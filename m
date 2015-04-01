@@ -1,50 +1,102 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Mar 2015 00:15:41 +0100
-Subject: [Buildroot] [git commit] package/rpi-firmware: fix config.txt
-	parsing
-Message-ID: <20150301084215.53AF47FA09@busybox.osuosl.org>
+From: Williams Jr., Ernest L. <ernesto@slac.stanford.edu>
+Date: Wed, 1 Apr 2015 00:13:48 +0000
+Subject: [Buildroot] clapack libraries missing?: buildroot-2014.11
+In-Reply-To: <551AFE63.6050009@mind.be>
+References: <CADDnATcLG1SbgVZ8TB08J_yHU5vF7vKTPdwUZnFvcgewoUFdEg@mail.gmail.com>,
+ <551AFE63.6050009@mind.be>
+Message-ID: <8b612d402130471485daafdd832b2d6a@exch13-mail05.win.slac.stanford.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c9ba844ed0b6f171094c4d2cb651cfea15eb833c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The rpi-firmware we currently package has a fiscious bug, that happens
-in corner cases while reading config.txt (mostly seen on RPi-2, but may
-also occur on RPi-1).
+________________________________________
+From: buildroot [buildroot-bounces at busybox.net] on behalf of Arnout Vandecappelle [arnout at mind.be]
+Sent: Tuesday, March 31, 2015 1:06 PM
+To: Ernest Williams; buildroot at busybox.net
+Subject: Re: [Buildroot] clapack libraries missing?: buildroot-2014.11
 
-Both the DT-aware and DT-unaware branches are affected.
+On 30/03/15 16:51, Ernest Williams wrote:
+> Hi,
+>
+> I am using "buildroot-2014.11"
+> I am using glibc and my target is INTEL x86_64
+> Version of CLAPACK:
+> CLAPACK_VERSION = 3.2.1
+>
+> I would like to use clapack but missing the following libraries after the install:
+>
+> ***********************
+> (1) lapack_LINUX.a
+> (2) blas_LINUX.a
+> (3) libF77.a
+> (4) libI77.a
+> ************************
+>
+> For includes I am also missing:
+> *************************************
+> "f2c.h"
+> **************************************
+>
+>
+> The only library, I see in the staging area is the following shared library:
+> =============================
+> liblapack.so
+> =============================
 
-Bump to the latest rpi-firmware to fix that.
+ libblas.so should also be installed. And the header file is called clapack.h
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rpi-firmware/rpi-firmware.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ The f2c functionality is linked into these shared libraries, it shouldn't be
+necessary to include or link with anything else.
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 03178d5..945f890 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_FIRMWARE_VERSION = 393dcc0e76f18f6ac1b67ba45d36058410670034
-+RPI_FIRMWARE_VERSION = b9fac65dd9ff607d0c2c4ea1bbba2bbf3fbc4a10
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
-@@ -16,7 +16,7 @@ RPI_FIRMWARE_DEPENDENCIES += host-rpi-firmware
- # The Device Tree blobs are not yet in the master branch of the
- # raspberrypi firmware project, so we have to use a separate branch
- # for now.
--RPI_FIRMWARE_VERSION = 09627457b9e15bf4ea4e6751d3c173a3fb65df07
-+RPI_FIRMWARE_VERSION = 6c0acfbbdba9908a4a4d21eab63c49ab72cb528b
- define RPI_FIRMWARE_INSTALL_DTB
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
+============================================================
+Okay, this is whta I have:
+
+[ernesto at icd-pc90626 lib]$ ls liblapack*
+liblapack.so*
+[ernesto at icd-pc90626 lib]$ ls libblas.so
+libblas.so*
+[ernesto at icd-pc90626 lib]$ ls ../include/clapack.h
+../include/clapack.h
+
+I will run a test example this evening for a try.
+
+Thanks again.
+
+
+Cheers,
+Ernest
+
+
+
+
+
+ Regards,
+ Arnout
+
+>
+>
+> Cheers,
+> Ernesto
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+--
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
