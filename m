@@ -1,27 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 21:45:11 +0200
-Subject: [Buildroot] [git commit] matchbox-panel: add hash file
-Message-ID: <20150401194607.43A097FED0@busybox.osuosl.org>
+Date: Wed, 1 Apr 2015 21:44:25 +0200
+Subject: [Buildroot] [git commit] matchbox: switch homepage and enhance
+	description
+Message-ID: <20150401194607.007AC7FED0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=730777efba2dac5d2438ed867bce21a88ca78fbf
+commit: http://git.buildroot.net/buildroot/commit/?id=3e3d100358d3de022ddea9bdcedae6345bba8d5e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The old homepage is dead so switch to the new URL.
+Also make the description somewhat better.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../matchbox/matchbox-panel/matchbox-panel.hash    |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/matchbox/Config.in |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
-diff --git a/package/matchbox/matchbox-panel/matchbox-panel.hash b/package/matchbox/matchbox-panel/matchbox-panel.hash
-new file mode 100644
-index 0000000..82802a9
---- /dev/null
-+++ b/package/matchbox/matchbox-panel/matchbox-panel.hash
-@@ -0,0 +1,2 @@
-+# From http://downloads.yoctoproject.org/releases/matchbox/matchbox-panel/0.9/matchbox-panel-0.9.3.tar.bz2.md5
-+md5	56d1807636f3919e22e51896ab7ccd2e	matchbox-panel-0.9.3.tar.bz2
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index b70133e..7867ae3 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -8,7 +8,12 @@ config BR2_PACKAGE_MATCHBOX
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	help
+-	  http://projects.o-hand.com/matchbox
++	  Matchbox is an Open Source base environment for the X Window
++	  System running on non-desktop embedded platforms such as
++	  handhelds, set-top boxes, kiosks and anything else for which
++	  screen space, input mechanisms or system resources are limited.
++
++	  http://matchbox-project.org/
+ 
+ if BR2_PACKAGE_MATCHBOX
+ 
