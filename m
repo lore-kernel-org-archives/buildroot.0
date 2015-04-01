@@ -1,47 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Apr 2015 18:45:26 +0200
-Subject: [Buildroot] [PATCH v2 1/1] qt5: bump version to 5.4.1
-In-Reply-To: <551BC0AC.5050507@carallon.com>
-References: <1425477719-6893-1-git-send-email-will_wagner@carallon.com>
- <20150331175845.GC3912@free.fr> <551BC0AC.5050507@carallon.com>
-Message-ID: <20150401164526.GA4235@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Apr 2015 19:58:05 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: Glamor
+	depends on dri3
+Message-ID: <20150401175836.5DB7481914@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Will, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=f9a016a93b2acac2db1a04869941c6c907901bb9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-04-01 10:55 +0100, Will Wagner spake thusly:
-> On 31/03/2015 18:58, Yann E. MORIN wrote:
-> >Will, All,
-> >
-> >On 2015-03-04 14:01 +0000, will_wagner at carallon.com spake thusly:
-> >>From: Will Wagner <will_wagner@carallon.com>
-> >>
-> >>Also remove all patches that have been applied to 5.4.1 branch
-> >You forgot to update the hashes.
-> >
-> >Care to send a patch to add them, please?
-> 
-> Sorry about that, not had to deal with hashes before.
+Fixes
 
-No problem. I'm starting to pay extra attention to hashes, because we're
-in the process of making them mandatory. So a branch I have locally
-breaks (but upstream is still OK, hence the reason you missed them!).
+../../../glamor/glamor_egl.c:603:25: error: unknown type name 'RRProviderPtr'
+                         RRProviderPtr provider,
+                         ^
+../../../glamor/glamor_egl.c:650:1: error: unknown type name 'dri3_screen_info_rec'
+ static dri3_screen_info_rec glamor_dri3_info = {
+ ^
 
-> I'll submit a patch shortly.
+using this defconfig
 
-Thank you! :-)
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_INIT_NONE=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL=y
 
-Regards,
-Yann E. MORIN.
+RRProviderPtr is defined in dri3/dri3.h, so make sure glamor is enabled only
+if dri3 is enabled, too.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index d9f36fc..ae68906 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -173,17 +173,21 @@ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
+ ifeq ($(BR2_PACKAGE_XPROTO_DRI2PROTO),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += xproto_dri2proto
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri2
++else
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri2
+ endif
+ ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
+-endif
+ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += libepoxy
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-glamor
+ endif
+ else
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri2 --disable-dri3
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri3 --disable-glamor
++endif
++else
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri2 --disable-dri3 --disable-glamor
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXSCRNSAVER),y)
