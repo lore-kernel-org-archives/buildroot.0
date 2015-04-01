@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  1 Apr 2015 20:36:20 +0200
-Subject: [Buildroot] [PATCH/RFC 27/27] package/kodi-audiodecoder-sidplay:
-	new package
+Date: Wed,  1 Apr 2015 20:36:13 +0200
+Subject: [Buildroot] [PATCH/RFC 20/27] package/kodi-addon-xvdr: bump version
 In-Reply-To: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427913380-14808-28-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427913380-14808-21-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,61 +13,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audiodecoder-sidplay/Config.in           |    8 ++++++++
- .../kodi-audiodecoder-sidplay.mk                      |   17 +++++++++++++++++
- package/kodi/Config.in                                |    1 +
- 3 files changed, 26 insertions(+)
- create mode 100644 package/kodi-audiodecoder-sidplay/Config.in
- create mode 100644 package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
+ package/kodi-addon-xvdr/kodi-addon-xvdr.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-audiodecoder-sidplay/Config.in b/package/kodi-audiodecoder-sidplay/Config.in
-new file mode 100644
-index 0000000..ae99afa
---- /dev/null
-+++ b/package/kodi-audiodecoder-sidplay/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_KODI_AUDIODECODER_SIDPLAY
-+	bool "kodi-audiodecoder-sidplay"
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_LIBSIDPLAY2
-+	help
-+	  Sidplay decoder addon for Kodi
-+
-+	  https://github.com/notspiff/audiodecoder.sidplay
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-new file mode 100644
-index 0000000..5a00869
---- /dev/null
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# kodi-audiodecoder-sidplay
-+#
-+################################################################################
-+
-+KODI_AUDIODECODER_SIDPLAY_VERSION = f2e7d98528dfb3bfdd5dabcb5152955c9dc6979a
-+KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,notspiff,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
-+KODI_AUDIODECODER_SIDPLAY_LICENSE = GPLv2+
-+KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = src/SIDCodec.cpp
-+
-+KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi-platform libsidplay2
-+
-+KODI_AUDIODECODER_SIDPLAY_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 7240dc0..b7697ed 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -296,6 +296,7 @@ comment "Kodi audio decoders"
+diff --git a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+index e05510c..55595a9 100644
+--- a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
++++ b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- source "package/kodi-audiodecoder-modplug/Config.in"
- source "package/kodi-audiodecoder-nosefart/Config.in"
-+source "package/kodi-audiodecoder-sidplay/Config.in"
- source "package/kodi-audiodecoder-snesapu/Config.in"
- source "package/kodi-audiodecoder-stsound/Config.in"
- source "package/kodi-audiodecoder-timidity/Config.in"
+-# This cset is on master. When a Helix branch is made, we should
++# This cset is on master. When an Isengard branch is made, we should
+ # follow it, as incompatible changes in the plugins API can happen
+ # on the master branch.
+-KODI_ADDON_XVDR_VERSION = 328fa653b821a4edc1256a13833f30a4483e2819
++KODI_ADDON_XVDR_VERSION = 3453f901283e2b0506b0bf1b523e3f59f506c6fb
+ KODI_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(KODI_ADDON_XVDR_VERSION))
+ KODI_ADDON_XVDR_LICENSE = GPLv2+
+ KODI_ADDON_XVDR_LICENSE_FILES = COPYING
 -- 
 1.7.10.4
