@@ -1,35 +1,47 @@
-From: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
-Date: Wed, 1 Apr 2015 16:18:47 +0000
-Subject: [Buildroot] Build embedded system for x86 device
-In-Reply-To: <AMXPR04MB103B46C4493795E70A219D7EAF30@AMXPR04MB103.eurprd04.prod.outlook.com>
-References: <AMXPR04MB10385410B37EA5F396EE688EAF30@AMXPR04MB103.eurprd04.prod.outlook.com>,
- <AMXPR04MB103B46C4493795E70A219D7EAF30@AMXPR04MB103.eurprd04.prod.outlook.com>
-Message-ID: <1427905127091.2736@geocept.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 1 Apr 2015 18:45:26 +0200
+Subject: [Buildroot] [PATCH v2 1/1] qt5: bump version to 5.4.1
+In-Reply-To: <551BC0AC.5050507@carallon.com>
+References: <1425477719-6893-1-git-send-email-will_wagner@carallon.com>
+ <20150331175845.GC3912@free.fr> <551BC0AC.5050507@carallon.com>
+Message-ID: <20150401164526.GA4235@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I reply to myself and I apologies for the noise...
+Will, All,
 
-In fact, the solution was easy find, I simple had to follow the help message from GRUB2:
-a) generate a tar rootfs
-b) leave 1Mb at begin of the Compact Flash and create a primary partition (ext3 in my use case)
-c) format the root partition (sudo mkfs.ext3 /dev/sdb1) and mount it (sudo mount /dev/sdb1 /mnt)
-d) install grub sudo ./output/host/usr/sbin/grub-bios-setup \
-			-b ./output/host/usr/lib/grub/i386-pc/boot.img \
-			-c ./output/images/grub.img -d . /dev/sdb
-e) install the rootfs ==> sudo tar -C /mnt -xf output/images/rootfs.tar
-f) install kernel ==> sudo cp output/image/bzImage  /mnt/boot/
-g) finish: sync && sudo umount /mnt
+On 2015-04-01 10:55 +0100, Will Wagner spake thusly:
+> On 31/03/2015 18:58, Yann E. MORIN wrote:
+> >Will, All,
+> >
+> >On 2015-03-04 14:01 +0000, will_wagner at carallon.com spake thusly:
+> >>From: Will Wagner <will_wagner@carallon.com>
+> >>
+> >>Also remove all patches that have been applied to 5.4.1 branch
+> >You forgot to update the hashes.
+> >
+> >Care to send a patch to add them, please?
+> 
+> Sorry about that, not had to deal with hashes before.
 
-That's it!
+No problem. I'm starting to pay extra attention to hashes, because we're
+in the process of making them mandatory. So a branch I have locally
+breaks (but upstream is still OK, hence the reason you missed them!).
 
-All works fine now, and my device boots with success :)
+> I'll submit a patch shortly.
 
-Thanks to all Buildroot contributors/maintainers for this great software :)
+Thank you! :-)
 
-Best regards
+Regards,
+Yann E. MORIN.
 
-Fabrice
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
