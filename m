@@ -1,121 +1,196 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 23:34:10 +0200
-Subject: [Buildroot] [git commit] imx6sabresd: rename to imx6sabre
-Message-ID: <20150401213451.372FA818F2@busybox.osuosl.org>
+Date: Wed, 1 Apr 2015 23:34:17 +0200
+Subject: [Buildroot] [git commit] configs: add Freescale SABRE Auto board
+	support
+Message-ID: <20150401213451.40C057FD5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3029f6ef14fd2fd6256b755c500b93f817d9a407
+commit: http://git.buildroot.net/buildroot/commit/?id=aacbdd131b5723b8e090ee8b2dad1843046b3ffe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rename imx6sabresd board folder to imx6sabre, to prepare for Sabre Auto
-addition. Update doc, link and defconfigs accordingly.
+SABRE Board for Automotive Infotainment (SABRE Auto, a.k.a. SABRE-AI) is
+Freescale's evaluation board based on the i.MX 6 ARM Cortex-A9 applications
+processor.
+
+Those defconfigs are an adaptation of freescale_imx6{q,dl}sabresd_defconfig for
+SABRE Auto, and are thus based on Freescale "official" git repo on
+git.freescale.com and SW release 3.10.17_1.0.0_ga.
 
 Signed-off-by: Vincent Stehl?? <vincent.stehle@freescale.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Eric B??nard <eric@eukrea.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Cc: Gilles Talis <gilles.talis@gmail.com>
+Cc: Peter Korsgaard <jacmet@sunsite.dk>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Gary Bisson <bisson.gary@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../freescale/{imx6sabresd => }/create-boot-sd.sh  |    0
- board/freescale/imx53loco/create-boot-sd.sh        |    2 +-
- ...ommon-boot-Linux-to-init-in-mfgtools-mode.patch |    0
- .../{imx6sabresd => imx6sabre}/readme.txt          |   19 +++++++++++--------
- configs/freescale_imx6dlsabresd_defconfig          |    2 +-
- configs/freescale_imx6qsabresd_defconfig           |    2 +-
- 6 files changed, 14 insertions(+), 11 deletions(-)
+ board/freescale/imx6sabre/readme.txt        |   45 +++++++++++++++++++++++++-
+ configs/freescale_imx6dlsabreauto_defconfig |   35 +++++++++++++++++++++
+ configs/freescale_imx6qsabreauto_defconfig  |   35 +++++++++++++++++++++
+ 3 files changed, 113 insertions(+), 2 deletions(-)
 
-diff --git a/board/freescale/imx6sabresd/create-boot-sd.sh b/board/freescale/create-boot-sd.sh
-similarity index 100%
-rename from board/freescale/imx6sabresd/create-boot-sd.sh
-rename to board/freescale/create-boot-sd.sh
-diff --git a/board/freescale/imx53loco/create-boot-sd.sh b/board/freescale/imx53loco/create-boot-sd.sh
-index 3083fd2..b1ce208 120000
---- a/board/freescale/imx53loco/create-boot-sd.sh
-+++ b/board/freescale/imx53loco/create-boot-sd.sh
-@@ -1 +1 @@
--../imx6sabresd/create-boot-sd.sh
-\ No newline at end of file
-+../imx6sabre/create-boot-sd.sh
-\ No newline at end of file
-diff --git a/board/freescale/imx6sabresd/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch b/board/freescale/imx6sabre/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
-similarity index 100%
-rename from board/freescale/imx6sabresd/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
-rename to board/freescale/imx6sabre/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
-diff --git a/board/freescale/imx6sabresd/readme.txt b/board/freescale/imx6sabre/readme.txt
-similarity index 82%
-rename from board/freescale/imx6sabresd/readme.txt
-rename to board/freescale/imx6sabre/readme.txt
-index 583ef40..6c1a5b5 100644
---- a/board/freescale/imx6sabresd/readme.txt
+diff --git a/board/freescale/imx6sabre/readme.txt b/board/freescale/imx6sabre/readme.txt
+index 6c1a5b5..6850885 100644
+--- a/board/freescale/imx6sabre/readme.txt
 +++ b/board/freescale/imx6sabre/readme.txt
-@@ -11,12 +11,12 @@ http://cache.freescale.com/files/32bit/doc/quick_start_guide/SABRESDB_IMX6_QSG.p
+@@ -3,11 +3,16 @@ Freescale i.MX6Q and i.MX6DL SABRESD development boards
+ *******************************************************
+ 
+ This file documents the Buildroot support for the Freescale SABRE Board for
+-Smart Devices Based on the i.MX 6 Series (SABRESD).
++Smart Devices Based on the i.MX 6 Series (SABRESD), as well as the Freescale
++SABRE Board for Automotive Infotainment.
+ 
+ Read the SABRESD Quick Start Guide for an introduction to the board:
+ http://cache.freescale.com/files/32bit/doc/quick_start_guide/SABRESDB_IMX6_QSG.pdf
+ 
++Read the SABRE for Automotive Infotainment Quick Start Guide for an
++introduction to the board:
++http://cache.freescale.com/files/32bit/doc/user_guide/IMX6SABREINFOQSG.pdf
++
  Build
  =====
  
--First, configure Buildroot for your SABRESD board.
--For i.MX6Q:
-+First, configure Buildroot for your SABRE board.
-+For i.MX6Q SABRE SD board:
- 
-   make freescale_imx6qsabresd_defconfig
- 
--For i.MX6DL:
-+For i.MX6DL SABRE SD board:
+@@ -20,12 +25,21 @@ For i.MX6DL SABRE SD board:
  
    make freescale_imx6dlsabresd_defconfig
  
-@@ -44,13 +44,16 @@ and copy the bootloader, kernel, DTBs and root filesystem as needed.
- 
- *** WARNING! The script will destroy all the card content. Use with care! ***
- 
--  ./board/freescale/imx6sabresd/create-boot-sd.sh <your-sd-device>
-+  ./board/freescale/create-boot-sd.sh <your-sd-device>
- 
--Boot the SABRESD board
--======================
-+Boot the SABRE board
-+====================
- 
--To boot your newly created system (refer to the SABRESD Quick Start Guide for
--guidance):
-+SABRE SD
-+--------
++For i.MX6Q SABRE Auto board:
 +
-+To boot your newly created system on a SABRE SD Board (refer to the SABRE SD
-+Quick Start Guide for guidance):
- - insert the SD card in the SD3 slot of the board;
- - locate the BOOT dip switches (SW6), set dips 2 and 7 to ON, all others to OFF;
- - connect a Micro USB cable to Debug Port and connect using a terminal emulator
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-index 680031d..a13d2b9 100644
---- a/configs/freescale_imx6dlsabresd_defconfig
-+++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -3,7 +3,7 @@ BR2_arm=y
- BR2_cortex_a9=y
++  make freescale_imx6qsabreauto_defconfig
++
++For i.MX6DL SABRE Auto board:
++
++  make freescale_imx6dlsabreauto_defconfig
++
+ Build all components:
  
- # patches
--BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabresd/patches"
+   make
+ 
+ You will find in ./output/images/ the following files:
+-  - imx6dl-sabresd.dtb or imx6q-sabresd.dtb
++  - imx6dl-sabresd.dtb or imx6q-sabresd.dtb or imx6q-sabreauto.dtb or
++    imx6dl-sabreauto.dtb
+   - rootfs.ext2
+   - rootfs.tar
+   - u-boot.imx
+@@ -60,6 +74,33 @@ Quick Start Guide for guidance):
+   at 115200 bps, 8n1;
+ - power on the board.
+ 
++SABRE Auto
++----------
++
++To boot your newly created system on a SABRE Auto Board (refer to the SABRE for
++Automotive Infotainment Quick Start Guide for guidance):
++- insert the SD card in the CPU card SD card socket J14;
++- Set the S1, S2 and S3 DIP switches and J3 jumper to boot from SD on CPU card.
++  Reference configuration:
++
++    S1
++     1  2   3   4  5   6   7   8   9  10
++    off ON off off ON off off off off off
++
++    S2
++     1   2  3   4
++    off off ON off
++
++    S3
++     1   2  3  4
++    off off ON ON
++
++    J3: 1-2
++
++- connect an RS-232 UART cable to CPU card debug port J18 UART DB9 and
++  connect using a terminal emulator at 115200 bps, 8n1;
++- power on the board.
++
+ Enjoy!
+ 
+ References
+diff --git a/configs/freescale_imx6dlsabreauto_defconfig b/configs/freescale_imx6dlsabreauto_defconfig
+new file mode 100644
+index 0000000..f4fc48a
+--- /dev/null
++++ b/configs/freescale_imx6dlsabreauto_defconfig
+@@ -0,0 +1,35 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a9=y
++
++# patches
 +BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
- 
- # toolchain
- BR2_KERNEL_HEADERS_VERSION=y
-diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index f2f702e..95f29d7 100644
---- a/configs/freescale_imx6qsabresd_defconfig
-+++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -3,7 +3,7 @@ BR2_arm=y
- BR2_cortex_a9=y
- 
- # patches
--BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabresd/patches"
++
++# toolchain
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.10.17"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
++
++# system
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
++
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabreauto"
++
++# filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabreauto"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
+diff --git a/configs/freescale_imx6qsabreauto_defconfig b/configs/freescale_imx6qsabreauto_defconfig
+new file mode 100644
+index 0000000..0831d24
+--- /dev/null
++++ b/configs/freescale_imx6qsabreauto_defconfig
+@@ -0,0 +1,35 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a9=y
++
++# patches
 +BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
- 
- # toolchain
- BR2_KERNEL_HEADERS_VERSION=y
++
++# toolchain
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.10.17"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
++
++# system
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
++
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabreauto"
++
++# filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
