@@ -1,34 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 23:35:49 +0200
-Subject: [Buildroot] [PATCH v2 1/2] imx6sabresd: rename to imx6sabre
-In-Reply-To: <1427719822-12367-1-git-send-email-vincent.stehle@freescale.com>
-References: <550D9052.2000204@mind.be>
- <1427719822-12367-1-git-send-email-vincent.stehle@freescale.com>
-Message-ID: <20150401233549.57d2437b@free-electrons.com>
+Date: Wed, 1 Apr 2015 23:41:02 +0200
+Subject: [Buildroot] [git commit] jamvm: add depends on toolchain w/threads
+Message-ID: <20150401214156.63B1C8191A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vincent Stehl?,
+commit: http://git.buildroot.net/buildroot/commit/?id=6be1abb14a4832c9d8e77bf316ddcdb2b393c265
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 30 Mar 2015 14:50:21 +0200, Vincent Stehl? wrote:
-> Rename imx6sabresd board folder to imx6sabre, to prepare for Sabre Auto
-> addition. Update doc, link and defconfigs accordingly.
-> 
-> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Eric B?nard <eric@eukrea.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Gilles Talis <gilles.talis@gmail.com>
-> Cc: Gary Bisson <bisson.gary@gmail.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/jamvm/Config.in |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-Both patches applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
+index f480995..375bded 100644
+--- a/package/jamvm/Config.in
++++ b/package/jamvm/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_JAMVM
+ 	bool "jamvm"
+ 	depends on BR2_INET_IPV6
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64 \
+ 		|| BR2_mips || BR2_mipsel || BR2_powerpc
+ 	select BR2_PACKAGE_ZLIB
+@@ -11,7 +12,8 @@ config BR2_PACKAGE_JAMVM
+ 
+ 	  http://jamvm.sf.net
+ 
+-comment "jamvm needs a toolchain w/ IPv6"
++comment "jamvm needs a toolchain w/ IPv6, threads"
+ 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64 \
+ 		|| BR2_mips || BR2_mipsel || BR2_powerpc
+ 	depends on !BR2_INET_IPV6
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
