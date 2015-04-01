@@ -1,52 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  1 Apr 2015 17:42:15 -0300
-Subject: [Buildroot] [PATCH 2/2] liberation: bump to version 2.00.1
-In-Reply-To: <1427920935-11391-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427920935-11391-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1427920935-11391-2-git-send-email-gustavo@zacarias.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 1 Apr 2015 22:46:23 +0200
+Subject: [Buildroot] [PATCH 2/2] bmon: remove hash file for GitHub
+	helper package
+In-Reply-To: <20150401223613.49f8b01c@free-electrons.com>
+References: <1427917740-17656-1-git-send-email-yegorslists@googlemail.com>
+ <1427917740-17656-2-git-send-email-yegorslists@googlemail.com>
+ <20150401223613.49f8b01c@free-electrons.com>
+Message-ID: <CAGm1_kvxC-5GY76+oe7Hg7kp9EBr0NBWPWguBGLCj99i-ZiXLg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file and switch license.
+On Wed, Apr 1, 2015 at 10:36 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Yegor Yefremov,
+>
+> On Wed,  1 Apr 2015 21:49:00 +0200, Yegor Yefremov wrote:
+>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> ---
+>>  package/bmon/bmon.hash | 2 --
+>>  1 file changed, 2 deletions(-)
+>>  delete mode 100644 package/bmon/bmon.hash
+>
+> This patch is not correct. There is a subtle thing about github
+> downloads. Quoting the Buildroot manual:
+>
+> """
+> If the package you wish to add does have a release section on GitHub,
+> the maintainer may have uploaded a release tarball, or the release may
+> just point to the automatically generated tarball from the git tag. If
+> there is a release tarball uploaded by the maintainer, we prefer to use
+> that since it may be slightly different (e.g. it contains a configure
+> script so we don?t need to do AUTORECONF).
+>
+> You can see on the release page if it?s an uploaded tarball or a git
+> tag:
+>
+> * If there is a green download button, like mongrel2, then it was
+>   uploaded by the maintainer and you should use the link of that button
+>   to specify FOO_SITE, and not use the github helper.
+>
+> * If there is grey download button, like xbmc, then it?s an
+>   automatically generated tarball and you should use the github helper
+>   function.
+> """
+>
+> So if we're with a "green" button case, it is perfectly fine to have a
+> tarball hash, because the taball is not automatically generated. And
+> this is the case we're in for bmon:
+> https://github.com/tgraf/bmon/releases. There is a green button. And
+> the BMON_SITE variable does not use the github helper.
+>
+> So I marked this patch as rejected.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/liberation/liberation.hash | 2 ++
- package/liberation/liberation.mk   | 7 +++----
- 2 files changed, 5 insertions(+), 4 deletions(-)
- create mode 100644 package/liberation/liberation.hash
+OK. I see.
 
-diff --git a/package/liberation/liberation.hash b/package/liberation/liberation.hash
-new file mode 100644
-index 0000000..3432880
---- /dev/null
-+++ b/package/liberation/liberation.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	7890278a6cd17873c57d9cd785c2d230d9abdea837e96516019c5885dd271504	liberation-fonts-ttf-2.00.1.tar.gz
-diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
-index 815aeba..dfed086 100644
---- a/package/liberation/liberation.mk
-+++ b/package/liberation/liberation.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
- 
--LIBERATION_VERSION = 1.06.0.20100721
-+LIBERATION_VERSION = 2.00.1
- LIBERATION_SITE = http://www.fedorahosted.org/releases/l/i/liberation-fonts
- LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
- LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
--# Bump to 2.x changes license!!
--LIBERATION_LICENSE = GPLv2 with exceptions
--LIBERATION_LICENSE_FILES = License.txt
-+LIBERATION_LICENSE = OFLv1.1
-+LIBERATION_LICENSE_FILES = LICENSE
- 
- ifeq ($(BR2_PACKAGE_LIBERATION_MONO),y)
- define LIBERATION_INSTALL_MONO
--- 
-2.0.5
+Yegor
