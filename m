@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  1 Apr 2015 20:36:16 +0200
-Subject: [Buildroot] [PATCH/RFC 23/27] package/kodi-audiodecoder-snesapu:
-	new package
+Date: Wed,  1 Apr 2015 20:36:08 +0200
+Subject: [Buildroot] [PATCH/RFC 15/27] package/kodi-pvr-njoy: new package
 In-Reply-To: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427913380-14808-24-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427913380-14808-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,60 +13,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audiodecoder-snesapu/Config.in           |    7 +++++++
- .../kodi-audiodecoder-snesapu.mk                      |   17 +++++++++++++++++
- package/kodi/Config.in                                |    1 +
+ package/kodi-pvr-njoy/Config.in        |    7 +++++++
+ package/kodi-pvr-njoy/kodi-pvr-njoy.mk |   17 +++++++++++++++++
+ package/kodi/Config.in                 |    1 +
  3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-audiodecoder-snesapu/Config.in
- create mode 100644 package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
+ create mode 100644 package/kodi-pvr-njoy/Config.in
+ create mode 100644 package/kodi-pvr-njoy/kodi-pvr-njoy.mk
 
-diff --git a/package/kodi-audiodecoder-snesapu/Config.in b/package/kodi-audiodecoder-snesapu/Config.in
+diff --git a/package/kodi-pvr-njoy/Config.in b/package/kodi-pvr-njoy/Config.in
 new file mode 100644
-index 0000000..0cb572f
+index 0000000..33c493c
 --- /dev/null
-+++ b/package/kodi-audiodecoder-snesapu/Config.in
++++ b/package/kodi-pvr-njoy/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_AUDIODECODER_SNESAPU
-+	bool "kodi-audiodecoder-snesapu"
++config BR2_PACKAGE_KODI_PVR_NJOY
++	bool "kodi-pvr-njoy"
 +	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  SPC decoder addon for Kodi
++	  Kodi's Njoy N7 client addon
 +
-+	  https://github.com/notspiff/audiodecoder.snesapu
-diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
++	  https://github.com/kodi-pvr/pvr.njoy
+diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
 new file mode 100644
-index 0000000..b68305d
+index 0000000..2d634fb
 --- /dev/null
-+++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
++++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-audiodecoder-snesapu
++# kodi-pvr-njoy
 +#
 +################################################################################
 +
-+KODI_AUDIODECODER_SNESAPU_VERSION = 9fc775b13279567ac880f076beb9eead88747467
-+KODI_AUDIODECODER_SNESAPU_SITE = $(call github,notspiff,audiodecoder.snesapu,$(KODI_AUDIODECODER_SNESAPU_VERSION))
-+KODI_AUDIODECODER_SNESAPU_LICENSE = GPLv2+
-+KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = src/SPCCodec.cpp
++KODI_PVR_NJOY_VERSION = fcd62943f976be1a60786643aaa01ebd98c0964e
++KODI_PVR_NJOY_SITE = $(call github,kodi-pvr,pvr.njoy,$(KODI_PVR_NJOY_VERSION))
++KODI_PVR_NJOY_LICENSE = GPLv2+
++KODI_PVR_NJOY_LICENSE_FILES = src/client.cpp
 +
-+KODI_AUDIODECODER_SNESAPU_DEPENDENCIES = kodi-platform
++KODI_PVR_NJOY_DEPENDENCIES = kodi-platform
 +
-+KODI_AUDIODECODER_SNESAPU_CONF_OPTS += \
++KODI_PVR_NJOY_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index e86c14e..8c99457 100644
+index b1fcdd6..8f0ab1d 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -295,6 +295,7 @@ if BR2_PACKAGE_KODI_AUDIO_DECODERS
- comment "Kodi audio decoders"
+@@ -276,6 +276,7 @@ source "package/kodi-pvr-iptvsimple/Config.in"
+ source "package/kodi-pvr-mediaportal-tvserver/Config.in"
+ source "package/kodi-pvr-mythtv/Config.in"
+ source "package/kodi-pvr-nextpvr/Config.in"
++source "package/kodi-pvr-njoy/Config.in"
+ source "package/kodi-addon-xvdr/Config.in"
  
- source "package/kodi-audiodecoder-modplug/Config.in"
-+source "package/kodi-audiodecoder-snesapu/Config.in"
- source "package/kodi-audiodecoder-vgmstream/Config.in"
- 
- endif # BR2_PACKAGE_KODI_AUDIO_DECODERS
+ endif # BR2_PACKAGE_KODI_PVR_ADDONS
 -- 
 1.7.10.4
