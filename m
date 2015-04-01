@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 22:42:32 +0200
-Subject: [Buildroot] [git commit] toolchain-common: default to Y for
-	LARGEFILE
-Message-ID: <20150401205855.B975C7F911@busybox.osuosl.org>
+Date: Wed, 1 Apr 2015 22:42:02 +0200
+Subject: [Buildroot] [git commit] toolchain/helpers: make LFS mandatory for
+	uclibc toolchains
+Message-ID: <20150401205855.A62927F911@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f360fec787991a408793f1a676c28f225ad94f38
+commit: http://git.buildroot.net/buildroot/commit/?id=7f96ef3580af371e4d448207f0f4ecd01bc0cee1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This will allow us to remove largefile handling in the tree without
-breaking things while doing so.
+As discussed on the mailing list drop the non-largefile option for
+toolchains.
+The size delta is minimal and it just complicates package dependencies.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-common.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ toolchain/helpers.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 304afe4..7eb22ce 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -7,6 +7,7 @@ source "package/gdb/Config.in.host"
- 
- config BR2_LARGEFILE
- 	bool
-+	default y
- 
- config BR2_INET_IPV6
- 	bool
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index c1d2878..50446ce 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -283,7 +283,7 @@ check_uclibc = \
+ 	fi; \
+ 	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
+ 	$(call check_uclibc_feature,__ARCH_USE_MMU__,BR2_USE_MMU,$${UCLIBC_CONFIG_FILE},MMU support) ;\
+-	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,BR2_LARGEFILE,$${UCLIBC_CONFIG_FILE},Large file support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,,$${UCLIBC_CONFIG_FILE},Large file support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_TOOLCHAIN_HAS_NATIVE_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
