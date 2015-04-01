@@ -1,39 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 23:03:52 +0200
-Subject: [Buildroot] [git commit] jimtcl: change the way of defining the
-	JIMTCL_INSTALL_LIB variable
-Message-ID: <20150401211756.8D6F18191A@busybox.osuosl.org>
+Date: Wed, 1 Apr 2015 23:18:28 +0200
+Subject: [Buildroot] [PATCH 1/1] jimtcl: change the way of define
+ JIMTCL_INSTALL_LIB variable
+In-Reply-To: <1421342294-11952-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1421342294-11952-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20150401231828.0726653d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a4c2843fbbd03c88457ae0ca37fb32fa9c80cb48
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Jerzy Grzegorek,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/jimtcl/jimtcl.mk |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+On Thu, 15 Jan 2015 18:18:14 +0100, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+>  package/jimtcl/jimtcl.mk |    5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-index 75c0382..c2e04ff 100644
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
-@@ -32,10 +32,11 @@ JIMTCL_INSTALL_LIB =
- else
- JIMTCL_SHARED = --shared
- JIMTCL_LIB = so.$(JIMTCL_VERSION)
--JIMTCL_INSTALL_LIB = \
-+define JIMTCL_INSTALL_LIB
- 	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
--	$(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB); \
-+		$(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
- 	ln -s libjim.$(JIMTCL_LIB) $(TARGET_DIR)/usr/lib/libjim.so
-+endef
- endif
- 
- define JIMTCL_CONFIGURE_CMDS
+Applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
