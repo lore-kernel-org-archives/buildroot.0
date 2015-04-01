@@ -1,90 +1,52 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  1 Apr 2015 17:42:14 -0300
-Subject: [Buildroot] [PATCH 1/2] package: new category for fonts, icons,
-	sounds and themes
-Message-ID: <1427920935-11391-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  1 Apr 2015 17:42:15 -0300
+Subject: [Buildroot] [PATCH 2/2] liberation: bump to version 2.00.1
+In-Reply-To: <1427920935-11391-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1427920935-11391-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1427920935-11391-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move all of the scattered fonts, icons, sound packs and themes into a
-new category for them.
-In preparation for the inclusion of more fonts.
+Also add hash file and switch license.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in | 28 ++++++++++++++++++++--------
- 1 file changed, 20 insertions(+), 8 deletions(-)
+ package/liberation/liberation.hash | 2 ++
+ package/liberation/liberation.mk   | 7 +++----
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+ create mode 100644 package/liberation/liberation.hash
 
-diff --git a/package/Config.in b/package/Config.in
-index 9d9fb71..1efd563 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -186,6 +186,26 @@ menu "Games"
- 	source "package/rubix/Config.in"
- endmenu
+diff --git a/package/liberation/liberation.hash b/package/liberation/liberation.hash
+new file mode 100644
+index 0000000..3432880
+--- /dev/null
++++ b/package/liberation/liberation.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	7890278a6cd17873c57d9cd785c2d230d9abdea837e96516019c5885dd271504	liberation-fonts-ttf-2.00.1.tar.gz
+diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
+index 815aeba..dfed086 100644
+--- a/package/liberation/liberation.mk
++++ b/package/liberation/liberation.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
  
-+menu "Fonts, icons, sounds and themes"
-+
-+comment "Fonts"
-+	source "package/dejavu/Config.in"
-+	source "package/ghostscript-fonts/Config.in"
-+	source "package/liberation/Config.in"
-+
-+comment "Icons"
-+	source "package/adwaita-icon-theme/Config.in"
-+	source "package/hicolor-icon-theme/Config.in"
-+
-+comment "Sounds"
-+	source "package/sound-theme-borealis/Config.in"
-+	source "package/sound-theme-freedesktop/Config.in"
-+
-+comment "Themes"
-+	source "package/gtk2-engines/Config.in"
-+
-+endmenu
-+
- menu "Graphic libraries and applications (graphic/text)"
+-LIBERATION_VERSION = 1.06.0.20100721
++LIBERATION_VERSION = 2.00.1
+ LIBERATION_SITE = http://www.fedorahosted.org/releases/l/i/liberation-fonts
+ LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
+ LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
+-# Bump to 2.x changes license!!
+-LIBERATION_LICENSE = GPLv2 with exceptions
+-LIBERATION_LICENSE_FILES = License.txt
++LIBERATION_LICENSE = OFLv1.1
++LIBERATION_LICENSE_FILES = LICENSE
  
- comment "Graphic applications"
-@@ -265,9 +285,6 @@ comment "X applications"
- 	source "package/xvkbd/Config.in"
- 
- comment "X libraries and helper libraries"
--	source "package/dejavu/Config.in"
--	source "package/ghostscript-fonts/Config.in"
--	source "package/liberation/Config.in"
- 	source "package/libsexy/Config.in"
- 	source "package/x11r7/xkeyboard-config/Config.in"
- 
-@@ -697,7 +714,6 @@ menu "Filesystem"
- endmenu
- 
- menu "Graphics"
--	source "package/adwaita-icon-theme/Config.in"
- 	source "package/atk/Config.in"
- 	source "package/cairo/Config.in"
- 	source "package/exiv2/Config.in"
-@@ -708,9 +724,7 @@ menu "Graphics"
- 	source "package/gdk-pixbuf/Config.in"
- 	source "package/giblib/Config.in"
- 	source "package/giflib/Config.in"
--	source "package/gtk2-engines/Config.in"
- 	source "package/harfbuzz/Config.in"
--	source "package/hicolor-icon-theme/Config.in"
- 	source "package/imlib2/Config.in"
- 	source "package/jasper/Config.in"
- 	source "package/jpeg/Config.in"
-@@ -1063,8 +1077,6 @@ menu "Miscellaneous"
- 	source "package/qemu/Config.in"
- 	source "package/shared-mime-info/Config.in"
- 	source "package/snowball-init/Config.in"
--	source "package/sound-theme-borealis/Config.in"
--	source "package/sound-theme-freedesktop/Config.in"
- 	source "package/wine/Config.in"
- endmenu
- 
+ ifeq ($(BR2_PACKAGE_LIBERATION_MONO),y)
+ define LIBERATION_INSTALL_MONO
 -- 
 2.0.5
