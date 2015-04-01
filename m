@@ -1,93 +1,74 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  1 Apr 2015 20:35:57 +0200
-Subject: [Buildroot] [PATCH/RFC 04/27] package/kodi-pvr-addons: Split into
-	addon-specific packages
+Date: Wed,  1 Apr 2015 20:35:55 +0200
+Subject: [Buildroot] [PATCH/RFC 02/27] package/tinyxml2: new package
 In-Reply-To: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427913380-14808-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427913380-14808-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Required for upcoming kodi-pvr-dvblink package:
+https://github.com/kodi-pvr/pvr.dvblink/blob/master/CMakeLists.txt#L11
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-addons/Config.in          |    6 ------
- package/kodi-pvr-addons/kodi-pvr-addons.mk |   27 ---------------------------
- package/kodi/Config.in                     |   10 +++++++++-
- 3 files changed, 9 insertions(+), 34 deletions(-)
- delete mode 100644 package/kodi-pvr-addons/Config.in
- delete mode 100644 package/kodi-pvr-addons/kodi-pvr-addons.mk
+ package/Config.in            |    1 +
+ package/tinyxml2/Config.in   |   11 +++++++++++
+ package/tinyxml2/tinyxml2.mk |   13 +++++++++++++
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/tinyxml2/Config.in
+ create mode 100644 package/tinyxml2/tinyxml2.mk
 
-diff --git a/package/kodi-pvr-addons/Config.in b/package/kodi-pvr-addons/Config.in
-deleted file mode 100644
-index 80916c7..0000000
---- a/package/kodi-pvr-addons/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_KODI_PVR_ADDONS
--	bool "kodi-pvr-addons"
--	help
--	  A collection of PVR backend addons for Kodi
--
--	  https://github.com/opdenkamp/xbmc-pvr-addons
-diff --git a/package/kodi-pvr-addons/kodi-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
-deleted file mode 100644
-index 1a09265..0000000
---- a/package/kodi-pvr-addons/kodi-pvr-addons.mk
-+++ /dev/null
-@@ -1,27 +0,0 @@
--################################################################################
--#
--# kodi-pvr-addons
--#
--################################################################################
--
--# This cset is on the branch 'helix'
--# When Kodi is updated, this should be updated to the corresponding branch
--KODI_PVR_ADDONS_VERSION = 4854fbe9dc0499ca8d1e10e8c18e329d3eb48814
--KODI_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(KODI_PVR_ADDONS_VERSION))
--KODI_PVR_ADDONS_LICENSE = GPLv3+
--KODI_PVR_ADDONS_LICENSE_FILES = COPYING
--
--# There's no ./configure in the git tree, we need to generate it
--KODI_PVR_ADDONS_AUTORECONF = YES
--
--KODI_PVR_ADDONS_DEPENDENCIES = zlib
--# This really is a runtime dependency, but we need KODI to be installed
--# first, since we'll install files in KODI's directories _after_ KODI has
--# installed its own files
--KODI_PVR_ADDONS_DEPENDENCIES += kodi
--
--KODI_PVR_ADDONS_CONF_OPTS = \
--	--enable-release \
--	--enable-addons-with-dependencies
--
--$(eval $(autotools-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 0abc228..80bba83 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -256,9 +256,17 @@ source "package/kodi-audioencoder-wav/Config.in"
- 
- endif # BR2_PACKAGE_KODI_OPTICALDRIVE
- 
-+config BR2_PACKAGE_KODI_PVR_ADDONS
-+	bool "kodi-pvr-addons"
+diff --git a/package/Config.in b/package/Config.in
+index ce67c8a..0eb2dcb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -828,6 +828,7 @@ menu "JSON/XML"
+ 	source "package/mxml/Config.in"
+ 	source "package/rapidjson/Config.in"
+ 	source "package/tinyxml/Config.in"
++	source "package/tinyxml2/Config.in"
+ 	source "package/xerces/Config.in"
+ 	source "package/yajl/Config.in"
+ 	source "package/yaml-cpp/Config.in"
+diff --git a/package/tinyxml2/Config.in b/package/tinyxml2/Config.in
+new file mode 100644
+index 0000000..25bc594
+--- /dev/null
++++ b/package/tinyxml2/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_TINYXML2
++	bool "tinyxml2"
++	depends on BR2_INSTALL_LIBSTDCPP
 +	help
-+	  A collection of PVR backend addons for Kodi
++	  TinyXML-2 is a simple, small, efficient, C++ XML parser that can be
++	  easily integrating into other programs.
 +
-+if BR2_PACKAGE_KODI_PVR_ADDONS
++	  http://www.grinninglizard.com/tinyxml2/index.html
 +
- comment "Kodi PVR addons"
- 
- source "package/kodi-addon-xvdr/Config.in"
--source "package/kodi-pvr-addons/Config.in"
++comment "tinyxml2 needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
+new file mode 100644
+index 0000000..370049b
+--- /dev/null
++++ b/package/tinyxml2/tinyxml2.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# tinyxml2
++#
++################################################################################
 +
-+endif # BR2_PACKAGE_KODI_PVR_ADDONS
- 
- endif # BR2_PACKAGE_KODI
++TINYXML2_VERSION = 2.2.0
++TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
++TINYXML2_LICENSE = zlib
++TINYXML2_LICENSE_FILES = readme.md
++TINYXML2_INSTALL_STAGING = YES
++
++$(eval $(cmake-package))
 -- 
 1.7.10.4
