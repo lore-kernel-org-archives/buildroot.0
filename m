@@ -1,87 +1,35 @@
-From: david.barbion at ext.leroymerlin.fr <david.barbion@ext.leroymerlin.fr>
-Date: Wed,  1 Apr 2015 16:26:03 +0200
-Subject: [Buildroot] [PATCH 1/1] amd-radeon-firmware
-Message-ID: <1427898363-26029-1-git-send-email-david.barbion@ext.leroymerlin.fr>
+From: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
+Date: Wed, 1 Apr 2015 16:18:47 +0000
+Subject: [Buildroot] Build embedded system for x86 device
+In-Reply-To: <AMXPR04MB103B46C4493795E70A219D7EAF30@AMXPR04MB103.eurprd04.prod.outlook.com>
+References: <AMXPR04MB10385410B37EA5F396EE688EAF30@AMXPR04MB103.eurprd04.prod.outlook.com>,
+ <AMXPR04MB103B46C4493795E70A219D7EAF30@AMXPR04MB103.eurprd04.prod.outlook.com>
+Message-ID: <1427905127091.2736@geocept.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: David BARBION <david.barbion@ext.leroymerlin.fr>
----
- package/linux-firmware/Config.in         |  9 +++++++++
- package/linux-firmware/linux-firmware.mk | 34 ++++++++++++++++++++++++++++++++
- 2 files changed, 43 insertions(+)
+I reply to myself and I apologies for the noise...
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 9e1eb91..7265990 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -17,6 +17,15 @@ config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_SST_DSP
- 
- endmenu # Audio
- 
-+menu "Video firmware"
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_RADEON
-+	bool "AMD Radeon video card firmware"
-+	help
-+	  Firmware files for AMD Radeon video cards.
-+
-+endmenu # Video
-+
- menu "WiFi firmware"
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_6002
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 71c8611..3668510 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -14,6 +14,40 @@ LINUX_FIRMWARE_FILES += intel/fw_sst_0f28.bin-48kHz_i2s_master
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.fw_sst_0f28
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RADEON),y)
-+LINUX_FIRMWARE_RADEON_FILES = \
-+	ARUBA_me ARUBA_pfp ARUBA_rlc BARTS_mc  BARTS_me BARTS_pfp BARTS_smc BONAIRE_ce \
-+	BONAIRE_mc BONAIRE_mc2 BONAIRE_me BONAIRE_mec BONAIRE_pfp BONAIRE_rlc BONAIRE_sdma BONAIRE_smc \
-+	BONAIRE_uvd BONAIRE_vce BTC_rlc CAICOS_mc CAICOS_me CAICOS_pfp CAICOS_smc CAYMAN_mc \
-+	CAYMAN_me CAYMAN_pfp CAYMAN_rlc CAYMAN_smc CEDAR_me CEDAR_pfp CEDAR_rlc CEDAR_smc \
-+	CYPRESS_me CYPRESS_pfp CYPRESS_rlc CYPRESS_smc CYPRESS_uvd HAINAN_ce HAINAN_mc HAINAN_mc2 \
-+	HAINAN_me HAINAN_pfp HAINAN_rlc HAINAN_smc HAWAII_ce HAWAII_mc HAWAII_mc2 HAWAII_me \
-+	HAWAII_mec HAWAII_pfp HAWAII_rlc HAWAII_sdma HAWAII_smc JUNIPER_me JUNIPER_pfp JUNIPER_rlc \
-+	JUNIPER_smc KABINI_ce KABINI_me KABINI_mec KABINI_pfp KABINI_rlc KABINI_sdma KAVERI_ce \
-+	KAVERI_me KAVERI_mec KAVERI_pfp KAVERI_rlc KAVERI_sdma MULLINS_ce MULLINS_me MULLINS_mec \
-+	MULLINS_pfp MULLINS_rlc MULLINS_sdma OLAND_ce OLAND_mc OLAND_mc2 OLAND_me OLAND_pfp \
-+	OLAND_rlc OLAND_smc PALM_me PALM_pfp PITCAIRN_ce PITCAIRN_mc PITCAIRN_mc2 PITCAIRN_me \
-+	PITCAIRN_pfp PITCAIRN_rlc PITCAIRN_smc R100_cp R200_cp R300_cp R420_cp R520_cp R600_me \
-+	R600_pfp R600_rlc R600_uvd R700_rlc REDWOOD_me REDWOOD_pfp REDWOOD_rlc REDWOOD_smc \
-+	RS600_cp RS690_cp RS780_me RS780_pfp RS780_uvd RV610_me RV610_pfp RV620_me \
-+	RV620_pfp RV630_me RV630_pfp RV635_me RV635_pfp RV670_me RV670_pfp RV710_me \
-+	RV710_pfp RV710_smc RV710_uvd RV730_me RV730_pfp RV730_smc RV740_smc RV770_me \
-+	RV770_pfp RV770_smc RV770_uvd SUMO2_me SUMO2_pfp SUMO_me SUMO_pfp SUMO_rlc \
-+	SUMO_uvd TAHITI_ce TAHITI_mc TAHITI_mc2 TAHITI_me TAHITI_pfp TAHITI_rlc TAHITI_smc \
-+	TAHITI_uvd TURKS_mc TURKS_me TURKS_pfp TURKS_smc VERDE_ce VERDE_mc VERDE_mc2 \
-+	VERDE_me VERDE_pfp VERDE_rlc VERDE_smc bonaire_ce bonaire_mc bonaire_me bonaire_mec \
-+	bonaire_pfp bonaire_rlc bonaire_sdma bonaire_smc hainan_ce hainan_mc hainan_me hainan_pfp \
-+	hainan_rlc hainan_smc hawaii_ce hawaii_mc hawaii_me hawaii_mec hawaii_pfp hawaii_rlc \
-+	hawaii_sdma hawaii_smc kabini_ce kabini_me kabini_mec kabini_pfp kabini_rlc kabini_sdma \
-+	kaveri_ce kaveri_me kaveri_mec kaveri_mec2 kaveri_pfp kaveri_rlc kaveri_sdma mullins_ce \
-+	mullins_me mullins_mec mullins_pfp mullins_rlc mullins_sdma oland_ce oland_mc oland_me \
-+	oland_pfp oland_rlc oland_smc pitcairn_ce pitcairn_mc pitcairn_me pitcairn_pfp pitcairn_rlc \
-+	pitcairn_smc tahiti_ce tahiti_mc tahiti_me tahiti_pfp tahiti_rlc tahiti_smc verde_ce \
-+	verde_mc verde_me verde_pfp verde_rlc verde_smc
-+LINUX_FIRMWARE_FILES += $(foreach f,$(LINUX_FIRMWARE_RADEON_FILES),radeon/$(f).bin)
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.radeon
-+endif
-+
- # rt2501/rt61
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61),y)
- LINUX_FIRMWARE_FILES += rt2561.bin rt2561s.bin rt2661.bin
--- 
-2.1.0
+In fact, the solution was easy find, I simple had to follow the help message from GRUB2:
+a) generate a tar rootfs
+b) leave 1Mb at begin of the Compact Flash and create a primary partition (ext3 in my use case)
+c) format the root partition (sudo mkfs.ext3 /dev/sdb1) and mount it (sudo mount /dev/sdb1 /mnt)
+d) install grub sudo ./output/host/usr/sbin/grub-bios-setup \
+			-b ./output/host/usr/lib/grub/i386-pc/boot.img \
+			-c ./output/images/grub.img -d . /dev/sdb
+e) install the rootfs ==> sudo tar -C /mnt -xf output/images/rootfs.tar
+f) install kernel ==> sudo cp output/image/bzImage  /mnt/boot/
+g) finish: sync && sudo umount /mnt
 
+That's it!
 
+All works fine now, and my device boots with success :)
 
-Ce message et toutes les pi?ces jointes sont ?tablis ? l'attention exclusive de leurs destinataires et sont confidentiels. Si vous recevez ce message par erreur, merci de le d?truire et d'en avertir imm?diatement l'exp?diteur. L'internet ne permettant pas d'assurer l'int?grit? de ce message, le contenu de ce message ne repr?sente en aucun cas un engagement de la part de Leroy Merlin.
+Thanks to all Buildroot contributors/maintainers for this great software :)
+
+Best regards
+
+Fabrice
