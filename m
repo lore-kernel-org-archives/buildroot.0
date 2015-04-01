@@ -1,107 +1,81 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  1 Apr 2015 05:56:24 -0300
-Subject: [Buildroot] [PATCH] package/gtk2-themes: remove
-Message-ID: <1427878584-20001-1-git-send-email-gustavo@zacarias.com.ar>
+From: Jens Rosenboom <j.rosenboom@x-ion.de>
+Date: Wed,  1 Apr 2015 11:08:45 +0200
+Subject: [Buildroot] [PATCH 1/1] Add package sl
+Message-ID: <1427879325-12015-1-git-send-email-j.rosenboom@x-ion.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The category just contains gtk2-theme-hicolor... which is a duplicate of
-hicolor-icon-theme, d'oh!
-Remove it and select the only one via legacy.
+SL (Steam Locomotive) runs across your terminal when you type "sl" as
+you meant to type "ls". It's just a joke command, and not useful at all.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Might want to depend on BR2_PACKAGE_NCURSES_WCHAR even in order to get
+terminfo for xterm-256color, but I'm not sure whether that should be
+just optional.
+
+Signed-off-by: Jens Rosenboom <j.rosenboom@x-ion.de>
 ---
- Config.in.legacy                                           |  7 +++++++
- package/Config.in                                          |  1 -
- package/gtk2-themes/Config.in                              |  6 ------
- package/gtk2-themes/gtk2-theme-hicolor/Config.in           |  2 --
- .../gtk2-themes/gtk2-theme-hicolor/gtk2-theme-hicolor.mk   | 14 --------------
- package/gtk2-themes/gtk2-themes.mk                         |  1 -
- 6 files changed, 7 insertions(+), 24 deletions(-)
- delete mode 100644 package/gtk2-themes/Config.in
- delete mode 100644 package/gtk2-themes/gtk2-theme-hicolor/Config.in
- delete mode 100644 package/gtk2-themes/gtk2-theme-hicolor/gtk2-theme-hicolor.mk
- delete mode 100644 package/gtk2-themes/gtk2-themes.mk
+ package/Config.in    |  1 +
+ package/sl/Config.in |  9 +++++++++
+ package/sl/sl.mk     | 20 ++++++++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/sl/Config.in
+ create mode 100644 package/sl/sl.mk
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 1f57671..445cab7 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.05"
- 
-+config BR2_PACKAGE_GTK2_THEME_HICOLOR
-+	bool "hicolor (default theme) is a duplicate"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_HICOLOR_ICON_THEME
-+	help
-+	  The option was just a duplicate of hicolor icon theme.
-+
- config BR2_PACKAGE_VALGRIND_PTRCHECK
- 	bool "valgrind's PTRCheck was renamed to SGCheck"
- 	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index 85e2704..9d9fb71 100644
+index d6a5ad3..08475fe 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -709,7 +709,6 @@ menu "Graphics"
- 	source "package/giblib/Config.in"
- 	source "package/giflib/Config.in"
- 	source "package/gtk2-engines/Config.in"
--	source "package/gtk2-themes/Config.in"
- 	source "package/harfbuzz/Config.in"
- 	source "package/hicolor-icon-theme/Config.in"
- 	source "package/imlib2/Config.in"
-diff --git a/package/gtk2-themes/Config.in b/package/gtk2-themes/Config.in
-deleted file mode 100644
-index ac212b8..0000000
---- a/package/gtk2-themes/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--menu "GTK Themes"
--depends on BR2_PACKAGE_LIBGTK2
--
--source "package/gtk2-themes/gtk2-theme-hicolor/Config.in"
--
--endmenu
-diff --git a/package/gtk2-themes/gtk2-theme-hicolor/Config.in b/package/gtk2-themes/gtk2-theme-hicolor/Config.in
-deleted file mode 100644
-index 144f1d8..0000000
---- a/package/gtk2-themes/gtk2-theme-hicolor/Config.in
-+++ /dev/null
-@@ -1,2 +0,0 @@
--config BR2_PACKAGE_GTK2_THEME_HICOLOR
--	bool "hicolor (default theme)"
-diff --git a/package/gtk2-themes/gtk2-theme-hicolor/gtk2-theme-hicolor.mk b/package/gtk2-themes/gtk2-theme-hicolor/gtk2-theme-hicolor.mk
-deleted file mode 100644
-index 84df23f..0000000
---- a/package/gtk2-themes/gtk2-theme-hicolor/gtk2-theme-hicolor.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# gtk2-theme-hicolor
--#
--################################################################################
--
--GTK2_THEME_HICOLOR_VERSION = 0.10
--GTK2_THEME_HICOLOR_SOURCE = hicolor-icon-theme-$(GTK2_THEME_HICOLOR_VERSION).tar.gz
--GTK2_THEME_HICOLOR_SITE = http://icon-theme.freedesktop.org/releases
--GTK2_THEME_HICOLOR_DEPENDENCIES = libgtk2
--GTK2_THEME_HICOLOR_LICENSE = GPLv2
--GTK2_THEME_HICOLOR_LICENSE_FILES = COPYING
--
--$(eval $(autotools-package))
-diff --git a/package/gtk2-themes/gtk2-themes.mk b/package/gtk2-themes/gtk2-themes.mk
-deleted file mode 100644
-index fc66698..0000000
---- a/package/gtk2-themes/gtk2-themes.mk
-+++ /dev/null
-@@ -1 +0,0 @@
--include $(sort $(wildcard package/gtk2-themes/*/*.mk))
+@@ -183,6 +183,7 @@ menu "Games"
+ 	source "package/opentyrian-data/Config.in"
+ 	source "package/prboom/Config.in"
+ 	source "package/rubix/Config.in"
++	source "package/sl/Config.in"
+ endmenu
+ 
+ menu "Graphic libraries and applications (graphic/text)"
+diff --git a/package/sl/Config.in b/package/sl/Config.in
+new file mode 100644
+index 0000000..e387ea5
+--- /dev/null
++++ b/package/sl/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_SL
++	bool "sl"
++        # Note(JR): Still need to check proper depends
++	depends on BR2_PACKAGE_NCURSES
++	help
++	  SL (Steam Locomotive) runs across your terminal when you type "sl" 
++	  as you meant to type "ls". It's just a joke command, and not useful at all.
++
++	  https://github.com/mtoyoda/sl
+diff --git a/package/sl/sl.mk b/package/sl/sl.mk
+new file mode 100644
+index 0000000..9ad98cb
+--- /dev/null
++++ b/package/sl/sl.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# sl
++#
++################################################################################
++
++SL_VERSION = 5.02
++SL_SITE = $(call github,mtoyoda,sl,$(SL_VERSION))
++SL_LICENSE = Unclear
++SL_LICENSE_FILES = LICENSE
++
++define SL_BUILD_CMDS
++	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
++endef
++
++define SL_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/sl $(TARGET_DIR)/usr/bin/sl
++endef
++
++$(eval $(generic-package))
 -- 
-2.0.5
+1.9.1
