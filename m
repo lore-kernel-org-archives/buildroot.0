@@ -1,36 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 23:47:15 +0200
-Subject: [Buildroot] [PATCH v2 1/1] gnuradio: depends on shared libs
-In-Reply-To: <1427739026-13418-1-git-send-email-gwenj@trabucayre.com>
-References: <1427739026-13418-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20150401234715.4099dc52@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 01 Apr 2015 23:48:49 +0200
+Subject: [Buildroot] [PATCH 1/1] jamvm: add depends on toolchain
+	w/threads
+In-Reply-To: <20150401234340.1717eaf2@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 1 Apr 2015 23:43:40 +0200")
+References: <1427385280-63133-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20150401234340.1717eaf2@free-electrons.com>
+Message-ID: <871tk3r03i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gwenhael Goavec-Merou,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon, 30 Mar 2015 20:10:26 +0200, Gwenhael Goavec-Merou wrote:
+Hi,
 
-> diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-> index 274afaa..fe89c01 100644
-> --- a/package/gnuradio/Config.in
-> +++ b/package/gnuradio/Config.in
-> @@ -1,14 +1,15 @@
-> -comment "gnuradio needs a toolchain w/ C++, IPV6, NPTL, largefile, wchar"
-> +comment "gnuradio needs a toolchain w/ C++, IPV6, NPTL, largefile, wchar and shared libs"
+> Also, there's something fishy between jamvm and classpath.
 
-s/shared libs/dynamic library/
+ > jamvm does select BR2_PACKAGE_CLASSPATH and has classpath in
+ > JAMVM_DEPENDENCIES.
 
-See the Buildroot manual for the exact strings to use in this situation.
+ > But classpath has depends on BR2_PACKAGE_JAMVM in its Config.in.
 
-I've fixed that up, rebased the patch on top of the non-largefile
-removal patches that I have merged, and applied. Thanks a lot!
+ > Does not make much sense. Peter, you followed the JamVM/Classpath
+ > stuff. What do you think?
 
-Thomas
+Hmm, that indeed doesn't sound right. I think the jamvm select should be
+dropped from classpath.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
