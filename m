@@ -1,99 +1,37 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 1 Apr 2015 11:26:50 +0200
-Subject: [Buildroot] [PATCH 1/1] Add package sl
-In-Reply-To: <1427879325-12015-1-git-send-email-j.rosenboom@x-ion.de>
-References: <1427879325-12015-1-git-send-email-j.rosenboom@x-ion.de>
-Message-ID: <CA+TH9V=GDKg8h=_1rfRimuKEaJM_DC-w60frT3PK3DTJA1m-+w@mail.gmail.com>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Wed, 01 Apr 2015 10:55:56 +0100
+Subject: [Buildroot] [PATCH v2 1/1] qt5: bump version to 5.4.1
+In-Reply-To: <20150331175845.GC3912@free.fr>
+References: <1425477719-6893-1-git-send-email-will_wagner@carallon.com>
+ <20150331175845.GC3912@free.fr>
+Message-ID: <551BC0AC.5050507@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jens Rosenboom,
+On 31/03/2015 18:58, Yann E. MORIN wrote:
+> Will, All,
+>
+> On 2015-03-04 14:01 +0000, will_wagner at carallon.com spake thusly:
+>> From: Will Wagner <will_wagner@carallon.com>
+>>
+>> Also remove all patches that have been applied to 5.4.1 branch
+> You forgot to update the hashes.
+>
+> Care to send a patch to add them, please?
 
-2015-04-01 11:08 GMT+02:00 Jens Rosenboom <j.rosenboom@x-ion.de>:
-> SL (Steam Locomotive) runs across your terminal when you type "sl" as
-> you meant to type "ls". It's just a joke command, and not useful at all.
->
-> Might want to depend on BR2_PACKAGE_NCURSES_WCHAR even in order to get
-> terminfo for xterm-256color, but I'm not sure whether that should be
-> just optional.
->
-> Signed-off-by: Jens Rosenboom <j.rosenboom@x-ion.de>
-> ---
->  package/Config.in    |  1 +
->  package/sl/Config.in |  9 +++++++++
->  package/sl/sl.mk     | 20 ++++++++++++++++++++
->  3 files changed, 30 insertions(+)
->  create mode 100644 package/sl/Config.in
->  create mode 100644 package/sl/sl.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index d6a5ad3..08475fe 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -183,6 +183,7 @@ menu "Games"
->         source "package/opentyrian-data/Config.in"
->         source "package/prboom/Config.in"
->         source "package/rubix/Config.in"
-> +       source "package/sl/Config.in"
->  endmenu
->
->  menu "Graphic libraries and applications (graphic/text)"
-> diff --git a/package/sl/Config.in b/package/sl/Config.in
-> new file mode 100644
-> index 0000000..e387ea5
-> --- /dev/null
-> +++ b/package/sl/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_SL
-> +       bool "sl"
-> +        # Note(JR): Still need to check proper depends
-> +       depends on BR2_PACKAGE_NCURSES
-> +       help
-> +         SL (Steam Locomotive) runs across your terminal when you type "sl"
-> +         as you meant to type "ls". It's just a joke command, and not useful at all.
-> +
-> +         https://github.com/mtoyoda/sl
-> diff --git a/package/sl/sl.mk b/package/sl/sl.mk
-> new file mode 100644
-> index 0000000..9ad98cb
-> --- /dev/null
-> +++ b/package/sl/sl.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# sl
-> +#
-> +################################################################################
-> +
-> +SL_VERSION = 5.02
-> +SL_SITE = $(call github,mtoyoda,sl,$(SL_VERSION))
-> +SL_LICENSE = Unclear
-> +SL_LICENSE_FILES = LICENSE
-> +
-> +define SL_BUILD_CMDS
-> +       $(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
-> +endef
-> +
-> +define SL_INSTALL_TARGET_CMDS
-> +       $(INSTALL) -D $(@D)/sl $(TARGET_DIR)/usr/bin/sl
-> +endef
-> +
-> +$(eval $(generic-package))
-> --
+Sorry about that, not had to deal with hashes before. I'll submit a 
+patch shortly.
 
-I want it now! Tomorrow will be too late!
-
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Will
 
 
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
