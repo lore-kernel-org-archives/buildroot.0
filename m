@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  1 Apr 2015 20:36:08 +0200
-Subject: [Buildroot] [PATCH/RFC 15/27] package/kodi-pvr-njoy: new package
+Date: Wed,  1 Apr 2015 20:36:20 +0200
+Subject: [Buildroot] [PATCH/RFC 27/27] package/kodi-audiodecoder-sidplay:
+	new package
 In-Reply-To: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427913380-14808-16-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427913380-14808-28-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +14,61 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-njoy/Config.in        |    7 +++++++
- package/kodi-pvr-njoy/kodi-pvr-njoy.mk |   17 +++++++++++++++++
- package/kodi/Config.in                 |    1 +
- 3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-pvr-njoy/Config.in
- create mode 100644 package/kodi-pvr-njoy/kodi-pvr-njoy.mk
+ package/kodi-audiodecoder-sidplay/Config.in           |    8 ++++++++
+ .../kodi-audiodecoder-sidplay.mk                      |   17 +++++++++++++++++
+ package/kodi/Config.in                                |    1 +
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/kodi-audiodecoder-sidplay/Config.in
+ create mode 100644 package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
 
-diff --git a/package/kodi-pvr-njoy/Config.in b/package/kodi-pvr-njoy/Config.in
+diff --git a/package/kodi-audiodecoder-sidplay/Config.in b/package/kodi-audiodecoder-sidplay/Config.in
 new file mode 100644
-index 0000000..33c493c
+index 0000000..ae99afa
 --- /dev/null
-+++ b/package/kodi-pvr-njoy/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_NJOY
-+	bool "kodi-pvr-njoy"
++++ b/package/kodi-audiodecoder-sidplay/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_AUDIODECODER_SIDPLAY
++	bool "kodi-audiodecoder-sidplay"
 +	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_LIBSIDPLAY2
 +	help
-+	  Kodi's Njoy N7 client addon
++	  Sidplay decoder addon for Kodi
 +
-+	  https://github.com/kodi-pvr/pvr.njoy
-diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
++	  https://github.com/notspiff/audiodecoder.sidplay
+diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
 new file mode 100644
-index 0000000..2d634fb
+index 0000000..5a00869
 --- /dev/null
-+++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
++++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-pvr-njoy
++# kodi-audiodecoder-sidplay
 +#
 +################################################################################
 +
-+KODI_PVR_NJOY_VERSION = fcd62943f976be1a60786643aaa01ebd98c0964e
-+KODI_PVR_NJOY_SITE = $(call github,kodi-pvr,pvr.njoy,$(KODI_PVR_NJOY_VERSION))
-+KODI_PVR_NJOY_LICENSE = GPLv2+
-+KODI_PVR_NJOY_LICENSE_FILES = src/client.cpp
++KODI_AUDIODECODER_SIDPLAY_VERSION = f2e7d98528dfb3bfdd5dabcb5152955c9dc6979a
++KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,notspiff,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
++KODI_AUDIODECODER_SIDPLAY_LICENSE = GPLv2+
++KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = src/SIDCodec.cpp
 +
-+KODI_PVR_NJOY_DEPENDENCIES = kodi-platform
++KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi-platform libsidplay2
 +
-+KODI_PVR_NJOY_CONF_OPTS += \
++KODI_AUDIODECODER_SIDPLAY_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index b1fcdd6..8f0ab1d 100644
+index 7240dc0..b7697ed 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -276,6 +276,7 @@ source "package/kodi-pvr-iptvsimple/Config.in"
- source "package/kodi-pvr-mediaportal-tvserver/Config.in"
- source "package/kodi-pvr-mythtv/Config.in"
- source "package/kodi-pvr-nextpvr/Config.in"
-+source "package/kodi-pvr-njoy/Config.in"
- source "package/kodi-addon-xvdr/Config.in"
+@@ -296,6 +296,7 @@ comment "Kodi audio decoders"
  
- endif # BR2_PACKAGE_KODI_PVR_ADDONS
+ source "package/kodi-audiodecoder-modplug/Config.in"
+ source "package/kodi-audiodecoder-nosefart/Config.in"
++source "package/kodi-audiodecoder-sidplay/Config.in"
+ source "package/kodi-audiodecoder-snesapu/Config.in"
+ source "package/kodi-audiodecoder-stsound/Config.in"
+ source "package/kodi-audiodecoder-timidity/Config.in"
 -- 
 1.7.10.4
