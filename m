@@ -1,58 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 22:36:13 +0200
-Subject: [Buildroot] [PATCH 2/2] bmon: remove hash file for GitHub
- helper package
-In-Reply-To: <1427917740-17656-2-git-send-email-yegorslists@googlemail.com>
-References: <1427917740-17656-1-git-send-email-yegorslists@googlemail.com>
- <1427917740-17656-2-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20150401223613.49f8b01c@free-electrons.com>
+Date: Wed, 1 Apr 2015 22:37:52 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] build host lz4 to support lz4
+ compression in the kernel.
+In-Reply-To: <1427919153-16080-1-git-send-email-sagaert.johan@proximus.be>
+References: <1427919153-16080-1-git-send-email-sagaert.johan@proximus.be>
+Message-ID: <20150401223752.0fd358cf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Dear Sagaert Johan,
 
-On Wed,  1 Apr 2015 21:49:00 +0200, Yegor Yefremov wrote:
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/bmon/bmon.hash | 2 --
->  1 file changed, 2 deletions(-)
->  delete mode 100644 package/bmon/bmon.hash
+On Wed,  1 Apr 2015 22:12:33 +0200, Sagaert Johan wrote:
 
-This patch is not correct. There is a subtle thing about github
-downloads. Quoting the Buildroot manual:
+> +# lz4 kernel compression is only available on ARM and kernel >= 3.11
+> +# we always build host-lz4 when the target is ARM.
+> +# (how could i use LINUX_VERSION_PROBED to check for >=3.11 ?)
+> +ifeq ($(BR2_arm),y)
+> +LINUX_DEPENDENCIES += host-lz4
+> +endif
 
-"""
-If the package you wish to add does have a release section on GitHub,
-the maintainer may have uploaded a release tarball, or the release may
-just point to the automatically generated tarball from the git tag. If
-there is a release tarball uploaded by the maintainer, we prefer to use
-that since it may be slightly different (e.g. it contains a configure
-script so we don?t need to do AUTORECONF).
+No that still isn't good: LZ4 compressed kernel is available on ARM,
+MIPS, x86 and S390 (we don't care about the latter in Buildroot).
 
-You can see on the release page if it?s an uploaded tarball or a git
-tag:
-
-* If there is a green download button, like mongrel2, then it was
-  uploaded by the maintainer and you should use the link of that button
-  to specify FOO_SITE, and not use the github helper.
-
-* If there is grey download button, like xbmc, then it?s an
-  automatically generated tarball and you should use the github helper
-  function.
-"""
-
-So if we're with a "green" button case, it is perfectly fine to have a
-tarball hash, because the taball is not automatically generated. And
-this is the case we're in for bmon:
-https://github.com/tgraf/bmon/releases. There is a green button. And
-the BMON_SITE variable does not use the github helper.
-
-So I marked this patch as rejected.
-
-Best regards,
+No, I really think we need to add new options in linux/Config.in.
 
 Thomas
 -- 
