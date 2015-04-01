@@ -1,51 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 01 Apr 2015 23:07:42 +0200
-Subject: [Buildroot] clapack libraries missing?: buildroot-2014.11
-In-Reply-To: <8328b17ed1d642209ea7133d18709de1@exch13-mail05.win.slac.stanford.edu>
-References: <CADDnATcLG1SbgVZ8TB08J_yHU5vF7vKTPdwUZnFvcgewoUFdEg@mail.gmail.com>,
- <551AFE63.6050009@mind.be>,
- <8b612d402130471485daafdd832b2d6a@exch13-mail05.win.slac.stanford.edu>
- <8328b17ed1d642209ea7133d18709de1@exch13-mail05.win.slac.stanford.edu>
-Message-ID: <551C5E1E.4090303@mind.be>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 1 Apr 2015 16:09:48 -0500
+Subject: [Buildroot] [PATCH 1/1] jamvm: add depends on toolchain
+	w/threads
+In-Reply-To: <20150401164428.7fcc4854@free-electrons.com>
+References: <1427385280-63133-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <CAMQcK5KRF47ZyTyzfj1e+xcDO0V_J8oUUXEgUiqF3zR6VYv7Qw@mail.gmail.com>
+ <CANQCQpaJObqR6poUyh5FMm58vPFGyruJm=JBWBbQtPgsP8pf1g@mail.gmail.com>
+ <CAMQcK5Lsur2cCryZ=fTGeeWRQzwCtaErkP-Of9auJ+-s6cHkEQ@mail.gmail.com>
+ <20150401164428.7fcc4854@free-electrons.com>
+Message-ID: <CANQCQpaUASXg+Rb_ea7wA+=okCuEyE_j1WpRrLuB0tVQEX5_9A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- [Ernesto, any chance of configuring your mailer to do proper quoting?]
+All,
 
-On 01/04/15 07:05, Williams Jr., Ernest L. wrote:
-[snip]
-> My code does not compile:
-> clapack has types that are not defined :(
-> 
-> What other header file defines, "integer, "complex", "doublereal", "logical" , etc  ...?
-> 
-> /* header file for clapack 3.2.1 */
-> 
-> #ifndef __CLAPACK_H
-> #define __CLAPACK_H
-> 
-> /* Subroutine */ int caxpy_(integer *n, complex *ca, complex *cx, integer *
->         incx, complex *cy, integer *incy);
-> 
-> 
-> 
-> Looks like  "f2c.h" is actually needed but was not installed.
+On Wed, Apr 1, 2015 at 9:44 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Ryan Barnett,
+>
+> On Wed, 1 Apr 2015 09:28:12 -0500, Ryan Barnett wrote:
+>
+>> > While running an autobuilder internally.  It's a arm uclibc build
+>> > failure looking for pthreads.
+>>
+>> I am curious about the Buildroot autobuilders then if they don't have
+>> javac available on them to build.
+>>
+>> Thomas - are there autobuilders that have javac installed on them?
+>
+> The autobuild-run script detects whether javac is available or not. If
+> it's not available, it makes sure to not attempt a build that has the
+> Buildroot packages that require javac to be installed.
+>
 
- Could you find out from upstream how to make sure that f2c gets installed as
-well? Perhaps also ask them to include f2c.h from clapack.h.
+Ok, it looks like it's detecting it as "javac 1.7.0_75" on ours.  I'll
+update my buildroot-test branch to the latest and retest (I'm a couple
+months behind).
 
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thanks,
+Matt
