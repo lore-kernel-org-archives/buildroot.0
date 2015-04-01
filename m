@@ -1,40 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 22:59:43 +0200
-Subject: [Buildroot] [PATCH v3 00/15] Drop non-largefile support
-In-Reply-To: <1427749654-30153-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427749654-30153-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150401225943.15ba7e49@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 01 Apr 2015 23:07:42 +0200
+Subject: [Buildroot] clapack libraries missing?: buildroot-2014.11
+In-Reply-To: <8328b17ed1d642209ea7133d18709de1@exch13-mail05.win.slac.stanford.edu>
+References: <CADDnATcLG1SbgVZ8TB08J_yHU5vF7vKTPdwUZnFvcgewoUFdEg@mail.gmail.com>,
+ <551AFE63.6050009@mind.be>,
+ <8b612d402130471485daafdd832b2d6a@exch13-mail05.win.slac.stanford.edu>
+ <8328b17ed1d642209ea7133d18709de1@exch13-mail05.win.slac.stanford.edu>
+Message-ID: <551C5E1E.4090303@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+ [Ernesto, any chance of configuring your mailer to do proper quoting?]
 
-On Mon, 30 Mar 2015 18:07:19 -0300, Gustavo Zacarias wrote:
+On 01/04/15 07:05, Williams Jr., Ernest L. wrote:
+[snip]
+> My code does not compile:
+> clapack has types that are not defined :(
+> 
+> What other header file defines, "integer, "complex", "doublereal", "logical" , etc  ...?
+> 
+> /* header file for clapack 3.2.1 */
+> 
+> #ifndef __CLAPACK_H
+> #define __CLAPACK_H
+> 
+> /* Subroutine */ int caxpy_(integer *n, complex *ca, complex *cx, integer *
+>         incx, complex *cy, integer *incy);
+> 
+> 
+> 
+> Looks like  "f2c.h" is actually needed but was not installed.
 
-> Gustavo Zacarias (15):
->   toolchain/helpers: add check for mandatory uClibc options
->   toolchain/helpers: make LFS mandatory for uclibc toolchains
->   package/uclibc: default to Y for LARGEFILE
->   toolchain-common: default to Y for LARGEFILE
->   toolchain: remove LARGEFILE selects
->   package infra: drop non-lfs support
->   configs: drop largefile option
->   busybox: force lfs build
->   system: drop largefile depends
->   boot/gummiboot: drop largefile depends
->   packages: remove (non-)lfs dependencies and tweaks
->   docs/manual: remove references to largefile
->   packages: remove non-lfs enabler patches
->   package/uclibc: drop BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
->   toolchain-common: drop BR2_LARGEFILE
+ Could you find out from upstream how to make sure that f2c gets installed as
+well? Perhaps also ask them to include f2c.h from clapack.h.
 
-Applied, thanks a lot!
 
-Thomas
+ Regards,
+ Arnout
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
