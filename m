@@ -1,43 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Apr 2015 10:15:27 +0200
-Subject: [Buildroot] [git commit] imagemagick: bump to version 6.9.1-0
-Message-ID: <20150402081636.9DF208194C@busybox.osuosl.org>
+Date: Thu, 2 Apr 2015 10:15:42 +0200
+Subject: [Buildroot] [git commit] package/linux-firmware: add support to
+	copy entire directories
+Message-ID: <20150402081636.A8A8B8195A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ec2187edf92bb4749a50939231160c6b9128ac3
+commit: http://git.buildroot.net/buildroot/commit/?id=b55bd5a9e25e716e27890a13ef9dde8cf48e17d8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also update hash file.
-
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: David BARBION <david.barbion@ext.leroymerlin.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/imagemagick/imagemagick.hash |    2 +-
- package/imagemagick/imagemagick.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-firmware/linux-firmware.mk |   25 +++++++++++++++++++++----
+ 1 files changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 16d5927..d93ccfe 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
--sha256 d1f5dcd32a93130feb9e980a8a97517d3a2c814a8b608d139d4756516548748c ImageMagick-6.9.0-10.tar.xz
-+sha256 32747565fc30da0ff0bc0bf3e41c9fefad829fa8fb2f7d1b98dd84ddb3919b0e ImageMagick-6.9.1-0.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index fe788ac..b6ef09c 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 71c8611..5a68138 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -293,6 +293,23 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
+ endif
  
--IMAGEMAGICK_VERSION = 6.9.0-10
-+IMAGEMAGICK_VERSION = 6.9.1-0
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+ ifneq ($(LINUX_FIRMWARE_FILES),)
++define LINUX_FIRMWARE_INSTALL_FILES
++	$(TAR) c -C $(@D) $(sort $(LINUX_FIRMWARE_FILES)) | \
++		$(TAR) x -C $(TARGET_DIR)/lib/firmware
++endef
++endif
++
++ifneq ($(LINUX_FIRMWARE_DIRS),)
++# We need to rm-rf the destination directory to avoid copying
++# into it in itself, should we re-install the package.
++define LINUX_FIRMWARE_INSTALL_DIRS
++	$(foreach d,$(LINUX_FIRMWARE_DIRS), \
++		rm -rf $(TARGET_DIR)/lib/firmware/$(d); \
++		cp -a $(@D)/$(d) $(TARGET_DIR)/lib/firmware/$(d)$(sep))
++endef
++endif
++
++ifneq ($(LINUX_FIRMWARE_FILES)$(LINUX_FIRMWARE_DIRS),)
+ 
+ # Most firmware files are under a proprietary license, so no need to
+ # repeat it for every selections above. Those firmwares that have more
+@@ -308,12 +325,12 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += WHENCE
+ # duplicates
+ LINUX_FIRMWARE_LICENSE_FILES = $(sort $(LINUX_FIRMWARE_ALL_LICENSE_FILES))
+ 
++endif
++
+ define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/lib/firmware
+-	$(TAR) c -C $(@D) $(sort $(LINUX_FIRMWARE_FILES)) | \
+-		$(TAR) x -C $(TARGET_DIR)/lib/firmware
++	$(LINUX_FIRMWARE_INSTALL_FILES)
++	$(LINUX_FIRMWARE_INSTALL_DIRS)
+ endef
+ 
+-endif
+-
+ $(eval $(generic-package))
