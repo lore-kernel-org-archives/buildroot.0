@@ -1,31 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  2 Apr 2015 21:39:05 +0000 (UTC)
-Subject: [Buildroot] [Bug 7981] Target file system skeleton permissions
-	hazard
-In-Reply-To: <bug-7981-163@https.bugs.busybox.net/>
-References: <bug-7981-163@https.bugs.busybox.net/>
-Message-ID: <20150402213905.06C1F81778@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 02 Apr 2015 23:41:43 +0200
+Subject: [Buildroot] [PATCH 4/7 v4] support/download: return different
+ exit codes for different failures
+In-Reply-To: <404de8633ddc3c6120c89ef457413ad9c5fd6a2d.1427840060.git.yann.morin.1998@free.fr>
+References: <cover.1427840060.git.yann.morin.1998@free.fr>
+ <404de8633ddc3c6120c89ef457413ad9c5fd6a2d.1427840060.git.yann.morin.1998@free.fr>
+Message-ID: <551DB797.3060300@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7981
+On 01/04/15 00:15, Yann E. MORIN wrote:
+> Return different exit codes depending on the error that occured:
+> 
+>   0: no error (hash file missing, or all hashes match)
+>   1: unknown option
+>   2: hash file exists, but at least one hash in error
+>   3: hash file exists, but no hash for file to check
+>   4: hash file exists, but at least one hash type unknown
+> 
+> This will be used in a later patch to decide whether the downloaded file
+> should be kept or removed.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
---- Comment #2 from Julien Olivain <juju@cotds.org> 2015-04-02 21:39:04 UTC ---
-I reviewed and tested successfully the mentioned patches with few defconfigs.
-It fixes the target rootfs perms in case of less common umask at clone or
-build time (like 0027 or 0077).
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Can you please add the Reviewed-by and Tested-by lines?
 
-Reviewed-by: Julien Olivain <juju@cotds.org>
-Tested-by: Julien Olivain <juju@cotds.org>
+ Regards,
+ Arnout
 
-Thanks!
-
+[snip]
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
