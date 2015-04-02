@@ -1,63 +1,41 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 1 Apr 2015 20:28:42 -0500
-Subject: [Buildroot] [PATCH 1/1] jamvm: add depends on toolchain
-	w/threads
-In-Reply-To: <20150401235934.58eded2d@free-electrons.com>
-References: <1427385280-63133-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20150401234340.1717eaf2@free-electrons.com>
- <871tk3r03i.fsf@dell.be.48ers.dk>
- <20150401235934.58eded2d@free-electrons.com>
-Message-ID: <CANQCQpau5G=NqiHgmONpYH+CTF4Uv_BrFaVZdiBnSAj33y=Wog@mail.gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Thu,  2 Apr 2015 08:12:29 +0200
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.9.1-0
+Message-ID: <1427955149-2676-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Also update hash file.
 
-On Wed, Apr 1, 2015 at 4:59 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Peter Korsgaard,
->
-> On Wed, 01 Apr 2015 23:48:49 +0200, Peter Korsgaard wrote:
->> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->>
->> Hi,
->>
->> > Also, there's something fishy between jamvm and classpath.
->>
->>  > jamvm does select BR2_PACKAGE_CLASSPATH and has classpath in
->>  > JAMVM_DEPENDENCIES.
->>
->>  > But classpath has depends on BR2_PACKAGE_JAMVM in its Config.in.
->>
->>  > Does not make much sense. Peter, you followed the JamVM/Classpath
->>  > stuff. What do you think?
->>
->> Hmm, that indeed doesn't sound right. I think the jamvm select should be
->> dropped from classpath.
->
-> There's no jamvm select in classpath, it's a 'depends on':
->
-> config BR2_PACKAGE_JAMVM
->         bool "jamvm"
->         select BR2_PACKAGE_CLASSPATH
->
-> config BR2_PACKAGE_CLASSPATH
->         bool "classpath"
->         depends on BR2_PACKAGE_JAMVM
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Looking at http://www.gnu.org/software/classpath/stories.html#jvm it
-looks like the jamvm "select" is correct but the classpath "depends"
-should be removed.  (my interpretation of this is...) classpath is
-just a library used by various JVMs so if another JVM was added to BR
-we'd have to remove that depends anyway at that point and make that
-JVM also do a select of classpath?
-
-
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 16d5927..d93ccfe 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
+-sha256 d1f5dcd32a93130feb9e980a8a97517d3a2c814a8b608d139d4756516548748c ImageMagick-6.9.0-10.tar.xz
++sha256 32747565fc30da0ff0bc0bf3e41c9fefad829fa8fb2f7d1b98dd84ddb3919b0e ImageMagick-6.9.1-0.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index f11ebf5..46bf8b4 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 6.9.0-10
++IMAGEMAGICK_VERSION = 6.9.1-0
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
+1.9.1
