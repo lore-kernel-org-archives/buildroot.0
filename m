@@ -1,93 +1,64 @@
-From: Sagaert Johan <sagaert.johan@proximus.be>
-Date: Fri,  3 Apr 2015 01:31:07 +0200
-Subject: [Buildroot] [PATCH 1/1 v4] Add kernel compression selection.
-Message-ID: <1428017467-856-1-git-send-email-sagaert.johan@proximus.be>
+From: Johan Sagaert <sagaert.johan@proximus.be>
+Date: Fri, 03 Apr 2015 01:35:41 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] build host lz4 to support lz4
+ compression in the kernel.
+In-Reply-To: <20150402220612.GD4229@free.fr>
+References: <1427919153-16080-1-git-send-email-sagaert.johan@proximus.be>
+ <20150401223752.0fd358cf@free-electrons.com> <551C6935.3050401@mind.be>
+ <20150402000158.0b85c847@free-electrons.com> <20150402220612.GD4229@free.fr>
+Message-ID: <551DD24D.4000800@proximus.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This selection will ensure that the correct host tools
-will be build used for the kernel compression method used.
-Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
----
-V3->V4
-	Add selection menu in the kernel menu section.
-	This ensures only things needed are build.
-V2->V3
-	Unconditionally build lz4.
-	The building overhead is negligible.
-V1->V2
-	Only add the host-lz4 dependency when ARM is selected.
-	Don't touch host-lz4 package.
----
- linux/Config.in | 28 ++++++++++++++++++++++++++++
- linux/linux.mk  | 13 ++++++++++++-
- 2 files changed, 40 insertions(+), 1 deletion(-)
+Dear ;
 
-diff --git a/linux/Config.in b/linux/Config.in
-index a1113dd..e5372cb 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -247,6 +247,34 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
- 
- endchoice
- 
-+#
-+# Kernel compression format
-+#
-+
-+choice
-+	prompt "Kernel compression format"
-+	help
-+	  This selection will just ensure that the correct host tools are build.
-+	  The actual compression for the kernel should be selected in the
-+	  kernel configuration menu.
-+
-+config BR2_LINUX_KERNEL_GZIP
-+	bool "gzip compression"
-+	
-+config BR2_LINUX_KERNEL_LZ4
-+	bool "lz4 compression"
-+	
-+config BR2_LINUX_KERNEL_LZMA
-+	bool "lzma compression"
-+
-+config BR2_LINUX_KERNEL_LZO
-+	bool "lzo compression"
-+	
-+config BR2_LINUX_KERNEL_XZ
-+	bool "xz compression"
-+
-+endchoice
-+
- config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
- 	string "Kernel image target name"
- 	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 22fce35..67ea544 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -49,7 +49,18 @@ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
- 
- LINUX_INSTALL_IMAGES = YES
--LINUX_DEPENDENCIES += host-kmod host-lzop
-+LINUX_DEPENDENCIES += host-kmod
-+
-+# host tools needed for kernel compression
-+ifeq ($(BR2_LINUX_KERNEL_LZ4),y)
-+LINUX_DEPENDENCIES += host-lz4
-+else ifeq ($(BR2_LINUX_KERNEL_LZMA),y)
-+LINUX_DEPENDENCIES += host-lzma
-+else ifeq ($(BR2_LINUX_KERNEL_LZO),y)
-+LINUX_DEPENDENCIES += host-lzop
-+else ifeq ($(BR2_LINUX_KERNEL_XZ),y)
-+LINUX_DEPENDENCIES += host-xz
-+endif
- 
- ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
- LINUX_DEPENDENCIES += host-uboot-tools
--- 
-2.3.3
+Ok, added a selection menu in my v4 patch.
+
+Regards  Johan
+
+Yann E. MORIN schreef op 3/04/2015 om 0:06:
+> Thomas, All,
+>
+> On 2015-04-02 00:01 +0200, Thomas Petazzoni spake thusly:
+>> On Wed, 01 Apr 2015 23:55:01 +0200, Arnout Vandecappelle wrote:
+>>
+>>>   Well, I'm in agreement with Johan's earlier statement that the overhead of the
+>>> host-lz4 build is negligible. It takes 20 seconds on my laptop, of which 6 are
+>>> buildroot overhead from parsing package/*/*.mk.
+>> 20 seconds, plus the host-lzop build time that we already build
+>> unconditionally.
+>>
+>>>   Peter said before that all this hacking of linux (or other) config files should
+>>> be avoided, and I agree.
+>> Correct, except when it's related to needed dependencies in Buildroot.
+>>
+>> But if that's fine for everyone, I'm OK with merging an unconditional
+>> host-lz4 dependency. I'll just follow what the consensus is on this
+>> matter, since I don't feel like arguing too much on this
+>> not-so-important issue.
+>>
+>> Thanks for the feedback, definitely very useful to have the opinion of
+>> others to help take a decision.
+> Well, I always find it very frustrating to build something that I do not
+> use. 20 seconds is an eternity (even the 15-or-so it takes here).
+>
+> Also, I see a lot of people doing this use-case, and being quite
+> frustrated:
+>
+>      make foo_defconfig
+>      make linux-menuconfig
+>      [Bam, 20s overhead, 35s on slower machines]
+>
+> Otherwise, 15s for a lzo, yet another 10s for lz4. What next?
+>
+> I would side with Thomas: add an entry in the Buildroot menuconfig to
+> configure what compression to use.
+>
+> My 2-cent advice... ;-)
+>
+> Regards,
+> Yann E. MORIN.
+>
