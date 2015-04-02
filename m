@@ -1,35 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Apr 2015 09:16:47 +0200
-Subject: [Buildroot] Naming convention for patches
-In-Reply-To: <CAJtjsKaG8QfL5ZHcZ7osJ0+T=eJTFgHxhCfqe=QWBDHa0z9q0w@mail.gmail.com>
-References: <CAJtjsKaG8QfL5ZHcZ7osJ0+T=eJTFgHxhCfqe=QWBDHa0z9q0w@mail.gmail.com>
-Message-ID: <20150402091647.06db2ee5@free-electrons.com>
+Date: Thu, 2 Apr 2015 09:23:05 +0200
+Subject: [Buildroot] [PATCH 1/1] elfutils: Add a --{enable,
+ disable}-backends option
+In-Reply-To: <CAGszK3hLApL5Pu383ywUppoApVSwZWDp026dZ11_tphCQ3469A@mail.gmail.com>
+References: <1427911925-7424-1-git-send-email-heyleke@gmail.com>
+ <20150401214323.4e340217@free-electrons.com>
+ <CAGszK3hLApL5Pu383ywUppoApVSwZWDp026dZ11_tphCQ3469A@mail.gmail.com>
+Message-ID: <20150402092305.4778c30b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Johan Oudinet,
+Dear Jan Heylen,
 
-On Thu, 26 Mar 2015 17:57:43 +0100, Johan Oudinet wrote:
+On Thu, 2 Apr 2015 09:12:53 +0200, Jan Heylen wrote:
 
-> In 9.8. Adding project-specific patches:
-> "Otherwise, patch files matching <packagename>-*.patch are applied in
-> alphabetical order."
+> > Patches should have a description and a Signed-off-by line.
+> Ah, I didn`t realise that on that level it was required, I'll fix it
+
+Yes, we also require a description + SoB *inside* patches for packages.
+See
+http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
+
+> > Also, could you submit this patch upstream? I'd like to see if upstream
+> > is willing to accept such a patch, since it is more or less a "feature"
+> > patch, and we prefer to not have to carry such patches forever.
+> This is based on 0002-disable-progs.patch, so it belongs in buildroot?
+> I'll try to upstream it to the elfutils package.
+
+Agreed that 0002-disable-progs.patch is basically the same sauce. It
+would be great to upstream these patches.
+
+> > This explanation seems weird: why would you link against libelf and not
+> > use it?
 > 
-> This naming convention has been changed in buildroot, so we can use
-> the name provided by git format-patch (i.e., without prefixing it by
-> the package name).
-> Is this pattern still required for patches inside
-> BR2_GLOBAL_PATCH_DIR, or is it simply a mistake from the
-> documentation?
+> The backends are plaform specific implementations, for every supported
+> platform. And, e.g. perf package which sources come with the Linux
+> kernel has a compile time dependency on it.On older kernels (<= 3,7),
+> the perf package requires libelf, from the eflutils package. But for
+> plenty of the features of perf, elfutils backends (libebl) are not
+> required at runtime. As backporting patches for not depending on
+> elfutils for all former kernel version is obviously not the best
+> method, I believe making it possible to not compile/install the
+> backends of libebl in your rootfs is a legitimate option (saves >300K
+> (stripped)).
 
-This is a mistake, and I've sent a patch that fixes it:
-
-  http://patchwork.ozlabs.org/patch/455879/
-
-Best regards,
+Ok, understood.
 
 Thomas
 -- 
