@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Apr 2015 10:20:52 +0200
-Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.9.1-0
-In-Reply-To: <1427955149-2676-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1427955149-2676-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20150402102052.0631bf94@free-electrons.com>
+Date: Thu, 2 Apr 2015 10:21:10 +0200
+Subject: [Buildroot] [PATCH 0/2 v3] package/linux-firmware: install AMD
+ Radeon firmware (branch yem/lnx-fw)
+In-Reply-To: <cover.1427925170.git.yann.morin.1998@free.fr>
+References: <cover.1427925170.git.yann.morin.1998@free.fr>
+Message-ID: <20150402102110.27a46b02@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+Dear Yann E. MORIN,
 
-On Thu,  2 Apr 2015 08:12:29 +0200, Jerzy Grzegorek wrote:
-> Also update hash file.
+On Wed,  1 Apr 2015 23:54:54 +0200, Yann E. MORIN wrote:
+
+> Yann E. MORIN (1):
+>       package/linux-firmware: add support to copy entire directories
 > 
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/imagemagick/imagemagick.hash | 2 +-
->  package/imagemagick/imagemagick.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> david.barbion at ext.leroymerlin.fr (1):
+>       package/linux-firmware: install AMD Radeon firmware
 
-Applied, thanks.
+Applied, thanks!
 
 Thomas
 -- 
