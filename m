@@ -1,43 +1,68 @@
-From: Sagaert Johan <sagaert.johan@proximus.be>
-Date: Fri,  3 Apr 2015 00:04:45 +0200
-Subject: [Buildroot] [PATCH 1/1 v3] always build host-lz4
-Message-ID: <1428012285-5967-1-git-send-email-sagaert.johan@proximus.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 3 Apr 2015 00:06:12 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] build host lz4 to support lz4
+ compression in the kernel.
+In-Reply-To: <20150402000158.0b85c847@free-electrons.com>
+References: <1427919153-16080-1-git-send-email-sagaert.johan@proximus.be>
+ <20150401223752.0fd358cf@free-electrons.com>
+ <551C6935.3050401@mind.be>
+ <20150402000158.0b85c847@free-electrons.com>
+Message-ID: <20150402220612.GD4229@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Selecting lz4 compression in the kernel configuration yields a
-significant improvement in boot time. Therefore we need lz4 as
-dependency for the kernel.
-Note that LZ4 is only supported on kernels >=3.11.x
-Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
----
-V2->V3
-	Unconditionally build lz4.
-	The building overhead is negligible.
-V1->V2
-	Only add the host-lz4 dependency when ARM is selected.
-	Don't touch host-lz4 package.
----
- linux/linux.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Thomas, All,
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 22fce35..14a5dab 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -71,6 +71,10 @@ LINUX_MAKE_ENV = \
- # going to be installed in the target filesystem.
- LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease)
- 
-+# lz4 kernel compression is only available on kernels >= 3.11
-+# we always build host-lz4
-+LINUX_DEPENDENCIES += host-lz4
-+
- ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
- KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
- else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
+On 2015-04-02 00:01 +0200, Thomas Petazzoni spake thusly:
+> On Wed, 01 Apr 2015 23:55:01 +0200, Arnout Vandecappelle wrote:
+> 
+> >  Well, I'm in agreement with Johan's earlier statement that the overhead of the
+> > host-lz4 build is negligible. It takes 20 seconds on my laptop, of which 6 are
+> > buildroot overhead from parsing package/*/*.mk.
+> 
+> 20 seconds, plus the host-lzop build time that we already build
+> unconditionally.
+> 
+> >  Peter said before that all this hacking of linux (or other) config files should
+> > be avoided, and I agree.
+> 
+> Correct, except when it's related to needed dependencies in Buildroot.
+> 
+> But if that's fine for everyone, I'm OK with merging an unconditional
+> host-lz4 dependency. I'll just follow what the consensus is on this
+> matter, since I don't feel like arguing too much on this
+> not-so-important issue.
+> 
+> Thanks for the feedback, definitely very useful to have the opinion of
+> others to help take a decision.
+
+Well, I always find it very frustrating to build something that I do not
+use. 20 seconds is an eternity (even the 15-or-so it takes here).
+
+Also, I see a lot of people doing this use-case, and being quite
+frustrated:
+
+    make foo_defconfig
+    make linux-menuconfig
+    [Bam, 20s overhead, 35s on slower machines]
+
+Otherwise, 15s for a lzo, yet another 10s for lz4. What next?
+
+I would side with Thomas: add an entry in the Buildroot menuconfig to
+configure what compression to use.
+
+My 2-cent advice... ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.3.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
