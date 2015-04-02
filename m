@@ -1,40 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 3 Apr 2015 00:08:37 +0200
-Subject: [Buildroot] [PATCH 2/7 v4] package infra: do not check hashes
- when downloading from a repository
-In-Reply-To: <551DBB2C.10400@mind.be>
-References: <cover.1427840060.git.yann.morin.1998@free.fr>
- <b172905fe4ddd1944cc14df21cc33d527c755a80.1427840060.git.yann.morin.1998@free.fr>
- <551DB6EA.3050209@mind.be> <20150402214931.GC4229@free.fr>
- <551DBB2C.10400@mind.be>
-Message-ID: <20150402220837.GE4229@free.fr>
+Date: Fri,  3 Apr 2015 01:09:06 +0200
+Subject: [Buildroot] [PATCH] package/ca-certificates: generate the bundle of
+	certs
+Message-ID: <1428016146-15442-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+glib-networking wants to use the certificates bundle, not the individual
+certificates.
 
-On 2015-04-02 23:57 +0200, Arnout Vandecappelle spake thusly:
-> On 02/04/15 23:49, Yann E. MORIN wrote:
-[---SNIP--]
-> > Well, I think I just used what you provided in your previous review, so
-> > I assumed your reviewed-by tag was still valid... ;-)
-> 
->  Ah, that explains the complete lack of spelling mistakes :-P
+Generating the bundle is usually done with update-ca-certificates, but
+that does not support running out-of-tree.
 
-You now *are* on my List. Beware...
+Fortiunately, and as Gustavo put it, update-ca-certificates is jsut a
+glorified 'cat'. It is supposed to be fed a config file stating which
+certificate to add/remove to/from the bundle, otherwise nothing fancy
+(Oh, yes, running hooks after updating the bundle).
 
-Regards,
-Yann E. MORIN.
+Since we do not need any of this in Buidlroot, we jsut generate a bundle
+with all certificates unconditionally.
 
-PS. Muhahaha! ;-)
+Reported-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ca-certificates/ca-certificates.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 271985a..8fe26c9 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -25,9 +25,11 @@ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
+ 	rm -f  $(TARGET_DIR)/etc/ssl/certs/*
+ 
+ 	# Create symlinks to certificates under /etc/ssl/certs
++	# and generate the bundle
+ 	cd $(TARGET_DIR) ;\
+ 	for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
+ 		ln -sf ../../../$$i etc/ssl/certs/`basename $${i} .crt`.pem ;\
++		cat $$i >>etc/ssl/certs/ca-certificates.crt ;\
+ 	done
+ 
+ 	# Create symlinks to the certificates by their hash values
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
