@@ -1,44 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  2 Apr 2015 19:43:55 +0200
-Subject: [Buildroot] [PATCH] package/ti-gfx: bump version, add hashes
-Message-ID: <1427996635-6414-1-git-send-email-yann.morin.1998@free.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu,  2 Apr 2015 21:19:05 +0200
+Subject: [Buildroot] [PATCH] docs: add links to the rest of the licenses
+Message-ID: <1428002345-12265-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't bump the softfp version, because there's still no newer release
-(probably softfp will never be updated).
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/ti-gfx/ti-gfx.hash | 3 +++
- package/ti-gfx/ti-gfx.mk   | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 package/ti-gfx/ti-gfx.hash
+ docs/manual/legal-notice.txt | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/package/ti-gfx/ti-gfx.hash b/package/ti-gfx/ti-gfx.hash
-new file mode 100644
-index 0000000..d97b559
---- /dev/null
-+++ b/package/ti-gfx/ti-gfx.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  54641222cdb49b03f996cbd6412de227198d9e084f5647d706bbf4217e8cdb07  Graphics_SDK_setuplinux_hardfp_5_01_01_02.bin
-+sha256  99dae9d33790c87860e828505ac07c5b864ef65d8372b39117704db6b78494ff  Graphics_SDK_setuplinux_softfp_5_01_00_01.bin
-diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
-index c831dae..061e9fe 100644
---- a/package/ti-gfx/ti-gfx.mk
-+++ b/package/ti-gfx/ti-gfx.mk
-@@ -7,7 +7,7 @@
- # SDK 5_01_01_01 only support EABIhf so we downgrade to 5_01_00_01 if EABIhf is
- # not available.
- ifeq ($(BR2_ARM_EABIHF),y)
--TI_GFX_VERSION = 5_01_01_01
-+TI_GFX_VERSION = 5_01_01_02
- TI_GFX_SOURCE = Graphics_SDK_setuplinux_hardfp_$(TI_GFX_VERSION).bin
- else
- TI_GFX_VERSION = 5_01_00_01
+diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
+index 7b17438..5895224 100644
+--- a/docs/manual/legal-notice.txt
++++ b/docs/manual/legal-notice.txt
+@@ -115,10 +115,18 @@ Buildroot, with the name used in the manifest files:
+ * `LGPL`:
+   http://www.gnu.org/licenses/lgpl.html[
+   GNU Lesser General Public License] (any version);
+-* `BSD-4c`: Original BSD 4-clause license;
+-* `BSD-3c`: BSD 3-clause license;
+-* `BSD-2c`: BSD 2-clause license;
+-* `MIT`: MIT-style license.
++* `BSD-4c`:
++  http://directory.fsf.org/wiki/License:BSD_4Clause[
++  Original BSD 4-clause license];
++* `BSD-3c`:
++  http://opensource.org/licenses/BSD-3-Clause[
++  BSD 3-clause license];
++* `BSD-2c`:
++  http://opensource.org/licenses/BSD-2-Clause[
++  BSD 2-clause license];
++* `MIT`:
++  http://opensource.org/licenses/mit-license.html[
++  MIT-style license];
+ * `Apache-2.0`:
+   http://apache.org/licenses/LICENSE-2.0.html[
+   Apache License, version 2.0];
 -- 
-1.9.1
+2.1.0
