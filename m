@@ -1,50 +1,93 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  3 Apr 2015 01:09:06 +0200
-Subject: [Buildroot] [PATCH] package/ca-certificates: generate the bundle of
-	certs
-Message-ID: <1428016146-15442-1-git-send-email-yann.morin.1998@free.fr>
+From: Sagaert Johan <sagaert.johan@proximus.be>
+Date: Fri,  3 Apr 2015 01:31:07 +0200
+Subject: [Buildroot] [PATCH 1/1 v4] Add kernel compression selection.
+Message-ID: <1428017467-856-1-git-send-email-sagaert.johan@proximus.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glib-networking wants to use the certificates bundle, not the individual
-certificates.
-
-Generating the bundle is usually done with update-ca-certificates, but
-that does not support running out-of-tree.
-
-Fortiunately, and as Gustavo put it, update-ca-certificates is jsut a
-glorified 'cat'. It is supposed to be fed a config file stating which
-certificate to add/remove to/from the bundle, otherwise nothing fancy
-(Oh, yes, running hooks after updating the bundle).
-
-Since we do not need any of this in Buidlroot, we jsut generate a bundle
-with all certificates unconditionally.
-
-Reported-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This selection will ensure that the correct host tools
+will be build used for the kernel compression method used.
+Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
 ---
- package/ca-certificates/ca-certificates.mk | 2 ++
- 1 file changed, 2 insertions(+)
+V3->V4
+	Add selection menu in the kernel menu section.
+	This ensures only things needed are build.
+V2->V3
+	Unconditionally build lz4.
+	The building overhead is negligible.
+V1->V2
+	Only add the host-lz4 dependency when ARM is selected.
+	Don't touch host-lz4 package.
+---
+ linux/Config.in | 28 ++++++++++++++++++++++++++++
+ linux/linux.mk  | 13 ++++++++++++-
+ 2 files changed, 40 insertions(+), 1 deletion(-)
 
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index 271985a..8fe26c9 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -25,9 +25,11 @@ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
- 	rm -f  $(TARGET_DIR)/etc/ssl/certs/*
+diff --git a/linux/Config.in b/linux/Config.in
+index a1113dd..e5372cb 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -247,6 +247,34 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
  
- 	# Create symlinks to certificates under /etc/ssl/certs
-+	# and generate the bundle
- 	cd $(TARGET_DIR) ;\
- 	for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
- 		ln -sf ../../../$$i etc/ssl/certs/`basename $${i} .crt`.pem ;\
-+		cat $$i >>etc/ssl/certs/ca-certificates.crt ;\
- 	done
+ endchoice
  
- 	# Create symlinks to the certificates by their hash values
++#
++# Kernel compression format
++#
++
++choice
++	prompt "Kernel compression format"
++	help
++	  This selection will just ensure that the correct host tools are build.
++	  The actual compression for the kernel should be selected in the
++	  kernel configuration menu.
++
++config BR2_LINUX_KERNEL_GZIP
++	bool "gzip compression"
++	
++config BR2_LINUX_KERNEL_LZ4
++	bool "lz4 compression"
++	
++config BR2_LINUX_KERNEL_LZMA
++	bool "lzma compression"
++
++config BR2_LINUX_KERNEL_LZO
++	bool "lzo compression"
++	
++config BR2_LINUX_KERNEL_XZ
++	bool "xz compression"
++
++endchoice
++
+ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
+ 	string "Kernel image target name"
+ 	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 22fce35..67ea544 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -49,7 +49,18 @@ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
+ 
+ LINUX_INSTALL_IMAGES = YES
+-LINUX_DEPENDENCIES += host-kmod host-lzop
++LINUX_DEPENDENCIES += host-kmod
++
++# host tools needed for kernel compression
++ifeq ($(BR2_LINUX_KERNEL_LZ4),y)
++LINUX_DEPENDENCIES += host-lz4
++else ifeq ($(BR2_LINUX_KERNEL_LZMA),y)
++LINUX_DEPENDENCIES += host-lzma
++else ifeq ($(BR2_LINUX_KERNEL_LZO),y)
++LINUX_DEPENDENCIES += host-lzop
++else ifeq ($(BR2_LINUX_KERNEL_XZ),y)
++LINUX_DEPENDENCIES += host-xz
++endif
+ 
+ ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
+ LINUX_DEPENDENCIES += host-uboot-tools
 -- 
-1.9.1
+2.3.3
