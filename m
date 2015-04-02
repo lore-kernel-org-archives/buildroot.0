@@ -1,22 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Apr 2015 23:04:42 +0200
-Subject: [Buildroot] [PATCH 1/1] install liblinphone in staging.
-In-Reply-To: <1428005968-15846-1-git-send-email-sagaert.johan@proximus.be>
- (Sagaert Johan's message of "Thu, 2 Apr 2015 22:19:28 +0200")
-References: <1428005968-15846-1-git-send-email-sagaert.johan@proximus.be>
-Message-ID: <87bnj6p7h1.fsf@dell.be.48ers.dk>
+Date: Thu, 02 Apr 2015 23:08:07 +0200
+Subject: [Buildroot] [PATCH] docs: add links to the rest of the licenses
+In-Reply-To: <1428002345-12265-1-git-send-email-yegorslists@googlemail.com>
+ (Yegor Yefremov's message of "Thu, 2 Apr 2015 21:19:05 +0200")
+References: <1428002345-12265-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <877ftup7bc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@proximus.be> writes:
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
- > Make sure the liblinphone library gets installed too.
- > Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Committed with the commit message fixed up, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
