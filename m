@@ -1,61 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 02 Apr 2015 23:34:41 +0200
-Subject: [Buildroot] [PATCH 0/7 v4] support/download: be more aggressive
- on missing hashes (branch yem/dl-hash-2)
-In-Reply-To: <20150401205235.GC4235@free.fr>
+Date: Thu, 02 Apr 2015 23:38:50 +0200
+Subject: [Buildroot] [PATCH 2/7 v4] package infra: do not check hashes
+ when downloading from a repository
+In-Reply-To: <b172905fe4ddd1944cc14df21cc33d527c755a80.1427840060.git.yann.morin.1998@free.fr>
 References: <cover.1427840060.git.yann.morin.1998@free.fr>
- <20150401220801.19f6ed2f@free-electrons.com> <20150401205235.GC4235@free.fr>
-Message-ID: <551DB5F1.60700@mind.be>
+ <b172905fe4ddd1944cc14df21cc33d527c755a80.1427840060.git.yann.morin.1998@free.fr>
+Message-ID: <551DB6EA.3050209@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/04/15 22:52, Yann E. MORIN wrote:
-> Thomas, All,
+On 01/04/15 00:15, Yann E. MORIN wrote:
+> When downloading from a repository, we have no way to ensure the
+> reproducibility of the generated archives, so we can't check the hashes.
 > 
-> On 2015-04-01 22:08 +0200, Thomas Petazzoni spake thusly:
->> On Wed,  1 Apr 2015 00:15:03 +0200, Yann E. MORIN wrote:
->>> This series makes hashes mandatory when a .hash file exists.
-> [--SNIP--]
->> I applied this and was going to push it, but I believe there's still a
->> problem.
->>
->> If I change strace.hash so that there is no hash matching the tarball
->> name of strace, then I get two times the error:
->>
->> $ make strace-extract
->> ERROR: No hash found for strace-4.10.tar.xz
->> ERROR: No hash found for strace-4.10.tar.xz
->> package/pkg-generic.mk:73: recipe for target '/home/thomas/projets/buildroot/output/build/strace-4.10/.stamp_downloaded' failed
->>
->> I haven't looked too deeply, but I believe it's because check-hash
->> returns 3, so dl-wrapper exits with error code 1, which means that the
->> pkg-download.mk logic concludes that the download from the upstream
->> location has failed, so it retries with sources.buildroot.net, and the
->> same thing happens.
->>
->> Is this expected?
+> Do not specifiy a hash file in those cases.
 > 
-> That's at least the result I expect, yes.
-> 
-> I know this might look weird, indeed. However, I did not find a
-> simple
-> way to avoid this.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- I think this weird behaviour is acceptable (for now). It is indeed hard to
-avoid, and anyway this is not something that a normal user would ever encounter.
-
- In a perfect world the entire download logic would move to a script (which
-admittedly would get a sh*tload of arguments). Then it would be much simpler to
-exit properly.
-
+ And now I also reviewed the manual update.
 
  Regards,
  Arnout
 
+> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+> 
+> ---
+> Changes v2 -> v3:
+>   - add blurb in the manual  (Arnout)
 [snip]
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
