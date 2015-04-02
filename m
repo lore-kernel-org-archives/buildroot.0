@@ -1,47 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Apr 2015 10:04:02 +0200
-Subject: [Buildroot] [PATCH 1/1] jamvm: add depends on toolchain
-	w/threads
-In-Reply-To: <CANQCQpau5G=NqiHgmONpYH+CTF4Uv_BrFaVZdiBnSAj33y=Wog@mail.gmail.com>
- (Matthew Weber's message of "Wed, 1 Apr 2015 20:28:42 -0500")
-References: <1427385280-63133-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20150401234340.1717eaf2@free-electrons.com>
- <871tk3r03i.fsf@dell.be.48ers.dk>
- <20150401235934.58eded2d@free-electrons.com>
- <CANQCQpau5G=NqiHgmONpYH+CTF4Uv_BrFaVZdiBnSAj33y=Wog@mail.gmail.com>
-Message-ID: <87sicjot1p.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Apr 2015 10:15:49 +0200
+Subject: [Buildroot] [git commit] package/linux-firmware: install AMD Radeon
+	firmware
+Message-ID: <20150402081636.B10268195B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7a7988bb282b9d1d0bfd015c9231015756ae5f60
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Signed-off-by: David BARBION <david.barbion@ext.leroymerlin.fr>
+[yann.morin.1998 at free.fr:
+  - simplify by copying the full directory
+  - fix title
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-firmware/Config.in         |    9 +++++++++
+ package/linux-firmware/linux-firmware.mk |    5 +++++
+ 2 files changed, 14 insertions(+), 0 deletions(-)
 
->>> Hmm, that indeed doesn't sound right. I think the jamvm select should be
- >>> dropped from classpath.
- >> 
- >> There's no jamvm select in classpath, it's a 'depends on':
- >> 
- >> config BR2_PACKAGE_JAMVM
- >> bool "jamvm"
- >> select BR2_PACKAGE_CLASSPATH
- >> 
- >> config BR2_PACKAGE_CLASSPATH
- >> bool "classpath"
- >> depends on BR2_PACKAGE_JAMVM
-
- > Looking at http://www.gnu.org/software/classpath/stories.html#jvm it
- > looks like the jamvm "select" is correct but the classpath "depends"
- > should be removed.  (my interpretation of this is...) classpath is
- > just a library used by various JVMs so if another JVM was added to BR
- > we'd have to remove that depends anyway at that point and make that
- > JVM also do a select of classpath?
-
-That's my understanding as well.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 9e1eb91..7265990 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -17,6 +17,15 @@ config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_SST_DSP
+ 
+ endmenu # Audio
+ 
++menu "Video firmware"
++
++config BR2_PACKAGE_LINUX_FIRMWARE_RADEON
++	bool "AMD Radeon video card firmware"
++	help
++	  Firmware files for AMD Radeon video cards.
++
++endmenu # Video
++
+ menu "WiFi firmware"
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_6002
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 5a68138..0919b16 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -14,6 +14,11 @@ LINUX_FIRMWARE_FILES += intel/fw_sst_0f28.bin-48kHz_i2s_master
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.fw_sst_0f28
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RADEON),y)
++LINUX_FIRMWARE_DIRS += radeon
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.radeon
++endif
++
+ # rt2501/rt61
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61),y)
+ LINUX_FIRMWARE_FILES += rt2561.bin rt2561s.bin rt2661.bin
