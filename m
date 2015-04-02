@@ -1,64 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 02 Apr 2015 23:32:20 +0200
-Subject: [Buildroot] [PATCH] package/ti-gfx: bump version, add hashes
-In-Reply-To: <1427996635-6414-1-git-send-email-yann.morin.1998@free.fr>
-References: <1427996635-6414-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <551DB564.3070107@mind.be>
+Date: Thu, 02 Apr 2015 23:34:41 +0200
+Subject: [Buildroot] [PATCH 0/7 v4] support/download: be more aggressive
+ on missing hashes (branch yem/dl-hash-2)
+In-Reply-To: <20150401205235.GC4235@free.fr>
+References: <cover.1427840060.git.yann.morin.1998@free.fr>
+ <20150401220801.19f6ed2f@free-electrons.com> <20150401205235.GC4235@free.fr>
+Message-ID: <551DB5F1.60700@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/04/15 19:43, Yann E. MORIN wrote:
-> We don't bump the softfp version, because there's still no newer release
-> (probably softfp will never be updated).
+On 01/04/15 22:52, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (downloaded both versions and checked the hash, build test of EABIhf es8.x)
-
-
- Note that this version also has support for AM43x (es9.x), so perhaps that
-option could be added as well?
-
-> ---
->  package/ti-gfx/ti-gfx.hash | 3 +++
->  package/ti-gfx/ti-gfx.mk   | 2 +-
->  2 files changed, 4 insertions(+), 1 deletion(-)
->  create mode 100644 package/ti-gfx/ti-gfx.hash
+> On 2015-04-01 22:08 +0200, Thomas Petazzoni spake thusly:
+>> On Wed,  1 Apr 2015 00:15:03 +0200, Yann E. MORIN wrote:
+>>> This series makes hashes mandatory when a .hash file exists.
+> [--SNIP--]
+>> I applied this and was going to push it, but I believe there's still a
+>> problem.
+>>
+>> If I change strace.hash so that there is no hash matching the tarball
+>> name of strace, then I get two times the error:
+>>
+>> $ make strace-extract
+>> ERROR: No hash found for strace-4.10.tar.xz
+>> ERROR: No hash found for strace-4.10.tar.xz
+>> package/pkg-generic.mk:73: recipe for target '/home/thomas/projets/buildroot/output/build/strace-4.10/.stamp_downloaded' failed
+>>
+>> I haven't looked too deeply, but I believe it's because check-hash
+>> returns 3, so dl-wrapper exits with error code 1, which means that the
+>> pkg-download.mk logic concludes that the download from the upstream
+>> location has failed, so it retries with sources.buildroot.net, and the
+>> same thing happens.
+>>
+>> Is this expected?
 > 
-[snip]
-> diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
-> index c831dae..061e9fe 100644
-> --- a/package/ti-gfx/ti-gfx.mk
-> +++ b/package/ti-gfx/ti-gfx.mk
-> @@ -7,7 +7,7 @@
->  # SDK 5_01_01_01 only support EABIhf so we downgrade to 5_01_00_01 if EABIhf is
->  # not available.
->  ifeq ($(BR2_ARM_EABIHF),y)
-> -TI_GFX_VERSION = 5_01_01_01
-> +TI_GFX_VERSION = 5_01_01_02
->  TI_GFX_SOURCE = Graphics_SDK_setuplinux_hardfp_$(TI_GFX_VERSION).bin
+> That's at least the result I expect, yes.
+> 
+> I know this might look weird, indeed. However, I did not find a
+> simple
+> way to avoid this.
 
- Perhaps this could be refactored into
+ I think this weird behaviour is acceptable (for now). It is indeed hard to
+avoid, and anyway this is not something that a normal user would ever encounter.
 
-TI_GFX_VERSION = hardfp_5_01_01_02
-else
-TI_GFX_VERSION = softfp_5_01_00_01
-endif
-TI_GFX_SOURCE = Graphics_SDK_setuplinux_$(TI_GFX_VERSION).bin
+ In a perfect world the entire download logic would move to a script (which
+admittedly would get a sh*tload of arguments). Then it would be much simpler to
+exit properly.
 
 
  Regards,
  Arnout
 
->  else
->  TI_GFX_VERSION = 5_01_00_01
-> 
-
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
