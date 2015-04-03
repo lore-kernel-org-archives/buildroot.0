@@ -1,37 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Apr 2015 14:27:37 +0200
-Subject: [Buildroot] [PATCH] toolchains: remove non-LFS toolchain
-In-Reply-To: <20150403104432.GN17056@tarshish>
-References: <1428057549-24019-1-git-send-email-yann.morin.1998@free.fr>
- <20150403104432.GN17056@tarshish>
-Message-ID: <20150403142737.0be7ae94@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  3 Apr 2015 09:27:24 -0300
+Subject: [Buildroot] [PATCH] icu: bump to version 55.1
+Message-ID: <1428064044-9830-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/icu/icu.hash | 4 ++--
+ package/icu/icu.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Fri, 3 Apr 2015 13:44:32 +0300, Baruch Siach wrote:
-> Hi Yann,
-> 
-> On Fri, Apr 03, 2015 at 12:39:09PM +0200, Yann E. MORIN wrote:
-> > Buildroot now requires toolchains to have LFS; it's no longer optional.
-> 
-> Why not just rebuild this toolchain using current master with LFS?
-
-That's the plan, but until this is done, to fix autobuilder issues,
-let's disable this toolchain.
-
-I will rebuild the ARM and PowerPC basic toolchains, and also the SH4
-toolchain after applying Waldemar's fix, and then update the
-autobuilder configuration accordingly.
-
-Thanks!
-
-Thomas
+diff --git a/package/icu/icu.hash b/package/icu/icu.hash
+index 4953513..cc3352e 100644
+--- a/package/icu/icu.hash
++++ b/package/icu/icu.hash
+@@ -1,2 +1,2 @@
+-# From https://ssl.icu-project.org/files/icu4c/54.1/icu4c-src-54_1.md5
+-md5	e844caed8f2ca24c088505b0d6271bc0	icu4c-54_1-src.tgz
++# From https://ssl.icu-project.org/files/icu4c/55.1/icu4c-src-55_1.md5
++md5	e2d523df79d6cb7855c2fbe284f4db29	icu4c-55_1-src.tgz
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index c5460b2..2590178 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ICU_VERSION = 54.1
++ICU_VERSION = 55.1
+ ICU_SOURCE = icu4c-$(subst .,_,$(ICU_VERSION))-src.tgz
+ ICU_SITE = http://download.icu-project.org/files/icu4c/$(ICU_VERSION)
+ ICU_LICENSE = ICU License
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.5
