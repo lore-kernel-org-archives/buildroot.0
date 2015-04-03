@@ -1,50 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Apr 2015 00:18:15 +0200
-Subject: [Buildroot] [git commit] wine: Add xlib_libXext dependency
-Message-ID: <20150403221841.7B30681774@busybox.osuosl.org>
+Date: Sat, 4 Apr 2015 00:18:22 +0200
+Subject: [Buildroot] [git commit] wine: 1.6.2 has no netapi configure option
+Message-ID: <20150403221841.872A681774@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c3ef90f8b244602e5c41c81907c8148d449a5bce
+commit: http://git.buildroot.net/buildroot/commit/?id=4cf1c626701db5df27cfcf7b14498bb03b177084
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This fixes window size issues.
 
 Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wine/wine.mk |   11 ++++++++---
- 1 files changed, 8 insertions(+), 3 deletions(-)
+ package/wine/wine.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
 diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index bd242cf..188c7cc 100644
+index 188c7cc..c201186 100644
 --- a/package/wine/wine.mk
 +++ b/package/wine/wine.mk
-@@ -27,9 +27,7 @@ WINE_CONF_OPTS = \
+@@ -23,7 +23,6 @@ WINE_CONF_OPTS = \
+ 	--without-gphoto \
+ 	--without-gsm \
+ 	--without-hal \
+-	--without-netapi \
  	--without-openal \
  	--without-opencl \
  	--without-osmesa \
--	--without-oss \
--	--without-xshape \
--	--without-xshm
-+	--without-oss
- 
- # Wine uses a wrapper around gcc, and uses the value of --host to
- # construct the filename of the gcc to call.  But for external
-@@ -207,6 +205,13 @@ else
- WINE_CONF_OPTS += --without-xcursor
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
-+WINE_CONF_OPTS += --with-xshape --with-xshm
-+WINE_DEPENDENCIES += xlib_libXext
-+else
-+WINE_CONF_OPTS += --without-xshape --without-xshm
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
- WINE_CONF_OPTS += --with-xinput --with-xinput2
- WINE_DEPENDENCIES += xlib_libXi
+@@ -304,7 +303,6 @@ HOST_WINE_CONF_OPTS += \
+ 	--without-jpeg \
+ 	--without-ldap \
+ 	--without-mpg123 \
+-	--without-netapi \
+ 	--without-openal \
+ 	--without-opencl \
+ 	--without-opengl \
