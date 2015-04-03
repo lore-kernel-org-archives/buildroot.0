@@ -1,48 +1,60 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 3 Apr 2015 13:44:32 +0300
-Subject: [Buildroot] [PATCH] toolchains: remove non-LFS toolchain
-In-Reply-To: <1428057549-24019-1-git-send-email-yann.morin.1998@free.fr>
-References: <1428057549-24019-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150403104432.GN17056@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 Apr 2015 14:01:59 +0200
+Subject: [Buildroot] [git commit] softether: add patch to fix build on
+	uClibc toolchain without ifaddr support
+Message-ID: <20150403120305.BC32E819BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+commit: http://git.buildroot.net/buildroot/commit/?id=d9cf0a76db5e428692f2489901c9787b1fd30eee
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Apr 03, 2015 at 12:39:09PM +0200, Yann E. MORIN wrote:
-> Buildroot now requires toolchains to have LFS; it's no longer optional.
+This commit adds a patch to softether to make sure it doesn't use the
+ifaddrs functions when they are not provided by the C library, which
+can be the case with certain external uClibc toolchains.
 
-Why not just rebuild this toolchain using current master with LFS?
+Fixes:
 
-baruch
+  http://autobuild.buildroot.net/results/199/19992951da34a703a476dc62ea92e12927c8a02d/
 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  web/toolchains/configs/br-powerpc-603e-basic-cpp.config | 9 ---------
->  1 file changed, 9 deletions(-)
->  delete mode 100644 web/toolchains/configs/br-powerpc-603e-basic-cpp.config
-> 
-> diff --git a/web/toolchains/configs/br-powerpc-603e-basic-cpp.config b/web/toolchains/configs/br-powerpc-603e-basic-cpp.config
-> deleted file mode 100644
-> index 9f1eb82..0000000
-> --- a/web/toolchains/configs/br-powerpc-603e-basic-cpp.config
-> +++ /dev/null
-> @@ -1,9 +0,0 @@
-> -BR2_powerpc=y
-> -BR2_powerpc_603e=y
-> -BR2_TOOLCHAIN_EXTERNAL=y
-> -BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> -BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-powerpc-603e-basic-cpp-2015.02.tar.bz2"
-> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_18=y
-> -# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> -BR2_TOOLCHAIN_EXTERNAL_CXX=y
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/softether/0007-uclibc-ai-addrconfig.patch |   27 +++++++++++++++++++++
+ 1 files changed, 27 insertions(+), 0 deletions(-)
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+diff --git a/package/softether/0007-uclibc-ai-addrconfig.patch b/package/softether/0007-uclibc-ai-addrconfig.patch
+new file mode 100644
+index 0000000..7d8f1c6
+--- /dev/null
++++ b/package/softether/0007-uclibc-ai-addrconfig.patch
+@@ -0,0 +1,27 @@
++Only enable getifaddrs support when available
++
++On uClibc, the ifaddrs.h support is optional. While the default
++Buildroot uClibc configuration has it enabled, some external
++toolchains may not. Therefore this patch detects that and adjusts
++softether usage of ifaddrs accordingly.
++
++Based on an initial patch from Bernd Kuhls.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/src/Mayaqua/Mayaqua.h
++===================================================================
++--- a/src/Mayaqua/Mayaqua.h
+++++ b/src/Mayaqua/Mayaqua.h
++@@ -235,9 +235,11 @@
++ #ifdef	OS_UNIX
++ #ifndef	UNIX_SOLARIS
++ #ifndef	CPU_SH4
+++#if !defined(__UCLIBC__) || defined(__UCLIBC_SUPPORT_AI_ADDRCONFIG__)
++ // Getifaddrs system call is supported on UNIX other than Solaris.
++ // However, it is not supported also by the Linux on SH4 CPU
++ #define	MAYAQUA_SUPPORTS_GETIFADDRS
+++#endif  // !UCLIBC || UCLIBC_SUPPORT_AI_ADDRCONFIG
++ #endif	// CPU_SH4
++ #endif	// UNIX_SOLARIS
++ #endif	// OS_UNIX
