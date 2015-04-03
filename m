@@ -1,46 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Apr 2015 14:04:51 +0200
-Subject: [Buildroot] [PATCH 1/2] package/softether: Fix build error on
- ARC
-In-Reply-To: <1428004759-25894-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1428004759-25894-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150403140451.3dba6a5f@free-electrons.com>
+Date: Fri, 3 Apr 2015 14:05:19 +0200
+Subject: [Buildroot] [git commit] package/softether: bump version
+Message-ID: <20150403120728.3789D81918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=8d97ef5d7c29c1def0b7e7529612a8c60fb6156f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  2 Apr 2015 21:59:18 +0200, Bernd Kuhls wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/softether/softether.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> +--- a/src/Mayaqua/Mayaqua.h.org	2015-04-02 21:52:44.911083674 +0200
-> ++++ b/src/Mayaqua/Mayaqua.h	2015-04-02 21:51:52.075081069 +0200
-> +@@ -235,9 +235,11 @@
-> + #ifdef	OS_UNIX
-> + #ifndef	UNIX_SOLARIS
-> + #ifndef	CPU_SH4
-> ++#ifndef	__arc__
-
-This is not the correct fix. The fact that the toolchain used in the
-build tests that failed does not have ifaddrs support is completely
-unrelated to the fact that it's an ARC toolchain.
-
-It's simply because this specific toolchain is an external toolchain
-that doesn't have the ifaddrs support. The internal ARC toolchain will
-have ifaddrs support, and other external toolchains may not have it.
-
-So the right fix is to actually test whether ifaddrs support is
-available or not. I've pushed a fix that implements this (hopefully
-correctly) :
-
-  http://git.buildroot.net/buildroot/commit/?id=d9cf0a76db5e428692f2489901c9787b1fd30eee
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/softether/softether.mk b/package/softether/softether.mk
+index d73d33c..17a450f 100644
+--- a/package/softether/softether.mk
++++ b/package/softether/softether.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SOFTETHER_VERSION = 64fd19e6f849247e3daee765ad278c6bf072afcb
++SOFTETHER_VERSION = 18b120e5f747a84d26302ec706f6c1c91d642ace
+ SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN,$(SOFTETHER_VERSION))
+ SOFTETHER_PATCH = \
+ 	https://github.com/dajhorn/SoftEtherVPN/commit/c5e5d7e93c6f3302adf5821c29c4efdb7630e418.patch \
