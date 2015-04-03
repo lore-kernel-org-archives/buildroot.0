@@ -1,39 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Apr 2015 14:32:57 +0200
-Subject: [Buildroot] [git commit] package/kodi: enable gconv libraries on
-	glibc configurations
-Message-ID: <20150403123350.9AD5881998@busybox.osuosl.org>
+Date: Fri, 3 Apr 2015 14:34:22 +0200
+Subject: [Buildroot] [PATCH v2] package/kodi: fix a runtime bug (no text
+ displayed in GUI) when a glibc toolchain is used
+In-Reply-To: <1425904718-24193-1-git-send-email-julien.boibessot@free.fr>
+References: <1425904718-24193-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20150403143422.29b59616@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48a717343deabbf9aa8b09f0c2b6944bcb5a81d9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Julien,
 
-When a glibc toolchain is used, Kodi really requires the gconv
-libraries to be installed, otherwise no text is rendered in the GUI.
+On Mon,  9 Mar 2015 13:38:38 +0100, julien.boibessot at free.fr wrote:
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
+> 
+> 
+> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 
-[Thomas: slightly improve commit message.]
+Thanks, applied. I've slightly tweaked the commit message, though: the
+title was a bit too long, and the commit message was empty, which
+wasn't really good.
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/kodi/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Thanks!
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index a0cbb18..88d1109 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -91,6 +91,7 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_XLIB_XT if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
- 	select BR2_PACKAGE_YAJL
- 	select BR2_PACKAGE_ZLIB
-+	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
- 	depends on BR2_INET_IPV6
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
