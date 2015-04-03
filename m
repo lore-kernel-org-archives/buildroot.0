@@ -1,55 +1,90 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Fri, 3 Apr 2015 07:39:18 -0500
-Subject: [Buildroot] [PATCH 1/1] miraclecast: new package
-In-Reply-To: <20150403050043.GM17056@tarshish>
-References: <1428030634-23928-1-git-send-email-ryanbarnett3@gmail.com>
- <20150403050043.GM17056@tarshish>
-Message-ID: <CALq67GAquEBk9P9svuM0WvO+bqRgeSPfCuAjtsbEGZZhN8WPwA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 Apr 2015 14:36:52 +0200
+Subject: [Buildroot] [git commit] drbd-utils: new package
+Message-ID: <20150403124757.EC136819B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+commit: http://git.buildroot.net/buildroot/commit/?id=4b47ab6cd45fe383c14cb3a2e5426c87477f14db
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Apr 3, 2015 at 12:00 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Ryan,
->
-> On Thu, Apr 02, 2015 at 10:10:34PM -0500, Ryan Barnett wrote:
->> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
->> index 98bda02..a94ce04 100644
->> --- a/package/systemd/systemd.mk
->> +++ b/package/systemd/systemd.mk
->> @@ -77,6 +77,11 @@ else
->>  SYSTEMD_CONF_OPTS += --disable-seccomp
->>  endif
->>
->> +ifeq ($(BR2_PACKAGE_MIRACLECAST),y)
->> +# Must enable kdbus in order to get sd-events.h in staging
->> +SYSTEMD_CONF_OPTS += --enable-kdbus
->> +endif
->
-> This looks somewhat unusual. And besides, kdbus should be a useful feature on
-> its own right. So why not add a BR2_PACKAGE_SYSTEMD_KDBUS option, and have
-> BR2_PACKAGE_MIRACLECAST select that? Setting the right kernel dependency for
-> BR2_PACKAGE_SYSTEMD_KDBUS would be an interesting question, though.
+DRBD utilities to manage the DRBD kernel module.
 
-I had this same idea an hour or so after submitting this patch. I
-wasn't really happy with what I sent but I blanking at the time. The
-miraclecast package is interesting because if I just pass the
---enable-kdbus when I build systemd, it doesn't install that
-sd-events.h file. Here is what they say in miraclecast's
-documentation:
+[Thomas: remove largefile dependency.]
 
-systemd: A system management daemon. It is used for device-management
-(udev), dbus management (sd-bus) and service management. Systemd must
-be compiled with --enable-kdbus, even though kdbus isn't used, but
-only the independent, experimental sd-libraries. required:
->=systemd-213
+Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                |    1 +
+ package/drbd-utils/Config.in     |    7 +++++++
+ package/drbd-utils/drbd-utils.mk |   34 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 42 insertions(+), 0 deletions(-)
 
-I will work on a v2 of this tonight but thanks for the feedback and
-the suggestion.
-
-Thanks,
--Ryan
+diff --git a/package/Config.in b/package/Config.in
+index f00a18f..65e2683 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1114,6 +1114,7 @@ endif
+ 	source "package/dhcpcd/Config.in"
+ 	source "package/dhcpdump/Config.in"
+ 	source "package/dnsmasq/Config.in"
++	source "package/drbd-utils/Config.in"
+ 	source "package/dropbear/Config.in"
+ 	source "package/ebtables/Config.in"
+ 	source "package/ejabberd/Config.in"
+diff --git a/package/drbd-utils/Config.in b/package/drbd-utils/Config.in
+new file mode 100644
+index 0000000..be68619
+--- /dev/null
++++ b/package/drbd-utils/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_DRBD_UTILS
++	bool "drbd-utils"
++	depends on BR2_USE_MMU # needs fork()
++	help
++	  DRBD utilities to manage the DRBD kernel module.
++
++	  http://oss.linbit.com/drbd/
+diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
+new file mode 100644
+index 0000000..0da4b1f
+--- /dev/null
++++ b/package/drbd-utils/drbd-utils.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# drbd-utils
++#
++################################################################################
++
++DRBD_UTILS_VERSION = 8.9.1
++DRBD_UTILS_SITE = http://oss.linbit.com/drbd/
++DRBD_UTILS_LICENSE = GPLv2+
++DRBD_UTILS_LICENSE_FILES = COPYING
++
++DRBD_UTILS_CONF_OPTS = --with-distro=generic
++
++ifeq ($(BR2_INIT_SYSTEMD),y)
++DRBD_UTILS_CONF_OPTS += --with-initscripttype=systemd
++DRDB_UTILS_DEPENDENCIES += systemd
++else
++DRBD_UTILS_CONF_OPTS += --with-initscripttype=sysv
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++DRBD_UTILS_CONF_OPTS += --with-udev=yes
++DRDB_UTILS_DEPENDENCIES += udev
++else
++DRBD_UTILS_CONF_OPTS += --with-udev=no
++endif
++
++# Do not build the documentation because it requires docbook
++define DRBD_UTILS_DISABLE_DOCS
++	$(SED) 's/user scripts documentation/user scripts/' $(@D)/Makefile.in
++endef
++DRBD_UTILS_POST_PATCH_HOOKS += DRBD_UTILS_DISABLE_DOCS
++
++$(eval $(autotools-package))
