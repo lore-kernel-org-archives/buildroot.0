@@ -1,90 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Apr 2015 14:36:52 +0200
-Subject: [Buildroot] [git commit] drbd-utils: new package
-Message-ID: <20150403124757.EC136819B3@busybox.osuosl.org>
+Date: Fri, 3 Apr 2015 14:48:49 +0200
+Subject: [Buildroot] [PATCH 1/1] drbd-utils: new package
+In-Reply-To: <1426177996-22605-1-git-send-email-cvubrugier@fastmail.fm>
+References: <1426177996-22605-1-git-send-email-cvubrugier@fastmail.fm>
+Message-ID: <20150403144849.66253910@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4b47ab6cd45fe383c14cb3a2e5426c87477f14db
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Christophe,
 
-DRBD utilities to manage the DRBD kernel module.
+On Thu, 12 Mar 2015 17:33:16 +0100, Christophe Vu-Brugier wrote:
 
-[Thomas: remove largefile dependency.]
+> diff --git a/package/drbd-utils/Config.in b/package/drbd-utils/Config.in
+> new file mode 100644
+> index 0000000..a8a0d34
+> --- /dev/null
+> +++ b/package/drbd-utils/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_DRBD_UTILS
+> +	bool "drbd-utils"
+> +	depends on BR2_LARGEFILE
+> +	depends on BR2_USE_MMU # needs fork()
+> +	help
+> +	  DRBD utilities to manage the DRBD kernel module.
+> +
+> +	  http://oss.linbit.com/drbd/
 
-Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                |    1 +
- package/drbd-utils/Config.in     |    7 +++++++
- package/drbd-utils/drbd-utils.mk |   34 ++++++++++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+), 0 deletions(-)
+There should have been a comment about the BR2_LARGEFILE dependency
+here. But in the mean time, we entirely removed the BR2_LARGEFILE
+option: from now on, we assume all toolchains have largefile support.
 
-diff --git a/package/Config.in b/package/Config.in
-index f00a18f..65e2683 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1114,6 +1114,7 @@ endif
- 	source "package/dhcpcd/Config.in"
- 	source "package/dhcpdump/Config.in"
- 	source "package/dnsmasq/Config.in"
-+	source "package/drbd-utils/Config.in"
- 	source "package/dropbear/Config.in"
- 	source "package/ebtables/Config.in"
- 	source "package/ejabberd/Config.in"
-diff --git a/package/drbd-utils/Config.in b/package/drbd-utils/Config.in
-new file mode 100644
-index 0000000..be68619
---- /dev/null
-+++ b/package/drbd-utils/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_DRBD_UTILS
-+	bool "drbd-utils"
-+	depends on BR2_USE_MMU # needs fork()
-+	help
-+	  DRBD utilities to manage the DRBD kernel module.
-+
-+	  http://oss.linbit.com/drbd/
-diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
-new file mode 100644
-index 0000000..0da4b1f
---- /dev/null
-+++ b/package/drbd-utils/drbd-utils.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# drbd-utils
-+#
-+################################################################################
-+
-+DRBD_UTILS_VERSION = 8.9.1
-+DRBD_UTILS_SITE = http://oss.linbit.com/drbd/
-+DRBD_UTILS_LICENSE = GPLv2+
-+DRBD_UTILS_LICENSE_FILES = COPYING
-+
-+DRBD_UTILS_CONF_OPTS = --with-distro=generic
-+
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+DRBD_UTILS_CONF_OPTS += --with-initscripttype=systemd
-+DRDB_UTILS_DEPENDENCIES += systemd
-+else
-+DRBD_UTILS_CONF_OPTS += --with-initscripttype=sysv
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-+DRBD_UTILS_CONF_OPTS += --with-udev=yes
-+DRDB_UTILS_DEPENDENCIES += udev
-+else
-+DRBD_UTILS_CONF_OPTS += --with-udev=no
-+endif
-+
-+# Do not build the documentation because it requires docbook
-+define DRBD_UTILS_DISABLE_DOCS
-+	$(SED) 's/user scripts documentation/user scripts/' $(@D)/Makefile.in
-+endef
-+DRBD_UTILS_POST_PATCH_HOOKS += DRBD_UTILS_DISABLE_DOCS
-+
-+$(eval $(autotools-package))
+So I've simply removed the depends on BR2_LARGEFILE line.
+
+Other than that, applied! Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
