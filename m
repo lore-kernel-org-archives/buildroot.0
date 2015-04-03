@@ -1,60 +1,54 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 3 Apr 2015 18:42:36 +0200
-Subject: [Buildroot] [PATCH 1/1] Add package sl
-In-Reply-To: <551C5F4F.5080001@mind.be>
-References: <1427879325-12015-1-git-send-email-j.rosenboom@x-ion.de>
- <CA+TH9V=GDKg8h=_1rfRimuKEaJM_DC-w60frT3PK3DTJA1m-+w@mail.gmail.com>
- <551C5F4F.5080001@mind.be>
-Message-ID: <CA+TH9Vm+Jaf3ycg3bNOAkpxz=_DwEZoH0dJXz--WuvygQ3GS6w@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri,  3 Apr 2015 19:16:26 +0200
+Subject: [Buildroot] [PATCH 0/4] toolchain/external: do not fail on missig
+	hash for custom downloaded toolchain (branch yem/dl-hash-toolchains)
+Message-ID: <cover.1428081325.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Hello All!
 
-2015-04-01 23:12 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->  Hi Angelo,
->
-> On 01/04/15 11:26, Angelo Compagnucci wrote:
->> Dear Jens Rosenboom,
->>
->> 2015-04-01 11:08 GMT+02:00 Jens Rosenboom <j.rosenboom@x-ion.de>:
->>> SL (Steam Locomotive) runs across your terminal when you type "sl" as
->>> you meant to type "ls". It's just a joke command, and not useful at all.
->>>
->>> Might want to depend on BR2_PACKAGE_NCURSES_WCHAR even in order to get
->>> terminfo for xterm-256color, but I'm not sure whether that should be
->>> just optional.
->>>
->>> Signed-off-by: Jens Rosenboom <j.rosenboom@x-ion.de>
-> [snip]
->>> --
->>
->> I want it now! Tomorrow will be too late!
->
->  Well, then review the patch and either give some comments and/or add your
-> Reviewed-by, Tested-by or Acked-by tags.
+This series makes it so we can download custom external toolchains, and
+still have mandatory checks of hashes.
 
-Honestly I thought it was an April fools! Why add an unuseful command
-to buildroot just the first of April after all! Lol!
+It also fixes a slightly annoying warning message when downloading from
+a repository.
 
-Sincerely, Angelo
-
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Regards,
+Yann E. MORIN.
 
 
+The following changes since commit 0eb659d04e7854a25be09c5358212a7bfcc39b2b:
+
+  config: Add defconfig for Freescale i.MX28 EVK (2015-04-03 17:26:00 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/dl-hash-toolchains
+
+for you to fetch changes up to b3d829351f7593b214a93a3503b789113d3d63ca:
+
+  support/download: do not warn about missing hash file for repositories (2015-04-03 19:08:46 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      support/download: add possibility to not fail on missing hash
+      toolchain/external: ginore missig hash for custom downloaded toolchain
+      support/download: restore mandatory check of hashes
+      support/download: do not warn about missing hash file for repositories
+
+ package/pkg-download.mk                            |  4 ++++
+ support/download/check-hash                        | 12 ++++++++++--
+ toolchain/toolchain-external/toolchain-external.mk |  2 ++
+ 3 files changed, 16 insertions(+), 2 deletions(-)
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
