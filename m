@@ -1,60 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Apr 2015 14:01:59 +0200
-Subject: [Buildroot] [git commit] softether: add patch to fix build on
-	uClibc toolchain without ifaddr support
-Message-ID: <20150403120305.BC32E819BE@busybox.osuosl.org>
+Date: Fri, 3 Apr 2015 14:04:51 +0200
+Subject: [Buildroot] [PATCH 1/2] package/softether: Fix build error on
+ ARC
+In-Reply-To: <1428004759-25894-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1428004759-25894-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150403140451.3dba6a5f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d9cf0a76db5e428692f2489901c9787b1fd30eee
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-This commit adds a patch to softether to make sure it doesn't use the
-ifaddrs functions when they are not provided by the C library, which
-can be the case with certain external uClibc toolchains.
+On Thu,  2 Apr 2015 21:59:18 +0200, Bernd Kuhls wrote:
 
-Fixes:
+> +--- a/src/Mayaqua/Mayaqua.h.org	2015-04-02 21:52:44.911083674 +0200
+> ++++ b/src/Mayaqua/Mayaqua.h	2015-04-02 21:51:52.075081069 +0200
+> +@@ -235,9 +235,11 @@
+> + #ifdef	OS_UNIX
+> + #ifndef	UNIX_SOLARIS
+> + #ifndef	CPU_SH4
+> ++#ifndef	__arc__
 
-  http://autobuild.buildroot.net/results/199/19992951da34a703a476dc62ea92e12927c8a02d/
+This is not the correct fix. The fact that the toolchain used in the
+build tests that failed does not have ifaddrs support is completely
+unrelated to the fact that it's an ARC toolchain.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/softether/0007-uclibc-ai-addrconfig.patch |   27 +++++++++++++++++++++
- 1 files changed, 27 insertions(+), 0 deletions(-)
+It's simply because this specific toolchain is an external toolchain
+that doesn't have the ifaddrs support. The internal ARC toolchain will
+have ifaddrs support, and other external toolchains may not have it.
 
-diff --git a/package/softether/0007-uclibc-ai-addrconfig.patch b/package/softether/0007-uclibc-ai-addrconfig.patch
-new file mode 100644
-index 0000000..7d8f1c6
---- /dev/null
-+++ b/package/softether/0007-uclibc-ai-addrconfig.patch
-@@ -0,0 +1,27 @@
-+Only enable getifaddrs support when available
-+
-+On uClibc, the ifaddrs.h support is optional. While the default
-+Buildroot uClibc configuration has it enabled, some external
-+toolchains may not. Therefore this patch detects that and adjusts
-+softether usage of ifaddrs accordingly.
-+
-+Based on an initial patch from Bernd Kuhls.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/src/Mayaqua/Mayaqua.h
-+===================================================================
-+--- a/src/Mayaqua/Mayaqua.h
-++++ b/src/Mayaqua/Mayaqua.h
-+@@ -235,9 +235,11 @@
-+ #ifdef	OS_UNIX
-+ #ifndef	UNIX_SOLARIS
-+ #ifndef	CPU_SH4
-++#if !defined(__UCLIBC__) || defined(__UCLIBC_SUPPORT_AI_ADDRCONFIG__)
-+ // Getifaddrs system call is supported on UNIX other than Solaris.
-+ // However, it is not supported also by the Linux on SH4 CPU
-+ #define	MAYAQUA_SUPPORTS_GETIFADDRS
-++#endif  // !UCLIBC || UCLIBC_SUPPORT_AI_ADDRCONFIG
-+ #endif	// CPU_SH4
-+ #endif	// UNIX_SOLARIS
-+ #endif	// OS_UNIX
+So the right fix is to actually test whether ifaddrs support is
+available or not. I've pushed a fix that implements this (hopefully
+correctly) :
+
+  http://git.buildroot.net/buildroot/commit/?id=d9cf0a76db5e428692f2489901c9787b1fd30eee
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
