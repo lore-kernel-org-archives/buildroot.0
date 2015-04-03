@@ -1,42 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Apr 2015 14:31:39 +0200
-Subject: [Buildroot] [git commit] samba: deprecate package due to EOL
-Message-ID: <20150403123150.3F03181910@busybox.osuosl.org>
+Date: Fri, 3 Apr 2015 14:31:15 +0200
+Subject: [Buildroot] [git commit] kodi: switch smb support to samba4
+Message-ID: <20150403123150.24EF681910@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2cf5d91167cda1bbc6ffac8330992cefc07fb489
+commit: http://git.buildroot.net/buildroot/commit/?id=dc6b46d1bacb03ebcec5196449c6aaf66bf42fb6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Samba 3.6.x is now EOL, people should move to samba4.
-
-See: https://www.samba.org/samba/history/samba-4.2.0.html
+samba3 is deprecated upstream.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/kodi/Config.in |    7 +++++--
+ package/kodi/kodi.mk   |    2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba/Config.in b/package/samba/Config.in
-index 9d04851..7ff8428 100644
---- a/package/samba/Config.in
-+++ b/package/samba/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SAMBA
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 1f98267..a0cbb18 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -202,10 +202,13 @@ config BR2_PACKAGE_KODI_LIBSHAIRPLAY
+ comment "shairport support needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+ 
++comment "samba support needs an (e)glibc toolchain"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
++
+ config BR2_PACKAGE_KODI_LIBSMBCLIENT
  	bool "samba"
-+	depends on BR2_DEPRECATED_SINCE_2015_05
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_nios2 # binary too large, relocations don't fit
-@@ -15,6 +16,7 @@ config BR2_PACKAGE_SAMBA
- 		so choose only the components you need.
+-	select BR2_PACKAGE_SAMBA
+-	select BR2_PACKAGE_SAMBA_LIBSMBCLIENT
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_SAMBA4
+ 	help
+ 	  Enable Samba support
  
- comment "samba needs a toolchain w/ threads"
-+	depends on BR2_DEPRECATED_SINCE_2015_05
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index ca8563d..ad73dcb 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -140,7 +140,7 @@ KODI_CONF_OPTS += --disable-webserver
+ endif
  
+ ifeq ($(BR2_PACKAGE_KODI_LIBSMBCLIENT),y)
+-KODI_DEPENDENCIES += samba
++KODI_DEPENDENCIES += samba4
+ KODI_CONF_OPTS += --enable-samba
+ else
+ KODI_CONF_OPTS += --disable-samba
