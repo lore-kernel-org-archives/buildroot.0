@@ -1,88 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Apr 2015 14:08:00 +0200
-Subject: [Buildroot] [git commit] package infra: do not check hashes when
-	downloading from a repository
-Message-ID: <20150403120939.28D25819C9@busybox.osuosl.org>
+Date: Fri, 3 Apr 2015 14:08:54 +0200
+Subject: [Buildroot] [git commit] support/download: always fail when there's
+	no hash
+Message-ID: <20150403120939.5A4F3818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1286222597d960b31567d30acdc01932c1f37afe
+commit: http://git.buildroot.net/buildroot/commit/?id=327531543288ac17690a36f3d4f2800f2ecc2362
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When downloading from a repository, we have no way to ensure the
-reproducibility of the generated archives, so we can't check the hashes.
+At the time we introduced hashes, we did not want to be too harsh in the
+beginning, and give people some time to adapt and accept the hashes. So
+we so far only whined^Wwarned about a missing hash (when the .hash file
+exists).
 
-Do not specifiy a hash file in those cases.
+Some time has passed now, and people are still missing updating hashes
+when bumping packages.
+
+Let's make that warning a little bit more annoying...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-directory.txt |    6 ++++++
- package/pkg-download.mk                   |    5 -----
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ docs/manual/adding-packages-directory.txt |    8 ++++----
+ support/download/check-hash               |    8 ++------
+ 2 files changed, 6 insertions(+), 10 deletions(-)
 
 diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 1b34b41..01a1928 100644
+index b9e3c52..f536a0c 100644
 --- a/docs/manual/adding-packages-directory.txt
 +++ b/docs/manual/adding-packages-directory.txt
-@@ -471,4 +471,10 @@ environment variable +BR2_ENFORCE_CHECK_HASH+ to a non-empty value, and
- there is no hash for a downloaded file, Buildroot considers this an
- error, deletes the downloaded file, and aborts.
+@@ -475,10 +475,10 @@ not match, Buildroot considers this an error, deletes the downloaded file,
+ and aborts.
  
-+Sources that are downloaded from a version control system (git, subversion,
-+etc...) can not have a hash, because the version control system and tar
-+may not create exactly the same file (dates, files ordering...), so the
-+hash could be wrong even for a valid download. Therefore, the hash check
-+is entirely skipped for such sources.
-+
- If the +.hash+ file is missing, then no check is done at all.
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 5e74519..e274712 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -87,7 +87,6 @@ github = https://github.com/$(1)/$(2)/archive/$(3)
- define DOWNLOAD_GIT
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
--		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
- 		$($(PKG)_SITE) \
-@@ -109,7 +108,6 @@ endef
- define DOWNLOAD_BZR
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b bzr \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
--		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
- 		$($(PKG)_SITE) \
-@@ -128,7 +126,6 @@ endef
- define DOWNLOAD_CVS
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b cvs \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
--		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
- 		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
-@@ -149,7 +146,6 @@ endef
- define DOWNLOAD_SVN
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b svn \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
--		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
- 		$($(PKG)_SITE) \
-@@ -189,7 +185,6 @@ endef
- define DOWNLOAD_HG
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b hg \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
--		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
- 		$($(PKG)_SITE) \
+ If the +.hash+ file is present, but it does not contain a hash for a
+-downloaded file, no check is done for that file. If you set the
+-environment variable +BR2_ENFORCE_CHECK_HASH+ to a non-empty value, and
+-there is no hash for a downloaded file, Buildroot considers this an
+-error, deletes the downloaded file, and aborts.
++downloaded file, Buildroot considers this an error and aborts. However,
++the downloaded file is left in the download directory since this
++typically indicates that the +.hash+ file is wrong but the downloaded
++file is probably OK.
+ 
+ Sources that are downloaded from a version control system (git, subversion,
+ etc...) can not have a hash, because the version control system and tar
+diff --git a/support/download/check-hash b/support/download/check-hash
+index ab416c7..13a76b8 100755
+--- a/support/download/check-hash
++++ b/support/download/check-hash
+@@ -94,10 +94,6 @@ while read t h f; do
+ done <"${h_file}"
+ 
+ if [ ${nb_checks} -eq 0 ]; then
+-    if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
+-        printf "ERROR: No hash found for %s\n" "${base}" >&2
+-        exit 3
+-    else
+-        printf "WARNING: No hash found for %s\n" "${base}" >&2
+-    fi
++    printf "ERROR: No hash found for %s\n" "${base}" >&2
++    exit 3
+ fi
