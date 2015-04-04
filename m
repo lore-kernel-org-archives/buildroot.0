@@ -1,42 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Apr 2015 21:14:44 +0200
-Subject: [Buildroot] [git commit] xerces: disable build and installation of
-	samples
-Message-ID: <20150404191543.98E92817EE@busybox.osuosl.org>
+Date: Sat, 4 Apr 2015 21:16:18 +0200
+Subject: [Buildroot] [PATCH 1/1] Disable sample xerces
+In-Reply-To: <1416499328-13083-1-git-send-email-damien@kal-host.com>
+References: <1416499328-13083-1-git-send-email-damien@kal-host.com>
+Message-ID: <20150404211618.36ecfeba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd63c8bc6c86c0645374fda8dfa654c3cd668656
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Damien Lanson,
 
-This commit tweaks the Makefile.in to not build and install example
-applications.
+On Thu, 20 Nov 2014 17:02:08 +0100, Damien Lanson wrote:
 
-[Thomas: improve commit log, rebase on top of latest master.]
+> New try to send a patch with git send-email. This patch remove building and
+> installing sample for xerces. If it's good, I have other patch to remove
+> building and/or installing of sample or example or dev file in some package.
 
-Signed-off-by: Damien Lanson <damien@kal-host.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xerces/xerces.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+Thanks, applied after tweaking the commit log, and rebased on master.
 
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 20426b6..cf36183 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -15,6 +15,12 @@ XERCES_CONF_OPTS = \
- 	--disable-threads \
- 	--with-gnu-ld
- 
-+define XERCES_DISABLE_SAMPLES
-+	$(SED) 's/ samples//' $(@D)/Makefile.in
-+endef
-+
-+XERCES_POST_PATCH_HOOKS += XERCES_DISABLE_SAMPLES
-+
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- XERCES_CONF_ENV += LIBS=-liconv
- XERCES_DEPENDENCIES += libiconv
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
