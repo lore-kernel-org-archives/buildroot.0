@@ -1,41 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Date: Sat, 4 Apr 2015 19:24:58 +0200
-Subject: [Buildroot] [PATCH v2 00/10] autobuild-run: python3 compat and
- misc improvements
-In-Reply-To: <1426693843-28792-1-git-send-email-dywi@mailerd.de>
-References: <1426693843-28792-1-git-send-email-dywi@mailerd.de>
-Message-ID: <20150404192458.3b73dfff@free-electrons.com>
+Subject: [Buildroot] [PATCH v2] libressl: new package
+In-Reply-To: <20150404165919.3569994e@free-electrons.com>
+References: <1413124786-14001-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20150404165919.3569994e@free-electrons.com>
+Message-ID: <CAGduivw1dhE8Lw7__nibHy=BGWUyBzoO_FziFi21EdxqA3F5fQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andr? Erdmann,
+Hi Thomas,
 
-On Wed, 18 Mar 2015 16:50:33 +0100, Andr? Erdmann wrote:
-
-> Andr? Erdmann (10):
->   autobuild-run: fixup imports
->   autobuild-run, python3: dict.iteritems()->items()
->   autobuild-run, python3: decode subprocess output
->   autobuild-run, python3: encode/decode mmap data
->   autobuild-run: avoid use of builtin as varname
->   autobuild-run: reorganize imports
->   autobuild-run: move check_requirements() to SystemInfo
-
-Those 7 first patches applied.
-
->   autobuild-run: encapsulate subprocess calls
->   autobuild-run: control subprocess env
->   autobuild-run: set locale to en_US or C
-
-I'll need more time (or help from someone else) to review these changes.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On Sat, Apr 4, 2015 at 4:59 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Maxime Hadjinlian,
+>
+> On Sun, 12 Oct 2014 16:39:46 +0200, Maxime Hadjinlian wrote:
+>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>> ---
+>> v1 -> v2:
+>>     - Add INSTALL_STAGING
+>
+> It is more complicated than this: libressl installs the same libraries
+> as openssl. So they should conflict with each other, and possibly a
+> virtual package should be introduced so that all packages can build
+> against either libressl or openssl depending on which one is selected.
+>
+> Since you have pushed again this patch since October 2014, I'll mark
+> it as Changes Requested in patchwork.
+Yup, I supposed I would have to do something like that, this first
+patch was only to feel the water about introducing libressl (which was
+not really old at that time).
+Anyway, I'll remove the dust from my repository and start working on
+that again !
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
