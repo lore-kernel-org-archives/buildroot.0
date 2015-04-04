@@ -1,61 +1,96 @@
-From: Johan Sagaert <sagaert.johan@proximus.be>
-Date: Sun, 05 Apr 2015 00:51:59 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] build host lz4 to support lz4
- compression in the kernel.
-In-Reply-To: <20150402220612.GD4229@free.fr>
-References: <1427919153-16080-1-git-send-email-sagaert.johan@proximus.be>
- <20150401223752.0fd358cf@free-electrons.com> <551C6935.3050401@mind.be>
- <20150402000158.0b85c847@free-electrons.com> <20150402220612.GD4229@free.fr>
-Message-ID: <55206B0F.6080206@proximus.be>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sun, 5 Apr 2015 01:17:56 +0200
+Subject: [Buildroot] [PATCH 1/2] package/makedevs: add recursive option
+In-Reply-To: <1426243805-8317-2-git-send-email-angelo.compagnucci@gmail.com>
+References: <1426243805-8317-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1426243805-8317-2-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <CA+TH9VkgQNNQkWgjLh5yhcY7_r0F-2b8ceXd+6BTTHTmO1D-uA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann E. MORIN schreef op 3/04/2015 om 0:06:
-> Thomas, All,
+Dear Buildroot developers,
+Il 13/mar/2015 11:50, "Angelo Compagnucci" <angelo.compagnucci@gmail.com>
+ha scritto:
 >
-> On 2015-04-02 00:01 +0200, Thomas Petazzoni spake thusly:
->> On Wed, 01 Apr 2015 23:55:01 +0200, Arnout Vandecappelle wrote:
->>
->>>   Well, I'm in agreement with Johan's earlier statement that the overhead of the
->>> host-lz4 build is negligible. It takes 20 seconds on my laptop, of which 6 are
->>> buildroot overhead from parsing package/*/*.mk.
->> 20 seconds, plus the host-lzop build time that we already build
->> unconditionally.
->>
->>>   Peter said before that all this hacking of linux (or other) config files should
->>> be avoided, and I agree.
->> Correct, except when it's related to needed dependencies in Buildroot.
->>
->> But if that's fine for everyone, I'm OK with merging an unconditional
->> host-lz4 dependency. I'll just follow what the consensus is on this
->> matter, since I don't feel like arguing too much on this
->> not-so-important issue.
->>
->> Thanks for the feedback, definitely very useful to have the opinion of
->> others to help take a decision.
-> Well, I always find it very frustrating to build something that I do not
-> use. 20 seconds is an eternity (even the 15-or-so it takes here).
+> This patch adds the possibilty to change owner/permission
+> of a folder recursively.
 >
-> Also, I see a lot of people doing this use-case, and being quite
-> frustrated:
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+
+Anybody willing to review this patch? I think it's very important to have
+the option to set permission on folders recursively!
+
+I think this patch is really simple and could be reviewed/accepted with a
+minimal effort.
+
+>  package/makedevs/makedevs.c | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 >
->      make foo_defconfig
->      make linux-menuconfig
->      [Bam, 20s overhead, 35s on slower machines]
+> diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+> index ab90b93..e575427 100644
+> --- a/package/makedevs/makedevs.c
+> +++ b/package/makedevs/makedevs.c
+> @@ -34,6 +34,8 @@
+>  #ifndef __APPLE__
+>  #include <sys/sysmacros.h>     /* major() and minor() */
+>  #endif
+> +#include <ftw.h>
+> +
 >
-> Otherwise, 15s for a lzo, yet another 10s for lz4. What next?
+>  const char *bb_applet_name;
 >
-> I would side with Thomas: add an entry in the Buildroot menuconfig to
-> configure what compression to use.
+> @@ -332,6 +334,7 @@ void bb_show_usage(void)
+>         fprintf(stderr, "Where name is the file name,  type can be one
+of:\n");
+>         fprintf(stderr, "      f       A regular file\n");
+>         fprintf(stderr, "      d       Directory\n");
+> +       fprintf(stderr, "      r       Directory recursively\n");
+>         fprintf(stderr, "      c       Character special device file\n");
+>         fprintf(stderr, "      b       Block special device file\n");
+>         fprintf(stderr, "      p       Fifo (named pipe)\n");
+> @@ -364,6 +367,20 @@ void bb_show_usage(void)
+>         exit(1);
+>  }
 >
-> My 2-cent advice... ;-)
+> +bb_recursive(const char *full_name, uid_t uid, gid_t gid, unsigned int
+mode){
+> +
+> +       int chmod_chown(const char *fpath, const struct stat *sb,
+> +               int tflag, struct FTW *ftwbuf) {
+> +               if (chown(fpath, uid, gid) == -1) return -1;
+> +               if ((mode != -1)) {
+> +                       if (chmod(fpath, mode) < 0) return -1;
+> +               }
+> +               return 0;
+> +       }
+> +
+> +       return nftw(full_name, chmod_chown, 20, FTW_MOUNT | FTW_PHYS);
+> +}
+> +
+>  int main(int argc, char **argv)
+>  {
+>         int opt;
+> @@ -474,6 +491,12 @@ int main(int argc, char **argv)
+>                                 ret = EXIT_FAILURE;
+>                                 goto loop;
+>                         }
+> +               } else if (type == 'r') {
+> +                       if (bb_recursive(full_name, uid, gid, mode) < 0) {
+> +                               bb_perror_msg("line %d: recursive failed
+for %s", linenum, full_name);
+> +                               ret = EXIT_FAILURE;
+> +                               goto loop;
+> +                       }
+>                 } else
+>                 {
+>                         dev_t rdev;
+> --
+> 1.9.1
 >
-> Regards,
-> Yann E. MORIN.
->
-What about overhead for checking hashes ?
-Meanwhile i submitted a new patch with a menu entry in the kernel section.
-Best Regards Johan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150405/257df3f5/attachment.html>
