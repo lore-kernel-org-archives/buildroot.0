@@ -1,46 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Apr 2015 21:05:11 +0200
-Subject: [Buildroot] [git commit] xerces: bump version, use .tar.xz,
-	add hash file
-Message-ID: <20150404191543.8FB378180F@busybox.osuosl.org>
+Date: Sat, 4 Apr 2015 21:14:44 +0200
+Subject: [Buildroot] [git commit] xerces: disable build and installation of
+	samples
+Message-ID: <20150404191543.98E92817EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=86f5fb8c742fdef5d465110069463582f33e699a
+commit: http://git.buildroot.net/buildroot/commit/?id=bd63c8bc6c86c0645374fda8dfa654c3cd668656
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit bumps the version of xerces to 3.1.2, changes tarball to
-.tar.xz, and adds a hash file.
+This commit tweaks the Makefile.in to not build and install example
+applications.
 
+[Thomas: improve commit log, rebase on top of latest master.]
+
+Signed-off-by: Damien Lanson <damien@kal-host.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xerces/xerces.hash |    2 ++
- package/xerces/xerces.mk   |    4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/xerces/xerces.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/xerces/xerces.hash b/package/xerces/xerces.hash
-new file mode 100644
-index 0000000..6f4c267
---- /dev/null
-+++ b/package/xerces/xerces.hash
-@@ -0,0 +1,2 @@
-+# From http://www.apache.org/dist/xerces/c/3/sources/xerces-c-3.1.2.tar.xz.sha256
-+sha256 a847529ab6125f36039f54fa61f3d5043791accf7da2f43917cd2b49deb768f1 xerces-c-3.1.2.tar.xz
 diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 59b8d8a..20426b6 100644
+index 20426b6..cf36183 100644
 --- a/package/xerces/xerces.mk
 +++ b/package/xerces/xerces.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+@@ -15,6 +15,12 @@ XERCES_CONF_OPTS = \
+ 	--disable-threads \
+ 	--with-gnu-ld
  
--XERCES_VERSION = 3.1.1
--XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.gz
-+XERCES_VERSION = 3.1.2
-+XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.xz
- XERCES_SITE = http://archive.apache.org/dist/xerces/c/3/sources
- XERCES_LICENSE = Apache-2.0
- XERCES_LICENSE_FILES = LICENSE
++define XERCES_DISABLE_SAMPLES
++	$(SED) 's/ samples//' $(@D)/Makefile.in
++endef
++
++XERCES_POST_PATCH_HOOKS += XERCES_DISABLE_SAMPLES
++
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ XERCES_CONF_ENV += LIBS=-liconv
+ XERCES_DEPENDENCIES += libiconv
