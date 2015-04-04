@@ -1,43 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Apr 2015 15:06:23 +0200
-Subject: [Buildroot] [git commit] package/freerdp: needs threads
-Message-ID: <20150404130646.89D44818CE@busybox.osuosl.org>
+Date: Sat, 4 Apr 2015 15:08:26 +0200
+Subject: [Buildroot] [PATCH] package/eudev: fix build with older gcc
+In-Reply-To: <1428149398-1552-1-git-send-email-yann.morin.1998@free.fr>
+References: <1428149398-1552-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150404150826.604ea481@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4c80d73251a0eb473f9d9f09ce923a0a50ed8436
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Fixes:
-    http://autobuild.buildroot.org/results/0b7/0b71e37b8891b3b8810d1e74445177a1099b59f3/
+On Sat,  4 Apr 2015 14:09:58 +0200, Yann E. MORIN wrote:
+> Initialisers for anonymous unions/structs are unknown to gcc-4.5, still
+> widely used.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/11e/11ebb926b891862e270b9cb39fd2ed4344b736a8/
+>     http://autobuild.buildroot.org/results/065/065fdef50b1dd57b95ad2b5eda9904a1d0787cdc/
+>     http://autobuild.buildroot.org/results/316/3161eb96da66936e2cb3ec6aa5547587c3d90338/
+>     http://autobuild.buildroot.org/results/226/2267a204e9eb46bcb621f5bd408deaca98709fc3/
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/freerdp/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+Applied, thanks. At some point we will have to decide to no longer
+support gcc 4.5.x. Not sure when we should do that though.
 
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index 445bc2d..2e879b4 100644
---- a/package/freerdp/Config.in
-+++ b/package/freerdp/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_FREERDP
- 	bool "freerdp"
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS # uses dlfcn.h
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -40,5 +41,6 @@ comment "freerdp server and client need X.Org"
- 
- endif
- 
--comment "freerdp needs a toolchain w/ wchar, dynamic library"
--	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-+comment "freerdp needs a toolchain w/ wchar, dynamic library, threads"
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
