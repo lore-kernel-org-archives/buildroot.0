@@ -1,45 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Apr 2015 00:41:32 +0200
-Subject: [Buildroot] [git commit] ipmiutil: only make available for x86
-Message-ID: <20150404224203.64C81818DE@busybox.osuosl.org>
+From: Johan Sagaert <sagaert.johan@proximus.be>
+Date: Sun, 05 Apr 2015 00:51:59 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] build host lz4 to support lz4
+ compression in the kernel.
+In-Reply-To: <20150402220612.GD4229@free.fr>
+References: <1427919153-16080-1-git-send-email-sagaert.johan@proximus.be>
+ <20150401223752.0fd358cf@free-electrons.com> <551C6935.3050401@mind.be>
+ <20150402000158.0b85c847@free-electrons.com> <20150402220612.GD4229@free.fr>
+Message-ID: <55206B0F.6080206@proximus.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9b38f10c074be00c9bcc90330ce302f3b41d6b2f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-IPMI is a Intel/PC spec, so it doesn't make much sense to build on !x86 -
-And ipmiutil uses sys/io.h and inb()/outb() which isn't supported on all
-architectures, so limit to x86 like we do for acpid.
-
-Fixes:
-http://autobuild.buildroot.net/results/b2b/b2b50be359431b828e60c2ffdcd0fa1ca1cd5605/
-http://autobuild.buildroot.net/results/f63/f63a25d6faca407da7332b2806300baadbe33326/
-http://autobuild.buildroot.net/results/92f/92f54495f7f2a4b70aff18c094baa71adb0f5985/
-http://autobuild.buildroot.net/results/f21/f21958c19f145baf83ebbb02b8526f1a58ea25ec/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ipmiutil/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
-
-diff --git a/package/ipmiutil/Config.in b/package/ipmiutil/Config.in
-index b6a1760..2500583 100644
---- a/package/ipmiutil/Config.in
-+++ b/package/ipmiutil/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_IPMIUTIL
- 	bool "ipmiutil"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_x86_64 || BR2_i386
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  The ipmiutil package provides easy-to-use utilities to view
-@@ -14,3 +15,4 @@ config BR2_PACKAGE_IPMIUTIL
- comment "ipmiutil needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_x86_64 || BR2_i386
+Yann E. MORIN schreef op 3/04/2015 om 0:06:
+> Thomas, All,
+>
+> On 2015-04-02 00:01 +0200, Thomas Petazzoni spake thusly:
+>> On Wed, 01 Apr 2015 23:55:01 +0200, Arnout Vandecappelle wrote:
+>>
+>>>   Well, I'm in agreement with Johan's earlier statement that the overhead of the
+>>> host-lz4 build is negligible. It takes 20 seconds on my laptop, of which 6 are
+>>> buildroot overhead from parsing package/*/*.mk.
+>> 20 seconds, plus the host-lzop build time that we already build
+>> unconditionally.
+>>
+>>>   Peter said before that all this hacking of linux (or other) config files should
+>>> be avoided, and I agree.
+>> Correct, except when it's related to needed dependencies in Buildroot.
+>>
+>> But if that's fine for everyone, I'm OK with merging an unconditional
+>> host-lz4 dependency. I'll just follow what the consensus is on this
+>> matter, since I don't feel like arguing too much on this
+>> not-so-important issue.
+>>
+>> Thanks for the feedback, definitely very useful to have the opinion of
+>> others to help take a decision.
+> Well, I always find it very frustrating to build something that I do not
+> use. 20 seconds is an eternity (even the 15-or-so it takes here).
+>
+> Also, I see a lot of people doing this use-case, and being quite
+> frustrated:
+>
+>      make foo_defconfig
+>      make linux-menuconfig
+>      [Bam, 20s overhead, 35s on slower machines]
+>
+> Otherwise, 15s for a lzo, yet another 10s for lz4. What next?
+>
+> I would side with Thomas: add an entry in the Buildroot menuconfig to
+> configure what compression to use.
+>
+> My 2-cent advice... ;-)
+>
+> Regards,
+> Yann E. MORIN.
+>
+What about overhead for checking hashes ?
+Meanwhile i submitted a new patch with a menu entry in the kernel section.
+Best Regards Johan
