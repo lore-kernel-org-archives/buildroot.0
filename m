@@ -1,69 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Apr 2015 19:44:15 +0200
-Subject: [Buildroot] [PATCH] sh4: fix toolchain creation
-In-Reply-To: <20150320182214.GA3086@waldemar-brodkorb.de>
-References: <20150320182214.GA3086@waldemar-brodkorb.de>
-Message-ID: <20150404194415.406fe195@free-electrons.com>
+Date: Sat, 4 Apr 2015 19:56:12 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/softether: Fix iconv-related
+ compile error
+In-Reply-To: <1426408159-24817-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1426408159-24817-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150404195612.03843dfe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Dear Bernd Kuhls,
 
-On Fri, 20 Mar 2015 19:22:15 +0100, Waldemar Brodkorb wrote:
-> The Linux kernel does force compile with -m4-nofpu, which is only
-> available when building a multilib toolchain.
-> The interesting part here is, that buildroot use --disable-multilib for
-> gcc configure, but enables --with-multilib-list=m4,m4-nofpu in
-> the default configuration for Qemu targeting r2d emulation.
-> This results in a toolchain, which can be used for the kernel and
-> for userland without creating a multilib toolchain with different
-> kinds of libgcc version. In the multilib case there would be some
-> subdirectories created like !m4 or m4-nofpu. As buildroot uses a
-> short version of toolchain creation, a multilib enabled gcc build
-> fails when creating libgcc.
+On Sun, 15 Mar 2015 09:29:19 +0100, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/72e/72eab3a6f162e3c5eac380f88b54d4f314d52445/
+> http://autobuild.buildroot.net/results/f47/f473882cd35445cbe5b3b15635d555340183951a/
+> http://autobuild.buildroot.net/results/45b/45b54b59935c3994c526593836ad433b82148f12/
+> http://autobuild.buildroot.net/results/1e4/1e4af4642691ea9681b39eb1ce4f8107e8c3ff5f/
+> http://autobuild.buildroot.net/results/182/182e658723d654d45c683dc2bc0b959c82c37826/
+> http://autobuild.buildroot.net/results/446/4467fd6aad86bf176625fdc74f5802f35519f157/
+> http://autobuild.buildroot.net/results/4a2/4a2cafabe048c5255b21cf25f149542561f60935/
+> http://autobuild.buildroot.net/results/12a/12a9de3d946b1379ed8bc772e556f163af758e6b/
+> http://autobuild.buildroot.net/results/795/795b02b656e3a6f265a5182140f4be62cf22ae7f/
 > 
-> So the best solution is to just keep multilib disabled, but always
-> add --with-multilib-list=m4,m4-nofpu when sh4/sh4eb is choosen.
+> To reproduce the build error I used this defconfig
 > 
-> Tested with sh4 minimal toolchain build and qemu defconfig with
-> gcc 4.8.x and uClibc.
+> BR2_arm=y
+> BR2_arm1176jzf_s=y
+> BR2_COMPILER_PARANOID_UNSAFE_PATH=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv6-ctng-linux-uclibcgnueabi.tar.xz"
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv6-ctng-linux-uclibcgnueabi"
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
+> BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
+> BR2_TOOLCHAIN_EXTERNAL_WCHAR=y
+> BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_PACKAGE_SOFTETHER=y
 > 
-> To sum up, compiling gcc with disabled multilib, but with a mulitlib-list
-> provides a working toolchain which can create sh4 nofpu code without trying to
-> create a libgcc for every variant.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-It still doesn't build here. Maybe it worked for you because you did
-not enable C++ support. Here is the defconfig I test:
-
-BR2_sh=y
-BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_DEFCONFIG="se7724"
-
-It fails as follows:
-
-(cd /home/test/outputs/sh4/host/usr/bin; for i in sh4-buildroot-linux-uclibc-*; do ln -snf $i sh4-linux${i##sh4-buildroot-linux-uclibc}; done)
-cp -dpf /home/test/outputs/sh4/host/usr/sh4-buildroot-linux-uclibc/lib*/libgcc_s* /home/test/outputs/sh4/host/usr/sh4-buildroot-linux-uclibc/sysroot/lib/
-cp: cannot stat `/home/test/outputs/sh4/host/usr/sh4-buildroot-linux-uclibc/lib*/libgcc_s*': No such file or directory
-make[1]: [/home/test/outputs/sh4/build/host-gcc-final-4.8.4/.stamp_host_installed] Error 1 (ignored)
-cp -dpf /home/test/outputs/sh4/host/usr/sh4-buildroot-linux-uclibc/lib*/libgcc_s* /home/test/outputs/sh4/target/lib/
-cp: cannot stat `/home/test/outputs/sh4/host/usr/sh4-buildroot-linux-uclibc/lib*/libgcc_s*': No such file or directory
-make[1]: [/home/test/outputs/sh4/build/host-gcc-final-4.8.4/.stamp_host_installed] Error 1 (ignored)
-mkdir -p /home/test/outputs/sh4/target/usr/lib
-for i in  libstdc++ ; do cp -dpf /home/test/outputs/sh4/host/usr/sh4-buildroot-linux-uclibc/lib*/${i}.a /home/test/outputs/sh4/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/lib/ ; done
-cp: cannot stat `/home/test/outputs/sh4/host/usr/sh4-buildroot-linux-uclibc/lib*/libstdc++.a': No such file or directory
-make[1]: *** [/home/test/outputs/sh4/build/host-gcc-final-4.8.4/.stamp_host_installed] Error 1
-make: *** [_all] Error 2
-
-Also, what about sh4a and sh4aeb ?
+Nor Peter nor I were able to reproduce the issue, and since then the
+softether version has been bumped, and the issue hasn't appeared again
+on the autobuilders. So let's assume the issue has been fixed. I'll
+mark the patch as Rejected in patchwork.
 
 Thanks,
 
