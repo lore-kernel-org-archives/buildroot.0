@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Apr 2015 15:16:23 +0200
-Subject: [Buildroot] [PATCH 2/4] Makefile: split off 'list-defconfigs'
- from 'help'
-In-Reply-To: <1426967388-559-3-git-send-email-arnout@mind.be>
+Date: Sat, 4 Apr 2015 15:18:47 +0200
+Subject: [Buildroot] [PATCH 3/4] Makefile: help: add package-specific
+ targets
+In-Reply-To: <1426967388-559-4-git-send-email-arnout@mind.be>
 References: <1426967388-559-1-git-send-email-arnout@mind.be>
- <1426967388-559-3-git-send-email-arnout@mind.be>
-Message-ID: <20150404151623.21ef7b0a@free-electrons.com>
+ <1426967388-559-4-git-send-email-arnout@mind.be>
+Message-ID: <20150404151847.58201f4e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,30 @@ To: buildroot@busybox.net
 
 Dear Arnout Vandecappelle (Essensium/Mind),
 
-On Sat, 21 Mar 2015 20:49:46 +0100, Arnout Vandecappelle
+On Sat, 21 Mar 2015 20:49:47 +0100, Arnout Vandecappelle
 (Essensium/Mind) wrote:
-> As discussed in the FOSDEM2015 BR developer meeting, the output of
-> 'make help' is too long for comfortable reading. To shorten it, split
-> off the list of defconfigs in a new target, 'list-defconfigs'.
-> 
-> Declare the new target as phony.
-> 
-> Add 'list-defconfigs' to the documentation.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  Makefile                             | 10 ++++++----
->  docs/manual/customize-outside-br.txt |  6 +++---
->  docs/manual/make-tips.txt            |  6 ++++++
->  3 files changed, 15 insertions(+), 7 deletions(-)
 
-Applied, thanks. Should the 'make help' text be extended to mention
-'list-defconfigs' ?
+> +	@echo
+> +	@echo 'Package-specific:'
+> +	@echo '  <pkg>                  - Build and install <pkg> and all its dependencies'
+> +	@echo '  <pkg>-source           - Only download the source files for <pkg>'
+> +	@echo '  <pkg>-extract          - Extract <pkg> sources'
+> +	@echo '  <pkg>-patch            - Apply patches to <pkg>'
+> +	@echo '  <pkg>-depends          - Build <pkg>'\''s dependencies'
+> +	@echo '  <pkg>-configure        - Build <pkg> up to the configure step'
+> +	@echo '  <pkg>-build            - Build <pkg> up to the build step'
+> +	@echo '  <pkg>-graph-depends    - Display <pkg>'\''s dependencies'
+> +	@echo '  <pkg>-graph-depends    - Generate a graph of <pkg>'\''s dependencies'
+
+Why <pkg>-graph-depends two times? I've kept only the second occurrence.
+
+> +	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
+> +	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+> +	@echo '  <pkg>-rebuild          - Restart the build from the build step'
+
+Do you think it would make sense to add <pkg>-reinstall here?
+
+Applied with the <pkg>-graph-depends thing fixed.
 
 Thomas
 -- 
