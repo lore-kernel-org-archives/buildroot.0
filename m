@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Apr 2015 16:43:17 +0200
-Subject: [Buildroot] [RFC] openplc: new package
-In-Reply-To: <1412539362-22336-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1412539362-22336-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150404164317.615a1421@free-electrons.com>
+Date: Sat, 4 Apr 2015 16:59:19 +0200
+Subject: [Buildroot] [PATCH v2] libressl: new package
+In-Reply-To: <1413124786-14001-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1413124786-14001-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20150404165919.3569994e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,19 @@ To: buildroot@busybox.net
 
 Dear Maxime Hadjinlian,
 
-On Sun,  5 Oct 2014 22:02:42 +0200, Maxime Hadjinlian wrote:
+On Sun, 12 Oct 2014 16:39:46 +0200, Maxime Hadjinlian wrote:
 > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
-> This is sent as an RFC, because I'm really not sure about the patches.
-> I will send them upstream as soon as possible.
+> v1 -> v2:
+>     - Add INSTALL_STAGING
 
-Applied, after doing a good number of changes:
+It is more complicated than this: libressl installs the same libraries
+as openssl. So they should conflict with each other, and possibly a
+virtual package should be introduced so that all packages can build
+against either libressl or openssl depending on which one is selected.
 
-    [Thomas:
-      - rename to open-plc-utils to match upstream name.
-      - fix Config.in to use tabs instead of spaces
-      - remove 'default n' line
-      - add dependency on BR2_USE_MMU
-      - bump to a more recent upstream commit
-      - remove no longer needed openplc-0002-Remove-vfprintf-call.patch
-      - rename patch to the proper naming convention
-      - specify <pkg>_LICENSE_FILES
-      - pass CROSS= instead of CC=
-      - do not pass CC= at install time.]
-
-Thanks,
+Since you have pushed again this patch since October 2014, I'll mark
+it as Changes Requested in patchwork.
 
 Thomas
 -- 
