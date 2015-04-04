@@ -1,38 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Apr 2015 15:39:22 +0200
-Subject: [Buildroot] [[PATCH v2] 1/1] package/swupdate: new package
-In-Reply-To: <1426750417-23107-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1426750417-23107-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150404153922.6960239f@free-electrons.com>
+Date: Sat, 4 Apr 2015 15:47:05 +0200
+Subject: [Buildroot] [PATCH 1/5 v2] package infra: add patch-dependencies
+In-Reply-To: <a51d416e81f55374ba749baa81222bfe0c52782b.1426342904.git.yann.morin.1998@free.fr>
+References: <cover.1426342904.git.yann.morin.1998@free.fr>
+ <a51d416e81f55374ba749baa81222bfe0c52782b.1426342904.git.yann.morin.1998@free.fr>
+Message-ID: <20150404154705.4be3e45d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Yann E. MORIN,
 
-On Thu, 19 Mar 2015 08:33:37 +0100, J?rg Krause wrote:
-> From: J?rg Krause <jkrause@posteo.de>
-> 
-> This patch is based on an WIP version submitted by Romain Naour, commented by
-> Arnout Vandecappelle:
-> https://patchwork.ozlabs.org/patch/401270/
-> 
-> The package provides a default configuration which let the user initiate an
-> update by using an update URL by using libcurl. The embedded webserver (a
-> customized version of mongoose) and Lua support are both disabled by default.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> Tested-by: Mike Williams <mike@mikebwilliams.com>
+On Sat, 14 Mar 2015 15:25:17 +0100, Yann E. MORIN wrote:
 
-Jorg, Romain, this patch is from March 19, and Arnout made a number of
-comments on March 22. Can you resend an updated version ?
+> -$(1)-show-depends:
+> +$(1)-show-build-depends:
+>  			@echo $$($(2)_FINAL_DEPENDENCIES)
+> +$(1)-show-patch-depends:
+> +			@echo $$($(2)_FINAL_PATCH_DEPENDENCIES)
+> +$(1)-show-depends:
+> +			@echo $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
 
-I'll mark your patch as Changes Requested in patchwork, so please
-remember to send a new version.
+I think this will break graph-depends. The python script will do "make
+<foo>-show-depends" for each package. Now this will return things such
+as "xenomai-patch", so the script will then try to do "make
+xenomai-patch-show-depends" to recurse into the dependency tree, and
+this will fail. <pkg>-show-depends should only return the name of
+packages.
 
-Thanks a lot!
+Also, I'm not sure about the usefulness of having separate
+show-build-depends and show-patch-depends. It could have been useful if
+show-depends would simply depend on them, but it doesn't work because
+we want all dependencies space-separated on one line.
+
+So, what about replacing this part with just:
+
+$(1)-show-depends:
+	@echo $$(sort $$($(2)_FINAL_DEPENDENCIES) $$(patsubst %-patch,%,$$($(2)_FINAL_PATCH_DEPENDENCIES)))
+
+Thanks,
 
 Thomas
 -- 
