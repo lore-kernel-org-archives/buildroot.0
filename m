@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Apr 2015 18:46:13 +0200
-Subject: [Buildroot] [PATCH 5/5] package/libungif: deprecate package
-In-Reply-To: <1422300260-5361-5-git-send-email-bernd.kuhls@t-online.de>
-References: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
- <1422300260-5361-5-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150404184613.448298e5@free-electrons.com>
+Date: Sat, 4 Apr 2015 18:48:03 +0200
+Subject: [Buildroot] [RFC 2/4] gpu-viv-bin-mx6q: is a libgl provider
+In-Reply-To: <1421839408-15839-3-git-send-email-jezz@sysmic.org>
+References: <1421839408-15839-1-git-send-email-jezz@sysmic.org>
+ <1421839408-15839-3-git-send-email-jezz@sysmic.org>
+Message-ID: <20150404184803.31434bd7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear J?r?me Pouiller,
 
-On Mon, 26 Jan 2015 20:24:20 +0100, Bernd Kuhls wrote:
-> To be replaced with giflib.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libungif/Config.in |    2 ++
->  1 file changed, 2 insertions(+)
+On Wed, 21 Jan 2015 12:23:26 +0100, J?r?me Pouiller wrote:
 
-I cannot apply this patch: Kodi is still selecting libungif currently.
+> -GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
+> +GPU_VIV_BIN_MX6Q_DEPENDENCIES = opengl-registry
+> +GPU_VIV_BIN_MX6Q_PROVIDES = libgl libegl libgles libopenvg
+>  GPU_VIV_BIN_MX6Q_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT))
 
-Can you resend an updated patch series that fixes Kodi before marking
-libungif as deprecated ?
+In the end, opengl-registry was never added, we preferred using the
+mesa3d headers instead, through the mesa3d-headers package.
 
-I'll mark this patch as Changes Requested in patchwork in the mean time.
+Can you respin this patch and resend a new version accordingly?
+
+In the mean time, I've marked your patch as Changes Requested in
+patchwork.
 
 Thanks,
 
 Thomas
-
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
