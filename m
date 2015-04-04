@@ -1,36 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Apr 2015 15:19:43 +0200
-Subject: [Buildroot] [git commit] README: mention 'make list-defconfigs'
-Message-ID: <20150404132028.82A947FA53@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat,  4 Apr 2015 10:25:29 -0300
+Subject: [Buildroot] [PATCH 0/3] The big webkitgtk bump
+Message-ID: <1428153932-15069-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33bb2822cd2f1567924edb7eb719c6a836a7ac1c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This is the first vesion of the bump.
 
-'make list-defconfigs' is probably one of the more useful things
-to get started quickly.
+There's support for libgtk2 & libgtk3, though libgtk2 is always needed
+for the plugin system.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- README |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+GL* support was only tested via mesa software renderer.
 
-diff --git a/README b/README
-index a7dae24..e863f0e 100644
---- a/README
-+++ b/README
-@@ -15,6 +15,9 @@ To build and use the buildroot stuff, do the following:
- 
- You do not need to be root to build or run buildroot.  Have fun!
- 
-+Buildroot comes with a basic configuration for a number of boards. Run
-+'make list-defconfigs' to view the list of provided configurations.
-+
- Please feed suggestions, bug reports, insults, and bribes back to the
- buildroot mailing list: buildroot at buildroot.org
- You can also find us on #buildroot on Freenode IRC.
+Wayland support wasn't enabled because it still needs gtk2 (plugins) -
+this could possibly be patched away.
+
+Multimedia support is automatic via detection of gst1-plugins-good,
+ideally this should be an option but right now opencv+gst generate a
+dependency loop if gstreamer1 is selected. Also codecs will need to be
+catered by the user via the appropiate gst selects.
+
+MIPS support was disabled pending libatomic support for
+__sync_fetch_and_add_8 which is handled there for some 32-bit
+architectures.
+
+Possible TODOs:
+Wayland in a proper way, granite support, gcr support, more arch
+testing/support.
+
+v1:
+
+* Bump webkitgtk to version 2.4.x in a versioned package.
+  This is because midori can't use 2.6.x or 2.8.x and this way we can
+  have another webkitgtk package in parallel for other uses.
+  The series is still security-supported upstream.
+
+* Bump midori to version 0.5.9.
+  No effort was made to enable support for the old webkit 1.x. series,
+  it may be possible to do so but it makes no sense.
+
+* Deprecate old webkit package.
+  Security bugs, build issues, general instability.
+
+Gustavo Zacarias (3):
+  webkitgtk24: new package
+  midori: bump to version 0.5.9
+  webkit: mark as deprecated
+
+ package/Config.in                             |  1 +
+ package/midori/0001-disable-libnotify.patch   | 43 ++++++++++++
+ package/midori/Config.in                      | 39 +++++++----
+ package/midori/midori.hash                    |  2 +
+ package/midori/midori.mk                      | 57 ++++++++--------
+ package/webkit/Config.in                      |  3 +
+ package/webkitgtk24/0001-fix-bug-137640.patch | 17 +++++
+ package/webkitgtk24/Config.in                 | 56 ++++++++++++++++
+ package/webkitgtk24/webkitgtk24.hash          |  2 +
+ package/webkitgtk24/webkitgtk24.mk            | 97 +++++++++++++++++++++++++++
+ 10 files changed, 278 insertions(+), 39 deletions(-)
+ create mode 100644 package/midori/0001-disable-libnotify.patch
+ create mode 100644 package/midori/midori.hash
+ create mode 100644 package/webkitgtk24/0001-fix-bug-137640.patch
+ create mode 100644 package/webkitgtk24/Config.in
+ create mode 100644 package/webkitgtk24/webkitgtk24.hash
+ create mode 100644 package/webkitgtk24/webkitgtk24.mk
+
+-- 
+2.0.5
