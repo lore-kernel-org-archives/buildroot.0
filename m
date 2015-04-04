@@ -1,33 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Apr 2015 16:59:19 +0200
-Subject: [Buildroot] [PATCH v2] libressl: new package
-In-Reply-To: <1413124786-14001-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1413124786-14001-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150404165919.3569994e@free-electrons.com>
+Date: Sat, 4 Apr 2015 17:02:46 +0200
+Subject: [Buildroot] [git commit] toolchain/external: do not accept
+	distro-class toolchains
+Message-ID: <20150404150257.E747E80720@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+commit: http://git.buildroot.net/buildroot/commit/?id=defb9658935357aca034276df4e78ac9b12c38ee
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 12 Oct 2014 16:39:46 +0200, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
-> v1 -> v2:
->     - Add INSTALL_STAGING
+Distro toolchains, i.ie. toolchains coing with distributions, will
+almost invariably be unsuitable for use with Buildroot:
+  - they are mostly non-relocatable;
+  - their sysroot is tainted with a lot of extra libraries.
 
-It is more complicated than this: libressl installs the same libraries
-as openssl. So they should conflict with each other, and possibly a
-virtual package should be introduced so that all packages can build
-against either libressl or openssl depending on which one is selected.
+Especially, the toolchains coming with Ubuntu (really, all the Debian
+familly of distros) are configured with --sysroot=/ which makes them
+non-relocatable, and they already contain quite some libraries that
+conflict (in any combination of version, API or ABI) with what Buildroot
+wants to build (i.e. extra libraries, some not even present in
+Buildroot...) but also their mere preence when Buildroot does not expect
+them to be already built (so that a package would enable features when
+it should not).
 
-Since you have pushed again this patch since October 2014, I'll mark
-it as Changes Requested in patchwork.
+So, try to detect those toolchains and black-list them; inform the user
+that the toolchain is unusable for the reasons mentioned above.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/helpers.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 50446ce..257fab2 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -357,6 +357,14 @@ check_unusable_toolchain = \
+ 		echo "them unsuitable as external toolchains for build systems" ; \
+ 		echo "such as Buildroot." ; \
+ 		exit 1 ; \
++	fi; \
++	with_sysroot=`$${__CROSS_CC} -v 2>&1 |sed -r -e '/.* --with-sysroot=([^[:space:]]+)[[:space:]].*/!d; s//\1/'`; \
++	if test "$${with_sysroot}"  = "/" ; then \
++		echo "Distribution toolchains are unsuitable for use by Buildroot," ; \
++		echo "as they were configured in a way that makes them non-relocatable,"; \
++		echo "and contain a lot of pre-built libraries that would conflict with"; \
++		echo "the ones Buildroot wants to build."; \
++		exit 1; \
+ 	fi
+ 
+ #
