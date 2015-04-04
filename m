@@ -1,96 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Apr 2015 15:13:52 +0200
-Subject: [Buildroot] [git commit] Makefile: split off 'list-defconfigs' from
-	'help'
-Message-ID: <20150404132028.6B9327FA53@busybox.osuosl.org>
+Date: Sat, 4 Apr 2015 15:19:25 +0200
+Subject: [Buildroot] [git commit] README: reduce it to a single page and
+	refer to other documentation
+Message-ID: <20150404132028.7B0257FA53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f42a580a890895793310f3a2b806eed1af32379c
+commit: http://git.buildroot.net/buildroot/commit/?id=e8a3da43e0807fd21ffedaa2bdad481f6b2d175e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As discussed in the FOSDEM2015 BR developer meeting, the output of
-'make help' is too long for comfortable reading. To shorten it, split
-off the list of defconfigs in a new target, 'list-defconfigs'.
-
-Declare the new target as phony.
-
-Add 'list-defconfigs' to the documentation.
+As discussed on the BR developer meeting at FOSDEM, the README should be
+very short and instead refer to other documentation: the manual, the
+website, the mailing list, the IRC channel.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile                             |   10 ++++++----
- docs/manual/customize-outside-br.txt |    6 +++---
- docs/manual/make-tips.txt            |    6 ++++++
- 3 files changed, 15 insertions(+), 7 deletions(-)
+ README |   59 ++++++++++-------------------------------------------------
+ 1 files changed, 10 insertions(+), 49 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 397effe..32a18ff 100644
---- a/Makefile
-+++ b/Makefile
-@@ -435,7 +435,7 @@ world: target-post-image
- 
- .PHONY: all world toolchain dirs clean distclean source outputmakefile \
- 	legal-info legal-info-prepare legal-info-clean printvars help \
--	target-finalize target-post-image \
-+	list-defconfigs target-finalize target-post-image \
- 	$(TARGETS) $(TARGETS_ROOTFS) \
- 	$(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
- 	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
-@@ -907,6 +907,11 @@ endif
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
- 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
- 	@echo
-+	@echo 'For further details, see README, generate the Buildroot manual, or consult'
-+	@echo 'it on-line at http://buildroot.org/docs.html'
-+	@echo
+diff --git a/README b/README
+index 944347d..a7dae24 100644
+--- a/README
++++ b/README
+@@ -1,59 +1,20 @@
++Buildroot is a simple, efficient and easy-to-use tool to generate embedded
++Linux systems through cross-compilation.
 +
-+list-defconfigs:
- 	@echo 'Built-in configs:'
- 	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig))), \
- 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
-@@ -917,9 +922,6 @@ ifneq ($(wildcard $(BR2_EXTERNAL)/configs/*_defconfig),)
- 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
- endif
- 	@echo
--	@echo 'For further details, see README, generate the Buildroot manual, or consult'
--	@echo 'it on-line at http://buildroot.org/docs.html'
--	@echo
- 
- release: OUT = buildroot-$(BR2_VERSION)
- 
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index 5d63e60..aac9a43 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -100,6 +100,6 @@ And then in +$(BR2_EXTERNAL)/package/package1+ and
- 
-  * One can store Buildroot defconfigs in the +configs+ subdirectory of
-    +$(BR2_EXTERNAL)+. Buildroot will automatically show them in the
--   output of +make help+ and allow them to be loaded with the normal
--   +make <name>_defconfig+ command. They will be visible under the
--   +User-provided configs+' label in the 'make help' output.
-+   output of +make list-defconfigs+ and allow them to be loaded with the
-+   normal +make <name>_defconfig+ command. They will be visible under the
-+   +User-provided configs+' label in the 'make list-defconfigs' output.
-diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
-index 027eddf..1cf1544 100644
---- a/docs/manual/make-tips.txt
-+++ b/docs/manual/make-tips.txt
-@@ -12,6 +12,12 @@ This is a collection of tips that help you make the most of Buildroot.
-  $ make V=1 <target>
- --------------------
- 
-+.Display the list of boards with a defconfig:
++The documentation can be found in docs/manual. You can generate a text
++document with 'make manual-text' and read output/docs/manual/manual.text.
++Online documentation can be found at http://buildroot.org/docs.html
 +
-+--------------------
-+ $ make list-defconfigs
-+--------------------
-+
- .Display all available targets:
+ To build and use the buildroot stuff, do the following:
  
- --------------------
+ 1) run 'make menuconfig'
+-2) select the packages you wish to compile
++2) select the target architecture and the packages you wish to compile
+ 3) run 'make'
+ 4) wait while it compiles
+-5) Use your shiny new root filesystem. Depending on which sort of
+-    root filesystem you selected, you may want to loop mount it,
+-    chroot into it, nfs mount it on your target device, burn it
+-    to flash, or whatever is appropriate for your target system.
++5) find the kernel, bootloader, root filesystem, etc. in output/images
+ 
+ You do not need to be root to build or run buildroot.  Have fun!
+ 
+-Offline build:
+-==============
+-
+-In order to do an offline-build (not connected to the net), fetch all
+-selected source by issuing a
+-$ make source
+-
+-before you disconnect.
+-If your build-host is never connected, then you have to copy buildroot
+-and your toplevel .config to a machine that has an internet-connection
+-and issue "make source" there, then copy the content of your dl/ dir to
+-the build-host.
+-
+-Building out-of-tree:
+-=====================
+-
+-Buildroot supports building out of tree with a syntax similar
+-to the Linux kernel. To use it, add O=<directory> to the
+-make command line, E.G.:
+-
+-$ make O=/tmp/build
+-
+-And all the output files (including .config) will be located under /tmp/build.
+-
+-More finegrained configuration:
+-===============================
+-
+-You can specify a config-file for uClibc:
+-$ make UCLIBC_CONFIG_FILE=/my/uClibc.config
+-
+-And you can specify a config-file for busybox:
+-$ make BUSYBOX_CONFIG_FILE=/my/busybox.config
+-
+-To use a non-standard host-compiler (if you do not have 'gcc'),
+-make sure that the compiler is in your PATH and that the library paths are
+-setup properly, if your compiler is built dynamically:
+-$ make HOSTCC=gcc-4.3.orig HOSTCXX=gcc-4.3-mine
+-
+-Depending on your configuration, there are some targets you can use to
+-use menuconfig of certain packages. This includes:
+-$ make HOSTCC=gcc-4.3 linux-menuconfig
+-$ make HOSTCC=gcc-4.3 uclibc-menuconfig
+-$ make HOSTCC=gcc-4.3 busybox-menuconfig
+-
+ Please feed suggestions, bug reports, insults, and bribes back to the
+ buildroot mailing list: buildroot at buildroot.org
++You can also find us on #buildroot on Freenode IRC.
