@@ -1,38 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Apr 2015 18:09:30 +0200
-Subject: [Buildroot] [PATCH v2 1/1] ipmiutil: new package
-In-Reply-To: <1412780403-11092-2-git-send-email-david.bachelart@bbright.com>
-References: <1412780403-11092-1-git-send-email-david.bachelart@bbright.com>
- <1412780403-11092-2-git-send-email-david.bachelart@bbright.com>
-Message-ID: <20150404180930.7555fefa@free-electrons.com>
+Date: Sat, 4 Apr 2015 18:13:52 +0200
+Subject: [Buildroot] [PATCH 49/51] python-libconfig: bump version
+In-Reply-To: <1414349157-22749-49-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1414349157-22749-49-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20150404181352.791e1346@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear David Bachelart,
+Dear Maxime Hadjinlian,
 
-On Wed,  8 Oct 2014 17:00:03 +0200, David Bachelart wrote:
+On Sun, 26 Oct 2014 19:45:55 +0100, Maxime Hadjinlian wrote:
+> The patch will be sent to upstream, it is needed to avoid searching
+> headers and library in the host machine.
 > 
-> Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-> ---
->  package/Config.in            |    1 +
->  package/ipmiutil/Config.in   |   16 ++++++++++++++++
->  package/ipmiutil/ipmiutil.mk |   15 +++++++++++++++
->  3 files changed, 32 insertions(+)
->  create mode 100644 package/ipmiutil/Config.in
->  create mode 100644 package/ipmiutil/ipmiutil.mk
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-Applied, after doing a number of changes:
+The patch has apparently never been submitted upstream, and you never
+reposted this version bump patch. Since the current version of
+python-libconfig doesn't require such a patch, let's keep it for now.
 
-    [Thomas:
-      - remove dependency on SSP support by adding a patch that changes
-        the configure.ac script stack protector test to actually work.
-      - rewrap Config.in help text
-      - fix how BR2_USE_MMU is used when displaying the comment.
-      - fix the license, it's BSD-3c, not BSD-2c.
-      - bump to version 2.9.5.]
+Please repost the patch if you're really interested in doing the bump.
 
 Thanks,
 
