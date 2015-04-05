@@ -1,36 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Apr 2015 18:48:24 +0200
-Subject: [Buildroot] [PATCH 3/6] package/zmqpp: fix legal-info
+Date: Sun,  5 Apr 2015 18:48:25 +0200
+Subject: [Buildroot] [PATCH 4/6] package/evemu: fix legal-info
 In-Reply-To: <cover.1428252467.git.yann.morin.1998@free.fr>
 References: <cover.1428252467.git.yann.morin.1998@free.fr>
-Message-ID: <5ebf9db9a00075be809a376ee19e0828d3c4245a.1428252467.git.yann.morin.1998@free.fr>
+Message-ID: <bb6c1928ed5672f25cc486da5fe7217f8ae671a2.1428252467.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The license is in fact MIT.
+COPYING.GPL3 is not present in the sources.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/zmqpp/zmqpp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/evemu/evemu.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-index 7efd04b..03c6475 100644
---- a/package/zmqpp/zmqpp.mk
-+++ b/package/zmqpp/zmqpp.mk
-@@ -8,8 +8,8 @@ ZMQPP_VERSION = 3.2.0
- ZMQPP_SITE = $(call github,zeromq,zmqpp,$(ZMQPP_VERSION))
- ZMQPP_INSTALL_STAGING = YES
- ZMQPP_DEPENDENCIES = zeromq
--ZMQPP_LICENSE = LGPLv3+ with exceptions
--ZMQPP_LICENSE_FILES = COPYING COPYING.LESSER
-+ZMQPP_LICENSE = MIT
-+ZMQPP_LICENSE_FILES = LICENSE
+diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
+index 9acdbe2..b502469 100644
+--- a/package/evemu/evemu.mk
++++ b/package/evemu/evemu.mk
+@@ -8,7 +8,7 @@ EVEMU_VERSION = 2.1.0
+ EVEMU_SITE = http://www.freedesktop.org/software/evemu
+ EVEMU_SOURCE = evemu-$(EVEMU_VERSION).tar.xz
+ EVEMU_LICENSE = LGPLv3 (library), GPLv3 (tools)
+-EVEMU_LICENSE_FILES = COPYING COPYING.GPL3
++EVEMU_LICENSE_FILES = COPYING
  
- ZMQPP_MAKE_OPTS = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
- ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
+ # asciidoc used to generate manpages, which we don't need, and if it's
+ # present on the build host, it ends getting called with our host-python
 -- 
 1.9.1
