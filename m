@@ -1,49 +1,89 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Apr 2015 23:20:28 +0200
-Subject: [Buildroot] [PATCH/RFC 03/27] package/kodi: bump version to
- 15.0 Alpha2-Isengard
-In-Reply-To: <20150404184448.3fea759b@free-electrons.com>
+Date: Sun, 5 Apr 2015 23:31:09 +0200
+Subject: [Buildroot] [PATCH/RFC 01/27] package/libsquish: New package
+In-Reply-To: <1427913380-14808-2-git-send-email-bernd.kuhls@t-online.de>
 References: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
- <1427913380-14808-4-git-send-email-bernd.kuhls@t-online.de>
- <20150404184448.3fea759b@free-electrons.com>
-Message-ID: <20150405212028.GI4134@free.fr>
+ <1427913380-14808-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150405213109.GJ4134@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Bernd, All,
 
-On 2015-04-04 18:44 +0200, Thomas Petazzoni spake thusly:
-> On Wed,  1 Apr 2015 20:35:56 +0200, Bernd Kuhls wrote:
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > ---
-> >  package/kodi/0001-Fixup-include-path.patch |   20 --------------
-> >  package/kodi/0002-texturepacker.patch      |   12 ++++++++
-> >  package/kodi/0003-lirc-PR6783.patch        |   41 ++++++++++++++++++++++++++++
-> >  package/kodi/Config.in                     |   15 +++++-----
-> >  package/kodi/kodi.mk                       |   33 ++++++++++++----------
-> >  5 files changed, 78 insertions(+), 43 deletions(-)
-> >  create mode 100644 package/kodi/0002-texturepacker.patch
-> >  create mode 100644 package/kodi/0003-lirc-PR6783.patch
+On 2015-04-01 20:35 +0200, Bernd Kuhls spake thusly:
+> Needed for Kodi 15.0
 > 
-> Do you know when the final release of Kodi 15.0 is planned? The next
-> Buildroot version will be 2015.05, with a feature freeze at the end of
-> April. Will Kodi 15.0 final be released by then? It would be a bit
-> weird to have a stable Buildroot release with an Alpha version of Kodi
-> packaged.
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[--SNIP--]
+> diff --git a/package/libsquish/Config.in b/package/libsquish/Config.in
+> new file mode 100644
+> index 0000000..10af979
+> --- /dev/null
+> +++ b/package/libsquish/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_LIBSQUISH
+> +	bool "libsquish"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	help
+> +	  The squish library (abbreviated to libsquish) is an open source DXT
+> +	  compression library written in C++
+> +
+> +	  https://code.google.com/p/libsquish
 
-From the cover letter:
-    "this series is a RFC and not meant for committing to buildroot."
+Don;t we have a better homepage for libsquish? Google code is slated for
+retirement later this year (or early next year). It would be a pity to
+have a dangling URL especially as we already know about that.
 
-Bernd is doing quite a good job at providing "snapshots" of his bump of
-Kodi (yeah, I don't have to do it! :-) ), so we can review and fix the
-issues, so that when the final version is finally cut, integrating in
-Buildroot would be quite easy.
+> +comment "libsquish needs a toolchain w/ C++"
+> +	depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/libsquish/libsquish.mk b/package/libsquish/libsquish.mk
+> new file mode 100644
+> index 0000000..d381370
+> --- /dev/null
+> +++ b/package/libsquish/libsquish.mk
+> @@ -0,0 +1,24 @@
+> +################################################################################
+> +#
+> +# libsquish
+> +#
+> +################################################################################
+> +
+> +LIBSQUISH_VERSION = 1.10-openelec
+> +LIBSQUISH_SOURCE = libsquish-$(LIBSQUISH_VERSION).tar.gz
+> +LIBSQUISH_SITE = http://sources.openelec.tv/devel
 
-I'll try to get some time to review the series (I already spot some
-issues in the first few commits).
+I'm a bit uneasy at pointing to Google code as the homepage, and at the
+same time using a third-party to get the archive from, especially since
+it looks like this version has been modified by OpenELEC.
+
+> +LIBSQUISH_INSTALL_STAGING = YES
+> +LIBSQUISH_LICENSE = MIT
+> +LIBSQUISH_LICENSE_FILES = README
+
+You do not provide build commands. Is that on purpose, or did you
+forget? ;-)
+
+> +define LIBSQUISH_INSTALL_STAGING_CMDS
+> +	CXX=$(TARGET_CXX) CXXFLAGS="$(TARGET_CXXFLAGS)" \
+
+Please use $(TARGET_CONFIGURE_OPTS) as it already contains all those
+defines, plus many others.
+
+> +	$(MAKE) -C $(@D) install PREFIX=/usr INSTALL_DIR=$(STAGING_DIR)/usr
+> +endef
+> +
+> +define LIBSQUISH_INSTALL_TARGET_CMDS
+> +	CXX=$(TARGET_CXX) CXXFLAGS="$(TARGET_CXXFLAGS)" \
+
+Ditto $(TARGET_CONFIGURE_OPTS).
+
+> +	$(MAKE) -C $(@D) install PREFIX=/usr INSTALL_DIR=$(TARGET_DIR)/usr
+> +endef
+> +
+> +$(eval $(generic-package))
 
 Regards,
 Yann E. MORIN.
