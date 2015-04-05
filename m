@@ -1,95 +1,129 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Mon, 6 Apr 2015 01:02:09 +0300
-Subject: [Buildroot] [RFC v2 2/6] squid: common service startup
+Date: Mon, 6 Apr 2015 01:02:30 +0300
+Subject: [Buildroot] [RFC v2 3/6] dropbear: common service startup
 In-Reply-To: <cover.1428263859.git.alex.suykov@gmail.com>
 References: <cover.1428263859.git.alex.suykov@gmail.com>
-Message-ID: <6963d8ed535a99f2f142bbe5abfb8eb891eeef8a.1428263859.git.alex.suykov@gmail.com>
+Message-ID: <d922d1afb082ed50f34cb1dd3c2db5f0a209b21c.1428263859.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A typical simple daemon.
+Relatively complex case, with umask and autid dependency.
 
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 ---
- package/squid/S97squid  | 40 ----------------------------------------
- package/squid/squid.mk  |  5 +----
- package/squid/squid.run |  3 +++
- 3 files changed, 4 insertions(+), 44 deletions(-)
- delete mode 100755 package/squid/S97squid
- create mode 100644 package/squid/squid.run
+ package/dropbear/S50dropbear      | 43 ---------------------------------------
+ package/dropbear/dropbear.mk      | 13 +-----------
+ package/dropbear/dropbear.run     |  6 ++++++
+ package/dropbear/dropbear.service | 10 ---------
+ 4 files changed, 7 insertions(+), 65 deletions(-)
+ delete mode 100644 package/dropbear/S50dropbear
+ create mode 100644 package/dropbear/dropbear.run
+ delete mode 100644 package/dropbear/dropbear.service
 
-diff --git a/package/squid/S97squid b/package/squid/S97squid
-deleted file mode 100755
-index b30af5b..0000000
---- a/package/squid/S97squid
+diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
+deleted file mode 100644
+index 2694931..0000000
+--- a/package/dropbear/S50dropbear
 +++ /dev/null
-@@ -1,40 +0,0 @@
+@@ -1,43 +0,0 @@
 -#!/bin/sh
+-#
+-# Starts dropbear sshd.
+-#
 -
--[ -x /usr/sbin/squid ] || exit 0
--[ -f /etc/squid.conf ] || exit 0
+-# Allow a few customizations from a config file
+-test -r /etc/default/dropbear && . /etc/default/dropbear
+-
+-start() {
+-	DROPBEAR_ARGS="$DROPBEAR_ARGS -R"
+-
+-	echo -n "Starting dropbear sshd: "
+-	umask 077
+-	start-stop-daemon -S -q -p /var/run/dropbear.pid \
+-		--exec /usr/sbin/dropbear -- $DROPBEAR_ARGS
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
+-}
+-stop() {
+-	echo -n "Stopping dropbear sshd: "
+-	start-stop-daemon -K -q -p /var/run/dropbear.pid
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
+-}
+-restart() {
+-	stop
+-	start
+-}
 -
 -case "$1" in
 -  start)
--    echo -n "Starting squid: "
--    if [ ! -d /var/log/squid ]; then
--      mkdir -p /var/log/squid
--      chown squid:squid /var/log/squid
--    fi
--    start-stop-daemon -S -x /usr/sbin/squid
--    [ $? = 0 ] && echo "OK" || echo "FAIL"
--    ;;
--
--   stop)
--    echo -n "Stopping squid: "
--    /usr/sbin/squid -k shutdown
--    [ $? = 0 ] && echo "OK" || echo "FAIL"
--    ;;
--
--  reload)
--    echo -n "Reloading squid configuration: "
--    /usr/sbin/squid -k reconfigure
--    [ $? = 0 ] && echo "OK" || echo "FAIL"
--    ;;
--
--  restart)
--    echo -n "Restarting squid: "
--    /usr/sbin/squid -k restart
--    [ $? = 0 ] && echo "OK" || echo "FAIL"
--    ;;
--
+-  	start
+-	;;
+-  stop)
+-  	stop
+-	;;
+-  restart|reload)
+-  	restart
+-	;;
 -  *)
--    echo "Usage: $0 {start|stop|reload|restart}"
--    exit 1
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
 -esac
 -
--exit 0
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index f4d6ae3..52209bd 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -76,9 +76,6 @@ define SQUID_USERS
- 	squid -1 squid -1 * - - - Squid proxy cache
+-exit $?
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index bc65d69..fdd83f4 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -51,19 +51,8 @@ define DROPBEAR_DISABLE_STANDALONE
+ 	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
  endef
  
--define SQUID_INSTALL_INIT_SYSV
--	$(INSTALL) -m 755 -D package/squid/S97squid \
--		$(TARGET_DIR)/etc/init.d/S97squid
+-define DROPBEAR_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/dropbear/dropbear.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/dropbear.service
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -fs ../../../../usr/lib/systemd/system/dropbear.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dropbear.service
 -endef
-+SQUID_INIT_RUN = squid.run
- 
- $(eval $(autotools-package))
-diff --git a/package/squid/squid.run b/package/squid/squid.run
+-
+ ifeq ($(BR2_USE_MMU),y)
+-define DROPBEAR_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 755 package/dropbear/S50dropbear \
+-		$(TARGET_DIR)/etc/init.d/S50dropbear
+-endef
++DROPBEAR_INIT_RUN = dropbear.run
+ else
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_STANDALONE
+ endif
+diff --git a/package/dropbear/dropbear.run b/package/dropbear/dropbear.run
 new file mode 100644
-index 0000000..12c2a52
+index 0000000..f50153d
 --- /dev/null
-+++ b/package/squid/squid.run
-@@ -0,0 +1,3 @@
-+description: Squid proxy server
-+prestart: mkdir -p /var/log/squid
-+foreground: /usr/sbin/squid -N
++++ b/package/dropbear/dropbear.run
+@@ -0,0 +1,6 @@
++description: Dropbear SSH daemon
++umask: 077
++pidfile: /var/run/dropbear.pid
++after: syslog network auditd
++background: /usr/sbin/dropbear -R
++foreground: /usr/sbin/dropbear -F -R
+diff --git a/package/dropbear/dropbear.service b/package/dropbear/dropbear.service
+deleted file mode 100644
+index 4e6c879..0000000
+--- a/package/dropbear/dropbear.service
++++ /dev/null
+@@ -1,10 +0,0 @@
+-[Unit]
+-Description=Dropbear SSH daemon
+-After=syslog.target network.target auditd.service
+-
+-[Service]
+-ExecStart=/usr/sbin/dropbear -F -R
+-ExecReload=/bin/kill -HUP $MAINPID
+-
+-[Install]
+-WantedBy=multi-user.target
 -- 
 2.0.3
