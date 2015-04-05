@@ -1,67 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Apr 2015 11:16:56 +0200
-Subject: [Buildroot] [PATCH 1/5 v2] package infra: add patch-dependencies
-In-Reply-To: <20150404154705.4be3e45d@free-electrons.com>
-References: <cover.1426342904.git.yann.morin.1998@free.fr>
- <a51d416e81f55374ba749baa81222bfe0c52782b.1426342904.git.yann.morin.1998@free.fr>
- <20150404154705.4be3e45d@free-electrons.com>
-Message-ID: <20150405091656.GC4134@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 5 Apr 2015 11:22:44 +0200
+Subject: [Buildroot] [git commit] systemd: needs 3.10+ kernel headers
+Message-ID: <20150405092340.638128191D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=5749d9a695daeb3a1fd1b8afb3a45fb2e759a66a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-04-04 15:47 +0200, Thomas Petazzoni spake thusly:
-> Dear Yann E. MORIN,
-> 
-> On Sat, 14 Mar 2015 15:25:17 +0100, Yann E. MORIN wrote:
-> 
-> > -$(1)-show-depends:
-> > +$(1)-show-build-depends:
-> >  			@echo $$($(2)_FINAL_DEPENDENCIES)
-> > +$(1)-show-patch-depends:
-> > +			@echo $$($(2)_FINAL_PATCH_DEPENDENCIES)
-> > +$(1)-show-depends:
-> > +			@echo $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
-> 
-> I think this will break graph-depends. The python script will do "make
-> <foo>-show-depends" for each package. Now this will return things such
-> as "xenomai-patch"
+Fixes:
+http://autobuild.buildroot.net/results/f51/f510014600bc7d1e3cf81ff53268d186c8b417b8/
+http://autobuild.buildroot.net/results/278/278a60a1569eb57773945281b102a0495ff32775/
+http://autobuild.buildroot.net/results/083/083f9579893185d93c591d171b39d8e068b21412/
+http://autobuild.buildroot.net/results/03a/03a96697aa72b69546d61e56d1285bb50b0633d9/
 
-No, I don't think so, because _PATCH_DEPENDENCIES contain package names,
-not or internal make targets. And I can prove it:
+And many more.
 
-    $ make linux-show-depends
-    fbtft host-kmod host-lzop toolchain
+Systemd needs NDA_PORT/VNI/IFINDEX from linux/neighbour.h, which were added
+in 3.10 (6681712d: vxlan: generalize forwarding tables).
 
-where fbtft is a kernel extension.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ system/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Have you even tried it?  ;-p
-
-> Also, I'm not sure about the usefulness of having separate
-> show-build-depends and show-patch-depends. It could have been useful if
-> show-depends would simply depend on them, but it doesn't work because
-> we want all dependencies space-separated on one line.
-> 
-> So, what about replacing this part with just:
-> 
-> $(1)-show-depends:
-> 	@echo $$(sort $$($(2)_FINAL_DEPENDENCIES) $$(patsubst %-patch,%,$$($(2)_FINAL_PATCH_DEPENDENCIES)))
-
-Well, I don;t mind getting rid of the separate show-{build,patch}-depends
-rules. But your proposal is wrong, since we do not have to get rid of
-the trailing -patch, because it's not in there...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/system/Config.in b/system/Config.in
+index 3516056..935f7a1 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -95,12 +95,12 @@ config BR2_INIT_SYSTEMD
+ 	depends on BR2_TOOLCHAIN_HAS_SSP
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 	select BR2_PACKAGE_SYSTEMD
+ 
+-comment 'systemd needs an (e)glibc toolchain, headers >= 3.7'
++comment 'systemd needs an (e)glibc toolchain, headers >= 3.10'
+ 	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
+-		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7)
++		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
+ 
+ config BR2_INIT_NONE
+ 	bool "None"
