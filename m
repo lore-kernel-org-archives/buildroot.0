@@ -1,96 +1,51 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 05 Apr 2015 23:53:29 +0200
-Subject: [Buildroot] [PATCH] ARC: bump tools to 2014.12 release
-In-Reply-To: <1427213019.13499.10.camel@synopsys.com>
-References: <1002870381.1069734.1426237851891.JavaMail.root@openwide.fr>	
- <1427205068.13499.9.camel@synopsys.com>	
- <20150324163127.417da43d@free-electrons.com>
- <1427213019.13499.10.camel@synopsys.com>
-Message-ID: <5521AED9.5030802@openwide.fr>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Mon, 6 Apr 2015 01:01:19 +0300
+Subject: [Buildroot] [RFC v2 0/5] common service startup files
+Message-ID: <cover.1428263859.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexey,
+This series is intended to simplify and clean up installation routine
+for daemon-like applications, merging sysv and systemd startup files
+and moving much of the common code out of per-package .mk files.
 
-Le 24/03/2015 17:03, Alexey Brodkin a ?crit :
-> Hi Thomas,
-> 
-> On Tue, 2015-03-24 at 16:31 +0100, Thomas Petazzoni wrote:
->> Dear Alexey Brodkin,
->>
->> On Tue, 24 Mar 2015 13:51:08 +0000, Alexey Brodkin wrote:
->>
->>> On Fri, 2015-03-13 at 10:10 +0100, Romain Naour wrote:
->>>> Hi Alexey,
->>>>
->>>> ----- Mail original -----
->>>> | De: "Alexey Brodkin" <Alexey.Brodkin@synopsys.com>
->>>> | ?: "romain naour" <romain.naour@openwide.fr>, "thomas petazzoni" <thomas.petazzoni@free-electrons.com>
->>>> | Cc: buildroot at uclibc.org
->>>> | Envoy?: Vendredi 13 Mars 2015 10:00:34
->>>> | Objet: Re: [Buildroot] [PATCH] ARC: bump tools to 2014.12 release
->>>> | 
->>>> | On Fri, 2015-03-13 at 09:19 +0100, Romain Naour wrote:
->>>> | > Hi Alexey,
->>>> | > Can you have a look at this patch:
->>>> | > https://patchwork.ozlabs.org/patch/449686/
->>>
->>> Do you think the patch Romain mentioned may fix
->>> http://autobuild.buildroot.org/results/d62/d62f472d70f60281dfe94cffc46a3e0566fd4a3d ?
->>
->> Yes, most likely it will fix this problem.
-> 
-> Are you going to apply it or we'll need to find somebody to try it
-> first?
-> 
+Currently buildroot requires pre-crafted sysv and/or systemd startup
+files to be supplied for each package that needs its daemon-like
+processes started at system boot. In many cases, this is redundant.
 
-I'm back on this issue and I found a way to reproduce it.
+Only a small part of the startup scripts is package-specific.
+A single command, the one that starts the process in foreground mode,
+is typically enough to generate usable sysv and systemd startup files.
 
-As you can see in the build.log, libiberty.a is located in host/usr/lib/libiberty.a
-But on my machine libiberty.a is located in host/usr/lib64/libiberty.a
+Separating package-specific data and removing the rest from package
+directories allows changing common code without the need to patch
+several dozen packages, ensures more or less even support for sysv
+and systemd, and potentially simplifies introduction of alternative
+system startup schemes. 
 
-This is really weird because autobuilders are also 64bits machine
-(x86_64-unknown-linux-gnu) and there is no reason that libiberty.a is not in the
-same place...
-So, I moved libiberty.a from host/usr/lib64/libiberty.a to
-host/usr/lib/libiberty.a and now I have the very same build failure.
+The first patch in the series contains the common code, and the rest
+show how it affects individual packages. I'm only posting a few
+interesting ones with comments; the full set (~50 patches) is available
+here: https://github.com/arsv/br/ branch run-1.
 
-When gdb is build with shared libraries, it try to link with it own libiberty.a
-(host-gdb-7.8.2/bfd/../libiberty/pic -liberty) but it take the one from
-host/usr/lib/libiberty.a because -LPath/to/host/usr/lib/libiberty.a is before
--LPath/to/build/host-gdb-7.8.2/bfd/../libiberty/pic.
+---
+v2 changes: this part of the v1 series is now standalone, the script
+got simplified a lot, and it now requires explicit variables instead
+of just picking up files from the package directory.
 
-See the complete gcc line (verbose):
-/bin/sh ./libtool --tag=CC   --mode=link /usr/bin/gcc -W -Wall
--Wstrict-prototypes -Wmissing-prototypes -Wshadow -O2
--I/home/naourr/git/buildroot/test/gdb/host/usr/include  -release `cat
-libtool-soversion`  -L/home/naourr/git/buildroot/test/gdb/host/lib
--L/home/naourr/git/buildroot/test/gdb/host/usr/lib
--Wl,-rpath,/home/naourr/git/buildroot/test/gdb/host/usr/lib -o libbfd.la -rpath
-/home/naourr/git/buildroot/test/gdb/host/usr/x86_64-unknown-linux-gnu/arm-buildroot-linux-uclibcgnueabi/lib
-archive.lo archures.lo bfd.lo bfdio.lo bfdwin.lo cache.lo coffgen.lo corefile.lo
-format.lo init.lo libbfd.lo opncls.lo reloc.lo section.lo syms.lo targets.lo
-hash.lo linker.lo srec.lo binary.lo tekhex.lo ihex.lo stabs.lo stab-syms.lo
-merge.lo dwarf2.lo simple.lo compress.lo verilog.lo `cat ofiles`
--L/home/naourr/git/buildroot/test/gdb/build/host-gdb-7.8.2/bfd/../libiberty/pic
--liberty -Wl,-lc,--as-needed,-lm,--no-as-needed  -lz
+Run files format reverted to "key: value" with explicit keys.
+It is still somewhat custom, and the script is still in python however.
 
-This line come from gdb/bfd/Makefile.in: l1239:
-libbfd.la: $(libbfd_la_OBJECTS) $(libbfd_la_DEPENDENCIES)
-	$(libbfd_la_LINK) $(am_libbfd_la_rpath) $(libbfd_la_OBJECTS)
-$(libbfd_la_LIBADD) $(LIBS)
+Non-daemon script support dropped completely, and some rare complex
+cases like postgres dropped as well.
 
-One solution is to disable shared libraries (preferred).
+Hard-coded paths removed, TARGET_DIR is used when appropriate.
 
-The second is to tweak LDFLAGS in gdb.mk like this:
-HOST_GDB_CONF_OPTS = \
-	[...]
-	LDFLAGS="-L$(@D)/bfd/../libiberty/pic $(HOST_LDFLAGS)"
+Variable substitution and special cases are now handled in package
+makefiles, not in the script.
 
-I don't see a better fix for gdb.
-
-Best regards,
-Romain
+-- 
+2.0.3
