@@ -1,61 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Apr 2015 17:35:31 +0200
-Subject: [Buildroot] [git commit] wvstreams: disable with the ARC external
-	toolchain
-Message-ID: <20150405153542.210827FFE2@busybox.osuosl.org>
+Date: Sun, 5 Apr 2015 17:38:55 +0200
+Subject: [Buildroot] [PATCH] lirc-tools: fix build with host python3
+In-Reply-To: <20150405153454.GA2183@tarshish>
+References: <a17acfb3c3818b1ccc0c2a98ff8993574d83f001.1428247566.git.baruch@tkos.co.il>
+ <20150405172857.7b773e82@free-electrons.com>
+ <20150405153454.GA2183@tarshish>
+Message-ID: <20150405173855.526c152c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b8e4a7f4a1d7460485374ff6efda0bcb2ec5aa7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Baruch Siach,
 
-This toolchain lacks program_invocation_* in the uClibc configuration.
+On Sun, 5 Apr 2015 18:34:54 +0300, Baruch Siach wrote:
 
-Fixes:
+> > So what about:
+> > 
+> >  * Using #!/usr/bin/env python in the script, and make the script both
+> >    python 2 and python 3 compliant.
+> > 
+> >  * Use $(if $(BR2_PACKAGE_PYTHON3),host-python3) in the dependencies ?
+> 
+> Are both needed? If the script is compliant with both python2 and python3, 
+> then we can rely on the host provided python in case host-python3 has not been 
+> built by the time lirc-tools builds, isn't it?
 
-  http://autobuild.buildroot.org/results/653/6531009b2eae64b4e79f66a625cf2a3f9ffc2ac6/
+True.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/wvdial/Config.in    |    2 ++
- package/wvstreams/Config.in |    3 +++
- 2 files changed, 5 insertions(+), 0 deletions(-)
-
-diff --git a/package/wvdial/Config.in b/package/wvdial/Config.in
-index e57f975..14befcf 100644
---- a/package/wvdial/Config.in
-+++ b/package/wvdial/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_WVDIAL
- 	bool "wvdial"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # wvstreams
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12 # wvstreams
- 	select BR2_PACKAGE_WVSTREAMS
- 	help
- 	  wvdial is an intelligent Point-to-Point Protocol dialer
-@@ -11,3 +12,4 @@ config BR2_PACKAGE_WVDIAL
- comment "wvdial needs a toolchain w/ C++"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12
-diff --git a/package/wvstreams/Config.in b/package/wvstreams/Config.in
-index 3080dc7..0580516 100644
---- a/package/wvstreams/Config.in
-+++ b/package/wvstreams/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_WVSTREAMS
- 	bool "wvstreams"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # fork()
-+	# toolchain lacks program_invocation_*
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -12,3 +14,4 @@ config BR2_PACKAGE_WVSTREAMS
- comment "wvstreams needs a toolchain w/ C++"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
