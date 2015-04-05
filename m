@@ -1,22 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Apr 2015 21:29:01 +0200
-Subject: [Buildroot] [PATCH] python-coherence: fix legal-info
-In-Reply-To: <1428257114-26525-1-git-send-email-yegorslists@googlemail.com>
- (Yegor Yefremov's message of "Sun, 5 Apr 2015 20:05:14 +0200")
-References: <1428257114-26525-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87384egyrm.fsf@dell.be.48ers.dk>
+Date: Sun, 5 Apr 2015 21:28:15 +0200
+Subject: [Buildroot] [git commit] python-coherence: fix legal-info
+Message-ID: <20150405192929.2969B8195E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6b0aea1b6cff5a9d3898e5a4eb1f79044b77ebed
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Typo in license file name.
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Typo in license file name.
 
-Committed, thanks.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-coherence/python-coherence.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-coherence/python-coherence.mk b/package/python-coherence/python-coherence.mk
+index 301885b..f9df37c 100644
+--- a/package/python-coherence/python-coherence.mk
++++ b/package/python-coherence/python-coherence.mk
+@@ -8,7 +8,7 @@ PYTHON_COHERENCE_VERSION = 0.6.6.2
+ PYTHON_COHERENCE_SITE = $(call github,coherence-project,Coherence,Coherence-$(PYTHON_COHERENCE_VERSION))
+ PYTHON_COHERENCE_SETUP_TYPE = setuptools
+ PYTHON_COHERENCE_LICENSE = MIT
+-PYTHON_COHERENCE_LICENSE_FILES = LICENSE
++PYTHON_COHERENCE_LICENSE_FILES = LICENCE
+ PYTHON_COHERENCE_DEPENDENCIES = python-twisted python-zope-interface python-pyasn
+ 
+ $(eval $(python-package))
