@@ -1,27 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Apr 2015 16:12:40 +0200
-Subject: [Buildroot] [PATCH v2 4/4] package/apr-util: add support for
- unixodbc
-In-Reply-To: <1425660584-25189-4-git-send-email-bernd.kuhls@t-online.de>
-References: <1425660584-25189-1-git-send-email-bernd.kuhls@t-online.de>
- <1425660584-25189-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150405161240.6067063c@free-electrons.com>
+Date: Sun, 5 Apr 2015 16:14:23 +0200
+Subject: [Buildroot] [PATCH v2 1/7] directfb: bump version to 1.7.7 and
+ add hash
+In-Reply-To: <trinity-1742d787-d422-4294-95ae-83889bfe4ab0-1425237355742@3capp-gmx-bs62>
+References: <trinity-1742d787-d422-4294-95ae-83889bfe4ab0-1425237355742@3capp-gmx-bs62>
+Message-ID: <20150405161423.3d23a668@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Peter Seiderer,
 
-On Fri,  6 Mar 2015 17:49:44 +0100, Bernd Kuhls wrote:
+On Sun, 1 Mar 2015 20:15:55 +0100, Peter Seiderer wrote:
+
+> > How shall we proceed to merge both of our series together? Are you
+> > willing to take care of this?
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: avoid picking up $(STAGING_DIR)/usr/bin/odbc_config, this file is
->     compiled for target and breaks unixodbc detection when used
+> Will try to provide an updated patch version (my versions plus yours)
+> and do more testing...
 
-Applied, thanks!
+Have you had some time to look into this?
+
+I will mark your 7 patches as "Changes Requested" in patchwork. Can you
+resend an updated series in the near future? If you think you will not
+have the time to do so, let me know, and I'll try to merge your patches
+with mine and push the result.
+
+Thanks,
 
 Thomas
 -- 
