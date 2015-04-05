@@ -1,37 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Apr 2015 22:56:22 +0200
-Subject: [Buildroot] [PATCH 3/4 v2] support/download: restore mandatory
-	check of hashes
+Date: Sun,  5 Apr 2015 22:56:21 +0200
+Subject: [Buildroot] [PATCH 2/4 v2] toolchain/external: ignore missing hash
+	for custom downloaded toolchain
 In-Reply-To: <cover.1428267362.git.yann.morin.1998@free.fr>
 References: <cover.1428267362.git.yann.morin.1998@free.fr>
-Message-ID: <b8c2a622aad5694425ff17f8c481a374feac0b8c.1428267362.git.yann.morin.1998@free.fr>
+Message-ID: <5546fde6ea4361ee957500e77ae1c09b1587c2f6.1428267362.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that custom external toolchains to be downloaded proprely instruct
-to not fail on a missing hash, restore the mandatory hash check for
-everything else.
+We will *always* be missing a hash file for custom external toolchains
+that are downloaded.
+
+So, just ignore that failure.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- support/download/check-hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/download/check-hash b/support/download/check-hash
-index 1276290..c24d26b 100755
---- a/support/download/check-hash
-+++ b/support/download/check-hash
-@@ -100,5 +100,5 @@ if [ ${nb_checks} -eq 0 ]; then
-         exit 0
-     fi
-     printf "ERROR: No hash found for %s\n" "${base}" >&2
--    exit 0
-+    exit 3
- fi
+---
+Changes v1 -> v2:
+  - fix typoes in title
+---
+ toolchain/toolchain-external/toolchain-external.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index c0429bb..3659511 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -400,6 +400,8 @@ else
+ # Custom toolchain
+ TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+ TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
++# Magic value to tell the download helper to avoid failling on missing hash
++export BR_MISSING_HASH_OK := $(call ignore-missing-hash-magic,$(TOOLCHAIN_EXTERNAL_SOURCE))
+ endif
+ 
+ # In fact, we don't need to download the toolchain, since it is already
 -- 
 1.9.1
