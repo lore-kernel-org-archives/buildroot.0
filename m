@@ -1,33 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Apr 2015 19:17:45 +0200
-Subject: [Buildroot] [PATCH 5/6] package/gnu-efi: fix legal-info
-In-Reply-To: <41ea946a815b2214044827c73815d8a171a3a939.1428252467.git.yann.morin.1998@free.fr>
-References: <cover.1428252467.git.yann.morin.1998@free.fr>
- <41ea946a815b2214044827c73815d8a171a3a939.1428252467.git.yann.morin.1998@free.fr>
-Message-ID: <20150405191745.3497f9a7@free-electrons.com>
+Date: Sun, 5 Apr 2015 19:19:32 +0200
+Subject: [Buildroot] [git commit] collectd: fix postgresql library detection
+Message-ID: <20150405172123.84EA281941@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=3f79f48764055b53cd548b8c62c357281aa816e4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  5 Apr 2015 18:48:26 +0200, Yann E. MORIN wrote:
-> Fix a bunch of deficiencies:
->   - 'debian/copyright' does not exist.
->   - gnuefi is not GPLv2+. Only one AArch64 file has GPLv2+ headers,
->     all others have BSD-3c
->   - efilib is BSD-2c
+Explicitly link against -lpthread and -lm.
 
-I don't quite agree here: some ARM files are also under GPLv2+, so I
-believe the whole thing really is under GPLv2+.
+Fixes ([1]):
+   checking for PQconnectdb in -lpq... no
+   checking for PQserverVersion in -lpq... no
+   postgresql  . . . . . no (dependency error)
 
-This is also apparently the opinion of Debian:
-http://changelogs.ubuntu.com/changelogs/pool/main/g/gnu-efi/gnu-efi_3.0i-2ubuntu1/copyright.
+[1] http://autobuild.buildroot.org/results/926/926a43b8f635790d7e9abdc977ea803ddaf8a523/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+[Thomas:
+  - Rebase on top of master
+  - Use += instead of =, which will avoid mistakes in the future.]
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/collectd/collectd.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 54a816f..f02be55 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -141,6 +141,7 @@ COLLECTD_CONF_OPTS += --with-libnetsnmp=$(STAGING_DIR)/usr/bin/net-snmp-config
+ endif
+ ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
+ COLLECTD_CONF_OPTS += --with-libpq=$(STAGING_DIR)/usr/bin/pg_config
++COLLECTD_CONF_ENV += LIBS="-lpthread -lm"
+ endif
+ ifeq ($(BR2_PACKAGE_YAJL),y)
+ COLLECTD_CONF_OPTS += --with-yajl=$(STAGING_DIR)/usr
