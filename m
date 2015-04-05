@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Apr 2015 19:17:04 +0200
-Subject: [Buildroot] [PATCH 0/6] legal-info: fix packages (branch
- yem/legal)
-In-Reply-To: <cover.1428252467.git.yann.morin.1998@free.fr>
+Date: Sun, 5 Apr 2015 19:17:45 +0200
+Subject: [Buildroot] [PATCH 5/6] package/gnu-efi: fix legal-info
+In-Reply-To: <41ea946a815b2214044827c73815d8a171a3a939.1428252467.git.yann.morin.1998@free.fr>
 References: <cover.1428252467.git.yann.morin.1998@free.fr>
-Message-ID: <20150405191704.2d0ccdf7@free-electrons.com>
+ <41ea946a815b2214044827c73815d8a171a3a939.1428252467.git.yann.morin.1998@free.fr>
+Message-ID: <20150405191745.3497f9a7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,18 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Sun,  5 Apr 2015 18:48:23 +0200, Yann E. MORIN wrote:
+On Sun,  5 Apr 2015 18:48:26 +0200, Yann E. MORIN wrote:
+> Fix a bunch of deficiencies:
+>   - 'debian/copyright' does not exist.
+>   - gnuefi is not GPLv2+. Only one AArch64 file has GPLv2+ headers,
+>     all others have BSD-3c
+>   - efilib is BSD-2c
 
->       package/liblinear: fix legal-info
->       package/python-cherrypy: fix legal-info
->       package/zmqpp: fix legal-info
->       package/evemu: fix legal-info
+I don't quite agree here: some ARM files are also under GPLv2+, so I
+believe the whole thing really is under GPLv2+.
 
-Applied.
-
->       package/gnu-efi: fix legal-info
-
-Not applied, I'll comment on this one.
-
->       package/linux-firmware: fix legal-info
-
-Applied.
+This is also apparently the opinion of Debian:
+http://changelogs.ubuntu.com/changelogs/pool/main/g/gnu-efi/gnu-efi_3.0i-2ubuntu1/copyright.
 
 Thomas
 -- 
