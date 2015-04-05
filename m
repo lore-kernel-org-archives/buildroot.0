@@ -1,119 +1,96 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Apr 2015 23:47:23 +0200
-Subject: [Buildroot] [PATCH v2 2/2] i2c-tools: add support to build
- python extension
-In-Reply-To: <CALq67GDxbZJ5j5YubsYokL0Q4i0uJBRrdHt91b5fXTaaEpucUg@mail.gmail.com>
-References: <1428263326-10320-1-git-send-email-ryanbarnett3@gmail.com>
- <1428263326-10320-2-git-send-email-ryanbarnett3@gmail.com>
- <20150405211001.GH4134@free.fr>
- <CALq67GDxbZJ5j5YubsYokL0Q4i0uJBRrdHt91b5fXTaaEpucUg@mail.gmail.com>
-Message-ID: <20150405214723.GL4134@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 05 Apr 2015 23:53:29 +0200
+Subject: [Buildroot] [PATCH] ARC: bump tools to 2014.12 release
+In-Reply-To: <1427213019.13499.10.camel@synopsys.com>
+References: <1002870381.1069734.1426237851891.JavaMail.root@openwide.fr>	
+ <1427205068.13499.9.camel@synopsys.com>	
+ <20150324163127.417da43d@free-electrons.com>
+ <1427213019.13499.10.camel@synopsys.com>
+Message-ID: <5521AED9.5030802@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan, All,
+Hi Alexey,
 
-On 2015-04-05 16:33 -0500, Ryan Barnett spake thusly:
-> On Sun, Apr 5, 2015 at 4:10 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Ryan, All,
-> >
-> > On 2015-04-05 14:48 -0500, Ryan Barnett spake thusly:
-> >> Add a config option to build the python bindings for i2c-tools -
-> >> py-smbus. The steps for building the python bindings is the same as
-> >> the distutil steps that are a part of the python infrastructure.
-> >>
-> >> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-> >> CC: Tjeerd Pinkert <t.j.pinkert@vu.nl>
-> >> CC: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> >> CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> >> CC: Baruch Siach <baruch@tkos.co.il>
-> >>
-> >> ---
-> >> Changes v1 -> v2:
-> >>  - Fixed spelling in config entry
-> >>  - Utilize the python infrastructure variables for environment and
-> >>    build/install opts (suggested by Thomas P)
-> >>  - Only support python2.7 since this is not compatabile with python3
-> >>    (suggested by Baruch)
-> >> ---
-> >>  package/i2c-tools/Config.in    | 13 +++++++++++++
-> >>  package/i2c-tools/i2c-tools.mk | 27 +++++++++++++++++++++++++++
-> >>  2 files changed, 40 insertions(+)
-> >>
-> >> diff --git a/package/i2c-tools/Config.in b/package/i2c-tools/Config.in
-> >> index e83dbd6..6426f30 100644
-> >> --- a/package/i2c-tools/Config.in
-> >> +++ b/package/i2c-tools/Config.in
-> >> @@ -8,3 +8,16 @@ config BR2_PACKAGE_I2C_TOOLS
-> >>         EEPROM decoding scripts, and more.
-> >>
-> >>         http://www.lm-sensors.org/wiki/I2CTools
-> >> +
-> >> +if BR2_PACKAGE_I2C_TOOLS
-> >> +
-> >> +config BR2_PACKAGE_I2C_TOOLS_PYSMBUS
-> >> +     bool "py-smbus"
-> >> +     depends on BR2_PACKAGE_PYTHON
-> >> +     help
-> >> +       Python bindings to smbus from the i2c-tools package.
-> >
-> > Well, like Baruch said, I would not add such option, and just build the
-> > Python binding if Python is enabled.
+Le 24/03/2015 17:03, Alexey Brodkin a ?crit :
+> Hi Thomas,
 > 
-> I kept it for this version because as I have said on IRC - I didn't
-> even know there were python bindings available for i2c-tools since
-> their wiki site makes no mention of this. However, since now more than
-> one person would prefer this, I will change it so the python bindings
-> are automatically installed.
+> On Tue, 2015-03-24 at 16:31 +0100, Thomas Petazzoni wrote:
+>> Dear Alexey Brodkin,
+>>
+>> On Tue, 24 Mar 2015 13:51:08 +0000, Alexey Brodkin wrote:
+>>
+>>> On Fri, 2015-03-13 at 10:10 +0100, Romain Naour wrote:
+>>>> Hi Alexey,
+>>>>
+>>>> ----- Mail original -----
+>>>> | De: "Alexey Brodkin" <Alexey.Brodkin@synopsys.com>
+>>>> | ?: "romain naour" <romain.naour@openwide.fr>, "thomas petazzoni" <thomas.petazzoni@free-electrons.com>
+>>>> | Cc: buildroot at uclibc.org
+>>>> | Envoy?: Vendredi 13 Mars 2015 10:00:34
+>>>> | Objet: Re: [Buildroot] [PATCH] ARC: bump tools to 2014.12 release
+>>>> | 
+>>>> | On Fri, 2015-03-13 at 09:19 +0100, Romain Naour wrote:
+>>>> | > Hi Alexey,
+>>>> | > Can you have a look at this patch:
+>>>> | > https://patchwork.ozlabs.org/patch/449686/
+>>>
+>>> Do you think the patch Romain mentioned may fix
+>>> http://autobuild.buildroot.org/results/d62/d62f472d70f60281dfe94cffc46a3e0566fd4a3d ?
+>>
+>> Yes, most likely it will fix this problem.
 > 
-> I would like to have some sort of notification about this in the
-> configurator but I don't really like having a comment for this. Plus I
-> have spent more time on this feature than I would have liked so I will
-> not modify Config.in at all.
-
-OK, that's fine with me that you don't want to go any further with that.
-
-An interested party can get the patch and resubmit with the change later
-on.
-
-> >> +I2C_TOOLS_DEPENDENCIES += python
-> >> +
-> >> +define I2C_TOOLS_BUILD_PYSMBUS
-> >> +     (cd $(@D)/py-smbus;  \
-> >> +     $(I2C_TOOLS_PYTHON_BASE_ENV) \
-> >> +             $(HOST_DIR)/usr/bin/python setup.py build \
-> >> +             $(PKG_PYTHON_DISTUTILS_BUILD_OPTS))
-> >> +endef
-> >> +I2C_TOOLS_POST_BUILD_HOOKS += I2C_TOOLS_BUILD_PYSMBUS
-> >
-> > I'd keep the define, ditch the hook, and shoehorn the macro directly
-> > into the build commands, since this is a generic package:
-> >
-> >     define I2C_TOOLS_BUILD_CMDS
-> >         $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> >         $(I2C_TOOLS_BUILD_PYSMBUS)
-> >     endef
+> Are you going to apply it or we'll need to find somebody to try it
+> first?
 > 
-> OK I will do this since when you put it that way I prefer this too.
-> However, it isn't really clear that you are suppose to do something
-> like this from the manual as I debated this issue. To use hooks or not
-> to use hooks, that is the question... :)
 
-Well, for generic packages, there's no much point in using hooks to
-start with, since you handle commands manually anyway. Hooks are most
-interesting for the other pkg-infras, like autotools, cmake et al. since
-you do not have control of the build/install commands.
+I'm back on this issue and I found a way to reproduce it.
 
-Regards,
-Yann E. MORIN.
+As you can see in the build.log, libiberty.a is located in host/usr/lib/libiberty.a
+But on my machine libiberty.a is located in host/usr/lib64/libiberty.a
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+This is really weird because autobuilders are also 64bits machine
+(x86_64-unknown-linux-gnu) and there is no reason that libiberty.a is not in the
+same place...
+So, I moved libiberty.a from host/usr/lib64/libiberty.a to
+host/usr/lib/libiberty.a and now I have the very same build failure.
+
+When gdb is build with shared libraries, it try to link with it own libiberty.a
+(host-gdb-7.8.2/bfd/../libiberty/pic -liberty) but it take the one from
+host/usr/lib/libiberty.a because -LPath/to/host/usr/lib/libiberty.a is before
+-LPath/to/build/host-gdb-7.8.2/bfd/../libiberty/pic.
+
+See the complete gcc line (verbose):
+/bin/sh ./libtool --tag=CC   --mode=link /usr/bin/gcc -W -Wall
+-Wstrict-prototypes -Wmissing-prototypes -Wshadow -O2
+-I/home/naourr/git/buildroot/test/gdb/host/usr/include  -release `cat
+libtool-soversion`  -L/home/naourr/git/buildroot/test/gdb/host/lib
+-L/home/naourr/git/buildroot/test/gdb/host/usr/lib
+-Wl,-rpath,/home/naourr/git/buildroot/test/gdb/host/usr/lib -o libbfd.la -rpath
+/home/naourr/git/buildroot/test/gdb/host/usr/x86_64-unknown-linux-gnu/arm-buildroot-linux-uclibcgnueabi/lib
+archive.lo archures.lo bfd.lo bfdio.lo bfdwin.lo cache.lo coffgen.lo corefile.lo
+format.lo init.lo libbfd.lo opncls.lo reloc.lo section.lo syms.lo targets.lo
+hash.lo linker.lo srec.lo binary.lo tekhex.lo ihex.lo stabs.lo stab-syms.lo
+merge.lo dwarf2.lo simple.lo compress.lo verilog.lo `cat ofiles`
+-L/home/naourr/git/buildroot/test/gdb/build/host-gdb-7.8.2/bfd/../libiberty/pic
+-liberty -Wl,-lc,--as-needed,-lm,--no-as-needed  -lz
+
+This line come from gdb/bfd/Makefile.in: l1239:
+libbfd.la: $(libbfd_la_OBJECTS) $(libbfd_la_DEPENDENCIES)
+	$(libbfd_la_LINK) $(am_libbfd_la_rpath) $(libbfd_la_OBJECTS)
+$(libbfd_la_LIBADD) $(LIBS)
+
+One solution is to disable shared libraries (preferred).
+
+The second is to tweak LDFLAGS in gdb.mk like this:
+HOST_GDB_CONF_OPTS = \
+	[...]
+	LDFLAGS="-L$(@D)/bfd/../libiberty/pic $(HOST_LDFLAGS)"
+
+I don't see a better fix for gdb.
+
+Best regards,
+Romain
