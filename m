@@ -1,94 +1,60 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Sun,  5 Apr 2015 14:48:46 -0500
-Subject: [Buildroot] [PATCH v2 2/2] i2c-tools: add support to build python
-	extension
-In-Reply-To: <1428263326-10320-1-git-send-email-ryanbarnett3@gmail.com>
-References: <1428263326-10320-1-git-send-email-ryanbarnett3@gmail.com>
-Message-ID: <1428263326-10320-2-git-send-email-ryanbarnett3@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  5 Apr 2015 22:56:19 +0200
+Subject: [Buildroot] [PATCH 0/4 v2] toolchain/external: do not fail on
+	missing hash for custom downloaded toolchain (branch
+	yem/dl-hash-toolchains)
+Message-ID: <cover.1428267362.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a config option to build the python bindings for i2c-tools -
-py-smbus. The steps for building the python bindings is the same as
-the distutil steps that are a part of the python infrastructure.
+Hello All!
 
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-CC: Tjeerd Pinkert <t.j.pinkert@vu.nl>
-CC: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-CC: Baruch Siach <baruch@tkos.co.il>
+This series makes it so we can download custom external toolchains, and
+still have mandatory checks of hashes.
 
----
+It also fixes a slightly annoying warning message when downloading from
+a repository.
+
+
 Changes v1 -> v2:
- - Fixed spelling in config entry
- - Utilize the python infrastructure variables for environment and
-   build/install opts (suggested by Thomas P)
- - Only support python2.7 since this is not compatabile with python3
-   (suggested by Baruch)
----
- package/i2c-tools/Config.in    | 13 +++++++++++++
- package/i2c-tools/i2c-tools.mk | 27 +++++++++++++++++++++++++++
- 2 files changed, 40 insertions(+)
+  - fix a few typoes
 
-diff --git a/package/i2c-tools/Config.in b/package/i2c-tools/Config.in
-index e83dbd6..6426f30 100644
---- a/package/i2c-tools/Config.in
-+++ b/package/i2c-tools/Config.in
-@@ -8,3 +8,16 @@ config BR2_PACKAGE_I2C_TOOLS
- 	  EEPROM decoding scripts, and more.
- 
- 	  http://www.lm-sensors.org/wiki/I2CTools
-+
-+if BR2_PACKAGE_I2C_TOOLS
-+
-+config BR2_PACKAGE_I2C_TOOLS_PYSMBUS
-+	bool "py-smbus"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  Python bindings to smbus from the i2c-tools package.
-+
-+comment "i2c-tools py-smbus depends on python2"
-+	depends on !BR2_PACKAGE_PYTHON
-+
-+endif
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 0115e22..ec2995f 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -21,4 +21,31 @@ define I2C_TOOLS_INSTALL_TARGET_CMDS
- 	done
- endef
- 
-+# BASE_ENV taken from PKG_PYTHON_DISTUTILS_ENV in package/pkg-python.mk
-+I2C_TOOLS_PYTHON_BASE_ENV = \
-+	$(PKG_PYTHON_DISTUTILS_ENV) \
-+	CFLAGS="$(TARGET_CFLAGS) -I../include"
-+
-+# Build/install steps mirror the distutil python package type in the python package
-+# infrastructure
-+ifeq ($(BR2_PACKAGE_I2C_TOOLS_PYSMBUS),y)
-+I2C_TOOLS_DEPENDENCIES += python
-+
-+define I2C_TOOLS_BUILD_PYSMBUS
-+	(cd $(@D)/py-smbus;  \
-+	$(I2C_TOOLS_PYTHON_BASE_ENV) \
-+		$(HOST_DIR)/usr/bin/python setup.py build \
-+		$(PKG_PYTHON_DISTUTILS_BUILD_OPTS))
-+endef
-+I2C_TOOLS_POST_BUILD_HOOKS += I2C_TOOLS_BUILD_PYSMBUS
-+
-+define I2C_TOOLS_INSTALL_PYSMBUS
-+	(cd $(@D)/py-smbus; \
-+	$(I2C_TOOLS_PYTHON_BASE_ENV) \
-+		$(HOST_DIR)/usr/bin/python setup.py install \
-+		$(PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS))
-+endef
-+I2C_TOOLS_POST_INSTALL_TARGET_HOOKS += I2C_TOOLS_INSTALL_PYSMBUS
-+endif
-+
- $(eval $(generic-package))
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 6b0aea1b6cff5a9d3898e5a4eb1f79044b77ebed:
+
+  python-coherence: fix legal-info (2015-04-05 21:28:15 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/dl-hash-toolchains
+
+for you to fetch changes up to 43e395ce9736f82fb6574be4d9ddba48f242753e:
+
+  support/download: do not warn about missing hash file for repositories (2015-04-05 22:53:38 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      support/download: add possibility to not fail on missing hash
+      toolchain/external: ignore missing hash for custom downloaded toolchain
+      support/download: restore mandatory check of hashes
+      support/download: do not warn about missing hash file for repositories
+
+ package/pkg-download.mk                            |  4 ++++
+ support/download/check-hash                        | 12 ++++++++++--
+ toolchain/toolchain-external/toolchain-external.mk |  2 ++
+ 3 files changed, 16 insertions(+), 2 deletions(-)
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
