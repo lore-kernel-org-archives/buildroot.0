@@ -1,102 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Apr 2015 18:04:17 +0200
-Subject: [Buildroot] [git commit] gpm: add patch to fix build with the musl
-	C library
-Message-ID: <20150405160508.ABB4781940@busybox.osuosl.org>
+Date: Sun, 5 Apr 2015 18:12:56 +0200
+Subject: [Buildroot] [git commit] libtirpc: turn last patch into a Git
+	formatted patch
+Message-ID: <20150405161344.1DEE381941@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8ef3af9fdf0ee0effa922fd6eef1daf9160a6f04
+commit: http://git.buildroot.net/buildroot/commit/?id=47e9cde426e20866701e6bcad42882151f3c64cb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backported from upstream Git repository.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/a4b/a4b076d2750056710ab85e364e9e2c687af971cc/
+This commit modifies the last libtirpc patch to be a Git formatted
+patch, i.e that can easily be imported using 'git am'.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ded-musl-support-to-libgpm-and-the-daemon.patch |   71 ++++++++++++++++++++
- 1 files changed, 71 insertions(+), 0 deletions(-)
+ ...-config-needs-pthread-as-private-library.patch} |   23 ++++++++++++++-----
+ 1 files changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/package/gpm/0001-Added-musl-support-to-libgpm-and-the-daemon.patch b/package/gpm/0001-Added-musl-support-to-libgpm-and-the-daemon.patch
-new file mode 100644
-index 0000000..1e1e919
---- /dev/null
-+++ b/package/gpm/0001-Added-musl-support-to-libgpm-and-the-daemon.patch
-@@ -0,0 +1,71 @@
-+From eb0e14f8a5c414603b2e882df54b9fec138104ec Mon Sep 17 00:00:00 2001
-+From: Dima Krasner <dima@dimakrasner.com>
-+Date: Wed, 12 Nov 2014 23:06:46 +0200
-+Subject: [PATCH] Added musl support to libgpm and the daemon.
-+
-+[Upstream patch backported from the github repository,
-+https://github.com/telmich/gpm/commit/d88fb1de5803c366ab62f7de9ee5d83207fb2afe.]
-+
+diff --git a/package/libtirpc/0007-needs-pthread.patch b/package/libtirpc/0007-pkg-config-needs-pthread-as-private-library.patch
+similarity index 50%
+rename from package/libtirpc/0007-needs-pthread.patch
+rename to package/libtirpc/0007-pkg-config-needs-pthread-as-private-library.patch
+index 6cdf98a..f83b9e2 100644
+--- a/package/libtirpc/0007-needs-pthread.patch
++++ b/package/libtirpc/0007-pkg-config-needs-pthread-as-private-library.patch
+@@ -1,4 +1,7 @@
+-pkg-config: needs pthread as private library
++From 308705710d40ced3ea2a913d24ab99cc61bef01f Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 5 Apr 2015 18:11:25 +0200
++Subject: [PATCH] pkg-config: needs pthread as private library
+ 
+ libtirpc needs pthreads. This is automatically pulled in when linking
+ with the shared library, thanks to the DT_NEEDED ELF tags.
+@@ -9,17 +12,25 @@ required libraries.
+ Thus, add -pthread to the private libraries in the pkg-config file.
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+ ---
+ Patch sent upstream:
+     http://sourceforge.net/p/libtirpc/mailman/message/33072076/
+ 
+-diff -durN libtirpc-0.2.4.orig/libtirpc.pc.in libtirpc-0.2.4/libtirpc.pc.in
+---- libtirpc-0.2.4.orig/libtirpc.pc.in	2013-12-09 21:59:51.000000000 +0100
+-+++ libtirpc-0.2.4/libtirpc.pc.in	2014-11-23 14:02:58.677760108 +0100
+-@@ -8,4 +8,5 @@
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ src/daemon/open_console.c  | 1 +
-+ src/prog/display-buttons.c | 1 +
-+ src/prog/display-coords.c  | 1 +
-+ src/prog/gpm-root.y        | 4 ++--
-+ 4 files changed, 5 insertions(+), 2 deletions(-)
++ libtirpc.pc.in | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/src/daemon/open_console.c b/src/daemon/open_console.c
-+index 98297c9..4d6c0af 100644
-+--- a/src/daemon/open_console.c
-++++ b/src/daemon/open_console.c
-+@@ -21,6 +21,7 @@
-+ 
-+ #include <fcntl.h>                  /* open and co.      */
-+ #include <sys/stat.h>               /* stat()            */
-++#include <sys/types.h>              /* major()           */
-+ #include <sys/ioctl.h>              /* ioctl             */
-+ 
-+ /* Linux specific (to be outsourced in gpm2 */
-+diff --git a/src/prog/display-buttons.c b/src/prog/display-buttons.c
-+index de8e5b2..38d2f11 100644
-+--- a/src/prog/display-buttons.c
-++++ b/src/prog/display-buttons.c
-+@@ -36,6 +36,7 @@
-+ #include <stdio.h>            /* printf()             */
-+ #include <time.h>             /* time()               */
-+ #include <errno.h>            /* errno                */
-++#include <sys/select.h>       /* fd_set and FD_*      */
-+ #include <gpm.h>              /* gpm information      */
-+ 
-+ /* display resulting data */
-+diff --git a/src/prog/display-coords.c b/src/prog/display-coords.c
-+index ed15c8a..411283a 100644
-+--- a/src/prog/display-coords.c
-++++ b/src/prog/display-coords.c
-+@@ -37,6 +37,7 @@
-+ #include <stdio.h>            /* printf()             */
-+ #include <time.h>             /* time()               */
-+ #include <errno.h>            /* errno                */
-++#include <sys/select.h>       /* fd_set and FD_*      */
-+ #include <gpm.h>              /* gpm information      */
-+ 
-+ /* display resulting data */
-+diff --git a/src/prog/gpm-root.y b/src/prog/gpm-root.y
-+index 069d801..188ae35 100644
-+--- a/src/prog/gpm-root.y
-++++ b/src/prog/gpm-root.y
-+@@ -1199,9 +1199,9 @@ int main(int argc, char **argv)
-+ #if defined(__GLIBC__)
-+    __sigemptyset(&childaction.sa_mask);
-+ #else /* __GLIBC__ */
-+-   childaction.sa_mask=0;
-++   sigemptyset(&childaction.sa_mask);
-+ #endif /* __GLIBC__ */
-+-   childaction.sa_flags=SA_INTERRUPT; /* need to break the select() call */
-++   childaction.sa_flags=0;
-+    sigaction(SIGCHLD,&childaction,NULL);
-+ 
-+    /*....................................... Connect and get your buffer */
++diff --git a/libtirpc.pc.in b/libtirpc.pc.in
++index ec4cf75..1dc85ea 100644
++--- a/libtirpc.pc.in
+++++ b/libtirpc.pc.in
++@@ -8,4 +8,5 @@ Description: Transport Independent RPC Library
+  Requires:
+  Version: @PACKAGE_VERSION@
+  Libs: -L at libdir@ -ltirpc
+ +Libs.private: -pthread
+  Cflags: -I at includedir@/tirpc
 +-- 
 +2.1.0
 +
