@@ -1,48 +1,32 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun,  5 Apr 2015 17:33:45 +0300
-Subject: [Buildroot] [PATCH] ncurses: symlink include directory in WCHAR
-	build
-Message-ID: <276f85257fbbca568c2056c3f4c7575f2501ccbe.1428244425.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Apr 2015 16:34:51 +0200
+Subject: [Buildroot] [PATCH v6] leveldb: new package
+In-Reply-To: <1421146437-17829-1-git-send-email-ste@junkomatic.net>
+References: <1421146437-17829-1-git-send-email-ste@junkomatic.net>
+Message-ID: <20150405163451.31dbe84d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages, like procps-ng, expect the wchar version of ncurses headers
-under the ncursesw directory. Add a symlink to the real location of the
-headers to satisfy this requirement.
+Dear Steve James,
 
-Fixes:
-http://autobuild.buildroot.net/results/3b3/3b38e0f3163f0a45b487d30530ecef024555bfa8/
+On Tue, 13 Jan 2015 10:53:57 +0000, Steve James wrote:
+> Signed-off-by: Steve James <ste@junkomatic.net>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/ncurses/ncurses.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+Applied, thanks, after doing some small changes:
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 8368c690b606..f66ed2c8c44c 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -94,6 +94,10 @@ NCURSES_LINK_STAGING_LIBS = \
- 
- NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC,$(STAGING_DIR))
- 
-+define NCURSES_WIDE_HEADERS_DIR
-+	ln -sf . $(STAGING_DIR)/usr/include/ncursesw
-+endef
-+
- NCURSES_CONF_OPTS += --enable-ext-colors
- NCURSES_ABI_VERSION = 6
- define NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO
-@@ -103,6 +107,7 @@ endef
- 
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
-+NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_WIDE_HEADERS_DIR
- 
- else # BR2_PACKAGE_NCURSES_WCHAR
- NCURSES_ABI_VERSION = 5
+    [Thomas:
+      - remove 003-allow-flags-from-environment.patch, and pass
+        TARGET_CONFIGURE_OPTS in the environment instead.
+      - convert the patches to Git formatted patches.
+      - use the v1.18 tag instead of a commit hash.
+      - do not pass TARGET_CONFIGURE_OPTS at install time, this is not
+        needed.]
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
