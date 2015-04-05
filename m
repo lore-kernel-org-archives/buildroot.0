@@ -1,32 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Apr 2015 16:34:51 +0200
-Subject: [Buildroot] [PATCH v6] leveldb: new package
-In-Reply-To: <1421146437-17829-1-git-send-email-ste@junkomatic.net>
-References: <1421146437-17829-1-git-send-email-ste@junkomatic.net>
-Message-ID: <20150405163451.31dbe84d@free-electrons.com>
+Date: Sun, 5 Apr 2015 17:24:50 +0200
+Subject: [Buildroot] [git commit] lirc-tools: add host-pkgconf dependency
+Message-ID: <20150405152520.C77928175F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve James,
+commit: http://git.buildroot.net/buildroot/commit/?id=bcfa8e1ff31a5f74be2c780dc845fbb71b393f4d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 13 Jan 2015 10:53:57 +0000, Steve James wrote:
-> Signed-off-by: Steve James <ste@junkomatic.net>
+Otherwise, the configure script fails with "Required program
+pkg-config is missing".
 
-Applied, thanks, after doing some small changes:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lirc-tools/lirc-tools.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-    [Thomas:
-      - remove 003-allow-flags-from-environment.patch, and pass
-        TARGET_CONFIGURE_OPTS in the environment instead.
-      - convert the patches to Git formatted patches.
-      - use the v1.18 tag instead of a commit hash.
-      - do not pass TARGET_CONFIGURE_OPTS at install time, this is not
-        needed.]
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
+index af332ea..6837042 100644
+--- a/package/lirc-tools/lirc-tools.mk
++++ b/package/lirc-tools/lirc-tools.mk
+@@ -9,6 +9,7 @@ LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
+ LIRC_TOOLS_SITE = http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)/
+ LIRC_TOOLS_LICENSE = GPLv2+
+ LIRC_TOOLS_LICENSE_FILES = COPYING
++LIRC_TOOLS_DEPENDENCIES = host-pkgconf
+ 
+ LIRC_TOOLS_CONF_OPTS = \
+ 	--without-x \
