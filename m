@@ -1,32 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Apr 2015 11:05:08 +0200
-Subject: [Buildroot] [git commit] ipmiutil: only make available for x86
-In-Reply-To: <20150404224203.64C81818DE@busybox.osuosl.org>
-References: <20150404224203.64C81818DE@busybox.osuosl.org>
-Message-ID: <20150405110508.6077a06a@free-electrons.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Sun, 05 Apr 2015 11:10:53 +0200
+Subject: [Buildroot] [RFC 2/4] gpu-viv-bin-mx6q: is a libgl provider
+In-Reply-To: <20150404184803.31434bd7@free-electrons.com>
+References: <1421839408-15839-1-git-send-email-jezz@sysmic.org>
+ <1421839408-15839-3-git-send-email-jezz@sysmic.org>
+ <20150404184803.31434bd7@free-electrons.com>
+Message-ID: <3078796.2A5JP7VBLH@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Hello Thomas,
 
-On Sun, 5 Apr 2015 00:41:32 +0200, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=9b38f10c074be00c9bcc90330ce302f3b41d6b2f
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Saturday 04 April 2015 18:48:03 Thomas Petazzoni wrote:
+> Dear J?r?me Pouiller,
 > 
-> IPMI is a Intel/PC spec, so it doesn't make much sense to build on !x86 -
-> And ipmiutil uses sys/io.h and inb()/outb() which isn't supported on all
-> architectures, so limit to x86 like we do for acpid.
+> On Wed, 21 Jan 2015 12:23:26 +0100, J?r?me Pouiller wrote:
+> 
+> > -GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
+> > +GPU_VIV_BIN_MX6Q_DEPENDENCIES = opengl-registry
+> > +GPU_VIV_BIN_MX6Q_PROVIDES = libgl libegl libgles libopenvg
+> >  GPU_VIV_BIN_MX6Q_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT))
+> 
+> In the end, opengl-registry was never added, we preferred using the
+> mesa3d headers instead, through the mesa3d-headers package.
+> 
+> Can you respin this patch and resend a new version accordingly?
+This task is in my todo list for some months. I increase its priority.
 
-It actually does build fine on ARM, though I agree it probably doesn't
-make a lot of sense to have ipmiutil on something else than x86/x86-64.
-
-Thanks for fixing this!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
