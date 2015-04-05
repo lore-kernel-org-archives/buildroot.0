@@ -1,34 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Apr 2015 21:28:15 +0200
-Subject: [Buildroot] [git commit] python-coherence: fix legal-info
-Message-ID: <20150405192929.2969B8195E@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 5 Apr 2015 22:35:31 +0300
+Subject: [Buildroot] [PATCH 1/1] i2c-tools: add support to build python
+ extension
+In-Reply-To: <CALq67GDTrohkUMGPYNv+iWvgZKXAfyJ9ADpc9G5RvPPMpUOmRw@mail.gmail.com>
+References: <1428259675-7116-1-git-send-email-ryanbarnett3@gmail.com>
+ <20150405191324.GB2183@tarshish>
+ <CALq67GDTrohkUMGPYNv+iWvgZKXAfyJ9ADpc9G5RvPPMpUOmRw@mail.gmail.com>
+Message-ID: <20150405193531.GC2183@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b0aea1b6cff5a9d3898e5a4eb1f79044b77ebed
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Ryan,
 
-Typo in license file name.
+On Sun, Apr 05, 2015 at 02:22:15PM -0500, Ryan Barnett wrote:
+> On Sun, Apr 5, 2015 at 2:13 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> > On Sun, Apr 05, 2015 at 01:47:55PM -0500, Ryan Barnett wrote:
+> >> +config BR2_PACKAGE_I2C_TOOLS_PYSMBUS
+> >
+> > I don't think another config option is necessary. The size of i2c-tools python
+> > binding is negligible when compared to the size of python itself.
+> 
+> Good point. So do I still keep a comment there about py-smbus not
+> being enabled unless python is selected? Otherwise someone might not
+> know that i2c-tools has the python bindings which is why I had the
+> config option to begin with.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-coherence/python-coherence.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I think it is reasonable to expect users looking for a python binding to 
+enable python itself first.
 
-diff --git a/package/python-coherence/python-coherence.mk b/package/python-coherence/python-coherence.mk
-index 301885b..f9df37c 100644
---- a/package/python-coherence/python-coherence.mk
-+++ b/package/python-coherence/python-coherence.mk
-@@ -8,7 +8,7 @@ PYTHON_COHERENCE_VERSION = 0.6.6.2
- PYTHON_COHERENCE_SITE = $(call github,coherence-project,Coherence,Coherence-$(PYTHON_COHERENCE_VERSION))
- PYTHON_COHERENCE_SETUP_TYPE = setuptools
- PYTHON_COHERENCE_LICENSE = MIT
--PYTHON_COHERENCE_LICENSE_FILES = LICENSE
-+PYTHON_COHERENCE_LICENSE_FILES = LICENCE
- PYTHON_COHERENCE_DEPENDENCIES = python-twisted python-zope-interface python-pyasn
- 
- $(eval $(python-package))
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
