@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Apr 2015 18:53:55 +0200
-Subject: [Buildroot] [git commit] package/python-cherrypy: fix legal-info
-Message-ID: <20150405171514.54A907F8D7@busybox.osuosl.org>
+Date: Sun, 5 Apr 2015 19:12:08 +0200
+Subject: [Buildroot] [git commit] package/linux-firmware: fix legal-info
+Message-ID: <20150405171514.736FB7F8D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8077d2367c524360daab5353090ca1ae0821dd2e
+commit: http://git.buildroot.net/buildroot/commit/?id=dd6919e33d4b6b32c25f0a3cd366d1317846017a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Sorry, I was not careful enough when reworking the radeon parts...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-cherrypy/python-cherrypy.mk |    2 +-
+ package/linux-firmware/linux-firmware.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
-index a08b21a..a07f9ed 100644
---- a/package/python-cherrypy/python-cherrypy.mk
-+++ b/package/python-cherrypy/python-cherrypy.mk
-@@ -8,7 +8,7 @@ PYTHON_CHERRYPY_VERSION = 3.6.0
- PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
- PYTHON_CHERRYPY_SITE = http://pypi.python.org/packages/source/C/CherryPy
- PYTHON_CHERRYPY_LICENSE = BSD-3c
--PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.txt
-+PYTHON_CHERRYPY_LICENSE_FILES = cherrypy/LICENSE.txt
- PYTHON_CHERRYPY_SETUP_TYPE = distutils
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 0919b16..9acfc53 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -16,7 +16,7 @@ endif
  
- $(eval $(python-package))
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RADEON),y)
+ LINUX_FIRMWARE_DIRS += radeon
+-LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.radeon
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.radeon
+ endif
+ 
+ # rt2501/rt61
