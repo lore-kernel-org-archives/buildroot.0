@@ -1,60 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Apr 2015 22:56:19 +0200
-Subject: [Buildroot] [PATCH 0/4 v2] toolchain/external: do not fail on
-	missing hash for custom downloaded toolchain (branch
-	yem/dl-hash-toolchains)
-Message-ID: <cover.1428267362.git.yann.morin.1998@free.fr>
+Date: Sun,  5 Apr 2015 22:56:20 +0200
+Subject: [Buildroot] [PATCH 1/4 v2] support/download: add possibility to not
+	fail on missing hash
+In-Reply-To: <cover.1428267362.git.yann.morin.1998@free.fr>
+References: <cover.1428267362.git.yann.morin.1998@free.fr>
+Message-ID: <b2fd5baf7f11dc7028535eabfc1b57f51106cccf.1428267362.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+In very constrained cases, it might be needed to not fail if a hash is
+missing. This is notably the case for custom external toolchains to be
+downloaded, because we do have a .hash file for external toolchains,
+but we oviously can not have hashes for all existing cutom toolchains
+(he, "custom"!).
 
-This series makes it so we can download custom external toolchains, and
-still have mandatory checks of hashes.
+So, add a way to avoid failing in that case.
 
-It also fixes a slightly annoying warning message when downloading from
-a repository.
+We use a magic value depending on the file to be downloaded, instead of
+yes/no, to avoid any accidental use. We also do not document it, because
+we do not want users to use it, and even more, to rely on it, since we
+still have hopes to get rid of that in the future.
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
+---
 Changes v1 -> v2:
-  - fix a few typoes
+  - fix typoes in commit log
+---
+ package/pkg-download.mk     | 4 ++++
+ support/download/check-hash | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 6b0aea1b6cff5a9d3898e5a4eb1f79044b77ebed:
-
-  python-coherence: fix legal-info (2015-04-05 21:28:15 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/dl-hash-toolchains
-
-for you to fetch changes up to 43e395ce9736f82fb6574be4d9ddba48f242753e:
-
-  support/download: do not warn about missing hash file for repositories (2015-04-05 22:53:38 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      support/download: add possibility to not fail on missing hash
-      toolchain/external: ignore missing hash for custom downloaded toolchain
-      support/download: restore mandatory check of hashes
-      support/download: do not warn about missing hash file for repositories
-
- package/pkg-download.mk                            |  4 ++++
- support/download/check-hash                        | 12 ++++++++++--
- toolchain/toolchain-external/toolchain-external.mk |  2 ++
- 3 files changed, 16 insertions(+), 2 deletions(-)
-
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index e274712..1e080e5 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -60,6 +60,10 @@ domainseparator = $(if $(1),$(1),/)
+ # github(user,package,version): returns site of GitHub repository
+ github = https://github.com/$(1)/$(2)/archive/$(3)
+ 
++# Compute magic value to ignore a missing hash
++# $1: filename, without path components
++ignore-missing-hash-magic = $(shell sha1sum <<<"$(1)" |cut -d ' ' -f 1)
++
+ ################################################################################
+ # The DOWNLOAD_* helpers are in charge of getting a working copy
+ # of the source repository for their corresponding SCM,
+diff --git a/support/download/check-hash b/support/download/check-hash
+index 67c1780..1276290 100755
+--- a/support/download/check-hash
++++ b/support/download/check-hash
+@@ -95,6 +95,10 @@ while read t h f; do
+ done <"${h_file}"
+ 
+ if [ ${nb_checks} -eq 0 ]; then
++    if [ "${BR_MISSING_HASH_OK}" = "$(sha1sum <<<"${base}" |cut -d ' ' -f 1)" ]; then
++        printf "WARNING: ignored missing hash for %s\n" "${base}" >&2
++        exit 0
++    fi
+     printf "ERROR: No hash found for %s\n" "${base}" >&2
+     exit 0
+ fi
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
