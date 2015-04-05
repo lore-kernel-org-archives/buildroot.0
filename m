@@ -1,32 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Apr 2015 11:45:14 +0200
-Subject: [Buildroot] [PATCH v5 1/1] tovid: new package
-In-Reply-To: <1427038513-5368-1-git-send-email-skenton@ou.edu>
-References: <1427038513-5368-1-git-send-email-skenton@ou.edu>
-Message-ID: <20150405114514.355707a4@free-electrons.com>
+Date: Sun, 5 Apr 2015 11:46:24 +0200
+Subject: [Buildroot] [PATCH 1/5 v2] package infra: add patch-dependencies
+In-Reply-To: <20150405091656.GC4134@free.fr>
+References: <cover.1426342904.git.yann.morin.1998@free.fr>
+ <a51d416e81f55374ba749baa81222bfe0c52782b.1426342904.git.yann.morin.1998@free.fr>
+ <20150404154705.4be3e45d@free-electrons.com>
+ <20150405091656.GC4134@free.fr>
+Message-ID: <20150405114624.1077fb67@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Kenton,
+Dear Yann E. MORIN,
 
-On Sun, 22 Mar 2015 10:35:13 -0500, Steve Kenton wrote:
-> The tovid suite, also known simply as tovid, is a collection of shell
-> and Python scripts for creating DVDs and (S)VCDs. It is pronounced
-> "to vid" (because it converts to video disc formats).
+On Sun, 5 Apr 2015 11:16:56 +0200, Yann E. MORIN wrote:
+
+> > I think this will break graph-depends. The python script will do "make
+> > <foo>-show-depends" for each package. Now this will return things such
+> > as "xenomai-patch"
 > 
-> Signed-off-by: Steve Kenton <skenton@ou.edu>
+> No, I don't think so, because _PATCH_DEPENDENCIES contain package names,
+> not or internal make targets. And I can prove it:
+> 
+>     $ make linux-show-depends
+>     fbtft host-kmod host-lzop toolchain
+> 
+> where fbtft is a kernel extension.
 
-Applied, with some minor changes:
+Yes, sorry, Romain explained to me on IRC where I was wrong.
 
-    [Thomas:
-      - remove largefile dependency
-      - properly propagate mplayer and ffmpeg dependencies.
-      - fix license: it's GPLv2+, not GPLv2.]
+> Have you even tried it?  ;-p
 
-Thanks,
+No, I only did a review.
+
+> Well, I don;t mind getting rid of the separate show-{build,patch}-depends
+> rules. But your proposal is wrong, since we do not have to get rid of
+> the trailing -patch, because it's not in there...
+
+Correct. I believe the show-{build,patch}-depends are not useful,
+though.
+
+I'll apply this series.
+
+Thanks!
 
 Thomas
 -- 
