@@ -1,44 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Apr 2015 22:56:21 +0200
-Subject: [Buildroot] [PATCH 2/4 v2] toolchain/external: ignore missing hash
-	for custom downloaded toolchain
+Date: Sun,  5 Apr 2015 22:56:23 +0200
+Subject: [Buildroot] [PATCH 4/4 v2] support/download: do not warn about
+	missing hash file for repositories
 In-Reply-To: <cover.1428267362.git.yann.morin.1998@free.fr>
 References: <cover.1428267362.git.yann.morin.1998@free.fr>
-Message-ID: <5546fde6ea4361ee957500e77ae1c09b1587c2f6.1428267362.git.yann.morin.1998@free.fr>
+Message-ID: <43e395ce9736f82fb6574be4d9ddba48f242753e.1428267362.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We will *always* be missing a hash file for custom external toolchains
-that are downloaded.
+When downloading from a repository, we explicitly pass no hash file,
+because we can't check hashes in that case.
 
-So, just ignore that failure.
+However, we're still printing a message that there is a missign hash
+file.
+
+Beside being a bit annoying (since we can't do anything about it), it
+may also be wrong, especially for packages for which we support multiple
+versions, with some being downloaded via a git clone and others as
+tarballs.
+
+Just print no warning when the path to the hash file is empty.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 ---
-Changes v1 -> v2:
-  - fix typoes in title
+Changes v1 -> v2;
+  - fix typoes in commit log
 ---
- toolchain/toolchain-external/toolchain-external.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ support/download/check-hash | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index c0429bb..3659511 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -400,6 +400,8 @@ else
- # Custom toolchain
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
-+# Magic value to tell the download helper to avoid failling on missing hash
-+export BR_MISSING_HASH_OK := $(call ignore-missing-hash-magic,$(TOOLCHAIN_EXTERNAL_SOURCE))
- endif
+diff --git a/support/download/check-hash b/support/download/check-hash
+index c24d26b..96d12a5 100755
+--- a/support/download/check-hash
++++ b/support/download/check-hash
+@@ -31,8 +31,12 @@ h_file="${1}"
+ file="${2}"
+ base="${3}"
  
- # In fact, we don't need to download the toolchain, since it is already
++# Bail early if no hash to check
++if [ -z "${h_file}" ]; then
++    exit 0
++fi
+ # Does the hash-file exist?
+-if [ -z "${h_file}" -o ! -f "${h_file}" ]; then
++if [ ! -f "${h_file}" ]; then
+     printf "WARNING: no hash file for %s\n" "${base}" >&2
+     exit 0
+ fi
 -- 
 1.9.1
