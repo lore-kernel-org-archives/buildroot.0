@@ -1,130 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Apr 2015 23:10:01 +0200
-Subject: [Buildroot] [PATCH v2 2/2] i2c-tools: add support to build
- python extension
-In-Reply-To: <1428263326-10320-2-git-send-email-ryanbarnett3@gmail.com>
-References: <1428263326-10320-1-git-send-email-ryanbarnett3@gmail.com>
- <1428263326-10320-2-git-send-email-ryanbarnett3@gmail.com>
-Message-ID: <20150405211001.GH4134@free.fr>
+Date: Sun, 5 Apr 2015 23:20:28 +0200
+Subject: [Buildroot] [PATCH/RFC 03/27] package/kodi: bump version to
+ 15.0 Alpha2-Isengard
+In-Reply-To: <20150404184448.3fea759b@free-electrons.com>
+References: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
+ <1427913380-14808-4-git-send-email-bernd.kuhls@t-online.de>
+ <20150404184448.3fea759b@free-electrons.com>
+Message-ID: <20150405212028.GI4134@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan, All,
+Thomas, All,
 
-On 2015-04-05 14:48 -0500, Ryan Barnett spake thusly:
-> Add a config option to build the python bindings for i2c-tools -
-> py-smbus. The steps for building the python bindings is the same as
-> the distutil steps that are a part of the python infrastructure.
+On 2015-04-04 18:44 +0200, Thomas Petazzoni spake thusly:
+> On Wed,  1 Apr 2015 20:35:56 +0200, Bernd Kuhls wrote:
+> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> > ---
+> >  package/kodi/0001-Fixup-include-path.patch |   20 --------------
+> >  package/kodi/0002-texturepacker.patch      |   12 ++++++++
+> >  package/kodi/0003-lirc-PR6783.patch        |   41 ++++++++++++++++++++++++++++
+> >  package/kodi/Config.in                     |   15 +++++-----
+> >  package/kodi/kodi.mk                       |   33 ++++++++++++----------
+> >  5 files changed, 78 insertions(+), 43 deletions(-)
+> >  create mode 100644 package/kodi/0002-texturepacker.patch
+> >  create mode 100644 package/kodi/0003-lirc-PR6783.patch
 > 
-> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-> CC: Tjeerd Pinkert <t.j.pinkert@vu.nl>
-> CC: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> CC: Baruch Siach <baruch@tkos.co.il>
-> 
-> ---
-> Changes v1 -> v2:
->  - Fixed spelling in config entry
->  - Utilize the python infrastructure variables for environment and
->    build/install opts (suggested by Thomas P)
->  - Only support python2.7 since this is not compatabile with python3
->    (suggested by Baruch)
-> ---
->  package/i2c-tools/Config.in    | 13 +++++++++++++
->  package/i2c-tools/i2c-tools.mk | 27 +++++++++++++++++++++++++++
->  2 files changed, 40 insertions(+)
-> 
-> diff --git a/package/i2c-tools/Config.in b/package/i2c-tools/Config.in
-> index e83dbd6..6426f30 100644
-> --- a/package/i2c-tools/Config.in
-> +++ b/package/i2c-tools/Config.in
-> @@ -8,3 +8,16 @@ config BR2_PACKAGE_I2C_TOOLS
->  	  EEPROM decoding scripts, and more.
->  
->  	  http://www.lm-sensors.org/wiki/I2CTools
-> +
-> +if BR2_PACKAGE_I2C_TOOLS
-> +
-> +config BR2_PACKAGE_I2C_TOOLS_PYSMBUS
-> +	bool "py-smbus"
-> +	depends on BR2_PACKAGE_PYTHON
-> +	help
-> +	  Python bindings to smbus from the i2c-tools package.
+> Do you know when the final release of Kodi 15.0 is planned? The next
+> Buildroot version will be 2015.05, with a feature freeze at the end of
+> April. Will Kodi 15.0 final be released by then? It would be a bit
+> weird to have a stable Buildroot release with an Alpha version of Kodi
+> packaged.
 
-Well, like Baruch said, I would not add such option, and just build the
-Python binding if Python is enabled.
+From the cover letter:
+    "this series is a RFC and not meant for committing to buildroot."
 
-> +comment "i2c-tools py-smbus depends on python2"
-> +	depends on !BR2_PACKAGE_PYTHON
-> +
-> +endif
-> diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-> index 0115e22..ec2995f 100644
-> --- a/package/i2c-tools/i2c-tools.mk
-> +++ b/package/i2c-tools/i2c-tools.mk
-> @@ -21,4 +21,31 @@ define I2C_TOOLS_INSTALL_TARGET_CMDS
->  	done
->  endef
->  
-> +# BASE_ENV taken from PKG_PYTHON_DISTUTILS_ENV in package/pkg-python.mk
-> +I2C_TOOLS_PYTHON_BASE_ENV = \
-> +	$(PKG_PYTHON_DISTUTILS_ENV) \
-> +	CFLAGS="$(TARGET_CFLAGS) -I../include"
+Bernd is doing quite a good job at providing "snapshots" of his bump of
+Kodi (yeah, I don't have to do it! :-) ), so we can review and fix the
+issues, so that when the final version is finally cut, integrating in
+Buildroot would be quite easy.
 
-Move this define into the conditional, below.
-
-> +# Build/install steps mirror the distutil python package type in the python package
-> +# infrastructure
-> +ifeq ($(BR2_PACKAGE_I2C_TOOLS_PYSMBUS),y)
-
-Since you'd no longer have an option to enable py-smbus, that
-conditional would become:
-
-    ifeq ($(BR2_PACKAGE_PYTHON),y)
-
-Also, empty line after the ifeq.
-
-> +I2C_TOOLS_DEPENDENCIES += python
-> +
-> +define I2C_TOOLS_BUILD_PYSMBUS
-> +	(cd $(@D)/py-smbus;  \
-> +	$(I2C_TOOLS_PYTHON_BASE_ENV) \
-> +		$(HOST_DIR)/usr/bin/python setup.py build \
-> +		$(PKG_PYTHON_DISTUTILS_BUILD_OPTS))
-> +endef
-> +I2C_TOOLS_POST_BUILD_HOOKS += I2C_TOOLS_BUILD_PYSMBUS
-
-I'd keep the define, ditch the hook, and shoehorn the macro directly
-into the build commands, since this is a generic package:
-
-    define I2C_TOOLS_BUILD_CMDS
-        $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-        $(I2C_TOOLS_BUILD_PYSMBUS)
-    endef
-
-> +define I2C_TOOLS_INSTALL_PYSMBUS
-> +	(cd $(@D)/py-smbus; \
-> +	$(I2C_TOOLS_PYTHON_BASE_ENV) \
-> +		$(HOST_DIR)/usr/bin/python setup.py install \
-> +		$(PKG_PYTHON_DISTUTILS_INSTALL_TARGET_OPTS))
-> +endef
-> +I2C_TOOLS_POST_INSTALL_TARGET_HOOKS += I2C_TOOLS_INSTALL_PYSMBUS
-
-Ditto, include that directly in the install commands.
-
-> +endif
-
-I like it when there is a comment after the endif, refering to the
-corresponding ifeq:
-
-    endif  # BR2_PACKAGE_PYTHON
-
-This helps when the conditional block if more than a few lines long.
-
-Also, empty line before the endif.
+I'll try to get some time to review the series (I already spot some
+issues in the first few commits).
 
 Regards,
 Yann E. MORIN.
