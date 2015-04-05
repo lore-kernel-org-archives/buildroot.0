@@ -1,49 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Apr 2015 11:22:44 +0200
-Subject: [Buildroot] [git commit] systemd: needs 3.10+ kernel headers
-Message-ID: <20150405092340.638128191D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Apr 2015 11:28:40 +0200
+Subject: [Buildroot] [RFC 2/4] gpu-viv-bin-mx6q: is a libgl provider
+In-Reply-To: <3078796.2A5JP7VBLH@sagittea>
+References: <1421839408-15839-1-git-send-email-jezz@sysmic.org>
+ <1421839408-15839-3-git-send-email-jezz@sysmic.org>
+ <20150404184803.31434bd7@free-electrons.com>
+ <3078796.2A5JP7VBLH@sagittea>
+Message-ID: <20150405112840.79cfc4ba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5749d9a695daeb3a1fd1b8afb3a45fb2e759a66a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear J?r?me Pouiller,
 
-Fixes:
-http://autobuild.buildroot.net/results/f51/f510014600bc7d1e3cf81ff53268d186c8b417b8/
-http://autobuild.buildroot.net/results/278/278a60a1569eb57773945281b102a0495ff32775/
-http://autobuild.buildroot.net/results/083/083f9579893185d93c591d171b39d8e068b21412/
-http://autobuild.buildroot.net/results/03a/03a96697aa72b69546d61e56d1285bb50b0633d9/
+On Sun, 05 Apr 2015 11:10:53 +0200, J?r?me Pouiller wrote:
 
-And many more.
+> > Can you respin this patch and resend a new version accordingly?
+> This task is in my todo list for some months. I increase its priority.
 
-Systemd needs NDA_PORT/VNI/IFINDEX from linux/neighbour.h, which were added
-in 3.10 (6681712d: vxlan: generalize forwarding tables).
+Great, thanks!
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- system/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+For your patches that haven't been merged yet, do not hesitate to
+resend them regularly, at least after a new release is made.
 
-diff --git a/system/Config.in b/system/Config.in
-index 3516056..935f7a1 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -95,12 +95,12 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_TOOLCHAIN_HAS_SSP
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- 	select BR2_PACKAGE_SYSTEMD
- 
--comment 'systemd needs an (e)glibc toolchain, headers >= 3.7'
-+comment 'systemd needs an (e)glibc toolchain, headers >= 3.10'
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
--		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7)
-+		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
- 
- config BR2_INIT_NONE
- 	bool "None"
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
