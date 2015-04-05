@@ -1,94 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun,  5 Apr 2015 18:26:06 +0300
-Subject: [Buildroot] [PATCH] lirc-tools: fix build with host python3
-Message-ID: <a17acfb3c3818b1ccc0c2a98ff8993574d83f001.1428247566.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Apr 2015 17:26:12 +0200
+Subject: [Buildroot] [git commit] drbd-utils: add dependency on host-flex
+Message-ID: <20150405152632.330E88191F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an upstream patch making make_rel_symlink.py python3 compatible and making
-python3 mandatory. Update lirc-tools dependencies accordingly.
+commit: http://git.buildroot.net/buildroot/commit/?id=e339f7eb39ccab8128e945927bbb99af065a0df2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-http://autobuild.buildroot.net/results/6c6/6c6e014a751650c16d25dfd3d673bd3199c72b2e/
-http://autobuild.buildroot.net/results/857/85724dfd014cec5a80dd18a635826daa2edc1417/
-http://autobuild.buildroot.net/results/a74/a74563f700a47065ffd1ba42c83c2d7722bacd89/
 
-and many others.
+  http://autobuild.buildroot.org/results/d8c/d8cbb888787401ddefadaea8dd239a651f3dbff1/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ools-Make-make_rel_symlink.py-use-python3.patch | 46 ++++++++++++++++++++++
- package/lirc-tools/lirc-tools.mk                   |  2 +
- 2 files changed, 48 insertions(+)
- create mode 100644 package/lirc-tools/0001-tools-Make-make_rel_symlink.py-use-python3.patch
+ package/drbd-utils/drbd-utils.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/lirc-tools/0001-tools-Make-make_rel_symlink.py-use-python3.patch b/package/lirc-tools/0001-tools-Make-make_rel_symlink.py-use-python3.patch
-new file mode 100644
-index 000000000000..3b5db2d6a644
---- /dev/null
-+++ b/package/lirc-tools/0001-tools-Make-make_rel_symlink.py-use-python3.patch
-@@ -0,0 +1,46 @@
-+From ae2e8cc85b6b4d2202e42d704dde8757ffd31da6 Mon Sep 17 00:00:00 2001
-+From: Alec Leamas <leamas.alec@gmail.com>
-+Date: Thu, 11 Dec 2014 04:44:49 +0100
-+Subject: [PATCH] tools: Make make_rel_symlink.py use python3.
-+
-+Upstream patch:
-+http://sourceforge.net/p/lirc/git/ci/ae2e8cc85b6b4d2202e42d704dde8757ffd31da6/
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ tools/make_rel_symlink.py | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/tools/make_rel_symlink.py b/tools/make_rel_symlink.py
-+index 5c893056f379..896637ff93e0 100755
-+--- a/tools/make_rel_symlink.py
-++++ b/tools/make_rel_symlink.py
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/env python
-++#!/usr/bin/env python3
-+ 
-+ import os
-+ import os.path
-+@@ -32,16 +32,16 @@ if sys.argv[1] == "-p":
-+     sys.argv = sys.argv[ 1:]
-+ 
-+ if len( sys.argv ) != 3:
-+-    print USAGE
-++    print(USAGE)
-+     sys.exit( 1 )
-+ 
-+ if  os.path.isdir(  sys.argv[2] ):
-+-    print "Removing link target dir:" +  sys.argv[2]
-++    print("Removing link target dir:" +  sys.argv[2])
-+     shutil.rmtree( sys.argv[2])
-+ 
-+ link_path = relative_ln_s( sys.argv[1], sys.argv[2] )
-+ if just_print:
-+-    print link_path
-++    print(link_path)
-+ else:
-+     os.chdir( os.path.dirname( sys.argv[2]))
-+     target = os.path.basename( sys.argv[2])
-+-- 
-+2.1.4
-+
-diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-index af332eaa763c..3e22fe449dfb 100644
---- a/package/lirc-tools/lirc-tools.mk
-+++ b/package/lirc-tools/lirc-tools.mk
-@@ -9,6 +9,8 @@ LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
- LIRC_TOOLS_SITE = http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)/
- LIRC_TOOLS_LICENSE = GPLv2+
- LIRC_TOOLS_LICENSE_FILES = COPYING
-+# For make_rel_symlink.py
-+LIRC_TOOLS_DEPENDENCIES = host-python3
+diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
+index 0da4b1f..5df5b81 100644
+--- a/package/drbd-utils/drbd-utils.mk
++++ b/package/drbd-utils/drbd-utils.mk
+@@ -8,6 +8,7 @@ DRBD_UTILS_VERSION = 8.9.1
+ DRBD_UTILS_SITE = http://oss.linbit.com/drbd/
+ DRBD_UTILS_LICENSE = GPLv2+
+ DRBD_UTILS_LICENSE_FILES = COPYING
++DRBD_UTILS_DEPENDENCIES = host-flex
  
- LIRC_TOOLS_CONF_OPTS = \
- 	--without-x \
--- 
-2.1.4
+ DRBD_UTILS_CONF_OPTS = --with-distro=generic
+ 
