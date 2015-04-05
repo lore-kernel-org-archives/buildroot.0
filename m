@@ -1,69 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Apr 2015 18:12:56 +0200
-Subject: [Buildroot] [git commit] libtirpc: turn last patch into a Git
-	formatted patch
-Message-ID: <20150405161344.1DEE381941@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  5 Apr 2015 18:48:23 +0200
+Subject: [Buildroot] [PATCH 0/6] legal-info: fix packages (branch yem/legal)
+Message-ID: <cover.1428252467.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=47e9cde426e20866701e6bcad42882151f3c64cb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-This commit modifies the last libtirpc patch to be a Git formatted
-patch, i.e that can easily be imported using 'git am'.
+This series fixes the 6 packages that have broken legal-info.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...-config-needs-pthread-as-private-library.patch} |   23 ++++++++++++++-----
- 1 files changed, 17 insertions(+), 6 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/libtirpc/0007-needs-pthread.patch b/package/libtirpc/0007-pkg-config-needs-pthread-as-private-library.patch
-similarity index 50%
-rename from package/libtirpc/0007-needs-pthread.patch
-rename to package/libtirpc/0007-pkg-config-needs-pthread-as-private-library.patch
-index 6cdf98a..f83b9e2 100644
---- a/package/libtirpc/0007-needs-pthread.patch
-+++ b/package/libtirpc/0007-pkg-config-needs-pthread-as-private-library.patch
-@@ -1,4 +1,7 @@
--pkg-config: needs pthread as private library
-+From 308705710d40ced3ea2a913d24ab99cc61bef01f Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 5 Apr 2015 18:11:25 +0200
-+Subject: [PATCH] pkg-config: needs pthread as private library
- 
- libtirpc needs pthreads. This is automatically pulled in when linking
- with the shared library, thanks to the DT_NEEDED ELF tags.
-@@ -9,17 +12,25 @@ required libraries.
- Thus, add -pthread to the private libraries in the pkg-config file.
- 
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
- ---
- Patch sent upstream:
-     http://sourceforge.net/p/libtirpc/mailman/message/33072076/
- 
--diff -durN libtirpc-0.2.4.orig/libtirpc.pc.in libtirpc-0.2.4/libtirpc.pc.in
----- libtirpc-0.2.4.orig/libtirpc.pc.in	2013-12-09 21:59:51.000000000 +0100
--+++ libtirpc-0.2.4/libtirpc.pc.in	2014-11-23 14:02:58.677760108 +0100
--@@ -8,4 +8,5 @@
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ libtirpc.pc.in | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libtirpc.pc.in b/libtirpc.pc.in
-+index ec4cf75..1dc85ea 100644
-+--- a/libtirpc.pc.in
-++++ b/libtirpc.pc.in
-+@@ -8,4 +8,5 @@ Description: Transport Independent RPC Library
-  Requires:
-  Version: @PACKAGE_VERSION@
-  Libs: -L at libdir@ -ltirpc
- +Libs.private: -pthread
-  Cflags: -I at includedir@/tirpc
-+-- 
-+2.1.0
-+
+
+The following changes since commit 6b8e4a7f4a1d7460485374ff6efda0bcb2ec5aa7:
+
+  wvstreams: disable with the ARC external toolchain (2015-04-05 17:35:31 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/legal
+
+for you to fetch changes up to a556182f9ddaca8f73745709a7f748de37b887fb:
+
+  package/linux-firmware: fix legal-info (2015-04-05 18:32:51 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (6):
+      package/liblinear: fix legal-info
+      package/python-cherrypy: fix legal-info
+      package/zmqpp: fix legal-info
+      package/evemu: fix legal-info
+      package/gnu-efi: fix legal-info
+      package/linux-firmware: fix legal-info
+
+ package/evemu/evemu.mk                     | 2 +-
+ package/gnu-efi/gnu-efi.mk                 | 4 ++--
+ package/liblinear/liblinear.mk             | 2 +-
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ package/python-cherrypy/python-cherrypy.mk | 2 +-
+ package/zmqpp/zmqpp.mk                     | 4 ++--
+ 6 files changed, 8 insertions(+), 8 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
