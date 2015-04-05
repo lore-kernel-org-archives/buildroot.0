@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Apr 2015 19:04:39 +0200
-Subject: [Buildroot] [git commit] package/evemu: fix legal-info
-Message-ID: <20150405171514.696D57F8D7@busybox.osuosl.org>
+Date: Sun, 5 Apr 2015 19:17:04 +0200
+Subject: [Buildroot] [PATCH 0/6] legal-info: fix packages (branch
+ yem/legal)
+In-Reply-To: <cover.1428252467.git.yann.morin.1998@free.fr>
+References: <cover.1428252467.git.yann.morin.1998@free.fr>
+Message-ID: <20150405191704.2d0ccdf7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c48267877436002127e5dfa59a92043faa15825
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-COPYING.GPL3 is not present in the sources.
+On Sun,  5 Apr 2015 18:48:23 +0200, Yann E. MORIN wrote:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/evemu/evemu.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+>       package/liblinear: fix legal-info
+>       package/python-cherrypy: fix legal-info
+>       package/zmqpp: fix legal-info
+>       package/evemu: fix legal-info
 
-diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-index 9acdbe2..b502469 100644
---- a/package/evemu/evemu.mk
-+++ b/package/evemu/evemu.mk
-@@ -8,7 +8,7 @@ EVEMU_VERSION = 2.1.0
- EVEMU_SITE = http://www.freedesktop.org/software/evemu
- EVEMU_SOURCE = evemu-$(EVEMU_VERSION).tar.xz
- EVEMU_LICENSE = LGPLv3 (library), GPLv3 (tools)
--EVEMU_LICENSE_FILES = COPYING COPYING.GPL3
-+EVEMU_LICENSE_FILES = COPYING
- 
- # asciidoc used to generate manpages, which we don't need, and if it's
- # present on the build host, it ends getting called with our host-python
+Applied.
+
+>       package/gnu-efi: fix legal-info
+
+Not applied, I'll comment on this one.
+
+>       package/linux-firmware: fix legal-info
+
+Applied.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
