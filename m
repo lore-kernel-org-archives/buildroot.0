@@ -1,57 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Apr 2015 19:40:47 +0200
-Subject: [Buildroot] [PATCH 5/6] package/gnu-efi: fix legal-info
-In-Reply-To: <20150405193604.57628c92@free-electrons.com>
-References: <cover.1428252467.git.yann.morin.1998@free.fr>
- <41ea946a815b2214044827c73815d8a171a3a939.1428252467.git.yann.morin.1998@free.fr>
- <20150405191745.3497f9a7@free-electrons.com>
- <20150405173134.GE4134@free.fr>
- <20150405193604.57628c92@free-electrons.com>
-Message-ID: <20150405174047.GF4134@free.fr>
+Date: Sun,  5 Apr 2015 19:48:55 +0200
+Subject: [Buildroot] [PATCHv2] package/gnu-efi: fix legal-info
+Message-ID: <1428256135-16455-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Fix a bunch of deficiencies:
+  - 'debian/copyright' does not exist.
+  - gnuefi is not GPLv2+. Only one AArch64 file has GPLv2+ headers,
+    all others have BSD-3c
+  - efilib is BSD-2c
 
-On 2015-04-05 19:36 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 5 Apr 2015 19:31:34 +0200, Yann E. MORIN wrote:
-> > The reasoning for changing that is:
-> >   - there are two files with a GPLv2+ header;
-> >     - gnuefi/crt0-efi-aarch64.S -> GPLv2+ or something like a BSD-2c
-> >     - gnuefi/crt0-efi-arm.S     -> GPLv2+
-> >   - all other files are BSD-3c (or have no licensing info)
-> >   - we don't build gnuefi for ARM or AArch64, only for x86 or x86_64
-> > 
-> > However, re-reading README.gnuefi, we can read this:
-> > 
-> > ---8<---
-> >  gnuefi: This directory contains the glue necessary to convert ELF64
-> >         binaries to EFI binaries.  Various runtime code bits, such as
-> >         a self-relocator are included as well.  This code has been
-> >         contributed by the Hewlett-Packard Company and is distributed
-> >         under the GNU GPL.
-> > ---8<---
-> > 
-> > This is very confusing.Waht about changing to:
-> > 
-> > GNU_EFI_LICENSE = BSD-3c and/or GPLv2+ (gnuefi), BSD-3c (efilib)
-> 
-> I would find this to be a safer value.
+Change the licensing information to include BSD-3c for the gnuefi parts,
+and keep refernce to GPLv2+ as the Main README.gnuefi references it.
 
-OK, I'll respin.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Thanks!
+---
+Changes v1 -> v2:
+  - be more conservative in the licensing reporting  (Thomas)
+---
+ package/gnu-efi/gnu-efi.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
+index 0e067a6..a11ff81 100644
+--- a/package/gnu-efi/gnu-efi.mk
++++ b/package/gnu-efi/gnu-efi.mk
+@@ -8,8 +8,8 @@ GNU_EFI_VERSION = 3.0.1
+ GNU_EFI_SOURCE = gnu-efi-$(GNU_EFI_VERSION).tar.bz2
+ GNU_EFI_SITE = http://downloads.sourceforge.net/project/gnu-efi
+ GNU_EFI_INSTALL_STAGING = YES
+-GNU_EFI_LICENSE = GPLv2+ (gnuefi), BSD (efilib)
+-GNU_EFI_LICENSE_FILES = debian/copyright
++GNU_EFI_LICENSE = BSD-3c and/or GPLv2+ (gnuefi), BSD-3c (efilib)
++GNU_EFI_LICENSE_FILES = README.efilib
+ 
+ # gnu-efi is a set of library and header files used to build
+ # standalone EFI applications such as bootloaders. There is no point
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
