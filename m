@@ -1,36 +1,51 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Sun, 05 Apr 2015 11:10:53 +0200
-Subject: [Buildroot] [RFC 2/4] gpu-viv-bin-mx6q: is a libgl provider
-In-Reply-To: <20150404184803.31434bd7@free-electrons.com>
-References: <1421839408-15839-1-git-send-email-jezz@sysmic.org>
- <1421839408-15839-3-git-send-email-jezz@sysmic.org>
- <20150404184803.31434bd7@free-electrons.com>
-Message-ID: <3078796.2A5JP7VBLH@sagittea>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 5 Apr 2015 11:12:04 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] build host lz4 to support lz4
+ compression in the kernel.
+In-Reply-To: <55206B0F.6080206@proximus.be>
+References: <1427919153-16080-1-git-send-email-sagaert.johan@proximus.be>
+ <20150401223752.0fd358cf@free-electrons.com>
+ <551C6935.3050401@mind.be>
+ <20150402000158.0b85c847@free-electrons.com>
+ <20150402220612.GD4229@free.fr> <55206B0F.6080206@proximus.be>
+Message-ID: <20150405091204.GB4134@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Johan, All,
 
-On Saturday 04 April 2015 18:48:03 Thomas Petazzoni wrote:
-> Dear J?r?me Pouiller,
-> 
-> On Wed, 21 Jan 2015 12:23:26 +0100, J?r?me Pouiller wrote:
-> 
-> > -GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
-> > +GPU_VIV_BIN_MX6Q_DEPENDENCIES = opengl-registry
-> > +GPU_VIV_BIN_MX6Q_PROVIDES = libgl libegl libgles libopenvg
-> >  GPU_VIV_BIN_MX6Q_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT))
-> 
-> In the end, opengl-registry was never added, we preferred using the
-> mesa3d headers instead, through the mesa3d-headers package.
-> 
-> Can you respin this patch and resend a new version accordingly?
-This task is in my todo list for some months. I increase its priority.
+On 2015-04-05 00:51 +0200, Johan Sagaert spake thusly:
+> Yann E. MORIN schreef op 3/04/2015 om 0:06:
+[--SNIP--]
+> >Well, I always find it very frustrating to build something that I do not
+> >use. 20 seconds is an eternity (even the 15-or-so it takes here).
+[--SNIP--]
+> What about overhead for checking hashes ?
+
+That's not exactly the same purpose.
+
+Hashes are an integral part of the infrastructure that ensure the
+integrity (and authenticity) of the downloaded archives. That's the
+reason they are mandatory. Also, hashing is not that slow: sha256 on
+~256MiB takes about 1s here, where lzo takes ~20s.
+
+lzo/lz4 on the other hand are a dependency of some optional kernel
+features.
+
+> Meanwhile i submitted a new patch with a menu entry in the kernel section.
+
+Thanks! :-) I'll have a look at it.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
