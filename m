@@ -1,74 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Apr 2015 11:44:53 +0200
-Subject: [Buildroot] [git commit] package/samba: use FHS dirs
-Message-ID: <20150406094501.611CE80168@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 6 Apr 2015 11:44:57 +0200
+Subject: [Buildroot] [PATCH 21/35] Makefile: simplify show-targets
+In-Reply-To: <1427650429-9293-22-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1427650429-9293-22-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150406094457.GD4369@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7105393e4cefc636b5bccef1742d66ede580df99
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Clean up system directories by making samba conform to FHS and by using
-subdirectories e.g. /var/log/samba and /var/run/samba instead of
-/var/log and /var/run.
+On 2015-03-29 19:33 +0200, Thomas Petazzoni spake thusly:
+> show-targets is only used currently by the graph-depends script, which
+> already recurses into the dependencies of the selected packages to
+> build the dependency graph. Therefore, dumping the contents of
+> $(PACKAGES) and $(ROOTFS_TARGETS) is sufficient: $(HOST_DEPS) and
+> $(TARGET_HOST_DEPS) will contain packages that are dependencies of
+> packages already listed in $(PACKAGES), which graph-depends will
+> discover by itself.
+> 
+> This allows to remove one more usage of $(HOST_DEPS) and
+> $(TARGET_HOST_DEPS), which is one more step towards their removal.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/samba/S91smb   |    5 +++--
- package/samba/samba.mk |   10 +++++-----
- 2 files changed, 8 insertions(+), 7 deletions(-)
+After reading your convining explanations about my previous concerns:
 
-diff --git a/package/samba/S91smb b/package/samba/S91smb
-index c190771..2e03e82 100755
---- a/package/samba/S91smb
-+++ b/package/samba/S91smb
-@@ -10,6 +10,7 @@
- mkdir -p /var/cache/samba
- mkdir -p /var/log/samba
- mkdir -p /var/lock/subsys
-+mkdir -p /var/run/samba
- 
- RETVAL=0
- 
-@@ -33,13 +34,13 @@ stop() {
- 	echo -n "Shutting down SMB services: "
- 	kill -9 `pidof smbd`
- 	RETVAL=$?
--	rm -f /var/run/smbd.pid
-+	rm -f /var/run/samba/smbd.pid
- 	echo "done"
- 
- 	echo -n "Shutting down NMB services: "
- 	kill -9 `pidof nmbd`
- 	RETVAL2=$?
--	rm -f /var/run/nmbd.pid
-+	rm -f /var/run/samba/nmbd.pid
- 
- 	[ $RETVAL -eq 0 -a $RETVAL2 -eq 0 ] && rm -f /var/lock/subsys/smb
- 	echo "done"
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 064bfd1..f4f07ac 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -33,11 +33,11 @@ SAMBA_CONF_ENV = \
- 	$(if $(BR2_PACKAGE_SAMBA_AVAHI),AVAHI_LIBS=-pthread)
- 
- SAMBA_CONF_OPTS = \
--	--with-piddir=/var/run \
--	--with-lockdir=/var/lock \
--	--with-logfilebase=/var/log \
--	--with-configdir=/etc/samba \
--	--with-privatedir=/etc/samba \
-+	--with-fhs \
-+	--with-piddir=/var/run/samba \
-+	--with-lockdir=/var/cache/samba \
-+	--with-ncalrpcdir=/var/run/ncalrpc \
-+	--with-nmbdsocketdir=/var/run/nmbd \
- 	\
- 	--disable-cups \
- 	--enable-shared-libs \
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index ab54dda..0709751 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -644,7 +644,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
+>  	@rm -f $(LEGAL_WARNINGS)
+>  
+>  show-targets:
+> -	@echo $(HOST_DEPS) $(TARGETS_HOST_DEPS) $(PACKAGES) $(TARGETS_ROOTFS)
+> +	@echo $(PACKAGES) $(TARGETS_ROOTFS)
+>  
+>  graph-build: $(O)/build/build-time.log
+>  	@install -d $(O)/graphs
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
