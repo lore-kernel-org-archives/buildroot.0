@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Apr 2015 17:28:48 +0200
-Subject: [Buildroot] [PATCH v2 1/3] Remove --{enable,
- disable}-debug configure flags.
-In-Reply-To: <1426173147-27755-1-git-send-email-johan.oudinet@gmail.com>
+Date: Mon, 6 Apr 2015 17:29:21 +0200
+Subject: [Buildroot] [PATCH v2 2/3] lame: Remove --enable-debug
+ workaround.
+In-Reply-To: <1426173147-27755-2-git-send-email-johan.oudinet@gmail.com>
 References: <1426173147-27755-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <20150406152848.GF4369@free.fr>
+ <1426173147-27755-2-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <20150406152921.GG4369@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +15,8 @@ To: buildroot@busybox.net
 Johan, All,
 
 On 2015-03-12 16:12 +0100, Johan Oudinet spake thusly:
-> Adding this flag when BR2_ENABLE_DEBUG is activated make several
-> packages to produce binaries that do not work as expected (e.g., dhcp,
-> lame, nano). Moreover, the help message of BR2_ENABLE_DEBUG does not
-> say it is adding this flag. It is supposed to build packages with
-> debugging symbols enabled. So, let it do that only.
-> 
-> * package/Makefile.in: Do not add --{enable,disable}-debug flags.
-> * package/pkg-autotools.mk: Remove ENABLE_DEBUG as it is not set
->   anymore.
+> This is not needed since BR2_ENABLE_DEBUG does not set this flag
+> anymore.
 > 
 > Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 
@@ -32,42 +26,27 @@ Regards,
 Yann E. MORIN.
 
 > ---
-> Changes v1 -> v2:
->   - Do not pass --disable-debug neither.
-> ---
->  package/Makefile.in      | 6 ------
->  package/pkg-autotools.mk | 1 -
->  2 files changed, 7 deletions(-)
+>  package/lame/lame.mk | 7 -------
+>  1 file changed, 7 deletions(-)
 > 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 803b162..049c89b 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -387,12 +387,6 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
->  TARGET_CONFIGURE_OPTS += CXX=false
->  endif
+> diff --git a/package/lame/lame.mk b/package/lame/lame.mk
+> index e47e0af..dcd155f 100644
+> --- a/package/lame/lame.mk
+> +++ b/package/lame/lame.mk
+> @@ -14,13 +14,6 @@ LAME_CONF_OPTS = --enable-dynamic-frontends
+>  LAME_LICENSE = LGPLv2+
+>  LAME_LICENSE_FILES = COPYING
 >  
-> -ifeq ($(BR2_ENABLE_DEBUG),y)
-> -ENABLE_DEBUG := --enable-debug
-> -else
-> -ENABLE_DEBUG := --disable-debug
-> -endif
+> -# Building lame with debug symbols needs the following macros to be
+> -# defined: _FPU_MASK_IM, _FPU_MASK_ZM, _FPU_MASK_OM.
+> -# So, if BR2_ENABLE_DEBUG is selected, then we have force lame to be
+> -# built without debug symbols because a number of architectures don't
+> -# have those macros defined.
+> -LAME_CONF_OPTS += --disable-debug
 > -
->  ifeq ($(BR2_STATIC_LIBS),y)
->  SHARED_STATIC_LIBS_OPTS = --enable-static --disable-shared
->  TARGET_CFLAGS += -static
-> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-> index d2f15fa..11bc643 100644
-> --- a/package/pkg-autotools.mk
-> +++ b/package/pkg-autotools.mk
-> @@ -203,7 +203,6 @@ define $(2)_CONFIGURE_CMDS
->  		$$(DISABLE_NLS) \
->  		$$(DISABLE_LARGEFILE) \
->  		$$(DISABLE_IPV6) \
-> -		$$(ENABLE_DEBUG) \
->  		$$(SHARED_STATIC_LIBS_OPTS) \
->  		$$(QUIET) $$($$(PKG)_CONF_OPTS) \
->  	)
+>  ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
+>  LAME_DEPENDENCIES += libsndfile
+>  LAME_CONF_OPTS += --with-fileio=sndfile
 > -- 
 > 2.1.0
 > 
