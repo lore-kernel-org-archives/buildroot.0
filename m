@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Apr 2015 10:58:20 +0200
-Subject: [Buildroot] [PATCH] lirc-tools: fix build with host python3
-In-Reply-To: <7a4adf12aeaac9866b488af01bf8e3e8aaf58f5e.1428295522.git.baruch@tkos.co.il>
-References: <7a4adf12aeaac9866b488af01bf8e3e8aaf58f5e.1428295522.git.baruch@tkos.co.il>
-Message-ID: <20150406105820.6e80b278@free-electrons.com>
+Date: Mon, 6 Apr 2015 10:58:44 +0200
+Subject: [Buildroot] [git commit] jsoncpp: don't build tests
+Message-ID: <20150406085849.B6A578197C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=5ec45823c173e4a6e3ba59424c86e1cb5afbd681
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  6 Apr 2015 07:45:22 +0300, Baruch Siach wrote:
-> Add an upstream patch making make_rel_symlink.py python3 compatible. Add
-> another patch that removes python3 dependency.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/6c6/6c6e014a751650c16d25dfd3d673bd3199c72b2e/
-> http://autobuild.buildroot.net/results/857/85724dfd014cec5a80dd18a635826daa2edc1417/
-> http://autobuild.buildroot.net/results/a74/a74563f700a47065ffd1ba42c83c2d7722bacd89/
-> 
-> and many others.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes:
+http://autobuild.buildroot.net/results/a0f/a0f60a1df243bdae875f12668011a53a70071ee6/
+http://autobuild.buildroot.net/results/f88/f8885520b5892d49164c88a974e7dffc1c3c2ce0/
+http://autobuild.buildroot.net/results/448/448745830f58496e6dcdf48e2ad57650b4744909/
 
-Applied, thanks!
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/jsoncpp/jsoncpp.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+index cfd3dd9..3044be1 100644
+--- a/package/jsoncpp/jsoncpp.mk
++++ b/package/jsoncpp/jsoncpp.mk
+@@ -11,6 +11,7 @@ JSONCPP_LICENSE_FILES = LICENSE
+ JSONCPP_INSTALL_STAGING = YES
+ 
+ JSONCPP_CONF_OPTS += \
+-	-DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF
++	-DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF \
++	-DJSONCPP_WITH_TESTS=OFF
+ 
+ $(eval $(cmake-package))
