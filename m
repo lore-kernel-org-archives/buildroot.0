@@ -1,104 +1,88 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  6 Apr 2015 16:03:06 +0200
-Subject: [Buildroot] [PATCH] boot/at91bootstrap3: migrate to pkg-kconfig
-Message-ID: <1428328986-1625-1-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 06 Apr 2015 16:09:23 +0200
+Subject: [Buildroot] [PATCHv3 4/5] Makefile: implement a size-stats
+	target
+In-Reply-To: <1423171200-24583-5-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1423171200-24583-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <55229393.5040808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Mauro Condarelli <mc5686@mclink.it>
+On 05/02/15 22:19, Thomas Petazzoni wrote:
+> This commit implements a size-stats target that calls the script of
+> the same name to generate the graph and CSV files related to package
+> and file sizes.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  Makefile | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 6d4ae38..faa2e38 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -680,6 +680,17 @@ graph-depends: graph-depends-requirements
+>  	|tee $(BASE_DIR)/graphs/$(@).dot \
+>  	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(BASE_DIR)/graphs/$(@).$(BR_GRAPH_OUT)
+>  
+> +size-stats:
+> +	@[ -f $(O)/build/packages-file-list.txt ] || \
+> +		{ echo "ERROR: No package size information available, please rebuild with BR2_COLLECT_FILE_SIZE_STATS" ; exit 1; }
 
-In at91bootstrap3, defconfig files are spread out in various
-sub-directories, so we can't easily construct the path to those
-defconfig files.
+ BR2_COLLECT_FILE_SIZE_STATS=y
 
-As it turns out, there are no two defconfig files named the same; they
-all contain at least the board name, plus some extra info. And there is
-always only one directory depth below board/ where all defconfig files
-are to be found.
+ Also the line is too long. And perhaps instead of "rebuild" it should say "do a
+clean build", otherwise stupid people will just do another make with the option
+enabled but nothing will actually be done.
 
-Also, at91bootstrap3's own Makefile relies on this single-match as it
-runs a 'find' command to locate the defconfig file.
 
-So, even though we do not know the path to the defconfig file, we can
-construct a shell-glob quite easily (in the hope that there will never
-be more than one directory depth).
+> +	@$(INSTALL) -d $(GRAPHS_DIR)
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-[yann.morin.1998 at free.fr:
-  - remove custom _CONFIGURE_CMDS, handled by pkg-kconfig  (Thomas)
-  - remove redundant intermediate variable
-  - fix using internal defconfig files
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
- boot/at91bootstrap3/at91bootstrap3.mk | 27 ++++++++++-----------------
- 1 file changed, 10 insertions(+), 17 deletions(-)
+ graph-depends is the only one that uses install -d, all the others use mkdir
+-p. So let's stick to that.
 
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index b780617..f35ffc7 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -10,10 +10,6 @@ AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VER
- AT91BOOTSTRAP3_INSTALL_IMAGES = YES
- AT91BOOTSTRAP3_INSTALL_TARGET = NO
- 
--AT91BOOTSTRAP3_DEFCONFIG = \
--	$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG))
--AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE = \
--	$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE))
- AT91BOOTSTRAP3_CUSTOM_PATCH_DIR = \
- 	$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR))
- 
-@@ -27,16 +23,6 @@ endef
- AT91BOOTSTRAP3_POST_PATCH_HOOKS += AT91BOOTSTRAP3_APPLY_CUSTOM_PATCHES
- endif
- 
--ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
--define AT91BOOTSTRAP3_CONFIGURE_CMDS
--	$(MAKE) $(AT91BOOTSTRAP3_MAKE_OPTS) -C $(@D) $(AT91BOOTSTRAP3_DEFCONFIG)_defconfig
--endef
--else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
--define AT91BOOTSTRAP3_CONFIGURE_CMDS
--	cp $(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE) $(@D)/.config
--endef
--endif
--
- define AT91BOOTSTRAP3_BUILD_CMDS
- 	$(MAKE) $(AT91BOOTSTRAP3_MAKE_OPTS) -C $(@D)
- endef
-@@ -45,18 +31,25 @@ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
- 	cp $(@D)/binaries/*.bin $(BINARIES_DIR)
- endef
- 
--$(eval $(generic-package))
-+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
-+AT91BOOTSTRAP3_KCONFIG_FILE = $(AT91BOOTSTRAP3_DIR)/board/*/$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG))_defconfig
-+else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
-+AT91BOOTSTRAP3_KCONFIG_FILE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE))
-+endif
-+AT91BOOTSTRAP3_KCONFIG_EDITORS = menuconfig xconfig gconfig
-+AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
-+$(eval $(kconfig-package))
- 
- # Checks to give errors that the user can understand
- ifeq ($(filter source,$(MAKECMDGOALS)),)
- ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
--ifeq ($(AT91BOOTSTRAP3_DEFCONFIG),)
-+ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG)),)
- $(error No at91bootstrap3 defconfig name specified, check your BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG setting)
- endif
- endif
- 
- ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
--ifeq ($(AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE),)
-+ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE)),)
- $(error No at91bootstrap3 configuration file specified, check your BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE setting)
- endif
- endif
+> +	@cd "$(CONFIG_DIR)"; \
+
+ Why is this needed? In fact, it's wrong, because TARGET_SKELETON will be
+relative to TOPDIR if it's given as a relative path. All the other paths are
+absolute paths, so there's no reason to cd AFAICS.
+
+ Also, I'd prefer $(Q) instead of @.
+
+
+ Regards,
+ Arnout
+
+
+> +	$(TOPDIR)/support/scripts/size-stats --builddir $(BASE_DIR) \
+> +		--graph $(BASE_DIR)/graphs/graph-size.$(BR_GRAPH_OUT) \
+> +		--file-size-csv $(BASE_DIR)/build/file-size-stats.csv \
+> +		--package-size-csv $(BASE_DIR)/build/package-size-stats.csv \
+> +		--skeleton-path $(TARGET_SKELETON)
+> +
+>  else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+>  
+>  all: menuconfig
+> @@ -896,6 +907,7 @@ endif
+>  	@echo '  manual-epub            - build manual in ePub'
+>  	@echo '  graph-build            - generate graphs of the build times'
+>  	@echo '  graph-depends          - generate graph of the dependency tree'
+> +	@echo '  size-stats             - generate stats of the filesystem size'
+>  	@echo
+>  	@echo 'Miscellaneous:'
+>  	@echo '  source                 - download all sources needed for offline-build'
+> 
+
+
 -- 
-1.9.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
