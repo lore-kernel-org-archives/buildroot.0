@@ -1,35 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  6 Apr 2015 14:13:08 +0200
-Subject: [Buildroot] [PATCH 3/6 v3] package/binutils: add hashes
+Date: Mon,  6 Apr 2015 14:13:09 +0200
+Subject: [Buildroot] [PATCH 4/6 v3] support/download: add possibility to not
+	fail on missing hash
 In-Reply-To: <cover.1428322317.git.yann.morin.1998@free.fr>
 References: <cover.1428322317.git.yann.morin.1998@free.fr>
-Message-ID: <e8403f1b690c847f9a7d518eb34ac6474c5815fe.1428322317.git.yann.morin.1998@free.fr>
+Message-ID: <8bc29f96aa3e21fac98977c11cdbc08b6ba321dd.1428322317.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+In very constrained cases, it might be needed to not fail if a hash is
+missing. This is notably the case for custom external toolchains to be
+downloaded, because we do have a .hash file for external toolchains,
+but we oviously can not have hashes for all existing cutom toolchains
+(he, "custom"!).
+
+So, add a way to avoid failing in that case.
+
+We use a magic value depending on the file to be downloaded, instead of
+yes/no, to avoid any accidental use. We also do not document it, because
+we do not want users to use it, and even more, to rely on it, since we
+still have hopes to get rid of that in the future.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/binutils/binutils.hash | 7 +++++++
- 1 file changed, 7 insertions(+)
- create mode 100644 package/binutils/binutils.hash
 
-diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-new file mode 100644
-index 0000000..4f99514
---- /dev/null
-+++ b/package/binutils/binutils.hash
-@@ -0,0 +1,7 @@
-+# Locally computed:
-+sha256 6c7af8ed1c8cf9b4b9d6e6fe09a3e1d3d479fe63984ba8b9b26bf356b6313ca9  binutils-2.22.tar.bz2
-+sha256 fe914e56fed7a9ec2eb45274b1f2e14b0d8b4f41906a5194eac6883cfe5c1097  binutils-2.23.2.tar.bz2
-+sha256 e5e8c5be9664e7f7f96e0d09919110ab5ad597794f5b1809871177a0f0f14137  binutils-2.24.tar.bz2
-+sha256 22defc65cfa3ef2a3395faaea75d6331c6e62ea5dfacfed3e2ec17b08c882923  binutils-2.25.tar.bz2
-+# No hash for the ARC variant, comes from the github-helper:
-+none   xxx                                                               binutils-arc-2014.12.tar.gz
+---
+Changes v1 -> v2:
+  - fix typoes in commit log
+---
+ package/pkg-download.mk     | 4 ++++
+ support/download/check-hash | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index e274712..1e080e5 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -60,6 +60,10 @@ domainseparator = $(if $(1),$(1),/)
+ # github(user,package,version): returns site of GitHub repository
+ github = https://github.com/$(1)/$(2)/archive/$(3)
+ 
++# Compute magic value to ignore a missing hash
++# $1: filename, without path components
++ignore-missing-hash-magic = $(shell sha1sum <<<"$(1)" |cut -d ' ' -f 1)
++
+ ################################################################################
+ # The DOWNLOAD_* helpers are in charge of getting a working copy
+ # of the source repository for their corresponding SCM,
+diff --git a/support/download/check-hash b/support/download/check-hash
+index d37f1cd..a091c61 100755
+--- a/support/download/check-hash
++++ b/support/download/check-hash
+@@ -99,6 +99,10 @@ while read t h f; do
+ done <"${h_file}"
+ 
+ if [ ${nb_checks} -eq 0 ]; then
++    if [ "${BR_MISSING_HASH_OK}" = "$(sha1sum <<<"${base}" |cut -d ' ' -f 1)" ]; then
++        printf "WARNING: ignored missing hash for %s\n" "${base}" >&2
++        exit 0
++    fi
+     printf "ERROR: No hash found for %s\n" "${base}" >&2
+     exit 0
+ fi
 -- 
 1.9.1
