@@ -1,81 +1,108 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 06 Apr 2015 16:09:23 +0200
-Subject: [Buildroot] [PATCHv3 4/5] Makefile: implement a size-stats
-	target
-In-Reply-To: <1423171200-24583-5-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1423171200-24583-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <55229393.5040808@mind.be>
+Date: Mon, 06 Apr 2015 16:16:37 +0200
+Subject: [Buildroot] [PATCH 2/3] Transformation of package
+ 'at91bootstrap3' to KConfig style.
+In-Reply-To: <20150406133219.GE4369@free.fr>
+References: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
+ <1425850629-14725-2-git-send-email-mc5686@mclink.it>
+ <20150406122020.5ea2e6df@free-electrons.com> <20150406133219.GE4369@free.fr>
+Message-ID: <55229545.4010103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/02/15 22:19, Thomas Petazzoni wrote:
-> This commit implements a size-stats target that calls the script of
-> the same name to generate the graph and CSV files related to package
-> and file sizes.
+On 06/04/15 15:32, Yann E. MORIN wrote:
+> Thomas, Mauro, All,
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  Makefile | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+> On 2015-04-06 12:20 +0200, Thomas Petazzoni spake thusly:
+>> Adding our kconfig-package guys Yann and Thomas DS in Cc. See below for
+>> some comments.
+>>
+>> On Sun,  8 Mar 2015 22:37:08 +0100, Mauro Condarelli wrote:
+>>>
+>>> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+>>> ---
+>>>  boot/at91bootstrap3/at91bootstrap3.mk |    9 ++++++++-
+>>>  1 file changed, 8 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+>>> index 098e7bf..37e1bdd 100644
+>>> --- a/boot/at91bootstrap3/at91bootstrap3.mk
+>>> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
+>>> @@ -46,7 +46,14 @@ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
+>>>  	cp $(@D)/binaries/*.bin $(BINARIES_DIR)
+>>>  endef
+>>>  
+>>> -$(eval $(generic-package))
+>>> +ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+>>> +AT91BOOTSTRAP3_KCONFIG_FILE = $(call qstrip,$(AT91BOOTSTRAP3_DEFCONFIG))
+>>> +else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
+>>> +AT91BOOTSTRAP3_KCONFIG_FILE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE))
+>>> +endif
+>>> +AT91BOOTSTRAP3_KCONFIG_EDITORS = menuconfig xconfig gconfig
+>>> +AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
+>>> +$(eval $(kconfig-package))
+>>
+>> This is not going far enough: the kconfig-package infra is taking care
+>> of implementing the <pkg>_CONFIGURE_CMDS for you. So the following
+>> chunk of code should go away:
+>>
+>> ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+>> define AT91BOOTSTRAP3_CONFIGURE_CMDS
+>>         $(MAKE) $(AT91BOOTSTRAP3_MAKE_OPTS) -C $(@D) $(AT91BOOTSTRAP3_DEFCONFIG)_defconfig
+>> endef
+>> else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
+>> define AT91BOOTSTRAP3_CONFIGURE_CMDS
+>>         cp $(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE) $(@D)/.config
+>> endef
+>> endif
+>>
+>> and be replaced by a chunk of code that sets
+>> AT91BOOTSTRAP3_KCONFIG_FILE.
 > 
-> diff --git a/Makefile b/Makefile
-> index 6d4ae38..faa2e38 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -680,6 +680,17 @@ graph-depends: graph-depends-requirements
->  	|tee $(BASE_DIR)/graphs/$(@).dot \
->  	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(BASE_DIR)/graphs/$(@).$(BR_GRAPH_OUT)
->  
-> +size-stats:
-> +	@[ -f $(O)/build/packages-file-list.txt ] || \
-> +		{ echo "ERROR: No package size information available, please rebuild with BR2_COLLECT_FILE_SIZE_STATS" ; exit 1; }
+> Indeed.
+> 
+>> However, while this is reasy to do for the
+>> BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG case, it is much more
+>> complicated for the BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG case. This
+>> is because we do not know the path to the defconfig file in the
+>> at91bootstrap3 source tree.
+>>
+>> For the linux and barebox package, when a defconfig name is passed, its
+>> path in the linux or barebox source tree is easily found: it's
+>> arch/<ARCH>/configs/<name>_defconfig. But for at91bootstrap3, defconfig
+>> files are spread throughout the tree, in directories named after the
+>> board. There is no real way of inferring the location of the defconfig
+>> file just by looking at its name.
+>>
+>> Therefore, I am not sure how we can initialize
+>> AT91BOOTSTRAP3_KCONFIG_FILE in such a situation.
+>>
+>> Thomas DS, Yann, am I missing something?
+> 
+> Well, it looks like the defconfig files are all in sub-directories of
+> boards/ and that each defconfig is unique in name.
+> 
+> So, we could probably do something like:
+> 
+>     AT91BOOTSTRAP3_KCONFIG_FILE = boards/*/$(call qstrip,$(AT91BOOTSTRAP3_DEFCONFIG))_defconfig
 
- BR2_COLLECT_FILE_SIZE_STATS=y
-
- Also the line is too long. And perhaps instead of "rebuild" it should say "do a
-clean build", otherwise stupid people will just do another make with the option
-enabled but nothing will actually be done.
-
-
-> +	@$(INSTALL) -d $(GRAPHS_DIR)
-
- graph-depends is the only one that uses install -d, all the others use mkdir
--p. So let's stick to that.
-
-> +	@cd "$(CONFIG_DIR)"; \
-
- Why is this needed? In fact, it's wrong, because TARGET_SKELETON will be
-relative to TOPDIR if it's given as a relative path. All the other paths are
-absolute paths, so there's no reason to cd AFAICS.
-
- Also, I'd prefer $(Q) instead of @.
-
+ Add a $(wildcard ...) around it, then you'll get the missing config file error
+if it doesn't match anything.
 
  Regards,
  Arnout
 
-
-> +	$(TOPDIR)/support/scripts/size-stats --builddir $(BASE_DIR) \
-> +		--graph $(BASE_DIR)/graphs/graph-size.$(BR_GRAPH_OUT) \
-> +		--file-size-csv $(BASE_DIR)/build/file-size-stats.csv \
-> +		--package-size-csv $(BASE_DIR)/build/package-size-stats.csv \
-> +		--skeleton-path $(TARGET_SKELETON)
-> +
->  else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
->  
->  all: menuconfig
-> @@ -896,6 +907,7 @@ endif
->  	@echo '  manual-epub            - build manual in ePub'
->  	@echo '  graph-build            - generate graphs of the build times'
->  	@echo '  graph-depends          - generate graph of the dependency tree'
-> +	@echo '  size-stats             - generate stats of the filesystem size'
->  	@echo
->  	@echo 'Miscellaneous:'
->  	@echo '  source                 - download all sources needed for offline-build'
+> 
+> This would be resolved by the 'cp' we do at the very begining, but is
+> not very robust (and would anyway warrant a big fat comment).
+> 
+> I'll see if that would work.
+> 
+> Regards,
+> Yann E. MORIN.
 > 
 
 
