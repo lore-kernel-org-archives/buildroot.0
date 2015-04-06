@@ -1,35 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 06 Apr 2015 22:54:41 +0200
-Subject: [Buildroot] [PATCH 1/1] libvpx : add hash
-In-Reply-To: <20150406223454.0ded81b7@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 6 Apr 2015 22:34:54 +0200")
-References: <1428350210-18111-1-git-send-email-sagaert.johan@proximus.be>
- <20150406223454.0ded81b7@free-electrons.com>
-Message-ID: <87twwtf04u.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  6 Apr 2015 23:02:49 +0200
+Subject: [Buildroot] [buildroot-test] [PATCH] autbuild-run: fix legal-info
+Message-ID: <1428354169-25215-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Currently, running legal-info is broken, as it only runs a plain 'make',
+which does not do much...
 
-Hi,
+Fix that by explicitly pass 'legal-info' as the make target. Also, we
+need to specify the download dir, to avoid using the default one (which
+does not exist) or a user-defined one (in the environment).
 
->> +# Locally computed:
- >> +sha256  b3917c9167fc4979377fddee7f4e9378c35698dad18e23a729251c77644a2048  libvpx-v1.3.0.tar.gz
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ scripts/autobuild-run | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- > We're fetching via Git, and the tarball is generated locally on your
- > machine. Since this process is not reproducible, we cannot guarantee
- > that the hash will always be the same. Therefore, we do not store hash
- > files for Git-sourced packages.
-
- > I've marked your patch as Rejected in patchwork for this reason.
-
-Also notice that libvpx 1.4.0 was recently released (including tarball),
-so it probably makes sense to bump and then add the .hash:
-
-https://groups.google.com/a/webmproject.org/forum/#!topic/codec-devel/2zYWenmdUM8
-
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 409570d..0e12080 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -560,7 +560,10 @@ def do_build(**kwargs):
+     if ret != 0:
+         log_write(log, "INFO: build failed")
+         return -1
+-    ret = subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir], stdout=f, stderr=f)
++    cmd = ["make", "O=%s" % outputdir, "-C", srcdir,
++            "BR2_DL_DIR=%s" % dldir, "legal-info"] \
++          + kwargs['make_opts'].split()
++    ret = subprocess.call(cmd, stdout=f, stderr=f)
+     if ret != 0:
+         log_write(log, "INFO: build failed during legal-info")
+         return -1
 -- 
-Bye, Peter Korsgaard
+1.9.1
