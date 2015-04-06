@@ -1,68 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Apr 2015 11:40:17 +0200
-Subject: [Buildroot] [PATCH 21/35] Makefile: simplify show-targets
-In-Reply-To: <20150330212107.GF4318@free.fr>
-References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1427650429-9293-22-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150330212107.GF4318@free.fr>
-Message-ID: <20150406114017.3eb61812@free-electrons.com>
+Date: Mon, 6 Apr 2015 11:44:53 +0200
+Subject: [Buildroot] [git commit] package/samba: use FHS dirs
+Message-ID: <20150406094501.611CE80168@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=7105393e4cefc636b5bccef1742d66ede580df99
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 30 Mar 2015 23:21:07 +0200, Yann E. MORIN wrote:
-> Thomas, All,
-> 
-> On 2015-03-29 19:33 +0200, Thomas Petazzoni spake thusly:
-> > show-targets is only used currently by the graph-depends script, which
-> > already recurses into the dependencies of the selected packages to
-> > build the dependency graph. Therefore, dumping the contents of
-> > $(PACKAGES) and $(ROOTFS_TARGETS) is sufficient: $(HOST_DEPS) and
-> > $(TARGET_HOST_DEPS) will contain packages that are dependencies of
-> > packages already listed in $(PACKAGES), which graph-depends will
-> > discover by itself.
-> > 
-> > This allows to remove one more usage of $(HOST_DEPS) and
-> > $(TARGET_HOST_DEPS), which is one more step towards their removal.
-> 
-> This means a lot of host packages no longer show up in show-targets.
+Clean up system directories by making samba conform to FHS and by using
+subdirectories e.g. /var/log/samba and /var/run/samba instead of
+/var/log and /var/run.
 
-This is expected. "make show-targets" has *never* guaranteed you that
-it would list *all* packages.
+Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/samba/S91smb   |    5 +++--
+ package/samba/samba.mk |   10 +++++-----
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-Remember, before this patch series, the main Makefile only had some
-logic to do a two-level recursion on the dependencies of host packages.
-So what the graph-depends script does is that it takes the output of
-"make show-targets" as an initial list of packages, and then walks the
-dependency tree by itself by calling "make <pkg>-show-depends"
-recursively, starting from the list of packages listed by "make
-show-targets".
-
-So, from this commit, "make show-targets" will only list the target
-packages selected by menuconfig (i.e all those listed in the
-global PACKAGES variable). All other packages will be figured out by
-iterating recursively using "make <pkg>-show-depends".
-
-So indeed, this changes the output of "make show-targets", but this
-output was wrong. And there is no way to make it correct without
-iterating recursively through dependencies.
-
-Note that this target is actually called "make show-targets" and not
-"make show-packages". So it does not give the guarantee that all
-packages will be listed.
-
-For me, this target is only an internal details of the graph-depends
-logic. As long as the global graph-depends graph remains the same, then
-I believe this is fine.
-
-Let me know what you think,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/samba/S91smb b/package/samba/S91smb
+index c190771..2e03e82 100755
+--- a/package/samba/S91smb
++++ b/package/samba/S91smb
+@@ -10,6 +10,7 @@
+ mkdir -p /var/cache/samba
+ mkdir -p /var/log/samba
+ mkdir -p /var/lock/subsys
++mkdir -p /var/run/samba
+ 
+ RETVAL=0
+ 
+@@ -33,13 +34,13 @@ stop() {
+ 	echo -n "Shutting down SMB services: "
+ 	kill -9 `pidof smbd`
+ 	RETVAL=$?
+-	rm -f /var/run/smbd.pid
++	rm -f /var/run/samba/smbd.pid
+ 	echo "done"
+ 
+ 	echo -n "Shutting down NMB services: "
+ 	kill -9 `pidof nmbd`
+ 	RETVAL2=$?
+-	rm -f /var/run/nmbd.pid
++	rm -f /var/run/samba/nmbd.pid
+ 
+ 	[ $RETVAL -eq 0 -a $RETVAL2 -eq 0 ] && rm -f /var/lock/subsys/smb
+ 	echo "done"
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 064bfd1..f4f07ac 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -33,11 +33,11 @@ SAMBA_CONF_ENV = \
+ 	$(if $(BR2_PACKAGE_SAMBA_AVAHI),AVAHI_LIBS=-pthread)
+ 
+ SAMBA_CONF_OPTS = \
+-	--with-piddir=/var/run \
+-	--with-lockdir=/var/lock \
+-	--with-logfilebase=/var/log \
+-	--with-configdir=/etc/samba \
+-	--with-privatedir=/etc/samba \
++	--with-fhs \
++	--with-piddir=/var/run/samba \
++	--with-lockdir=/var/cache/samba \
++	--with-ncalrpcdir=/var/run/ncalrpc \
++	--with-nmbdsocketdir=/var/run/nmbd \
+ 	\
+ 	--disable-cups \
+ 	--enable-shared-libs \
