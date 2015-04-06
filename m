@@ -1,73 +1,47 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon,  6 Apr 2015 18:57:28 +0200
-Subject: [Buildroot] [PATCH 2/4] package/thrift: fix libtool warning
+Date: Mon,  6 Apr 2015 18:57:29 +0200
+Subject: [Buildroot] [PATCH 3/4] package/autoconf-archive: bump to version
+	v2015.02.24
 In-Reply-To: <1428339450-2158-1-git-send-email-romain.naour@openwide.fr>
 References: <1428339450-2158-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1428339450-2158-2-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1428339450-2158-3-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport an upstream patch.
+Fix the AX_CXX_COMPILE_STDCXX_11 macro which was broken in the
+previous release.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- ...-check-minimum-required-version-of-automa.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch
+This will break packages that really depends on C++11 (like thrift).
+---
+ package/autoconf-archive/autoconf-archive.hash | 2 +-
+ package/autoconf-archive/autoconf-archive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch b/package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch
-new file mode 100644
-index 0000000..2019706
---- /dev/null
-+++ b/package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch
-@@ -0,0 +1,45 @@
-+From 9b03d2b02d32302008d2bd0218b31b9a0ca5a748 Mon Sep 17 00:00:00 2001
-+From: Jens Geyer <jensg@apache.org>
-+Date: Fri, 3 Apr 2015 12:37:03 +0200
-+Subject: [PATCH] THRIFT-3071 check minimum required version of automake in
-+ bootstrap.sh Client: Build process Patch: James E. King, III
-+ <jim.king@simplivity.com>
-+
-+This closes #421
-+
-+- remove a warning when using libtool
-+
-+"libtoolize: Consider adding 'AC_CONFIG_MACRO_DIRS([./aclocal])' to configure.ac,"
-+
-+[Romain:
-+  - remove the part for bootstrap.sh which is not
-+    bundled in thrift archive.
-+  - fix the comment]
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ configure.ac | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 5fa611e..8daeb03 100755
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -18,6 +18,7 @@
-+ #
-+ 
-+ AC_PREREQ(2.65)
-++AC_CONFIG_MACRO_DIR([./aclocal])
-+ 
-+ AC_INIT([thrift], [0.9.2])
-+ 
-+@@ -540,6 +541,7 @@ AC_CHECK_FUNCS([memset])
-+ AC_CHECK_FUNCS([mkdir])
-+ AC_CHECK_FUNCS([realpath])
-+ AC_CHECK_FUNCS([select])
-++AC_CHECK_FUNCS([setlocale])
-+ AC_CHECK_FUNCS([socket])
-+ AC_CHECK_FUNCS([strchr])
-+ AC_CHECK_FUNCS([strdup])
-+-- 
-+1.9.3
-+
+diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
+index 9f975d5..c310f5a 100644
+--- a/package/autoconf-archive/autoconf-archive.hash
++++ b/package/autoconf-archive/autoconf-archive.hash
+@@ -1,2 +1,2 @@
+ # Computed locally
+-sha256 dfd460d23a9690322dee29a355ea285b5774f37383d3741cf77a4ad6a11a7e81  autoconf-archive-2015.02.04.tar.xz
++sha256 69715bdd078f552ca85e498a94543e11cb8bcdf0359e659b84d84d19372b0dc5  autoconf-archive-2015.02.24.tar.xz
+diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
+index 4479348..bd3b0c8 100644
+--- a/package/autoconf-archive/autoconf-archive.mk
++++ b/package/autoconf-archive/autoconf-archive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUTOCONF_ARCHIVE_VERSION = 2015.02.04
++AUTOCONF_ARCHIVE_VERSION = 2015.02.24
+ AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
+ AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
+ AUTOCONF_ARCHIVE_LICENSE = GPLv3+ with exception
 -- 
 1.9.3
