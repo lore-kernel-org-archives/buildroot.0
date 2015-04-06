@@ -1,50 +1,47 @@
-From: Johan Sagaert <sagaert.johan@proximus.be>
-Date: Mon, 06 Apr 2015 11:53:19 +0200
-Subject: [Buildroot] Target to create missing hashes.
-In-Reply-To: <20150406085602.GA4369@free.fr>
-References: <5521BE08.9020304@proximus.be> <20150406085602.GA4369@free.fr>
-Message-ID: <5522578F.80507@proximus.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Apr 2015 12:07:37 +0200
+Subject: [Buildroot] [git commit] espeak: disable for static-only builds
+Message-ID: <20150406100831.270D181994@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann E. MORIN schreef op 6/04/2015 om 10:56:
-> Johan, All,
->
-> On 2015-04-06 00:58 +0200, Johan Sagaert spake thusly:
->> Would be nice to have a convenience make target to create missing hashes.
->> (Comes in handy for custom packages not available in upstream buildroot, or
->> when bumping versions before posting the patches to the mailing list.)
->>
->>   make  <pkg>-sha256_hash
-> Well, we do not want the hashes to be automatically created, because we
-> want them to come from upstream if possible, and only if upstream does
-> not provide hashes do we locally compute them.
->
-> So, we can't offer an automatic way to create hashes. It has to be a
-> manual process.
-I did not mean 'automatic'  in the sense that buildroot would create the 
-missing hashes
-whenever its finds one during the build, but only as an aid to manually 
-add / update a hash after
-  for example adding a new package, or bumping to a newer version.
->> Maybe the missing hash warnings should also be redirected to a file
->> .missing_hashes, they mostly go unnoticed otherwise while building.
-> Well, I have a series that makes missing hashes a hard error (when the
-> .hash file exists), so that will be caught fairly easily! ;-) And a
-> missing .hash file would become a warning for now, with the ultimate
-> goal of making it a hard error in the future (because we do not have
-> enough packages with a .hash file for now).
->
-> There is the idea floatign around of creating a check-package (or
-> check-patch) script that could be used to validate a new package, and
-> checking a .hash file exists could be part of that script.
->
-> Any taker? ;-)
->
-> Regards,
-> Yann E. MORIN.
->
-Best Regards Johan
+commit: http://git.buildroot.net/buildroot/commit/?id=f66004ded744000c3e6ed85049fd70a5844098ab
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The Makefile wants to unconditionally build a shared library, and
+since it's probably not a package that relevant in static-only
+scenarios, let's simply disable it.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/b84/b84f56cdc22f333b95e0894084a800be53aefd26/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/espeak/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/espeak/Config.in b/package/espeak/Config.in
+index 4bb8d4a..94e2816 100644
+--- a/package/espeak/Config.in
++++ b/package/espeak/Config.in
+@@ -1,5 +1,5 @@
+-comment "espeak needs a toolchain w/ C++, wchar, threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++comment "espeak needs a toolchain w/ C++, wchar, threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_ESPEAK
+@@ -8,6 +8,8 @@ config BR2_PACKAGE_ESPEAK
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
++	# does not properly support building only a static version
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  espeak is a speech synthesizer software for English and
+ 	  other languages.
