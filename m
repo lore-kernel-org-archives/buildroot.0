@@ -1,65 +1,93 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Apr 2015 22:34:54 +0200
-Subject: [Buildroot] [PATCH 1/1] libvpx : add hash
-In-Reply-To: <1428350210-18111-1-git-send-email-sagaert.johan@proximus.be>
-References: <1428350210-18111-1-git-send-email-sagaert.johan@proximus.be>
-Message-ID: <20150406223454.0ded81b7@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 06 Apr 2015 22:43:30 +0200
+Subject: [Buildroot] [PATCH 2/4] package/thrift: fix libtool warning
+In-Reply-To: <5522E92F.1070300@mind.be>
+References: <1428339450-2158-1-git-send-email-romain.naour@openwide.fr>
+ <1428339450-2158-2-git-send-email-romain.naour@openwide.fr>
+ <5522E92F.1070300@mind.be>
+Message-ID: <5522EFF2.6040303@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+Hi Arnout,
 
-On Mon,  6 Apr 2015 21:56:50 +0200, Sagaert Johan wrote:
-> Also added VP8/VP9 codec names to Config.in menu help.
+Le 06/04/2015 22:14, Arnout Vandecappelle a ?crit :
+> On 06/04/15 18:57, Romain Naour wrote:
+>> Backport an upstream patch.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > 
-> Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
-> ---
->  package/libvpx/Config.in   | 2 ++
->  package/libvpx/libvpx.hash | 3 +++
->  2 files changed, 5 insertions(+)
->  create mode 100644 package/libvpx/libvpx.hash
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
-> diff --git a/package/libvpx/Config.in b/package/libvpx/Config.in
-> index 0ed3e1a..67cc71a 100644
-> --- a/package/libvpx/Config.in
-> +++ b/package/libvpx/Config.in
-> @@ -4,6 +4,8 @@ config BR2_PACKAGE_LIBVPX
->  	help
->  	  A high-quality, open video format that's freely available to
->  	  everyone.
-> +	  libvpx contains the VP8/VP9 codecs used in applications like
-> +	  linphone.
+>  Minor comments below
+> 
+>> ---
+>>  ...-check-minimum-required-version-of-automa.patch | 45 ++++++++++++++++++++++
+>>  1 file changed, 45 insertions(+)
+>>  create mode 100644 package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch
+>>
+>> diff --git a/package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch b/package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch
+>> new file mode 100644
+>> index 0000000..2019706
+>> --- /dev/null
+>> +++ b/package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch
+>> @@ -0,0 +1,45 @@
+>> +From 9b03d2b02d32302008d2bd0218b31b9a0ca5a748 Mon Sep 17 00:00:00 2001
+>> +From: Jens Geyer <jensg@apache.org>
+>> +Date: Fri, 3 Apr 2015 12:37:03 +0200
+>> +Subject: [PATCH] THRIFT-3071 check minimum required version of automake in
+>> + bootstrap.sh Client: Build process Patch: James E. King, III
+>> + <jim.king@simplivity.com>
+> 
+>  Something went wrong with the subject line here. Upstream has the Client: and
+> Patch: lines below the subject.
 
-I don't think the "linphone" example makes a lot of sense, as there
-are zillions of other applications that may use libvpx, and some of
-them are probably more popular than linphone. Maybe something like:
+Ok, I see. The commit tittle is correct in my git tree but the formatted patch
+is wrong...
 
-	  A high-quality, open video format that's freely available to
-	  everyone. Supports the VP8 and VP9 formats.
+I had to add a new line between title and Client line...
 
-> diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
-> new file mode 100644
-> index 0000000..36d48f8
-> --- /dev/null
-> +++ b/package/libvpx/libvpx.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed:
-> +sha256  b3917c9167fc4979377fddee7f4e9378c35698dad18e23a729251c77644a2048  libvpx-v1.3.0.tar.gz
+> 
+>> +
+>> +This closes #421
+>> +
+>> +- remove a warning when using libtool
+>> +
+>> +"libtoolize: Consider adding 'AC_CONFIG_MACRO_DIRS([./aclocal])' to configure.ac,"
+>> +
+>> +[Romain:
+>> +  - remove the part for bootstrap.sh which is not
+>> +    bundled in thrift archive.
+>> +  - fix the comment]
+> 
+>  Well, that fixing was no success :-) Anyway it should be
 
-We're fetching via Git, and the tarball is generated locally on your
-machine. Since this process is not reproducible, we cannot guarantee
-that the hash will always be the same. Therefore, we do not store hash
-files for Git-sourced packages.
+Indeed :) Sorry
 
-I've marked your patch as Rejected in patchwork for this reason.
+> 
+> - fix the commit log accordingly
+> 
+> 
+>  Please also add a reference to the upstream commit, e.g.
+> 
+> 4aa95df383bfa13c46a4dc0b41672ec29d476300 upstream
+> 
+> or
+> 
+> https://git-wip-us.apache.org/repos/asf?p=thrift.git;h=4aa95df383bfa13c46a4dc0b41672ec29d476300
+> 
+
+Thanks for the review, I'll resend an updated version after having some comments
+on patch 3/4 and 4/4 which are the aim of this series.
 
 Best regards,
+Romain
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> 
+> 
+>  Regards,
+>  Arnout
+> 
