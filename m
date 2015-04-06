@@ -1,93 +1,105 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 06 Apr 2015 22:43:30 +0200
-Subject: [Buildroot] [PATCH 2/4] package/thrift: fix libtool warning
-In-Reply-To: <5522E92F.1070300@mind.be>
-References: <1428339450-2158-1-git-send-email-romain.naour@openwide.fr>
- <1428339450-2158-2-git-send-email-romain.naour@openwide.fr>
- <5522E92F.1070300@mind.be>
-Message-ID: <5522EFF2.6040303@openwide.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 06 Apr 2015 22:47:38 +0200
+Subject: [Buildroot] [PATCH 4/6 v3] support/download: add possibility to
+ not fail on missing hash
+In-Reply-To: <8bc29f96aa3e21fac98977c11cdbc08b6ba321dd.1428322317.git.yann.morin.1998@free.fr>
+References: <cover.1428322317.git.yann.morin.1998@free.fr>
+ <8bc29f96aa3e21fac98977c11cdbc08b6ba321dd.1428322317.git.yann.morin.1998@free.fr>
+Message-ID: <5522F0EA.8070305@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+On 06/04/15 14:13, Yann E. MORIN wrote:
+> In very constrained cases, it might be needed to not fail if a hash is
+> missing. This is notably the case for custom external toolchains to be
+> downloaded, because we do have a .hash file for external toolchains,
+> but we oviously can not have hashes for all existing cutom toolchains
+> (he, "custom"!).
+> 
+> So, add a way to avoid failing in that case.
+> 
+> We use a magic value depending on the file to be downloaded, instead of
+> yes/no, to avoid any accidental use. We also do not document it, because
+> we do not want users to use it, and even more, to rely on it, since we
+> still have hopes to get rid of that in the future.
 
-Le 06/04/2015 22:14, Arnout Vandecappelle a ?crit :
-> On 06/04/15 18:57, Romain Naour wrote:
->> Backport an upstream patch.
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
->  Minor comments below
-> 
->> ---
->>  ...-check-minimum-required-version-of-automa.patch | 45 ++++++++++++++++++++++
->>  1 file changed, 45 insertions(+)
->>  create mode 100644 package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch
->>
->> diff --git a/package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch b/package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch
->> new file mode 100644
->> index 0000000..2019706
->> --- /dev/null
->> +++ b/package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch
->> @@ -0,0 +1,45 @@
->> +From 9b03d2b02d32302008d2bd0218b31b9a0ca5a748 Mon Sep 17 00:00:00 2001
->> +From: Jens Geyer <jensg@apache.org>
->> +Date: Fri, 3 Apr 2015 12:37:03 +0200
->> +Subject: [PATCH] THRIFT-3071 check minimum required version of automake in
->> + bootstrap.sh Client: Build process Patch: James E. King, III
->> + <jim.king@simplivity.com>
-> 
->  Something went wrong with the subject line here. Upstream has the Client: and
-> Patch: lines below the subject.
+ I don't think that complexity is really warranted. Something like
+BR_MISSING_HASH=OK should be enough.
 
-Ok, I see. The commit tittle is correct in my git tree but the formatted patch
-is wrong...
-
-I had to add a new line between title and Client line...
+ I do agree with not documenting it, however.
 
 > 
->> +
->> +This closes #421
->> +
->> +- remove a warning when using libtool
->> +
->> +"libtoolize: Consider adding 'AC_CONFIG_MACRO_DIRS([./aclocal])' to configure.ac,"
->> +
->> +[Romain:
->> +  - remove the part for bootstrap.sh which is not
->> +    bundled in thrift archive.
->> +  - fix the comment]
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > 
->  Well, that fixing was no success :-) Anyway it should be
+> ---
+> Changes v1 -> v2:
+>   - fix typoes in commit log
+> ---
+>  package/pkg-download.mk     | 4 ++++
+>  support/download/check-hash | 4 ++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index e274712..1e080e5 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -60,6 +60,10 @@ domainseparator = $(if $(1),$(1),/)
+>  # github(user,package,version): returns site of GitHub repository
+>  github = https://github.com/$(1)/$(2)/archive/$(3)
+>  
+> +# Compute magic value to ignore a missing hash
+> +# $1: filename, without path components
+> +ignore-missing-hash-magic = $(shell sha1sum <<<"$(1)" |cut -d ' ' -f 1)
+> +
+>  ################################################################################
+>  # The DOWNLOAD_* helpers are in charge of getting a working copy
+>  # of the source repository for their corresponding SCM,
+> diff --git a/support/download/check-hash b/support/download/check-hash
+> index d37f1cd..a091c61 100755
+> --- a/support/download/check-hash
+> +++ b/support/download/check-hash
+> @@ -99,6 +99,10 @@ while read t h f; do
+>  done <"${h_file}"
+>  
+>  if [ ${nb_checks} -eq 0 ]; then
+> +    if [ "${BR_MISSING_HASH_OK}" = "$(sha1sum <<<"${base}" |cut -d ' ' -f 1)" ]; then
+> +        printf "WARNING: ignored missing hash for %s\n" "${base}" >&2
 
-Indeed :) Sorry
+ There shouldn't be a warning in this case either, right? Neither end users nor
+buildroot developers can do anything about it, so what would be the point...
 
-> 
-> - fix the commit log accordingly
-> 
-> 
->  Please also add a reference to the upstream commit, e.g.
-> 
-> 4aa95df383bfa13c46a4dc0b41672ec29d476300 upstream
-> 
-> or
-> 
-> https://git-wip-us.apache.org/repos/asf?p=thrift.git;h=4aa95df383bfa13c46a4dc0b41672ec29d476300
+ I'd also make the branching more explicit:
+
+if [ ${nb_checks} -eq 0 ]; then
+    if [ "${BR_MISSING_HASH}" = "OK" ]; then
+        exit 0
+    else
+        printf "ERROR: No hash found for %s\n" "${base}" >&2
+        exit 0
+    fi
+fi
+
+
+ Regards,
+ Arnout
+
+> +        exit 0
+> +    fi
+>      printf "ERROR: No hash found for %s\n" "${base}" >&2
+>      exit 0
+>  fi
 > 
 
-Thanks for the review, I'll resend an updated version after having some comments
-on patch 3/4 and 4/4 which are the aim of this series.
 
-Best regards,
-Romain
-
-> 
-> 
->  Regards,
->  Arnout
-> 
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
