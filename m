@@ -1,34 +1,68 @@
-From: ali hagigat <hagigatali@gmail.com>
-Date: Mon, 6 Apr 2015 18:27:39 +0430
-Subject: [Buildroot] why there are errors compiling the kernel, 3.16.7
-Message-ID: <CAKKWdtdUN=FxONoqC5qMdJZPQjFFeosehRdLnY-b1jq_msU02Q@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 6 Apr 2015 16:00:16 +0200
+Subject: [Buildroot] [PATCH v2] packages: fix and improve support for
+ top-level parallel makefile
+Message-ID: <CAHkwnC8VQRxNFNE=VR7qDadbC1oquAYsatAhiH4OdM6Tkz0CKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-linux-3.16.7.tar.xz
-ipipe-core-3.16.7-arm-5.patch  + xenomai user space applications and libraries
-target-board: wandboard-quad
+On Mon, Apr 6, 2015 at 3:50 PM, Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
+> To fix packages that fail to build when PARALLEL_JOBS is empty instead
+> of using an empty PARALLEL_JOBS just avoid to using it in
+> the MAKE variable.
+>
+> Check the MAKEFLAGS variable to know automatically if the -j option is
+> being used, but use the "=" operator instead of the ":=" operator
+> because it can be checked only in a "recursively expanded variable".
+> Use "override" because otherwise it's impossible to change the
+> automatic variable "MAKE".
+>
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> ---
+>  Makefile            | 4 ++--
+>  package/Makefile.in | 3 ++-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 8d09725..6c2dcca 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -58,8 +58,8 @@ export HOSTARCH := $(shell uname -m | \
+>  #
+>  # Taking into account the above considerations, if you still want to execute
+>  # this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
+> -# build using the following command:
+> -#      make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
+> +# use the -j<jobs> option when building, e.g:
+> +#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
+>  .NOTPARALLEL:
+>
+>  # absolute path
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index fc57427..ed68e35 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -18,7 +18,8 @@ PARALLEL_JOBS := $(BR2_JLEVEL)
+>  endif
+>
+>  MAKE1 := $(HOSTMAKE) -j1
+> -MAKE := $(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
+> +override MAKE = $(HOSTMAKE) \
+> +       $(if $(findstring j,$(filter-out --%,$(MAKEFLAGS))),,-j$(PARALLEL_JOBS))
+>
+>  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+>  TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
+> --
+> 2.3.4
+>
 
+I've forgot to add the subject prefix "PATCH v2" and the changelog:
+v2:
+ - instead of using an empty BR2_JLEVEL check the MAKEFLAGS variable
 
-  CHK     include/generated/compile.h
-  CC      arch/arm/xenomai/hal.o
-  CC      net/socket.o
-  AS      arch/arm/xenomai/switch.o
-arch/arm/xenomai/hal.c:47:24: fatal error: asm/system.h: No such file
-or directory
- #include <asm/system.h>
-                        ^
-compilation terminated.
-make[2]: *** [arch/arm/xenomai/hal.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [arch/arm/xenomai] Error 2
-make[1]: *** Waiting for unfinished jobs....
-  LD      net/802/built-in.o
-  CC      net/core/sock.o
-  CC      net/dns_resolver/dns_key.o
-  CC      net/dns_resolver/dns_query.o
-  LD      net/dns_resolver/dns_resolver.o
-  LD      net/dns_resolver/built-in
+BR
+-- 
+Fabio Porcedda
