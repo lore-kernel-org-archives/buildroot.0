@@ -1,60 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Apr 2015 12:42:54 +0200
-Subject: [Buildroot] [git commit] package/ipmiutil: do not build doc
-Message-ID: <20150406104305.62B17819AF@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  6 Apr 2015 14:13:07 +0200
+Subject: [Buildroot] [PATCH 0/6 v3] toolchain: better handle hashes (branch
+	yem/dl-hash-toolchains)
+Message-ID: <cover.1428322317.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ca735d8a0b86b7ad274319774df2bca0abfe4ee9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-Fixes:
-    http://autobuild.buildroot.org/results/2ec/2ecfb1143ba89ffa5cdc8096bb175b2c396c4670/
-    http://autobuild.buildroot.org/results/c49/c497fc446140694084922d51fe6be308ce5c1c1a/
-    http://autobuild.buildroot.org/results/434/434b156b5c9b5c7b65ffe6174cf4e029e7e3ffd8/
+This series makes it so we can download custom external toolchains, and
+still have mandatory checks of hashes.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ipmiutil/0002-no-build-doc.patch |   30 ++++++++++++++++++++++++++++++
- 1 files changed, 30 insertions(+), 0 deletions(-)
+It also adds the long-awaited-for hashes for gcc and binutils.
 
-diff --git a/package/ipmiutil/0002-no-build-doc.patch b/package/ipmiutil/0002-no-build-doc.patch
-new file mode 100644
-index 0000000..f26d22e
---- /dev/null
-+++ b/package/ipmiutil/0002-no-build-doc.patch
-@@ -0,0 +1,30 @@
-+configure: do not build doc
-+
-+Fixes:
-+    http://autobuild.buildroot.org/results/2ec/2ecfb1143ba89ffa5cdc8096bb175b2c396c4670/
-+    http://autobuild.buildroot.org/results/c49/c497fc446140694084922d51fe6be308ce5c1c1a/
-+    http://autobuild.buildroot.org/results/434/434b156b5c9b5c7b65ffe6174cf4e029e7e3ffd8/
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN ipmiutil-2.9.5.orig/configure.ac ipmiutil-2.9.5/configure.ac
-+--- ipmiutil-2.9.5.orig/configure.ac	2015-04-06 12:23:01.020731749 +0200
-++++ ipmiutil-2.9.5/configure.ac	2015-04-06 12:24:31.181773510 +0200
-+@@ -55,7 +55,7 @@
-+ isredhat=0
-+ init_scripts="scripts/ipmi_port.sh scripts/ipmiutil_evt scripts/ipmiutil_asy scripts/ipmiutil_wdt"
-+ projdir=`pwd`
-+-SUBDIR_S="doc scripts lib util"
-++SUBDIR_S="scripts lib util"
-+ os=Linux
-+ 
-+ # ltmain.sh, config.sub, et al should have been created, but check to be sure.
-+@@ -161,7 +161,7 @@
-+ 	LANPLUS_SAM="no"
-+ 	LD_SAMX=""
-+ 	CFLAGS="-O2"
-+-        SUBDIR_S="doc scripts util"
-++        SUBDIR_S="scripts util"
-+ 	if test "x$cross_compiling" = "xyes"; then
-+ 	   # cross-compiling, so link with -static (e.g. Android ARM)
-+ 	   CROSS_LFLAGS="-static"
+Finally, it fixes a slightly annoying warning message when downloading
+from a repository.
+
+
+Changes v2 -> v3:
+  - add hashes for gcc and binutils
+  - fix a few more typoes
+
+Changes v1 -> v2:
+  - fix a few typoes
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit ca735d8a0b86b7ad274319774df2bca0abfe4ee9:
+
+  package/ipmiutil: do not build doc (2015-04-06 12:42:54 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/dl-hash-toolchains
+
+for you to fetch changes up to 21c6a4cd9d79b9279ba50426a2d0baaa1bc3f0b0:
+
+  support/download: restore mandatory check of hashes (2015-04-06 14:11:45 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (6):
+      support/download: do not warn about missing hash file for repositories
+      package/gcc: add hashes
+      package/binutils: add hashes
+      support/download: add possibility to not fail on missing hash
+      toolchain/external: ignore missing hash for custom downloaded toolchain
+      support/download: restore mandatory check of hashes
+
+ package/binutils/binutils.hash                     |  7 +++++++
+ package/gcc/gcc-final/gcc-final.hash               |  1 +
+ package/gcc/gcc-initial/gcc-initial.hash           |  1 +
+ package/gcc/gcc.hash                               |  7 +++++++
+ package/pkg-download.mk                            |  4 ++++
+ support/download/check-hash                        | 12 ++++++++++--
+ toolchain/toolchain-external/toolchain-external.mk |  2 ++
+ 7 files changed, 32 insertions(+), 2 deletions(-)
+ create mode 100644 package/binutils/binutils.hash
+ create mode 120000 package/gcc/gcc-final/gcc-final.hash
+ create mode 120000 package/gcc/gcc-initial/gcc-initial.hash
+ create mode 100644 package/gcc/gcc.hash
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
