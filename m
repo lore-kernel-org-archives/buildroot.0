@@ -1,59 +1,125 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 07 Apr 2015 01:18:26 +0200
-Subject: [Buildroot] [PATCH 3/4] package/autoconf-archive: bump to
- version v2015.02.24
-In-Reply-To: <1428339450-2158-3-git-send-email-romain.naour@openwide.fr>
-References: <1428339450-2158-1-git-send-email-romain.naour@openwide.fr>
- <1428339450-2158-3-git-send-email-romain.naour@openwide.fr>
-Message-ID: <55231442.9010306@mind.be>
+Date: Tue, 07 Apr 2015 01:24:42 +0200
+Subject: [Buildroot] [PATCH 5/6 v3] toolchain/external: ignore missing
+ hash for custom downloaded toolchain
+In-Reply-To: <20150406212001.GI4369@free.fr>
+References: <cover.1428322317.git.yann.morin.1998@free.fr>
+ <2e8ef15e2d2d729ffe1bb5f77aabeb525554c407.1428322317.git.yann.morin.1998@free.fr>
+ <5522F4AF.7000409@mind.be> <20150406212001.GI4369@free.fr>
+Message-ID: <552315BA.3010605@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/04/15 18:57, Romain Naour wrote:
-> Fix the AX_CXX_COMPILE_STDCXX_11 macro which was broken in the
-> previous release.
+On 06/04/15 23:20, Yann E. MORIN wrote:
+> Arnout, All,
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> On 2015-04-06 23:03 +0200, Arnout Vandecappelle spake thusly:
+>> On 06/04/15 14:13, Yann E. MORIN wrote:
+>>> We will *always* be missing a hash file for custom external toolchains
+>>> that are downloaded.
+>>>
+>>> So, just ignore that failure.
+>>>
+>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>>>
+>>> ---
+>>> Changes v1 -> v2:
+>>>   - fix typoes in title
+>>> ---
+>>>  toolchain/toolchain-external/toolchain-external.mk | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+>>> index c0429bb..3659511 100644
+>>> --- a/toolchain/toolchain-external/toolchain-external.mk
+>>> +++ b/toolchain/toolchain-external/toolchain-external.mk
+>>> @@ -400,6 +400,8 @@ else
+>>>  # Custom toolchain
+>>>  TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+>>>  TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+>>> +# Magic value to tell the download helper to avoid failling on missing hash
+>>> +export BR_MISSING_HASH_OK := $(call ignore-missing-hash-magic,$(TOOLCHAIN_EXTERNAL_SOURCE))
+>>
+>>  Urgh - this disables the hash check for all packages, not just the toolchain.
+> 
+> No, that disable the check only for that one file, because we're not
+> chcking whether it is set, but whether it is set to the correct value
+> (i.e. the sha1 of the filename).
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Ah of course, that's probably why you introduced that.
 
- I checked that libsigrok (which really depends on this package) still works,
-but of course there could be other hidden dependencies like thrift.
+ But it does mean that only a single file can ever be bypassed...
+
+> 
+>> So NACK for exporting it.
+> 
+> OK, this is indeed fishy.
+> 
+>>  But I see that it's not so simple to get it into the environment of the
+>> download step...
+>>
+>>
+>>  Perhaps instead we should add a global variable with the files that should not
+>> be hash-checked:
+>>
+>> NOHASH_FILES += $(TOOLCHAIN_EXTERNAL_SOURCE)
+>>
+>> and in pkg-download.mk
+>>
+>> hasharg = $(if $(filter-out $(TOOLCHAIN_EXTERNAL_SOURCE),$(1)),
+> 
+> You probably meant s/TOOLCHAIN_EXTERNAL_SOURCE/NOHASH_FILES/ ?
+
+ Untested and all :-)
+
+> 
+>> 	-H $(PKGDIR)/$($(PKG)_RAWNAME).hash)
+>>
+>> define DOWNLOAD_WGET
+>>         $(EXTRA_ENV) $(DL_WRAPPER) -b wget \
+>>                 -o $(DL_DIR)/$(2) \
+>>                 $(call hasharg,$(2)) \
+>>                 $(QUIET) \
+>>                 -- \
+>>                 '$(call qstrip,$(1))'
+>> endef
+>>
+>> (all completely untested, obviously :-)
+> 
+> Well, that sounds a bit better than my proposal.
+> 
+> Still, I prefer:
+> 
+>   - we offload the check in the dl-wrapper so we can do the check in a
+>     single place, rather than re-add extra code in each download macros
+>     (the dl-wrapper was added because the Makefile macros were too
+>     complex to handle);
+
+ Ack that, though I don't immediately see a way to do that.
+
+> 
+>   - we pass obscur values (like a sha1), rather than the filenames, to
+>     make it even less easy to use.
+
+ I really don't see the point of that... If it's not documented, you have to
+look at the source code to find out which variable to set. And when you look at
+the source code, you immediately see how this obscure value is calculated so it
+makes no real difference.
+
 
  Regards,
  Arnout
 
-> ---
-> This will break packages that really depends on C++11 (like thrift).
-> ---
->  package/autoconf-archive/autoconf-archive.hash | 2 +-
->  package/autoconf-archive/autoconf-archive.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
-> index 9f975d5..c310f5a 100644
-> --- a/package/autoconf-archive/autoconf-archive.hash
-> +++ b/package/autoconf-archive/autoconf-archive.hash
-> @@ -1,2 +1,2 @@
->  # Computed locally
-> -sha256 dfd460d23a9690322dee29a355ea285b5774f37383d3741cf77a4ad6a11a7e81  autoconf-archive-2015.02.04.tar.xz
-> +sha256 69715bdd078f552ca85e498a94543e11cb8bcdf0359e659b84d84d19372b0dc5  autoconf-archive-2015.02.24.tar.xz
-> diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
-> index 4479348..bd3b0c8 100644
-> --- a/package/autoconf-archive/autoconf-archive.mk
-> +++ b/package/autoconf-archive/autoconf-archive.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -AUTOCONF_ARCHIVE_VERSION = 2015.02.04
-> +AUTOCONF_ARCHIVE_VERSION = 2015.02.24
->  AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
->  AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
->  AUTOCONF_ARCHIVE_LICENSE = GPLv3+ with exception
+> I'll respin a series taking into account your comments. Thanks! :-)
+> 
+> Regards,
+> Yann E. MORIN.
 > 
 
 
