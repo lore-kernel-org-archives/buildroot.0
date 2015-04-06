@@ -1,52 +1,63 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 06 Apr 2015 16:22:40 +0200
-Subject: [Buildroot] why there are errors compiling the kernel, 3.16.7
-In-Reply-To: <CAKKWdtdUN=FxONoqC5qMdJZPQjFFeosehRdLnY-b1jq_msU02Q@mail.gmail.com>
-References: <CAKKWdtdUN=FxONoqC5qMdJZPQjFFeosehRdLnY-b1jq_msU02Q@mail.gmail.com>
-Message-ID: <552296B0.4030808@mind.be>
+Date: Mon, 06 Apr 2015 16:25:38 +0200
+Subject: [Buildroot] [PATCH] Makefile: add help for
+ linux-update-defconfig target
+In-Reply-To: <20150406151856.17c47bc3@free-electrons.com>
+References: <1428003286-13449-1-git-send-email-yegorslists@googlemail.com>	<5522871B.2050603@mind.be>
+ <20150406151856.17c47bc3@free-electrons.com>
+Message-ID: <55229762.4040302@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/04/15 15:57, ali hagigat wrote:
-> linux-3.16.7.tar.xz
-> ipipe-core-3.16.7-arm-5.patch  + xenomai user space applications and libraries
-> target-board: wandboard-quad
+On 06/04/15 15:18, Thomas Petazzoni wrote:
+> Arnout, Yegor,
 > 
+> On Mon, 06 Apr 2015 15:16:11 +0200, Arnout Vandecappelle wrote:
 > 
->   CHK     include/generated/compile.h
->   CC      arch/arm/xenomai/hal.o
->   CC      net/socket.o
->   AS      arch/arm/xenomai/switch.o
-> arch/arm/xenomai/hal.c:47:24: fatal error: asm/system.h: No such file
-> or directory
->  #include <asm/system.h>
+>>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>>
+>> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>>
+>>> ---
+>>>  Makefile | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/Makefile b/Makefile
+>>> index edb122b..08b5c1e 100644
+>>> --- a/Makefile
+>>> +++ b/Makefile
+>>> @@ -878,6 +878,8 @@ endif
+>>>  ifeq ($(BR2_LINUX_KERNEL),y)
+>>>  	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
+>>>  	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
+>>> +	@echo '  linux-update-defconfig - Save the Linux configuration to the path specified'
+>>> +	@echo '                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE'
+> 
+> Why just for linux and not for all kconfig based packages ? Why
+> <foo>-update-defconfig and not <foo>-update-config ?
 
- That file has been deleted in 3.15, so I guess Xenomai is not compatible with
-3.16 kernels, or you need a different xenomai version.
+ Here are the reasons:
+
+- update-defconfig doesn't exist for all kconfig packages
+
+- update-defconfig is preferred if it exists (for Linux I certainly see no
+reason to ever use update-config)
+
+- documenting foo-update-defconfig would perhaps be better, but that's part of a
+bigger change that would completely remove all the specifics. When I did the
+'make help' patches I started on that, but it turns out to be a bit more work so
+I dropped it in the end.
+
 
  Regards,
  Arnout
 
->                         ^
-> compilation terminated.
-> make[2]: *** [arch/arm/xenomai/hal.o] Error 1
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [arch/arm/xenomai] Error 2
-> make[1]: *** Waiting for unfinished jobs....
->   LD      net/802/built-in.o
->   CC      net/core/sock.o
->   CC      net/dns_resolver/dns_key.o
->   CC      net/dns_resolver/dns_query.o
->   LD      net/dns_resolver/dns_resolver.o
->   LD      net/dns_resolver/built-in
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
+> Thomas
 > 
 
 
