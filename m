@@ -1,47 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Apr 2015 12:07:37 +0200
-Subject: [Buildroot] [git commit] espeak: disable for static-only builds
-Message-ID: <20150406100831.270D181994@busybox.osuosl.org>
+Date: Mon, 6 Apr 2015 12:10:55 +0200
+Subject: [Buildroot] [PATCH] espeak: add support for static builds
+In-Reply-To: <1425637368-63956-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1425637368-63956-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150406121055.3ea10b9f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f66004ded744000c3e6ed85049fd70a5844098ab
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Vicente Olivert Riera,
 
-The Makefile wants to unconditionally build a shared library, and
-since it's probably not a package that relevant in static-only
-scenarios, let's simply disable it.
+On Fri, 6 Mar 2015 10:22:48 +0000, Vicente Olivert Riera wrote:
 
-Fixes:
+>  define ESPEAK_BUILD_CMDS
+>  	$(MAKE) -C $(@D)/src  $(TARGET_CONFIGURE_OPTS) \
+> -		AUDIO="$(ESPEAK_AUDIO_BACKEND)" all
+> +		AUDIO="$(ESPEAK_AUDIO_BACKEND)" \
+> +		$(if $(BR2_STATIC_LIBS),speak,all)
 
-  http://autobuild.buildroot.org/results/b84/b84f56cdc22f333b95e0894084a800be53aefd26/
+This does not work quite well: in shared scenarios, espeak is building
+four things:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/espeak/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ * the espeak binary
+ * the speak binary
+ * the libespeak.a static library
+ * the libespeak.so shared library
 
-diff --git a/package/espeak/Config.in b/package/espeak/Config.in
-index 4bb8d4a..94e2816 100644
---- a/package/espeak/Config.in
-+++ b/package/espeak/Config.in
-@@ -1,5 +1,5 @@
--comment "espeak needs a toolchain w/ C++, wchar, threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-+comment "espeak needs a toolchain w/ C++, wchar, threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_ESPEAK
-@@ -8,6 +8,8 @@ config BR2_PACKAGE_ESPEAK
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	# does not properly support building only a static version
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  espeak is a speech synthesizer software for English and
- 	  other languages.
+Now, with your change, in static scenarios, you're only building the
+"speak" binary. The "espeak" binary is no longer built, and neither is
+the libespeak.a static library.
+
+In such cases, if someone is really interested in being able to support
+static-only build, that someone should work with upstream a proper
+patch to make that possible, and then add support in Buildroot. I don't
+think espeak is a very likely candidate for use in static-only
+environments, so it's not worse the additional mess in Buildroot.
+
+I've committed a patch that disables espeak when BR2_STATIC_LIBS is
+enabled, and marked your patch as Rejected in patchwork.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
