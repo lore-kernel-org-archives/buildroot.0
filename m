@@ -1,74 +1,85 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 06 Apr 2015 16:39:37 +0200
-Subject: [Buildroot] [PATCH 1/6 v3] support/download: do not warn about
- missing hash file for repositories
-In-Reply-To: <129976edaa1c2da5422402ba25274706cc2d2d26.1428322317.git.yann.morin.1998@free.fr>
-References: <cover.1428322317.git.yann.morin.1998@free.fr>
- <129976edaa1c2da5422402ba25274706cc2d2d26.1428322317.git.yann.morin.1998@free.fr>
-Message-ID: <55229AA9.4090201@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 6 Apr 2015 17:28:48 +0200
+Subject: [Buildroot] [PATCH v2 1/3] Remove --{enable,
+ disable}-debug configure flags.
+In-Reply-To: <1426173147-27755-1-git-send-email-johan.oudinet@gmail.com>
+References: <1426173147-27755-1-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <20150406152848.GF4369@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/04/15 14:13, Yann E. MORIN wrote:
-> When downloading from a repository, we explicitly pass no hash file,
-> because we can't check hashes in that case.
-> 
-> However, we're still printing a message that there is a missign hash
-> file.
-> 
-> Beside being a bit annoying (since we can't do anything about it), it
-> may also be wrong, especially for packages for which we support multiple
-> versions, with some being downloaded via a git clone and others as
-> tarballs.
-> 
-> Just print no warning when the path to the hash file is empty.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Johan, All,
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
+On 2015-03-12 16:12 +0100, Johan Oudinet spake thusly:
+> Adding this flag when BR2_ENABLE_DEBUG is activated make several
+> packages to produce binaries that do not work as expected (e.g., dhcp,
+> lame, nano). Moreover, the help message of BR2_ENABLE_DEBUG does not
+> say it is adding this flag. It is supposed to build packages with
+> debugging symbols enabled. So, let it do that only.
 > 
+> * package/Makefile.in: Do not add --{enable,disable}-debug flags.
+> * package/pkg-autotools.mk: Remove ENABLE_DEBUG as it is not set
+>   anymore.
+> 
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 > ---
-> Changes v1 -> v2;
->   - fix typoes in commit log
+> Changes v1 -> v2:
+>   - Do not pass --disable-debug neither.
 > ---
->  support/download/check-hash | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  package/Makefile.in      | 6 ------
+>  package/pkg-autotools.mk | 1 -
+>  2 files changed, 7 deletions(-)
 > 
-> diff --git a/support/download/check-hash b/support/download/check-hash
-> index 67c1780..d37f1cd 100755
-> --- a/support/download/check-hash
-> +++ b/support/download/check-hash
-> @@ -31,8 +31,12 @@ h_file="${1}"
->  file="${2}"
->  base="${3}"
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 803b162..049c89b 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -387,12 +387,6 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+>  TARGET_CONFIGURE_OPTS += CXX=false
+>  endif
 >  
-> +# Bail early if no hash to check
-> +if [ -z "${h_file}" ]; then
-> +    exit 0
-> +fi
->  # Does the hash-file exist?
-> -if [ -z "${h_file}" -o ! -f "${h_file}" ]; then
-> +if [ ! -f "${h_file}" ]; then
->      printf "WARNING: no hash file for %s\n" "${base}" >&2
->      exit 0
->  fi
+> -ifeq ($(BR2_ENABLE_DEBUG),y)
+> -ENABLE_DEBUG := --enable-debug
+> -else
+> -ENABLE_DEBUG := --disable-debug
+> -endif
+> -
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  SHARED_STATIC_LIBS_OPTS = --enable-static --disable-shared
+>  TARGET_CFLAGS += -static
+> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> index d2f15fa..11bc643 100644
+> --- a/package/pkg-autotools.mk
+> +++ b/package/pkg-autotools.mk
+> @@ -203,7 +203,6 @@ define $(2)_CONFIGURE_CMDS
+>  		$$(DISABLE_NLS) \
+>  		$$(DISABLE_LARGEFILE) \
+>  		$$(DISABLE_IPV6) \
+> -		$$(ENABLE_DEBUG) \
+>  		$$(SHARED_STATIC_LIBS_OPTS) \
+>  		$$(QUIET) $$($$(PKG)_CONF_OPTS) \
+>  	)
+> -- 
+> 2.1.0
 > 
-
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
