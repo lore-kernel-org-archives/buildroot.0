@@ -1,68 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Apr 2015 11:30:39 +0200
-Subject: [Buildroot] [git commit] pkg-generic: declare phony targets as such
-Message-ID: <20150406093206.D713F800FE@busybox.osuosl.org>
+Date: Mon, 6 Apr 2015 11:05:16 +0200
+Subject: [Buildroot] [git commit] docs/manual: update documentation about
+	applying patches
+Message-ID: <20150406093206.A9229800FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97eeb54598cf02d8b12752edd6d96a30b7a00be1
+commit: http://git.buildroot.net/buildroot/commit/?id=a5fd21d2e58fa6a5f9aa861c7c4638a5b7952c3f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit improves the pkg-generic package infrastructure so that it
-declares all the <pkg>-<something> targets as PHONY, which they
-actually are.
-
-[Thomas:
-   - add some missing phony targets, noticed by Yann E. Morin;
-   - put one target per line, order alphabetically. Makes it easier to
-     spot missing targets.]
+The Buildroot manual is currently wrong when describing how patches
+are applied: it says that <packagename>-*.patch is applied, and that
+<packagename>-<seq>-*.patch is the recommended name for patches. This
+is incorrect, since we're now using just <seq>-*.patch. This commit
+adjusts the documentation accordingly.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-generic.mk |   30 ++++++++++++++++++++++++++++++
- 1 files changed, 30 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-generic.txt |    2 +-
+ docs/manual/customize-patches.txt       |   11 +++++------
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 9070f8b..f77aab2 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -777,6 +777,36 @@ ifneq ($$(call suitable-extractor,$$($(2)_SOURCE)),$$(XZCAT))
- DL_TOOLS_DEPENDENCIES += $$(firstword $$(call suitable-extractor,$$($(2)_SOURCE)))
- endif
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 85c9ccd..1aa6def 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -219,7 +219,7 @@ information is (assuming the package name is +libfoo+) :
+   +LIBFOO_SITE+. If +HOST_LIBFOO_PATCH+ is not specified, it defaults
+   to +LIBFOO_PATCH+. Note that patches that are included in Buildroot
+   itself use a different mechanism: all files of the form
+-  +<packagename>-*.patch+ present in the package directory inside
++  +*.patch+ present in the package directory inside
+   Buildroot will be applied to the package after extraction (see
+   xref:patch-policy[patching a package]). Finally, patches listed in
+   the +LIBFOO_PATCH+ variable are applied _before_ the patches stored
+diff --git a/docs/manual/customize-patches.txt b/docs/manual/customize-patches.txt
+index e129a64..fa63541 100644
+--- a/docs/manual/customize-patches.txt
++++ b/docs/manual/customize-patches.txt
+@@ -33,12 +33,11 @@ follows:
+ * If a +series+ file exists in the package directory, then patches are
+   applied according to the +series+ file;
+ +
+-* Otherwise, patch files matching +<packagename>-*.patch+
+-  are applied in alphabetical order.
+-  So, to ensure they are applied in the right order, it is highly
+-  recommended to name the patch files like this:
+-  +<packagename>-<number>-<description>.patch+, where +<number>+
+-  refers to the 'apply order'.
++* Otherwise, patch files matching +*.patch+ are applied in
++  alphabetical order.  So, to ensure they are applied in the right
++  order, it is highly recommended to name the patch files like this:
++  +<number>-<description>.patch+, where +<number>+ refers to the
++  'apply order'.
  
-+# Ensure all virtual targets are PHONY. Listed alphabetically.
-+.PHONY:	$(1) \
-+	$(1)-all-external-deps \
-+	$(1)-all-legal-info \
-+	$(1)-all-source \
-+	$(1)-build \
-+	$(1)-clean-for-rebuild \
-+	$(1)-clean-for-reconfigure \
-+	$(1)-clean-for-reinstall \
-+	$(1)-configure \
-+	$(1)-depends \
-+	$(1)-dirclean \
-+	$(1)-external-deps \
-+	$(1)-extract \
-+	$(1)-graph-depends \
-+	$(1)-install \
-+	$(1)-install-host \
-+	$(1)-install-images \
-+	$(1)-install-staging \
-+	$(1)-install-target \
-+	$(1)-legal-info \
-+	$(1)-patch \
-+	$(1)-rebuild \
-+	$(1)-reconfigure \
-+	$(1)-reinstall \
-+	$(1)-rsync \
-+	$(1)-show-depends \
-+	$(1)-show-version \
-+	$(1)-source
-+
- endif # $(2)_KCONFIG_VAR
- endef # inner-generic-package
- 
+ For information about how patches are applied for a package, see
+ xref:patch-apply-order[]
