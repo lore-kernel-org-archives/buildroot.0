@@ -1,30 +1,30 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  6 Apr 2015 03:30:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 4021] uClibc: undefined reference to
-	`__GI___errno_location'
-In-Reply-To: <bug-4021-163@https.bugs.busybox.net/>
-References: <bug-4021-163@https.bugs.busybox.net/>
-Message-ID: <20150406033036.B8AFD8197A@busybox.osuosl.org>
+Date: Mon,  6 Apr 2015 03:30:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 7802] host-python build hangs compiling
+	getbuildinfo.o
+In-Reply-To: <bug-7802-163@https.bugs.busybox.net/>
+References: <bug-7802-163@https.bugs.busybox.net/>
+Message-ID: <20150406033038.6BA128197A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4021
+https://bugs.busybox.net/show_bug.cgi?id=7802
 
 cory42080 at gmail.com changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
            Priority|P5                          |P1
-             Status|REOPENED                    |NEW
-            Version|unspecified                 |1.22.x
-          Component|Other                       |Other
                  CC|                            |busybox-cvs at busybox.net
-         AssignedTo|unassigned at uclibc.org       |unassigned at busybox.net
-            Product|uClibc                      |Busybox
-           Severity|critical                    |normal
+          Component|Other                       |Other
+            Version|2014.11                     |1.22.x
+         AssignedTo|unassigned at buildroot.uclibc |unassigned at busybox.net
+                   |.org                        |
+            Product|buildroot                   |Busybox
+           Severity|blocker                     |normal
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
