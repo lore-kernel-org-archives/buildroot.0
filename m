@@ -1,122 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Apr 2015 12:33:46 +0200
-Subject: [Buildroot] [PATCH 1/1] Support for the Lamobo R1 a.k.a.
- BananaPi-R1 router board
-In-Reply-To: <1426530919-27935-2-git-send-email-a.weiler@aldea.de>
-References: <1426530919-27935-1-git-send-email-a.weiler@aldea.de>
- <1426530919-27935-2-git-send-email-a.weiler@aldea.de>
-Message-ID: <20150406123346.3bfcae3f@free-electrons.com>
+Date: Mon, 6 Apr 2015 12:42:54 +0200
+Subject: [Buildroot] [git commit] package/ipmiutil: do not build doc
+Message-ID: <20150406104305.62B17819AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Adrian Weiler,
+commit: http://git.buildroot.net/buildroot/commit/?id=ca735d8a0b86b7ad274319774df2bca0abfe4ee9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 16 Mar 2015 19:35:19 +0100, Adrian Weiler wrote:
-> Signed-off-by: Adrian Weiler <a.weiler@aldea.de>
-> ---
->  board/bananapi/r1/busybox.config                   | 1054 ++++
->  board/bananapi/r1/fs-overlay/etc/dnsmasq.conf      |  623 ++
->  board/bananapi/r1/fs-overlay/etc/hostapd.conf      |   18 +
->  board/bananapi/r1/fs-overlay/etc/init.d/S02led     |   32 +
->  board/bananapi/r1/fs-overlay/etc/network/eth0.up   |   19 +
->  .../bananapi/r1/fs-overlay/etc/network/interfaces  |   10 +
->  board/bananapi/r1/fs-overlay/etc/network/wlan0.up  |    9 +
->  board/bananapi/r1/fs-overlay/root/.ssh/.empty      |    0
->  board/bananapi/r1/linux-3.19.1.config              |  263 +
->  .../r1/patches/linux/linux-3.19-001-lamobo.patch   | 6004 ++++++++++++++++++++
->  board/bananapi/r1/patches/package/.empty           |    0
->  board/bananapi/r1/post-image.sh                    |  108 +
->  board/bananapi/r1/uEnv.txt                         |    6 +
->  boot/uboot/uboot-001-bananapi.patch                |   50 +
->  configs/lamobo_r1_defconfig                        |   62 +
->  package/Config.in                                  |    1 +
->  package/swconfig/001-no-uci.patch                  |  236 +
->  package/swconfig/Config.in                         |   11 +
->  package/swconfig/swconfig.mk                       |   24 +
->  19 files changed, 8530 insertions(+)
+Fixes:
+    http://autobuild.buildroot.org/results/2ec/2ecfb1143ba89ffa5cdc8096bb175b2c396c4670/
+    http://autobuild.buildroot.org/results/c49/c497fc446140694084922d51fe6be308ce5c1c1a/
+    http://autobuild.buildroot.org/results/434/434b156b5c9b5c7b65ffe6174cf4e029e7e3ffd8/
 
-Thanks for this patch. However, it unfortunately doesn't match the type
-of minimal defconfig that we currently accept in Buildroot. Our
-defconfig are meant to generate a minimal system, that boots up to a
-Busybox shell prompt. All the rest should be left to user's
-customization.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ipmiutil/0002-no-build-doc.patch |   30 ++++++++++++++++++++++++++++++
+ 1 files changed, 30 insertions(+), 0 deletions(-)
 
-> diff --git a/board/bananapi/r1/busybox.config b/board/bananapi/r1/busybox.config
-> new file mode 100644
-> index 0000000..a0846ae
-> --- /dev/null
-> +++ b/board/bananapi/r1/busybox.config
-
-Why do you have a custom Busybox configuration? Isn't the default one
-sufficient for your needs?
-
-
-> diff --git a/board/bananapi/r1/fs-overlay/etc/dnsmasq.conf b/board/bananapi/r1/fs-overlay/etc/dnsmasq.conf
-> new file mode 100644
-> index 0000000..9748ddb
-> --- /dev/null
-> +++ b/board/bananapi/r1/fs-overlay/etc/dnsmasq.conf
-
-What if I don't want to use dnsmasq on this platform? If you want to
-turn the BananaPi-R1 into a proper router, then we could have two
-separate defconfig files:
-
-	lamobo_r1_defconfig		-> really minimal	
-	lamobo_r1_router_defconfig	-> a router-like config
-
-Also, maybe we can make this config file more minimal by only
-keeping the non-commented lines?
-
-
-> diff --git a/board/bananapi/r1/fs-overlay/root/.ssh/.empty b/board/bananapi/r1/fs-overlay/root/.ssh/.empty
-> new file mode 100644
-> index 0000000..e69de29
-
-Why ?
-
-> diff --git a/board/bananapi/r1/patches/linux/linux-3.19-001-lamobo.patch b/board/bananapi/r1/patches/linux/linux-3.19-001-lamobo.patch
-
-This patch is really *huge*. Unlike OpenWRT, we clearly do not want to
-have large kernel patches to maintain in Buildroot. Having a patch
-adding a Device Tree, or fixing minor stuff is OK. Having a patch
-adding an entire subsystem + drivers is not OK.
-
-So either find a way of downloading this patch, or make Buildroot point
-to a Git tree where a complete Git tree of the kernel can be found, or
-work with the upstream kernel to get this stuff merged.
-
-
-> diff --git a/package/swconfig/Config.in b/package/swconfig/Config.in
-> new file mode 100644
-> index 0000000..8817c3f
-> --- /dev/null
-> +++ b/package/swconfig/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_SWCONFIG
-> +	bool "swconfig"
-> +#	depends on BR2_PACKAGE_LIBNL
-> +	select BR2_PACKAGE_LIBNL
-> +	help
-> +	  Configuration utility for the B53 switch on the Bananapi R1 router board
-> +
-> +	  http://openwrt.org
-> +
-> +#comment "swconfig needs libnl"
-> +#	depends on !BR2_PACKAGE_LIBNL 
-
-If I understand correctly, this utility is only useful in combination
-with the OpenWRT-specific switch configuration subsystem that was added
-by your patch. Since this subsystem is not in the mainline kernel, I'm
-really unsure we want to have the corresponding userspace utilities in
-Buildroot.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ipmiutil/0002-no-build-doc.patch b/package/ipmiutil/0002-no-build-doc.patch
+new file mode 100644
+index 0000000..f26d22e
+--- /dev/null
++++ b/package/ipmiutil/0002-no-build-doc.patch
+@@ -0,0 +1,30 @@
++configure: do not build doc
++
++Fixes:
++    http://autobuild.buildroot.org/results/2ec/2ecfb1143ba89ffa5cdc8096bb175b2c396c4670/
++    http://autobuild.buildroot.org/results/c49/c497fc446140694084922d51fe6be308ce5c1c1a/
++    http://autobuild.buildroot.org/results/434/434b156b5c9b5c7b65ffe6174cf4e029e7e3ffd8/
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN ipmiutil-2.9.5.orig/configure.ac ipmiutil-2.9.5/configure.ac
++--- ipmiutil-2.9.5.orig/configure.ac	2015-04-06 12:23:01.020731749 +0200
+++++ ipmiutil-2.9.5/configure.ac	2015-04-06 12:24:31.181773510 +0200
++@@ -55,7 +55,7 @@
++ isredhat=0
++ init_scripts="scripts/ipmi_port.sh scripts/ipmiutil_evt scripts/ipmiutil_asy scripts/ipmiutil_wdt"
++ projdir=`pwd`
++-SUBDIR_S="doc scripts lib util"
+++SUBDIR_S="scripts lib util"
++ os=Linux
++ 
++ # ltmain.sh, config.sub, et al should have been created, but check to be sure.
++@@ -161,7 +161,7 @@
++ 	LANPLUS_SAM="no"
++ 	LD_SAMX=""
++ 	CFLAGS="-O2"
++-        SUBDIR_S="doc scripts util"
+++        SUBDIR_S="scripts util"
++ 	if test "x$cross_compiling" = "xyes"; then
++ 	   # cross-compiling, so link with -static (e.g. Android ARM)
++ 	   CROSS_LFLAGS="-static"
