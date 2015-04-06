@@ -1,47 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Apr 2015 12:10:55 +0200
-Subject: [Buildroot] [PATCH] espeak: add support for static builds
-In-Reply-To: <1425637368-63956-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1425637368-63956-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150406121055.3ea10b9f@free-electrons.com>
+Date: Mon, 6 Apr 2015 12:20:20 +0200
+Subject: [Buildroot] [PATCH 2/3] Transformation of package
+ 'at91bootstrap3' to KConfig style.
+In-Reply-To: <1425850629-14725-2-git-send-email-mc5686@mclink.it>
+References: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
+ <1425850629-14725-2-git-send-email-mc5686@mclink.it>
+Message-ID: <20150406122020.5ea2e6df@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Mauro Condarelli,
 
-On Fri, 6 Mar 2015 10:22:48 +0000, Vicente Olivert Riera wrote:
+Adding our kconfig-package guys Yann and Thomas DS in Cc. See below for
+some comments.
 
->  define ESPEAK_BUILD_CMDS
->  	$(MAKE) -C $(@D)/src  $(TARGET_CONFIGURE_OPTS) \
-> -		AUDIO="$(ESPEAK_AUDIO_BACKEND)" all
-> +		AUDIO="$(ESPEAK_AUDIO_BACKEND)" \
-> +		$(if $(BR2_STATIC_LIBS),speak,all)
+On Sun,  8 Mar 2015 22:37:08 +0100, Mauro Condarelli wrote:
+> 
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  boot/at91bootstrap3/at91bootstrap3.mk |    9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+> index 098e7bf..37e1bdd 100644
+> --- a/boot/at91bootstrap3/at91bootstrap3.mk
+> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
+> @@ -46,7 +46,14 @@ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
+>  	cp $(@D)/binaries/*.bin $(BINARIES_DIR)
+>  endef
+>  
+> -$(eval $(generic-package))
+> +ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+> +AT91BOOTSTRAP3_KCONFIG_FILE = $(call qstrip,$(AT91BOOTSTRAP3_DEFCONFIG))
+> +else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
+> +AT91BOOTSTRAP3_KCONFIG_FILE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE))
+> +endif
+> +AT91BOOTSTRAP3_KCONFIG_EDITORS = menuconfig xconfig gconfig
+> +AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
+> +$(eval $(kconfig-package))
 
-This does not work quite well: in shared scenarios, espeak is building
-four things:
+This is not going far enough: the kconfig-package infra is taking care
+of implementing the <pkg>_CONFIGURE_CMDS for you. So the following
+chunk of code should go away:
 
- * the espeak binary
- * the speak binary
- * the libespeak.a static library
- * the libespeak.so shared library
+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+define AT91BOOTSTRAP3_CONFIGURE_CMDS
+        $(MAKE) $(AT91BOOTSTRAP3_MAKE_OPTS) -C $(@D) $(AT91BOOTSTRAP3_DEFCONFIG)_defconfig
+endef
+else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
+define AT91BOOTSTRAP3_CONFIGURE_CMDS
+        cp $(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE) $(@D)/.config
+endef
+endif
 
-Now, with your change, in static scenarios, you're only building the
-"speak" binary. The "espeak" binary is no longer built, and neither is
-the libespeak.a static library.
+and be replaced by a chunk of code that sets
+AT91BOOTSTRAP3_KCONFIG_FILE.
 
-In such cases, if someone is really interested in being able to support
-static-only build, that someone should work with upstream a proper
-patch to make that possible, and then add support in Buildroot. I don't
-think espeak is a very likely candidate for use in static-only
-environments, so it's not worse the additional mess in Buildroot.
+However, while this is reasy to do for the
+BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG case, it is much more
+complicated for the BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG case. This
+is because we do not know the path to the defconfig file in the
+at91bootstrap3 source tree.
 
-I've committed a patch that disables espeak when BR2_STATIC_LIBS is
-enabled, and marked your patch as Rejected in patchwork.
+For the linux and barebox package, when a defconfig name is passed, its
+path in the linux or barebox source tree is easily found: it's
+arch/<ARCH>/configs/<name>_defconfig. But for at91bootstrap3, defconfig
+files are spread throughout the tree, in directories named after the
+board. There is no real way of inferring the location of the defconfig
+file just by looking at its name.
 
-Thanks!
+Therefore, I am not sure how we can initialize
+AT91BOOTSTRAP3_KCONFIG_FILE in such a situation.
+
+Thomas DS, Yann, am I missing something?
+
+Best regards,
 
 Thomas
 -- 
