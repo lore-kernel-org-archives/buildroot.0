@@ -1,40 +1,35 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 6 Apr 2015 08:04:22 +0300
-Subject: [Buildroot] [PATCH v2 1/2] systemd: add option to enable kdbus
- support
-In-Reply-To: <1428271811-27530-1-git-send-email-ryanbarnett3@gmail.com>
-References: <1428271811-27530-1-git-send-email-ryanbarnett3@gmail.com>
-Message-ID: <20150406050422.GD2183@tarshish>
+Date: Mon,  6 Apr 2015 08:32:07 +0300
+Subject: [Buildroot] [PATCH] jsoncpp: don't build tests
+Message-ID: <deb5dd93e84879ae624f214bf7dba983fa526348.1428298327.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ryan,
+Fixes:
+http://autobuild.buildroot.net/results/a0f/a0f60a1df243bdae875f12668011a53a70071ee6/
+http://autobuild.buildroot.net/results/f88/f8885520b5892d49164c88a974e7dffc1c3c2ce0/
+http://autobuild.buildroot.net/results/448/448745830f58496e6dcdf48e2ad57650b4744909/
 
-On Sun, Apr 05, 2015 at 05:10:10PM -0500, Ryan Barnett wrote:
-> In the future when the kernel offically supports kdbus, this option
-> should automatically enable the kernel kdbus config option(s).
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/jsoncpp/jsoncpp.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-So there is no need to fiddle with kernel version dependency for 
---enable-kdbus?
-
-[...]
-
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_KDBUS),y)
-> +SYSTEMD_CONF_OPTS += --enable-kdbus
-> +else
-> +SYSTEMD_CONF_OPTS += --disable-kdbus
-> +endif
-
-Is there any reason not to enable kdbus when the kernel supports that? If not, 
-I'd suggest to add --enable-kdbus unconditionally, and remove 
-BR2_PACKAGE_SYSTEMD_KDBUS.
-
-baruch
-
+diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+index cfd3dd9b3179..3044be13a154 100644
+--- a/package/jsoncpp/jsoncpp.mk
++++ b/package/jsoncpp/jsoncpp.mk
+@@ -11,6 +11,7 @@ JSONCPP_LICENSE_FILES = LICENSE
+ JSONCPP_INSTALL_STAGING = YES
+ 
+ JSONCPP_CONF_OPTS += \
+-	-DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF
++	-DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF \
++	-DJSONCPP_WITH_TESTS=OFF
+ 
+ $(eval $(cmake-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.4
