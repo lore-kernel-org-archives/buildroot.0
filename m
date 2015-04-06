@@ -1,34 +1,73 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon,  6 Apr 2015 18:57:27 +0200
-Subject: [Buildroot] [PATCH 1/4] package/thrift: reorders alphabetically the
-	dependencies.
-Message-ID: <1428339450-2158-1-git-send-email-romain.naour@openwide.fr>
+Date: Mon,  6 Apr 2015 18:57:28 +0200
+Subject: [Buildroot] [PATCH 2/4] package/thrift: fix libtool warning
+In-Reply-To: <1428339450-2158-1-git-send-email-romain.naour@openwide.fr>
+References: <1428339450-2158-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1428339450-2158-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Backport an upstream patch.
+
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/thrift/thrift.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ ...-check-minimum-required-version-of-automa.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch
 
-diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-index 094f8d0..409b04d 100644
---- a/package/thrift/thrift.mk
-+++ b/package/thrift/thrift.mk
-@@ -8,8 +8,9 @@ THRIFT_VERSION = 0.9.2
- THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(THRIFT_VERSION)
- THRIFT_DEPENDENCIES = host-pkgconf host-thrift boost libevent openssl zlib
- THRIFT_INSTALL_STAGING = YES
--HOST_THRIFT_DEPENDENCIES = host-boost host-libevent host-openssl host-pkgconf \
--	host-zlib host-bison host-flex
-+HOST_THRIFT_DEPENDENCIES = host-bison host-boost host-flex host-libevent \
-+	host-openssl host-pkgconf host-zlib
+diff --git a/package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch b/package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch
+new file mode 100644
+index 0000000..2019706
+--- /dev/null
++++ b/package/thrift/0004-THRIFT-3071-check-minimum-required-version-of-automa.patch
+@@ -0,0 +1,45 @@
++From 9b03d2b02d32302008d2bd0218b31b9a0ca5a748 Mon Sep 17 00:00:00 2001
++From: Jens Geyer <jensg@apache.org>
++Date: Fri, 3 Apr 2015 12:37:03 +0200
++Subject: [PATCH] THRIFT-3071 check minimum required version of automake in
++ bootstrap.sh Client: Build process Patch: James E. King, III
++ <jim.king@simplivity.com>
 +
- THRIFT_CONF_OPTS = --with-sysroot=$(STAGING_DIR) \
- 	--with-boost \
- 	--with-boost-libdir=$(STAGING_DIR)/usr/lib \
++This closes #421
++
++- remove a warning when using libtool
++
++"libtoolize: Consider adding 'AC_CONFIG_MACRO_DIRS([./aclocal])' to configure.ac,"
++
++[Romain:
++  - remove the part for bootstrap.sh which is not
++    bundled in thrift archive.
++  - fix the comment]
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ configure.ac | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 5fa611e..8daeb03 100755
++--- a/configure.ac
+++++ b/configure.ac
++@@ -18,6 +18,7 @@
++ #
++ 
++ AC_PREREQ(2.65)
+++AC_CONFIG_MACRO_DIR([./aclocal])
++ 
++ AC_INIT([thrift], [0.9.2])
++ 
++@@ -540,6 +541,7 @@ AC_CHECK_FUNCS([memset])
++ AC_CHECK_FUNCS([mkdir])
++ AC_CHECK_FUNCS([realpath])
++ AC_CHECK_FUNCS([select])
+++AC_CHECK_FUNCS([setlocale])
++ AC_CHECK_FUNCS([socket])
++ AC_CHECK_FUNCS([strchr])
++ AC_CHECK_FUNCS([strdup])
++-- 
++1.9.3
++
 -- 
 1.9.3
