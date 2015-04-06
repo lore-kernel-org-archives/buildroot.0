@@ -1,63 +1,67 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 06 Apr 2015 16:25:38 +0200
-Subject: [Buildroot] [PATCH] Makefile: add help for
- linux-update-defconfig target
-In-Reply-To: <20150406151856.17c47bc3@free-electrons.com>
-References: <1428003286-13449-1-git-send-email-yegorslists@googlemail.com>	<5522871B.2050603@mind.be>
- <20150406151856.17c47bc3@free-electrons.com>
-Message-ID: <55229762.4040302@mind.be>
+Date: Mon, 06 Apr 2015 16:39:37 +0200
+Subject: [Buildroot] [PATCH 1/6 v3] support/download: do not warn about
+ missing hash file for repositories
+In-Reply-To: <129976edaa1c2da5422402ba25274706cc2d2d26.1428322317.git.yann.morin.1998@free.fr>
+References: <cover.1428322317.git.yann.morin.1998@free.fr>
+ <129976edaa1c2da5422402ba25274706cc2d2d26.1428322317.git.yann.morin.1998@free.fr>
+Message-ID: <55229AA9.4090201@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/04/15 15:18, Thomas Petazzoni wrote:
-> Arnout, Yegor,
+On 06/04/15 14:13, Yann E. MORIN wrote:
+> When downloading from a repository, we explicitly pass no hash file,
+> because we can't check hashes in that case.
 > 
-> On Mon, 06 Apr 2015 15:16:11 +0200, Arnout Vandecappelle wrote:
+> However, we're still printing a message that there is a missign hash
+> file.
 > 
->>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Beside being a bit annoying (since we can't do anything about it), it
+> may also be wrong, especially for packages for which we support multiple
+> versions, with some being downloaded via a git clone and others as
+> tarballs.
 > 
->>
->>> ---
->>>  Makefile | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/Makefile b/Makefile
->>> index edb122b..08b5c1e 100644
->>> --- a/Makefile
->>> +++ b/Makefile
->>> @@ -878,6 +878,8 @@ endif
->>>  ifeq ($(BR2_LINUX_KERNEL),y)
->>>  	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
->>>  	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
->>> +	@echo '  linux-update-defconfig - Save the Linux configuration to the path specified'
->>> +	@echo '                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE'
+> Just print no warning when the path to the hash file is empty.
 > 
-> Why just for linux and not for all kconfig based packages ? Why
-> <foo>-update-defconfig and not <foo>-update-config ?
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- Here are the reasons:
-
-- update-defconfig doesn't exist for all kconfig packages
-
-- update-defconfig is preferred if it exists (for Linux I certainly see no
-reason to ever use update-config)
-
-- documenting foo-update-defconfig would perhaps be better, but that's part of a
-bigger change that would completely remove all the specifics. When I did the
-'make help' patches I started on that, but it turns out to be a bit more work so
-I dropped it in the end.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
  Regards,
  Arnout
 
 > 
-> Thomas
+> ---
+> Changes v1 -> v2;
+>   - fix typoes in commit log
+> ---
+>  support/download/check-hash | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/support/download/check-hash b/support/download/check-hash
+> index 67c1780..d37f1cd 100755
+> --- a/support/download/check-hash
+> +++ b/support/download/check-hash
+> @@ -31,8 +31,12 @@ h_file="${1}"
+>  file="${2}"
+>  base="${3}"
+>  
+> +# Bail early if no hash to check
+> +if [ -z "${h_file}" ]; then
+> +    exit 0
+> +fi
+>  # Does the hash-file exist?
+> -if [ -z "${h_file}" -o ! -f "${h_file}" ]; then
+> +if [ ! -f "${h_file}" ]; then
+>      printf "WARNING: no hash file for %s\n" "${base}" >&2
+>      exit 0
+>  fi
 > 
 
 
