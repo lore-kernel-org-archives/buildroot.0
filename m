@@ -1,75 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  6 Apr 2015 14:13:07 +0200
-Subject: [Buildroot] [PATCH 0/6 v3] toolchain: better handle hashes (branch
-	yem/dl-hash-toolchains)
-Message-ID: <cover.1428322317.git.yann.morin.1998@free.fr>
+Date: Mon,  6 Apr 2015 14:13:06 +0200
+Subject: [Buildroot] [PATCH 1/6 v3] support/download: do not warn about
+	missing hash file for repositories
+In-Reply-To: <cover.1428322317.git.yann.morin.1998@free.fr>
+References: <cover.1428322317.git.yann.morin.1998@free.fr>
+Message-ID: <129976edaa1c2da5422402ba25274706cc2d2d26.1428322317.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+When downloading from a repository, we explicitly pass no hash file,
+because we can't check hashes in that case.
 
-This series makes it so we can download custom external toolchains, and
-still have mandatory checks of hashes.
+However, we're still printing a message that there is a missign hash
+file.
 
-It also adds the long-awaited-for hashes for gcc and binutils.
+Beside being a bit annoying (since we can't do anything about it), it
+may also be wrong, especially for packages for which we support multiple
+versions, with some being downloaded via a git clone and others as
+tarballs.
 
-Finally, it fixes a slightly annoying warning message when downloading
-from a repository.
+Just print no warning when the path to the hash file is empty.
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Changes v2 -> v3:
-  - add hashes for gcc and binutils
-  - fix a few more typoes
+---
+Changes v1 -> v2;
+  - fix typoes in commit log
+---
+ support/download/check-hash | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Changes v1 -> v2:
-  - fix a few typoes
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit ca735d8a0b86b7ad274319774df2bca0abfe4ee9:
-
-  package/ipmiutil: do not build doc (2015-04-06 12:42:54 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/dl-hash-toolchains
-
-for you to fetch changes up to 21c6a4cd9d79b9279ba50426a2d0baaa1bc3f0b0:
-
-  support/download: restore mandatory check of hashes (2015-04-06 14:11:45 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (6):
-      support/download: do not warn about missing hash file for repositories
-      package/gcc: add hashes
-      package/binutils: add hashes
-      support/download: add possibility to not fail on missing hash
-      toolchain/external: ignore missing hash for custom downloaded toolchain
-      support/download: restore mandatory check of hashes
-
- package/binutils/binutils.hash                     |  7 +++++++
- package/gcc/gcc-final/gcc-final.hash               |  1 +
- package/gcc/gcc-initial/gcc-initial.hash           |  1 +
- package/gcc/gcc.hash                               |  7 +++++++
- package/pkg-download.mk                            |  4 ++++
- support/download/check-hash                        | 12 ++++++++++--
- toolchain/toolchain-external/toolchain-external.mk |  2 ++
- 7 files changed, 32 insertions(+), 2 deletions(-)
- create mode 100644 package/binutils/binutils.hash
- create mode 120000 package/gcc/gcc-final/gcc-final.hash
- create mode 120000 package/gcc/gcc-initial/gcc-initial.hash
- create mode 100644 package/gcc/gcc.hash
-
+diff --git a/support/download/check-hash b/support/download/check-hash
+index 67c1780..d37f1cd 100755
+--- a/support/download/check-hash
++++ b/support/download/check-hash
+@@ -31,8 +31,12 @@ h_file="${1}"
+ file="${2}"
+ base="${3}"
+ 
++# Bail early if no hash to check
++if [ -z "${h_file}" ]; then
++    exit 0
++fi
+ # Does the hash-file exist?
+-if [ -z "${h_file}" -o ! -f "${h_file}" ]; then
++if [ ! -f "${h_file}" ]; then
+     printf "WARNING: no hash file for %s\n" "${base}" >&2
+     exit 0
+ fi
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
