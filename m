@@ -1,33 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Apr 2015 23:21:57 +0200
-Subject: [Buildroot] [buildroot-test] [PATCH] autbuild-run: fix
-	legal-info
-In-Reply-To: <1428354169-25215-1-git-send-email-yann.morin.1998@free.fr>
-References: <1428354169-25215-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150406232157.4d71a397@free-electrons.com>
+Date: Mon, 6 Apr 2015 23:25:22 +0200
+Subject: [Buildroot] [git commit] package/thrift: reorders alphabetically
+	the dependencies.
+Message-ID: <20150406212527.EC629819BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=18c8efe90baec4f4e11068b08d322de3e233e2e9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  6 Apr 2015 23:02:49 +0200, Yann E. MORIN wrote:
-> Currently, running legal-info is broken, as it only runs a plain 'make',
-> which does not do much...
-> 
-> Fix that by explicitly pass 'legal-info' as the make target. Also, we
-> need to specify the download dir, to avoid using the default one (which
-> does not exist) or a user-defined one (in the environment).
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/thrift/thrift.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-Applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
+index 094f8d0..409b04d 100644
+--- a/package/thrift/thrift.mk
++++ b/package/thrift/thrift.mk
+@@ -8,8 +8,9 @@ THRIFT_VERSION = 0.9.2
+ THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(THRIFT_VERSION)
+ THRIFT_DEPENDENCIES = host-pkgconf host-thrift boost libevent openssl zlib
+ THRIFT_INSTALL_STAGING = YES
+-HOST_THRIFT_DEPENDENCIES = host-boost host-libevent host-openssl host-pkgconf \
+-	host-zlib host-bison host-flex
++HOST_THRIFT_DEPENDENCIES = host-bison host-boost host-flex host-libevent \
++	host-openssl host-pkgconf host-zlib
++
+ THRIFT_CONF_OPTS = --with-sysroot=$(STAGING_DIR) \
+ 	--with-boost \
+ 	--with-boost-libdir=$(STAGING_DIR)/usr/lib \
