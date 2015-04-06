@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Apr 2015 17:29:21 +0200
-Subject: [Buildroot] [PATCH v2 2/3] lame: Remove --enable-debug
+Date: Mon, 6 Apr 2015 17:29:53 +0200
+Subject: [Buildroot] [PATCH v2 3/3] mp4v2: Remove --disable-debug
  workaround.
-In-Reply-To: <1426173147-27755-2-git-send-email-johan.oudinet@gmail.com>
+In-Reply-To: <1426173147-27755-3-git-send-email-johan.oudinet@gmail.com>
 References: <1426173147-27755-1-git-send-email-johan.oudinet@gmail.com>
- <1426173147-27755-2-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <20150406152921.GG4369@free.fr>
+ <1426173147-27755-3-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <20150406152953.GH4369@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,27 +26,26 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/lame/lame.mk | 7 -------
->  1 file changed, 7 deletions(-)
+>  package/mp4v2/mp4v2.mk | 6 ------
+>  1 file changed, 6 deletions(-)
 > 
-> diff --git a/package/lame/lame.mk b/package/lame/lame.mk
-> index e47e0af..dcd155f 100644
-> --- a/package/lame/lame.mk
-> +++ b/package/lame/lame.mk
-> @@ -14,13 +14,6 @@ LAME_CONF_OPTS = --enable-dynamic-frontends
->  LAME_LICENSE = LGPLv2+
->  LAME_LICENSE_FILES = COPYING
+> diff --git a/package/mp4v2/mp4v2.mk b/package/mp4v2/mp4v2.mk
+> index 5d38116..1da5bc3 100644
+> --- a/package/mp4v2/mp4v2.mk
+> +++ b/package/mp4v2/mp4v2.mk
+> @@ -16,12 +16,6 @@ MP4V2_LICENSE_FILES = COPYING
+>  # disable it
+>  MP4V2_CONF_ENV = ac_cv_prog_FOUND_HELP2MAN=no
 >  
-> -# Building lame with debug symbols needs the following macros to be
-> -# defined: _FPU_MASK_IM, _FPU_MASK_ZM, _FPU_MASK_OM.
-> -# So, if BR2_ENABLE_DEBUG is selected, then we have force lame to be
-> -# built without debug symbols because a number of architectures don't
-> -# have those macros defined.
-> -LAME_CONF_OPTS += --disable-debug
+> -# infrastructure passes --disable-debug if !BR2_ENABLE_DEBUG. With
+> -# mpv42 the only thing this option does is that it tries to strip any
+> -# -g* options from CFLAGS/CXXFLAGS. The logic to do so is
+> -# unfortunately buggy, so just pass --enable-debug to disable this
+> -MP4V2_CONF_OPTS = --enable-debug
 > -
->  ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
->  LAME_DEPENDENCIES += libsndfile
->  LAME_CONF_OPTS += --with-fileio=sndfile
+>  ifeq ($(BR2_LARGEFILE),y)
+>  MP4V2_CONF_OPTS += --enable-largefile
+>  else
 > -- 
 > 2.1.0
 > 
