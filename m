@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  7 Apr 2015 15:29:04 -0300
-Subject: [Buildroot] [PATCH 1/3] gtk2-engines: add hash file
-Message-ID: <1428431346-13658-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  7 Apr 2015 15:29:05 -0300
+Subject: [Buildroot] [PATCH 2/3] libsigc++: add hash file
+In-Reply-To: <1428431346-13658-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1428431346-13658-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1428431346-13658-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gtk2-engines/gtk2-engines.hash | 2 ++
+ package/libsigc/libsigc.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/gtk2-engines/gtk2-engines.hash
+ create mode 100644 package/libsigc/libsigc.hash
 
-diff --git a/package/gtk2-engines/gtk2-engines.hash b/package/gtk2-engines/gtk2-engines.hash
+diff --git a/package/libsigc/libsigc.hash b/package/libsigc/libsigc.hash
 new file mode 100644
-index 0000000..ac56c7d
+index 0000000..21c0e99
 --- /dev/null
-+++ b/package/gtk2-engines/gtk2-engines.hash
++++ b/package/libsigc/libsigc.hash
 @@ -0,0 +1,2 @@
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk-engines/2.20/gtk-engines-2.20.2.sha256sum
-+sha256	15b680abca6c773ecb85253521fa100dd3b8549befeecc7595b10209d62d66b5	gtk-engines-2.20.2.tar.bz2
++# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/2.2/libsigc++-2.2.11.sha256sum
++sha256	9834045f74f56752c2c6b3cdc195c30ab8314ad22dc8e626d6f67f940f1e4957	libsigc++-2.2.11.tar.xz
 -- 
 2.0.5
