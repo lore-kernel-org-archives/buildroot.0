@@ -1,43 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  6 Apr 2015 22:13:11 -0300
-Subject: [Buildroot] [PATCH] gcc-final: install libatomic
-Message-ID: <1428369191-25650-1-git-send-email-gustavo@zacarias.com.ar>
+From: Masahiro Yamada <yamada.masahiro@socionext.com>
+Date: Tue,  7 Apr 2015 13:08:16 +0900
+Subject: [Buildroot] [PATCH] Makefile: remove redundant ifdef V
+Message-ID: <1428379696-16079-1-git-send-email-yamada.masahiro@socionext.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's required in some 32-bit architectures for the extended (64-bit)
-atomic operations, like __sync_add_and_fetch_8.
-These arches are at least: i386, mips & mipsel.
+If "V" is not defined, "$(origin V)" returns "undefined".
+"ifdev V" is redundant.
 
-Target size growth is ~15 KiB for ARM.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 ---
- package/gcc/gcc-final/gcc-final.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index d76eb31..8fda883 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -118,6 +118,15 @@ endef
+ Makefile | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index d6426b3..9db52a8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -184,10 +184,8 @@ endif
  
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBGCC
- 
-+define HOST_GCC_FINAL_INSTALL_LIBATOMIC
-+	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libatomic* \
-+		$(STAGING_DIR)/lib/
-+	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libatomic* \
-+		$(TARGET_DIR)/lib/
-+endef
-+
-+HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBATOMIC
-+
- # Handle the installation of libraries in /usr/lib
- HOST_GCC_FINAL_USR_LIBS =
- 
+ # To put more focus on warnings, be less verbose as default
+ # Use 'make V=1' to see the full commands
+-ifdef V
+-  ifeq ("$(origin V)", "command line")
+-    KBUILD_VERBOSE = $(V)
+-  endif
++ifeq ("$(origin V)", "command line")
++  KBUILD_VERBOSE = $(V)
+ endif
+ ifndef KBUILD_VERBOSE
+   KBUILD_VERBOSE = 0
 -- 
-2.0.5
+1.9.1
