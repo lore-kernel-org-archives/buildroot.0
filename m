@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Apr 2015 21:35:36 +0200
-Subject: [Buildroot] [PATCH] ntp: security bump to version 4.2.8p2
-In-Reply-To: <1428425651-24304-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1428425651-24304-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150407213536.514653fb@free-electrons.com>
+Date: Tue, 7 Apr 2015 21:35:45 +0200
+Subject: [Buildroot] [PATCH] libmicrohttpd: bump to version 0.9.40
+In-Reply-To: <1428427906-28982-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1428427906-28982-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150407213545.3f57879f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,14 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Tue,  7 Apr 2015 13:54:11 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2015-1798 - ntpd accepts unauthenticated packets with symmetric key
-> crypto.
-> CVE-2015-1799 -  Authentication doesn't protect symmetric associations
-> against DoS attacks.
-> 
+On Tue,  7 Apr 2015 14:31:46 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/ntp/ntp.hash | 4 ++--
->  package/ntp/ntp.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+>  package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied, thanks.
+Applied, thanks!
 
 Thomas
 -- 
