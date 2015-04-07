@@ -1,32 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Apr 2015 21:33:15 +0200
-Subject: [Buildroot] [PATCH] lirc-tools: needs threads
-In-Reply-To: <cb6cb178ff004d5c7cad4497fbdacdd83193f967.1428389483.git.baruch@tkos.co.il>
-References: <cb6cb178ff004d5c7cad4497fbdacdd83193f967.1428389483.git.baruch@tkos.co.il>
-Message-ID: <20150407213315.7814d1b2@free-electrons.com>
+Date: Tue, 7 Apr 2015 21:34:00 +0200
+Subject: [Buildroot] [git commit] Makefile: remove extra ifdef/endif of top
+	Makefile
+Message-ID: <20150407193439.D185F81941@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=6bf9e23332bffc6362cb63f37957ac69e5a6ac96
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  7 Apr 2015 09:51:23 +0300, Baruch Siach wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/c20/c20a98dfacfa79579a0d401e081f2cca13a7a7b0/
-> http://autobuild.buildroot.net/results/0fe/0fe9b4a3a5128844886e4bf89b5bc0d3008b43aa/
-> http://autobuild.buildroot.net/results/482/4826409b3d3177eff3e7f2c3b7360058c73fd406/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/lirc-tools/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
+The GNU make's origin function know undefined variable well,
+so the outer ifdef/endif conditional checking is unneeded.
 
-Applied, thanks!
+From `info make` documentation, origin will return
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  `undefined'
+     if VARIABLE was never defined.
+  `command line'
+     if VARIABLE was defined on the command line.
+   ...
+
+Therefore, $(origin V) will get a value anyway, killing ifdef/endif
+is viable and safe.
+
+Furthermore, I've checked the minimal requirements from the top
+Makefile is GNU make 3.81, and that version of GNU make has support
+of origin function well already, so now it's safe to kill the outer
+conditional checking, without upgrading the minimal requirements.
+
+Signed-off-by: Cheng Renquan <crq@kernel.org>
+Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+[ Commit description is borrowed from Linux Kernel
+  (commit b8b0618cf6fa) and adjusted for Buildroot ]
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile |    6 ++----
+ 1 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index c691b57..2ad8832 100644
+--- a/Makefile
++++ b/Makefile
+@@ -184,10 +184,8 @@ endif
+ 
+ # To put more focus on warnings, be less verbose as default
+ # Use 'make V=1' to see the full commands
+-ifdef V
+-  ifeq ("$(origin V)", "command line")
+-    KBUILD_VERBOSE = $(V)
+-  endif
++ifeq ("$(origin V)", "command line")
++  KBUILD_VERBOSE = $(V)
+ endif
+ ifndef KBUILD_VERBOSE
+   KBUILD_VERBOSE = 0
