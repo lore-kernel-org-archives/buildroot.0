@@ -1,37 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Apr 2015 22:52:16 +0200
-Subject: [Buildroot] [git commit] package/mplayer: add optional samba support
-Message-ID: <20150407212927.8FB2F818B2@busybox.osuosl.org>
+Date: Tue, 7 Apr 2015 23:17:58 +0200
+Subject: [Buildroot] [git commit] package/mplayer: add optional libfribidi
+	support
+Message-ID: <20150407212927.ACFE87FF84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=25aee69c9a2ba67cc58a30fb51c8493c881d5f1a
+commit: http://git.buildroot.net/buildroot/commit/?id=0d0e5cd10544e47903ad288302ffa9adca810948
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+[Thomas: rely on autodetection.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mplayer/mplayer.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/mplayer/mplayer.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
 diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 06cddf6..d87ff20 100644
+index 7a88b74..9f6c1e6 100644
 --- a/package/mplayer/mplayer.mk
 +++ b/package/mplayer/mplayer.mk
-@@ -54,6 +54,13 @@ else
- MPLAYER_CONF_OPTS += --disable-termcap
+@@ -53,6 +53,14 @@ else
+ MPLAYER_CONF_OPTS += --disable-fontconfig
  endif
  
-+ifeq ($(BR2_PACKAGE_SAMBA_SMBCLIENT),y)
-+MPLAYER_CONF_OPTS += --enable-smb
-+MPLAYER_DEPENDENCIES += samba
++# We intentionally don't pass --enable-fribidi, to let the
++# autodetection find which library to link with.
++ifeq ($(BR2_PACKAGE_LIBFRIBIDI),y)
++MPLAYER_DEPENDENCIES += libfribidi
 +else
-+MPLAYER_CONF_OPTS += --disable-smb
++MPLAYER_CONF_OPTS += --disable-fribidi
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
- MPLAYER_CONF_OPTS +=  \
- 	--enable-dvdread \
+ # We intentionally don't pass --enable-termcap, in order to let the
+ # autodetection find with which library to link with. Otherwise, we
+ # would have to pass it manually.
