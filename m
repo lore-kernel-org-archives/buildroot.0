@@ -1,86 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Apr 2015 19:13:31 +0200
-Subject: [Buildroot] [PATCH v2] Makefile: remove extra ifdef/endif of
- top Makefile
-In-Reply-To: <1428383349-20804-1-git-send-email-yamada.masahiro@socionext.com>
-References: <1428383349-20804-1-git-send-email-yamada.masahiro@socionext.com>
-Message-ID: <20150407171331.GE4216@free.fr>
+From: Adrian Weiler <a.weiler@aldea.de>
+Date: Tue, 07 Apr 2015 19:16:31 +0200
+Subject: [Buildroot] [PATCH 1/1] Support for the Lamobo R1 a.k.a.
+ BananaPi-R1 router board
+In-Reply-To: <20150406123346.3bfcae3f@free-electrons.com>
+References: <1426530919-27935-1-git-send-email-a.weiler@aldea.de>	<1426530919-27935-2-git-send-email-a.weiler@aldea.de>
+ <20150406123346.3bfcae3f@free-electrons.com>
+Message-ID: <552410EF.6020603@aldea.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Masahiro, All,
+Hello Thomas,
 
-On 2015-04-07 14:09 +0900, Masahiro Yamada spake thusly:
-> The GNU make's origin function know undefined variable well,
-> so the outer ifdef/endif conditional checking is unneeded.
-> 
-> From `info make` documentation, origin will return
-> 
->   `undefined'
->      if VARIABLE was never defined.
->   `command line'
->      if VARIABLE was defined on the command line.
->    ...
-> 
-> Therefore, $(origin V) will get a value anyway, killing ifdef/endif
-> is viable and safe.
-> 
-> Furthermore, I've checked the minimal requirements from the top
-> Makefile is GNU make 3.81, and that version of GNU make has support
-> of origin function well already, so now it's safe to kill the outer
-> conditional checking, without upgrading the minimal requirements.
-> 
-> Signed-off-by: Cheng Renquan <crq@kernel.org>
-> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> [ Commit description is borrowed from Linux Kernel
->   (commit b8b0618cf6fa) and adjusted for Buildroot ]
-> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+thank you for the review.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+At 06.04.2015, 12:33 Thomas Petazzoni wrote:
+> [...] Having a patch adding an entire subsystem + drivers is not OK.
+I was not aware of this. Are there guidelines somewhere? I know
+http://buildroot.uclibc.org/downloads/manual/manual.html#_contributing_to_buildroot,
+but there is no hint on the scope of contributions.
 
-Regards,
-Yann E. MORIN.
+The main speciality of the BananaPi-R1 board is the Broadcom BCM53125S
+ethernet switch which features 5 ports @ 1Gb/s. Unfortunately there is
+no driver for it as of Linux 3.19.3. The only implementation for a
+driver I could find was an OpenWRT patch and it seems that OpenWRT is
+more or less the only publicly available distribution supporting this
+board (i probably also works with Android). However there are also some
+major driver issues with the WLAN chip on this board, and these issues
+are probably easier to track down in a more lightweight environment than
+OpenWRT.
 
-> ---
-> 
-> Changes in v2:
->   - Add more detailed explanation
-> 
->  Makefile | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index d6426b3..9db52a8 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -184,10 +184,8 @@ endif
->  
->  # To put more focus on warnings, be less verbose as default
->  # Use 'make V=1' to see the full commands
-> -ifdef V
-> -  ifeq ("$(origin V)", "command line")
-> -    KBUILD_VERBOSE = $(V)
-> -  endif
-> +ifeq ("$(origin V)", "command line")
-> +  KBUILD_VERBOSE = $(V)
->  endif
->  ifndef KBUILD_VERBOSE
->    KBUILD_VERBOSE = 0
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+My intent was to extract a minimum subset from OpenWRT to get this board
+running. Of course I can remove all the customizations which are not
+absolutely required for a basic operation of the board (busybox,
+dnsmasq, etc...). But without a driver for the ethernet switch, this
+does not make much sense. And the driver is useless without the user
+land tool to configure it. So does it make sense at all to add support
+for this board to buildroot?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> [...] So either find a way of downloading this patch, or make
+> Buildroot point to a Git tree where a complete Git tree of the kernel
+> can be found,
+That depends on where there is any interest of having this platform
+supported by buildroot at all.
+
+> [...] If I understand correctly, this utility is only useful in
+> combination with the OpenWRT-specific switch configuration subsystem
+> that was added by your patch. Since this subsystem is not in the
+> mainline kernel, I'm really unsure we want to have the corresponding
+> userspace utilities in Buildroot.
+I don't think the switch configuration subsystem is OpenWRT-specific.
+The configuration subsystem is based on netlink sockets, which is fairly
+common, and already supported in buildroot (by the libnl library). Only
+the Unified Configuration Interface (UCI) is OpenWRT-specific. I already
+removed all UCI dependencies from the switch configuration utility so it
+can be used entirely from the command line. But of course this
+configuration utility is specific to the B53xxx family of ethernet switches.
+
+Best regards,
+Adrian
