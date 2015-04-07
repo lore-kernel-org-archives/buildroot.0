@@ -1,93 +1,42 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue,  7 Apr 2015 08:35:25 +0200
-Subject: [Buildroot] [PATCH v2] boot/at91bootstrap3: Add the option to
-	download via git
-Message-ID: <1428388525-19186-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  7 Apr 2015 09:51:23 +0300
+Subject: [Buildroot] [PATCH] lirc-tools: needs threads
+Message-ID: <cb6cb178ff004d5c7cad4497fbdacdd83193f967.1428389483.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds an option to download at91bootstrap3 via a
-custom git repository. Useful for all the vendor
-customized versions.
+Fixes:
+http://autobuild.buildroot.net/results/c20/c20a98dfacfa79579a0d401e081f2cca13a7a7b0/
+http://autobuild.buildroot.net/results/0fe/0fe9b4a3a5128844886e4bf89b5bc0d3008b43aa/
+http://autobuild.buildroot.net/results/482/4826409b3d3177eff3e7f2c3b7360058c73fd406/
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Changelog:
+ package/lirc-tools/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-v1 -> v2:
-  - Adapted to the latest changes in at91bootstrap3 files
-
- boot/at91bootstrap3/Config.in         | 35 +++++++++++++++++++++++++++++++++++
- boot/at91bootstrap3/at91bootstrap3.mk |  7 +++++++
- 2 files changed, 42 insertions(+)
-
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index 8ac40ed..089b05d 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -10,6 +10,41 @@ config BR2_TARGET_AT91BOOTSTRAP3
- 
- if BR2_TARGET_AT91BOOTSTRAP3
- 
-+choice
-+
-+	prompt "AT91 Bootstrap 3 version"
-+
-+config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	bool "3.7.1"
-+
-+config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-+	bool "Custom Git repository"
-+	help
-+	  This option allows Buildroot to get the AT91 Bootstrap 3 source
-+	  code from a Git repository.
-+
-+endchoice
-+
-+if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-+
-+config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL
-+	string "URL of custom repository"
-+
-+config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION
-+	string "Custom repository version"
-+	help
-+	  Revision to use in the typical format used by Git
-+	  E.G. a sha id, a tag, branch, ..
-+
-+endif
-+
-+config BR2_TARGET_AT91BOOTSTRAP3_VERSION
-+	string
-+	default "v3.7.1" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
-+		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-+
-+
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR
- 	string "custom patch dir"
+diff --git a/package/lirc-tools/Config.in b/package/lirc-tools/Config.in
+index 0f58662c371c..8ce83a05153d 100644
+--- a/package/lirc-tools/Config.in
++++ b/package/lirc-tools/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIRC_TOOLS
+ 	bool "lirc-tools"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
  	help
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index 3e3b78e..e8a751a 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -5,7 +5,14 @@
- ################################################################################
+ 	  LIRC is a package that supports receiving and sending IR
+ 	  signals of the most common IR remote controls. It contains a
+@@ -13,3 +14,7 @@ config BR2_PACKAGE_LIRC_TOOLS
+ 	  enable the kernel drivers to support your hardware.
  
- AT91BOOTSTRAP3_VERSION = v3.7.1
-+AT91BOOTSTRAP3_VERSION = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_VERSION))
+ 	  http://www.lirc.org/
 +
-+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
-+AT91BOOTSTRAP3_SITE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL))
-+AT91BOOTSTRAP3_SITE_METHOD = git
-+else
- AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
-+endif
- 
- AT91BOOTSTRAP3_INSTALL_IMAGES = YES
- AT91BOOTSTRAP3_INSTALL_TARGET = NO
++comment "lirc-tools needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-2.3.5
+2.1.4
