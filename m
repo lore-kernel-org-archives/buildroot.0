@@ -1,33 +1,32 @@
-From: Sagaert Johan <sagaert.johan@proximus.be>
-Date: Tue,  7 Apr 2015 12:45:25 +0200
-Subject: [Buildroot] [PATCH 1/1] libvpx : bump version to 1.4.0
-Message-ID: <1428403525-21160-1-git-send-email-sagaert.johan@proximus.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  7 Apr 2015 14:44:19 +0300
+Subject: [Buildroot] [PATCH 1/2] board/raspberrypi: readme: add a missing
+	word
+Message-ID: <750c74e7558083272a595596adc199be64526a4b.1428407060.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-no hash file needed for git repo's
-Changes : https://chromium.googlesource.com/webm/libvpx/+/0080aca235e2d677e49ff46c3e8e77d9dd15858c/CHANGELOG
-
-Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/libvpx/libvpx.mk | 2 +-
+ board/raspberrypi/readme.txt | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index 7624835..6a65ad3 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index b513ca321347..7a6df0637ad8 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -23,7 +23,7 @@ Configure Buildroot
+ -------------------
  
--LIBVPX_VERSION = v1.3.0
-+LIBVPX_VERSION = v1.4.0
- LIBVPX_SITE = http://git.chromium.org/webm/libvpx.git
- LIBVPX_SITE_METHOD = git
+ The raspberrypi_defconfig configuration is a minimal configuration with
+-all that is required to bring the Raspberry Pi. You should base your
++all that is required to bring the Raspberry Pi up. You should base your
+ work on this defconfig:
  
+   $ make raspberrypi_defconfig
 -- 
-2.3.3
+2.1.4
