@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Apr 2015 19:01:26 +0200
-Subject: [Buildroot] [PATCH] configs/raspberrypi: remove
- BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
-In-Reply-To: <4c57acb52a45749057a0ca92d1d982a78c6f8cc2.1428401645.git.baruch@tkos.co.il>
-References: <4c57acb52a45749057a0ca92d1d982a78c6f8cc2.1428401645.git.baruch@tkos.co.il>
-Message-ID: <20150407170126.GA4216@free.fr>
+Date: Tue, 7 Apr 2015 19:01:54 +0200
+Subject: [Buildroot] [PATCH 1/2] board/raspberrypi: readme: add a
+	missing word
+In-Reply-To: <750c74e7558083272a595596adc199be64526a4b.1428407060.git.baruch@tkos.co.il>
+References: <750c74e7558083272a595596adc199be64526a4b.1428407060.git.baruch@tkos.co.il>
+Message-ID: <20150407170154.GB4216@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,58 +13,32 @@ To: buildroot@busybox.net
 
 Baruch, All,
 
-On 2015-04-07 13:14 +0300, Baruch Siach spake thusly:
-> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS became ineffective in commit a5ce7590c4b
-> (package/rpi-firmware: bump version), and was removed in commit 4e92ffdc47cc
-> (rpi-firmware: remove no longer used BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS).
-> Remove it from the Pi configs.
-> 
-> Also, remove the now obsolete comment in these config files.
-> 
+On 2015-04-07 14:44 +0300, Baruch Siach spake thusly:
 > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-I basically agree on the change.
-
-However, this means there is now no reason to have separate sdefconfig
-files for the RPi (version 1) as both now use a DTB.
-
-So, we should now:
-  - get rid of configs/raspberrypi_defconfig 
-  - rename configs/raspberrypi_dt_defconfig into configs/raspberrypi_defconfig
-
-Otherwise, looks fine.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  configs/raspberrypi2_defconfig   | 2 --
->  configs/raspberrypi_dt_defconfig | 2 --
->  2 files changed, 4 deletions(-)
+>  board/raspberrypi/readme.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-> index 4d4944f9e3f1..814e1820e8d1 100644
-> --- a/configs/raspberrypi2_defconfig
-> +++ b/configs/raspberrypi2_defconfig
-> @@ -19,6 +19,4 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="23c76b7f608e51258c6fca02aebeb5d588583149"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->  BR2_LINUX_KERNEL_ZIMAGE=y
+> diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+> index b513ca321347..7a6df0637ad8 100644
+> --- a/board/raspberrypi/readme.txt
+> +++ b/board/raspberrypi/readme.txt
+> @@ -23,7 +23,7 @@ Configure Buildroot
+>  -------------------
 >  
-> -# Install the DTB files, as the RPi2 uses the Device Tree
->  BR2_PACKAGE_RPI_FIRMWARE=y
-> -BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
-> diff --git a/configs/raspberrypi_dt_defconfig b/configs/raspberrypi_dt_defconfig
-> index ca62084c4d9c..c727a7cdfd1f 100644
-> --- a/configs/raspberrypi_dt_defconfig
-> +++ b/configs/raspberrypi_dt_defconfig
-> @@ -17,6 +17,4 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.18-rpi-dt.defconfig"
->  BR2_LINUX_KERNEL_ZIMAGE=y
+>  The raspberrypi_defconfig configuration is a minimal configuration with
+> -all that is required to bring the Raspberry Pi. You should base your
+> +all that is required to bring the Raspberry Pi up. You should base your
+>  work on this defconfig:
 >  
-> -# Install the DTB files
->  BR2_PACKAGE_RPI_FIRMWARE=y
-> -BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+>    $ make raspberrypi_defconfig
 > -- 
 > 2.1.4
 > 
