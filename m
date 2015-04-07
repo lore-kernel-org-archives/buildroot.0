@@ -1,41 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Apr 2015 21:35:25 +0200
-Subject: [Buildroot] [git commit] libmicrohttpd: bump to version 0.9.40
-Message-ID: <20150407200456.C8C787FBD9@busybox.osuosl.org>
+Date: Tue, 7 Apr 2015 21:35:15 +0200
+Subject: [Buildroot] [git commit] ntp: security bump to version 4.2.8p2
+Message-ID: <20150407200456.BF15A819E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4fc07f9cf602d05403e33921e7ecfca37ebbccaf
+commit: http://git.buildroot.net/buildroot/commit/?id=c765a7faa56acb7b020bd78e697ee334442341db
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+CVE-2015-1798 - ntpd accepts unauthenticated packets with symmetric key
+crypto.
+CVE-2015-1799 -  Authentication doesn't protect symmetric associations
+against DoS attacks.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libmicrohttpd/libmicrohttpd.hash |    2 +-
- package/libmicrohttpd/libmicrohttpd.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ntp/ntp.hash |    4 ++--
+ package/ntp/ntp.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index 2cf1a54..fa01fbc 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+index 8336be8..fe51932 100644
+--- a/package/ntp/ntp.hash
++++ b/package/ntp/ntp.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	4f937b6065c366d776be86b1d24b8fc400ebc7ea006a9d77c49a8f2f0cd7e373	libmicrohttpd-0.9.39.tar.gz
-+sha256	403d4d46a8690ad8382bd9f156be3eaf4e80869a75b39f03d48bbcb124c7b7a6	libmicrohttpd-0.9.40.tar.gz
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index e1b5f8b..b661f95 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p1.tar.gz.md5
+-md5	65d8cdfae4722226fbe29863477641ed ntp-4.2.8p1.tar.gz
++# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p2.tar.gz.md5
++md5	fa37049383316322d060ec9061ac23a9	ntp-4.2.8p2.tar.gz
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index bf2cdbd..c91cc70 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBMICROHTTPD_VERSION = 0.9.39
-+LIBMICROHTTPD_VERSION = 0.9.40
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
+ NTP_VERSION_MAJOR = 4.2
+-NTP_VERSION = $(NTP_VERSION_MAJOR).8p1
++NTP_VERSION = $(NTP_VERSION_MAJOR).8p2
+ NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+ NTP_DEPENDENCIES = host-pkgconf libevent
+ NTP_LICENSE = ntp license
