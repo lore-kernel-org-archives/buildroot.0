@@ -1,34 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Apr 2015 11:28:00 +0200
-Subject: [Buildroot] Buildroot 2015.02-git-00861-gae5ed8b make error
-In-Reply-To: <CABzetm3xjJzctWgto-SF83tABonMWTU=O72tRr4TDO1+_EYN0w@mail.gmail.com>
-References: <CABzetm3xjJzctWgto-SF83tABonMWTU=O72tRr4TDO1+_EYN0w@mail.gmail.com>
-Message-ID: <20150407112800.50d89fc1@free-electrons.com>
+From: Sagaert Johan <sagaert.johan@proximus.be>
+Date: Tue,  7 Apr 2015 11:59:31 +0200
+Subject: [Buildroot] [PATCH 1/1] libvpx : name the supported formats.
+Message-ID: <1428400771-15579-1-git-send-email-sagaert.johan@proximus.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rohit Kumar,
+Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
+---
+ package/libvpx/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Tue, 7 Apr 2015 10:50:53 +0200, Rohit Kumar wrote:
-
-> You seem to have the current working directory in your
-> LD_LIBRARY_PATH environment variable. This doesn't work.
-> make: *** [core-dependencies] Error 1
-> 
-> my LD_LIBRARY PATH is
-> "/opt/ros/fuerte/lib:/opt/ros/fuerte/lib:"
-> 
-> what is worng here??
-
-The final ':' without anything afterwards. Remove it.
-
-Best regards,
-
-Thomas
+diff --git a/package/libvpx/Config.in b/package/libvpx/Config.in
+index 0ed3e1a..6b0400c 100644
+--- a/package/libvpx/Config.in
++++ b/package/libvpx/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBVPX
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  A high-quality, open video format that's freely available to
+-	  everyone.
++	  everyone. Supports the VP8 and VP9 formats.
+ 
+ 	  http://webmproject.org
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.3.3
