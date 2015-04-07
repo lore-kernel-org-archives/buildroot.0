@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Apr 2015 22:52:46 +0200
-Subject: [Buildroot] [PATCH 03/18] package/mplayer: add optional ncurses
+Date: Tue, 7 Apr 2015 22:53:22 +0200
+Subject: [Buildroot] [PATCH 04/18] package/mplayer: add optional samba
  support
-In-Reply-To: <1427649094-1240-4-git-send-email-bernd.kuhls@t-online.de>
+In-Reply-To: <1427649094-1240-5-git-send-email-bernd.kuhls@t-online.de>
 References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
- <1427649094-1240-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150407225246.42065043@free-electrons.com>
+ <1427649094-1240-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150407225322.2c219692@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,34 +14,20 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sun, 29 Mar 2015 19:11:19 +0200, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mplayer/mplayer.mk |    8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-> index f004ca9..5ecd25a 100644
-> --- a/package/mplayer/mplayer.mk
-> +++ b/package/mplayer/mplayer.mk
-> @@ -45,6 +45,14 @@ else
->  MPLAYER_CONF_OPTS += --disable-freetype
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_NCURSES),y)
-> +MPLAYER_CONF_OPTS += --enable-termcap
+On Sun, 29 Mar 2015 19:11:20 +0200, Bernd Kuhls wrote:
 
-I've removed this line.
+> +ifeq ($(BR2_PACKAGE_SAMBA_SMBCLIENT),y)
+> +MPLAYER_CONF_OPTS += --enable-smb
+> +MPLAYER_DEPENDENCIES += samba
+> +else
+> +MPLAYER_CONF_OPTS += --disable-smb
+> +endif
 
-> +MPLAYER_DEPENDENCIES += ncurses
-> +MPLAYER_EXTRA_LIBS += -lncurses
+Samba 3 has been deprecated. So I've merged this patch, but it's
+actually a no-op, unless deprecated packages are enabled. Can you check
+whether Samba 4 can be used instead ?
 
-This line.
-
-And added a comment above to explain why we don't pass --enable-termcap.
-
-And then I applied, thanks!
+Thanks,
 
 Thomas
 -- 
