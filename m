@@ -1,58 +1,26 @@
-From: Patrick Noffke <patrick@noffke.me>
-Date: Tue, 07 Apr 2015 13:25:52 -0500
-Subject: [Buildroot] Fwd: Re: [git commit] boot/at91bootstrap3: migrate
-	to pkg-kconfig
-In-Reply-To: <2040502.JIOmFcmm7a@noffke.mortara.com>
-References: <2040502.JIOmFcmm7a@noffke.mortara.com>
-Message-ID: <2982764.cgQMvR0ARn@noffke.mortara.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  7 Apr 2015 15:29:04 -0300
+Subject: [Buildroot] [PATCH 1/3] gtk2-engines: add hash file
+Message-ID: <1428431346-13658-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday, April 07, 2015 12:50:47 PM Patrick Noffke wrote:
-> Sorry, didn't send to the list.
-> 
-> My problem may be because I patched at91bootstrap3, and I probably missed 
-> something there.  I was changing some of its configuration to enable SDRAM 
-and 
-> NOR flash for this board.
-> 
-> > 
-> >     cp $(YOUR_CONFIG_FILE)  $(AT91BOOTSTRAP3_DIR)/.config
-> >     make oldconfig
-> > 
-> This is my problem.  I didn't know about oldconfig -- I thought defconfig was 
-> getting run.
-> 
-> make oldconfig is replacing some of my settings for the at91bootstrap3 
-package.  
-> 
-> In particular, in my custom config, I have 
-> 
-> #CONFIG_MACH_TYPE="1830"
-> CONFIG_MACH_TYPE="0xFFFFFFFF"
-> CONFIG_SDRAM=y
-> 
-> and these are getting replaced with
-> 
-> CONFIG_MACH_TYPE="1830"
-> # CONFIG_SDRAM is not set
-> 
-> Should oldconfig be doing this?
-> 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gtk2-engines/gtk2-engines.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/gtk2-engines/gtk2-engines.hash
 
-If I add:
-
-	select CONFIG_SDRAM
-
-to output/build/at91bootstrap3-v3.7.1/board/at91sam9m10g45ek/Config.in.board, 
-then the CONFIG_SDRAM=y line is not replaced when oldconfig is run.
-
-I don't understand oldconfig, but from a bit of Googling it sounds like it 
-should only write config options that don't already exist in the current .config 
-file.  Is that correct?  If so, is it a bug in the at91bootstrap3 kconfig code?
-
-Thanks,
-Patrick
+diff --git a/package/gtk2-engines/gtk2-engines.hash b/package/gtk2-engines/gtk2-engines.hash
+new file mode 100644
+index 0000000..ac56c7d
+--- /dev/null
++++ b/package/gtk2-engines/gtk2-engines.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.gnome.org/pub/gnome/sources/gtk-engines/2.20/gtk-engines-2.20.2.sha256sum
++sha256	15b680abca6c773ecb85253521fa100dd3b8549befeecc7595b10209d62d66b5	gtk-engines-2.20.2.tar.bz2
+-- 
+2.0.5
