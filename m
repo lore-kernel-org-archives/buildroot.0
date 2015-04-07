@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 7 Apr 2015 22:06:42 +0200
-Subject: [Buildroot] [git commit] libsigc++: add hash file
-Message-ID: <20150407200853.46994805E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libsoup: add hash file
+Message-ID: <20150407200853.525F28018E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=44e68960fcb7dc71c8026ae60a0473dc33402f8b
+commit: http://git.buildroot.net/buildroot/commit/?id=fff7b4034e652d3631ea6891797f10d6a72c4ac7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsigc/libsigc.hash |    2 ++
+ package/libsoup/libsoup.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libsigc/libsigc.hash b/package/libsigc/libsigc.hash
+diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
 new file mode 100644
-index 0000000..21c0e99
+index 0000000..2eb86c4
 --- /dev/null
-+++ b/package/libsigc/libsigc.hash
++++ b/package/libsoup/libsoup.hash
 @@ -0,0 +1,2 @@
-+# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/2.2/libsigc++-2.2.11.sha256sum
-+sha256	9834045f74f56752c2c6b3cdc195c30ab8314ad22dc8e626d6f67f940f1e4957	libsigc++-2.2.11.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.48/libsoup-2.48.0.sha256sum
++sha256	ea34dd64fe44343445daf6dd690d0691e9d973468de44878da97371c16d89784	libsoup-2.48.0.tar.xz
