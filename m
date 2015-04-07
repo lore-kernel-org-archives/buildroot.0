@@ -1,39 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  7 Apr 2015 17:07:21 -0300
-Subject: [Buildroot] [PATCH] nginx: bump to version 1.6.3
-Message-ID: <1428437241-12248-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Apr 2015 22:06:41 +0200
+Subject: [Buildroot] [git commit] libffi: add hash file
+Message-ID: <20150407200852.387C07FCEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=fc41a4bcd5da41bfb4bfee15a1e09ccbfb024c3a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 96e5fb2..5306bed 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	b5608c2959d3e7ad09b20fc8f9e5bd4bc87b3bc8ba5936a513c04ed8f1391a18	nginx-1.6.2.tar.gz
-+sha256	0a98e95b366e4d6042f331e1fa4d70e18fd1e49d8993e589008e70e742b7e757	nginx-1.6.3.tar.gz
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index dee16af..be9bd0a 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NGINX_VERSION = 1.6.2
-+NGINX_VERSION = 1.6.3
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2c
- NGINX_LICENSE_FILES = LICENSE
--- 
-2.0.5
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libffi/libffi.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/libffi/libffi.hash b/package/libffi/libffi.hash
+new file mode 100644
+index 0000000..4c25fd3
+--- /dev/null
++++ b/package/libffi/libffi.hash
+@@ -0,0 +1,2 @@
++# From ftp://sourceware.org/pub/libffi/sha512.sum
++sha512	8994973d75facf5ad928c270e17b1a56e24d1543af75b93731a0048e747df27e4190a736b6dc2dca7d43de1d7e88891220304802c10fcccdcebee9c9ffd3d1b9	libffi-3.1.tar.gz
