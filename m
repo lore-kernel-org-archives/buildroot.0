@@ -1,50 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Apr 2015 23:30:51 +0200
-Subject: [Buildroot] [PATCH 00/18] package/mplayer: add optional
- dependencies
-In-Reply-To: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150407233051.44d71f67@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 7 Apr 2015 23:35:25 +0200
+Subject: [Buildroot] [PATCH] sh64: drop support for architecture
+In-Reply-To: <20150407233000.4f7af4c9@free-electrons.com>
+References: <20150407203101.GA14853@waldemar-brodkorb.de>
+ <20150407233000.4f7af4c9@free-electrons.com>
+Message-ID: <20150407213524.GV20492@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-On Sun, 29 Mar 2015 19:11:16 +0200, Bernd Kuhls wrote:
+> Dear Waldemar Brodkorb,
+> 
+> On Tue, 7 Apr 2015 22:31:01 +0200, Waldemar Brodkorb wrote:
+> > There seems to be no hardware or emulator available for this
+> > architecture. Someone from ST Microelectronics told me that
+> > sh64/sh5 projects are dropped over ten years ago.
+> > I found nothing about real hardware on the sites of Hitachi
+> > or Renesas.
+> > We should drop this.
+> > Support in uClibc-ng will be dropped in 1.1.
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> 
+> Maybe we should start by marking it deprecated for this release cycle?
 
-> Bernd Kuhls (18):
->   package/mplayer: needs host-pkgconf
->   package/mplayer: add optional giflib support
->   package/mplayer: add optional ncurses support
->   package/mplayer: add optional samba support
->   package/mplayer: add optional libbluray support
->   package/mplayer: add optional fontconfig support
->   package/mplayer: add optional libfribidi support
->   package/mplayer: add optional libass support
->   package/mplayer: add optional libenca support
+You normally do this. But do you have _any_ user using this in
+buildroot? I thought the deprecation procedure is for
+features/architecturs or whatever, which might have an existing userbase.
 
-Applied up to this point, after switching some of them to autodetection
-instead of the extra libs thing.
+But maybe someone knows of any device/emulator.
 
->   package/mplayer: add optional lzo support
->   package/mplayer: add optional faad2 support
->   package/mplayer: add optional rtmpdump support
->   package/mplayer: add optional speex support
->   package/mplayer: add optional libiconv support
->   package/mplayer: disable optional libcdio support
->   package/mplayer: add optional bzip2 support
->   package/mplayer: add optional lame support
->   package/mplayer: add optional libmpeg2 support
-
-I'll have a look at those ones later on.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+best regards
+ Waldemar
