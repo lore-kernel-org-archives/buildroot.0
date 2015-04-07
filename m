@@ -1,47 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Apr 2015 21:29:03 +0200
-Subject: [Buildroot] [PATCH 1/1] libvpx : bump version to 1.4.0
-In-Reply-To: <1428403525-21160-1-git-send-email-sagaert.johan@proximus.be>
-References: <1428403525-21160-1-git-send-email-sagaert.johan@proximus.be>
-Message-ID: <20150407212903.79e0f100@free-electrons.com>
+Date: Tue, 7 Apr 2015 21:30:05 +0200
+Subject: [Buildroot] [git commit] configs/raspberrypi: remove
+	BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
+Message-ID: <20150407193011.95B49819B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=c9674d2f4fe99cfdfaee1865a4591fbc8ac4c0c6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  7 Apr 2015 12:45:25 +0200, Sagaert Johan wrote:
-> no hash file needed for git repo's
-> Changes : https://chromium.googlesource.com/webm/libvpx/+/0080aca235e2d677e49ff46c3e8e77d9dd15858c/CHANGELOG
-> 
-> Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
-> ---
->  package/libvpx/libvpx.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-> index 7624835..6a65ad3 100644
-> --- a/package/libvpx/libvpx.mk
-> +++ b/package/libvpx/libvpx.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBVPX_VERSION = v1.3.0
-> +LIBVPX_VERSION = v1.4.0
->  LIBVPX_SITE = http://git.chromium.org/webm/libvpx.git
->  LIBVPX_SITE_METHOD = git
+BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS became ineffective in commit a5ce7590c4b
+(package/rpi-firmware: bump version), and was removed in commit 4e92ffdc47cc
+(rpi-firmware: remove no longer used BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS).
+Remove it from the Pi configs.
 
-As Peter Korsgaard pointed out, there is apparently a tarball available
-for this release. It would be better to use a tarball rather than
-fetching through Git when possible.
+Also, remove the now obsolete comment in these config files.
 
-Thanks,
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/raspberrypi2_defconfig   |    2 --
+ configs/raspberrypi_dt_defconfig |    2 --
+ 2 files changed, 0 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index 4d4944f..814e182 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -19,6 +19,4 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="23c76b7f608e51258c6fca02aebeb5d588583149"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ 
+-# Install the DTB files, as the RPi2 uses the Device Tree
+ BR2_PACKAGE_RPI_FIRMWARE=y
+-BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+diff --git a/configs/raspberrypi_dt_defconfig b/configs/raspberrypi_dt_defconfig
+index ca62084..c727a7c 100644
+--- a/configs/raspberrypi_dt_defconfig
++++ b/configs/raspberrypi_dt_defconfig
+@@ -17,6 +17,4 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.18-rpi-dt.defconfig"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ 
+-# Install the DTB files
+ BR2_PACKAGE_RPI_FIRMWARE=y
+-BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
