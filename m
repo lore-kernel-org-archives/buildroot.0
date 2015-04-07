@@ -1,30 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Apr 2015 22:05:20 +0200
-Subject: [Buildroot] [PATCH] espeak: fix legal info
-In-Reply-To: <1428427093-28727-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1428427093-28727-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150407220520.17e2cce1@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  7 Apr 2015 17:07:21 -0300
+Subject: [Buildroot] [PATCH] nginx: bump to version 1.6.3
+Message-ID: <1428437241-12248-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/nginx/nginx.hash | 2 +-
+ package/nginx/nginx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue,  7 Apr 2015 14:18:13 -0300, Gustavo Zacarias wrote:
-> The file is License.txt, not License.txt (so, the other english). Fixes:
-> http://autobuild.buildroot.net/results/a8b/a8b2b93e96901fe4fdfb64e1941c5c45bd52c742/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/espeak/espeak.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Applied, thanks!
-
-Thomas
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 96e5fb2..5306bed 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	b5608c2959d3e7ad09b20fc8f9e5bd4bc87b3bc8ba5936a513c04ed8f1391a18	nginx-1.6.2.tar.gz
++sha256	0a98e95b366e4d6042f331e1fa4d70e18fd1e49d8993e589008e70e742b7e757	nginx-1.6.3.tar.gz
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index dee16af..be9bd0a 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NGINX_VERSION = 1.6.2
++NGINX_VERSION = 1.6.3
+ NGINX_SITE = http://nginx.org/download
+ NGINX_LICENSE = BSD-2c
+ NGINX_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.5
