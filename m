@@ -1,46 +1,78 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  7 Apr 2015 13:54:11 -0300
-Subject: [Buildroot] [PATCH] ntp: security bump to version 4.2.8p2
-Message-ID: <1428425651-24304-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 7 Apr 2015 19:01:26 +0200
+Subject: [Buildroot] [PATCH] configs/raspberrypi: remove
+ BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
+In-Reply-To: <4c57acb52a45749057a0ca92d1d982a78c6f8cc2.1428401645.git.baruch@tkos.co.il>
+References: <4c57acb52a45749057a0ca92d1d982a78c6f8cc2.1428401645.git.baruch@tkos.co.il>
+Message-ID: <20150407170126.GA4216@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2015-1798 - ntpd accepts unauthenticated packets with symmetric key
-crypto.
-CVE-2015-1799 -  Authentication doesn't protect symmetric associations
-against DoS attacks.
+Baruch, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ntp/ntp.hash | 4 ++--
- package/ntp/ntp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2015-04-07 13:14 +0300, Baruch Siach spake thusly:
+> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS became ineffective in commit a5ce7590c4b
+> (package/rpi-firmware: bump version), and was removed in commit 4e92ffdc47cc
+> (rpi-firmware: remove no longer used BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS).
+> Remove it from the Pi configs.
+> 
+> Also, remove the now obsolete comment in these config files.
+> 
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
-index 8336be8..fe51932 100644
---- a/package/ntp/ntp.hash
-+++ b/package/ntp/ntp.hash
-@@ -1,2 +1,2 @@
--# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p1.tar.gz.md5
--md5	65d8cdfae4722226fbe29863477641ed ntp-4.2.8p1.tar.gz
-+# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p2.tar.gz.md5
-+md5	fa37049383316322d060ec9061ac23a9	ntp-4.2.8p2.tar.gz
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index bf2cdbd..c91cc70 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NTP_VERSION_MAJOR = 4.2
--NTP_VERSION = $(NTP_VERSION_MAJOR).8p1
-+NTP_VERSION = $(NTP_VERSION_MAJOR).8p2
- NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
- NTP_DEPENDENCIES = host-pkgconf libevent
- NTP_LICENSE = ntp license
+I basically agree on the change.
+
+However, this means there is now no reason to have separate sdefconfig
+files for the RPi (version 1) as both now use a DTB.
+
+So, we should now:
+  - get rid of configs/raspberrypi_defconfig 
+  - rename configs/raspberrypi_dt_defconfig into configs/raspberrypi_defconfig
+
+Otherwise, looks fine.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  configs/raspberrypi2_defconfig   | 2 --
+>  configs/raspberrypi_dt_defconfig | 2 --
+>  2 files changed, 4 deletions(-)
+> 
+> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+> index 4d4944f9e3f1..814e1820e8d1 100644
+> --- a/configs/raspberrypi2_defconfig
+> +++ b/configs/raspberrypi2_defconfig
+> @@ -19,6 +19,4 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="23c76b7f608e51258c6fca02aebeb5d588583149"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+>  BR2_LINUX_KERNEL_ZIMAGE=y
+>  
+> -# Install the DTB files, as the RPi2 uses the Device Tree
+>  BR2_PACKAGE_RPI_FIRMWARE=y
+> -BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+> diff --git a/configs/raspberrypi_dt_defconfig b/configs/raspberrypi_dt_defconfig
+> index ca62084c4d9c..c727a7cdfd1f 100644
+> --- a/configs/raspberrypi_dt_defconfig
+> +++ b/configs/raspberrypi_dt_defconfig
+> @@ -17,6 +17,4 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.18-rpi-dt.defconfig"
+>  BR2_LINUX_KERNEL_ZIMAGE=y
+>  
+> -# Install the DTB files
+>  BR2_PACKAGE_RPI_FIRMWARE=y
+> -BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+> -- 
+> 2.1.4
+> 
+
 -- 
-2.0.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
