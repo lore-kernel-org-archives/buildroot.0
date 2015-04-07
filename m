@@ -1,59 +1,67 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 7 Apr 2015 20:34:49 +0300
-Subject: [Buildroot] [PATCH] configs/raspberrypi: remove
- BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
-In-Reply-To: <20150407170126.GA4216@free.fr>
-References: <4c57acb52a45749057a0ca92d1d982a78c6f8cc2.1428401645.git.baruch@tkos.co.il>
- <20150407170126.GA4216@free.fr>
-Message-ID: <20150407173449.GE2241@tarshish>
+From: Patrick Noffke <patrick@noffke.me>
+Date: Tue, 07 Apr 2015 12:50:47 -0500
+Subject: [Buildroot] Fwd: Re: [git commit] boot/at91bootstrap3: migrate to
+	pkg-kconfig
+Message-ID: <2040502.JIOmFcmm7a@noffke.mortara.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Sorry, didn't send to the list.
 
-On Tue, Apr 07, 2015 at 07:01:26PM +0200, Yann E. MORIN wrote:
-> On 2015-04-07 13:14 +0300, Baruch Siach spake thusly:
-> > BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS became ineffective in commit a5ce7590c4b
-> > (package/rpi-firmware: bump version), and was removed in commit 4e92ffdc47cc
-> > (rpi-firmware: remove no longer used BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS).
-> > Remove it from the Pi configs.
-> > 
-> > Also, remove the now obsolete comment in these config files.
-> > 
-> > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+My problem may be because I patched at91bootstrap3, and I probably missed 
+something there.  I was changing some of its configuration to enable SDRAM and 
+NOR flash for this board.
+
+Patrick
+
+----------  Forwarded Message  ----------
+
+Subject: Re: [Buildroot] [git commit] boot/at91bootstrap3: migrate to pkg-
+kconfig
+Date: Tuesday, April 07, 2015, 12:40:48 PM
+From: Patrick Noffke <patrick@noffke.me>
+To: Yann E. MORIN <yann.morin.1998@free.fr>
+
+On Tuesday, April 07, 2015 07:21:00 PM you wrote:
+> Patrick, All,
 > 
-> I basically agree on the change.
+> see what it's doing in: package/pkg-kconfig.mk , and it's basically:
 > 
-> However, this means there is now no reason to have separate sdefconfig
-> files for the RPi (version 1) as both now use a DTB.
+>     cp $(YOUR_CONFIG_FILE)  $(AT91BOOTSTRAP3_DIR)/.config
+>     make oldconfig
 > 
-> So, we should now:
->   - get rid of configs/raspberrypi_defconfig 
->   - rename configs/raspberrypi_dt_defconfig into configs/raspberrypi_defconfig
+This is my problem.  I didn't know about oldconfig -- I thought defconfig was 
+getting run.
 
-There are a few other differences between raspberrypi_defconfig and 
-raspberrypi_dt_defconfig:
+make oldconfig is replacing some of my settings for the at91bootstrap3 package.  
 
-   * Kernel version 3.12.28 vs 3.19
+In particular, in my custom config, I have 
 
-   * Kernel provided config vs local config
+#CONFIG_MACH_TYPE="1830"
+CONFIG_MACH_TYPE="0xFFFFFFFF"
+CONFIG_SDRAM=y
 
-   * Toolchain with C++ support
+and these are getting replaced with
 
-Should the dt version take precedence on all these differences?
+CONFIG_MACH_TYPE="1830"
+# CONFIG_SDRAM is not set
 
-The readme file seems to indicate that device tree support is experimental. Is 
-this no longer the case?
+Should oldconfig be doing this?
 
-Note that I don't own the hardware, so I can't test the result.
+> Well, it's pretty easy to see if this patch is the culprit:
+> 
+>     git checkout 2016cb30f103024a8dfb50bcfe9a68bfac2f1118^
+> 
+> then test your config and see if it works. If it does, then the patch
+> may be the culprit (i.e. uncover a bug somewhere, maybe in Buildroot,
+> maybe in at91bootstrap3 itself); if the config does not work, then the
+> bug pre-existed that patch.
 
-baruch
+When I checkout this revision, the package builds fine.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thanks,
+Patrick
+-----------------------------------------
