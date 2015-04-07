@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Apr 2015 22:41:24 +0200
-Subject: [Buildroot] [PATCH] package/openvmtools: bump version to 9.10.0
-In-Reply-To: <1427648360-122766-1-git-send-email-kaszak@gmail.com>
-References: <1427648360-122766-1-git-send-email-kaszak@gmail.com>
-Message-ID: <20150407224124.3e0adaa6@free-electrons.com>
+Date: Tue, 7 Apr 2015 22:51:45 +0200
+Subject: [Buildroot] [git commit] package/mplayer: add optional ncurses
+	support
+Message-ID: <20150407205207.C6C2780DE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Karoly Kasza,
+commit: http://git.buildroot.net/buildroot/commit/?id=7220d1f2106edd122f034ac767c1fc81fb2d71d9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 29 Mar 2015 18:59:20 +0200, Karoly Kasza wrote:
-> 
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+[Thomas: don't pass --enable-termcap, and rely on autodetection
+instead of forcing -lncurses.]
 
-Thanks, I've applied your patch, with only some minor changes, see
-below.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mplayer/mplayer.mk |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
 
-> +# If found openssl, build openvmtools with support for it
-
-Such a comment is not really needed in this case, since it's quite
-obvious what is happening.
-
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +OPENVMTOOLS_DEPENDENCIES += openssl
-
-I've added --with-ssl in OPENVMTOOLS_CONF_OPTS here, to be explicit,
-like is done for procps for example.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+index 70a8842..06cddf6 100644
+--- a/package/mplayer/mplayer.mk
++++ b/package/mplayer/mplayer.mk
+@@ -45,6 +45,15 @@ else
+ MPLAYER_CONF_OPTS += --disable-freetype
+ endif
+ 
++# We intentionally don't pass --enable-termcap, in order to let the
++# autodetection find with which library to link with. Otherwise, we
++# would have to pass it manually.
++ifeq ($(BR2_PACKAGE_NCURSES),y)
++MPLAYER_DEPENDENCIES += ncurses
++else
++MPLAYER_CONF_OPTS += --disable-termcap
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
+ MPLAYER_CONF_OPTS +=  \
+ 	--enable-dvdread \
