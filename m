@@ -1,32 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Apr 2015 21:32:16 +0200
-Subject: [Buildroot] [git commit] libvpx: name the supported formats.
-Message-ID: <20150407193223.45913819B9@busybox.osuosl.org>
+Date: Tue, 7 Apr 2015 21:32:46 +0200
+Subject: [Buildroot] [PATCH 1/1] libvpx : name the supported formats.
+In-Reply-To: <1428400771-15579-1-git-send-email-sagaert.johan@proximus.be>
+References: <1428400771-15579-1-git-send-email-sagaert.johan@proximus.be>
+Message-ID: <20150407213246.28ec393e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f72480cf124ebd816a5e0a7fcd0c9e8f0ef7ace0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Sagaert Johan,
 
-Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libvpx/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Tue,  7 Apr 2015 11:59:31 +0200, Sagaert Johan wrote:
+> Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
+> ---
+>  package/libvpx/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libvpx/Config.in b/package/libvpx/Config.in
-index 0ed3e1a..6b0400c 100644
---- a/package/libvpx/Config.in
-+++ b/package/libvpx/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBVPX
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  A high-quality, open video format that's freely available to
--	  everyone.
-+	  everyone. Supports the VP8 and VP9 formats.
- 
- 	  http://webmproject.org
- 
+Applied, thanks.
+
+One very minor nit: there is normally no space before the ":" in
+english. So the title should be:
+
+	libvpx: name the supported formats
+
+I've fixed that up before committing.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
