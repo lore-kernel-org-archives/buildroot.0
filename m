@@ -1,49 +1,30 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  7 Apr 2015 13:14:05 +0300
-Subject: [Buildroot] [PATCH] configs/raspberrypi: remove
-	BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
-Message-ID: <4c57acb52a45749057a0ca92d1d982a78c6f8cc2.1428401645.git.baruch@tkos.co.il>
+Date: Tue, 7 Apr 2015 13:38:34 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-04-06
+In-Reply-To: <20150407063021.87698100F3D@stock.ovh.net>
+References: <20150407063021.87698100F3D@stock.ovh.net>
+Message-ID: <20150407103834.GD2241@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS became ineffective in commit a5ce7590c4b
-(package/rpi-firmware: bump version), and was removed in commit 4e92ffdc47cc
-(rpi-firmware: remove no longer used BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS).
-Remove it from the Pi configs.
+Hi Thomas, all,
 
-Also, remove the now obsolete comment in these config files.
+On Tue, Apr 07, 2015 at 08:30:21AM +0200, Thomas Petazzoni wrote:
+>               procps-ng-3.3.10 | 3 
+[...]
+>      powerpc |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/beb417429bc795cd9aec894dc37024d5ab6632e4/
+>       x86_64 |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/2475a3f4a94bae6d06dfd2c2b74ba6af871f64ab/
+>         i686 |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/ef84db9c5ac2da1db80264087d89b5a9fd0e9478/
 
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- configs/raspberrypi2_defconfig   | 2 --
- configs/raspberrypi_dt_defconfig | 2 --
- 2 files changed, 4 deletions(-)
+Should be fixed by http://patchwork.ozlabs.org/patch/458254/.
 
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index 4d4944f9e3f1..814e1820e8d1 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -19,6 +19,4 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="23c76b7f608e51258c6fca02aebeb5d588583149"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- BR2_LINUX_KERNEL_ZIMAGE=y
- 
--# Install the DTB files, as the RPi2 uses the Device Tree
- BR2_PACKAGE_RPI_FIRMWARE=y
--BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
-diff --git a/configs/raspberrypi_dt_defconfig b/configs/raspberrypi_dt_defconfig
-index ca62084c4d9c..c727a7cdfd1f 100644
---- a/configs/raspberrypi_dt_defconfig
-+++ b/configs/raspberrypi_dt_defconfig
-@@ -17,6 +17,4 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.18-rpi-dt.defconfig"
- BR2_LINUX_KERNEL_ZIMAGE=y
- 
--# Install the DTB files
- BR2_PACKAGE_RPI_FIRMWARE=y
--BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+baruch
+
 -- 
-2.1.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
