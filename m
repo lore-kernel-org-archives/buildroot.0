@@ -1,60 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  8 Apr 2015 19:08:34 +0200
-Subject: [Buildroot] [PATCH 1/2] infra/pkg-kconfig: don't require a kconfig
-	file for disabled packages
+Date: Wed,  8 Apr 2015 19:08:35 +0200
+Subject: [Buildroot] [PATCH 2/2] infra/pkg-kconfig: require an non-empty
+	KCONFIG_FILE
 In-Reply-To: <cover.1428512591.git.yann.morin.1998@free.fr>
 References: <cover.1428512591.git.yann.morin.1998@free.fr>
-Message-ID: <25c5ce55fd15b63fae1635bdc6940527079acdf6.1428512591.git.yann.morin.1998@free.fr>
+Message-ID: <c5c81694cabca70c5651fe42a7de99247275659c.1428512591.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a package is not enabled, we need not check that it provides
-a .config/defconfig file.
+Currently, we only check that the variable is defined, which is not
+enough since we really want it to be non-empty.
 
-So far, all our pkg-kconfig packages unconditionally set their
-_KCONFIG_FILE, even to an empty value. But some packages (e.g.
-at91bootstrap3) wanted to set it only when enabled, and broke.
+We however can't check it points to an existing file, because the
+package might well not be extracted yet, and we may use an internal
+defconfig. If that file does not eventually exist, there will be a
+failure down the road at build time when we try to copy it...
 
-So, only do the check when the package is enabled.
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- package/pkg-kconfig.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/pkg-kconfig.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 04ac37d..fd9f19d 100644
+index fd9f19d..fe8d266 100644
 --- a/package/pkg-kconfig.mk
 +++ b/package/pkg-kconfig.mk
-@@ -36,11 +36,6 @@ $(2)_KCONFIG_EDITORS ?= menuconfig
- $(2)_KCONFIG_OPTS ?=
- $(2)_KCONFIG_FIXUP_CMDS ?=
- 
--# FOO_KCONFIG_FILE is required
--ifndef $(2)_KCONFIG_FILE
--$$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
--endif
--
- # The config file could be in-tree, so before depending on it the package should
- # be extracted (and patched) first
- $$($(2)_KCONFIG_FILE): | $(1)-patch
-@@ -72,6 +67,11 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
- # already called above, so we can effectively use this variable.
+@@ -68,7 +68,7 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
  ifeq ($$($$($(2)_KCONFIG_VAR)),y)
  
-+# FOO_KCONFIG_FILE is required
-+ifndef $(2)_KCONFIG_FILE
-+$$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
-+endif
-+
- # Configuration editors (menuconfig, ...)
- $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_done
- 	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+ # FOO_KCONFIG_FILE is required
+-ifndef $(2)_KCONFIG_FILE
++ifeq ($$($(2)_KCONFIG_FILE),)
+ $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
+ endif
+ 
 -- 
 1.9.1
