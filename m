@@ -1,45 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 23:20:38 +0200
-Subject: [Buildroot] [PATCH] raspberrypi2: kernel version does no more
- exist
-In-Reply-To: <1428480480-6422-1-git-send-email-jezz@sysmic.org>
-References: <1428480480-6422-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20150408232038.4942770f@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 8 Apr 2015 23:21:29 +0200
+Subject: [Buildroot] [PATCH 11/18] package/mplayer: add optional faad2
+ support
+In-Reply-To: <1427649094-1240-12-git-send-email-bernd.kuhls@t-online.de>
+References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
+ <1427649094-1240-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150408212129.GF4197@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Bernd, All,
 
-On Wed,  8 Apr 2015 10:08:00 +0200, J?r?me Pouiller wrote:
-> It looks like version 2c4959b of Raspberry kernel does no more exist:
+On 2015-03-29 19:11 +0200, Bernd Kuhls spake thusly:
 > 
-> $ git clone https://github.com/raspberrypi/linux.git
-> [...]
-> $ cd linux
-> $ git co 23c76b7f608e51258c6fca02aebeb5d588583149
-> fatal: reference is not a tree: 23c76b7f608e51258c6fca02aebeb5d588583149
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/mplayer/mplayer.mk |    7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> Replace it by lastest version of 3.19 branch
+> diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+> index a09cf43..442f82b 100644
+> --- a/package/mplayer/mplayer.mk
+> +++ b/package/mplayer/mplayer.mk
+> @@ -117,6 +117,13 @@ else
+>  MPLAYER_CONF_OPTS += --disable-mencoder
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_FAAD2),y)
+> +MPLAYER_DEPENDENCIES += faad2
+> +MPLAYER_CONF_OPTS += --enable-faad
+> +else
+> +MPLAYER_CONF_OPTS += --disable-faad
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBASS),y)
+>  MPLAYER_DEPENDENCIES += libass
+>  MPLAYER_EXTRA_LIBS += -lass
+> -- 
+> 1.7.10.4
 > 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Yeah, the RPi people are annoying, they constantly rebase their
-branches so there's no way to have a stable commit. Yann posted an
-issue to their github: https://github.com/raspberrypi/linux/issues/915.
-Maybe we need to look into what they propose, apparently they have some
-stable branches.
-
-I've nonetheless applied your commit, after tweaking the commit log.
-
-(Hint: "does no more exist" isn't proper English as far as I know, you
-should say "does not exist anymore" I believe. Though I'm not a native
-English speaker, so I might be wrong.)
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
