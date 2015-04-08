@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 21:23:03 +0200
-Subject: [Buildroot] [git commit] php: bump to version 5.6.7
-Message-ID: <20150408192716.6AF71818B7@busybox.osuosl.org>
+Date: Wed, 8 Apr 2015 21:27:05 +0200
+Subject: [Buildroot] [git commit] socat: security bump to version 2.0.0-b8
+Message-ID: <20150408192716.88652819AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a48bc40e2d2536a830ecaa9247a1238966a97741
+commit: http://git.buildroot.net/buildroot/commit/?id=5c76c25e63d8790eae14c5c23550caebcbd81a24
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+CVE-2015-1379 - signal handler implementations are not async-signal-safe
+and can cause crash or freeze of socat processes.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php/php.hash |    2 +-
- package/php/php.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/socat/socat.hash |    2 ++
+ package/socat/socat.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 0794db8..e5e42d2 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--md5	692f9bc5649806f2053eee1e7323b7ea	php-5.5.23.tar.xz
-+md5	4e04eb021de009981ed963f993a171c1	php-5.6.7.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 73ed494..ed842b0 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/socat/socat.hash b/package/socat/socat.hash
+new file mode 100644
+index 0000000..a876ae2
+--- /dev/null
++++ b/package/socat/socat.hash
+@@ -0,0 +1,2 @@
++# From http://www.dest-unreach.org/socat/download.md5sum
++md5	ff56576703dfdeac221357a348c30760	socat-2.0.0-b8.tar.bz2
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index ecb7621..eaf13bc 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 5.5.23
-+PHP_VERSION = 5.6.7
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-SOCAT_VERSION = 2.0.0-b7
++SOCAT_VERSION = 2.0.0-b8
+ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download
+ SOCAT_LICENSE = GPLv2
