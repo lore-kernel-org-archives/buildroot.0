@@ -1,50 +1,43 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Wed, 08 Apr 2015 10:13:36 +0200
-Subject: [Buildroot] [PATCH] raspberrypi2: kernel version does no more
-	exist
-In-Reply-To: <1428480480-6422-1-git-send-email-jezz@sysmic.org>
-References: <1428480480-6422-1-git-send-email-jezz@sysmic.org>
-Message-ID: <10534432.fYLKuX57Ot@aquila>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed,  8 Apr 2015 10:40:09 +0200
+Subject: [Buildroot] [PATCH] package/sam-ba: bump to version 2.15
+Message-ID: <1428482409-13380-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 08 April 2015 10:08:00 J?r?me Pouiller wrote:
-> It looks like version 2c4959b of Raspberry kernel does no more exist:
-I mean 'version 23c76b7' does no more exist.
+This patch bumps to version 2.15 and fixes to the new folder naming.
 
-> 
-> $ git clone https://github.com/raspberrypi/linux.git
-> [...]
-> $ cd linux
-> $ git co 23c76b7f608e51258c6fca02aebeb5d588583149
-> fatal: reference is not a tree: 23c76b7f608e51258c6fca02aebeb5d588583149
-> 
-> Replace it by lastest version of 3.19 branch
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  configs/raspberrypi2_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-> index 814e182..6a48b26 100644
-> --- a/configs/raspberrypi2_defconfig
-> +++ b/configs/raspberrypi2_defconfig
-> @@ -15,7 +15,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_GIT=y
->  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="23c76b7f608e51258c6fca02aebeb5d588583149"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="2c4959b772a35d9d459b0a92f39bb066e9a44d37"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->  BR2_LINUX_KERNEL_ZIMAGE=y
->  
-> 
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/sam-ba/sam-ba.mk | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
+diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+index f46cbce..2a3c2a1 100644
+--- a/package/sam-ba/sam-ba.mk
++++ b/package/sam-ba/sam-ba.mk
+@@ -5,16 +5,15 @@
+ ################################################################################
+ 
+ SAM_BA_SITE = http://www.atmel.com/dyn/resources/prod_documents
+-SAM_BA_VERSION = 2.12
++SAM_BA_VERSION = 2.15
+ SAM_BA_SOURCE = sam-ba_$(SAM_BA_VERSION).zip
+-SAM_BA_PATCH = sam-ba_$(SAM_BA_VERSION)_patch5.gz
+ SAM_BA_LICENSE = BSD-like (partly binary-only)
+ SAM_BA_LICENSE_FILES = doc/readme.txt
+ 
+ define HOST_SAM_BA_EXTRACT_CMDS
+ 	$(UNZIP) -d $(BUILD_DIR) $(DL_DIR)/$(SAM_BA_SOURCE)
+-	mv $(BUILD_DIR)/sam-ba_cdc_cdc_linux/* $(@D)
+-	rmdir $(BUILD_DIR)/sam-ba_cdc_cdc_linux/
++	mv $(BUILD_DIR)/sam-ba_cdc_linux/* $(@D)
++	rmdir $(BUILD_DIR)/sam-ba_cdc_linux/
+ endef
+ 
+ # Since it's a prebuilt application and it does not conform to the
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+1.9.1
