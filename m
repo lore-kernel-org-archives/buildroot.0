@@ -1,76 +1,101 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 08 Apr 2015 22:13:11 +0200
-Subject: [Buildroot] [PATCH 1/2] infra/pkg-kconfig: don't require a
- kconfig file for disabled packages
-In-Reply-To: <25c5ce55fd15b63fae1635bdc6940527079acdf6.1428512591.git.yann.morin.1998@free.fr>
-References: <cover.1428512591.git.yann.morin.1998@free.fr>
- <25c5ce55fd15b63fae1635bdc6940527079acdf6.1428512591.git.yann.morin.1998@free.fr>
-Message-ID: <55258BD7.70601@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 08 Apr 2015 22:18:48 +0200
+Subject: [Buildroot] [PATCH 4/4] package/thrift: add dependency on
+	host-autoconf-archive
+In-Reply-To: <552313A8.4020207@mind.be>
+References: <1428339450-2158-1-git-send-email-romain.naour@openwide.fr>
+ <1428339450-2158-4-git-send-email-romain.naour@openwide.fr>
+ <552313A8.4020207@mind.be>
+Message-ID: <55258D28.60201@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/04/15 19:08, Yann E. MORIN wrote:
-> When a package is not enabled, we need not check that it provides
-> a .config/defconfig file.
-> 
-> So far, all our pkg-kconfig packages unconditionally set their
-> _KCONFIG_FILE, even to an empty value. But some packages (e.g.
-> at91bootstrap3) wanted to set it only when enabled, and broke.
-> 
-> So, only do the check when the package is enabled.
-> 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Hi Arnout,
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Regards,
- Arnout
-
-> ---
->  package/pkg-kconfig.mk | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+Le 07/04/2015 01:15, Arnout Vandecappelle a ?crit :
+> On 06/04/15 18:57, Romain Naour wrote:
+>> The ax_cxx_compile_stdcxx_11 macro bundled in thrift package is
+>> brocken and out of date.
+>> Remove it and use the one provided by autoconf-archive package.
+>>
+>> Related to:
+>> [thrift]
+>> http://autobuild.buildroot.net/results/21e/21e3fff1e0d714f94ac7e621289d1a59bc02a05f/build-end.log
+>> [host-thrift]
+>> http://autobuild.buildroot.net/results/b89/b89ffc2bff699eb10bb6abd92369a43d4900354d/build-end.log
 > 
-> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> index 04ac37d..fd9f19d 100644
-> --- a/package/pkg-kconfig.mk
-> +++ b/package/pkg-kconfig.mk
-> @@ -36,11 +36,6 @@ $(2)_KCONFIG_EDITORS ?= menuconfig
->  $(2)_KCONFIG_OPTS ?=
->  $(2)_KCONFIG_FIXUP_CMDS ?=
->  
-> -# FOO_KCONFIG_FILE is required
-> -ifndef $(2)_KCONFIG_FILE
-> -$$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
-> -endif
-> -
->  # The config file could be in-tree, so before depending on it the package should
->  # be extracted (and patched) first
->  $$($(2)_KCONFIG_FILE): | $(1)-patch
-> @@ -72,6 +67,11 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
->  # already called above, so we can effectively use this variable.
->  ifeq ($$($$($(2)_KCONFIG_VAR)),y)
->  
-> +# FOO_KCONFIG_FILE is required
-> +ifndef $(2)_KCONFIG_FILE
-> +$$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
-> +endif
-> +
->  # Configuration editors (menuconfig, ...)
->  $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_done
->  	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+>  I fail to see what this really fixes... For both build failures, it failed
+> before this patch and it still fails after it... and it should fail since these
+> compilers indeed are not fully C++11 compliant (missing virtual overrides which
+> were added in gcc 4.7).
+> 
+>  Oh, I get it, it will now fail consistently, instead of failing depending on
+> whether host-autoconf-archive has been installed or not...
+
+I added a link to the macro bug report for v2 to explain the issue.
+http://savannah.gnu.org/patch/index.php?8287
+
+> 
+>  But the stupid thing is, the build does succeed with these non-conforming
+> compilers, because thrift actually doesn't use that particular feature...
+> 
+>  So perhaps it's better to patch configure.ac and ax_cxx_compile_stdcxx_11.m4 to
+> give the macro a different name, so that we can still compile thrift with gcc 4.5.
+
+The macro accept a second argument to make C++11 optional:
+AX_CXX_COMPILE_STDCXX_11([noext], [optional])
+
+Thrift build fine but produce lot of warning about anonymous variadic macros but
+it just for some debug macro:
+#define T_DEBUG(format_string,...)
+"warning: anonymous variadic macros were introduced in C99"
+
+And some warning about the use of --std=c++0x (C++03) long long which is
+available in gcc 4.5.
+"warning: use of C++0x long long integer constant"
+
+At least, it seems to be safe to make C++11 optional and use C++03 for this
+release...
+
+> 
+>  Still...
 > 
 
+[snip]
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>> +
+>> +The ax_cxx_compile_stdcxx_11 macro is brocken and out of date.
+>> +
+>> +Remove it and use the one provided by autoconf-archive package.
+> 
+>  This is not needed, autoreconf will pick up the newer version automatically.
+
+OK
+
+> 
+> [snip]
+> 
+>> diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
+>> index 409b04d..5d4c515 100644
+>> --- a/package/thrift/thrift.mk
+>> +++ b/package/thrift/thrift.mk
+>> @@ -8,8 +8,8 @@ THRIFT_VERSION = 0.9.2
+>>  THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(THRIFT_VERSION)
+>>  THRIFT_DEPENDENCIES = host-pkgconf host-thrift boost libevent openssl zlib
+> 
+>  Missing dependency on host-autoconf-archive here.
+
+Ok
+
+Best regards,
+Romain
+
+> 
+> 
+>  Regards,
+>  Arnout
+> 
+>
