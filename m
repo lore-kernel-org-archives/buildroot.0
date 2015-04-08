@@ -1,44 +1,57 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  8 Apr 2015 13:21:46 -0300
-Subject: [Buildroot] [PATCH] socat: security bump to version 2.0.0-b8
-Message-ID: <1428510106-26897-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 8 Apr 2015 18:44:37 +0200
+Subject: [Buildroot] autobuild-run bug, one instance died
+In-Reply-To: <20150408164316.0641eb3c@free-electrons.com>
+References: <20150408164316.0641eb3c@free-electrons.com>
+Message-ID: <20150408164437.GA4197@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2015-1379 - signal handler implementations are not async-signal-safe
-and can cause crash or freeze of socat processes.
+Thomas, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/socat/socat.hash | 2 ++
- package/socat/socat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/socat/socat.hash
+On 2015-04-08 16:43 +0200, Thomas Petazzoni spake thusly:
+> I got the following backtrace on my autobuild-run instance:
+> 
+> thomas at build:~$ Process Process-2:
+> Traceback (most recent call last):
+>   File "/usr/lib/python2.6/multiprocessing/process.py", line 232, in _bootstrap
+>     self.run()
+>   File "/usr/lib/python2.6/multiprocessing/process.py", line 88, in run
+>     self._target(*self._args, **self._kwargs)
+>   File "../buildroot-test/scripts/autobuild-run", line 735, in run_instance
+>     ret = gen_config(**kwargs)
+>   File "../buildroot-test/scripts/autobuild-run", line 473, in gen_config
+>     configs = get_toolchain_configs()
+>   File "../buildroot-test/scripts/autobuild-run", line 262, in get_toolchain_configs
+>     with urlopen_closing(config["url"]) as r:
+>   File "../buildroot-test/scripts/autobuild-run", line 134, in <lambda>
+>     urlopen_closing = lambda uri: contextlib.closing(urlopen(uri))
+>   File "/usr/lib/python2.6/urllib2.py", line 126, in urlopen
+>     return _opener.open(url, data, timeout)
+>   File "/usr/lib/python2.6/urllib2.py", line 391, in open
+>     response = self._open(req, data)
+>   File "/usr/lib/python2.6/urllib2.py", line 409, in _open
+>     '_open', req)
+>   File "/usr/lib/python2.6/urllib2.py", line 369, in _call_chain
+>     result = func(*args)
+>   File "/usr/lib/python2.6/urllib2.py", line 1170, in http_open
+>     return self.do_open(httplib.HTTPConnection, req)
+>   File "/usr/lib/python2.6/urllib2.py", line 1145, in do_open
+>     raise URLError(err)
+> URLError: <urlopen error [Errno -2] Name or service not known>
 
-diff --git a/package/socat/socat.hash b/package/socat/socat.hash
-new file mode 100644
-index 0000000..a876ae2
---- /dev/null
-+++ b/package/socat/socat.hash
-@@ -0,0 +1,2 @@
-+# From http://www.dest-unreach.org/socat/download.md5sum
-+md5	ff56576703dfdeac221357a348c30760	socat-2.0.0-b8.tar.bz2
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index ecb7621..eaf13bc 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SOCAT_VERSION = 2.0.0-b7
-+SOCAT_VERSION = 2.0.0-b8
- SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
- SOCAT_SITE = http://www.dest-unreach.org/socat/download
- SOCAT_LICENSE = GPLv2
+Aha! I'm not the only one having DNS issues, it seems! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.0.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
