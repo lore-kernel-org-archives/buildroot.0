@@ -1,34 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 19:29:24 +0200
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 08 Apr 2015 14:30:51 -0300
 Subject: [Buildroot] [PATCH v2 1/5] gcc-final: install libatomic
-In-Reply-To: <552564A8.4050406@zacarias.com.ar>
-References: <1428511969-28430-1-git-send-email-gustavo@zacarias.com.ar>
- <1428511969-28430-2-git-send-email-gustavo@zacarias.com.ar>
- <20150408191414.1fce04ac@free-electrons.com>
- <552564A8.4050406@zacarias.com.ar>
-Message-ID: <20150408192924.0520195b@free-electrons.com>
+In-Reply-To: <20150408192924.0520195b@free-electrons.com>
+References: <1428511969-28430-1-git-send-email-gustavo@zacarias.com.ar>	<1428511969-28430-2-git-send-email-gustavo@zacarias.com.ar>	<20150408191414.1fce04ac@free-electrons.com>	<552564A8.4050406@zacarias.com.ar>
+ <20150408192924.0520195b@free-electrons.com>
+Message-ID: <552565CB.8030607@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 04/08/2015 02:29 PM, Thomas Petazzoni wrote:
 
-On Wed, 08 Apr 2015 14:26:00 -0300, Gustavo Zacarias wrote:
+> Is libatomic going to be provided by all toolchains on all
+> architectures?
 
-> Actually it's already copied into staging, so i did't see any breakage
-> at build time, but yes, runtime is a different story.
-> Adding libatomic.so.* to LIB_EXTERNAL_LIBS in
-> toolchain/toolchain-external/toolchain-external.mk is enough.
-> I'll send a patch if this is the proper course of action, otherwise
-> exclude webkit/midori for some external toolchains.
-
-Is libatomic going to be provided by all toolchains on all
-architectures?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+It doesn't matter, if the file isn't available it won't error out
+(tested on blackfin external toolchain).
+Regards.
