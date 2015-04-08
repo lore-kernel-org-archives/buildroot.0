@@ -1,61 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 21:07:23 +0200
-Subject: [Buildroot] [git commit] libsigrok: mark libsigrokcxx as broken
-Message-ID: <20150408190813.7E4BD819C7@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 08 Apr 2015 21:09:22 +0200
+Subject: [Buildroot] [PATCH] Makefile: fix HOSTFC definition
+In-Reply-To: <1428454350-30186-1-git-send-email-yamada.masahiro@socionext.com>
+References: <1428454350-30186-1-git-send-email-yamada.masahiro@socionext.com>
+Message-ID: <55257CE2.9090206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=41e81b7ae149319950814efe3c39acb1200167d2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 08/04/15 02:52, Masahiro Yamada wrote:
+> "echo" always succeeds, "which g77 || type -p g77 || echo gfortran"
+> is never run.
 
-It requires doxygen to generate the C++ bindings, which doesn't have a
-package in Buildroot. Until this gets resolved, mark libsigrokcxx and
-its reverse dependency pulseview as broken to avoid build failures in
-the autobuilders.
+ + mention the correction HOSTLD -> HOSTFC
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libsigrok/Config.in |    3 +++
- package/pulseview/Config.in |    2 ++
- 2 files changed, 5 insertions(+), 0 deletions(-)
+> 
+> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+> ---
+> 
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 9db52a8..8f4f87c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -251,7 +251,7 @@ HOSTRANLIB := ranlib
+>  endif
+>  HOSTAR := $(shell which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
+>  HOSTAS := $(shell which $(HOSTAS) || type -p $(HOSTAS) || echo as)
+> -HOSTFC := $(shell which $(HOSTLD) || type -p $(HOSTLD) || echo || which g77 || type -p g77 || echo gfortran)
+                                 ^^
+ Since it was incorrect anyway (it was defined as /usr/bin/ld on the
+autobuilders) and there was never an issue with it, I guess it was not used
+anyway. So I propose to completely remove it.
 
-diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
-index 93bd06f..bd37319 100644
---- a/package/libsigrok/Config.in
-+++ b/package/libsigrok/Config.in
-@@ -22,12 +22,15 @@ config BR2_PACKAGE_LIBSIGROKCXX
- 	bool "build C++ bindings"
- 	select BR2_PACKAGE_GLIBMM
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	# requires doxygen, which isn't packaged in Buildroot
-+	depends on BROKEN
- 	help
- 	  Build libsigrok C++ bindings as well.
- 
- comment "C++ bindings need a toolchain w/ C++"
- 	depends on BR2_PACKAGE_LIBSIGROK
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BROKEN
- 
- endif
- 
-diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
-index de899af..e0f1bcf 100644
---- a/package/pulseview/Config.in
-+++ b/package/pulseview/Config.in
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_PULSEVIEW
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BROKEN # libsigrokcxx
- 	help
- 	  PulseView is a Qt based logic analyzer, oscilloscope
- 	  and MSO GUI for sigrok.
-@@ -25,3 +26,4 @@ comment "pulseview needs a toolchain w/ wchar, threads, C++"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_QT5
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+	depends on BROKEN # libsigrokcxx
+ Failing that:
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+ Regards,
+ Arnout
+
+> +HOSTFC := $(shell which $(HOSTFC) || type -p $(HOSTFC) || which g77 || type -p g77 || echo gfortran)
+>  HOSTCPP := $(shell which $(HOSTCPP) || type -p $(HOSTCPP) || echo cpp)
+>  HOSTLD := $(shell which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
+>  HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
