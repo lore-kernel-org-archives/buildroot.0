@@ -1,34 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  8 Apr 2015 14:28:50 -0300
-Subject: [Buildroot] [PATCH] toolchain-external: install libatomic
-Message-ID: <1428514130-5052-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Apr 2015 19:29:24 +0200
+Subject: [Buildroot] [PATCH v2 1/5] gcc-final: install libatomic
+In-Reply-To: <552564A8.4050406@zacarias.com.ar>
+References: <1428511969-28430-1-git-send-email-gustavo@zacarias.com.ar>
+ <1428511969-28430-2-git-send-email-gustavo@zacarias.com.ar>
+ <20150408191414.1fce04ac@free-electrons.com>
+ <552564A8.4050406@zacarias.com.ar>
+Message-ID: <20150408192924.0520195b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's required in some 32-bit architectures for the extended (64-bit)
-atomic operations, like __sync_add_and_fetch_8.
-These arches are at least: i386, mips & mipsel.
+Dear Gustavo Zacarias,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/toolchain-external/toolchain-external.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 08 Apr 2015 14:26:00 -0300, Gustavo Zacarias wrote:
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index c0429bb..2427463 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -64,7 +64,7 @@
- #  of Buildroot is handled identical for the 2 toolchain types.
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
--LIB_EXTERNAL_LIBS += libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
-+LIB_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_ARM_EABIHF),yy)
- LIB_EXTERNAL_LIBS += ld-linux-armhf.so.*
- else
+> Actually it's already copied into staging, so i did't see any breakage
+> at build time, but yes, runtime is a different story.
+> Adding libatomic.so.* to LIB_EXTERNAL_LIBS in
+> toolchain/toolchain-external/toolchain-external.mk is enough.
+> I'll send a patch if this is the proper course of action, otherwise
+> exclude webkit/midori for some external toolchains.
+
+Is libatomic going to be provided by all toolchains on all
+architectures?
+
+Thomas
 -- 
-2.0.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
