@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  8 Apr 2015 23:43:59 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/dtv-scan-tables: bump version
+Date: Wed,  8 Apr 2015 23:43:58 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package/tvheadend: bump version
 In-Reply-To: <1428529439-29437-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1428529439-29437-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1428529439-29437-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1428529439-29437-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,21 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v2: bump to current git master
 
- package/dtv-scan-tables/dtv-scan-tables.mk |    2 +-
+ package/tvheadend/tvheadend.mk |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
-index 9d85325..4114d23 100644
---- a/package/dtv-scan-tables/dtv-scan-tables.mk
-+++ b/package/dtv-scan-tables/dtv-scan-tables.mk
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 44154c6..74b261f 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DTV_SCAN_TABLES_VERSION = 1246b27f8b45f84c1824925060ad931530542f2e
-+DTV_SCAN_TABLES_VERSION = f2053b34a5ac6f263edc22888b0db4b1fa563fe4
- DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
- DTV_SCAN_TABLES_SITE_METHOD = git
- 
+-TVHEADEND_VERSION = 7006b9fd88ce0cf54d59399df40fe4ee003c4180
++TVHEADEND_VERSION = 995aaf895b175d1c0b5ef52860f78f443449e84a
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 -- 
 1.7.10.4
