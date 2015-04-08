@@ -1,75 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 21:12:20 +0200
-Subject: [Buildroot] [PATCH v2] pulseview: new package
-In-Reply-To: <CAMpxmJUeJms2BVLVrhsgm7d1MegO-hV1XUEPwUgiCc7Z81Mfgg@mail.gmail.com>
-References: <1426759708-4920-1-git-send-email-bgolaszewski@baylibre.com>
- <20150406234303.010225ea@free-electrons.com>
- <CAMpxmJXWnzUwgM7EQ3De4OCAprJ1oFVecYMD8j+xa7dU8co1qA@mail.gmail.com>
- <20150408162905.4cfbc0a3@free-electrons.com>
- <CAMpxmJUeJms2BVLVrhsgm7d1MegO-hV1XUEPwUgiCc7Z81Mfgg@mail.gmail.com>
-Message-ID: <20150408211220.3e34e66a@free-electrons.com>
+Date: Wed, 8 Apr 2015 21:14:11 +0200
+Subject: [Buildroot] [git commit] strongswan: bump to version 5.3.0
+Message-ID: <20150408191441.2E8CE800CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bartosz Golaszewski,
+commit: http://git.buildroot.net/buildroot/commit/?id=6117fa4501bcf35d46c60a79b954f92673f7bd39
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 8 Apr 2015 18:05:38 +0200, Bartosz Golaszewski wrote:
+Enable connmark and forecast plugins when iptables is selected.
+And always enable the led plugin, though it's not new to 5.3.0.
 
-> still no success. The reason for pulseview failures is libsigrokcxx.so
-> not being present on the target. Please consider applying the attached
-> patch, which should let us know what the reason is for libsigrokcxx
-> silent failures.
+[Thomas: also update hash file.]
 
-I've reproduced the problem in the autobuilder directly, and the
-problem is fairly clear:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/strongswan/strongswan.hash |    4 ++--
+ package/strongswan/strongswan.mk   |   14 +++++++++++++-
+ 2 files changed, 15 insertions(+), 3 deletions(-)
 
-ESC[3m>>> libsigrok 380ee96fdfe0895ca0aa0b158d5c332ef08f8b3c ConfiguringESC[23m
-mkdir -p /home/test/outputs/1f018c927c31e5302bfac85fd8e4ecb2fd5d38f3/output/build/libsigrok-380ee96fdfe0895ca0aa0b158d5c332ef08f8b3c/autostuff
-ESC[3m>>> libsigrok 380ee96fdfe0895ca0aa0b158d5c332ef08f8b3c AutoreconfiguringESC[23m
-libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'autostuff'.
-libtoolize: copying file 'autostuff/ltmain.sh'
-libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'autostuff'.
-libtoolize: copying file 'autostuff/libtool.m4'
-libtoolize: copying file 'autostuff/ltoptions.m4'
-libtoolize: copying file 'autostuff/ltsugar.m4'
-libtoolize: copying file 'autostuff/ltversion.m4'
-libtoolize: copying file 'autostuff/lt~obsolete.m4'
-configure.ac:42: installing 'autostuff/ar-lib'
-configure.ac:42: installing 'autostuff/compile'
-configure.ac:37: installing 'autostuff/config.guess'
-configure.ac:37: installing 'autostuff/config.sub'
-configure.ac:40: installing 'autostuff/install-sh'
-configure.ac:40: installing 'autostuff/missing'
-Makefile.am: installing './INSTALL'
-Makefile.am: installing 'autostuff/depcomp'
-parallel-tests: installing 'autostuff/test-driver'
-ESC[3m>>> libsigrok 380ee96fdfe0895ca0aa0b158d5c332ef08f8b3c Patching libtoolESC[23m
-[...]
-Enabled language bindings:
- - C++............................. no (Doxygen required)
-
-So, generating the C++ bindings requires Doxygen. And Doxygen is not
-part of the mandatory Buildroot dependencies, and not packaged in
-Buildroot as a host package.
-
-The reason why it works for you is because you have Doxygen installed
-on your machine. Several of the autobuilders run in a minimal chroot
-that has only the strict requirements of Buildroot installed, nothing
-else, specifically to detect such issues.
-
-So, in the mean time, I've marked libsigrokcxx as broken, as well as
-pulseview. I believe the best solution is probably to create a
-host-doxygen package (or convince the libsigrok developers to not use
-something such as doxygen to generate C++ bindings). Can you look into
-this?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index 6073b36..626356a 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -1,2 +1,2 @@
+-# From http://download.strongswan.org/strongswan-5.2.2.tar.bz2.md5
+-md5	7ee1a33060b2bde35be0f6d78a1d26d0	strongswan-5.2.2.tar.bz2
++# From http://download.strongswan.org/strongswan-5.3.0.tar.bz2.md5
++md5	c52d4228231c2025d9c320d0e9990327	strongswan-5.3.0.tar.bz2
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 059955d..057870f 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRONGSWAN_VERSION = 5.2.2
++STRONGSWAN_VERSION = 5.3.0
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
+ STRONGSWAN_LICENSE = GPLv2+
+@@ -12,6 +12,7 @@ STRONGSWAN_LICENSE_FILES = COPYING LICENSE
+ STRONGSWAN_DEPENDENCIES = host-pkgconf
+ STRONGSWAN_CONF_OPTS += \
+ 	--without-lib-prefix \
++	--enable-led \
+ 	--enable-pkcs11=yes \
+ 	--enable-kernel-netlink=$(if $(BR2_INET_IPV6),yes,no) \
+ 	--enable-socket-default=$(if $(BR2_INET_IPV6),yes,no) \
+@@ -70,4 +71,15 @@ STRONGSWAN_DEPENDENCIES += \
+ 	$(if $(BR2_PACKAGE_MYSQL),mysql)
+ endif
+ 
++ifeq ($(BR2_PACKAGE_IPTABLES),y)
++STRONGSWAN_DEPENDENCIES += iptables
++STRONGSWAN_CONF_OPTS += \
++	--enable-connmark \
++	--enable-forecast
++else
++STRONGSWAN_COF_OPTS += \
++	--disable-connmark \
++	--disable-forecast
++endif
++
+ $(eval $(autotools-package))
