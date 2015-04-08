@@ -1,23 +1,52 @@
-From: Patrick Noffke <patrick@noffke.me>
-Date: Wed, 08 Apr 2015 10:55:32 -0500
-Subject: [Buildroot] [PATCH 1/1] Toolchain - Add option to enable Ada
-	language.
-In-Reply-To: <1474058.4ZllOqIG4k@noffke.mortara.com>
-References: <1572450641.2711242.1428504046971.JavaMail.root@openwide.fr>
- <1474058.4ZllOqIG4k@noffke.mortara.com>
-Message-ID: <3856473.isbJbROvv7@noffke.mortara.com>
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date: Wed, 8 Apr 2015 18:05:38 +0200
+Subject: [Buildroot] [PATCH v2] pulseview: new package
+In-Reply-To: <20150408162905.4cfbc0a3@free-electrons.com>
+References: <1426759708-4920-1-git-send-email-bgolaszewski@baylibre.com>
+ <20150406234303.010225ea@free-electrons.com>
+ <CAMpxmJXWnzUwgM7EQ3De4OCAprJ1oFVecYMD8j+xa7dU8co1qA@mail.gmail.com>
+ <20150408162905.4cfbc0a3@free-electrons.com>
+Message-ID: <CAMpxmJUeJms2BVLVrhsgm7d1MegO-hV1XUEPwUgiCc7Z81Mfgg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday, April 08, 2015 10:51:48 AM Patrick Noffke wrote:
-> The comments are nearby lines in the source file.  I did not add them.
->  I generated the patch following the buildroot manual, specifically
-> using:
-> 
+2015-04-08 16:29 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Bartosz Golaszewski,
+>
+> On Wed, 8 Apr 2015 16:07:07 +0200, Bartosz Golaszewski wrote:
+>
+>> is it somehow possible to see the full build log? Pulseview can't be
+>> built due to:
+>>
+>> -- checking for module 'libsigrokcxx>=0.3.0'
+>> --   package 'libsigrokcxx>=0.3.0' not found
+>>
+>> I can't reproduce it with attached configs locally though and need to
+>> see what happens when building the C++ bindings.
+>
+> No, we don't save the full build logs as they are way too large. Did
+> you try rebuilding exactly one of the failing configurations?
+>
+> For example, building
+> http://autobuild.buildroot.org/results/a4e/a4ebb507798b94272bbad02456dace90472785a7/config ?
 
-Sorry, I see the comment now.  I'll remove it.  Thanks.
+Hi Thomas,
 
-Patrick
+still no success. The reason for pulseview failures is libsigrokcxx.so
+not being present on the target. Please consider applying the attached
+patch, which should let us know what the reason is for libsigrokcxx
+silent failures.
+
+Best regards,
+Bartosz Golaszewski
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-libsigrok-bail-out-if-C-bindings-are-not-built-corre.patch
+Type: text/x-patch
+Size: 1442 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150408/524a75a1/attachment.bin>
