@@ -1,10 +1,10 @@
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Wed, 8 Apr 2015 12:45:06 +0200
+Date: Wed, 8 Apr 2015 16:07:07 +0200
 Subject: [Buildroot] [PATCH v2] pulseview: new package
 In-Reply-To: <20150406234303.010225ea@free-electrons.com>
 References: <1426759708-4920-1-git-send-email-bgolaszewski@baylibre.com>
  <20150406234303.010225ea@free-electrons.com>
-Message-ID: <CAMpxmJVC3rf55hyQ9jaFUv+99HwtFY1SiS6YcMbL4COtPMyK2Q@mail.gmail.com>
+Message-ID: <CAMpxmJXWnzUwgM7EQ3De4OCAprJ1oFVecYMD8j+xa7dU8co1qA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,15 @@ To: buildroot@busybox.net
 > This package is causing a number of build failures in our automated
 > testing system. Can you investigate them?
 
-Sure thing, I'll get right to it.
+Hi Thomas,
 
-Cheers,
+is it somehow possible to see the full build log? Pulseview can't be
+built due to:
+
+-- checking for module 'libsigrokcxx>=0.3.0'
+--   package 'libsigrokcxx>=0.3.0' not found
+
+I can't reproduce it with attached configs locally though and need to
+see what happens when building the C++ bindings.
+
 Bart
