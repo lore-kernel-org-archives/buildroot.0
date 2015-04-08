@@ -1,142 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  8 Apr 2015 22:36:28 +0200
-Subject: [Buildroot] [PATCHv3] *config: improve handling of BR2_LEGACY
-Message-ID: <1428525388-24739-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Apr 2015 22:38:51 +0200
+Subject: [Buildroot] [PATCH v2] pulseview: new package
+In-Reply-To: <CAMpxmJVGxtExSQmdjqYvbXuw2hDvObnyfaN27RG+dn88ipu=jw@mail.gmail.com>
+References: <1426759708-4920-1-git-send-email-bgolaszewski@baylibre.com>
+ <20150406234303.010225ea@free-electrons.com>
+ <CAMpxmJXWnzUwgM7EQ3De4OCAprJ1oFVecYMD8j+xa7dU8co1qA@mail.gmail.com>
+ <20150408162905.4cfbc0a3@free-electrons.com>
+ <CAMpxmJUeJms2BVLVrhsgm7d1MegO-hV1XUEPwUgiCc7Z81Mfgg@mail.gmail.com>
+ <20150408211220.3e34e66a@free-electrons.com>
+ <CAMpxmJVGxtExSQmdjqYvbXuw2hDvObnyfaN27RG+dn88ipu=jw@mail.gmail.com>
+Message-ID: <20150408223851.3abe5405@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Arnout Vandecappelle <arnout@mind.be>
+Hello,
 
-In 8a46d4bf1f the randpackageconfig and allpackageyesconfig were
-extended with disabling all the legacy options, otherwise the resulting
-config couldn't be built. However, that didn't work for randconfig and
-allyesconfig.
+On Wed, 8 Apr 2015 22:29:06 +0200, Bartosz Golaszewski wrote:
+> 2015-04-08 21:12 GMT+02:00 Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com>:
+> > I've reproduced the problem in the autobuilder directly, and the
+> > problem is fairly clear:
+> 
+> Thanks for the investigation!
 
-This commit reverts 8a46d4bf1f and replaces it with a different
-approach: skipping of the legacy config options is passed explicitly
-through the environment variable SKIP_LEGACY, which forces
-BR2_SKIP_LEGACY to y.
+No problem, you're welcome. Without having access to the autobuilders,
+it might be hard to reproduce some of the issues, so I'm definitely
+happy to reproduce them and provide more details as needed.
 
-We add a (silent) call to olddefconfig to set out the old legacy
-options aside.
+> > So, generating the C++ bindings requires Doxygen. And Doxygen is not
+> > part of the mandatory Buildroot dependencies, and not packaged in
+> > Buildroot as a host package.
+> 
+> Can we add an error message similar to those emitted when e.g. git or
+> svn is missing. but for doxygen (only when libsigrokcxx is selected)?
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[yann.morin.1998 at free.fr: do not rely on a user-visible option, works
- perfectly well with only blind options set from the environment]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Yes, we can, but it's a bit annoying. It means that building
+libsigrokcxx + pulseview will most likely not be tested much by the
+autobuilders.
 
----
-Changes v2 -> v3:
-  - add the missing pieces (calling olddefconfig)
+> > So, in the mean time, I've marked libsigrokcxx as broken, as well as
+> > pulseview. I believe the best solution is probably to create a
+> > host-doxygen package (or convince the libsigrok developers to not use
+> > something such as doxygen to generate C++ bindings). Can you look into
+> > this?
+> 
+> C++ bindings are generated using xml files created by doxygen. I will
+> take a look tomorrow, but it may be impossible to drop using doxygen
+> without having to do a major overhaul of libsigrokcxx. I think that
+> host-doxygen is a more feasible solution unless we can demand user to
+> install doxygeb on the host machine.
 
-Changes v1 -> v2:
-  - don't use a user-visible option  (Yann)
----
- Config.in.legacy | 12 ++++++++++++
- Makefile         | 27 ++++++++++++++-------------
- 2 files changed, 26 insertions(+), 13 deletions(-)
+Can you have a quick look at how annoying (or not) it would be to create
+a host-doxygen package? This would be the nicest solution, of course
+assuming it doesn't require millions of dependencies that would also
+have to be packaged in Buildroot.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 445cab7..38fca09 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -52,6 +52,16 @@
- #
- # [End of example]
- 
-+config BR2_SKIP_LEGACY_ENV
-+	bool
-+	option env="SKIP_LEGACY"
-+
-+config BR2_SKIP_LEGACY
-+	bool
-+	default y if BR2_SKIP_LEGACY_ENV
-+
-+if !BR2_SKIP_LEGACY
-+
- config BR2_LEGACY
- 	bool
- 	help
-@@ -1281,3 +1291,5 @@ config BR2_BFIN_FLAT
- 	select BR2_LEGACY
- 
- endmenu
-+
-+endif # !SKIP_LEGACY
-diff --git a/Makefile b/Makefile
-index 2ad8832..294967c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -700,7 +700,8 @@ COMMON_CONFIG_ENV = \
- 	KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
- 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
- 	BR2_CONFIG=$(BR2_CONFIG) \
--	BR2_EXTERNAL=$(BR2_EXTERNAL)
-+	BR2_EXTERNAL=$(BR2_EXTERNAL) \
-+	SKIP_LEGACY=
- 
- xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
-@@ -728,45 +729,45 @@ oldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 
- randconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --randconfig $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --randconfig $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
- allyesconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --allyesconfig $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --allyesconfig $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
- allnoconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --allnoconfig $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --allnoconfig $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
- randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
--	@grep '^config BR2_PACKAGE_' Config.in.legacy | \
--		while read config pkg; do \
--		echo "# $$pkg is not set" >> $(CONFIG_DIR)/.config.nopkg; done
--	@$(COMMON_CONFIG_ENV) \
-+	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y \
- 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
- 		$< --randconfig $(CONFIG_CONFIG_IN)
- 	@rm -f $(CONFIG_DIR)/.config.nopkg
-+	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
- allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
--	@grep '^config BR2_PACKAGE_' Config.in.legacy | \
--		while read config pkg; do \
--		echo "# $$pkg is not set" >> $(CONFIG_DIR)/.config.nopkg; done
--	@$(COMMON_CONFIG_ENV) \
-+	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y \
- 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
- 		$< --allyesconfig $(CONFIG_CONFIG_IN)
- 	@rm -f $(CONFIG_DIR)/.config.nopkg
-+	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
- allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
--	@$(COMMON_CONFIG_ENV) \
-+	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y \
- 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
- 		$< --allnoconfig $(CONFIG_CONFIG_IN)
- 	@rm -f $(CONFIG_DIR)/.config.nopkg
-+	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
- silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
+Thanks,
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
