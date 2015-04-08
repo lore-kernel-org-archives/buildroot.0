@@ -1,40 +1,81 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  8 Apr 2015 13:52:49 -0300
-Subject: [Buildroot] [PATCH v2 5/5] libgail: mark as deprecated
-In-Reply-To: <1428511969-28430-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1428511969-28430-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1428511969-28430-6-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  8 Apr 2015 18:57:19 +0200
+Subject: [Buildroot] [PATCH 0/8 v4] toolchain: better handle hashes (branch
+	yem/dl-hash-toolchains)
+Message-ID: <cover.1428512075.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark libgail as deprecated now that midori has been updated to use
-webkitgtk24 and the only package that uses it (webkit) has been
-deprecated.
+Hello All!
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libgail/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+This series makes it so we can download custom external toolchains, and
+still have mandatory checks of hashes.
 
-diff --git a/package/libgail/Config.in b/package/libgail/Config.in
-index 3967083..a92a8eb 100644
---- a/package/libgail/Config.in
-+++ b/package/libgail/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBGAIL
- 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
- 	depends on BR2_ARCH_HAS_ATOMICS # pango -> cairo
- 	depends on BR2_PACKAGE_LIBGTK2
-+	depends on BR2_DEPRECATED_SINCE_2015_05
- 	select BR2_PACKAGE_PANGO
- 	help
- 	  GAIL provides accessibility support for gtk+ and
-@@ -27,3 +28,4 @@ comment "libgail needs a toolchain w/ C++, wchar, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_DEPRECATED_SINCE_2015_05
+It also adds the long-awaited-for hashes for gcc and binutils.
+
+
+Changes v3 -> v4:
+  - add missing fake-hash for uClibc eXtensa git snapshot; add uClibc
+    daily snapshots to exclusion list  (Arnout)
+  - drop using a magic value; use a list of excluded files  (Arnout)
+
+Changes v2 -> v3:
+  - add hashes for gcc and binutils
+  - fix a few more typoes
+
+Changes v1 -> v2:
+  - fix a few typoes
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 2552729232b4d9c5cb63ad247d6d94ab83e48e49:
+
+  package/mplayer: add optional libenca support (2015-04-07 23:27:23 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/dl-hash-toolchains
+
+for you to fetch changes up to ee02447feb64c265dcf5e7a60dddb630c7dc9402:
+
+  support/download: do not accept exlcuded files with ashes (2015-04-08 18:54:13 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (8):
+      package/gcc: add hashes
+      package/binutils: add hashes
+      package/uclibc: add missing hash for eXtensa
+      support/download: add possibility to not fail on missing hash
+      toolchain/external: ignore missing hash for custom downloaded toolchain
+      package/uclibc: ignore missing hash for snapshots
+      support/download: restore mandatory check of hashes
+      support/download: do not accept exlcuded files with ashes
+
+ package/binutils/binutils.hash                     |  7 +++++++
+ package/gcc/gcc-final/gcc-final.hash               |  1 +
+ package/gcc/gcc-initial/gcc-initial.hash           |  1 +
+ package/gcc/gcc.hash                               |  7 +++++++
+ package/pkg-download.mk                            |  3 +++
+ package/uclibc/uclibc.hash                         |  3 +++
+ package/uclibc/uclibc.mk                           |  1 +
+ support/download/check-hash                        | 17 ++++++++++++++++-
+ toolchain/toolchain-external/toolchain-external.mk |  2 ++
+ 9 files changed, 41 insertions(+), 1 deletion(-)
+ create mode 100644 package/binutils/binutils.hash
+ create mode 120000 package/gcc/gcc-final/gcc-final.hash
+ create mode 120000 package/gcc/gcc-initial/gcc-initial.hash
+ create mode 100644 package/gcc/gcc.hash
+
 -- 
-2.0.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
