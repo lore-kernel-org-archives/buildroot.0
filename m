@@ -1,30 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  7 Apr 2015 20:34:29 -0300
-Subject: [Buildroot] [PATCH] adwaita-icon-theme: also available for libgtk2
-Message-ID: <1428449669-8756-1-git-send-email-gustavo@zacarias.com.ar>
+From: Masahiro Yamada <yamada.masahiro@socionext.com>
+Date: Wed,  8 Apr 2015 09:52:30 +0900
+Subject: [Buildroot] [PATCH] Makefile: fix HOSTFC definition
+Message-ID: <1428454350-30186-1-git-send-email-yamada.masahiro@socionext.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It can actually be used for libgtk2 as well as libgtk3.
+"echo" always succeeds, "which g77 || type -p g77 || echo gfortran"
+is never run.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 ---
- package/adwaita-icon-theme/Config.in | 2 +-
+
+ Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/adwaita-icon-theme/Config.in b/package/adwaita-icon-theme/Config.in
-index a06071e..d200570 100644
---- a/package/adwaita-icon-theme/Config.in
-+++ b/package/adwaita-icon-theme/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_ADWAITA_ICON_THEME
- 	bool "adwaita icon theme"
--	depends on BR2_PACKAGE_LIBGTK3
-+	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
- 	help
- 	  Adwaita icon theme
+diff --git a/Makefile b/Makefile
+index 9db52a8..8f4f87c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -251,7 +251,7 @@ HOSTRANLIB := ranlib
+ endif
+ HOSTAR := $(shell which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
+ HOSTAS := $(shell which $(HOSTAS) || type -p $(HOSTAS) || echo as)
+-HOSTFC := $(shell which $(HOSTLD) || type -p $(HOSTLD) || echo || which g77 || type -p g77 || echo gfortran)
++HOSTFC := $(shell which $(HOSTFC) || type -p $(HOSTFC) || which g77 || type -p g77 || echo gfortran)
+ HOSTCPP := $(shell which $(HOSTCPP) || type -p $(HOSTCPP) || echo cpp)
+ HOSTLD := $(shell which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
+ HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
 -- 
-2.0.5
+1.9.1
