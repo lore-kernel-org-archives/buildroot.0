@@ -1,61 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Apr 2015 23:35:16 +0200
-Subject: [Buildroot] [PATCH 18/18] package/mplayer: add optional
- libmpeg2 support
-In-Reply-To: <1427649094-1240-19-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Apr 2015 23:35:23 +0200
+Subject: [Buildroot] [PATCH 00/18] package/mplayer: add optional
+ dependencies
+In-Reply-To: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
- <1427649094-1240-19-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150408213516.GI4197@free.fr>
+Message-ID: <20150408233523.087d9e0c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Dear Bernd Kuhls,
 
-On 2015-03-29 19:11 +0200, Bernd Kuhls spake thusly:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mplayer/mplayer.mk |    6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-> index da6e468..61c4594 100644
-> --- a/package/mplayer/mplayer.mk
-> +++ b/package/mplayer/mplayer.mk
-> @@ -150,6 +150,12 @@ MPLAYER_EXTRA_LIBS += -lass
->  MPLAYER_CONF_OPTS += --disable-ass-internal --enable-ass
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBMPEG2),y)
-> +MPLAYER_DEPENDENCIES += libmpeg2
-> +MPLAYER_CONF_OPTS += --disable-libmpeg2-internal --enable-libmpeg2
-> +MPLAYER_EXTRA_LIBS += -lmpeg2
-> +endif
+On Sun, 29 Mar 2015 19:11:16 +0200, Bernd Kuhls wrote:
 
-Ditto, ./configure detects the LDFLAGS if it auto-finds libmpeg2 (i.e.
-without passing --enable-libmpeg2).
+>   package/mplayer: add optional lzo support
+>   package/mplayer: add optional faad2 support
+>   package/mplayer: add optional rtmpdump support
+>   package/mplayer: add optional speex support
+>   package/mplayer: add optional libiconv support
+>   package/mplayer: disable optional libcdio support
+>   package/mplayer: add optional bzip2 support
+>   package/mplayer: add optional lame support
+>   package/mplayer: add optional libmpeg2 support
 
-Regards,
-Yann E. MORIN.
+I've applied those patches, after fixing up things to rely on
+autodection in order to avoid the "extra libs" thing.
 
->  ifeq ($(BR2_PACKAGE_TREMOR),y)
->  MPLAYER_DEPENDENCIES += tremor
->  MPLAYER_CONF_OPTS += --disable-tremor-internal --enable-tremor
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+However, I'm not entirely happy with how the mplayer package looks
+like. Some dependencies have explicit disable:
 
+ifeq ($(BR2_PACKAGE_LAME),y)
+MPLAYER_DEPENDENCIES += lame
+MPLAYER_CONF_OPTS += --enable-mp3lame
+else
+MPLAYER_CONF_OPTS += --disable-mp3lame
+endif
+
+but some do not:
+
+ifeq ($(BR2_PACKAGE_TREMOR),y)
+MPLAYER_DEPENDENCIES += tremor
+MPLAYER_CONF_OPTS += --disable-tremor-internal --enable-tremor
+endif
+
+and for example, when --disable-tremor is not passed, an internal
+tremor implementation is used, as far as I can see.
+
+There are also cases like:
+
+MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_BZIP2),bzip2)
+
+All of this should probably be harmonized to properly get an explicit
+disabling for all dependencies, unless there is a good reason not to do
+so.
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
