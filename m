@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 23:32:50 +0200
-Subject: [Buildroot] [PATCH 14/18] package/mplayer: add optional
- libiconv support
-In-Reply-To: <20150408213008.GH4197@free.fr>
+Date: Wed, 8 Apr 2015 23:33:17 +0200
+Subject: [Buildroot] [PATCH 12/18] package/mplayer: add optional
+ rtmpdump support
+In-Reply-To: <20150408212503.GG4197@free.fr>
 References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
- <1427649094-1240-15-git-send-email-bernd.kuhls@t-online.de>
- <20150408213008.GH4197@free.fr>
-Message-ID: <20150408233250.1d28f0ad@free-electrons.com>
+ <1427649094-1240-13-git-send-email-bernd.kuhls@t-online.de>
+ <20150408212503.GG4197@free.fr>
+Message-ID: <20150408233317.6eb8263c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,31 +15,29 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Wed, 8 Apr 2015 23:30:08 +0200, Yann E. MORIN wrote:
+On Wed, 8 Apr 2015 23:25:03 +0200, Yann E. MORIN wrote:
 
-> > +ifeq ($(BR2_PACKAGE_LIBICONV),y)
-> > +MPLAYER_CONF_OPTS += --enable-iconv
-> > +MPLAYER_DEPENDENCIES += libiconv
-> > +MPLAYER_EXTRA_LIBS += -liconv
+> Instead of passin extra libs, just let ./configure detect it all by
+> itself:
 > 
-> Even though that's jsut been merged, I think this has the same issue as
-> the librtmp: ./configure will find the appropriate CFLAGS/LIBS if not
-> explicitly told to use iconv, so I'd just add the dependency (like
-> already suggested for librtmp).
-> 
-> Care to address that ad send a respin, please?
+>     # ./configure will auto-detet librtmp if present, and will use
+>     # appropriate CFLAGS/LDFLAGS/LIBS (otherwise, it fails to do so
+>     # if told explicitly to use librtmp with --enable-librtmp
+>     ifeq ($(BR2_PACKAGE_RTMPDUMP),y)
+>     MPLAYER_DEPENDENCIES += rtmpdump
+>     else
+>     MPLAYER_CONF_OPTS += --disable-librtmp
+>     endif
 
-I've addressed that when applying:
+Done when applying:
 
-+# We intentionally don't pass --enable-libiconv, to let the
-+# autodetection find which library to link with.
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+MPLAYER_DEPENDENCIES += libiconv
++# We intentionally don't pass --enable-librtmp to let autodetection
++# find which library to link with.
++ifeq ($(BR2_PACKAGE_RTMPDUMP),y)
++MPLAYER_DEPENDENCIES += rtmpdump
 +else
-+MPLAYER_CONF_OPTS += --disable-iconv
++MPLAYER_CONF_OPTS += --disable-librtmp
 +endif
-
-Thanks,
 
 Thomas
 -- 
