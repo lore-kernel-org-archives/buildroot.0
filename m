@@ -1,194 +1,40 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Wed,  8 Apr 2015 09:56:14 +0200
-Subject: [Buildroot] [PATCH v3 4/4] package/cups-filters: Add new package
-	cups-filters 1.0.67
-In-Reply-To: <1428479774-29241-1-git-send-email-olivier.schonken@gmail.com>
-References: <1428479774-29241-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <1428479774-29241-4-git-send-email-olivier.schonken@gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Wed,  8 Apr 2015 10:08:00 +0200
+Subject: [Buildroot] [PATCH] raspberrypi2: kernel version does no more exist
+Message-ID: <1428480480-6422-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add --enable-xpdf-headers to poppler.mk. Required for succesfull
-build of cups-filters.
+It looks like version 2c4959b of Raspberry kernel does no more exist:
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+$ git clone https://github.com/raspberrypi/linux.git
+[...]
+$ cd linux
+$ git co 23c76b7f608e51258c6fca02aebeb5d588583149
+fatal: reference is not a tree: 23c76b7f608e51258c6fca02aebeb5d588583149
 
-Changes v2 -> v3
-Also add --enable-xpdf-headers to poppler.mk. Required for succesfull
-build of cups-filters.
+Replace it by lastest version of 3.19 branch
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/Config.in                      |  1 +
- package/cups-filters/Config.in         | 47 ++++++++++++++++++++++++
- package/cups-filters/cups-filters.hash |  2 ++
- package/cups-filters/cups-filters.mk   | 65 ++++++++++++++++++++++++++++++++++
- package/poppler/poppler.mk             |  3 +-
- 5 files changed, 117 insertions(+), 1 deletion(-)
- create mode 100644 package/cups-filters/Config.in
- create mode 100644 package/cups-filters/cups-filters.hash
- create mode 100644 package/cups-filters/cups-filters.mk
+ configs/raspberrypi2_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index de8e856..f678f7d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1116,6 +1116,7 @@ menu "Networking applications"
- 	source "package/crda/Config.in"
- 	source "package/ctorrent/Config.in"
- 	source "package/cups/Config.in"
-+	source "package/cups-filters/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/dhcp/Config.in"
- endif
-diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
-new file mode 100644
-index 0000000..cb70192
---- /dev/null
-+++ b/package/cups-filters/Config.in
-@@ -0,0 +1,47 @@
-+config BR2_PACKAGE_CUPS_FILTERS
-+	bool "cups-filters"
-+	depends on BR2_PACKAGE_CUPS
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_IJS
-+	select BR2_PACKAGE_LCMS2
-+	select BR2_PACKAGE_POPPLER
-+	select BR2_PACKAGE_QPDF
-+	# needs fork()
-+	depends on BR2_USE_MMU
-+	help
-+	  This project provides backends, filters, and other software that was
-+	  once part of the core CUPS distribution but is no longer maintained
-+	  by Apple Inc. In addition it contains additional filters and software
-+	  developed independently of Apple, especially filters for the PDF-
-+	  centric printing workflow introduced by OpenPrinting and a daemon
-+	  to browse Bonjour broadcasts of remote CUPS printers to make these
-+	  printers available locally and to provide backward compatibility to
-+	  the old CUPS broadcasting and browsing of CUPS 1.5.x and older.
-+	  From CUPS 1.6.0 on, this package is required for using printer drivers
-+	  with CUPS under Linux. With CUPS 1.5.x and earlier this package can be
-+	  used optionally to switch over to PDF-based printing.
-+
-+	  http://hplipopensource.com/
-+
-+if BR2_PACKAGE_CUPS_FILTERS
-+
-+config BR2_PACKAGE_CUPS_FILTERS_PDFTOPS
-+	bool "pdftops support"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Enable pdftops support
-+
-+comment "pdftops support needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_CUPS_FILTERS_AVAHI
-+	bool "avahi support"
-+	depends on !BR2_STATIC_LIBS # avahi
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS # avahi
-+	select BR2_PACKAGE_AVAHI
-+	select BR2_PACKAGE_AVAHI_DAEMON
-+	help
-+	  Enable Avahi support.
-+	  Select this if you want cups to support Bonjour protocol.
-+
-+endif
-diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
-new file mode 100644
-index 0000000..c7a401e
---- /dev/null
-+++ b/package/cups-filters/cups-filters.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	6fd3d26bdf89a773a757b1368a672714ddfbd576392b0e57aff64dbc5711f86d  cups-filters-1.0.67.tar.gz
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-new file mode 100644
-index 0000000..86128f1
---- /dev/null
-+++ b/package/cups-filters/cups-filters.mk
-@@ -0,0 +1,65 @@
-+#############################################################
-+#
-+# cups-filters
-+#
-+#############################################################
-+CUPS_FILTERS_VERSION = 1.0.67
-+CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters/
-+CUPS_FILTERS_LICENSE = GPLv2+
-+CUPS_FILTERS_LICENSE_FILES = COPYING
-+
-+CUPS_FILTERS_DEPENDENCIES = cups libglib2 ijs lcms2 poppler qpdf
-+
-+CUPS_FILTERS_CONF_OPTS = --disable-avahi \
-+                        --disable-imagefilters \
-+                        --with-cups-config=$(STAGING_DIR)/usr/bin/cups-config \
-+                        --without-png \
-+                        --with-sysroot=$(STAGING_DIR)
-+
-+ifeq ($(BR2_PACKAGE_CUPS_FILTERS_PDFTOPS),y)
-+	CUPS_FILTERS_CONF_OPTS += --with-pdftops=pdftops
-+endif
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+	CUPS_FILTERS_CONF_OPTS += --disable-shared \
-+				  --enable-static
-+else
-+	CUPS_FILTERS_CONF_OPTS += --enable-shared
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+	CUPS_FILTERS_CONF_OPTS += --with-jpeg
-+	CUPS_FILTERS_DEPENDENCIES += jpeg
-+else
-+	CUPS_FILTERS_CONF_OPTS += --without-jpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+	CUPS_FILTERS_CONF_OPTS += --with-png
-+	CUPS_FILTERS_DEPENDENCIES += libpng
-+else
-+	CUPS_FILTERS_CONF_OPTS += --without-png
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TIFF),y)
-+	CUPS_FILTERS_CONF_OPTS += --with-tiff
-+	CUPS_FILTERS_DEPENDENCIES += tiff
-+else
-+	CUPS_FILTERS_CONF_OPTS += --without-tiff
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+	CUPS_FILTERS_CONF_OPTS += --enable-dbus
-+	CUPS_FILTERS_DEPENDENCIES += dbus
-+else
-+	CUPS_FILTERS_CONF_OPTS += --disable-dbus
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CUPS_FILTERS_AVAHI),y)
-+	CUPS_FILTERS_DEPENDENCIES += avahi
-+	CUPS_FILTERS_CONF_OPTS += --enable-avahi
-+else
-+	CUPS_FILTERS_CONF_OPTS += --disable-avahi
-+endif
-+
-+$(eval $(autotools-package))
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index d35da54..fbb76f5 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -11,7 +11,8 @@ POPPLER_DEPENDENCIES = fontconfig
- POPPLER_LICENSE = GPLv2+
- POPPLER_LICENSE_FILES = COPYING
- POPPLER_INSTALL_STAGING = YES
--POPPLER_CONF_OPTS = --with-font-configuration=fontconfig
-+POPPLER_CONF_OPTS = --with-font-configuration=fontconfig \
-+	--enable-xpdf-headers
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index 814e182..6a48b26 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -15,7 +15,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="23c76b7f608e51258c6fca02aebeb5d588583149"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="2c4959b772a35d9d459b0a92f39bb066e9a44d37"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ BR2_LINUX_KERNEL_ZIMAGE=y
  
- ifeq ($(BR2_PACKAGE_LCMS2),y)
- POPPLER_CONF_OPTS += --enable-cms=lcms2
 -- 
 1.9.1
