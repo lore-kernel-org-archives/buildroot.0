@@ -1,57 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Apr 2015 18:44:37 +0200
-Subject: [Buildroot] autobuild-run bug, one instance died
-In-Reply-To: <20150408164316.0641eb3c@free-electrons.com>
-References: <20150408164316.0641eb3c@free-electrons.com>
-Message-ID: <20150408164437.GA4197@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  8 Apr 2015 13:52:44 -0300
+Subject: [Buildroot] [PATCH v2 0/5] The big webkitgtk bump
+Message-ID: <1428511969-28430-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Second take at the webkit/midori bump...
 
-On 2015-04-08 16:43 +0200, Thomas Petazzoni spake thusly:
-> I got the following backtrace on my autobuild-run instance:
-> 
-> thomas at build:~$ Process Process-2:
-> Traceback (most recent call last):
->   File "/usr/lib/python2.6/multiprocessing/process.py", line 232, in _bootstrap
->     self.run()
->   File "/usr/lib/python2.6/multiprocessing/process.py", line 88, in run
->     self._target(*self._args, **self._kwargs)
->   File "../buildroot-test/scripts/autobuild-run", line 735, in run_instance
->     ret = gen_config(**kwargs)
->   File "../buildroot-test/scripts/autobuild-run", line 473, in gen_config
->     configs = get_toolchain_configs()
->   File "../buildroot-test/scripts/autobuild-run", line 262, in get_toolchain_configs
->     with urlopen_closing(config["url"]) as r:
->   File "../buildroot-test/scripts/autobuild-run", line 134, in <lambda>
->     urlopen_closing = lambda uri: contextlib.closing(urlopen(uri))
->   File "/usr/lib/python2.6/urllib2.py", line 126, in urlopen
->     return _opener.open(url, data, timeout)
->   File "/usr/lib/python2.6/urllib2.py", line 391, in open
->     response = self._open(req, data)
->   File "/usr/lib/python2.6/urllib2.py", line 409, in _open
->     '_open', req)
->   File "/usr/lib/python2.6/urllib2.py", line 369, in _call_chain
->     result = func(*args)
->   File "/usr/lib/python2.6/urllib2.py", line 1170, in http_open
->     return self.do_open(httplib.HTTPConnection, req)
->   File "/usr/lib/python2.6/urllib2.py", line 1145, in do_open
->     raise URLError(err)
-> URLError: <urlopen error [Errno -2] Name or service not known>
+There's support for libgtk2 & libgtk3, though libgtk2 is always needed
+for the plugin system.
 
-Aha! I'm not the only one having DNS issues, it seems! :-)
+GL* support was only tested via mesa software renderer.
 
-Regards,
-Yann E. MORIN.
+Wayland support wasn't enabled because it still needs gtk2 (plugins) -
+this could possibly be patched away.
+
+Multimedia support is automatic via detection of gst1-plugins-base,
+ideally this should be an option but right now opencv+gst generate a
+dependency loop if gstreamer1 is selected. Also codecs will need to be
+catered by the user via the appropiate gst selects.
+
+MIPS support was disabled pending libatomic support for
+__sync_fetch_and_add_8 which is handled there for some 32-bit
+architectures.
+Update for v2: MIPS(eb) SIGBUSes, so disabled in general, kept the
+libatomic tweak for reference. MIPSel untested.
+
+Possible TODOs:
+Wayland in a proper way, granite support, gcr support, more arch
+testing/support.
+
+v2:
+* Needs NPTL [Gustavo]
+  It uses pthread_getattr_np()
+
+* Handle libatomic [Gustavo]
+  Needed for i386, mips & mipsel at least.
+
+* Deprecate libgail, no longer used by any package [Gustavo]
+
+v1:
+
+* Bump webkitgtk to version 2.4.x in a versioned package.
+  This is because midori can't use 2.6.x or 2.8.x and this way we can
+  have another webkitgtk package in parallel for other uses.
+  The series is still security-supported upstream.
+
+ * Bump midori to version 0.5.9.
+  No effort was made to enable support for the old webkit 1.x. series,
+  it may be possible to do so but it makes no sense.
+
+* Deprecate old webkit package.
+  Security bugs, build issues, general instability.
+
+Gustavo Zacarias (5):
+  gcc-final: install libatomic
+  webkitgtk24: new package
+  midori: bump to version 0.5.9
+  webkit: mark as deprecated
+  libgail: mark as deprecated
+
+ package/Config.in                             |   1 +
+ package/gcc/gcc-final/gcc-final.mk            |   9 +++
+ package/libgail/Config.in                     |   2 +
+ package/midori/0001-disable-libnotify.patch   |  43 +++++++++++
+ package/midori/Config.in                      |  39 +++++++---
+ package/midori/midori.hash                    |   2 +
+ package/midori/midori.mk                      |  57 +++++++-------
+ package/webkit/Config.in                      |   3 +
+ package/webkitgtk24/0001-fix-bug-137640.patch |  17 +++++
+ package/webkitgtk24/Config.in                 |  56 ++++++++++++++
+ package/webkitgtk24/webkitgtk24.hash          |   2 +
+ package/webkitgtk24/webkitgtk24.mk            | 102 ++++++++++++++++++++++++++
+ 12 files changed, 294 insertions(+), 39 deletions(-)
+ create mode 100644 package/midori/0001-disable-libnotify.patch
+ create mode 100644 package/midori/midori.hash
+ create mode 100644 package/webkitgtk24/0001-fix-bug-137640.patch
+ create mode 100644 package/webkitgtk24/Config.in
+ create mode 100644 package/webkitgtk24/webkitgtk24.hash
+ create mode 100644 package/webkitgtk24/webkitgtk24.mk
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.5
