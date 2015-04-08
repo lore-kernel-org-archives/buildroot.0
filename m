@@ -1,46 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 22:35:28 +0200
-Subject: [Buildroot] [PATCH v2] package/thrift: add dependency on
- host-autoconf-archive
-In-Reply-To: <1428524781-20093-1-git-send-email-romain.naour@openwide.fr>
-References: <1428524781-20093-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150408223528.3d5ba49d@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  8 Apr 2015 22:35:42 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/libungif: deprecate package
+Message-ID: <1428525342-30428-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+To be replaced with giflib.
 
-On Wed,  8 Apr 2015 22:26:21 +0200, Romain Naour wrote:
-> The ax_cxx_compile_stdcxx_11 macro bundled in thrift package is
-> brocken [1] and out of date.
-> 
-> Add autoconf-archive as dependency to use an updated version of this macro.
-> 
-> Since Thrift actually doesn't use that particular C++11 feature, add a
-> patch to make C++11 support optional.
-> 
-> [1] https://savannah.gnu.org/patch/index.php?8287
-> 
-> Fixes:
-> [thrift]
-> http://autobuild.buildroot.net/results/21e/21e3fff1e0d714f94ac7e621289d1a59bc02a05f/build-end.log
-> [host-thrift]
-> http://autobuild.buildroot.net/results/b89/b89ffc2bff699eb10bb6abd92369a43d4900354d/build-end.log
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Follow-up of http://patchwork.ozlabs.org/patch/432990/
 
-Thanks, applied!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: no changes
 
-If you have the time, it would be great to clean up our 5 patches
-against thrift and submit them upstream.
+ package/libungif/Config.in |    2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks a lot!
-
-Thomas
+diff --git a/package/libungif/Config.in b/package/libungif/Config.in
+index e8c301c..012ef76 100644
+--- a/package/libungif/Config.in
++++ b/package/libungif/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_LIBUNGIF
+ 	bool "libungif"
++	depends on !BR2_PACKAGE_GIFLIB
++	depends on BR2_DEPRECATED_SINCE_2015_02 # giflib
+ 	help
+ 	  libungif is a library for handling the uncompressed GIF image format.
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
