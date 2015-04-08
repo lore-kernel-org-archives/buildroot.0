@@ -1,32 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 21:28:49 +0200
-Subject: [Buildroot] [git commit] package/libuv: Bump to version 1.4.2
-Message-ID: <20150408192855.9638381941@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 08 Apr 2015 16:29:00 -0300
+Subject: [Buildroot] [PATCH 3/3] php: add opcache option
+In-Reply-To: <20150408212655.2a4fe0cd@free-electrons.com>
+References: <1428507569-28044-1-git-send-email-gustavo@zacarias.com.ar>	<1428507569-28044-3-git-send-email-gustavo@zacarias.com.ar>
+ <20150408212655.2a4fe0cd@free-electrons.com>
+Message-ID: <5525817C.2060302@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb53a13eb3ec1a54106bb1d8abc2ea1d35a688ac
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 04/08/2015 04:26 PM, Thomas Petazzoni wrote:
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libuv/libuv.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> Would have been a nicer (and potentially upstreamable) solution to have
+> a AC_CACHE_VAL that allows to prefeed the result of the tests from the
+> configure environment.
+> 
+> Applied anyway, thanks!
 
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 33f8d2c..1194299 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUV_VERSION = v1.0.2
-+LIBUV_VERSION = v1.4.2
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+Yes, all of these patches were a first round of getting things cleaner,
+maybe not 100% clean but cleaner, and get the features, opcache has been
+included since 5.5.x but we never got it because it was somewhat
+difficult to get nicely (specially with 5.5.x not being nice to
+buildconf either).
+Regards.
