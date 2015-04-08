@@ -1,52 +1,44 @@
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Wed, 8 Apr 2015 18:05:38 +0200
-Subject: [Buildroot] [PATCH v2] pulseview: new package
-In-Reply-To: <20150408162905.4cfbc0a3@free-electrons.com>
-References: <1426759708-4920-1-git-send-email-bgolaszewski@baylibre.com>
- <20150406234303.010225ea@free-electrons.com>
- <CAMpxmJXWnzUwgM7EQ3De4OCAprJ1oFVecYMD8j+xa7dU8co1qA@mail.gmail.com>
- <20150408162905.4cfbc0a3@free-electrons.com>
-Message-ID: <CAMpxmJUeJms2BVLVrhsgm7d1MegO-hV1XUEPwUgiCc7Z81Mfgg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  8 Apr 2015 13:21:46 -0300
+Subject: [Buildroot] [PATCH] socat: security bump to version 2.0.0-b8
+Message-ID: <1428510106-26897-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-04-08 16:29 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Bartosz Golaszewski,
->
-> On Wed, 8 Apr 2015 16:07:07 +0200, Bartosz Golaszewski wrote:
->
->> is it somehow possible to see the full build log? Pulseview can't be
->> built due to:
->>
->> -- checking for module 'libsigrokcxx>=0.3.0'
->> --   package 'libsigrokcxx>=0.3.0' not found
->>
->> I can't reproduce it with attached configs locally though and need to
->> see what happens when building the C++ bindings.
->
-> No, we don't save the full build logs as they are way too large. Did
-> you try rebuilding exactly one of the failing configurations?
->
-> For example, building
-> http://autobuild.buildroot.org/results/a4e/a4ebb507798b94272bbad02456dace90472785a7/config ?
+Fixes:
+CVE-2015-1379 - signal handler implementations are not async-signal-safe
+and can cause crash or freeze of socat processes.
 
-Hi Thomas,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/socat/socat.hash | 2 ++
+ package/socat/socat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/socat/socat.hash
 
-still no success. The reason for pulseview failures is libsigrokcxx.so
-not being present on the target. Please consider applying the attached
-patch, which should let us know what the reason is for libsigrokcxx
-silent failures.
-
-Best regards,
-Bartosz Golaszewski
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-libsigrok-bail-out-if-C-bindings-are-not-built-corre.patch
-Type: text/x-patch
-Size: 1442 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150408/524a75a1/attachment.bin>
+diff --git a/package/socat/socat.hash b/package/socat/socat.hash
+new file mode 100644
+index 0000000..a876ae2
+--- /dev/null
++++ b/package/socat/socat.hash
+@@ -0,0 +1,2 @@
++# From http://www.dest-unreach.org/socat/download.md5sum
++md5	ff56576703dfdeac221357a348c30760	socat-2.0.0-b8.tar.bz2
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index ecb7621..eaf13bc 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SOCAT_VERSION = 2.0.0-b7
++SOCAT_VERSION = 2.0.0-b8
+ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download
+ SOCAT_LICENSE = GPLv2
+-- 
+2.0.5
