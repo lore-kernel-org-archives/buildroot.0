@@ -1,56 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  8 Apr 2015 18:57:16 +0200
-Subject: [Buildroot] [PATCH 1/8 v4] package/gcc: add hashes
+Date: Wed,  8 Apr 2015 18:57:18 +0200
+Subject: [Buildroot] [PATCH 3/8 v4] package/uclibc: add missing hash for
+	eXtensa
 In-Reply-To: <cover.1428512075.git.yann.morin.1998@free.fr>
 References: <cover.1428512075.git.yann.morin.1998@free.fr>
-Message-ID: <f78c5a1a3e8998f0e32d08fc7c5a63dea083f4c4.1428512075.git.yann.morin.1998@free.fr>
+Message-ID: <f5b5e7691683c7529da966088e9369f97e0de968.1428512075.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This is a git snapshot, we can't have a hash for it.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/gcc/gcc-final/gcc-final.hash     | 1 +
- package/gcc/gcc-initial/gcc-initial.hash | 1 +
- package/gcc/gcc.hash                     | 7 +++++++
- 3 files changed, 9 insertions(+)
- create mode 120000 package/gcc/gcc-final/gcc-final.hash
- create mode 120000 package/gcc/gcc-initial/gcc-initial.hash
- create mode 100644 package/gcc/gcc.hash
+ package/uclibc/uclibc.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/gcc/gcc-final/gcc-final.hash b/package/gcc/gcc-final/gcc-final.hash
-new file mode 120000
-index 0000000..7ac9361
---- /dev/null
-+++ b/package/gcc/gcc-final/gcc-final.hash
-@@ -0,0 +1 @@
-+../gcc.hash
-\ No newline at end of file
-diff --git a/package/gcc/gcc-initial/gcc-initial.hash b/package/gcc/gcc-initial/gcc-initial.hash
-new file mode 120000
-index 0000000..7ac9361
---- /dev/null
-+++ b/package/gcc/gcc-initial/gcc-initial.hash
-@@ -0,0 +1 @@
-+../gcc.hash
-\ No newline at end of file
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-new file mode 100644
-index 0000000..d9a04fc
---- /dev/null
-+++ b/package/gcc/gcc.hash
-@@ -0,0 +1,7 @@
-+# Locally computed (upstream only has sigs):
-+sha256  eef3f0456db8c3d992cbb51d5d32558190bc14f3bc19383dd93acc27acc6befc  gcc-4.5.4.tar.bz2
-+sha256  92e61c6dc3a0a449e62d72a38185fda550168a86702dea07125ebd3ec3996282  gcc-4.7.4.tar.bz2
-+sha256  4a80aa23798b8e9b5793494b8c976b39b8d9aa2e53cd5ed5534aff662a7f8695  gcc-4.8.4.tar.bz2
-+sha256  2020c98295856aa13fda0f2f3a4794490757fc24bcca918d52cc8b4917b972dd  gcc-4.9.2.tar.bz2
-+# No hash for the ARC variant, comes from the github-helper:
-+none    xxx                                                               gcc-arc-2014.12.tar.gz
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 69cc103..971ab26 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -6,3 +6,6 @@ sha256	0a9085a11615296cfe7783f16ff29073393eb330749947adece0eeddb31705a4	uClibc-a
+ 
+ # From http://www.uclibc-ng.org/trac/
+ sha256  e561040293ba4f21dcf3285ca1f683b5a8493eb0ffd3b3e495122cfde5a64a0e        uClibc-ng-1.0.1.tar.xz
++
++# No hash for this git snapshot
++none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
 -- 
 1.9.1
