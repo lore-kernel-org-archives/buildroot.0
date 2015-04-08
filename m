@@ -1,43 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  8 Apr 2015 19:08:35 +0200
-Subject: [Buildroot] [PATCH 2/2] infra/pkg-kconfig: require an non-empty
-	KCONFIG_FILE
-In-Reply-To: <cover.1428512591.git.yann.morin.1998@free.fr>
-References: <cover.1428512591.git.yann.morin.1998@free.fr>
-Message-ID: <c5c81694cabca70c5651fe42a7de99247275659c.1428512591.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Apr 2015 19:14:14 +0200
+Subject: [Buildroot] [PATCH v2 1/5] gcc-final: install libatomic
+In-Reply-To: <1428511969-28430-2-git-send-email-gustavo@zacarias.com.ar>
+References: <1428511969-28430-1-git-send-email-gustavo@zacarias.com.ar>
+ <1428511969-28430-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150408191414.1fce04ac@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we only check that the variable is defined, which is not
-enough since we really want it to be non-empty.
+Dear Gustavo Zacarias,
 
-We however can't check it points to an existing file, because the
-package might well not be extracted yet, and we may use an internal
-defconfig. If that file does not eventually exist, there will be a
-failure down the road at build time when we try to copy it...
+On Wed,  8 Apr 2015 13:52:45 -0300, Gustavo Zacarias wrote:
+> It's required in some 32-bit architectures for the extended (64-bit)
+> atomic operations, like __sync_add_and_fetch_8.
+> These arches are at least: i386, mips & mipsel.
+> 
+> Target size growth is ~15 KiB for ARM.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
- package/pkg-kconfig.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What is your proposal to handle libatomic for the external toolchain
+case?
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index fd9f19d..fe8d266 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -68,7 +68,7 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
- ifeq ($$($$($(2)_KCONFIG_VAR)),y)
- 
- # FOO_KCONFIG_FILE is required
--ifndef $(2)_KCONFIG_FILE
-+ifeq ($$($(2)_KCONFIG_FILE),)
- $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
- endif
- 
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
