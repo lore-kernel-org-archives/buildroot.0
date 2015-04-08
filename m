@@ -1,35 +1,38 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 08 Apr 2015 22:29:35 +0200
-Subject: [Buildroot] [PATCH/RFC 03/27] package/kodi: bump version to
-	15.0 Alpha2-Isengard
-References: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
- <1427913380-14808-4-git-send-email-bernd.kuhls@t-online.de>
- <20150404184448.3fea759b@free-electrons.com>
-Message-ID: <XnsA476E4CF4CDF7berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Apr 2015 22:30:18 +0200
+Subject: [Buildroot] [PATCH 1/2] infra/pkg-kconfig: don't require a
+ kconfig file for disabled packages
+In-Reply-To: <25c5ce55fd15b63fae1635bdc6940527079acdf6.1428512591.git.yann.morin.1998@free.fr>
+References: <cover.1428512591.git.yann.morin.1998@free.fr>
+ <25c5ce55fd15b63fae1635bdc6940527079acdf6.1428512591.git.yann.morin.1998@free.fr>
+Message-ID: <20150408223018.6f1226af@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20150404184448.3fea759b at free-electrons.com:
+Dear Yann E. MORIN,
 
-> Do you know when the final release of Kodi 15.0 is planned? The next
-> Buildroot version will be 2015.05, with a feature freeze at the end of
-> April. Will Kodi 15.0 final be released by then?
+On Wed,  8 Apr 2015 19:08:34 +0200, Yann E. MORIN wrote:
+> When a package is not enabled, we need not check that it provides
+> a .config/defconfig file.
+> 
+> So far, all our pkg-kconfig packages unconditionally set their
+> _KCONFIG_FILE, even to an empty value. But some packages (e.g.
+> at91bootstrap3) wanted to set it only when enabled, and broke.
+> 
+> So, only do the check when the package is enabled.
+> 
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-Hi,
+Applied, thanks!
 
-http://kodi.wiki/view/Development_builds#Monthly_build
-"Kodi developers have a merge cycle every month for new features and major 
-changes. For ten days they add new features, then for the rest of the month 
-they fix things."
-
-Alpha 2 was released an April 1st, I expect Beta 1 at the beginning of May 
-and a release maybe one month later with several RC before that. So no, Kodi 
-15.0 will not be part of buildroot 2015.05, but as Yann already pointed out, 
-I am sending my current patch series as RFC early to pave the way for this 
-"beast" ;)
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
