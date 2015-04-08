@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 21:22:53 +0200
-Subject: [Buildroot] [PATCH] geoip: bump to version 1.6.5
-In-Reply-To: <1428507541-28002-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1428507541-28002-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150408212253.26a99b74@free-electrons.com>
+Date: Wed, 8 Apr 2015 21:25:09 +0200
+Subject: [Buildroot] [PATCH 1/3] php: bump to version 5.6.7
+In-Reply-To: <1428507569-28044-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1428507569-28044-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150408212509.02a65c9f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,11 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Wed,  8 Apr 2015 12:39:01 -0300, Gustavo Zacarias wrote:
+On Wed,  8 Apr 2015 12:39:27 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/geoip/geoip.hash | 2 +-
->  package/geoip/geoip.mk   | 2 +-
+>  package/php/php.hash | 2 +-
+>  package/php/php.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied, thanks!
