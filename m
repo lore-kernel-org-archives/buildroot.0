@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 21:15:36 +0200
-Subject: [Buildroot] [PATCH 2/2] strongswan: bump to version 5.3.0
-In-Reply-To: <1428488444-8124-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1428488444-8124-1-git-send-email-gustavo@zacarias.com.ar>
- <1428488444-8124-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150408211536.4f59b3fc@free-electrons.com>
+Date: Wed, 8 Apr 2015 21:22:27 +0200
+Subject: [Buildroot] [PATCH] strongswan: needs atomics
+In-Reply-To: <1428507128-8490-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1428507128-8490-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150408212227.615c05a2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +12,17 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Wed,  8 Apr 2015 07:20:44 -0300, Gustavo Zacarias wrote:
-> Enable connmark and forecast plugins when iptables is selected.
-> And always enable the led plugin, though it's not new to 5.3.0.
+On Wed,  8 Apr 2015 12:32:08 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/3d1/3d13ced1b142d014c5bc098137174c4369a1e3b5/
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-You missed updating the hash file, so I did that while committing.
+Hum, I don't quite see how this change can fix the build issue. The
+build issue is on Microblaze, and Microblaze has BR2_ARCH_HAS_ATOMICS=y.
+
+So while I agree that Strongswan is indeed using atomic intrinsics, it
+isn't going to fix the issue.
 
 Thomas
 -- 
