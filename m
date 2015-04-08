@@ -1,61 +1,75 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 08 Apr 2015 21:09:22 +0200
-Subject: [Buildroot] [PATCH] Makefile: fix HOSTFC definition
-In-Reply-To: <1428454350-30186-1-git-send-email-yamada.masahiro@socionext.com>
-References: <1428454350-30186-1-git-send-email-yamada.masahiro@socionext.com>
-Message-ID: <55257CE2.9090206@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Apr 2015 21:12:20 +0200
+Subject: [Buildroot] [PATCH v2] pulseview: new package
+In-Reply-To: <CAMpxmJUeJms2BVLVrhsgm7d1MegO-hV1XUEPwUgiCc7Z81Mfgg@mail.gmail.com>
+References: <1426759708-4920-1-git-send-email-bgolaszewski@baylibre.com>
+ <20150406234303.010225ea@free-electrons.com>
+ <CAMpxmJXWnzUwgM7EQ3De4OCAprJ1oFVecYMD8j+xa7dU8co1qA@mail.gmail.com>
+ <20150408162905.4cfbc0a3@free-electrons.com>
+ <CAMpxmJUeJms2BVLVrhsgm7d1MegO-hV1XUEPwUgiCc7Z81Mfgg@mail.gmail.com>
+Message-ID: <20150408211220.3e34e66a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/04/15 02:52, Masahiro Yamada wrote:
-> "echo" always succeeds, "which g77 || type -p g77 || echo gfortran"
-> is never run.
+Dear Bartosz Golaszewski,
 
- + mention the correction HOSTLD -> HOSTFC
+On Wed, 8 Apr 2015 18:05:38 +0200, Bartosz Golaszewski wrote:
 
-> 
-> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-> ---
-> 
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 9db52a8..8f4f87c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -251,7 +251,7 @@ HOSTRANLIB := ranlib
->  endif
->  HOSTAR := $(shell which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
->  HOSTAS := $(shell which $(HOSTAS) || type -p $(HOSTAS) || echo as)
-> -HOSTFC := $(shell which $(HOSTLD) || type -p $(HOSTLD) || echo || which g77 || type -p g77 || echo gfortran)
-                                 ^^
- Since it was incorrect anyway (it was defined as /usr/bin/ld on the
-autobuilders) and there was never an issue with it, I guess it was not used
-anyway. So I propose to completely remove it.
+> still no success. The reason for pulseview failures is libsigrokcxx.so
+> not being present on the target. Please consider applying the attached
+> patch, which should let us know what the reason is for libsigrokcxx
+> silent failures.
 
- Failing that:
+I've reproduced the problem in the autobuilder directly, and the
+problem is fairly clear:
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ESC[3m>>> libsigrok 380ee96fdfe0895ca0aa0b158d5c332ef08f8b3c ConfiguringESC[23m
+mkdir -p /home/test/outputs/1f018c927c31e5302bfac85fd8e4ecb2fd5d38f3/output/build/libsigrok-380ee96fdfe0895ca0aa0b158d5c332ef08f8b3c/autostuff
+ESC[3m>>> libsigrok 380ee96fdfe0895ca0aa0b158d5c332ef08f8b3c AutoreconfiguringESC[23m
+libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'autostuff'.
+libtoolize: copying file 'autostuff/ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'autostuff'.
+libtoolize: copying file 'autostuff/libtool.m4'
+libtoolize: copying file 'autostuff/ltoptions.m4'
+libtoolize: copying file 'autostuff/ltsugar.m4'
+libtoolize: copying file 'autostuff/ltversion.m4'
+libtoolize: copying file 'autostuff/lt~obsolete.m4'
+configure.ac:42: installing 'autostuff/ar-lib'
+configure.ac:42: installing 'autostuff/compile'
+configure.ac:37: installing 'autostuff/config.guess'
+configure.ac:37: installing 'autostuff/config.sub'
+configure.ac:40: installing 'autostuff/install-sh'
+configure.ac:40: installing 'autostuff/missing'
+Makefile.am: installing './INSTALL'
+Makefile.am: installing 'autostuff/depcomp'
+parallel-tests: installing 'autostuff/test-driver'
+ESC[3m>>> libsigrok 380ee96fdfe0895ca0aa0b158d5c332ef08f8b3c Patching libtoolESC[23m
+[...]
+Enabled language bindings:
+ - C++............................. no (Doxygen required)
 
+So, generating the C++ bindings requires Doxygen. And Doxygen is not
+part of the mandatory Buildroot dependencies, and not packaged in
+Buildroot as a host package.
 
- Regards,
- Arnout
+The reason why it works for you is because you have Doxygen installed
+on your machine. Several of the autobuilders run in a minimal chroot
+that has only the strict requirements of Buildroot installed, nothing
+else, specifically to detect such issues.
 
-> +HOSTFC := $(shell which $(HOSTFC) || type -p $(HOSTFC) || which g77 || type -p g77 || echo gfortran)
->  HOSTCPP := $(shell which $(HOSTCPP) || type -p $(HOSTCPP) || echo cpp)
->  HOSTLD := $(shell which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
->  HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
-> 
+So, in the mean time, I've marked libsigrokcxx as broken, as well as
+pulseview. I believe the best solution is probably to create a
+host-doxygen package (or convince the libsigrok developers to not use
+something such as doxygen to generate C++ bindings). Can you look into
+this?
 
+Thanks a lot!
 
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
