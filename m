@@ -1,76 +1,94 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 08 Apr 2015 22:22:00 +0200
-Subject: [Buildroot] [PATCH 2/2] infra/pkg-kconfig: require an non-empty
- KCONFIG_FILE
-In-Reply-To: <c5c81694cabca70c5651fe42a7de99247275659c.1428512591.git.yann.morin.1998@free.fr>
-References: <cover.1428512591.git.yann.morin.1998@free.fr>
- <c5c81694cabca70c5651fe42a7de99247275659c.1428512591.git.yann.morin.1998@free.fr>
-Message-ID: <55258DE8.9020207@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed,  8 Apr 2015 22:26:21 +0200
+Subject: [Buildroot] [PATCH v2] package/thrift: add dependency on
+	host-autoconf-archive
+Message-ID: <1428524781-20093-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/04/15 19:08, Yann E. MORIN wrote:
-> Currently, we only check that the variable is defined, which is not
-> enough since we really want it to be non-empty.
+The ax_cxx_compile_stdcxx_11 macro bundled in thrift package is
+brocken [1] and out of date.
 
- Have you tested this? According to the make documentation, this is not true...
+Add autoconf-archive as dependency to use an updated version of this macro.
 
-> 
-> We however can't check it points to an existing file, because the
-> package might well not be extracted yet, and we may use an internal
-> defconfig. If that file does not eventually exist, there will be a
-> failure down the road at build time when we try to copy it...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> ---
->  package/pkg-kconfig.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> index fd9f19d..fe8d266 100644
-> --- a/package/pkg-kconfig.mk
-> +++ b/package/pkg-kconfig.mk
-> @@ -68,7 +68,7 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
->  ifeq ($$($$($(2)_KCONFIG_VAR)),y)
->  
->  # FOO_KCONFIG_FILE is required
-> -ifndef $(2)_KCONFIG_FILE
-> +ifeq ($$($(2)_KCONFIG_FILE),)
+Since Thrift actually doesn't use that particular C++11 feature, add a
+patch to make C++11 support optional.
 
- These two are exactly the same, cfr. [1]:
+[1] https://savannah.gnu.org/patch/index.php?8287
 
->      The 'ifdef' form takes the _name_ of a variable as its argument,
->      not a reference to a variable.  The value of that variable has a
->      non-empty value, the TEXT-IF-TRUE is effective; otherwise, the
-       ^^^^^^^^^^^^^^^
->      TEXT-IF-FALSE, if any, is effective.  Variables that have never
->      been defined have an empty value.  The text VARIABLE-NAME is
->      expanded, so it could be a variable or function that expands to the
-       ^^^^^^^^
->      name of a variable.
+Fixes:
+[thrift]
+http://autobuild.buildroot.net/results/21e/21e3fff1e0d714f94ac7e621289d1a59bc02a05f/build-end.log
+[host-thrift]
+http://autobuild.buildroot.net/results/b89/b89ffc2bff699eb10bb6abd92369a43d4900354d/build-end.log
 
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+v2: - as suggested by Arnout, don't remove the old ax_cxx_compile_stdcxx_11.m4 file.
+    - make C++11 optional.
+    - add a link to the ax_cxx_compile_stdcxx_11's bug report.
+    - add host-autoconf-archive dependency for the target thrift.
+---
+ .../0005-configure.ac-C-11-is-optional.patch       | 28 ++++++++++++++++++++++
+ package/thrift/thrift.mk                           |  7 +++---
+ 2 files changed, 32 insertions(+), 3 deletions(-)
+ create mode 100644 package/thrift/0005-configure.ac-C-11-is-optional.patch
 
-
- Regards,
- Arnout
-
-[1] https://www.gnu.org/software/make/manual/html_node/Conditional-Syntax.html
-
->  $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
->  endif
->  
-> 
-
-
+diff --git a/package/thrift/0005-configure.ac-C-11-is-optional.patch b/package/thrift/0005-configure.ac-C-11-is-optional.patch
+new file mode 100644
+index 0000000..9ed7e0a
+--- /dev/null
++++ b/package/thrift/0005-configure.ac-C-11-is-optional.patch
+@@ -0,0 +1,28 @@
++From 9c3a7e79b256730dd85a7acadbaf57ab018b3127 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Tue, 7 Apr 2015 07:37:26 +0200
++Subject: [PATCH] configure.ac: C++11 is optional
++
++Thrift build fine whitout c++11 support.
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 8daeb03..bfd49ae 100755
++--- a/configure.ac
+++++ b/configure.ac
++@@ -99,7 +99,7 @@ AC_PROG_AWK
++ AC_PROG_RANLIB
++ 
++ AC_LANG([C++])
++-AX_CXX_COMPILE_STDCXX_11([noext])
+++AX_CXX_COMPILE_STDCXX_11([noext], [optional])
++ 
++ AC_ARG_ENABLE([libs],
++   AS_HELP_STRING([--enable-libs], [build the Apache Thrift libraries [default=yes]]),
++-- 
++1.9.3
++
+diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
+index 409b04d..b4b3a2c 100644
+--- a/package/thrift/thrift.mk
++++ b/package/thrift/thrift.mk
+@@ -6,10 +6,11 @@
+ 
+ THRIFT_VERSION = 0.9.2
+ THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(THRIFT_VERSION)
+-THRIFT_DEPENDENCIES = host-pkgconf host-thrift boost libevent openssl zlib
++THRIFT_DEPENDENCIES = host-autoconf-archive host-pkgconf host-thrift boost \
++	libevent openssl zlib
+ THRIFT_INSTALL_STAGING = YES
+-HOST_THRIFT_DEPENDENCIES = host-bison host-boost host-flex host-libevent \
+-	host-openssl host-pkgconf host-zlib
++HOST_THRIFT_DEPENDENCIES = host-autoconf-archive host-bison host-boost \
++	host-flex host-libevent host-openssl host-pkgconf host-zlib
+ 
+ THRIFT_CONF_OPTS = --with-sysroot=$(STAGING_DIR) \
+ 	--with-boost \
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.3
