@@ -1,81 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  8 Apr 2015 18:57:19 +0200
-Subject: [Buildroot] [PATCH 0/8 v4] toolchain: better handle hashes (branch
-	yem/dl-hash-toolchains)
-Message-ID: <cover.1428512075.git.yann.morin.1998@free.fr>
+Date: Wed,  8 Apr 2015 18:57:16 +0200
+Subject: [Buildroot] [PATCH 1/8 v4] package/gcc: add hashes
+In-Reply-To: <cover.1428512075.git.yann.morin.1998@free.fr>
+References: <cover.1428512075.git.yann.morin.1998@free.fr>
+Message-ID: <f78c5a1a3e8998f0e32d08fc7c5a63dea083f4c4.1428512075.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
-
-This series makes it so we can download custom external toolchains, and
-still have mandatory checks of hashes.
-
-It also adds the long-awaited-for hashes for gcc and binutils.
-
-
-Changes v3 -> v4:
-  - add missing fake-hash for uClibc eXtensa git snapshot; add uClibc
-    daily snapshots to exclusion list  (Arnout)
-  - drop using a magic value; use a list of excluded files  (Arnout)
-
-Changes v2 -> v3:
-  - add hashes for gcc and binutils
-  - fix a few more typoes
-
-Changes v1 -> v2:
-  - fix a few typoes
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 2552729232b4d9c5cb63ad247d6d94ab83e48e49:
-
-  package/mplayer: add optional libenca support (2015-04-07 23:27:23 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/dl-hash-toolchains
-
-for you to fetch changes up to ee02447feb64c265dcf5e7a60dddb630c7dc9402:
-
-  support/download: do not accept exlcuded files with ashes (2015-04-08 18:54:13 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (8):
-      package/gcc: add hashes
-      package/binutils: add hashes
-      package/uclibc: add missing hash for eXtensa
-      support/download: add possibility to not fail on missing hash
-      toolchain/external: ignore missing hash for custom downloaded toolchain
-      package/uclibc: ignore missing hash for snapshots
-      support/download: restore mandatory check of hashes
-      support/download: do not accept exlcuded files with ashes
-
- package/binutils/binutils.hash                     |  7 +++++++
- package/gcc/gcc-final/gcc-final.hash               |  1 +
- package/gcc/gcc-initial/gcc-initial.hash           |  1 +
- package/gcc/gcc.hash                               |  7 +++++++
- package/pkg-download.mk                            |  3 +++
- package/uclibc/uclibc.hash                         |  3 +++
- package/uclibc/uclibc.mk                           |  1 +
- support/download/check-hash                        | 17 ++++++++++++++++-
- toolchain/toolchain-external/toolchain-external.mk |  2 ++
- 9 files changed, 41 insertions(+), 1 deletion(-)
- create mode 100644 package/binutils/binutils.hash
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ package/gcc/gcc-final/gcc-final.hash     | 1 +
+ package/gcc/gcc-initial/gcc-initial.hash | 1 +
+ package/gcc/gcc.hash                     | 7 +++++++
+ 3 files changed, 9 insertions(+)
  create mode 120000 package/gcc/gcc-final/gcc-final.hash
  create mode 120000 package/gcc/gcc-initial/gcc-initial.hash
  create mode 100644 package/gcc/gcc.hash
 
+diff --git a/package/gcc/gcc-final/gcc-final.hash b/package/gcc/gcc-final/gcc-final.hash
+new file mode 120000
+index 0000000..7ac9361
+--- /dev/null
++++ b/package/gcc/gcc-final/gcc-final.hash
+@@ -0,0 +1 @@
++../gcc.hash
+\ No newline at end of file
+diff --git a/package/gcc/gcc-initial/gcc-initial.hash b/package/gcc/gcc-initial/gcc-initial.hash
+new file mode 120000
+index 0000000..7ac9361
+--- /dev/null
++++ b/package/gcc/gcc-initial/gcc-initial.hash
+@@ -0,0 +1 @@
++../gcc.hash
+\ No newline at end of file
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+new file mode 100644
+index 0000000..d9a04fc
+--- /dev/null
++++ b/package/gcc/gcc.hash
+@@ -0,0 +1,7 @@
++# Locally computed (upstream only has sigs):
++sha256  eef3f0456db8c3d992cbb51d5d32558190bc14f3bc19383dd93acc27acc6befc  gcc-4.5.4.tar.bz2
++sha256  92e61c6dc3a0a449e62d72a38185fda550168a86702dea07125ebd3ec3996282  gcc-4.7.4.tar.bz2
++sha256  4a80aa23798b8e9b5793494b8c976b39b8d9aa2e53cd5ed5534aff662a7f8695  gcc-4.8.4.tar.bz2
++sha256  2020c98295856aa13fda0f2f3a4794490757fc24bcca918d52cc8b4917b972dd  gcc-4.9.2.tar.bz2
++# No hash for the ARC variant, comes from the github-helper:
++none    xxx                                                               gcc-arc-2014.12.tar.gz
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
