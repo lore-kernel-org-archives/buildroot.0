@@ -1,62 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Apr 2015 23:21:29 +0200
-Subject: [Buildroot] [PATCH 11/18] package/mplayer: add optional faad2
- support
-In-Reply-To: <1427649094-1240-12-git-send-email-bernd.kuhls@t-online.de>
-References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
- <1427649094-1240-12-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150408212129.GF4197@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Apr 2015 23:22:30 +0200
+Subject: [Buildroot] [PATCH] strongswan: needs atomics
+In-Reply-To: <55259A87.7050504@zacarias.com.ar>
+References: <1428507128-8490-1-git-send-email-gustavo@zacarias.com.ar>
+ <20150408212227.615c05a2@free-electrons.com>
+ <55258D3D.9070800@zacarias.com.ar>
+ <20150408224028.1c419e88@free-electrons.com>
+ <55259A87.7050504@zacarias.com.ar>
+Message-ID: <20150408232230.362b95bd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Dear Gustavo Zacarias,
 
-On 2015-03-29 19:11 +0200, Bernd Kuhls spake thusly:
+On Wed, 08 Apr 2015 18:15:51 -0300, Gustavo Zacarias wrote:
+
+> I'd venture to say the first (hardware has atomics) - that's what it
+> means right now because:
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/mplayer/mplayer.mk |    7 +++++++
->  1 file changed, 7 insertions(+)
+> 1) We don't handle libatomic, which is the fallback if HW doesn't do it.
+> This would entail adding LIBS="-latomic" for autotools packages, and
+> things are magically fixed.
 > 
-> diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-> index a09cf43..442f82b 100644
-> --- a/package/mplayer/mplayer.mk
-> +++ b/package/mplayer/mplayer.mk
-> @@ -117,6 +117,13 @@ else
->  MPLAYER_CONF_OPTS += --disable-mencoder
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_FAAD2),y)
-> +MPLAYER_DEPENDENCIES += faad2
-> +MPLAYER_CONF_OPTS += --enable-faad
-> +else
-> +MPLAYER_CONF_OPTS += --disable-faad
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBASS),y)
->  MPLAYER_DEPENDENCIES += libass
->  MPLAYER_EXTRA_LIBS += -lass
-> -- 
-> 1.7.10.4
+> 2) We don't copy libatomic (patches sent), so we can't do 1 just yet.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> So basically we should rename the whole thing.
+> BR2_ARCH_HAS_ATOMICS isn't precise, we need to formulate this probably
+> as BR2_ARCH_NEEDS_LIBATOMIC since AFAIK the fallback is mandatory, while
+> copying it for the toolchains.
+> We could have BR2_TOOLCHAIN_HAS_ATOMICS to point towards
+> toolchains/architectures that don't provide atomics and a fallback.
+> It also means that packages that were previously excluded can, in fact,
+> be used anyway as long as libatomic is thrown to the mix.
 
+Thanks for the summary.
+
+How do you handle Blackfin, which uses gcc 4.3, while I believe
+libatomic is a new thing in gcc 4.8, no?
+
+Are you sure all atomic intrinsics are tied to the existence of
+libatomic? It's quite hard to find some good documentation on the web
+about libatomic.
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
