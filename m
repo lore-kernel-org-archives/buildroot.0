@@ -1,40 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 22:40:28 +0200
-Subject: [Buildroot] [PATCH] strongswan: needs atomics
-In-Reply-To: <55258D3D.9070800@zacarias.com.ar>
-References: <1428507128-8490-1-git-send-email-gustavo@zacarias.com.ar>
- <20150408212227.615c05a2@free-electrons.com>
- <55258D3D.9070800@zacarias.com.ar>
-Message-ID: <20150408224028.1c419e88@free-electrons.com>
+Date: Wed, 8 Apr 2015 22:42:05 +0200
+Subject: [Buildroot] [PATCH UNTESTED] autobuild-run: handle failed
+ network connection
+In-Reply-To: <1428525283-8015-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1428525283-8015-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20150408224205.25c254c2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Thomas De Schampheleire,
 
-On Wed, 08 Apr 2015 17:19:09 -0300, Gustavo Zacarias wrote:
-> On 04/08/2015 04:22 PM, Thomas Petazzoni wrote:
+On Wed,  8 Apr 2015 22:34:43 +0200, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 > 
-> > Hum, I don't quite see how this change can fix the build issue. The
-> > build issue is on Microblaze, and Microblaze has BR2_ARCH_HAS_ATOMICS=y.
-> > 
-> > So while I agree that Strongswan is indeed using atomic intrinsics, it
-> > isn't going to fix the issue.
+> Due to a network failure, checking of the autobuild-run version or
+> obtaining the toolchain configurations could fail, causing the instance to
+> stop with an exception (and not restarting automatically).
 > 
-> The real problem is that we declared that microblaze has atomics when it
-> doesn't. All of the __atomic_compare_and_exchange_? functions for
-> microblaze live in libatomic, which is a clear indication that it has no
-> native atomics support whatsoever.
+> Fix this scenario by catching such errors and continuing with a new build.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Does BR2_ARCH_HAS_ATOMICS says if the HW itself has atomics or if
-generally atomic operations are available in the compiler? I would say
-the latter, since this is actually what we care about.
-
-But atomic handling is clearly an area that requires some
-clarification, as there are still some autobuilder failures that we are
-not able to solve due to bad handling of atomic related dependencies.
+Thanks for quickly proposing a patch for this! But I'm wondering if we
+shouldn't instead fix the main autobuild-run process (which starts the
+subprocesses) to read the exit code of its subprocesses, and restart
+them if they fail. This would allow to make sure the subprocesses
+continue to run, regardless of the reason for which they failed.
 
 Thomas
 -- 
