@@ -1,57 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  8 Apr 2015 18:57:23 +0200
-Subject: [Buildroot] [PATCH 8/8 v4] support/download: do not accept exlcuded
-	files with ashes
-In-Reply-To: <cover.1428512075.git.yann.morin.1998@free.fr>
-References: <cover.1428512075.git.yann.morin.1998@free.fr>
-Message-ID: <ee02447feb64c265dcf5e7a60dddb630c7dc9402.1428512075.git.yann.morin.1998@free.fr>
+Date: Wed,  8 Apr 2015 19:08:31 +0200
+Subject: [Buildroot] [PATCH 0/2] pkg-kconfig: fix checking .config file
+	(branch yem/misc)
+Message-ID: <cover.1428512591.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If a file is excluded from checking its hashes, it must effectively have
-no hash for it.
+Hello All!
 
-So, if an excluded file indeed has at least one hash, there is an issue
-somewhere; that file should probably not be excluded.
+This series tries to fix the pkg-kconfig infra for disabled packages.
 
-When this happens, bail out in error.
+Currently, the pkg-kconfig infra always checks that the specified
+FOO_KCONFIG_FILE variable is set (and does not care if it's empty, as
+long as it is set), even for packages that were not enabled by the user.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- support/download/check-hash | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+This is dubious at best, and forces kconfig-based packages to always set
+that variable, even to an empty value.
 
-diff --git a/support/download/check-hash b/support/download/check-hash
-index 96f5965..849637e 100755
---- a/support/download/check-hash
-+++ b/support/download/check-hash
-@@ -18,6 +18,9 @@ set -e
- #       one of its hashes
- #   3:  the hash file exists and there was no hash to check the file against
- #   4:  the hash file exists and at least one hash type is unknown
-+#   5:  the hash file exists and there was at least one hash for the file
-+#       to check and all those hashes did match, but the file is excluded
-+#       from being checked
- 
- while getopts :q OPT; do
-     case "${OPT}" in
-@@ -106,4 +109,11 @@ if [ ${nb_checks} -eq 0 ]; then
-     done
-     printf "ERROR: No hash found for %s\n" "${base}" >&2
-     exit 3
-+else
-+    for f in ${BR_NO_CHECK_HASH_FOR}; do
-+        if [ "${f}" = "${base}" ]; then
-+            printf "ERROR: Hash found for excluded %s\n" "${base}" >&2
-+            exit 5
-+        fi
-+    done
- fi
+Furthermore, it does not even check if the variable is non-empty.
+
+Fix that in two ways:
+  - only do the check when the package is actually enabled;
+  - change the check to test if the variable is non-empty (instead of
+    merely set).
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 2552729232b4d9c5cb63ad247d6d94ab83e48e49:
+
+  package/mplayer: add optional libenca support (2015-04-07 23:27:23 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/misc
+
+for you to fetch changes up to c5c81694cabca70c5651fe42a7de99247275659c:
+
+  infra/pkg-kconfig: require an non-empty KCONFIG_FILE (2015-04-08 19:01:54 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      infra/pkg-kconfig: don't require a kconfig file for disabled packages
+      infra/pkg-kconfig: require an non-empty KCONFIG_FILE
+
+ package/pkg-kconfig.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
