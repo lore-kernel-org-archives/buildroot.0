@@ -1,111 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 9 Apr 2015 00:02:42 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/tvheadend: Fix inclusion of
- dtv-scan-tables files
-In-Reply-To: <1428529439-29437-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1428529439-29437-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150408220242.GK4197@free.fr>
+From: Steve Kenton <skenton@ou.edu>
+Date: Wed, 08 Apr 2015 17:15:29 -0500
+Subject: [Buildroot] [PATCH v5 1/1] tovid: new package
+In-Reply-To: <20150405114514.355707a4@free-electrons.com>
+References: <1427038513-5368-1-git-send-email-skenton@ou.edu>
+ <20150405114514.355707a4@free-electrons.com>
+Message-ID: <5525A881.3000404@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
-
-On 2015-04-08 23:43 +0200, Bernd Kuhls spake thusly:
-> --enable-dvbscan forces downloading the tables from upstream when the
-> files are not already present in data/dvb-scan/, see support/getmuxlist.
+<snip>
+On 04/05/2015 04:45 AM, Thomas Petazzoni wrote:
 > 
-> By moving the copy command for the dvb-scan files before tvheadend configure
-> calls the getmuxlist script, the latter will recognize the existing files,
-> quote: "# Note: will not update existing set (if not .git)"
+> Applied, with some minor changes:
 > 
-> To verify the bundled contents have a look at build.linux/bundle.d.
-> Also fix a comment typo.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/25f/25fc657dbc37228483eeefb3618be9df2ee13832/
-> http://autobuild.buildroot.net/results/37a/37abb5d2ec62ac59897d019e6ca85c8eb0e69786/
-> http://autobuild.buildroot.net/results/e86/e860e501f904d94bbab6a765aad4d19947135513/
-> http://autobuild.buildroot.net/results/a55/a55ab4fc34bebda14236d6a0efe893aa75374ed2/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: do not patch header files but use a better moment for copying the dvb files (Yann)
+>     Thomas
+It looks like Tovid has finished moving from SVN to github.
 
-So, even though I find this much better than the previous iteration, it
-is broken:
+Github Green "Latest release" button for Tovid shows:
 
-    $ make clean
-    $ make tvheadend-patch
-    [--SNIP--]
-    cp: cannot stat ?/home/ymorin/dev/buildroot/O/target/usr/share/dvb/*?:
-    No such file or directory
+https://github.com/tovid-suite/tovid/releases/download/v0.35.0/tovid-0.35.0.tar.gz
 
-This is because dependencies are not guaranteed until just before the
-configure step.
+I could not find any indication of a hash file - does github offer them anywhere
+that I'm missing? Computed the one below locally after downloading. Is sha256sum
+still preferred hash for local computation?
 
-I have a pending series that adds patch-dependencies, but it's not yet
-been applied (search about fixing linux extensions).
+$ sha256sum tovid-0.35.0.tar.gz
+06f7cb00b213bbe83d72f4f2076b675a662697034e1d2cdc2dce987e35c827bc  tovid-0.35.0.tar.gz
 
-In the meantime, I think we should make that hook a pre-configure hook,
-rather than a post-extract hook.
+Are uploaded tarballs still preferred for projects on github?
 
-Of course, it would work with a standard build, because dtv-scan-tables
-sorts before tvheadend. Still, we'd better get it right from the
-beginning.
+Not quite sure how to submit the change over.
 
-Regards,
-Yann E. MORIN.
 
->  package/tvheadend/tvheadend.mk |   12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index d6b77da..44154c6 100644
-> --- a/package/tvheadend/tvheadend.mk
-> +++ b/package/tvheadend/tvheadend.mk
-> @@ -40,6 +40,13 @@ endif
->  
->  TVHEADEND_DEPENDENCIES += dtv-scan-tables
->  
-> +define TVHEADEND_INSTALL_DTV_SCAN_TABLES
-> +	$(INSTALL) -d $(@D)/data/dvb-scan
-> +	cp -r $(TARGET_DIR)/usr/share/dvb/* $(@D)/data/dvb-scan/
-> +	touch $(@D)/data/dvb-scan/.stamp
-> +endef
-> +TVHEADEND_POST_EXTRACT_HOOKS += TVHEADEND_INSTALL_DTV_SCAN_TABLES
-> +
->  define TVHEADEND_CONFIGURE_CMDS
->  	(cd $(@D);						\
->  		$(TARGET_CONFIGURE_OPTS)			\
-> @@ -58,12 +65,9 @@ define TVHEADEND_CONFIGURE_CMDS
->  endef
->  
->  # The tvheadend build system expects the transponder data to be present inside
-> -# its source tree. To prevent a downloaded initiated by the build system just
-> +# its source tree. To prevent a download initiated by the build system just
->  # copy the data files in the right place and add the corresponding stamp file.
->  define TVHEADEND_BUILD_CMDS
-> -	$(INSTALL) -d $(@D)/data/dvb-scan
-> -	cp -r $(TARGET_DIR)/usr/share/dvb/* $(@D)/data/dvb-scan/
-> -	touch $(@D)/data/dvb-scan/.stamp
->  	$(MAKE) -C $(@D)
->  endef
->  
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Steve Kenton
