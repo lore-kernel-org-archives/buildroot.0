@@ -1,75 +1,106 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Apr 2015 23:46:17 +0200
-Subject: [Buildroot] [PATCH 00/18] package/mplayer: add optional
- dependencies
-In-Reply-To: <20150408233523.087d9e0c@free-electrons.com>
-References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
- <20150408233523.087d9e0c@free-electrons.com>
-Message-ID: <20150408214617.GJ4197@free.fr>
+Date: Thu, 9 Apr 2015 00:02:42 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/tvheadend: Fix inclusion of
+ dtv-scan-tables files
+In-Reply-To: <1428529439-29437-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1428529439-29437-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150408220242.GK4197@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Bernd, All,
 
-On 2015-04-08 23:35 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 29 Mar 2015 19:11:16 +0200, Bernd Kuhls wrote:
+On 2015-04-08 23:43 +0200, Bernd Kuhls spake thusly:
+> --enable-dvbscan forces downloading the tables from upstream when the
+> files are not already present in data/dvb-scan/, see support/getmuxlist.
 > 
-> >   package/mplayer: add optional lzo support
-> >   package/mplayer: add optional faad2 support
-> >   package/mplayer: add optional rtmpdump support
-> >   package/mplayer: add optional speex support
-> >   package/mplayer: add optional libiconv support
-> >   package/mplayer: disable optional libcdio support
-> >   package/mplayer: add optional bzip2 support
-> >   package/mplayer: add optional lame support
-> >   package/mplayer: add optional libmpeg2 support
+> By moving the copy command for the dvb-scan files before tvheadend configure
+> calls the getmuxlist script, the latter will recognize the existing files,
+> quote: "# Note: will not update existing set (if not .git)"
 > 
-> I've applied those patches, after fixing up things to rely on
-> autodection in order to avoid the "extra libs" thing.
+> To verify the bundled contents have a look at build.linux/bundle.d.
+> Also fix a comment typo.
 > 
-> However, I'm not entirely happy with how the mplayer package looks
-> like. Some dependencies have explicit disable:
+> Fixes
+> http://autobuild.buildroot.net/results/25f/25fc657dbc37228483eeefb3618be9df2ee13832/
+> http://autobuild.buildroot.net/results/37a/37abb5d2ec62ac59897d019e6ca85c8eb0e69786/
+> http://autobuild.buildroot.net/results/e86/e860e501f904d94bbab6a765aad4d19947135513/
+> http://autobuild.buildroot.net/results/a55/a55ab4fc34bebda14236d6a0efe893aa75374ed2/
 > 
-> ifeq ($(BR2_PACKAGE_LAME),y)
-> MPLAYER_DEPENDENCIES += lame
-> MPLAYER_CONF_OPTS += --enable-mp3lame
-> else
-> MPLAYER_CONF_OPTS += --disable-mp3lame
-> endif
-> 
-> but some do not:
-> 
-> ifeq ($(BR2_PACKAGE_TREMOR),y)
-> MPLAYER_DEPENDENCIES += tremor
-> MPLAYER_CONF_OPTS += --disable-tremor-internal --enable-tremor
-> endif
-> 
-> and for example, when --disable-tremor is not passed, an internal
-> tremor implementation is used, as far as I can see.
-> 
-> There are also cases like:
-> 
-> MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_BZIP2),bzip2)
-> 
-> All of this should probably be harmonized to properly get an explicit
-> disabling for all dependencies, unless there is a good reason not to do
-> so.
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: do not patch header files but use a better moment for copying the dvb files (Yann)
 
-Well, the reason is pretty obvious:
+So, even though I find this much better than the previous iteration, it
+is broken:
 
-  - it's not an autotools package, the configure is hand-written
-  - some options have explicit --enable/disable-foo
-  - some options only have --enable-foo
-  - and some only rely on detecting the optional lib(s)
+    $ make clean
+    $ make tvheadend-patch
+    [--SNIP--]
+    cp: cannot stat ?/home/ymorin/dev/buildroot/O/target/usr/share/dvb/*?:
+    No such file or directory
 
-For example, there's no option for bzip2: if the lib is present, it is
-enabled, otherwise it is disabled.
+This is because dependencies are not guaranteed until just before the
+configure step.
+
+I have a pending series that adds patch-dependencies, but it's not yet
+been applied (search about fixing linux extensions).
+
+In the meantime, I think we should make that hook a pre-configure hook,
+rather than a post-extract hook.
+
+Of course, it would work with a standard build, because dtv-scan-tables
+sorts before tvheadend. Still, we'd better get it right from the
+beginning.
 
 Regards,
 Yann E. MORIN.
+
+>  package/tvheadend/tvheadend.mk |   12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+> index d6b77da..44154c6 100644
+> --- a/package/tvheadend/tvheadend.mk
+> +++ b/package/tvheadend/tvheadend.mk
+> @@ -40,6 +40,13 @@ endif
+>  
+>  TVHEADEND_DEPENDENCIES += dtv-scan-tables
+>  
+> +define TVHEADEND_INSTALL_DTV_SCAN_TABLES
+> +	$(INSTALL) -d $(@D)/data/dvb-scan
+> +	cp -r $(TARGET_DIR)/usr/share/dvb/* $(@D)/data/dvb-scan/
+> +	touch $(@D)/data/dvb-scan/.stamp
+> +endef
+> +TVHEADEND_POST_EXTRACT_HOOKS += TVHEADEND_INSTALL_DTV_SCAN_TABLES
+> +
+>  define TVHEADEND_CONFIGURE_CMDS
+>  	(cd $(@D);						\
+>  		$(TARGET_CONFIGURE_OPTS)			\
+> @@ -58,12 +65,9 @@ define TVHEADEND_CONFIGURE_CMDS
+>  endef
+>  
+>  # The tvheadend build system expects the transponder data to be present inside
+> -# its source tree. To prevent a downloaded initiated by the build system just
+> +# its source tree. To prevent a download initiated by the build system just
+>  # copy the data files in the right place and add the corresponding stamp file.
+>  define TVHEADEND_BUILD_CMDS
+> -	$(INSTALL) -d $(@D)/data/dvb-scan
+> -	cp -r $(TARGET_DIR)/usr/share/dvb/* $(@D)/data/dvb-scan/
+> -	touch $(@D)/data/dvb-scan/.stamp
+>  	$(MAKE) -C $(@D)
+>  endef
+>  
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
