@@ -1,37 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  8 Apr 2015 12:32:08 -0300
-Subject: [Buildroot] [PATCH] strongswan: needs atomics
-Message-ID: <1428507128-8490-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  8 Apr 2015 12:39:01 -0300
+Subject: [Buildroot] [PATCH] geoip: bump to version 1.6.5
+Message-ID: <1428507541-28002-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/3d1/3d13ced1b142d014c5bc098137174c4369a1e3b5/
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/strongswan/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/geoip/geoip.hash | 2 +-
+ package/geoip/geoip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index 23131dc..bdbbb50 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -1,10 +1,12 @@
- comment "strongswan needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
-+	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/geoip/geoip.hash b/package/geoip/geoip.hash
+index 6f1b909..d410c2f 100644
+--- a/package/geoip/geoip.hash
++++ b/package/geoip/geoip.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  36b31c9b8447bd0a56a70b651022e918d0a0654e140cc2492948e6f2175ff5b1  GeoIP-1.6.4.tar.gz
++sha256  0ae1c95e69ad627d3a45cb897f79ce0c30f13fcd4b4a0dda073be0c9552521b3  GeoIP-1.6.5.tar.gz
+diff --git a/package/geoip/geoip.mk b/package/geoip/geoip.mk
+index ac88a3b..0496de1 100644
+--- a/package/geoip/geoip.mk
++++ b/package/geoip/geoip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- menuconfig BR2_PACKAGE_STRONGSWAN
- 	bool "strongswan"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  strongSwan is an OpenSource IPsec implementation for the
+-GEOIP_VERSION = 1.6.4
++GEOIP_VERSION = 1.6.5
+ GEOIP_SOURCE = GeoIP-$(GEOIP_VERSION).tar.gz
+ GEOIP_SITE = https://github.com/maxmind/geoip-api-c/releases/download/v$(GEOIP_VERSION)
+ GEOIP_INSTALL_STAGING = YES
 -- 
 2.0.5
