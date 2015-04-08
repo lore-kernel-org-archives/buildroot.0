@@ -1,32 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 19:14:14 +0200
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 08 Apr 2015 14:26:00 -0300
 Subject: [Buildroot] [PATCH v2 1/5] gcc-final: install libatomic
-In-Reply-To: <1428511969-28430-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1428511969-28430-1-git-send-email-gustavo@zacarias.com.ar>
- <1428511969-28430-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150408191414.1fce04ac@free-electrons.com>
+In-Reply-To: <20150408191414.1fce04ac@free-electrons.com>
+References: <1428511969-28430-1-git-send-email-gustavo@zacarias.com.ar>	<1428511969-28430-2-git-send-email-gustavo@zacarias.com.ar>
+ <20150408191414.1fce04ac@free-electrons.com>
+Message-ID: <552564A8.4050406@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 04/08/2015 02:14 PM, Thomas Petazzoni wrote:
 
-On Wed,  8 Apr 2015 13:52:45 -0300, Gustavo Zacarias wrote:
-> It's required in some 32-bit architectures for the extended (64-bit)
-> atomic operations, like __sync_add_and_fetch_8.
-> These arches are at least: i386, mips & mipsel.
-> 
-> Target size growth is ~15 KiB for ARM.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> What is your proposal to handle libatomic for the external toolchain
+> case?
 
-What is your proposal to handle libatomic for the external toolchain
-case?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Actually it's already copied into staging, so i did't see any breakage
+at build time, but yes, runtime is a different story.
+Adding libatomic.so.* to LIB_EXTERNAL_LIBS in
+toolchain/toolchain-external/toolchain-external.mk is enough.
+I'll send a patch if this is the proper course of action, otherwise
+exclude webkit/midori for some external toolchains.
+Regards.
