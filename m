@@ -1,48 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  8 Apr 2015 18:57:20 +0200
-Subject: [Buildroot] [PATCH 5/8 v4] toolchain/external: ignore missing hash
-	for custom downloaded toolchain
+Date: Wed,  8 Apr 2015 18:57:21 +0200
+Subject: [Buildroot] [PATCH 6/8 v4] package/uclibc: ignore missing hash for
+	snapshots
 In-Reply-To: <cover.1428512075.git.yann.morin.1998@free.fr>
 References: <cover.1428512075.git.yann.morin.1998@free.fr>
-Message-ID: <c059378e6b67661e3986d270cd6be406fb312a21.1428512075.git.yann.morin.1998@free.fr>
+Message-ID: <17515f799ca33cad357949df9926d260187d57b4.1428512075.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We will *always* be missing a hash file for custom external toolchains
-that are downloaded.
-
-So, just ignore that failure.
+We can't have a hash for snapshots, so add them to the exclusion list.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-
 ---
-Chamges v3 -> v4:
-  - drop magic value, append to the exclusion list  (Arnout)
+ package/uclibc/uclibc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Changes v1 -> v2:
-  - fix typoes in title
----
- toolchain/toolchain-external/toolchain-external.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index c0429bb..09b16d1 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -400,6 +400,8 @@ else
- # Custom toolchain
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
-+# We can't check hashes for custom downloaded toolchains
-+BR_NO_CHECK_HASH_FOR += $(TOOLCHAIN_EXTERNAL_SOURCE)
- endif
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 72a46d9..1ec8b10 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -11,6 +11,7 @@ UCLIBC_LICENSE_FILES = COPYING.LIB
  
- # In fact, we don't need to download the toolchain, since it is already
+ ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+ UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
++BR_NO_CHECK_HASH_FOR += uClibc-$(UCLIBC_VERSION).tar.xz
+ else ifeq ($(BR2_UCLIBC_VERSION_NG),y)
+ UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
 -- 
 1.9.1
