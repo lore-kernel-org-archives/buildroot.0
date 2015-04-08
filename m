@@ -1,37 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 22:33:35 +0200
-Subject: [Buildroot] [PATCH 2/2] package/kodi: Remove unused dependency
- to libungif
-In-Reply-To: <1428524507-30375-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1428524507-30375-1-git-send-email-bernd.kuhls@t-online.de>
- <1428524507-30375-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150408223335.7622520e@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 8 Apr 2015 22:34:32 +0200
+Subject: [Buildroot] [PATCH 2/2] *config: improve handling of BR2_LEGACY
+In-Reply-To: <1422199879-7825-2-git-send-email-arnout@mind.be>
+References: <1422199879-7825-1-git-send-email-arnout@mind.be>
+ <1422199879-7825-2-git-send-email-arnout@mind.be>
+Message-ID: <20150408203432.GB4197@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Arnout, All,
 
-On Wed,  8 Apr 2015 22:21:47 +0200, Bernd Kuhls wrote:
+On 2015-01-25 16:31 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> This commit reverts 8a46d4bf1f and replaces it with a different
+> approach: skipping of the legacy config options is passed explicitly
+> through the environment variable SKIP_LEGACY, which forces
+> BR2_SKIP_LEGACY to y.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi/Config.in |    1 -
->  package/kodi/kodi.mk   |    2 +-
->  2 files changed, 1 insertion(+), 2 deletions(-)
+> Note that it is necessary for BR2_SKIP_LEGACY to be user-visible,
+> otherwise it will not be taken into account by 'make oldconfig' and
+> you would be questioned about the legacy options. Also, because
+> randconfig may randomly turn this option off or on, it is necessary
+> to select it and not simply default to BR2_SKIP_LEGACY_FROM_ENV.
 
-Applied, thanks!
+I was not very happy with a user-visible skip-legacy option, so I
+respinned a version without it.
 
-With this, the latest user of libungif is gone, so can you send a patch
-to deprecate the libungif package? I believe it was the overall goal of
-moving to giflib, right?
+Care to have a look and see if it still addresses all your concerns?
 
-Thanks!
+Thanks for this initial spin! :-)
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
