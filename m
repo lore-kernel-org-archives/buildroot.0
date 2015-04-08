@@ -1,60 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  8 Apr 2015 19:08:31 +0200
-Subject: [Buildroot] [PATCH 0/2] pkg-kconfig: fix checking .config file
-	(branch yem/misc)
-Message-ID: <cover.1428512591.git.yann.morin.1998@free.fr>
+Date: Wed,  8 Apr 2015 19:08:34 +0200
+Subject: [Buildroot] [PATCH 1/2] infra/pkg-kconfig: don't require a kconfig
+	file for disabled packages
+In-Reply-To: <cover.1428512591.git.yann.morin.1998@free.fr>
+References: <cover.1428512591.git.yann.morin.1998@free.fr>
+Message-ID: <25c5ce55fd15b63fae1635bdc6940527079acdf6.1428512591.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+When a package is not enabled, we need not check that it provides
+a .config/defconfig file.
 
-This series tries to fix the pkg-kconfig infra for disabled packages.
+So far, all our pkg-kconfig packages unconditionally set their
+_KCONFIG_FILE, even to an empty value. But some packages (e.g.
+at91bootstrap3) wanted to set it only when enabled, and broke.
 
-Currently, the pkg-kconfig infra always checks that the specified
-FOO_KCONFIG_FILE variable is set (and does not care if it's empty, as
-long as it is set), even for packages that were not enabled by the user.
+So, only do the check when the package is enabled.
 
-This is dubious at best, and forces kconfig-based packages to always set
-that variable, even to an empty value.
-
-Furthermore, it does not even check if the variable is non-empty.
-
-Fix that in two ways:
-  - only do the check when the package is actually enabled;
-  - change the check to test if the variable is non-empty (instead of
-    merely set).
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 2552729232b4d9c5cb63ad247d6d94ab83e48e49:
-
-  package/mplayer: add optional libenca support (2015-04-07 23:27:23 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/misc
-
-for you to fetch changes up to c5c81694cabca70c5651fe42a7de99247275659c:
-
-  infra/pkg-kconfig: require an non-empty KCONFIG_FILE (2015-04-08 19:01:54 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      infra/pkg-kconfig: don't require a kconfig file for disabled packages
-      infra/pkg-kconfig: require an non-empty KCONFIG_FILE
-
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+---
  package/pkg-kconfig.mk | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 04ac37d..fd9f19d 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -36,11 +36,6 @@ $(2)_KCONFIG_EDITORS ?= menuconfig
+ $(2)_KCONFIG_OPTS ?=
+ $(2)_KCONFIG_FIXUP_CMDS ?=
+ 
+-# FOO_KCONFIG_FILE is required
+-ifndef $(2)_KCONFIG_FILE
+-$$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
+-endif
+-
+ # The config file could be in-tree, so before depending on it the package should
+ # be extracted (and patched) first
+ $$($(2)_KCONFIG_FILE): | $(1)-patch
+@@ -72,6 +67,11 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ # already called above, so we can effectively use this variable.
+ ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+ 
++# FOO_KCONFIG_FILE is required
++ifndef $(2)_KCONFIG_FILE
++$$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
++endif
++
+ # Configuration editors (menuconfig, ...)
+ $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ 	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
