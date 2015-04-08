@@ -1,116 +1,90 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed,  8 Apr 2015 22:34:43 +0200
-Subject: [Buildroot] [PATCH UNTESTED] autobuild-run: handle failed network
-	connection
-Message-ID: <1428525283-8015-1-git-send-email-patrickdepinguin@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Apr 2015 22:34:47 +0200
+Subject: [Buildroot] [git commit] package/thrift: add dependency on
+	host-autoconf-archive
+Message-ID: <20150408203457.4C57E8193C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=30dc4dbf4ce66b7b4b27cf96d14a5be69a7eee61
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Due to a network failure, checking of the autobuild-run version or
-obtaining the toolchain configurations could fail, causing the instance to
-stop with an exception (and not restarting automatically).
+The ax_cxx_compile_stdcxx_11 macro bundled in thrift package is
+brocken [1] and out of date.
 
-Fix this scenario by catching such errors and continuing with a new build.
+Add autoconf-archive as dependency to use an updated version of this macro.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Since Thrift actually doesn't use that particular C++11 feature, add a
+patch to make C++11 support optional.
 
+[1] https://savannah.gnu.org/patch/index.php?8287
+
+Fixes:
+[thrift]
+http://autobuild.buildroot.net/results/21e/21e3fff1e0d714f94ac7e621289d1a59bc02a05f/build-end.log
+[host-thrift]
+http://autobuild.buildroot.net/results/b89/b89ffc2bff699eb10bb6abd92369a43d4900354d/build-end.log
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Note: UNTESTED!
----
- scripts/autobuild-run | 62 ++++++++++++++++++++++++++++++---------------------
- 1 file changed, 36 insertions(+), 26 deletions(-)
+ .../0005-configure.ac-C-11-is-optional.patch       |   28 ++++++++++++++++++++
+ package/thrift/thrift.mk                           |    7 +++--
+ 2 files changed, 32 insertions(+), 3 deletions(-)
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 0e12080..350a137 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -158,11 +158,15 @@ def log_write(logf, msg):
-     logf.flush()
- 
- def check_version():
--    with urlopen_closing('http://autobuild.buildroot.org/version') as r:
--        version = int(decode_bytes(r.readline()).strip())
--    if version > VERSION:
--        print("ERROR: script version too old, please upgrade.")
--        sys.exit(1)
-+    try:
-+        with urlopen_closing('http://autobuild.buildroot.org/version') as r:
-+            version = int(decode_bytes(r.readline()).strip())
-+        if version > VERSION:
-+            print("ERROR: script version too old, please upgrade.")
-+            sys.exit(1)
-+    except _urllib.URLError:
-+        # couldn't check version, assume it's OK
-+        pass
- 
- class SystemInfo:
-     DEFAULT_NEEDED_PROGS = ["make", "git", "gcc", "timeout"]
-@@ -242,27 +246,30 @@ def get_toolchain_configs():
-     """
-     tc_cfg_uri = 'http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv'
- 
--    with urlopen_closing(tc_cfg_uri) as r:
--        l = decode_byte_list(r.readlines())
--    configs = []
--
--    (_, _, _, _, hostarch) = os.uname()
--    if hostarch == 'i686' or hostarch == 'x86_64':
--        hostarch = 'x86'
--
--    for row in csv.reader(l):
--        config = {}
--        config["url"] = row[0]
--        config["hostarch"] = row[1]
--        # Ignore toolchains that are not built for the appropriate
--        # host architecture
--        if hostarch != config["hostarch"]:
--            continue
--        config["libc"] = row[2]
--        with urlopen_closing(config["url"]) as r:
--            config["contents"] = decode_byte_list(r.readlines())
--        configs.append(config)
--    return configs
-+    try:
-+        with urlopen_closing(tc_cfg_uri) as r:
-+            l = decode_byte_list(r.readlines())
-+        configs = []
+diff --git a/package/thrift/0005-configure.ac-C-11-is-optional.patch b/package/thrift/0005-configure.ac-C-11-is-optional.patch
+new file mode 100644
+index 0000000..9ed7e0a
+--- /dev/null
++++ b/package/thrift/0005-configure.ac-C-11-is-optional.patch
+@@ -0,0 +1,28 @@
++From 9c3a7e79b256730dd85a7acadbaf57ab018b3127 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Tue, 7 Apr 2015 07:37:26 +0200
++Subject: [PATCH] configure.ac: C++11 is optional
 +
-+        (_, _, _, _, hostarch) = os.uname()
-+        if hostarch == 'i686' or hostarch == 'x86_64':
-+            hostarch = 'x86'
++Thrift build fine whitout c++11 support.
 +
-+        for row in csv.reader(l):
-+            config = {}
-+            config["url"] = row[0]
-+            config["hostarch"] = row[1]
-+            # Ignore toolchains that are not built for the appropriate
-+            # host architecture
-+            if hostarch != config["hostarch"]:
-+                continue
-+            config["libc"] = row[2]
-+            with urlopen_closing(config["url"]) as r:
-+                config["contents"] = decode_byte_list(r.readlines())
-+            configs.append(config)
-+        return configs
-+    except _urllib.URLError:
-+        return []
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 8daeb03..bfd49ae 100755
++--- a/configure.ac
+++++ b/configure.ac
++@@ -99,7 +99,7 @@ AC_PROG_AWK
++ AC_PROG_RANLIB
++ 
++ AC_LANG([C++])
++-AX_CXX_COMPILE_STDCXX_11([noext])
+++AX_CXX_COMPILE_STDCXX_11([noext], [optional])
++ 
++ AC_ARG_ENABLE([libs],
++   AS_HELP_STRING([--enable-libs], [build the Apache Thrift libraries [default=yes]]),
++-- 
++1.9.3
++
+diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
+index 409b04d..b4b3a2c 100644
+--- a/package/thrift/thrift.mk
++++ b/package/thrift/thrift.mk
+@@ -6,10 +6,11 @@
  
- def prepare_build(**kwargs):
-     """Prepare for the next build of the specified instance
-@@ -471,6 +478,9 @@ def gen_config(**kwargs):
+ THRIFT_VERSION = 0.9.2
+ THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(THRIFT_VERSION)
+-THRIFT_DEPENDENCIES = host-pkgconf host-thrift boost libevent openssl zlib
++THRIFT_DEPENDENCIES = host-autoconf-archive host-pkgconf host-thrift boost \
++	libevent openssl zlib
+ THRIFT_INSTALL_STAGING = YES
+-HOST_THRIFT_DEPENDENCIES = host-bison host-boost host-flex host-libevent \
+-	host-openssl host-pkgconf host-zlib
++HOST_THRIFT_DEPENDENCIES = host-autoconf-archive host-bison host-boost \
++	host-flex host-libevent host-openssl host-pkgconf host-zlib
  
-     # Select a random toolchain configuration
-     configs = get_toolchain_configs()
-+    if not configs:
-+        log_write(log, "WARNING: no toolchain configurations could be retrieved. Network issue?")
-+        return -1
-     i = randint(0, len(configs) - 1)
-     config = configs[i]
- 
--- 
-1.8.5.1
+ THRIFT_CONF_OPTS = --with-sysroot=$(STAGING_DIR) \
+ 	--with-boost \
