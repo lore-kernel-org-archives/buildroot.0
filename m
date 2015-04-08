@@ -1,37 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Apr 2015 22:59:49 +0200
-Subject: [Buildroot] [git commit] package/mplayer: add optional faad2 support
-Message-ID: <20150408212257.C89A580406@busybox.osuosl.org>
+Date: Wed, 8 Apr 2015 23:00:34 +0200
+Subject: [Buildroot] [git commit] package/mplayer: add optional rtmpdump
+	support
+Message-ID: <20150408212257.D2A3180406@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=08cead4e89d48fe0d3d2f68bcc9a1235ff97c73f
+commit: http://git.buildroot.net/buildroot/commit/?id=0ae0eb1cc86e68b987ba2c33aa4f069af1493ec0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mplayer/mplayer.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/mplayer/mplayer.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
 diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index c8f4dd3..46bc2b0 100644
+index 46bc2b0..412837d 100644
 --- a/package/mplayer/mplayer.mk
 +++ b/package/mplayer/mplayer.mk
-@@ -118,6 +118,13 @@ else
- MPLAYER_CONF_OPTS += --disable-mencoder
+@@ -166,6 +166,14 @@ else
+ MPLAYER_CONF_OPTS += --disable-gif
  endif
  
-+ifeq ($(BR2_PACKAGE_FAAD2),y)
-+MPLAYER_DEPENDENCIES += faad2
-+MPLAYER_CONF_OPTS += --enable-faad
++# We intentionally don't pass --enable-librtmp to let autodetection
++# find which library to link with.
++ifeq ($(BR2_PACKAGE_RTMPDUMP),y)
++MPLAYER_DEPENDENCIES += rtmpdump
 +else
-+MPLAYER_CONF_OPTS += --disable-faad
++MPLAYER_CONF_OPTS += --disable-librtmp
 +endif
 +
- # We intentionally don't pass --disable-ass-internal --enable-ass and
- # let autodetection find which library to link with.
- ifeq ($(BR2_PACKAGE_LIBASS),y)
+ ifeq ($(BR2_PACKAGE_LZO),y)
+ MPLAYER_DEPENDENCIES += lzo
+ MPLAYER_CONF_OPTS += --enable-liblzo
