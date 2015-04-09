@@ -1,88 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Apr 2015 23:33:27 +0200
-Subject: [Buildroot] [git commit] pciutils: cleanup
-Message-ID: <20150409213424.7F661818D3@busybox.osuosl.org>
+Date: Thu, 9 Apr 2015 23:34:14 +0200
+Subject: [Buildroot] [git commit] arch: add core-avx2
+Message-ID: <20150409213424.986627FBC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c879f95a03c38949f4a8ee38f2c6c91f56411fd
+commit: http://git.buildroot.net/buildroot/commit/?id=f92e6219cf7b08adb3b621c4686528a327a16e86
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It makes no sense to have variables that are only used in one place
-(PCIUTILS_MAKE_OPTS) for different build conditions.
-Just make them add-up to MAKE_OPTS and move the fixed definition up.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pciutils/pciutils.mk |   34 ++++++++++++++--------------------
- 1 files changed, 14 insertions(+), 20 deletions(-)
+ arch/Config.in.x86 |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
 
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index 1410738..12c13b2 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
-@@ -10,6 +10,14 @@ PCIUTILS_SOURCE = pciutils-$(PCIUTILS_VERSION).tar.xz
- PCIUTILS_INSTALL_STAGING = YES
- PCIUTILS_LICENSE = GPLv2+
- PCIUTILS_LICENSE_FILES = COPYING
-+PCIUTILS_MAKE_OPTS = \
-+	CC="$(TARGET_CC)" \
-+	HOST="$(KERNEL_ARCH)-linux" \
-+	OPT="$(TARGET_CFLAGS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS)" \
-+	RANLIB=$(TARGET_RANLIB) \
-+	AR=$(TARGET_AR) \
-+	PCIUTILS_DNS=no
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index 9767bc1..43f6abc 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -15,6 +15,8 @@ config BR2_X86_CPU_HAS_SSE42
+ 	bool
+ config BR2_X86_CPU_HAS_AVX
+ 	bool
++config BR2_X86_CPU_HAS_AVX2
++	bool
  
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- PCIUTILS_DEPENDENCIES += udev
-@@ -19,39 +27,25 @@ PCIUTILS_MAKE_OPTS += HWDB=no
- endif
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
--PCIUTILS_ZLIB=yes
-+PCIUTILS_MAKE_OPTS += ZLIB=yes
- PCIUTILS_DEPENDENCIES += zlib
- else
--PCIUTILS_ZLIB=no
-+PCIUTILS_MAKE_OPTS += ZLIB=no
- endif
- 
--PCIUTILS_DNS = no
--
- ifeq ($(BR2_PACKAGE_KMOD),y)
- PCIUTILS_DEPENDENCIES += kmod
--PCIUTILS_KMOD = yes
-+PCIUTILS_MAKE_OPTS += LIBKMOD=yes
- else
--PCIUTILS_KMOD = no
-+PCIUTILS_MAKE_OPTS += LIBKMOD=no
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
--PCIUTILS_SHARED=no
-+PCIUTILS_MAKE_OPTS += SHARED=no
- else
--PCIUTILS_SHARED=yes
-+PCIUTILS_MAKE_OPTS += SHARED=yes
- endif
- 
--PCIUTILS_MAKE_OPTS += \
--	CC="$(TARGET_CC)" \
--	HOST="$(KERNEL_ARCH)-linux" \
--	OPT="$(TARGET_CFLAGS)" \
--	LDFLAGS="$(TARGET_LDFLAGS)" \
--	RANLIB=$(TARGET_RANLIB) \
--	AR=$(TARGET_AR) \
--	ZLIB=$(PCIUTILS_ZLIB) \
--	DNS=$(PCIUTILS_DNS) \
--	LIBKMOD=$(PCIUTILS_KMOD) \
--	SHARED=$(PCIUTILS_SHARED)
--
- # Build after busybox since it's got a lightweight lspci
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- PCIUTILS_DEPENDENCIES += busybox
+ choice
+ 	prompt "Target Architecture Variant"
+@@ -101,6 +103,17 @@ config BR2_x86_corei7_avx
+ 	select BR2_X86_CPU_HAS_SSE4
+ 	select BR2_X86_CPU_HAS_SSE42
+ 	select BR2_X86_CPU_HAS_AVX
++config BR2_x86_core_avx2
++	bool "core-avx2"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++	select BR2_X86_CPU_HAS_AVX
++	select BR2_X86_CPU_HAS_AVX2
+ config BR2_x86_atom
+ 	bool "atom"
+ 	select BR2_X86_CPU_HAS_MMX
+@@ -239,6 +252,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default "core2"		if BR2_x86_core2
+ 	default "corei7"	if BR2_x86_corei7
+ 	default "corei7-avx"	if BR2_x86_corei7_avx
++	default "core-avx2"	if BR2_x86_core_avx2
+ 	default "atom"		if BR2_x86_atom
+ 	default "k8"		if BR2_x86_opteron
+ 	default "k8-sse3"	if BR2_x86_opteron_sse3
