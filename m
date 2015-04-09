@@ -1,36 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Apr 2015 14:32:06 +0200
-Subject: [Buildroot] [PATCH v2] pkg-*.mk: add comment about argument 1
- of inner-*-package
-In-Reply-To: <1428581666-20343-1-git-send-email-yamada.masahiro@socionext.com>
-References: <1428581666-20343-1-git-send-email-yamada.masahiro@socionext.com>
-Message-ID: <20150409143206.0685f0dd@free-electrons.com>
+Date: Thu, 9 Apr 2015 14:33:16 +0200
+Subject: [Buildroot] Edit custom package install path
+In-Reply-To: <CALQ+5acckG4TxdDSF4jr4QoSr-FZJFjsnD3g9Dz6U4ApbKQpyQ@mail.gmail.com>
+References: <CALQ+5acckG4TxdDSF4jr4QoSr-FZJFjsnD3g9Dz6U4ApbKQpyQ@mail.gmail.com>
+Message-ID: <20150409143316.510c2ff6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Masahiro Yamada,
+Dear Igor Trevisan,
 
-On Thu,  9 Apr 2015 21:14:26 +0900, Masahiro Yamada wrote:
+On Thu, 9 Apr 2015 14:26:33 +0200, Igor Trevisan wrote:
 
-> -#  argument 1 is the lowercase package name
-> +#  argument 1 is the lowercase package name, including a host_ prefix
-> +#             for host packages
+> I'd like to know if there's a way to chose or edit, from Menuconfig,
+> the installation path of a given package.
+> 
+> Let suppose I added "mypackage" to buildroot and I want to give the
+> user the power to define where this package
+> will stay in the final root FS for my target: /opt, /usr/bin, other...
+> 
+> Is there a way to do this?
 
-The prefix is 'host-', not 'host_'. Though I'm not sure this comment is
-really that useful: host-foo is really the name of the package. Since
-there is no parameter containing the lower case package name without
-the 'host-' prefix, I don't think such an additional comment is really
-needed.
+No, there is no way to do this. We cannot add one "installation path"
+option to each of the 1500 packages we have in Buildroot.
 
-The comment is needed for argument 2 and 3, because they are indeed
-different in the fact that one has HOST_ and not the other one.
+The options are:
+
+ * Move things around in a post-build script, if the thing can be moved
+   after compilation.
+
+ * Adjust the package .mk file to your needs.
 
 Best regards,
 
-Thomas
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
