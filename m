@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Apr 2015 11:54:01 +0200
-Subject: [Buildroot] [git commit] xserver_xorg-server: fix CONF_OPTS
-Message-ID: <20150409095517.B7632819C5@busybox.osuosl.org>
+Date: Thu, 9 Apr 2015 11:54:48 +0200
+Subject: [Buildroot] [git commit] php: use TARGET_MAKE_ENV for buildconf
+Message-ID: <20150409095517.BB4D07FF19@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=96484d07fca60d5409e132abcc950e95a872a974
+commit: http://git.buildroot.net/buildroot/commit/?id=86071180d4c2072f93363313761339fa89ad917a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
+Otherwise we miss the PATH for hosts that lack autotools. Fixes:
+http://autobuild.buildroot.net/results/368/368da962f657801817a4b962415e55606915c871/
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xserver_xorg-server/xserver_xorg-server.mk     |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/php/php.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index ce4069b..f120bec 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -65,12 +65,12 @@ XSERVER_XORG_SERVER_CONF_OPTS = \
- 	--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
+diff --git a/package/php/php.mk b/package/php/php.mk
+index eb4f797..f355632 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -25,7 +25,7 @@ PHP_CONF_ENV = EXTRA_LIBS="$(PHP_EXTRA_LIBS)"
+ # PHP can't be AUTORECONFed the standard way unfortunately
+ PHP_DEPENDENCIES += host-autoconf host-automake host-libtool
+ define PHP_BUILDCONF
+-	cd $(@D) ; ./buildconf --force
++	cd $(@D) ; $(TARGET_MAKE_ENV) ./buildconf --force
+ endef
+ PHP_PRE_CONFIGURE_HOOKS += PHP_BUILDCONF
  
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--XSERVER_XORG_CONF_OPTS += \
-+XSERVER_XORG_SERVER_CONF_OPTS += \
- 	--with-systemd-daemon \
- 	--enable-systemd-logind
- XSERVER_XORG_SERVER_DEPENDENCIES += systemd
- else
--XSERVER_XORG_CONF_OPTS += \
-+XSERVER_XORG_SERVER_CONF_OPTS += \
- 	--without-systemd-daemon \
- 	--disable-systemd-logind
- endif
