@@ -1,41 +1,68 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  9 Apr 2015 16:01:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 7956] glibc 2.20 and 2.21 fail to build for
- sh64-buildroot-linux-gnu
-In-Reply-To: <bug-7956-163@https.bugs.busybox.net/>
-References: <bug-7956-163@https.bugs.busybox.net/>
-Message-ID: <20150409160134.9C63781979@busybox.osuosl.org>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 09 Apr 2015 18:03:17 +0200
+Subject: [Buildroot] [PATCH v6 00/15] Add Xorg support for iMX6
+In-Reply-To: <CADCpmyOp078FVzrQqR8xehha56O4Db3roVKPQL2Zj97NwFJoUQ@mail.gmail.com>
+References: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
+ <CADCpmyOp078FVzrQqR8xehha56O4Db3roVKPQL2Zj97NwFJoUQ@mail.gmail.com>
+Message-ID: <5526A2C5.3000502@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7956
+Hi Jerome,
 
---- Comment #2 from Uwe Hermann <uwe@hermann-uwe.de> 2015-04-09 16:01:34 UTC ---
-Well, I don't need it personally (at the moment), but we're trying to
-cross-compile our software (sigrok, open-source test&measurement project, see
-www.sigrok.org) for as many platforms as possible in order to catch any
-portability issues. We're using buildroot-built toolchains and sysroots for
-that since it's quite convenient.
+On 01/22/2015 07:47 AM, Gary Bisson wrote:
+> Hi Jerome,
+>
+> On Fri, Jan 16, 2015 at 3:33 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+>> Hello,
+>>
+>> Main purpose of this serie is to add support of Vivante GPU (found on imx6) to
+>> Xorg. This work is mainly adapted from Yocto.
+>>
+>> v6:
+>>    - Rebase on master
+>>    - Add license for xdriver_xf86-video-imx-viv. Notice this package does not
+>>      provide any license file.
+>>    - Fix typos suggested by Thomas P.
+>>    - Fix dependency on libdrm (gpu-viv-bin-mx6q does not depends on libdrm, but
+>>      xdriver_xf86-video-imx-viv does depend)
+>>    - Add a note about runtime dependencies in gpu-viv-bin-mx6q
+>>    - Splited patch 6/15 in 3 parts
+>>    - Splited patch 10/15 in 2 parts
+>>    - Make 0001-Force_egl_visual_ID_33.patch contionnal
+>>
+>
+> I confirm this patchset applies and builds fine on master. However I
+> couldn't get X to start properly as it was complaining that no screen
+> was available (using the  same setup as before: nitrogen6x + HDMI
+> monitor). I didn't have time to investigate any further but have you
+> had any issue? I think the X server version has been bumped lately,
+> are you still using the same xorg.conf?
+> I'll try to get more info before the end of the week.
 
-See e.g.
-http://sigrok.org/jenkins/job/libserialport/
-http://sigrok.org/jenkins/job/libsigrok/
+I guess you must feel desperate about this patchset getting into 
+mainline and I'm sorry not to have looked at it for months.
+Anyway, I got some time today and built everything from scratch again 
+using the configuration you suggest in you 7/15 but for my board 
+(nitrogen6x kernel and u-boot config).
+First of all, everything applies and builds fine on today's master. Then 
+everything I've tested is working fine:
+- X (starting the X server with the xorg.conf from Yocto):
+https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
+- GPU libs with X back-end (test of turorial7). Plus I made sure 
+building with fb back-end still works fine
+- Qt5 with openGl, as I didn't what was the best test I've started a few 
+binaries:
+# /usr/lib/qt/examples/opengl/hellogl2/hellogl2
+# /usr/lib/qt/examples/gui/openglwindow/openglwindow
+# qmlscene TestCase.qml
 
-I don't know if we currently have users for sh64 or not, but that should not be
-relevant for this issue really.
+In other words, everything runs great!
 
-I guess the question is whether mainline glibc supports sh64 at all or not. The
-text "configure: error: The sh64 is not supported." suggests the latter. But I
-didn't check whether that's actually true or an incorrect error is emitted
-(and/or whether sh64 support is planned to be added to glibc).
+Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
-Note: I haven't tried the eglibc option for sh64 in buildroot, maybe that one
-does have support (?)
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Regards,
+Gary
