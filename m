@@ -1,40 +1,41 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 9 Apr 2015 22:20:54 +0200
-Subject: [Buildroot] [PATCH 2/2] samba4: bump to version 4.2.0
-In-Reply-To: <55265956.3020607@zacarias.com.ar>
-References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>
- <1425588249-20942-2-git-send-email-gustavo@zacarias.com.ar>
- <XnsA4777FCDAF5A6berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <55265956.3020607@zacarias.com.ar>
-Message-ID: <20150409202054.GD27057@waldemar-brodkorb.de>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu,  9 Apr 2015 22:21:33 +0200
+Subject: [Buildroot] [PATCH: buildroot-test 2/2] autobuild-run: do not build
+	boost package with logging option enabled.
+In-Reply-To: <1428610893-9224-1-git-send-email-romain.naour@openwide.fr>
+References: <1428610893-9224-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1428610893-9224-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Gustavo Zacarias wrote,
+pthread_spin_* functions are not implemented in the uClibc used by this toolchain.
 
-> On 04/09/2015 07:33 AM, Bernd Kuhls wrote:
-> 
-> > Hi,
-> > 
-> > is this really necessary? Building samba4 with uclibc worked here and I guess 
-> > the problem you saw with nss.h was fixed in 4.2.0rc3:
-> > https://bugzilla.samba.org/show_bug.cgi?id=11026
-> > 
-> > Please note that I tested compilation only, for a runtime test I need more 
-> > time.
-> 
-> Even if building with nss.h is fixed you still need $ORIGIN support
-> which uClibc lacks in the current releases.
-> So you'll have runtime issues.
-> In the past (samba 4.1.x) i moved libraries to /usr/lib as a workaround,
-> but for 4.2.x this didn't seem enough/there's a lot of new libraries to
-> move.
+Fixes:
+http://autobuild.buildroot.net/results/ba5/ba5836e9a77e1b48e24ace46ca1611c22524261d
 
-uClibc-ng has $ORIGIN support. Can you test it with samba4?
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ scripts/autobuild-run | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-best regards
- Waldemar
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 35f38ce..f2f239f 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -447,6 +447,11 @@ def fixup_config(**kwargs):
+     if 'BR2_PACKAGE_BOOST_LOG=y\n' in configlines and \
+        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-xtensa-full-2015.02.tar.bz2"\n' in configlines:
+         return False
++    # This arc uClibc toolchain fails to build boost package with logging option enabled
++    if 'BR2_PACKAGE_BOOST_LOG=y\n' in configlines and \
++       'BR2_UCLIBC_VERSION_ARC_GIT=y\n' in configlines and \
++       'BR2_UCLIBC_VERSION_STRING="arc-2014.12"\n' in configlines:
++        return False
+ 
+     with open(os.path.join(outputdir, ".config"), "w+") as configf:
+         configf.writelines(configlines)
+-- 
+1.9.3
