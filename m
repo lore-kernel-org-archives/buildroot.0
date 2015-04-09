@@ -1,37 +1,36 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  9 Apr 2015 20:16:10 +0200
-Subject: [Buildroot] [PATCH v4 3/3] package/dtv-scan-tables: bump version
-In-Reply-To: <1428603370-15627-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1428603370-15627-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1428603370-15627-3-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  9 Apr 2015 15:27:58 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{12,18}.x series
+Message-ID: <1428604078-18994-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-v4: no changes
-v3: no changes
-v2: bump to current git master
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- package/dtv-scan-tables/dtv-scan-tables.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
-index 9d85325..4114d23 100644
---- a/package/dtv-scan-tables/dtv-scan-tables.mk
-+++ b/package/dtv-scan-tables/dtv-scan-tables.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DTV_SCAN_TABLES_VERSION = 1246b27f8b45f84c1824925060ad931530542f2e
-+DTV_SCAN_TABLES_VERSION = f2053b34a5ac6f263edc22888b0db4b1fa563fe4
- DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
- DTV_SCAN_TABLES_SITE_METHOD = git
- 
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index b8f702e..1bfde7d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -194,12 +194,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.106"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.73"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.39"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.40"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+ 	default "3.14.37"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.10"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.11"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.3"	if BR2_KERNEL_HEADERS_3_19
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-1.7.10.4
+2.0.5
