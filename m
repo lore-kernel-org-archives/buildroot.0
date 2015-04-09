@@ -1,8 +1,8 @@
 From: Masahiro Yamada <yamada.masahiro@socionext.com>
-Date: Thu,  9 Apr 2015 20:48:27 +0900
-Subject: [Buildroot] [PATCH] pkg-*.mk: add comment about argument 1 of
+Date: Thu,  9 Apr 2015 21:14:26 +0900
+Subject: [Buildroot] [PATCH v2] pkg-*.mk: add comment about argument 1 of
 	inner-*-package
-Message-ID: <1428580107-15674-1-git-send-email-yamada.masahiro@socionext.com>
+Message-ID: <1428581666-20343-1-git-send-email-yamada.masahiro@socionext.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,7 +12,11 @@ To: buildroot@busybox.net
 Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 ---
 
+Changes in v2:
+  - Fix pkg-cmake.mk too
+
  package/pkg-autotools.mk | 3 ++-
+ package/pkg-cmake.mk     | 3 ++-
  package/pkg-generic.mk   | 3 ++-
  package/pkg-kconfig.mk   | 3 ++-
  package/pkg-luarocks.mk  | 3 ++-
@@ -20,7 +24,7 @@ Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
  package/pkg-python.mk    | 3 ++-
  package/pkg-rebar.mk     | 3 ++-
  package/pkg-virtual.mk   | 3 ++-
- 8 files changed, 16 insertions(+), 8 deletions(-)
+ 9 files changed, 18 insertions(+), 9 deletions(-)
 
 diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
 index 2ecf7d8..d094023 100644
@@ -29,6 +33,20 @@ index 2ecf7d8..d094023 100644
 @@ -101,7 +101,8 @@ endef
  # calls the generic package infrastructure to generate the necessary
  # make targets
+ #
+-#  argument 1 is the lowercase package name
++#  argument 1 is the lowercase package name, including a host_ prefix
++#             for host packages
+ #  argument 2 is the uppercase package name, including a HOST_ prefix
+ #             for host packages
+ #  argument 3 is the uppercase package name, without the HOST_ prefix
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 2262012..8497a7b 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -41,7 +41,8 @@ endif
+ # tune the build process and calls the generic package infrastructure to
+ # generate the necessary make targets
  #
 -#  argument 1 is the lowercase package name
 +#  argument 1 is the lowercase package name, including a host_ prefix
