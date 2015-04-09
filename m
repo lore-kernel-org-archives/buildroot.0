@@ -1,77 +1,138 @@
 From: Masahiro Yamada <yamada.masahiro@socionext.com>
-Date: Thu,  9 Apr 2015 20:28:55 +0900
-Subject: [Buildroot] [PATCH v2] Makefile: delete HOSTFC and FC_FOR_BUILD
-Message-ID: <1428578935-13452-1-git-send-email-yamada.masahiro@socionext.com>
+Date: Thu,  9 Apr 2015 20:48:27 +0900
+Subject: [Buildroot] [PATCH] pkg-*.mk: add comment about argument 1 of
+	inner-*-package
+Message-ID: <1428580107-15674-1-git-send-email-yamada.masahiro@socionext.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This definition of HOSTFC is completely wrong.
-
-"$(HOSTLD)" should be "$(HOSTFC)".  Also, "echo" always succeeds, so
-"which g77 || type -p g77 || echo gfortran" is never run.
-
-Anyway, HOSTFC is most likely set to "/use/bin/ld" and nobody has
-complained about it before me, so I guess it is not used at all.
-
-At least grepping HOSTFC, FC_FOR_BUILD did not hit any packages.
-Drop HOSTFC and FC_FOR_BUILD.
-
 Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
 
-Changes in v2:
- - Remove HOSTFC rather than fix it.
+ package/pkg-autotools.mk | 3 ++-
+ package/pkg-generic.mk   | 3 ++-
+ package/pkg-kconfig.mk   | 3 ++-
+ package/pkg-luarocks.mk  | 3 ++-
+ package/pkg-perl.mk      | 3 ++-
+ package/pkg-python.mk    | 3 ++-
+ package/pkg-rebar.mk     | 3 ++-
+ package/pkg-virtual.mk   | 3 ++-
+ 8 files changed, 16 insertions(+), 8 deletions(-)
 
- Makefile            | 6 +-----
- package/Makefile.in | 1 -
- 2 files changed, 1 insertion(+), 6 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 9db52a8..5f9a2c3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -228,9 +228,6 @@ HOSTCXX := g++
- HOSTCXX := $(shell which $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
- endif
- HOSTCXX_NOCCACHE := $(HOSTCXX)
--ifndef HOSTFC
--HOSTFC := gfortran
--endif
- ifndef HOSTCPP
- HOSTCPP := cpp
- endif
-@@ -251,7 +248,6 @@ HOSTRANLIB := ranlib
- endif
- HOSTAR := $(shell which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
- HOSTAS := $(shell which $(HOSTAS) || type -p $(HOSTAS) || echo as)
--HOSTFC := $(shell which $(HOSTLD) || type -p $(HOSTLD) || echo || which g77 || type -p g77 || echo gfortran)
- HOSTCPP := $(shell which $(HOSTCPP) || type -p $(HOSTCPP) || echo cpp)
- HOSTLD := $(shell which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
- HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
-@@ -259,7 +255,7 @@ HOSTNM := $(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
- HOSTOBJCOPY := $(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
- HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
- 
--export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
-+export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
- export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
- 
- # Make sure pkg-config doesn't look outside the buildroot tree
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 8e471ee..e65e08b 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -264,7 +264,6 @@ TARGET_CONFIGURE_OPTS = \
- 	CC_FOR_BUILD="$(HOSTCC)" \
- 	GCC_FOR_BUILD="$(HOSTCC)" \
- 	CXX_FOR_BUILD="$(HOSTCXX)" \
--	FC_FOR_BUILD="$(HOSTFC)" \
- 	LD_FOR_BUILD="$(HOSTLD)" \
- 	CPPFLAGS_FOR_BUILD="$(HOST_CPPFLAGS)" \
- 	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 2ecf7d8..d094023 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -101,7 +101,8 @@ endef
+ # calls the generic package infrastructure to generate the necessary
+ # make targets
+ #
+-#  argument 1 is the lowercase package name
++#  argument 1 is the lowercase package name, including a host_ prefix
++#             for host packages
+ #  argument 2 is the uppercase package name, including a HOST_ prefix
+ #             for host packages
+ #  argument 3 is the uppercase package name, without the HOST_ prefix
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index f77aab2..d561dc0 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -273,7 +273,8 @@ endef
+ # inner-generic-package -- generates the make targets needed to build a
+ # generic package
+ #
+-#  argument 1 is the lowercase package name
++#  argument 1 is the lowercase package name, including a host_ prefix
++#             for host packages
+ #  argument 2 is the uppercase package name, including a HOST_ prefix
+ #             for host packages
+ #  argument 3 is the uppercase package name, without the HOST_ prefix
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index fd9f19d..32193b7 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -15,7 +15,8 @@
+ # inner-kconfig-package -- generates the make targets needed to support a
+ # kconfig package
+ #
+-#  argument 1 is the lowercase package name
++#  argument 1 is the lowercase package name, including a host_ prefix
++#             for host packages
+ #  argument 2 is the uppercase package name, including a HOST_ prefix
+ #             for host packages
+ #  argument 3 is the uppercase package name, without the HOST_ prefix
+diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+index 83f338e..36c2883 100644
+--- a/package/pkg-luarocks.mk
++++ b/package/pkg-luarocks.mk
+@@ -23,7 +23,8 @@
+ # tune the build process and calls the generic package infrastructure to
+ # generate the necessary make targets
+ #
+-#  argument 1 is the lowercase package name
++#  argument 1 is the lowercase package name, including a host_ prefix
++#             for host packages
+ #  argument 2 is the uppercase package name, including a HOST_ prefix
+ #             for host packages
+ #  argument 3 is the uppercase package name, without the HOST_ prefix
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index 6577588..4c191b5 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -29,7 +29,8 @@ PERL_RUN = PERL5LIB= $(HOST_DIR)/usr/bin/perl
+ # calls the generic package infrastructure to generate the necessary
+ # make targets
+ #
+-#  argument 1 is the lowercase package name
++#  argument 1 is the lowercase package name, including a host_ prefix
++#             for host packages
+ #  argument 2 is the uppercase package name, including a HOST_ prefix
+ #             for host packages
+ #  argument 3 is the uppercase package name, without the HOST_ prefix
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 426301a..11c6d2e 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -81,7 +81,8 @@ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ # few hooks to tune the build process and calls the generic package
+ # infrastructure to generate the necessary make targets
+ #
+-#  argument 1 is the lowercase package name
++#  argument 1 is the lowercase package name, including a host_ prefix
++#             for host packages
+ #  argument 2 is the uppercase package name, including a HOST_ prefix
+ #             for host packages
+ #  argument 3 is the uppercase package name, without the HOST_ prefix
+diff --git a/package/pkg-rebar.mk b/package/pkg-rebar.mk
+index 75facd5..d7cc175 100644
+--- a/package/pkg-rebar.mk
++++ b/package/pkg-rebar.mk
+@@ -101,7 +101,8 @@ endef
+ # calls the generic package infrastructure to generate the necessary
+ # make targets.
+ #
+-#  argument 1 is the lowercase package name
++#  argument 1 is the lowercase package name, including a host_ prefix
++#             for host packages
+ #  argument 2 is the uppercase package name, including a HOST_ prefix
+ #             for host packages
+ #  argument 3 is the uppercase package name, without the HOST_ prefix
+diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+index 2889ef9..d6367d9 100644
+--- a/package/pkg-virtual.mk
++++ b/package/pkg-virtual.mk
+@@ -18,7 +18,8 @@
+ # inner-virtual-package -- defines the dependency rules of the virtual
+ # package against its provider.
+ #
+-#  argument 1 is the lowercase package name
++#  argument 1 is the lowercase package name, including a host_ prefix
++#             for host packages
+ #  argument 2 is the uppercase package name, including a HOST_ prefix
+ #             for host packages
+ #  argument 3 is the uppercase package name, without the HOST_ prefix
 -- 
 1.9.1
