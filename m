@@ -1,30 +1,56 @@
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Thu,  9 Apr 2015 12:19:01 +0200
-Subject: [Buildroot] [PATCH 0/2] fix pulseview build failures
-Message-ID: <1428574743-32177-1-git-send-email-bgolaszewski@baylibre.com>
+Date: Thu,  9 Apr 2015 12:19:02 +0200
+Subject: [Buildroot] [PATCH 1/2] doxygen: new package
+In-Reply-To: <1428574743-32177-1-git-send-email-bgolaszewski@baylibre.com>
+References: <1428574743-32177-1-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <1428574743-32177-2-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series fixes pulseview build failures which have been observed
-on many autobuilders. They have been caused by doxygen not being present
-on host machines.
+Host package only.
 
-The first patch adds doxygen host package. The second makes libsigrok
-depend on it when C++ bindings are selected.
-
-Bartosz Golaszewski (2):
-  doxygen: new package
-  libsigrok: add host-doxygen dependency for C++ bindings
-
- package/doxygen/doxygen.hash   |  2 ++
- package/doxygen/doxygen.mk     | 18 ++++++++++++++++++
- package/libsigrok/libsigrok.mk |  2 +-
- 3 files changed, 21 insertions(+), 1 deletion(-)
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+---
+ package/doxygen/doxygen.hash |  2 ++
+ package/doxygen/doxygen.mk   | 18 ++++++++++++++++++
+ 2 files changed, 20 insertions(+)
  create mode 100644 package/doxygen/doxygen.hash
  create mode 100644 package/doxygen/doxygen.mk
 
+diff --git a/package/doxygen/doxygen.hash b/package/doxygen/doxygen.hash
+new file mode 100644
+index 0000000..40cfe16
+--- /dev/null
++++ b/package/doxygen/doxygen.hash
+@@ -0,0 +1,2 @@
++# Computed locally
++sha256 d4ab6e28d4d45d8956cad17470aade3fbe2356e8f64b92167e738c1887feccec  doxygen-1.8.9.1.src.tar.gz
+diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
+new file mode 100644
+index 0000000..b5d3500
+--- /dev/null
++++ b/package/doxygen/doxygen.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# doxygen
++#
++################################################################################
++
++DOXYGEN_VERSION = 1.8.9.1
++DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
++DOXYGEN_SITE = http://ftp.stack.nl/pub/users/dimitri/
++DOXYGEN_LICENSE = GPLv2
++DOXYGEN_LICENSE_FILES = LICENSE
++
++# configure fails with default host-autotools-package parameters
++define HOST_DOXYGEN_CONFIGURE_CMDS
++	(cd $(@D); ./configure --shared --prefix=$(HOST_DIR)/usr)
++endef
++
++$(eval $(host-autotools-package))
 -- 
 2.1.4
