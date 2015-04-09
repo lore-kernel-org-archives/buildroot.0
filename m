@@ -1,37 +1,31 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 9 Apr 2015 21:22:12 +0200
-Subject: [Buildroot] [PATCH] sh64: drop support for architecture
-In-Reply-To: <20150408225336.0b046dac@free-electrons.com>
-References: <20150407203101.GA14853@waldemar-brodkorb.de>
- <20150408225336.0b046dac@free-electrons.com>
-Message-ID: <20150409192212.GB27057@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Apr 2015 21:39:43 +0200
+Subject: [Buildroot] [PATCH] erlang: bump version to 17.5
+In-Reply-To: <1428588062-9074-1-git-send-email-fhunleth@troodon-software.com>
+References: <1428588062-9074-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20150409213943.787ffe0f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Dear Frank Hunleth,
 
-> Dear Waldemar Brodkorb,
+On Thu,  9 Apr 2015 10:01:02 -0400, Frank Hunleth wrote:
+> This also adds a hash file for the new version.
 > 
-> On Tue, 7 Apr 2015 22:31:01 +0200, Waldemar Brodkorb wrote:
-> > There seems to be no hardware or emulator available for this
-> > architecture. Someone from ST Microelectronics told me that
-> > sh64/sh5 projects are dropped over ten years ago.
-> > I found nothing about real hardware on the sites of Hitachi
-> > or Renesas.
-> > We should drop this.
-> > Support in uClibc-ng will be dropped in 1.1.
-> > 
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> 
-> Following my and Peter comments, we'd prefer to see this feature to be
-> marked as deprecated. I've marked the patch as "Rejected" in patchwork.
-> Can you cook a patch simply marking sh64 as deprecated?
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> ---
+>  package/erlang/erlang.hash | 2 ++
+>  package/erlang/erlang.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>  create mode 100644 package/erlang/erlang.hash
 
-Is there documentation how to do this?
+Applied, thanks.
 
-best regards
- Waldemar
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
