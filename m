@@ -1,27 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 09 Apr 2015 16:45:03 -0300
-Subject: [Buildroot] [PATCH] pciutils: bump to version 3.3.1
-In-Reply-To: <20150409214407.5592a172@free-electrons.com>
-References: <1428605866-17345-1-git-send-email-gustavo@zacarias.com.ar>
- <20150409214407.5592a172@free-electrons.com>
-Message-ID: <5526D6BF.7020506@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Apr 2015 21:46:32 +0200
+Subject: [Buildroot] [PATCH 1/2] doxygen: new package
+In-Reply-To: <1428574743-32177-2-git-send-email-bgolaszewski@baylibre.com>
+References: <1428574743-32177-1-git-send-email-bgolaszewski@baylibre.com>
+ <1428574743-32177-2-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <20150409214632.5cf61f23@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/09/2015 04:44 PM, Thomas Petazzoni wrote:
-> It's a little bit strange to have the unconditional PCIUTILS_MAKE_OPTS
-> after the conditional ones.
-> 
-> But it's also tied to the fact that for udev you've decided to add
-> HWDB=<foo> in PCIUTILS_MAKE_OPTS, while for the other dependencies,
-> they do PCIUTILS_ZLIB = <foo>, and then in PCIUTILS_MAKE_OPTS, they
-> have ZLIB=$(PCIUTILS_ZLIB).
-> 
-> So things are not very consistent right now. If you can send a
-> follow-up patch to make things a bit more consistent, it'd be great.
+Dear Bartosz Golaszewski,
 
-Yes, i'll send a cleanup.
-Regards.
+On Thu,  9 Apr 2015 12:19:02 +0200, Bartosz Golaszewski wrote:
+
+> +DOXYGEN_VERSION = 1.8.9.1
+> +DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
+> +DOXYGEN_SITE = http://ftp.stack.nl/pub/users/dimitri/
+> +DOXYGEN_LICENSE = GPLv2
+> +DOXYGEN_LICENSE_FILES = LICENSE
+> +
+> +# configure fails with default host-autotools-package parameters
+> +define HOST_DOXYGEN_CONFIGURE_CMDS
+> +	(cd $(@D); ./configure --shared --prefix=$(HOST_DIR)/usr)
+> +endef
+> +
+> +$(eval $(host-autotools-package))
+
+configure fails with the default host-autotools-package parameters,
+because doxygen does not use the autotools nor even autoconf. So this
+package should be handled using the host-generic-package infrastructure
+instead.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
