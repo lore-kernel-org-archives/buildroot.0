@@ -1,36 +1,31 @@
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Thu,  9 Apr 2015 12:19:03 +0200
-Subject: [Buildroot] [PATCH 2/2] libsigrok: add host-doxygen dependency for
-	C++ bindings
-In-Reply-To: <1428574743-32177-1-git-send-email-bgolaszewski@baylibre.com>
-References: <1428574743-32177-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <1428574743-32177-3-git-send-email-bgolaszewski@baylibre.com>
+Date: Thu, 9 Apr 2015 12:19:50 +0200
+Subject: [Buildroot] [PATCH v2] pulseview: new package
+In-Reply-To: <20150408223851.3abe5405@free-electrons.com>
+References: <1426759708-4920-1-git-send-email-bgolaszewski@baylibre.com>
+ <20150406234303.010225ea@free-electrons.com>
+ <CAMpxmJXWnzUwgM7EQ3De4OCAprJ1oFVecYMD8j+xa7dU8co1qA@mail.gmail.com>
+ <20150408162905.4cfbc0a3@free-electrons.com>
+ <CAMpxmJUeJms2BVLVrhsgm7d1MegO-hV1XUEPwUgiCc7Z81Mfgg@mail.gmail.com>
+ <20150408211220.3e34e66a@free-electrons.com>
+ <CAMpxmJVGxtExSQmdjqYvbXuw2hDvObnyfaN27RG+dn88ipu=jw@mail.gmail.com>
+ <20150408223851.3abe5405@free-electrons.com>
+Message-ID: <CAMpxmJXXN9mwU5kdQ0-m6mVxrniBL2dmOt1CdG1qo38wO9fOwQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Doxygen is required to generate xml files required by libsigrokcxx
-build system.
+2015-04-08 22:38 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+>
+> Can you have a quick look at how annoying (or not) it would be to create
+> a host-doxygen package? This would be the nicest solution, of course
+> assuming it doesn't require millions of dependencies that would also
+> have to be packaged in Buildroot.
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- package/libsigrok/libsigrok.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Done, please see the series I've just sent.
 
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index 1e6080d..4309480 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
-@@ -48,7 +48,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBSIGROKCXX),y)
- LIBSIGROK_CONF_OPTS += --enable-cxx
--LIBSIGROK_DEPENDENCIES += host-autoconf-archive glibmm
-+LIBSIGROK_DEPENDENCIES += host-autoconf-archive glibmm host-doxygen
- else
- LIBSIGROK_CONF_OPTS += --disable-cxx
- endif
--- 
-2.1.4
+Best regards,
+Bartosz Golaszewski
