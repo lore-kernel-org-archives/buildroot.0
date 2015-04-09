@@ -1,18 +1,18 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Apr 2015 23:48:19 +0200
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 09 Apr 2015 23:48:22 +0200
 Subject: [Buildroot] [PATCH] package/boost: boost-log needs NPTL threads
 In-Reply-To: <1428615930-17716-1-git-send-email-romain.naour@openwide.fr>
 References: <1428615930-17716-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150409234819.1aced7ae@free-electrons.com>
+Message-ID: <5526F3A6.5020004@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Hi Thomas,
 
-On Thu,  9 Apr 2015 23:45:30 +0200, Romain Naour wrote:
+Le 09/04/2015 23:45, Romain Naour a ?crit :
 > Fixes:
 > [xtensa]
 > http://autobuild.buildroot.net/results/664/6642dc9c569b2820a9d0e273fc2fb1d5a635ba0a
@@ -35,17 +35,12 @@ On Thu,  9 Apr 2015 23:45:30 +0200, Romain Naour wrote:
 >  config BR2_PACKAGE_BOOST_LOG
 >  	bool "boost-log"
 > +	depend on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+              ^
+Sorry, there is a typo s/depend/depends/
 
-Good, but missing comment :-)
-
-And "depends on", not "depend on".
-
-Please test patches!
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Romain
+>  
+>  config BR2_PACKAGE_BOOST_MATH
+>  	bool "boost-math"
+> 
