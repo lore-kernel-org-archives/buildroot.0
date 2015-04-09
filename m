@@ -1,59 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Apr 2015 22:47:30 +0200
-Subject: [Buildroot] [git commit] package infra: add patch-dependencies
-Message-ID: <20150409211053.6C0DC81963@busybox.osuosl.org>
+Date: Thu, 9 Apr 2015 22:52:20 +0200
+Subject: [Buildroot] [git commit] linux: fix extensions
+Message-ID: <20150409211053.8073581963@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97595d11fb3a4e46aae18dce2147a66e205fa9e0
+commit: http://git.buildroot.net/buildroot/commit/?id=53785a2c77e723c394197df68efb71d6938e1884
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some packages need to vampirise files from one or more other packages.
-This is the case, for example, of the Linux kernel and its /extensions/.
+Since the move to the kconfig-package infra, linux extensions are
+broken.
 
-Add a new type of dependencies, that are guaranteed to be extracted and
-patched before a package is patched.
+In our linux package, extensions are applied as pre-patch hooks.
 
-[Thomas: remove <pkg>-show-build-depends and <pkg>-show-patch-depends,
-since they don't seem to really be necessary and very useful.]
+Before the kconfig-package infra, we had custom rules for the
+linux-*config targets, which were of the form:
+
+    linux-menuconfig: linux-configure
+        $(MAKE) -C $(LINUX_DIR) menuconfig
+
+This caused the linux tree to be fully configured before running the
+configurators, and thus linux dependencies were entirely fullfilled, and
+extensions were properly applied.
+
+Since we migrated (in dff25ea), the kconfig-package infra introduces a
+(hidden, internal) intermediate step 'kconfig-fixup' and decorelates the
+kconfig-part of the configuration from the actual package-part of the
+configuration:
+
+    linux-configure -------> kconfig-fixup --> .config --> $(LINUX_CONFIG_FILE)
+                        /
+    linux-menuconfig --'
+
+As thus, this (very useful!) use-case breaks (starting from a clean
+Buildroot tree):
+
+    make menuconfig
+        -> enable a kernel and at least one extension
+        -> save and exit
+    make linux-menuconfig
+        -> extensions are not available
+
+Fix that by using the newly-introduced patch-dependencies, so that
+extensions are available before we try to patch the linux kernel.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ linux/linux-ext-fbtft.mk   |    2 +-
+ linux/linux-ext-rtai.mk    |    2 +-
+ linux/linux-ext-xenomai.mk |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f77aab2..1d56f81 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -428,6 +428,7 @@ endif
+diff --git a/linux/linux-ext-fbtft.mk b/linux/linux-ext-fbtft.mk
+index 36f4fd2..6892c89 100644
+--- a/linux/linux-ext-fbtft.mk
++++ b/linux/linux-ext-fbtft.mk
+@@ -6,7 +6,7 @@
  
- # Eliminate duplicates in dependencies
- $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
-+$(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
+ ifeq ($(BR2_LINUX_KERNEL_EXT_FBTFT),y)
+ # Add dependency to fbtft package (download helper for the fbtft source)
+-LINUX_DEPENDENCIES += fbtft
++LINUX_PATCH_DEPENDENCIES += fbtft
  
- $(2)_INSTALL_STAGING		?= NO
- $(2)_INSTALL_IMAGES		?= NO
-@@ -539,6 +540,8 @@ $$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_PATCH)
+ # for linux >= 3.15 install to drivers/video/fbdev/fbtft
+ # for linux < 3.15 install to drivers/video/fbtft
+diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
+index bf998d5..942b430 100644
+--- a/linux/linux-ext-rtai.mk
++++ b/linux/linux-ext-rtai.mk
+@@ -6,7 +6,7 @@
  
- $(1)-patch:		$$($(2)_TARGET_PATCH)
- $$($(2)_TARGET_PATCH):	$$($(2)_TARGET_EXTRACT)
-+# Order-only dependency
-+$$($(2)_TARGET_PATCH):  | $$(patsubst %,%-patch,$$($(2)_FINAL_PATCH_DEPENDENCIES))
+ ifeq ($(BR2_LINUX_KERNEL_EXT_RTAI),y)
+ # Add dependency to RTAI (user-space) which provide kernel patches
+-LINUX_DEPENDENCIES += rtai-patch
++LINUX_PATCH_DEPENDENCIES += rtai
  
- $(1)-extract:			$$($(2)_TARGET_EXTRACT)
- $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
-@@ -578,7 +581,7 @@ $(1)-show-version:
- 			@echo $$($(2)_VERSION)
+ RTAI_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_RTAI_PATCH))
  
- $(1)-show-depends:
--			@echo $$($(2)_FINAL_DEPENDENCIES)
-+			@echo $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
+diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
+index 84d2c17..f6a5ffd 100644
+--- a/linux/linux-ext-xenomai.mk
++++ b/linux/linux-ext-xenomai.mk
+@@ -6,7 +6,7 @@
  
- $(1)-graph-depends: graph-depends-requirements
- 			@$$(INSTALL) -d $$(GRAPHS_DIR)
+ ifeq ($(BR2_LINUX_KERNEL_EXT_XENOMAI),y)
+ # Add dependency to xenomai (user-space) which provide ksrc part
+-LINUX_DEPENDENCIES += xenomai
++LINUX_PATCH_DEPENDENCIES += xenomai
+ 
+ # Adeos patch version
+ XENOMAI_ADEOS_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH))
