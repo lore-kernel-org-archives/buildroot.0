@@ -1,28 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Apr 2015 11:55:32 +0200
-Subject: [Buildroot] [PATCH] php: allow cache for strcasestr test
-In-Reply-To: <1428543150-10434-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1428543150-10434-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150409115532.1a129863@free-electrons.com>
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date: Thu,  9 Apr 2015 12:19:01 +0200
+Subject: [Buildroot] [PATCH 0/2] fix pulseview build failures
+Message-ID: <1428574743-32177-1-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+This series fixes pulseview build failures which have been observed
+on many autobuilders. They have been caused by doxygen not being present
+on host machines.
 
-On Wed,  8 Apr 2015 22:32:30 -0300, Gustavo Zacarias wrote:
-> Fileinfo does an AC_TRY_RUN to test for strcasestr without allowing a
-> canned response, hence breaking cross-compiles. Use AC_CACHE_VAL. Fixes:
-> http://autobuild.buildroot.net/results/10a/10ae44cbc7c0c8e6f1ac54dae4c9d94c703aa3dd/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The first patch adds doxygen host package. The second makes libsigrok
+depend on it when C++ bindings are selected.
 
-Applied, thanks!
+Bartosz Golaszewski (2):
+  doxygen: new package
+  libsigrok: add host-doxygen dependency for C++ bindings
 
-Thomas
+ package/doxygen/doxygen.hash   |  2 ++
+ package/doxygen/doxygen.mk     | 18 ++++++++++++++++++
+ package/libsigrok/libsigrok.mk |  2 +-
+ 3 files changed, 21 insertions(+), 1 deletion(-)
+ create mode 100644 package/doxygen/doxygen.hash
+ create mode 100644 package/doxygen/doxygen.mk
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
