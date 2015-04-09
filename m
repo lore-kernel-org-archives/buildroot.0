@@ -1,43 +1,85 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu,  9 Apr 2015 23:54:53 +0200
-Subject: [Buildroot] [PATCH v2] package/boost: boost-log needs NPTL threads
-Message-ID: <1428616493-18162-1-git-send-email-romain.naour@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 10 Apr 2015 00:12:29 +0200
+Subject: [Buildroot] [PATCH 1/1] pkg-generic: support patching local
+ source code
+In-Reply-To: <1428539284-5957-1-git-send-email-nic.dade@mistsys.com>
+References: <1428539284-5957-1-git-send-email-nic.dade@mistsys.com>
+Message-ID: <20150409221228.GC4192@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-[xtensa]
-http://autobuild.buildroot.net/results/664/6642dc9c569b2820a9d0e273fc2fb1d5a635ba0a
-[arc]
-http://autobuild.buildroot.net/results/ba5/ba5836e9a77e1b48e24ace46ca1611c22524261d
-[bfin]
-http://autobuild.buildroot.net/results/8cd/8cdac9cc67394aaae09ee816a9adddec762e3bd0
+Nicolas, All,
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
-v2: add comment when !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-    fix the typo "depends on"
----
- package/boost/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+On 2015-04-08 17:28 -0700, Nicolas S. Dade spake thusly:
+> Signed-off-by: Nicolas S. Dade <nic.dade@mistsys.com>
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 65bf605..5444c42 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -89,6 +89,10 @@ comment "boost-locale needs a toolchain w/ wchar"
- 
- config BR2_PACKAGE_BOOST_LOG
- 	bool "boost-log"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+
-+comment "boost-log needs a toolchain w/ NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
- config BR2_PACKAGE_BOOST_MATH
- 	bool "boost-math"
+Thanks for your patch!
+
+However, we're explicitly not allowing patching local sources, on
+purpose.
+
+The use-case for using local sources is to allow people to use a
+development version of the package, one they are hacking on. Thus, we
+believe that in most cases, the patches bundled with Buildroot would
+most certainly fail to apply on local sources.
+
+So, we think that, if those patches are still needed, the developper
+will have to carry them in its local sources.
+
+Also, your commit log is not explaining the issue you are facing, so it
+is hard to udnerstand why you would need bundled patches to be applied,
+and the use-case that would cover.
+
+I'm leaving this open for now, for others to speak up, but I'd be
+tempted to say "no" for the aforementioned reasons.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/pkg-generic.mk | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index f77aab2..09f2405 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -555,15 +555,18 @@ else
+>  # In the package override case, the sequence of steps
+>  #  source, by rsyncing
+>  #  depends
+> +#  patch
+>  #  configure
+>  
+>  # Use an order-only dependency so the "<pkg>-clean-for-rebuild" rule
+>  # can remove the stamp file without triggering the configure step.
+> -$$($(2)_TARGET_CONFIGURE): | $$($(2)_TARGET_RSYNC)
+> +$$($(2)_TARGET_CONFIGURE): | $$($(2)_TARGET_PATCH)
+>  
+>  $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
+>  
+> -$(1)-patch:		$(1)-rsync
+> +$(1)-patch:		$$($(2)_TARGET_PATCH)
+> +$$($(2)_TARGET_PATCH):	$$($(2)_TARGET_RSYNC)
+> +
+>  $(1)-extract:		$(1)-rsync
+>  
+>  $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
