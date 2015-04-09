@@ -1,41 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Apr 2015 21:41:12 +0200
-Subject: [Buildroot] [PATCH v4 1/3] package/tvheadend: Fix inclusion of
- dtv-scan-tables files
-In-Reply-To: <1428603370-15627-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1428603370-15627-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150409214112.0b97865b@free-electrons.com>
+Date: Thu, 9 Apr 2015 21:41:18 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{12,18}.x series
+Message-ID: <20150409194213.7BE5A81998@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=6f60c18d8b7ec0c4b1cea1b97c6ba083c2452eaf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  9 Apr 2015 20:16:08 +0200, Bernd Kuhls wrote:
-> --enable-dvbscan forces downloading the tables from upstream when the
-> files are not already present in data/dvb-scan/, see support/getmuxlist.
-> 
-> By moving the copy command for the dvb-scan files before tvheadend configure
-> the getmuxlist script, called by tvheadend configure, will recognize the
-> existing directory, quote: "# Note: will not update existing set (if not .git)"
-> 
-> To verify the bundled contents have a look at build.linux/bundle.d.
-> Also fix a comment typo.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/25f/25fc657dbc37228483eeefb3618be9df2ee13832/
-> http://autobuild.buildroot.net/results/37a/37abb5d2ec62ac59897d019e6ca85c8eb0e69786/
-> http://autobuild.buildroot.net/results/e86/e860e501f904d94bbab6a765aad4d19947135513/
-> http://autobuild.buildroot.net/results/a55/a55ab4fc34bebda14236d6a0efe893aa75374ed2/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/Config.in.host |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Series applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index b8f702e..1bfde7d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -194,12 +194,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.106"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.73"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.39"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.40"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+ 	default "3.14.37"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.10"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.11"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.3"	if BR2_KERNEL_HEADERS_3_19
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
