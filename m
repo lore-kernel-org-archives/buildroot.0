@@ -1,36 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Apr 2015 21:44:58 +0200
-Subject: [Buildroot] [PATCH v2] Makefile: delete HOSTFC and FC_FOR_BUILD
-In-Reply-To: <1428578935-13452-1-git-send-email-yamada.masahiro@socionext.com>
-References: <1428578935-13452-1-git-send-email-yamada.masahiro@socionext.com>
-Message-ID: <20150409214458.6aa30b36@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 09 Apr 2015 16:45:03 -0300
+Subject: [Buildroot] [PATCH] pciutils: bump to version 3.3.1
+In-Reply-To: <20150409214407.5592a172@free-electrons.com>
+References: <1428605866-17345-1-git-send-email-gustavo@zacarias.com.ar>
+ <20150409214407.5592a172@free-electrons.com>
+Message-ID: <5526D6BF.7020506@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Masahiro Yamada,
+On 04/09/2015 04:44 PM, Thomas Petazzoni wrote:
+> It's a little bit strange to have the unconditional PCIUTILS_MAKE_OPTS
+> after the conditional ones.
+> 
+> But it's also tied to the fact that for udev you've decided to add
+> HWDB=<foo> in PCIUTILS_MAKE_OPTS, while for the other dependencies,
+> they do PCIUTILS_ZLIB = <foo>, and then in PCIUTILS_MAKE_OPTS, they
+> have ZLIB=$(PCIUTILS_ZLIB).
+> 
+> So things are not very consistent right now. If you can send a
+> follow-up patch to make things a bit more consistent, it'd be great.
 
-On Thu,  9 Apr 2015 20:28:55 +0900, Masahiro Yamada wrote:
-> This definition of HOSTFC is completely wrong.
-> 
-> "$(HOSTLD)" should be "$(HOSTFC)".  Also, "echo" always succeeds, so
-> "which g77 || type -p g77 || echo gfortran" is never run.
-> 
-> Anyway, HOSTFC is most likely set to "/use/bin/ld" and nobody has
-> complained about it before me, so I guess it is not used at all.
-> 
-> At least grepping HOSTFC, FC_FOR_BUILD did not hit any packages.
-> Drop HOSTFC and FC_FOR_BUILD.
-> 
-> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Yes, i'll send a cleanup.
+Regards.
