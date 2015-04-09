@@ -1,55 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Apr 2015 23:26:16 +0200
-Subject: [Buildroot] [git commit] linux: fix fbtft kernel extension
-Message-ID: <20150409212635.257C18195A@busybox.osuosl.org>
+Date: Thu, 9 Apr 2015 23:26:48 +0200
+Subject: [Buildroot] [PATCH] linux: fix fbtft kernel extension
+In-Reply-To: <1420982335-6015-1-git-send-email-ps.report@gmx.net>
+References: <1420982335-6015-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20150409232648.022193f8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=03ee513bda74ac41d8de29d907e2c40ddbc6ace0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Seiderer,
 
-Fixes fbtft kernel extension bug reported by Richard Fergusson ([1]):
+On Sun, 11 Jan 2015 14:18:55 +0100, Peter Seiderer wrote:
+> Fixes fbtft kernel extension bug reported by Richard Fergusson ([1]):
+> 
+> drivers/video/Kconfig:2525: can't open file
+> "drivers/video/fbdev/fbtft/Kconfig"
+> 
+> Fix: write the right fbtft/KConfig path to video/Kconfig or
+> video/fbdev/Kconfig (instead of hard coded one)
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2015-January/117057.html
+> 
+> Reported-by: Richard Fergusson <fergie4000@gmail.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-drivers/video/Kconfig:2525: can't open file
-"drivers/video/fbdev/fbtft/Kconfig"
+Applied, thanks!
 
-Fix: write the right fbtft/KConfig path to video/Kconfig or
-video/fbdev/Kconfig (instead of hard coded one)
-
-[1] http://lists.busybox.net/pipermail/buildroot/2015-January/117057.html
-
-Reported-by: Richard Fergusson <fergie4000@gmail.com>
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/linux-ext-fbtft.mk |   14 +++++++-------
- 1 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/linux/linux-ext-fbtft.mk b/linux/linux-ext-fbtft.mk
-index 3e6a3cc..5eb3d94 100644
---- a/linux/linux-ext-fbtft.mk
-+++ b/linux/linux-ext-fbtft.mk
-@@ -10,13 +10,13 @@ LINUX_EXTENSIONS += fbtft
- # for linux < 3.15 install to drivers/video/fbtft
- define FBTFT_PREPARE_KERNEL
- 	if [ -e $(LINUX_DIR)/drivers/video/fbdev ]; then \
--		dest=$(LINUX_DIR)/drivers/video/fbdev ; \
-+		dest=drivers/video/fbdev ; \
- 	else \
--		dest=$(LINUX_DIR)/drivers/video/ ; \
-+		dest=drivers/video ; \
- 	fi ; \
--	mkdir -p $${dest}/fbtft; \
--	cp -dpfr $(FBTFT_DIR)/* $${dest}/fbtft/ ; \
--	echo 'source "drivers/video/fbdev/fbtft/Kconfig"' \
--		>> $${dest}/Kconfig ; \
--	echo 'obj-y += fbtft/' >> $${dest}/Makefile
-+	mkdir -p $(LINUX_DIR)/$${dest}/fbtft; \
-+	cp -dpfr $(FBTFT_DIR)/* $(LINUX_DIR)/$${dest}/fbtft/ ; \
-+	echo "source \"$${dest}/fbtft/Kconfig\"" \
-+		>> $(LINUX_DIR)/$${dest}/Kconfig ; \
-+	echo 'obj-y += fbtft/' >> $(LINUX_DIR)/$${dest}/Makefile
- endef
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
