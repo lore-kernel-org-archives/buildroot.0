@@ -1,28 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Apr 2015 23:35:28 +0200
-Subject: [Buildroot] [PATCH 1/3] arch: add corei7-avx
-In-Reply-To: <1426716071-27570-1-git-send-email-steven@uplinklabs.net>
-References: <1426716071-27570-1-git-send-email-steven@uplinklabs.net>
-Message-ID: <20150409233528.705616c8@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu,  9 Apr 2015 23:45:30 +0200
+Subject: [Buildroot] [PATCH] package/boost: boost-log needs NPTL threads
+Message-ID: <1428615930-17716-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steven Noonan,
+Fixes:
+[xtensa]
+http://autobuild.buildroot.net/results/664/6642dc9c569b2820a9d0e273fc2fb1d5a635ba0a
+[arc]
+http://autobuild.buildroot.net/results/ba5/ba5836e9a77e1b48e24ace46ca1611c22524261d
+[bfin]
+http://autobuild.buildroot.net/results/8cd/8cdac9cc67394aaae09ee816a9adddec762e3bd0
 
-On Wed, 18 Mar 2015 15:01:08 -0700, Steven Noonan wrote:
-> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
-> ---
->  arch/Config.in.x86 | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/boost/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-All three patches applied, thanks a lot!
-
-Thomas
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 65bf605..2695264 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -89,6 +89,7 @@ comment "boost-locale needs a toolchain w/ wchar"
+ 
+ config BR2_PACKAGE_BOOST_LOG
+ 	bool "boost-log"
++	depend on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 
+ config BR2_PACKAGE_BOOST_MATH
+ 	bool "boost-math"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.3
