@@ -1,68 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  8 Apr 2015 22:32:30 -0300
-Subject: [Buildroot] [PATCH] php: allow cache for strcasestr test
-Message-ID: <1428543150-10434-1-git-send-email-gustavo@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 9 Apr 2015 07:43:39 +0300
+Subject: [Buildroot] [PATCH 1/1 v2] libvpx: bump version to 1.4.0
+In-Reply-To: <5525AF73.2080101@proximus.be>
+References: <1428447211-24428-1-git-send-email-sagaert.johan@proximus.be>
+ <20150408225139.3c65fe12@free-electrons.com>
+ <5525AF73.2080101@proximus.be>
+Message-ID: <20150409044339.GH2241@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fileinfo does an AC_TRY_RUN to test for strcasestr without allowing a
-canned response, hence breaking cross-compiles. Use AC_CACHE_VAL. Fixes:
-http://autobuild.buildroot.net/results/10a/10ae44cbc7c0c8e6f1ac54dae4c9d94c703aa3dd/
+Hi Johan,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/php/0005-ac-cache-strcasestr.patch | 24 ++++++++++++++++++++++++
- package/php/php.mk                         |  4 +++-
- 2 files changed, 27 insertions(+), 1 deletion(-)
- create mode 100644 package/php/0005-ac-cache-strcasestr.patch
+On Thu, Apr 09, 2015 at 12:45:07AM +0200, Johan Sagaert wrote:
+> Thomas Petazzoni schreef op 8/04/2015 om 22:51:
+> >On Wed,  8 Apr 2015 00:53:31 +0200, Sagaert Johan wrote:
+> >>Use tar.bz2 instead of git.
+> >>Also added the hash file.
+> >>Changes: https://chromium.googlesource.com/webm/libvpx/+/0080aca235e2d677e49ff46c3e8e77d9dd15858c/CHANGELOG
+> >>
+> >>Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
+> >Thanks, applied, after removing the unnecessary LIBVPX_VERSION_MAJOR
+> >variable, as suggested by Arnout.
+>
+> Fine, thanks :
+> Is there a thumb rule  when this is needed  ?  I see many packages use this
+> scheme .
 
-diff --git a/package/php/0005-ac-cache-strcasestr.patch b/package/php/0005-ac-cache-strcasestr.patch
-new file mode 100644
-index 0000000..8a8c5d8
---- /dev/null
-+++ b/package/php/0005-ac-cache-strcasestr.patch
-@@ -0,0 +1,24 @@
-+Allow cache answer for strcasestr discovery.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura php-5.6.7.orig/ext/fileinfo/config.m4 php-5.6.7/ext/fileinfo/config.m4
-+--- php-5.6.7.orig/ext/fileinfo/config.m4	2015-04-08 22:19:45.798770792 -0300
-++++ php-5.6.7/ext/fileinfo/config.m4	2015-04-08 22:26:33.110654338 -0300
-+@@ -14,6 +14,7 @@
-+     libmagic/readcdf.c libmagic/softmagic.c"
-+ 
-+   AC_MSG_CHECKING([for strcasestr])
-++  AC_CACHE_VAL(ac_cv_func_strcasestr,
-+   AC_TRY_RUN([
-+ #include <string.h>
-+ #include <strings.h>
-+@@ -46,7 +47,7 @@
-+     AC_MSG_RESULT(no)
-+     AC_MSG_NOTICE(using libmagic strcasestr implementation)
-+     libmagic_sources="$libmagic_sources libmagic/strcasestr.c"
-+-  ])
-++  ]))
-+ 
-+   PHP_NEW_EXTENSION(fileinfo, fileinfo.c $libmagic_sources, $ext_shared,,-I at ext_srcdir@/libmagic)
-+   PHP_ADD_BUILD_DIR($ext_builddir/libmagic)
-diff --git a/package/php/php.mk b/package/php/php.mk
-index f355632..1a5e084 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -20,7 +20,9 @@ PHP_CONF_OPTS = \
- 	--without-pear \
- 	--with-config-file-path=/etc \
- 	--disable-rpath
--PHP_CONF_ENV = EXTRA_LIBS="$(PHP_EXTRA_LIBS)"
-+PHP_CONF_ENV = \
-+	ac_cv_func_strcasestr=yes \
-+	EXTRA_LIBS="$(PHP_EXTRA_LIBS)"
- 
- # PHP can't be AUTORECONFed the standard way unfortunately
- PHP_DEPENDENCIES += host-autoconf host-automake host-libtool
+We split the _MAJOR part of the version when it is used on its one, e.g. for 
+_SITE name.
+
+baruch
+
 -- 
-2.0.5
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
