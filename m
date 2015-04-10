@@ -1,102 +1,80 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 10 Apr 2015 19:30:22 +0200
-Subject: [Buildroot] [PATCH 1/1] pkg-generic: support patching local
- source code
-In-Reply-To: <CAB7JjA_EKRS9uEX9MhgUVpovh4VKoUF2vx1wE2Q+a9baZTRyCQ@mail.gmail.com>
-References: <1428539284-5957-1-git-send-email-nic.dade@mistsys.com>
- <20150409221228.GC4192@free.fr>
- <CAB7JjA_Xc3ZCpT8RME2_nPjAGiDmp_k+yYOyvih7Bq9BSuShDA@mail.gmail.com>
- <20150409224049.GD4192@free.fr>
- <CAB7JjA_EKRS9uEX9MhgUVpovh4VKoUF2vx1wE2Q+a9baZTRyCQ@mail.gmail.com>
-Message-ID: <20150410173022.GC4313@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 10 Apr 2015 23:31:01 +0200
+Subject: [Buildroot] [RFC] Move host-pkgconf dependency to
+ package/pkg-autotools.mk
+In-Reply-To: <20150410141217.4bd2547c@free-electrons.com>
+References: <XnsA4787599FCF1BberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20150410141217.4bd2547c@free-electrons.com>
+Message-ID: <55284115.40309@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nicolas, All,
-
-On 2015-04-09 17:35 -0700, Nicolas Dade spake thusly:
-[--SNIP--]
-> > why not used the [packages in buildroot]
+On 10/04/15 14:12, Thomas Petazzoni wrote:
+> Dear Bernd Kuhls,
 > 
-> I do for those which are in buildroot. What I'm building in the SDK are the
-> vendor's utilities which talk to their hardware part. Those aren't packages
-> in [regular] buildroot, but I've added packages to my buildroot to build
-> these vendor utilities.
-
-OK, I misread what you wrote. The way you do it makes sense, of course.
-
-> > [documentation]
+> On Fri, 10 Apr 2015 11:33:39 +0200, Bernd Kuhls wrote:
+>> Hi,
+>>
+>> is there a reason an autotools-package should not depend on host-pkgconf?
+>>
+>> The phrase "host-pkgconf" appears in > 300 packages
+>>
+>> $ for i in `find -iname *.mk | grep -v pkgconf`; do grep host-pkgconf $i; 
+>> done | wc -l
+>> 313
+>>
+>> If 
+>>
+>> $(2)_DEPENDENCIES += host-pkgconf
+>>
+>> is added to package/pkg-autotools.mk we could get rid of all those 
+>> dependencies in the packages and avoid nasty build errors in the future.
 > 
-> Ah, I see why I didn't find this in the docs. I'm not using the
-> <pkg>_OVERRIDE_SRCDIR feature. I'm setting <pkg>_SITE to the subdir of the
-> SDK I want, and <pkt>_SITE_METHOD to "local". That is described in section
-> "17.5.2 generic-package reference", and doesn't mention patches or lack
-> there-of.
-
-Aha! But inder the hood, the 'local' site method hijacks the
-_OVERRIDE_SRCDIR infra. Hence the same behaviour.
-
-> This way buildroot rsyncs from the SDK subdir I want to build to
-> output/<pkg>-<ver>/, applies my patches, and builds it there, and the SDK
-> source tree is left untouched. My understanding of _OVERRIDE_SRCDIR is that
-> it overrides what would normally be output/<pkg>-<ver>/, and if I set it to
-> point to the SDK I'd end up patching the pristine SDK source.
+> I think it has been discussed in the past, even though I don't remember
+> the conclusion. On my side, since I don't like useless dependencies,
+> but I recognize that we often forget to add host-pkgconf in the
+> dependencies of a number of autotools packages, I made a proposal last
+> year: http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/82327.
 > 
-> Maybe the right thing is to patch if _SITE and SITE_METHOD=local is used,
-> and not if _OVERRIDE_SRCDIR is used.
+> It checks before building if the package uses PKG_CHECK_MODULES(), and
+> verifies that the package properly depends on host-pkgconf in this case.
 
-Well, doing so is surely not the solution, because we'd be trying to
-revert a decision made previously. The best solution would be to teach
-the download infra to handle the 'local' site method by itself and not
-rely on OVERRIDE_SRCDIR to begin with.
+ I agree that something like that is the way to go.
 
-However, as a workaround to your issue, I'd suggest you do somwething
-like the following (using two packages 'foo' and 'bar' as example):
+ However, I would prefer that this kind of stuff:
+
+- goes into scripts in the support/ directory;
+
+- gets called from the GLOBAL_INSTRUMENTATION_HOOKS;
+
+- is selectable with a config option in the Build options menu (which would be
+enabled by the autobuilders).
 
 
-foo.mk:
-    FOO_SOURCE = filename-of-SDK.tar.gz
-    FOO_SITE = file:///path/to/SDK
+ My reasoning is that the BR infrastructure is already pretty darn complicated,
+so it would be good to separate the core infrastructure from the fringe stuff.
+And the config option is of course because I prefer to keep the developer stuff
+out of the way of normal users.
 
-    define FOO_BUILD_CMDS
-        cd $(@D)/relative/path/to/package/foo; \
-        make whatever
-    endef
 
-    # And similar for install and other _CMDS
+ Regards,
+ Arnout
 
-bar.mk:
-    BAR_SOURCE = filename-of-SDK.tar.gz
-    BAR_SITE = file:///path/to/SDK
 
-    define BAR_BUILD_CMDS
-        cd $(@D)/relative/path/to/package/bar; \
-        make whatever-else
-    endef
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
-    # And similar for install and other _CMDS
-
-And then you can have whatever patch you want to apply to those packages
-(but the patches should be relative to the top-dir of the SDK, not the
-packages' dirs).
-
-Yes, this would mean having many packages using the same source file,
-but that's pretty much OK; it works even though we're not doing it for
-any package in Buildroot.
-
-Let's continue discussing a proper solution for that. In the meantime,
-I'm marking your patch as "Rejected" in our Patchwork.
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
