@@ -1,38 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 10 Apr 2015 21:54:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-addon-xvdr: bump version and
-	switch to branch kodi-helix
-Message-ID: <1428695666-10412-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Apr 2015 21:53:52 +0200
+Subject: [Buildroot] [git commit] procps-ng: needs gettextize
+Message-ID: <20150410195446.477D17FC3C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=502565f90abf6fab4d84f22ed99b3d446cdd446d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+http://autobuild.buildroot.org/results/904/90401cdb471f9e9582e2ca2ad07fb3db148420d7/
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-addon-xvdr/kodi-addon-xvdr.mk |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/procps-ng/procps-ng.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-index e05510c..1d654e2 100644
---- a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-+++ b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 4ee60f3..07e98b9 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -13,6 +13,7 @@ PROCPS_NG_INSTALL_STAGING = YES
+ PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf
+ # For 0002-use-pkgconfig-for-ncursesw-cflags.patch
+ PROCPS_NG_AUTORECONF = YES
++PROCPS_NG_GETTEXTIZE = YES
  
--# This cset is on master. When a Helix branch is made, we should
--# follow it, as incompatible changes in the plugins API can happen
--# on the master branch.
--KODI_ADDON_XVDR_VERSION = 328fa653b821a4edc1256a13833f30a4483e2819
-+# This cset is on helix. When an Isengard branch is made, we should
-+# follow it or switch to master, as incompatible changes in the plugins
-+# API can happen.
-+KODI_ADDON_XVDR_VERSION = c5eff57b810b815d052d02163b314fd06223b30a
- KODI_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(KODI_ADDON_XVDR_VERSION))
- KODI_ADDON_XVDR_LICENSE = GPLv2+
- KODI_ADDON_XVDR_LICENSE_FILES = COPYING
--- 
-1.7.10.4
+ # If both procps-ng and busybox are selected, make certain procps-ng
+ # wins the fight over who gets to have their utils actually installed.
