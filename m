@@ -1,48 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Apr 2015 11:21:56 +0200
-Subject: [Buildroot] Disabling Synopsys ARC pre-built toolchains in Buildroot
-Message-ID: <20150410112156.6b0e42f7@free-electrons.com>
+Date: Fri, 10 Apr 2015 11:23:26 +0200
+Subject: [Buildroot] [PATCH v2 1/3] doxygen: new package
+In-Reply-To: <CAMpxmJU_wsEqkm0UPA2eMGVcts3giLLdAxyKLR=0KRjyLMJqcw@mail.gmail.com>
+References: <1428653766-22734-1-git-send-email-bgolaszewski@baylibre.com>
+ <1428653766-22734-2-git-send-email-bgolaszewski@baylibre.com>
+ <CAMpxmJU_wsEqkm0UPA2eMGVcts3giLLdAxyKLR=0KRjyLMJqcw@mail.gmail.com>
+Message-ID: <20150410112326.53cb8726@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alexey,
+Dear Bartosz Golaszewski,
 
-In commit 2b93fe5374ae4f8337e1f7ae32be4d72dd94cb3c, you added the
-support for pre-built ARC toolchains from Synopsys, which was a very
-useful change.
+On Fri, 10 Apr 2015 11:20:52 +0200, Bartosz Golaszewski wrote:
 
-However, right now, I wonder if we should not get rid of those
-toolchains: they use a uClibc configuration that is too different from
-the default one of Buildroot, causing numerous build failures in the
-autobuilders. Those failures are due to:
+> Sorry, for that - I eventually forgot to change host-autotools-package
+> to host-generic-package. Surprisingly it works.
 
- * Missing libutil stub (UCLIBC_HAS_LIBUTIL option)
+This is not surprising: host-autotools-package allows you to override
+<pkg>_CONFIGURE_CMDS, <pkg>_BUILD_CMDS and <pkg>_INSTALL_*_CMDS.
 
-   http://autobuild.buildroot.org/results/ce3/ce39eb9b9ece0968563641fb2207099d1a37b191/
+Also, in your v3, remove the parenthesis:
 
- * Missing program_invocation_name (UCLIBC_HAS_PROGRAM_INVOCATION_NAME
-   option)
+	($(MAKE) -C $(@D))
 
-   http://autobuild.buildroot.org/results/154/1546d909e606daefd41b87dece94d642c0fdeba4/
-   http://autobuild.buildroot.org/results/bd5/bd54581d7b0cc73bc501072d27e870a443dfce79/
+should be just:
 
- * Missing ifaddrd support (UCLIBC_SUPPORT_AI_ADDRCONFIG option)
+	$(MAKE) -C $(@D)
 
-   http://autobuild.buildroot.org/results/134/134e78ef1fa87f7fbf26c23ec5dfc68785d79613/
+And add a comment in the .mk file to explain why we're not using
+host-autotools-package even if there is a ./configure script being
+called.
 
-There are too many of those issues affecting too many packages for us
-to reasonably patch all of them.
-
-Could you work internally to prepare a new version of those toolchains,
-that has at least these three additional options enabled?
-
-In the mean time, unless you have an objection, I will mark those
-toolchains as disabled in Buildroot.
-
-Thanks in advance for your feedback,
+Thanks!
 
 Thomas
 -- 
