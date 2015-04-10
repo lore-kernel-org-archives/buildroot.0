@@ -1,48 +1,39 @@
-From: Doug Kehn <rdkehn@yahoo.com>
-Date: Fri, 10 Apr 2015 10:01:05 -0500
-Subject: [Buildroot] [PATCH 1/1] package/cryptodev-linux: ccache compile fix
-Message-ID: <1428678065-24673-1-git-send-email-rdkehn@yahoo.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 10 Apr 2015 15:18:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 7478] Multiple chosen python modules are not built
+ due to missing header files in include path
+In-Reply-To: <bug-7478-163@https.bugs.busybox.net/>
+References: <bug-7478-163@https.bugs.busybox.net/>
+Message-ID: <20150410151822.D6681818D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cryptodev-linux fails to build when BR2_CCACHE=y.
+https://bugs.busybox.net/show_bug.cgi?id=7478
 
->>> cryptodev-linux 1.7 Building
-/usr/bin/make -j5 -C /home/dkehn/buildroot/output/build/cryptodev-linux-1.7 HOSTCC="/home/dkehn/buildroot/output/host/usr/bin/ccache /usr/bin/gcc" HOSTCFLAGS="" ARCH=arm INSTALL_MOD_PATH=/home/dkehn/buildroot/output/target CROSS_COMPILE="/home/dkehn/buildroot/output/host/usr/bin/ccache /home/dkehn/buildroot/output/host/usr/bin/arm-buildroot-linux-gnueabihf-" DEPMOD=/home/dkehn/buildroot/output/host/sbin/depmod LOADADDR="0x82000000" KERNEL_DIR=/home/dkehn/buildroot/output/build/linux-2489c022b2932432606f897741a71b712e6dbe77
-make -C /home/dkehn/buildroot/output/build/linux-2489c022b2932432606f897741a71b712e6dbe77 SUBDIRS=`pwd` ARCH=arm CROSS_COMPILE=/home/dkehn/buildroot/output/host/usr/bin/ccache /home/dkehn/buildroot/output/host/usr/bin/arm-buildroot-linux-gnueabihf- modules
-make[3]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
-make[3]: /home/dkehn/buildroot/output/host/usr/bin/ccachegcc: Command not found
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Adding quotes around ${CROSS_COMPILE} KERNEL_MAKE_OPTS assignment in
-cryptodev-linux Makefile fixes compile error.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
----
- package/cryptodev-linux/0002-fix-ccache-compile.patch | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
- create mode 100644 package/cryptodev-linux/0002-fix-ccache-compile.patch
+--- Comment #13 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-04-10 15:18:22 UTC ---
+I tried again today to do a build with an internal toolchain, python and sqlite
+enabled, and it works fine, and I can import the sqlite3 python module on the
+target successfully:
 
-diff --git a/package/cryptodev-linux/0002-fix-ccache-compile.patch b/package/cryptodev-linux/0002-fix-ccache-compile.patch
-new file mode 100644
-index 0000000..a023190
---- /dev/null
-+++ b/package/cryptodev-linux/0002-fix-ccache-compile.patch
-@@ -0,0 +1,13 @@
-+Index: cryptodev-linux-1.7/Makefile
-+===================================================================
-+--- cryptodev-linux-1.7.orig/Makefile
-++++ cryptodev-linux-1.7/Makefile
-+@@ -18,7 +18,7 @@ ifneq (${ARCH},)
-+ KERNEL_MAKE_OPTS += ARCH=${ARCH}
-+ endif
-+ ifneq (${CROSS_COMPILE},)
-+-KERNEL_MAKE_OPTS += CROSS_COMPILE=${CROSS_COMPILE}
-++KERNEL_MAKE_OPTS += CROSS_COMPILE="${CROSS_COMPILE}"
-+ endif
-+ 
-+ build: version.h
+Welcome to Buildroot
+buildroot login: root
+# python -c "import sqlite3"
+# 
+
+So, I'm marking this bug as "works for me", since apparently neither Thomas DS
+nor I have been able to reproduce it so far.
+
 -- 
-2.3.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
