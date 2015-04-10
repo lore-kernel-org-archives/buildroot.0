@@ -1,36 +1,63 @@
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Fri, 10 Apr 2015 10:16:05 +0200
-Subject: [Buildroot] [PATCH v2 2/3] libsigrok: add host-doxygen dependency
-	for C++ bindings
+Date: Fri, 10 Apr 2015 10:16:04 +0200
+Subject: [Buildroot] [PATCH v2 1/3] doxygen: new package
 In-Reply-To: <1428653766-22734-1-git-send-email-bgolaszewski@baylibre.com>
 References: <1428653766-22734-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <1428653766-22734-3-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <1428653766-22734-2-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Doxygen is required to generate xml files required by libsigrokcxx
-build system.
+Host package only.
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- package/libsigrok/libsigrok.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/doxygen/doxygen.hash |  2 ++
+ package/doxygen/doxygen.mk   | 25 +++++++++++++++++++++++++
+ 2 files changed, 27 insertions(+)
+ create mode 100644 package/doxygen/doxygen.hash
+ create mode 100644 package/doxygen/doxygen.mk
 
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index 1e6080d..4309480 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
-@@ -48,7 +48,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBSIGROKCXX),y)
- LIBSIGROK_CONF_OPTS += --enable-cxx
--LIBSIGROK_DEPENDENCIES += host-autoconf-archive glibmm
-+LIBSIGROK_DEPENDENCIES += host-autoconf-archive glibmm host-doxygen
- else
- LIBSIGROK_CONF_OPTS += --disable-cxx
- endif
+diff --git a/package/doxygen/doxygen.hash b/package/doxygen/doxygen.hash
+new file mode 100644
+index 0000000..40cfe16
+--- /dev/null
++++ b/package/doxygen/doxygen.hash
+@@ -0,0 +1,2 @@
++# Computed locally
++sha256 d4ab6e28d4d45d8956cad17470aade3fbe2356e8f64b92167e738c1887feccec  doxygen-1.8.9.1.src.tar.gz
+diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
+new file mode 100644
+index 0000000..40884d4
+--- /dev/null
++++ b/package/doxygen/doxygen.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# doxygen
++#
++################################################################################
++
++DOXYGEN_VERSION = 1.8.9.1
++DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
++DOXYGEN_SITE = http://ftp.stack.nl/pub/users/dimitri/
++DOXYGEN_LICENSE = GPLv2
++DOXYGEN_LICENSE_FILES = LICENSE
++
++define HOST_DOXYGEN_CONFIGURE_CMDS
++	(cd $(@D); ./configure --shared --prefix=$(HOST_DIR)/usr)
++endef
++
++define DOXYGEN_BUILD_CMDS
++	($(MAKE) -C $(@D))
++endef
++
++define HOST_DOXYGEN_INSTALL_CMDS
++	($(MAKE) install -C $(@D))
++endef
++
++$(eval $(host-autotools-package))
 -- 
 2.1.4
