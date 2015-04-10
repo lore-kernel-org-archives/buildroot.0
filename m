@@ -1,38 +1,35 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 10 Apr 2015 19:22:10 +0200
-Subject: [Buildroot] [PATCH 1/2] package/gd: Add dependency to libvpx
-Message-ID: <1428686531-13084-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri, 10 Apr 2015 19:25:00 +0200
+Subject: [Buildroot] [PATCH] qt5: fix license information for
+	qt5multimedia and qt5xmlpatterns
+References: <1428657204-25558-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <XnsA478C5842FE37berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed to get reproducable builds and to reproduce this build error:
-http://autobuild.buildroot.net/results/046/046dd505feb5e92bdee3d0993366be162da1223a/
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in
+news:1428657204-25558-1-git-send-email-thomas.petazzoni at free-electrons.com:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/gd/gd.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+> While most of the Qt5 components indeed seem to be under LGPLv2.1 with
+> exception, or LGPLv3 or GPLv2, the qt5multimedia and qt5xmlpatterns
+> components only carry the LGPLv2.1 and LGPLv3 license files, and not
+> the GPLv2 license file. So one can safely assume that the GPLv2 option
+> is not available for those components, and this commit adjusts the
+> <pkg>_LICENSE and <pkg>_LICENSE_FILES variables accordingly.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/c62/c62eef5e5b8add138cdab34e6410
+>   3d974d0a510b/ 
+> 
+> Signed-off-by: Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> 
 
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 2991cd5..1b519de 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -51,6 +51,13 @@ else
- GD_CONF_OPTS += --without-png
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBVPX),y)
-+GD_DEPENDENCIES += libvpx
-+GD_CONF_OPTS += --with-vpx
-+else
-+GD_CONF_OPTS += --without-vpx
-+endif
-+
- ifeq ($(BR2_PACKAGE_TIFF),y)
- GD_DEPENDENCIES += tiff
- GD_CONF_OPTS += --with-tiff
--- 
-1.7.10.4
+Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Regards, Bernd
