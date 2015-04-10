@@ -1,44 +1,122 @@
-From: Masahiro Yamada <yamada.masahiro@socionext.com>
-Date: Fri, 10 Apr 2015 11:19:12 +0900
-Subject: [Buildroot] [PATCH v2] pkg-*.mk: add comment about argument 1
-	of inner-*-package
-In-Reply-To: <20150409143206.0685f0dd@free-electrons.com>
-References: <1428581666-20343-1-git-send-email-yamada.masahiro@socionext.com>
- <20150409143206.0685f0dd@free-electrons.com>
-Message-ID: <CAK7LNASODoamuetDkfW9hzGzMaUTLt1vV+zqL7KZM20n0d=5Qw@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 10 Apr 2015 07:39:44 +0200
+Subject: [Buildroot] [PATCH 1/2] package/makedevs: add recursive option
+In-Reply-To: <20150409212331.GB4192@free.fr>
+References: <1426243805-8317-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1426243805-8317-2-git-send-email-angelo.compagnucci@gmail.com>
+ <20150409212331.GB4192@free.fr>
+Message-ID: <CA+TH9Vn8ojKvJBHT_PRJ==R_NHsqDbN6MVCfx+6NQ9P3UBcvmw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Yann E. MORIN,
 
-2015-04-09 21:32 GMT+09:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Masahiro Yamada,
+2015-04-09 23:23 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+> Angelo, All,
 >
-> On Thu,  9 Apr 2015 21:14:26 +0900, Masahiro Yamada wrote:
+> On 2015-03-13 11:50 +0100, Angelo Compagnucci spake thusly:
+>> This patch adds the possibilty to change owner/permission
+>> of a folder recursively.
+>>
+>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 >
->> -#  argument 1 is the lowercase package name
->> +#  argument 1 is the lowercase package name, including a host_ prefix
->> +#             for host packages
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> The prefix is 'host-', not 'host_'. Though I'm not sure this comment is
-> really that useful: host-foo is really the name of the package. Since
-> there is no parameter containing the lower case package name without
-> the 'host-' prefix, I don't think such an additional comment is really
-> needed.
+> [I really only did a review and no actual tests]
 >
-> The comment is needed for argument 2 and 3, because they are indeed
-> different in the fact that one has HOST_ and not the other one.
->
-> Best regards,
+> As a side comment: maybe that would be interesting to submit a similar
+> patch for busybox (where makedevs originated); note however that busybox
+> has changed quite a lot since we forked makedevs...
 
-OK, thanks for explaining this!
+I've not submitted upstream cause the code for makedevs is in
+buildroot source tree ...
+If you think it's important, I will submit not later the patch will accepted.
+
+Thank you!
+
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> ---
+>>  package/makedevs/makedevs.c | 23 +++++++++++++++++++++++
+>>  1 file changed, 23 insertions(+)
+>>
+>> diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+>> index ab90b93..e575427 100644
+>> --- a/package/makedevs/makedevs.c
+>> +++ b/package/makedevs/makedevs.c
+>> @@ -34,6 +34,8 @@
+>>  #ifndef __APPLE__
+>>  #include <sys/sysmacros.h>     /* major() and minor() */
+>>  #endif
+>> +#include <ftw.h>
+>> +
+>>
+>>  const char *bb_applet_name;
+>>
+>> @@ -332,6 +334,7 @@ void bb_show_usage(void)
+>>       fprintf(stderr, "Where name is the file name,  type can be one of:\n");
+>>       fprintf(stderr, "      f       A regular file\n");
+>>       fprintf(stderr, "      d       Directory\n");
+>> +     fprintf(stderr, "      r       Directory recursively\n");
+>>       fprintf(stderr, "      c       Character special device file\n");
+>>       fprintf(stderr, "      b       Block special device file\n");
+>>       fprintf(stderr, "      p       Fifo (named pipe)\n");
+>> @@ -364,6 +367,20 @@ void bb_show_usage(void)
+>>       exit(1);
+>>  }
+>>
+>> +bb_recursive(const char *full_name, uid_t uid, gid_t gid, unsigned int mode){
+>> +
+>> +     int chmod_chown(const char *fpath, const struct stat *sb,
+>> +             int tflag, struct FTW *ftwbuf) {
+>> +             if (chown(fpath, uid, gid) == -1) return -1;
+>> +             if ((mode != -1)) {
+>> +                     if (chmod(fpath, mode) < 0) return -1;
+>> +             }
+>> +             return 0;
+>> +     }
+>> +
+>> +     return nftw(full_name, chmod_chown, 20, FTW_MOUNT | FTW_PHYS);
+>> +}
+>> +
+>>  int main(int argc, char **argv)
+>>  {
+>>       int opt;
+>> @@ -474,6 +491,12 @@ int main(int argc, char **argv)
+>>                               ret = EXIT_FAILURE;
+>>                               goto loop;
+>>                       }
+>> +             } else if (type == 'r') {
+>> +                     if (bb_recursive(full_name, uid, gid, mode) < 0) {
+>> +                             bb_perror_msg("line %d: recursive failed for %s", linenum, full_name);
+>> +                             ret = EXIT_FAILURE;
+>> +                             goto loop;
+>> +                     }
+>>               } else
+>>               {
+>>                       dev_t rdev;
+>> --
+>> 1.9.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 
 
 
 -- 
-Best Regards
-Masahiro Yamada
+Profile: http://it.linkedin.com/in/compagnucciangelo
