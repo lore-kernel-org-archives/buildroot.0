@@ -1,62 +1,60 @@
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Fri, 10 Apr 2015 10:16:06 +0200
-Subject: [Buildroot] [PATCH v2 3/3] Revert "libsigrok: mark libsigrokcxx as
-	broken"
-In-Reply-To: <1428653766-22734-1-git-send-email-bgolaszewski@baylibre.com>
-References: <1428653766-22734-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <1428653766-22734-4-git-send-email-bgolaszewski@baylibre.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Apr 2015 11:13:24 +0200
+Subject: [Buildroot] [PATCH] qt5: fix license information for qt5multimedia
+	and qt5xmlpatterns
+Message-ID: <1428657204-25558-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 41e81b7ae149319950814efe3c39acb1200167d2.
+While most of the Qt5 components indeed seem to be under LGPLv2.1 with
+exception, or LGPLv3 or GPLv2, the qt5multimedia and qt5xmlpatterns
+components only carry the LGPLv2.1 and LGPLv3 license files, and not
+the GPLv2 license file. So one can safely assume that the GPLv2 option
+is not available for those components, and this commit adjusts the
+<pkg>_LICENSE and <pkg>_LICENSE_FILES variables accordingly.
 
-Doxygen dependency issue for libsigrokcxx has been fixed.
+Fixes:
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+  http://autobuild.buildroot.org/results/c62/c62eef5e5b8add138cdab34e64103d974d0a510b/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsigrok/Config.in | 3 ---
- package/pulseview/Config.in | 2 --
- 2 files changed, 5 deletions(-)
+ package/qt5/qt5multimedia/qt5multimedia.mk   | 4 ++--
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
-index bd37319..93bd06f 100644
---- a/package/libsigrok/Config.in
-+++ b/package/libsigrok/Config.in
-@@ -22,15 +22,12 @@ config BR2_PACKAGE_LIBSIGROKCXX
- 	bool "build C++ bindings"
- 	select BR2_PACKAGE_GLIBMM
- 	depends on BR2_INSTALL_LIBSTDCPP
--	# requires doxygen, which isn't packaged in Buildroot
--	depends on BROKEN
- 	help
- 	  Build libsigrok C++ bindings as well.
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 0c8d2ec..763fc28 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -11,8 +11,8 @@ QT5MULTIMEDIA_DEPENDENCIES = qt5base
+ QT5MULTIMEDIA_INSTALL_STAGING = YES
  
- comment "C++ bindings need a toolchain w/ C++"
- 	depends on BR2_PACKAGE_LIBSIGROK
- 	depends on !BR2_INSTALL_LIBSTDCPP
--	depends on BROKEN
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5MULTIMEDIA_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
+-QT5MULTIMEDIA_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
++QT5MULTIMEDIA_LICENSE = LGPLv2.1 with exception or LGPLv3
++QT5MULTIMEDIA_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
+ else
+ QT5MULTIMEDIA_LICENSE = Commercial license
+ QT5MULTIMEDIA_REDISTRIBUTE = NO
+diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+index b69cac7..136da9f 100644
+--- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
++++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+@@ -11,8 +11,8 @@ QT5XMLPATTERNS_DEPENDENCIES = qt5base
+ QT5XMLPATTERNS_INSTALL_STAGING = YES
  
- endif
- 
-diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
-index e0f1bcf..de899af 100644
---- a/package/pulseview/Config.in
-+++ b/package/pulseview/Config.in
-@@ -15,7 +15,6 @@ config BR2_PACKAGE_PULSEVIEW
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BROKEN # libsigrokcxx
- 	help
- 	  PulseView is a Qt based logic analyzer, oscilloscope
- 	  and MSO GUI for sigrok.
-@@ -26,4 +25,3 @@ comment "pulseview needs a toolchain w/ wchar, threads, C++"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_QT5
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
--	depends on BROKEN # libsigrokcxx
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5XMLPATTERNS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
+-QT5XMLPATTERNS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
++QT5XMLPATTERNS_LICENSE = LGPLv2.1 with exception or LGPLv3
++QT5XMLPATTERNS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
+ else
+ QT5XMLPATTERNS_LICENSE = Commercial license
+ QT5XMLPATTERNS_REDISTRIBUTE = NO
 -- 
-2.1.4
+2.1.0
