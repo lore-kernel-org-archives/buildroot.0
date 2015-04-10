@@ -1,146 +1,410 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Apr 2015 08:30:19 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-04-09
-Message-ID: <20150410063020.3AE6C101166@stock.ovh.net>
+From: Masahiro Yamada <yamada.masahiro@socionext.com>
+Date: Fri, 10 Apr 2015 15:48:42 +0900
+Subject: [Buildroot] No login prompt visible after "random: dd urandom
+ read with 0 bits of entropy available"
+In-Reply-To: <CAK7LNASG0FPWGCGMkwEL4DUAJuSjKGyBWumtZ4jrOBhbhQiwFw@mail.gmail.com>
+References: <CAK7LNASG0FPWGCGMkwEL4DUAJuSjKGyBWumtZ4jrOBhbhQiwFw@mail.gmail.com>
+Message-ID: <CAK7LNAT7NBxZX-T3Td1Er19j9wfhrNmk45LrovcT4WvyHLiHgg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2015-04-09
-===============================
+Hi,
 
-        success : 159
-       failures : 73 
-       timeouts : 5  
-          TOTAL : 237
+I retract this question.
 
-Classification of failures by reason
-====================================
+The IRQ number of UART was wrong.
+(I had added the IRQ number by offset 32 by mistake.
+I thought UART was working correctly because I could see kernel log,
+but it wasn't.)
 
-              procps-ng-3.3.10 | 13
-                     php-5.6.7 | 10
-                      gd-2.1.1 | 5 
-freerdp-770c67d340d5f0a7b48... | 4 
-                  boost-1.57.0 | 4 
-                     vlc-2.2.0 | 4 
-           libmemcached-1.0.18 | 2 
-                    webp-0.4.3 | 2 
-                     at-3.1.13 | 2 
-              postgresql-9.4.1 | 2 
-                libtirpc-0.2.4 | 2 
-              strongswan-5.3.0 | 1 
-make: *** [qt5xmlpatterns-l... | 1 
-                    parted-3.1 | 1 
-               mongrel2-v1.9.1 | 1 
-               libecore-1.7.10 | 1 
-                    qpdf-5.1.2 | 1 
-           host-openssl-1.0.2a | 1 
-               linux-pam-1.1.8 | 1 
-                  python-2.7.9 | 1 
-                 ipkg-0.99.163 | 1 
-                 civetweb-v1.5 | 1 
-               alsa-lib-1.0.29 | 1 
-      host-gdb-arc-2014.12-gdb | 1 
-                 leveldb-v1.18 | 1 
-        host-util-linux-2.26.1 | 1 
-                 python3-3.4.2 | 1 
-                 cdrkit-1.1.11 | 1 
-                libevas-1.7.10 | 1 
-                   erlang-17.4 | 1 
-                 rsyslog-8.8.0 | 1 
-               host-qemu-2.1.2 | 1 
-                netatalk-3.1.7 | 1 
-                   lite-0.8.10 | 1 
-                     tmux-1.9a | 1 
-                     gdb-7.8.2 | 1 
-               linknx-0.0.1.32 | 1 
-             armadillo-4.000.4 | 1 
-make[2]: *** [all-recursive... | 1 
+With the fixed IRQ number, at last, I succeeded in booting the kernel.
 
-Detail of failures
-===================
+I am very sorry for the noise.
 
-     powerpc |                alsa-lib-1.0.29 | NOK | http://autobuild.buildroot.net/results/0eb1c9798bb7c2d2db2a0fab3ed7038c4fa2f376/
-         arm |              armadillo-4.000.4 | NOK | http://autobuild.buildroot.net/results/e2cd79d3252e4daac0ba77bdcc9d0d4c4d2ecda4/
-         arm |                      at-3.1.13 | NOK | http://autobuild.buildroot.net/results/0958a098b0b0f584d67107ac4e447b69ad8e037b/
-         arm |                      at-3.1.13 | NOK | http://autobuild.buildroot.net/results/ad139bcaf0ff3cc8da133fbf1b050438fdf5cd85/
-     powerpc |                   boost-1.57.0 | NOK | http://autobuild.buildroot.net/results/7e61912e2acb8dd62f59ac1dba3061aae036b7e0/
-        bfin |                   boost-1.57.0 | NOK | http://autobuild.buildroot.net/results/8cdac9cc67394aaae09ee816a9adddec762e3bd0/
-        bfin |                   boost-1.57.0 | NOK | http://autobuild.buildroot.net/results/6ec1775a8c19a326b5fa270bfcaf14f0a5747247/
-      xtensa |                   boost-1.57.0 | NOK | http://autobuild.buildroot.net/results/6642dc9c569b2820a9d0e273fc2fb1d5a635ba0a/
-      x86_64 |                  cdrkit-1.1.11 | NOK | http://autobuild.buildroot.net/results/9f8b51d9a0697c7eeb1e33b8a11551cdf8e81373/
-         arm |                  civetweb-v1.5 | NOK | http://autobuild.buildroot.net/results/833947cda53cbd8a71cbf4ff88770e6be2a499e2/
-        i486 |                    erlang-17.4 | NOK | http://autobuild.buildroot.net/results/fb5159adf1c8614da2402add3c3b4963950abf89/
-         arm | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/609571b0b964f5dd98bd8a0273cd9e1bc6936a5e/
-         arm | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/adceb7220741a420dca6a5441320e9e52fcfc3c9/
-      x86_64 | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/b19f9a26cabd9243be960c15ca55f46fd7495721/
-         arm | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/b517df2980b3e2a10f46150ee0c3e8bb11b6f51d/
-         arm |                       gd-2.1.1 | NOK | http://autobuild.buildroot.net/results/dfed2b62aad83cc960ba3c93b7f0a994f18ad22a/
-     powerpc |                       gd-2.1.1 | NOK | http://autobuild.buildroot.net/results/a919d2bcbbd573e7a5556fbcdea053d4d451dd50/
-         arc |                       gd-2.1.1 | NOK | http://autobuild.buildroot.net/results/526550e73581a91427b394d566d3389554ee90ed/
-         arm |                       gd-2.1.1 | NOK | http://autobuild.buildroot.net/results/b89d7e3a1fc9403984bcd6462b8fd8d1196f2095/
-     powerpc |                       gd-2.1.1 | NOK | http://autobuild.buildroot.net/results/61739df0009015451ba78a7ca335dcc0d0dedcc8/
-        bfin |                      gdb-7.8.2 | NOK | http://autobuild.buildroot.net/results/fb1e7535abc227f5fa511408b505807b63650515/
-         arc |       host-gdb-arc-2014.12-gdb | NOK | http://autobuild.buildroot.net/results/cd745e1625cada5c327a906c19c6523823a52627/
-     powerpc |            host-openssl-1.0.2a | TIM | http://autobuild.buildroot.net/results/61a102ca3f2cf24d0ec5e18bbbb40c841acf3802/
-        sh4a |                host-qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/b1f67078d62401362369158068f022693c3bbc48/
-    mips64el |         host-util-linux-2.26.1 | TIM | http://autobuild.buildroot.net/results/44d69fe8bc274f90c5a38e5bd370b07f87039bb0/
-         arm |                  ipkg-0.99.163 | NOK | http://autobuild.buildroot.net/results/12fcd1b71a3d3439b396b25d72bfc875db564f38/
-        bfin |                  leveldb-v1.18 | NOK | http://autobuild.buildroot.net/results/12aa1612d43eb359950545b8fccead5df837d075/
-         arm |                libecore-1.7.10 | NOK | http://autobuild.buildroot.net/results/d1cfbf9b96675b8b0cd52f117ac9f0dd4df0af6a/
-      xtensa |                 libevas-1.7.10 | NOK | http://autobuild.buildroot.net/results/c3c19aca95bbcde864fdd735143ea087f0d598c7/
-        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/107c3c98c84af6b3a6aa27a03bc2843376d429c8/
-        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/d70788a772941fd3edadc2437ecedb9122ba9fc8/
-         arm |                 libtirpc-0.2.4 | NOK | http://autobuild.buildroot.net/results/5eeb31988275e3ee7e3b4b535414fe8a0da55f2b/
-         arc |                 libtirpc-0.2.4 | NOK | http://autobuild.buildroot.net/results/134e78ef1fa87f7fbf26c23ec5dfc68785d79613/
-         arm |                linknx-0.0.1.32 | NOK | http://autobuild.buildroot.net/results/10db32ce2f2892b7d5187c55215e63d8c8648a65/
-         arc |                linux-pam-1.1.8 | NOK | http://autobuild.buildroot.net/results/7c13e39642296f98ceb835cf8778b0935d0d0777/
-        bfin |                    lite-0.8.10 | NOK | http://autobuild.buildroot.net/results/f433c4dcea5b40a602ed3cc5d5698c8496650255/
-         arm | make: *** [qt5xmlpatterns-l... | NOK | http://autobuild.buildroot.net/results/4f95f72064d316325f5096c22fe3d020447d32fe/
-         arm | make[2]: *** [all-recursive... | TIM | http://autobuild.buildroot.net/results/e85a304acee8e18951882c6ac5c5046bc6698518/
-         arm |                mongrel2-v1.9.1 | NOK | http://autobuild.buildroot.net/results/396d1532b37c912ac69fc117f0103079444d57bf/
-         arm |                 netatalk-3.1.7 | NOK | http://autobuild.buildroot.net/results/a9b4c4c0d20ef52f5422297bfcb879f8b65fc0b6/
-         arm |                     parted-3.1 | TIM | http://autobuild.buildroot.net/results/272de20787c45c34f9004473eb37f0138422d616/
-     aarch64 |                      php-5.6.7 | NOK | http://autobuild.buildroot.net/results/a46272b23a415c5c6e0d534bfaa8c5d5c80bad1b/
-         arm |                      php-5.6.7 | NOK | http://autobuild.buildroot.net/results/a8b9c7fcb2debc9748e9bfb9dcef1dd7d7244ead/
-        i486 |                      php-5.6.7 | NOK | http://autobuild.buildroot.net/results/e83a5b0d5fabfbb7e87af0f89bfd94b95d2a12a5/
-     powerpc |                      php-5.6.7 | NOK | http://autobuild.buildroot.net/results/10ae44cbc7c0c8e6f1ac54dae4c9d94c703aa3dd/
-      mipsel |                      php-5.6.7 | NOK | http://autobuild.buildroot.net/results/368da962f657801817a4b962415e55606915c871/
-        i486 |                      php-5.6.7 | NOK | http://autobuild.buildroot.net/results/40e469d61254433ce48700182668938dc9067897/
-    mips64el |                      php-5.6.7 | NOK | http://autobuild.buildroot.net/results/d2353e5f6451ef05d16e42fa9eb79c5fca5897e0/
-        i486 |                      php-5.6.7 | NOK | http://autobuild.buildroot.net/results/08c0e63ee532664ef32cf64a9c330ae621ec259a/
-     powerpc |                      php-5.6.7 | NOK | http://autobuild.buildroot.net/results/49915070145174787b682c9879811bae1df80403/
-    mips64el |                      php-5.6.7 | NOK | http://autobuild.buildroot.net/results/0241256eb98623e35a9308a94e04970960f3e93d/
-      xtensa |               postgresql-9.4.1 | NOK | http://autobuild.buildroot.net/results/a91bc596f33d8fc4fb2233e483b28c186487ed52/
-      xtensa |               postgresql-9.4.1 | NOK | http://autobuild.buildroot.net/results/e27a5fd0898b9e0212e2645c6886665759b980b9/
-      xtensa |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/7a81f0154a9d3acb6022b895514b6527022c2143/
-    mips64el |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/8515f56a4f2a807a3f2f21bee4856f4917559355/
-        mips |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/1cbaefc86313e26128c7de328d45b15cc142baa3/
-     powerpc |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/3741bd8f1525383e00876afc50c26f66d382bdc0/
-         arm |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/c0ff15860207e77b5ece5040b4ecb996c736636e/
-        i686 |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/69e8005babacaedcebf6e6fb14ff5684c516af2f/
-      x86_64 |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/afb542a4718512fc80b1e67a2e648d7c91683a33/
-      x86_64 |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/80c9e226adb623182b970d429b96e6c3f801cbeb/
-    mips64el |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/cb0e5e070b8c0732e2bc633d811c9da2aee7dd47/
-     aarch64 |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/046e6f01f5114e8e5040526d6d0be2eecd0dd9d2/
-        mips |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/b67751687099eff91bb8d31634f6c271c7968479/
-     powerpc |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/a4bea725ab9b2d35cabb79164a8cc2d8ead8754c/
-        i686 |               procps-ng-3.3.10 | NOK | http://autobuild.buildroot.net/results/b88a11815a17e89916679c3e5872402cfe12b6e4/
-      xtensa |                   python-2.7.9 | NOK | http://autobuild.buildroot.net/results/27ff12127dee3b1a8df86ef8b05681d695b2cac8/
-         arm |                  python3-3.4.2 | NOK | http://autobuild.buildroot.net/results/8476757122820d4becabfefce9623dcfbb4a98aa/
-         arm |                     qpdf-5.1.2 | NOK | http://autobuild.buildroot.net/results/652a184e8825f57ecbd6afeb46f3d87388aff04b/
-        i486 |                  rsyslog-8.8.0 | NOK | http://autobuild.buildroot.net/results/0bdde92bd0e0fa163c4b6579ff69b7f6e61a8b19/
-microblazeel |               strongswan-5.3.0 | NOK | http://autobuild.buildroot.net/results/8f3e4031f722ff13bc3e9eeb88197c925977aa88/
-         arm |                      tmux-1.9a | TIM | http://autobuild.buildroot.net/results/886441659a3e44cfce89c0b4f4ecd7300769b2c6/
-         arm |                      vlc-2.2.0 | NOK | http://autobuild.buildroot.net/results/3e2171c4bd91027067bf8b53cf5306ad1aea480f/
-    mips64el |                      vlc-2.2.0 | NOK | http://autobuild.buildroot.net/results/857a83c9e620804d83e5d131328ac0c39c6ec064/
-         arm |                      vlc-2.2.0 | NOK | http://autobuild.buildroot.net/results/0187cbac5406fd1f08ced4cd6e3fbe155e8cc64c/
-         arm |                      vlc-2.2.0 | NOK | http://autobuild.buildroot.net/results/b7e8227a4033843a5391e48e358074b4cd2da7b5/
-     aarch64 |                     webp-0.4.3 | NOK | http://autobuild.buildroot.net/results/796bf7205167a091b70eb1f99c3f63b6abce9153/
-     aarch64 |                     webp-0.4.3 | NOK | http://autobuild.buildroot.net/results/edf48f0ecfb959e2c0071c3795e6f2a543e3534c/
+
+Masahiro Yamada
+
+
+
+
+2015-04-09 18:35 GMT+09:00 Masahiro Yamada <yamada.masahiro@socionext.com>:
+> Dear Thomas Petazzoni (and experts),
+>
+> I am trying to port Linux (4.0-rc7) to my new ARM SoC
+> along with initramdisk created by Buildroot.
+>
+> I have been struggling to solve my problem for about two weeks.
+> I do not know if my current problem comes from the Kernel,
+> initramdisk, or other areas.
+> I know I am bothering you, but could you give me some of your time?
+>
+> I found a Linux porting guideline written by you:
+> http://free-electrons.com/pub/conferences/2013/elc/arm-soc-checklist/arm-soc-checklist.pdf
+>
+> Thanks for providing the amazing slides!
+>
+> As you suggested in the slide,
+> I want to start with a minimal set of features with Timer, IRQ and Serial.
+>
+> I guess timer, irq, and UART are working on my board,
+> but the kernel fails to boot. (Precisely, no login prompt is displayed.)
+>
+> My SoC is based on Cortex-A9 (uniprocessor implementation).
+> A 16550-compatible UART is avaialable on my board
+> and GIC, Global timer drivers are already in the Kernel,
+> so I believe booting the kernel should not be too difficult.
+>
+>
+> I wrote a very simple device tree like this:
+>
+> ---------------8<---------------------
+> /dts-v1/;
+> /include/ "skeleton.dtsi"
+>
+> / {
+>         compatible = "socionext,ph1-ld4";
+>
+>         memory {
+>                 device_type = "memory";
+>                 reg = <0x80000000 0x20000000>;
+>         };
+>
+>         chosen {
+>                 bootargs = "console=ttyS0,115200";
+>         };
+>
+>         aliases {
+>                 serial0 = &uart0;
+>         };
+>
+>         cpus {
+>                 #size-cells = <0>;
+>                 #address-cells = <1>;
+>
+>                 cpu at 0 {
+>                         device_type = "cpu";
+>                         compatible = "arm,cortex-a9";
+>                         reg = <0>;
+>                 };
+>         };
+>
+>         clocks {
+>                 #address-cells = <1>;
+>                 #size-cells = <0>;
+>
+>                 arm_timer_clk: arm_timer_clk {
+>                         #clock-cells = <0>;
+>                         compatible = "fixed-clock";
+>                         clock-frequency = <50000000>;
+>                 };
+>         };
+>
+>         soc: soc {
+>                 compatible = "simple-bus";
+>                 #address-cells = <1>;
+>                 #size-cells = <1>;
+>                 interrupt-parent = <&intc>;
+>                 ranges;
+>
+>
+>                 uart0: uart at 03fb0000 {
+>                         compatible = "ns16550";
+>                         reg = <0x03fb0000 0x100>;
+>                         clock-frequency = <12288000>;
+>                         interrupts = <0 81 4>;
+>                         reg-shift = <1>;
+>                         fifo-size = <16>;
+>                 };
+>
+>                 intc: interrupt-controller at 60001000 {
+>                         compatible = "arm,cortex-a9-gic";
+>                         #interrupt-cells = <3>;
+>                         #address-cells = <1>;
+>                         interrupt-controller;
+>                         reg = <0x60001000 0x1000>,
+>                               <0x60000100 0x100>;
+>                 };
+>
+>                 global_timer: timer at 60000200 {
+>                         compatible = "arm,cortex-a9-global-timer";
+>                         reg = <0x60000200 0x20>;
+>                         interrupts = <1 11 0x104>;
+>                         interrupt-parent = <&intc>;
+>                         clocks = <&arm_timer_clk>;
+>                 };
+>
+>         };
+> };
+> ---------------->8--------------------
+>
+>
+>
+> The kernel configuration is based on multi_v7_defconfig.
+>
+> The difference against it is just one line; I just added
+> "CONFIG_ARCH_UNIPHIER=y" for my SoC.
+>
+>
+> I built the initramdisk with Buildroot:
+>
+> The buildroot defconfig is like this:
+> ---------------8<---------------------
+> BR2_arm=y
+> BR2_cortex_a9=y
+> BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> BR2_LINUX_KERNEL_CUSTOM_REPO_URL="/home/yamada/workspace/zynq-pf/linux-unph"
+> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="uniphier-master"
+> BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+> BR2_LINUX_KERNEL_ZIMAGE=y
+> BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> BR2_LINUX_KERNEL_INTREE_DTS_NAME="uniphier-ph1-ld4-ref"
+> BR2_TARGET_ROOTFS_CPIO=y
+> BR2_TARGET_ROOTFS_CPIO_GZIP=y
+> BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
+> BR2_TARGET_UBOOT=y
+> BR2_TARGET_UBOOT_BOARDNAME="ph1_ld4"
+> BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> BR2_TARGET_UBOOT_CUSTOM_REPO_URL="/home/yamada/workspace/zynq-pf/u-boot-unph"
+> BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="uniphier-master"
+> BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-dtb.img"
+> BR2_TARGET_UBOOT_SPL=y
+> ---------------->8--------------------
+>
+>
+>
+>
+> I passed the kernel image, the device tree blob, and initramdisk from U-Boot.
+>
+>
+> The kernel log is displayed like follows:
+>
+> ---------------8<---------------------
+> [    0.000000] Booting Linux on physical CPU 0x0
+> [    0.000000] Linux version 4.0.0-rc7 (yamada at beagle) (gcc version
+> 4.8.4 (Buildroot 2015.05-git-00947-g419dfed-dirty) ) #1 SMP Thu Apr 9
+> 17:51:38 JST 2015
+> [    0.000000] CPU: ARMv7 Processor [413fc090] revision 0 (ARMv7), cr=10c5387d
+> [    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing
+> instruction cache
+> [    0.000000] Machine model: socionext,ph1-ld4
+> [    0.000000] cma: Reserved 64 MiB at 0x9c000000
+> [    0.000000] Memory policy: Data cache writeback
+> [    0.000000] CPU: All CPU(s) started in SVC mode.
+> [    0.000000] PERCPU: Embedded 11 pages/cpu @dbbc9000 s12480 r8192
+> d24384 u45056
+> [    0.000000] Built 1 zonelists in Zone order, mobility grouping on.
+> Total pages: 130048
+> [    0.000000] Kernel command line: console=ttyS0,115200
+> [    0.000000] PID hash table entries: 2048 (order: 1, 8192 bytes)
+> [    0.000000] Dentry cache hash table entries: 65536 (order: 6, 262144 bytes)
+> [    0.000000] Inode-cache hash table entries: 32768 (order: 5, 131072 bytes)
+> [    0.000000] Memory: 439004K/524288K available (7922K kernel code,
+> 960K rwdata, 3476K rodata, 812K init, 316K bss, 19748K reserved,
+> 65536K cma-reserved, 0K highmem)
+> [    0.000000] Virtual kernel memory layout:
+> [    0.000000]     vector  : 0xffff0000 - 0xffff1000   (   4 kB)
+> [    0.000000]     fixmap  : 0xffc00000 - 0xfff00000   (3072 kB)
+> [    0.000000]     vmalloc : 0xe0800000 - 0xff000000   ( 488 MB)
+> [    0.000000]     lowmem  : 0xc0000000 - 0xe0000000   ( 512 MB)
+> [    0.000000]     pkmap   : 0xbfe00000 - 0xc0000000   (   2 MB)
+> [    0.000000]     modules : 0xbf000000 - 0xbfe00000   (  14 MB)
+> [    0.000000]       .text : 0xc0208000 - 0xc0d2ab58   (11403 kB)
+> [    0.000000]       .init : 0xc0d2b000 - 0xc0df6000   ( 812 kB)
+> [    0.000000]       .data : 0xc0df6000 - 0xc0ee60a0   ( 961 kB)
+> [    0.000000]        .bss : 0xc0ee60a0 - 0xc0f35158   ( 317 kB)
+> [    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+> [    0.000000] Hierarchical RCU implementation.
+> [    0.000000]         Additional per-CPU info printed with stalls.
+> [    0.000000]         RCU restricting CPUs from NR_CPUS=16 to nr_cpu_ids=1.
+> [    0.000000] RCU: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
+> [    0.000000] NR_IRQS:16 nr_irqs:16 16
+> [    0.000000] GIC CPU mask not found - kernel will fail to boot.
+> [    0.000000] GIC CPU mask not found - kernel will fail to boot.
+> [    0.000023] sched_clock: 64 bits at 50MHz, resolution 20ns, wraps
+> every 2748779069440ns
+> [    0.000280] Console: colour dummy device 80x30
+> [    0.000327] Calibrating delay loop... 1590.88 BogoMIPS (lpj=3977216)
+> [    0.045071] pid_max: default: 32768 minimum: 301
+> [    0.045288] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes)
+> [    0.045311] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes)
+> [    0.046442] CPU: Testing write buffer coherency: ok
+> [    0.046890] CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+> [    0.047021] Setting up static identity map for 0x80981fa0 - 0x80982038
+> [    0.049167] Brought up 1 CPUs
+> [    0.049194] SMP: Total of 1 processors activated (1590.88 BogoMIPS).
+> [    0.049205] CPU: All CPU(s) started in SVC mode.
+> [    0.050195] devtmpfs: initialized
+> [    0.051031] VFP support v0.3: implementor 41 architecture 3 part 30
+> variant 9 rev 4
+> [    0.061607] pinctrl core: initialized pinctrl subsystem
+> [    0.064291] NET: Registered protocol family 16
+> [    0.067507] DMA: preallocated 256 KiB pool for atomic coherent allocations
+> [    0.070073] cpuidle: using governor ladder
+> [    0.070204] cpuidle: using governor menu
+> [    0.071959] No ATAGs?
+> [    0.072010] hw-breakpoint: found 5 (+1 reserved) breakpoint and 1
+> watchpoint registers.
+> [    0.072027] hw-breakpoint: maximum watchpoint size is 4 bytes.
+> [    0.073727] Serial: AMBA PL011 UART driver
+> [    0.089345] vgaarb: loaded
+> [    0.090512] SCSI subsystem initialized
+> [    0.091516] usbcore: registered new interface driver usbfs
+> [    0.091635] usbcore: registered new interface driver hub
+> [    0.091785] usbcore: registered new device driver usb
+> [    0.092842] media: Linux media interface: v0.10
+> [    0.092968] Linux video capture interface: v2.00
+> [    0.093066] pps_core: LinuxPPS API ver. 1 registered
+> [    0.093080] pps_core: Software ver. 5.3.6 - Copyright 2005-2007
+> Rodolfo Giometti <giometti@linux.it>
+> [    0.093131] PTP clock support registered
+> [    0.093412] EDAC MC: Ver: 3.0.0
+> [    0.094927] Advanced Linux Sound Architecture Driver Initialized.
+> [    0.096686] Switched to clocksource arm_global_timer
+> [    0.119523] NET: Registered protocol family 2
+> [    0.120529] TCP established hash table entries: 4096 (order: 2, 16384 bytes)
+> [    0.120599] TCP bind hash table entries: 4096 (order: 3, 32768 bytes)
+> [    0.120669] TCP: Hash tables configured (established 4096 bind 4096)
+> [    0.120786] TCP: reno registered
+> [    0.120816] UDP hash table entries: 256 (order: 1, 8192 bytes)
+> [    0.120869] UDP-Lite hash table entries: 256 (order: 1, 8192 bytes)
+> [    0.121219] NET: Registered protocol family 1
+> [    0.122072] RPC: Registered named UNIX socket transport module.
+> [    0.122098] RPC: Registered udp transport module.
+> [    0.122108] RPC: Registered tcp transport module.
+> [    0.122115] RPC: Registered tcp NFSv4.1 backchannel transport module.
+> [    0.122881] Unpacking initramfs...
+> [    0.351517] Freeing initrd memory: 1532K (cfe81000 - d0000000)
+> [    0.353637] futex hash table entries: 256 (order: 2, 16384 bytes)
+> [    0.366277] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+> [    0.367890] NFS: Registering the id_resolver key type
+> [    0.367966] Key type id_resolver registered
+> [    0.367983] Key type id_legacy registered
+> [    0.368126] ntfs: driver 2.1.31 [Flags: R/O].
+> [    0.370870] Block layer SCSI generic (bsg) driver version 0.4
+> loaded (major 248)
+> [    0.370921] io scheduler noop registered
+> [    0.370947] io scheduler deadline registered
+> [    0.371240] io scheduler cfq registered (default)
+> [    0.516978] Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+> [    0.519995] SuperH (H)SCI(F) driver initialized
+> [    0.520748] msm_serial: driver initialized
+> [    0.521879] console [ttyS0] disabled
+> [    0.521981] 3fb0000.uart: ttyS0 at MMIO 0x3fb0000 (irq = 17,
+> base_baud = 768000) is a 16550
+> [    1.101140] console [ttyS0] enabled
+> [    1.105730] STMicroelectronics ASC driver initialized
+> [    1.112872] [drm] Initialized drm 1.1.0 20060810
+> [    1.128321] loop: module loaded
+> [    1.139187] CAN device driver interface
+> [    1.144370] igb: Intel(R) Gigabit Ethernet Network Driver - version 5.2.15-k
+> [    1.151859] igb: Copyright (c) 2007-2014 Intel Corporation.
+> [    1.159656] pegasus: v0.9.3 (2013/04/25), Pegasus/Pegasus II USB
+> Ethernet driver
+> [    1.167641] usbcore: registered new interface driver pegasus
+> [    1.173788] usbcore: registered new interface driver asix
+> [    1.179652] usbcore: registered new interface driver ax88179_178a
+> [    1.186256] usbcore: registered new interface driver cdc_ether
+> [    1.192622] usbcore: registered new interface driver smsc75xx
+> [    1.198870] usbcore: registered new interface driver smsc95xx
+> [    1.205087] usbcore: registered new interface driver net1080
+> [    1.211213] usbcore: registered new interface driver cdc_subset
+> [    1.217607] usbcore: registered new interface driver zaurus
+> [    1.223697] usbcore: registered new interface driver cdc_ncm
+> [    1.231029] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+> [    1.237999] ehci-pci: EHCI PCI platform driver
+> [    1.242891] ehci-platform: EHCI generic platform driver
+> [    1.248680] ehci-omap: OMAP-EHCI Host Controller driver
+> [    1.254441] ehci-orion: EHCI orion driver
+> [    1.258920] SPEAr-ehci: EHCI SPEAr driver
+> [    1.263405] ehci-st: EHCI STMicroelectronics driver
+> [    1.268794] ehci-exynos: EHCI EXYNOS driver
+> [    1.273490] tegra-ehci: Tegra EHCI driver
+> [    1.277988] ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
+> [    1.284605] ohci-pci: OHCI PCI platform driver
+> [    1.289485] ohci-platform: OHCI generic platform driver
+> [    1.295255] ohci-omap3: OHCI OMAP3 driver
+> [    1.299737] SPEAr-ohci: OHCI SPEAr driver
+> [    1.304218] ohci-st: OHCI STMicroelectronics driver
+> [    1.309734] usbcore: registered new interface driver usb-storage
+> [    1.318730] mousedev: PS/2 mouse device common for all mice
+> [    1.329613] i2c /dev entries driver
+> [    1.335565] usbcore: registered new interface driver uvcvideo
+> [    1.341722] USB Video Class driver (1.1.1)
+> [    1.346053] gspca_main: v2.14.0 registered
+> [    1.355689] Driver 'mmcblk' needs updating - please use bus_type methods
+> [    1.362992] sdhci: Secure Digital Host Controller Interface driver
+> [    1.369561] sdhci: Copyright(c) Pierre Ossman
+> [    1.375384] Synopsys Designware Multimedia Card Interface Driver
+> [    1.383061] sdhci-pltfm: SDHCI platform and OF driver helper
+> [    1.390737] ledtrig-cpu: registered to indicate activity on CPUs
+> [    1.397595] usbcore: registered new interface driver usbhid
+> [    1.403534] usbhid: USB HID core driver
+> [    1.412862] usbcore: registered new interface driver snd-usb-audio
+> [    1.423771] TCP: cubic registered
+> [    1.427393] NET: Registered protocol family 17
+> [    1.432163] can: controller area network core (rev 20120528 abi 9)
+> [    1.438842] NET: Registered protocol family 29
+> [    1.443606] can: raw protocol (rev 20120528)
+> [    1.448166] can: broadcast manager protocol (rev 20120528 t)
+> [    1.454192] can: netlink gateway (rev 20130117) max_hops=1
+> [    1.460709] Key type dns_resolver registered
+> [    1.465434] ThumbEE CPU extension supported.
+> [    1.470026] Registering SWP/SWPB emulation handler
+> [    1.479705] drivers/rtc/hctosys.c: unable to open rtc device (rtc0)
+> [    1.487177] ALSA device list:
+> [    1.490312]   No soundcards found.
+> [    1.496444] Freeing unused kernel memory: 812K (c0d2b000 - c0df6000)
+> [    1.684454] random: dd urandom read with 0 bits of entropy available
+> ---------------->8--------------------------------------
+>
+>
+> I think the kernel is still running.
+> (I confirmed it by putting printk("foo\n") into the cpu_idle_loop() function.
+> The message "foo" waw displayed on the console periodically.)
+>
+>
+> I suspect my situation is different from what is written in
+> "Frequently Asked Questions & Troubleshooting",
+> because I cannot see such messages from /etc/inittab as
+>    Initializing random number generator... done.
+>    Starting network...
+>
+>
+>
+> My new SoC file is almost empty:
+>
+> ---------------8<---------------------
+> #include <asm/mach/arch.h>
+>
+> static const char * const uniphier_board_dt_compat[] = {
+>         "socionext,ph1-ld4",
+>         "socionext,ph1-pro4",
+>         NULL,
+> };
+>
+> DT_MACHINE_START(UNIPHIER, "Socionext UniPhier")
+>         .dt_compat      = uniphier_board_dt_compat,
+> MACHINE_END
+> ---------------->8--------------------------------------
+>
+>
+>
+> What is the cause of this problem?
+> What should I do to figure out it?
+> Any hint is really appreciated.
+>
+>
+> Best Regards
+> Masahiro Yamada
+
 
 
 -- 
-http://autobuild.buildroot.net
+Best Regards
+Masahiro Yamada
