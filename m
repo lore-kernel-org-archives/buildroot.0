@@ -1,39 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 10 Apr 2015 10:35:22 -0300
-Subject: [Buildroot] [PATCH] sysstat: bump to version 11.0.4
-Message-ID: <1428672922-17101-1-git-send-email-gustavo@zacarias.com.ar>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Fri, 10 Apr 2015 09:49:12 -0400
+Subject: [Buildroot] [PATCH v2 04/25] psplash: move systemd service
+ files to /usr/lib
+In-Reply-To: <20150409215759.0fd7e64f@free-electrons.com>
+References: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
+ <1426878856-15747-5-git-send-email-mike@mikebwilliams.com>
+ <20150320203611.463c682a@free-electrons.com>
+ <20150409215759.0fd7e64f@free-electrons.com>
+Message-ID: <CANPyyuPHSADQvRXtY4DVLx1w5+QbosTFPV9xwxgQ_42eBJAZww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sysstat/sysstat.hash | 2 +-
- package/sysstat/sysstat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thomas,
 
-diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
-index 1a96e2f..226ff06 100644
---- a/package/sysstat/sysstat.hash
-+++ b/package/sysstat/sysstat.hash
-@@ -1,2 +1,2 @@
- # From http://sebastien.godard.pagesperso-orange.fr/download.html
--md5	27d4ca66869dce132ace3194dd7d7539	sysstat-11.0.2.tar.xz
-+md5	df1ed75656eb06320088d54247f0e803	sysstat-11.0.4.tar.xz
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 30fd9b2..6bdd3b8 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSSTAT_VERSION = 11.0.2
-+SYSSTAT_VERSION = 11.0.4
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
--- 
-2.0.5
+I'll take a look at all of those patches with comments next week, I'm
+working on another project for a bit.
+
+Thanks,
+Mike
+
+On Thu, Apr 9, 2015 at 3:57 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Mike,
+>
+> Ping ?
+>
+> Thomas
+>
+> On Fri, 20 Mar 2015 20:36:11 +0100, Thomas Petazzoni wrote:
+>> Dear Mike Williams,
+>>
+>> On Fri, 20 Mar 2015 15:13:55 -0400, Mike Williams wrote:
+>>
+>> >  define PSPLASH_INSTALL_INIT_SYSTEMD
+>> > +   mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+>> > +
+>> >     $(INSTALL) -D -m 644 package/psplash/psplash-start.service \
+>> > -           $(TARGET_DIR)/etc/systemd/system/psplash-start.service
+>> > -   $(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants
+>> > -   ln -sf  ../psplash-start.service \
+>> > +           $(TARGET_DIR)/usr/lib/systemd/system/psplash-start.service
+>> > +   $(INSTALL) -d $(TARGET_DIR)/usr/lib/systemd/system/sysinit.target.wants
+>>
+>> Why are we creating this directory?
+>>
+>> Thanks,
+>>
+>> Thomas
+>
+>
+>
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
