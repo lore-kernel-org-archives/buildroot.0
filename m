@@ -1,39 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 10 Apr 2015 22:01:19 +0200
-Subject: [Buildroot] [PATCH 2/2] infra/pkg-kconfig: require an non-empty
- KCONFIG_FILE
-In-Reply-To: <20150408204917.GC4197@free.fr>
-References: <cover.1428512591.git.yann.morin.1998@free.fr>
- <c5c81694cabca70c5651fe42a7de99247275659c.1428512591.git.yann.morin.1998@free.fr>
- <55258DE8.9020207@mind.be> <20150408204917.GC4197@free.fr>
-Message-ID: <55282C0F.90501@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 10 Apr 2015 22:06:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libpciaccess: Fix compilation error
+	with musl-based toolchain
+Message-ID: <1428696405-9969-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/04/15 22:49, Yann E. MORIN wrote:
-[snip]
-> So, because neither "use defconfig" nor "use custom config" is set,
-> KERNEL_SOURCE_CONFIG is not set, so LINUX_KCONFIG_FILE ends up empty.
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libpciaccess/0001-limits_h.patch |   22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 package/libpciaccess/0001-limits_h.patch
 
-BR2_LINUX_KERNEL_USE_DEFCONFIG and BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG are the
-only two possibilities in the "Kernel configuration" choice, so one of them will
-always be set.
-
-> However, our ifndef did not trigger so far.
-
- The kernel isn't built in the autobuilders, so where would it trigger?
-
- Regards,
- Arnout
-
+diff --git a/package/libpciaccess/0001-limits_h.patch b/package/libpciaccess/0001-limits_h.patch
+new file mode 100644
+index 0000000..e8cfee9
+--- /dev/null
++++ b/package/libpciaccess/0001-limits_h.patch
+@@ -0,0 +1,22 @@
++Fix compilation error with musl-based toolchain
++
++linux_sysfs.c:751:15: error: 'PATH_MAX' undeclared (first use in this function)
++     char name[PATH_MAX];
++
++Patch already sent upstream by Felix Janda
++http://lists.x.org/archives/xorg-devel/2014-December/044723.html
++
++Signed-off-by: Felix Janda <felix.janda@posteo.de>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr libpciaccess-0.13.3.org/src/linux_sysfs.c libpciaccess-0.13.3/src/linux_sysfs.c
++--- libpciaccess-0.13.3.org/src/linux_sysfs.c	2015-02-04 00:59:14.000000000 +0100
+++++ libpciaccess-0.13.3/src/linux_sysfs.c	2015-04-10 21:57:35.000000000 +0200
++@@ -44,6 +44,7 @@
++ #include <sys/mman.h>
++ #include <dirent.h>
++ #include <errno.h>
+++#include <limits.h>
++ 
++ #if defined(__i386__) || defined(__x86_64__) || defined(__arm__)
++ #include <sys/io.h>
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
