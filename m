@@ -1,63 +1,62 @@
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Fri, 10 Apr 2015 10:16:04 +0200
-Subject: [Buildroot] [PATCH v2 1/3] doxygen: new package
+Date: Fri, 10 Apr 2015 10:16:06 +0200
+Subject: [Buildroot] [PATCH v2 3/3] Revert "libsigrok: mark libsigrokcxx as
+	broken"
 In-Reply-To: <1428653766-22734-1-git-send-email-bgolaszewski@baylibre.com>
 References: <1428653766-22734-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <1428653766-22734-2-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <1428653766-22734-4-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Host package only.
+This reverts commit 41e81b7ae149319950814efe3c39acb1200167d2.
+
+Doxygen dependency issue for libsigrokcxx has been fixed.
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- package/doxygen/doxygen.hash |  2 ++
- package/doxygen/doxygen.mk   | 25 +++++++++++++++++++++++++
- 2 files changed, 27 insertions(+)
- create mode 100644 package/doxygen/doxygen.hash
- create mode 100644 package/doxygen/doxygen.mk
+ package/libsigrok/Config.in | 3 ---
+ package/pulseview/Config.in | 2 --
+ 2 files changed, 5 deletions(-)
 
-diff --git a/package/doxygen/doxygen.hash b/package/doxygen/doxygen.hash
-new file mode 100644
-index 0000000..40cfe16
---- /dev/null
-+++ b/package/doxygen/doxygen.hash
-@@ -0,0 +1,2 @@
-+# Computed locally
-+sha256 d4ab6e28d4d45d8956cad17470aade3fbe2356e8f64b92167e738c1887feccec  doxygen-1.8.9.1.src.tar.gz
-diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
-new file mode 100644
-index 0000000..40884d4
---- /dev/null
-+++ b/package/doxygen/doxygen.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# doxygen
-+#
-+################################################################################
-+
-+DOXYGEN_VERSION = 1.8.9.1
-+DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
-+DOXYGEN_SITE = http://ftp.stack.nl/pub/users/dimitri/
-+DOXYGEN_LICENSE = GPLv2
-+DOXYGEN_LICENSE_FILES = LICENSE
-+
-+define HOST_DOXYGEN_CONFIGURE_CMDS
-+	(cd $(@D); ./configure --shared --prefix=$(HOST_DIR)/usr)
-+endef
-+
-+define DOXYGEN_BUILD_CMDS
-+	($(MAKE) -C $(@D))
-+endef
-+
-+define HOST_DOXYGEN_INSTALL_CMDS
-+	($(MAKE) install -C $(@D))
-+endef
-+
-+$(eval $(host-autotools-package))
+diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+index bd37319..93bd06f 100644
+--- a/package/libsigrok/Config.in
++++ b/package/libsigrok/Config.in
+@@ -22,15 +22,12 @@ config BR2_PACKAGE_LIBSIGROKCXX
+ 	bool "build C++ bindings"
+ 	select BR2_PACKAGE_GLIBMM
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	# requires doxygen, which isn't packaged in Buildroot
+-	depends on BROKEN
+ 	help
+ 	  Build libsigrok C++ bindings as well.
+ 
+ comment "C++ bindings need a toolchain w/ C++"
+ 	depends on BR2_PACKAGE_LIBSIGROK
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on BROKEN
+ 
+ endif
+ 
+diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+index e0f1bcf..de899af 100644
+--- a/package/pulseview/Config.in
++++ b/package/pulseview/Config.in
+@@ -15,7 +15,6 @@ config BR2_PACKAGE_PULSEVIEW
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BROKEN # libsigrokcxx
+ 	help
+ 	  PulseView is a Qt based logic analyzer, oscilloscope
+ 	  and MSO GUI for sigrok.
+@@ -26,4 +25,3 @@ comment "pulseview needs a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+-	depends on BROKEN # libsigrokcxx
 -- 
 2.1.4
