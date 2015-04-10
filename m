@@ -1,31 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Apr 2015 21:53:03 +0200
-Subject: [Buildroot] [PATCH] qt5: fix license information for
- qt5multimedia and qt5xmlpatterns
-In-Reply-To: <1428657204-25558-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1428657204-25558-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150410215303.499ae405@free-electrons.com>
+Date: Fri, 10 Apr 2015 21:53:33 +0200
+Subject: [Buildroot] [PATCH] sysstat: bump to version 11.0.4
+In-Reply-To: <1428672922-17101-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1428672922-17101-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150410215333.5d5bb82d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Gustavo Zacarias,
 
-On Fri, 10 Apr 2015 11:13:24 +0200, Thomas Petazzoni wrote:
-> While most of the Qt5 components indeed seem to be under LGPLv2.1 with
-> exception, or LGPLv3 or GPLv2, the qt5multimedia and qt5xmlpatterns
-> components only carry the LGPLv2.1 and LGPLv3 license files, and not
-> the GPLv2 license file. So one can safely assume that the GPLv2 option
-> is not available for those components, and this commit adjusts the
-> <pkg>_LICENSE and <pkg>_LICENSE_FILES variables accordingly.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/c62/c62eef5e5b8add138cdab34e64103d974d0a510b/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Fri, 10 Apr 2015 10:35:22 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Applied, thanks.
 
