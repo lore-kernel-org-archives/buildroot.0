@@ -1,49 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Apr 2015 14:12:17 +0200
-Subject: [Buildroot] [RFC] Move host-pkgconf dependency to
- package/pkg-autotools.mk
-In-Reply-To: <XnsA4787599FCF1BberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <XnsA4787599FCF1BberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20150410141217.4bd2547c@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 10 Apr 2015 09:16:02 -0300
+Subject: [Buildroot] [PATCH 2/2] samba4: bump to version 4.2.0
+In-Reply-To: <20150409202054.GD27057@waldemar-brodkorb.de>
+References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>
+ <1425588249-20942-2-git-send-email-gustavo@zacarias.com.ar>
+ <XnsA4777FCDAF5A6berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <55265956.3020607@zacarias.com.ar>
+ <20150409202054.GD27057@waldemar-brodkorb.de>
+Message-ID: <5527BF02.6060304@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+On 04/09/2015 05:20 PM, Waldemar Brodkorb wrote:
 
-On Fri, 10 Apr 2015 11:33:39 +0200, Bernd Kuhls wrote:
-> Hi,
-> 
-> is there a reason an autotools-package should not depend on host-pkgconf?
-> 
-> The phrase "host-pkgconf" appears in > 300 packages
-> 
-> $ for i in `find -iname *.mk | grep -v pkgconf`; do grep host-pkgconf $i; 
-> done | wc -l
-> 313
-> 
-> If 
-> 
-> $(2)_DEPENDENCIES += host-pkgconf
-> 
-> is added to package/pkg-autotools.mk we could get rid of all those 
-> dependencies in the packages and avoid nasty build errors in the future.
+> uClibc-ng has $ORIGIN support. Can you test it with samba4?
 
-I think it has been discussed in the past, even though I don't remember
-the conclusion. On my side, since I don't like useless dependencies,
-but I recognize that we often forget to add host-pkgconf in the
-dependencies of a number of autotools packages, I made a proposal last
-year: http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/82327.
+Yes, and it fails to work, snip:
 
-It checks before building if the package uses PKG_CHECK_MODULES(), and
-verifies that the package properly depends on host-pkgconf in this case.
+-----
+# /etc/init.d/S91smb start
+Starting SMB services: /usr/sbin/smbd: can't load library 'libtalloc.so.2'
+FAIL
+Starting NMB services: /usr/sbin/nmbd: can't load library 'libtalloc.so.2'
+FAIL
+# ls -l /lib/*uClibc*
+-rwxr-xr-x    1 root     root         25304 Apr  9  2015
+/lib/ld-uClibc-1.0.1.so
+lrwxrwxrwx    1 root     root            14 Apr  9  2015
+/lib/ld-uClibc.so.0 -> ld-uClibc.so.1
+lrwxrwxrwx    1 root     root            18 Apr  9  2015
+/lib/ld-uClibc.so.1 -> ld-uClibc-1.0.1.so
+-rwxr-xr-x    1 root     root        367544 Apr  9  2015
+/lib/libuClibc-1.0.1.so
+# ls -l /usr/lib/samba/libtalloc*
+lrwxrwxrwx    1 root     root            18 Apr  9  2015
+/usr/lib/samba/libtalloc.so.2 -> libtalloc.so.2.1.1
+-rwxr-xr-x    1 root     root         19396 Apr  9  2015
+/usr/lib/samba/libtalloc.so.2.1.1
+-----
 
-Best regards,
+On the build machine:
+$ readelf -d ?mbd|grep RPATH
+ 0x0000000f (RPATH)                      Library rpath: [/usr/lib/samba]
+ 0x0000000f (RPATH)                      Library rpath: [/usr/lib/samba]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+So, it's not up to it yet.
+
+Regards.
