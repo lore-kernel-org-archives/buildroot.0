@@ -1,43 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Apr 2015 11:23:26 +0200
-Subject: [Buildroot] [PATCH v2 1/3] doxygen: new package
-In-Reply-To: <CAMpxmJU_wsEqkm0UPA2eMGVcts3giLLdAxyKLR=0KRjyLMJqcw@mail.gmail.com>
-References: <1428653766-22734-1-git-send-email-bgolaszewski@baylibre.com>
- <1428653766-22734-2-git-send-email-bgolaszewski@baylibre.com>
- <CAMpxmJU_wsEqkm0UPA2eMGVcts3giLLdAxyKLR=0KRjyLMJqcw@mail.gmail.com>
-Message-ID: <20150410112326.53cb8726@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 10 Apr 2015 11:33:39 +0200
+Subject: [Buildroot] [RFC] Move host-pkgconf dependency to
+	package/pkg-autotools.mk
+Message-ID: <XnsA4787599FCF1BberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bartosz Golaszewski,
+Hi,
 
-On Fri, 10 Apr 2015 11:20:52 +0200, Bartosz Golaszewski wrote:
+is there a reason an autotools-package should not depend on host-pkgconf?
 
-> Sorry, for that - I eventually forgot to change host-autotools-package
-> to host-generic-package. Surprisingly it works.
+The phrase "host-pkgconf" appears in > 300 packages
 
-This is not surprising: host-autotools-package allows you to override
-<pkg>_CONFIGURE_CMDS, <pkg>_BUILD_CMDS and <pkg>_INSTALL_*_CMDS.
+$ for i in `find -iname *.mk | grep -v pkgconf`; do grep host-pkgconf $i; 
+done | wc -l
+313
 
-Also, in your v3, remove the parenthesis:
+If 
 
-	($(MAKE) -C $(@D))
+$(2)_DEPENDENCIES += host-pkgconf
 
-should be just:
+is added to package/pkg-autotools.mk we could get rid of all those 
+dependencies in the packages and avoid nasty build errors in the future.
 
-	$(MAKE) -C $(@D)
-
-And add a comment in the .mk file to explain why we're not using
-host-autotools-package even if there is a ./configure script being
-called.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
