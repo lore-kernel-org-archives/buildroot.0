@@ -1,74 +1,51 @@
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Fri, 10 Apr 2015 11:20:52 +0200
-Subject: [Buildroot] [PATCH v2 1/3] doxygen: new package
-In-Reply-To: <1428653766-22734-2-git-send-email-bgolaszewski@baylibre.com>
-References: <1428653766-22734-1-git-send-email-bgolaszewski@baylibre.com>
- <1428653766-22734-2-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <CAMpxmJU_wsEqkm0UPA2eMGVcts3giLLdAxyKLR=0KRjyLMJqcw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Apr 2015 11:21:56 +0200
+Subject: [Buildroot] Disabling Synopsys ARC pre-built toolchains in Buildroot
+Message-ID: <20150410112156.6b0e42f7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-04-10 10:16 GMT+02:00 Bartosz Golaszewski <bgolaszewski@baylibre.com>:
-> Host package only.
->
-> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> ---
->  package/doxygen/doxygen.hash |  2 ++
->  package/doxygen/doxygen.mk   | 25 +++++++++++++++++++++++++
->  2 files changed, 27 insertions(+)
->  create mode 100644 package/doxygen/doxygen.hash
->  create mode 100644 package/doxygen/doxygen.mk
->
-> diff --git a/package/doxygen/doxygen.hash b/package/doxygen/doxygen.hash
-> new file mode 100644
-> index 0000000..40cfe16
-> --- /dev/null
-> +++ b/package/doxygen/doxygen.hash
-> @@ -0,0 +1,2 @@
-> +# Computed locally
-> +sha256 d4ab6e28d4d45d8956cad17470aade3fbe2356e8f64b92167e738c1887feccec  doxygen-1.8.9.1.src.tar.gz
-> diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
-> new file mode 100644
-> index 0000000..40884d4
-> --- /dev/null
-> +++ b/package/doxygen/doxygen.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
-> +#
-> +# doxygen
-> +#
-> +################################################################################
-> +
-> +DOXYGEN_VERSION = 1.8.9.1
-> +DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
-> +DOXYGEN_SITE = http://ftp.stack.nl/pub/users/dimitri/
-> +DOXYGEN_LICENSE = GPLv2
-> +DOXYGEN_LICENSE_FILES = LICENSE
-> +
-> +define HOST_DOXYGEN_CONFIGURE_CMDS
-> +       (cd $(@D); ./configure --shared --prefix=$(HOST_DIR)/usr)
-> +endef
-> +
-> +define DOXYGEN_BUILD_CMDS
-> +       ($(MAKE) -C $(@D))
-> +endef
-> +
-> +define HOST_DOXYGEN_INSTALL_CMDS
-> +       ($(MAKE) install -C $(@D))
-> +endef
-> +
-> +$(eval $(host-autotools-package))
-> --
-> 2.1.4
->
+Hello Alexey,
 
-Sorry, for that - I eventually forgot to change host-autotools-package
-to host-generic-package. Surprisingly it works.
+In commit 2b93fe5374ae4f8337e1f7ae32be4d72dd94cb3c, you added the
+support for pre-built ARC toolchains from Synopsys, which was a very
+useful change.
 
-Version 3 coming right up.
+However, right now, I wonder if we should not get rid of those
+toolchains: they use a uClibc configuration that is too different from
+the default one of Buildroot, causing numerous build failures in the
+autobuilders. Those failures are due to:
 
-Best regards,
-Bartosz Golaszewski
+ * Missing libutil stub (UCLIBC_HAS_LIBUTIL option)
+
+   http://autobuild.buildroot.org/results/ce3/ce39eb9b9ece0968563641fb2207099d1a37b191/
+
+ * Missing program_invocation_name (UCLIBC_HAS_PROGRAM_INVOCATION_NAME
+   option)
+
+   http://autobuild.buildroot.org/results/154/1546d909e606daefd41b87dece94d642c0fdeba4/
+   http://autobuild.buildroot.org/results/bd5/bd54581d7b0cc73bc501072d27e870a443dfce79/
+
+ * Missing ifaddrd support (UCLIBC_SUPPORT_AI_ADDRCONFIG option)
+
+   http://autobuild.buildroot.org/results/134/134e78ef1fa87f7fbf26c23ec5dfc68785d79613/
+
+There are too many of those issues affecting too many packages for us
+to reasonably patch all of them.
+
+Could you work internally to prepare a new version of those toolchains,
+that has at least these three additional options enabled?
+
+In the mean time, unless you have an objection, I will mark those
+toolchains as disabled in Buildroot.
+
+Thanks in advance for your feedback,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
