@@ -1,60 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 10 Apr 2015 23:08:12 +0200
-Subject: [Buildroot] [PATCH 1/1] pkg-generic: support patching local
- source code
-In-Reply-To: <CAB7JjA_Xc3ZCpT8RME2_nPjAGiDmp_k+yYOyvih7Bq9BSuShDA@mail.gmail.com>
-References: <1428539284-5957-1-git-send-email-nic.dade@mistsys.com>
- <20150409221228.GC4192@free.fr>
- <CAB7JjA_Xc3ZCpT8RME2_nPjAGiDmp_k+yYOyvih7Bq9BSuShDA@mail.gmail.com>
-Message-ID: <55283BBC.1040708@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 10 Apr 2015 23:12:09 +0200
+Subject: [Buildroot] [PATCH] package/gdb: fix uClibc build whitout MMU
+Message-ID: <1428700329-670-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Nicolas,
+Fixes:
+http://autobuild.buildroot.net/results/9e4/9e4df085319e346803c26c65478accb27eb950ae
 
- [Please don't top-post]
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ .../0001-gdbserver-fix-uClibc-whithout-MMU.patch   | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/gdb/7.8.2/0001-gdbserver-fix-uClibc-whithout-MMU.patch
 
-On 10/04/15 00:21, Nicolas Dade wrote:
-> Let me explain what led me to allow patches to local source. My local source
-> isn't mine. It's an SDK from the vendor of a part I'm using. The vendor is much
-> better at hardware than software, and their SDK doesn't build as-is. So I need
-> to patch it. I also need to maintain my patches separated from the SDK since the
-> vendor publishes updates to their SDK every month or so.
-> 
-> So what I am doing is having the vendor's SDK source code unzip'ed in one
-> directory, and have buildroot use [subtrees of] that directory as the local
-> source, patch it with my fixes, and build it.
-
- Instead of unzipping the source code, leave it as an archive (if it is really a
-zipfile instead of a tarball, you'll need to supply custom EXTRACT_CMDS). Then
-the patches still are applied. And it gives you much more flexibility to put the
-
-> 
-> PS I also thought that not allowing patching only for local sources was a
-> strange asymmetry in buildroot. I expected local sources to work the same as
-> tarballs.
-
- We probably should get rid of the 'local' site method, since it is indeed
-confusing and serves no purpose as far as I'm concerned.
-
-
- Regards,
- Arnout
-
-> It wasn't until I looked into the buildroot make system that I
-> realized why my patches weren't getting applied. So if you don't accept this
-> patch, at least you might document that local sources cannot be patched in a
-> clear way.
-> 
-[snip]
-
+diff --git a/package/gdb/7.8.2/0001-gdbserver-fix-uClibc-whithout-MMU.patch b/package/gdb/7.8.2/0001-gdbserver-fix-uClibc-whithout-MMU.patch
+new file mode 100644
+index 0000000..42168df
+--- /dev/null
++++ b/package/gdb/7.8.2/0001-gdbserver-fix-uClibc-whithout-MMU.patch
+@@ -0,0 +1,34 @@
++From 59432cbfe267ad89b7cfc73dcd702b8282ef4e9d Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Fri, 10 Apr 2015 22:58:07 +0200
++Subject: [PATCH] gdbserver: fix uClibc whithout MMU.
++
++Since commit d86d4aafd4fa22fa4cccb83253fb187b03f97f48, the pid
++must be retrieved from current_inferior.
++
++The change has not been made in the function linux_read_offsets().
++
++Fixes:
++http://autobuild.buildroot.net/results/9e4/9e4df085319e346803c26c65478accb27eb950ae/build-end.log
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ gdb/gdbserver/linux-low.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/gdbserver/linux-low.c b/gdb/gdbserver/linux-low.c
++index 1a40897..71d078a 100644
++--- a/gdb/gdbserver/linux-low.c
+++++ b/gdb/gdbserver/linux-low.c
++@@ -4933,7 +4933,7 @@ static int
++ linux_read_offsets (CORE_ADDR *text_p, CORE_ADDR *data_p)
++ {
++   unsigned long text, text_end, data;
++-  int pid = lwpid_of (get_thread_lwp (current_inferior));
+++  int pid = lwpid_of (current_inferior);
++ 
++   errno = 0;
++ 
++-- 
++1.9.3
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.3
