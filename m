@@ -1,62 +1,86 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 10 Apr 2015 23:57:57 +0200
-Subject: [Buildroot] [PATCH 2/2] infra/pkg-kconfig: require an non-empty
- KCONFIG_FILE
-In-Reply-To: <20150410204030.GE4313@free.fr>
-References: <cover.1428512591.git.yann.morin.1998@free.fr>
- <c5c81694cabca70c5651fe42a7de99247275659c.1428512591.git.yann.morin.1998@free.fr>
- <55258DE8.9020207@mind.be> <20150408204917.GC4197@free.fr>
- <55282C0F.90501@mind.be> <20150410204030.GE4313@free.fr>
-Message-ID: <55284765.7030404@mind.be>
+Date: Sat, 11 Apr 2015 01:43:26 +0200
+Subject: [Buildroot] [PATCHv3] *config: improve handling of BR2_LEGACY
+In-Reply-To: <1428525388-24739-1-git-send-email-yann.morin.1998@free.fr>
+References: <1428525388-24739-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <5528601E.2080302@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/04/15 22:40, Yann E. MORIN wrote:
-> Arnout, All,
+On 08/04/15 22:36, Yann E. MORIN wrote:
+> From: Arnout Vandecappelle <arnout@mind.be>
 > 
-> On 2015-04-10 22:01 +0200, Arnout Vandecappelle spake thusly:
->> On 08/04/15 22:49, Yann E. MORIN wrote:
->> [snip]
->>> So, because neither "use defconfig" nor "use custom config" is set,
->>> KERNEL_SOURCE_CONFIG is not set, so LINUX_KCONFIG_FILE ends up empty.
->>
->>
->> BR2_LINUX_KERNEL_USE_DEFCONFIG and BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG are the
->> only two possibilities in the "Kernel configuration" choice, so one of them will
->> always be set.
+> In 8a46d4bf1f the randpackageconfig and allpackageyesconfig were
+> extended with disabling all the legacy options, otherwise the resulting
+> config couldn't be built. However, that didn't work for randconfig and
+> allyesconfig.
 > 
-> No, neither would be set if you don't enable building a kernel. In that
-> case, LINUX_KCONFIG_FILE is empty, but the $(eval $(kconfig-package)) is
-> still called, and thus the test should fail. But it does not.
+> This commit reverts 8a46d4bf1f and replaces it with a different
+> approach: skipping of the legacy config options is passed explicitly
+> through the environment variable SKIP_LEGACY, which forces
+> BR2_SKIP_LEGACY to y.
+> 
+> We add a (silent) call to olddefconfig to set out the old legacy
+> options aside.
 
- Argh, stupid me... The documentation I pointed to explicitly says a few lines
-lower:
+ Yes, that's another way to avoid the 'make oldconfig' problem.
 
-Note that ifdef only tests whether a variable has a value. It does not expand
-the variable to see if that value is nonempty.
+ I actually found it useful to have the option user-visible, because then it's
+possible to get rid of all of them in one shot. But on the other hand, it's not
+so nice that it gets saved in the defconfig...
 
 
- Therefore, I've un-rejected this patch, and I'm adding my
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> [yann.morin.1998 at free.fr: do not rely on a user-visible option, works
+>  perfectly well with only blind options set from the environment]
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> ---
+> Changes v2 -> v3:
+>   - add the missing pieces (calling olddefconfig)
+> 
+> Changes v1 -> v2:
+>   - don't use a user-visible option  (Yann)
+> ---
+>  Config.in.legacy | 12 ++++++++++++
+>  Makefile         | 27 ++++++++++++++-------------
+>  2 files changed, 26 insertions(+), 13 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 445cab7..38fca09 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -52,6 +52,16 @@
+>  #
+>  # [End of example]
+>  
+> +config BR2_SKIP_LEGACY_ENV
+> +	bool
+> +	option env="SKIP_LEGACY"
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ This additional option is no longer needed if it's not user visible.
+
+
+ v4 coming up.
 
 
  Regards,
  Arnout
 
-> 
->>> However, our ifndef did not trigger so far.
->>
->>  The kernel isn't built in the autobuilders, so where would it trigger?
-> 
-> Well, obviously, locally. ;-)
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+> +
+> +config BR2_SKIP_LEGACY
+> +	bool
+> +	default y if BR2_SKIP_LEGACY_ENV
+> +
+> +if !BR2_SKIP_LEGACY
+> +
+>  config BR2_LEGACY
+>  	bool
+>  	help
+[snip]
 
 
 -- 
