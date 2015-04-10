@@ -1,33 +1,39 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Fri, 10 Apr 2015 21:57:54 +0200
-Subject: [Buildroot] [PATCH 1/1] linux-headers: add support for 4.x versions
-Message-ID: <1428695874-27584-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 10 Apr 2015 22:01:19 +0200
+Subject: [Buildroot] [PATCH 2/2] infra/pkg-kconfig: require an non-empty
+ KCONFIG_FILE
+In-Reply-To: <20150408204917.GC4197@free.fr>
+References: <cover.1428512591.git.yann.morin.1998@free.fr>
+ <c5c81694cabca70c5651fe42a7de99247275659c.1428512591.git.yann.morin.1998@free.fr>
+ <55258DE8.9020207@mind.be> <20150408204917.GC4197@free.fr>
+Message-ID: <55282C0F.90501@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/linux-headers/linux-headers.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On 08/04/15 22:49, Yann E. MORIN wrote:
+[snip]
+> So, because neither "use defconfig" nor "use custom config" is set,
+> KERNEL_SOURCE_CONFIG is not set, so LINUX_KCONFIG_FILE ends up empty.
 
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index d770927..ca68a5b 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -10,8 +10,10 @@
- LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
- ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
--else
-+else ifeq ($(findstring x3.,x$(LINUX_HEADERS_VERSION)),x3.)
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
-+else ifeq ($(findstring x4.,x$(LINUX_HEADERS_VERSION)),x4.)
-+LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
- endif
- LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
- 
+
+BR2_LINUX_KERNEL_USE_DEFCONFIG and BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG are the
+only two possibilities in the "Kernel configuration" choice, so one of them will
+always be set.
+
+> However, our ifndef did not trigger so far.
+
+ The kernel isn't built in the autobuilders, so where would it trigger?
+
+ Regards,
+ Arnout
+
 -- 
-1.9.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
