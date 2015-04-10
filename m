@@ -1,60 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Apr 2015 11:13:24 +0200
-Subject: [Buildroot] [PATCH] qt5: fix license information for qt5multimedia
-	and qt5xmlpatterns
-Message-ID: <1428657204-25558-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Bamvor Jian Zhang <bamvor.zhangjian@huawei.com>
+Date: Fri, 10 Apr 2015 17:16:53 +0800
+Subject: [Buildroot] [RFC PATCH v2 0/5] Add ILP32 support in aarch64
+In-Reply-To: <1426672192-21041-1-git-send-email-bamvor.zhangjian@huawei.com>
+References: <1426672192-21041-1-git-send-email-bamvor.zhangjian@huawei.com>
+Message-ID: <55279505.6000803@huawei.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While most of the Qt5 components indeed seem to be under LGPLv2.1 with
-exception, or LGPLv3 or GPLv2, the qt5multimedia and qt5xmlpatterns
-components only carry the LGPLv2.1 and LGPLv3 license files, and not
-the GPLv2 license file. So one can safely assume that the GPLv2 option
-is not available for those components, and this commit adjusts the
-<pkg>_LICENSE and <pkg>_LICENSE_FILES variables accordingly.
+On 2015/3/18 17:49, Zhang Jian(Bamvor) wrote:
+Ping.
+It seems that no response in recent four weeks.
 
-Fixes:
-
-  http://autobuild.buildroot.org/results/c62/c62eef5e5b8add138cdab34e64103d974d0a510b/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt5/qt5multimedia/qt5multimedia.mk   | 4 ++--
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index 0c8d2ec..763fc28 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -11,8 +11,8 @@ QT5MULTIMEDIA_DEPENDENCIES = qt5base
- QT5MULTIMEDIA_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
--QT5MULTIMEDIA_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
--QT5MULTIMEDIA_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-+QT5MULTIMEDIA_LICENSE = LGPLv2.1 with exception or LGPLv3
-+QT5MULTIMEDIA_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
- else
- QT5MULTIMEDIA_LICENSE = Commercial license
- QT5MULTIMEDIA_REDISTRIBUTE = NO
-diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-index b69cac7..136da9f 100644
---- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-+++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-@@ -11,8 +11,8 @@ QT5XMLPATTERNS_DEPENDENCIES = qt5base
- QT5XMLPATTERNS_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
--QT5XMLPATTERNS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
--QT5XMLPATTERNS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-+QT5XMLPATTERNS_LICENSE = LGPLv2.1 with exception or LGPLv3
-+QT5XMLPATTERNS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
- else
- QT5XMLPATTERNS_LICENSE = Commercial license
- QT5XMLPATTERNS_REDISTRIBUTE = NO
--- 
-2.1.0
+bamvor
+> This is second version of my patches. This previous version is here[1].
+> The previous discussion, Gustavo agree that only external toolchain is in
+> consideration at this time. I will try to work on the buildroot toolchain
+> after current series patch is upstreamed.
+> 
+> ILP32 is very useful when the user want to migrate from arm 32bit to 64bit
+> with minimal risk. There is no code changes and almost no footprint changes
+> after migration. ILP32 could get the better performance compare with arm 32bit
+> (use 64bit register and instruction instead of 32bit one) and aarch64 LP64
+> (aarch64 default ABI).
+> 
+> Our test show that the performance of ILP32 is roughly 10% better than arm64
+> LP64 while the footprint is 86% of LP64. Because of these, It is useful for
+> both embedded and enterprise system.
+> 
+> Here is the details definition of ILP32:
+> ILP32 is elf32 with aarch64 assembly and is compiled by 64bit compiler.
+> Refer the following table:
+> 
+>   \-            |  arm 32bit  | arm64 ILP32 | arm64 LP64
+> ----------------|-------------|-------------|-------------
+> instruction set |   armv7-a   |   armv8-a   |   armv8-a
+> int             |   32bit     |   32bit     |   32bit
+> long            |   32bit     | **32bit**   |   64bit
+> pointer         |   32bit     | **32bit**   |   64bit
+> 
+> LP64 is the default ABI on arm64(Implies -mabi=lp64 while compiling), and the
+> kernel remains in LP64 no matter ILP32 enables or not.
+> 
+> These series patches introduce the big endian support in aarch64 and then add
+> ILP32 special filename and menuconfig step by step.
+> 
+> The test of build is based on linaro kernel [2] and toolchain built by linaro
+> ABE environment[3], anyone could built this toolchain through the simpile
+> abe script.
+> 
+> This is my first time I try to contribute the buildroot, feedback is very
+> appreciated. Sorry if there are some coding style issues.
+> 
+> changes since v1
+> 1.  avoid mabi issue in gcc 4.8 while build aarch64 lp64.
+> 2.  change default libc, toolchain for ilp32 build.
+> 3.  others changes suggested by Gustavo.
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2015-March/122115.html
+> [2] https://git.linaro.org/kernel/linux-linaro-tracking.git
+> [3] https://wiki.linaro.org/ABE
+> 
+> Zhang Jian(Bamvor) (5):
+>   aarch64: add big endian(aarch64_be) support
+>   aarch64: ilp32: handle special file name
+>   aarch64: ilp32: add ilp32 compiler and linker flags
+>   aarch64: ilp32: add ilp32 build config
+>   aarch64: ilp32 defconfig examples
+> 
+>  Makefile                                           | 11 +++++-
+>  arch/Config.in                                     | 12 +++++--
+>  arch/Config.in.aarch64                             | 40 ++++++++++++++++++++-
+>  configs/aarch64_be_defconfig                       |  2 ++
+>  configs/aarch64_be_ilp32_defconfig                 |  8 +++++
+>  configs/aarch64_ilp32_defconfig                    |  8 +++++
+>  package/Makefile.in                                | 10 +++++-
+>  package/gcc/Config.in.host                         |  3 +-
+>  toolchain/Config.in                                |  2 ++
+>  toolchain/helpers.mk                               |  4 +--
+>  toolchain/toolchain-buildroot/Config.in            | 27 +++++++-------
+>  toolchain/toolchain-external/Config.in             | 20 +++++++++++
+>  toolchain/toolchain-external/toolchain-external.mk | 41 ++++++++++++++++++++--
+>  13 files changed, 165 insertions(+), 23 deletions(-)
+>  create mode 100644 configs/aarch64_be_defconfig
+>  create mode 100644 configs/aarch64_be_ilp32_defconfig
+>  create mode 100644 configs/aarch64_ilp32_defconfig
+> 
