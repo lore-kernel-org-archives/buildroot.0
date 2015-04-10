@@ -1,36 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 10 Apr 2015 20:59:17 +0000 (UTC)
-Subject: [Buildroot] [Bug 7760] botan: wrong prefix in botan-1.10.pc
-In-Reply-To: <bug-7760-163@https.bugs.busybox.net/>
-References: <bug-7760-163@https.bugs.busybox.net/>
-Message-ID: <20150410205917.B073F807E1@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 10 Apr 2015 22:57:34 +0200
+Subject: [Buildroot] [PATCH] botan: pass --prefix=/usr to fix .pc file
+In-Reply-To: <1428681323-11414-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 10 Apr 2015 17:55:23 +0200")
+References: <1428681323-11414-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <876193em69.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7760
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ > botan uses a non-autotools build system. We currently don't pass any
+ > --prefix=/usr, and by default the prefix is set to /usr/local. This
+ > doesn't cause a lot of visible issues because at install time, we pass
+ > DESTDIR=$(TARGET_DIR)/usr (the build system doesn't make the
+ > difference between DESTDIR and prefix).
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+ > However, the generated pkg-config .pc file is wrong, as it contains
+ > prefix=/usr/local instead of prefix=/usr, which doesn't match where
+ > the botan library and headers are installed. By passing --prefix=/usr,
+ > we make sure that the .pc file is in line with where botan is
+ > installed.
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> 2015-04-10 20:59:17 UTC ---
-Fixed by:
+ > Fixes bug #7760
 
-commit 7536a7354c92e0ec2760479a9d62e792703154d7
-Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date:   Fri Apr 10 17:55:23 2015 +0200
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-    botan: pass --prefix=/usr to fix .pc file
-
-Thanks.
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
