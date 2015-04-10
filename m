@@ -1,47 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Apr 2015 22:55:00 +0200
-Subject: [Buildroot] [git commit] botan: pass --prefix=/usr to fix .pc file
-Message-ID: <20150410205754.0520A81971@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 10 Apr 2015 20:59:17 +0000 (UTC)
+Subject: [Buildroot] [Bug 7760] botan: wrong prefix in botan-1.10.pc
+In-Reply-To: <bug-7760-163@https.bugs.busybox.net/>
+References: <bug-7760-163@https.bugs.busybox.net/>
+Message-ID: <20150410205917.B073F807E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7536a7354c92e0ec2760479a9d62e792703154d7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=7760
 
-botan uses a non-autotools build system. We currently don't pass any
---prefix=/usr, and by default the prefix is set to /usr/local. This
-doesn't cause a lot of visible issues because at install time, we pass
-DESTDIR=$(TARGET_DIR)/usr (the build system doesn't make the
-difference between DESTDIR and prefix).
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-However, the generated pkg-config .pc file is wrong, as it contains
-prefix=/usr/local instead of prefix=/usr, which doesn't match where
-the botan library and headers are installed. By passing --prefix=/usr,
-we make sure that the .pc file is in line with where botan is
-installed.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Fixes bug #7760
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> 2015-04-10 20:59:17 UTC ---
+Fixed by:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/botan/botan.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+commit 7536a7354c92e0ec2760479a9d62e792703154d7
+Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date:   Fri Apr 10 17:55:23 2015 +0200
 
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 70a0946..6ac3ce7 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -16,7 +16,8 @@ BOTAN_CONF_OPTS = \
- 	--cpu=$(BR2_ARCH) \
- 	--os=linux \
- 	--cc=gcc \
--	--cc-bin="$(TARGET_CXX)"
-+	--cc-bin="$(TARGET_CXX)" \
-+	--prefix=/usr
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- BOTAN_CONF_OPTS += --disable-shared --no-autoload
+    botan: pass --prefix=/usr to fix .pc file
+
+Thanks.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
