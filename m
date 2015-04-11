@@ -1,12 +1,15 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 11 Apr 2015 01:49:02 +0200
-Subject: [Buildroot] [PATCH v4] *config: improve handling of BR2_LEGACY
-Message-ID: <1428709742-4787-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 11 Apr 2015 08:22:28 +0200
+Subject: [Buildroot] [git commit] *config: improve handling of BR2_LEGACY
+Message-ID: <20150411062422.6724C8078E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: http://git.buildroot.net/buildroot/commit/?id=53903a1520420ae92fc1a9b4ffa6df8efff266f4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 In 8a46d4bf1f the randpackageconfig and allpackageyesconfig were
 extended with disabling all the legacy options, otherwise the resulting
@@ -24,26 +27,15 @@ However, in that case no values are set for the legacy options so a
 subsequent oldconfig will query them. Therefore, run an additional
 olddefconfig.
 
+[Peter: fix s/BR2_LEGACY/SKIP_LEGACY/ typo]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 [yann.morin.1998 at free.fr: do not rely on a user-visible option, works
  perfectly well with only blind options set from the environment]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v3 -> v4: (Arnout)
-  - remove redundant BR2_SKIP_LEGACY_ENV
-  - improve commit message
-  - add an explanatory comment
-
-Changes v2 -> v3: (Yann)
-  - add the missing pieces (calling olddefconfig)
-
-Changes v1 -> v2: (Yann)
-  - don't use a user-visible option
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in.legacy |  8 ++++++++
- Makefile         | 32 +++++++++++++++++++-------------
+ Config.in.legacy |    8 ++++++++
+ Makefile         |   32 +++++++++++++++++++-------------
  2 files changed, 27 insertions(+), 13 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
@@ -70,7 +62,7 @@ index 0fc794f..97bc939 100644
 +
 +endif # !SKIP_LEGACY
 diff --git a/Makefile b/Makefile
-index 5f9a2c3..23fd6da 100644
+index 5f9a2c3..f011918 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -696,7 +696,8 @@ COMMON_CONFIG_ENV = \
@@ -88,7 +80,7 @@ index 5f9a2c3..23fd6da 100644
  	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
  
 +# For the config targets that automatically select options, we pass
-+# BR2_LEGACY=y to disable the legacy options. However, in that case
++# SKIP_LEGACY=y to disable the legacy options. However, in that case
 +# no values are set for the legacy options so a subsequent oldconfig
 +# will query them. Therefore, run an additional olddefconfig.
 +
@@ -152,5 +144,3 @@ index 5f9a2c3..23fd6da 100644
  
  silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
  	@mkdir -p $(BUILD_DIR)/buildroot-config
--- 
-2.1.4
