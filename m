@@ -1,28 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Apr 2015 18:04:21 +0200
-Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2015.04.06
-In-Reply-To: <1428765089-9726-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1428765089-9726-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150411180421.185a6203@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 11 Apr 2015 16:09:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 8011] When building only busybox and strace,
+ strace fails on not finding bluetooth/bluetooth.h
+In-Reply-To: <bug-8011-163@https.bugs.busybox.net/>
+References: <bug-8011-163@https.bugs.busybox.net/>
+Message-ID: <20150411160911.8F3D080120@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+https://bugs.busybox.net/show_bug.cgi?id=8011
 
-On Sat, 11 Apr 2015 12:11:29 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/wireless-regdb/wireless-regdb.hash | 2 +-
->  package/wireless-regdb/wireless-regdb.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+--- Comment #2 from Jaap Crezee <jaap@jcz.nl> 2015-04-11 16:09:11 UTC ---
+Created attachment 5986
+  --> https://bugs.busybox.net/attachment.cgi?id=5986
+my configuration failing with busybox & strace
 
-Applied, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
