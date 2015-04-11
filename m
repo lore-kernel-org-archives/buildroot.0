@@ -1,47 +1,67 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Apr 2015 20:31:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gdb: Add optional dependencies
-Message-ID: <1428777116-24382-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 11 Apr 2015 20:35:12 +0200
+Subject: [Buildroot] [PATCH v2 1/1] xserver_xorg-server: Change default
+ to X.org modular server
+In-Reply-To: <20150411201805.4bac425d@free-electrons.com>
+References: <1428772436-16962-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150411195842.52a58aff@free-electrons.com>
+ <20150411181330.GL4221@free.fr>
+ <20150411201805.4bac425d@free-electrons.com>
+Message-ID: <20150411183512.GM4221@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To allow reproducable builds add some optional dependencies
+Thomas, All,
 
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/gdb | grep NEEDED | sort
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libexpat.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
- 0x00000001 (NEEDED)                     Shared library: [libm.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
- 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libpython2.7.so.1.0]
- 0x00000001 (NEEDED)                     Shared library: [libutil.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+On 2015-04-11 20:18 +0200, Thomas Petazzoni spake thusly:
+> Dear Yann E. MORIN,
+> 
+> On Sat, 11 Apr 2015 20:13:30 +0200, Yann E. MORIN wrote:
+> 
+> > I would not mind much doing the switch to the modular Xserver by
+> > default. But that would mean proper dependency propagation (i.e. C++).
+> 
+> I don't understand what you mean here.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/gdb/gdb.mk |    5 +++++
- 1 file changed, 5 insertions(+)
+See below...
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 9818320..34f7b5c 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -36,6 +36,11 @@ else
- GDB_DEPENDENCIES = ncurses
- endif
- 
-+GDB_DEPENDENCIES += \
-+	$(if $(BR2_PACKAGE_EXPAT),expat) \
-+	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
-+	$(if $(BR2_PACKAGE_ZLIB),zlib)
-+
- # For the host variant, we really want to build with XML support,
- # which is needed to read XML descriptions of target architectures. We
- # also need ncurses.
+> > However, an alternative solution would be to remove the 'default' clause
+> > altogether from the choice:
+> > 
+> >   - if C++ is available, the modular Xserver is enabled by default,
+> >     being the first option in the choice;
+> > 
+> >   - if C++ is not enabled, then KDrive is enabled, being the only option
+> >     in the choice.
+> 
+> Well, Bernd's patch is doing that in a perfectly fine way. If C++ is
+> available, the default on modular will work. If C++ is not available,
+> since the modular option will not be available, the only remaining
+> option in the choice will be Kdrive, and it will be the selected option.
+> 
+> Am I missing something?
+
+No, not really.
+
+Even though 'default' in Kconfig is not authoritative, and that's not
+even a warning to default to an option that has unmet dependencies, I
+still find it odd to default to that option.
+
+And since the default is defaulting to the first entry in the choice, it
+is no longer needed at all.
+
+At best, we could add a comment summarising the situation.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
