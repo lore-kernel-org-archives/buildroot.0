@@ -1,86 +1,75 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 11 Apr 2015 09:17:32 -0300
-Subject: [Buildroot] [PATCH 04/14] toolchain: remove IPv6 selects
+Date: Sat, 11 Apr 2015 09:17:33 -0300
+Subject: [Buildroot] [PATCH 05/14] toolchain-external: remove CS sh2
+	toolchains
 In-Reply-To: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1428754662-27829-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1428754662-27829-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There's no need for toolchains or the user to declare IPv6 support since
-it's now mandatory.
+Normally we'd deprecate them, but:
+
+1) They don't support IPv6 and it's being removed so it makes no sense.
+2) They're based on uClibc 0.9.30-ish which is very old and surely has
+package build breakage all over it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/Config.in                    |  2 --
- toolchain/toolchain-external/Config.in | 11 -----------
- 2 files changed, 13 deletions(-)
+ toolchain/toolchain-external/Config.in | 38 ----------------------------------
+ 1 file changed, 38 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 32a00a9..a851ce4 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -9,7 +9,6 @@ config BR2_TOOLCHAIN
- # Should be selected for glibc or eglibc
- config BR2_TOOLCHAIN_USES_GLIBC
- 	bool
--	select BR2_INET_IPV6
- 	select BR2_USE_WCHAR
- 	select BR2_ENABLE_LOCALE
- 	select BR2_TOOLCHAIN_HAS_THREADS
-@@ -23,7 +22,6 @@ config BR2_TOOLCHAIN_USES_UCLIBC
- 
- config BR2_TOOLCHAIN_USES_MUSL
- 	bool
--	select BR2_INET_IPV6
- 	select BR2_USE_WCHAR
- 	select BR2_ENABLE_LOCALE
- 	select BR2_TOOLCHAIN_HAS_THREADS
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 3b7f40b..a8949c5 100644
+index a8949c5..97619d4 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -780,7 +780,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_INET_IPV6
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
-@@ -797,7 +796,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_INET_IPV6
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
-@@ -814,7 +812,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_INET_IPV6
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
-@@ -1145,14 +1142,6 @@ endchoice
+@@ -630,44 +630,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+ 	    - SH4A, uClibc, big endian
+ 	      Not usable in Buildroot yet.
  
- if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
- 
--config BR2_TOOLCHAIN_EXTERNAL_INET_IPV6
--	bool "Toolchain has IPv6 support?"
--	select BR2_INET_IPV6
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+-	bool "Sourcery CodeBench SH 2011.03"
+-	depends on BR2_sh2a
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_USE_WCHAR
+-	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	# kernel headers: 2.6.38
 -	help
--	  Select this option if your external toolchain supports
--	  IPv6. If you don't know, leave the default value, Buildroot
--	  will tell you if it's correct or not.
+-	  Sourcery CodeBench toolchain for the SuperH architecture,
+-	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
+-	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.38. It has
+-	  support for the following variants:
+-	    - SH2A, uClibc, big endian
 -
- config BR2_TOOLCHAIN_EXTERNAL_WCHAR
- 	bool "Toolchain has WCHAR support?"
- 	select BR2_USE_WCHAR
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+-	bool "Sourcery CodeBench SH 2010.09"
+-	depends on BR2_sh2a
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_USE_WCHAR
+-	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	# kernel headers: 2.6.35
+-	help
+-	  Sourcery CodeBench toolchain for the SuperH architecture,
+-	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
+-	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.35.2. It
+-	  has support for the following variants:
+-	    - SH2A, uClibc, big endian
+-
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405
+ 	bool "Sourcery CodeBench AMD64 2014.05"
+ 	depends on BR2_x86_64
 -- 
 2.0.5
