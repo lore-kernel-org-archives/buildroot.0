@@ -1,75 +1,54 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 11 Apr 2015 09:17:33 -0300
-Subject: [Buildroot] [PATCH 05/14] toolchain-external: remove CS sh2
-	toolchains
+Date: Sat, 11 Apr 2015 09:17:34 -0300
+Subject: [Buildroot] [PATCH 06/14] package infra: drop non-IPv6 support
 In-Reply-To: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1428754662-27829-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1428754662-27829-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Normally we'd deprecate them, but:
-
-1) They don't support IPv6 and it's being removed so it makes no sense.
-2) They're based on uClibc 0.9.30-ish which is very old and surely has
-package build breakage all over it.
+Now that IPv6 is mandatory remove support for non-IPv6 tweaks/variables
+in the package infra.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/toolchain-external/Config.in | 38 ----------------------------------
- 1 file changed, 38 deletions(-)
+ package/Makefile.in      | 6 ------
+ package/pkg-autotools.mk | 2 +-
+ 2 files changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index a8949c5..97619d4 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -630,44 +630,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- 	    - SH4A, uClibc, big endian
- 	      Not usable in Buildroot yet.
+diff --git a/package/Makefile.in b/package/Makefile.in
+index e65e08b..a0c5a7a 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -369,12 +369,6 @@ else
+ DISABLE_NLS :=--disable-nls
+ endif
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
--	bool "Sourcery CodeBench SH 2011.03"
--	depends on BR2_sh2a
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_USE_WCHAR
--	select BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	# kernel headers: 2.6.38
--	help
--	  Sourcery CodeBench toolchain for the SuperH architecture,
--	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
--	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.38. It has
--	  support for the following variants:
--	    - SH2A, uClibc, big endian
+-ifeq ($(BR2_INET_IPV6),y)
+-DISABLE_IPV6 = --enable-ipv6
+-else
+-DISABLE_IPV6 = --disable-ipv6
+-endif
 -
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
--	bool "Sourcery CodeBench SH 2010.09"
--	depends on BR2_sh2a
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_USE_WCHAR
--	select BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	# kernel headers: 2.6.35
--	help
--	  Sourcery CodeBench toolchain for the SuperH architecture,
--	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
--	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.35.2. It
--	  has support for the following variants:
--	    - SH2A, uClibc, big endian
--
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405
- 	bool "Sourcery CodeBench AMD64 2014.05"
- 	depends on BR2_x86_64
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ TARGET_CONFIGURE_OPTS += CXX=false
+ endif
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 2ecf7d8..49b42d4 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -200,8 +200,8 @@ define $(2)_CONFIGURE_CMDS
+ 		--with-xmlto=no \
+ 		--with-fop=no \
+ 		--disable-dependency-tracking \
++		--enable-ipv6 \
+ 		$$(DISABLE_NLS) \
+-		$$(DISABLE_IPV6) \
+ 		$$(ENABLE_DEBUG) \
+ 		$$(SHARED_STATIC_LIBS_OPTS) \
+ 		$$(QUIET) $$($$(PKG)_CONF_OPTS) \
 -- 
 2.0.5
