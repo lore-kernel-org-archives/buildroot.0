@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Apr 2015 11:03:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: Show toolchain
- comment only on mmu archs
-In-Reply-To: <1428739246-3867-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1428739246-3867-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150411090304.GB4221@free.fr>
+Date: Sat, 11 Apr 2015 11:17:14 +0200
+Subject: [Buildroot] [PATCH 1/3] package/rsyslog: Autoreconf is not
+ necessary anymore
+In-Reply-To: <1428738737-3238-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1428738737-3238-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150411091714.GC4221@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,35 @@ To: buildroot@busybox.net
 
 Bernd, All,
 
-On 2015-04-11 10:00 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/e2fsprogs/Config.in |    1 +
->  1 file changed, 1 insertion(+)
+On 2015-04-11 09:52 +0200, Bernd Kuhls spake thusly:
+> Buildroot contains no patches for this package anymore.
 > 
-> diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
-> index f5011d1..12d135b 100644
-> --- a/package/e2fsprogs/Config.in
-> +++ b/package/e2fsprogs/Config.in
-> @@ -100,3 +100,4 @@ endif
->  
->  comment "e2fsprogs needs a toolchain w/ wchar"
->  	depends on !BR2_USE_WCHAR
-> +	depends on BR2_USE_MMU
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-We usually put that dependency first. But that's not too problemtaic,
-so:
-
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[build-tested only]
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
+> ---
+>  package/rsyslog/rsyslog.mk |    2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+> index c6758eb..7d49ed1 100644
+> --- a/package/rsyslog/rsyslog.mk
+> +++ b/package/rsyslog/rsyslog.mk
+> @@ -16,8 +16,6 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
+>  	pmaixforwardedfrom pmciscoios pmcisconames pmlastmsg pmsnare
+>  RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
+>  	$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
+> -# For mysql and pgsql support patches
+> -RSYSLOG_AUTORECONF = YES
+>  
+>  # Build after BusyBox
+>  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
 > -- 
 > 1.7.10.4
 > 
