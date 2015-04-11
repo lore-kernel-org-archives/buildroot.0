@@ -1,27 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 11 Apr 2015 17:27:49 +0000 (UTC)
-Subject: [Buildroot] [Bug 8011] When building only busybox and strace,
- strace fails on not finding bluetooth/bluetooth.h
-In-Reply-To: <bug-8011-163@https.bugs.busybox.net/>
-References: <bug-8011-163@https.bugs.busybox.net/>
-Message-ID: <20150411172749.9BC7B80E09@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Apr 2015 19:58:42 +0200
+Subject: [Buildroot] [PATCH v2 1/1] xserver_xorg-server: Change default
+ to X.org modular server
+In-Reply-To: <1428772436-16962-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1428772436-16962-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150411195842.52a58aff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8011
+Dear Bernd Kuhls,
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-04-11 17:27:49 UTC ---
-You're using a custom external toolchain:
+On Sat, 11 Apr 2015 19:13:56 +0200, Bernd Kuhls wrote:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: Change default for all toolchain configurations (Thomas)
 
-BR2_TOOLCHAIN_EXTERNAL_PATH="/opt/cross/quark/toolchain"
+Well, it's not actually changing the default for all toolchain
+configurations, since the modular X.org variant requires C++ support,
+while the KDrive variant does not.
 
-So it's most likely this toolchain that is broken. Is this toolchain available
-somewhere?
+However, probably this doesn't matter. On such a change, I'd like to
+have a Acked-by from a few other Buildroot developers. Yann, Arnout,
+Gustavo, what do you think?
 
+Best regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
