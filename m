@@ -1,79 +1,65 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Apr 2015 13:16:39 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/jsoncpp: Broken on musl
-Message-ID: <1428750999-31816-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 11 Apr 2015 13:32:45 +0200
+Subject: [Buildroot] [PATCH 1/1] fftw: fix build failure with old gcc
+In-Reply-To: <1428748907-3319-1-git-send-email-gwenj@trabucayre.com>
+References: <1428748907-3319-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20150411113245.GE4221@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also propagate to reverse dependency in sysdig,
-to keep bisectability do this in one commit.
+Gwenhael, All,
 
-Fixes compile error:
+On 2015-04-11 12:41 +0200, Gwenhael Goavec-Merou spake thusly:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> -Ofast is not available on gcc <2.6. This option is equivalent to 
 
-[ 16%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_lib.dir/json_value.cpp.o
-In file included from /home/fli4l/br3/output/host/usr/lib/gcc/x86_64-buildroot-linux-musl/4.9.2/include/xmmintrin.h:34:0,
-                 from /home/fli4l/br3/output/host/usr/lib/gcc/x86_64-buildroot-linux-musl/4.9.2/include/x86intrin.h:31,
-                 from /home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/include/c++/4.9.2/x86_64-buildroot-linux-musl/bits/opt_random.h:33,
-                 from /home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/include/c++/4.9.2/random:50,
-                 from /home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/include/c++/4.9.2/bits/stl_algo.h:66,
-                 from /home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/include/c++/4.9.2/algorithm:62,
-                 from /home/fli4l/br3/output/build/jsoncpp-1.6.1/src/lib_json/json_value.cpp:20:
-/home/fli4l/br3/output/host/usr/lib/gcc/x86_64-buildroot-linux-musl/4.9.2/include/mm_malloc.h:34:64: error: declaration of 'int posix_memalign(void**, size_t, size_t) throw ()' has a different exception specifier
- extern "C" int posix_memalign (void **, size_t, size_t) throw ();
-                                                                ^
-In file included from /home/fli4l/br3/output/build/jsoncpp-1.6.1/include/json/assertions.h:9:0,
-                 from /home/fli4l/br3/output/build/jsoncpp-1.6.1/src/lib_json/json_value.cpp:7:
-/home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/stdlib.h:98:5: error: from previous declaration 'int posix_memalign(void**, size_t, size_t)'
- int posix_memalign (void **, size_t, size_t);
-     ^
-make[2]: *** [src/lib_json/CMakeFiles/jsoncpp_lib.dir/json_value.cpp.o] Error 1
+You probably meant gcc<4.6 ? gcc-2.6 is, well, quite old... The latest
+2.6.x was released in 2002... ;-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: Disable jsoncpp and reverse dependency with musl toolchain instead of patching gcc (Thomas)
-    FTR: gcc patches can be found here: http://patchwork.ozlabs.org/patch/460337/
+> -O3 -ffast-math.
+> 
+> Fixes:
+> http://autobuild.buildroot.org/results/207/207a20a3ca5e62029823b1361479d5cd38fefeb0/
+> http://autobuild.buildroot.net/results/871/871b29c9bbf94aa05034c442f35c8771f83abe1e/
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
- package/jsoncpp/Config.in |    2 ++
- package/sysdig/Config.in  |    2 ++
- 2 files changed, 4 insertions(+)
+Otherwise, I did not SoB this patch for real. A post-commit note would
+have been quite enough, in fact.
 
-diff --git a/package/jsoncpp/Config.in b/package/jsoncpp/Config.in
-index 3ec02e1..a628598 100644
---- a/package/jsoncpp/Config.in
-+++ b/package/jsoncpp/Config.in
-@@ -1,4 +1,5 @@
- config BR2_PACKAGE_JSONCPP
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # posix_memalign
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	bool "jsoncpp"
- 	help
-@@ -11,4 +12,5 @@ config BR2_PACKAGE_JSONCPP
- 	  https://github.com/open-source-parsers/jsoncpp
- 
- comment "jsoncpp needs a toolchain w/ C++"
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index 3d7ee67..d97aaf9 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_SYSDIG
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LUAJIT
- 	select BR2_PACKAGE_JSONCPP
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # jsoncpp
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_INSTALL_LIBSTDCPP # libjson
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-@@ -16,5 +17,6 @@ config BR2_PACKAGE_SYSDIG
- 	  http://sysdig.org
- 
- comment "sysdig needs a toolchain w/ C++ and a Linux kernel to be built"
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/fftw/fftw.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+> index 1148909..5045ab6 100644
+> --- a/package/fftw/fftw.mk
+> +++ b/package/fftw/fftw.mk
+> @@ -18,7 +18,7 @@ FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_QUAD),--enable,--disable)-qu
+>  
+>  FFTW_CFLAGS = $(TARGET_CFLAGS)
+>  ifeq ($(BR2_PACKAGE_FFTW_FAST),y)
+> -FFTW_CFLAGS += -Ofast
+> +FFTW_CFLAGS += -O3 -ffast-math
+>  endif
+>  
+>  # x86 optimisations
+> -- 
+> 2.0.5
+> 
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
