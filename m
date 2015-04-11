@@ -1,83 +1,79 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 11 Apr 2015 07:51:15 -0300
-Subject: [Buildroot] [PATCH 3/3] inconsolata: new package
-In-Reply-To: <1428749475-898-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1428749475-898-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1428749475-898-3-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 11 Apr 2015 13:16:39 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/jsoncpp: Broken on musl
+Message-ID: <1428750999-31816-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in                    |  1 +
- package/inconsolata/Config.in        |  7 +++++++
- package/inconsolata/inconsolata.hash |  2 ++
- package/inconsolata/inconsolata.mk   | 19 +++++++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/inconsolata/Config.in
- create mode 100644 package/inconsolata/inconsolata.hash
- create mode 100644 package/inconsolata/inconsolata.mk
+Also propagate to reverse dependency in sysdig,
+to keep bisectability do this in one commit.
 
-diff --git a/package/Config.in b/package/Config.in
-index 5147ceb..4be75dd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -182,6 +182,7 @@ comment "Fonts"
- 	source "package/bitstream-vera/Config.in"
- 	source "package/dejavu/Config.in"
- 	source "package/ghostscript-fonts/Config.in"
-+	source "package/inconsolata/Config.in"
- 	source "package/liberation/Config.in"
+Fixes compile error:
+
+[ 16%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_lib.dir/json_value.cpp.o
+In file included from /home/fli4l/br3/output/host/usr/lib/gcc/x86_64-buildroot-linux-musl/4.9.2/include/xmmintrin.h:34:0,
+                 from /home/fli4l/br3/output/host/usr/lib/gcc/x86_64-buildroot-linux-musl/4.9.2/include/x86intrin.h:31,
+                 from /home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/include/c++/4.9.2/x86_64-buildroot-linux-musl/bits/opt_random.h:33,
+                 from /home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/include/c++/4.9.2/random:50,
+                 from /home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/include/c++/4.9.2/bits/stl_algo.h:66,
+                 from /home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/include/c++/4.9.2/algorithm:62,
+                 from /home/fli4l/br3/output/build/jsoncpp-1.6.1/src/lib_json/json_value.cpp:20:
+/home/fli4l/br3/output/host/usr/lib/gcc/x86_64-buildroot-linux-musl/4.9.2/include/mm_malloc.h:34:64: error: declaration of 'int posix_memalign(void**, size_t, size_t) throw ()' has a different exception specifier
+ extern "C" int posix_memalign (void **, size_t, size_t) throw ();
+                                                                ^
+In file included from /home/fli4l/br3/output/build/jsoncpp-1.6.1/include/json/assertions.h:9:0,
+                 from /home/fli4l/br3/output/build/jsoncpp-1.6.1/src/lib_json/json_value.cpp:7:
+/home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/stdlib.h:98:5: error: from previous declaration 'int posix_memalign(void**, size_t, size_t)'
+ int posix_memalign (void **, size_t, size_t);
+     ^
+make[2]: *** [src/lib_json/CMakeFiles/jsoncpp_lib.dir/json_value.cpp.o] Error 1
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: Disable jsoncpp and reverse dependency with musl toolchain instead of patching gcc (Thomas)
+    FTR: gcc patches can be found here: http://patchwork.ozlabs.org/patch/460337/
+
+ package/jsoncpp/Config.in |    2 ++
+ package/sysdig/Config.in  |    2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/package/jsoncpp/Config.in b/package/jsoncpp/Config.in
+index 3ec02e1..a628598 100644
+--- a/package/jsoncpp/Config.in
++++ b/package/jsoncpp/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_JSONCPP
++	depends on !BR2_TOOLCHAIN_USES_MUSL # posix_memalign
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	bool "jsoncpp"
+ 	help
+@@ -11,4 +12,5 @@ config BR2_PACKAGE_JSONCPP
+ 	  https://github.com/open-source-parsers/jsoncpp
  
- comment "Icons"
-diff --git a/package/inconsolata/Config.in b/package/inconsolata/Config.in
-new file mode 100644
-index 0000000..de6b388
---- /dev/null
-+++ b/package/inconsolata/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_INCONSOLATA
-+	bool "inconsolata"
-+	help
-+	  Inconsolata is a monospace font, designed for code listings
-+	  and the like.
-+
-+	  http://www.google.com/fonts/specimen/Inconsolata
-diff --git a/package/inconsolata/inconsolata.hash b/package/inconsolata/inconsolata.hash
-new file mode 100644
-index 0000000..49ea958
---- /dev/null
-+++ b/package/inconsolata/inconsolata.hash
-@@ -0,0 +1,2 @@
-+# From http://snapshot.debian.org/archive/debian/20091207T044352Z/pool/main/t/ttf-inconsolata/ttf-inconsolata_001.010-2.dsc
-+sha256	ecf8ba44911fcb3c9683aef1ca2b3cfbafa119a3e93c682f448850e1ae08ce93	ttf-inconsolata_001.010.orig.tar.gz
-diff --git a/package/inconsolata/inconsolata.mk b/package/inconsolata/inconsolata.mk
-new file mode 100644
-index 0000000..2f53b98
---- /dev/null
-+++ b/package/inconsolata/inconsolata.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# inconsolata
-+#
-+################################################################################
-+
-+INCONSOLATA_VERSION = 001.010
-+INCONSOLATA_SITE = http://snapshot.debian.org/archive/debian/20090524T155154Z/pool/main/t/ttf-inconsolata
-+INCONSOLATA_SOURCE = ttf-inconsolata_$(INCONSOLATA_VERSION).orig.tar.gz
-+INCONSOLATA_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/inconsolata
-+INCONSOLATA_LICENSE = OFLv1.0
-+INCONSOLATA_LICENSE_FILES = OFL.txt
-+
-+define INCONSOLATA_INSTALL_TARGET_CMDS
-+	mkdir -p $(INCONSOLATA_TARGET_DIR)
-+	$(INSTALL) -m 644 $(@D)/*.otf $(INCONSOLATA_TARGET_DIR)
-+endef
-+
-+$(eval $(generic-package))
+ comment "jsoncpp needs a toolchain w/ C++"
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index 3d7ee67..d97aaf9 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_SYSDIG
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LUAJIT
+ 	select BR2_PACKAGE_JSONCPP
++	depends on !BR2_TOOLCHAIN_USES_MUSL # jsoncpp
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_INSTALL_LIBSTDCPP # libjson
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+@@ -16,5 +17,6 @@ config BR2_PACKAGE_SYSDIG
+ 	  http://sysdig.org
+ 
+ comment "sysdig needs a toolchain w/ C++ and a Linux kernel to be built"
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
 -- 
-2.0.5
+1.7.10.4
