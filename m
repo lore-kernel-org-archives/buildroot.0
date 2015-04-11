@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Apr 2015 17:07:00 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/makedevs: add recursive
-	option
-In-Reply-To: <1428759632-17060-2-git-send-email-angelo.compagnucci@gmail.com>
+Date: Sat, 11 Apr 2015 17:08:22 +0200
+Subject: [Buildroot] [PATCH v2 2/2] docs/manual: documentation for
+ recursive makedevs syntax
+In-Reply-To: <1428759632-17060-3-git-send-email-angelo.compagnucci@gmail.com>
 References: <1428759632-17060-1-git-send-email-angelo.compagnucci@gmail.com>
- <1428759632-17060-2-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150411150659.GH4221@free.fr>
+ <1428759632-17060-3-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20150411150821.GI4221@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,101 +15,52 @@ To: buildroot@busybox.net
 Angelo, All,
 
 On 2015-04-11 15:40 +0200, Angelo Compagnucci spake thusly:
-> This patch adds the option to change owner/permission
-> of a folder recursively.
-
-In *nix terminology, we usually refer to a 'directory' not a 'folder'.
-'Folder' is a Windows-ism. ;-)
-
+> This patch adds the documentation for the new makedevs
+> recursive syntax.
+> 
 > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+>  docs/manual/makedev-syntax.txt | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
+> index e02b79d..afb4ae2 100644
+> --- a/docs/manual/makedev-syntax.txt
+> +++ b/docs/manual/makedev-syntax.txt
+> @@ -24,6 +24,7 @@ There are a few non-trivial blocks:
+>  - +type+ is the type of the file, being one of:
+>    * f: a regular file
+>    * d: a directory
+> +  * r: a directory recursively
+>    * c: a character device file
+>    * b: a block device file
+>    * p: a named pipe
+> @@ -38,7 +39,14 @@ Let's say you want to change the permissions of a given file; using
+>  this syntax, you will need to put:
+>  
+>  ----
+> -/usr/bin/foobar f 644 0 0 - - -	- -
+> +/usr/bin/foobar f 644 0 0 - - - - -
+> +----
+> +
+> +Alternatively, if you want to change owner/permission of a folder
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+s/folder/directory/
+
+Otherwise:
+
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Tested with a simple dirtectory tree, and manually running through
-fakeroot that saved its internal DB, then manually inspected the DB
-dump to contain what was expected.
-
-Thanks! :-)
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> Changelog:
-> 
-> v1 -> v2:
->   - Code refactoring to avoid nested functions as suggested
->     by Peter Korsgaard
-> 
->  package/makedevs/makedevs.c | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
-> index ab90b93..ee0f9fb 100644
-> --- a/package/makedevs/makedevs.c
-> +++ b/package/makedevs/makedevs.c
-> @@ -34,8 +34,12 @@
->  #ifndef __APPLE__
->  #include <sys/sysmacros.h>     /* major() and minor() */
->  #endif
-> +#include <ftw.h>
->  
->  const char *bb_applet_name;
-> +uid_t recursive_uid;
-> +gid_t recursive_gid;
-> +unsigned int recursive_mode;
->  
->  void bb_verror_msg(const char *s, va_list p)
->  {
-> @@ -332,6 +336,7 @@ void bb_show_usage(void)
->  	fprintf(stderr, "Where name is the file name,  type can be one of:\n");
->  	fprintf(stderr, "      f       A regular file\n");
->  	fprintf(stderr, "      d       Directory\n");
-> +	fprintf(stderr, "      r       Directory recursively\n");
->  	fprintf(stderr, "      c       Character special device file\n");
->  	fprintf(stderr, "      b       Block special device file\n");
->  	fprintf(stderr, "      p       Fifo (named pipe)\n");
-> @@ -364,6 +369,23 @@ void bb_show_usage(void)
->  	exit(1);
->  }
->  
-> +bb_recursive(const char *fpath, const struct stat *sb,
-> +		int tflag, struct FTW *ftwbuf){
+> +recursively, you can put:
 > +
-> +	if (chown(fpath, recursive_uid, recursive_gid) == -1) {
-> +		bb_perror_msg("chown failed for %s", fpath);
-> +		return -1;
-> +	}
-> +	if (recursive_mode != -1) {
-> +		if (chmod(fpath, recursive_mode) < 0) {
-> +			bb_perror_msg("chmod failed for %s", fpath);
-> +			return -1;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  int main(int argc, char **argv)
->  {
->  	int opt;
-> @@ -474,6 +496,15 @@ int main(int argc, char **argv)
->  				ret = EXIT_FAILURE;
->  				goto loop;
->  			}
-> +		} else if (type == 'r') {
-> +			recursive_uid = uid;
-> +			recursive_gid = gid;
-> +			recursive_mode = mode;
-> +			if (nftw(full_name, bb_recursive, 20, FTW_MOUNT | FTW_PHYS) < 0) {
-> +				bb_perror_msg("line %d: recursive failed for %s", linenum, full_name);
-> +				ret = EXIT_FAILURE;
-> +				goto loop;
-> +			}
->  		} else
->  		{
->  			dev_t rdev;
+> +----
+> +/usr/share/myapp r 750 myuser myuser - - - - -
+>  ----
+>  
+>  On the other hand, if you want to create the device file +/dev/hda+
 > -- 
 > 1.9.1
 > 
