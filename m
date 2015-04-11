@@ -1,77 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Apr 2015 20:24:07 +0200
-Subject: [Buildroot] [PATCH] package/gdb: gdb 7.9 fix uClibc build
- whitout MMU
-In-Reply-To: <1428702305-28208-1-git-send-email-romain.naour@openwide.fr>
-References: <1428702305-28208-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150411202407.2fd37afb@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 11 Apr 2015 20:31:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdb: Add optional dependencies
+Message-ID: <1428777116-24382-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+To allow reproducable builds add some optional dependencies
 
-On Fri, 10 Apr 2015 23:45:05 +0200, Romain Naour wrote:
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  .../0001-gdbserver-fix-uClibc-whithout-MMU.patch   | 38 ++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/gdb/7.9/0001-gdbserver-fix-uClibc-whithout-MMU.patch
-> 
-> diff --git a/package/gdb/7.9/0001-gdbserver-fix-uClibc-whithout-MMU.patch b/package/gdb/7.9/0001-gdbserver-fix-uClibc-whithout-MMU.patch
-> new file mode 100644
-> index 0000000..23486a3
-> --- /dev/null
-> +++ b/package/gdb/7.9/0001-gdbserver-fix-uClibc-whithout-MMU.patch
-> @@ -0,0 +1,38 @@
-> +From d3988abfa6bb97dbcad3a0ff0961e920ce84b00c Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@openwide.fr>
-> +Date: Fri, 10 Apr 2015 22:58:07 +0200
-> +Subject: [PATCH] gdbserver: fix uClibc whithout MMU.
-> +
-> +Since commit d86d4aafd4fa22fa4cccb83253fb187b03f97f48, the pid
-> +must be retrieved from current_thread.
-> +
-> +The change has not been made in the function linux_read_offsets().
-> +
-> +Fixes:
-> +http://autobuild.buildroot.net/results/9e4/9e4df085319e346803c26c65478accb27eb950ae/build-end.log
-> +
-> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> +
-> +Conflicts:
-> +	gdb/gdbserver/linux-low.c
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/gdb | grep NEEDED | sort
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libexpat.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
+ 0x00000001 (NEEDED)                     Shared library: [libm.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
+ 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libpython2.7.so.1.0]
+ 0x00000001 (NEEDED)                     Shared library: [libutil.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
 
-This Conflicts info is probably not needed.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/gdb/gdb.mk |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-> +---
-> + gdb/gdbserver/linux-low.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/gdb/gdbserver/linux-low.c b/gdb/gdbserver/linux-low.c
-> +index 4d19c87..23f012d 100644
-> +--- a/gdb/gdbserver/linux-low.c
-> ++++ b/gdb/gdbserver/linux-low.c
-> +@@ -4933,7 +4933,8 @@ static int
-> + linux_read_offsets (CORE_ADDR *text_p, CORE_ADDR *data_p)
-> + {
-> +   unsigned long text, text_end, data;
-> +-  int pid = lwpid_of (get_thread_lwp (current_thread));
-> ++
-
-No need to add this empty line here.
-
-> ++  int pid = lwpid_of (current_thread);
-
-Can you respin a new version?
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 9818320..34f7b5c 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -36,6 +36,11 @@ else
+ GDB_DEPENDENCIES = ncurses
+ endif
+ 
++GDB_DEPENDENCIES += \
++	$(if $(BR2_PACKAGE_EXPAT),expat) \
++	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
++	$(if $(BR2_PACKAGE_ZLIB),zlib)
++
+ # For the host variant, we really want to build with XML support,
+ # which is needed to read XML descriptions of target architectures. We
+ # also need ncurses.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
