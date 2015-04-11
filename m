@@ -1,53 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Apr 2015 20:13:30 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Apr 2015 20:18:05 +0200
 Subject: [Buildroot] [PATCH v2 1/1] xserver_xorg-server: Change default
  to X.org modular server
-In-Reply-To: <20150411195842.52a58aff@free-electrons.com>
+In-Reply-To: <20150411181330.GL4221@free.fr>
 References: <1428772436-16962-1-git-send-email-bernd.kuhls@t-online.de>
  <20150411195842.52a58aff@free-electrons.com>
-Message-ID: <20150411181330.GL4221@free.fr>
+ <20150411181330.GL4221@free.fr>
+Message-ID: <20150411201805.4bac425d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Bernd, All,
+Dear Yann E. MORIN,
 
-On 2015-04-11 19:58 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 11 Apr 2015 19:13:56 +0200, Bernd Kuhls wrote:
-> > 
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > ---
-> > v2: Change default for all toolchain configurations (Thomas)
+On Sat, 11 Apr 2015 20:13:30 +0200, Yann E. MORIN wrote:
+
+> I would not mind much doing the switch to the modular Xserver by
+> default. But that would mean proper dependency propagation (i.e. C++).
+
+I don't understand what you mean here.
+
+> However, an alternative solution would be to remove the 'default' clause
+> altogether from the choice:
 > 
-> Well, it's not actually changing the default for all toolchain
-> configurations, since the modular X.org variant requires C++ support,
-> while the KDrive variant does not.
+>   - if C++ is available, the modular Xserver is enabled by default,
+>     being the first option in the choice;
 > 
-> However, probably this doesn't matter. On such a change, I'd like to
-> have a Acked-by from a few other Buildroot developers. Yann, Arnout,
-> Gustavo, what do you think?
+>   - if C++ is not enabled, then KDrive is enabled, being the only option
+>     in the choice.
 
-I would not mind much doing the switch to the modular Xserver by
-default. But that would mean proper dependency propagation (i.e. C++).
+Well, Bernd's patch is doing that in a perfectly fine way. If C++ is
+available, the default on modular will work. If C++ is not available,
+since the modular option will not be available, the only remaining
+option in the choice will be Kdrive, and it will be the selected option.
 
-However, an alternative solution would be to remove the 'default' clause
-altogether from the choice:
+Am I missing something?
 
-  - if C++ is available, the modular Xserver is enabled by default,
-    being the first option in the choice;
-
-  - if C++ is not enabled, then KDrive is enabled, being the only option
-    in the choice.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
