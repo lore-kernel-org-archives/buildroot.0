@@ -1,41 +1,50 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Apr 2015 22:31:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libinput: bump version to 0.13.0
-Message-ID: <1428784301-30177-1-git-send-email-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 11 Apr 2015 21:03:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 8011] When building only busybox and strace,
+ strace fails on not finding bluetooth/bluetooth.h
+In-Reply-To: <bug-8011-163@https.bugs.busybox.net/>
+References: <bug-8011-163@https.bugs.busybox.net/>
+Message-ID: <20150411210343.A085A80E2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=8011
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libinput/libinput.hash |    4 ++--
- package/libinput/libinput.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 1e4adc5..a910648 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/wayland-devel/2015-March/020475.html
--sha256	6e0ce9dd9ff04e9ac382dffb7fa332b94f093227a197a9c8189e87de6d88b55a	libinput-0.12.0.tar.xz
-+# From http://lists.freedesktop.org/archives/wayland-devel/2015-March/020833.html
-+sha256	6cecaf7fde525f1d81474cbd495ce526d5e34c845d3e9d6f3e2565b7048cc61a	libinput-0.13.0.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index a6dec86..a9723c6 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 0.12.0
-+LIBINPUT_VERSION = 0.13.0
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_LICENSE = MIT
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+
+--- Comment #7 from Yann E. MORIN <yann.morin.1998@free.fr> 2015-04-11 21:03:43 UTC ---
+So, I've tried to reproduce this here. Here's my defconfig:
+
+    BR2_x86_64=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_PACKAGE_STRACE=y
+
+Also, I do have bluetooth devel files installed on my host system:
+
+    $ ls -l /usr/include/bluetooth/bluetooth.h
+    -rw-r--r-- 1 root root 7588 Jan 28 22:19 /usr/include/bluetooth/bluetooth.h
+
+But it is not present in the sysroot:
+
+    $ find staging/ -name bluetooth.h
+    [nothing]
+
+And strace's log is like:
+
+    checking bluetooth/bluetooth.h usability... no
+    checking bluetooth/bluetooth.h presence... no
+    checking for bluetooth/bluetooth.h... no
+
+Can you try to reproduce from a clean environment?
+
 -- 
-1.7.10.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
