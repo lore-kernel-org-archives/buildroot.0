@@ -1,59 +1,53 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Apr 2015 20:01:19 +0200
-Subject: [Buildroot] [PATCH 2/2] package/exim: Add optional libiconv support
-In-Reply-To: <1428775279-20078-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1428775279-20078-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1428775279-20078-2-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 11 Apr 2015 20:13:30 +0200
+Subject: [Buildroot] [PATCH v2 1/1] xserver_xorg-server: Change default
+ to X.org modular server
+In-Reply-To: <20150411195842.52a58aff@free-electrons.com>
+References: <1428772436-16962-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150411195842.52a58aff@free-electrons.com>
+Message-ID: <20150411181330.GL4221@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, Bernd, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/exim/exim.mk |   14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+On 2015-04-11 19:58 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 11 Apr 2015 19:13:56 +0200, Bernd Kuhls wrote:
+> > 
+> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> > ---
+> > v2: Change default for all toolchain configurations (Thomas)
+> 
+> Well, it's not actually changing the default for all toolchain
+> configurations, since the modular X.org variant requires C++ support,
+> while the KDrive variant does not.
+> 
+> However, probably this doesn't matter. On such a change, I'd like to
+> have a Acked-by from a few other Buildroot developers. Yann, Arnout,
+> Gustavo, what do you think?
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 967b782..bb3a9fa 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -44,7 +44,6 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
- 	$(call exim-config-change,TRANSPORT_LMTP,yes)
- 	$(call exim-config-change,PCRE_LIBS,-lpcre)
- 	$(call exim-config-change,PCRE_CONFIG,no)
--	$(call exim-config-change,HAVE_ICONV,no)
- 	$(call exim-config-unset,EXIM_MONITOR)
- endef
- 
-@@ -62,6 +61,18 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+EXIM_DEPENDENCIES += libiconv
-+define EXIM_USE_DEFAULT_CONFIG_FILE_LIBICONV
-+	$(call exim-config-change,HAVE_ICONV,yes)
-+	$(call exim-config-add,EXTRALIBS_EXIM,-liconv)
-+endef
-+else
-+define EXIM_USE_DEFAULT_CONFIG_FILE_LIBICONV
-+	$(call exim-config-change,HAVE_ICONV,no)
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- EXIM_DEPENDENCIES += openssl
- define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
-@@ -97,6 +108,7 @@ define EXIM_CONFIGURE_CMDS
- 	$(EXIM_USE_DEFAULT_CONFIG_FILE)
- 	$(EXIM_USE_DEFAULT_CONFIG_FILE_DOVECOT)
- 	$(EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV)
-+	$(EXIM_USE_DEFAULT_CONFIG_FILE_LIBICONV)
- 	$(EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL)
- 	$(EXIM_CONFIGURE_TOOLCHAIN)
- endef
+I would not mind much doing the switch to the modular Xserver by
+default. But that would mean proper dependency propagation (i.e. C++).
+
+However, an alternative solution would be to remove the 'default' clause
+altogether from the choice:
+
+  - if C++ is available, the modular Xserver is enabled by default,
+    being the first option in the choice;
+
+  - if C++ is not enabled, then KDrive is enabled, being the only option
+    in the choice.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
