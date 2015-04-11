@@ -1,31 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Apr 2015 09:43:13 +0200
-Subject: [Buildroot] [PATCH] package/gdb: fix uClibc build whitout MMU
-In-Reply-To: <1428700329-670-1-git-send-email-romain.naour@openwide.fr>
-References: <1428700329-670-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150411094313.70d4ada5@free-electrons.com>
+Date: Sat, 11 Apr 2015 09:47:25 +0200
+Subject: [Buildroot] [RFC] Move host-pkgconf dependency to
+ package/pkg-autotools.mk
+In-Reply-To: <55284115.40309@mind.be>
+References: <XnsA4787599FCF1BberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20150410141217.4bd2547c@free-electrons.com>
+ <55284115.40309@mind.be>
+Message-ID: <20150411094725.5c29b312@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Arnout,
 
-On Fri, 10 Apr 2015 23:12:09 +0200, Romain Naour wrote:
+On Fri, 10 Apr 2015 23:31:01 +0200, Arnout Vandecappelle wrote:
 
-> diff --git a/package/gdb/7.8.2/0001-gdbserver-fix-uClibc-whithout-MMU.patch b/package/gdb/7.8.2/0001-gdbserver-fix-uClibc-whithout-MMU.patch
-> new file mode 100644
-> index 0000000..42168df
-> --- /dev/null
-> +++ b/package/gdb/7.8.2/0001-gdbserver-fix-uClibc-whithout-MMU.patch
-> @@ -0,0 +1,34 @@
-> +From 59432cbfe267ad89b7cfc73dcd702b8282ef4e9d Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@openwide.fr>
-> +Date: Fri, 10 Apr 2015 22:58:07 +0200
-> +Subject: [PATCH] gdbserver: fix uClibc whithout MMU.
+>  I agree that something like that is the way to go.
+> 
+>  However, I would prefer that this kind of stuff:
+> 
+> - goes into scripts in the support/ directory;
+> 
+> - gets called from the GLOBAL_INSTRUMENTATION_HOOKS;
+> 
+> - is selectable with a config option in the Build options menu (which would be
+> enabled by the autobuilders).
+> 
+>  My reasoning is that the BR infrastructure is already pretty darn complicated,
+> so it would be good to separate the core infrastructure from the fringe stuff.
+> And the config option is of course because I prefer to keep the developer stuff
+> out of the way of normal users.
 
-Is this an upstream gdb patch?
+I fully agree with these suggestions. I think you already made them on
+my previous posting of a patch doing this check, and it's just that I
+haven't taken the time to prepare a new version of the patch.
 
 Thanks,
 
