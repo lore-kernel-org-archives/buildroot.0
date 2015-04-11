@@ -1,34 +1,27 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Apr 2015 19:13:56 +0200
-Subject: [Buildroot] [PATCH v2 1/1] xserver_xorg-server: Change default to
-	X.org modular server
-Message-ID: <1428772436-16962-1-git-send-email-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 11 Apr 2015 17:27:49 +0000 (UTC)
+Subject: [Buildroot] [Bug 8011] When building only busybox and strace,
+ strace fails on not finding bluetooth/bluetooth.h
+In-Reply-To: <bug-8011-163@https.bugs.busybox.net/>
+References: <bug-8011-163@https.bugs.busybox.net/>
+Message-ID: <20150411172749.9BC7B80E09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=8011
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: Change default for all toolchain configurations (Thomas)
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-04-11 17:27:49 UTC ---
+You're using a custom external toolchain:
 
- package/x11r7/xserver_xorg-server/Config.in |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+BR2_TOOLCHAIN_EXTERNAL_PATH="/opt/cross/quark/toolchain"
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 1123f3b..54d7c24 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -58,7 +58,7 @@ if BR2_PACKAGE_XSERVER_XORG_SERVER
- 
- choice
- 	prompt "X Window System server type"
--	default BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
-+	default BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
- 	help
- 	  Select the X Window System server to use
- 
+So it's most likely this toolchain that is broken. Is this toolchain available
+somewhere?
+
 -- 
-1.7.10.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
