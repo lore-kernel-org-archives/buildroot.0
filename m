@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 11 Apr 2015 09:17:30 -0300
-Subject: [Buildroot] [PATCH 02/14] package/uclibc: default to Y for IPv6
+Date: Sat, 11 Apr 2015 09:17:31 -0300
+Subject: [Buildroot] [PATCH 03/14] toolchain-common: default to Y for IPv6
 In-Reply-To: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1428754662-27829-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1428754662-27829-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,20 @@ things while doing so.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/uclibc/Config.in | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ toolchain/toolchain-common.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index fdf8351..5bd9098 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -87,11 +87,8 @@ config BR2_UCLIBC_CONFIG
- 	  If unsure, use the default.
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 13c684d..dfb7394 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -7,6 +7,7 @@ source "package/gdb/Config.in.host"
  
- config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
--	bool "Enable IPv6 support"
--	select BR2_INET_IPV6
--	help
--	  Enable this option if you want your toolchain to support
--	  IPv6.
-+	bool
+ config BR2_INET_IPV6
+ 	bool
 +	default y
  
- config BR2_TOOLCHAIN_BUILDROOT_INET_RPC
- 	bool "Enable RPC support"
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_58595
+ 	bool
 -- 
 2.0.5
