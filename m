@@ -1,43 +1,55 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Apr 2015 10:17:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/flac: Fix musl compile
-Message-ID: <1428740243-22440-1-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 11 Apr 2015 10:28:38 +0200
+Subject: [Buildroot] [PATCH 1/2] package/makedevs: add recursive option
+In-Reply-To: <CA+TH9V=__byXvPOE+qd6Jkj2cv+g9gfvPX-Wsgmq=4QQ2_7W=g@mail.gmail.com>
+ (Angelo Compagnucci's message of "Sat, 11 Apr 2015 09:00:05 +0200")
+References: <1426243805-8317-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1426243805-8317-2-git-send-email-angelo.compagnucci@gmail.com>
+ <871tjrek5s.fsf@dell.be.48ers.dk>
+ <CA+TH9V=__byXvPOE+qd6Jkj2cv+g9gfvPX-Wsgmq=4QQ2_7W=g@mail.gmail.com>
+Message-ID: <87sic7cbm1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/flac/0002-sigemptyset.patch |   18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
- create mode 100644 package/flac/0002-sigemptyset.patch
+hi,
 
-diff --git a/package/flac/0002-sigemptyset.patch b/package/flac/0002-sigemptyset.patch
-new file mode 100644
-index 0000000..9cbc338
---- /dev/null
-+++ b/package/flac/0002-sigemptyset.patch
-@@ -0,0 +1,18 @@
-+Fix musl compile since it does not define __sigemptyset
-+
-+Downloaded from
-+http://git.alpinelinux.org/cgit/aports/commit/main/flac/sigemptyset.patch?id=49fd0f4cebc46e2753d6a60e450078446f7f18a7
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- ./src/libFLAC/cpu.c.orig
-++++ ./src/libFLAC/cpu.c
-+@@ -243,7 +243,7 @@
-+ 		struct sigaction sigill_save;
-+ 		struct sigaction sigill_sse;
-+ 		sigill_sse.sa_sigaction = sigill_handler_sse_os;
-+-		__sigemptyset(&sigill_sse.sa_mask);
-++		sigemptyset(&sigill_sse.sa_mask);
-+ 		sigill_sse.sa_flags = SA_SIGINFO | SA_RESETHAND; /* SA_RESETHAND just in case our SIGILL return jump breaks, so we don't get stuck in a loop */
-+ 		if(0 == sigaction(SIGILL, &sigill_sse, &sigill_save))
-+ 		{
+>> I know you are doing this because nftw doesn't allow any extra arguments
+ >> to be passed to the function, but using GCC specific nested functions
+ >> isn't really nice.
+ >> Does E.G. clang support these?
+
+ > Doh! I thought nested function could be a more widespread feature! Of
+ > course, you are right, clang doesn't support nested functions.
+
+ > The naive solution could be to add a global object, could be acceptable?
+ > There are only three variables and could be nested inside a nice structure.
+
+Yes, or simply 3 globals (recursive_{uid,gid,mode}) to keep it simple.
+
+ >> Alternatively we could port
+ >> recursive_action() from busybox.
+
+ > / * Unfortunately, while nftw(3) could replace this and reduce
+ >  * code size a bit, nftw() wasn't supported before GNU libc 2.1,
+ >  * and so isn't sufficiently portable to take over since glibc2.1
+ >  * is so stinking huge.
+ >  */
+
+ > The only reason why they stick with an hand made recursive function
+ > instead of nftw is to support older glibc 2.1 (!) that doesn't have
+ > that function.
+ > I think it's not our problem and backporting that old code is not a good idea!
+
+Yes, that AND the fact that recursive_action takes a userData structure
+that gets forwarded to the callbacks.
+
+But yeah, just using nftw with 3 globals is simpler.
+
 -- 
-1.7.10.4
+Venlig hilsen,
+Peter Korsgaard 
