@@ -1,42 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Apr 2015 18:03:49 +0200
-Subject: [Buildroot] [git commit] wireless-regdb: bump to version 2015.04.06
-Message-ID: <20150411160353.0590A803C8@busybox.osuosl.org>
+Date: Sat, 11 Apr 2015 18:04:17 +0200
+Subject: [Buildroot] [PATCH v2 0/2] Makedevs: add recursive option
+In-Reply-To: <1428759632-17060-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1428759632-17060-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20150411180417.7e34b00b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d14d82a9a9eb7c4b70082963927538fdde82786b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Angelo Compagnucci,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/wireless-regdb/wireless-regdb.hash |    2 +-
- package/wireless-regdb/wireless-regdb.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sat, 11 Apr 2015 15:40:30 +0200, Angelo Compagnucci wrote:
+> This patch series add the recursive option to makedevs.
+> 
+> With recursive option will be possible to apply owner/permission
+> recursively to folders.
+> 
+> Angelo Compagnucci (2):
+>   package/makedevs: add recursive option
+>   docs/manual: documentation for recursive makedevs syntax
+> 
+>  docs/manual/makedev-syntax.txt | 10 +++++++++-
+>  package/makedevs/makedevs.c    | 31 +++++++++++++++++++++++++++++++
+>  2 files changed, 40 insertions(+), 1 deletion(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index d44391a..115b490 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	5e6f00b8e23391de9b068b2400ac3172324e5f590fc424018bb5a1389ffe6f84	wireless-regdb-2015.03.13.tar.xz
-+sha256	4c4a10b3aa97ac494dda5bc13a045bda211437aab24341fe11d78530e640f133	wireless-regdb-2015.04.06.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index ce6f1d5..20b330f 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRELESS_REGDB_VERSION = 2015.03.13
-+WIRELESS_REGDB_VERSION = 2015.04.06
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+Both patches applied, after s/folder/directory/, as suggested by Yann.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
