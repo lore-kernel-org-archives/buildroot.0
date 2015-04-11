@@ -1,65 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Apr 2015 13:32:45 +0200
-Subject: [Buildroot] [PATCH 1/1] fftw: fix build failure with old gcc
-In-Reply-To: <1428748907-3319-1-git-send-email-gwenj@trabucayre.com>
-References: <1428748907-3319-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20150411113245.GE4221@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 11 Apr 2015 13:38:34 +0200
+Subject: [Buildroot] [PATCH 2/3] package/rsyslog: Fix linking against
+	postgresql
+References: <1428738737-3238-1-git-send-email-bernd.kuhls@t-online.de>
+ <1428738737-3238-2-git-send-email-bernd.kuhls@t-online.de>
+ <20150411124226.726fde30@free-electrons.com>
+Message-ID: <XnsA4798AC8357A8berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gwenhael, All,
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20150411124226.726fde30 at free-electrons.com: 
 
-On 2015-04-11 12:41 +0200, Gwenhael Goavec-Merou spake thusly:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> Dear Bernd Kuhls,
 > 
-> -Ofast is not available on gcc <2.6. This option is equivalent to 
-
-You probably meant gcc<4.6 ? gcc-2.6 is, well, quite old... The latest
-2.6.x was released in 2002... ;-)
-
-> -O3 -ffast-math.
+> On Sat, 11 Apr 2015 09:52:16 +0200, Bernd Kuhls wrote:
+>> Configure misses libm and libpthread when checking for postgresql.
+>> Patching configure.ac did not fix the problem so we patch configure
+>> directly, 
 > 
-> Fixes:
-> http://autobuild.buildroot.org/results/207/207a20a3ca5e62029823b1361479d5cd38fefeb0/
-> http://autobuild.buildroot.net/results/871/871b29c9bbf94aa05034c442f35c8771f83abe1e/
+> Hum, why?
 > 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> It seems a bit backward to remove AUTORECONF = YES to then add a patch
+> that modifies the configure script directly.
 
-Otherwise, I did not SoB this patch for real. A post-commit note would
-have been quite enough, in fact.
+Hi,
 
-Regards,
-Yann E. MORIN.
+I tried to add "-lm -lpthread" to line 615 in configure.ac:
 
-> ---
->  package/fftw/fftw.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-> index 1148909..5045ab6 100644
-> --- a/package/fftw/fftw.mk
-> +++ b/package/fftw/fftw.mk
-> @@ -18,7 +18,7 @@ FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_QUAD),--enable,--disable)-qu
->  
->  FFTW_CFLAGS = $(TARGET_CFLAGS)
->  ifeq ($(BR2_PACKAGE_FFTW_FAST),y)
-> -FFTW_CFLAGS += -Ofast
-> +FFTW_CFLAGS += -O3 -ffast-math
->  endif
->  
->  # x86 optimisations
-> -- 
-> 2.0.5
-> 
+-     PGSQL_LIBS="-L`$PG_CONFIG --libdir` -lpq"
++     PGSQL_LIBS="-L`$PG_CONFIG --libdir` -lm -lpthread -lpq"
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Original configure, line 17388, looks like this before autoreconf
+
+LIBS="-lpq -L`$PG_CONFIG --libdir`
+
+and, as line 17865, it still looks the same causing postgresql detection
+to fail... 
+
+Please note that -lpq is on the first position in this variable, I have no
+idea how to change this line in configure without patching that file
+directly. 
+
+Regards, Bernd
