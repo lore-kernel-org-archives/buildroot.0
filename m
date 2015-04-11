@@ -1,55 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Apr 2015 10:28:38 +0200
-Subject: [Buildroot] [PATCH 1/2] package/makedevs: add recursive option
-In-Reply-To: <CA+TH9V=__byXvPOE+qd6Jkj2cv+g9gfvPX-Wsgmq=4QQ2_7W=g@mail.gmail.com>
- (Angelo Compagnucci's message of "Sat, 11 Apr 2015 09:00:05 +0200")
-References: <1426243805-8317-1-git-send-email-angelo.compagnucci@gmail.com>
- <1426243805-8317-2-git-send-email-angelo.compagnucci@gmail.com>
- <871tjrek5s.fsf@dell.be.48ers.dk>
- <CA+TH9V=__byXvPOE+qd6Jkj2cv+g9gfvPX-Wsgmq=4QQ2_7W=g@mail.gmail.com>
-Message-ID: <87sic7cbm1.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 11 Apr 2015 11:03:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: Show toolchain
+ comment only on mmu archs
+In-Reply-To: <1428739246-3867-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1428739246-3867-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150411090304.GB4221@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+Bernd, All,
 
-hi,
+On 2015-04-11 10:00 +0200, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/e2fsprogs/Config.in |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
+> index f5011d1..12d135b 100644
+> --- a/package/e2fsprogs/Config.in
+> +++ b/package/e2fsprogs/Config.in
+> @@ -100,3 +100,4 @@ endif
+>  
+>  comment "e2fsprogs needs a toolchain w/ wchar"
+>  	depends on !BR2_USE_WCHAR
+> +	depends on BR2_USE_MMU
 
->> I know you are doing this because nftw doesn't allow any extra arguments
- >> to be passed to the function, but using GCC specific nested functions
- >> isn't really nice.
- >> Does E.G. clang support these?
+We usually put that dependency first. But that's not too problemtaic,
+so:
 
- > Doh! I thought nested function could be a more widespread feature! Of
- > course, you are right, clang doesn't support nested functions.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > The naive solution could be to add a global object, could be acceptable?
- > There are only three variables and could be nested inside a nice structure.
+Regards,
+Yann E. MORIN.
 
-Yes, or simply 3 globals (recursive_{uid,gid,mode}) to keep it simple.
-
- >> Alternatively we could port
- >> recursive_action() from busybox.
-
- > / * Unfortunately, while nftw(3) could replace this and reduce
- >  * code size a bit, nftw() wasn't supported before GNU libc 2.1,
- >  * and so isn't sufficiently portable to take over since glibc2.1
- >  * is so stinking huge.
- >  */
-
- > The only reason why they stick with an hand made recursive function
- > instead of nftw is to support older glibc 2.1 (!) that doesn't have
- > that function.
- > I think it's not our problem and backporting that old code is not a good idea!
-
-Yes, that AND the fact that recursive_action takes a userData structure
-that gets forwarded to the callbacks.
-
-But yeah, just using nftw with 3 globals is simpler.
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
