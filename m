@@ -1,54 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Apr 2015 18:03:25 +0200
-Subject: [Buildroot] [git commit] docs/manual: documentation for recursive
-	makedevs syntax
-Message-ID: <20150411160341.D5EA77FD44@busybox.osuosl.org>
+Date: Sat, 11 Apr 2015 18:03:49 +0200
+Subject: [Buildroot] [git commit] wireless-regdb: bump to version 2015.04.06
+Message-ID: <20150411160353.0590A803C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=68cb6a88c1c0da1567cabd83684170ccb820ae98
+commit: http://git.buildroot.net/buildroot/commit/?id=d14d82a9a9eb7c4b70082963927538fdde82786b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds the documentation for the new makedevs
-recursive syntax.
-
-[Thomas: s/folder/directory/ as suggested by Yann.]
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/makedev-syntax.txt |   10 +++++++++-
- 1 files changed, 9 insertions(+), 1 deletions(-)
+ package/wireless-regdb/wireless-regdb.hash |    2 +-
+ package/wireless-regdb/wireless-regdb.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
-index e02b79d..283119d 100644
---- a/docs/manual/makedev-syntax.txt
-+++ b/docs/manual/makedev-syntax.txt
-@@ -24,6 +24,7 @@ There are a few non-trivial blocks:
- - +type+ is the type of the file, being one of:
-   * f: a regular file
-   * d: a directory
-+  * r: a directory recursively
-   * c: a character device file
-   * b: a block device file
-   * p: a named pipe
-@@ -38,7 +39,14 @@ Let's say you want to change the permissions of a given file; using
- this syntax, you will need to put:
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index d44391a..115b490 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256	5e6f00b8e23391de9b068b2400ac3172324e5f590fc424018bb5a1389ffe6f84	wireless-regdb-2015.03.13.tar.xz
++sha256	4c4a10b3aa97ac494dda5bc13a045bda211437aab24341fe11d78530e640f133	wireless-regdb-2015.04.06.tar.xz
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index ce6f1d5..20b330f 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ----
--/usr/bin/foobar f 644 0 0 - - -	- -
-+/usr/bin/foobar f 644 0 0 - - - - -
-+----
-+
-+Alternatively, if you want to change owner/permission of a directory
-+recursively, you can put:
-+
-+----
-+/usr/share/myapp r 750 myuser myuser - - - - -
- ----
- 
- On the other hand, if you want to create the device file +/dev/hda+
+-WIRELESS_REGDB_VERSION = 2015.03.13
++WIRELESS_REGDB_VERSION = 2015.04.06
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
