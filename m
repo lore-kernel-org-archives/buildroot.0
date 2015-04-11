@@ -1,50 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Apr 2015 14:23:23 +0200
-Subject: [Buildroot] [PATCH 2/3] package/rsyslog: Fix linking against
- postgresql
-In-Reply-To: <20150411141520.4060c6a3@free-electrons.com>
-References: <1428738737-3238-1-git-send-email-bernd.kuhls@t-online.de>
- <1428738737-3238-2-git-send-email-bernd.kuhls@t-online.de>
- <20150411124226.726fde30@free-electrons.com>
- <XnsA4798AC8357A8berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20150411120739.GF4221@free.fr>
- <20150411141520.4060c6a3@free-electrons.com>
-Message-ID: <20150411122323.GG4221@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Apr 2015 15:16:49 +0200
+Subject: [Buildroot] [git commit] package: fix fonts & co alpha sort
+Message-ID: <20150411131659.213F980795@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Bernd, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=0dd3a94fe3246ef25999881502fb0bad912082ad
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-04-11 14:15 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 11 Apr 2015 14:07:39 +0200, Yann E. MORIN wrote:
-> > Unfortunately, pg_config is a binary, so we provide our own minimalist
-> > one, which does not implement --libs.
-> 
-> So, shouldn't we simply implement --libs in our own pg_config
-> implementation?
+Fonts & co go before Games.
 
-Well, I thought that was pretty much obvious we should, yes.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in |   24 ++++++++++++------------
+ 1 files changed, 12 insertions(+), 12 deletions(-)
 
-However, I've had a quick look, and it's not that easy... :-(
-
-For example, regarding the issue we're actually trying to solve: the
-check rsyslog's ./configure does is eventually using _isnan() which is
-in -lm, but nothing in the NEEDED of libpq.so suggests -lm is needed,
-not even in the dependency chain (i.e. NEEDEDs of NEEDEDs...)
-
-So, I can have a deeper and longer look, but that will be later. Unless
-Bernd beats me to it, that is. ;-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/Config.in b/package/Config.in
+index de8e856..a996855 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -176,18 +176,6 @@ menu "Filesystem and flash utilities"
+ 	source "package/xfsprogs/Config.in"
+ endmenu
+ 
+-menu "Games"
+-	source "package/doom-wad/Config.in"
+-	source "package/gnuchess/Config.in"
+-	source "package/lbreakout2/Config.in"
+-	source "package/ltris/Config.in"
+-	source "package/opentyrian/Config.in"
+-	source "package/opentyrian-data/Config.in"
+-	source "package/prboom/Config.in"
+-	source "package/rubix/Config.in"
+-	source "package/sl/Config.in"
+-endmenu
+-
+ menu "Fonts, icons, sounds and themes"
+ 
+ comment "Fonts"
+@@ -208,6 +196,18 @@ comment "Themes"
+ 
+ endmenu
+ 
++menu "Games"
++	source "package/doom-wad/Config.in"
++	source "package/gnuchess/Config.in"
++	source "package/lbreakout2/Config.in"
++	source "package/ltris/Config.in"
++	source "package/opentyrian/Config.in"
++	source "package/opentyrian-data/Config.in"
++	source "package/prboom/Config.in"
++	source "package/rubix/Config.in"
++	source "package/sl/Config.in"
++endmenu
++
+ menu "Graphic libraries and applications (graphic/text)"
+ 
+ comment "Graphic applications"
