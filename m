@@ -1,40 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Apr 2015 15:27:39 +0200
-Subject: [Buildroot] [PATCH 1/1] fftw: fix build failure with old gcc
-In-Reply-To: <1428748907-3319-1-git-send-email-gwenj@trabucayre.com>
-References: <1428748907-3319-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20150411152739.416d6e89@free-electrons.com>
+Date: Sat, 11 Apr 2015 15:29:06 +0200
+Subject: [Buildroot] [git commit] package/jsoncpp: bump version to 1.6.1
+Message-ID: <20150411132914.3E91F80805@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gwenhael Goavec-Merou,
+commit: http://git.buildroot.net/buildroot/commit/?id=5e90f6350e047f856617399c31842ca34ea11ed5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 11 Apr 2015 12:41:47 +0200, Gwenhael Goavec-Merou wrote:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> -Ofast is not available on gcc <2.6. This option is equivalent to 
-> -O3 -ffast-math.
-> 
-> Fixes:
-> http://autobuild.buildroot.org/results/207/207a20a3ca5e62029823b1361479d5cd38fefeb0/
-> http://autobuild.buildroot.net/results/871/871b29c9bbf94aa05034c442f35c8771f83abe1e/
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  package/fftw/fftw.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...001-Revert-Use-std-namespace-for-snprintf.patch |    2 +-
+ package/jsoncpp/jsoncpp.mk                         |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I've removed Yann SoB, and fixed s/2.6/4.6/ in the commit log, and
-applied.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+index 6c6ae2d..7935849 100644
+--- a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
++++ b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+@@ -29,7 +29,7 @@ index 83102fd2bb86..f7ad1e21bbc0 100644
+  
+  #if defined(_MSC_VER) && _MSC_VER < 1500 // VC++ 8.0 and below
+  #define snprintf _snprintf
+--#else
++-#elif __cplusplus >= 201103L
+ -#define snprintf std::snprintf
+  #endif
+  
+diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+index 3044be1..63b18e6 100644
+--- a/package/jsoncpp/jsoncpp.mk
++++ b/package/jsoncpp/jsoncpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JSONCPP_VERSION = 1.6.0
++JSONCPP_VERSION = 1.6.1
+ JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
+ JSONCPP_LICENSE = Public Domain or MIT
+ JSONCPP_LICENSE_FILES = LICENSE
