@@ -1,34 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Apr 2015 21:56:24 +0200
-Subject: [Buildroot] [PATCH 06/11 v7] package/eudev: split udev/libudev
-References: <cover.1423317174.git.yann.morin.1998@free.fr>
- <1173e1bc3a763340a6e65f43d2ba8b8e71da23b4.1423317174.git.yann.morin.1998@free.fr>
-Message-ID: <XnsA479DF2FDF820berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Date: Sat, 11 Apr 2015 22:31:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libinput: bump version to 0.13.0
+Message-ID: <1428784301-30177-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:1173e1bc3a763340a6e65f43d2ba8b8e71da23b4.1423317174.git.yann.morin.1998
-@free.fr:
 
-> +EUDEV_DEPENDENCIES = host-pkgconf
-> +EUDEV_PROVIDES = libudev
-> +
-> +ifeq ($(BR2_PACKAGE_EUDEV_DAEMON),y)
-> +
-> +EUDEV_DEPENDENCIES += host-gperf util-linux kmod
-> +EUDEV_PROVIDES += udev
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libinput/libinput.hash |    4 ++--
+ package/libinput/libinput.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Hi Yann,
-
-eudev always depends on host-gperf, not only with enabled udev daemon, 
-otherwise:
-
-checking for i586-buildroot-linux-uclibc-gperf... no
-checking for gperf... no
-configure: error: *** gperf not found
-
-Regards, Bernd
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 1e4adc5..a910648 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/wayland-devel/2015-March/020475.html
+-sha256	6e0ce9dd9ff04e9ac382dffb7fa332b94f093227a197a9c8189e87de6d88b55a	libinput-0.12.0.tar.xz
++# From http://lists.freedesktop.org/archives/wayland-devel/2015-March/020833.html
++sha256	6cecaf7fde525f1d81474cbd495ce526d5e34c845d3e9d6f3e2565b7048cc61a	libinput-0.13.0.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index a6dec86..a9723c6 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 0.12.0
++LIBINPUT_VERSION = 0.13.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_LICENSE = MIT
+-- 
+1.7.10.4
