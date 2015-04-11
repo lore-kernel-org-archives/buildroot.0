@@ -1,33 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 11 Apr 2015 18:44:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 8011] When building only busybox and strace,
- strace fails on not finding bluetooth/bluetooth.h
-In-Reply-To: <bug-8011-163@https.bugs.busybox.net/>
-References: <bug-8011-163@https.bugs.busybox.net/>
-Message-ID: <20150411184401.05F1380E09@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 11 Apr 2015 21:56:24 +0200
+Subject: [Buildroot] [PATCH 06/11 v7] package/eudev: split udev/libudev
+References: <cover.1423317174.git.yann.morin.1998@free.fr>
+ <1173e1bc3a763340a6e65f43d2ba8b8e71da23b4.1423317174.git.yann.morin.1998@free.fr>
+Message-ID: <XnsA479DF2FDF820berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8011
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+news:1173e1bc3a763340a6e65f43d2ba8b8e71da23b4.1423317174.git.yann.morin.1998
+@free.fr:
 
---- Comment #6 from Jaap Crezee <jaap@jcz.nl> 2015-04-11 18:44:00 UTC ---
-We are working with an Intel Galileo gen2 board.
-Intel states you should use Yocto.
-The reason we are all still here (probably) is because we do NOT like Yocto, or
-at least I do not like it. I think it is way to bloated.
-Because I could not find a suitable toolchain, I built one myself.
+> +EUDEV_DEPENDENCIES = host-pkgconf
+> +EUDEV_PROVIDES = libudev
+> +
+> +ifeq ($(BR2_PACKAGE_EUDEV_DAEMON),y)
+> +
+> +EUDEV_DEPENDENCIES += host-gperf util-linux kmod
+> +EUDEV_PROVIDES += udev
 
-My guess would be that it is not the toolchain which is broken, it has no
-header files whatsoever regarding any bluetooth headers.
+Hi Yann,
 
-I am using the same toolchain for a "full-blown" rootfs (the one from this bug
-is only for initramfs); it works quite well there. But in that case I also
-enabled bluez5....
+eudev always depends on host-gperf, not only with enabled udev daemon, 
+otherwise:
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+checking for i586-buildroot-linux-uclibc-gperf... no
+checking for gperf... no
+configure: error: *** gperf not found
+
+Regards, Bernd
