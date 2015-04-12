@@ -1,60 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Apr 2015 16:12:45 +0200
-Subject: [Buildroot] [PATCH 03/14] toolchain-common: default to Y for
-	IPv6
-In-Reply-To: <1428754662-27829-3-git-send-email-gustavo@zacarias.com.ar>
-References: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
- <1428754662-27829-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150412141245.GF21018@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 12 Apr 2015 16:21:46 +0200
+Subject: [Buildroot] [PATCH 1/2] package/exim: Adjust libnsl detection to
+	include musl
+Message-ID: <1428848507-2117-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+Only (e)glibc provides libnsl, uclibc provides only a stub
 
-On 2015-04-11 09:17 -0300, Gustavo Zacarias spake thusly:
-> This will allow us to remove IPv6 handling in the tree without breaking
-> things while doing so.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  toolchain/toolchain-common.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-> index 13c684d..dfb7394 100644
-> --- a/toolchain/toolchain-common.in
-> +++ b/toolchain/toolchain-common.in
-> @@ -7,6 +7,7 @@ source "package/gdb/Config.in.host"
->  
->  config BR2_INET_IPV6
->  	bool
-> +	default y
+Fixes compilation using this defconfig
 
-After the re-ordering of the series (i.e. CS sh2 toolchains are removed
-before this patch), then you can add my:
+    BR2_arm=y
+    BR2_cortex_a7=y
+    BR2_STATIC_LIBS=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_PACKAGE_OPENSSL=y
+    BR2_PACKAGE_EXIM=y
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/exim/exim.mk |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
->  config BR2_TOOLCHAIN_HAS_GCC_BUG_58595
->  	bool
-> -- 
-> 2.0.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 0a70c42..fcf2be5 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -81,8 +81,9 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
+ endef
+ endif
+ 
+-# this specific toolchain lacks libnsl
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12),y)
++# only (e)glibc provides libnsl, remove -lnsl for all other toolchains
++# http://bugs.exim.org/show_bug.cgi?id=1564
++ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
+ define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
+ 	$(SED) 's/-lnsl//g' $(@D)/OS/Makefile-Linux
+ endef
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
