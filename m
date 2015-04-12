@@ -1,77 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Apr 2015 18:37:46 +0200
-Subject: [Buildroot] [PATCHv2 02/21] fs: declare phony targets as such
+Date: Sun, 12 Apr 2015 18:37:45 +0200
+Subject: [Buildroot] [PATCHv2 01/21] pkg-kconfig: declare phony targets as
+	such
 In-Reply-To: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1428856685-4403-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1428856685-4403-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit improves the filesystem handling code to declare its
-various targets as PHONY when appropriate.
+Just like the previous commit did for the pkg-generic infrastructure,
+this commit improves the pkg-kconfig infrastructure to declare its
+custom <pkg>-<something> targets as PHONY.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/common.mk              | 2 ++
- fs/ext2/ext2.mk           | 2 ++
- fs/initramfs/initramfs.mk | 2 ++
- fs/iso9660/iso9660.mk     | 2 ++
- 4 files changed, 8 insertions(+)
+ package/pkg-kconfig.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 5d07f00..cac127f 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -102,6 +102,8 @@ rootfs-$(1)-show-depends:
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index fd9f19d..8361064 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -100,6 +100,12 @@ $(1)-update-defconfig: $(1)-savedefconfig
  
- rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
+ endif # package enabled
  
-+.PHONY: rootfs-$(1) rootfs-$(1)-show-depends
++.PHONY: \
++	$(1)-update-config \
++	$(1)-update-defconfig \
++	$(1)-savedefconfig \
++	$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS))
 +
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
- TARGETS_ROOTFS += rootfs-$(1)
- endif
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 1cac72e..cab66a5 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -35,6 +35,8 @@ endef
- rootfs-ext2-symlink:
- 	ln -sf rootfs.ext2$(ROOTFS_EXT2_COMPRESS_EXT) $(BINARIES_DIR)/rootfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN)$(ROOTFS_EXT2_COMPRESS_EXT)
+ endef # inner-kconfig-package
  
-+.PHONY: rootfs-ext2-symlink
-+
- ifneq ($(BR2_TARGET_ROOTFS_EXT2_GEN),2)
- ROOTFS_EXT2_POST_TARGETS += rootfs-ext2-symlink
- endif
-diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
-index 308924d..db50812 100644
---- a/fs/initramfs/initramfs.mk
-+++ b/fs/initramfs/initramfs.mk
-@@ -17,6 +17,8 @@ rootfs-initramfs: $(ROOTFS_INITRAMFS_DEPENDENCIES) $(ROOTFS_INITRAMFS_POST_TARGE
- rootfs-initramfs-show-depends:
- 	@echo $(ROOTFS_INITRAMFS_DEPENDENCIES)
- 
-+.PHONY: rootfs-initramfs rootfs-initramfs-show-depends
-+
- ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
- TARGETS_ROOTFS += rootfs-initramfs
- endif
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 5b44ba4..4ccfce9 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -48,6 +48,8 @@ rootfs-iso9660: $(BINARIES_DIR)/rootfs.iso9660
- rootfs-iso9660-show-depends:
- 	@echo $(ROOTFS_ISO9660_DEPENDENCIES)
- 
-+.PHONY: rootfs-iso9660 rootfs-iso9660-show-depends
-+
  ################################################################################
- #
- # Toplevel Makefile options
 -- 
 2.1.0
