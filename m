@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Apr 2015 19:22:48 +0200
-Subject: [Buildroot] [autobuild 3/4] autobuild-run: sanitize make options
-In-Reply-To: <1428849285-21092-3-git-send-email-s.martin49@gmail.com>
+Date: Sun, 12 Apr 2015 19:26:40 +0200
+Subject: [Buildroot] [autobuild 4/4] autobuild-run: allow to change
+ default git uri and branch through env. vars.
+In-Reply-To: <1428849285-21092-4-git-send-email-s.martin49@gmail.com>
 References: <1428849285-21092-1-git-send-email-s.martin49@gmail.com>
- <1428849285-21092-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150412192248.4913d967@free-electrons.com>
+ <1428849285-21092-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150412192640.5b6089b3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +14,58 @@ To: buildroot@busybox.net
 
 Dear Samuel Martin,
 
-On Sun, 12 Apr 2015 16:34:44 +0200, Samuel Martin wrote:
-> So far, --make-opts allows the user to override any make option or
-> variable, especially '-C' and 'O=' which should not in the autobuild
-> context.
-> 
-> So, this change drop '-C' option and 'O=' and 'BR2_JLEVEL=' variables
-> from the --make-opts arguments.
+On Sun, 12 Apr 2015 16:34:45 +0200, Samuel Martin wrote:
+> This is useful when hacking the autobuild-run script on some specific
+> Buildroot tree.
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > ---
->  scripts/autobuild-run | 37 ++++++++++++++++++++++++++++++++++++-
->  1 file changed, 36 insertions(+), 1 deletion(-)
+>  scripts/autobuild-run | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
 > 
 > diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index a7cdc12..dbfc33e 100755
+> index dbfc33e..e1c6c5d 100755
 > --- a/scripts/autobuild-run
 > +++ b/scripts/autobuild-run
-> @@ -773,6 +773,40 @@ def merge(dict_1, dict_2):
->      return dict((str(key), dict_1.get(key) or dict_2.get(key))
->                  for key in set(dict_2) | set(dict_1))
+> @@ -102,6 +102,16 @@ Format of the configuration file:
+>  Default values for the arguments are:
 >  
-> +def sanitize_make_opts(make_opts):
-> +    """ sanitize make options
+>    %s
 > +
-> +    - do not allow to override '-C' option
-> +    - do not allow to user deifined 'O=' and 'BR2_JLEVEL='
-> +    - print log when overloading 'BR2_DL_DIR='
+> +Environment variables:
 > +
-> +    Return the sanitized make options string.
-> +    """
-> +    make_opts = make_opts.split(" ")
-> +    for i, arg in enumerate(make_opts):
-> +        if arg.startswith("-C"):
-> +            # remove both '-C<path>' and '-C' arguments
-> +            warn = "WARN: sanitizing make-opts (removing arguments '%s" % arg
-> +            make_opts.remove(arg)
-> +            if arg == '-C':
-> +                # remove '<path>' in case of '-C <path>'
-> +                # (no need for incrementing i since make_opts[i] already points
-> +                # to '<path>' after arg (i.e. '-C') has been removed
-> +                warn += " %s" % make_opts[i]
-> +                make_opts.remove(make_opts[i])
-> +            warn += "')"
-> +            print(warn)
-> +        elif "=" in arg:
-> +            var = arg.split("=", 1)[0]
-> +            if var in ("BR2_DL_DIR",):
-> +                print("INFO: using user defined '%s' (%s)" % (var, arg))
-> +            elif var in ("BR2_JLEVEL", "O",):
-> +                warn = "WARN: sanitizing make variable (removing arguments '%s')" % arg
-> +                make_opts.remove(arg)
-> +                print(warn)
-> +    return " ".join(make_opts)
+> +  BUILDROOT_GIT_REPO_URI
+> +    This environment variable allows to fetch the given Buildroot git repository
+> +    instead of the official one.
+> +
+> +  BUILDROOT_GIT_BRANCH
+> +    This environment variable allows to change the Buildroot git branch instead
+> +    of master.
+>  """ % '\n  '.join(
+>      ['%s = %s' % (key, val) for (key, val) in defaults.items()])
+>  
+> @@ -297,8 +307,10 @@ def prepare_build(**kwargs):
+>      # Clone Buildroot. This only happens if the source directory
+>      # didn't exist already.
+>      srcdir = os.path.join(idir, "buildroot")
+> +    br_repo = os.environ.get("BUILDROOT_GIT_REPO_URI", "git://git.busybox.net/buildroot")
+> +    br_branch = os.environ.get("BUILDROOT_GIT_BRANCH", "master")
+>      if not os.path.exists(srcdir):
+> -        ret = subprocess.call(["git", "clone", "git://git.busybox.net/buildroot", srcdir],
+> +        ret = subprocess.call(["git", "clone", "-b", br_branch, br_repo, srcdir],
+>                                stdout=log, stderr=log)
+>          if ret != 0:
+>              log_write(log, "ERROR: could not clone Buildroot sources")
 
-To be honest, this seems a bit overkill to me. From my point of view
---make-opts is an advanced option, so users are supposed to understand
-what they are doing. So I'm not very fond of adding a lot of fairly
-complex code just to check for the validity of the values passed to
-this option.
+Why environment variables? http://patchwork.ozlabs.org/patch/394526/
+was proposing to use options, which was much better IMO. If you could
+take this approach (after refreshing the patch), I would be OK.
 
-Best regards,
+Note that in the patch from Matt Weber, I also explicitly asked that
+when a non-default repo/branch is used, the script should refuse to
+submit the results to autobuild.b.o.
+
+Thanks,
 
 Thomas
 -- 
