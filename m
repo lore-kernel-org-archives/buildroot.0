@@ -1,62 +1,66 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Apr 2015 16:21:47 +0200
-Subject: [Buildroot] [PATCH 2/2] package/exim: Fix compilation error with
-	musl
-In-Reply-To: <1428848507-2117-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1428848507-2117-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1428848507-2117-2-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Apr 2015 16:22:51 +0200
+Subject: [Buildroot] [PATCH 04/14] toolchain: remove IPv6 selects
+In-Reply-To: <1428754662-27829-4-git-send-email-gustavo@zacarias.com.ar>
+References: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
+ <1428754662-27829-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150412142251.GG21018@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-smtp_in.c: In function ?smtp_start_session?:
-smtp_in.c:1976:36: error: invalid application of ?sizeof? to incomplete type ?struct options?
-     EXIM_SOCKLEN_T optlen = sizeof(struct ip_options) + MAX_IPOPTLEN;
+Gustavo, All,
 
-smtp_in.c misdetects the needed style for ip_options, only OPTSTYLE == 2 works.
-Since musl does not provide any macro[1] to detect it we need to pretend to be
-darwin in order to fix the compile bug.
+On 2015-04-11 09:17 -0300, Gustavo Zacarias spake thusly:
+> There's no need for toolchains or the user to declare IPv6 support since
+> it's now mandatory.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  toolchain/Config.in                    |  2 --
+>  toolchain/toolchain-external/Config.in | 11 -----------
+>  2 files changed, 13 deletions(-)
+> 
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index 32a00a9..a851ce4 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+[--SNIP--]
+> @@ -1145,14 +1142,6 @@ endchoice
+>  
+>  if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+>  
+> -config BR2_TOOLCHAIN_EXTERNAL_INET_IPV6
+> -	bool "Toolchain has IPv6 support?"
+> -	select BR2_INET_IPV6
+> -	help
+> -	  Select this option if your external toolchain supports
+> -	  IPv6. If you don't know, leave the default value, Buildroot
+> -	  will tell you if it's correct or not.
 
-In order to do so we need the generated os.h before building start, therefore
-add some make subtargets to the configure step.
+This hunk should be squashed into your first patch (toolchain/helpers:
+make IPv6 mandatory for uclibc toolchains).
 
-[1] http://wiki.musl-libc.org/wiki/FAQ#Q:_why_is_there_no_MUSL_macro_.3F
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/exim/exim.mk |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+>  config BR2_TOOLCHAIN_EXTERNAL_WCHAR
+>  	bool "Toolchain has WCHAR support?"
+>  	select BR2_USE_WCHAR
+> -- 
+> 2.0.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index fcf2be5..d7c61db 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -89,6 +89,13 @@ define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
- endef
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+define EXIM_PRETEND_TO_BE_DARWIN_TO_FIX_IP_OPTIONS
-+	echo "#undef GLIBC_IP_OPTIONS" >> $(@D)/build-br/os.h
-+	echo "#define DARWIN_IP_OPTIONS" >> $(@D)/build-br/os.h
-+endef
-+endif
-+
- define EXIM_CONFIGURE_TOOLCHAIN
- 	$(call exim-config-add,CC,$(TARGET_CC))
- 	$(call exim-config-add,CFLAGS,$(TARGET_CFLAGS))
-@@ -97,6 +104,9 @@ define EXIM_CONFIGURE_TOOLCHAIN
- 	$(call exim-config-add,HOSTCC,$(HOSTCC))
- 	$(call exim-config-add,HOSTCFLAGS,$(HOSTCFLAGS))
- 	$(EXIM_REMOVE_LIBNSL_FROM_MAKEFILE)
-+	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) configure
-+	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D)/build-br config
-+	$(EXIM_PRETEND_TO_BE_DARWIN_TO_FIX_IP_OPTIONS)
- endef
- 
- ifneq ($(call qstrip,$(BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE)),)
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
