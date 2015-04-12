@@ -1,88 +1,62 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 12 Apr 2015 16:34:44 +0200
-Subject: [Buildroot] [autobuild 3/4] autobuild-run: sanitize make options
-In-Reply-To: <1428849285-21092-1-git-send-email-s.martin49@gmail.com>
-References: <1428849285-21092-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1428849285-21092-3-git-send-email-s.martin49@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Apr 2015 16:34:31 +0200
+Subject: [Buildroot] [PATCH 09/14] system: drop IPv6 depend for systemd
+In-Reply-To: <1428754662-27829-9-git-send-email-gustavo@zacarias.com.ar>
+References: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
+ <1428754662-27829-9-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150412143431.GK21018@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-So far, --make-opts allows the user to override any make option or
-variable, especially '-C' and 'O=' which should not in the autobuild
-context.
+Gustavo, All,
 
-So, this change drop '-C' option and 'O=' and 'BR2_JLEVEL=' variables
-from the --make-opts arguments.
+On 2015-04-11 09:17 -0300, Gustavo Zacarias spake thusly:
+> It's no longer an option so it must be dropped.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  system/Config.in | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/system/Config.in b/system/Config.in
+> index 431524d..84cde94 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -81,7 +81,6 @@ config BR2_INIT_SYSTEMD
+>  	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC
+>  	depends on BR2_USE_WCHAR
+> -	depends on BR2_INET_IPV6
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- scripts/autobuild-run | 37 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+I know you're taking care of that in a followup patch, but it seems
+weird that you drop the dependency here in the system option, but keep
+it in the systemd package, even though it is selected.
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index a7cdc12..dbfc33e 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -773,6 +773,40 @@ def merge(dict_1, dict_2):
-     return dict((str(key), dict_1.get(key) or dict_2.get(key))
-                 for key in set(dict_2) | set(dict_1))
- 
-+def sanitize_make_opts(make_opts):
-+    """ sanitize make options
-+
-+    - do not allow to override '-C' option
-+    - do not allow to user deifined 'O=' and 'BR2_JLEVEL='
-+    - print log when overloading 'BR2_DL_DIR='
-+
-+    Return the sanitized make options string.
-+    """
-+    make_opts = make_opts.split(" ")
-+    for i, arg in enumerate(make_opts):
-+        if arg.startswith("-C"):
-+            # remove both '-C<path>' and '-C' arguments
-+            warn = "WARN: sanitizing make-opts (removing arguments '%s" % arg
-+            make_opts.remove(arg)
-+            if arg == '-C':
-+                # remove '<path>' in case of '-C <path>'
-+                # (no need for incrementing i since make_opts[i] already points
-+                # to '<path>' after arg (i.e. '-C') has been removed
-+                warn += " %s" % make_opts[i]
-+                make_opts.remove(make_opts[i])
-+            warn += "')"
-+            print(warn)
-+        elif "=" in arg:
-+            var = arg.split("=", 1)[0]
-+            if var in ("BR2_DL_DIR",):
-+                print("INFO: using user defined '%s' (%s)" % (var, arg))
-+            elif var in ("BR2_JLEVEL", "O",):
-+                warn = "WARN: sanitizing make variable (removing arguments '%s')" % arg
-+                make_opts.remove(arg)
-+                print(warn)
-+    return " ".join(make_opts)
-+
-+
- def main():
- 
-     # Avoid locale settings of autobuilder machine leaking in, for example
-@@ -833,6 +867,7 @@ def main():
-         sys.exit(1)
- 
-     buildpid = multiprocessing.Array('i', int(args['--ninstances']))
-+    make_opts = sanitize_make_opts(args['--make-opts'])
-     processes = []
-     for i in range(0, int(args['--ninstances'])):
-         p = multiprocessing.Process(target=run_instance, kwargs=dict(
-@@ -842,7 +877,7 @@ def main():
-                 http_login = args['--http-login'],
-                 http_password = args['--http-password'],
-                 submitter = args['--submitter'],
--                make_opts = args['--make-opts'],
-+                make_opts = make_opts,
-                 upload = upload,
-                 buildpid = buildpid
-             ))
+I would also remove the dependency in systemd at the same time; or push
+this patch after the packages have been cleaned up (I'd prfefer the
+first solution, though).
+
+Regards,
+Yann E. MORIN.
+
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_TOOLCHAIN_HAS_SSP
+>  	depends on BR2_USE_MMU
+> -- 
+> 2.0.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.3.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
