@@ -1,68 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Apr 2015 13:25:42 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/exim: Add optional OpenSSL
-	support
-Message-ID: <1428837942-24631-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 12 Apr 2015 13:30:35 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/gdb: Add optional dependencies
+Message-ID: <1428838235-1369-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add TARGET_MAKE_ENV to EXIM_BUILD_CMDS to enable access to our pkg-config.
+To allow reproducable builds of target gdb add some optional dependencies
+
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/gdb | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libm.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
+ 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libutil.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libpython2.7.so.1.0]
+ 0x00000001 (NEEDED)                     Shared library: [libexpat.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v3: Add comment about TARGET_MAKE_ENV (Baruch)
-v2: Use pkg-config to detect openssl (Yann)
+v2: Dependencies are only needed for target gdb (Yann)
 
- package/exim/exim.mk |   13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ package/gdb/gdb.mk |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index f39445d..67dbd64 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -9,7 +9,7 @@ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
- EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPLv2+
- EXIM_LICENSE_FILES = LICENCE
--EXIM_DEPENDENCIES = pcre berkeleydb
-+EXIM_DEPENDENCIES = pcre berkeleydb host-pkgconf
- 
- # Modify a variable value. It must already exist in the file, either
- # commented or not.
-@@ -62,6 +62,14 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV
- endef
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 9818320..2dd63ca 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -33,7 +33,10 @@ ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),)
+ GDB_SUBDIR = gdb/gdbserver
+ HOST_GDB_SUBDIR = .
+ else
+-GDB_DEPENDENCIES = ncurses
++GDB_DEPENDENCIES = ncurses \
++	$(if $(BR2_PACKAGE_EXPAT),expat) \
++	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
++	$(if $(BR2_PACKAGE_ZLIB),zlib)
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+EXIM_DEPENDENCIES += openssl
-+define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
-+	$(call exim-config-change,SUPPORT_TLS,yes)
-+	$(call exim-config-change,USE_OPENSSL_PC,openssl)
-+endef
-+endif
-+
- # this specific toolchain lacks libnsl
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12),y)
- define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
-@@ -89,6 +97,7 @@ define EXIM_CONFIGURE_CMDS
- 	$(EXIM_USE_DEFAULT_CONFIG_FILE)
- 	$(EXIM_USE_DEFAULT_CONFIG_FILE_DOVECOT)
- 	$(EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV)
-+	$(EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL)
- 	$(EXIM_CONFIGURE_TOOLCHAIN)
- endef
- endif # CUSTOM_CONFIG
-@@ -101,7 +110,7 @@ endif
- # "The -j (parallel) flag must not be used with make"
- # (http://www.exim.org/exim-html-current/doc/html/spec_html/ch04.html)
- define EXIM_BUILD_CMDS
--	build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS)
-+	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS)
- endef
- 
- # Need to replicate the LFLAGS in install, as exim still wants to build
+ # For the host variant, we really want to build with XML support,
 -- 
 1.7.10.4
