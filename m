@@ -1,49 +1,38 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Apr 2015 13:30:35 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/gdb: Add optional dependencies
-Message-ID: <1428838235-1369-1-git-send-email-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 12 Apr 2015 12:06:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 8011] When building only busybox and strace,
+ strace fails on not finding bluetooth/bluetooth.h
+In-Reply-To: <bug-8011-163@https.bugs.busybox.net/>
+References: <bug-8011-163@https.bugs.busybox.net/>
+Message-ID: <20150412120647.3888E7FC87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To allow reproducable builds of target gdb add some optional dependencies
+https://bugs.busybox.net/show_bug.cgi?id=8011
 
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/gdb | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
- 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libm.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
- 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libutil.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libpython2.7.so.1.0]
- 0x00000001 (NEEDED)                     Shared library: [libexpat.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+--- Comment #8 from Jaap Crezee <jaap@jcz.nl> 2015-04-12 12:06:46 UTC ---
+Okay, I checked the build output:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: Dependencies are only needed for target gdb (Yann)
+<snip>
+checking bluetooth/bluetooth.h usability... yes
+checking bluetooth/bluetooth.h presence... no
+configure: WARNING: bluetooth/bluetooth.h: accepted by the compiler, rejected
+by the preprocessor!
+configure: WARNING: bluetooth/bluetooth.h: proceeding with the compiler's
+result
+checking for bluetooth/bluetooth.h... yes
+</snip>
 
- package/gdb/gdb.mk |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Any clue if I should look into the toolchain?
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 9818320..2dd63ca 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -33,7 +33,10 @@ ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),)
- GDB_SUBDIR = gdb/gdbserver
- HOST_GDB_SUBDIR = .
- else
--GDB_DEPENDENCIES = ncurses
-+GDB_DEPENDENCIES = ncurses \
-+	$(if $(BR2_PACKAGE_EXPAT),expat) \
-+	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
-+	$(if $(BR2_PACKAGE_ZLIB),zlib)
- endif
- 
- # For the host variant, we really want to build with XML support,
+I might also try the buildroot toolchain generator once more later today. I
+could also build that once, store it in /opt/cross/ .. and just use that from
+buildroot, just like my current toolchain.
+
 -- 
-1.7.10.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
