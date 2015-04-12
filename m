@@ -1,45 +1,77 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 12 Apr 2015 12:30:28 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-04-11
-In-Reply-To: <20150412104113.4f1e8d2d@free-electrons.com>
-References: <20150412063020.68757101071@stock.ovh.net>
- <CAMo8BfK4+9oE11xoPuQxqHXjh=oJ6cb9LkWAab+g2o82uyzZ0w@mail.gmail.com>
- <20150412104113.4f1e8d2d@free-electrons.com>
-Message-ID: <CAMo8BfLFhsq+6=HhFBjvoh32R58L=rHnDCEaEjrJaq-j3t1JZQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Apr 2015 11:48:55 +0200
+Subject: [Buildroot] [PATCH 1/2] package/exim: Add optional OpenSSL
+ support
+In-Reply-To: <1428775279-20078-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1428775279-20078-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150412094855.GD4218@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Apr 12, 2015 at 11:41 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Max Filippov,
->
-> On Sun, 12 Apr 2015 10:47:33 +0300, Max Filippov wrote:
->> On Sun, Apr 12, 2015 at 9:30 AM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->> > Build statistics for 2015-04-11
->> >       xtensa |               postgresql-9.4.1 | NOK | http://autobuild.buildroot.net/results/cb3aa9bf4c7e38649f1a62be67c58e34cc786595/
->> >       xtensa |               postgresql-9.4.1 | NOK | http://autobuild.buildroot.net/results/1fc251eaefd56b1fc18e885debd5d97cc1261b42/
->> >       xtensa |               postgresql-9.4.1 | NOK | http://autobuild.buildroot.net/results/575fcea8b082a91c08d75db13d478b271c68083c/
->>
->> Fixed by https://patchwork.ozlabs.org/patch/453567/
->
-> Yes, I know. I am just wondering if this is the right fix. It really
-> seems odd to be doing comparisons on the output of gcc. Autoconf should
-> be able to do much better than that.
->
-> What is this piece of code trying to do? Why doesn't it simply reply on
-> the return value of gcc when testing if this or that feature is
-> available?
+Bernd, All,
 
-Exactly the questions that I had.
-The answer: http://www.postgresql.org/message-id/9101.1426820918 at sss.pgh.pa.us
-And response to this patch:
-http://www.postgresql.org/message-id/20150320132351.GS3636 at alvh.no-ip.org
+On 2015-04-11 20:01 +0200, Bernd Kuhls spake thusly:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/exim/exim.mk |    9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+> index f39445d..967b782 100644
+> --- a/package/exim/exim.mk
+> +++ b/package/exim/exim.mk
+> @@ -62,6 +62,14 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV
+>  endef
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +EXIM_DEPENDENCIES += openssl
+> +define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
+> +	$(call exim-config-change,SUPPORT_TLS,yes)
+> +	$(call exim-config-change,TLS_LIBS,-lssl -lcrypto)
+
+I would prefer we use pkg-config. From doc/spec.txt:
+
+    If you have pkg-config available, then instead you can just use:
+
+    SUPPORT_TLS=yes
+    USE_OPENSSL_PC=openssl
+
+Of course, you'll have to add host-pkgconf to exim's dependencies.
+
+Regards,
+Yann E. MORIN.
+
+> +endef
+> +endif
+> +
+>  # this specific toolchain lacks libnsl
+>  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12),y)
+>  define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
+> @@ -89,6 +97,7 @@ define EXIM_CONFIGURE_CMDS
+>  	$(EXIM_USE_DEFAULT_CONFIG_FILE)
+>  	$(EXIM_USE_DEFAULT_CONFIG_FILE_DOVECOT)
+>  	$(EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV)
+> +	$(EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL)
+>  	$(EXIM_CONFIGURE_TOOLCHAIN)
+>  endef
+>  endif # CUSTOM_CONFIG
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Thanks.
--- Max
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
