@@ -1,39 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Apr 2015 18:58:40 +0200
-Subject: [Buildroot] [PATCH v3 2/3] libsigrok: add host-doxygen
- dependency for C++ bindings
-In-Reply-To: <1428659399-28620-3-git-send-email-bgolaszewski@baylibre.com>
-References: <1428659399-28620-1-git-send-email-bgolaszewski@baylibre.com>
- <1428659399-28620-3-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <20150412185840.2f07e37e@free-electrons.com>
+Date: Sun, 12 Apr 2015 18:58:58 +0200
+Subject: [Buildroot] [git commit] Revert "libsigrok: mark libsigrokcxx as
+	broken"
+Message-ID: <20150412165905.0E74E807C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bartosz Golaszewski,
+commit: http://git.buildroot.net/buildroot/commit/?id=b9a6cc1dd23692d5d959bcc5c9270480074b8792
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 10 Apr 2015 11:49:58 +0200, Bartosz Golaszewski wrote:
-> Doxygen is required to generate xml files required by libsigrokcxx
-> build system.
-> 
-> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> ---
->  package/libsigrok/libsigrok.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+This reverts commit 41e81b7ae149319950814efe3c39acb1200167d2.
 
-I've applied, after adding host-python (or host-python3) in the
-dependencies when building the C++ bindings. Otherwise, the creation of
-the C++ bindings fail, due to Python being too old: some autobuilders
-only have Python 2.6, while libsigrok requires at least Python 2.7.
+Doxygen dependency issue for libsigrokcxx has been fixed.
 
-Committed with this fixed.
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libsigrok/Config.in |    3 ---
+ package/pulseview/Config.in |    2 --
+ 2 files changed, 0 insertions(+), 5 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+index bd37319..93bd06f 100644
+--- a/package/libsigrok/Config.in
++++ b/package/libsigrok/Config.in
+@@ -22,15 +22,12 @@ config BR2_PACKAGE_LIBSIGROKCXX
+ 	bool "build C++ bindings"
+ 	select BR2_PACKAGE_GLIBMM
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	# requires doxygen, which isn't packaged in Buildroot
+-	depends on BROKEN
+ 	help
+ 	  Build libsigrok C++ bindings as well.
+ 
+ comment "C++ bindings need a toolchain w/ C++"
+ 	depends on BR2_PACKAGE_LIBSIGROK
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on BROKEN
+ 
+ endif
+ 
+diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+index e0f1bcf..de899af 100644
+--- a/package/pulseview/Config.in
++++ b/package/pulseview/Config.in
+@@ -15,7 +15,6 @@ config BR2_PACKAGE_PULSEVIEW
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BROKEN # libsigrokcxx
+ 	help
+ 	  PulseView is a Qt based logic analyzer, oscilloscope
+ 	  and MSO GUI for sigrok.
+@@ -26,4 +25,3 @@ comment "pulseview needs a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+-	depends on BROKEN # libsigrokcxx
