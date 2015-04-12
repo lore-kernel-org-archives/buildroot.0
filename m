@@ -1,195 +1,166 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Apr 2015 18:37:44 +0200
-Subject: [Buildroot] [PATCHv2 00/21] Package based 'source', 'legal-info',
-	'source-check' and 'external-deps'
-Message-ID: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Apr 2015 18:37:48 +0200
+Subject: [Buildroot] [PATCHv2 04/21] Makefile: rename TARGETS to PACKAGES
+In-Reply-To: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1428856685-4403-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+For clarity, this commit renames the TARGETS variable to the more
+meaningful PACKAGES variable. Indeed, only packages (handled by one of
+the package infrastructures) should be listed in this variable, and
+not other random non-package targets.
 
-This is a new iteration of the "Package based 'source', 'legal-info',
-'source-check' and 'external-deps'" series.
-
-Changes since v1:
-=================
-
- - Remove all the patches that have been applied to master, and rebase
-   on top of the latest master, fixing the conflicts along the way.
-
- - Fix a bug in the implementation of $(1)-source-check: the code was
-   using $(p) to reference the loop iterator, while it should have
-   been using $$(p) instead.
-
- - Add missing phony targets in pkg-kconfig: $(1)-savedefconfig and
-   $(1)-update-defconfig. Noticed by Yann E. Morin.
-
- - Mark rootfs-ext2-symlink as a phony target. Noticed by Yann
-   E. Morin.
-
- - Add Reviewed-by from Yann on "Makefile: targets are now declared
-   phony by the appropriate infrastructures" since the problem he
-   pointed out in the review has been fixed in previous patches.
-
- - In patch "Makefile: rename TARGETS to PACKAGES", fix typo in commit
-   log (should be *listed*), and also rename TARGETS to PACKAGES in
-   package/matchbox/matchbox.mk as well as
-   support/scripts/graph-depends, as mentionned by Yann E. Morin.
-
- - Added Acked-by from Yann on "fs: add rootfs dependencies to
-   PACKAGES".
-
- - Extend the commit log of "Makefile: use <pkg>-all-legal-info to
-   implement the legal-info target" to explain why the 'make
-   legal-info' output before and after this patch may be different,
-   and why it is actually more correct after the patch. Suggested by
-   Yann.
-
- - Add Reviewed-by from Yann on patch "Makefile: simplify
-   show-targets".
-
- - Added Tested-by and Reviewed-by from Yann on patch "Makefile: use
-   the package infra based external-deps".
-
-Original introduction of the series
-===================================
-
-(Note: this is the original introduction of the series, matching the
-v1. Since some patches have been merged, the patch numbers below do
-not match this current version of the series.)
-
-The initial goal of this series was to change the way we recursively
-go through host dependencies for the implementation of the 'source',
-'external-deps', 'legal-info' and 'source-check' targets.
-
-The implementation of such targets currently do not rely on the
-package infrastructure, and the main Makefile tries to iterate through
-the dependencies of all packages using the TARGETS, TARGETS_HOST_DEPS
-and HOST_DEPS variable, but it does so with only a two-level
-recursion, which does not guarantee that all dependencies will have
-been taken into account. It is also not at all in the spirit of the
-rest of the package infrastructure.
-
-So our final goal is simply that all those targets are implemented
-using per-package make targets that recursively go through their own
-dependencies.
-
-Along the way, a number of other related changes or cleanups have been
-made, and we try to describe below the overall logic of the patch
-series:
-
- - Currently, some packages do directly use the 'DOWNLOAD' macro to
-   download files. This has the unfortunate effect that the package
-   infrastructure is not aware that those files are being downloaded,
-   which is bad.
-
-   To fix this, patches 1 to 7 fixes the two problematic packages: the
-   'linux' and 'perl' packages. In the case of the 'perl' package, an
-   addition was needed to the package infrastructure: supporting full
-   URLs in <pkg>_EXTRA_DOWNLOADS. Some related cleanups and
-   improvements are done as part of these changes.
-
-   Compared to the v1 of those patches: I've fixed the typos found by
-   Baruch and Romain, added the Reviewed-by tags that were given,
-   fixed the manual line-break issue reported by Arnout, and adjusted
-   the order of the variables in perl.mk as suggested by Arnout.
-
- - As part of the review of the first version of this series (which
-   only included patches 1 to 7), a comment was made that packages
-   like Linux were only applying patches named linux-*.patch, while we
-   have moved for all other packages to a convention that consists in
-   applying *.patch. Therefore, patches 8 and 9 make the Linux,
-   U-Boot, Barebox, AT91Bootstrap and AT91Bootstrap3 follow this
-   convention, and fix the user manual accordingly.
-
- - Patches 10 and 11 start extending the package infrastructure by
-   adding the <pkg>-external-deps, <pkg>-all-external-deps,
-   <pkg>-all-source and <pkg>-all-legal-info targets.
-
- - Patch 12 is doing some silly cleanup of the main Makefile.
-
- - Patches 13 to 17 clarify and fix the way we declare the PHONY make
-   targets, by making the package infrastructure responsible for doing
-   that for package targets.
-
- - Patches 18 and 19 make some not very important cleanups (variable
-   renaming, etc.)
-
- - Patch 20 switches the 'legal-info' target to fully use the package
-   infrastructure, thanks to the <pkg>-all-legal-info target added
-   previously.
-
- - Patch 21 simplifies show-targets a bit.
-
- - Patch 22, like patch 20, switches the global 'external-deps' target
-   to fully use the package infrastructure, thanks to the
-   <pkg>-all-external-deps target added previously.
-
- - Patch 23 cleans up the download infra by removing the support for
-   the SHOW_EXTERNAL_DEPS DL_MODE, unneeded now that the package infra
-   is in charge of the 'external-deps' feature.
-
- - Patches 24, 25, 26, 27, 28, 29 and 30 take care of the global
-   'source-check' target, also moved to use the package infrastructure
-   through newly introduced <pkg>-source-check and
-   <pkg>-all-source-check targets.
-
- - Patch 31 does some indentation cleanup.
-
- - Patch 32 and 33 make some improvements to the package
-   infrastructure in terms of downloading source, patches and extra
-   downloads.
-
- - Patch 34 implements the global 'source' target using the package
-   infrastructrure, thanks to <pkg>-source and <pkg>-all-source.
-
- - Patch 35 removes the now unneeded variables from the main Makefile,
-   which was our original goal.
-
-Thomas
-
-Thomas Petazzoni (21):
-  pkg-kconfig: declare phony targets as such
-  fs: declare phony targets as such
-  Makefile: targets are now declared phony by the appropriate
-    infrastructures
-  Makefile: rename TARGETS to PACKAGES
-  fs: add rootfs dependencies to PACKAGES
-  Makefile: use <pkg>-all-legal-info to implement the legal-info target
-  Makefile: simplify show-targets
-  Makefile: use the package infra based external-deps
-  pkg-download: remove support for the SHOW_EXTERNAL_DEPS DL_MODE
-  Makefile: move source-check outside of noconfig_targets
-  pkg-download: extend DOWNLOAD_INNER, add a SOURCE_CHECK macro
-  pkg-generic: implement source-check targets
-  Makefile: implement a package based source-check target
-  pkg-generic: remove the .stamp_rsync_sourced fake stamp file
-  pkg-generic: don't use DL_MODE in .stamp_downloaded
-  pkg-download: get rid of DL_MODE
-  pkg-download: fix indentation for SOURCE_CHECK_* macros
-  pkg-generic: propagate <pkg>_EXTRA_DOWNLOADS from target to host
-    package
-  pkg-generic: introduce a <pkg>_ALL_DOWNLOADS variable and factorize
-    code
-  Makefile: implement the 'source' target using the package
-    infrastructure
-  Makefile: remove unneeded variables
-
- Makefile                      | 53 +++++++--------------------
- fs/common.mk                  |  3 ++
- fs/ext2/ext2.mk               |  2 ++
- fs/initramfs/initramfs.mk     |  2 ++
- fs/iso9660/iso9660.mk         |  2 ++
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile                      | 22 +++++++++++-----------
  package/matchbox/matchbox.mk  |  2 +-
- package/pkg-download.mk       | 83 +++++++++++--------------------------------
- package/pkg-generic.mk        | 62 ++++++++++++++------------------
- package/pkg-kconfig.mk        |  6 ++++
+ package/pkg-generic.mk        |  2 +-
  support/scripts/graph-depends |  2 +-
  system/system.mk              |  2 +-
- 11 files changed, 79 insertions(+), 140 deletions(-)
+ 5 files changed, 15 insertions(+), 15 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index fee2551..f4deec3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -297,7 +297,7 @@ unexport MACHINE
+ 
+ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
+ 
+-TARGETS :=
++PACKAGES :=
+ 
+ # silent mode requested?
+ QUIET := $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-q)
+@@ -389,16 +389,16 @@ include fs/common.mk
+ 
+ include $(BR2_EXTERNAL)/external.mk
+ 
+-TARGETS_SOURCE := $(patsubst %,%-source,$(TARGETS))
++PACKAGES_SOURCE := $(patsubst %,%-source,$(PACKAGES))
+ 
+ # host-* dependencies have to be handled specially, as those aren't
+-# visible in Kconfig and hence not added to a variable like TARGETS.
++# visible in Kconfig and hence not added to a variable like PACKAGES.
+ # instead, find all the host-* targets listed in each <PKG>_DEPENDENCIES
+ # variable for each enabled target.
+ # Notice: this only works for newstyle gentargets/autotargets packages
+ TARGETS_HOST_DEPS = $(sort $(filter host-%,$(foreach dep,\
+ 		$(addsuffix _DEPENDENCIES,\
+-			$(call UPPERCASE,$(TARGETS) $(TARGETS_ROOTFS))),\
++			$(call UPPERCASE,$(PACKAGES) $(TARGETS_ROOTFS))),\
+ 		$($(dep)))))
+ # Host packages can in turn have their own dependencies. Likewise find
+ # all the package names listed in the HOST_<PKG>_DEPENDENCIES for each
+@@ -410,8 +410,8 @@ HOST_DEPS = $(sort $(foreach dep,\
+ 		$($(dep))))
+ HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
+ 
+-TARGETS_LEGAL_INFO := $(patsubst %,%-legal-info,\
+-		$(TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))
++PACKAGES_LEGAL_INFO := $(patsubst %,%-legal-info,\
++		$(PACKAGES) $(TARGETS_HOST_DEPS) $(HOST_DEPS))
+ 
+ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR)
+@@ -505,7 +505,7 @@ endif
+ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+ GLIBC_GENERATE_LOCALES = $(call qstrip,$(BR2_GENERATE_LOCALE))
+ ifneq ($(GLIBC_GENERATE_LOCALES),)
+-TARGETS += host-localedef
++PACKAGES += host-localedef
+ 
+ define GENERATE_GLIBC_LOCALES
+ 	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
+@@ -549,7 +549,7 @@ endif
+ 
+ $(TARGETS_ROOTFS): target-finalize
+ 
+-target-finalize: $(TARGETS)
++target-finalize: $(PACKAGES)
+ 	@$(call MESSAGE,"Finalizing target directory")
+ 	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
+ 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+@@ -613,7 +613,7 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
+-source: $(TARGETS_SOURCE) $(HOST_SOURCE)
++source: $(PACKAGES_SOURCE) $(HOST_SOURCE)
+ 
+ external-deps:
+ 	@$(MAKE1) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
+@@ -631,7 +631,7 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
+ 	@$(call legal-warning,the toolchain has not been saved)
+ 	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+ 
+-legal-info: dirs legal-info-clean legal-info-prepare $(TARGETS_LEGAL_INFO) \
++legal-info: dirs legal-info-clean legal-info-prepare $(PACKAGES_LEGAL_INFO) \
+ 		$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST)
+ 	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
+ 	@if [ -r $(LEGAL_WARNINGS) ]; then \
+@@ -642,7 +642,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(TARGETS_LEGAL_INFO) \
+ 	@rm -f $(LEGAL_WARNINGS)
+ 
+ show-targets:
+-	@echo $(HOST_DEPS) $(TARGETS_HOST_DEPS) $(TARGETS) $(TARGETS_ROOTFS)
++	@echo $(HOST_DEPS) $(TARGETS_HOST_DEPS) $(PACKAGES) $(TARGETS_ROOTFS)
+ 
+ graph-build: $(O)/build/build-time.log
+ 	@install -d $(GRAPHS_DIR)
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index aec57c0..fe1a7db 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -1,4 +1,4 @@
+ ifeq ($(BR2_PACKAGE_MATCHBOX),y)
+ include $(sort $(wildcard package/matchbox/*/*.mk))
+-TARGETS += matchbox-lib matchbox-wm
++PACKAGES += matchbox-lib matchbox-wm
+ endif
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1d56f81..d1a1811 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -746,7 +746,7 @@ $(eval $(call check-deprecated-variable,$(2)_BUILD_OPT,$(2)_BUILD_OPTS))
+ $(eval $(call check-deprecated-variable,$(2)_GETTEXTIZE_OPT,$(2)_GETTEXTIZE_OPTS))
+ $(eval $(call check-deprecated-variable,$(2)_KCONFIG_OPT,$(2)_KCONFIG_OPTS))
+ 
+-TARGETS += $(1)
++PACKAGES += $(1)
+ 
+ ifneq ($$($(2)_PERMISSIONS),)
+ PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 08ecc5a..c26e1e0 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -116,7 +116,7 @@ def get_version(pkgs):
+     return version
+ 
+ # Execute the "make show-targets" command to get the list of the main
+-# Buildroot TARGETS and return it formatted as a Python list. This
++# Buildroot PACKAGES and return it formatted as a Python list. This
+ # list is used as the starting point for full dependency graphs
+ def get_targets():
+     sys.stderr.write("Getting targets\n")
+diff --git a/system/system.mk b/system/system.mk
+index 4a1eb4a..c95e436 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -35,7 +35,7 @@ TARGET_FINALIZE_HOOKS += SYSTEM_ISSUE
+ endif
+ 
+ ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
+-TARGETS += host-mkpasswd
++PACKAGES += host-mkpasswd
+ endif
+ 
+ define SET_NETWORK_LOCALHOST
 -- 
 2.1.0
