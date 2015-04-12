@@ -1,77 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Apr 2015 11:48:55 +0200
-Subject: [Buildroot] [PATCH 1/2] package/exim: Add optional OpenSSL
- support
-In-Reply-To: <1428775279-20078-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1428775279-20078-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150412094855.GD4218@free.fr>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sun, 12 Apr 2015 12:04:49 +0200
+Subject: [Buildroot] [PATCH] giflib: fix description about compatibility
+ with libungif
+In-Reply-To: <20150412091301.GB4218@free.fr>
+References: <1428828185-19869-1-git-send-email-fabio.porcedda@gmail.com>
+ <20150412084723.GH2279@tarshish>
+ <CAHkwnC8W0A+GTHiVuTo1D5ViNzbr8NjvZd-hO5+YGDAB+RhTHA@mail.gmail.com>
+ <20150412090834.GI2279@tarshish> <20150412091301.GB4218@free.fr>
+Message-ID: <CAHkwnC9wo970CURbVD13OdsjzPy5U6EPF431n7he2wEo5URxWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+On Sun, Apr 12, 2015 at 11:13 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Baruch, All,
+>
+> On 2015-04-12 12:08 +0300, Baruch Siach spake thusly:
+>> On Sun, Apr 12, 2015 at 10:57:40AM +0200, Fabio Porcedda wrote:
+>> > On Sun, Apr 12, 2015 at 10:47 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+>> > > On Sun, Apr 12, 2015 at 10:43:05AM +0200, Fabio Porcedda wrote:
+>> > >> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>> > >> ---
+>> > >>  package/giflib/Config.in | 2 +-
+>> > >>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> > >>
+>> > >> diff --git a/package/giflib/Config.in b/package/giflib/Config.in
+>> > >> index 70368dc..bb5741a 100644
+>> > >> --- a/package/giflib/Config.in
+>> > >> +++ b/package/giflib/Config.in
+>> > >> @@ -1,7 +1,7 @@
+>> > >>  config BR2_PACKAGE_GIFLIB
+>> > >>       bool "giflib"
+>> > >>       help
+>> > >> -       giflib is a library for reading and writing gif images. It is API and
+>> > >> +       giflib is a library for reading and writing gif images. It was API and
+>> > >>         ABI compatible with libungif which was in wide use while the LZW
+>> > >>         compression algorithm was patented.
+>> > >
+>> > > So giflib is not compatible to libungif anymore?
+>> >
+>> > Just comparing the gif_lib.h header you can see that the definition of
+>> > some functions changes:
+>> >
+>> > git diff --no-index libungif-4.1.4/lib/gif_lib.h giflib-5.1.1/lib/gif_lib.h
+>> >
+>> >  GifFileType *EGifOpenFileName(const char *GifFileName,
+>> > -                              int GifTestExistance);
+>> > -GifFileType *EGifOpenFileHandle(int GifFileHandle);
+>> > -GifFileType *EGifOpen(void *userPtr, OutputFunc writeFunc);
+>> > -
+>> > +                              const bool GifTestExistence, int *Error);
+>> > +GifFileType *EGifOpenFileHandle(const int GifFileHandle, int *Error);
+>> > +GifFileType *EGifOpen(void *userPtr, OutputFunc writeFunc, int *Error);
+>> >  int EGifSpew(GifFileType * GifFile);
+>>
+>> If this is the case I would use a more explicit language. Something like:
+>>
+>>       giflib used to be API and ABI compatible with libungif which ... Note that
+>>       recent gitlib versions are no longer compatible with libungif.
+>
+> I would even go further, and remove any reference to libungif
+> altogether. So, just keep the first sentence:
+>
+>     giflib is a library for reading and writing gif images.
+>
 
-On 2015-04-11 20:01 +0200, Bernd Kuhls spake thusly:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/exim/exim.mk |    9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-> index f39445d..967b782 100644
-> --- a/package/exim/exim.mk
-> +++ b/package/exim/exim.mk
-> @@ -62,6 +62,14 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV
->  endef
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +EXIM_DEPENDENCIES += openssl
-> +define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
-> +	$(call exim-config-change,SUPPORT_TLS,yes)
-> +	$(call exim-config-change,TLS_LIBS,-lssl -lcrypto)
+Because the libungif library is now deprecated i think it's a good idea.
 
-I would prefer we use pkg-config. From doc/spec.txt:
-
-    If you have pkg-config available, then instead you can just use:
-
-    SUPPORT_TLS=yes
-    USE_OPENSSL_PC=openssl
-
-Of course, you'll have to add host-pkgconf to exim's dependencies.
-
-Regards,
-Yann E. MORIN.
-
-> +endef
-> +endif
-> +
->  # this specific toolchain lacks libnsl
->  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12),y)
->  define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
-> @@ -89,6 +97,7 @@ define EXIM_CONFIGURE_CMDS
->  	$(EXIM_USE_DEFAULT_CONFIG_FILE)
->  	$(EXIM_USE_DEFAULT_CONFIG_FILE_DOVECOT)
->  	$(EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV)
-> +	$(EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL)
->  	$(EXIM_CONFIGURE_TOOLCHAIN)
->  endef
->  endif # CUSTOM_CONFIG
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+BR
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Fabio Porcedda
