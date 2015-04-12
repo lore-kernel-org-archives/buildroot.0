@@ -1,71 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Apr 2015 15:56:43 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/exim: Add optional OpenSSL
- support
-In-Reply-To: <XnsA47AA092866DAberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1428837942-24631-1-git-send-email-bernd.kuhls@t-online.de>
- <20150412132302.GF4218@free.fr> <20150412134418.GA21018@free.fr>
- <XnsA47AA092866DAberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20150412135643.GB21018@free.fr>
+Date: Sun, 12 Apr 2015 16:07:20 +0200
+Subject: [Buildroot] [PATCH 01/14] toolchain/helpers: make IPv6
+ mandatory for uclibc toolchains
+In-Reply-To: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150412140720.GC21018@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Gustavo, All,
 
-On 2015-04-12 15:47 +0200, Bernd Kuhls spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-> news:20150412134418.GA21018 at free.fr:
+On 2015-04-11 09:17 -0300, Gustavo Zacarias spake thusly:
+> As previously discussed drop the non-IPv6 option for toolchains.
+> The size delta is about 10 KiB and it just complicates package
+> dependencies.
 > 
-> >> A further fix would be to remove use of libnsl when the C library is not
-> >> glibc.
-> > 
-> > Woops, wrong, uClibc also has libnsl...
-> 
-> Hi,
-> 
-> but it is only a stub library without any function:
-> 
-> http://git.uclibc.org/uClibc/tree/docs/Glibc_vs_uClibc_Differences.txt
-> 
-> "uClibc provides a stub libnsl, but has no actual support for Network 
-> Information Service (NIS)."
-> 
-> Right now I am testing something like this:
-> 
-> -# this specific toolchain lacks libnsl
-> -ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12),y)
-> +# only (e)glibc provides libnsl, remove -lnsl for all other toolchains
-> +# http://bugs.exim.org/show_bug.cgi?id=1564
-> +ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
-> 
-> which fixes your compile bug, just to find another one...
-> 
-> smtp_in.c: In function ?smtp_start_session?:
-> smtp_in.c:1976:36: error: invalid application of ?sizeof? to incomplete type 
-> ?struct options?
->      EXIM_SOCKLEN_T optlen = sizeof(struct ip_options) + MAX_IPOPTLEN;
->                                     ^
-> smtp_in.c:2023:42: error: dereferencing pointer to incomplete type
->        uschar *optstart = (uschar *)(ipopt->__data);
->                                           ^
-> smtp_in.c:2053:54: error: dereferencing pointer to incomplete type
->                 inet_ntoa(*((struct in_addr *)(&(ipopt->faddr))))))
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Yup, got the same while investigating, too.
-
-> which I am trying to solve right now.
-
-Well, would it not be much simpler to just ditch support for static
-builds in exim? I.e. mark it as depends on !static .
-
-Surely, static is for those few fronge architecures, and I doubt running
-a mail server on those is a common use-case...
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  toolchain/helpers.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 257fab2..cb3b61a 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -284,7 +284,7 @@ check_uclibc = \
+>  	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
+>  	$(call check_uclibc_feature,__ARCH_USE_MMU__,BR2_USE_MMU,$${UCLIBC_CONFIG_FILE},MMU support) ;\
+>  	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,,$${UCLIBC_CONFIG_FILE},Large file support) ;\
+> -	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
+> +	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
+>  	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_TOOLCHAIN_HAS_NATIVE_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
+>  	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
+>  	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
+> -- 
+> 2.0.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
