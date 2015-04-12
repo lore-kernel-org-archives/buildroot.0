@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Apr 2015 16:36:08 +0200
-Subject: [Buildroot] [PATCH 10/14] docs/manual: remove references to IPv6
-In-Reply-To: <1428754662-27829-10-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 12 Apr 2015 16:55:42 +0200
+Subject: [Buildroot] [PATCH 11/14] packages: remove non-IPv6 enabler
+ patches
+In-Reply-To: <1428754662-27829-11-git-send-email-gustavo@zacarias.com.ar>
 References: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
- <1428754662-27829-10-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150412143608.GL21018@free.fr>
+ <1428754662-27829-11-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150412145541.GM21018@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,84 +15,60 @@ To: buildroot@busybox.net
 Gustavo, All,
 
 On 2015-04-11 09:17 -0300, Gustavo Zacarias spake thusly:
-> It's no longer an option so remove all references to it.
+> These are no longer required so remove them.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/avahi/0003-ipv6only.patch                  |  19 --
+>  package/avahi/0005-optional-ipv6.patch             | 147 --------------
+>  package/iproute2/0001-optional-ipv6.patch          |  89 ---------
+>  package/iproute2/0002-vxlan-optional-ipv6.patch    |  83 --------
+>  package/libeXosip2/0001-fix-non-ipv6-build.patch   |  22 ---
+>  package/libglib2/0001-optional-ipv6.patch          | 195 ------------------
+>  package/libnice/0001-build-IPV6_RECVERR.patch      |  20 --
+>  .../libtirpc/0003-Make-IPv6-support-optional.patch |  26 ---
+>  package/luasocket/0001-uClibc-IPv6.patch           | 217 ---------------------
+>  package/perl/0001-uClibc-IPv6.patch                |  61 ------
+>  package/rpcbind/0003-Make-IPv6-configurable.patch  |  42 ----
+>  package/rpcbind/rpcbind.mk                         |   1 -
+>  package/x11vnc/0001-ipv6.patch                     |  25 ---
+>  13 files changed, 947 deletions(-)
+>  delete mode 100644 package/avahi/0003-ipv6only.patch
+>  delete mode 100644 package/avahi/0005-optional-ipv6.patch
+>  delete mode 100644 package/iproute2/0001-optional-ipv6.patch
+>  delete mode 100644 package/iproute2/0002-vxlan-optional-ipv6.patch
+>  delete mode 100644 package/libeXosip2/0001-fix-non-ipv6-build.patch
+>  delete mode 100644 package/libglib2/0001-optional-ipv6.patch
+>  delete mode 100644 package/libnice/0001-build-IPV6_RECVERR.patch
+>  delete mode 100644 package/libtirpc/0003-Make-IPv6-support-optional.patch
+>  delete mode 100644 package/luasocket/0001-uClibc-IPv6.patch
+>  delete mode 100644 package/perl/0001-uClibc-IPv6.patch
+>  delete mode 100644 package/rpcbind/0003-Make-IPv6-configurable.patch
+>  delete mode 100644 package/x11vnc/0001-ipv6.patch
+
+We also have one patch dealing with IPv6 for lighttpd:
+
+  - package/lighttpd/0001-Fix-default-config-file.patch
+
+    @@ -90,7 +90,7 @@ server.port = 80
+     ##
+     ## Use IPv6?
+     ##
+    -server.use-ipv6 = "enable"
+    +# server.use-ipv6 = "enable"
+     
+     ##
+     ## bind to a specific IP
+
+  - changes the default config to disable IPv6: do we want to keep that
+    hunk?
+
+Otherwise:
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  docs/manual/adding-packages-directory.txt | 11 +++--------
->  docs/manual/configure.txt                 | 10 +++++-----
->  2 files changed, 8 insertions(+), 13 deletions(-)
-> 
-> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> index f536a0c..639003f 100644
-> --- a/docs/manual/adding-packages-directory.txt
-> +++ b/docs/manual/adding-packages-directory.txt
-> @@ -207,10 +207,9 @@ coding style].
->  ==== Dependencies on target and toolchain options
->  
->  Many packages depend on certain options of the toolchain: the choice of
-> -C library, C++ support, thread support, RPC support, IPv6 support,
-> -wchar support, or dynamic library support. Some packages can only be
-> -built on certain target architectures, or if an MMU is available in the
-> -processor.
-> +C library, C++ support, thread support, RPC support, wchar support,
-> +or dynamic library support. Some packages can only be built on certain
-> +target architectures, or if an MMU is available in the processor.
->  
->  These dependencies have to be expressed with the appropriate 'depends
->  on' statements in the Config.in file. Additionally, for dependencies on
-> @@ -301,10 +300,6 @@ use in the comment.
->  ** Dependency symbol: +BR2_TOOLCHAIN_HAS_NATIVE_RPC+
->  ** Comment string: +RPC+
->  
-> -* IPv6 support
-> -** Dependency symbol: +BR2_INET_IPV6+
-> -** Comment string: +IPv6+ (lowercase v)
-> -
->  * wchar support
->  ** Dependency symbol: +BR2_USE_WCHAR+
->  ** Comment string: +wchar+
-> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-> index c06182b..dd34eef 100644
-> --- a/docs/manual/configure.txt
-> +++ b/docs/manual/configure.txt
-> @@ -109,8 +109,8 @@ most important ones allow to:
->   * Change the version of the GCC compiler, binutils and the C library.
->  
->   * Select a number of toolchain options (uClibc only): whether the
-> -   toolchain should have IPv6 support, RPC support (used mainly for
-> -   NFS), wide-char support, locale support (for internationalization),
-> +   toolchain should have RPC support (used mainly for NFS),
-> +   wide-char support, locale support (for internationalization),
->     C++ support or thread support. Depending on which options you choose,
->     the number of userspace applications and libraries visible in
->     Buildroot menus will change: many applications and libraries require
-> @@ -177,9 +177,9 @@ Then, you have three solutions to use an external toolchain:
->    external toolchain uses the 'glibc' library, you only have to tell
->    whether your toolchain supports C\++ or not and whether it has
->    built-in RPC support. If your external toolchain uses the 'uClibc'
-> -  library, then you have to tell Buildroot if it supports IPv6,
-> -  RPC, wide-char, locale, program invocation, threads and
-> -  C++. At the beginning of the execution, Buildroot will tell you if
-> +  library, then you have to tell Buildroot if it supports RPC,
-> +  wide-char, locale, program invocation, threads and C++.
-> +  At the beginning of the execution, Buildroot will tell you if
->    the selected options do not match the toolchain configuration.
->  
->  Our external toolchain support has been tested with toolchains from
-> -- 
-> 2.0.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
