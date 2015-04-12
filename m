@@ -1,65 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Apr 2015 18:37:50 +0200
-Subject: [Buildroot] [PATCHv2 06/21] Makefile: use <pkg>-all-legal-info to
-	implement the legal-info target
+Date: Sun, 12 Apr 2015 18:37:54 +0200
+Subject: [Buildroot] [PATCHv2 10/21] Makefile: move source-check outside of
+	noconfig_targets
 In-Reply-To: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1428856685-4403-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1428856685-4403-11-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit changes the implementation of the global 'legal-info'
-target to use the newly introduced per-package <pkg>-all-legal-info
-target. This allows to avoid using the $(TARGET_HOST_DEPS) and
-$(HOST_DEPS) variables that we are trying to remove.
+make source-check is here to check whether the remote sources for the
+current selection of packages are still available. So it cannot be a
+noconfig_targets, since it depends on a configuration being
+available. The very fact that 'source-check' is basically the same as
+'source', and one is a noconfig_target and not the other is a clear
+indication that the current implementation is wrong.
 
-It is worth mentionning that this commit might change the output of
-'make legal-info' by making it more correct than it was. With the
-existing implementations, we could be missing packages if they were
-host packages, or target packages not properly selected in terms of
-Config.in dependencies, and with a more than a two-level deep
-dependency from a target package properly selected at the Config.in
-level. This is because our previous logic was simply taking all
-packages in the "TARGETS" (now called "PACKAGES") variable, which are
-only the target packages explicitly selected in the .config file, and
-doing a two-level deep recursion in the dependencies.
-
-With this commit, we switch legal-info to use proper make-based
-dependencies, so we no longer have the limitations we used to
-have. For this reason, the output of 'make legal-info' after this
-patch may contain *more* entries than before this patch, but it is
-really because it is now correct.
+So this commit moves source-check to no longer be a noconfig_target.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ Makefile | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index f4deec3..a22d99b 100644
+index 40ee2e2..6937dd3 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -410,9 +410,6 @@ HOST_DEPS = $(sort $(foreach dep,\
- 		$($(dep))))
- HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
+@@ -75,7 +75,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
+ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+ 	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+-	source-check print-version olddefconfig
++	print-version olddefconfig
  
--PACKAGES_LEGAL_INFO := $(patsubst %,%-legal-info,\
--		$(PACKAGES) $(TARGETS_HOST_DEPS) $(HOST_DEPS))
+ # Strip quotes and then whitespaces
+ qstrip = $(strip $(subst ",,$(1)))
+@@ -422,7 +422,7 @@ world: target-post-image
+ 
+ .PHONY: all world toolchain dirs clean distclean source outputmakefile \
+ 	legal-info legal-info-prepare legal-info-clean printvars help \
+-	target-finalize target-post-image
++	target-finalize target-post-image source-check
+ 
+ ################################################################################
+ #
+@@ -616,6 +616,10 @@ _external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
+ external-deps:
+ 	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
+ 
++# check if download URLs are outdated
++source-check:
++	$(MAKE1) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
++
+ legal-info-clean:
+ 	@rm -fr $(LEGAL_INFO_DIR)
+ 
+@@ -794,10 +798,6 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+ 		$(CONFIG_CONFIG_IN)
+ 
+-# check if download URLs are outdated
+-source-check:
+-	$(MAKE1) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
 -
- dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR)
+ .PHONY: defconfig savedefconfig
  
-@@ -631,7 +628,7 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
- 	@$(call legal-warning,the toolchain has not been saved)
- 	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
- 
--legal-info: dirs legal-info-clean legal-info-prepare $(PACKAGES_LEGAL_INFO) \
-+legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
- 		$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST)
- 	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
- 	@if [ -r $(LEGAL_WARNINGS) ]; then \
+ ################################################################################
 -- 
 2.1.0
