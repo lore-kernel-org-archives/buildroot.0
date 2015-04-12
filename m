@@ -1,63 +1,94 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 12 Apr 2015 20:15:28 +0200
-Subject: [Buildroot] [autobuild 1/4] autobuild-run: prevent send_result
- from failing when gathering config files
-In-Reply-To: <20150412192051.5d747e28@free-electrons.com>
+Date: Sun, 12 Apr 2015 20:20:15 +0200
+Subject: [Buildroot] [autobuild 3/4] autobuild-run: sanitize make options
+In-Reply-To: <20150412192248.4913d967@free-electrons.com>
 References: <1428849285-21092-1-git-send-email-s.martin49@gmail.com>
- <20150412192051.5d747e28@free-electrons.com>
-Message-ID: <CAHXCMM+Mz485o6zV0OktecHL9o7LaxCGD+-3p4yFcVpwiTpFJg@mail.gmail.com>
+ <1428849285-21092-3-git-send-email-s.martin49@gmail.com>
+ <20150412192248.4913d967@free-electrons.com>
+Message-ID: <CAHXCMM+sXordT3ZLF4Xz3hEYmLbMzxFkkwM0GJE3cidB82cxdA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Apr 12, 2015 at 7:20 PM, Thomas Petazzoni
+On Sun, Apr 12, 2015 at 7:22 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Dear Samuel Martin,
 >
-> On Sun, 12 Apr 2015 16:34:42 +0200, Samuel Martin wrote:
->> - Make sure using absolute paths in os.path.relpath();
->> - os.makedirs() can fail if the directory already exists, so only create it
->>   when needed.
+> On Sun, 12 Apr 2015 16:34:44 +0200, Samuel Martin wrote:
+>> So far, --make-opts allows the user to override any make option or
+>> variable, especially '-C' and 'O=' which should not in the autobuild
+>> context.
+>>
+>> So, this change drop '-C' option and 'O=' and 'BR2_JLEVEL=' variables
+>> from the --make-opts arguments.
 >>
 >> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 >> ---
->>  scripts/autobuild-run | 7 ++++---
->>  1 file changed, 4 insertions(+), 3 deletions(-)
+>>  scripts/autobuild-run | 37 ++++++++++++++++++++++++++++++++++++-
+>>  1 file changed, 36 insertions(+), 1 deletion(-)
 >>
 >> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
->> index 0e12080..a19d51b 100755
+>> index a7cdc12..dbfc33e 100755
 >> --- a/scripts/autobuild-run
 >> +++ b/scripts/autobuild-run
->> @@ -653,15 +653,16 @@ def send_results(result, **kwargs):
->>          if not reason:
->>              return
+>> @@ -773,6 +773,40 @@ def merge(dict_1, dict_2):
+>>      return dict((str(key), dict_1.get(key) or dict_2.get(key))
+>>                  for key in set(dict_2) | set(dict_1))
 >>
->> -        srcroot = os.path.join(outputdir, "build", '-'.join(reason))
->> -        destroot = os.path.join(resultdir, '-'.join(reason))
->> +        srcroot = os.path.abspath(os.path.join(outputdir, "build", '-'.join(reason)))
->> +        destroot = os.path.abspath(os.path.join(resultdir, '-'.join(reason)))
+>> +def sanitize_make_opts(make_opts):
+>> +    """ sanitize make options
+>> +
+>> +    - do not allow to override '-C' option
+>> +    - do not allow to user deifined 'O=' and 'BR2_JLEVEL='
+>> +    - print log when overloading 'BR2_DL_DIR='
+>> +
+>> +    Return the sanitized make options string.
+>> +    """
+>> +    make_opts = make_opts.split(" ")
+>> +    for i, arg in enumerate(make_opts):
+>> +        if arg.startswith("-C"):
+>> +            # remove both '-C<path>' and '-C' arguments
+>> +            warn = "WARN: sanitizing make-opts (removing arguments '%s" % arg
+>> +            make_opts.remove(arg)
+>> +            if arg == '-C':
+>> +                # remove '<path>' in case of '-C <path>'
+>> +                # (no need for incrementing i since make_opts[i] already points
+>> +                # to '<path>' after arg (i.e. '-C') has been removed
+>> +                warn += " %s" % make_opts[i]
+>> +                make_opts.remove(make_opts[i])
+>> +            warn += "')"
+>> +            print(warn)
+>> +        elif "=" in arg:
+>> +            var = arg.split("=", 1)[0]
+>> +            if var in ("BR2_DL_DIR",):
+>> +                print("INFO: using user defined '%s' (%s)" % (var, arg))
+>> +            elif var in ("BR2_JLEVEL", "O",):
+>> +                warn = "WARN: sanitizing make variable (removing arguments '%s')" % arg
+>> +                make_opts.remove(arg)
+>> +                print(warn)
+>> +    return " ".join(make_opts)
 >
-> Can you explain why this is needed?
+> To be honest, this seems a bit overkill to me. From my point of view
+> --make-opts is an advanced option, so users are supposed to understand
+> what they are doing. So I'm not very fond of adding a lot of fairly
+> complex code just to check for the validity of the values passed to
+> this option.
 
-During my tests, I ran into some weird errors because it was trying to
-mkdir some directories in the package builddir itself instead of in
-the result location.
-I certainly messed up something, I'll check again.
-And... indeed after a close look at code, it should not be necessary...
+Fair enough!
+I'm happy to not make my life harder when hacking this script! ;-)
 
-Reagrds,
+Regards,
 
 >
-> Thanks,
+> Best regards,
 >
 > Thomas
 > --
 > Thomas Petazzoni, CTO, Free Electrons
 > Embedded Linux, Kernel and Android engineering
 > http://free-electrons.com
-
 
 
 -- 
