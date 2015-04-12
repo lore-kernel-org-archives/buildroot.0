@@ -1,32 +1,66 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 12 Apr 2015 13:27:21 +0300
-Subject: [Buildroot] [PATCH v2] giflib: remove from the description the
- reference to libungif
-In-Reply-To: <1428833637-14667-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1428833637-14667-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150412102721.GJ2279@tarshish>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 12 Apr 2015 13:13:28 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/exim: Add optional OpenSSL
+	support
+Message-ID: <1428837208-25941-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio,
 
-On Sun, Apr 12, 2015 at 12:13:57PM +0200, Fabio Porcedda wrote:
-> Starting from version 5.0 giflib it's no longer compatible with
-> libungif, also the libungif is now deprecated so just remove the
-> reference to libungif.
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: Use pkg-config to detect openssl (Yann)
 
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+ package/exim/exim.mk |   13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-baruch
-
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index f39445d..67dbd64 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -9,7 +9,7 @@ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
+ EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPLv2+
+ EXIM_LICENSE_FILES = LICENCE
+-EXIM_DEPENDENCIES = pcre berkeleydb
++EXIM_DEPENDENCIES = pcre berkeleydb host-pkgconf
+ 
+ # Modify a variable value. It must already exist in the file, either
+ # commented or not.
+@@ -62,6 +62,14 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++EXIM_DEPENDENCIES += openssl
++define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
++	$(call exim-config-change,SUPPORT_TLS,yes)
++	$(call exim-config-change,USE_OPENSSL_PC,openssl)
++endef
++endif
++
+ # this specific toolchain lacks libnsl
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12),y)
+ define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
+@@ -89,6 +97,7 @@ define EXIM_CONFIGURE_CMDS
+ 	$(EXIM_USE_DEFAULT_CONFIG_FILE)
+ 	$(EXIM_USE_DEFAULT_CONFIG_FILE_DOVECOT)
+ 	$(EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV)
++	$(EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL)
+ 	$(EXIM_CONFIGURE_TOOLCHAIN)
+ endef
+ endif # CUSTOM_CONFIG
+@@ -101,7 +110,7 @@ endif
+ # "The -j (parallel) flag must not be used with make"
+ # (http://www.exim.org/exim-html-current/doc/html/spec_html/ch04.html)
+ define EXIM_BUILD_CMDS
+-	build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS)
++	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS)
+ endef
+ 
+ # Need to replicate the LFLAGS in install, as exim still wants to build
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.7.10.4
