@@ -1,27 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Apr 2015 19:16:29 +0200
-Subject: [Buildroot] [PATCHv2 00/21] Package based 'source', 'legal-info',
- 'source-check' and 'external-deps'
-In-Reply-To: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150412191629.4ff9907c@free-electrons.com>
+Date: Sun, 12 Apr 2015 19:20:51 +0200
+Subject: [Buildroot] [autobuild 1/4] autobuild-run: prevent send_result
+ from failing when gathering config files
+In-Reply-To: <1428849285-21092-1-git-send-email-s.martin49@gmail.com>
+References: <1428849285-21092-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150412192051.5d747e28@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Samuel Martin,
 
-On Sun, 12 Apr 2015 18:37:44 +0200, Thomas Petazzoni wrote:
+On Sun, 12 Apr 2015 16:34:42 +0200, Samuel Martin wrote:
+> - Make sure using absolute paths in os.path.relpath();
+> - os.makedirs() can fail if the directory already exists, so only create it
+>   when needed.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  scripts/autobuild-run | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+> index 0e12080..a19d51b 100755
+> --- a/scripts/autobuild-run
+> +++ b/scripts/autobuild-run
+> @@ -653,15 +653,16 @@ def send_results(result, **kwargs):
+>          if not reason:
+>              return
+>  
+> -        srcroot = os.path.join(outputdir, "build", '-'.join(reason))
+> -        destroot = os.path.join(resultdir, '-'.join(reason))
+> +        srcroot = os.path.abspath(os.path.join(outputdir, "build", '-'.join(reason)))
+> +        destroot = os.path.abspath(os.path.join(resultdir, '-'.join(reason)))
 
-> This is a new iteration of the "Package based 'source', 'legal-info',
-> 'source-check' and 'external-deps'" series.
+Can you explain why this is needed?
 
-In case someone would like to test this series, I've pushed it to the
-following repo/branch:
-
-  http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=pkg-based-deps-v2
+Thanks,
 
 Thomas
 -- 
