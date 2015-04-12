@@ -1,71 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Apr 2015 19:26:40 +0200
-Subject: [Buildroot] [autobuild 4/4] autobuild-run: allow to change
- default git uri and branch through env. vars.
-In-Reply-To: <1428849285-21092-4-git-send-email-s.martin49@gmail.com>
-References: <1428849285-21092-1-git-send-email-s.martin49@gmail.com>
- <1428849285-21092-4-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150412192640.5b6089b3@free-electrons.com>
+Date: Sun, 12 Apr 2015 19:29:49 +0200
+Subject: [Buildroot] [PATCH 0/2 v2 autobuilders] buildroot-test: misc
+ enhancenments (branch yem/reproduce)
+In-Reply-To: <cover.1428842444.git.yann.morin.1998@free.fr>
+References: <cover.1428842444.git.yann.morin.1998@free.fr>
+Message-ID: <20150412192949.40b70945@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Yann E. MORIN,
 
-On Sun, 12 Apr 2015 16:34:45 +0200, Samuel Martin wrote:
-> This is useful when hacking the autobuild-run script on some specific
-> Buildroot tree.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  scripts/autobuild-run | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index dbfc33e..e1c6c5d 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -102,6 +102,16 @@ Format of the configuration file:
->  Default values for the arguments are:
->  
->    %s
-> +
-> +Environment variables:
-> +
-> +  BUILDROOT_GIT_REPO_URI
-> +    This environment variable allows to fetch the given Buildroot git repository
-> +    instead of the official one.
-> +
-> +  BUILDROOT_GIT_BRANCH
-> +    This environment variable allows to change the Buildroot git branch instead
-> +    of master.
->  """ % '\n  '.join(
->      ['%s = %s' % (key, val) for (key, val) in defaults.items()])
->  
-> @@ -297,8 +307,10 @@ def prepare_build(**kwargs):
->      # Clone Buildroot. This only happens if the source directory
->      # didn't exist already.
->      srcdir = os.path.join(idir, "buildroot")
-> +    br_repo = os.environ.get("BUILDROOT_GIT_REPO_URI", "git://git.busybox.net/buildroot")
-> +    br_branch = os.environ.get("BUILDROOT_GIT_BRANCH", "master")
->      if not os.path.exists(srcdir):
-> -        ret = subprocess.call(["git", "clone", "git://git.busybox.net/buildroot", srcdir],
-> +        ret = subprocess.call(["git", "clone", "-b", br_branch, br_repo, srcdir],
->                                stdout=log, stderr=log)
->          if ret != 0:
->              log_write(log, "ERROR: could not clone Buildroot sources")
+On Sun, 12 Apr 2015 14:42:09 +0200, Yann E. MORIN wrote:
 
-Why environment variables? http://patchwork.ozlabs.org/patch/394526/
-was proposing to use options, which was much better IMO. If you could
-take this approach (after refreshing the patch), I would be OK.
+> Yann E. MORIN (2):
+>       br-reproduce-build: quote variables
+>       br-reproduce-build: fix URL of gitid
 
-Note that in the patch from Matt Weber, I also explicitly asked that
-when a non-default repo/branch is used, the script should refuse to
-submit the results to autobuild.b.o.
-
-Thanks,
+Both applied, thanks!
 
 Thomas
 -- 
