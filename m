@@ -1,72 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Apr 2015 11:13:01 +0200
-Subject: [Buildroot] [PATCH] giflib: fix description about compatibility
- with libungif
-In-Reply-To: <20150412090834.GI2279@tarshish>
-References: <1428828185-19869-1-git-send-email-fabio.porcedda@gmail.com>
- <20150412084723.GH2279@tarshish>
- <CAHkwnC8W0A+GTHiVuTo1D5ViNzbr8NjvZd-hO5+YGDAB+RhTHA@mail.gmail.com>
- <20150412090834.GI2279@tarshish>
-Message-ID: <20150412091301.GB4218@free.fr>
+Date: Sun, 12 Apr 2015 11:25:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdb: Add optional dependencies
+In-Reply-To: <1428777116-24382-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1428777116-24382-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150412092545.GC4218@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Bernd, All,
 
-On 2015-04-12 12:08 +0300, Baruch Siach spake thusly:
-> On Sun, Apr 12, 2015 at 10:57:40AM +0200, Fabio Porcedda wrote:
-> > On Sun, Apr 12, 2015 at 10:47 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > > On Sun, Apr 12, 2015 at 10:43:05AM +0200, Fabio Porcedda wrote:
-> > >> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> > >> ---
-> > >>  package/giflib/Config.in | 2 +-
-> > >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >>
-> > >> diff --git a/package/giflib/Config.in b/package/giflib/Config.in
-> > >> index 70368dc..bb5741a 100644
-> > >> --- a/package/giflib/Config.in
-> > >> +++ b/package/giflib/Config.in
-> > >> @@ -1,7 +1,7 @@
-> > >>  config BR2_PACKAGE_GIFLIB
-> > >>       bool "giflib"
-> > >>       help
-> > >> -       giflib is a library for reading and writing gif images. It is API and
-> > >> +       giflib is a library for reading and writing gif images. It was API and
-> > >>         ABI compatible with libungif which was in wide use while the LZW
-> > >>         compression algorithm was patented.
-> > >
-> > > So giflib is not compatible to libungif anymore?
-> > 
-> > Just comparing the gif_lib.h header you can see that the definition of
-> > some functions changes:
-> > 
-> > git diff --no-index libungif-4.1.4/lib/gif_lib.h giflib-5.1.1/lib/gif_lib.h
-> > 
-> >  GifFileType *EGifOpenFileName(const char *GifFileName,
-> > -                              int GifTestExistance);
-> > -GifFileType *EGifOpenFileHandle(int GifFileHandle);
-> > -GifFileType *EGifOpen(void *userPtr, OutputFunc writeFunc);
-> > -
-> > +                              const bool GifTestExistence, int *Error);
-> > +GifFileType *EGifOpenFileHandle(const int GifFileHandle, int *Error);
-> > +GifFileType *EGifOpen(void *userPtr, OutputFunc writeFunc, int *Error);
-> >  int EGifSpew(GifFileType * GifFile);
+On 2015-04-11 20:31 +0200, Bernd Kuhls spake thusly:
+> To allow reproducable builds add some optional dependencies
 > 
-> If this is the case I would use a more explicit language. Something like:
+> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/gdb | grep NEEDED | sort
+>  0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+>  0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
+>  0x00000001 (NEEDED)                     Shared library: [libexpat.so.1]
+>  0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
+>  0x00000001 (NEEDED)                     Shared library: [libm.so.0]
+>  0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
+>  0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
+>  0x00000001 (NEEDED)                     Shared library: [libpython2.7.so.1.0]
+>  0x00000001 (NEEDED)                     Shared library: [libutil.so.0]
+>  0x00000001 (NEEDED)                     Shared library: [libz.so.1]
 > 
-> 	giflib used to be API and ABI compatible with libungif which ... Note that 
-> 	recent gitlib versions are no longer compatible with libungif.
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/gdb/gdb.mk |    5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> index 9818320..34f7b5c 100644
+> --- a/package/gdb/gdb.mk
+> +++ b/package/gdb/gdb.mk
+> @@ -36,6 +36,11 @@ else
+>  GDB_DEPENDENCIES = ncurses
+>  endif
+>  
+> +GDB_DEPENDENCIES += \
+> +	$(if $(BR2_PACKAGE_EXPAT),expat) \
+> +	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+> +	$(if $(BR2_PACKAGE_ZLIB),zlib)
 
-I would even go further, and remove any reference to libungif
-altogether. So, just keep the first sentence:
+Do we need those dependencies even when only gdbserver is built?
 
-    giflib is a library for reading and writing gif images.
+If not, move the dependencies into the if-block just above.
+If yes, add a comment about it.
 
 Regards,
 Yann E. MORIN.
+
+>  # For the host variant, we really want to build with XML support,
+>  # which is needed to read XML descriptions of target architectures. We
+>  # also need ncurses.
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
