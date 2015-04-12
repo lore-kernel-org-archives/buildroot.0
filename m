@@ -1,29 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Apr 2015 19:01:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libinput: bump version to 0.13.0
-In-Reply-To: <1428784301-30177-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1428784301-30177-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150412190124.0181be91@free-electrons.com>
+Date: Sun, 12 Apr 2015 19:05:23 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 2.6.2
+Message-ID: <20150412170622.13257807E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=a215bade9af8b63f7391ca4b9cb852e1e5795952
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 11 Apr 2015 22:31:41 +0200, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libinput/libinput.hash |    4 ++--
->  package/libinput/libinput.mk   |    2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.hash |    2 +-
+ package/ffmpeg/ffmpeg.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 13487d1..f2e4cd4 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	a4f6388706ee2daba9d35d2aa018ae5feeb450efa716555e011a6543d43ec7c1	ffmpeg-2.6.1.tar.bz2
++sha256	889e3aa069b724dc95cbfc79ef83322a8a39d9f6225f39fad1b47294fc1f29ba	ffmpeg-2.6.2.tar.bz2
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 7d7fb19..787dbb1 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 2.6.1
++FFMPEG_VERSION = 2.6.2
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
