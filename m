@@ -1,56 +1,88 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 12 Apr 2015 16:34:45 +0200
-Subject: [Buildroot] [autobuild 4/4] autobuild-run: allow to change default
-	git uri and branch through env. vars.
+Date: Sun, 12 Apr 2015 16:34:44 +0200
+Subject: [Buildroot] [autobuild 3/4] autobuild-run: sanitize make options
 In-Reply-To: <1428849285-21092-1-git-send-email-s.martin49@gmail.com>
 References: <1428849285-21092-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1428849285-21092-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <1428849285-21092-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is useful when hacking the autobuild-run script on some specific
-Buildroot tree.
+So far, --make-opts allows the user to override any make option or
+variable, especially '-C' and 'O=' which should not in the autobuild
+context.
+
+So, this change drop '-C' option and 'O=' and 'BR2_JLEVEL=' variables
+from the --make-opts arguments.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- scripts/autobuild-run | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ scripts/autobuild-run | 37 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 36 insertions(+), 1 deletion(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index dbfc33e..e1c6c5d 100755
+index a7cdc12..dbfc33e 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -102,6 +102,16 @@ Format of the configuration file:
- Default values for the arguments are:
+@@ -773,6 +773,40 @@ def merge(dict_1, dict_2):
+     return dict((str(key), dict_1.get(key) or dict_2.get(key))
+                 for key in set(dict_2) | set(dict_1))
  
-   %s
++def sanitize_make_opts(make_opts):
++    """ sanitize make options
 +
-+Environment variables:
++    - do not allow to override '-C' option
++    - do not allow to user deifined 'O=' and 'BR2_JLEVEL='
++    - print log when overloading 'BR2_DL_DIR='
 +
-+  BUILDROOT_GIT_REPO_URI
-+    This environment variable allows to fetch the given Buildroot git repository
-+    instead of the official one.
++    Return the sanitized make options string.
++    """
++    make_opts = make_opts.split(" ")
++    for i, arg in enumerate(make_opts):
++        if arg.startswith("-C"):
++            # remove both '-C<path>' and '-C' arguments
++            warn = "WARN: sanitizing make-opts (removing arguments '%s" % arg
++            make_opts.remove(arg)
++            if arg == '-C':
++                # remove '<path>' in case of '-C <path>'
++                # (no need for incrementing i since make_opts[i] already points
++                # to '<path>' after arg (i.e. '-C') has been removed
++                warn += " %s" % make_opts[i]
++                make_opts.remove(make_opts[i])
++            warn += "')"
++            print(warn)
++        elif "=" in arg:
++            var = arg.split("=", 1)[0]
++            if var in ("BR2_DL_DIR",):
++                print("INFO: using user defined '%s' (%s)" % (var, arg))
++            elif var in ("BR2_JLEVEL", "O",):
++                warn = "WARN: sanitizing make variable (removing arguments '%s')" % arg
++                make_opts.remove(arg)
++                print(warn)
++    return " ".join(make_opts)
 +
-+  BUILDROOT_GIT_BRANCH
-+    This environment variable allows to change the Buildroot git branch instead
-+    of master.
- """ % '\n  '.join(
-     ['%s = %s' % (key, val) for (key, val) in defaults.items()])
++
+ def main():
  
-@@ -297,8 +307,10 @@ def prepare_build(**kwargs):
-     # Clone Buildroot. This only happens if the source directory
-     # didn't exist already.
-     srcdir = os.path.join(idir, "buildroot")
-+    br_repo = os.environ.get("BUILDROOT_GIT_REPO_URI", "git://git.busybox.net/buildroot")
-+    br_branch = os.environ.get("BUILDROOT_GIT_BRANCH", "master")
-     if not os.path.exists(srcdir):
--        ret = subprocess.call(["git", "clone", "git://git.busybox.net/buildroot", srcdir],
-+        ret = subprocess.call(["git", "clone", "-b", br_branch, br_repo, srcdir],
-                               stdout=log, stderr=log)
-         if ret != 0:
-             log_write(log, "ERROR: could not clone Buildroot sources")
+     # Avoid locale settings of autobuilder machine leaking in, for example
+@@ -833,6 +867,7 @@ def main():
+         sys.exit(1)
+ 
+     buildpid = multiprocessing.Array('i', int(args['--ninstances']))
++    make_opts = sanitize_make_opts(args['--make-opts'])
+     processes = []
+     for i in range(0, int(args['--ninstances'])):
+         p = multiprocessing.Process(target=run_instance, kwargs=dict(
+@@ -842,7 +877,7 @@ def main():
+                 http_login = args['--http-login'],
+                 http_password = args['--http-password'],
+                 submitter = args['--submitter'],
+-                make_opts = args['--make-opts'],
++                make_opts = make_opts,
+                 upload = upload,
+                 buildpid = buildpid
+             ))
 -- 
 2.3.5
