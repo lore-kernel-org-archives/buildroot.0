@@ -1,46 +1,81 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 12 Apr 2015 12:25:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 8011] When building only busybox and strace,
- strace fails on not finding bluetooth/bluetooth.h
-In-Reply-To: <bug-8011-163@https.bugs.busybox.net/>
-References: <bug-8011-163@https.bugs.busybox.net/>
-Message-ID: <20150412122516.50AC67FD53@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Apr 2015 14:42:13 +0200
+Subject: [Buildroot] [PATCH 2/2 v2 autobuilders] br-reproduce-build: fix URL
+	of gitid
+In-Reply-To: <cover.1428842444.git.yann.morin.1998@free.fr>
+References: <cover.1428842444.git.yann.morin.1998@free.fr>
+Message-ID: <4ec90d83a1df3ac770250375cbd7617dc2b6fe63.1428842444.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8011
+The canonical URL to the results on the autobuilder server wants the
+sha1 to be prefixed with the first three letters of the sha1, like so:
 
---- Comment #10 from Jaap Crezee <jaap@jcz.nl> 2015-04-12 12:25:16 UTC ---
-My strace/config.log
+    b52/b52c54eafc2ea8814bb49850823e55d8e034d33d
 
-<snip>
-configure:7337: checking bluetooth/bluetooth.h usability
-configure:7337:
-/data/work/zupr/ZUPR-Embedded-Buildroot_initramfs/output/host/usr/bin/ccache
-/data/work/zupr/ZUPR-Embedded-Buildroot_initramfs/output/host/usr/bin/i586-unknown-linux-gnu-gcc
--c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os 
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
-conftest.c:89:33: fatal error: bluetooth/bluetooth.h: No such file or directory
- #include <bluetooth/bluetooth.h>
-                                 ^
-compilation terminated.
-configure:7337: $? = 1
-</snip>
+Currently, this is done by a redirect on the server, but it is broken,
+so that requests that do not conform to that scheme return empty
+results. See for example the difference between those two calls:
 
-Seems rather normal. But, wait, I just did change two things:
-- change default rootpw to ""
-- did a make distclean
+    wget -O OK 'http://autobuild.buildroot.org/results/b2c/b2cefd7d362c12ed99b708d11b988704778d450c/defconfig'
+    wget -O KO 'http://autobuild.buildroot.org/results/b2cefd7d362c12ed99b708d11b988704778d450c/defconfig'
 
-Now it seems to work as expected.
+So, currently, passing only the sah1 on the command line of br-reproduce
+would not work, because the sha1 is used as-is to construct the URL. To
+make it work, a user had to pass the sha1 prefixed with the first three
+chars.
 
-Could it have something to do with the above? Most likely number 2, I do not
-think changing a root pwd wil effect something like this.
-Or maybe it is ccache ?
+However, this is not very convenient.
 
+Fix that:
+  - internally reconstruct the canonical URL;
+  - still accept a prefix-sha1 on the command line (for users that got
+    used to that behaviour).
+
+Reported-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+---
+Changes v1 -> v2:
+  - use bashism to extract the first three chars, instead of the more
+    complex but POSIX-compliant construct  (Thomas)
+---
+ utils/br-reproduce-build | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/utils/br-reproduce-build b/utils/br-reproduce-build
+index 0ecfb54..17d61f5 100755
+--- a/utils/br-reproduce-build
++++ b/utils/br-reproduce-build
+@@ -16,10 +16,25 @@ if [ $# -ne 1 ] ; then
+     exit 1 ;
+ fi
+ 
+-BUILD_ID="$1"
++# The location where the results are stored on the server is
++# of the form 'xxx/xxxyyyyyyyy', where 'xxx' are the first
++# three chars of the sha1, and 'xxxyyyyyyyy' is the full sha1.
++#
++# We accept the user to pass either the full sha1, or the full
++# sha1 prefixed with the 'xxx' part. So we just extract the sha1
++# from the value passed by the user
++BUILD_ID="${1#*/}"
+ 
++# The build directory is only made of the full sha1, without the
++# leading 'xxx/' part
+ BUILD_DIR="${OUTPUT_DIR}/${BUILD_ID}"
+ 
++# Now, we construct the BUILD-ID as it is expected to be on the server:
++# - extract the first three chars of the sha1: use some shell triclery:
++# - prepend those three chars and a '/' to the full sha1
++BUILD_ID_SHORT="${BUILD_ID:0:3}"
++BUILD_ID="${BUILD_ID_SHORT}/${BUILD_ID}"
++
+ mkdir -p "${BUILD_DIR}"
+ if [ $? -ne 0 ] ; then
+     echo "Cannot create output directory"
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.9.1
