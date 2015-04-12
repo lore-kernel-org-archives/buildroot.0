@@ -1,73 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Apr 2015 11:25:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gdb: Add optional dependencies
-In-Reply-To: <1428777116-24382-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1428777116-24382-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150412092545.GC4218@free.fr>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sun, 12 Apr 2015 12:30:28 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-04-11
+In-Reply-To: <20150412104113.4f1e8d2d@free-electrons.com>
+References: <20150412063020.68757101071@stock.ovh.net>
+ <CAMo8BfK4+9oE11xoPuQxqHXjh=oJ6cb9LkWAab+g2o82uyzZ0w@mail.gmail.com>
+ <20150412104113.4f1e8d2d@free-electrons.com>
+Message-ID: <CAMo8BfLFhsq+6=HhFBjvoh32R58L=rHnDCEaEjrJaq-j3t1JZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+On Sun, Apr 12, 2015 at 11:41 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Max Filippov,
+>
+> On Sun, 12 Apr 2015 10:47:33 +0300, Max Filippov wrote:
+>> On Sun, Apr 12, 2015 at 9:30 AM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>> > Build statistics for 2015-04-11
+>> >       xtensa |               postgresql-9.4.1 | NOK | http://autobuild.buildroot.net/results/cb3aa9bf4c7e38649f1a62be67c58e34cc786595/
+>> >       xtensa |               postgresql-9.4.1 | NOK | http://autobuild.buildroot.net/results/1fc251eaefd56b1fc18e885debd5d97cc1261b42/
+>> >       xtensa |               postgresql-9.4.1 | NOK | http://autobuild.buildroot.net/results/575fcea8b082a91c08d75db13d478b271c68083c/
+>>
+>> Fixed by https://patchwork.ozlabs.org/patch/453567/
+>
+> Yes, I know. I am just wondering if this is the right fix. It really
+> seems odd to be doing comparisons on the output of gcc. Autoconf should
+> be able to do much better than that.
+>
+> What is this piece of code trying to do? Why doesn't it simply reply on
+> the return value of gcc when testing if this or that feature is
+> available?
 
-On 2015-04-11 20:31 +0200, Bernd Kuhls spake thusly:
-> To allow reproducable builds add some optional dependencies
-> 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/gdb | grep NEEDED | sort
->  0x00000001 (NEEDED)                     Shared library: [libc.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libexpat.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
->  0x00000001 (NEEDED)                     Shared library: [libm.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
->  0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libpython2.7.so.1.0]
->  0x00000001 (NEEDED)                     Shared library: [libutil.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libz.so.1]
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/gdb/gdb.mk |    5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-> index 9818320..34f7b5c 100644
-> --- a/package/gdb/gdb.mk
-> +++ b/package/gdb/gdb.mk
-> @@ -36,6 +36,11 @@ else
->  GDB_DEPENDENCIES = ncurses
->  endif
->  
-> +GDB_DEPENDENCIES += \
-> +	$(if $(BR2_PACKAGE_EXPAT),expat) \
-> +	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
-> +	$(if $(BR2_PACKAGE_ZLIB),zlib)
-
-Do we need those dependencies even when only gdbserver is built?
-
-If not, move the dependencies into the if-block just above.
-If yes, add a comment about it.
-
-Regards,
-Yann E. MORIN.
-
->  # For the host variant, we really want to build with XML support,
->  # which is needed to read XML descriptions of target architectures. We
->  # also need ncurses.
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Exactly the questions that I had.
+The answer: http://www.postgresql.org/message-id/9101.1426820918 at sss.pgh.pa.us
+And response to this patch:
+http://www.postgresql.org/message-id/20150320132351.GS3636 at alvh.no-ip.org
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks.
+-- Max
