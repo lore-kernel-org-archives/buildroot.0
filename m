@@ -1,59 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Apr 2015 18:07:21 +0200
-Subject: [Buildroot] [PATCH 14/14] toolchain-common: drop BR2_INET_IPV6
-In-Reply-To: <1428754662-27829-14-git-send-email-gustavo@zacarias.com.ar>
-References: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
- <1428754662-27829-14-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150412160721.GC19416@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Apr 2015 18:37:46 +0200
+Subject: [Buildroot] [PATCHv2 02/21] fs: declare phony targets as such
+In-Reply-To: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1428856685-4403-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+This commit improves the filesystem handling code to declare its
+various targets as PHONY when appropriate.
 
-On 2015-04-11 09:17 -0300, Gustavo Zacarias spake thusly:
-> It's now unused so farewell.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/common.mk              | 2 ++
+ fs/ext2/ext2.mk           | 2 ++
+ fs/initramfs/initramfs.mk | 2 ++
+ fs/iso9660/iso9660.mk     | 2 ++
+ 4 files changed, 8 insertions(+)
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  toolchain/toolchain-common.in | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-> index dfb7394..478315b 100644
-> --- a/toolchain/toolchain-common.in
-> +++ b/toolchain/toolchain-common.in
-> @@ -5,10 +5,6 @@
->  # so put it here instead
->  source "package/gdb/Config.in.host"
->  
-> -config BR2_INET_IPV6
-> -	bool
-> -	default y
-> -
->  config BR2_TOOLCHAIN_HAS_GCC_BUG_58595
->  	bool
->  
-> -- 
-> 2.0.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/fs/common.mk b/fs/common.mk
+index 5d07f00..cac127f 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -102,6 +102,8 @@ rootfs-$(1)-show-depends:
+ 
+ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
+ 
++.PHONY: rootfs-$(1) rootfs-$(1)-show-depends
++
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+ TARGETS_ROOTFS += rootfs-$(1)
+ endif
+diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+index 1cac72e..cab66a5 100644
+--- a/fs/ext2/ext2.mk
++++ b/fs/ext2/ext2.mk
+@@ -35,6 +35,8 @@ endef
+ rootfs-ext2-symlink:
+ 	ln -sf rootfs.ext2$(ROOTFS_EXT2_COMPRESS_EXT) $(BINARIES_DIR)/rootfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN)$(ROOTFS_EXT2_COMPRESS_EXT)
+ 
++.PHONY: rootfs-ext2-symlink
++
+ ifneq ($(BR2_TARGET_ROOTFS_EXT2_GEN),2)
+ ROOTFS_EXT2_POST_TARGETS += rootfs-ext2-symlink
+ endif
+diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
+index 308924d..db50812 100644
+--- a/fs/initramfs/initramfs.mk
++++ b/fs/initramfs/initramfs.mk
+@@ -17,6 +17,8 @@ rootfs-initramfs: $(ROOTFS_INITRAMFS_DEPENDENCIES) $(ROOTFS_INITRAMFS_POST_TARGE
+ rootfs-initramfs-show-depends:
+ 	@echo $(ROOTFS_INITRAMFS_DEPENDENCIES)
+ 
++.PHONY: rootfs-initramfs rootfs-initramfs-show-depends
++
+ ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+ TARGETS_ROOTFS += rootfs-initramfs
+ endif
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 5b44ba4..4ccfce9 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -48,6 +48,8 @@ rootfs-iso9660: $(BINARIES_DIR)/rootfs.iso9660
+ rootfs-iso9660-show-depends:
+ 	@echo $(ROOTFS_ISO9660_DEPENDENCIES)
+ 
++.PHONY: rootfs-iso9660 rootfs-iso9660-show-depends
++
+ ################################################################################
+ #
+ # Toplevel Makefile options
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.0
