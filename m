@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 01:35:38 +0200
-Subject: [Buildroot] [PATCH 2/8 v4] package/binutils: add hashes
-In-Reply-To: <1fedcd0068d180c92addf908097b04c389f05e9a.1428512075.git.yann.morin.1998@free.fr>
+Date: Tue, 14 Apr 2015 01:36:34 +0200
+Subject: [Buildroot] [PATCH 3/8 v4] package/uclibc: add missing hash for
+	eXtensa
+In-Reply-To: <f5b5e7691683c7529da966088e9369f97e0de968.1428512075.git.yann.morin.1998@free.fr>
 References: <cover.1428512075.git.yann.morin.1998@free.fr>
- <1fedcd0068d180c92addf908097b04c389f05e9a.1428512075.git.yann.morin.1998@free.fr>
-Message-ID: <552C52CA.3070608@mind.be>
+ <f5b5e7691683c7529da966088e9369f97e0de968.1428512075.git.yann.morin.1998@free.fr>
+Message-ID: <552C5302.3060607@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +13,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 08/04/15 18:57, Yann E. MORIN wrote:
+> This is a git snapshot, we can't have a hash for it.
+> 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  package/binutils/binutils.hash | 7 +++++++
->  1 file changed, 7 insertions(+)
->  create mode 100644 package/binutils/binutils.hash
-> 
-> diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-> new file mode 100644
-> index 0000000..4f99514
-> --- /dev/null
-> +++ b/package/binutils/binutils.hash
-> @@ -0,0 +1,7 @@
-> +# Locally computed:
-> +sha256 6c7af8ed1c8cf9b4b9d6e6fe09a3e1d3d479fe63984ba8b9b26bf356b6313ca9  binutils-2.22.tar.bz2
-> +sha256 fe914e56fed7a9ec2eb45274b1f2e14b0d8b4f41906a5194eac6883cfe5c1097  binutils-2.23.2.tar.bz2
-> +sha256 e5e8c5be9664e7f7f96e0d09919110ab5ad597794f5b1809871177a0f0f14137  binutils-2.24.tar.bz2
-> +sha256 22defc65cfa3ef2a3395faaea75d6331c6e62ea5dfacfed3e2ec17b08c882923  binutils-2.25.tar.bz2
-> +# No hash for the ARC variant, comes from the github-helper:
-> +none   xxx                                                               binutils-arc-2014.12.tar.gz
-> 
 
-# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
-sha512	ffe8ef263ef99183e8cc823fe8487ff7d0f7bf9a8efd2853b5f4636aca0023850d13de4eac7d77a5f69413d8a50e6f95bb14569be53df86c0bce38034525ab74	binutils-2.22.tar.bz2
-sha512	dec753bbba008f1526b89cf1bd85feba78f362f5333ffdf93953fd131eb755976dec82a0a4ba38c43d2434da007137780cfe674de5414be5cf7ce7fbc6af6d16	binutils-2.23.2.tar.bz2
-sha512	5ec95ad47d49b12c4558a8db0ca2109d3ee1955e3776057f3330c4506f8f4d1cf5e505fbf8a16b98403a0fcdeaaf986fe0a22be6456247dbdace63ce1f776b12	binutils-2.24.tar.bz2
-sha512	49438970642f379978aba988e3d2e7b63dab6fd0b46d91f4100f083e87a84d242089daca58572245fe620457a77bbbe2d78588ff3fb79314e500d1a39bf96f30	binutils-2.25.tar.bz2
-
-(Just cut&paste from the ftp site, not tested.)
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
+
+> ---
+>  package/uclibc/uclibc.hash | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+> index 69cc103..971ab26 100644
+> --- a/package/uclibc/uclibc.hash
+> +++ b/package/uclibc/uclibc.hash
+> @@ -6,3 +6,6 @@ sha256	0a9085a11615296cfe7783f16ff29073393eb330749947adece0eeddb31705a4	uClibc-a
+>  
+>  # From http://www.uclibc-ng.org/trac/
+>  sha256  e561040293ba4f21dcf3285ca1f683b5a8493eb0ffd3b3e495122cfde5a64a0e        uClibc-ng-1.0.1.tar.xz
+> +
+> +# No hash for this git snapshot
+> +none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
+> 
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
