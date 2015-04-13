@@ -1,180 +1,80 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 00:50:55 +0200
-Subject: [Buildroot] [PATCHv5] system: allow/disallow root login,
- accept encoded passwords
-In-Reply-To: <1428702127-17152-1-git-send-email-yann.morin.1998@free.fr>
-References: <1428702127-17152-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <552C484F.1070105@mind.be>
+Date: Tue, 14 Apr 2015 01:09:38 +0200
+Subject: [Buildroot] [PATCH v2 1/1] xserver_xorg-server: Change default
+ to X.org modular server
+In-Reply-To: <20150411183512.GM4221@free.fr>
+References: <1428772436-16962-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150411195842.52a58aff@free-electrons.com> <20150411181330.GL4221@free.fr>
+ <20150411201805.4bac425d@free-electrons.com> <20150411183512.GM4221@free.fr>
+Message-ID: <552C4CB2.7070001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/04/15 23:42, Yann E. MORIN wrote:
-> From: Lorenzo Catucci <lorenzo@sancho.ccd.uniroma2.it>
+On 11/04/15 20:35, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> Currently, there is only two possibilities regarding the root account:
->   - it is enabled with no password (the default)
->   - it is enabled, using a clear-text, user-provided password
+> On 2015-04-11 20:18 +0200, Thomas Petazzoni spake thusly:
+>> Dear Yann E. MORIN,
+>>
+>> On Sat, 11 Apr 2015 20:13:30 +0200, Yann E. MORIN wrote:
+>>
+>>> I would not mind much doing the switch to the modular Xserver by
+>>> default. But that would mean proper dependency propagation (i.e. C++).
+>>
+>> I don't understand what you mean here.
 > 
-> This is deemed insufficient in many cases, especially when the .config
-> file has to be published (e.g. for the GPL compliance, or any other
-> reason.).
+> See below...
 > 
-> Fix that in two ways:
+>>> However, an alternative solution would be to remove the 'default' clause
+>>> altogether from the choice:
+>>>
+>>>   - if C++ is available, the modular Xserver is enabled by default,
+>>>     being the first option in the choice;
+>>>
+>>>   - if C++ is not enabled, then KDrive is enabled, being the only optionhttp://patchwork.ozlabs.org/patch/400833/
+>>>     in the choice.
+>>
+>> Well, Bernd's patch is doing that in a perfectly fine way. If C++ is
+>> available, the default on modular will work. If C++ is not available,
+>> since the modular option will not be available, the only remaining
+>> option in the choice will be Kdrive, and it will be the selected option.
+>>
+>> Am I missing something?
 > 
->   - add a bolean option that allows/disallows root login altogether,
->     which defaults to 'y' to keep backward compatibility;
+> No, not really.
 > 
->   - accept already-encoded passwords, which we recognise as starting
->     with either of $1$, $5$ or $6$ (resp. for md5, sha256 or sha512).
+> Even though 'default' in Kconfig is not authoritative, and that's not
+> even a warning to default to an option that has unmet dependencies, I
+> still find it odd to default to that option.
 > 
-> Signed-off-by: Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
-> [yann.morin.1998 at free.fr:
->   - don't add a choice to select between clear-text/encoded password,
->     use a single prompt;
->   - differentiate in the password hook itself;
->   - rewrite parts of the help entry;
->   - rewrite and expand the commit log
-> ]
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> And since the default is defaulting to the first entry in the choice, it
+> is no longer needed at all.
 > 
-> ---
-> Changes v4 -> v5:
->   - use makefile syntax instead of shell  (Thomas)
->   - typoes  (Thomas)
->   - fix up the commit log (it never was possible to disable root login)
-> ---
->  system/Config.in | 28 +++++++++++++++++++---------
->  system/system.mk | 22 ++++++++++++++++------
->  2 files changed, 35 insertions(+), 15 deletions(-)
-> 
-> diff --git a/system/Config.in b/system/Config.in
-> index 431524d..6ba34ba 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -177,26 +177,36 @@ endif
->  
->  if BR2_ROOTFS_SKELETON_DEFAULT
->  
-> +config BR2_TARGET_ENABLE_ROOT_LOGIN
-> +	bool "Enable root login"
-> +	default "y"
+> At best, we could add a comment summarising the situation.
 
- No quotes around bool values.
+ Then it's better to go for Bernd's original patch [1] because it explicitly
+gives the different defaults for the different situations.
 
- However, since the default is y while it is normally n, and since we have to do
-something special for the n case, wouldn't it make more sense to call it
-BR2_TARGET_DISABLE_ROOT_LOGIN?
+ ThomasP's comment to that was that it is strange that a choice default depends
+on the toolchain options. It makes sense to make a default depend on the arch
+options, because we consider that something that can't be controlled by the
+user, but changing the default based on toolchain options sounds a bit weird.
 
-> +	help
-> +	  Enable root login password
-> +
->  config BR2_TARGET_GENERIC_ROOT_PASSWD
->  	string "Root password"
->  	default ""
-> +	depends on BR2_TARGET_ENABLE_ROOT_LOGIN
->  	help
-> -	  Set the initial root password (in clear). It will be md5-encrypted.
-> +	  Set the initial root password.
->  
->  	  If set to empty (the default), then no root password will be set,
->  	  and root will need no password to log in.
->  
-> -	  WARNING! WARNING!
-> -	  Although pretty strong, MD5 is now an old hash function, and
-> -	  suffers from some weaknesses, which makes it susceptible to attacks.
-> -	  It is showing its age, so this root password should not be trusted
-> -	  to properly secure any product that can be shipped to the wide,
-> -	  hostile world.
-> +	  If the password starts with any of $1$, $5$ or $6$, it is considered
-> +	  to be already crypt-encoded with respectively md5, sha256 or sha512.
-> +	  Any other value is taken to be a clear-text value, and is crypt-encoded
-> +	  as per the "Passwords encoding" scheme, above.
-> +
-> +	  Note: "$" signs in the hashed password must be doubled. For example,
-> +	  if the hashed password is "$1$longsalt$v35DIIeMo4yUfI23yditq0", then
-> +	  you must enter it as "$$1$$longsalt$$v35DIIeMo4yUfI23yditq0".
+ But of course, we already have a bunch of those, although it's not as explicit
+as in [1]. E.g. the media backend of dvdrw-tools defaults to cdrkit if
+kernel-headers >= 3.0, else it defaults to xorriso; gpu-amd-bin-mx51 output
+defaults to X11 if X11 is selected, else it defaults to framebuffer.
 
- Perhaps explain why:
-
-This is necessary because make will interpret the $ as variable expansion.
-
->  
->  	  WARNING! WARNING!
-> -	  The password appears in clear in the .config file, and may appear
-> +	  The password appears as-is in the .config file, and may appear
->  	  in the build log! Avoid using a valuable password if either the
-> -	  .config file or the build log may be distributed!
-> +	  .config file or the build log may be distributed, or at the
-> +	  very least use a strong cryptographic hash for your password!
->  
->  choice
->  	bool "/bin/sh"
-> diff --git a/system/system.mk b/system/system.mk
-> index 4a1eb4a..b500a01 100644
-> --- a/system/system.mk
-> +++ b/system/system.mk
-> @@ -34,7 +34,7 @@ endef
->  TARGET_FINALIZE_HOOKS += SYSTEM_ISSUE
->  endif
->  
-> -ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
-> +ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
->  TARGETS += host-mkpasswd
->  endif
->  
-> @@ -69,12 +69,22 @@ TARGET_FINALIZE_HOOKS += SET_NETWORK
->  
->  ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
->  
-> -define SYSTEM_ROOT_PASSWD
-> -	[ -n "$(TARGET_GENERIC_ROOT_PASSWD)" ] && \
-> -		TARGET_GENERIC_ROOT_PASSWD_HASH=$$($(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)"); \
-> -	$(SED) "s,^root:[^:]*:,root:$$TARGET_GENERIC_ROOT_PASSWD_HASH:," $(TARGET_DIR)/etc/shadow
-> +ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
-> +ifeq ($(TARGET_GENERIC_ROOT_PASSWD),)
-> +SYSTEM_ROOT_PASSWORD =
-> +else ifneq ($(or $(filter $$1$$%,$(TARGET_GENERIC_ROOT_PASSWD)),$(filter $$5$$%,$(TARGET_GENERIC_ROOT_PASSWD)),$(filter $$6$$%,$(TARGET_GENERIC_ROOT_PASSWD))),)
-
- filter allows multiple patterns, so:
-
-else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(TARGET_GENERIC_ROOT_PASSWD)),)
-
-> +SYSTEM_ROOT_PASSWORD = $(TARGET_GENERIC_ROOT_PASSWD)
-> +else
-> +SYSTEM_ROOT_PASSWORD = $(shell $(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)")
-> +endif
-> +else # !BR2_TARGET_ENABLE_ROOT_LOGIN
-> +SYSTEM_ROOT_PASSWORD = *
-
- Even though Peter prefers positive logic, I think in this case it is more
-important to keep the logic close to the condition, i.e.:
-
-ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),)
-SYSTEM_ROOT_PASSWORD = *
-else ifeq ($(TARGET_GENERIC_ROOT_PASSWD),)
-...
-
- Of course, if it becomes _DISABLE_ then it will be positive logic after all :-)
+ So I'm in favour of going back to [1].
 
  Regards,
  Arnout
 
 
-> +endif
-> +
-> +define SYSTEM_SET_ROOT_PASSWD
-> +	$(SED) 's,^root:[^:]*:,root:$(SYSTEM_ROOT_PASSWORD):,' $(TARGET_DIR)/etc/shadow
->  endef
-> -TARGET_FINALIZE_HOOKS += SYSTEM_ROOT_PASSWD
-> +TARGET_FINALIZE_HOOKS += SYSTEM_SET_ROOT_PASSWD
->  
->  ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
->  define SYSTEM_BIN_SH
-> 
+[1] http://patchwork.ozlabs.org/patch/400833/
 
 
 -- 
