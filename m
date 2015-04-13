@@ -1,42 +1,68 @@
 From: Bamvor Jian Zhang <bamvor.zhangjian@huawei.com>
-Date: Mon, 13 Apr 2015 18:06:47 +0800
-Subject: [Buildroot] [RFC PATCH v2 3/5] aarch64: ilp32: add ilp32
- compiler and linker flags
-In-Reply-To: <5527C3DD.6050401@zacarias.com.ar>
+Date: Mon, 13 Apr 2015 18:12:26 +0800
+Subject: [Buildroot] [RFC PATCH v2 2/5] aarch64: ilp32: handle special
+	file name
+In-Reply-To: <5527C385.1060204@zacarias.com.ar>
 References: <1426672192-21041-1-git-send-email-bamvor.zhangjian@huawei.com>
- <1426672192-21041-4-git-send-email-bamvor.zhangjian@huawei.com>
- <5527C3DD.6050401@zacarias.com.ar>
-Message-ID: <552B9537.9020601@huawei.com>
+ <1426672192-21041-3-git-send-email-bamvor.zhangjian@huawei.com>
+ <5527C385.1060204@zacarias.com.ar>
+Message-ID: <552B968A.40504@huawei.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2015/4/10 20:36, Gustavo Zacarias wrote:
+On 2015/4/10 20:35, Gustavo Zacarias wrote:
 > On 03/18/2015 06:49 AM, Zhang Jian(Bamvor) wrote:
 > 
->> +ifeq ($(BR2_AARCH64_ILP32)$(BR2_aarch64),yy)
->> +TARGET_ABI += -mabi=ilp32 -Xlinker -maarch64linux32
+>> In aarch64 ilp32, the directory of library is libilp32 and the linker is
+>> ld-linux-aarch64_ilp32.so.1 or ld-linux-aarch64_be_ilp32.so.1.
+> 
+> There's a couple of issues here, let's see...
+> 
+>> +ifeq ($(BR2_GCC_TARGET_ABI), "ilp32")
+>> +# Leave extension for x32 on x86_64 which is libx32 instead of libx32
+>> +ifeq ($(BR2_aarch64), y)
+>> +LIB_SYMLINK = libilp32
 >> +endif
->> +
->> +ifeq ($(BR2_AARCH64_ILP32)$(BR2_aarch64_be),yy)
->> +TARGET_ABI += -mabi=ilp32 -Xlinker -EB -Xlinker -maarch64linux32b
+>> +ifeq ($(BR2_aarch64_be), y)
+>> +LIB_SYMLINK = libilp32
+>> +endif
 >> +endif
 > 
-> Ok, but...
+> You can simplify this:
 > 
->> -TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
->> +TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS)) $(TARGET_ABI)
+> ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
+> ifeq ($(BR2_GCC_TARGET_ABI), "ilp32")
+> LIB_SYMLINK = libilp32
+> endif
+> endif
 > 
-> ...you're throwing -mabi at ld, i don't think ld understands that and
-> would probably break other architectures like PowerPC e500.
-Well, I guess it will only work for aarch64 because the BR2_AARCH64_ILP32.
-Meanwhile, maybe I only need the "-Xlinker -EB -Xlinker -maarch64linux32b".
-I will change it in my next version.
+> aarch64 & aarch64_be won't be defined at the same time so you can
+> condense it in a single ifeq.
+> Also the comment doesn't apply IMHO, there's nothing related to x86_64
+> here yet.
+> Additionally it has to be aarch64 before it can be ilp32 right? And is
+> "ilp32" used for any other architecture? If not you could remove the
+> whole aarch64 clause.
+Ilp32 is used in x86_64 too. But the name of ilp32 in x86_64 is x32.
+> 
+>> +ifeq ($(BR2_GCC_TARGET_ABI), "ilp32")
+>> +LIB_EXTERNAL_LIBS += ld*.so
+>> +endif
+> 
+> Can we focus this a little bit more like it's done for ARM EABIhf
+> instead of just copying ld* blindly?
+Oh, it is ld-VERSION.so in libilp32 directory. The ld-linux-aarch64_ilp32.so.1
+is only existed in lib directory. And ld-linux-aarch64_ilp32.so.1 is the
+only file I need in lib. So, here, I just skip the lib directory.
 
 regards
 
 bamvor
+> Otherwise the rest looks ok from a quick look/without having a toolchain
+> to test things.
 > Regards.
+> 
 > 
