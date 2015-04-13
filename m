@@ -1,75 +1,71 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Mon, 13 Apr 2015 17:18:39 -0500
-Subject: [Buildroot] [PATCHv2 10/21] Makefile: move source-check outside
- of noconfig_targets
-In-Reply-To: <20150413215831.GQ29025@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 14 Apr 2015 00:29:42 +0200
+Subject: [Buildroot] [PATCHv2 09/21] pkg-download: remove support for
+ the SHOW_EXTERNAL_DEPS DL_MODE
+In-Reply-To: <20150413204017.GI29025@free.fr>
 References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-11-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150413204916.GJ29025@free.fr>
- <20150413230640.10513197@free-electrons.com>
- <20150413215831.GQ29025@free.fr>
-Message-ID: <CAMQcK5+3TaZ+X7=BLC8TCDDzZ=RPAgeE5hDWOujmv_ivvzn=Xw@mail.gmail.com>
+ <1428856685-4403-10-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150413203115.GG29025@free.fr> <20150413223318.3429cc65@free-electrons.com>
+ <20150413204017.GI29025@free.fr>
+Message-ID: <552C4356.4030006@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+On 13/04/15 22:40, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2015-04-13 22:33 +0200, Thomas Petazzoni spake thusly:
+>> On Mon, 13 Apr 2015 22:31:15 +0200, Yann E. MORIN wrote:
+>>> That's weird, the output looks like that:
+>>>
+>>>     $ make external-deps
+>>>     make -C /home/ymorin/dev/buildroot/buildroot O=/home/ymorin/dev/buildroot/O/. external-deps
+>>>     [--SNIP--]
+>>>     gcc-4.8.4.tar.bz2
+>>>     gdbm-1.11.tar.gz
+>>>     genext2fs-1.4.1.tar.gz
+>>>       GEN     /home/ymorin/dev/buildroot/O/./Makefile
+>>>     genimage-7.tar.xz
+>>>     genpart-1.0.2.tar.bz2
+>>>     [--SNIP--]
+>>>
+>>> Weird that the message about our Makefile wrapper is irght in the middle
+>>> of that... :-/
+>>
+>> Weird, indeed. Could it be because external-deps is implement itself as
+>> a call to $(MAKE) _external-deps ?
+> 
+> Well, I'm no longer able to reproduce it... I'll try to get a
+> reproducible setup and will report back...
 
-On Mon, Apr 13, 2015 at 4:58 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+ Try 'touch O/.config; make external-deps'.
 
-[...]
+ You probably did something like:
 
-> Well, I have a slightly different opinion.
->
-> First, I agree that for Buildroot maintenance, we only care about
-> upstream, not even primary or backup sites. We do not even have a
-> primary.
->
-> Second, for a user that wants to be serious, the only thing that would
-> really matter in the end is the existence of the package on the primary
-> site.
->
-> Let me explain...
->
-> In an enterprise-grade project, one can not rely on external resources
-> to be always available; one can only rely on internal resources. Thus,
-> in that case, source-check should only look at the primary.
+make O=O foo_defconfig
+make O=O external-deps
 
-I agree with this statement and would also like to add that they are
-probably also sitting being a firewall so having the primary site be
-the only source of downloads helps avoid errors and confusion.
+ After foo_defconfig, .config is more recent than auto.conf so silentoldconfig
+is run, and that one depends on the dependency-less outputmakefile target.
+Really silly inheritance from the kernel's kconfig infra.
 
-> However, that primary has to filled in to begin with, and that is often
-> done by just running "make source" and then copying those sources to the
-> primary. If an upstream source is missing, it is the moment one wants to
-> be notified. There's no reason to run a source-check onto upstream, even
-> less so on the mirror.
->
-> So, in my opinion, source-check should behave as such:
->
->   - if primary is set, only check on primary
->   - if primary is not set, only check upstream
->   - never check on the mirror
 
-The only reason I could see someone in large enterprise needing to be
-able to reach the mirror is if there are behind a firewall where
-getting an opening to the mirror (sources.b.o) is easier for them to
-get access to than others. However, I as I typed the above sentence, I
-thought it would then make more sense for them to just mirror
-sources.b.o themselves outside of buildroot for a them to create
-primary site internally.
+ Regards,
+ Arnout
 
-Anyway that is my two-cents on your comments and I don't really have a
-preference whatever direction this goes.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
 
-Thanks,
--Ryan
 
 -- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
