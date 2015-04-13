@@ -1,49 +1,76 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 01:46:46 +0200
-Subject: [Buildroot] [PATCH 7/8 v4] support/download: restore mandatory
-	check of hashes
-In-Reply-To: <f792146f35a5019f70f0656a5fa448d7ff9778fc.1428512075.git.yann.morin.1998@free.fr>
+Date: Tue, 14 Apr 2015 01:56:02 +0200
+Subject: [Buildroot] [PATCH 8/8 v4] support/download: do not accept
+ exlcuded files with ashes
+In-Reply-To: <ee02447feb64c265dcf5e7a60dddb630c7dc9402.1428512075.git.yann.morin.1998@free.fr>
 References: <cover.1428512075.git.yann.morin.1998@free.fr>
- <f792146f35a5019f70f0656a5fa448d7ff9778fc.1428512075.git.yann.morin.1998@free.fr>
-Message-ID: <552C5566.60903@mind.be>
+ <ee02447feb64c265dcf5e7a60dddb630c7dc9402.1428512075.git.yann.morin.1998@free.fr>
+Message-ID: <552C5792.6090606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/04/15 18:57, Yann E. MORIN wrote:
-> Now that custom external toolchains to be downloaded proprely instruct
-                                                       properly
+ In subject: excluded hashes
 
-> to not fail on a missing hash, restore the mandatory hash check for
-> everything else.
+ However, I'm not so sure of this one. Let's say that I configure a custom
+toolchain that comes from Linaro, and later on upstream buildroot adds official
+support for this toolchain including a hash, then suddenly I'll get an error for
+my custom toolchain...
+
+ Also:
+
+On 08/04/15 18:57, Yann E. MORIN wrote:
+> If a file is excluded from checking its hashes, it must effectively have
+> no hash for it.
+> 
+> So, if an excluded file indeed has at least one hash, there is an issue
+> somewhere; that file should probably not be excluded.
+> 
+> When this happens, bail out in error.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  support/download/check-hash | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/support/download/check-hash b/support/download/check-hash
+> index 96f5965..849637e 100755
+> --- a/support/download/check-hash
+> +++ b/support/download/check-hash
+> @@ -18,6 +18,9 @@ set -e
+>  #       one of its hashes
+>  #   3:  the hash file exists and there was no hash to check the file against
+>  #   4:  the hash file exists and at least one hash type is unknown
+> +#   5:  the hash file exists and there was at least one hash for the file
+> +#       to check and all those hashes did match, but the file is excluded
+> +#       from being checked
+>  
+>  while getopts :q OPT; do
+>      case "${OPT}" in
+> @@ -106,4 +109,11 @@ if [ ${nb_checks} -eq 0 ]; then
+>      done
+>      printf "ERROR: No hash found for %s\n" "${base}" >&2
+>      exit 3
+> +else
+> +    for f in ${BR_NO_CHECK_HASH_FOR}; do
+> +        if [ "${f}" = "${base}" ]; then
+> +            printf "ERROR: Hash found for excluded %s\n" "${base}" >&2
+> +            exit 5
+> +        fi
+> +    done
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
+ I'd move this check before actually checking the hash; I have the feeling it
+will be pretty likely that the hashes will mismatch when this error occurs, and
+then this error is probably the root issue.
 
  Regards,
  Arnout
 
-> ---
->  support/download/check-hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/download/check-hash b/support/download/check-hash
-> index ca81f00..96f5965 100755
-> --- a/support/download/check-hash
-> +++ b/support/download/check-hash
-> @@ -105,5 +105,5 @@ if [ ${nb_checks} -eq 0 ]; then
->          fi
->      done
->      printf "ERROR: No hash found for %s\n" "${base}" >&2
-> -    exit 0
-> +    exit 3
 >  fi
 > 
 
