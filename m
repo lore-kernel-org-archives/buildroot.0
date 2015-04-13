@@ -1,104 +1,105 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Apr 2015 23:04:05 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/python-pydal: new package
-In-Reply-To: <CA+TH9V=rovjsF+-g0mMtQzAOJtebzTAQLMR778emgycxjSuOAw@mail.gmail.com>
-References: <1428933447-32061-1-git-send-email-angelo.compagnucci@gmail.com>
- <1428933447-32061-2-git-send-email-angelo.compagnucci@gmail.com>
- <20150413161716.5cd8e3ae@free-electrons.com>
- <CA+TH9V=rovjsF+-g0mMtQzAOJtebzTAQLMR778emgycxjSuOAw@mail.gmail.com>
-Message-ID: <20150413230405.4a3b3a78@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Apr 2015 23:05:21 +0200
+Subject: [Buildroot] [PATCHv2 12/21] pkg-generic: implement source-check
+ targets
+In-Reply-To: <1428856685-4403-13-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1428856685-4403-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150413210521.GL29025@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Thomas, All,
 
-On Mon, 13 Apr 2015 16:34:44 +0200, Angelo Compagnucci wrote:
-
-> No. Unfortunately buildroot doesn't support git submodules: the
-> download helper makes a bare clone and zip the results without git
-> informations, so it's not possible to do a submodule init in a
-> POST_EXTRACT action.
+On 2015-04-12 18:37 +0200, Thomas Petazzoni spake thusly:
+> This commits extends the common package infrastructure with the
+> $(1)-source-check and $(1)-all-source-check targets.
 > 
-> The only way is to add a dummy package for the submodule and copy the
-> downloaded content to appropriate folders. I was inspired by other
-> packages (ex sunxi-mali-prop) that use the same exact method.
-
-No, that's not the only way. Just package python-pydal as a normal
-Python module, that can be selected independently from python-web2py.
-Ignore completely that it is a submodule of python-web2py, because we
-don't care: python-web2py simply does "import pydal", so as long as
-python-pydal has been installed, everything will be alright.
-
-> >> +PYTHON_PYDAL_VERSION = v15.03
-> >> +PYTHON_PYDAL_SITE = https://github.com/web2py/pydal.git
-> >> +PYTHON_PYDAL_SITE_METHOD = git
-> >
-> > github function?
+> The $(1)-source-check target simply calls the newly added
+> SOURCE_CHECK macro on all items to be downloaded.
 > 
-> Using this method I can use alternatively both commit id or tag.
-
-I don't get it, with the github function you can define a commit id or
-a tag.
-
-> >> +PYTHON_PYDAL_LICENSE = BSDv3
-> >
-> > BSDv3 does not exist. You're confusing GPLv3 and BSD-3c.
+> The $(1)-all-source-check target will depend on the
+> $(1)-all-source-check targets of all dependent packages and the
+> $(1)-source-check target of the current package, which allows to do a
+> recursive source-check in the dependency tree.
 > 
-> Doh! Probably also the original author is wrong:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[manually tested with PKG-source-check and PKG-all-source-check, with
+ PKG being either ejabberd or xz, both enabled.]
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/pkg-generic.mk | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
 > 
-> "License
-> pyDAL is released under the BSDv3 License.
-> For further details, please check the LICENSE file."
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 11edb34..b45b86e 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -577,6 +577,16 @@ endif
+>  $(1)-show-version:
+>  			@echo $$($(2)_VERSION)
+>  
+> +$(1)-source-check:
+> +ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+> +	$$(foreach p,$$($(2)_SOURCE) $$($(2)_EXTRA_DOWNLOADS) $$($(2)_PATCH),\
+> +		$$(if $$(findstring ://,$$(p)),\
+> +			$$(call SOURCE_CHECK,$$(p)),\
+> +			$$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$$(p))))
+> +else
+> +	test -d $$($(2)_OVERRIDE_SRCDIR)
+> +endif
+> +
+>  $(1)-show-depends:
+>  			@echo $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
+>  
+> @@ -589,6 +599,8 @@ $(1)-graph-depends: graph-depends-requirements
+>  
+>  $(1)-all-source:       $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-source) $(1)-source
+>  
+> +$(1)-all-source-check:       $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-source-check) $(1)-source-check
+> +
+>  $(1)-all-external-deps:        $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-external-deps) $(1)-external-deps
+>  
+>  $(1)-all-legal-info:   $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-legal-info) $(1)-legal-info
+> @@ -782,6 +794,7 @@ endif
+>  	$(1)-all-external-deps \
+>  	$(1)-all-legal-info \
+>  	$(1)-all-source \
+> +	$(1)-all-source-check \
+>  	$(1)-build \
+>  	$(1)-clean-for-rebuild \
+>  	$(1)-clean-for-reconfigure \
+> @@ -805,7 +818,8 @@ endif
+>  	$(1)-rsync \
+>  	$(1)-show-depends \
+>  	$(1)-show-version \
+> -	$(1)-source
+> +	$(1)-source \
+> +	$(1)-source-check
+>  
+>  endif # $(2)_KCONFIG_VAR
+>  endef # inner-generic-package
+> -- 
+> 2.1.0
 > 
-> I will submit a PR to Giovanni Barillari!
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Yes, the author is wrong, I looked at the license, and it's a BSD-3c.
-
-> >> +PYTHON_PYDAL_LICENSE_FILES = LICENSE
-> >> +
-> >> +$(eval $(generic-package))
-> >
-> > A comment above this to explain why we have this generic-package that
-> > doesn't do anything.
-> 
-> Ok!
-
-Well, in fact, change it to a Python package that does something:
-
-Something along the lines of:
-
-diff --git a/package/python-pydal/Config.in b/package/python-pydal/Config.in
-index eda2f77..303762d 100644
---- a/package/python-pydal/Config.in
-+++ b/package/python-pydal/Config.in
-@@ -1,2 +1,2 @@
- config BR2_PACKAGE_PYTHON_PYDAL
--       bool
-+       bool "python-pydal"
-diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
-index a88bf8b..25eaf56 100644
---- a/package/python-pydal/python-pydal.mk
-+++ b/package/python-pydal/python-pydal.mk
-@@ -5,9 +5,9 @@
- ################################################################################
- 
- PYTHON_PYDAL_VERSION = v15.03
--PYTHON_PYDAL_SITE = https://github.com/web2py/pydal.git
--PYTHON_PYDAL_SITE_METHOD = git
--PYTHON_PYDAL_LICENSE = BSDv3
-+PYTHON_PYDAL_SITE = $(call github,web2py,pydal,$(PYTHON_PYDAL_VERSION))
-+PYTHON_PYDAL_LICENSE = BSD-3c
- PYTHON_PYDAL_LICENSE_FILES = LICENSE
-+PYTHON_PYDAL_SETUP_TYPE = setuptools
- 
--$(eval $(generic-package))
-+$(eval $(python-package))
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
