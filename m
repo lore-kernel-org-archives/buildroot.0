@@ -1,49 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Apr 2015 23:06:40 +0200
-Subject: [Buildroot] [PATCHv2 10/21] Makefile: move source-check outside
- of noconfig_targets
-In-Reply-To: <20150413204916.GJ29025@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Apr 2015 23:07:36 +0200
+Subject: [Buildroot] [PATCHv2 13/21] Makefile: implement a package based
+ source-check target
+In-Reply-To: <1428856685-4403-14-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-11-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150413204916.GJ29025@free.fr>
-Message-ID: <20150413230640.10513197@free-electrons.com>
+ <1428856685-4403-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150413210736.GM29025@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Thomas, All,
 
-On Mon, 13 Apr 2015 22:49:16 +0200, Yann E. MORIN wrote:
-
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 2015-04-12 18:37 +0200, Thomas Petazzoni spake thusly:
+> This commit switches the implementation of the global source-check
+> target to use a package infrastructure based mechanism, using the
+> $(1)-all-source-check target added in the previous commit.
 > 
-> However, I noticed that source-check tries to go to the mirror. For
-> example, cjson fails to download from svn for me here, and it falls back
-> to looking on the mirror, and thus concludes it exists.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[tested against a randpackageconfig]
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  Makefile | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> Shouldn't source-check be limited to looking at the upstream locations?
+> diff --git a/Makefile b/Makefile
+> index 6937dd3..7d94ee8 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -617,8 +617,7 @@ external-deps:
+>  	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
+>  
+>  # check if download URLs are outdated
+> -source-check:
+> -	$(MAKE1) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
+> +source-check: $(foreach p,$(PACKAGES),$(p)-all-source-check)
+>  
+>  legal-info-clean:
+>  	@rm -fr $(LEGAL_INFO_DIR)
+> -- 
+> 2.1.0
 > 
-> However, not a blocker, since it;s already the behaviour we have.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Yes, the behavior you're observing is indeed the current behavior as
-far as I know, so my patches are not changing this. Indeed, we could
-discuss whether source-check should check only primary site + upstream
-site, or primary site + upstream site + sources.b.o.
-
-From a BR maintenance point of view, checking only primary site +
-upstream is probably better as it means we can get notified when an
-upstream has disappeared.
-
-But from a BR user point of view, what's important is that the source
-code remains available *somewhere*, be it from upstream or sources.b.o.
-
-So I'm not very decided on this. Opinions welcome.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
