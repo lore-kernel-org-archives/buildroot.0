@@ -1,47 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Apr 2015 23:36:36 +0200
-Subject: [Buildroot] [PATCHv2 12/21] pkg-generic: implement source-check
- targets
-In-Reply-To: <20150413212558.GN29025@free.fr>
-References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-13-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150413210521.GL29025@free.fr> <20150413212558.GN29025@free.fr>
-Message-ID: <20150413213636.GO29025@free.fr>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Mon, 13 Apr 2015 23:38:19 +0200
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.9.1-1
+Message-ID: <1428961099-30334-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Also update hash file.
 
-On 2015-04-13 23:25 +0200, Yann E. MORIN spake thusly:
-> On 2015-04-13 23:05 +0200, Yann E. MORIN spake thusly:
-> > On 2015-04-12 18:37 +0200, Thomas Petazzoni spake thusly:
-[--SNIP--]
-> > > +$(1)-source-check:
-> > > +ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-> > > +	$$(foreach p,$$($(2)_SOURCE) $$($(2)_EXTRA_DOWNLOADS) $$($(2)_PATCH),\
-> > > +		$$(if $$(findstring ://,$$(p)),\
-> > > +			$$(call SOURCE_CHECK,$$(p)),\
-> > > +			$$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$$(p))))
->                                                             ^^
-> You're missing a $$(sep) before the last parenthesis, here  ||
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-And because my tabstop=4, I missed the right position. Regardless, the
-following is correct:
-
-> so that last line would be:
-> 
->     $$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$$(p)))$$(sep))
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index d93ccfe..b1c9caf 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
+-sha256 32747565fc30da0ff0bc0bf3e41c9fefad829fa8fb2f7d1b98dd84ddb3919b0e ImageMagick-6.9.1-0.tar.xz
++sha256 8f6ebeb1a1321fd7b7d3161a66461743ea5bbc352e4339c792b3bab52c379378 ImageMagick-6.9.1-1.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index b6ef09c..1594f69 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 6.9.1-0
++IMAGEMAGICK_VERSION = 6.9.1-1
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
