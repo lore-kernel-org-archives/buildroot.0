@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Apr 2015 21:37:07 +0200
-Subject: [Buildroot] [PATCHv2 02/21] fs: declare phony targets as such
-In-Reply-To: <1428856685-4403-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Apr 2015 21:44:33 +0200
+Subject: [Buildroot] [PATCHv2 03/21] Makefile: targets are now declared
+ phony by the appropriate infrastructures
+In-Reply-To: <1428856685-4403-4-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150413193707.GB29025@free.fr>
+ <1428856685-4403-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150413194433.GC29025@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,60 +15,53 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-04-12 18:37 +0200, Thomas Petazzoni spake thusly:
-> This commit improves the filesystem handling code to declare its
-> various targets as PHONY when appropriate.
+> The main Makefile was declaring a subset of the per-package targets as
+> being PHONY, but not all of them. Now that the pkg-generic package
+> infrastructure is taking care of that in a much more systematic
+> fashion, this commit gets rid of the unneeded code from the main
+> Makefile.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I'll have to withdraw that tag of mine, see below...
 
-Just a commnet, below...
-
-> diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
-> index 308924d..db50812 100644
-> --- a/fs/initramfs/initramfs.mk
-> +++ b/fs/initramfs/initramfs.mk
-> @@ -17,6 +17,8 @@ rootfs-initramfs: $(ROOTFS_INITRAMFS_DEPENDENCIES) $(ROOTFS_INITRAMFS_POST_TARGE
->  rootfs-initramfs-show-depends:
->  	@echo $(ROOTFS_INITRAMFS_DEPENDENCIES)
+> ---
+>  Makefile | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index f011918..fee2551 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -390,7 +390,6 @@ include fs/common.mk
+>  include $(BR2_EXTERNAL)/external.mk
 >  
-> +.PHONY: rootfs-initramfs rootfs-initramfs-show-depends
+>  TARGETS_SOURCE := $(patsubst %,%-source,$(TARGETS))
+> -TARGETS_DIRCLEAN := $(patsubst %,%-dirclean,$(TARGETS))
+>  
+>  # host-* dependencies have to be handled specially, as those aren't
+>  # visible in Kconfig and hence not added to a variable like TARGETS.
+> @@ -426,9 +425,7 @@ world: target-post-image
+>  
+>  .PHONY: all world toolchain dirs clean distclean source outputmakefile \
+>  	legal-info legal-info-prepare legal-info-clean printvars help \
+> -	list-defconfigs target-finalize target-post-image \
 
-This made me think of the trick we use to force a kernel rebuild with
-this newly-created initramfs.
+Since you first posted that series, the 'list-defconfig' was introduced
+by Arnout, and your patch removes it from being a PHONY target, which it
+should be...
 
-We're using a post-fs target to force the kerbnel rebuild:
-    ROOTFS_INITRAMFS_POST_TARGETS += linux-rebuild-with-initramfs
+> -	$(TARGETS) $(TARGETS_ROOTFS) \
+> -	$(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO)
+> +	target-finalize target-post-image
 
-But this rule is not PHONY, and your series does not make it PHONY.
-This could be done in a fallow-up patch, and is not a blocker.
+... so should be kept in there.
+
+When you fix that, you can keep my reviewd-by tag.
 
 Regards,
 Yann E. MORIN.
-
->  ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
->  TARGETS_ROOTFS += rootfs-initramfs
->  endif
-> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-> index 5b44ba4..4ccfce9 100644
-> --- a/fs/iso9660/iso9660.mk
-> +++ b/fs/iso9660/iso9660.mk
-> @@ -48,6 +48,8 @@ rootfs-iso9660: $(BINARIES_DIR)/rootfs.iso9660
->  rootfs-iso9660-show-depends:
->  	@echo $(ROOTFS_ISO9660_DEPENDENCIES)
->  
-> +.PHONY: rootfs-iso9660 rootfs-iso9660-show-depends
-> +
->  ################################################################################
->  #
->  # Toplevel Makefile options
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
