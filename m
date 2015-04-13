@@ -1,52 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Apr 2015 23:10:59 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/python-web2py: new package
-In-Reply-To: <CA+TH9V=m3fCRPzt+vPKV3m=o5KL8W7DaxokRp1WFKNH07zzf0w@mail.gmail.com>
-References: <1428933447-32061-1-git-send-email-angelo.compagnucci@gmail.com>
- <1428933447-32061-3-git-send-email-angelo.compagnucci@gmail.com>
- <20150413162140.7851d045@free-electrons.com>
- <CA+TH9V=m3fCRPzt+vPKV3m=o5KL8W7DaxokRp1WFKNH07zzf0w@mail.gmail.com>
-Message-ID: <20150413231059.79c1d264@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 13 Apr 2015 18:17:56 -0300
+Subject: [Buildroot] [PATCH] libksba: security bump to version 1.3.3
+Message-ID: <1428959876-32242-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Fixes (no CVEs assigned yet):
 
-On Mon, 13 Apr 2015 16:43:08 +0200, Angelo Compagnucci wrote:
+* integer overflow in the DN decoder src/dn.c (append_quoted,
+append_atv)
 
-> dependencies. Probably only python would suffice, cause python-sqlite
-> is always compiled with python cause it's selected.
+* integer overflow in the BER decoder src/ber-decoder.c (ber_decoder_s)
 
-There is no such thing as python-sqlite. There is only python, which
-may or may not have the sqlite functionality. In such cases, what you
-have to do is:
+* denial of service due to stack overflow in src/ber-decoder.c
+(push_decoder_state, pop_decoder_state)
 
- 1/ At the Config.in level, make sure you select the relevant options,
-    i.e BR2_PACKAGE_PYTHON_SQLITE (or BR2_PACKAGE_PYTHON3_SQLITE if you
-    want to support Python 3)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libksba/libksba.hash | 4 ++--
+ package/libksba/libksba.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- 2/ At the .mk level, depend on the appropriate package, in this case
-    'python' (or 'python3')
-
-> > This package has a setup.py. Any reason why you're not using it,
-> > together with the python-package infrastructure?
-> 
-> I can try! Honestly, I've not explored the option cause web2py is self
-> contained and it doesn't require installation. It uses a writable
-> directory for served applications, so suing a custom directory un
-> /usr/share with writing permission setted to www-data seemed the most
-> sensible choice.
-
-Installing with python-package seems to work, but it does not install
-the web2py.py program itself, so it should be done separately. Also, it
-is a bit weird that the whole thing has to be part of a www-data
-writable directory, no?
-
-Thomas
+diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
+index 3bd6ef0..f7727f1 100644
+--- a/package/libksba/libksba.hash
++++ b/package/libksba/libksba.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.gnupg.org/pipermail/gnupg-announce/2014q4/000359.html
+-sha1	37d0893a587354af2b6e49f6ae701ca84f52da67	libksba-1.3.2.tar.bz2
++# Locally calculated after checking pgp signature
++sha256	0c7f5ffe34d0414f6951d9880a46fcc2985c487f7c36369b9f11ad41131c7786	libksba-1.3.3.tar.bz2
+diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
+index b48cac5..7651534 100644
+--- a/package/libksba/libksba.mk
++++ b/package/libksba/libksba.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBKSBA_VERSION = 1.3.2
++LIBKSBA_VERSION = 1.3.3
+ LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
+ LIBKSBA_SITE = ftp://ftp.gnupg.org/gcrypt/libksba
+ LIBKSBA_LICENSE = LGPLv3+ or GPLv2+ (library, headers), GPLv3+ (manual, tests, build system)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.5
