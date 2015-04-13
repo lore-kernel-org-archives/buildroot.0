@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 01:45:12 +0200
-Subject: [Buildroot] [PATCH 6/8 v4] package/uclibc: ignore missing hash
-	for snapshots
-In-Reply-To: <17515f799ca33cad357949df9926d260187d57b4.1428512075.git.yann.morin.1998@free.fr>
+Date: Tue, 14 Apr 2015 01:46:46 +0200
+Subject: [Buildroot] [PATCH 7/8 v4] support/download: restore mandatory
+	check of hashes
+In-Reply-To: <f792146f35a5019f70f0656a5fa448d7ff9778fc.1428512075.git.yann.morin.1998@free.fr>
 References: <cover.1428512075.git.yann.morin.1998@free.fr>
- <17515f799ca33cad357949df9926d260187d57b4.1428512075.git.yann.morin.1998@free.fr>
-Message-ID: <552C5508.1050007@mind.be>
+ <f792146f35a5019f70f0656a5fa448d7ff9778fc.1428512075.git.yann.morin.1998@free.fr>
+Message-ID: <552C5566.60903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,11 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 08/04/15 18:57, Yann E. MORIN wrote:
-> We can't have a hash for snapshots, so add them to the exclusion list.
+> Now that custom external toolchains to be downloaded proprely instruct
+                                                       properly
+
+> to not fail on a missing hash, restore the mandatory hash check for
+> everything else.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -22,25 +26,25 @@ On 08/04/15 18:57, Yann E. MORIN wrote:
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+
  Regards,
  Arnout
 
 > ---
->  package/uclibc/uclibc.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  support/download/check-hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index 72a46d9..1ec8b10 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -11,6 +11,7 @@ UCLIBC_LICENSE_FILES = COPYING.LIB
->  
->  ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
->  UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
-> +BR_NO_CHECK_HASH_FOR += uClibc-$(UCLIBC_VERSION).tar.xz
->  else ifeq ($(BR2_UCLIBC_VERSION_NG),y)
->  UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
->  UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+> diff --git a/support/download/check-hash b/support/download/check-hash
+> index ca81f00..96f5965 100755
+> --- a/support/download/check-hash
+> +++ b/support/download/check-hash
+> @@ -105,5 +105,5 @@ if [ ${nb_checks} -eq 0 ]; then
+>          fi
+>      done
+>      printf "ERROR: No hash found for %s\n" "${base}" >&2
+> -    exit 0
+> +    exit 3
+>  fi
 > 
 
 
