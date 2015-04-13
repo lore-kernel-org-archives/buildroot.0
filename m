@@ -1,116 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Apr 2015 16:21:40 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/python-web2py: new package
-In-Reply-To: <1428933447-32061-3-git-send-email-angelo.compagnucci@gmail.com>
-References: <1428933447-32061-1-git-send-email-angelo.compagnucci@gmail.com>
- <1428933447-32061-3-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150413162140.7851d045@free-electrons.com>
+From: Igor Trevisan <igt1972@gmail.com>
+Date: Mon, 13 Apr 2015 16:27:29 +0200
+Subject: [Buildroot] Edit custom package install path
+In-Reply-To: <20150409143316.510c2ff6@free-electrons.com>
+References: <CALQ+5acckG4TxdDSF4jr4QoSr-FZJFjsnD3g9Dz6U4ApbKQpyQ@mail.gmail.com>
+ <20150409143316.510c2ff6@free-electrons.com>
+Message-ID: <CALQ+5afYacXUj5OA+NjX79YNpOwMggmVAVH+qYuyX7P9=-qRJw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Hi Thomas,
 
-On Mon, 13 Apr 2015 15:57:27 +0200, Angelo Compagnucci wrote:
+On 9 April 2015 at 14:33, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Igor Trevisan,
+>
+> On Thu, 9 Apr 2015 14:26:33 +0200, Igor Trevisan wrote:
+>
+>> I'd like to know if there's a way to chose or edit, from Menuconfig,
+>> the installation path of a given package.
+>>
+>> Let suppose I added "mypackage" to buildroot and I want to give the
+>> user the power to define where this package
+>> will stay in the final root FS for my target: /opt, /usr/bin, other...
+>>
+>> Is there a way to do this?
+>
+> No, there is no way to do this. We cannot add one "installation path"
+> option to each of the 1500 packages we have in Buildroot.
 
-> diff --git a/package/python-web2py/Config.in b/package/python-web2py/Config.in
-> new file mode 100644
-> index 0000000..c376856
-> --- /dev/null
-> +++ b/package/python-web2py/Config.in
-> @@ -0,0 +1,26 @@
-> +config BR2_PACKAGE_PYTHON_WEB2PY
-> +	bool "python-web2py"
-> +	depends on BR2_PACKAGE_PYTHON
-> +	select BR2_PACKAGE_PYTHON_PYDAL
-> +	select BR2_PACKAGE_ZLIB
+Sounds reasonable... :-)
 
-Not needed.
+> The options are:
+>
+>  * Move things around in a post-build script, if the thing can be moved
+>    after compilation.
+>
+>  * Adjust the package .mk file to your needs.
+>
 
-> +	select BR2_PACKAGE_PYTHON_ZLIB
-> +	select BR2_PACKAGE_EXPAT
+I went with the second one.
 
-Ditto.
+Thanks for your answer,
+best regards,
+I.
 
-> +	select BR2_PACKAGE_PYTHON_PYEXPAT
-> +	select BR2_PACKAGE_SQLITE
-
-Ditto.
-
-Those are already selected by BR2_PACKAGE_PYTHON_{ZLIB,PYEXPAT,SQLITE}
-respectively.
-
-> diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-> new file mode 100644
-> index 0000000..828b662
-> --- /dev/null
-> +++ b/package/python-web2py/python-web2py.mk
-> @@ -0,0 +1,46 @@
-> +################################################################################
-> +#
-> +# python-web2py
-> +#
-> +################################################################################
-> +
-> +PYTHON_WEB2PY_VERSION = R-2.10.3
-> +PYTHON_WEB2PY_SITE = https://github.com/web2py/web2py.git
-> +PYTHON_WEB2PY_SITE_METHOD = git
-
-github function?
-
-> +PYTHON_WEB2PY_LICENSE = LGPLv3
-> +PYTHON_WEB2PY_LICENSE_FILES = LICENSE
-> +PYTHON_WEB2PY_DEPENDENCIES = python sqlite
-
-It really depends on sqlite itself? Or only the Python sqlite module?
-
-> +define PYTHON_WEB2PY_PYDAL_COPY
-> +	cp -rf $(PYTHON_PYDAL_SRCDIR)/*  $(@D)/gluon/packages/dal/
-> +endef
-> +
-> +PYTHON_WEB2PY_POST_EXTRACT_HOOKS += PYTHON_WEB2PY_PYDAL_COPY
-> +
-> +define PYTHON_WEB2PY_INSTALL_TARGET_CMDS
-> +	$(HOST_DIR)/usr/bin/python2 -c 'import os; \
-> +		os.chdir("$(@D)"); \
-> +		from gluon.main import save_password; \
-> +		save_password($(BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD),8000)'
-> +	mkdir -p $(TARGET_DIR)/usr/share/web2py
-> +	cp -dpfr $(@D)/* $(TARGET_DIR)/usr/share/web2py
-> +endef
-> +
-> +define PYTHON_WEB2PY_INSTALL_INIT_SYSV
-> +	$(INSTALL) -m 0755 -D package/python-web2py/S51web2py \
-> +		$(TARGET_DIR)/etc/init.d/S51web2py
-> +endef
-> +
-> +define PYTHON_WEB2PY_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -D -m 0644 package/python-web2py/web2py.service \
-> +		$(TARGET_DIR)/etc/systemd/system/web2py.service
-
-I think we changed the installation of .service files to /usr/lib. See
-commit af17811662595ad1db0a992a3a7446c79d40d578 for example.
-
-> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +	ln -fs ../web2py.service \
-> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/web2py.service
-> +endef
-> +
-> +define PYTHON_WEB2PY_PERMISSIONS
-> +	/usr/share/web2py  r  750  www-data  www-data  -  -  -  -  -
-> +endef
-> +
-> +$(eval $(generic-package))
-
-This package has a setup.py. Any reason why you're not using it,
-together with the python-package infrastructure?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+"Don't find fault, find a remedy" (H.Ford)
+-------------------------------------------------------------------------
+"Beer is proof that God loves us and wants us
+to be happy" (Benjamin Franklin)
+-------------------------------------------------------------------------
