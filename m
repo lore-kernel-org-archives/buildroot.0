@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 01:32:25 +0200
-Subject: [Buildroot] [PATCH 1/8 v4] package/gcc: add hashes
-In-Reply-To: <f78c5a1a3e8998f0e32d08fc7c5a63dea083f4c4.1428512075.git.yann.morin.1998@free.fr>
+Date: Tue, 14 Apr 2015 01:35:38 +0200
+Subject: [Buildroot] [PATCH 2/8 v4] package/binutils: add hashes
+In-Reply-To: <1fedcd0068d180c92addf908097b04c389f05e9a.1428512075.git.yann.morin.1998@free.fr>
 References: <cover.1428512075.git.yann.morin.1998@free.fr>
- <f78c5a1a3e8998f0e32d08fc7c5a63dea083f4c4.1428512075.git.yann.morin.1998@free.fr>
-Message-ID: <552C5209.7040504@mind.be>
+ <1fedcd0068d180c92addf908097b04c389f05e9a.1428512075.git.yann.morin.1998@free.fr>
+Message-ID: <552C52CA.3070608@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,65 +13,39 @@ To: buildroot@busybox.net
 
 On 08/04/15 18:57, Yann E. MORIN wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 > ---
->  package/gcc/gcc-final/gcc-final.hash     | 1 +
->  package/gcc/gcc-initial/gcc-initial.hash | 1 +
->  package/gcc/gcc.hash                     | 7 +++++++
->  3 files changed, 9 insertions(+)
->  create mode 120000 package/gcc/gcc-final/gcc-final.hash
->  create mode 120000 package/gcc/gcc-initial/gcc-initial.hash
->  create mode 100644 package/gcc/gcc.hash
+>  package/binutils/binutils.hash | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>  create mode 100644 package/binutils/binutils.hash
 > 
-> diff --git a/package/gcc/gcc-final/gcc-final.hash b/package/gcc/gcc-final/gcc-final.hash
-> new file mode 120000
-> index 0000000..7ac9361
-> --- /dev/null
-> +++ b/package/gcc/gcc-final/gcc-final.hash
-> @@ -0,0 +1 @@
-> +../gcc.hash
-> \ No newline at end of file
-> diff --git a/package/gcc/gcc-initial/gcc-initial.hash b/package/gcc/gcc-initial/gcc-initial.hash
-> new file mode 120000
-> index 0000000..7ac9361
-> --- /dev/null
-> +++ b/package/gcc/gcc-initial/gcc-initial.hash
-> @@ -0,0 +1 @@
-> +../gcc.hash
-> \ No newline at end of file
-> diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+> diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
 > new file mode 100644
-> index 0000000..d9a04fc
+> index 0000000..4f99514
 > --- /dev/null
-> +++ b/package/gcc/gcc.hash
+> +++ b/package/binutils/binutils.hash
 > @@ -0,0 +1,7 @@
-> +# Locally computed (upstream only has sigs):
+> +# Locally computed:
+> +sha256 6c7af8ed1c8cf9b4b9d6e6fe09a3e1d3d479fe63984ba8b9b26bf356b6313ca9  binutils-2.22.tar.bz2
+> +sha256 fe914e56fed7a9ec2eb45274b1f2e14b0d8b4f41906a5194eac6883cfe5c1097  binutils-2.23.2.tar.bz2
+> +sha256 e5e8c5be9664e7f7f96e0d09919110ab5ad597794f5b1809871177a0f0f14137  binutils-2.24.tar.bz2
+> +sha256 22defc65cfa3ef2a3395faaea75d6331c6e62ea5dfacfed3e2ec17b08c882923  binutils-2.25.tar.bz2
+> +# No hash for the ARC variant, comes from the github-helper:
+> +none   xxx                                                               binutils-arc-2014.12.tar.gz
+> 
 
- Which upstream is that?
+# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
+sha512	ffe8ef263ef99183e8cc823fe8487ff7d0f7bf9a8efd2853b5f4636aca0023850d13de4eac7d77a5f69413d8a50e6f95bb14569be53df86c0bce38034525ab74	binutils-2.22.tar.bz2
+sha512	dec753bbba008f1526b89cf1bd85feba78f362f5333ffdf93953fd131eb755976dec82a0a4ba38c43d2434da007137780cfe674de5414be5cf7ce7fbc6af6d16	binutils-2.23.2.tar.bz2
+sha512	5ec95ad47d49b12c4558a8db0ca2109d3ee1955e3776057f3330c4506f8f4d1cf5e505fbf8a16b98403a0fcdeaaf986fe0a22be6456247dbdace63ce1f776b12	binutils-2.24.tar.bz2
+sha512	49438970642f379978aba988e3d2e7b63dab6fd0b46d91f4100f083e87a84d242089daca58572245fe620457a77bbbe2d78588ff3fb79314e500d1a39bf96f30	binutils-2.25.tar.bz2
 
-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.5.4/sha512.sum
-sha512	78696b287d46aacd6f150920da376ea32f58ad9f0dafd2d3b7fa6dbdd8dd7afe659108d1dfaa5807617fc5248719f50b39c37ade0173ea5b9fec2091f4656115	gcc-4.5.4.tar.bz2
-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.7.4/sha512.sum
-sha512	dfcb737073191e628231031a3571ec77ee760a59377630f4a6e4fdfa66f9ddad39fde47e3f0f227eb43cdf90e0d34cde5abdc9ac892c1e111a911062a66c9189	gcc-4.7.4.tar.bz2
-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.8.4/sha512.sum
-sha512	b4c84ebd754c026029d706ef52c4242df4dcadc6a22cc5669b3aa37ac9dc25bc9cd9651fda83fb24dd5d17b1710e6865a35bb6c5cd9b95d0971717453935ae8e	gcc-4.8.4.tar.bz2
-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.9.2/sha512.sum
-sha512	e96cba06d572dbe7f382a2b00fd9297dcf9f9219d46a9ad0bd904dc36d5e7db3335e422640b79a27fed6fde91b0731732b94a0e2fbcd47344d6779f8ba1f4f9c	gcc-4.9.2.tar.bz2
-
+(Just cut&paste from the ftp site, not tested.)
 
  Regards,
  Arnout
-
-> +sha256  eef3f0456db8c3d992cbb51d5d32558190bc14f3bc19383dd93acc27acc6befc  gcc-4.5.4.tar.bz2
-> +sha256  92e61c6dc3a0a449e62d72a38185fda550168a86702dea07125ebd3ec3996282  gcc-4.7.4.tar.bz2
-> +sha256  4a80aa23798b8e9b5793494b8c976b39b8d9aa2e53cd5ed5534aff662a7f8695  gcc-4.8.4.tar.bz2
-> +sha256  2020c98295856aa13fda0f2f3a4794490757fc24bcca918d52cc8b4917b972dd  gcc-4.9.2.tar.bz2
-> +# No hash for the ARC variant, comes from the github-helper:
-> +none    xxx                                                               gcc-arc-2014.12.tar.gz
-> 
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
