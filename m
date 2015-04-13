@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 01:36:34 +0200
-Subject: [Buildroot] [PATCH 3/8 v4] package/uclibc: add missing hash for
-	eXtensa
-In-Reply-To: <f5b5e7691683c7529da966088e9369f97e0de968.1428512075.git.yann.morin.1998@free.fr>
+Date: Tue, 14 Apr 2015 01:43:40 +0200
+Subject: [Buildroot] [PATCH 4/8 v4] support/download: add possibility to
+ not fail on missing hash
+In-Reply-To: <1f4a021bb2826f296ae7b2876f8ae8ab57cde349.1428512075.git.yann.morin.1998@free.fr>
 References: <cover.1428512075.git.yann.morin.1998@free.fr>
- <f5b5e7691683c7529da966088e9369f97e0de968.1428512075.git.yann.morin.1998@free.fr>
-Message-ID: <552C5302.3060607@mind.be>
+ <1f4a021bb2826f296ae7b2876f8ae8ab57cde349.1428512075.git.yann.morin.1998@free.fr>
+Message-ID: <552C54AC.9050905@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 08/04/15 18:57, Yann E. MORIN wrote:
-> This is a git snapshot, we can't have a hash for it.
+> In very constrained cases, it might be needed to not fail if a hash is
+> missing. This is notably the case for custom external toolchains to be
+> downloaded, because we do have a .hash file for external toolchains,
+> but we oviously can not have hashes for all existing cutom toolchains
+         obviously                                     custom
+
+> (he, "custom"!).
+
+ So what is it going to be cutom or custom? :-)
+
+> 
+> So, add a way to avoid failing in that case.
+> 
+> Form the Makefile, we export the list of files for which not to check
+  From
+
+> the hash. Then, from the check-hash script, if no check was done, and
+> the file we were trying to match in in this exclusion list, we just exit
+                                   is
+
+> without error.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -22,24 +42,70 @@ On 08/04/15 18:57, Yann E. MORIN wrote:
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+but more fixes below...
+
+> 
+> ---
+> Changes v3 -> v4:
+>   - drop the magic value, use a list of excluded files  (Arnout)
+> 
+> Changes v1 -> v2:
+>   - fix typoes in commit log
+> ---
+>  package/pkg-download.mk     | 3 +++
+>  support/download/check-hash | 5 +++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index e274712..5b7c861 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -60,6 +60,9 @@ domainseparator = $(if $(1),$(1),/)
+>  # github(user,package,version): returns site of GitHub repository
+>  github = https://github.com/$(1)/$(2)/archive/$(3)
+>  
+> +# Expressely do not check hashes for those files
+     Expressly
+
+> +export BR_NO_CHECK_HASH_FOR
+> +
+>  ################################################################################
+>  # The DOWNLOAD_* helpers are in charge of getting a working copy
+>  # of the source repository for their corresponding SCM,
+> diff --git a/support/download/check-hash b/support/download/check-hash
+> index d37f1cd..ca81f00 100755
+> --- a/support/download/check-hash
+> +++ b/support/download/check-hash
+> @@ -99,6 +99,11 @@ while read t h f; do
+>  done <"${h_file}"
+>  
+>  if [ ${nb_checks} -eq 0 ]; then
+> +    for f in ${BR_NO_CHECK_HASH_FOR}; do
+> +        if [ "${f}" = "${base}" ]; then
+> +            exit 0
+> +        fi
+> +    done
+
+ I can't stop myself from micro-optimising :-)
+
+if [ ${nb_checks} -eq 0 ]; then
+	case " ${BR_NO_CHECK_HASH_FOR} " in
+	"* ${base} *")
+		exit 0
+		;;
+	esac
+	printf "ERROR: No hash found for %s\n" "${base}" >&2
+	exit 0
+fi
+
+But maybe that's not really more readable...
+
  Regards,
  Arnout
 
-> ---
->  package/uclibc/uclibc.hash | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-> index 69cc103..971ab26 100644
-> --- a/package/uclibc/uclibc.hash
-> +++ b/package/uclibc/uclibc.hash
-> @@ -6,3 +6,6 @@ sha256	0a9085a11615296cfe7783f16ff29073393eb330749947adece0eeddb31705a4	uClibc-a
->  
->  # From http://www.uclibc-ng.org/trac/
->  sha256  e561040293ba4f21dcf3285ca1f683b5a8493eb0ffd3b3e495122cfde5a64a0e        uClibc-ng-1.0.1.tar.xz
-> +
-> +# No hash for this git snapshot
-> +none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
+>      printf "ERROR: No hash found for %s\n" "${base}" >&2
+>      exit 0
+>  fi
 > 
 
 
