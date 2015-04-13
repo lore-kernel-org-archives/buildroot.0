@@ -1,55 +1,98 @@
-From: Igor Trevisan <igt1972@gmail.com>
-Date: Mon, 13 Apr 2015 16:27:29 +0200
-Subject: [Buildroot] Edit custom package install path
-In-Reply-To: <20150409143316.510c2ff6@free-electrons.com>
-References: <CALQ+5acckG4TxdDSF4jr4QoSr-FZJFjsnD3g9Dz6U4ApbKQpyQ@mail.gmail.com>
- <20150409143316.510c2ff6@free-electrons.com>
-Message-ID: <CALQ+5afYacXUj5OA+NjX79YNpOwMggmVAVH+qYuyX7P9=-qRJw@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 13 Apr 2015 16:34:44 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/python-pydal: new package
+In-Reply-To: <20150413161716.5cd8e3ae@free-electrons.com>
+References: <1428933447-32061-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1428933447-32061-2-git-send-email-angelo.compagnucci@gmail.com>
+ <20150413161716.5cd8e3ae@free-electrons.com>
+Message-ID: <CA+TH9V=rovjsF+-g0mMtQzAOJtebzTAQLMR778emgycxjSuOAw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Thomas Petazzoni,
 
-On 9 April 2015 at 14:33, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Igor Trevisan,
+2015-04-13 16:17 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Angelo Compagnucci,
 >
-> On Thu, 9 Apr 2015 14:26:33 +0200, Igor Trevisan wrote:
+> On Mon, 13 Apr 2015 15:57:26 +0200, Angelo Compagnucci wrote:
 >
->> I'd like to know if there's a way to chose or edit, from Menuconfig,
->> the installation path of a given package.
->>
->> Let suppose I added "mypackage" to buildroot and I want to give the
->> user the power to define where this package
->> will stay in the final root FS for my target: /opt, /usr/bin, other...
->>
->> Is there a way to do this?
+>> diff --git a/package/python-pydal/Config.in b/package/python-pydal/Config.in
+>> new file mode 100644
+>> index 0000000..eda2f77
+>> --- /dev/null
+>> +++ b/package/python-pydal/Config.in
+>> @@ -0,0 +1,2 @@
+>> +config BR2_PACKAGE_PYTHON_PYDAL
+>> +     bool
 >
-> No, there is no way to do this. We cannot add one "installation path"
-> option to each of the 1500 packages we have in Buildroot.
+> I understand that the source code for this package is copied into the
+> web2py code, so that's why it's a prompt-less package. Is it the only
+> way of doing things?
 
-Sounds reasonable... :-)
+No. Unfortunately buildroot doesn't support git submodules: the
+download helper makes a bare clone and zip the results without git
+informations, so it's not possible to do a submodule init in a
+POST_EXTRACT action.
 
-> The options are:
->
->  * Move things around in a post-build script, if the thing can be moved
->    after compilation.
->
->  * Adjust the package .mk file to your needs.
->
+The only way is to add a dummy package for the submodule and copy the
+downloaded content to appropriate folders. I was inspired by other
+packages (ex sunxi-mali-prop) that use the same exact method.
 
-I went with the second one.
+>> diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
+>> new file mode 100644
+>> index 0000000..a88bf8b
+>> --- /dev/null
+>> +++ b/package/python-pydal/python-pydal.mk
+>> @@ -0,0 +1,13 @@
+>> +################################################################################
+>> +#
+>> +# python-pydal
+>> +#
+>> +################################################################################
+>> +
+>> +PYTHON_PYDAL_VERSION = v15.03
+>> +PYTHON_PYDAL_SITE = https://github.com/web2py/pydal.git
+>> +PYTHON_PYDAL_SITE_METHOD = git
+>
+> github function?
 
-Thanks for your answer,
-best regards,
-I.
+Using this method I can use alternatively both commit id or tag.
+Usually web2py uses a tagged pydal version as a submodule, sometimes
+not.
+
+>> +PYTHON_PYDAL_LICENSE = BSDv3
+>
+> BSDv3 does not exist. You're confusing GPLv3 and BSD-3c.
+
+Doh! Probably also the original author is wrong:
+
+"License
+pyDAL is released under the BSDv3 License.
+For further details, please check the LICENSE file."
+
+I will submit a PR to Giovanni Barillari!
+
+>> +PYTHON_PYDAL_LICENSE_FILES = LICENSE
+>> +
+>> +$(eval $(generic-package))
+>
+> A comment above this to explain why we have this generic-package that
+> doesn't do anything.
+
+Ok!
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+
 
 -- 
-"Don't find fault, find a remedy" (H.Ford)
--------------------------------------------------------------------------
-"Beer is proof that God loves us and wants us
-to be happy" (Benjamin Franklin)
--------------------------------------------------------------------------
+Profile: http://it.linkedin.com/in/compagnucciangelo
