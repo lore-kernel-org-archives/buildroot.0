@@ -1,41 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 13 Apr 2015 10:00:25 -0300
-Subject: [Buildroot] [PATCH 3/3] linux: bump default to version 4.0
-In-Reply-To: <1428930025-25061-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1428930025-25061-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1428930025-25061-3-git-send-email-gustavo@zacarias.com.ar>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 13 Apr 2015 15:43:18 +0200
+Subject: [Buildroot] [PATCH 0/2]  Web2py and pydal new packages
+Message-ID: <1428932600-21996-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This patch adds web2py python web application framework and pydal,
+it's database abstraction layer.
+This is the first package to use the new recursive makedevs syntax,
+indeed it runs as www-data non privileged user.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 817139b..cb4daa4 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.19.3"
-+	bool "4.0"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.19.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.0" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+Angelo Compagnucci (2):
+  package/python-pydal: new package
+  package/python-web2py: new package
+
+ package/Config.in                      |  2 ++
+ package/python-pydal/Config.in         |  2 ++
+ package/python-pydal/python-pydal.mk   | 13 ++++++++++
+ package/python-web2py/Config.in        | 25 ++++++++++++++++++
+ package/python-web2py/S51web2py        | 25 ++++++++++++++++++
+ package/python-web2py/python-web2py.mk | 46 ++++++++++++++++++++++++++++++++++
+ package/python-web2py/web2py.service   | 11 ++++++++
+ 7 files changed, 124 insertions(+)
+ create mode 100644 package/python-pydal/Config.in
+ create mode 100644 package/python-pydal/python-pydal.mk
+ create mode 100644 package/python-web2py/Config.in
+ create mode 100644 package/python-web2py/S51web2py
+ create mode 100644 package/python-web2py/python-web2py.mk
+ create mode 100644 package/python-web2py/web2py.service
+
 -- 
-2.0.5
+1.9.1
