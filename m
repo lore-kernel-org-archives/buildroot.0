@@ -1,105 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Apr 2015 22:49:16 +0200
-Subject: [Buildroot] [PATCHv2 10/21] Makefile: move source-check outside
- of noconfig_targets
-In-Reply-To: <1428856685-4403-11-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-11-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150413204916.GJ29025@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 13 Apr 2015 17:54:29 -0300
+Subject: [Buildroot] [PATCH] ruby: security bump to version 2.2.2
+Message-ID: <1428958469-19720-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Fixes:
+CVE-2015-1855 - OpenSSL extension?s hostname verification vulnerability.
 
-On 2015-04-12 18:37 +0200, Thomas Petazzoni spake thusly:
-> make source-check is here to check whether the remote sources for the
-> current selection of packages are still available. So it cannot be a
-> noconfig_targets, since it depends on a configuration being
-> available. The very fact that 'source-check' is basically the same as
-> 'source', and one is a noconfig_target and not the other is a clear
-> indication that the current implementation is wrong.
-> 
-> So this commit moves source-check to no longer be a noconfig_target.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-However, I noticed that source-check tries to go to the mirror. For
-example, cjson fails to download from svn for me here, and it falls back
-to looking on the mirror, and thus concludes it exists.
-
-Shouldn't source-check be limited to looking at the upstream locations?
-
-However, not a blocker, since it;s already the behaviour we have.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  Makefile | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 40ee2e2..6937dd3 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -75,7 +75,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
->  noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
->  	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
->  	randpackageconfig allyespackageconfig allnopackageconfig \
-> -	source-check print-version olddefconfig
-> +	print-version olddefconfig
->  
->  # Strip quotes and then whitespaces
->  qstrip = $(strip $(subst ",,$(1)))
-> @@ -422,7 +422,7 @@ world: target-post-image
->  
->  .PHONY: all world toolchain dirs clean distclean source outputmakefile \
->  	legal-info legal-info-prepare legal-info-clean printvars help \
-> -	target-finalize target-post-image
-> +	target-finalize target-post-image source-check
->  
->  ################################################################################
->  #
-> @@ -616,6 +616,10 @@ _external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
->  external-deps:
->  	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
->  
-> +# check if download URLs are outdated
-> +source-check:
-> +	$(MAKE1) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
-> +
->  legal-info-clean:
->  	@rm -fr $(LEGAL_INFO_DIR)
->  
-> @@ -794,10 +798,6 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->  		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
->  		$(CONFIG_CONFIG_IN)
->  
-> -# check if download URLs are outdated
-> -source-check:
-> -	$(MAKE1) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
-> -
->  .PHONY: defconfig savedefconfig
->  
->  ################################################################################
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 6fa47a4..4680a61 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,2 +1,2 @@
+-# From https://www.ruby-lang.org/en/news/2015/03/03/ruby-2-2-1-released/
+-sha256	3b2852c07fdc12d0ba2b5698c7587ae2b46141539a526d143da5860b55a626c0	ruby-2.2.1.tar.xz
++# From https://www.ruby-lang.org/en/news/2015/04/13/ruby-2-2-2-released/
++sha256	f033b5d08ab57083e48c1d81bcd7399967578c370b664da90e12a32891424462	ruby-2.2.2.tar.xz
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 2e2adfd..552da07 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RUBY_VERSION_MAJOR = 2.2
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
+ RUBY_VERSION_EXT = 2.2.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.5
