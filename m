@@ -1,56 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Apr 2015 10:18:28 +0200
-Subject: [Buildroot] [PATCHv2 04/21] Makefile: rename TARGETS to PACKAGES
-In-Reply-To: <20150413200115.GE29025@free.fr>
-References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-5-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150413200115.GE29025@free.fr>
-Message-ID: <20150414101828.6b30606d@free-electrons.com>
+Date: Tue, 14 Apr 2015 10:06:48 +0200
+Subject: [Buildroot] [git commit] libgpgme: bump to version 1.5.4
+Message-ID: <20150414081954.9F3807F9E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=f6cc786b2119aedabedfb70a80c870444b7d19f8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 13 Apr 2015 22:01:15 +0200, Yann E. MORIN wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libgpgme/libgpgme.hash |    4 ++--
+ package/libgpgme/libgpgme.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> > diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-> > index aec57c0..fe1a7db 100644
-> > --- a/package/matchbox/matchbox.mk
-> > +++ b/package/matchbox/matchbox.mk
-> > @@ -1,4 +1,4 @@
-> >  ifeq ($(BR2_PACKAGE_MATCHBOX),y)
-> >  include $(sort $(wildcard package/matchbox/*/*.mk))
-> > -TARGETS += matchbox-lib matchbox-wm
-> > +PACKAGES += matchbox-lib matchbox-wm
-> 
-> I understand we need to manually add them to the list of packages,
-> because neither matchbox-lib nor matchbox-wm have an associated Kconfig
-> option.
-> 
-> Yet, I believe this should be changed so that they behave like any other
-> package, and that we use 'select' from the matchbox package to select
-> the -lib and -wm dependenct packages.
-> 
-> If we are really concerned that we do not want to make those
-> user-selectable, we could make them prompt-less packages, and so they'd
-> be hidden.
-> 
-> Of course, this is not a blocker for this patch, as you're doing a mere
-> renaming of an existing variable, and the fix can be done in a follow-up
-> patch (OK, written on my TODO-list).
-
-Fully agreed, this custom matchbox stuff is weird, and should be
-changed to better match what we normally do with other packages.
-Looking forward to your patches on this, once you reach this point in
-your ever-growing TODO-list!
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
+index 7ed9b48..a6d2d44 100644
+--- a/package/libgpgme/libgpgme.hash
++++ b/package/libgpgme/libgpgme.hash
+@@ -1,2 +1,2 @@
+-# From https://www.gnupg.org/download/integrity_check.html
+-sha1  8dd7711a4de117994fe2d45879ef8a9900d50f6a  gpgme-1.5.3.tar.bz2
++# Locally calculated after checking pgp signature
++sha256	bb38c0ec8815c9e94e6047b484984808a8dad9d6bec8df33dc5339fd55ffea6c	gpgme-1.5.4.tar.bz2
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 6377b76..79b44bd 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPGME_VERSION = 1.5.3
++LIBGPGME_VERSION = 1.5.4
+ LIBGPGME_SITE = ftp://ftp.gnupg.org/gcrypt/gpgme
+ LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
+ LIBGPGME_LICENSE = LGPLv2.1+
