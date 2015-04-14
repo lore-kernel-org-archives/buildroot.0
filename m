@@ -1,77 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Apr 2015 10:12:32 +0200
-Subject: [Buildroot] [git commit] fs: declare phony targets as such
-Message-ID: <20150414081954.CF0337F9E1@busybox.osuosl.org>
+Date: Tue, 14 Apr 2015 10:06:59 +0200
+Subject: [Buildroot] [git commit] iproute2: bump to version 4.0.0
+Message-ID: <20150414081954.B395E7F9E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2aef771f6e05d3fd1ea59c2faab986eaa55f28f7
+commit: http://git.buildroot.net/buildroot/commit/?id=15944a5ea4bf42602e624e7a88b6f0549d8ccda4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit improves the filesystem handling code to declare its
-various targets as PHONY when appropriate.
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- fs/common.mk              |    2 ++
- fs/ext2/ext2.mk           |    2 ++
- fs/initramfs/initramfs.mk |    2 ++
- fs/iso9660/iso9660.mk     |    2 ++
- 4 files changed, 8 insertions(+), 0 deletions(-)
+ package/iproute2/iproute2.hash |    2 +-
+ package/iproute2/iproute2.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 5d07f00..cac127f 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -102,6 +102,8 @@ rootfs-$(1)-show-depends:
- 
- rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
- 
-+.PHONY: rootfs-$(1) rootfs-$(1)-show-depends
-+
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
- TARGETS_ROOTFS += rootfs-$(1)
- endif
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 1cac72e..cab66a5 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -35,6 +35,8 @@ endef
- rootfs-ext2-symlink:
- 	ln -sf rootfs.ext2$(ROOTFS_EXT2_COMPRESS_EXT) $(BINARIES_DIR)/rootfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN)$(ROOTFS_EXT2_COMPRESS_EXT)
- 
-+.PHONY: rootfs-ext2-symlink
-+
- ifneq ($(BR2_TARGET_ROOTFS_EXT2_GEN),2)
- ROOTFS_EXT2_POST_TARGETS += rootfs-ext2-symlink
- endif
-diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
-index 308924d..db50812 100644
---- a/fs/initramfs/initramfs.mk
-+++ b/fs/initramfs/initramfs.mk
-@@ -17,6 +17,8 @@ rootfs-initramfs: $(ROOTFS_INITRAMFS_DEPENDENCIES) $(ROOTFS_INITRAMFS_POST_TARGE
- rootfs-initramfs-show-depends:
- 	@echo $(ROOTFS_INITRAMFS_DEPENDENCIES)
- 
-+.PHONY: rootfs-initramfs rootfs-initramfs-show-depends
-+
- ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
- TARGETS_ROOTFS += rootfs-initramfs
- endif
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 5b44ba4..4ccfce9 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -48,6 +48,8 @@ rootfs-iso9660: $(BINARIES_DIR)/rootfs.iso9660
- rootfs-iso9660-show-depends:
- 	@echo $(ROOTFS_ISO9660_DEPENDENCIES)
- 
-+.PHONY: rootfs-iso9660 rootfs-iso9660-show-depends
-+
- ################################################################################
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 40dd0a5..336d6b6 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,2 +1,2 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	e2f9f8c36e166f2ba6c0e1e7a9ad84cdf7c1615b93df49dac44563d7b57fd7b0	iproute2-3.19.0.tar.xz
++sha256	5cd06eb1050b858b308b65705725042bb566fd261135e35a73dafb48cd632618	iproute2-4.0.0.tar.xz
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 688ae97..102a222 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
  #
- # Toplevel Makefile options
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 3.19.0
++IPROUTE2_VERSION = 4.0.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex
