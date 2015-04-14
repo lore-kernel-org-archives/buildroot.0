@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 15 Apr 2015 00:27:46 +0200
-Subject: [Buildroot] [PATCHv2 19/21] pkg-generic: introduce a
- <pkg>_ALL_DOWNLOADS variable and factorize code
-In-Reply-To: <1428856685-4403-20-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Apr 2015 00:31:20 +0200
+Subject: [Buildroot] [PATCHv2 20/21] Makefile: implement the 'source'
+ target using the package infrastructure
+In-Reply-To: <1428856685-4403-21-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-20-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <552D9462.1020202@mind.be>
+ <1428856685-4403-21-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <552D9538.3020309@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,89 +13,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 12/04/15 18:38, Thomas Petazzoni wrote:
-> Now, both the download and source-check code are iterating over
-> <pkg>_SOURCE, <pkg>_PATCH and <pkg>_EXTRA_DOWNLOADS elements, figuring
-> out whether they contain full URLs or not. Instead of doing this
-> repeatdly, this patch introduces an internal <pkg>_ALL_DOWNLOADS
-> variable, which contains the list of everything that needs to be
-> downloaded, with URLs already expanded to take into account <pkg>_SITE
-> if needed.
+> Now that all the bits are in place, switch the global 'source' target
+> to use the package infrastructure logic.
 > 
-> This allows to simplify quite significantly the .stamp_download and
-> source-check implementation.
-
- Nice!
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-with make perl
+with 'make source' (actually together with the next patch).
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/pkg-generic.mk | 26 ++++++++------------------
->  1 file changed, 8 insertions(+), 18 deletions(-)
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index d2ed605..7dc1cb8 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -72,25 +72,13 @@ endif
->  $(BUILD_DIR)/%/.stamp_downloaded:
->  	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
->  # Only show the download message if it isn't already downloaded
-> -	$(Q)for p in $($(PKG)_SOURCE) $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
-> +	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
->  		if test ! -e $(DL_DIR)/`basename $$p` ; then \
->  			$(call MESSAGE,"Downloading") ; \
->  			break ; \
->  		fi ; \
->  	done
-> -	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
-> -	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),\
-> -		$(if $(findstring ://,$(p)),\
-> -			$(call DOWNLOAD,$(p)),\
-> -			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
-> -		)\
-> -	$(sep))
-> -	$(foreach p,$($(PKG)_PATCH),\
-> -		$(if $(findstring ://,$(p)),\
-> -			$(call DOWNLOAD,$(p)),\
-> -			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
-> -		)\
-> -	$(sep))
-> +	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p))$(sep))
->  	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
->  	$(Q)mkdir -p $(@D)
->  	$(Q)touch $@
-> @@ -359,6 +347,11 @@ ifndef $(2)_EXTRA_DOWNLOADS
->   endif
->  endif
+> diff --git a/Makefile b/Makefile
+> index 7d94ee8..06a9f05 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -610,7 +610,7 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize
+>  		$(call MESSAGE,"Executing post-image script $(s)"); \
+>  		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
 >  
-> +$(2)_ALL_DOWNLOADS = \
-> +	$$(foreach p,$$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
-> +		$$(if $$(findstring ://,$$(p)),$$(p),\
-> +			$$($(2)_SITE:/=)/$$(p)))
-> +
->  ifndef $(2)_SITE
->   ifdef $(3)_SITE
->    $(2)_SITE = $$($(3)_SITE)
-> @@ -572,10 +565,7 @@ $(1)-show-version:
+> -source: $(PACKAGES_SOURCE) $(HOST_SOURCE)
+> +source: $(foreach p,$(PACKAGES),$(p)-all-source)
 >  
->  $(1)-source-check:
->  ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-> -	$$(foreach p,$$($(2)_SOURCE) $$($(2)_EXTRA_DOWNLOADS) $$($(2)_PATCH),\
-> -		$$(if $$(findstring ://,$$(p)),\
-> -			$$(call SOURCE_CHECK,$$(p)),\
-> -			$$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$$(p))))
-> +	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
->  else
->  	test -d $$($(2)_OVERRIDE_SRCDIR)
->  endif
+>  _external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
+>  external-deps:
 > 
 
 
