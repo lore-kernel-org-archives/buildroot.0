@@ -1,95 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 22:55:19 +0200
-Subject: [Buildroot] [PATCHv2 14/21] pkg-generic: remove the
- .stamp_rsync_sourced fake stamp file
-In-Reply-To: <1428856685-4403-15-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-15-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <552D7EB7.5040203@mind.be>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 14 Apr 2015 23:09:17 +0200
+Subject: [Buildroot] dpkg and apt for buildroot?
+In-Reply-To: <20150414200222.GB7501@postdiluvian.org>
+References: <20150414200222.GB7501@postdiluvian.org>
+Message-ID: <CAGm1_kvDWPPE1ajGbSHj9utnQuykgfqNr=tWVBg+PWNddGrDxQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/04/15 18:37, Thomas Petazzoni wrote:
-> The only reason for the .stamp_rsync_sourced fake stamp file target to
-> exist was to handle the SOURCE_CHECK operation on packages using the
-> OVERRIDE_SRCDIR mechanism. Now that this is handled directly inside
-> $(1)-source-check, there is no longer any need for this part of the
-> code.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Dear Mark,
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Tue, Apr 14, 2015 at 10:02 PM, Mark Mason
+<mason+buildroot@postdiluvian.org> wrote:
+> Has anyone already done the footwork to add dpkg and apt (at least a
+> secure apt-get, I'm not sure what other dependancies there are)?
+>
+> I ran across some mail from July 2013 with patches for dpkg, which
+> were very close to working, but I didn't see any for apt.  I'm kind of
+> surprised that apt and friends aren't an option - am I about to run
+> into something unexpectedly complicated, or is complex package
+> management like apt/dpkg provides just generally outside of
+> buildroot's scope?
+>
+> While I'm at it, almost all of the traffic on this list is related to
+> development of buildroot rather than development with buildroot.  Is
+> there a better place for questions (after the documentation and web
+> searches have not provided answers), or is this it?
 
-by running python-source-check, python-source and python-all-source-check with
-PYTHON_OVERRIDE_SRCDIR set. python-all-source-check actually fails (which seems
-to be a recurring theme in this series) because host-python-source{,-check} does
-_not_ have OVERRIDE_SRCDIR set, but it inherits the PKG_VERSION=custom from the
-target package. But since this already occurs on current master, I don't
-consider this a failure of this patch.
+Have you read this section?
+http://nightly.buildroot.org/manual.html#faq-no-binary-packages
 
- Regards,
- Arnout
-
-> ---
->  package/pkg-generic.mk | 13 +------------
->  1 file changed, 1 insertion(+), 12 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index b45b86e..d432a2e 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -122,14 +122,6 @@ $(BUILD_DIR)/%/.stamp_rsynced:
->  	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
->  	$(Q)touch $@
->  
-> -# Handle the SOURCE_CHECK case for rsynced packages
-> -$(BUILD_DIR)/%/.stamp_rsync_sourced:
-> -ifeq ($(DL_MODE),SOURCE_CHECK)
-> -	test -d $(SRCDIR)
-> -else
-> -	@true # Nothing to do to source a local package
-> -endif
-> -
->  # Patch
->  #
->  # The RAWNAME variable is the lowercased package name, which allows to
-> @@ -439,7 +431,6 @@ $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
->  $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
->  $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
->  $(2)_TARGET_RSYNC =	        $$($(2)_DIR)/.stamp_rsynced
-> -$(2)_TARGET_RSYNC_SOURCE =      $$($(2)_DIR)/.stamp_rsync_sourced
->  $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
->  $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
->  $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
-> @@ -568,7 +559,7 @@ $(1)-extract:		$(1)-rsync
->  
->  $(1)-rsync:		$$($(2)_TARGET_RSYNC)
->  
-> -$(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
-> +$(1)-source:
->  
->  $(1)-external-deps:
->  	@echo "file://$$($(2)_OVERRIDE_SRCDIR)"
-> @@ -638,8 +629,6 @@ $$($(2)_TARGET_BUILD):			PKG=$(2)
->  $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
->  $$($(2)_TARGET_RSYNC):                  SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
->  $$($(2)_TARGET_RSYNC):                  PKG=$(2)
-> -$$($(2)_TARGET_RSYNC_SOURCE):		SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
-> -$$($(2)_TARGET_RSYNC_SOURCE):		PKG=$(2)
->  $$($(2)_TARGET_PATCH):			PKG=$(2)
->  $$($(2)_TARGET_PATCH):			RAWNAME=$$(patsubst host-%,%,$(1))
->  $$($(2)_TARGET_PATCH):			PKGDIR=$(pkgdir)
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Yegor
