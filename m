@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 23:41:36 +0200
-Subject: [Buildroot] [PATCHv2 17/21] pkg-download: fix indentation for
- SOURCE_CHECK_* macros
-In-Reply-To: <1428856685-4403-18-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Apr 2015 23:46:19 +0200
+Subject: [Buildroot] [PATCHv2 16/21] pkg-download: get rid of DL_MODE
+In-Reply-To: <1428856685-4403-17-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-18-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <552D8990.8080100@mind.be>
+ <1428856685-4403-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <552D8AAB.5090106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,72 +12,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 12/04/15 18:38, Thomas Petazzoni wrote:
-> Some of the SOURCE_CHECK_* macros are using a non-standard two-spaces
-> indentation. This commit switches them to use a single tab based
-> indentation, like in the rest of Buildroot.
+> The DL_MODE variable is now no longer used with any other value than
+> "DOWNLOAD", so it no longer makes sense to have this variable at
+> all. Therefore, this commit gets rid of it.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-with git show -w
+
+By doing 'make source'.
 
  Regards,
  Arnout
 
 > ---
->  package/pkg-download.mk | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  package/pkg-download.mk | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
 > 
 > diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 8cd168a..f35dc04 100644
+> index 829b54d..8cd168a 100644
 > --- a/package/pkg-download.mk
 > +++ b/package/pkg-download.mk
-> @@ -87,7 +87,7 @@ endef
->  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
->  # repository
->  define SOURCE_CHECK_GIT
-> -  $(GIT) ls-remote --heads $($(PKG)_SITE) > /dev/null
-> +	$(GIT) ls-remote --heads $($(PKG)_SITE) > /dev/null
->  endef
+> @@ -20,10 +20,6 @@ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
 >  
->  define DOWNLOAD_BZR
-> @@ -131,7 +131,7 @@ define DOWNLOAD_SVN
->  endef
+>  DL_WRAPPER = support/download/dl-wrapper
 >  
->  define SOURCE_CHECK_SVN
-> -  $(SVN) ls $($(PKG)_SITE)@$($(PKG)_DL_VERSION) > /dev/null
-> +	$(SVN) ls $($(PKG)_SITE)@$($(PKG)_DL_VERSION) > /dev/null
->  endef
->  
->  # SCP URIs should be of the form scp://[user@]host:filepath
-> @@ -163,7 +163,7 @@ endef
->  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
->  # repository
->  define SOURCE_CHECK_HG
-> -  $(HG) incoming --force -l1 $($(PKG)_SITE) > /dev/null
-> +	$(HG) incoming --force -l1 $($(PKG)_SITE) > /dev/null
->  endef
->  
->  define DOWNLOAD_WGET
-> @@ -176,7 +176,7 @@ define DOWNLOAD_WGET
->  endef
->  
->  define SOURCE_CHECK_WGET
-> -  $(WGET) --spider '$(call qstrip,$(1))'
-> +	$(WGET) --spider '$(call qstrip,$(1))'
->  endef
->  
->  define DOWNLOAD_LOCALFILES
-> @@ -189,7 +189,7 @@ define DOWNLOAD_LOCALFILES
->  endef
->  
->  define SOURCE_CHECK_LOCALFILES
-> -  test -e $(call stripurischeme,$(call qstrip,$(1)))
-> +	test -e $(call stripurischeme,$(call qstrip,$(1)))
->  endef
->  
+> -# Default spider mode is 'DOWNLOAD'. Other possible value is
+> -# 'SOURCE_CHECK' used by the _source-check target.
+> -DL_MODE = DOWNLOAD
+> -
+>  # DL_DIR may have been set already from the environment
+>  ifeq ($(origin DL_DIR),undefined)
+>  DL_DIR ?= $(call qstrip,$(BR2_DL_DIR))
+> @@ -209,7 +205,7 @@ endef
 >  ################################################################################
+>  
+>  define DOWNLOAD
+> -	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)),$(DL_MODE))
+> +	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)),DOWNLOAD)
+>  endef
+>  
+>  define SOURCE_CHECK
 > 
 
 
