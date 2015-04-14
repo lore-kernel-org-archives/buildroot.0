@@ -1,84 +1,66 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 14 Apr 2015 12:31:16 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/python-web2py: new package
-In-Reply-To: <20150414105619.13a008df@free-electrons.com>
-References: <1428933447-32061-1-git-send-email-angelo.compagnucci@gmail.com>
- <1428933447-32061-3-git-send-email-angelo.compagnucci@gmail.com>
- <20150413162140.7851d045@free-electrons.com>
- <CA+TH9V=m3fCRPzt+vPKV3m=o5KL8W7DaxokRp1WFKNH07zzf0w@mail.gmail.com>
- <20150413231059.79c1d264@free-electrons.com>
- <CA+TH9VmPa_hiGf4OmhUZf2vm3zKb0=y0=DE=DEZOLN4dk+LHdQ@mail.gmail.com>
- <20150414105619.13a008df@free-electrons.com>
-Message-ID: <CA+TH9Vnac=v41tKEhNJspYQQz2gYFPAe0_p1hB1xgu0Eb3pj0A@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 14 Apr 2015 12:50:09 +0200
+Subject: [Buildroot] [git commit] fs: add rootfs dependencies to PACKAGES
+In-Reply-To: <20150414081954.EF1607F9E1@busybox.osuosl.org>
+References: <20150414081954.EF1607F9E1@busybox.osuosl.org>
+Message-ID: <552CF0E1.5090205@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+On 14/04/15 10:17, Thomas Petazzoni wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=4570dbcb14b394d8f3c97baf4c9e5f4f225d1d37
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> The logic for creating most of the filesystem images requires a
+> certain number of host packages to be built. However, those packages
+> are not currently listed in the global PACKAGES variables, and they
+> are not dependencies of any other package listed in the PACKAGES
+> variable.
+> 
+> While it does not have any practical implications, it makes sense to
+> have those packages listed in the global PACKAGES variable, which this
+> commit implements.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  fs/common.mk |    1 +
+>  1 files changed, 1 insertions(+), 0 deletions(-)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index cac127f..41ee86d 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -106,6 +106,7 @@ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
+>  
+>  ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+>  TARGETS_ROOTFS += rootfs-$(1)
+> +PACKAGES += $$(ROOTFS_$(2)_DEPENDENCIES)
 
-2015-04-14 10:56 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Angelo Compagnucci,
->
-> On Tue, 14 Apr 2015 10:46:21 +0200, Angelo Compagnucci wrote:
->
->> >> I can try! Honestly, I've not explored the option cause web2py is self
->> >> contained and it doesn't require installation. It uses a writable
->> >> directory for served applications, so suing a custom directory un
->> >> /usr/share with writing permission setted to www-data seemed the most
->> >> sensible choice.
->> >
->> > Installing with python-package seems to work, but it does not install
->> > the web2py.py program itself, so it should be done separately.
->>
->> Yes, I tried and it's practically useless.
->
-> Well, the setup.py can be fixed to also install web2py.py, or the
-> web2py.py can be installed by Buildroot separately, using a post
-> install hook.
+ This will break the rest of your series for filesystems like ubi and initramfs
+that depend on another filesystem, because filesystems are not really packages
+so they shouldn't be in PACKAGES.
 
-honestly, i don't think it's really necessary to use python distutils
-infrastructure to install web2py, it's not even considered in the
-official documentation. Probably because the installation is ususally
-don copying web2py in a folder reacheable by apache and configuring it
-for use with wsgi, or via the internal webserver.
-The official setup-web2py-ubuntu.sh distributed with the application
-makes a /home/www-data directory and adds a apache/wsgi virtualhost.
+ Regards,
+ Arnout
 
->> Honestly, more or less all the application framework I saw in the past
->> runs in a www-data owned directory, I can think of joomla, redmine an
->> many others I poked with.
->> Probably do you want a more finer grain in the permission table, like
->> giving writable permissions only to the directories that really need
->> it, I can try!
->
-> Well, if the Python modules of web2py get installed by the setup.py
-> script, they are installed in /usr/lib/python<version>/site-packages/.
-> And clearly, we do not want to directory to be owned by www-data.
-
-Yes, true, cause web2py is usually installed as an apache served
-application in an apache www-data owned directory.
-For the of simplicity, I choose to adopt the same method, but without
-using an apache virtualhost way too overkill, but use the internal
-webserver.
-
-I'm preparing a new patch in which web2py will be installed in the
-more suited /var/www/ directory.
-
-Sincerely, Angelo
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
+>  endif
+>  endef
+>  
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
