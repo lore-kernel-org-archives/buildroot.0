@@ -1,81 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 14 Apr 2015 08:07:48 -0300
-Subject: [Buildroot] [PATCH] libnl: bump to version 3.2.26
-Message-ID: <1429009668-2550-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 14 Apr 2015 13:22:09 +0200
+Subject: [Buildroot] [PATCHv2 08/21] Makefile: use the package infra
+ based external-deps
+In-Reply-To: <20150414095202.7850ba00@free-electrons.com>
+References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>	<1428856685-4403-9-git-send-email-thomas.petazzoni@free-electrons.com>	<552C5ADB.6020509@mind.be>
+ <20150414095202.7850ba00@free-electrons.com>
+Message-ID: <552CF861.50004@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...link.h-fix-build-including-poll.h-with-th.patch | 30 ----------------------
- package/libnl/libnl.hash                           |  5 ++--
- package/libnl/libnl.mk                             |  4 +--
- 3 files changed, 4 insertions(+), 35 deletions(-)
- delete mode 100644 package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch
+On 14/04/15 09:52, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
+> 
+> On Tue, 14 Apr 2015 02:10:03 +0200, Arnout Vandecappelle wrote:
+> 
+>>> +_external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
+>>>  external-deps:
+>>> -	@$(MAKE1) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
+>>> +	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
+>>
+>>  If we also remove the sort -u (which removes duplicates, but there should be no
+>> duplicates to begin with), then there's no need for a recursive make and we
+>> avoid the GEN     /home/ymorin/dev/buildroot/O/./Makefile that Yann ran into
+>> (which BTW was not caused by this patch but already existed before).
+> 
+> Unless I missed something there will definitely be duplicates, if two
+> packages depend on the same dependency, this dependency will be listed
+> twice. I just did a "make randpackageconfig", followed by "make
+> _external-deps | sort", and here is what I get:
+> 
+> am335x-pru-package-506e074859891a2b350eb4f5fcb451c4961410ea.tar.gz
+> am335x-pru-package-506e074859891a2b350eb4f5fcb451c4961410ea.tar.gz
+[snip]
 
-diff --git a/package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch b/package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch
-deleted file mode 100644
-index 53a299b..0000000
---- a/package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 14128766e80823f79a3b2c97573da1aea5c16ea8 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
--Date: Mon, 1 Sep 2014 12:38:10 +0200
--Subject: [PATCH 1/2] netlink/netlink.h: fix build including <poll.h> with the
-- musl C library
--
--https://github.com/thom311/libnl/pull/64
--
--Signed-off-by: Thomas Haller <thaller@redhat.com>
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- include/netlink/netlink.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/include/netlink/netlink.h b/include/netlink/netlink.h
--index 28dba06..61656b3 100644
----- a/include/netlink/netlink.h
--+++ b/include/netlink/netlink.h
--@@ -16,7 +16,7 @@
-- #include <stdint.h>
-- #include <string.h>
-- #include <stdlib.h>
---#include <sys/poll.h>
--+#include <poll.h>
-- #include <sys/socket.h>
-- #include <sys/types.h>
-- #include <sys/time.h>
---- 
--2.1.0
--
-diff --git a/package/libnl/libnl.hash b/package/libnl/libnl.hash
-index 6188d70..9ce5ffe 100644
---- a/package/libnl/libnl.hash
-+++ b/package/libnl/libnl.hash
-@@ -1,3 +1,2 @@
--# From http://lists.infradead.org/pipermail/libnl/2014-July/001549.html
--sha256	8beb7590674957b931de6b7f81c530b85dc7c1ad8fbda015398bc1e8d1ce8ec5 libnl-3.2.25.tar.gz
--md5	03f74d0cd5037cadc8cdfa313bbd195c	libnl-3.2.25.tar.gz
-+# From https://github.com/thom311/libnl/releases/download/libnl3_2_26/libnl-3.2.26.tar.gz.sha256sum
-+sha256	1323ff6cea47efe9f988893b09840942a8c36131f472a9f3b96eb68d8f8d7555	libnl-3.2.26.tar.gz
-diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
-index e795e80..5993e97 100644
---- a/package/libnl/libnl.mk
-+++ b/package/libnl/libnl.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBNL_VERSION = 3.2.25
--LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files
-+LIBNL_VERSION = 3.2.26
-+LIBNL_SITE = https://github.com/thom311/libnl/releases/download/libnl$(subst .,_,$(LIBNL_VERSION))
- LIBNL_LICENSE = LGPLv2.1+
- LIBNL_LICENSE_FILES = COPYING
- LIBNL_INSTALL_STAGING = YES
+ Ah yes, silly me. I just _assumed_ that external deps would have been 
+implemented like:
+
+$(1)-external-deps: $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-external-deps)
+
+instead of passing through -all-external-deps. I just tested that the
+above gives exactly the same result as the -all-external-deps version.
+
+ The other reason why there are duplicates is because host packages and
+target packages (usually) have the same sources, so they will be listed
+twice. That's more difficult to get around.
+
+
+ Regards,
+ Arnout
 -- 
-2.0.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
