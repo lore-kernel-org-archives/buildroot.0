@@ -1,56 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Apr 2015 09:52:02 +0200
-Subject: [Buildroot] [PATCHv2 08/21] Makefile: use the package infra
- based external-deps
-In-Reply-To: <552C5ADB.6020509@mind.be>
-References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-9-git-send-email-thomas.petazzoni@free-electrons.com>
- <552C5ADB.6020509@mind.be>
-Message-ID: <20150414095202.7850ba00@free-electrons.com>
+Date: Tue, 14 Apr 2015 10:07:57 +0200
+Subject: [Buildroot] [PATCH] ruby: security bump to version 2.2.2
+In-Reply-To: <1428958469-19720-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1428958469-19720-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150414100757.62ea08a0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Gustavo Zacarias,
 
-On Tue, 14 Apr 2015 02:10:03 +0200, Arnout Vandecappelle wrote:
-
-> > +_external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
-> >  external-deps:
-> > -	@$(MAKE1) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
-> > +	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
+On Mon, 13 Apr 2015 17:54:29 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> CVE-2015-1855 - OpenSSL extension?s hostname verification vulnerability.
 > 
->  If we also remove the sort -u (which removes duplicates, but there should be no
-> duplicates to begin with), then there's no need for a recursive make and we
-> avoid the GEN     /home/ymorin/dev/buildroot/O/./Makefile that Yann ran into
-> (which BTW was not caused by this patch but already existed before).
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/ruby/ruby.hash | 4 ++--
+>  package/ruby/ruby.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Unless I missed something there will definitely be duplicates, if two
-packages depend on the same dependency, this dependency will be listed
-twice. I just did a "make randpackageconfig", followed by "make
-_external-deps | sort", and here is what I get:
-
-am335x-pru-package-506e074859891a2b350eb4f5fcb451c4961410ea.tar.gz
-am335x-pru-package-506e074859891a2b350eb4f5fcb451c4961410ea.tar.gz
-...
-dbus-1.8.16.tar.gz
-dbus-1.8.16.tar.gz
-dbus-glib-0.104.tar.gz
-dbus-glib-0.104.tar.gz
-...
-e2fsprogs-1.42.12.tar.xz
-e2fsprogs-1.42.12.tar.xz
-...
-expat-2.1.0.tar.gz
-expat-2.1.0.tar.gz
-...
-file-5.22.tar.gz
-file-5.22.tar.gz
-...
-
-Want more of it? :-)
+Applied, thanks.
 
 Thomas
 -- 
