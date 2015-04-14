@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 22:30:18 +0200
-Subject: [Buildroot] [PATCHv2 13/21] Makefile: implement a package based
- source-check target
-In-Reply-To: <1428856685-4403-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Apr 2015 22:55:19 +0200
+Subject: [Buildroot] [PATCHv2 14/21] pkg-generic: remove the
+ .stamp_rsync_sourced fake stamp file
+In-Reply-To: <1428856685-4403-15-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-14-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <552D78DA.7080303@mind.be>
+ <1428856685-4403-15-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <552D7EB7.5040203@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,48 +13,76 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 12/04/15 18:37, Thomas Petazzoni wrote:
-> This commit switches the implementation of the global source-check
-> target to use a package infrastructure based mechanism, using the
-> $(1)-all-source-check target added in the previous commit.
+> The only reason for the .stamp_rsync_sourced fake stamp file target to
+> exist was to handle the SOURCE_CHECK operation on packages using the
+> OVERRIDE_SRCDIR mechanism. Now that this is handled directly inside
+> $(1)-source-check, there is no longer any need for this part of the
+> code.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- There is something still missing to complete the conversion: some packages
-(at91bootstrap, at91bootstrap3, barebox, uboot, xloader, linux, sunxi-boards)
-check that the configuration files specified in .config really exist, _unless_
-make source is called (presumably this exception is to support the 'make
-allpackageyesconfig; make source' way of refreshing the buildroot mirror).
-Previously (actually, before you removed source-check from noconfig_targets),
-this would also apply to source-check, but now it doesn't anymore.
-
- So I'd update all those filter expressions with source-check as well.
-
- But that doesn't affect this patch, so
-
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+by running python-source-check, python-source and python-all-source-check with
+PYTHON_OVERRIDE_SRCDIR set. python-all-source-check actually fails (which seems
+to be a recurring theme in this series) because host-python-source{,-check} does
+_not_ have OVERRIDE_SRCDIR set, but it inherits the PKG_VERSION=custom from the
+target package. But since this already occurs on current master, I don't
+consider this a failure of this patch.
 
  Regards,
  Arnout
 
 > ---
->  Makefile | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  package/pkg-generic.mk | 13 +------------
+>  1 file changed, 1 insertion(+), 12 deletions(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index 6937dd3..7d94ee8 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -617,8 +617,7 @@ external-deps:
->  	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index b45b86e..d432a2e 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -122,14 +122,6 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+>  	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+>  	$(Q)touch $@
 >  
->  # check if download URLs are outdated
-> -source-check:
-> -	$(MAKE1) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
-> +source-check: $(foreach p,$(PACKAGES),$(p)-all-source-check)
+> -# Handle the SOURCE_CHECK case for rsynced packages
+> -$(BUILD_DIR)/%/.stamp_rsync_sourced:
+> -ifeq ($(DL_MODE),SOURCE_CHECK)
+> -	test -d $(SRCDIR)
+> -else
+> -	@true # Nothing to do to source a local package
+> -endif
+> -
+>  # Patch
+>  #
+>  # The RAWNAME variable is the lowercased package name, which allows to
+> @@ -439,7 +431,6 @@ $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
+>  $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
+>  $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
+>  $(2)_TARGET_RSYNC =	        $$($(2)_DIR)/.stamp_rsynced
+> -$(2)_TARGET_RSYNC_SOURCE =      $$($(2)_DIR)/.stamp_rsync_sourced
+>  $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
+>  $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
+>  $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
+> @@ -568,7 +559,7 @@ $(1)-extract:		$(1)-rsync
 >  
->  legal-info-clean:
->  	@rm -fr $(LEGAL_INFO_DIR)
+>  $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+>  
+> -$(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
+> +$(1)-source:
+>  
+>  $(1)-external-deps:
+>  	@echo "file://$$($(2)_OVERRIDE_SRCDIR)"
+> @@ -638,8 +629,6 @@ $$($(2)_TARGET_BUILD):			PKG=$(2)
+>  $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
+>  $$($(2)_TARGET_RSYNC):                  SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
+>  $$($(2)_TARGET_RSYNC):                  PKG=$(2)
+> -$$($(2)_TARGET_RSYNC_SOURCE):		SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
+> -$$($(2)_TARGET_RSYNC_SOURCE):		PKG=$(2)
+>  $$($(2)_TARGET_PATCH):			PKG=$(2)
+>  $$($(2)_TARGET_PATCH):			RAWNAME=$$(patsubst host-%,%,$(1))
+>  $$($(2)_TARGET_PATCH):			PKGDIR=$(pkgdir)
 > 
 
 
