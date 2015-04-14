@@ -1,60 +1,71 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 13:22:09 +0200
-Subject: [Buildroot] [PATCHv2 08/21] Makefile: use the package infra
- based external-deps
-In-Reply-To: <20150414095202.7850ba00@free-electrons.com>
-References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>	<1428856685-4403-9-git-send-email-thomas.petazzoni@free-electrons.com>	<552C5ADB.6020509@mind.be>
- <20150414095202.7850ba00@free-electrons.com>
-Message-ID: <552CF861.50004@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Apr 2015 13:54:24 +0200
+Subject: [Buildroot] [git commit] fs: add rootfs dependencies to PACKAGES
+In-Reply-To: <552CF0E1.5090205@mind.be>
+References: <20150414081954.EF1607F9E1@busybox.osuosl.org>
+ <552CF0E1.5090205@mind.be>
+Message-ID: <20150414135424.3b1ab04a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/04/15 09:52, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
+Dear Arnout Vandecappelle,
+
+On Tue, 14 Apr 2015 12:50:09 +0200, Arnout Vandecappelle wrote:
+
+> > diff --git a/fs/common.mk b/fs/common.mk
+> > index cac127f..41ee86d 100644
+> > --- a/fs/common.mk
+> > +++ b/fs/common.mk
+> > @@ -106,6 +106,7 @@ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
+> >  
+> >  ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+> >  TARGETS_ROOTFS += rootfs-$(1)
+> > +PACKAGES += $$(ROOTFS_$(2)_DEPENDENCIES)
 > 
-> On Tue, 14 Apr 2015 02:10:03 +0200, Arnout Vandecappelle wrote:
-> 
->>> +_external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
->>>  external-deps:
->>> -	@$(MAKE1) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
->>> +	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
->>
->>  If we also remove the sort -u (which removes duplicates, but there should be no
->> duplicates to begin with), then there's no need for a recursive make and we
->> avoid the GEN     /home/ymorin/dev/buildroot/O/./Makefile that Yann ran into
->> (which BTW was not caused by this patch but already existed before).
-> 
-> Unless I missed something there will definitely be duplicates, if two
-> packages depend on the same dependency, this dependency will be listed
-> twice. I just did a "make randpackageconfig", followed by "make
-> _external-deps | sort", and here is what I get:
-> 
-> am335x-pru-package-506e074859891a2b350eb4f5fcb451c4961410ea.tar.gz
-> am335x-pru-package-506e074859891a2b350eb4f5fcb451c4961410ea.tar.gz
-[snip]
+>  This will break the rest of your series for filesystems like ubi and initramfs
+> that depend on another filesystem, because filesystems are not really packages
+> so they shouldn't be in PACKAGES.
 
- Ah yes, silly me. I just _assumed_ that external deps would have been 
-implemented like:
+Aaah, indeed. Thanks a lot for catching this!
 
-$(1)-external-deps: $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-external-deps)
+But I believe the package dependencies should be in PACKAGES, so that
+"make external-deps", "make legal-info", "make source" and so on
+properly take into account the packages needed as a dependency of
+building a rootfs image.
 
-instead of passing through -all-external-deps. I just tested that the
-above gives exactly the same result as the -all-external-deps version.
+I can see several solutions here:
 
- The other reason why there are duplicates is because host packages and
-target packages (usually) have the same sources, so they will be listed
-twice. That's more difficult to get around.
+ 1) In the fs infrastructure, separate package dependencies from
+    filesystem dependencies, like ROOTFS_UBI_FS_DEPENDENCIES =
+    rootfs-ubifs, and ROOTFS_UBIFS_PACKAGE_DEPENDENCIES = host-mtd.
+    This is probably the easiest solution, maybe not the prettiest one.
 
+ 2) Simply filter out from $$(ROOTFS_$(2)_DEPENDENCIES) the targets
+    that start with 'rootfs-' when adding them to the PACKAGES variable.
+    Maybe not that pretty either, but very simple to do.
 
- Regards,
- Arnout
+ 3) Adjust the fs infrastructure so that the rootfs-<foo> targets will
+    also have rootfs-<foo>-legal-info, rootfs-<foo>-source,
+    rootfs-<foo>-source-check and so on, a bit like we already
+    implement rootfs-<foo>-show-depends.
+
+ 4) Make the filesystem image stuff real packages. After all, they
+    install something to $(BINARIES_DIR) and some other packages do it.
+    Of course, the big difference is that they should have a special
+    type so that they get built only after all other packages have been
+    built/installed, the post-build scripts, overlay and so on have
+    been handled.
+
+(1), (2) and (3) are pretty easy, (4) is a lot more work, and I don't
+know if the result will be very useful, but I don't know.
+
+Thoughts?
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
