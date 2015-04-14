@@ -1,52 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Apr 2015 10:06:43 +0200
-Subject: [Buildroot] [git commit] libksba: security bump to version 1.3.3
-Message-ID: <20150414081954.940E67F9E1@busybox.osuosl.org>
+Date: Tue, 14 Apr 2015 10:06:53 +0200
+Subject: [Buildroot] [git commit] imagemagick: bump to version 6.9.1-1
+Message-ID: <20150414081954.A8FAF7F9E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c52e364ebd6c8f834db8c7533fba817acaf8d6e
+commit: http://git.buildroot.net/buildroot/commit/?id=ba4d7d37790627e55e64d8d19db35cdb3209b0e3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes (no CVEs assigned yet):
+Also update hash file.
 
-* integer overflow in the DN decoder src/dn.c (append_quoted,
-append_atv)
-
-* integer overflow in the BER decoder src/ber-decoder.c (ber_decoder_s)
-
-* denial of service due to stack overflow in src/ber-decoder.c
-(push_decoder_state, pop_decoder_state)
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libksba/libksba.hash |    4 ++--
- package/libksba/libksba.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/imagemagick/imagemagick.hash |    2 +-
+ package/imagemagick/imagemagick.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
-index 3bd6ef0..f7727f1 100644
---- a/package/libksba/libksba.hash
-+++ b/package/libksba/libksba.hash
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index d93ccfe..b1c9caf 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
 @@ -1,2 +1,2 @@
--# From http://lists.gnupg.org/pipermail/gnupg-announce/2014q4/000359.html
--sha1	37d0893a587354af2b6e49f6ae701ca84f52da67	libksba-1.3.2.tar.bz2
-+# Locally calculated after checking pgp signature
-+sha256	0c7f5ffe34d0414f6951d9880a46fcc2985c487f7c36369b9f11ad41131c7786	libksba-1.3.3.tar.bz2
-diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
-index b48cac5..7651534 100644
---- a/package/libksba/libksba.mk
-+++ b/package/libksba/libksba.mk
+ # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
+-sha256 32747565fc30da0ff0bc0bf3e41c9fefad829fa8fb2f7d1b98dd84ddb3919b0e ImageMagick-6.9.1-0.tar.xz
++sha256 8f6ebeb1a1321fd7b7d3161a66461743ea5bbc352e4339c792b3bab52c379378 ImageMagick-6.9.1-1.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index b6ef09c..1594f69 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBKSBA_VERSION = 1.3.2
-+LIBKSBA_VERSION = 1.3.3
- LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
- LIBKSBA_SITE = ftp://ftp.gnupg.org/gcrypt/libksba
- LIBKSBA_LICENSE = LGPLv3+ or GPLv2+ (library, headers), GPLv3+ (manual, tests, build system)
+-IMAGEMAGICK_VERSION = 6.9.1-0
++IMAGEMAGICK_VERSION = 6.9.1-1
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
