@@ -1,61 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Apr 2015 23:38:15 +0200
-Subject: [Buildroot] [PATCHv2 10/21] Makefile: move source-check outside
- of noconfig_targets
-In-Reply-To: <552D6D9B.2000301@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 14 Apr 2015 23:41:36 +0200
+Subject: [Buildroot] [PATCHv2 17/21] pkg-download: fix indentation for
+ SOURCE_CHECK_* macros
+In-Reply-To: <1428856685-4403-18-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-11-git-send-email-thomas.petazzoni@free-electrons.com>
- <552D6D9B.2000301@mind.be>
-Message-ID: <20150414213815.GB4053@free.fr>
+ <1428856685-4403-18-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <552D8990.8080100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
-
-On 2015-04-14 21:42 +0200, Arnout Vandecappelle spake thusly:
-> On 12/04/15 18:37, Thomas Petazzoni wrote:
-> > make source-check is here to check whether the remote sources for the
-> > current selection of packages are still available. So it cannot be a
-> > noconfig_targets, since it depends on a configuration being
-> > available. The very fact that 'source-check' is basically the same as
-> > 'source', and one is a noconfig_target and not the other is a clear
-> > indication that the current implementation is wrong.
+On 12/04/15 18:38, Thomas Petazzoni wrote:
+> Some of the SOURCE_CHECK_* macros are using a non-standard two-spaces
+> indentation. This commit switches them to use a single tab based
+> indentation, like in the rest of Buildroot.
 > 
->  Well, actually, source-check is a noconfig target because we don't need to read
-> the .config file to be able to run it.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Maybe I missed something, but don't we need .config to get the list of
-enabled packages?
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+with git show -w
 
-Hmm.. Let me think.. Ah, I see what you mean. The first-level 'make'
-does not need it, because its only rule for now is to call itself with
-the 'source' goal and a variable set.
+ Regards,
+ Arnout
 
-I get it now.
-
-> Moving it out of noconfig almost doubles
-> the runtime, because now both the first level and the second level make have to
-> parse all the makefiles.
+> ---
+>  package/pkg-download.mk | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 > 
->  So the real reason to do this is not because it was wrong (just a little weird
-> and missing explanation), but because you need it for three patches later.
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index 8cd168a..f35dc04 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -87,7 +87,7 @@ endef
+>  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+>  # repository
+>  define SOURCE_CHECK_GIT
+> -  $(GIT) ls-remote --heads $($(PKG)_SITE) > /dev/null
+> +	$(GIT) ls-remote --heads $($(PKG)_SITE) > /dev/null
+>  endef
+>  
+>  define DOWNLOAD_BZR
+> @@ -131,7 +131,7 @@ define DOWNLOAD_SVN
+>  endef
+>  
+>  define SOURCE_CHECK_SVN
+> -  $(SVN) ls $($(PKG)_SITE)@$($(PKG)_DL_VERSION) > /dev/null
+> +	$(SVN) ls $($(PKG)_SITE)@$($(PKG)_DL_VERSION) > /dev/null
+>  endef
+>  
+>  # SCP URIs should be of the form scp://[user@]host:filepath
+> @@ -163,7 +163,7 @@ endef
+>  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+>  # repository
+>  define SOURCE_CHECK_HG
+> -  $(HG) incoming --force -l1 $($(PKG)_SITE) > /dev/null
+> +	$(HG) incoming --force -l1 $($(PKG)_SITE) > /dev/null
+>  endef
+>  
+>  define DOWNLOAD_WGET
+> @@ -176,7 +176,7 @@ define DOWNLOAD_WGET
+>  endef
+>  
+>  define SOURCE_CHECK_WGET
+> -  $(WGET) --spider '$(call qstrip,$(1))'
+> +	$(WGET) --spider '$(call qstrip,$(1))'
+>  endef
+>  
+>  define DOWNLOAD_LOCALFILES
+> @@ -189,7 +189,7 @@ define DOWNLOAD_LOCALFILES
+>  endef
+>  
+>  define SOURCE_CHECK_LOCALFILES
+> -  test -e $(call stripurischeme,$(call qstrip,$(1)))
+> +	test -e $(call stripurischeme,$(call qstrip,$(1)))
+>  endef
+>  
+>  ################################################################################
+> 
 
-Yes, this change all by itself is meaningless, but we need it later,
-when source-check is eventually part of the package infra. It seemed
-obvious during my review, given the goal of the series.
-
-For clarification, that could be added to the commit log, indeed.
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
