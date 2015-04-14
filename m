@@ -1,74 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 23:36:37 +0200
-Subject: [Buildroot] [PATCHv2 15/21] pkg-generic: don't use DL_MODE in
- .stamp_downloaded
-In-Reply-To: <1428856685-4403-16-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 Apr 2015 23:38:15 +0200
+Subject: [Buildroot] [PATCHv2 10/21] Makefile: move source-check outside
+ of noconfig_targets
+In-Reply-To: <552D6D9B.2000301@mind.be>
 References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-16-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <552D8865.9040506@mind.be>
+ <1428856685-4403-11-git-send-email-thomas.petazzoni@free-electrons.com>
+ <552D6D9B.2000301@mind.be>
+Message-ID: <20150414213815.GB4053@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/04/15 18:37, Thomas Petazzoni wrote:
-> The .stamp_downloaded target is now only being used to really
-> download, and no longer for other activities like "source check" or
-> "external deps". So the check on DL_MODE being equal to DOWNLOAD is no
-> longer necessary.
+Arnout, All,
+
+On 2015-04-14 21:42 +0200, Arnout Vandecappelle spake thusly:
+> On 12/04/15 18:37, Thomas Petazzoni wrote:
+> > make source-check is here to check whether the remote sources for the
+> > current selection of packages are still available. So it cannot be a
+> > noconfig_targets, since it depends on a configuration being
+> > available. The very fact that 'source-check' is basically the same as
+> > 'source', and one is a noconfig_target and not the other is a clear
+> > indication that the current implementation is wrong.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>  Well, actually, source-check is a noconfig target because we don't need to read
+> the .config file to be able to run it.
 
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Maybe I missed something, but don't we need .config to get the list of
+enabled packages?
 
+Hmm.. Let me think.. Ah, I see what you mean. The first-level 'make'
+does not need it, because its only rule for now is to call itself with
+the 'source' goal and a variable set.
 
- Regards,
- Arnout
+I get it now.
 
-> ---
->  package/pkg-generic.mk | 4 ----
->  1 file changed, 4 deletions(-)
+> Moving it out of noconfig almost doubles
+> the runtime, because now both the first level and the second level make have to
+> parse all the makefiles.
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index d432a2e..13a3843 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -71,7 +71,6 @@ endif
->  # Retrieve the archive
->  $(BUILD_DIR)/%/.stamp_downloaded:
->  	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
-> -ifeq ($(DL_MODE),DOWNLOAD)
->  # Only show the download message if it isn't already downloaded
->  	$(Q)for p in $($(PKG)_SOURCE) $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
->  		if test ! -e $(DL_DIR)/`basename $$p` ; then \
-> @@ -79,7 +78,6 @@ ifeq ($(DL_MODE),DOWNLOAD)
->  			break ; \
->  		fi ; \
->  	done
-> -endif
->  	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
->  	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),\
->  		$(if $(findstring ://,$(p)),\
-> @@ -94,10 +92,8 @@ endif
->  		)\
->  	$(sep))
->  	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
-> -ifeq ($(DL_MODE),DOWNLOAD)
->  	$(Q)mkdir -p $(@D)
->  	$(Q)touch $@
-> -endif
->  
->  # Unpack the archive
->  $(BUILD_DIR)/%/.stamp_extracted:
-> 
+>  So the real reason to do this is not because it was wrong (just a little weird
+> and missing explanation), but because you need it for three patches later.
 
+Yes, this change all by itself is meaningless, but we need it later,
+when source-check is eventually part of the package infra. It seemed
+obvious during my review, given the goal of the series.
+
+For clarification, that could be added to the commit log, indeed.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
