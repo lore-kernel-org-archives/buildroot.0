@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Apr 2015 10:06:53 +0200
-Subject: [Buildroot] [git commit] imagemagick: bump to version 6.9.1-1
-Message-ID: <20150414081954.A8FAF7F9E1@busybox.osuosl.org>
+Date: Tue, 14 Apr 2015 10:20:59 +0200
+Subject: [Buildroot] [PATCHv2 00/21] Package based 'source', 'legal-info',
+ 'source-check' and 'external-deps'
+In-Reply-To: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150414102059.5150603e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba4d7d37790627e55e64d8d19db35cdb3209b0e3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Also update hash file.
+On Sun, 12 Apr 2015 18:37:44 +0200, Thomas Petazzoni wrote:
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/imagemagick/imagemagick.hash |    2 +-
- package/imagemagick/imagemagick.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Thomas Petazzoni (21):
+>   pkg-kconfig: declare phony targets as such
+>   fs: declare phony targets as such
+>   Makefile: targets are now declared phony by the appropriate
+>     infrastructures
+>   Makefile: rename TARGETS to PACKAGES
+>   fs: add rootfs dependencies to PACKAGES
+>   Makefile: use <pkg>-all-legal-info to implement the legal-info target
+>   Makefile: simplify show-targets
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index d93ccfe..b1c9caf 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
--sha256 32747565fc30da0ff0bc0bf3e41c9fefad829fa8fb2f7d1b98dd84ddb3919b0e ImageMagick-6.9.1-0.tar.xz
-+sha256 8f6ebeb1a1321fd7b7d3161a66461743ea5bbc352e4339c792b3bab52c379378 ImageMagick-6.9.1-1.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index b6ef09c..1594f69 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 6.9.1-0
-+IMAGEMAGICK_VERSION = 6.9.1-1
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+Applied up to this point.
+
+>   Makefile: use the package infra based external-deps
+
+I've stopped here, because Arnout raised a concern, and I'd like the
+concern to be resolved before moving forward with applying the rest of
+the series. I've already replied to Arnout's concern, so hopefully it
+will be resolved soon.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
