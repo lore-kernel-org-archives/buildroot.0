@@ -1,177 +1,120 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 14 Apr 2015 17:05:04 +0200
-Subject: [Buildroot] [PATCH v3 2/2] package/python-web2py: new package
-In-Reply-To: <1429023904-20194-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1429023904-20194-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1429023904-20194-3-git-send-email-angelo.compagnucci@gmail.com>
+From: Alex Potapenko <opotapenko@gmail.com>
+Date: Tue, 14 Apr 2015 18:20:41 +0300
+Subject: [Buildroot] [Buildroot-2015.02][MIPS]Building soft-float gcc-4.9.2
+	binutils-2.25 toolchain
+Message-ID: <CAF5aO=+W3-bBxvrT2G9EzBP6_JFK+udqfYzbSvXpLEbsL+a-nA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds web2py package. web2py is a free open source
-full-stack framework for rapid development of fast, scalable,
-secure and portable database-driven web-based applications.
+Dear all!
+While trying to build a soft-float gcc-4.9.2 binutils-2.25 mipsel
+toolchain, I encountered some problems, and found some solutions, and would
+like to share my experience in the hope that it might be useful for someone
+else.
+The starting point was a working buildroot 2015.02 config that I use to
+build an ARM EABI toolchain: I only changed the architecture using 'make
+menuconfig' command (see attached config). The built went fine right until
+it tried to link shared libatomic during host-gcc-final build. The error
+looked like this:
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
-Changelog:
-  
-v2 -> v3:
- * Fixed systemd service file installation path.
- * Fixed dependencies in Config.mk
- * Moved to the systemwide installed pydal.
- * Moved installation path to /var/www/.
-  
-v1 -> v2:
- * Adding python2 dependency only (suggested by Yegor)
+libtool: link:
+> /home/alex/optware/buildroot-mipsel/toolchain/buildroot-2015.02/output/build/host-gcc-final-4.9.2/build/./gcc/xgcc
+> -B/home/alex/optware/buildroot-mipsel/toolchain/buildroot-2015.02/output/build/host-gcc-final-4.9.2/build/./gcc/
+> -B/home/alex/optware/buildroot-mipsel/toolchain/buildroot-2015.02/output/host/usr/mipsel-buildroot-linux-uclibc/bin/
+> -B/home/alex/optware/buildroot-mipsel/toolchain/buildroot-2015.02/output/host/usr/mipsel-buildroot-linux-uclibc/lib/
+> -isystem
+> /home/alex/optware/buildroot-mipsel/toolchain/buildroot-2015.02/output/host/usr/mipsel-buildroot-linux-uclibc/include
+> -isystem
+> /home/alex/optware/buildroot-mipsel/toolchain/buildroot-2015.02/output/host/usr/mipsel-buildroot-linux-uclibc/sys-include
+>    -shared  .libs/gload.o .libs/gstore.o .libs/gcas.o .libs/gexch.o
+> .libs/glfree.o .libs/lock.o .libs/init.o .libs/fenv.o .libs/load_1_.o
+> .libs/store_1_.o .libs/cas_1_.o .libs/exch_1_.o .libs/fadd_1_.o
+> .libs/fsub_1_.o .libs/fand_1_.o .libs/fior_1_.o .libs/fxor_1_.o
+> .libs/fnand_1_.o .libs/tas_1_.o .libs/load_2_.o .libs/store_2_.o
+> .libs/cas_2_.o .libs/exch_2_.o .libs/fadd_2_.o .libs/fsub_2_.o
+> .libs/fand_2_.o .libs/fior_2_.o .libs/fxor_2_.o .libs/fnand_2_.o
+> .libs/tas_2_.o .libs/load_4_.o .libs/store_4_.o .libs/cas_4_.o
+> .libs/exch_4_.o .libs/fadd_4_.o .libs/fsub_4_.o .libs/fand_4_.o
+> .libs/fior_4_.o .libs/fxor_4_.o .libs/fnand_4_.o .libs/tas_4_.o
+> .libs/load_8_.o .libs/store_8_.o .libs/cas_8_.o .libs/exch_8_.o
+> .libs/fadd_8_.o .libs/fsub_8_.o .libs/fand_8_.o .libs/fior_8_.o
+> .libs/fxor_8_.o .libs/fnand_8_.o .libs/tas_8_.o     -pthread
+> -Wl,--version-script -Wl,../../../libatomic/libatomic.map   -pthread
+> -Wl,-soname -Wl,libatomic.so.1 -o .libs/libatomic.so.1.1.0
+> /home/alex/optware/buildroot-mipsel/toolchain/buildroot-2015.02/output/host/usr/mipsel-buildroot-linux-uclibc/bin/ld:
+> .libs/gload.o: relocation R_MIPS_HI16 against `__gnu_local_gp' can not be
+> used when making a shared object; recompile with -fPIC
+> .libs/gload.o: error adding symbols: Bad value
+> collect2: error: ld returned 1 exit status
+> make[5]: *** [libatomic.la] Error 1
+> make[5]: Leaving directory
+> `/home/alex/optware/buildroot-mipsel/toolchain/buildroot-2015.02/output/build/host-gcc-final-4.9.2/build/mipsel-buildroot-linux-uclibc/libatomic'
+> make[4]: *** [all-recursive] Error 1
+> make[4]: Leaving directory
+> `/home/alex/optware/buildroot-mipsel/toolchain/buildroot-2015.02/output/build/host-gcc-final-4.9.2/build/mipsel-buildroot-linux-uclibc/libatomic'
+> make[3]: *** [all] Error 2
+> make[3]: Leaving directory
+> `/home/alex/optware/buildroot-mipsel/toolchain/buildroot-2015.02/output/build/host-gcc-final-4.9.2/build/mipsel-buildroot-linux-uclibc/libatomic'
+> make[2]: *** [all-target-libatomic] Error 2
+> make[2]: Leaving directory
+> `/home/alex/optware/buildroot-mipsel/toolchain/buildroot-2015.02/output/build/host-gcc-final-4.9.2/build'
+> make[1]: *** [all] Error 2
+> make[1]: Leaving directory
+> `/home/alex/optware/buildroot-mipsel/toolchain/buildroot-2015.02/output/build/host-gcc-final-4.9.2/build'
+> make: ***
+> [/home/alex/optware/buildroot-mipsel/toolchain/buildroot-2015.02/output/build/host-gcc-final-4.9.2/.stamp_built]
+> Error 2
 
 
- package/Config.in                      |  1 +
- package/python-web2py/Config.in        | 23 ++++++++++++++++++++
- package/python-web2py/S51web2py        | 25 ++++++++++++++++++++++
- package/python-web2py/python-web2py.mk | 39 ++++++++++++++++++++++++++++++++++
- package/python-web2py/web2py.service   | 11 ++++++++++
- 5 files changed, 99 insertions(+)
- create mode 100644 package/python-web2py/Config.in
- create mode 100644 package/python-web2py/S51web2py
- create mode 100644 package/python-web2py/python-web2py.mk
- create mode 100644 package/python-web2py/web2py.service
+After some manual hacking, the build went on until similar issues with
+libstdc++. To fix these issues, I wrote a gcc-4.9.2 patch to force '-fPIC'
+flags by editing several Makefile.in files. See
+attached 920-libatomic-libstdc++-fPIC.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 839b80a..fd4296c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -618,6 +618,7 @@ menu "external python modules"
- 	source "package/python-twisted/Config.in"
- 	source "package/python-urwid/Config.in"
- 	source "package/python-versiontools/Config.in"
-+	source "package/python-web2py/Config.in"
- 	source "package/python-webpy/Config.in"
- 	source "package/python-werkzeug/Config.in"
- 	source "package/python-ws4py/Config.in"
-diff --git a/package/python-web2py/Config.in b/package/python-web2py/Config.in
-new file mode 100644
-index 0000000..b10d3a4
---- /dev/null
-+++ b/package/python-web2py/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_PYTHON_WEB2PY
-+	bool "python-web2py"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_PYDAL
-+	select BR2_PACKAGE_PYTHON_ZLIB
-+	select BR2_PACKAGE_PYTHON_PYEXPAT
-+	select BR2_PACKAGE_PYTHON_SQLITE
-+	help
-+	  web2py is a free open source full-stack framework for rapid
-+	  development of fast, scalable, secure and portable
-+	  database-driven web-based applications.
-+
-+	  http://web2py.com
-+
-+if BR2_PACKAGE_PYTHON_WEB2PY
-+
-+config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
-+	string "admin panel password"
-+	default web2py
-+	help
-+	  Set the admin panel password.
-+
-+endif
-diff --git a/package/python-web2py/S51web2py b/package/python-web2py/S51web2py
-new file mode 100644
-index 0000000..1da9ef4
---- /dev/null
-+++ b/package/python-web2py/S51web2py
-@@ -0,0 +1,25 @@
-+#!/bin/sh
-+
-+case "$1" in
-+	start)
-+		echo -n "Starting web2py: "
-+		start-stop-daemon -S -q -m -p /run/web2py.pid \
-+			-c www-data \
-+			-b -x /var/www/web2py/web2py.py \
-+			-- --nogui -a '"<recycle>"' -i 0.0.0.0 -p 8000
-+		[ $? = 0 ] && echo "OK" || echo "FAIL"
-+		;;
-+	stop)
-+		echo -n "Stopping web2py: "
-+		start-stop-daemon -K -q -p /run/web2py.pid
-+		[ $? = 0 ] && echo "OK" || echo "FAIL"
-+		;;
-+	restart)
-+		"$0" stop
-+		sleep 1
-+		"$0" start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		;;
-+esac
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-new file mode 100644
-index 0000000..01e332e
---- /dev/null
-+++ b/package/python-web2py/python-web2py.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# python-web2py
-+#
-+################################################################################
-+
-+PYTHON_WEB2PY_VERSION = R-2.10.3
-+PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,$(PYTHON_WEB2PY_VERSION))
-+PYTHON_WEB2PY_LICENSE = LGPLv3
-+PYTHON_WEB2PY_LICENSE_FILES = LICENSE
-+PYTHON_WEB2PY_DEPENDENCIES = python python-pydal host-python-pydal
-+
-+define PYTHON_WEB2PY_INSTALL_TARGET_CMDS
-+	$(HOST_DIR)/usr/bin/python2 -c 'import os; \
-+		os.chdir("$(@D)"); \
-+		from gluon.main import save_password; \
-+		save_password($(BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD),8000)'
-+	mkdir -p $(TARGET_DIR)/var/www/web2py
-+	cp -dpfr $(@D)/* $(TARGET_DIR)/var/www/web2py
-+endef
-+
-+define PYTHON_WEB2PY_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/python-web2py/S51web2py \
-+		$(TARGET_DIR)/etc/init.d/S51web2py
-+endef
-+
-+define PYTHON_WEB2PY_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 package/python-web2py/web2py.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/web2py.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../web2py.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/web2py.service
-+endef
-+
-+define PYTHON_WEB2PY_PERMISSIONS
-+	/var/www/web2py  r  750  www-data  www-data  -  -  -  -  -
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/python-web2py/web2py.service b/package/python-web2py/web2py.service
-new file mode 100644
-index 0000000..0274bd8
---- /dev/null
-+++ b/package/python-web2py/web2py.service
-@@ -0,0 +1,11 @@
-+[Unit]
-+Description=Web2py daemon
-+After=network.target
-+
-+[Service]
-+Type=simple
-+ExecStart=/var/www/web2py/web2py.py --nogui -a '<recycle>' -i 0.0.0.0 -p 8000
-+User=www-data
-+
-+[Install]
-+WantedBy=multi-user.target
+The second issue became evident while I was trying to use a cross-compiled
+native gcc on the target. I didn't save the exact output, but it was
+complaining that some of the crt* files was compiled with -mhard-float,
+while some other --- with -msoft-float. After some googling, I found the
+issue in gcc's bug tracker:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64569
+Luckily, the fix to the problem was backported from gcc 5 by *mpf* (many
+thanks to him). I extracted the diff, applied it as well, and, finally,
+everything works fine now. See attached
+930-mips-soft-float-for-binutils-2.25.patch
+
+
+I'm not really knowledgeable in buildroot, but, to anyone who is, I'd like
+to say that you can feel free to submit patches using these workarounds. I
+just thought that it is right to give back to the community whose work you
+use :)
+
 -- 
-1.9.1
+Best regards,
+Alex Potapenko
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150414/7ca71814/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: config
+Type: application/octet-stream
+Size: 47897 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150414/7ca71814/attachment.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 920-libatomic-libstdc++-fPIC.patch
+Type: application/octet-stream
+Size: 2592 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150414/7ca71814/attachment-0001.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 930-mips-soft-float-for-binutils-2.25.patch
+Type: application/octet-stream
+Size: 4524 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150414/7ca71814/attachment-0002.obj>
