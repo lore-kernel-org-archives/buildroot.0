@@ -1,66 +1,81 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 12:50:09 +0200
-Subject: [Buildroot] [git commit] fs: add rootfs dependencies to PACKAGES
-In-Reply-To: <20150414081954.EF1607F9E1@busybox.osuosl.org>
-References: <20150414081954.EF1607F9E1@busybox.osuosl.org>
-Message-ID: <552CF0E1.5090205@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 14 Apr 2015 08:07:48 -0300
+Subject: [Buildroot] [PATCH] libnl: bump to version 3.2.26
+Message-ID: <1429009668-2550-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/04/15 10:17, Thomas Petazzoni wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=4570dbcb14b394d8f3c97baf4c9e5f4f225d1d37
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> The logic for creating most of the filesystem images requires a
-> certain number of host packages to be built. However, those packages
-> are not currently listed in the global PACKAGES variables, and they
-> are not dependencies of any other package listed in the PACKAGES
-> variable.
-> 
-> While it does not have any practical implications, it makes sense to
-> have those packages listed in the global PACKAGES variable, which this
-> commit implements.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  fs/common.mk |    1 +
->  1 files changed, 1 insertions(+), 0 deletions(-)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index cac127f..41ee86d 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -106,6 +106,7 @@ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
->  
->  ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
->  TARGETS_ROOTFS += rootfs-$(1)
-> +PACKAGES += $$(ROOTFS_$(2)_DEPENDENCIES)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...link.h-fix-build-including-poll.h-with-th.patch | 30 ----------------------
+ package/libnl/libnl.hash                           |  5 ++--
+ package/libnl/libnl.mk                             |  4 +--
+ 3 files changed, 4 insertions(+), 35 deletions(-)
+ delete mode 100644 package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch
 
- This will break the rest of your series for filesystems like ubi and initramfs
-that depend on another filesystem, because filesystems are not really packages
-so they shouldn't be in PACKAGES.
-
- Regards,
- Arnout
-
->  endif
->  endef
->  
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
+diff --git a/package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch b/package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch
+deleted file mode 100644
+index 53a299b..0000000
+--- a/package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 14128766e80823f79a3b2c97573da1aea5c16ea8 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+-Date: Mon, 1 Sep 2014 12:38:10 +0200
+-Subject: [PATCH 1/2] netlink/netlink.h: fix build including <poll.h> with the
+- musl C library
+-
+-https://github.com/thom311/libnl/pull/64
+-
+-Signed-off-by: Thomas Haller <thaller@redhat.com>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- include/netlink/netlink.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/include/netlink/netlink.h b/include/netlink/netlink.h
+-index 28dba06..61656b3 100644
+---- a/include/netlink/netlink.h
+-+++ b/include/netlink/netlink.h
+-@@ -16,7 +16,7 @@
+- #include <stdint.h>
+- #include <string.h>
+- #include <stdlib.h>
+--#include <sys/poll.h>
+-+#include <poll.h>
+- #include <sys/socket.h>
+- #include <sys/types.h>
+- #include <sys/time.h>
+--- 
+-2.1.0
+-
+diff --git a/package/libnl/libnl.hash b/package/libnl/libnl.hash
+index 6188d70..9ce5ffe 100644
+--- a/package/libnl/libnl.hash
++++ b/package/libnl/libnl.hash
+@@ -1,3 +1,2 @@
+-# From http://lists.infradead.org/pipermail/libnl/2014-July/001549.html
+-sha256	8beb7590674957b931de6b7f81c530b85dc7c1ad8fbda015398bc1e8d1ce8ec5 libnl-3.2.25.tar.gz
+-md5	03f74d0cd5037cadc8cdfa313bbd195c	libnl-3.2.25.tar.gz
++# From https://github.com/thom311/libnl/releases/download/libnl3_2_26/libnl-3.2.26.tar.gz.sha256sum
++sha256	1323ff6cea47efe9f988893b09840942a8c36131f472a9f3b96eb68d8f8d7555	libnl-3.2.26.tar.gz
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index e795e80..5993e97 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBNL_VERSION = 3.2.25
+-LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files
++LIBNL_VERSION = 3.2.26
++LIBNL_SITE = https://github.com/thom311/libnl/releases/download/libnl$(subst .,_,$(LIBNL_VERSION))
+ LIBNL_LICENSE = LGPLv2.1+
+ LIBNL_LICENSE_FILES = COPYING
+ LIBNL_INSTALL_STAGING = YES
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+2.0.5
