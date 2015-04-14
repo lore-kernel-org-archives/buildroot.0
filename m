@@ -1,57 +1,77 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 02:10:03 +0200
-Subject: [Buildroot] [PATCHv2 08/21] Makefile: use the package infra
- based external-deps
-In-Reply-To: <1428856685-4403-9-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-9-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <552C5ADB.6020509@mind.be>
+Date: Tue, 14 Apr 2015 02:17:26 +0200
+Subject: [Buildroot] [PATCH 1/5 v2] package infra: add patch-dependencies
+In-Reply-To: <a51d416e81f55374ba749baa81222bfe0c52782b.1426342904.git.yann.morin.1998@free.fr>
+References: <cover.1426342904.git.yann.morin.1998@free.fr>
+ <a51d416e81f55374ba749baa81222bfe0c52782b.1426342904.git.yann.morin.1998@free.fr>
+Message-ID: <552C5C96.9050901@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/04/15 18:37, Thomas Petazzoni wrote:
-> This commit changes the global 'external-deps' target to use the newly
-> introduced per-package <pkg>-all-external-deps, instead of relying on
-> the 'source' target with a custom DL_MODE.
+On 14/03/15 15:25, Yann E. MORIN wrote:
+> Some packages need to vampirise files from one or more other packages.
+> This is the case, for example, of the Linux kernel and its /extensions/.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Add a new type of dependencies, that are guaranteed to be extracted and
+> patched before a package is patched.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  package/pkg-generic.mk | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index e91c5e6..40ee2e2 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -612,8 +612,9 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index c1b379b..018f048 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -427,6 +427,7 @@ endif
 >  
->  source: $(PACKAGES_SOURCE) $(HOST_SOURCE)
+>  # Eliminate duplicates in dependencies
+>  $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
+> +$(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
 >  
-> +_external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
->  external-deps:
-> -	@$(MAKE1) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
-> +	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
+>  $(2)_INSTALL_STAGING		?= NO
+>  $(2)_INSTALL_IMAGES		?= NO
+> @@ -538,6 +539,8 @@ $$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_PATCH)
+>  
+>  $(1)-patch:		$$($(2)_TARGET_PATCH)
+>  $$($(2)_TARGET_PATCH):	$$($(2)_TARGET_EXTRACT)
+> +# Order-only dependency
+> +$$($(2)_TARGET_PATCH):  | $$(patsubst %,%-patch,$$($(2)_FINAL_PATCH_DEPENDENCIES))
+>  
+>  $(1)-extract:			$$($(2)_TARGET_EXTRACT)
+>  $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
+> @@ -568,8 +571,12 @@ endif
+>  $(1)-show-version:
+>  			@echo $$($(2)_VERSION)
+>  
+> -$(1)-show-depends:
+> +$(1)-show-build-depends:
+>  			@echo $$($(2)_FINAL_DEPENDENCIES)
+> +$(1)-show-patch-depends:
+> +			@echo $$($(2)_FINAL_PATCH_DEPENDENCIES)
+> +$(1)-show-depends:
+> +			@echo $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
 
- If we also remove the sort -u (which removes duplicates, but there should be no
-duplicates to begin with), then there's no need for a recursive make and we
-avoid the GEN     /home/ymorin/dev/buildroot/O/./Makefile that Yann ran into
-(which BTW was not caused by this patch but already existed before).
-
- The original implementation required recursive make to be able to pass the
-DL_MODE override.
+ I just noticed now: you added the patch dependencies to show-depends, but not
+to -all-source, -all-external-deps and -all-legal-info. Isn't that wrong? Of
+course, at the moment it makes no difference because it's only used for linux
+extension packages and in that case the linux package is always selected anyway
+so it'll end up in $(TARGETS) and get printed that way. But it just feels a bit
+inconsistent.
 
 
  Regards,
  Arnout
 
+
 >  
->  legal-info-clean:
->  	@rm -fr $(LEGAL_INFO_DIR)
+>  $(1)-graph-depends: graph-depends-requirements
+>  			@$$(INSTALL) -d $$(O)/graphs
 > 
 
 
