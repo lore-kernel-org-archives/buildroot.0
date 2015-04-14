@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 22:22:07 +0200
-Subject: [Buildroot] [PATCHv2 12/21] pkg-generic: implement source-check
- targets
-In-Reply-To: <1428856685-4403-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Apr 2015 22:30:18 +0200
+Subject: [Buildroot] [PATCHv2 13/21] Makefile: implement a package based
+ source-check target
+In-Reply-To: <1428856685-4403-14-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-13-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <552D76EF.90901@mind.be>
+ <1428856685-4403-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <552D78DA.7080303@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,86 +13,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 12/04/15 18:37, Thomas Petazzoni wrote:
-> This commits extends the common package infrastructure with the
-> $(1)-source-check and $(1)-all-source-check targets.
-> 
-> The $(1)-source-check target simply calls the newly added
-> SOURCE_CHECK macro on all items to be downloaded.
-> 
-> The $(1)-all-source-check target will depend on the
-> $(1)-all-source-check targets of all dependent packages and the
-> $(1)-source-check target of the current package, which allows to do a
-> recursive source-check in the dependency tree.
+> This commit switches the implementation of the global source-check
+> target to use a package infrastructure based mechanism, using the
+> $(1)-all-source-check target added in the previous commit.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-by breaking bzip2 package (change version to .69) and observing that
-bzip-source-check and python-all-source-check fail.
+ There is something still missing to complete the conversion: some packages
+(at91bootstrap, at91bootstrap3, barebox, uboot, xloader, linux, sunxi-boards)
+check that the configuration files specified in .config really exist, _unless_
+make source is called (presumably this exception is to support the 'make
+allpackageyesconfig; make source' way of refreshing the buildroot mirror).
+Previously (actually, before you removed source-check from noconfig_targets),
+this would also apply to source-check, but now it doesn't anymore.
 
- However...
+ So I'd update all those filter expressions with source-check as well.
 
-> ---
->  package/pkg-generic.mk | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 11edb34..b45b86e 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -577,6 +577,16 @@ endif
->  $(1)-show-version:
->  			@echo $$($(2)_VERSION)
->  
-> +$(1)-source-check:
-> +ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-> +	$$(foreach p,$$($(2)_SOURCE) $$($(2)_EXTRA_DOWNLOADS) $$($(2)_PATCH),\
-> +		$$(if $$(findstring ://,$$(p)),\
-> +			$$(call SOURCE_CHECK,$$(p)),\
-> +			$$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$$(p))))
-> +else
-> +	test -d $$($(2)_OVERRIDE_SRCDIR)
-> +endif
-> +
->  $(1)-show-depends:
->  			@echo $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
->  
-> @@ -589,6 +599,8 @@ $(1)-graph-depends: graph-depends-requirements
->  
->  $(1)-all-source:       $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-source) $(1)-source
->  
-> +$(1)-all-source-check:       $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-source-check) $(1)-source-check
+ But that doesn't affect this patch, so
 
- As mentioned before, I believe _FINAL_PATCH_DEPENDENCIES is missing here, which
-is currently not observable because only linux extensions use it and the linux
-package will be reached through PACKAGES anyway.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
  Regards,
  Arnout
 
-> +
->  $(1)-all-external-deps:        $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-external-deps) $(1)-external-deps
+> ---
+>  Makefile | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 6937dd3..7d94ee8 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -617,8 +617,7 @@ external-deps:
+>  	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
 >  
->  $(1)-all-legal-info:   $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-legal-info) $(1)-legal-info
-> @@ -782,6 +794,7 @@ endif
->  	$(1)-all-external-deps \
->  	$(1)-all-legal-info \
->  	$(1)-all-source \
-> +	$(1)-all-source-check \
->  	$(1)-build \
->  	$(1)-clean-for-rebuild \
->  	$(1)-clean-for-reconfigure \
-> @@ -805,7 +818,8 @@ endif
->  	$(1)-rsync \
->  	$(1)-show-depends \
->  	$(1)-show-version \
-> -	$(1)-source
-> +	$(1)-source \
-> +	$(1)-source-check
+>  # check if download URLs are outdated
+> -source-check:
+> -	$(MAKE1) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
+> +source-check: $(foreach p,$(PACKAGES),$(p)-all-source-check)
 >  
->  endif # $(2)_KCONFIG_VAR
->  endef # inner-generic-package
+>  legal-info-clean:
+>  	@rm -fr $(LEGAL_INFO_DIR)
 > 
 
 
