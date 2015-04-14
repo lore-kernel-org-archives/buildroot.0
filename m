@@ -1,190 +1,133 @@
-From: =?UTF-8?Q?Andr=C3=A9_Erdmann?= <dywi@mailerd.de>
-Date: Tue, 14 Apr 2015 21:58:18 +0200
-Subject: [Buildroot] [PATCH v2 10/10] autobuild-run: set locale to en_US
- or C
-In-Reply-To: <CAHXCMMKGjOfOSQfiP5bnNe9KeHEaTkDAcjXv7RA0U4t=iEXqHA@mail.gmail.com>
-References: <1426693843-28792-1-git-send-email-dywi@mailerd.de>
- <1426693843-28792-11-git-send-email-dywi@mailerd.de>
- <CAHXCMMKGjOfOSQfiP5bnNe9KeHEaTkDAcjXv7RA0U4t=iEXqHA@mail.gmail.com>
-Message-ID: <CAGrucu37+u58boPOTyb2rW=fg6=69KHuuK_q8iFurSvJyp-6Jw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 14 Apr 2015 22:06:04 +0200
+Subject: [Buildroot] [PATCHv2 11/21] pkg-download: extend DOWNLOAD_INNER,
+ add a SOURCE_CHECK macro
+In-Reply-To: <20150413210024.GK29025@free.fr>
+References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1428856685-4403-12-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150413210024.GK29025@free.fr>
+Message-ID: <552D732C.3060907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 13/04/15 23:00, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2015-04-12 18:37 +0200, Thomas Petazzoni spake thusly:
+>> As part of moving to a package infrastructure based source-check
+>> implementation, we are going to move away from the global DL_MODE
+>> variable to select the behavior of the DOWNLOAD_INNER macro.
+>>
+>> As a preparation to this, this commit makes the DOWNLOAD_INNER macro
+>> take a third argument, which is the action to be done: either DOWNLOAD
+>> or SOURCE_CHECK. For now, the DOWNLOAD macro passes $(DL_MODE) as this
+>> third argument, in order to keep the existing behavior.
+>>
+>> In addition, a SOURCE_CHECK macro is added, which calls DOWNLOAD_INNER
+>> with the appropriate action. This macro will be used in the upcoming
+>> package infra based implementation of source-check.
 
-2015-04-12 10:31 GMT+02:00 Samuel Martin <s.martin49@gmail.com>:
-> Hi Andr?, Thomas, all,
->
-> On Wed, Mar 18, 2015 at 4:50 PM, Andr? Erdmann <dywi@mailerd.de> wrote:
->> some python scripts break if the locale is set to C, try en_US{.UTF-8,} first
-> Could you give an example of such a script?
->
+ It seems a bit weird to do that in this commit, more logical to do it in the
+next one or as a separate commit. But that's no major issue, so
 
-Apart from the small snippet I've included below the commit message:
-no, I don't have any real-world script at hand that exposes this issue
-and is sufficiently small. In general, it occurs when a script relies
-on the default system encoding derived from the LANG/LC_ and has to
-deal with non-ascii strings, e.g. when using open() and not
-io.open()/codecs.open() to read a file.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 >>
->> Additionally, drop all locale env vars (LC_*, LANG[GUAGE]) when
->> setting the new locale.
->>
->> Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
+>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> [tested by doing a "make source" on a randpackageconfig]
+
+ You should have tested make source-check.
+
+ I tested it but didn't finish because of a failure in github (it seems that the
+AWS servers don't accept the HEAD request, and after a couple of retries I ran
+into github's bandwidth limitation, so eventually I gave up).
+
+
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
 >> ---
+>>  package/pkg-download.mk | 28 ++++++++++++++++------------
+>>  1 file changed, 16 insertions(+), 12 deletions(-)
 >>
->> Just for reference, a small python example that breaks if LANG is set to C:
->>
->>   $ LANG=C python -c "print(u'Andr\xe9')"
->>   UnicodeEncodeError: 'ascii' codec can't encode character u'\xe9' in position 4: ordinal not in range(128)
->>
->> ---
->>  scripts/autobuild-run | 48 ++++++++++++++++++++++++++++++++++++++++++++----
->>  1 file changed, 44 insertions(+), 4 deletions(-)
->>
->> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
->> index e1a3398..a1e947d 100755
->> --- a/scripts/autobuild-run
->> +++ b/scripts/autobuild-run
->> @@ -168,6 +168,12 @@ class SystemInfo:
->>      DEFAULT_NEEDED_PROGS = ["make", "git", "gcc", "timeout"]
->>      DEFAULT_OPTIONAL_PROGS = ["bzr", "java", "javac", "jar"]
->>
->> +    # list of default locales (in lowercase, without "-", descending order)
->> +    #  some python scripts break if the locale is set to C, try en_US first
->> +    TRY_LOCALES = ['en_us.utf8', 'en_us', 'c']
->> +    # list of locale environment variables that should be (re-)set by set_locale()
->> +    LOCALE_KEYS = ['LANG']
+>> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+>> index be3babb..829b54d 100644
+>> --- a/package/pkg-download.mk
+>> +++ b/package/pkg-download.mk
+>> @@ -209,14 +209,18 @@ endef
+>>  ################################################################################
+>>  
+>>  define DOWNLOAD
+>> -	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)))
+>> +	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)),$(DL_MODE))
+>> +endef
 >> +
->>      def __init__(self):
->>          self.needed_progs = list(self.__class__.DEFAULT_NEEDED_PROGS)
->>          self.optional_progs = list(self.__class__.DEFAULT_OPTIONAL_PROGS)
->> @@ -231,6 +237,41 @@ class SystemInfo:
+>> +define SOURCE_CHECK
+>> +	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)),SOURCE_CHECK)
+>>  endef
+>>  
+>>  define DOWNLOAD_INNER
+>>  	$(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
+>>  		case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
+>> -			scp) $(call $(DL_MODE)_SCP,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
+>> -			*) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
+>> +			scp) $(call $(3)_SCP,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
+>> +			*) $(call $(3)_WGET,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
+>>  		esac ; \
+>>  	fi ; \
+>>  	if test "$(BR2_PRIMARY_SITE_ONLY)" = "y" ; then \
+>> @@ -229,18 +233,18 @@ define DOWNLOAD_INNER
+>>  			scheme="$($(PKG)_SITE_METHOD)" ; \
+>>  		fi ; \
+>>  		case "$$scheme" in \
+>> -			git) $($(DL_MODE)_GIT) && exit ;; \
+>> -			svn) $($(DL_MODE)_SVN) && exit ;; \
+>> -			cvs) $($(DL_MODE)_CVS) && exit ;; \
+>> -			bzr) $($(DL_MODE)_BZR) && exit ;; \
+>> -			file) $($(DL_MODE)_LOCALFILES) && exit ;; \
+>> -			scp) $($(DL_MODE)_SCP) && exit ;; \
+>> -			hg) $($(DL_MODE)_HG) && exit ;; \
+>> -			*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
+>> +			git) $($(3)_GIT) && exit ;; \
+>> +			svn) $($(3)_SVN) && exit ;; \
+>> +			cvs) $($(3)_CVS) && exit ;; \
+>> +			bzr) $($(3)_BZR) && exit ;; \
+>> +			file) $($(3)_LOCALFILES) && exit ;; \
+>> +			scp) $($(3)_SCP) && exit ;; \
+>> +			hg) $($(3)_HG) && exit ;; \
+>> +			*) $(call $(3)_WGET,$(1),$(2)) && exit ;; \
+>>  		esac ; \
+>>  	fi ; \
+>>  	if test -n "$(call qstrip,$(BR2_BACKUP_SITE))" ; then \
+>> -		$(call $(DL_MODE)_WGET,$(BR2_BACKUP_SITE)/$(2),$(2)) && exit ; \
+>> +		$(call $(3)_WGET,$(BR2_BACKUP_SITE)/$(2),$(2)) && exit ; \
+>>  	fi ; \
+>>  	exit 1
+>>  endef
+>> -- 
+>> 2.1.0
 >>
->>          return not missing_requirements
->>
->> +    def set_locale(self):
->> +        def is_locale_env_varname(w):
->> +            # w[:4] == 'LANG' and (not w[4:] or w[4:] == 'UAGE') ...
-> Hmm... I must say the comment is rather confusing!
->
-
-I'll drop it.
-
-I usually take some "this could be optimized" notes while coding, this
-one aims at reducing the str parts that need to be matched more than
-once, because the word w matches "LANG" or "LANGUAGE" if the first 4
-chars match "LANG" and the remainder is either empty or "UAGE".
-
->> +            return w[:3] == 'LC_' or w == 'LANG' or w == 'LANGUAGE'
-> or: return w.startswith('LC_') or w in ['LANG', 'LANGUAGE']
->
->> +
->> +        ret, locales_str = self.run_cmd_get_stdout(["locale", "-a"])[
->> +        if ret != os.EX_OK:
->> +            return False
->> +
->> +        # create a dict
->> +        #   <locale identifier> (as listed in TRY_LOCALES) => <locale env name>
->> +        locales = dict((
->> +            (k.lower().replace("-", ""), k) for k in locales_str.split(None)
-> s/None//
->
->> +        ))
->> +
->> +        for loc_key in filter(lambda x: x in locales, self.TRY_LOCALES):
-> Is a for loop really needed here?
-> You could just do:
->   try:[
->     loc_key = filter(lambda x: x in locales, self.TRY_LOCALES)[0]
->   except (TypeError, IndexError):
->     # set "C" as locale
->     loc_key = self.TRY_LOCALES[-1]
->
-
-I've chosen a for-loop here because it works with both python 2 and
-python 3 equally well:
-
-* in python 2: filter() returns a list  =>  "filter(...)[0]" enclosed
-by a "try/except IndexError" block
-* in python 3: filter() returns a generator object  =>
-"next(filter(...))" enclosed by a "try/except StopIteration" block
-
-None of these variants are compatible with each other, because you
-can't access generator items by index (filter(...)[0] raises a
-TypeError in py3), and lists are not iterators (next(filter(...))
-raises a TypeError in py2).
-
-What would work for both py2/py3 is "next(iter(filter(...)))" enclosed
-by a "try/except StopIteration" block, but the for-loop is more
-readable.
-
-
->> +            # cannot modify self.env while iterating over it,
->> +            #  create intermediate list
->> +            env_old_locale_keys = [
->> +                k for k in self.env.keys() if is_locale_env_varname(k)
->> +            ]
->> +            for k in env_old_locale_keys:
->> +                del self.env[k]
-> Setting the new value will automatically override the old value, so
-> deleting it before looks a bit overkill...
->
-
-Deleting/Inserting is asymmetrical:
-
-* drop any env var matching LANG, LANGUAGE or LC_* (LC_MESSAGES et al)
-* set LANG to the new locale
-
-We could also simply set LC_ALL instead of deleting LC_*, but that
-opens up the possibility to leak LC_ env vars when LC_ALL gets
-unset/emptied:
-
-$ env LC_MESSAGES=en_US.UTF-8 LC_ALL=de_DE.UTF-8  sh -c 'locale | grep
-LC_MES; export LC_ALL=; locale | grep LC_MES;'
-
-LC_MESSAGES="de_DE.UTF-8"
-LC_MESSAGES=en_US.UTF-8
-
->> +
->> +            # set new locale once
->> +            for vname in self.LOCALE_KEYS:
->> +                self.env[vname] = locales[loc_key]
->> +            return True
->> +        # -- end for
->> +        # practically impossible to reach this return if 'c' is in TRY_LOCALES:
->> +        return None
->> +
->> +    def sanitize_env(self):
->> +        self.set_locale()
->> +
->>      def popen(self, cmdv, **kwargs):
->>          kwargs.setdefault('stdin', self.devnull)
->>          kwargs.setdefault('stdout', self.devnull)
->> @@ -789,12 +830,11 @@ def merge(dict_1, dict_2):
->>
->>  def main():
->>
->> -    # Avoid locale settings of autobuilder machine leaking in, for example
->> -    # showing error messages in another language.
->> -    os.environ['LC_ALL'] = 'C'
->> -
->>      check_version()
->>      sysinfo = SystemInfo()
->> +    # Avoid locale settings of autobuilder machine leaking in, for example
->> +    # showing error messages in another language.
->> +    sysinfo.sanitize_env()
->>
->>      args = docopt.docopt(doc, version=VERSION)
->>
->> --
->> 2.3.2
->>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 
 -- 
-Andr?
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
