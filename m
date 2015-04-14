@@ -1,121 +1,108 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 15 Apr 2015 00:25:45 +0200
-Subject: [Buildroot] [PATCHv2 11/21] pkg-download: extend DOWNLOAD_INNER,
- add a SOURCE_CHECK macro
-In-Reply-To: <552D732C.3060907@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 15 Apr 2015 00:27:46 +0200
+Subject: [Buildroot] [PATCHv2 19/21] pkg-generic: introduce a
+ <pkg>_ALL_DOWNLOADS variable and factorize code
+In-Reply-To: <1428856685-4403-20-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-12-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150413210024.GK29025@free.fr> <552D732C.3060907@mind.be>
-Message-ID: <20150414222545.GD4053@free.fr>
+ <1428856685-4403-20-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <552D9462.1020202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
-
-On 2015-04-14 22:06 +0200, Arnout Vandecappelle spake thusly:
-> On 13/04/15 23:00, Yann E. MORIN wrote:
-> > Thomas, All,
-> > 
-> > On 2015-04-12 18:37 +0200, Thomas Petazzoni spake thusly:
-> >> As part of moving to a package infrastructure based source-check
-> >> implementation, we are going to move away from the global DL_MODE
-> >> variable to select the behavior of the DOWNLOAD_INNER macro.
-> >>
-> >> As a preparation to this, this commit makes the DOWNLOAD_INNER macro
-> >> take a third argument, which is the action to be done: either DOWNLOAD
-> >> or SOURCE_CHECK. For now, the DOWNLOAD macro passes $(DL_MODE) as this
-> >> third argument, in order to keep the existing behavior.
-> >>
-> >> In addition, a SOURCE_CHECK macro is added, which calls DOWNLOAD_INNER
-> >> with the appropriate action. This macro will be used in the upcoming
-> >> package infra based implementation of source-check.
+On 12/04/15 18:38, Thomas Petazzoni wrote:
+> Now, both the download and source-check code are iterating over
+> <pkg>_SOURCE, <pkg>_PATCH and <pkg>_EXTRA_DOWNLOADS elements, figuring
+> out whether they contain full URLs or not. Instead of doing this
+> repeatdly, this patch introduces an internal <pkg>_ALL_DOWNLOADS
+> variable, which contains the list of everything that needs to be
+> downloaded, with URLs already expanded to take into account <pkg>_SITE
+> if needed.
 > 
->  It seems a bit weird to do that in this commit, more logical to do it in the
-> next one or as a separate commit. But that's no major issue, so
+> This allows to simplify quite significantly the .stamp_download and
+> source-check implementation.
+
+ Nice!
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+with make perl
+
+ Regards,
+ Arnout
+
 > 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/pkg-generic.mk | 26 ++++++++------------------
+>  1 file changed, 8 insertions(+), 18 deletions(-)
 > 
-> >>
-> >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > 
-> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > [tested by doing a "make source" on a randpackageconfig]
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index d2ed605..7dc1cb8 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -72,25 +72,13 @@ endif
+>  $(BUILD_DIR)/%/.stamp_downloaded:
+>  	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+>  # Only show the download message if it isn't already downloaded
+> -	$(Q)for p in $($(PKG)_SOURCE) $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
+> +	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
+>  		if test ! -e $(DL_DIR)/`basename $$p` ; then \
+>  			$(call MESSAGE,"Downloading") ; \
+>  			break ; \
+>  		fi ; \
+>  	done
+> -	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
+> -	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),\
+> -		$(if $(findstring ://,$(p)),\
+> -			$(call DOWNLOAD,$(p)),\
+> -			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
+> -		)\
+> -	$(sep))
+> -	$(foreach p,$($(PKG)_PATCH),\
+> -		$(if $(findstring ://,$(p)),\
+> -			$(call DOWNLOAD,$(p)),\
+> -			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
+> -		)\
+> -	$(sep))
+> +	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p))$(sep))
+>  	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+>  	$(Q)mkdir -p $(@D)
+>  	$(Q)touch $@
+> @@ -359,6 +347,11 @@ ifndef $(2)_EXTRA_DOWNLOADS
+>   endif
+>  endif
+>  
+> +$(2)_ALL_DOWNLOADS = \
+> +	$$(foreach p,$$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+> +		$$(if $$(findstring ://,$$(p)),$$(p),\
+> +			$$($(2)_SITE:/=)/$$(p)))
+> +
+>  ifndef $(2)_SITE
+>   ifdef $(3)_SITE
+>    $(2)_SITE = $$($(3)_SITE)
+> @@ -572,10 +565,7 @@ $(1)-show-version:
+>  
+>  $(1)-source-check:
+>  ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+> -	$$(foreach p,$$($(2)_SOURCE) $$($(2)_EXTRA_DOWNLOADS) $$($(2)_PATCH),\
+> -		$$(if $$(findstring ://,$$(p)),\
+> -			$$(call SOURCE_CHECK,$$(p)),\
+> -			$$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$$(p))))
+> +	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
+>  else
+>  	test -d $$($(2)_OVERRIDE_SRCDIR)
+>  endif
 > 
->  You should have tested make source-check.
 
-Well, I did run source-check and source; just forgot to state it.
-
-However, I did not notice a failure, because buildroot will fallback to
-our mirror when it does not find something. Because source-check takes
-quite some time to run, I just ran it and went off doing smething else;
-when I came back, there was no error of a failing package, because
-every missing pieces were retrieved from the mirror. And in the default
-config, there is a mirror (our).
-
-And then, it means we can't reliably run sourcce-check to check that
-upstream is still available, just becasue some upstream do not allow us
-to do so (HEAD not being supported).
-
-An alternative would be to use a GET instead of a HEAD, and just ask for
-zero byte (or probably just a few bytes in case some servers would
-refuse to serve zero byte). But there's no way to do so with wget. curl
-is a little bit more flexible and it is possible ask for a range, but
-not all server will abide to that range.
-
-So, I can see a few blockign points baring source-check from being
-completely useful:
-
-  - no or limited VCS support: git does not always support remote-listing
-    a sha1 so we only check the remote exists, our bzr, cvs and hg checks
-    are no better, svn is OK though;
-
-  - scp only works if the user has a shell (which is not mandatory, scp
-    can work even if the user can't get a shell);
-
-  - some HTTP upstreams do not accept a HEAD request;
-
-  - as far as I could see all out FTP-hosted packages are on behaving
-    servers.
-
-Bizarelly enough, what works best are the legacy (or oldish) methods:
-svn and FTP. Yeah for grumpy old guys... :-(
-
-In the ned, does source-check really makes sense?
-
-Let me rephrase...
-
-What's the purpose of source-check?
-
-As far as I can see, there are two use-cases:
-
-  - for us Buildroot devs: check that an upstream still provides a
-    resource;
-
-  - for a standard user to check if he can get the source of his set of
-    packages.
-
-But is that really necessary?
-
-For a user, what can he do if the package can't be downloaded (i.e. not
-in upstream and not on our mirror)? Nothing...
-
-For us, all we need to know is that something can't be downloaded so we
-can bump the package (or point it to our mirror). We have autobuilders
-to catch download failures.
-
-So, does it make sense to keep source-check at all?
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
