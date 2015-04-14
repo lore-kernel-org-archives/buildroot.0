@@ -1,66 +1,121 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Apr 2015 23:50:59 +0200
-Subject: [Buildroot] [PATCHv2 18/21] pkg-generic: propagate
- <pkg>_EXTRA_DOWNLOADS from target to host package
-In-Reply-To: <1428856685-4403-19-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 15 Apr 2015 00:25:45 +0200
+Subject: [Buildroot] [PATCHv2 11/21] pkg-download: extend DOWNLOAD_INNER,
+ add a SOURCE_CHECK macro
+In-Reply-To: <552D732C.3060907@mind.be>
 References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-19-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <552D8BC3.9040803@mind.be>
+ <1428856685-4403-12-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150413210024.GK29025@free.fr> <552D732C.3060907@mind.be>
+Message-ID: <20150414222545.GD4053@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/04/15 18:38, Thomas Petazzoni wrote:
-> Just like <pkg>_PATCH, <pkg>_SOURCE or <pkg>_SITE, the
-> <pkg>_EXTRA_DOWNLOADS variable of a host package should be
-> automatically inferred from the <pkg>_EXTRA_DOWNLOADS value of the
-> corresponding target package, unless an explicit value is being
-> defined for the host package. This commit implements this for
-> <pkg>_EXTRA_DOWNLOADS.
+Arnout, All,
 
- I'm not so sure about this one. _EXTRA_DOWNLOADS is currently used for the
-blackfin toolchains and for perl. Toolchains are target packages so no issue
-there, but for perl, we really only need perl-cross for the target perl. At the
-moment, host-perl is only built as a dependency of perl so it doesn't hurt to
-download perl-cross for host-perl, but it is unnecessary.
-
- Is there a hidden reason why you want this (i.e. is it required for some later
-patch)?
-
- Regards,
- Arnout
+On 2015-04-14 22:06 +0200, Arnout Vandecappelle spake thusly:
+> On 13/04/15 23:00, Yann E. MORIN wrote:
+> > Thomas, All,
+> > 
+> > On 2015-04-12 18:37 +0200, Thomas Petazzoni spake thusly:
+> >> As part of moving to a package infrastructure based source-check
+> >> implementation, we are going to move away from the global DL_MODE
+> >> variable to select the behavior of the DOWNLOAD_INNER macro.
+> >>
+> >> As a preparation to this, this commit makes the DOWNLOAD_INNER macro
+> >> take a third argument, which is the action to be done: either DOWNLOAD
+> >> or SOURCE_CHECK. For now, the DOWNLOAD macro passes $(DL_MODE) as this
+> >> third argument, in order to keep the existing behavior.
+> >>
+> >> In addition, a SOURCE_CHECK macro is added, which calls DOWNLOAD_INNER
+> >> with the appropriate action. This macro will be used in the upcoming
+> >> package infra based implementation of source-check.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/pkg-generic.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  It seems a bit weird to do that in this commit, more logical to do it in the
+> next one or as a separate commit. But that's no major issue, so
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 13a3843..d2ed605 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -353,6 +353,12 @@ ifndef $(2)_PATCH
->   endif
->  endif
->  
-> +ifndef $(2)_EXTRA_DOWNLOADS
-> + ifdef $(3)_EXTRA_DOWNLOADS
-> +  $(2)_PATCH = $$($(3)_EXTRA_DOWNLOADS)
-> + endif
-> +endif
-> +
->  ifndef $(2)_SITE
->   ifdef $(3)_SITE
->    $(2)_SITE = $$($(3)_SITE)
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
+> >>
+> >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > 
+> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > [tested by doing a "make source" on a randpackageconfig]
+> 
+>  You should have tested make source-check.
 
+Well, I did run source-check and source; just forgot to state it.
+
+However, I did not notice a failure, because buildroot will fallback to
+our mirror when it does not find something. Because source-check takes
+quite some time to run, I just ran it and went off doing smething else;
+when I came back, there was no error of a failing package, because
+every missing pieces were retrieved from the mirror. And in the default
+config, there is a mirror (our).
+
+And then, it means we can't reliably run sourcce-check to check that
+upstream is still available, just becasue some upstream do not allow us
+to do so (HEAD not being supported).
+
+An alternative would be to use a GET instead of a HEAD, and just ask for
+zero byte (or probably just a few bytes in case some servers would
+refuse to serve zero byte). But there's no way to do so with wget. curl
+is a little bit more flexible and it is possible ask for a range, but
+not all server will abide to that range.
+
+So, I can see a few blockign points baring source-check from being
+completely useful:
+
+  - no or limited VCS support: git does not always support remote-listing
+    a sha1 so we only check the remote exists, our bzr, cvs and hg checks
+    are no better, svn is OK though;
+
+  - scp only works if the user has a shell (which is not mandatory, scp
+    can work even if the user can't get a shell);
+
+  - some HTTP upstreams do not accept a HEAD request;
+
+  - as far as I could see all out FTP-hosted packages are on behaving
+    servers.
+
+Bizarelly enough, what works best are the legacy (or oldish) methods:
+svn and FTP. Yeah for grumpy old guys... :-(
+
+In the ned, does source-check really makes sense?
+
+Let me rephrase...
+
+What's the purpose of source-check?
+
+As far as I can see, there are two use-cases:
+
+  - for us Buildroot devs: check that an upstream still provides a
+    resource;
+
+  - for a standard user to check if he can get the source of his set of
+    packages.
+
+But is that really necessary?
+
+For a user, what can he do if the package can't be downloaded (i.e. not
+in upstream and not on our mirror)? Nothing...
+
+For us, all we need to know is that something can't be downloaded so we
+can bump the package (or point it to our mirror). We have autobuilders
+to catch download failures.
+
+So, does it make sense to keep source-check at all?
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
