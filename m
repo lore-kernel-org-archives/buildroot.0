@@ -1,54 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Apr 2015 14:05:19 +0200
-Subject: [Buildroot] [PATCHv2 08/21] Makefile: use the package infra
- based external-deps
-In-Reply-To: <552CF861.50004@mind.be>
-References: <1428856685-4403-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1428856685-4403-9-git-send-email-thomas.petazzoni@free-electrons.com>
- <552C5ADB.6020509@mind.be>
- <20150414095202.7850ba00@free-electrons.com>
- <552CF861.50004@mind.be>
-Message-ID: <20150414140519.03a3bdd6@free-electrons.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 14 Apr 2015 17:05:02 +0200
+Subject: [Buildroot] [PATCH v3 0/2]  Web2py and pydal new packages
+Message-ID: <1429023904-20194-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+This patch adds web2py python web application framework and pydal,
+it's database abstraction layer.
+This is the first package to use the new recursive makedevs syntax,
+indeed it runs as www-data non privileged user.
 
-On Tue, 14 Apr 2015 13:22:09 +0200, Arnout Vandecappelle wrote:
+Angelo Compagnucci (2):
+  package/python-pydal: new package
+  package/python-web2py: new package
 
->  Ah yes, silly me. I just _assumed_ that external deps would have been 
-> implemented like:
-> 
-> $(1)-external-deps: $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-external-deps)
-> 
-> instead of passing through -all-external-deps. I just tested that the
-> above gives exactly the same result as the -all-external-deps version.
+ package/Config.in                      |  2 ++
+ package/python-pydal/Config.in         | 15 +++++++++++++
+ package/python-pydal/python-pydal.mk   | 14 ++++++++++++
+ package/python-web2py/Config.in        | 23 ++++++++++++++++++++
+ package/python-web2py/S51web2py        | 25 ++++++++++++++++++++++
+ package/python-web2py/python-web2py.mk | 39 ++++++++++++++++++++++++++++++++++
+ package/python-web2py/web2py.service   | 11 ++++++++++
+ 7 files changed, 129 insertions(+)
+ create mode 100644 package/python-pydal/Config.in
+ create mode 100644 package/python-pydal/python-pydal.mk
+ create mode 100644 package/python-web2py/Config.in
+ create mode 100644 package/python-web2py/S51web2py
+ create mode 100644 package/python-web2py/python-web2py.mk
+ create mode 100644 package/python-web2py/web2py.service
 
-I might be missing something here, but I don't see why your version
-would be any different than the -all-external-deps version I've
-proposed. Except that $(1)-external-deps would not behave as I would
-expect it to behave: give only the list of external deps for $(1), not
-recursively for all dependencies of $(1). But except that I don't
-really see the difference.
-
->  The other reason why there are duplicates is because host packages and
-> target packages (usually) have the same sources, so they will be listed
-> twice. That's more difficult to get around.
-
-I believe this is more likely to be the reason: if you look back at my
-examples, I never got more than twice the same package. So we're
-probably hitting the target vs. host package thing.
-
-Is there anything that we can do about it besides keeping this | sort
--u ?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
