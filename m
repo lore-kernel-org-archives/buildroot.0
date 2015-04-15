@@ -1,33 +1,32 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 15 Apr 2015 09:23:43 -0300
-Subject: [Buildroot] wide-dhcpv6 crash when built in buildroot version
- 2014.05 using a cross toolchain arm-buildroot-linux-gnueabihf with gcc
- version 4.8.3
-In-Reply-To: <620A1A0EF5A8FD49AAB6076B610B85DD45C35001@LTX-EXCH03.int.lantronix.com>
-References: <620A1A0EF5A8FD49AAB6076B610B85DD45C35001@LTX-EXCH03.int.lantronix.com>
-Message-ID: <552E584F.5010809@zacarias.com.ar>
+Date: Wed, 15 Apr 2015 09:37:34 -0300
+Subject: [Buildroot] [PATCH] uclibc: enable UCLIBC_HAS_UTMP in snapshot
+	configuration
+Message-ID: <1429101454-26556-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/15/2015 08:27 AM, Srinivasan R wrote:
+Otherwise busybox in the default configuration fails to build.
 
-> Hi Gustavo Zacarias,
->   Thanks for reply,
-> Can you please give me any link for the manual that gives the example of newer make file format that buildroot's latest version will accept?
-> Meantime, the defconfig I am using is "toro_defconfig".
-> 
-> Regards,
-> Srini.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/uclibc/uClibc-snapshot.config | 1 +
+ 1 file changed, 1 insertion(+)
 
-Hi.
-Please keep the list in cc@
-There's no such thing as toro_defconfig in vanilla buildroot, so it's
-either a fork/customized.
-The documents are online, see:
-http://www.buildroot.net/downloads/manual/manual.html#generic-package-reference
-A quick generic package to use as sample could be eeprog, there are many
-others, it depends on the complexity you're facing.
-Regards.
+diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
+index 6f5ebfa..ac3d9b0 100644
+--- a/package/uclibc/uClibc-snapshot.config
++++ b/package/uclibc/uClibc-snapshot.config
+@@ -237,6 +237,7 @@ UCLIBC_HAS_FTW=y
+ # UCLIBC_HAS_FTS is not set
+ UCLIBC_HAS_GLOB=y
+ UCLIBC_HAS_GNU_GLOB=y
++UCLIBC_HAS_UTMP=y
+ UCLIBC_HAS_UTMPX=y
+ 
+ #
+-- 
+2.0.5
