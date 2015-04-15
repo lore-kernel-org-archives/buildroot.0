@@ -1,39 +1,75 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 15 Apr 2015 11:09:52 -0300
-Subject: [Buildroot] [PATCH] nano: bump to version 2.4.1
-Message-ID: <1429106992-29282-1-git-send-email-gustavo@zacarias.com.ar>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Wed, 15 Apr 2015 17:39:05 +0200
+Subject: [Buildroot] [PATCH 1/3] ejabberd: start the daemon as ejabberd user
+Message-ID: <1429112347-17009-1-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ejabberd.mk creates an ejabberd user but the init script was starting
+the xmpp server as root user. This patch fixes it by invoking
+ejabberctl from a "su ejabberd -c" command.
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index b77e63a..cb5d5b8 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	5076fb502680503e648cbdcbf2077e39fba193420ae19203f0a54cb2d94a75bd	nano-2.4.0.tar.gz
-+sha256	6a0ceb5e1b9b9bea72d5d1f46488ace4782b1f198ea6ba558480a86d994f29d2	nano-2.4.1.tar.gz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 58ee370..4d47fdb 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+---
+ package/ejabberd/S50ejabberd | 28 ++++++++++++++++++++--------
+ 1 file changed, 20 insertions(+), 8 deletions(-)
+
+diff --git a/package/ejabberd/S50ejabberd b/package/ejabberd/S50ejabberd
+index 2656307..925a072 100644
+--- a/package/ejabberd/S50ejabberd
++++ b/package/ejabberd/S50ejabberd
+@@ -7,29 +7,41 @@ USER=ejabberd
+ RUNDIR=/var/run/ejabberd
  
--NANO_VERSION = 2.4.0
-+NANO_VERSION = 2.4.1
- NANO_SITE = $(BR2_GNU_MIRROR)/nano
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
+ mkrundir() {
+-    install -d -o $USER -g $USER $RUNDIR
++    install -d -o "$USER" -g "$USER" "$RUNDIR"
++}
++
++# Run ejabberdctl as user $USER.
++ctl() {
++    su $USER -c "ejabberdctl $*"
+ }
+ 
+ case "$1" in
+     start)
+-	mkrundir
+-        echo "Starting ejabberd..."
+-        ejabberdctl start
++        mkrundir || exit 1
++        echo -n "Starting ejabberd... "
++        ctl start
+         ;;
+     stop)
+         echo -n "Stopping ejabberd... "
+-        ejabberdctl stop > /dev/null
+-        if [ $? -eq 3 ] || ejabberdctl stopped; then
++        ctl stop > /dev/null
++        if [ $? -eq 3 ] || ctl stopped; then
+             echo "OK"
+         else
+             echo "failed"
+         fi
+         ;;
+-    restart|reload)
++    status)
++        ctl status
++        ;;
++    restart|force-reload)
+         "$0" stop
+         "$0" start
+         ;;
++    live)
++        mkrundir || exit 1
++        ctl live
++        ;;
+     *)
+-        echo "Usage: $0 {start|stop|restart}"
++        echo "Usage: $0 {start|stop|status|restart|force-reload|live}"
+         exit 1
+ esac
 -- 
-2.0.5
+2.1.0
