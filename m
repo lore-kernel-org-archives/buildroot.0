@@ -1,53 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 15 Apr 2015 17:57:18 -0300
-Subject: [Buildroot] [PATCH] samba4: bump to version 4.2.1
-Message-ID: <1429131438-10497-1-git-send-email-gustavo@zacarias.com.ar>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 15 Apr 2015 23:55:34 +0200
+Subject: [Buildroot] [PATCH 0/1] Added linux drivers backports project
+Message-ID: <1429134935-11241-1-git-send-email-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/samba4/Config.in   | 2 +-
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Hi there,
 
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index 5a83ab8..57adadd 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -4,7 +4,7 @@ comment "samba4 needs an (e)glibc toolchain"
- config BR2_PACKAGE_SAMBA4
- 	bool "samba4"
- 	depends on !BR2_PACKAGE_SAMBA
--	depends on BR2_TOOLCHAIN_USES_GLIBC # needs nss.h, $ORIGIN support
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # needs $ORIGIN support
- 	depends on !BR2_nios2 # binary too large, relocations don't fit
- 	select BR2_PACKAGE_E2FSPROGS
- 	select BR2_PACKAGE_POPT
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 3dbea5a..42bfb93 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	66a6057815a971fee64fbe936ff6cbad542421a4bd52cba8d8d41afc9abc490f	samba-4.2.0.tar.gz
-+sha256	37eaa239c116dc2c22c29c5a2931eb178ed22e48b594687247446703119b4ac3	samba-4.2.1.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 78d92ef..e5971fb 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.2.0
-+SAMBA4_VERSION = 4.2.1
- SAMBA4_SITE = http://ftp.samba.org/pub/samba
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+this is a patch adding [1] to buildroot. Backports provide drivers released on
+newer kernels backported for usage on older kernels. This is very handy, for
+those which have to use and old kernel (some SoC requires this).
+
+This project was discussed more than one year ago [2], but nothing was actually
+implemented.
+
+I plan further improvements:
+
+* Allow to use different versions
+There are stable releases, snapshot based on current linux-next and some
+archived versions based on linux-next. Although it's recommended to use the
+latest stable version, some people prefer / need different version.
+
+* Version check
+For kernel versions older than 3.0 version backports-3.14 is needed,
+kernels < 2.6.26 aren't supported.
+
+* Custom patches
+Ekvivalent of BR2_LINUX_KERNEL_PATCH.
+
+* Custom repository version
+Ekvivalent of BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION.
+
+Credits: I got inspired by implementation in gfiber project (but rewrited).
+
+Kind regards,
+Petr
+
+
+[1] https://backports.wiki.kernel.org
+[2] http://lists.busybox.net/pipermail/buildroot/2013-December/084663.html
+[3] https://gfiber.googlesource.com/buildroot/+/gfiber-openbox-2/package/backports/backports.mk
+
+Petr Vorel (1):
+  Added linux drivers backports project
+
+ package/Config.in                            |  1 +
+ package/linux-backports/Config.in            | 36 ++++++++++++++
+ package/linux-backports/linux-backports.hash |  2 +
+ package/linux-backports/linux-backports.mk   | 73 ++++++++++++++++++++++++++++
+ 4 files changed, 112 insertions(+)
+ create mode 100644 package/linux-backports/Config.in
+ create mode 100644 package/linux-backports/linux-backports.hash
+ create mode 100644 package/linux-backports/linux-backports.mk
+
 -- 
-2.0.5
+1.8.0
