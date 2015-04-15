@@ -1,79 +1,77 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 14 Apr 2015 21:37:56 -0300
-Subject: [Buildroot] [PATCH] radvd: bump to version 2.11
-Message-ID: <1429058276-15401-1-git-send-email-gustavo@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 15 Apr 2015 06:13:48 +0300
+Subject: [Buildroot] [PATCH 1/1] json-c: bump version to
+ json-c-0.12-20140410
+In-Reply-To: <552DA110.5050001@proximus.be>
+References: <1429002618-22546-1-git-send-email-sagaert.johan@proximus.be>
+ <20150414091501.GQ2279@tarshish> <552DA110.5050001@proximus.be>
+Message-ID: <20150415031347.GA30380@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No longer needs check (hence the patch) to build.
+Hi Sagaert Johan,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...-check-requirement-we-don-t-do-unit-tests.patch | 29 ----------------------
- package/radvd/radvd.hash                           |  4 +--
- package/radvd/radvd.mk                             |  2 +-
- 3 files changed, 3 insertions(+), 32 deletions(-)
- delete mode 100644 package/radvd/0001-Drop-check-requirement-we-don-t-do-unit-tests.patch
+On Wed, Apr 15, 2015 at 01:21:52AM +0200, Johan Sagaert wrote:
+> Baruch Siach schreef op 14/04/2015 om 11:15:
+> >It seems this packages builds with -Werror, hence the need for this patch 
+> >to avoid build breakage. A better solution, in my opinion, is to remove 
+> >-Werror.
+> 
+> i tried
+> diff --git a/Makefile.am.inc b/Makefile.am.inc
+> index fec591b..61db1d2 100644
+> --- a/Makefile.am.inc
+> +++ b/Makefile.am.inc
+> @@ -1,2 +1,2 @@
+> -AM_CFLAGS = -Wall -Werror -Wno-error=deprecated-declarations -Wextra
+> -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
+> +AM_CFLAGS = -Wall -Wno-error=deprecated-declarations -Wextra
+> -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
+> 
+> but this seems to yield this unexpected error.
+> 
+> >>> json-c json-c-0.12-20140410 Building
+> PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/sbin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/host/usr/sbin:/root/google-cloud-sdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/buildroot12git/output/build/host-cmake-3.0.2/bin"
+> /usr/bin/make -j1  -C
+> /home/buildroot12git/output/build/json-c-json-c-0.12-20140410/
+> make[1]: Entering directory
+> `/home/buildroot12git/output/build/json-c-json-c-0.12-20140410'
+>  cd . && /bin/sh
+> /home/buildroot12git/output/build/json-c-json-c-0.12-20140410/missing
+> automake-1.14 --gnu Makefile
+> /home/buildroot12git/output/build/json-c-json-c-0.12-20140410/missing: line
+> 81: automake-1.14: command not found
+> WARNING: 'automake-1.14' is missing on your system.
+>          You should only need it if you modified 'Makefile.am' or
+>          'configure.ac' or m4 files included by 'configure.ac'.
+>          The 'automake' program is part of the GNU Automake package:
+>          <http://www.gnu.org/software/automake>
+>          It also requires GNU Autoconf, GNU m4 and Perl in order to run:
+>          <http://www.gnu.org/software/autoconf>
+>          <http://www.gnu.org/software/m4/>
+>          <http://www.perl.org/>
+> make[1]: *** [Makefile.in] Error 127
+> make[1]: Leaving directory
+> `/home/buildroot12git/output/build/json-c-json-c-0.12-20140410'
+> make: ***
+> [/home/buildroot12git/output/build/json-c-json-c-0.12-20140410/.stamp_built]
+> Error 2
+> return of make was 2
+> 
+> I don't see why.
 
-diff --git a/package/radvd/0001-Drop-check-requirement-we-don-t-do-unit-tests.patch b/package/radvd/0001-Drop-check-requirement-we-don-t-do-unit-tests.patch
-deleted file mode 100644
-index 0bbbf28..0000000
---- a/package/radvd/0001-Drop-check-requirement-we-don-t-do-unit-tests.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 2074114cef857f95104367c51ac9367082fc8060 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Sun, 23 Nov 2014 12:16:32 +0100
--Subject: [PATCH 1/3] Drop check requirement, we don't do unit tests
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- configure.ac | 4 ----
-- 1 file changed, 4 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 59b18a8..5dde3b2 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -50,10 +50,6 @@ dnl Determine CC and preset CFLAGS
-- AC_PROG_CC_C99
-- AC_PROG_RANLIB
-- 
---if test "$arch" = "linux" ; then
---PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
---fi
---
-- dnl Determine of netlink is available
-- AC_MSG_CHECKING(netlink)
-- AC_TRY_COMPILE([
---- 
--2.1.0
--
-diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
-index fe777d5..7324c31 100644
---- a/package/radvd/radvd.hash
-+++ b/package/radvd/radvd.hash
-@@ -1,2 +1,2 @@
--# From http://www.litech.org/radvd/dist/radvd-2.10.tar.gz.sha256
--sha256	76ceee8304120ae42cc38d03dd720a3db94a57e459f3184254fa523367fb9773	radvd-2.10.tar.xz
-+# From http://www.litech.org/radvd/dist/radvd-2.11.tar.gz.sha256
-+sha256	04636288fc79fa151260eeb2bea1b05942f59c31f01358c57f930a4eb45b5acc	radvd-2.11.tar.xz
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 184cf7a..872eac0 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RADVD_VERSION = 2.10
-+RADVD_VERSION = 2.11
- RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
- RADVD_SITE = http://www.litech.org/radvd/dist
- RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
+Please try adding
+
+	JSON_C_AUTORECONF = YES
+
+to your .mk file.
+
+baruch
+
 -- 
-2.0.5
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
