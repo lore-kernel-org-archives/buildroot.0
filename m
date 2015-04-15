@@ -1,60 +1,39 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Wed, 15 Apr 2015 16:23:10 -0400
-Subject: [Buildroot] [PATCH 1/1] monit: bump to version 3.12.2
-Message-ID: <1429129390-28278-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 15 Apr 2015 22:36:12 +0200
+Subject: [Buildroot] [PATCH] package/libfreeimage: needs C++ support
+Message-ID: <1429130172-6287-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file and remove the m4 directory creation from the monit.mk
-which is now in the source tree.
+Fixes:
+http://autobuild.buildroot.net/results/f52/f52dd2939984cd7a6926b8ad6d5be13dcf3afae8
 
-Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/monit/monit.hash | 6 ++++++
- package/monit/monit.mk   | 8 +-------
- 2 files changed, 7 insertions(+), 7 deletions(-)
- create mode 100644 package/monit/monit.hash
+ package/libfreeimage/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/monit/monit.hash b/package/monit/monit.hash
-new file mode 100644
-index 0000000..9313c7a
---- /dev/null
-+++ b/package/monit/monit.hash
-@@ -0,0 +1,6 @@
-+# From https://mmonit.com/monit/dist/monit-5.12.2.tar.gz.sha256:
-+sha256	8ab0296d1aa2351b1573481592d7b5e06de1edd49dff1b5552839605a450914c  monit-5.12.2.tar.gz
-+
-+# Locally calculated:
-+md5	5f5cf4c18b42e8091b49b4e07cf972ce	monit-5.12.2.tar.gz
-+sha1	5ffdcc0c5dfbc12bfe2e35dd33d2626a038771fc	monit-5.12.2.tar.gz
-diff --git a/package/monit/monit.mk b/package/monit/monit.mk
-index 1a81349..9f0a29a 100644
---- a/package/monit/monit.mk
-+++ b/package/monit/monit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libfreeimage/Config.in b/package/libfreeimage/Config.in
+index 546593b..914c0af 100644
+--- a/package/libfreeimage/Config.in
++++ b/package/libfreeimage/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBFREEIMAGE
+ 	bool "libfreeimage"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  FreeImage is an Open Source library project for developers who
+@@ -9,5 +10,5 @@ config BR2_PACKAGE_LIBFREEIMAGE
  
--MONIT_VERSION = 5.7
-+MONIT_VERSION = 5.12.2
- MONIT_SITE = http://mmonit.com/monit/dist
- MONIT_LICENSE = AGPLv3 with OpenSSL exception
- MONIT_LICENSE_FILES = COPYING
-@@ -12,12 +12,6 @@ MONIT_LICENSE_FILES = COPYING
- # Touching Makefile.am:
- MONIT_AUTORECONF = YES
+ 	  http://freeimage.sourceforge.net
  
--# Missing m4/ directory in the source tree
--define MONIT_M4
--	mkdir $(@D)/m4
--endef
--MONIT_POST_PATCH_HOOKS += MONIT_M4
--
- MONIT_CONF_ENV = \
- 	libmonit_cv_setjmp_available=yes \
- 	libmonit_cv_vsnprintf_c99_conformant=yes
+-comment "libfreeimage needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "libfreeimage needs a toolchain w/ C++, dynamic library"
++	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
 -- 
-1.8.3.4
+1.9.3
