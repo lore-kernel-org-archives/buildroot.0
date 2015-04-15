@@ -1,129 +1,56 @@
-From: Sagaert Johan <sagaert.johan@proximus.be>
-Date: Wed, 15 Apr 2015 11:21:28 +0200
-Subject: [Buildroot] [PATCH 1/1 v3] json-c: bump version to
-	json-c-0.12-20140410
-Message-ID: <1429089688-4106-1-git-send-email-sagaert.johan@proximus.be>
+From: Nimai Mahajan <nimaim@gmail.com>
+Date: Wed, 15 Apr 2015 08:11:33 -0400
+Subject: [Buildroot] How to allocate 100% of memory to /tmp?
+In-Reply-To: <CAOS_Y6QdG3nJAvzT_BggE-uG7-qDHorFk7OoT1-632mLbBbVAw@mail.gmail.com>
+References: <CALoSW658=RKf+o=X4ND03U5CiH83poVTPrU+uGDAJPkKtXzUHw@mail.gmail.com>
+ <CAOS_Y6QdG3nJAvzT_BggE-uG7-qDHorFk7OoT1-632mLbBbVAw@mail.gmail.com>
+Message-ID: <CALoSW67QkhJHyghRhzKqtQYiw7i=hBafLeBUw2hB3_X79rW1SQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also;
-  -removed upstream patch
-  -added patch to remove -Werror from make flags
+On Tue, Apr 14, 2015 at 8:06 PM, Rob Landley <rob@landley.net> wrote:
+> On Tue, Apr 14, 2015 at 6:28 PM, Nimai Mahajan <nimaim@gmail.com> wrote:
+>> We are working on a recovery system using Buildroot that operates
+>> solely in memory. Some data we send over is 1-2GB in size so we'd like
+>> to allocate all of the memory to /tmp.
+>
+> mount -o remount,size=80% /tmp
+>
+> (And if you do that, don't be surprised if your system locks solid.
+> The oom killer can't evict page cache. In theory tmpfs can evict it to
+> swap, but when swap fills up the oom killer will get _really_confused_
+> if the amount of memory dedicated to unfreeable disk cache is
+> disproportionately high leaving it with no good choices on what to
+> do.)
+>
+>> I'm not sure where the setting
+>> is to change this but on a system with 2 GB of memory for example,
+>> /tmp is given 1 GB and /dev/shm the other 1 GB. How do I map this
+>> differently in a safe manner?
+>
+> You don't do 100% in a safe manner, that leaves nothing for the rest
+> of the system.
+>
+>> Or is this normal behavior? Thanks!
+>
+> The tmpfs default is 50%, yes. The size= argument changes that
+> default, I normally use percent but you can specify megabytes and such
+> instead. According to
+> http://kernel.org/doc/Documentation/filesystems/tmpfs.txt you can even
+> specify size=0 to take the guiderails off completely and lock your
+> system solid as soon as you write enough data to /tmp, just like ramfs
+> would.
+>
+> Up to you, really. As with all open source, if it breaks, you get to
+> keep the pieces. Try it and see what happens, maybe a big enough swap
+> partition will make it work anyway, I haven't played with this bit
+> much.
+>
+> Rob
 
-Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
----
-V2->V3
-	no hash for git checkouts
-	add comment to AUTORECONF line.
----
-V1->V2
-	Remove the -Werror from make flags
----
- .../0001-don-t-threat-warnings-as-errors.patch     | 21 +++++++++++
- package/json-c/0001-no-reentrant.patch             | 44 ----------------------
- package/json-c/json-c.mk                           |  4 +-
- 3 files changed, 24 insertions(+), 45 deletions(-)
- create mode 100644 package/json-c/0001-don-t-threat-warnings-as-errors.patch
- delete mode 100644 package/json-c/0001-no-reentrant.patch
-
-diff --git a/package/json-c/0001-don-t-threat-warnings-as-errors.patch b/package/json-c/0001-don-t-threat-warnings-as-errors.patch
-new file mode 100644
-index 0000000..f18bf92
---- /dev/null
-+++ b/package/json-c/0001-don-t-threat-warnings-as-errors.patch
-@@ -0,0 +1,21 @@
-+From e81a30a35107643323950ef6803eddebecb33344 Mon Sep 17 00:00:00 2001
-+From: Sagaert Johan <sagaert.johan@proximus.be>
-+Date: Wed, 15 Apr 2015 00:40:46 +0200
-+Subject: [PATCH 1/1] don't threat warnings as errors
-+
-+Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
-+---
-+ Makefile.am.inc | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am.inc b/Makefile.am.inc
-+index fec591b..61db1d2 100644
-+--- a/Makefile.am.inc
-++++ b/Makefile.am.inc
-+@@ -1,2 +1,2 @@
-+-AM_CFLAGS = -Wall -Werror -Wno-error=deprecated-declarations -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
-++AM_CFLAGS = -Wall -Wno-error=deprecated-declarations -Wextra -Wwrite-strings -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
-+ 
-+-- 
-+2.3.3
-+
-diff --git a/package/json-c/0001-no-reentrant.patch b/package/json-c/0001-no-reentrant.patch
-deleted file mode 100644
-index b8ae6bb..0000000
---- a/package/json-c/0001-no-reentrant.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--Do not pass -D_REENTRANT
--
--This flag is not needed to build this library, and prevents to build
--it with toolchains that don't have thread support.
--
--Since the Makefile.in change is a one-liner, we also do it in the
--patch to avoid having to autoreconfigure the package.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/Makefile.am.inc
--===================================================================
----- a/Makefile.am.inc
--+++ b/Makefile.am.inc
--@@ -1,2 +1,2 @@
---AM_CFLAGS = -Wall -Werror -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
--+AM_CFLAGS = -Wall -Werror -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE
-- 
--Index: b/Makefile.in
--===================================================================
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -274,7 +274,7 @@
-- top_build_prefix = @top_build_prefix@
-- top_builddir = @top_builddir@
-- top_srcdir = @top_srcdir@
---AM_CFLAGS = -Wall -Werror -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
--+AM_CFLAGS = -Wall -Werror -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE
-- EXTRA_DIST = README.html README-WIN32.html config.h.win32 doc json-c.vcproj
-- SUBDIRS = . tests
-- lib_LTLIBRARIES = libjson-c.la $(am__append_1)
--Index: b/tests/Makefile.in
--===================================================================
----- a/tests/Makefile.in
--+++ b/tests/Makefile.in
--@@ -228,7 +228,7 @@
-- top_build_prefix = @top_build_prefix@
-- top_builddir = @top_builddir@
-- top_srcdir = @top_srcdir@
---AM_CFLAGS = -Wall -Werror -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
--+AM_CFLAGS = -Wall -Werror -Wextra -Wwrite-strings -Wno-unused-parameter -std=gnu99 -D_GNU_SOURCE
-- LIBJSON_LA = $(top_builddir)/libjson-c.la
-- test1_LDADD = $(LIBJSON_LA)
-- test1Formatted_LDADD = $(LIBJSON_LA)
-diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
-index b8212ca..35243f1 100644
---- a/package/json-c/json-c.mk
-+++ b/package/json-c/json-c.mk
-@@ -4,11 +4,13 @@
- #
- ################################################################################
- 
--JSON_C_VERSION = json-c-0.11-20130402
-+JSON_C_VERSION = json-c-0.12-20140410
- JSON_C_SITE = $(call github,json-c,json-c,$(JSON_C_VERSION))
- JSON_C_INSTALL_STAGING = YES
- JSON_C_MAKE = $(MAKE1)
- JSON_C_CONF_OPTS = --disable-oldname-compat
-+# AUTORECONF is needed because of Makefile.am.inc patch.
-+JSON_C_AUTORECONF = YES
- JSON_C_LICENSE = MIT
- JSON_C_LICENSE_FILES = COPYING
- 
--- 
-2.3.3
+Makes sense, thanks Rob! This helps a lot, I didn't know 50% is tmpfs
+default, that is good to know. I will consider using a storage
+partition then and avoiding potential pitfalls with this.
