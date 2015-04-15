@@ -1,50 +1,79 @@
-From: Rob Landley <rob@landley.net>
-Date: Tue, 14 Apr 2015 19:06:40 -0500
-Subject: [Buildroot] How to allocate 100% of memory to /tmp?
-In-Reply-To: <CALoSW658=RKf+o=X4ND03U5CiH83poVTPrU+uGDAJPkKtXzUHw@mail.gmail.com>
-References: <CALoSW658=RKf+o=X4ND03U5CiH83poVTPrU+uGDAJPkKtXzUHw@mail.gmail.com>
-Message-ID: <CAOS_Y6QdG3nJAvzT_BggE-uG7-qDHorFk7OoT1-632mLbBbVAw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 14 Apr 2015 21:37:56 -0300
+Subject: [Buildroot] [PATCH] radvd: bump to version 2.11
+Message-ID: <1429058276-15401-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 14, 2015 at 6:28 PM, Nimai Mahajan <nimaim@gmail.com> wrote:
-> We are working on a recovery system using Buildroot that operates
-> solely in memory. Some data we send over is 1-2GB in size so we'd like
-> to allocate all of the memory to /tmp.
+No longer needs check (hence the patch) to build.
 
-mount -o remount,size=80% /tmp
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...-check-requirement-we-don-t-do-unit-tests.patch | 29 ----------------------
+ package/radvd/radvd.hash                           |  4 +--
+ package/radvd/radvd.mk                             |  2 +-
+ 3 files changed, 3 insertions(+), 32 deletions(-)
+ delete mode 100644 package/radvd/0001-Drop-check-requirement-we-don-t-do-unit-tests.patch
 
-(And if you do that, don't be surprised if your system locks solid.
-The oom killer can't evict page cache. In theory tmpfs can evict it to
-swap, but when swap fills up the oom killer will get _really_confused_
-if the amount of memory dedicated to unfreeable disk cache is
-disproportionately high leaving it with no good choices on what to
-do.)
-
-> I'm not sure where the setting
-> is to change this but on a system with 2 GB of memory for example,
-> /tmp is given 1 GB and /dev/shm the other 1 GB. How do I map this
-> differently in a safe manner?
-
-You don't do 100% in a safe manner, that leaves nothing for the rest
-of the system.
-
-> Or is this normal behavior? Thanks!
-
-The tmpfs default is 50%, yes. The size= argument changes that
-default, I normally use percent but you can specify megabytes and such
-instead. According to
-http://kernel.org/doc/Documentation/filesystems/tmpfs.txt you can even
-specify size=0 to take the guiderails off completely and lock your
-system solid as soon as you write enough data to /tmp, just like ramfs
-would.
-
-Up to you, really. As with all open source, if it breaks, you get to
-keep the pieces. Try it and see what happens, maybe a big enough swap
-partition will make it work anyway, I haven't played with this bit
-much.
-
-Rob
+diff --git a/package/radvd/0001-Drop-check-requirement-we-don-t-do-unit-tests.patch b/package/radvd/0001-Drop-check-requirement-we-don-t-do-unit-tests.patch
+deleted file mode 100644
+index 0bbbf28..0000000
+--- a/package/radvd/0001-Drop-check-requirement-we-don-t-do-unit-tests.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 2074114cef857f95104367c51ac9367082fc8060 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Sun, 23 Nov 2014 12:16:32 +0100
+-Subject: [PATCH 1/3] Drop check requirement, we don't do unit tests
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- configure.ac | 4 ----
+- 1 file changed, 4 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 59b18a8..5dde3b2 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -50,10 +50,6 @@ dnl Determine CC and preset CFLAGS
+- AC_PROG_CC_C99
+- AC_PROG_RANLIB
+- 
+--if test "$arch" = "linux" ; then
+--PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
+--fi
+--
+- dnl Determine of netlink is available
+- AC_MSG_CHECKING(netlink)
+- AC_TRY_COMPILE([
+--- 
+-2.1.0
+-
+diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
+index fe777d5..7324c31 100644
+--- a/package/radvd/radvd.hash
++++ b/package/radvd/radvd.hash
+@@ -1,2 +1,2 @@
+-# From http://www.litech.org/radvd/dist/radvd-2.10.tar.gz.sha256
+-sha256	76ceee8304120ae42cc38d03dd720a3db94a57e459f3184254fa523367fb9773	radvd-2.10.tar.xz
++# From http://www.litech.org/radvd/dist/radvd-2.11.tar.gz.sha256
++sha256	04636288fc79fa151260eeb2bea1b05942f59c31f01358c57f930a4eb45b5acc	radvd-2.11.tar.xz
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index 184cf7a..872eac0 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RADVD_VERSION = 2.10
++RADVD_VERSION = 2.11
+ RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
+ RADVD_SITE = http://www.litech.org/radvd/dist
+ RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
+-- 
+2.0.5
