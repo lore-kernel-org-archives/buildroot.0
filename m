@@ -1,39 +1,53 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 15 Apr 2015 22:36:12 +0200
-Subject: [Buildroot] [PATCH] package/libfreeimage: needs C++ support
-Message-ID: <1429130172-6287-1-git-send-email-romain.naour@openwide.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 15 Apr 2015 17:57:18 -0300
+Subject: [Buildroot] [PATCH] samba4: bump to version 4.2.1
+Message-ID: <1429131438-10497-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/f52/f52dd2939984cd7a6926b8ad6d5be13dcf3afae8
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libfreeimage/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/samba4/Config.in   | 2 +-
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libfreeimage/Config.in b/package/libfreeimage/Config.in
-index 546593b..914c0af 100644
---- a/package/libfreeimage/Config.in
-+++ b/package/libfreeimage/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBFREEIMAGE
- 	bool "libfreeimage"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
- 	help
- 	  FreeImage is an Open Source library project for developers who
-@@ -9,5 +10,5 @@ config BR2_PACKAGE_LIBFREEIMAGE
+diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+index 5a83ab8..57adadd 100644
+--- a/package/samba4/Config.in
++++ b/package/samba4/Config.in
+@@ -4,7 +4,7 @@ comment "samba4 needs an (e)glibc toolchain"
+ config BR2_PACKAGE_SAMBA4
+ 	bool "samba4"
+ 	depends on !BR2_PACKAGE_SAMBA
+-	depends on BR2_TOOLCHAIN_USES_GLIBC # needs nss.h, $ORIGIN support
++	depends on BR2_TOOLCHAIN_USES_GLIBC # needs $ORIGIN support
+ 	depends on !BR2_nios2 # binary too large, relocations don't fit
+ 	select BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_POPT
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 3dbea5a..42bfb93 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	66a6057815a971fee64fbe936ff6cbad542421a4bd52cba8d8d41afc9abc490f	samba-4.2.0.tar.gz
++sha256	37eaa239c116dc2c22c29c5a2931eb178ed22e48b594687247446703119b4ac3	samba-4.2.1.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 78d92ef..e5971fb 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://freeimage.sourceforge.net
- 
--comment "libfreeimage needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "libfreeimage needs a toolchain w/ C++, dynamic library"
-+	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
+-SAMBA4_VERSION = 4.2.0
++SAMBA4_VERSION = 4.2.1
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-1.9.3
+2.0.5
