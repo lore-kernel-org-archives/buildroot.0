@@ -1,56 +1,33 @@
-From: Nimai Mahajan <nimaim@gmail.com>
-Date: Wed, 15 Apr 2015 08:11:33 -0400
-Subject: [Buildroot] How to allocate 100% of memory to /tmp?
-In-Reply-To: <CAOS_Y6QdG3nJAvzT_BggE-uG7-qDHorFk7OoT1-632mLbBbVAw@mail.gmail.com>
-References: <CALoSW658=RKf+o=X4ND03U5CiH83poVTPrU+uGDAJPkKtXzUHw@mail.gmail.com>
- <CAOS_Y6QdG3nJAvzT_BggE-uG7-qDHorFk7OoT1-632mLbBbVAw@mail.gmail.com>
-Message-ID: <CALoSW67QkhJHyghRhzKqtQYiw7i=hBafLeBUw2hB3_X79rW1SQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 15 Apr 2015 09:23:43 -0300
+Subject: [Buildroot] wide-dhcpv6 crash when built in buildroot version
+ 2014.05 using a cross toolchain arm-buildroot-linux-gnueabihf with gcc
+ version 4.8.3
+In-Reply-To: <620A1A0EF5A8FD49AAB6076B610B85DD45C35001@LTX-EXCH03.int.lantronix.com>
+References: <620A1A0EF5A8FD49AAB6076B610B85DD45C35001@LTX-EXCH03.int.lantronix.com>
+Message-ID: <552E584F.5010809@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 14, 2015 at 8:06 PM, Rob Landley <rob@landley.net> wrote:
-> On Tue, Apr 14, 2015 at 6:28 PM, Nimai Mahajan <nimaim@gmail.com> wrote:
->> We are working on a recovery system using Buildroot that operates
->> solely in memory. Some data we send over is 1-2GB in size so we'd like
->> to allocate all of the memory to /tmp.
->
-> mount -o remount,size=80% /tmp
->
-> (And if you do that, don't be surprised if your system locks solid.
-> The oom killer can't evict page cache. In theory tmpfs can evict it to
-> swap, but when swap fills up the oom killer will get _really_confused_
-> if the amount of memory dedicated to unfreeable disk cache is
-> disproportionately high leaving it with no good choices on what to
-> do.)
->
->> I'm not sure where the setting
->> is to change this but on a system with 2 GB of memory for example,
->> /tmp is given 1 GB and /dev/shm the other 1 GB. How do I map this
->> differently in a safe manner?
->
-> You don't do 100% in a safe manner, that leaves nothing for the rest
-> of the system.
->
->> Or is this normal behavior? Thanks!
->
-> The tmpfs default is 50%, yes. The size= argument changes that
-> default, I normally use percent but you can specify megabytes and such
-> instead. According to
-> http://kernel.org/doc/Documentation/filesystems/tmpfs.txt you can even
-> specify size=0 to take the guiderails off completely and lock your
-> system solid as soon as you write enough data to /tmp, just like ramfs
-> would.
->
-> Up to you, really. As with all open source, if it breaks, you get to
-> keep the pieces. Try it and see what happens, maybe a big enough swap
-> partition will make it work anyway, I haven't played with this bit
-> much.
->
-> Rob
+On 04/15/2015 08:27 AM, Srinivasan R wrote:
 
-Makes sense, thanks Rob! This helps a lot, I didn't know 50% is tmpfs
-default, that is good to know. I will consider using a storage
-partition then and avoiding potential pitfalls with this.
+> Hi Gustavo Zacarias,
+>   Thanks for reply,
+> Can you please give me any link for the manual that gives the example of newer make file format that buildroot's latest version will accept?
+> Meantime, the defconfig I am using is "toro_defconfig".
+> 
+> Regards,
+> Srini.
+
+Hi.
+Please keep the list in cc@
+There's no such thing as toro_defconfig in vanilla buildroot, so it's
+either a fork/customized.
+The documents are online, see:
+http://www.buildroot.net/downloads/manual/manual.html#generic-package-reference
+A quick generic package to use as sample could be eeprog, there are many
+others, it depends on the complexity you're facing.
+Regards.
