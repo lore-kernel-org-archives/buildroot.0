@@ -1,44 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Apr 2015 10:16:29 +0200
-Subject: [Buildroot] [PATCH 2/4] boot/uboot: add hash file
-In-Reply-To: <20150419100836.40d7c13c@free-electrons.com>
-References: <1429361566-3538-1-git-send-email-joerg.krause@embedded.rocks>
- <1429361566-3538-2-git-send-email-joerg.krause@embedded.rocks>
- <20150419100836.40d7c13c@free-electrons.com>
-Message-ID: <20150419081629.GD4313@free.fr>
+From: Robert P. J. Day <rpjday@crashcourse.ca>
+Date: Wed, 15 Apr 2015 16:42:35 -0400 (EDT)
+Subject: [Buildroot] how to point at a massive local archive of S/W tarballs
+Message-ID: <alpine.LFD.2.11.1504151638400.26183@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, J?rg, All,
 
-On 2015-04-19 10:08 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 18 Apr 2015 14:52:44 +0200, J?rg Krause wrote:
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > ---
-> >  boot/uboot/uboot.hash | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >  create mode 100644 boot/uboot/uboot.hash
-> 
-> Applied, thanks.
-> 
-> Once the hashes become mandatory, we'll have to take care of this
-> package, since the user might download custom tarball / git version,
-> which will not match the hash provided in the hash file. Cc'ed Yann on
-> this.
+  (NOTE: first of a few fairly basic questions as i play with the
+current buildroot after being away for a bit.)
 
-OK, I'll consider this for my series making them mandatory. Thanks for
-the heads-up.
+  if i'm starting a new build, how can i take advantage of the
+gigabytes of S/W tarballs i've collected for doing OE/yocto project
+builds?
 
-Regards,
-Yann E. MORIN.
+  i want to set the equivalent of a local mirror -- would i set a
+value in the "Primary download site" config option, with the format
+"file:///pathname/to/all/my/tarballs"?
+
+rday
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+========================================================================
+Robert P. J. Day                                 Ottawa, Ontario, CANADA
+                        http://crashcourse.ca
+
+Twitter:                                       http://twitter.com/rpjday
+LinkedIn:                               http://ca.linkedin.com/in/rpjday
+========================================================================
