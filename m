@@ -1,45 +1,73 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 16 Apr 2015 23:19:25 +0200
-Subject: [Buildroot] Intel Edison support
-In-Reply-To: <CA+-urNRPe3bv+FH9He==b2_aa_NCnDXwxUJGGZqfUsNGyZt74w@mail.gmail.com>
-References: <CA+-urNRPe3bv+FH9He==b2_aa_NCnDXwxUJGGZqfUsNGyZt74w@mail.gmail.com>
-Message-ID: <5530275D.90305@mind.be>
+Date: Thu, 16 Apr 2015 23:31:56 +0200
+Subject: [Buildroot] config choices in building for beaglebone black
+	(BBB)?
+In-Reply-To: <alpine.LFD.2.11.1504160857510.20888@localhost>
+References: <alpine.LFD.2.11.1504160857510.20888@localhost>
+Message-ID: <55302A4C.5050109@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/04/15 14:33, Frank Hunleth wrote:
-> Hi all,
+On 16/04/15 15:03, Robert P. J. Day wrote:
 > 
-> I have support for the Intel Edison working in Buildroot. It took a while to
-> figure out everything that Intel's Yocto distribution was doing, but after you
-> simplify it down, it doesn't seem so bad. I'd send the patch up for review, but
-> it is dwarfed by two massive patch files on u-boot and the kernel that I had to
-> copy from Intel's Yocto distro [1]. It seems better if BR could download the
-> Yocto distro, extract the patch files, and use them when needed. It also doesn't
-> seem right for BR to have to carry around a couple mega-patches. Is this
-> possible and is there an example somewhere?
+>   anyone who uses buildroot to build for a BBB will probably know the
+> answers to this instantly.
 > 
-> If you would like to see my current patches for Edison support, they are
-> available here: https://github.com/fhunleth/buildroot-edison.
+>   did a "git clone" of buildroot, and did nothing more than:
+> 
+>   $ make beaglebone_defconfig
+>   $ make
+> 
+> so, basically, all the defaults, worked fine. so now i'm looking at my
+> config options and want to know how far i can push a BBB build to the
+> bleeding edge, and about the BBB defaults.
+> 
+>   first, i notice that the default build for BBB uses uClibc rather
+> than glibc, which is easy enough to adjust, but i'm curious as to why
+> something like a BBB doesn't have glibc as the default C library to
+> use.
 
- There is a github upload of the official Edison yocto layer at [2]. You could
-download the relevant patches from there with BR2_LINUX_KERNEL_PATCH. When you
-do that, please make sure that the sha is included in the URL, so [3] and not [4].
+ Our defconfigs are always the minimal bootable system, where minimal means as
+small as possible. glibc makes it about twice as large, that's why the defconfig
+uses uClibc.
+
+> 
+>   also, for bleeding edge, can anyone verify whether i'm safe pushing
+> the versions of everything right to the latest? you know:
+> 
+>   * kernel 4.0.x
+>   * glibc 2.21
+>   * binutils 2.25
+>   * gcc 4.9.x
+
+ For binutils and gcc and uClibc we typically stick to the buildroot default
+versions (even though we don't actually test all defconfigs when we change the
+default version for one of those...).
+
+ For the kernel, it's the latest version that anyone has tested and submitted.
+
+ In case of BBB, I'm not 100% sure if all the graphics stuff from the TI kernel
+has been fully upstreamed, so switching to a mainline kernel is not necessarily
+acceptable. Even though the buildroot defconfig doesn't include graphics
+support, we do want to offer a kernel that supports everything that the board has.
+
+ A colleague of mine (in CC) used mainline 3.19 on BBB without any problem;
+however AFAIK he didn't really use graphics with that so YMMV. Vianney, do you
+think your config should be OK for upstream buildroot? If yes, send it to me and
+I'll submit it.
 
  Regards,
  Arnout
 
-
-> [1] http://www.intel.com/support/edison/sb/CS-035180.htm
-
-[2] https://github.com/instantinfrastructure/edison-src
-[3]
-https://raw.githubusercontent.com/instantinfrastructure/edison-src/7002c964adb5a69cabdd11346769a7a1b66a8c01/device-software/meta-edison/recipes-kernel/linux/files/upstream_to_edison.patch
-[4]
-https://raw.githubusercontent.com/instantinfrastructure/edison-src/device-software/meta-edison/recipes-kernel/linux/files/upstream_to_edison.patch
+> 
+> and so on, and so on. any other BBB issues anyone wants to warn me
+> about before i go charging off in that direction? thanks.
+> 
+> rday
+> 
 
 
 -- 
