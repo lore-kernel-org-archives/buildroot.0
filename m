@@ -1,41 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 16 Apr 2015 20:52:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exim: Dependency host-pkgconf is
-	only needed for OpenSSL detection
-Message-ID: <1429210360-4753-1-git-send-email-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 16 Apr 2015 21:55:20 +0200
+Subject: [Buildroot]
+ =?utf-8?q?Analysis_of_build_error=3A_ffmpeg-2=2E6=2E2?=
+ =?utf-8?q?=40bfin_on_Nathaniel=C2=B4s_autobuilder?=
+In-Reply-To: <XnsA47DDCE7A4440berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <XnsA47DDCE7A4440berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <553013A8.1050701@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 15/04/15 21:42, Bernd Kuhls wrote:
+> today this build error happened:
+> http://autobuild.buildroot.net/results/d13/d13488a43f6e034623104a36c07114db99
+> 325b8d/
+> 
+> I can not reproduce the error here but I think I know why it happened:
+> 
+> $ grep -i ^ranlib output/build/ffmpeg-2.6.2/config.log
+> RANLIB='/home/fli4l/br3/output/host/usr/bin/bfin-uclinux-ranlib'
+> ranlib_default='ranlib'
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/exim/exim.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ The problem is that bfin-uclinux-ranlib does not have the -D option. I think we
+have to pass --ranlib=$(TARGET_RANLIB) to configure.
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 67dbd64..a95559d 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -9,7 +9,7 @@ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
- EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPLv2+
- EXIM_LICENSE_FILES = LICENCE
--EXIM_DEPENDENCIES = pcre berkeleydb host-pkgconf
-+EXIM_DEPENDENCIES = pcre berkeleydb
- 
- # Modify a variable value. It must already exist in the file, either
- # commented or not.
-@@ -63,7 +63,7 @@ endef
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--EXIM_DEPENDENCIES += openssl
-+EXIM_DEPENDENCIES += openssl host-pkgconf
- define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
- 	$(call exim-config-change,SUPPORT_TLS,yes)
- 	$(call exim-config-change,USE_OPENSSL_PC,openssl)
+ I could reproduce and that fixes it. Patch follows.
+
+ Regards,
+ Arnout
+
 -- 
-1.7.10.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
