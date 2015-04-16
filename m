@@ -1,33 +1,32 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 16 Apr 2015 22:17:38 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: explicitly pass --ranlib
-References: <1429214355-29429-1-git-send-email-arnout@mind.be>
-Message-ID: <XnsA47EE2C9972B5berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Date: Thu, 16 Apr 2015 22:19:34 +0200
+Subject: [Buildroot] [PATCH 2/2] samba4: bump to version 4.2.0
+References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>
+ <1425588249-20942-2-git-send-email-gustavo@zacarias.com.ar>
+ <XnsA4777FCDAF5A6berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <55265956.3020607@zacarias.com.ar>
+ <20150409202054.GD27057@waldemar-brodkorb.de>
+ <5527BF02.6060304@zacarias.com.ar>
+ <20150416195525.GK27057@waldemar-brodkorb.de>
+ <5530145C.8000308@zacarias.com.ar>
+ <20150416200943.GM27057@waldemar-brodkorb.de>
+Message-ID: <XnsA47EE31D5A454berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> 
-wrote in news:1429214355-29429-1-git-send-email-arnout at mind.be:
+Waldemar Brodkorb <wbx@openadk.org> wrote in 
+news:20150416200943.GM27057 at waldemar-brodkorb.de:
 
-> +     --ranlib=$(TARGET_RANLIB) \
+> And you have users using uClibc for Kodi, which is even bigger than
+> samba ;)
 
 Hi,
 
-are you sure that your patch changes the behaviour of
-http://git.videolan.org/?
-p=ffmpeg.git;a=blob;f=configure;h=c11262a66c5ce8906f1a06bb54de3ab1e964dfb0;hb
-=HEAD#l2760
-
-when testing ranlib features?
-I am asking this because the configure options are stored into script 
-variables in line 3019[1], whereas the ranlib test occurs in line 2760 
-already.
+I am using Samba and Kodi on the same machine, so it will be nice to have a 
+Samba 4.x :) I?ll try to find some time to test Samba4 with 
+LDSO_RUNPATH_OF_EXECUTABLE enabled in uClibc. Thx for the hint!
 
 Regards, Bernd
-
-[1] http://git.videolan.org/?
-p=ffmpeg.git;a=blob;f=configure;h=c11262a66c5ce8906f1a06bb54de3ab1e964dfb0;hb
-=HEAD#l3019
