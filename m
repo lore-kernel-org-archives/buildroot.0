@@ -1,40 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 16 Apr 2015 21:55:20 +0200
-Subject: [Buildroot]
- =?utf-8?q?Analysis_of_build_error=3A_ffmpeg-2=2E6=2E2?=
- =?utf-8?q?=40bfin_on_Nathaniel=C2=B4s_autobuilder?=
-In-Reply-To: <XnsA47DDCE7A4440berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <XnsA47DDCE7A4440berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <553013A8.1050701@mind.be>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 16 Apr 2015 21:55:25 +0200
+Subject: [Buildroot] [PATCH 2/2] samba4: bump to version 4.2.0
+In-Reply-To: <5527BF02.6060304@zacarias.com.ar>
+References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>
+ <1425588249-20942-2-git-send-email-gustavo@zacarias.com.ar>
+ <XnsA4777FCDAF5A6berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <55265956.3020607@zacarias.com.ar>
+ <20150409202054.GD27057@waldemar-brodkorb.de>
+ <5527BF02.6060304@zacarias.com.ar>
+Message-ID: <20150416195525.GK27057@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/04/15 21:42, Bernd Kuhls wrote:
-> today this build error happened:
-> http://autobuild.buildroot.net/results/d13/d13488a43f6e034623104a36c07114db99
-> 325b8d/
+Hi,
+Gustavo Zacarias wrote,
+
+> On 04/09/2015 05:20 PM, Waldemar Brodkorb wrote:
 > 
-> I can not reproduce the error here but I think I know why it happened:
+> > uClibc-ng has $ORIGIN support. Can you test it with samba4?
 > 
-> $ grep -i ^ranlib output/build/ffmpeg-2.6.2/config.log
-> RANLIB='/home/fli4l/br3/output/host/usr/bin/bfin-uclinux-ranlib'
-> ranlib_default='ranlib'
+> Yes, and it fails to work, snip:
+> 
+> -----
+> # /etc/init.d/S91smb start
+> Starting SMB services: /usr/sbin/smbd: can't load library 'libtalloc.so.2'
+> FAIL
+> Starting NMB services: /usr/sbin/nmbd: can't load library 'libtalloc.so.2'
+> FAIL
+> # ls -l /lib/*uClibc*
+> -rwxr-xr-x    1 root     root         25304 Apr  9  2015
+> /lib/ld-uClibc-1.0.1.so
+> lrwxrwxrwx    1 root     root            14 Apr  9  2015
+> /lib/ld-uClibc.so.0 -> ld-uClibc.so.1
+> lrwxrwxrwx    1 root     root            18 Apr  9  2015
+> /lib/ld-uClibc.so.1 -> ld-uClibc-1.0.1.so
+> -rwxr-xr-x    1 root     root        367544 Apr  9  2015
+> /lib/libuClibc-1.0.1.so
+> # ls -l /usr/lib/samba/libtalloc*
+> lrwxrwxrwx    1 root     root            18 Apr  9  2015
+> /usr/lib/samba/libtalloc.so.2 -> libtalloc.so.2.1.1
+> -rwxr-xr-x    1 root     root         19396 Apr  9  2015
+> /usr/lib/samba/libtalloc.so.2.1.1
+> -----
+> 
+> On the build machine:
+> $ readelf -d ?mbd|grep RPATH
+>  0x0000000f (RPATH)                      Library rpath: [/usr/lib/samba]
+>  0x0000000f (RPATH)                      Library rpath: [/usr/lib/samba]
+> 
+> So, it's not up to it yet.
 
- The problem is that bfin-uclinux-ranlib does not have the -D option. I think we
-have to pass --ranlib=$(TARGET_RANLIB) to configure.
+It is not a missing or broken $ORIGIN support. As you posted, there
+is no $ORIGIN used in RPATH.
+I am really sure it is this commit and option which is solving the
+runtime problem:
+http://git.uclibc.org/uClibc/commit/?id=409f14d9b5e47513d5c939120a33965997c8ceb2
 
- I could reproduce and that fixes it. Patch follows.
+Will be part of uClibc-ng 1.0.2.
 
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+best regards
+ Waldemar
