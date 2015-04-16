@@ -1,41 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Apr 2015 08:00:09 +0200
-Subject: [Buildroot] [git commit] nano: bump to version 2.4.1
-Message-ID: <20150416060018.ECC7D8189D@busybox.osuosl.org>
+Date: Thu, 16 Apr 2015 08:02:45 +0200
+Subject: [Buildroot] [git commit] configs/qemu: update arm vexpress
+Message-ID: <20150416060438.6D340818A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e6f4ca802a3b8d71a79bc19f1f39f28d60466d5c
+commit: http://git.buildroot.net/buildroot/commit/?id=36588d6388f5b460a46a5931e602ee0442df4994
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Switch to kernel 4.0.
+Switch to DTB (mandatory).
+And adjust invocation to use dtb and add a little more RAM for testing.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nano/nano.hash |    2 +-
- package/nano/nano.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/qemu/arm-vexpress/readme.txt  |    4 ++--
+ configs/qemu_arm_vexpress_defconfig |   10 ++++++----
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index b77e63a..cb5d5b8 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	5076fb502680503e648cbdcbf2077e39fba193420ae19203f0a54cb2d94a75bd	nano-2.4.0.tar.gz
-+sha256	6a0ceb5e1b9b9bea72d5d1f46488ace4782b1f198ea6ba558480a86d994f29d2	nano-2.4.1.tar.gz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 58ee370..4d47fdb 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
+index 937a39b..c8f24be 100644
+--- a/board/qemu/arm-vexpress/readme.txt
++++ b/board/qemu/arm-vexpress/readme.txt
+@@ -1,8 +1,8 @@
+ Run the emulation with:
  
--NANO_VERSION = 2.4.0
-+NANO_VERSION = 2.4.1
- NANO_SITE = $(BR2_GNU_MIRROR)/nano
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
+-  qemu-system-arm -M vexpress-a9 -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=sd -append "console=ttyAMA0,115200 root=/dev/mmcblk0" -serial stdio -net nic,model=lan9118 -net user
++  qemu-system-arm -M vexpress-a9 -m 256 -kernel output/images/zImage -dtb output/images/vexpress-v2p-ca9.dtb -drive file=output/images/rootfs.ext2,if=sd -append "console=ttyAMA0,115200 root=/dev/mmcblk0" -serial stdio -net nic,model=lan9118 -net user
+ 
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 2.2.0
++Tested with QEMU 2.2.1
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index f23da96..7c62ebc 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -13,14 +13,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 4.0 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.8"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="4.0"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
