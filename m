@@ -1,21 +1,30 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 16 Apr 2015 11:16:02 +0200
-Subject: [Buildroot] builtroot .Mk file
-In-Reply-To: <201504161706037269216@panstontech.com>
-References: <201504161706037269216@panstontech.com>
-Message-ID: <CAC1BbcSNnZ_BZBZYeymQ3mDj7ncgrRG_=hfjZ=2PrZduTXa3-g@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 16 Apr 2015 11:37:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 7951] gcc 4.9.2 fails to build for
+	sparc-buildroot-linux-gnu
+In-Reply-To: <bug-7951-163@https.bugs.busybox.net/>
+References: <bug-7951-163@https.bugs.busybox.net/>
+Message-ID: <20150416113726.7CB49818A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[forwarding this to the list]
+https://bugs.busybox.net/show_bug.cgi?id=7951
 
-On 16 April 2015 at 11:06, hongyuanzh at panstontech.com
-<hongyuanzh@panstontech.com> wrote:
->
-> I want to add in the builtroot kernel driver compiled Ko files and dynamic
-> library *.So  but I don't write*.Mk file  . Can you give me an example
-> ________________________________
-> hongyuanzh at panstontech.com*
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #4 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2015-04-16 11:37:26 UTC ---
+Fixed in master commit e0046e533fe22240f6eda7048d2733b01adb15ef
+Thanks.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
