@@ -1,76 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 16 Apr 2015 23:04:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exim: Dependency host-pkgconf
- is only needed for OpenSSL detection
-In-Reply-To: <1429210360-4753-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429210360-4753-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150416210443.GE4405@free.fr>
+Date: Thu, 16 Apr 2015 23:12:10 +0200
+Subject: [Buildroot] [PATCH] ffmpeg: explicitly pass --ranlib
+In-Reply-To: <1429214355-29429-1-git-send-email-arnout@mind.be>
+References: <1429214355-29429-1-git-send-email-arnout@mind.be>
+Message-ID: <20150416211210.GF4405@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Arnout, All,
 
-On 2015-04-16 20:52 +0200, Bernd Kuhls spake thusly:
+On 2015-04-16 21:59 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> It seems that ffmpeg's custom configure doesn't observe the RANLIB
+> environment variable, and incorrectly uses the host's ranlib to
+> check if the -D option is supported. Blackfin's ranlib doesn't, most
+> others do.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/exim/exim.mk |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-> index 67dbd64..a95559d 100644
-> --- a/package/exim/exim.mk
-> +++ b/package/exim/exim.mk
-> @@ -9,7 +9,7 @@ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
->  EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
->  EXIM_LICENSE = GPLv2+
->  EXIM_LICENSE_FILES = LICENCE
-> -EXIM_DEPENDENCIES = pcre berkeleydb host-pkgconf
-> +EXIM_DEPENDENCIES = pcre berkeleydb
->  
->  # Modify a variable value. It must already exist in the file, either
->  # commented or not.
-> @@ -63,7 +63,7 @@ endef
->  endif
->  
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> -EXIM_DEPENDENCIES += openssl
-> +EXIM_DEPENDENCIES += openssl host-pkgconf
+> I also checked if there are any more mistakes like that in ffmpeg's
+> configure script, but it looked OK.
 
-Well, even though we currently only support berkleydb as a DB backend,
-exim can also use sqlite. And detecting sqlite is done via pkg-config.
+Your wording "ffmpeg's configure" prompted me to look at ffmpeg, and
+so here's my thoughts about it...
 
-Also, exim uses pkg-config for a lot of other stuff; quoting their
-(awfull) buildsystem:
+Given that ffmpeg is not using autoconf, automake and co., it should not
+be usign the autotools-package infra, but should be switched over to
+using the generic-package infra instead.
 
-    for name_mod in \
-        CDB DBM:dbmdb DNSDB DSEARCH IBASE LSEARCH MYSQL NIS NISPLUS ORACLE \
-        PASSWD PGSQL SQLITE TESTDB WHOSON
-    do
-      emit_module_rule $name_mod
-    done
-
-and emit_module_rule() contains this code:
-
-    [--SNIP--]
-      echo "LOOKUP_${mod_name}_INCLUDE = $(pkg-config --cflags $pkgconf)"
-      echo "LOOKUP_${mod_name}_LIBS = $(pkg-config --libs $pkgconf)"
-    [--SNIP--]
-
-So, even though we do not really need it when OpenSSL is disabled, I
-think we want to keep it as an uncoditionaly dependency.
+OK, not your fault! ;-)
 
 Regards,
 Yann E. MORIN.
 
->  define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
->  	$(call exim-config-change,SUPPORT_TLS,yes)
->  	$(call exim-config-change,USE_OPENSSL_PC,openssl)
+> Fixes:
+> http://autobuild.buildroot.net/results/d13488a43f6e034623104a36c07114db99325b8d
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Bernd Kuhs <bernd.kuhls@t-online.de>
+> ---
+>  package/ffmpeg/ffmpeg.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+> index 787dbb1..59c49ee 100644
+> --- a/package/ffmpeg/ffmpeg.mk
+> +++ b/package/ffmpeg/ffmpeg.mk
+> @@ -18,6 +18,7 @@ endif
+>  
+>  FFMPEG_CONF_OPTS = \
+>  	--prefix=/usr \
+> +	--ranlib=$(TARGET_RANLIB) \
+>  	--enable-avfilter \
+>  	--disable-version3 \
+>  	--enable-logging \
 > -- 
-> 1.7.10.4
+> 2.1.4
 > 
 > _______________________________________________
 > buildroot mailing list
