@@ -1,69 +1,77 @@
-From: Robert P. J. Day <rpjday@crashcourse.ca>
-Date: Thu, 16 Apr 2015 11:34:31 -0400 (EDT)
-Subject: [Buildroot] couple questions about what's generated under
-	output/host/
-Message-ID: <alpine.LFD.2.11.1504161128470.31691@localhost>
+From: Al West <al.west@v-nova.com>
+Date: Thu, 16 Apr 2015 16:23:49 +0000
+Subject: [Buildroot] ldconfig error on second make as non-root user
+Message-ID: <AMSPR03MB051242A6A47EF9A10143A1CCEE40@AMSPR03MB051.eurprd03.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-  going through the results of building for a BBB and curious about
-two fairly minor things.
+I am having an issue with buildroot when running as a regular user.  Before I was running as root, but the buildroot documentation recommends against this.   
 
-  i'm looking under output/host/usr/arm-buildroot-linux-gnueabihf, and
-the first curiosity is further under the subdirectory bin/:
+I can make my target from clean but if afterwards I try just make I get an error with ldconfig complaining that the filename is not absolute.  I think I'm probably doing something wrong somewhere.  I am using Fedora 20.
 
-$ ls -l
-total 9860
--rwxr-xr-x. 2 rpjday rpjday  860248 Apr 16 09:53 ar
--rwxr-xr-x. 2 rpjday rpjday 1494440 Apr 16 09:53 as
-lrwxrwxrwx. 1 rpjday rpjday       3 Apr 16 10:01 cc -> gcc
--rwxr-xr-x. 4 rpjday rpjday 1347224 Apr 16 09:53 ld
--rwxr-xr-x. 4 rpjday rpjday 1347224 Apr 16 09:53 ld.bfd
--rwxr-xr-x. 2 rpjday rpjday  837608 Apr 16 09:53 nm
--rwxr-xr-x. 2 rpjday rpjday 1027080 Apr 16 09:53 objcopy
--rwxr-xr-x. 2 rpjday rpjday 1280720 Apr 16 09:53 objdump
--rwxr-xr-x. 2 rpjday rpjday  860248 Apr 16 09:53 ranlib
--rwxr-xr-x. 2 rpjday rpjday 1027112 Apr 16 09:53 strip
+I have also created a package for libcryptopp but as I am quite new to git, buildroot and makefiles in general I'd be happy if someone would review what I have done - I'm open to suggestions on to how to best facilitate this.
 
-the symlink cc -> gcc is, as you can see, broken since there is no gcc
-in the current directory. is that a build error? what is that broken
-symlink supposed to represent? is this a configuration error on my
-part?
+Cheers,
+Al
 
-  second, under the subdirectory lib/, we have this:
-
-$ ls -l
-total 1540
--rw-r--r--. 1 rpjday rpjday  176730 Apr 16 10:01 libatomic.a
--rwxr-xr-x. 1 rpjday rpjday    1021 Apr 16 10:01 libatomic.la
-lrwxrwxrwx. 1 rpjday rpjday      18 Apr 16 10:01 libatomic.so -> libatomic.so.1.1.0
-lrwxrwxrwx. 1 rpjday rpjday      18 Apr 16 10:01 libatomic.so.1 -> libatomic.so.1.1.0
--rwxr-xr-x. 1 rpjday rpjday   68060 Apr 16 10:01 libatomic.so.1.1.0
--rw-r--r--. 1 rpjday rpjday     132 Apr 16 10:01 libgcc_s.so
--rw-r--r--. 1 rpjday rpjday 1316900 Apr 16 10:01 libgcc_s.so.1
-$
-
-  what is that lib/ directory supposed to represent? since if i move
-up and go into the sysroot/ directory, i see a whole pile of ARM
-libraries, *including* the two libgcc* entries that were in the
-earlier lib/ directory, so those two files are being duplicated. is
-there a reason for that?
-
-  thanks.
-
-rday
-
-
--- 
-
-========================================================================
-Robert P. J. Day                                 Ottawa, Ontario, CANADA
-                        http://crashcourse.ca
-
-Twitter:                                       http://twitter.com/rpjday
-LinkedIn:                               http://ca.linkedin.com/in/rpjday
-========================================================================
+[al at f20build buildroot]$ make
+>>>   Finalizing target directory
+rm -rf /home/al/test1/buildroot/output/target/usr/lib/luarocks
+rm -rf /home/al/test1/buildroot/output/target/usr/lib/perl5/5.20.2/pod
+rm -rf /home/al/test1/buildroot/output/target/usr/lib/perl5/5.20.2/x86_64-linux/CORE
+find /home/al/test1/buildroot/output/target/usr/lib/perl5/ -name 'extralibs.ld' -print0 | xargs -0 rm -f
+find: '/home/al/test1/buildroot/output/target/usr/lib/perl5/': No such file or directory
+find /home/al/test1/buildroot/output/target/usr/lib/perl5/ -name '*.bs' -print0 | xargs -0 rm -f
+find: '/home/al/test1/buildroot/output/target/usr/lib/perl5/': No such file or directory
+find /home/al/test1/buildroot/output/target/usr/lib/perl5/ -name '.packlist' -print0 | xargs -0 rm -f
+find: '/home/al/test1/buildroot/output/target/usr/lib/perl5/': No such file or directory
+grep -q '^console$' /home/al/test1/buildroot/output/target/etc/securetty || echo 'console' >> /home/al/test1/buildroot/output/target/etc/securetty
+mkdir -p /home/al/test1/buildroot/output/target/etc
+echo "plink-buildroot" > /home/al/test1/buildroot/output/target/etc/hostname
+/usr/bin/sed -i -e '$a \127.0.1.1\tplink-buildroot' -e '/^127.0.1.1/d' /home/al/test1/buildroot/output/target/etc/hosts
+mkdir -p /home/al/test1/buildroot/output/target/etc
+echo "Welcome to P.Link powered by Perseus" > /home/al/test1/buildroot/output/target/etc/issue
+mkdir -p /home/al/test1/buildroot/output/target/etc/network/
+( echo "# interface file auto-generated by buildroot"; echo ; echo "auto lo"; echo "iface lo inet loopback"; ) > /home/al/test1/buildroot/output/target/etc/network/interfaces
+( echo ; echo "auto Control"; echo "iface Control inet dhcp"; ) >> /home/al/test1/buildroot/output/target/etc/network/interfaces
+[ -n "linux" ] && TARGET_GENERIC_ROOT_PASSWD_HASH=$(/home/al/test1/buildroot/output/host/usr/bin/mkpasswd -m "sha-512" "linux"); /usr/bin/sed -i -e "s,^root:[^:]*:,root:$TARGET_GENERIC_ROOT_PASSWD_HASH:," /home/al/test1/buildroot/output/target/etc/shadow
+ln -sf /bin/busybox /home/al/test1/buildroot/output/target/bin/sh
+/usr/bin/sed -i -e '/# GENERIC_SERIAL$/s~^.*#~console::respawn:/sbin/getty -L  console 0 vt100 #~' /home/al/test1/buildroot/output/target/etc/inittab
+/usr/bin/sed -i -e '/^#.*-o remount,rw \/$/s~^#\+~~' /home/al/test1/buildroot/output/target/etc/inittab
+rm -rf /home/al/test1/buildroot/output/target/usr/include /home/al/test1/buildroot/output/target/usr/share/aclocal \
+        /home/al/test1/buildroot/output/target/usr/lib/pkgconfig /home/al/test1/buildroot/output/target/usr/share/pkgconfig \
+        /home/al/test1/buildroot/output/target/usr/lib/cmake /home/al/test1/buildroot/output/target/usr/share/cmake
+find /home/al/test1/buildroot/output/target/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
+find /home/al/test1/buildroot/output/target/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
+find /home/al/test1/buildroot/output/target/usr/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
+rm -rf /home/al/test1/buildroot/output/target/usr/share/gdb
+rm -rf /home/al/test1/buildroot/output/target/usr/man /home/al/test1/buildroot/output/target/usr/share/man
+rm -rf /home/al/test1/buildroot/output/target/usr/info /home/al/test1/buildroot/output/target/usr/share/info
+rm -rf /home/al/test1/buildroot/output/target/usr/doc /home/al/test1/buildroot/output/target/usr/share/doc
+rm -rf /home/al/test1/buildroot/output/target/usr/share/gtk-doc
+rmdir /home/al/test1/buildroot/output/target/usr/share 2>/dev/null
+make: [target-finalize] Error 1 (ignored)
+find /home/al/test1/buildroot/output/target -type f \( -perm /111 -o -name '*.so*' \) -not \( -name 'libpthread*.so*' -o -name '*.ko' \) -print0 | xargs -0 /home/al/test1/buildroot/output/host/usr/bin/x86_64-buildroot-linux-gnu-strip --remove-section=.comment --remove-section=.note 2>/dev/null || true
+if test -d /home/al/test1/buildroot/output/target/lib/modules; then \
+        find /home/al/test1/buildroot/output/target/lib/modules -type f -name '*.ko' | \
+        xargs -r /home/al/test1/buildroot/output/host/usr/bin/x86_64-buildroot-linux-gnu-strip --remove-section=.comment --remove-section=.note --strip-unneeded; fi
+find /home/al/test1/buildroot/output/target/lib -type f -name 'libpthread*.so*' | \
+        xargs -r /home/al/test1/buildroot/output/host/usr/bin/x86_64-buildroot-linux-gnu-strip --remove-section=.comment --remove-section=.note --strip-debug
+mkdir -p /home/al/test1/buildroot/output/target/etc
+# Mandatory configuration file and auxilliary cache directory
+# for recent versions of ldconfig
+touch /home/al/test1/buildroot/output/target/etc/ld.so.conf
+mkdir -p /home/al/test1/buildroot/output/target/var/cache/ldconfig
+if [ -x "/home/al/test1/buildroot/output/host/usr/bin/x86_64-buildroot-linux-gnu-ldconfig" ]; \
+then \
+        /home/al/test1/buildroot/output/host/usr/bin/x86_64-buildroot-linux-gnu-ldconfig -r /home/al/test1/buildroot/output/target; \
+else \
+        /sbin/ldconfig -r /home/al/test1/buildroot/output/target; \
+fi
+/sbin/ldconfig: need absolute file name for configuration file when using -r
+make: *** [target-finalize] Error 1
