@@ -1,139 +1,186 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Apr 2015 08:02:45 +0200
-Subject: [Buildroot] [git commit] configs/qemu: update x86
-Message-ID: <20150416060438.D371C818A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu: update sparc ss10
+Message-ID: <20150416060438.8EC6F818A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=055cfbf8a2cd271dc1e020e7c7eb89054311373c
+commit: http://git.buildroot.net/buildroot/commit/?id=d810fabb735a94cfa60a770e580daac293eead91
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Switch to kernel 4.0.
-Enable evdev for extra X testing.
-Drop bloat/redundant options.
+Switch kernel config to ext4, simplify to reduce bloat.
+Adjust invocation to keep the framebuffer window for graphics testing.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/qemu/x86/linux-3.19.config |   63 --------------------------------------
- board/qemu/x86/linux-4.0.config  |   20 ++++++++++++
- board/qemu/x86/readme.txt        |    2 +-
- configs/qemu_x86_defconfig       |   10 +++---
- 4 files changed, 26 insertions(+), 69 deletions(-)
+ board/qemu/sparc-ss10/linux-3.19.config |   95 -------------------------------
+ board/qemu/sparc-ss10/linux-4.0.config  |   31 ++++++++++
+ board/qemu/sparc-ss10/readme.txt        |    4 +-
+ configs/qemu_sparc_ss10_defconfig       |   10 ++--
+ 4 files changed, 38 insertions(+), 102 deletions(-)
 
-diff --git a/board/qemu/x86/linux-3.19.config b/board/qemu/x86/linux-3.19.config
+diff --git a/board/qemu/sparc-ss10/linux-3.19.config b/board/qemu/sparc-ss10/linux-3.19.config
 deleted file mode 100644
-index 602a9bb..0000000
---- a/board/qemu/x86/linux-3.19.config
+index 0e7e500..0000000
+--- a/board/qemu/sparc-ss10/linux-3.19.config
 +++ /dev/null
-@@ -1,63 +0,0 @@
--# CONFIG_LOCALVERSION_AUTO is not set
--# CONFIG_SWAP is not set
+@@ -1,95 +0,0 @@
 -CONFIG_SYSVIPC=y
--# CONFIG_COMPAT_BRK is not set
+-CONFIG_POSIX_MQUEUE=y
+-CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_SLAB=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
 -# CONFIG_BLK_DEV_BSG is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--# CONFIG_IOSCHED_CFQ is not set
--# CONFIG_X86_EXTENDED_PLATFORM is not set
--# CONFIG_SCHED_OMIT_FRAME_POINTER is not set
--# CONFIG_MTRR_SANITIZER is not set
--# CONFIG_SECCOMP is not set
--# CONFIG_RELOCATABLE is not set
+-CONFIG_PCI=y
+-CONFIG_SUN_OPENPROMFS=m
+-CONFIG_BINFMT_MISC=m
 -CONFIG_NET=y
 -CONFIG_PACKET=y
 -CONFIG_UNIX=y
+-CONFIG_XFRM_USER=m
+-CONFIG_NET_KEY=m
 -CONFIG_INET=y
 -CONFIG_IP_PNP=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
+-CONFIG_IP_PNP_DHCP=y
+-CONFIG_INET_AH=y
+-CONFIG_INET_ESP=y
+-CONFIG_INET_IPCOMP=y
 -# CONFIG_INET_LRO is not set
--# CONFIG_INET_DIAG is not set
--# CONFIG_IPV6 is not set
--# CONFIG_WIRELESS is not set
--# CONFIG_PREVENT_FIRMWARE_BUILD is not set
--# CONFIG_FIRMWARE_IN_KERNEL is not set
--# CONFIG_BLK_DEV is not set
+-CONFIG_INET6_AH=m
+-CONFIG_INET6_ESP=m
+-CONFIG_INET6_IPCOMP=m
+-CONFIG_IPV6_TUNNEL=m
+-CONFIG_NET_PKTGEN=m
+-CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-CONFIG_BLK_DEV_LOOP=m
+-CONFIG_BLK_DEV_CRYPTOLOOP=m
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_SCSI=y
 -CONFIG_BLK_DEV_SD=y
--CONFIG_ATA=y
--CONFIG_ATA_PIIX=y
+-CONFIG_BLK_DEV_SR=m
+-CONFIG_CHR_DEV_SG=m
+-CONFIG_SCSI_QLOGICPTI=m
+-CONFIG_SCSI_SUNESP=y
 -CONFIG_NETDEVICES=y
--CONFIG_NE2K_PCI=y
--CONFIG_8139CP=y
+-CONFIG_DUMMY=m
+-CONFIG_SUNLANCE=y
+-CONFIG_HAPPYMEAL=m
+-CONFIG_SUNBMAC=m
+-CONFIG_SUNQE=m
 -# CONFIG_WLAN is not set
--# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
--# CONFIG_INPUT_MOUSE is not set
--# CONFIG_SERIO_SERPORT is not set
--# CONFIG_LEGACY_PTYS is not set
--# CONFIG_DEVKMEM is not set
--CONFIG_SERIAL_8250=y
--CONFIG_SERIAL_8250_CONSOLE=y
--# CONFIG_HW_RANDOM is not set
--# CONFIG_HWMON is not set
--CONFIG_SOUND=y
--CONFIG_SND=y
--CONFIG_SND_HDA_INTEL=y
--# CONFIG_USB_SUPPORT is not set
--# CONFIG_X86_PLATFORM_DEVICES is not set
--# CONFIG_DMIID is not set
--CONFIG_EXT4_FS=y
--# CONFIG_DNOTIFY is not set
--# CONFIG_INOTIFY_USER is not set
+-CONFIG_INPUT_JOYDEV=m
+-CONFIG_INPUT_EVDEV=m
+-CONFIG_INPUT_EVBUG=m
+-CONFIG_KEYBOARD_ATKBD=m
+-CONFIG_KEYBOARD_SUNKBD=m
+-CONFIG_MOUSE_PS2=m
+-CONFIG_MOUSE_SERIAL=m
+-CONFIG_SERIO=m
+-CONFIG_SERIAL_SUNZILOG=y
+-CONFIG_SERIAL_SUNZILOG_CONSOLE=y
+-CONFIG_SERIAL_SUNSU=y
+-CONFIG_SERIAL_SUNSU_CONSOLE=y
+-CONFIG_SPI=y
+-CONFIG_SPI_XILINX=m
+-CONFIG_SUN_OPENPROMIO=m
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT2_FS_XATTR=y
+-CONFIG_EXT2_FS_POSIX_ACL=y
+-CONFIG_EXT2_FS_SECURITY=y
+-CONFIG_AUTOFS4_FS=m
+-CONFIG_ISO9660_FS=m
+-CONFIG_PROC_KCORE=y
 -CONFIG_TMPFS=y
 -CONFIG_TMPFS_POSIX_ACL=y
--# CONFIG_MISC_FILESYSTEMS is not set
+-CONFIG_ROMFS_FS=m
 -CONFIG_NFS_FS=y
 -CONFIG_ROOT_NFS=y
+-CONFIG_NLS=y
 -# CONFIG_ENABLE_WARN_DEPRECATED is not set
--# CONFIG_ENABLE_MUST_CHECK is not set
--# CONFIG_UNUSED_SYMBOLS is not set
--# CONFIG_FRAME_POINTER is not set
--# CONFIG_X86_VERBOSE_BOOTUP is not set
--# CONFIG_VIRTUALIZATION is not set
-diff --git a/board/qemu/x86/linux-4.0.config b/board/qemu/x86/linux-4.0.config
+-CONFIG_DEBUG_KERNEL=y
+-CONFIG_DETECT_HUNG_TASK=y
+-# CONFIG_SCHED_DEBUG is not set
+-CONFIG_KGDB=y
+-CONFIG_KGDB_TESTS=y
+-CONFIG_CRYPTO_NULL=m
+-CONFIG_CRYPTO_ECB=m
+-CONFIG_CRYPTO_PCBC=m
+-CONFIG_CRYPTO_MD4=y
+-CONFIG_CRYPTO_MICHAEL_MIC=m
+-CONFIG_CRYPTO_SHA256=m
+-CONFIG_CRYPTO_SHA512=m
+-CONFIG_CRYPTO_ARC4=m
+-CONFIG_CRYPTO_BLOWFISH=m
+-CONFIG_CRYPTO_CAST5=m
+-CONFIG_CRYPTO_CAST6=m
+-CONFIG_CRYPTO_SERPENT=m
+-CONFIG_CRYPTO_TWOFISH=m
+-# CONFIG_CRYPTO_ANSI_CPRNG is not set
+-# CONFIG_CRYPTO_HW is not set
+-CONFIG_LIBCRC32C=m
+diff --git a/board/qemu/sparc-ss10/linux-4.0.config b/board/qemu/sparc-ss10/linux-4.0.config
 new file mode 100644
-index 0000000..ce19f81
+index 0000000..cb8d01d
 --- /dev/null
-+++ b/board/qemu/x86/linux-4.0.config
-@@ -0,0 +1,20 @@
++++ b/board/qemu/sparc-ss10/linux-4.0.config
+@@ -0,0 +1,31 @@
 +CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_PCI=y
++CONFIG_SUN_OPENPROMFS=m
 +CONFIG_NET=y
 +CONFIG_PACKET=y
 +CONFIG_UNIX=y
 +CONFIG_INET=y
++# CONFIG_WIRELESS is not set
++CONFIG_SCSI=y
 +CONFIG_BLK_DEV_SD=y
-+CONFIG_ATA=y
-+CONFIG_ATA_PIIX=y
++CONFIG_BLK_DEV_SR=y
++CONFIG_CHR_DEV_SG=y
++CONFIG_SCSI_SUNESP=y
 +CONFIG_NETDEVICES=y
-+CONFIG_NE2K_PCI=y
-+CONFIG_8139CP=y
++CONFIG_SUNLANCE=y
++# CONFIG_WLAN is not set
 +CONFIG_INPUT_EVDEV=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+CONFIG_SND_HDA_INTEL=y
++CONFIG_KEYBOARD_SUNKBD=y
++CONFIG_MOUSE_SERIAL=y
++CONFIG_SERIAL_SUNZILOG=y
++CONFIG_SERIAL_SUNZILOG_CONSOLE=y
++CONFIG_SERIAL_SUNSU=y
++CONFIG_SERIAL_SUNSU_CONSOLE=y
++CONFIG_SUN_OPENPROMIO=m
 +CONFIG_EXT4_FS=y
++CONFIG_ISO9660_FS=y
 +CONFIG_TMPFS=y
 +CONFIG_TMPFS_POSIX_ACL=y
-diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
-index 1d4e123..85d5c60 100644
---- a/board/qemu/x86/readme.txt
-+++ b/board/qemu/x86/readme.txt
-@@ -4,4 +4,4 @@ Run the emulation with:
+diff --git a/board/qemu/sparc-ss10/readme.txt b/board/qemu/sparc-ss10/readme.txt
+index 88f98d5..1972a11 100644
+--- a/board/qemu/sparc-ss10/readme.txt
++++ b/board/qemu/sparc-ss10/readme.txt
+@@ -1,7 +1,7 @@
+ Run the emulation with:
  
- The login prompt will appear in the graphical window.
+-  qemu-system-sparc -M SS-10 -kernel output/images/zImage -drive file=output/images/rootfs.ext2 -append "root=/dev/sda console=ttyS0,115200" -serial stdio -net nic,model=lance -net user -display none
++  qemu-system-sparc -M SS-10 -kernel output/images/zImage -drive file=output/images/rootfs.ext2 -append "root=/dev/sda console=ttyS0,115200" -serial stdio -net nic,model=lance -net user
+ 
+ The login prompt will appear in the terminal that started Qemu.
  
 -Tested with QEMU 2.2.0
 +Tested with QEMU 2.2.1
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index f0831b0..0892d39 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 73195fa..1fff720 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -8,15 +8,15 @@ BR2_GLOBAL_PATCH_DIR="board/qemu/sparc-ss10"
  BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
  
@@ -145,11 +192,12 @@ index f0831b0..0892d39 100644
 +BR2_DEFAULT_KERNEL_VERSION="4.0"
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
  
- # Kernel
+ # Linux kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.19.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-4.0.config"
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux-3.19.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux-4.0.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
