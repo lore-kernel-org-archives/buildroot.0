@@ -1,34 +1,75 @@
-From: Robert P. J. Day <rpjday@crashcourse.ca>
-Date: Thu, 16 Apr 2015 18:42:29 -0400 (EDT)
-Subject: [Buildroot] [PATCH] Makefile: remove redundant mkdir from
-	*config
-In-Reply-To: <1429222358-3446-1-git-send-email-arnout@mind.be>
-References: <1429222358-3446-1-git-send-email-arnout@mind.be>
-Message-ID: <alpine.LFD.2.11.1504161841100.9373@localhost>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Thu, 16 Apr 2015 18:50:38 -0400
+Subject: [Buildroot] Intel Edison support
+In-Reply-To: <5530275D.90305@mind.be>
+References: <CA+-urNRPe3bv+FH9He==b2_aa_NCnDXwxUJGGZqfUsNGyZt74w@mail.gmail.com>
+ <5530275D.90305@mind.be>
+Message-ID: <CA+-urNReEwGqR=FgyWsm9nAO=QkiTcbtfcxBaF3__eCciASM1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 17 Apr 2015, Arnout Vandecappelle (Essensium/Mind) wrote:
+On Thu, Apr 16, 2015 at 5:19 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+> On 16/04/15 14:33, Frank Hunleth wrote:
+> > Hi all,
+> >
+> > I have support for the Intel Edison working in Buildroot. It took a while to
+> > figure out everything that Intel's Yocto distribution was doing, but after you
+> > simplify it down, it doesn't seem so bad. I'd send the patch up for review, but
+> > it is dwarfed by two massive patch files on u-boot and the kernel that I had to
+> > copy from Intel's Yocto distro [1]. It seems better if BR could download the
+> > Yocto distro, extract the patch files, and use them when needed. It also doesn't
+> > seem right for BR to have to carry around a couple mega-patches. Is this
+> > possible and is there an example somewhere?
+> >
+> > If you would like to see my current patches for Edison support, they are
+> > available here: https://github.com/fhunleth/buildroot-edison.
+>
+>  There is a github upload of the official Edison yocto layer at [2]. You could
+> download the relevant patches from there with BR2_LINUX_KERNEL_PATCH. When you
+> do that, please make sure that the sha is included in the URL, so [3] and not [4].
 
-> The first dependency of these targets is
-> $(BUILD_DIR)/buildroot-config/conf
-> so the $(BUILD_DIR)/buildroot-config directory certainly exists.
+Thanks. I'll try that for the kernel.
 
-  technically, not quite ... the first dependency is *some* variation
-of "*conf" such as nconf or qconf, etc, not just "conf". but the
-redundancy is true for all such variations.
+At the moment, u-boot only supports patch directories, so I can't
+download the mega-patch for it. I was going to copy/paste the patch
+support from the kernel, but the kernel's patch support looks more
+involved than I expected. I'm not missing a generic patch macro
+somewhere, am I?
 
-rday
+Thanks,
+Frank
+
+>
+>  Regards,
+>  Arnout
+>
+>
+> > [1] http://www.intel.com/support/edison/sb/CS-035180.htm
+>
+> [2] https://github.com/instantinfrastructure/edison-src
+> [3]
+> https://raw.githubusercontent.com/instantinfrastructure/edison-src/7002c964adb5a69cabdd11346769a7a1b66a8c01/device-software/meta-edison/recipes-kernel/linux/files/upstream_to_edison.patch
+> [4]
+> https://raw.githubusercontent.com/instantinfrastructure/edison-src/device-software/meta-edison/recipes-kernel/linux/files/upstream_to_edison.patch
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+
+
+
 
 -- 
-
-========================================================================
-Robert P. J. Day                                 Ottawa, Ontario, CANADA
-                        http://crashcourse.ca
-
-Twitter:                                       http://twitter.com/rpjday
-LinkedIn:                               http://ca.linkedin.com/in/rpjday
-========================================================================
+Frank Hunleth
+Troodon Software LLC
+Embedded Software Development
+http://troodon-software.com/
