@@ -1,73 +1,31 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 16 Apr 2015 23:31:56 +0200
-Subject: [Buildroot] config choices in building for beaglebone black
-	(BBB)?
-In-Reply-To: <alpine.LFD.2.11.1504160857510.20888@localhost>
-References: <alpine.LFD.2.11.1504160857510.20888@localhost>
-Message-ID: <55302A4C.5050109@mind.be>
+Date: Thu, 16 Apr 2015 23:42:46 +0200
+Subject: [Buildroot] [PATCH 0/1] package/ffmpeg: Fix ranlib check when
+ cross-compiling
+In-Reply-To: <1429215155-2085-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429215155-2085-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <55302CD6.3040201@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/04/15 15:03, Robert P. J. Day wrote:
+On 16/04/15 22:12, Bernd Kuhls wrote:
+> Hi,
 > 
->   anyone who uses buildroot to build for a BBB will probably know the
-> answers to this instantly.
+> this is a different approach to fix the build error.
+> Please compare my patch with http://patchwork.ozlabs.org/patch/461843/
 > 
->   did a "git clone" of buildroot, and did nothing more than:
-> 
->   $ make beaglebone_defconfig
->   $ make
-> 
-> so, basically, all the defaults, worked fine. so now i'm looking at my
-> config options and want to know how far i can push a BBB build to the
-> bleeding edge, and about the BBB defaults.
-> 
->   first, i notice that the default build for BBB uses uClibc rather
-> than glibc, which is easy enough to adjust, but i'm curious as to why
-> something like a BBB doesn't have glibc as the default C library to
-> use.
+> I am not sure what the best fix would be, therefore I have not yet
+> sent my patch upstream.
 
- Our defconfigs are always the minimal bootable system, where minimal means as
-small as possible. glibc makes it about twice as large, that's why the defconfig
-uses uClibc.
-
-> 
->   also, for bleeding edge, can anyone verify whether i'm safe pushing
-> the versions of everything right to the latest? you know:
-> 
->   * kernel 4.0.x
->   * glibc 2.21
->   * binutils 2.25
->   * gcc 4.9.x
-
- For binutils and gcc and uClibc we typically stick to the buildroot default
-versions (even though we don't actually test all defconfigs when we change the
-default version for one of those...).
-
- For the kernel, it's the latest version that anyone has tested and submitted.
-
- In case of BBB, I'm not 100% sure if all the graphics stuff from the TI kernel
-has been fully upstreamed, so switching to a mainline kernel is not necessarily
-acceptable. Even though the buildroot defconfig doesn't include graphics
-support, we do want to offer a kernel that supports everything that the board has.
-
- A colleague of mine (in CC) used mainline 3.19 on BBB without any problem;
-however AFAIK he didn't really use graphics with that so YMMV. Vianney, do you
-think your config should be OK for upstream buildroot? If yes, send it to me and
-I'll submit it.
+ I'm OK with either solution. I propose that you send your patch upstream, see
+how they react, and if it's positive then we go with yours. If they don't accept
+it, then I think that not patching (i.e. my solution) is better.
 
  Regards,
  Arnout
-
-> 
-> and so on, and so on. any other BBB issues anyone wants to warn me
-> about before i go charging off in that direction? thanks.
-> 
-> rday
-> 
 
 
 -- 
