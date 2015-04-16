@@ -1,23 +1,27 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 16 Apr 2015 08:42:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 4910] __IPC_64 bit is not expected by Kernel's
- SYSV *ctl fuctions
-In-Reply-To: <bug-4910-163@https.bugs.busybox.net/>
-References: <bug-4910-163@https.bugs.busybox.net/>
-Message-ID: <20150416084251.0723480F41@busybox.osuosl.org>
+Date: Thu, 16 Apr 2015 08:43:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 4934] Memory leak in pthread_mutext_timedlock
+In-Reply-To: <bug-4934-163@https.bugs.busybox.net/>
+References: <bug-4934-163@https.bugs.busybox.net/>
+Message-ID: <20150416084331.2BEBF807EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4910
+https://bugs.busybox.net/show_bug.cgi?id=4934
 
 Bernhard Reutner-Fischer <aldot@uclibc.org> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-   Target Milestone|0.9.34                      |---
+          Component|Outdated package            |Threads
+            Version|2015.02                     |unspecified
+         AssignedTo|unassigned at buildroot.uclibc |unassigned at uclibc.org
+                   |.org                        |
+            Product|buildroot                   |uClibc
+   Target Milestone|2015.02                     |---
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
