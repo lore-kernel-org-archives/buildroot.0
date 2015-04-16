@@ -1,17 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 16 Apr 2015 02:16:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 6026] -Wstrict-overflow and -Wtrampolines should
- be part of standard CFLAGS
-In-Reply-To: <bug-6026-163@https.bugs.busybox.net/>
-References: <bug-6026-163@https.bugs.busybox.net/>
-Message-ID: <20150416021651.968CD818A0@busybox.osuosl.org>
+Date: Thu, 16 Apr 2015 02:16:52 +0000 (UTC)
+Subject: [Buildroot] [Bug 5972] Undefined Behavior in md5.c
+In-Reply-To: <bug-5972-163@https.bugs.busybox.net/>
+References: <bug-5972-163@https.bugs.busybox.net/>
+Message-ID: <20150416021652.31EAF80506@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6026
+https://bugs.busybox.net/show_bug.cgi?id=5972
 
 ????????? <alek.gricak2009@gmail.com> changed:
 
