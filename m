@@ -1,31 +1,54 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Thu, 16 Apr 2015 08:33:19 -0400
-Subject: [Buildroot] Intel Edison support
-Message-ID: <CA+-urNRPe3bv+FH9He==b2_aa_NCnDXwxUJGGZqfUsNGyZt74w@mail.gmail.com>
+From: Robert P. J. Day <rpjday@crashcourse.ca>
+Date: Thu, 16 Apr 2015 08:40:35 -0400 (EDT)
+Subject: [Buildroot] how to point at a local archive of S/W tarballs?
+In-Reply-To: <CAHXCMMKL_0tT08zgSgHhC9OVVJiTUdYe6USEasqY5PqygkPwVg@mail.gmail.com>
+References: <alpine.LFD.2.11.1504160820540.17663@localhost>
+ <CAHXCMMKL_0tT08zgSgHhC9OVVJiTUdYe6USEasqY5PqygkPwVg@mail.gmail.com>
+Message-ID: <alpine.LFD.2.11.1504160836530.19987@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+On Thu, 16 Apr 2015, Samuel Martin wrote:
 
-I have support for the Intel Edison working in Buildroot. It took a while
-to figure out everything that Intel's Yocto distribution was doing, but
-after you simplify it down, it doesn't seem so bad. I'd send the patch up
-for review, but it is dwarfed by two massive patch files on u-boot and the
-kernel that I had to copy from Intel's Yocto distro [1]. It seems better if
-BR could download the Yocto distro, extract the patch files, and use them
-when needed. It also doesn't seem right for BR to have to carry around a
-couple mega-patches. Is this possible and is there an example somewhere?
+> Hi Robert,
+>
+> On Thu, Apr 16, 2015 at 2:21 PM, Robert P. J. Day <rpjday@crashcourse.ca> wrote:
+> >
+> >   [apologies if you've seen this before -- i posted it yesterday but
+> > it doesn't seem to show up in the ML archives.]
+> >
+> >   if i'm starting a new build, how can i take advantage of the
+> > gigabytes of S/W tarballs i've collected for doing OE/yocto project
+> > builds?
+> >
+> >   i want to set the equivalent of a local mirror -- would i set a
+> > value in the "Primary download site" config option, with the format
+> > "file:///pathname/to/all/my/tarballs"?
+>
+> You certainly want to set BR2_DL_DIR [1].
+>
+> [1] http://nightly.buildroot.org/#env-vars
 
-If you would like to see my current patches for Edison support, they are
-available here: https://github.com/fhunleth/buildroot-edison.
+  i'm not convinced that's what i want ... AIUI, that variable defines
+where the downloaded SW tarballs will be *placed*, and i'm happy to
+leave that where it is as a local dl/ directory for the build.
 
-Thanks,
-Frank
+  what i want is to define a local (on-host) mirror for tarballs that
+will be searched before going out to the net. i definitely don't want
+the fetch process to try to *place* anything in that local mirror,
+only to *fetch* from it.
 
-[1] http://www.intel.com/support/edison/sb/CS-035180.htm
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150416/7fe67c47/attachment.html>
+rday
+
+-- 
+
+========================================================================
+Robert P. J. Day                                 Ottawa, Ontario, CANADA
+                        http://crashcourse.ca
+
+Twitter:                                       http://twitter.com/rpjday
+LinkedIn:                               http://ca.linkedin.com/in/rpjday
+========================================================================
