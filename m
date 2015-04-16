@@ -1,26 +1,26 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
 Date: Thu, 16 Apr 2015 02:16:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 6026] -Wstrict-overflow and -Wtrampolines should
- be part of standard CFLAGS
-In-Reply-To: <bug-6026-163@https.bugs.busybox.net/>
-References: <bug-6026-163@https.bugs.busybox.net/>
-Message-ID: <20150416021651.A1A3D818A0@busybox.osuosl.org>
+Subject: [Buildroot] [Bug 29] strftime dosen't display correct localized
+ month and daynames
+In-Reply-To: <bug-29-163@https.bugs.busybox.net/>
+References: <bug-29-163@https.bugs.busybox.net/>
+Message-ID: <20150416021651.E2EF080506@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6026
+https://bugs.busybox.net/show_bug.cgi?id=29
 
 ????????? <alek.gricak2009@gmail.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
                  CC|                            |buildroot at uclibc.org
-          Component|Other                       |Outdated package
-           Platform|PC                          |All
-            Version|0.9.33.3                    |2015.02
+          Component|stdio                       |Outdated package
+           Platform|Other                       |All
+            Version|0.9.30                      |2015.02
          AssignedTo|unassigned at uclibc.org       |unassigned at buildroot.uclibc
                    |                            |.org
             Product|uClibc                      |buildroot
