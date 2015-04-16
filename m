@@ -1,82 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Apr 2015 08:13:31 +0200
-Subject: [Buildroot] [git commit] libnl: bump to version 3.2.26
-Message-ID: <20150416061335.D5398803E3@busybox.osuosl.org>
+Date: Thu, 16 Apr 2015 08:13:11 +0200
+Subject: [Buildroot] [git commit] radvd: bump to version 2.11
+Message-ID: <20150416061335.C3AB98184F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bee5ff6299442204bb0879fed11e8a1a5c4aed73
+commit: http://git.buildroot.net/buildroot/commit/?id=d140d14ebb961891034c5cb988f79f9d32bd7c9c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+No longer needs check (hence the patch) to build.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...link.h-fix-build-including-poll.h-with-th.patch |   30 --------------------
- package/libnl/libnl.hash                           |    5 +--
- package/libnl/libnl.mk                             |    4 +-
- 3 files changed, 4 insertions(+), 35 deletions(-)
+ ...-check-requirement-we-don-t-do-unit-tests.patch |   29 --------------------
+ package/radvd/radvd.hash                           |    4 +-
+ package/radvd/radvd.mk                             |    2 +-
+ 3 files changed, 3 insertions(+), 32 deletions(-)
 
-diff --git a/package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch b/package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch
+diff --git a/package/radvd/0001-Drop-check-requirement-we-don-t-do-unit-tests.patch b/package/radvd/0001-Drop-check-requirement-we-don-t-do-unit-tests.patch
 deleted file mode 100644
-index 53a299b..0000000
---- a/package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch
+index 0bbbf28..0000000
+--- a/package/radvd/0001-Drop-check-requirement-we-don-t-do-unit-tests.patch
 +++ /dev/null
-@@ -1,30 +0,0 @@
--From 14128766e80823f79a3b2c97573da1aea5c16ea8 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
--Date: Mon, 1 Sep 2014 12:38:10 +0200
--Subject: [PATCH 1/2] netlink/netlink.h: fix build including <poll.h> with the
-- musl C library
+@@ -1,29 +0,0 @@
+-From 2074114cef857f95104367c51ac9367082fc8060 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Sun, 23 Nov 2014 12:16:32 +0100
+-Subject: [PATCH 1/3] Drop check requirement, we don't do unit tests
 -
--https://github.com/thom311/libnl/pull/64
--
--Signed-off-by: Thomas Haller <thaller@redhat.com>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
-- include/netlink/netlink.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- configure.ac | 4 ----
+- 1 file changed, 4 deletions(-)
 -
--diff --git a/include/netlink/netlink.h b/include/netlink/netlink.h
--index 28dba06..61656b3 100644
----- a/include/netlink/netlink.h
--+++ b/include/netlink/netlink.h
--@@ -16,7 +16,7 @@
-- #include <stdint.h>
-- #include <string.h>
-- #include <stdlib.h>
---#include <sys/poll.h>
--+#include <poll.h>
-- #include <sys/socket.h>
-- #include <sys/types.h>
-- #include <sys/time.h>
+-diff --git a/configure.ac b/configure.ac
+-index 59b18a8..5dde3b2 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -50,10 +50,6 @@ dnl Determine CC and preset CFLAGS
+- AC_PROG_CC_C99
+- AC_PROG_RANLIB
+- 
+--if test "$arch" = "linux" ; then
+--PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
+--fi
+--
+- dnl Determine of netlink is available
+- AC_MSG_CHECKING(netlink)
+- AC_TRY_COMPILE([
 --- 
 -2.1.0
 -
-diff --git a/package/libnl/libnl.hash b/package/libnl/libnl.hash
-index 6188d70..9ce5ffe 100644
---- a/package/libnl/libnl.hash
-+++ b/package/libnl/libnl.hash
-@@ -1,3 +1,2 @@
--# From http://lists.infradead.org/pipermail/libnl/2014-July/001549.html
--sha256	8beb7590674957b931de6b7f81c530b85dc7c1ad8fbda015398bc1e8d1ce8ec5 libnl-3.2.25.tar.gz
--md5	03f74d0cd5037cadc8cdfa313bbd195c	libnl-3.2.25.tar.gz
-+# From https://github.com/thom311/libnl/releases/download/libnl3_2_26/libnl-3.2.26.tar.gz.sha256sum
-+sha256	1323ff6cea47efe9f988893b09840942a8c36131f472a9f3b96eb68d8f8d7555	libnl-3.2.26.tar.gz
-diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
-index e795e80..5993e97 100644
---- a/package/libnl/libnl.mk
-+++ b/package/libnl/libnl.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
+index fe777d5..7324c31 100644
+--- a/package/radvd/radvd.hash
++++ b/package/radvd/radvd.hash
+@@ -1,2 +1,2 @@
+-# From http://www.litech.org/radvd/dist/radvd-2.10.tar.gz.sha256
+-sha256	76ceee8304120ae42cc38d03dd720a3db94a57e459f3184254fa523367fb9773	radvd-2.10.tar.xz
++# From http://www.litech.org/radvd/dist/radvd-2.11.tar.gz.sha256
++sha256	04636288fc79fa151260eeb2bea1b05942f59c31f01358c57f930a4eb45b5acc	radvd-2.11.tar.xz
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index 184cf7a..872eac0 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNL_VERSION = 3.2.25
--LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files
-+LIBNL_VERSION = 3.2.26
-+LIBNL_SITE = https://github.com/thom311/libnl/releases/download/libnl$(subst .,_,$(LIBNL_VERSION))
- LIBNL_LICENSE = LGPLv2.1+
- LIBNL_LICENSE_FILES = COPYING
- LIBNL_INSTALL_STAGING = YES
+-RADVD_VERSION = 2.10
++RADVD_VERSION = 2.11
+ RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
+ RADVD_SITE = http://www.litech.org/radvd/dist
+ RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
