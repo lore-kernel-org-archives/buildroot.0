@@ -1,90 +1,69 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 16 Apr 2015 16:50:50 +0200
-Subject: [Buildroot] [PATCH] live555: fix library installation
-Message-ID: <1429195850-4884-1-git-send-email-luca@lucaceresoli.net>
+From: Robert P. J. Day <rpjday@crashcourse.ca>
+Date: Thu, 16 Apr 2015 11:34:31 -0400 (EDT)
+Subject: [Buildroot] couple questions about what's generated under
+	output/host/
+Message-ID: <alpine.LFD.2.11.1504161128470.31691@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The manual target installation commands optionally copies 3 executables
-that demonstrate the library usage, but do not the library itself.
 
-This results in the following errors at runtime:
+  going through the results of building for a BBB and curious about
+two fairly minor things.
 
-  # openRTSP
-  openRTSP: can't load library 'libliveMedia.so.38'
-  # live555MediaServer
-  live555MediaServer: can't load library 'libliveMedia.so.38'
-  # MPEG2TransportStreamIndexer
-  MPEG2TransportStreamIndexer: can't load library 'libliveMedia.so.38'
-  #
+  i'm looking under output/host/usr/arm-buildroot-linux-gnueabihf, and
+the first curiosity is further under the subdirectory bin/:
 
-Tested with the following defconfig, which is basically
-qemu_arm_versatile_defconfig + C++ + live555:
+$ ls -l
+total 9860
+-rwxr-xr-x. 2 rpjday rpjday  860248 Apr 16 09:53 ar
+-rwxr-xr-x. 2 rpjday rpjday 1494440 Apr 16 09:53 as
+lrwxrwxrwx. 1 rpjday rpjday       3 Apr 16 10:01 cc -> gcc
+-rwxr-xr-x. 4 rpjday rpjday 1347224 Apr 16 09:53 ld
+-rwxr-xr-x. 4 rpjday rpjday 1347224 Apr 16 09:53 ld.bfd
+-rwxr-xr-x. 2 rpjday rpjday  837608 Apr 16 09:53 nm
+-rwxr-xr-x. 2 rpjday rpjday 1027080 Apr 16 09:53 objcopy
+-rwxr-xr-x. 2 rpjday rpjday 1280720 Apr 16 09:53 objdump
+-rwxr-xr-x. 2 rpjday rpjday  860248 Apr 16 09:53 ranlib
+-rwxr-xr-x. 2 rpjday rpjday 1027112 Apr 16 09:53 strip
 
-BR2_arm=y
-BR2_KERNEL_HEADERS_VERSION=y
-BR2_DEFAULT_KERNEL_VERSION="4.0"
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-4.0.config"
-BR2_LINUX_KERNEL_ZIMAGE=y
-BR2_PACKAGE_LIVE555=y
-BR2_TARGET_ROOTFS_EXT2=y
+the symlink cc -> gcc is, as you can see, broken since there is no gcc
+in the current directory. is that a build error? what is that broken
+symlink supposed to represent? is this a configuration error on my
+part?
 
-Fix the whole installation step by using the 'make install' step provided
-by the upstream package, similar to what was done in commit
-44d15563c706dce48f84 for the staging installation.
-After that, we just delete the optional executables that are not selected
-in configure.
+  second, under the subdirectory lib/, we have this:
 
-Note: this change has the effect of installing all the test and demo
-executables produced by the live555 compilation process, and that were
-previously not copied. This increases the uncompressed target filesystem
-size by roughly 300 kB (tested for a 32-bit ARM target).
+$ ls -l
+total 1540
+-rw-r--r--. 1 rpjday rpjday  176730 Apr 16 10:01 libatomic.a
+-rwxr-xr-x. 1 rpjday rpjday    1021 Apr 16 10:01 libatomic.la
+lrwxrwxrwx. 1 rpjday rpjday      18 Apr 16 10:01 libatomic.so -> libatomic.so.1.1.0
+lrwxrwxrwx. 1 rpjday rpjday      18 Apr 16 10:01 libatomic.so.1 -> libatomic.so.1.1.0
+-rwxr-xr-x. 1 rpjday rpjday   68060 Apr 16 10:01 libatomic.so.1.1.0
+-rw-r--r--. 1 rpjday rpjday     132 Apr 16 10:01 libgcc_s.so
+-rw-r--r--. 1 rpjday rpjday 1316900 Apr 16 10:01 libgcc_s.so.1
+$
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Baruch Siach <baruch@tkos.co.il>
----
- package/live555/live555.mk | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+  what is that lib/ directory supposed to represent? since if i move
+up and go into the sysroot/ directory, i see a whole pile of ARM
+libraries, *including* the two libgcc* entries that were in the
+earlier lib/ directory, so those two files are being duplicated. is
+there a reason for that?
 
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index cbd1e85..f5ff85f 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -44,18 +44,19 @@ define LIVE555_BUILD_CMDS
- 	$(MAKE) -C $(@D) all
- endef
- 
--LIVE555_FILES_TO_INSTALL-y =
--LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_OPENRTSP) += testProgs/openRTSP
--LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MEDIASERVER) += mediaServer/live555MediaServer
--LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MPEG2_INDEXER) += testProgs/MPEG2TransportStreamIndexer
-+LIVE555_FILES_TO_REMOVE += $(if $(BR2_PACKAGE_LIVE555_OPENRTSP),,openRTSP)
-+LIVE555_FILES_TO_REMOVE += $(if $(BR2_PACKAGE_LIVE555_MEDIASERVER),,live555MediaServer)
-+LIVE555_FILES_TO_REMOVE += $(if $(BR2_PACKAGE_LIVE555_MPEG2_INDEXER),,MPEG2TransportStreamIndexer)
- 
- define LIVE555_INSTALL_STAGING_CMDS
- 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install
- endef
- 
- define LIVE555_INSTALL_TARGET_CMDS
--	for i in $(LIVE555_FILES_TO_INSTALL-y); do \
--		$(INSTALL) -D -m 0755 $(@D)/$$i $(TARGET_DIR)/usr/bin/`basename $$i` || exit 1; \
-+	$(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D) install
-+	for i in $(LIVE555_FILES_TO_REMOVE); do \
-+		echo "Removing $$i"; \
-+		rm -f $(TARGET_DIR)/usr/bin/`basename $$i`; \
- 	done
- endef
- 
+  thanks.
+
+rday
+
+
 -- 
-1.9.1
+
+========================================================================
+Robert P. J. Day                                 Ottawa, Ontario, CANADA
+                        http://crashcourse.ca
+
+Twitter:                                       http://twitter.com/rpjday
+LinkedIn:                               http://ca.linkedin.com/in/rpjday
+========================================================================
