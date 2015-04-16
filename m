@@ -1,16 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 16 Apr 2015 02:16:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 6068] Enhancement: Add warning -Wcast-align for GCC
-In-Reply-To: <bug-6068-163@https.bugs.busybox.net/>
-References: <bug-6068-163@https.bugs.busybox.net/>
-Message-ID: <20150416021650.A94D480506@busybox.osuosl.org>
+Date: Thu, 16 Apr 2015 02:16:51 +0000 (UTC)
+Subject: [Buildroot] [Bug 6026] -Wstrict-overflow and -Wtrampolines should
+ be part of standard CFLAGS
+In-Reply-To: <bug-6026-163@https.bugs.busybox.net/>
+References: <bug-6026-163@https.bugs.busybox.net/>
+Message-ID: <20150416021651.A1A3D818A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6068
+https://bugs.busybox.net/show_bug.cgi?id=6026
 
 ????????? <alek.gricak2009@gmail.com> changed:
 
