@@ -1,75 +1,90 @@
-From: Robert P. J. Day <rpjday@crashcourse.ca>
-Date: Thu, 16 Apr 2015 09:17:49 -0400 (EDT)
-Subject: [Buildroot] how to point at a local archive of S/W tarballs?
-In-Reply-To: <CAHXCMML2jMy_yF7dNyM4LKBTMhH6MMwrEi5OyJ_ep2ia2NeknQ@mail.gmail.com>
-References: <alpine.LFD.2.11.1504160820540.17663@localhost>
- <CAHXCMMKL_0tT08zgSgHhC9OVVJiTUdYe6USEasqY5PqygkPwVg@mail.gmail.com>
- <alpine.LFD.2.11.1504160836530.19987@localhost>
- <CAHXCMML2jMy_yF7dNyM4LKBTMhH6MMwrEi5OyJ_ep2ia2NeknQ@mail.gmail.com>
-Message-ID: <alpine.LFD.2.11.1504160912290.18180@localhost>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 16 Apr 2015 16:50:50 +0200
+Subject: [Buildroot] [PATCH] live555: fix library installation
+Message-ID: <1429195850-4884-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Apr 2015, Samuel Martin wrote:
+The manual target installation commands optionally copies 3 executables
+that demonstrate the library usage, but do not the library itself.
 
-> On Thu, Apr 16, 2015 at 2:40 PM, Robert P. J. Day <rpjday@crashcourse.ca> wrote:
-> > On Thu, 16 Apr 2015, Samuel Martin wrote:
-> >
-> >> Hi Robert,
-> >>
-> >> On Thu, Apr 16, 2015 at 2:21 PM, Robert P. J. Day <rpjday@crashcourse.ca> wrote:
-> >> >
-> >> >   [apologies if you've seen this before -- i posted it yesterday but
-> >> > it doesn't seem to show up in the ML archives.]
-> >> >
-> >> >   if i'm starting a new build, how can i take advantage of the
-> >> > gigabytes of S/W tarballs i've collected for doing OE/yocto project
-> >> > builds?
-> >> >
-> >> >   i want to set the equivalent of a local mirror -- would i set a
-> >> > value in the "Primary download site" config option, with the format
-> >> > "file:///pathname/to/all/my/tarballs"?
-> >>
-> >> You certainly want to set BR2_DL_DIR [1].
-> >>
-> >> [1] http://nightly.buildroot.org/#env-vars
-> >
-> >   i'm not convinced that's what i want ... AIUI, that variable defines
-> > where the downloaded SW tarballs will be *placed*, and i'm happy to
-> > leave that where it is as a local dl/ directory for the build.
-> >
-> >   what i want is to define a local (on-host) mirror for tarballs that
-> > will be searched before going out to the net. i definitely don't want
-> > the fetch process to try to *place* anything in that local mirror,
-> > only to *fetch* from it.
->
-> For alternative mirror, there is a couple of options in the menuconfig:
-> Build options ---> Mirrors and Download locations
+This results in the following errors at runtime:
 
-  i know, i referred to that very config option in my original
-posting. what i'm wondering is if that config option -- "Primary
-download site" -- can be set to point at a local directory on my build
-host that's already loaded with S/W tarballs i've built up over the
-months for use with my OE and yocto builds.
+  # openRTSP
+  openRTSP: can't load library 'libliveMedia.so.38'
+  # live555MediaServer
+  live555MediaServer: can't load library 'libliveMedia.so.38'
+  # MPEG2TransportStreamIndexer
+  MPEG2TransportStreamIndexer: can't load library 'libliveMedia.so.38'
+  #
 
-  the help for that option says only that, "Valid URIs are URIs
-recognized by $(WGET) and scp URIs of the form
-scp://[user@]host:path." last time i looked, wget doesn't support the
-"file://" form of URI, so i can't use that.
+Tested with the following defconfig, which is basically
+qemu_arm_versatile_defconfig + C++ + live555:
 
-  is there a standard way to do this?
+BR2_arm=y
+BR2_KERNEL_HEADERS_VERSION=y
+BR2_DEFAULT_KERNEL_VERSION="4.0"
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-4.0.config"
+BR2_LINUX_KERNEL_ZIMAGE=y
+BR2_PACKAGE_LIVE555=y
+BR2_TARGET_ROOTFS_EXT2=y
 
-rday
+Fix the whole installation step by using the 'make install' step provided
+by the upstream package, similar to what was done in commit
+44d15563c706dce48f84 for the staging installation.
+After that, we just delete the optional executables that are not selected
+in configure.
 
+Note: this change has the effect of installing all the test and demo
+executables produced by the live555 compilation process, and that were
+previously not copied. This increases the uncompressed target filesystem
+size by roughly 300 kB (tested for a 32-bit ARM target).
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Baruch Siach <baruch@tkos.co.il>
+---
+ package/live555/live555.mk | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index cbd1e85..f5ff85f 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -44,18 +44,19 @@ define LIVE555_BUILD_CMDS
+ 	$(MAKE) -C $(@D) all
+ endef
+ 
+-LIVE555_FILES_TO_INSTALL-y =
+-LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_OPENRTSP) += testProgs/openRTSP
+-LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MEDIASERVER) += mediaServer/live555MediaServer
+-LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MPEG2_INDEXER) += testProgs/MPEG2TransportStreamIndexer
++LIVE555_FILES_TO_REMOVE += $(if $(BR2_PACKAGE_LIVE555_OPENRTSP),,openRTSP)
++LIVE555_FILES_TO_REMOVE += $(if $(BR2_PACKAGE_LIVE555_MEDIASERVER),,live555MediaServer)
++LIVE555_FILES_TO_REMOVE += $(if $(BR2_PACKAGE_LIVE555_MPEG2_INDEXER),,MPEG2TransportStreamIndexer)
+ 
+ define LIVE555_INSTALL_STAGING_CMDS
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install
+ endef
+ 
+ define LIVE555_INSTALL_TARGET_CMDS
+-	for i in $(LIVE555_FILES_TO_INSTALL-y); do \
+-		$(INSTALL) -D -m 0755 $(@D)/$$i $(TARGET_DIR)/usr/bin/`basename $$i` || exit 1; \
++	$(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D) install
++	for i in $(LIVE555_FILES_TO_REMOVE); do \
++		echo "Removing $$i"; \
++		rm -f $(TARGET_DIR)/usr/bin/`basename $$i`; \
+ 	done
+ endef
+ 
 -- 
-
-========================================================================
-Robert P. J. Day                                 Ottawa, Ontario, CANADA
-                        http://crashcourse.ca
-
-Twitter:                                       http://twitter.com/rpjday
-LinkedIn:                               http://ca.linkedin.com/in/rpjday
-========================================================================
+1.9.1
