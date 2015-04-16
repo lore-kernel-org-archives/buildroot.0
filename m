@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 16 Apr 2015 08:16:42 +0000 (UTC)
+Date: Thu, 16 Apr 2015 08:17:27 +0000 (UTC)
 Subject: [Buildroot] [Bug 4021] uClibc: undefined reference to
 	`__GI___errno_location'
 In-Reply-To: <bug-4021-163@https.bugs.busybox.net/>
 References: <bug-4021-163@https.bugs.busybox.net/>
-Message-ID: <20150416081642.5DF4D805F6@busybox.osuosl.org>
+Message-ID: <20150416081727.0AC53805F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,10 +17,7 @@ Bernhard Reutner-Fischer <aldot@uclibc.org> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-          Component|Other                       |Other
-            Version|1.22.x                      |unspecified
-         AssignedTo|unassigned at busybox.net      |unassigned at uclibc.org
-            Product|Busybox                     |uClibc
+           Priority|P1                          |P5
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
