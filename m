@@ -1,25 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 16 Apr 2015 05:17:55 +0000 (UTC)
-Subject: [Buildroot] =?utf-8?b?W0J1ZyA4MDI2XSAg0YvQstCy?=
-In-Reply-To: <bug-8026-163@https.bugs.busybox.net/>
-References: <bug-8026-163@https.bugs.busybox.net/>
-Message-ID: <20150416051755.9E05281824@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 16 Apr 2015 07:48:31 +0200
+Subject: [Buildroot] [PATCH] samba4: bump to version 4.2.1
+In-Reply-To: <1429131438-10497-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1429131438-10497-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150416074831.77c66272@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8026
+Dear Gustavo Zacarias,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Wed, 15 Apr 2015 17:57:18 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/samba4/Config.in   | 2 +-
+>  package/samba4/samba4.hash | 2 +-
+>  package/samba4/samba4.mk   | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |INVALID
+Applied, thanks.
 
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
