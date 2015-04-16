@@ -1,30 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 16 Apr 2015 12:15:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 8016] collectd fails to build,
- network.c:171:19: error: 'IPV6_MULTICAST_HOPS' undeclared
-In-Reply-To: <bug-8016-163@https.bugs.busybox.net/>
-References: <bug-8016-163@https.bugs.busybox.net/>
-Message-ID: <20150416121510.0BA93818A8@busybox.osuosl.org>
+From: Robert P. J. Day <rpjday@crashcourse.ca>
+Date: Thu, 16 Apr 2015 08:21:56 -0400 (EDT)
+Subject: [Buildroot] how to point at a local archive of S/W tarballs?
+Message-ID: <alpine.LFD.2.11.1504160820540.17663@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8016
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+  [apologies if you've seen this before -- i posted it yesterday but
+it doesn't seem to show up in the ML archives.]
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |INVALID
+  if i'm starting a new build, how can i take advantage of the
+gigabytes of S/W tarballs i've collected for doing OE/yocto project
+builds?
 
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2015-04-16 12:15:09 UTC ---
-You can't change toolchain options without doing a complete rebuild, that's the
-problem.
+  i want to set the equivalent of a local mirror -- would i set a
+value in the "Primary download site" config option, with the format
+"file:///pathname/to/all/my/tarballs"?
+
+rday
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+
+========================================================================
+Robert P. J. Day                                 Ottawa, Ontario, CANADA
+                        http://crashcourse.ca
+
+Twitter:                                       http://twitter.com/rpjday
+LinkedIn:                               http://ca.linkedin.com/in/rpjday
+========================================================================
