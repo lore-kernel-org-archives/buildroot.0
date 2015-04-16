@@ -1,166 +1,233 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Apr 2015 08:02:45 +0200
-Subject: [Buildroot] [git commit] configs/qemu: update sh4 r2d
-Message-ID: <20150416060438.A909D818A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu: update microblazebe/el
+Message-ID: <20150416060438.795E6818A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6d1e5ea63a7530c5add7ecbb60954954802d42f0
+commit: http://git.buildroot.net/buildroot/commit/?id=f4e8c18897fd175a1a06f4b40842a8e52f701c76
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Switch to kernel 4.0.
-Simplify kernel config to reduce bloat.
+Remove redundant/pointless kernel options to reduce bloat.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/qemu/sh4-r2d/linux-3.19.config |   71 ----------------------------------
- board/qemu/sh4-r2d/linux-4.0.config  |   38 ++++++++++++++++++
- board/qemu/sh4-r2d/readme.txt        |    2 +-
- configs/qemu_sh4_r2d_defconfig       |   10 ++--
- 4 files changed, 44 insertions(+), 77 deletions(-)
+ board/qemu/microblazebe-mmu/linux-3.19.config |   56 ------------------------
+ board/qemu/microblazebe-mmu/linux-4.0.config  |   19 ++++++++
+ board/qemu/microblazebe-mmu/readme.txt        |    2 +-
+ board/qemu/microblazeel-mmu/linux-3.19.config |   57 -------------------------
+ board/qemu/microblazeel-mmu/linux-4.0.config  |   18 ++++++++
+ board/qemu/microblazeel-mmu/readme.txt        |    2 +-
+ configs/qemu_microblazebe_mmu_defconfig       |   10 ++--
+ configs/qemu_microblazeel_mmu_defconfig       |   10 ++--
+ 8 files changed, 49 insertions(+), 125 deletions(-)
 
-diff --git a/board/qemu/sh4-r2d/linux-3.19.config b/board/qemu/sh4-r2d/linux-3.19.config
+diff --git a/board/qemu/microblazebe-mmu/linux-3.19.config b/board/qemu/microblazebe-mmu/linux-3.19.config
 deleted file mode 100644
-index 5a98a69..0000000
---- a/board/qemu/sh4-r2d/linux-3.19.config
+index fc25c9d..0000000
+--- a/board/qemu/microblazebe-mmu/linux-3.19.config
 +++ /dev/null
-@@ -1,71 +0,0 @@
+@@ -1,56 +0,0 @@
 -CONFIG_SYSVIPC=y
 -CONFIG_IKCONFIG=y
 -CONFIG_IKCONFIG_PROC=y
--CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_INITRAMFS_SOURCE="rootfs.cpio"
+-CONFIG_EXPERT=y
+-CONFIG_KALLSYMS_ALL=y
+-# CONFIG_BASE_FULL is not set
+-# CONFIG_FUTEX is not set
+-# CONFIG_EPOLL is not set
+-# CONFIG_SIGNALFD is not set
+-# CONFIG_SHMEM is not set
 -CONFIG_SLAB=y
--CONFIG_PROFILING=y
--CONFIG_OPROFILE=y
 -CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
 -# CONFIG_BLK_DEV_BSG is not set
--CONFIG_CPU_SUBTYPE_SH7751R=y
--CONFIG_MEMORY_START=0x0c000000
--CONFIG_FLATMEM_MANUAL=y
--CONFIG_SH_RTS7751R2D=y
--CONFIG_RTS7751R2D_PLUS=y
--CONFIG_HEARTBEAT=y
--CONFIG_PCI=y
--CONFIG_HOTPLUG_PCI=y
+-CONFIG_PARTITION_ADVANCED=y
+-CONFIG_OPT_LIB_ASM=y
+-CONFIG_XILINX_MICROBLAZE0_FAMILY="spartan3adsp"
+-CONFIG_XILINX_MICROBLAZE0_USE_MSR_INSTR=1
+-CONFIG_XILINX_MICROBLAZE0_USE_PCMP_INSTR=1
+-CONFIG_XILINX_MICROBLAZE0_USE_BARREL=1
+-CONFIG_XILINX_MICROBLAZE0_USE_HW_MUL=1
+-CONFIG_HZ_100=y
+-CONFIG_MMU=y
+-CONFIG_CMDLINE_BOOL=y
+-CONFIG_CMDLINE_FORCE=y
 -CONFIG_NET=y
 -CONFIG_PACKET=y
 -CONFIG_UNIX=y
 -CONFIG_INET=y
--CONFIG_IP_PNP=y
--CONFIG_IP_PNP_DHCP=y
 -# CONFIG_INET_LRO is not set
 -# CONFIG_IPV6 is not set
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
--CONFIG_FW_LOADER=m
 -CONFIG_BLK_DEV_RAM=y
--CONFIG_BLK_DEV_SD=y
--CONFIG_ATA=y
--CONFIG_PATA_PLATFORM=y
+-CONFIG_BLK_DEV_RAM_SIZE=8192
 -CONFIG_NETDEVICES=y
--CONFIG_8139CP=y
--# CONFIG_WLAN is not set
--# CONFIG_INPUT_MOUSEDEV is not set
--# CONFIG_INPUT_KEYBOARD is not set
--# CONFIG_INPUT_MOUSE is not set
+-CONFIG_XILINX_EMACLITE=y
+-# CONFIG_INPUT is not set
 -# CONFIG_SERIO is not set
--CONFIG_SERIAL_8250=y
--CONFIG_SERIAL_SH_SCI=y
--CONFIG_SERIAL_SH_SCI_CONSOLE=y
--CONFIG_HW_RANDOM=y
--CONFIG_SPI=y
--CONFIG_SPI_SH_SCI=y
--CONFIG_MFD_SM501=y
--CONFIG_FB=y
--CONFIG_FB_SH_MOBILE_LCDC=m
--CONFIG_FB_SH_MOBILE_HDMI=m
--CONFIG_FB_SM501=y
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_LOGO=y
--CONFIG_SOUND=y
--CONFIG_SND_YMFPCI=m
--CONFIG_SOUND_PRIME=m
--CONFIG_USB=y
--CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
--CONFIG_USB_OHCI_HCD=y
--CONFIG_USB_STORAGE=y
--CONFIG_RTC_CLASS=y
--CONFIG_RTC_DRV_R9701=y
--CONFIG_EXT4_FS=y
--CONFIG_MSDOS_FS=y
--CONFIG_VFAT_FS=y
--CONFIG_PROC_KCORE=y
--CONFIG_TMPFS=y
--CONFIG_TMPFS_POSIX_ACL=y
--CONFIG_MINIX_FS=y
--CONFIG_NLS_CODEPAGE_932=y
--CONFIG_DEBUG_FS=y
+-# CONFIG_VT is not set
+-CONFIG_SERIAL_UARTLITE=y
+-CONFIG_SERIAL_UARTLITE_CONSOLE=y
+-# CONFIG_HW_RANDOM is not set
+-# CONFIG_HWMON is not set
+-# CONFIG_USB_SUPPORT is not set
+-# CONFIG_DNOTIFY is not set
+-CONFIG_NFS_FS=y
+-CONFIG_CIFS=y
+-CONFIG_CIFS_STATS=y
+-CONFIG_CIFS_STATS2=y
+-CONFIG_DEBUG_INFO=y
+-CONFIG_DEBUG_SLAB=y
+-CONFIG_DETECT_HUNG_TASK=y
+-CONFIG_DEBUG_SPINLOCK=y
+-CONFIG_EARLY_PRINTK=y
 -# CONFIG_CRYPTO_ANSI_CPRNG is not set
--CONFIG_CRC_T10DIF=y
-diff --git a/board/qemu/sh4-r2d/linux-4.0.config b/board/qemu/sh4-r2d/linux-4.0.config
+diff --git a/board/qemu/microblazebe-mmu/linux-4.0.config b/board/qemu/microblazebe-mmu/linux-4.0.config
 new file mode 100644
-index 0000000..a3d6544
+index 0000000..6b4ff22
 --- /dev/null
-+++ b/board/qemu/sh4-r2d/linux-4.0.config
-@@ -0,0 +1,38 @@
++++ b/board/qemu/microblazebe-mmu/linux-4.0.config
+@@ -0,0 +1,19 @@
 +CONFIG_SYSVIPC=y
 +CONFIG_MODULES=y
-+CONFIG_CPU_SUBTYPE_SH7751R=y
-+CONFIG_MEMORY_START=0x0c000000
-+CONFIG_FLATMEM_MANUAL=y
-+CONFIG_SH_RTS7751R2D=y
-+CONFIG_RTS7751R2D_PLUS=y
-+CONFIG_HEARTBEAT=y
-+CONFIG_PCI=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_OPT_LIB_ASM=y
++CONFIG_XILINX_MICROBLAZE0_FAMILY="spartan3adsp"
++CONFIG_XILINX_MICROBLAZE0_USE_MSR_INSTR=1
++CONFIG_XILINX_MICROBLAZE0_USE_PCMP_INSTR=1
++CONFIG_XILINX_MICROBLAZE0_USE_BARREL=1
++CONFIG_XILINX_MICROBLAZE0_USE_HW_MUL=1
++CONFIG_MMU=y
 +CONFIG_NET=y
 +CONFIG_PACKET=y
 +CONFIG_UNIX=y
 +CONFIG_INET=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_ATA=y
-+CONFIG_PATA_PLATFORM=y
 +CONFIG_NETDEVICES=y
-+CONFIG_8139CP=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_SH_SCI=y
-+CONFIG_SERIAL_SH_SCI_CONSOLE=y
-+CONFIG_SPI=y
-+CONFIG_SPI_SH_SCI=y
-+CONFIG_MFD_SM501=y
-+CONFIG_FB=y
-+CONFIG_FB_SH_MOBILE_LCDC=y
-+CONFIG_FB_SH_MOBILE_HDMI=y
-+CONFIG_FB_SM501=y
-+CONFIG_FRAMEBUFFER_CONSOLE=y
-+CONFIG_LOGO=y
-+CONFIG_SOUND=y
-+CONFIG_SND_YMFPCI=y
-+CONFIG_SOUND_PRIME=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_R9701=y
-+CONFIG_EXT4_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
-index c256f0b..b7476b9 100644
---- a/board/qemu/sh4-r2d/readme.txt
-+++ b/board/qemu/sh4-r2d/readme.txt
-@@ -5,4 +5,4 @@ Run the emulation with:
++CONFIG_XILINX_EMACLITE=y
++CONFIG_SERIAL_UARTLITE=y
++CONFIG_SERIAL_UARTLITE_CONSOLE=y
++# CONFIG_VGA_CONSOLE is not set
+diff --git a/board/qemu/microblazebe-mmu/readme.txt b/board/qemu/microblazebe-mmu/readme.txt
+index c6375cc..9f93ab5 100644
+--- a/board/qemu/microblazebe-mmu/readme.txt
++++ b/board/qemu/microblazebe-mmu/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
  The login prompt will appear in the terminal that started Qemu.
- The graphical window is the framebuffer.
  
 -Tested with QEMU 2.2.0
 +Tested with QEMU 2.2.1
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index 88bf914..928a82d 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -14,15 +14,15 @@ BR2_TARGET_ROOTFS_EXT2=y
- # doesn't use floating point operations.
- BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
+diff --git a/board/qemu/microblazeel-mmu/linux-3.19.config b/board/qemu/microblazeel-mmu/linux-3.19.config
+deleted file mode 100644
+index 53ef203..0000000
+--- a/board/qemu/microblazeel-mmu/linux-3.19.config
++++ /dev/null
+@@ -1,57 +0,0 @@
+-CONFIG_SYSVIPC=y
+-CONFIG_IKCONFIG=y
+-CONFIG_IKCONFIG_PROC=y
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_INITRAMFS_SOURCE="rootfs.cpio"
+-CONFIG_EXPERT=y
+-CONFIG_KALLSYMS_ALL=y
+-# CONFIG_BASE_FULL is not set
+-# CONFIG_FUTEX is not set
+-# CONFIG_EPOLL is not set
+-# CONFIG_SIGNALFD is not set
+-# CONFIG_SHMEM is not set
+-CONFIG_SLAB=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-# CONFIG_BLK_DEV_BSG is not set
+-CONFIG_PARTITION_ADVANCED=y
+-CONFIG_XILINX_MICROBLAZE0_FAMILY="spartan3adsp"
+-CONFIG_XILINX_MICROBLAZE0_USE_MSR_INSTR=1
+-CONFIG_XILINX_MICROBLAZE0_USE_PCMP_INSTR=1
+-CONFIG_XILINX_MICROBLAZE0_USE_BARREL=1
+-CONFIG_XILINX_MICROBLAZE0_USE_HW_MUL=1
+-CONFIG_HZ_100=y
+-CONFIG_MMU=y
+-CONFIG_CMDLINE_BOOL=y
+-CONFIG_CMDLINE_FORCE=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-# CONFIG_INET_LRO is not set
+-# CONFIG_IPV6 is not set
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_BLK_DEV_RAM_SIZE=8192
+-CONFIG_NETDEVICES=y
+-CONFIG_XILINX_EMACLITE=y
+-# CONFIG_INPUT is not set
+-# CONFIG_SERIO is not set
+-# CONFIG_VT is not set
+-CONFIG_SERIAL_UARTLITE=y
+-CONFIG_SERIAL_UARTLITE_CONSOLE=y
+-# CONFIG_HW_RANDOM is not set
+-# CONFIG_HWMON is not set
+-# CONFIG_USB_SUPPORT is not set
+-# CONFIG_DNOTIFY is not set
+-CONFIG_NFS_FS=y
+-CONFIG_CIFS=y
+-CONFIG_CIFS_STATS=y
+-CONFIG_CIFS_STATS2=y
+-CONFIG_DEBUG_INFO=y
+-CONFIG_DEBUG_SLAB=y
+-CONFIG_DETECT_HUNG_TASK=y
+-CONFIG_DEBUG_SPINLOCK=y
+-CONFIG_EARLY_PRINTK=y
+-CONFIG_CRYPTO_CRC32C=y
+-# CONFIG_CRYPTO_ANSI_CPRNG is not set
+-CONFIG_CRC16=y
+diff --git a/board/qemu/microblazeel-mmu/linux-4.0.config b/board/qemu/microblazeel-mmu/linux-4.0.config
+new file mode 100644
+index 0000000..c7d6b30
+--- /dev/null
++++ b/board/qemu/microblazeel-mmu/linux-4.0.config
+@@ -0,0 +1,18 @@
++CONFIG_SYSVIPC=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_XILINX_MICROBLAZE0_FAMILY="spartan3adsp"
++CONFIG_XILINX_MICROBLAZE0_USE_MSR_INSTR=1
++CONFIG_XILINX_MICROBLAZE0_USE_PCMP_INSTR=1
++CONFIG_XILINX_MICROBLAZE0_USE_BARREL=1
++CONFIG_XILINX_MICROBLAZE0_USE_HW_MUL=1
++CONFIG_MMU=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_NETDEVICES=y
++CONFIG_XILINX_EMACLITE=y
++CONFIG_SERIAL_UARTLITE=y
++CONFIG_SERIAL_UARTLITE_CONSOLE=y
++# CONFIG_VGA_CONSOLE is not set
+diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
+index 3a5d55a..230527d 100644
+--- a/board/qemu/microblazeel-mmu/readme.txt
++++ b/board/qemu/microblazeel-mmu/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 2.2.0
++Tested with QEMU 2.2.1
+diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+index 8fb077b..098688b 100644
+--- a/configs/qemu_microblazebe_mmu_defconfig
++++ b/configs/qemu_microblazebe_mmu_defconfig
+@@ -9,16 +9,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
  
 -# Lock to 3.19 headers to avoid breaking with newer kernels
 +# Lock to 4.0 headers to avoid breaking with newer kernels
@@ -170,12 +237,39 @@ index 88bf914..928a82d 100644
 +BR2_DEFAULT_KERNEL_VERSION="4.0"
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
  
- # Linux kernel
+ # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.19.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-4.0.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.19.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-4.0.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_PATCH="board/qemu/microblazebe-mmu/xilinx-xemaclite.patch"
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index 80f8207..021018c 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -9,16 +9,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 3.19 headers to avoid breaking with newer kernels
++# Lock to 4.0 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.19"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
++BR2_DEFAULT_KERNEL_VERSION="4.0"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.19.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-4.0.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_PATCH="board/qemu/microblazeel-mmu/xilinx-xemaclite.patch"
