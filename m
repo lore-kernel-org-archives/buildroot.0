@@ -1,67 +1,77 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 17 Apr 2015 11:14:58 +0200
-Subject: [Buildroot] [PATCH 1/1] Added linux drivers backports project
-In-Reply-To: <20150417090337.GA27179@vorel-pc>
-References: <1429134935-11241-1-git-send-email-petr.vorel@gmail.com>
- <1429134935-11241-2-git-send-email-petr.vorel@gmail.com>
- <55301BBB.4090705@mind.be> <20150417090337.GA27179@vorel-pc>
-Message-ID: <5530CF12.20307@mind.be>
+From: Al West <al.west@v-nova.com>
+Date: Fri, 17 Apr 2015 09:16:56 +0000
+Subject: [Buildroot] ldconfig error on second make as non-root user
+In-Reply-To: <20150416172251.GB4405@free.fr>
+References: <AMSPR03MB051242A6A47EF9A10143A1CCEE40@AMSPR03MB051.eurprd03.prod.outlook.com>
+ <20150416172251.GB4405@free.fr>
+Message-ID: <AMSPR03MB0518068A68065822D2E1155CEE30@AMSPR03MB051.eurprd03.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/04/15 11:03, Petr Vorel wrote:
-> Thanks for comments, I'll create new version tonight.
+Hi Yann, All,
+
+> Al, All,
 > 
->>  I would say that this package fits better in the linux extensions menu. Even if
->> you just consider this package as a set of kernel modules, I think that from a
->> users perspective it fits better together with the kernel.
-> Sounds reasonable, I'll do it.
+> [Please wrap your mails to < ~72-char wide lines]
+> 
 
- Well, Thomas disagrees, so I guess you shouldn't.
-
- Anyway, if it does become a Linux extension, the package will stay. One of the
-Kconfig options (the package or the linux extension) will be a blind option, and
-at that time we can still choose which one will be blind.
+I think I've corrected that. 
 
 [snip]
->>> +# Checks to give errors that the user can understand
->>> +ifeq ($(filter source,$(MAKECMDGOALS)),)
->>> +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
->>> +ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG)),)
->>> +$(error No kernel defconfig name specified, check your BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG setting)
->>> +endif
->>> +endif
->>> +
->>> +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
->>> +ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)),)
->>> +$(error No kernel configuration file specified, check your BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE setting)
->>> +endif
->>> +endif
->>> +
->>> +endif
-> I'd keep the error messages as indication for user.
+> > I can make my target from clean but if afterwards I try just make I
+> > get an error with ldconfig complaining that the filename is not
+> > absolute.  I think I'm probably doing something wrong somewhere.
+> > I am using Fedora 20.
+> 
+> Can you report on the output of:
+>     $ ldconfig --version
+> 
 
- If you use kconfig-package you should never get these messages because it
-already has that check, on line 70-74:
+[al at f20build buildroot]$ ldconfig --version
+ldconfig (GNU libc) 2.18
+Copyright (C) 2013 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+Written by Andreas Jaeger.
 
-# FOO_KCONFIG_FILE is required
-ifndef $(2)_KCONFIG_FILE
-$$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
-endif
+> [--SNIP--]
+> > if [ -x
+> > "/home/al/test1/buildroot/output/host/usr/bin/x86_64-buildroot-
+> linux-gnu-ldconfig" ]; \ then \
+> >
+> > /home/al/test1/buildroot/output/host/usr/bin/x86_64-buildroot-
+> linux-gnu-ldconfig -r /home/al/test1/buildroot/output/target; \ else \
+> >         /sbin/ldconfig -r /home/al/test1/buildroot/output/target; \ fi
+> > /sbin/ldconfig: need absolute file name for configuration file when
+> > using -r
+> > make: *** [target-finalize] Error 1
+> 
+> Can you try this patch, please:
+> 
+> diff --git a/Makefile b/Makefile
+> index 70d6b4a..1f5a3c9 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -583,9 +583,9 @@ endif
+>  	mkdir -p $(TARGET_DIR)/var/cache/ldconfig
+>  	if [ -x "$(TARGET_CROSS)ldconfig" ]; \
+>  	then \
+> -		$(TARGET_CROSS)ldconfig -r $(TARGET_DIR); \
+> +		$(TARGET_CROSS)ldconfig -r $(TARGET_DIR) -f
+> +$(TARGET_DIR)/etc/ld.so.conf; \
+>  	else \
+> -		/sbin/ldconfig -r $(TARGET_DIR); \
+> + 		/sbin/ldconfig -r $(TARGET_DIR) -f
+> $(TARGET_DIR)/etc/ld.so.conf; \
+>  	fi
+>  	( \
+>  		echo "NAME=Buildroot"; \
+> 
 
+Patch applied and subsequent make is successful :-)  
 
- Oh, now I see that Yann's patch to convert this to ifeq hasn't been applied
-yet... So yes in that case the custom check should stay.
-
- Regards,
- Arnout
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thanks,
+Al
