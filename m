@@ -1,147 +1,47 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat, 18 Apr 2015 01:01:10 +0200
-Subject: [Buildroot] [PATCH v4 1/1] Added linux drivers backports project
-Message-ID: <1429311670-7831-1-git-send-email-petr.vorel@gmail.com>
+Date: Sat, 18 Apr 2015 01:02:45 +0200
+Subject: [Buildroot] [PATCH 1/1] Added linux drivers backports project
+In-Reply-To: <55316095.5090902@mind.be>
+References: <1429263629-13708-1-git-send-email-vorel@jablocom.com>
+ <1429263629-13708-2-git-send-email-vorel@jablocom.com>
+ <55316095.5090902@mind.be>
+Message-ID: <20150417230243.GB3800@t61>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://backports.wiki.kernel.org
+>  In the future, please give your patch a version number (by giving the argument
+> -v3 or --subject-prefix='PATCH v3' to git send-email or format-patch). Also
+> include a changelog below your SoB, separated by --- (you can do this while
+> amending your commit).
+Fixed, hope it's correct this time. Sent as -v4.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-Changes v3->v4:
-* Define LINUX_BACKPORTS_MAKE_ENV instead of LINUX_BACKPORTS_MAKE_OPTS, remove TARGET_MAKE_ENV from it.
-* Add nconfig to LINUX_BACKPORTS_KCONFIG_EDITORS
-* Clean formating of build commands.
----
- package/Config.in                            |  1 +
- package/linux-backports/Config.in            | 37 +++++++++++++++++++++
- package/linux-backports/linux-backports.hash |  2 ++
- package/linux-backports/linux-backports.mk   | 48 ++++++++++++++++++++++++++++
- 4 files changed, 88 insertions(+)
- create mode 100644 package/linux-backports/Config.in
- create mode 100644 package/linux-backports/linux-backports.hash
- create mode 100644 package/linux-backports/linux-backports.mk
+>  Actually, kconfig-package should probably do a default assignment for
+> LINUX_BACKPORTS_MAKE_ENV, but since it doesn't you have to do it explicitly.
+I need LINUX_BACKPORTS_MAKE_ENV, as KLIB and KLIB_BUILD aren't set.
 
-diff --git a/package/Config.in b/package/Config.in
-index 34b6017..c8e24a7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -365,6 +365,7 @@ endif
- 	source "package/iucode-tool/Config.in"
- 	source "package/kbd/Config.in"
- 	source "package/lcdproc/Config.in"
-+	source "package/linux-backports/Config.in"
- 	source "package/lirc-tools/Config.in"
- 	source "package/lm-sensors/Config.in"
- 	source "package/lshw/Config.in"
-diff --git a/package/linux-backports/Config.in b/package/linux-backports/Config.in
-new file mode 100644
-index 0000000..3e4e383
---- /dev/null
-+++ b/package/linux-backports/Config.in
-@@ -0,0 +1,37 @@
-+config BR2_PACKAGE_LINUX_BACKPORTS
-+	bool "Linux kernel driver backports"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  The backports package includes many Linux drivers from recent
-+	  kernels, backported to older ones.
-+
-+	  https://backports.wiki.kernel.org
-+
-+if BR2_PACKAGE_LINUX_BACKPORTS
-+
-+choice
-+	prompt "Linux kernel driver backports configuration"
-+	default BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
-+
-+config BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
-+	bool "Using a defconfig"
-+
-+config BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG
-+	bool "Using a custom config file"
-+
-+endchoice
-+
-+config BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG
-+	string "Defconfig name"
-+	depends on BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
-+	help
-+          Name of the backports defconfig file to use. The defconfig is located
-+          in defconfigs/ directory in the backports tree.
-+
-+config BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE
-+	string "Configuration file path"
-+	depends on BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG
-+	help
-+	  Path to the backports configuration file
-+
-+endif
-diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
-new file mode 100644
-index 0000000..42ea0b3
---- /dev/null
-+++ b/package/linux-backports/linux-backports.hash
-@@ -0,0 +1,2 @@
-+# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v3.18.1/sha256sums.asc
-+sha256 ff3d4d5192c4d57d7415dfcd60e02ea4fa21e0de224ae0ce2b5b9f2e9c815783  backports-3.18.1-1.tar.xz
-diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-new file mode 100644
-index 0000000..47cb206
---- /dev/null
-+++ b/package/linux-backports/linux-backports.mk
-@@ -0,0 +1,48 @@
-+LINUX_BACKPORTS_VERSION  = 3.18.1
-+LINUX_BACKPORTS_REVISION = 1
-+LINUX_BACKPORTS_SOURCE   = backports-$(LINUX_BACKPORTS_VERSION)-$(LINUX_BACKPORTS_REVISION).tar.xz
-+LINUX_BACKPORTS_SITE     = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION)
-+LINUX_BACKPORTS_DEPENDENCIES = linux
-+
-+LINUX_BACKPORTS_MAKE_ENV = \
-+	$(LINUX_MAKE_FLAGS) \
-+	KLIB_BUILD=$(LINUX_DIR) \
-+	KLIB=$(TARGET_DIR)
-+
-+ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
-+LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
-+else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
-+LINUX_BACKPORTS_KCONFIG_FILE = $(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)
-+endif
-+
-+define LINUX_BACKPORTS_BUILD_CMDS
-+	$(LINUX_BACKPORTS_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) -C $(@D)
-+endef
-+
-+define LINUX_BACKPORTS_INSTALL_TARGET_CMDS
-+	$(LINUX_BACKPORTS_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
-+		-C $(LINUX_DIR) M=$(@D) \
-+		INSTALL_MOD_DIR=backports \
-+		modules_install
-+endef
-+
-+LINUX_BACKPORTS_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
-+LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
-+
-+$(eval $(kconfig-package))
-+
-+# Checks to give errors that the user can understand
-+ifeq ($(filter source,$(MAKECMDGOALS)),)
-+ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
-+ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG)),)
-+$(error No kernel defconfig name specified, check your BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG setting)
-+endif
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
-+ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)),)
-+$(error No kernel configuration file specified, check your BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE setting)
-+endif
-+endif
-+
-+endif
--- 
-1.8.0
+>  However, ince below you're calling modules_install directly, would it be
+> possible/reasonable to do the build in the same way? It's always nice if the
+> different CMDS definitions look the same. So
+
+> 	$(LINUX_BACKPORTS_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
+> 		-C $(LINUX_DIR) M=$(@D) \
+> 		modules
+
+>  But if the backports build system does some extra magic (NOT kconfig stuff, but
+> other magic), then of course you shouldn't do this.
+Unfortunately it has to be build this way (or I haven't found any better).
+LINUX_BACKPORTS_BUILD_CMDS needs -C $(@D), otherwise there is infinite loop. I'm
+surprised, as $(@D) is backport directory (I'd expect to be add automatically) - suppose I
+have an error somewhere.
+LINUX_BACKPORTS_INSTALL_TARGET_CMDS needs -C $(LINUX_DIR) M=$(@D)
+=> different commands.
+
+>  No nconfig? Not that it matters much...
+Taken from busybox where it wasn't (sent as separate patch). Added...
+BTW: I'd expect to have one unique default variable for all of those.
+
+Kind regards,
+Petr
