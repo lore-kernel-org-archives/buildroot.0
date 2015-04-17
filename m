@@ -1,77 +1,47 @@
-From: Al West <al.west@v-nova.com>
-Date: Fri, 17 Apr 2015 09:16:56 +0000
-Subject: [Buildroot] ldconfig error on second make as non-root user
-In-Reply-To: <20150416172251.GB4405@free.fr>
-References: <AMSPR03MB051242A6A47EF9A10143A1CCEE40@AMSPR03MB051.eurprd03.prod.outlook.com>
- <20150416172251.GB4405@free.fr>
-Message-ID: <AMSPR03MB0518068A68065822D2E1155CEE30@AMSPR03MB051.eurprd03.prod.outlook.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Fri, 17 Apr 2015 11:33:28 +0200
+Subject: [Buildroot]  [PATCH 1/1] Added linux drivers backports project
+Message-ID: <1429263209-13127-1-git-send-email-vorel@jablocom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+From: Petr Vorel <petr.vorel@gmail.com>
 
-> Al, All,
-> 
-> [Please wrap your mails to < ~72-char wide lines]
-> 
+I fixed things which were reported and keep it as a package. This is for first start.
 
-I think I've corrected that. 
+> # FOO_KCONFIG_FILE is required
+> ifndef $(2)_KCONFIG_FILE
+> $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
+> endif
 
-[snip]
-> > I can make my target from clean but if afterwards I try just make I
-> > get an error with ldconfig complaining that the filename is not
-> > absolute.  I think I'm probably doing something wrong somewhere.
-> > I am using Fedora 20.
-> 
-> Can you report on the output of:
->     $ ldconfig --version
-> 
+>  Oh, now I see that Yann's patch to convert this to ifeq hasn't been applied
+> yet... So yes in that case the custom check should stay.
+Ok. Could you send me a link to the patch?
 
-[al at f20build buildroot]$ ldconfig --version
-ldconfig (GNU libc) 2.18
-Copyright (C) 2013 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-Written by Andreas Jaeger.
+>  Anyway, if it does become a Linux extension, the package will stay. One of the
+> Kconfig options (the package or the linux extension) will be a blind option, and
+> at that time we can still choose which one will be blind.
+It's up to you folks to decide, if there could be both versions (package and extension).
 
-> [--SNIP--]
-> > if [ -x
-> > "/home/al/test1/buildroot/output/host/usr/bin/x86_64-buildroot-
-> linux-gnu-ldconfig" ]; \ then \
-> >
-> > /home/al/test1/buildroot/output/host/usr/bin/x86_64-buildroot-
-> linux-gnu-ldconfig -r /home/al/test1/buildroot/output/target; \ else \
-> >         /sbin/ldconfig -r /home/al/test1/buildroot/output/target; \ fi
-> > /sbin/ldconfig: need absolute file name for configuration file when
-> > using -r
-> > make: *** [target-finalize] Error 1
-> 
-> Can you try this patch, please:
-> 
-> diff --git a/Makefile b/Makefile
-> index 70d6b4a..1f5a3c9 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -583,9 +583,9 @@ endif
->  	mkdir -p $(TARGET_DIR)/var/cache/ldconfig
->  	if [ -x "$(TARGET_CROSS)ldconfig" ]; \
->  	then \
-> -		$(TARGET_CROSS)ldconfig -r $(TARGET_DIR); \
-> +		$(TARGET_CROSS)ldconfig -r $(TARGET_DIR) -f
-> +$(TARGET_DIR)/etc/ld.so.conf; \
->  	else \
-> -		/sbin/ldconfig -r $(TARGET_DIR); \
-> + 		/sbin/ldconfig -r $(TARGET_DIR) -f
-> $(TARGET_DIR)/etc/ld.so.conf; \
->  	fi
->  	( \
->  		echo "NAME=Buildroot"; \
-> 
+> I plan further improvements:
+> * Allow to use different versions
+> There are stable releases, snapshot based on current linux-next and some
+> archived versions based on linux-next. Although it's recommended to use the
+> latest stable version, some people prefer / need different version.
 
-Patch applied and subsequent make is successful :-)  
+> * Version check
+> For kernel versions older than 3.0 version backports-3.14 is needed,
+> kernels < 2.6.26 aren't supported.
 
-Thanks,
-Al
+> * Custom patches
+> Ekvivalent of BR2_LINUX_KERNEL_PATCH.
+
+> * Custom repository version
+> Ekvivalent of BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION.
+Any comments?
+
+Kind regards,
+Petr
