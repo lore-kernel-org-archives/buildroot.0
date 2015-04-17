@@ -1,30 +1,25 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat, 18 Apr 2015 00:31:22 +0200
-Subject: [Buildroot] [PATCH 1/1] busybox: add nconfig to editors
-Message-ID: <1429309882-6918-1-git-send-email-petr.vorel@gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Fri, 17 Apr 2015 18:54:00 -0400
+Subject: [Buildroot] Downloading patches with the same filename
+Message-ID: <CA+-urNR=d0=dY2JW+KgHsFajeQB+Lh=0oVRFrsUeZyU0w3_2Gg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/busybox/busybox.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm running into a situation where two patch files have the same
+filename, but are intended for different packages. As you would
+expect, the first package builds fine. The second package goes to
+download the patch, but sees that it already exists in the dl
+directory. Applying this patch to the second package obviously fails.
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 95fdfec..764768f 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -46,7 +46,7 @@ ifndef BUSYBOX_CONFIG_FILE
- endif
- 
- BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
--BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
-+BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
- BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
- 
- define BUSYBOX_PERMISSIONS
--- 
-2.1.4
+For kicks, I tried appending a URL fragment to the patch URL (e.g.,
+#package1 and #package2), but that was stripped off.
+
+Has this situation come up before and are there any workarounds? I am
+running into it with the Intel Edison where the naming convention for
+every patch from Intel seems to be "upstream_to_edison.patch".
+
+Thanks,
+Frank
