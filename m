@@ -1,9 +1,9 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 17 Apr 2015 11:33:29 +0200
+Date: Fri, 17 Apr 2015 11:40:29 +0200
 Subject: [Buildroot] [PATCH 1/1] Added linux drivers backports project
-In-Reply-To: <1429263209-13127-1-git-send-email-vorel@jablocom.com>
-References: <1429263209-13127-1-git-send-email-vorel@jablocom.com>
-Message-ID: <1429263209-13127-2-git-send-email-vorel@jablocom.com>
+In-Reply-To: <1429263629-13708-1-git-send-email-vorel@jablocom.com>
+References: <1429263629-13708-1-git-send-email-vorel@jablocom.com>
+Message-ID: <1429263629-13708-2-git-send-email-vorel@jablocom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,10 +17,10 @@ https://backports.wiki.kernel.org
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
  package/Config.in                            |  1 +
- package/linux-backports/Config.in            | 37 ++++++++++++++++++++++++++++
+ package/linux-backports/Config.in            | 37 ++++++++++++++++++++
  package/linux-backports/linux-backports.hash |  2 ++
- package/linux-backports/linux-backports.mk   | 35 ++++++++++++++++++++++++++
- 4 files changed, 75 insertions(+)
+ package/linux-backports/linux-backports.mk   | 51 ++++++++++++++++++++++++++++
+ 4 files changed, 91 insertions(+)
  create mode 100644 package/linux-backports/Config.in
  create mode 100644 package/linux-backports/linux-backports.hash
  create mode 100644 package/linux-backports/linux-backports.mk
@@ -90,10 +90,10 @@ index 0000000..42ea0b3
 +sha256 ff3d4d5192c4d57d7415dfcd60e02ea4fa21e0de224ae0ce2b5b9f2e9c815783  backports-3.18.1-1.tar.xz
 diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
 new file mode 100644
-index 0000000..0d60354
+index 0000000..b479b64
 --- /dev/null
 +++ b/package/linux-backports/linux-backports.mk
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,51 @@
 +LINUX_BACKPORTS_VERSION  = 3.18.1
 +LINUX_BACKPORTS_REVISION = 1
 +LINUX_BACKPORTS_SOURCE   = backports-$(LINUX_BACKPORTS_VERSION)-$(LINUX_BACKPORTS_REVISION).tar.xz
@@ -129,5 +129,21 @@ index 0000000..0d60354
 +LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
 +
 +$(eval $(kconfig-package))
++
++# Checks to give errors that the user can understand
++ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
++ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG)),)
++$(error No kernel defconfig name specified, check your BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG setting)
++endif
++endif
++
++ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
++ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)),)
++$(error No kernel configuration file specified, check your BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE setting)
++endif
++endif
++
++endif
 -- 
 1.8.0
