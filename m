@@ -1,33 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Apr 2015 17:17:33 +0200
-Subject: [Buildroot] ldconfig error on second make as non-root user
-In-Reply-To: <AMSPR03MB051242A6A47EF9A10143A1CCEE40@AMSPR03MB051.eurprd03.prod.outlook.com>
-References: <AMSPR03MB051242A6A47EF9A10143A1CCEE40@AMSPR03MB051.eurprd03.prod.outlook.com>
-Message-ID: <20150417151733.GB5271@free.fr>
+From: Santhosh Ramani <srcoolz@gmail.com>
+Date: Fri, 17 Apr 2015 10:21:49 -0500
+Subject: [Buildroot] Run a custom script after USB mount
+Message-ID: <CADKZYYKSc+rE2YvaBokFteSTE3gwnEvNksY1-w0HNC35u5yFig@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Al, All,
+Hello Everyone,
 
-On 2015-04-16 16:23 +0000, Al West spake thusly:
-> I am having an issue with buildroot when running as a regular user.
-[--SNIP--]
-> /sbin/ldconfig: need absolute file name for configuration file when using -r
-> make: *** [target-finalize] Error 1
+I am having some trouble with udev and rules.d. The buildroot system
+automatically mounts any USB memory stick at the location /media/usb0. (I
+have only USB host port). I would like to execute a script every time a USB
+memory stick is inserted.
 
-Can you paste the content of your target/etc/ld.so.conf file (As well as any
-file in target/etc/ld.so.conf.d/ ), please?
+I added a custom rule in rules.d - I named it *z*usbdetect.rules (z so that
+it runs at the very end, since I want it to run after usbmount.rules in
+/lib/udev/rules.d has finished executing)
 
-Regards,
-Yann E. MORIN.
+The content of the rules file are as follows:
+
+KERNEL=="sd*", ATTRS{mode}=="a_host", ATTRS{serial}=="musb-hdrc.0.auto",
+ATTRS{product}=="MUSB HDRC host driver", RUN+="/etc/hcc/usb-detected"
+
+I have double checked that my script has execute permissions and I can run
+it by hand. Am I missing something? Can you please point me in the right
+direction?
+
+Thank you for your help.
+Regards
+
+Santhosh
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Greater the Difficulty....Sweeter is the Victory
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150417/914a44d6/attachment.html>
