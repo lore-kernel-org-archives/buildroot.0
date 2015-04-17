@@ -1,132 +1,87 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 17 Apr 2015 18:48:03 +0200
-Subject: [Buildroot] [PATCH v2] Makefile: remove redundant mkdir from *config
-In-Reply-To: <alpine.LFD.2.11.1504161841100.9373@localhost>
-References: <alpine.LFD.2.11.1504161841100.9373@localhost>
-Message-ID: <1429289283-15524-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 17 Apr 2015 18:58:04 +0200
+Subject: [Buildroot] [git commit] fs: add rootfs dependencies to PACKAGES
+In-Reply-To: <20150417184658.3b910231@free-electrons.com>
+References: <20150414081954.EF1607F9E1@busybox.osuosl.org>	<552CF0E1.5090205@mind.be>	<20150414135424.3b1ab04a@free-electrons.com>	<552D65C3.6010106@mind.be>	<20150417173642.5fa56833@free-electrons.com>	<55313020.7050203@mind.be>
+ <20150417184658.3b910231@free-electrons.com>
+Message-ID: <55313B9C.3000008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The first dependency of these targets is
-$(BUILD_DIR)/buildroot-config/*conf
-so the $(BUILD_DIR)/buildroot-config directory certainly exists.
+On 17/04/15 18:46, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
+> 
+> On Fri, 17 Apr 2015 18:09:04 +0200, Arnout Vandecappelle wrote:
 
-Reported-by: Robert P. J. Day <rpjday@crashcourse.ca>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Changes v1->v2:
-- Updated commit message with *conf, since it's sometimes qconf, nconf,
-  ... (Robert)
+[snip]
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Makefile | 18 ------------------
- 1 file changed, 18 deletions(-)
+>>> Is this something we want to get to? In practice, I believe most if not
+>>> all of the target packages have a selected kconfig symbol. So the
+>>> biggest change needed to get to this point would be the need to have
+>>> selected kconfig symbols for all the host packages. Do we want to do
+>>> that?
+>>
+>>  Yes I do. Not just for the thing below, but also because it makes
+>> infrastructure like legal-info and external-deps easier to understand if you
+>> don't have to mess with the dependencies but can just rely on a list of packages.
+> 
+> I don't quite agree here. To me, traveling recursively through the
+> dependencies is just the normal, 'make' way of doing things. It's not
+> complicated, it's really natural.
 
-diff --git a/Makefile b/Makefile
-index 70d6b4a..6a28b28 100644
---- a/Makefile
-+++ b/Makefile
-@@ -694,23 +694,18 @@ COMMON_CONFIG_ENV = \
- 	SKIP_LEGACY=
- 
- xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
- 
- gconfig: $(BUILD_DIR)/buildroot-config/gconf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) srctree=$(TOPDIR) $< $(CONFIG_CONFIG_IN)
- 
- menuconfig: $(BUILD_DIR)/buildroot-config/mconf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
- 
- nconfig: $(BUILD_DIR)/buildroot-config/nconf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
- 
- config: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
- 
- # For the config targets that automatically select options, we pass
-@@ -719,26 +714,21 @@ config: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- # will query them. Therefore, run an additional olddefconfig.
- 
- oldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) $< --oldconfig $(CONFIG_CONFIG_IN)
- 
- randconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --randconfig $(CONFIG_CONFIG_IN)
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
- allyesconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --allyesconfig $(CONFIG_CONFIG_IN)
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
- allnoconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --allnoconfig $(CONFIG_CONFIG_IN)
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
- randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y \
- 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
-@@ -747,7 +737,6 @@ randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
- allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y \
- 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
-@@ -756,7 +745,6 @@ allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
- allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y \
- 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
-@@ -765,30 +753,24 @@ allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
- silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	$(COMMON_CONFIG_ENV) $< --silentoldconfig $(CONFIG_CONFIG_IN)
- 
- olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN)
- 
- defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
- 
- # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
- %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/configs/$@ \
- 		$< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
- 
- %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
- 		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
- 
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) $< \
- 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
- 		$(CONFIG_CONFIG_IN)
+ For dependencies, yes. But the legal-info of package foo really has nothing to
+do with the legal-info of host package bar even if foo depends on bar. IMHO of
+course.
+
+ But what I really mean is that something like this for external-deps would be
+quite simpler:
+
+external-deps:
+	echo $(foreach pkg,$(PACKAGES),$($(pkg)_ALL_DOWNLOADS)))
+
+> 
+> But maybe it's just a matter of perspective.
+> 
+>>> I remember I did a proposal with this a long time ago, which allowed to
+>>> only include the package .mk files that were actually needed in the
+>>> build and therefore reducing the parsing time. However, the general
+>>> feedback at the time was that the parsing time is not significant
+>>> enough today to justify such a heavy modification.
+>>
+>>  As I remember it, the general feedback (at least my feedback) was that the fact
+>> that it makes tab-completion usable is a huge gain so certainly worth it, but
+>> that it was not actually working because of the missing host Kconfig symbols.
+> 
+> I'm not entirely sure to understand what sort of tab completion now
+> works? Doing make fo<tab> becoming usable because the overall parsing
+> time is more reasonable?
+
+ Indeed. 'make -qnp' takes 3.5s on my laptop with a hot cache, full completion
+about 5 seconds. With a cold cache it's over 20 seconds. But I guess I should
+get an SSD.
+
+> However, one down side of not including all .mk files is that you will
+> no longer be able to do 'make <pkg>-<something>' for a package that
+> isn't enabled. And it is something I do everyday when doing BR
+> development, especially 'make <pkg>-extract' and 'make <pkg>-patch',
+> because that the easiest way to quickly get the source code of a given
+> package extracted somewhere. And I can do this without having to go in
+> menuconfig enable the package.
+
+ I do that as well, but we could add a make variable to read all .mk files.
+Which was also one of the feedbacks on your patch series IIRC.
+
+ Regards,
+ Arnout
+
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
