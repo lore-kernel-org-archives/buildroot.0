@@ -1,80 +1,109 @@
-From: Robert P. J. Day <rpjday@crashcourse.ca>
-Date: Fri, 17 Apr 2015 14:37:44 -0400 (EDT)
-Subject: [Buildroot] [PATCH] package Config.in.host files: Update some home
-	page URLs.
-Message-ID: <alpine.LFD.2.11.1504171436001.13521@localhost>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 17 Apr 2015 21:35:49 +0200
+Subject: [Buildroot] [PATCH 1/1] Added linux drivers backports project
+In-Reply-To: <1429263629-13708-2-git-send-email-vorel@jablocom.com>
+References: <1429263629-13708-1-git-send-email-vorel@jablocom.com>
+ <1429263629-13708-2-git-send-email-vorel@jablocom.com>
+Message-ID: <55316095.5090902@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 17/04/15 11:40, Petr Vorel wrote:
+> From: Petr Vorel <petr.vorel@gmail.com>
+> 
+> https://backports.wiki.kernel.org
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
-Some URLs for package/*/Config.in.host files could use some updating.
+ In the future, please give your patch a version number (by giving the argument
+-v3 or --subject-prefix='PATCH v3' to git send-email or format-patch). Also
+include a changelog below your SoB, separated by --- (you can do this while
+amending your commit).
 
-Signed-off-by: Robert P. J. Day <rpjday@crashcourse.ca>
+[snip]
 
----
+> +LINUX_BACKPORTS_MAKE_OPTS = \
+> +	$(TARGET_MAKE_ENV) \
 
-  hoping this is the proper patch format.
+ This should be in LINUX_BACKPORTS_MAKE_ENV instead of _OPTS.
 
-diff --git a/package/dfu-util/Config.in.host b/package/dfu-util/Config.in.host
-index b2a8f82..ea47a36 100644
---- a/package/dfu-util/Config.in.host
-+++ b/package/dfu-util/Config.in.host
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_HOST_DFU_UTIL
- 	  specification of the USB forum. DFU is intended to download
- 	  and upload firmware to devices connected over USB.
+ Actually, kconfig-package should probably do a default assignment for
+LINUX_BACKPORTS_MAKE_ENV, but since it doesn't you have to do it explicitly.
 
--	  http://dfu-util.gnumonks.org/
-+	  http://dfu-util.sourceforge.net/
-diff --git a/package/dos2unix/Config.in.host b/package/dos2unix/Config.in.host
-index a02e005..012d614 100644
---- a/package/dos2unix/Config.in.host
-+++ b/package/dos2unix/Config.in.host
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_HOST_DOS2UNIX
- 	help
- 	  dos2unix converts text file line endings between CRLF and LF
+> +	$(LINUX_MAKE_FLAGS) \
+> +	KLIB_BUILD=$(LINUX_DIR) \
+> +	KLIB=$(TARGET_DIR)
+> +
+> +
+> +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
+> +LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
+> +else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
+> +LINUX_BACKPORTS_KCONFIG_FILE = $(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)
+> +endif
+> +
+> +define LINUX_BACKPORTS_BUILD_CMDS
+> +	$(LINUX_BACKPORTS_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
+> +		-C $(@D)
 
--	  http://freshmeat.net/projects/dos2unix
-+	  http://freecode.com/projects/dos2unix
-diff --git a/package/e2fsprogs/Config.in.host b/package/e2fsprogs/Config.in.host
-index bc0c71c..de9148e 100644
---- a/package/e2fsprogs/Config.in.host
-+++ b/package/e2fsprogs/Config.in.host
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_HOST_E2FSPROGS
- 	help
- 	  The EXT2/3/4 file system utilities.
+ This would fit on a single line.
 
--	  http://e2fsprogs.sf.net
-+	  http://e2fsprogs.sourceforge.net
-diff --git a/package/mke2img/Config.in.host b/package/mke2img/Config.in.host
-index 9781c6a..b5bcb84 100644
---- a/package/mke2img/Config.in.host
-+++ b/package/mke2img/Config.in.host
-@@ -7,3 +7,5 @@ config BR2_PACKAGE_HOST_MKE2IMG
+ However, ince below you're calling modules_install directly, would it be
+possible/reasonable to do the build in the same way? It's always nice if the
+different CMDS definitions look the same. So
 
- 	  This tool is bundled by, and specific to Buildroot. However, it can
- 	  be used from post-images scripts is needed.
-+
-+	  https://code.google.com/p/mke2img/
-diff --git a/package/openocd/Config.in.host b/package/openocd/Config.in.host
-index 2380942..e1d0e63 100644
---- a/package/openocd/Config.in.host
-+++ b/package/openocd/Config.in.host
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_HOST_OPENOCD
- 	help
- 	  OpenOCD - Open On-Chip Debugger
+	$(LINUX_BACKPORTS_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
+		-C $(LINUX_DIR) M=$(@D) \
+		modules
 
--	  http://openocd.berlios.de/web/
-+	  http://openocd.org/
+ But if the backports build system does some extra magic (NOT kconfig stuff, but
+other magic), then of course you shouldn't do this.
+
+> +endef
+> +
+> +define LINUX_BACKPORTS_INSTALL_TARGET_CMDS
+> +	$(LINUX_BACKPORTS_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
+> +		-C $(LINUX_DIR) M=$(@D) \
+> +		INSTALL_MOD_DIR=backports \
+> +		modules_install
+> +endef
+> +
+> +LINUX_BACKPORTS_KCONFIG_EDITORS = menuconfig xconfig gconfig
+
+ No nconfig? Not that it matters much...
+
+
+ Regards,
+ Arnout
+
+> +LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
+> +
+> +$(eval $(kconfig-package))
+> +
+> +# Checks to give errors that the user can understand
+> +ifeq ($(filter source,$(MAKECMDGOALS)),)
+> +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
+> +ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG)),)
+> +$(error No kernel defconfig name specified, check your BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG setting)
+> +endif
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
+> +ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)),)
+> +$(error No kernel configuration file specified, check your BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE setting)
+> +endif
+> +endif
+> +
+> +endif
+> 
+
 
 -- 
-
-========================================================================
-Robert P. J. Day                                 Ottawa, Ontario, CANADA
-                        http://crashcourse.ca
-
-Twitter:                                       http://twitter.com/rpjday
-LinkedIn:                               http://ca.linkedin.com/in/rpjday
-========================================================================
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
