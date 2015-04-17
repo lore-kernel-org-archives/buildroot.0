@@ -1,102 +1,82 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 17 Apr 2015 21:35:49 +0200
+Date: Fri, 17 Apr 2015 21:44:01 +0200
 Subject: [Buildroot] [PATCH 1/1] Added linux drivers backports project
-In-Reply-To: <1429263629-13708-2-git-send-email-vorel@jablocom.com>
-References: <1429263629-13708-1-git-send-email-vorel@jablocom.com>
- <1429263629-13708-2-git-send-email-vorel@jablocom.com>
-Message-ID: <55316095.5090902@mind.be>
+In-Reply-To: <1429263209-13127-1-git-send-email-vorel@jablocom.com>
+References: <1429263209-13127-1-git-send-email-vorel@jablocom.com>
+Message-ID: <55316281.6080506@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/04/15 11:40, Petr Vorel wrote:
+On 17/04/15 11:33, Petr Vorel wrote:
 > From: Petr Vorel <petr.vorel@gmail.com>
 > 
-> https://backports.wiki.kernel.org
+> I fixed things which were reported and keep it as a package. This is for first start.
 > 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+>> # FOO_KCONFIG_FILE is required
+>> ifndef $(2)_KCONFIG_FILE
+>> $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
+>> endif
+> 
+>>  Oh, now I see that Yann's patch to convert this to ifeq hasn't been applied
+>> yet... So yes in that case the custom check should stay.
+> Ok. Could you send me a link to the patch?
 
- In the future, please give your patch a version number (by giving the argument
--v3 or --subject-prefix='PATCH v3' to git send-email or format-patch). Also
-include a changelog below your SoB, separated by --- (you can do this while
-amending your commit).
+http://patchwork.ozlabs.org/patch/459378/
+
 
 [snip]
+>> I plan further improvements:
+>> * Allow to use different versions
+>> There are stable releases, snapshot based on current linux-next and some
+>> archived versions based on linux-next. Although it's recommended to use the
+>> latest stable version, some people prefer / need different version.
 
-> +LINUX_BACKPORTS_MAKE_OPTS = \
-> +	$(TARGET_MAKE_ENV) \
+ I don't know if that is so important. If you really need that, you can still
+use OVERRIDE_SRCDIR or copy it to BR2_EXTERNAL under a different name or add a
+patch in BR2_GLOBAL_PATCH_DIR.
 
- This should be in LINUX_BACKPORTS_MAKE_ENV instead of _OPTS.
+> 
+>> * Version check
+>> For kernel versions older than 3.0 version backports-3.14 is needed,
+>> kernels < 2.6.26 aren't supported.
 
- Actually, kconfig-package should probably do a default assignment for
-LINUX_BACKPORTS_MAKE_ENV, but since it doesn't you have to do it explicitly.
+ Ah, that is a reason to allow versions! But then I'd limit it to three
+versions, selectable with a choice: stable (default), next, and old (3.14).
 
-> +	$(LINUX_MAKE_FLAGS) \
-> +	KLIB_BUILD=$(LINUX_DIR) \
-> +	KLIB=$(TARGET_DIR)
-> +
-> +
-> +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
-> +LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
-> +else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
-> +LINUX_BACKPORTS_KCONFIG_FILE = $(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)
-> +endif
-> +
-> +define LINUX_BACKPORTS_BUILD_CMDS
-> +	$(LINUX_BACKPORTS_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
-> +		-C $(@D)
+ I don't think a check of the kernel version is needed. There are also
+dependencies in a bunch of other modules packages and those don't do a
+dependency check either. You can anyway only do that check while building
+(because you need to have the kernel source to extract the version), and usually
+the modules package already does a check itself.
 
- This would fit on a single line.
+> 
+>> * Custom patches
+>> Ekvivalent of BR2_LINUX_KERNEL_PATCH.
 
- However, ince below you're calling modules_install directly, would it be
-possible/reasonable to do the build in the same way? It's always nice if the
-different CMDS definitions look the same. So
+ That's kind of superseded by BR2_GLOBAL_PATCH_DIR.
 
-	$(LINUX_BACKPORTS_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
-		-C $(LINUX_DIR) M=$(@D) \
-		modules
+> 
+>> * Custom repository version
+>> Ekvivalent of BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION.
 
- But if the backports build system does some extra magic (NOT kconfig stuff, but
-other magic), then of course you shouldn't do this.
-
-> +endef
-> +
-> +define LINUX_BACKPORTS_INSTALL_TARGET_CMDS
-> +	$(LINUX_BACKPORTS_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
-> +		-C $(LINUX_DIR) M=$(@D) \
-> +		INSTALL_MOD_DIR=backports \
-> +		modules_install
-> +endef
-> +
-> +LINUX_BACKPORTS_KCONFIG_EDITORS = menuconfig xconfig gconfig
-
- No nconfig? Not that it matters much...
+ That one would be useful, so a fourth version in the choice.
 
 
  Regards,
  Arnout
 
-> +LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
-> +
-> +$(eval $(kconfig-package))
-> +
-> +# Checks to give errors that the user can understand
-> +ifeq ($(filter source,$(MAKECMDGOALS)),)
-> +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
-> +ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG)),)
-> +$(error No kernel defconfig name specified, check your BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG setting)
-> +endif
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
-> +ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)),)
-> +$(error No kernel configuration file specified, check your BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE setting)
-> +endif
-> +endif
-> +
-> +endif
+> Any comments?
+> 
+> Kind regards,
+> Petr
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 > 
 
 
