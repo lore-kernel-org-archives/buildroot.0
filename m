@@ -1,87 +1,98 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 17 Apr 2015 18:58:04 +0200
-Subject: [Buildroot] [git commit] fs: add rootfs dependencies to PACKAGES
-In-Reply-To: <20150417184658.3b910231@free-electrons.com>
-References: <20150414081954.EF1607F9E1@busybox.osuosl.org>	<552CF0E1.5090205@mind.be>	<20150414135424.3b1ab04a@free-electrons.com>	<552D65C3.6010106@mind.be>	<20150417173642.5fa56833@free-electrons.com>	<55313020.7050203@mind.be>
- <20150417184658.3b910231@free-electrons.com>
-Message-ID: <55313B9C.3000008@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 17 Apr 2015 20:00:36 +0200
+Subject: [Buildroot] [PATCH 1/2] libnl: add patch to fix bmon build
+ breakage
+In-Reply-To: <1429266405-9217-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1429266405-9217-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150417180036.GD5271@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/04/15 18:46, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
+gustavo, All,
+
+On 2015-04-17 07:26 -0300, Gustavo Zacarias spake thusly:
+> Revert a 3.2.26 patch that breaks the bmon build (among possibly
+> others). Fixes:
+> http://autobuild.buildroot.net/results/296/296bcaf4fd1fadcab71881d6d00a8763bfa91a41/
+
+I wonder if that should not be bmon that should be patched to include
+that header wherever necessary, instead of reverting a commit from
+libnl?
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  ...remove-unnecessary-include-of-private-lin.patch | 44 ++++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch
 > 
-> On Fri, 17 Apr 2015 18:09:04 +0200, Arnout Vandecappelle wrote:
-
-[snip]
-
->>> Is this something we want to get to? In practice, I believe most if not
->>> all of the target packages have a selected kconfig symbol. So the
->>> biggest change needed to get to this point would be the need to have
->>> selected kconfig symbols for all the host packages. Do we want to do
->>> that?
->>
->>  Yes I do. Not just for the thing below, but also because it makes
->> infrastructure like legal-info and external-deps easier to understand if you
->> don't have to mess with the dependencies but can just rely on a list of packages.
+> diff --git a/package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch b/package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch
+> new file mode 100644
+> index 0000000..3520899
+> --- /dev/null
+> +++ b/package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch
+> @@ -0,0 +1,44 @@
+> +From 61310ce3f2b6c5c21be8c788848f083e4c58d138 Mon Sep 17 00:00:00 2001
+> +From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +Date: Fri, 17 Apr 2015 07:20:48 -0300
+> +Subject: [PATCH] Revert "route: remove unnecessary include of private
+> + linux/if.h"
+> +
+> +It breaks rtnl_link_get_flags() checks against IFF_* defines that aren't
+> +defined.
+> +
+> +This reverts commit 50a76998ac36ace3716d3c979b352fac73cfc80a.
+> +
+> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +---
+> + include/netlink/route/link.h | 1 +
+> + src/nl-link-set.c            | 1 -
+> + 2 files changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/include/netlink/route/link.h b/include/netlink/route/link.h
+> +index 8f74f42..a7aa88b 100644
+> +--- a/include/netlink/route/link.h
+> ++++ b/include/netlink/route/link.h
+> +@@ -15,6 +15,7 @@
+> + #include <netlink/netlink.h>
+> + #include <netlink/cache.h>
+> + #include <netlink/addr.h>
+> ++#include <linux/if.h>
+> + #include <sys/types.h>
+> + 
+> + #ifdef __cplusplus
+> +diff --git a/src/nl-link-set.c b/src/nl-link-set.c
+> +index 6a6bac8..bbb60f9 100644
+> +--- a/src/nl-link-set.c
+> ++++ b/src/nl-link-set.c
+> +@@ -9,7 +9,6 @@
+> +  * Copyright (c) 2003-2010 Thomas Graf <tgraf@suug.ch>
+> +  */
+> + 
+> +-#include <linux/if.h>
+> + #include <netlink/cli/utils.h>
+> + #include <netlink/cli/link.h>
+> + 
+> +-- 
+> +2.0.5
+> +
+> -- 
+> 2.0.5
 > 
-> I don't quite agree here. To me, traveling recursively through the
-> dependencies is just the normal, 'make' way of doing things. It's not
-> complicated, it's really natural.
-
- For dependencies, yes. But the legal-info of package foo really has nothing to
-do with the legal-info of host package bar even if foo depends on bar. IMHO of
-course.
-
- But what I really mean is that something like this for external-deps would be
-quite simpler:
-
-external-deps:
-	echo $(foreach pkg,$(PACKAGES),$($(pkg)_ALL_DOWNLOADS)))
-
-> 
-> But maybe it's just a matter of perspective.
-> 
->>> I remember I did a proposal with this a long time ago, which allowed to
->>> only include the package .mk files that were actually needed in the
->>> build and therefore reducing the parsing time. However, the general
->>> feedback at the time was that the parsing time is not significant
->>> enough today to justify such a heavy modification.
->>
->>  As I remember it, the general feedback (at least my feedback) was that the fact
->> that it makes tab-completion usable is a huge gain so certainly worth it, but
->> that it was not actually working because of the missing host Kconfig symbols.
-> 
-> I'm not entirely sure to understand what sort of tab completion now
-> works? Doing make fo<tab> becoming usable because the overall parsing
-> time is more reasonable?
-
- Indeed. 'make -qnp' takes 3.5s on my laptop with a hot cache, full completion
-about 5 seconds. With a cold cache it's over 20 seconds. But I guess I should
-get an SSD.
-
-> However, one down side of not including all .mk files is that you will
-> no longer be able to do 'make <pkg>-<something>' for a package that
-> isn't enabled. And it is something I do everyday when doing BR
-> development, especially 'make <pkg>-extract' and 'make <pkg>-patch',
-> because that the easiest way to quickly get the source code of a given
-> package extracted somewhere. And I can do this without having to go in
-> menuconfig enable the package.
-
- I do that as well, but we could add a make variable to read all .mk files.
-Which was also one of the feedbacks on your patch series IIRC.
-
- Regards,
- Arnout
-
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
