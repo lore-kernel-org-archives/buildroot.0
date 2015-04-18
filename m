@@ -1,9 +1,11 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Apr 2015 14:40:14 +0200
-Subject: [Buildroot] [PATCH 02/32] package/x11r7/xcb-util-cursor: new package
+Date: Sat, 18 Apr 2015 14:40:20 +0200
+Subject: [Buildroot] [PATCH 08/32]
+	package/x11r7/xdriver_xf86-input-keyboard: bump version to
+	1.8.1, add hash
 In-Reply-To: <1429360844-12625-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429360844-12625-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429360844-12625-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429360844-12625-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,78 +15,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/Config.in                            |    1 +
- package/x11r7/xcb-util-cursor/Config.in            |   17 +++++++++++++++++
- package/x11r7/xcb-util-cursor/xcb-util-cursor.hash |    2 ++
- package/x11r7/xcb-util-cursor/xcb-util-cursor.mk   |   15 +++++++++++++++
- 4 files changed, 35 insertions(+)
- create mode 100644 package/x11r7/xcb-util-cursor/Config.in
- create mode 100644 package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
- create mode 100644 package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
+ .../xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash     |    2 ++
+ .../x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 4166a96..572963c 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -17,6 +17,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/libxcb/Config.in
- 		source package/x11r7/libepoxy/Config.in
- 		source package/x11r7/xcb-util/Config.in
-+		source package/x11r7/xcb-util-cursor/Config.in
- 		source package/x11r7/xcb-util-image/Config.in
- 		source package/x11r7/xcb-util-keysyms/Config.in
- 		source package/x11r7/xcb-util-renderutil/Config.in
-diff --git a/package/x11r7/xcb-util-cursor/Config.in b/package/x11r7/xcb-util-cursor/Config.in
+diff --git a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash
 new file mode 100644
-index 0000000..6479363
+index 0000000..11fcc60
 --- /dev/null
-+++ b/package/x11r7/xcb-util-cursor/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_XCB_UTIL_CURSOR
-+	bool "xcb-util-cursor"
-+	select BR2_PACKAGE_XCB_UTIL
-+	select BR2_PACKAGE_XCB_UTIL_IMAGE
-+	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL
-+	help
-+	  The XCB util modules provides a number of libraries which sit on top
-+	  of libxcb, the core X protocol library, and some of the extension
-+	  libraries. These experimental libraries provide convenience functions
-+	  and interfaces which make the raw X protocol more usable. Some of the
-+	  libraries also provide client-side code which is not strictly part of
-+	  the X protocol but which have traditionally been provided by Xlib.
-+
-+	  XCB util-cursor module provides the following libraries:
-+	    - cursor: port of libxcursor
-+
-+	  http://xcb.freedesktop.org/
-diff --git a/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash b/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
-new file mode 100644
-index 0000000..e5c47ca
---- /dev/null
-+++ b/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
++++ b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash
 @@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2015-March/002555.html
-+sha1	b55a92cd96c3ec1be9a26963df6d5f16e68fffea	xcb-util-cursor-0.1.2.tar.bz2
-diff --git a/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk b/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
-new file mode 100644
-index 0000000..65704a1
---- /dev/null
-+++ b/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# xcb-util-cursor
-+#
-+################################################################################
-+
-+XCB_UTIL_CURSOR_VERSION = 0.1.2
-+XCB_UTIL_CURSOR_SITE = http://xcb.freedesktop.org/dist
-+XCB_UTIL_CURSOR_SOURCE = xcb-util-cursor-$(XCB_UTIL_CURSOR_VERSION).tar.bz2
-+XCB_UTIL_CURSOR_LICENSE = MIT
-+XCB_UTIL_CURSOR_LICENSE_FILES = COPYING
-+XCB_UTIL_CURSOR_INSTALL_STAGING = YES
-+XCB_UTIL_CURSOR_DEPENDENCIES = xcb-util xcb-util-image xcb-util-renderutil
-+
-+$(eval $(autotools-package))
++# From http://lists.x.org/archives/xorg-announce/2015-April/002559.html
++sha256	1ac8ff39bf9da7d2fc7fd6c24515726e8138340c0518ab8c606e008cf93ca211	xf86-input-keyboard-1.8.1.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
+index 36d2c5e..209f44a 100644
+--- a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
++++ b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_INPUT_KEYBOARD_VERSION = 1.8.0
++XDRIVER_XF86_INPUT_KEYBOARD_VERSION = 1.8.1
+ XDRIVER_XF86_INPUT_KEYBOARD_SOURCE = xf86-input-keyboard-$(XDRIVER_XF86_INPUT_KEYBOARD_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_KEYBOARD_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_KEYBOARD_LICENSE = MIT
 -- 
 1.7.10.4
