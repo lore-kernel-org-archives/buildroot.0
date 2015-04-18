@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Apr 2015 14:40:19 +0200
-Subject: [Buildroot] [PATCH 07/32] package/x11r7/xdriver_xf86-input-vmmouse:
-	add hash
+Date: Sat, 18 Apr 2015 14:40:17 +0200
+Subject: [Buildroot] [PATCH 05/32] package/x11r7/xdriver_xf86-input-evdev:
+	bump version to 2.9.2
 In-Reply-To: <1429360844-12625-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429360844-12625-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429360844-12625-7-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429360844-12625-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +14,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash |    2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash
+ .../x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash   |    4 ++--
+ package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash
-new file mode 100644
-index 0000000..5331fac
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash
-@@ -0,0 +1,2 @@
-+# From http://lists.freedesktop.org/archives/xorg/2013-January/055275.html
-+sha256	04cfb60366008d4db815c550d8fb8d0a4270c75fa7a20fa3bddc9ecbd355612c	xf86-input-vmmouse-13.0.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
+index ea5233e..330ac30 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2014-November/002499.html
+-sha256 0ce30328adfeac90a6f4b508d992fb834d8e50b484b29d3d58cf6683fa8502f9  xf86-input-evdev-2.9.1.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-March/002557.html
++sha256	792329b531afc6928ccda94e4b51a5520d4ddf8ef9a00890a5d0d31898acefec	xf86-input-evdev-2.9.2.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+index 5f029a2..6019412 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.9.1
++XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.9.2
+ XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
 -- 
 1.7.10.4
