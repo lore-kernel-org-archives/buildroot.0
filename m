@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 18:21:52 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-evdev:
-	bump version to 2.9.2
-Message-ID: <20150418162756.E3CF48079D@busybox.osuosl.org>
+Date: Sat, 18 Apr 2015 18:21:02 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXdmcp: bump to
+	version 1.1.2
+Message-ID: <20150418162756.CF65D8079D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d9419604fa91dd107b65c3b0d1921f73f0000b4a
+commit: http://git.buildroot.net/buildroot/commit/?id=d68dde1724d898f2bebc418bce0614ccee777b7a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-input-evdev.hash                  |    4 ++--
- .../xdriver_xf86-input-evdev.mk                    |    2 +-
+ package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash |    4 ++--
+ package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk   |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-index ea5233e..330ac30 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
+diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
+index 8aff93b..6b50cb1 100644
+--- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
++++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2014-November/002499.html
--sha256 0ce30328adfeac90a6f4b508d992fb834d8e50b484b29d3d58cf6683fa8502f9  xf86-input-evdev-2.9.1.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-March/002557.html
-+sha256	792329b531afc6928ccda94e4b51a5520d4ddf8ef9a00890a5d0d31898acefec	xf86-input-evdev-2.9.2.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index 5f029a2..6019412 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+-# From http://lists.freedesktop.org/archives/xorg/2012-March/054007.html
+-sha256	9ace6d4230f9dce4ed090692f82f613253ada8f887b23b3d8ff3dd4e3a7c118e	libXdmcp-1.1.1.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-March/002554.html
++sha256	81fe09867918fff258296e1e1e159f0dc639cb30d201c53519f25ab73af4e4e2	libXdmcp-1.1.2.tar.bz2
+diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
+index 866f10b..119c018 100644
+--- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
++++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.9.1
-+XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.9.2
- XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
+-XLIB_LIBXDMCP_VERSION = 1.1.1
++XLIB_LIBXDMCP_VERSION = 1.1.2
+ XLIB_LIBXDMCP_SOURCE = libXdmcp-$(XLIB_LIBXDMCP_VERSION).tar.bz2
+ XLIB_LIBXDMCP_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXDMCP_LICENSE = MIT
