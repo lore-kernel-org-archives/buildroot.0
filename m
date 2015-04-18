@@ -1,48 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 15:55:41 +0200
-Subject: [Buildroot] [PATCH 3/3] altera: update use of
- BR2_TARGET_UBOOT_PATCH_DIR
-In-Reply-To: <1429302375-12275-3-git-send-email-fhunleth@troodon-software.com>
-References: <1429302375-12275-1-git-send-email-fhunleth@troodon-software.com>
- <1429302375-12275-3-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20150418155541.55f356cb@free-electrons.com>
+Date: Sat, 18 Apr 2015 15:57:05 +0200
+Subject: [Buildroot] [PATCH] target-finalize: fix calling ldconfig
+In-Reply-To: <1429287033-21225-1-git-send-email-yann.morin.1998@free.fr>
+References: <1429287033-21225-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150418155705.3ff66f18@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Frank Hunleth,
+Dear Yann E. MORIN,
 
-On Fri, 17 Apr 2015 16:26:15 -0400, Frank Hunleth wrote:
-> Use BR2_TARGET_UBOOT_PATCHES now that BR2_TARGET_UBOOT_PATCH_DIR is
-> deprecated.
+On Fri, 17 Apr 2015 18:10:33 +0200, Yann E. MORIN wrote:
+> On some systems (e.g. Fedora 20), the build breaks when parsing include
+> directives in our /etc/ld.so.conf, with error messages as thus:
 > 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+>     /sbin/ldconfig: need absolute file name for configuration file
+>     when using -r
+> 
+> So, enforce the path to the ld.so.conf file to point to our own, in the
+> target/ directory.
+> 
+> Reported-by: Al West <al.west@v-nova.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  configs/altera_sockit_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
-> index d27b96b..f9249ca 100644
-> --- a/configs/altera_sockit_defconfig
-> +++ b/configs/altera_sockit_defconfig
-> @@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
->  BR2_TARGET_UBOOT_CUSTOM_GIT=y
->  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.rocketboards.org/u-boot-socfpga.git"
->  BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_acds13.0sp1"
-> -BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/altera/sockit"
-> +BR2_TARGET_UBOOT_CUSTOM_PATCHES="board/altera/sockit/uboot-sockit-preloader-sample-design.patch"
+>  Makefile | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-Did you actually tested this? It will end up with:
+Applied, thanks. But I must admit I would prefer a real overhaul of our
+ldconfig handling (that takes into account glibc vs. uclibc vs. musl,
+etc.).
 
-UBOOT_PATCH = board/altera/sockit/uboot-sockit-preloader-sample-design.patch
-
-which means that the package infra will try to download:
-
-   ftp://ftp.denx.de/pub/u-boot/board/altera/sockit/uboot-sockit-preloader-sample-design.patch
-
-No?
+Thanks,
 
 Thomas
 -- 
