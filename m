@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Apr 2015 16:29:54 +0200
-Subject: [Buildroot] [PATCH 26/61] package/x11r7/xapp_viewres: add hash
+Date: Sat, 18 Apr 2015 16:29:44 +0200
+Subject: [Buildroot] [PATCH 16/61] package/x11r7/xapp_iceauth: add hash
 In-Reply-To: <1429367429-11771-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429367429-11771-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429367429-11771-26-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429367429-11771-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_viewres/xapp_viewres.hash |    2 ++
+ package/x11r7/xapp_iceauth/xapp_iceauth.hash |    2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/x11r7/xapp_viewres/xapp_viewres.hash
+ create mode 100644 package/x11r7/xapp_iceauth/xapp_iceauth.hash
 
-diff --git a/package/x11r7/xapp_viewres/xapp_viewres.hash b/package/x11r7/xapp_viewres/xapp_viewres.hash
+diff --git a/package/x11r7/xapp_iceauth/xapp_iceauth.hash b/package/x11r7/xapp_iceauth/xapp_iceauth.hash
 new file mode 100644
-index 0000000..c45b1b2
+index 0000000..90c5f70
 --- /dev/null
-+++ b/package/x11r7/xapp_viewres/xapp_viewres.hash
++++ b/package/x11r7/xapp_iceauth/xapp_iceauth.hash
 @@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2013-January/002122.html
-+sha256	d9c11b44908d91926df8b33428ae04c86c85e4f8380e9b5e68326a651c872e59	viewres-1.0.4.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-January/002519.html
++sha256	1216af2dee99b318fcf8bf9a259915273bcb37a7f1e7859af4f15d0ebf6f3f0a	iceauth-1.0.7.tar.bz2
 -- 
 1.7.10.4
