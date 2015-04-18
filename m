@@ -1,38 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 19:07:53 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-keyboard:
-	Fix compile error
-Message-ID: <20150418170843.54F6580E0E@busybox.osuosl.org>
+Date: Sat, 18 Apr 2015 19:08:09 +0200
+Subject: [Buildroot] [git commit] configs/riotboard: bump kernel to version
+	3.19.3
+Message-ID: <20150418170843.5FA5680E0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3f866eb24b807a2a9055fda7561e835452dca8ed
+commit: http://git.buildroot.net/buildroot/commit/?id=8866bdb1fc38263c5292f9cb8dc09b119f70ceb8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-lnx_kbd.c: In function 'OpenKeyboard':
-lnx_kbd.c:194:8: error: implicit declaration of function 'getpgid' [-Werror=implicit-function-declaration]
-        rc = tcsetpgrp(pInfo->fd, getpgid(0));
-        ^
-lnx_kbd.c:194:8: warning: nested extern declaration of 'getpgid' [-Wnested-externs]
-cc1: some warnings being treated as errors
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-input-keyboard.mk                 |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ configs/riotboard_defconfig |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-index 209f44a..eb2d582 100644
---- a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-+++ b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-@@ -10,5 +10,6 @@ XDRIVER_XF86_INPUT_KEYBOARD_SITE = http://xorg.freedesktop.org/releases/individu
- XDRIVER_XF86_INPUT_KEYBOARD_LICENSE = MIT
- XDRIVER_XF86_INPUT_KEYBOARD_LICENSE_FILES = COPYING
- XDRIVER_XF86_INPUT_KEYBOARD_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_kbproto xproto_randrproto xproto_xproto
-+XDRIVER_XF86_INPUT_KEYBOARD_CONF_OPTS = --disable-selective-werror
+diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
+index fc25249..6e581fa 100644
+--- a/configs/riotboard_defconfig
++++ b/configs/riotboard_defconfig
+@@ -20,13 +20,13 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
  
- $(eval $(autotools-package))
+ # kernel headers
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_DEFAULT_KERNEL_VERSION="3.19.3"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
