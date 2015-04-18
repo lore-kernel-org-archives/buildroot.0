@@ -1,42 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 18:26:40 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xdriinfo: bump version
-	to 1.0.5, add hash
-Message-ID: <20150418162757.4E7AC7F8C5@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 18 Apr 2015 18:29:14 +0200
+Subject: [Buildroot] [PATCH 08/32]
+	package/x11r7/xdriver_xf86-input-keyboard: bump version to
+	1.8.1, add hash
+References: <1429360844-12625-1-git-send-email-bernd.kuhls@t-online.de>
+ <1429360844-12625-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <XnsA480BC0F613ABberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f604f310c3120acb4bf343239fd3c707297cd3b5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote in
+news:1429360844-12625-8-git-send-email-bernd.kuhls at t-online.de: 
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xapp_xdriinfo/xapp_xdriinfo.hash |    2 ++
- package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+> 
+> Signed-off-by: Bernd Kuhls
+> <bernd.kuhls@t-online.de> ---
+>  .../xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.hash     | 
+>    2 ++ 
+>  .../x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk | 
+>    2 +- 
 
-diff --git a/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.hash b/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.hash
-new file mode 100644
-index 0000000..264ec9a
---- /dev/null
-+++ b/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.hash
-@@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2015-April/002570.html
-+sha256	4cba3766ef89557422062287248adeb933999071bad6f3ef9c0a478a3c680119	xdriinfo-1.0.5.tar.bz2
-diff --git a/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk b/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk
-index d37ec32..bb00d3b 100644
---- a/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk
-+++ b/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XAPP_XDRIINFO_VERSION = 1.0.4
-+XAPP_XDRIINFO_VERSION = 1.0.5
- XAPP_XDRIINFO_SOURCE = xdriinfo-$(XAPP_XDRIINFO_VERSION).tar.bz2
- XAPP_XDRIINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XDRIINFO_LICENSE = MIT
+Hi,
+
+please do not commit this patch, I still need to fix a problem.
+Marked as superseded in patchwork.
+
+Regards, Bernd
