@@ -1,9 +1,7 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 18 Apr 2015 10:15:29 +0200
-Subject: [Buildroot] [PATCH 5/5] perl-path-tiny: bump to version 0.068
-In-Reply-To: <1429344929-2198-1-git-send-email-francois.perrad@gadz.org>
-References: <1429344929-2198-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1429344929-2198-5-git-send-email-francois.perrad@gadz.org>
+Date: Sat, 18 Apr 2015 10:57:57 +0200
+Subject: [Buildroot] [PATCH 1/3] luaposix: bump to version 33.3.1
+Message-ID: <1429347479-7171-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +10,51 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-path-tiny/perl-path-tiny.hash | 4 ++--
- package/perl-path-tiny/perl-path-tiny.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/luaposix/Config.in   | 14 +++++---------
+ package/luaposix/luaposix.mk |  2 +-
+ 2 files changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/package/perl-path-tiny/perl-path-tiny.hash b/package/perl-path-tiny/perl-path-tiny.hash
-index 7c3381d..91c1d1e 100644
---- a/package/perl-path-tiny/perl-path-tiny.hash
-+++ b/package/perl-path-tiny/perl-path-tiny.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    b82cb206a44b7408b11b991001c45e49 Path-Tiny-0.061.tar.gz
--sha256 e8290aac8c0623eea1b20b4a9d9a1be08db7f5a92ea51a514677964f3fa01cca Path-Tiny-0.061.tar.gz
-+md5    76e99fd1bb615f56954025ae636c6233 Path-Tiny-0.068.tar.gz
-+sha256 a331fbd855a6216877c643c4cae4bf7edfdf7e13cd8142d2cb2d12eafdebaee0 Path-Tiny-0.068.tar.gz
-diff --git a/package/perl-path-tiny/perl-path-tiny.mk b/package/perl-path-tiny/perl-path-tiny.mk
-index 248e30c..534453b 100644
---- a/package/perl-path-tiny/perl-path-tiny.mk
-+++ b/package/perl-path-tiny/perl-path-tiny.mk
+diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
+index 439dc42..8b24574 100644
+--- a/package/luaposix/Config.in
++++ b/package/luaposix/Config.in
+@@ -1,19 +1,15 @@
+ config BR2_PACKAGE_LUAPOSIX
+ 	bool "luaposix"
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+-	depends on !BR2_PACKAGE_LUA_5_3
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA_5_1
+ 	# LuaBitOp is already included in LuaJIT
+ 	help
+-	  luaposix is a POSIX binding, including curses, for Lua 5.1
+-	  and 5.2; Like most libraries it simply binds to C APIs on
+-	  the underlying system, so it won't work on a non-POSIX
+-	  system. However, it does try to detect the level of POSIX
++	  luaposix is a POSIX binding, including curses, for Lua 5.1,
++	  5.2 and 5.3; like most libraries it simply binds to C APIs on
++	  the underlying system, so it won't work on non-POSIX
++	  systems. However, it does try to detect the level of POSIX
+ 	  conformance of the underlying system and bind only available
+-	  APIs
++	  APIs.
+ 
+ 	  https://github.com/luaposix/luaposix
+-
+-comment "luaposix needs a Lua 5.1/5.2 interpreter"
+-	depends on BR2_PACKAGE_LUA_5_3
+diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
+index 5d41472..ea4ab02 100644
+--- a/package/luaposix/luaposix.mk
++++ b/package/luaposix/luaposix.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_PATH_TINY_VERSION = 0.061
-+PERL_PATH_TINY_VERSION = 0.068
- PERL_PATH_TINY_SOURCE = Path-Tiny-$(PERL_PATH_TINY_VERSION).tar.gz
- PERL_PATH_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAGOLDEN
- PERL_PATH_TINY_DEPENDENCIES = perl
+-LUAPOSIX_VERSION = 33.0.0
++LUAPOSIX_VERSION = 33.3.1
+ LUAPOSIX_SITE = $(call github,luaposix,luaposix,release-v$(LUAPOSIX_VERSION))
+ LUAPOSIX_LICENSE = MIT
+ LUAPOSIX_LICENSE_FILES = COPYING
 -- 
 2.1.0
