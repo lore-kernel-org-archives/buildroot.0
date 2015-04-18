@@ -1,43 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 15:00:36 +0200
-Subject: [Buildroot] [git commit] perl-mojolicous: bump to version 6.08
-Message-ID: <20150418133113.A8F308079A@busybox.osuosl.org>
+Date: Sat, 18 Apr 2015 15:33:34 +0200
+Subject: [Buildroot] [PATCH 1/3] luaposix: bump to version 33.3.1
+In-Reply-To: <1429347479-7171-1-git-send-email-francois.perrad@gadz.org>
+References: <1429347479-7171-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150418153334.37f310c9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0bc47cec61d64dc2c611d54ba1f0acaa99aeef50
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Francois Perrad,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/perl-mojolicious/perl-mojolicious.hash |    4 ++--
- package/perl-mojolicious/perl-mojolicious.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Sat, 18 Apr 2015 10:57:57 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/luaposix/Config.in   | 14 +++++---------
+>  package/luaposix/luaposix.mk |  2 +-
+>  2 files changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
-index a6d7703..2955ed6 100644
---- a/package/perl-mojolicious/perl-mojolicious.hash
-+++ b/package/perl-mojolicious/perl-mojolicious.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    797f28b188dec6e6a899b9b481ee8228 Mojolicious-5.72.tar.gz
--sha256 323218db02890a0b5e5d756f663ad32dbf312d05aa564b06d0a927e4a6a434d4 Mojolicious-5.72.tar.gz
-+md5    ab8d44864173583a5eae4f507420112f Mojolicious-6.08.tar.gz
-+sha256 338c0310eb55c2be42dfee1173c4e3ee5bcd86f6be6f8035d1955c579767adb3 Mojolicious-6.08.tar.gz
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index cb633d6..549805b 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_MOJOLICIOUS_VERSION = 5.72
-+PERL_MOJOLICIOUS_VERSION = 6.08
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
- PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
- PERL_MOJOLICIOUS_DEPENDENCIES = perl
+All three patches applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
