@@ -1,52 +1,52 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 18 Apr 2015 19:16:09 +0200
-Subject: [Buildroot] [PATCH] package/openvmtools: fix procps-ng library
- name
-In-Reply-To: <1429269780-107634-1-git-send-email-kaszak@gmail.com>
-References: <1429269780-107634-1-git-send-email-kaszak@gmail.com>
-Message-ID: <55329159.5000609@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Apr 2015 19:44:17 +0200
+Subject: [Buildroot] [PATCH 0/2] timezone: bumps and hashes (branch
+	yem/tzdata)
+Message-ID: <cover.1429379016.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Karoly,
+Hello All!
 
-Le 17/04/2015 13:23, Karoly Kasza a ?crit :
-> procps-ng libraries are now accesible on the same name as procps, thus
-> using the CUSTOM_PROCPS_NAME environment variable breaks compilation.
-> 
-> This fixes autobuild error 2a19f84c35de0ff008c2cd1aea96f6a4f2767ee1.
+This series bumps the timezone-related packages, and adds hash files to
+those packages.
 
-Usually we use a complete path like:
-http://autobuild.buildroot.net/results/2a1/2a19f84c35de0ff008c2cd1aea96f6a4f2767ee1
+Regards,
+Yann E. MORIN.
 
-> 
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-> ---
 
-Issue reproduced locally.
+The following changes since commit 0f9bee00c3491024ed2775ef12d2850ed6d3d407:
 
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-Tested-by: Romain Naour <romain.naour@openwide.fr>
+  board/riotboard: readme: Update description (2015-04-18 19:08:28 +0200)
 
-Best regards,
-Romain
+are available in the git repository at:
 
->  package/openvmtools/openvmtools.mk |    1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-> index f180f6f..ef6544a 100644
-> --- a/package/openvmtools/openvmtools.mk
-> +++ b/package/openvmtools/openvmtools.mk
-> @@ -33,7 +33,6 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PROCPS),y)
->  OPENVMTOOLS_CONF_OPTS += --with-procps
-> -OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps
->  OPENVMTOOLS_DEPENDENCIES += procps-ng
->  else
->  OPENVMTOOLS_CONF_OPTS += --without-procps
-> 
+  git://git.busybox.net/~ymorin/git/buildroot yem/tzdata
+
+for you to fetch changes up to 612c6835da3af662a1a3a2b644a9e1b7bd150094:
+
+  package/tzdata: bump version, add hash (2015-04-18 19:42:07 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/zic: bump version, add hash
+      package/tzdata: bump version, add hash
+
+ package/tzdata/tzdata.hash | 2 ++
+ package/tzdata/tzdata.mk   | 2 +-
+ package/zic/zic.hash       | 2 ++
+ package/zic/zic.mk         | 2 +-
+ 4 files changed, 6 insertions(+), 2 deletions(-)
+ create mode 100644 package/tzdata/tzdata.hash
+ create mode 100644 package/zic/zic.hash
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
