@@ -1,47 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 19:08:28 +0200
-Subject: [Buildroot] [git commit] board/riotboard: readme: Update description
-Message-ID: <20150418170843.696B880E0E@busybox.osuosl.org>
+Date: Sat, 18 Apr 2015 19:11:41 +0200
+Subject: [Buildroot] [PATCH 1/1]
+ package/x11r7/xdriver_xf86-input-keyboard: Fix compile error
+In-Reply-To: <1429375169-23279-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429375169-23279-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150418191141.6027595a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f9bee00c3491024ed2775ef12d2850ed6d3d407
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-[Thomas: rewrap text.]
+On Sat, 18 Apr 2015 18:39:29 +0200, Bernd Kuhls wrote:
+> lnx_kbd.c: In function 'OpenKeyboard':
+> lnx_kbd.c:194:8: error: implicit declaration of function 'getpgid' [-Werror=implicit-function-declaration]
+>         rc = tcsetpgrp(pInfo->fd, getpgid(0));
+>         ^
+> lnx_kbd.c:194:8: warning: nested extern declaration of 'getpgid' [-Wnested-externs]
+> cc1: some warnings being treated as errors
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk  |    1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/embest/riotboard/readme.txt |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+Applied, thanks.
 
-diff --git a/board/embest/riotboard/readme.txt b/board/embest/riotboard/readme.txt
-index 8c31bbe..b7390d0 100644
---- a/board/embest/riotboard/readme.txt
-+++ b/board/embest/riotboard/readme.txt
-@@ -15,9 +15,9 @@ your SD-card:
- 
- sudo dd if=output/images/u-boot.imx of=/dev/sdX bs=1k seek=1
- 
--Create 1 partition on the SD-card using your favourite tool. The partition
--should be big enough to hold your rootfs, for example 128MiB. Here's how an
--example of such partition layout:
-+Create 1 partition on the SD-card using your favourite tool. The
-+partition should be big enough to hold your rootfs, for example
-+128MiB. Here's an example partition layout:
- 
-    Device Boot      Start         End      Blocks   Id  System
- /dev/sdX1            2048      264191      131072   83  Linux
-@@ -30,7 +30,7 @@ Deploy your rootfs to the SD-card:
- 
- sudo mkdir /mnt/sdcard/
- sudo mount /dev/sdX1 /mnt/sdcard/
--sudo tar xf rootfs.tar -C /mnt/sdcard/
-+sudo tar xf output/images/rootfs.tar -C /mnt/sdcard/
- sudo umount /dev/sdX1
- 
- 3. Running buildroot
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
