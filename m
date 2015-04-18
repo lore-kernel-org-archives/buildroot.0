@@ -1,62 +1,44 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sat, 18 Apr 2015 10:28:31 -0400
-Subject: [Buildroot] [PATCH 3/3] altera: update use of
-	BR2_TARGET_UBOOT_PATCH_DIR
-In-Reply-To: <20150418155541.55f356cb@free-electrons.com>
-References: <1429302375-12275-1-git-send-email-fhunleth@troodon-software.com>
- <1429302375-12275-3-git-send-email-fhunleth@troodon-software.com>
- <20150418155541.55f356cb@free-electrons.com>
-Message-ID: <CA+-urNRRAEeDp23bzrrh7tR1UFB2OXTpydgSu6P2+_LPBsZKMA@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 18 Apr 2015 16:29:30 +0200
+Subject: [Buildroot] [PATCH 02/61] package/x11r7/xapp_xdbedizzy: bump
+	version to 1.1.0, add hash
+In-Reply-To: <1429367429-11771-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429367429-11771-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429367429-11771-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 18, 2015 at 9:55 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Frank Hunleth,
->
-> On Fri, 17 Apr 2015 16:26:15 -0400, Frank Hunleth wrote:
->> Use BR2_TARGET_UBOOT_PATCHES now that BR2_TARGET_UBOOT_PATCH_DIR is
->> deprecated.
->>
->> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
->> ---
->>  configs/altera_sockit_defconfig | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
->> index d27b96b..f9249ca 100644
->> --- a/configs/altera_sockit_defconfig
->> +++ b/configs/altera_sockit_defconfig
->> @@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
->>  BR2_TARGET_UBOOT_CUSTOM_GIT=y
->>  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.rocketboards.org/u-boot-socfpga.git"
->>  BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_acds13.0sp1"
->> -BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/altera/sockit"
->> +BR2_TARGET_UBOOT_CUSTOM_PATCHES="board/altera/sockit/uboot-sockit-preloader-sample-design.patch"
->
-> Did you actually tested this? It will end up with:
->
-> UBOOT_PATCH = board/altera/sockit/uboot-sockit-preloader-sample-design.patch
->
-> which means that the package infra will try to download:
->
->    ftp://ftp.denx.de/pub/u-boot/board/altera/sockit/uboot-sockit-preloader-sample-design.patch
->
-> No?
 
-Dohh! In my rush to leave yesterday, I had convinced myself that it
-would work without testing. You're totally right, though. I'll fix
-depending on how the first patch in the series works out.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.hash |    2 ++
+ package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.hash
 
-Thanks,
-Frank
-
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+diff --git a/package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.hash b/package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.hash
+new file mode 100644
+index 0000000..8fbe8b0
+--- /dev/null
++++ b/package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.hash
+@@ -0,0 +1,2 @@
++# From http://lists.x.org/archives/xorg-announce/2010-October/001514.html
++sha1	281bee72116311e2d8393ae53ea832e9d267eded	xdbedizzy-1.1.0.tar.bz2
+diff --git a/package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.mk b/package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.mk
+index e732dc4..72d04f8 100644
+--- a/package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.mk
++++ b/package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XAPP_XDBEDIZZY_VERSION = 1.0.2
++XAPP_XDBEDIZZY_VERSION = 1.1.0
+ XAPP_XDBEDIZZY_SOURCE = xdbedizzy-$(XAPP_XDBEDIZZY_VERSION).tar.bz2
+ XAPP_XDBEDIZZY_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XDBEDIZZY_LICENSE = MIT
+-- 
+1.7.10.4
