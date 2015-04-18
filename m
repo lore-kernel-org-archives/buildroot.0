@@ -1,34 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 15:30:56 +0200
-Subject: [Buildroot] [git commit] copas: bump to version 2.0.0
-Message-ID: <20150418133114.9FC007FA59@busybox.osuosl.org>
+Date: Sat, 18 Apr 2015 15:00:36 +0200
+Subject: [Buildroot] [git commit] perl-mojolicous: bump to version 6.08
+Message-ID: <20150418133113.A8F308079A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f79c30c195aa8170e0fb1cfd0aa4493b05c38ba1
+commit: http://git.buildroot.net/buildroot/commit/?id=0bc47cec61d64dc2c611d54ba1f0acaa99aeef50
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/copas/copas.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/perl-mojolicious/perl-mojolicious.hash |    4 ++--
+ package/perl-mojolicious/perl-mojolicious.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/copas/copas.mk b/package/copas/copas.mk
-index 9bc38e4..b3f97c7 100644
---- a/package/copas/copas.mk
-+++ b/package/copas/copas.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
+index a6d7703..2955ed6 100644
+--- a/package/perl-mojolicious/perl-mojolicious.hash
++++ b/package/perl-mojolicious/perl-mojolicious.hash
+@@ -1,3 +1,3 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    797f28b188dec6e6a899b9b481ee8228 Mojolicious-5.72.tar.gz
+-sha256 323218db02890a0b5e5d756f663ad32dbf312d05aa564b06d0a927e4a6a434d4 Mojolicious-5.72.tar.gz
++md5    ab8d44864173583a5eae4f507420112f Mojolicious-6.08.tar.gz
++sha256 338c0310eb55c2be42dfee1173c4e3ee5bcd86f6be6f8035d1955c579767adb3 Mojolicious-6.08.tar.gz
+diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
+index cb633d6..549805b 100644
+--- a/package/perl-mojolicious/perl-mojolicious.mk
++++ b/package/perl-mojolicious/perl-mojolicious.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--COPAS_VERSION = 1.2.1-1
--COPAS_SUBDIR = copas-1_2_1
-+COPAS_VERSION = 2.0.0-1
-+COPAS_SUBDIR = copas-2_0_0
- COPAS_LICENSE = MIT
- 
- $(eval $(luarocks-package))
+-PERL_MOJOLICIOUS_VERSION = 5.72
++PERL_MOJOLICIOUS_VERSION = 6.08
+ PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
+ PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
+ PERL_MOJOLICIOUS_DEPENDENCIES = perl
