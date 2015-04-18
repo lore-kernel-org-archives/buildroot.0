@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Apr 2015 16:29:32 +0200
-Subject: [Buildroot] [PATCH 04/61] package/x11r7/xapp_xf86dga: bump version
-	to 1.0.3, add hash
+Date: Sat, 18 Apr 2015 16:29:48 +0200
+Subject: [Buildroot] [PATCH 20/61] package/x11r7/xapp_mkfontdir: add hash
 In-Reply-To: <1429367429-11771-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429367429-11771-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429367429-11771-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429367429-11771-20-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +13,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xf86dga/xapp_xf86dga.hash |    2 ++
- package/x11r7/xapp_xf86dga/xapp_xf86dga.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/x11r7/xapp_xf86dga/xapp_xf86dga.hash
+ package/x11r7/xapp_mkfontdir/xapp_mkfontdir.hash |    2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/x11r7/xapp_mkfontdir/xapp_mkfontdir.hash
 
-diff --git a/package/x11r7/xapp_xf86dga/xapp_xf86dga.hash b/package/x11r7/xapp_xf86dga/xapp_xf86dga.hash
+diff --git a/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.hash b/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.hash
 new file mode 100644
-index 0000000..b0c803e
+index 0000000..7a218b9
 --- /dev/null
-+++ b/package/x11r7/xapp_xf86dga/xapp_xf86dga.hash
++++ b/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.hash
 @@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2010-October/001515.html
-+sha1	030659e3728f5f7142e1cf727f147aceeabe4b9e	xf86dga-1.0.3.tar.bz2
-diff --git a/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk b/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk
-index 07b6ac9..a2e08da 100644
---- a/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk
-+++ b/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XAPP_XF86DGA_VERSION = 1.0.2
-+XAPP_XF86DGA_VERSION = 1.0.3
- XAPP_XF86DGA_SOURCE = xf86dga-$(XAPP_XF86DGA_VERSION).tar.bz2
- XAPP_XF86DGA_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XF86DGA_LICENSE = MIT
++# From http://lists.x.org/archives/xorg-announce/2012-February/001818.html
++sha256	56d52a482df130484e51fd066d1b6eda7c2c02ddbc91fe6e2be1b9c4e7306530	mkfontdir-1.0.7.tar.bz2
 -- 
 1.7.10.4
