@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 18:40:19 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xwud: add hash
-Message-ID: <20150418170701.282787F922@busybox.osuosl.org>
+Date: Sat, 18 Apr 2015 18:40:18 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xfs: add hash
+Message-ID: <20150418170700.63C367F922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a3909771ab19a6d7a1d3cd227dda51306cdf06a4
+commit: http://git.buildroot.net/buildroot/commit/?id=9c97a96c6dfd5511b35e947a0cb8c320a5211439
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xapp_xwud/xapp_xwud.hash |    2 ++
+ package/x11r7/xapp_xfs/xapp_xfs.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xapp_xwud/xapp_xwud.hash b/package/x11r7/xapp_xwud/xapp_xwud.hash
+diff --git a/package/x11r7/xapp_xfs/xapp_xfs.hash b/package/x11r7/xapp_xfs/xapp_xfs.hash
 new file mode 100644
-index 0000000..44e9c60
+index 0000000..6782374
 --- /dev/null
-+++ b/package/x11r7/xapp_xwud/xapp_xwud.hash
++++ b/package/x11r7/xapp_xfs/xapp_xfs.hash
 @@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2012-March/001927.html
-+sha256	d6b3a09ccfe750868e26bd2384900ab5ff0d434f7f40cd272a50eda8aaa1f8bd	xwud-1.0.4.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2014-August/002472.html
++sha256	a40b75e674c091464f85739292b6bf24e2d153f4a2ac456d3ea6b8a64e269ffa	xfs-1.1.4.tar.bz2
