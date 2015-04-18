@@ -1,42 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 18:38:52 +0200
-Subject: [Buildroot] [PATCH 02/32] package/x11r7/xcb-util-cursor: new
- package
-In-Reply-To: <1429360844-12625-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1429360844-12625-1-git-send-email-bernd.kuhls@t-online.de>
- <1429360844-12625-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150418183852.49035fcf@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 18 Apr 2015 18:39:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-input-keyboard:
+	Fix compile error
+Message-ID: <1429375169-23279-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+lnx_kbd.c: In function 'OpenKeyboard':
+lnx_kbd.c:194:8: error: implicit declaration of function 'getpgid' [-Werror=implicit-function-declaration]
+        rc = tcsetpgrp(pInfo->fd, getpgid(0));
+        ^
+lnx_kbd.c:194:8: warning: nested extern declaration of 'getpgid' [-Wnested-externs]
+cc1: some warnings being treated as errors
 
-On Sat, 18 Apr 2015 14:40:14 +0200, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/x11r7/Config.in                            |    1 +
->  package/x11r7/xcb-util-cursor/Config.in            |   17 +++++++++++++++++
->  package/x11r7/xcb-util-cursor/xcb-util-cursor.hash |    2 ++
->  package/x11r7/xcb-util-cursor/xcb-util-cursor.mk   |   15 +++++++++++++++
->  4 files changed, 35 insertions(+)
->  create mode 100644 package/x11r7/xcb-util-cursor/Config.in
->  create mode 100644 package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
->  create mode 100644 package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk  |    1 +
+ 1 file changed, 1 insertion(+)
 
-I've applied patches 2 to 32, except patch 28, since I asked a question
-about it.
-
-On the new package additions, I had to rewrap the Config.in help text
-almost each time, but other than that, it looked good.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
+index 209f44a..eb2d582 100644
+--- a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
++++ b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
+@@ -10,5 +10,6 @@ XDRIVER_XF86_INPUT_KEYBOARD_SITE = http://xorg.freedesktop.org/releases/individu
+ XDRIVER_XF86_INPUT_KEYBOARD_LICENSE = MIT
+ XDRIVER_XF86_INPUT_KEYBOARD_LICENSE_FILES = COPYING
+ XDRIVER_XF86_INPUT_KEYBOARD_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_kbproto xproto_randrproto xproto_xproto
++XDRIVER_XF86_INPUT_KEYBOARD_CONF_OPTS = --disable-selective-werror
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
