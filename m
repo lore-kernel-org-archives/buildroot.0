@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Apr 2015 14:40:37 +0200
-Subject: [Buildroot] [PATCH 25/32] package/x11r7/xapp_xmag: bump version to
-	1.0.6, add hash
+Date: Sat, 18 Apr 2015 14:40:23 +0200
+Subject: [Buildroot] [PATCH 11/32] package/x11r7/xapp_twm: bump version to
+	1.0.9, add hash
 In-Reply-To: <1429360844-12625-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429360844-12625-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429360844-12625-25-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429360844-12625-11-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xmag/xapp_xmag.hash |    2 ++
- package/x11r7/xapp_xmag/xapp_xmag.mk   |    2 +-
+ package/x11r7/xapp_twm/xapp_twm.hash |    2 ++
+ package/x11r7/xapp_twm/xapp_twm.mk   |    2 +-
  2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/x11r7/xapp_xmag/xapp_xmag.hash
+ create mode 100644 package/x11r7/xapp_twm/xapp_twm.hash
 
-diff --git a/package/x11r7/xapp_xmag/xapp_xmag.hash b/package/x11r7/xapp_xmag/xapp_xmag.hash
+diff --git a/package/x11r7/xapp_twm/xapp_twm.hash b/package/x11r7/xapp_twm/xapp_twm.hash
 new file mode 100644
-index 0000000..ccfeb32
+index 0000000..eecc5c4
 --- /dev/null
-+++ b/package/x11r7/xapp_xmag/xapp_xmag.hash
++++ b/package/x11r7/xapp_twm/xapp_twm.hash
 @@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2015-April/002581.html
-+sha256	87a2bc23b251e2d8f8370d3283a4d6c8dac98a30cb5749a04336cdb55c14e161	xmag-1.0.6.tar.bz2
-diff --git a/package/x11r7/xapp_xmag/xapp_xmag.mk b/package/x11r7/xapp_xmag/xapp_xmag.mk
-index 9851499..bfc60c3 100644
---- a/package/x11r7/xapp_xmag/xapp_xmag.mk
-+++ b/package/x11r7/xapp_xmag/xapp_xmag.mk
++# From http://lists.x.org/archives/xorg-announce/2015-April/002565.html
++sha256	c575167ac33edf3bd1592f1bedfe0559debb128ed5fb4873c1278e3be166310a	twm-1.0.9.tar.bz2
+diff --git a/package/x11r7/xapp_twm/xapp_twm.mk b/package/x11r7/xapp_twm/xapp_twm.mk
+index 7f6ba4f..1f576e1 100644
+--- a/package/x11r7/xapp_twm/xapp_twm.mk
++++ b/package/x11r7/xapp_twm/xapp_twm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XMAG_VERSION = 1.0.5
-+XAPP_XMAG_VERSION = 1.0.6
- XAPP_XMAG_SOURCE = xmag-$(XAPP_XMAG_VERSION).tar.bz2
- XAPP_XMAG_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XMAG_LICENSE = MIT
+-XAPP_TWM_VERSION = 1.0.8
++XAPP_TWM_VERSION = 1.0.9
+ XAPP_TWM_SOURCE = twm-$(XAPP_TWM_VERSION).tar.bz2
+ XAPP_TWM_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_TWM_LICENSE = MIT
 -- 
 1.7.10.4
