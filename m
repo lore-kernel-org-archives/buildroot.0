@@ -1,47 +1,35 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat, 18 Apr 2015 01:02:45 +0200
-Subject: [Buildroot] [PATCH 1/1] Added linux drivers backports project
-In-Reply-To: <55316095.5090902@mind.be>
-References: <1429263629-13708-1-git-send-email-vorel@jablocom.com>
- <1429263629-13708-2-git-send-email-vorel@jablocom.com>
- <55316095.5090902@mind.be>
-Message-ID: <20150417230243.GB3800@t61>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Fri, 17 Apr 2015 20:40:41 -0400 (EDT)
+Subject: [Buildroot] [PATCH 1/3] uboot: add support for patch files and
+ URLs
+In-Reply-To: <1429302375-12275-1-git-send-email-fhunleth@troodon-software.com>
+References: <1429302375-12275-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <877797848.435510.1429317641487.JavaMail.zimbra@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->  In the future, please give your patch a version number (by giving the argument
-> -v3 or --subject-prefix='PATCH v3' to git send-email or format-patch). Also
-> include a changelog below your SoB, separated by --- (you can do this while
-> amending your commit).
-Fixed, hope it's correct this time. Sent as -v4.
+Hi all,
 
->  Actually, kconfig-package should probably do a default assignment for
-> LINUX_BACKPORTS_MAKE_ENV, but since it doesn't you have to do it explicitly.
-I need LINUX_BACKPORTS_MAKE_ENV, as KLIB and KLIB_BUILD aren't set.
+Sorry for showing up a bit late on this thread.
 
->  However, ince below you're calling modules_install directly, would it be
-> possible/reasonable to do the build in the same way? It's always nice if the
-> different CMDS definitions look the same. So
+> +config BR2_TARGET_UBOOT_PATCHES
+> +	string "custom patches"
+[...]
+> +UBOOT_PATCH += $(call qstrip,$(BR2_TARGET_UBOOT_PATCHES))
+> +
+>  define UBOOT_CONFIGURE_CMDS
 
-> 	$(LINUX_BACKPORTS_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
-> 		-C $(LINUX_DIR) M=$(@D) \
-> 		modules
+While we are adding new U-Boot related symbols, I think it would be nice
+to respect the project naming convention, which is described in the
+"Names and Spelling" section [1] of the project README file.
 
->  But if the backports build system does some extra magic (NOT kconfig stuff, but
-> other magic), then of course you shouldn't do this.
-Unfortunately it has to be build this way (or I haven't found any better).
-LINUX_BACKPORTS_BUILD_CMDS needs -C $(@D), otherwise there is infinite loop. I'm
-surprised, as $(@D) is backport directory (I'd expect to be add automatically) - suppose I
-have an error somewhere.
-LINUX_BACKPORTS_INSTALL_TARGET_CMDS needs -C $(LINUX_DIR) M=$(@D)
-=> different commands.
+So, I'd suggest these symbols to be named BR2_TARGET_U_BOOT_PATCHES and
+U_BOOT_PATCH in respect to the official project name.
 
->  No nconfig? Not that it matters much...
-Taken from busybox where it wasn't (sent as separate patch). Added...
-BTW: I'd expect to have one unique default variable for all of those.
+[1] http://git.denx.de/?p=u-boot.git;a=blob;f=README;h=9b748ccc34120b3c10dd8c33d84269bff6853b1b;hb=HEAD#l93
 
-Kind regards,
-Petr
+Best Regards,
+-v
