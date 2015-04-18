@@ -1,62 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 15:30:38 +0200
-Subject: [Buildroot] [git commit] luaposix: bump to version 33.3.1
-Message-ID: <20150418133114.812287FA59@busybox.osuosl.org>
+Date: Sat, 18 Apr 2015 15:31:01 +0200
+Subject: [Buildroot] [git commit] lpeg: bump to version 0.12.2
+Message-ID: <20150418133114.BC50B8040E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=93549a562efab152b702a7dca10e3b935f9dbd3b
+commit: http://git.buildroot.net/buildroot/commit/?id=13db7aebd76bbb0bdcdcce557a7390c91fcc7f2f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/luaposix/Config.in   |   14 +++++---------
- package/luaposix/luaposix.mk |    2 +-
- 2 files changed, 6 insertions(+), 10 deletions(-)
+ package/lpeg/lpeg.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
-index 439dc42..8b24574 100644
---- a/package/luaposix/Config.in
-+++ b/package/luaposix/Config.in
-@@ -1,19 +1,15 @@
- config BR2_PACKAGE_LUAPOSIX
- 	bool "luaposix"
- 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
--	depends on !BR2_PACKAGE_LUA_5_3
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA_5_1
- 	# LuaBitOp is already included in LuaJIT
- 	help
--	  luaposix is a POSIX binding, including curses, for Lua 5.1
--	  and 5.2; Like most libraries it simply binds to C APIs on
--	  the underlying system, so it won't work on a non-POSIX
--	  system. However, it does try to detect the level of POSIX
-+	  luaposix is a POSIX binding, including curses, for Lua 5.1,
-+	  5.2 and 5.3; like most libraries it simply binds to C APIs on
-+	  the underlying system, so it won't work on non-POSIX
-+	  systems. However, it does try to detect the level of POSIX
- 	  conformance of the underlying system and bind only available
--	  APIs
-+	  APIs.
- 
- 	  https://github.com/luaposix/luaposix
--
--comment "luaposix needs a Lua 5.1/5.2 interpreter"
--	depends on BR2_PACKAGE_LUA_5_3
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index 5d41472..ea4ab02 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
+diff --git a/package/lpeg/lpeg.mk b/package/lpeg/lpeg.mk
+index 52fb7b7..76e75f7 100644
+--- a/package/lpeg/lpeg.mk
++++ b/package/lpeg/lpeg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUAPOSIX_VERSION = 33.0.0
-+LUAPOSIX_VERSION = 33.3.1
- LUAPOSIX_SITE = $(call github,luaposix,luaposix,release-v$(LUAPOSIX_VERSION))
- LUAPOSIX_LICENSE = MIT
- LUAPOSIX_LICENSE_FILES = COPYING
+-LPEG_VERSION = 0.12.1-1
++LPEG_VERSION = 0.12.2-1
+ LPEG_LICENSE = MIT
+ 
+ $(eval $(luarocks-package))
