@@ -1,42 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 18:40:17 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xf86dga: bump version
-	to 1.0.3, add hash
-Message-ID: <20150418170659.4C1C17F922@busybox.osuosl.org>
+Date: Sat, 18 Apr 2015 18:40:19 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xwud: add hash
+Message-ID: <20150418170701.282787F922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0687ccac6c0264c75b1a3b02c68847f9f3e59284
+commit: http://git.buildroot.net/buildroot/commit/?id=a3909771ab19a6d7a1d3cd227dda51306cdf06a4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xapp_xf86dga/xapp_xf86dga.hash |    2 ++
- package/x11r7/xapp_xf86dga/xapp_xf86dga.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/x11r7/xapp_xwud/xapp_xwud.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xapp_xf86dga/xapp_xf86dga.hash b/package/x11r7/xapp_xf86dga/xapp_xf86dga.hash
+diff --git a/package/x11r7/xapp_xwud/xapp_xwud.hash b/package/x11r7/xapp_xwud/xapp_xwud.hash
 new file mode 100644
-index 0000000..b0c803e
+index 0000000..44e9c60
 --- /dev/null
-+++ b/package/x11r7/xapp_xf86dga/xapp_xf86dga.hash
++++ b/package/x11r7/xapp_xwud/xapp_xwud.hash
 @@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2010-October/001515.html
-+sha1	030659e3728f5f7142e1cf727f147aceeabe4b9e	xf86dga-1.0.3.tar.bz2
-diff --git a/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk b/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk
-index 07b6ac9..a2e08da 100644
---- a/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk
-+++ b/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XAPP_XF86DGA_VERSION = 1.0.2
-+XAPP_XF86DGA_VERSION = 1.0.3
- XAPP_XF86DGA_SOURCE = xf86dga-$(XAPP_XF86DGA_VERSION).tar.bz2
- XAPP_XF86DGA_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XF86DGA_LICENSE = MIT
++# From http://lists.x.org/archives/xorg-announce/2012-March/001927.html
++sha256	d6b3a09ccfe750868e26bd2384900ab5ff0d434f7f40cd272a50eda8aaa1f8bd	xwud-1.0.4.tar.bz2
