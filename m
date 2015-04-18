@@ -1,83 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 18:32:23 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xcompmgr: new package
-Message-ID: <20150418163311.EDC627FCDF@busybox.osuosl.org>
+Date: Sat, 18 Apr 2015 18:33:54 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libICE: Add
+	host-pkgconf dependency
+Message-ID: <20150418163407.A37608050F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=194d7c531b613e4f04981a6319fc81664b257a61
+commit: http://git.buildroot.net/buildroot/commit/?id=b05cce23262e4ea2dcd030a7e19bf4c6601ea97a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Using this defconfig
+
+BR2_x86_pentium4=y
+BR2_COMPILER_PARANOID_UNSAFE_PATH=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2015.02.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
+BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XLIB_LIBICE=y
+
+build would fail without this patch:
+
+checking for ICE... configure: error: in `/home/br/buildroot/output/build/xlib_libICE-1.0.9':
+configure: error: The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
+
+Alternatively, you may set the environment variables ICE_CFLAGS
+and ICE_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See `config.log' for more details
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/Config.in                        |    1 +
- package/x11r7/xapp_xcompmgr/Config.in          |   10 ++++++++++
- package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash |    2 ++
- package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk   |   19 +++++++++++++++++++
- 4 files changed, 32 insertions(+), 0 deletions(-)
+ package/x11r7/xlib_libICE/xlib_libICE.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 572963c..62cfd56 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -89,6 +89,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xapp_xclipboard/Config.in
- 		source package/x11r7/xapp_xclock/Config.in
- 		source package/x11r7/xapp_xcmsdb/Config.in
-+		source package/x11r7/xapp_xcompmgr/Config.in
- 		source package/x11r7/xapp_xconsole/Config.in
- 		source package/x11r7/xapp_xcursorgen/Config.in
- 		source package/x11r7/xapp_xdbedizzy/Config.in
-diff --git a/package/x11r7/xapp_xcompmgr/Config.in b/package/x11r7/xapp_xcompmgr/Config.in
-new file mode 100644
-index 0000000..a2e1db5
---- /dev/null
-+++ b/package/x11r7/xapp_xcompmgr/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_XAPP_XCOMPMGR
-+	bool "xcompmgr"
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBXFIXES
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXFIXES
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE
-+	help
-+	  xcompmgr is a sample compositing manager that enables basic
-+	  eye-candy effects.
-diff --git a/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash b/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash
-new file mode 100644
-index 0000000..34c13c1
---- /dev/null
-+++ b/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash
-@@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2015-April/002568.html
-+sha256	c8049b1a2531313be7469ba9b198d334f0b91cc01efc2b20b9afcb117e4d6892	xcompmgr-1.1.7.tar.bz2
-diff --git a/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk b/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk
-new file mode 100644
-index 0000000..918c1e5
---- /dev/null
-+++ b/package/x11r7/xapp_xcompmgr/xapp_xcompmgr.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# xapp_xcompmgr
-+#
-+################################################################################
-+
-+XAPP_XCOMPMGR_VERSION = 1.1.7
-+XAPP_XCOMPMGR_SOURCE = xcompmgr-$(XAPP_XCOMPMGR_VERSION).tar.bz2
-+XAPP_XCOMPMGR_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XCOMPMGR_LICENSE = MIT
-+XAPP_XCOMPMGR_LICENSE_FILES = COPYING
-+XAPP_XCOMPMGR_DEPENDENCIES = \
-+	xlib_libXcomposite \
-+	xlib_libXdamage \
-+	xlib_libXext \
-+	xlib_libXfixes \
-+	xlib_libXrender
-+
-+$(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libICE/xlib_libICE.mk b/package/x11r7/xlib_libICE/xlib_libICE.mk
+index 6f69bfb..e2a4e7d 100644
+--- a/package/x11r7/xlib_libICE/xlib_libICE.mk
++++ b/package/x11r7/xlib_libICE/xlib_libICE.mk
+@@ -10,6 +10,6 @@ XLIB_LIBICE_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBICE_LICENSE = MIT
+ XLIB_LIBICE_LICENSE_FILES = COPYING
+ XLIB_LIBICE_INSTALL_STAGING = YES
+-XLIB_LIBICE_DEPENDENCIES = xlib_xtrans xproto_xproto
++XLIB_LIBICE_DEPENDENCIES = xlib_xtrans xproto_xproto host-pkgconf
+ 
+ $(eval $(autotools-package))
