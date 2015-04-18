@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Apr 2015 16:29:53 +0200
-Subject: [Buildroot] [PATCH 25/61] package/x11r7/xapp_showfont: add hash
+Date: Sat, 18 Apr 2015 16:30:28 +0200
+Subject: [Buildroot] [PATCH 60/61] package/x11r7//xdriver_xf86-video-vmware:
+	add hash
 In-Reply-To: <1429367429-11771-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429367429-11771-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429367429-11771-25-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429367429-11771-60-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +14,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_showfont/xapp_showfont.hash |    2 ++
+ .../x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash   |    2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/x11r7/xapp_showfont/xapp_showfont.hash
+ create mode 100644 package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
 
-diff --git a/package/x11r7/xapp_showfont/xapp_showfont.hash b/package/x11r7/xapp_showfont/xapp_showfont.hash
+diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
 new file mode 100644
-index 0000000..0fff9ce
+index 0000000..10d31d0
 --- /dev/null
-+++ b/package/x11r7/xapp_showfont/xapp_showfont.hash
++++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
 @@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2014-December/002513.html
-+sha256	e9735c1c530b8a52edfab7415cc0fd7f8d2889095114f4cb689a27476461ac89	showfont-1.0.5.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-January/002521.html
++sha256	3c1d244e4b1b77e92126957965cdc9fb82de4c215c0706a3a8aaff6939e4a0cc	xf86-video-vmware-13.1.0.tar.bz2
 -- 
 1.7.10.4
