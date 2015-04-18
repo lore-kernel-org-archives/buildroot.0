@@ -1,62 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 18:33:54 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libICE: Add
-	host-pkgconf dependency
-Message-ID: <20150418163407.A37608050F@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Apr 2015 18:34:49 +0200
+Subject: [Buildroot] Advice on how to build TGT
+In-Reply-To: <003c01d079ea$52d2a8b0$f877fa10$@go-unified.com>
+References: <003c01d079ea$52d2a8b0$f877fa10$@go-unified.com>
+Message-ID: <20150418163449.GB4538@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b05cce23262e4ea2dcd030a7e19bf4c6601ea97a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Benedikt, All,
 
-Using this defconfig
+On 2015-04-18 16:14 +0100, Benedikt Riedel spake thusly:
+> I am trying to get this application into my buildroot to provide and manage iSCSI targets
+> 
+> [1]http://stgt.sourceforge.net/
+> 
+> 
+> 
+> The package is compiling/installing, however I am not able to run the service or the binary.
+> 
+> 
+> 
+> # tgtd
+> 
+> -sh: tgtd: not found
+> 
+> 
+> 
+> 
+> 
+> The config.in is fairly simple:
+> 
+> 
+> 
+> STGT_VERSION= 1.0.57
+> 
+> STGT_SOURCE = v1.0.57.tar.gz
+> 
+> STGT_SITE = https://github.com/fujita/tgt/archive/
 
-BR2_x86_pentium4=y
-BR2_COMPILER_PARANOID_UNSAFE_PATH=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2015.02.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
-BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XLIB_LIBICE=y
+Please use the github helper. See the manual:
+    http://buildroot.net/downloads/manual/manual.html#github-download-url
 
-build would fail without this patch:
+> STGT_AUTORECONF = NO
 
-checking for ICE... configure: error: in `/home/br/buildroot/output/build/xlib_libICE-1.0.9':
-configure: error: The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
+Unneeded since that's the default. Anyway, wrong since it's not an
+autotools package (see below).
 
-Alternatively, you may set the environment variables ICE_CFLAGS
-and ICE_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
+> STGT_INSTALL_STAGING = NO
+> STGT_INSTALL_TARGET = YES
 
-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-See `config.log' for more details
+Unneeded, that's the default.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xlib_libICE/xlib_libICE.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> STGT_DEPENDENCIES = uclibc
 
-diff --git a/package/x11r7/xlib_libICE/xlib_libICE.mk b/package/x11r7/xlib_libICE/xlib_libICE.mk
-index 6f69bfb..e2a4e7d 100644
---- a/package/x11r7/xlib_libICE/xlib_libICE.mk
-+++ b/package/x11r7/xlib_libICE/xlib_libICE.mk
-@@ -10,6 +10,6 @@ XLIB_LIBICE_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBICE_LICENSE = MIT
- XLIB_LIBICE_LICENSE_FILES = COPYING
- XLIB_LIBICE_INSTALL_STAGING = YES
--XLIB_LIBICE_DEPENDENCIES = xlib_xtrans xproto_xproto
-+XLIB_LIBICE_DEPENDENCIES = xlib_xtrans xproto_xproto host-pkgconf
- 
- $(eval $(autotools-package))
+Incorrect. And anyway, the dependency on the toolchain is automatic.
+
+> $(eval $(autotools-package))
+
+I'm very surprised this works, since tgt does not have configure, nor
+does it have configure.ac or Makefile.am or the other autotools-related
+files.
+
+What you want to use is the generic-package infrastructure. See the
+manual.
+
+> Any suggestion on what I am missing or an alternative iSCSI target
+> that works with kernel >3.18 would be appreciated.
+
+Well, I've had a quick look at tgt, and it seems it will be hard (very
+hard) to cross-compile, given the way the Makefiles are written. For
+example, there's a ton of things like (in usr/Makefile):
+
+    ifneq ($(shell test -e /usr/include/linux/signalfd.h && echo 1),)
+    CFLAGS += -DUSE_SIGNALFD
+    endif
+
+which are clearly wrong for cross-compilation.
+
+tgt would indeed be a nice addition, but it would need quite some love
+and care... :-/
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
