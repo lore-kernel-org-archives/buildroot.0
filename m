@@ -1,9 +1,8 @@
 From: Nikolay Dimitrov <picmaster@mail.bg>
-Date: Sat, 18 Apr 2015 17:13:31 +0300
-Subject: [Buildroot] [PATCH 2/2] board/riotboard: readme: Update description
-In-Reply-To: <1429366411-8463-1-git-send-email-picmaster@mail.bg>
-References: <1429366411-8463-1-git-send-email-picmaster@mail.bg>
-Message-ID: <1429366411-8463-2-git-send-email-picmaster@mail.bg>
+Date: Sat, 18 Apr 2015 17:13:30 +0300
+Subject: [Buildroot] [PATCH 1/2] configs/riotboard: bump kernel to version
+	3.19.3
+Message-ID: <1429366411-8463-1-git-send-email-picmaster@mail.bg>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +11,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
 ---
- board/embest/riotboard/readme.txt |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ configs/riotboard_defconfig |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/embest/riotboard/readme.txt b/board/embest/riotboard/readme.txt
-index 8c31bbe..c734ec4 100644
---- a/board/embest/riotboard/readme.txt
-+++ b/board/embest/riotboard/readme.txt
-@@ -16,8 +16,8 @@ your SD-card:
- sudo dd if=output/images/u-boot.imx of=/dev/sdX bs=1k seek=1
+diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
+index fc25249..6e581fa 100644
+--- a/configs/riotboard_defconfig
++++ b/configs/riotboard_defconfig
+@@ -20,13 +20,13 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
  
- Create 1 partition on the SD-card using your favourite tool. The partition
--should be big enough to hold your rootfs, for example 128MiB. Here's how an
--example of such partition layout:
-+should be big enough to hold your rootfs, for example 128MiB. Here's an example
-+partition layout:
+ # kernel headers
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_DEFAULT_KERNEL_VERSION="3.19.3"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
  
-    Device Boot      Start         End      Blocks   Id  System
- /dev/sdX1            2048      264191      131072   83  Linux
-@@ -30,7 +30,7 @@ Deploy your rootfs to the SD-card:
- 
- sudo mkdir /mnt/sdcard/
- sudo mount /dev/sdX1 /mnt/sdcard/
--sudo tar xf rootfs.tar -C /mnt/sdcard/
-+sudo tar xf output/images/rootfs.tar -C /mnt/sdcard/
- sudo umount /dev/sdX1
- 
- 3. Running buildroot
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 -- 
 1.7.10.4
