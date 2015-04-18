@@ -1,10 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Apr 2015 14:40:15 +0200
-Subject: [Buildroot] [PATCH 03/32] package/x11r7/xlib_libXdmcp: bump to
-	version 1.1.2
-In-Reply-To: <1429360844-12625-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429360844-12625-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429360844-12625-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 18 Apr 2015 14:40:13 +0200
+Subject: [Buildroot] [PATCH 01/32] package/x11r7/xcb-util-renderutil: new
+	package
+Message-ID: <1429360844-12625-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +12,76 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash |    4 ++--
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/Config.in                                 |    1 +
+ package/x11r7/xcb-util-renderutil/Config.in             |   15 +++++++++++++++
+ .../x11r7/xcb-util-renderutil/xcb-util-renderutil.hash  |    2 ++
+ .../x11r7/xcb-util-renderutil/xcb-util-renderutil.mk    |   15 +++++++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 package/x11r7/xcb-util-renderutil/Config.in
+ create mode 100644 package/x11r7/xcb-util-renderutil/xcb-util-renderutil.hash
+ create mode 100644 package/x11r7/xcb-util-renderutil/xcb-util-renderutil.mk
 
-diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
-index 8aff93b..6b50cb1 100644
---- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
-+++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/xorg/2012-March/054007.html
--sha256	9ace6d4230f9dce4ed090692f82f613253ada8f887b23b3d8ff3dd4e3a7c118e	libXdmcp-1.1.1.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-March/002554.html
-+sha256	81fe09867918fff258296e1e1e159f0dc639cb30d201c53519f25ab73af4e4e2	libXdmcp-1.1.2.tar.bz2
-diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-index 866f10b..119c018 100644
---- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-+++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBXDMCP_VERSION = 1.1.1
-+XLIB_LIBXDMCP_VERSION = 1.1.2
- XLIB_LIBXDMCP_SOURCE = libXdmcp-$(XLIB_LIBXDMCP_VERSION).tar.bz2
- XLIB_LIBXDMCP_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXDMCP_LICENSE = MIT
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 608837f..4166a96 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -19,6 +19,7 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/xcb-util/Config.in
+ 		source package/x11r7/xcb-util-image/Config.in
+ 		source package/x11r7/xcb-util-keysyms/Config.in
++		source package/x11r7/xcb-util-renderutil/Config.in
+ 		source package/x11r7/xcb-util-wm/Config.in
+ 		source package/x11r7/xlib_libFS/Config.in
+ 		source package/x11r7/xlib_libICE/Config.in
+diff --git a/package/x11r7/xcb-util-renderutil/Config.in b/package/x11r7/xcb-util-renderutil/Config.in
+new file mode 100644
+index 0000000..9675278
+--- /dev/null
++++ b/package/x11r7/xcb-util-renderutil/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_XCB_UTIL_RENDERUTIL
++	bool "xcb-util-renderutil"
++	select BR2_PACKAGE_XCB_UTIL
++	help
++	  The XCB util modules provides a number of libraries which sit on top
++	  of libxcb, the core X protocol library, and some of the extension
++	  libraries. These experimental libraries provide convenience functions
++	  and interfaces which make the raw X protocol more usable. Some of the
++	  libraries also provide client-side code which is not strictly part of
++	  the X protocol but which have traditionally been provided by Xlib.
++
++	  XCB util-renderutil module provides the following library:
++	    - renderutil: Convenience functions for the Render extension.
++
++	  http://xcb.freedesktop.org/
+diff --git a/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.hash b/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.hash
+new file mode 100644
+index 0000000..e5c47ca
+--- /dev/null
++++ b/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.hash
+@@ -0,0 +1,2 @@
++# From http://lists.x.org/archives/xorg-announce/2015-March/002555.html
++sha1	b55a92cd96c3ec1be9a26963df6d5f16e68fffea	xcb-util-cursor-0.1.2.tar.bz2
+diff --git a/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.mk b/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.mk
+new file mode 100644
+index 0000000..9e6683b
+--- /dev/null
++++ b/package/x11r7/xcb-util-renderutil/xcb-util-renderutil.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# xcb-util-renderutil
++#
++################################################################################
++
++XCB_UTIL_RENDERUTIL_VERSION = 0.3.9
++XCB_UTIL_RENDERUTIL_SITE = http://xcb.freedesktop.org/dist
++XCB_UTIL_RENDERUTIL_SOURCE = xcb-util-renderutil-$(XCB_UTIL_RENDERUTIL_VERSION).tar.bz2
++XCB_UTIL_RENDERUTIL_LICENSE = MIT
++XCB_UTIL_RENDERUTIL_LICENSE_FILES = COPYING
++XCB_UTIL_RENDERUTIL_INSTALL_STAGING = YES
++XCB_UTIL_RENDERUTIL_DEPENDENCIES = xcb-util
++
++$(eval $(autotools-package))
 -- 
 1.7.10.4
