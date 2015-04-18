@@ -1,187 +1,353 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 08:30:17 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-04-17
-Message-ID: <20150418063017.CCBDF10115D@stock.ovh.net>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sat, 18 Apr 2015 08:46:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: bump to version 2015.04
+Message-ID: <1429339603-12415-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2015-04-17
-===============================
+Bump to version 2015.04:
+  * Enable optional support for FIT Signature Verification
+  * Remove patch 0002-nostrip, it's upstream
+  * Add musl patch
+  * Add hash file
 
-        success : 185
-       failures : 108
-       timeouts : 3  
-          TOTAL : 296
+This patch supersedes "package/uboot-tools: bump to version 2015.01"
+http://patchwork.ozlabs.org/patch/440396/
 
-Classification of failures by reason
-====================================
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uboot-tools/0002-nostrip.patch             | 61 -------------------
+ .../0002-tools-only-in-no-dot-config-targets.patch | 39 ++++++++++++
+ package/uboot-tools/0003-Fix-musl-build.patch      | 71 ++++++++++++++++++++++
+ package/uboot-tools/Config.in                      | 18 ++++++
+ package/uboot-tools/Config.in.host                 | 21 +++++++
+ package/uboot-tools/uboot-tools.hash               |  2 +
+ package/uboot-tools/uboot-tools.mk                 | 23 ++++++-
+ 7 files changed, 172 insertions(+), 63 deletions(-)
+ delete mode 100644 package/uboot-tools/0002-nostrip.patch
+ create mode 100644 package/uboot-tools/0002-tools-only-in-no-dot-config-targets.patch
+ create mode 100644 package/uboot-tools/0003-Fix-musl-build.patch
+ create mode 100644 package/uboot-tools/uboot-tools.hash
 
-                      bmon-3.6 | 28
-libubox-5a0bbefc8fa44044625... | 9 
-                libtirpc-0.2.4 | 7 
-                     vlc-2.2.0 | 6 
-                 leveldb-v1.18 | 4 
-                  dhcpcd-6.7.1 | 3 
-           libfreeimage-3.17.0 | 3 
-                  boost-1.57.0 | 3 
-      host-gdb-arc-2014.12-gdb | 3 
-               libecore-1.7.10 | 3 
-freerdp-770c67d340d5f0a7b48... | 2 
-                    webp-0.4.3 | 2 
-                host-ola-0.9.4 | 2 
-           aircrack-ng-1.2-rc1 | 2 
-              postgresql-9.4.1 | 2 
-                  python-2.7.9 | 1 
-                    qpdf-5.1.2 | 1 
-                  snmppp-3.3.4 | 1 
-             armadillo-4.000.4 | 1 
-                   atftp-0.7.1 | 1 
-                    qemu-2.1.2 | 1 
-                 clamav-0.98.6 | 1 
-                 clapack-3.2.1 | 1 
-libconfuse-9413a82f9cb56a94... | 1 
-filemq-482797b8aa30fcc9ea13... | 1 
-               libsigsegv-2.10 | 1 
-               celt051-0.5.1.3 | 1 
-                 jack2-v1.9.10 | 1 
-         conntrack-tools-1.4.2 | 1 
-              xmlstarlet-1.5.0 | 1 
-make: *** [network-manager-... | 1 
-                  weston-1.7.0 | 1 
-                 rsyslog-8.9.0 | 1 
-            host-heimdal-1.5.3 | 1 
-               alsa-lib-1.0.29 | 1 
-           libmemcached-1.0.18 | 1 
-                   bdwgc-7.4.2 | 1 
-                     gdb-7.8.2 | 1 
-               host-qemu-2.1.2 | 1 
-           libvncserver-0.9.10 | 1 
-              wireshark-1.12.4 | 1 
-           qt5multimedia-5.4.1 | 1 
-            gst-ffmpeg-0.10.13 | 1 
-             fxload-2008_10_13 | 1 
-             exfat-utils-1.1.1 | 1 
-          libedit-20130712-3.1 | 1 
-                host-gdb-7.8.2 | 1 
-
-Detail of failures
-===================
-
-         arm |            aircrack-ng-1.2-rc1 | NOK | http://autobuild.buildroot.net/results/6f93e23d41e3d0e06402923381e63dc38ad7fa5d/
-         arm |            aircrack-ng-1.2-rc1 | NOK | http://autobuild.buildroot.net/results/2816333c8525b6f7025b59091c439850a3ff6c19/
-         sh4 |                alsa-lib-1.0.29 | NOK | http://autobuild.buildroot.net/results/702ac31e2b4b69ec299e4195d51c31f96cd2b35b/
-      x86_64 |              armadillo-4.000.4 | NOK | http://autobuild.buildroot.net/results/67fc3461dc3a30b4c246ef674de05fa88a269afe/
-         arm |                    atftp-0.7.1 | NOK | http://autobuild.buildroot.net/results/f92d5dfb37ff884ae3458b78fd304c898b3c018b/
-         arm |                    bdwgc-7.4.2 | NOK | http://autobuild.buildroot.net/results/97e47fbfe663a742445405d8fbca44a8ba528650/
-     powerpc |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/d0a9bd72289e79f486b86c3b3bbb5bc4f3c7446d/
-        i486 |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/390473845e1353689005714e54721f955f762c31/
-        sh4a |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/6d500cbbfb3f641deecb739214ab0b47b403e3e9/
-       nios2 |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/186830c2e3806055e7555f51fb499ebfa7757c5e/
-        sh4a |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/0b16c077d9320f88e9a6263e08400413ac6bf4a5/
-         arm |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/0a823b943bf32877c183e43e194fa03b69d3d3bb/
-      x86_64 |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/ac8120f47bca2c75c120319a8bc3c1d8d690afd1/
-      x86_64 |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/dc178b56b270d2ef988094749a7d31b9aabb186b/
-      xtensa |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/8b700be859cde113cdbdf76e3b97d2a27fdadb92/
-         arm |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/296bcaf4fd1fadcab71881d6d00a8763bfa91a41/
-      mipsel |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/eeac33312a6c6f24ea00482100f74572bf71b365/
-         arm |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/acad45bd6e787ff6dcbf3dc975d3e9c543df23ca/
-         arm |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/5a5c711145b798969dc4a33a985faad5c3136239/
-      mipsel |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/45bd14ad6898c16a7292580232c01bb6b2376ee5/
-     powerpc |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/33222c2694f37367178e4ee2c40030db413e0cf4/
-         arm |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/0f6b55bf4cc85458ea311c67f01c020090aac9df/
-         arm |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/5a040eccb60629582fc0a99cdabcaa0ddb64695b/
-        mips |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/b621c66689d2d84bb677e3a70417f6ccffdad9e0/
-     powerpc |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/c584b9a0d4aae85ebfefdf731cea2ed2b1e2a88b/
-         arm |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/d68e578c15719b3455d7e3472f06fa103b7553a1/
-     powerpc |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/d414b842f6231116af334905f6ad89601da5f874/
-      mipsel |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/20b5942338a15d8f68a36859bff609d8caca530e/
-         arm |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/21aa5f0590b46c249a50b88328ed14f43398b827/
-        i486 |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/285ab28bd7281a58cde172a18c66aba700a59693/
-      xtensa |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/8e0f5be114361b593fda2db560e500f8a5a92757/
-         arc |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/db38341cce2aad36a625667e106a44d3d22aeedf/
-      x86_64 |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/74c56c72152946635e41e8b8f68a7dbc7b3faede/
-     powerpc |                       bmon-3.6 | NOK | http://autobuild.buildroot.net/results/0a2aeb6a988c330c9f67ef9e1d4ef10e3095cec3/
-         arc |                   boost-1.57.0 | NOK | http://autobuild.buildroot.net/results/8076f17de6d7c6c0145f3f159b678f25cda71352/
-         arc |                   boost-1.57.0 | NOK | http://autobuild.buildroot.net/results/42ae4a6a1cb4e3a9ec10742d116ba38db51494ca/
-     powerpc |                   boost-1.57.0 | NOK | http://autobuild.buildroot.net/results/4f871c5f063a65cd129560a359421860cf8e4f56/
-         arm |                celt051-0.5.1.3 | NOK | http://autobuild.buildroot.net/results/aa365d74b27e1a0b4f9664bb5bbb1a172ea4aaea/
-        i686 |                  clamav-0.98.6 | NOK | http://autobuild.buildroot.net/results/32ce89ff98edafb30eec0ac3c96ed9c031925ea9/
-         arm |                  clapack-3.2.1 | NOK | http://autobuild.buildroot.net/results/865dc9aea54eaba2e6049112fc6fd0efcacd0ea8/
-      xtensa |          conntrack-tools-1.4.2 | NOK | http://autobuild.buildroot.net/results/a77ac1acfc4bd9727629c6119426b58959352544/
-      xtensa |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/f5755a32311e03d9eb2c8bf8dba18264d3769406/
-microblazeel |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/90c62f0413ff0f606f50f97dba1073dc87db4cb3/
-     aarch64 |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/3851e2543dcab190211d48f830ccb74f12c0e57d/
-         arm |              exfat-utils-1.1.1 | NOK | http://autobuild.buildroot.net/results/78ea208ab06e9ecd5b17defbb9380b0d43ae2da1/
-     powerpc | filemq-482797b8aa30fcc9ea13... | NOK | http://autobuild.buildroot.net/results/32b0012cea40d14c8054eb1f774a1ef241ede3a0/
-      xtensa | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/8159e9cf37282487e76e3db0690f67c1ce3aaa4a/
-      xtensa | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/e0a3b695926ad3f32637b2971f146468dfc61b13/
-microblazeel |              fxload-2008_10_13 | NOK | http://autobuild.buildroot.net/results/47f8948c8c90adc2297c6bfa18af56d857f9e1a8/
-        bfin |                      gdb-7.8.2 | NOK | http://autobuild.buildroot.net/results/df7365ecda81433d1222e04c0595b61477227532/
-microblazeel |             gst-ffmpeg-0.10.13 | TIM | http://autobuild.buildroot.net/results/d1bb29c248ae7a4c63f6a8c879a0237cfe107648/
-      xtensa |                 host-gdb-7.8.2 | NOK | http://autobuild.buildroot.net/results/c46a2b0f209940a9708091f74e5cd87c71e6fd5a/
-         arc |       host-gdb-arc-2014.12-gdb | NOK | http://autobuild.buildroot.net/results/633d3c0f0019cf64e8b5387e9d39ca503f715206/
-         arc |       host-gdb-arc-2014.12-gdb | NOK | http://autobuild.buildroot.net/results/bab6417c7d74978930d7a91cc9b3deaa538fa6c0/
-         arc |       host-gdb-arc-2014.12-gdb | NOK | http://autobuild.buildroot.net/results/ae7c5d270be73fc10d32ae3333ad878df96e295a/
-      x86_64 |             host-heimdal-1.5.3 | TIM | http://autobuild.buildroot.net/results/8ab58fce2c21df3260c091e81320a70a6632c20a/
-         arm |                 host-ola-0.9.4 | NOK | http://autobuild.buildroot.net/results/8bd761c52388e937d1372c531f0c7b4d9ad533b6/
-      mipsel |                 host-ola-0.9.4 | NOK | http://autobuild.buildroot.net/results/239eea35463bcc27e1098304fbd61a8daff90307/
-        sh4a |                host-qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/76b27aeae4ea1508a06af2e53cd3d3cfff8207b0/
-      xtensa |                  jack2-v1.9.10 | NOK | http://autobuild.buildroot.net/results/aa3e94b3ff6d56f4a8dd2197f7c2ca748a513980/
-        bfin |                  leveldb-v1.18 | NOK | http://autobuild.buildroot.net/results/24d1da36fa3950ac226beb678d3b1d5b1d431bdd/
-        bfin |                  leveldb-v1.18 | NOK | http://autobuild.buildroot.net/results/b1d2bdacb2006cbedc80aca42f554ba18e8a2dd3/
-        bfin |                  leveldb-v1.18 | NOK | http://autobuild.buildroot.net/results/8edd5110b893566b73b0710e3f0560937b1cf9fa/
-        bfin |                  leveldb-v1.18 | NOK | http://autobuild.buildroot.net/results/8f36a1aac8d3c3842b5435933e36631654c780d5/
-      x86_64 | libconfuse-9413a82f9cb56a94... | TIM | http://autobuild.buildroot.net/results/996ea6190e50c08ce7155ff48ecdc6c3a81c2c17/
-      xtensa |                libecore-1.7.10 | NOK | http://autobuild.buildroot.net/results/d0dd0b909c540bf3792b87ded2ddca330cf934c7/
-      xtensa |                libecore-1.7.10 | NOK | http://autobuild.buildroot.net/results/d21d385ab2beb657083a7eaa5014ad455f06275b/
-         arc |                libecore-1.7.10 | NOK | http://autobuild.buildroot.net/results/cb5438642e2f6f6a97b30b4e7cb2dee419a23aed/
-         arm |           libedit-20130712-3.1 | NOK | http://autobuild.buildroot.net/results/9fff30ea48777cf18258ff4e48e6c1af6d7801ff/
-        i686 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/229a1e5ee41faaee4f33ed914334de530ad5e4cd/
-        i686 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/62e1e9e062f5c2366fb1803480a2d7d4799f7829/
-        i686 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/59c9d5ed79092024c4280e69a7186eb92f56d3f5/
-        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/ebd3b9e84d0fde1a70daaa954f020f0de7e87c01/
-         arm |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/98d803a57cf7fd516654e217c97f2a274165a7f4/
-         arc |                 libtirpc-0.2.4 | NOK | http://autobuild.buildroot.net/results/750274d17021c292303c235fb29b90f4122bd3fb/
-         arc |                 libtirpc-0.2.4 | NOK | http://autobuild.buildroot.net/results/eca62a1552ba017da3dce291845f68309364fc57/
-         arc |                 libtirpc-0.2.4 | NOK | http://autobuild.buildroot.net/results/cba95780409a465e2affdd367ef17636e57c9904/
-         arc |                 libtirpc-0.2.4 | NOK | http://autobuild.buildroot.net/results/d0112bd82e6f7212d19ab1ce042e400f1f46d814/
-         arm |                 libtirpc-0.2.4 | NOK | http://autobuild.buildroot.net/results/52c56fe9dfaba3b2bf2e97fe2d994f1c58204c41/
-         arc |                 libtirpc-0.2.4 | NOK | http://autobuild.buildroot.net/results/5be0356728e09c0634a2494b7736b1f2285a2681/
-         arm |                 libtirpc-0.2.4 | NOK | http://autobuild.buildroot.net/results/ea3bd61f9fa9b7f82f2b87ebfe7f56bca9d1d8e5/
-      xtensa | libubox-5a0bbefc8fa44044625... | NOK | http://autobuild.buildroot.net/results/650c77ebea5f97b16c8a51f9f97709efdc7e8474/
-        i486 | libubox-5a0bbefc8fa44044625... | NOK | http://autobuild.buildroot.net/results/3979974ad9662467b836411355350c08ad3efe5a/
-      x86_64 | libubox-5a0bbefc8fa44044625... | NOK | http://autobuild.buildroot.net/results/ffd40055fa9457568b66595460c426ecdeae3f83/
-     powerpc | libubox-5a0bbefc8fa44044625... | NOK | http://autobuild.buildroot.net/results/b1b7d2d826eb8abd2cd7cdf2c654478db4e8434a/
-         sh4 | libubox-5a0bbefc8fa44044625... | NOK | http://autobuild.buildroot.net/results/603ebd4bfbfb8260aaf68ff68fcb3457fab99b0e/
-      xtensa | libubox-5a0bbefc8fa44044625... | NOK | http://autobuild.buildroot.net/results/37786cbbe368b83ce5f606bd2fe7eabfa2db9049/
-         arm | libubox-5a0bbefc8fa44044625... | NOK | http://autobuild.buildroot.net/results/aa739159f0fae8f36ba65eb658e870522f91c7bb/
-         arm | libubox-5a0bbefc8fa44044625... | NOK | http://autobuild.buildroot.net/results/843d5c8a980b320b9c26e4f23f26bcadb69869ff/
-     powerpc | libubox-5a0bbefc8fa44044625... | NOK | http://autobuild.buildroot.net/results/38e76f3633f5590a3746299fd7dd6496daab72e6/
-       nios2 |            libvncserver-0.9.10 | NOK | http://autobuild.buildroot.net/results/9362eb7fb34336a7ce35d2a930ff1bd4502efdce/
-         arm | make: *** [network-manager-... | NOK | http://autobuild.buildroot.net/results/e8bc1e23d334e452d981d1a7d7280cf1f90c030a/
-      xtensa |               postgresql-9.4.1 | NOK | http://autobuild.buildroot.net/results/9f2e42c9fc68d688bbbbf9a4fd6c4feee213612e/
-      xtensa |               postgresql-9.4.1 | NOK | http://autobuild.buildroot.net/results/37feafe52fa3af2b627de41495576e304d5fca61/
-      xtensa |                   python-2.7.9 | NOK | http://autobuild.buildroot.net/results/3f475b19a78587f73f4a1754458ffe7f4430f056/
-        i686 |                     qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/a280e5267b3910957cc2be746897fbc0939da2b5/
-         arm |                     qpdf-5.1.2 | NOK | http://autobuild.buildroot.net/results/556f6ee36db5087c17100d3162aaf61ec1aa4f97/
-         arm |            qt5multimedia-5.4.1 | NOK | http://autobuild.buildroot.net/results/62feff0aa0c4841fc45bb9cefc4cba41d3a927af/
-         arm |                  rsyslog-8.9.0 | NOK | http://autobuild.buildroot.net/results/3ce8d9795a10cb0610c099ef8bf981e9cce0c4b5/
-         arm |                   snmppp-3.3.4 | NOK | http://autobuild.buildroot.net/results/418fe5eb32d76fac666dbdaa0a0dcb58a2f69e95/
-    mips64el |                      vlc-2.2.0 | NOK | http://autobuild.buildroot.net/results/5f66a8a135c95624a14908c685f1201dd7f8ae87/
-    mips64el |                      vlc-2.2.0 | NOK | http://autobuild.buildroot.net/results/1a97ff57648261a6d5afe732a1783aafdba43706/
-      x86_64 |                      vlc-2.2.0 | NOK | http://autobuild.buildroot.net/results/9b07deb767c95b29d9a03f23badd5f5e054f7dc2/
-        i686 |                      vlc-2.2.0 | NOK | http://autobuild.buildroot.net/results/90aaaaaa372a71b067a95a53ba8a64273cc39fa0/
-         arm |                      vlc-2.2.0 | NOK | http://autobuild.buildroot.net/results/de487ec8be0ca0101c8d0ce328504936d8e6fcf0/
-         arm |                      vlc-2.2.0 | NOK | http://autobuild.buildroot.net/results/26d5acf2d644d57abcd9fa3813de4d704ae64a9b/
-     aarch64 |                     webp-0.4.3 | NOK | http://autobuild.buildroot.net/results/c071e54799744b02c35a877d97ff1111e748db38/
-     aarch64 |                     webp-0.4.3 | NOK | http://autobuild.buildroot.net/results/7caa14254c76f8f00fe212af3a99e804a02bfa5b/
-     powerpc |                   weston-1.7.0 | NOK | http://autobuild.buildroot.net/results/b40349652fff53997c56bd6722981ef5b5f2f279/
-         arm |               wireshark-1.12.4 | NOK | http://autobuild.buildroot.net/results/da6f57432efc793ec6e346c677b4c634b5d261e0/
-        bfin |               xmlstarlet-1.5.0 | NOK | http://autobuild.buildroot.net/results/e9959b6503bf931b8a348ab287755ab63f944d3e/
-
-
+diff --git a/package/uboot-tools/0002-nostrip.patch b/package/uboot-tools/0002-nostrip.patch
+deleted file mode 100644
+index 7333f41..0000000
+--- a/package/uboot-tools/0002-nostrip.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-From 17e0d6ddd1dc5d04b8032bde2f2076134b0c6dd7 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Wed, 27 Aug 2014 14:21:32 +0200
+-Subject: [PATCH] tools/env: change stripping strategy to allow no-stripping
+-
+-When building the U-Boot tools for non-ELF platforms (such as Blackfin
+-FLAT), since commit 79fc0c5f498c3982aa4740c273ab1a9255063d9c
+-("tools/env: cross-compile fw_printenv without setting HOSTCC"), the
+-build fails because it tries to strip a FLAT binary, which does not
+-make sense.
+-
+-This commit solves this by changing the stripping logic in
+-tools/env/Makefile to be similar to the one in tools/Makefile. This
+-logic continues to apply strip to the final binary, but does not abort
+-the build if it fails, and does the stripping in place on the final
+-binary. This allows the logic to work fine if stripping doesn't work,
+-as it leaves the final binary untouched.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Cc: Masahiro Yamada <yamada.m@jp.panasonic.com>
+-Cc: Sonic Zhang <sonic.zhang@analog.com>
+----
+-An improved solution would be to be able to override STRIP completely
+-by setting it to /bin/true, but the main Makefile enforces STRIP =
+-$(CROSS_COMPILE)strip.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- tools/env/Makefile | 14 ++++++++------
+- 1 file changed, 8 insertions(+), 6 deletions(-)
+-
+-diff --git a/tools/env/Makefile b/tools/env/Makefile
+-index f5368bc..d047aa5 100644
+---- a/tools/env/Makefile
+-+++ b/tools/env/Makefile
+-@@ -21,14 +21,16 @@ HOST_EXTRACFLAGS += -DMTD_OLD
+- endif
+- 
+- always := fw_printenv
+--hostprogs-y := fw_printenv_unstripped
+-+hostprogs-y := fw_printenv
+- 
+--fw_printenv_unstripped-objs := fw_env.o fw_env_main.o \
+-+fw_printenv-objs := fw_env.o fw_env_main.o \
+- 	crc32.o ctype.o linux_string.o \
+- 	env_attr.o env_flags.o aes.o
+- 
+--quiet_cmd_strip = STRIP   $@
+--      cmd_strip = $(STRIP) -o $@ $<
+-+quiet_cmd_crosstools_strip = STRIP   $^
+-+      cmd_crosstools_strip = $(STRIP) $^; touch $@
+- 
+--$(obj)/fw_printenv: $(obj)/fw_printenv_unstripped FORCE
+--	$(call if_changed,strip)
+-+$(obj)/.strip: $(obj)/fw_printenv
+-+	$(call cmd,crosstools_strip)
+-+
+-+always += .strip
+--- 
+-2.0.0
+-
+diff --git a/package/uboot-tools/0002-tools-only-in-no-dot-config-targets.patch b/package/uboot-tools/0002-tools-only-in-no-dot-config-targets.patch
+new file mode 100644
+index 0000000..fedf9be
+--- /dev/null
++++ b/package/uboot-tools/0002-tools-only-in-no-dot-config-targets.patch
+@@ -0,0 +1,39 @@
++From 7d9bac7bf8d9ef39ab6b6e8d436e3dbdee5cd120 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Sun, 1 Feb 2015 21:53:47 +0100
++Subject: [PATCH 1/1] tools only in no dot config targets
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Revert upstream commit c7ad5cbb1ef2c33883f0fa7d0455095004fd306d:
++
++    Makefile: drop "tools-only" from no-dot-config-targets
++
++This indirectly pulls in a build-dependency on libssl-dev used for FIT
++image support, and possibly GPL/OpenSSL licensing incompatibility
++issues.
++
++Based on Debian patch from u-boot-tools:
++http://ftp.de.debian.org/debian/pool/main/u/u-boot/u-boot_2014.10+dfsg1-2.1.debian.tar.xz
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 36a9a28..f85c194 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -417,7 +417,7 @@ timestamp_h := include/generated/timestamp_autogenerated.h
++
++ no-dot-config-targets := clean clobber mrproper distclean \
++			 help %docs check% coccicheck \
++-			 ubootversion backup
+++			 ubootversion backup tools-only
++
++ config-targets := 0
++ mixed-targets  := 0
++--
++2.3.0
+diff --git a/package/uboot-tools/0003-Fix-musl-build.patch b/package/uboot-tools/0003-Fix-musl-build.patch
+new file mode 100644
+index 0000000..7c07daf
+--- /dev/null
++++ b/package/uboot-tools/0003-Fix-musl-build.patch
+@@ -0,0 +1,71 @@
++From bf738fda390787a10db0c9a4be9fcafd6707a90e Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Sat, 18 Apr 2015 08:00:46 +0200
++Subject: [PATCH 1/1] Fix musl build
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This patch fixes cross-compiling U-Boot tools with the musl C library:
++  * including <sys/types.h> is needed for ulong
++  * defining _GNU_SOURCE is needed for loff_t
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ include/image.h    | 1 +
++ tools/env/fw_env.c | 2 ++
++ tools/imagetool.h  | 1 +
++ tools/proftool.c   | 1 +
++ 4 files changed, 5 insertions(+)
++
++diff --git a/include/image.h b/include/image.h
++index 3844be6..ac2fd6e 100644
++--- a/include/image.h
+++++ b/include/image.h
++@@ -18,6 +18,7 @@
++
++ #include "compiler.h"
++ #include <asm/byteorder.h>
+++#include <sys/types.h>
++
++ /* Define this to avoid #ifdefs later on */
++ struct lmb;
++diff --git a/tools/env/fw_env.c b/tools/env/fw_env.c
++index 1173eea..daa02a7 100644
++--- a/tools/env/fw_env.c
+++++ b/tools/env/fw_env.c
++@@ -8,6 +8,8 @@
++  * SPDX-License-Identifier:	GPL-2.0+
++  */
++
+++#define _GNU_SOURCE
+++
++ #include <errno.h>
++ #include <env_flags.h>
++ #include <fcntl.h>
++diff --git a/tools/imagetool.h b/tools/imagetool.h
++index 3e15b4e..b7874f4 100644
++--- a/tools/imagetool.h
+++++ b/tools/imagetool.h
++@@ -16,6 +16,7 @@
++ #include <stdlib.h>
++ #include <string.h>
++ #include <sys/stat.h>
+++#include <sys/types.h>
++ #include <time.h>
++ #include <unistd.h>
++ #include <u-boot/sha1.h>
++diff --git a/tools/proftool.c b/tools/proftool.c
++index 3482951..9ce7a77 100644
++--- a/tools/proftool.c
+++++ b/tools/proftool.c
++@@ -16,6 +16,7 @@
++ #include <string.h>
++ #include <unistd.h>
++ #include <sys/param.h>
+++#include <sys/types.h>
++
++ #include <compiler.h>
++ #include <trace.h>
++--
++2.3.5
+diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
+index 7c8f17c..66045af 100644
+--- a/package/uboot-tools/Config.in
++++ b/package/uboot-tools/Config.in
+@@ -13,6 +13,24 @@ config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
+ 	  The mkimage tool from Das U-Boot bootloader, which allows
+ 	  generation of U-Boot images in various formats.
+ 
++if BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
++config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT
++	bool "FIT signature verification support"
++	select BR2_PACKAGE_OPENSSL
++	help
++	  Enables support for FIT Signature Verification.
++
++	  Flat Image Trees (FIT) supports hashing of images so that these
++	  hashes can be checked on loading. This protects against corruption
++	  of the image. However it does not prevent the substitution of one
++	  image for another.
++
++	  The signature feature allows the hash to be signed with a private
++	  key such that it can be verified using a public key later. Provided
++	  that the private key is kept secret and the public key is stored in
++	  a non-volatile place, any image can be verified in this way.
++endif
++
+ config BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE
+ 	bool "mkenvimage"
+ 	help
+diff --git a/package/uboot-tools/Config.in.host b/package/uboot-tools/Config.in.host
+index 7a844e9..8494b16 100644
+--- a/package/uboot-tools/Config.in.host
++++ b/package/uboot-tools/Config.in.host
+@@ -4,3 +4,24 @@ config BR2_PACKAGE_HOST_UBOOT_TOOLS
+ 	  Companion tools for Das U-Boot bootloader.
+ 
+ 	  http://www.denx.de/wiki/U-Boot/WebHome
++
++if BR2_PACKAGE_HOST_UBOOT_TOOLS
++config BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
++	bool "FIT signature verification support"
++	help
++	  Enables support for FIT Signature Verification.
++
++	  Flat Image Trees (FIT) supports hashing of images so that these
++	  hashes can be checked on loading. This protects against corruption
++	  of the image. However it does not prevent the substitution of one
++	  image for another.
++
++	  The signature feature allows the hash to be signed with a private
++	  key such that it can be verified using a public key later. Provided
++	  that the private key is kept secret and the public key is stored in
++	  a non-volatile place, any image can be verified in this way.
++
++	  Enabling this option indirectly pulls in a build-dependency on
++	  libssl and libcrypto, and possibly GPL/OpenSSL licensing
++	  incompatibility issues.
++endif
+diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
+new file mode 100644
+index 0000000..9cc96f6
+--- /dev/null
++++ b/package/uboot-tools/uboot-tools.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	0a1a70df586655f527befa6f12e184e96ed61b126e5a567382321b17200f5d60  u-boot-2015.04.tar.bz2
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 413207d..1c6d542 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -4,18 +4,24 @@
+ #
+ ################################################################################
+ 
+-UBOOT_TOOLS_VERSION = 2014.07
++UBOOT_TOOLS_VERSION = 2015.04
+ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPLv2+
+ UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
+ 
++define UBOOT_TOOLS_CONFIGURE_CMDS
++	mkdir -p $(@D)/include/config
++	touch $(@D)/include/config/auto.conf
++endef
++
+ define UBOOT_TOOLS_BUILD_CMDS
+ 	$(MAKE) -C $(@D) 			\
+ 		CROSS_COMPILE="$(TARGET_CROSS)"	\
+ 		CFLAGS="$(TARGET_CFLAGS)"	\
+ 		LDFLAGS="$(TARGET_LDFLAGS)"	\
+ 		CROSS_BUILD_TOOLS=y		\
++		CONFIG_FIT_SIGNATURE=$(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT) \
+ 		tools-only
+ 	$(MAKE) -C $(@D) 			\
+ 		CROSS_COMPILE="$(TARGET_CROSS)"	\
+@@ -28,7 +34,10 @@ ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE),y)
+ define UBOOT_TOOLS_INSTALL_MKIMAGE
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/mkimage $(TARGET_DIR)/usr/bin/mkimage
+ endef
+-endif
++ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT),y)
++UBOOT_TOOLS_DEPENDENCIES = openssl
++endif # BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT
++endif # BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
+ 
+ ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE),y)
+ define UBOOT_TOOLS_INSTALL_MKENVIMAGE
+@@ -49,8 +58,18 @@ define UBOOT_TOOLS_INSTALL_TARGET_CMDS
+ 	$(UBOOT_TOOLS_INSTALL_FWPRINTENV)
+ endef
+ 
++ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
++HOST_UBOOT_TOOLS_DEPENDENCIES = host-openssl
++endif
++
++define HOST_UBOOT_TOOLS_CONFIGURE_CMDS
++	mkdir -p $(@D)/include/config
++	touch $(@D)/include/config/auto.conf
++endef
++
+ define HOST_UBOOT_TOOLS_BUILD_CMDS
+ 	$(MAKE1) -C $(@D) 			\
++		CONFIG_FIT_SIGNATURE=$(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT) \
+ 		HOSTCC="$(HOSTCC)"		\
+ 		HOSTCFLAGS="$(HOST_CFLAGS)"	\
+ 		HOSTLDFLAGS="$(HOST_LDFLAGS)"	\
 -- 
-http://autobuild.buildroot.net
+2.3.5
