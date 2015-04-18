@@ -1,27 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 18:40:19 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xrdb: add hash
-Message-ID: <20150418170700.C8F937FF24@busybox.osuosl.org>
+Date: Sat, 18 Apr 2015 18:40:17 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xf86dga: bump version
+	to 1.0.3, add hash
+Message-ID: <20150418170659.4C1C17F922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82602e9a716352a493a10c81af84837f0dae4443
+commit: http://git.buildroot.net/buildroot/commit/?id=0687ccac6c0264c75b1a3b02c68847f9f3e59284
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xapp_xrdb/xapp_xrdb.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/x11r7/xapp_xf86dga/xapp_xf86dga.hash |    2 ++
+ package/x11r7/xapp_xf86dga/xapp_xf86dga.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xapp_xrdb/xapp_xrdb.hash b/package/x11r7/xapp_xrdb/xapp_xrdb.hash
+diff --git a/package/x11r7/xapp_xf86dga/xapp_xf86dga.hash b/package/x11r7/xapp_xf86dga/xapp_xf86dga.hash
 new file mode 100644
-index 0000000..4844a09
+index 0000000..b0c803e
 --- /dev/null
-+++ b/package/x11r7/xapp_xrdb/xapp_xrdb.hash
++++ b/package/x11r7/xapp_xf86dga/xapp_xf86dga.hash
 @@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2013-September/002316.html
-+sha256	73827b6bbfc9d27ca287d95a1224c306d7053cd7b8156641698d7dc541ca565b	xrdb-1.1.0.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2010-October/001515.html
++sha1	030659e3728f5f7142e1cf727f147aceeabe4b9e	xf86dga-1.0.3.tar.bz2
+diff --git a/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk b/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk
+index 07b6ac9..a2e08da 100644
+--- a/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk
++++ b/package/x11r7/xapp_xf86dga/xapp_xf86dga.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XAPP_XF86DGA_VERSION = 1.0.2
++XAPP_XF86DGA_VERSION = 1.0.3
+ XAPP_XF86DGA_SOURCE = xf86dga-$(XAPP_XF86DGA_VERSION).tar.bz2
+ XAPP_XF86DGA_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XF86DGA_LICENSE = MIT
