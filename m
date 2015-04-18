@@ -1,49 +1,27 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sat, 18 Apr 2015 18:54:27 +0200
-Subject: [Buildroot] [PATCH 3/3] expect: bump to version 5.45.3
-In-Reply-To: <1429376067-9228-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1429376067-9228-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1429376067-9228-4-git-send-email-fabio.porcedda@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 18 Apr 2015 18:40:17 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xapp_iceauth: add hash
+Message-ID: <20150418170659.B0A557FF24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Download it from the cvs repository because it is not avaialbe as a
-downloadable file.
-Also because a tag isn't avaiable use the date.
+commit: http://git.buildroot.net/buildroot/commit/?id=290acd538cc07c9d7ee77fe1a90c509fbce691a4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/expect/expect.hash | 2 --
- package/expect/expect.mk   | 5 ++---
- 2 files changed, 2 insertions(+), 5 deletions(-)
- delete mode 100644 package/expect/expect.hash
+ package/x11r7/xapp_iceauth/xapp_iceauth.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/expect/expect.hash b/package/expect/expect.hash
-deleted file mode 100644
-index 09e68e7..0000000
---- a/package/expect/expect.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed:
--sha256  b28dca90428a3b30e650525cdc16255d76bb6ccd65d448be53e620d95d5cc040  expect5.45.tar.gz
-diff --git a/package/expect/expect.mk b/package/expect/expect.mk
-index 8ef7e90..513be8f 100644
---- a/package/expect/expect.mk
-+++ b/package/expect/expect.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--EXPECT_VERSION = 5.45
--EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
--EXPECT_SITE = http://downloads.sourceforge.net/project/expect/Expect/$(EXPECT_VERSION)
-+EXPECT_VERSION = 2014/05/02 # v5.45.3
-+EXPECT_SITE = cvs://expect.cvs.sourceforge.net:/cvsroot/expect
- EXPECT_LICENSE = Public domain
- EXPECT_LICENSE_FILES = README
- 
--- 
-2.3.5
+diff --git a/package/x11r7/xapp_iceauth/xapp_iceauth.hash b/package/x11r7/xapp_iceauth/xapp_iceauth.hash
+new file mode 100644
+index 0000000..90c5f70
+--- /dev/null
++++ b/package/x11r7/xapp_iceauth/xapp_iceauth.hash
+@@ -0,0 +1,2 @@
++# From http://lists.x.org/archives/xorg-announce/2015-January/002519.html
++sha256	1216af2dee99b318fcf8bf9a259915273bcb37a7f1e7859af4f15d0ebf6f3f0a	iceauth-1.0.7.tar.bz2
