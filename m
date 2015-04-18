@@ -1,40 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 19:08:09 +0200
-Subject: [Buildroot] [git commit] configs/riotboard: bump kernel to version
-	3.19.3
-Message-ID: <20150418170843.5FA5680E0E@busybox.osuosl.org>
+Date: Sat, 18 Apr 2015 19:08:28 +0200
+Subject: [Buildroot] [git commit] board/riotboard: readme: Update description
+Message-ID: <20150418170843.696B880E0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8866bdb1fc38263c5292f9cb8dc09b119f70ceb8
+commit: http://git.buildroot.net/buildroot/commit/?id=0f9bee00c3491024ed2775ef12d2850ed6d3d407
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+[Thomas: rewrap text.]
 
 Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/riotboard_defconfig |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ board/embest/riotboard/readme.txt |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-index fc25249..6e581fa 100644
---- a/configs/riotboard_defconfig
-+++ b/configs/riotboard_defconfig
-@@ -20,13 +20,13 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+diff --git a/board/embest/riotboard/readme.txt b/board/embest/riotboard/readme.txt
+index 8c31bbe..b7390d0 100644
+--- a/board/embest/riotboard/readme.txt
++++ b/board/embest/riotboard/readme.txt
+@@ -15,9 +15,9 @@ your SD-card:
  
- # kernel headers
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.19"
-+BR2_DEFAULT_KERNEL_VERSION="3.19.3"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ sudo dd if=output/images/u-boot.imx of=/dev/sdX bs=1k seek=1
  
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19.3"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-Create 1 partition on the SD-card using your favourite tool. The partition
+-should be big enough to hold your rootfs, for example 128MiB. Here's how an
+-example of such partition layout:
++Create 1 partition on the SD-card using your favourite tool. The
++partition should be big enough to hold your rootfs, for example
++128MiB. Here's an example partition layout:
+ 
+    Device Boot      Start         End      Blocks   Id  System
+ /dev/sdX1            2048      264191      131072   83  Linux
+@@ -30,7 +30,7 @@ Deploy your rootfs to the SD-card:
+ 
+ sudo mkdir /mnt/sdcard/
+ sudo mount /dev/sdX1 /mnt/sdcard/
+-sudo tar xf rootfs.tar -C /mnt/sdcard/
++sudo tar xf output/images/rootfs.tar -C /mnt/sdcard/
+ sudo umount /dev/sdX1
+ 
+ 3. Running buildroot
