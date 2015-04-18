@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 18 Apr 2015 10:15:25 +0200
-Subject: [Buildroot] [PATCH 1/5] perl-gdgraph: bump to version 1.59
-Message-ID: <1429344929-2198-1-git-send-email-francois.perrad@gadz.org>
+Date: Sat, 18 Apr 2015 10:15:26 +0200
+Subject: [Buildroot] [PATCH 2/5] perl-io-socket-ssl: bump to version 2.012
+In-Reply-To: <1429344929-2198-1-git-send-email-francois.perrad@gadz.org>
+References: <1429344929-2198-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1429344929-2198-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-gdgraph/perl-gdgraph.hash | 4 ++--
- package/perl-gdgraph/perl-gdgraph.mk   | 2 +-
+ package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
+ package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-gdgraph/perl-gdgraph.hash b/package/perl-gdgraph/perl-gdgraph.hash
-index ba51793..7005cc9 100644
---- a/package/perl-gdgraph/perl-gdgraph.hash
-+++ b/package/perl-gdgraph/perl-gdgraph.hash
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+index 5578892..cc6ad46 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    2c9e4feb4246200d96b9faa8024b0bf0 GDGraph-1.48.tar.gz
--sha256 4324a104557edaf8925a20f24326af89c08e419989fbaa7380f0c9731bc2ac6c GDGraph-1.48.tar.gz
-+md5    8bb270a30fea27491302b39b701b3d4e GDGraph-1.49.tar.gz
-+sha256 d26538c827e35c1d4b27f3c045b60f1ab6b45401c54a87e86103cd7c2374cff5 GDGraph-1.49.tar.gz
-diff --git a/package/perl-gdgraph/perl-gdgraph.mk b/package/perl-gdgraph/perl-gdgraph.mk
-index 421fe99..dfb08d1 100644
---- a/package/perl-gdgraph/perl-gdgraph.mk
-+++ b/package/perl-gdgraph/perl-gdgraph.mk
+-md5    69cad2edebf89c6c295fe8778a4f9906 IO-Socket-SSL-2.010.tar.gz
+-sha256 68491ad58eb28645ca1272657e9c77c4c8ae4a11d35fb630ead4b6157079503c IO-Socket-SSL-2.010.tar.gz
++md5    e8d6584271b8c9421115eede83d42182 IO-Socket-SSL-2.012.tar.gz
++sha256 02bd7f17ceb492e396eca6627f50aaa2a3ddfcb5bfa3889ddf145383b0b179d9 IO-Socket-SSL-2.012.tar.gz
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+index 70f73e8..16ea056 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_GDGRAPH_VERSION = 1.48
-+PERL_GDGRAPH_VERSION = 1.49
- PERL_GDGRAPH_SOURCE = GDGraph-$(PERL_GDGRAPH_VERSION).tar.gz
- PERL_GDGRAPH_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RUZ
- PERL_GDGRAPH_DEPENDENCIES = perl perl-gd perl-gdtextutil
+-PERL_IO_SOCKET_SSL_VERSION = 2.010
++PERL_IO_SOCKET_SSL_VERSION = 2.012
+ PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
+ PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
+ PERL_IO_SOCKET_SSL_DEPENDENCIES = perl perl-net-ssleay
 -- 
 2.1.0
