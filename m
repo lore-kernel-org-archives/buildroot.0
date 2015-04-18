@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Apr 2015 15:54:41 +0200
-Subject: [Buildroot] [PATCH 2/3] uboot: deprecate
- BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
-In-Reply-To: <1429302375-12275-2-git-send-email-fhunleth@troodon-software.com>
+Date: Sat, 18 Apr 2015 15:55:41 +0200
+Subject: [Buildroot] [PATCH 3/3] altera: update use of
+ BR2_TARGET_UBOOT_PATCH_DIR
+In-Reply-To: <1429302375-12275-3-git-send-email-fhunleth@troodon-software.com>
 References: <1429302375-12275-1-git-send-email-fhunleth@troodon-software.com>
- <1429302375-12275-2-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20150418155441.76edbfe1@free-electrons.com>
+ <1429302375-12275-3-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20150418155541.55f356cb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +14,35 @@ To: buildroot@busybox.net
 
 Dear Frank Hunleth,
 
-On Fri, 17 Apr 2015 16:26:14 -0400, Frank Hunleth wrote:
-> Users should use BR2_TARGET_UBOOT_PATCHES instead.
+On Fri, 17 Apr 2015 16:26:15 -0400, Frank Hunleth wrote:
+> Use BR2_TARGET_UBOOT_PATCHES now that BR2_TARGET_UBOOT_PATCH_DIR is
+> deprecated.
 > 
 > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> ---
+>  configs/altera_sockit_defconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
+> index d27b96b..f9249ca 100644
+> --- a/configs/altera_sockit_defconfig
+> +++ b/configs/altera_sockit_defconfig
+> @@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
+>  BR2_TARGET_UBOOT_CUSTOM_GIT=y
+>  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.rocketboards.org/u-boot-socfpga.git"
+>  BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_acds13.0sp1"
+> -BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/altera/sockit"
+> +BR2_TARGET_UBOOT_CUSTOM_PATCHES="board/altera/sockit/uboot-sockit-preloader-sample-design.patch"
 
-Except that your implementation of BR2_TARGET_UBOOT_PATCHES does not
-allow the same thing as BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR.
-BR2_TARGET_UBOOT_PATCHES, as per your current implementation, can only
-be used for remote patches: they will be downloaded from the given URL
-if a full URL is given, or from $(UBOOT_SITE) if just a file name is
-given.
+Did you actually tested this? It will end up with:
 
-See how things are done in linux/linux.mk for an example that allows
-both remote and local patches. Though I'm not necessarily too happy to
-see the linux/linux.mk being duplicated...
+UBOOT_PATCH = board/altera/sockit/uboot-sockit-preloader-sample-design.patch
 
-Thanks,
+which means that the package infra will try to download:
+
+   ftp://ftp.denx.de/pub/u-boot/board/altera/sockit/uboot-sockit-preloader-sample-design.patch
+
+No?
 
 Thomas
 -- 
