@@ -1,42 +1,47 @@
 From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sat, 18 Apr 2015 16:27:44 -0400
-Subject: [Buildroot] [PATCH v2 3/3] altera: update use of
-	BR2_TARGET_UBOOT_PATCH_DIR
+Date: Sat, 18 Apr 2015 16:27:43 -0400
+Subject: [Buildroot] [PATCH v2 2/3] uboot: deprecate
+	BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
 In-Reply-To: <1429388864-15377-1-git-send-email-fhunleth@troodon-software.com>
 References: <1429388864-15377-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <1429388864-15377-3-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <1429388864-15377-2-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use BR2_TARGET_UBOOT_PATCH now that BR2_TARGET_UBOOT_PATCH_DIR is
-deprecated.
+Users should use BR2_TARGET_UBOOT_PATCH instead.
 
 Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
 Changes v1 -> v2:
-  - After switch to linux.mk style, patch directories are supported
-    again
-  - Actually tested this patch this time. It works - at least the
-    patch applies and the altera_sockit configuration builds.
+  - Made BR2_TARGET_UBOOT_PATCH naming consistent with kernel
+    naming, since using linux.mk patch strategy now
 
- configs/altera_sockit_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ boot/uboot/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
-index d27b96b..888fccf 100644
---- a/configs/altera_sockit_defconfig
-+++ b/configs/altera_sockit_defconfig
-@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.rocketboards.org/u-boot-socfpga.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_acds13.0sp1"
--BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/altera/sockit"
-+BR2_TARGET_UBOOT_PATCH="board/altera/sockit"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 768daa7..a2e8e94 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -71,6 +71,7 @@ config BR2_TARGET_UBOOT_VERSION
+ 		if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
+
+ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
++	depends on BR2_DEPRECATED_SINCE_2015_05
+ 	string "custom patch dir"
+ 	help
+ 	  If your board requires custom patches, add the path to the
+@@ -79,6 +80,8 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+
+ 	  Most users may leave this empty
+
++	  NOTE: Use BR2_TARGET_UBOOT_PATCH instead.
++
+ config BR2_TARGET_UBOOT_PATCH
+ 	string "Custom U-Boot patches"
+ 	help
 --
 1.9.1
