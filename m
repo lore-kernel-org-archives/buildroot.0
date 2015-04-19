@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 19 Apr 2015 23:10:29 +0200
-Subject: [Buildroot] [git commit] package/lockdev: add hash
-Message-ID: <20150419212235.879CC7FBF7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lockfile-progs: add hash
+Message-ID: <20150419212235.8EBF27FBF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6104ad04db0114ba12fdae422bc7adba7cd7c232
+commit: http://git.buildroot.net/buildroot/commit/?id=57e2fa7a6a63ae24eec55f0e89660009f9c7e948
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lockdev/lockdev.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/lockfile-progs/lockfile-progs.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/lockdev/lockdev.hash b/package/lockdev/lockdev.hash
+diff --git a/package/lockfile-progs/lockfile-progs.hash b/package/lockfile-progs/lockfile-progs.hash
 new file mode 100644
-index 0000000..bb055e4
+index 0000000..e628f0c
 --- /dev/null
-+++ b/package/lockdev/lockdev.hash
-@@ -0,0 +1,3 @@
-+# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockdev/lockdev_1.0.3-1.6.dsc
-+sha256	ccae635d7ac3fdd50897eceb250872b3d9a191d298f213e7f0c836910d869f82	lockdev_1.0.3.orig.tar.gz
-+sha256	a5405c6ee5e97e45eeb1c81330a7e9f444a58bda5e6771fa30007516c115007e	lockdev_1.0.3-1.6.diff.gz
++++ b/package/lockfile-progs/lockfile-progs.hash
+@@ -0,0 +1,2 @@
++# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockfile-progs/lockfile-progs_0.1.17.dsc
++sha256	03fb05d25499532f497775b1747b61fa6beebf12d3bcc951e125349ae166c511	lockfile-progs_0.1.17.tar.gz
