@@ -1,27 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 14:40:50 +0200
-Subject: [Buildroot] [git commit] librsvg: add hash file
-Message-ID: <20150419124107.93B827FD0D@busybox.osuosl.org>
+Date: Sun, 19 Apr 2015 14:40:45 +0200
+Subject: [Buildroot] [git commit] librsvg: add host variant
+Message-ID: <20150419124107.8B11A7FD0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a52a01be6d827e9af91137f5871a2692a4b9eca8
+commit: http://git.buildroot.net/buildroot/commit/?id=ceb184f3db0f6978bf80a4bcebdc15165f97bc81
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Required by the midori build process (rsvg-convert).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/librsvg/librsvg.hash |    2 ++
+ package/librsvg/librsvg.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
-new file mode 100644
-index 0000000..7572d6c
---- /dev/null
-+++ b/package/librsvg/librsvg.hash
-@@ -0,0 +1,2 @@
-+# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.26/librsvg-2.26.3.sha256sum
-+sha256	3761e3d446a9c2f4ebe52431289e15976f1d447f64ed33bb7f35cb1c430eac49	librsvg-2.26.3.tar.gz
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index 674dca4..5c385dc 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -10,6 +10,7 @@ LIBRSVG_SITE = http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(LIBRSVG_VERSION_
+ LIBRSVG_INSTALL_STAGING = YES
+ LIBRSVG_CONF_OPTS = --disable-tools
+ LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 gdk-pixbuf
++HOST_LIBRSVG_DEPENDENCIES = host-libxml2 host-cairo host-pango host-libglib2 host-gdk-pixbuf
+ LIBRSVG_LICENSE = LGPLv2+
+ LIBRSVG_LICENSE_FILES = COPYING.LIB
+ 
+@@ -20,3 +21,4 @@ LIBRSVG_DEPENDENCIES += libgtk2
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
