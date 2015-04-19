@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 12:17:10 +0200
-Subject: [Buildroot] [PATCH v2 15/25] package/perl-http-negotiate: New
+Date: Sun, 19 Apr 2015 12:17:17 +0200
+Subject: [Buildroot] [PATCH v2 22/25] package/perl-crypt-openssl-random: new
 	package
 In-Reply-To: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429438640-9367-16-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429438640-9367-23-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,69 +14,72 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                                    |    1 +
- package/perl-http-negotiate/Config.in                |    9 +++++++++
- package/perl-http-negotiate/perl-http-negotiate.hash |    3 +++
- package/perl-http-negotiate/perl-http-negotiate.mk   |   14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/perl-http-negotiate/Config.in
- create mode 100644 package/perl-http-negotiate/perl-http-negotiate.hash
- create mode 100644 package/perl-http-negotiate/perl-http-negotiate.mk
+ package/Config.in                                        |    1 +
+ package/perl-crypt-openssl-random/Config.in              |   12 ++++++++++++
+ .../perl-crypt-openssl-random.hash                       |    3 +++
+ .../perl-crypt-openssl-random.mk                         |   14 ++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/perl-crypt-openssl-random/Config.in
+ create mode 100644 package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
+ create mode 100644 package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c74d848..e09beaa 100644
+index dd2fedb..2a536a2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -516,6 +516,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-http-daemon/Config.in"
- 	source "package/perl-http-date/Config.in"
- 	source "package/perl-http-message/Config.in"
-+	source "package/perl-http-negotiate/Config.in"
- 	source "package/perl-io-html/Config.in"
- 	source "package/perl-io-socket-ssl/Config.in"
- 	source "package/perl-json-tiny/Config.in"
-diff --git a/package/perl-http-negotiate/Config.in b/package/perl-http-negotiate/Config.in
+@@ -502,6 +502,7 @@ endif
+ 	source "package/perl/Config.in"
+ if BR2_PACKAGE_PERL
+ menu "Perl libraries/modules"
++	source "package/perl-crypt-openssl-random/Config.in"
+ 	source "package/perl-datetime-tiny/Config.in"
+ 	source "package/perl-digest-hmac/Config.in"
+ 	source "package/perl-digest-sha1/Config.in"
+diff --git a/package/perl-crypt-openssl-random/Config.in b/package/perl-crypt-openssl-random/Config.in
 new file mode 100644
-index 0000000..2b7f7b9
+index 0000000..2095cac
 --- /dev/null
-+++ b/package/perl-http-negotiate/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PERL_HTTP_NEGOTIATE
-+	bool "perl-http-negotiate"
-+	select BR2_PACKAGE_PERL_HTTP_MESSAGE
++++ b/package/perl-crypt-openssl-random/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PERL_CRYPT_OPENSSL_RANDOM
++	bool "perl-crypt-openssl-random"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_OPENSSL
 +	help
-+	  This module provides a complete implementation of the HTTP content
-+	  negotiation algorithm specified in draft-ietf-http-v11-spec-00.ps
-+	  chapter 12.
++	  Routines for accessing the OpenSSL pseudo-random number generator
++	  using the openSSL libraries
 +
-+	  http://github.com/gisle/http-negotiate
-diff --git a/package/perl-http-negotiate/perl-http-negotiate.hash b/package/perl-http-negotiate/perl-http-negotiate.hash
++	  http://sourceforge.net/projects/perl-openssl/
++
++comment "perl-crypt-openssl-random needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
 new file mode 100644
-index 0000000..f1db2ff
+index 0000000..2de6547
 --- /dev/null
-+++ b/package/perl-http-negotiate/perl-http-negotiate.hash
++++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    1236195250e264d7436e7bb02031671b HTTP-Negotiate-6.01.tar.gz
-+sha256 1c729c1ea63100e878405cda7d66f9adfd3ed4f1d6cacaca0ee9152df728e016 HTTP-Negotiate-6.01.tar.gz
-diff --git a/package/perl-http-negotiate/perl-http-negotiate.mk b/package/perl-http-negotiate/perl-http-negotiate.mk
++md5    b89ca9314c3a066b440a7bb3cb8d725d Crypt-OpenSSL-Random-0.10.tar.gz
++sha256 ae65d0ab6907edd1d67f87fdf0923ecae4d54c4c2e0ac9d9df97227903ccf18a Crypt-OpenSSL-Random-0.10.tar.gz
+diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
 new file mode 100644
-index 0000000..569ed2b
+index 0000000..2692236
 --- /dev/null
-+++ b/package/perl-http-negotiate/perl-http-negotiate.mk
++++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-http-negotiate
++# perl-crypt-openssl-random
 +#
 +################################################################################
 +
-+PERL_HTTP_NEGOTIATE_VERSION = 6.01
-+PERL_HTTP_NEGOTIATE_SOURCE = HTTP-Negotiate-$(PERL_HTTP_NEGOTIATE_VERSION).tar.gz
-+PERL_HTTP_NEGOTIATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_HTTP_NEGOTIATE_DEPENDENCIES = perl-http-message
-+PERL_HTTP_NEGOTIATE_LICENSE = Artistic or GPLv1+
-+PERL_HTTP_NEGOTIATE_LICENSE_FILES = README
++PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.10
++PERL_CRYPT_OPENSSL_RANDOM_SOURCE = Crypt-OpenSSL-Random-$(PERL_CRYPT_OPENSSL_RANDOM_VERSION).tar.gz
++PERL_CRYPT_OPENSSL_RANDOM_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
++PERL_CRYPT_OPENSSL_RANDOM_DEPENDENCIES = openssl perl
++PERL_CRYPT_OPENSSL_RANDOM_LICENSE = Artistic or GPLv1+
++PERL_CRYPT_OPENSSL_RANDOM_LICENSE_FILES = LICENSE
 +
 +$(eval $(perl-package))
 -- 
