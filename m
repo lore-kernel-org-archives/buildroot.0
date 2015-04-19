@@ -1,38 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 14:40:45 +0200
-Subject: [Buildroot] [git commit] librsvg: add host variant
-Message-ID: <20150419124107.8B11A7FD0D@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 19 Apr 2015 09:39:56 -0300
+Subject: [Buildroot] [PATCH v2 05/11] busybox: force ipv6 build
+In-Reply-To: <1429447202-13722-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1429447202-13722-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1429447202-13722-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ceb184f3db0f6978bf80a4bcebdc15165f97bc81
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Required by the midori build process (rsvg-convert).
+Since it isn't optional any more just force IPv6 on in busybox to avoid
+problems.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/librsvg/librsvg.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/busybox/busybox.mk | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index 674dca4..5c385dc 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -10,6 +10,7 @@ LIBRSVG_SITE = http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(LIBRSVG_VERSION_
- LIBRSVG_INSTALL_STAGING = YES
- LIBRSVG_CONF_OPTS = --disable-tools
- LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 gdk-pixbuf
-+HOST_LIBRSVG_DEPENDENCIES = host-libxml2 host-cairo host-pango host-libglib2 host-gdk-pixbuf
- LIBRSVG_LICENSE = LGPLv2+
- LIBRSVG_LICENSE_FILES = COPYING.LIB
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 95fdfec..1ce508a 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -97,18 +97,10 @@ define BUSYBOX_SET_LARGEFILE
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_FDISK_SUPPORT_LARGE_DISKS,$(BUSYBOX_BUILD_CONFIG))
+ endef
  
-@@ -20,3 +21,4 @@ LIBRSVG_DEPENDENCIES += libgtk2
- endif
+-# If IPv6 is enabled then enable basic ifupdown support for it
+-ifeq ($(BR2_INET_IPV6),y)
+ define BUSYBOX_SET_IPV6
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_IPV6,$(BUSYBOX_BUILD_CONFIG))
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_IFUPDOWN_IPV6,$(BUSYBOX_BUILD_CONFIG))
+ endef
+-else
+-define BUSYBOX_SET_IPV6
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_IPV6,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_IFUPDOWN_IPV6,$(BUSYBOX_BUILD_CONFIG))
+-endef
+-endif
  
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ # If we're using static libs do the same for busybox
+ ifeq ($(BR2_STATIC_LIBS),y)
+-- 
+2.0.5
