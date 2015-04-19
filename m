@@ -1,74 +1,68 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 17:22:54 +0200
-Subject: [Buildroot] [PATCH 1/2] package/dhcpcd: bump to version 6.8.1
-Message-ID: <1429456975-17889-1-git-send-email-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 19 Apr 2015 17:34:13 +0200
+Subject: [Buildroot] [git commit] uboot: deprecate
+ BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+In-Reply-To: <20150419090719.42BAD80094@busybox.osuosl.org>
+References: <20150419090719.42BAD80094@busybox.osuosl.org>
+Message-ID: <5533CAF5.9020401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-removed patch applied upstream
+On 19/04/15 11:06, Thomas Petazzoni wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=14f1a83ee3bd4728765b63976c5ec21b34e59c35
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Users should use BR2_TARGET_UBOOT_PATCH instead.
+> 
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  boot/uboot/Config.in |    3 +++
+>  1 files changed, 3 insertions(+), 0 deletions(-)
+> 
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index 8769296..4f01499 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -72,6 +72,7 @@ config BR2_TARGET_UBOOT_VERSION
+>  
+>  config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+>  	string "custom patch dir"
+> +	depends on BR2_DEPRECATED_SINCE_2015_05
+>  	help
+>  	  If your board requires custom patches, add the path to the
+>  	  directory containing the patches here. The patches must be
+> @@ -79,6 +80,8 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+>  
+>  	  Most users may leave this empty
+>  
+> +	  NOTE: Use BR2_TARGET_UBOOT_PATCH instead.
+> +
+>  config BR2_TARGET_UBOOT_PATCH
+>  	string "Custom U-Boot patches"
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/dhcpcd/0001-fix-linux-macro-name.patch |   25 ------------------------
- package/dhcpcd/dhcpcd.hash                     |    2 +-
- package/dhcpcd/dhcpcd.mk                       |    2 +-
- 3 files changed, 2 insertions(+), 27 deletions(-)
- delete mode 100644 package/dhcpcd/0001-fix-linux-macro-name.patch
+ To make the deprecation smoother, we could add
 
-diff --git a/package/dhcpcd/0001-fix-linux-macro-name.patch b/package/dhcpcd/0001-fix-linux-macro-name.patch
-deleted file mode 100644
-index 18dbb10..0000000
---- a/package/dhcpcd/0001-fix-linux-macro-name.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--Fix Linux define
--
--Fetched from upstream:
--http://roy.marples.name/projects/dhcpcd/ci/2cabc3efee4c18ca?sbs=0
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--
--Index: dhcpcd.h
--==================================================================
----- /dhcpcd.h
--+++ /dhcpcd.h
--@@ -58,11 +58,11 @@
-- 
-- struct interface {
-- 	struct dhcpcd_ctx *ctx;
-- 	TAILQ_ENTRY(interface) next;
-- 	char name[IF_NAMESIZE];
---#ifdef __linux
--+#ifdef __linux__
-- 	char alias[IF_NAMESIZE];
-- #endif
-- 	unsigned int index;
-- 	unsigned int flags;
-- 	sa_family_t family;
--
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-index b66244d..1b7543f 100644
---- a/package/dhcpcd/dhcpcd.hash
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated from download (no sig, hash)
--sha256	cb65d3e783fa5484ed095bb940c3274a5a91d3ed4a9d9ae66a49d9637165bd98	dhcpcd-6.7.1.tar.bz2
-+sha256	27b60cbf726a8319e6f1e7691132082c9cdac473317ea47cb093d0dd3d32af82	dhcpcd-6.8.1.tar.bz2
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 6f82090..694bb75 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DHCPCD_VERSION = 6.7.1
-+DHCPCD_VERSION = 6.8.1
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
- DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
- DHCPCD_DEPENDENCIES = host-pkgconf
+	default BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+
+ Regards,
+ Arnout
+
+>  	help
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+
 -- 
-1.7.10.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
