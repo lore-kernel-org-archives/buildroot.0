@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 09:41:14 +0200
-Subject: [Buildroot] [git commit] python: add hash file
-Message-ID: <20150419074553.965F18040E@busybox.osuosl.org>
+Date: Sun, 19 Apr 2015 09:46:14 +0200
+Subject: [Buildroot] [git commit] vala: requires host-bison
+Message-ID: <20150419074626.BD5C180429@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=99f2f9aab94630b52c01d1d7fc7383449be940e2
+commit: http://git.buildroot.net/buildroot/commit/?id=8d73e19dea303a4aa51bf5fabd138cf193f557a6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even though there's a hash at
-https://www.python.org/downloads/release/python-279/ prefer using the
-sig since that's just md5.
+[Thomas: fix typo in commit log.]
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python/python.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/vala/vala.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/python/python.hash b/package/python/python.hash
-new file mode 100644
-index 0000000..f741e85
---- /dev/null
-+++ b/package/python/python.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	90d27e14ea7e03570026850e2e50ba71ad20b7eb31035aada1cf3def8f8d4916	Python-2.7.9.tar.xz
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index 292ea7e..573e1e4 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -11,7 +11,7 @@ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPLv2.1+
+ VALA_LICENSE_FILES = COPYING
+ 
+-HOST_VALA_DEPENDENCIES = host-flex host-libglib2
++HOST_VALA_DEPENDENCIES = host-bison host-flex host-libglib2
+ # Yes, the autoconf script understands ':' as "xsltproc is not
+ # available".
+ HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
