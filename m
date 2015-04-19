@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 10:33:30 +0200
-Subject: [Buildroot] [PATCH 17/20] perl-net-http: New package
+Date: Sun, 19 Apr 2015 10:33:22 +0200
+Subject: [Buildroot] [PATCH 09/20] perl-file-listing: New package
 In-Reply-To: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429432413-17038-18-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429432413-17038-10-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +13,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                        |    1 +
- package/perl-net-http/Config.in          |    7 +++++++
- package/perl-net-http/perl-net-http.hash |    3 +++
- package/perl-net-http/perl-net-http.mk   |   14 ++++++++++++++
+ package/Config.in                                |    1 +
+ package/perl-file-listing/Config.in              |    7 +++++++
+ package/perl-file-listing/perl-file-listing.hash |    3 +++
+ package/perl-file-listing/perl-file-listing.mk   |   14 ++++++++++++++
  4 files changed, 25 insertions(+)
- create mode 100644 package/perl-net-http/Config.in
- create mode 100644 package/perl-net-http/perl-net-http.hash
- create mode 100644 package/perl-net-http/perl-net-http.mk
+ create mode 100644 package/perl-file-listing/Config.in
+ create mode 100644 package/perl-file-listing/perl-file-listing.hash
+ create mode 100644 package/perl-file-listing/perl-file-listing.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 024b286..3e421c5 100644
+index bb4f3e0..8a96777 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -523,6 +523,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-lwp-mediatypes/Config.in"
- 	source "package/perl-mojolicious/Config.in"
- 	source "package/perl-net-dns/Config.in"
-+	source "package/perl-net-http/Config.in"
- 	source "package/perl-net-ssleay/Config.in"
- 	source "package/perl-netaddr-ip/Config.in"
- 	source "package/perl-path-tiny/Config.in"
-diff --git a/package/perl-net-http/Config.in b/package/perl-net-http/Config.in
+@@ -506,6 +506,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-file-util/Config.in"
+ 	source "package/perl-digest-hmac/Config.in"
+ 	source "package/perl-encode-locale/Config.in"
++	source "package/perl-file-listing/Config.in"
+ 	source "package/perl-gd/Config.in"
+ 	source "package/perl-gdgraph/Config.in"
+ 	source "package/perl-gdtextutil/Config.in"
+diff --git a/package/perl-file-listing/Config.in b/package/perl-file-listing/Config.in
 new file mode 100644
-index 0000000..6f18dd5
+index 0000000..85f8e2e
 --- /dev/null
-+++ b/package/perl-net-http/Config.in
++++ b/package/perl-file-listing/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_NET_HTTP
-+	bool "perl-net-http"
-+	select BR2_PACKAGE_PERL_URI
++config BR2_PACKAGE_PERL_FILE_LISTING
++	bool "perl-file-listing"
++	select BR2_PACKAGE_PERL_HTTP_DATE
 +	help
-+	  The `Net::HTTP' class is a low-level HTTP client.
++	  Module to parse directoy listings
 +
-+	  http://github.com/libwww-perl/net-http
-diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
++	  https://github.com/gisle/file-listing
+diff --git a/package/perl-file-listing/perl-file-listing.hash b/package/perl-file-listing/perl-file-listing.hash
 new file mode 100644
-index 0000000..9f5f11b
+index 0000000..1549c5a
 --- /dev/null
-+++ b/package/perl-net-http/perl-net-http.hash
++++ b/package/perl-file-listing/perl-file-listing.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    b6da691523456089d7a812ac398bc77e Net-HTTP-6.07.tar.gz
-+sha256 9f31e0325a5a0930ad309fa019da9d208e57e236fb0598675ed883c820240364 Net-HTTP-6.07.tar.gz
-diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
++md5    83f636b477741f3a014585bb9cc079a6 File-Listing-6.04.tar.gz
++sha256 1e0050fcd6789a2179ec0db282bf1e90fb92be35d1171588bd9c47d52d959cf5 File-Listing-6.04.tar.gz
+diff --git a/package/perl-file-listing/perl-file-listing.mk b/package/perl-file-listing/perl-file-listing.mk
 new file mode 100644
-index 0000000..a73dfec
+index 0000000..a9d8ced
 --- /dev/null
-+++ b/package/perl-net-http/perl-net-http.mk
++++ b/package/perl-file-listing/perl-file-listing.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-net-http
++# perl-file-listing
 +#
 +################################################################################
 +
-+PERL_NET_HTTP_VERSION = 6.07
-+PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
-+PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MS/MSCHILLI
-+PERL_NET_HTTP_DEPENDENCIES = perl-uri
-+PERL_NET_HTTP_LICENSE = Artistic or GPLv1+
-+PERL_NET_HTTP_LICENSE_FILES = README
++PERL_FILE_LISTING_VERSION = 6.04
++PERL_FILE_LISTING_SOURCE = File-Listing-$(PERL_FILE_LISTING_VERSION).tar.gz
++PERL_FILE_LISTING_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_FILE_LISTING_DEPENDENCIES = perl-http-date
++PERL_FILE_LISTING_LICENSE = Artistic or GPLv1+
++PERL_FILE_LISTING_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
