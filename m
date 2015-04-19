@@ -1,114 +1,223 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Apr 2015 10:36:12 -0300
-Subject: [Buildroot] [PATCH v3 08/11] webkitgtk24: new package
-In-Reply-To: <20150419144959.330b99b3@free-electrons.com>
-References: <1429436906-15222-1-git-send-email-gustavo@zacarias.com.ar>	<1429436906-15222-9-git-send-email-gustavo@zacarias.com.ar>
- <20150419144959.330b99b3@free-electrons.com>
-Message-ID: <5533AF4C.9040108@zacarias.com.ar>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 19 Apr 2015 16:03:56 +0200
+Subject: [Buildroot] [PATCH] uclibc-ng: update to 1.0.2
+Message-ID: <20150419140355.GA7043@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/19/2015 09:49 AM, Thomas Petazzoni wrote:
+Following problems found by buildroot should be fixed:
+ * static python2 compile (there is still a general problem, not related to uClibc-ng)
+ * postgresql configure hickup (link warnings got removed)
+ * samba runtime problems (RPATH in executables are respected)
 
-> I'm a bit unhappy with webkitgtk24 as the name. Are the newer versions
-> API incompatible? Also, is it possible to install both webkitgtk24 and
-> webkitgtk26 or 28 on the same system?
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ ...selection-better-do-it-in-your-build-syst.patch |   60 ----------------
+ .../0001-fix-static-linking-of-pthread-apps.patch  |   72 ++++++++++++++++++++
+ package/uclibc/Config.in                           |    2 +-
+ package/uclibc/uClibc-ng.config                    |    4 +-
+ package/uclibc/uclibc.hash                         |    2 +-
+ 5 files changed, 77 insertions(+), 63 deletions(-)
+ delete mode 100644 package/uclibc/1.0.1/0001-remove-NAN-selection-better-do-it-in-your-build-syst.patch
+ create mode 100644 package/uclibc/1.0.2/0001-fix-static-linking-of-pthread-apps.patch
 
-Hi.
-I'm not happy with the naming either, it's crappy to type/autocomplete.
-But yes, multiple versions can live side-by-side and the API isn't
-exactly the same.
-In fact i have quite a setup with a webkitgtk26 package (in process of
-going 28) but didn't send it yet because there are no applications in
-buildroot that use it.
-Midori can't use 2.6.x or 2.8.x, that's probably expected for a future
-release (0.6.x+).
-Versions 2.6.x/2.8.x can be used with epiphany (AKA web), but that would
-require adding many new gnome3 packages and i'm not that fond of it (and
-much less having time for it).
-
-> Wow, so all in all, it's only available on ARM and x86/x86-64. Not a
-> huge list of supported architectures. But OK.
-
-This is just what i managed to get building and running.
-A couple of mips combinations failed to build, one built but segfaulted
-and i didn't test extensively because of build times.
-The mips failures might be qemu's fault to be honest, at least those
-that didn't run properly.
-Powerpc needs some build patches, and i lack any ppc with framebuffer to
-test (plus they're not a normal setup either).
-I didn't try "fringe" or resource-constrained architectures.
-And it's subject to available hardware to test as well, qemu is usable
-but painfully slow :)
-So right now it's "documentation" - these are known to work but doesn't
-mean others won't.
-I was hoping all of the people claiming for "i want new webkit!!!!1!!1"
-would do some testing and feedback, but they're awfully silent on the
-matter.
-
->> +comment "webkitgtk24 needs libgtk2 and a toolchain w/ C++, wchar, NPTL"
->> +	depends on BR2_PACKAGE_WEBKITGTK24_ARCH_SUPPORTS
->> +	depends on BR2_ARCH_HAS_ATOMICS
->> +	depends on !BR2_PACKAGE_LIBGTK2 || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
->> +		|| !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
->> +	depends on BR2_USE_MMU
->> +
->> +config BR2_PACKAGE_WEBKITGTK24
->> +	bool "webkitgtk 2.4.x"
->> +	depends on BR2_INSTALL_LIBSTDCPP
->> +	depends on BR2_USE_WCHAR
->> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->> +	depends on (BR2_PACKAGE_LIBGTK2 && BR2_PACKAGE_XORG7)
-
-> Here you require gtk2 + xorg7, but not in the comment above. Is this
-> expected?
-
-No, it's a leftover from wayland experimentation, it needs a fix.
-
-> The libgles + libegl case looks a bit weird. Such a configuration is
-> normally used *without* X.org, so why would we select some X.org
-> libraries in this case?
-
-Right now webkit 2.4.x can't build without gtk2+ and that's the reason
-for it, we need xorg7 no matter what.
-That's also the reason i dropped my attempts at wayland support, having
-xorg7 there negates many of the benefits of such a setup.
-It might be possible to patch the xorg/gtk2 needs away, it's already
-done for 2.6.x+ actually, but i don't know how much i want to
-patch/diverge from upstream, even though they'd probably be a few small
-patches.
-Most of what i'd like to see is gtk2 going away, even though gtk3
-support is "experimental" it works much better than gtk2 according to my
-tests, and having both in the target sucks.
-The leftover mandatory gtk2 support is for binary netscape api plugins,
-which outside of x86* (flash) it probably doesn't make any sense.
-
-> Aah, that's how you solved the infinite loop.
-
-Magic!
-I've found this build-testing in an old debian chroot and worked it out
-the quick way (well, not so quick for people building in such a scenario).
-For webkit-gtk 2.6.x+ it's probably solved via the cmake migration.
-
-> And why? :-)
-
-Thin archives break the build, though i must admit i don't recall
-exactly how (it was at the very start of the cleanup effort).
-
->> +WEBKITGTK24_CONF_OPTS = \
->> +	--enable-dependency-tracking \
-> 
-> Why? Yes it is in the older webkit, but do we have a reason to have it
-> here?
-
-Makefile logic doesn't parallelize well: it breaks the build usually
-when building WTF (at the beginning).
-It might be worth adding a comment.
-
-Most of the build breakage is solved in the newer versions with cmake,
-but midori doesn't like that.
-
-Regards.
+diff --git a/package/uclibc/1.0.1/0001-remove-NAN-selection-better-do-it-in-your-build-syst.patch b/package/uclibc/1.0.1/0001-remove-NAN-selection-better-do-it-in-your-build-syst.patch
+deleted file mode 100644
+index b94c5a3..0000000
+--- a/package/uclibc/1.0.1/0001-remove-NAN-selection-better-do-it-in-your-build-syst.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 65aa786d3f6282da02d35b600e82408b47e0a3fe Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Mon, 9 Mar 2015 01:48:19 -0500
+-Subject: [PATCH 20/20] remove NAN selection, better do it in your build
+- system
+-
+-With older gcc than 4.9.x, this breaks the build.
+-These specific compiler flags belongs better to your
+-favorite build system.
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+----
+- Rules.mak                 |    4 ----
+- extra/Configs/Config.mips |   15 ---------------
+- 2 files changed, 19 deletions(-)
+-
+-diff --git a/Rules.mak b/Rules.mak
+-index 3b074a8..5217004 100644
+---- a/Rules.mak
+-+++ b/Rules.mak
+-@@ -404,10 +404,6 @@ ifeq ($(TARGET_ARCH),mips)
+- 	CPU_CFLAGS-$(CONFIG_MIPS_N64_ABI)+=-mabi=64
+- 	CPU_CFLAGS-$(CONFIG_MIPS_O32_ABI)+=-mabi=32
+- 	CPU_CFLAGS-$(CONFIG_MIPS_N32_ABI)+=-mabi=n32
+--
+--	CPU_CFLAGS-$(CONFIG_MIPS_NAN_LEGACY)+=-mnan=legacy
+--	CPU_CFLAGS-$(CONFIG_MIPS_NAN_2008)+=-mnan=2008
+--
+- 	CPU_LDFLAGS-y += $(CPU_CFLAGS)
+- endif
+- 
+-diff --git a/extra/Configs/Config.mips b/extra/Configs/Config.mips
+-index 76b10c6..4d30d31 100644
+---- a/extra/Configs/Config.mips
+-+++ b/extra/Configs/Config.mips
+-@@ -33,21 +33,6 @@ config CONFIG_MIPS_N64_ABI
+- endchoice
+- 
+- choice
+--	prompt "Target NAN Encoding"
+--	default CONFIG_MIPS_NAN_LEGACY
+--	help
+--	  This is the NAN Encoding you want to use.  Chose either Legacy
+--	  or 2008.
+--
+--config CONFIG_MIPS_NAN_LEGACY
+--	bool "LEGACY"
+--
+--config CONFIG_MIPS_NAN_2008
+--	bool "2008"
+--
+--endchoice
+--
+--choice
+- 	prompt "Target Processor Architecture"
+- 	default CONFIG_MIPS_ISA_1 if CONFIG_MIPS_O32_ABI
+- 	default CONFIG_MIPS_ISA_3 if CONFIG_MIPS_N32_ABI
+--- 
+-1.7.10.4
+-
+diff --git a/package/uclibc/1.0.2/0001-fix-static-linking-of-pthread-apps.patch b/package/uclibc/1.0.2/0001-fix-static-linking-of-pthread-apps.patch
+new file mode 100644
+index 0000000..a0f3bc0
+--- /dev/null
++++ b/package/uclibc/1.0.2/0001-fix-static-linking-of-pthread-apps.patch
+@@ -0,0 +1,72 @@
++From 74c69da52ad5029cd2fc2d3d41d581022ed0a7aa Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Wed, 15 Apr 2015 12:47:57 -0500
++Subject: [PATCH] fix static linking of pthread apps
++
++When compiling python you get duplicate symbol problem.
++Seen in the autobuilders of buildroot project.
++
++Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
++---
++ libc/sysdeps/linux/common/setregid.c  | 2 +-
++ libc/sysdeps/linux/common/setresgid.c | 4 ++--
++ libc/sysdeps/linux/common/setresuid.c | 4 ++--
++ 3 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/libc/sysdeps/linux/common/setregid.c b/libc/sysdeps/linux/common/setregid.c
++index 15d590a..aaa7293 100644
++--- a/libc/sysdeps/linux/common/setregid.c
+++++ b/libc/sysdeps/linux/common/setregid.c
++@@ -37,4 +37,4 @@ int setregid(gid_t rgid, gid_t egid)
++ }
++ #endif
++ 
++-libc_hidden_def(setregid)
+++libc_hidden_weak(setregid)
++diff --git a/libc/sysdeps/linux/common/setresgid.c b/libc/sysdeps/linux/common/setresgid.c
++index 95decc2..b6d1647 100644
++--- a/libc/sysdeps/linux/common/setresgid.c
+++++ b/libc/sysdeps/linux/common/setresgid.c
++@@ -16,7 +16,7 @@
++ # define __NR_setresgid __NR_setresgid32
++ 
++ _syscall3(int, setresgid, gid_t, rgid, gid_t, egid, gid_t, sgid)
++-libc_hidden_def(setresgid)
+++libc_hidden_weak(setresgid)
++ 
++ #elif defined(__NR_setresgid)
++ 
++@@ -34,7 +34,7 @@ int setresgid(gid_t rgid, gid_t egid, gid_t sgid)
++ 	}
++ 	return (__syscall_setresgid(rgid, egid, sgid));
++ }
++-libc_hidden_def(setresgid)
+++libc_hidden_weak(setresgid)
++ 
++ #endif
++ 
++diff --git a/libc/sysdeps/linux/common/setresuid.c b/libc/sysdeps/linux/common/setresuid.c
++index 022ccfe..a2a2183 100644
++--- a/libc/sysdeps/linux/common/setresuid.c
+++++ b/libc/sysdeps/linux/common/setresuid.c
++@@ -16,7 +16,7 @@
++ # define __NR_setresuid __NR_setresuid32
++ 
++ _syscall3(int, setresuid, uid_t, ruid, uid_t, euid, uid_t, suid)
++-libc_hidden_def(setresuid)
+++libc_hidden_weak(setresuid)
++ 
++ #elif defined(__NR_setresuid)
++ 
++@@ -34,7 +34,7 @@ int setresuid(uid_t ruid, uid_t euid, uid_t suid)
++ 	}
++ 	return (__syscall_setresuid(ruid, euid, suid));
++ }
++-libc_hidden_def(setresuid)
+++libc_hidden_weak(setresuid)
++ 
++ #endif
++ 
++-- 
++2.3.2 (Apple Git-55)
++
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index fdf8351..a48e2ec 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -69,7 +69,7 @@ config BR2_UCLIBC_VERSION_STRING
+ 	string
+ 	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
+ 	default "arc-2014.12" if BR2_UCLIBC_VERSION_ARC_GIT
+-	default "1.0.1"		if BR2_UCLIBC_VERSION_NG
++	default "1.0.2"		if BR2_UCLIBC_VERSION_NG
+ 	default "7bf35c8b7d4a1f97174eb49f47f33946b282114c" if BR2_UCLIBC_VERSION_XTENSA_GIT
+ 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
+ 
+diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
+index 2885af6..c6e7ff9 100644
+--- a/package/uclibc/uClibc-ng.config
++++ b/package/uclibc/uClibc-ng.config
+@@ -1,6 +1,6 @@
+ #
+ # Automatically generated make config: don't edit
+-# Version: 1.0.1
++# Version: 1.0.2
+ #
+ # TARGET_alpha is not set
+ # TARGET_arc is not set
+@@ -93,6 +93,7 @@ LDSO_PRELOAD_ENV_SUPPORT=y
+ # LDSO_PRELINK_SUPPORT is not set
+ # UCLIBC_STATIC_LDCONFIG is not set
+ LDSO_RUNPATH=y
++LDSO_RUNPATH_OF_EXECUTABLE=y
+ LDSO_SAFE_RUNPATH=y
+ LDSO_SEARCH_INTERP_PATH=y
+ LDSO_LD_LIBRARY_PATH=y
+@@ -236,6 +237,7 @@ UCLIBC_HAS_FTW=y
+ # UCLIBC_HAS_FTS is not set
+ UCLIBC_HAS_GLOB=y
+ UCLIBC_HAS_GNU_GLOB=y
++UCLIBC_HAS_UTMP=y
+ UCLIBC_HAS_UTMPX=y
+ 
+ #
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 69cc103..7bfe46f 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -5,4 +5,4 @@ sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0
+ sha256	0a9085a11615296cfe7783f16ff29073393eb330749947adece0eeddb31705a4	uClibc-arc-2014.08.tar.gz
+ 
+ # From http://www.uclibc-ng.org/trac/
+-sha256  e561040293ba4f21dcf3285ca1f683b5a8493eb0ffd3b3e495122cfde5a64a0e        uClibc-ng-1.0.1.tar.xz
++sha256  7e92e99995daa634cbdc63c297784df6e8fe39cc1d3bbd2d37eb5c3ced8a86e5        uClibc-ng-1.0.2.tar.xz
+-- 
+1.7.10.4
