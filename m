@@ -1,7 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 19:53:04 +0200
-Subject: [Buildroot] [PATCH 01/10] package/libev: bump version to 4.19
-Message-ID: <1429465993-30357-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 19 Apr 2015 19:53:09 +0200
+Subject: [Buildroot] [PATCH 06/10] package/libgail: add hash
+In-Reply-To: <1429465993-30357-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429465993-30357-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429465993-30357-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,21 +13,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libev/libev.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libgail/libgail.hash |    2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/libgail/libgail.hash
 
-diff --git a/package/libev/libev.mk b/package/libev/libev.mk
-index dc42858..cde2ee0 100644
---- a/package/libev/libev.mk
-+++ b/package/libev/libev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEV_VERSION = 4.15
-+LIBEV_VERSION = 4.19
- LIBEV_SITE = http://dist.schmorp.de/libev
- LIBEV_INSTALL_STAGING = YES
- LIBEV_LICENSE = BSD-2c or GPLv2+
+diff --git a/package/libgail/libgail.hash b/package/libgail/libgail.hash
+new file mode 100644
+index 0000000..5cfd752
+--- /dev/null
++++ b/package/libgail/libgail.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.gnome.org/pub/gnome/sources/gail/1.22/gail-1.22.3.sha256sum
++sha256	03f03029277eb4f0e2c15a825fe716245d8647ede0435645475110289b059ae8	gail-1.22.3.tar.bz2
 -- 
 1.7.10.4
