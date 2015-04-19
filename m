@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 12:17:11 +0200
-Subject: [Buildroot] [PATCH v2 16/25] package/perl-net-http: New package
+Date: Sun, 19 Apr 2015 12:17:18 +0200
+Subject: [Buildroot] [PATCH v2 23/25] package/perl-crypt-openssl-rsa: new
+	package
 In-Reply-To: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429438640-9367-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429438640-9367-24-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +14,71 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                        |    1 +
- package/perl-net-http/Config.in          |    7 +++++++
- package/perl-net-http/perl-net-http.hash |    3 +++
- package/perl-net-http/perl-net-http.mk   |   14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/perl-net-http/Config.in
- create mode 100644 package/perl-net-http/perl-net-http.hash
- create mode 100644 package/perl-net-http/perl-net-http.mk
+ package/Config.in                                        |    1 +
+ package/perl-crypt-openssl-rsa/Config.in                 |   11 +++++++++++
+ .../perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash   |    3 +++
+ package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk |   14 ++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/perl-crypt-openssl-rsa/Config.in
+ create mode 100644 package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
+ create mode 100644 package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e09beaa..4d8f98d 100644
+index 2a536a2..eef9f48 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -523,6 +523,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-lwp-mediatypes/Config.in"
- 	source "package/perl-mojolicious/Config.in"
- 	source "package/perl-net-dns/Config.in"
-+	source "package/perl-net-http/Config.in"
- 	source "package/perl-net-ssleay/Config.in"
- 	source "package/perl-netaddr-ip/Config.in"
- 	source "package/perl-path-tiny/Config.in"
-diff --git a/package/perl-net-http/Config.in b/package/perl-net-http/Config.in
+@@ -503,6 +503,7 @@ endif
+ if BR2_PACKAGE_PERL
+ menu "Perl libraries/modules"
+ 	source "package/perl-crypt-openssl-random/Config.in"
++	source "package/perl-crypt-openssl-rsa/Config.in"
+ 	source "package/perl-datetime-tiny/Config.in"
+ 	source "package/perl-digest-hmac/Config.in"
+ 	source "package/perl-digest-sha1/Config.in"
+diff --git a/package/perl-crypt-openssl-rsa/Config.in b/package/perl-crypt-openssl-rsa/Config.in
 new file mode 100644
-index 0000000..6f18dd5
+index 0000000..1fa1fd9
 --- /dev/null
-+++ b/package/perl-net-http/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_NET_HTTP
-+	bool "perl-net-http"
-+	select BR2_PACKAGE_PERL_URI
++++ b/package/perl-crypt-openssl-rsa/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PERL_CRYPT_OPENSSL_RSA
++	bool "perl-crypt-openssl-rsa"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_PERL_CRYPT_OPENSSL_RANDOM
 +	help
-+	  The `Net::HTTP' class is a low-level HTTP client.
++	  RSA encoding and decoding, using the openSSL libraries
 +
-+	  http://github.com/libwww-perl/net-http
-diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
++	  https://metacpan.org/release/Crypt-OpenSSL-RSA
++
++comment "perl-crypt-openssl-rsa needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
 new file mode 100644
-index 0000000..9f5f11b
+index 0000000..6e060ce
 --- /dev/null
-+++ b/package/perl-net-http/perl-net-http.hash
++++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    b6da691523456089d7a812ac398bc77e Net-HTTP-6.07.tar.gz
-+sha256 9f31e0325a5a0930ad309fa019da9d208e57e236fb0598675ed883c820240364 Net-HTTP-6.07.tar.gz
-diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
++md5    86217a5036fc63779c30420b5fd84129 Crypt-OpenSSL-RSA-0.28.tar.gz
++sha256 5357f977464bb3a8184cf2d3341851a10d5515b4b2b0dfb88bf78995c0ded7be Crypt-OpenSSL-RSA-0.28.tar.gz
+diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
 new file mode 100644
-index 0000000..a73dfec
+index 0000000..30d7303
 --- /dev/null
-+++ b/package/perl-net-http/perl-net-http.mk
++++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-net-http
++# perl-crypt-openssl-rsa
 +#
 +################################################################################
 +
-+PERL_NET_HTTP_VERSION = 6.07
-+PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
-+PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MS/MSCHILLI
-+PERL_NET_HTTP_DEPENDENCIES = perl-uri
-+PERL_NET_HTTP_LICENSE = Artistic or GPLv1+
-+PERL_NET_HTTP_LICENSE_FILES = README
++PERL_CRYPT_OPENSSL_RSA_VERSION = 0.28
++PERL_CRYPT_OPENSSL_RSA_SOURCE = Crypt-OpenSSL-RSA-$(PERL_CRYPT_OPENSSL_RSA_VERSION).tar.gz
++PERL_CRYPT_OPENSSL_RSA_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PERLER
++PERL_CRYPT_OPENSSL_RSA_DEPENDENCIES = perl perl-crypt-openssl-random
++PERL_CRYPT_OPENSSL_RSA_LICENSE = Artistic or GPLv1+
++PERL_CRYPT_OPENSSL_RSA_LICENSE_FILES = LICENSE
 +
 +$(eval $(perl-package))
 -- 
