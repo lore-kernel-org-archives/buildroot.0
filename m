@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 10:33:32 +0200
-Subject: [Buildroot] [PATCH 19/20] perl-libwww: New package
+Date: Sun, 19 Apr 2015 10:33:25 +0200
+Subject: [Buildroot] [PATCH 12/20] perl-lwp-mediatypes: New package
 In-Reply-To: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429432413-17038-20-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429432413-17038-13-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,85 +13,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                    |    1 +
- package/perl-libwww/Config.in        |   16 ++++++++++++++++
- package/perl-libwww/perl-libwww.hash |    3 +++
- package/perl-libwww/perl-libwww.mk   |   23 +++++++++++++++++++++++
- 4 files changed, 43 insertions(+)
- create mode 100644 package/perl-libwww/Config.in
- create mode 100644 package/perl-libwww/perl-libwww.hash
- create mode 100644 package/perl-libwww/perl-libwww.mk
+ package/Config.in                                    |    1 +
+ package/perl-lwp-mediatypes/Config.in                |    7 +++++++
+ package/perl-lwp-mediatypes/perl-lwp-mediatypes.hash |    3 +++
+ package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk   |   14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/perl-lwp-mediatypes/Config.in
+ create mode 100644 package/perl-lwp-mediatypes/perl-lwp-mediatypes.hash
+ create mode 100644 package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 3b73934..35a41e6 100644
+index 4aacdd7..32b00fe 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -520,6 +520,7 @@ menu "Perl libraries/modules"
+@@ -516,6 +516,7 @@ menu "Perl libraries/modules"
  	source "package/perl-io-html/Config.in"
  	source "package/perl-io-socket-ssl/Config.in"
  	source "package/perl-json-tiny/Config.in"
-+	source "package/perl-libwww/Config.in"
- 	source "package/perl-lwp-mediatypes/Config.in"
++	source "package/perl-lwp-mediatypes/Config.in"
  	source "package/perl-mojolicious/Config.in"
  	source "package/perl-net-dns/Config.in"
-diff --git a/package/perl-libwww/Config.in b/package/perl-libwww/Config.in
+ 	source "package/perl-net-ssleay/Config.in"
+diff --git a/package/perl-lwp-mediatypes/Config.in b/package/perl-lwp-mediatypes/Config.in
 new file mode 100644
-index 0000000..523371f
+index 0000000..b362e9c
 --- /dev/null
-+++ b/package/perl-libwww/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_PERL_LIBWWW
-+	bool "perl-libwww"
-+	select BR2_PACKAGE_PERL_ENCODE_LOCALE
-+	select BR2_PACKAGE_PERL_FILE_LISTING
-+	select BR2_PACKAGE_PERL_HTML_PARSER
-+	select BR2_PACKAGE_PERL_HTTP_COOKIES
-+	select BR2_PACKAGE_PERL_HTTP_DAEMON
-+	select BR2_PACKAGE_PERL_HTTP_NEGOTIATE
-+	select BR2_PACKAGE_PERL_LWP_MEDIATYPES
-+	select BR2_PACKAGE_PERL_NET_HTTP
-+	select BR2_PACKAGE_PERL_URI
-+	select BR2_PACKAGE_PERL_WWW_ROBOTRULES
++++ b/package/perl-lwp-mediatypes/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_LWP_MEDIATYPES
++	bool "perl-lwp-mediatypes"
 +	help
-+	  The World-Wide Web library for Perl
++	  This module provides functions for handling media (also known as MIME)
++	  types and encodings.
 +
-+	  https://github.com/libwww-perl/libwww-perl
-diff --git a/package/perl-libwww/perl-libwww.hash b/package/perl-libwww/perl-libwww.hash
++	  https://github.com/gisle/lwp-mediatypes
+diff --git a/package/perl-lwp-mediatypes/perl-lwp-mediatypes.hash b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.hash
 new file mode 100644
-index 0000000..1ef5ccf
+index 0000000..0f6fee9
 --- /dev/null
-+++ b/package/perl-libwww/perl-libwww.hash
++++ b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    85b36bcd2fd2450718ee14f894f0d3d1 libwww-perl-6.13.tar.gz
-+sha256 5fbd13eebd1933e5a203fceb2c1629efbccff3efc8fab6ec0285c79d0a95f8b2 libwww-perl-6.13.tar.gz
-diff --git a/package/perl-libwww/perl-libwww.mk b/package/perl-libwww/perl-libwww.mk
++md5    8c5f25fb64b974d22aff424476ba13c9 LWP-MediaTypes-6.02.tar.gz
++sha256 18790b0cc5f0a51468495c3847b16738f785a2d460403595001e0b932e5db676 LWP-MediaTypes-6.02.tar.gz
+diff --git a/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk
 new file mode 100644
-index 0000000..0ee1e04
+index 0000000..2442d41
 --- /dev/null
-+++ b/package/perl-libwww/perl-libwww.mk
-@@ -0,0 +1,23 @@
++++ b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-libwww
++# perl-lwp-mediatypes
 +#
 +################################################################################
 +
-+PERL_LIBWWW_VERSION = 6.13
-+PERL_LIBWWW_SITE = $(call github,libwww-perl,libwww-perl,$(PERL_LIBWWW_VERSION))
-+PERL_LIBWWW_LICENSE = Artistic or GPLv1+
-+PERL_LIBWWW_LICENSE_FILES = LICENSE
-+PERL_LIBWWW_DEPENDENCIES = \
-+	perl-encode-locale \
-+	perl-file-listing \
-+	perl-html-parser \
-+	perl-http-cookies \
-+	perl-http-daemon \
-+	perl-http-date \
-+	perl-http-negotiate \
-+	perl-net-http \
-+	perl-uri \
-+	perl-www-robotrules
++PERL_LWP_MEDIATYPES_VERSION = 6.02
++PERL_LWP_MEDIATYPES_SOURCE = LWP-MediaTypes-$(PERL_LWP_MEDIATYPES_VERSION).tar.gz
++PERL_LWP_MEDIATYPES_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_LWP_MEDIATYPES_DEPENDENCIES = perl
++PERL_LWP_MEDIATYPES_LICENSE = Artistic or GPLv1+
++PERL_LWP_MEDIATYPES_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
