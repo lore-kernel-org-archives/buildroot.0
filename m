@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 12:17:05 +0200
-Subject: [Buildroot] [PATCH v2 10/25] package/perl-uri: New package
+Date: Sun, 19 Apr 2015 12:17:09 +0200
+Subject: [Buildroot] [PATCH v2 14/25] package/perl-http-daemon: New package
 In-Reply-To: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429438640-9367-11-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429438640-9367-15-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,68 +13,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in              |    1 +
- package/perl-uri/Config.in     |    8 ++++++++
- package/perl-uri/perl-uri.hash |    3 +++
- package/perl-uri/perl-uri.mk   |   14 ++++++++++++++
+ package/Config.in                              |    1 +
+ package/perl-http-daemon/Config.in             |    8 ++++++++
+ package/perl-http-daemon/perl-http-daemon.hash |    3 +++
+ package/perl-http-daemon/perl-http-daemon.mk   |   14 ++++++++++++++
  4 files changed, 26 insertions(+)
- create mode 100644 package/perl-uri/Config.in
- create mode 100644 package/perl-uri/perl-uri.hash
- create mode 100644 package/perl-uri/perl-uri.mk
+ create mode 100644 package/perl-http-daemon/Config.in
+ create mode 100644 package/perl-http-daemon/perl-http-daemon.hash
+ create mode 100644 package/perl-http-daemon/perl-http-daemon.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 3c99f07..794aa7a 100644
+index 184c926..c74d848 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -523,6 +523,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-path-tiny/Config.in"
- 	source "package/perl-time-hires/Config.in"
- 	source "package/perl-try-tiny/Config.in"
-+	source "package/perl-uri/Config.in"
- 	source "package/perl-xml-libxml/Config.in"
- 	source "package/perl-xml-namespacesupport/Config.in"
- 	source "package/perl-xml-sax/Config.in"
-diff --git a/package/perl-uri/Config.in b/package/perl-uri/Config.in
+@@ -513,6 +513,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-html-parser/Config.in"
+ 	source "package/perl-html-tagset/Config.in"
+ 	source "package/perl-http-cookies/Config.in"
++	source "package/perl-http-daemon/Config.in"
+ 	source "package/perl-http-date/Config.in"
+ 	source "package/perl-http-message/Config.in"
+ 	source "package/perl-io-html/Config.in"
+diff --git a/package/perl-http-daemon/Config.in b/package/perl-http-daemon/Config.in
 new file mode 100644
-index 0000000..62a53f2
+index 0000000..3d69b88
 --- /dev/null
-+++ b/package/perl-uri/Config.in
++++ b/package/perl-http-daemon/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PERL_URI
-+	bool "perl-uri"
++config BR2_PACKAGE_PERL_HTTP_DAEMON
++	bool "perl-http-daemon"
++	select BR2_PACKAGE_PERL_HTTP_MESSAGE
 +	help
-+	  The module implements the URI class. Objects of this class represent
-+	  Uniform Resource Identifier references as specified in RFC 2396 and
-+	  updated by RFC 2732.
++	  Instances of the `HTTP::Daemon' class are HTTP/1.1 servers that listen
++	  on a socket for incoming requests.
 +
-+	  https://github.com/libwww-perl/uri
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
++	  http://github.com/gisle/http-daemon
+diff --git a/package/perl-http-daemon/perl-http-daemon.hash b/package/perl-http-daemon/perl-http-daemon.hash
 new file mode 100644
-index 0000000..da33416
+index 0000000..f4f6023
 --- /dev/null
-+++ b/package/perl-uri/perl-uri.hash
++++ b/package/perl-http-daemon/perl-http-daemon.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    d0ef53b6c63bcc02ba55f405c30741e3 URI-1.67.tar.gz
-+sha256 7088d43d5f4902becfa5e0627751f5e6d0e0bdd1637b2d39e70ce807068a274e URI-1.67.tar.gz
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
++md5    ed0ae02d25d7f1e89456d4d69732adc2 HTTP-Daemon-6.01.tar.gz
++sha256 43fd867742701a3f9fcc7bd59838ab72c6490c0ebaf66901068ec6997514adc2 HTTP-Daemon-6.01.tar.gz
+diff --git a/package/perl-http-daemon/perl-http-daemon.mk b/package/perl-http-daemon/perl-http-daemon.mk
 new file mode 100644
-index 0000000..421a89f
+index 0000000..42d2873
 --- /dev/null
-+++ b/package/perl-uri/perl-uri.mk
++++ b/package/perl-http-daemon/perl-http-daemon.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-uri
++# perl-http-daemon
 +#
 +################################################################################
 +
-+PERL_URI_VERSION = 1.67
-+PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
-+PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
-+PERL_URI_DEPENDENCIES = perl
-+PERL_URI_LICENSE = Artistic or GPLv1+
-+PERL_URI_LICENSE_FILES = README
++PERL_HTTP_DAEMON_VERSION = 6.01
++PERL_HTTP_DAEMON_SOURCE = HTTP-Daemon-$(PERL_HTTP_DAEMON_VERSION).tar.gz
++PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_HTTP_DAEMON_DEPENDENCIES = perl-http-message
++PERL_HTTP_DAEMON_LICENSE = Artistic or GPLv1+
++PERL_HTTP_DAEMON_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
