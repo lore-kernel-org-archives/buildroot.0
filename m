@@ -1,80 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 19 Apr 2015 13:43:44 +0200
-Subject: [Buildroot] [git commit] package/perl-net-dns: New package
-Message-ID: <20150419114640.14DC47FB0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-http-date: New package
+Message-ID: <20150419114640.32C047FB0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6d47f90a1ee202e5678f2b9965c6b13e141fdb61
+commit: http://git.buildroot.net/buildroot/commit/?id=22915566173a90b92c02df5aabef64883628ea0c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                      |    1 +
- package/perl-net-dns/Config.in         |   11 +++++++++++
- package/perl-net-dns/perl-net-dns.hash |    3 +++
- package/perl-net-dns/perl-net-dns.mk   |   14 ++++++++++++++
- 4 files changed, 29 insertions(+), 0 deletions(-)
+ package/Config.in                          |    1 +
+ package/perl-http-date/Config.in           |    7 +++++++
+ package/perl-http-date/perl-http-date.hash |    3 +++
+ package/perl-http-date/perl-http-date.mk   |   14 ++++++++++++++
+ 4 files changed, 25 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 1f9c908..a6d5dcf 100644
+index fa42afb..f091923 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -513,6 +513,7 @@ menu "Perl libraries/modules"
+@@ -511,6 +511,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-gdtextutil/Config.in"
+ 	source "package/perl-html-parser/Config.in"
+ 	source "package/perl-html-tagset/Config.in"
++	source "package/perl-http-date/Config.in"
  	source "package/perl-io-socket-ssl/Config.in"
  	source "package/perl-json-tiny/Config.in"
  	source "package/perl-mojolicious/Config.in"
-+	source "package/perl-net-dns/Config.in"
- 	source "package/perl-net-ssleay/Config.in"
- 	source "package/perl-netaddr-ip/Config.in"
- 	source "package/perl-path-tiny/Config.in"
-diff --git a/package/perl-net-dns/Config.in b/package/perl-net-dns/Config.in
+diff --git a/package/perl-http-date/Config.in b/package/perl-http-date/Config.in
 new file mode 100644
-index 0000000..52fb4d8
+index 0000000..c45335f
 --- /dev/null
-+++ b/package/perl-net-dns/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PERL_NET_DNS
-+	bool "perl-net-dns"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_PERL_DIGEST_HMAC
++++ b/package/perl-http-date/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_HTTP_DATE
++	bool "perl-http-date"
 +	help
-+	  Net::DNS is a DNS resolver implemented in Perl.
++	  This module provides functions that deal the date formats used by the
++	  HTTP protocol (and then some more)
 +
-+	  http://www.net-dns.org
-+
-+comment "perl-net-dns needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
++	  https://github.com/gisle/http-date
+diff --git a/package/perl-http-date/perl-http-date.hash b/package/perl-http-date/perl-http-date.hash
 new file mode 100644
-index 0000000..01d2772
+index 0000000..db85cd0
 --- /dev/null
-+++ b/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-http-date/perl-http-date.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    f1d48107ff6b366479ad035783486d7a Net-DNS-0.83.tar.gz
-+sha256 8e1108d1801b9695909859323e1ed2f7ffb3b03dd3d2028a19fb79fc1a1d7c39 Net-DNS-0.83.tar.gz
-diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
++md5    52b7a0d5982d61be1edb217751d7daba HTTP-Date-6.02.tar.gz
++sha256 e8b9941da0f9f0c9c01068401a5e81341f0e3707d1c754f8e11f42a7e629e333 HTTP-Date-6.02.tar.gz
+diff --git a/package/perl-http-date/perl-http-date.mk b/package/perl-http-date/perl-http-date.mk
 new file mode 100644
-index 0000000..75c0a1b
+index 0000000..6de95b6
 --- /dev/null
-+++ b/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-http-date/perl-http-date.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-net-dns
++# perl-http-date
 +#
 +################################################################################
 +
-+PERL_NET_DNS_VERSION = 0.83
-+PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
-+PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
-+PERL_NET_DNS_DEPENDENCIES = perl perl-digest-hmac
-+PERL_NET_DNS_LICENSE = Artistic or GPLv1+
-+PERL_NET_DNS_LICENSE_FILES = README
++PERL_HTTP_DATE_VERSION = 6.02
++PERL_HTTP_DATE_SOURCE = HTTP-Date-$(PERL_HTTP_DATE_VERSION).tar.gz
++PERL_HTTP_DATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_HTTP_DATE_DEPENDENCIES = perl
++PERL_HTTP_DATE_LICENSE = Artistic or GPLv1+
++PERL_HTTP_DATE_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
