@@ -1,35 +1,30 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 10:38:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/Config.in: Sort perl-file-util
-	correctly
-Message-ID: <1429432736-17150-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Apr 2015 10:50:07 +0200
+Subject: [Buildroot] [PATCH 00/20] Some new Perl modules
+In-Reply-To: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150419105007.411d3dd3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Bernd Kuhls,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/Config.in |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, 19 Apr 2015 10:33:13 +0200, Bernd Kuhls wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index e2c5c3f..f15614e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -503,10 +503,10 @@ endif
- if BR2_PACKAGE_PERL
- menu "Perl libraries/modules"
- 	source "package/perl-datetime-tiny/Config.in"
--	source "package/perl-file-util/Config.in"
- 	source "package/perl-digest-hmac/Config.in"
- 	source "package/perl-encode-locale/Config.in"
- 	source "package/perl-file-listing/Config.in"
-+	source "package/perl-file-util/Config.in"
- 	source "package/perl-gd/Config.in"
- 	source "package/perl-gdgraph/Config.in"
- 	source "package/perl-gdtextutil/Config.in"
+> this patch series adds some modules to buildroot needed by Spamassassin. The
+> Spamassassin package itself is not yet finished yet, but these modules can be
+> used by other packages as well so I split them from my tree.
+
+Thanks. Could you explain why some of them have a host variant, and why
+the host variant is useful?
+
+Thanks,
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
