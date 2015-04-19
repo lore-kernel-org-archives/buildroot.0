@@ -1,53 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Apr 2015 09:40:02 -0300
-Subject: [Buildroot] [PATCH v2 11/11] toolchain: drop BR2_INET_IPV6
-In-Reply-To: <1429447202-13722-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1429447202-13722-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1429447202-13722-12-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Apr 2015 14:44:15 +0200
+Subject: [Buildroot] [PATCH 02/32] package/x11r7/xcb-util-cursor: new
+ package
+In-Reply-To: <XnsA4817080262A3berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <1429360844-12625-1-git-send-email-bernd.kuhls@t-online.de>
+ <1429360844-12625-2-git-send-email-bernd.kuhls@t-online.de>
+ <20150418183852.49035fcf@free-electrons.com>
+ <XnsA4817080262A3berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20150419144415.73605595@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's no longer used so farewell.
+Dear Bernd Kuhls,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/uclibc/Config.in      | 5 -----
- toolchain/toolchain-common.in | 4 ----
- 2 files changed, 9 deletions(-)
+Please try to Cc: me when you reply to a mail from me on the mailing
+list. This will ensure it also goes to my Inbox, so that I can reply to
+you in an hopefully timely fashion :)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index c4b4a5c..4d464a6 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -86,11 +86,6 @@ config BR2_UCLIBC_CONFIG
- 	  See also docs/README in this package.
- 	  If unsure, use the default.
- 
--config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
--	bool
--	select BR2_INET_IPV6
--	default y
--
- config BR2_TOOLCHAIN_BUILDROOT_INET_RPC
- 	bool "Enable RPC support"
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 28fb53a..d50c908 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -5,10 +5,6 @@
- # so put it here instead
- source "package/gdb/Config.in.host"
- 
--config BR2_INET_IPV6
--	bool
--	default y
--
- config BR2_TOOLCHAIN_HAS_GCC_BUG_58595
- 	bool
- 
+On Sun, 19 Apr 2015 11:03:33 +0200, Bernd Kuhls wrote:
+
+> how many chars are allowed in one line? I could not find a hint at
+> http://buildroot.uclibc.org/downloads/manual/manual.html#writing-rules-
+> config-in, so I used max. 80 chars.
+
+I think 72 should be the rule.
+
+Thanks,
+
+Thomas
 -- 
-2.0.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
