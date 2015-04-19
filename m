@@ -1,9 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 10:33:26 +0200
-Subject: [Buildroot] [PATCH 13/20] perl-http-message: New package
-In-Reply-To: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429432413-17038-14-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 19 Apr 2015 10:38:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/Config.in: Sort perl-file-util
+	correctly
+Message-ID: <1429432736-17150-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,78 +12,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                                |    1 +
- package/perl-http-message/Config.in              |   12 ++++++++++++
- package/perl-http-message/perl-http-message.hash |    3 +++
- package/perl-http-message/perl-http-message.mk   |   19 +++++++++++++++++++
- 4 files changed, 35 insertions(+)
- create mode 100644 package/perl-http-message/Config.in
- create mode 100644 package/perl-http-message/perl-http-message.hash
- create mode 100644 package/perl-http-message/perl-http-message.mk
+ package/Config.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 32b00fe..4725c23 100644
+index e2c5c3f..f15614e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -513,6 +513,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-html-parser/Config.in"
- 	source "package/perl-html-tagset/Config.in"
- 	source "package/perl-http-date/Config.in"
-+	source "package/perl-http-message/Config.in"
- 	source "package/perl-io-html/Config.in"
- 	source "package/perl-io-socket-ssl/Config.in"
- 	source "package/perl-json-tiny/Config.in"
-diff --git a/package/perl-http-message/Config.in b/package/perl-http-message/Config.in
-new file mode 100644
-index 0000000..9dda1ee
---- /dev/null
-+++ b/package/perl-http-message/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PERL_HTTP_MESSAGE
-+	bool "perl-http-message"
-+	select BR2_PACKAGE_PERL_ENCODE_LOCALE
-+	select BR2_PACKAGE_PERL_HTTP_DATE
-+	select BR2_PACKAGE_PERL_IO_HTML
-+	select BR2_PACKAGE_PERL_LWP_MEDIATYPES
-+	select BR2_PACKAGE_PERL_URI
-+	help
-+	  The HTTP-Message distribution contains classes useful for representing
-+	  the messages passed in HTTP style communication.
-+
-+	  https://github.com/libwww-perl/http-message
-diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
-new file mode 100644
-index 0000000..ff6268d
---- /dev/null
-+++ b/package/perl-http-message/perl-http-message.hash
-@@ -0,0 +1,3 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    e563ac516e28d33f65bc0f295f625f85 HTTP-Message-6.06.tar.gz
-+sha256 087e97009c5239dca4631cf433d836771b3fc5ba5685eef1965f9d3415cbad63 HTTP-Message-6.06.tar.gz
-diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
-new file mode 100644
-index 0000000..12eda90
---- /dev/null
-+++ b/package/perl-http-message/perl-http-message.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# perl-http-message
-+#
-+################################################################################
-+
-+PERL_HTTP_MESSAGE_VERSION = 6.06
-+PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
-+PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_HTTP_MESSAGE_LICENSE = Artistic or GPLv1+
-+PERL_HTTP_MESSAGE_LICENSE_FILES = README
-+PERL_HTTP_MESSAGE_DEPENDENCIES = \
-+	perl-encode-locale \
-+	perl-http-date \
-+	perl-io-html \
-+	perl-lwp-mediatypes \
-+	perl-uri
-+
-+$(eval $(perl-package))
+@@ -503,10 +503,10 @@ endif
+ if BR2_PACKAGE_PERL
+ menu "Perl libraries/modules"
+ 	source "package/perl-datetime-tiny/Config.in"
+-	source "package/perl-file-util/Config.in"
+ 	source "package/perl-digest-hmac/Config.in"
+ 	source "package/perl-encode-locale/Config.in"
+ 	source "package/perl-file-listing/Config.in"
++	source "package/perl-file-util/Config.in"
+ 	source "package/perl-gd/Config.in"
+ 	source "package/perl-gdgraph/Config.in"
+ 	source "package/perl-gdtextutil/Config.in"
 -- 
 1.7.10.4
