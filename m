@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 19 Apr 2015 23:10:30 +0200
-Subject: [Buildroot] [git commit] package/thttpd: add hash
-Message-ID: <20150419212235.B4C4C7FBF7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libee: add hash
+Message-ID: <20150419212235.D89BC7FBF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=37ed5420850f6c0f4280bef708e1bcdac264bf4b
+commit: http://git.buildroot.net/buildroot/commit/?id=ff0ae6d2cb2897f28b714d9adb176b84323b30b5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/thttpd/thttpd.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/libee/libee.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/thttpd/thttpd.hash b/package/thttpd/thttpd.hash
+diff --git a/package/libee/libee.hash b/package/libee/libee.hash
 new file mode 100644
-index 0000000..2400f5b
+index 0000000..b70242a
 --- /dev/null
-+++ b/package/thttpd/thttpd.hash
-@@ -0,0 +1,3 @@
-+# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/t/thttpd/thttpd_2.25b-11.dsc
-+sha256	07719b08b1cff6a21c08697a7bcb4395425b07ee753106262fb62a03a7d32360	thttpd_2.25b.orig.tar.gz
-+sha256	4d213c18daf121d21412cc54864fbca250e1773a91df6573373e1d2273a2cec9	thttpd_2.25b-11.diff.gz
++++ b/package/libee/libee.hash
+@@ -0,0 +1,2 @@
++# From http://www.libee.org/download/libee-0-4-1/
++md5	7bbf4160876c12db6193c06e2badedb2	libee-0.4.1.tar.gz
