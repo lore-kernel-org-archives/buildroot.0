@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Apr 2015 06:48:16 -0300
-Subject: [Buildroot] [PATCH v3 01/11] gcc-final: install libatomic
+Date: Sun, 19 Apr 2015 06:48:17 -0300
+Subject: [Buildroot] [PATCH v3 02/11] toolchain-external: install libatomic
 In-Reply-To: <1429436906-15222-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1429436906-15222-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1429436906-15222-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1429436906-15222-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +14,23 @@ It's required in some 32-bit architectures for the extended (64-bit)
 atomic operations, like __sync_add_and_fetch_8.
 These arches are at least: i386, mips & mipsel.
 
-Target size growth is ~15 KiB for ARM.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gcc/gcc-final/gcc-final.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ toolchain/toolchain-external/toolchain-external.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index d76eb31..8fda883 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -118,6 +118,15 @@ endef
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index c0429bb..2427463 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -64,7 +64,7 @@
+ #  of Buildroot is handled identical for the 2 toolchain types.
  
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBGCC
- 
-+define HOST_GCC_FINAL_INSTALL_LIBATOMIC
-+	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libatomic* \
-+		$(STAGING_DIR)/lib/
-+	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libatomic* \
-+		$(TARGET_DIR)/lib/
-+endef
-+
-+HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBATOMIC
-+
- # Handle the installation of libraries in /usr/lib
- HOST_GCC_FINAL_USR_LIBS =
- 
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+-LIB_EXTERNAL_LIBS += libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
++LIB_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_ARM_EABIHF),yy)
+ LIB_EXTERNAL_LIBS += ld-linux-armhf.so.*
+ else
 -- 
 2.0.5
