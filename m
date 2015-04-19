@@ -1,75 +1,57 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Apr 2015 09:39:52 -0300
-Subject: [Buildroot] [PATCH v2 01/11] toolchain-external: remove CS sh2
-	toolchains
+Date: Sun, 19 Apr 2015 09:39:53 -0300
+Subject: [Buildroot] [PATCH v2 02/11] package/uclibc: default to Y for IPv6
 In-Reply-To: <1429447202-13722-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1429447202-13722-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1429447202-13722-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1429447202-13722-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Normally we'd deprecate them, but:
-
-1) They don't support IPv6 and it's being removed so it makes no sense.
-2) They're based on uClibc 0.9.30-ish which is very old and surely has
-package build breakage all over it.
+Remove the option to disable IPv6 support in uclibc and associated
+logic.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/toolchain-external/Config.in | 38 ----------------------------------
- 1 file changed, 38 deletions(-)
+ package/uclibc/Config.in | 6 ++----
+ package/uclibc/uclibc.mk | 4 ----
+ 2 files changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index cd2115b..440de18 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -630,44 +630,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- 	    - SH4A, uClibc, big endian
- 	      Not usable in Buildroot yet.
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index fdf8351..c4b4a5c 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -87,11 +87,9 @@ config BR2_UCLIBC_CONFIG
+ 	  If unsure, use the default.
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
--	bool "Sourcery CodeBench SH 2011.03"
--	depends on BR2_sh2a
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_USE_WCHAR
--	select BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	# kernel headers: 2.6.38
+ config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
+-	bool "Enable IPv6 support"
++	bool
+ 	select BR2_INET_IPV6
 -	help
--	  Sourcery CodeBench toolchain for the SuperH architecture,
--	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
--	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.38. It has
--	  support for the following variants:
--	    - SH2A, uClibc, big endian
--
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
--	bool "Sourcery CodeBench SH 2010.09"
--	depends on BR2_sh2a
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_USE_WCHAR
--	select BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	# kernel headers: 2.6.35
--	help
--	  Sourcery CodeBench toolchain for the SuperH architecture,
--	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
--	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.35.2. It
--	  has support for the following variants:
--	    - SH2A, uClibc, big endian
--
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405
- 	bool "Sourcery CodeBench AMD64 2014.05"
- 	depends on BR2_x86_64
+-	  Enable this option if you want your toolchain to support
+-	  IPv6.
++	default y
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_INET_RPC
+ 	bool "Enable RPC support"
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 72a46d9..07ff8e5 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -212,11 +212,7 @@ endif
+ # IPv6
+ #
+ 
+-ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_IPV6),y)
+ UCLIBC_IPV6_CONFIG = $(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_IPV6,$(@D)/.config)
+-else
+-UCLIBC_IPV6_CONFIG = $(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_IPV6,$(@D)/.config)
+-endif
+ 
+ #
+ # RPC
 -- 
 2.0.5
