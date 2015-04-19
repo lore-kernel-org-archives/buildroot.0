@@ -1,78 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 13:43:45 +0200
-Subject: [Buildroot] [git commit] package/perl-digest-sha1: new package
-Message-ID: <20150419114640.C176781940@busybox.osuosl.org>
+Date: Sun, 19 Apr 2015 13:43:44 +0200
+Subject: [Buildroot] [git commit] package/perl-encode-locale: new package
+Message-ID: <20150419114640.29F2D7FB0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5088ed78557ff422593a578bdf0f0ed7f683dc75
+commit: http://git.buildroot.net/buildroot/commit/?id=c0229917ffd969b08a7fcd268db678d424a7f676
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                              |    1 +
- package/perl-digest-sha1/Config.in             |   10 ++++++++++
- package/perl-digest-sha1/perl-digest-sha1.hash |    3 +++
- package/perl-digest-sha1/perl-digest-sha1.mk   |   13 +++++++++++++
- 4 files changed, 27 insertions(+), 0 deletions(-)
+ package/Config.in                                  |    1 +
+ package/perl-encode-locale/Config.in               |    6 ++++++
+ package/perl-encode-locale/perl-encode-locale.hash |    3 +++
+ package/perl-encode-locale/perl-encode-locale.mk   |   14 ++++++++++++++
+ 4 files changed, 24 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 27d06cd..cd9090d 100644
+index 36a4915..fa42afb 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -504,6 +504,7 @@ if BR2_PACKAGE_PERL
  menu "Perl libraries/modules"
  	source "package/perl-datetime-tiny/Config.in"
  	source "package/perl-digest-hmac/Config.in"
-+	source "package/perl-digest-sha1/Config.in"
- 	source "package/perl-encode-locale/Config.in"
- 	source "package/perl-file-listing/Config.in"
++	source "package/perl-encode-locale/Config.in"
  	source "package/perl-file-util/Config.in"
-diff --git a/package/perl-digest-sha1/Config.in b/package/perl-digest-sha1/Config.in
+ 	source "package/perl-gd/Config.in"
+ 	source "package/perl-gdgraph/Config.in"
+diff --git a/package/perl-encode-locale/Config.in b/package/perl-encode-locale/Config.in
 new file mode 100644
-index 0000000..b72a4ae
+index 0000000..d15aecb
 --- /dev/null
-+++ b/package/perl-digest-sha1/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PERL_DIGEST_SHA1
-+	bool "perl-digest-sha1"
-+	depends on !BR2_STATIC_LIBS
++++ b/package/perl-encode-locale/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_ENCODE_LOCALE
++	bool "perl-encode-locale"
 +	help
-+	  Perl interface to the SHA-1 algorithm
++	  Determine the locale encoding
 +
-+	  https://metacpan.org/release/Digest-SHA1
-+
-+comment "perl-digest-sha1 needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-digest-sha1/perl-digest-sha1.hash b/package/perl-digest-sha1/perl-digest-sha1.hash
++	  https://github.com/gisle/encode-locale
+diff --git a/package/perl-encode-locale/perl-encode-locale.hash b/package/perl-encode-locale/perl-encode-locale.hash
 new file mode 100644
-index 0000000..d24d5ab
+index 0000000..d1abef5
 --- /dev/null
-+++ b/package/perl-digest-sha1/perl-digest-sha1.hash
++++ b/package/perl-encode-locale/perl-encode-locale.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    bd22388f268434f2b24f64e28bf1aa35 Digest-SHA1-2.13.tar.gz
-+sha256 68c1dac2187421f0eb7abf71452a06f190181b8fc4b28ededf5b90296fb943cc Digest-SHA1-2.13.tar.gz
-diff --git a/package/perl-digest-sha1/perl-digest-sha1.mk b/package/perl-digest-sha1/perl-digest-sha1.mk
++md5    0565984b048732e4fd1315212f21d462 Encode-Locale-1.04.tar.gz
++sha256 33aca4aa35829bd5c8c5e64ebfde86d0a2e8cd59dac2c4de707ffe9dc10bfbd4 Encode-Locale-1.04.tar.gz
+diff --git a/package/perl-encode-locale/perl-encode-locale.mk b/package/perl-encode-locale/perl-encode-locale.mk
 new file mode 100644
-index 0000000..d3224e1
+index 0000000..fd7148e
 --- /dev/null
-+++ b/package/perl-digest-sha1/perl-digest-sha1.mk
-@@ -0,0 +1,13 @@
++++ b/package/perl-encode-locale/perl-encode-locale.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-digest-sha1
++# perl-encode-locale
 +#
 +################################################################################
 +
-+PERL_DIGEST_SHA1_VERSION = 2.13
-+PERL_DIGEST_SHA1_SOURCE = Digest-SHA1-$(PERL_DIGEST_SHA1_VERSION).tar.gz
-+PERL_DIGEST_SHA1_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_DIGEST_SHA1_DEPENDENCIES = perl
-+PERL_DIGEST_SHA1_LICENSE = Artistic or GPLv1+
++PERL_ENCODE_LOCALE_VERSION = 1.04
++PERL_ENCODE_LOCALE_SOURCE = Encode-Locale-$(PERL_ENCODE_LOCALE_VERSION).tar.gz
++PERL_ENCODE_LOCALE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_ENCODE_LOCALE_DEPENDENCIES = perl
++PERL_ENCODE_LOCALE_LICENSE = Artistic or GPLv1+
++PERL_ENCODE_LOCALE_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
