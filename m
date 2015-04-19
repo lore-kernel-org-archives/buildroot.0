@@ -1,76 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 13:43:44 +0200
-Subject: [Buildroot] [git commit] package/perl-lwp-mediatypes: New package
-Message-ID: <20150419114640.5B0A17FB0C@busybox.osuosl.org>
+Date: Sun, 19 Apr 2015 13:43:45 +0200
+Subject: [Buildroot] [git commit] package/perl-net-http: New package
+Message-ID: <20150419114640.9524D7FB0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b221670b188a9600c29d6d4a4916a8115bbc9a4
+commit: http://git.buildroot.net/buildroot/commit/?id=15d306cc5697c7a34b6dc33145786a007477355c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |    1 +
- package/perl-lwp-mediatypes/Config.in              |    7 +++++++
- .../perl-lwp-mediatypes/perl-lwp-mediatypes.hash   |    3 +++
- package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk |   14 ++++++++++++++
+ package/Config.in                        |    1 +
+ package/perl-net-http/Config.in          |    7 +++++++
+ package/perl-net-http/perl-net-http.hash |    3 +++
+ package/perl-net-http/perl-net-http.mk   |   14 ++++++++++++++
  4 files changed, 25 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 51f44a2..3da9973 100644
+index 0066da9..b3c87d6 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -516,6 +516,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-io-html/Config.in"
- 	source "package/perl-io-socket-ssl/Config.in"
- 	source "package/perl-json-tiny/Config.in"
-+	source "package/perl-lwp-mediatypes/Config.in"
+@@ -523,6 +523,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-lwp-mediatypes/Config.in"
  	source "package/perl-mojolicious/Config.in"
  	source "package/perl-net-dns/Config.in"
++	source "package/perl-net-http/Config.in"
  	source "package/perl-net-ssleay/Config.in"
-diff --git a/package/perl-lwp-mediatypes/Config.in b/package/perl-lwp-mediatypes/Config.in
+ 	source "package/perl-netaddr-ip/Config.in"
+ 	source "package/perl-path-tiny/Config.in"
+diff --git a/package/perl-net-http/Config.in b/package/perl-net-http/Config.in
 new file mode 100644
-index 0000000..b362e9c
+index 0000000..6f18dd5
 --- /dev/null
-+++ b/package/perl-lwp-mediatypes/Config.in
++++ b/package/perl-net-http/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_LWP_MEDIATYPES
-+	bool "perl-lwp-mediatypes"
++config BR2_PACKAGE_PERL_NET_HTTP
++	bool "perl-net-http"
++	select BR2_PACKAGE_PERL_URI
 +	help
-+	  This module provides functions for handling media (also known as MIME)
-+	  types and encodings.
++	  The `Net::HTTP' class is a low-level HTTP client.
 +
-+	  https://github.com/gisle/lwp-mediatypes
-diff --git a/package/perl-lwp-mediatypes/perl-lwp-mediatypes.hash b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.hash
++	  http://github.com/libwww-perl/net-http
+diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
 new file mode 100644
-index 0000000..0f6fee9
+index 0000000..9f5f11b
 --- /dev/null
-+++ b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.hash
++++ b/package/perl-net-http/perl-net-http.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    8c5f25fb64b974d22aff424476ba13c9 LWP-MediaTypes-6.02.tar.gz
-+sha256 18790b0cc5f0a51468495c3847b16738f785a2d460403595001e0b932e5db676 LWP-MediaTypes-6.02.tar.gz
-diff --git a/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk
++md5    b6da691523456089d7a812ac398bc77e Net-HTTP-6.07.tar.gz
++sha256 9f31e0325a5a0930ad309fa019da9d208e57e236fb0598675ed883c820240364 Net-HTTP-6.07.tar.gz
+diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
 new file mode 100644
-index 0000000..2442d41
+index 0000000..a73dfec
 --- /dev/null
-+++ b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk
++++ b/package/perl-net-http/perl-net-http.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-lwp-mediatypes
++# perl-net-http
 +#
 +################################################################################
 +
-+PERL_LWP_MEDIATYPES_VERSION = 6.02
-+PERL_LWP_MEDIATYPES_SOURCE = LWP-MediaTypes-$(PERL_LWP_MEDIATYPES_VERSION).tar.gz
-+PERL_LWP_MEDIATYPES_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_LWP_MEDIATYPES_DEPENDENCIES = perl
-+PERL_LWP_MEDIATYPES_LICENSE = Artistic or GPLv1+
-+PERL_LWP_MEDIATYPES_LICENSE_FILES = README
++PERL_NET_HTTP_VERSION = 6.07
++PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
++PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MS/MSCHILLI
++PERL_NET_HTTP_DEPENDENCIES = perl-uri
++PERL_NET_HTTP_LICENSE = Artistic or GPLv1+
++PERL_NET_HTTP_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
