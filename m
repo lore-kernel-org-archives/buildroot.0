@@ -1,30 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 19:24:22 +0200
-Subject: [Buildroot] [git commit] package/fbdump: Add project URL to
-	Config.in
-Message-ID: <20150419172623.7945280797@busybox.osuosl.org>
+Date: Sun, 19 Apr 2015 19:25:15 +0200
+Subject: [Buildroot] [git commit] package/fbterm: add hash
+Message-ID: <20150419172623.CE21F80797@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c990ef28c7f48a911e32f49150237f826b2a771a
+commit: http://git.buildroot.net/buildroot/commit/?id=ec33af95194f9de15e10db647ef0cc7dc2137ebe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fbdump/Config.in |    2 ++
+ package/fbterm/fbterm.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/fbdump/Config.in b/package/fbdump/Config.in
-index 7910713..982448d 100644
---- a/package/fbdump/Config.in
-+++ b/package/fbdump/Config.in
-@@ -5,3 +5,5 @@ config BR2_PACKAGE_FBDUMP
- 	  framebuffer  device and write them out as a PPM file. Currently,
- 	  most packed-pixel framebuffer formats and the vga16 framebuffer
- 	  are supported.
-+
-+	  http://www.rcdrummond.net/fbdump
+diff --git a/package/fbterm/fbterm.hash b/package/fbterm/fbterm.hash
+new file mode 100644
+index 0000000..20a3e8f
+--- /dev/null
++++ b/package/fbterm/fbterm.hash
+@@ -0,0 +1,2 @@
++# From http://code.google.com/p/fbterm/downloads/detail?name=fbterm-1.7.0.tar.gz&can=2&q=
++sha1	dc7b7ff29212c1551f35bf7a50967454d3b8c67c	fbterm-1.7.0.tar.gz
