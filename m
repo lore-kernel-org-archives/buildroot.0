@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 12:17:07 +0200
-Subject: [Buildroot] [PATCH v2 12/25] package/perl-http-message: New package
+Date: Sun, 19 Apr 2015 12:17:08 +0200
+Subject: [Buildroot] [PATCH v2 13/25] package/perl-http-cookies: New package
 In-Reply-To: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429438640-9367-13-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429438640-9367-14-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,76 +14,66 @@ To: buildroot@busybox.net
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
  package/Config.in                                |    1 +
- package/perl-http-message/Config.in              |   12 ++++++++++++
- package/perl-http-message/perl-http-message.hash |    3 +++
- package/perl-http-message/perl-http-message.mk   |   19 +++++++++++++++++++
- 4 files changed, 35 insertions(+)
- create mode 100644 package/perl-http-message/Config.in
- create mode 100644 package/perl-http-message/perl-http-message.hash
- create mode 100644 package/perl-http-message/perl-http-message.mk
+ package/perl-http-cookies/Config.in              |    7 +++++++
+ package/perl-http-cookies/perl-http-cookies.hash |    3 +++
+ package/perl-http-cookies/perl-http-cookies.mk   |   14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/perl-http-cookies/Config.in
+ create mode 100644 package/perl-http-cookies/perl-http-cookies.hash
+ create mode 100644 package/perl-http-cookies/perl-http-cookies.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 501f767..f19c451 100644
+index f19c451..184c926 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -513,6 +513,7 @@ menu "Perl libraries/modules"
+@@ -512,6 +512,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-gdtextutil/Config.in"
  	source "package/perl-html-parser/Config.in"
  	source "package/perl-html-tagset/Config.in"
++	source "package/perl-http-cookies/Config.in"
  	source "package/perl-http-date/Config.in"
-+	source "package/perl-http-message/Config.in"
+ 	source "package/perl-http-message/Config.in"
  	source "package/perl-io-html/Config.in"
- 	source "package/perl-io-socket-ssl/Config.in"
- 	source "package/perl-json-tiny/Config.in"
-diff --git a/package/perl-http-message/Config.in b/package/perl-http-message/Config.in
+diff --git a/package/perl-http-cookies/Config.in b/package/perl-http-cookies/Config.in
 new file mode 100644
-index 0000000..9dda1ee
+index 0000000..4dd2fd9
 --- /dev/null
-+++ b/package/perl-http-message/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PERL_HTTP_MESSAGE
-+	bool "perl-http-message"
-+	select BR2_PACKAGE_PERL_ENCODE_LOCALE
-+	select BR2_PACKAGE_PERL_HTTP_DATE
-+	select BR2_PACKAGE_PERL_IO_HTML
-+	select BR2_PACKAGE_PERL_LWP_MEDIATYPES
-+	select BR2_PACKAGE_PERL_URI
++++ b/package/perl-http-cookies/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_HTTP_COOKIES
++	bool "perl-http-cookies"
++	select BR2_PACKAGE_PERL_HTTP_MESSAGE
 +	help
-+	  The HTTP-Message distribution contains classes useful for representing
-+	  the messages passed in HTTP style communication.
++	  Objects that represent a "cookie jar"
 +
-+	  https://github.com/libwww-perl/http-message
-diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
++	  http://github.com/gisle/http-cookies
+diff --git a/package/perl-http-cookies/perl-http-cookies.hash b/package/perl-http-cookies/perl-http-cookies.hash
 new file mode 100644
-index 0000000..ff6268d
+index 0000000..94e5f31
 --- /dev/null
-+++ b/package/perl-http-message/perl-http-message.hash
++++ b/package/perl-http-cookies/perl-http-cookies.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    e563ac516e28d33f65bc0f295f625f85 HTTP-Message-6.06.tar.gz
-+sha256 087e97009c5239dca4631cf433d836771b3fc5ba5685eef1965f9d3415cbad63 HTTP-Message-6.06.tar.gz
-diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
++md5    ecfd0eeb88512033352c2f13c9580f03 HTTP-Cookies-6.01.tar.gz
++sha256 f5d3ade383ce6389d80cb0d0356b643af80435bb036afd8edce335215ec5eb20 HTTP-Cookies-6.01.tar.gz
+diff --git a/package/perl-http-cookies/perl-http-cookies.mk b/package/perl-http-cookies/perl-http-cookies.mk
 new file mode 100644
-index 0000000..12eda90
+index 0000000..b3bfa2c
 --- /dev/null
-+++ b/package/perl-http-message/perl-http-message.mk
-@@ -0,0 +1,19 @@
++++ b/package/perl-http-cookies/perl-http-cookies.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-http-message
++# perl-http-cookies
 +#
 +################################################################################
 +
-+PERL_HTTP_MESSAGE_VERSION = 6.06
-+PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
-+PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_HTTP_MESSAGE_LICENSE = Artistic or GPLv1+
-+PERL_HTTP_MESSAGE_LICENSE_FILES = README
-+PERL_HTTP_MESSAGE_DEPENDENCIES = \
-+	perl-encode-locale \
-+	perl-http-date \
-+	perl-io-html \
-+	perl-lwp-mediatypes \
-+	perl-uri
++PERL_HTTP_COOKIES_VERSION = 6.01
++PERL_HTTP_COOKIES_SOURCE = HTTP-Cookies-$(PERL_HTTP_COOKIES_VERSION).tar.gz
++PERL_HTTP_COOKIES_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_HTTP_COOKIES_DEPENDENCIES = perl-http-message
++PERL_HTTP_COOKIES_LICENSE = Artistic or GPLv1+
++PERL_HTTP_COOKIES_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
