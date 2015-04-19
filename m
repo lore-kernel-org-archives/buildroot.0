@@ -1,62 +1,48 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 19 Apr 2015 19:55:51 +0200
-Subject: [Buildroot] [PATCH v6 1/8] package/gcc: add hashes
-In-Reply-To: <cover.1429447148.git.yann.morin.1998@free.fr>
+Date: Sun, 19 Apr 2015 19:55:54 +0200
+Subject: [Buildroot] [PATCH v6 4/8] uclibc: update hash for arc
+In-Reply-To: <1429466158-28878-1-git-send-email-arnout@mind.be>
 References: <cover.1429447148.git.yann.morin.1998@free.fr>
-Message-ID: <1429466158-28878-1-git-send-email-arnout@mind.be>
+ <1429466158-28878-1-git-send-email-arnout@mind.be>
+Message-ID: <1429466158-28878-4-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The old hash for 2014.08 was never updated. Since uclibc-arc-2014.12 is
+downloaded from the github helper, it is converted into a 'none' hash.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Reordered the hashes so the none-hashes are together.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gcc/gcc-final/gcc-final.hash     |  1 +
- package/gcc/gcc-initial/gcc-initial.hash |  1 +
- package/gcc/gcc.hash                     | 10 ++++++++++
- 3 files changed, 12 insertions(+)
- create mode 120000 package/gcc/gcc-final/gcc-final.hash
- create mode 120000 package/gcc/gcc-initial/gcc-initial.hash
- create mode 100644 package/gcc/gcc.hash
+This should be inserted into Yann's series before or after 3/7.
 
-diff --git a/package/gcc/gcc-final/gcc-final.hash b/package/gcc/gcc-final/gcc-final.hash
-new file mode 120000
-index 0000000..7ac9361
---- /dev/null
-+++ b/package/gcc/gcc-final/gcc-final.hash
-@@ -0,0 +1 @@
-+../gcc.hash
-\ No newline at end of file
-diff --git a/package/gcc/gcc-initial/gcc-initial.hash b/package/gcc/gcc-initial/gcc-initial.hash
-new file mode 120000
-index 0000000..7ac9361
---- /dev/null
-+++ b/package/gcc/gcc-initial/gcc-initial.hash
-@@ -0,0 +1 @@
-+../gcc.hash
-\ No newline at end of file
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-new file mode 100644
-index 0000000..5eec97f
---- /dev/null
-+++ b/package/gcc/gcc.hash
-@@ -0,0 +1,10 @@
-+# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.5.4/sha512.sum
-+sha512  78696b287d46aacd6f150920da376ea32f58ad9f0dafd2d3b7fa6dbdd8dd7afe659108d1dfaa5807617fc5248719f50b39c37ade0173ea5b9fec2091f4656115  gcc-4.5.4.tar.bz2
-+# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.7.4/sha512.sum
-+sha512  dfcb737073191e628231031a3571ec77ee760a59377630f4a6e4fdfa66f9ddad39fde47e3f0f227eb43cdf90e0d34cde5abdc9ac892c1e111a911062a66c9189  gcc-4.7.4.tar.bz2
-+# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.8.4/sha512.sum
-+sha512  b4c84ebd754c026029d706ef52c4242df4dcadc6a22cc5669b3aa37ac9dc25bc9cd9651fda83fb24dd5d17b1710e6865a35bb6c5cd9b95d0971717453935ae8e  gcc-4.8.4.tar.bz2
-+# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.9.2/sha512.sum
-+sha512  e96cba06d572dbe7f382a2b00fd9297dcf9f9219d46a9ad0bd904dc36d5e7db3335e422640b79a27fed6fde91b0731732b94a0e2fbcd47344d6779f8ba1f4f9c  gcc-4.9.2.tar.bz2
-+# No hash for the ARC variant, comes from the github-helper:
-+none  xxx  gcc-arc-2014.12.tar.gz
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/uclibc/uclibc.hash | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 971ab26..01e71c0 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,11 +1,11 @@
+ # Locally calculated after checking pgp signature
+ sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
+ 
+-# Locally calculated
+-sha256	0a9085a11615296cfe7783f16ff29073393eb330749947adece0eeddb31705a4	uClibc-arc-2014.08.tar.gz
+-
+ # From http://www.uclibc-ng.org/trac/
+ sha256  e561040293ba4f21dcf3285ca1f683b5a8493eb0ffd3b3e495122cfde5a64a0e        uClibc-ng-1.0.1.tar.xz
+ 
++# No hash for the ARC variant, comes from the github-helper
++none	xxx	uClibc-arc-2014.12.tar.gz
++
+ # No hash for this git snapshot
+ none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
 -- 
 2.1.4
