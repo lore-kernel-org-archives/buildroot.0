@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 19 Apr 2015 23:10:28 +0200
-Subject: [Buildroot] [git commit] package/ipmiutil: add hash
-Message-ID: <20150419212235.2D0AD8040A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libaio: add hash
+Message-ID: <20150419212235.639337FBF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff44e175c7a5d0fdbe97b1a76ad5092ca7d0c2f7
+commit: http://git.buildroot.net/buildroot/commit/?id=bc8fe7210c6c8e0fcb1bc3eff7d86e6789888dda
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ipmiutil/ipmiutil.hash |    2 ++
+ package/libaio/libaio.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/ipmiutil/ipmiutil.hash b/package/ipmiutil/ipmiutil.hash
+diff --git a/package/libaio/libaio.hash b/package/libaio/libaio.hash
 new file mode 100644
-index 0000000..2afc0f2
+index 0000000..deb16e8
 --- /dev/null
-+++ b/package/ipmiutil/ipmiutil.hash
++++ b/package/libaio/libaio.hash
 @@ -0,0 +1,2 @@
-+# From http://sourceforge.net/projects/ipmiutil/files/?source=navbar
-+sha1	265f022c876da373b2ecb4be2bc0f98e65f70977	ipmiutil-2.9.5.tar.gz
++# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/liba/libaio/libaio_0.3.109-3.dsc
++sha256	bf4a457253cbaab215aea75cb6e18dc8d95bbd507e9920661ff9bdd288c8778d	libaio_0.3.109.orig.tar.gz
