@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 10:33:28 +0200
-Subject: [Buildroot] [PATCH 15/20] perl-http-daemon: New package
+Date: Sun, 19 Apr 2015 10:33:14 +0200
+Subject: [Buildroot] [PATCH 01/20] perl-digest-hmac: New package
 In-Reply-To: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429432413-17038-16-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429432413-17038-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,67 +14,65 @@ To: buildroot@busybox.net
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
  package/Config.in                              |    1 +
- package/perl-http-daemon/Config.in             |    8 ++++++++
- package/perl-http-daemon/perl-http-daemon.hash |    3 +++
- package/perl-http-daemon/perl-http-daemon.mk   |   14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/perl-http-daemon/Config.in
- create mode 100644 package/perl-http-daemon/perl-http-daemon.hash
- create mode 100644 package/perl-http-daemon/perl-http-daemon.mk
+ package/perl-digest-hmac/Config.in             |    6 ++++++
+ package/perl-digest-hmac/perl-digest-hmac.hash |    3 +++
+ package/perl-digest-hmac/perl-digest-hmac.mk   |   14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/perl-digest-hmac/Config.in
+ create mode 100644 package/perl-digest-hmac/perl-digest-hmac.hash
+ create mode 100644 package/perl-digest-hmac/perl-digest-hmac.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 4b43207..7c91393 100644
+index 86d9435..33456e1 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -513,6 +513,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-html-parser/Config.in"
- 	source "package/perl-html-tagset/Config.in"
- 	source "package/perl-http-cookies/Config.in"
-+	source "package/perl-http-daemon/Config.in"
- 	source "package/perl-http-date/Config.in"
- 	source "package/perl-http-message/Config.in"
- 	source "package/perl-io-html/Config.in"
-diff --git a/package/perl-http-daemon/Config.in b/package/perl-http-daemon/Config.in
+@@ -504,6 +504,7 @@ if BR2_PACKAGE_PERL
+ menu "Perl libraries/modules"
+ 	source "package/perl-datetime-tiny/Config.in"
+ 	source "package/perl-file-util/Config.in"
++	source "package/perl-digest-hmac/Config.in"
+ 	source "package/perl-gd/Config.in"
+ 	source "package/perl-gdgraph/Config.in"
+ 	source "package/perl-gdtextutil/Config.in"
+diff --git a/package/perl-digest-hmac/Config.in b/package/perl-digest-hmac/Config.in
 new file mode 100644
-index 0000000..3d69b88
+index 0000000..733a53d
 --- /dev/null
-+++ b/package/perl-http-daemon/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PERL_HTTP_DAEMON
-+	bool "perl-http-daemon"
-+	select BR2_PACKAGE_PERL_HTTP_MESSAGE
++++ b/package/perl-digest-hmac/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_DIGEST_HMAC
++	bool "perl-digest-hmac"
 +	help
-+	  Instances of the `HTTP::Daemon' class are HTTP/1.1 servers that listen
-+	  on a socket for incoming requests.
++	  Digest::HMAC - Keyed-Hashing for Message Authentication
 +
-+	  http://github.com/gisle/http-daemon
-diff --git a/package/perl-http-daemon/perl-http-daemon.hash b/package/perl-http-daemon/perl-http-daemon.hash
++	  https://github.com/gisle/digest-hmac
+diff --git a/package/perl-digest-hmac/perl-digest-hmac.hash b/package/perl-digest-hmac/perl-digest-hmac.hash
 new file mode 100644
-index 0000000..f4f6023
+index 0000000..018e4eb
 --- /dev/null
-+++ b/package/perl-http-daemon/perl-http-daemon.hash
++++ b/package/perl-digest-hmac/perl-digest-hmac.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    ed0ae02d25d7f1e89456d4d69732adc2 HTTP-Daemon-6.01.tar.gz
-+sha256 43fd867742701a3f9fcc7bd59838ab72c6490c0ebaf66901068ec6997514adc2 HTTP-Daemon-6.01.tar.gz
-diff --git a/package/perl-http-daemon/perl-http-daemon.mk b/package/perl-http-daemon/perl-http-daemon.mk
++md5    e6a5d6f552da16eacb5157ea4369ff9d Digest-HMAC-1.03.tar.gz
++sha256 3bc72c6d3ff144d73aefb90e9a78d33612d58cf1cd1631ecfb8985ba96da4a59 Digest-HMAC-1.03.tar.gz
+diff --git a/package/perl-digest-hmac/perl-digest-hmac.mk b/package/perl-digest-hmac/perl-digest-hmac.mk
 new file mode 100644
-index 0000000..42d2873
+index 0000000..97ec43e
 --- /dev/null
-+++ b/package/perl-http-daemon/perl-http-daemon.mk
++++ b/package/perl-digest-hmac/perl-digest-hmac.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-http-daemon
++# perl-digest-hmac
 +#
 +################################################################################
 +
-+PERL_HTTP_DAEMON_VERSION = 6.01
-+PERL_HTTP_DAEMON_SOURCE = HTTP-Daemon-$(PERL_HTTP_DAEMON_VERSION).tar.gz
-+PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_HTTP_DAEMON_DEPENDENCIES = perl-http-message
-+PERL_HTTP_DAEMON_LICENSE = Artistic or GPLv1+
-+PERL_HTTP_DAEMON_LICENSE_FILES = README
++PERL_DIGEST_HMAC_VERSION = 1.03
++PERL_DIGEST_HMAC_SOURCE = Digest-HMAC-$(PERL_DIGEST_HMAC_VERSION).tar.gz
++PERL_DIGEST_HMAC_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_DIGEST_HMAC_DEPENDENCIES = perl
++PERL_DIGEST_HMAC_LICENSE = Artistic or GPLv1+
++PERL_DIGEST_HMAC_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
