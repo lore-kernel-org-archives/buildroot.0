@@ -1,9 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 15:07:17 +0200
-Subject: [Buildroot] [PATCH 2/9] package/feh: bump version to 2.12.1
-In-Reply-To: <1429448844-12598-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429448844-12598-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429448844-12598-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 19 Apr 2015 15:07:16 +0200
+Subject: [Buildroot] [PATCH 1/9] package/fbdump: Add project URL to Config.in
+Message-ID: <1429448844-12598-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +11,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/feh/feh.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/fbdump/Config.in |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 15d3218..0c4c164 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FEH_VERSION = 2.12
-+FEH_VERSION = 2.12.1
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org
- FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
+diff --git a/package/fbdump/Config.in b/package/fbdump/Config.in
+index 7910713..982448d 100644
+--- a/package/fbdump/Config.in
++++ b/package/fbdump/Config.in
+@@ -5,3 +5,5 @@ config BR2_PACKAGE_FBDUMP
+ 	  framebuffer  device and write them out as a PPM file. Currently,
+ 	  most packed-pixel framebuffer formats and the vga16 framebuffer
+ 	  are supported.
++
++	  http://www.rcdrummond.net/fbdump
 -- 
 1.7.10.4
