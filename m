@@ -1,42 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 09:49:56 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xcb-util-image: bump version
-	to 0.4.0, add hash
-Message-ID: <20150419075429.958ED81938@busybox.osuosl.org>
+Date: Sun, 19 Apr 2015 09:51:34 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-nv: add
+	hash
+Message-ID: <20150419075430.61DAB81938@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0597c92b0a4515a1c721118ff5e6e9bc78419a2e
+commit: http://git.buildroot.net/buildroot/commit/?id=738fed5990844663b3c53416427540c3069feb4b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xcb-util-image/xcb-util-image.hash |    2 ++
- package/x11r7/xcb-util-image/xcb-util-image.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ .../xdriver_xf86-video-nv.hash                     |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xcb-util-image/xcb-util-image.hash b/package/x11r7/xcb-util-image/xcb-util-image.hash
+diff --git a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.hash b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.hash
 new file mode 100644
-index 0000000..1cc82ac
+index 0000000..8083ea2
 --- /dev/null
-+++ b/package/x11r7/xcb-util-image/xcb-util-image.hash
++++ b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.hash
 @@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2014-October/002489.html
-+sha256	2db96a37d78831d643538dd1b595d7d712e04bdccf8896a5e18ce0f398ea2ffc	xcb-util-image-0.4.0.tar.bz2
-diff --git a/package/x11r7/xcb-util-image/xcb-util-image.mk b/package/x11r7/xcb-util-image/xcb-util-image.mk
-index 6978236..705b8a7 100644
---- a/package/x11r7/xcb-util-image/xcb-util-image.mk
-+++ b/package/x11r7/xcb-util-image/xcb-util-image.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XCB_UTIL_IMAGE_VERSION = 0.3.9
-+XCB_UTIL_IMAGE_VERSION = 0.4.0
- XCB_UTIL_IMAGE_SITE = http://xcb.freedesktop.org/dist
- XCB_UTIL_IMAGE_SOURCE = xcb-util-image-$(XCB_UTIL_IMAGE_VERSION).tar.bz2
- XCB_UTIL_IMAGE_INSTALL_STAGING = YES
++# From http://lists.x.org/archives/xorg-announce/2012-July/002030.html
++sha256	8395f65501f16f9cbaae8f598b02c6f18e78f4d3d30a08cb8d547dc2e00c10bf xf86-video-nv-2.1.20.tar.bz2
