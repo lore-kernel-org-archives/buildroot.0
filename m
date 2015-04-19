@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 23:10:27 +0200
-Subject: [Buildroot] [git commit] package/gtest: add hash
-Message-ID: <20150419212234.D2BE8805EE@busybox.osuosl.org>
+Date: Sun, 19 Apr 2015 23:10:28 +0200
+Subject: [Buildroot] [git commit] package/igh-ethercat: add hash
+Message-ID: <20150419212235.0F55E8040A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2374678d8f389b8d60d3a62f06ff59e397ab2620
+commit: http://git.buildroot.net/buildroot/commit/?id=21182109eb69fcc28eef1b95bbb511fcb34d43f1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gtest/gtest.hash |    2 ++
+ package/igh-ethercat/igh-ethercat.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/gtest/gtest.hash b/package/gtest/gtest.hash
+diff --git a/package/igh-ethercat/igh-ethercat.hash b/package/igh-ethercat/igh-ethercat.hash
 new file mode 100644
-index 0000000..8ff79cb
+index 0000000..b5ee124
 --- /dev/null
-+++ b/package/gtest/gtest.hash
++++ b/package/igh-ethercat/igh-ethercat.hash
 @@ -0,0 +1,2 @@
-+# From http://code.google.com/p/googletest/downloads/detail?name=gtest-1.7.0.zip&can=2&q=
-+sha1	f85f6d2481e2c6c4a18539e391aa4ea8ab0394af	gtest-1.7.0.zip
++# From http://etherlab.org/download/ethercat/ethercat-1.5.2.tar.bz2.md5
++md5	6b4001f8d975865d74a0b108b3bdda3d	ethercat-1.5.2.tar.bz2
