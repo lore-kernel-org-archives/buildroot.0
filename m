@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 19 Apr 2015 19:41:23 +0200
-Subject: [Buildroot] [PATCH 4/7 v5] support/download: add possibility to
- not fail on missing hash
-In-Reply-To: <942ffe13728f4ab40af2ab19d9fe9a256647bcfa.1429447148.git.yann.morin.1998@free.fr>
+Date: Sun, 19 Apr 2015 19:46:02 +0200
+Subject: [Buildroot] [PATCH 6/7 v5] package/uclibc: ignore missing hash
+	for snapshots
+In-Reply-To: <c8daf217107af09f64d956f7077f9b5f58f25cc6.1429447148.git.yann.morin.1998@free.fr>
 References: <cover.1429447148.git.yann.morin.1998@free.fr>
- <942ffe13728f4ab40af2ab19d9fe9a256647bcfa.1429447148.git.yann.morin.1998@free.fr>
-Message-ID: <5533E8C3.5090006@mind.be>
+ <c8daf217107af09f64d956f7077f9b5f58f25cc6.1429447148.git.yann.morin.1998@free.fr>
+Message-ID: <5533E9DA.6060903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,92 +13,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 19/04/15 14:44, Yann E. MORIN wrote:
-> In very constrained cases, it might be needed to not fail if a hash is
-> missing. This is notably the case for custom external toolchains to be
-> downloaded, because we do have a .hash file for external toolchains,
-> but we obviously can not have hashes for all existing custom toolchains
-> (he, "custom"!).
-> 
-> So, add a way to avoid failing in that case.
-> 
->>From the Makefile, we export the list of files for which not to check
-> the hash. Then, from the check-hash script, if no check was done, and
-> the file we were trying to match in in this exclusion list, we just exit
-> without error.
+> We can't have a hash for snapshots, so add them to the exclusion list.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Ouch, it doesn't work...
-
-> 
 > ---
-> Changes v4 -> v5:
->   - micro-optimisation, use case-esac instead of a for-loop  (Arnout)
->   - typoes  (Arnout)
+>  package/uclibc/uclibc.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Changes v3 -> v4:
->   - drop the magic value, use a list of excluded files  (Arnout)
-> 
-> Changes v1 -> v2:
->   - fix typoes in commit log
-> ---
->  package/pkg-download.mk     | 3 +++
->  support/download/check-hash | 6 ++++++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index e274712..1fc23c4 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -60,6 +60,9 @@ domainseparator = $(if $(1),$(1),/)
->  # github(user,package,version): returns site of GitHub repository
->  github = https://github.com/$(1)/$(2)/archive/$(3)
+> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+> index 72a46d9..1ec8b10 100644
+> --- a/package/uclibc/uclibc.mk
+> +++ b/package/uclibc/uclibc.mk
+> @@ -11,6 +11,7 @@ UCLIBC_LICENSE_FILES = COPYING.LIB
 >  
-> +# Expressly do not check hashes for those files
-> +export BR_NO_CHECK_HASH_FOR
+>  ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+>  UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
+> +BR_NO_CHECK_HASH_FOR += uClibc-$(UCLIBC_VERSION).tar.xz
 
- The comment is not very clear. Perhaps
+ The file is .bz2, not .xz.
 
-# Files in this variable do not get their hash checked.
-export BR_NO_CHECK_HASH_FOR
-
-
-> +
->  ################################################################################
->  # The DOWNLOAD_* helpers are in charge of getting a working copy
->  # of the source repository for their corresponding SCM,
-> diff --git a/support/download/check-hash b/support/download/check-hash
-> index 678a7ef..1280322 100755
-> --- a/support/download/check-hash
-> +++ b/support/download/check-hash
-> @@ -99,6 +99,12 @@ while read t h f; do
->  done <"${h_file}"
->  
->  if [ ${nb_checks} -eq 0 ]; then
-> +    case " ${BR_NO_CHECK_HASH_FOR} " in
-> +    " ${base} ")
-
- This does not work. If there is more than one file, there can be something
-before/after ${base}, so we need to add * at the beginning and the end. But
-then, the quotes stop the matching of *, so we have to write:
-
-	*\ ${base}\ *)
-
+ I think it's better to put $(UCLIBC_SOURCE) instead.
 
  Regards,
  Arnout
 
-> +        # File explicitly has no hash
-> +        exit 0
-> +        ;;
-> +    esac
->      printf "ERROR: No hash found for %s\n" "${base}" >&2
->      exit 0
->  fi
+>  else ifeq ($(BR2_UCLIBC_VERSION_NG),y)
+>  UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+>  UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
 > 
 
 
