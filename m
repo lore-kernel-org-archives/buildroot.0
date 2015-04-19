@@ -1,29 +1,30 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 16:29:36 +0200
-Subject: [Buildroot] [PATCH 17/19] package/iptraf-ng: add hash
-In-Reply-To: <1429453778-4178-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 19 Apr 2015 11:36:38 -0300
+Subject: [Buildroot] [PATCH 04/19] package/hiawatha: bump version to 9.12
+In-Reply-To: <1429453778-4178-4-git-send-email-bernd.kuhls@t-online.de>
 References: <1429453778-4178-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429453778-4178-17-git-send-email-bernd.kuhls@t-online.de>
+ <1429453778-4178-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <5533BD76.5070903@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 04/19/2015 11:29 AM, Bernd Kuhls wrote:
+> diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+> index 76619e0..9a8ec15 100644
+> --- a/package/hiawatha/hiawatha.mk
+> +++ b/package/hiawatha/hiawatha.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -HIAWATHA_VERSION = 9.2
+> +HIAWATHA_VERSION = 9.12
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/iptraf-ng/iptraf-ng.hash |    2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/iptraf-ng/iptraf-ng.hash
-
-diff --git a/package/iptraf-ng/iptraf-ng.hash b/package/iptraf-ng/iptraf-ng.hash
-new file mode 100644
-index 0000000..7cb4d1b
---- /dev/null
-+++ b/package/iptraf-ng/iptraf-ng.hash
-@@ -0,0 +1,2 @@
-+# From https://fedorahosted.org/releases/i/p/iptraf-ng/iptraf-ng-1.1.4.tar.gz.sum
-+sha1	a2e51b0dd6b8c80583fc25d055850c96b3d2f544	iptraf-ng-1.1.4.tar.gz
--- 
-1.7.10.4
+Did you try this with polarssl on?
+Last time i tried it wanted 1.3.x which has a different API than 1.2.x
+(so bumping it would break other packages).
+And they don't seem to be able to live side by side either.
+Regards.
