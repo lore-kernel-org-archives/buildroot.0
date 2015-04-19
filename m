@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 10:33:24 +0200
-Subject: [Buildroot] [PATCH 11/20] perl-uri: New package
+Date: Sun, 19 Apr 2015 10:33:16 +0200
+Subject: [Buildroot] [PATCH 03/20] perl-html-parser: New package
 In-Reply-To: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429432413-17038-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429432413-17038-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,69 +13,70 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in              |    1 +
- package/perl-uri/Config.in     |    8 ++++++++
- package/perl-uri/perl-uri.hash |    3 +++
- package/perl-uri/perl-uri.mk   |   14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/perl-uri/Config.in
- create mode 100644 package/perl-uri/perl-uri.hash
- create mode 100644 package/perl-uri/perl-uri.mk
+ package/Config.in                              |    1 +
+ package/perl-html-parser/Config.in             |    8 ++++++++
+ package/perl-html-parser/perl-html-parser.hash |    3 +++
+ package/perl-html-parser/perl-html-parser.mk   |   15 +++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/perl-html-parser/Config.in
+ create mode 100644 package/perl-html-parser/perl-html-parser.hash
+ create mode 100644 package/perl-html-parser/perl-html-parser.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e60481e..4aacdd7 100644
+index ae4ce5f..ab4cf10 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -523,6 +523,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-path-tiny/Config.in"
- 	source "package/perl-time-hires/Config.in"
- 	source "package/perl-try-tiny/Config.in"
-+	source "package/perl-uri/Config.in"
- 	source "package/perl-xml-libxml/Config.in"
- 	source "package/perl-xml-namespacesupport/Config.in"
- 	source "package/perl-xml-sax/Config.in"
-diff --git a/package/perl-uri/Config.in b/package/perl-uri/Config.in
+@@ -508,6 +508,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-gd/Config.in"
+ 	source "package/perl-gdgraph/Config.in"
+ 	source "package/perl-gdtextutil/Config.in"
++	source "package/perl-html-parser/Config.in"
+ 	source "package/perl-html-tagset/Config.in"
+ 	source "package/perl-io-socket-ssl/Config.in"
+ 	source "package/perl-json-tiny/Config.in"
+diff --git a/package/perl-html-parser/Config.in b/package/perl-html-parser/Config.in
 new file mode 100644
-index 0000000..62a53f2
+index 0000000..afdd523
 --- /dev/null
-+++ b/package/perl-uri/Config.in
++++ b/package/perl-html-parser/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PERL_URI
-+	bool "perl-uri"
++config BR2_PACKAGE_PERL_HTML_PARSER
++	bool "perl-html-parser"
++	select BR2_PACKAGE_PERL_HTML_TAGSET
 +	help
-+	  The module implements the URI class. Objects of this class represent
-+	  Uniform Resource Identifier references as specified in RFC 2396 and
-+	  updated by RFC 2732.
++	  The HTML-Parser distribution is is a collection of modules that parse
++	  and extract information from HTML documents
 +
-+	  https://github.com/libwww-perl/uri
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
++	  http://github.com/gisle/html-parser
+diff --git a/package/perl-html-parser/perl-html-parser.hash b/package/perl-html-parser/perl-html-parser.hash
 new file mode 100644
-index 0000000..da33416
+index 0000000..eed22b7
 --- /dev/null
-+++ b/package/perl-uri/perl-uri.hash
++++ b/package/perl-html-parser/perl-html-parser.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    d0ef53b6c63bcc02ba55f405c30741e3 URI-1.67.tar.gz
-+sha256 7088d43d5f4902becfa5e0627751f5e6d0e0bdd1637b2d39e70ce807068a274e URI-1.67.tar.gz
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
++md5    9128a45893097dfa3bf03301b19c5efe HTML-Parser-3.71.tar.gz
++sha256 be918b3749d3ff93627f72ee4b825683332ecb4c81c67a3a8d72b0435ffbd802 HTML-Parser-3.71.tar.gz
+diff --git a/package/perl-html-parser/perl-html-parser.mk b/package/perl-html-parser/perl-html-parser.mk
 new file mode 100644
-index 0000000..421a89f
+index 0000000..2488702
 --- /dev/null
-+++ b/package/perl-uri/perl-uri.mk
-@@ -0,0 +1,14 @@
++++ b/package/perl-html-parser/perl-html-parser.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# perl-uri
++# perl-html-parser
 +#
 +################################################################################
 +
-+PERL_URI_VERSION = 1.67
-+PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
-+PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
-+PERL_URI_DEPENDENCIES = perl
-+PERL_URI_LICENSE = Artistic or GPLv1+
-+PERL_URI_LICENSE_FILES = README
++PERL_HTML_PARSER_VERSION = 3.71
++PERL_HTML_PARSER_SOURCE = HTML-Parser-$(PERL_HTML_PARSER_VERSION).tar.gz
++PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_HTML_PARSER_DEPENDENCIES = perl-html-tagset
++PERL_HTML_PARSER_LICENSE = Artistic or GPLv1+
++PERL_HTML_PARSER_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
++$(eval $(host-perl-package))
 -- 
 1.7.10.4
