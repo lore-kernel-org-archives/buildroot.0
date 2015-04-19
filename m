@@ -1,57 +1,118 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Apr 2015 09:39:53 -0300
-Subject: [Buildroot] [PATCH v2 02/11] package/uclibc: default to Y for IPv6
+Date: Sun, 19 Apr 2015 09:39:54 -0300
+Subject: [Buildroot] [PATCH v2 03/11] toolchain: make IPv6 mandatory for
+	external toolchains
 In-Reply-To: <1429447202-13722-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1429447202-13722-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1429447202-13722-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1429447202-13722-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the option to disable IPv6 support in uclibc and associated
-logic.
+Remove BR2_INET_IPV6 select for predefined external toolchains.
+
+Remove the (non)IPv6 option prompt since it's now mandatory.
+
+And force the toolchain check now that internal uclibc is always built
+with IPv6 support and external non-IPv6 toolchains are disallowed.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/uclibc/Config.in | 6 ++----
- package/uclibc/uclibc.mk | 4 ----
- 2 files changed, 2 insertions(+), 8 deletions(-)
+ toolchain/Config.in                    |  2 --
+ toolchain/helpers.mk                   |  2 +-
+ toolchain/toolchain-common.in          |  1 +
+ toolchain/toolchain-external/Config.in | 11 -----------
+ 4 files changed, 2 insertions(+), 14 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index fdf8351..c4b4a5c 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -87,11 +87,9 @@ config BR2_UCLIBC_CONFIG
- 	  If unsure, use the default.
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 32a00a9..a851ce4 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -9,7 +9,6 @@ config BR2_TOOLCHAIN
+ # Should be selected for glibc or eglibc
+ config BR2_TOOLCHAIN_USES_GLIBC
+ 	bool
+-	select BR2_INET_IPV6
+ 	select BR2_USE_WCHAR
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+@@ -23,7 +22,6 @@ config BR2_TOOLCHAIN_USES_UCLIBC
  
- config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
--	bool "Enable IPv6 support"
-+	bool
- 	select BR2_INET_IPV6
--	help
--	  Enable this option if you want your toolchain to support
--	  IPv6.
+ config BR2_TOOLCHAIN_USES_MUSL
+ 	bool
+-	select BR2_INET_IPV6
+ 	select BR2_USE_WCHAR
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 257fab2..cb3b61a 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -284,7 +284,7 @@ check_uclibc = \
+ 	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
+ 	$(call check_uclibc_feature,__ARCH_USE_MMU__,BR2_USE_MMU,$${UCLIBC_CONFIG_FILE},MMU support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,,$${UCLIBC_CONFIG_FILE},Large file support) ;\
+-	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_TOOLCHAIN_HAS_NATIVE_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 1b25cf1..28fb53a 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -7,6 +7,7 @@ source "package/gdb/Config.in.host"
+ 
+ config BR2_INET_IPV6
+ 	bool
 +	default y
  
- config BR2_TOOLCHAIN_BUILDROOT_INET_RPC
- 	bool "Enable RPC support"
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 72a46d9..07ff8e5 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -212,11 +212,7 @@ endif
- # IPv6
- #
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_58595
+ 	bool
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 440de18..d2b99cc 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -742,7 +742,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_INET_IPV6
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+@@ -759,7 +758,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_INET_IPV6
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+@@ -776,7 +774,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_INET_IPV6
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+@@ -1111,14 +1108,6 @@ endchoice
  
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_IPV6),y)
- UCLIBC_IPV6_CONFIG = $(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_IPV6,$(@D)/.config)
--else
--UCLIBC_IPV6_CONFIG = $(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_IPV6,$(@D)/.config)
--endif
+ if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
  
- #
- # RPC
+-config BR2_TOOLCHAIN_EXTERNAL_INET_IPV6
+-	bool "Toolchain has IPv6 support?"
+-	select BR2_INET_IPV6
+-	help
+-	  Select this option if your external toolchain supports
+-	  IPv6. If you don't know, leave the default value, Buildroot
+-	  will tell you if it's correct or not.
+-
+ config BR2_TOOLCHAIN_EXTERNAL_WCHAR
+ 	bool "Toolchain has WCHAR support?"
+ 	select BR2_USE_WCHAR
 -- 
 2.0.5
