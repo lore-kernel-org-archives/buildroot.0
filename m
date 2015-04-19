@@ -1,49 +1,79 @@
-From: Robert P. J. Day <rpjday@crashcourse.ca>
-Date: Sun, 19 Apr 2015 12:32:04 -0400 (EDT)
-Subject: [Buildroot] auto.conf versus autoconf.h versus .config
-Message-ID: <alpine.LFD.2.11.1504191223050.3495@localhost>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 19 Apr 2015 18:41:13 +0200
+Subject: [Buildroot] [PATCH 1/7 v5] package/gcc: add hashes
+In-Reply-To: <ef3296567cf8cd1221c8f2413e0d2f3821fe5343.1429447148.git.yann.morin.1998@free.fr>
+References: <cover.1429447148.git.yann.morin.1998@free.fr>
+ <ef3296567cf8cd1221c8f2413e0d2f3821fe5343.1429447148.git.yann.morin.1998@free.fr>
+Message-ID: <5533DAA9.3090509@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 19/04/15 14:44, Yann E. MORIN wrote:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
-  just want to clarify the generated config artifacts and their
-ordering if i may ... i'm looking at the output objects under
-output/build/buildroot-config, especially these:
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-* auto.conf
-* autoconf.h
+ Regards,
+ Arnout
 
-and if memory serves, auto.conf represents the *set* config variables
-that result from my configuration (which, for my BBB, is 187 lines
-long), while the top-level .config file represents exactly the same
-information, but padded out with many hundreds of lines of "is not
-set" lines, hence its much longer length of well over 2500 lines for
-me. do i understand that correctly?
+> 
+> ---
+> Changes v4 -> v5:
+>   - use alternate upstream as source of hashes  (Arnout)
+> ---
+>  package/gcc/gcc-final/gcc-final.hash     |  1 +
+>  package/gcc/gcc-initial/gcc-initial.hash |  1 +
+>  package/gcc/gcc.hash                     | 10 ++++++++++
+>  3 files changed, 12 insertions(+)
+>  create mode 120000 package/gcc/gcc-final/gcc-final.hash
+>  create mode 120000 package/gcc/gcc-initial/gcc-initial.hash
+>  create mode 100644 package/gcc/gcc.hash
+> 
+> diff --git a/package/gcc/gcc-final/gcc-final.hash b/package/gcc/gcc-final/gcc-final.hash
+> new file mode 120000
+> index 0000000..7ac9361
+> --- /dev/null
+> +++ b/package/gcc/gcc-final/gcc-final.hash
+> @@ -0,0 +1 @@
+> +../gcc.hash
+> \ No newline at end of file
+> diff --git a/package/gcc/gcc-initial/gcc-initial.hash b/package/gcc/gcc-initial/gcc-initial.hash
+> new file mode 120000
+> index 0000000..7ac9361
+> --- /dev/null
+> +++ b/package/gcc/gcc-initial/gcc-initial.hash
+> @@ -0,0 +1 @@
+> +../gcc.hash
+> \ No newline at end of file
+> diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+> new file mode 100644
+> index 0000000..5eec97f
+> --- /dev/null
+> +++ b/package/gcc/gcc.hash
+> @@ -0,0 +1,10 @@
+> +# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.5.4/sha512.sum
+> +sha512  78696b287d46aacd6f150920da376ea32f58ad9f0dafd2d3b7fa6dbdd8dd7afe659108d1dfaa5807617fc5248719f50b39c37ade0173ea5b9fec2091f4656115  gcc-4.5.4.tar.bz2
+> +# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.7.4/sha512.sum
+> +sha512  dfcb737073191e628231031a3571ec77ee760a59377630f4a6e4fdfa66f9ddad39fde47e3f0f227eb43cdf90e0d34cde5abdc9ac892c1e111a911062a66c9189  gcc-4.7.4.tar.bz2
+> +# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.8.4/sha512.sum
+> +sha512  b4c84ebd754c026029d706ef52c4242df4dcadc6a22cc5669b3aa37ac9dc25bc9cd9651fda83fb24dd5d17b1710e6865a35bb6c5cd9b95d0971717453935ae8e  gcc-4.8.4.tar.bz2
+> +# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.9.2/sha512.sum
+> +sha512  e96cba06d572dbe7f382a2b00fd9297dcf9f9219d46a9ad0bd904dc36d5e7db3335e422640b79a27fed6fde91b0731732b94a0e2fbcd47344d6779f8ba1f4f9c  gcc-4.9.2.tar.bz2
+> +# No hash for the ARC variant, comes from the github-helper:
+> +none  xxx  gcc-arc-2014.12.tar.gz
+> 
 
-  finally, there's autoconf.h, which is just the transformed version
-of auto.conf suitable for inclusion in source and header files.
-
-  do i have that about right? there are also the numerous header files
-and subdirs under .../br2 in that location, but in my case, every
-single *.h file in that br2/ directory is empty. what is the purpose
-of all those empty header files? just placeholders of some kind?
-(there are lots of subdirs there as well, but i'm just curious about
-the empty header files *immediately* under br2/ there.)
-
-rday
-
-p.s. if all this is explained somewhere, pointing me at it will be
-just ducky.
 
 -- 
-
-========================================================================
-Robert P. J. Day                                 Ottawa, Ontario, CANADA
-                        http://crashcourse.ca
-
-Twitter:                                       http://twitter.com/rpjday
-LinkedIn:                               http://ca.linkedin.com/in/rpjday
-========================================================================
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
