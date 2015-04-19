@@ -1,57 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 19 Apr 2015 19:54:05 +0200
-Subject: [Buildroot] [PATCH 7/7 v5] support/download: restore mandatory
-	check of hashes
-In-Reply-To: <92db9d9c24d6a53fa0db2aa7b3bff1456498d690.1429447148.git.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 19 Apr 2015 19:55:53 +0200
+Subject: [Buildroot] [PATCH v6 3/8] package/uclibc: add missing hash for
+	eXtensa
+In-Reply-To: <1429466158-28878-1-git-send-email-arnout@mind.be>
 References: <cover.1429447148.git.yann.morin.1998@free.fr>
- <92db9d9c24d6a53fa0db2aa7b3bff1456498d690.1429447148.git.yann.morin.1998@free.fr>
-Message-ID: <5533EBBD.5070302@mind.be>
+ <1429466158-28878-1-git-send-email-arnout@mind.be>
+Message-ID: <1429466158-28878-3-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/04/15 14:45, Yann E. MORIN wrote:
-> Now that custom external toolchains to be downloaded proprely instruct
-                                                       properly
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- Also, it's not just the external toolchains that you fixed in this series.
+This is a git snapshot, we can't have a hash for it.
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/uclibc/uclibc.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
- Regards,
- Arnout
-
-> to not fail on a missing hash, restore the mandatory hash check for
-> everything else.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  support/download/check-hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/download/check-hash b/support/download/check-hash
-> index 1280322..383bd5c 100755
-> --- a/support/download/check-hash
-> +++ b/support/download/check-hash
-> @@ -106,5 +106,5 @@ if [ ${nb_checks} -eq 0 ]; then
->          ;;
->      esac
->      printf "ERROR: No hash found for %s\n" "${base}" >&2
-> -    exit 0
-> +    exit 3
->  fi
-> 
-
-
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 69cc103..971ab26 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -6,3 +6,6 @@ sha256	0a9085a11615296cfe7783f16ff29073393eb330749947adece0eeddb31705a4	uClibc-a
+ 
+ # From http://www.uclibc-ng.org/trac/
+ sha256  e561040293ba4f21dcf3285ca1f683b5a8493eb0ffd3b3e495122cfde5a64a0e        uClibc-ng-1.0.1.tar.xz
++
++# No hash for this git snapshot
++none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+2.1.4
