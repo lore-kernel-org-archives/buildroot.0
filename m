@@ -1,29 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 12:53:39 +0200
-Subject: [Buildroot] [PATCH 3/5] package/celt051: add hash
-In-Reply-To: <1429440821-2578-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429440821-2578-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429440821-2578-3-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 19 Apr 2015 08:00:24 -0300
+Subject: [Buildroot] [PATCH 11/14] packages: remove non-IPv6 enabler
+	patches
+In-Reply-To: <20150412145541.GM21018@free.fr>
+References: <1428754662-27829-1-git-send-email-gustavo@zacarias.com.ar>
+ <1428754662-27829-11-git-send-email-gustavo@zacarias.com.ar>
+ <20150412145541.GM21018@free.fr>
+Message-ID: <55338AC8.1080202@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 04/12/2015 11:55 AM, Yann E. MORIN wrote:
+> We also have one patch dealing with IPv6 for lighttpd:
+> 
+>   - package/lighttpd/0001-Fix-default-config-file.patch
+> 
+>     @@ -90,7 +90,7 @@ server.port = 80
+>      ##
+>      ## Use IPv6?
+>      ##
+>     -server.use-ipv6 = "enable"
+>     +# server.use-ipv6 = "enable"
+>      
+>      ##
+>      ## bind to a specific IP
+> 
+>   - changes the default config to disable IPv6: do we want to keep that
+>     hunk?
+> 
+> Otherwise:
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/celt051/celt051.hash |    2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/celt051/celt051.hash
-
-diff --git a/package/celt051/celt051.hash b/package/celt051/celt051.hash
-new file mode 100644
-index 0000000..4ad212b
---- /dev/null
-+++ b/package/celt051/celt051.hash
-@@ -0,0 +1,2 @@
-+# From http://downloads.xiph.org/releases/celt/SHA1SUMS
-+sha1	eb05030108c36cb063c3f026c349f16d78e0a497	celt-0.5.1.3.tar.gz
--- 
-1.7.10.4
+For this one i'm unsure how lighttpd will react to enabling ipv6 on a
+non-ipv6 kernel, so i'll leave it as is.
+Regards.
