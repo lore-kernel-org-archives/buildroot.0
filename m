@@ -1,68 +1,29 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 19 Apr 2015 17:34:13 +0200
-Subject: [Buildroot] [git commit] uboot: deprecate
- BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
-In-Reply-To: <20150419090719.42BAD80094@busybox.osuosl.org>
-References: <20150419090719.42BAD80094@busybox.osuosl.org>
-Message-ID: <5533CAF5.9020401@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Apr 2015 17:42:29 +0200
+Subject: [Buildroot] [PATCH 3/5] package/libaio: add hash
+In-Reply-To: <1429458151-20049-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429458151-20049-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429458151-20049-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/04/15 11:06, Thomas Petazzoni wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=14f1a83ee3bd4728765b63976c5ec21b34e59c35
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Users should use BR2_TARGET_UBOOT_PATCH instead.
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  boot/uboot/Config.in |    3 +++
->  1 files changed, 3 insertions(+), 0 deletions(-)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 8769296..4f01499 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -72,6 +72,7 @@ config BR2_TARGET_UBOOT_VERSION
->  
->  config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
->  	string "custom patch dir"
-> +	depends on BR2_DEPRECATED_SINCE_2015_05
->  	help
->  	  If your board requires custom patches, add the path to the
->  	  directory containing the patches here. The patches must be
-> @@ -79,6 +80,8 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
->  
->  	  Most users may leave this empty
->  
-> +	  NOTE: Use BR2_TARGET_UBOOT_PATCH instead.
-> +
->  config BR2_TARGET_UBOOT_PATCH
->  	string "Custom U-Boot patches"
 
- To make the deprecation smoother, we could add
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libaio/libaio.hash |    2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/libaio/libaio.hash
 
-	default BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
-
- Regards,
- Arnout
-
->  	help
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
+diff --git a/package/libaio/libaio.hash b/package/libaio/libaio.hash
+new file mode 100644
+index 0000000..deb16e8
+--- /dev/null
++++ b/package/libaio/libaio.hash
+@@ -0,0 +1,2 @@
++# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/liba/libaio/libaio_0.3.109-3.dsc
++sha256	bf4a457253cbaab215aea75cb6e18dc8d95bbd507e9920661ff9bdd288c8778d	libaio_0.3.109.orig.tar.gz
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
