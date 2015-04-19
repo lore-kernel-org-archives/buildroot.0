@@ -1,42 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 19 Apr 2015 23:10:28 +0200
-Subject: [Buildroot] [git commit] package/libdvbsi: bump version to 0.3.7,
-	add hash
-Message-ID: <20150419212235.53E777FBF7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/input-tools: add hash
+Message-ID: <20150419212235.17F538040A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9084e63e13b73a6a9dc1a9a85b8fbc21c7e9cc37
+commit: http://git.buildroot.net/buildroot/commit/?id=14ec72b592a0e1e5c4aea1bad408cb14c6d22196
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libdvbsi/libdvbsi.hash |    2 ++
- package/libdvbsi/libdvbsi.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/input-tools/input-tools.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libdvbsi/libdvbsi.hash b/package/libdvbsi/libdvbsi.hash
+diff --git a/package/input-tools/input-tools.hash b/package/input-tools/input-tools.hash
 new file mode 100644
-index 0000000..7454625
+index 0000000..c82cae3
 --- /dev/null
-+++ b/package/libdvbsi/libdvbsi.hash
++++ b/package/input-tools/input-tools.hash
 @@ -0,0 +1,2 @@
-+# From http://www.saftware.de/libdvbsi++/libdvbsi++-0.3.7.tar.bz2.md5
-+md5	7eb50352c06b17c499a6d51e18e99ec5	libdvbsi++-0.3.7.tar.bz2
-diff --git a/package/libdvbsi/libdvbsi.mk b/package/libdvbsi/libdvbsi.mk
-index c67bdbd..ed8b382 100644
---- a/package/libdvbsi/libdvbsi.mk
-+++ b/package/libdvbsi/libdvbsi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDVBSI_VERSION = 0.3.6
-+LIBDVBSI_VERSION = 0.3.7
- LIBDVBSI_SOURCE = libdvbsi++-$(LIBDVBSI_VERSION).tar.bz2
- LIBDVBSI_SITE = http://www.saftware.de/libdvbsi++
- LIBDVBSI_INSTALL_STAGING = YES
++# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/j/joystick/joystick_20051019-12.dsc
++sha256	cb60cb62093f1889a91fcef1cc36546aba406f451941e8d057f095639e6afb89	joystick_20051019.orig.tar.gz
