@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 12:17:19 +0200
-Subject: [Buildroot] [PATCH v2 24/25] package/perl-mailtools: new package
+Date: Sun, 19 Apr 2015 12:17:07 +0200
+Subject: [Buildroot] [PATCH v2 12/25] package/perl-http-message: New package
 In-Reply-To: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429438640-9367-25-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429438640-9367-13-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,66 +13,77 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                          |    1 +
- package/perl-mailtools/Config.in           |    7 +++++++
- package/perl-mailtools/perl-mailtools.hash |    3 +++
- package/perl-mailtools/perl-mailtools.mk   |   13 +++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/perl-mailtools/Config.in
- create mode 100644 package/perl-mailtools/perl-mailtools.hash
- create mode 100644 package/perl-mailtools/perl-mailtools.mk
+ package/Config.in                                |    1 +
+ package/perl-http-message/Config.in              |   12 ++++++++++++
+ package/perl-http-message/perl-http-message.hash |    3 +++
+ package/perl-http-message/perl-http-message.mk   |   19 +++++++++++++++++++
+ 4 files changed, 35 insertions(+)
+ create mode 100644 package/perl-http-message/Config.in
+ create mode 100644 package/perl-http-message/perl-http-message.hash
+ create mode 100644 package/perl-http-message/perl-http-message.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index eef9f48..c8e57f3 100644
+index 501f767..f19c451 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -525,6 +525,7 @@ menu "Perl libraries/modules"
+@@ -513,6 +513,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-html-parser/Config.in"
+ 	source "package/perl-html-tagset/Config.in"
+ 	source "package/perl-http-date/Config.in"
++	source "package/perl-http-message/Config.in"
+ 	source "package/perl-io-html/Config.in"
+ 	source "package/perl-io-socket-ssl/Config.in"
  	source "package/perl-json-tiny/Config.in"
- 	source "package/perl-libwww/Config.in"
- 	source "package/perl-lwp-mediatypes/Config.in"
-+	source "package/perl-mailtools/Config.in"
- 	source "package/perl-mime-base64/Config.in"
- 	source "package/perl-mojolicious/Config.in"
- 	source "package/perl-net-dns/Config.in"
-diff --git a/package/perl-mailtools/Config.in b/package/perl-mailtools/Config.in
+diff --git a/package/perl-http-message/Config.in b/package/perl-http-message/Config.in
 new file mode 100644
-index 0000000..e02d3cb
+index 0000000..9dda1ee
 --- /dev/null
-+++ b/package/perl-mailtools/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_MAILTOOLS
-+	bool "perl-mailtools"
-+	select BR2_PACKAGE_PERL_TIMEDATE
++++ b/package/perl-http-message/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PERL_HTTP_MESSAGE
++	bool "perl-http-message"
++	select BR2_PACKAGE_PERL_ENCODE_LOCALE
++	select BR2_PACKAGE_PERL_HTTP_DATE
++	select BR2_PACKAGE_PERL_IO_HTML
++	select BR2_PACKAGE_PERL_LWP_MEDIATYPES
++	select BR2_PACKAGE_PERL_URI
 +	help
-+	  Various e-mail related modules
++	  The HTTP-Message distribution contains classes useful for representing
++	  the messages passed in HTTP style communication.
 +
-+	  https://metacpan.org/release/MailTools
-diff --git a/package/perl-mailtools/perl-mailtools.hash b/package/perl-mailtools/perl-mailtools.hash
++	  https://github.com/libwww-perl/http-message
+diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
 new file mode 100644
-index 0000000..b67867a
+index 0000000..ff6268d
 --- /dev/null
-+++ b/package/perl-mailtools/perl-mailtools.hash
++++ b/package/perl-http-message/perl-http-message.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    813ae849683367bb75e6be89e4e8cc46 MailTools-2.14.tar.gz
-+sha256 4b7c7ef674b2ef75ea793f053cd067c6a4b33e58e3adf08a89c8ea4c56b3dff8 MailTools-2.14.tar.gz
-diff --git a/package/perl-mailtools/perl-mailtools.mk b/package/perl-mailtools/perl-mailtools.mk
++md5    e563ac516e28d33f65bc0f295f625f85 HTTP-Message-6.06.tar.gz
++sha256 087e97009c5239dca4631cf433d836771b3fc5ba5685eef1965f9d3415cbad63 HTTP-Message-6.06.tar.gz
+diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
 new file mode 100644
-index 0000000..5b11625
+index 0000000..12eda90
 --- /dev/null
-+++ b/package/perl-mailtools/perl-mailtools.mk
-@@ -0,0 +1,13 @@
++++ b/package/perl-http-message/perl-http-message.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# perl-mailtools
++# perl-http-message
 +#
 +################################################################################
 +
-+PERL_MAILTOOLS_VERSION = 2.14
-+PERL_MAILTOOLS_SOURCE = MailTools-$(PERL_MAILTOOLS_VERSION).tar.gz
-+PERL_MAILTOOLS_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MA/MARKOV
-+PERL_MAILTOOLS_DEPENDENCIES = perl perl-timedate
-+PERL_MAILTOOLS_LICENSE = Artistic or GPLv1+
++PERL_HTTP_MESSAGE_VERSION = 6.06
++PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
++PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_HTTP_MESSAGE_LICENSE = Artistic or GPLv1+
++PERL_HTTP_MESSAGE_LICENSE_FILES = README
++PERL_HTTP_MESSAGE_DEPENDENCIES = \
++	perl-encode-locale \
++	perl-http-date \
++	perl-io-html \
++	perl-lwp-mediatypes \
++	perl-uri
 +
 +$(eval $(perl-package))
 -- 
