@@ -1,94 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 19 Apr 2015 13:43:45 +0200
-Subject: [Buildroot] [git commit] package/perl-libwww: New package
-Message-ID: <20150419114640.A98B27FB0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-mime-base64: New package
+Message-ID: <20150419114640.B4B497FB0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=15f46e3354d999ff86461f75f1d123ac58961432
+commit: http://git.buildroot.net/buildroot/commit/?id=90c62ef5d91a847bc3a76ec3af4c57e41ebf5707
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                    |    1 +
- package/perl-libwww/Config.in        |   16 ++++++++++++++++
- package/perl-libwww/perl-libwww.hash |    3 +++
- package/perl-libwww/perl-libwww.mk   |   23 +++++++++++++++++++++++
- 4 files changed, 43 insertions(+), 0 deletions(-)
+ package/Config.in                              |    1 +
+ package/perl-mime-base64/Config.in             |    7 +++++++
+ package/perl-mime-base64/perl-mime-base64.hash |    3 +++
+ package/perl-mime-base64/perl-mime-base64.mk   |   14 ++++++++++++++
+ 4 files changed, 25 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 530add8..8db52ab 100644
+index 8db52ab..27d06cd 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -520,6 +520,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-io-html/Config.in"
- 	source "package/perl-io-socket-ssl/Config.in"
+@@ -522,6 +522,7 @@ menu "Perl libraries/modules"
  	source "package/perl-json-tiny/Config.in"
-+	source "package/perl-libwww/Config.in"
+ 	source "package/perl-libwww/Config.in"
  	source "package/perl-lwp-mediatypes/Config.in"
++	source "package/perl-mime-base64/Config.in"
  	source "package/perl-mojolicious/Config.in"
  	source "package/perl-net-dns/Config.in"
-diff --git a/package/perl-libwww/Config.in b/package/perl-libwww/Config.in
+ 	source "package/perl-net-http/Config.in"
+diff --git a/package/perl-mime-base64/Config.in b/package/perl-mime-base64/Config.in
 new file mode 100644
-index 0000000..523371f
+index 0000000..7e4858f
 --- /dev/null
-+++ b/package/perl-libwww/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_PERL_LIBWWW
-+	bool "perl-libwww"
-+	select BR2_PACKAGE_PERL_ENCODE_LOCALE
-+	select BR2_PACKAGE_PERL_FILE_LISTING
-+	select BR2_PACKAGE_PERL_HTML_PARSER
-+	select BR2_PACKAGE_PERL_HTTP_COOKIES
-+	select BR2_PACKAGE_PERL_HTTP_DAEMON
-+	select BR2_PACKAGE_PERL_HTTP_NEGOTIATE
-+	select BR2_PACKAGE_PERL_LWP_MEDIATYPES
-+	select BR2_PACKAGE_PERL_NET_HTTP
-+	select BR2_PACKAGE_PERL_URI
-+	select BR2_PACKAGE_PERL_WWW_ROBOTRULES
++++ b/package/perl-mime-base64/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_MIME_BASE64
++	bool "perl-mime-base64"
 +	help
-+	  The World-Wide Web library for Perl
++	  This package contains a base64 encoder/decoder and a quoted-printable
++	  encoder/decoder.
 +
-+	  https://github.com/libwww-perl/libwww-perl
-diff --git a/package/perl-libwww/perl-libwww.hash b/package/perl-libwww/perl-libwww.hash
++	  http://github.com/gisle/mime-base64
+diff --git a/package/perl-mime-base64/perl-mime-base64.hash b/package/perl-mime-base64/perl-mime-base64.hash
 new file mode 100644
-index 0000000..1ef5ccf
+index 0000000..0cfe598
 --- /dev/null
-+++ b/package/perl-libwww/perl-libwww.hash
++++ b/package/perl-mime-base64/perl-mime-base64.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    85b36bcd2fd2450718ee14f894f0d3d1 libwww-perl-6.13.tar.gz
-+sha256 5fbd13eebd1933e5a203fceb2c1629efbccff3efc8fab6ec0285c79d0a95f8b2 libwww-perl-6.13.tar.gz
-diff --git a/package/perl-libwww/perl-libwww.mk b/package/perl-libwww/perl-libwww.mk
++md5    ef958dc2bf96be5f759391c6ac1debd4 MIME-Base64-3.15.tar.gz
++sha256 7f863566a6a9cb93eda93beadb77d9aa04b9304d769cea3bb921b9a91b3a1eb9 MIME-Base64-3.15.tar.gz
+diff --git a/package/perl-mime-base64/perl-mime-base64.mk b/package/perl-mime-base64/perl-mime-base64.mk
 new file mode 100644
-index 0000000..0ee1e04
+index 0000000..abb2704
 --- /dev/null
-+++ b/package/perl-libwww/perl-libwww.mk
-@@ -0,0 +1,23 @@
++++ b/package/perl-mime-base64/perl-mime-base64.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-libwww
++# perl-mime-base64
 +#
 +################################################################################
 +
-+PERL_LIBWWW_VERSION = 6.13
-+PERL_LIBWWW_SITE = $(call github,libwww-perl,libwww-perl,$(PERL_LIBWWW_VERSION))
-+PERL_LIBWWW_LICENSE = Artistic or GPLv1+
-+PERL_LIBWWW_LICENSE_FILES = LICENSE
-+PERL_LIBWWW_DEPENDENCIES = \
-+	perl-encode-locale \
-+	perl-file-listing \
-+	perl-html-parser \
-+	perl-http-cookies \
-+	perl-http-daemon \
-+	perl-http-date \
-+	perl-http-negotiate \
-+	perl-net-http \
-+	perl-uri \
-+	perl-www-robotrules
++PERL_MIME_BASE64_VERSION = 3.15
++PERL_MIME_BASE64_SOURCE = MIME-Base64-$(PERL_MIME_BASE64_VERSION).tar.gz
++PERL_MIME_BASE64_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_MIME_BASE64_DEPENDENCIES = perl
++PERL_MIME_BASE64_LICENSE = Artistic or GPLv1+
++PERL_MIME_BASE64_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
