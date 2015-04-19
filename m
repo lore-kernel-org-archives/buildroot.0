@@ -1,26 +1,30 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun, 19 Apr 2015 14:12:31 +0200
-Subject: [Buildroot] [PATCH] package/python-m2crypto: add hash
-Message-ID: <1429445551-13618-1-git-send-email-fabio.porcedda@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Apr 2015 14:24:57 +0200
+Subject: [Buildroot] [git commit] package/dbus-python: remove whitespace
+Message-ID: <20150419122631.3529A7F9AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/python-m2crypto/python-m2crypto.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/python-m2crypto/python-m2crypto.hash
+commit: http://git.buildroot.net/buildroot/commit/?id=6d214c295d1cf2d3d71c03cb84f96f6286e8c26c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python-m2crypto/python-m2crypto.hash
-new file mode 100644
-index 0000000..a5231ec
---- /dev/null
-+++ b/package/python-m2crypto/python-m2crypto.hash
-@@ -0,0 +1,2 @@
-+# From https://pypi.python.org/pypi/M2Crypto/0.21.1
-+md5 f93d8462ff7646397a9f77a2fe602d17 M2Crypto-0.21.1.tar.gz
--- 
-2.3.5
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dbus-python/dbus-python.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
+
+diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
+index 1637406..9bda018 100644
+--- a/package/dbus-python/dbus-python.mk
++++ b/package/dbus-python/dbus-python.mk
+@@ -28,6 +28,4 @@ DBUS_PYTHON_CONF_ENV += \
+ 	PYTHON_LIBS="$(shell $(STAGING_DIR)/usr/bin/python3-config --ldflags)"
+ endif
+ 
+-
+-
+ $(eval $(autotools-package))
