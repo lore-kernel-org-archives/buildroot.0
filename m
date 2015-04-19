@@ -1,43 +1,47 @@
-From: Robert P. J. Day <rpjday@crashcourse.ca>
-Date: Sun, 19 Apr 2015 12:49:26 -0400 (EDT)
-Subject: [Buildroot] [PATCH] u-boot: Add sha256 hash value for earlier
-	2013.10 version.
-Message-ID: <alpine.LFD.2.11.1504191245070.8977@localhost>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 19 Apr 2015 18:57:44 +0200
+Subject: [Buildroot] [PATCH] uclibc: update hash for arc
+In-Reply-To: <5533DC18.7030907@mind.be>
+References: <5533DC18.7030907@mind.be>
+Message-ID: <1429462664-15469-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The old hash for 2014.08 was never updated. Since uclibc-arc-2014.12 is
+downloaded from the github helper, it is converted into a 'none' hash.
 
-Add a hash value for u-boot-2013.10.tar.bz2.
+Reordered the hashes so the none-hashes are together.
 
-Signed-off-by: Robert P. J. Day <rpjday@crashcourse.ca>
-
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
+This should be inserted into Yann's series before or after 3/7.
 
-  if i understand this correctly, if a package has no hash file, then
-downloading generates a warning. but with the newly-added uboot.hash
-file, the missing sha256sum for the earlier 2013.10 version generates
-an "ERROR" when running "make source", even though the tarball is in
-fact downloaded correctly. so just add a hash value to quiet the
-download.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/uclibc/uclibc.hash | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index 9cc96f6..b98c2ff 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256	0a1a70df586655f527befa6f12e184e96ed61b126e5a567382321b17200f5d60  u-boot-2015.04.tar.bz2
-+sha256	0d71e62beb952b41ebafb20a7ee4df2f960db64c31b054721ceb79ff14014c55  u-boot-2013.10.tar.bz2
-
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 971ab26..01e71c0 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,11 +1,11 @@
+ # Locally calculated after checking pgp signature
+ sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
+ 
+-# Locally calculated
+-sha256	0a9085a11615296cfe7783f16ff29073393eb330749947adece0eeddb31705a4	uClibc-arc-2014.08.tar.gz
+-
+ # From http://www.uclibc-ng.org/trac/
+ sha256  e561040293ba4f21dcf3285ca1f683b5a8493eb0ffd3b3e495122cfde5a64a0e        uClibc-ng-1.0.1.tar.xz
+ 
++# No hash for the ARC variant, comes from the github-helper
++none	xxx	uClibc-arc-2014.12.tar.gz
++
+ # No hash for this git snapshot
+ none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
 -- 
-
-========================================================================
-Robert P. J. Day                                 Ottawa, Ontario, CANADA
-                        http://crashcourse.ca
-
-Twitter:                                       http://twitter.com/rpjday
-LinkedIn:                               http://ca.linkedin.com/in/rpjday
-========================================================================
+2.1.4
