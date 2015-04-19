@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 19 Apr 2015 18:41:13 +0200
-Subject: [Buildroot] [PATCH 1/7 v5] package/gcc: add hashes
-In-Reply-To: <ef3296567cf8cd1221c8f2413e0d2f3821fe5343.1429447148.git.yann.morin.1998@free.fr>
+Date: Sun, 19 Apr 2015 18:42:06 +0200
+Subject: [Buildroot] [PATCH 2/7 v5] package/binutils: add hashes
+In-Reply-To: <cd2e5bb95ea73288d7cc3dea3b9930b7fd7effb5.1429447148.git.yann.morin.1998@free.fr>
 References: <cover.1429447148.git.yann.morin.1998@free.fr>
- <ef3296567cf8cd1221c8f2413e0d2f3821fe5343.1429447148.git.yann.morin.1998@free.fr>
-Message-ID: <5533DAA9.3090509@mind.be>
+ <cd2e5bb95ea73288d7cc3dea3b9930b7fd7effb5.1429447148.git.yann.morin.1998@free.fr>
+Message-ID: <5533DADE.1000008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,37 @@ To: buildroot@busybox.net
 
 On 19/04/15 14:44, Yann E. MORIN wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+
  Regards,
  Arnout
 
-> 
 > ---
 > Changes v4 -> v5:
->   - use alternate upstream as source of hashes  (Arnout)
+>   - use alternate upstream as source for hashes  (Arnout)
 > ---
->  package/gcc/gcc-final/gcc-final.hash     |  1 +
->  package/gcc/gcc-initial/gcc-initial.hash |  1 +
->  package/gcc/gcc.hash                     | 10 ++++++++++
->  3 files changed, 12 insertions(+)
->  create mode 120000 package/gcc/gcc-final/gcc-final.hash
->  create mode 120000 package/gcc/gcc-initial/gcc-initial.hash
->  create mode 100644 package/gcc/gcc.hash
+>  package/binutils/binutils.hash | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>  create mode 100644 package/binutils/binutils.hash
 > 
-> diff --git a/package/gcc/gcc-final/gcc-final.hash b/package/gcc/gcc-final/gcc-final.hash
-> new file mode 120000
-> index 0000000..7ac9361
-> --- /dev/null
-> +++ b/package/gcc/gcc-final/gcc-final.hash
-> @@ -0,0 +1 @@
-> +../gcc.hash
-> \ No newline at end of file
-> diff --git a/package/gcc/gcc-initial/gcc-initial.hash b/package/gcc/gcc-initial/gcc-initial.hash
-> new file mode 120000
-> index 0000000..7ac9361
-> --- /dev/null
-> +++ b/package/gcc/gcc-initial/gcc-initial.hash
-> @@ -0,0 +1 @@
-> +../gcc.hash
-> \ No newline at end of file
-> diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+> diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
 > new file mode 100644
-> index 0000000..5eec97f
+> index 0000000..028fc10
 > --- /dev/null
-> +++ b/package/gcc/gcc.hash
-> @@ -0,0 +1,10 @@
-> +# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.5.4/sha512.sum
-> +sha512  78696b287d46aacd6f150920da376ea32f58ad9f0dafd2d3b7fa6dbdd8dd7afe659108d1dfaa5807617fc5248719f50b39c37ade0173ea5b9fec2091f4656115  gcc-4.5.4.tar.bz2
-> +# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.7.4/sha512.sum
-> +sha512  dfcb737073191e628231031a3571ec77ee760a59377630f4a6e4fdfa66f9ddad39fde47e3f0f227eb43cdf90e0d34cde5abdc9ac892c1e111a911062a66c9189  gcc-4.7.4.tar.bz2
-> +# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.8.4/sha512.sum
-> +sha512  b4c84ebd754c026029d706ef52c4242df4dcadc6a22cc5669b3aa37ac9dc25bc9cd9651fda83fb24dd5d17b1710e6865a35bb6c5cd9b95d0971717453935ae8e  gcc-4.8.4.tar.bz2
-> +# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.9.2/sha512.sum
-> +sha512  e96cba06d572dbe7f382a2b00fd9297dcf9f9219d46a9ad0bd904dc36d5e7db3335e422640b79a27fed6fde91b0731732b94a0e2fbcd47344d6779f8ba1f4f9c  gcc-4.9.2.tar.bz2
+> +++ b/package/binutils/binutils.hash
+> @@ -0,0 +1,7 @@
+> +# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
+> +sha512  ffe8ef263ef99183e8cc823fe8487ff7d0f7bf9a8efd2853b5f4636aca0023850d13de4eac7d77a5f69413d8a50e6f95bb14569be53df86c0bce38034525ab74  binutils-2.22.tar.bz2
+> +sha512  dec753bbba008f1526b89cf1bd85feba78f362f5333ffdf93953fd131eb755976dec82a0a4ba38c43d2434da007137780cfe674de5414be5cf7ce7fbc6af6d16  binutils-2.23.2.tar.bz2
+> +sha512  5ec95ad47d49b12c4558a8db0ca2109d3ee1955e3776057f3330c4506f8f4d1cf5e505fbf8a16b98403a0fcdeaaf986fe0a22be6456247dbdace63ce1f776b12  binutils-2.24.tar.bz2
+> +sha512  49438970642f379978aba988e3d2e7b63dab6fd0b46d91f4100f083e87a84d242089daca58572245fe620457a77bbbe2d78588ff3fb79314e500d1a39bf96f30  binutils-2.25.tar.bz2
 > +# No hash for the ARC variant, comes from the github-helper:
-> +none  xxx  gcc-arc-2014.12.tar.gz
+> +none   xxx                                                               binutils-arc-2014.12.tar.gz
 > 
 
 
