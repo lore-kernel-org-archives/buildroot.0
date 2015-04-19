@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Apr 2015 10:10:28 +0200
-Subject: [Buildroot] [PATCH 2/3] manual: cvs: document that a date can
- be used instead of a tag
-In-Reply-To: <1429376067-9228-3-git-send-email-fabio.porcedda@gmail.com>
+Date: Sun, 19 Apr 2015 10:11:48 +0200
+Subject: [Buildroot] [PATCH 3/3] expect: bump to version 5.45.3
+In-Reply-To: <1429376067-9228-4-git-send-email-fabio.porcedda@gmail.com>
 References: <1429376067-9228-1-git-send-email-fabio.porcedda@gmail.com>
- <1429376067-9228-3-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150419081028.GB4313@free.fr>
+ <1429376067-9228-4-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20150419081148.GC4313@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,40 +14,50 @@ To: buildroot@busybox.net
 Fabio, All,
 
 On 2015-04-18 18:54 +0200, Fabio Porcedda spake thusly:
-> Also instead of using the generic word "timestamp" use the word "tag".
+> Download it from the cvs repository because it is not avaialbe as a
+> downloadable file.
+> Also because a tag isn't avaiable use the date.
 > 
 > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 > ---
->  docs/manual/adding-packages-generic.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/expect/expect.hash | 2 --
+>  package/expect/expect.mk   | 5 ++---
+>  2 files changed, 2 insertions(+), 5 deletions(-)
+>  delete mode 100644 package/expect/expect.hash
 > 
-> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> index 8cf6bb6..be754a2 100644
-> --- a/docs/manual/adding-packages-generic.txt
-> +++ b/docs/manual/adding-packages-generic.txt
-> @@ -280,7 +280,7 @@ information is (assuming the package name is +libfoo+) :
->       Only anonymous pserver mode is supported.
->       +LIBFOO_SITE+ 'must' contain the source URL as well as the remote
->       repository directory. The module is the package name.
-> -     +LIBFOO_VERSION+ is 'mandatory' and 'must' be a timestamp.
-> +     +LIBFOO_VERSION+ is 'mandatory' and 'must' be a tag or a date.
+> diff --git a/package/expect/expect.hash b/package/expect/expect.hash
+> deleted file mode 100644
+> index 09e68e7..0000000
+> --- a/package/expect/expect.hash
+> +++ /dev/null
+> @@ -1,2 +0,0 @@
+> -# Locally computed:
+> -sha256  b28dca90428a3b30e650525cdc16255d76bb6ccd65d448be53e620d95d5cc040  expect5.45.tar.gz
+> diff --git a/package/expect/expect.mk b/package/expect/expect.mk
+> index 8ef7e90..513be8f 100644
+> --- a/package/expect/expect.mk
+> +++ b/package/expect/expect.mk
+> @@ -4,9 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -EXPECT_VERSION = 5.45
+> -EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
+> -EXPECT_SITE = http://downloads.sourceforge.net/project/expect/Expect/$(EXPECT_VERSION)
+> +EXPECT_VERSION = 2014/05/02 # v5.45.3
 
-I'd like we document the format of the date we recognise. Because, IIRC,
-cvs accepts 'yesterday' as a date format, and that would be interpreted
-as a tag with the current code.
+Do not put comments after the variable definition, it breaks things.
 
-So maybe, just state something like:
-
-    ... or a date (YYYYMMDD:hhmmss)
-
-Or whatever is a date format recognised.
+Note that the example we have in the manual is wrong. Care to address
+that as well, please?
 
 Regards,
 Yann E. MORIN.
 
->    ** +git+ for retrieving source code from a Git repository. Used by
->       default when +LIBFOO_SITE+ begins with +git://+. The downloaded
->       source code is cached as with the +svn+
+> +EXPECT_SITE = cvs://expect.cvs.sourceforge.net:/cvsroot/expect
+>  EXPECT_LICENSE = Public domain
+>  EXPECT_LICENSE_FILES = README
+>  
 > -- 
 > 2.3.5
 > 
