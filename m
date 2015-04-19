@@ -1,35 +1,80 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Apr 2015 09:39:57 -0300
-Subject: [Buildroot] [PATCH v2 06/11] configs: drop redundant IPv6 option
+Date: Sun, 19 Apr 2015 09:39:58 -0300
+Subject: [Buildroot] [PATCH v2 07/11] docs/manual: remove references to IPv6
 In-Reply-To: <1429447202-13722-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1429447202-13722-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1429447202-13722-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1429447202-13722-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop the buildroot toolchain IPv6 option from the only config that's got
-it since it's now a non-option.
+It's no longer an option so remove all references to it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- configs/armadeus_apf9328_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+ docs/manual/adding-packages-directory.txt | 11 +++--------
+ docs/manual/configure.txt                 | 10 +++++-----
+ 2 files changed, 8 insertions(+), 13 deletions(-)
 
-diff --git a/configs/armadeus_apf9328_defconfig b/configs/armadeus_apf9328_defconfig
-index 3ad8feb..d6388db 100644
---- a/configs/armadeus_apf9328_defconfig
-+++ b/configs/armadeus_apf9328_defconfig
-@@ -6,7 +6,6 @@ BR2_arm920t=y
- BR2_PACKAGE_GDB=y
- BR2_PACKAGE_HOST_GDB=y
- BR2_ENABLE_LOCALE_PURGE=y
--BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
- BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
- BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index f536a0c..639003f 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -207,10 +207,9 @@ coding style].
+ ==== Dependencies on target and toolchain options
+ 
+ Many packages depend on certain options of the toolchain: the choice of
+-C library, C++ support, thread support, RPC support, IPv6 support,
+-wchar support, or dynamic library support. Some packages can only be
+-built on certain target architectures, or if an MMU is available in the
+-processor.
++C library, C++ support, thread support, RPC support, wchar support,
++or dynamic library support. Some packages can only be built on certain
++target architectures, or if an MMU is available in the processor.
+ 
+ These dependencies have to be expressed with the appropriate 'depends
+ on' statements in the Config.in file. Additionally, for dependencies on
+@@ -301,10 +300,6 @@ use in the comment.
+ ** Dependency symbol: +BR2_TOOLCHAIN_HAS_NATIVE_RPC+
+ ** Comment string: +RPC+
+ 
+-* IPv6 support
+-** Dependency symbol: +BR2_INET_IPV6+
+-** Comment string: +IPv6+ (lowercase v)
+-
+ * wchar support
+ ** Dependency symbol: +BR2_USE_WCHAR+
+ ** Comment string: +wchar+
+diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+index c06182b..dd34eef 100644
+--- a/docs/manual/configure.txt
++++ b/docs/manual/configure.txt
+@@ -109,8 +109,8 @@ most important ones allow to:
+  * Change the version of the GCC compiler, binutils and the C library.
+ 
+  * Select a number of toolchain options (uClibc only): whether the
+-   toolchain should have IPv6 support, RPC support (used mainly for
+-   NFS), wide-char support, locale support (for internationalization),
++   toolchain should have RPC support (used mainly for NFS),
++   wide-char support, locale support (for internationalization),
+    C++ support or thread support. Depending on which options you choose,
+    the number of userspace applications and libraries visible in
+    Buildroot menus will change: many applications and libraries require
+@@ -177,9 +177,9 @@ Then, you have three solutions to use an external toolchain:
+   external toolchain uses the 'glibc' library, you only have to tell
+   whether your toolchain supports C\++ or not and whether it has
+   built-in RPC support. If your external toolchain uses the 'uClibc'
+-  library, then you have to tell Buildroot if it supports IPv6,
+-  RPC, wide-char, locale, program invocation, threads and
+-  C++. At the beginning of the execution, Buildroot will tell you if
++  library, then you have to tell Buildroot if it supports RPC,
++  wide-char, locale, program invocation, threads and C++.
++  At the beginning of the execution, Buildroot will tell you if
+   the selected options do not match the toolchain configuration.
+ 
+ Our external toolchain support has been tested with toolchains from
 -- 
 2.0.5
