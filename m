@@ -1,27 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 23:10:28 +0200
-Subject: [Buildroot] [git commit] package/intltool: add hash
-Message-ID: <20150419212235.2391F8040A@busybox.osuosl.org>
+Date: Sun, 19 Apr 2015 23:10:27 +0200
+Subject: [Buildroot] [git commit] package/iozone: bump to version 3_430
+Message-ID: <20150419212235.047108040A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=332e7b58a48b74827455775e7f17f1b1740ad906
+commit: http://git.buildroot.net/buildroot/commit/?id=c015d2f2d8269f38a7378f7ac8e1385f6a7d39bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/intltool/intltool.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/iozone/iozone.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/intltool/intltool.hash b/package/intltool/intltool.hash
-new file mode 100644
-index 0000000..a60af50
---- /dev/null
-+++ b/package/intltool/intltool.hash
-@@ -0,0 +1,2 @@
-+# From https://launchpad.net/intltool/trunk/0.50.2/+download/intltool-0.50.2.tar.gz/+md5
-+md5	23fbd879118253cb99aeac067da5f591	intltool-0.50.2.tar.gz
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+index 57d4f79..0662207 100644
+--- a/package/iozone/iozone.mk
++++ b/package/iozone/iozone.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IOZONE_VERSION = 3_414
++IOZONE_VERSION = 3_430
+ IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
+ IOZONE_SITE = http://www.iozone.org/src/current
+ IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
