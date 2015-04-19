@@ -1,29 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 15:07:22 +0200
-Subject: [Buildroot] [PATCH 7/9] package/fakeroot: add hash
-In-Reply-To: <1429448844-12598-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429448844-12598-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429448844-12598-7-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Apr 2015 15:15:30 +0200
+Subject: [Buildroot] [PATCH v4 1/1] Added linux drivers backports project
+In-Reply-To: <20150419110326.31c34542@free-electrons.com>
+References: <1429311670-7831-1-git-send-email-petr.vorel@gmail.com>
+ <20150419110326.31c34542@free-electrons.com>
+Message-ID: <20150419131529.GH4313@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, Petr, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/fakeroot/fakeroot.hash |    2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/fakeroot/fakeroot.hash
+On 2015-04-19 11:03 +0200, Thomas Petazzoni spake thusly:
+--SNIP--]
+> I wanted to apply your patch, and did a couple of updates to it (see
+> below). However, there's a more fundamental problem to this package: it
+> expects the linux package to be extracted/configured *before* the
+> configuration of linux-backports. Unfortunately, this is not the case:
+> 'linux' is only in LINUX_BACKPORTS_DEPENDENCIES, so it's only
+> guaranteed to be here when linux-backports gets configured, not before.
+[--SNIP--]
+> I'm not sure yet of the possible solutions to this: add 'linux' to
+> LINUX_BACKPORT_PATCH_DEPENDENCIES ? Use the linux extension mechanism
+> as suggested by Arnout ?
 
-diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
-new file mode 100644
-index 0000000..c9e1f0c
---- /dev/null
-+++ b/package/fakeroot/fakeroot.hash
-@@ -0,0 +1,2 @@
-+# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/f/fakeroot/fakeroot_1.18.4-2.debian.tar.gz
-+sha256	0a359efa3e9496c33234b3e9c89306a09bb4da9d33de43c261f1d8447e6ebea2	fakeroot_1.18.4.orig.tar.bz2
+Adding 'linux' to _PATCH_DEPENDENCIES will not be enough, because all
+_PATCH_DEPENDENCIES guarantees is that such dependencies are extracted
+and patched, not that they are configured/built or whatever.
+
+So, the only option left would be to treat them as a linux extension,
+and drop the build+install commands from linux-backports, and use the
+integration strategy (instead of the packaging strategy), see:
+    https://backports.wiki.kernel.org/index.php/Documentation/integration
+
+However, it seems to be quite involved...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
