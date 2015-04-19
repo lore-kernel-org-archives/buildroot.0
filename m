@@ -1,36 +1,52 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Apr 2015 06:48:17 -0300
-Subject: [Buildroot] [PATCH v3 02/11] toolchain-external: install libatomic
+Date: Sun, 19 Apr 2015 06:48:18 -0300
+Subject: [Buildroot] [PATCH v3 03/11] harfbuzz: add host variant
 In-Reply-To: <1429436906-15222-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1429436906-15222-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1429436906-15222-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1429436906-15222-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's required in some 32-bit architectures for the extended (64-bit)
-atomic operations, like __sync_add_and_fetch_8.
-These arches are at least: i386, mips & mipsel.
+Required for host-pango, which in turn is required for host-librsvg and
+at last midori.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/harfbuzz/harfbuzz.mk | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index c0429bb..2427463 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -64,7 +64,7 @@
- #  of Buildroot is handled identical for the 2 toolchain types.
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 0a69b09..9cfd613 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -11,6 +11,20 @@ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+ HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING
+ HARFBUZZ_INSTALL_STAGING = YES
+ HARFBUZZ_CONF_OPTS = --without-coretext --without-uniscribe --without-graphite2
++
++# freetype & glib2 support required by host-pango
++HOST_HARFBUZZ_DEPENDENCIES = \
++	host-freetype \
++	host-libglib2
++HOST_HARFBUZZ_CONF_OPTS = \
++	--without-corext \
++	--without-uniscribe \
++	--without-graphite2 \
++	--with-cairo=no \
++	--with-icu=no \
++	--with-freetype=yes \
++	--with-glib=yes
++
+ # beta libtool version
+ HARFBUZZ_AUTORECONF = YES
  
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
--LIB_EXTERNAL_LIBS += libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
-+LIB_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_ARM_EABIHF),yy)
- LIB_EXTERNAL_LIBS += ld-linux-armhf.so.*
- else
+@@ -48,3 +62,4 @@ HARFBUZZ_CONF_OPTS += --with-icu=no
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.0.5
