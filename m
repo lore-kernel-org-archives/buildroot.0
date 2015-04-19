@@ -1,54 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 11:30:40 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Apr 2015 11:31:23 +0200
 Subject: [Buildroot] [PATCH 00/20] Some new Perl modules
-In-Reply-To: <XnsA4816FEFF3E58berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 References: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
- <20150419105007.411d3dd3@free-electrons.com>
- <XnsA4816FEFF3E58berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20150419113040.1c46a6cb@free-electrons.com>
+ <CAB0FRsu9h1pZUTeKU6FGrup3bsijWWT31AovXX85O2UkUxBaJw@mail.gmail.com>
+Message-ID: <XnsA48175384634BberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+=?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad-
+jEMvHSqNoUo@public.gmane.org> wrote in 
+news:CAB0FRsu9h1pZUTeKU6FGrup3bsijWWT31AovXX85O2UkUxBaJw at mail.gmail.com:
 
-On Sun, 19 Apr 2015 11:00:14 +0200, Bernd Kuhls wrote:
+> The latest version of `support/scripts/scancpan` allows to generate
+> the hash file.
 
-> perl-mail-spamassassin checks for the presence of some dependency modules 
-> during its configuration phase and stops if they can not be found, like:
-> 
-> dependency check complete...
-> 
-> REQUIRED module missing: HTML::Parser
-> REQUIRED module missing: Net::DNS
-> REQUIRED module missing: NetAddr::IP
-> 
-> After
-> 
-> $ make host-perl-html-parser
-> 
-> this list will be shorter:
-> 
-> dependency check complete...
-> 
-> REQUIRED module missing: Net::DNS
-> REQUIRED module missing: NetAddr::IP
-> 
-> This serves just as an example, having these host modules installed makes 
-> SpamAssassin_s configure happy ;)
+Hi,
 
-Right, but isn't this an ugly workaround? They are not really needed on
-the host, only to make spamassassin believe they will be on the target.
-Isn't there a better solution?
+yes, I know, this helps a lot :) I used it to generate to 20 hash files for 
+the new packages I just posted to the mailinglist.
 
-Fran?ois, maybe you have an idea?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
