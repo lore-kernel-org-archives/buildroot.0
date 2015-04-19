@@ -1,85 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Apr 2015 14:44:55 +0200
-Subject: [Buildroot] [PATCH 0/7 v5] toolchain: better handle hashes (branch
-	yem/dl-hash-toolchains)
-Message-ID: <cover.1429447148.git.yann.morin.1998@free.fr>
+Date: Sun, 19 Apr 2015 14:44:54 +0200
+Subject: [Buildroot] [PATCH 1/7 v5] package/gcc: add hashes
+In-Reply-To: <cover.1429447148.git.yann.morin.1998@free.fr>
+References: <cover.1429447148.git.yann.morin.1998@free.fr>
+Message-ID: <ef3296567cf8cd1221c8f2413e0d2f3821fe5343.1429447148.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-This series makes it so we can download custom external toolchains, and
-still have mandatory checks of hashes.
-
-It also adds the long-awaited-for hashes for gcc and binutils.
-
-
+---
 Changes v4 -> v5:
-  - drop patch #8, that errored-out when an excluded file did have
-    one or more associated hashes  (Arnout)
-  - typoes  (Arnout)
-
-Changes v3 -> v4:
-  - add missing fake-hash for uClibc eXtensa git snapshot; add uClibc
-    daily snapshots to exclusion list  (Arnout)
-  - drop using a magic value; use a list of excluded files  (Arnout)
-
-Changes v2 -> v3:
-  - add hashes for gcc and binutils
-  - fix a few more typoes
-
-Changes v1 -> v2:
-  - fix a few typoes
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 81e22ebd5ee3b9aa36fcbc86602a8fc5bfe87c17:
-
-  package/python-m2crypto: add hash (2015-04-19 14:25:28 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/dl-hash-toolchains
-
-for you to fetch changes up to 92db9d9c24d6a53fa0db2aa7b3bff1456498d690:
-
-  support/download: restore mandatory check of hashes (2015-04-19 14:35:03 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (7):
-      package/gcc: add hashes
-      package/binutils: add hashes
-      package/uclibc: add missing hash for eXtensa
-      support/download: add possibility to not fail on missing hash
-      toolchain/external: ignore missing hash for custom downloaded toolchain
-      package/uclibc: ignore missing hash for snapshots
-      support/download: restore mandatory check of hashes
-
- package/binutils/binutils.hash                     |  7 +++++++
- package/gcc/gcc-final/gcc-final.hash               |  1 +
- package/gcc/gcc-initial/gcc-initial.hash           |  1 +
- package/gcc/gcc.hash                               | 10 ++++++++++
- package/pkg-download.mk                            |  3 +++
- package/uclibc/uclibc.hash                         |  3 +++
- package/uclibc/uclibc.mk                           |  1 +
- support/download/check-hash                        |  8 +++++++-
- toolchain/toolchain-external/toolchain-external.mk |  2 ++
- 9 files changed, 35 insertions(+), 1 deletion(-)
- create mode 100644 package/binutils/binutils.hash
+  - use alternate upstream as source of hashes  (Arnout)
+---
+ package/gcc/gcc-final/gcc-final.hash     |  1 +
+ package/gcc/gcc-initial/gcc-initial.hash |  1 +
+ package/gcc/gcc.hash                     | 10 ++++++++++
+ 3 files changed, 12 insertions(+)
  create mode 120000 package/gcc/gcc-final/gcc-final.hash
  create mode 120000 package/gcc/gcc-initial/gcc-initial.hash
  create mode 100644 package/gcc/gcc.hash
 
+diff --git a/package/gcc/gcc-final/gcc-final.hash b/package/gcc/gcc-final/gcc-final.hash
+new file mode 120000
+index 0000000..7ac9361
+--- /dev/null
++++ b/package/gcc/gcc-final/gcc-final.hash
+@@ -0,0 +1 @@
++../gcc.hash
+\ No newline at end of file
+diff --git a/package/gcc/gcc-initial/gcc-initial.hash b/package/gcc/gcc-initial/gcc-initial.hash
+new file mode 120000
+index 0000000..7ac9361
+--- /dev/null
++++ b/package/gcc/gcc-initial/gcc-initial.hash
+@@ -0,0 +1 @@
++../gcc.hash
+\ No newline at end of file
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+new file mode 100644
+index 0000000..5eec97f
+--- /dev/null
++++ b/package/gcc/gcc.hash
+@@ -0,0 +1,10 @@
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.5.4/sha512.sum
++sha512  78696b287d46aacd6f150920da376ea32f58ad9f0dafd2d3b7fa6dbdd8dd7afe659108d1dfaa5807617fc5248719f50b39c37ade0173ea5b9fec2091f4656115  gcc-4.5.4.tar.bz2
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.7.4/sha512.sum
++sha512  dfcb737073191e628231031a3571ec77ee760a59377630f4a6e4fdfa66f9ddad39fde47e3f0f227eb43cdf90e0d34cde5abdc9ac892c1e111a911062a66c9189  gcc-4.7.4.tar.bz2
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.8.4/sha512.sum
++sha512  b4c84ebd754c026029d706ef52c4242df4dcadc6a22cc5669b3aa37ac9dc25bc9cd9651fda83fb24dd5d17b1710e6865a35bb6c5cd9b95d0971717453935ae8e  gcc-4.8.4.tar.bz2
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.9.2/sha512.sum
++sha512  e96cba06d572dbe7f382a2b00fd9297dcf9f9219d46a9ad0bd904dc36d5e7db3335e422640b79a27fed6fde91b0731732b94a0e2fbcd47344d6779f8ba1f4f9c  gcc-4.9.2.tar.bz2
++# No hash for the ARC variant, comes from the github-helper:
++none  xxx  gcc-arc-2014.12.tar.gz
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
