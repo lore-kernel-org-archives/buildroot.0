@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 12:17:13 +0200
-Subject: [Buildroot] [PATCH v2 18/25] package/perl-libwww: New package
+Date: Sun, 19 Apr 2015 12:17:12 +0200
+Subject: [Buildroot] [PATCH v2 17/25] package/perl-www-robotrules: New
+	package
 In-Reply-To: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429438640-9367-19-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429438640-9367-18-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,85 +14,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                    |    1 +
- package/perl-libwww/Config.in        |   16 ++++++++++++++++
- package/perl-libwww/perl-libwww.hash |    3 +++
- package/perl-libwww/perl-libwww.mk   |   23 +++++++++++++++++++++++
- 4 files changed, 43 insertions(+)
- create mode 100644 package/perl-libwww/Config.in
- create mode 100644 package/perl-libwww/perl-libwww.hash
- create mode 100644 package/perl-libwww/perl-libwww.mk
+ package/Config.in                                    |    1 +
+ package/perl-www-robotrules/Config.in                |    8 ++++++++
+ package/perl-www-robotrules/perl-www-robotrules.hash |    3 +++
+ package/perl-www-robotrules/perl-www-robotrules.mk   |   14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/perl-www-robotrules/Config.in
+ create mode 100644 package/perl-www-robotrules/perl-www-robotrules.hash
+ create mode 100644 package/perl-www-robotrules/perl-www-robotrules.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 4e6e8c8..08e44bf 100644
+index 4d8f98d..4e6e8c8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -520,6 +520,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-io-html/Config.in"
- 	source "package/perl-io-socket-ssl/Config.in"
- 	source "package/perl-json-tiny/Config.in"
-+	source "package/perl-libwww/Config.in"
- 	source "package/perl-lwp-mediatypes/Config.in"
- 	source "package/perl-mojolicious/Config.in"
- 	source "package/perl-net-dns/Config.in"
-diff --git a/package/perl-libwww/Config.in b/package/perl-libwww/Config.in
+@@ -530,6 +530,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-time-hires/Config.in"
+ 	source "package/perl-try-tiny/Config.in"
+ 	source "package/perl-uri/Config.in"
++	source "package/perl-www-robotrules/Config.in"
+ 	source "package/perl-xml-libxml/Config.in"
+ 	source "package/perl-xml-namespacesupport/Config.in"
+ 	source "package/perl-xml-sax/Config.in"
+diff --git a/package/perl-www-robotrules/Config.in b/package/perl-www-robotrules/Config.in
 new file mode 100644
-index 0000000..523371f
+index 0000000..83dbcfb
 --- /dev/null
-+++ b/package/perl-libwww/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_PERL_LIBWWW
-+	bool "perl-libwww"
-+	select BR2_PACKAGE_PERL_ENCODE_LOCALE
-+	select BR2_PACKAGE_PERL_FILE_LISTING
-+	select BR2_PACKAGE_PERL_HTML_PARSER
-+	select BR2_PACKAGE_PERL_HTTP_COOKIES
-+	select BR2_PACKAGE_PERL_HTTP_DAEMON
-+	select BR2_PACKAGE_PERL_HTTP_NEGOTIATE
-+	select BR2_PACKAGE_PERL_LWP_MEDIATYPES
-+	select BR2_PACKAGE_PERL_NET_HTTP
-+	select BR2_PACKAGE_PERL_URI
-+	select BR2_PACKAGE_PERL_WWW_ROBOTRULES
++++ b/package/perl-www-robotrules/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PERL_WWW_ROBOTRULES
++	bool "perl-www-robotrules"
++	select PERL_URI
 +	help
-+	  The World-Wide Web library for Perl
++	  This module provides functions that deal the date formats used by the
++	  HTTP protocol (and then some more)
 +
-+	  https://github.com/libwww-perl/libwww-perl
-diff --git a/package/perl-libwww/perl-libwww.hash b/package/perl-libwww/perl-libwww.hash
++	  http://github.com/gisle/www-robotrules
+diff --git a/package/perl-www-robotrules/perl-www-robotrules.hash b/package/perl-www-robotrules/perl-www-robotrules.hash
 new file mode 100644
-index 0000000..1ef5ccf
+index 0000000..9091a29
 --- /dev/null
-+++ b/package/perl-libwww/perl-libwww.hash
++++ b/package/perl-www-robotrules/perl-www-robotrules.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    85b36bcd2fd2450718ee14f894f0d3d1 libwww-perl-6.13.tar.gz
-+sha256 5fbd13eebd1933e5a203fceb2c1629efbccff3efc8fab6ec0285c79d0a95f8b2 libwww-perl-6.13.tar.gz
-diff --git a/package/perl-libwww/perl-libwww.mk b/package/perl-libwww/perl-libwww.mk
++md5    b7186e8b8b3701e70c22abf430742403 WWW-RobotRules-6.02.tar.gz
++sha256 46b502e7a288d559429891eeb5d979461dd3ecc6a5c491ead85d165b6e03a51e WWW-RobotRules-6.02.tar.gz
+diff --git a/package/perl-www-robotrules/perl-www-robotrules.mk b/package/perl-www-robotrules/perl-www-robotrules.mk
 new file mode 100644
-index 0000000..0ee1e04
+index 0000000..0c68b98
 --- /dev/null
-+++ b/package/perl-libwww/perl-libwww.mk
-@@ -0,0 +1,23 @@
++++ b/package/perl-www-robotrules/perl-www-robotrules.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-libwww
++# perl-www-robotrules
 +#
 +################################################################################
 +
-+PERL_LIBWWW_VERSION = 6.13
-+PERL_LIBWWW_SITE = $(call github,libwww-perl,libwww-perl,$(PERL_LIBWWW_VERSION))
-+PERL_LIBWWW_LICENSE = Artistic or GPLv1+
-+PERL_LIBWWW_LICENSE_FILES = LICENSE
-+PERL_LIBWWW_DEPENDENCIES = \
-+	perl-encode-locale \
-+	perl-file-listing \
-+	perl-html-parser \
-+	perl-http-cookies \
-+	perl-http-daemon \
-+	perl-http-date \
-+	perl-http-negotiate \
-+	perl-net-http \
-+	perl-uri \
-+	perl-www-robotrules
++PERL_WWW_ROBOTRULES_VERSION = 6.02
++PERL_WWW_ROBOTRULES_SOURCE = WWW-RobotRules-$(PERL_WWW_ROBOTRULES_VERSION).tar.gz
++PERL_WWW_ROBOTRULES_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_WWW_ROBOTRULES_DEPENDENCIES = perl-uri
++PERL_WWW_ROBOTRULES_LICENSE = Artistic or GPLv1+
++PERL_WWW_ROBOTRULES_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
