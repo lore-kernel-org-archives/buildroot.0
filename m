@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 12:17:02 +0200
-Subject: [Buildroot] [PATCH v2 07/25] package/perl-http-date: New package
+Date: Sun, 19 Apr 2015 12:16:56 +0200
+Subject: [Buildroot] [PATCH v2 01/25] package/perl-html-tagset: New package
 In-Reply-To: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429438640-9367-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429438640-9367-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +13,66 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                          |    1 +
- package/perl-http-date/Config.in           |    7 +++++++
- package/perl-http-date/perl-http-date.hash |    3 +++
- package/perl-http-date/perl-http-date.mk   |   14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/perl-http-date/Config.in
- create mode 100644 package/perl-http-date/perl-http-date.hash
- create mode 100644 package/perl-http-date/perl-http-date.mk
+ package/Config.in                              |    1 +
+ package/perl-html-tagset/Config.in             |    6 ++++++
+ package/perl-html-tagset/perl-html-tagset.hash |    3 +++
+ package/perl-html-tagset/perl-html-tagset.mk   |   14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/perl-html-tagset/Config.in
+ create mode 100644 package/perl-html-tagset/perl-html-tagset.hash
+ create mode 100644 package/perl-html-tagset/perl-html-tagset.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e04f804..10c5974 100644
+index a3cd4c2..bb354ff 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -511,6 +511,7 @@ menu "Perl libraries/modules"
+@@ -508,6 +508,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-gd/Config.in"
+ 	source "package/perl-gdgraph/Config.in"
  	source "package/perl-gdtextutil/Config.in"
- 	source "package/perl-html-parser/Config.in"
- 	source "package/perl-html-tagset/Config.in"
-+	source "package/perl-http-date/Config.in"
++	source "package/perl-html-tagset/Config.in"
  	source "package/perl-io-socket-ssl/Config.in"
  	source "package/perl-json-tiny/Config.in"
  	source "package/perl-mojolicious/Config.in"
-diff --git a/package/perl-http-date/Config.in b/package/perl-http-date/Config.in
+diff --git a/package/perl-html-tagset/Config.in b/package/perl-html-tagset/Config.in
 new file mode 100644
-index 0000000..c45335f
+index 0000000..a39bc65
 --- /dev/null
-+++ b/package/perl-http-date/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_HTTP_DATE
-+	bool "perl-http-date"
++++ b/package/perl-html-tagset/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_HTML_TAGSET
++	bool "perl-html-tagset"
 +	help
-+	  This module provides functions that deal the date formats used by the
-+	  HTTP protocol (and then some more)
++	  HTML::Tagset - data tables useful in parsing HTML
 +
-+	  https://github.com/gisle/http-date
-diff --git a/package/perl-http-date/perl-http-date.hash b/package/perl-http-date/perl-http-date.hash
++	  http://www.cpan.org/modules/by-authors/id/P/PE/PETDANCE/
+diff --git a/package/perl-html-tagset/perl-html-tagset.hash b/package/perl-html-tagset/perl-html-tagset.hash
 new file mode 100644
-index 0000000..db85cd0
+index 0000000..a4cf090
 --- /dev/null
-+++ b/package/perl-http-date/perl-http-date.hash
++++ b/package/perl-html-tagset/perl-html-tagset.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    52b7a0d5982d61be1edb217751d7daba HTTP-Date-6.02.tar.gz
-+sha256 e8b9941da0f9f0c9c01068401a5e81341f0e3707d1c754f8e11f42a7e629e333 HTTP-Date-6.02.tar.gz
-diff --git a/package/perl-http-date/perl-http-date.mk b/package/perl-http-date/perl-http-date.mk
++md5    d2bfa18fe1904df7f683e96611e87437 HTML-Tagset-3.20.tar.gz
++sha256 adb17dac9e36cd011f5243881c9739417fd102fce760f8de4e9be4c7131108e2 HTML-Tagset-3.20.tar.gz
+diff --git a/package/perl-html-tagset/perl-html-tagset.mk b/package/perl-html-tagset/perl-html-tagset.mk
 new file mode 100644
-index 0000000..6de95b6
+index 0000000..2629611
 --- /dev/null
-+++ b/package/perl-http-date/perl-http-date.mk
++++ b/package/perl-html-tagset/perl-html-tagset.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-http-date
++# perl-html-tagset
 +#
 +################################################################################
 +
-+PERL_HTTP_DATE_VERSION = 6.02
-+PERL_HTTP_DATE_SOURCE = HTTP-Date-$(PERL_HTTP_DATE_VERSION).tar.gz
-+PERL_HTTP_DATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_HTTP_DATE_DEPENDENCIES = perl
-+PERL_HTTP_DATE_LICENSE = Artistic or GPLv1+
-+PERL_HTTP_DATE_LICENSE_FILES = README
++PERL_HTML_TAGSET_VERSION = 3.20
++PERL_HTML_TAGSET_SOURCE = HTML-Tagset-$(PERL_HTML_TAGSET_VERSION).tar.gz
++PERL_HTML_TAGSET_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PETDANCE
++PERL_HTML_TAGSET_DEPENDENCIES = perl
++PERL_HTML_TAGSET_LICENSE = Artistic or GPLv1+
++PERL_HTML_TAGSET_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
