@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 10:33:21 +0200
-Subject: [Buildroot] [PATCH 08/20] perl-http-date: New package
+Date: Sun, 19 Apr 2015 10:33:31 +0200
+Subject: [Buildroot] [PATCH 18/20] perl-www-robotrules: New package
 In-Reply-To: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429432413-17038-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429432413-17038-19-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +13,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                          |    1 +
- package/perl-http-date/Config.in           |    7 +++++++
- package/perl-http-date/perl-http-date.hash |    3 +++
- package/perl-http-date/perl-http-date.mk   |   14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/perl-http-date/Config.in
- create mode 100644 package/perl-http-date/perl-http-date.hash
- create mode 100644 package/perl-http-date/perl-http-date.mk
+ package/Config.in                                    |    1 +
+ package/perl-www-robotrules/Config.in                |    8 ++++++++
+ package/perl-www-robotrules/perl-www-robotrules.hash |    3 +++
+ package/perl-www-robotrules/perl-www-robotrules.mk   |   14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/perl-www-robotrules/Config.in
+ create mode 100644 package/perl-www-robotrules/perl-www-robotrules.hash
+ create mode 100644 package/perl-www-robotrules/perl-www-robotrules.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 75e6f58..bb4f3e0 100644
+index 3e421c5..3b73934 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -511,6 +511,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-gdtextutil/Config.in"
- 	source "package/perl-html-parser/Config.in"
- 	source "package/perl-html-tagset/Config.in"
-+	source "package/perl-http-date/Config.in"
- 	source "package/perl-io-socket-ssl/Config.in"
- 	source "package/perl-json-tiny/Config.in"
- 	source "package/perl-mojolicious/Config.in"
-diff --git a/package/perl-http-date/Config.in b/package/perl-http-date/Config.in
+@@ -530,6 +530,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-time-hires/Config.in"
+ 	source "package/perl-try-tiny/Config.in"
+ 	source "package/perl-uri/Config.in"
++	source "package/perl-www-robotrules/Config.in"
+ 	source "package/perl-xml-libxml/Config.in"
+ 	source "package/perl-xml-namespacesupport/Config.in"
+ 	source "package/perl-xml-sax/Config.in"
+diff --git a/package/perl-www-robotrules/Config.in b/package/perl-www-robotrules/Config.in
 new file mode 100644
-index 0000000..c45335f
+index 0000000..83dbcfb
 --- /dev/null
-+++ b/package/perl-http-date/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_HTTP_DATE
-+	bool "perl-http-date"
++++ b/package/perl-www-robotrules/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PERL_WWW_ROBOTRULES
++	bool "perl-www-robotrules"
++	select PERL_URI
 +	help
 +	  This module provides functions that deal the date formats used by the
 +	  HTTP protocol (and then some more)
 +
-+	  https://github.com/gisle/http-date
-diff --git a/package/perl-http-date/perl-http-date.hash b/package/perl-http-date/perl-http-date.hash
++	  http://github.com/gisle/www-robotrules
+diff --git a/package/perl-www-robotrules/perl-www-robotrules.hash b/package/perl-www-robotrules/perl-www-robotrules.hash
 new file mode 100644
-index 0000000..db85cd0
+index 0000000..9091a29
 --- /dev/null
-+++ b/package/perl-http-date/perl-http-date.hash
++++ b/package/perl-www-robotrules/perl-www-robotrules.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    52b7a0d5982d61be1edb217751d7daba HTTP-Date-6.02.tar.gz
-+sha256 e8b9941da0f9f0c9c01068401a5e81341f0e3707d1c754f8e11f42a7e629e333 HTTP-Date-6.02.tar.gz
-diff --git a/package/perl-http-date/perl-http-date.mk b/package/perl-http-date/perl-http-date.mk
++md5    b7186e8b8b3701e70c22abf430742403 WWW-RobotRules-6.02.tar.gz
++sha256 46b502e7a288d559429891eeb5d979461dd3ecc6a5c491ead85d165b6e03a51e WWW-RobotRules-6.02.tar.gz
+diff --git a/package/perl-www-robotrules/perl-www-robotrules.mk b/package/perl-www-robotrules/perl-www-robotrules.mk
 new file mode 100644
-index 0000000..6de95b6
+index 0000000..0c68b98
 --- /dev/null
-+++ b/package/perl-http-date/perl-http-date.mk
++++ b/package/perl-www-robotrules/perl-www-robotrules.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-http-date
++# perl-www-robotrules
 +#
 +################################################################################
 +
-+PERL_HTTP_DATE_VERSION = 6.02
-+PERL_HTTP_DATE_SOURCE = HTTP-Date-$(PERL_HTTP_DATE_VERSION).tar.gz
-+PERL_HTTP_DATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_HTTP_DATE_DEPENDENCIES = perl
-+PERL_HTTP_DATE_LICENSE = Artistic or GPLv1+
-+PERL_HTTP_DATE_LICENSE_FILES = README
++PERL_WWW_ROBOTRULES_VERSION = 6.02
++PERL_WWW_ROBOTRULES_SOURCE = WWW-RobotRules-$(PERL_WWW_ROBOTRULES_VERSION).tar.gz
++PERL_WWW_ROBOTRULES_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_WWW_ROBOTRULES_DEPENDENCIES = perl-uri
++PERL_WWW_ROBOTRULES_LICENSE = Artistic or GPLv1+
++PERL_WWW_ROBOTRULES_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
