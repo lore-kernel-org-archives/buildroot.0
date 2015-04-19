@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 19 Apr 2015 23:10:29 +0200
-Subject: [Buildroot] [git commit] package/mii-diag: add hash
-Message-ID: <20150419212235.95CAD7FBF7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rsh-redone: add hash
+Message-ID: <20150419212235.9CF647FBF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e835b185f5a129b81d54595581cc76dad41cc45f
+commit: http://git.buildroot.net/buildroot/commit/?id=93d391c873e3c2849d6a99717259d1b22c3d84a8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mii-diag/mii-diag.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/rsh-redone/rsh-redone.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/mii-diag/mii-diag.hash b/package/mii-diag/mii-diag.hash
+diff --git a/package/rsh-redone/rsh-redone.hash b/package/rsh-redone/rsh-redone.hash
 new file mode 100644
-index 0000000..22c69e3
+index 0000000..ba85607
 --- /dev/null
-+++ b/package/mii-diag/mii-diag.hash
-@@ -0,0 +1,3 @@
-+# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/m/mii-diag/mii-diag_2.11-3.dsc
-+sha256	c690e87e6010607593c1cc2ccd5c481eb3be179387220ad445d8ab83d73ad41c	mii-diag_2.11.orig.tar.gz
-+sha256	b49fd3e7c0c446a949c3ca246cc441824d7ef5a61530f884756a82b0b2997190	mii-diag_2.11-3.diff.gz
++++ b/package/rsh-redone/rsh-redone.hash
+@@ -0,0 +1,2 @@
++# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/r/rsh-redone/rsh-redone_85-2.dsc
++sha256	55ac8ee2acacbc3490f073e3922c0cde46ffe4ea3c593e05c48fed4c1e1a8811	rsh-redone_85.orig.tar.gz
