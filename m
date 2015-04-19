@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 10:33:22 +0200
-Subject: [Buildroot] [PATCH 09/20] perl-file-listing: New package
+Date: Sun, 19 Apr 2015 10:33:27 +0200
+Subject: [Buildroot] [PATCH 14/20] perl-http-cookies: New package
 In-Reply-To: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429432413-17038-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429432413-17038-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429432413-17038-15-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,66 +14,66 @@ To: buildroot@busybox.net
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
  package/Config.in                                |    1 +
- package/perl-file-listing/Config.in              |    7 +++++++
- package/perl-file-listing/perl-file-listing.hash |    3 +++
- package/perl-file-listing/perl-file-listing.mk   |   14 ++++++++++++++
+ package/perl-http-cookies/Config.in              |    7 +++++++
+ package/perl-http-cookies/perl-http-cookies.hash |    3 +++
+ package/perl-http-cookies/perl-http-cookies.mk   |   14 ++++++++++++++
  4 files changed, 25 insertions(+)
- create mode 100644 package/perl-file-listing/Config.in
- create mode 100644 package/perl-file-listing/perl-file-listing.hash
- create mode 100644 package/perl-file-listing/perl-file-listing.mk
+ create mode 100644 package/perl-http-cookies/Config.in
+ create mode 100644 package/perl-http-cookies/perl-http-cookies.hash
+ create mode 100644 package/perl-http-cookies/perl-http-cookies.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index bb4f3e0..8a96777 100644
+index 4725c23..4b43207 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -506,6 +506,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-file-util/Config.in"
- 	source "package/perl-digest-hmac/Config.in"
- 	source "package/perl-encode-locale/Config.in"
-+	source "package/perl-file-listing/Config.in"
- 	source "package/perl-gd/Config.in"
- 	source "package/perl-gdgraph/Config.in"
+@@ -512,6 +512,7 @@ menu "Perl libraries/modules"
  	source "package/perl-gdtextutil/Config.in"
-diff --git a/package/perl-file-listing/Config.in b/package/perl-file-listing/Config.in
+ 	source "package/perl-html-parser/Config.in"
+ 	source "package/perl-html-tagset/Config.in"
++	source "package/perl-http-cookies/Config.in"
+ 	source "package/perl-http-date/Config.in"
+ 	source "package/perl-http-message/Config.in"
+ 	source "package/perl-io-html/Config.in"
+diff --git a/package/perl-http-cookies/Config.in b/package/perl-http-cookies/Config.in
 new file mode 100644
-index 0000000..85f8e2e
+index 0000000..4dd2fd9
 --- /dev/null
-+++ b/package/perl-file-listing/Config.in
++++ b/package/perl-http-cookies/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_FILE_LISTING
-+	bool "perl-file-listing"
-+	select BR2_PACKAGE_PERL_HTTP_DATE
++config BR2_PACKAGE_PERL_HTTP_COOKIES
++	bool "perl-http-cookies"
++	select BR2_PACKAGE_PERL_HTTP_MESSAGE
 +	help
-+	  Module to parse directoy listings
++	  Objects that represent a "cookie jar"
 +
-+	  https://github.com/gisle/file-listing
-diff --git a/package/perl-file-listing/perl-file-listing.hash b/package/perl-file-listing/perl-file-listing.hash
++	  http://github.com/gisle/http-cookies
+diff --git a/package/perl-http-cookies/perl-http-cookies.hash b/package/perl-http-cookies/perl-http-cookies.hash
 new file mode 100644
-index 0000000..1549c5a
+index 0000000..94e5f31
 --- /dev/null
-+++ b/package/perl-file-listing/perl-file-listing.hash
++++ b/package/perl-http-cookies/perl-http-cookies.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    83f636b477741f3a014585bb9cc079a6 File-Listing-6.04.tar.gz
-+sha256 1e0050fcd6789a2179ec0db282bf1e90fb92be35d1171588bd9c47d52d959cf5 File-Listing-6.04.tar.gz
-diff --git a/package/perl-file-listing/perl-file-listing.mk b/package/perl-file-listing/perl-file-listing.mk
++md5    ecfd0eeb88512033352c2f13c9580f03 HTTP-Cookies-6.01.tar.gz
++sha256 f5d3ade383ce6389d80cb0d0356b643af80435bb036afd8edce335215ec5eb20 HTTP-Cookies-6.01.tar.gz
+diff --git a/package/perl-http-cookies/perl-http-cookies.mk b/package/perl-http-cookies/perl-http-cookies.mk
 new file mode 100644
-index 0000000..a9d8ced
+index 0000000..b3bfa2c
 --- /dev/null
-+++ b/package/perl-file-listing/perl-file-listing.mk
++++ b/package/perl-http-cookies/perl-http-cookies.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-file-listing
++# perl-http-cookies
 +#
 +################################################################################
 +
-+PERL_FILE_LISTING_VERSION = 6.04
-+PERL_FILE_LISTING_SOURCE = File-Listing-$(PERL_FILE_LISTING_VERSION).tar.gz
-+PERL_FILE_LISTING_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_FILE_LISTING_DEPENDENCIES = perl-http-date
-+PERL_FILE_LISTING_LICENSE = Artistic or GPLv1+
-+PERL_FILE_LISTING_LICENSE_FILES = README
++PERL_HTTP_COOKIES_VERSION = 6.01
++PERL_HTTP_COOKIES_SOURCE = HTTP-Cookies-$(PERL_HTTP_COOKIES_VERSION).tar.gz
++PERL_HTTP_COOKIES_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_HTTP_COOKIES_DEPENDENCIES = perl-http-message
++PERL_HTTP_COOKIES_LICENSE = Artistic or GPLv1+
++PERL_HTTP_COOKIES_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
