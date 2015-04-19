@@ -1,75 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 11:40:53 +0200
-Subject: [Buildroot] [git commit] perl-digest-hmac: New package
-Message-ID: <20150419094110.95CD87FF00@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Apr 2015 11:42:08 +0200
+Subject: [Buildroot] [PATCH 4/8 v4] support/download: add possibility to
+ not fail on missing hash
+In-Reply-To: <552C54AC.9050905@mind.be>
+References: <cover.1428512075.git.yann.morin.1998@free.fr>
+ <1f4a021bb2826f296ae7b2876f8ae8ab57cde349.1428512075.git.yann.morin.1998@free.fr>
+ <552C54AC.9050905@mind.be>
+Message-ID: <20150419094208.GF4313@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7553eac7a8a289964f2307f905a3c5d3990c872b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Arnout, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                              |    1 +
- package/perl-digest-hmac/Config.in             |    6 ++++++
- package/perl-digest-hmac/perl-digest-hmac.hash |    3 +++
- package/perl-digest-hmac/perl-digest-hmac.mk   |   14 ++++++++++++++
- 4 files changed, 24 insertions(+), 0 deletions(-)
+On 2015-04-14 01:43 +0200, Arnout Vandecappelle spake thusly:
+> On 08/04/15 18:57, Yann E. MORIN wrote:
+> > In very constrained cases, it might be needed to not fail if a hash is
+> > missing. This is notably the case for custom external toolchains to be
+> > downloaded, because we do have a .hash file for external toolchains,
+> > but we oviously can not have hashes for all existing cutom toolchains
+>          obviously                                     custom
+> 
+> > (he, "custom"!).
+> 
+>  So what is it going to be cutom or custom? :-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 34b6017..e8dd4cb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -504,6 +504,7 @@ if BR2_PACKAGE_PERL
- menu "Perl libraries/modules"
- 	source "package/perl-datetime-tiny/Config.in"
- 	source "package/perl-file-util/Config.in"
-+	source "package/perl-digest-hmac/Config.in"
- 	source "package/perl-gd/Config.in"
- 	source "package/perl-gdgraph/Config.in"
- 	source "package/perl-gdtextutil/Config.in"
-diff --git a/package/perl-digest-hmac/Config.in b/package/perl-digest-hmac/Config.in
-new file mode 100644
-index 0000000..733a53d
---- /dev/null
-+++ b/package/perl-digest-hmac/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_DIGEST_HMAC
-+	bool "perl-digest-hmac"
-+	help
-+	  Digest::HMAC - Keyed-Hashing for Message Authentication
-+
-+	  https://github.com/gisle/digest-hmac
-diff --git a/package/perl-digest-hmac/perl-digest-hmac.hash b/package/perl-digest-hmac/perl-digest-hmac.hash
-new file mode 100644
-index 0000000..018e4eb
---- /dev/null
-+++ b/package/perl-digest-hmac/perl-digest-hmac.hash
-@@ -0,0 +1,3 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    e6a5d6f552da16eacb5157ea4369ff9d Digest-HMAC-1.03.tar.gz
-+sha256 3bc72c6d3ff144d73aefb90e9a78d33612d58cf1cd1631ecfb8985ba96da4a59 Digest-HMAC-1.03.tar.gz
-diff --git a/package/perl-digest-hmac/perl-digest-hmac.mk b/package/perl-digest-hmac/perl-digest-hmac.mk
-new file mode 100644
-index 0000000..97ec43e
---- /dev/null
-+++ b/package/perl-digest-hmac/perl-digest-hmac.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# perl-digest-hmac
-+#
-+################################################################################
-+
-+PERL_DIGEST_HMAC_VERSION = 1.03
-+PERL_DIGEST_HMAC_SOURCE = Digest-HMAC-$(PERL_DIGEST_HMAC_VERSION).tar.gz
-+PERL_DIGEST_HMAC_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_DIGEST_HMAC_DEPENDENCIES = perl
-+PERL_DIGEST_HMAC_LICENSE = Artistic or GPLv1+
-+PERL_DIGEST_HMAC_LICENSE_FILES = README
-+
-+$(eval $(perl-package))
+I pondered using 'coton', but that had no meaning. So I've decided for
+'custom' instead. ;-)
+
+All typoes fixed. Well, at least the ones you pointed out! ;-)
+
+[--SNIP--]
+> > diff --git a/support/download/check-hash b/support/download/check-hash
+> > index d37f1cd..ca81f00 100755
+> > --- a/support/download/check-hash
+> > +++ b/support/download/check-hash
+> > @@ -99,6 +99,11 @@ while read t h f; do
+> >  done <"${h_file}"
+> >  
+> >  if [ ${nb_checks} -eq 0 ]; then
+> > +    for f in ${BR_NO_CHECK_HASH_FOR}; do
+> > +        if [ "${f}" = "${base}" ]; then
+> > +            exit 0
+> > +        fi
+> > +    done
+> 
+>  I can't stop myself from micro-optimising :-)
+> 
+> if [ ${nb_checks} -eq 0 ]; then
+> 	case " ${BR_NO_CHECK_HASH_FOR} " in
+> 	"* ${base} *")
+> 		exit 0
+> 		;;
+> 	esac
+> 	printf "ERROR: No hash found for %s\n" "${base}" >&2
+> 	exit 0
+> fi
+> 
+> But maybe that's not really more readable...
+
+Yeah, I can read that no problem. I don't care which to use, so I'll
+switch over to using case.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
