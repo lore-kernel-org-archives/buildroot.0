@@ -1,30 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 19:14:01 +0200
-Subject: [Buildroot] [PATCH 08/10] package/sysvinit: add hash
-In-Reply-To: <1429463643-27125-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429463643-27125-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429463643-27125-8-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Apr 2015 19:10:32 +0200
+Subject: [Buildroot] [git commit] python-sip: fix installation of sip.h
+	header
+Message-ID: <20150419171955.09BD6807AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=32574fe118377511c51bfea20a7bf3e2a9c0bfb2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+With the current python-sip package, the sip.h header is installed in
+$(STAGING_DIR)/usr/include/python3.4/, while Python headers are
+expected to be installed in $(STAGING_DIR)/usr/include/python3.4m/
+(notice the 'm' at the end).
+
+Since with this, the directory name for the headers and libraries is
+not the same, this patch introduces separate PYTHON_SIP_LIB_DIR and
+PYTHON_SIP_INCLUDE_DIR variables, and use them for the --destdir and
+--incdir options.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sysvinit/sysvinit.hash |    3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 package/sysvinit/sysvinit.hash
+ package/python-sip/python-sip.mk |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/sysvinit/sysvinit.hash b/package/sysvinit/sysvinit.hash
-new file mode 100644
-index 0000000..268b984
---- /dev/null
-+++ b/package/sysvinit/sysvinit.hash
-@@ -0,0 +1,3 @@
-+# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/sysvinit/sysvinit_2.88dsf-13.1%2Bsqueeze1.dsc
-+sha256	b016f937958d2809a020d407e1287bdc09abf1d44efaa96530e2ea57f544f4e8	sysvinit_2.88dsf.orig.tar.gz
-+sha256	26b456a31036b1e1c2486c22ca2b7fde6d723b7c63669604eacc61cfb6609ef8	sysvinit_2.88dsf-13.1+squeeze1.diff.gz
--- 
-1.7.10.4
+diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
+index 59cd1fc..4651186 100644
+--- a/package/python-sip/python-sip.mk
++++ b/package/python-sip/python-sip.mk
+@@ -15,11 +15,13 @@ PYTHON_SIP_DEPENDENCIES = qt
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ PYTHON_SIP_DEPENDENCIES += python
+ HOST_PYTHON_SIP_DEPENDENCIES += host-python
+-PYTHON_SIP_PYTHON_DIR = python$(PYTHON_VERSION_MAJOR)
++PYTHON_SIP_LIB_DIR = usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++PYTHON_SIP_INCLUDE_DIR = usr/include/python$(PYTHON_VERSION_MAJOR)
+ else ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ PYTHON_SIP_DEPENDENCIES += python3
+ HOST_PYTHON_SIP_DEPENDENCIES += host-python3
+-PYTHON_SIP_PYTHON_DIR = python$(PYTHON3_VERSION_MAJOR)
++PYTHON_SIP_LIB_DIR = usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
++PYTHON_SIP_INCLUDE_DIR = usr/include/python$(PYTHON3_VERSION_MAJOR)m
+ endif
+ 
+ define HOST_PYTHON_SIP_CONFIGURE_CMDS
+@@ -39,8 +41,8 @@ define PYTHON_SIP_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python configure.py \
+ 			--bindir $(TARGET_DIR)/usr/bin \
+-			--destdir $(TARGET_DIR)/usr/lib/$(PYTHON_SIP_PYTHON_DIR)/site-packages \
+-			--incdir $(STAGING_DIR)/usr/include/$(PYTHON_SIP_PYTHON_DIR)  \
++			--destdir $(TARGET_DIR)/$(PYTHON_SIP_LIB_DIR) \
++			--incdir $(STAGING_DIR)/$(PYTHON_SIP_INCLUDE_DIR)  \
+ 			--sipdir $(TARGET_DIR)/usr/share/sip \
+ 			--sysroot $(STAGING_DIR)/usr \
+ 			--use-qmake && \
