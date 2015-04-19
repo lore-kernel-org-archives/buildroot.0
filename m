@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 23:26:00 +0200
-Subject: [Buildroot] [PATCH 01/10] package/libev: bump version to 4.19
-In-Reply-To: <1429465993-30357-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429465993-30357-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150419232600.76a9a356@free-electrons.com>
+Date: Sun, 19 Apr 2015 23:23:40 +0200
+Subject: [Buildroot] [PATCH 01/10] package/memstat: bump version to 1.0,
+ add hash
+In-Reply-To: <1429463643-27125-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429463643-27125-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150419232340.6fbe63d4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +13,16 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sun, 19 Apr 2015 19:53:04 +0200, Bernd Kuhls wrote:
+On Sun, 19 Apr 2015 19:13:54 +0200, Bernd Kuhls wrote:
+> Change upstream URL to sourceforge and add it to Config.in
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libev/libev.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/memstat/Config.in    |    2 ++
+>  package/memstat/memstat.hash |    2 ++
+>  package/memstat/memstat.mk   |    4 ++--
+>  3 files changed, 6 insertions(+), 2 deletions(-)
+>  create mode 100644 package/memstat/memstat.hash
 
 Series applied, thanks.
 
