@@ -1,75 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Apr 2015 18:28:39 +0200
-Subject: [Buildroot] [PATCH v4 1/1] Added linux drivers backports project
-In-Reply-To: <5533D5CF.5000305@mind.be>
-References: <1429311670-7831-1-git-send-email-petr.vorel@gmail.com>
- <20150419110326.31c34542@free-electrons.com>
- <5533D5CF.5000305@mind.be>
-Message-ID: <20150419162839.GI4313@free.fr>
+From: Robert P. J. Day <rpjday@crashcourse.ca>
+Date: Sun, 19 Apr 2015 12:32:04 -0400 (EDT)
+Subject: [Buildroot] auto.conf versus autoconf.h versus .config
+Message-ID: <alpine.LFD.2.11.1504191223050.3495@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
 
-On 2015-04-19 18:20 +0200, Arnout Vandecappelle spake thusly:
-> On 19/04/15 11:03, Thomas Petazzoni wrote:
-> > Dear Petr Vorel,
-> > 
-> > On Sat, 18 Apr 2015 01:01:10 +0200, Petr Vorel wrote:
-> >> https://backports.wiki.kernel.org
-> >>
-> >> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> > 
-> > I wanted to apply your patch, and did a couple of updates to it (see
-> > below). However, there's a more fundamental problem to this package: it
-> > expects the linux package to be extracted/configured *before* the
-> > configuration of linux-backports. Unfortunately, this is not the case:
-> > 'linux' is only in LINUX_BACKPORTS_DEPENDENCIES, so it's only
-> > guaranteed to be here when linux-backports gets configured, not before.
-> 
-> 
->  Perhaps that's a problem in the kconfig infrastructure. The configure step
-> depends on the DEPENDENCIES, and I'd consider the *config targets conceptually
-> part of the configure step. Currently, *config only depends on the patch step
-> (through $(2)_KCONFIG_FILE), perhaps we should add the depends step to that.
+  just want to clarify the generated config artifacts and their
+ordering if i may ... i'm looking at the output objects under
+output/build/buildroot-config, especially these:
 
-Well, I would not be very happy with that, since that would make the
-following use-case a real pain:
+* auto.conf
+* autoconf.h
 
-    $ make foo_defconfig
-    $ make linux-menuconfig
+and if memory serves, auto.conf represents the *set* config variables
+that result from my configuration (which, for my BBB, is 187 lines
+long), while the top-level .config file represents exactly the same
+information, but padded out with many hundreds of lines of "is not
+set" lines, hence its much longer length of well over 2500 lines for
+me. do i understand that correctly?
 
-Currently, all it needs is the linux kernel to be extracted and patched,
-and none of its depedencies to be built. Otherwise, it would require the
-toolchain to be built, plus a sh.tload of other stuff (lzo, for one, and
-all its own dependencies).
+  finally, there's autoconf.h, which is just the transformed version
+of auto.conf suitable for inclusion in source and header files.
 
-That's what we had before the kconfig-package infra, and  that was such
-a pain...
+  do i have that about right? there are also the numerous header files
+and subdirs under .../br2 in that location, but in my case, every
+single *.h file in that br2/ directory is empty. what is the purpose
+of all those empty header files? just placeholders of some kind?
+(there are lots of subdirs there as well, but i'm just curious about
+the empty header files *immediately* under br2/ there.)
 
-However, I understand we have a hole for now, nad that we need to plug
-it. If that requires foo-*condif to be moved as part of the configure
-step, then so be it, but that would be really, really painfull.
+rday
 
-At the very worse, we could manually add the proper dependencies... But
-that would be ugly as well.
-
-Maybe we should have a clean way of doing it with a proper dependency
-handling (well, I'd rather avoid introducing yet another _DEPENDENCIES
-variable if at all possible, either).
-
-Not an easy problem... :-(
-
-Regards,
-Yann E. MORIN.
+p.s. if all this is explained somewhere, pointing me at it will be
+just ducky.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+========================================================================
+Robert P. J. Day                                 Ottawa, Ontario, CANADA
+                        http://crashcourse.ca
+
+Twitter:                                       http://twitter.com/rpjday
+LinkedIn:                               http://ca.linkedin.com/in/rpjday
+========================================================================
