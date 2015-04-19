@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 19 Apr 2015 09:51:34 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXtst: add hash
-Message-ID: <20150419075430.E68E881938@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xproto_glproto: add hash
+Message-ID: <20150419075431.0340E81938@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e0f695387da66b9882bdec938dccacedf3d61f75
+commit: http://git.buildroot.net/buildroot/commit/?id=a0478c51967cd1a51d3b9e769adbd1dfcd9470bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libXtst/xlib_libXtst.hash |    2 ++
+ package/x11r7/xproto_glproto/xproto_glproto.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.hash b/package/x11r7/xlib_libXtst/xlib_libXtst.hash
+diff --git a/package/x11r7/xproto_glproto/xproto_glproto.hash b/package/x11r7/xproto_glproto/xproto_glproto.hash
 new file mode 100644
-index 0000000..4224121
+index 0000000..fce6a22
 --- /dev/null
-+++ b/package/x11r7/xlib_libXtst/xlib_libXtst.hash
++++ b/package/x11r7/xproto_glproto/xproto_glproto.hash
 @@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2013-May/002237.html
-+sha256	ef0a7ffd577e5f1a25b1663b375679529663a1880151beaa73e9186c8309f6d9	libXtst-1.2.2.tar.bz2
++# Locally computed
++sha256	adaa94bded310a2bfcbb9deb4d751d965fcfe6fb3a2f6d242e2df2d6589dbe40	glproto-1.4.17.tar.bz2
