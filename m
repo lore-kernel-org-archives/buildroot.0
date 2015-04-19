@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 12:53:41 +0200
-Subject: [Buildroot] [PATCH 5/5] package/cloop: add hash
+Date: Sun, 19 Apr 2015 12:53:38 +0200
+Subject: [Buildroot] [PATCH 2/5] package/cdrkit: add hash
 In-Reply-To: <1429440821-2578-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429440821-2578-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429440821-2578-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429440821-2578-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/cloop/cloop.hash |    2 ++
+ package/cdrkit/cdrkit.hash |    2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/cloop/cloop.hash
+ create mode 100644 package/cdrkit/cdrkit.hash
 
-diff --git a/package/cloop/cloop.hash b/package/cloop/cloop.hash
+diff --git a/package/cdrkit/cdrkit.hash b/package/cdrkit/cdrkit.hash
 new file mode 100644
-index 0000000..9acbceb
+index 0000000..6ecb922
 --- /dev/null
-+++ b/package/cloop/cloop.hash
++++ b/package/cdrkit/cdrkit.hash
 @@ -0,0 +1,2 @@
-+# From http://debian-knoppix.alioth.debian.org/packages/sources/cloop/cloop_2.634-1.dsc
-+sha256	d6d03e2368e19f9c6c3a313e9c34cf0620d129ce26132a8805580d953769dbbd	cloop_2.634-1.tar.gz
++# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/cdrkit/cdrkit_1.1.11-3.dsc
++sha256	d1c030756ecc182defee9fe885638c1785d35a2c2a297b4604c0e0dcc78e47da	cdrkit_1.1.11.orig.tar.gz
 -- 
 1.7.10.4
