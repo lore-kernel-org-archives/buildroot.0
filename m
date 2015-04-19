@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 12:16:57 +0200
-Subject: [Buildroot] [PATCH v2 02/25] package/perl-html-parser: New package
+Date: Sun, 19 Apr 2015 12:17:02 +0200
+Subject: [Buildroot] [PATCH v2 07/25] package/perl-http-date: New package
 In-Reply-To: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429438640-9367-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429438640-9367-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,68 +13,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                              |    1 +
- package/perl-html-parser/Config.in             |    8 ++++++++
- package/perl-html-parser/perl-html-parser.hash |    3 +++
- package/perl-html-parser/perl-html-parser.mk   |   14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/perl-html-parser/Config.in
- create mode 100644 package/perl-html-parser/perl-html-parser.hash
- create mode 100644 package/perl-html-parser/perl-html-parser.mk
+ package/Config.in                          |    1 +
+ package/perl-http-date/Config.in           |    7 +++++++
+ package/perl-http-date/perl-http-date.hash |    3 +++
+ package/perl-http-date/perl-http-date.mk   |   14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/perl-http-date/Config.in
+ create mode 100644 package/perl-http-date/perl-http-date.hash
+ create mode 100644 package/perl-http-date/perl-http-date.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index bb354ff..386b2e8 100644
+index e04f804..10c5974 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -508,6 +508,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-gd/Config.in"
- 	source "package/perl-gdgraph/Config.in"
+@@ -511,6 +511,7 @@ menu "Perl libraries/modules"
  	source "package/perl-gdtextutil/Config.in"
-+	source "package/perl-html-parser/Config.in"
+ 	source "package/perl-html-parser/Config.in"
  	source "package/perl-html-tagset/Config.in"
++	source "package/perl-http-date/Config.in"
  	source "package/perl-io-socket-ssl/Config.in"
  	source "package/perl-json-tiny/Config.in"
-diff --git a/package/perl-html-parser/Config.in b/package/perl-html-parser/Config.in
+ 	source "package/perl-mojolicious/Config.in"
+diff --git a/package/perl-http-date/Config.in b/package/perl-http-date/Config.in
 new file mode 100644
-index 0000000..afdd523
+index 0000000..c45335f
 --- /dev/null
-+++ b/package/perl-html-parser/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PERL_HTML_PARSER
-+	bool "perl-html-parser"
-+	select BR2_PACKAGE_PERL_HTML_TAGSET
++++ b/package/perl-http-date/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_HTTP_DATE
++	bool "perl-http-date"
 +	help
-+	  The HTML-Parser distribution is is a collection of modules that parse
-+	  and extract information from HTML documents
++	  This module provides functions that deal the date formats used by the
++	  HTTP protocol (and then some more)
 +
-+	  http://github.com/gisle/html-parser
-diff --git a/package/perl-html-parser/perl-html-parser.hash b/package/perl-html-parser/perl-html-parser.hash
++	  https://github.com/gisle/http-date
+diff --git a/package/perl-http-date/perl-http-date.hash b/package/perl-http-date/perl-http-date.hash
 new file mode 100644
-index 0000000..eed22b7
+index 0000000..db85cd0
 --- /dev/null
-+++ b/package/perl-html-parser/perl-html-parser.hash
++++ b/package/perl-http-date/perl-http-date.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    9128a45893097dfa3bf03301b19c5efe HTML-Parser-3.71.tar.gz
-+sha256 be918b3749d3ff93627f72ee4b825683332ecb4c81c67a3a8d72b0435ffbd802 HTML-Parser-3.71.tar.gz
-diff --git a/package/perl-html-parser/perl-html-parser.mk b/package/perl-html-parser/perl-html-parser.mk
++md5    52b7a0d5982d61be1edb217751d7daba HTTP-Date-6.02.tar.gz
++sha256 e8b9941da0f9f0c9c01068401a5e81341f0e3707d1c754f8e11f42a7e629e333 HTTP-Date-6.02.tar.gz
+diff --git a/package/perl-http-date/perl-http-date.mk b/package/perl-http-date/perl-http-date.mk
 new file mode 100644
-index 0000000..ecdd7fd
+index 0000000..6de95b6
 --- /dev/null
-+++ b/package/perl-html-parser/perl-html-parser.mk
++++ b/package/perl-http-date/perl-http-date.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-html-parser
++# perl-http-date
 +#
 +################################################################################
 +
-+PERL_HTML_PARSER_VERSION = 3.71
-+PERL_HTML_PARSER_SOURCE = HTML-Parser-$(PERL_HTML_PARSER_VERSION).tar.gz
-+PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_HTML_PARSER_DEPENDENCIES = perl perl-html-tagset
-+PERL_HTML_PARSER_LICENSE = Artistic or GPLv1+
-+PERL_HTML_PARSER_LICENSE_FILES = README
++PERL_HTTP_DATE_VERSION = 6.02
++PERL_HTTP_DATE_SOURCE = HTTP-Date-$(PERL_HTTP_DATE_VERSION).tar.gz
++PERL_HTTP_DATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_HTTP_DATE_DEPENDENCIES = perl
++PERL_HTTP_DATE_LICENSE = Artistic or GPLv1+
++PERL_HTTP_DATE_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
