@@ -1,65 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 14:40:22 +0200
-Subject: [Buildroot] [git commit] cairo: add host variant
-Message-ID: <20150419124107.78F9D7FD0D@busybox.osuosl.org>
+Date: Sun, 19 Apr 2015 14:40:05 +0200
+Subject: [Buildroot] [git commit] toolchain-external: install libatomic
+Message-ID: <20150419124107.64378819CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f463cbfcde69d0c43025fd6fbd7ab64455db5c7
+commit: http://git.buildroot.net/buildroot/commit/?id=d0b812533c99638b8dd57902395856cf074b7fea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Required for host-pango, which in turn is required for host-librsvg and
-at last midori.
+It's required in some 32-bit architectures for the extended (64-bit)
+atomic operations, like __sync_add_and_fetch_8.
+These arches are at least: i386, mips & mipsel.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cairo/cairo.mk |   28 ++++++++++++++++++++++++++++
- 1 files changed, 28 insertions(+), 0 deletions(-)
+ toolchain/toolchain-external/toolchain-external.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 2c55338..098f249 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -74,6 +74,33 @@ CAIRO_CONF_OPTS = \
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index c0429bb..2427463 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -64,7 +64,7 @@
+ #  of Buildroot is handled identical for the 2 toolchain types.
  
- CAIRO_DEPENDENCIES = host-pkgconf fontconfig pixman
- 
-+# Just the bare minimum to make other host-* packages happy
-+HOST_CAIRO_CONF_OPTS = \
-+	--enable-trace=no \
-+	--enable-interpreter=no \
-+	--disable-directfb \
-+	--enable-ft \
-+	--disable-gobject \
-+	--disable-glesv2 \
-+	--disable-vg \
-+	--disable-xlib \
-+	--disable-xcb \
-+	--without-x \
-+	--disable-xlib-xrender \
-+	--disable-ps \
-+	--disable-pdf \
-+	--enable-png \
-+	--disable-script \
-+	--disable-svg \
-+	--disable-tee \
-+	--disable-xml
-+HOST_CAIRO_DEPENDENCIES = \
-+	host-freetype \
-+	host-fontconfig \
-+	host-libpng \
-+	host-pixman \
-+	host-pkgconf
-+
- # DirectFB svg support rely on Cairo and Cairo DirectFB support depends on
- # DirectFB. Break circular dependency by disabling DirectFB support in Cairo
- # (which is experimental)
-@@ -172,3 +199,4 @@ CAIRO_CONF_OPTS += --disable-xml
- endif
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+-LIB_EXTERNAL_LIBS += libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
++LIB_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_ARM_EABIHF),yy)
+ LIB_EXTERNAL_LIBS += ld-linux-armhf.so.*
+ else
