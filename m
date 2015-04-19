@@ -1,49 +1,79 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 12:16:55 +0200
-Subject: [Buildroot] [PATCH v2 00/25] Some new Perl modules
-Message-ID: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 19 Apr 2015 12:17:00 +0200
+Subject: [Buildroot] [PATCH v2 05/25] package/perl-time-hires: New package
+In-Reply-To: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429438640-9367-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this patch series adds some modules to buildroot needed by Spamassassin. The
-Spamassassin package itself is not yet finished yet, but these modules can be
-used by other packages as well so I split them from my tree.
 
-v2:
-- added some more dependencies found by scancpan script
-- removed all host-perl-package entries (Thomas)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/Config.in                            |    1 +
+ package/perl-time-hires/Config.in            |    6 ++++++
+ package/perl-time-hires/perl-time-hires.hash |    3 +++
+ package/perl-time-hires/perl-time-hires.mk   |   14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/perl-time-hires/Config.in
+ create mode 100644 package/perl-time-hires/perl-time-hires.hash
+ create mode 100644 package/perl-time-hires/perl-time-hires.mk
 
-Regards, Bernd
-
-Bernd Kuhls (25):
-  package/perl-html-tagset: New package
-  package/perl-html-parser: New package
-  package/perl-netaddr-ip: New package
-  package/perl-net-dns: New package
-  package/perl-time-hires: New package
-  package/perl-encode-locale: new package
-  package/perl-http-date: New package
-  package/perl-file-listing: New package
-  package/perl-io-html: New package
-  package/perl-uri: New package
-  package/perl-lwp-mediatypes: New package
-  package/perl-http-message: New package
-  package/perl-http-cookies: New package
-  package/perl-http-daemon: New package
-  package/perl-http-negotiate: New package
-  package/perl-net-http: New package
-  package/perl-www-robotrules: New package
-  package/perl-libwww: New package
-  package/perl-mime-base64: New package
-  package/perl-digest-sha1: new package
-  package/perl-timedate: new package
-  package/perl-crypt-openssl-random: new package
-  package/perl-crypt-openssl-rsa: new package
-  package/perl-mailtools: new package
-  package/perl-mail-dkim: new package
-
+diff --git a/package/Config.in b/package/Config.in
+index d6ef132..f26305e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -517,6 +517,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-net-ssleay/Config.in"
+ 	source "package/perl-netaddr-ip/Config.in"
+ 	source "package/perl-path-tiny/Config.in"
++	source "package/perl-time-hires/Config.in"
+ 	source "package/perl-try-tiny/Config.in"
+ 	source "package/perl-xml-libxml/Config.in"
+ 	source "package/perl-xml-namespacesupport/Config.in"
+diff --git a/package/perl-time-hires/Config.in b/package/perl-time-hires/Config.in
+new file mode 100644
+index 0000000..e10c18a
+--- /dev/null
++++ b/package/perl-time-hires/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_TIME_HIRES
++	bool "perl-time-hires"
++	help
++	  High resolution alarm, sleep, gettimeofday, interval timers
++
++	  http://search.cpan.org/dist/Time-HiRes/HiRes.pm
+diff --git a/package/perl-time-hires/perl-time-hires.hash b/package/perl-time-hires/perl-time-hires.hash
+new file mode 100644
+index 0000000..1852340
+--- /dev/null
++++ b/package/perl-time-hires/perl-time-hires.hash
+@@ -0,0 +1,3 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    077e5d7eda1349f98c564026603f8a0a Time-HiRes-1.9726.tar.gz
++sha256 ff662ad9b1f6c75a149db7fa1bfc7a161ac8b271e5f3980345e08b734769109e Time-HiRes-1.9726.tar.gz
+diff --git a/package/perl-time-hires/perl-time-hires.mk b/package/perl-time-hires/perl-time-hires.mk
+new file mode 100644
+index 0000000..79207c9
+--- /dev/null
++++ b/package/perl-time-hires/perl-time-hires.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# perl-time-hires
++#
++################################################################################
++
++PERL_TIME_HIRES_VERSION = 1.9726
++PERL_TIME_HIRES_SOURCE = Time-HiRes-$(PERL_TIME_HIRES_VERSION).tar.gz
++PERL_TIME_HIRES_SITE = $(BR2_CPAN_MIRROR)/authors/id/Z/ZE/ZEFRAM
++PERL_TIME_HIRES_DEPENDENCIES = perl
++PERL_TIME_HIRES_LICENSE = Artistic or GPLv1+
++PERL_TIME_HIRES_LICENSE_FILES = README
++
++$(eval $(perl-package))
 -- 
 1.7.10.4
