@@ -1,40 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Apr 2015 06:48:26 -0300
-Subject: [Buildroot] [PATCH v3 11/11] libgail: mark as deprecated
-In-Reply-To: <1429436906-15222-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1429436906-15222-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1429436906-15222-12-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Apr 2015 11:57:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/Config.in: Sort perl-file-util
+	correctly
+Message-ID: <1429437426-6505-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark libgail as deprecated now that midori has been updated to use
-webkitgtk24 and the only package that uses it (webkit) has been
-deprecated.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libgail/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/Config.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libgail/Config.in b/package/libgail/Config.in
-index 3967083..a92a8eb 100644
---- a/package/libgail/Config.in
-+++ b/package/libgail/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBGAIL
- 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
- 	depends on BR2_ARCH_HAS_ATOMICS # pango -> cairo
- 	depends on BR2_PACKAGE_LIBGTK2
-+	depends on BR2_DEPRECATED_SINCE_2015_05
- 	select BR2_PACKAGE_PANGO
- 	help
- 	  GAIL provides accessibility support for gtk+ and
-@@ -27,3 +28,4 @@ comment "libgail needs a toolchain w/ C++, wchar, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_DEPRECATED_SINCE_2015_05
+diff --git a/package/Config.in b/package/Config.in
+index 33456e1..a3cd4c2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -503,8 +503,8 @@ endif
+ if BR2_PACKAGE_PERL
+ menu "Perl libraries/modules"
+ 	source "package/perl-datetime-tiny/Config.in"
+-	source "package/perl-file-util/Config.in"
+ 	source "package/perl-digest-hmac/Config.in"
++	source "package/perl-file-util/Config.in"
+ 	source "package/perl-gd/Config.in"
+ 	source "package/perl-gdgraph/Config.in"
+ 	source "package/perl-gdtextutil/Config.in"
 -- 
-2.0.5
+1.7.10.4
