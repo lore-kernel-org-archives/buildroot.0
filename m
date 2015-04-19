@@ -1,38 +1,28 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Apr 2015 06:48:21 -0300
-Subject: [Buildroot] [PATCH v3 06/11] librsvg: add host variant
+Date: Sun, 19 Apr 2015 06:48:22 -0300
+Subject: [Buildroot] [PATCH v3 07/11] librsvg: add hash file
 In-Reply-To: <1429436906-15222-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1429436906-15222-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1429436906-15222-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1429436906-15222-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Required by the midori build process (rsvg-convert).
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/librsvg/librsvg.mk | 2 ++
+ package/librsvg/librsvg.hash | 2 ++
  1 file changed, 2 insertions(+)
+ create mode 100644 package/librsvg/librsvg.hash
 
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index 674dca4..5c385dc 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -10,6 +10,7 @@ LIBRSVG_SITE = http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(LIBRSVG_VERSION_
- LIBRSVG_INSTALL_STAGING = YES
- LIBRSVG_CONF_OPTS = --disable-tools
- LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 gdk-pixbuf
-+HOST_LIBRSVG_DEPENDENCIES = host-libxml2 host-cairo host-pango host-libglib2 host-gdk-pixbuf
- LIBRSVG_LICENSE = LGPLv2+
- LIBRSVG_LICENSE_FILES = COPYING.LIB
- 
-@@ -20,3 +21,4 @@ LIBRSVG_DEPENDENCIES += libgtk2
- endif
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
+new file mode 100644
+index 0000000..7572d6c
+--- /dev/null
++++ b/package/librsvg/librsvg.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.26/librsvg-2.26.3.sha256sum
++sha256	3761e3d446a9c2f4ebe52431289e15976f1d447f64ed33bb7f35cb1c430eac49	librsvg-2.26.3.tar.gz
 -- 
 2.0.5
