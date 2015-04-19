@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 12:17:01 +0200
-Subject: [Buildroot] [PATCH v2 06/25] package/perl-encode-locale: new package
+Date: Sun, 19 Apr 2015 12:17:05 +0200
+Subject: [Buildroot] [PATCH v2 10/25] package/perl-uri: New package
 In-Reply-To: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429438640-9367-7-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429438640-9367-11-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,66 +13,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                                  |    1 +
- package/perl-encode-locale/Config.in               |    6 ++++++
- package/perl-encode-locale/perl-encode-locale.hash |    3 +++
- package/perl-encode-locale/perl-encode-locale.mk   |   14 ++++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/perl-encode-locale/Config.in
- create mode 100644 package/perl-encode-locale/perl-encode-locale.hash
- create mode 100644 package/perl-encode-locale/perl-encode-locale.mk
+ package/Config.in              |    1 +
+ package/perl-uri/Config.in     |    8 ++++++++
+ package/perl-uri/perl-uri.hash |    3 +++
+ package/perl-uri/perl-uri.mk   |   14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/perl-uri/Config.in
+ create mode 100644 package/perl-uri/perl-uri.hash
+ create mode 100644 package/perl-uri/perl-uri.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f26305e..e04f804 100644
+index 3c99f07..794aa7a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -504,6 +504,7 @@ if BR2_PACKAGE_PERL
- menu "Perl libraries/modules"
- 	source "package/perl-datetime-tiny/Config.in"
- 	source "package/perl-digest-hmac/Config.in"
-+	source "package/perl-encode-locale/Config.in"
- 	source "package/perl-file-util/Config.in"
- 	source "package/perl-gd/Config.in"
- 	source "package/perl-gdgraph/Config.in"
-diff --git a/package/perl-encode-locale/Config.in b/package/perl-encode-locale/Config.in
+@@ -523,6 +523,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-path-tiny/Config.in"
+ 	source "package/perl-time-hires/Config.in"
+ 	source "package/perl-try-tiny/Config.in"
++	source "package/perl-uri/Config.in"
+ 	source "package/perl-xml-libxml/Config.in"
+ 	source "package/perl-xml-namespacesupport/Config.in"
+ 	source "package/perl-xml-sax/Config.in"
+diff --git a/package/perl-uri/Config.in b/package/perl-uri/Config.in
 new file mode 100644
-index 0000000..d15aecb
+index 0000000..62a53f2
 --- /dev/null
-+++ b/package/perl-encode-locale/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_ENCODE_LOCALE
-+	bool "perl-encode-locale"
++++ b/package/perl-uri/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PERL_URI
++	bool "perl-uri"
 +	help
-+	  Determine the locale encoding
++	  The module implements the URI class. Objects of this class represent
++	  Uniform Resource Identifier references as specified in RFC 2396 and
++	  updated by RFC 2732.
 +
-+	  https://github.com/gisle/encode-locale
-diff --git a/package/perl-encode-locale/perl-encode-locale.hash b/package/perl-encode-locale/perl-encode-locale.hash
++	  https://github.com/libwww-perl/uri
+diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
 new file mode 100644
-index 0000000..d1abef5
+index 0000000..da33416
 --- /dev/null
-+++ b/package/perl-encode-locale/perl-encode-locale.hash
++++ b/package/perl-uri/perl-uri.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    0565984b048732e4fd1315212f21d462 Encode-Locale-1.04.tar.gz
-+sha256 33aca4aa35829bd5c8c5e64ebfde86d0a2e8cd59dac2c4de707ffe9dc10bfbd4 Encode-Locale-1.04.tar.gz
-diff --git a/package/perl-encode-locale/perl-encode-locale.mk b/package/perl-encode-locale/perl-encode-locale.mk
++md5    d0ef53b6c63bcc02ba55f405c30741e3 URI-1.67.tar.gz
++sha256 7088d43d5f4902becfa5e0627751f5e6d0e0bdd1637b2d39e70ce807068a274e URI-1.67.tar.gz
+diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
 new file mode 100644
-index 0000000..fd7148e
+index 0000000..421a89f
 --- /dev/null
-+++ b/package/perl-encode-locale/perl-encode-locale.mk
++++ b/package/perl-uri/perl-uri.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-encode-locale
++# perl-uri
 +#
 +################################################################################
 +
-+PERL_ENCODE_LOCALE_VERSION = 1.04
-+PERL_ENCODE_LOCALE_SOURCE = Encode-Locale-$(PERL_ENCODE_LOCALE_VERSION).tar.gz
-+PERL_ENCODE_LOCALE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_ENCODE_LOCALE_DEPENDENCIES = perl
-+PERL_ENCODE_LOCALE_LICENSE = Artistic or GPLv1+
-+PERL_ENCODE_LOCALE_LICENSE_FILES = README
++PERL_URI_VERSION = 1.67
++PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
++PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
++PERL_URI_DEPENDENCIES = perl
++PERL_URI_LICENSE = Artistic or GPLv1+
++PERL_URI_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
