@@ -1,50 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 13:54:13 +0200
-Subject: [Buildroot] [PATCH v2 00/25] Some new Perl modules
-In-Reply-To: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150419135413.1e68c525@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Apr 2015 14:01:30 +0200
+Subject: [Buildroot] [PATCH 2/5] package/dbus-python: remove whitespace
+In-Reply-To: <1429444893-13874-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429444893-13874-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429444893-13874-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
 
-On Sun, 19 Apr 2015 12:16:55 +0200, Bernd Kuhls wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/dbus-python/dbus-python.mk |    2 --
+ 1 file changed, 2 deletions(-)
 
-> Bernd Kuhls (25):
->   package/perl-html-tagset: New package
->   package/perl-html-parser: New package
->   package/perl-netaddr-ip: New package
->   package/perl-net-dns: New package
->   package/perl-time-hires: New package
->   package/perl-encode-locale: new package
->   package/perl-http-date: New package
->   package/perl-file-listing: New package
->   package/perl-io-html: New package
->   package/perl-uri: New package
->   package/perl-lwp-mediatypes: New package
->   package/perl-http-message: New package
->   package/perl-http-cookies: New package
->   package/perl-http-daemon: New package
->   package/perl-http-negotiate: New package
->   package/perl-net-http: New package
->   package/perl-www-robotrules: New package
->   package/perl-libwww: New package
->   package/perl-mime-base64: New package
->   package/perl-digest-sha1: new package
->   package/perl-timedate: new package
->   package/perl-crypt-openssl-random: new package
->   package/perl-crypt-openssl-rsa: new package
->   package/perl-mailtools: new package
->   package/perl-mail-dkim: new package
-
-Applied, thanks.
-
-Thomas
+diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
+index 1637406..9bda018 100644
+--- a/package/dbus-python/dbus-python.mk
++++ b/package/dbus-python/dbus-python.mk
+@@ -28,6 +28,4 @@ DBUS_PYTHON_CONF_ENV += \
+ 	PYTHON_LIBS="$(shell $(STAGING_DIR)/usr/bin/python3-config --ldflags)"
+ endif
+ 
+-
+-
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
