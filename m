@@ -1,84 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Apr 2015 18:44:50 +0200
-Subject: [Buildroot] auto.conf versus autoconf.h versus .config
-In-Reply-To: <alpine.LFD.2.11.1504191223050.3495@localhost>
-References: <alpine.LFD.2.11.1504191223050.3495@localhost>
-Message-ID: <20150419164450.GJ4313@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 19 Apr 2015 18:47:20 +0200
+Subject: [Buildroot] [PATCH 3/7 v5] package/uclibc: add missing hash for
+	eXtensa
+In-Reply-To: <5ebea83fd4fa6be72e9176af095aa19a4e8b8e06.1429447148.git.yann.morin.1998@free.fr>
+References: <cover.1429447148.git.yann.morin.1998@free.fr>
+ <5ebea83fd4fa6be72e9176af095aa19a4e8b8e06.1429447148.git.yann.morin.1998@free.fr>
+Message-ID: <5533DC18.7030907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Robert, All,
-
-On 2015-04-19 12:32 -0400, Robert P. J. Day spake thusly:
+On 19/04/15 14:44, Yann E. MORIN wrote:
+> This is a git snapshot, we can't have a hash for it.
 > 
->   just want to clarify the generated config artifacts and their
-> ordering if i may ... i'm looking at the output objects under
-> output/build/buildroot-config, especially these:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ My reviewed-by still stands, but you should probably also fix the hash for arc,
+which currently still points at 2014.08 while we use 2014.12 and it's from github
+
+none xxx uClibc-arc-2014.12.tar.gz
+
+
+ Regards,
+ Arnout
+
+> ---
+>  package/uclibc/uclibc.hash | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> * auto.conf
-> * autoconf.h
+> diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+> index 69cc103..971ab26 100644
+> --- a/package/uclibc/uclibc.hash
+> +++ b/package/uclibc/uclibc.hash
+> @@ -6,3 +6,6 @@ sha256	0a9085a11615296cfe7783f16ff29073393eb330749947adece0eeddb31705a4	uClibc-a
+>  
+>  # From http://www.uclibc-ng.org/trac/
+>  sha256  e561040293ba4f21dcf3285ca1f683b5a8493eb0ffd3b3e495122cfde5a64a0e        uClibc-ng-1.0.1.tar.xz
+> +
+> +# No hash for this git snapshot
+> +none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
 > 
-> and if memory serves, auto.conf represents the *set* config variables
-> that result from my configuration (which, for my BBB, is 187 lines
-> long), while the top-level .config file represents exactly the same
-> information, but padded out with many hundreds of lines of "is not
-> set" lines, hence its much longer length of well over 2500 lines for
-> me. do i understand that correctly?
-> 
->   finally, there's autoconf.h, which is just the transformed version
-> of auto.conf suitable for inclusion in source and header files.
-> 
->   do i have that about right? there are also the numerous header files
-> and subdirs under .../br2 in that location, but in my case, every
-> single *.h file in that br2/ directory is empty. what is the purpose
-> of all those empty header files? just placeholders of some kind?
-> (there are lots of subdirs there as well, but i'm just curious about
-> the empty header files *immediately* under br2/ there.)
 
-The .config file is the direct output of menuconfig (and other
-configurators). That's what we use to decide whether a package (or any
-other option) is enabled/disabled. That's also what the Kconfig parser
-uses as input and serves two purposes: 1) show you the currently
-selected/deselected options, 2) show which it does not know about (i.e.
-those that are marked (NEW), e.g. when you're using a .config from an
-old version and are updating).
-
-All the rest are atrifacts of 'make silentoldconfig' which we use to
-eventually enforce the Kconfig set of options into the .config (i.e.
-silentoldconfig, like oldconfig, is supposed to ask if there are
-options it does not know the status of, but only show those options, not
-the full set).
-
-silentoldconfig also generates that autoconf.h and that myriad of empty
-.h files. In buildroot, we do not use those, but since we're trying to
-be as close as upstream Kconfig (from the kernel), we get them too.
-
-For info: the kernel uses that myriad of empty .h files for its
-dependency tracking in Kbuild. They are never ever included in any .c
-file, but just in dependency rules in the Makefiles. Kconfig is smart
-enough to not touch such a file is the corresponding option was
-previously set, but removes thos no longer set, and touches those that
-are set but were previously not.
-
-TL;DR: do not care about anything in output/build/buildroot.config, it's
-just a side-effect of using a kconfig parser that is close to the one in
-the Linux kernel.
-
-> p.s. if all this is explained somewhere, pointing me at it will be
-> just ducky.
-
-Docuemntation/kbuild/ in your kernel tree. ;-)
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
