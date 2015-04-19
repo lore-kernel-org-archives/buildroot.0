@@ -1,45 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 19:03:21 +0200
-Subject: [Buildroot] [PATCH v4 1/1] Added linux drivers backports project
-In-Reply-To: <20150419162839.GI4313@free.fr>
-References: <1429311670-7831-1-git-send-email-petr.vorel@gmail.com>
- <20150419110326.31c34542@free-electrons.com>
- <5533D5CF.5000305@mind.be> <20150419162839.GI4313@free.fr>
-Message-ID: <20150419190321.19200e70@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Apr 2015 19:03:25 +0200
+Subject: [Buildroot] [PATCH 3/7 v5] package/uclibc: add missing hash for
+	eXtensa
+In-Reply-To: <5533DC18.7030907@mind.be>
+References: <cover.1429447148.git.yann.morin.1998@free.fr>
+ <5ebea83fd4fa6be72e9176af095aa19a4e8b8e06.1429447148.git.yann.morin.1998@free.fr>
+ <5533DC18.7030907@mind.be>
+Message-ID: <20150419170325.GK4313@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Arnout, All,
 
-On Sun, 19 Apr 2015 18:28:39 +0200, Yann E. MORIN wrote:
-
-> Well, I would not be very happy with that, since that would make the
-> following use-case a real pain:
+On 2015-04-19 18:47 +0200, Arnout Vandecappelle spake thusly:
+> On 19/04/15 14:44, Yann E. MORIN wrote:
+> > This is a git snapshot, we can't have a hash for it.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
->     $ make foo_defconfig
->     $ make linux-menuconfig
+>  My reviewed-by still stands, but you should probably also fix the hash for arc,
+> which currently still points at 2014.08 while we use 2014.12 and it's from github
 > 
-> Currently, all it needs is the linux kernel to be extracted and patched,
-> and none of its depedencies to be built. Otherwise, it would require the
-> toolchain to be built, plus a sh.tload of other stuff (lzo, for one, and
-> all its own dependencies).
+> none xxx uClibc-arc-2014.12.tar.gz
 
-We could remove the mandatory host-lzo dependency from the linux
-package, by adding an option for that. Remember the recent patches also
-adding host-xz to the dependencies of linux, which I rejected?
+Damn, I did not even check that the version was correct. Thanks for
+spotting! :-)
 
-This would leave host-kmod as the only dependency of the linux package
-I believe. But well host-kmod as AUTORECONF = YES, so it pulls a whole
-bunch of crap.
+Regards,
+Yann E. MORIN.
 
-I agree that being able to do "make <foo>-menuconfig" without waiting
-too long is really a great feature.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
