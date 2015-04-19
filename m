@@ -1,70 +1,74 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 17:22:55 +0200
-Subject: [Buildroot] [PATCH 2/2] package/dhcpcd: Fix ipv6-related build error
-In-Reply-To: <1429456975-17889-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429456975-17889-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429456975-17889-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 19 Apr 2015 17:22:54 +0200
+Subject: [Buildroot] [PATCH 1/2] package/dhcpcd: bump to version 6.8.1
+Message-ID: <1429456975-17889-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/5ff/5ffd15ab4b866e8c0187667ace305202514bdab9/
-http://autobuild.buildroot.net/results/a58/a583eea465a7bae8969665c76c695a6b394ce7fd/
-http://autobuild.buildroot.net/results/98b/98b5aa1a8fa664e8e977ccb8a49d9906d633c057/
-http://autobuild.buildroot.net/results/dc1/dc12251f206672840347c36f5347fcba86e2c874/
-http://autobuild.buildroot.net/results/0e1/0e15f71d6992b68df57baa69b034b4001aca7a21/
-http://autobuild.buildroot.net/results/e00/e0093101ae636a693744c040710e68a90d1e6aa1/
-and many others
+removed patch applied upstream
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dhcpcd/0001-gnu_source.patch |   35 ++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/dhcpcd/0001-gnu_source.patch
+ package/dhcpcd/0001-fix-linux-macro-name.patch |   25 ------------------------
+ package/dhcpcd/dhcpcd.hash                     |    2 +-
+ package/dhcpcd/dhcpcd.mk                       |    2 +-
+ 3 files changed, 2 insertions(+), 27 deletions(-)
+ delete mode 100644 package/dhcpcd/0001-fix-linux-macro-name.patch
 
-diff --git a/package/dhcpcd/0001-gnu_source.patch b/package/dhcpcd/0001-gnu_source.patch
-new file mode 100644
-index 0000000..2c6f4ee
---- /dev/null
-+++ b/package/dhcpcd/0001-gnu_source.patch
-@@ -0,0 +1,35 @@
-+Fix ipv6-related build error
-+
-+/home/br/br2/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -std=c99  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_BSD_SOURCE -D_XOPEN_SOURCE=700 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_DEFAULT_SOURCE -DINET -DINET6 -I./crypt -c dhcpcd.c -o dhcpcd.o
-+In file included from /home/br/br2/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include/sys/socket.h:40:0,
-+                 from dhcpcd.c:33:
-+ipv6.h:213:41: error: invalid application of 'sizeof' to incomplete type 'struct in6_pktinfo'
-+  unsigned char sndbuf[CMSG_SPACE(sizeof(struct in6_pktinfo))];
-+                                         ^
-+ipv6.h:197:38: error: invalid application of 'sizeof' to incomplete type 'struct in6_pktinfo'
-+ #define IP6BUFLEN (CMSG_SPACE(sizeof(struct in6_pktinfo)) + \
-+                                      ^
-+ipv6.h:216:23: note: in expansion of macro 'IP6BUFLEN'
-+  unsigned char rcvbuf[IP6BUFLEN];
-+                       ^
-+dhcpcd.c: In function 'write_pid':
-+dhcpcd.c:108:2: warning: implicit declaration of function 'dprintf' [-Wimplicit-function-declaration]
-+  return dprintf(fd, "%d\n", (int)pid);
-+  ^
-+make: *** [dhcpcd.o] Error 1
-+make: Leaving directory `/home/br/br2/output/build/dhcpcd-6.8.1'
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr dhcpcd-6.8.1.org/configure dhcpcd-6.8.1/configure
-+--- dhcpcd-6.8.1.org/configure	2015-03-27 12:17:28.000000000 +0100
-++++ dhcpcd-6.8.1/configure	2015-04-19 17:16:49.256616146 +0200
-+@@ -365,7 +365,7 @@
-+ 	echo "DHCPCD_SRCS+=	if-bsd.c" >>$CONFIG_MK
-+ 	;;
-+ linux*)
-+-	echo "CPPFLAGS+=	-D_BSD_SOURCE -D_XOPEN_SOURCE=700" >>$CONFIG_MK
-++	echo "CPPFLAGS+=	-D_GNU_SOURCE -D_XOPEN_SOURCE=700" >>$CONFIG_MK
-+ 	# Large File Support, should be fine for 32-bit systems.
-+ 	# But if this is the case, why is it not set by default?
-+ 	echo "CPPFLAGS+=	-D_FILE_OFFSET_BITS=64" >>$CONFIG_MK
+diff --git a/package/dhcpcd/0001-fix-linux-macro-name.patch b/package/dhcpcd/0001-fix-linux-macro-name.patch
+deleted file mode 100644
+index 18dbb10..0000000
+--- a/package/dhcpcd/0001-fix-linux-macro-name.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-Fix Linux define
+-
+-Fetched from upstream:
+-http://roy.marples.name/projects/dhcpcd/ci/2cabc3efee4c18ca?sbs=0
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-
+-Index: dhcpcd.h
+-==================================================================
+---- /dhcpcd.h
+-+++ /dhcpcd.h
+-@@ -58,11 +58,11 @@
+- 
+- struct interface {
+- 	struct dhcpcd_ctx *ctx;
+- 	TAILQ_ENTRY(interface) next;
+- 	char name[IF_NAMESIZE];
+--#ifdef __linux
+-+#ifdef __linux__
+- 	char alias[IF_NAMESIZE];
+- #endif
+- 	unsigned int index;
+- 	unsigned int flags;
+- 	sa_family_t family;
+-
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index b66244d..1b7543f 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated from download (no sig, hash)
+-sha256	cb65d3e783fa5484ed095bb940c3274a5a91d3ed4a9d9ae66a49d9637165bd98	dhcpcd-6.7.1.tar.bz2
++sha256	27b60cbf726a8319e6f1e7691132082c9cdac473317ea47cb093d0dd3d32af82	dhcpcd-6.8.1.tar.bz2
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 6f82090..694bb75 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DHCPCD_VERSION = 6.7.1
++DHCPCD_VERSION = 6.8.1
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
+ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
 -- 
 1.7.10.4
