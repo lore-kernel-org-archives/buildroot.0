@@ -1,80 +1,1076 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Apr 2015 09:39:58 -0300
-Subject: [Buildroot] [PATCH v2 07/11] docs/manual: remove references to IPv6
+Date: Sun, 19 Apr 2015 09:39:59 -0300
+Subject: [Buildroot] [PATCH v2 08/11] packages: remove non-IPv6 enabler
+	patches
 In-Reply-To: <1429447202-13722-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1429447202-13722-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1429447202-13722-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1429447202-13722-9-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's no longer an option so remove all references to it.
+These are no longer required so remove them.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- docs/manual/adding-packages-directory.txt | 11 +++--------
- docs/manual/configure.txt                 | 10 +++++-----
- 2 files changed, 8 insertions(+), 13 deletions(-)
+ package/avahi/0003-ipv6only.patch                  |  19 --
+ package/avahi/0005-optional-ipv6.patch             | 147 --------------
+ package/iproute2/0001-optional-ipv6.patch          |  89 ---------
+ package/iproute2/0002-vxlan-optional-ipv6.patch    |  83 --------
+ package/libeXosip2/0001-fix-non-ipv6-build.patch   |  22 ---
+ package/libglib2/0001-optional-ipv6.patch          | 195 ------------------
+ package/libnice/0001-build-IPV6_RECVERR.patch      |  20 --
+ .../libtirpc/0003-Make-IPv6-support-optional.patch |  26 ---
+ package/luasocket/0001-uClibc-IPv6.patch           | 217 ---------------------
+ package/perl/0001-uClibc-IPv6.patch                |  61 ------
+ package/rpcbind/0003-Make-IPv6-configurable.patch  |  42 ----
+ package/rpcbind/rpcbind.mk                         |   1 -
+ package/x11vnc/0001-ipv6.patch                     |  25 ---
+ 13 files changed, 947 deletions(-)
+ delete mode 100644 package/avahi/0003-ipv6only.patch
+ delete mode 100644 package/avahi/0005-optional-ipv6.patch
+ delete mode 100644 package/iproute2/0001-optional-ipv6.patch
+ delete mode 100644 package/iproute2/0002-vxlan-optional-ipv6.patch
+ delete mode 100644 package/libeXosip2/0001-fix-non-ipv6-build.patch
+ delete mode 100644 package/libglib2/0001-optional-ipv6.patch
+ delete mode 100644 package/libnice/0001-build-IPV6_RECVERR.patch
+ delete mode 100644 package/libtirpc/0003-Make-IPv6-support-optional.patch
+ delete mode 100644 package/luasocket/0001-uClibc-IPv6.patch
+ delete mode 100644 package/perl/0001-uClibc-IPv6.patch
+ delete mode 100644 package/rpcbind/0003-Make-IPv6-configurable.patch
+ delete mode 100644 package/x11vnc/0001-ipv6.patch
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index f536a0c..639003f 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -207,10 +207,9 @@ coding style].
- ==== Dependencies on target and toolchain options
- 
- Many packages depend on certain options of the toolchain: the choice of
--C library, C++ support, thread support, RPC support, IPv6 support,
--wchar support, or dynamic library support. Some packages can only be
--built on certain target architectures, or if an MMU is available in the
--processor.
-+C library, C++ support, thread support, RPC support, wchar support,
-+or dynamic library support. Some packages can only be built on certain
-+target architectures, or if an MMU is available in the processor.
- 
- These dependencies have to be expressed with the appropriate 'depends
- on' statements in the Config.in file. Additionally, for dependencies on
-@@ -301,10 +300,6 @@ use in the comment.
- ** Dependency symbol: +BR2_TOOLCHAIN_HAS_NATIVE_RPC+
- ** Comment string: +RPC+
- 
--* IPv6 support
--** Dependency symbol: +BR2_INET_IPV6+
--** Comment string: +IPv6+ (lowercase v)
+diff --git a/package/avahi/0003-ipv6only.patch b/package/avahi/0003-ipv6only.patch
+deleted file mode 100644
+index 8cc3cb9..0000000
+--- a/package/avahi/0003-ipv6only.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-diff -urpN avahi-0.6.22.orig/avahi-core/socket.c avahi-0.6.22/avahi-core/socket.c
+---- avahi-0.6.22.orig/avahi-core/socket.c	2007-12-16 22:03:08.000000000 +0100
+-+++ avahi-0.6.22/avahi-core/socket.c	2008-03-31 17:13:24.000000000 +0200
+-@@ -394,13 +394,13 @@ int avahi_open_socket_ipv6(int no_reuse)
+-         avahi_log_warn("IPV6_UNICAST_HOPS failed: %s", strerror(errno));
+-         goto fail;
+-     }
+--
+-+#ifdef IPV6_V6ONLY
+-     yes = 1;
+-     if (setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, &yes, sizeof(yes)) < 0) {
+-         avahi_log_warn("IPV6_V6ONLY failed: %s", strerror(errno));
+-         goto fail;
+-     }
+--
+-+#endif
+-     yes = 1;
+-     if (setsockopt(fd, IPPROTO_IPV6, IPV6_MULTICAST_LOOP, &yes, sizeof(yes)) < 0) {
+-         avahi_log_warn("IPV6_MULTICAST_LOOP failed: %s", strerror(errno));
+diff --git a/package/avahi/0005-optional-ipv6.patch b/package/avahi/0005-optional-ipv6.patch
+deleted file mode 100644
+index 5caf87c..0000000
+--- a/package/avahi/0005-optional-ipv6.patch
++++ /dev/null
+@@ -1,147 +0,0 @@
+-[PATCH] avahi-core: make ipv6 support optional on uclibc 0.9.31+
 -
- * wchar support
- ** Dependency symbol: +BR2_USE_WCHAR+
- ** Comment string: +wchar+
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index c06182b..dd34eef 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -109,8 +109,8 @@ most important ones allow to:
-  * Change the version of the GCC compiler, binutils and the C library.
+-uClibc 0.9.31+ doesn't define the IPV6_* defines when IPv6 support isn't
+-enabled, causing the avahi build to break. Detect this configuration, and
+-comment out IPv6 code if so.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- avahi-core/socket.c |   28 +++++++++++++++++++++++-----
+- 1 file changed, 23 insertions(+), 5 deletions(-)
+-
+-Index: avahi-0.6.23/avahi-core/socket.c
+-===================================================================
+---- avahi-0.6.23.orig/avahi-core/socket.c
+-+++ avahi-0.6.23/avahi-core/socket.c
+-@@ -47,6 +47,11 @@
+- #include <net/if_dl.h>
+- #endif
+- 
+-+#include <features.h>
+-+#if defined(__UCLIBC__) && !defined (__UCLIBC_HAS_IPV6__)
+-+#define NO_IPV6
+-+#endif
+-+
+- #include "dns.h"
+- #include "fdutil.h"
+- #include "socket.h"
+-@@ -75,6 +80,7 @@ static void mdns_mcast_group_ipv4(struct
+-     inet_pton(AF_INET, AVAHI_IPV4_MCAST_GROUP, &ret_sa->sin_addr);
+- }
+- 
+-+#ifndef NO_IPV6
+- static void mdns_mcast_group_ipv6(struct sockaddr_in6 *ret_sa) {
+-     assert(ret_sa);
+- 
+-@@ -83,6 +89,7 @@ static void mdns_mcast_group_ipv6(struct
+-     ret_sa->sin6_port = htons(AVAHI_MDNS_PORT);
+-     inet_pton(AF_INET6, AVAHI_IPV6_MCAST_GROUP, &ret_sa->sin6_addr);
+- }
+-+#endif
+- 
+- static void ipv4_address_to_sockaddr(struct sockaddr_in *ret_sa, const AvahiIPv4Address *a, uint16_t port) {
+-     assert(ret_sa);
+-@@ -95,6 +102,7 @@ static void ipv4_address_to_sockaddr(str
+-     memcpy(&ret_sa->sin_addr, a, sizeof(AvahiIPv4Address));
+- }
+- 
+-+#ifndef NO_IPV6
+- static void ipv6_address_to_sockaddr(struct sockaddr_in6 *ret_sa, const AvahiIPv6Address *a, uint16_t port) {
+-     assert(ret_sa);
+-     assert(a);
+-@@ -105,6 +113,7 @@ static void ipv6_address_to_sockaddr(str
+-     ret_sa->sin6_port = htons(port);
+-     memcpy(&ret_sa->sin6_addr, a, sizeof(AvahiIPv6Address));
+- }
+-+#endif
+- 
+- int avahi_mdns_mcast_join_ipv4(int fd, const AvahiIPv4Address *a, int idx, int join) {
+- #ifdef HAVE_STRUCT_IP_MREQN
+-@@ -143,6 +152,7 @@ int avahi_mdns_mcast_join_ipv4(int fd, c
+- }
+- 
+- int avahi_mdns_mcast_join_ipv6(int fd, const AvahiIPv6Address *a, int idx, int join) {
+-+#ifndef NO_IPV6
+-     struct ipv6_mreq mreq6;
+-     struct sockaddr_in6 sa6;
+- 
+-@@ -164,6 +174,9 @@ int avahi_mdns_mcast_join_ipv6(int fd, c
+-     }
+- 
+-     return 0;
+-+#else
+-+    return -1;
+-+#endif
+- }
+- 
+- static int reuseaddr(int fd) {
+-@@ -372,6 +385,7 @@ fail:
+- }
+- 
+- int avahi_open_socket_ipv6(int no_reuse) {
+-+#ifndef NO_IPV6
+-     struct sockaddr_in6 sa, local;
+-     int fd = -1, yes, r;
+-     int ttl;
+-@@ -437,7 +451,7 @@ int avahi_open_socket_ipv6(int no_reuse)
+- fail:
+-     if (fd >= 0)
+-         close(fd);
+--
+-+#endif
+-     return -1;
+- }
+- 
+-@@ -567,7 +581,7 @@ int avahi_send_dns_packet_ipv6(
+-         const AvahiIPv6Address *src_address,
+-         const AvahiIPv6Address *dst_address,
+-         uint16_t dst_port) {
+--
+-+#ifndef NO_IPV6
+-     struct sockaddr_in6 sa;
+-     struct msghdr msg;
+-     struct iovec io;
+-@@ -620,6 +634,9 @@ int avahi_send_dns_packet_ipv6(
+-     }
+- 
+-     return sendmsg_loop(fd, &msg, 0);
+-+#else
+-+    return -1;
+-+#endif
+- }
+- 
+- AvahiDnsPacket *avahi_recv_dns_packet_ipv4(
+-@@ -782,7 +799,7 @@ AvahiDnsPacket *avahi_recv_dns_packet_ip
+-         AvahiIPv6Address *ret_dst_address,
+-         AvahiIfIndex *ret_iface,
+-         uint8_t *ret_ttl) {
+--
+-+#ifndef NO_IPV6
+-     AvahiDnsPacket *p = NULL;
+-     struct msghdr msg;
+-     struct iovec io;
+-@@ -889,7 +906,7 @@ AvahiDnsPacket *avahi_recv_dns_packet_ip
+- fail:
+-     if (p)
+-         avahi_dns_packet_free(p);
+--
+-+#endif
+-     return NULL;
+- }
+- 
+-@@ -934,6 +951,7 @@ fail:
+- }
+- 
+- int avahi_open_unicast_socket_ipv6(void) {
+-+#ifndef NO_IPV6
+-     struct sockaddr_in6 local;
+-     int fd = -1, yes;
+- 
+-@@ -974,6 +992,6 @@ int avahi_open_unicast_socket_ipv6(void)
+- fail:
+-     if (fd >= 0)
+-         close(fd);
+--
+-+#endif
+-     return -1;
+- }
+diff --git a/package/iproute2/0001-optional-ipv6.patch b/package/iproute2/0001-optional-ipv6.patch
+deleted file mode 100644
+index c51f695..0000000
+--- a/package/iproute2/0001-optional-ipv6.patch
++++ /dev/null
+@@ -1,89 +0,0 @@
+-[PATCH] fix build on uClibc without IPv6 support
+-
+-Disable IPv6 support code when building with uClibc configured without IPv6
+-support.
+-
+-[Gustavo: update for iproute2 3.10.0]
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura iproute2-3.10.0.orig/ip/ip6tunnel.c iproute2-3.10.0/ip/ip6tunnel.c
+---- iproute2-3.10.0.orig/ip/ip6tunnel.c	2013-08-14 09:17:56.538089916 -0300
+-+++ iproute2-3.10.0/ip/ip6tunnel.c	2013-08-14 09:18:02.952298534 -0300
+-@@ -20,6 +20,10 @@
+-  *	Masahide NAKAMURA @USAGI
+-  */
+-
+-+#include <features.h>
+-+#if defined(__UCLIBC__) && !defined (__UCLIBC_HAS_IPV6__)
+-+#else
+-+
+- #include <stdio.h>
+- #include <string.h>
+- #include <stdlib.h>
+-@@ -425,3 +429,5 @@
+- 	fprintf(stderr, "Command \"%s\" is unknown, try \"ip -f inet6 tunnel help\".\n", *argv);
+- 	exit(-1);
+- }
+-+
+-+#endif /* no ipv6 */
+-diff -Nura iproute2-3.10.0.orig/ip/ipprefix.c iproute2-3.10.0/ip/ipprefix.c
+---- iproute2-3.10.0.orig/ip/ipprefix.c	2013-08-14 09:17:56.539089949 -0300
+-+++ iproute2-3.10.0/ip/ipprefix.c	2013-08-14 09:19:29.065099291 -0300
+-@@ -23,11 +23,18 @@
+-  *	Masahide NAKAMURA @USAGI
+-  */
+-
+-+#include <features.h>
+-+#if defined(__UCLIBC__) && !defined (__UCLIBC_HAS_IPV6__)
+-+#define NO_IPV6
+-+#endif
+-+
+- #include <stdio.h>
+- #include <stdlib.h>
+- #include <string.h>
+- #include <sys/socket.h>
+-+#ifndef NO_IPV6
+- #include <netinet/icmp6.h>
+-+#endif
+-
+- #include "utils.h"
+- #include "ip_common.h"
+-@@ -65,10 +72,12 @@
+- 		fprintf(stderr, "incorrect protocol family: %d\n", prefix->prefix_family);
+- 		return 0;
+- 	}
+-+#ifdef ND_OPT_PREFIX_INFORMATION
+- 	if (prefix->prefix_type != ND_OPT_PREFIX_INFORMATION) {
+- 		fprintf(stderr, "wrong ND type %d\n", prefix->prefix_type);
+- 		return 0;
+- 	}
+-+#endif
+-
+- 	parse_rtattr(tb, RTA_MAX, RTM_RTA(prefix), len);
+-
+-diff -Nura iproute2-3.10.0.orig/ip/iptunnel.c iproute2-3.10.0/ip/iptunnel.c
+---- iproute2-3.10.0.orig/ip/iptunnel.c	2013-08-14 09:17:56.538089916 -0300
+-+++ iproute2-3.10.0/ip/iptunnel.c	2013-08-14 09:18:02.953298566 -0300
+-@@ -9,6 +9,10 @@
+-  * Authors:	Alexey Kuznetsov, <kuznet@ms2.inr.ac.ru>
+-  *
+-  */
+-+#include <features.h>
+-+#if defined(__UCLIBC__) && !defined (__UCLIBC_HAS_IPV6__)
+-+#define NO_IPV6
+-+#endif
+-
+- #include <stdio.h>
+- #include <stdlib.h>
+-@@ -634,8 +638,10 @@
+- 	 * protocol-independent because of unarranged structure between
+- 	 * IPv4 and IPv6.
+- 	 */
+-+#ifndef NO_IPV6
+- 	case AF_INET6:
+- 		return do_ip6tunnel(argc, argv);
+-+#endif
+- 	default:
+- 		fprintf(stderr, "Unsupported protocol family: %d\n", preferred_family);
+- 		exit(-1);
+diff --git a/package/iproute2/0002-vxlan-optional-ipv6.patch b/package/iproute2/0002-vxlan-optional-ipv6.patch
+deleted file mode 100644
+index 80ea97c..0000000
+--- a/package/iproute2/0002-vxlan-optional-ipv6.patch
++++ /dev/null
+@@ -1,83 +0,0 @@
+-Disable IPv6 support code in vxlan when building with uClibc configured without
+-IPv6 support.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura iproute2-3.14.0/ip/iplink_vxlan.c iproute2-3.14.0-noipv6/ip/iplink_vxlan.c
+---- iproute2-3.14.0/ip/iplink_vxlan.c	2014-04-11 21:48:41.000000000 -0300
+-+++ iproute2-3.14.0-noipv6/ip/iplink_vxlan.c	2014-04-14 08:36:22.638235721 -0300
+-@@ -9,6 +9,11 @@
+-  * Authors:     Stephen Hemminger <shemminger@vyatta.com
+-  */
+- 
+-+#include <features.h>
+-+#if defined(__UCLIBC__) && !defined (__UCLIBC_HAS_IPV6__)
+-+#define NO_IPV6
+-+#endif
+-+
+- #include <stdio.h>
+- #include <stdlib.h>
+- #include <string.h>
+-@@ -188,12 +193,14 @@
+- 		return -1;
+- 	}
+- 
+-+#ifndef NO_IPV6
+- 	if ((gaddr && daddr) ||
+- 		(memcmp(&gaddr6, &in6addr_any, sizeof(gaddr6)) &&
+- 		 memcmp(&daddr6, &in6addr_any, sizeof(daddr6)))) {
+- 		fprintf(stderr, "vxlan: both group and remote cannot be specified\n");
+- 		return -1;
+- 	}
+-+#endif
+- 
+- 	if (!dst_port_set) {
+- 		fprintf(stderr, "vxlan: destination port not specified\n"
+-@@ -208,15 +215,19 @@
+- 		addattr_l(n, 1024, IFLA_VXLAN_GROUP, &gaddr, 4);
+- 	else if (daddr)
+- 		addattr_l(n, 1024, IFLA_VXLAN_GROUP, &daddr, 4);
+-+#ifndef NO_IPV6
+- 	if (memcmp(&gaddr6, &in6addr_any, sizeof(gaddr6)) != 0)
+- 		addattr_l(n, 1024, IFLA_VXLAN_GROUP6, &gaddr6, sizeof(struct in6_addr));
+- 	else if (memcmp(&daddr6, &in6addr_any, sizeof(daddr6)) != 0)
+- 		addattr_l(n, 1024, IFLA_VXLAN_GROUP6, &daddr6, sizeof(struct in6_addr));
+-+#endif
+- 
+- 	if (saddr)
+- 		addattr_l(n, 1024, IFLA_VXLAN_LOCAL, &saddr, 4);
+-+#ifndef NO_IPV6
+- 	else if (memcmp(&saddr6, &in6addr_any, sizeof(saddr6)) != 0)
+- 		addattr_l(n, 1024, IFLA_VXLAN_LOCAL6, &saddr6, sizeof(struct in6_addr));
+-+#endif
+- 
+- 	if (link)
+- 		addattr32(n, 1024, IFLA_VXLAN_LINK, link);
+-@@ -275,6 +286,7 @@
+- 	} else if (tb[IFLA_VXLAN_GROUP6]) {
+- 		struct in6_addr addr;
+- 		memcpy(&addr, RTA_DATA(tb[IFLA_VXLAN_GROUP6]), sizeof(struct in6_addr));
+-+#ifndef NO_IPV6
+- 		if (memcmp(&addr, &in6addr_any, sizeof(addr)) != 0) {
+- 			if (IN6_IS_ADDR_MULTICAST(&addr))
+- 				fprintf(f, "group %s ",
+-@@ -283,6 +295,7 @@
+- 				fprintf(f, "remote %s ",
+- 					format_host(AF_INET6, sizeof(struct in6_addr), &addr, s1, sizeof(s1)));
+- 		}
+-+#endif
+- 	}
+- 
+- 	if (tb[IFLA_VXLAN_LOCAL]) {
+-@@ -293,9 +306,11 @@
+- 	} else if (tb[IFLA_VXLAN_LOCAL6]) {
+- 		struct in6_addr addr;
+- 		memcpy(&addr, RTA_DATA(tb[IFLA_VXLAN_LOCAL6]), sizeof(struct in6_addr));
+-+#ifndef NO_IPV6
+- 		if (memcmp(&addr, &in6addr_any, sizeof(addr)) != 0)
+- 			fprintf(f, "local %s ",
+- 				format_host(AF_INET6, sizeof(struct in6_addr), &addr, s1, sizeof(s1)));
+-+#endif
+- 	}
+- 
+- 	if (tb[IFLA_VXLAN_LINK] &&
+diff --git a/package/libeXosip2/0001-fix-non-ipv6-build.patch b/package/libeXosip2/0001-fix-non-ipv6-build.patch
+deleted file mode 100644
+index bec833f..0000000
+--- a/package/libeXosip2/0001-fix-non-ipv6-build.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-[PATCH] Fix build on systems without IPV6_TCLASS support
+-
+-The wrong variable name was used.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- src/eXtl_udp.c |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: libeXosip2-3.6.0/src/eXtl_udp.c
+-===================================================================
+---- libeXosip2-3.6.0.orig/src/eXtl_udp.c
+-+++ libeXosip2-3.6.0/src/eXtl_udp.c
+-@@ -178,7 +178,7 @@
+- 		res = setsockopt(udp_socket, IPPROTO_IPV6, IPV6_TCLASS,
+- 			(SOCKET_OPTION_VALUE)&tos, sizeof(tos));
+- #else
+--		retval = setsockopt(udp_socket, IPPROTO_IPV6, IP_TOS,
+-+		res = setsockopt(udp_socket, IPPROTO_IPV6, IP_TOS,
+- 			(SOCKET_OPTION_VALUE)&tos, sizeof(tos));
+- #endif
+- 	}
+diff --git a/package/libglib2/0001-optional-ipv6.patch b/package/libglib2/0001-optional-ipv6.patch
+deleted file mode 100644
+index cbab1f1..0000000
+--- a/package/libglib2/0001-optional-ipv6.patch
++++ /dev/null
+@@ -1,195 +0,0 @@
+-[PATCH]: fix build on uClibc without IPv6 support
+-
+-Updated to glib 2.36 by Thomas Petazzoni.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- gio/ginetaddress.c |    9 +++++++++
+- 1 file changed, 9 insertions(+)
+-
+-Index: b/gio/ginetaddress.c
+-===================================================================
+---- a/gio/ginetaddress.c
+-+++ b/gio/ginetaddress.c
+-@@ -21,6 +21,7 @@
+-  *          Samuel Cormier-Iijima <sciyoshi@gmail.com>
+-  */
+- 
+-+#include <features.h>
+- #include <config.h>
+- 
+- #include <string.h>
+-@@ -423,7 +424,11 @@
+-   return NULL;
+- }
+- 
+-+#if defined(__UCLIBC__) && !defined(__UCLIBC_HAS_IPV6__)
+-+#define G_INET_ADDRESS_FAMILY_IS_VALID(family) ((family) == AF_INET)
+-+#else
+- #define G_INET_ADDRESS_FAMILY_IS_VALID(family) ((family) == AF_INET || (family) == AF_INET6)
+-+#endif
+- 
+- /**
+-  * g_inet_address_new_from_bytes:
+-@@ -472,8 +477,10 @@
+- 
+-       return g_inet_address_new_from_bytes (addr, family);
+-     }
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_IPV6__))
+-   else
+-     return g_inet_address_new_from_bytes (in6addr_loopback.s6_addr, family);
+-+#endif
+- }
+- 
+- /**
+-@@ -499,8 +506,10 @@
+- 
+-       return g_inet_address_new_from_bytes (addr, family);
+-     }
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_IPV6__))
+-   else
+-     return g_inet_address_new_from_bytes (in6addr_any.s6_addr, family);
+-+#endif
+- }
+- 
+- 
+-Index: b/gio/gsocket.c
+-===================================================================
+---- a/gio/gsocket.c
+-+++ b/gio/gsocket.c
+-@@ -425,7 +425,9 @@
+-   switch (family)
+-     {
+-      case G_SOCKET_FAMILY_IPV4:
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_IPV6__))
+-      case G_SOCKET_FAMILY_IPV6:
+-+#endif
+-        socket->priv->family = address.ss_family;
+-        switch (socket->priv->type)
+- 	 {
+-@@ -1321,11 +1323,13 @@
+-       g_socket_get_option (socket, IPPROTO_IP, IP_TTL,
+- 			   &value, &error);
+-     }
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_IPV6__))
+-   else if (socket->priv->family == G_SOCKET_FAMILY_IPV6)
+-     {
+-       g_socket_get_option (socket, IPPROTO_IPV6, IPV6_UNICAST_HOPS,
+- 			   &value, &error);
+-     }
+-+#endif
+-   else
+-     g_return_val_if_reached (0);
+- 
+-@@ -1362,6 +1366,7 @@
+-       g_socket_set_option (socket, IPPROTO_IP, IP_TTL,
+- 			   ttl, &error);
+-     }
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_IPV6__))
+-   else if (socket->priv->family == G_SOCKET_FAMILY_IPV6)
+-     {
+-       g_socket_set_option (socket, IPPROTO_IP, IP_TTL,
+-@@ -1369,6 +1374,7 @@
+-       g_socket_set_option (socket, IPPROTO_IPV6, IPV6_UNICAST_HOPS,
+- 			   ttl, &error);
+-     }
+-+#endif
+-   else
+-     g_return_if_reached ();
+- 
+-@@ -1470,11 +1476,13 @@
+-       g_socket_get_option (socket, IPPROTO_IP, IP_MULTICAST_LOOP,
+- 			   &value, &error);
+-     }
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_IPV6__))
+-   else if (socket->priv->family == G_SOCKET_FAMILY_IPV6)
+-     {
+-       g_socket_get_option (socket, IPPROTO_IPV6, IPV6_MULTICAST_LOOP,
+- 			   &value, &error);
+-     }
+-+#endif
+-   else
+-     g_return_val_if_reached (FALSE);
+- 
+-@@ -1515,6 +1523,7 @@
+-       g_socket_set_option (socket, IPPROTO_IP, IP_MULTICAST_LOOP,
+- 			   loopback, &error);
+-     }
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_IPV6__))
+-   else if (socket->priv->family == G_SOCKET_FAMILY_IPV6)
+-     {
+-       g_socket_set_option (socket, IPPROTO_IP, IP_MULTICAST_LOOP,
+-@@ -1522,6 +1531,7 @@
+-       g_socket_set_option (socket, IPPROTO_IPV6, IPV6_MULTICAST_LOOP,
+- 			   loopback, &error);
+-     }
+-+#endif
+-   else
+-     g_return_if_reached ();
+- 
+-@@ -1559,11 +1569,13 @@
+-       g_socket_get_option (socket, IPPROTO_IP, IP_MULTICAST_TTL,
+- 			   &value, &error);
+-     }
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_IPV6__))
+-   else if (socket->priv->family == G_SOCKET_FAMILY_IPV6)
+-     {
+-       g_socket_get_option (socket, IPPROTO_IPV6, IPV6_MULTICAST_HOPS,
+- 			   &value, &error);
+-     }
+-+#endif
+-   else
+-     g_return_val_if_reached (FALSE);
+- 
+-@@ -1601,6 +1613,7 @@
+-       g_socket_set_option (socket, IPPROTO_IP, IP_MULTICAST_TTL,
+- 			   ttl, &error);
+-     }
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_IPV6__))
+-   else if (socket->priv->family == G_SOCKET_FAMILY_IPV6)
+-     {
+-       g_socket_set_option (socket, IPPROTO_IP, IP_MULTICAST_TTL,
+-@@ -1608,6 +1621,7 @@
+-       g_socket_set_option (socket, IPPROTO_IPV6, IPV6_MULTICAST_HOPS,
+- 			   ttl, &error);
+-     }
+-+#endif
+-   else
+-     g_return_if_reached ();
+- 
+-@@ -1965,6 +1979,7 @@
+-       result = setsockopt (socket->priv->fd, IPPROTO_IP, optname,
+- 			   &mc_req, sizeof (mc_req));
+-     }
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_IPV6__))
+-   else if (g_inet_address_get_family (group) == G_SOCKET_FAMILY_IPV6)
+-     {
+-       struct ipv6_mreq mc_req_ipv6;
+-@@ -1982,6 +1997,7 @@
+-       result = setsockopt (socket->priv->fd, IPPROTO_IPV6, optname,
+- 			   &mc_req_ipv6, sizeof (mc_req_ipv6));
+-     }
+-+#endif
+-   else
+-     g_return_val_if_reached (FALSE);
+- 
+-@@ -2089,8 +2105,8 @@
+-     case G_SOCKET_FAMILY_IPV4:
+-       return TRUE;
+- 
+--    case G_SOCKET_FAMILY_IPV6:
+- #if defined (IPPROTO_IPV6) && defined (IPV6_V6ONLY)
+-+    case G_SOCKET_FAMILY_IPV6:
+-       {
+-         gint v6_only;
+- 
+-@@ -2101,8 +2117,6 @@
+- 
+-         return !v6_only;
+-       }
+--#else
+--      return FALSE;
+- #endif
+- 
+-     default:
+diff --git a/package/libnice/0001-build-IPV6_RECVERR.patch b/package/libnice/0001-build-IPV6_RECVERR.patch
+deleted file mode 100644
+index af55bb9..0000000
+--- a/package/libnice/0001-build-IPV6_RECVERR.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-Make libnice build in non-IPv6 configurations
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/stun/usages/bind.c
+-===================================================================
+---- a/stun/usages/bind.c
+-+++ b/stun/usages/bind.c
+-@@ -260,9 +260,11 @@
+-       case AF_INET:
+-         setsockopt (fd, SOL_IP, IP_RECVERR, &yes, sizeof (yes));
+-         break;
+-+#ifdef IPV6_RECVERR
+-       case AF_INET6:
+-         setsockopt (fd, SOL_IPV6, IPV6_RECVERR, &yes, sizeof (yes));
+-         break;
+-+#endif
+-       default:
+-         /* Nothing to do. */
+-         break;
+diff --git a/package/libtirpc/0003-Make-IPv6-support-optional.patch b/package/libtirpc/0003-Make-IPv6-support-optional.patch
+deleted file mode 100644
+index ad8ce65..0000000
+--- a/package/libtirpc/0003-Make-IPv6-support-optional.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From fbe5fccf0e3bdaae3defc66a288176797fd12a17 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sun, 24 Jun 2012 21:40:21 +0200
+-Subject: [PATCH] Make IPv6 support optional
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- src/Makefile.am | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/Makefile.am b/src/Makefile.am
+-index b5db263..f086255 100644
+---- a/src/Makefile.am
+-+++ b/src/Makefile.am
+-@@ -7,7 +7,7 @@
+- 
+- noinst_HEADERS = rpc_com.h
+- 
+--AM_CPPFLAGS = -I$(top_srcdir)/tirpc -DPORTMAP -DINET6 \
+-+AM_CPPFLAGS = -I$(top_srcdir)/tirpc -DPORTMAP \
+- 		-D_GNU_SOURCE -Wall -pipe  
+- 
+- lib_LTLIBRARIES = libtirpc.la
+--- 
+-2.0.0
+-
+diff --git a/package/luasocket/0001-uClibc-IPv6.patch b/package/luasocket/0001-uClibc-IPv6.patch
+deleted file mode 100644
+index ae70b4d..0000000
+--- a/package/luasocket/0001-uClibc-IPv6.patch
++++ /dev/null
+@@ -1,217 +0,0 @@
+-fix build with uClibc without IPv6 support
+-
+-see Pull Request: https://github.com/diegonehab/luasocket/pull/90
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-
+-Index: b/luasocket-3.0-rc1/src/options.c
+-===================================================================
+---- a/luasocket-3.0-rc1/src/options.c
+-+++ b/luasocket-3.0-rc1/src/options.c
+-@@ -110,6 +110,7 @@
+-     return opt_setboolean(L, ps, SOL_SOCKET, SO_BROADCAST);
+- }
+- 
+-+#ifdef IPV6_UNICAST_HOPS
+- int opt_set_ip6_unicast_hops(lua_State *L, p_socket ps)
+- {
+-   return opt_setint(L, ps, IPPROTO_IPV6, IPV6_UNICAST_HOPS);
+-@@ -119,7 +120,9 @@
+- {
+-   return opt_getint(L, ps, IPPROTO_IPV6, IPV6_UNICAST_HOPS);
+- }
+-+#endif
+- 
+-+#ifdef IPV6_MULTICAST_HOPS
+- int opt_set_ip6_multicast_hops(lua_State *L, p_socket ps)
+- {
+-   return opt_setint(L, ps, IPPROTO_IPV6, IPV6_MULTICAST_HOPS);
+-@@ -129,6 +132,7 @@
+- {
+-   return opt_getint(L, ps, IPPROTO_IPV6, IPV6_MULTICAST_HOPS);
+- }
+-+#endif
+- 
+- int opt_set_ip_multicast_loop(lua_State *L, p_socket ps)
+- {
+-@@ -140,6 +144,7 @@
+-     return opt_getboolean(L, ps, IPPROTO_IP, IP_MULTICAST_LOOP);
+- }
+- 
+-+#ifdef IPV6_MULTICAST_LOOP
+- int opt_set_ip6_multicast_loop(lua_State *L, p_socket ps)
+- {
+-     return opt_setboolean(L, ps, IPPROTO_IPV6, IPV6_MULTICAST_LOOP);
+-@@ -149,6 +154,7 @@
+- {
+-     return opt_getboolean(L, ps, IPPROTO_IPV6, IPV6_MULTICAST_LOOP);
+- }
+-+#endif
+- 
+- int opt_set_linger(lua_State *L, p_socket ps)
+- {
+-@@ -221,16 +227,21 @@
+-     return opt_setmembership(L, ps, IPPROTO_IP, IP_DROP_MEMBERSHIP);
+- }
+- 
+-+#ifdef IPV6_ADD_MEMBERSHIP
+- int opt_set_ip6_add_membership(lua_State *L, p_socket ps)
+- {
+-     return opt_ip6_setmembership(L, ps, IPPROTO_IPV6, IPV6_ADD_MEMBERSHIP);
+- }
+-+#endif
+- 
+-+#ifdef IPV6_DROP_MEMBERSHIP
+- int opt_set_ip6_drop_membersip(lua_State *L, p_socket ps)
+- {
+-     return opt_ip6_setmembership(L, ps, IPPROTO_IPV6, IPV6_DROP_MEMBERSHIP);
+- }
+-+#endif
+- 
+-+#ifdef IPV6_V6ONLY
+- int opt_get_ip6_v6only(lua_State *L, p_socket ps)
+- {
+-     return opt_getboolean(L, ps, IPPROTO_IPV6, IPV6_V6ONLY);
+-@@ -240,6 +251,7 @@
+- {
+-     return opt_setboolean(L, ps, IPPROTO_IPV6, IPV6_V6ONLY);
+- }
+-+#endif
+- 
+- /*=========================================================================*\
+- * Auxiliar functions
+-Index: b/luasocket-3.0-rc1/src/options.h
+-===================================================================
+---- a/luasocket-3.0-rc1/src/options.h
+-+++ b/luasocket-3.0-rc1/src/options.h
+-@@ -32,12 +32,24 @@
+- int opt_set_ip_multicast_loop(lua_State *L, p_socket ps);
+- int opt_set_ip_add_membership(lua_State *L, p_socket ps);
+- int opt_set_ip_drop_membersip(lua_State *L, p_socket ps);
+-+#ifdef IPV6_UNICAST_HOPS
+- int opt_set_ip6_unicast_hops(lua_State *L, p_socket ps);
+-+#endif
+-+#ifdef IPV6_MULTICAST_HOPS
+- int opt_set_ip6_multicast_hops(lua_State *L, p_socket ps);
+-+#endif
+-+#ifdef IPV6_MULTICAST_LOOP
+- int opt_set_ip6_multicast_loop(lua_State *L, p_socket ps);
+-+#endif
+-+#ifdef IPV6_ADD_MEMBERSHIP
+- int opt_set_ip6_add_membership(lua_State *L, p_socket ps);
+-+#endif
+-+#ifdef IPV6_DROP_MEMBERSHIP
+- int opt_set_ip6_drop_membersip(lua_State *L, p_socket ps);
+-+#endif
+-+#ifdef IPV6_V6ONLY
+- int opt_set_ip6_v6only(lua_State *L, p_socket ps);
+-+#endif
+- 
+- /* supported options for getoption */
+- int opt_get_reuseaddr(lua_State *L, p_socket ps);
+-@@ -48,10 +60,18 @@
+- int opt_get_ip_multicast_loop(lua_State *L, p_socket ps);
+- int opt_get_ip_multicast_if(lua_State *L, p_socket ps);
+- int opt_get_error(lua_State *L, p_socket ps);
+-+#ifdef IPV6_MULTICAST_LOOP
+- int opt_get_ip6_multicast_loop(lua_State *L, p_socket ps);
+-+#endif
+-+#ifdef IPV6_MULTICAST_HOPS
+- int opt_get_ip6_multicast_hops(lua_State *L, p_socket ps);
+-+#endif
+-+#ifdef IPV6_UNICAST_HOPS
+- int opt_get_ip6_unicast_hops(lua_State *L, p_socket ps);
+-+#endif
+-+#ifdef IPV6_V6ONLY
+- int opt_get_ip6_v6only(lua_State *L, p_socket ps); 
+-+#endif
+- 
+- /* invokes the appropriate option handler */
+- int opt_meth_setoption(lua_State *L, p_opt opt, p_socket ps);
+-Index: b/luasocket-3.0-rc1/src/tcp.c
+-===================================================================
+---- a/luasocket-3.0-rc1/src/tcp.c
+-+++ b/luasocket-3.0-rc1/src/tcp.c
+-@@ -81,7 +81,9 @@
+-     {"keepalive",   opt_set_keepalive},
+-     {"reuseaddr",   opt_set_reuseaddr},
+-     {"tcp-nodelay", opt_set_tcp_nodelay},
+-+#ifdef IPV6_V6ONLY
+-     {"ipv6-v6only", opt_set_ip6_v6only},
+-+#endif
+-     {"linger",      opt_set_linger},
+-     {NULL,          NULL}
+- };
+-@@ -366,11 +368,13 @@
+-         auxiliar_setclass(L, "tcp{master}", -1);
+-         /* initialize remaining structure fields */
+-         socket_setnonblocking(&sock);
+-+#ifdef IPV6_V6ONLY
+-         if (family == PF_INET6) {
+-             int yes = 1;
+-             setsockopt(sock, IPPROTO_IPV6, IPV6_V6ONLY,
+-                 (void *)&yes, sizeof(yes));
+-         }
+-+#endif
+-         tcp->sock = sock;
+-         io_init(&tcp->io, (p_send) socket_send, (p_recv) socket_recv,
+-                 (p_error) socket_ioerror, &tcp->sock);
+-Index: b/luasocket-3.0-rc1/src/udp.c
+-===================================================================
+---- a/luasocket-3.0-rc1/src/udp.c
+-+++ b/luasocket-3.0-rc1/src/udp.c
+-@@ -78,12 +78,22 @@
+-     {"ip-multicast-loop",    opt_set_ip_multicast_loop},
+-     {"ip-add-membership",    opt_set_ip_add_membership},
+-     {"ip-drop-membership",   opt_set_ip_drop_membersip},
+-+#ifdef IPV6_UNICAST_HOPS
+-     {"ipv6-unicast-hops",    opt_set_ip6_unicast_hops},
+-     {"ipv6-multicast-hops",  opt_set_ip6_unicast_hops},
+-+#endif
+-+#ifdef IPV6_MULTICAST_LOOP
+-     {"ipv6-multicast-loop",  opt_set_ip6_multicast_loop},
+-+#endif
+-+#ifdef IPV6_ADD_MEMBERSHIP
+-     {"ipv6-add-membership",  opt_set_ip6_add_membership},
+-+#endif
+-+#ifdef IPV6_DROP_MEMBERSHIP
+-     {"ipv6-drop-membership", opt_set_ip6_drop_membersip},
+-+#endif
+-+#ifdef IPV6_V6ONLY
+-     {"ipv6-v6only",          opt_set_ip6_v6only},
+-+#endif
+-     {NULL,                   NULL}
+- };
+- 
+-@@ -92,10 +102,16 @@
+-     {"ip-multicast-if",      opt_get_ip_multicast_if},
+-     {"ip-multicast-loop",    opt_get_ip_multicast_loop},
+-     {"error",                opt_get_error},
+-+#ifdef IPV6_UNICAST_HOPS
+-     {"ipv6-unicast-hops",    opt_get_ip6_unicast_hops},
+-     {"ipv6-multicast-hops",  opt_get_ip6_unicast_hops},
+-+#endif
+-+#ifdef IPV6_MULTICAST_LOOP
+-     {"ipv6-multicast-loop",  opt_get_ip6_multicast_loop},
+-+#endif
+-+#ifdef IPV6_V6ONLY
+-     {"ipv6-v6only",          opt_get_ip6_v6only},
+-+#endif
+-     {NULL,                   NULL}
+- };
+- 
+-@@ -416,11 +432,13 @@
+-         auxiliar_setclass(L, "udp{unconnected}", -1);
+-         /* initialize remaining structure fields */
+-         socket_setnonblocking(&sock);
+-+#ifdef IPV6_V6ONLY
+-         if (family == PF_INET6) {
+-             int yes = 1;
+-             setsockopt(sock, IPPROTO_IPV6, IPV6_V6ONLY,
+-                 (void *)&yes, sizeof(yes));
+-         }
+-+#endif
+-         udp->sock = sock;
+-         timeout_init(&udp->tm, -1, -1);
+-         udp->family = family;
+-
+diff --git a/package/perl/0001-uClibc-IPv6.patch b/package/perl/0001-uClibc-IPv6.patch
+deleted file mode 100644
+index b29d373..0000000
+--- a/package/perl/0001-uClibc-IPv6.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-fix on uClibc without IPv6 support
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-
+-Index: b/cpan/Socket/Socket.xs
+-===================================================================
+---- a/cpan/Socket/Socket.xs
+-+++ b/cpan/Socket/Socket.xs
+-@@ -920,7 +920,7 @@
+- 	CODE:
+- #ifdef HAS_INETNTOP
+- 	STRLEN addrlen;
+--#ifdef AF_INET6
+-+#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
+- 	struct in6_addr addr;
+- 	char str[INET6_ADDRSTRLEN];
+- #else
+-@@ -940,7 +940,7 @@
+- 		croak("Bad address length for Socket::inet_ntop on AF_INET;"
+- 		      " got %"UVuf", should be 4", (UV)addrlen);
+- 	    break;
+--#ifdef AF_INET6
+-+#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
+- 	  case AF_INET6:
+- 	    if(addrlen != 16)
+- 		croak("Bad address length for Socket::inet_ntop on AF_INET6;"
+-@@ -949,7 +949,7 @@
+- #endif
+- 	  default:
+- 		croak("Bad address family for %s, got %d, should be"
+--#ifdef AF_INET6
+-+#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
+- 		      " either AF_INET or AF_INET6",
+- #else
+- 		      " AF_INET",
+-@@ -979,7 +979,7 @@
+- #ifdef HAS_INETPTON
+- 	int ok;
+- 	int addrlen = 0;
+--#ifdef AF_INET6
+-+#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
+- 	struct in6_addr ip_address;
+- #else
+- 	struct in_addr ip_address;
+-@@ -989,14 +989,14 @@
+- 	  case AF_INET:
+- 	    addrlen = 4;
+- 	    break;
+--#ifdef AF_INET6
+-+#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
+- 	  case AF_INET6:
+- 	    addrlen = 16;
+- 	    break;
+- #endif
+- 	  default:
+- 		croak("Bad address family for %s, got %d, should be"
+--#ifdef AF_INET6
+-+#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
+- 		      " either AF_INET or AF_INET6",
+- #else
+- 		      " AF_INET",
+diff --git a/package/rpcbind/0003-Make-IPv6-configurable.patch b/package/rpcbind/0003-Make-IPv6-configurable.patch
+deleted file mode 100644
+index 0bb311c..0000000
+--- a/package/rpcbind/0003-Make-IPv6-configurable.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 5a1826d116ae986cb464d3503e0ae9ceaba3a687 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sat, 10 Nov 2012 22:24:56 +0100
+-Subject: [PATCH] Make IPv6 configurable
+-
+-Add an autoconf check that verifies whether IPv6 is available or not,
+-and define the INET6 macro if available, instead of hardcoding it in
+-src/Makefile.am.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- Makefile.am  | 1 -
+- configure.in | 3 +++
+- 2 files changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index d10c906..c983a3e 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -3,7 +3,6 @@ AM_CPPFLAGS = \
+- 	-DPORTMAP \
+- 	-DFACILITY=LOG_MAIL \
+- 	-DSEVERITY=LOG_INFO \
+--	-DINET6 \
+- 	-DRPCBIND_STATEDIR="\"$(statedir)\"" \
+- 	-DRPCBIND_USER="\"$(rpcuser)\"" \
+- 	-D_GNU_SOURCE \
+-diff --git a/configure.ac b/configure.ac
+-index 2b67720..f144c8e 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -36,4 +36,7 @@ AS_IF([test x$enable_libwrap = xyes], [
+- 
+- AC_SEARCH_LIBS([pthread_create], [pthread])
+- 
+-+AC_CHECK_HEADER(netinet/ip6.h,
+-+        AC_DEFINE(INET6, 1, [Define to 1 if IPv6 is available]))
+-+
+- AC_OUTPUT([Makefile])
+--- 
+-2.0.0
+-
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index 55de3fc..7bfb1e2 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -9,7 +9,6 @@ RPCBIND_SITE = http://downloads.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIN
+ RPCBIND_SOURCE = rpcbind-$(RPCBIND_VERSION).tar.bz2
+ RPCBIND_LICENSE = BSD-3c
+ RPCBIND_LICENSE_FILES = COPYING
+-RPCBIND_AUTORECONF = YES
  
-  * Select a number of toolchain options (uClibc only): whether the
--   toolchain should have IPv6 support, RPC support (used mainly for
--   NFS), wide-char support, locale support (for internationalization),
-+   toolchain should have RPC support (used mainly for NFS),
-+   wide-char support, locale support (for internationalization),
-    C++ support or thread support. Depending on which options you choose,
-    the number of userspace applications and libraries visible in
-    Buildroot menus will change: many applications and libraries require
-@@ -177,9 +177,9 @@ Then, you have three solutions to use an external toolchain:
-   external toolchain uses the 'glibc' library, you only have to tell
-   whether your toolchain supports C\++ or not and whether it has
-   built-in RPC support. If your external toolchain uses the 'uClibc'
--  library, then you have to tell Buildroot if it supports IPv6,
--  RPC, wide-char, locale, program invocation, threads and
--  C++. At the beginning of the execution, Buildroot will tell you if
-+  library, then you have to tell Buildroot if it supports RPC,
-+  wide-char, locale, program invocation, threads and C++.
-+  At the beginning of the execution, Buildroot will tell you if
-   the selected options do not match the toolchain configuration.
- 
- Our external toolchain support has been tested with toolchains from
+ RPCBIND_CONF_ENV += \
+ 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/tirpc/"
+diff --git a/package/x11vnc/0001-ipv6.patch b/package/x11vnc/0001-ipv6.patch
+deleted file mode 100644
+index 89c2835..0000000
+--- a/package/x11vnc/0001-ipv6.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-[PATCH] fix build on uClibc without IPv6 support
+-
+-Some systems (like uClibc) defines AF_INET6 even when configured without
+-IPv6 support, so don't use that to decide if IPv6 support should be enabled.
+-
+-Instead use the X11VNC_IPV6 define like elsewhere in the code.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- x11vnc/enc.h |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: x11vnc-0.9.13/x11vnc/enc.h
+-===================================================================
+---- x11vnc-0.9.13.orig/x11vnc/enc.h
+-+++ x11vnc-0.9.13/x11vnc/enc.h
+-@@ -1733,7 +1733,7 @@
+- 	}
+- 
+- 	try6:
+--#ifdef AF_INET6
+-+#if X11VNC_IPV6
+- 	if (!getenv("ULTRAVNC_DSM_HELPER_NOIPV6")) {
+- 		struct sockaddr_in6 sin;
+- 		int one = 1, sock = -1;
 -- 
 2.0.5
