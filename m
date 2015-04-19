@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Apr 2015 12:17:09 +0200
-Subject: [Buildroot] [PATCH v2 14/25] package/perl-http-daemon: New package
+Date: Sun, 19 Apr 2015 12:17:11 +0200
+Subject: [Buildroot] [PATCH v2 16/25] package/perl-net-http: New package
 In-Reply-To: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1429438640-9367-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429438640-9367-15-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429438640-9367-17-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,68 +13,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                              |    1 +
- package/perl-http-daemon/Config.in             |    8 ++++++++
- package/perl-http-daemon/perl-http-daemon.hash |    3 +++
- package/perl-http-daemon/perl-http-daemon.mk   |   14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/perl-http-daemon/Config.in
- create mode 100644 package/perl-http-daemon/perl-http-daemon.hash
- create mode 100644 package/perl-http-daemon/perl-http-daemon.mk
+ package/Config.in                        |    1 +
+ package/perl-net-http/Config.in          |    7 +++++++
+ package/perl-net-http/perl-net-http.hash |    3 +++
+ package/perl-net-http/perl-net-http.mk   |   14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/perl-net-http/Config.in
+ create mode 100644 package/perl-net-http/perl-net-http.hash
+ create mode 100644 package/perl-net-http/perl-net-http.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 184c926..c74d848 100644
+index e09beaa..4d8f98d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -513,6 +513,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-html-parser/Config.in"
- 	source "package/perl-html-tagset/Config.in"
- 	source "package/perl-http-cookies/Config.in"
-+	source "package/perl-http-daemon/Config.in"
- 	source "package/perl-http-date/Config.in"
- 	source "package/perl-http-message/Config.in"
- 	source "package/perl-io-html/Config.in"
-diff --git a/package/perl-http-daemon/Config.in b/package/perl-http-daemon/Config.in
+@@ -523,6 +523,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-lwp-mediatypes/Config.in"
+ 	source "package/perl-mojolicious/Config.in"
+ 	source "package/perl-net-dns/Config.in"
++	source "package/perl-net-http/Config.in"
+ 	source "package/perl-net-ssleay/Config.in"
+ 	source "package/perl-netaddr-ip/Config.in"
+ 	source "package/perl-path-tiny/Config.in"
+diff --git a/package/perl-net-http/Config.in b/package/perl-net-http/Config.in
 new file mode 100644
-index 0000000..3d69b88
+index 0000000..6f18dd5
 --- /dev/null
-+++ b/package/perl-http-daemon/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PERL_HTTP_DAEMON
-+	bool "perl-http-daemon"
-+	select BR2_PACKAGE_PERL_HTTP_MESSAGE
++++ b/package/perl-net-http/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_NET_HTTP
++	bool "perl-net-http"
++	select BR2_PACKAGE_PERL_URI
 +	help
-+	  Instances of the `HTTP::Daemon' class are HTTP/1.1 servers that listen
-+	  on a socket for incoming requests.
++	  The `Net::HTTP' class is a low-level HTTP client.
 +
-+	  http://github.com/gisle/http-daemon
-diff --git a/package/perl-http-daemon/perl-http-daemon.hash b/package/perl-http-daemon/perl-http-daemon.hash
++	  http://github.com/libwww-perl/net-http
+diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
 new file mode 100644
-index 0000000..f4f6023
+index 0000000..9f5f11b
 --- /dev/null
-+++ b/package/perl-http-daemon/perl-http-daemon.hash
++++ b/package/perl-net-http/perl-net-http.hash
 @@ -0,0 +1,3 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    ed0ae02d25d7f1e89456d4d69732adc2 HTTP-Daemon-6.01.tar.gz
-+sha256 43fd867742701a3f9fcc7bd59838ab72c6490c0ebaf66901068ec6997514adc2 HTTP-Daemon-6.01.tar.gz
-diff --git a/package/perl-http-daemon/perl-http-daemon.mk b/package/perl-http-daemon/perl-http-daemon.mk
++md5    b6da691523456089d7a812ac398bc77e Net-HTTP-6.07.tar.gz
++sha256 9f31e0325a5a0930ad309fa019da9d208e57e236fb0598675ed883c820240364 Net-HTTP-6.07.tar.gz
+diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
 new file mode 100644
-index 0000000..42d2873
+index 0000000..a73dfec
 --- /dev/null
-+++ b/package/perl-http-daemon/perl-http-daemon.mk
++++ b/package/perl-net-http/perl-net-http.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-http-daemon
++# perl-net-http
 +#
 +################################################################################
 +
-+PERL_HTTP_DAEMON_VERSION = 6.01
-+PERL_HTTP_DAEMON_SOURCE = HTTP-Daemon-$(PERL_HTTP_DAEMON_VERSION).tar.gz
-+PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_HTTP_DAEMON_DEPENDENCIES = perl-http-message
-+PERL_HTTP_DAEMON_LICENSE = Artistic or GPLv1+
-+PERL_HTTP_DAEMON_LICENSE_FILES = README
++PERL_NET_HTTP_VERSION = 6.07
++PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
++PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MS/MSCHILLI
++PERL_NET_HTTP_DEPENDENCIES = perl-uri
++PERL_NET_HTTP_LICENSE = Artistic or GPLv1+
++PERL_NET_HTTP_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
