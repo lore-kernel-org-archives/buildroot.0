@@ -1,58 +1,68 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 19 Apr 2015 17:45:01 +0200
-Subject: [Buildroot] [PATCH 2/3] manual: cvs: document that a date can
- be used instead of a tag
-In-Reply-To: <CAHkwnC-mOAdrGEt0E_FCrvf2kFZJ78UuWa+2h0a+Dco8dg49uA@mail.gmail.com>
-References: <1429376067-9228-1-git-send-email-fabio.porcedda@gmail.com>
- <1429376067-9228-3-git-send-email-fabio.porcedda@gmail.com>
- <20150419081028.GB4313@free.fr>
- <CAHkwnC-mOAdrGEt0E_FCrvf2kFZJ78UuWa+2h0a+Dco8dg49uA@mail.gmail.com>
-Message-ID: <5533CD7D.1070605@mind.be>
+Date: Sun, 19 Apr 2015 18:20:31 +0200
+Subject: [Buildroot] [PATCH v4 1/1] Added linux drivers backports project
+In-Reply-To: <20150419110326.31c34542@free-electrons.com>
+References: <1429311670-7831-1-git-send-email-petr.vorel@gmail.com>
+ <20150419110326.31c34542@free-electrons.com>
+Message-ID: <5533D5CF.5000305@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/04/15 12:08, Fabio Porcedda wrote:
-> On Sun, Apr 19, 2015 at 10:10 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> Fabio, All,
->>
->> On 2015-04-18 18:54 +0200, Fabio Porcedda spake thusly:
->>> Also instead of using the generic word "timestamp" use the word "tag".
->>>
->>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->>> ---
->>>  docs/manual/adding-packages-generic.txt | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
->>> index 8cf6bb6..be754a2 100644
->>> --- a/docs/manual/adding-packages-generic.txt
->>> +++ b/docs/manual/adding-packages-generic.txt
->>> @@ -280,7 +280,7 @@ information is (assuming the package name is +libfoo+) :
->>>       Only anonymous pserver mode is supported.
->>>       +LIBFOO_SITE+ 'must' contain the source URL as well as the remote
->>>       repository directory. The module is the package name.
->>> -     +LIBFOO_VERSION+ is 'mandatory' and 'must' be a timestamp.
->>> +     +LIBFOO_VERSION+ is 'mandatory' and 'must' be a tag or a date.
->>
->> I'd like we document the format of the date we recognise. Because, IIRC,
->> cvs accepts 'yesterday' as a date format, and that would be interpreted
->> as a tag with the current code.
->>
->> So maybe, just state something like:
->>
->>     ... or a date (YYYYMMDD:hhmmss)
+On 19/04/15 11:03, Thomas Petazzoni wrote:
+> Dear Petr Vorel,
 > 
-> What about this:
-> (<YYYY>-<MM>-<DD>[T<HH><MM>[<SS>]] e.g 2015-12-20 or 2015-12-20T1010)
+> On Sat, 18 Apr 2015 01:01:10 +0200, Petr Vorel wrote:
+>> https://backports.wiki.kernel.org
+>>
+>> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> 
+> I wanted to apply your patch, and did a couple of updates to it (see
+> below). However, there's a more fundamental problem to this package: it
+> expects the linux package to be extracted/configured *before* the
+> configuration of linux-backports. Unfortunately, this is not the case:
+> 'linux' is only in LINUX_BACKPORTS_DEPENDENCIES, so it's only
+> guaranteed to be here when linux-backports gets configured, not before.
 
- Can a timezone be added to that? Playing with dates and times without timezone
-is dangerous.
+
+ Perhaps that's a problem in the kconfig infrastructure. The configure step
+depends on the DEPENDENCIES, and I'd consider the *config targets conceptually
+part of the configure step. Currently, *config only depends on the patch step
+(through $(2)_KCONFIG_FILE), perhaps we should add the depends step to that.
+
 
  Regards,
  Arnout
+
+> 
+> So, when you run 'make linux-backports-menuconfig' from a clean
+> Buildroot tree (i.e without doing a full 'make'), you get:
+> 
+> thomas at skate:~/projets/buildroot (master)$ make linux-backports-menuconfig
+> yes "" |  /usr/bin/make -j5 -C /home/thomas/projets/buildroot/output/build/linux-backports-3.18.1-1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm INSTALL_MOD_PATH=/home/thomas/projets/buildroot/output/target CROSS_COMPILE=" /home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-" DEPMOD=/home/thomas/projets/buildroot/output/host/sbin/depmod KLIB_BUILD=/home/thomas/projets/buildroot/output/build/linux-4.0 KLIB=/home/thomas/projets/buildroot/output/target oldconfig
+> make[1]: Entering directory '/home/thomas/projets/buildroot/output/build/linux-backports-3.18.1-1'
+> /--------------
+> | Your kernel headers are incomplete/not installed.
+> | Please install kernel headers, including a .config
+> | file or use the KLIB/KLIB_BUILD make variables to
+> | set the kernel to build against, e.g.
+> |   make KLIB=/lib/modules/3.1.7/
+> | to compile/install for the installed kernel 3.1.7
+> | (that isn't currently running.)
+> \--
+> Makefile:40: recipe for target 'oldconfig' failed
+> make[1]: *** [oldconfig] Error 1
+> make[1]: Leaving directory '/home/thomas/projets/buildroot/output/build/linux-backports-3.18.1-1'
+> package/linux-backports/linux-backports.mk:38: recipe for target '/home/thomas/projets/buildroot/output/build/linux-backports-3.18.1-1/.stamp_kconfig_fixup_done' failed
+> make: *** [/home/thomas/projets/buildroot/output/build/linux-backports-3.18.1-1/.stamp_kconfig_fixup_done] Error 2
+> 
+> This is because output/build/linux-4.0 is currently empty, since the
+> linux package has not been extracted yet.
+
+
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
