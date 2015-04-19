@@ -1,46 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 11:39:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openssl: bin/openssl depends on
- dynamic linking
-In-Reply-To: <1428851196-16360-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1428851196-16360-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150419113916.0e99b1eb@free-electrons.com>
+Date: Sun, 19 Apr 2015 11:39:40 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xapp_oclock: bump version to
+	1.0.3, add hash
+Message-ID: <20150419093953.A6795804F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=1736bed79159cbb211f32e32569cec7f80e195cb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 12 Apr 2015 17:06:36 +0200, Bernd Kuhls wrote:
-> Fixes
-> /home/br/br3/output/host/usr/lib/gcc/i586-buildroot-linux-uclibc/4.8.4/../../../../i586-buildroot-linux-uclibc/bin/ld: cannot find -ldl
-> 
-> using this defconfig
-> 
-> BR2_STATIC_LIBS=y
-> BR2_PACKAGE_OPENSSL=y
-> BR2_PACKAGE_OPENSSL_BIN=y
-> 
-> Quoting PROBLEMS:
-> "We don't have framework to associate -ldl with no-dso, therefore the only
-> way is to edit Makefile right after ./config no-dso and remove -ldl from
-> EX_LIBS line."
-> 
-> To not make the build procedure more complicated disable static building of
-> bin/openssl.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/openssl/Config.in |    1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xapp_oclock/xapp_oclock.hash |    2 ++
+ package/x11r7/xapp_oclock/xapp_oclock.mk   |    9 ++++++++-
+ 2 files changed, 10 insertions(+), 1 deletions(-)
 
-Applied after adding the kconfig comment you forgot to add to indicate
-the dynamic library dependency, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xapp_oclock/xapp_oclock.hash b/package/x11r7/xapp_oclock/xapp_oclock.hash
+new file mode 100644
+index 0000000..ad54499
+--- /dev/null
++++ b/package/x11r7/xapp_oclock/xapp_oclock.hash
+@@ -0,0 +1,2 @@
++# From http://lists.x.org/archives/xorg-announce/2012-February/001820.html
++sha256	54f5fb85f5828705683f457e559fb18753332db15ae82da561b0ae5a63915091	oclock-1.0.3.tar.bz2
+diff --git a/package/x11r7/xapp_oclock/xapp_oclock.mk b/package/x11r7/xapp_oclock/xapp_oclock.mk
+index d3949de..17d544c 100644
+--- a/package/x11r7/xapp_oclock/xapp_oclock.mk
++++ b/package/x11r7/xapp_oclock/xapp_oclock.mk
+@@ -4,11 +4,18 @@
+ #
+ ################################################################################
+ 
+-XAPP_OCLOCK_VERSION = 1.0.1
++XAPP_OCLOCK_VERSION = 1.0.3
+ XAPP_OCLOCK_SOURCE = oclock-$(XAPP_OCLOCK_VERSION).tar.bz2
+ XAPP_OCLOCK_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_OCLOCK_LICENSE = MIT
+ XAPP_OCLOCK_LICENSE_FILES = COPYING
+ XAPP_OCLOCK_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXKBFILE),y)
++XAPP_OCLOCK_CONF_OPTS += --with-xkb
++XAPP_OCLOCK_DEPENDENCIES += xlib_libxkbfile
++else
++XAPP_OCLOCK_CONF_OPTS += --without-xkb
++endif
++
+ $(eval $(autotools-package))
