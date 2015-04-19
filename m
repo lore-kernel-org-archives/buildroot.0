@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 13:50:44 +0200
-Subject: [Buildroot] [git commit] package/yasm: add hash
-Message-ID: <20150419115101.67C6C819BC@busybox.osuosl.org>
+Date: Sun, 19 Apr 2015 13:53:46 +0200
+Subject: [Buildroot] [PATCH] package/yasm: add hash
+In-Reply-To: <1429443879-30381-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1429443879-30381-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20150419135346.13048f5b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a8385c7925d3afe510e98370f106475fcaa2754e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Fabio Porcedda,
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/yasm/yasm.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Sun, 19 Apr 2015 13:44:39 +0200, Fabio Porcedda wrote:
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> ---
+>  package/yasm/yasm.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/yasm/yasm.hash
 
-diff --git a/package/yasm/yasm.hash b/package/yasm/yasm.hash
-new file mode 100644
-index 0000000..d5cf267
---- /dev/null
-+++ b/package/yasm/yasm.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 768ffab457b90a20a6d895c39749adb547c1b7cb5c108e84b151a838a23ccf31 yasm-1.2.0.tar.gz
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
