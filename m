@@ -1,56 +1,29 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 19 Apr 2015 19:46:02 +0200
-Subject: [Buildroot] [PATCH 6/7 v5] package/uclibc: ignore missing hash
-	for snapshots
-In-Reply-To: <c8daf217107af09f64d956f7077f9b5f58f25cc6.1429447148.git.yann.morin.1998@free.fr>
-References: <cover.1429447148.git.yann.morin.1998@free.fr>
- <c8daf217107af09f64d956f7077f9b5f58f25cc6.1429447148.git.yann.morin.1998@free.fr>
-Message-ID: <5533E9DA.6060903@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Apr 2015 19:53:06 +0200
+Subject: [Buildroot] [PATCH 03/10] package/json-glib: add hash
+In-Reply-To: <1429465993-30357-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429465993-30357-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429465993-30357-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/04/15 14:44, Yann E. MORIN wrote:
-> We can't have a hash for snapshots, so add them to the exclusion list.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/uclibc/uclibc.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index 72a46d9..1ec8b10 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -11,6 +11,7 @@ UCLIBC_LICENSE_FILES = COPYING.LIB
->  
->  ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
->  UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
-> +BR_NO_CHECK_HASH_FOR += uClibc-$(UCLIBC_VERSION).tar.xz
 
- The file is .bz2, not .xz.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/json-glib/json-glib.hash |    2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/json-glib/json-glib.hash
 
- I think it's better to put $(UCLIBC_SOURCE) instead.
-
- Regards,
- Arnout
-
->  else ifeq ($(BR2_UCLIBC_VERSION_NG),y)
->  UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
->  UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
-> 
-
-
+diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
+new file mode 100644
+index 0000000..dd8bf54
+--- /dev/null
++++ b/package/json-glib/json-glib.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/0.14/json-glib-0.14.2.sha256sum
++sha256	b816a5fa3e5664b08679a6972a6e5693d6cc1990ff4a6f94c07554db96be94a7	json-glib-0.14.2.tar.xz
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
