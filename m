@@ -1,30 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Apr 2015 14:24:57 +0200
-Subject: [Buildroot] [git commit] package/dbus-python: remove whitespace
-Message-ID: <20150419122631.3529A7F9AC@busybox.osuosl.org>
+Date: Sun, 19 Apr 2015 14:25:03 +0200
+Subject: [Buildroot] [git commit] package/ctorrent: add hash
+Message-ID: <20150419122631.40C337F9AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6d214c295d1cf2d3d71c03cb84f96f6286e8c26c
+commit: http://git.buildroot.net/buildroot/commit/?id=4238658fa4f074ac369f3fe014a2a20784b94402
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dbus-python/dbus-python.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ package/ctorrent/ctorrent.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
-index 1637406..9bda018 100644
---- a/package/dbus-python/dbus-python.mk
-+++ b/package/dbus-python/dbus-python.mk
-@@ -28,6 +28,4 @@ DBUS_PYTHON_CONF_ENV += \
- 	PYTHON_LIBS="$(shell $(STAGING_DIR)/usr/bin/python3-config --ldflags)"
- endif
- 
--
--
- $(eval $(autotools-package))
+diff --git a/package/ctorrent/ctorrent.hash b/package/ctorrent/ctorrent.hash
+new file mode 100644
+index 0000000..6dcb590
+--- /dev/null
++++ b/package/ctorrent/ctorrent.hash
+@@ -0,0 +1,2 @@
++# From http://sourceforge.net/projects/dtorrent/files/dtorrent/3.3.2/
++sha1	d4e221f0292268f80e2430ce9d451dd64cf1ffaa	ctorrent-dnh3.3.2.tar.gz
