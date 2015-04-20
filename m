@@ -1,40 +1,83 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Apr 2015 21:10:29 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{10,14,19}.x series
-Message-ID: <1429488629-995-1-git-send-email-gustavo@zacarias.com.ar>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 20 Apr 2015 04:36:11 +0200
+Subject: [Buildroot] [PATCH 2/3] manual: cvs: document that a date can
+ be used instead of a tag
+In-Reply-To: <5533CD7D.1070605@mind.be>
+References: <1429376067-9228-1-git-send-email-fabio.porcedda@gmail.com>
+ <1429376067-9228-3-git-send-email-fabio.porcedda@gmail.com>
+ <20150419081028.GB4313@free.fr>
+ <CAHkwnC-mOAdrGEt0E_FCrvf2kFZJ78UuWa+2h0a+Dco8dg49uA@mail.gmail.com>
+ <5533CD7D.1070605@mind.be>
+Message-ID: <CAHkwnC9rcyr4Y+ydSYiDBY2x=+3QLfGapr75E3+Do+69wbWF=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Sun, Apr 19, 2015 at 5:45 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 19/04/15 12:08, Fabio Porcedda wrote:
+>> On Sun, Apr 19, 2015 at 10:10 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>>> Fabio, All,
+>>>
+>>> On 2015-04-18 18:54 +0200, Fabio Porcedda spake thusly:
+>>>> Also instead of using the generic word "timestamp" use the word "tag".
+>>>>
+>>>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>>>> ---
+>>>>  docs/manual/adding-packages-generic.txt | 2 +-
+>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+>>>> index 8cf6bb6..be754a2 100644
+>>>> --- a/docs/manual/adding-packages-generic.txt
+>>>> +++ b/docs/manual/adding-packages-generic.txt
+>>>> @@ -280,7 +280,7 @@ information is (assuming the package name is +libfoo+) :
+>>>>       Only anonymous pserver mode is supported.
+>>>>       +LIBFOO_SITE+ 'must' contain the source URL as well as the remote
+>>>>       repository directory. The module is the package name.
+>>>> -     +LIBFOO_VERSION+ is 'mandatory' and 'must' be a timestamp.
+>>>> +     +LIBFOO_VERSION+ is 'mandatory' and 'must' be a tag or a date.
+>>>
+>>> I'd like we document the format of the date we recognise. Because, IIRC,
+>>> cvs accepts 'yesterday' as a date format, and that would be interpreted
+>>> as a tag with the current code.
+>>>
+>>> So maybe, just state something like:
+>>>
+>>>     ... or a date (YYYYMMDD:hhmmss)
+>>
+>> What about this:
+>> (<YYYY>-<MM>-<DD>[T<HH><MM>[<SS>]] e.g 2015-12-20 or 2015-12-20T1010)
+>
+>  Can a timezone be added to that? Playing with dates and times without timezone
+> is dangerous.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 49f818b..e0a676d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -200,15 +200,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.68"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.74"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.75"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.40"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.38"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.39"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.11"	if BR2_KERNEL_HEADERS_3_18
--	default "3.19.4"	if BR2_KERNEL_HEADERS_3_19
-+	default "3.19.5"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0"		if BR2_KERNEL_HEADERS_4_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+This one works: (<YYYY>-<MM>-<DD>[T<HH>:<MM>[:<SS>][-<ZZ>] e.g
+2015-12-20 or 2015-12-20T10:10-00)
+
+But to made it works I must replace the ":" with "_":
+
+index bdb26b8..2beb529 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -325,14 +325,14 @@ $(2)_RAWNAME                      =  $$(patsubst
+host-%,%,$(1))
+ ifndef $(2)_VERSION
+  ifdef $(3)_VERSION
+   $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
+-  $(2)_VERSION := $$(subst /,_,$$(strip $$($(3)_VERSION)))
++  $(2)_VERSION := $$(subst :,_,$$(subst /,_,$$(strip $$($(3)_VERSION))))
+  else
+   $(2)_VERSION = undefined
+   $(2)_DL_VERSION = undefined
+  endif
+ else
+   $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
+-  $(2)_VERSION := $$(strip $$(subst /,_,$$($(2)_VERSION)))
++  $(2)_VERSION := $$(strip $$(subst :,_,$$(subst /,_,$$($(2)_VERSION))))
+ endif
+
+BR
 -- 
-2.0.5
+Fabio Porcedda
