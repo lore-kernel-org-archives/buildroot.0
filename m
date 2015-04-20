@@ -1,69 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Apr 2015 23:00:13 +0200
-Subject: [Buildroot] [PATCH v2] live555: fix library installation
-In-Reply-To: <1429519351-8391-1-git-send-email-luca@lucaceresoli.net>
-References: <1429519351-8391-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20150420230013.318f77f5@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 20 Apr 2015 23:00:28 +0200
+Subject: [Buildroot] [PATCH v4 1/1] Added linux drivers backports project
+In-Reply-To: <553564B4.2060303@mind.be>
+References: <1429311670-7831-1-git-send-email-petr.vorel@gmail.com>
+ <20150419110326.31c34542@free-electrons.com>
+ <5533D5CF.5000305@mind.be> <20150419162839.GI4313@free.fr>
+ <20150419190321.19200e70@free-electrons.com>
+ <553564B4.2060303@mind.be>
+Message-ID: <20150420210027.GB4057@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+Arnout, All,
 
-On Mon, 20 Apr 2015 10:42:31 +0200, Luca Ceresoli wrote:
-> The manual target installation commands optionally copy 3 executables
-> that demonstrate the library usage, but do not the library itself.
+On 2015-04-20 22:42 +0200, Arnout Vandecappelle spake thusly:
+> On 19/04/15 19:03, Thomas Petazzoni wrote:
+> > Dear Yann E. MORIN,
+> > 
+> > On Sun, 19 Apr 2015 18:28:39 +0200, Yann E. MORIN wrote:
+> > 
+> >> Well, I would not be very happy with that, since that would make the
+> >> following use-case a real pain:
+> >>
+> >>     $ make foo_defconfig
+> >>     $ make linux-menuconfig
+> >>
+> >> Currently, all it needs is the linux kernel to be extracted and patched,
+> >> and none of its depedencies to be built. Otherwise, it would require the
+> >> toolchain to be built, plus a sh.tload of other stuff (lzo, for one, and
+> >> all its own dependencies).
+> > 
+> > We could remove the mandatory host-lzo dependency from the linux
+> > package, by adding an option for that. Remember the recent patches also
+> > adding host-xz to the dependencies of linux, which I rejected?
+> > 
+> > This would leave host-kmod as the only dependency of the linux package
+> > I believe. But well host-kmod as AUTORECONF = YES, so it pulls a whole
+> > bunch of crap.
 > 
-> This results in the following errors at runtime:
+>  As mentioned before, it pulls in the toolchain as well. That's a lot worse than
+> host-lzo and host-xz - even extracting an external toolchain takes longer than
+> host-xz (at least for me).
 > 
->   # openRTSP
->   openRTSP: can't load library 'libliveMedia.so.38'
->   # live555MediaServer
->   live555MediaServer: can't load library 'libliveMedia.so.38'
->   # MPEG2TransportStreamIndexer
->   MPEG2TransportStreamIndexer: can't load library 'libliveMedia.so.38'
->   #
 > 
-> Tested with the following defconfig, which is basically
-> qemu_arm_versatile_defconfig plus C++ and live555:
+>  However, we can add the dependency specifically for linux-backports. There is
+> something to be said for the reasoning that usually/sometimes you don't need the
+> dependencies to be present, so doing it per package sounds OK.
 > 
-> BR2_arm=y
-> BR2_KERNEL_HEADERS_VERSION=y
-> BR2_DEFAULT_KERNEL_VERSION="4.0"
-> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-> BR2_LINUX_KERNEL=y
-> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
-> BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-4.0.config"
-> BR2_LINUX_KERNEL_ZIMAGE=y
-> BR2_PACKAGE_LIVE555=y
-> BR2_TARGET_ROOTFS_EXT2=y
+>  So in this case, adding
 > 
-> Fix the whole installation step by using the 'make install' step provided
-> by the upstream package, similar to what was done in commit
-> 44d15563c706dce48f84 for the staging installation.
+> $(LINUX_BACKPORTS_KCONFIG_FILE): linux
 > 
-> Note: this change has the effect of installing unconditionally all the
-> test and demo executables produced by the live555 compilation process,
-> and that were previously not (or optionally) copied. This increases the
-> uncompressed target filesystem size by roughly 300 kB (tested for a
-> 32-bit ARM target). Undesired files can be deleted in a post-build script.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> ---
+> to linux-backports.mk should be sufficient.
 
-Applied, thanks.
+Yes, I have the same reasoning, and I think what you suggest is good
+enough to be considered the good solution.
 
-Thomas
+If we end up having more such cases, we can revisit this in the future.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
