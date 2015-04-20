@@ -1,82 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Apr 2015 23:35:21 +0200
-Subject: [Buildroot] [PATCH] packages: fix and improve support for
- top-level parallel makefile
-In-Reply-To: <1428328208-27211-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1428328208-27211-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <55357119.9020401@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 20 Apr 2015 23:36:24 +0200
+Subject: [Buildroot] config choices in building for beaglebone black
+	(BBB)?
+In-Reply-To: <55302A4C.5050109@mind.be> (Arnout Vandecappelle's message of
+ "Thu, 16 Apr 2015 23:31:56 +0200")
+References: <alpine.LFD.2.11.1504160857510.20888@localhost>
+ <55302A4C.5050109@mind.be>
+Message-ID: <87wq16trc7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/04/15 15:50, Fabio Porcedda wrote:
-> To fix packages that fail to build when PARALLEL_JOBS is empty instead
-> of using an empty PARALLEL_JOBS just avoid to using it in
-> the MAKE variable.
-> 
-> Check the MAKEFLAGS variable to know automatically if the -j option is
-> being used, but use the "=" operator instead of the ":=" operator
-> because it can be checked only in a "recursively expanded variable".
-> Use "override" because otherwise it's impossible to change the
-> automatic variable "MAKE".
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
->  Makefile            | 4 ++--
->  package/Makefile.in | 3 ++-
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 8d09725..6c2dcca 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -58,8 +58,8 @@ export HOSTARCH := $(shell uname -m | \
->  #
->  # Taking into account the above considerations, if you still want to execute
->  # this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
-> -# build using the following command:
-> -#	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
-> +# use the -j<jobs> option when building, e.g:
-> +#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
->  .NOTPARALLEL:
->  
->  # absolute path
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index fc57427..ed68e35 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -18,7 +18,8 @@ PARALLEL_JOBS := $(BR2_JLEVEL)
->  endif
->  
->  MAKE1 := $(HOSTMAKE) -j1
-> -MAKE := $(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
-> +override MAKE = $(HOSTMAKE) \
-> +	$(if $(findstring j,$(filter-out --%,$(MAKEFLAGS))),,-j$(PARALLEL_JOBS))
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- Wouldn't it be much simpler to surround the definition of PARALLEL_JOBS at the
-beginning of this file with
+Hi,
 
-ifeq ($(findstring j,$(filter-out --%,$(MAKEFLAGS))),)
-...
-endif
+>> also, for bleeding edge, can anyone verify whether i'm safe pushing
+ >> the versions of everything right to the latest? you know:
+ >> 
+ >> * kernel 4.0.x
+ >> * glibc 2.21
+ >> * binutils 2.25
+ >> * gcc 4.9.x
 
-?
+ >  For binutils and gcc and uClibc we typically stick to the buildroot default
+ > versions (even though we don't actually test all defconfigs when we change the
+ > default version for one of those...).
 
- Regards,
- Arnout
+We don't do runtime testing (very time consuming and we don't have
+access to all boards), but the defconfigs do get build tested.
 
->  
->  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
->  TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
-> 
+ >  In case of BBB, I'm not 100% sure if all the graphics stuff from the TI kernel
+ > has been fully upstreamed, so switching to a mainline kernel is not necessarily
+ > acceptable. Even though the buildroot defconfig doesn't include graphics
+ > support, we do want to offer a kernel that supports everything that the board has.
 
+Indeed. That and the cape handling. It really depends on what you need
+to do with the hw.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
