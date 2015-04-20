@@ -1,54 +1,54 @@
-From: Robert P. J. Day <rpjday@crashcourse.ca>
-Date: Mon, 20 Apr 2015 09:28:43 -0400 (EDT)
-Subject: [Buildroot] how to point at a massive local archive of S/W
- tarballs
-In-Reply-To: <CANQCQpZ59t+dZZDB35+870pppUk_xuiGvgyEVKNdarc1pc19Ug@mail.gmail.com>
-References: <alpine.LFD.2.11.1504151638400.26183@localhost>
- <CANQCQpZ59t+dZZDB35+870pppUk_xuiGvgyEVKNdarc1pc19Ug@mail.gmail.com>
-Message-ID: <alpine.LFD.2.11.1504200926590.24210@localhost>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Mon, 20 Apr 2015 17:29:18 +0200
+Subject: [Buildroot] [PATCH 2/3] python-pyqt: fix install
+In-Reply-To: <1429543759-32207-1-git-send-email-gwenj@trabucayre.com>
+References: <1429543759-32207-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1429543759-32207-2-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 20 Apr 2015, Matthew Weber wrote:
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-> Robert,
->
-> On Wed, Apr 15, 2015 at 3:42 PM, Robert P. J. Day <rpjday@crashcourse.ca> wrote:
-> >
-> >
-> >   (NOTE: first of a few fairly basic questions as i play with the
-> > current buildroot after being away for a bit.)
-> >
-> >   if i'm starting a new build, how can i take advantage of the
-> > gigabytes of S/W tarballs i've collected for doing OE/yocto project
-> > builds?
-> >
-> >   i want to set the equivalent of a local mirror -- would i set a
-> > value in the "Primary download site" config option, with the format
-> > "file:///pathname/to/all/my/tarballs"?
->
-> Take a look here:
-> http://buildroot.org/downloads/manual/manual.html#_advanced_usage
-> Section 8.11.4 describes a method for setting a download location via
-> env or capturing it as part of a targets configuration.
+PyQt4 provides two version for some py files: one for python2.x and one for
+python3.x. This two versions are installed in TARGET_DIR.
+After installing files, python is used to generate all .pyc files, but fails
+like :
+class ProxyBase(metaclass=ProxyMetaclass):
+                             ^
+							 SyntaxError: invalid syntax
 
-  i read that but it *seems* that that will simply use a shared
-download directory for both download destination *and* tarballs you
-need. what i'm after is the yocto project equivalent of a local source
-mirror, and others have already insisted that there's no such thing in
-buildroot.
+This patch supdress directory for not targeted python version.
 
-rday
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/python-pyqt/python-pyqt.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/package/python-pyqt/python-pyqt.mk b/package/python-pyqt/python-pyqt.mk
+index 808837e..e7ab3a6 100644
+--- a/package/python-pyqt/python-pyqt.mk
++++ b/package/python-pyqt/python-pyqt.mk
+@@ -14,8 +14,10 @@ PYTHON_PYQT_DEPENDENCIES = python-sip host-python-sip qt
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ PYTHON_PYQT_PYTHON_DIR = python$(PYTHON_VERSION_MAJOR)
++PYTHON_PYQT_RM_PORT_BASE = port_v3
+ else ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ PYTHON_PYQT_PYTHON_DIR = python$(PYTHON3_VERSION_MAJOR)
++PYTHON_PYQT_RM_PORT_BASE = port_v2
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT_EMBEDDED),y)
+@@ -97,6 +99,7 @@ endef
+ define PYTHON_PYQT_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install
+ 	touch $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/__init__.py
++	$(RM) -rf $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/uic/$(PYTHON_PYQT_RM_PORT_BASE)
+ 	PYTHONPATH="$(PYTHON_PATH)" \
+ 		$(HOST_DIR)/usr/bin/python -c "import compileall; \
+ 		compileall.compile_dir('$(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4')"
 -- 
-
-========================================================================
-Robert P. J. Day                                 Ottawa, Ontario, CANADA
-                        http://crashcourse.ca
-
-Twitter:                                       http://twitter.com/rpjday
-LinkedIn:                               http://ca.linkedin.com/in/rpjday
-========================================================================
+2.0.5
