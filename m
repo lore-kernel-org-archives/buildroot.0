@@ -1,28 +1,68 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 20 Apr 2015 05:25:45 +0200
-Subject: [Buildroot] [PATCH 3/3] package/b43-firmware: add hash
-In-Reply-To: <1429500345-31730-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1429500345-31730-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1429500345-31730-3-git-send-email-fabio.porcedda@gmail.com>
+Date: Mon, 20 Apr 2015 05:27:53 +0200
+Subject: [Buildroot] [PATCH] packages: fix and improve support for
+	top-level parallel makefile
+In-Reply-To: <1428328208-27211-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1428328208-27211-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <CAHkwnC-USy5ihDYmQoK_1x9nfoW1Cn8TmX6oGpQOzf58UjcyGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/b43-firmware/b43-firmware.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/b43-firmware/b43-firmware.hash
+On Mon, Apr 6, 2015 at 3:50 PM, Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
+> To fix packages that fail to build when PARALLEL_JOBS is empty instead
+> of using an empty PARALLEL_JOBS just avoid to using it in
+> the MAKE variable.
+>
+> Check the MAKEFLAGS variable to know automatically if the -j option is
+> being used, but use the "=" operator instead of the ":=" operator
+> because it can be checked only in a "recursively expanded variable".
+> Use "override" because otherwise it's impossible to change the
+> automatic variable "MAKE".
+>
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> ---
+>  Makefile            | 4 ++--
+>  package/Makefile.in | 3 ++-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 8d09725..6c2dcca 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -58,8 +58,8 @@ export HOSTARCH := $(shell uname -m | \
+>  #
+>  # Taking into account the above considerations, if you still want to execute
+>  # this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
+> -# build using the following command:
+> -#      make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
+> +# use the -j<jobs> option when building, e.g:
+> +#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
+>  .NOTPARALLEL:
+>
+>  # absolute path
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index fc57427..ed68e35 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -18,7 +18,8 @@ PARALLEL_JOBS := $(BR2_JLEVEL)
+>  endif
+>
+>  MAKE1 := $(HOSTMAKE) -j1
+> -MAKE := $(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
+> +override MAKE = $(HOSTMAKE) \
+> +       $(if $(findstring j,$(filter-out --%,$(MAKEFLAGS))),,-j$(PARALLEL_JOBS))
+>
+>  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+>  TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
+> --
+> 2.3.4
+>
 
-diff --git a/package/b43-firmware/b43-firmware.hash b/package/b43-firmware/b43-firmware.hash
-new file mode 100644
-index 0000000..bafd00c
---- /dev/null
-+++ b/package/b43-firmware/b43-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 f1e7067aac5b62b67b8b6e4c517990277804339ac16065eb13c731ff909ae46f broadcom-wl-5.100.138.tar.bz2
+Ping?
+
+BR
 -- 
-2.3.5
+Fabio Porcedda
