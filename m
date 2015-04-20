@@ -1,39 +1,62 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Apr 2015 23:08:39 +0200
-Subject: [Buildroot] [PATCH v4 1/1] Added linux drivers backports project
-In-Reply-To: <20150420225628.0a54561f@free-electrons.com>
-References: <1429311670-7831-1-git-send-email-petr.vorel@gmail.com>	<20150419110326.31c34542@free-electrons.com>	<5533D5CF.5000305@mind.be>	<20150419162839.GI4313@free.fr>	<20150419190321.19200e70@free-electrons.com>	<553564B4.2060303@mind.be>
- <20150420225628.0a54561f@free-electrons.com>
-Message-ID: <55356AD7.2080109@mind.be>
+Date: Mon, 20 Apr 2015 23:10:36 +0200
+Subject: [Buildroot] [git commit] pppd: fix url
+In-Reply-To: <20150420174941.EA21381D41@busybox.osuosl.org>
+References: <20150420174941.EA21381D41@busybox.osuosl.org>
+Message-ID: <55356B4C.8030204@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/04/15 22:56, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
+On 20/04/15 19:47, Thomas Petazzoni wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=2a9041ab763e1e0a9f0fc727be22e13f38e40413
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> On Mon, 20 Apr 2015 22:42:28 +0200, Arnout Vandecappelle wrote:
+> Explanation from https://download.samba.org/pub/samba/README.FTP
 > 
->>  However, we can add the dependency specifically for linux-backports. There is
->> something to be said for the reasoning that usually/sometimes you don't need the
->> dependencies to be present, so doing it per package sounds OK.
->>
->>  So in this case, adding
->>
->> $(LINUX_BACKPORTS_KCONFIG_FILE): linux
->>
->> to linux-backports.mk should be sufficient.
+> Due to bandwidth usage, ftp downloads of Samba from samba.org are no
+> longer allowed. Please use one of our many mirror sites at
+> http://www.samba.org/ or to directly access the old site via http
+> please use http://download.samba.org/samba/ftp/
 > 
-> If we do this, we must also keep the 'linux' dependency in
-> LINUX_BACKPORTS_DEPENDENCIES as well, so that the package infra remains
-> aware of this dependency.
+> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/pppd/pppd.mk |    2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
+> 
+> diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+> index 31d6e06..b268fbe 100644
+> --- a/package/pppd/pppd.mk
+> +++ b/package/pppd/pppd.mk
+> @@ -6,7 +6,7 @@
+>  
+>  PPPD_VERSION = 2.4.7
+>  PPPD_SOURCE = ppp-$(PPPD_VERSION).tar.gz
+> -PPPD_SITE = ftp://ftp.samba.org/pub/ppp
+> +PPPD_SITE = https://download.samba.org/pub/ppp
 
- Yes of course.
+ Actually, we prefer to avoid https because of potential issues with
+certificates and limitations of corporate firewalls. And the http version works.
+
 
  Regards,
  Arnout
+
+
+>  PPPD_LICENSE = LGPLv2+ LGPL BSD-4c BSD-3c GPLv2+
+>  PPPD_LICENSE_FILES = \
+>  	pppd/tdb.c pppd/plugins/pppoatm/COPYING \
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 
 -- 
