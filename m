@@ -1,40 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Apr 2015 22:25:35 +0200
-Subject: [Buildroot] [git commit] package/perl-libwww: Fix legal-info
-Message-ID: <20150420202614.1837781D49@busybox.osuosl.org>
+Date: Mon, 20 Apr 2015 22:27:33 +0200
+Subject: [Buildroot] [git commit] perl-libwww: remove hash file
+Message-ID: <20150420202825.D696A81D4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=78080092e8d26666d84f65a0cfe6b3d45193bdf2
+commit: http://git.buildroot.net/buildroot/commit/?id=fb77a3d6c64477182cc766dbf2f20aad2f59d8e6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/6c6/6c6fb6001101ff528176b887ed8c95ef49313afb/
-http://autobuild.buildroot.net/results/56d/56d42e7691d4eb1a682c49c0fa6c951d0e3069ec/
+As reported by Romain Naour, having a hash file for a package
+downloaded from github is wrong.
 
-[Thomas: use the README file, since it contains a copyright notice and
-the name of the license, instead of not having any license file at
-all.]
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reported-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-libwww/perl-libwww.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/perl-libwww/perl-libwww.hash |    3 ---
+ 1 files changed, 0 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-libwww/perl-libwww.mk b/package/perl-libwww/perl-libwww.mk
-index 0ee1e04..8157be2 100644
---- a/package/perl-libwww/perl-libwww.mk
-+++ b/package/perl-libwww/perl-libwww.mk
-@@ -7,7 +7,7 @@
- PERL_LIBWWW_VERSION = 6.13
- PERL_LIBWWW_SITE = $(call github,libwww-perl,libwww-perl,$(PERL_LIBWWW_VERSION))
- PERL_LIBWWW_LICENSE = Artistic or GPLv1+
--PERL_LIBWWW_LICENSE_FILES = LICENSE
-+PERL_LIBWWW_LICENSE_FILES = README
- PERL_LIBWWW_DEPENDENCIES = \
- 	perl-encode-locale \
- 	perl-file-listing \
+diff --git a/package/perl-libwww/perl-libwww.hash b/package/perl-libwww/perl-libwww.hash
+deleted file mode 100644
+index 1ef5ccf..0000000
+--- a/package/perl-libwww/perl-libwww.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# retrieved by scancpan from http://cpan.metacpan.org/
+-md5    85b36bcd2fd2450718ee14f894f0d3d1 libwww-perl-6.13.tar.gz
+-sha256 5fbd13eebd1933e5a203fceb2c1629efbccff3efc8fab6ec0285c79d0a95f8b2 libwww-perl-6.13.tar.gz
