@@ -1,43 +1,64 @@
-From: Mark Mason <mason+buildroot@postdiluvian.org>
-Date: Mon, 20 Apr 2015 15:35:47 -0400
-Subject: [Buildroot] dpkg and apt for buildroot?
-In-Reply-To: <CAGm1_kvDWPPE1ajGbSHj9utnQuykgfqNr=tWVBg+PWNddGrDxQ@mail.gmail.com>
-References: <20150414200222.GB7501@postdiluvian.org>
- <CAGm1_kvDWPPE1ajGbSHj9utnQuykgfqNr=tWVBg+PWNddGrDxQ@mail.gmail.com>
-Message-ID: <20150420193546.GA3801@postdiluvian.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 20 Apr 2015 21:52:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/perl-libwww: Fix legal-info
+In-Reply-To: <1429551651-21509-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429551651-21509-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <553558F7.7000205@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor Yefremov <yegorslists@googlemail.com> wrote:
+Hi Bernd,
 
-> Dear Mark,
+Le 20/04/2015 19:40, Bernd Kuhls a ?crit :
+> Fixes
+> http://autobuild.buildroot.net/results/6c6/6c6fb6001101ff528176b887ed8c95ef49313afb/
+> http://autobuild.buildroot.net/results/56d/56d42e7691d4eb1a682c49c0fa6c951d0e3069ec/
 > 
-> On Tue, Apr 14, 2015 at 10:02 PM, Mark Mason
-> <mason+buildroot@postdiluvian.org> wrote:
-> > Has anyone already done the footwork to add dpkg and apt (at least a
-> > secure apt-get, I'm not sure what other dependancies there are)?
-> >
-> > I ran across some mail from July 2013 with patches for dpkg, which
-> > were very close to working, but I didn't see any for apt.  I'm kind of
-> > surprised that apt and friends aren't an option - am I about to run
-> > into something unexpectedly complicated, or is complex package
-> > management like apt/dpkg provides just generally outside of
-> > buildroot's scope?
-> >
-> > While I'm at it, almost all of the traffic on this list is related to
-> > development of buildroot rather than development with buildroot.  Is
-> > there a better place for questions (after the documentation and web
-> > searches have not provided answers), or is this it?
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+
+The git hash is also wrong.
+
+First I get an error wile testing the hash series:
+ERROR: No hash found for perl-libwww-6.13.tar.gz
+
+Then, by renaming libwww-perl-6.13.tar.gz to perl-libwww-6.13.tar.gz
+ERROR: perl-libwww-6.13.tar.gz has wrong md5 hash:
+ERROR: expected: 85b36bcd2fd2450718ee14f894f0d3d1
+ERROR: got     : eadcb8e0d6657817290328cc8976764e
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+
+I get:
+md5    eadcb8e0d6657817290328cc8976764e perl-libwww-6.13.tar.gz
+sha256 ee80e56e2866fdd91f8dc25b91cfdb1f3582ea9cc1ab53a0c420fef07bb3f04d perl-libwww-6.13.tar.gz
+
+instead of:
+
+md5    85b36bcd2fd2450718ee14f894f0d3d1 libwww-perl-6.13.tar.gz
+sha256 5fbd13eebd1933e5a203fceb2c1629efbccff3efc8fab6ec0285c79d0a95f8b2 libwww-perl-6.13.tar.gz
+
+The archive has been generated automatically by github, not by the maintainer.
+it's probably not the very same archive.
+
+Best regards,
+Romain
+
+>  package/perl-libwww/perl-libwww.mk |    1 -
+>  1 file changed, 1 deletion(-)
 > 
-> Have you read this section?
-> http://nightly.buildroot.org/manual.html#faq-no-binary-packages
-
-Sorry for the delays, I've been working on other stuff, just got back
-to the packages.
-
-I did read that section, but I'm not looking for packages of
-buildroot, I just need apt to maintain software that's not part of
-buildroot.
+> diff --git a/package/perl-libwww/perl-libwww.mk b/package/perl-libwww/perl-libwww.mk
+> index 0ee1e04..00b59c4 100644
+> --- a/package/perl-libwww/perl-libwww.mk
+> +++ b/package/perl-libwww/perl-libwww.mk
+> @@ -7,7 +7,6 @@
+>  PERL_LIBWWW_VERSION = 6.13
+>  PERL_LIBWWW_SITE = $(call github,libwww-perl,libwww-perl,$(PERL_LIBWWW_VERSION))
+>  PERL_LIBWWW_LICENSE = Artistic or GPLv1+
+> -PERL_LIBWWW_LICENSE_FILES = LICENSE
+>  PERL_LIBWWW_DEPENDENCIES = \
+>  	perl-encode-locale \
+>  	perl-file-listing \
+> 
