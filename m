@@ -1,53 +1,50 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 20 Apr 2015 17:29:19 +0200
-Subject: [Buildroot] [PATCH 3/3] qt: fix webkit dependencies
-In-Reply-To: <1429543759-32207-1-git-send-email-gwenj@trabucayre.com>
-References: <1429543759-32207-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1429543759-32207-3-git-send-email-gwenj@trabucayre.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 20 Apr 2015 15:27:45 +0000
+Subject: [Buildroot] [PATCH] uclibc: run snapshot and ng configs through
+ "savedefconfig"
+In-Reply-To: <20150420152520.GR27057@waldemar-brodkorb.de>
+References: <1429527676-32277-1-git-send-email-abrodkin@synopsys.com>
+ <20150420152520.GR27057@waldemar-brodkorb.de>
+Message-ID: <1429543665.2756.26.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Hi Waldemar,
 
-qtwebkit includes qscript headers. 
-For packages like python-pyqt if webkit is available but not qscript, the
-compilation fails with :
-buildroot/output/build/python-pyqt-4.11.3/sip/QtWebKit/qwebframe.sip:79:0:
-../../../host/usr/i686-buildroot-linux-gnu/sysroot/usr/include/QtWebKit/qwebframe.h:28:36:
-	fatal error: QtScript/qscriptengine.h: No such file or directory
+On Mon, 2015-04-20 at 17:25 +0200, Waldemar Brodkorb wrote:
+> Hi Alexey,
+> Alexey Brodkin wrote,
+> 
+> > Recently uClibc got support of "savedefconfig" target that allows
+> > generation of compact configuration description which only lists
+> > differences from default options.
+> > 
+> > That's uClibc commit -
+> > http://git.uclibc.org/uClibc/commit/?id=e286a674419d31cb0757dd2f8307d8b4756cf1f9
+> > 
+> > This change represents post-processing of "uClibc-snapshot.defconfig"
+> > and "uClibc-ng.config" with "make savedefconfig" made on current
+> > uClibc/uClibc-ng master branches.
+> > 
+> > Unfortunately the most recent stable uClibc version 0.9.33.2 doesn't
+> > have "savedefconfig" target so I'm leaving uClibc-0.9.33.config as it
+> > is.
+> 
+> Please do not use master branch of uClibc-ng, as the config is no
+> longer compatible to uClibc. Use uClibc-ng 1.0 branch for this.
+> 1.0 will be compatible to existing uClibc config.
+> Master has some symbols renamed and removed already.
+> 
+> Only 1.0.x support is included in buildroot.
 
-This problem is not seen with Qt compilation because some relative include
-directly from sources are added.
+Indeed I noticed some symbols were missing.
+But I was under impression that 1.x are made from master so used master
+as a base.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/qt/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+I'll send a re-spin with defconfig for uClibc-ng based on 1.0 branch.
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 43f5a0f..f6ca054 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -417,6 +417,7 @@ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 
- config BR2_PACKAGE_QT_WEBKIT
- 	bool "WebKit Module"
-+	depends on BR2_PACKAGE_QT_SCRIPT
- 	depends on BR2_PACKAGE_QT_SHARED
- 	depends on BR2_PACKAGE_QT_GUI_MODULE
- 	depends on BR2_PACKAGE_QT_NETWORK
-@@ -427,7 +428,8 @@ config BR2_PACKAGE_QT_WEBKIT
- 	  If unsure, say n.
- 
- comment "WebKit needs shared library/NPTL toolchain/gui/network support"
--	depends on !(BR2_PACKAGE_QT_SHARED && BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
-+	depends on !(BR2_PACKAGE_QT_SCRIPT && BR2_PACKAGE_QT_SHARED && \
-+		BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 
--- 
-2.0.5
+Thanks a lot for prompt reply.
+Alexey
