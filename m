@@ -1,73 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Apr 2015 09:45:38 +0200
-Subject: [Buildroot] [PATCH v6 5/8] support/download: add possibility to
- not fail on missing hash
-In-Reply-To: <20150419183851.GM4313@free.fr>
-References: <cover.1429447148.git.yann.morin.1998@free.fr>
- <1429466158-28878-1-git-send-email-arnout@mind.be>
- <1429466158-28878-5-git-send-email-arnout@mind.be>
- <20150419183851.GM4313@free.fr>
-Message-ID: <5534AEA2.9010401@mind.be>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 20 Apr 2015 10:38:11 +0200
+Subject: [Buildroot] [PATCH] live555: fix library installation
+In-Reply-To: <20150419134235.18c914b0@free-electrons.com>
+References: <1429195850-4884-1-git-send-email-luca@lucaceresoli.net>
+ <20150419134235.18c914b0@free-electrons.com>
+Message-ID: <5534BAF3.1080305@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/04/15 20:38, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2015-04-19 19:55 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
->> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Dear Thomas,
+
+Thomas Petazzoni wrote:
+> Dear Luca Ceresoli,
+>
+> On Thu, 16 Apr 2015 16:50:50 +0200, Luca Ceresoli wrote:
+>> The manual target installation commands optionally copies 3 executables
+>> that demonstrate the library usage, but do not the library itself.
 >>
->> In very constrained cases, it might be needed to not fail if a hash is
->> missing. This is notably the case for custom external toolchains to be
->> downloaded, because we do have a .hash file for external toolchains,
->> but we obviously can not have hashes for all existing custom toolchains
->> (he, "custom"!).
+>> This results in the following errors at runtime:
 >>
->> So, add a way to avoid failing in that case.
->>
->> >From the Makefile, we export the list of files for which not to check
-> 
-> Stray leading '>' probably for a copy-paste from your mailer.
+>>    # openRTSP
+>>    openRTSP: can't load library 'libliveMedia.so.38'
+>>    # live555MediaServer
+>>    live555MediaServer: can't load library 'libliveMedia.so.38'
+>>    # MPEG2TransportStreamIndexer
+>>    MPEG2TransportStreamIndexer: can't load library 'libliveMedia.so.38'
+>>    #
+>
+> I understand the issue, but I'm not entirely happy with the solution.
+> There are some options BR2_PACKAGE_LIVE555_OPENRTSP,
+> BR2_PACKAGE_LIVE555_MEDIASERVER, etc. to control which tools to
+> install. But with your new patch, regardless of the value of those
+> options, a lot of other programs (tests and others) are installed.
+> Which make the existing per-program options a bit weird/useless.
+>
+> I would personally advocate for a simple removal of the per-program
+> options, just install everything, and leave it to post-build scripts to
+> clean up what's needed.
 
- pwclient git-am actually... I would have expected patchwork (or actually, the
-python mail handling infra) to handle >From correctly...
+Wow, this means removing dozens of lines of code... great!
 
-> 
->> the hash. Then, from the check-hash script, if no check was done, and
->> the file we were trying to match in in this exclusion list, we just exit
->> without error.
->>
-[snip]
->> diff --git a/support/download/check-hash b/support/download/check-hash
->> index 678a7ef..d378701 100755
->> --- a/support/download/check-hash
->> +++ b/support/download/check-hash
->> @@ -99,6 +99,12 @@ while read t h f; do
->>  done <"${h_file}"
->>  
->>  if [ ${nb_checks} -eq 0 ]; then
->> +    case " ${BR_NO_CHECK_HASH_FOR} " in
->> +    *\ ${base}\ *)
-> 
-> I don't like much the escaping when it can be avoided. We can still use
-> quotes (even if not very much better), like so:
-> 
->     *" ${base} "*
+At first I just wanted to keep a sort of "backward compatibility", at
+least at the configure level. But I really prefer to simplify the
+package by installing everything.
 
- It's your patch, modify as you like :-)
+I'm sending an update v2 patch.
 
- I just reposted it since I anyway had it locally modified.
-
- Regards,
- Arnout
+BTW, there should be a simple way to skip installation of all
+executables, by tweaking the live555 makefiles. But I don't think it
+would be very nice to conditionally apply a patch based on config
+options. Do you agree?
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Luca
