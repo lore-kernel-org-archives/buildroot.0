@@ -1,7 +1,9 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 20 Apr 2015 05:25:43 +0200
-Subject: [Buildroot] [PATCH 1/3] package/pkgconf: add hash
-Message-ID: <1429500345-31730-1-git-send-email-fabio.porcedda@gmail.com>
+Date: Mon, 20 Apr 2015 05:25:44 +0200
+Subject: [Buildroot] [PATCH 2/3] package/dmalloc: add hash
+In-Reply-To: <1429500345-31730-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1429500345-31730-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1429500345-31730-2-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/pkgconf/pkgconf.hash | 2 ++
+ package/dmalloc/dmalloc.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/pkgconf/pkgconf.hash
+ create mode 100644 package/dmalloc/dmalloc.hash
 
-diff --git a/package/pkgconf/pkgconf.hash b/package/pkgconf/pkgconf.hash
+diff --git a/package/dmalloc/dmalloc.hash b/package/dmalloc/dmalloc.hash
 new file mode 100644
-index 0000000..97060bd
+index 0000000..e74ef74
 --- /dev/null
-+++ b/package/pkgconf/pkgconf.hash
++++ b/package/dmalloc/dmalloc.hash
 @@ -0,0 +1,2 @@
 +# Locally computed:
-+sha256 3bbb1c40832b522de0bf0e5bdeba62160ac499a541facedac5755929a9e87027 pkgconf-0.8.9.tar.bz2
++sha256 d3be5c6eec24950cb3bd67dbfbcdf036f1278fae5fd78655ef8cdf9e911e428a dmalloc-5.5.2.tgz
 -- 
 2.3.5
