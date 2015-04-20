@@ -1,32 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 20 Apr 2015 19:45:10 +0200
-Subject: [Buildroot] [PATCH 2/2] package/tor: new package
-References: <1427638949-3191-1-git-send-email-bernd.kuhls@t-online.de>
- <1427638949-3191-2-git-send-email-bernd.kuhls@t-online.de>
- <CAHkwnC_aKhRJezdfbxiMVq6ZsTSGrk-jmns7b7M5Yht3s9HpVA@mail.gmail.com>
-Message-ID: <XnsA482C8EF8C79berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Apr 2015 19:47:36 +0200
+Subject: [Buildroot] [git commit] pppd: fix url
+Message-ID: <20150420174941.EA21381D41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio Porcedda <fabio.porcedda@gmail.com> wrote 
-in news:CAHkwnC_aKhRJezdfbxiMVq6ZsTSGrk-jmns7b7M5Yht3s9HpVA at mail.gmail.com:
+commit: http://git.buildroot.net/buildroot/commit/?id=2a9041ab763e1e0a9f0fc727be22e13f38e40413
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->> +TOR_VERSION = 0.2.5.11
-> 
-> What about adding the latest version available (0.2.6.7)?
+Explanation from https://download.samba.org/pub/samba/README.FTP
 
-Hi,
+Due to bandwidth usage, ftp downloads of Samba from samba.org are no
+longer allowed. Please use one of our many mirror sites at
+http://www.samba.org/ or to directly access the old site via http
+please use http://download.samba.org/samba/ftp/
 
-https://www.torproject.org/download/download.html.en
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pppd/pppd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-"The current stable version of Tor is 0.2.5.12." (will update my patch)
-
-"The current unstable/alpha version of Tor is 0.2.6.7."
-
-Afaik it is the policy of the buildroot project not to ship alpha versions of 
-software.
-
-Regards, Bernd
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 31d6e06..b268fbe 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -6,7 +6,7 @@
+ 
+ PPPD_VERSION = 2.4.7
+ PPPD_SOURCE = ppp-$(PPPD_VERSION).tar.gz
+-PPPD_SITE = ftp://ftp.samba.org/pub/ppp
++PPPD_SITE = https://download.samba.org/pub/ppp
+ PPPD_LICENSE = LGPLv2+ LGPL BSD-4c BSD-3c GPLv2+
+ PPPD_LICENSE_FILES = \
+ 	pppd/tdb.c pppd/plugins/pppoatm/COPYING \
