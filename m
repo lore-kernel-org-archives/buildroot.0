@@ -1,65 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Apr 2015 22:54:35 +0200
-Subject: [Buildroot] [PATCH v2] live555: fix library installation
-In-Reply-To: <20150420113516.53c9199f@free-electrons.com>
-References: <1429519351-8391-1-git-send-email-luca@lucaceresoli.net>
- <20150420113516.53c9199f@free-electrons.com>
-Message-ID: <5535678B.7090506@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Apr 2015 22:56:28 +0200
+Subject: [Buildroot] [PATCH v4 1/1] Added linux drivers backports project
+In-Reply-To: <553564B4.2060303@mind.be>
+References: <1429311670-7831-1-git-send-email-petr.vorel@gmail.com>
+ <20150419110326.31c34542@free-electrons.com>
+ <5533D5CF.5000305@mind.be> <20150419162839.GI4313@free.fr>
+ <20150419190321.19200e70@free-electrons.com>
+ <553564B4.2060303@mind.be>
+Message-ID: <20150420225628.0a54561f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/04/15 11:35, Thomas Petazzoni wrote:
-> Dear Luca Ceresoli,
-> 
-> On Mon, 20 Apr 2015 10:42:31 +0200, Luca Ceresoli wrote:
-> 
->> -if BR2_PACKAGE_LIVE555
->> -
->> -config BR2_PACKAGE_LIVE555_OPENRTSP
->> -	bool "OpenRTSP"
->> -	default y
->> -	help
->> -	  Live555 RTSP Client.
->> -
->> -config BR2_PACKAGE_LIVE555_MEDIASERVER
->> -	bool "live555MediaServer"
->> -	default y
->> -	help
->> -	  RTSP Server. Supports numerous media formats such as H.264 and MPEG2.
->> -
->> -config BR2_PACKAGE_LIVE555_MPEG2_INDEXER
->> -	bool "MPEG2TransportStreamIndexer"
->> -	default y
->> -	help
->> -	  MPEG2 Transport Stream Indexer. Provides indexes allowing 'trick play'
->> -	  operation in the Live555MediaServer.
->> -
->> -endif
-> 
-> Config.in.legacy handling?
+Dear Arnout Vandecappelle,
 
- Don't really see the point... It defaults to y anyway, so only someone who
-explicitly disabled it in their config would care. But in that case, it won't
-even show up on the legacy screen. So actually, it's better _not_ to have legacy
-handling for this one IMHO.
+On Mon, 20 Apr 2015 22:42:28 +0200, Arnout Vandecappelle wrote:
 
- Regards,
- Arnout
-
+>  However, we can add the dependency specifically for linux-backports. There is
+> something to be said for the reasoning that usually/sometimes you don't need the
+> dependencies to be present, so doing it per package sounds OK.
 > 
-> Thanks!
+>  So in this case, adding
 > 
-> Thomas
+> $(LINUX_BACKPORTS_KCONFIG_FILE): linux
 > 
+> to linux-backports.mk should be sufficient.
 
+If we do this, we must also keep the 'linux' dependency in
+LINUX_BACKPORTS_DEPENDENCIES as well, so that the package infra remains
+aware of this dependency.
 
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
