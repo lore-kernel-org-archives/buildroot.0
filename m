@@ -1,68 +1,26 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Apr 2015 23:10:36 +0200
-Subject: [Buildroot] [git commit] pppd: fix url
-In-Reply-To: <20150420174941.EA21381D41@busybox.osuosl.org>
-References: <20150420174941.EA21381D41@busybox.osuosl.org>
-Message-ID: <55356B4C.8030204@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 20 Apr 2015 23:19:45 +0200
+Subject: [Buildroot] [PATCH] package/b43-firmware: add missing hash for pre
+	3.2 kernel archive
+Message-ID: <1429564785-11856-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/04/15 19:47, Thomas Petazzoni wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=2a9041ab763e1e0a9f0fc727be22e13f38e40413
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Explanation from https://download.samba.org/pub/samba/README.FTP
-> 
-> Due to bandwidth usage, ftp downloads of Samba from samba.org are no
-> longer allowed. Please use one of our many mirror sites at
-> http://www.samba.org/ or to directly access the old site via http
-> please use http://download.samba.org/samba/ftp/
-> 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/pppd/pppd.mk |    2 +-
->  1 files changed, 1 insertions(+), 1 deletions(-)
-> 
-> diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-> index 31d6e06..b268fbe 100644
-> --- a/package/pppd/pppd.mk
-> +++ b/package/pppd/pppd.mk
-> @@ -6,7 +6,7 @@
->  
->  PPPD_VERSION = 2.4.7
->  PPPD_SOURCE = ppp-$(PPPD_VERSION).tar.gz
-> -PPPD_SITE = ftp://ftp.samba.org/pub/ppp
-> +PPPD_SITE = https://download.samba.org/pub/ppp
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/b43-firmware/b43-firmware.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
- Actually, we prefer to avoid https because of potential issues with
-certificates and limitations of corporate firewalls. And the http version works.
-
-
- Regards,
- Arnout
-
-
->  PPPD_LICENSE = LGPLv2+ LGPL BSD-4c BSD-3c GPLv2+
->  PPPD_LICENSE_FILES = \
->  	pppd/tdb.c pppd/plugins/pppoatm/COPYING \
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
+diff --git a/package/b43-firmware/b43-firmware.hash b/package/b43-firmware/b43-firmware.hash
+index bafd00c..efc1a6c 100644
+--- a/package/b43-firmware/b43-firmware.hash
++++ b/package/b43-firmware/b43-firmware.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256 f1e7067aac5b62b67b8b6e4c517990277804339ac16065eb13c731ff909ae46f broadcom-wl-5.100.138.tar.bz2
++sha256 26a8c370f48fc129d0731cfd751c36cae1419b0bc8ca35781126744e60eae009 broadcom-wl-5.10.56.27.3_mipsel.tar.bz2
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.3
