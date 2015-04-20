@@ -1,233 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Apr 2015 22:38:04 +0200
-Subject: [Buildroot] [git commit] package/gdb: backport xtensa gdbserver
-	fixes
-Message-ID: <20150420203827.4D13E81D54@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 20 Apr 2015 22:42:28 +0200
+Subject: [Buildroot] [PATCH v4 1/1] Added linux drivers backports project
+In-Reply-To: <20150419190321.19200e70@free-electrons.com>
+References: <1429311670-7831-1-git-send-email-petr.vorel@gmail.com>	<20150419110326.31c34542@free-electrons.com>	<5533D5CF.5000305@mind.be>	<20150419162839.GI4313@free.fr>
+ <20150419190321.19200e70@free-electrons.com>
+Message-ID: <553564B4.2060303@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c92d4b89563d8396b74e0a0467d30805a4bb26f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/04/15 19:03, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
+> 
+> On Sun, 19 Apr 2015 18:28:39 +0200, Yann E. MORIN wrote:
+> 
+>> Well, I would not be very happy with that, since that would make the
+>> following use-case a real pain:
+>>
+>>     $ make foo_defconfig
+>>     $ make linux-menuconfig
+>>
+>> Currently, all it needs is the linux kernel to be extracted and patched,
+>> and none of its depedencies to be built. Otherwise, it would require the
+>> toolchain to be built, plus a sh.tload of other stuff (lzo, for one, and
+>> all its own dependencies).
+> 
+> We could remove the mandatory host-lzo dependency from the linux
+> package, by adding an option for that. Remember the recent patches also
+> adding host-xz to the dependencies of linux, which I rejected?
+> 
+> This would leave host-kmod as the only dependency of the linux package
+> I believe. But well host-kmod as AUTORECONF = YES, so it pulls a whole
+> bunch of crap.
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...gdbserver-xtensa-drop-xtensa_usrregs_info.patch |   47 ++++++++++++++++++++
- ...erver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch |   46 +++++++++++++++++++
- ...gdbserver-xtensa-drop-xtensa_usrregs_info.patch |   47 ++++++++++++++++++++
- ...erver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch |   46 +++++++++++++++++++
- 4 files changed, 186 insertions(+), 0 deletions(-)
+ As mentioned before, it pulls in the toolchain as well. That's a lot worse than
+host-lzo and host-xz - even extracting an external toolchain takes longer than
+host-xz (at least for me).
 
-diff --git a/package/gdb/7.8.2/0002-gdbserver-xtensa-drop-xtensa_usrregs_info.patch b/package/gdb/7.8.2/0002-gdbserver-xtensa-drop-xtensa_usrregs_info.patch
-new file mode 100644
-index 0000000..93fe749
---- /dev/null
-+++ b/package/gdb/7.8.2/0002-gdbserver-xtensa-drop-xtensa_usrregs_info.patch
-@@ -0,0 +1,47 @@
-+From deb44829ecc1dd38275af0fcf91acd319e227a89 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Fri, 17 Apr 2015 03:07:41 +0300
-+Subject: [PATCH 1/2] gdbserver/xtensa: drop xtensa_usrregs_info
-+
-+xtensa_usrregs_info refers to undefined variables xtensa_num_regs and
-+xtensa_regmap. Drop xtensa_usrregs_info and replace pointer to usrregs
-+in regs_info with NULL since all registers are read/set through regsets.
-+
-+2015-04-17  Max Filippov  <jcmvbkbc@gmail.com>
-+gdb/gdbserver/
-+	* linux-xtensa-low.c (xtensa_usrregs_info): Remove.
-+	(regs_info): Replace usrregs pointer with NULL.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: deb44829ecc1dd38275af0fcf91acd319e227a89
-+Changes to ChangeLog are dropped.
-+
-+ gdb/gdbserver/linux-xtensa-low.c | 8 +-------
-+ 2 files changed, 6 insertions(+), 7 deletions(-)
-+
-+diff --git a/gdb/gdbserver/linux-xtensa-low.c b/gdb/gdbserver/linux-xtensa-low.c
-+index f7fafaf..e786da5 100644
-+--- a/gdb/gdbserver/linux-xtensa-low.c
-++++ b/gdb/gdbserver/linux-xtensa-low.c
-+@@ -186,16 +186,10 @@ static struct regsets_info xtensa_regsets_info =
-+     NULL, /* disabled_regsets */
-+   };
-+ 
-+-static struct usrregs_info xtensa_usrregs_info =
-+-  {
-+-    xtensa_num_regs,
-+-    xtensa_regmap,
-+-  };
-+-
-+ static struct regs_info regs_info =
-+   {
-+     NULL, /* regset_bitmap */
-+-    &xtensa_usrregs_info,
-++    NULL, /* usrregs */
-+     &xtensa_regsets_info
-+   };
-+ 
-+-- 
-+1.8.1.4
-+
-diff --git a/package/gdb/7.8.2/0003-gdbserver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch b/package/gdb/7.8.2/0003-gdbserver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch
-new file mode 100644
-index 0000000..027f700
---- /dev/null
-+++ b/package/gdb/7.8.2/0003-gdbserver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch
-@@ -0,0 +1,46 @@
-+From a2d5a9d76f2366ed93095fc5a63eafa06b22f808 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Fri, 17 Apr 2015 02:52:50 +0300
-+Subject: [PATCH 2/2] gdbserver/xtensa: fix typo in XCHAL_HAVE_LOOPS
-+
-+This fixes lbeg/lend/lcount registers handling through gdbserver.
-+
-+2015-04-17  Max Filippov  <jcmvbkbc@gmail.com>
-+gdb/gdbserver/
-+	* linux-xtensa-low.c (xtensa_fill_gregset)
-+	(xtensa_store_gregset): Check XCHAL_HAVE_LOOPS instead of
-+	XCHAL_HAVE_LOOP.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: a2d5a9d76f2366ed93095fc5a63eafa06b22f808
-+Changes to ChangeLog are dropped.
-+
-+ gdb/gdbserver/linux-xtensa-low.c | 4 ++--
-+ 2 files changed, 8 insertions(+), 2 deletions(-)
-+
-+diff --git a/gdb/gdbserver/linux-xtensa-low.c b/gdb/gdbserver/linux-xtensa-low.c
-+index e786da5..4daccee 100644
-+--- a/gdb/gdbserver/linux-xtensa-low.c
-++++ b/gdb/gdbserver/linux-xtensa-low.c
-+@@ -59,7 +59,7 @@ xtensa_fill_gregset (struct regcache *regcache, void *buf)
-+ 
-+   /* Loop registers, if hardware has it.  */
-+ 
-+-#if XCHAL_HAVE_LOOP
-++#if XCHAL_HAVE_LOOPS
-+   collect_register_by_name (regcache, "lbeg", (char*)&rset[R_LBEG]);
-+   collect_register_by_name (regcache, "lend", (char*)&rset[R_LEND]);
-+   collect_register_by_name (regcache, "lcount", (char*)&rset[R_LCOUNT]);
-+@@ -94,7 +94,7 @@ xtensa_store_gregset (struct regcache *regcache, const void *buf)
-+ 
-+   /* Loop registers, if hardware has it.  */
-+ 
-+-#if XCHAL_HAVE_LOOP
-++#if XCHAL_HAVE_LOOPS
-+   supply_register_by_name (regcache, "lbeg", (char*)&rset[R_LBEG]);
-+   supply_register_by_name (regcache, "lend", (char*)&rset[R_LEND]);
-+   supply_register_by_name (regcache, "lcount", (char*)&rset[R_LCOUNT]);
-+-- 
-+1.8.1.4
-+
-diff --git a/package/gdb/7.9/0002-gdbserver-xtensa-drop-xtensa_usrregs_info.patch b/package/gdb/7.9/0002-gdbserver-xtensa-drop-xtensa_usrregs_info.patch
-new file mode 100644
-index 0000000..93fe749
---- /dev/null
-+++ b/package/gdb/7.9/0002-gdbserver-xtensa-drop-xtensa_usrregs_info.patch
-@@ -0,0 +1,47 @@
-+From deb44829ecc1dd38275af0fcf91acd319e227a89 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Fri, 17 Apr 2015 03:07:41 +0300
-+Subject: [PATCH 1/2] gdbserver/xtensa: drop xtensa_usrregs_info
-+
-+xtensa_usrregs_info refers to undefined variables xtensa_num_regs and
-+xtensa_regmap. Drop xtensa_usrregs_info and replace pointer to usrregs
-+in regs_info with NULL since all registers are read/set through regsets.
-+
-+2015-04-17  Max Filippov  <jcmvbkbc@gmail.com>
-+gdb/gdbserver/
-+	* linux-xtensa-low.c (xtensa_usrregs_info): Remove.
-+	(regs_info): Replace usrregs pointer with NULL.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: deb44829ecc1dd38275af0fcf91acd319e227a89
-+Changes to ChangeLog are dropped.
-+
-+ gdb/gdbserver/linux-xtensa-low.c | 8 +-------
-+ 2 files changed, 6 insertions(+), 7 deletions(-)
-+
-+diff --git a/gdb/gdbserver/linux-xtensa-low.c b/gdb/gdbserver/linux-xtensa-low.c
-+index f7fafaf..e786da5 100644
-+--- a/gdb/gdbserver/linux-xtensa-low.c
-++++ b/gdb/gdbserver/linux-xtensa-low.c
-+@@ -186,16 +186,10 @@ static struct regsets_info xtensa_regsets_info =
-+     NULL, /* disabled_regsets */
-+   };
-+ 
-+-static struct usrregs_info xtensa_usrregs_info =
-+-  {
-+-    xtensa_num_regs,
-+-    xtensa_regmap,
-+-  };
-+-
-+ static struct regs_info regs_info =
-+   {
-+     NULL, /* regset_bitmap */
-+-    &xtensa_usrregs_info,
-++    NULL, /* usrregs */
-+     &xtensa_regsets_info
-+   };
-+ 
-+-- 
-+1.8.1.4
-+
-diff --git a/package/gdb/7.9/0003-gdbserver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch b/package/gdb/7.9/0003-gdbserver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch
-new file mode 100644
-index 0000000..027f700
---- /dev/null
-+++ b/package/gdb/7.9/0003-gdbserver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch
-@@ -0,0 +1,46 @@
-+From a2d5a9d76f2366ed93095fc5a63eafa06b22f808 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Fri, 17 Apr 2015 02:52:50 +0300
-+Subject: [PATCH 2/2] gdbserver/xtensa: fix typo in XCHAL_HAVE_LOOPS
-+
-+This fixes lbeg/lend/lcount registers handling through gdbserver.
-+
-+2015-04-17  Max Filippov  <jcmvbkbc@gmail.com>
-+gdb/gdbserver/
-+	* linux-xtensa-low.c (xtensa_fill_gregset)
-+	(xtensa_store_gregset): Check XCHAL_HAVE_LOOPS instead of
-+	XCHAL_HAVE_LOOP.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: a2d5a9d76f2366ed93095fc5a63eafa06b22f808
-+Changes to ChangeLog are dropped.
-+
-+ gdb/gdbserver/linux-xtensa-low.c | 4 ++--
-+ 2 files changed, 8 insertions(+), 2 deletions(-)
-+
-+diff --git a/gdb/gdbserver/linux-xtensa-low.c b/gdb/gdbserver/linux-xtensa-low.c
-+index e786da5..4daccee 100644
-+--- a/gdb/gdbserver/linux-xtensa-low.c
-++++ b/gdb/gdbserver/linux-xtensa-low.c
-+@@ -59,7 +59,7 @@ xtensa_fill_gregset (struct regcache *regcache, void *buf)
-+ 
-+   /* Loop registers, if hardware has it.  */
-+ 
-+-#if XCHAL_HAVE_LOOP
-++#if XCHAL_HAVE_LOOPS
-+   collect_register_by_name (regcache, "lbeg", (char*)&rset[R_LBEG]);
-+   collect_register_by_name (regcache, "lend", (char*)&rset[R_LEND]);
-+   collect_register_by_name (regcache, "lcount", (char*)&rset[R_LCOUNT]);
-+@@ -94,7 +94,7 @@ xtensa_store_gregset (struct regcache *regcache, const void *buf)
-+ 
-+   /* Loop registers, if hardware has it.  */
-+ 
-+-#if XCHAL_HAVE_LOOP
-++#if XCHAL_HAVE_LOOPS
-+   supply_register_by_name (regcache, "lbeg", (char*)&rset[R_LBEG]);
-+   supply_register_by_name (regcache, "lend", (char*)&rset[R_LEND]);
-+   supply_register_by_name (regcache, "lcount", (char*)&rset[R_LCOUNT]);
-+-- 
-+1.8.1.4
-+
+
+ However, we can add the dependency specifically for linux-backports. There is
+something to be said for the reasoning that usually/sometimes you don't need the
+dependencies to be present, so doing it per package sounds OK.
+
+ So in this case, adding
+
+$(LINUX_BACKPORTS_KCONFIG_FILE): linux
+
+to linux-backports.mk should be sufficient.
+
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
