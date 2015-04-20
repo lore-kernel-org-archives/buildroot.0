@@ -1,36 +1,48 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 20 Apr 2015 09:10:52 +0000
-Subject: [Buildroot] [PATCH] uclibc: clean-up test suite build command
-In-Reply-To: <20150420105831.597e4bca@free-electrons.com>
-References: <1404149181-18586-1-git-send-email-abrodkin@synopsys.com>
- <20140630200719.1339a6ed@free-electrons.com>
- <1427269764.2718.4.camel@synopsys.com>
- <20150325173919.0b2d0528@free-electrons.com>
- <1429519146.2756.2.camel@synopsys.com>
- <20150420105831.597e4bca@free-electrons.com>
-Message-ID: <1429521052.2756.3.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Apr 2015 11:35:16 +0200
+Subject: [Buildroot] [PATCH v2] live555: fix library installation
+In-Reply-To: <1429519351-8391-1-git-send-email-luca@lucaceresoli.net>
+References: <1429519351-8391-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20150420113516.53c9199f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Luca Ceresoli,
 
-On Mon, 2015-04-20 at 10:58 +0200, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Mon, 20 Apr 2015 08:39:07 +0000, Alexey Brodkin wrote:
-> 
-> > Please treat this as a gentle reminder. I'm wondering if that pretty
-> > straight-forward change has a chance for being applied?
-> > 
-> > From your previous answer I understood that you\re in general fine with
-> > clean-up stuff like that.
-> 
-> Sure. Can you resend a new version of the patch, so that it shows up in
-> patchwork?
+On Mon, 20 Apr 2015 10:42:31 +0200, Luca Ceresoli wrote:
 
-Sure, done!
+> -if BR2_PACKAGE_LIVE555
+> -
+> -config BR2_PACKAGE_LIVE555_OPENRTSP
+> -	bool "OpenRTSP"
+> -	default y
+> -	help
+> -	  Live555 RTSP Client.
+> -
+> -config BR2_PACKAGE_LIVE555_MEDIASERVER
+> -	bool "live555MediaServer"
+> -	default y
+> -	help
+> -	  RTSP Server. Supports numerous media formats such as H.264 and MPEG2.
+> -
+> -config BR2_PACKAGE_LIVE555_MPEG2_INDEXER
+> -	bool "MPEG2TransportStreamIndexer"
+> -	default y
+> -	help
+> -	  MPEG2 Transport Stream Indexer. Provides indexes allowing 'trick play'
+> -	  operation in the Live555MediaServer.
+> -
+> -endif
 
--Alexey
+Config.in.legacy handling?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
