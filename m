@@ -1,66 +1,73 @@
-From: gwenhael.goavec <gwenj@trabucayre.com>
-Date: Mon, 20 Apr 2015 09:34:18 +0200
-Subject: [Buildroot] [PATCH v3 2/2] python-pyqt: new package
-In-Reply-To: <20150419192345.3ec38d2a@free-electrons.com>
-References: <1429430633-12267-1-git-send-email-gwenj@trabucayre.com>
- <1429430633-12267-2-git-send-email-gwenj@trabucayre.com>
- <20150419192345.3ec38d2a@free-electrons.com>
-Message-ID: <20150420093418.59629a18@x230.trabucayre.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 20 Apr 2015 09:45:38 +0200
+Subject: [Buildroot] [PATCH v6 5/8] support/download: add possibility to
+ not fail on missing hash
+In-Reply-To: <20150419183851.GM4313@free.fr>
+References: <cover.1429447148.git.yann.morin.1998@free.fr>
+ <1429466158-28878-1-git-send-email-arnout@mind.be>
+ <1429466158-28878-5-git-send-email-arnout@mind.be>
+ <20150419183851.GM4313@free.fr>
+Message-ID: <5534AEA2.9010401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas.
+On 19/04/15 20:38, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2015-04-19 19:55 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+>> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>
+>> In very constrained cases, it might be needed to not fail if a hash is
+>> missing. This is notably the case for custom external toolchains to be
+>> downloaded, because we do have a .hash file for external toolchains,
+>> but we obviously can not have hashes for all existing custom toolchains
+>> (he, "custom"!).
+>>
+>> So, add a way to avoid failing in that case.
+>>
+>> >From the Makefile, we export the list of files for which not to check
+> 
+> Stray leading '>' probably for a copy-paste from your mailer.
 
-Thank for review and corrections.
+ pwclient git-am actually... I would have expected patchwork (or actually, the
+python mail handling infra) to handle >From correctly...
 
-Regards
-Gwenhael
+> 
+>> the hash. Then, from the check-hash script, if no check was done, and
+>> the file we were trying to match in in this exclusion list, we just exit
+>> without error.
+>>
+[snip]
+>> diff --git a/support/download/check-hash b/support/download/check-hash
+>> index 678a7ef..d378701 100755
+>> --- a/support/download/check-hash
+>> +++ b/support/download/check-hash
+>> @@ -99,6 +99,12 @@ while read t h f; do
+>>  done <"${h_file}"
+>>  
+>>  if [ ${nb_checks} -eq 0 ]; then
+>> +    case " ${BR_NO_CHECK_HASH_FOR} " in
+>> +    *\ ${base}\ *)
+> 
+> I don't like much the escaping when it can be avoided. We can still use
+> quotes (even if not very much better), like so:
+> 
+>     *" ${base} "*
 
-On Sun, 19 Apr 2015 19:23:45 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+ It's your patch, modify as you like :-)
 
-> Gwenhael,
-> 
-> On Sun, 19 Apr 2015 10:03:53 +0200, Gwenhael Goavec-Merou wrote:
-> > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> > 
-> > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> > Cc: Sergey Kostanbaev <sergey.kostanbaev@gmail.com>
-> 
-> Patch applied, after doing some additional changes:
-> 
->     [Thomas:
->      - Remove dependency on python (already a dependency of python-sip),
->        and add a dependency on host-python-sip, since python-sip no longer
->        depends on host-python-sip.
->      - Make the code Python 2 / Python 3 compatible (both have been
->        tested).
->      - Fix indentation all over the place.
->      - Remove double quotes when defining variable values, not needed.
->      - Add <pkg>_BUILD_CMDS to do the build process separately from the
->        installation.
->      - Create a PYTHON_PYQT_CONF_OPTS variable with all the config
->        options, since some of them are now conditional.
->      - Use 'compileall' to byte-compile the dummy __init__.py.]
-> 
-> I also made a fix on python-sip to make things build properly on Python 3.
-> 
-> I tested PyQt with both Python 2 and Python 3, and I was able to run:
-> 
-> >>> from PyQt4 import QtCore
-> >>> QtCore.QDateTime.currentDateTime()
-> PyQt4.QtCore.QDateTime(2015, 4, 19, 16, 59, 12, 794)
-> 
-> in both cases. Don't hesitate to test with bigger applications to
-> confirm that everything is still working fine.
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+ I just reposted it since I anyway had it locally modified.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
