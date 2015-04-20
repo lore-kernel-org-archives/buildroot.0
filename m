@@ -1,63 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Apr 2015 23:50:01 +0200
-Subject: [Buildroot] [PATCH 1/2] pkg-download: add optional destination
- filename
-In-Reply-To: <1429462679-4769-1-git-send-email-fhunleth@troodon-software.com>
-References: <1429462679-4769-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <55357489.3080305@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 20 Apr 2015 22:00:16 +0000 (UTC)
+Subject: [Buildroot] [Bug 7971] python-flask,
+	python-werkzeug. No module named zlib
+In-Reply-To: <bug-7971-163@https.bugs.busybox.net/>
+References: <bug-7971-163@https.bugs.busybox.net/>
+Message-ID: <20150420220016.22065819CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/04/15 18:57, Frank Hunleth wrote:
-> This adds an optional parameter to the DOWNLOAD macro so that it's
-> possible to specify a destination filename that's different from one
-> being downloaded.
+https://bugs.busybox.net/show_bug.cgi?id=7971
 
- In this case, this filename should be used instead of the upstream filename
-when downloading from PRIMARY or SECONDARY.
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-04-20 22:00:15 UTC ---
+I am using a fr_FR.UTF-8 system. I've built the following defconfig:
 
- And perhaps for the time being both should be tried, because current caches
-still have the old filenames...
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.02.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_18=y
+BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PYTHON_FLASK=y
 
- Regards,
- Arnout
+And Flask can be imported just fine:
 
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  package/pkg-download.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index e274712..1278018 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -244,13 +244,14 @@ endef
->  # 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
->  #
->  # Argument 1 is the source location
-> +# Argument 2 is an optional destination filename
->  #
->  # E.G. use like this:
->  # $(call DOWNLOAD,$(FOO_SITE))
->  ################################################################################
->  
->  define DOWNLOAD
-> -	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)))
-> +	$(call DOWNLOAD_INNER,$(1),$(if $(2),$(2),$(notdir $(1))))
->  endef
->  
->  define DOWNLOAD_INNER
-> 
+Welcome to Buildroot
+buildroot login: root
+# python
+>>> from flask import Flask
+>>> 
 
+So I cannot reproduce the bug reported by Nikita.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
