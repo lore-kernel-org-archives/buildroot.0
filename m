@@ -1,34 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Apr 2015 22:38:16 +0200
-Subject: [Buildroot] [PATCH] package/gdb: backport xtensa gdbserver fixes
-In-Reply-To: <1429446912-3366-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1429446912-3366-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20150420223816.285de98b@free-electrons.com>
+Date: Mon, 20 Apr 2015 22:35:58 +0200
+Subject: [Buildroot] [git commit] boost: add option to disable container
+	library
+Message-ID: <20150420203827.43E8981D53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Max Filippov,
+commit: http://git.buildroot.net/buildroot/commit/?id=bbbdde6e052b28b5c669ea29027c94d246861a28
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 19 Apr 2015 15:35:12 +0300, Max Filippov wrote:
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> ---
->  ...gdbserver-xtensa-drop-xtensa_usrregs_info.patch | 47 ++++++++++++++++++++++
->  ...erver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch | 46 +++++++++++++++++++++
->  ...gdbserver-xtensa-drop-xtensa_usrregs_info.patch | 47 ++++++++++++++++++++++
->  ...erver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch | 46 +++++++++++++++++++++
->  4 files changed, 186 insertions(+)
->  create mode 100644 package/gdb/7.8.2/0002-gdbserver-xtensa-drop-xtensa_usrregs_info.patch
->  create mode 100644 package/gdb/7.8.2/0003-gdbserver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch
->  create mode 100644 package/gdb/7.9/0002-gdbserver-xtensa-drop-xtensa_usrregs_info.patch
->  create mode 100644 package/gdb/7.9/0003-gdbserver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch
+Signed-off-by: Will Wagner <will_wagner@carallon.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/boost/Config.in |    3 +++
+ package/boost/boost.mk  |    1 +
+ 2 files changed, 4 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 5444c42..add7069 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -55,6 +55,9 @@ config BR2_PACKAGE_BOOST_ATOMIC
+ config BR2_PACKAGE_BOOST_CHRONO
+ 	bool "boost-chrono"
+ 
++config BR2_PACKAGE_BOOST_CONTAINER
++	bool "boost-container"
++
+ config BR2_PACKAGE_BOOST_CONTEXT
+ 	bool "boost-context"
+ 	depends on (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel \
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 56a6c34..7060591 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -28,6 +28,7 @@ BOOST_WITHOUT_FLAGS = coroutine
+ 
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTAINER),,container)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
