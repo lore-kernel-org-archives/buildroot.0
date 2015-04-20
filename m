@@ -1,7 +1,9 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 20 Apr 2015 17:29:17 +0200
-Subject: [Buildroot] [PATCH 1/3] python-pyqt: fix compile on x86
-Message-ID: <1429543759-32207-1-git-send-email-gwenj@trabucayre.com>
+Date: Mon, 20 Apr 2015 17:29:19 +0200
+Subject: [Buildroot] [PATCH 3/3] qt: fix webkit dependencies
+In-Reply-To: <1429543759-32207-1-git-send-email-gwenj@trabucayre.com>
+References: <1429543759-32207-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1429543759-32207-3-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +12,42 @@ To: buildroot@busybox.net
 
 From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-fix :
-http://autobuild.buildroot.net/results/e2a/e2ab7e2e61aaa5758a3a572ae25a047e802fdcc0/
+qtwebkit includes qscript headers. 
+For packages like python-pyqt if webkit is available but not qscript, the
+compilation fails with :
+buildroot/output/build/python-pyqt-4.11.3/sip/QtWebKit/qwebframe.sip:79:0:
+../../../host/usr/i686-buildroot-linux-gnu/sysroot/usr/include/QtWebKit/qwebframe.h:28:36:
+	fatal error: QtScript/qscriptengine.h: No such file or directory
 
-According to configure-ng.py, PyQt_qreal_double must be disabled only for ARM
-target.
+This problem is not seen with Qt compilation because some relative include
+directly from sources are added.
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/python-pyqt/python-pyqt.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/qt/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-pyqt/python-pyqt.mk b/package/python-pyqt/python-pyqt.mk
-index 2363f7d..808837e 100644
---- a/package/python-pyqt/python-pyqt.mk
-+++ b/package/python-pyqt/python-pyqt.mk
-@@ -33,13 +33,17 @@ endif
- # Turn off features that aren't available in QWS and current qt
- # configuration.
- PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES = \
--	PyQt_Accessibility PyQt_SessionManager PyQt_qreal_double \
-+	PyQt_Accessibility PyQt_SessionManager \
- 	PyQt_Shortcut PyQt_RawFont
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 43f5a0f..f6ca054 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -417,6 +417,7 @@ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
  
- ifeq ($(BR2_PACKAGE_QT_OPENSSL),)
- PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_OpenSSL
- endif
+ config BR2_PACKAGE_QT_WEBKIT
+ 	bool "WebKit Module"
++	depends on BR2_PACKAGE_QT_SCRIPT
+ 	depends on BR2_PACKAGE_QT_SHARED
+ 	depends on BR2_PACKAGE_QT_GUI_MODULE
+ 	depends on BR2_PACKAGE_QT_NETWORK
+@@ -427,7 +428,8 @@ config BR2_PACKAGE_QT_WEBKIT
+ 	  If unsure, say n.
  
-+ifeq ($(BR2_arm)$(BR2_armeb),y)
-+PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_qreal_double
-+endif
-+
- define PYTHON_PYQT_QTDETAIL
- 	echo $(1) >> $(2)/qtdetail.out
- endef
+ comment "WebKit needs shared library/NPTL toolchain/gui/network support"
+-	depends on !(BR2_PACKAGE_QT_SHARED && BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
++	depends on !(BR2_PACKAGE_QT_SCRIPT && BR2_PACKAGE_QT_SHARED && \
++		BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+ 
 -- 
 2.0.5
