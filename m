@@ -1,9 +1,7 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 20 Apr 2015 17:29:18 +0200
-Subject: [Buildroot] [PATCH 2/3] python-pyqt: fix install
-In-Reply-To: <1429543759-32207-1-git-send-email-gwenj@trabucayre.com>
-References: <1429543759-32207-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1429543759-32207-2-git-send-email-gwenj@trabucayre.com>
+Date: Mon, 20 Apr 2015 17:29:17 +0200
+Subject: [Buildroot] [PATCH 1/3] python-pyqt: fix compile on x86
+Message-ID: <1429543759-32207-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +10,39 @@ To: buildroot@busybox.net
 
 From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-PyQt4 provides two version for some py files: one for python2.x and one for
-python3.x. This two versions are installed in TARGET_DIR.
-After installing files, python is used to generate all .pyc files, but fails
-like :
-class ProxyBase(metaclass=ProxyMetaclass):
-                             ^
-							 SyntaxError: invalid syntax
+fix :
+http://autobuild.buildroot.net/results/e2a/e2ab7e2e61aaa5758a3a572ae25a047e802fdcc0/
 
-This patch supdress directory for not targeted python version.
+According to configure-ng.py, PyQt_qreal_double must be disabled only for ARM
+target.
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/python-pyqt/python-pyqt.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/python-pyqt/python-pyqt.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/package/python-pyqt/python-pyqt.mk b/package/python-pyqt/python-pyqt.mk
-index 808837e..e7ab3a6 100644
+index 2363f7d..808837e 100644
 --- a/package/python-pyqt/python-pyqt.mk
 +++ b/package/python-pyqt/python-pyqt.mk
-@@ -14,8 +14,10 @@ PYTHON_PYQT_DEPENDENCIES = python-sip host-python-sip qt
+@@ -33,13 +33,17 @@ endif
+ # Turn off features that aren't available in QWS and current qt
+ # configuration.
+ PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES = \
+-	PyQt_Accessibility PyQt_SessionManager PyQt_qreal_double \
++	PyQt_Accessibility PyQt_SessionManager \
+ 	PyQt_Shortcut PyQt_RawFont
  
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- PYTHON_PYQT_PYTHON_DIR = python$(PYTHON_VERSION_MAJOR)
-+PYTHON_PYQT_RM_PORT_BASE = port_v3
- else ifeq ($(BR2_PACKAGE_PYTHON3),y)
- PYTHON_PYQT_PYTHON_DIR = python$(PYTHON3_VERSION_MAJOR)
-+PYTHON_PYQT_RM_PORT_BASE = port_v2
+ ifeq ($(BR2_PACKAGE_QT_OPENSSL),)
+ PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_OpenSSL
  endif
  
- ifeq ($(BR2_PACKAGE_QT_EMBEDDED),y)
-@@ -97,6 +99,7 @@ endef
- define PYTHON_PYQT_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install
- 	touch $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/__init__.py
-+	$(RM) -rf $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/uic/$(PYTHON_PYQT_RM_PORT_BASE)
- 	PYTHONPATH="$(PYTHON_PATH)" \
- 		$(HOST_DIR)/usr/bin/python -c "import compileall; \
- 		compileall.compile_dir('$(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4')"
++ifeq ($(BR2_arm)$(BR2_armeb),y)
++PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_qreal_double
++endif
++
+ define PYTHON_PYQT_QTDETAIL
+ 	echo $(1) >> $(2)/qtdetail.out
+ endef
 -- 
 2.0.5
