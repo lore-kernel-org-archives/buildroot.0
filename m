@@ -1,44 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Apr 2015 23:36:24 +0200
-Subject: [Buildroot] config choices in building for beaglebone black
-	(BBB)?
-In-Reply-To: <55302A4C.5050109@mind.be> (Arnout Vandecappelle's message of
- "Thu, 16 Apr 2015 23:31:56 +0200")
-References: <alpine.LFD.2.11.1504160857510.20888@localhost>
- <55302A4C.5050109@mind.be>
-Message-ID: <87wq16trc7.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 20 Apr 2015 23:43:19 +0200
+Subject: [Buildroot] [PATCH] package/b43-firmware: add missing hash for
+ pre 3.2 kernel archive
+In-Reply-To: <1429564785-11856-1-git-send-email-romain.naour@openwide.fr>
+References: <1429564785-11856-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150420214319.GD4057@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Romain, All,
 
-Hi,
+On 2015-04-20 23:19 +0200, Romain Naour spake thusly:
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
->> also, for bleeding edge, can anyone verify whether i'm safe pushing
- >> the versions of everything right to the latest? you know:
- >> 
- >> * kernel 4.0.x
- >> * glibc 2.21
- >> * binutils 2.25
- >> * gcc 4.9.x
+Manually verified the hash.
 
- >  For binutils and gcc and uClibc we typically stick to the buildroot default
- > versions (even though we don't actually test all defconfigs when we change the
- > default version for one of those...).
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-We don't do runtime testing (very time consuming and we don't have
-access to all boards), but the defconfigs do get build tested.
+Regards,
+Yann E. MORIN.
 
- >  In case of BBB, I'm not 100% sure if all the graphics stuff from the TI kernel
- > has been fully upstreamed, so switching to a mainline kernel is not necessarily
- > acceptable. Even though the buildroot defconfig doesn't include graphics
- > support, we do want to offer a kernel that supports everything that the board has.
-
-Indeed. That and the cape handling. It really depends on what you need
-to do with the hw.
+> ---
+>  package/b43-firmware/b43-firmware.hash | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/b43-firmware/b43-firmware.hash b/package/b43-firmware/b43-firmware.hash
+> index bafd00c..efc1a6c 100644
+> --- a/package/b43-firmware/b43-firmware.hash
+> +++ b/package/b43-firmware/b43-firmware.hash
+> @@ -1,2 +1,3 @@
+>  # Locally computed:
+>  sha256 f1e7067aac5b62b67b8b6e4c517990277804339ac16065eb13c731ff909ae46f broadcom-wl-5.100.138.tar.bz2
+> +sha256 26a8c370f48fc129d0731cfd751c36cae1419b0bc8ca35781126744e60eae009 broadcom-wl-5.10.56.27.3_mipsel.tar.bz2
+> -- 
+> 1.9.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150420/e43236a7/attachment.asc>
