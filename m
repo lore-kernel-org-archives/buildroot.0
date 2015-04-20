@@ -1,39 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Apr 2015 22:56:28 +0200
-Subject: [Buildroot] [PATCH v4 1/1] Added linux drivers backports project
-In-Reply-To: <553564B4.2060303@mind.be>
-References: <1429311670-7831-1-git-send-email-petr.vorel@gmail.com>
- <20150419110326.31c34542@free-electrons.com>
- <5533D5CF.5000305@mind.be> <20150419162839.GI4313@free.fr>
- <20150419190321.19200e70@free-electrons.com>
- <553564B4.2060303@mind.be>
-Message-ID: <20150420225628.0a54561f@free-electrons.com>
+Date: Mon, 20 Apr 2015 22:38:50 +0200
+Subject: [Buildroot] [git commit] package/dhcpcd: bump to version 6.8.1
+Message-ID: <20150420205749.9FDFD805F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+commit: http://git.buildroot.net/buildroot/commit/?id=02466db45ba697d5d03f0cee9f4d5c65d49f73ed
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 20 Apr 2015 22:42:28 +0200, Arnout Vandecappelle wrote:
+removed patch applied upstream
 
->  However, we can add the dependency specifically for linux-backports. There is
-> something to be said for the reasoning that usually/sometimes you don't need the
-> dependencies to be present, so doing it per package sounds OK.
-> 
->  So in this case, adding
-> 
-> $(LINUX_BACKPORTS_KCONFIG_FILE): linux
-> 
-> to linux-backports.mk should be sufficient.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dhcpcd/0001-fix-linux-macro-name.patch |   25 ------------------------
+ package/dhcpcd/dhcpcd.hash                     |    2 +-
+ package/dhcpcd/dhcpcd.mk                       |    2 +-
+ 3 files changed, 2 insertions(+), 27 deletions(-)
 
-If we do this, we must also keep the 'linux' dependency in
-LINUX_BACKPORTS_DEPENDENCIES as well, so that the package infra remains
-aware of this dependency.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dhcpcd/0001-fix-linux-macro-name.patch b/package/dhcpcd/0001-fix-linux-macro-name.patch
+deleted file mode 100644
+index 18dbb10..0000000
+--- a/package/dhcpcd/0001-fix-linux-macro-name.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-Fix Linux define
+-
+-Fetched from upstream:
+-http://roy.marples.name/projects/dhcpcd/ci/2cabc3efee4c18ca?sbs=0
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-
+-Index: dhcpcd.h
+-==================================================================
+---- /dhcpcd.h
+-+++ /dhcpcd.h
+-@@ -58,11 +58,11 @@
+- 
+- struct interface {
+- 	struct dhcpcd_ctx *ctx;
+- 	TAILQ_ENTRY(interface) next;
+- 	char name[IF_NAMESIZE];
+--#ifdef __linux
+-+#ifdef __linux__
+- 	char alias[IF_NAMESIZE];
+- #endif
+- 	unsigned int index;
+- 	unsigned int flags;
+- 	sa_family_t family;
+-
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index b66244d..1b7543f 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated from download (no sig, hash)
+-sha256	cb65d3e783fa5484ed095bb940c3274a5a91d3ed4a9d9ae66a49d9637165bd98	dhcpcd-6.7.1.tar.bz2
++sha256	27b60cbf726a8319e6f1e7691132082c9cdac473317ea47cb093d0dd3d32af82	dhcpcd-6.8.1.tar.bz2
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 6f82090..694bb75 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DHCPCD_VERSION = 6.7.1
++DHCPCD_VERSION = 6.8.1
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
+ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
