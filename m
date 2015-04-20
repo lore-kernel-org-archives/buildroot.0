@@ -1,37 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Apr 2015 22:28:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/perl-libwww: Fix legal-info
-In-Reply-To: <1429551651-21509-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429551651-21509-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150420222857.7d538271@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 20 Apr 2015 22:31:08 +0200
+Subject: [Buildroot] Towards 2015.05-rc1
+In-Reply-To: <20150419220053.2c1d5b62@free-electrons.com>
+References: <20150419220053.2c1d5b62@free-electrons.com>
+Message-ID: <5535620C.6010801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
-
-On Mon, 20 Apr 2015 19:40:51 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/6c6/6c6fb6001101ff528176b887ed8c95ef49313afb/
-> http://autobuild.buildroot.net/results/56d/56d42e7691d4eb1a682c49c0fa6c951d0e3069ec/
+On 19/04/15 22:00, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/perl-libwww/perl-libwww.mk |    1 -
->  1 file changed, 1 deletion(-)
+> We're about 10 days from cutting 2015.05-rc1, so we have only 10 days
+> left to merge new features, new packages, major changes. Please let me
+> know which (big) changes you'd like to see merged.
+> 
+> On my list, there is at least:
+> 
+>  - The mandatory hashes series from Yann/Arnout.
 
-Actually, there's a README file that contains a copyright notice and
-the name of the license, so I've used that as the license file instead
-of not having anything.
+ This one is actually still missing handling user-specified downloads, like
+custom U-Boot version or custom Linux version. That said, most of the series
+(barring the last one) could be applied as far as I'm concerned. Although I
+notice now that I forgot to add my acks to my repost :-)
 
-And I've removed the hash file, as reported by Romain Naour.
+> 
+>  - The external-deps/source/source-check/legal-info fixes series from
+>    me.
 
-Thanks,
+ IIRC there was still something major missing in this series as well, wasn't there?
 
-Thomas
+
+ Another series that I'd like to see is the IPv6 deprecation, and size-stats.
+But I guess I should do some review there :-)
+
+
+ Regards,
+ Arnout
+
+
+> 
+> Also, if you are worried about smaller things being merged, please make
+> sure to review and test the corresponding patches. If your patches
+> didn't get attention, try to convince someone else to review/test your
+> patches.
+> 
+> Thanks,
+> 
+> Thomas
+> 
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
