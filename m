@@ -1,57 +1,36 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 20 Apr 2015 12:10:18 +0300
-Subject: [Buildroot] [PATCH v2] uclibc: clean-up test suite build command
-Message-ID: <1429521018-11517-1-git-send-email-abrodkin@synopsys.com>
+Date: Mon, 20 Apr 2015 09:10:52 +0000
+Subject: [Buildroot] [PATCH] uclibc: clean-up test suite build command
+In-Reply-To: <20150420105831.597e4bca@free-electrons.com>
+References: <1404149181-18586-1-git-send-email-abrodkin@synopsys.com>
+ <20140630200719.1339a6ed@free-electrons.com>
+ <1427269764.2718.4.camel@synopsys.com>
+ <20150325173919.0b2d0528@free-electrons.com>
+ <1429519146.2756.2.camel@synopsys.com>
+ <20150420105831.597e4bca@free-electrons.com>
+Message-ID: <1429521052.2756.3.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Starting from uClibc 0.9.32 "test_compile" target builds tests flawlessly.
-For 0.9.31 it lead to build failure, but now when AVR32 support was dropped
-I think this change worth applying.
+Hi Thomas,
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
+On Mon, 2015-04-20 at 10:58 +0200, Thomas Petazzoni wrote:
+> Dear Alexey Brodkin,
+> 
+> On Mon, 20 Apr 2015 08:39:07 +0000, Alexey Brodkin wrote:
+> 
+> > Please treat this as a gentle reminder. I'm wondering if that pretty
+> > straight-forward change has a chance for being applied?
+> > 
+> > From your previous answer I understood that you\re in general fine with
+> > clean-up stuff like that.
+> 
+> Sure. Can you resend a new version of the patch, so that it shows up in
+> patchwork?
 
-This is just a re-send of v1 (https://patchwork.ozlabs.org/patch/365705/)
-so no changes at all.
+Sure, done!
 
-It still applies flawlessly on current master.
-
-I build tested it on ARC and ARM. Note on ARM uClibc tests
-(BR2_UCLIBC_INSTALL_TEST_SUITE) will be only compiled without errors
-with uClibc-ng (BR2_UCLIBC_VERSION_NG), either BR2_UCLIBC_VERSION_0_9_33
-or BR2_UCLIBC_VERSION_SNAPSHOT will fail on testsuite compilation but
-that has nothing to do with current patch I think.
-
----
- package/uclibc/uclibc.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 72a46d9..c599379 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -395,12 +395,10 @@ endef
- 
- ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
- define UCLIBC_BUILD_TEST_SUITE
--	$(MAKE1) -C $(@D)/test \
-+	$(MAKE1) -C $(@D) \
- 		$(UCLIBC_MAKE_FLAGS) \
--		ARCH_CFLAGS=-I$(STAGING_DIR)/usr/include \
- 		UCLIBC_ONLY=1 \
--		TEST_INSTALLED_UCLIBC=1 \
--		compile
-+		test_compile
- endef
- endif
- 
--- 
-2.1.0
+-Alexey
