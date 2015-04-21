@@ -1,37 +1,35 @@
-From: Mike Musterd <MMusterd@kns.com>
-Date: Tue, 21 Apr 2015 06:30:29 +0000
-Subject: [Buildroot] grub on target
-Message-ID: <HKXPR01MB0312A3D64DA648D6B74794C9C2EF0@HKXPR01MB0312.apcprd01.prod.exchangelabs.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 Apr 2015 09:05:07 +0200
+Subject: [Buildroot] [PATCH 1/3] package/c-ares: add hash
+In-Reply-To: <1429583936-13335-1-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Tue, 21 Apr 2015 04:38:54 +0200")
+References: <1429583936-13335-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87mw22t10c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello list,
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-I am developing a small OS that functions as a sort of bootloader for windows. Its primary function is to check whether windows is available and if so, reboot to windows once (then, after that, boot into the bootloader again).
-If not it will repartition disk, install itself on new partition, and format drives and clone windows (from a network source) all from within this bootloader.
+ > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+ > ---
+ >  package/c-ares/c-ares.hash | 2 ++
+ >  1 file changed, 2 insertions(+)
+ >  create mode 100644 package/c-ares/c-ares.hash
 
-I am using grub for that, with some custom fixes to the grub-reboot script to make it behave as required.
+ > diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+ > new file mode 100644
+ > index 0000000..ce614d8
+ > --- /dev/null
+ > +++ b/package/c-ares/c-ares.hash
+ > @@ -0,0 +1,2 @@
+ > +# Locally calculated
+ > +sha256 3d701674615d1158e56a59aaede7891f2dde3da0f46a6d3c684e0ae70f52d3db c-ares-1.10.0.tar.gz
 
-However to my dismay I found that the grub package does not actually build grub for the target.
+Upstream provides a gpg signature, so I've verified against that and
+updated the comment, thanks.
 
-grub.mk claims as much:
-# We're cheating here as we're installing the grub binary not in the
-# target directory (where it is useless), but in the host
-# directory. This grub binary can be used to install grub into the MBR
-# of a disk or disk image.
-
-In my use case I need grub in the target directory, and it's not useless at all. So I modified the grub.mk to actually make grub for the target, and it all works.
-
-Now my question is: is my usecase generic enough to warrant a patch submission, or is the 'useless' part always true except in my case?
-
-Kind regards,
-
-Mike
-
-This email is non-binding, is subject to contract, and neither Kulicke and Soffa Industries, Inc. nor its subsidiaries (each and collectively "K&S") shall have any obligation to you to consummate the transactions herein or to enter into any agreement, other than in accordance with the terms and conditions of a definitive agreement if and when negotiated, finalized and executed between the parties. This email and all its contents are protected by International and United States copyright laws. Any reproduction or use of all or any part of this email without the express written consent of K&S is prohibited.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150421/f7b7a377/attachment.html>
+-- 
+Bye, Peter Korsgaard
