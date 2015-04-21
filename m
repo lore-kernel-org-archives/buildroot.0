@@ -1,134 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Apr 2015 00:02:28 +0200
-Subject: [Buildroot] [PATCH] rtai: remove option
- BR2_LINUX_KERNEL_EXT_RTAI_PATCH
-In-Reply-To: <1429652188-11586-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1429652188-11586-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150421220228.GE4262@free.fr>
+From: Steven Noonan <steven@uplinklabs.net>
+Date: Tue, 21 Apr 2015 16:58:02 -0700
+Subject: [Buildroot] Reminder about your pending Buildroot patches
+In-Reply-To: <20150421125634.385A788D@mail.free-electrons.com>
+References: <20150421125634.385A788D@mail.free-electrons.com>
+Message-ID: <CAKbGBLgnq72kw570gNB=EHFnw9UOJY3_7H0nFpebjJ9kgGx+qQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On Tue, Apr 21, 2015 at 5:56 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> This is a reminder about your Buildroot patches that are older than 30
+> days.
+>
+> We need your help to know if your patches are still relevant or not.
+> To help us, make sure to update the status of your patches in
+> patchwork as appropriate, or to resend an updated version that applies
+> on the latest Buildroot master. Especially let us know if you would
+> like to withdraw your patch if you are no longer interested.
+>
+> Here is the list of patches you have submitted that are still pending:
+>
+>  - [1/7] package/perf: if slang is enabled, depend on it
+>    http://patchwork.ozlabs.org/patch/451638/
+>
+>  - [2/7] package/perf: if numactl (libnuma) is enabled, depend on it
+>    http://patchwork.ozlabs.org/patch/451636/
+>
+>  - [3/7] package/perf: if libunwind is enabled, depend on it
+>    http://patchwork.ozlabs.org/patch/451637/
+>
+>  - [5/7] package/perf: patch installation paths
+>    http://patchwork.ozlabs.org/patch/451641/
+>
+>  - [6/7] package/perf: add patch to prevent crash on empty history buffer
+>    http://patchwork.ozlabs.org/patch/451634/
+>
+>  - [7/7] package/perf: use correct definition of ARCH on x86_64
+>    http://patchwork.ozlabs.org/patch/451633/
 
-On 2015-04-21 23:36 +0200, Thomas Petazzoni spake thusly:
-> This commit removes BR2_LINUX_KERNEL_EXT_RTAI_PATCH because this
-> option never worked. It was added in commit
-> 8797a9cd1fe6723db34b0c125d0d9d04e3483e8d, which added package/rtai/
-> and RTAI as a Linux extension.
-> 
-> The option prompt says "Path for RTAI patch file", so let's say you
-> specify /home/foo/bar/myrtai.patch as the value for
-> BR2_LINUX_KERNEL_EXT_RTAI_PATCH.
-> 
-> Then the code does:
-> 
-> RTAI_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_RTAI_PATCH))
-> 
-> and we have a package called 'rtai', so the normal logic of
-> <pkg>_PATCH applies. Since the <pkg>_PATCH value does not contain
-> ftp://, http:// or https://, the package infrastructure will try to
-> download $(RTAI_SITE)/$(RTAI_PATCH), i.e:
-> 
->    https://www.rtai.org/userfiles/downloads/RTAI/home/foo/bar/myrtai.patch
-> 
-> Pretty clear that it has no chance of working.
-> 
-> Now, let's assume an URL is used as the value of
-> BR2_LINUX_KERNEL_EXT_RTAI_PATCH, such as
-> http://foo.com/bar/myrtai.patch. In this case, it will be properly
-> downloaded by the package infrastructure. But then, the following code
-> kicks in:
-> 
-> define RTAI_PREPARE_KERNEL
->        $(APPLY_PATCHES)                        \
->                $(LINUX_DIR)                    \
->                $(dir $(RTAI_PATCH))            \
->                $(notdir $(RTAI_PATCH))
-> endef
-> 
-> The value of $(dir $(RTAI_PATCH)) will be http://foo.com/bar/. How
-> can $(APPLY_PATCHES) make use of such a stupid patch location?
-> 
-> Bottom line is that this feature has never worked, so there is not
-> even a point in adding Config.in.legacy support for it.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+All 7 are still relevant.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  - implement granular choice for stack protector
+>    http://patchwork.ozlabs.org/patch/451643/
 
-Regards,
-Yann E. MORIN.
+Still relevant.
 
-> ---
->  linux/Config.ext.in     |  6 ------
->  linux/linux-ext-rtai.mk | 11 -----------
->  2 files changed, 17 deletions(-)
-> 
-> diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-> index c909254..ea79aa1 100644
-> --- a/linux/Config.ext.in
-> +++ b/linux/Config.ext.in
-> @@ -44,12 +44,6 @@ config BR2_LINUX_KERNEL_EXT_RTAI
->  	help
->  	  RTAI Kernel part.
->  
-> -config BR2_LINUX_KERNEL_EXT_RTAI_PATCH
-> -	depends on BR2_LINUX_KERNEL_EXT_RTAI
-> -	string "Path for RTAI patch file"
-> -	help
-> -	  Optionally, explicitly specify the RTAI patch to use.
-> -
->  # fbtft
->  config BR2_LINUX_KERNEL_EXT_FBTFT
->  	bool "FB TFT drivers"
-> diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
-> index 07e7a19..0cc1232 100644
-> --- a/linux/linux-ext-rtai.mk
-> +++ b/linux/linux-ext-rtai.mk
-> @@ -6,8 +6,6 @@
->  
->  LINUX_EXTENSIONS += rtai
->  
-> -RTAI_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_RTAI_PATCH))
-> -
->  ifeq ($(KERNEL_ARCH),i386)
->  RTAI_ARCH = x86
->  else ifeq ($(KERNEL_ARCH),x86_64)
-> @@ -19,7 +17,6 @@ RTAI_ARCH = $(KERNEL_ARCH)
->  endif
->  
->  # Prepare kernel patch
-> -ifeq ($(RTAI_PATCH),)
->  define RTAI_PREPARE_KERNEL
->  	kver=`$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion` ; \
->  	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$${kver}-*patch ; then \
-> @@ -31,11 +28,3 @@ define RTAI_PREPARE_KERNEL
->  		exit 1 ; \
->  	fi
->  endef
-> -else
-> -define RTAI_PREPARE_KERNEL
-> -	$(APPLY_PATCHES) 			\
-> -		$(LINUX_DIR)			\
-> -		$(dir $(RTAI_PATCH))		\
-> -		$(notdir $(RTAI_PATCH))
-> -endef
-> -endif
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  - package/glibc: enable lock elision on x86_64 hosts
+>    http://patchwork.ozlabs.org/patch/451651/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Still relevant.
+
+>  - package: add shadow 4.2.1
+>    http://patchwork.ozlabs.org/patch/451723/
+
+There was some followup discussion which I haven't addressed. But it
+is still relevant.
+
+>  - package: add mosh 1.2.4
+>    http://patchwork.ozlabs.org/patch/451726/
+
+Still relevant.
+
+>  - [v2] package/perf: build outside kernel tree
+>    http://patchwork.ozlabs.org/patch/451947/
+
+Relevant but people didn't want this one -- I just didn't see an
+alternative if we were going to apply any patches to perf.
+
+>  - package/libpthsem: correctly handle --{en, dis}able-debug arguments on configure
+>    http://patchwork.ozlabs.org/patch/452271/
+
+Still relevant.
+
+> We have a lot of pending patches:
+>    https://patchwork.ozlabs.org/project/buildroot/list/
+>
+> You can help shorten this list by reviewing and testing patches, which
+> helps the maintainers when applying patches. The more patches are
+> reviewed or tested patches, the more are applied; the more are
+> applied, the shorter the list; the shorter the list, the faster
+> patches are applied.
+>
+> Thanks a lot for your help and contribution to Buildroot!
+> --
+> Buildroot, http://buildroot.org
