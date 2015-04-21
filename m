@@ -1,33 +1,33 @@
 From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue, 21 Apr 2015 09:45:36 -0400
-Subject: [Buildroot] [PATCH] uboot: add default for BR2_TARGET_UBOOT_PATCH
-Message-ID: <1429623936-4438-1-git-send-email-fhunleth@troodon-software.com>
+Date: Tue, 21 Apr 2015 09:47:37 -0400
+Subject: [Buildroot] [git commit] uboot: deprecate
+	BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+In-Reply-To: <20150421093900.6add9a67@free-electrons.com>
+References: <20150419090719.42BAD80094@busybox.osuosl.org>
+ <5533CAF5.9020401@mind.be>
+ <20150421093900.6add9a67@free-electrons.com>
+Message-ID: <CA+-urNQ=yzLkH6ftgHCoBVym7ZbtxwPxXTBHhwNb74t4QxN1Zw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Automatically copy over the value from BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
-to make handling its deprecation easier. Thanks to Arnout for the
-suggestion.
+On Tue, Apr 21, 2015 at 3:39 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Arnout Vandecappelle,
+>
+> On Sun, 19 Apr 2015 17:34:13 +0200, Arnout Vandecappelle wrote:
+>
+>> >  config BR2_TARGET_UBOOT_PATCH
+>> >     string "Custom U-Boot patches"
+>>
+>>  To make the deprecation smoother, we could add
+>>
+>>       default BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+>
+> Could you, or Frank, send a patch doing this?
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- boot/uboot/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Sent. Thanks for the suggestion.
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 4f01499..419b183 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -84,6 +84,7 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
- 
- config BR2_TARGET_UBOOT_PATCH
- 	string "Custom U-Boot patches"
-+	default BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
- 	help
- 	  A space-separated list of patches to apply to U-Boot.
- 	  Each patch can be described as an URL, a local file path,
--- 
-1.9.1
+Frank
