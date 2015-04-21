@@ -1,43 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Apr 2015 22:18:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cryptodev-linux: ccache compile
- fix
-In-Reply-To: <1428678065-24673-1-git-send-email-rdkehn@yahoo.com>
-References: <1428678065-24673-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <20150421221848.1fe976f7@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 21 Apr 2015 22:19:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/zeromq: enable kernel-based
+ feature flags
+In-Reply-To: <CAKAx1cg4csBWbVi5wKKKPcTBkocTQuf08G2YEMeZHTT686e+8g@mail.gmail.com>
+References: <1429623019-12174-1-git-send-email-lionel.orry@gmail.com>
+ <20150421153349.715c50f7@free-electrons.com>
+ <CAKAx1cg4csBWbVi5wKKKPcTBkocTQuf08G2YEMeZHTT686e+8g@mail.gmail.com>
+Message-ID: <5536B0BA.2070100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Doug Kehn,
-
-On Fri, 10 Apr 2015 10:01:05 -0500, Doug Kehn wrote:
-> cryptodev-linux fails to build when BR2_CCACHE=y.
+On 21/04/15 15:39, Lionel Orry wrote:
+> Hello,
 > 
-> >>> cryptodev-linux 1.7 Building
-> /usr/bin/make -j5 -C /home/dkehn/buildroot/output/build/cryptodev-linux-1.7 HOSTCC="/home/dkehn/buildroot/output/host/usr/bin/ccache /usr/bin/gcc" HOSTCFLAGS="" ARCH=arm INSTALL_MOD_PATH=/home/dkehn/buildroot/output/target CROSS_COMPILE="/home/dkehn/buildroot/output/host/usr/bin/ccache /home/dkehn/buildroot/output/host/usr/bin/arm-buildroot-linux-gnueabihf-" DEPMOD=/home/dkehn/buildroot/output/host/sbin/depmod LOADADDR="0x82000000" KERNEL_DIR=/home/dkehn/buildroot/output/build/linux-2489c022b2932432606f897741a71b712e6dbe77
-> make -C /home/dkehn/buildroot/output/build/linux-2489c022b2932432606f897741a71b712e6dbe77 SUBDIRS=`pwd` ARCH=arm CROSS_COMPILE=/home/dkehn/buildroot/output/host/usr/bin/ccache /home/dkehn/buildroot/output/host/usr/bin/arm-buildroot-linux-gnueabihf- modules
-> make[3]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
-> make[3]: /home/dkehn/buildroot/output/host/usr/bin/ccachegcc: Command not found
+> On Tue, Apr 21, 2015 at 3:33 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Lionel Orry,
+>>
+>> On Tue, 21 Apr 2015 15:30:19 +0200, Lionel Orry wrote:
+>>> The current configuration system does not check for cached variables for
+>>> these flags, and thus they are always disabled when cross-compiling.
+>>> This patch fixes the configuration system to use cached variables and
+>>> enables them at configuration time.
+>>>
+>>> Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+>>> ---
+>>>  ...e.m4-make-kernel-specific-flags-cacheable.patch | 204 +++++++++++++++++++++
+>>>  package/zeromq/zeromq.mk                           |  10 +
+>>>  2 files changed, 214 insertions(+)
+>>>  create mode 100644 package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
+>>>
+>>> diff --git a/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch b/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
+>>> new file mode 100644
+>>> index 0000000..9b6e808
+>>> --- /dev/null
+>>> +++ b/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
+>>> @@ -0,0 +1,204 @@
+>>> +From 2eee4dd2b1668124f377f6da1d511249086a1449 Mon Sep 17 00:00:00 2001
+>>> +From: Lionel Orry <lionel.orry@gmail.com>
+>>> +Date: Fri, 6 Feb 2015 09:45:21 +0100
+>>> +Subject: [PATCH 1/1] acinclude.m4: make kernel-specific flags cacheable
+>>> +
+>>> +Specifically when cross-compiling, one can be willing to force these
+>>> +variable values using the environment of a config.cache file. This
+>>> +commit makes this possible.
+>>> +
+>>> +The affected variables are:
+>>> +
+>>> +* libzmq_cv_sock_cloexec
+>>> +* libzmq_cv_so_keepalive
+>>> +* libzmq_cv_tcp_keepcnt
+>>> +* libzmq_cv_tcp_keepidle
+>>> +* libzmq_cv_tcp_keepintvl
+>>> +* libzmq_cv_tcp_keepalive
+>>> +
+>>> +Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+>>
+>> Could you state whether this patch is upstream or not?
 > 
-> Adding quotes around ${CROSS_COMPILE} KERNEL_MAKE_OPTS assignment in
-> cryptodev-linux Makefile fixes compile error.
-> 
-> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-> ---
->  package/cryptodev-linux/0002-fix-ccache-compile.patch | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
->  create mode 100644 package/cryptodev-linux/0002-fix-ccache-compile.patch
+> This patch is upstream in v4.1.x branch, so it will be included
+> upstream as soon as zeromq v4.1.0 is released.
 
-You forgot a description and SoB line in the patch itself, so I've
-added these and committed.
+ If the patch is already upstream, and the upstream patch applies cleanly,
+please use the upstream patch instead (adding you Sob if necessary and adding a
+reference to the upstream commit sha). If the upstream patch does not apply
+cleanly you can keep using this custom patch, but please still add a reference
+to the upstream sha.
 
-Thanks!
 
-Thomas
+ Regards,
+ Arnout
+
+[snip]
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
