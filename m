@@ -1,85 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Apr 2015 22:19:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/zeromq: enable kernel-based
- feature flags
-In-Reply-To: <CAKAx1cg4csBWbVi5wKKKPcTBkocTQuf08G2YEMeZHTT686e+8g@mail.gmail.com>
-References: <1429623019-12174-1-git-send-email-lionel.orry@gmail.com>
- <20150421153349.715c50f7@free-electrons.com>
- <CAKAx1cg4csBWbVi5wKKKPcTBkocTQuf08G2YEMeZHTT686e+8g@mail.gmail.com>
-Message-ID: <5536B0BA.2070100@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Apr 2015 22:30:31 +0200
+Subject: [Buildroot] Reminder about your pending Buildroot patches
+In-Reply-To: <trinity-40009cd6-8f41-4e4a-93be-430b5623fcf6-1429641760076@3capp-gmx-bs04>
+References: <trinity-40009cd6-8f41-4e4a-93be-430b5623fcf6-1429641760076@3capp-gmx-bs04>
+Message-ID: <20150421223031.3a309050@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/04/15 15:39, Lionel Orry wrote:
-> Hello,
+Dear Peter Seiderer,
+
+On Tue, 21 Apr 2015 20:42:40 +0200, Peter Seiderer wrote:
+
+> > Here is the list of patches you have submitted that are still pending:
+> > 
+> >  - [v4,3/3] linux: install dtc only in case package host dtc is not selected
+> >    http://patchwork.ozlabs.org/patch/431281/
+> > 
 > 
-> On Tue, Apr 21, 2015 at 3:33 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Lionel Orry,
->>
->> On Tue, 21 Apr 2015 15:30:19 +0200, Lionel Orry wrote:
->>> The current configuration system does not check for cached variables for
->>> these flags, and thus they are always disabled when cross-compiling.
->>> This patch fixes the configuration system to use cached variables and
->>> enables them at configuration time.
->>>
->>> Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
->>> ---
->>>  ...e.m4-make-kernel-specific-flags-cacheable.patch | 204 +++++++++++++++++++++
->>>  package/zeromq/zeromq.mk                           |  10 +
->>>  2 files changed, 214 insertions(+)
->>>  create mode 100644 package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
->>>
->>> diff --git a/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch b/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
->>> new file mode 100644
->>> index 0000000..9b6e808
->>> --- /dev/null
->>> +++ b/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
->>> @@ -0,0 +1,204 @@
->>> +From 2eee4dd2b1668124f377f6da1d511249086a1449 Mon Sep 17 00:00:00 2001
->>> +From: Lionel Orry <lionel.orry@gmail.com>
->>> +Date: Fri, 6 Feb 2015 09:45:21 +0100
->>> +Subject: [PATCH 1/1] acinclude.m4: make kernel-specific flags cacheable
->>> +
->>> +Specifically when cross-compiling, one can be willing to force these
->>> +variable values using the environment of a config.cache file. This
->>> +commit makes this possible.
->>> +
->>> +The affected variables are:
->>> +
->>> +* libzmq_cv_sock_cloexec
->>> +* libzmq_cv_so_keepalive
->>> +* libzmq_cv_tcp_keepcnt
->>> +* libzmq_cv_tcp_keepidle
->>> +* libzmq_cv_tcp_keepintvl
->>> +* libzmq_cv_tcp_keepalive
->>> +
->>> +Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
->>
->> Could you state whether this patch is upstream or not?
+> Thanks for the reminder, referred patch is suberseded by/squashed into:
 > 
-> This patch is upstream in v4.1.x branch, so it will be included
-> upstream as soon as zeromq v4.1.0 is released.
+> Patchwork [v5] dtc: add host build
+> http://patchwork.ozlabs.org/patch/453619/
 
- If the patch is already upstream, and the upstream patch applies cleanly,
-please use the upstream patch instead (adding you Sob if necessary and adding a
-reference to the upstream commit sha). If the upstream patch does not apply
-cleanly you can keep using this custom patch, but please still add a reference
-to the upstream sha.
+Thanks for the update!
 
-
- Regards,
- Arnout
-
-[snip]
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
