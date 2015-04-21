@@ -1,93 +1,141 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Apr 2015 18:55:52 +0200
-Subject: [Buildroot] [PATCHv4] toolchain: fix installing gconv libs with
-	multi-arch toolchain
-Message-ID: <1429635352-14756-1-git-send-email-yann.morin.1998@free.fr>
+Date: Tue, 21 Apr 2015 19:04:39 +0200
+Subject: [Buildroot] [PATCH 0/8 v11] NVidia GPU binary blobs for Tegra2/3
+	(branch yem/gfx2)
+Message-ID: <cover.1429635674.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For a multi-arch toolchain, gconv modules are in a sub-directory named
-after the machine gcc targets. This is the case, for example, for the
-Linaro ARM 2014.09 toolchain, which has the gconv modules in (relative
-to the sysroot):
-    /usr/lib/arm-linux-gnueabihf/gconv
+Hello All!
 
-while the Sourcery CodeBench ARM 2014.05 (non-multi-arch) has them in:
-    /usr/lib/gconv
+This series adds support for NVidia's binary blob, the driver to its
+family of GPUs, for Tegra2 and Tegra3, initially submitted by Nicolas.
 
-So, to catter for both cases, search both paths. We want to favour the
-machine-specific gconv modules over potentially existing "generic" ones,
-so we first search that (if it exists) and fallback to looking in the
-generic location.
+Since those binary blobs require the old X11 driver ABI 14, we can not
+use them for now, as the version of X11 we have implements ABI 19; X11
+ABIs are not backward compatible.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+So, we need to introduce a choice for the version of X11, so as to
+provide whatever was the latest X11 vbersion to provide ABI 14; this
+would be X11 version 1.14.7.
 
----
-changes v3 -> v4:
-  - nothing, just rebased on top of master
+Fortunately, Gustavo was kind enough to suggest and test that building
+an old X11 server with newer X11 libs was still possible, so that we
+only really need the old server, not all the old libs. Pfewww... ;-)
+
+So, this series in split in two main parts:
+
+  - patches 1-5 introduce the possibility to choose an old X11 version
+    for the server,
+
+  - patches 6-8 add new packages for the NVidia Tegra blobs.
+
+Thanks go to Nicolas, Laurent and Gustavo for their input and testing!
+
+
+Changes v8 -> v11:
+  - version bump for tegra drivers and codecs  (Nicolas)
+
+Changes v7 -> v8:
+  - introduce use of an old X11 server to provide the ABI expected by
+    the NVidia blobs
+  - drop the x86 drivers, applied
+
+Changes v6 -> v7:
+  - drop all Khronos Registries packages in favour of mesa3d-headers
+  - adapt the NVidia driver packages to use mesa3d-headers
+
+Changes v5 -> v6:
+  - make python-lxml a target package too  (Yegor)
+  - rename the packages and move one directory up  (J?r?me)
+  - use mesa3d to provide additional headers, don't bundle them
+  - install extra GLES platform headers  (Nicolas)
+  - x86 nvidia driver installs a gl.pc file  (J?r?me)
+  - drop JPEG HW acceleration for Tegra2/3, since we do not have
+    the headers  (Nicolas)
+
+Changes v4 -> v5:
+  - fix env vars when building opengl-registry
+
+Changes v3 -> v4:
+  - integrate the Tegra2/3 driver from Nicolas
+  - lots of cleanups in the packages for Tegra2/3
+  - further fixes after Thomas comments
+  - introduce more of the Khronos registry (OpenMAX, OpenKode...)
 
 Changes v2 -> v3:
-  - use TOOLCHAIN_EXTERNAL_PREFIX instead of computing it again
+  - some rewrite after Thomas comments
 
 Changes v1 -> v2:
-  - also handle the case where the gconv modules list is specified
----
- toolchain/toolchain.mk | 26 ++++++++++++++++++--------
- 1 file changed, 18 insertions(+), 8 deletions(-)
+  - bump opengl-registry
+  - drop i915, applied  (Peter)
 
-diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
-index 3f9900b..0a35909 100644
---- a/toolchain/toolchain.mk
-+++ b/toolchain/toolchain.mk
-@@ -17,28 +17,38 @@ endif
- ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
- GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
- define COPY_GCONV_LIBS
--	$(Q)if [ -z "$(GCONV_LIBS)" ]; then \
--		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/gconv-modules \
--				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
--		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/gconv/*.so \
-+	$(Q)found_gconv=no; \
-+	for d in $(TOOLCHAIN_EXTERNAL_PREFIX) ''; do \
-+		[ -d "$(STAGING_DIR)/usr/lib/$${d}/gconv" ] || continue; \
-+		found_gconv=yes; \
-+		break; \
-+	done; \
-+	if [ "$${found_gconv}" = "no" ]; then \
-+		printf "Unable to find gconv modules\n" >&2; \
-+		exit 1; \
-+	fi; \
-+	if [ -z "$(GCONV_LIBS)" ]; then \
-+		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
-+				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules && \
-+		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/$${d}/gconv/*.so \
- 				   $(TARGET_DIR)/usr/lib/gconv \
- 		|| exit 1; \
- 	else \
- 		for l in $(GCONV_LIBS); do \
--			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/$${l}.so \
-+			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/$${l}.so \
- 					      $(TARGET_DIR)/usr/lib/gconv/$${l}.so \
- 			|| exit 1; \
--			$(TARGET_READELF) -d $(STAGING_DIR)/usr/lib/gconv/$${l}.so |\
-+			$(TARGET_READELF) -d $(STAGING_DIR)/usr/lib/$${d}/gconv/$${l}.so |\
- 			sort -u |\
- 			sed -e '/.*(NEEDED).*\[\(.*\.so\)\]$$/!d; s//\1/;' |\
- 			while read lib; do \
--				 $(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/$${lib} \
-+				 $(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/$${lib} \
- 						       $(TARGET_DIR)/usr/lib/gconv/$${lib} \
- 				 || exit 1; \
- 			done; \
- 		done; \
- 		./support/scripts/expunge-gconv-modules "$(GCONV_LIBS)" \
--			<$(STAGING_DIR)/usr/lib/gconv/gconv-modules \
-+			<$(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
- 			>$(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
- 	fi
- endef
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit abf4db2c48bf60053cf66b32a0572cd59dd5d624:
+
+  package: add mosquitto (2015-04-21 16:08:44 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/gfx2
+
+for you to fetch changes up to 01c5d72e1eae387c59c3e674635b2e6e5a564a1c:
+
+  package/nvidia-tegra23-codecs: new package (2015-04-21 18:05:23 +0200)
+
+----------------------------------------------------------------
+Nicolas Serafini (3):
+      package/nvidia-tegra23-binaries: new package
+      package.nvidia-tegra23-binaries: add gstreamer plugins
+      package/nvidia-tegra23-codecs: new package
+
+Yann E. MORIN (5):
+      package/xserver_xorg-server: prepare for multiple supported versions
+      package/xserver_xorg-server: make the version a choice
+      package/xserver_xorg-server: add blind options to specify driver ABI
+      package/xserver_xorg-server: not all versions need all dependencies
+      package/xserver_xorg-server: add version 1.14.7
+
+ package/Config.in                                  |   1 +
+ package/nvidia-tegra23/Config.in                   |  38 ++++++
+ .../nvidia-tegra23-binaries/Config.in              |  42 +++++++
+ .../nvidia-tegra23/nvidia-tegra23-binaries/egl.pc  |  10 ++
+ .../nvidia-tegra23/nvidia-tegra23-binaries/gles.pc |  10 ++
+ .../nvidia-tegra23-binaries/glesv2.pc              |  10 ++
+ .../nvidia-tegra23-binaries.hash                   |   3 +
+ .../nvidia-tegra23-binaries.mk                     | 128 +++++++++++++++++++++
+ .../nvidia-tegra23/nvidia-tegra23-codecs/Config.in |   7 ++
+ .../nvidia-tegra23-codecs.hash                     |   3 +
+ .../nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk |  41 +++++++
+ package/nvidia-tegra23/nvidia-tegra23.mk           |  18 +++
+ ...1-backtrace.c-Fix-word-cast-to-a-pointer.patch} |   0
+ package/x11r7/xserver_xorg-server/Config.in        |  31 ++++-
+ .../xserver_xorg-server/xserver_xorg-server.mk     |   9 +-
+ 15 files changed, 348 insertions(+), 3 deletions(-)
+ create mode 100644 package/nvidia-tegra23/Config.in
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23.mk
+ rename package/x11r7/xserver_xorg-server/{0004-backtrace.c-Fix-word-cast-to-a-pointer.patch => 1.17.1/0001-backtrace.c-Fix-word-cast-to-a-pointer.patch} (100%)
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
