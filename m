@@ -1,36 +1,27 @@
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Tue, 21 Apr 2015 14:22:25 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 Apr 2015 14:53:24 +0200
 Subject: [Buildroot] [PATCH] system/skeleton: fix /etc/group
-Message-ID: <1429618945-21621-1-git-send-email-bgolaszewski@baylibre.com>
+In-Reply-To: <1429618945-21621-1-git-send-email-bgolaszewski@baylibre.com>
+ (Bartosz Golaszewski's message of "Tue, 21 Apr 2015 14:22:25 +0200")
+References: <1429618945-21621-1-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <87618ptzgb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using busybox compiled from current git, login emits the following
-message:
+>>>>> "Bartosz" == Bartosz Golaszewski <bgolaszewski@baylibre.com> writes:
 
-    login: /etc/group: bad record
+ > When using busybox compiled from current git, login emits the following
+ > message:
 
-Fix it by adding the missing colon to /etc/group in system/skeleton.
+ >     login: /etc/group: bad record
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- system/skeleton/etc/group | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Fix it by adding the missing colon to /etc/group in system/skeleton.
 
-diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
-index fa74ae2..c1dc11f 100644
---- a/system/skeleton/etc/group
-+++ b/system/skeleton/etc/group
-@@ -21,6 +21,6 @@ plugdev:x:46:
- staff:x:50:
- lock:x:54:
- netdev:x:82:
--ftp:x:83
-+ftp:x:83:
- nogroup:x:99:
- users:x:100:
+Hmm, while the patch looks correct I don't see that error message
+here. What is your setup exactly?
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
