@@ -1,52 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Apr 2015 23:48:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/zeromq: enable kernel-based
- feature flags
-In-Reply-To: <20150421224751.1eebfde3@free-electrons.com>
-References: <1423214752-29779-1-git-send-email-lionel.orry@gmail.com>	<20150315232850.21412e3a@free-electrons.com>	<CAKAx1cjF8Q9ZTJXg4yxHkqQFFkzAEEKzU5V852XZtQMw=59LPw@mail.gmail.com>	<5509FBEB.8040505@mind.be>
- <20150421224751.1eebfde3@free-electrons.com>
-Message-ID: <5536C5C1.4080106@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Apr 2015 23:49:14 +0200
+Subject: [Buildroot] [PATCH/RFC 03/27] package/kodi: bump version to
+ 15.0 Alpha2-Isengard
+In-Reply-To: <XnsA476E4CF4CDF7berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
+ <1427913380-14808-4-git-send-email-bernd.kuhls@t-online.de>
+ <20150404184448.3fea759b@free-electrons.com>
+ <XnsA476E4CF4CDF7berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20150421234914.04230ff1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/04/15 22:47, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
-> 
-> On Wed, 18 Mar 2015 23:27:55 +0100, Arnout Vandecappelle wrote:
-> 
->>  It's been a while ago, of course, but I think one problem was that the symbols
->> are also defined by the toolchain, so they exist even if the kernel doesn't
->> support them.
-> 
-> If the flags exist in the toolchain, then it means that the toolchain
-> is using a certain version of the kernel headers. Running with a kernel
-> older than that will anyway not work.
-> 
-> I mean, there are zillions of configure script that tests if the
-> toolchain has syscall foo() or bar() by simply doing a compile time
-> test. They don't actually check if the user is stupid enough to run on
-> a system that has a kernel older than the kernel headers + C library
-> combination used in the toolchain.
-> 
-> Or am I missing something specific to those flags?
+Bernd,
 
- They are not syscalls but flags which are defined in <netinet/tcp.h>, which (at
-least for uClibc) is copied verbatim from libc to the sysroot. So AFAICS the
-libc doesn't actually check if it is really available in the kernel. Possibly
-the kernels that didn't support these flags already defined (and ignored) them.
+On Wed, 08 Apr 2015 22:29:35 +0200, Bernd Kuhls wrote:
 
+> http://kodi.wiki/view/Development_builds#Monthly_build
+> "Kodi developers have a merge cycle every month for new features and major 
+> changes. For ten days they add new features, then for the rest of the month 
+> they fix things."
+> 
+> Alpha 2 was released an April 1st, I expect Beta 1 at the beginning of May 
+> and a release maybe one month later with several RC before that. So no, Kodi 
+> 15.0 will not be part of buildroot 2015.05, but as Yann already pointed out, 
+> I am sending my current patch series as RFC early to pave the way for this 
+> "beast" ;)
 
- Regards,
- Arnout
+Following this reply, I've marked all the patches as RFC in patchwork,
+except PATCH 2 (tinyxml2), which has been applied. PATCH 1 could have
+been merged separately from the Kodi bump, but there have been numerous
+changes requested by Yann, so they need to be addressed before the
+patch can be applied.
 
+Thanks a lot!
 
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
