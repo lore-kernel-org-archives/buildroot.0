@@ -1,74 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Apr 2015 19:22:46 +0200
-Subject: [Buildroot] [PATCH 2/3] package/cache-calibrator: add hash
-In-Reply-To: <87iocqt0wq.fsf@dell.be.48ers.dk>
-References: <1429583936-13335-1-git-send-email-fabio.porcedda@gmail.com>
- <1429583936-13335-2-git-send-email-fabio.porcedda@gmail.com>
- <87iocqt0wq.fsf@dell.be.48ers.dk>
-Message-ID: <20150421172246.GB4262@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 21 Apr 2015 19:36:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xeyes: Add dependency to
+	xlib_libXrender
+Message-ID: <1429637763-9093-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+xeyes depends on Xrender since version 1.1.0
+http://lists.freedesktop.org/archives/xorg/2009-December/048305.html
 
-On 2015-04-21 09:07 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
-> 
->  > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->  > ---
->  >  package/cache-calibrator/cache-calibrator.hash | 2 ++
->  >  1 file changed, 2 insertions(+)
->  >  create mode 100644 package/cache-calibrator/cache-calibrator.hash
-> 
->  > diff --git a/package/cache-calibrator/cache-calibrator.hash b/package/cache-calibrator/cache-calibrator.hash
->  > new file mode 100644
->  > index 0000000..df61d17
->  > --- /dev/null
->  > +++ b/package/cache-calibrator/cache-calibrator.hash
->  > @@ -0,0 +1,2 @@
->  > +# Locally calculated
->  > +sha256 2018ed8fa733155d44ceb1c0066c5cf8df7771cdf7cfca0a07b8dd9bebd9c221 calibrator.c
-> 
-> This will cause issues when/if that file ever gets updated - But then
-> atleast we know and can update the hash.
+Fixes
+http://autobuild.buildroot.net/results/bae/baeded072fbec4a398738e00dbf851d756af660f/
 
-It also means that Buildroot 2015.05 will stop working at some point
-when this file is updated. The problem is not much about Buildroot
-master , which is easily fixable, but about our releases, that get
-broken as soon as upstream changes that file.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xapp_xeyes/Config.in     |    1 +
+ package/x11r7/xapp_xeyes/xapp_xeyes.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-I am not really happy with either solutions: either add a hash and break
-releases in the future, or not add a hash file, and miss updates,
-especially in the autobuilders (even though they do remove downloads
-from time to time.
-
-One case for the adding the hash, too, is that it will tell people that
-their local copy in their local cache (e.g. my ~/src/ ) is out-of-date.
-
-Still, I'm not convinced we want that hash...
-
-Do we have other such packages (I think I read there was another
-version-less package for now)?
-
-Regards,
-Yann E. MORIN.
-
-> Committed, thanks.
-> 
-> -- 
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/x11r7/xapp_xeyes/Config.in b/package/x11r7/xapp_xeyes/Config.in
+index a7b7737..5cf7f6c 100644
+--- a/package/x11r7/xapp_xeyes/Config.in
++++ b/package/x11r7/xapp_xeyes/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_XAPP_XEYES
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXMU
++	select BR2_PACKAGE_XLIB_LIBXRENDER
+ 	select BR2_PACKAGE_XLIB_LIBXT
+ 	help
+ 	  X.Org xeyes application
+diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.mk b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
+index 89cac51..07c1200 100644
+--- a/package/x11r7/xapp_xeyes/xapp_xeyes.mk
++++ b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
+@@ -9,6 +9,6 @@ XAPP_XEYES_SOURCE = xeyes-$(XAPP_XEYES_VERSION).tar.bz2
+ XAPP_XEYES_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XEYES_LICENSE = MIT
+ XAPP_XEYES_LICENSE_FILES = COPYING
+-XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXt
++XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXrender xlib_libXt
+ 
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
