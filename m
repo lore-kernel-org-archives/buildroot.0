@@ -1,31 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Apr 2015 09:11:53 +0200
-Subject: [Buildroot] [PATCH 1/1] heimdal: needs host-flex and explicitly
- set -lpthread
-In-Reply-To: <5535AFDE.9060704@gmail.com>
-References: <1429466003-4595-1-git-send-email-bluemrp9@gmail.com>
- <20150420223532.5677fb5f@free-electrons.com>
- <5535AFDE.9060704@gmail.com>
-Message-ID: <20150421091153.54b44a73@free-electrons.com>
+Date: Tue, 21 Apr 2015 09:28:02 +0200
+Subject: [Buildroot] Versioned symbols in elfutils and uClibc
+In-Reply-To: <CAMo8BfLHuMzBaETgnJu-O+osAKw3dQM-XCUa5yEqP__oZwwQFw@mail.gmail.com>
+References: <CAMo8BfLHuMzBaETgnJu-O+osAKw3dQM-XCUa5yEqP__oZwwQFw@mail.gmail.com>
+Message-ID: <20150421092802.7aedf522@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Coe,
+Max,
 
-On Mon, 20 Apr 2015 19:03:10 -0700, Ryan Coe wrote:
+On Tue, 21 Apr 2015 04:30:12 +0300, Max Filippov wrote:
 
-> I found the addition of host-flex not to be necessary.  The -lpthread 
-> addition fixes a build error on my machine.  I will submit a new version 
-> of my patch.
+> I'm debugging strange segfault running ltrace for xtensa:
+> it's caused by dwfl_report_elf recursively calling itself, resulting
+> in stack overflow. The symbol dwfl_report_elf is versioned, there
+> are versions ELFUTILS_0.122 and ELFUTILS_0.156, ltrace calls
+> 0.122, but when 0.122 tries to resolve 0.156 it gets back pointer
+> to 0.122. AFAICS uClibc does not support symbol versioning.
+> Any idea what can be done about it?
 
-Could you give the full build log of host-heimdal on your machine, as
-well as the contents of config.log, when the build fails due to
--lpthread being missing?
+I guess this is probably a question you should ask on the uClibc
+mailing list rather than the Buildroot one.
 
-Thanks,
+Best regards,
 
 Thomas
 -- 
