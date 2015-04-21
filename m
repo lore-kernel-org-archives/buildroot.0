@@ -1,35 +1,52 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 21 Apr 2015 20:59:06 +0300
-Subject: [Buildroot] Versioned symbols in elfutils and uClibc
-In-Reply-To: <87a8y1u32q.fsf@dell.be.48ers.dk>
-References: <CAMo8BfLHuMzBaETgnJu-O+osAKw3dQM-XCUa5yEqP__oZwwQFw@mail.gmail.com>
- <87a8y1u32q.fsf@dell.be.48ers.dk>
-Message-ID: <CAMo8BfLEk0C7pv2DY1eOr-aqHzaPf0wNNn8aNhdAhsT-CB4eWQ@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 21 Apr 2015 20:42:40 +0200
+Subject: [Buildroot] Reminder about your pending Buildroot patches
+Message-ID: <trinity-40009cd6-8f41-4e4a-93be-430b5623fcf6-1429641760076@3capp-gmx-bs04>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 21, 2015 at 2:35 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
->
->  > Hi,
->  > I'm debugging strange segfault running ltrace for xtensa:
->  > it's caused by dwfl_report_elf recursively calling itself, resulting
->  > in stack overflow. The symbol dwfl_report_elf is versioned, there
->  > are versions ELFUTILS_0.122 and ELFUTILS_0.156, ltrace calls
->  > 0.122, but when 0.122 tries to resolve 0.156 it gets back pointer
->  > to 0.122. AFAICS uClibc does not support symbol versioning.
->  > Any idea what can be done about it?
->
-> Without knowing much about this, have you tried commenting out the
-> #ifdef SHARED part in lib/eu-config.h (and possible the corresponding
-> part in libdwfl/dwfl_report_elf.c)?
+Hello Thomas,
 
-It does help, thanks. Looks like this place needs to be patched to
-account for missing symbol versioning in uclibc?
+On Tue, Apr 21, 2015 at 02:56:44PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> This is a reminder about your Buildroot patches that are older than 30
+> days.
+> 
+> We need your help to know if your patches are still relevant or not.
+> To help us, make sure to update the status of your patches in
+> patchwork as appropriate, or to resend an updated version that applies
+> on the latest Buildroot master. Especially let us know if you would
+> like to withdraw your patch if you are no longer interested.
+> 
+> Here is the list of patches you have submitted that are still pending:
+> 
+>  - [v4,3/3] linux: install dtc only in case package host dtc is not selected
+>    http://patchwork.ozlabs.org/patch/431281/
+> 
 
--- 
-Thanks.
--- Max
+Thanks for the reminder, referred patch is suberseded by/squashed into:
+
+Patchwork [v5] dtc: add host build
+http://patchwork.ozlabs.org/patch/453619/
+
+Have done the patchwork status update...
+
+Regards,
+Peter
+
+> We have a lot of pending patches:
+>    https://patchwork.ozlabs.org/project/buildroot/list/
+> 
+> You can help shorten this list by reviewing and testing patches, which
+> helps the maintainers when applying patches. The more patches are
+> reviewed or tested patches, the more are applied; the more are
+> applied, the shorter the list; the shorter the list, the faster
+> patches are applied.
+> 
+> Thanks a lot for your help and contribution to Buildroot!
+> -- 
+> Buildroot, http://buildroot.org
