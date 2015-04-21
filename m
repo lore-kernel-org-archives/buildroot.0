@@ -1,53 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Apr 2015 23:59:02 +0200
-Subject: [Buildroot] [PATCH] rtai: remove option
- BR2_LINUX_KERNEL_EXT_RTAI_PATCH
-In-Reply-To: <20150421234737.03dbb086@free-electrons.com>
-References: <1429652188-11586-1-git-send-email-thomas.petazzoni@free-electrons.com>	<5536C4ED.3010008@mind.be>
- <20150421234737.03dbb086@free-electrons.com>
-Message-ID: <5536C826.8080904@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 Apr 2015 00:00:32 +0200
+Subject: [Buildroot] [RFC v2 0/5] common service startup files
+In-Reply-To: <20150406105122.4b13f5b0@free-electrons.com>
+References: <cover.1428263859.git.alex.suykov@gmail.com>
+ <20150406105122.4b13f5b0@free-electrons.com>
+Message-ID: <20150421220032.GC4262@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/04/15 23:47, Thomas Petazzoni wrote:
-> Arnout,
-> 
-> On Tue, 21 Apr 2015 23:45:17 +0200, Arnout Vandecappelle wrote:
-> 
->>  This requires legacy handling. With in the help text something like
->>
->> 	  The BR2_LINUX_KERNEL_EXT_RTAI_PATCH option never worked, so it is
->> 	  probably not useful. If you do have a valid use case and it used to
->> 	  work for you, please let us know on buildroot at buildroot.net.
-> 
-> Well, I talked about Config.in.legacy handling in the commit message:
+Alex, Thomas, All,
 
- TL;DR :-)
-
+On 2015-04-06 10:51 +0200, Thomas Petazzoni spake thusly:
+> On Mon, 6 Apr 2015 01:01:19 +0300, Alex Suykov wrote:
+> > This series is intended to simplify and clean up installation routine
+> > for daemon-like applications, merging sysv and systemd startup files
+> > and moving much of the common code out of per-package .mk files.
 > 
-> """
-> Bottom line is that this feature has never worked, so there is not
-> even a point in adding Config.in.legacy support for it.
-> """
+> Thanks a lot for working on this.
 > 
-> Should I understand that you don't agree with this reasoning, and still
-> want Config.in.legacy handling?
+> To be honest, my feeling is that I don't really like Buildroot to
+> invent its own "abstract" language to describe the initialization of
+> services, then used to generate SysV and Systemd unit files.
 
- Yep, because if someone _does_ have it set, it probably works for them and we
-should know about it. If nobody has it set, then it doesn't hurt to have it in
-legacy.
+Totally agreed on my side.
 
- Regards,
- Arnout
+> There are two main reasons for this feeling.
+> 
+> First of all, because the philosophy of Buildroot is to not invent new
+> language, or add layers on top of what exists: we use Kconfig for the
+> configuration, make for the package building logic, shell and Python
+> scripts in some situations. This is all standard, and generally well
+> known by most Linux developers. Even though the language you propose
+> for describing the initialization of services is certainly not very
+> complicated, it remains a layer on top of what really happens.
+> 
+> Second, such abstract languages usually appear simple initially. But
+> then, some corner cases show up, with cases that can easily be solved
+> in shell scripts or systemd unit files, but were not planned in this
+> small abstract language. So it has to be extended. Again, and again. To
+> finally become as complicated as the shell scripts or systemd unit
+> files.
 
+Been there, done that. Indeed.
+
+> Of course, my opinion is just one amongst many other Buildroot
+> developers, and if all other Buildroot developers are convinced that
+> this is the way to go, then we'll do it. But since not many people
+> gave their opinion about this, I thought I would simply give mine.
+
+Well, it's always difficult to state an opinion on such a series. I have
+the gut-feeling that it is "not good", but just stating so is not
+sufficient to coment on it. You've expressed quite nicely my feelings
+bout this. Thanks!
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
