@@ -1,49 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 21 Apr 2015 19:36:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xeyes: Add dependency to
-	xlib_libXrender
-Message-ID: <1429637763-9093-1-git-send-email-bernd.kuhls@t-online.de>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Tue, 21 Apr 2015 13:50:33 -0400
+Subject: [Buildroot] [PATCH 0/5] systemd service file cleanups
+Message-ID: <1429638638-28695-1-git-send-email-mike@mikebwilliams.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xeyes depends on Xrender since version 1.1.0
-http://lists.freedesktop.org/archives/xorg/2009-December/048305.html
+All,
 
-Fixes
-http://autobuild.buildroot.net/results/bae/baeded072fbec4a398738e00dbf851d756af660f/
+This set of patches fixes and cleans up some systemd service files for various packages.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xapp_xeyes/Config.in     |    1 +
- package/x11r7/xapp_xeyes/xapp_xeyes.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+avahi was build-tested on both systemd and busybox init. psplash started but failed due to lack of a framebuffer on my device. rsyslog, ofono, and connman appeared to be working correctly.
 
-diff --git a/package/x11r7/xapp_xeyes/Config.in b/package/x11r7/xapp_xeyes/Config.in
-index a7b7737..5cf7f6c 100644
---- a/package/x11r7/xapp_xeyes/Config.in
-+++ b/package/x11r7/xapp_xeyes/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_XAPP_XEYES
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_XLIB_LIBXMU
-+	select BR2_PACKAGE_XLIB_LIBXRENDER
- 	select BR2_PACKAGE_XLIB_LIBXT
- 	help
- 	  X.Org xeyes application
-diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.mk b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-index 89cac51..07c1200 100644
---- a/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-+++ b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-@@ -9,6 +9,6 @@ XAPP_XEYES_SOURCE = xeyes-$(XAPP_XEYES_VERSION).tar.bz2
- XAPP_XEYES_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XEYES_LICENSE = MIT
- XAPP_XEYES_LICENSE_FILES = COPYING
--XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXt
-+XAPP_XEYES_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXmu xlib_libXrender xlib_libXt
- 
- $(eval $(autotools-package))
+The previous versions of this series also moved the systemd installation location, and fixed a number of packages' udev rules installation directory. For now, I recommend those patches be dropped. When systemd is built to be installed in its default directory, it no longer searches /lib/udev for rules as the upstream default is /usr/lib/udev.
+
+Unfortunately, it appears that either many packages are built assuming an un-split /usr/lib and /lib, or they are only tested on systems where systemd is installed to /lib when the split exists. I'm not sure its worth the effort to patch all of these upstream packages, and I instead recommend that we merge /lib and /usr/lib for systemd systems.
+
+Finally, the gpsd patch has been dropped for now because it was attempting to incorrectly interact with the host systemd.
+
+Mike Williams (5):
+  avahi: systemd cleanups
+  psplash: move systemd service files to /usr/lib
+  rsyslog: fix systemd service installation
+  ofono: enable systemd service by default
+  connman: enable systemd service by default
+
+ package/avahi/0002-disable-systemd-support.patch | 22 ----------------------
+ package/avahi/avahi.mk                           | 12 ++++++++++--
+ package/connman/connman.mk                       |  5 +++++
+ package/ofono/ofono.mk                           |  6 ++++++
+ package/psplash/psplash.mk                       |  8 ++++----
+ package/rsyslog/rsyslog.mk                       |  7 ++++---
+ 6 files changed, 29 insertions(+), 31 deletions(-)
+ delete mode 100644 package/avahi/0002-disable-systemd-support.patch
+
 -- 
-1.7.10.4
+2.1.4
