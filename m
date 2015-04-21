@@ -1,88 +1,183 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Apr 2015 23:14:36 +0200
-Subject: [Buildroot] [PATCH 1/1] RTAI updated to version 4.0.1 and bug
- fix so kernel gets patched cleanly
-In-Reply-To: <1424790794-5707-1-git-send-email-Matthew.Bastian@nrc-cnrc.gc.ca>
-References: <1424790794-5707-1-git-send-email-Matthew.Bastian@nrc-cnrc.gc.ca>
-Message-ID: <20150421231436.40331fbb@free-electrons.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 21 Apr 2015 23:17:12 +0200
+Subject: [Buildroot] [PATCH v6 1/1] Added linux drivers backports project
+Message-ID: <1429651032-17621-1-git-send-email-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matthew Bastian,
+https://backports.wiki.kernel.org
 
-On Tue, 24 Feb 2015 10:13:14 -0500, Matthew Bastian wrote:
-> From: Matthew Bastian <mbastian@zaphod.ds.nrc.ca>
-> 
-> Signed-off-by: Matthew Bastian <Matthew.Bastian@nrc-cnrc.gc.ca>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+Changes v5->v6:
+Added changes by Arnout Vandecappelle in Mon Apr 20 21:46:34 UTC 2015:
+* linux-backports.mk: $(LINUX_BACKPORTS_KCONFIG_FILE): linux
+  this doesn't help: we'd need to use:
+  LINUX_BACKPORTS_KCONFIG_FILE := $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
+  but then we don't get value for $(LINUX_BACKPORTS_DIR) nor $(@D).
+* linux-backports.mk: LINUX_BACKPORTS_PATCH_DEPENDENCIES = linux
+  This also does not help, it does linux extracting, patching, but we
+  need also configuring. We'd need something like
+  LINUX_BACKPORTS_CONFIGURE_DEPENDENCIES to be implemented.
+* Config.in: info about support from kernel 3.0.
+* Config.in: help text wrapped to 72 columns.
 
-I've applied your patch, but did some additional changes to it, see
-below.
+Changes v4->v5:
+* Added changes made by Thomas Petazzoni in Sun, 19 Apr 2015 11:03:26 +0200.
 
-> diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
-> index bf998d5..2631535 100644
-> --- a/linux/linux-ext-rtai.mk
-> +++ b/linux/linux-ext-rtai.mk
-> @@ -20,14 +20,15 @@ else
->  RTAI_ARCH = $(KERNEL_ARCH)
->  endif
->  
-> +kver = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion`
-> +
->  # Prepare kernel patch
->  ifeq ($(RTAI_PATCH),)
->  define RTAI_PREPARE_KERNEL
-> -	kver=`$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion` ; \
-> -	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$${kver}-*patch ; then \
-> +	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$(kver)-*patch ; then \
->  		$(APPLY_PATCHES) $(LINUX_DIR)		 		\
-> -			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/ 	\
-> -			hal-linux-$${kver}-*patch ; \
-> +			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches \
-> +				hal-linux-$(kver)-*patch ; \
->  	else \
->  		echo "No RTAI patch for your kernel version" ; \
->  		exit 1 ; \
+Changes v3->v4:
+* Define LINUX_BACKPORTS_MAKE_ENV instead of LINUX_BACKPORTS_MAKE_OPTS, remove TARGET_MAKE_ENV from it.
+* Add nconfig to LINUX_BACKPORTS_KCONFIG_EDITORS.
+* Clean formating of build commands.
+---
+ package/Config.in                            |  1 +
+ package/linux-backports/Config.in            | 43 +++++++++++++++++++
+ package/linux-backports/linux-backports.hash |  2 +
+ package/linux-backports/linux-backports.mk   | 62 ++++++++++++++++++++++++++++
+ 4 files changed, 108 insertions(+)
+ create mode 100644 package/linux-backports/Config.in
+ create mode 100644 package/linux-backports/linux-backports.hash
+ create mode 100644 package/linux-backports/linux-backports.mk
 
-These changes seemed to not be necessary. The RTAI patch applied just
-fine with the existing code. If you really think there is a problem
-here, please give a more detailed description, but for now, I've
-applied your patch without this part.
-
-> diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
-> index 6f94121..dfd8e0c 100644
-> --- a/package/rtai/rtai.mk
-> +++ b/package/rtai/rtai.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -RTAI_VERSION = 3.8.1
-> +RTAI_VERSION = 4.0.1
->  RTAI_SOURCE = rtai-$(RTAI_VERSION).tar.bz2
->  RTAI_SITE = https://www.rtai.org/userfiles/downloads/RTAI
->  RTAI_INSTALL_STAGING = YES
-> @@ -22,6 +22,8 @@ RTAI_CONF_OPTS = \
->  	--includedir=/usr/include/rtai \
->  	--with-linux-dir=$(LINUX_DIR) 	\
->  	--disable-leds		      	\
-> +	--enable-usi			\
-> +	--enable-align-priority		\
->  	--disable-rtailab		\
->  	--with-module-dir=/lib/modules/$(LINUX_VERSION_PROBED)/rtai
-
-I've applied this part.
-
-Also, there is a RTAI 4.1 version. Could you look at sending a patch to
-use this version instead? It has some patches for much more recent
-kernel versions on x86.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 319f01a..cdd946c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -365,6 +365,7 @@ endif
+ 	source "package/iucode-tool/Config.in"
+ 	source "package/kbd/Config.in"
+ 	source "package/lcdproc/Config.in"
++	source "package/linux-backports/Config.in"
+ 	source "package/lirc-tools/Config.in"
+ 	source "package/lm-sensors/Config.in"
+ 	source "package/lshw/Config.in"
+diff --git a/package/linux-backports/Config.in b/package/linux-backports/Config.in
+new file mode 100644
+index 0000000..f427565
+--- /dev/null
++++ b/package/linux-backports/Config.in
+@@ -0,0 +1,43 @@
++comment "linux-backports needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
++
++config BR2_PACKAGE_LINUX_BACKPORTS
++	bool "linux-backports"
++	depends on BR2_LINUX_KERNEL
++	help
++          The backports package includes many Linux drivers from recent
++          kernels, backported to older ones.
++
++          This version of linux-backports supports kernels starting from
++          3.0.
++
++	  https://backports.wiki.kernel.org
++
++if BR2_PACKAGE_LINUX_BACKPORTS
++
++choice
++	prompt "Linux kernel driver backports configuration"
++	default BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
++
++config BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
++	bool "Using a defconfig"
++
++config BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG
++	bool "Using a custom config file"
++
++endchoice
++
++config BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG
++	string "Defconfig name"
++	depends on BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
++	help
++          Name of the backports defconfig file to use. The defconfig is
++          located in defconfigs/ directory in the backports tree.
++
++config BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE
++	string "Configuration file path"
++	depends on BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG
++	help
++	  Path to the backports configuration file
++
++endif
+diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
+new file mode 100644
+index 0000000..42ea0b3
+--- /dev/null
++++ b/package/linux-backports/linux-backports.hash
+@@ -0,0 +1,2 @@
++# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v3.18.1/sha256sums.asc
++sha256 ff3d4d5192c4d57d7415dfcd60e02ea4fa21e0de224ae0ce2b5b9f2e9c815783  backports-3.18.1-1.tar.xz
+diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
+new file mode 100644
+index 0000000..73f273c
+--- /dev/null
++++ b/package/linux-backports/linux-backports.mk
+@@ -0,0 +1,62 @@
++################################################################################
++#
++# linux-backports
++#
++################################################################################
++
++LINUX_BACKPORTS_VERSION_MAJOR = 3.18.1
++LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
++LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
++LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
++
++LINUX_BACKPORTS_DEPENDENCIES = linux
++# FIXME: does linux extracting, patching, but we need also linux to be configured.
++LINUX_BACKPORTS_PATCH_DEPENDENCIES = linux
++
++LINUX_BACKPORTS_MAKE_OPTS = \
++	$(LINUX_MAKE_FLAGS) \
++	KLIB_BUILD=$(LINUX_DIR) \
++	KLIB=$(TARGET_DIR)
++
++ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
++LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
++else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
++LINUX_BACKPORTS_KCONFIG_FILE = $(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)
++endif
++
++# backports configure needs a configured kernel
++# FIXME: not used as we'd need to assign LINUX_BACKPORTS_KCONFIG_FILE with :=,
++# but then we don't get $(LINUX_BACKPORTS_DIR) evaluated.
++$(LINUX_BACKPORTS_KCONFIG_FILE): linux
++
++define LINUX_BACKPORTS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) -C $(@D)
++endef
++
++define LINUX_BACKPORTS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
++		-C $(LINUX_DIR) M=$(@D) \
++		INSTALL_MOD_DIR=backports \
++		modules_install
++endef
++
++LINUX_BACKPORTS_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
++LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
++
++$(eval $(kconfig-package))
++
++# Checks to give errors that the user can understand
++ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
++ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG)),)
++$(error No linux-backports defconfig name specified, check your BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG setting)
++endif
++endif
++
++ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
++ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)),)
++$(error No linux-backports configuration file specified, check your BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE setting)
++endif
++endif
++
++endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.0
