@@ -1,204 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Apr 2015 16:08:44 +0200
-Subject: [Buildroot] [git commit] package: add mosquitto
-Message-ID: <20150421141948.1C63281D5C@busybox.osuosl.org>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Tue, 21 Apr 2015 10:20:46 -0400
+Subject: [Buildroot] [PATCH 2/2] pkg-generic: prepend downloaded patches
+ w/ package
+In-Reply-To: <20150421153045.6927584f@free-electrons.com>
+References: <1429462679-4769-1-git-send-email-fhunleth@troodon-software.com>
+ <1429462679-4769-2-git-send-email-fhunleth@troodon-software.com>
+ <55357904.1080608@mind.be>
+ <CA+-urNTh3ONseXzFEqx3ALLqLJBmpH-RvV1vQu9bHhx-uEQQFQ@mail.gmail.com>
+ <20150421153045.6927584f@free-electrons.com>
+Message-ID: <CA+-urNTcHpvcg1Y7rFCVWAUsE2RjEO0QhBvFca2gAcyLWm8URw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=abf4db2c48bf60053cf66b32a0572cd59dd5d624
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, Apr 21, 2015 at 9:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Frank Hunleth,
+>
+> On Tue, 21 Apr 2015 09:03:53 -0400, Frank Hunleth wrote:
+>
+>> I don't like the idea of penalizing _SOURCE and _EXTRA_DOWNLOADS with
+>> the ugly filenames from _PATCH, so I'm currently in favor of having a
+>> different strategies. (I've never used _EXTRA_DOWNLOADS, so maybe it's
+>> more like _PATCH?)
+>
+> Thinking out loud. We're trying to solve the problem of two packages
+> downloading files having the same name, and we're struggling to find a
+> solution by renaming files.
+>
+> What if we took a different approach, and instead of renaming files,
+> keep the file named as they are, but store them in subdirectories,
+> named per-package. I.e, instead of throwing everything in $(DL_DIR), we
+> create $(DL_DIR)/<package>/ for each package, and we store the
+> downloads only for this package there. This way, two different packages
+> can download files named identically, they will simply be stored in
+> different directories.
+>
+> There are obviously some implications (organization of files in
+> BR2_PRIMARY_SITE and on sources.buildroot.net), but isn't this the
+> easiest solution, after all? Or am I missing something?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                |    1 +
- package/mosquitto/Config.in      |   19 ++++++++
- package/mosquitto/S50mosquitto   |   35 +++++++++++++++
- package/mosquitto/mosquitto.hash |    2 +
- package/mosquitto/mosquitto.mk   |   90 ++++++++++++++++++++++++++++++++++++++
- 5 files changed, 147 insertions(+), 0 deletions(-)
+Yes. This would be another route barring the new issue that I just ran
+into with _PATCH.
 
-diff --git a/package/Config.in b/package/Config.in
-index 319f01a..cee013e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1208,6 +1208,7 @@ endif
- 	source "package/modem-manager/Config.in"
- 	source "package/mongoose/Config.in"
- 	source "package/mongrel2/Config.in"
-+	source "package/mosquitto/Config.in"
- 	source "package/mrouted/Config.in"
- 	source "package/mtr/Config.in"
- 	source "package/nbd/Config.in"
-diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-new file mode 100644
-index 0000000..8f579f8
---- /dev/null
-+++ b/package/mosquitto/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_MOSQUITTO
-+	bool "mosquitto"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_INET_IPV6
-+	depends on !BR2_STATIC_LIBS # builds .so
-+	help
-+	  Mosquitto is an open source message broker that implements
-+	  the MQ Telemetry Transport protocol versions 3.1 and
-+	  3.1.1. MQTT provides a lightweight method of carrying out
-+	  messaging using a publish/subscribe model. This makes it
-+	  suitable for "machine to machine" messaging such as with low
-+	  power sensors or mobile devices such as phones, embedded
-+	  computers or microcontrollers like the Arduino.
-+
-+	  http://mosquitto.org/
-+
-+comment "mosquitto needs a toolchain w/ IPv6, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INET_IPV6 || BR2_STATIC_LIBS
-diff --git a/package/mosquitto/S50mosquitto b/package/mosquitto/S50mosquitto
-new file mode 100644
-index 0000000..9f10cce
---- /dev/null
-+++ b/package/mosquitto/S50mosquitto
-@@ -0,0 +1,35 @@
-+#!/bin/sh
-+
-+start() {
-+	echo -n "Starting mosquitto: "
-+	start-stop-daemon -S -q -m -b -p /var/run/mosquitto.pid \
-+		--exec /usr/sbin/mosquitto \
-+		-- -c /etc/mosquitto/mosquitto.conf
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+stop() {
-+	echo -n "Stopping mosquitto: "
-+	start-stop-daemon -K -q -p /var/run/mosquitto.pid
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+  start)
-+	start
-+	;;
-+  stop)
-+	stop
-+	;;
-+  restart|reload)
-+	restart
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-new file mode 100644
-index 0000000..2f38bdb
---- /dev/null
-+++ b/package/mosquitto/mosquitto.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	75a8b051c7859a2426ffc15bf45b44f79c8288395a325d791ba54e5df9af58a8  mosquitto-1.4.1.tar.gz
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-new file mode 100644
-index 0000000..0016750
---- /dev/null
-+++ b/package/mosquitto/mosquitto.mk
-@@ -0,0 +1,90 @@
-+################################################################################
-+#
-+# mosquitto
-+#
-+################################################################################
-+
-+MOSQUITTO_VERSION = 1.4.1
-+MOSQUITTO_SITE = http://mosquitto.org/files/source
-+MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
-+MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
-+MOSQUITTO_INSTALL_STAGING = YES
-+
-+MOSQUITTO_MAKE_OPTS = \
-+	UNAME=Linux \
-+	STRIP=true \
-+	prefix=/usr \
-+	WITH_WRAP=no \
-+	WITH_DOCS=no
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+MOSQUITTO_MAKE_OPTS += WITH_THREADING=yes
-+else
-+MOSQUITTO_MAKE_OPTS += WITH_THREADING=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+MOSQUITTO_DEPENDENCIES += openssl
-+MOSQUITTO_MAKE_OPTS += WITH_TLS=yes
-+else
-+MOSQUITTO_MAKE_OPTS += WITH_TLS=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_C_ARES),y)
-+MOSQUITTO_DEPENDENCIES += c-ares
-+MOSQUITTO_MAKE_OPTS += WITH_SRV=yes
-+else
-+MOSQUITTO_MAKE_OPTS += WITH_SRV=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
-+MOSQUITTO_DEPENDENCIES += util-linux
-+MOSQUITTO_MAKE_OPTS += WITH_UUID=yes
-+else
-+MOSQUITTO_MAKE_OPTS += WITH_UUID=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS),y)
-+MOSQUITTO_DEPENDENCIES += libwebsockets
-+MOSQUITTO_MAKE_OPTS += WITH_WEBSOCKETS=yes
-+else
-+MOSQUITTO_MAKE_OPTS += WITH_WEBSOCKETS=no
-+endif
-+
-+# C++ support is only used to create a wrapper library
-+ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
-+define MOSQUITTO_DISABLE_CPP
-+	$(SED) '/-C cpp/d' $(@D)/lib/Makefile
-+endef
-+
-+MOSQUITTO_POST_PATCH_HOOKS += MOSQUITTO_DISABLE_CPP
-+endif
-+
-+define MOSQUITTO_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		$(MOSQUITTO_MAKE_OPTS)
-+endef
-+
-+define MOSQUITTO_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		$(MOSQUITTO_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
-+endef
-+
-+define MOSQUITTO_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		$(MOSQUITTO_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
-+	rm -f $(TARGET_DIR)/etc/mosquitto/*.example
-+	$(INSTALL) -D -m 0644 $(@D)/mosquitto.conf \
-+		$(TARGET_DIR)/etc/mosquitto/mosquitto.conf
-+endef
-+
-+define MOSQUITTO_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/mosquitto/S50mosquitto \
-+		$(TARGET_DIR)/etc/init.d/S50mosquitto
-+endef
-+
-+define MOSQUITTO_USERS
-+	mosquitto -1 nogroup -1 * - - - Mosquitto user
-+endef
-+
-+$(eval $(generic-package))
+The issue occurs when Intel updates their kernel or u-boot patches
+without updating which kernel or u-boot that they use. The remote file
+name of the patches is still the same (upstream_to_edison.patch). The
+kernel or u-boot package versions are also still the same. So unless I
+append some additional versioning information to the filename stored
+in $(DL_DIR), the new patch won't be downloaded.
+
+Frank
