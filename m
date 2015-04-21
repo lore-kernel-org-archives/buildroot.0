@@ -1,10 +1,9 @@
 From: Mike Williams <mike@mikebwilliams.com>
-Date: Tue, 21 Apr 2015 13:50:35 -0400
-Subject: [Buildroot] [PATCH 2/5] psplash: move systemd service files to
-	/usr/lib
+Date: Tue, 21 Apr 2015 13:50:36 -0400
+Subject: [Buildroot] [PATCH 3/5] rsyslog: fix systemd service installation
 In-Reply-To: <1429638638-28695-1-git-send-email-mike@mikebwilliams.com>
 References: <1429638638-28695-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <1429638638-28695-3-git-send-email-mike@mikebwilliams.com>
+Message-ID: <1429638638-28695-4-git-send-email-mike@mikebwilliams.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +12,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 ---
- package/psplash/psplash.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/rsyslog/rsyslog.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
-index 5901547..85c0fb8 100644
---- a/package/psplash/psplash.mk
-+++ b/package/psplash/psplash.mk
-@@ -11,15 +11,15 @@ PSPLASH_AUTORECONF = YES
- 
- define PSPLASH_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/psplash/psplash-start.service \
--		$(TARGET_DIR)/etc/systemd/system/psplash-start.service
-+		$(TARGET_DIR)/usr/lib/systemd/system/psplash-start.service
- 	$(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants
--	ln -sf  ../psplash-start.service \
-+	ln -sf  ../../../../usr/lib/systemd/system/psplash-start.service \
- 		 $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants/
- 
- 	$(INSTALL) -D -m 644 package/psplash/psplash-quit.service \
--		$(TARGET_DIR)/etc/systemd/system/psplash-quit.service
-+		$(TARGET_DIR)/usr/lib/systemd/system/psplash-quit.service
- 	$(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf  ../psplash-quit.service \
-+	ln -sf  ../../../../usr/lib/systemd/system/psplash-quit.service \
- 		 $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 99e6eba..0b7df4b 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -65,11 +65,12 @@ define RSYSLOG_INSTALL_INIT_SYSV
  endef
  
+ define RSYSLOG_INSTALL_INIT_SYSTEMD
+-	ln -sf /lib/systemd/system/rsyslog.service \
++	mkdir -p $(TARGET_DIR)/etc/systemd/system
++	ln -fs ../../../usr/lib/systemd/system/rsyslog.service \
+ 		$(TARGET_DIR)/etc/systemd/system/syslog.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -sf ../syslog.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/syslog.service
++	ln -fs ../../../../usr/lib/systemd/system/rsyslog.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rsyslog.service
+ endef
+ 
+ define RSYSLOG_INSTALL_CONF
 -- 
 2.1.4
