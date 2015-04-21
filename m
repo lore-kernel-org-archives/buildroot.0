@@ -1,75 +1,93 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Apr 2015 18:36:10 +0200
-Subject: [Buildroot] Reminder about your pending Buildroot patches
-In-Reply-To: <20150421124317.BA6BE88D@mail.free-electrons.com>
-References: <20150421124317.BA6BE88D@mail.free-electrons.com>
-Message-ID: <20150421163610.GA4262@free.fr>
+Date: Tue, 21 Apr 2015 18:55:52 +0200
+Subject: [Buildroot] [PATCHv4] toolchain: fix installing gconv libs with
+	multi-arch toolchain
+Message-ID: <1429635352-14756-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+For a multi-arch toolchain, gconv modules are in a sub-directory named
+after the machine gcc targets. This is the case, for example, for the
+Linaro ARM 2014.09 toolchain, which has the gconv modules in (relative
+to the sysroot):
+    /usr/lib/arm-linux-gnueabihf/gconv
 
-On 2015-04-21 14:43 +0200, Thomas Petazzoni spake thusly:
-> This is a reminder about your Buildroot patches that are older than 30
-> days.
-> 
-> We need your help to know if your patches are still relevant or not.
-> To help us, make sure to update the status of your patches in
-> patchwork as appropriate, or to resend an updated version that applies
-> on the latest Buildroot master. Especially let us know if you would
-> like to withdraw your patch if you are no longer interested.
-> 
-> Here is the list of patches you have submitted that are still pending:
-> 
->  - [1/8,v8] package/xserver_xorg-server: prepare for multiple supported versions
->    http://patchwork.ozlabs.org/patch/450221/
-> 
->  - [2/8,v8] package/xserver_xorg-server: make the version a choice
->    http://patchwork.ozlabs.org/patch/450222/
-> 
->  - [3/8,v8] package/xserver_xorg-server: add blind options to specify driver ABI
->    http://patchwork.ozlabs.org/patch/450223/
-> 
->  - [4/8,v8] package/xserver_xorg-server: not all versions need all dependencies
->    http://patchwork.ozlabs.org/patch/450225/
-> 
->  - [5/8,v8] package/xserver_xorg-server: add version 1.14.7
->    http://patchwork.ozlabs.org/patch/450224/
-> 
->  - [6/8,v8] package/nvidia-tegra23-binaries: new package
->    http://patchwork.ozlabs.org/patch/450226/
-> 
->  - [7/8,v8] package.nvidia-tegra23-binaries: add gstreamer plugins
->    http://patchwork.ozlabs.org/patch/450228/
-> 
->  - [8/8,v8] package/nvidia-tegra23-codecs: new package
->    http://patchwork.ozlabs.org/patch/450227/
+while the Sourcery CodeBench ARM 2014.05 (non-multi-arch) has them in:
+    /usr/lib/gconv
 
-Still valid inmy point of view.
+So, to catter for both cases, search both paths. We want to favour the
+machine-specific gconv modules over potentially existing "generic" ones,
+so we first search that (if it exists) and fallback to looking in the
+generic location.
 
-Anyone can test this up to and including patch 5, as this does not
-require access to specific hardware.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-As for patches 6-8, anyone with access to a tegra2/3 system should test
-it, as I do not have access to such a system.
+---
+changes v3 -> v4:
+  - nothing, just rebased on top of master
 
->  - [2/2,v3] toolchain: fix installing gconv libs with multi-arch toolchain
->    http://patchwork.ozlabs.org/patch/451014/
+Changes v2 -> v3:
+  - use TOOLCHAIN_EXTERNAL_PREFIX instead of computing it again
 
-Still applicable. I will rebase and resend shortly.
+Changes v1 -> v2:
+  - also handle the case where the gconv modules list is specified
+---
+ toolchain/toolchain.mk | 26 ++++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
 
-Thank you! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
+index 3f9900b..0a35909 100644
+--- a/toolchain/toolchain.mk
++++ b/toolchain/toolchain.mk
+@@ -17,28 +17,38 @@ endif
+ ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
+ GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
+ define COPY_GCONV_LIBS
+-	$(Q)if [ -z "$(GCONV_LIBS)" ]; then \
+-		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/gconv-modules \
+-				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
+-		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/gconv/*.so \
++	$(Q)found_gconv=no; \
++	for d in $(TOOLCHAIN_EXTERNAL_PREFIX) ''; do \
++		[ -d "$(STAGING_DIR)/usr/lib/$${d}/gconv" ] || continue; \
++		found_gconv=yes; \
++		break; \
++	done; \
++	if [ "$${found_gconv}" = "no" ]; then \
++		printf "Unable to find gconv modules\n" >&2; \
++		exit 1; \
++	fi; \
++	if [ -z "$(GCONV_LIBS)" ]; then \
++		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
++				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules && \
++		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/$${d}/gconv/*.so \
+ 				   $(TARGET_DIR)/usr/lib/gconv \
+ 		|| exit 1; \
+ 	else \
+ 		for l in $(GCONV_LIBS); do \
+-			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/$${l}.so \
++			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/$${l}.so \
+ 					      $(TARGET_DIR)/usr/lib/gconv/$${l}.so \
+ 			|| exit 1; \
+-			$(TARGET_READELF) -d $(STAGING_DIR)/usr/lib/gconv/$${l}.so |\
++			$(TARGET_READELF) -d $(STAGING_DIR)/usr/lib/$${d}/gconv/$${l}.so |\
+ 			sort -u |\
+ 			sed -e '/.*(NEEDED).*\[\(.*\.so\)\]$$/!d; s//\1/;' |\
+ 			while read lib; do \
+-				 $(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/$${lib} \
++				 $(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/$${lib} \
+ 						       $(TARGET_DIR)/usr/lib/gconv/$${lib} \
+ 				 || exit 1; \
+ 			done; \
+ 		done; \
+ 		./support/scripts/expunge-gconv-modules "$(GCONV_LIBS)" \
+-			<$(STAGING_DIR)/usr/lib/gconv/gconv-modules \
++			<$(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
+ 			>$(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
+ 	fi
+ endef
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
