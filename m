@@ -1,46 +1,33 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 21 Apr 2015 13:43:53 +0000
-Subject: [Buildroot] [PATCH v4] gcc: explicitly use
- C{XX}FLAGS_FOR_TARGET instead of --enable-target-optspace
-In-Reply-To: <20140923131924.2334adec@free-electrons.com>
-References: <1409558133-17642-1-git-send-email-abrodkin@synopsys.com>
- <1410155602.4784.1.camel@abrodkin-8560l.internal.synopsys.com>
- <1410787751.5875.30.camel@abrodkin-8560l.internal.synopsys.com>
- <1411470616.8968.3.camel@abrodkin-8560l.internal.synopsys.com>
- <20140923131924.2334adec@free-electrons.com>
-Message-ID: <1429623833.2624.15.camel@synopsys.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Tue, 21 Apr 2015 09:45:36 -0400
+Subject: [Buildroot] [PATCH] uboot: add default for BR2_TARGET_UBOOT_PATCH
+Message-ID: <1429623936-4438-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Automatically copy over the value from BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+to make handling its deprecation easier. Thanks to Arnout for the
+suggestion.
 
-On Tue, 2014-09-23 at 13:19 +0200, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Tue, 23 Sep 2014 11:10:16 +0000, Alexey Brodkin wrote:
-> 
-> > > > I'm wondering if this version is fine and we may go ahead an apply it?
-> > > 
-> > > Please treat this as a polite reminder about this pending patch.
-> > 
-> > Any chance for this change to made its way into upstream Buildroot?
-> 
-> Yes. Please give us some time to test it before applying it. It's
-> touching a fairly sensitive area, so we don't apply such patches
-> lightly.
-> 
-> Best regards,
-> 
-> Thomas
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ boot/uboot/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-I just got a reminder on my pending patches in Buildroot so I'm updating
-that one.
-
-This v4 patch should be dropped because it is now superseded with v5
-(http://patchwork.ozlabs.org/patch/453849/) which in its turn is just a
-rebase of v4 on top of more up to date master.
-
--Alexey
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 4f01499..419b183 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -84,6 +84,7 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+ 
+ config BR2_TARGET_UBOOT_PATCH
+ 	string "Custom U-Boot patches"
++	default BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+ 	help
+ 	  A space-separated list of patches to apply to U-Boot.
+ 	  Each patch can be described as an URL, a local file path,
+-- 
+1.9.1
