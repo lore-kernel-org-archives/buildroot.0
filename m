@@ -1,61 +1,70 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Apr 2015 23:47:19 +0200
-Subject: [Buildroot] Towards 2015.05-rc1
-References: <20150419220053.2c1d5b62@free-electrons.com>
- <XnsA481E23CAF8E0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20150419230245.64cf1410@free-electrons.com>
- <87sibutq0q.fsf@dell.be.48ers.dk>
-Message-ID: <XnsA484F1FDAFE24berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 Apr 2015 23:58:33 +0200
+Subject: [Buildroot] [PATCH] pkg-cmake: Skip compilation in installation
+ step
+In-Reply-To: <1429733516-4466-1-git-send-email-cedric.marie@openmailbox.org>
+References: <1429733516-4466-1-git-send-email-cedric.marie@openmailbox.org>
+Message-ID: <20150422215833.GE4069@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard <peter@korsgaard.com> wrote in
-news:87sibutq0q.fsf at dell.be.48ers.dk: 
+C?dric, All,
 
->>>>>> "Thomas" == Thomas Petazzoni
->>>>>> <thomas.petazzoni@free-electrons.com>
->>>>>> writes: 
+On 2015-04-22 22:11 +0200, C?dric Marie spake thusly:
+> With CMake build system, the "make install" command always compiles
+> before installing, to make sure that everything is up-to-date.
 > 
-> > Bernd,
-> > On Sun, 19 Apr 2015 22:14:24 +0200, Bernd Kuhls wrote:
+> In Buildroot environment, this is quite useless, because the package
+> has always already been compiled, either at first build, or when
+> invoking "make <package>-rebuild".
+> In all cases, when it comes to staging or target installation step, the
+> package has just been compiled.
 > 
-> >> if possible and time allows for all involved persons I would like to
-> >> see the libudev series stuff in the next buildroot release. 
+> Using "make install/fast" - in order to skip the compilation step - is
+> therefore more appropriate, more consistent with what other build
+> systems do, and saves time when you need to rebuild your package.
 > 
-> > As far as I remember, someone needs to take over this series, no? I
-> > believe you originally authored it, then Yann took over, then Peter
-> > proposed to take over but did not resend it as far as I know.
+> Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
+> ---
+>  package/pkg-cmake.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Yes, sorry - I haven't forgotten about it, but I haven't been able to
-> find time for it yet. Realisticly seen, I probably won't be able to make
-> it within the next 10 days.
-> 
-> > On my side, I am still a bit concerned by the usefulness of this
-> > series. The use cases you have are anyway running big things (Kodi,
-> > etc.) so I'm not sure why running udevd or not makes a big difference.
-> > It does seem a lot of additional complexity for not such a huge
-> > benefit.
-> 
-> I agree that it is a tradeoff. In the worst case it can be handled in a
-> post-build script.
-> 
-> My own usecase was to use libinput for some keyboard/mouse/touchscreen
-> handling on a small system and disliking the udevd dependency.
-> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 2262012..f17a883 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -57,8 +57,8 @@ $(2)_MAKE			?= $$(MAKE)
+>  $(2)_MAKE_ENV			?=
+>  $(2)_MAKE_OPTS			?=
+>  $(2)_INSTALL_OPTS		?= install
+> -$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
+> -$(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
+> +$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install/fast
+> +$(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install/fast
 
-Hi Peter, hi Thomas,
+Would it also make sense we install cmake itself with this rule, in
+package/cmake/cmake.mk:47 , too?
 
-my plan is to provide a Kodi package for an existing distro (www.fli4l.de)
-which uses buildroot to compile its binaries and uses this option: 
+Regards,
+Yann E. MORIN.
 
-BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+>  $(2)_SRCDIR			= $$($(2)_DIR)/$$($(2)_SUBDIR)
+>  
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-and CONFIG_MDEV=y in busybox.config
-
-These settings forbid enabling udev which blocks mesa3d, and therefore
-kodi, on x86. 
-
-Regards, Bernd
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
