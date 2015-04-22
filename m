@@ -1,47 +1,47 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 23 Apr 2015 00:08:37 +0200
-Subject: [Buildroot] [PATCH v7 4/8] uclibc: update hash for arc
+Date: Thu, 23 Apr 2015 00:08:40 +0200
+Subject: [Buildroot] [PATCH v7 7/8] package/uclibc: ignore missing hash for
+	snapshots
 In-Reply-To: <1429740521-31943-1-git-send-email-arnout@mind.be>
 References: <1429740521-31943-1-git-send-email-arnout@mind.be>
-Message-ID: <1429740521-31943-5-git-send-email-arnout@mind.be>
+Message-ID: <1429740521-31943-8-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Arnout Vandecappelle <arnout@mind.be>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The old hash for 2014.08 was never updated. Since uclibc-arc-2014.12 is
-downloaded from the github helper, it is converted into a 'none' hash.
+We can't have a hash for snapshots, so add them to the exclusion list.
 
-Reordered the hashes so the none-hashes are together.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+---
+Changes v1 -> v6: (Arnout)
+  - use $(UCLIBC_SOURCE) instead of a wrong filename
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/uclibc/uclibc.hash | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/uclibc/uclibc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 729c643..fe60291 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,11 +1,11 @@
- # Locally calculated after checking pgp signature
- sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 07ff8e5..ce9b2b4 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -11,6 +11,7 @@ UCLIBC_LICENSE_FILES = COPYING.LIB
  
--# Locally calculated
--sha256	0a9085a11615296cfe7783f16ff29073393eb330749947adece0eeddb31705a4	uClibc-arc-2014.08.tar.gz
--
- # From http://www.uclibc-ng.org/trac/
- sha256  7e92e99995daa634cbdc63c297784df6e8fe39cc1d3bbd2d37eb5c3ced8a86e5        uClibc-ng-1.0.2.tar.xz
- 
-+# No hash for the ARC variant, comes from the github-helper
-+none	xxx	uClibc-arc-2014.12.tar.gz
-+
- # No hash for this git snapshot
- none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
+ ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+ UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
++BR_NO_CHECK_HASH_FOR += $(UCLIBC_SOURCE)
+ else ifeq ($(BR2_UCLIBC_VERSION_NG),y)
+ UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
 -- 
 2.1.4
