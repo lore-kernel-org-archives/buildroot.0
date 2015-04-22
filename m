@@ -1,52 +1,68 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Apr 2015 00:06:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: Fixes linking error with
-	tremor due to wrong library name
-Message-ID: <1429740384-21839-1-git-send-email-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 23 Apr 2015 00:08:34 +0200
+Subject: [Buildroot] [PATCH v7 1/8] package/gcc: add hashes
+In-Reply-To: <1429740521-31943-1-git-send-email-arnout@mind.be>
+References: <1429740521-31943-1-git-send-email-arnout@mind.be>
+Message-ID: <1429740521-31943-2-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/469/4693f5f3d362e74a55c8145dbe777606f5865ad5/
-http://autobuild.buildroot.net/results/795/795744533dbf7076e88163fb35327da8c42819f1/
-http://autobuild.buildroot.net/results/89d/89d9997fc76ad334ff7b7f2a28294c78c424a120/
-http://autobuild.buildroot.net/results/57f/57f22c8623268d836e8b402e8c27d418b6fb7f72/
-http://autobuild.buildroot.net/results/5f6/5f66a8a135c95624a14908c685f1201dd7f8ae87/
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-and many others
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/vlc/0004-libvorbisidec.patch |   18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
- create mode 100644 package/vlc/0004-libvorbisidec.patch
+Changes v4 -> v5:
+  - use alternate upstream as source of hashes  (Arnout)
 
-diff --git a/package/vlc/0004-libvorbisidec.patch b/package/vlc/0004-libvorbisidec.patch
-new file mode 100644
-index 0000000..155e069
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/gcc/gcc-final/gcc-final.hash     |  1 +
+ package/gcc/gcc-initial/gcc-initial.hash |  1 +
+ package/gcc/gcc.hash                     | 10 ++++++++++
+ 3 files changed, 12 insertions(+)
+ create mode 120000 package/gcc/gcc-final/gcc-final.hash
+ create mode 120000 package/gcc/gcc-initial/gcc-initial.hash
+ create mode 100644 package/gcc/gcc.hash
+
+diff --git a/package/gcc/gcc-final/gcc-final.hash b/package/gcc/gcc-final/gcc-final.hash
+new file mode 120000
+index 0000000..7ac9361
 --- /dev/null
-+++ b/package/vlc/0004-libvorbisidec.patch
-@@ -0,0 +1,18 @@
-+Fixes linking error with tremor due to wrong library name
-+
-+Downloaded from Gentoo package
-+https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-video/vlc/files/vlc-2.1.0-fix-libtremor-libs.patch?view=markup
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- a/modules/codec/Makefile.am
-++++ b/modules/codec/Makefile.am
-+@@ -215,7 +215,7 @@
-+ libtremor_plugin_la_SOURCES = codec/vorbis.c
-+ libtremor_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) -DMODULE_NAME_IS_tremor
-+ libtremor_plugin_la_LDFLAGS = $(AM_LDFLAGS) -rpath '$(codecdir)'
-+-libtremor_plugin_la_LIBADD = -lvorbisdec -logg
-++libtremor_plugin_la_LIBADD = $(VORBIS_LIBS) $(OGG_LIBS)
-+ EXTRA_LTLIBRARIES += libtremor_plugin.la
-+ codec_LTLIBRARIES += $(LTLIBtremor)
-+ 
++++ b/package/gcc/gcc-final/gcc-final.hash
+@@ -0,0 +1 @@
++../gcc.hash
+\ No newline at end of file
+diff --git a/package/gcc/gcc-initial/gcc-initial.hash b/package/gcc/gcc-initial/gcc-initial.hash
+new file mode 120000
+index 0000000..7ac9361
+--- /dev/null
++++ b/package/gcc/gcc-initial/gcc-initial.hash
+@@ -0,0 +1 @@
++../gcc.hash
+\ No newline at end of file
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+new file mode 100644
+index 0000000..5eec97f
+--- /dev/null
++++ b/package/gcc/gcc.hash
+@@ -0,0 +1,10 @@
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.5.4/sha512.sum
++sha512  78696b287d46aacd6f150920da376ea32f58ad9f0dafd2d3b7fa6dbdd8dd7afe659108d1dfaa5807617fc5248719f50b39c37ade0173ea5b9fec2091f4656115  gcc-4.5.4.tar.bz2
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.7.4/sha512.sum
++sha512  dfcb737073191e628231031a3571ec77ee760a59377630f4a6e4fdfa66f9ddad39fde47e3f0f227eb43cdf90e0d34cde5abdc9ac892c1e111a911062a66c9189  gcc-4.7.4.tar.bz2
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.8.4/sha512.sum
++sha512  b4c84ebd754c026029d706ef52c4242df4dcadc6a22cc5669b3aa37ac9dc25bc9cd9651fda83fb24dd5d17b1710e6865a35bb6c5cd9b95d0971717453935ae8e  gcc-4.8.4.tar.bz2
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.9.2/sha512.sum
++sha512  e96cba06d572dbe7f382a2b00fd9297dcf9f9219d46a9ad0bd904dc36d5e7db3335e422640b79a27fed6fde91b0731732b94a0e2fbcd47344d6779f8ba1f4f9c  gcc-4.9.2.tar.bz2
++# No hash for the ARC variant, comes from the github-helper:
++none  xxx  gcc-arc-2014.12.tar.gz
 -- 
-1.7.10.4
+2.1.4
