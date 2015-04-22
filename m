@@ -1,41 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Apr 2015 09:38:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/zeromq: enable kernel-based
- feature flags
-In-Reply-To: <CAKAx1chfSwdhSnyWud4fqMj5hh6pjAZLLcTQL2HppRoHs529tQ@mail.gmail.com>
-References: <1429623019-12174-1-git-send-email-lionel.orry@gmail.com>
- <20150421153349.715c50f7@free-electrons.com>
- <CAKAx1cg4csBWbVi5wKKKPcTBkocTQuf08G2YEMeZHTT686e+8g@mail.gmail.com>
- <5536B0BA.2070100@mind.be>
- <CAKAx1chfSwdhSnyWud4fqMj5hh6pjAZLLcTQL2HppRoHs529tQ@mail.gmail.com>
-Message-ID: <20150422093827.0031bb70@free-electrons.com>
+Date: Wed, 22 Apr 2015 09:39:30 +0200
+Subject: [Buildroot] [PATCH v2] heimdal: explicitly set -lpthread
+In-Reply-To: <55372443.909@gmail.com>
+References: <1429581853-24749-1-git-send-email-bluemrp9@gmail.com>
+ <20150421093509.0cdd1240@free-electrons.com>
+ <55372443.909@gmail.com>
+Message-ID: <20150422093930.4bacca8a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lionel Orry,
+Dear Ryan Coe,
 
-On Wed, 22 Apr 2015 08:01:50 +0200, Lionel Orry wrote:
+On Tue, 21 Apr 2015 21:32:03 -0700, Ryan Coe wrote:
 
-> I did, on libzmq repository:
-> 
-> git show 9daf6 > 0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
-> 
-> And tested this patch. Is this correct ?
+> I still get a build failure relating to a missing -lpthread with this 
+> method.
 
-Yes, this is OK. You could also do something like:
+If the failure you're getting is the one you reported in the other
+e-mail, I already replied that it's because you didn't apply my patch.
+Can you retry with my patch applied, and if it fails, post somewhere
+the build output of the host-heimdal package?
 
-	git checkout -b buildroot 4.0.5
-	git cherry-pick 9daf6
-	git format-patch HEAD^
-
-This will "rebase" the patch on top of 4.0.5, which will allow to avoid
-the 20 lines offset. You can also edit the patch to add the upstream
-commit ID.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
