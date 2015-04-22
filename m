@@ -1,160 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Apr 2015 20:53:37 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/tiff: Rework tiff utilities
-	handling
-Message-ID: <1429728817-21784-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 22 Apr 2015 21:05:56 +0200
+Subject: [Buildroot] Reminder about your pending Buildroot patches
+In-Reply-To: <20150421125638.93B6B88C@mail.free-electrons.com>
+References: <20150421125638.93B6B88C@mail.free-electrons.com>
+Message-ID: <5537F114.4070103@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove all utility-specific options in favour of a generic
-option which select either all or no packages. If users
-want something more fine-grained than that, they can always
-remove the unnecessary tools in a post-build script.
 
-Since tiff has no configure option or Makefile target to prevent
-the build/install of its utilities specific Makefile targets are
-called to build the libtiff and, optionally, the utilities.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+ 
+Hi Thomas,
 
---
-v3: rebased
-v2: Replaced submenu with a new all-or-nothing option (Thomas)
+Am 21.04.2015 um 14:56 schrieb Thomas Petazzoni:
+> Here is the list of patches you have submitted that are still pending:
+>
+>  - [v2,1/1] package/tiff: Rework tiff utilities handling
+>    http://patchwork.ozlabs.org/patch/434644/
+rebased and still valid: http://patchwork.ozlabs.org/patch/463778/
+>  - [1/1] package/x11r7/xapp_xfs: Fix linking error
+>    http://patchwork.ozlabs.org/patch/442068/
+This patch should still be valid according to
+http://autobuild.buildroot.net/?reason=xapp_xfs-1.1.4
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- Config.in.legacy       |   16 +++++++++++++
- package/tiff/Config.in |   11 +++------
- package/tiff/tiff.mk   |   59 +++++++++++++++++++++---------------------------
- 3 files changed, 45 insertions(+), 41 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 97bc939..9a28e25 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,22 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.05"
+Regards, Bernd
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
  
-+config BR2_PACKAGE_TIFF_TIFF2PDF
-+	bool "tiff utility-specific option removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_TIFF_UTILITIES
-+	help
-+	  utility-specific options have been removed in favour of
-+	  the new option BR2_PACKAGE_TIFF_UTILITIES.
-+
-+config BR2_PACKAGE_TIFF_TIFFCP
-+	bool "tiff utility-specific option removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_TIFF_UTILITIES
-+	help
-+	  utility-specific options have been removed in favour of
-+	  the new option BR2_PACKAGE_TIFF_UTILITIES.
-+
- config BR2_TARGET_GENERIC_PASSWD_DES
- 	bool "Encoding passwords with DES has been removed"
- 	select BR2_LEGACY
-diff --git a/package/tiff/Config.in b/package/tiff/Config.in
-index 3a929f7..957bbce 100644
---- a/package/tiff/Config.in
-+++ b/package/tiff/Config.in
-@@ -60,14 +60,9 @@ config BR2_PACKAGE_TIFF_JBIG
- 	default y
- endmenu
- 
--config BR2_PACKAGE_TIFF_TIFF2PDF
--	bool "tiff2pdf"
-+config BR2_PACKAGE_TIFF_UTILITIES
-+	bool "tiffutils"
- 	help
--	  tiff2pdf utility
--
--config BR2_PACKAGE_TIFF_TIFFCP
--	bool "tiffcp"
--	help
--	  tiffcp utility
-+	  install tiff utilities
- 
- endif
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 06f0e34..9016a21 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -15,36 +15,6 @@ TIFF_CONF_OPTS = \
- 
- TIFF_DEPENDENCIES = host-pkgconf
- 
--TIFF_TOOLS_TO_DELETE = \
--	bmp2tiff \
--	fax2ps \
--	fax2tiff \
--	gif2tiff \
--	pal2rgb \
--	ppm2tiff \
--	ras2tiff \
--	raw2tiff \
--	rgb2ycbcr \
--	thumbnail \
--	tiff2bw \
--	tiff2ps \
--	tiff2rgba \
--	tiffcmp \
--	tiffcrop \
--	tiffdither \
--	tiffdump \
--	tiffinfo \
--	tiffmedian \
--	tiffset \
--	tiffsplit \
--
--ifeq ($(BR2_PACKAGE_TIFF_TIFF2PDF),)
--TIFF_TOOLS_TO_DELETE += tiff2pdf
--endif
--ifeq ($(BR2_PACKAGE_TIFF_TIFFCP),)
--TIFF_TOOLS_TO_DELETE += tiffcp
--endif
--
- ifneq ($(BR2_PACKAGE_TIFF_CCITT),y)
- TIFF_CONF_OPTS += --disable-ccitt
- endif
-@@ -97,10 +67,33 @@ ifneq ($(BR2_PACKAGE_TIFF_JBIG),y)
- TIFF_CONF_OPTS += --disable-jbig
- endif
- 
--define TIFF_REMOVE_TOOLS_FIXUP
--	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(TIFF_TOOLS_TO_DELETE))
-+ifeq ($(BR2_PACKAGE_TIFF_UTILITIES),y)
-+define TIFF_MAKE_TOOLS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools
- endef
-+define TIFF_INSTALL_STAGING_TOOLS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools DESTDIR=$(STAGING_DIR) install
-+endef
-+define TIFF_INSTALL_TARGET_TOOLS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools DESTDIR=$(TARGET_DIR) install
-+endef
-+endif
- 
--TIFF_POST_INSTALL_TARGET_HOOKS += TIFF_REMOVE_TOOLS_FIXUP
-+define TIFF_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/port
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libtiff
-+	$(TIFF_MAKE_TOOLS)
-+endef
-+
-+define TIFF_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libtiff DESTDIR=$(STAGING_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install-pkgconfigDATA
-+	$(TIFF_INSTALL_STAGING_TOOLS)
-+endef
-+
-+define TIFF_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libtiff DESTDIR=$(TARGET_DIR) install
-+	$(TIFF_INSTALL_TARGET_TOOLS)
-+endef
- 
- $(eval $(autotools-package))
--- 
-1.7.10.4
+iQIcBAEBCAAGBQJVN/EUAAoJEIf/kIcW8uhHiskP/0niEmi5MuV4w6MLiGj3oohH
+RrsUIze/0dGWHZbZSxLNLkBn1wi64Y++xNrvbTsLEaos179YryYRJDm9N/ySO+am
+nOKeAWEam8yRr75K8nb0VyOqIzF5/4GOgk3XM+jXlNUpdbaGxau7xhNi6NyptV2W
+uaGpyirvLkUbwPATategACEUSipuAQzrLxzPf1InY0aEoAUjDslE4NtMy3G7x4zp
+vLyle2GTztaOsDxg47elWJAQdOhTc75PoOFx+PasJbNJ65RiJv7FBPft8782YKM3
+JzV/TKKhdc4rH4nTtF4A0dqtS3y9wPSsOrEv9xUbpqT2bcyMhh2/wWuJ5rCh/Zot
+D6S/b4AIfilsBEAQCYtOdPmapeQSzQFJcqwnDSZ6Kg3STwXkB6bJpi4TWodl2o68
+n1BxZJ5L5FwamKc7biWvfSk7YpohNoMmqOhX0F67h4mfIRtwNs65SYmiMgb9TcyH
+pxqNruobvwy/YzGSYqyNdUl6nBBbRLy+Cy6uSOuTCqnCcubVvINEVS/FQ3NUJE6U
+JsJyDWr4TyfA1f1t9NrOMkbJthekrvIO5AIIwrq44CJmaNscVdaz+PSn4iDzGIxK
+mqTcfi+lwkS/IC6HY/1TAdGZajTVRb8D3Yfz9u3qjNRzxeq5P9VMZtyqIuTfDWpV
+BZAwO1HlRtdMqzK3l32d
+=RJxL
+-----END PGP SIGNATURE-----
