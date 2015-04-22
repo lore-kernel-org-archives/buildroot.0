@@ -1,299 +1,262 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Wed, 22 Apr 2015 09:56:18 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/swupdate: new package
-In-Reply-To: <5536C0ED.1080301@mind.be>
-References: <1429576251-28975-1-git-send-email-joerg.krause@embedded.rocks>
- <5536C0ED.1080301@mind.be>
-Message-ID: <1429689378.3833.19.camel@embedded.rocks>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Wed, 22 Apr 2015 09:58:56 +0200
+Subject: [Buildroot] [PATCH v3] package/zeromq: enable kernel-based feature
+	flags
+Message-ID: <1429689536-15301-1-git-send-email-lionel.orry@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Di, 2015-04-21 at 23:28 +0200, Arnout Vandecappelle wrote:
-> On 21/04/15 02:30, J?rg Krause wrote:
-> > This patch is based on an WIP version submitted by Romain Naour, 
-> > commented by
-> > Arnout Vandecappelle:
-> > https://patchwork.ozlabs.org/patch/401270/
-> > 
-> > This package provides a default configuration with all external 
-> > dependencies
-> > enabled. This is necessary because upstream does not detect which 
-> > dependencies
-> > are available. Furthermore, upstream does not implement a 
-> > savedefconfig target.
-> > 
-> > Note that swupdate provides its own customized version of mongoose 
-> > and
-> > lsqlite3.
-> > 
-> > swupdate provides a default website which can be installed to the 
-> > target to
-> > enable firmware update with a browser. This patch adds the user 
-> > option to
-> > install this website.
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > Cc: Romain Naour <romain.naour@openwide.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > Tested-by: Mike Williams <mike@mikebwilliams.com>
-> > ---
-> > Changes v2 -> v3:
-> >   - bump to latest commit d7753be4fd8bdf2ba4ba56ee869550663b2cca80
-> >   - enable all dependencies (Arnout)
-> >   - rewrite help text for configuration file
-> >   - add option to install default website
-> > 
-> > Changes v1 -> v2:
-> >   - bump to latest commit d9f58b5a3263b1b00c6d011cd8cdd65e69890b46
-> >   - update Sob email address
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > ---
+The current configuration system does not check for cached variables for
+these flags, and thus they are always disabled when cross-compiling.
+This patch fixes the configuration system to use cached variables and
+enables them at configuration time.
 
-[snip]
+Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
 
-> > --- /dev/null
-> > +++ b/package/swupdate/Config.in
-> > @@ -0,0 +1,42 @@
-> > +config BR2_PACKAGE_SWUPDATE
-> > +   bool "swupdate"
-> > +   depends on BR2_TOOLCHAIN_HAS_THREADS # OpenSSL
-> > +   depends on BR2_PACKAGE_LUA_5_2
-> 
->  Yikes, now I see this dependency so explicitly, it does look kind 
-> of scary...
-> 
->  Maybe it's a better idea to not support lua at all instead.
-> 
->  How big a difference does it make in rootfs size?
+---
+Changes v2 -> v3:
+  - use unmodified upstream patch integrated in future v4.2.x releases
+    (suggested by Arnout)
+Changes v1 -> v2:
+  - fix indentation of continuation lines (suggested by Thomas P.)
 
-Enabling lua adds 30KB for Lua 5.2 and 20KB for swupdate to rootfs.tar.
+Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+---
+ ...e.m4-make-kernel-specific-flags-cacheable.patch | 199 +++++++++++++++++++++
+ package/zeromq/zeromq.mk                           |  10 ++
+ 2 files changed, 209 insertions(+)
+ create mode 100644 package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
 
->  What do you think, Joerg? Romain? Others?
-
-The additional 50KB are neglectable for me. What I don't like is that 
-I I have to select Lua 5.2 first to be able to select swupdate.
-
-How about removing lua support from the default config and adding a
-check "ifeq($(BR2_PACKAGE_LUA_5_2),y)" which enables all lua features
-in swupdate.
-
-> 
-> > +   select BR2_PACKAGE_LIBCONFIG
-> > +   select BR2_PACKAGE_LIBCURL
-> > +   select BR2_PACKAGE_MTD
-> > +   select BR2_PACKAGE_OPENSSL
-> > +   select BR2_PACKAGE_ZLIB
-> > +   help
-> > +     swupdate provides a reliable way to update the software 
-> > on an
-> > +     embedded system.
-> > +
-> > +     https://github.com/sbabic/swupdate.git
-> > +
-> > +if BR2_PACKAGE_SWUPDATE
-> > +
-> > +config BR2_PACKAGE_SWUPDATE_CONFIG
-> > +   string "swupdate configuration file"
-> > +   default "package/swupdate/swupdate.config"
-> > +   help
-> > +     The default swupdate configuration file will enable 
-> > swupdate with
-> > +     an image downloader, a webserver, and lua support, as 
-> > well as
-> > +     handlers for UBI volumes, raw NAND or NOR flash, SD 
-> > cards, shell
-> > +     scripts, and the U-Boot bootloader environment.
-> > +
-> > +     Most people will just use the default swupdate 
-> > configuration file.
-> > +     However, some people may wish to use their own modified 
-> > swupdate
-> > +     configuration file, and will specify their config file 
-> > location
-> > +     with this option.
-> > +
-> > +config BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE
-> > +   bool "install default website"
-> > +   help
-> > +     Install the provided website to /var/www/swupdate.
-> > +endif
-> > +
-> > +comment "swupate support needs toolchain w/ threads"
-> > +   depends on !BR2_TOOLCHAIN_HAS_THREADS
-> > +
-> > +comment "swupate needs a Lua 5.2 interpreter"
-> > +   depends on !BR2_PACKAGE_LUA_5_2
-> > diff --git a/package/swupdate/swupdate-0001-Add-missing-header-for
-> > -off_t.patch b/package/swupdate/swupdate-0001-Add-missing-header
-> > -for-off_t.patch
-> > new file mode 100644
-> > index 0000000..4be0f7b
-> > --- /dev/null
-> > +++ b/package/swupdate/swupdate-0001-Add-missing-header-for
-> > -off_t.patch
-> > @@ -0,0 +1,25 @@
-> > +From 4e382373cad64ca7e183336e33b72c53cfeed340 Mon Sep 17 00:00:00 
-> > 2001
-> > +From: Romain Naour <romain.naour@openwide.fr>
-> > +Date: Sun, 7 Sep 2014 17:31:09 +0200
-> > +Subject: [PATCH 1/1] Add missing header for off_t
-> > +
-> > +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> 
->  What's the upstream status of this? Stefan is normally pretty 
-> reactive...
-
-It's not upstream yet. I will send the patch to Stefano.
-
-> > +---
-> > + include/swupdate.h | 1 +
-> > + 1 file changed, 1 insertion(+)
-> > +
-> > +diff --git a/include/swupdate.h b/include/swupdate.h
-> > +index 78b7f85..c193397 100644
-> > +--- a/include/swupdate.h
-> > ++++ b/include/swupdate.h
-> > +@@ -23,6 +23,7 @@
-> > + #ifndef _SWUPDATE_H
-> > + #define _SWUPDATE_H
-> > + 
-> > ++#include <sys/types.h>
-> > + #include <sys/queue.h>
-> > + #include "flash.h"
-> > + #include "globals.h"
-> > +-- 
-> > +1.9.3
-> > +
-> > diff --git a/package/swupdate/swupdate.config 
-> > b/package/swupdate/swupdate.config
-> > new file mode 100644
-> > index 0000000..cb75998
-> > --- /dev/null
-> > +++ b/package/swupdate/swupdate.config
-> > @@ -0,0 +1,82 @@
-> [snip]
-> > +CONFIG_UBOOT=y
-> > +CONFIG_UBOOT_FWENV="/etc/fw_env.config"
-> 
->  Does it still work correctly if fw_env.config is not installed on 
-> the target?
-> Probably not... So I think this should be mentioned in the help text.
-
-I have not tested this.
-
-> > diff --git a/package/swupdate/swupdate.mk 
-> > b/package/swupdate/swupdate.mk
-> > new file mode 100644
-> > index 0000000..c78092a
-> > --- /dev/null
-> > +++ b/package/swupdate/swupdate.mk
-> > @@ -0,0 +1,62 @@
-> > +##################################################################
-> > ##############
-> > +#
-> > +# swupdate
-> > +#
-> > +##################################################################
-> > ##############
-> > +
-> > +# Choose latest commit instead of release 2014.07 for getting bug 
-> > fixes and
-> > +# image downloading feature
-> 
->  This type of comment should be in the commit message, not in the 
-> .mk file.
-
-Ok
-
-> > +SWUPDATE_VERSION = 8f59c21a07a99b94b53ab9ae3579cd2014b3cedc
-> > +SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
-> > +SWUPDATE_LICENSE = GPLv2+
-> > +SWUPDATE_LICENSE_FILES = COPYING
-> > +
-> > +# swupdate bundles its own mongoose and lsqlite3 versions
-> > +SWUPDATE_DEPENDENCIES = libconfig libcurl lua mtd openssl zlib
-> > +
-> > +SWUPDATE_BUILD_CONFIG = $(SWUPDATE_DIR)/.config
-> 
->  In linux.mk we directly use $(@D)/.config, which is IMHO clearer 
-> than adding an
-> extra variable.
-
-Ok
-
-> > +SWUPDATE_KCONFIG_FILE = $(call 
-> > qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
-> > +SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig
-> 
->  No nconfig?
-
-No nconfig.
-
-> > +SWUPDATE_CFLAGS = $(TARGET_CFLAGS)
-> > +SWUPDATE_LDFLAGS = $(TARGET_LDFLAGS)
-> > +SWUPDATE_LDLIBS =
-> 
->  These are redundant, just use the appropriate variables directly 
-> below.
-
-Ok
-
-> > +
-> > +# If we're using static libs do the same for swupdate
-> 
->  This comment is redundant.
-
-Ok
-
-> > +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> > +define SWUPDATE_PREFER_STATIC
-> > +   $(call 
-> > KCONFIG_ENABLE_OPT,CONFIG_STATIC,$(SWUPDATE_BUILD_CONFIG))
-> > +endef
-> > +endif
-> > +
-> > +define SWUPDATE_BUILD_OPTIONS
-> 
->  Better name would be _SET_BUILD_OPTIONS.
-
-Ok
-
-> > +   $(call 
-> > KCONFIG_SET_OPT,CONFIG_CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)", \
-> > +           $(SWUPDATE_BUILD_CONFIG))
-> > +   $(call KCONFIG_SET_OPT,CONFIG_SYSROOT,"$(SYSROOT_DIR)", \
-> 
->  SYSROOT_DIR doesn't exist, you probably meant STAGING_DIR.
-
-Correct.
-
-> > +           $(SWUPDATE_BUILD_CONFIG))
-> > +   $(call 
-> > KCONFIG_SET_OPT,CONFIG_EXTRA_CFLAGS,"$(SWUPDATE_CFLAGS)", \
-> > +           $(SWUPDATE_BUILD_CONFIG))
-> > +   $(call 
-> > KCONFIG_SET_OPT,CONFIG_EXTRA_LDFLAGS,"$(SWUPDATE_LDFLAGS)", \
-> > +           $(SWUPDATE_BUILD_CONFIG))
-> > +   $(call 
-> > KCONFIG_SET_OPT,CONFIG_EXTRA_LDLIBS,"$(SWUPDATE_LDLIBS)", \
-> > +           $(SWUPDATE_BUILD_CONFIG))
-> > +endef
-> > +
-> > +define SWUPDATE_KCONFIG_FIXUP_CMDS
-> > +   $(SWUPDATE_PREFER_STATIC)
-> > +   $(SWUPDATE_BUILD_OPTIONS)
-> > +endef
-> > +
-> > +define SWUPDATE_BUILD_CMDS
-> > +   $(MAKE) -C $(@D)
-> 
->  You should at least pass $(TARGET_MAKE_ENV) as well.
-
-Ok
-
-Many thanks for reviewing!
+diff --git a/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch b/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
+new file mode 100644
+index 0000000..ff225d3
+--- /dev/null
++++ b/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
+@@ -0,0 +1,199 @@
++commit 9daf6dd7c4947ce74ca729de5c3cfe8cbc304702
++Author: Lionel Orry <lionel.orry@gmail.com>
++Date:   Fri Feb 6 15:11:07 2015 +0100
++
++    acinclude.m4: make kernel-specific flags cacheable
++    
++    Specifically when cross-compiling, one can be willing to force these
++    variable values using the environment of a config.cache file. This
++    commit makes this possible.
++    
++    The affected variables are:
++    
++    * libzmq_cv_sock_cloexec
++    * libzmq_cv_so_keepalive
++    * libzmq_cv_tcp_keepcnt
++    * libzmq_cv_tcp_keepidle
++    * libzmq_cv_tcp_keepintvl
++    * libzmq_cv_tcp_keepalive
++    
++    Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
++
++diff --git a/acinclude.m4 b/acinclude.m4
++index 4bbd19e..456740d 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -586,8 +586,8 @@ dnl # LIBZMQ_CHECK_SOCK_CLOEXEC([action-if-found], [action-if-not-found])
++ dnl # Check if SOCK_CLOEXEC is supported                                           #
++ dnl ################################################################################
++ AC_DEFUN([LIBZMQ_CHECK_SOCK_CLOEXEC], [{
++-    AC_MSG_CHECKING(whether SOCK_CLOEXEC is supported)
++-    AC_TRY_RUN([/* SOCK_CLOEXEC test */
+++    AC_CACHE_CHECK([whether SOCK_CLOEXEC is supported], [libzmq_cv_sock_cloexec],
+++        [AC_TRY_RUN([/* SOCK_CLOEXEC test */
++ #include <sys/types.h>
++ #include <sys/socket.h>
++ 
++@@ -596,11 +596,13 @@ int main (int argc, char *argv [])
++     int s = socket (PF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0);
++     return (s == -1);
++ }
++-    ],
++-    [AC_MSG_RESULT(yes) ; libzmq_cv_sock_cloexec="yes" ; $1],
++-    [AC_MSG_RESULT(no)  ; libzmq_cv_sock_cloexec="no"  ; $2],
++-    [AC_MSG_RESULT(not during cross-compile) ; libzmq_cv_sock_cloexec="no"]
+++        ],
+++        [libzmq_cv_sock_cloexec="yes"],
+++        [libzmq_cv_sock_cloexec="no"],
+++        [libzmq_cv_sock_cloexec="not during cross-compile"]
+++        )]
++     )
+++    AS_IF([test "x$libzmq_cv_sock_cloexec" = "xyes"], [$1], [$2])
++ }])
++ 
++ dnl ################################################################################
++@@ -628,8 +630,8 @@ dnl # LIBZMQ_CHECK_SO_KEEPALIVE([action-if-found], [action-if-not-found])
++ dnl # Check if SO_KEEPALIVE is supported                                           #
++ dnl ################################################################################
++ AC_DEFUN([LIBZMQ_CHECK_SO_KEEPALIVE], [{
++-    AC_MSG_CHECKING(whether SO_KEEPALIVE is supported)
++-    AC_TRY_RUN([/* SO_KEEPALIVE test */
+++    AC_CACHE_CHECK([whether SO_KEEPALIVE is supported], [libzmq_cv_so_keepalive],
+++        [AC_TRY_RUN([/* SO_KEEPALIVE test */
++ #include <sys/types.h>
++ #include <sys/socket.h>
++ 
++@@ -641,11 +643,13 @@ int main (int argc, char *argv [])
++         ((rc = setsockopt (s, SOL_SOCKET, SO_KEEPALIVE, (char*) &opt, sizeof (int))) == -1)
++     );
++ }
++-    ],
++-    [AC_MSG_RESULT(yes) ; libzmq_cv_so_keepalive="yes" ; $1],
++-    [AC_MSG_RESULT(no)  ; libzmq_cv_so_keepalive="no"  ; $2],
++-    [AC_MSG_RESULT(not during cross-compile) ; libzmq_cv_so_keepalive="no"]
+++        ],
+++        [libzmq_cv_so_keepalive="yes"],
+++        [libzmq_cv_so_keepalive="no"],
+++        [libzmq_cv_so_keepalive="not during cross-compile"]
+++        )]
++     )
+++    AS_IF([test "x$libzmq_cv_so_keepalive" = "xyes"], [$1], [$2])
++ }])
++ 
++ dnl ################################################################################
++@@ -653,8 +657,8 @@ dnl # LIBZMQ_CHECK_TCP_KEEPCNT([action-if-found], [action-if-not-found])
++ dnl # Check if TCP_KEEPCNT is supported                                            #
++ dnl ################################################################################
++ AC_DEFUN([LIBZMQ_CHECK_TCP_KEEPCNT], [{
++-    AC_MSG_CHECKING(whether TCP_KEEPCNT is supported)
++-    AC_TRY_RUN([/* TCP_KEEPCNT test */
+++    AC_CACHE_CHECK([whether TCP_KEEPCNT is supported], [libzmq_cv_tcp_keepcnt],
+++        [AC_TRY_RUN([/* TCP_KEEPCNT test */
++ #include <sys/types.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++@@ -669,11 +673,13 @@ int main (int argc, char *argv [])
++         ((rc = setsockopt (s, IPPROTO_TCP, TCP_KEEPCNT, (char*) &opt, sizeof (int))) == -1)
++     );
++ }
++-    ],
++-    [AC_MSG_RESULT(yes) ; libzmq_cv_tcp_keepcnt="yes" ; $1],
++-    [AC_MSG_RESULT(no)  ; libzmq_cv_tcp_keepcnt="no"  ; $2],
++-    [AC_MSG_RESULT(not during cross-compile) ; libzmq_cv_tcp_keepcnt="no"]
+++        ],
+++        [libzmq_cv_tcp_keepcnt="yes"],
+++        [libzmq_cv_tcp_keepcnt="no"],
+++        [libzmq_cv_tcp_keepcnt="not during cross-compile"]
+++        )]
++     )
+++    AS_IF([test "x$libzmq_cv_tcp_keepcnt" = "xyes"], [$1], [$2])
++ }])
++ 
++ dnl ################################################################################
++@@ -681,8 +687,8 @@ dnl # LIBZMQ_CHECK_TCP_KEEPIDLE([action-if-found], [action-if-not-found])
++ dnl # Check if TCP_KEEPIDLE is supported                                           #
++ dnl ################################################################################
++ AC_DEFUN([LIBZMQ_CHECK_TCP_KEEPIDLE], [{
++-    AC_MSG_CHECKING(whether TCP_KEEPIDLE is supported)
++-    AC_TRY_RUN([/* TCP_KEEPIDLE test */
+++    AC_CACHE_CHECK([whether TCP_KEEPIDLE is supported], [libzmq_cv_tcp_keepidle],
+++        [AC_TRY_RUN([/* TCP_KEEPIDLE test */
++ #include <sys/types.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++@@ -697,11 +703,13 @@ int main (int argc, char *argv [])
++         ((rc = setsockopt (s, IPPROTO_TCP, TCP_KEEPIDLE, (char*) &opt, sizeof (int))) == -1)
++     );
++ }
++-    ],
++-    [AC_MSG_RESULT(yes) ; libzmq_cv_tcp_keepidle="yes" ; $1],
++-    [AC_MSG_RESULT(no)  ; libzmq_cv_tcp_keepidle="no"  ; $2],
++-    [AC_MSG_RESULT(not during cross-compile) ; libzmq_cv_tcp_keepidle="no"]
+++        ],
+++        [libzmq_cv_tcp_keepidle="yes"],
+++        [libzmq_cv_tcp_keepidle="no"],
+++        [libzmq_cv_tcp_keepidle="not during cross-compile"]
+++        )]
++     )
+++    AS_IF([test "x$libzmq_cv_tcp_keepidle" = "xyes"], [$1], [$2])
++ }])
++ 
++ dnl ################################################################################
++@@ -709,8 +717,8 @@ dnl # LIBZMQ_CHECK_TCP_KEEPINTVL([action-if-found], [action-if-not-found])
++ dnl # Check if TCP_KEEPINTVL is supported                                           #
++ dnl ################################################################################
++ AC_DEFUN([LIBZMQ_CHECK_TCP_KEEPINTVL], [{
++-    AC_MSG_CHECKING(whether TCP_KEEPINTVL is supported)
++-    AC_TRY_RUN([/* TCP_KEEPINTVL test */
+++    AC_CACHE_CHECK([whether TCP_KEEPINTVL is supported], [libzmq_cv_tcp_keepintvl],
+++        [AC_TRY_RUN([/* TCP_KEEPINTVL test */
++ #include <sys/types.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++@@ -725,11 +733,13 @@ int main (int argc, char *argv [])
++         ((rc = setsockopt (s, IPPROTO_TCP, TCP_KEEPINTVL, (char*) &opt, sizeof (int))) == -1)
++     );
++ }
++-    ],
++-    [AC_MSG_RESULT(yes) ; libzmq_cv_tcp_keepintvl="yes" ; $1],
++-    [AC_MSG_RESULT(no)  ; libzmq_cv_tcp_keepintvl="no"  ; $2],
++-    [AC_MSG_RESULT(not during cross-compile) ; libzmq_cv_tcp_keepintvl="no"]
+++        ],
+++        [libzmq_cv_tcp_keepintvl="yes"],
+++        [libzmq_cv_tcp_keepintvl="no"],
+++        [libzmq_cv_tcp_keepintvl="not during cross-compile"]
+++        )]
++     )
+++    AS_IF([test "x$libzmq_cv_tcp_keepintvl" = "xyes"], [$1], [$2])
++ }])
++ 
++ dnl ################################################################################
++@@ -737,8 +747,8 @@ dnl # LIBZMQ_CHECK_TCP_KEEPALIVE([action-if-found], [action-if-not-found])
++ dnl # Check if TCP_KEEPALIVE is supported                                          #
++ dnl ################################################################################
++ AC_DEFUN([LIBZMQ_CHECK_TCP_KEEPALIVE], [{
++-    AC_MSG_CHECKING(whether TCP_KEEPALIVE is supported)
++-    AC_TRY_RUN([/* TCP_KEEPALIVE test */
+++    AC_CACHE_CHECK([whether TCP_KEEPALIVE is supported], [libzmq_cv_tcp_keepalive],
+++        [AC_TRY_RUN([/* TCP_KEEPALIVE test */
++ #include <sys/types.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++@@ -753,11 +763,13 @@ int main (int argc, char *argv [])
++         ((rc = setsockopt (s, IPPROTO_TCP, TCP_KEEPALIVE, (char*) &opt, sizeof (int))) == -1)
++     );
++ }
++-    ],
++-    [AC_MSG_RESULT(yes) ; libzmq_cv_tcp_keepalive="yes" ; $1],
++-    [AC_MSG_RESULT(no)  ; libzmq_cv_tcp_keepalive="no"  ; $2],
++-    [AC_MSG_RESULT(not during cross-compile) ; libzmq_cv_tcp_keepalive="no"]
+++        ],
+++        [libzmq_cv_tcp_keepalive="yes"],
+++        [libzmq_cv_tcp_keepalive="no"],
+++        [libzmq_cv_tcp_keepalive="not during cross-compile"]
+++        )]
++     )
+++    AS_IF([test "x$libzmq_cv_tcp_keepalive" = "xyes"], [$1], [$2])
++ }])
++ 
++ dnl ################################################################################
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index dbd6fc7..7e9ed19 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -11,8 +11,18 @@ ZEROMQ_DEPENDENCIES = util-linux
+ ZEROMQ_LICENSE = LGPLv3+ with exceptions
+ ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
+ # For 0001-tests-disable-test_fork-if-fork-is-not-available.patch
++# and 0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
+ ZEROMQ_AUTORECONF = YES
+ 
++# Assume these flags are always available. It is true, at least for
++# SOCK_CLOEXEC, since linux v2.6.27.
++# Note: the flag TCP_KEEPALIVE is NOT available so we do not include it.
++ZEROMQ_CONF_ENV = libzmq_cv_sock_cloexec=yes \
++	libzmq_cv_so_keepalive=yes \
++	libzmq_cv_tcp_keepcnt=yes \
++	libzmq_cv_tcp_keepidle=yes \
++	libzmq_cv_tcp_keepintvl=yes
++
+ # Only tools/curve_keygen.c needs this, but it doesn't hurt to pass it
+ # for the rest of the build as well (which automatically includes stdc++).
+ ifeq ($(BR2_STATIC_LIBS),y)
+-- 
+2.1.0
