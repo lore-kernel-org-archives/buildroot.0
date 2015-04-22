@@ -1,77 +1,65 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Tue, 21 Apr 2015 21:32:03 -0700
-Subject: [Buildroot] [PATCH v2] heimdal: explicitly set -lpthread
-In-Reply-To: <20150421093509.0cdd1240@free-electrons.com>
-References: <1429581853-24749-1-git-send-email-bluemrp9@gmail.com>
- <20150421093509.0cdd1240@free-electrons.com>
-Message-ID: <55372443.909@gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 22 Apr 2015 07:48:22 +0200
+Subject: [Buildroot] [PATCH 2/3] package/cache-calibrator: add hash
+In-Reply-To: <87oamhrz55.fsf@dell.be.48ers.dk>
+References: <1429583936-13335-1-git-send-email-fabio.porcedda@gmail.com>
+ <1429583936-13335-2-git-send-email-fabio.porcedda@gmail.com>
+ <87iocqt0wq.fsf@dell.be.48ers.dk> <20150421172246.GB4262@free.fr>
+ <87oamhrz55.fsf@dell.be.48ers.dk>
+Message-ID: <CAHkwnC9vK7Xnwga91hts-PpNB4bPAZd=uwhXY49CXH29Y0qkjg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/21/2015 12:35 AM, Thomas Petazzoni wrote:
-> Dear Ryan Coe,
+On Tue, Apr 21, 2015 at 10:43 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 >
-> On Mon, 20 Apr 2015 19:04:13 -0700, Ryan Coe wrote:
->> fixes the following build error:
->>
->> output/build/host-heimdal-1.5.3/lib/sqlite/.libs/libheimsqlite.a(sqlite3.o): In function `pthreadMutexTry':
->> sqlite3.c:(.text+0x5795): undefined reference to `pthread_mutex_trylock'
->> output/build/host-heimdal-1.5.3/lib/sqlite/.libs/libheimsqlite.a(sqlite3.o): In function `pthreadMutexAlloc':
->> sqlite3.c:(.text+0xbf84): undefined reference to `pthread_mutexattr_init'
->> sqlite3.c:(.text+0xbf91): undefined reference to `pthread_mutexattr_settype'
->> sqlite3.c:(.text+0xbfa4): undefined reference to `pthread_mutexattr_destroy'
->> output/build/host-heimdal-1.5.3/base/.libs/libheimbase.a(heimbase.o): In function `init_ar_tls':
->> heimbase.c:(.text+0x4f): undefined reference to `pthread_key_create'
->> output/build/host-heimdal-1.5.3/base/.libs/libheimbase.a(heimbase.o): In function `autorel_tls':
->> heimbase.c:(.text+0x263): undefined reference to `pthread_getspecific'
->> heimbase.c:(.text+0x291): undefined reference to `pthread_setspecific'
->> collect2: error: ld returned 1 exit status
->> make[3]: *** [verify_krb5_conf] Error 1
->> make[3]: Leaving directory `output/build/host-heimdal-1.5.3/lib/krb5'
->> make[2]: *** [all-recursive] Error 1
->> make[2]: Leaving directory `output/build/host-heimdal-1.5.3/lib'
->> make[1]: *** [all-recursive] Error 1
->> make[1]: Leaving directory `output/build/host-heimdal-1.5.3'
->> make: *** [output/build/host-heimdal-1.5.3/.stamp_built] Error 2
->>
->> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-> Ok, now I understand better. It's because host-heimdal picks up
-> host-sqlite, which we most likely don't need. Can you try instead
-> something like this:
+> Hi,
 >
-> diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
-> index 972f15c..5d27f77 100644
-> --- a/package/heimdal/heimdal.mk
-> +++ b/package/heimdal/heimdal.mk
-> @@ -9,7 +9,19 @@ HEIMDAL_SITE = http://www.h5l.org/dist/src
->   HEIMDAL_DEPENDENCIES = host-e2fsprogs host-pkgconf
->   HEIMDAL_INSTALL_STAGING = YES
->   # static because of -fPIC issues with e2fsprogs on x86_64 host
-> -HOST_HEIMDAL_CONF_OPTS = --with-x=no --disable-shared --enable-static
-> +HOST_HEIMDAL_CONF_OPTS = \
-> +       --disable-shared \
-> +       --enable-static \
-> +       --without-openldap \
-> +       --without-capng \
-> +       --without-sqlite3 \
-> +       --without-libintl \
-> +       --without-openssl \
-> +       --without-berkeley-db \
-> +       --without-readline \
-> +       --without-libedit \
-> +       --without-hesiod \
-> +       --without-x
->   HOST_HEIMDAL_CONF_ENV = MAKEINFO=true
->   HEIMDAL_MAKE = $(MAKE1)
->   # For heimdal-0004-compile_et.patch
+>>> This will cause issues when/if that file ever gets updated - But then
+>  >> atleast we know and can update the hash.
 >
-> Thanks,
+>  > It also means that Buildroot 2015.05 will stop working at some point
+>  > when this file is updated. The problem is not much about Buildroot
+>  > master , which is easily fixable, but about our releases, that get
+>  > broken as soon as upstream changes that file.
 >
-> Thomas
-Thomas,
+>  > I am not really happy with either solutions: either add a hash and break
+>  > releases in the future, or not add a hash file, and miss updates,
+>  > especially in the autobuilders (even though they do remove downloads
+>  > from time to time.
+>
+> True - I don't really think there's any good solution to this (besides
+> maybe convincing upstream to version their releases).
+>
+>  > One case for the adding the hash, too, is that it will tell people that
+>  > their local copy in their local cache (e.g. my ~/src/ ) is out-of-date.
+>
+>  > Still, I'm not convinced we want that hash...
+>
+> Maybe not. Perhaps the breakage from wrong hash is worse than the
+> potential breakage from newer versions. Also notice that the download
+> support falls back to our local copy on sources.buildroot.net if the
+> hash doesn't match.
+>
+>  > Do we have other such packages (I think I read there was another
+>  > version-less package for now)?
+>
+> Yes, we do:
+>
+> git grep 'SOURCE =.*\.c$'
+> package/cache-calibrator/cache-calibrator.mk:CACHE_CALIBRATOR_SOURCE = calibrator.c
+> package/devmem2/devmem2.mk:DEVMEM2_SOURCE = devmem2.c
+> package/whetstone/whetstone.mk:WHETSTONE_SOURCE = whetstone.c
+>
 
-I still get a build failure relating to a missing -lpthread with this 
-method.
+If the upstream is not willing to version those files what about
+creating a github repositories for them? Also to be able to check the
+hash on github files we just need to attach the binary for each
+release.
+
+BR
+-- 
+Fabio Porcedda
