@@ -1,50 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Apr 2015 22:48:32 +0200
-Subject: [Buildroot] [PATCHv4] toolchain: fix installing gconv libs with
- multi-arch toolchain
-In-Reply-To: <1429635352-14756-1-git-send-email-yann.morin.1998@free.fr>
-References: <1429635352-14756-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150422224832.49055e84@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 22 Apr 2015 22:50:44 +0200
+Subject: [Buildroot] [PATCH] uboot: add default for
+	BR2_TARGET_UBOOT_PATCH
+In-Reply-To: <CA+-urNTdraNR-jsAbCM_DxnMMdx=YfrhsUgW973oXwO5guLsWg@mail.gmail.com>
+References: <1429623936-4438-1-git-send-email-fhunleth@troodon-software.com>
+ <20150422222225.4b80a2bd@free-electrons.com>
+ <CA+-urNTdraNR-jsAbCM_DxnMMdx=YfrhsUgW973oXwO5guLsWg@mail.gmail.com>
+Message-ID: <553809A4.5060501@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
-
-On Tue, 21 Apr 2015 18:55:52 +0200, Yann E. MORIN wrote:
-> For a multi-arch toolchain, gconv modules are in a sub-directory named
-> after the machine gcc targets. This is the case, for example, for the
-> Linaro ARM 2014.09 toolchain, which has the gconv modules in (relative
-> to the sysroot):
->     /usr/lib/arm-linux-gnueabihf/gconv
+On 04/22/15 22:31, Frank Hunleth wrote:
+> On Wed, Apr 22, 2015 at 4:22 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>>
+>> Dear Frank Hunleth,
+>>
+>> On Tue, 21 Apr 2015 09:45:36 -0400, Frank Hunleth wrote:
+>>> Automatically copy over the value from BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+>>> to make handling its deprecation easier. Thanks to Arnout for the
+>>> suggestion.
+>>>
+>>> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+>>> ---
+>>>  boot/uboot/Config.in | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+>>> index 4f01499..419b183 100644
+>>> --- a/boot/uboot/Config.in
+>>> +++ b/boot/uboot/Config.in
+>>> @@ -84,6 +84,7 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+>>>
+>>>  config BR2_TARGET_UBOOT_PATCH
+>>>       string "Custom U-Boot patches"
+>>> +     default BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+>>>       help
+>>>         A space-separated list of patches to apply to U-Boot.
+>>>         Each patch can be described as an URL, a local file path,
+>>
+>> Does this actually works? I've tried removing BR2_TARGET_UBOOT_PATCH=""
+>> from my .config, add BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="foo bar", and
+>> ran 'make menuconfig'. I was hoping to see "foo bar" in
+>> BR2_TARGET_UBOOT_PATCH, but it wasn't the case. Am I missing something?
+>>
 > 
-> while the Sourcery CodeBench ARM 2014.05 (non-multi-arch) has them in:
->     /usr/lib/gconv
-> 
-> So, to catter for both cases, search both paths. We want to favour the
-> machine-specific gconv modules over potentially existing "generic" ones,
-> so we first search that (if it exists) and fallback to looking in the
-> generic location.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> ---
-> changes v3 -> v4:
->   - nothing, just rebased on top of master
+> It only works if you have BR2_DEPRECATED_SINCE_2015_05 enabled.
 
-I've applied, even though I'm not terribly happy with the huge amount
-of complex shell code being added. This gconv stuff is already calling
-a shell script to recreate the gconv-modules file. Maybe we should just
-move all this logic to a separate shell script, in which we could use
-functions and so on?
+ Right, it's deprecated, not legacy...
 
-I've tried to think a bit about writing all of this in make, but it
-isn't trivial at all.
+ Perhaps it's better to move it to legacy instead of deprecating. Deprecating is
+for when we remove a feature, but here it's more like we renamed it.
 
-Thomas
+ Note that string handling in legacy is a bit special, look at e.g.
+BR2_PACKAGE_TZDATA_ZONELIST (renamed to BR2_TARGET_TZ_ZONELIST) for an example.
+
+ Regards,
+ Arnout
+
+> I
+> almost posted an email asking how useful this was. I very rarely
+> enable BR2_DEPRECATED. However, I justified it to myself that if
+> nothing else, it was documentation that the former value in
+> BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR could be copied verbatim.
+> 
+> FWIW, I did try reordering the options to see if putting
+> BR2_TARGET_UBOOT_PATCH first would make this work, but it didn't
+> change the results on my end.
+> 
+> Frank
+> 
+> 
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
