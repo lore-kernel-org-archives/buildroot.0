@@ -1,35 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Apr 2015 23:47:44 +0200
-Subject: [Buildroot] [PATCH 1/2] package/vlc: use only glesv2, not glesv1
-In-Reply-To: <1429737809-17368-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429737809-17368-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150422234744.411c550e@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 22 Apr 2015 23:47:19 +0200
+Subject: [Buildroot] Towards 2015.05-rc1
+References: <20150419220053.2c1d5b62@free-electrons.com>
+ <XnsA481E23CAF8E0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20150419230245.64cf1410@free-electrons.com>
+ <87sibutq0q.fsf@dell.be.48ers.dk>
+Message-ID: <XnsA484F1FDAFE24berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Peter Korsgaard <peter@korsgaard.com> wrote in
+news:87sibutq0q.fsf at dell.be.48ers.dk: 
 
-On Wed, 22 Apr 2015 23:23:28 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/0be/0bee8646c2dd7dd2c201ee2986f3e802277314a5/
-> http://autobuild.buildroot.net/results/64a/64a1a6d39b72b9dec4231b9f28ca14b38989d7df/
-> http://autobuild.buildroot.net/results/b6b/b6b66e0b24d985462ca8dbefedd740453ca42293/
-> http://autobuild.buildroot.net/results/497/4976f5e9dc53e6f9f29d9d45f0fb9bd42c7ab1ea/
+>>>>>> "Thomas" == Thomas Petazzoni
+>>>>>> <thomas.petazzoni@free-electrons.com>
+>>>>>> writes: 
 > 
-> and many others
+> > Bernd,
+> > On Sun, 19 Apr 2015 22:14:24 +0200, Bernd Kuhls wrote:
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/vlc/vlc.mk |    5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> >> if possible and time allows for all involved persons I would like to
+> >> see the libudev series stuff in the next buildroot release. 
+> 
+> > As far as I remember, someone needs to take over this series, no? I
+> > believe you originally authored it, then Yann took over, then Peter
+> > proposed to take over but did not resend it as far as I know.
+> 
+> Yes, sorry - I haven't forgotten about it, but I haven't been able to
+> find time for it yet. Realisticly seen, I probably won't be able to make
+> it within the next 10 days.
+> 
+> > On my side, I am still a bit concerned by the usefulness of this
+> > series. The use cases you have are anyway running big things (Kodi,
+> > etc.) so I'm not sure why running udevd or not makes a big difference.
+> > It does seem a lot of additional complexity for not such a huge
+> > benefit.
+> 
+> I agree that it is a tradeoff. In the worst case it can be handled in a
+> post-build script.
+> 
+> My own usecase was to use libinput for some keyboard/mouse/touchscreen
+> handling on a small system and disliking the udevd dependency.
+> 
 
-Both patches applied, thanks.
+Hi Peter, hi Thomas,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+my plan is to provide a Kodi package for an existing distro (www.fli4l.de)
+which uses buildroot to compile its binaries and uses this option: 
+
+BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+
+and CONFIG_MDEV=y in busybox.config
+
+These settings forbid enabling udev which blocks mesa3d, and therefore
+kodi, on x86. 
+
+Regards, Bernd
