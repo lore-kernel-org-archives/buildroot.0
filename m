@@ -1,77 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Apr 2015 23:39:55 +0200
-Subject: [Buildroot] [PATCH] pkg-generic: substitute colon and space out
- of PKG_VERSION
-In-Reply-To: <1429737867-1754-1-git-send-email-arnout@mind.be>
-References: <1429737867-1754-1-git-send-email-arnout@mind.be>
-Message-ID: <20150422213955.GD4069@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Apr 2015 23:45:48 +0200
+Subject: [Buildroot] [PATCH] Reduce need for
+ BR2_HOSTARCH_NEEDS_IA32_COMPILER
+In-Reply-To: <536cdd7b.ATs+iKVatjmU5yNL%chris.lesiak@licor.com>
+References: <536cdd7b.ATs+iKVatjmU5yNL%chris.lesiak@licor.com>
+Message-ID: <20150422234548.2281a752@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+Dear Chris Lesiak,
 
-On 2015-04-22 23:24 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> Using a colon or a space in a make target doesn't work, so they have to
-> be filtered out of the PKG_VERSION variable just like the / currently
-> already is.
+On Fri, 9 May 2014 08:51:55 -0500, Chris Lesiak wrote:
+> Reduce need for BR2_HOSTARCH_NEEDS_IA32_COMPILER
 > 
-> This will be needed for date-based CVS versions.
+> When building grub and syslinux, the 32-bit host compiler is only
+> needed when building for 64-bit target.  For 32-bit targets, the
+> target compiler will work.
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  package/pkg-generic.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> This change makes it less likely that a mulilib host is needed.
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index d1a1811..eeccf5b 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -322,17 +322,19 @@ $(2)_RAWNAME			=  $$(patsubst host-%,%,$(1))
->  # sanitize the package version that is used in paths, directory and file names.
->  # Forward slashes may appear in the package's version when pointing to a
->  # version control system branch or tag, for example remotes/origin/1_10_stable.
-> +# Similar for spaces and colons (:) that may appear in date-based revisions for
-> +# CVS.
->  ifndef $(2)_VERSION
->   ifdef $(3)_VERSION
->    $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
-> -  $(2)_VERSION := $$(subst /,_,$$(strip $$($(3)_VERSION)))
-> +  $(2)_VERSION := $$(subst $(space),_,$$(subst :,_,$$(subst /,_,$$(strip $$($(3)_VERSION)))))
->   else
->    $(2)_VERSION = undefined
->    $(2)_DL_VERSION = undefined
->   endif
->  else
->    $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
-> -  $(2)_VERSION := $$(strip $$(subst /,_,$$($(2)_VERSION)))
-> +  $(2)_VERSION := $$(subst $$(space),_,$$(subst :,_,$$(subst /,_,$$(strip $$($(2)_VERSION)))))
+> Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
 
-Here, you'r ealso changing (for the better!) the order we call
-strip/subst. Note that the way you did is better *and* is aligned with
-the host variant, above. Previously, there was discrepancy betwee nthe
-hos and target variants.
+Sorry for the very late answer. Unfortunately, your patch doesn't work
+properly with the following defconfig:
 
-That change may warrant at least a sentence in the commit log.
+BR2_x86_pentium4=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2015.02.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_TARGET_GRUB=y
+BR2_TARGET_SYSLINUX=y
 
-Regards,
-Yann E. MORIN.
+It fails during the syslinux build with:
 
->  endif
->  
->  $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
-> -- 
-> 2.1.4
-> 
+/home/thomas/projets/buildroot/output/build/syslinux-6.03/bios/core/../lzo/prepcore ldlinux.raw ldlinux.bin
+make[4]: /home/thomas/projets/buildroot/output/build/syslinux-6.03/bios/core/../lzo/prepcore: Command not found
+/home/thomas/projets/buildroot/output/build/syslinux-6.03/core/Makefile:153: recipe for target 'ldlinux.bin' failed
 
+This is because, using your patch, syslinux gets built with the target
+compiler instead of the host compiler. While this generally works, it
+doesn't work in the specific case of the prepcore program, which gets
+built with the target compiler, but executed on the host. And since I'm
+using a uClibc toolchain for the target, the resulting program cannot
+run on my glibc based machine.
+
+There is probably a way to adjust the syslinux build process to avoid
+this, but I don't know if it's really worth the effort.
+
+I've marked your patch as "Changes Requested". Do not hesitate to
+repost an updated version that fixes this problem.
+
+Thanks for your contribution,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
