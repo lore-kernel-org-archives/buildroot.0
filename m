@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 23 Apr 2015 00:08:39 +0200
-Subject: [Buildroot] [PATCH v7 6/8] toolchain/external: ignore missing hash
-	for custom downloaded toolchain
+Date: Thu, 23 Apr 2015 00:08:36 +0200
+Subject: [Buildroot] [PATCH v7 3/8] package/uclibc: add missing hash for
+	eXtensa
 In-Reply-To: <1429740521-31943-1-git-send-email-arnout@mind.be>
 References: <1429740521-31943-1-git-send-email-arnout@mind.be>
-Message-ID: <1429740521-31943-7-git-send-email-arnout@mind.be>
+Message-ID: <1429740521-31943-4-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +13,27 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-We will *always* be missing a hash file for custom external toolchains
-that are downloaded.
-
-So, just ignore that failure.
+This is a git snapshot, we can't have a hash for it.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 ---
-Chamges v3 -> v4:
-  - drop magic value, append to the exclusion list  (Arnout)
+ package/uclibc/uclibc.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Changes v1 -> v2:
-  - fix typoes in title
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- toolchain/toolchain-external/toolchain-external.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 2427463..5576dcb 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -400,6 +400,8 @@ else
- # Custom toolchain
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
-+# We can't check hashes for custom downloaded toolchains
-+BR_NO_CHECK_HASH_FOR += $(TOOLCHAIN_EXTERNAL_SOURCE)
- endif
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 7bfe46f..729c643 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -6,3 +6,6 @@ sha256	0a9085a11615296cfe7783f16ff29073393eb330749947adece0eeddb31705a4	uClibc-a
  
- # In fact, we don't need to download the toolchain, since it is already
+ # From http://www.uclibc-ng.org/trac/
+ sha256  7e92e99995daa634cbdc63c297784df6e8fe39cc1d3bbd2d37eb5c3ced8a86e5        uClibc-ng-1.0.2.tar.xz
++
++# No hash for this git snapshot
++none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
 -- 
 2.1.4
