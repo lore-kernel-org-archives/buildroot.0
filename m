@@ -1,75 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Apr 2015 22:59:08 +0200
-Subject: [Buildroot] [git commit] toolchain-external: remove CS sh2
-	toolchains
-Message-ID: <20150422210724.C468981D89@busybox.osuosl.org>
+Date: Wed, 22 Apr 2015 22:59:42 +0200
+Subject: [Buildroot] [git commit] system: drop IPv6 depend for systemd
+Message-ID: <20150422210724.E7FBB81D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c68c365d2937920df1f2062e4821ebb6d21d195e
+commit: http://git.buildroot.net/buildroot/commit/?id=b7c6e6c1c129139de49c924be6e5e09436ffad5e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Normally we'd deprecate them, but:
-
-1) They don't support IPv6 and it's being removed so it makes no sense.
-2) They're based on uClibc 0.9.30-ish which is very old and surely has
-package build breakage all over it.
+The option is a non-option now and will be removed.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in |   38 --------------------------------
- 1 files changed, 0 insertions(+), 38 deletions(-)
+ package/systemd/Config.in |    1 -
+ system/Config.in          |    1 -
+ 2 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index cd2115b..440de18 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -630,44 +630,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- 	    - SH4A, uClibc, big endian
- 	      Not usable in Buildroot yet.
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
--	bool "Sourcery CodeBench SH 2011.03"
--	depends on BR2_sh2a
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_USE_WCHAR
--	select BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	# kernel headers: 2.6.38
--	help
--	  Sourcery CodeBench toolchain for the SuperH architecture,
--	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
--	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.38. It has
--	  support for the following variants:
--	    - SH2A, uClibc, big endian
--
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
--	bool "Sourcery CodeBench SH 2010.09"
--	depends on BR2_sh2a
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_USE_WCHAR
--	select BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	# kernel headers: 2.6.35
--	help
--	  Sourcery CodeBench toolchain for the SuperH architecture,
--	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
--	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.35.2. It
--	  has support for the following variants:
--	    - SH2A, uClibc, big endian
--
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405
- 	bool "Sourcery CodeBench AMD64 2014.05"
- 	depends on BR2_x86_64
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index d00ac9d..38353d0 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -11,7 +11,6 @@ config BR2_PACKAGE_SYSTEMD
+ 	bool "systemd"
+ 	depends on BR2_INIT_SYSTEMD
+ 	depends on BR2_USE_WCHAR # util-linux
+-	depends on BR2_INET_IPV6
+ 	depends on !BR2_STATIC_LIBS # kmod
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_USE_MMU # dbus
+diff --git a/system/Config.in b/system/Config.in
+index 431524d..84cde94 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -81,7 +81,6 @@ config BR2_INIT_SYSTEMD
+ 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_USE_WCHAR
+-	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HAS_SSP
+ 	depends on BR2_USE_MMU
