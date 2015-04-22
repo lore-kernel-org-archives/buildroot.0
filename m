@@ -1,41 +1,85 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 22 Apr 2015 22:39:28 +0200
-Subject: [Buildroot] Reminder about your pending Buildroot patches
-In-Reply-To: <20150421125646.3729288A@mail.free-electrons.com>
-References: <20150421125646.3729288A@mail.free-electrons.com>
-Message-ID: <55380700.1060203@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Apr 2015 22:30:34 +0200
+Subject: [Buildroot] [git commit] toolchain: fix installing gconv libs with
+	multi-arch toolchain
+Message-ID: <20150422204438.1E779803FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=fb5cbf3198c9af20f7440b66c070873bb2207797
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 21/04/2015 14:56, Thomas Petazzoni a ?crit :
-> 
->  - package/openvmtools: enable openvmtools kernel modules
->    http://patchwork.ozlabs.org/patch/441785/
+For a multi-arch toolchain, gconv modules are in a sub-directory named
+after the machine gcc targets. This is the case, for example, for the
+Linaro ARM 2014.09 toolchain, which has the gconv modules in (relative
+to the sysroot):
+    /usr/lib/arm-linux-gnueabihf/gconv
 
-This patch needs to be updated since the last openvmtools bump.
+while the Sourcery CodeBench ARM 2014.05 (non-multi-arch) has them in:
+    /usr/lib/gconv
 
-With the previous version, I was able to build all kernel module with 3.2.64
-kernel but the build was broken 3.4+ kernel and with 3.2.64+ kernel due to a
-backported patch.
-As Karoly said, most of those drivers has been merged upstream (3.18~3.19), I'm
-not sure we want to add a lot of patches to be able to build with stable kernel
-release 3.4.y, 3.10.y, 3.12.y, 3.14.y.
+So, to catter for both cases, search both paths. We want to favour the
+machine-specific gconv modules over potentially existing "generic" ones,
+so we first search that (if it exists) and fallback to looking in the
+generic location.
 
-Nevertheless, we can add this option with a big warning and say that the kernel
-modules has been build and tested with a limited number of kernel version, at
-least 3.2.64.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain.mk |   26 ++++++++++++++++++--------
+ 1 files changed, 18 insertions(+), 8 deletions(-)
 
-> 
->  - package/gdb: disable shared build for host-gdb
->    http://patchwork.ozlabs.org/patch/449686/
-> 
-
-See also, http://patchwork.ozlabs.org/patch/460494/ but I'm not very convinced.
-
-Best regards,
-Romain
+diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
+index 3f9900b..0a35909 100644
+--- a/toolchain/toolchain.mk
++++ b/toolchain/toolchain.mk
+@@ -17,28 +17,38 @@ endif
+ ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
+ GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
+ define COPY_GCONV_LIBS
+-	$(Q)if [ -z "$(GCONV_LIBS)" ]; then \
+-		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/gconv-modules \
+-				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
+-		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/gconv/*.so \
++	$(Q)found_gconv=no; \
++	for d in $(TOOLCHAIN_EXTERNAL_PREFIX) ''; do \
++		[ -d "$(STAGING_DIR)/usr/lib/$${d}/gconv" ] || continue; \
++		found_gconv=yes; \
++		break; \
++	done; \
++	if [ "$${found_gconv}" = "no" ]; then \
++		printf "Unable to find gconv modules\n" >&2; \
++		exit 1; \
++	fi; \
++	if [ -z "$(GCONV_LIBS)" ]; then \
++		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
++				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules && \
++		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/$${d}/gconv/*.so \
+ 				   $(TARGET_DIR)/usr/lib/gconv \
+ 		|| exit 1; \
+ 	else \
+ 		for l in $(GCONV_LIBS); do \
+-			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/$${l}.so \
++			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/$${l}.so \
+ 					      $(TARGET_DIR)/usr/lib/gconv/$${l}.so \
+ 			|| exit 1; \
+-			$(TARGET_READELF) -d $(STAGING_DIR)/usr/lib/gconv/$${l}.so |\
++			$(TARGET_READELF) -d $(STAGING_DIR)/usr/lib/$${d}/gconv/$${l}.so |\
+ 			sort -u |\
+ 			sed -e '/.*(NEEDED).*\[\(.*\.so\)\]$$/!d; s//\1/;' |\
+ 			while read lib; do \
+-				 $(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/$${lib} \
++				 $(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/$${lib} \
+ 						       $(TARGET_DIR)/usr/lib/gconv/$${lib} \
+ 				 || exit 1; \
+ 			done; \
+ 		done; \
+ 		./support/scripts/expunge-gconv-modules "$(GCONV_LIBS)" \
+-			<$(STAGING_DIR)/usr/lib/gconv/gconv-modules \
++			<$(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
+ 			>$(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
+ 	fi
+ endef
