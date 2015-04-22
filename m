@@ -1,53 +1,64 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Apr 2015 20:09:18 +0200
-Subject: [Buildroot] [PATCH 07/30] package/matchbox: make matchbox-fakekey a
-	real package
+Date: Wed, 22 Apr 2015 20:09:20 +0200
+Subject: [Buildroot] [PATCH 09/30] package/matchbox: make
+	match-startup-monitor a real package
 In-Reply-To: <cover.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <50fde3fb58a4b07ca643b0a24b5635db02318ad8.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <b5a7a6e89a61acaa154c10b6e9cef08404f913a8.1429725549.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, matchbox-fakekey is missing a Kconfig entry, but is so far
-solely a build-time dependency of matchbox-keyboard.
+ Currently, matchbox-startup-monitor is missing a Kconfig entry, but is
+so far solely a build-time dependency of matchbox-panel.
 
-So, make it a real package, and select it from matchbox-keyboard.
+So, make it a real package, and only build-depend on it when enabled.
+Fix the condition to build-depend on it.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/matchbox/Config.in                  | 2 ++
- package/matchbox/matchbox-fakekey/Config.in | 2 ++
- 2 files changed, 4 insertions(+)
- create mode 100644 package/matchbox/matchbox-fakekey/Config.in
+ package/matchbox/Config.in                          | 1 +
+ package/matchbox/matchbox-panel/matchbox-panel.mk   | 4 ++--
+ package/matchbox/matchbox-startup-monitor/Config.in | 2 ++
+ 3 files changed, 5 insertions(+), 2 deletions(-)
+ create mode 100644 package/matchbox/matchbox-startup-monitor/Config.in
 
 diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index ead2649..8d4ebc7 100644
+index 9b27d4d..2f9b73d 100644
 --- a/package/matchbox/Config.in
 +++ b/package/matchbox/Config.in
-@@ -24,11 +24,13 @@ source "package/matchbox/matchbox-wm/Config.in"
- source "package/matchbox/matchbox-panel/Config.in"
- source "package/matchbox/matchbox-desktop/Config.in"
+@@ -26,5 +26,6 @@ source "package/matchbox/matchbox-desktop/Config.in"
  source "package/matchbox/matchbox-common/Config.in"
-+source "package/matchbox/matchbox-fakekey/Config.in"
+ source "package/matchbox/matchbox-fakekey/Config.in"
+ source "package/matchbox/matchbox-keyboard/Config.in"
++source "package/matchbox/matchbox-startup-monitor/Config.in"
  
- config BR2_PACKAGE_MATCHBOX_KEYBOARD
- 	bool "Matchbox Virtual Keyboard"
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_MATCHBOX_FAKEKEY
- 	help
- 	  Virtual Keyboard
+ endif
+diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
+index d3efed9..f7d699b 100644
+--- a/package/matchbox/matchbox-panel/matchbox-panel.mk
++++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
+@@ -13,9 +13,9 @@ MATCHBOX_PANEL_LICENSE_FILES = COPYING
+ MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib
+ MATCHBOX_PANEL_CONF_OPTS = --enable-expat
  
-diff --git a/package/matchbox/matchbox-fakekey/Config.in b/package/matchbox/matchbox-fakekey/Config.in
+-ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
++ifeq ($(BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR),y)
+ MATCHBOX_PANEL_CONF_OPTS += --enable-startup-notification
+-MATCHBOX_PANEL_DEPENDENCIES += startup-notification matchbox-startup-monitor
++MATCHBOX_PANEL_DEPENDENCIES += matchbox-startup-monitor
+ else
+ MATCHBOX_PANEL_CONF_OPTS += --disable-startup-notification
+ endif
+diff --git a/package/matchbox/matchbox-startup-monitor/Config.in b/package/matchbox/matchbox-startup-monitor/Config.in
 new file mode 100644
-index 0000000..334f3a2
+index 0000000..4dd088f
 --- /dev/null
-+++ b/package/matchbox/matchbox-fakekey/Config.in
++++ b/package/matchbox/matchbox-startup-monitor/Config.in
 @@ -0,0 +1,2 @@
-+config BR2_PACKAGE_MATCHBOX_FAKEKEY
++config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
 +	bool
 -- 
 1.9.1
