@@ -1,103 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Apr 2015 09:14:26 +0200
-Subject: [Buildroot] Reminder about your pending Buildroot patches
-In-Reply-To: <CAKbGBLgnq72kw570gNB=EHFnw9UOJY3_7H0nFpebjJ9kgGx+qQ@mail.gmail.com>
-References: <20150421125634.385A788D@mail.free-electrons.com>
- <CAKbGBLgnq72kw570gNB=EHFnw9UOJY3_7H0nFpebjJ9kgGx+qQ@mail.gmail.com>
-Message-ID: <20150422091426.0f431551@free-electrons.com>
+Date: Wed, 22 Apr 2015 09:34:52 +0200
+Subject: [Buildroot] [PATCH 1/1] heimdal: needs host-flex and explicitly
+ set -lpthread
+In-Reply-To: <5537287A.9070505@gmail.com>
+References: <1429466003-4595-1-git-send-email-bluemrp9@gmail.com>
+ <20150420223532.5677fb5f@free-electrons.com>
+ <5535AFDE.9060704@gmail.com>
+ <20150421091153.54b44a73@free-electrons.com>
+ <5537287A.9070505@gmail.com>
+Message-ID: <20150422093452.082de610@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Steven,
+Dear Ryan Coe,
 
-On Tue, 21 Apr 2015 16:58:02 -0700, Steven Noonan wrote:
+On Tue, 21 Apr 2015 21:50:02 -0700, Ryan Coe wrote:
 
-> > Here is the list of patches you have submitted that are still pending:
-> >
-> >  - [1/7] package/perf: if slang is enabled, depend on it
-> >    http://patchwork.ozlabs.org/patch/451638/
-> >
-> >  - [2/7] package/perf: if numactl (libnuma) is enabled, depend on it
-> >    http://patchwork.ozlabs.org/patch/451636/
-> >
-> >  - [3/7] package/perf: if libunwind is enabled, depend on it
-> >    http://patchwork.ozlabs.org/patch/451637/
-> >
-> >  - [5/7] package/perf: patch installation paths
-> >    http://patchwork.ozlabs.org/patch/451641/
-> >
-> >  - [6/7] package/perf: add patch to prevent crash on empty history buffer
-> >    http://patchwork.ozlabs.org/patch/451634/
-> >
-> >  - [7/7] package/perf: use correct definition of ARCH on x86_64
-> >    http://patchwork.ozlabs.org/patch/451633/
-> 
-> All 7 are still relevant.
+> (cd 
+> /home/ryan/devel/buildroot/buildroot-git/output/build/host-heimdal-1.5.3/ && 
+> rm -rf config.cache; 
+> PATH="/home/ryan/devel/buildroot/buildroot-git/output/host/bin:/home/ryan/devel/buildroot/buildroot-git/output/host/sbin:/home/ryan/devel/buildroot/buildroot-git/output/host/usr/bin:/home/ryan/devel/buildroot/buildroot-git/output/host/usr/sbin:/home/ryan/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games" 
+> AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld" NM="/usr/bin/nm" 
+> CC="/usr/bin/gcc" GCC="/usr/bin/gcc" CXX="/usr/bin/g++" 
+> CPP="/usr/bin/cpp" OBJCOPY="/usr/bin/objcopy" RANLIB="/usr/bin/ranlib" 
+> CPPFLAGS="-I/home/ryan/devel/buildroot/buildroot-git/output/host/usr/include" 
+> CFLAGS="-O2 
+> -I/home/ryan/devel/buildroot/buildroot-git/output/host/usr/include" 
+> CXXFLAGS="-O2 
+> -I/home/ryan/devel/buildroot/buildroot-git/output/host/usr/include" 
+> LDFLAGS="-L/home/ryan/devel/buildroot/buildroot-git/output/host/lib 
+> -L/home/ryan/devel/buildroot/buildroot-git/output/host/usr/lib 
+> -Wl,-rpath,/home/ryan/devel/buildroot/buildroot-git/output/host/usr/lib" 
+> PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 
+> PKG_CONFIG="/home/ryan/devel/buildroot/buildroot-git/output/host/usr/bin/pkg-config" 
+> PKG_CONFIG_SYSROOT_DIR="/" 
+> PKG_CONFIG_LIBDIR="/home/ryan/devel/buildroot/buildroot-git/output/host/usr/lib/pkgconfig:/home/ryan/devel/buildroot/buildroot-git/output/host/usr/share/pkgconfig" 
+> LD_LIBRARY_PATH="/home/ryan/devel/buildroot/buildroot-git/output/host/usr/lib" 
+> INTLTOOL_PERL=/usr/bin/perl CFLAGS="-O2 
+> -I/home/ryan/devel/buildroot/buildroot-git/output/host/usr/include" 
+> LDFLAGS="-L/home/ryan/devel/buildroot/buildroot-git/output/host/lib 
+> -L/home/ryan/devel/buildroot/buildroot-git/output/host/usr/lib 
+> -Wl,-rpath,/home/ryan/devel/buildroot/buildroot-git/output/host/usr/lib" 
+> MAKEINFO=true CONFIG_SITE=/dev/null ./configure 
+> --prefix="/home/ryan/devel/buildroot/buildroot-git/output/host/usr" 
+> --sysconfdir="/home/ryan/devel/buildroot/buildroot-git/output/host/etc" 
+> --localstatedir="/home/ryan/devel/buildroot/buildroot-git/output/host/var" 
+> --enable-shared --disable-static --disable-gtk-doc 
+> --disable-gtk-doc-html --disable-doc --disable-docs 
+> --disable-documentation --disable-debug --with-xmlto=no --with-fop=no 
+> --disable-dependency-tracking  --with-x=no --disable-shared 
 
-Ok. I'll have a look at those perf patches.
+You don't have my patch applied here. There's still only --with-x=no,
+and none of the other --without that my patch is adding.
 
-> >  - implement granular choice for stack protector
-> >    http://patchwork.ozlabs.org/patch/451643/
-> 
-> Still relevant.
-
-Do all the gcc versions support those different levels of stack
-protection?
-
-> >  - package/glibc: enable lock elision on x86_64 hosts
-> >    http://patchwork.ozlabs.org/patch/451651/
-> 
-> Still relevant.
-
-Is lock elision a feature always available on x86-64 ? Or only on
-certain cores ? I believe it required a certain generation of hardware.
-But maybe the glibc gracefully falls back to a non-elided lock
-implementation when the hardware does not have the required features.
-
-All sort of questions that should have been addressed in the commit
-log... which is currently empty :-)
-
-> >  - package: add shadow 4.2.1
-> >    http://patchwork.ozlabs.org/patch/451723/
-> 
-> There was some followup discussion which I haven't addressed. But it
-> is still relevant.
-
-Yes, but can you address the comments?
-
-> 
-> >  - package: add mosh 1.2.4
-> >    http://patchwork.ozlabs.org/patch/451726/
-> 
-> Still relevant.
-
-There has been some comments. Can you address them and resend? The
-comments have been made a month ago. While I agree we (Buildroot
-maintainers / core developers) are not best placed to criticize about
-delays, it would be good to respin patches not too long after the
-comments, so that they are kept "alive and moving".
-
-> >  - [v2] package/perf: build outside kernel tree
-> >    http://patchwork.ozlabs.org/patch/451947/
-> 
-> Relevant but people didn't want this one -- I just didn't see an
-> alternative if we were going to apply any patches to perf.
-
-Yeah, this isn't a simple problem :-/
-
-> >  - package/libpthsem: correctly handle --{en, dis}able-debug arguments on configure
-> >    http://patchwork.ozlabs.org/patch/452271/
-> 
-> Still relevant.
-
-Not really: we are going to get rid of passing --enable-debug /
---disable-debug. A patch series doing this has already been posted. I
-believe it will make this patch irrelevant. Can you confirm?
-
-Thanks,
+Please test with the patch applied, thanks!
 
 Thomas
 -- 
