@@ -1,85 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Apr 2015 20:09:24 +0200
-Subject: [Buildroot] [PATCH 13/30] package/matchbox: fix option prompts
+Date: Wed, 22 Apr 2015 20:09:26 +0200
+Subject: [Buildroot] [PATCH 15/30] package/matchbox-common: break dependency
+	chain for display
 In-Reply-To: <cover.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <627b2a8dc8d8772672b79e7bd2f3d36eb401dca1.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <decaf19e18b41b46067fa48d59ba2171e4893598.1429725549.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the package names instead of some fancy human-readable strings. ;-)
+Currently, matchbox-common depends on either matchbox-dsktop or
+matchbox-panel, and the three are organised so that matchbox-common gets
+indented in the menuconfig.
+
+That's a feature of menuconfig to consider the dependency chain to
+indent sub-options.
+
+Add a fake, prompt-less option to break that dependency chain.
+
+Note: yes, this is an dirty hack.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/matchbox/Config.in                   | 2 +-
- package/matchbox/matchbox-common/Config.in   | 4 ++--
- package/matchbox/matchbox-desktop/Config.in  | 2 +-
- package/matchbox/matchbox-keyboard/Config.in | 2 +-
- package/matchbox/matchbox-panel/Config.in    | 2 +-
- 5 files changed, 6 insertions(+), 6 deletions(-)
+ package/matchbox/matchbox-common/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 7d06bb2..e58aaf2 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_MATCHBOX
--	bool "MatchBox Window Manager"
-+	bool "matchbox"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_FONTCONFIG
 diff --git a/package/matchbox/matchbox-common/Config.in b/package/matchbox/matchbox-common/Config.in
-index 7d22d05..f1c4ce3 100644
+index 6ec4697..93761f5 100644
 --- a/package/matchbox/matchbox-common/Config.in
 +++ b/package/matchbox/matchbox-common/Config.in
-@@ -1,9 +1,9 @@
+@@ -1,3 +1,8 @@
++# Hack! Break dependency chain so that matchbox-common does
++# not get indented below matchbox-panel or matchbox-desktop.
++config FOO
++    bool
++
  config BR2_PACKAGE_MATCHBOX_COMMON
--	bool "Matchbox session common files"
-+	bool "matchbox-common"
- 	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
- 	help
- 	  Common desktop folders and matchbox-session script.
- 
- config BR2_PACKAGE_MATCHBOX_COMMON_PDA
--	bool "PDA style desktop folders"
-+	bool "PDA style app folder"
- 	depends on BR2_PACKAGE_MATCHBOX_COMMON
-diff --git a/package/matchbox/matchbox-desktop/Config.in b/package/matchbox/matchbox-desktop/Config.in
-index c9fd196..ed80c22 100644
---- a/package/matchbox/matchbox-desktop/Config.in
-+++ b/package/matchbox/matchbox-desktop/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_MATCHBOX_DESKTOP
--	bool "Matchbox Desktop"
-+	bool "matchbox-desktop"
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  A PDA style application launcher or 'item browser'.
-diff --git a/package/matchbox/matchbox-keyboard/Config.in b/package/matchbox/matchbox-keyboard/Config.in
-index e017358..056a255 100644
---- a/package/matchbox/matchbox-keyboard/Config.in
-+++ b/package/matchbox/matchbox-keyboard/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_MATCHBOX_KEYBOARD
--	bool "Matchbox Virtual Keyboard"
-+	bool "matchbox-keyboard"
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_MATCHBOX_FAKEKEY
-diff --git a/package/matchbox/matchbox-panel/Config.in b/package/matchbox/matchbox-panel/Config.in
-index e3daaf5..47bd10a 100644
---- a/package/matchbox/matchbox-panel/Config.in
-+++ b/package/matchbox/matchbox-panel/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_MATCHBOX_PANEL
--	bool "Matchbox Panel"
-+	bool "matchbox-panel"
- 	select BR2_PACKAGE_MATCHBOX_LIB
- 	help
- 	  A flexible always present 'window bar' for holding
+ 	bool "matchbox-common"
+ 	depends on BR2_PACKAGE_MATCHBOX_PANEL || BR2_PACKAGE_MATCHBOX_DESKTOP
 -- 
 1.9.1
