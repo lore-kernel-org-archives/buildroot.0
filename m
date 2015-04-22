@@ -1,72 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Apr 2015 23:45:48 +0200
-Subject: [Buildroot] [PATCH] Reduce need for
- BR2_HOSTARCH_NEEDS_IA32_COMPILER
-In-Reply-To: <536cdd7b.ATs+iKVatjmU5yNL%chris.lesiak@licor.com>
-References: <536cdd7b.ATs+iKVatjmU5yNL%chris.lesiak@licor.com>
-Message-ID: <20150422234548.2281a752@free-electrons.com>
+Date: Wed, 22 Apr 2015 23:47:11 +0200
+Subject: [Buildroot] [git commit] package/vlc: use only glesv2, not glesv1
+Message-ID: <20150422214728.F36FF81D79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Chris Lesiak,
+commit: http://git.buildroot.net/buildroot/commit/?id=40e6f3df1738bd92b08e87edd2cee0b5bd5037f8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 9 May 2014 08:51:55 -0500, Chris Lesiak wrote:
-> Reduce need for BR2_HOSTARCH_NEEDS_IA32_COMPILER
-> 
-> When building grub and syslinux, the 32-bit host compiler is only
-> needed when building for 64-bit target.  For 32-bit targets, the
-> target compiler will work.
-> 
-> This change makes it less likely that a mulilib host is needed.
-> 
-> Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+Fixes
+http://autobuild.buildroot.net/results/0be/0bee8646c2dd7dd2c201ee2986f3e802277314a5/
+http://autobuild.buildroot.net/results/64a/64a1a6d39b72b9dec4231b9f28ca14b38989d7df/
+http://autobuild.buildroot.net/results/b6b/b6b66e0b24d985462ca8dbefedd740453ca42293/
+http://autobuild.buildroot.net/results/497/4976f5e9dc53e6f9f29d9d45f0fb9bd42c7ab1ea/
 
-Sorry for the very late answer. Unfortunately, your patch doesn't work
-properly with the following defconfig:
+and many others
 
-BR2_x86_pentium4=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2015.02.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_GRUB=y
-BR2_TARGET_SYSLINUX=y
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/vlc/vlc.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-It fails during the syslinux build with:
-
-/home/thomas/projets/buildroot/output/build/syslinux-6.03/bios/core/../lzo/prepcore ldlinux.raw ldlinux.bin
-make[4]: /home/thomas/projets/buildroot/output/build/syslinux-6.03/bios/core/../lzo/prepcore: Command not found
-/home/thomas/projets/buildroot/output/build/syslinux-6.03/core/Makefile:153: recipe for target 'ldlinux.bin' failed
-
-This is because, using your patch, syslinux gets built with the target
-compiler instead of the host compiler. While this generally works, it
-doesn't work in the specific case of the prepcore program, which gets
-built with the target compiler, but executed on the host. And since I'm
-using a uClibc toolchain for the target, the resulting program cannot
-run on my glibc based machine.
-
-There is probably a way to adjust the syslinux build process to avoid
-this, but I don't know if it's really worth the effort.
-
-I've marked your patch as "Changes Requested". Do not hesitate to
-repost an updated version that fixes this problem.
-
-Thanks for your contribution,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index e77d4fa..b937b79 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -24,6 +24,7 @@ endef
+ VLC_POST_PATCH_HOOKS += VLC_OVERRIDE_PKG_M4
+ 
+ VLC_CONF_OPTS += \
++	--disable-gles1 \
+ 	--disable-a52 \
+ 	--disable-shout \
+ 	--disable-twolame \
+@@ -137,10 +138,10 @@ VLC_DEPENDENCIES += libgl
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+-VLC_CONF_OPTS += --enable-gles1 --enable-gles2
++VLC_CONF_OPTS += --enable-gles2
+ VLC_DEPENDENCIES += libgles
+ else
+-VLC_CONF_OPTS += --disable-gles1 --disable-gles2
++VLC_CONF_OPTS += --disable-gles2
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPUS),y)
