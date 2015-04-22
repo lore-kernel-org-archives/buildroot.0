@@ -1,36 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Apr 2015 22:55:53 +0200
-Subject: [Buildroot] [git commit] ofono: enable systemd service by default
-Message-ID: <20150422205620.45D0C80797@busybox.osuosl.org>
+Date: Wed, 22 Apr 2015 22:56:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xeyes: Add
+ dependency to xlib_libXrender
+In-Reply-To: <1429637763-9093-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429637763-9093-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150422225651.19016a06@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a510faf846413729968b130c77d822eaa924b758
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Signed-off-by: Mike Williams <mike@mikebwilliams.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ofono/ofono.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+On Tue, 21 Apr 2015 19:36:03 +0200, Bernd Kuhls wrote:
+> xeyes depends on Xrender since version 1.1.0
+> http://lists.freedesktop.org/archives/xorg/2009-December/048305.html
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/bae/baeded072fbec4a398738e00dbf851d756af660f/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/x11r7/xapp_xeyes/Config.in     |    1 +
+>  package/x11r7/xapp_xeyes/xapp_xeyes.mk |    2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 98e2fbc..f1a63e2 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -26,6 +26,12 @@ define OFONO_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/ofono/S46ofono $(TARGET_DIR)/etc/init.d/S46ofono
- endef
- 
-+define OFONO_INSTALL_INIT_SYSTEMD
-+	mkdir -p $(TARGET_DIR)/etc/systemd/systemd/multi-user.target.wants
-+	ln -fs ../../../../usr/lib/systemd/system/ofono.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+endef
-+
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- OFONO_CONF_OPTS += --enable-udev
- OFONO_DEPENDENCIES += udev
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
