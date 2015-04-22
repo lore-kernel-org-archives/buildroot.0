@@ -1,41 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Apr 2015 23:28:42 +0200
-Subject: [Buildroot] [PATCH] pkg-generic: substitute colon and space out
- of PKG_VERSION
-In-Reply-To: <1429737867-1754-1-git-send-email-arnout@mind.be>
-References: <1429737867-1754-1-git-send-email-arnout@mind.be>
-Message-ID: <20150422232842.1c28991d@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 22 Apr 2015 23:29:53 +0200
+Subject: [Buildroot] [PATCH 04/19] package/hiawatha: bump version to 9.12
+References: <1429453778-4178-1-git-send-email-bernd.kuhls@t-online.de>
+ <1429453778-4178-4-git-send-email-bernd.kuhls@t-online.de>
+ <5533BD76.5070903@zacarias.com.ar>
+Message-ID: <XnsA484EF08AA918berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+Gustavo Zacarias <gustavo@zacarias.com.ar> wrote in 
+news:5533BD76.5070903 at zacarias.com.ar:
 
-On Wed, 22 Apr 2015 23:24:27 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
+>> -HIAWATHA_VERSION = 9.2
+>> +HIAWATHA_VERSION = 9.12
+> 
+> Did you try this with polarssl on?
+> Last time i tried it wanted 1.3.x which has a different API than 1.2.x
+> (so bumping it would break other packages).
+> And they don't seem to be able to live side by side either.
 
->  ifndef $(2)_VERSION
->   ifdef $(3)_VERSION
->    $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
-> -  $(2)_VERSION := $$(subst /,_,$$(strip $$($(3)_VERSION)))
-> +  $(2)_VERSION := $$(subst $(space),_,$$(subst :,_,$$(subst /,_,$$(strip $$($(3)_VERSION)))))
->   else
->    $(2)_VERSION = undefined
->    $(2)_DL_VERSION = undefined
->   endif
->  else
->    $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
-> -  $(2)_VERSION := $$(strip $$(subst /,_,$$($(2)_VERSION)))
-> +  $(2)_VERSION := $$(subst $$(space),_,$$(subst :,_,$$(subst /,_,$$(strip $$($(2)_VERSION)))))
->  endif
+Hi,
 
-Since this code is now a bit more complicated, maybe we should have a
-function in pkg-utils.mk for this?
+argh, I missed that, sorry. No, I did not test with polarssl, therefore I 
+marked my patch as "Changes Requested" in patchworks. This bump was a "drive-
+by bump" during my hash series last weekend.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
