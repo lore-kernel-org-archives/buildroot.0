@@ -1,78 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 Apr 2015 00:20:33 +0200
-Subject: [Buildroot] [PATCH] mosquitto: remove ipv6 depends
-In-Reply-To: <1429740838-8577-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1429740838-8577-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150422222033.GF4069@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 23 Apr 2015 00:26:06 +0200
+Subject: [Buildroot] [PATCH] package: kill pointless text justification
+In-Reply-To: <1429740874-8619-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1429740874-8619-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <55381FFE.7090602@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
-
-On 2015-04-22 19:13 -0300, Gustavo Zacarias spake thusly:
-> The package was added after the last iteration of the non-ipv6
-> toolchain removal, so adjust it.
-> 
+On 04/23/15 00:14, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Now it occurs to me that we should probably have kep a hiden symbol,
-like so:
+Checked that it is a whitespace-only change, and manually went over the entire
+patch to see what really changed.
 
-    config BR2_INET_IPV6
-        bool
-        default y
+ Actually, the subject line should have been:
 
-so that existing out-of-tree packages (e.g. in some br2-external trees)
-continue to work seamlessly...
+package: kill pointless double space at end of sentence
 
-But them users would probably never notice the breakage, so maybe better
-break early...
+but that's a minor issue :-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/mosquitto/Config.in | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-> index 8f579f8..50937d0 100644
-> --- a/package/mosquitto/Config.in
-> +++ b/package/mosquitto/Config.in
-> @@ -1,7 +1,6 @@
->  config BR2_PACKAGE_MOSQUITTO
->  	bool "mosquitto"
->  	depends on BR2_USE_MMU # fork()
-> -	depends on BR2_INET_IPV6
->  	depends on !BR2_STATIC_LIBS # builds .so
->  	help
->  	  Mosquitto is an open source message broker that implements
-> @@ -14,6 +13,6 @@ config BR2_PACKAGE_MOSQUITTO
->  
->  	  http://mosquitto.org/
->  
-> -comment "mosquitto needs a toolchain w/ IPv6, dynamic library"
-> +comment "mosquitto needs a toolchain w/ dynamic library"
->  	depends on BR2_USE_MMU
-> -	depends on !BR2_INET_IPV6 || BR2_STATIC_LIBS
-> +	depends on BR2_STATIC_LIBS
-> -- 
-> 2.0.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
