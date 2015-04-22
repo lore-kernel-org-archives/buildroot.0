@@ -1,262 +1,109 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Wed, 22 Apr 2015 09:58:56 +0200
-Subject: [Buildroot] [PATCH v3] package/zeromq: enable kernel-based feature
-	flags
-Message-ID: <1429689536-15301-1-git-send-email-lionel.orry@gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 22 Apr 2015 10:03:59 +0200
+Subject: [Buildroot] [PATCH 2/3] manual: cvs: document that a date can
+ be used instead of a tag
+In-Reply-To: <55356A45.5020301@mind.be>
+References: <1429376067-9228-1-git-send-email-fabio.porcedda@gmail.com>
+ <1429376067-9228-3-git-send-email-fabio.porcedda@gmail.com>
+ <20150419081028.GB4313@free.fr>
+ <CAHkwnC-mOAdrGEt0E_FCrvf2kFZJ78UuWa+2h0a+Dco8dg49uA@mail.gmail.com>
+ <5533CD7D.1070605@mind.be>
+ <CAHkwnC9rcyr4Y+ydSYiDBY2x=+3QLfGapr75E3+Do+69wbWF=Q@mail.gmail.com>
+ <55356A45.5020301@mind.be>
+Message-ID: <CAHkwnC9qgzpdV9owFZr+Vi51-6fP18+XoeuMkKO=KLfg013xkw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current configuration system does not check for cached variables for
-these flags, and thus they are always disabled when cross-compiling.
-This patch fixes the configuration system to use cached variables and
-enables them at configuration time.
+On Mon, Apr 20, 2015 at 11:06 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 20/04/15 04:36, Fabio Porcedda wrote:
+>> On Sun, Apr 19, 2015 at 5:45 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>> On 19/04/15 12:08, Fabio Porcedda wrote:
+>>>> On Sun, Apr 19, 2015 at 10:10 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>>>>> Fabio, All,
+>>>>>
+>>>>> On 2015-04-18 18:54 +0200, Fabio Porcedda spake thusly:
+>>>>>> Also instead of using the generic word "timestamp" use the word "tag".
+>>>>>>
+>>>>>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>>>>>> ---
+>>>>>>  docs/manual/adding-packages-generic.txt | 2 +-
+>>>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+>>>>>> index 8cf6bb6..be754a2 100644
+>>>>>> --- a/docs/manual/adding-packages-generic.txt
+>>>>>> +++ b/docs/manual/adding-packages-generic.txt
+>>>>>> @@ -280,7 +280,7 @@ information is (assuming the package name is +libfoo+) :
+>>>>>>       Only anonymous pserver mode is supported.
+>>>>>>       +LIBFOO_SITE+ 'must' contain the source URL as well as the remote
+>>>>>>       repository directory. The module is the package name.
+>>>>>> -     +LIBFOO_VERSION+ is 'mandatory' and 'must' be a timestamp.
+>>>>>> +     +LIBFOO_VERSION+ is 'mandatory' and 'must' be a tag or a date.
+>>>>>
+>>>>> I'd like we document the format of the date we recognise. Because, IIRC,
+>>>>> cvs accepts 'yesterday' as a date format, and that would be interpreted
+>>>>> as a tag with the current code.
+>>>>>
+>>>>> So maybe, just state something like:
+>>>>>
+>>>>>     ... or a date (YYYYMMDD:hhmmss)
+>>>>
+>>>> What about this:
+>>>> (<YYYY>-<MM>-<DD>[T<HH><MM>[<SS>]] e.g 2015-12-20 or 2015-12-20T1010)
+>>>
+>>>  Can a timezone be added to that? Playing with dates and times without timezone
+>>> is dangerous.
+>>
+>> This one works: (<YYYY>-<MM>-<DD>[T<HH>:<MM>[:<SS>][-<ZZ>] e.g
+>> 2015-12-20 or 2015-12-20T10:10-00)
+>
+>  Well, the example should include a timezone and mention that adding a timezone
+> is advisable.
 
-Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+Ok.
 
----
-Changes v2 -> v3:
-  - use unmodified upstream patch integrated in future v4.2.x releases
-    (suggested by Arnout)
-Changes v1 -> v2:
-  - fix indentation of continuation lines (suggested by Thomas P.)
+>  Alternatively, we could specifies that times are in UTC and set TZ=UTC in the
+> cvs helper.
 
-Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
----
- ...e.m4-make-kernel-specific-flags-cacheable.patch | 199 +++++++++++++++++++++
- package/zeromq/zeromq.mk                           |  10 ++
- 2 files changed, 209 insertions(+)
- create mode 100644 package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
+Fine for me.
+Yann what do you think about it?
 
-diff --git a/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch b/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
-new file mode 100644
-index 0000000..ff225d3
---- /dev/null
-+++ b/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
-@@ -0,0 +1,199 @@
-+commit 9daf6dd7c4947ce74ca729de5c3cfe8cbc304702
-+Author: Lionel Orry <lionel.orry@gmail.com>
-+Date:   Fri Feb 6 15:11:07 2015 +0100
-+
-+    acinclude.m4: make kernel-specific flags cacheable
-+    
-+    Specifically when cross-compiling, one can be willing to force these
-+    variable values using the environment of a config.cache file. This
-+    commit makes this possible.
-+    
-+    The affected variables are:
-+    
-+    * libzmq_cv_sock_cloexec
-+    * libzmq_cv_so_keepalive
-+    * libzmq_cv_tcp_keepcnt
-+    * libzmq_cv_tcp_keepidle
-+    * libzmq_cv_tcp_keepintvl
-+    * libzmq_cv_tcp_keepalive
-+    
-+    Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
-+
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index 4bbd19e..456740d 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -586,8 +586,8 @@ dnl # LIBZMQ_CHECK_SOCK_CLOEXEC([action-if-found], [action-if-not-found])
-+ dnl # Check if SOCK_CLOEXEC is supported                                           #
-+ dnl ################################################################################
-+ AC_DEFUN([LIBZMQ_CHECK_SOCK_CLOEXEC], [{
-+-    AC_MSG_CHECKING(whether SOCK_CLOEXEC is supported)
-+-    AC_TRY_RUN([/* SOCK_CLOEXEC test */
-++    AC_CACHE_CHECK([whether SOCK_CLOEXEC is supported], [libzmq_cv_sock_cloexec],
-++        [AC_TRY_RUN([/* SOCK_CLOEXEC test */
-+ #include <sys/types.h>
-+ #include <sys/socket.h>
-+ 
-+@@ -596,11 +596,13 @@ int main (int argc, char *argv [])
-+     int s = socket (PF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0);
-+     return (s == -1);
-+ }
-+-    ],
-+-    [AC_MSG_RESULT(yes) ; libzmq_cv_sock_cloexec="yes" ; $1],
-+-    [AC_MSG_RESULT(no)  ; libzmq_cv_sock_cloexec="no"  ; $2],
-+-    [AC_MSG_RESULT(not during cross-compile) ; libzmq_cv_sock_cloexec="no"]
-++        ],
-++        [libzmq_cv_sock_cloexec="yes"],
-++        [libzmq_cv_sock_cloexec="no"],
-++        [libzmq_cv_sock_cloexec="not during cross-compile"]
-++        )]
-+     )
-++    AS_IF([test "x$libzmq_cv_sock_cloexec" = "xyes"], [$1], [$2])
-+ }])
-+ 
-+ dnl ################################################################################
-+@@ -628,8 +630,8 @@ dnl # LIBZMQ_CHECK_SO_KEEPALIVE([action-if-found], [action-if-not-found])
-+ dnl # Check if SO_KEEPALIVE is supported                                           #
-+ dnl ################################################################################
-+ AC_DEFUN([LIBZMQ_CHECK_SO_KEEPALIVE], [{
-+-    AC_MSG_CHECKING(whether SO_KEEPALIVE is supported)
-+-    AC_TRY_RUN([/* SO_KEEPALIVE test */
-++    AC_CACHE_CHECK([whether SO_KEEPALIVE is supported], [libzmq_cv_so_keepalive],
-++        [AC_TRY_RUN([/* SO_KEEPALIVE test */
-+ #include <sys/types.h>
-+ #include <sys/socket.h>
-+ 
-+@@ -641,11 +643,13 @@ int main (int argc, char *argv [])
-+         ((rc = setsockopt (s, SOL_SOCKET, SO_KEEPALIVE, (char*) &opt, sizeof (int))) == -1)
-+     );
-+ }
-+-    ],
-+-    [AC_MSG_RESULT(yes) ; libzmq_cv_so_keepalive="yes" ; $1],
-+-    [AC_MSG_RESULT(no)  ; libzmq_cv_so_keepalive="no"  ; $2],
-+-    [AC_MSG_RESULT(not during cross-compile) ; libzmq_cv_so_keepalive="no"]
-++        ],
-++        [libzmq_cv_so_keepalive="yes"],
-++        [libzmq_cv_so_keepalive="no"],
-++        [libzmq_cv_so_keepalive="not during cross-compile"]
-++        )]
-+     )
-++    AS_IF([test "x$libzmq_cv_so_keepalive" = "xyes"], [$1], [$2])
-+ }])
-+ 
-+ dnl ################################################################################
-+@@ -653,8 +657,8 @@ dnl # LIBZMQ_CHECK_TCP_KEEPCNT([action-if-found], [action-if-not-found])
-+ dnl # Check if TCP_KEEPCNT is supported                                            #
-+ dnl ################################################################################
-+ AC_DEFUN([LIBZMQ_CHECK_TCP_KEEPCNT], [{
-+-    AC_MSG_CHECKING(whether TCP_KEEPCNT is supported)
-+-    AC_TRY_RUN([/* TCP_KEEPCNT test */
-++    AC_CACHE_CHECK([whether TCP_KEEPCNT is supported], [libzmq_cv_tcp_keepcnt],
-++        [AC_TRY_RUN([/* TCP_KEEPCNT test */
-+ #include <sys/types.h>
-+ #include <sys/socket.h>
-+ #include <netinet/in.h>
-+@@ -669,11 +673,13 @@ int main (int argc, char *argv [])
-+         ((rc = setsockopt (s, IPPROTO_TCP, TCP_KEEPCNT, (char*) &opt, sizeof (int))) == -1)
-+     );
-+ }
-+-    ],
-+-    [AC_MSG_RESULT(yes) ; libzmq_cv_tcp_keepcnt="yes" ; $1],
-+-    [AC_MSG_RESULT(no)  ; libzmq_cv_tcp_keepcnt="no"  ; $2],
-+-    [AC_MSG_RESULT(not during cross-compile) ; libzmq_cv_tcp_keepcnt="no"]
-++        ],
-++        [libzmq_cv_tcp_keepcnt="yes"],
-++        [libzmq_cv_tcp_keepcnt="no"],
-++        [libzmq_cv_tcp_keepcnt="not during cross-compile"]
-++        )]
-+     )
-++    AS_IF([test "x$libzmq_cv_tcp_keepcnt" = "xyes"], [$1], [$2])
-+ }])
-+ 
-+ dnl ################################################################################
-+@@ -681,8 +687,8 @@ dnl # LIBZMQ_CHECK_TCP_KEEPIDLE([action-if-found], [action-if-not-found])
-+ dnl # Check if TCP_KEEPIDLE is supported                                           #
-+ dnl ################################################################################
-+ AC_DEFUN([LIBZMQ_CHECK_TCP_KEEPIDLE], [{
-+-    AC_MSG_CHECKING(whether TCP_KEEPIDLE is supported)
-+-    AC_TRY_RUN([/* TCP_KEEPIDLE test */
-++    AC_CACHE_CHECK([whether TCP_KEEPIDLE is supported], [libzmq_cv_tcp_keepidle],
-++        [AC_TRY_RUN([/* TCP_KEEPIDLE test */
-+ #include <sys/types.h>
-+ #include <sys/socket.h>
-+ #include <netinet/in.h>
-+@@ -697,11 +703,13 @@ int main (int argc, char *argv [])
-+         ((rc = setsockopt (s, IPPROTO_TCP, TCP_KEEPIDLE, (char*) &opt, sizeof (int))) == -1)
-+     );
-+ }
-+-    ],
-+-    [AC_MSG_RESULT(yes) ; libzmq_cv_tcp_keepidle="yes" ; $1],
-+-    [AC_MSG_RESULT(no)  ; libzmq_cv_tcp_keepidle="no"  ; $2],
-+-    [AC_MSG_RESULT(not during cross-compile) ; libzmq_cv_tcp_keepidle="no"]
-++        ],
-++        [libzmq_cv_tcp_keepidle="yes"],
-++        [libzmq_cv_tcp_keepidle="no"],
-++        [libzmq_cv_tcp_keepidle="not during cross-compile"]
-++        )]
-+     )
-++    AS_IF([test "x$libzmq_cv_tcp_keepidle" = "xyes"], [$1], [$2])
-+ }])
-+ 
-+ dnl ################################################################################
-+@@ -709,8 +717,8 @@ dnl # LIBZMQ_CHECK_TCP_KEEPINTVL([action-if-found], [action-if-not-found])
-+ dnl # Check if TCP_KEEPINTVL is supported                                           #
-+ dnl ################################################################################
-+ AC_DEFUN([LIBZMQ_CHECK_TCP_KEEPINTVL], [{
-+-    AC_MSG_CHECKING(whether TCP_KEEPINTVL is supported)
-+-    AC_TRY_RUN([/* TCP_KEEPINTVL test */
-++    AC_CACHE_CHECK([whether TCP_KEEPINTVL is supported], [libzmq_cv_tcp_keepintvl],
-++        [AC_TRY_RUN([/* TCP_KEEPINTVL test */
-+ #include <sys/types.h>
-+ #include <sys/socket.h>
-+ #include <netinet/in.h>
-+@@ -725,11 +733,13 @@ int main (int argc, char *argv [])
-+         ((rc = setsockopt (s, IPPROTO_TCP, TCP_KEEPINTVL, (char*) &opt, sizeof (int))) == -1)
-+     );
-+ }
-+-    ],
-+-    [AC_MSG_RESULT(yes) ; libzmq_cv_tcp_keepintvl="yes" ; $1],
-+-    [AC_MSG_RESULT(no)  ; libzmq_cv_tcp_keepintvl="no"  ; $2],
-+-    [AC_MSG_RESULT(not during cross-compile) ; libzmq_cv_tcp_keepintvl="no"]
-++        ],
-++        [libzmq_cv_tcp_keepintvl="yes"],
-++        [libzmq_cv_tcp_keepintvl="no"],
-++        [libzmq_cv_tcp_keepintvl="not during cross-compile"]
-++        )]
-+     )
-++    AS_IF([test "x$libzmq_cv_tcp_keepintvl" = "xyes"], [$1], [$2])
-+ }])
-+ 
-+ dnl ################################################################################
-+@@ -737,8 +747,8 @@ dnl # LIBZMQ_CHECK_TCP_KEEPALIVE([action-if-found], [action-if-not-found])
-+ dnl # Check if TCP_KEEPALIVE is supported                                          #
-+ dnl ################################################################################
-+ AC_DEFUN([LIBZMQ_CHECK_TCP_KEEPALIVE], [{
-+-    AC_MSG_CHECKING(whether TCP_KEEPALIVE is supported)
-+-    AC_TRY_RUN([/* TCP_KEEPALIVE test */
-++    AC_CACHE_CHECK([whether TCP_KEEPALIVE is supported], [libzmq_cv_tcp_keepalive],
-++        [AC_TRY_RUN([/* TCP_KEEPALIVE test */
-+ #include <sys/types.h>
-+ #include <sys/socket.h>
-+ #include <netinet/in.h>
-+@@ -753,11 +763,13 @@ int main (int argc, char *argv [])
-+         ((rc = setsockopt (s, IPPROTO_TCP, TCP_KEEPALIVE, (char*) &opt, sizeof (int))) == -1)
-+     );
-+ }
-+-    ],
-+-    [AC_MSG_RESULT(yes) ; libzmq_cv_tcp_keepalive="yes" ; $1],
-+-    [AC_MSG_RESULT(no)  ; libzmq_cv_tcp_keepalive="no"  ; $2],
-+-    [AC_MSG_RESULT(not during cross-compile) ; libzmq_cv_tcp_keepalive="no"]
-++        ],
-++        [libzmq_cv_tcp_keepalive="yes"],
-++        [libzmq_cv_tcp_keepalive="no"],
-++        [libzmq_cv_tcp_keepalive="not during cross-compile"]
-++        )]
-+     )
-++    AS_IF([test "x$libzmq_cv_tcp_keepalive" = "xyes"], [$1], [$2])
-+ }])
-+ 
-+ dnl ################################################################################
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index dbd6fc7..7e9ed19 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -11,8 +11,18 @@ ZEROMQ_DEPENDENCIES = util-linux
- ZEROMQ_LICENSE = LGPLv3+ with exceptions
- ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
- # For 0001-tests-disable-test_fork-if-fork-is-not-available.patch
-+# and 0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
- ZEROMQ_AUTORECONF = YES
- 
-+# Assume these flags are always available. It is true, at least for
-+# SOCK_CLOEXEC, since linux v2.6.27.
-+# Note: the flag TCP_KEEPALIVE is NOT available so we do not include it.
-+ZEROMQ_CONF_ENV = libzmq_cv_sock_cloexec=yes \
-+	libzmq_cv_so_keepalive=yes \
-+	libzmq_cv_tcp_keepcnt=yes \
-+	libzmq_cv_tcp_keepidle=yes \
-+	libzmq_cv_tcp_keepintvl=yes
-+
- # Only tools/curve_keygen.c needs this, but it doesn't hurt to pass it
- # for the rest of the build as well (which automatically includes stdc++).
- ifeq ($(BR2_STATIC_LIBS),y)
+>
+>>
+>> But to made it works I must replace the ":" with "_":
+>
+>  Why? The / substitution is only needed because VERSION is used in filenames,
+> and : is fine in filenames, no?
+
+The colon is fine for filenames, neverthless if i don't replace it, I
+get this error:
+
+$ make expect-source
+package/expect/expect.mk:19: *** target pattern contains no '%'.  Stop.
+
+>> index bdb26b8..2beb529 100644
+>> --- a/package/pkg-generic.mk
+>> +++ b/package/pkg-generic.mk
+>> @@ -325,14 +325,14 @@ $(2)_RAWNAME                      =  $$(patsubst
+>> host-%,%,$(1))
+>>  ifndef $(2)_VERSION
+>>   ifdef $(3)_VERSION
+>>    $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
+>> -  $(2)_VERSION := $$(subst /,_,$$(strip $$($(3)_VERSION)))
+>> +  $(2)_VERSION := $$(subst :,_,$$(subst /,_,$$(strip $$($(3)_VERSION))))
+>>   else
+>>    $(2)_VERSION = undefined
+>>    $(2)_DL_VERSION = undefined
+>>   endif
+>>  else
+>>    $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
+>> -  $(2)_VERSION := $$(strip $$(subst /,_,$$($(2)_VERSION)))
+>> +  $(2)_VERSION := $$(strip $$(subst :,_,$$(subst /,_,$$($(2)_VERSION))))
+>>  endif
+
+BR
 -- 
-2.1.0
+Fabio Porcedda
