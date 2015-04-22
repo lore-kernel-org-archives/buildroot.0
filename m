@@ -1,52 +1,80 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 22 Apr 2015 23:24:27 +0200
-Subject: [Buildroot] [PATCH] pkg-generic: substitute colon and space out of
-	PKG_VERSION
-Message-ID: <1429737867-1754-1-git-send-email-arnout@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 22 Apr 2015 23:27:59 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/swupdate: new package
+In-Reply-To: <1429689378.3833.19.camel@embedded.rocks>
+References: <1429576251-28975-1-git-send-email-joerg.krause@embedded.rocks>	
+ <5536C0ED.1080301@mind.be> <1429689378.3833.19.camel@embedded.rocks>
+Message-ID: <5538125F.7010509@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using a colon or a space in a make target doesn't work, so they have to
-be filtered out of the PKG_VERSION variable just like the / currently
-already is.
+Hi J?rg, Arnout, all
 
-This will be needed for date-based CVS versions.
+Le 22/04/2015 09:56, J?rg Krause a ?crit :
+> On Di, 2015-04-21 at 23:28 +0200, Arnout Vandecappelle wrote:
+>> On 21/04/15 02:30, J?rg Krause wrote:
+>>> This patch is based on an WIP version submitted by Romain Naour, 
+>>> commented by
+>>> Arnout Vandecappelle:
+>>> https://patchwork.ozlabs.org/patch/401270/
+>>>
+>>> This package provides a default configuration with all external 
+>>> dependencies
+>>> enabled. This is necessary because upstream does not detect which 
+>>> dependencies
+>>> are available. Furthermore, upstream does not implement a 
+>>> savedefconfig target.
+>>>
+>>> Note that swupdate provides its own customized version of mongoose 
+>>> and
+>>> lsqlite3.
+>>>
+>>> swupdate provides a default website which can be installed to the 
+>>> target to
+>>> enable firmware update with a browser. This patch adds the user 
+>>> option to
+>>> install this website.
+>>>
+>>> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+>>> Cc: Romain Naour <romain.naour@openwide.fr>
+>>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>> Cc: Arnout Vandecappelle <arnout@mind.be>
+>>> Tested-by: Mike Williams <mike@mikebwilliams.com>
+>>> ---
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/pkg-generic.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+[snip]
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index d1a1811..eeccf5b 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -322,17 +322,19 @@ $(2)_RAWNAME			=  $$(patsubst host-%,%,$(1))
- # sanitize the package version that is used in paths, directory and file names.
- # Forward slashes may appear in the package's version when pointing to a
- # version control system branch or tag, for example remotes/origin/1_10_stable.
-+# Similar for spaces and colons (:) that may appear in date-based revisions for
-+# CVS.
- ifndef $(2)_VERSION
-  ifdef $(3)_VERSION
-   $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
--  $(2)_VERSION := $$(subst /,_,$$(strip $$($(3)_VERSION)))
-+  $(2)_VERSION := $$(subst $(space),_,$$(subst :,_,$$(subst /,_,$$(strip $$($(3)_VERSION)))))
-  else
-   $(2)_VERSION = undefined
-   $(2)_DL_VERSION = undefined
-  endif
- else
-   $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
--  $(2)_VERSION := $$(strip $$(subst /,_,$$($(2)_VERSION)))
-+  $(2)_VERSION := $$(subst $$(space),_,$$(subst :,_,$$(subst /,_,$$(strip $$($(2)_VERSION)))))
- endif
- 
- $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
--- 
-2.1.4
+>>> diff --git a/package/swupdate/swupdate-0001-Add-missing-header-for
+>>> -off_t.patch b/package/swupdate/swupdate-0001-Add-missing-header
+>>> -for-off_t.patch
+>>> new file mode 100644
+>>> index 0000000..4be0f7b
+>>> --- /dev/null
+>>> +++ b/package/swupdate/swupdate-0001-Add-missing-header-for
+>>> -off_t.patch
+>>> @@ -0,0 +1,25 @@
+>>> +From 4e382373cad64ca7e183336e33b72c53cfeed340 Mon Sep 17 00:00:00 
+>>> 2001
+>>> +From: Romain Naour <romain.naour@openwide.fr>
+>>> +Date: Sun, 7 Sep 2014 17:31:09 +0200
+>>> +Subject: [PATCH 1/1] Add missing header for off_t
+>>> +
+>>> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>>
+>>  What's the upstream status of this? Stefan is normally pretty 
+>> reactive...
+> 
+> It's not upstream yet. I will send the patch to Stefano.
+
+Sorry, I haven't reworked on swupdate since October :-/
+My tests on swupdate with my x86 target are on standby since then.
+Also I need to spend some time to add the support for other bootloader than
+u-boot (not easy).
+
+I'll try to look at your v4 this week end.
+
+Best regards,
+Romain
