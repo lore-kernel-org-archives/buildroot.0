@@ -1,65 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Apr 2015 00:44:37 +0200
-Subject: [Buildroot] [PATCH] pkg-generic: substitute colon and space out
-	of PKG_VERSION
-In-Reply-To: <1429737867-1754-1-git-send-email-arnout@mind.be>
-References: <1429737867-1754-1-git-send-email-arnout@mind.be>
-Message-ID: <55382455.5040408@mind.be>
+Date: Thu, 23 Apr 2015 00:53:30 +0200
+Subject: [Buildroot] [PATCH] pkg-cmake: Skip compilation in installation
+ step
+In-Reply-To: <1429733516-4466-1-git-send-email-cedric.marie@openmailbox.org>
+References: <1429733516-4466-1-git-send-email-cedric.marie@openmailbox.org>
+Message-ID: <5538266A.1070006@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/22/15 23:24, Arnout Vandecappelle (Essensium/Mind) wrote:
-> Using a colon or a space in a make target doesn't work, so they have to
-> be filtered out of the PKG_VERSION variable just like the / currently
-> already is.
+On 04/22/15 22:11, C?dric Marie wrote:
+> With CMake build system, the "make install" command always compiles
+> before installing, to make sure that everything is up-to-date.
 > 
-> This will be needed for date-based CVS versions.
+> In Buildroot environment, this is quite useless, because the package
+> has always already been compiled, either at first build, or when
+> invoking "make <package>-rebuild".
+> In all cases, when it comes to staging or target installation step, the
+> package has just been compiled.
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  package/pkg-generic.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> Using "make install/fast" - in order to skip the compilation step - is
+> therefore more appropriate, more consistent with what other build
+> systems do, and saves time when you need to rebuild your package.
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index d1a1811..eeccf5b 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -322,17 +322,19 @@ $(2)_RAWNAME			=  $$(patsubst host-%,%,$(1))
->  # sanitize the package version that is used in paths, directory and file names.
->  # Forward slashes may appear in the package's version when pointing to a
->  # version control system branch or tag, for example remotes/origin/1_10_stable.
-> +# Similar for spaces and colons (:) that may appear in date-based revisions for
-> +# CVS.
->  ifndef $(2)_VERSION
->   ifdef $(3)_VERSION
->    $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
-> -  $(2)_VERSION := $$(subst /,_,$$(strip $$($(3)_VERSION)))
-> +  $(2)_VERSION := $$(subst $(space),_,$$(subst :,_,$$(subst /,_,$$(strip $$($(3)_VERSION)))))
+> Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
 
- Hold it, something is wrong here, because the host version gets an extra _
-appended...
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- D'oh, $(space) should be $$(space) :-(
+ Doing it for host-cmake itself can be a separate patch. And not very important
+either, I can't measure the time difference...
 
  Regards,
  Arnout
 
->   else
->    $(2)_VERSION = undefined
->    $(2)_DL_VERSION = undefined
->   endif
->  else
->    $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
-> -  $(2)_VERSION := $$(strip $$(subst /,_,$$($(2)_VERSION)))
-> +  $(2)_VERSION := $$(subst $$(space),_,$$(subst :,_,$$(subst /,_,$$(strip $$($(2)_VERSION)))))
->  endif
+> ---
+>  package/pkg-cmake.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 2262012..f17a883 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -57,8 +57,8 @@ $(2)_MAKE			?= $$(MAKE)
+>  $(2)_MAKE_ENV			?=
+>  $(2)_MAKE_OPTS			?=
+>  $(2)_INSTALL_OPTS		?= install
+> -$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
+> -$(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
+> +$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install/fast
+> +$(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install/fast
 >  
->  $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
+>  $(2)_SRCDIR			= $$($(2)_DIR)/$$($(2)_SUBDIR)
+>  
 > 
 
 
