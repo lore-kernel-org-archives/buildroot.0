@@ -1,65 +1,107 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 22 Apr 2015 07:48:22 +0200
-Subject: [Buildroot] [PATCH 2/3] package/cache-calibrator: add hash
-In-Reply-To: <87oamhrz55.fsf@dell.be.48ers.dk>
-References: <1429583936-13335-1-git-send-email-fabio.porcedda@gmail.com>
- <1429583936-13335-2-git-send-email-fabio.porcedda@gmail.com>
- <87iocqt0wq.fsf@dell.be.48ers.dk> <20150421172246.GB4262@free.fr>
- <87oamhrz55.fsf@dell.be.48ers.dk>
-Message-ID: <CAHkwnC9vK7Xnwga91hts-PpNB4bPAZd=uwhXY49CXH29Y0qkjg@mail.gmail.com>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Wed, 22 Apr 2015 07:54:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/zeromq: enable kernel-based
+ feature flags
+In-Reply-To: <CAKAx1cg4csBWbVi5wKKKPcTBkocTQuf08G2YEMeZHTT686e+8g@mail.gmail.com>
+References: <1429623019-12174-1-git-send-email-lionel.orry@gmail.com>
+ <20150421153349.715c50f7@free-electrons.com>
+ <CAKAx1cg4csBWbVi5wKKKPcTBkocTQuf08G2YEMeZHTT686e+8g@mail.gmail.com>
+Message-ID: <CAKAx1chX8RGpwnynUsUReBCgw5TC5WWpd+B8e4V3e=p85cH3cg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 21, 2015 at 10:43 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hi all,
+
+On Tue, Apr 21, 2015 at 3:39 PM, Lionel Orry <lionel.orry@gmail.com> wrote:
+> Hello,
 >
-> Hi,
+> On Tue, Apr 21, 2015 at 3:33 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Lionel Orry,
+>>
+>> On Tue, 21 Apr 2015 15:30:19 +0200, Lionel Orry wrote:
+>>> The current configuration system does not check for cached variables for
+>>> these flags, and thus they are always disabled when cross-compiling.
+>>> This patch fixes the configuration system to use cached variables and
+>>> enables them at configuration time.
+>>>
+>>> Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+>>> ---
+>>>  ...e.m4-make-kernel-specific-flags-cacheable.patch | 204 +++++++++++++++++++++
+>>>  package/zeromq/zeromq.mk                           |  10 +
+>>>  2 files changed, 214 insertions(+)
+>>>  create mode 100644 package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
+>>>
+>>> diff --git a/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch b/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
+>>> new file mode 100644
+>>> index 0000000..9b6e808
+>>> --- /dev/null
+>>> +++ b/package/zeromq/0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
+>>> @@ -0,0 +1,204 @@
+>>> +From 2eee4dd2b1668124f377f6da1d511249086a1449 Mon Sep 17 00:00:00 2001
+>>> +From: Lionel Orry <lionel.orry@gmail.com>
+>>> +Date: Fri, 6 Feb 2015 09:45:21 +0100
+>>> +Subject: [PATCH 1/1] acinclude.m4: make kernel-specific flags cacheable
+>>> +
+>>> +Specifically when cross-compiling, one can be willing to force these
+>>> +variable values using the environment of a config.cache file. This
+>>> +commit makes this possible.
+>>> +
+>>> +The affected variables are:
+>>> +
+>>> +* libzmq_cv_sock_cloexec
+>>> +* libzmq_cv_so_keepalive
+>>> +* libzmq_cv_tcp_keepcnt
+>>> +* libzmq_cv_tcp_keepidle
+>>> +* libzmq_cv_tcp_keepintvl
+>>> +* libzmq_cv_tcp_keepalive
+>>> +
+>>> +Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+>>
+>> Could you state whether this patch is upstream or not?
 >
->>> This will cause issues when/if that file ever gets updated - But then
->  >> atleast we know and can update the hash.
->
->  > It also means that Buildroot 2015.05 will stop working at some point
->  > when this file is updated. The problem is not much about Buildroot
->  > master , which is easily fixable, but about our releases, that get
->  > broken as soon as upstream changes that file.
->
->  > I am not really happy with either solutions: either add a hash and break
->  > releases in the future, or not add a hash file, and miss updates,
->  > especially in the autobuilders (even though they do remove downloads
->  > from time to time.
->
-> True - I don't really think there's any good solution to this (besides
-> maybe convincing upstream to version their releases).
->
->  > One case for the adding the hash, too, is that it will tell people that
->  > their local copy in their local cache (e.g. my ~/src/ ) is out-of-date.
->
->  > Still, I'm not convinced we want that hash...
->
-> Maybe not. Perhaps the breakage from wrong hash is worse than the
-> potential breakage from newer versions. Also notice that the download
-> support falls back to our local copy on sources.buildroot.net if the
-> hash doesn't match.
->
->  > Do we have other such packages (I think I read there was another
->  > version-less package for now)?
->
-> Yes, we do:
->
-> git grep 'SOURCE =.*\.c$'
-> package/cache-calibrator/cache-calibrator.mk:CACHE_CALIBRATOR_SOURCE = calibrator.c
-> package/devmem2/devmem2.mk:DEVMEM2_SOURCE = devmem2.c
-> package/whetstone/whetstone.mk:WHETSTONE_SOURCE = whetstone.c
+> This patch is upstream in v4.1.x branch, so it will be included
+> upstream as soon as zeromq v4.1.0 is released.
 >
 
-If the upstream is not willing to version those files what about
-creating a github repositories for them? Also to be able to check the
-hash on github files we just need to attach the binary for each
-release.
+My bad, I made a mistake here : not v4.1.x branch, but master branch
+of libzmq which will become v4.2.x branch.
+So it will not be included before v4.2.0 is released.
 
-BR
--- 
-Fabio Porcedda
+Sorry for the typo...
+
+>>
+>>> +# Assume these flags are always available. It is true, at least for
+>>> +# SOCK_CLOEXEC, since linux v2.6.27.
+>>> +# Note: the flag TCP_KEEPALIVE is NOT available so we do not include it.
+>>> +ZEROMQ_CONF_ENV = libzmq_cv_sock_cloexec=yes \
+>>> +                               libzmq_cv_so_keepalive=yes \
+>>
+>> Only one tab for indentation on continuation lines.
+>
+> Will correct.
+>
+>>
+>> Also, I must say I still don't quite understand why an AC_TRY_RUN() is
+>> needed here. Isn't an AC_TRY_LINK() to test if the relevant flags
+>> exists sufficient?
+>
+> Arnout stated something about it:
+> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/110044
+>
+> What do you think about it ?
+>
+>>
+>> Thanks,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux, Kernel and Android engineering
+>> http://free-electrons.com
+>
+> Regards,
+> Lionel
