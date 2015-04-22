@@ -1,28 +1,43 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Apr 2015 00:26:06 +0200
-Subject: [Buildroot] [PATCH] package: kill pointless text justification
-In-Reply-To: <1429740874-8619-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1429740874-8619-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <55381FFE.7090602@mind.be>
+Date: Thu, 23 Apr 2015 00:28:01 +0200
+Subject: [Buildroot] [RFC v2 0/5] common service startup files
+In-Reply-To: <20150422220234.GA11809@vostro>
+References: <cover.1428263859.git.alex.suykov@gmail.com>
+ <20150422231143.2b2921e2@free-electrons.com> <20150422220234.GA11809@vostro>
+Message-ID: <55382071.2000601@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/23/15 00:14, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On 04/23/15 00:02, Alex Suykov wrote:
+> Wed, Apr 22, 2015 at 11:11:43PM +0200, Thomas Petazzoni wrote:
+> 
+>> Thanks for this proposal. However, as you have seen, the general
+>> feedback was not very positive. We don't really like having a
+>> specialized language being created for Buildroot, so the overall
+>> approach doesn't really match the "spirit" of how things are done in
+>> Buildroot.
+>>
+>> I've marked the corresponding patches as rejected in our patch tracking
+>> system.
+> 
+> Ok, yeah, the initial reaction was pretty clear and I thought it has been
+> marked as rejected for several weeks already. Looks like it wasn't,
+> so people got those patch reminders and started replying.
+> 
+> -*--
+> 
+> And a kind of follow-up: I've got a bunch of systemd service files
+> as a by-product of this effort, some of them for packages that
+> have no systemd hooks at present.
+> 
+> If you're interested, I could either upload them somewhere
+> for you to pick up, or alternatively start sending patches myself.
+> One package at a time, without any global infrastructure changes.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Checked that it is a whitespace-only change, and manually went over the entire
-patch to see what really changed.
-
- Actually, the subject line should have been:
-
-package: kill pointless double space at end of sentence
-
-but that's a minor issue :-)
+ That would be great!
 
  Regards,
  Arnout
