@@ -1,118 +1,132 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Apr 2015 22:59:31 +0200
-Subject: [Buildroot] [git commit] toolchain: make IPv6 mandatory for
-	external toolchains
-Message-ID: <20150422210724.DC37281D89@busybox.osuosl.org>
+Date: Wed, 22 Apr 2015 23:06:35 +0200
+Subject: [Buildroot] [git commit] packages: remove non-IPv6 dependencies and
+	tweaks
+Message-ID: <20150422210725.3D00E81D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51eaa2ca15e25169ab6c18b068e9c6e05856bd04
+commit: http://git.buildroot.net/buildroot/commit/?id=79ce08bbdc33d1725f5d950736c9f624814b5a03
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove BR2_INET_IPV6 select for predefined external toolchains.
-
-Remove the (non)IPv6 option prompt since it's now mandatory.
-
-And force the toolchain check now that internal uclibc is always built
-with IPv6 support and external non-IPv6 toolchains are disallowed.
+Now that IPv6 is mandatory remove package dependencies and conditionals
+for it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/Config.in                    |    2 --
- toolchain/helpers.mk                   |    2 +-
- toolchain/toolchain-common.in          |    1 +
- toolchain/toolchain-external/Config.in |   11 -----------
- 4 files changed, 2 insertions(+), 14 deletions(-)
+ package/aiccu/Config.in                      |    5 ++---
+ package/argus/Config.in                      |    5 ++---
+ package/atftp/Config.in                      |    5 ++---
+ package/batctl/Config.in                     |    5 ++---
+ package/bind/Config.in                       |    5 ++---
+ package/bluez5_utils/Config.in               |    6 ++----
+ package/chrony/chrony.mk                     |    4 ----
+ package/civetweb/civetweb.mk                 |    6 +-----
+ package/classpath/Config.in                  |    5 -----
+ package/collectd/Config.in                   |    7 ++-----
+ package/connman/Config.in                    |    5 ++---
+ package/conntrack-tools/Config.in            |    6 ++----
+ package/cppzmq/Config.in                     |    7 +++----
+ package/czmq/Config.in                       |    7 +++----
+ package/dhcp/dhcp.mk                         |    4 ----
+ package/dhcpcd/dhcpcd.mk                     |    4 ----
+ package/dnsmasq/dnsmasq.mk                   |    4 ----
+ package/dovecot/Config.in                    |    5 -----
+ package/ebtables/Config.in                   |    5 -----
+ package/ffmpeg/Config.in                     |    6 ------
+ package/filemq/Config.in                     |    7 +++----
+ package/gnuradio/Config.in                   |    6 ++----
+ package/gnutls/gnutls.mk                     |    2 +-
+ package/gpsd/gpsd.mk                         |    5 -----
+ package/gstreamer/gst-ffmpeg/Config.in       |    4 ----
+ package/gstreamer/gst-plugins-good/Config.in |    4 ----
+ package/hiawatha/hiawatha.mk                 |    1 -
+ package/hostapd/hostapd.mk                   |    4 ----
+ package/iftop/Config.in                      |    5 ++---
+ package/iptables/iptables.mk                 |    8 --------
+ package/iptraf-ng/Config.in                  |    5 -----
+ package/iputils/Config.in                    |    2 +-
+ package/iputils/iputils.mk                   |   21 ++++++---------------
+ package/jamvm/Config.in                      |    4 +---
+ package/kodi/Config.in                       |    5 ++---
+ package/libiio/libiio.mk                     |    2 +-
+ package/libndp/Config.in                     |    4 ----
+ package/libnetfilter_queue/Config.in         |    4 ----
+ package/libnftnl/Config.in                   |    4 ----
+ package/libnspr/libnspr.mk                   |    1 -
+ package/liboping/Config.in                   |    4 ----
+ package/libshairplay/Config.in               |    5 ++---
+ package/libsoup/libsoup.mk                   |    7 -------
+ package/libuv/Config.in                      |    5 ++---
+ package/libvncserver/libvncserver.mk         |    4 ----
+ package/libwebsockets/libwebsockets.mk       |    9 +--------
+ package/linphone/Config.in                   |    6 ++----
+ package/lsof/lsof.mk                         |    9 ++-------
+ package/ltp-testsuite/Config.in              |    6 ++----
+ package/lxc/Config.in                        |    5 ++---
+ package/mediastreamer/Config.in              |    6 ++----
+ package/minidlna/Config.in                   |    5 ++---
+ package/modem-manager/Config.in              |    7 +++----
+ package/mongrel2/Config.in                   |    5 ++---
+ package/mono/Config.in                       |    5 ++---
+ package/mpd/Config.in                        |    4 ----
+ package/mplayer/mplayer.mk                   |   14 +-------------
+ package/mtd/Config.in                        |    4 ----
+ package/ndisc6/Config.in                     |    5 -----
+ package/net-tools/net-tools.mk               |    4 +---
+ package/netsnmp/netsnmp.mk                   |   11 +----------
+ package/network-manager/Config.in            |    6 ++----
+ package/nftables/Config.in                   |    6 ++----
+ package/nginx/nginx.mk                       |    6 +++---
+ package/nmap/Config.in                       |    5 ++---
+ package/nodejs/Config.in                     |    6 ++----
+ package/ntp/ntp.mk                           |    4 ----
+ package/odhcp6c/Config.in                    |    5 -----
+ package/olsr/Config.in                       |    5 ++---
+ package/opencv/Config.in                     |    4 ----
+ package/openntpd/Config.in                   |    5 ++---
+ package/openobex/Config.in                   |    4 ----
+ package/openpgm/Config.in                    |    5 ++---
+ package/openvmtools/Config.in                |    5 ++---
+ package/openvpn/Config.in                    |    5 -----
+ package/php-zmq/Config.in                    |    7 +++----
+ package/php/Config.ext                       |    4 ----
+ package/php/php.mk                           |    7 -------
+ package/postgresql/postgresql.mk             |    8 +-------
+ package/pppd/pppd.mk                         |    5 +----
+ package/proftpd/proftpd.mk                   |    3 +--
+ package/python-pyzmq/Config.in               |    7 +++----
+ package/qemu/Config.in                       |    5 ++---
+ package/qt/qt.mk                             |    7 -------
+ package/qt5/Config.in                        |    5 ++---
+ package/quagga/Config.in                     |    5 -----
+ package/radvd/Config.in                      |    5 -----
+ package/redis/Config.in                      |    5 ++---
+ package/samba/samba.mk                       |    2 +-
+ package/sconeserver/sconeserver.mk           |    8 +-------
+ package/ser2net/Config.in                    |    5 -----
+ package/smcroute/Config.in                   |    5 -----
+ package/sofia-sip/sofia-sip.mk               |    5 -----
+ package/spawn-fcgi/spawn-fcgi.mk             |    4 ----
+ package/squid/Config.in                      |    6 ++----
+ package/strongswan/Config.in                 |    3 ---
+ package/strongswan/strongswan.mk             |    4 ++--
+ package/tcl/Config.in                        |    6 ++----
+ package/tftpd/tftpd.mk                       |    4 ----
+ package/tovid/Config.in                      |    5 ++---
+ package/transmission/Config.in               |    5 ++---
+ package/trinity/trinity.mk                   |    4 ----
+ package/tvheadend/Config.in                  |    5 ++---
+ package/ulogd/Config.in                      |    5 ++---
+ package/ussp-push/Config.in                  |    5 ++---
+ package/x11vnc/x11vnc.mk                     |    6 ------
+ package/zeromq/Config.in                     |    7 +++----
+ package/zmqpp/Config.in                      |    7 +++----
+ package/zyre/Config.in                       |    7 +++----
+ 109 files changed, 132 insertions(+), 454 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 32a00a9..a851ce4 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -9,7 +9,6 @@ config BR2_TOOLCHAIN
- # Should be selected for glibc or eglibc
- config BR2_TOOLCHAIN_USES_GLIBC
- 	bool
--	select BR2_INET_IPV6
- 	select BR2_USE_WCHAR
- 	select BR2_ENABLE_LOCALE
- 	select BR2_TOOLCHAIN_HAS_THREADS
-@@ -23,7 +22,6 @@ config BR2_TOOLCHAIN_USES_UCLIBC
- 
- config BR2_TOOLCHAIN_USES_MUSL
- 	bool
--	select BR2_INET_IPV6
- 	select BR2_USE_WCHAR
- 	select BR2_ENABLE_LOCALE
- 	select BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 257fab2..cb3b61a 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -284,7 +284,7 @@ check_uclibc = \
- 	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
- 	$(call check_uclibc_feature,__ARCH_USE_MMU__,BR2_USE_MMU,$${UCLIBC_CONFIG_FILE},MMU support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,,$${UCLIBC_CONFIG_FILE},Large file support) ;\
--	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
-+	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_TOOLCHAIN_HAS_NATIVE_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 1b25cf1..28fb53a 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -7,6 +7,7 @@ source "package/gdb/Config.in.host"
- 
- config BR2_INET_IPV6
- 	bool
-+	default y
- 
- config BR2_TOOLCHAIN_HAS_GCC_BUG_58595
- 	bool
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 440de18..d2b99cc 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -742,7 +742,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_INET_IPV6
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
-@@ -759,7 +758,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_INET_IPV6
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
-@@ -776,7 +774,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_INET_IPV6
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
-@@ -1111,14 +1108,6 @@ endchoice
- 
- if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
- 
--config BR2_TOOLCHAIN_EXTERNAL_INET_IPV6
--	bool "Toolchain has IPv6 support?"
--	select BR2_INET_IPV6
--	help
--	  Select this option if your external toolchain supports
--	  IPv6. If you don't know, leave the default value, Buildroot
--	  will tell you if it's correct or not.
--
- config BR2_TOOLCHAIN_EXTERNAL_WCHAR
- 	bool "Toolchain has WCHAR support?"
- 	select BR2_USE_WCHAR
+Patch is too large, so refusing to show it
