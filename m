@@ -1,45 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Apr 2015 22:10:47 +0200
-Subject: [Buildroot] [PATCH 16/16] package/rng-tools: add systemd
- support for rngd
-In-Reply-To: <1421684056-5266-17-git-send-email-maxtram95@gmail.com>
-References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
- <1421684056-5266-17-git-send-email-maxtram95@gmail.com>
-Message-ID: <20150422221047.0a119b41@free-electrons.com>
+Date: Wed, 22 Apr 2015 22:11:03 +0200
+Subject: [Buildroot] [git commit] ltris: fix typos
+Message-ID: <20150422201109.6C1FA81D55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxim Mikityanskiy,
+commit: http://git.buildroot.net/buildroot/commit/?id=bd7354c7a7476466653b142cfa091393da6a19ab
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 19 Jan 2015 18:14:16 +0200, Maxim Mikityanskiy wrote:
-> Add rngd.service for systemd. Also patch rngd with patch from Fedora to
-> ignore failure if no hwrng present:
-> https://bugzilla.redhat.com/show_bug.cgi?id=892178
-> 
-> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-> ---
->  package/rng-tools/rng-tools.mk         |  8 ++++++++
->  package/rng-tools/rngd-exit-code.patch | 11 +++++++++++
->  package/rng-tools/rngd.service         |  9 +++++++++
->  3 files changed, 28 insertions(+)
->  create mode 100644 package/rng-tools/rngd-exit-code.patch
->  create mode 100644 package/rng-tools/rngd.service
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ltris/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied, after doing a number of changes:
-
-    [Thomas:
-     - rename patch to the proper naming convention
-     - add description and SoB to patch
-     - install service file to /usr/lib/systemd and not /lib/systemd
-     - use a relative symbolic link instead of an absolute one]
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ltris/Config.in b/package/ltris/Config.in
+index bf5240d..d13531b 100644
+--- a/package/ltris/Config.in
++++ b/package/ltris/Config.in
+@@ -4,9 +4,9 @@ config BR2_PACKAGE_LTRIS
+ 	select BR2_PACKAGE_SDL
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+-	  LTris as a tetris clone, using SDL. It optionally requires
++	  LTris is a tetris clone, using SDL. It optionally requires
+ 	  SDL_mixer for audio support.  A display with minimum 640x480
+-	  resolution and a keyboard are recommanded.
++	  resolution and a keyboard are recommended.
+ 
+ 	  http://lgames.sourceforge.net/index.php?project=LTris
+ 
