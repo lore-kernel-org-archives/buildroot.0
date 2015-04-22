@@ -1,32 +1,75 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Apr 2015 23:04:40 +0200
-Subject: [Buildroot] [PATCH 2/2] package/dhcpcd: Fix ipv6-related build
-	error
-References: <1429456975-17889-1-git-send-email-bernd.kuhls@t-online.de>
- <1429456975-17889-2-git-send-email-bernd.kuhls@t-online.de>
- <20150420225837.02ddde6b@free-electrons.com>
-Message-ID: <XnsA484EAC255A71berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Apr 2015 22:59:08 +0200
+Subject: [Buildroot] [git commit] toolchain-external: remove CS sh2
+	toolchains
+Message-ID: <20150422210724.C468981D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20150420225837.02ddde6b at free-electrons.com:
+commit: http://git.buildroot.net/buildroot/commit/?id=c68c365d2937920df1f2062e4821ebb6d21d195e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Do you have an explanation of why this build failure happens with
-> certain uClibc toolchains and not others?
+Normally we'd deprecate them, but:
 
-Hi Thomas,
+1) They don't support IPv6 and it's being removed so it makes no sense.
+2) They're based on uClibc 0.9.30-ish which is very old and surely has
+package build breakage all over it.
 
-sorry, I have no idea.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/Config.in |   38 --------------------------------
+ 1 files changed, 0 insertions(+), 38 deletions(-)
 
-"struct in6_pktinfo" is encapsulated in include/netinet/in.h by
-
-#ifdef __USE_GNU
-
-It looked weird for me that dhcpcd want to add -D_BSD_SOURCE to cflags on 
-linux*, so I tried to change it, and voila, the code compiled.
-
-Regards, Bernd
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index cd2115b..440de18 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -630,44 +630,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+ 	    - SH4A, uClibc, big endian
+ 	      Not usable in Buildroot yet.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+-	bool "Sourcery CodeBench SH 2011.03"
+-	depends on BR2_sh2a
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_USE_WCHAR
+-	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	# kernel headers: 2.6.38
+-	help
+-	  Sourcery CodeBench toolchain for the SuperH architecture,
+-	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
+-	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.38. It has
+-	  support for the following variants:
+-	    - SH2A, uClibc, big endian
+-
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+-	bool "Sourcery CodeBench SH 2010.09"
+-	depends on BR2_sh2a
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_USE_WCHAR
+-	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	# kernel headers: 2.6.35
+-	help
+-	  Sourcery CodeBench toolchain for the SuperH architecture,
+-	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
+-	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.35.2. It
+-	  has support for the following variants:
+-	    - SH2A, uClibc, big endian
+-
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405
+ 	bool "Sourcery CodeBench AMD64 2014.05"
+ 	depends on BR2_x86_64
