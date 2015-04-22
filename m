@@ -1,42 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Apr 2015 23:47:22 +0200
-Subject: [Buildroot] [git commit] package/vlc: bump version to 2.2.1
-Message-ID: <20150422214729.0530E80458@busybox.osuosl.org>
+Date: Wed, 22 Apr 2015 23:47:44 +0200
+Subject: [Buildroot] [PATCH 1/2] package/vlc: use only glesv2, not glesv1
+In-Reply-To: <1429737809-17368-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429737809-17368-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150422234744.411c550e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc9cbe5e037ac9dcd7530584f17400e3f1809a5f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vlc/vlc.hash |    4 ++--
- package/vlc/vlc.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Wed, 22 Apr 2015 23:23:28 +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/0be/0bee8646c2dd7dd2c201ee2986f3e802277314a5/
+> http://autobuild.buildroot.net/results/64a/64a1a6d39b72b9dec4231b9f28ca14b38989d7df/
+> http://autobuild.buildroot.net/results/b6b/b6b66e0b24d985462ca8dbefedd740453ca42293/
+> http://autobuild.buildroot.net/results/497/4976f5e9dc53e6f9f29d9d45f0fb9bd42c7ab1ea/
+> 
+> and many others
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/vlc/vlc.mk |    5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 7b84cef..ce124f3 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,2 +1,2 @@
--# From http://download.videolan.org/pub/videolan/vlc/2.2.0/vlc-2.2.0.tar.xz.sha256
--sha256  5e0a27e248c47da723a696420aca3a4dd15cc3ed8cc81618d3f1dc8661b25517  vlc-2.2.0.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/2.2.1/vlc-2.2.1.tar.xz.sha256
-+sha256	543d9d7e378ec0fa1ee2e7f7f5acf8c456c7d0ecc32037171523197ef3cf1fcb	vlc-2.2.1.tar.xz
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index b937b79..ab9aaae 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VLC_VERSION = 2.2.0
-+VLC_VERSION = 2.2.1
- VLC_SITE = http://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPLv2+ LGPLv2.1+
+Both patches applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
