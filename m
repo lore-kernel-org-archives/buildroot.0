@@ -1,19 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Apr 2015 15:07:17 +0200
-Subject: [Buildroot] [PATCH] Makefile: fix typo in a comment
-In-Reply-To: <1429689832-26900-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Wed, 22 Apr 2015 10:03:52 +0200")
-References: <1429689832-26900-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87fv7ss456.fsf@dell.be.48ers.dk>
+Date: Wed, 22 Apr 2015 15:09:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/shairport-sync: bump to version
+	2.2.3
+In-Reply-To: <1429702426-17411-1-git-send-email-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Wed, 22 Apr 2015 13:33:46
+ +0200")
+References: <1429702426-17411-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <87bnigs40u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
 Committed, thanks.
 
