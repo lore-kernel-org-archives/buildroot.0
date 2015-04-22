@@ -1,64 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Apr 2015 20:09:31 +0200
-Subject: [Buildroot] [PATCH 20/30] package/matchbox: cleanup handling of
-	support for compositing
+Date: Wed, 22 Apr 2015 20:09:34 +0200
+Subject: [Buildroot] [PATCH 23/30] package/matchbox: drop useless
+	dependencies
 In-Reply-To: <cover.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <96868b02f42ce4dfb025afa2bb0de4cbbdf6f510.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <0f88fac02eba1f18605db80731bfb130d00721cb.1429725549.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Support for /compositing/ requires Xcomposite, Xfixes, Xdamage and
-Xrender, as can be seen in the configure.ac. And it is optional.
+xlib-libXft is only needed when building a 'standalone' matchbox, which
+means not using matchbox-lib.
 
-Fix that by removing 'select' in Config.in, and chcking all four
-dependencies in the .mk.
+But we *are* building matchbox-lib, and we do not support the standalone
+mode (and probably won't, as even upstream says it is ugly, by lack of
+theming).
+
+Similarly, xlib-libXext is only used for its 'xsync' extension, for
+which support is entirely commented-out in matchbox.
+
+So, drop the dependency on xlib-libXft, and make it explicit we're not
+building either standalone modes; drop xlib-libXext.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/matchbox/Config.in   |  1 -
- package/matchbox/matchbox.mk | 13 ++++++++-----
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ package/matchbox/Config.in   | 1 -
+ package/matchbox/matchbox.mk | 6 +++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index e58aaf2..39eb616 100644
+index 9d8d060..fa186e9 100644
 --- a/package/matchbox/Config.in
 +++ b/package/matchbox/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_MATCHBOX
+@@ -4,7 +4,6 @@ menuconfig BR2_PACKAGE_MATCHBOX
+ 	depends on BR2_USE_MMU # fork()
  	select BR2_PACKAGE_FONTCONFIG
  	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+-	select BR2_PACKAGE_XLIB_LIBXEXT
  	select BR2_PACKAGE_XLIB_LIBXCURSOR
  	select BR2_PACKAGE_MATCHBOX_LIB
  	help
 diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-index 5bd2587..be94414 100644
+index 4ec3fb5..bce9520 100644
 --- a/package/matchbox/matchbox.mk
 +++ b/package/matchbox/matchbox.mk
-@@ -16,12 +16,15 @@ MATCHBOX_CONF_OPTS = --enable-expat
+@@ -11,7 +11,11 @@ MATCHBOX_LICENSE = GPLv2+
+ MATCHBOX_LICENSE_FILES = COPYING
+ 
+ MATCHBOX_DEPENDENCIES = matchbox-lib
+-MATCHBOX_CONF_OPTS = --enable-expat --disable-composite
++MATCHBOX_CONF_OPTS = \
++	--enable-expat \
++	--disable-composite \
++	--disable-standalone \
++	--disable-standalone-xft
+ 
  # Workaround bug in configure script
  MATCHBOX_CONF_ENV = expat=yes
- 
--ifeq ($(BR2_PACKAGE_X11R7_LIBXCOMPOSITE),y)
--ifeq ($(BR2_PACKAGE_X11R7_LIBXPM),y)
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE)$(BR2_PACKAGE_XLIB_LIBXFIXES)$(BR2_PACKAGE_XLIB_LIBXDAMAGE)$(BR2_PACKAGE_XLIB_LIBXRENDER),yyyy)
- MATCHBOX_CONF_OPTS += --enable-composite
--MATCHBOX_DEPENDENCIES += xlib_libXcomposite
--MATCHBOX_DEPENDENCIES += xlib_libXpm
--endif
-+MATCHBOX_DEPENDENCIES += \
-+	xlib_libXcomposite \
-+	xlib_libXfixes \
-+	xlib_libXdamage \
-+	xlib_libXrender
-+else
-+MATCHBOX_CONF_OPTS += --disable-composite
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
 -- 
 1.9.1
