@@ -1,48 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Apr 2015 20:09:37 +0200
-Subject: [Buildroot] [PATCH 26/30] package/matchbox: wrap long lines
+Date: Wed, 22 Apr 2015 20:09:38 +0200
+Subject: [Buildroot] [PATCH 27/30] package/matchbox: xlib-libXcursor is an
+	optional dependency
 In-Reply-To: <cover.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <2fac27965d9f2b0f1c261655a08ccf72b694716e.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <14d4c02b30caadb404949b98238f87ba3b509e40.1429725549.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+matchbox selects xlib-libXcursor, but does not build-depend on it.
+
+But xlib-libXcursor is only an optional dependency.
+
+Fix that by removing the select, and properly build-depend on it when
+it is enabled.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/matchbox/matchbox-keyboard/matchbox-keyboard.mk | 3 ++-
- package/matchbox/matchbox-lib/matchbox-lib.mk           | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/matchbox/Config.in   | 1 -
+ package/matchbox/matchbox.mk | 4 ++++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-index 368a883..4d8359b 100644
---- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-@@ -15,7 +15,8 @@ MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expa
- MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index fa186e9..ad68718 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -4,7 +4,6 @@ menuconfig BR2_PACKAGE_MATCHBOX
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_MATCHBOX_LIB
+ 	help
+ 	  Matchbox is an Open Source base environment for the X Window
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index bce9520..d2c3451 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -38,6 +38,10 @@ else
+ MATCHBOX_CONF_OPTS += --disable-session
+ endif
  
- define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
--	$(INSTALL) -D -m 0755 package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
-+	$(INSTALL) -D -m 0755 package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh \
-+		$(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
- endef
++ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
++MATCHBOX_DEPENDENCIES += xlib_libXcursor
++endif
++
+ $(eval $(autotools-package))
  
- MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
-diff --git a/package/matchbox/matchbox-lib/matchbox-lib.mk b/package/matchbox/matchbox-lib/matchbox-lib.mk
-index 3b697bb..d43e2b8 100644
---- a/package/matchbox/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox/matchbox-lib/matchbox-lib.mk
-@@ -15,7 +15,8 @@ MATCHBOX_LIB_CONF_OPTS = --enable-expat --disable-doxygen-docs
- MATCHBOX_LIB_CONF_ENV = LIBS="-lX11"
- 
- define MATCHBOX_LIB_POST_INSTALL_FIXES
--	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' $(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
-+	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
- endef
- 
- MATCHBOX_LIB_POST_INSTALL_STAGING_HOOKS += MATCHBOX_LIB_POST_INSTALL_FIXES
+ # After we called a package infra, w ecan include more files
 -- 
 1.9.1
