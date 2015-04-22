@@ -1,44 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Apr 2015 20:09:41 +0200
-Subject: [Buildroot] [PATCH 30/30] package/matchbox-panel: fix WiFi
-	monitoring
+Date: Wed, 22 Apr 2015 20:09:30 +0200
+Subject: [Buildroot] [PATCH 19/30] package/matchbox: enable support for the
+	Xsession manager
 In-Reply-To: <cover.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <3de1b4334c76469f95d791d578f769831ab2f3a5.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <f3e0f3a40f00196638e2a5edd185d81be7bf175e.1429725549.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-matchbox-panel can build a simple applet to monitor the WiFi. For that,
-it tries to see if libiwl is available; if so, WiFi monitoring is
-enabled, otherwise it is disabled; there is not option to explicitly
-enable or disable it.
-
-Currently, matchbox-panel depends on the wireless-tools package.
-However, that's not enough, since the library will only be installed if
-explictly enabled in the menuconfig *and* this is not a static build.
-
-Change the dependency to be on the library, not the package.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/matchbox/matchbox-panel/matchbox-panel.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/matchbox/matchbox.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
-index dedbab6..455ae34 100644
---- a/package/matchbox/matchbox-panel/matchbox-panel.mk
-+++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
-@@ -32,7 +32,7 @@ else
- MATCHBOX_PANEL_CONF_OPTS += --disable-dnotify
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 2d30ca0..5bd2587 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -35,6 +35,13 @@ else
+ MATCHBOX_CONF_OPTS += --disable-startup-notification
  endif
  
--ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS),y)
-+ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_LIB),y)
- MATCHBOX_PANEL_DEPENDENCIES += wireless_tools
- endif
++ifeq ($(BR2_PACKAGE_XLIB_LIBSM),y)
++MATCHBOX_CONF_OPTS += --enable-session
++MATCHBOX_DEPENDENCIES += xlib_libSM
++else
++MATCHBOX_CONF_OPTS += --disable-session
++endif
++
+ $(eval $(autotools-package))
  
+ # After we called a package infra, w ecan include more files
 -- 
 1.9.1
