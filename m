@@ -1,79 +1,131 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Apr 2015 18:29:36 +0200
-Subject: [Buildroot] [PATCH 2/3] manual: cvs: document that a date can
- be used instead of a tag
-In-Reply-To: <CAHkwnC9qgzpdV9owFZr+Vi51-6fP18+XoeuMkKO=KLfg013xkw@mail.gmail.com>
-References: <1429376067-9228-1-git-send-email-fabio.porcedda@gmail.com>
- <1429376067-9228-3-git-send-email-fabio.porcedda@gmail.com>
- <20150419081028.GB4313@free.fr>
- <CAHkwnC-mOAdrGEt0E_FCrvf2kFZJ78UuWa+2h0a+Dco8dg49uA@mail.gmail.com>
- <5533CD7D.1070605@mind.be>
- <CAHkwnC9rcyr4Y+ydSYiDBY2x=+3QLfGapr75E3+Do+69wbWF=Q@mail.gmail.com>
- <55356A45.5020301@mind.be>
- <CAHkwnC9qgzpdV9owFZr+Vi51-6fP18+XoeuMkKO=KLfg013xkw@mail.gmail.com>
-Message-ID: <20150422162936.GA4069@free.fr>
+Date: Wed, 22 Apr 2015 20:09:37 +0200
+Subject: [Buildroot] [PATCH 0/30] matchbox: huge cleanups (branch
+	yem/matchbox)
+Message-ID: <cover.1429725549.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, Gustavo, All,
+Hello All!
 
-On 2015-04-22 10:03 +0200, Fabio Porcedda spake thusly:
-> On Mon, Apr 20, 2015 at 11:06 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> > On 20/04/15 04:36, Fabio Porcedda wrote:
-[--SNIP--]
-> >> This one works: (<YYYY>-<MM>-<DD>[T<HH>:<MM>[:<SS>][-<ZZ>] e.g
-> >> 2015-12-20 or 2015-12-20T10:10-00)
-> >
-> >  Well, the example should include a timezone and mention that adding a timezone
-> > is advisable.
-> Ok.
-> 
-> >  Alternatively, we could specifies that times are in UTC and set TZ=UTC in the
-> > cvs helper.
-> 
-> Fine for me.
-> Yann what do you think about it?
+This series is an attempt at cleaning up the matchbox packages.
 
-I don't care. But what if a user specifies a timezone?
+Currently, the matchbox pckages are in a dire situation, where some
+package do not even have a corresponding BR2_PACKAGE_FOO option, but are
+nonetheless build dependencies ones of others.
 
-The tricky part with dealing with date (aka human date and timei) is
-exactly that: having to deal with it. It is very complex to parse a date
-in a reliable manner.
+Also, some support code has been bit-rotting and is not even buildable
+today, ike support for compositing, which simply FTBFS.
 
-So we can't really validate a date. I'd rather we allow the full range
-of dates supported by cvs, and let it deal with whatever the user
-provides, and if that's incorrect, let cvs fail, not us (well, we'd
-eventually fail, but not on our will).
+Finally, some dependencies are incorrect. For example, there are build
+dependencies not expressed in the Kconfig (not even counting the missing
+Kconfig entries for packages), or are entirely wrong.
 
-> >> But to made it works I must replace the ":" with "_":
-> >
-> >  Why? The / substitution is only needed because VERSION is used in filenames,
-> > and : is fine in filenames, no?
-> 
-> The colon is fine for filenames, neverthless if i don't replace it, I
-> get this error:
-> 
-> $ make expect-source
-> package/expect/expect.mk:19: *** target pattern contains no '%'.  Stop.
+So, this series aims at fixing all of this. And add a little bit of
+extra features we're currently missing. Not everything that is possible
+with matchbox has been handled, though, like support for NLS.
 
-Yes, because the $(@D) contains the version string, and it is a make
-goal. So, we'd end up wth something like;
+The series is split into multiple parts;
 
-    foo-2015-04-22T18:26/.stamp_extracted:
-        blabla
+  - patches 1-9 make all packages real packages, i.e. with proper
+    Kconfig options. No functionality change.
 
-Notice that there are two columns, and that is not valid make syntax
-(AFAIR).
+  - patches 10-13 do a little eye-candy cleanups. No functionality
+    change.
 
-Which make me think: "2015-04-22 18:26" is an equally valid date, and we
-do not really support spaces in paths, so we'd have to also replaces
-spaces as well.
+  - patches 14-17 fixes dependencies. No functionality change done on
+    purpose, except because of added proper dependency tracking.
+
+  - patch 18 stands out alone, a bit of eye-candy to add prompts for
+    previously prompt-less packages. No functionality change.
+
+  - patches 19-30 are not really sorted. They ar ea mix of fixes,
+    eye-candy and the few new features.
+
+This has been build-tested only, with about every combinations possible
+excercised, for ARM. No run-time testing has been done, though.
+
+Enjoy! ;-)
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit d3230923e62f57cdefa90b5ffb9760f39c94718e:
+
+  package/shairport-sync: bump to version 2.2.3 (2015-04-22 15:07:55 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/matchbox
+
+for you to fetch changes up to 3de1b4334c76469f95d791d578f769831ab2f3a5:
+
+  package/matchbox-panel: fix WiFi monitoring (2015-04-22 19:45:03 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (30):
+      package/matchbox: make matchbox-lib a real package
+      package/matchbox: make matchbox-wm a real package
+      package/matchbox-wm: drop useless commented options
+      package/matchbox: make matchbox-panel a real package
+      package/matchbox: make matchbox-desktop a real package
+      package/matchbox: make matchbox-common a real package
+      package/matchbox: make matchbox-fakekey a real package
+      package/matchbox: make matchbox-keyboard a real package
+      package/matchbox: make match-startup-monitor a real package
+      package/matchbox: remove superfluous conditional includes
+      package/matchbox: point to new home
+      package/matchbox: get rid of intermediate non-package matchbox
+      package/matchbox: fix option prompts
+      package/matchbox-common: fix dependencies
+      package/matchbox-common: break dependency chain for display
+      package/matchbox-fakekey: add missing dependency
+      package/matchbox-startup-monitor: add misisng dependency
+      package/matchbox: finally add prompts to all sub-packages
+      package/matchbox: enable support for the Xsession manager
+      package/matchbox: cleanup handling of support for compositing
+      package/matchbox: make it a menu
+      package/matchbox: forcibly disable support for compositing
+      package/matchbox: drop useless dependencies
+      package/matchbox-keyboard: enforce disabling support for cairo
+      package/matchbox-common: explicitly disable PDA folders when not selected
+      package/matchbox: wrap long lines
+      package/matchbox: xlib-libXcursor is an optional dependency
+      package/matchbox-panel: add option to use ACPI for the battery applet
+      package/matchbox-panel: add support for dnotify
+      package/matchbox-panel: fix WiFi monitoring
+
+ .../{matchbox-wm => }/0001-defaulttheme.patch      |  0
+ package/matchbox/Config.in                         | 45 +++++--------------
+ package/matchbox/matchbox-common/Config.in         | 14 ++++++
+ .../matchbox/matchbox-common/matchbox-common.mk    |  2 +
+ package/matchbox/matchbox-desktop/Config.in        |  5 +++
+ package/matchbox/matchbox-fakekey/Config.in        |  5 +++
+ package/matchbox/matchbox-keyboard/Config.in       |  7 +++
+ .../matchbox-keyboard/matchbox-keyboard.mk         |  4 +-
+ package/matchbox/matchbox-lib/Config.in            |  4 ++
+ package/matchbox/matchbox-lib/matchbox-lib.mk      |  3 +-
+ package/matchbox/matchbox-panel/Config.in          | 28 ++++++++++++
+ package/matchbox/matchbox-panel/matchbox-panel.mk  | 18 ++++++--
+ .../matchbox/matchbox-startup-monitor/Config.in    |  5 +++
+ package/matchbox/matchbox-wm/matchbox-wm.mk        | 41 ------------------
+ .../matchbox-wm.hash => matchbox.hash}             |  0
+ package/matchbox/matchbox.mk                       | 50 ++++++++++++++++++++--
+ 16 files changed, 148 insertions(+), 83 deletions(-)
+ rename package/matchbox/{matchbox-wm => }/0001-defaulttheme.patch (100%)
+ create mode 100644 package/matchbox/matchbox-common/Config.in
+ create mode 100644 package/matchbox/matchbox-desktop/Config.in
+ create mode 100644 package/matchbox/matchbox-fakekey/Config.in
+ create mode 100644 package/matchbox/matchbox-keyboard/Config.in
+ create mode 100644 package/matchbox/matchbox-lib/Config.in
+ create mode 100644 package/matchbox/matchbox-panel/Config.in
+ create mode 100644 package/matchbox/matchbox-startup-monitor/Config.in
+ delete mode 100644 package/matchbox/matchbox-wm/matchbox-wm.mk
+ rename package/matchbox/{matchbox-wm/matchbox-wm.hash => matchbox.hash} (100%)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
