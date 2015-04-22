@@ -1,27 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Apr 2015 22:11:11 +0200
-Subject: [Buildroot] [PATCH v2] ltris: fix typos
-In-Reply-To: <1429713006-22772-1-git-send-email-luca@lucaceresoli.net>
-References: <1429713006-22772-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20150422221111.5f2f7bc1@free-electrons.com>
+From: =?UTF-8?q?C=C3=A9dric=20Marie?= <cedric.marie@openmailbox.org>
+Date: Wed, 22 Apr 2015 22:11:56 +0200
+Subject: [Buildroot] [PATCH] pkg-cmake: Skip compilation in installation step
+Message-ID: <1429733516-4466-1-git-send-email-cedric.marie@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+With CMake build system, the "make install" command always compiles
+before installing, to make sure that everything is up-to-date.
 
-On Wed, 22 Apr 2015 16:30:06 +0200, Luca Ceresoli wrote:
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->  package/ltris/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+In Buildroot environment, this is quite useless, because the package
+has always already been compiled, either at first build, or when
+invoking "make <package>-rebuild".
+In all cases, when it comes to staging or target installation step, the
+package has just been compiled.
 
-Applied, thanks.
+Using "make install/fast" - in order to skip the compilation step - is
+therefore more appropriate, more consistent with what other build
+systems do, and saves time when you need to rebuild your package.
 
-Thomas
+Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
+---
+ package/pkg-cmake.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 2262012..f17a883 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -57,8 +57,8 @@ $(2)_MAKE			?= $$(MAKE)
+ $(2)_MAKE_ENV			?=
+ $(2)_MAKE_OPTS			?=
+ $(2)_INSTALL_OPTS		?= install
+-$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
+-$(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
++$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install/fast
++$(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install/fast
+ 
+ $(2)_SRCDIR			= $$($(2)_DIR)/$$($(2)_SUBDIR)
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
