@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 23 Apr 2015 00:08:40 +0200
-Subject: [Buildroot] [PATCH v7 7/8] package/uclibc: ignore missing hash for
-	snapshots
+Date: Thu, 23 Apr 2015 00:08:35 +0200
+Subject: [Buildroot] [PATCH v7 2/8] package/binutils: add hashes
 In-Reply-To: <1429740521-31943-1-git-send-email-arnout@mind.be>
 References: <1429740521-31943-1-git-send-email-arnout@mind.be>
-Message-ID: <1429740521-31943-8-git-send-email-arnout@mind.be>
+Message-ID: <1429740521-31943-3-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +12,34 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-We can't have a hash for snapshots, so add them to the exclusion list.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
-Changes v1 -> v6: (Arnout)
-  - use $(UCLIBC_SOURCE) instead of a wrong filename
+Changes v4 -> v5:
+  - use alternate upstream as source for hashes  (Arnout)
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/uclibc/uclibc.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/binutils/binutils.hash | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100644 package/binutils/binutils.hash
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 07ff8e5..ce9b2b4 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -11,6 +11,7 @@ UCLIBC_LICENSE_FILES = COPYING.LIB
- 
- ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
- UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
-+BR_NO_CHECK_HASH_FOR += $(UCLIBC_SOURCE)
- else ifeq ($(BR2_UCLIBC_VERSION_NG),y)
- UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+new file mode 100644
+index 0000000..028fc10
+--- /dev/null
++++ b/package/binutils/binutils.hash
+@@ -0,0 +1,7 @@
++# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
++sha512  ffe8ef263ef99183e8cc823fe8487ff7d0f7bf9a8efd2853b5f4636aca0023850d13de4eac7d77a5f69413d8a50e6f95bb14569be53df86c0bce38034525ab74  binutils-2.22.tar.bz2
++sha512  dec753bbba008f1526b89cf1bd85feba78f362f5333ffdf93953fd131eb755976dec82a0a4ba38c43d2434da007137780cfe674de5414be5cf7ce7fbc6af6d16  binutils-2.23.2.tar.bz2
++sha512  5ec95ad47d49b12c4558a8db0ca2109d3ee1955e3776057f3330c4506f8f4d1cf5e505fbf8a16b98403a0fcdeaaf986fe0a22be6456247dbdace63ce1f776b12  binutils-2.24.tar.bz2
++sha512  49438970642f379978aba988e3d2e7b63dab6fd0b46d91f4100f083e87a84d242089daca58572245fe620457a77bbbe2d78588ff3fb79314e500d1a39bf96f30  binutils-2.25.tar.bz2
++# No hash for the ARC variant, comes from the github-helper:
++none   xxx                                                               binutils-arc-2014.12.tar.gz
 -- 
 2.1.4
