@@ -1,58 +1,75 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Apr 2015 23:19:53 +0200
-Subject: [Buildroot] [PATCHv2] Makefile: add list-defconfig to the
-	general help
-In-Reply-To: <1429823046-8906-1-git-send-email-yann.morin.1998@free.fr>
-References: <1429823046-8906-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <553961F9.8020505@mind.be>
+Date: Thu, 23 Apr 2015 23:24:50 +0200
+Subject: [Buildroot] [PATCH 0/30] matchbox: huge cleanups (branch
+ yem/matchbox)
+In-Reply-To: <cover.1429725549.git.yann.morin.1998@free.fr>
+References: <cover.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <55396322.3040604@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/23/15 23:04, Yann E. MORIN wrote:
-> When listing defconfig files was moved to its own make target, it was
-> not added to the general help text.
+On 04/22/15 20:09, Yann E. MORIN wrote:
+> Hello All!
 > 
-> However, this is a very important topic, so list it.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+> This series is an attempt at cleaning up the matchbox packages.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Hi Yann,
+
+ Kudos for this!
+
+> 
+> Currently, the matchbox pckages are in a dire situation, where some
+> package do not even have a corresponding BR2_PACKAGE_FOO option, but are
+> nonetheless build dependencies ones of others.
+> 
+> Also, some support code has been bit-rotting and is not even buildable
+> today, ike support for compositing, which simply FTBFS.
+> 
+> Finally, some dependencies are incorrect. For example, there are build
+> dependencies not expressed in the Kconfig (not even counting the missing
+> Kconfig entries for packages), or are entirely wrong.
+> 
+> So, this series aims at fixing all of this. And add a little bit of
+> extra features we're currently missing. Not everything that is possible
+> with matchbox has been handled, though, like support for NLS.
+> 
+> The series is split into multiple parts;
+> 
+>   - patches 1-9 make all packages real packages, i.e. with proper
+>     Kconfig options. No functionality change.
+
+ One overall remark to this part of the series: I'd move them directly under
+package/ which is supposed to be the standard way of doing things now, so get
+rid of the matchbox subdirectory. That's also the way it works with Kodi BTW.
 
  Regards,
  Arnout
 
 > 
-> ---
-> Changes v1 -> v2:
->   - move to the 'documentation' section  (Arnout)
+>   - patches 10-13 do a little eye-candy cleanups. No functionality
+>     change.
 > 
-> ---
-> Notes: I was not sure where to put it. On the one hand, the
-> 'configuration' section seemed appropriate, but I think it does
-> fit well with all the other make targets in there; on the other
-> hand, the 'misc' section does not seem adequate either... Arnout
-> suggested the 'documentation' section.
-> ---
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
+>   - patches 14-17 fixes dependencies. No functionality change done on
+>     purpose, except because of added proper dependency tracking.
 > 
-> diff --git a/Makefile b/Makefile
-> index 5de4789..f37d17e 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -886,6 +886,7 @@ endif
->  	@echo '  manual-epub            - build manual in ePub'
->  	@echo '  graph-build            - generate graphs of the build times'
->  	@echo '  graph-depends          - generate graph of the dependency tree'
-> +	@echo '  list-defconfigs:       - list all defconfigs (pre-configured minimal systems)'
->  	@echo
->  	@echo 'Miscellaneous:'
->  	@echo '  source                 - download all sources needed for offline-build'
+>   - patch 18 stands out alone, a bit of eye-candy to add prompts for
+>     previously prompt-less packages. No functionality change.
 > 
+>   - patches 19-30 are not really sorted. They ar ea mix of fixes,
+>     eye-candy and the few new features.
+> 
+> This has been build-tested only, with about every combinations possible
+> excercised, for ARM. No run-time testing has been done, though.
+> 
+> Enjoy! ;-)
+> 
+> Regards,
+> Yann E. MORIN.
+
+[snip]
 
 
 -- 
