@@ -1,62 +1,35 @@
-From: Markos Chandras <markos.chandras@imgtec.com>
-Date: Thu, 23 Apr 2015 10:50:57 +0100
-Subject: [Buildroot] [PATCH 2/2] QEMU: Enable package for MIPS targets
-In-Reply-To: <1429782657-6283-1-git-send-email-markos.chandras@imgtec.com>
-References: <1429782657-6283-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <1429782657-6283-2-git-send-email-markos.chandras@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 23 Apr 2015 08:12:38 -0300
+Subject: [Buildroot] [PATCH] network-manager: adjust license info
+Message-ID: <1429787558-14581-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow QEMU to be installed on MIPS targets. Also introduce a new
-symbol (BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET) to hold the
-architectures than can build and use QEMU on the target.
+libgsystem is gone, so remove that section. Fixes:
+http://autobuild.buildroot.net/results/4b9/4b9826f540b8da43c0434769ad9485529cf762e6/
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/qemu/Config.in | 9 +++++++--
- package/qemu/qemu.mk   | 4 ++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ package/network-manager/network-manager.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index fff786d3f11f..f537ce67181c 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -1,11 +1,16 @@
-+config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
-+	bool
-+	# Only tested in these architectures
-+	default y if BR2_i386 || BR2_mips || BR2_mipsel || BR2_x86_64
-+
- comment "QEMU requires a toolchain with wchar, threads"
--	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
- 	depends on BR2_USE_MMU
- 	depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR)
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 937a446..c37c9ea 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -11,8 +11,8 @@ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(N
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
+ 	libgcrypt wireless_tools util-linux host-intltool readline libndp
+-NETWORK_MANAGER_LICENSE = GPLv2+ (app), LGPLv2+ (libnm-util, libgsystem)
+-NETWORK_MANAGER_LICENSE_FILES = COPYING libnm-util/COPYING libgsystem/COPYING
++NETWORK_MANAGER_LICENSE = GPLv2+ (app), LGPLv2+ (libnm-util)
++NETWORK_MANAGER_LICENSE_FILES = COPYING libnm-util/COPYING
  
- config BR2_PACKAGE_QEMU
- 	bool "QEMU"
--	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR # gettext
- 	depends on BR2_USE_MMU # fork()
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index b73127b24748..decfc259d2e3 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -32,8 +32,8 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-p
- #       microblaze      microblaze
- #       mips            mips
- #       mipsel          mipsel
--#       mips64          ?
--#       mips64el        ?
-+#       mips64          mips64
-+#       mips64el        mips64el
- #       powerpc         ppc
- #       sh2a            not supported
- #       sh4             sh4
+ NETWORK_MANAGER_CONF_ENV = \
+ 	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
 -- 
-2.3.5
+2.0.5
