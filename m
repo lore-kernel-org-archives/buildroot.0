@@ -1,34 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Apr 2015 17:24:38 +0200
-Subject: [Buildroot] [git commit] QEMU: bump to 2.2.1
-Message-ID: <20150423154328.266A281916@busybox.osuosl.org>
+Date: Thu, 23 Apr 2015 17:43:33 +0200
+Subject: [Buildroot] [PATCH 1/2] QEMU: bump to 2.2.1
+In-Reply-To: <1429782657-6283-1-git-send-email-markos.chandras@imgtec.com>
+References: <1429782657-6283-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <20150423174333.2cfb6a46@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a18203ae7f828a730b6428e3468a391ec5cf165b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Markos Chandras,
 
-Bump QEMU to 2.2.1
+On Thu, 23 Apr 2015 10:50:56 +0100, Markos Chandras wrote:
+> Bump QEMU to 2.2.1
+> 
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> ---
+>  package/qemu/qemu.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qemu/qemu.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 1202df7..b73127b 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QEMU_VERSION = 2.1.2
-+QEMU_VERSION = 2.2.1
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
- QEMU_SITE = http://wiki.qemu.org/download
- QEMU_LICENSE = GPLv2 LGPLv2.1 MIT BSD-3c BSD-2c Others/BSD-1c
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
