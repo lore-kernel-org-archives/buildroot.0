@@ -1,42 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 Apr 2015 22:37:36 +0200
-Subject: [Buildroot] [PATCH] Makefile: add list-defconfig to the general help
-Message-ID: <1429821457-6008-1-git-send-email-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 23 Apr 2015 22:40:51 +0200
+Subject: [Buildroot] [PATCH 2/2] package/x11r7/xdriver_xf86-input-void: bump
+	version to 1.4.1 and mark as deprecated
+In-Reply-To: <1429821651-11120-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1429821651-11120-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1429821651-11120-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When listing defconfig files was moved to its own make target, it was
-not added to the general help text.
+http://lists.x.org/archives/xorg-announce/2015-April/002585.html
+"The void driver is a dummy driver that does nothing and just fulfils
+the requirements of really old servers that must have an input device.
+It is just dead weight for any server released after 2007 or so. Don't use
+it."
 
-However, this is a very important topic, so list it.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Notes: I was not sure where to put it. On the one hand, the
-'configuration' section seemed appropriate, but I think it does
-fit well with all the other make targets in there; on the other
-hand, the 'misc' section does not seem adequate either... Feel free to
-move it around as you see fit...
----
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ package/x11r7/xdriver_xf86-input-void/Config.in                    |    4 ++++
+ package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash |    4 ++--
+ package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk   |    2 +-
+ 3 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 5de4789..4418dfb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -888,6 +888,7 @@ endif
- 	@echo '  graph-depends          - generate graph of the dependency tree'
- 	@echo
- 	@echo 'Miscellaneous:'
-+	@echo '  list-defconfigs:       - list all defconfigs (pre-configured minimal systems)'
- 	@echo '  source                 - download all sources needed for offline-build'
- 	@echo '  source-check           - check selected packages for valid download URLs'
- 	@echo '  external-deps          - list external packages used'
+diff --git a/package/x11r7/xdriver_xf86-input-void/Config.in b/package/x11r7/xdriver_xf86-input-void/Config.in
+index d6fdef2..fd3a600 100644
+--- a/package/x11r7/xdriver_xf86-input-void/Config.in
++++ b/package/x11r7/xdriver_xf86-input-void/Config.in
+@@ -1,5 +1,9 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_VOID
+ 	bool "xf86-input-void"
++	# http://lists.x.org/archives/xorg-announce/2015-April/002585.html
++	# "It is just dead weight for any server released after 2007 or so.
++	#  Don't use it."
++	depends on BR2_DEPRECATED_SINCE_2015_05
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+diff --git a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash
+index 8dd55d3..a1b88c5 100644
+--- a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash
++++ b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2011-May/001658.html
+-sha1	49b462d3acb16337eaf78202d4074f19d5e20b29	xf86-input-void-1.4.0.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-April/002585.html
++sha256	f96e4f0a622821bf43a74bd419f2a18423343996c9d243c7e1430ba2d142339c	xf86-input-void-1.4.1.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
+index cab3753..5baa528 100644
+--- a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
++++ b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_INPUT_VOID_VERSION = 1.4.0
++XDRIVER_XF86_INPUT_VOID_VERSION = 1.4.1
+ XDRIVER_XF86_INPUT_VOID_SOURCE = xf86-input-void-$(XDRIVER_XF86_INPUT_VOID_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_VOID_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_VOID_LICENSE = MIT
 -- 
-1.9.1
+1.7.10.4
