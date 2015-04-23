@@ -1,63 +1,46 @@
-From: will_wagner at carallon.com <will_wagner@carallon.com>
-Date: Thu, 23 Apr 2015 14:27:10 +0100
-Subject: [Buildroot] [PATCH 1/1] toolchain-external: update musl-cross
-	toolchain to 1.1.6
-Message-ID: <1429795630-39235-1-git-send-email-will_wagner@carallon.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 23 Apr 2015 09:53:45 -0400
+Subject: [Buildroot] [PATCH] package: kill pointless text justification
+In-Reply-To: <5538288D.3090308@zacarias.com.ar>
+References: <1429740874-8619-1-git-send-email-gustavo@zacarias.com.ar>
+ <20150422223204.GG4069@free.fr> <5538288D.3090308@zacarias.com.ar>
+Message-ID: <CANxTyt5G+dbcxx7ArtpTikzAGwN2ZzUxhG6hyd1hEL5YXWPv9Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Will Wagner <will_wagner@carallon.com>
+On Wed, Apr 22, 2015 at 7:02 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+> On 04/22/2015 07:32 PM, Yann E. MORIN wrote:
+>
+>> Well, it's not entirely incorrect.
+>>
+>> English typography used to require there is a double-space (or two word
+>> spaces, can't remeber the typographic name) between the full-stop and
+>> the next sentence:
+>>
+>>     https://en.wikipedia.org/wiki/Full_stop#Spacing_after_a_full_stop
+>>
+>> However, this usage has been gradually declining in favour of a single
+>> space, but is till widely used, especially when submitting manuscripts.
+>>
+>> Well, except for us Froggies, who only always used single-spacing. ;-)
+>
+> Actually it's related to scribes in a historical context:
+> http://en.wikipedia.org/wiki/Typographic_alignment#History
+>
+> It was one of the tricks used to keep all the lines of the same length
+> (visually).
+> Regards.
+>
 
-The 1.1.6 version of musl-cross fixes the two issues that had been
-preventing versions after 1.1.1 being used by buildroot, namely:
-- sysroot is enabled again
-- kernel headers are included again
 
-Signed-off-by: Will Wagner <will_wagner@carallon.com>
----
- toolchain/toolchain-external/Config.in             | 6 +++---
- toolchain/toolchain-external/toolchain-external.mk | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+When I googled "double space after period", the first hit was an
+article entitled "Nothing Says Over 40 Like Two Spaces after a
+Period!".
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index d2b99cc..9433101 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -814,7 +814,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
- 	  glibc 2.18, gdb 7.7.50 and kernel headers 3.13.
- 
- config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
--	bool "Musl 1.1.1 toolchain"
-+	bool "Musl 1.1.6 toolchain"
- 	depends on (BR2_arm && BR2_ARM_EABI) || (BR2_armeb && BR2_ARM_EABI) || \
- 		(BR2_i386 && !BR2_x86_i386) || BR2_microblazebe || BR2_mips || \
- 		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || BR2_x86_64
-@@ -825,8 +825,8 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
- 	help
- 	  Toolchain based on the Musl C library, provided by the
--	  musl-cross project. It uses gcc 4.8.3, binutils 2.24 and
--	  musl 1.1.1. It does not have a cross debugger included.
-+	  musl-cross project. It uses gcc 4.9.2, binutils 2.25 and
-+	  musl 1.1.6. It does not have a cross debugger included.
- 
- 	  The ARM toolchain is built for ARMv4t, soft-float.
- 	  The x86 toolchain is built for i486.
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 2427463..11345cc 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -356,7 +356,7 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/aarch64-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = aarch64-2014.05-30-aarch64-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
--TOOLCHAIN_EXTERNAL_VERSION = 1.1.1
-+TOOLCHAIN_EXTERNAL_VERSION = 1.1.6
- TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)
- ifeq ($(BR2_arm),y)
- TOOLCHAIN_EXTERNAL_SOURCE = crossx86-arm-linux-musleabi-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
--- 
-2.1.4
+And now I'm sad.  _And_ I have to retrain my typing habit.
+
+Danomi -
