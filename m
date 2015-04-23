@@ -1,33 +1,74 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 23 Apr 2015 20:03:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 8041] error on building libcurl7.42.0.
-In-Reply-To: <bug-8041-163@https.bugs.busybox.net/>
-References: <bug-8041-163@https.bugs.busybox.net/>
-Message-ID: <20150423200333.0620780DF5@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 23 Apr 2015 22:14:55 +0200
+Subject: [Buildroot] [PATCH v2 1/1] gtest: update recipe to use autotools
+In-Reply-To: <871078529.576418.1429788227635.JavaMail.zimbra@datacom.ind.br>
+References: <CAHkwnC-cZpP5m5009NiLZM07+t8CFSYVxqTBmNuXEA-x9mGwLg@mail.gmail.com>
+ <1429734568-20489-1-git-send-email-casantos@datacom.ind.br>
+ <20150422224620.7abefdb2@free-electrons.com>
+ <871078529.576418.1429788227635.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <553952BF.1040402@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8041
+On 04/23/15 13:23, Carlos Santos wrote:
+>> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+>> To: "Carlos Santos" <casantos@datacom.ind.br>
+>> Cc: buildroot at buildroot.org
+>> Sent: Wednesday, April 22, 2015 5:46:20 PM
+>> Subject: Re: [Buildroot] [PATCH v2 1/1] gtest: update recipe to use autotools
+> 
+>> Dear Carlos Santos,
+>>
+>> On Wed, 22 Apr 2015 17:29:28 -0300, Carlos Santos wrote:
+>>
+>>> -$(eval $(cmake-package))
+>>> +$(eval $(autotools-package))
+>>
+>> I still don't understand. Fabio quoted the README of gtest, which says:
+>>
+>> """
+>> The Autotools build script (configure + make) is no longer officially
+>> supportted.  You are encouraged to migrate to your own build system or
+>> use CMake.
+>> """
+>>
+>> So why moving from using the supported CMake to the no-longer supported
+>> autotools build system would be an improvement?
+>>
+>> This really needs more explanations.
+> 
+> I agree that using autotools is not the ideal approach but so I don't have a solution to generate the gtest-config script using CMake. I will spend some additional time on this today and submit and alternate patch if possible.
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+ I think it's fairly simple:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+# gtest-config is only generated when gtest is built with autotools,
+# so generate it manually here.
+define GTEST_INSTALL_CONFIG
+	sed 's/@PACKAGE_TARNAME@/gtest/;\
+		s/@PACKAGE_VERSION@/$(GTEST_VERSION)/;\
+		s/..../' \
+		$(@D)/scripts/gtest-config.in \
+		> $(STAGING_DIR)/usr/bin/gtest-config
+endef
+GTEST_POST_STAGING_INSTALL_HOOKS += GTEST_INSTALL_CONFIG
 
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2015-04-23 20:03:32 UTC ---
-Fixed via http://patchwork.ozlabs.org/patch/464045/
-Will close the bug once it's commited.
+ Not tested, of course :-)
 
-If you report another bug like this please provide the last ~100 lines of
-output as well so we don't need to build everything to check (besides the
-config).
-Thanks.
+ In particular, I'm not sure if gtest-config gives the correct feedback when
+gtest has been installed with cmake.
+
+
+ Regards,
+ Arnout
+
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
