@@ -1,82 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Apr 2015 09:47:51 +0200
-Subject: [Buildroot] [PATCH] package: kill pointless text justification
-In-Reply-To: <1429740874-8619-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1429740874-8619-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150423094751.0f26d066@free-electrons.com>
+Date: Thu, 23 Apr 2015 09:44:08 +0200
+Subject: [Buildroot] [git commit] libtirpc: fix build failure after non-IPv6
+	disabled
+Message-ID: <20150423074852.0712F81DAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=723151f93c57bbd08b9f86a6ce7b14b6f79894e0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Apr 2015 19:14:34 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/berkeleydb/Config.in                     | 2 +-
->  package/biosdevname/Config.in                    | 2 +-
->  package/bluez5_utils/Config.in                   | 2 +-
->  package/boa/Config.in                            | 2 +-
->  package/busybox/Config.in                        | 2 +-
->  package/coreutils/Config.in                      | 2 +-
->  package/cppunit/Config.in                        | 2 +-
->  package/dcron/Config.in                          | 2 +-
->  package/dialog/Config.in                         | 2 +-
->  package/dnsmasq/Config.in                        | 2 +-
->  package/e2tools/Config.in                        | 2 +-
->  package/ed/Config.in                             | 4 ++--
->  package/fftw/Config.in                           | 2 +-
->  package/findutils/Config.in                      | 2 +-
->  package/flex/Config.in                           | 2 +-
->  package/freescale-imx/gpu-viv-bin-mx6q/Config.in | 2 +-
->  package/gawk/Config.in                           | 2 +-
->  package/genext2fs/Config.in                      | 2 +-
->  package/google-breakpad/Config.in                | 2 +-
->  package/gsl/Config.in                            | 2 +-
->  package/gstreamer/gst-ffmpeg/Config.in           | 4 ++--
->  package/gstreamer1/gstreamer1/Config.in          | 2 +-
->  package/gzip/Config.in                           | 2 +-
->  package/iproute2/Config.in                       | 2 +-
->  package/jack2/Config.in                          | 2 +-
->  package/jimtcl/Config.in                         | 2 +-
->  package/joe/Config.in                            | 2 +-
->  package/jsoncpp/Config.in                        | 2 +-
->  package/libassuan/Config.in                      | 2 +-
->  package/libexif/Config.in                        | 2 +-
->  package/libmad/Config.in                         | 2 +-
->  package/libshout/Config.in                       | 2 +-
->  package/ltris/Config.in                          | 2 +-
->  package/lua/Config.in                            | 2 +-
->  package/mesa3d/Config.in                         | 2 +-
->  package/mpd/Config.in                            | 2 +-
->  package/mpg123/Config.in                         | 2 +-
->  package/nginx/Config.in                          | 2 +-
->  package/nodejs/Config.in                         | 4 ++--
->  package/openssh/Config.in                        | 2 +-
->  package/polkit/Config.in                         | 2 +-
->  package/python-cffi/Config.in                    | 2 +-
->  package/python-docopt/Config.in                  | 2 +-
->  package/qlibc/Config.in                          | 2 +-
->  package/read-edid/Config.in                      | 4 ++--
->  package/rp-pppoe/Config.in                       | 4 ++--
->  package/rsh-redone/Config.in                     | 4 ++--
->  package/sispmctl/Config.in                       | 2 +-
->  package/smcroute/Config.in                       | 2 +-
->  package/sqlcipher/Config.in                      | 2 +-
->  package/sudo/Config.in                           | 2 +-
->  package/sunxi-mali/Config.in                     | 2 +-
->  package/szip/Config.in                           | 2 +-
->  package/xenomai/Config.in                        | 2 +-
->  package/zeromq/Config.in                         | 2 +-
->  package/zlib/Config.in                           | 2 +-
->  56 files changed, 62 insertions(+), 62 deletions(-)
+Adjust patch 0005 to account for the removed optional IPv6 support
+patch, since otherwise it won't apply. Fixes:
+http://autobuild.buildroot.net/results/0ad/0ad8c9e331190f72280c3a1e3cd8d42728f818de/
 
-Applied, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ly-generate-XDR-header-files-from-.x-sour.patch |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch b/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch
+index 3c1c82d..023abd1 100644
+--- a/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch
++++ b/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch
+@@ -4,6 +4,7 @@ Date: Sat, 10 Nov 2012 17:29:53 +0100
+ Subject: [PATCH] Automatically generate XDR header files from .x sources using
+  rpcgen
+ 
++[Gustavo: update after dropping non-IPv6 support]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ ---
+  Makefile.am           |  22 +-
+@@ -75,7 +76,7 @@ index f086255..a9db71b 100644
+ @@ -8,7 +8,7 @@
+  noinst_HEADERS = rpc_com.h
+  
+- AM_CPPFLAGS = -I$(top_srcdir)/tirpc -DPORTMAP \
++ AM_CPPFLAGS = -I$(top_srcdir)/tirpc -DPORTMAP -DINET6 \
+ -		-D_GNU_SOURCE -Wall -pipe  
+ +		-D_GNU_SOURCE -Wall -pipe -I$(top_builddir)/tirpc
+  
