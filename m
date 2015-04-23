@@ -1,39 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 23 Apr 2015 17:01:36 -0300
-Subject: [Buildroot] [PATCH] libcurl: disable curldebug
-Message-ID: <1429819296-8647-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 23 Apr 2015 20:03:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 8041] error on building libcurl7.42.0.
+In-Reply-To: <bug-8041-163@https.bugs.busybox.net/>
+References: <bug-8041-163@https.bugs.busybox.net/>
+Message-ID: <20150423200333.0620780DF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-curldebug is a more advanced form of debugging for curl which audits
-source code with the checksource.pl tool, and treats warnings as errors.
-Normally users won't want/need this so disable it since it leads to
-failed builds when debug info is enabled (which is what people normally
-want).
-When buildroot does --enable-debug curl inherently enables curldebug too.
+https://bugs.busybox.net/show_bug.cgi?id=8041
 
-Solves bug #8041.
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libcurl/libcurl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index acb2b42..3390399 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -20,7 +20,7 @@ LIBCURL_INSTALL_STAGING = YES
- # probably almost never used. See
- # http://curl.haxx.se/docs/manpage.html#--ntlm.
- LIBCURL_CONF_OPTS = --disable-verbose --disable-manual --disable-ntlm-wb \
--	--enable-hidden-symbols --with-random=/dev/urandom
-+	--enable-hidden-symbols --with-random=/dev/urandom --disable-curldebug
- LIBCURL_CONFIG_SCRIPTS = curl-config
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
+--- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2015-04-23 20:03:32 UTC ---
+Fixed via http://patchwork.ozlabs.org/patch/464045/
+Will close the bug once it's commited.
+
+If you report another bug like this please provide the last ~100 lines of
+output as well so we don't need to build everything to check (besides the
+config).
+Thanks.
+
 -- 
-2.0.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
