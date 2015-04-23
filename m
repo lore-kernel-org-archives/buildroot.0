@@ -1,45 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Apr 2015 09:44:08 +0200
-Subject: [Buildroot] [git commit] libtirpc: fix build failure after non-IPv6
-	disabled
-Message-ID: <20150423074852.0712F81DAB@busybox.osuosl.org>
+Date: Thu, 23 Apr 2015 09:48:49 +0200
+Subject: [Buildroot] [PATCH] mosquitto: remove ipv6 depends
+In-Reply-To: <1429740838-8577-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1429740838-8577-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150423094849.139651e4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=723151f93c57bbd08b9f86a6ce7b14b6f79894e0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Adjust patch 0005 to account for the removed optional IPv6 support
-patch, since otherwise it won't apply. Fixes:
-http://autobuild.buildroot.net/results/0ad/0ad8c9e331190f72280c3a1e3cd8d42728f818de/
+On Wed, 22 Apr 2015 19:13:58 -0300, Gustavo Zacarias wrote:
+> The package was added after the last iteration of the non-ipv6
+> toolchain removal, so adjust it.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/mosquitto/Config.in | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...ly-generate-XDR-header-files-from-.x-sour.patch |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch b/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch
-index 3c1c82d..023abd1 100644
---- a/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch
-+++ b/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch
-@@ -4,6 +4,7 @@ Date: Sat, 10 Nov 2012 17:29:53 +0100
- Subject: [PATCH] Automatically generate XDR header files from .x sources using
-  rpcgen
- 
-+[Gustavo: update after dropping non-IPv6 support]
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- ---
-  Makefile.am           |  22 +-
-@@ -75,7 +76,7 @@ index f086255..a9db71b 100644
- @@ -8,7 +8,7 @@
-  noinst_HEADERS = rpc_com.h
-  
-- AM_CPPFLAGS = -I$(top_srcdir)/tirpc -DPORTMAP \
-+ AM_CPPFLAGS = -I$(top_srcdir)/tirpc -DPORTMAP -DINET6 \
- -		-D_GNU_SOURCE -Wall -pipe  
- +		-D_GNU_SOURCE -Wall -pipe -I$(top_builddir)/tirpc
-  
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
