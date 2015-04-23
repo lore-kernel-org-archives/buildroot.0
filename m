@@ -1,96 +1,43 @@
-From: Santhosh Ramani <srcoolz@gmail.com>
-Date: Wed, 22 Apr 2015 22:44:56 -0500
-Subject: [Buildroot] Run a custom script after USB mount
-In-Reply-To: <CADKZYYJrtTdn_47NCJumggetKmoHt7sAbk5-a9X_zHrMVJdYHA@mail.gmail.com>
-References: <CADKZYYKSc+rE2YvaBokFteSTE3gwnEvNksY1-w0HNC35u5yFig@mail.gmail.com>
- <CAKAx1ch+bA0RtZ6tfeK959UQazCaWRtRZr_N-DKBdGddXvK9Fg@mail.gmail.com>
- <CADKZYYLY_bj7b-8vJ+ztgxc2zjuxKLJgxAJ0e4XY681=h2aj=Q@mail.gmail.com>
- <20150418143654.021fa104@free-electrons.com>
- <CADKZYYJrtTdn_47NCJumggetKmoHt7sAbk5-a9X_zHrMVJdYHA@mail.gmail.com>
-Message-ID: <CADKZYYLdSRXNoRp6OPaYDuAi16fB93Rwj-NTHmi=JiBTsYgaKw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 23 Apr 2015 01:44:18 -0300
+Subject: [Buildroot] [PATCH] libtirpc: fix build failure after non-IPv6
+	disabled
+Message-ID: <1429764258-17941-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Adjust patch 0005 to account for the removed optional IPv6 support
+patch, since otherwise it won't apply. Fixes:
+http://autobuild.buildroot.net/results/0ad/0ad8c9e331190f72280c3a1e3cd8d42728f818de/
 
-This is the output I get from the udevadm monitor
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../0005-Automatically-generate-XDR-header-files-from-.x-sour.patch    | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-# udevadm monitor
-monitor will print the received events for:
-UDEV - the event which udev sends out after rule processing
-KERNEL - the kernel uevent
-
-KERNEL[4574.108256] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1 (usb)
-KERNEL[4574.114729] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0
-(usb)
-KERNEL[4574.116502] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4
-(scsi)
-KERNEL[4574.116755] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/scsi_host/host4
-(scsi_host)
-UDEV  [4574.128129] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1 (usb)
-UDEV  [4574.134332] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0
-(usb)
-UDEV  [4574.136982] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4
-(scsi)
-UDEV  [4574.141432] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/scsi_host/host4
-(scsi_host)
-KERNEL[4575.112353] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/target4:0:0
-(scsi)
-KERNEL[4575.114159] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/target4:0:0/4:0:0:0
-(scsi)
-KERNEL[4575.115028] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/target4:0:0/4:0:0:0/scsi_disk/4:0:0:0
-(scsi_disk)
-KERNEL[4575.119508] add      /devices/virtual/bdi/8:0 (bdi)
-KERNEL[4575.126051] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/target4:0:0/4:0:0:0/scsi_device/4:0:0:0
-(scsi_device)
-KERNEL[4575.132346] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/target4:0:0/4:0:0:0/block/sda
-(block)
-KERNEL[4575.132908] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/target4:0:0/4:0:0:0/block/sda/sda1
-(block)
-UDEV  [4575.137353] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/target4:0:0
-(scsi)
-UDEV  [4575.145704] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/target4:0:0/4:0:0:0
-(scsi)
-UDEV  [4575.155363] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/target4:0:0/4:0:0:0/scsi_disk/4:0:0:0
-(scsi_disk)
-UDEV  [4575.159306] add      /devices/virtual/bdi/8:0 (bdi)
-UDEV  [4575.171496] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/target4:0:0/4:0:0:0/scsi_device/4:0:0:0
-(scsi_device)
-UDEV  [4575.427571] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/target4:0:0/4:0:0:0/block/sda
-(block)
-UDEV  [4576.767773] add
-/devices/ocp.2/47400000.usb/47401400.usb/musb-hdrc.0.auto/usb1/1-1/1-1:1.0/host4/target4:0:0/4:0:0:0/block/sda/sda1
-(block)
-
-Thank you
-Regards
-
-Santhosh
-
+diff --git a/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch b/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch
+index 3c1c82d..023abd1 100644
+--- a/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch
++++ b/package/libtirpc/0005-Automatically-generate-XDR-header-files-from-.x-sour.patch
+@@ -4,6 +4,7 @@ Date: Sat, 10 Nov 2012 17:29:53 +0100
+ Subject: [PATCH] Automatically generate XDR header files from .x sources using
+  rpcgen
+ 
++[Gustavo: update after dropping non-IPv6 support]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ ---
+  Makefile.am           |  22 +-
+@@ -75,7 +76,7 @@ index f086255..a9db71b 100644
+ @@ -8,7 +8,7 @@
+  noinst_HEADERS = rpc_com.h
+  
+- AM_CPPFLAGS = -I$(top_srcdir)/tirpc -DPORTMAP \
++ AM_CPPFLAGS = -I$(top_srcdir)/tirpc -DPORTMAP -DINET6 \
+ -		-D_GNU_SOURCE -Wall -pipe  
+ +		-D_GNU_SOURCE -Wall -pipe -I$(top_builddir)/tirpc
+  
 -- 
-Greater the Difficulty....Sweeter is the Victory
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150422/bb8a1f96/attachment.html>
+2.0.5
