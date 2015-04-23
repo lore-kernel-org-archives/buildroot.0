@@ -1,181 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Apr 2015 00:29:04 +0200
-Subject: [Buildroot] [git commit] elfutils: disable symbol versioning for
-	uClibc
-Message-ID: <20150423224538.EAE3F81D79@busybox.osuosl.org>
+From: Santhosh Ramani <srcoolz@gmail.com>
+Date: Thu, 23 Apr 2015 18:04:57 -0500
+Subject: [Buildroot] Run a custom script after USB mount
+In-Reply-To: <55394E6D.8000404@mind.be>
+References: <CADKZYYKSc+rE2YvaBokFteSTE3gwnEvNksY1-w0HNC35u5yFig@mail.gmail.com>
+ <CAKAx1ch+bA0RtZ6tfeK959UQazCaWRtRZr_N-DKBdGddXvK9Fg@mail.gmail.com>
+ <CADKZYYLY_bj7b-8vJ+ztgxc2zjuxKLJgxAJ0e4XY681=h2aj=Q@mail.gmail.com>
+ <20150418143654.021fa104@free-electrons.com>
+ <CADKZYYJrtTdn_47NCJumggetKmoHt7sAbk5-a9X_zHrMVJdYHA@mail.gmail.com>
+ <55394E6D.8000404@mind.be>
+Message-ID: <CADKZYY+U0L0jd=2FU9z7u1dOk0sJE5AoSrbihmV7OEYKE7=hAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a3f0785396e64b5e2428f860d785f00bbc665d67
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Arnout,
 
-This fixes segfault in xtensa ltrace caused by infinite recursion in the
-function dwfl_report_elf calling other version of that function.
+> /# cat /etc/udev/rules.d/99-usb-detection.rules/*
+> > SUBSYSTEM=="usb", ACTION=="add", KERNEL=="sda*",
+> RUN+="/etc/hcc/usb-detected"*
+>  If it's a scsi device, the subsystem is block, not usb, right?
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...bling-symbol-versioning-at-configure-time.patch |  139 ++++++++++++++++++++
- package/elfutils/elfutils.mk                       |    1 +
- 2 files changed, 140 insertions(+), 0 deletions(-)
 
-diff --git a/package/elfutils/0007-Allow-disabling-symbol-versioning-at-configure-time.patch b/package/elfutils/0007-Allow-disabling-symbol-versioning-at-configure-time.patch
-new file mode 100644
-index 0000000..7378f26
---- /dev/null
-+++ b/package/elfutils/0007-Allow-disabling-symbol-versioning-at-configure-time.patch
-@@ -0,0 +1,139 @@
-+From bafacacaf7659a4933604662daba26a480b29a8d Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Thu, 23 Apr 2015 20:46:59 +0200
-+Subject: [PATCH] Allow disabling symbol versioning at configure time
-+
-+Due to missing symbol versioning support in uClibc calls to versioned
-+functions that internally call different version of themselves results
-+in infinite recursion.
-+
-+Introduce macro SYMBOL_VERSIONING and use it instead of plain SHARED to
-+decide whether symbol versioning is needed. Control this macro
-+definition with new configure option --disable-symbol-versioning.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Signed-off-by: Mark Wielaard <mjw@redhat.com>
-+---
-+Backported from: bafacacaf7659a4933604662daba26a480b29a8d
-+Changes to ChangeLogs are dropped.
-+
-+ config/eu.am                   | 10 ++++++++--
-+ configure.ac                   |  7 +++++++
-+ lib/eu-config.h                |  6 +++---
-+ libdwfl/core-file.c            |  2 +-
-+ libdwfl/dwfl_module_build_id.c |  2 +-
-+ libdwfl/dwfl_report_elf.c      |  2 +-
-+
-+diff --git a/config/eu.am b/config/eu.am
-+index faf8add..6103a3e 100644
-+--- a/config/eu.am
-++++ b/config/eu.am
-+@@ -38,16 +38,22 @@ AM_CFLAGS = -std=gnu99 -Wall -Wshadow -Wformat=2 \
-+ 
-+ COMPILE.os = $(filter-out -fprofile-arcs -ftest-coverage, $(COMPILE))
-+ 
-++DEFS.os = -DPIC -DSHARED
-++if SYMBOL_VERSIONING
-++DEFS.os += -DSYMBOL_VERSIONING
-++else
-++endif
-++
-+ %.os: %.c %.o
-+ if AMDEP
-+-	if $(COMPILE.os) -c -o $@ -fpic -DPIC -DSHARED -MT $@ -MD -MP \
-++	if $(COMPILE.os) -c -o $@ -fpic $(DEFS.os) -MT $@ -MD -MP \
-+ 	  -MF "$(DEPDIR)/$*.Tpo" `test -f '$<' || echo '$(srcdir)/'`$<; \
-+ 	then cat "$(DEPDIR)/$*.Tpo" >> "$(DEPDIR)/$*.Po"; \
-+ 	     rm -f "$(DEPDIR)/$*.Tpo"; \
-+ 	else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; \
-+ 	fi
-+ else
-+-	$(COMPILE.os) -c -o $@ -fpic -DPIC -DSHARED $<
-++	$(COMPILE.os) -c -o $@ -fpic $(DEFS.os) $<
-+ endif
-+ 
-+ CLEANFILES = *.gcno *.gcda
-+diff --git a/configure.ac b/configure.ac
-+index ed2c964..be01573 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -241,6 +241,13 @@ AS_HELP_STRING([--disable-textrelcheck],
-+                [Disable textrelcheck being a fatal error]))
-+ AM_CONDITIONAL(FATAL_TEXTREL, [test "x$enable_textrelcheck" != "xno"])
-+ 
-++AC_ARG_ENABLE([symbol-versioning],
-++AS_HELP_STRING([--disable-symbol-versioning],
-++               [Disable symbol versioning in shared objects]))
-++AM_CONDITIONAL(SYMBOL_VERSIONING, [test "x$enable_symbol_versioning" != "xno"])
-++AS_IF([test "x$enable_symbol_versioning" = "xno"],
-++      [AC_MSG_WARN([Disabling symbol versioning breaks ABI compatibility.])])
-++
-+ dnl The directories with content.
-+ 
-+ dnl Documentation.
-+diff --git a/lib/eu-config.h b/lib/eu-config.h
-+index 3afff26..5bb21c1 100644
-+--- a/lib/eu-config.h
-++++ b/lib/eu-config.h
-+@@ -163,7 +163,7 @@ asm (".section predict_data, \"aw\"; .previous\n"
-+ #define ELFUTILS_HEADER(name) <lib##name.h>
-+ 
-+ 
-+-#ifdef SHARED
-++#ifdef SYMBOL_VERSIONING
-+ # define OLD_VERSION(name, version) \
-+   asm (".globl _compat." #version "." #name "\n" \
-+        "_compat." #version "." #name " = " #name "\n" \
-+@@ -181,8 +181,8 @@ asm (".section predict_data, \"aw\"; .previous\n"
-+ # define OLD_VERSION(name, version) /* Nothing for static linking.  */
-+ # define NEW_VERSION(name, version) /* Nothing for static linking.  */
-+ # define COMPAT_VERSION_NEWPROTO(name, version, prefix) \
-+-  error "should use #ifdef SHARED"
-+-# define COMPAT_VERSION(name, version, prefix) error "should use #ifdef SHARED"
-++  error "should use #ifdef SYMBOL_VERSIONING"
-++# define COMPAT_VERSION(name, version, prefix) error "should use #ifdef SYMBOL_VERSIONING"
-+ #endif
-+ 
-+ 
-+diff --git a/libdwfl/core-file.c b/libdwfl/core-file.c
-+index 324e9d2..bbe0899 100644
-+--- a/libdwfl/core-file.c
-++++ b/libdwfl/core-file.c
-+@@ -588,7 +588,7 @@ dwfl_core_file_report (Dwfl *dwfl, Elf *elf, const char *executable)
-+ INTDEF (dwfl_core_file_report)
-+ NEW_VERSION (dwfl_core_file_report, ELFUTILS_0.158)
-+ 
-+-#ifdef SHARED
-++#ifdef SYMBOL_VERSIONING
-+ int _compat_without_executable_dwfl_core_file_report (Dwfl *dwfl, Elf *elf);
-+ COMPAT_VERSION_NEWPROTO (dwfl_core_file_report, ELFUTILS_0.146,
-+ 			 without_executable)
-+diff --git a/libdwfl/dwfl_module_build_id.c b/libdwfl/dwfl_module_build_id.c
-+index 350bbf8..c9a42ca 100644
-+--- a/libdwfl/dwfl_module_build_id.c
-++++ b/libdwfl/dwfl_module_build_id.c
-+@@ -101,7 +101,7 @@ dwfl_module_build_id (Dwfl_Module *mod,
-+ INTDEF (dwfl_module_build_id)
-+ NEW_VERSION (dwfl_module_build_id, ELFUTILS_0.138)
-+ 
-+-#ifdef SHARED
-++#ifdef SYMBOL_VERSIONING
-+ COMPAT_VERSION (dwfl_module_build_id, ELFUTILS_0.130, vaddr_at_end)
-+ 
-+ int
-+diff --git a/libdwfl/dwfl_report_elf.c b/libdwfl/dwfl_report_elf.c
-+index 3a4ae2e..624284c 100644
-+--- a/libdwfl/dwfl_report_elf.c
-++++ b/libdwfl/dwfl_report_elf.c
-+@@ -321,7 +321,7 @@ dwfl_report_elf (Dwfl *dwfl, const char *name, const char *file_name, int fd,
-+ INTDEF (dwfl_report_elf)
-+ NEW_VERSION (dwfl_report_elf, ELFUTILS_0.156)
-+ 
-+-#ifdef SHARED
-++#ifdef SYMBOL_VERSIONING
-+ Dwfl_Module *
-+   _compat_without_add_p_vaddr_dwfl_report_elf (Dwfl *dwfl, const char *name,
-+ 					       const char *file_name, int fd,
-+-- 
-+1.8.1.4
-+
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 227dea9..838c3b8 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -34,6 +34,7 @@ ELFUTILS_CONF_ENV += \
- 
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- ELFUTILS_DEPENDENCIES += argp-standalone
-+ELFUTILS_CONF_OPTS += --disable-symbol-versioning
- endif
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
+Yes you are correct - I removed the subsystem section and it now works
+properly. I also was not restarting (or reloading) udev rules properly and
+that was also contributing to the problem.
+
+The script I want to run copies data from the USB stick and places it at a
+given location. However, it seems that by the time the script finishes
+executing the USB is not yet mounted so nothing gets copied. How can I
+defer execution of the script until the volume is mounted, yet at the same
+time not block udev. I tried the following:
+
+usb-detected: Launcher Script
+
+/etc/hcc/update_script & exit
+
+I was hoping the second script "update" would be launched as a separate
+process and will be non-blocking. I could then add sleep command in the
+second script and delay execution. However, this doesn't seem to work. I
+was not able to use 'disown' either, since it's a bash command. Similarly I
+didn't have any luck with 'at' command either.
+
+Any thoughts on how I can defer the thread and not block udev?
+
+Thank you once again for all your replies.
+Regards
+
+Santhosh
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150423/d2b2ae54/attachment.html>
