@@ -1,47 +1,27 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 23 Apr 2015 02:46:30 -0300
-Subject: [Buildroot] [PATCH] opentyrian: switch to bitbucket
-Message-ID: <1429767990-6382-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 23 Apr 2015 02:48:25 -0300
+Subject: [Buildroot] [PATCH v7 4/8] uclibc: update hash for arc
+In-Reply-To: <1429740521-31943-5-git-send-email-arnout@mind.be>
+References: <1429740521-31943-1-git-send-email-arnout@mind.be>
+ <1429740521-31943-5-git-send-email-arnout@mind.be>
+Message-ID: <553887A9.2080103@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As we know google code is going away, so switch the site/source now
-rather than waiting for breakage.
+On 04/22/2015 07:08 PM, Arnout Vandecappelle (Essensium/Mind) wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/opentyrian/Config.in     | 2 +-
- package/opentyrian/opentyrian.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> From: Arnout Vandecappelle <arnout@mind.be>
+> 
+> The old hash for 2014.08 was never updated. Since uclibc-arc-2014.12 is
+> downloaded from the github helper, it is converted into a 'none' hash.
+> 
+> Reordered the hashes so the none-hashes are together.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-diff --git a/package/opentyrian/Config.in b/package/opentyrian/Config.in
-index 3ebcf08..b0c519f 100644
---- a/package/opentyrian/Config.in
-+++ b/package/opentyrian/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_OPENTYRIAN
- 	  to play the game.
- 	  If you want some sound, activate ALSA with OSS emulation.
- 
--	  http://code.google.com/p/opentyrian/
-+	  https://bitbucket.org/opentyrian/opentyrian/wiki/Home
- 
- if BR2_PACKAGE_OPENTYRIAN
- 
-diff --git a/package/opentyrian/opentyrian.mk b/package/opentyrian/opentyrian.mk
-index 3dc5af5..b74e4cf 100644
---- a/package/opentyrian/opentyrian.mk
-+++ b/package/opentyrian/opentyrian.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- OPENTYRIAN_VERSION = 9c9f0ec3532b
--OPENTYRIAN_SITE = https://code.google.com/p/opentyrian/
-+OPENTYRIAN_SITE = https://bitbucket.org/opentyrian/opentyrian
- OPENTYRIAN_SITE_METHOD = hg
- OPENTYRIAN_LICENSE = GPLv2+
- OPENTYRIAN_LICENSE_FILES = COPYING
--- 
-2.0.5
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
