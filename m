@@ -1,56 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Apr 2015 22:46:40 +0200
-Subject: [Buildroot] [PATCH] Makefile: add list-defconfig to the general
-	help
-In-Reply-To: <1429821457-6008-1-git-send-email-yann.morin.1998@free.fr>
-References: <1429821457-6008-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <55395A30.1060807@mind.be>
+Date: Thu, 23 Apr 2015 22:51:52 +0200
+Subject: [Buildroot] [PATCH] host-cmake: Install with install/fast target
+In-Reply-To: <1429818373-1788-1-git-send-email-cedric.marie@openmailbox.org>
+References: <1429818373-1788-1-git-send-email-cedric.marie@openmailbox.org>
+Message-ID: <55395B68.8030308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/23/15 22:37, Yann E. MORIN wrote:
-> When listing defconfig files was moved to its own make target, it was
-> not added to the general help text.
-
- Woops, thanks for noticing.
-
+On 04/23/15 21:46, C?dric Marie wrote:
+> Use install/fast target in order to skip compilation in installation
+> step. The same trick has just been used in pkg-cmake.mk for all CMake
+> packages.
 > 
-> However, this is a very important topic, so list it.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> 
-> ---
-> Notes: I was not sure where to put it. On the one hand, the
-> 'configuration' section seemed appropriate, but I think it does
-> fit well with all the other make targets in there; on the other
-> hand, the 'misc' section does not seem adequate either... Feel free to
-> move it around as you see fit...
+> Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
 
- Documentation, after graph-*.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
 > ---
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
+>  package/cmake/cmake.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index 5de4789..4418dfb 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -888,6 +888,7 @@ endif
->  	@echo '  graph-depends          - generate graph of the dependency tree'
->  	@echo
->  	@echo 'Miscellaneous:'
-> +	@echo '  list-defconfigs:       - list all defconfigs (pre-configured minimal systems)'
->  	@echo '  source                 - download all sources needed for offline-build'
->  	@echo '  source-check           - check selected packages for valid download URLs'
->  	@echo '  external-deps          - list external packages used'
+> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+> index 6b9e563..9ca6443 100644
+> --- a/package/cmake/cmake.mk
+> +++ b/package/cmake/cmake.mk
+> @@ -44,7 +44,7 @@ define HOST_CMAKE_BUILD_CMDS
+>  endef
+>  
+>  define HOST_CMAKE_INSTALL_CMDS
+> -	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install/fast
+>  endef
+>  
+>  define CMAKE_REMOVE_EXTRA_DATA
 > 
 
 
