@@ -1,22 +1,32 @@
-From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
-Date: Thu, 23 Apr 2015 11:06:25 +0200
-Subject: [Buildroot] [PATCH] pkg-cmake: Skip compilation in installation
- step
-In-Reply-To: <20150423095021.16ba5083@free-electrons.com>
-References: <1429733516-4466-1-git-send-email-cedric.marie@openmailbox.org>
- <20150423095021.16ba5083@free-electrons.com>
-Message-ID: <a2783e293d15e178b037127dd09d0386@openmailbox.org>
+From: Markos Chandras <markos.chandras@imgtec.com>
+Date: Thu, 23 Apr 2015 10:50:56 +0100
+Subject: [Buildroot] [PATCH 1/2] QEMU: bump to 2.2.1
+Message-ID: <1429782657-6283-1-git-send-email-markos.chandras@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 2015-04-23 09:50, Thomas Petazzoni a ?crit?:
-> Applied, thanks.
+Bump QEMU to 2.2.1
 
-Thank you.
-Should I provide the patch for host-cmake as well?
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ package/qemu/qemu.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 1202df77c5e4..b73127b24748 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QEMU_VERSION = 2.1.2
++QEMU_VERSION = 2.2.1
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+ QEMU_SITE = http://wiki.qemu.org/download
+ QEMU_LICENSE = GPLv2 LGPLv2.1 MIT BSD-3c BSD-2c Others/BSD-1c
 -- 
-C?dric
+2.3.5
