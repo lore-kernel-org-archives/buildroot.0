@@ -1,43 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Apr 2015 23:18:43 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/tiff: Rework tiff utilities
- handling
-In-Reply-To: <XnsA485ECD1F6D76berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1429816903-2484-1-git-send-email-bernd.kuhls@t-online.de>
- <55396033.1000003@mind.be>
- <XnsA485ECD1F6D76berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <553961B3.8020802@mind.be>
+Date: Thu, 23 Apr 2015 23:19:53 +0200
+Subject: [Buildroot] [PATCHv2] Makefile: add list-defconfig to the
+	general help
+In-Reply-To: <1429823046-8906-1-git-send-email-yann.morin.1998@free.fr>
+References: <1429823046-8906-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <553961F9.8020505@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/23/15 23:16, Bernd Kuhls wrote:
-> [posted and mailed]
+On 04/23/15 23:04, Yann E. MORIN wrote:
+> When listing defconfig files was moved to its own make target, it was
+> not added to the general help text.
 > 
-> Arnout Vandecappelle <arnout@mind.be> wrote in 
-> news:55396033.1000003 at mind.be:
+> However, this is a very important topic, so list it.
 > 
->>  Okay, so here's the wild idea:
->>
->> TIFF_SUBDIRS = port libtiff
->> ifeq ($(BR2_PACKAGE_TIFF_UTILITIES),y)
->> TIFF_SUBDIRS += tools
->> endif
->>
->> TIFF_MAKE = $(MAKE) SUBDIRS="$(TIFF_SUBDIRS)"
->>
->>  Build test seems to work, I'll resubmit so tell me what you think.
-> 
-> Hi Arnout,
-> 
-> lgtm.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
- Note that I didn't do a runtime test (for missing libraries), so YMMV.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
+
+> 
+> ---
+> Changes v1 -> v2:
+>   - move to the 'documentation' section  (Arnout)
+> 
+> ---
+> Notes: I was not sure where to put it. On the one hand, the
+> 'configuration' section seemed appropriate, but I think it does
+> fit well with all the other make targets in there; on the other
+> hand, the 'misc' section does not seem adequate either... Arnout
+> suggested the 'documentation' section.
+> ---
+>  Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 5de4789..f37d17e 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -886,6 +886,7 @@ endif
+>  	@echo '  manual-epub            - build manual in ePub'
+>  	@echo '  graph-build            - generate graphs of the build times'
+>  	@echo '  graph-depends          - generate graph of the dependency tree'
+> +	@echo '  list-defconfigs:       - list all defconfigs (pre-configured minimal systems)'
+>  	@echo
+>  	@echo 'Miscellaneous:'
+>  	@echo '  source                 - download all sources needed for offline-build'
+> 
 
 
 -- 
