@@ -1,64 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Apr 2015 22:40:51 +0200
-Subject: [Buildroot] [PATCH 2/2] package/x11r7/xdriver_xf86-input-void: bump
-	version to 1.4.1 and mark as deprecated
-In-Reply-To: <1429821651-11120-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429821651-11120-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1429821651-11120-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu, 23 Apr 2015 22:40:50 +0200
+Subject: [Buildroot] [PATCH 1/2] package/x11r7/xdriver_xf86-input-libinput:
+	bump version to 0.9.0
+Message-ID: <1429821651-11120-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-http://lists.x.org/archives/xorg-announce/2015-April/002585.html
-"The void driver is a dummy driver that does nothing and just fulfils
-the requirements of really old servers that must have an input device.
-It is just dead weight for any server released after 2007 or so. Don't use
-it."
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xdriver_xf86-input-void/Config.in                    |    4 ++++
- package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash |    4 ++--
- package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk   |    2 +-
- 3 files changed, 7 insertions(+), 3 deletions(-)
+ .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash |    6 +++---
+ .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-void/Config.in b/package/x11r7/xdriver_xf86-input-void/Config.in
-index d6fdef2..fd3a600 100644
---- a/package/x11r7/xdriver_xf86-input-void/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-void/Config.in
-@@ -1,5 +1,9 @@
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_VOID
- 	bool "xf86-input-void"
-+	# http://lists.x.org/archives/xorg-announce/2015-April/002585.html
-+	# "It is just dead weight for any server released after 2007 or so.
-+	#  Don't use it."
-+	depends on BR2_DEPRECATED_SINCE_2015_05
- 	select BR2_PACKAGE_XPROTO_INPUTPROTO
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
-diff --git a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash
-index 8dd55d3..a1b88c5 100644
---- a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash
-+++ b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2011-May/001658.html
--sha1	49b462d3acb16337eaf78202d4074f19d5e20b29	xf86-input-void-1.4.0.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-April/002585.html
-+sha256	f96e4f0a622821bf43a74bd419f2a18423343996c9d243c7e1430ba2d142339c	xf86-input-void-1.4.1.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
-index cab3753..5baa528 100644
---- a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
-+++ b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+index a07df47..9b5219f 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+@@ -1,3 +1,3 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-March/002540.html
+-sha1	c2ec968847f85d7d503b12d63c2cc9697cbe0243				xf86-input-libinput-0.8.0.tar.bz2
+-sha256	2152b0984feffe8151934ad9af29bde7fc621e0a54b0cdedbaf1abc367dea43a	xf86-input-libinput-0.8.0.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-April/002586.html
++sha1	cfb19cc863bfc0a419df6b14287891ad54bc86a2				xf86-input-libinput-0.9.0.tar.bz2
++sha256	37f623b7869c700156049fa9204bafd6027bf5c3acd9017919e42199bcc666da	xf86-input-libinput-0.9.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index ec788a2..28371a2 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_VOID_VERSION = 1.4.0
-+XDRIVER_XF86_INPUT_VOID_VERSION = 1.4.1
- XDRIVER_XF86_INPUT_VOID_SOURCE = xf86-input-void-$(XDRIVER_XF86_INPUT_VOID_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_VOID_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_VOID_LICENSE = MIT
+-XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.8.0
++XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.9.0
+ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
 -- 
 1.7.10.4
