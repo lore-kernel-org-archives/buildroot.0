@@ -1,46 +1,29 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 23 Apr 2015 11:19:44 -0300
-Subject: [Buildroot] [PATCH v2] stunnel: bump to version 5.16
-Message-ID: <1429798784-9484-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 23 Apr 2015 11:21:16 -0300
+Subject: [Buildroot] [PATCH] stunnel: bump to version 5.16
+In-Reply-To: <20150423145629.6a75c166@free-electrons.com>
+References: <1429790551-7950-1-git-send-email-gustavo@zacarias.com.ar>
+ <20150423145629.6a75c166@free-electrons.com>
+Message-ID: <5538FFDC.1070206@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 4 +++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+On 04/23/2015 09:56 AM, Thomas Petazzoni wrote:
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 7f28905..8545341 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From http://www.stunnel.org/pipermail/stunnel-announce/2015-January/000090.html
--sha256	87b34a74061861d1edd2ab238c73eb989b3d0a17e44574b7b6ead1a16aae38c8	stunnel-5.09.tar.gz
-+# From https://www.stunnel.org/pipermail/stunnel-announce/2015-April/000098.html
-+sha256	b6b7e93fb2626eaabae1c8474e1dfa23962cfde8fa35c8602289fcaa4f53608d	stunnel-5.16.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index f7099e8..7a6bb46 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -4,11 +4,13 @@
- #
- ################################################################################
- 
--STUNNEL_VERSION = 5.09
-+STUNNEL_VERSION = 5.16
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/5.x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
- 	--disable-libwrap
-+STUNNEL_CONF_ENV = \
-+	ax_cv_check_cflags___fstack_protector=$(if $(BR2_ENABLE_SSP),yes,no)
- STUNNEL_LICENSE = GPLv2+
- STUNNEL_LICENSE_FILES = COPYING COPYRIGHT.GPL
- 
--- 
-2.0.5
+>> +STUNNEL_CONF_ENV = ax_cv_check_cflags___fstack_protector=no
+> 
+> Shouldn't this be:
+> 
+> STUNNEL_CONF_ENV = \
+> 	ax_cv_check_cflags___fstack_protector=$(if $(BR2_ENABLE_SSP),yes,no)
+> 
+>  ?
+
+Oi, yes.
+The problem is that the detection is too optimistic, it assumes it's ok
+under most circumstances, and breaks in a non-trivial way.
+Sent V2.
+Regards.
