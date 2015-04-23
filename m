@@ -1,50 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 24 Apr 2015 00:27:44 +0200
-Subject: [Buildroot] [PATCH 12/30] package/matchbox: get rid of
- intermediate non-package matchbox
-In-Reply-To: <3a0d878f5062e3e57decc9a2ed348a2dcef8d0b2.1429725549.git.yann.morin.1998@free.fr>
-References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <3a0d878f5062e3e57decc9a2ed348a2dcef8d0b2.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <553971E0.10102@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 24 Apr 2015 00:28:32 +0200
+Subject: [Buildroot] [PATCHv2] Makefile: add list-defconfig to the
+	general help
+In-Reply-To: <1429823046-8906-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Thu, 23 Apr 2015 23:04:06 +0200")
+References: <1429823046-8906-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <877ft2scmn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/22/15 20:09, Yann E. MORIN wrote:
-> Currently, the matchbox entry in the menu is a non-package entry, that
-> forcibly selects the matchbox-wm package, which is the real matchbox WM.
-> 
-> So, get rid of the current matchbox option, rename the exisiting
-> matchbox-wm to simply matchbox, so we have a real package from the
-> onset.
-> 
-> Since we're reusing the previous option for the WM package, there is no
-> need for a entry in the legacy menu.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > When listing defconfig files was moved to its own make target, it was
+ > not added to the general help text.
 
-> ---
-[snip]
-> +# After we called a package infra, w ecan include more files
-                                       ^^
+ > However, this is a very important topic, so list it.
 
- This comment becomes redundant after the move.
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
 
- Regards,
- Arnout
+ > ---
+ > Changes v1 -> v2:
+ >   - move to the 'documentation' section  (Arnout)
 
->  include $(sort $(wildcard package/matchbox/*/*.mk))
-> 
+ > diff --git a/Makefile b/Makefile
+ > index 5de4789..f37d17e 100644
+ > --- a/Makefile
+ > +++ b/Makefile
+ > @@ -886,6 +886,7 @@ endif
+ >  	@echo '  manual-epub            - build manual in ePub'
+ >  	@echo '  graph-build            - generate graphs of the build times'
+ >  	@echo '  graph-depends          - generate graph of the dependency tree'
+ > +	@echo '  list-defconfigs:       - list all defconfigs (pre-configured minimal systems)'
 
+I've dropped the ':' character to match the other lines and committed,
+thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
