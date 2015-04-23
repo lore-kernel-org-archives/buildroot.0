@@ -1,29 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Apr 2015 17:43:33 +0200
-Subject: [Buildroot] [PATCH 1/2] QEMU: bump to 2.2.1
-In-Reply-To: <1429782657-6283-1-git-send-email-markos.chandras@imgtec.com>
-References: <1429782657-6283-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <20150423174333.2cfb6a46@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 23 Apr 2015 18:38:23 +0200
+Subject: [Buildroot] [PATCH 11/30] package/matchbox: point to new home
+In-Reply-To: <20150423085812.GL8539@piout.net>
+References: <cover.1429725549.git.yann.morin.1998@free.fr>
+ <1b8a30a38d5f4cc09e60cf5ee62d17faf76d4876.1429725549.git.yann.morin.1998@free.fr>
+ <20150423085812.GL8539@piout.net>
+Message-ID: <20150423163823.GA4255@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Alexandre, All,
 
-On Thu, 23 Apr 2015 10:50:56 +0100, Markos Chandras wrote:
-> Bump QEMU to 2.2.1
+On 2015-04-23 10:58 +0200, Alexandre Belloni spake thusly:
+> On 22/04/2015 at 20:09:22 +0200, Yann E. MORIN wrote :
+> > The new home of the matchbox project is with the Yocto
+> > project^Wumbrella^Wbuildsystem^Wdistribution^Wwhatever
+> > that is. ;-)
 > 
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-> ---
->  package/qemu/qemu.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> I'm not sure that kind of comments will make people take buildroot
+> seriously. The correct behaviour would be to actually be happy that
+> someone is willing to maintain matchbox.
 
-Applied, thanks.
+OK, so that was probably not that good a joke, in retrospect, even with
+the smiley... Yes, it may have been a little bit too sarcastic. I'll
+withdraw in the next respin. Thanks for the lecture.
 
-Thomas
+And yes, I'm happy matchbox as well as many other things are hosted
+there. But matchbox being 'maintained' is another story: most every
+matchbox packages have not been touched for 2 years, the only exception
+being a commit and its prompt revert. Still, that's not a reproach
+whatsoever: matchbox is dead, and that's part of life for a package;
+nothing wrong with that.
+
+Thanks for the feedback. :-)
+
+Regards,
+Yann E. MORIN.
+
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/matchbox/Config.in | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+> > index 2f9b73d..891ac95 100644
+> > --- a/package/matchbox/Config.in
+> > +++ b/package/matchbox/Config.in
+> > @@ -15,7 +15,7 @@ config BR2_PACKAGE_MATCHBOX
+> >  	  handhelds, set-top boxes, kiosks and anything else for which
+> >  	  screen space, input mechanisms or system resources are limited.
+> >  
+> > -	  http://matchbox-project.org/
+> > +	  https://www.yoctoproject.org/tools-resources/projects/matchbox
+> >  
+> >  if BR2_PACKAGE_MATCHBOX
+> >  
+> > -- 
+> > 1.9.1
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> -- 
+> Alexandre Belloni, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
