@@ -1,33 +1,105 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 22 Apr 2015 20:09:31 -0300
-Subject: [Buildroot] Towards 2015.05-rc1
-In-Reply-To: <55381E27.4020502@mind.be>
-References: <20150419220053.2c1d5b62@free-electrons.com>
- <XnsA481E23CAF8E0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20150419230245.64cf1410@free-electrons.com> <55381E27.4020502@mind.be>
-Message-ID: <55382A2B.1090108@zacarias.com.ar>
+From: Santhosh Ramani <srcoolz@gmail.com>
+Date: Wed, 22 Apr 2015 22:02:24 -0500
+Subject: [Buildroot] Run a custom script after USB mount
+In-Reply-To: <20150418143654.021fa104@free-electrons.com>
+References: <CADKZYYKSc+rE2YvaBokFteSTE3gwnEvNksY1-w0HNC35u5yFig@mail.gmail.com>
+ <CAKAx1ch+bA0RtZ6tfeK959UQazCaWRtRZr_N-DKBdGddXvK9Fg@mail.gmail.com>
+ <CADKZYYLY_bj7b-8vJ+ztgxc2zjuxKLJgxAJ0e4XY681=h2aj=Q@mail.gmail.com>
+ <20150418143654.021fa104@free-electrons.com>
+Message-ID: <CADKZYYJrtTdn_47NCJumggetKmoHt7sAbk5-a9X_zHrMVJdYHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/22/2015 07:18 PM, Arnout Vandecappelle wrote:
+Hello Thomas,
 
->  Since udev rules are IMHO a lot more complicated than mdev rules and you
-> usually don't need that complexity in embedded systems, I think there really is
-> a case to be made for avoiding full udev. Of course, it's always possible to
-> remove the udev start script in a post-build script (which effectively makes
-> udev dead code), but it is definitely nice to know which packages will work
-> without udev running. So that's what I would like this libudev stuff to do.
-> 
->  For example, I have one system that used to be based on mdev. Now we have to
-> add modem-manager to it, and modem-manager depends on udev. So I've enabled
-> udev, but now I have to replace the mdev rules with udev rules and I probably
-> also have to get rid of some of the default udev rules which are not appropriate.
+Thanks for your reply - I was able to use 'udevadm monitor' to look at udev
+events. Every time the USB is inserted, I do see udev messages indicate
+'add'. These are the scripts and rules I have in the system - may be I'm
+doing something wrong here...
 
-There's also usbutils which now requires the udev hwdb and libudev.
-I expect to see this kind of requirement for other packages in the
-future, the latest pciutils for example benefits with the same trickery,
-and though it still works without it i wonder for how long.
-Regards.
+I have added a rule in /etc/udev/rules.d/ and it has the following single
+line.
+
+*# cat /etc/udev/rules.d/99-usb-detection.rules*
+* SUBSYSTEM=="usb", ACTION=="add", KERNEL=="sda*",
+RUN+="/etc/hcc/usb-detected"*
+
+The usb-detected script is nothing more than a launcher script that runs
+the dummy scripts and ensures that udev doesn't have to wait for the script
+to finish completion.
+
+*# cat /etc/hcc/usb-detected*
+
+
+
+
+
+
+
+*#! /bin/sh # # The following script is launched when a USB memory stick is
+mounted # This is just a launcher script # /root/update_script & exit*
+
+And the update_script is doing nothing but creating a new file.
+
+*# cat /root/update_script*
+
+
+
+
+
+
+
+
+*#! /bin/sh sleep 5 echo "" > /root/new echo
+"******************************************************" >> /root/new echo
+"Test file created" >> /root/new echo
+"******************************************************" >> /root/new echo
+"" >> /root/new*
+
+I can run the usb-detected script and it works fine, however I don't think
+it gets launched from the usb-rule. Any thoughts on this?
+
+Thank you for your help.
+Regards
+
+Santhosh
+
+
+On 18 April 2015 at 07:36, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Santhosh Ramani,
+>
+> On Fri, 17 Apr 2015 11:37:41 -0500, Santhosh Ramani wrote:
+>
+> > I checked the daemons that are running, and it seems udev is running.
+> > However, I do see /sbin/mdev and /sbin/udevd, so not entirely sure which
+> > one is running. Under System Configuration /dev management, I do have
+> eudev
+> > selected rather than mdev.
+> >
+> > But regardless, shouldn't the script execute when USB is detected. I see
+> > that it gets mounted properly at /media/usb0 but the script doesn't seem
+> to
+> > run.
+>
+> You may want to try 'udevadm --monitor' or something similar to debug
+> the udev events.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+
+
+
+-- 
+Greater the Difficulty....Sweeter is the Victory
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150422/36eead56/attachment.html>
