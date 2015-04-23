@@ -1,42 +1,35 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 23 Apr 2015 02:49:30 -0300
-Subject: [Buildroot] [PATCH] ntfs-3g: bump to version 2015.3.14
-Message-ID: <1429768170-6430-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 23 Apr 2015 02:55:29 -0300
+Subject: [Buildroot] [PATCH v2] uclibc: run snapshot and ng configs
+	through "savedefconfig"
+In-Reply-To: <1429544863-19143-1-git-send-email-abrodkin@synopsys.com>
+References: <1429544863-19143-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <55388951.5050204@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+On 04/20/2015 12:47 PM, Alexey Brodkin wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ntfs-3g/ntfs-3g.hash | 2 ++
- package/ntfs-3g/ntfs-3g.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/ntfs-3g/ntfs-3g.hash
+> Recently uClibc got support of "savedefconfig" target that allows
+> generation of compact configuration description which only lists
+> differences from default options.
+> 
+> That's uClibc commit -
+> http://git.uclibc.org/uClibc/commit/?id=e286a674419d31cb0757dd2f8307d8b4756cf1f9
+> 
+> This change represents post-processing of "uClibc-snapshot.defconfig"
+> and "uClibc-ng.config" with "make savedefconfig" made on current
+> uClibc/master and uClibc-ng/1.0 branches accordingly.
+> 
+> Unfortunately the most recent stable uClibc version 0.9.33.2 doesn't
+> have "savedefconfig" target so I'm leaving uClibc-0.9.33.config as it
+> is.
 
-diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
-new file mode 100644
-index 0000000..1c3445b
---- /dev/null
-+++ b/package/ntfs-3g/ntfs-3g.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	97f996015d8316d4a272bd2629978e5e97072dd3cc148ce39802f8037c6538f2	ntfs-3g_ntfsprogs-2015.3.14.tgz
-diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
-index 708e590..95e3db4 100644
---- a/package/ntfs-3g/ntfs-3g.mk
-+++ b/package/ntfs-3g/ntfs-3g.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NTFS_3G_VERSION = 2014.2.15
-+NTFS_3G_VERSION = 2015.3.14
- NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
- NTFS_3G_SITE = http://tuxera.com/opensource
- NTFS_3G_CONF_OPTS = --disable-ldconfig
--- 
-2.0.5
+Hi.
+It looks good on principle, however can you respin it on top of
+Waldermar's recent -ng version bump?
+Thanks.
+Regards.
