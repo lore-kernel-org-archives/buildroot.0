@@ -1,132 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Apr 2015 21:22:34 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/dovecot: not available on
-	static-only build
-Message-ID: <1429816954-2529-1-git-send-email-bernd.kuhls@t-online.de>
+From: =?UTF-8?q?C=C3=A9dric=20Marie?= <cedric.marie@openmailbox.org>
+Date: Thu, 23 Apr 2015 21:46:13 +0200
+Subject: [Buildroot] [PATCH] host-cmake: Install with install/fast target
+Message-ID: <1429818373-1788-1-git-send-email-cedric.marie@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/53f/53fd9003a4cf7d128f4d64d43209fe26d859a829/
+Use install/fast target in order to skip compilation in installation
+step. The same trick has just been used in pkg-cmake.mk for all CMake
+packages.
 
-http://autobuild.buildroot.net/results/53f/53fd9003a4cf7d128f4d64d43209fe26d859a829/dovecot-2.2.16/config.log
-shows this pthread related link error during configure
-
-sqlite3.c:(.text+0x5106): undefined reference to `pthread_mutex_trylock'
-/home/test/autobuild/instance-2/output/host/usr/i686-buildroot-linux-uclibc/sysroot/usr/lib/libsqlite3.a(sqlite3.o): In function `pthreadMutexAlloc':
-sqlite3.c:(.text+0x91fb): undefined reference to `pthread_mutexattr_init'
-sqlite3.c:(.text+0x9205): undefined reference to `pthread_mutexattr_settype'
-sqlite3.c:(.text+0x920e): undefined reference to `pthread_mutex_init'
-sqlite3.c:(.text+0x9216): undefined reference to `pthread_mutexattr_destroy'
-sqlite3.c:(.text+0x9234): undefined reference to `pthread_mutex_init'
-
-Trying to fix it in dovecot.mk by
-
-+# dovecot forgets to compile/link with -pthread breaking static linking
-+DOVECOT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -pthread" LIBS="-pthread"
-
-results in a build error later on
-setresgid.c:(.text+0x0): multiple definition of `setresgid'
-
-which might be fixed in uclibc by porting
-http://git.buildroot.net/buildroot/tree/package/uclibc/1.0.2/0001-fix-static-linking-of-pthread-apps.patch
-
-but, at the end, I think it is better to not build Dovecot as a static
-binary since it is heavy modularized and not worth the effort. Therefore
-remove two patches fixing static linking, since they are not needed anymore.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
 ---
-v2: rebased
+ package/cmake/cmake.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- package/dovecot/0002-fix-static-build.patch |   24 ------------------------
- package/dovecot/0003-fix-static-build.patch |   24 ------------------------
- package/dovecot/Config.in                   |    5 +++++
- 3 files changed, 5 insertions(+), 48 deletions(-)
- delete mode 100644 package/dovecot/0002-fix-static-build.patch
- delete mode 100644 package/dovecot/0003-fix-static-build.patch
-
-diff --git a/package/dovecot/0002-fix-static-build.patch b/package/dovecot/0002-fix-static-build.patch
-deleted file mode 100644
-index be646bc..0000000
---- a/package/dovecot/0002-fix-static-build.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--Fix static build
--
--MODULE_SUFFIX is undefined when building statically; don't used it.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: sent upstream
--(http://dovecot.org/pipermail/dovecot/2014-November/098694.html)
--
--diff -Nuar dovecot-2.2.15-orig/src/lib/module-dir.c dovecot-2.2.15/src/lib/module-dir.c
----- dovecot-2.2.15-orig/src/lib/module-dir.c	2014-10-18 00:10:15.000000000 +0300
--+++ dovecot-2.2.15/src/lib/module-dir.c	2014-11-13 19:27:29.417786313 +0200
--@@ -621,7 +621,11 @@
-- 	if (*p == '_')
-- 		fname = p + 1;
-- 
--+#ifdef MODULE_SUFFIX
-- 	p = strstr(fname, MODULE_SUFFIX);
--+#else
--+	p = NULL;
--+#endif
-- 	if (p == NULL)
-- 		return fname;
-- 
-diff --git a/package/dovecot/0003-fix-static-build.patch b/package/dovecot/0003-fix-static-build.patch
-deleted file mode 100644
-index c5dd9d1..0000000
---- a/package/dovecot/0003-fix-static-build.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--Fix symbol conflict in static build with MySQL enabled
--
--Compile error log:
--http://autobuild.buildroot.net/results/9b5/9b536926b3b2bf82c683b48e9697a220f1b4bf33/build-end.log
--
--Patch suggested by Timo Sirainen:
--http://www.dovecot.org/list/dovecot/2014-November/098787.html
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr dovecot-2.2.15.org/src/lib/strnum.h dovecot-2.2.15/src/lib/strnum.h
----- dovecot-2.2.15.org/src/lib/strnum.h	2014-07-02 17:21:24.000000000 +0200
--+++ dovecot-2.2.15/src/lib/strnum.h	2014-11-21 19:26:42.316225982 +0100
--@@ -1,6 +1,10 @@
-- #ifndef STRNUM_H
-- #define STRNUM_H
-- 
--+/* libmysqlclient really should try to keep its internal stuff internal so
--+   they won't conflict with the actual programs that are trying to use it. */
--+#define str_to_time str_to_time_libmysqlclient_craps_all_over
--+
-- /* Return TRUE if all characters in string are numbers.
--    Stop when `end_char' is found from string. */
-- bool str_is_numeric(const char *str, char end_char) ATTR_PURE;
-diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
-index 5fd1714..9c242fc 100644
---- a/package/dovecot/Config.in
-+++ b/package/dovecot/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_DOVECOT
- 	bool "dovecot"
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # fork()
- 	help
- 	  Dovecot is an open source IMAP and POP3 email server for Linux/UNIX-
-@@ -51,3 +52,7 @@ config BR2_PACKAGE_DOVECOT_ZLIB
- source package/dovecot-pigeonhole/Config.in
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 6b9e563..9ca6443 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -44,7 +44,7 @@ define HOST_CMAKE_BUILD_CMDS
+ endef
  
- endif # BR2_PACKAGE_DOVECOT
-+
-+comment "dovecot needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_STATIC_LIBS
+ define HOST_CMAKE_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install/fast
+ endef
+ 
+ define CMAKE_REMOVE_EXTRA_DATA
 -- 
-1.7.10.4
+2.1.4
