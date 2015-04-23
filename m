@@ -1,42 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Apr 2015 09:44:40 +0200
-Subject: [Buildroot] [git commit] memcached: bump to version 1.4.23
-Message-ID: <20150423074852.108CE800CD@busybox.osuosl.org>
+Date: Thu, 23 Apr 2015 09:46:28 +0200
+Subject: [Buildroot] [git commit] ntfs-3g: bump to version 2015.3.14
+Message-ID: <20150423074852.2B06481DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=096772d430b771408f020e08d6fc9c6861d68d3d
+commit: http://git.buildroot.net/buildroot/commit/?id=5e2c17b9a3a52d31312215004e79576e5ec6f1f3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/memcached/memcached.hash |    4 ++--
- package/memcached/memcached.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ntfs-3g/ntfs-3g.hash |    2 ++
+ package/ntfs-3g/ntfs-3g.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index 98e572d..45e1db5 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,2 +1,2 @@
--# From http://www.memcached.org/files/memcached-1.4.22.tar.gz.sha1
--sha1	5968d357d504a1f52622f9f8a3e85c29558acaa5	memcached-1.4.22.tar.gz
-+# From http://www.memcached.org/files/memcached-1.4.23.tar.gz.sha1
-+sha1	121fc548860f4e7d4d5052f9816cc6ff4cc5a10d	memcached-1.4.23.tar.gz
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 8a005d4..3c67da0 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
+diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
+new file mode 100644
+index 0000000..1c3445b
+--- /dev/null
++++ b/package/ntfs-3g/ntfs-3g.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	97f996015d8316d4a272bd2629978e5e97072dd3cc148ce39802f8037c6538f2	ntfs-3g_ntfsprogs-2015.3.14.tgz
+diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
+index 708e590..95e3db4 100644
+--- a/package/ntfs-3g/ntfs-3g.mk
++++ b/package/ntfs-3g/ntfs-3g.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MEMCACHED_VERSION = 1.4.22
-+MEMCACHED_VERSION = 1.4.23
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-NTFS_3G_VERSION = 2014.2.15
++NTFS_3G_VERSION = 2015.3.14
+ NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
+ NTFS_3G_SITE = http://tuxera.com/opensource
+ NTFS_3G_CONF_OPTS = --disable-ldconfig
