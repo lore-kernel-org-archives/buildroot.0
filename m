@@ -1,64 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Apr 2015 23:00:39 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-void:
-	bump version to 1.4.1 and mark as deprecated
-Message-ID: <20150423210626.7403A803E9@busybox.osuosl.org>
+Date: Thu, 23 Apr 2015 23:01:47 +0200
+Subject: [Buildroot] [git commit] package/gcc: add hashes
+Message-ID: <20150423210626.7CFE2803E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67575a811ba2aa5c3a97eb23347cae9a193d02ee
+commit: http://git.buildroot.net/buildroot/commit/?id=fcd6589021383d71e5df51d9b65529d5e9bbbfb1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-http://lists.x.org/archives/xorg-announce/2015-April/002585.html
-"The void driver is a dummy driver that does nothing and just fulfils
-the requirements of really old servers that must have an input device.
-It is just dead weight for any server released after 2007 or so. Don't use
-it."
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xdriver_xf86-input-void/Config.in    |    4 ++++
- .../xdriver_xf86-input-void.hash                   |    4 ++--
- .../xdriver_xf86-input-void.mk                     |    2 +-
- 3 files changed, 7 insertions(+), 3 deletions(-)
+ package/gcc/gcc-final/gcc-final.hash     |    1 +
+ package/gcc/gcc-initial/gcc-initial.hash |    1 +
+ package/gcc/gcc.hash                     |   10 ++++++++++
+ 3 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-void/Config.in b/package/x11r7/xdriver_xf86-input-void/Config.in
-index d6fdef2..fd3a600 100644
---- a/package/x11r7/xdriver_xf86-input-void/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-void/Config.in
-@@ -1,5 +1,9 @@
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_VOID
- 	bool "xf86-input-void"
-+	# http://lists.x.org/archives/xorg-announce/2015-April/002585.html
-+	# "It is just dead weight for any server released after 2007 or so.
-+	#  Don't use it."
-+	depends on BR2_DEPRECATED_SINCE_2015_05
- 	select BR2_PACKAGE_XPROTO_INPUTPROTO
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
-diff --git a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash
-index 8dd55d3..a1b88c5 100644
---- a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash
-+++ b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2011-May/001658.html
--sha1	49b462d3acb16337eaf78202d4074f19d5e20b29	xf86-input-void-1.4.0.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-April/002585.html
-+sha256	f96e4f0a622821bf43a74bd419f2a18423343996c9d243c7e1430ba2d142339c	xf86-input-void-1.4.1.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
-index cab3753..5baa528 100644
---- a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
-+++ b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_INPUT_VOID_VERSION = 1.4.0
-+XDRIVER_XF86_INPUT_VOID_VERSION = 1.4.1
- XDRIVER_XF86_INPUT_VOID_SOURCE = xf86-input-void-$(XDRIVER_XF86_INPUT_VOID_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_VOID_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_VOID_LICENSE = MIT
+diff --git a/package/gcc/gcc-final/gcc-final.hash b/package/gcc/gcc-final/gcc-final.hash
+new file mode 120000
+index 0000000..7ac9361
+--- /dev/null
++++ b/package/gcc/gcc-final/gcc-final.hash
+@@ -0,0 +1 @@
++../gcc.hash
+\ No newline at end of file
+diff --git a/package/gcc/gcc-initial/gcc-initial.hash b/package/gcc/gcc-initial/gcc-initial.hash
+new file mode 120000
+index 0000000..7ac9361
+--- /dev/null
++++ b/package/gcc/gcc-initial/gcc-initial.hash
+@@ -0,0 +1 @@
++../gcc.hash
+\ No newline at end of file
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+new file mode 100644
+index 0000000..5eec97f
+--- /dev/null
++++ b/package/gcc/gcc.hash
+@@ -0,0 +1,10 @@
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.5.4/sha512.sum
++sha512  78696b287d46aacd6f150920da376ea32f58ad9f0dafd2d3b7fa6dbdd8dd7afe659108d1dfaa5807617fc5248719f50b39c37ade0173ea5b9fec2091f4656115  gcc-4.5.4.tar.bz2
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.7.4/sha512.sum
++sha512  dfcb737073191e628231031a3571ec77ee760a59377630f4a6e4fdfa66f9ddad39fde47e3f0f227eb43cdf90e0d34cde5abdc9ac892c1e111a911062a66c9189  gcc-4.7.4.tar.bz2
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.8.4/sha512.sum
++sha512  b4c84ebd754c026029d706ef52c4242df4dcadc6a22cc5669b3aa37ac9dc25bc9cd9651fda83fb24dd5d17b1710e6865a35bb6c5cd9b95d0971717453935ae8e  gcc-4.8.4.tar.bz2
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.9.2/sha512.sum
++sha512  e96cba06d572dbe7f382a2b00fd9297dcf9f9219d46a9ad0bd904dc36d5e7db3335e422640b79a27fed6fde91b0731732b94a0e2fbcd47344d6779f8ba1f4f9c  gcc-4.9.2.tar.bz2
++# No hash for the ARC variant, comes from the github-helper:
++none  xxx  gcc-arc-2014.12.tar.gz
