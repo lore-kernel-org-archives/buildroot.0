@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Apr 2015 23:35:41 +0200
-Subject: [Buildroot] [PATCH 02/30] package/matchbox: make matchbox-wm a
- real package
-In-Reply-To: <2a2829fef33255a90ea0989d2fbd1a2cc67b7825.1429725549.git.yann.morin.1998@free.fr>
+Date: Thu, 23 Apr 2015 23:36:06 +0200
+Subject: [Buildroot] [PATCH 04/30] package/matchbox: make matchbox-panel
+ a real package
+In-Reply-To: <9d8e6092e50ef50a78cd450f4a9daec38f374949.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <2a2829fef33255a90ea0989d2fbd1a2cc67b7825.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <553965AD.1000606@mind.be>
+ <9d8e6092e50ef50a78cd450f4a9daec38f374949.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <553965C6.7010407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +13,58 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 04/22/15 20:09, Yann E. MORIN wrote:
-> Similarly to what we just did for matchbox-lib, we make matchbox-wm a
-> real package.
+> Currently, matchbox-panel is treated as if it were an option of the
+> matchbox package.
+> 
+> But that's not true, since it is a real package all by itself, with its
+> own archive and its own buildsystem.
+> 
+> So, make it a real package.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- (on condition that it goes to package/matchbox-wm)
+ (on condition that it goes to matchbox/matchbox-panel)
 
  Regards,
  Arnout
-
 > ---
->  package/matchbox/Config.in             | 2 ++
->  package/matchbox/matchbox-wm/Config.in | 3 +++
->  package/matchbox/matchbox.mk           | 1 -
->  3 files changed, 5 insertions(+), 1 deletion(-)
->  create mode 100644 package/matchbox/matchbox-wm/Config.in
+>  package/matchbox/Config.in                | 7 +------
+>  package/matchbox/matchbox-panel/Config.in | 6 ++++++
+>  2 files changed, 7 insertions(+), 6 deletions(-)
+>  create mode 100644 package/matchbox/matchbox-panel/Config.in
 > 
 > diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-> index 70cc168..15b1017 100644
+> index 15b1017..e791cea 100644
 > --- a/package/matchbox/Config.in
 > +++ b/package/matchbox/Config.in
-> @@ -8,6 +8,7 @@ config BR2_PACKAGE_MATCHBOX
->  	select BR2_PACKAGE_XLIB_LIBXDAMAGE
->  	select BR2_PACKAGE_XLIB_LIBXCURSOR
->  	select BR2_PACKAGE_MATCHBOX_LIB
-> +	select BR2_PACKAGE_MATCHBOX_WM
->  	help
->  	  Matchbox is an Open Source base environment for the X Window
->  	  System running on non-desktop embedded platforms such as
-> @@ -19,6 +20,7 @@ config BR2_PACKAGE_MATCHBOX
->  if BR2_PACKAGE_MATCHBOX
+> @@ -21,12 +21,7 @@ if BR2_PACKAGE_MATCHBOX
 >  
 >  source "package/matchbox/matchbox-lib/Config.in"
-> +source "package/matchbox/matchbox-wm/Config.in"
+>  source "package/matchbox/matchbox-wm/Config.in"
+> -
+> -config BR2_PACKAGE_MATCHBOX_PANEL
+> -	bool "Matchbox Panel"
+> -	help
+> -	  A flexible always present 'window bar' for holding
+> -	  application launchers.
+> +source "package/matchbox/matchbox-panel/Config.in"
 >  
->  config BR2_PACKAGE_MATCHBOX_PANEL
->  	bool "Matchbox Panel"
-> diff --git a/package/matchbox/matchbox-wm/Config.in b/package/matchbox/matchbox-wm/Config.in
+>  config BR2_PACKAGE_MATCHBOX_DESKTOP
+>  	bool "Matchbox Desktop"
+> diff --git a/package/matchbox/matchbox-panel/Config.in b/package/matchbox/matchbox-panel/Config.in
 > new file mode 100644
-> index 0000000..6ad5dfc
+> index 0000000..e3daaf5
 > --- /dev/null
-> +++ b/package/matchbox/matchbox-wm/Config.in
-> @@ -0,0 +1,3 @@
-> +config BR2_PACKAGE_MATCHBOX_WM
-> +	bool
+> +++ b/package/matchbox/matchbox-panel/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_MATCHBOX_PANEL
+> +	bool "Matchbox Panel"
 > +	select BR2_PACKAGE_MATCHBOX_LIB
-> diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-> index e367df2..17d89d8 100644
-> --- a/package/matchbox/matchbox.mk
-> +++ b/package/matchbox/matchbox.mk
-> @@ -1,4 +1,3 @@
->  ifeq ($(BR2_PACKAGE_MATCHBOX),y)
->  include $(sort $(wildcard package/matchbox/*/*.mk))
-> -PACKAGES += matchbox-wm
->  endif
+> +	help
+> +	  A flexible always present 'window bar' for holding
+> +	  application launchers.
 > 
 
 
