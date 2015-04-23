@@ -1,49 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Apr 2015 09:45:19 +0200
-Subject: [Buildroot] [git commit] opentyrian: switch to bitbucket
-Message-ID: <20150423074852.22B7C800CD@busybox.osuosl.org>
+Date: Thu, 23 Apr 2015 09:44:40 +0200
+Subject: [Buildroot] [git commit] memcached: bump to version 1.4.23
+Message-ID: <20150423074852.108CE800CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aab12d7eb0bc10034f2b1e28f09ff658b265c339
+commit: http://git.buildroot.net/buildroot/commit/?id=096772d430b771408f020e08d6fc9c6861d68d3d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-As we know google code is going away, so switch the site/source now
-rather than waiting for breakage.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/opentyrian/Config.in     |    2 +-
- package/opentyrian/opentyrian.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/memcached/memcached.hash |    4 ++--
+ package/memcached/memcached.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/opentyrian/Config.in b/package/opentyrian/Config.in
-index 3ebcf08..b0c519f 100644
---- a/package/opentyrian/Config.in
-+++ b/package/opentyrian/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_OPENTYRIAN
- 	  to play the game.
- 	  If you want some sound, activate ALSA with OSS emulation.
- 
--	  http://code.google.com/p/opentyrian/
-+	  https://bitbucket.org/opentyrian/opentyrian/wiki/Home
- 
- if BR2_PACKAGE_OPENTYRIAN
- 
-diff --git a/package/opentyrian/opentyrian.mk b/package/opentyrian/opentyrian.mk
-index 3dc5af5..b74e4cf 100644
---- a/package/opentyrian/opentyrian.mk
-+++ b/package/opentyrian/opentyrian.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index 98e572d..45e1db5 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,2 +1,2 @@
+-# From http://www.memcached.org/files/memcached-1.4.22.tar.gz.sha1
+-sha1	5968d357d504a1f52622f9f8a3e85c29558acaa5	memcached-1.4.22.tar.gz
++# From http://www.memcached.org/files/memcached-1.4.23.tar.gz.sha1
++sha1	121fc548860f4e7d4d5052f9816cc6ff4cc5a10d	memcached-1.4.23.tar.gz
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index 8a005d4..3c67da0 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- OPENTYRIAN_VERSION = 9c9f0ec3532b
--OPENTYRIAN_SITE = https://code.google.com/p/opentyrian/
-+OPENTYRIAN_SITE = https://bitbucket.org/opentyrian/opentyrian
- OPENTYRIAN_SITE_METHOD = hg
- OPENTYRIAN_LICENSE = GPLv2+
- OPENTYRIAN_LICENSE_FILES = COPYING
+-MEMCACHED_VERSION = 1.4.22
++MEMCACHED_VERSION = 1.4.23
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
