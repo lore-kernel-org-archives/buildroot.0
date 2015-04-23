@@ -1,161 +1,132 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Apr 2015 21:21:43 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/tiff: Rework tiff utilities
-	handling
-Message-ID: <1429816903-2484-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu, 23 Apr 2015 21:22:34 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/dovecot: not available on
+	static-only build
+Message-ID: <1429816954-2529-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove all utility-specific options in favour of a generic
-option which select either all or no packages. If users
-want something more fine-grained than that, they can always
-remove the unnecessary tools in a post-build script.
+Fixes
+http://autobuild.buildroot.net/results/53f/53fd9003a4cf7d128f4d64d43209fe26d859a829/
 
-Since tiff has no configure option or Makefile target to prevent
-the build/install of its utilities specific Makefile targets are
-called to build the libtiff and, optionally, the utilities.
+http://autobuild.buildroot.net/results/53f/53fd9003a4cf7d128f4d64d43209fe26d859a829/dovecot-2.2.16/config.log
+shows this pthread related link error during configure
 
---
-v4: rebased
-v3: rebased
-v2: Replaced submenu with a new all-or-nothing option (Thomas)
+sqlite3.c:(.text+0x5106): undefined reference to `pthread_mutex_trylock'
+/home/test/autobuild/instance-2/output/host/usr/i686-buildroot-linux-uclibc/sysroot/usr/lib/libsqlite3.a(sqlite3.o): In function `pthreadMutexAlloc':
+sqlite3.c:(.text+0x91fb): undefined reference to `pthread_mutexattr_init'
+sqlite3.c:(.text+0x9205): undefined reference to `pthread_mutexattr_settype'
+sqlite3.c:(.text+0x920e): undefined reference to `pthread_mutex_init'
+sqlite3.c:(.text+0x9216): undefined reference to `pthread_mutexattr_destroy'
+sqlite3.c:(.text+0x9234): undefined reference to `pthread_mutex_init'
+
+Trying to fix it in dovecot.mk by
+
++# dovecot forgets to compile/link with -pthread breaking static linking
++DOVECOT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -pthread" LIBS="-pthread"
+
+results in a build error later on
+setresgid.c:(.text+0x0): multiple definition of `setresgid'
+
+which might be fixed in uclibc by porting
+http://git.buildroot.net/buildroot/tree/package/uclibc/1.0.2/0001-fix-static-linking-of-pthread-apps.patch
+
+but, at the end, I think it is better to not build Dovecot as a static
+binary since it is heavy modularized and not worth the effort. Therefore
+remove two patches fixing static linking, since they are not needed anymore.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy       |   16 +++++++++++++
- package/tiff/Config.in |   11 +++------
- package/tiff/tiff.mk   |   59 +++++++++++++++++++++---------------------------
- 3 files changed, 45 insertions(+), 41 deletions(-)
+v2: rebased
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 70a9043..90f474c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,22 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.05"
- 
-+config BR2_PACKAGE_TIFF_TIFF2PDF
-+	bool "tiff utility-specific option removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_TIFF_UTILITIES
-+	help
-+	  utility-specific options have been removed in favour of
-+	  the new option BR2_PACKAGE_TIFF_UTILITIES.
-+
-+config BR2_PACKAGE_TIFF_TIFFCP
-+	bool "tiff utility-specific option removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_TIFF_UTILITIES
-+	help
-+	  utility-specific options have been removed in favour of
-+	  the new option BR2_PACKAGE_TIFF_UTILITIES.
-+
- config BR2_LINUX_KERNEL_EXT_RTAI_PATCH
- 	bool "RTAI patch file path has been removed"
+ package/dovecot/0002-fix-static-build.patch |   24 ------------------------
+ package/dovecot/0003-fix-static-build.patch |   24 ------------------------
+ package/dovecot/Config.in                   |    5 +++++
+ 3 files changed, 5 insertions(+), 48 deletions(-)
+ delete mode 100644 package/dovecot/0002-fix-static-build.patch
+ delete mode 100644 package/dovecot/0003-fix-static-build.patch
+
+diff --git a/package/dovecot/0002-fix-static-build.patch b/package/dovecot/0002-fix-static-build.patch
+deleted file mode 100644
+index be646bc..0000000
+--- a/package/dovecot/0002-fix-static-build.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Fix static build
+-
+-MODULE_SUFFIX is undefined when building statically; don't used it.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: sent upstream
+-(http://dovecot.org/pipermail/dovecot/2014-November/098694.html)
+-
+-diff -Nuar dovecot-2.2.15-orig/src/lib/module-dir.c dovecot-2.2.15/src/lib/module-dir.c
+---- dovecot-2.2.15-orig/src/lib/module-dir.c	2014-10-18 00:10:15.000000000 +0300
+-+++ dovecot-2.2.15/src/lib/module-dir.c	2014-11-13 19:27:29.417786313 +0200
+-@@ -621,7 +621,11 @@
+- 	if (*p == '_')
+- 		fname = p + 1;
+- 
+-+#ifdef MODULE_SUFFIX
+- 	p = strstr(fname, MODULE_SUFFIX);
+-+#else
+-+	p = NULL;
+-+#endif
+- 	if (p == NULL)
+- 		return fname;
+- 
+diff --git a/package/dovecot/0003-fix-static-build.patch b/package/dovecot/0003-fix-static-build.patch
+deleted file mode 100644
+index c5dd9d1..0000000
+--- a/package/dovecot/0003-fix-static-build.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Fix symbol conflict in static build with MySQL enabled
+-
+-Compile error log:
+-http://autobuild.buildroot.net/results/9b5/9b536926b3b2bf82c683b48e9697a220f1b4bf33/build-end.log
+-
+-Patch suggested by Timo Sirainen:
+-http://www.dovecot.org/list/dovecot/2014-November/098787.html
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr dovecot-2.2.15.org/src/lib/strnum.h dovecot-2.2.15/src/lib/strnum.h
+---- dovecot-2.2.15.org/src/lib/strnum.h	2014-07-02 17:21:24.000000000 +0200
+-+++ dovecot-2.2.15/src/lib/strnum.h	2014-11-21 19:26:42.316225982 +0100
+-@@ -1,6 +1,10 @@
+- #ifndef STRNUM_H
+- #define STRNUM_H
+- 
+-+/* libmysqlclient really should try to keep its internal stuff internal so
+-+   they won't conflict with the actual programs that are trying to use it. */
+-+#define str_to_time str_to_time_libmysqlclient_craps_all_over
+-+
+- /* Return TRUE if all characters in string are numbers.
+-    Stop when `end_char' is found from string. */
+- bool str_is_numeric(const char *str, char end_char) ATTR_PURE;
+diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
+index 5fd1714..9c242fc 100644
+--- a/package/dovecot/Config.in
++++ b/package/dovecot/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_DOVECOT
+ 	bool "dovecot"
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
  	help
-diff --git a/package/tiff/Config.in b/package/tiff/Config.in
-index 3a929f7..957bbce 100644
---- a/package/tiff/Config.in
-+++ b/package/tiff/Config.in
-@@ -60,14 +60,9 @@ config BR2_PACKAGE_TIFF_JBIG
- 	default y
- endmenu
+ 	  Dovecot is an open source IMAP and POP3 email server for Linux/UNIX-
+@@ -51,3 +52,7 @@ config BR2_PACKAGE_DOVECOT_ZLIB
+ source package/dovecot-pigeonhole/Config.in
  
--config BR2_PACKAGE_TIFF_TIFF2PDF
--	bool "tiff2pdf"
-+config BR2_PACKAGE_TIFF_UTILITIES
-+	bool "tiffutils"
- 	help
--	  tiff2pdf utility
--
--config BR2_PACKAGE_TIFF_TIFFCP
--	bool "tiffcp"
--	help
--	  tiffcp utility
-+	  install tiff utilities
- 
- endif
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 06f0e34..9016a21 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -15,36 +15,6 @@ TIFF_CONF_OPTS = \
- 
- TIFF_DEPENDENCIES = host-pkgconf
- 
--TIFF_TOOLS_TO_DELETE = \
--	bmp2tiff \
--	fax2ps \
--	fax2tiff \
--	gif2tiff \
--	pal2rgb \
--	ppm2tiff \
--	ras2tiff \
--	raw2tiff \
--	rgb2ycbcr \
--	thumbnail \
--	tiff2bw \
--	tiff2ps \
--	tiff2rgba \
--	tiffcmp \
--	tiffcrop \
--	tiffdither \
--	tiffdump \
--	tiffinfo \
--	tiffmedian \
--	tiffset \
--	tiffsplit \
--
--ifeq ($(BR2_PACKAGE_TIFF_TIFF2PDF),)
--TIFF_TOOLS_TO_DELETE += tiff2pdf
--endif
--ifeq ($(BR2_PACKAGE_TIFF_TIFFCP),)
--TIFF_TOOLS_TO_DELETE += tiffcp
--endif
--
- ifneq ($(BR2_PACKAGE_TIFF_CCITT),y)
- TIFF_CONF_OPTS += --disable-ccitt
- endif
-@@ -97,10 +67,33 @@ ifneq ($(BR2_PACKAGE_TIFF_JBIG),y)
- TIFF_CONF_OPTS += --disable-jbig
- endif
- 
--define TIFF_REMOVE_TOOLS_FIXUP
--	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(TIFF_TOOLS_TO_DELETE))
-+ifeq ($(BR2_PACKAGE_TIFF_UTILITIES),y)
-+define TIFF_MAKE_TOOLS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools
- endef
-+define TIFF_INSTALL_STAGING_TOOLS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools DESTDIR=$(STAGING_DIR) install
-+endef
-+define TIFF_INSTALL_TARGET_TOOLS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools DESTDIR=$(TARGET_DIR) install
-+endef
-+endif
- 
--TIFF_POST_INSTALL_TARGET_HOOKS += TIFF_REMOVE_TOOLS_FIXUP
-+define TIFF_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/port
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libtiff
-+	$(TIFF_MAKE_TOOLS)
-+endef
+ endif # BR2_PACKAGE_DOVECOT
 +
-+define TIFF_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libtiff DESTDIR=$(STAGING_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install-pkgconfigDATA
-+	$(TIFF_INSTALL_STAGING_TOOLS)
-+endef
-+
-+define TIFF_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libtiff DESTDIR=$(TARGET_DIR) install
-+	$(TIFF_INSTALL_TARGET_TOOLS)
-+endef
- 
- $(eval $(autotools-package))
++comment "dovecot needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS
 -- 
 1.7.10.4
