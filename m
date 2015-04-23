@@ -1,80 +1,74 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Apr 2015 23:47:46 +0200
-Subject: [Buildroot] [PATCH 04/30] package/matchbox: make matchbox-panel
- a real package
-In-Reply-To: <5539681F.1050604@mind.be>
+Date: Thu, 23 Apr 2015 23:49:52 +0200
+Subject: [Buildroot] [PATCH 05/30] package/matchbox: make
+ matchbox-desktop a real package
+In-Reply-To: <40921cd751a3d6dc2bca91cb2ad74001733f6931.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <9d8e6092e50ef50a78cd450f4a9daec38f374949.1429725549.git.yann.morin.1998@free.fr>
- <5539681F.1050604@mind.be>
-Message-ID: <55396882.6020500@mind.be>
+ <40921cd751a3d6dc2bca91cb2ad74001733f6931.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <55396900.90701@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/23/15 23:46, Arnout Vandecappelle wrote:
-> On 04/22/15 20:09, Yann E. MORIN wrote:
->> Currently, matchbox-panel is treated as if it were an option of the
->> matchbox package.
->>
->> But that's not true, since it is a real package all by itself, with its
->> own archive and its own buildsystem.
->>
->> So, make it a real package.
->>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> ---
->>  package/matchbox/Config.in                | 7 +------
->>  package/matchbox/matchbox-panel/Config.in | 6 ++++++
->>  2 files changed, 7 insertions(+), 6 deletions(-)
->>  create mode 100644 package/matchbox/matchbox-panel/Config.in
->>
->> diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
->> index 15b1017..e791cea 100644
->> --- a/package/matchbox/Config.in
->> +++ b/package/matchbox/Config.in
->> @@ -21,12 +21,7 @@ if BR2_PACKAGE_MATCHBOX
->>  
->>  source "package/matchbox/matchbox-lib/Config.in"
->>  source "package/matchbox/matchbox-wm/Config.in"
->> -
->> -config BR2_PACKAGE_MATCHBOX_PANEL
->> -	bool "Matchbox Panel"
->> -	help
->> -	  A flexible always present 'window bar' for holding
->> -	  application launchers.
->> +source "package/matchbox/matchbox-panel/Config.in"
->>  
->>  config BR2_PACKAGE_MATCHBOX_DESKTOP
->>  	bool "Matchbox Desktop"
->> diff --git a/package/matchbox/matchbox-panel/Config.in b/package/matchbox/matchbox-panel/Config.in
->> new file mode 100644
->> index 0000000..e3daaf5
->> --- /dev/null
->> +++ b/package/matchbox/matchbox-panel/Config.in
->> @@ -0,0 +1,6 @@
->> +config BR2_PACKAGE_MATCHBOX_PANEL
->> +	bool "Matchbox Panel"
+On 04/22/15 20:09, Yann E. MORIN wrote:
+> Currently, matchbox-desktop is treated as if it were an option of the
+> matchbox package.
 > 
->  Actually, to match our style, that should be "matchbox-panel". You can choose
-> if that is in this patch or in a mass cleanup patch later in the series.
+> But that's not true, since it is a real package all by itself, with its
+> own archive and its own buildsystem.
+> 
+> So, make it a real package.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- Argh, it already is part of a later patch. Sorry for the noise...
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ One remark below...
+
+> ---
+>  package/matchbox/Config.in                  | 7 +------
+>  package/matchbox/matchbox-desktop/Config.in | 5 +++++
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+>  create mode 100644 package/matchbox/matchbox-desktop/Config.in
+> 
+> diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+> index e791cea..39aff3c 100644
+> --- a/package/matchbox/Config.in
+> +++ b/package/matchbox/Config.in
+> @@ -22,12 +22,7 @@ if BR2_PACKAGE_MATCHBOX
+>  source "package/matchbox/matchbox-lib/Config.in"
+>  source "package/matchbox/matchbox-wm/Config.in"
+>  source "package/matchbox/matchbox-panel/Config.in"
+> -
+> -config BR2_PACKAGE_MATCHBOX_DESKTOP
+> -	bool "Matchbox Desktop"
+> -	select BR2_PACKAGE_ZLIB
+> -	help
+> -	  A PDA style application launcher or 'item browser'.
+> +source "package/matchbox/matchbox-desktop/Config.in"
+
+ Note that things should be sorted alphabetically. But I think that can better
+be combined with the one-directory-up patch.
 
  Regards,
  Arnout
 
-> 
->  Regards,
->  Arnout
-> 
->> +	select BR2_PACKAGE_MATCHBOX_LIB
->> +	help
->> +	  A flexible always present 'window bar' for holding
->> +	  application launchers.
->>
-> 
+>  
+>  config BR2_PACKAGE_MATCHBOX_COMMON
+>  	bool "Matchbox session common files"
+> diff --git a/package/matchbox/matchbox-desktop/Config.in b/package/matchbox/matchbox-desktop/Config.in
+> new file mode 100644
+> index 0000000..c9fd196
+> --- /dev/null
+> +++ b/package/matchbox/matchbox-desktop/Config.in
+> @@ -0,0 +1,5 @@
+> +config BR2_PACKAGE_MATCHBOX_DESKTOP
+> +	bool "Matchbox Desktop"
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  A PDA style application launcher or 'item browser'.
 > 
 
 
