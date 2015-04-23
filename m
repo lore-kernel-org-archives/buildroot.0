@@ -1,48 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Apr 2015 17:21:07 +0200
-Subject: [Buildroot] [git commit] stunnel: bump to version 5.16
-Message-ID: <20150423152403.CDB4E81D8E@busybox.osuosl.org>
+Date: Thu, 23 Apr 2015 17:23:37 +0200
+Subject: [Buildroot] [git commit] network-manager: adjust license info
+Message-ID: <20150423152403.E5F567FA57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8e784debcb8074f394b69469604888d2a9158c73
+commit: http://git.buildroot.net/buildroot/commit/?id=f24aff2cb8bc13204adf028dc3262bfd881837f5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+libgsystem is gone, so remove that section. Fixes:
+http://autobuild.buildroot.net/results/4b9/4b9826f540b8da43c0434769ad9485529cf762e6/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/stunnel/stunnel.hash |    4 ++--
- package/stunnel/stunnel.mk   |    4 +++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/network-manager/network-manager.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 7f28905..8545341 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From http://www.stunnel.org/pipermail/stunnel-announce/2015-January/000090.html
--sha256	87b34a74061861d1edd2ab238c73eb989b3d0a17e44574b7b6ead1a16aae38c8	stunnel-5.09.tar.gz
-+# From https://www.stunnel.org/pipermail/stunnel-announce/2015-April/000098.html
-+sha256	b6b7e93fb2626eaabae1c8474e1dfa23962cfde8fa35c8602289fcaa4f53608d	stunnel-5.16.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index f7099e8..7a6bb46 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -4,11 +4,13 @@
- #
- ################################################################################
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 937a446..c37c9ea 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -11,8 +11,8 @@ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(N
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
+ 	libgcrypt wireless_tools util-linux host-intltool readline libndp
+-NETWORK_MANAGER_LICENSE = GPLv2+ (app), LGPLv2+ (libnm-util, libgsystem)
+-NETWORK_MANAGER_LICENSE_FILES = COPYING libnm-util/COPYING libgsystem/COPYING
++NETWORK_MANAGER_LICENSE = GPLv2+ (app), LGPLv2+ (libnm-util)
++NETWORK_MANAGER_LICENSE_FILES = COPYING libnm-util/COPYING
  
--STUNNEL_VERSION = 5.09
-+STUNNEL_VERSION = 5.16
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/5.x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
- 	--disable-libwrap
-+STUNNEL_CONF_ENV = \
-+	ax_cv_check_cflags___fstack_protector=$(if $(BR2_ENABLE_SSP),yes,no)
- STUNNEL_LICENSE = GPLv2+
- STUNNEL_LICENSE_FILES = COPYING COPYRIGHT.GPL
- 
+ NETWORK_MANAGER_CONF_ENV = \
+ 	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
