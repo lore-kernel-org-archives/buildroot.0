@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Apr 2015 23:52:16 +0200
-Subject: [Buildroot] [PATCH 06/30] package/matchbox: make
- matchbox-common a real package
-In-Reply-To: <3e3893d8a377276f8a62bdbb4a093b60d9977773.1429725549.git.yann.morin.1998@free.fr>
+Date: Thu, 23 Apr 2015 23:54:23 +0200
+Subject: [Buildroot] [PATCH 07/30] package/matchbox: make
+ matchbox-fakekey a real package
+In-Reply-To: <50fde3fb58a4b07ca643b0a24b5635db02318ad8.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <3e3893d8a377276f8a62bdbb4a093b60d9977773.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <55396990.4090601@mind.be>
+ <50fde3fb58a4b07ca643b0a24b5635db02318ad8.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <55396A0F.3080105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,10 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 04/22/15 20:09, Yann E. MORIN wrote:
-> Currently, matchbox-common is treated as if it were an option of the
-> matchbox package.
+> Currently, matchbox-fakekey is missing a Kconfig entry, but is so far
+> solely a build-time dependency of matchbox-keyboard.
 > 
-> But that's not true, since it is a real package all by itself, with its
-> own archive and its own buildsystem.
-> 
-> So, make it a real package.
+> So, make it a real package, and select it from matchbox-keyboard.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -29,48 +26,37 @@ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
  Arnout
 
 > ---
->  package/matchbox/Config.in                 | 11 +----------
->  package/matchbox/matchbox-common/Config.in |  9 +++++++++
->  2 files changed, 10 insertions(+), 10 deletions(-)
->  create mode 100644 package/matchbox/matchbox-common/Config.in
+>  package/matchbox/Config.in                  | 2 ++
+>  package/matchbox/matchbox-fakekey/Config.in | 2 ++
+>  2 files changed, 4 insertions(+)
+>  create mode 100644 package/matchbox/matchbox-fakekey/Config.in
 > 
 > diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-> index 39aff3c..ead2649 100644
+> index ead2649..8d4ebc7 100644
 > --- a/package/matchbox/Config.in
 > +++ b/package/matchbox/Config.in
-> @@ -23,16 +23,7 @@ source "package/matchbox/matchbox-lib/Config.in"
->  source "package/matchbox/matchbox-wm/Config.in"
+> @@ -24,11 +24,13 @@ source "package/matchbox/matchbox-wm/Config.in"
 >  source "package/matchbox/matchbox-panel/Config.in"
 >  source "package/matchbox/matchbox-desktop/Config.in"
-> -
-> -config BR2_PACKAGE_MATCHBOX_COMMON
-> -	bool "Matchbox session common files"
-> -	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
-> -	help
-> -	  Common desktop folders and matchbox-session script.
-> -
-> -config BR2_PACKAGE_MATCHBOX_COMMON_PDA
-> -	bool "PDA style desktop folders"
-> -	depends on BR2_PACKAGE_MATCHBOX_COMMON
-> +source "package/matchbox/matchbox-common/Config.in"
+>  source "package/matchbox/matchbox-common/Config.in"
+> +source "package/matchbox/matchbox-fakekey/Config.in"
 >  
 >  config BR2_PACKAGE_MATCHBOX_KEYBOARD
 >  	bool "Matchbox Virtual Keyboard"
-> diff --git a/package/matchbox/matchbox-common/Config.in b/package/matchbox/matchbox-common/Config.in
+>  	select BR2_PACKAGE_XLIB_LIBXTST
+>  	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
+> +	select BR2_PACKAGE_MATCHBOX_FAKEKEY
+>  	help
+>  	  Virtual Keyboard
+>  
+> diff --git a/package/matchbox/matchbox-fakekey/Config.in b/package/matchbox/matchbox-fakekey/Config.in
 > new file mode 100644
-> index 0000000..7d22d05
+> index 0000000..334f3a2
 > --- /dev/null
-> +++ b/package/matchbox/matchbox-common/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_MATCHBOX_COMMON
-> +	bool "Matchbox session common files"
-> +	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
-> +	help
-> +	  Common desktop folders and matchbox-session script.
-> +
-> +config BR2_PACKAGE_MATCHBOX_COMMON_PDA
-> +	bool "PDA style desktop folders"
-> +	depends on BR2_PACKAGE_MATCHBOX_COMMON
+> +++ b/package/matchbox/matchbox-fakekey/Config.in
+> @@ -0,0 +1,2 @@
+> +config BR2_PACKAGE_MATCHBOX_FAKEKEY
+> +	bool
 > 
 
 
