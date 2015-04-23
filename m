@@ -1,39 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Apr 2015 22:59:43 +0200
-Subject: [Buildroot] [git commit] host-cmake: Install with install/fast
-	target
-Message-ID: <20150423205949.198268191E@busybox.osuosl.org>
+Date: Thu, 23 Apr 2015 22:59:56 +0200
+Subject: [Buildroot] [PATCH] host-cmake: Install with install/fast target
+In-Reply-To: <1429818373-1788-1-git-send-email-cedric.marie@openmailbox.org>
+References: <1429818373-1788-1-git-send-email-cedric.marie@openmailbox.org>
+Message-ID: <20150423225956.7966a7cc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4b67596023ff92be833cbd82010f37d59cc64aa9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear C?dric Marie,
 
-Use install/fast target in order to skip compilation in installation
-step. The same trick has just been used in pkg-cmake.mk for all CMake
-packages.
+On Thu, 23 Apr 2015 21:46:13 +0200, C?dric Marie wrote:
+> Use install/fast target in order to skip compilation in installation
+> step. The same trick has just been used in pkg-cmake.mk for all CMake
+> packages.
+> 
+> Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
+> ---
+>  package/cmake/cmake.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: C??dric Marie <cedric.marie@openmailbox.org>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cmake/cmake.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 6b9e563..9ca6443 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -44,7 +44,7 @@ define HOST_CMAKE_BUILD_CMDS
- endef
- 
- define HOST_CMAKE_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install/fast
- endef
- 
- define CMAKE_REMOVE_EXTRA_DATA
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
