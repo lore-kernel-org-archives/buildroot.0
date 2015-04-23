@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Apr 2015 23:33:44 +0200
-Subject: [Buildroot] [PATCH 03/30] package/matchbox-wm: drop useless
- commented options
-In-Reply-To: <000cdecc50eb5979cb4e94e1b8291dfe67efd275.1429725549.git.yann.morin.1998@free.fr>
+Date: Thu, 23 Apr 2015 23:35:41 +0200
+Subject: [Buildroot] [PATCH 02/30] package/matchbox: make matchbox-wm a
+ real package
+In-Reply-To: <2a2829fef33255a90ea0989d2fbd1a2cc67b7825.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <000cdecc50eb5979cb4e94e1b8291dfe67efd275.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <55396538.1020903@mind.be>
+ <2a2829fef33255a90ea0989d2fbd1a2cc67b7825.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <553965AD.1000606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,63 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 04/22/15 20:09, Yann E. MORIN wrote:
+> Similarly to what we just did for matchbox-lib, we make matchbox-wm a
+> real package.
+> 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- I'd put this one at the beginning of the series though since it's the simplest
-of them all and can be accepted quickly. Perhaps it's already gone by the time
-you respin :-).
+ (on condition that it goes to package/matchbox-wm)
 
  Regards,
  Arnout
 
 > ---
->  package/matchbox/matchbox-wm/matchbox-wm.mk | 3 ---
->  1 file changed, 3 deletions(-)
+>  package/matchbox/Config.in             | 2 ++
+>  package/matchbox/matchbox-wm/Config.in | 3 +++
+>  package/matchbox/matchbox.mk           | 1 -
+>  3 files changed, 5 insertions(+), 1 deletion(-)
+>  create mode 100644 package/matchbox/matchbox-wm/Config.in
 > 
-> diff --git a/package/matchbox/matchbox-wm/matchbox-wm.mk b/package/matchbox/matchbox-wm/matchbox-wm.mk
-> index 16f1417..da9efd7 100644
-> --- a/package/matchbox/matchbox-wm/matchbox-wm.mk
-> +++ b/package/matchbox/matchbox-wm/matchbox-wm.mk
-> @@ -25,10 +25,7 @@ endif
->  endif
+> diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+> index 70cc168..15b1017 100644
+> --- a/package/matchbox/Config.in
+> +++ b/package/matchbox/Config.in
+> @@ -8,6 +8,7 @@ config BR2_PACKAGE_MATCHBOX
+>  	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+>  	select BR2_PACKAGE_XLIB_LIBXCURSOR
+>  	select BR2_PACKAGE_MATCHBOX_LIB
+> +	select BR2_PACKAGE_MATCHBOX_WM
+>  	help
+>  	  Matchbox is an Open Source base environment for the X Window
+>  	  System running on non-desktop embedded platforms such as
+> @@ -19,6 +20,7 @@ config BR2_PACKAGE_MATCHBOX
+>  if BR2_PACKAGE_MATCHBOX
 >  
->  ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
-> -#MATCHBOX_WM_OPTS += --enable-standalone-xft
->  MATCHBOX_WM_DEPENDENCIES += xlib_libXft
-> -else
-> -#MATCHBOX_WM_OPTS += --disable-standalone-xft
->  endif
+>  source "package/matchbox/matchbox-lib/Config.in"
+> +source "package/matchbox/matchbox-wm/Config.in"
 >  
->  ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
+>  config BR2_PACKAGE_MATCHBOX_PANEL
+>  	bool "Matchbox Panel"
+> diff --git a/package/matchbox/matchbox-wm/Config.in b/package/matchbox/matchbox-wm/Config.in
+> new file mode 100644
+> index 0000000..6ad5dfc
+> --- /dev/null
+> +++ b/package/matchbox/matchbox-wm/Config.in
+> @@ -0,0 +1,3 @@
+> +config BR2_PACKAGE_MATCHBOX_WM
+> +	bool
+> +	select BR2_PACKAGE_MATCHBOX_LIB
+> diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+> index e367df2..17d89d8 100644
+> --- a/package/matchbox/matchbox.mk
+> +++ b/package/matchbox/matchbox.mk
+> @@ -1,4 +1,3 @@
+>  ifeq ($(BR2_PACKAGE_MATCHBOX),y)
+>  include $(sort $(wildcard package/matchbox/*/*.mk))
+> -PACKAGES += matchbox-wm
+>  endif
 > 
 
 
