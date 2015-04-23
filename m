@@ -1,34 +1,56 @@
-From: =?UTF-8?q?C=C3=A9dric=20Marie?= <cedric.marie@openmailbox.org>
-Date: Thu, 23 Apr 2015 21:46:13 +0200
-Subject: [Buildroot] [PATCH] host-cmake: Install with install/fast target
-Message-ID: <1429818373-1788-1-git-send-email-cedric.marie@openmailbox.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 23 Apr 2015 21:55:17 +0200
+Subject: [Buildroot] [PATCH v1] atftp: fix musl compile
+Message-ID: <trinity-43fcb93d-bdf2-4e9e-8466-3a69c84ab60a-1429818917033@3capp-gmx-bs60>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use install/fast target in order to skip compilation in installation
-step. The same trick has just been used in pkg-cmake.mk for all CMake
-packages.
+Hello Thomas,
 
-Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
----
- package/cmake/cmake.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, Apr 18, 2015 at 03:44:24PM +0200, Thomas Petazzoni wrote:
+> Dear Peter Seiderer,
+> 
+> On Thu, 16 Apr 2015 23:02:05 +0200, Peter Seiderer wrote:
+> > - add missing __THROW, __BEGIN_DECLS, __END_DECLS and __attribute_pure__
+> >   defines in atftp own argz.h file
+> > 
+> > - add missing sys/types.h include in tftp.h and tftpd.h
+> > 
+> > Fixes [1]:
+> > 
+> > argz.h:61:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'extern'
+> >  extern error_t __argz_create (char *__const __argv[], char **__restrict __argz,
+> >  ^
+> > argz.h: In function 'argz_create':
+> > argz.h:64:34: error: expected declaration specifiers before '__THROW'
+> >         size_t *__restrict __len) __THROW;
+> > 
+> > [1] http://autobuild.buildroot.net/results/b7f/b7f205ea2066788ea78a1a819f1b592e84e2455e/
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  ...gz.h-fix-musl-compile-add-missing-defines.patch | 42 ++++++++++++++++++++++
+> >  ...-tftpd.h-fix-musl-compile-missing-include.patch | 40 +++++++++++++++++++++
+> >  2 files changed, 82 insertions(+)
+> >  create mode 100644 package/atftp/0002-argz.h-fix-musl-compile-add-missing-defines.patch
+> >  create mode 100644 package/atftp/0003-tftp.h-tftpd.h-fix-musl-compile-missing-include.patch
+> 
+> Applied, thanks. Can you please submit those patches to the upstream
+> atftp project?
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 6b9e563..9ca6443 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -44,7 +44,7 @@ define HOST_CMAKE_BUILD_CMDS
- endef
- 
- define HOST_CMAKE_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install/fast
- endef
- 
- define CMAKE_REMOVE_EXTRA_DATA
--- 
-2.1.4
+Yes, done: http://sourceforge.net/p/atftp/bugs/4/
+
+Regards,
+Peter
+
+> 
+> Thanks,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
