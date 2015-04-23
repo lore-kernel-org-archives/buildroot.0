@@ -1,179 +1,63 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Thu, 23 Apr 2015 23:45:57 +0300
-Subject: [Buildroot] [PATCH] elfutils: disable symbol versioning for uClibc
-Message-ID: <1429821957-18969-1-git-send-email-jcmvbkbc@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 23 Apr 2015 22:46:40 +0200
+Subject: [Buildroot] [PATCH] Makefile: add list-defconfig to the general
+	help
+In-Reply-To: <1429821457-6008-1-git-send-email-yann.morin.1998@free.fr>
+References: <1429821457-6008-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <55395A30.1060807@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes segfault in xtensa ltrace caused by infinite recursion in the
-function dwfl_report_elf calling other version of that function.
+On 04/23/15 22:37, Yann E. MORIN wrote:
+> When listing defconfig files was moved to its own make target, it was
+> not added to the general help text.
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- ...bling-symbol-versioning-at-configure-time.patch | 139 +++++++++++++++++++++
- package/elfutils/elfutils.mk                       |   1 +
- 2 files changed, 140 insertions(+)
- create mode 100644 package/elfutils/0007-Allow-disabling-symbol-versioning-at-configure-time.patch
+ Woops, thanks for noticing.
 
-diff --git a/package/elfutils/0007-Allow-disabling-symbol-versioning-at-configure-time.patch b/package/elfutils/0007-Allow-disabling-symbol-versioning-at-configure-time.patch
-new file mode 100644
-index 0000000..7378f26
---- /dev/null
-+++ b/package/elfutils/0007-Allow-disabling-symbol-versioning-at-configure-time.patch
-@@ -0,0 +1,139 @@
-+From bafacacaf7659a4933604662daba26a480b29a8d Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Thu, 23 Apr 2015 20:46:59 +0200
-+Subject: [PATCH] Allow disabling symbol versioning at configure time
-+
-+Due to missing symbol versioning support in uClibc calls to versioned
-+functions that internally call different version of themselves results
-+in infinite recursion.
-+
-+Introduce macro SYMBOL_VERSIONING and use it instead of plain SHARED to
-+decide whether symbol versioning is needed. Control this macro
-+definition with new configure option --disable-symbol-versioning.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Signed-off-by: Mark Wielaard <mjw@redhat.com>
-+---
-+Backported from: bafacacaf7659a4933604662daba26a480b29a8d
-+Changes to ChangeLogs are dropped.
-+
-+ config/eu.am                   | 10 ++++++++--
-+ configure.ac                   |  7 +++++++
-+ lib/eu-config.h                |  6 +++---
-+ libdwfl/core-file.c            |  2 +-
-+ libdwfl/dwfl_module_build_id.c |  2 +-
-+ libdwfl/dwfl_report_elf.c      |  2 +-
-+
-+diff --git a/config/eu.am b/config/eu.am
-+index faf8add..6103a3e 100644
-+--- a/config/eu.am
-++++ b/config/eu.am
-+@@ -38,16 +38,22 @@ AM_CFLAGS = -std=gnu99 -Wall -Wshadow -Wformat=2 \
-+ 
-+ COMPILE.os = $(filter-out -fprofile-arcs -ftest-coverage, $(COMPILE))
-+ 
-++DEFS.os = -DPIC -DSHARED
-++if SYMBOL_VERSIONING
-++DEFS.os += -DSYMBOL_VERSIONING
-++else
-++endif
-++
-+ %.os: %.c %.o
-+ if AMDEP
-+-	if $(COMPILE.os) -c -o $@ -fpic -DPIC -DSHARED -MT $@ -MD -MP \
-++	if $(COMPILE.os) -c -o $@ -fpic $(DEFS.os) -MT $@ -MD -MP \
-+ 	  -MF "$(DEPDIR)/$*.Tpo" `test -f '$<' || echo '$(srcdir)/'`$<; \
-+ 	then cat "$(DEPDIR)/$*.Tpo" >> "$(DEPDIR)/$*.Po"; \
-+ 	     rm -f "$(DEPDIR)/$*.Tpo"; \
-+ 	else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; \
-+ 	fi
-+ else
-+-	$(COMPILE.os) -c -o $@ -fpic -DPIC -DSHARED $<
-++	$(COMPILE.os) -c -o $@ -fpic $(DEFS.os) $<
-+ endif
-+ 
-+ CLEANFILES = *.gcno *.gcda
-+diff --git a/configure.ac b/configure.ac
-+index ed2c964..be01573 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -241,6 +241,13 @@ AS_HELP_STRING([--disable-textrelcheck],
-+                [Disable textrelcheck being a fatal error]))
-+ AM_CONDITIONAL(FATAL_TEXTREL, [test "x$enable_textrelcheck" != "xno"])
-+ 
-++AC_ARG_ENABLE([symbol-versioning],
-++AS_HELP_STRING([--disable-symbol-versioning],
-++               [Disable symbol versioning in shared objects]))
-++AM_CONDITIONAL(SYMBOL_VERSIONING, [test "x$enable_symbol_versioning" != "xno"])
-++AS_IF([test "x$enable_symbol_versioning" = "xno"],
-++      [AC_MSG_WARN([Disabling symbol versioning breaks ABI compatibility.])])
-++
-+ dnl The directories with content.
-+ 
-+ dnl Documentation.
-+diff --git a/lib/eu-config.h b/lib/eu-config.h
-+index 3afff26..5bb21c1 100644
-+--- a/lib/eu-config.h
-++++ b/lib/eu-config.h
-+@@ -163,7 +163,7 @@ asm (".section predict_data, \"aw\"; .previous\n"
-+ #define ELFUTILS_HEADER(name) <lib##name.h>
-+ 
-+ 
-+-#ifdef SHARED
-++#ifdef SYMBOL_VERSIONING
-+ # define OLD_VERSION(name, version) \
-+   asm (".globl _compat." #version "." #name "\n" \
-+        "_compat." #version "." #name " = " #name "\n" \
-+@@ -181,8 +181,8 @@ asm (".section predict_data, \"aw\"; .previous\n"
-+ # define OLD_VERSION(name, version) /* Nothing for static linking.  */
-+ # define NEW_VERSION(name, version) /* Nothing for static linking.  */
-+ # define COMPAT_VERSION_NEWPROTO(name, version, prefix) \
-+-  error "should use #ifdef SHARED"
-+-# define COMPAT_VERSION(name, version, prefix) error "should use #ifdef SHARED"
-++  error "should use #ifdef SYMBOL_VERSIONING"
-++# define COMPAT_VERSION(name, version, prefix) error "should use #ifdef SYMBOL_VERSIONING"
-+ #endif
-+ 
-+ 
-+diff --git a/libdwfl/core-file.c b/libdwfl/core-file.c
-+index 324e9d2..bbe0899 100644
-+--- a/libdwfl/core-file.c
-++++ b/libdwfl/core-file.c
-+@@ -588,7 +588,7 @@ dwfl_core_file_report (Dwfl *dwfl, Elf *elf, const char *executable)
-+ INTDEF (dwfl_core_file_report)
-+ NEW_VERSION (dwfl_core_file_report, ELFUTILS_0.158)
-+ 
-+-#ifdef SHARED
-++#ifdef SYMBOL_VERSIONING
-+ int _compat_without_executable_dwfl_core_file_report (Dwfl *dwfl, Elf *elf);
-+ COMPAT_VERSION_NEWPROTO (dwfl_core_file_report, ELFUTILS_0.146,
-+ 			 without_executable)
-+diff --git a/libdwfl/dwfl_module_build_id.c b/libdwfl/dwfl_module_build_id.c
-+index 350bbf8..c9a42ca 100644
-+--- a/libdwfl/dwfl_module_build_id.c
-++++ b/libdwfl/dwfl_module_build_id.c
-+@@ -101,7 +101,7 @@ dwfl_module_build_id (Dwfl_Module *mod,
-+ INTDEF (dwfl_module_build_id)
-+ NEW_VERSION (dwfl_module_build_id, ELFUTILS_0.138)
-+ 
-+-#ifdef SHARED
-++#ifdef SYMBOL_VERSIONING
-+ COMPAT_VERSION (dwfl_module_build_id, ELFUTILS_0.130, vaddr_at_end)
-+ 
-+ int
-+diff --git a/libdwfl/dwfl_report_elf.c b/libdwfl/dwfl_report_elf.c
-+index 3a4ae2e..624284c 100644
-+--- a/libdwfl/dwfl_report_elf.c
-++++ b/libdwfl/dwfl_report_elf.c
-+@@ -321,7 +321,7 @@ dwfl_report_elf (Dwfl *dwfl, const char *name, const char *file_name, int fd,
-+ INTDEF (dwfl_report_elf)
-+ NEW_VERSION (dwfl_report_elf, ELFUTILS_0.156)
-+ 
-+-#ifdef SHARED
-++#ifdef SYMBOL_VERSIONING
-+ Dwfl_Module *
-+   _compat_without_add_p_vaddr_dwfl_report_elf (Dwfl *dwfl, const char *name,
-+ 					       const char *file_name, int fd,
-+-- 
-+1.8.1.4
-+
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 227dea9..838c3b8 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -34,6 +34,7 @@ ELFUTILS_CONF_ENV += \
- 
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- ELFUTILS_DEPENDENCIES += argp-standalone
-+ELFUTILS_CONF_OPTS += --disable-symbol-versioning
- endif
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
+> 
+> However, this is a very important topic, so list it.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> 
+> ---
+> Notes: I was not sure where to put it. On the one hand, the
+> 'configuration' section seemed appropriate, but I think it does
+> fit well with all the other make targets in there; on the other
+> hand, the 'misc' section does not seem adequate either... Feel free to
+> move it around as you see fit...
+
+ Documentation, after graph-*.
+
+ Regards,
+ Arnout
+
+> ---
+>  Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 5de4789..4418dfb 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -888,6 +888,7 @@ endif
+>  	@echo '  graph-depends          - generate graph of the dependency tree'
+>  	@echo
+>  	@echo 'Miscellaneous:'
+> +	@echo '  list-defconfigs:       - list all defconfigs (pre-configured minimal systems)'
+>  	@echo '  source                 - download all sources needed for offline-build'
+>  	@echo '  source-check           - check selected packages for valid download URLs'
+>  	@echo '  external-deps          - list external packages used'
+> 
+
+
 -- 
-1.8.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
