@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Apr 2015 23:55:04 +0200
-Subject: [Buildroot] [PATCH 08/30] package/matchbox: make
- matchbox-keyboard a real package
-In-Reply-To: <726fbfea7c913e3e8e59a71dfe1d3f49b2c0113b.1429725549.git.yann.morin.1998@free.fr>
+Date: Fri, 24 Apr 2015 00:00:15 +0200
+Subject: [Buildroot] [PATCH 09/30] package/matchbox: make
+ match-startup-monitor a real package
+In-Reply-To: <b5a7a6e89a61acaa154c10b6e9cef08404f913a8.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <726fbfea7c913e3e8e59a71dfe1d3f49b2c0113b.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <55396A38.5070808@mind.be>
+ <b5a7a6e89a61acaa154c10b6e9cef08404f913a8.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <55396B6F.2040004@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +13,72 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 04/22/15 20:09, Yann E. MORIN wrote:
-> Currently, matchbox-keyboard is treated as if it were an option of the
-> matchbox package.
+>  Currently, matchbox-startup-monitor is missing a Kconfig entry, but is
+  ^
+
+> so far solely a build-time dependency of matchbox-panel.
 > 
-> But that's not true, since it is a real package all by itself, with its
-> own archive and its own buildsystem.
-> 
-> So, make it a real package.
+> So, make it a real package, and only build-depend on it when enabled.
+> Fix the condition to build-depend on it.
+
+ Update commit message according to my comment below.
+
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/matchbox/Config.in                          | 1 +
+>  package/matchbox/matchbox-panel/matchbox-panel.mk   | 4 ++--
+>  package/matchbox/matchbox-startup-monitor/Config.in | 2 ++
+>  3 files changed, 5 insertions(+), 2 deletions(-)
+>  create mode 100644 package/matchbox/matchbox-startup-monitor/Config.in
+> 
+> diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+> index 9b27d4d..2f9b73d 100644
+> --- a/package/matchbox/Config.in
+> +++ b/package/matchbox/Config.in
+> @@ -26,5 +26,6 @@ source "package/matchbox/matchbox-desktop/Config.in"
+>  source "package/matchbox/matchbox-common/Config.in"
+>  source "package/matchbox/matchbox-fakekey/Config.in"
+>  source "package/matchbox/matchbox-keyboard/Config.in"
+> +source "package/matchbox/matchbox-startup-monitor/Config.in"
+>  
+>  endif
+> diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
+> index d3efed9..f7d699b 100644
+> --- a/package/matchbox/matchbox-panel/matchbox-panel.mk
+> +++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
+> @@ -13,9 +13,9 @@ MATCHBOX_PANEL_LICENSE_FILES = COPYING
+>  MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib
+>  MATCHBOX_PANEL_CONF_OPTS = --enable-expat
+>  
+> -ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
+> +ifeq ($(BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR),y)
+>  MATCHBOX_PANEL_CONF_OPTS += --enable-startup-notification
+> -MATCHBOX_PANEL_DEPENDENCIES += startup-notification matchbox-startup-monitor
+> +MATCHBOX_PANEL_DEPENDENCIES += matchbox-startup-monitor
+>  else
+>  MATCHBOX_PANEL_CONF_OPTS += --disable-startup-notification
+>  endif
+> diff --git a/package/matchbox/matchbox-startup-monitor/Config.in b/package/matchbox/matchbox-startup-monitor/Config.in
+> new file mode 100644
+> index 0000000..4dd088f
+> --- /dev/null
+> +++ b/package/matchbox/matchbox-startup-monitor/Config.in
+> @@ -0,0 +1,2 @@
+> +config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
+> +	bool
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ This changes behaviour: it used to be selected automatically when
+startup-notification was selected. So you should add
+
+	default y if BR2_PACKAGE_STARTUP_NOTIFICATION
+
+ Of course, that's going to be reverted anyway when you later add a prompt to
+this package, so perhaps it's not that important.
+
 
  Regards,
  Arnout
-
-> ---
->  package/matchbox/Config.in                   | 9 +--------
->  package/matchbox/matchbox-keyboard/Config.in | 7 +++++++
->  2 files changed, 8 insertions(+), 8 deletions(-)
->  create mode 100644 package/matchbox/matchbox-keyboard/Config.in
-> 
-> diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-> index 8d4ebc7..9b27d4d 100644
-> --- a/package/matchbox/Config.in
-> +++ b/package/matchbox/Config.in
-> @@ -25,13 +25,6 @@ source "package/matchbox/matchbox-panel/Config.in"
->  source "package/matchbox/matchbox-desktop/Config.in"
->  source "package/matchbox/matchbox-common/Config.in"
->  source "package/matchbox/matchbox-fakekey/Config.in"
-> -
-> -config BR2_PACKAGE_MATCHBOX_KEYBOARD
-> -	bool "Matchbox Virtual Keyboard"
-> -	select BR2_PACKAGE_XLIB_LIBXTST
-> -	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
-> -	select BR2_PACKAGE_MATCHBOX_FAKEKEY
-> -	help
-> -	  Virtual Keyboard
-> +source "package/matchbox/matchbox-keyboard/Config.in"
->  
->  endif
-> diff --git a/package/matchbox/matchbox-keyboard/Config.in b/package/matchbox/matchbox-keyboard/Config.in
-> new file mode 100644
-> index 0000000..e017358
-> --- /dev/null
-> +++ b/package/matchbox/matchbox-keyboard/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_MATCHBOX_KEYBOARD
-> +	bool "Matchbox Virtual Keyboard"
-> +	select BR2_PACKAGE_XLIB_LIBXTST
-> +	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
-> +	select BR2_PACKAGE_MATCHBOX_FAKEKEY
-> +	help
-> +	  Virtual Keyboard
 > 
 
 
