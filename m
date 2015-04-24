@@ -1,34 +1,39 @@
-From: =?utf-8?Q?Pongr=C3=A1cz_Istv=C3=A1n?= <pongracz.istvan@gmail.com>
-Date: Fri, 24 Apr 2015 22:34:44 +0200
-Subject: [Buildroot] Kernel panic - unable to mount root fs on
-	unknown-block(0, 0) - i486
-Message-ID: <92c9421a9c3260f1653ab207e9b9d4d4@www.startit.hu>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 24 Apr 2015 22:53:12 +0200
+Subject: [Buildroot] [PATCH 06/10 v7] package/nvidia-driver: Add gl.pc
+In-Reply-To: <XnsA486E28EE4A92berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <cover.1423597914.git.yann.morin.1998@free.fr>
+ <09718509727afa315acf9e7b999f71243f2a67c3.1423597914.git.yann.morin.1998@free.fr>
+ <XnsA486E28EE4A92berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20150424205312.GI4244@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bernd, All,
 
- Hi,
+On 2015-04-24 22:16 +0200, Bernd Kuhls spake thusly:
+[--SNIP--]
+> > +     $(INSTALL) -D -m 0644 package/nvidia-driver/gl.pc 
+> $(STAGING_DIR)/usr/lib/pkgconfig/gl.pc
+> 
+> the nvidia package should not install gl.pc when
+> BR2_PACKAGE_NVIDIA_DRIVER_XORG is not set because in this case nvidia-driver 
+> is not a provider for libgl.
 
-I have a problem with booting kernel built by buildroot on i486. The kernel (3.18.x) panicked: Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
+Indeed. I'll cook up a patch.
 
-I use the latest buildroot, the target is i486. I used a kernel config from a known working older kernel and double checked, all ext2/ext3 etc. built directly to the kernel, so, seems every necessary drivers built directly to the kernel (not as modules).
+Thanks for the report!
 
-I tried to boot from usb. There is no initramfs (initrd).
+Regards,
+Yann E. MORIN.
 
-If I get a different kernel from an other system, which is working, and I started the buildroot generated system with that kernel, it can boot as expected. Same kernel parameters.
-
-Does it sound familiar to somebody?
-
-My goal is to get a console based system optimized to i486, including kernel.
-
-What am I missing?
-
-Thanks, 
-
-Istv?n
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150424/845dbd56/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
