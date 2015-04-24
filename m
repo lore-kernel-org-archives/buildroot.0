@@ -1,75 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Apr 2015 19:54:38 +0200
-Subject: [Buildroot] integrating MariaDB Galera Cluster into BR
-In-Reply-To: <553A5805.3080701@green-communications.fr>
-References: <553A5805.3080701@green-communications.fr>
-Message-ID: <20150424175438.GG4244@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 24 Apr 2015 20:01:27 +0200
+Subject: [Buildroot] [git commit] qpdf: unbreak build on uClibc w/o threads
+Message-ID: <20150424180315.B5E7281DE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sylvain, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=42cfac07e1e5732fccf676c8b7aeabe53dbd2ff7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-04-24 16:49 +0200, Sylvain Raybaud spake thusly:
-> I would like to integrate MariaDB Galera Cluster
-> (https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster/)
-> into Buildroot. Before I prepare and submit patches I would like to
-> ask a few questions about how to do things properly: MariaDB conflicts
-> with MySQL (they install the same files). Should I:
-> 
->  a) Create a meta-package, for example "mysql compatible DB", the
-> selection of which would let the user choose between MariaDB Galera
-> Cluster or MySQL?
-> 
->  b) Integrate MariaDB Galera Cluster into MySQL package and let the
-> user choose which implementation he wants?
-> 
->  c) Make these packages mutually exclusive using "depends on !"?
+Fixes:
+http://autobuild.buildroot.net/results/af8/af857caef0c622aa9cfb1859b344880971ff263c/
+http://autobuild.buildroot.net/results/10e/10e90c7c93aec92f0e13de50ecc861d56750dc8c/
+http://autobuild.buildroot.net/results/69c/69c4522852e0b634723aaacd57f192db7ad6aa58/
+http://autobuild.buildroot.net/results/fc4/fc45fd1bd249f58a3d8907bfd410f5dfbb452751/
 
-I would say either b) or c). Which one depends on how MariaDB Galera is
-seen with respect to MySQL:
+And many more.
 
- 1- is it a completely different implementation that is 100% compatible?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...0001-QUtil.hh-time_t-needs-include-time.h.patch |   29 ++++++++++++++++++++
+ 1 files changed, 29 insertions(+), 0 deletions(-)
 
- 2- is it a fork that is 100% compatible?
-
- 3- is it a fork that is not 100% compatible?
-
-For 1 or 2, I'd say go with b), otherwise go for c).
-
-If you decide for c), then only one can depend on not the ther
-(otherwise you'd have a crcular dependency). That is, something like:
-
-    config BR2_PKG_MYSQL
-        bool "mysql"
-
-    config BR2_PKG_MARIADB
-        bool "mariadb"
-        depends on !BR2_PKG_MYSQL
-
-Anyway, if you're not sure, go for c); we will review the patch, and we
-can guide you based on the details.
-
-in any case, be sure to read:
-
-  - the section(s) from the "Adding new packages to Buildroot" chapter,
-    that applies to mariadb (e.g. generic, autotools, cmake...):
-    http://buildroot.net/downloads/manual/manual.html#adding-packages
-
-  - the section on how to send patches:
-    http://buildroot.net/downloads/manual/manual.html#submitting-patches
-
-Happy hacking! ;-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/qpdf/0001-QUtil.hh-time_t-needs-include-time.h.patch b/package/qpdf/0001-QUtil.hh-time_t-needs-include-time.h.patch
+new file mode 100644
+index 0000000..742c70c
+--- /dev/null
++++ b/package/qpdf/0001-QUtil.hh-time_t-needs-include-time.h.patch
+@@ -0,0 +1,29 @@
++From 88ac4baf0a55ef15f298592fa344d8ddae26fa33 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Fri, 24 Apr 2015 19:58:41 +0200
++Subject: [PATCH] QUtil.hh: time_t needs #include <time.h>
++
++Fixes build on uClibc without threads:
++
++http://autobuild.buildroot.net/results/af8/af857caef0c622aa9cfb1859b344880971ff263c/build-end.log
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ include/qpdf/QUtil.hh | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/include/qpdf/QUtil.hh b/include/qpdf/QUtil.hh
++index 5c2e548..7f912e2 100644
++--- a/include/qpdf/QUtil.hh
+++++ b/include/qpdf/QUtil.hh
++@@ -14,6 +14,7 @@
++ #include <list>
++ #include <stdexcept>
++ #include <stdio.h>
+++#include <time.h>
++ 
++ class RandomDataProvider;
++ 
++-- 
++2.1.3
++
