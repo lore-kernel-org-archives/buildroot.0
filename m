@@ -1,61 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Apr 2015 20:01:27 +0200
-Subject: [Buildroot] [git commit] qpdf: unbreak build on uClibc w/o threads
-Message-ID: <20150424180315.B5E7281DE5@busybox.osuosl.org>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Fri, 24 Apr 2015 14:49:57 -0400
+Subject: [Buildroot] [PATCH] qwt: bump to version 6.1.2
+Message-ID: <1429901397-9961-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=42cfac07e1e5732fccf676c8b7aeabe53dbd2ff7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Qwt 6.1.2 fixes several minor issues in 6.1.0 and removes the need to
+carry a patch in Buildroot.
 
-Fixes:
-http://autobuild.buildroot.net/results/af8/af857caef0c622aa9cfb1859b344880971ff263c/
-http://autobuild.buildroot.net/results/10e/10e90c7c93aec92f0e13de50ecc861d56750dc8c/
-http://autobuild.buildroot.net/results/69c/69c4522852e0b634723aaacd57f192db7ad6aa58/
-http://autobuild.buildroot.net/results/fc4/fc45fd1bd249f58a3d8907bfd410f5dfbb452751/
-
-And many more.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- ...0001-QUtil.hh-time_t-needs-include-time.h.patch |   29 ++++++++++++++++++++
- 1 files changed, 29 insertions(+), 0 deletions(-)
+ package/qwt/0001-remove-installed-check.patch | 32 ---------------------------
+ package/qwt/qwt.hash                          |  2 +-
+ package/qwt/qwt.mk                            |  2 +-
+ 3 files changed, 2 insertions(+), 34 deletions(-)
+ delete mode 100644 package/qwt/0001-remove-installed-check.patch
 
-diff --git a/package/qpdf/0001-QUtil.hh-time_t-needs-include-time.h.patch b/package/qpdf/0001-QUtil.hh-time_t-needs-include-time.h.patch
-new file mode 100644
-index 0000000..742c70c
---- /dev/null
-+++ b/package/qpdf/0001-QUtil.hh-time_t-needs-include-time.h.patch
-@@ -0,0 +1,29 @@
-+From 88ac4baf0a55ef15f298592fa344d8ddae26fa33 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Fri, 24 Apr 2015 19:58:41 +0200
-+Subject: [PATCH] QUtil.hh: time_t needs #include <time.h>
-+
-+Fixes build on uClibc without threads:
-+
-+http://autobuild.buildroot.net/results/af8/af857caef0c622aa9cfb1859b344880971ff263c/build-end.log
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ include/qpdf/QUtil.hh | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/include/qpdf/QUtil.hh b/include/qpdf/QUtil.hh
-+index 5c2e548..7f912e2 100644
-+--- a/include/qpdf/QUtil.hh
-++++ b/include/qpdf/QUtil.hh
-+@@ -14,6 +14,7 @@
-+ #include <list>
-+ #include <stdexcept>
-+ #include <stdio.h>
-++#include <time.h>
-+ 
-+ class RandomDataProvider;
-+ 
-+-- 
-+2.1.3
-+
+diff --git a/package/qwt/0001-remove-installed-check.patch b/package/qwt/0001-remove-installed-check.patch
+deleted file mode 100644
+index 7490a7b..0000000
+--- a/package/qwt/0001-remove-installed-check.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-Remove useless check at build time
+-
+-At build time, Qwt looks whether the Qwt libraries are already
+-installed in the destination directory, to avoid confusion between
+-libraries installed system-wide and locally-built shared
+-libraries. However, this behaviour conflicts with how Buildroot builds
+-and installs libraries, so get rid of it.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: qwt-6.0.0/qwtbuild.pri
+-===================================================================
+---- qwt-6.0.0.orig/qwtbuild.pri	2011-09-12 19:37:35.663275952 +0200
+-+++ qwt-6.0.0/qwtbuild.pri	2011-09-12 19:37:41.913275949 +0200
+-@@ -53,17 +53,3 @@
+- !debug_and_release {
+-     OBJECTS_DIR       = obj
+- }
+--
+--unix {
+--
+--    exists( $${QMAKE_LIBDIR_QT}/libqwt.* ) {
+--
+--        # On some Linux distributions the Qwt libraries are installed 
+--        # in the same directory as the Qt libraries. Unfortunately
+--        # qmake always adds QMAKE_LIBDIR_QT at the beginning of the 
+--        # linker path, so that the installed libraries will be
+--        # used instead of the local ones.
+--
+--        error( "local build will conflict with $${QMAKE_LIBDIR_QT}/libqwt.*" )
+--    }
+--}
+diff --git a/package/qwt/qwt.hash b/package/qwt/qwt.hash
+index dfc9c31..fc78b75 100644
+--- a/package/qwt/qwt.hash
++++ b/package/qwt/qwt.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  a7e3d9f1db917d186a973c5f04a316bc9607c7c35794d7a16de323aba5e17402  qwt-6.1.0.tar.bz2
++sha256  2b08f18d1d3970e7c3c6096d850f17aea6b54459389731d3ce715d193e243d0c  qwt-6.1.2.tar.bz2
+diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+index c565ba0..8a46c25 100644
+--- a/package/qwt/qwt.mk
++++ b/package/qwt/qwt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QWT_VERSION = 6.1.0
++QWT_VERSION = 6.1.2
+ QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
+ QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
+ QWT_INSTALL_STAGING = YES
+-- 
+1.9.1
