@@ -1,43 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 24 Apr 2015 22:16:18 +0200
-Subject: [Buildroot] [PATCH 06/10 v7] package/nvidia-driver: Add gl.pc
-References: <cover.1423597914.git.yann.morin.1998@free.fr>
- <09718509727afa315acf9e7b999f71243f2a67c3.1423597914.git.yann.morin.1998@free.fr>
-Message-ID: <XnsA486E28EE4A92berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: =?utf-8?Q?Pongr=C3=A1cz_Istv=C3=A1n?= <pongracz.istvan@gmail.com>
+Date: Fri, 24 Apr 2015 22:34:44 +0200
+Subject: [Buildroot] Kernel panic - unable to mount root fs on
+	unknown-block(0, 0) - i486
+Message-ID: <92c9421a9c3260f1653ab207e9b9d4d4@www.startit.hu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:09718509727afa315acf9e7b999f71243f2a67c3.1423597914.git.yann.morin.1998
-@free.fr:
+ Hi,
 
-> +     $(INSTALL) -D -m 0644 package/nvidia-driver/gl.pc 
-$(STAGING_DIR)/usr/lib/pkgconfig/gl.pc
+I have a problem with booting kernel built by buildroot on i486. The kernel (3.18.x) panicked: Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
 
-Hi,
+I use the latest buildroot, the target is i486. I used a kernel config from a known working older kernel and double checked, all ext2/ext3 etc. built directly to the kernel, so, seems every necessary drivers built directly to the kernel (not as modules).
 
-the nvidia package should not install gl.pc when
-BR2_PACKAGE_NVIDIA_DRIVER_XORG is not set because in this case nvidia-driver 
-is not a provider for libgl.
+I tried to boot from usb. There is no initramfs (initrd).
 
-The reason for this autobuild error 
-http://autobuild.buildroot.net/results/724/724fce8ce51c2c0578192b1369a1cfcea3
-d72638/
-in the vlc package is that vlc detects gl.pc from the nvidia package and 
-tries to enable opengl support. Compiling this defconfig with "make vlc" 
-alone works, if you compile nvidia-driver before vlc than the build breaks.
+If I get a different kernel from an other system, which is working, and I started the buildroot generated system with that kernel, it can boot as expected. Same kernel parameters.
 
-.config looks like this.
+Does it sound familiar to somebody?
 
-$ grep -i nvidia .config
-BR2_PACKAGE_NVIDIA_DRIVER=y
-# nvidia-driver X.org drivers needs a modular Xorg server
-# BR2_PACKAGE_NVIDIA_DRIVER_CUDA is not set
-# nvidia kernel module needs a kernel to be built
+My goal is to get a console based system optimized to i486, including kernel.
 
-Regards, Bernd
+What am I missing?
+
+Thanks, 
+
+Istv?n
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150424/845dbd56/attachment.html>
