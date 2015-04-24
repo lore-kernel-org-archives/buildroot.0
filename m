@@ -1,41 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Apr 2015 19:43:10 +0200
-Subject: [Buildroot] [PATCH 10/30] package/matchbox: remove superfluous
- conditional includes
-In-Reply-To: <55396BAB.2020206@mind.be>
-References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <71ea29cc98ad7d3f0278f14b50837784776b12ca.1429725549.git.yann.morin.1998@free.fr>
- <55396BAB.2020206@mind.be>
-Message-ID: <20150424174310.GE4244@free.fr>
+Date: Fri, 24 Apr 2015 19:45:26 +0200
+Subject: [Buildroot] [PATCHv2] Makefile: add list-defconfig to the
+	general help
+In-Reply-To: <877ft2scmn.fsf@dell.be.48ers.dk>
+References: <1429823046-8906-1-git-send-email-yann.morin.1998@free.fr>
+ <877ft2scmn.fsf@dell.be.48ers.dk>
+Message-ID: <20150424174526.GF4244@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Peter, All,
 
-On 2015-04-24 00:01 +0200, Arnout Vandecappelle spake thusly:
-> On 04/22/15 20:09, Yann E. MORIN wrote:
-> > Now that the matchbox package no longer forcibly add entries to the
-> > PACKAGES list, and entirely relies on having proper packages, we can
-> > safely include all matchbox sub-packages .mk files, and the pkg-infra
-> > will take care of building only those that are enabled.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 2015-04-24 00:28 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 > 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>  > When listing defconfig files was moved to its own make target, it was
+>  > not added to the general help text.
 > 
->  This could already been done after patches 1 and 2.
+>  > However, this is a very important topic, so list it.
+> 
+>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > Cc: Arnout Vandecappelle <arnout@mind.be>
+> 
+>  > ---
+>  > Changes v1 -> v2:
+>  >   - move to the 'documentation' section  (Arnout)
+> 
+>  > diff --git a/Makefile b/Makefile
+>  > index 5de4789..f37d17e 100644
+>  > --- a/Makefile
+>  > +++ b/Makefile
+>  > @@ -886,6 +886,7 @@ endif
+>  >  	@echo '  manual-epub            - build manual in ePub'
+>  >  	@echo '  graph-build            - generate graphs of the build times'
+>  >  	@echo '  graph-depends          - generate graph of the dependency tree'
+>  > +	@echo '  list-defconfigs:       - list all defconfigs (pre-configured minimal systems)'
+> 
+> I've dropped the ':' character to match the other lines and committed,
+> thanks.
 
-It might be possible to do so, but I'd prefer all matchbox packages to
-be converted/cleaned-up first, in case there's an unwanted side-effect
-in the package infra about a package with no Kconfig entry.
-
-So, I'm not moving that patch (also due to some lazyness in testing
-there would be no problem! ;-] ).
-
-Thanks!
+Damn, bad copy-paste. Thans for fixing!
 
 Regards,
 Yann E. MORIN.
