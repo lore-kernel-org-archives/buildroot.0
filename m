@@ -1,51 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 24 Apr 2015 22:00:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: Fix compile warning being
-	treated as error
-Message-ID: <1429905652-16930-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri, 24 Apr 2015 22:16:18 +0200
+Subject: [Buildroot] [PATCH 06/10 v7] package/nvidia-driver: Add gl.pc
+References: <cover.1423597914.git.yann.morin.1998@free.fr>
+ <09718509727afa315acf9e7b999f71243f2a67c3.1423597914.git.yann.morin.1998@free.fr>
+Message-ID: <XnsA486E28EE4A92berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/b14/b149dcd9bfcf9e69cf7fa16636c3089a6673769a/
-http://autobuild.buildroot.net/results/d45/d45c4abcd22d99edaff8943b0073a94dcd972ab5/
-http://autobuild.buildroot.net/results/1f6/1f6a4a9084a9d07bdd8d6c6dafeedb38d27c0b8f/
-http://autobuild.buildroot.net/results/8f0/8f05242257a0ed059d5258c4a83ab26095516917/
+[posted and mailed]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../vlc/0004-implicit-function-declaration.patch   |   20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
- create mode 100644 package/vlc/0004-implicit-function-declaration.patch
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+news:09718509727afa315acf9e7b999f71243f2a67c3.1423597914.git.yann.morin.1998
+@free.fr:
 
-diff --git a/package/vlc/0004-implicit-function-declaration.patch b/package/vlc/0004-implicit-function-declaration.patch
-new file mode 100644
-index 0000000..515453d
---- /dev/null
-+++ b/package/vlc/0004-implicit-function-declaration.patch
-@@ -0,0 +1,20 @@
-+Fix compile warning being treated as error:
-+
-+codec/svg.c: In function 'DecodeBlock':
-+codec/svg.c:240:5: error: implicit declaration of function 'rsvg_handle_render_cairo' [-Werror=implicit-function-declaration]
-+cc1: some warnings being treated as errors
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr vlc-2.2.1.org/configure.ac vlc-2.2.1/configure.ac
-+--- vlc-2.2.1.org/configure.ac	2015-04-13 09:57:54.000000000 +0200
-++++ vlc-2.2.1/configure.ac	2015-04-24 20:54:35.349039010 +0200
-+@@ -864,7 +864,7 @@
-+ dnl  Compiler warnings
-+ dnl
-+ 
-+-RDC_PROG_CC_WFLAGS([all extra sign-compare undef pointer-arith bad-function-cast write-strings missing-prototypes volatile-register-var error-implicit-function-declaration])
-++RDC_PROG_CC_WFLAGS([all extra sign-compare undef pointer-arith bad-function-cast write-strings missing-prototypes volatile-register-var])
-+ RDC_PROG_CC_FLAGS([-pipe])
-+ AC_LANG_PUSH([C++])
-+ RDC_PROG_CXX_WFLAGS([all extra sign-compare undef pointer-arith volatile-register-var])
--- 
-1.7.10.4
+> +     $(INSTALL) -D -m 0644 package/nvidia-driver/gl.pc 
+$(STAGING_DIR)/usr/lib/pkgconfig/gl.pc
+
+Hi,
+
+the nvidia package should not install gl.pc when
+BR2_PACKAGE_NVIDIA_DRIVER_XORG is not set because in this case nvidia-driver 
+is not a provider for libgl.
+
+The reason for this autobuild error 
+http://autobuild.buildroot.net/results/724/724fce8ce51c2c0578192b1369a1cfcea3
+d72638/
+in the vlc package is that vlc detects gl.pc from the nvidia package and 
+tries to enable opengl support. Compiling this defconfig with "make vlc" 
+alone works, if you compile nvidia-driver before vlc than the build breaks.
+
+.config looks like this.
+
+$ grep -i nvidia .config
+BR2_PACKAGE_NVIDIA_DRIVER=y
+# nvidia-driver X.org drivers needs a modular Xorg server
+# BR2_PACKAGE_NVIDIA_DRIVER_CUDA is not set
+# nvidia kernel module needs a kernel to be built
+
+Regards, Bernd
