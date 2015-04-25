@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Apr 2015 19:33:03 +0200
-Subject: [Buildroot] [PATCHv3 09/18] pkg-generic: remove the
- .stamp_rsync_sourced fake stamp file
-In-Reply-To: <1429972982-25495-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Apr 2015 19:34:17 +0200
+Subject: [Buildroot] [PATCHv3 10/18] pkg-generic: don't use DL_MODE in
+ .stamp_downloaded
+In-Reply-To: <1429972982-25495-11-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1429972982-25495-10-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150425173303.GJ4275@free.fr>
+ <1429972982-25495-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150425173417.GK4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,52 +15,55 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-04-25 16:42 +0200, Thomas Petazzoni spake thusly:
-> The only reason for the .stamp_rsync_sourced fake stamp file target to
-> exist was to handle the SOURCE_CHECK operation on packages using the
-> OVERRIDE_SRCDIR mechanism. Now that this is handled directly inside
-> $(1)-source-check, there is no longer any need for this part of the
-> code.
+> The .stamp_downloaded target is now only being used to really
+> download, and no longer for other activities like "source check" or
+> "external deps". So the check on DL_MODE being equal to DOWNLOAD is no
+> longer necessary.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/pkg-generic.mk | 13 +------------
->  1 file changed, 1 insertion(+), 12 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 5a9bcf1..05831d4 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-[--SNIP--]
-> @@ -570,7 +561,7 @@ $(1)-extract:		$(1)-rsync
->  
->  $(1)-rsync:		$$($(2)_TARGET_RSYNC)
->  
-> -$(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
-> +$(1)-source:
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-The reason that line existed was to be able to define a dependency on
-the stamp file. There is now no reason to keep this line at all; all you
-have above is declaring a make goal without dependency or rule, so it
-is entirely useless.
-
-Just get rid of the line altogether.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  $(1)-external-deps:
->  	@echo "file://$$($(2)_OVERRIDE_SRCDIR)"
-> @@ -652,8 +643,6 @@ $$($(2)_TARGET_BUILD):			PKG=$(2)
->  $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
->  $$($(2)_TARGET_RSYNC):                  SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
->  $$($(2)_TARGET_RSYNC):                  PKG=$(2)
-> -$$($(2)_TARGET_RSYNC_SOURCE):		SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
-> -$$($(2)_TARGET_RSYNC_SOURCE):		PKG=$(2)
->  $$($(2)_TARGET_PATCH):			PKG=$(2)
->  $$($(2)_TARGET_PATCH):			RAWNAME=$$(patsubst host-%,%,$(1))
->  $$($(2)_TARGET_PATCH):			PKGDIR=$(pkgdir)
+> ---
+>  package/pkg-generic.mk | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 05831d4..cb901ae 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -71,7 +71,6 @@ endif
+>  # Retrieve the archive
+>  $(BUILD_DIR)/%/.stamp_downloaded:
+>  	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+> -ifeq ($(DL_MODE),DOWNLOAD)
+>  # Only show the download message if it isn't already downloaded
+>  	$(Q)for p in $($(PKG)_SOURCE) $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
+>  		if test ! -e $(DL_DIR)/`basename $$p` ; then \
+> @@ -79,7 +78,6 @@ ifeq ($(DL_MODE),DOWNLOAD)
+>  			break ; \
+>  		fi ; \
+>  	done
+> -endif
+>  	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
+>  	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),\
+>  		$(if $(findstring ://,$(p)),\
+> @@ -94,10 +92,8 @@ endif
+>  		)\
+>  	$(sep))
+>  	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+> -ifeq ($(DL_MODE),DOWNLOAD)
+>  	$(Q)mkdir -p $(@D)
+>  	$(Q)touch $@
+> -endif
+>  
+>  # Unpack the archive
+>  $(BUILD_DIR)/%/.stamp_extracted:
 > -- 
 > 2.1.0
 > 
