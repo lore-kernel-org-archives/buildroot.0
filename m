@@ -1,75 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Apr 2015 23:14:57 +0200
-Subject: [Buildroot] [PATCHv3 16/18] Makefile: add BR_BUILDING variable
-In-Reply-To: <20150425202649.GS4275@free.fr>
+Date: Sat, 25 Apr 2015 23:59:02 +0200
+Subject: [Buildroot] [PATCHv3 17/18] packages: refactor checks using
+ BR_BUILDING
+In-Reply-To: <20150425205257.GT4275@free.fr>
 References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1429972982-25495-17-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150425202649.GS4275@free.fr>
-Message-ID: <20150425211457.GU4275@free.fr>
+ <1429972982-25495-18-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150425205257.GT4275@free.fr>
+Message-ID: <20150425215902.GV4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,All,
+Thomas, All,
 
-On 2015-04-25 22:26 +0200, Yann E. MORIN spake thusly:
+On 2015-04-25 22:52 +0200, Yann E. MORIN spake thusly:
 > On 2015-04-25 16:43 +0200, Thomas Petazzoni spake thusly:
-> > Some packages do some sanity checks on their configuration, for
-> > example linux checks that the defconfig string is not empty when a
-> > defconfig is used. Such checks are currently always performed, except
-> > when the 'source' target is part of make goals.
-> > 
-> > This is problematic for two reasons:
-> > 
-> >  - Other targets such as 'source-check', 'external-deps' or
-> >    'legal-info', that do not consist in doing a build, cannot be
-> >    executed in such situations.
-> > 
-> >  - The current code removes the check as soon as one of the targets is
-> >    source. But if there are other non-source targets called at the
-> >    same time, the checks are ignored.
-> > 
-> > This commit therefore introduces an internal variable called
-> > BR_BUILDING, which tells packages if we are actually building or
-> > not. A variable nobuild_targets indicates the targets that we do not
-> > consider as being build targets.
-> > 
-> > For the moment, nobuild_targets only contains 'source', to be
-> > completely iso-functional.
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Instead of manually testing MAKECMDGOALS, use the newly introduced
+> > BR_BUILDING variable to know if we're building or not.
+[--SNIP--]
+> >  # Checks to give errors that the user can understand
+> > -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> > +ifeq ($(BR_BUILDING),y)
+> >  ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
 > 
-> I'm not too fond of the variable name, but I can't find a better one...
+> I think it would be good to have a single way we do those checks.
 > 
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> For example, compare at91bootstrap above and at91bootstrap3 here.
+> The former is doing the BR2_BUILDING check and package-enabled check
+> in a single ifeq, while the latter does it with two ifeq.
+> 
+> I don't really care which we use, but we should use the same everywhere.
+> Maybe we could favour doing it with feq, for those packages that want to
+> do multiple checks.
 
-I maintian my ack, but I have a deeper concern about not doing those
-checks in the first place.
-
-So, what does it mean not to have a config/board/... name to start with?
-
-It means the specific configuration is not complete, and that the
-package will fail to configure or build. So it does not make sense to
-accept a configuration where such config name are missing.
-
-Furthermore, what about a package that needs the config name to decide
-what tarball to download? In that case, we can't do the check at all,
-and we must fail as soon as the config name is empty.
-
-As such, I'd prefer we do not condition the check on whether we'r
-ebuilding or not, but that we do it always, fo all packages.
-
-However, I can see one reason where we would still want the checks to be
-conditional: make rand*config && make source-check . And that is a
-tricky case to solve.
-
-We could do it by always defining defaults (in the Config.in) to such
-config names; those defaults could be conditional, of course. But coming
-up with sane defaults is not easy either...
-
-Thoughts?
+Slip of the fingers... I meant:  do it with two ifeq...
 
 Regards,
 Yann E. MORIN.
