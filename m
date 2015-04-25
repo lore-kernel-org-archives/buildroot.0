@@ -1,43 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 11:51:25 +0200
-Subject: [Buildroot] [git commit] toolchain/external: ignore missing hash
-	for custom downloaded toolchain
-Message-ID: <20150425095655.1FFC580094@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 25 Apr 2015 12:03:50 +0200
+Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.4.2
+Message-ID: <1429956230-26893-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd05cfa3113ffd9542f7b0a2a1ee014a178dc1d1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Update version and hash (see [1] for details).
 
-We will *always* be missing a hash file for custom external toolchains
-that are downloaded.
+[1] http://lists.freedesktop.org/archives/input-tools/2015-April/001167.html
 
-So, just ignore that failure.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- toolchain/toolchain-external/toolchain-external.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libevdev/libevdev.hash | 4 ++--
+ package/libevdev/libevdev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 11345cc..fd796a0 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -400,6 +400,8 @@ else
- # Custom toolchain
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
-+# We can't check hashes for custom downloaded toolchains
-+BR_NO_CHECK_HASH_FOR += $(TOOLCHAIN_EXTERNAL_SOURCE)
- endif
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 868a245..535490b 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,2 +1,2 @@
+-# Hash from http://lists.freedesktop.org/archives/input-tools/2015-April/001166.html
+-sha256 5179d3c9a71dd764b4ab9df21edcdb5b61832cbc48ad90b75a52ac79cf8fae85 libevdev-1.4.1.tar.xz
++# Hash from http://lists.freedesktop.org/archives/input-tools/2015-April/001167.html
++sha256 7c77b213f075706d428a2af54b66bf86b03a68e9fb390e7ec48cf55065970643 libevdev-1.4.2.tar.xz
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index eb26517..3ed7ba0 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # In fact, we don't need to download the toolchain, since it is already
+-LIBEVDEV_VERSION = 1.4.1
++LIBEVDEV_VERSION = 1.4.2
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
+-- 
+2.1.4
