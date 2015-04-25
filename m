@@ -1,37 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 10:32:40 +0200
-Subject: [Buildroot] [git commit] sh64: deprecate support for this dead
-	architecture
-Message-ID: <20150425083305.F28D57FF2E@busybox.osuosl.org>
+Date: Sat, 25 Apr 2015 10:33:40 +0200
+Subject: [Buildroot] [PATCH] sh64: deprecate support for this dead
+ architecture
+In-Reply-To: <20150425012313.GA29771@waldemar-brodkorb.de>
+References: <20150425012313.GA29771@waldemar-brodkorb.de>
+Message-ID: <20150425103340.41fef9c4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b49aeacfcad4119b8b0158aa5cd467003c1b851f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Waldemar Brodkorb,
 
-As discussed on the mailinglist, this should be deprecated
-before removal.
+On Sat, 25 Apr 2015 03:23:14 +0200, Waldemar Brodkorb wrote:
+> As discussed on the mailinglist, this should be deprecated
+> before removal.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  Config.in.legacy |    6 ++++++
+>  arch/Config.in   |    1 +
+>  2 files changed, 7 insertions(+)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 70a9043..622e51c 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -107,6 +107,12 @@ endif
+>  ###############################################################################
+>  comment "Legacy options removed in 2015.05"
+>  
+> +config BR2_sh64
+> +	bool "SuperH64 architecture support has been removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  There is no hardware or emulator available.
+> +
 
-[Thomas: don't add to Config.in.legacy.]
+We don't add deprecated options in Config.in.legacy, only the options
+that I really removed. So I've removed this chunk from the patch and
+applied.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- arch/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Thanks,
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 59bf84a..06aff2c 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -163,6 +163,7 @@ config BR2_sh
- 
- config BR2_sh64
- 	bool "SuperH64"
-+	depends on BR2_DEPRECATED_SINCE_2015_05
- 	help
- 	  SuperH64 (or SH) is a 64-bit reduced instruction set computer (RISC)
- 	  instruction set architecture (ISA) developed by Hitachi.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
