@@ -1,32 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 14:34:54 +0200
-Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.4.2
-In-Reply-To: <1429956230-26893-1-git-send-email-ps.report@gmx.net>
-References: <1429956230-26893-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20150425143454.63cb2449@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 25 Apr 2015 14:39:38 +0200
+Subject: [Buildroot] [PATCH] package/input-tools: add hash for
+	joystick_20051019-5.diff.gz
+Message-ID: <1429965578-16168-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Fixes:
+http://autobuild.buildroot.net/results/1f3/1f3c5c060cd98a3f4cf9688fc8a83cc1c23ece29
 
-On Sat, 25 Apr 2015 12:03:50 +0200, Peter Seiderer wrote:
-> Update version and hash (see [1] for details).
-> 
-> [1] http://lists.freedesktop.org/archives/input-tools/2015-April/001167.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/libevdev/libevdev.hash | 4 ++--
->  package/libevdev/libevdev.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/input-tools/input-tools.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/input-tools/input-tools.hash b/package/input-tools/input-tools.hash
+index c82cae3..53b0f92 100644
+--- a/package/input-tools/input-tools.hash
++++ b/package/input-tools/input-tools.hash
+@@ -1,2 +1,4 @@
+ # From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/j/joystick/joystick_20051019-12.dsc
+ sha256	cb60cb62093f1889a91fcef1cc36546aba406f451941e8d057f095639e6afb89	joystick_20051019.orig.tar.gz
++# From http://snapshot.debian.org/archive/debian/20090630T220234Z/pool/main/j/joystick/joystick_20051019-5.dsc
++sha256	01e9d14a656d594a3e261751233200f740a09c2a538ac71447c104ffe89ec10c	joystick_20051019-5.diff.gz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.3
