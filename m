@@ -1,83 +1,50 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Apr 2015 11:16:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdcadec: new package
-Message-ID: <1429953408-32582-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Apr 2015 11:22:42 +0200
+Subject: [Buildroot] [git commit] gtest: generate the gtest-config script
+Message-ID: <20150425092418.2541080794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for next ffmpeg release:
-http://git.videolan.org/?p=ffmpeg.git;a=blobdiff;f=Changelog;h=4542e324d8ab722468ed251325a3efddb28bff8e;hp=46304d83a90d2a846421a61f9391dfcd1e52ba31;hb=72025ac36c740f031d7e413041fdfe97087c83c4;hpb=6fe2641d6e410b7bc203138fa97e1118b411f16d
+commit: http://git.buildroot.net/buildroot/commit/?id=39186b5f5ac61c72d4b3d3088b7facbfd739abfa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+gtest has moved from the autotools to CMake, but the CMake build
+system is currently not installing the gtest-config script. Work
+around that by installing it manually, after doing the necessary
+sed-ing from the gtest-config.in template.
+
+Reported-by: Carlos Santos <casantos@datacom.ind.br>
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in              |    1 +
- package/libdcadec/Config.in    |    7 +++++++
- package/libdcadec/libdcadec.mk |   28 ++++++++++++++++++++++++++++
- 3 files changed, 36 insertions(+)
- create mode 100644 package/libdcadec/Config.in
- create mode 100644 package/libdcadec/libdcadec.mk
+ package/gtest/gtest.mk |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index e0a8057..c8f3115 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -897,6 +897,7 @@ endmenu
- menu "Multimedia"
- 	source "package/libass/Config.in"
- 	source "package/libbluray/Config.in"
-+	source "package/libdcadec/Config.in"
- 	source "package/libdvbcsa/Config.in"
- 	source "package/libdvbsi/Config.in"
- 	source "package/libdvdnav/Config.in"
-diff --git a/package/libdcadec/Config.in b/package/libdcadec/Config.in
-new file mode 100644
-index 0000000..2687a18
---- /dev/null
-+++ b/package/libdcadec/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBDCADEC
-+	bool "libdcadec"
-+	help
-+	  dcadec is a free DTS Coherent Acoustics decoder with support
-+	  for HD extensions.
-+
-+	  https://github.com/foo86/dcadec
-diff --git a/package/libdcadec/libdcadec.mk b/package/libdcadec/libdcadec.mk
-new file mode 100644
-index 0000000..1c423f0
---- /dev/null
-+++ b/package/libdcadec/libdcadec.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# libdcadec
-+#
-+################################################################################
-+
-+LIBDCADEC_VERSION = 7b3b44cd180c9345c98be9062eac701eab5c7454
-+LIBDCADEC_SITE = $(call github,foo86,dcadec,$(LIBDCADEC_VERSION))
-+LIBDCADEC_LICENSE = LGPLv2.1+
-+LIBDCADEC_LICENSE_FILES = COPYING.LGPLv2.1
-+LIBDCADEC_INSTALL_STAGING = YES
-+
-+define LIBDCADEC_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" -C $(@D)
-+endef
-+
-+define LIBDCADEC_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		DESTDIR=$(STAGING_DIR) PREFIX=/usr install
-+endef
-+
-+define LIBDCADEC_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		DESTDIR=$(TARGET_DIR) PREFIX=/usr install
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.10.4
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+index 7129c93..562acf0 100644
+--- a/package/gtest/gtest.mk
++++ b/package/gtest/gtest.mk
+@@ -30,6 +30,20 @@ define GTEST_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/libgtest_main.a $(STAGING_DIR)/usr/lib/libgtest_main.a
+ 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gtest/
+ 	cp -rp $(@D)/include/gtest/* $(STAGING_DIR)/usr/include/gtest/
++	# Generate the gtest-config script manually, since the CMake
++	# build system is not doing it.
++	sed 's%@PACKAGE_TARNAME@%gtest%;\
++		s%@PACKAGE_VERSION@%$(GTEST_VERSION)%;\
++		s%@prefix@%$(STAGING_DIR)/usr%;\
++		s%@exec_prefix@%$(STAGING_DIR)/usr%;\
++		s%@libdir@%$(STAGING_DIR)/usr/lib%;\
++		s%@includedir@%$(STAGING_DIR)/usr/include%;\
++		s%@bindir@%$(STAGING_DIR)/usr/bin%;\
++		s%@PTHREAD_CFLAGS@%%;\
++		s%@PTHREAD_LIBS@%-lpthread%;' \
++		$(@D)/scripts/gtest-config.in \
++		> $(STAGING_DIR)/usr/bin/gtest-config
++	chmod +x $(STAGING_DIR)/usr/bin/gtest-config
+ endef
+ 
+ $(eval $(cmake-package))
