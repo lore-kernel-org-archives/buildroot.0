@@ -1,41 +1,51 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Apr 2015 09:32:15 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libinput: bump version to 0.14.1
-Message-ID: <1429947136-1792-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Apr 2015 10:15:29 +0200
+Subject: [Buildroot] [PATCH v5] package/tiff: Rework tiff utilities
+ handling
+In-Reply-To: <1429823896-32708-1-git-send-email-arnout@mind.be>
+References: <1429823896-32708-1-git-send-email-arnout@mind.be>
+Message-ID: <20150425101529.69834195@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Arnout Vandecappelle (Essensium/Mind),
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libinput/libinput.hash |    4 ++--
- package/libinput/libinput.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Thu, 23 Apr 2015 23:18:16 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> 
+> Remove all utility-specific options in favour of a generic
+> option which select either all or no packages. If users
+> want something more fine-grained than that, they can always
+> remove the unnecessary tools in a post-build script.
+> 
+> Since tiff has no configure option or Makefile target to prevent
+> the build/install of its utilities specific Makefile targets are
+> called to build the libtiff and, optionally, the utilities.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> [Arnout: more compact implementation, slightly extend help text]
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> v5: More compact implementation with SUBDIRS instead of overriding the
+>     autotools _CMDS; extend Config.in text tiffutils -> tiff utilities;
+>     extend Config.in help text with capitalization and _all_ utilities.
+> v4: rebased
+> v3: rebased
+> v2: Replaced submenu with a new all-or-nothing option (Thomas)
+> ---
+>  Config.in.legacy       | 16 ++++++++++++++++
+>  package/tiff/Config.in | 11 +++--------
+>  package/tiff/tiff.mk   | 39 +++++----------------------------------
+>  3 files changed, 24 insertions(+), 42 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index a910648..6452847 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/wayland-devel/2015-March/020833.html
--sha256	6cecaf7fde525f1d81474cbd495ce526d5e34c845d3e9d6f3e2565b7048cc61a	libinput-0.13.0.tar.xz
-+# From http://lists.freedesktop.org/archives/wayland-devel/2015-April/021485.html
-+sha256	2bed202ebe2d5026950d6f9d2ac0f0160d12f61c5a0f6d0d6ef671bbb02c1b64	libinput-0.14.1.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index a9723c6..bacee6a 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 0.13.0
-+LIBINPUT_VERSION = 0.14.1
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_LICENSE = MIT
+Applied, thanks.
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
