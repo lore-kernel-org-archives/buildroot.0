@@ -1,27 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 11:26:11 +0200
-Subject: [Buildroot] [PATCH] luarocks: bump to version 2.2.2
-In-Reply-To: <1429951734-7387-1-git-send-email-francois.perrad@gadz.org>
-References: <1429951734-7387-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20150425112611.6f6f89ae@free-electrons.com>
+Date: Sat, 25 Apr 2015 11:26:00 +0200
+Subject: [Buildroot] [git commit] luarocks: bump to version 2.2.2
+Message-ID: <20150425092619.446B680DF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=aa0dc35df4e2659f9d6d4c860ba2aca1bdec0271
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 25 Apr 2015 10:48:54 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/luarocks/luarocks.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/luarocks/luarocks.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 7216620..2b6c975 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUAROCKS_VERSION = 2.2.1
++LUAROCKS_VERSION = 2.2.2
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
