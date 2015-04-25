@@ -1,56 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 10:18:35 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/dovecot: not available on
- static-only build
-In-Reply-To: <1429816954-2529-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429816954-2529-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150425101835.1eafc258@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Apr 2015 10:27:51 +0200
+Subject: [Buildroot] [PATCH] pkg-generic: substitute colon and space out
+ of PKG_VERSION
+In-Reply-To: <1429744088-19590-1-git-send-email-arnout@mind.be>
+References: <1429737867-1754-1-git-send-email-arnout@mind.be>
+ <1429744088-19590-1-git-send-email-arnout@mind.be>
+Message-ID: <20150425082750.GA4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Arnout, All,
 
-On Thu, 23 Apr 2015 21:22:34 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/53f/53fd9003a4cf7d128f4d64d43209fe26d859a829/
+On 2015-04-23 01:08 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> Using a colon or a space in a make target doesn't work, so they have to
+> be filtered out of the PKG_VERSION variable just like the / currently
+> already is.
 > 
-> http://autobuild.buildroot.net/results/53f/53fd9003a4cf7d128f4d64d43209fe26d859a829/dovecot-2.2.16/config.log
-> shows this pthread related link error during configure
+> This will be needed for date-based CVS versions.
 > 
-> sqlite3.c:(.text+0x5106): undefined reference to `pthread_mutex_trylock'
-> /home/test/autobuild/instance-2/output/host/usr/i686-buildroot-linux-uclibc/sysroot/usr/lib/libsqlite3.a(sqlite3.o): In function `pthreadMutexAlloc':
-> sqlite3.c:(.text+0x91fb): undefined reference to `pthread_mutexattr_init'
-> sqlite3.c:(.text+0x9205): undefined reference to `pthread_mutexattr_settype'
-> sqlite3.c:(.text+0x920e): undefined reference to `pthread_mutex_init'
-> sqlite3.c:(.text+0x9216): undefined reference to `pthread_mutexattr_destroy'
-> sqlite3.c:(.text+0x9234): undefined reference to `pthread_mutex_init'
+> Add a helper macro 'sanitize' in pkg-utils.mk to implement this. This
+> also moves the strip to the inner level for the target branch.
 > 
-> Trying to fix it in dovecot.mk by
-> 
-> +# dovecot forgets to compile/link with -pthread breaking static linking
-> +DOVECOT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -pthread" LIBS="-pthread"
-> 
-> results in a build error later on
-> setresgid.c:(.text+0x0): multiple definition of `setresgid'
-> 
-> which might be fixed in uclibc by porting
-> http://git.buildroot.net/buildroot/tree/package/uclibc/1.0.2/0001-fix-static-linking-of-pthread-apps.patch
-> 
-> but, at the end, I think it is better to not build Dovecot as a static
-> binary since it is heavy modularized and not worth the effort. Therefore
-> remove two patches fixing static linking, since they are not needed anymore.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 > ---
-> v2: rebased
+> Changes v1 -> v2:
+>   - Move to a helper macro (Thomas).
+>   - Add moving of strip to commit message (Yann).
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/pkg-generic.mk | 6 ++++--
+>  package/pkg-utils.mk   | 5 +++++
+>  2 files changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index d1a1811..455bdf1 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -322,17 +322,19 @@ $(2)_RAWNAME			=  $$(patsubst host-%,%,$(1))
+>  # sanitize the package version that is used in paths, directory and file names.
+>  # Forward slashes may appear in the package's version when pointing to a
+>  # version control system branch or tag, for example remotes/origin/1_10_stable.
+> +# Similar for spaces and colons (:) that may appear in date-based revisions for
+> +# CVS.
+>  ifndef $(2)_VERSION
+>   ifdef $(3)_VERSION
+>    $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
+> -  $(2)_VERSION := $$(subst /,_,$$(strip $$($(3)_VERSION)))
+> +  $(2)_VERSION := $$(call sanitize,$$($(3)_VERSION))
+>   else
+>    $(2)_VERSION = undefined
+>    $(2)_DL_VERSION = undefined
+>   endif
+>  else
+>    $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
+> -  $(2)_VERSION := $$(strip $$(subst /,_,$$($(2)_VERSION)))
+> +  $(2)_VERSION := $$(call sanitize,$$($(2)_VERSION))
+>  endif
+>  
+>  $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index 5a385f8..99a3c1e 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -37,6 +37,11 @@ endef
+>  $(eval $(call caseconvert-helper,UPPERCASE,$(join $(addsuffix :,$([FROM])),$([TO]))))
+>  $(eval $(call caseconvert-helper,LOWERCASE,$(join $(addsuffix :,$([TO])),$([FROM]))))
+>  
+> +# Sanitize macro cleans up generic strings so it can be used as a filename
+> +# and in rules. Particularly useful for VCS version strings, that can contain
+> +# slashes, colons (OK in filenames but not in rules), and spaces.
+> +sanitize = $(subst $(space),_,$(subst :,_,$(subst /,_,$(strip $(1)))))
+> +
+>  #
+>  # Manipulation of .config files based on the Kconfig
+>  # infrastructure. Used by the BusyBox package, the Linux kernel
+> -- 
+> 2.1.4
+> 
 
-Applied, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
