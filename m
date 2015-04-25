@@ -1,41 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 16:42:52 +0200
-Subject: [Buildroot] [PATCHv3 08/18] Makefile: implement a package based
-	source-check target
+Date: Sat, 25 Apr 2015 16:42:54 +0200
+Subject: [Buildroot] [PATCHv3 10/18] pkg-generic: don't use DL_MODE in
+	.stamp_downloaded
 In-Reply-To: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1429972982-25495-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1429972982-25495-11-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit switches the implementation of the global source-check
-target to use a package infrastructure based mechanism, using the
-$(1)-all-source-check target added in the previous commit.
+The .stamp_downloaded target is now only being used to really
+download, and no longer for other activities like "source check" or
+"external deps". So the check on DL_MODE being equal to DOWNLOAD is no
+longer necessary.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Makefile | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/pkg-generic.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index a442325..f5ff574 100644
---- a/Makefile
-+++ b/Makefile
-@@ -619,8 +619,7 @@ external-deps:
- 	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 05831d4..cb901ae 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -71,7 +71,6 @@ endif
+ # Retrieve the archive
+ $(BUILD_DIR)/%/.stamp_downloaded:
+ 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+-ifeq ($(DL_MODE),DOWNLOAD)
+ # Only show the download message if it isn't already downloaded
+ 	$(Q)for p in $($(PKG)_SOURCE) $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
+ 		if test ! -e $(DL_DIR)/`basename $$p` ; then \
+@@ -79,7 +78,6 @@ ifeq ($(DL_MODE),DOWNLOAD)
+ 			break ; \
+ 		fi ; \
+ 	done
+-endif
+ 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
+ 	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),\
+ 		$(if $(findstring ://,$(p)),\
+@@ -94,10 +92,8 @@ endif
+ 		)\
+ 	$(sep))
+ 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+-ifeq ($(DL_MODE),DOWNLOAD)
+ 	$(Q)mkdir -p $(@D)
+ 	$(Q)touch $@
+-endif
  
- # check if download URLs are outdated
--source-check:
--	$(MAKE1) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
-+source-check: $(foreach p,$(PACKAGES),$(p)-all-source-check)
- 
- legal-info-clean:
- 	@rm -fr $(LEGAL_INFO_DIR)
+ # Unpack the archive
+ $(BUILD_DIR)/%/.stamp_extracted:
 -- 
 2.1.0
