@@ -1,66 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 10:34:41 +0200
-Subject: [Buildroot] [git commit] package/nvidia-driver: don't install gl.pc
-	when not providing libgl
-Message-ID: <20150425090201.CF4FB81734@busybox.osuosl.org>
+Date: Sat, 25 Apr 2015 11:09:41 +0200
+Subject: [Buildroot] [git commit] package/bullet: new package
+Message-ID: <20150425091024.C0A01805E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=861cc84f8c7150d0578b8ec6189b4fec6c7d04e6
+commit: http://git.buildroot.net/buildroot/commit/?id=176e408b36555ad56dc65c007e1fbba5dcc9ea36
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When nvidia-driver does not provide libgl (i.e. when it does not install
-the X.org driver), it should also not install gl.pc, otherwise, packages
-that depend on pkg-config will mis-detect presence of GL and fail to
-build, like vlc:
+[Thomas:
+  - move package to 'Libraries -> Graphics'
+  - wrap the Config.in help text
+  - change license from "Zlib" to "zlib license" to match what the
+    zlib package is doing.]
 
-    http://autobuild.buildroot.org/results/724/724fce8ce51c2c0578192b1369a1cfcea3d72638/
-
-So, only install gl.pc when we install the X.org driver. Similarly, we
-do not need to install libGL.la either.
-
-Reported-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nvidia-driver/nvidia-driver.mk |   15 ++++++++++-----
- 1 files changed, 10 insertions(+), 5 deletions(-)
+ package/Config.in        |    1 +
+ package/bullet/Config.in |   11 +++++++++++
+ package/bullet/bullet.mk |   18 ++++++++++++++++++
+ 3 files changed, 30 insertions(+), 0 deletions(-)
 
-diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-index a85cc1c..71babfb 100644
---- a/package/nvidia-driver/nvidia-driver.mk
-+++ b/package/nvidia-driver/nvidia-driver.mk
-@@ -40,6 +40,15 @@ NVIDIA_DRIVER_LIBS = \
- 	libvdpau libvdpau_nvidia \
- 	libnvidia-ml
+diff --git a/package/Config.in b/package/Config.in
+index afa145e..7e25109 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -750,6 +750,7 @@ endmenu
  
-+# Install the gl.pc file
-+define NVIDIA_DRIVER_INSTALL_GL_DEV
-+	$(INSTALL) -D -m 0644 $(@D)/libGL.la $(STAGING_DIR)/usr/lib/libGL.la
-+	$(SED) 's:__GENERATED_BY__:Buildroot:' $(STAGING_DIR)/usr/lib/libGL.la
-+	$(SED) 's:__LIBGL_PATH__:/usr/lib:' $(STAGING_DIR)/usr/lib/libGL.la
-+	$(SED) 's:-L[^[:space:]]\+::' $(STAGING_DIR)/usr/lib/libGL.la
-+	$(INSTALL) -D -m 0644 package/nvidia-driver/gl.pc $(STAGING_DIR)/usr/lib/pkgconfig/gl.pc
-+endef
+ menu "Graphics"
+ 	source "package/atk/Config.in"
++	source "package/bullet/Config.in"
+ 	source "package/cairo/Config.in"
+ 	source "package/exiv2/Config.in"
+ 	source "package/fltk/Config.in"
+diff --git a/package/bullet/Config.in b/package/bullet/Config.in
+new file mode 100644
+index 0000000..fc285ab
+--- /dev/null
++++ b/package/bullet/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_BULLET
++	bool "bullet"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Bullet is a Collision Detection and Rigid Body Dynamics
++	  Library.
 +
- # Those libraries are 'private' libraries requiring an agreement with
- # NVidia to develop code for those libs. There seems to be no restriction
- # on using those libraries (e.g. if the user has such an agreement, or
-@@ -154,11 +163,7 @@ endef
- # For staging, install libraries and development files
- define NVIDIA_DRIVER_INSTALL_STAGING_CMDS
- 	$(call NVIDIA_DRIVER_INSTALL_LIBS,$(STAGING_DIR))
--	$(INSTALL) -D -m 0644 $(@D)/libGL.la $(STAGING_DIR)/usr/lib/libGL.la
--	$(SED) 's:__GENERATED_BY__:Buildroot:' $(STAGING_DIR)/usr/lib/libGL.la
--	$(SED) 's:__LIBGL_PATH__:/usr/lib:' $(STAGING_DIR)/usr/lib/libGL.la
--	$(SED) 's:-L[^[:space:]]\+::' $(STAGING_DIR)/usr/lib/libGL.la
--	$(INSTALL) -D -m 0644 package/nvidia-driver/gl.pc $(STAGING_DIR)/usr/lib/pkgconfig/gl.pc
-+	$(NVIDIA_DRIVER_INSTALL_GL_DEV)
- endef
- 
- # For target, install libraries and X.org modules
++	  http://bulletphysics.org
++
++comment "bullet needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/bullet/bullet.mk b/package/bullet/bullet.mk
+new file mode 100644
+index 0000000..3ec97b4
+--- /dev/null
++++ b/package/bullet/bullet.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# bullet
++#
++################################################################################
++
++# This is the git id of the 2.82 release.
++BULLET_VERSION = 19f999ac087e68ffc2551ffb73e35e60271a0d27
++BULLET_SITE = $(call github,bulletphysics,bullet3,$(BULLET_VERSION))
++BULLET_INSTALL_STAGING = YES
++BULLET_LICENSE = zlib license
++BULLET_LICENSE_FILES = BulletLicense.txt COPYING
++
++# Disable GLUT support since there is no freeglut or OpenGLUT package and we
++# don't build the demos apps.
++BULLET_CONF_OPTS = -DUSE_GLUT=OFF -DBUILD_DEMOS=OFF
++
++$(eval $(cmake-package))
