@@ -1,45 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 14:26:34 +0200
-Subject: [Buildroot] [PATCH v7 0/8] toolchain: better handle hashes
- (branch yem/dl-hash-toolchains)
-In-Reply-To: <1429740521-31943-1-git-send-email-arnout@mind.be>
-References: <1429740521-31943-1-git-send-email-arnout@mind.be>
-Message-ID: <20150425142634.516e800e@free-electrons.com>
+Date: Sat, 25 Apr 2015 14:30:06 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/swupdate: new package
+In-Reply-To: <20150425102232.GB4275@free.fr>
+References: <1429916563-20332-1-git-send-email-joerg.krause@embedded.rocks>
+ <20150425102232.GB4275@free.fr>
+Message-ID: <20150425143006.4478f374@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Yann E. MORIN,
 
-On Thu, 23 Apr 2015 00:08:33 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
+On Sat, 25 Apr 2015 12:22:32 +0200, Yann E. MORIN wrote:
 
-> Arnout Vandecappelle (1):
->       uclibc: update hash for arc
+> > +SWUPDATE_VERSION = c68f02320858f89f2d441ff2057d49489fb6f586
+> > +SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+> > +SWUPDATE_LICENSE = GPLv2+
 > 
-> Yann E. MORIN (7):
->       package/gcc: add hashes
->       package/binutils: add hashes
->       package/uclibc: add missing hash for eXtensa
->       support/download: add possibility to not fail on missing hash
->       toolchain/external: ignore missing hash for custom downloaded toolchain
->       package/uclibc: ignore missing hash for snapshots
->       support/download: restore mandatory check of hashes
+> In fact, there are a few other licenses. For example, the copies of
+> Mongoose and lsqlite3 they bundle are MIT; the sqlite3 aggregated source
+> file is public domain ("The author disclaims copyright to this source
+> code.").
 
-Series applied.
+Do we care about this? If the all thing is then linked with GPLv2 code,
+then the result is GPLv2 license, no?
 
-One thing that bothered me a little bit is that when the hash of the
-tarball downloaded from upstream doesn't match the one we have in BR,
-we gracefully fall back on downloading the tarball from
-sources.buildroot.net.
-
-This is good for users as it means their build succeeds. But not so
-good from the point of view of noticing that upstream has for some
-reason changed the tarball.
-
-Any opinion about this?
+Indeed, the authors of the MIT licensed code should get credited (by
+means of a file in <pkg>_LICENSE_FILES), but I'm not sure we need to
+mention MIT and public domain in <pkg>_LICENSE.
 
 Thomas
 -- 
