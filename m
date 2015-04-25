@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Apr 2015 19:15:45 +0200
-Subject: [Buildroot] [PATCHv3 06/18] pkg-download: extend DOWNLOAD_INNER,
- add a SOURCE_CHECK macro
-In-Reply-To: <1429972982-25495-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Apr 2015 19:28:37 +0200
+Subject: [Buildroot] [PATCHv3 07/18] pkg-generic: implement source-check
+	targets
+In-Reply-To: <1429972982-25495-8-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1429972982-25495-7-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150425171545.GH4275@free.fr>
+ <1429972982-25495-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150425172837.GI4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,90 +15,87 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-04-25 16:42 +0200, Thomas Petazzoni spake thusly:
-> As part of moving to a package infrastructure based source-check
-> implementation, we are going to move away from the global DL_MODE
-> variable to select the behavior of the DOWNLOAD_INNER macro.
+> This commits extends the common package infrastructure with the
+> $(1)-source-check and $(1)-all-source-check targets.
 > 
-> As a preparation to this, this commit makes the DOWNLOAD_INNER macro
-> take a third argument, which is the action to be done: either DOWNLOAD
-> or SOURCE_CHECK. For now, the DOWNLOAD macro passes $(DL_MODE) as this
-> third argument, in order to keep the existing behavior.
+> The $(1)-source-check target simply calls the newly added
+> SOURCE_CHECK macro on all items to be downloaded.
 > 
-> In addition, a SOURCE_CHECK macro is added, which calls DOWNLOAD_INNER
-> with the appropriate action. This macro will be used in the upcoming
-> package infra based implementation of source-check.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> [tested by doing a "make source" on a randpackageconfig]
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> The $(1)-all-source-check target will depend on the
+> $(1)-all-source-check targets of all dependent packages and the
+> $(1)-source-check target of the current package, which allows to do a
+> recursive source-check in the dependency tree.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Superfluous SoB-line.
+To be noted: packages hosted at github, when we download a released
+tarball, are broken, because the backing-store is AWS, which does not
+support the HEAD request. But that is not a change due to this patch, it
+was already broken previously.
+
+> ---
+>  package/pkg-generic.mk | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index a12b868..5a9bcf1 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -579,6 +579,16 @@ endif
+>  $(1)-show-version:
+>  			@echo $$($(2)_VERSION)
+>  
+> +$(1)-source-check:
+> +ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+> +	$$(foreach p,$$($(2)_SOURCE) $$($(2)_EXTRA_DOWNLOADS) $$($(2)_PATCH),\
+> +		$$(if $$(findstring ://,$$(p)),\
+> +			$$(call SOURCE_CHECK,$$(p)),\
+> +			$$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$$(p)))$$(sep))
+> +else
+> +	test -d $$($(2)_OVERRIDE_SRCDIR)
+> +endif
+> +
+>  $(1)-show-depends:
+>  			@echo $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
+>  
+> @@ -594,6 +604,11 @@ $(1)-all-source:	$$(foreach p, \
+>  				$$(p)-all-source) \
+>  			$(1)-source
+>  
+> +$(1)-all-source-check:	$$(foreach p, \
+> +				$$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES), \
+> +				$$(p)-all-source-check) \
+> +			$(1)-source-check
+
+If you do the little trick I mentioned as a comment to your patch 2,
+you'd have to do it here, too.
+
+That would make it mor ereadable.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/pkg-download.mk | 28 ++++++++++++++++------------
->  1 file changed, 16 insertions(+), 12 deletions(-)
-> 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index eee9e59..76afced 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -212,14 +212,18 @@ endef
->  ################################################################################
+>  $(1)-all-external-deps:	$$(foreach p, \
+>  				$$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES), \
+>  				$$(p)-all-external-deps) \
+> @@ -793,6 +808,7 @@ endif
+>  	$(1)-all-external-deps \
+>  	$(1)-all-legal-info \
+>  	$(1)-all-source \
+> +	$(1)-all-source-check \
+>  	$(1)-build \
+>  	$(1)-clean-for-rebuild \
+>  	$(1)-clean-for-reconfigure \
+> @@ -816,7 +832,8 @@ endif
+>  	$(1)-rsync \
+>  	$(1)-show-depends \
+>  	$(1)-show-version \
+> -	$(1)-source
+> +	$(1)-source \
+> +	$(1)-source-check
 >  
->  define DOWNLOAD
-> -	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)))
-> +	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)),$(DL_MODE))
-> +endef
-> +
-> +define SOURCE_CHECK
-> +	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)),SOURCE_CHECK)
->  endef
->  
->  define DOWNLOAD_INNER
->  	$(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
->  		case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
-> -			scp) $(call $(DL_MODE)_SCP,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
-> -			*) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
-> +			scp) $(call $(3)_SCP,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
-> +			*) $(call $(3)_WGET,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
->  		esac ; \
->  	fi ; \
->  	if test "$(BR2_PRIMARY_SITE_ONLY)" = "y" ; then \
-> @@ -232,18 +236,18 @@ define DOWNLOAD_INNER
->  			scheme="$($(PKG)_SITE_METHOD)" ; \
->  		fi ; \
->  		case "$$scheme" in \
-> -			git) $($(DL_MODE)_GIT) && exit ;; \
-> -			svn) $($(DL_MODE)_SVN) && exit ;; \
-> -			cvs) $($(DL_MODE)_CVS) && exit ;; \
-> -			bzr) $($(DL_MODE)_BZR) && exit ;; \
-> -			file) $($(DL_MODE)_LOCALFILES) && exit ;; \
-> -			scp) $($(DL_MODE)_SCP) && exit ;; \
-> -			hg) $($(DL_MODE)_HG) && exit ;; \
-> -			*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
-> +			git) $($(3)_GIT) && exit ;; \
-> +			svn) $($(3)_SVN) && exit ;; \
-> +			cvs) $($(3)_CVS) && exit ;; \
-> +			bzr) $($(3)_BZR) && exit ;; \
-> +			file) $($(3)_LOCALFILES) && exit ;; \
-> +			scp) $($(3)_SCP) && exit ;; \
-> +			hg) $($(3)_HG) && exit ;; \
-> +			*) $(call $(3)_WGET,$(1),$(2)) && exit ;; \
->  		esac ; \
->  	fi ; \
->  	if test -n "$(call qstrip,$(BR2_BACKUP_SITE))" ; then \
-> -		$(call $(DL_MODE)_WGET,$(BR2_BACKUP_SITE)/$(2),$(2)) && exit ; \
-> +		$(call $(3)_WGET,$(BR2_BACKUP_SITE)/$(2),$(2)) && exit ; \
->  	fi ; \
->  	exit 1
->  endef
+>  endif # $(2)_KCONFIG_VAR
+>  endef # inner-generic-package
 > -- 
 > 2.1.0
 > 
