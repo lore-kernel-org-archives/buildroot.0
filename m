@@ -1,38 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 14:30:06 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/swupdate: new package
-In-Reply-To: <20150425102232.GB4275@free.fr>
-References: <1429916563-20332-1-git-send-email-joerg.krause@embedded.rocks>
- <20150425102232.GB4275@free.fr>
-Message-ID: <20150425143006.4478f374@free-electrons.com>
+Date: Sat, 25 Apr 2015 14:34:09 +0200
+Subject: [Buildroot] [git commit] libevdev: bump version to 1.4.2
+Message-ID: <20150425123415.A22E9807A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=f76280613673a533b549ccab2af5ffa45ca87f62
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 25 Apr 2015 12:22:32 +0200, Yann E. MORIN wrote:
+Update version and hash (see [1] for details).
 
-> > +SWUPDATE_VERSION = c68f02320858f89f2d441ff2057d49489fb6f586
-> > +SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
-> > +SWUPDATE_LICENSE = GPLv2+
-> 
-> In fact, there are a few other licenses. For example, the copies of
-> Mongoose and lsqlite3 they bundle are MIT; the sqlite3 aggregated source
-> file is public domain ("The author disclaims copyright to this source
-> code.").
+[1] http://lists.freedesktop.org/archives/input-tools/2015-April/001167.html
 
-Do we care about this? If the all thing is then linked with GPLv2 code,
-then the result is GPLv2 license, no?
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libevdev/libevdev.hash |    4 ++--
+ package/libevdev/libevdev.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Indeed, the authors of the MIT licensed code should get credited (by
-means of a file in <pkg>_LICENSE_FILES), but I'm not sure we need to
-mention MIT and public domain in <pkg>_LICENSE.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 868a245..535490b 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,2 +1,2 @@
+-# Hash from http://lists.freedesktop.org/archives/input-tools/2015-April/001166.html
+-sha256 5179d3c9a71dd764b4ab9df21edcdb5b61832cbc48ad90b75a52ac79cf8fae85 libevdev-1.4.1.tar.xz
++# Hash from http://lists.freedesktop.org/archives/input-tools/2015-April/001167.html
++sha256 7c77b213f075706d428a2af54b66bf86b03a68e9fb390e7ec48cf55065970643 libevdev-1.4.2.tar.xz
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index eb26517..3ed7ba0 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEVDEV_VERSION = 1.4.1
++LIBEVDEV_VERSION = 1.4.2
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
