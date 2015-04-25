@@ -1,29 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 10:31:59 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libinput: bump version to 0.14.1
-In-Reply-To: <1429947136-1792-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429947136-1792-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150425103159.1e509a3f@free-electrons.com>
+Date: Sat, 25 Apr 2015 10:32:40 +0200
+Subject: [Buildroot] [git commit] sh64: deprecate support for this dead
+	architecture
+Message-ID: <20150425083305.F28D57FF2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=b49aeacfcad4119b8b0158aa5cd467003c1b851f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 25 Apr 2015 09:32:15 +0200, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libinput/libinput.hash |    4 ++--
->  package/libinput/libinput.mk   |    2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+As discussed on the mailinglist, this should be deprecated
+before removal.
 
-Both applied, thanks.
+[Thomas: don't add to Config.in.legacy.]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/arch/Config.in b/arch/Config.in
+index 59bf84a..06aff2c 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -163,6 +163,7 @@ config BR2_sh
+ 
+ config BR2_sh64
+ 	bool "SuperH64"
++	depends on BR2_DEPRECATED_SINCE_2015_05
+ 	help
+ 	  SuperH64 (or SH) is a 64-bit reduced instruction set computer (RISC)
+ 	  instruction set architecture (ISA) developed by Hitachi.
