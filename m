@@ -1,50 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 11:22:42 +0200
-Subject: [Buildroot] [git commit] gtest: generate the gtest-config script
-Message-ID: <20150425092418.2541080794@busybox.osuosl.org>
+Date: Sat, 25 Apr 2015 11:25:27 +0200
+Subject: [Buildroot] [PATCH v2 1/1] gtest: update recipe to use autotools
+In-Reply-To: <553952BF.1040402@mind.be>
+References: <CAHkwnC-cZpP5m5009NiLZM07+t8CFSYVxqTBmNuXEA-x9mGwLg@mail.gmail.com>
+ <1429734568-20489-1-git-send-email-casantos@datacom.ind.br>
+ <20150422224620.7abefdb2@free-electrons.com>
+ <871078529.576418.1429788227635.JavaMail.zimbra@datacom.ind.br>
+ <553952BF.1040402@mind.be>
+Message-ID: <20150425112527.6c790a91@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=39186b5f5ac61c72d4b3d3088b7facbfd739abfa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Arnout, Carlos,
 
-gtest has moved from the autotools to CMake, but the CMake build
-system is currently not installing the gtest-config script. Work
-around that by installing it manually, after doing the necessary
-sed-ing from the gtest-config.in template.
+On Thu, 23 Apr 2015 22:14:55 +0200, Arnout Vandecappelle wrote:
 
-Reported-by: Carlos Santos <casantos@datacom.ind.br>
-Suggested-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gtest/gtest.mk |   14 ++++++++++++++
- 1 files changed, 14 insertions(+), 0 deletions(-)
+> # gtest-config is only generated when gtest is built with autotools,
+> # so generate it manually here.
+> define GTEST_INSTALL_CONFIG
+> 	sed 's/@PACKAGE_TARNAME@/gtest/;\
+> 		s/@PACKAGE_VERSION@/$(GTEST_VERSION)/;\
+> 		s/..../' \
+> 		$(@D)/scripts/gtest-config.in \
+> 		> $(STAGING_DIR)/usr/bin/gtest-config
+> endef
+> GTEST_POST_STAGING_INSTALL_HOOKS += GTEST_INSTALL_CONFIG
 
-diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
-index 7129c93..562acf0 100644
---- a/package/gtest/gtest.mk
-+++ b/package/gtest/gtest.mk
-@@ -30,6 +30,20 @@ define GTEST_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/libgtest_main.a $(STAGING_DIR)/usr/lib/libgtest_main.a
- 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gtest/
- 	cp -rp $(@D)/include/gtest/* $(STAGING_DIR)/usr/include/gtest/
-+	# Generate the gtest-config script manually, since the CMake
-+	# build system is not doing it.
-+	sed 's%@PACKAGE_TARNAME@%gtest%;\
-+		s%@PACKAGE_VERSION@%$(GTEST_VERSION)%;\
-+		s%@prefix@%$(STAGING_DIR)/usr%;\
-+		s%@exec_prefix@%$(STAGING_DIR)/usr%;\
-+		s%@libdir@%$(STAGING_DIR)/usr/lib%;\
-+		s%@includedir@%$(STAGING_DIR)/usr/include%;\
-+		s%@bindir@%$(STAGING_DIR)/usr/bin%;\
-+		s%@PTHREAD_CFLAGS@%%;\
-+		s%@PTHREAD_LIBS@%-lpthread%;' \
-+		$(@D)/scripts/gtest-config.in \
-+		> $(STAGING_DIR)/usr/bin/gtest-config
-+	chmod +x $(STAGING_DIR)/usr/bin/gtest-config
- endef
- 
- $(eval $(cmake-package))
+I've implemented this solution, see commit:
+
+  http://git.buildroot.net/buildroot/commit/?id=39186b5f5ac61c72d4b3d3088b7facbfd739abfa
+
+I test that the generated gtest-config returns sane values, but I
+didn't test with a real program using gtest obviously.
+
+Carlos, can you let us know if that works for your use case?
+
+Thanks a lot,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
