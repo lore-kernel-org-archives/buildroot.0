@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Apr 2015 22:26:49 +0200
-Subject: [Buildroot] [PATCHv3 16/18] Makefile: add BR_BUILDING variable
-In-Reply-To: <1429972982-25495-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Apr 2015 22:52:57 +0200
+Subject: [Buildroot] [PATCHv3 17/18] packages: refactor checks using
+	BR_BUILDING
+In-Reply-To: <1429972982-25495-18-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1429972982-25495-17-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150425202649.GS4275@free.fr>
+ <1429972982-25495-18-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150425205257.GT4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,75 +15,70 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-04-25 16:43 +0200, Thomas Petazzoni spake thusly:
-> Some packages do some sanity checks on their configuration, for
-> example linux checks that the defconfig string is not empty when a
-> defconfig is used. Such checks are currently always performed, except
-> when the 'source' target is part of make goals.
-> 
-> This is problematic for two reasons:
-> 
->  - Other targets such as 'source-check', 'external-deps' or
->    'legal-info', that do not consist in doing a build, cannot be
->    executed in such situations.
-> 
->  - The current code removes the check as soon as one of the targets is
->    source. But if there are other non-source targets called at the
->    same time, the checks are ignored.
-> 
-> This commit therefore introduces an internal variable called
-> BR_BUILDING, which tells packages if we are actually building or
-> not. A variable nobuild_targets indicates the targets that we do not
-> consider as being build targets.
-> 
-> For the moment, nobuild_targets only contains 'source', to be
-> completely iso-functional.
+> Instead of manually testing MAKECMDGOALS, use the newly introduced
+> BR_BUILDING variable to know if we're building or not.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[--SNIP--]
+> diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+> index 802e85e..f655058 100644
+> --- a/boot/at91bootstrap/at91bootstrap.mk
+> +++ b/boot/at91bootstrap/at91bootstrap.mk
+> @@ -40,11 +40,8 @@ endef
+>  
+>  $(eval $(generic-package))
+>  
+> -ifeq ($(BR2_TARGET_AT91BOOTSTRAP),y)
+> -# we NEED a board name unless we're at make source
+> -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> +ifeq ($(BR2_TARGET_AT91BOOTSTRAP)$(BR_BUILDING),yy)
+>  ifeq ($(AT91BOOTSTRAP_BOARD),)
+>  $(error No AT91Bootstrap board name set. Check your BR2_TARGET_AT91BOOTSTRAP_BOARD setting)
+>  endif
+>  endif
+> -endif
+> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+> index 3e3b78e..ff49e14 100644
+> --- a/boot/at91bootstrap3/at91bootstrap3.mk
+> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
+> @@ -43,7 +43,7 @@ AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
+>  $(eval $(kconfig-package))
+>  
+>  # Checks to give errors that the user can understand
+> -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> +ifeq ($(BR_BUILDING),y)
+>  ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
 
-I'm not too fond of the variable name, but I can't find a better one...
+I think it would be good to have a single way we do those checks.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+For example, compare at91bootstrap above and at91bootstrap3 here.
+The former is doing the BR2_BUILDING check and package-enabled check
+in a single ifeq, while the latter does it with two ifeq.
 
-Not tested, there's virtually nothing new to test (except that it is
-valid make synbtax, obviously, and that's OK).
+I don't really care which we use, but we should use the same everywhere.
+Maybe we could favour doing it with feq, for those packages that want to
+do multiple checks.
+
+Applicable to the other packages, of course.
+
+[--SNIP--]
+> diff --git a/boot/xloader/xloader.mk b/boot/xloader/xloader.mk
+> index 90d5fa2..a07a190 100644
+> --- a/boot/xloader/xloader.mk
+> +++ b/boot/xloader/xloader.mk
+> @@ -25,12 +25,8 @@ endef
+>  
+>  $(eval $(generic-package))
+>  
+> -ifeq ($(BR2_TARGET_XLOADER),y)
+> -# we NEED a board name unless we're at make source
+> -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> +ifeq ($(BR2_TARGET_XLOADER)$(BR_BUILDING),y)
+
+This is broken: it should be compared to 'yy', not a single 'y'.
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  Makefile | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index 0ba341b..e0be636 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -77,6 +77,22 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
->  	randpackageconfig allyespackageconfig allnopackageconfig \
->  	print-version olddefconfig
->  
-> +# Some global targets do not trigger a build, but are used to collect
-> +# metadata, or do various checks. When such targets are triggered,
-> +# some packages should not do their configuration sanity
-> +# checks. Provide them a BR_BUILDING variable set to 'y' when we're
-> +# actually building and they should do their sanity checks.
-> +#
-> +# We're building in two situations: when MAKECMDGOALS is empty
-> +# (default target is to build), or when MAKECMDGOALS contains
-> +# something else than one of the nobuild_targets.
-> +nobuild_targets := source
-> +ifeq ($(MAKECMDGOALS),)
-> +BR_BUILDING = y
-> +else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
-> +BR_BUILDING = y
-> +endif
-> +
->  # Strip quotes and then whitespaces
->  qstrip = $(strip $(subst ",,$(1)))
->  #"))
-> -- 
-> 2.1.0
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
