@@ -1,11 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Apr 2015 14:46:26 +0200
-Subject: [Buildroot] [PATCH 1/3] support: add script to find maintainers
-In-Reply-To: <553B83E3.7010804@mailerd.de>
+Date: Sat, 25 Apr 2015 14:49:33 +0200
+Subject: [Buildroot] [PATCH 2/3] support/maintainers: add support for
+ autobuild results
+In-Reply-To: <553B83E6.6020809@mailerd.de>
 References: <cover.1427044305.git.yann.morin.1998@free.fr>
- <6fa246aa883ffa33c0fbcf7d52e7032b9685bfaf.1427044305.git.yann.morin.1998@free.fr>
- <553B83E3.7010804@mailerd.de>
-Message-ID: <20150425124626.GC4275@free.fr>
+ <e256c9430c3a6d0005946031bcefcdcdebe48852.1427044305.git.yann.morin.1998@free.fr>
+ <553B83E6.6020809@mailerd.de>
+Message-ID: <20150425124933.GD4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,188 +17,77 @@ Andr?, All,
 
 On 2015-04-25 14:09 +0200, Andr? Erdmann spake thusly:
 > 2015/4/24 Yann E. Morin <yann.morin.1998@free.fr>:
-> > With the growing number of packages, as well as the many infrastructures
-> > we now have (package, download...), it is time we introduce the notion
-> > of maintainers.
-[--SNIP--]
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  support/scripts/check-maintainer | 38 ++++++++++++++++++++++++++++++++++++--
+> >  1 file changed, 36 insertions(+), 2 deletions(-)
+> > 
 > > diff --git a/support/scripts/check-maintainer b/support/scripts/check-maintainer
-> > new file mode 100755
-> > index 0000000..0ca7136
-> > --- /dev/null
+> > index 0ca7136..1dae00b 100755
+> > --- a/support/scripts/check-maintainer
 > > +++ b/support/scripts/check-maintainer
-> > @@ -0,0 +1,157 @@
-> > +#!/usr/bin/env bash
+> > @@ -1,20 +1,54 @@
+> >  #!/usr/bin/env bash
+> >  
+> > +# Base URL for autobuild results
+> > +ABO_BASE="http://autobuild.buildroot.org/results/"
 > > +
-> > +main() {
-> > +    local OPT OPTARGS
-> 
-> s/OPTARGS/OPTARG?
-
-Bummer...
-
-> Not sure if it makes sense to local-scope getopts vars,
-> there's also OPTIND and maybe OPTERR.
-
-Well, it does not really matter, even for OPT and OPTARG, since main()
-is the sole function in the script.
-
-Still, I have for a while tried to declare all local-scope variables
-with 'local', As I find it to be a "good" behaviour.
-
-But you're right, to be consistent, all should be declared local.
-
-And OPTERR is not something set by bash, it is a variable that bash
-reads to see how to behave on error.  So, as long as it is not set,
-there's no reason to declare it. But of course, there is, since we
-do not want to inhrit it from the user's environment.
-
-> > +    local -a pkgs archs files rcpt
-> > +    local pattern pkg arch file maintainer
+> >  main() {
+> >      local OPT OPTARGS
+> >      local -a pkgs archs files rcpt
+> > -    local pattern pkg arch file maintainer
+> > +    local autobuild pattern pkg arch file maintainer
+> > +    local pkg_url arch_url short_sha
+> >  
+> > -    while getopts :hp:a: OPT; do
+> > +    while getopts :hp:a:b: OPT; do
+> >          case "${OPT}" in
+> >          h)  help; exit 0;;
+> >          p)  pkgs+=( "${OPTARG}" );;
+> >          a)  archs+=( "${OPTARG}" );;
+> > +        b)  autobuild="${OPTARG}";;
+> >          :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
+> >          \?) error "unknown option '%s'\n" "${OPTARG}";;
+> >          esac
+> >      done
+> >  
+> > +    # Sanity check: can't have an autobuild url and either a package or an arch
+> > +    if [ -n "${autobuild}" -a \( ${#pkgs[@]} -ne 0 -o ${#archs[@]} -ne 0 \) ]; then
+> > +        error "Can not use an autobuild failure at the same time as a package or architcture\n"
+> > +    fi
 > > +
-> > +    while getopts :hp:a: OPT; do
-> > +        case "${OPT}" in
-> > +        h)  help; exit 0;;
-> > +        p)  pkgs+=( "${OPTARG}" );;
-> > +        a)  archs+=( "${OPTARG}" );;
-> > +        :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
-> > +        \?) error "unknown option '%s'\n" "${OPTARG}";;
-> > +        esac
-> > +    done
+> > +    # For an autobuild failure, get the failing package and arch,
+> > +    # and fake as if they were passed on the command line.
+> > +    if [ -n "${autobuild}" ]; then
+> > +        # If it starts with http:// then we consider this is an URL to
+> > +        # an autobuild result directory, otherwise we consider it is the
+> > +        # sha1 of a failed build.
+> > +        if [[ "${autobuild}" =~ ^http:// ]]; then
+> > +            pkg_url="${autobuild}/build-time.log"
+> > +            arch_url="${autobuild}/config"
+> > +        else
+> > +            short_sha="${autobuild%${autobuild#???}}"
 > 
-> Non-option args will be ignored by this script.
-> If people don't read the help message first and simply run
-> "check-maintainer PKG" or do some scripting and end up with
-> "check-maintainer -p $(command_that_usually_prints_a_single_package_name_but_now_prints_two)",
-> then the script could hang forever waiting for a patch from stdin.
+> More readable:
 > 
-> Might be better to error-exit in this case, e.g.:
-> 
->     # bail out if any positional args are given
->     [ ${#} -lt ${OPTIND} ] || error "bad usage: script does not accept positional args.\n"
+>    short_sha="${autobuild:0:3}"
 
-Good catch. I'll fix.
+Yes, but this is a bashism (i.e. not posix). And even though we're
+explicitly using bash, I tend to avoid bashisms when it can be done with
+POSIX constructs.
 
-> > +    # We can't easily scan the pattern->maintainer relations into an
-> > +    # array, because each pattern may be associated with more than one
-> > +    # maintainer, and entries in bash arrays can't be another array
-> > +    # (i.e. arrays are only one-dimensional).
-> > +    # So, we scan the maintainers file once, and for each pattern we
-> > +    # check if there is a matching file, which in practice is the
-> > +    # optimum solution.
-> > +    # Note: filtering-out comments and empty lines in the bash 'case'
-> > +    # is slightly faster (~10%) than it is to 'sed' them out.
-> > +    while read pattern; do
-> 
-> "read -r" unless backslash escapes should be expanded
+But since Thomas alrady raised a concern about that in another patch
+(for the autobuilder code itself), I'll switch to using the bashsim.
 
-There's no need for backslash escapes, so I'll use 'read -r'.
+> But behaves differently from your approach when $autobuild is not valid
+> (<= 3 chars long).
 
-> > +        case "${pattern}" in
-> > +        "#"*|"")
-> > +            continue
-> > +        ;;
-> > +        *@*)
-> > +            maintainer="${pattern}"
-> > +            continue
-> > +        ;;
-> > +        esac
-> 
-> A "have maintainer?" check would slightly help against a malformed
-> maintainers file (file pattern before the first "Person <mail>" line):
-> 
->     [ -z "${maintainer}" ] || \
+I'll put guards in palce to catch this.
 
-Better yet:
-    [ -n "${maintainer}" ] || continue
+[--SNIP--]
+> The help message for "-b" is missing.
 
-No?
-
-> > +        for file in "${files[@]}"; do
-> > +            if filematch "${file}" "${pattern}"; then
-> > +                debug "  --> adding '%s'\n" "${maintainer}"
-> > +                rcpt+=( "${maintainer}" )
-> > +            fi
-> > +        done
-> > +    done <MAINTAINERS
-> > +
-> 
-> The read-loop basically reads as follows:
-> 
->    foreach maintainer, pattern loop
->       foreach file loop
->          if filematch file, pattern then
->             rank up maintainer
->          end if
->       end loop
->    end loop
-> 
-> => Maintainers with more than one pattern matching the same file get ranked up,
->    try "check-maintainer -p opengl" ;) (after applying patch 3 of this series)
-> 
-> Is that on purpose or accepted behavior due to otherwise increased script complexity?
-
-Yes, that's on purpose, see the comment a few lines later:
-    # Report all interested maintainers, ranking by number of matches
-
-Is that a problem ranking by number of matches?
-
-> It'd be rather easy to fix it in bash 4 /w an associative array (*),
-> but I don't know of any sane solution for bash 3, if that's a requirement.
-> 
-> (*) as long as all patterns are listed in one block per maintainer
->     (no "person <mail>" redefinition), but that's guaranteed by the file format
-
-No, we can not use associative arrays to store { patterns -> maintainer } 
-relations, because a single pattern may have more than one maintainer.
-
-For example, I'm interested in linux/* and you're interested in linux/*
-too. How can w estore that in an associative array? Remember that arrays
-in bash are one-dimensional, so we can have an associative array like;
-    { pattern -> { maint-1, maint-2 } }
-
-That's explained in the comment above the read-loop.
-
-> > +DESCRIPTION
-> > +    In some projects, some persons are considered responsible for one or
-> > +    more specific parts of the projects; they are called "maintainers",
-> > +    like is done in the Linux kernel.
-> > +
-> > +    In Buildroot, however, we do not have such "maintainers"; rather,
-> > +    some people can declare themselves to be "interested" in specific
-> > +    parts of the project. We still call them "maintainers", though.
-> > +
-> > +    ${my_name} helps in finding such persons. It can be used in two ways.
-> > +
-> > +    In the first synopsis, you pass it a package name or an architecture
-> > +    name, and it will tell you the persons that have declared interests
-> > +    in those.
-> > +
-> > +    In the second synopsis, with no options, it will read a patch from
-> > +    stdin, and it will tell you who has declared interest in the areas
-> > +    touched by the patch.
-> > +
-> > +OPTIONS
-> > +    -h  This help text.
-> > +
-> > +    -p PKG
-> > +        Find the persons interested in package PKG.
-> > +
-> 
-> Noteworthy: PKG can also be a glob pattern,
->             e.g. "usb_modeswitch*" (because of "find -name <PKG>.mk").
-
-Well, even if that works, do we want to document it? Hmm... yes, it
-might be usefull; consider e.g. 'kodi*' or 'matchbox*', indeed.
-
-OK, will add to the help.
-
-> Also, "-p" and "-a" can be given more than once,
-
-Will make it explicit.
-
-> whereas "-b" introduced in patch 2 behaves differently.
-
-Does it make sense to support more than one autobuild failure?
+ACK.
 
 Thanks!
 
