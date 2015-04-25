@@ -1,33 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 10:16:20 +0200
-Subject: [Buildroot] [PATCH] qwt: bump to version 6.1.2
-In-Reply-To: <1429901397-9961-1-git-send-email-fhunleth@troodon-software.com>
-References: <1429901397-9961-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20150425101620.0e2724a4@free-electrons.com>
+Date: Sat, 25 Apr 2015 10:17:01 +0200
+Subject: [Buildroot] [git commit] QEMU: Enable package for MIPS targets
+Message-ID: <20150425081715.A985180E42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Frank Hunleth,
+commit: http://git.buildroot.net/buildroot/commit/?id=b93fd39e2e20ffaeeb10cf1a3436c169413917e3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 24 Apr 2015 14:49:57 -0400, Frank Hunleth wrote:
-> Qwt 6.1.2 fixes several minor issues in 6.1.0 and removes the need to
-> carry a patch in Buildroot.
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  package/qwt/0001-remove-installed-check.patch | 32 ---------------------------
->  package/qwt/qwt.hash                          |  2 +-
->  package/qwt/qwt.mk                            |  2 +-
->  3 files changed, 2 insertions(+), 34 deletions(-)
->  delete mode 100644 package/qwt/0001-remove-installed-check.patch
+Allow QEMU to be installed on MIPS targets. Also introduce a new
+symbol (BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET) to hold the
+architectures than can build and use QEMU on the target.
 
-Applied, thanks.
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qemu/Config.in |    9 +++++++--
+ package/qemu/qemu.mk   |    4 ++--
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index fff786d..25936e2 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -1,11 +1,16 @@
++config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
++	bool
++	# Only tested on these architectures
++	default y if BR2_i386 || BR2_mips || BR2_mipsel || BR2_x86_64
++
+ comment "QEMU requires a toolchain with wchar, threads"
+-	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
+ 	depends on BR2_USE_MMU
+ 	depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR)
+ 
+ config BR2_PACKAGE_QEMU
+ 	bool "QEMU"
+-	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR # gettext
+ 	depends on BR2_USE_MMU # fork()
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index b73127b..decfc25 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -32,8 +32,8 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-p
+ #       microblaze      microblaze
+ #       mips            mips
+ #       mipsel          mipsel
+-#       mips64          ?
+-#       mips64el        ?
++#       mips64          mips64
++#       mips64el        mips64el
+ #       powerpc         ppc
+ #       sh2a            not supported
+ #       sh4             sh4
