@@ -1,43 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 11:49:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: Fixes linking error with
- tremor due to wrong library name
-In-Reply-To: <1429740384-21839-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1429740384-21839-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150425114904.20e960ba@free-electrons.com>
+Date: Sat, 25 Apr 2015 11:51:34 +0200
+Subject: [Buildroot] [git commit] package/uclibc: ignore missing hash for
+	snapshots
+Message-ID: <20150425095655.29CF780094@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=33e72a90f89afc008b20784482882df45be9a8b7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 23 Apr 2015 00:06:24 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/469/4693f5f3d362e74a55c8145dbe777606f5865ad5/
-> http://autobuild.buildroot.net/results/795/795744533dbf7076e88163fb35327da8c42819f1/
-> http://autobuild.buildroot.net/results/89d/89d9997fc76ad334ff7b7f2a28294c78c424a120/
-> http://autobuild.buildroot.net/results/57f/57f22c8623268d836e8b402e8c27d418b6fb7f72/
-> http://autobuild.buildroot.net/results/5f6/5f66a8a135c95624a14908c685f1201dd7f8ae87/
-> 
-> and many others
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/vlc/0004-libvorbisidec.patch |   18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->  create mode 100644 package/vlc/0004-libvorbisidec.patch
+We can't have a hash for snapshots, so add them to the exclusion list.
 
-I've renamed to 0005-libvorbisidec.patch, so that the patch numbering
-remains correct, and applied.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uclibc/uclibc.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Please submit upstream.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 07ff8e5..ce9b2b4 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -11,6 +11,7 @@ UCLIBC_LICENSE_FILES = COPYING.LIB
+ 
+ ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+ UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
++BR_NO_CHECK_HASH_FOR += $(UCLIBC_SOURCE)
+ else ifeq ($(BR2_UCLIBC_VERSION_NG),y)
+ UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
