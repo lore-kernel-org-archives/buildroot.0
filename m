@@ -1,42 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 16:43:02 +0200
-Subject: [Buildroot] [PATCHv3 18/18] Makefile: add a few more targets to
-	nobuild_targets
+Date: Sat, 25 Apr 2015 16:45:42 +0200
+Subject: [Buildroot] [PATCHv3 00/18] Package based 'source', 'legal-info',
+ 'source-check' and 'external-deps'
 In-Reply-To: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1429972982-25495-19-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150425164542.79fe43b4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With this commit, one can now execute the source-check, external-deps
-and legal-info targets regardless of the checks normally being done by
-packages on the configuration.
+Hello,
 
-Note that we intentionally do not go down the road of adding %-source,
-%-legal-info, and the miryad of other targets that could work in such
-situations. We only whitelist a few targets that are really useful to
-have as nobuild_targets.
+On Sat, 25 Apr 2015 16:42:44 +0200, Thomas Petazzoni wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> This is a new iteration of the "Package based 'source', 'legal-info',
+> 'source-check' and 'external-deps'" series.
 
-diff --git a/Makefile b/Makefile
-index e0be636..2d7c05a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -86,7 +86,7 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
- # We're building in two situations: when MAKECMDGOALS is empty
- # (default target is to build), or when MAKECMDGOALS contains
- # something else than one of the nobuild_targets.
--nobuild_targets := source
-+nobuild_targets := source source-check legal-info external-deps _external-deps
- ifeq ($(MAKECMDGOALS),)
- BR_BUILDING = y
- else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+If someone wants to test this series, I've pushed it at:
+
+  http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=pkg-based-deps-v3
+
+Thanks,
+
+Thomas
 -- 
-2.1.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
