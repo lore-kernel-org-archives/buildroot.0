@@ -1,99 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Apr 2015 19:37:31 +0200
-Subject: [Buildroot] [PATCHv3 12/18] pkg-download: fix indentation for
- SOURCE_CHECK_* macros
-In-Reply-To: <1429972982-25495-13-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Apr 2015 19:49:48 +0200
+Subject: [Buildroot] [PATCHv3 09/18] pkg-generic: remove the
+ .stamp_rsync_sourced fake stamp file
+In-Reply-To: <20150425173303.GJ4275@free.fr>
 References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1429972982-25495-13-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150425173730.GM4275@free.fr>
+ <1429972982-25495-10-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150425173303.GJ4275@free.fr>
+Message-ID: <20150425194948.70ff9724@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Yann E. MORIN,
 
-On 2015-04-25 16:42 +0200, Thomas Petazzoni spake thusly:
-> Some of the SOURCE_CHECK_* macros are using a non-standard two-spaces
-> indentation. This commit switches them to use a single tab based
-> indentation, like in the rest of Buildroot.
+On Sat, 25 Apr 2015 19:33:03 +0200, Yann E. MORIN wrote:
+
+> > -$(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
+> > +$(1)-source:
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> [with git show -w]
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> The reason that line existed was to be able to define a dependency on
+> the stamp file. There is now no reason to keep this line at all; all you
+> have above is declaring a make goal without dependency or rule, so it
+> is entirely useless.
 
-Superfluous SoB line. ;-)
+I don't think a target with no dependencies or rules is useless. It can
+be useful to not have an error when this target is triggered.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+When you are going to do a 'make source', it will do a 'make
+$(1)-source' on all packages, including the ones that have
+<pkg>_OVERRIDE_SRCDIR. So there must be a $(1)-source target, even if
+it doesn't do anything.
 
-Regards,
-Yann E. MORIN.
+Am I missing something?
 
-> ---
->  package/pkg-download.mk | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index a145011..a38062e 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -90,7 +90,7 @@ endef
->  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
->  # repository
->  define SOURCE_CHECK_GIT
-> -  $(GIT) ls-remote --heads $($(PKG)_SITE) > /dev/null
-> +	$(GIT) ls-remote --heads $($(PKG)_SITE) > /dev/null
->  endef
->  
->  define DOWNLOAD_BZR
-> @@ -134,7 +134,7 @@ define DOWNLOAD_SVN
->  endef
->  
->  define SOURCE_CHECK_SVN
-> -  $(SVN) ls $($(PKG)_SITE)@$($(PKG)_DL_VERSION) > /dev/null
-> +	$(SVN) ls $($(PKG)_SITE)@$($(PKG)_DL_VERSION) > /dev/null
->  endef
->  
->  # SCP URIs should be of the form scp://[user@]host:filepath
-> @@ -166,7 +166,7 @@ endef
->  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
->  # repository
->  define SOURCE_CHECK_HG
-> -  $(HG) incoming --force -l1 $($(PKG)_SITE) > /dev/null
-> +	$(HG) incoming --force -l1 $($(PKG)_SITE) > /dev/null
->  endef
->  
->  define DOWNLOAD_WGET
-> @@ -179,7 +179,7 @@ define DOWNLOAD_WGET
->  endef
->  
->  define SOURCE_CHECK_WGET
-> -  $(WGET) --spider '$(call qstrip,$(1))'
-> +	$(WGET) --spider '$(call qstrip,$(1))'
->  endef
->  
->  define DOWNLOAD_LOCALFILES
-> @@ -192,7 +192,7 @@ define DOWNLOAD_LOCALFILES
->  endef
->  
->  define SOURCE_CHECK_LOCALFILES
-> -  test -e $(call stripurischeme,$(call qstrip,$(1)))
-> +	test -e $(call stripurischeme,$(call qstrip,$(1)))
->  endef
->  
->  ################################################################################
-> -- 
-> 2.1.0
-> 
+Thanks,
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
