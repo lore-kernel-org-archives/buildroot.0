@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 16:45:42 +0200
-Subject: [Buildroot] [PATCHv3 00/18] Package based 'source', 'legal-info',
- 'source-check' and 'external-deps'
-In-Reply-To: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150425164542.79fe43b4@free-electrons.com>
+Date: Sat, 25 Apr 2015 16:46:17 +0200
+Subject: [Buildroot] [PATCH 6/6] package/perl-mail-spamassassin: new
+ package
+In-Reply-To: <1429970088-593-6-git-send-email-bernd.kuhls@t-online.de>
+References: <1429970088-593-1-git-send-email-bernd.kuhls@t-online.de>
+ <1429970088-593-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150425164617.43f7db2e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Bernd Kuhls,
 
-On Sat, 25 Apr 2015 16:42:44 +0200, Thomas Petazzoni wrote:
+On Sat, 25 Apr 2015 15:54:48 +0200, Bernd Kuhls wrote:
+> This package contains a dependency check which only checks for installed
+> modules in host-perl, not the target variant. Therefore some host package
+> of perl modules are needed as dependency.
 
-> This is a new iteration of the "Package based 'source', 'legal-info',
-> 'source-check' and 'external-deps'" series.
-
-If someone wants to test this series, I've pushed it at:
-
-  http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=pkg-based-deps-v3
+Are they needed because they are used, or needed just to please the
+dependency checks of spamassassin?
 
 Thanks,
 
