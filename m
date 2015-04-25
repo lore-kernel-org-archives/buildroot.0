@@ -1,99 +1,130 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Apr 2015 10:27:51 +0200
-Subject: [Buildroot] [PATCH] pkg-generic: substitute colon and space out
- of PKG_VERSION
-In-Reply-To: <1429744088-19590-1-git-send-email-arnout@mind.be>
-References: <1429737867-1754-1-git-send-email-arnout@mind.be>
- <1429744088-19590-1-git-send-email-arnout@mind.be>
-Message-ID: <20150425082750.GA4275@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Apr 2015 10:18:28 +0200
+Subject: [Buildroot] [git commit] package/dovecot: not available on
+	static-only build
+Message-ID: <20150425083008.89F5680E42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=bfb5d066fc8a4a5f4be4e0f99dd75b62f32ec787
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-04-23 01:08 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> Using a colon or a space in a make target doesn't work, so they have to
-> be filtered out of the PKG_VERSION variable just like the / currently
-> already is.
-> 
-> This will be needed for date-based CVS versions.
-> 
-> Add a helper macro 'sanitize' in pkg-utils.mk to implement this. This
-> also moves the strip to the inner level for the target branch.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Fixes
+http://autobuild.buildroot.net/results/53f/53fd9003a4cf7d128f4d64d43209fe26d859a829/
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+http://autobuild.buildroot.net/results/53f/53fd9003a4cf7d128f4d64d43209fe26d859a829/dovecot-2.2.16/config.log
+shows this pthread related link error during configure
 
-Regards,
-Yann E. MORIN.
+sqlite3.c:(.text+0x5106): undefined reference to `pthread_mutex_trylock'
+/home/test/autobuild/instance-2/output/host/usr/i686-buildroot-linux-uclibc/sysroot/usr/lib/libsqlite3.a(sqlite3.o): In function `pthreadMutexAlloc':
+sqlite3.c:(.text+0x91fb): undefined reference to `pthread_mutexattr_init'
+sqlite3.c:(.text+0x9205): undefined reference to `pthread_mutexattr_settype'
+sqlite3.c:(.text+0x920e): undefined reference to `pthread_mutex_init'
+sqlite3.c:(.text+0x9216): undefined reference to `pthread_mutexattr_destroy'
+sqlite3.c:(.text+0x9234): undefined reference to `pthread_mutex_init'
 
-> ---
-> Changes v1 -> v2:
->   - Move to a helper macro (Thomas).
->   - Add moving of strip to commit message (Yann).
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/pkg-generic.mk | 6 ++++--
->  package/pkg-utils.mk   | 5 +++++
->  2 files changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index d1a1811..455bdf1 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -322,17 +322,19 @@ $(2)_RAWNAME			=  $$(patsubst host-%,%,$(1))
->  # sanitize the package version that is used in paths, directory and file names.
->  # Forward slashes may appear in the package's version when pointing to a
->  # version control system branch or tag, for example remotes/origin/1_10_stable.
-> +# Similar for spaces and colons (:) that may appear in date-based revisions for
-> +# CVS.
->  ifndef $(2)_VERSION
->   ifdef $(3)_VERSION
->    $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
-> -  $(2)_VERSION := $$(subst /,_,$$(strip $$($(3)_VERSION)))
-> +  $(2)_VERSION := $$(call sanitize,$$($(3)_VERSION))
->   else
->    $(2)_VERSION = undefined
->    $(2)_DL_VERSION = undefined
->   endif
->  else
->    $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
-> -  $(2)_VERSION := $$(strip $$(subst /,_,$$($(2)_VERSION)))
-> +  $(2)_VERSION := $$(call sanitize,$$($(2)_VERSION))
->  endif
->  
->  $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 5a385f8..99a3c1e 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -37,6 +37,11 @@ endef
->  $(eval $(call caseconvert-helper,UPPERCASE,$(join $(addsuffix :,$([FROM])),$([TO]))))
->  $(eval $(call caseconvert-helper,LOWERCASE,$(join $(addsuffix :,$([TO])),$([FROM]))))
->  
-> +# Sanitize macro cleans up generic strings so it can be used as a filename
-> +# and in rules. Particularly useful for VCS version strings, that can contain
-> +# slashes, colons (OK in filenames but not in rules), and spaces.
-> +sanitize = $(subst $(space),_,$(subst :,_,$(subst /,_,$(strip $(1)))))
-> +
->  #
->  # Manipulation of .config files based on the Kconfig
->  # infrastructure. Used by the BusyBox package, the Linux kernel
-> -- 
-> 2.1.4
-> 
+Trying to fix it in dovecot.mk by
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
++# dovecot forgets to compile/link with -pthread breaking static linking
++DOVECOT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -pthread" LIBS="-pthread"
+
+results in a build error later on
+setresgid.c:(.text+0x0): multiple definition of `setresgid'
+
+which might be fixed in uclibc by porting
+http://git.buildroot.net/buildroot/tree/package/uclibc/1.0.2/0001-fix-static-linking-of-pthread-apps.patch
+
+but, at the end, I think it is better to not build Dovecot as a static
+binary since it is heavy modularized and not worth the effort. Therefore
+remove two patches fixing static linking, since they are not needed anymore.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dovecot/0002-fix-static-build.patch |   24 ------------------------
+ package/dovecot/0003-fix-static-build.patch |   24 ------------------------
+ package/dovecot/Config.in                   |    5 +++++
+ 3 files changed, 5 insertions(+), 48 deletions(-)
+
+diff --git a/package/dovecot/0002-fix-static-build.patch b/package/dovecot/0002-fix-static-build.patch
+deleted file mode 100644
+index be646bc..0000000
+--- a/package/dovecot/0002-fix-static-build.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Fix static build
+-
+-MODULE_SUFFIX is undefined when building statically; don't used it.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: sent upstream
+-(http://dovecot.org/pipermail/dovecot/2014-November/098694.html)
+-
+-diff -Nuar dovecot-2.2.15-orig/src/lib/module-dir.c dovecot-2.2.15/src/lib/module-dir.c
+---- dovecot-2.2.15-orig/src/lib/module-dir.c	2014-10-18 00:10:15.000000000 +0300
+-+++ dovecot-2.2.15/src/lib/module-dir.c	2014-11-13 19:27:29.417786313 +0200
+-@@ -621,7 +621,11 @@
+- 	if (*p == '_')
+- 		fname = p + 1;
+- 
+-+#ifdef MODULE_SUFFIX
+- 	p = strstr(fname, MODULE_SUFFIX);
+-+#else
+-+	p = NULL;
+-+#endif
+- 	if (p == NULL)
+- 		return fname;
+- 
+diff --git a/package/dovecot/0003-fix-static-build.patch b/package/dovecot/0003-fix-static-build.patch
+deleted file mode 100644
+index c5dd9d1..0000000
+--- a/package/dovecot/0003-fix-static-build.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Fix symbol conflict in static build with MySQL enabled
+-
+-Compile error log:
+-http://autobuild.buildroot.net/results/9b5/9b536926b3b2bf82c683b48e9697a220f1b4bf33/build-end.log
+-
+-Patch suggested by Timo Sirainen:
+-http://www.dovecot.org/list/dovecot/2014-November/098787.html
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr dovecot-2.2.15.org/src/lib/strnum.h dovecot-2.2.15/src/lib/strnum.h
+---- dovecot-2.2.15.org/src/lib/strnum.h	2014-07-02 17:21:24.000000000 +0200
+-+++ dovecot-2.2.15/src/lib/strnum.h	2014-11-21 19:26:42.316225982 +0100
+-@@ -1,6 +1,10 @@
+- #ifndef STRNUM_H
+- #define STRNUM_H
+- 
+-+/* libmysqlclient really should try to keep its internal stuff internal so
+-+   they won't conflict with the actual programs that are trying to use it. */
+-+#define str_to_time str_to_time_libmysqlclient_craps_all_over
+-+
+- /* Return TRUE if all characters in string are numbers.
+-    Stop when `end_char' is found from string. */
+- bool str_is_numeric(const char *str, char end_char) ATTR_PURE;
+diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
+index 5fd1714..9c242fc 100644
+--- a/package/dovecot/Config.in
++++ b/package/dovecot/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_DOVECOT
+ 	bool "dovecot"
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Dovecot is an open source IMAP and POP3 email server for Linux/UNIX-
+@@ -51,3 +52,7 @@ config BR2_PACKAGE_DOVECOT_ZLIB
+ source package/dovecot-pigeonhole/Config.in
+ 
+ endif # BR2_PACKAGE_DOVECOT
++
++comment "dovecot needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS
