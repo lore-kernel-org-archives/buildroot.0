@@ -1,28 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Apr 2015 15:54:43 +0200
-Subject: [Buildroot] [PATCH 1/6] package/perl-netaddr-ip: Add host variant
-Message-ID: <1429970088-593-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Apr 2015 16:42:45 +0200
+Subject: [Buildroot] [PATCHv3 01/18] fs: only add non rootfs- targets to
+	PACKAGES
+In-Reply-To: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1429972982-25495-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed to make Mail-SpamAssassin?s dependency check happy.
+Commit 4570dbcb14b394d8f3c97baf4c9e5f4f225d1d37
+("4570dbcb14b394d8f3c97baf4c9e5f4f225d1d37") added the dependencies of
+rootfs building logic to PACKAGES, only thinking about the case where
+rootfs building logic actually depends on real, normal packages
+(host-mtd, host-genext2fs, etc.). But some file systems (rootfs-ubi)
+depend on other filesystem images (rootfs-ubifs). And such targets
+should not be added to PACKAGES, other an incorrect circular
+dependency is created.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This commit fixes that by only adding the rootfs building logic
+dependencies that do *not* start with rootfs- to the global PACKAGES
+variable.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-netaddr-ip/perl-netaddr-ip.mk |    1 +
- 1 file changed, 1 insertion(+)
+ fs/common.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/perl-netaddr-ip/perl-netaddr-ip.mk b/package/perl-netaddr-ip/perl-netaddr-ip.mk
-index e8ace9d..aaa3ef0 100644
---- a/package/perl-netaddr-ip/perl-netaddr-ip.mk
-+++ b/package/perl-netaddr-ip/perl-netaddr-ip.mk
-@@ -14,3 +14,4 @@ PERL_NETADDR_IP_LICENSE_FILES = Artistic Copying
- PERL_NETADDR_IP_CONF_OPTS = -noxs
+diff --git a/fs/common.mk b/fs/common.mk
+index 41ee86d..4387d06 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -106,7 +106,7 @@ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
  
- $(eval $(perl-package))
-+$(eval $(host-perl-package))
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+ TARGETS_ROOTFS += rootfs-$(1)
+-PACKAGES += $$(ROOTFS_$(2)_DEPENDENCIES)
++PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES))
+ endif
+ endef
+ 
 -- 
-1.7.10.4
+2.1.0
