@@ -1,87 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 16:42:57 +0200
-Subject: [Buildroot] [PATCHv3 13/18] pkg-generic: introduce a
-	<pkg>_ALL_DOWNLOADS variable and factorize code
+Date: Sat, 25 Apr 2015 16:42:58 +0200
+Subject: [Buildroot] [PATCHv3 14/18] Makefile: implement the 'source' target
+	using the package infrastructure
 In-Reply-To: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1429972982-25495-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1429972982-25495-15-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now, both the download and source-check code are iterating over
-<pkg>_SOURCE, <pkg>_PATCH and <pkg>_EXTRA_DOWNLOADS elements, figuring
-out whether they contain full URLs or not. Instead of doing this
-repeatdly, this patch introduces an internal <pkg>_ALL_DOWNLOADS
-variable, which contains the list of everything that needs to be
-downloaded, with URLs already expanded to take into account <pkg>_SITE
-if needed.
+Now that all the bits are in place, switch the global 'source' target
+to use the package infrastructure logic.
 
-This allows to simplify quite significantly the .stamp_download and
-source-check implementation.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[with 'make source' (actually together with the next patch).]
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk | 26 ++++++++------------------
- 1 file changed, 8 insertions(+), 18 deletions(-)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index cb901ae..517c02f 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -72,25 +72,13 @@ endif
- $(BUILD_DIR)/%/.stamp_downloaded:
- 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- # Only show the download message if it isn't already downloaded
--	$(Q)for p in $($(PKG)_SOURCE) $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
-+	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
- 		if test ! -e $(DL_DIR)/`basename $$p` ; then \
- 			$(call MESSAGE,"Downloading") ; \
- 			break ; \
- 		fi ; \
- 	done
--	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
--	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),\
--		$(if $(findstring ://,$(p)),\
--			$(call DOWNLOAD,$(p)),\
--			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
--		)\
--	$(sep))
--	$(foreach p,$($(PKG)_PATCH),\
--		$(if $(findstring ://,$(p)),\
--			$(call DOWNLOAD,$(p)),\
--			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
--		)\
--	$(sep))
-+	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p))$(sep))
- 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- 	$(Q)mkdir -p $(@D)
- 	$(Q)touch $@
-@@ -355,6 +343,11 @@ ifndef $(2)_PATCH
-  endif
- endif
+diff --git a/Makefile b/Makefile
+index f5ff574..e8a694b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -612,7 +612,7 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
  
-+$(2)_ALL_DOWNLOADS = \
-+	$$(foreach p,$$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
-+		$$(if $$(findstring ://,$$(p)),$$(p),\
-+			$$($(2)_SITE:/=)/$$(p)))
-+
- ifndef $(2)_SITE
-  ifdef $(3)_SITE
-   $(2)_SITE = $$($(3)_SITE)
-@@ -568,10 +561,7 @@ $(1)-show-version:
+-source: $(PACKAGES_SOURCE) $(HOST_SOURCE)
++source: $(foreach p,$(PACKAGES),$(p)-all-source)
  
- $(1)-source-check:
- ifeq ($$($(2)_OVERRIDE_SRCDIR),)
--	$$(foreach p,$$($(2)_SOURCE) $$($(2)_EXTRA_DOWNLOADS) $$($(2)_PATCH),\
--		$$(if $$(findstring ://,$$(p)),\
--			$$(call SOURCE_CHECK,$$(p)),\
--			$$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$$(p)))$$(sep))
-+	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
- else
- 	test -d $$($(2)_OVERRIDE_SRCDIR)
- endif
+ _external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
+ external-deps:
 -- 
 2.1.0
