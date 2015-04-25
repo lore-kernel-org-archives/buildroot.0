@@ -1,48 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 10:33:40 +0200
-Subject: [Buildroot] [PATCH] sh64: deprecate support for this dead
- architecture
-In-Reply-To: <20150425012313.GA29771@waldemar-brodkorb.de>
-References: <20150425012313.GA29771@waldemar-brodkorb.de>
-Message-ID: <20150425103340.41fef9c4@free-electrons.com>
+Date: Sat, 25 Apr 2015 10:34:49 +0200
+Subject: [Buildroot] [PATCH] package/nvidia-driver: don't install gl.pc
+ when not providing libgl
+In-Reply-To: <1429911597-19411-1-git-send-email-yann.morin.1998@free.fr>
+References: <1429911597-19411-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150425103449.7013d56f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Dear Yann E. MORIN,
 
-On Sat, 25 Apr 2015 03:23:14 +0200, Waldemar Brodkorb wrote:
-> As discussed on the mailinglist, this should be deprecated
-> before removal.
+On Fri, 24 Apr 2015 23:39:57 +0200, Yann E. MORIN wrote:
+> When nvidia-driver does not provide libgl (i.e. when it does not install
+> the X.org driver), it should also not install gl.pc, otherwise, packages
+> that depend on pkg-config will mis-detect presence of GL and fail to
+> build, like vlc:
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+>     http://autobuild.buildroot.org/results/724/724fce8ce51c2c0578192b1369a1cfcea3d72638/
+> 
+> So, only install gl.pc when we install the X.org driver. Similarly, we
+> do not need to install libGL.la either.
+> 
+> Reported-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  Config.in.legacy |    6 ++++++
->  arch/Config.in   |    1 +
->  2 files changed, 7 insertions(+)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 70a9043..622e51c 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -107,6 +107,12 @@ endif
->  ###############################################################################
->  comment "Legacy options removed in 2015.05"
->  
-> +config BR2_sh64
-> +	bool "SuperH64 architecture support has been removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  There is no hardware or emulator available.
-> +
+>  package/nvidia-driver/nvidia-driver.mk | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
 
-We don't add deprecated options in Config.in.legacy, only the options
-that I really removed. So I've removed this chunk from the patch and
-applied.
-
-Thanks,
+Applied, thanks.
 
 Thomas
 -- 
