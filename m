@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Apr 2015 18:36:18 +0200
-Subject: [Buildroot] [PATCHv3 01/18] fs: only add non rootfs- targets to
-	PACKAGES
-In-Reply-To: <1429972982-25495-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Apr 2015 18:41:09 +0200
+Subject: [Buildroot] [PATCHv3 02/18] pkg-generic: take into account
+ patch dependencies in source, external-deps and legal-info
+In-Reply-To: <1429972982-25495-3-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1429972982-25495-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150425163618.GF4275@free.fr>
+ <1429972982-25495-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150425164109.GG4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,47 +15,64 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-04-25 16:42 +0200, Thomas Petazzoni spake thusly:
-> Commit 4570dbcb14b394d8f3c97baf4c9e5f4f225d1d37
-> ("4570dbcb14b394d8f3c97baf4c9e5f4f225d1d37") added the dependencies of
-> rootfs building logic to PACKAGES, only thinking about the case where
-> rootfs building logic actually depends on real, normal packages
-> (host-mtd, host-genext2fs, etc.). But some file systems (rootfs-ubi)
-> depend on other filesystem images (rootfs-ubifs). And such targets
-> should not be added to PACKAGES, other an incorrect circular
-                                   ^^^^^
-*otherwise
+> The $(1)-all-{source,external-deps,legal-info} targets currently only
+> take care of the dependencies in <pkg>_DEPENDENCIES, but not
+> <pkg>_PATCH_DEPENDENCIES. This patch fixes that.
+> 
+> Long term, we might want to refactor this to have a single variable
+> containing all dependencies. But this requires more work in
+> pkg-generic than we want to do at the moment.
 
-> dependency is created.
-> 
-> This commit fixes that by only adding the rootfs building logic
-> dependencies that do *not* start with rootfs- to the global PACKAGES
-> variable.
-> 
+Well, you can still introduce $(2)_FINAL_ALL_DEPENDENCIES. That would
+make the code reall much more readable.
+
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/pkg-generic.mk | 19 ++++++++++++++-----
+>  1 file changed, 14 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 455bdf1..de63f2f 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -592,11 +592,20 @@ $(1)-graph-depends: graph-depends-requirements
+>  			|tee $$(GRAPHS_DIR)/$$(@).dot \
+>  			|dot $$(BR2_GRAPH_DOT_OPTS) -T$$(BR_GRAPH_OUT) -o $$(GRAPHS_DIR)/$$(@).$$(BR_GRAPH_OUT)
+>  
+> -$(1)-all-source:       $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-source) $(1)-source
+> -
+> -$(1)-all-external-deps:        $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-external-deps) $(1)-external-deps
+> -
+> -$(1)-all-legal-info:   $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-legal-info) $(1)-legal-info
+> +$(1)-all-source:	$$(foreach p, \
+> +				$$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES), \
+> +				$$(p)-all-source) \
+> +			$(1)-source
 
-Except for that:
+Well, that's really unreadable. What about:
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+    $(1)-all-source: $(1)-source
+    $(1)-all-source: $$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
+
+Of course that require _FINAL_ALL_DEPENDENCIEs, but I guess the cost is
+worth the gain.
+
+Ditto for the others, of course.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  fs/common.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 41ee86d..4387d06 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -106,7 +106,7 @@ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
+> +$(1)-all-external-deps:	$$(foreach p, \
+> +				$$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES), \
+> +				$$(p)-all-external-deps) \
+> +			$(1)-external-deps
+> +
+> +$(1)-all-legal-info:	$$(foreach p, \
+> +				$$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES), \
+> +				$$(p)-all-legal-info) \
+> +			$(1)-legal-info
 >  
->  ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
->  TARGETS_ROOTFS += rootfs-$(1)
-> -PACKAGES += $$(ROOTFS_$(2)_DEPENDENCIES)
-> +PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES))
->  endif
->  endef
+>  $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
 >  
 > -- 
 > 2.1.0
