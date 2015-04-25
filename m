@@ -1,69 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Apr 2015 16:43:00 +0200
-Subject: [Buildroot] [PATCHv3 16/18] Makefile: add BR_BUILDING variable
+Date: Sat, 25 Apr 2015 16:42:57 +0200
+Subject: [Buildroot] [PATCHv3 13/18] pkg-generic: introduce a
+	<pkg>_ALL_DOWNLOADS variable and factorize code
 In-Reply-To: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1429972982-25495-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1429972982-25495-14-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages do some sanity checks on their configuration, for
-example linux checks that the defconfig string is not empty when a
-defconfig is used. Such checks are currently always performed, except
-when the 'source' target is part of make goals.
+Now, both the download and source-check code are iterating over
+<pkg>_SOURCE, <pkg>_PATCH and <pkg>_EXTRA_DOWNLOADS elements, figuring
+out whether they contain full URLs or not. Instead of doing this
+repeatdly, this patch introduces an internal <pkg>_ALL_DOWNLOADS
+variable, which contains the list of everything that needs to be
+downloaded, with URLs already expanded to take into account <pkg>_SITE
+if needed.
 
-This is problematic for two reasons:
-
- - Other targets such as 'source-check', 'external-deps' or
-   'legal-info', that do not consist in doing a build, cannot be
-   executed in such situations.
-
- - The current code removes the check as soon as one of the targets is
-   source. But if there are other non-source targets called at the
-   same time, the checks are ignored.
-
-This commit therefore introduces an internal variable called
-BR_BUILDING, which tells packages if we are actually building or
-not. A variable nobuild_targets indicates the targets that we do not
-consider as being build targets.
-
-For the moment, nobuild_targets only contains 'source', to be
-completely iso-functional.
+This allows to simplify quite significantly the .stamp_download and
+source-check implementation.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ package/pkg-generic.mk | 26 ++++++++------------------
+ 1 file changed, 8 insertions(+), 18 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 0ba341b..e0be636 100644
---- a/Makefile
-+++ b/Makefile
-@@ -77,6 +77,22 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
- 	randpackageconfig allyespackageconfig allnopackageconfig \
- 	print-version olddefconfig
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index cb901ae..517c02f 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -72,25 +72,13 @@ endif
+ $(BUILD_DIR)/%/.stamp_downloaded:
+ 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ # Only show the download message if it isn't already downloaded
+-	$(Q)for p in $($(PKG)_SOURCE) $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
++	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
+ 		if test ! -e $(DL_DIR)/`basename $$p` ; then \
+ 			$(call MESSAGE,"Downloading") ; \
+ 			break ; \
+ 		fi ; \
+ 	done
+-	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
+-	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),\
+-		$(if $(findstring ://,$(p)),\
+-			$(call DOWNLOAD,$(p)),\
+-			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
+-		)\
+-	$(sep))
+-	$(foreach p,$($(PKG)_PATCH),\
+-		$(if $(findstring ://,$(p)),\
+-			$(call DOWNLOAD,$(p)),\
+-			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
+-		)\
+-	$(sep))
++	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p))$(sep))
+ 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)mkdir -p $(@D)
+ 	$(Q)touch $@
+@@ -355,6 +343,11 @@ ifndef $(2)_PATCH
+  endif
+ endif
  
-+# Some global targets do not trigger a build, but are used to collect
-+# metadata, or do various checks. When such targets are triggered,
-+# some packages should not do their configuration sanity
-+# checks. Provide them a BR_BUILDING variable set to 'y' when we're
-+# actually building and they should do their sanity checks.
-+#
-+# We're building in two situations: when MAKECMDGOALS is empty
-+# (default target is to build), or when MAKECMDGOALS contains
-+# something else than one of the nobuild_targets.
-+nobuild_targets := source
-+ifeq ($(MAKECMDGOALS),)
-+BR_BUILDING = y
-+else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
-+BR_BUILDING = y
-+endif
++$(2)_ALL_DOWNLOADS = \
++	$$(foreach p,$$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
++		$$(if $$(findstring ://,$$(p)),$$(p),\
++			$$($(2)_SITE:/=)/$$(p)))
 +
- # Strip quotes and then whitespaces
- qstrip = $(strip $(subst ",,$(1)))
- #"))
+ ifndef $(2)_SITE
+  ifdef $(3)_SITE
+   $(2)_SITE = $$($(3)_SITE)
+@@ -568,10 +561,7 @@ $(1)-show-version:
+ 
+ $(1)-source-check:
+ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+-	$$(foreach p,$$($(2)_SOURCE) $$($(2)_EXTRA_DOWNLOADS) $$($(2)_PATCH),\
+-		$$(if $$(findstring ://,$$(p)),\
+-			$$(call SOURCE_CHECK,$$(p)),\
+-			$$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$$(p)))$$(sep))
++	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
+ else
+ 	test -d $$($(2)_OVERRIDE_SRCDIR)
+ endif
 -- 
 2.1.0
