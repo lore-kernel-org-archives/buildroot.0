@@ -1,77 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 11:51:10 +0200
-Subject: [Buildroot] [PATCHv4 12/18] pkg-download: fix indentation for
-	SOURCE_CHECK_* macros
+Date: Sun, 26 Apr 2015 11:51:12 +0200
+Subject: [Buildroot] [PATCHv4 14/18] Makefile: implement the 'source' target
+	using the package infrastructure
 In-Reply-To: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1430041876-16436-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1430041876-16436-15-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some of the SOURCE_CHECK_* macros are using a non-standard two-spaces
-indentation. This commit switches them to use a single tab based
-indentation, like in the rest of Buildroot.
+Now that all the bits are in place, switch the global 'source' target
+to use the package infrastructure logic.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[with git show -w]
+[with 'make source' (actually together with the next patch).]
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[tested with a randpackageconfig]
 ---
- package/pkg-download.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index a145011..a38062e 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -90,7 +90,7 @@ endef
- # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
- # repository
- define SOURCE_CHECK_GIT
--  $(GIT) ls-remote --heads $($(PKG)_SITE) > /dev/null
-+	$(GIT) ls-remote --heads $($(PKG)_SITE) > /dev/null
- endef
+diff --git a/Makefile b/Makefile
+index f5ff574..e8a694b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -612,7 +612,7 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
  
- define DOWNLOAD_BZR
-@@ -134,7 +134,7 @@ define DOWNLOAD_SVN
- endef
+-source: $(PACKAGES_SOURCE) $(HOST_SOURCE)
++source: $(foreach p,$(PACKAGES),$(p)-all-source)
  
- define SOURCE_CHECK_SVN
--  $(SVN) ls $($(PKG)_SITE)@$($(PKG)_DL_VERSION) > /dev/null
-+	$(SVN) ls $($(PKG)_SITE)@$($(PKG)_DL_VERSION) > /dev/null
- endef
- 
- # SCP URIs should be of the form scp://[user@]host:filepath
-@@ -166,7 +166,7 @@ endef
- # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
- # repository
- define SOURCE_CHECK_HG
--  $(HG) incoming --force -l1 $($(PKG)_SITE) > /dev/null
-+	$(HG) incoming --force -l1 $($(PKG)_SITE) > /dev/null
- endef
- 
- define DOWNLOAD_WGET
-@@ -179,7 +179,7 @@ define DOWNLOAD_WGET
- endef
- 
- define SOURCE_CHECK_WGET
--  $(WGET) --spider '$(call qstrip,$(1))'
-+	$(WGET) --spider '$(call qstrip,$(1))'
- endef
- 
- define DOWNLOAD_LOCALFILES
-@@ -192,7 +192,7 @@ define DOWNLOAD_LOCALFILES
- endef
- 
- define SOURCE_CHECK_LOCALFILES
--  test -e $(call stripurischeme,$(call qstrip,$(1)))
-+	test -e $(call stripurischeme,$(call qstrip,$(1)))
- endef
- 
- ################################################################################
+ _external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
+ external-deps:
 -- 
 2.1.0
