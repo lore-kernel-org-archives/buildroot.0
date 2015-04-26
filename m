@@ -1,11 +1,11 @@
 From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Sun, 26 Apr 2015 18:16:52 +0200
+Date: Sun, 26 Apr 2015 18:17:39 +0200
 Subject: [Buildroot] [PATCH 5/8 v11] package/xserver_xorg-server: add
  version 1.14.7
 In-Reply-To: <7c1cccc2773ed740d1c418d1437c629839849f73.1429635674.git.yann.morin.1998@free.fr>
 References: <cover.1429635674.git.yann.morin.1998@free.fr>
  <7c1cccc2773ed740d1c418d1437c629839849f73.1429635674.git.yann.morin.1998@free.fr>
-Message-ID: <20150426181652.621e5193@nserafini-N550JK>
+Message-ID: <20150426181739.1a288fbe@nserafini-N550JK>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
