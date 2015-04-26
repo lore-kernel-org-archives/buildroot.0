@@ -1,69 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 19:55:40 +0200
-Subject: [Buildroot] [git commit] Makefile: add BR_BUILDING variable
-Message-ID: <20150426202108.A825D7FC25@busybox.osuosl.org>
+Date: Sun, 26 Apr 2015 22:20:42 +0200
+Subject: [Buildroot] [git commit] Makefile: add a few more targets to
+	nobuild_targets
+Message-ID: <20150426202108.C083E7FC25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=256f142bf662fd8fee712e38edd58bb6e8fd283d
+commit: http://git.buildroot.net/buildroot/commit/?id=4feeb2db3484dec940ff1f8921bb4db15031e8fe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some packages do some sanity checks on their configuration, for
-example linux checks that the defconfig string is not empty when a
-defconfig is used. Such checks are currently always performed, except
-when the 'source' target is part of make goals.
+With this commit, one can now execute the source-check, external-deps
+and legal-info targets regardless of the checks normally being done by
+packages on the configuration.
 
-This is problematic for two reasons:
+Note that we intentionally do not go down the road of adding %-source,
+%-legal-info, and the miryad of other targets that could work in such
+situations. We only whitelist a few targets that are really useful to
+have as nobuild_targets.
 
- - Other targets such as 'source-check', 'external-deps' or
-   'legal-info', that do not consist in doing a build, cannot be
-   executed in such situations.
-
- - The current code removes the check as soon as one of the targets is
-   source. But if there are other non-source targets called at the
-   same time, the checks are ignored.
-
-This commit therefore introduces an internal variable called
-BR_BUILDING, which tells packages if we are actually building or
-not. A variable nobuild_targets indicates the targets that we do not
-consider as being build targets.
-
-For the moment, nobuild_targets only contains 'source', to be
-completely iso-functional.
+[Thomas: also add 'clean' and 'distclean' to the nobuild_targets, as
+suggested by Yann.]
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- Makefile |   16 ++++++++++++++++
- 1 files changed, 16 insertions(+), 0 deletions(-)
+ Makefile |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 0ba341b..e0be636 100644
+index e0be636..3983fce 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -77,6 +77,22 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
- 	randpackageconfig allyespackageconfig allnopackageconfig \
- 	print-version olddefconfig
- 
-+# Some global targets do not trigger a build, but are used to collect
-+# metadata, or do various checks. When such targets are triggered,
-+# some packages should not do their configuration sanity
-+# checks. Provide them a BR_BUILDING variable set to 'y' when we're
-+# actually building and they should do their sanity checks.
-+#
-+# We're building in two situations: when MAKECMDGOALS is empty
-+# (default target is to build), or when MAKECMDGOALS contains
-+# something else than one of the nobuild_targets.
-+nobuild_targets := source
-+ifeq ($(MAKECMDGOALS),)
-+BR_BUILDING = y
-+else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
-+BR_BUILDING = y
-+endif
-+
- # Strip quotes and then whitespaces
- qstrip = $(strip $(subst ",,$(1)))
- #"))
+@@ -86,7 +86,9 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
+ # We're building in two situations: when MAKECMDGOALS is empty
+ # (default target is to build), or when MAKECMDGOALS contains
+ # something else than one of the nobuild_targets.
+-nobuild_targets := source
++nobuild_targets := source source-check \
++	legal-info external-deps _external-deps \
++	clean distclean
+ ifeq ($(MAKECMDGOALS),)
+ BR_BUILDING = y
+ else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
