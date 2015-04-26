@@ -1,113 +1,118 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 26 Apr 2015 22:24:10 +0200
-Subject: [Buildroot] [git commit] package/nvidia-tegra23-codecs: new package
-Message-ID: <20150426202425.2BAA5818C4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package.nvidia-tegra23-binaries: add
+	gstreamer plugins
+Message-ID: <20150426202425.1FB63818C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=25967591813409ae8c4a1358b3751a080975d95d
+commit: http://git.buildroot.net/buildroot/commit/?id=f2c2bd0b7a1f8d08ed88c35dc6b736d522ba1e02
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-nvidia-tegra23-codecs provides various HW-accelerated media codecs, such
-as: AAC3, h264, jpeg, MP3...
+[Thomas:
+  - add missing libXv dependency.
+  - remove the NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS and
+    NVIDIA_TEGRA23_BINARIES_MULTIMEDIA_APPS, and use simple 'cp -dpfr'
+    calls to copy the plugins and sample applications.]
 
 Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-[me:
-  - split codecs from binaries into this patch
-  - use our extractor helpers
-]
+[yann.morin.1998 at free.fr: split out into their own patch]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-[Thomas:
-  - Remove <pkg>_DEPENDENCIES variable that contained
-    nvidia-tegra23-binaries, since this dependency is a runtime
-    dependency only.
-  - Remove 'NVIDIA_TEGRA23_CODECS_INSTALL_STAGING = NO', since this is
-    the default.
-  - Remove 'NVIDIA_TEGRA23_CODECS_INSTALL_TARGET = YES', since this is
-    the default.
-  - Instead of using a NVIDIA_TEGRA23_CODECS_FIRMWARE variable listing
-    the firmware files to copy, simply copy all firmware files.]
 ---
- package/nvidia-tegra23/Config.in                   |    1 +
- .../nvidia-tegra23/nvidia-tegra23-codecs/Config.in |    7 ++++
- .../nvidia-tegra23-codecs.hash                     |    3 ++
- .../nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk |   32 ++++++++++++++++++++
- 4 files changed, 43 insertions(+), 0 deletions(-)
+ .../nvidia-tegra23-binaries/Config.in              |   16 +++++++++++
+ .../nvidia-tegra23-binaries.mk                     |   27 ++++++++++++++++++++
+ 2 files changed, 43 insertions(+), 0 deletions(-)
 
-diff --git a/package/nvidia-tegra23/Config.in b/package/nvidia-tegra23/Config.in
-index 28c99c7..eb33581 100644
---- a/package/nvidia-tegra23/Config.in
-+++ b/package/nvidia-tegra23/Config.in
-@@ -29,6 +29,7 @@ config BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3
- endchoice
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
+index d2b6223..573ab90 100644
+--- a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
++++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
+@@ -23,4 +23,20 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
+ config BR2_PACKAGE_PROVIDES_LIBOPENMAX
+ 	default "nvidia-tegra23-binaries"
  
- source "package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in"
-+source "package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in"
- endif
- 
- comment "nvidia-tegra23 needs Xorg <= 1.14 and a (e)glibc toolchain w/ EABIhf"
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
-new file mode 100644
-index 0000000..df9de69
---- /dev/null
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_NVIDIA_TEGRA23_CODECS
-+	bool "nvidia-tegra23 codecs"
-+	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS
++	bool "GStreamer 0.10.x plugins"
++	depends on BR2_PACKAGE_GSTREAMER # Run-time only
++	select BR2_PACKAGE_XLIB_LIBXV
 +	help
-+	  NVIDIA Tegra restricted codecs from Linux For Tegra 16.5.
++	  GStreamer 0.10.x plugins
 +
-+	  https://developer.nvidia.com/linux-tegra-rel-16
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
-new file mode 100644
-index 0000000..9b5c614
---- /dev/null
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
-@@ -0,0 +1,3 @@
-+# From https://developer.nvidia.com/linux-tegra-rel-16
-+sha1 540e89d5462537cd59c8a86efdb786b3b4310868 Tegra20_Linux-codecs_R16.5_armhf.tbz2
-+sha1 3637efe808f25594e3cdc2756aef6e0274ab70f4 Tegra30_Linux-codecs_R16.5_armhf.tbz2
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-new file mode 100644
-index 0000000..18f083d
---- /dev/null
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# nvidia-tegra23-codecs
-+#
-+################################################################################
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_NV_SAMPLE_APPS
++	bool "NVIDIA multimedia sample apps"
++	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS
++	help
++	  nvgstplayer and nvgstcapture multimedia test applications.
 +
-+NVIDIA_TEGRA23_CODECS_VERSION = $(NVIDIA_TEGRA23_VERSION)
-+NVIDIA_TEGRA23_CODECS_SOURCE = $(NVIDIA_TEGRA23_BASE)-codecs_R$(NVIDIA_TEGRA23_CODECS_VERSION)_armhf.tbz2
-+NVIDIA_TEGRA23_CODECS_SITE = $(NVIDIA_TEGRA23_SITE)
-+NVIDIA_TEGRA23_CODECS_LICENSE = NVIDIA(r) Tegra(r) Software License Agreement
-+NVIDIA_TEGRA23_CODECS_LICENSE_FILES = Tegra_Software_License_Agreement-Tegra-Linux-codecs.txt
-+NVIDIA_TEGRA23_CODECS_REDISTRIBUTE = NO
++comment "GStreamer 0.10.x plugins need GStreamer 0.10"
++	depends on !BR2_PACKAGE_GSTREAMER
 +
-+# The archive contains an archive with the firmware codecs
-+define NVIDIA_TEGRA23_CODECS_EXTRACT_CMDS
-+	$(INSTALL) -d $(@D)
-+	$(call suitable-extractor,$(NVIDIA_TEGRA23_CODECS_SOURCE)) \
-+		$(DL_DIR)/$(NVIDIA_TEGRA23_CODECS_SOURCE) | \
-+	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D) $(TAR_OPTIONS) -
-+	$(INSTALL) -d $(@D)/restricted_codecs
-+	$(call suitable-extractor,$(@D)/restricted_codecs.tbz2) \
-+		$(@D)/restricted_codecs.tbz2 | \
-+	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
+ endif
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
+index 1d6c0f8..7b6029e 100644
+--- a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
++++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
+@@ -10,6 +10,10 @@ NVIDIA_TEGRA23_BINARIES_SOURCE = $(NVIDIA_TEGRA23_BASE)_R$(NVIDIA_TEGRA23_BINARI
+ 
+ NVIDIA_TEGRA23_BINARIES_LICENSE = License For Customer Use of NVIDIA Software
+ NVIDIA_TEGRA23_BINARIES_LICENSE_FILES = nv_tegra/LICENSE
++ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
++NVIDIA_TEGRA23_BINARIES_LICENSE += LGPLv2.1
++NVIDIA_TEGRA23_BINARIES_LICENSE_FILES += nv_tegra/nv_sample_apps/LICENSE.gst-openmax
++endif
+ 
+ NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING = YES
+ 
+@@ -20,6 +24,10 @@ NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING = YES
+ NVIDIA_TEGRA23_BINARIES_DEPENDENCIES = mesa3d-headers \
+ 	xlib_libX11 xlib_libXext
+ 
++ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
++NVIDIA_TEGRA23_BINARIES_DEPENDENCIES += xlib_libXv
++endif
++
+ NVIDIA_TEGRA23_BINARIES_PROVIDES = libegl libgles libopenmax
+ 
+ NVIDIA_TEGRA23_BINARIES_DRV = \
+@@ -47,11 +55,28 @@ define NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS
+ 	)
+ endef
+ 
++ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
++define NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS
++	mkdir -p $(1)/usr/lib/gstreamer-0.10/
++	cp -dpfr $(@D)/nv_tegra/nv_sample_apps/nvgstapps/usr/lib/gstreamer-0.10/*.so \
++		$(1)/usr/lib/gstreamer-0.10/
 +endef
++endif
 +
-+define NVIDIA_TEGRA23_CODECS_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/lib/firmware/
-+	cp -dpfr $(@D)/restricted_codecs/lib/firmware/*.axf \
-+		$(TARGET_DIR)/lib/firmware/
++ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_NV_SAMPLE_APPS),y)
++define NVIDIA_TEGRA23_BINARIES_INSTALL_APPS
++	mkdir -p $(TARGET_DIR)/usr/bin/
++	cp -dpfr $(@D)/nv_tegra/nv_sample_apps/nvgstapps/usr/bin/* \
++		$(TARGET_DIR)/usr/bin/
 +endef
++endif
 +
-+$(eval $(generic-package))
+ define NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING_CMDS
+ 	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(STAGING_DIR))
+ 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig/
+ 	cp -dpfr package/nvidia-tegra23/nvidia-tegra23-binaries/*.pc \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/
++	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS,$(STAGING_DIR))
+ endef
+ 
+ define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
+@@ -63,6 +88,8 @@ define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/etc/nv_tegra_release
+ 	$(INSTALL) -D -m 0644 $(@D)/$(NVIDIA_TEGRA23_BINARIES_DRV) \
+ 		$(TARGET_DIR)/usr/lib/xorg/modules/drivers/tegra_drv.so
++	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS,$(TARGET_DIR))
++	$(NVIDIA_TEGRA23_BINARIES_INSTALL_APPS)
+ endef
+ 
+ $(eval $(generic-package))
