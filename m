@@ -1,59 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 11:51:08 +0200
-Subject: [Buildroot] [PATCHv4 10/18] pkg-generic: don't use DL_MODE in
-	.stamp_downloaded
+Date: Sun, 26 Apr 2015 11:51:11 +0200
+Subject: [Buildroot] [PATCHv4 13/18] pkg-generic: introduce a
+	<pkg>_ALL_DOWNLOADS variable and factorize code
 In-Reply-To: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1430041876-16436-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1430041876-16436-14-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The .stamp_downloaded target is now only being used to really
-download, and no longer for other activities like "source check" or
-"external deps". So the check on DL_MODE being equal to DOWNLOAD is no
-longer necessary.
+Now, both the download and source-check code are iterating over
+<pkg>_SOURCE, <pkg>_PATCH and <pkg>_EXTRA_DOWNLOADS elements, figuring
+out whether they contain full URLs or not. Instead of doing this
+repeatdly, this patch introduces an internal <pkg>_ALL_DOWNLOADS
+variable, which contains the list of everything that needs to be
+downloaded, with URLs already expanded to take into account <pkg>_SITE
+if needed.
+
+This allows to simplify quite significantly the .stamp_download and
+source-check implementation.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-generic.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/pkg-generic.mk | 26 ++++++++------------------
+ 1 file changed, 8 insertions(+), 18 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6537d6a..6279fb1 100644
+index 6279fb1..248ca77 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -71,7 +71,6 @@ endif
- # Retrieve the archive
+@@ -72,25 +72,13 @@ endif
  $(BUILD_DIR)/%/.stamp_downloaded:
  	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
--ifeq ($(DL_MODE),DOWNLOAD)
  # Only show the download message if it isn't already downloaded
- 	$(Q)for p in $($(PKG)_SOURCE) $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
+-	$(Q)for p in $($(PKG)_SOURCE) $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
++	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
  		if test ! -e $(DL_DIR)/`basename $$p` ; then \
-@@ -79,7 +78,6 @@ ifeq ($(DL_MODE),DOWNLOAD)
+ 			$(call MESSAGE,"Downloading") ; \
  			break ; \
  		fi ; \
  	done
--endif
- 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
- 	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),\
- 		$(if $(findstring ://,$(p)),\
-@@ -94,10 +92,8 @@ endif
- 		)\
- 	$(sep))
+-	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
+-	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),\
+-		$(if $(findstring ://,$(p)),\
+-			$(call DOWNLOAD,$(p)),\
+-			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
+-		)\
+-	$(sep))
+-	$(foreach p,$($(PKG)_PATCH),\
+-		$(if $(findstring ://,$(p)),\
+-			$(call DOWNLOAD,$(p)),\
+-			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
+-		)\
+-	$(sep))
++	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p))$(sep))
  	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
--ifeq ($(DL_MODE),DOWNLOAD)
  	$(Q)mkdir -p $(@D)
  	$(Q)touch $@
--endif
+@@ -355,6 +343,11 @@ ifndef $(2)_PATCH
+  endif
+ endif
  
- # Unpack the archive
- $(BUILD_DIR)/%/.stamp_extracted:
++$(2)_ALL_DOWNLOADS = \
++	$$(foreach p,$$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
++		$$(if $$(findstring ://,$$(p)),$$(p),\
++			$$($(2)_SITE:/=)/$$(p)))
++
+ ifndef $(2)_SITE
+  ifdef $(3)_SITE
+   $(2)_SITE = $$($(3)_SITE)
+@@ -569,10 +562,7 @@ $(1)-show-version:
+ 
+ $(1)-source-check:
+ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+-	$$(foreach p,$$($(2)_SOURCE) $$($(2)_EXTRA_DOWNLOADS) $$($(2)_PATCH),\
+-		$$(if $$(findstring ://,$$(p)),\
+-			$$(call SOURCE_CHECK,$$(p)),\
+-			$$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$$(p)))$$(sep))
++	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
+ else
+ 	test -d $$($(2)_OVERRIDE_SRCDIR)
+ endif
 -- 
 2.1.0
