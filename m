@@ -1,40 +1,87 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 26 Apr 2015 12:41:57 +0300
-Subject: [Buildroot] [PATCH 1/2] package/ccache: bump to version 3.2.1
-In-Reply-To: <CABbD_XA_G2=LG8c3zJzbUU=jj0QjkbbnHNTq76n94Ujt6ZukOQ@mail.gmail.com>
-References: <1430040062-46308-1-git-send-email-kaszak@gmail.com>
- <20150426092755.GJ2258@tarshish>
- <CABbD_XA_G2=LG8c3zJzbUU=jj0QjkbbnHNTq76n94Ujt6ZukOQ@mail.gmail.com>
-Message-ID: <20150426094157.GK2258@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Apr 2015 11:42:47 +0200
+Subject: [Buildroot] [PATCHv3 17/18] packages: refactor checks using
+ BR_BUILDING
+In-Reply-To: <20150425205257.GT4275@free.fr>
+References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1429972982-25495-18-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150425205257.GT4275@free.fr>
+Message-ID: <20150426114247.0686ffc2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi K?roly,
+Dear Yann E. MORIN,
 
-On Sun, Apr 26, 2015 at 11:38:52AM +0200, K?roly Kasza wrote:
-> > > -     sed -i 's,getenv("CCACHE_COMPILERCHECK"),"none",' $(@D)/ccache.c
-> > > -     sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/ccache.c
-> > > +     sed -i 's,conf->compiler_check =
-> > x_strdup("mtime"),conf->compiler_check = x_strdup("none"),' $(@D)/conf.c
-> > > +     sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/conf.c
-> > 
-> > You are doing non trivial changes here and above. Please explain in a
-> > commit log what you are doing, and why this is needed as part of the 
-> > version bump.
+On Sat, 25 Apr 2015 22:52:57 +0200, Yann E. MORIN wrote:
+
+> >  # Checks to give errors that the user can understand
+> > -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> > +ifeq ($(BR_BUILDING),y)
+> >  ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
 > 
-> As you probably see, those lines do the exact same as before, just the
-> structure of the ccache sources changed with the major version bump. I'll
-> wait for some comments on the second patch regarding the introduction of a
-> wrapper script and resend with a more informative git log.
+> I think it would be good to have a single way we do those checks.
+> 
+> For example, compare at91bootstrap above and at91bootstrap3 here.
+> The former is doing the BR2_BUILDING check and package-enabled check
+> in a single ifeq, while the latter does it with two ifeq.
+> 
+> I don't really care which we use, but we should use the same everywhere.
+> Maybe we could favour doing it with feq, for those packages that want to
+> do multiple checks.
+> 
+> Applicable to the other packages, of course.
 
-Thanks. When doing so please comment also on the _HOOKS change.
+I don't quite agree. For at91bootstrap, there is only one check being
+done, while for at91bootstrap3, two checks are being done.
 
-baruch
+So basically, the current code is:
 
+ifeq ($(BR_BUILDING),y)
+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG)),)
+$(error No at91bootstrap3 defconfig name specified, check your BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG setting)
+endif
+endif
+
+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
+ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE)),)
+$(error No at91bootstrap3 configuration file specified, check your BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE setting)
+endif
+endif
+endif
+
+While you're proposing to unfactorize the BR_BUILDING test:
+
+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG)$(BR_BUILDING),yy)
+ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG)),)
+$(error No at91bootstrap3 defconfig name specified, check your BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG setting)
+endif
+endif
+
+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG)$(BR_BUILDING),yy)
+ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE)),)
+$(error No at91bootstrap3 configuration file specified, check your BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE setting)
+endif
+endif
+
+I'm not sure in this case this is really better.
+
+> > -ifeq ($(BR2_TARGET_XLOADER),y)
+> > -# we NEED a board name unless we're at make source
+> > -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> > +ifeq ($(BR2_TARGET_XLOADER)$(BR_BUILDING),y)
+> 
+> This is broken: it should be compared to 'yy', not a single 'y'.
+
+Fixed in v4.
+
+Thanks,
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
