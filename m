@@ -1,58 +1,48 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 26 Apr 2015 23:09:17 +0200
-Subject: [Buildroot] [PATCH v1] qt: fix postgresql plugin configure
-Message-ID: <1430082557-13685-1-git-send-email-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Apr 2015 23:28:19 +0200
+Subject: [Buildroot] [PATCH 0/8 v11] NVidia GPU binary blobs for
+ Tegra2/3 (branch yem/gfx2)
+In-Reply-To: <20150426223152.7ed42fe5@free-electrons.com>
+References: <cover.1429635674.git.yann.morin.1998@free.fr>
+ <20150426223152.7ed42fe5@free-electrons.com>
+Message-ID: <20150426212819.GH4809@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add additional -lpthread to fix postgresql plugin configure test.
+Thomas, All,
 
-Fixes [1]:
+On 2015-04-26 22:31 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 21 Apr 2015 19:04:39 +0200, Yann E. MORIN wrote:
+> 
+> > ----------------------------------------------------------------
+> > Nicolas Serafini (3):
+> >       package/nvidia-tegra23-binaries: new package
+> >       package.nvidia-tegra23-binaries: add gstreamer plugins
+> >       package/nvidia-tegra23-codecs: new package
+> > 
+> > Yann E. MORIN (5):
+> >       package/xserver_xorg-server: prepare for multiple supported versions
+> >       package/xserver_xorg-server: make the version a choice
+> >       package/xserver_xorg-server: add blind options to specify driver ABI
+> >       package/xserver_xorg-server: not all versions need all dependencies
+> >       package/xserver_xorg-server: add version 1.14.7
+> 
+> Series applied!
 
-  PostgreSQL support cannot be enabled due to functionality tests!
-   Turn on verbose messaging (-v) to ./configure to see the final report.
-   If you believe this message is in error you may use the continue
-   switch (-continue) to ./configure to continue.
-  make: *** [/home/test/autobuild/instance-1/output/build/qt-4.8.6/.stamp_configured] Error 101
-  make: Leaving directory `/home/test/autobuild/instance-1/buildroot'
+Thanks! And thanks for further fixing it! :-)
 
-Verbose configure output:
+/me can dump one more local branch! :-]
 
-  PostgreSQL auto-detection... ()
-  compiling psql.cpp
-  linking psql
-  .../host/usr/i686-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.so.1.0.0: warning: gethostbyname is obsolescent, use getnameinfo() instead.
-  .../host/usr/i686-buildroot-linux-uclibc/sysroot/usr/lib/libpq.so: undefined reference to `pthread_sigmask'
-  collect2: error: ld returned 1 exit status
-  Makefile:99: recipe for target 'psql' failed
-  gmake[2]: *** [psql] Error 1
-  PostgreSQL disabled.
+Regards,
+Yann E. MORIN.
 
-[1] http://autobuild.buildroot.net/results/8c1/8c1e18a181f355ab8870c5d3d70cf9d757b6f225/
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/qt/qt.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index d1615ae..8a762e8 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -348,7 +348,10 @@ QT_CONFIGURE_OPTS += -qt-sql-odbc
- QT_DEPENDENCIES += unixodbc
- endif
- ifeq ($(BR2_PACKAGE_QT_PSQL),y)
--QT_CONFIGURE_OPTS += -qt-sql-psql -psql_config $(STAGING_DIR)/usr/bin/pg_config
-+# additional -lpthread needed for uclibc/libpq.so linking configure test
-+QT_CONFIGURE_OPTS += -qt-sql-psql \
-+	-psql_config $(STAGING_DIR)/usr/bin/pg_config \
-+	-lpthread
- QT_DEPENDENCIES += postgresql
- endif
- ifeq ($(BR2_PACKAGE_QT_SQLITE_QT),y)
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
