@@ -1,37 +1,50 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 27 Apr 2015 01:40:19 +0200
-Subject: [Buildroot] [PATCH 2/4] manual: cvs: document that a date can be
-	used instead of a tag
+Date: Mon, 27 Apr 2015 01:40:20 +0200
+Subject: [Buildroot] [PATCH 3/4] expect: bump to version 5.45.3
 In-Reply-To: <1430091621-4698-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1430091621-4698-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1430091621-4698-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1430091621-4698-4-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also instead of using the generic word "timestamp" use the word "tag".
+Download it from the cvs repository because it is not avaialbe as a
+downloadable file.
+Also because a tag isn't avaiable use the date.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- docs/manual/adding-packages-generic.txt | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/expect/expect.hash | 2 --
+ package/expect/expect.mk   | 6 +++---
+ 2 files changed, 3 insertions(+), 5 deletions(-)
+ delete mode 100644 package/expect/expect.hash
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 8cf6bb6..23c2578 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -280,7 +280,9 @@ information is (assuming the package name is +libfoo+) :
-      Only anonymous pserver mode is supported.
-      +LIBFOO_SITE+ 'must' contain the source URL as well as the remote
-      repository directory. The module is the package name.
--     +LIBFOO_VERSION+ is 'mandatory' and 'must' be a timestamp.
-+     +LIBFOO_VERSION+ is 'mandatory' and 'must' be a tag or a date
-+     (e.g. "2014-10-20", "2014-10-20 13:45", "2014-10-20 13:45+01:00"
-+     see "man cvs" for further details).
-   ** +git+ for retrieving source code from a Git repository. Used by
-      default when +LIBFOO_SITE+ begins with +git://+. The downloaded
-      source code is cached as with the +svn+
+diff --git a/package/expect/expect.hash b/package/expect/expect.hash
+deleted file mode 100644
+index 09e68e7..0000000
+--- a/package/expect/expect.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed:
+-sha256  b28dca90428a3b30e650525cdc16255d76bb6ccd65d448be53e620d95d5cc040  expect5.45.tar.gz
+diff --git a/package/expect/expect.mk b/package/expect/expect.mk
+index 8ef7e90..d78ff6c 100644
+--- a/package/expect/expect.mk
++++ b/package/expect/expect.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-EXPECT_VERSION = 5.45
+-EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
+-EXPECT_SITE = http://downloads.sourceforge.net/project/expect/Expect/$(EXPECT_VERSION)
++# Version 5.45.3
++EXPECT_VERSION = 2014-05-02
++EXPECT_SITE = cvs://expect.cvs.sourceforge.net:/cvsroot/expect
+ EXPECT_LICENSE = Public domain
+ EXPECT_LICENSE_FILES = README
+ 
 -- 
 2.3.5
