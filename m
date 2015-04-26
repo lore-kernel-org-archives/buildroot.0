@@ -1,53 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 14:24:44 +0200
-Subject: [Buildroot] [PATCH 2/2] package/ccache: add wrapper for
- internal toolchain
-In-Reply-To: <CABbD_XCocg8xyZHE5rxAA3FUH5p2eGaFiKdaJhoaXhdFVingug@mail.gmail.com>
-References: <1430040062-46308-1-git-send-email-kaszak@gmail.com>
- <1430040062-46308-2-git-send-email-kaszak@gmail.com>
- <20150426113742.182fa26b@free-electrons.com>
- <CABbD_XCocg8xyZHE5rxAA3FUH5p2eGaFiKdaJhoaXhdFVingug@mail.gmail.com>
-Message-ID: <20150426142444.51f5b4d6@free-electrons.com>
+Date: Sun, 26 Apr 2015 14:26:37 +0200
+Subject: [Buildroot] [PATCH 2/2] python3: add hash file
+In-Reply-To: <1430051197-27220-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1430051197-27220-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1430051197-27220-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear K?roly Kasza,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python3/python3.hash | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 package/python3/python3.hash
 
-On Sun, 26 Apr 2015 11:45:06 +0200, K?roly Kasza wrote:
-
-> That is true, so the wrapper for external toolchains also needs the
-> extrafiles/hash solution. I simply missed this.
-
-No problem, but it would indeed be nice to have a solution that covers
-both cases.
-
-> > I must say I don't quite like the fact that the solution used here is
-> > different between internal and external toolchain, but I haven't
-> > thought too much of the problem.
-> 
-> I thought this would be more efficient, but the above statement kills it.
-
-I certainly don't want to kill anything. This ccache problem has been
-around for a long time, and it's definitely great to see someone taking
-care of this relatively complicated issue.
-
-> > How would ccache work with external toolchains?
-> >
-> 
-> Well, using mtime is out of question because of the BR built wrapper, so it
-> requires the
-> same solution: a wrapper for ccache and using extrafiles/hash as for the
-> internal.
-
-Indeed. But maybe the existing external toolchain wrapper can be used.
-We probably don't want to have a shell wrapper call a C wrapper
-calling the compiler.
-
-Thomas
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+new file mode 100644
+index 0000000..60ac230
+--- /dev/null
++++ b/package/python3/python3.hash
+@@ -0,0 +1,4 @@
++# From https://www.python.org/downloads/release/python-343/
++md5 7d092d1bba6e17f0d9bd21b49e441dd5 Python-3.4.3.tar.xz
++# Locally computed
++sha256 b5b3963533768d5fc325a4d7a6bd6f666726002d696f1d399ec06b043ea996b8 Python-3.4.3.tar.xz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
