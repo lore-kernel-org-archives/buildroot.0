@@ -1,85 +1,76 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 26 Apr 2015 14:36:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libedit: bump version to
-	20150325-3.1
-Message-ID: <1430051767-14374-1-git-send-email-bernd.kuhls@t-online.de>
+From: Karoly Kasza <kaszak@gmail.com>
+Date: Sun, 26 Apr 2015 14:39:13 +0200
+Subject: [Buildroot] [PATCH v2] package/ccache: bump to version 3.2.1
+Message-ID: <1430051953-87326-1-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bump ccache from v.3.1.x to v.3.2.x.
+All functionality remained the same.
+ - Configure now accepts a parameter to use ccache's internal zlib.
+ - conf.c was introduced and some settings were moved from ccache.c,
+   with minor changes.
+ - The PATCH_CONFIGURATION hook was moved from POST_CONFIGURE to
+   POST_PATCH, as patching files should be done there, before calling
+   the configure script.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 ---
- package/libedit/0001-check-bsd-functions-in-libbsd.patch |    4 +++-
- package/libedit/Config.in                                |    7 ++++---
- package/libedit/libedit.mk                               |    8 +++++++-
- 3 files changed, 14 insertions(+), 5 deletions(-)
+Changes v1 -> v2:
+  - added git commit message (Baruch)
 
-diff --git a/package/libedit/0001-check-bsd-functions-in-libbsd.patch b/package/libedit/0001-check-bsd-functions-in-libbsd.patch
-index 21c57f8..de452a5 100644
---- a/package/libedit/0001-check-bsd-functions-in-libbsd.patch
-+++ b/package/libedit/0001-check-bsd-functions-in-libbsd.patch
-@@ -1,11 +1,13 @@
- configure: on Linux, the BSD functions require linking against libbsd
- 
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+(Rebased against 20150325-3.1)
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- 
- diff -durN libedit-20130712-3.1.orig/configure.ac libedit-20130712-3.1/configure.ac
- --- libedit-20130712-3.1.orig/configure.ac	2013-07-12 20:39:22.000000000 +0200
- +++ libedit-20130712-3.1/configure.ac	2013-07-28 23:35:35.012676469 +0200
--@@ -108,6 +108,10 @@
-+@@ -117,6 +117,10 @@
-  #AC_FUNC_REALLOC
-  AC_TYPE_SIGNAL
-  AC_FUNC_STAT
-diff --git a/package/libedit/Config.in b/package/libedit/Config.in
-index a70f9eb..7c85014 100644
---- a/package/libedit/Config.in
-+++ b/package/libedit/Config.in
-@@ -10,10 +10,11 @@ config BR2_PACKAGE_LIBEDIT
- 	  The official homepage is at:
- 	  http://ftp.netbsd.org/pub/NetBSD/NetBSD-release-5-0/src/lib/libedit/
- 
--	  Jess Thrysoee maintains an autotoolified packaged, which we use
-+	  Jess Thrysoee maintains an autotoolified package, which we use
- 	  in Buildroot as it makes it much simpler than using the upstream
--	  sources which require pmake:
--	  http://www.thrysoee.dk/editline/
-+	  sources which require pmake.
-+
-+	  http://www.thrysoee.dk/editline
- 
- comment "libedit needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU
-diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
-index 8cadd9b..d4692ea 100644
---- a/package/libedit/libedit.mk
-+++ b/package/libedit/libedit.mk
+ package/ccache/ccache.hash |    4 ++--
+ package/ccache/ccache.mk   |   10 +++++-----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index 10caac8..49012af 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,2 +1,2 @@
+-# Verified key http://samba.org/ftp/ccache/ccache-3.1.11.tar.xz.asc - sha256 computed locally
+-sha256	60e9f3f1e60f528cfce910f3224bcc698029320f6ab77ec09a7b46bda2bc678e	ccache-3.1.11.tar.xz
++# Verified key http://samba.org/ftp/ccache/ccache-3.2.1.tar.xz.asc - sha256 computed locally
++sha256	872af34e1d2cef18694001d29db7f167d644e7602ca32cd6c74b28d81458bd9d	ccache-3.2.1.tar.xz
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 893b6ae..52b5c67 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBEDIT_VERSION = 20130712-3.1
-+LIBEDIT_VERSION = 20150325-3.1
- LIBEDIT_SITE = http://www.thrysoee.dk/editline
- LIBEDIT_INSTALL_STAGING = YES
- LIBEDIT_DEPENDENCIES = ncurses
-@@ -14,6 +14,12 @@ LIBEDIT_LICENSE_FILES = COPYING
- # We're patching configure.ac
- LIBEDIT_AUTORECONF = YES
+-CCACHE_VERSION = 3.1.11
++CCACHE_VERSION = 3.2.1
+ CCACHE_SITE = http://samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPLv3+, others
+@@ -19,7 +19,7 @@ CCACHE_LICENSE_FILES = LICENSE.txt GPL-3.0.txt
+ # to use HOSTCC_NOCCACHE as the compiler. Instead, we take the easy
+ # path: tell ccache to use its internal copy of zlib, so that ccache
+ # has zero dependency besides the C library.
+-HOST_CCACHE_CONF_OPTS += ccache_cv_zlib_1_2_3=no
++HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
  
-+# Needed for autoreconf to work properly
-+define LIBEDIT_FIXUP_M4_DIR
-+	mkdir $(@D)/m4
-+endef
-+LIBEDIT_POST_EXTRACT_HOOKS += LIBEDIT_FIXUP_M4_DIR
-+
- # Doesn't really support !wchar, but support is disabled otherwise
- LIBEDIT_CONF_OPTS += --enable-widec
+ # Patch host-ccache as follows:
+ #  - Use BR_CACHE_DIR instead of CCACHE_DIR, because CCACHE_DIR
+@@ -34,11 +34,11 @@ HOST_CCACHE_CONF_OPTS += ccache_cv_zlib_1_2_3=no
+ #    the need to specify BR_CACHE_DIR when invoking ccache directly.
+ define HOST_CCACHE_PATCH_CONFIGURATION
+ 	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/ccache.c
+-	sed -i 's,getenv("CCACHE_COMPILERCHECK"),"none",' $(@D)/ccache.c
+-	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/ccache.c
++	sed -i 's,conf->compiler_check = x_strdup("mtime"),conf->compiler_check = x_strdup("none"),' $(@D)/conf.c
++	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/conf.c
+ endef
  
+-HOST_CCACHE_POST_CONFIGURE_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
++HOST_CCACHE_POST_PATCH_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
+ 
+ define HOST_CCACHE_MAKE_CACHE_DIR
+ 	mkdir -p $(BR_CACHE_DIR)
 -- 
 1.7.10.4
