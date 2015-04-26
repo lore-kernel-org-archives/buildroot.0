@@ -1,12 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Apr 2015 16:13:45 +0200
-Subject: [Buildroot] [PATCHv3 16/18] Makefile: add BR_BUILDING variable
-In-Reply-To: <20150426114055.47144b47@free-electrons.com>
+Date: Sun, 26 Apr 2015 16:18:15 +0200
+Subject: [Buildroot] [PATCHv3 17/18] packages: refactor checks using
+ BR_BUILDING
+In-Reply-To: <20150426114247.0686ffc2@free-electrons.com>
 References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1429972982-25495-17-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150425202649.GS4275@free.fr> <20150425211457.GU4275@free.fr>
- <20150426114055.47144b47@free-electrons.com>
-Message-ID: <20150426141345.GB4809@free.fr>
+ <1429972982-25495-18-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150425205257.GT4275@free.fr>
+ <20150426114247.0686ffc2@free-electrons.com>
+Message-ID: <20150426141815.GC4809@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,48 +16,58 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2015-04-26 11:40 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 25 Apr 2015 23:14:57 +0200, Yann E. MORIN wrote:
-> > I maintian my ack, but I have a deeper concern about not doing those
-> > checks in the first place.
-> > 
-> > So, what does it mean not to have a config/board/... name to start with?
-> > 
-> > It means the specific configuration is not complete, and that the
-> > package will fail to configure or build. So it does not make sense to
-> > accept a configuration where such config name are missing.
-> > 
-> > Furthermore, what about a package that needs the config name to decide
-> > what tarball to download? In that case, we can't do the check at all,
-> > and we must fail as soon as the config name is empty.
-> > 
-> > As such, I'd prefer we do not condition the check on whether we'r
-> > ebuilding or not, but that we do it always, fo all packages.
-> > 
-> > However, I can see one reason where we would still want the checks to be
-> > conditional: make rand*config && make source-check . And that is a
-> > tricky case to solve.
-> > 
-> > We could do it by always defining defaults (in the Config.in) to such
-> > config names; those defaults could be conditional, of course. But coming
-> > up with sane defaults is not easy either...
-> > 
-> > Thoughts?
+On 2015-04-26 11:42 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 25 Apr 2015 22:52:57 +0200, Yann E. MORIN wrote:
 > 
-> I'd answer that this is a deeper discussion, into which I'd prefer to
-> not get into at this point. The patch series is trying to keep the
-> existing behavior, and I'd like to not change that for now.
+> > >  # Checks to give errors that the user can understand
+> > > -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> > > +ifeq ($(BR_BUILDING),y)
+> > >  ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+> > 
+> > I think it would be good to have a single way we do those checks.
+> > 
+> > For example, compare at91bootstrap above and at91bootstrap3 here.
+> > The former is doing the BR2_BUILDING check and package-enabled check
+> > in a single ifeq, while the latter does it with two ifeq.
+> > 
+> > I don't really care which we use, but we should use the same everywhere.
+> > Maybe we could favour doing it with feq, for those packages that want to
+> > do multiple checks.
+> > 
+> > Applicable to the other packages, of course.
+> 
+> I don't quite agree. For at91bootstrap, there is only one check being
+> done, while for at91bootstrap3, two checks are being done.
+> 
+> So basically, the current code is:
+> 
+> ifeq ($(BR_BUILDING),y)
+> ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+> ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG)),)
+> $(error No at91bootstrap3 defconfig name specified, check your BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG setting)
+> endif
+> endif
+> 
+> ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
+> ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE)),)
+> $(error No at91bootstrap3 configuration file specified, check your BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE setting)
+> endif
+> endif
+> endif
+> 
+> While you're proposing to unfactorize the BR_BUILDING test:
 
-Absolutely in agreement with that.
+I thionk I actually meant the other way around: always use two ifeq,
+that is always factorise the check on BR_BUILDING. But there was some
+typing errors in my comment, which I clarified in a further reply:
+    http://lists.busybox.net/pipermail/buildroot/2015-April/126861.html
 
-I never intended my comments to be taken as a suggestion to change your
-series. I even stated that I did maintain my acked-by. ;-)
+What I really meant is that I think it would be good to have a single
+and uniform way of doing the checks, so we have sane examples on how to
+do it. For example, you even had an issue with xloader that completely
+broke the 'source' rule. ;-)
 
-> Once this patch series gets merged, I'll be happy to rediscuss why we
-> have this special casing on 'make source' / 'make source-check' to
-> disable the checks.
-
-Yup.
+But I won;t be pedantic on this. ;-)
 
 Regards,
 Yann E. MORIN.
