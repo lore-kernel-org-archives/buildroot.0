@@ -1,29 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 22:23:20 +0200
-Subject: [Buildroot] [PATCHv4 18/18] Makefile: add a few more targets to
- nobuild_targets
-In-Reply-To: <20150426154052.GG4809@free.fr>
+Date: Sun, 26 Apr 2015 22:23:56 +0200
+Subject: [Buildroot] [PATCHv4 00/18] Package based 'source', 'legal-info',
+ 'source-check' and 'external-deps'
+In-Reply-To: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1430041876-16436-19-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150426154052.GG4809@free.fr>
-Message-ID: <20150426222320.0d497a91@free-electrons.com>
+Message-ID: <20150426222356.4bfdb360@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hello all,
 
-On Sun, 26 Apr 2015 17:40:52 +0200, Yann E. MORIN wrote:
+On Sun, 26 Apr 2015 11:50:58 +0200, Thomas Petazzoni wrote:
 
-> You may also want to add those:
->     clean distclean
-> 
-> Because otherwise, it is not possible to clean or distclean a directory
-> when the .config has one or more unset board names.
+> Thomas Petazzoni (18):
+>   fs: only add non rootfs- targets to PACKAGES
+>   pkg-generic: take into account patch dependencies in source,
+>     external-deps and legal-info
+>   Makefile: use the package infra based external-deps
+>   pkg-download: remove support for the SHOW_EXTERNAL_DEPS DL_MODE
+>   Makefile: move source-check outside of noconfig_targets
+>   pkg-download: extend DOWNLOAD_INNER, add a SOURCE_CHECK macro
+>   pkg-generic: implement source-check targets
+>   Makefile: implement a package based source-check target
+>   pkg-generic: remove the .stamp_rsync_sourced fake stamp file
+>   pkg-generic: don't use DL_MODE in .stamp_downloaded
+>   pkg-download: get rid of DL_MODE
+>   pkg-download: fix indentation for SOURCE_CHECK_* macros
+>   pkg-generic: introduce a <pkg>_ALL_DOWNLOADS variable and factorize
+>     code
+>   Makefile: implement the 'source' target using the package
+>     infrastructure
+>   Makefile: remove unneeded variables
+>   Makefile: add BR_BUILDING variable
+>   packages: refactor checks using BR_BUILDING
+>   Makefile: add a few more targets to nobuild_targets
 
-Done! I've added clean and distclean to nobuild_targets before applying.
+This patch series is now fully applied. Thanks a lot to Yann and Arnout
+for helping with their in-depth review and testing!
 
 Thomas
 -- 
