@@ -1,74 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 11:51:07 +0200
-Subject: [Buildroot] [PATCHv4 09/18] pkg-generic: remove the
-	.stamp_rsync_sourced fake stamp file
+Date: Sun, 26 Apr 2015 11:51:03 +0200
+Subject: [Buildroot] [PATCHv4 05/18] Makefile: move source-check outside of
+	noconfig_targets
 In-Reply-To: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1430041876-16436-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1430041876-16436-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The only reason for the .stamp_rsync_sourced fake stamp file target to
-exist was to handle the SOURCE_CHECK operation on packages using the
-OVERRIDE_SRCDIR mechanism. Now that this is handled directly inside
-$(1)-source-check, there is no longer any need for this part of the
-code.
+make source-check is here to check whether the remote sources for the
+current selection of packages are still available. In its current
+implementation, since it simply calls recursively a sub-make with the
+source target, it can be a noconfig_targets. However, a follow-up
+change will make source-check not use a sub-make, which will require
+it to no longer be a noconfig_targets.
+
+Therefore, as a preparation, this commit moves source-check outside of
+noconfig_targets.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-generic.mk | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+ Makefile | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 2176771..6537d6a 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -122,14 +122,6 @@ $(BUILD_DIR)/%/.stamp_rsynced:
- 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
+diff --git a/Makefile b/Makefile
+index 7649e4c..a442325 100644
+--- a/Makefile
++++ b/Makefile
+@@ -75,7 +75,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
+ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+ 	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+-	source-check print-version olddefconfig
++	print-version olddefconfig
  
--# Handle the SOURCE_CHECK case for rsynced packages
--$(BUILD_DIR)/%/.stamp_rsync_sourced:
--ifeq ($(DL_MODE),SOURCE_CHECK)
--	test -d $(SRCDIR)
--else
--	@true # Nothing to do to source a local package
--endif
--
- # Patch
+ # Strip quotes and then whitespaces
+ qstrip = $(strip $(subst ",,$(1)))
+@@ -422,7 +422,7 @@ world: target-post-image
+ 
+ .PHONY: all world toolchain dirs clean distclean source outputmakefile \
+ 	legal-info legal-info-prepare legal-info-clean printvars help \
+-	list-defconfigs target-finalize target-post-image
++	list-defconfigs target-finalize target-post-image source-check
+ 
+ ################################################################################
  #
- # The RAWNAME variable is the lowercased package name, which allows to
-@@ -442,7 +434,6 @@ $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
- $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
- $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
- $(2)_TARGET_RSYNC =	        $$($(2)_DIR)/.stamp_rsynced
--$(2)_TARGET_RSYNC_SOURCE =      $$($(2)_DIR)/.stamp_rsync_sourced
- $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
- $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
- $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
-@@ -571,7 +562,7 @@ $(1)-extract:		$(1)-rsync
+@@ -618,6 +618,10 @@ _external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
+ external-deps:
+ 	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
  
- $(1)-rsync:		$$($(2)_TARGET_RSYNC)
++# check if download URLs are outdated
++source-check:
++	$(MAKE1) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
++
+ legal-info-clean:
+ 	@rm -fr $(LEGAL_INFO_DIR)
  
--$(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
-+$(1)-source:
+@@ -778,10 +782,6 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+ 		$(CONFIG_CONFIG_IN)
  
- $(1)-external-deps:
- 	@echo "file://$$($(2)_OVERRIDE_SRCDIR)"
-@@ -645,8 +636,6 @@ $$($(2)_TARGET_BUILD):			PKG=$(2)
- $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
- $$($(2)_TARGET_RSYNC):                  SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
- $$($(2)_TARGET_RSYNC):                  PKG=$(2)
--$$($(2)_TARGET_RSYNC_SOURCE):		SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
--$$($(2)_TARGET_RSYNC_SOURCE):		PKG=$(2)
- $$($(2)_TARGET_PATCH):			PKG=$(2)
- $$($(2)_TARGET_PATCH):			RAWNAME=$$(patsubst host-%,%,$(1))
- $$($(2)_TARGET_PATCH):			PKGDIR=$(pkgdir)
+-# check if download URLs are outdated
+-source-check:
+-	$(MAKE1) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
+-
+ .PHONY: defconfig savedefconfig
+ 
+ ################################################################################
 -- 
 2.1.0
