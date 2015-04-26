@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 19:11:04 +0200
-Subject: [Buildroot] [PATCH 1/3] package/libgsm: new package
-In-Reply-To: <1430060451-4075-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 26 Apr 2015 19:12:46 +0200
+Subject: [Buildroot] [PATCH 2/3] package/libpjsip: new package
+In-Reply-To: <1430060451-4075-3-git-send-email-bernd.kuhls@t-online.de>
 References: <1430060451-4075-1-git-send-email-bernd.kuhls@t-online.de>
- <1430060451-4075-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150426191104.1dafb792@free-electrons.com>
+ <1430060451-4075-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150426191246.5e1c5242@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,53 +13,82 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sun, 26 Apr 2015 17:00:49 +0200, Bernd Kuhls wrote:
+On Sun, 26 Apr 2015 17:00:50 +0200, Bernd Kuhls wrote:
 
-> diff --git a/package/libgsm/libgsm.mk b/package/libgsm/libgsm.mk
+> diff --git a/package/libpjsip/0001-disable-tests.patch b/package/libpjsip/0001-disable-tests.patch
 > new file mode 100644
-> index 0000000..e272e7c
+> index 0000000..3b140ed
 > --- /dev/null
-> +++ b/package/libgsm/libgsm.mk
-> @@ -0,0 +1,33 @@
+> +++ b/package/libpjsip/0001-disable-tests.patch
+> @@ -0,0 +1,12 @@
+
+Missing patch description + SoB.
+
+
+> diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+> new file mode 100644
+> index 0000000..8f445e6
+> --- /dev/null
+> +++ b/package/libpjsip/libpjsip.mk
+> @@ -0,0 +1,49 @@
 > +################################################################################
 > +#
-> +# libgsm
+> +# libpjsip
 > +#
 > +################################################################################
 > +
-> +LIBGSM_VERSION = 1.0.14
-> +LIBGSM_SOURCE = gsm-$(LIBGSM_VERSION).tar.gz
-> +LIBGSM_SITE = http://www.quut.com/gsm
-> +LIBGSM_INSTALL_STAGING = YES
+> +LIBPJSIP_VERSION = 2.4
+> +LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
+> +LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
+> +LIBPJSIP_INSTALL_STAGING = YES
 
-License + license file?
+License + license files?
 
-> +define LIBGSM_BUILD_CMDS
-> +	cd $(@D) && $(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
-
-Do need for cd $(@D) when you do -C $(@D). Ditto for the commands below.
-
-Also, please try to use $(TARGET_CONFIGURE_OPTS) instead of just
-CC=$(TARGET_CC).
-
-> +endef
 > +
-> +# install targets are not safe for parallel jobs
-> +define LIBGSM_INSTALL_STAGING_CMDS
-> +	cd $(@D) && $(TARGET_MAKE_ENV) $(MAKE1) CC=$(TARGET_CC) -C $(@D) \
-> +		INSTALL_ROOT=$(STAGING_DIR)/usr \
-> +		GSM_INSTALL_INC=$(STAGING_DIR)/usr/include \
-> +		install
-> +endef
+> +LIBPJSIP_DEPENDENCIES = libgsm libsrtp
 > +
-> +define LIBGSM_INSTALL_TARGET_CMDS
-> +	cd $(@D) && $(TARGET_MAKE_ENV) $(MAKE1) CC=$(TARGET_CC) -C $(@D) \
-> +		INSTALL_ROOT=$(TARGET_DIR)/usr \
-> +		GSM_INSTALL_INC=$(TARGET_DIR)/usr/include \
-> +		GSM_INSTALL_MAN=$(TARGET_DIR)/usr/share/man/man3 \
-> +		TOAST_INSTALL_MAN=$(TARGET_DIR)/usr/share/man/man1 \
+> +LIBPJSIP_CONF_ENV = \
+> +	LD="$(TARGET_CC)" \
+> +	CFLAGS="$(TARGET_CFLAGS) -DPJ_HAS_IPV6=1"
+> +
+> +LIBPJSIP_CONF_OPTS = \
+> +	--with-external-gsm \
+> +	--with-external-srtp \
+> +	--disable-sound \
+> +	--disable-resample \
+> +	--disable-video \
+> +	--disable-opencore-amr
+> +
+> +ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
+> +LIBPJSIP_CONF_OPTS += --with-external-pa
+> +LIBPJSIP_DEPENDENCIES += portaudio
+> +endif
 
-Where are the manpages going in the case of the staging installation?
+Can you add a 'else' clause to explicitly disable portaudio support?
+
+> +
+> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +LIBPJSIP_DEPENDENCIES += openssl
+> +LIBPJSIP_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
+> +else
+> +LIBPJSIP_CONF_OPTS += --disable-ssl
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SPEEX),y)
+> +LIBPJSIP_CONF_OPTS += --with-external-speex
+> +LIBPJSIP_DEPENDENCIES += speex
+> +else
+> +LIBPJSIP_CONF_OPTS += --disable-speex-codec --disable-speex-aec
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+> +LIBPJSIP_DEPENDENCIES += util-linux
+
+Any way to --enable/--disable this?
+
+> +endif
+> +
+> +$(eval $(autotools-package))
 
 Thanks,
 
