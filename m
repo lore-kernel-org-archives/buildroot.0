@@ -1,36 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 22:44:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnuchess: needs c++
-In-Reply-To: <1430080308-2444-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1430080308-2444-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150426224415.0f881a1a@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 26 Apr 2015 22:44:34 +0200
+Subject: [Buildroot] [PATCH] vlc: uclibc-ng can be used
+Message-ID: <20150426204434.GA23399@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Tested with X86 and ARM compiles.
 
-On Sun, 26 Apr 2015 22:31:48 +0200, Bernd Kuhls wrote:
-> Quoted from ChangeLog:
-> 
-> 2013-11-23  Antonio Ceballos  <aceballos@gmail.com>
-> [...]
->     * doc/gnuchess.texi: frontend no longer compiled in C; now in C++.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/04e/04e7c14c20f0e056e63a712be3821a3f5c94cff1/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/gnuchess/Config.in |    5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/vlc/Config.in |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+index af96d08..b030a56 100644
+--- a/package/vlc/Config.in
++++ b/package/vlc/Config.in
+@@ -5,7 +5,7 @@ endif
+ 
+ config BR2_PACKAGE_VLC
+ 	bool "vlc"
+-	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
++	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+@@ -18,7 +18,7 @@ config BR2_PACKAGE_VLC
+ 
+ 	  http://www.videolan.org/vlc/
+ 
+-comment "vlc needs a uclibc snapshot or (e)glibc toolchain w/ C++, wchar, threads, headers >= 3.7"
+-	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC) \
++comment "vlc needs a uclibc snapshot, uclibc-ng or (e)glibc toolchain w/ C++, wchar, threads, headers >= 3.7"
++	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) \
+ 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
