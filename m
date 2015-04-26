@@ -1,81 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Apr 2015 16:18:15 +0200
-Subject: [Buildroot] [PATCHv3 17/18] packages: refactor checks using
- BR_BUILDING
-In-Reply-To: <20150426114247.0686ffc2@free-electrons.com>
-References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1429972982-25495-18-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150425205257.GT4275@free.fr>
- <20150426114247.0686ffc2@free-electrons.com>
-Message-ID: <20150426141815.GC4809@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 26 Apr 2015 16:52:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libical: bump version to v1.0.1
+Message-ID: <1430059941-3692-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Project moved to github according to http://sourceforge.net/projects/freeassociation
 
-On 2015-04-26 11:42 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 25 Apr 2015 22:52:57 +0200, Yann E. MORIN wrote:
-> 
-> > >  # Checks to give errors that the user can understand
-> > > -ifeq ($(filter source,$(MAKECMDGOALS)),)
-> > > +ifeq ($(BR_BUILDING),y)
-> > >  ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
-> > 
-> > I think it would be good to have a single way we do those checks.
-> > 
-> > For example, compare at91bootstrap above and at91bootstrap3 here.
-> > The former is doing the BR2_BUILDING check and package-enabled check
-> > in a single ifeq, while the latter does it with two ifeq.
-> > 
-> > I don't really care which we use, but we should use the same everywhere.
-> > Maybe we could favour doing it with feq, for those packages that want to
-> > do multiple checks.
-> > 
-> > Applicable to the other packages, of course.
-> 
-> I don't quite agree. For at91bootstrap, there is only one check being
-> done, while for at91bootstrap3, two checks are being done.
-> 
-> So basically, the current code is:
-> 
-> ifeq ($(BR_BUILDING),y)
-> ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
-> ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG)),)
-> $(error No at91bootstrap3 defconfig name specified, check your BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG setting)
-> endif
-> endif
-> 
-> ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
-> ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE)),)
-> $(error No at91bootstrap3 configuration file specified, check your BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE setting)
-> endif
-> endif
-> endif
-> 
-> While you're proposing to unfactorize the BR_BUILDING test:
+"As of 2014-06-14, this project may now be found at http://github.com/libical."
 
-I thionk I actually meant the other way around: always use two ifeq,
-that is always factorise the check on BR_BUILDING. But there was some
-typing errors in my comment, which I clarified in a further reply:
-    http://lists.busybox.net/pipermail/buildroot/2015-April/126861.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libical/0001-no-tests.patch |   19 +++++++++++++++++++
+ package/libical/Config.in           |    6 ++++--
+ package/libical/libical.hash        |    2 +-
+ package/libical/libical.mk          |   10 +++++++---
+ 4 files changed, 31 insertions(+), 6 deletions(-)
+ create mode 100644 package/libical/0001-no-tests.patch
 
-What I really meant is that I think it would be good to have a single
-and uniform way of doing the checks, so we have sane examples on how to
-do it. For example, you even had an issue with xloader that completely
-broke the 'source' rule. ;-)
-
-But I won;t be pedantic on this. ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libical/0001-no-tests.patch b/package/libical/0001-no-tests.patch
+new file mode 100644
+index 0000000..324c04f
+--- /dev/null
++++ b/package/libical/0001-no-tests.patch
+@@ -0,0 +1,19 @@
++Disable tests to avoid MMU dependency due to fork.
++
++Fixes
++CMakeFiles/regression.dir/regression.c.o: In function `_test_file_locks':
++/home/br/br4/output/build/libical-v1.0.1/src/test/regression.c:(.text+0x96d8): undefined reference to `_fork'
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr libical-1.0.1.org/src/CMakeLists.txt libical-1.0.1/src/CMakeLists.txt
++--- libical-1.0.1.org/src/CMakeLists.txt	2014-10-09 17:07:05.000000000 +0200
+++++ libical-1.0.1/src/CMakeLists.txt	2015-04-25 17:41:22.657345548 +0200
++@@ -1,7 +1,6 @@
++ add_subdirectory(libical)
++ add_subdirectory(libicalss)
++ add_subdirectory(libicalvcal)
++-add_subdirectory(test)
++ 
++ if(MSVC)
++   install(FILES
+diff --git a/package/libical/Config.in b/package/libical/Config.in
+index 9bb63c3..0c9b785 100644
+--- a/package/libical/Config.in
++++ b/package/libical/Config.in
+@@ -1,11 +1,13 @@
+ config BR2_PACKAGE_LIBICAL
+ 	bool "libical"
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  libical is an Open Source (MPL/LGPL) implementation of the IETF's
+ 	  iCalendar Calendaring and Scheduling protocols.
+ 
+-	  http://www.citadel.org/doku.php/documentation:featured_projects:libical
++	  http://libical.github.io/libical
+ 
+-comment "libical needs a toolchain w/ wchar"
++comment "libical needs a toolchain w/ dynamic library, wchar"
+ 	depends on !BR2_USE_WCHAR
++	depends on BR2_STATIC_LIBS
+diff --git a/package/libical/libical.hash b/package/libical/libical.hash
+index 2382ad7..ab5c2dd 100644
+--- a/package/libical/libical.hash
++++ b/package/libical/libical.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  2ae78b0757f0dd13431acf42a9a8d038339fd4767fd5134e650bf60ee0b4dff0  libical-0.48.tar.gz
++sha256	7d5f613454ec6c7d1bcfb441c919215be53292aa15cd1cb14249d1413d6c610c	libical-v1.0.1.tar.gz
+diff --git a/package/libical/libical.mk b/package/libical/libical.mk
+index 4025627..b3702ae 100644
+--- a/package/libical/libical.mk
++++ b/package/libical/libical.mk
+@@ -4,10 +4,14 @@
+ #
+ ################################################################################
+ 
+-LIBICAL_VERSION = 0.48
+-LIBICAL_SITE = http://downloads.sourceforge.net/project/freeassociation/libical/libical-$(LIBICAL_VERSION)
++LIBICAL_VERSION = v1.0.1
++LIBICAL_SITE = $(call github,libical,libical,$(LIBICAL_VERSION))
+ LIBICAL_INSTALL_STAGING = YES
+ LIBICAL_LICENSE = MPLv1.0 or LGPLv2.1
+ LIBICAL_LICENSE_FILES = LICENSE
+ 
+-$(eval $(autotools-package))
++# building without this option is broken, it is used by
++# Gentoo/alpinelinux as well
++LIBICAL_CONF_OPTS = -DSHARED_ONLY=true
++
++$(eval $(cmake-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
