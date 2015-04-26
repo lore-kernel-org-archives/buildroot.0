@@ -1,40 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Apr 2015 23:28:19 +0200
-Subject: [Buildroot] [PATCH 0/8 v11] NVidia GPU binary blobs for
- Tegra2/3 (branch yem/gfx2)
-In-Reply-To: <20150426223152.7ed42fe5@free-electrons.com>
-References: <cover.1429635674.git.yann.morin.1998@free.fr>
- <20150426223152.7ed42fe5@free-electrons.com>
-Message-ID: <20150426212819.GH4809@free.fr>
+Date: Sun, 26 Apr 2015 23:33:41 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: add hash for 2012.07
+In-Reply-To: <20150426222755.437ae3fe@free-electrons.com>
+References: <1430078172-8136-1-git-send-email-vincent.stehle@laposte.net>
+ <20150426222755.437ae3fe@free-electrons.com>
+Message-ID: <20150426213341.GI4809@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Thomas, Vincent, All,
 
-On 2015-04-26 22:31 +0200, Thomas Petazzoni spake thusly:
-> On Tue, 21 Apr 2015 19:04:39 +0200, Yann E. MORIN wrote:
-> 
-> > ----------------------------------------------------------------
-> > Nicolas Serafini (3):
-> >       package/nvidia-tegra23-binaries: new package
-> >       package.nvidia-tegra23-binaries: add gstreamer plugins
-> >       package/nvidia-tegra23-codecs: new package
+On 2015-04-26 22:27 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 26 Apr 2015 21:56:12 +0200, Vincent Stehle wrote:
+> > From: Vincent Stehl? <vincent.stehle@laposte.net>
 > > 
-> > Yann E. MORIN (5):
-> >       package/xserver_xorg-server: prepare for multiple supported versions
-> >       package/xserver_xorg-server: make the version a choice
-> >       package/xserver_xorg-server: add blind options to specify driver ABI
-> >       package/xserver_xorg-server: not all versions need all dependencies
-> >       package/xserver_xorg-server: add version 1.14.7
+> > To repair the build of pandaboard_defconfig.
+> > 
+> > Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+> > ---
+> >  boot/uboot/uboot.hash | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+> > index 9cc96f6..9def045 100644
+> > --- a/boot/uboot/uboot.hash
+> > +++ b/boot/uboot/uboot.hash
+> > @@ -1,2 +1,3 @@
+> >  # Locally computed:
+> > +sha256	e08e20a6979bfca6eebb9a2b0e42aa4416af3d796332fd63a3470495a089d496  u-boot-2012.07.tar.bz2
+> >  sha256	0a1a70df586655f527befa6f12e184e96ed61b126e5a567382321b17200f5d60  u-boot-2015.04.tar.bz2
 > 
-> Series applied!
+> The problem indeed exists, but this is not the right solution. The
+> right solution is to use BR_NO_CHECK_HASH_FOR. Yann, can you look at
+> all the packages that may use custom versions (U-Boot, Barebox,
+> kernel, etc.) and do the necessary BR_NO_CHECK_HASH_FOR handling?
 
-Thanks! And thanks for further fixing it! :-)
-
-/me can dump one more local branch! :-]
+I'll have a look.
 
 Regards,
 Yann E. MORIN.
