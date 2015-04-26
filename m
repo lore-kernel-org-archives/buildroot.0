@@ -1,118 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 26 Apr 2015 22:24:10 +0200
-Subject: [Buildroot] [git commit] package.nvidia-tegra23-binaries: add
-	gstreamer plugins
-Message-ID: <20150426202425.1FB63818C4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xserver_xorg-server: not all
+	versions need all dependencies
+Message-ID: <20150426202424.F188F818C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f2c2bd0b7a1f8d08ed88c35dc6b736d522ba1e02
+commit: http://git.buildroot.net/buildroot/commit/?id=5696eb080b7519f40b654c13747262453d6c4857
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas:
-  - add missing libXv dependency.
-  - remove the NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS and
-    NVIDIA_TEGRA23_BINARIES_MULTIMEDIA_APPS, and use simple 'cp -dpfr'
-    calls to copy the plugins and sample applications.]
+Support for the Present protocol has been added to, and is mandatory
+since version 1.15.
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-[yann.morin.1998 at free.fr: split out into their own patch]
+As we're on the verge of adding 1.14.7, we need to make Present a
+version-specific dependency.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../nvidia-tegra23-binaries/Config.in              |   16 +++++++++++
- .../nvidia-tegra23-binaries.mk                     |   27 ++++++++++++++++++++
- 2 files changed, 43 insertions(+), 0 deletions(-)
+ package/x11r7/xserver_xorg-server/Config.in        |    2 +-
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    7 ++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-index d2b6223..573ab90 100644
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-+++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-@@ -23,4 +23,20 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
- config BR2_PACKAGE_PROVIDES_LIBOPENMAX
- 	default "nvidia-tegra23-binaries"
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index c578528..2fccef6 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -35,7 +35,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	select BR2_PACKAGE_XPROTO_GLPROTO
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XPROTO_KBPROTO
+-	select BR2_PACKAGE_XPROTO_PRESENTPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_RESOURCEPROTO
+@@ -69,6 +68,7 @@ choice
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	bool "1.17.1"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
++	select BR2_PACKAGE_XPROTO_PRESENTPROTO
  
-+config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS
-+	bool "GStreamer 0.10.x plugins"
-+	depends on BR2_PACKAGE_GSTREAMER # Run-time only
-+	select BR2_PACKAGE_XLIB_LIBXV
-+	help
-+	  GStreamer 0.10.x plugins
-+
-+config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_NV_SAMPLE_APPS
-+	bool "NVIDIA multimedia sample apps"
-+	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS
-+	help
-+	  nvgstplayer and nvgstcapture multimedia test applications.
-+
-+comment "GStreamer 0.10.x plugins need GStreamer 0.10"
-+	depends on !BR2_PACKAGE_GSTREAMER
-+
+ endchoice
+ 
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index d08197d..79d663c 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -38,7 +38,6 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	xproto_glproto 			\
+ 	xproto_inputproto 		\
+ 	xproto_kbproto 			\
+-	xproto_presentproto 		\
+ 	xproto_randrproto 		\
+ 	xproto_renderproto 		\
+ 	xproto_resourceproto 		\
+@@ -75,6 +74,12 @@ XSERVER_XORG_SERVER_CONF_OPTS += \
+ 	--disable-systemd-logind
  endif
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-index 1d6c0f8..7b6029e 100644
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-+++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-@@ -10,6 +10,10 @@ NVIDIA_TEGRA23_BINARIES_SOURCE = $(NVIDIA_TEGRA23_BASE)_R$(NVIDIA_TEGRA23_BINARI
  
- NVIDIA_TEGRA23_BINARIES_LICENSE = License For Customer Use of NVIDIA Software
- NVIDIA_TEGRA23_BINARIES_LICENSE_FILES = nv_tegra/LICENSE
-+ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
-+NVIDIA_TEGRA23_BINARIES_LICENSE += LGPLv2.1
-+NVIDIA_TEGRA23_BINARIES_LICENSE_FILES += nv_tegra/nv_sample_apps/LICENSE.gst-openmax
-+endif
- 
- NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING = YES
- 
-@@ -20,6 +24,10 @@ NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING = YES
- NVIDIA_TEGRA23_BINARIES_DEPENDENCIES = mesa3d-headers \
- 	xlib_libX11 xlib_libXext
- 
-+ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
-+NVIDIA_TEGRA23_BINARIES_DEPENDENCIES += xlib_libXv
++# Present protocol only required for xserver 1.15+, but does not matter if
++# enabled for older versions as they don't use it (not even optionally).
++ifeq ($(BR2_PACKAGE_XPROTO_PRESENTPROTO),y)
++XSERVER_XORG_SERVER_DEPENDENCIES += xproto_presentproto
 +endif
 +
- NVIDIA_TEGRA23_BINARIES_PROVIDES = libegl libgles libopenmax
- 
- NVIDIA_TEGRA23_BINARIES_DRV = \
-@@ -47,11 +55,28 @@ define NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS
- 	)
- endef
- 
-+ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
-+define NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS
-+	mkdir -p $(1)/usr/lib/gstreamer-0.10/
-+	cp -dpfr $(@D)/nv_tegra/nv_sample_apps/nvgstapps/usr/lib/gstreamer-0.10/*.so \
-+		$(1)/usr/lib/gstreamer-0.10/
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_NV_SAMPLE_APPS),y)
-+define NVIDIA_TEGRA23_BINARIES_INSTALL_APPS
-+	mkdir -p $(TARGET_DIR)/usr/bin/
-+	cp -dpfr $(@D)/nv_tegra/nv_sample_apps/nvgstapps/usr/bin/* \
-+		$(TARGET_DIR)/usr/bin/
-+endef
-+endif
-+
- define NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING_CMDS
- 	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(STAGING_DIR))
- 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig/
- 	cp -dpfr package/nvidia-tegra23/nvidia-tegra23-binaries/*.pc \
- 		$(STAGING_DIR)/usr/lib/pkgconfig/
-+	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS,$(STAGING_DIR))
- endef
- 
- define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
-@@ -63,6 +88,8 @@ define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
- 		$(TARGET_DIR)/etc/nv_tegra_release
- 	$(INSTALL) -D -m 0644 $(@D)/$(NVIDIA_TEGRA23_BINARIES_DRV) \
- 		$(TARGET_DIR)/usr/lib/xorg/modules/drivers/tegra_drv.so
-+	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS,$(TARGET_DIR))
-+	$(NVIDIA_TEGRA23_BINARIES_INSTALL_APPS)
- endef
- 
- $(eval $(generic-package))
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-xorg
+ XSERVER_XORG_SERVER_DEPENDENCIES += libpciaccess
