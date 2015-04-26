@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 11:51:16 +0200
-Subject: [Buildroot] [PATCHv4 18/18] Makefile: add a few more targets to
-	nobuild_targets
+Date: Sun, 26 Apr 2015 11:51:06 +0200
+Subject: [Buildroot] [PATCHv4 08/18] Makefile: implement a package based
+	source-check target
 In-Reply-To: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1430041876-16436-19-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1430041876-16436-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With this commit, one can now execute the source-check, external-deps
-and legal-info targets regardless of the checks normally being done by
-packages on the configuration.
-
-Note that we intentionally do not go down the road of adding %-source,
-%-legal-info, and the miryad of other targets that could work in such
-situations. We only whitelist a few targets that are really useful to
-have as nobuild_targets.
+This commit switches the implementation of the global source-check
+target to use a package infrastructure based mechanism, using the
+$(1)-all-source-check target added in the previous commit.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Makefile | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index e0be636..2d7c05a 100644
+index a442325..f5ff574 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -86,7 +86,7 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
- # We're building in two situations: when MAKECMDGOALS is empty
- # (default target is to build), or when MAKECMDGOALS contains
- # something else than one of the nobuild_targets.
--nobuild_targets := source
-+nobuild_targets := source source-check legal-info external-deps _external-deps
- ifeq ($(MAKECMDGOALS),)
- BR_BUILDING = y
- else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+@@ -619,8 +619,7 @@ external-deps:
+ 	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
+ 
+ # check if download URLs are outdated
+-source-check:
+-	$(MAKE1) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
++source-check: $(foreach p,$(PACKAGES),$(p)-all-source-check)
+ 
+ legal-info-clean:
+ 	@rm -fr $(LEGAL_INFO_DIR)
 -- 
 2.1.0
