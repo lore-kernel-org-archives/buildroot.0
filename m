@@ -1,151 +1,53 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 26 Apr 2015 13:19:18 +0200
-Subject: [Buildroot] [PATCH] uclibc-ng: remove temporary workaround
-Message-ID: <20150426111917.GA9826@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Apr 2015 14:24:44 +0200
+Subject: [Buildroot] [PATCH 2/2] package/ccache: add wrapper for
+ internal toolchain
+In-Reply-To: <CABbD_XCocg8xyZHE5rxAA3FUH5p2eGaFiKdaJhoaXhdFVingug@mail.gmail.com>
+References: <1430040062-46308-1-git-send-email-kaszak@gmail.com>
+ <1430040062-46308-2-git-send-email-kaszak@gmail.com>
+ <20150426113742.182fa26b@free-electrons.com>
+ <CABbD_XCocg8xyZHE5rxAA3FUH5p2eGaFiKdaJhoaXhdFVingug@mail.gmail.com>
+Message-ID: <20150426142444.51f5b4d6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fminf and others got implemented in the time after this
-patch was added. Remove the workaround to get mesa compiled
-with uClibc-ng.
+Dear K?roly Kasza,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
+On Sun, 26 Apr 2015 11:45:06 +0200, K?roly Kasza wrote:
 
-Patch from git branch of uClibc-ng.
-So no upstream action required, will be in 1.0.3.
+> That is true, so the wrapper for external toolchains also needs the
+> extrafiles/hash solution. I simply missed this.
 
----
- ...ert-Do-not-define-unimplemented-functions.patch |  118 ++++++++++++++++++++
- 1 file changed, 118 insertions(+)
- create mode 100644 package/uclibc/1.0.2/0002-Revert-Do-not-define-unimplemented-functions.patch
+No problem, but it would indeed be nice to have a solution that covers
+both cases.
 
-diff --git a/package/uclibc/1.0.2/0002-Revert-Do-not-define-unimplemented-functions.patch b/package/uclibc/1.0.2/0002-Revert-Do-not-define-unimplemented-functions.patch
-new file mode 100644
-index 0000000..66780ce
---- /dev/null
-+++ b/package/uclibc/1.0.2/0002-Revert-Do-not-define-unimplemented-functions.patch
-@@ -0,0 +1,118 @@
-+From 650380248eaad577445c88b7314307d3acd166fc Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sat, 25 Apr 2015 07:09:40 -0500
-+Subject: [PATCH] Revert "Do not define unimplemented functions"
-+
-+This reverts commit bd3eaf83ef1b4954b6c0e7ba8bbdd29b2cd4a833.
-+
-+They are now implemented.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ include/math.h                             |  2 --
-+ libc/sysdeps/linux/common/bits/mathcalls.h | 18 ------------------
-+ 2 files changed, 20 deletions(-)
-+
-+diff --git a/include/math.h b/include/math.h
-+index c79af3f..1b54c9e 100644
-+--- a/include/math.h
-++++ b/include/math.h
-+@@ -118,7 +118,6 @@ __BEGIN_DECLS
-+ #  define _Mfloat_		float
-+ # endif
-+ # define _Mdouble_		_Mfloat_
-+-# define _Mdouble_is_float_
-+ # ifdef __STDC__
-+ #  define __MATH_PRECNAME(name,r) name##f##r
-+ # else
-+@@ -127,7 +126,6 @@ __BEGIN_DECLS
-+ # define _Mdouble_BEGIN_NAMESPACE __BEGIN_NAMESPACE_C99
-+ # define _Mdouble_END_NAMESPACE   __END_NAMESPACE_C99
-+ # include <bits/mathcalls.h>
-+-# undef _Mdouble_is_float_
-+ # undef	_Mdouble_
-+ # undef _Mdouble_BEGIN_NAMESPACE
-+ # undef _Mdouble_END_NAMESPACE
-+diff --git a/libc/sysdeps/linux/common/bits/mathcalls.h b/libc/sysdeps/linux/common/bits/mathcalls.h
-+index 3d7e34f..9bebb51 100644
-+--- a/libc/sysdeps/linux/common/bits/mathcalls.h
-++++ b/libc/sysdeps/linux/common/bits/mathcalls.h
-+@@ -291,9 +291,7 @@ __END_NAMESPACE_C99
-+ #ifdef __USE_ISOC99
-+ __BEGIN_NAMESPACE_C99
-+ /* True gamma function.  */
-+-# ifndef _Mdouble_is_float_
-+ __MATHCALLI (tgamma,, (_Mdouble_))
-+-# endif
-+ __END_NAMESPACE_C99
-+ #endif
-+ 
-+@@ -324,9 +322,7 @@ __MATHCALLX (nextafter,, (_Mdouble_ __x, _Mdouble_ __y), (__const__))
-+ libm_hidden_proto(nextafterl)
-+ # endif
-+ # if defined __USE_ISOC99 && !defined __LDBL_COMPAT
-+-#  ifndef _Mdouble_is_float_
-+ __MATHCALLX (nexttoward,, (_Mdouble_ __x, long double __y), (__const__))
-+-#  endif
-+ # endif
-+ 
-+ /* Return the remainder of integer divison X / Y with infinite precision.  */
-+@@ -343,15 +339,11 @@ __MATHDECLI (int,ilogb,, (_Mdouble_ __x))
-+ 
-+ #ifdef __USE_ISOC99
-+ /* Return X times (2 to the Nth power).  */
-+-# ifndef _Mdouble_is_float_
-+ __MATHCALLI (scalbln,, (_Mdouble_ __x, long int __n))
-+-# endif
-+ 
-+ /* Round X to integral value in floating-point format using current
-+    rounding direction, but do not raise inexact exception.  */
-+-# ifndef _Mdouble_is_float_
-+ __MATHCALLI (nearbyint,, (_Mdouble_ __x))
-+-# endif
-+ 
-+ /* Round X to nearest integral value, rounding halfway cases away from
-+    zero.  */
-+@@ -364,9 +356,7 @@ __MATHCALLX (trunc,, (_Mdouble_ __x), (__const__))
-+ /* Compute remainder of X and Y and put in *QUO a value with sign of x/y
-+    and magnitude congruent `mod 2^n' to the magnitude of the integral
-+    quotient x/y, with n >= 3.  */
-+-# ifndef _Mdouble_is_float_
-+ __MATHCALLI (remquo,, (_Mdouble_ __x, _Mdouble_ __y, int *__quo))
-+-# endif
-+ 
-+ 
-+ /* Conversion functions.  */
-+@@ -383,19 +373,13 @@ __MATHDECLI (long long int,llround,, (_Mdouble_ __x))
-+ 
-+ 
-+ /* Return positive difference between X and Y.  */
-+-# ifndef _Mdouble_is_float_
-+ __MATHCALLI (fdim,, (_Mdouble_ __x, _Mdouble_ __y))
-+-# endif
-+ 
-+ /* Return maximum numeric value from X and Y.  */
-+-# ifndef _Mdouble_is_float_
-+ __MATHCALLI (fmax,, (_Mdouble_ __x, _Mdouble_ __y))
-+-# endif
-+ 
-+ /* Return minimum numeric value from X and Y.  */
-+-# ifndef _Mdouble_is_float_
-+ __MATHCALLI (fmin,, (_Mdouble_ __x, _Mdouble_ __y))
-+-# endif
-+ 
-+ 
-+ /* Classify given number.  */
-+@@ -406,9 +390,7 @@ __MATHDECL_PRIV (int, signbit,, (_Mdouble_ __value), (__const__))
-+ 
-+ 
-+ /* Multiply-add function computed as a ternary operation.  */
-+-# ifndef _Mdouble_is_float_
-+ __MATHCALLI (fma,, (_Mdouble_ __x, _Mdouble_ __y, _Mdouble_ __z))
-+-# endif
-+ #endif /* Use ISO C99.  */
-+ 
-+ #if defined __USE_MISC || defined __USE_XOPEN_EXTENDED || defined __USE_ISOC99
-+-- 
-+2.3.2 (Apple Git-55)
-+
+> > I must say I don't quite like the fact that the solution used here is
+> > different between internal and external toolchain, but I haven't
+> > thought too much of the problem.
+> 
+> I thought this would be more efficient, but the above statement kills it.
+
+I certainly don't want to kill anything. This ccache problem has been
+around for a long time, and it's definitely great to see someone taking
+care of this relatively complicated issue.
+
+> > How would ccache work with external toolchains?
+> >
+> 
+> Well, using mtime is out of question because of the BR built wrapper, so it
+> requires the
+> same solution: a wrapper for ccache and using extrafiles/hash as for the
+> internal.
+
+Indeed. But maybe the existing external toolchain wrapper can be used.
+We probably don't want to have a shell wrapper call a C wrapper
+calling the compiler.
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
