@@ -1,32 +1,151 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 26 Apr 2015 12:55:29 +0200
-Subject: [Buildroot] [PATCH v2 6/6] package/perl-mail-spamassassin: new
-	package
-References: <1430041039-13905-1-git-send-email-bernd.kuhls@t-online.de>
- <1430041039-13905-6-git-send-email-bernd.kuhls@t-online.de>
- <20150426120256.63387117@free-electrons.com>
-Message-ID: <XnsA488837A5F7C7berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 26 Apr 2015 13:19:18 +0200
+Subject: [Buildroot] [PATCH] uclibc-ng: remove temporary workaround
+Message-ID: <20150426111917.GA9826@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20150426120256.63387117 at free-electrons.com:
+fminf and others got implemented in the time after this
+patch was added. Remove the workaround to get mesa compiled
+with uClibc-ng.
 
-> Dear Bernd Kuhls,
-> 
-> On Sun, 26 Apr 2015 11:37:19 +0200, Bernd Kuhls wrote:
->> This package contains a dependency check which only checks for installed
->> modules in host-perl, not the target variant. Therefore some host package
->> of perl modules are needed as dependency.
-> 
-> What about fixing Spamassassin instead?
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
 
-Hi Thomas,
+Patch from git branch of uClibc-ng.
+So no upstream action required, will be in 1.0.3.
 
-I tried and failed:
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/114369
+---
+ ...ert-Do-not-define-unimplemented-functions.patch |  118 ++++++++++++++++++++
+ 1 file changed, 118 insertions(+)
+ create mode 100644 package/uclibc/1.0.2/0002-Revert-Do-not-define-unimplemented-functions.patch
 
-Regards, Bernd
+diff --git a/package/uclibc/1.0.2/0002-Revert-Do-not-define-unimplemented-functions.patch b/package/uclibc/1.0.2/0002-Revert-Do-not-define-unimplemented-functions.patch
+new file mode 100644
+index 0000000..66780ce
+--- /dev/null
++++ b/package/uclibc/1.0.2/0002-Revert-Do-not-define-unimplemented-functions.patch
+@@ -0,0 +1,118 @@
++From 650380248eaad577445c88b7314307d3acd166fc Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Sat, 25 Apr 2015 07:09:40 -0500
++Subject: [PATCH] Revert "Do not define unimplemented functions"
++
++This reverts commit bd3eaf83ef1b4954b6c0e7ba8bbdd29b2cd4a833.
++
++They are now implemented.
++
++Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
++---
++ include/math.h                             |  2 --
++ libc/sysdeps/linux/common/bits/mathcalls.h | 18 ------------------
++ 2 files changed, 20 deletions(-)
++
++diff --git a/include/math.h b/include/math.h
++index c79af3f..1b54c9e 100644
++--- a/include/math.h
+++++ b/include/math.h
++@@ -118,7 +118,6 @@ __BEGIN_DECLS
++ #  define _Mfloat_		float
++ # endif
++ # define _Mdouble_		_Mfloat_
++-# define _Mdouble_is_float_
++ # ifdef __STDC__
++ #  define __MATH_PRECNAME(name,r) name##f##r
++ # else
++@@ -127,7 +126,6 @@ __BEGIN_DECLS
++ # define _Mdouble_BEGIN_NAMESPACE __BEGIN_NAMESPACE_C99
++ # define _Mdouble_END_NAMESPACE   __END_NAMESPACE_C99
++ # include <bits/mathcalls.h>
++-# undef _Mdouble_is_float_
++ # undef	_Mdouble_
++ # undef _Mdouble_BEGIN_NAMESPACE
++ # undef _Mdouble_END_NAMESPACE
++diff --git a/libc/sysdeps/linux/common/bits/mathcalls.h b/libc/sysdeps/linux/common/bits/mathcalls.h
++index 3d7e34f..9bebb51 100644
++--- a/libc/sysdeps/linux/common/bits/mathcalls.h
+++++ b/libc/sysdeps/linux/common/bits/mathcalls.h
++@@ -291,9 +291,7 @@ __END_NAMESPACE_C99
++ #ifdef __USE_ISOC99
++ __BEGIN_NAMESPACE_C99
++ /* True gamma function.  */
++-# ifndef _Mdouble_is_float_
++ __MATHCALLI (tgamma,, (_Mdouble_))
++-# endif
++ __END_NAMESPACE_C99
++ #endif
++ 
++@@ -324,9 +322,7 @@ __MATHCALLX (nextafter,, (_Mdouble_ __x, _Mdouble_ __y), (__const__))
++ libm_hidden_proto(nextafterl)
++ # endif
++ # if defined __USE_ISOC99 && !defined __LDBL_COMPAT
++-#  ifndef _Mdouble_is_float_
++ __MATHCALLX (nexttoward,, (_Mdouble_ __x, long double __y), (__const__))
++-#  endif
++ # endif
++ 
++ /* Return the remainder of integer divison X / Y with infinite precision.  */
++@@ -343,15 +339,11 @@ __MATHDECLI (int,ilogb,, (_Mdouble_ __x))
++ 
++ #ifdef __USE_ISOC99
++ /* Return X times (2 to the Nth power).  */
++-# ifndef _Mdouble_is_float_
++ __MATHCALLI (scalbln,, (_Mdouble_ __x, long int __n))
++-# endif
++ 
++ /* Round X to integral value in floating-point format using current
++    rounding direction, but do not raise inexact exception.  */
++-# ifndef _Mdouble_is_float_
++ __MATHCALLI (nearbyint,, (_Mdouble_ __x))
++-# endif
++ 
++ /* Round X to nearest integral value, rounding halfway cases away from
++    zero.  */
++@@ -364,9 +356,7 @@ __MATHCALLX (trunc,, (_Mdouble_ __x), (__const__))
++ /* Compute remainder of X and Y and put in *QUO a value with sign of x/y
++    and magnitude congruent `mod 2^n' to the magnitude of the integral
++    quotient x/y, with n >= 3.  */
++-# ifndef _Mdouble_is_float_
++ __MATHCALLI (remquo,, (_Mdouble_ __x, _Mdouble_ __y, int *__quo))
++-# endif
++ 
++ 
++ /* Conversion functions.  */
++@@ -383,19 +373,13 @@ __MATHDECLI (long long int,llround,, (_Mdouble_ __x))
++ 
++ 
++ /* Return positive difference between X and Y.  */
++-# ifndef _Mdouble_is_float_
++ __MATHCALLI (fdim,, (_Mdouble_ __x, _Mdouble_ __y))
++-# endif
++ 
++ /* Return maximum numeric value from X and Y.  */
++-# ifndef _Mdouble_is_float_
++ __MATHCALLI (fmax,, (_Mdouble_ __x, _Mdouble_ __y))
++-# endif
++ 
++ /* Return minimum numeric value from X and Y.  */
++-# ifndef _Mdouble_is_float_
++ __MATHCALLI (fmin,, (_Mdouble_ __x, _Mdouble_ __y))
++-# endif
++ 
++ 
++ /* Classify given number.  */
++@@ -406,9 +390,7 @@ __MATHDECL_PRIV (int, signbit,, (_Mdouble_ __value), (__const__))
++ 
++ 
++ /* Multiply-add function computed as a ternary operation.  */
++-# ifndef _Mdouble_is_float_
++ __MATHCALLI (fma,, (_Mdouble_ __x, _Mdouble_ __y, _Mdouble_ __z))
++-# endif
++ #endif /* Use ISO C99.  */
++ 
++ #if defined __USE_MISC || defined __USE_XOPEN_EXTENDED || defined __USE_ISOC99
++-- 
++2.3.2 (Apple Git-55)
++
+-- 
+1.7.10.4
