@@ -1,26 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 19:16:33 +0200
-Subject: [Buildroot] [git commit] libedit: add hash file
-Message-ID: <20150426171646.2613A81858@busybox.osuosl.org>
+Date: Sun, 26 Apr 2015 19:15:07 +0200
+Subject: [Buildroot] [git commit] package/libedit: bump version to
+	20150325-3.1
+Message-ID: <20150426171646.1DE8880429@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=712f4ed87b716797b5dec089e21a3ca1b3501d8c
+commit: http://git.buildroot.net/buildroot/commit/?id=c80f0490d994688e57799c02ad1e6c7dcaf5e9e3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libedit/libedit.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ .../0001-check-bsd-functions-in-libbsd.patch       |    4 +++-
+ package/libedit/Config.in                          |    7 ++++---
+ package/libedit/libedit.mk                         |    8 +++++++-
+ 3 files changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/package/libedit/libedit.hash b/package/libedit/libedit.hash
-new file mode 100644
-index 0000000..4bfb8af
---- /dev/null
-+++ b/package/libedit/libedit.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 c88a5e4af83c5f40dda8455886ac98923a9c33125699742603a88a0253fcc8c5 libedit-20150325-3.1.tar.gz
+diff --git a/package/libedit/0001-check-bsd-functions-in-libbsd.patch b/package/libedit/0001-check-bsd-functions-in-libbsd.patch
+index 21c57f8..de452a5 100644
+--- a/package/libedit/0001-check-bsd-functions-in-libbsd.patch
++++ b/package/libedit/0001-check-bsd-functions-in-libbsd.patch
+@@ -1,11 +1,13 @@
+ configure: on Linux, the BSD functions require linking against libbsd
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++(Rebased against 20150325-3.1)
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ 
+ diff -durN libedit-20130712-3.1.orig/configure.ac libedit-20130712-3.1/configure.ac
+ --- libedit-20130712-3.1.orig/configure.ac	2013-07-12 20:39:22.000000000 +0200
+ +++ libedit-20130712-3.1/configure.ac	2013-07-28 23:35:35.012676469 +0200
+-@@ -108,6 +108,10 @@
++@@ -117,6 +117,10 @@
+  #AC_FUNC_REALLOC
+  AC_TYPE_SIGNAL
+  AC_FUNC_STAT
+diff --git a/package/libedit/Config.in b/package/libedit/Config.in
+index a70f9eb..7c85014 100644
+--- a/package/libedit/Config.in
++++ b/package/libedit/Config.in
+@@ -10,10 +10,11 @@ config BR2_PACKAGE_LIBEDIT
+ 	  The official homepage is at:
+ 	  http://ftp.netbsd.org/pub/NetBSD/NetBSD-release-5-0/src/lib/libedit/
+ 
+-	  Jess Thrysoee maintains an autotoolified packaged, which we use
++	  Jess Thrysoee maintains an autotoolified package, which we use
+ 	  in Buildroot as it makes it much simpler than using the upstream
+-	  sources which require pmake:
+-	  http://www.thrysoee.dk/editline/
++	  sources which require pmake.
++
++	  http://www.thrysoee.dk/editline
+ 
+ comment "libedit needs a toolchain w/ wchar"
+ 	depends on BR2_USE_MMU
+diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
+index 8cadd9b..87a1cdc 100644
+--- a/package/libedit/libedit.mk
++++ b/package/libedit/libedit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEDIT_VERSION = 20130712-3.1
++LIBEDIT_VERSION = 20150325-3.1
+ LIBEDIT_SITE = http://www.thrysoee.dk/editline
+ LIBEDIT_INSTALL_STAGING = YES
+ LIBEDIT_DEPENDENCIES = ncurses
+@@ -14,6 +14,12 @@ LIBEDIT_LICENSE_FILES = COPYING
+ # We're patching configure.ac
+ LIBEDIT_AUTORECONF = YES
+ 
++# Needed for autoreconf to work properly
++define LIBEDIT_FIXUP_M4_DIR
++	mkdir $(@D)/m4
++endef
++LIBEDIT_POST_EXTRACT_HOOKS += LIBEDIT_FIXUP_M4_DIR
++
+ # Doesn't really support !wchar, but support is disabled otherwise
+ LIBEDIT_CONF_OPTS += --enable-widec
+ 
