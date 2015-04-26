@@ -1,166 +1,168 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 19:50:53 +0200
-Subject: [Buildroot] [git commit] pkg-download: remove support for the
-	SHOW_EXTERNAL_DEPS DL_MODE
-Message-ID: <20150426202108.29E6981734@busybox.osuosl.org>
+Date: Sun, 26 Apr 2015 21:43:25 +0200
+Subject: [Buildroot] [git commit] packages: refactor checks using BR_BUILDING
+Message-ID: <20150426202108.B6BC87FC25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a15ef6216ebfdcc94979e9f5f68c51e733cf00bc
+commit: http://git.buildroot.net/buildroot/commit/?id=fa6289bb1aad1a8b6721fbeb15d34520c84dcb39
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that the external-deps implementation relies on the per-package
-<pkg>-all-external-deps and <pkg>-external-deps targets and no longer
-on the 'source' target with a custom DL_MODE, we can get rid of the
-support for the SHOW_EXTERNAL_DEPS DL_MODE value in the pkg-download
-logic.
+Instead of manually testing MAKECMDGOALS, use the newly introduced
+BR_BUILDING variable to know if we're building or not.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-download.mk |   45 ++-------------------------------------------
- package/pkg-generic.mk  |    5 +----
- 2 files changed, 3 insertions(+), 47 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk   |    5 +----
+ boot/at91bootstrap3/at91bootstrap3.mk |    2 +-
+ boot/barebox/barebox.mk               |    5 +----
+ boot/uboot/uboot.mk                   |   13 ++++---------
+ boot/xloader/xloader.mk               |    6 +-----
+ linux/linux.mk                        |    2 +-
+ package/sunxi-boards/sunxi-boards.mk  |    4 +---
+ 7 files changed, 10 insertions(+), 27 deletions(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 1fc23c4..eee9e59 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -20,9 +20,8 @@ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index 802e85e..f655058 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -40,11 +40,8 @@ endef
  
- DL_WRAPPER = support/download/dl-wrapper
+ $(eval $(generic-package))
  
--# Default spider mode is 'DOWNLOAD'. Other possible values are 'SOURCE_CHECK'
--# used by the _source-check target and 'SHOW_EXTERNAL_DEPS', used by the
--# external-deps target.
-+# Default spider mode is 'DOWNLOAD'. Other possible value is
-+# 'SOURCE_CHECK' used by the _source-check target.
- DL_MODE = DOWNLOAD
- 
- # DL_DIR may have been set already from the environment
-@@ -74,11 +73,6 @@ export BR_NO_CHECK_HASH_FOR
- # The SOURCE_CHECK_* helpers are in charge of simply checking that the source
- # is available for download. This can be used to make sure one will be able
- # to get all the sources needed for one's build configuration.
--#
--# The SHOW_EXTERNAL_DEPS_* helpers simply output to the console the names
--# of the files that will be downloaded, or path and revision of the
--# source repositories, producing a list of all the "external dependencies"
--# of a given build configuration.
- ################################################################################
- 
- # Try a shallow clone - but that only works if the version is a ref (tag or
-@@ -103,11 +97,6 @@ define SOURCE_CHECK_GIT
-   $(GIT) ls-remote --heads $($(PKG)_SITE) > /dev/null
- endef
- 
--define SHOW_EXTERNAL_DEPS_GIT
--	echo $($(PKG)_SOURCE)
--endef
--
--
- define DOWNLOAD_BZR
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b bzr \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
-@@ -122,10 +111,6 @@ define SOURCE_CHECK_BZR
- 	$(BZR) ls --quiet $($(PKG)_SITE) > /dev/null
- endef
- 
--define SHOW_EXTERNAL_DEPS_BZR
--	echo $($(PKG)_SOURCE)
--endef
--
- define DOWNLOAD_CVS
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b cvs \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
-@@ -142,10 +127,6 @@ define SOURCE_CHECK_CVS
- 	$(CVS) -d:pserver:anonymous:@$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) login
- endef
- 
--define SHOW_EXTERNAL_DEPS_CVS
--	echo $($(PKG)_SOURCE)
--endef
--
- define DOWNLOAD_SVN
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b svn \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
-@@ -160,10 +141,6 @@ define SOURCE_CHECK_SVN
-   $(SVN) ls $($(PKG)_SITE)@$($(PKG)_DL_VERSION) > /dev/null
- endef
- 
--define SHOW_EXTERNAL_DEPS_SVN
--  echo $($(PKG)_SOURCE)
--endef
--
- # SCP URIs should be of the form scp://[user@]host:filepath
- # Note that filepath is relative to the user's home directory, so you may want
- # to prepend the path with a slash: scp://[user@]host:/absolutepath
-@@ -180,11 +157,6 @@ define SOURCE_CHECK_SCP
- 	$(SSH) $(call domain,$(1),:) ls '$(call notdomain,$(1),:)' > /dev/null
- endef
- 
--define SHOW_EXTERNAL_DEPS_SCP
--	echo $(2)
--endef
--
--
- define DOWNLOAD_HG
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b hg \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
-@@ -201,11 +173,6 @@ define SOURCE_CHECK_HG
-   $(HG) incoming --force -l1 $($(PKG)_SITE) > /dev/null
- endef
- 
--define SHOW_EXTERNAL_DEPS_HG
--  echo $($(PKG)_SOURCE)
--endef
--
--
- define DOWNLOAD_WGET
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b wget \
- 		-o $(DL_DIR)/$(2) \
-@@ -219,10 +186,6 @@ define SOURCE_CHECK_WGET
-   $(WGET) --spider '$(call qstrip,$(1))'
- endef
- 
--define SHOW_EXTERNAL_DEPS_WGET
--  echo $(2)
--endef
--
- define DOWNLOAD_LOCALFILES
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b cp \
- 		-o $(DL_DIR)/$(2) \
-@@ -236,10 +199,6 @@ define SOURCE_CHECK_LOCALFILES
-   test -e $(call stripurischeme,$(call qstrip,$(1)))
- endef
- 
--define SHOW_EXTERNAL_DEPS_LOCALFILES
--  echo $(2)
--endef
--
- ################################################################################
- # DOWNLOAD -- Download helper. Will try to download source from:
- # 1) BR2_PRIMARY_SITE if enabled
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index dd8c4c9..d7e3ca9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -122,13 +122,10 @@ $(BUILD_DIR)/%/.stamp_rsynced:
- 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
- 
--# Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
--# packages
-+# Handle the SOURCE_CHECK case for rsynced packages
- $(BUILD_DIR)/%/.stamp_rsync_sourced:
- ifeq ($(DL_MODE),SOURCE_CHECK)
- 	test -d $(SRCDIR)
--else ifeq ($(DL_MODE),SHOW_EXTERNAL_DEPS)
--	echo "file://$(SRCDIR)"
- else
- 	@true # Nothing to do to source a local package
+-ifeq ($(BR2_TARGET_AT91BOOTSTRAP),y)
+-# we NEED a board name unless we're at make source
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR2_TARGET_AT91BOOTSTRAP)$(BR_BUILDING),yy)
+ ifeq ($(AT91BOOTSTRAP_BOARD),)
+ $(error No AT91Bootstrap board name set. Check your BR2_TARGET_AT91BOOTSTRAP_BOARD setting)
  endif
+ endif
+-endif
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 3e3b78e..ff49e14 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -43,7 +43,7 @@ AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
+ $(eval $(kconfig-package))
+ 
+ # Checks to give errors that the user can understand
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR_BUILDING),y)
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG)),)
+ $(error No at91bootstrap3 defconfig name specified, check your BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG setting)
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 98cb04e..54f52bb 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -106,11 +106,8 @@ endif
+ 
+ $(eval $(kconfig-package))
+ 
+-ifeq ($(BR2_TARGET_BAREBOX),y)
+-# we NEED a board defconfig file unless we're at make source
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR2_TARGET_BAREBOX)$(BR_BUILDING),yy)
+ ifeq ($(BAREBOX_SOURCE_CONFIG),)
+ $(error No Barebox config file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE settings)
+ endif
+ endif
+-endif
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 1526177..01aaf2c 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -164,8 +164,7 @@ define UBOOT_INSTALL_OMAP_IFT_IMAGE
+ endef
+ 
+ ifeq ($(BR2_TARGET_UBOOT_OMAP_IFT),y)
+-# we NEED a config file unless we're at make source
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR_BUILDING),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG)),)
+ $(error No gpsign config file. Check your BR2_TARGET_UBOOT_OMAP_IFT_CONFIG setting)
+ endif
+@@ -179,8 +178,7 @@ UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_OMAP_IFT_IMAGE
+ endif
+ 
+ ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
+-# we NEED a environment settings unless we're at make source
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR_BUILDING),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
+ $(error Please define a source file for Uboot environment (BR2_TARGET_UBOOT_ENVIMAGE_SOURCE setting))
+ endif
+@@ -193,9 +191,7 @@ endif
+ 
+ $(eval $(generic-package))
+ 
+-ifeq ($(BR2_TARGET_UBOOT),y)
+-# we NEED a board name unless we're at make source
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR2_TARGET_UBOOT)$(BR_BUILDING),yy)
+ ifeq ($(UBOOT_BOARD_NAME),)
+ $(error No U-Boot board name set. Check your BR2_TARGET_UBOOT_BOARDNAME setting)
+ endif
+@@ -221,5 +217,4 @@ $(error No custom U-Boot repository URL specified. Check your BR2_TARGET_UBOOT_C
+ endif # qstrip BR2_TARGET_UBOOT_CUSTOM_CUSTOM_REPO_VERSION
+ endif # BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
+ 
+-endif # filter source
+-endif # BR2_TARGET_UBOOT
++endif # BR2_TARGET_UBOOT && BR_BUILDING
+diff --git a/boot/xloader/xloader.mk b/boot/xloader/xloader.mk
+index 90d5fa2..c68dc81 100644
+--- a/boot/xloader/xloader.mk
++++ b/boot/xloader/xloader.mk
+@@ -25,12 +25,8 @@ endef
+ 
+ $(eval $(generic-package))
+ 
+-ifeq ($(BR2_TARGET_XLOADER),y)
+-# we NEED a board name unless we're at make source
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR2_TARGET_XLOADER)$(BR_BUILDING),yy)
+ ifeq ($(XLOADER_BOARD_NAME),)
+ $(error NO x-loader board name set. Check your BR2_BOOT_XLOADER_BOARDNAME setting)
+ endif
+ endif
+-
+-endif
+diff --git a/linux/linux.mk b/linux/linux.mk
+index deed073..0c348da 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -354,7 +354,7 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
+ linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
+ 
+ # Checks to give errors that the user can understand
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR_BUILDING),y)
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG)),)
+ $(error No kernel defconfig name specified, check your BR2_LINUX_KERNEL_DEFCONFIG setting)
+diff --git a/package/sunxi-boards/sunxi-boards.mk b/package/sunxi-boards/sunxi-boards.mk
+index 1a2bb4c..cacf824 100644
+--- a/package/sunxi-boards/sunxi-boards.mk
++++ b/package/sunxi-boards/sunxi-boards.mk
+@@ -16,13 +16,11 @@ define SUNXI_BOARDS_INSTALL_IMAGES_CMDS
+ 		$(BINARIES_DIR)/script.bin
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_SUNXI_BOARDS),y)
++ifeq ($(BR2_PACKAGE_SUNXI_BOARDS)$(BR_BUILDING),yy)
+ # we NEED a board name
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
+ ifeq ($(SUNXI_BOARDS_FEX_FILE),)
+ $(error No sunxi .fex file specified. Check your BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE settings)
+ endif
+ endif
+-endif
+ 
+ $(eval $(generic-package))
