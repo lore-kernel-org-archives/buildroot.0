@@ -1,42 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 22:31:52 +0200
-Subject: [Buildroot] [PATCH 0/8 v11] NVidia GPU binary blobs for
- Tegra2/3 (branch yem/gfx2)
-In-Reply-To: <cover.1429635674.git.yann.morin.1998@free.fr>
-References: <cover.1429635674.git.yann.morin.1998@free.fr>
-Message-ID: <20150426223152.7ed42fe5@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 26 Apr 2015 22:31:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gnuchess: needs c++
+Message-ID: <1430080308-2444-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Quoted from ChangeLog:
 
-On Tue, 21 Apr 2015 19:04:39 +0200, Yann E. MORIN wrote:
+2013-11-23  Antonio Ceballos  <aceballos@gmail.com>
+[...]
+    * doc/gnuchess.texi: frontend no longer compiled in C; now in C++.
 
-> ----------------------------------------------------------------
-> Nicolas Serafini (3):
->       package/nvidia-tegra23-binaries: new package
->       package.nvidia-tegra23-binaries: add gstreamer plugins
->       package/nvidia-tegra23-codecs: new package
-> 
-> Yann E. MORIN (5):
->       package/xserver_xorg-server: prepare for multiple supported versions
->       package/xserver_xorg-server: make the version a choice
->       package/xserver_xorg-server: add blind options to specify driver ABI
->       package/xserver_xorg-server: not all versions need all dependencies
->       package/xserver_xorg-server: add version 1.14.7
+Fixes
+http://autobuild.buildroot.net/results/04e/04e7c14c20f0e056e63a712be3821a3f5c94cff1/
 
-Series applied!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/gnuchess/Config.in |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Nicolas, if you can give a test at the latest master, and check
-everything is still working fine for you, it would be great.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/gnuchess/Config.in b/package/gnuchess/Config.in
+index 13ae801..aa446f4 100644
+--- a/package/gnuchess/Config.in
++++ b/package/gnuchess/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_GNUCHESS
+ 	bool "gnuchess"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_FLEX
+ 	help
+@@ -7,5 +8,5 @@ config BR2_PACKAGE_GNUCHESS
+ 
+ 	  http://ftp.gnu.org/pub/gnu/chess
+ 
+-comment "gnuchess needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "gnuchess needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
