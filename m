@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 22:29:51 +0200
-Subject: [Buildroot] [PATCH 5/8 v11] package/xserver_xorg-server: add
- version 1.14.7
-In-Reply-To: <7c1cccc2773ed740d1c418d1437c629839849f73.1429635674.git.yann.morin.1998@free.fr>
+Date: Sun, 26 Apr 2015 22:30:22 +0200
+Subject: [Buildroot] [PATCH 6/8 v11] package/nvidia-tegra23-binaries:
+ new package
+In-Reply-To: <951d8be6053afa65c7392b5e57987955eda7d43b.1429635674.git.yann.morin.1998@free.fr>
 References: <cover.1429635674.git.yann.morin.1998@free.fr>
- <7c1cccc2773ed740d1c418d1437c629839849f73.1429635674.git.yann.morin.1998@free.fr>
-Message-ID: <20150426222951.5fc02f8f@free-electrons.com>
+ <951d8be6053afa65c7392b5e57987955eda7d43b.1429635674.git.yann.morin.1998@free.fr>
+Message-ID: <20150426223022.22c345d3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +14,48 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Tue, 21 Apr 2015 19:04:41 +0200, Yann E. MORIN wrote:
-> Some old binary blobs drivers, like the NVidia Tegra2/3 blobs, only
-> implement an old VIDEODRV ABI.
+On Tue, 21 Apr 2015 19:04:42 +0200, Yann E. MORIN wrote:
+> From: Nicolas Serafini <nicolas.serafini@sensefly.com>
 > 
-> Since VIDEODRV ABIs are not backward compatible [0], lets introduce an
-> older Xserver version that supports such an old ABI.
+> This patch adds a new package for all libraries and drivers
+> provided by Nvidia Linux4Tegra release 16.5.
 > 
-> [0] http://www.x.org/wiki/XorgModuleABIVersions/
+> We have intermediate .mk and Config.in, because those values will be
+> shared with the codecs package, to come in a follow-up patch, like we
+> have for the Freescale stuff.
 > 
+> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+> [yann.morin.1998 at free.fr:
+>   - split jpeg into its own patch
+>   - split codecs and gstreamer plugins out into their own packages
+>   - do not patch for .pc files, just bundle them in $(@D)
+> ]
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Cc: Ben Ben <carmazen84@gmail.com>
+> 
 > ---
->  package/x11r7/xserver_xorg-server/Config.in | 9 +++++++++
->  1 file changed, 9 insertions(+)
+> Changes v10 -> v11:
+>   - add dependency on the proper VIDEODRV ABI, and drop all useless
+>     ABI choices, since we only have one valid (ABI 14)  (Thomas)
+>   - remove superfluous TAB
 
-As noticed by Nicolas, I've added a hash for 1.14.7.
+Applied, after doing a good number of changes:
 
-> +config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14_7
-
-and renamed that to BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14.
+    [Thomas:
+      - don't select BR2_PACKAGE_XLIB_LIBXT, there is no reference to it
+        in <pkg>_DEPENDENCIES, and it doesn't seem to be used by any
+        library.
+      - select BR2_PACKAGE_XLIB_LIBX11, which is referenced by the .mk
+        file, and is actually used by the pre-built .so files.
+      - do not select BR2_PACKAGE_XLIB_LIBXV, since it isn't used by the
+        X.org libraries/drivers, but only the Gstreamer ones.
+      - remove 'NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET = YES', it is not
+        needed since it is the default.
+      - remove the definitions of NVIDIA_TEGRA23_BINARIES_FIRMWARE,
+        NVIDIA_TEGRA23_BINARIES_LIBRARIES and
+        NVIDIA_TEGRA23_BINARIES_PKGCONFIG, these are very long, and not
+        really needed: just copy all the firmware, libraries and .pc files
+        with a simple 'cp -dpfr'.]
 
 Thomas
 -- 
