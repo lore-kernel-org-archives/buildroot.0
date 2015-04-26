@@ -1,76 +1,224 @@
-From: Karoly Kasza <kaszak@gmail.com>
-Date: Sun, 26 Apr 2015 14:39:13 +0200
-Subject: [Buildroot] [PATCH v2] package/ccache: bump to version 3.2.1
-Message-ID: <1430051953-87326-1-git-send-email-kaszak@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 26 Apr 2015 14:45:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libsrtp: bump version to 1.5.2
+Message-ID: <1430052331-5079-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump ccache from v.3.1.x to v.3.2.x.
-All functionality remained the same.
- - Configure now accepts a parameter to use ccache's internal zlib.
- - conf.c was introduced and some settings were moved from ccache.c,
-   with minor changes.
- - The PATCH_CONFIGURATION hook was moved from POST_CONFIGURE to
-   POST_PATCH, as patching files should be done there, before calling
-   the configure script.
+Removed patches applied upstream:
+https://github.com/cisco/libsrtp/commit/cae277e4377acc90ef787d09ed0d82968bbe809a
+https://github.com/cisco/libsrtp/commit/b5fad5f893c7f323a8f8e1c512fa48cf6cdb1c8d
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2:
-  - added git commit message (Baruch)
+ ...-for-building-on-cross-compiling-the-shar.patch |  139 --------------------
+ ...checks-for-libz-and-libdl-when-OpenSSL-is.patch |   33 -----
+ package/libsrtp/libsrtp.mk                         |    3 +-
+ 3 files changed, 1 insertion(+), 174 deletions(-)
+ delete mode 100644 package/libsrtp/0001-Add-support-for-building-on-cross-compiling-the-shar.patch
+ delete mode 100644 package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
 
- package/ccache/ccache.hash |    4 ++--
- package/ccache/ccache.mk   |   10 +++++-----
- 2 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 10caac8..49012af 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,2 +1,2 @@
--# Verified key http://samba.org/ftp/ccache/ccache-3.1.11.tar.xz.asc - sha256 computed locally
--sha256	60e9f3f1e60f528cfce910f3224bcc698029320f6ab77ec09a7b46bda2bc678e	ccache-3.1.11.tar.xz
-+# Verified key http://samba.org/ftp/ccache/ccache-3.2.1.tar.xz.asc - sha256 computed locally
-+sha256	872af34e1d2cef18694001d29db7f167d644e7602ca32cd6c74b28d81458bd9d	ccache-3.2.1.tar.xz
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 893b6ae..52b5c67 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libsrtp/0001-Add-support-for-building-on-cross-compiling-the-shar.patch b/package/libsrtp/0001-Add-support-for-building-on-cross-compiling-the-shar.patch
+deleted file mode 100644
+index a2df70b..0000000
+--- a/package/libsrtp/0001-Add-support-for-building-on-cross-compiling-the-shar.patch
++++ /dev/null
+@@ -1,139 +0,0 @@
+-From 8e1dadbcb7ec6be1c568550e97a9e3ce565758bf Mon Sep 17 00:00:00 2001
+-From: Nirbheek Chauhan <nirbheek@centricular.com>
+-Date: Wed, 5 Nov 2014 18:35:14 +0530
+-Subject: [PATCH] Add support for building on/cross-compiling the shared
+- library for Windows and OS X
+-
+-Also ensure that the shared library is versioned, and an implib is created on
+-Windows.
+-
+-Commit backported from upstream.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- Makefile.in | 53 ++++++++++++++++++++++++++++++++++++++++-------------
+- 1 file changed, 40 insertions(+), 13 deletions(-)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index 5a7fc21..5ca4453 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -17,7 +17,7 @@
+- USE_OPENSSL = @USE_OPENSSL@
+- HAVE_PKG_CONFIG = @HAVE_PKG_CONFIG@
+- 
+--.PHONY: all test build_table_apps
+-+.PHONY: all shared_library test build_table_apps
+- 
+- all: test 
+- 
+-@@ -43,10 +43,10 @@ endif
+- CC	= @CC@
+- INCDIR	= -Icrypto/include -I$(srcdir)/include -I$(srcdir)/crypto/include
+- DEFS	= @DEFS@
+--CPPFLAGS= @CPPFLAGS@
+-+CPPFLAGS= -fPIC @CPPFLAGS@
+- CFLAGS	= @CFLAGS@
+- LIBS	= @LIBS@
+--LDFLAGS	= @LDFLAGS@ -L.
+-+LDFLAGS	= -L. @LDFLAGS@
+- COMPILE = $(CC) $(DEFS) $(INCDIR) $(CPPFLAGS) $(CFLAGS)
+- SRTPLIB	= -lsrtp
+- 
+-@@ -75,12 +75,33 @@ prefix = @prefix@
+- exec_prefix = @exec_prefix@
+- includedir = @includedir@
+- libdir = @libdir@
+-+bindir = @bindir@
+- 
+- ifeq (1, $(HAVE_PKG_CONFIG))
+- pkgconfigdir = $(libdir)/pkgconfig
+- pkgconfig_DATA = libsrtp.pc
+- endif
+- 
+-+SHAREDLIBVERSION = 1
+-+ifeq (linux,$(findstring linux, at host@))
+-+SHAREDLIB_DIR = $(libdir)
+-+SHAREDLIB_LDFLAGS = -shared -Wl,-soname,$@
+-+SHAREDLIBSUFFIXNOVER = so
+-+SHAREDLIBSUFFIX = $(SHAREDLIBSUFFIXNOVER).$(SHAREDLIBVERSION)
+-+else ifeq (mingw,$(findstring mingw, at host@))
+-+SHAREDLIB_DIR = $(bindir)
+-+SHAREDLIB_LDFLAGS = -shared -Wl,--out-implib,libsrtp.dll.a
+-+SHAREDLIBVERSION =
+-+SHAREDLIBSUFFIXNOVER = dll
+-+SHAREDLIBSUFFIX = $(SHAREDLIBSUFFIXNOVER)
+-+else ifeq (darwin,$(findstring darwin, at host@))
+-+SHAREDLIB_DIR = $(libdir)
+-+SHAREDLIB_LDFLAGS = -dynamiclib -twolevel_namespace -undefined dynamic_lookup \
+-+        -fno-common -headerpad_max_install_names -install_name $(libdir)/$@
+-+SHAREDLIBSUFFIXNOVER = dylib
+-+SHAREDLIBSUFFIX = $(SHAREDLIBVERSION).$(SHAREDLIBSUFFIXNOVER)
+-+endif
+-+
+- # implicit rules for object files and test apps
+- 
+- %.o: %.c
+-@@ -121,9 +142,14 @@ libsrtp.a: $(srtpobj) $(cryptobj) $(gdoi)
+- 	ar cr libsrtp.a $^
+- 	$(RANLIB) libsrtp.a
+- 
+--libsrtp.so: $(srtpobj) $(cryptobj) $(gdoi) 
+--	$(CC) -shared -Wl,-soname,libsrtp.so \
+--	    -o libsrtp.so $^ $(LDFLAGS)
+-+libsrtp.$(SHAREDLIBSUFFIX): $(srtpobj) $(cryptobj) $(gdoi)
+-+	$(CC) -shared -o $@ $(SHAREDLIB_LDFLAGS) \
+-+                $^ $(LDFLAGS) $(LIBS)
+-+	if [ -n "$(SHAREDLIBVERSION)" ]; then \
+-+		ln -sfn $@ libsrtp.$(SHAREDLIBSUFFIXNOVER); \
+-+	fi
+-+
+-+shared_library: libsrtp.$(SHAREDLIBSUFFIX)
+- 
+- # libcryptomath.a contains general-purpose routines that are used to
+- # generate tables and verify cryptoalgorithm implementations - this
+-@@ -212,16 +238,18 @@ libsrtpdoc:
+- .PHONY: clean superclean distclean install
+- 
+- install:
+--	@if [ -r $(DESTDIR)$(includedir)/srtp/srtp.h ]; then \
+--	   echo "you should run 'make uninstall' first"; exit 1;  \
+--	fi
+- 	$(INSTALL) -d $(DESTDIR)$(includedir)/srtp
+- 	$(INSTALL) -d $(DESTDIR)$(libdir)
+-+	$(INSTALL) -d $(DESTDIR)$(bindir)
+- 	cp $(srcdir)/include/*.h $(DESTDIR)$(includedir)/srtp  
+- 	cp $(srcdir)/crypto/include/*.h $(DESTDIR)$(includedir)/srtp
+- 	if [ "$(srcdir)" != "." ]; then cp crypto/include/*.h $(DESTDIR)$(includedir)/srtp; fi
+- 	if [ -f libsrtp.a ]; then cp libsrtp.a $(DESTDIR)$(libdir)/; fi
+--	if [ -f libsrtp.so ]; then cp libsrtp.so $(DESTDIR)$(libdir)/; fi
+-+	if [ -f libsrtp.dll.a ]; then cp libsrtp.dll.a $(DESTDIR)$(libdir)/; fi
+-+	if [ -f libsrtp.$(SHAREDLIBSUFFIX) ]; then \
+-+		cp libsrtp.$(SHAREDLIBSUFFIX) $(DESTDIR)$(SHAREDLIB_DIR)/; \
+-+		cp libsrtp.$(SHAREDLIBSUFFIXNOVER) $(DESTDIR)$(SHAREDLIB_DIR)/; \
+-+	fi
+- 	if [ "$(pkgconfig_DATA)" != "" ]; then \
+- 		$(INSTALL) -d $(DESTDIR)$(pkgconfigdir); \
+- 		cp $(srcdir)/$(pkgconfig_DATA) $(DESTDIR)$(pkgconfigdir)/; \
+-@@ -229,8 +257,7 @@ install:
+- 
+- uninstall:
+- 	rm -f $(DESTDIR)$(includedir)/srtp/*.h
+--	rm -f $(DESTDIR)$(libdir)/libsrtp.a
+--	rm -f $(DESTDIR)$(libdir)/libsrtp.so
+-+	rm -f $(DESTDIR)$(libdir)/libsrtp.*
+- 	-rmdir $(DESTDIR)$(includedir)/srtp
+- 	if [ "$(pkgconfig_DATA)" != "" ]; then \
+- 		rm -f $(DESTDIR)$(pkgconfigdir)/$(pkgconfig_DATA); \
+-@@ -238,7 +265,7 @@ uninstall:
+- 
+- clean:
+- 	rm -rf $(cryptobj) $(srtpobj) $(cryptomath) TAGS \
+--        libcryptomath.a libsrtp.a libsrtp.so core *.core test/core
+-+        libcryptomath.a libsrtp.* core *.core test/core
+- 	for a in * */* */*/*; do			\
+-               if [ -f "$$a~" ] ; then rm -f $$a~; fi;	\
+-         done;
+--- 
+-2.1.0
+-
+diff --git a/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch b/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
+deleted file mode 100644
+index acb2c9a..0000000
+--- a/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 3107a0161bf30f7e3e0c356c3d040d99634fbf5b Mon Sep 17 00:00:00 2001
+-From: jfigus <foleyj@cisco.com>
+-Date: Thu, 26 Feb 2015 12:25:08 -0500
+-Subject: [PATCH] A autoconf checks for libz and libdl when OpenSSL is enabled
+- to allow for static linking of OpenSSL (via CFLAGS=-static).
+-
+-[Romain:
+-  Drop the configure part of the patch since Buildroot
+-  use AUTORECONF in libsrtp.mk]
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- configure.in | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/configure.in b/configure.in
+-index ee30daf..71df46b 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -147,6 +147,10 @@ if test "$enable_openssl" = "yes"; then
+-    LDFLAGS="$LDFLAGS $(pkg-config --libs openssl)";
+-    CFLAGS="$CFLAGS $(pkg-config --cflags openssl)";
+- 
+-+   AC_CHECK_LIB([dl], [dlopen], [],
+-+             [AC_MSG_FAILURE([can't find libdl])])
+-+   AC_CHECK_LIB([z], [inflate], [],
+-+             [AC_MSG_FAILURE([can't find libz])])
+-    AC_CHECK_LIB([crypto], [EVP_EncryptInit], [],
+-              [AC_MSG_FAILURE([can't find openssl >1.0.1 crypto lib])])
+-    AC_CHECK_LIB([crypto], [EVP_aes_128_ctr], [],
+--- 
+-1.9.3
+-
+diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
+index e5cf47b..bcf344f 100644
+--- a/package/libsrtp/libsrtp.mk
++++ b/package/libsrtp/libsrtp.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--CCACHE_VERSION = 3.1.11
-+CCACHE_VERSION = 3.2.1
- CCACHE_SITE = http://samba.org/ftp/ccache
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPLv3+, others
-@@ -19,7 +19,7 @@ CCACHE_LICENSE_FILES = LICENSE.txt GPL-3.0.txt
- # to use HOSTCC_NOCCACHE as the compiler. Instead, we take the easy
- # path: tell ccache to use its internal copy of zlib, so that ccache
- # has zero dependency besides the C library.
--HOST_CCACHE_CONF_OPTS += ccache_cv_zlib_1_2_3=no
-+HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
- 
- # Patch host-ccache as follows:
- #  - Use BR_CACHE_DIR instead of CCACHE_DIR, because CCACHE_DIR
-@@ -34,11 +34,11 @@ HOST_CCACHE_CONF_OPTS += ccache_cv_zlib_1_2_3=no
- #    the need to specify BR_CACHE_DIR when invoking ccache directly.
- define HOST_CCACHE_PATCH_CONFIGURATION
- 	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/ccache.c
--	sed -i 's,getenv("CCACHE_COMPILERCHECK"),"none",' $(@D)/ccache.c
--	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/ccache.c
-+	sed -i 's,conf->compiler_check = x_strdup("mtime"),conf->compiler_check = x_strdup("none"),' $(@D)/conf.c
-+	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/conf.c
- endef
- 
--HOST_CCACHE_POST_CONFIGURE_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
-+HOST_CCACHE_POST_PATCH_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
- 
- define HOST_CCACHE_MAKE_CACHE_DIR
- 	mkdir -p $(BR_CACHE_DIR)
+-LIBSRTP_VERSION = v1.5.0
++LIBSRTP_VERSION = v1.5.2
+ LIBSRTP_SITE = $(call github,cisco,libsrtp,$(LIBSRTP_VERSION))
+-LIBSRTP_AUTORECONF = YES
+ LIBSRTP_INSTALL_STAGING = YES
+ LIBSRTP_LICENSE = BSD-3c
+ LIBSRTP_LICENSE_FILES = LICENSE
 -- 
 1.7.10.4
