@@ -1,45 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 12:14:15 +0200
-Subject: [Buildroot] [PATCH v2 1/3] python-pyqt: fix PyQt_qreal_double
- enabling/disabling
-In-Reply-To: <1429958478-29114-1-git-send-email-gwenj@trabucayre.com>
-References: <1429958478-29114-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20150426121415.40ce90fb@free-electrons.com>
+Date: Sun, 26 Apr 2015 12:15:30 +0200
+Subject: [Buildroot] [git commit] qt: add QT_COORD_TYPE to double option
+Message-ID: <20150426101551.9F86C81786@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gwenhael Goavec-Merou,
+commit: http://git.buildroot.net/buildroot/commit/?id=7619aba496208102e098e24454371b9513ec2f90
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 25 Apr 2015 12:41:16 +0200, Gwenhael Goavec-Merou wrote:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> fix :
-> http://autobuild.buildroot.net/results/6a2/6a28855c11b321ce8ceaf0acdd5395738af931fd/
-> http://autobuild.buildroot.net/results/91a/91a3641d1e4126475bbca0d3c779582832f6db91/
-> http://autobuild.buildroot.net/results/b10/b10fa70c199fc2de405068fea1eac80c29577747/
-> http://autobuild.buildroot.net/results/b53/b5334ac80afb58a19bd40b7c0b18378d75bc8fc7/
-> http://autobuild.buildroot.net/results/01f/01fa1319e467c3c2410fd462dc40c18b82dc8246/
-> http://autobuild.buildroot.net/results/2e6/2e6cae93ab860175c405e440bc7e24334b5b14e8/
-> 
-> According to configure-ng.py, PyQt_qreal_double must be disabled on ARM target
-> and when QT_NO_FPU is set.
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
-> Changes v1 -> v2:
->  * disable PyQt_qreal_double for sh4, sh4a, sh4aeb and QWS & mips
-> ---
->  package/python-pyqt/python-pyqt.mk | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
+On ARM-based platforms, qreal is a typedef for float for performance
+reasons. But we may want a double precision anyway.
 
-I've applied after changing the logic to use a hidden Config.in
-boolean. Thanks!
+Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt/Config.in |   10 ++++++++++
+ package/qt/qt.mk     |    5 +++++
+ 2 files changed, 15 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 43f5a0f..83fdeec 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -120,6 +120,16 @@ config BR2_PACKAGE_QT_CONFIG_FILE
+ 	  This option allows to set the path of such a configuration
+ 	  file, which Buildroot will give to Qt at compile time.
+ 
++config BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE
++	bool "QT_COORD_TYPE to double"
++	help
++	  Set QT_COORD_TYPE to double. On ARM-based platforms, qreal
++	  is a typedef for float for performance reasons, but for
++	  QT_COORD_TYPE, some people may want to use a double type
++	  anyway for precision.
++
++	  If unsure say n.
++
+ config BR2_PACKAGE_QT_QT3SUPPORT
+ 	bool "Compatibility with Qt3"
+ 	depends on BR2_PACKAGE_QT_GUI_MODULE
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index d1615ae..919137b 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -46,6 +46,11 @@ QT_CFLAGS += -marm
+ QT_CXXFLAGS += -marm
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE),y)
++QT_CFLAGS += -DQT_COORD_TYPE=double
++QT_CXXFLAGS += -DQT_COORD_TYPE=double
++endif
++
+ ifeq ($(BR2_PACKAGE_QT_QT3SUPPORT),y)
+ QT_CONFIGURE_OPTS += -qt3support
+ else
