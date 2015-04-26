@@ -1,41 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 11:39:04 +0200
-Subject: [Buildroot] [PATCHv3 07/18] pkg-generic: implement source-check
- targets
-In-Reply-To: <20150425172837.GI4275@free.fr>
+Date: Sun, 26 Apr 2015 11:40:55 +0200
+Subject: [Buildroot] [PATCHv3 16/18] Makefile: add BR_BUILDING variable
+In-Reply-To: <20150425211457.GU4275@free.fr>
 References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1429972982-25495-8-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150425172837.GI4275@free.fr>
-Message-ID: <20150426113904.7efb27c0@free-electrons.com>
+ <1429972982-25495-17-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150425202649.GS4275@free.fr> <20150425211457.GU4275@free.fr>
+Message-ID: <20150426114055.47144b47@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Yann,
 
-On Sat, 25 Apr 2015 19:28:37 +0200, Yann E. MORIN wrote:
+On Sat, 25 Apr 2015 23:14:57 +0200, Yann E. MORIN wrote:
 
-> To be noted: packages hosted at github, when we download a released
-> tarball, are broken, because the backing-store is AWS, which does not
-> support the HEAD request. But that is not a change due to this patch, it
-> was already broken previously.
-
-Right. Let's not fix all the problems in this patch series :-)
-
-
-> > +$(1)-all-source-check:	$$(foreach p, \
-> > +				$$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES), \
-> > +				$$(p)-all-source-check) \
-> > +			$(1)-source-check
+> I maintian my ack, but I have a deeper concern about not doing those
+> checks in the first place.
 > 
-> If you do the little trick I mentioned as a comment to your patch 2,
-> you'd have to do it here, too.
+> So, what does it mean not to have a config/board/... name to start with?
+> 
+> It means the specific configuration is not complete, and that the
+> package will fail to configure or build. So it does not make sense to
+> accept a configuration where such config name are missing.
+> 
+> Furthermore, what about a package that needs the config name to decide
+> what tarball to download? In that case, we can't do the check at all,
+> and we must fail as soon as the config name is empty.
+> 
+> As such, I'd prefer we do not condition the check on whether we'r
+> ebuilding or not, but that we do it always, fo all packages.
+> 
+> However, I can see one reason where we would still want the checks to be
+> conditional: make rand*config && make source-check . And that is a
+> tricky case to solve.
+> 
+> We could do it by always defining defaults (in the Config.in) to such
+> config names; those defaults could be conditional, of course. But coming
+> up with sane defaults is not easy either...
+> 
+> Thoughts?
 
-Will be in v4.
+I'd answer that this is a deeper discussion, into which I'd prefer to
+not get into at this point. The patch series is trying to keep the
+existing behavior, and I'd like to not change that for now.
 
-Thanks,
+Once this patch series gets merged, I'll be happy to rediscuss why we
+have this special casing on 'make source' / 'make source-check' to
+disable the checks.
 
 Thomas
 -- 
