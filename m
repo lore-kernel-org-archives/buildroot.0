@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 22:29:12 +0200
-Subject: [Buildroot] [PATCH 4/8 v11] package/xserver_xorg-server: not
- all versions need all dependencies
-In-Reply-To: <4ef114d646d13c6c519a2c858473ff8d19c60130.1429635674.git.yann.morin.1998@free.fr>
+Date: Sun, 26 Apr 2015 22:29:07 +0200
+Subject: [Buildroot] [PATCH 3/8 v11] package/xserver_xorg-server: add
+ blind options to specify driver ABI
+In-Reply-To: <f1bf83e904fb4296ae09c6e56b5725e07d448ef6.1429635674.git.yann.morin.1998@free.fr>
 References: <cover.1429635674.git.yann.morin.1998@free.fr>
- <4ef114d646d13c6c519a2c858473ff8d19c60130.1429635674.git.yann.morin.1998@free.fr>
-Message-ID: <20150426222912.78a62538@free-electrons.com>
+ <f1bf83e904fb4296ae09c6e56b5725e07d448ef6.1429635674.git.yann.morin.1998@free.fr>
+Message-ID: <20150426222907.59b83624@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +14,16 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Tue, 21 Apr 2015 19:04:40 +0200, Yann E. MORIN wrote:
-> Support for the Present protocol has been added to, and is mandatory
-> since version 1.15.
-> 
-> As we're on the verge of adding 1.14.7, we need to make Present a
-> version-specific dependency.
+On Tue, 21 Apr 2015 19:04:39 +0200, Yann E. MORIN wrote:
+> The upcoming NVidia Tegra2/3 binary blobs only work with a certain
+> VIDEODRV ABI (namely up to 14), so we must have a way to represent that
+> ABI so that such packages can not be enabled with a too recent/old ABI.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/x11r7/xserver_xorg-server/Config.in              | 2 +-
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 7 ++++++-
->  2 files changed, 7 insertions(+), 2 deletions(-)
+>  package/x11r7/xserver_xorg-server/Config.in | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
 Applied, thanks.
 
