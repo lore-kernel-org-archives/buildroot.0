@@ -1,80 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 11:51:05 +0200
-Subject: [Buildroot] [PATCHv4 07/18] pkg-generic: implement source-check
-	targets
+Date: Sun, 26 Apr 2015 11:51:09 +0200
+Subject: [Buildroot] [PATCHv4 11/18] pkg-download: get rid of DL_MODE
 In-Reply-To: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1430041876-16436-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1430041876-16436-12-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commits extends the common package infrastructure with the
-$(1)-source-check and $(1)-all-source-check targets.
-
-The $(1)-source-check target simply calls the newly added
-SOURCE_CHECK macro on all items to be downloaded.
-
-The $(1)-all-source-check target will depend on the
-$(1)-all-source-check targets of all dependent packages and the
-$(1)-source-check target of the current package, which allows to do a
-recursive source-check in the dependency tree.
+The DL_MODE variable is now no longer used with any other value than
+"DOWNLOAD", so it no longer makes sense to have this variable at
+all. Therefore, this commit gets rid of it.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-generic.mk | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ package/pkg-download.mk | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index d7e3ca9..2176771 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -580,6 +580,16 @@ endif
- $(1)-show-version:
- 			@echo $$($(2)_VERSION)
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 76afced..a145011 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -20,10 +20,6 @@ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
-+$(1)-source-check:
-+ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-+	$$(foreach p,$$($(2)_SOURCE) $$($(2)_EXTRA_DOWNLOADS) $$($(2)_PATCH),\
-+		$$(if $$(findstring ://,$$(p)),\
-+			$$(call SOURCE_CHECK,$$(p)),\
-+			$$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$$(p)))$$(sep))
-+else
-+	test -d $$($(2)_OVERRIDE_SRCDIR)
-+endif
-+
- $(1)-show-depends:
- 			@echo $$($(2)_FINAL_ALL_DEPENDENCIES)
+ DL_WRAPPER = support/download/dl-wrapper
  
-@@ -593,6 +603,9 @@ $(1)-graph-depends: graph-depends-requirements
- $(1)-all-source:	$(1)-source
- $(1)-all-source:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
+-# Default spider mode is 'DOWNLOAD'. Other possible value is
+-# 'SOURCE_CHECK' used by the _source-check target.
+-DL_MODE = DOWNLOAD
+-
+ # DL_DIR may have been set already from the environment
+ ifeq ($(origin DL_DIR),undefined)
+ DL_DIR ?= $(call qstrip,$(BR2_DL_DIR))
+@@ -212,7 +208,7 @@ endef
+ ################################################################################
  
-+$(1)-all-source-check:	$(1)-source-check
-+$(1)-all-source-check:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source-check)
-+
- $(1)-all-external-deps:	$(1)-external-deps
- $(1)-all-external-deps:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-external-deps)
+ define DOWNLOAD
+-	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)),$(DL_MODE))
++	$(call DOWNLOAD_INNER,$(1),$(notdir $(1)),DOWNLOAD)
+ endef
  
-@@ -788,6 +801,7 @@ endif
- 	$(1)-all-external-deps \
- 	$(1)-all-legal-info \
- 	$(1)-all-source \
-+	$(1)-all-source-check \
- 	$(1)-build \
- 	$(1)-clean-for-rebuild \
- 	$(1)-clean-for-reconfigure \
-@@ -811,7 +825,8 @@ endif
- 	$(1)-rsync \
- 	$(1)-show-depends \
- 	$(1)-show-version \
--	$(1)-source
-+	$(1)-source \
-+	$(1)-source-check
- 
- endif # $(2)_KCONFIG_VAR
- endef # inner-generic-package
+ define SOURCE_CHECK
 -- 
 2.1.0
