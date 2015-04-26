@@ -1,42 +1,58 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 26 Apr 2015 22:44:34 +0200
-Subject: [Buildroot] [PATCH] vlc: uclibc-ng can be used
-Message-ID: <20150426204434.GA23399@waldemar-brodkorb.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 26 Apr 2015 23:09:17 +0200
+Subject: [Buildroot] [PATCH v1] qt: fix postgresql plugin configure
+Message-ID: <1430082557-13685-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested with X86 and ARM compiles.
+Add additional -lpthread to fix postgresql plugin configure test.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Fixes [1]:
+
+  PostgreSQL support cannot be enabled due to functionality tests!
+   Turn on verbose messaging (-v) to ./configure to see the final report.
+   If you believe this message is in error you may use the continue
+   switch (-continue) to ./configure to continue.
+  make: *** [/home/test/autobuild/instance-1/output/build/qt-4.8.6/.stamp_configured] Error 101
+  make: Leaving directory `/home/test/autobuild/instance-1/buildroot'
+
+Verbose configure output:
+
+  PostgreSQL auto-detection... ()
+  compiling psql.cpp
+  linking psql
+  .../host/usr/i686-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.so.1.0.0: warning: gethostbyname is obsolescent, use getnameinfo() instead.
+  .../host/usr/i686-buildroot-linux-uclibc/sysroot/usr/lib/libpq.so: undefined reference to `pthread_sigmask'
+  collect2: error: ld returned 1 exit status
+  Makefile:99: recipe for target 'psql' failed
+  gmake[2]: *** [psql] Error 1
+  PostgreSQL disabled.
+
+[1] http://autobuild.buildroot.net/results/8c1/8c1e18a181f355ab8870c5d3d70cf9d757b6f225/
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/vlc/Config.in |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/qt/qt.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index af96d08..b030a56 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -5,7 +5,7 @@ endif
- 
- config BR2_PACKAGE_VLC
- 	bool "vlc"
--	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
-+	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) # spawn.h
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_VLC
- 
- 	  http://www.videolan.org/vlc/
- 
--comment "vlc needs a uclibc snapshot or (e)glibc toolchain w/ C++, wchar, threads, headers >= 3.7"
--	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC) \
-+comment "vlc needs a uclibc snapshot, uclibc-ng or (e)glibc toolchain w/ C++, wchar, threads, headers >= 3.7"
-+	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) \
- 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index d1615ae..8a762e8 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -348,7 +348,10 @@ QT_CONFIGURE_OPTS += -qt-sql-odbc
+ QT_DEPENDENCIES += unixodbc
+ endif
+ ifeq ($(BR2_PACKAGE_QT_PSQL),y)
+-QT_CONFIGURE_OPTS += -qt-sql-psql -psql_config $(STAGING_DIR)/usr/bin/pg_config
++# additional -lpthread needed for uclibc/libpq.so linking configure test
++QT_CONFIGURE_OPTS += -qt-sql-psql \
++	-psql_config $(STAGING_DIR)/usr/bin/pg_config \
++	-lpthread
+ QT_DEPENDENCIES += postgresql
+ endif
+ ifeq ($(BR2_PACKAGE_QT_SQLITE_QT),y)
 -- 
-1.7.10.4
+2.1.4
