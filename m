@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 26 Apr 2015 17:00:49 +0200
-Subject: [Buildroot] [PATCH 1/3] package/libgsm: new package
+Date: Sun, 26 Apr 2015 17:00:51 +0200
+Subject: [Buildroot] [PATCH 3/3] package/libspandsp: new package
 In-Reply-To: <1430060451-4075-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1430060451-4075-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1430060451-4075-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1430060451-4075-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,288 +13,111 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in               |    1 +
- package/libgsm/0001-cross.patch |  205 +++++++++++++++++++++++++++++++++++++++
- package/libgsm/Config.in        |    6 ++
- package/libgsm/libgsm.mk        |   33 +++++++
- 4 files changed, 245 insertions(+)
- create mode 100644 package/libgsm/0001-cross.patch
- create mode 100644 package/libgsm/Config.in
- create mode 100644 package/libgsm/libgsm.mk
+ package/Config.in                               |    1 +
+ package/libspandsp/0001-fix-compiler-opts.patch |   23 +++++++++++++++++++++
+ package/libspandsp/Config.in                    |    9 ++++++++
+ package/libspandsp/libspandsp.hash              |    2 ++
+ package/libspandsp/libspandsp.mk                |   25 +++++++++++++++++++++++
+ 5 files changed, 60 insertions(+)
+ create mode 100644 package/libspandsp/0001-fix-compiler-opts.patch
+ create mode 100644 package/libspandsp/Config.in
+ create mode 100644 package/libspandsp/libspandsp.hash
+ create mode 100644 package/libspandsp/libspandsp.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index da185be..744ebc6 100644
+index 2a06a3d..d47b787 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -670,6 +670,7 @@ menu "Audio/Sound"
- 	source "package/libcdio/Config.in"
- 	source "package/libcue/Config.in"
- 	source "package/libcuefile/Config.in"
-+	source "package/libgsm/Config.in"
- 	source "package/libid3tag/Config.in"
- 	source "package/liblo/Config.in"
- 	source "package/libmad/Config.in"
-diff --git a/package/libgsm/0001-cross.patch b/package/libgsm/0001-cross.patch
+@@ -682,6 +682,7 @@ menu "Audio/Sound"
+ 	source "package/libsidplay2/Config.in"
+ 	source "package/libsndfile/Config.in"
+ 	source "package/libsoxr/Config.in"
++	source "package/libspandsp/Config.in"
+ 	source "package/libvorbis/Config.in"
+ 	source "package/mp4v2/Config.in"
+ 	source "package/opencore-amr/Config.in"
+diff --git a/package/libspandsp/0001-fix-compiler-opts.patch b/package/libspandsp/0001-fix-compiler-opts.patch
 new file mode 100644
-index 0000000..e1bbb74
+index 0000000..c3bd800
 --- /dev/null
-+++ b/package/libgsm/0001-cross.patch
-@@ -0,0 +1,205 @@
-+Fix compilation problems.
++++ b/package/libspandsp/0001-fix-compiler-opts.patch
+@@ -0,0 +1,23 @@
++Fix bfin compilation
 +
-+Downloaded from
-+https://projects.archlinux.org/svntogit/packages.git/plain/trunk/gsm.patch?h=packages/gsm
++cc1: error: unrecognized command line option "-Wunused-but-set-variable"
++
++using this defconfig
++
++BR2_bfin=y
++BR2_PACKAGE_LIBSPANDSP=y
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+--- a/Makefile	2006-04-26 15:14:26.000000000 -0400
-++++ b/Makefile	2010-06-19 16:53:25.000000000 -0400
-+@@ -44,7 +44,7 @@
-+ # CCFLAGS 	= -c -O
++diff -uNr spandsp-0.0.6.org/configure.ac spandsp-0.0.6/configure.ac
++--- spandsp-0.0.6.org/configure.ac	2014-08-09 10:19:27.000000000 +0200
+++++ spandsp-0.0.6/configure.ac	2015-04-25 17:46:27.717349873 +0200
++@@ -337,7 +337,7 @@
 + 
-+ CC		= gcc -ansi -pedantic
-+-CCFLAGS 	= -c -O2 -DNeedFunctionPrototypes=1
-++CCFLAGS 	= -c -O2 -fPIC -DNeedFunctionPrototypes=1
-+ 
-+ LD 		= $(CC)
-+ 
-+@@ -96,11 +96,11 @@
-+ #  Other tools
-+ 
-+ SHELL		= /bin/sh
-+-LN		= ln
-++LN		= ln -s -f
-+ BASENAME 	= basename
-+ AR		= ar
-+ ARFLAGS		= cr
-+-RMFLAGS		=
-++RMFLAGS		= -f
-+ FIND		= find
-+ COMPRESS 	= compress
-+ COMPRESSFLAGS 	= 
-+@@ -139,7 +139,7 @@
-+ 
-+ # Targets
-+ 
-+-LIBGSM	= $(LIB)/libgsm.a
-++LIBGSMSO = $(LIB)/libgsm.so
-+ 
-+ TOAST	= $(BIN)/toast
-+ UNTOAST	= $(BIN)/untoast
-+@@ -257,7 +257,7 @@
-+ # Install targets
-+ 
-+ GSM_INSTALL_TARGETS =	\
-+-		$(GSM_INSTALL_LIB)/libgsm.a		\
-++		$(GSM_INSTALL_LIB)/libgsm.so		\
-+ 		$(GSM_INSTALL_INC)/gsm.h		\
-+ 		$(GSM_INSTALL_MAN)/gsm.3		\
-+ 		$(GSM_INSTALL_MAN)/gsm_explode.3	\
-+@@ -279,7 +279,7 @@
-+ 
-+ # Target rules
-+ 
-+-all:		$(LIBGSM) $(TOAST) $(TCAT) $(UNTOAST)
-++all:		$(LIBGSMSO) $(TOAST) $(TCAT) $(UNTOAST)
-+ 		@-echo $(ROOT): Done.
-+ 
-+ tst:		$(TST)/lin2cod $(TST)/cod2lin $(TOAST) $(TST)/test-result
-+@@ -299,24 +299,23 @@
-+ 
-+ # The basic API: libgsm
-+ 
-+-$(LIBGSM):	$(LIB) $(GSM_OBJECTS)
-+-		-rm $(RMFLAGS) $(LIBGSM)
-+-		$(AR) $(ARFLAGS) $(LIBGSM) $(GSM_OBJECTS)
-+-		$(RANLIB) $(LIBGSM)
-+-
-++$(LIBGSMSO): $(LIB) $(GSM_OBJECTS)
-++	$(LD) -shared -Wl,-soname,libgsm.so.1 -o $@.1.0.13 $(GSM_OBJECTS)
-++	$(LN) libgsm.so.1.0.13 $(LIBGSMSO).1
-++	$(LN) libgsm.so.1.0.13 $(LIBGSMSO)
-+ 
-+ # Toast, Untoast and Tcat -- the compress-like frontends to gsm.
-+ 
-+-$(TOAST):	$(BIN) $(TOAST_OBJECTS) $(LIBGSM)
-+-		$(LD) $(LFLAGS) -o $(TOAST) $(TOAST_OBJECTS) $(LIBGSM) $(LDLIB)
-++$(TOAST):	$(BIN) $(TOAST_OBJECTS) $(LIBGSMSO)
-++		$(LD) $(LFLAGS) -o $(TOAST) $(TOAST_OBJECTS) $(LIBGSMSO) $(LDLIB)
-+ 
-+ $(UNTOAST):	$(BIN) $(TOAST)
-+ 		-rm $(RMFLAGS) $(UNTOAST)
-+-		$(LN) $(TOAST) $(UNTOAST)
-++		$(LN) toast $(UNTOAST)
-+ 
-+ $(TCAT):	$(BIN) $(TOAST)
-+ 		-rm $(RMFLAGS) $(TCAT)
-+-		$(LN) $(TOAST) $(TCAT)
-++		$(LN) toast $(TCAT)
-+ 
-+ 
-+ # The local bin and lib directories
-+@@ -351,53 +350,54 @@
-+ 		fi
-+ 
-+ $(TOAST_INSTALL_BIN)/toast:	$(TOAST)
-+-		-rm $@
-++		-rm $(RMFLAGS) $@
-+ 		cp $(TOAST) $@
-+ 		chmod 755 $@
-+ 
-+ $(TOAST_INSTALL_BIN)/untoast:	$(TOAST_INSTALL_BIN)/toast
-+-		-rm $@
-+-		ln $? $@
-++		-rm $(RMFLAGS) $@
-++		$(LN) toast $@
-+ 
-+ $(TOAST_INSTALL_BIN)/tcat:	$(TOAST_INSTALL_BIN)/toast
-+-		-rm $@
-+-		ln $? $@
-++		-rm $(RMFLAGS) $@
-++		$(LN) toast $@
-+ 
-+ $(TOAST_INSTALL_MAN)/toast.1:	$(MAN)/toast.1
-+-		-rm $@
-++		-rm $(RMFLAGS) $@
-+ 		cp $? $@
-+ 		chmod 444 $@
-+ 
-+ $(GSM_INSTALL_MAN)/gsm.3:	$(MAN)/gsm.3
-+-		-rm $@
-++		-rm $(RMFLAGS) $@
-+ 		cp $? $@
-+ 		chmod 444 $@
-+ 
-+ $(GSM_INSTALL_MAN)/gsm_option.3:	$(MAN)/gsm_option.3
-+-		-rm $@
-++		-rm $(RMFLAGS) $@
-+ 		cp $? $@
-+ 		chmod 444 $@
-+ 
-+ $(GSM_INSTALL_MAN)/gsm_explode.3:	$(MAN)/gsm_explode.3
-+-		-rm $@
-++		-rm $(RMFLAGS) $@
-+ 		cp $? $@
-+ 		chmod 444 $@
-+ 
-+ $(GSM_INSTALL_MAN)/gsm_print.3:	$(MAN)/gsm_print.3
-+-		-rm $@
-++		-rm $(RMFLAGS) $@
-+ 		cp $? $@
-+ 		chmod 444 $@
-+ 
-+ $(GSM_INSTALL_INC)/gsm.h:	$(INC)/gsm.h
-+-		-rm $@
-+-		cp $? $@
-+-		chmod 444 $@
-+-
-+-$(GSM_INSTALL_LIB)/libgsm.a:	$(LIBGSM)
-+-		-rm $@
-++		-rm $(RMFLAGS) $@
-+ 		cp $? $@
-+ 		chmod 444 $@
-+ 
-++$(GSM_INSTALL_LIB)/libgsm.so:	$(LIBGSMSO)
-++		-rm $(RMFLAGS) $@ $@.1 $@.1.0.13
-++		cp $?.1.0.13 $@.1.0.13
-++		chmod 755 $@.1.0.13
-++		$(LN) libgsm.so.1.0.13 $@
-++		$(LN) libgsm.so.1.0.13 $@.1
-+ 
-+ # Distribution
-+ 
-+@@ -425,7 +425,7 @@
-+ 			-print | xargs rm $(RMFLAGS)
-+ 
-+ clean:	semi-clean
-+-		-rm $(RMFLAGS) $(LIBGSM) $(ADDTST)/add		\
-++		-rm $(RMFLAGS) $(LIBGSMSO)* $(ADDTST)/add		\
-+ 			$(TOAST) $(TCAT) $(UNTOAST)	\
-+ 			$(ROOT)/gsm-1.0.tar.Z
-+ 
-+@@ -473,22 +473,22 @@
-+ $(TST)/test-result:	$(TST)/lin2cod $(TST)/cod2lin $(TOAST) $(TST)/run
-+ 			( cd $(TST); ./run ) 
-+ 
-+-$(TST)/lin2txt:		$(TST)/lin2txt.o $(LIBGSM)
-++$(TST)/lin2txt:		$(TST)/lin2txt.o $(LIBGSMSO)
-+ 			$(LD) $(LFLAGS) -o $(TST)/lin2txt \
-+-				$(TST)/lin2txt.o $(LIBGSM) $(LDLIB)
-++				$(TST)/lin2txt.o $(LIBGSMSO) $(LDLIB)
-+ 
-+-$(TST)/lin2cod:		$(TST)/lin2cod.o $(LIBGSM)
-++$(TST)/lin2cod:		$(TST)/lin2cod.o $(LIBGSMSO)
-+ 			$(LD) $(LFLAGS) -o $(TST)/lin2cod \
-+-				$(TST)/lin2cod.o $(LIBGSM) $(LDLIB)
-++				$(TST)/lin2cod.o $(LIBGSMSO) $(LDLIB)
-+ 
-+-$(TST)/gsm2cod:		$(TST)/gsm2cod.o $(LIBGSM)
-++$(TST)/gsm2cod:		$(TST)/gsm2cod.o $(LIBGSMSO)
-+ 			$(LD) $(LFLAGS) -o $(TST)/gsm2cod \
-+-				$(TST)/gsm2cod.o $(LIBGSM) $(LDLIB)
-++				$(TST)/gsm2cod.o $(LIBGSMSO) $(LDLIB)
-+ 
-+-$(TST)/cod2txt:		$(TST)/cod2txt.o $(LIBGSM)
-++$(TST)/cod2txt:		$(TST)/cod2txt.o $(LIBGSMSO)
-+ 			$(LD) $(LFLAGS) -o $(TST)/cod2txt \
-+-				$(TST)/cod2txt.o $(LIBGSM) $(LDLIB)
-++				$(TST)/cod2txt.o $(LIBGSMSO) $(LDLIB)
-+ 
-+-$(TST)/cod2lin:		$(TST)/cod2lin.o $(LIBGSM)
-++$(TST)/cod2lin:		$(TST)/cod2lin.o $(LIBGSMSO)
-+ 			$(LD) $(LFLAGS) -o $(TST)/cod2lin \
-+-				$(TST)/cod2lin.o $(LIBGSM) $(LDLIB)
-++				$(TST)/cod2lin.o $(LIBGSMSO) $(LDLIB)
-diff --git a/package/libgsm/Config.in b/package/libgsm/Config.in
++ case "${ax_cv_c_compiler_vendor}" in
++ gnu)
++-    COMP_VENDOR_CFLAGS="-std=gnu99 -ffast-math -Wall -Wunused-variable -Wunused-but-set-variable -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes $COMP_VENDOR_CFLAGS"
+++    COMP_VENDOR_CFLAGS="-std=gnu99 -ffast-math -Wall -Wunused-variable -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes $COMP_VENDOR_CFLAGS"
++     if test "$enable_neon" = "yes" ; then
++         COMP_VENDOR_CFLAGS="-mfpu=neon -mfloat-abi=hard $COMP_VENDOR_CFLAGS"
++     fi
+diff --git a/package/libspandsp/Config.in b/package/libspandsp/Config.in
 new file mode 100644
-index 0000000..da6e22f
+index 0000000..9a22209
 --- /dev/null
-+++ b/package/libgsm/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBGSM
-+	bool "libgsm"
++++ b/package/libspandsp/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBSPANDSP
++	bool "libspandsp"
++	select BR2_PACKAGE_TIFF
 +	help
-+	  Shared libraries for GSM 06.10 lossy speech compression.
++	  Spandsp is a library of many DSP functions for telephony.
++	  These range from simple modules, such as DTMF detection, to a
++	  complete software FAX machine.
 +
-+	  http://www.quut.com/gsm
-diff --git a/package/libgsm/libgsm.mk b/package/libgsm/libgsm.mk
++	  http://www.soft-switch.org
+diff --git a/package/libspandsp/libspandsp.hash b/package/libspandsp/libspandsp.hash
 new file mode 100644
-index 0000000..e272e7c
+index 0000000..3bd7fa6
 --- /dev/null
-+++ b/package/libgsm/libgsm.mk
-@@ -0,0 +1,33 @@
++++ b/package/libspandsp/libspandsp.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	6a86ccf68c2af46c1f98334b8e300c75df1be39b5620d689285c35167737c913	spandsp-20140809.tar.gz
+diff --git a/package/libspandsp/libspandsp.mk b/package/libspandsp/libspandsp.mk
+new file mode 100644
+index 0000000..b543a1d
+--- /dev/null
++++ b/package/libspandsp/libspandsp.mk
+@@ -0,0 +1,25 @@
 +################################################################################
 +#
-+# libgsm
++# libspandsp
 +#
 +################################################################################
 +
-+LIBGSM_VERSION = 1.0.14
-+LIBGSM_SOURCE = gsm-$(LIBGSM_VERSION).tar.gz
-+LIBGSM_SITE = http://www.quut.com/gsm
-+LIBGSM_INSTALL_STAGING = YES
++LIBSPANDSP_VERSION = 20140809
++LIBSPANDSP_SOURCE = spandsp-$(LIBSPANDSP_VERSION).tar.gz
++LIBSPANDSP_SITE = http://www.soft-switch.org/downloads/spandsp/snapshots
++LIBSPANDSP_LICENSE = LGPL-2.1
++LIBSPANDSP_LICENSE_FILES = COPYING
++LIBSPANDSP_INSTALL_STAGING = YES
++LIBSPANDSP_AUTORECONF = YES
 +
-+define LIBGSM_BUILD_CMDS
-+	cd $(@D) && $(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
-+endef
++# Fixes broken gcc
++# http://thread.gmane.org/gmane.linux.lib.musl.general/2468/
++LIBSPANDSP_CONF_ENV = ac_cv_header_tgmath_h=no
 +
-+# install targets are not safe for parallel jobs
-+define LIBGSM_INSTALL_STAGING_CMDS
-+	cd $(@D) && $(TARGET_MAKE_ENV) $(MAKE1) CC=$(TARGET_CC) -C $(@D) \
-+		INSTALL_ROOT=$(STAGING_DIR)/usr \
-+		GSM_INSTALL_INC=$(STAGING_DIR)/usr/include \
-+		install
-+endef
++LIBSPANDSP_DEPENDENCIES = tiff
 +
-+define LIBGSM_INSTALL_TARGET_CMDS
-+	cd $(@D) && $(TARGET_MAKE_ENV) $(MAKE1) CC=$(TARGET_CC) -C $(@D) \
-+		INSTALL_ROOT=$(TARGET_DIR)/usr \
-+		GSM_INSTALL_INC=$(TARGET_DIR)/usr/include \
-+		GSM_INSTALL_MAN=$(TARGET_DIR)/usr/share/man/man3 \
-+		TOAST_INSTALL_MAN=$(TARGET_DIR)/usr/share/man/man1 \
-+		install
-+endef
++ifeq ($(BR2_PACKAGE_JPEG),y)
++LIBSPANDSP_DEPENDENCIES += jpeg
++endif
 +
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.10.4
