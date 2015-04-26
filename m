@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Apr 2015 17:20:28 +0200
-Subject: [Buildroot] [PATCHv4 07/18] pkg-generic: implement source-check
-	targets
-In-Reply-To: <1430041876-16436-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Apr 2015 17:31:58 +0200
+Subject: [Buildroot] [PATCHv4 17/18] packages: refactor checks using
+	BR_BUILDING
+In-Reply-To: <1430041876-16436-18-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1430041876-16436-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150426152028.GE4809@free.fr>
+ <1430041876-16436-18-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150426153158.GF4809@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,77 +15,168 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-04-26 11:51 +0200, Thomas Petazzoni spake thusly:
-> This commits extends the common package infrastructure with the
-> $(1)-source-check and $(1)-all-source-check targets.
-> 
-> The $(1)-source-check target simply calls the newly added
-> SOURCE_CHECK macro on all items to be downloaded.
-> 
-> The $(1)-all-source-check target will depend on the
-> $(1)-all-source-check targets of all dependent packages and the
-> $(1)-source-check target of the current package, which allows to do a
-> recursive source-check in the dependency tree.
+> Instead of manually testing MAKECMDGOALS, use the newly introduced
+> BR_BUILDING variable to know if we're building or not.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/pkg-generic.mk | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index d7e3ca9..2176771 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -580,6 +580,16 @@ endif
->  $(1)-show-version:
->  			@echo $$($(2)_VERSION)
->  
-> +$(1)-source-check:
-> +ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-> +	$$(foreach p,$$($(2)_SOURCE) $$($(2)_EXTRA_DOWNLOADS) $$($(2)_PATCH),\
-> +		$$(if $$(findstring ://,$$(p)),\
-> +			$$(call SOURCE_CHECK,$$(p)),\
-> +			$$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$$(p)))$$(sep))
-> +else
-> +	test -d $$($(2)_OVERRIDE_SRCDIR)
-> +endif
 
-Why don;t you split this inside the OVERRIDE_SRCDIR condition, just
-above, along with the current $(1)-source ?
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[tested with a randpackageconfig + xloader enabled without a board name
+set]
 
 Regards,
 Yann E. MORIN.
 
->  $(1)-show-depends:
->  			@echo $$($(2)_FINAL_ALL_DEPENDENCIES)
+> ---
+>  boot/at91bootstrap/at91bootstrap.mk   |  5 +----
+>  boot/at91bootstrap3/at91bootstrap3.mk |  2 +-
+>  boot/barebox/barebox.mk               |  5 +----
+>  boot/uboot/uboot.mk                   | 13 ++++---------
+>  boot/xloader/xloader.mk               |  6 +-----
+>  linux/linux.mk                        |  2 +-
+>  package/sunxi-boards/sunxi-boards.mk  |  4 +---
+>  7 files changed, 10 insertions(+), 27 deletions(-)
+> 
+> diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+> index 802e85e..f655058 100644
+> --- a/boot/at91bootstrap/at91bootstrap.mk
+> +++ b/boot/at91bootstrap/at91bootstrap.mk
+> @@ -40,11 +40,8 @@ endef
 >  
-> @@ -593,6 +603,9 @@ $(1)-graph-depends: graph-depends-requirements
->  $(1)-all-source:	$(1)-source
->  $(1)-all-source:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
+>  $(eval $(generic-package))
 >  
-> +$(1)-all-source-check:	$(1)-source-check
-> +$(1)-all-source-check:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source-check)
-> +
->  $(1)-all-external-deps:	$(1)-external-deps
->  $(1)-all-external-deps:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-external-deps)
+> -ifeq ($(BR2_TARGET_AT91BOOTSTRAP),y)
+> -# we NEED a board name unless we're at make source
+> -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> +ifeq ($(BR2_TARGET_AT91BOOTSTRAP)$(BR_BUILDING),yy)
+>  ifeq ($(AT91BOOTSTRAP_BOARD),)
+>  $(error No AT91Bootstrap board name set. Check your BR2_TARGET_AT91BOOTSTRAP_BOARD setting)
+>  endif
+>  endif
+> -endif
+> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+> index 3e3b78e..ff49e14 100644
+> --- a/boot/at91bootstrap3/at91bootstrap3.mk
+> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
+> @@ -43,7 +43,7 @@ AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
+>  $(eval $(kconfig-package))
 >  
-> @@ -788,6 +801,7 @@ endif
->  	$(1)-all-external-deps \
->  	$(1)-all-legal-info \
->  	$(1)-all-source \
-> +	$(1)-all-source-check \
->  	$(1)-build \
->  	$(1)-clean-for-rebuild \
->  	$(1)-clean-for-reconfigure \
-> @@ -811,7 +825,8 @@ endif
->  	$(1)-rsync \
->  	$(1)-show-depends \
->  	$(1)-show-version \
-> -	$(1)-source
-> +	$(1)-source \
-> +	$(1)-source-check
+>  # Checks to give errors that the user can understand
+> -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> +ifeq ($(BR_BUILDING),y)
+>  ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+>  ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG)),)
+>  $(error No at91bootstrap3 defconfig name specified, check your BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG setting)
+> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+> index 98cb04e..54f52bb 100644
+> --- a/boot/barebox/barebox.mk
+> +++ b/boot/barebox/barebox.mk
+> @@ -106,11 +106,8 @@ endif
 >  
->  endif # $(2)_KCONFIG_VAR
->  endef # inner-generic-package
+>  $(eval $(kconfig-package))
+>  
+> -ifeq ($(BR2_TARGET_BAREBOX),y)
+> -# we NEED a board defconfig file unless we're at make source
+> -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> +ifeq ($(BR2_TARGET_BAREBOX)$(BR_BUILDING),yy)
+>  ifeq ($(BAREBOX_SOURCE_CONFIG),)
+>  $(error No Barebox config file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE settings)
+>  endif
+>  endif
+> -endif
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 1526177..01aaf2c 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -164,8 +164,7 @@ define UBOOT_INSTALL_OMAP_IFT_IMAGE
+>  endef
+>  
+>  ifeq ($(BR2_TARGET_UBOOT_OMAP_IFT),y)
+> -# we NEED a config file unless we're at make source
+> -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> +ifeq ($(BR_BUILDING),y)
+>  ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG)),)
+>  $(error No gpsign config file. Check your BR2_TARGET_UBOOT_OMAP_IFT_CONFIG setting)
+>  endif
+> @@ -179,8 +178,7 @@ UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_OMAP_IFT_IMAGE
+>  endif
+>  
+>  ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
+> -# we NEED a environment settings unless we're at make source
+> -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> +ifeq ($(BR_BUILDING),y)
+>  ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
+>  $(error Please define a source file for Uboot environment (BR2_TARGET_UBOOT_ENVIMAGE_SOURCE setting))
+>  endif
+> @@ -193,9 +191,7 @@ endif
+>  
+>  $(eval $(generic-package))
+>  
+> -ifeq ($(BR2_TARGET_UBOOT),y)
+> -# we NEED a board name unless we're at make source
+> -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> +ifeq ($(BR2_TARGET_UBOOT)$(BR_BUILDING),yy)
+>  ifeq ($(UBOOT_BOARD_NAME),)
+>  $(error No U-Boot board name set. Check your BR2_TARGET_UBOOT_BOARDNAME setting)
+>  endif
+> @@ -221,5 +217,4 @@ $(error No custom U-Boot repository URL specified. Check your BR2_TARGET_UBOOT_C
+>  endif # qstrip BR2_TARGET_UBOOT_CUSTOM_CUSTOM_REPO_VERSION
+>  endif # BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
+>  
+> -endif # filter source
+> -endif # BR2_TARGET_UBOOT
+> +endif # BR2_TARGET_UBOOT && BR_BUILDING
+> diff --git a/boot/xloader/xloader.mk b/boot/xloader/xloader.mk
+> index 90d5fa2..c68dc81 100644
+> --- a/boot/xloader/xloader.mk
+> +++ b/boot/xloader/xloader.mk
+> @@ -25,12 +25,8 @@ endef
+>  
+>  $(eval $(generic-package))
+>  
+> -ifeq ($(BR2_TARGET_XLOADER),y)
+> -# we NEED a board name unless we're at make source
+> -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> +ifeq ($(BR2_TARGET_XLOADER)$(BR_BUILDING),yy)
+>  ifeq ($(XLOADER_BOARD_NAME),)
+>  $(error NO x-loader board name set. Check your BR2_BOOT_XLOADER_BOARDNAME setting)
+>  endif
+>  endif
+> -
+> -endif
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index deed073..0c348da 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -354,7 +354,7 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
+>  linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
+>  
+>  # Checks to give errors that the user can understand
+> -ifeq ($(filter source,$(MAKECMDGOALS)),)
+> +ifeq ($(BR_BUILDING),y)
+>  ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+>  ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG)),)
+>  $(error No kernel defconfig name specified, check your BR2_LINUX_KERNEL_DEFCONFIG setting)
+> diff --git a/package/sunxi-boards/sunxi-boards.mk b/package/sunxi-boards/sunxi-boards.mk
+> index 1a2bb4c..cacf824 100644
+> --- a/package/sunxi-boards/sunxi-boards.mk
+> +++ b/package/sunxi-boards/sunxi-boards.mk
+> @@ -16,13 +16,11 @@ define SUNXI_BOARDS_INSTALL_IMAGES_CMDS
+>  		$(BINARIES_DIR)/script.bin
+>  endef
+>  
+> -ifeq ($(BR2_PACKAGE_SUNXI_BOARDS),y)
+> +ifeq ($(BR2_PACKAGE_SUNXI_BOARDS)$(BR_BUILDING),yy)
+>  # we NEED a board name
+> -ifeq ($(filter source,$(MAKECMDGOALS)),)
+>  ifeq ($(SUNXI_BOARDS_FEX_FILE),)
+>  $(error No sunxi .fex file specified. Check your BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE settings)
+>  endif
+>  endif
+> -endif
+>  
+>  $(eval $(generic-package))
 > -- 
 > 2.1.0
 > 
