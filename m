@@ -1,63 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 11:51:13 +0200
-Subject: [Buildroot] [PATCHv4 15/18] Makefile: remove unneeded variables
+Date: Sun, 26 Apr 2015 11:51:14 +0200
+Subject: [Buildroot] [PATCHv4 16/18] Makefile: add BR_BUILDING variable
 In-Reply-To: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1430041876-16436-16-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1430041876-16436-17-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that all the external-deps, source-check and source targets are
-properly implemented based on the package infrastructure, the
-PACKAGES_SOURCE, TARGET_HOST_DEPS, HOST_DEPS and HOST_SOURCE variables
-are no longer needed. This is a good thing since they were anyway
-incorrect, as they were only doing a two level recursion in the
-dependencies of host packages.
+Some packages do some sanity checks on their configuration, for
+example linux checks that the defconfig string is not empty when a
+defconfig is used. Such checks are currently always performed, except
+when the 'source' target is part of make goals.
+
+This is problematic for two reasons:
+
+ - Other targets such as 'source-check', 'external-deps' or
+   'legal-info', that do not consist in doing a build, cannot be
+   executed in such situations.
+
+ - The current code removes the check as soon as one of the targets is
+   source. But if there are other non-source targets called at the
+   same time, the checks are ignored.
+
+This commit therefore introduces an internal variable called
+BR_BUILDING, which tells packages if we are actually building or
+not. A variable nobuild_targets indicates the targets that we do not
+consider as being build targets.
+
+For the moment, nobuild_targets only contains 'source', to be
+completely iso-functional.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[tested with a randpackageconfig]
 ---
- Makefile | 21 ---------------------
- 1 file changed, 21 deletions(-)
+ Makefile | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/Makefile b/Makefile
-index e8a694b..0ba341b 100644
+index 0ba341b..e0be636 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -389,27 +389,6 @@ include fs/common.mk
+@@ -77,6 +77,22 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+ 	print-version olddefconfig
  
- include $(BR2_EXTERNAL)/external.mk
- 
--PACKAGES_SOURCE := $(patsubst %,%-source,$(PACKAGES))
--
--# host-* dependencies have to be handled specially, as those aren't
--# visible in Kconfig and hence not added to a variable like PACKAGES.
--# instead, find all the host-* targets listed in each <PKG>_DEPENDENCIES
--# variable for each enabled target.
--# Notice: this only works for newstyle gentargets/autotargets packages
--TARGETS_HOST_DEPS = $(sort $(filter host-%,$(foreach dep,\
--		$(addsuffix _DEPENDENCIES,\
--			$(call UPPERCASE,$(PACKAGES) $(TARGETS_ROOTFS))),\
--		$($(dep)))))
--# Host packages can in turn have their own dependencies. Likewise find
--# all the package names listed in the HOST_<PKG>_DEPENDENCIES for each
--# host package found above. Ideally this should be done recursively until
--# no more packages are found, but that's hard to do in make, so limit to
--# 1 level for now.
--HOST_DEPS = $(sort $(foreach dep,\
--		$(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS_HOST_DEPS))),\
--		$($(dep))))
--HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
--
- dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR)
- 
++# Some global targets do not trigger a build, but are used to collect
++# metadata, or do various checks. When such targets are triggered,
++# some packages should not do their configuration sanity
++# checks. Provide them a BR_BUILDING variable set to 'y' when we're
++# actually building and they should do their sanity checks.
++#
++# We're building in two situations: when MAKECMDGOALS is empty
++# (default target is to build), or when MAKECMDGOALS contains
++# something else than one of the nobuild_targets.
++nobuild_targets := source
++ifeq ($(MAKECMDGOALS),)
++BR_BUILDING = y
++else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
++BR_BUILDING = y
++endif
++
+ # Strip quotes and then whitespaces
+ qstrip = $(strip $(subst ",,$(1)))
+ #"))
 -- 
 2.1.0
