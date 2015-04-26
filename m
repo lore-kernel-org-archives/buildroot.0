@@ -1,65 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 11:51:00 +0200
-Subject: [Buildroot] [PATCHv4 02/18] pkg-generic: take into account patch
-	dependencies in source, external-deps and legal-info
+Date: Sun, 26 Apr 2015 11:50:59 +0200
+Subject: [Buildroot] [PATCHv4 01/18] fs: only add non rootfs- targets to
+	PACKAGES
 In-Reply-To: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1430041876-16436-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1430041876-16436-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The $(1)-all-{source,external-deps,legal-info} targets currently only
-take care of the dependencies in <pkg>_DEPENDENCIES, but not
-<pkg>_PATCH_DEPENDENCIES. This patch fixes that by introducing a
-<pkg>_FINAL_ALL_DEPENDENCIES. It also reworks the $(1)-show-depends
-target to make use of <pkg>_FINALL_ALL_DEPENDENCIES.
+Commit 4570dbcb14b394d8f3c97baf4c9e5f4f225d1d37
+("4570dbcb14b394d8f3c97baf4c9e5f4f225d1d37") added the dependencies of
+rootfs building logic to PACKAGES, only thinking about the case where
+rootfs building logic actually depends on real, normal packages
+(host-mtd, host-genext2fs, etc.). But some file systems (rootfs-ubi)
+depend on other filesystem images (rootfs-ubifs). And such targets
+should not be added to PACKAGES, otherwise an incorrect circular
+dependency is created.
+
+This commit fixes that by only adding the rootfs building logic
+dependencies that do *not* start with rootfs- to the global PACKAGES
+variable.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-generic.mk | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ fs/common.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 455bdf1..dd8c4c9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -431,6 +431,7 @@ endif
- # Eliminate duplicates in dependencies
- $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
- $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
-+$(2)_FINAL_ALL_DEPENDENCIES = $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
+diff --git a/fs/common.mk b/fs/common.mk
+index 41ee86d..4387d06 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -106,7 +106,7 @@ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
  
- $(2)_INSTALL_STAGING		?= NO
- $(2)_INSTALL_IMAGES		?= NO
-@@ -583,7 +584,7 @@ $(1)-show-version:
- 			@echo $$($(2)_VERSION)
- 
- $(1)-show-depends:
--			@echo $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
-+			@echo $$($(2)_FINAL_ALL_DEPENDENCIES)
- 
- $(1)-graph-depends: graph-depends-requirements
- 			@$$(INSTALL) -d $$(GRAPHS_DIR)
-@@ -592,11 +593,14 @@ $(1)-graph-depends: graph-depends-requirements
- 			|tee $$(GRAPHS_DIR)/$$(@).dot \
- 			|dot $$(BR2_GRAPH_DOT_OPTS) -T$$(BR_GRAPH_OUT) -o $$(GRAPHS_DIR)/$$(@).$$(BR_GRAPH_OUT)
- 
--$(1)-all-source:       $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-source) $(1)-source
-+$(1)-all-source:	$(1)-source
-+$(1)-all-source:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
- 
--$(1)-all-external-deps:        $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-external-deps) $(1)-external-deps
-+$(1)-all-external-deps:	$(1)-external-deps
-+$(1)-all-external-deps:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-external-deps)
- 
--$(1)-all-legal-info:   $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-legal-info) $(1)-legal-info
-+$(1)-all-legal-info:	$(1)-legal-info
-+$(1)-all-legal-info:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-legal-info)
- 
- $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+ TARGETS_ROOTFS += rootfs-$(1)
+-PACKAGES += $$(ROOTFS_$(2)_DEPENDENCIES)
++PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES))
+ endif
+ endef
  
 -- 
 2.1.0
