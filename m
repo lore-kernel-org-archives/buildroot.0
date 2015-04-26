@@ -1,77 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 12:02:56 +0200
-Subject: [Buildroot] [PATCH v2 6/6] package/perl-mail-spamassassin: new
- package
-In-Reply-To: <1430041039-13905-6-git-send-email-bernd.kuhls@t-online.de>
-References: <1430041039-13905-1-git-send-email-bernd.kuhls@t-online.de>
- <1430041039-13905-6-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150426120256.63387117@free-electrons.com>
+Date: Sun, 26 Apr 2015 12:03:06 +0200
+Subject: [Buildroot] [git commit] package/perl-db-file: new package
+Message-ID: <20150426100337.CEA49800DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=1284bad1c476caf8c9cc65b72078d99c91659170
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 26 Apr 2015 11:37:19 +0200, Bernd Kuhls wrote:
-> This package contains a dependency check which only checks for installed
-> modules in host-perl, not the target variant. Therefore some host package
-> of perl modules are needed as dependency.
+[Thomas: rename package to perl-db-file.]
 
-What about fixing Spamassassin instead?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                      |    1 +
+ package/perl-db-file/Config.in         |   12 ++++++++++++
+ package/perl-db-file/perl-db-file.hash |    3 +++
+ package/perl-db-file/perl-db-file.mk   |   13 +++++++++++++
+ 4 files changed, 29 insertions(+), 0 deletions(-)
 
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> 
-> ---
-> v2: - select perl-encode-detect only when c++ is available
-
-And this seems broken. Read on below.
-
-> diff --git a/package/perl-mail-spamassassin/Config.in b/package/perl-mail-spamassassin/Config.in
-> new file mode 100644
-> index 0000000..799a6a7
-> --- /dev/null
-> +++ b/package/perl-mail-spamassassin/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_PERL_MAIL_SPAMASSASSIN
-> +	bool "perl-mail-spamassassin"
-> +	depends on !BR2_STATIC_LIBS
-> +	select BR2_PACKAGE_PERL_DB_FILE
-> +	select BR2_PACKAGE_PERL_DIGEST_SHA1
-> +	select BR2_PACKAGE_PERL_ENCODE_DETECT if BR2_INSTALL_LIBSTDCPP
-
-So if C++ is not available, we are not selecting
-BR2_PACKAGE_PERL_ENCODE_DETECT.
-
-> +PERL_MAIL_SPAMASSASSIN_DEPENDENCIES = \
-> +	perl \
-> +	perl-db_file \
-> +	perl-digest-sha1 \
-> +	perl-encode-detect \
-
-But we depend on it anyway.
-
-So really, there are only a few solutions:
-
- *) perl-encode-detect is a mandatory dependency of spamassassin. In
-    this case, spamassassin must have a depends on C++.
-
- *) perl-encode-detect is an optional dependency of spamassassin. In
-    this case, do nothing in Config.in, and use ifeq
-    ($(BR2_PACKAGE_PERL_ENCODE_DETECT),y) in the .mk file to add it in
-    PERL_MAIL_SPAMASSASSIN_DEPENDENCIES.
-
- *) or if you really want to enable it automatically when C++ is
-    available, keep your select in the Config.in, but use ifeq
-    ($(BR2_PACKAGE_PERL_ENCODE_DETECT),y) in the .mk file to add it in
-    PERL_MAIL_SPAMASSASSIN_DEPENDENCIES.
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 4327f07..6ca4276 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -505,6 +505,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-crypt-openssl-random/Config.in"
+ 	source "package/perl-crypt-openssl-rsa/Config.in"
+ 	source "package/perl-datetime-tiny/Config.in"
++	source "package/perl-db-file/Config.in"
+ 	source "package/perl-digest-hmac/Config.in"
+ 	source "package/perl-digest-sha1/Config.in"
+ 	source "package/perl-encode-locale/Config.in"
+diff --git a/package/perl-db-file/Config.in b/package/perl-db-file/Config.in
+new file mode 100644
+index 0000000..18daec3
+--- /dev/null
++++ b/package/perl-db-file/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PERL_DB_FILE
++	bool "perl-db-file"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_BERKELEYDB
++	select BR2_PACKAGE_BERKELEYDB_COMPAT185
++	help
++	  Perl5 access to Berkeley DB version 1.x
++
++	  https://metacpan.org/release/DB_File
++
++comment "perl-db_file needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-db-file/perl-db-file.hash b/package/perl-db-file/perl-db-file.hash
+new file mode 100644
+index 0000000..df0113c
+--- /dev/null
++++ b/package/perl-db-file/perl-db-file.hash
+@@ -0,0 +1,3 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    0ae7910cabc31a44e50b713a8a475514 DB_File-1.835.tar.gz
++sha256 41206f39a1bac49db8c1595e300b04c70e1393b2d78ccb9ef15c5c0b81037cfc DB_File-1.835.tar.gz
+diff --git a/package/perl-db-file/perl-db-file.mk b/package/perl-db-file/perl-db-file.mk
+new file mode 100644
+index 0000000..1501926
+--- /dev/null
++++ b/package/perl-db-file/perl-db-file.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# perl-db_file
++#
++################################################################################
++
++PERL_DB_FILE_VERSION = 1.835
++PERL_DB_FILE_SOURCE = DB_File-$(PERL_DB_FILE_VERSION).tar.gz
++PERL_DB_FILE_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PM/PMQS
++PERL_DB_FILE_DEPENDENCIES = berkeleydb perl
++PERL_DB_FILE_LICENSE = Artistic or GPLv1+
++
++$(eval $(perl-package))
