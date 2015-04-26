@@ -1,123 +1,87 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 26 Apr 2015 17:00:51 +0200
-Subject: [Buildroot] [PATCH 3/3] package/libspandsp: new package
-In-Reply-To: <1430060451-4075-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1430060451-4075-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1430060451-4075-4-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Apr 2015 17:15:54 +0200
+Subject: [Buildroot] [PATCHv4 02/18] pkg-generic: take into account
+ patch dependencies in source, external-deps and legal-info
+In-Reply-To: <1430041876-16436-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1430041876-16436-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150426151554.GD4809@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/Config.in                               |    1 +
- package/libspandsp/0001-fix-compiler-opts.patch |   23 +++++++++++++++++++++
- package/libspandsp/Config.in                    |    9 ++++++++
- package/libspandsp/libspandsp.hash              |    2 ++
- package/libspandsp/libspandsp.mk                |   25 +++++++++++++++++++++++
- 5 files changed, 60 insertions(+)
- create mode 100644 package/libspandsp/0001-fix-compiler-opts.patch
- create mode 100644 package/libspandsp/Config.in
- create mode 100644 package/libspandsp/libspandsp.hash
- create mode 100644 package/libspandsp/libspandsp.mk
+On 2015-04-26 11:51 +0200, Thomas Petazzoni spake thusly:
+> The $(1)-all-{source,external-deps,legal-info} targets currently only
+> take care of the dependencies in <pkg>_DEPENDENCIES, but not
+> <pkg>_PATCH_DEPENDENCIES. This patch fixes that by introducing a
+> <pkg>_FINAL_ALL_DEPENDENCIES. It also reworks the $(1)-show-depends
+> target to make use of <pkg>_FINALL_ALL_DEPENDENCIES.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/Config.in b/package/Config.in
-index 2a06a3d..d47b787 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -682,6 +682,7 @@ menu "Audio/Sound"
- 	source "package/libsidplay2/Config.in"
- 	source "package/libsndfile/Config.in"
- 	source "package/libsoxr/Config.in"
-+	source "package/libspandsp/Config.in"
- 	source "package/libvorbis/Config.in"
- 	source "package/mp4v2/Config.in"
- 	source "package/opencore-amr/Config.in"
-diff --git a/package/libspandsp/0001-fix-compiler-opts.patch b/package/libspandsp/0001-fix-compiler-opts.patch
-new file mode 100644
-index 0000000..c3bd800
---- /dev/null
-+++ b/package/libspandsp/0001-fix-compiler-opts.patch
-@@ -0,0 +1,23 @@
-+Fix bfin compilation
-+
-+cc1: error: unrecognized command line option "-Wunused-but-set-variable"
-+
-+using this defconfig
-+
-+BR2_bfin=y
-+BR2_PACKAGE_LIBSPANDSP=y
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr spandsp-0.0.6.org/configure.ac spandsp-0.0.6/configure.ac
-+--- spandsp-0.0.6.org/configure.ac	2014-08-09 10:19:27.000000000 +0200
-++++ spandsp-0.0.6/configure.ac	2015-04-25 17:46:27.717349873 +0200
-+@@ -337,7 +337,7 @@
-+ 
-+ case "${ax_cv_c_compiler_vendor}" in
-+ gnu)
-+-    COMP_VENDOR_CFLAGS="-std=gnu99 -ffast-math -Wall -Wunused-variable -Wunused-but-set-variable -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes $COMP_VENDOR_CFLAGS"
-++    COMP_VENDOR_CFLAGS="-std=gnu99 -ffast-math -Wall -Wunused-variable -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes $COMP_VENDOR_CFLAGS"
-+     if test "$enable_neon" = "yes" ; then
-+         COMP_VENDOR_CFLAGS="-mfpu=neon -mfloat-abi=hard $COMP_VENDOR_CFLAGS"
-+     fi
-diff --git a/package/libspandsp/Config.in b/package/libspandsp/Config.in
-new file mode 100644
-index 0000000..9a22209
---- /dev/null
-+++ b/package/libspandsp/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBSPANDSP
-+	bool "libspandsp"
-+	select BR2_PACKAGE_TIFF
-+	help
-+	  Spandsp is a library of many DSP functions for telephony.
-+	  These range from simple modules, such as DTMF detection, to a
-+	  complete software FAX machine.
-+
-+	  http://www.soft-switch.org
-diff --git a/package/libspandsp/libspandsp.hash b/package/libspandsp/libspandsp.hash
-new file mode 100644
-index 0000000..3bd7fa6
---- /dev/null
-+++ b/package/libspandsp/libspandsp.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	6a86ccf68c2af46c1f98334b8e300c75df1be39b5620d689285c35167737c913	spandsp-20140809.tar.gz
-diff --git a/package/libspandsp/libspandsp.mk b/package/libspandsp/libspandsp.mk
-new file mode 100644
-index 0000000..b543a1d
---- /dev/null
-+++ b/package/libspandsp/libspandsp.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# libspandsp
-+#
-+################################################################################
-+
-+LIBSPANDSP_VERSION = 20140809
-+LIBSPANDSP_SOURCE = spandsp-$(LIBSPANDSP_VERSION).tar.gz
-+LIBSPANDSP_SITE = http://www.soft-switch.org/downloads/spandsp/snapshots
-+LIBSPANDSP_LICENSE = LGPL-2.1
-+LIBSPANDSP_LICENSE_FILES = COPYING
-+LIBSPANDSP_INSTALL_STAGING = YES
-+LIBSPANDSP_AUTORECONF = YES
-+
-+# Fixes broken gcc
-+# http://thread.gmane.org/gmane.linux.lib.musl.general/2468/
-+LIBSPANDSP_CONF_ENV = ac_cv_header_tgmath_h=no
-+
-+LIBSPANDSP_DEPENDENCIES = tiff
-+
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+LIBSPANDSP_DEPENDENCIES += jpeg
-+endif
-+
-+$(eval $(autotools-package))
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[tested a "make source" and "make external-deps" and "make legal-info"
+ on a randpackageconfig]
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/pkg-generic.mk | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 455bdf1..dd8c4c9 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -431,6 +431,7 @@ endif
+>  # Eliminate duplicates in dependencies
+>  $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
+>  $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
+> +$(2)_FINAL_ALL_DEPENDENCIES = $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
+>  
+>  $(2)_INSTALL_STAGING		?= NO
+>  $(2)_INSTALL_IMAGES		?= NO
+> @@ -583,7 +584,7 @@ $(1)-show-version:
+>  			@echo $$($(2)_VERSION)
+>  
+>  $(1)-show-depends:
+> -			@echo $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
+> +			@echo $$($(2)_FINAL_ALL_DEPENDENCIES)
+>  
+>  $(1)-graph-depends: graph-depends-requirements
+>  			@$$(INSTALL) -d $$(GRAPHS_DIR)
+> @@ -592,11 +593,14 @@ $(1)-graph-depends: graph-depends-requirements
+>  			|tee $$(GRAPHS_DIR)/$$(@).dot \
+>  			|dot $$(BR2_GRAPH_DOT_OPTS) -T$$(BR_GRAPH_OUT) -o $$(GRAPHS_DIR)/$$(@).$$(BR_GRAPH_OUT)
+>  
+> -$(1)-all-source:       $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-source) $(1)-source
+> +$(1)-all-source:	$(1)-source
+> +$(1)-all-source:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
+>  
+> -$(1)-all-external-deps:        $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-external-deps) $(1)-external-deps
+> +$(1)-all-external-deps:	$(1)-external-deps
+> +$(1)-all-external-deps:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-external-deps)
+>  
+> -$(1)-all-legal-info:   $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-legal-info) $(1)-legal-info
+> +$(1)-all-legal-info:	$(1)-legal-info
+> +$(1)-all-legal-info:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-legal-info)
+>  
+>  $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
+>  
+> -- 
+> 2.1.0
+> 
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
