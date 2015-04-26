@@ -1,46 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 22:20:42 +0200
-Subject: [Buildroot] [git commit] Makefile: add a few more targets to
-	nobuild_targets
-Message-ID: <20150426202108.C083E7FC25@busybox.osuosl.org>
+Date: Sun, 26 Apr 2015 19:55:32 +0200
+Subject: [Buildroot] [git commit] Makefile: remove unneeded variables
+Message-ID: <20150426202108.9EE53818B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4feeb2db3484dec940ff1f8921bb4db15031e8fe
+commit: http://git.buildroot.net/buildroot/commit/?id=ae473ca4464a2dd4514077169af9005d8665c59a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With this commit, one can now execute the source-check, external-deps
-and legal-info targets regardless of the checks normally being done by
-packages on the configuration.
-
-Note that we intentionally do not go down the road of adding %-source,
-%-legal-info, and the miryad of other targets that could work in such
-situations. We only whitelist a few targets that are really useful to
-have as nobuild_targets.
-
-[Thomas: also add 'clean' and 'distclean' to the nobuild_targets, as
-suggested by Yann.]
+Now that all the external-deps, source-check and source targets are
+properly implemented based on the package infrastructure, the
+PACKAGES_SOURCE, TARGET_HOST_DEPS, HOST_DEPS and HOST_SOURCE variables
+are no longer needed. This is a good thing since they were anyway
+incorrect, as they were only doing a two level recursion in the
+dependencies of host packages.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[tested with a randpackageconfig]
 ---
- Makefile |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ Makefile |   21 ---------------------
+ 1 files changed, 0 insertions(+), 21 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index e0be636..3983fce 100644
+index e8a694b..0ba341b 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -86,7 +86,9 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
- # We're building in two situations: when MAKECMDGOALS is empty
- # (default target is to build), or when MAKECMDGOALS contains
- # something else than one of the nobuild_targets.
--nobuild_targets := source
-+nobuild_targets := source source-check \
-+	legal-info external-deps _external-deps \
-+	clean distclean
- ifeq ($(MAKECMDGOALS),)
- BR_BUILDING = y
- else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+@@ -389,27 +389,6 @@ include fs/common.mk
+ 
+ include $(BR2_EXTERNAL)/external.mk
+ 
+-PACKAGES_SOURCE := $(patsubst %,%-source,$(PACKAGES))
+-
+-# host-* dependencies have to be handled specially, as those aren't
+-# visible in Kconfig and hence not added to a variable like PACKAGES.
+-# instead, find all the host-* targets listed in each <PKG>_DEPENDENCIES
+-# variable for each enabled target.
+-# Notice: this only works for newstyle gentargets/autotargets packages
+-TARGETS_HOST_DEPS = $(sort $(filter host-%,$(foreach dep,\
+-		$(addsuffix _DEPENDENCIES,\
+-			$(call UPPERCASE,$(PACKAGES) $(TARGETS_ROOTFS))),\
+-		$($(dep)))))
+-# Host packages can in turn have their own dependencies. Likewise find
+-# all the package names listed in the HOST_<PKG>_DEPENDENCIES for each
+-# host package found above. Ideally this should be done recursively until
+-# no more packages are found, but that's hard to do in make, so limit to
+-# 1 level for now.
+-HOST_DEPS = $(sort $(foreach dep,\
+-		$(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS_HOST_DEPS))),\
+-		$($(dep))))
+-HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
+-
+ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR)
+ 
