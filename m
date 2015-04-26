@@ -1,88 +1,168 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Apr 2015 11:51:11 +0200
-Subject: [Buildroot] [PATCHv4 13/18] pkg-generic: introduce a
-	<pkg>_ALL_DOWNLOADS variable and factorize code
+Date: Sun, 26 Apr 2015 11:51:15 +0200
+Subject: [Buildroot] [PATCHv4 17/18] packages: refactor checks using
+	BR_BUILDING
 In-Reply-To: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1430041876-16436-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1430041876-16436-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1430041876-16436-18-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now, both the download and source-check code are iterating over
-<pkg>_SOURCE, <pkg>_PATCH and <pkg>_EXTRA_DOWNLOADS elements, figuring
-out whether they contain full URLs or not. Instead of doing this
-repeatdly, this patch introduces an internal <pkg>_ALL_DOWNLOADS
-variable, which contains the list of everything that needs to be
-downloaded, with URLs already expanded to take into account <pkg>_SITE
-if needed.
-
-This allows to simplify quite significantly the .stamp_download and
-source-check implementation.
+Instead of manually testing MAKECMDGOALS, use the newly introduced
+BR_BUILDING variable to know if we're building or not.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-generic.mk | 26 ++++++++------------------
- 1 file changed, 8 insertions(+), 18 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk   |  5 +----
+ boot/at91bootstrap3/at91bootstrap3.mk |  2 +-
+ boot/barebox/barebox.mk               |  5 +----
+ boot/uboot/uboot.mk                   | 13 ++++---------
+ boot/xloader/xloader.mk               |  6 +-----
+ linux/linux.mk                        |  2 +-
+ package/sunxi-boards/sunxi-boards.mk  |  4 +---
+ 7 files changed, 10 insertions(+), 27 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6279fb1..248ca77 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -72,25 +72,13 @@ endif
- $(BUILD_DIR)/%/.stamp_downloaded:
- 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- # Only show the download message if it isn't already downloaded
--	$(Q)for p in $($(PKG)_SOURCE) $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
-+	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
- 		if test ! -e $(DL_DIR)/`basename $$p` ; then \
- 			$(call MESSAGE,"Downloading") ; \
- 			break ; \
- 		fi ; \
- 	done
--	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
--	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),\
--		$(if $(findstring ://,$(p)),\
--			$(call DOWNLOAD,$(p)),\
--			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
--		)\
--	$(sep))
--	$(foreach p,$($(PKG)_PATCH),\
--		$(if $(findstring ://,$(p)),\
--			$(call DOWNLOAD,$(p)),\
--			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
--		)\
--	$(sep))
-+	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p))$(sep))
- 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- 	$(Q)mkdir -p $(@D)
- 	$(Q)touch $@
-@@ -355,6 +343,11 @@ ifndef $(2)_PATCH
-  endif
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index 802e85e..f655058 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -40,11 +40,8 @@ endef
+ 
+ $(eval $(generic-package))
+ 
+-ifeq ($(BR2_TARGET_AT91BOOTSTRAP),y)
+-# we NEED a board name unless we're at make source
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR2_TARGET_AT91BOOTSTRAP)$(BR_BUILDING),yy)
+ ifeq ($(AT91BOOTSTRAP_BOARD),)
+ $(error No AT91Bootstrap board name set. Check your BR2_TARGET_AT91BOOTSTRAP_BOARD setting)
+ endif
+ endif
+-endif
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 3e3b78e..ff49e14 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -43,7 +43,7 @@ AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
+ $(eval $(kconfig-package))
+ 
+ # Checks to give errors that the user can understand
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR_BUILDING),y)
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG)),)
+ $(error No at91bootstrap3 defconfig name specified, check your BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG setting)
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 98cb04e..54f52bb 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -106,11 +106,8 @@ endif
+ 
+ $(eval $(kconfig-package))
+ 
+-ifeq ($(BR2_TARGET_BAREBOX),y)
+-# we NEED a board defconfig file unless we're at make source
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR2_TARGET_BAREBOX)$(BR_BUILDING),yy)
+ ifeq ($(BAREBOX_SOURCE_CONFIG),)
+ $(error No Barebox config file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE settings)
+ endif
+ endif
+-endif
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 1526177..01aaf2c 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -164,8 +164,7 @@ define UBOOT_INSTALL_OMAP_IFT_IMAGE
+ endef
+ 
+ ifeq ($(BR2_TARGET_UBOOT_OMAP_IFT),y)
+-# we NEED a config file unless we're at make source
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR_BUILDING),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG)),)
+ $(error No gpsign config file. Check your BR2_TARGET_UBOOT_OMAP_IFT_CONFIG setting)
+ endif
+@@ -179,8 +178,7 @@ UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_OMAP_IFT_IMAGE
  endif
  
-+$(2)_ALL_DOWNLOADS = \
-+	$$(foreach p,$$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
-+		$$(if $$(findstring ://,$$(p)),$$(p),\
-+			$$($(2)_SITE:/=)/$$(p)))
-+
- ifndef $(2)_SITE
-  ifdef $(3)_SITE
-   $(2)_SITE = $$($(3)_SITE)
-@@ -569,10 +562,7 @@ $(1)-show-version:
- 
- $(1)-source-check:
- ifeq ($$($(2)_OVERRIDE_SRCDIR),)
--	$$(foreach p,$$($(2)_SOURCE) $$($(2)_EXTRA_DOWNLOADS) $$($(2)_PATCH),\
--		$$(if $$(findstring ://,$$(p)),\
--			$$(call SOURCE_CHECK,$$(p)),\
--			$$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$$(p)))$$(sep))
-+	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
- else
- 	test -d $$($(2)_OVERRIDE_SRCDIR)
+ ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
+-# we NEED a environment settings unless we're at make source
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR_BUILDING),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
+ $(error Please define a source file for Uboot environment (BR2_TARGET_UBOOT_ENVIMAGE_SOURCE setting))
  endif
+@@ -193,9 +191,7 @@ endif
+ 
+ $(eval $(generic-package))
+ 
+-ifeq ($(BR2_TARGET_UBOOT),y)
+-# we NEED a board name unless we're at make source
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR2_TARGET_UBOOT)$(BR_BUILDING),yy)
+ ifeq ($(UBOOT_BOARD_NAME),)
+ $(error No U-Boot board name set. Check your BR2_TARGET_UBOOT_BOARDNAME setting)
+ endif
+@@ -221,5 +217,4 @@ $(error No custom U-Boot repository URL specified. Check your BR2_TARGET_UBOOT_C
+ endif # qstrip BR2_TARGET_UBOOT_CUSTOM_CUSTOM_REPO_VERSION
+ endif # BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
+ 
+-endif # filter source
+-endif # BR2_TARGET_UBOOT
++endif # BR2_TARGET_UBOOT && BR_BUILDING
+diff --git a/boot/xloader/xloader.mk b/boot/xloader/xloader.mk
+index 90d5fa2..c68dc81 100644
+--- a/boot/xloader/xloader.mk
++++ b/boot/xloader/xloader.mk
+@@ -25,12 +25,8 @@ endef
+ 
+ $(eval $(generic-package))
+ 
+-ifeq ($(BR2_TARGET_XLOADER),y)
+-# we NEED a board name unless we're at make source
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR2_TARGET_XLOADER)$(BR_BUILDING),yy)
+ ifeq ($(XLOADER_BOARD_NAME),)
+ $(error NO x-loader board name set. Check your BR2_BOOT_XLOADER_BOARDNAME setting)
+ endif
+ endif
+-
+-endif
+diff --git a/linux/linux.mk b/linux/linux.mk
+index deed073..0c348da 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -354,7 +354,7 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
+ linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
+ 
+ # Checks to give errors that the user can understand
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(BR_BUILDING),y)
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG)),)
+ $(error No kernel defconfig name specified, check your BR2_LINUX_KERNEL_DEFCONFIG setting)
+diff --git a/package/sunxi-boards/sunxi-boards.mk b/package/sunxi-boards/sunxi-boards.mk
+index 1a2bb4c..cacf824 100644
+--- a/package/sunxi-boards/sunxi-boards.mk
++++ b/package/sunxi-boards/sunxi-boards.mk
+@@ -16,13 +16,11 @@ define SUNXI_BOARDS_INSTALL_IMAGES_CMDS
+ 		$(BINARIES_DIR)/script.bin
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_SUNXI_BOARDS),y)
++ifeq ($(BR2_PACKAGE_SUNXI_BOARDS)$(BR_BUILDING),yy)
+ # we NEED a board name
+-ifeq ($(filter source,$(MAKECMDGOALS)),)
+ ifeq ($(SUNXI_BOARDS_FEX_FILE),)
+ $(error No sunxi .fex file specified. Check your BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE settings)
+ endif
+ endif
+-endif
+ 
+ $(eval $(generic-package))
 -- 
 2.1.0
