@@ -1,61 +1,21 @@
-From: Pascal Mazon <pascal.mazon@6wind.com>
-Date: Mon, 27 Apr 2015 10:11:07 +0200
-Subject: [Buildroot] [PATCH 1/1] ncurses: generate libtermcap
-In-Reply-To: <20150424161825.4d76c287@free-electrons.com>
-References: <1429880066-7743-1-git-send-email-pascal.mazon@6wind.com>
- <20150424161825.4d76c287@free-electrons.com>
-Message-ID: <553DEF1B.3070807@6wind.com>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Mon, 27 Apr 2015 08:20:09 +0000
+Subject: [Buildroot] uClibc build verbosity control
+Message-ID: <C2D7FE5348E1B147BCA15975FBA230756659BC9F@IN01WEMBXB.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/24/2015 04:18 PM, Thomas Petazzoni wrote:
- > Dear Pascal Mazon,
- >
- > On Fri, 24 Apr 2015 14:54:26 +0200, Pascal Mazon wrote:
- >> There is no libtermcap package in buildroot, but ncurses implements 
-termcap
- >> natively. Furthermore, ncurses already provides the termcap.h header 
-file.
- >>
- >> With this patch, we fix an issue encountered with some external 
-toolchains
- >> that include a libtermcap.a (typically the GNU libtermcap version) 
-in their
- >> sysroot folder.
- >
- > Which external toolchains are in this situation?
+Hi,
 
-I encountered this with a Cavium OCTEON toolchain.
+uClibc verbosity control V=xx is different from other mainstream projects: namely Busybox and Linux kernel.
+To print full cmdlines (when debugging obscure toolchain issues) we need to pass V=2 whereas kernel/busybox take V=1.
 
- >
- >> Bash, for instance, would be linking with this libtermcap while using
- >> headers from ncurses.
- >>
- >> In order to be consistent, let's make sure there is only the ncurses'
- >> termcap library. To that effect, we:
- >> - remove any libtermcap.* in the staging dir,
- >
- > I think this should probably not be done by the ncurses package, but as
- > a post-install hook of the external toolchain.
+Can this be changed (I can provide a patch) assuming this doesn't break existing scripts upsetting some people.
 
-But in that case, would it still be possible not to delete libtermcap.a
-if ncurses is not selected (to still be able to link against it)?
+My issue is specifically when using likes of Buildroot, there's no obvious way to get the cmdlines of uClibc and/or other projects (unless there's some obvious way I'm missing).
 
-I put this patch in the ncurses package, as the issue arises only when
-it is enabled, and it is intimately associated with ncurses selection.
-I've been thinking that as ncurses provides libtermcap and it is the
-implementation of choice, it ought to be done there.
-
-I've looked on Debian, the termcap.h and libtermcap.so are provided in
-the libncurses-dev package itself, too.
-
- >
- > Thomas
- >
-
--- 
-Pascal Mazon
-www.6wind.com
+Thx,
+-Vineet
