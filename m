@@ -1,85 +1,92 @@
-From: Antoine Tenart <antoine.tenart@free-electrons.com>
-Date: Mon, 27 Apr 2015 15:47:39 +0200
-Subject: [Buildroot] [PATCH] imx-usb-loader: new host package
-Message-ID: <1430142459-9448-1-git-send-email-antoine.tenart@free-electrons.com>
+From: Marcin Bis <marcin@bis.org.pl>
+Date: Mon, 27 Apr 2015 15:42:09 +0200
+Subject: [Buildroot] [PATCH] cc-tool: new package
+Message-ID: <1430142129-32750-1-git-send-email-marcin@bis.org.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This host package allows to build tools to download and execute code on
-Freescale i.MX5/i.MX6 and Vybrid SoCs through the Serial Download
-Protocol.
+cc-tool provides support for Texas Instruments CC Debugger
 
-The work behind this commit was funded by ECA Group
-<http://www.ecagroup.com>. ECA Group is the copyright owner of the
-contributed code.
-
-Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+Signed-off-by: Marcin Bis <marcin@bis.org.pl>
 ---
- package/Config.in.host                   |  1 +
- package/imx-usb-loader/Config.in.host    | 10 ++++++++++
- package/imx-usb-loader/imx-usb-loader.mk | 22 ++++++++++++++++++++++
- 3 files changed, 33 insertions(+)
- create mode 100644 package/imx-usb-loader/Config.in.host
- create mode 100644 package/imx-usb-loader/imx-usb-loader.mk
+ package/Config.in            |  1 +
+ package/cc-tool/Config.in    | 21 +++++++++++++++++++++
+ package/cc-tool/cc-tool.hash |  3 +++
+ package/cc-tool/cc-tool.mk   | 13 +++++++++++++
+ 4 files changed, 38 insertions(+)
+ create mode 100644 package/cc-tool/Config.in
+ create mode 100644 package/cc-tool/cc-tool.hash
+ create mode 100644 package/cc-tool/cc-tool.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 6df627f1752f..744fd43128fa 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -11,6 +11,7 @@ menu "Host utilities"
- 	source "package/genext2fs/Config.in.host"
- 	source "package/genimage/Config.in.host"
- 	source "package/genpart/Config.in.host"
-+	source "package/imx-usb-loader/Config.in.host"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/mke2img/Config.in.host"
- 	source "package/mtd/Config.in.host"
-diff --git a/package/imx-usb-loader/Config.in.host b/package/imx-usb-loader/Config.in.host
+diff --git a/package/Config.in b/package/Config.in
+index 4e20e4d..12767d5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -316,6 +316,7 @@ endmenu
+ 	source "package/avrdude/Config.in"
+ 	source "package/bcache-tools/Config.in"
+ 	source "package/biosdevname/Config.in"
++	source "package/cc-tool/Config.in"
+ 	source "package/cdrkit/Config.in"
+ 	source "package/cryptsetup/Config.in"
+ 	source "package/cwiid/Config.in"
+diff --git a/package/cc-tool/Config.in b/package/cc-tool/Config.in
 new file mode 100644
-index 000000000000..a30f20a32f81
+index 0000000..f62200d
 --- /dev/null
-+++ b/package/imx-usb-loader/Config.in.host
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_IMX_USB_LOADER
-+	bool "host imx usb loader"
-+	select BR2_PACKAGE_LIBUSB
++++ b/package/cc-tool/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_CC_TOOL
++	bool "cc-tool"
++	depends on BR2_INSTALL_LIBSTDCPP
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_LARGEFILE
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
++	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_BOOST_REGEX
++	select BR2_PACKAGE_BOOST_FILESYSTEM
++	select BR2_PACKAGE_BOOST_SIGNALS
 +	help
-+	  This package contains tools to download and execute code
-+	  on Freescale i.MX5/i.MX6 and Vybrid SoCs through the
-+	  Serial Download Protocol.
++	  cc-tool provides support for Texas Instruments CC Debugger
++	  for Linux OS in order to program 8051-based System-On-Chip
++	  devices: CC254x CC253x CC243x CC251x CC111x
 +
-+	  https://github.com/boundarydevices/imx_usb_loader
-diff --git a/package/imx-usb-loader/imx-usb-loader.mk b/package/imx-usb-loader/imx-usb-loader.mk
++	  http://sourceforge.net/projects/cctool/
++
++comment "cc-tool needs a toolchain w/ C++, largefile, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/cc-tool/cc-tool.hash b/package/cc-tool/cc-tool.hash
 new file mode 100644
-index 000000000000..e33daac34367
+index 0000000..81844ee
 --- /dev/null
-+++ b/package/imx-usb-loader/imx-usb-loader.mk
-@@ -0,0 +1,22 @@
++++ b/package/cc-tool/cc-tool.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/cctool/files/
++sha1 f313e55f019ea5338438633f5b5e689b699343e1  cc-tool-0.26-src.tgz
++md5 26960676f3e6264e612c299fbf8ec5ea  cc-tool-0.26-src.tgz
+diff --git a/package/cc-tool/cc-tool.mk b/package/cc-tool/cc-tool.mk
+new file mode 100644
+index 0000000..9a6ee6e
+--- /dev/null
++++ b/package/cc-tool/cc-tool.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# iMX USB loader
++# cc-tool
 +#
 +################################################################################
 +
-+IMX_USB_LOADER_VERSION = f96aee286ea17c832b7ec922dd76842deb5ce299
-+IMX_USB_LOADER_SITE = $(call github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
-+IMX_USB_LOADER_LICENSE = LGPLv2.1
-+IMX_USB_LOADER_LICENSE_FILES = COPYING
-+IMX_USB_LOADER_DEPENDENCIES = libusb
++CC_TOOL_VERSION = 0.26
++CC_TOOL_SITE = http://downloads.sourceforge.net/project/cctool
++CC_TOOL_SOURCE = cc-tool-$(CC_TOOL_VERSION)-src.tgz
++CC_TOOL_LICENSE = GPLv2
++CC_TOOL_LICENSE_FILES = COPYING
 +
-+define HOST_IMX_USB_LOADER_BUILD_CMDS
-+	$(MAKE) -C $(@D)
-+endef
-+
-+define HOST_IMX_USB_LOADER_INSTALL_CMDS
-+	$(MAKE) -C $(@D)	\
-+		DESTDIR=$(HOST_DIR) install
-+endef
-+
-+$(eval $(host-generic-package))
++$(eval $(autotools-package))
 -- 
-2.3.6
+1.9.1
