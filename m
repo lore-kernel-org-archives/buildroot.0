@@ -1,42 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Apr 2015 17:22:49 +0200
-Subject: [Buildroot] [PATCH] android-tools: new host package
-In-Reply-To: <1430142448-9390-1-git-send-email-antoine.tenart@free-electrons.com>
-References: <1430142448-9390-1-git-send-email-antoine.tenart@free-electrons.com>
-Message-ID: <20150427172249.74dbb30c@free-electrons.com>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Mon, 27 Apr 2015 11:24:11 -0400 (EDT)
+Subject: [Buildroot] Any ideas about mechanism of updating
+ software/firmware?
+In-Reply-To: <553DD8C9.1040602@gmail.com>
+References: <553DD8C9.1040602@gmail.com>
+Message-ID: <493144149.114608.1430148251538.JavaMail.zimbra@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Antoine,
+Hi Xuebing,
 
-Yes, I know the patch comes from me, but there are some typos.
+> Is it a good practice to update 'system/skeleton/etc/issue' when a new
+> version will be 'git tag'ed and built?
 
-On Mon, 27 Apr 2015 15:47:28 +0200, Antoine Tenart wrote:
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> This host package allows to build the fastboot and adb utilities,
-> which can be used to interfact with target devices implementing one of
+No, you shouldn't modify Buildroot's default files. All project-specific files 
+should go in a new directory under board/, typically 
+board/<customer>/<project>/.  You can define a directory from which all files
+will be copied as is to the rootfs.  For instance, try the following config:
 
-interfact -> interact
+    BR2_ROOTFS_OVERLAY="board/<customer>/<project>/fs-overlay"
 
-> +config BR2_PACKAGE_HOST_ANDROID_TOOLS_ADB
-> +       bool "adb"
-> +       help
-> +         This option will build and install the adb utility for the
-> +         host, which can be used to interfact with target devices
+with a custom file board/<customer>/<project>/fs-overlay/etc/issue.
 
-interfact -> interact
+Note that if you want a dynamic value such as the git tag, you can use a 
+post-build script writing to ${TARGET_DIR}/etc/issue (see 
+BR2_ROOTFS_POST_BUILD_SCRIPT). 
 
-Also, I forgot to add a hash file. Make sure to add the hash for both
-the tarball itself, and the Debian tarball as well.
+(Also note that /etc/os-release already contains the full version string).
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+-v
