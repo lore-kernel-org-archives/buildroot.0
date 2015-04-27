@@ -1,60 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Apr 2015 23:26:06 +0200
-Subject: [Buildroot] [git commit] gcc/4.8.4: fix aarch64 vmlaq_lane_s32 typo
-Message-ID: <20150427212617.9225C800D6@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 27 Apr 2015 23:28:06 +0200
+Subject: [Buildroot] [PATCH v1] qt: fix postgresql plugin configure
+Message-ID: <trinity-68c62bd0-bc83-4f4e-9377-485c9b9bf00b-1430170086668@3capp-gmx-bs20>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=326a681f1ee23b40db2637dc8dfe3e49cd58cd80
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes webp build:
-http://autobuild.buildroot.net/results/656/6563be62557ab6c1bdd4152523774316dc09c9ce/
-http://autobuild.buildroot.net/results/e31/e31e782d927215dde87b2f3174d70b8eb70085fd/
-http://autobuild.buildroot.net/results/e2e/e2e627dd6fdfa58ee07fd3aaca43e1731cc8b6e4/
-http://autobuild.buildroot.net/results/26e/26ed07fe917e1af21b5c5c3e4f6c2b39d78a8aff/
+On Sun, Apr 26, 2015 at 11:09:17PM +0200, Peter Seiderer wrote:
+> Add additional -lpthread to fix postgresql plugin configure test.
+> 
+> Fixes [1]:
+> 
+>   PostgreSQL support cannot be enabled due to functionality tests!
+>    Turn on verbose messaging (-v) to ./configure to see the final report.
+>    If you believe this message is in error you may use the continue
+>    switch (-continue) to ./configure to continue.
+>   make: *** [/home/test/autobuild/instance-1/output/build/qt-4.8.6/.stamp_configured] Error 101
+>   make: Leaving directory `/home/test/autobuild/instance-1/buildroot'
+> 
+> Verbose configure output:
+> 
+>   PostgreSQL auto-detection... ()
+>   compiling psql.cpp
+>   linking psql
+>   .../host/usr/i686-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.so.1.0.0: warning: gethostbyname is obsolescent, use getnameinfo() instead.
+>   .../host/usr/i686-buildroot-linux-uclibc/sysroot/usr/lib/libpq.so: undefined reference to `pthread_sigmask'
+>   collect2: error: ld returned 1 exit status
+>   Makefile:99: recipe for target 'psql' failed
+>   gmake[2]: *** [psql] Error 1
+>   PostgreSQL disabled.
+> 
+> [1] http://autobuild.buildroot.net/results/8c1/8c1e18a181f355ab8870c5d3d70cf9d757b6f225/
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/qt/qt.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+> index d1615ae..8a762e8 100644
+> --- a/package/qt/qt.mk
+> +++ b/package/qt/qt.mk
+> @@ -348,7 +348,10 @@ QT_CONFIGURE_OPTS += -qt-sql-odbc
+>  QT_DEPENDENCIES += unixodbc
+>  endif
+>  ifeq ($(BR2_PACKAGE_QT_PSQL),y)
+> -QT_CONFIGURE_OPTS += -qt-sql-psql -psql_config $(STAGING_DIR)/usr/bin/pg_config
+> +# additional -lpthread needed for uclibc/libpq.so linking configure test
+> +QT_CONFIGURE_OPTS += -qt-sql-psql \
+> +     -psql_config $(STAGING_DIR)/usr/bin/pg_config \
+> +     -lpthread
+>  QT_DEPENDENCIES += postgresql
+>  endif
+>  ifeq ($(BR2_PACKAGE_QT_SQLITE_QT),y)
+> -- 
+> 2.1.4
+> 
+> 
 
-And many more.
+Patch not needed if Max Filippov's patch 'package/postgresql: fix pthread flags detection' ([1])
+is first applied. This patch fixes the qt-4.8.6 build failure too...
 
-Upstream bug report and patch:
-https://code.google.com/p/webp/issues/detail?id=230
-https://android-review.googlesource.com/#/c/99470
+Regards,
+Peter
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../4.8.4/843-aarch64-vmlaq_lane_s32-typo.patch    |   24 ++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
-
-diff --git a/package/gcc/4.8.4/843-aarch64-vmlaq_lane_s32-typo.patch b/package/gcc/4.8.4/843-aarch64-vmlaq_lane_s32-typo.patch
-new file mode 100644
-index 0000000..afa650c
---- /dev/null
-+++ b/package/gcc/4.8.4/843-aarch64-vmlaq_lane_s32-typo.patch
-@@ -0,0 +1,24 @@
-+From 845478644ba54a6947e9b224f2e5cd342e8257a9 Mon Sep 17 00:00:00 2001
-+From: Andrew Hsieh <andrewhsieh@google.com>
-+Date: Wed, 25 Jun 2014 22:13:48 -0700
-+Subject: [PATCH] Fix a typo in vmlaq_lane_s32
-+
-+BUG=15526898
-+
-+Change-Id: I4e35a764d369d378808dab29beefe34d1f93249b
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+
-+diff --git a/gcc/config/aarch64/arm_neon.h b/gcc/config/aarch64/arm_neon.h
-+index 73c7e7d..92b0119 100644
-+--- a/gcc/config/aarch64/arm_neon.h
-++++ b/gcc/config/aarch64/arm_neon.h
-+@@ -9984,7 +9984,7 @@
-+ #define vmlaq_lane_s32(a, b, c, d)                                      \
-+   __extension__                                                         \
-+     ({                                                                  \
-+-       int32x4_t c_ = (c);                                              \
-++       int32x2_t c_ = (c);                                              \
-+        int32x4_t b_ = (b);                                              \
-+        int32x4_t a_ = (a);                                              \
-+        int32x4_t result;                                                \
+[1] https://patchwork.ozlabs.org/patch/453567/
