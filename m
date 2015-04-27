@@ -1,98 +1,117 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Apr 2015 23:52:43 +0200
-Subject: [Buildroot] [PATCH 1/1] gmock: new package
-In-Reply-To: <1425304883-4332-2-git-send-email-casantos@datacom.ind.br>
-References: <1425304883-4332-1-git-send-email-casantos@datacom.ind.br>
- <1425304883-4332-2-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20150427235243.3ffef238@free-electrons.com>
+Date: Mon, 27 Apr 2015 23:56:47 +0200
+Subject: [Buildroot] [PATCH v5] python-pyxml: new package
+In-Reply-To: <1423083501-3477-1-git-send-email-yegorslists@googlemail.com>
+References: <1423083501-3477-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20150427235647.2a9770b1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Carlos Santos,
+Dear Yegor Yefremov,
 
-On Mon,  2 Mar 2015 11:01:23 -0300, Carlos Santos wrote:
+On Wed,  4 Feb 2015 21:58:21 +0100, Yegor Yefremov wrote:
 
-> diff --git a/package/gmock/gmock.hash b/package/gmock/gmock.hash
+> diff --git a/package/Config.in b/package/Config.in
+> index fe3d3d0..581bc56 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -561,6 +561,7 @@ menu "external python modules"
+>  	source "package/python-pysnmp-mibs/Config.in"
+>  	source "package/python-pyusb/Config.in"
+>  	source "package/python-pyxb/Config.in"
+> ++	source "package/python-pyxml/Config.in"
+
+This seems weird, why are there two '+' signs here?
+
+>  	source "package/python-pyzmq/Config.in"
+>  	source "package/python-requests/Config.in"
+>  	source "package/python-rtslib-fb/Config.in"
+> diff --git a/package/python-pyxml/Config.in b/package/python-pyxml/Config.in
 > new file mode 100644
-> index 0000000..4d038e2
+> index 0000000..420f3ad
 > --- /dev/null
-> +++ b/package/gmock/gmock.hash
-> @@ -0,0 +1,3 @@
-> +# No upstream hashes for the following:
-
-We use:
-
-# Locally computed
-
-and a single sha256 hash.
-
-> +md5 073b984d8798ea1594f5e44d85b20d66 gmock-1.7.0.zip
-> +sha1 f9d9dd882a25f4069ed9ee48e70aff1b53e3c5a5 gmock-1.7.0.zip
-> diff --git a/package/gmock/gmock.mk b/package/gmock/gmock.mk
+> +++ b/package/python-pyxml/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_PYTHON_PYXML
+> +	bool "python-pyxml"
+> +	depends on BR2_PACKAGE_PYTHON
+> +	help
+> +	  This is the Python XML package.  The distribution contains a
+> +	  validating XML parser, an implementation of the SAX and DOM
+> +	  programming interfaces, an interface to the Expat parser (and the
+> +	  Expat parser itself), and a C helper module that can speed up
+> +	  xmllib.py by a factor of 5.  There's even documentation!
+> +
+> +	  http://pyxml.sourceforge.net/topics/index.html
+> diff --git a/package/python-pyxml/python-xml.hash b/package/python-pyxml/python-xml.hash
 > new file mode 100644
-> index 0000000..5ecf940
+> index 0000000..47fa4c1
 > --- /dev/null
-> +++ b/package/gmock/gmock.mk
-> @@ -0,0 +1,47 @@
+> +++ b/package/python-pyxml/python-xml.hash
+> @@ -0,0 +1,2 @@
+> +#Locally computed
+
+Nit: space between # and Locally.
+
+> +sha256 9fab66f9584fb8e67aebd8745a5c97bf1c5a2e2e461adf68862bcec64e448c13  PyXML-0.8.4.tar.gz
+> diff --git a/package/python-pyxml/python-xml.mk b/package/python-pyxml/python-xml.mk
+> new file mode 100644
+> index 0000000..59bdc06
+> --- /dev/null
+> +++ b/package/python-pyxml/python-xml.mk
+> @@ -0,0 +1,32 @@
 > +################################################################################
 > +#
-> +# gmock
+> +# python-pyxml
 > +#
 > +################################################################################
 > +
-> +GMOCK_VERSION = 1.7.0
-> +GMOCK_SOURCE = gmock-$(GMOCK_VERSION).zip
-> +GMOCK_SITE = http://googlemock.googlecode.com/files
-> +GMOCK_INSTALL_STAGING = YES
-> +GMOCK_INSTALL_TARGET = NO
-> +GMOCK_LICENSE = BSD-3c
-> +GMOCK_LICENSE_FILES = LICENSE
-> +GMOCK_DEPENDENCIES = gtest
-> +HOST_GMOCK_DEPENDENCIES = host-python
-> +
-> +GMOCK_CONF_OPTS = --with-gtest=$(STAGING_DIR)/usr/lib/
-> +
-> +define GMOCK_EXTRACT_CMDS
-> +	$(UNZIP) $(DL_DIR)/$(GMOCK_SOURCE) -d $(BUILD_DIR)
-> +endef
-> +
-> +define GMOCK_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgmock.a $(STAGING_DIR)/usr/lib/libgmock.a
-> +	$(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgmock_main.a $(STAGING_DIR)/usr/lib/libgmock_main.a
-> +	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gmock/
-> +	cp -rp $(@D)/include/gmock/* $(STAGING_DIR)/usr/include/gmock/
-> +endef
+> +PYTHON_PYXML_VERSION = 0.8.4
+> +PYTHON_PYXML_SOURCE  = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
+> +PYTHON_PYXML_SITE    = http://downloads.sourceforge.net/project/pyxml/pyxml/0.8.4/
 
-Why don't you use the default rule for autotools-package staging
-installation?
+Please don't align '=' signs. I know we used to do it years ago, but
+we've stopped doing that, and fixed this all over the tree.
+
+> +PYTHON_PYXML_LICENSE = BSD-3c
+> +PYTHON_PYXML_LICENSE_FILES = LICENSE
+> +PYTHON_PYXML_SETUP_TYPE = distutils
+> +PYTHON_PYXML_DEPENDENCIES = host-python python expat
+
+host-python and python not needed here, the python-package
+infrastructure takes care of that.
+
+> +PYTHON_PYXML_INSTALL_STAGING = NO
+
+Why?
 
 > +
-> +
-> +# Unzipping inside $(@D) and moving everything from the created subdirectory is
-> +# required because unzipping directly in $(BUILD_DIR) would cause host-gmock to
-> +# overwrite the gmock subdir instead of unzipping in a host-gmock subdir.
-> +define HOST_GMOCK_EXTRACT_CMDS
-> +	$(UNZIP) $(DL_DIR)/$(GMOCK_SOURCE) -d $(@D)
-> +	mv $(@D)/gmock-$(GMOCK_VERSION)/* $(@D)
-> +	rmdir $(@D)/gmock-$(GMOCK_VERSION)
+> +define PYTHON_PYXML_CONFIGURE_CMDS
+> +	(cd $(@D); \
+> +		$(HOST_DIR)/usr/bin/python setup.py \
+> +		config --with-libexpat=$(STAGING_DIR)/usr)
 > +endef
-> +
-> +define HOST_GMOCK_INSTALL_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/scripts/generator/gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen.py
-> +	ln -sf gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen
-> +	cp -rp $(@D)/scripts/generator/cpp $(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-> +endef
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-generic-package))
 
-Who is using host-gmock? Your code is not using it apparently, so it
-seems like dead code. Can you explain more how it is supposed to be
-used? And why would it be a host-generic-package and not
-host-autotools-package?
+Since this is a bit unconventional, it would be good to have a comment
+above to explain why there is a configure step.
+
+> +
+> +HOST_PYTHON_PYXML_DEPENDENCIES = host-python host-expat
+> +
+> +define HOST_PYTHON_PYXML_CONFIGURE_CMDS
+> +	(cd $(@D); \
+> +		$(HOST_DIR)/usr/bin/python setup.py \
+> +		config --with-libexpat=$(HOST_DIR)/usr)
+> +endef
+> +
+> +$(eval $(python-package))
+> +$(eval $(host-python-package))
+
+Why do we want host-python-pyxml? What other package is using it?
+Please mention that in the commit log at least.
 
 Thanks,
 
