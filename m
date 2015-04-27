@@ -1,51 +1,106 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 27 Apr 2015 19:56:38 +0200
-Subject: [Buildroot] [PATCH] imx-usb-loader: new host package
-In-Reply-To: <1430142459-9448-1-git-send-email-antoine.tenart@free-electrons.com>
-References: <1430142459-9448-1-git-send-email-antoine.tenart@free-electrons.com>
-Message-ID: <6061599.b1S2CSsYX5@sagittea>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 27 Apr 2015 21:02:56 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/swupdate: new package
+In-Reply-To: <20150425102232.GB4275@free.fr>
+References: <1429916563-20332-1-git-send-email-joerg.krause@embedded.rocks>
+ <20150425102232.GB4275@free.fr>
+Message-ID: <1430161376.1537.5.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Antoine,
+Hi Yann,
 
-On Monday 27 April 2015 15:47:39 Antoine Tenart wrote:
-> This host package allows to build tools to download and execute code on
-> Freescale i.MX5/i.MX6 and Vybrid SoCs through the Serial Download
-> Protocol.
-> 
-> The work behind this commit was funded by ECA Group
-> <http://www.ecagroup.com>. ECA Group is the copyright owner of the
-> contributed code.
-> 
-> Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
-> ---
->  package/Config.in.host                   |  1 +
->  package/imx-usb-loader/Config.in.host    | 10 ++++++++++
->  package/imx-usb-loader/imx-usb-loader.mk | 22 ++++++++++++++++++++++
->  3 files changed, 33 insertions(+)
->  create mode 100644 package/imx-usb-loader/Config.in.host
->  create mode 100644 package/imx-usb-loader/imx-usb-loader.mk
-[...]
-> +define HOST_IMX_USB_LOADER_INSTALL_CMDS
-> +	$(MAKE) -C $(@D)	\
-> +		DESTDIR=$(HOST_DIR) install
-> +endef
-hmm... configuration files are installed in $(HOST_DIR)/usr/etc, 
-$(HOST_DIR)/etc would be better.
-
-More annoying, it seems installed binaries look for configuration files in 
-/etc instead of $(HOST_DIR)/etc.
-
-
-> +
-> +$(eval $(host-generic-package))
+On Sa, 2015-04-25 at 12:22 +0200, Yann E. MORIN wrote:
+> J?rg, All,
 > 
 
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+[snip]
+
+> 
+> We prefer to point to the homepage when it exists, rather than to the
+> git tree:
+>     https://sbabic.github.io/swupdate/
+
+Ok.
+
+> 
+> > +if BR2_PACKAGE_SWUPDATE
+> > +
+> > +config BR2_PACKAGE_SWUPDATE_CONFIG
+> > +   string "swupdate configuration file"
+> > +   default "package/swupdate/swupdate.config"
+> > +   help
+> > +     The default swupdate configuration file will enable 
+> > swupdate with
+> > +     an image downloader and a webserver, as well as 
+> > handlers for UBI
+> > +     volumes, raw NAND or NOR flash, SD cards and shell 
+> > scripts.
+> > +
+> > +     Most people will just use the default swupdate 
+> > configuration file.
+> > +     However, some people may wish to use their own modified 
+> > swupdate
+> > +     configuration file, and will specify their config file 
+> > location
+> > +     with this option.
+> > +
+> > +     Note that if you add lua support in the configuration 
+> > file you need
+> > +     the Lua 5.2 interpreter (BR_PACKAGE_LUA_5_2) manually.
+> 
+> Something's weird in this sentence. What about:
+> 
+>     Note that if you add lua support in the configuration file, you 
+> will
+>     have to enable the Lua 5.2 interpreter (BR_PACKAGE_LUA_5_2).
+
+Ok.
+
+> 
+> [--SNIP--]
+> > diff --git a/package/swupdate/swupdate.mk 
+> > b/package/swupdate/swupdate.mk
+> > new file mode 100644
+> > index 0000000..71ae888
+> > --- /dev/null
+> > +++ b/package/swupdate/swupdate.mk
+> > @@ -0,0 +1,53 @@
+> > +##################################################################
+> > ##############
+> > +#
+> > +# swupdate
+> > +#
+> > +##################################################################
+> > ##############
+> > +
+> > +SWUPDATE_VERSION = c68f02320858f89f2d441ff2057d49489fb6f586
+> > +SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+> > +SWUPDATE_LICENSE = GPLv2+
+> 
+> In fact, there are a few other licenses. For example, the copies of
+> Mongoose and lsqlite3 they bundle are MIT; the sqlite3 aggregated 
+> source
+> file is public domain ("The author disclaims copyright to this source
+> code.").
+
+I see. So I'll add MIT and Public Domain, right?
+
+> > +SWUPDATE_LICENSE_FILES = COPYING
+> > +
+> > +# swupdate bundles its own mongoose and lsqlite3 versions
+> 
+> Is it possible to make it use external versions, or does it only 
+> support
+> using its bundled ones?
+> 
+> If that's possible, we prefer that.
+
+swupdate bundles with mongoose 3.8 (2013) and lsqlite3 0.8 (2011)
+versions. I'm not sure it will work with recent versions.
+
+Best regards
+J?rg Krause
