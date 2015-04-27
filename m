@@ -1,106 +1,124 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 27 Apr 2015 21:02:56 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/swupdate: new package
-In-Reply-To: <20150425102232.GB4275@free.fr>
-References: <1429916563-20332-1-git-send-email-joerg.krause@embedded.rocks>
- <20150425102232.GB4275@free.fr>
-Message-ID: <1430161376.1537.5.camel@embedded.rocks>
+From: Marcin Bis <marcin@bis.org.pl>
+Date: Mon, 27 Apr 2015 21:46:26 +0200
+Subject: [Buildroot] [PATCH] cc-tool: new package
+In-Reply-To: <20150427173126.23797992@free-electrons.com>
+References: <1430142129-32750-1-git-send-email-marcin@bis.org.pl>
+ <20150427173126.23797992@free-electrons.com>
+Message-ID: <553E9212.4090805@bis.org.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi Thomas,
 
-On Sa, 2015-04-25 at 12:22 +0200, Yann E. MORIN wrote:
-> J?rg, All,
-> 
+Thank you for comments.
 
-[snip]
+On 04/27/2015 05:31 PM, Thomas Petazzoni wrote:
+> Dear Marcin Bis,
+>
+> Thanks for this contribution! See some comment sbelow.
+>
+> On Mon, 27 Apr 2015 15:42:09 +0200, Marcin Bis wrote:
+>> cc-tool provides support for Texas Instruments CC Debugger
+>>
+>> Signed-off-by: Marcin Bis <marcin@bis.org.pl>
+>
+> It is not entirely clear: is it a tool you run on your target device,
+> or on your host/development machine?
+>
+> Your package is for the target, but I would intuitively expect a
+> debugger to run on the host/development machine. How does it work?
 
-> 
-> We prefer to point to the homepage when it exists, rather than to the
-> git tree:
->     https://sbabic.github.io/swupdate/
+cc-tool is used for interacting with Texas Instrument's Debugger and 
+Programmer for RF System-on-Chips.
+http://www.ti.com/tool/cc-debugger
 
-Ok.
+The device is used for programming (and debugging) firmware on various 
+TI Low Power RF System-on-Chips (based on 8051 microcontrolers).
 
-> 
-> > +if BR2_PACKAGE_SWUPDATE
-> > +
-> > +config BR2_PACKAGE_SWUPDATE_CONFIG
-> > +   string "swupdate configuration file"
-> > +   default "package/swupdate/swupdate.config"
-> > +   help
-> > +     The default swupdate configuration file will enable 
-> > swupdate with
-> > +     an image downloader and a webserver, as well as 
-> > handlers for UBI
-> > +     volumes, raw NAND or NOR flash, SD cards and shell 
-> > scripts.
-> > +
-> > +     Most people will just use the default swupdate 
-> > configuration file.
-> > +     However, some people may wish to use their own modified 
-> > swupdate
-> > +     configuration file, and will specify their config file 
-> > location
-> > +     with this option.
-> > +
-> > +     Note that if you add lua support in the configuration 
-> > file you need
-> > +     the Lua 5.2 interpreter (BR_PACKAGE_LUA_5_2) manually.
-> 
-> Something's weird in this sentence. What about:
-> 
->     Note that if you add lua support in the configuration file, you 
-> will
->     have to enable the Lua 5.2 interpreter (BR_PACKAGE_LUA_5_2).
+I am using it for re-flashing such chips from ARM-based embedded devices 
+(running Buildroot generated os) - so I put it under "tools for target" 
+category.
 
-Ok.
+TI chips do not have sufficient resources to run Linux on them, so 
+adding cc-tool as a host tools in Buildroot does not make sense (in my 
+opinion) - the tool has no use on Buildroot generated images.
 
-> 
-> [--SNIP--]
-> > diff --git a/package/swupdate/swupdate.mk 
-> > b/package/swupdate/swupdate.mk
-> > new file mode 100644
-> > index 0000000..71ae888
-> > --- /dev/null
-> > +++ b/package/swupdate/swupdate.mk
-> > @@ -0,0 +1,53 @@
-> > +##################################################################
-> > ##############
-> > +#
-> > +# swupdate
-> > +#
-> > +##################################################################
-> > ##############
-> > +
-> > +SWUPDATE_VERSION = c68f02320858f89f2d441ff2057d49489fb6f586
-> > +SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
-> > +SWUPDATE_LICENSE = GPLv2+
-> 
-> In fact, there are a few other licenses. For example, the copies of
-> Mongoose and lsqlite3 they bundle are MIT; the sqlite3 aggregated 
-> source
-> file is public domain ("The author disclaims copyright to this source
-> code.").
+>> diff --git a/package/cc-tool/Config.in b/package/cc-tool/Config.in
+>> new file mode 100644
+>> index 0000000..f62200d
+>> --- /dev/null
+>> +++ b/package/cc-tool/Config.in
+>> @@ -0,0 +1,21 @@
+>> +config BR2_PACKAGE_CC_TOOL
+>> +	bool "cc-tool"
+>> +	depends on BR2_INSTALL_LIBSTDCPP
+>> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +	depends on BR2_LARGEFILE
+>> +	select BR2_PACKAGE_LIBUSB
+>> +	select BR2_PACKAGE_BOOST
+>> +	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+>> +	select BR2_PACKAGE_BOOST_SYSTEM
+>> +	select BR2_PACKAGE_BOOST_REGEX
+>> +	select BR2_PACKAGE_BOOST_FILESYSTEM
+>> +	select BR2_PACKAGE_BOOST_SIGNALS
+>
+> So you're selecting libusb and boost here.
+>
+>> +	help
+>> +	  cc-tool provides support for Texas Instruments CC Debugger
+>> +	  for Linux OS in order to program 8051-based System-On-Chip
+>> +	  devices: CC254x CC253x CC243x CC251x CC111x
+>> +
+>> +	  http://sourceforge.net/projects/cctool/
+>> +
+>> +comment "cc-tool needs a toolchain w/ C++, largefile, threads"
+>> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+>> diff --git a/package/cc-tool/cc-tool.hash b/package/cc-tool/cc-tool.hash
+>> new file mode 100644
+>> index 0000000..81844ee
+>> --- /dev/null
+>> +++ b/package/cc-tool/cc-tool.hash
+>> @@ -0,0 +1,3 @@
+>> +# From http://sourceforge.net/projects/cctool/files/
+>> +sha1 f313e55f019ea5338438633f5b5e689b699343e1  cc-tool-0.26-src.tgz
+>> +md5 26960676f3e6264e612c299fbf8ec5ea  cc-tool-0.26-src.tgz
+>> diff --git a/package/cc-tool/cc-tool.mk b/package/cc-tool/cc-tool.mk
+>> new file mode 100644
+>> index 0000000..9a6ee6e
+>> --- /dev/null
+>> +++ b/package/cc-tool/cc-tool.mk
+>> @@ -0,0 +1,13 @@
+>> +################################################################################
+>> +#
+>> +# cc-tool
+>> +#
+>> +################################################################################
+>> +
+>> +CC_TOOL_VERSION = 0.26
+>> +CC_TOOL_SITE = http://downloads.sourceforge.net/project/cctool
+>> +CC_TOOL_SOURCE = cc-tool-$(CC_TOOL_VERSION)-src.tgz
+>> +CC_TOOL_LICENSE = GPLv2
+>> +CC_TOOL_LICENSE_FILES = COPYING
+>
+> But you don't depend on them anywhere here. So you are not guaranteed
+> that they will be built before cc-tool.
 
-I see. So I'll add MIT and Public Domain, right?
+Fixing this.
 
-> > +SWUPDATE_LICENSE_FILES = COPYING
-> > +
-> > +# swupdate bundles its own mongoose and lsqlite3 versions
-> 
-> Is it possible to make it use external versions, or does it only 
-> support
-> using its bundled ones?
-> 
-> If that's possible, we prefer that.
+>> +
+>> +$(eval $(autotools-package))
+>
+> Other than that, looks good. I've checked the license info, it looks
+> good to me. The configure script doesn't provide any option for
+> optional things, so it looks alright.
+>
+> Thanks!
+>
+> Thomas
+>
 
-swupdate bundles with mongoose 3.8 (2013) and lsqlite3 0.8 (2011)
-versions. I'm not sure it will work with recent versions.
-
-Best regards
-J?rg Krause
+-- 
+   Marcin Bis
