@@ -1,72 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Apr 2015 22:29:05 +0200
-Subject: [Buildroot] [git commit] civetweb: rename lua option to match
-	naming convention
-Message-ID: <20150427203640.90BAF7FBE2@busybox.osuosl.org>
+Date: Mon, 27 Apr 2015 22:03:12 +0200
+Subject: [Buildroot] [git commit] civetweb: unbreak static linking builds
+Message-ID: <20150427203640.8AF09819D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=efd49e3366164a992b76d5e42450dface6c90ffe
+commit: http://git.buildroot.net/buildroot/commit/?id=fc882cf2adbdcb5258312fc8410af929821f5945
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Suboptions of package foo should be prefixed with BR2_PACKAGE_FOO, not just
-BR2_FOO.
+Fixes
+http://autobuild.buildroot.net/results/0a5/0a555a4ad0d100a7d402908b1f26d213de0ec127/
+http://autobuild.buildroot.net/results/97b/97b014b2a611ba2528dda86bb05d6ffbec51c21d/
+http://autobuild.buildroot.net/results/c2e/c2e314127be74a41bcdb78f04bc51fe2edef0b0f/
+http://autobuild.buildroot.net/results/734/7346a89b5e7dd3633ecf9ac5292379ec9e832b2e/
 
-Also add Config.in.legacy handling for it.
+And many more.
+
+It is only the lua suboption that needs dlopen support, so adjust the
+toolchain dependencies and CIVETWEB_LIBS handling to match.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy             |    9 +++++++++
- package/civetweb/Config.in   |    2 +-
- package/civetweb/civetweb.mk |    2 +-
- 3 files changed, 11 insertions(+), 2 deletions(-)
+ package/civetweb/Config.in   |    4 ++++
+ package/civetweb/civetweb.mk |    3 ++-
+ 2 files changed, 6 insertions(+), 1 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 90f474c..408b5f0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,15 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.05"
- 
-+config BR2_CIVETWEB_WITH_LUA
-+	bool "civetweb lua option renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_CIVETWEB_WITH_LUA
-+	help
-+	  civetweb's lua option has been renamed to
-+	  BR2_PACKAGE_CIVETWEB_WITH_LUA to be aligned with how other
-+	  packages name options.
-+
- config BR2_PACKAGE_TIFF_TIFF2PDF
- 	bool "tiff utility-specific option removed"
- 	select BR2_LEGACY
 diff --git a/package/civetweb/Config.in b/package/civetweb/Config.in
-index 6eed00d..d68a1ff 100644
+index f964ac1..6eed00d 100644
 --- a/package/civetweb/Config.in
 +++ b/package/civetweb/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_CIVETWEB
- 
- if BR2_PACKAGE_CIVETWEB
- 
--config BR2_CIVETWEB_WITH_LUA
-+config BR2_PACKAGE_CIVETWEB_WITH_LUA
+@@ -12,11 +12,15 @@ if BR2_PACKAGE_CIVETWEB
+ config BR2_CIVETWEB_WITH_LUA
  	bool "enable Lua support"
  	# required by the bundled Sqlite3 and Lua code
- 	depends on !BR2_STATIC_LIBS
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Enable Lua support in Civetweb. Note that this will use a
+ 	  version of Lua and Sqlite bundled within the Civetweb
+ 	  sources, and not the packages from Buildroot.
+ 
++comment "lua support needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ endif
+ 
+ comment "civetweb needs a toolchain w/ threads"
 diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-index eee5cbf..496eef8 100644
+index 048c91f..eee5cbf 100644
 --- a/package/civetweb/civetweb.mk
 +++ b/package/civetweb/civetweb.mk
-@@ -15,7 +15,7 @@ CIVETWEB_LIBS = -lpthread -lm
+@@ -11,12 +11,13 @@ CIVETWEB_LICENSE_FILES = LICENSE.md
+ 
+ CIVETWEB_CONF_OPTS = TARGET_OS=LINUX WITH_IPV6=1
+ CIVETWEB_COPT = $(TARGET_CFLAGS) -DHAVE_POSIX_FALLOCATE=0
+-CIVETWEB_LIBS = -lpthread -lm -ldl
++CIVETWEB_LIBS = -lpthread -lm
  CIVETWEB_SYSCONFDIR = /etc
  CIVETWEB_HTMLDIR = /var/www
  
--ifeq ($(BR2_CIVETWEB_WITH_LUA),y)
-+ifeq ($(BR2_PACKAGE_CIVETWEB_WITH_LUA),y)
+ ifeq ($(BR2_CIVETWEB_WITH_LUA),y)
  CIVETWEB_CONF_OPTS += WITH_LUA=1
- CIVETWEB_LIBS += -ldl
++CIVETWEB_LIBS += -ldl
  endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
