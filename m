@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 27 Apr 2015 10:02:53 -0300
-Subject: [Buildroot] [PATCH 02/16] guile: add hash file
+Date: Mon, 27 Apr 2015 10:02:54 -0300
+Subject: [Buildroot] [PATCH 03/16] heimdal: add hash file
 In-Reply-To: <1430139787-19304-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1430139787-19304-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1430139787-19304-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1430139787-19304-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/guile/guile.hash | 2 ++
+ package/heimdal/heimdal.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/guile/guile.hash
+ create mode 100644 package/heimdal/heimdal.hash
 
-diff --git a/package/guile/guile.hash b/package/guile/guile.hash
+diff --git a/package/heimdal/heimdal.hash b/package/heimdal/heimdal.hash
 new file mode 100644
-index 0000000..9ba0bf5
+index 0000000..845e957
 --- /dev/null
-+++ b/package/guile/guile.hash
++++ b/package/heimdal/heimdal.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated after checking pgp signature
-+sha256	aed0a4a6db4e310cbdfeb3613fa6f86fddc91ef624c1e3f8937a6304c69103e2	guile-2.0.11.tar.xz
++sha256	aac27bedb33c341b6aed202af07ccc816146a893148721f8123abbbf93bbfea5	heimdal-1.5.3.tar.gz
 -- 
 2.0.5
