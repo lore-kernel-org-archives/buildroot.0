@@ -1,25 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Apr 2015 23:25:19 +0200
-Subject: [Buildroot] [PATCH 1/2] memtester: add hash
-In-Reply-To: <618ca12806107797707e4aff6e80a6253aef04c7.1430127353.git.baruch@tkos.co.il>
-References: <618ca12806107797707e4aff6e80a6253aef04c7.1430127353.git.baruch@tkos.co.il>
-Message-ID: <20150427232519.36e322bc@free-electrons.com>
+Date: Mon, 27 Apr 2015 23:25:43 +0200
+Subject: [Buildroot] [PATCH] memcached: bump to version 1.4.24
+In-Reply-To: <1430140024-28670-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1430140024-28670-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150427232543.2777f3e5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Gustavo Zacarias,
 
-On Mon, 27 Apr 2015 12:35:52 +0300, Baruch Siach wrote:
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Mon, 27 Apr 2015 10:07:04 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/memtester/memtester.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/memtester/memtester.hash
+>  package/memcached/memcached.hash | 4 ++--
+>  package/memcached/memcached.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Both applied, thanks.
+Applied, thanks.
 
 Thomas
 -- 
