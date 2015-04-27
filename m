@@ -1,95 +1,54 @@
-From: Marcin Bis <marcin@bis.org.pl>
-Date: Mon, 27 Apr 2015 21:50:16 +0200
-Subject: [Buildroot] [PATCH v2] cc-tool: new package
-In-Reply-To: <553E9212.4090805@bis.org.pl>
-References: <553E9212.4090805@bis.org.pl>
-Message-ID: <1430164216-6477-1-git-send-email-marcin@bis.org.pl>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Mon, 27 Apr 2015 13:01:43 -0700
+Subject: [Buildroot] [PATCH] imx-usb-loader: new host package
+In-Reply-To: <6061599.b1S2CSsYX5@sagittea>
+References: <1430142459-9448-1-git-send-email-antoine.tenart@free-electrons.com>
+ <6061599.b1S2CSsYX5@sagittea>
+Message-ID: <553E95A7.6000704@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cc-tool provides support for Texas Instruments CC Debugger
+Hi J?r?me,
 
-Signed-off-by: Marcin Bis <marcin@bis.org.pl>
----
- package/Config.in            |  1 +
- package/cc-tool/Config.in    | 21 +++++++++++++++++++++
- package/cc-tool/cc-tool.hash |  3 +++
- package/cc-tool/cc-tool.mk   | 14 ++++++++++++++
- 4 files changed, 39 insertions(+)
- create mode 100644 package/cc-tool/Config.in
- create mode 100644 package/cc-tool/cc-tool.hash
- create mode 100644 package/cc-tool/cc-tool.mk
+On 04/27/2015 10:56 AM, J?r?me Pouiller wrote:
+> Hello Antoine,
+> 
+> On Monday 27 April 2015 15:47:39 Antoine Tenart wrote:
+>> This host package allows to build tools to download and execute code on
+>> Freescale i.MX5/i.MX6 and Vybrid SoCs through the Serial Download
+>> Protocol.
+>>
+>> The work behind this commit was funded by ECA Group
+>> <http://www.ecagroup.com>. ECA Group is the copyright owner of the
+>> contributed code.
+>>
+>> Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+>> ---
+>>  package/Config.in.host                   |  1 +
+>>  package/imx-usb-loader/Config.in.host    | 10 ++++++++++
+>>  package/imx-usb-loader/imx-usb-loader.mk | 22 ++++++++++++++++++++++
+>>  3 files changed, 33 insertions(+)
+>>  create mode 100644 package/imx-usb-loader/Config.in.host
+>>  create mode 100644 package/imx-usb-loader/imx-usb-loader.mk
+> [...]
+>> +define HOST_IMX_USB_LOADER_INSTALL_CMDS
+>> +	$(MAKE) -C $(@D)	\
+>> +		DESTDIR=$(HOST_DIR) install
+>> +endef
+> hmm... configuration files are installed in $(HOST_DIR)/usr/etc, 
+> $(HOST_DIR)/etc would be better.
+> 
+> More annoying, it seems installed binaries look for configuration files in 
+> /etc instead of $(HOST_DIR)/etc.
+> 
 
-diff --git a/package/Config.in b/package/Config.in
-index 4e20e4d..12767d5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -316,6 +316,7 @@ endmenu
- 	source "package/avrdude/Config.in"
- 	source "package/bcache-tools/Config.in"
- 	source "package/biosdevname/Config.in"
-+	source "package/cc-tool/Config.in"
- 	source "package/cdrkit/Config.in"
- 	source "package/cryptsetup/Config.in"
- 	source "package/cwiid/Config.in"
-diff --git a/package/cc-tool/Config.in b/package/cc-tool/Config.in
-new file mode 100644
-index 0000000..f62200d
---- /dev/null
-+++ b/package/cc-tool/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_CC_TOOL
-+	bool "cc-tool"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_LARGEFILE
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_REGEX
-+	select BR2_PACKAGE_BOOST_FILESYSTEM
-+	select BR2_PACKAGE_BOOST_SIGNALS
-+	help
-+	  cc-tool provides support for Texas Instruments CC Debugger
-+	  for Linux OS in order to program 8051-based System-On-Chip
-+	  devices: CC254x CC253x CC243x CC251x CC111x
-+
-+	  http://sourceforge.net/projects/cctool/
-+
-+comment "cc-tool needs a toolchain w/ C++, largefile, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/cc-tool/cc-tool.hash b/package/cc-tool/cc-tool.hash
-new file mode 100644
-index 0000000..81844ee
---- /dev/null
-+++ b/package/cc-tool/cc-tool.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/cctool/files/
-+sha1 f313e55f019ea5338438633f5b5e689b699343e1  cc-tool-0.26-src.tgz
-+md5 26960676f3e6264e612c299fbf8ec5ea  cc-tool-0.26-src.tgz
-diff --git a/package/cc-tool/cc-tool.mk b/package/cc-tool/cc-tool.mk
-new file mode 100644
-index 0000000..0612fd0
---- /dev/null
-+++ b/package/cc-tool/cc-tool.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# cc-tool
-+#
-+################################################################################
-+
-+CC_TOOL_VERSION = 0.26
-+CC_TOOL_SITE = http://downloads.sourceforge.net/project/cctool
-+CC_TOOL_SOURCE = cc-tool-$(CC_TOOL_VERSION)-src.tgz
-+CC_TOOL_LICENSE = GPLv2
-+CC_TOOL_LICENSE_FILES = COPYING
-+CC_TOOL_DEPENDENCIES = boost libusb
-+
-+$(eval $(autotools-package))
--- 
-1.9.1
+This can be over-ridden by setting sysconfdir=$(HOST_DIR)/etc/
+	https://github.com/boundarydevices/imx_usb_loader/blob/master/Makefile#L6
+
+Regards,
+
+
+Eric
