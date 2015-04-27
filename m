@@ -1,42 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Apr 2015 23:30:41 +0200
-Subject: [Buildroot] [git commit] memcached: bump to version 1.4.24
-Message-ID: <20150427213049.7B95B81D53@busybox.osuosl.org>
+Date: Mon, 27 Apr 2015 23:31:28 +0200
+Subject: [Buildroot] [git commit] manual: don't use a comment at the end of
+	the version variable assignment
+Message-ID: <20150427213133.0B8EE81D53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=968cf1fc8df2eaea0ddc8e03fea09bbd4f143249
+commit: http://git.buildroot.net/buildroot/commit/?id=375728d0513bf53f058f07dcc88c426614dc306e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The comment at the end of the version string assigment could lead to a download
+failure so don't use it as a example.
+
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/memcached/memcached.hash |    4 ++--
- package/memcached/memcached.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ docs/manual/adding-packages-tips.txt |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index 45e1db5..55376ce 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,2 +1,2 @@
--# From http://www.memcached.org/files/memcached-1.4.23.tar.gz.sha1
--sha1	121fc548860f4e7d4d5052f9816cc6ff4cc5a10d	memcached-1.4.23.tar.gz
-+# From http://www.memcached.org/files/memcached-1.4.24.tar.gz.sha1
-+sha1	32a798a37ef782da10a09d74aa1e5be91f2861db	memcached-1.4.24.tar.gz
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 3c67da0..2d39bd8 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index 6f5e785..6699951 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -42,7 +42,8 @@ on GitHub. As GitHub is known to have changed download mechanisms in the
+ past, the 'github' helper function should be used as shown below.
  
--MEMCACHED_VERSION = 1.4.23
-+MEMCACHED_VERSION = 1.4.24
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ ------------------------
+-FOO_VERSION = v1.0 # tag or full commit ID
++# Use a tag or a full commit ID
++FOO_VERSION = v1.0
+ FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
+ ------------------------
+ 
