@@ -1,25 +1,51 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 27 Apr 2015 19:01:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: Fix compile warning being
-	treated as error
-References: <1429905652-16930-1-git-send-email-bernd.kuhls@t-online.de>
- <20150425114220.3f518a79@free-electrons.com>
-Message-ID: <XnsA489C18076B59berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Mon, 27 Apr 2015 19:56:38 +0200
+Subject: [Buildroot] [PATCH] imx-usb-loader: new host package
+In-Reply-To: <1430142459-9448-1-git-send-email-antoine.tenart@free-electrons.com>
+References: <1430142459-9448-1-git-send-email-antoine.tenart@free-electrons.com>
+Message-ID: <6061599.b1S2CSsYX5@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20150425114220.3f518a79 at free-electrons.com:
+Hello Antoine,
 
-> Applied, thanks. If you have the courage of submitting our 4 VLC
-> patches upstream, it would be great :-)
+On Monday 27 April 2015 15:47:39 Antoine Tenart wrote:
+> This host package allows to build tools to download and execute code on
+> Freescale i.MX5/i.MX6 and Vybrid SoCs through the Serial Download
+> Protocol.
+> 
+> The work behind this commit was funded by ECA Group
+> <http://www.ecagroup.com>. ECA Group is the copyright owner of the
+> contributed code.
+> 
+> Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+> ---
+>  package/Config.in.host                   |  1 +
+>  package/imx-usb-loader/Config.in.host    | 10 ++++++++++
+>  package/imx-usb-loader/imx-usb-loader.mk | 22 ++++++++++++++++++++++
+>  3 files changed, 33 insertions(+)
+>  create mode 100644 package/imx-usb-loader/Config.in.host
+>  create mode 100644 package/imx-usb-loader/imx-usb-loader.mk
+[...]
+> +define HOST_IMX_USB_LOADER_INSTALL_CMDS
+> +	$(MAKE) -C $(@D)	\
+> +		DESTDIR=$(HOST_DIR) install
+> +endef
+hmm... configuration files are installed in $(HOST_DIR)/usr/etc, 
+$(HOST_DIR)/etc would be better.
 
-Hi,
+More annoying, it seems installed binaries look for configuration files in 
+/etc instead of $(HOST_DIR)/etc.
 
-I will do so when vlc does not throw compile errors on the autobuilders 
-anymore ;) Btw, I will send another vlc patch in a few seconds ;)
 
-Regards, Bernd
+> +
+> +$(eval $(host-generic-package))
+> 
+
+-- 
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
