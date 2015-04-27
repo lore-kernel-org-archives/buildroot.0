@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Apr 2015 23:21:38 +0200
-Subject: [Buildroot] [PATCH 01/16] diffutils: add hash file
-In-Reply-To: <1430139787-19304-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1430139787-19304-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150427232138.1728adc9@free-electrons.com>
+Date: Mon, 27 Apr 2015 23:22:14 +0200
+Subject: [Buildroot] [git commit] ramspeed: add hash
+Message-ID: <20150427212516.B26E57FBC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=aca694c0ee2082a6ace9cfc360adab6807f72ba0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 27 Apr 2015 10:02:52 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/diffutils/diffutils.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/diffutils/diffutils.hash
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ramspeed/ramspeed.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-All applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ramspeed/ramspeed.hash b/package/ramspeed/ramspeed.hash
+new file mode 100644
+index 0000000..71052a3
+--- /dev/null
++++ b/package/ramspeed/ramspeed.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	f84e2e42b2b6b221ef9b586f6ae63d863db4ff21858e0ce7c84622a7c9522950	ramspeed-2.6.0.tar.gz
