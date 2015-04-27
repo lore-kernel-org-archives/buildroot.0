@@ -1,54 +1,38 @@
-From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Mon, 27 Apr 2015 13:01:43 -0700
-Subject: [Buildroot] [PATCH] imx-usb-loader: new host package
-In-Reply-To: <6061599.b1S2CSsYX5@sagittea>
-References: <1430142459-9448-1-git-send-email-antoine.tenart@free-electrons.com>
- <6061599.b1S2CSsYX5@sagittea>
-Message-ID: <553E95A7.6000704@boundarydevices.com>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Mon, 27 Apr 2015 22:16:16 +0200
+Subject: [Buildroot] uClibc build verbosity control
+In-Reply-To: <20150427092110.GF8309@waldemar-brodkorb.de>
+References: <C2D7FE5348E1B147BCA15975FBA230756659BC9F@IN01WEMBXB.internal.synopsys.com>
+ <20150427092110.GF8309@waldemar-brodkorb.de>
+Message-ID: <64AC6559-D358-40F8-8543-1C2D6DEEE01E@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?r?me,
+On April 27, 2015 11:21:10 AM GMT+02:00, Waldemar Brodkorb <wbx@openadk.org> wrote:
+>Hi Vineet,
+>Vineet Gupta wrote,
+>
+>> Hi,
+>> 
+>> uClibc verbosity control V=xx is different from other mainstream
+>projects: namely Busybox and Linux kernel.
+>> To print full cmdlines (when debugging obscure toolchain issues) we
+>need to pass V=2 whereas kernel/busybox take V=1.
+>> 
+>> Can this be changed (I can provide a patch) assuming this doesn't
+>break existing scripts upsetting some people.
+>> 
+>> My issue is specifically when using likes of Buildroot, there's no
+>obvious way to get the cmdlines of uClibc and/or other projects (unless
+>there's some obvious way I'm missing).
 
-On 04/27/2015 10:56 AM, J?r?me Pouiller wrote:
-> Hello Antoine,
-> 
-> On Monday 27 April 2015 15:47:39 Antoine Tenart wrote:
->> This host package allows to build tools to download and execute code on
->> Freescale i.MX5/i.MX6 and Vybrid SoCs through the Serial Download
->> Protocol.
->>
->> The work behind this commit was funded by ECA Group
->> <http://www.ecagroup.com>. ECA Group is the copyright owner of the
->> contributed code.
->>
->> Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
->> ---
->>  package/Config.in.host                   |  1 +
->>  package/imx-usb-loader/Config.in.host    | 10 ++++++++++
->>  package/imx-usb-loader/imx-usb-loader.mk | 22 ++++++++++++++++++++++
->>  3 files changed, 33 insertions(+)
->>  create mode 100644 package/imx-usb-loader/Config.in.host
->>  create mode 100644 package/imx-usb-loader/imx-usb-loader.mk
-> [...]
->> +define HOST_IMX_USB_LOADER_INSTALL_CMDS
->> +	$(MAKE) -C $(@D)	\
->> +		DESTDIR=$(HOST_DIR) install
->> +endef
-> hmm... configuration files are installed in $(HOST_DIR)/usr/etc, 
-> $(HOST_DIR)/etc would be better.
-> 
-> More annoying, it seems installed binaries look for configuration files in 
-> /etc instead of $(HOST_DIR)/etc.
-> 
+Just add V=2 to make flags used for uclibc?
 
-This can be over-ridden by setting sysconfdir=$(HOST_DIR)/etc/
-	https://github.com/boundarydevices/imx_usb_loader/blob/master/Makefile#L6
+>
+>Good idea. Send a patch. I am pro.
 
-Regards,
-
-
-Eric
+I found the terse output with just defines rather neat.
+If there is consensus that the current V=1 has no benefit then we can drop it in favour of just silent 0 and fully verbose 1.
