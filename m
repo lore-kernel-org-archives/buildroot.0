@@ -1,76 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Apr 2015 17:25:32 +0200
-Subject: [Buildroot] [PATCH] imx-usb-loader: new host package
-In-Reply-To: <1430142459-9448-1-git-send-email-antoine.tenart@free-electrons.com>
-References: <1430142459-9448-1-git-send-email-antoine.tenart@free-electrons.com>
-Message-ID: <20150427172532.6e54e15e@free-electrons.com>
+Date: Mon, 27 Apr 2015 17:31:26 +0200
+Subject: [Buildroot] [PATCH] cc-tool: new package
+In-Reply-To: <1430142129-32750-1-git-send-email-marcin@bis.org.pl>
+References: <1430142129-32750-1-git-send-email-marcin@bis.org.pl>
+Message-ID: <20150427173126.23797992@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Antoine,
+Dear Marcin Bis,
 
-On Mon, 27 Apr 2015 15:47:39 +0200, Antoine Tenart wrote:
+Thanks for this contribution! See some comment sbelow.
 
-> diff --git a/package/imx-usb-loader/Config.in.host b/package/imx-usb-loader/Config.in.host
+On Mon, 27 Apr 2015 15:42:09 +0200, Marcin Bis wrote:
+> cc-tool provides support for Texas Instruments CC Debugger
+> 
+> Signed-off-by: Marcin Bis <marcin@bis.org.pl>
+
+It is not entirely clear: is it a tool you run on your target device,
+or on your host/development machine?
+
+Your package is for the target, but I would intuitively expect a
+debugger to run on the host/development machine. How does it work?
+
+> diff --git a/package/cc-tool/Config.in b/package/cc-tool/Config.in
 > new file mode 100644
-> index 000000000000..a30f20a32f81
+> index 0000000..f62200d
 > --- /dev/null
-> +++ b/package/imx-usb-loader/Config.in.host
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_HOST_IMX_USB_LOADER
-> +	bool "host imx usb loader"
-
-	bool "host imx-usb-loader"
-
-> +	select BR2_PACKAGE_LIBUSB
+> +++ b/package/cc-tool/Config.in
+> @@ -0,0 +1,21 @@
+> +config BR2_PACKAGE_CC_TOOL
+> +	bool "cc-tool"
+> +	depends on BR2_INSTALL_LIBSTDCPP
 > +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_LARGEFILE
+> +	select BR2_PACKAGE_LIBUSB
+> +	select BR2_PACKAGE_BOOST
+> +	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+> +	select BR2_PACKAGE_BOOST_SYSTEM
+> +	select BR2_PACKAGE_BOOST_REGEX
+> +	select BR2_PACKAGE_BOOST_FILESYSTEM
+> +	select BR2_PACKAGE_BOOST_SIGNALS
 
-No, doesn't make sense. Your package is a host package, so it does not
-need libusb. It needs host-libusb, so there is no need for anything in
-Config.in.
+So you're selecting libusb and boost here.
 
-> diff --git a/package/imx-usb-loader/imx-usb-loader.mk b/package/imx-usb-loader/imx-usb-loader.mk
+> +	help
+> +	  cc-tool provides support for Texas Instruments CC Debugger
+> +	  for Linux OS in order to program 8051-based System-On-Chip
+> +	  devices: CC254x CC253x CC243x CC251x CC111x
+> +
+> +	  http://sourceforge.net/projects/cctool/
+> +
+> +comment "cc-tool needs a toolchain w/ C++, largefile, threads"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/cc-tool/cc-tool.hash b/package/cc-tool/cc-tool.hash
 > new file mode 100644
-> index 000000000000..e33daac34367
+> index 0000000..81844ee
 > --- /dev/null
-> +++ b/package/imx-usb-loader/imx-usb-loader.mk
-> @@ -0,0 +1,22 @@
+> +++ b/package/cc-tool/cc-tool.hash
+> @@ -0,0 +1,3 @@
+> +# From http://sourceforge.net/projects/cctool/files/
+> +sha1 f313e55f019ea5338438633f5b5e689b699343e1  cc-tool-0.26-src.tgz
+> +md5 26960676f3e6264e612c299fbf8ec5ea  cc-tool-0.26-src.tgz
+> diff --git a/package/cc-tool/cc-tool.mk b/package/cc-tool/cc-tool.mk
+> new file mode 100644
+> index 0000000..9a6ee6e
+> --- /dev/null
+> +++ b/package/cc-tool/cc-tool.mk
+> @@ -0,0 +1,13 @@
 > +################################################################################
 > +#
-> +# iMX USB loader
-
-imx-usb-loader
-
+> +# cc-tool
 > +#
 > +################################################################################
 > +
-> +IMX_USB_LOADER_VERSION = f96aee286ea17c832b7ec922dd76842deb5ce299
-> +IMX_USB_LOADER_SITE = $(call github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
-> +IMX_USB_LOADER_LICENSE = LGPLv2.1
+> +CC_TOOL_VERSION = 0.26
+> +CC_TOOL_SITE = http://downloads.sourceforge.net/project/cctool
+> +CC_TOOL_SOURCE = cc-tool-$(CC_TOOL_VERSION)-src.tgz
+> +CC_TOOL_LICENSE = GPLv2
+> +CC_TOOL_LICENSE_FILES = COPYING
 
-LGPLv2.1+
+But you don't depend on them anywhere here. So you are not guaranteed
+that they will be built before cc-tool.
 
-> +IMX_USB_LOADER_LICENSE_FILES = COPYING
-> +IMX_USB_LOADER_DEPENDENCIES = libusb
 > +
-> +define HOST_IMX_USB_LOADER_BUILD_CMDS
-> +	$(MAKE) -C $(@D)
+> +$(eval $(autotools-package))
 
-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+Other than that, looks good. I've checked the license info, it looks
+good to me. The configure script doesn't provide any option for
+optional things, so it looks alright.
 
-> +endef
-> +
-> +define HOST_IMX_USB_LOADER_INSTALL_CMDS
-> +	$(MAKE) -C $(@D)	\
-> +		DESTDIR=$(HOST_DIR) install
-
-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
-		DESTDIR=$(HOST_DIR) install
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
