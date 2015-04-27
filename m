@@ -1,38 +1,50 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Mon, 27 Apr 2015 22:16:16 +0200
-Subject: [Buildroot] uClibc build verbosity control
-In-Reply-To: <20150427092110.GF8309@waldemar-brodkorb.de>
-References: <C2D7FE5348E1B147BCA15975FBA230756659BC9F@IN01WEMBXB.internal.synopsys.com>
- <20150427092110.GF8309@waldemar-brodkorb.de>
-Message-ID: <64AC6559-D358-40F8-8543-1C2D6DEEE01E@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Apr 2015 22:35:57 +0200
+Subject: [Buildroot] [git commit] civetweb: use TARGET_CONFIGURE_OPTS
+Message-ID: <20150427203640.9AD5F819D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On April 27, 2015 11:21:10 AM GMT+02:00, Waldemar Brodkorb <wbx@openadk.org> wrote:
->Hi Vineet,
->Vineet Gupta wrote,
->
->> Hi,
->> 
->> uClibc verbosity control V=xx is different from other mainstream
->projects: namely Busybox and Linux kernel.
->> To print full cmdlines (when debugging obscure toolchain issues) we
->need to pass V=2 whereas kernel/busybox take V=1.
->> 
->> Can this be changed (I can provide a patch) assuming this doesn't
->break existing scripts upsetting some people.
->> 
->> My issue is specifically when using likes of Buildroot, there's no
->obvious way to get the cmdlines of uClibc and/or other projects (unless
->there's some obvious way I'm missing).
+commit: http://git.buildroot.net/buildroot/commit/?id=ea94747798a6c0c61c261bc3296417bb12d43d98
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Just add V=2 to make flags used for uclibc?
+Instead of explicitly handling CC/LD/CFLAGS. No functional change, but it is
+cleaner like this.
 
->
->Good idea. Send a patch. I am pro.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/civetweb/civetweb.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-I found the terse output with just defines rather neat.
-If there is consensus that the current V=1 has no benefit then we can drop it in favour of just silent 0 and fully verbose 1.
+diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
+index 496eef8..d29765b 100644
+--- a/package/civetweb/civetweb.mk
++++ b/package/civetweb/civetweb.mk
+@@ -10,7 +10,7 @@ CIVETWEB_LICENSE = MIT
+ CIVETWEB_LICENSE_FILES = LICENSE.md
+ 
+ CIVETWEB_CONF_OPTS = TARGET_OS=LINUX WITH_IPV6=1
+-CIVETWEB_COPT = $(TARGET_CFLAGS) -DHAVE_POSIX_FALLOCATE=0
++CIVETWEB_COPT = -DHAVE_POSIX_FALLOCATE=0
+ CIVETWEB_LIBS = -lpthread -lm
+ CIVETWEB_SYSCONFDIR = /etc
+ CIVETWEB_HTMLDIR = /var/www
+@@ -29,13 +29,13 @@ CIVETWEB_COPT += -DNO_SSL
+ endif
+ 
+ define CIVETWEB_BUILD_CMDS
+-	$(MAKE) CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D) build \
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) build \
+ 		$(CIVETWEB_CONF_OPTS) \
+ 		COPT="$(CIVETWEB_COPT)" LIBS="$(CIVETWEB_LIBS)"
+ endef
+ 
+ define CIVETWEB_INSTALL_TARGET_CMDS
+-	$(MAKE) CC="$(TARGET_CC)" -C $(@D) install \
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
+ 		DOCUMENT_ROOT="$(CIVETWEB_HTMLDIR)" \
+ 		CONFIG_FILE2="$(CIVETWEB_SYSCONFDIR)/civetweb.conf" \
+ 		HTMLDIR="$(TARGET_DIR)$(CIVETWEB_HTMLDIR)" \
