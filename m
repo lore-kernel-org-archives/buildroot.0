@@ -1,66 +1,43 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Apr 2015 20:51:21 +0200
-Subject: [Buildroot] Run a custom script after USB mount
-In-Reply-To: <CADKZYY+U0L0jd=2FU9z7u1dOk0sJE5AoSrbihmV7OEYKE7=hAg@mail.gmail.com>
-References: <CADKZYYKSc+rE2YvaBokFteSTE3gwnEvNksY1-w0HNC35u5yFig@mail.gmail.com>
- <CAKAx1ch+bA0RtZ6tfeK959UQazCaWRtRZr_N-DKBdGddXvK9Fg@mail.gmail.com>
- <CADKZYYLY_bj7b-8vJ+ztgxc2zjuxKLJgxAJ0e4XY681=h2aj=Q@mail.gmail.com>
- <20150418143654.021fa104@free-electrons.com>
- <CADKZYYJrtTdn_47NCJumggetKmoHt7sAbk5-a9X_zHrMVJdYHA@mail.gmail.com>
- <55394E6D.8000404@mind.be>
- <CADKZYY+U0L0jd=2FU9z7u1dOk0sJE5AoSrbihmV7OEYKE7=hAg@mail.gmail.com>
-Message-ID: <553FD6A9.5060804@mind.be>
+Date: Tue, 28 Apr 2015 20:52:59 +0200
+Subject: [Buildroot] grub on target
+In-Reply-To: <20150424174149.GA627@postdiluvian.org>
+References: <HKXPR01MB0312A3D64DA648D6B74794C9C2EF0@HKXPR01MB0312.apcprd01.prod.exchangelabs.com>
+ <20150422195220.GA19841@postdiluvian.org>
+ <20150424174149.GA627@postdiluvian.org>
+Message-ID: <553FD70B.40209@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/24/15 01:04, Santhosh Ramani wrote:
-> Hello Arnout,
-> 
->     > /# cat /etc/udev/rules.d/99-usb-detection.rules/*
->     > SUBSYSTEM=="usb", ACTION=="add", KERNEL=="sda*", RUN+="/etc/hcc/usb-detected"*
->      If it's a scsi device, the subsystem is block, not usb, right?
-> 
-> 
-> Yes you are correct - I removed the subsystem section and it now works properly.
-> I also was not restarting (or reloading) udev rules properly and that was also
-> contributing to the problem. 
-> 
-> The script I want to run copies data from the USB stick and places it at a given
-> location. However, it seems that by the time the script finishes executing the
-> USB is not yet mounted so nothing gets copied. How can I defer execution of the
-> script until the volume is mounted, yet at the same time not block udev. I tried
-> the following:
-> 
-> usb-detected: Launcher Script
-> 
-> /etc/hcc/update_script & exit
-> 
-> I was hoping the second script "update" would be launched as a separate process
-> and will be non-blocking. I could then add sleep command in the second script
-> and delay execution. However, this doesn't seem to work. I was not able to use
-> 'disown' either, since it's a bash command. Similarly I didn't have any luck
-> with 'at' command either.
-> 
-> Any thoughts on how I can defer the thread and not block udev?
+ Hi Mark,
 
- Actually I don't use udev myself - I just read the documentation to answer your
-question. so I really can't say.
+On 04/24/15 19:41, Mark Mason wrote:
+> To answer my own question, it looks like I was having some sort of
+> UEFI-related problem, and it was fixed by a newer version of Grub2.
 
- However, can't you add something to whatever script is doing the mounting, so
-you can be sure that it's mounted already?
+ Perhaps you'd like to submit a patch to bump grub2 to a newer version?
 
  Regards,
  Arnout
 
 > 
-> Thank you once again for all your replies.
-> Regards
+> When booting from Grub2 under some circumstances (seemingly involving
+> the phase of the moon and how frustrated I was) I'd get a message
+> saying "Couldn't terminate EFI service", then some sort of hang.  Some
+> digging around turned up a Grub2 patch to address this issue that
+> buildroot-2015-02 doesn't have - Grub2 simply retries the service stop
+> if it fails the first time, emitting a message about retrying the
+> service stop instead of a message about being unable to stop.
 > 
-> Santhosh
-
+> I have no idea what service(s) are involved, but I've now got reliable
+> booting.
+> 
+> It's worth nothing that the Grub2 info page does address
+> phase-of-the-moon issues, but only involving the graphics.
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
