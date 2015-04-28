@@ -1,49 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 29 Apr 2015 00:40:01 +0200
-Subject: [Buildroot] [PATCH 4/7] boot/barebox: do not check hash for custom
-	versions
+Date: Wed, 29 Apr 2015 00:40:03 +0200
+Subject: [Buildroot] [PATCH 6/7] linux: do not check hashes for custom
+	versions and tarballs
 In-Reply-To: <cover.1430260630.git.yann.morin.1998@free.fr>
 References: <cover.1430260630.git.yann.morin.1998@free.fr>
-Message-ID: <895f0c166335e5dfb49a30dd8cf0b2986a5f7431.1430260630.git.yann.morin.1998@free.fr>
+Message-ID: <f033e301266baba536c3d63902cc2439e45eb3a4.1430260630.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As we recently did for U-Boot, disable chekcing hashes for custom
-versions of barebox.
-
-Note that we currently have no hash file for barebox, but avoiding the
-check will already be in place when we do add it.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/barebox/barebox.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ linux/linux.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 54f52bb..764791d 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -11,6 +11,7 @@ ifeq ($(BAREBOX_VERSION),custom)
- BAREBOX_TARBALL = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
- BAREBOX_SITE = $(patsubst %/,%,$(dir $(BAREBOX_TARBALL)))
- BAREBOX_SOURCE = $(notdir $(BAREBOX_TARBALL))
-+BR_NO_CHECK_HASH_FOR += $(BAREBOX_SOURCE)
- else ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
- BAREBOX_SITE = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
- BAREBOX_SITE_METHOD = git
-@@ -18,6 +19,9 @@ else
- # Handle stable official Barebox versions
- BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
- BAREBOX_SITE = http://www.barebox.org/download
-+ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_VERSION),y)
-+BR_NO_CHECK_HASH_FOR += $(BAREBOX_SOURCE)
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 0c348da..959c564 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -13,8 +13,10 @@ ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
+ LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
+ LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
+ LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
++BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
++# For 'local', there is no hash check, so no need to set BR_NO_CHECK_HASH_FOR
+ LINUX_SITE_METHOD = local
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+@@ -24,6 +26,9 @@ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_SITE_METHOD = hg
+ else
+ LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
++ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
++BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
 +endif
- endif
- 
- BAREBOX_DEPENDENCIES = host-lzop
+ # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+ # to use the $(word) function. We support versions such as 4.0, 3.1,
+ # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
 -- 
 1.9.1
