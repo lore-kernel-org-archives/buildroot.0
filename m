@@ -1,40 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Apr 2015 21:17:23 +0200
-Subject: [Buildroot] [PATCH v7 0/8] toolchain: better handle hashes
- (branch yem/dl-hash-toolchains)
-In-Reply-To: <20150425142634.516e800e@free-electrons.com>
-References: <1429740521-31943-1-git-send-email-arnout@mind.be>
- <20150425142634.516e800e@free-electrons.com>
-Message-ID: <553FDCC3.2090607@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 28 Apr 2015 21:23:36 +0200
+Subject: [Buildroot] [PATCH] qt: QT_COORD_TYPE_DOUBLE should only be set
+	on soft float
+In-Reply-To: <1430235747-5775-1-git-send-email-richard.genoud@gmail.com>
+ (Richard Genoud's message of "Tue, 28 Apr 2015 17:42:27 +0200")
+References: <874mo0zj0r.fsf@dell.be.48ers.dk>
+ <1430235747-5775-1-git-send-email-richard.genoud@gmail.com>
+Message-ID: <87zj5sxdjb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/25/15 14:26, Thomas Petazzoni wrote:
-> One thing that bothered me a little bit is that when the hash of the
-> tarball downloaded from upstream doesn't match the one we have in BR,
-> we gracefully fall back on downloading the tarball from
-> sources.buildroot.net.
-> 
-> This is good for users as it means their build succeeds. But not so
-> good from the point of view of noticing that upstream has for some
-> reason changed the tarball.
+>>>>> "Richard" == Richard Genoud <richard.genoud@gmail.com> writes:
 
- We could disable the SECONDARY site in the autobuilders.
+ > If QT_COORD_TYPE_DOUBLE is forced and hard float is used, Qt compilation
+ > breaks because it can't find hard coded operations on double.
 
- Regards,
- Arnout
+ > Moreover, QT_COORD_TYPE is float only if QT_NO_FPU is set.
+ > (cf src/corelib/global/qglobal.h)
 
-> 
-> Any opinion about this?
+ > So, we can safely make the QT_COORD_TYPE_DOUBLE option depend on
+ > BR2_SOFT_FLOAT.
 
+ > Reported-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+
+Committed, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Venlig hilsen,
+Peter Korsgaard 
