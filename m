@@ -1,49 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Apr 2015 22:57:22 +0200
-Subject: [Buildroot] [PATCH] python: Allow pyo only and variants
-In-Reply-To: <20150426190620.4647bb75@free-electrons.com>
-References: <1430065819-12745-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20150426190620.4647bb75@free-electrons.com>
-Message-ID: <553FF432.107@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 29 Apr 2015 00:39:59 +0200
+Subject: [Buildroot] [PATCH 0/7] hashes: add more custom versions to the
+	exclusion list (branch yem/no-hash-custom)
+Message-ID: <cover.1430260630.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/26/15 19:06, Thomas Petazzoni wrote:
-> I'm sure we can do something smarter here.
-> 
-> # arg1: extension of files to remove
-> define PYTHON_FINALIZE_REMOVE_HELPER
-> 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.$(1)' -print0 | xargs -0 rm -f
-> endef
-> 
-> ifeq ($(BR2_PACKAGE_PYTHON_REMOVE_PY),y)
-> 	$(call PYTHON_FINALIZE_REMOVE_HELPER,py)
-> endif
-> 
-> ifeq ($(BR2_PACKAGE_PYTHON_REMOVE_PYC),y)
-> 	$(call PYTHON_FINALIZE_REMOVE_HELPER,pyc)
-> endif
-> 
-> ifeq ($(BR2_PACKAGE_PYTHON_REMOVE_PYO),y)
-> 	$(call PYTHON_FINALIZE_REMOVE_HELPER,pyo)
-> endif
-> 
-> BR2_PACKAGE_PYTHON_REMOVE_* being hidden Config.in options.
+Hello All!
 
- Or make these options the public ones instead of having the huge choice.
+This series adds more custom versions to the list of files excluded from
+the hash check.
 
- Requires legacy handling of course.
+As a side effect, it also fixes assigning to that exclusion list, adds a
+hash to Xenomai, and switches gummiboot to use http:// instead of git://.
 
- Regards,
- Arnout
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 6b1f66643d782fc6f00e7436d41ceea6d88ad6bf:
+
+  dhcpcd: fix ipv6 related compile failure (2015-04-28 21:44:55 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/no-hash-custom
+
+for you to fetch changes up to c7721b4bf0d66994d78b3ad75a5371bdbe390d9a:
+
+  package/xenomai: ignore custom versions (2015-04-29 00:32:16 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (7):
+      boot/gummiboot: switch to http for git clone
+      pkg-infra: assign BR_NO_CHECK_HASH_FOR so it is recursively-expanded
+      boot/uboot: do not check hash for custom versions
+      boot/barebox: do not check hash for custom versions
+      boot/mxs-bootlets: do not check hash of custom tarball
+      linux: do not check hashes for custom versions and tarballs
+      package/xenomai: ignore custom versions
+
+ boot/barebox/barebox.mk           | 4 ++++
+ boot/gummiboot/gummiboot.mk       | 3 ++-
+ boot/mxs-bootlets/mxs-bootlets.mk | 1 +
+ boot/uboot/uboot.mk               | 4 ++++
+ linux/linux.mk                    | 5 +++++
+ package/pkg-download.mk           | 4 +++-
+ package/xenomai/xenomai.mk        | 3 +++
+ 7 files changed, 22 insertions(+), 2 deletions(-)
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
