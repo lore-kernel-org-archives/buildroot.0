@@ -1,27 +1,48 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Tue, 28 Apr 2015 17:15:59 +0200
-Subject: [Buildroot] rpi-firmware package installs DTBs that are kernel
-	version specific
-Message-ID: <553FA42F.8060602@je-eigen-domein.nl>
+From: Richard Genoud <richard.genoud@gmail.com>
+Date: Tue, 28 Apr 2015 17:42:27 +0200
+Subject: [Buildroot] [PATCH] qt: QT_COORD_TYPE_DOUBLE should only be set on
+	soft float
+In-Reply-To: <874mo0zj0r.fsf@dell.be.48ers.dk>
+References: <874mo0zj0r.fsf@dell.be.48ers.dk>
+Message-ID: <1430235747-5775-1-git-send-email-richard.genoud@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+If QT_COORD_TYPE_DOUBLE is forced and hard float is used, Qt compilation
+breaks because it can't find hard coded operations on double.
 
-Currently the rpi-firmware buildroot package downloads and installs 
-binary DTB files.
-Problem is that those DTB files seem to be kernel version specific, and 
-the current ones only work properly with a rpi-3.18.y Linux kernel.
-When you use them with a kernel build from the rpi-3.19.y or rpi-4.0.y 
-branch mmc0 does not function.
+Moreover, QT_COORD_TYPE is float only if QT_NO_FPU is set.
+(cf src/corelib/global/qglobal.h)
 
-Think it may be better if we remove the binary DTB file installation 
-from the rpi-firmware package, forcing the user to compile the device 
-tree files from kernel source instead, ensuring matching version.
+So, we can safely make the QT_COORD_TYPE_DOUBLE option depend on
+BR2_SOFT_FLOAT.
 
-Yours sincerely,
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+---
+ package/qt/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Floris Bos
+based on master 2a15ce89ac5a
+Compiled for:
+cortexA8 in hard float/soft float with and without QT_COORD_TYPE_DOUBLE
+x86_64
+arm926t with and without QT_COORD_TYPE_DOUBLE
+
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 83fdeec812bb..9568b7010cff 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -121,6 +121,7 @@ config BR2_PACKAGE_QT_CONFIG_FILE
+ 	  file, which Buildroot will give to Qt at compile time.
+ 
+ config BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE
++	depends on BR2_SOFT_FLOAT
+ 	bool "QT_COORD_TYPE to double"
+ 	help
+ 	  Set QT_COORD_TYPE to double. On ARM-based platforms, qreal
+-- 
+2.3.4
