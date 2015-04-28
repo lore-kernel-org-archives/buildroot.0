@@ -1,51 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Apr 2015 10:19:45 +0200
-Subject: [Buildroot] [git commit] python3: needs dynamic library support
-In-Reply-To: <20150428100057.2eefa119@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 28 Apr 2015 10:00:57 +0200")
-References: <20150428065522.6D9387FFFD@busybox.osuosl.org>
- <20150428100057.2eefa119@free-electrons.com>
-Message-ID: <87bni8zmu6.fsf@dell.be.48ers.dk>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue, 28 Apr 2015 11:50:36 +0300
+Subject: [Buildroot] [PATCH] argp-standalone: restrict value range passed to
+	isprint function
+Message-ID: <1430211036-4123-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+According to C standards isprint argument shall be representable as an
+unsigned char or be equal to EOF, otherwise the behaviour is undefined.
 
- > Dear Peter Korsgaard,
- > On Tue, 28 Apr 2015 08:50:04 +0200, Peter Korsgaard wrote:
- >> commit: http://git.buildroot.net/buildroot/commit/?id=54915af7c75851318385affd037c7718e10f2665
- >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
- >> 
- >> Fixes:
- >> http://autobuild.buildroot.net/results/c65/c65c2b2c4c2ca328c4f26ba38798c40ab02c8772/
- >> http://autobuild.buildroot.net/results/e0d/e0db38ca12dbe664d472c4f6f3f1ade4150119c3/
- >> http://autobuild.buildroot.net/results/8e1/8e196d05dd65cdd782c8d41d937a7d9d2ef7dc1a/
- >> http://autobuild.buildroot.net/results/e3a/e3a71f5d05a3e176a9e641e758b1ba64c9560991/
- >> 
- >> And many more.
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Passing arbitrary ints leads to segfault in nm program from elfutils.
 
- > I disagree. This is not the right fix. Python 3 can build perfectly
- > fine in a static environment. What you're seeing here are uClibc bugs,
- > not an impossibility of building Python 3 statically.
+Restrict isprint argument range to values representable by unsigned char.
 
-Well, then we should atleast fix this:
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ package/argp-standalone/0002-isprint.patch | 35 ++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/argp-standalone/0002-isprint.patch
 
-#
-# Make sure libpython gets stripped out on target
-#
-define PYTHON3_ENSURE_LIBPYTHON_STRIPPED
-	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)*.so
-endef
-
-PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_ENSURE_LIBPYTHON_STRIPPED
-
-Are there really use cases for building python3 statically?
-
+diff --git a/package/argp-standalone/0002-isprint.patch b/package/argp-standalone/0002-isprint.patch
+new file mode 100644
+index 0000000..a2962a1
+--- /dev/null
++++ b/package/argp-standalone/0002-isprint.patch
+@@ -0,0 +1,35 @@
++Subject: restrict value range passed to isprint function
++
++According to C standards isprint argument shall be representable as an
++unsigned char or be equal to EOF, otherwise the behaviour is undefined.
++
++Passing arbitrary ints leads to segfault in nm program from elfutils.
++
++Restrict isprint argument range to values representable by unsigned char.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++diff -bu argp-standalone-1.3/argp.h argp-standalone-1.3-/argp.h
++--- argp-standalone-1.3/argp.h	2015-04-28 10:31:39.015319337 +0300
+++++ argp-standalone-1.3-/argp.h	2015-04-28 10:27:46.526770624 +0300
++@@ -577,7 +577,7 @@
++   else
++     {
++       int __key = __opt->key;
++-      return __key > 0 && isprint (__key);
+++      return __key > 0 && __key <= UCHAR_MAX && isprint (__key);
++     }
++ }
++ 
++diff -bu argp-standalone-1.3/argp-parse.c argp-standalone-1.3-/argp-parse.c
++--- argp-standalone-1.3/argp-parse.c	2015-04-28 10:31:39.016319380 +0300
+++++ argp-standalone-1.3-/argp-parse.c	2015-04-28 10:27:21.810818130 +0300
++@@ -1292,7 +1292,7 @@
++       int __key = __opt->key;
++       /* FIXME: whether or not a particular key implies a short option
++        * ought not to be locale dependent. */
++-      return __key > 0 && isprint (__key);
+++      return __key > 0 && __key <= UCHAR_MAX && isprint (__key);
++     }
++ }
++ 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+1.8.1.4
