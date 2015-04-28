@@ -1,48 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Apr 2015 20:52:59 +0200
-Subject: [Buildroot] grub on target
-In-Reply-To: <20150424174149.GA627@postdiluvian.org>
-References: <HKXPR01MB0312A3D64DA648D6B74794C9C2EF0@HKXPR01MB0312.apcprd01.prod.exchangelabs.com>
- <20150422195220.GA19841@postdiluvian.org>
- <20150424174149.GA627@postdiluvian.org>
-Message-ID: <553FD70B.40209@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 28 Apr 2015 20:59:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libubox: Fix linking against libm
+Message-ID: <1430247544-2735-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Mark,
+Fixes
+http://autobuild.buildroot.net/results/94d/94dd7f38ae105e7cd2f342d718e27a65edcf3a3d/
+http://autobuild.buildroot.net/results/1ca/1ca29f3adc1b9b2a841df7d118548654b3235432/
+http://autobuild.buildroot.net/results/231/231e5966948dcef579190c48d2aaf24414159483/
+http://autobuild.buildroot.net/results/b55/b55aecc18a9870c342e0be4ed58cd609527bff96/
+http://autobuild.buildroot.net/results/947/9473b109cf942296b0643e074839209134f6e3fc/
+and many others
 
-On 04/24/15 19:41, Mark Mason wrote:
-> To answer my own question, it looks like I was having some sort of
-> UEFI-related problem, and it was fixed by a newer version of Grub2.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libubox/libubox.mk |    5 +++++
+ 1 file changed, 5 insertions(+)
 
- Perhaps you'd like to submit a patch to bump grub2 to a newer version?
-
- Regards,
- Arnout
-
-> 
-> When booting from Grub2 under some circumstances (seemingly involving
-> the phase of the moon and how frustrated I was) I'd get a message
-> saying "Couldn't terminate EFI service", then some sort of hang.  Some
-> digging around turned up a Grub2 patch to address this issue that
-> buildroot-2015-02 doesn't have - Grub2 simply retries the service stop
-> if it fails the first time, emitting a message about retrying the
-> service stop instead of a message about being unable to stop.
-> 
-> I have no idea what service(s) are involved, but I've now got reliable
-> booting.
-> 
-> It's worth nothing that the Grub2 info page does address
-> phase-of-the-moon issues, but only involving the graphics.
-[snip]
-
+diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
+index 5d9c01d..15a3739 100644
+--- a/package/libubox/libubox.mk
++++ b/package/libubox/libubox.mk
+@@ -10,6 +10,11 @@ LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
+ LIBUBOX_INSTALL_STAGING = YES
+ LIBUBOX_DEPENDENCIES = $(if $(BR2_PACKAGE_JSON_C),json-c)
+ 
++# For uClibc-based toolchains, libubox forgets to link with -lm
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++LIBUBOX_CONF_OPTS = -DCMAKE_C_FLAGS="-lm"
++endif
++
+ ifeq ($(BR2_USE_MMU)$(BR2_PACKAGE_LUA_5_1),yy)
+ LIBUBOX_DEPENDENCIES += lua
+ LIBUBOX_CONF_OPTS += -DBUILD_LUA=ON \
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
