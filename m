@@ -1,30 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 28 Apr 2015 22:39:10 +0200
-Subject: [Buildroot] [PATCH] freerdp: fix build with uclibc snapshot and
-	uclibc-ng
-References: <6282ca49ebfb65c9399eeedcac6a3d69038d2690.1430250053.git.baruch@tkos.co.il>
-Message-ID: <XnsA48AE66F8143FberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 28 Apr 2015 22:57:22 +0200
+Subject: [Buildroot] [PATCH] python: Allow pyo only and variants
+In-Reply-To: <20150426190620.4647bb75@free-electrons.com>
+References: <1430065819-12745-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20150426190620.4647bb75@free-electrons.com>
+Message-ID: <553FF432.107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch Siach <baruch@tkos.co.il> wrote in
-news:6282ca49ebfb65c9399eeedcac6a3d69038d2690.1430250053.git.baruch at tkos.co
-.il: 
+On 04/26/15 19:06, Thomas Petazzoni wrote:
+> I'm sure we can do something smarter here.
+> 
+> # arg1: extension of files to remove
+> define PYTHON_FINALIZE_REMOVE_HELPER
+> 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.$(1)' -print0 | xargs -0 rm -f
+> endef
+> 
+> ifeq ($(BR2_PACKAGE_PYTHON_REMOVE_PY),y)
+> 	$(call PYTHON_FINALIZE_REMOVE_HELPER,py)
+> endif
+> 
+> ifeq ($(BR2_PACKAGE_PYTHON_REMOVE_PYC),y)
+> 	$(call PYTHON_FINALIZE_REMOVE_HELPER,pyc)
+> endif
+> 
+> ifeq ($(BR2_PACKAGE_PYTHON_REMOVE_PYO),y)
+> 	$(call PYTHON_FINALIZE_REMOVE_HELPER,pyo)
+> endif
+> 
+> BR2_PACKAGE_PYTHON_REMOVE_* being hidden Config.in options.
 
-> uclibc snapshot and uclibc-ng add support for the eventfd_{read,write}
-> glibc extensions. Refine our uClibc support patch to take this into
-> account, based on upstream suggested PR.
+ Or make these options the public ones instead of having the huge choice.
 
-Hi,
+ Requires legacy handling of course.
 
-what about adding eventfd_read() and eventfd_write() to 
-package/uclibc/0.9.33.2/? This function is needed by upcoming Kodi 15.0 
-Isengard as well and will be part[1] of my next RFC-patch series when beta1 
-of the next Kodi version will be released.
+ Regards,
+ Arnout
 
-Regards, Bernd
-
-[1] In fact it is the 2nd try ;) http://patchwork.ozlabs.org/patch/402957/
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
