@@ -1,48 +1,71 @@
-From: Richard Genoud <richard.genoud@gmail.com>
-Date: Tue, 28 Apr 2015 17:42:27 +0200
-Subject: [Buildroot] [PATCH] qt: QT_COORD_TYPE_DOUBLE should only be set on
-	soft float
-In-Reply-To: <874mo0zj0r.fsf@dell.be.48ers.dk>
-References: <874mo0zj0r.fsf@dell.be.48ers.dk>
-Message-ID: <1430235747-5775-1-git-send-email-richard.genoud@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 28 Apr 2015 20:51:21 +0200
+Subject: [Buildroot] Run a custom script after USB mount
+In-Reply-To: <CADKZYY+U0L0jd=2FU9z7u1dOk0sJE5AoSrbihmV7OEYKE7=hAg@mail.gmail.com>
+References: <CADKZYYKSc+rE2YvaBokFteSTE3gwnEvNksY1-w0HNC35u5yFig@mail.gmail.com>
+ <CAKAx1ch+bA0RtZ6tfeK959UQazCaWRtRZr_N-DKBdGddXvK9Fg@mail.gmail.com>
+ <CADKZYYLY_bj7b-8vJ+ztgxc2zjuxKLJgxAJ0e4XY681=h2aj=Q@mail.gmail.com>
+ <20150418143654.021fa104@free-electrons.com>
+ <CADKZYYJrtTdn_47NCJumggetKmoHt7sAbk5-a9X_zHrMVJdYHA@mail.gmail.com>
+ <55394E6D.8000404@mind.be>
+ <CADKZYY+U0L0jd=2FU9z7u1dOk0sJE5AoSrbihmV7OEYKE7=hAg@mail.gmail.com>
+Message-ID: <553FD6A9.5060804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If QT_COORD_TYPE_DOUBLE is forced and hard float is used, Qt compilation
-breaks because it can't find hard coded operations on double.
+On 04/24/15 01:04, Santhosh Ramani wrote:
+> Hello Arnout,
+> 
+>     > /# cat /etc/udev/rules.d/99-usb-detection.rules/*
+>     > SUBSYSTEM=="usb", ACTION=="add", KERNEL=="sda*", RUN+="/etc/hcc/usb-detected"*
+>      If it's a scsi device, the subsystem is block, not usb, right?
+> 
+> 
+> Yes you are correct - I removed the subsystem section and it now works properly.
+> I also was not restarting (or reloading) udev rules properly and that was also
+> contributing to the problem. 
+> 
+> The script I want to run copies data from the USB stick and places it at a given
+> location. However, it seems that by the time the script finishes executing the
+> USB is not yet mounted so nothing gets copied. How can I defer execution of the
+> script until the volume is mounted, yet at the same time not block udev. I tried
+> the following:
+> 
+> usb-detected: Launcher Script
+> 
+> /etc/hcc/update_script & exit
+> 
+> I was hoping the second script "update" would be launched as a separate process
+> and will be non-blocking. I could then add sleep command in the second script
+> and delay execution. However, this doesn't seem to work. I was not able to use
+> 'disown' either, since it's a bash command. Similarly I didn't have any luck
+> with 'at' command either.
+> 
+> Any thoughts on how I can defer the thread and not block udev?
 
-Moreover, QT_COORD_TYPE is float only if QT_NO_FPU is set.
-(cf src/corelib/global/qglobal.h)
+ Actually I don't use udev myself - I just read the documentation to answer your
+question. so I really can't say.
 
-So, we can safely make the QT_COORD_TYPE_DOUBLE option depend on
-BR2_SOFT_FLOAT.
+ However, can't you add something to whatever script is doing the mounting, so
+you can be sure that it's mounted already?
 
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
----
- package/qt/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ Regards,
+ Arnout
 
-based on master 2a15ce89ac5a
-Compiled for:
-cortexA8 in hard float/soft float with and without QT_COORD_TYPE_DOUBLE
-x86_64
-arm926t with and without QT_COORD_TYPE_DOUBLE
+> 
+> Thank you once again for all your replies.
+> Regards
+> 
+> Santhosh
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 83fdeec812bb..9568b7010cff 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -121,6 +121,7 @@ config BR2_PACKAGE_QT_CONFIG_FILE
- 	  file, which Buildroot will give to Qt at compile time.
- 
- config BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE
-+	depends on BR2_SOFT_FLOAT
- 	bool "QT_COORD_TYPE to double"
- 	help
- 	  Set QT_COORD_TYPE to double. On ARM-based platforms, qreal
+
 -- 
-2.3.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
