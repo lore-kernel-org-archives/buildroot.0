@@ -1,94 +1,39 @@
-From: Marcin Bis <marcin@bis.org.pl>
-Date: Tue, 28 Apr 2015 09:44:32 +0200
-Subject: [Buildroot] [PATCH v3] cc-tool: new package
-In-Reply-To: <20150428032827.GX2258@tarshish>
-References: <20150428032827.GX2258@tarshish>
-Message-ID: <1430207072-12150-1-git-send-email-marcin@bis.org.pl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Apr 2015 10:00:57 +0200
+Subject: [Buildroot] [git commit] python3: needs dynamic library support
+In-Reply-To: <20150428065522.6D9387FFFD@busybox.osuosl.org>
+References: <20150428065522.6D9387FFFD@busybox.osuosl.org>
+Message-ID: <20150428100057.2eefa119@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cc-tool provides support for Texas Instruments CC Debugger
+Dear Peter Korsgaard,
 
-Signed-off-by: Marcin Bis <marcin@bis.org.pl>
----
- package/Config.in            |  1 +
- package/cc-tool/Config.in    | 20 ++++++++++++++++++++
- package/cc-tool/cc-tool.hash |  3 +++
- package/cc-tool/cc-tool.mk   | 14 ++++++++++++++
- 4 files changed, 38 insertions(+)
- create mode 100644 package/cc-tool/Config.in
- create mode 100644 package/cc-tool/cc-tool.hash
- create mode 100644 package/cc-tool/cc-tool.mk
+On Tue, 28 Apr 2015 08:50:04 +0200, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=54915af7c75851318385affd037c7718e10f2665
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/c65/c65c2b2c4c2ca328c4f26ba38798c40ab02c8772/
+> http://autobuild.buildroot.net/results/e0d/e0db38ca12dbe664d472c4f6f3f1ade4150119c3/
+> http://autobuild.buildroot.net/results/8e1/8e196d05dd65cdd782c8d41d937a7d9d2ef7dc1a/
+> http://autobuild.buildroot.net/results/e3a/e3a71f5d05a3e176a9e641e758b1ba64c9560991/
+> 
+> And many more.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-diff --git a/package/Config.in b/package/Config.in
-index 4e20e4d..12767d5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -316,6 +316,7 @@ endmenu
- 	source "package/avrdude/Config.in"
- 	source "package/bcache-tools/Config.in"
- 	source "package/biosdevname/Config.in"
-+	source "package/cc-tool/Config.in"
- 	source "package/cdrkit/Config.in"
- 	source "package/cryptsetup/Config.in"
- 	source "package/cwiid/Config.in"
-diff --git a/package/cc-tool/Config.in b/package/cc-tool/Config.in
-new file mode 100644
-index 0000000..be41de6
---- /dev/null
-+++ b/package/cc-tool/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_CC_TOOL
-+	bool "cc-tool"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_REGEX
-+	select BR2_PACKAGE_BOOST_FILESYSTEM
-+	select BR2_PACKAGE_BOOST_SIGNALS
-+	help
-+	  cc-tool provides support for Texas Instruments CC Debugger
-+	  for Linux OS in order to program 8051-based System-On-Chip
-+	  devices: CC254x CC253x CC243x CC251x CC111x
-+
-+	  http://sourceforge.net/projects/cctool/
-+
-+comment "cc-tool needs a toolchain w/ C++, largefile, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/cc-tool/cc-tool.hash b/package/cc-tool/cc-tool.hash
-new file mode 100644
-index 0000000..81844ee
---- /dev/null
-+++ b/package/cc-tool/cc-tool.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/cctool/files/
-+sha1 f313e55f019ea5338438633f5b5e689b699343e1  cc-tool-0.26-src.tgz
-+md5 26960676f3e6264e612c299fbf8ec5ea  cc-tool-0.26-src.tgz
-diff --git a/package/cc-tool/cc-tool.mk b/package/cc-tool/cc-tool.mk
-new file mode 100644
-index 0000000..0612fd0
---- /dev/null
-+++ b/package/cc-tool/cc-tool.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# cc-tool
-+#
-+################################################################################
-+
-+CC_TOOL_VERSION = 0.26
-+CC_TOOL_SITE = http://downloads.sourceforge.net/project/cctool
-+CC_TOOL_SOURCE = cc-tool-$(CC_TOOL_VERSION)-src.tgz
-+CC_TOOL_LICENSE = GPLv2
-+CC_TOOL_LICENSE_FILES = COPYING
-+CC_TOOL_DEPENDENCIES = boost libusb
-+
-+$(eval $(autotools-package))
+I disagree. This is not the right fix. Python 3 can build perfectly
+fine in a static environment. What you're seeing here are uClibc bugs,
+not an impossibility of building Python 3 statically.
+
+Best regards,
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
