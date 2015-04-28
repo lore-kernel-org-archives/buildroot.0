@@ -1,49 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Apr 2015 21:44:55 +0200
-Subject: [Buildroot] [git commit] dhcpcd: fix ipv6 related compile failure
-Message-ID: <20150428195516.5F3E9805A3@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 28 Apr 2015 22:13:57 +0200
+Subject: [Buildroot] [PATCHv3 09/18] pkg-generic: remove the
+ .stamp_rsync_sourced fake stamp file
+In-Reply-To: <20150425194948.70ff9724@free-electrons.com>
+References: <1429972982-25495-1-git-send-email-thomas.petazzoni@free-electrons.com>	<1429972982-25495-10-git-send-email-thomas.petazzoni@free-electrons.com>	<20150425173303.GJ4275@free.fr>
+ <20150425194948.70ff9724@free-electrons.com>
+Message-ID: <553FEA05.4040200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b1f66643d782fc6f00e7436d41ceea6d88ad6bf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 04/25/15 19:49, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
+> 
+> On Sat, 25 Apr 2015 19:33:03 +0200, Yann E. MORIN wrote:
+> 
+>>> -$(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
+>>> +$(1)-source:
+>>
+>> The reason that line existed was to be able to define a dependency on
+>> the stamp file. There is now no reason to keep this line at all; all you
+>> have above is declaring a make goal without dependency or rule, so it
+>> is entirely useless.
+> 
+> I don't think a target with no dependencies or rules is useless. It can
+> be useful to not have an error when this target is triggered.
+> 
+> When you are going to do a 'make source', it will do a 'make
+> $(1)-source' on all packages, including the ones that have
+> <pkg>_OVERRIDE_SRCDIR. So there must be a $(1)-source target, even if
+> it doesn't do anything.
+> 
+> Am I missing something?
 
-Add '-D_GNU_SOURCE' to gain missing struct in6_pktinfo definition.
+ Actually, adding it to .PHONY is sufficient, there's no need to declare it
+explicitly. But of course it doesn't hurt either, and this patch was already
+committed.
 
-Fixes [1]:
+ Regards,
+ Arnout
 
-ipv6.h:211:41: error: invalid application of 'sizeof' to incomplete type 'struct in6_pktinfo'
-  unsigned char sndbuf[CMSG_SPACE(sizeof(struct in6_pktinfo))];
-                                         ^
-ipv6.h:195:38: error: invalid application of 'sizeof' to incomplete type 'struct in6_pktinfo'
- #define IP6BUFLEN (CMSG_SPACE(sizeof(struct in6_pktinfo)) + \
-                                      ^
-ipv6.h:214:23: note: in expansion of macro 'IP6BUFLEN'
-  unsigned char rcvbuf[IP6BUFLEN];
 
-[1] http://autobuild.buildroot.net/results/523/523858fb930e74fe28f24989ff0697693b5fdd67
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dhcpcd/dhcpcd.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 4056351..756a660 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -20,8 +20,8 @@ endif
- 
- define DHCPCD_CONFIGURE_CMDS
- 	(cd $(@D); \
--	$(TARGET_CONFIGURE_OPTS) ./configure \
--		--os=linux \
-+	$(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
-+		./configure --os=linux \
- 		$(DHCPCD_CONFIG_OPTS) )
- endef
- 
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
