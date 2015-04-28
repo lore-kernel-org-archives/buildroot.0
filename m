@@ -1,55 +1,93 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 28 Apr 2015 06:28:27 +0300
-Subject: [Buildroot] [PATCH v2] cc-tool: new package
-In-Reply-To: <1430164216-6477-1-git-send-email-marcin@bis.org.pl>
-References: <553E9212.4090805@bis.org.pl>
- <1430164216-6477-1-git-send-email-marcin@bis.org.pl>
-Message-ID: <20150428032827.GX2258@tarshish>
+From: Steve Kenton <skenton@ou.edu>
+Date: Mon, 27 Apr 2015 22:42:00 -0500
+Subject: [Buildroot] [PATCH v1 1/1] vidstab: new package
+Message-ID: <1430192520-16082-1-git-send-email-skenton@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Marcin,
+	  Vid.stab is a video image stabilization library
+	  that can be used with ffmpeg --enable-libvidstab
+	  and is acknowledged by the ffmpeg developers to
+	  be superior to the built-in deshake filter. It
+	  works best in a 2-pass configuration but 1-pass
+	  is also available when needed/acceptable.
 
-On Mon, Apr 27, 2015 at 09:50:16PM +0200, Marcin Bis wrote:
-> diff --git a/package/cc-tool/Config.in b/package/cc-tool/Config.in
-> new file mode 100644
-> index 0000000..f62200d
-> --- /dev/null
-> +++ b/package/cc-tool/Config.in
-> @@ -0,0 +1,21 @@
-> +config BR2_PACKAGE_CC_TOOL
-> +	bool "cc-tool"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_LARGEFILE
+Signed-off-by: Steve Kenton <skenton@ou.edu>
+---
+I'm planning on using this with ffmpeg but that part is not
+ready yet, however libvidstab.so is standalone if others are
+interested in using it. It builds with uClibc,  ucLibc-ng,
+musl and glibc with just C++ enabled. I know it's late in
+the cycle so kick it down the road if you think it should
+wait for the ffmpeg integration.
 
-LFS support is now mandatory in Buildroot. Please remove.
+ package/Config.in          |  1 +
+ package/vidstab/Config.in  | 20 ++++++++++++++++++++
+ package/vidstab/vidstab.mk | 14 ++++++++++++++
+ 3 files changed, 35 insertions(+)
+ create mode 100644 package/vidstab/Config.in
+ create mode 100644 package/vidstab/vidstab.mk
 
-> +	select BR2_PACKAGE_LIBUSB
-> +	select BR2_PACKAGE_BOOST
-> +	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-> +	select BR2_PACKAGE_BOOST_SYSTEM
-> +	select BR2_PACKAGE_BOOST_REGEX
-> +	select BR2_PACKAGE_BOOST_FILESYSTEM
-> +	select BR2_PACKAGE_BOOST_SIGNALS
-> +	help
-> +	  cc-tool provides support for Texas Instruments CC Debugger
-> +	  for Linux OS in order to program 8051-based System-On-Chip
-> +	  devices: CC254x CC253x CC243x CC251x CC111x
-> +
-> +	  http://sourceforge.net/projects/cctool/
-> +
-> +comment "cc-tool needs a toolchain w/ C++, largefile, threads"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-
-Ditto.
-
-baruch
-
+diff --git a/package/Config.in b/package/Config.in
+index 4e20e4d..99935d8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -802,6 +802,7 @@ menu "Graphics"
+ 	source "package/poppler/Config.in"
+ 	source "package/powervr/Config.in"
+ 	source "package/tiff/Config.in"
++	source "package/vidstab/Config.in"
+ 	source "package/wayland/Config.in"
+ 	source "package/webkit/Config.in"
+ 	source "package/webp/Config.in"
+diff --git a/package/vidstab/Config.in b/package/vidstab/Config.in
+new file mode 100644
+index 0000000..d900d17
+--- /dev/null
++++ b/package/vidstab/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_VIDSTAB
++	bool "vidstab"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Vid.stab is a video image stabilization library
++	  that can be used with ffmpeg --enable-libvidstab
++	  and is acknowledged by the ffmpeg developers to
++	  be superior to the built-in deshake filter. It
++	  works best in a 2-pass configuration but 1-pass
++	  is also available when needed/acceptable.
++
++	  Buildroot does not support packages with a '.'
++	  in their name, which explains why it is named
++	  vidstab and not vid.stab as might be expected.
++
++	  https://github.com/georgmartius/vid.stab
++
++comment "vidstab needs a toolschain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
+diff --git a/package/vidstab/vidstab.mk b/package/vidstab/vidstab.mk
+new file mode 100644
+index 0000000..53fb420
+--- /dev/null
++++ b/package/vidstab/vidstab.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# vidstab
++#
++################################################################################
++
++VIDSTAB_VERSION = 3b35b4ddeb595511593a862849e750c459b99cb8
++VIDSTAB_SITE = $(call github,georgmartius,vid.stab,$(VIDSTAB_VERSION))
++VIDSTAB_LICENSE = GPL
++VIDSTAB_LICENSE_FILES = LICENSE
++VIDSTAB_INSTALL_STAGING = YES
++
++$(eval $(cmake-package))
++
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.0
