@@ -1,55 +1,84 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 29 Apr 2015 00:40:00 +0200
-Subject: [Buildroot] [PATCH 3/7] boot/uboot: do not check hash for custom
-	versions
+Date: Wed, 29 Apr 2015 00:39:59 +0200
+Subject: [Buildroot] [PATCH 2/7] pkg-infra: assign BR_NO_CHECK_HASH_FOR so
+	it is recursively-expanded
 In-Reply-To: <cover.1430260630.git.yann.morin.1998@free.fr>
 References: <cover.1430260630.git.yann.morin.1998@free.fr>
-Message-ID: <12d715d71a908668d9156cfb3c0a0de1966bea66.1430260630.git.yann.morin.1998@free.fr>
+Message-ID: <e8cce5d9bbb1b75dbf02c0f9ee44ee23a0314d38.1430260630.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For custom tarballs, it's quite obvious we can not check hashes.
+Currently, assigning to BR_NO_CHECK_HASH_FOR in conditionals, but
+referencing vairaible assigned to later, fails. Here's a failing
+test-case, which is the reduced test-case of how we handle
+BR_NO_CHECK_HASH_FOR for now:
 
-For custom versions, that's not so obvious. One might think we could
-have hashes for all the official releases, but that's not possible: if
-the user uses a released version of Buildroot (say 2015.05) much later
-in the future, and wants to use the then-released 2038.02 U-Boot. It now
-seems pretty obvious that Buildroot 2015.02 can't know the hash for
-U-Boot 2038.02.
+    export FOO
 
-So, disable checking the hash for custom tarballs and custom versions.
+    ifeq ($(BAR_V),)
+    BAR_V=1
+    else
+    FOO += $(BAR_S)
+    endif
+
+    BAR_S = bar-$(BAR_V).tar
+
+    all:
+        @echo "BAR_S=\"$(BAR_S)\""
+        @$(SHELL) -c 'echo "FOO=\"$${FOO}\""'
+
+Run it with:
+
+    $ make
+    BAR_S="bar-1.tar"
+    FOO=""
+    $ make BAR_V=2
+    BAR_S="bar-2.tar"
+    FOO=" "
+
+Now, change the firstline to read:
+
+    export FOO =
+
+And we now get:
+
+    $ make
+    BAR_S="bar-1.tar"
+    FOO=""
+    $ make BAR_V=2
+    BAR_S="bar-2.tar"
+    FOO=" bar-2.tar"
+
+This new behaviour will be needed later for Xenomai, which handles the
+version string in an unusual way.
+
+(Note how there's a leading space in both cases? In Buildroot, we do not
+care that extra space, it is simply ignored).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Vincent Stehle <vincent.stehle@laposte.net>
 ---
- boot/uboot/uboot.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/pkg-download.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 01aaf2c..410d8d8 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -17,6 +17,7 @@ ifeq ($(UBOOT_VERSION),custom)
- UBOOT_TARBALL = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION))
- UBOOT_SITE = $(patsubst %/,%,$(dir $(UBOOT_TARBALL)))
- UBOOT_SOURCE = $(notdir $(UBOOT_TARBALL))
-+BR_NO_CHECK_HASH_FOR += $(UBOOT_SOURCE)
- else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT),y)
- UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
- UBOOT_SITE_METHOD = git
-@@ -27,6 +28,9 @@ else
- # Handle stable official U-Boot versions
- UBOOT_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_SOURCE = u-boot-$(UBOOT_VERSION).tar.bz2
-+ifeq ($(BR2_TARGET_UBOOT_CUSTOM_VERSION),y)
-+BR_NO_CHECK_HASH_FOR += $(UBOOT_SOURCE)
-+endif
- endif
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index a38062e..f0651db 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -56,7 +56,9 @@ domainseparator = $(if $(1),$(1),/)
+ github = https://github.com/$(1)/$(2)/archive/$(3)
  
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
+ # Expressly do not check hashes for those files
+-export BR_NO_CHECK_HASH_FOR
++# It needs to be assigned so as to be a recursively-expanded variable, and
++# so that it can be assigned inside conditionals.
++export BR_NO_CHECK_HASH_FOR =
+ 
+ ################################################################################
+ # The DOWNLOAD_* helpers are in charge of getting a working copy
 -- 
 1.9.1
