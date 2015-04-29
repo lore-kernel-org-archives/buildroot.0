@@ -1,23 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 29 Apr 2015 10:50:44 +0000 (UTC)
-Subject: [Buildroot] [Bug 4910] __IPC_64 bit is not expected by Kernel's
- SYSV *ctl fuctions
-In-Reply-To: <bug-4910-163@https.bugs.busybox.net/>
-References: <bug-4910-163@https.bugs.busybox.net/>
-Message-ID: <20150429105044.AA75E81D5A@busybox.osuosl.org>
+From: Wenxi Jin <wjin@vitesse.com>
+Date: Wed, 29 Apr 2015 10:06:09 +0000
+Subject: [Buildroot] libfcgi:  warning: gethostbyname is obsolescent,
+ use getnameinfo() instead
+Message-ID: <BL2PR01MB339CCBE30AA445B9A09A27CC4D70@BL2PR01MB339.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4910
+Hi
+?
+I am using libfcgi package which will threw out a warning in the linking stage.
+my-buildroot-sdk/sysroots/mips32el-nf-linux/usr/lib/libfcgi.so: warning: gethostbyname is obsolescent, use getnameinfo() instead.
+I try to search around and even the official libfcgi website without any luck.
+After seeing the patch in buildroot forum, I actually see this warning as well.
+The patch is for fixing some other error, but seems no intention to fix this libfcgi warning at all?
+Is there any way I could get rid of or surpass this warning, I really want the jenkins build server to be quite.
+Thanks so much in advance.
 
---- Comment #1 from Bernhard Reutner-Fischer <aldot@uclibc.org> 2015-04-29 10:50:44 UTC ---
-It seems we have a __ASSUME_IPC64 in kernel-features.h
-Can you please cook a patch perusing / tweaking this?
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Best regards,
+Wenxi Jin
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150429/a247e567/attachment.html>
