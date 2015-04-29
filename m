@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Apr 2015 23:06:37 +0200
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.42.1
-In-Reply-To: <1430333276-26407-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 29 Apr 2015 15:47:56 -0300")
-References: <1430333276-26407-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87egn2y78i.fsf@dell.be.48ers.dk>
+Date: Wed, 29 Apr 2015 23:09:32 +0200
+Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.0
+In-Reply-To: <1430335040-3526-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 29 Apr 2015 16:17:20 -0300")
+References: <1430335040-3526-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a8xqy73n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +13,7 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Fixes:
- > CVE-2013-3153 - sensitive HTTP server headers also sent to proxies.
-
- > And drop upstream patches.
-
+ > Switch SITE to use BR2_KERNEL_MIRROR as well.
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
