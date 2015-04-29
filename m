@@ -1,162 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 29 Apr 2015 15:47:56 -0300
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.42.1
-Message-ID: <1430333276-26407-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 29 Apr 2015 21:05:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/clamav: bump version to 0.98.7,
+	enable ipv6 support
+Message-ID: <1430334334-31393-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2013-3153 - sensitive HTTP server headers also sent to proxies.
+Clamav uses AC_TRY_RUN in m4/reorganization/code_checks/ipv6.m4 to check
+for ipv6 support, which is not cross-compile safe. Since buildroot
+supports ipv6 out-of-the-box now this patch forces ipv6 support.
 
-And drop upstream patches.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...1-connectionexists-fix-build-without-NTLM.patch | 54 ----------------------
- ...connectionexists-follow-up-to-fd9d3a1ef1f.patch | 48 -------------------
- package/libcurl/libcurl.hash                       |  2 +-
- package/libcurl/libcurl.mk                         |  2 +-
- 4 files changed, 2 insertions(+), 104 deletions(-)
- delete mode 100644 package/libcurl/0001-connectionexists-fix-build-without-NTLM.patch
- delete mode 100644 package/libcurl/0002-connectionexists-follow-up-to-fd9d3a1ef1f.patch
+ package/clamav/clamav.hash |    4 ++--
+ package/clamav/clamav.mk   |    5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/libcurl/0001-connectionexists-fix-build-without-NTLM.patch b/package/libcurl/0001-connectionexists-fix-build-without-NTLM.patch
-deleted file mode 100644
-index 4f91372..0000000
---- a/package/libcurl/0001-connectionexists-fix-build-without-NTLM.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From fd9d3a1ef1f7b1cb5812d04bad07818efc6f3b3a Mon Sep 17 00:00:00 2001
--From: Daniel Stenberg <daniel@haxx.se>
--Date: Wed, 22 Apr 2015 13:31:35 +0200
--Subject: [PATCH 1/2] connectionexists: fix build without NTLM
--
--Do not access NTLM-specific struct fields when built without NTLM
--enabled!
--
--bug: http://curl.haxx.se/?i=231
--Reported-by: Patrick Rapin
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- lib/url.c | 6 ++++--
-- 1 file changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/lib/url.c b/lib/url.c
--index f033dbc..93f15f1 100644
----- a/lib/url.c
--+++ b/lib/url.c
--@@ -3069,9 +3069,11 @@ ConnectionExists(struct SessionHandle *data,
--   struct connectdata *check;
--   struct connectdata *chosen = 0;
--   bool canPipeline = IsPipeliningPossible(data, needle);
--+#ifdef USE_NTLM
--   bool wantNTLMhttp = ((data->state.authhost.want & CURLAUTH_NTLM) ||
--                        (data->state.authhost.want & CURLAUTH_NTLM_WB)) &&
--     (needle->handler->protocol & PROTO_FAMILY_HTTP) ? TRUE : FALSE;
--+#endif
--   struct connectbundle *bundle;
-- 
--   *force_reuse = FALSE;
--@@ -3208,6 +3210,7 @@ ConnectionExists(struct SessionHandle *data,
--           continue;
--       }
-- 
--+#if defined(USE_NTLM)
--       if((!(needle->handler->flags & PROTOPT_CREDSPERREQUEST)) ||
--          (wantNTLMhttp || check->ntlm.state != NTLMSTATE_NONE)) {
--         /* This protocol requires credentials per connection or is HTTP+NTLM,
--@@ -3217,10 +3220,9 @@ ConnectionExists(struct SessionHandle *data,
--           /* one of them was different */
--           continue;
--         }
---#if defined(USE_NTLM)
--         credentialsMatch = TRUE;
---#endif
--       }
--+#endif
-- 
--       if(!needle->bits.httpproxy || needle->handler->flags&PROTOPT_SSL ||
--          (needle->bits.httpproxy && check->bits.httpproxy &&
---- 
--2.0.5
--
-diff --git a/package/libcurl/0002-connectionexists-follow-up-to-fd9d3a1ef1f.patch b/package/libcurl/0002-connectionexists-follow-up-to-fd9d3a1ef1f.patch
-deleted file mode 100644
-index 28eaeb9..0000000
---- a/package/libcurl/0002-connectionexists-follow-up-to-fd9d3a1ef1f.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From 85c45d153b901d3f69dd5713924039c011477612 Mon Sep 17 00:00:00 2001
--From: Daniel Stenberg <daniel@haxx.se>
--Date: Wed, 22 Apr 2015 13:58:10 +0200
--Subject: [PATCH 2/2] connectionexists: follow-up to fd9d3a1ef1f
--
--PROTOPT_CREDSPERREQUEST still needs to be checked even when NTLM is not
--enabled.
--
--Mistake-caught-by: Kamil Dudka
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- lib/url.c | 11 +++++++----
-- 1 file changed, 7 insertions(+), 4 deletions(-)
--
--diff --git a/lib/url.c b/lib/url.c
--index 93f15f1..7dc5c45 100644
----- a/lib/url.c
--+++ b/lib/url.c
--@@ -3210,9 +3210,11 @@ ConnectionExists(struct SessionHandle *data,
--           continue;
--       }
-- 
---#if defined(USE_NTLM)
---      if((!(needle->handler->flags & PROTOPT_CREDSPERREQUEST)) ||
---         (wantNTLMhttp || check->ntlm.state != NTLMSTATE_NONE)) {
--+      if((!(needle->handler->flags & PROTOPT_CREDSPERREQUEST))
--+#ifdef USE_NTLM
--+         || (wantNTLMhttp || check->ntlm.state != NTLMSTATE_NONE)
--+#endif
--+        ) {
--         /* This protocol requires credentials per connection or is HTTP+NTLM,
--            so verify that we're using the same name and password as well */
--         if(!strequal(needle->user, check->user) ||
--@@ -3220,9 +3222,10 @@ ConnectionExists(struct SessionHandle *data,
--           /* one of them was different */
--           continue;
--         }
--+#if defined(USE_NTLM)
--         credentialsMatch = TRUE;
---      }
-- #endif
--+      }
-- 
--       if(!needle->bits.httpproxy || needle->handler->flags&PROTOPT_SSL ||
--          (needle->bits.httpproxy && check->bits.httpproxy &&
---- 
--2.0.5
--
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index e2bd83d..59a458e 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 7913388..21983f9 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	32557d68542f5c6cc8437b5b8a945857b4c5c6b6276da909e35b783d1d66d08f	curl-7.42.0.tar.bz2
-+sha256	e2905973391ec2dfd7743a8034ad10eeb58dab8b3a297e7892a41a7999cac887	curl-7.42.1.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 3390399..f0d7bac 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+-# From http://sourceforge.net/projects/clamav/files/clamav/0.98.6/
+-sha1	03cb9a20a08aba9176b1f58d5527d06ec8261f9c	clamav-0.98.6.tar.gz
++# From http://sourceforge.net/projects/clamav/files/clamav/0.98.7/
++sha1	c9793d67c041e2b944116d912f8681c8bd6e4432	clamav-0.98.7.tar.gz
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 6a8fddf..e6a1195 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.42.0
-+LIBCURL_VERSION = 7.42.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-CLAMAV_VERSION = 0.98.6
++CLAMAV_VERSION = 0.98.7
+ CLAMAV_SITE = http://sourceforge.net/projects/clamav/files/clamav/$(CLAMAV_VERSION)
+ CLAMAV_LICENSE = GPLv2
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+@@ -16,7 +16,8 @@ CLAMAV_DEPENDENCIES = openssl zlib $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ 
+ # mmap cannot be detected when cross-compiling, needed for mempool support
+ CLAMAV_CONF_ENV = \
+-	ac_cv_c_mmap_private=yes
++	ac_cv_c_mmap_private=yes \
++	have_cv_ipv6=yes
+ 
+ CLAMAV_CONF_OPTS = \
+ 	--with-dbdir=/var/lib/clamav \
 -- 
-2.0.5
+1.7.10.4
