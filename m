@@ -1,39 +1,36 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 29 Apr 2015 09:36:44 -0400
-Subject: [Buildroot] [PATCH 2/2] raspberrypi: bump raspberrypi_dt_defconfig
-	kernel
-In-Reply-To: <1430314604-28680-1-git-send-email-fhunleth@troodon-software.com>
-References: <1430314604-28680-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <1430314604-28680-2-git-send-email-fhunleth@troodon-software.com>
+From: Baptiste Moraine <baptiste.moraine@kapelse.com>
+Date: Wed, 29 Apr 2015 15:39:00 +0200
+Subject: [Buildroot] [PATCH 1/1] libwebsockets: add LWS_ prefix to
+	LWS_WITHOUT_TESTAPPS=ON cmake option
+Message-ID: <1430314740-6112-1-git-send-email-baptiste.moraine@kapelse.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This brings the raspberrypi_dt_defconfig up to the same kernel used by
-the raspberrypi2_defconfig. Also changed the git URL to use HTTP for
-consistency.
+Currently, libwebsockets.mk is passing -DWITHOUT_TESTAPPS=ON to disable
+the building of libwebsockets test applications, but this is doing nothing
+because the option is really named  LWS_WITHOUT_TESTAPPS.
+This commit fixes that by using the correct option name.
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Baptiste Moraine <baptiste.moraine@kapelse.com>
 ---
- configs/raspberrypi_dt_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libwebsockets/libwebsockets.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/raspberrypi_dt_defconfig b/configs/raspberrypi_dt_defconfig
-index c727a7c..991460e 100644
---- a/configs/raspberrypi_dt_defconfig
-+++ b/configs/raspberrypi_dt_defconfig
-@@ -11,8 +11,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 9e62f1c..2f83748 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -11,7 +11,7 @@ LIBWEBSOCKETS_LICENSE = LGPLv2.1 with exceptions
+ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
+ LIBWEBSOCKETS_DEPENDENCIES = zlib
+ LIBWEBSOCKETS_INSTALL_STAGING = YES
+-LIBWEBSOCKETS_CONF_OPTS = -DWITHOUT_TESTAPPS=ON -DLWS_IPV6=ON
++LIBWEBSOCKETS_CONF_OPTS = -DLWS_WITHOUT_TESTAPPS=ON -DLWS_IPV6=ON
  
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="246530ff8a4f302b8666c6d9cf509407d8c1257a"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="2747cc0bde4ca441691260fae1e34c9ef954ccae"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.18-rpi-dt.defconfig"
- BR2_LINUX_KERNEL_ZIMAGE=y
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBWEBSOCKETS_DEPENDENCIES += openssl host-openssl
 -- 
 1.9.1
