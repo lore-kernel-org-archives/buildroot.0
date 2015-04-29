@@ -1,138 +1,38 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 29 Apr 2015 22:10:17 +0200
-Subject: [Buildroot] [autobuild v2 3/3] autobuild-run: allow to change
-	default git uri and branch on the command line
-In-Reply-To: <1430338217-25518-1-git-send-email-s.martin49@gmail.com>
-References: <1430338217-25518-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1430338217-25518-3-git-send-email-s.martin49@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 29 Apr 2015 22:58:05 +0200
+Subject: [Buildroot] [git commit] Revert "dhcpcd: fix ipv6 related compile
+	failure"
+Message-ID: <20150429205838.7082681DA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is useful when hacking the autobuild-run script on some specific
-Buildroot tree, or to run the script with custom tree.
+commit: http://git.buildroot.net/buildroot/commit/?id=56e42a9f4399adfa106ef6d6b5d599700ba61b99
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Result upload is automatically disable when one of these setting are not
-the default ones.
+This reverts commit 6b1f66643d782fc6f00e7436d41ceea6d88ad6bf.
 
-Cc: Matt Weber <Matthew.Weber@rockwellcollins.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+It turns out to not really fix the build errors after all, so revert it.
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-changes v1->v2:
-- use cmdline options instead of env. vars.
----
- scripts/autobuild-run | 41 +++++++++++++++++++++++++++++++++--------
- 1 file changed, 33 insertions(+), 8 deletions(-)
+ package/dhcpcd/dhcpcd.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 01e3265..427d333 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -57,6 +57,9 @@
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 756a660..4056351 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -20,8 +20,8 @@ endif
  
- from __future__ import print_function
+ define DHCPCD_CONFIGURE_CMDS
+ 	(cd $(@D); \
+-	$(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+-		./configure --os=linux \
++	$(TARGET_CONFIGURE_OPTS) ./configure \
++		--os=linux \
+ 		$(DHCPCD_CONFIG_OPTS) )
+ endef
  
-+BUILDROOT_GIT_REPO_URI = "git://git.busybox.net/buildroot"
-+BUILDROOT_GIT_BRANCH = "master"
-+
- # Don't tell docopt about the defaults, as it would not allow the following
- # priority hierarchy for arguments: command-line > config file > defaults
- defaults = {
-@@ -64,6 +67,8 @@ defaults = {
-     '--njobs': '1',
-     '--submitter': 'N/A',
-     '--make-opts': '',
-+    '--br-git-uri': BUILDROOT_GIT_REPO_URI,
-+    '--br-git-branch': BUILDROOT_GIT_BRANCH,
- }
- 
- doc = """autobuild-run - run Buildroot autobuilder
-@@ -84,6 +89,14 @@ Options:
-   --make-opts OPTSTRING          string of extra options to pass to Buildroot
-                                  make, such as specific command wrappers
-                                  [default: ]
-+  --br-git-uri GIT_REPO_URI      Buildroot git repository uri used from the instances.
-+                                 When an alternative git repo uri is set, result uplaod
-+                                 is disabled.
-+                                 [default: the official Buildroot repository]
-+  --br-git-branch GIT_BRANCH     Buildroot git branch used for the instance
-+                                 When an alternative git branch is set, result uplaod
-+                                 is disabled.
-+                                 [default: master]
-   -c, --config CONFIG            path to configuration file
- 
- Format of the configuration file:
-@@ -98,6 +111,8 @@ Format of the configuration file:
-    http-login = <value>
-    http-password = <value>
-    submitter = <value>
-+   br-git-uri = <value>
-+   br-git-branch = <value>
- 
- Default values for the arguments are:
- 
-@@ -296,17 +311,17 @@ def prepare_build(**kwargs):
- 
-     # Clone Buildroot. This only happens if the source directory
-     # didn't exist already.
--    srcdir = os.path.join(idir, "buildroot")
-+    srcdir = os.path.abspath(os.path.join(idir, "buildroot"))
-     if not os.path.exists(srcdir):
--        ret = subprocess.call(["git", "clone", "git://git.busybox.net/buildroot", srcdir],
-+        ret = subprocess.call(["git", "clone", "-b", kwargs['br_git_branch'],
-+                              kwargs['br_git_repo_uri'], srcdir],
-                               stdout=log, stderr=log)
-         if ret != 0:
-             log_write(log, "ERROR: could not clone Buildroot sources")
-             return -1
- 
-     # Update the Buildroot sources.
--    abssrcdir = os.path.abspath(srcdir)
--    ret = subprocess.call(["git", "pull"], cwd=abssrcdir, stdout=log, stderr=log)
-+    ret = subprocess.call(["git", "pull"], cwd=srcdir, stdout=log, stderr=log)
-     if ret != 0:
-         log_write(log, "ERROR: could not pull Buildroot sources")
-         return -1
-@@ -794,14 +809,22 @@ def main():
- 
-     # http_login/password could theoretically be allowed as empty, so check
-     # explicitly on None.
--    upload = (args['--http-login'] is not None) \
--             and (args['--http-password'] is not None)
-+    upload = True
-+    if args['--http-login'] is None or args['--http-password'] is None:
-+        print("WARN: due to the lack of http login/password details, results will not be submitted")
-+        upload = False
-+    # disable result upload when using alternative git repository and/or branch
-+    if args['--br-git-uri'] != BUILDROOT_GIT_REPO_URI \
-+            or args['--br-git-branch'] != BUILDROOT_GIT_BRANCH:
-+        print("WARN: using alternative git repository and/or branch, results will not be submitted")
-+        upload = False
-+
-     if upload:
-         sysinfo.needed_progs.append("curl")
-     else:
--        print("WARN: due to the lack of http login/password details, results will not be submitted")
-         print("WARN: tarballs of results will be kept locally only")
- 
-+
-     if not sysinfo.check_requirements():
-         sys.exit(1)
- 
-@@ -844,7 +867,9 @@ def main():
-                 submitter = args['--submitter'],
-                 make_opts = args['--make-opts'],
-                 upload = upload,
--                buildpid = buildpid
-+                buildpid = buildpid,
-+                br_git_repo_uri = args['--br-git-uri'],
-+                br_git_branch = args['--br-git-branch']
-             ))
-         p.start()
-         processes.append(p)
--- 
-2.3.7
