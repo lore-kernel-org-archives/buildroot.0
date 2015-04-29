@@ -1,52 +1,39 @@
 From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 29 Apr 2015 09:36:43 -0400
-Subject: [Buildroot] [PATCH 1/2] raspberrypi2: switch Linux kernel to
-	rpi-3.18.y
-Message-ID: <1430314604-28680-1-git-send-email-fhunleth@troodon-software.com>
+Date: Wed, 29 Apr 2015 09:36:44 -0400
+Subject: [Buildroot] [PATCH 2/2] raspberrypi: bump raspberrypi_dt_defconfig
+	kernel
+In-Reply-To: <1430314604-28680-1-git-send-email-fhunleth@troodon-software.com>
+References: <1430314604-28680-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <1430314604-28680-2-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This changes the kernel used on the Raspberry Pi 2 from the 3.19 branch
-back to the 3.18 branch. This provides a couple of advantages:
-
-  1. mmc0 works again. Floris Bos found out that this was due to using
-     the precompiled DTB files from rpi-firmware. These DTBs were built
-     using 3.18.
-  2. The rpi-3.18.y branch is not regularly rebased like rpi-3.19.y
-     according to popcornmix. See
-     https://github.com/raspberrypi/linux/issues/915.
+This brings the raspberrypi_dt_defconfig up to the same kernel used by
+the raspberrypi2_defconfig. Also changed the git URL to use HTTP for
+consistency.
 
 Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- configs/raspberrypi2_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ configs/raspberrypi_dt_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index 6a48b26..5859749 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -7,15 +7,15 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- 
--# Lock to 3.19 headers as the RPi2 kernel is based off the 3.19 branch
-+# Lock to 3.18 headers as the RPi2 kernel is based off the 3.18 branch
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.19"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
-+BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+diff --git a/configs/raspberrypi_dt_defconfig b/configs/raspberrypi_dt_defconfig
+index c727a7c..991460e 100644
+--- a/configs/raspberrypi_dt_defconfig
++++ b/configs/raspberrypi_dt_defconfig
+@@ -11,8 +11,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
  
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="2c4959b772a35d9d459b0a92f39bb066e9a44d37"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="246530ff8a4f302b8666c6d9cf509407d8c1257a"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
 +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="2747cc0bde4ca441691260fae1e34c9ef954ccae"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.18-rpi-dt.defconfig"
  BR2_LINUX_KERNEL_ZIMAGE=y
- 
 -- 
 1.9.1
