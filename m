@@ -1,162 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Apr 2015 23:27:02 +0200
-Subject: [Buildroot] [git commit] libcurl: security bump to version 7.42.1
-Message-ID: <20150429213022.7806981DA4@busybox.osuosl.org>
+Date: Wed, 29 Apr 2015 23:02:17 +0200
+Subject: [Buildroot] [git commit] pcre: bump to version 8.37
+Message-ID: <20150429213022.6DC3981D99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62592bb66036d520f13c8eefc25dca056a186959
+commit: http://git.buildroot.net/buildroot/commit/?id=87ec20c1f009307f0a1a928d4d4a7f7e67d6230d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2013-3153 - sensitive HTTP server headers also sent to proxies.
-
-And drop upstream patches.
+Security patch now upstream so drop it.
+Also switch to bz2 compression.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-connectionexists-fix-build-without-NTLM.patch |   54 --------------------
- ...connectionexists-follow-up-to-fd9d3a1ef1f.patch |   48 -----------------
- package/libcurl/libcurl.hash                       |    2 +-
- package/libcurl/libcurl.mk                         |    2 +-
- 4 files changed, 2 insertions(+), 104 deletions(-)
+ package/pcre/0003-fix-CVE-2014-8964.patch |   25 -------------------------
+ package/pcre/pcre.hash                    |    6 +++---
+ package/pcre/pcre.mk                      |    3 ++-
+ 3 files changed, 5 insertions(+), 29 deletions(-)
 
-diff --git a/package/libcurl/0001-connectionexists-fix-build-without-NTLM.patch b/package/libcurl/0001-connectionexists-fix-build-without-NTLM.patch
+diff --git a/package/pcre/0003-fix-CVE-2014-8964.patch b/package/pcre/0003-fix-CVE-2014-8964.patch
 deleted file mode 100644
-index 4f91372..0000000
---- a/package/libcurl/0001-connectionexists-fix-build-without-NTLM.patch
+index bfc5860..0000000
+--- a/package/pcre/0003-fix-CVE-2014-8964.patch
 +++ /dev/null
-@@ -1,54 +0,0 @@
--From fd9d3a1ef1f7b1cb5812d04bad07818efc6f3b3a Mon Sep 17 00:00:00 2001
--From: Daniel Stenberg <daniel@haxx.se>
--Date: Wed, 22 Apr 2015 13:31:35 +0200
--Subject: [PATCH 1/2] connectionexists: fix build without NTLM
+@@ -1,25 +0,0 @@
+-Description: CVE-2014-8964, heap buffer overflow
+- Heap buffer overflow if an assertion with a zero minimum repeat is used as
+- the condition in a conditional group.
+-Origin: upstream http://bugs.exim.org/show_bug.cgi?id=1546
+-Bug: http://bugs.exim.org/show_bug.cgi?id=1546
+-Applied-Upstream: Yes, after 8.36
 -
--Do not access NTLM-specific struct fields when built without NTLM
--enabled!
--
--bug: http://curl.haxx.se/?i=231
--Reported-by: Patrick Rapin
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
-- lib/url.c | 6 ++++--
-- 1 file changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/lib/url.c b/lib/url.c
--index f033dbc..93f15f1 100644
----- a/lib/url.c
--+++ b/lib/url.c
--@@ -3069,9 +3069,11 @@ ConnectionExists(struct SessionHandle *data,
--   struct connectdata *check;
--   struct connectdata *chosen = 0;
--   bool canPipeline = IsPipeliningPossible(data, needle);
--+#ifdef USE_NTLM
--   bool wantNTLMhttp = ((data->state.authhost.want & CURLAUTH_NTLM) ||
--                        (data->state.authhost.want & CURLAUTH_NTLM_WB)) &&
--     (needle->handler->protocol & PROTO_FAMILY_HTTP) ? TRUE : FALSE;
--+#endif
--   struct connectbundle *bundle;
+-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+---- a/pcre_exec.c
+-+++ b/pcre_exec.c
+-@@ -1404,8 +1404,11 @@
+-         condition = TRUE;
 - 
--   *force_reuse = FALSE;
--@@ -3208,6 +3210,7 @@ ConnectionExists(struct SessionHandle *data,
--           continue;
--       }
+-         /* Advance ecode past the assertion to the start of the first branch,
+--        but adjust it so that the general choosing code below works. */
+-+        but adjust it so that the general choosing code below works. If the
+-+	assertion has a quantifier that allows zero repeats we must skip over
+-+	the BRAZERO. This is a lunatic thing to do, but somebody did! */
 - 
--+#if defined(USE_NTLM)
--       if((!(needle->handler->flags & PROTOPT_CREDSPERREQUEST)) ||
--          (wantNTLMhttp || check->ntlm.state != NTLMSTATE_NONE)) {
--         /* This protocol requires credentials per connection or is HTTP+NTLM,
--@@ -3217,10 +3220,9 @@ ConnectionExists(struct SessionHandle *data,
--           /* one of them was different */
--           continue;
--         }
---#if defined(USE_NTLM)
--         credentialsMatch = TRUE;
---#endif
--       }
--+#endif
-- 
--       if(!needle->bits.httpproxy || needle->handler->flags&PROTOPT_SSL ||
--          (needle->bits.httpproxy && check->bits.httpproxy &&
---- 
--2.0.5
--
-diff --git a/package/libcurl/0002-connectionexists-follow-up-to-fd9d3a1ef1f.patch b/package/libcurl/0002-connectionexists-follow-up-to-fd9d3a1ef1f.patch
-deleted file mode 100644
-index 28eaeb9..0000000
---- a/package/libcurl/0002-connectionexists-follow-up-to-fd9d3a1ef1f.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From 85c45d153b901d3f69dd5713924039c011477612 Mon Sep 17 00:00:00 2001
--From: Daniel Stenberg <daniel@haxx.se>
--Date: Wed, 22 Apr 2015 13:58:10 +0200
--Subject: [PATCH 2/2] connectionexists: follow-up to fd9d3a1ef1f
--
--PROTOPT_CREDSPERREQUEST still needs to be checked even when NTLM is not
--enabled.
--
--Mistake-caught-by: Kamil Dudka
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- lib/url.c | 11 +++++++----
-- 1 file changed, 7 insertions(+), 4 deletions(-)
--
--diff --git a/lib/url.c b/lib/url.c
--index 93f15f1..7dc5c45 100644
----- a/lib/url.c
--+++ b/lib/url.c
--@@ -3210,9 +3210,11 @@ ConnectionExists(struct SessionHandle *data,
--           continue;
--       }
-- 
---#if defined(USE_NTLM)
---      if((!(needle->handler->flags & PROTOPT_CREDSPERREQUEST)) ||
---         (wantNTLMhttp || check->ntlm.state != NTLMSTATE_NONE)) {
--+      if((!(needle->handler->flags & PROTOPT_CREDSPERREQUEST))
--+#ifdef USE_NTLM
--+         || (wantNTLMhttp || check->ntlm.state != NTLMSTATE_NONE)
--+#endif
--+        ) {
--         /* This protocol requires credentials per connection or is HTTP+NTLM,
--            so verify that we're using the same name and password as well */
--         if(!strequal(needle->user, check->user) ||
--@@ -3220,9 +3222,10 @@ ConnectionExists(struct SessionHandle *data,
--           /* one of them was different */
--           continue;
--         }
--+#if defined(USE_NTLM)
--         credentialsMatch = TRUE;
---      }
-- #endif
--+      }
-- 
--       if(!needle->bits.httpproxy || needle->handler->flags&PROTOPT_SSL ||
--          (needle->bits.httpproxy && check->bits.httpproxy &&
---- 
--2.0.5
--
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index e2bd83d..59a458e 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	32557d68542f5c6cc8437b5b8a945857b4c5c6b6276da909e35b783d1d66d08f	curl-7.42.0.tar.bz2
-+sha256	e2905973391ec2dfd7743a8034ad10eeb58dab8b3a297e7892a41a7999cac887	curl-7.42.1.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 3390399..f0d7bac 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
+-+	if (*ecode == OP_BRAZERO) ecode++;
+-         ecode += GET(ecode, 1);
+-         while (*ecode == OP_ALT) ecode += GET(ecode, 1);
+-         ecode += 1 + LINK_SIZE - PRIV(OP_lengths)[condcode];
+diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
+index 56c5a17..0b2b1c4 100644
+--- a/package/pcre/pcre.hash
++++ b/package/pcre/pcre.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/pcre/files/pcre/8.36/
+-md5	ff7b4bb14e355f04885cf18ff4125c98	pcre-8.36.tar.gz
+-sha1	fb537757756818133d8157ec878bc11f5a93ef4d	pcre-8.36.tar.gz
++# From http://sourceforge.net/projects/pcre/files/pcre/8.37/
++md5	ed91be292cb01d21bc7e526816c26981	pcre-8.37.tar.bz2
++sha1	4c629b3f582366fae4e8912f0d9fa3140347d6e7	pcre-8.37.tar.bz2
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index 4ff7abd..fd339ed 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.42.0
-+LIBCURL_VERSION = 7.42.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-PCRE_VERSION = 8.36
++PCRE_VERSION = 8.37
+ PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
++PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
+ PCRE_LICENSE = BSD-3c
+ PCRE_LICENSE_FILES = LICENCE
+ PCRE_INSTALL_STAGING = YES
