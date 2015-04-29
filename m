@@ -1,55 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 29 Apr 2015 21:05:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/clamav: bump version to 0.98.7,
-	enable ipv6 support
-Message-ID: <1430334334-31393-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 29 Apr 2015 16:17:20 -0300
+Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.0
+Message-ID: <1430335040-3526-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Clamav uses AC_TRY_RUN in m4/reorganization/code_checks/ipv6.m4 to check
-for ipv6 support, which is not cross-compile safe. Since buildroot
-supports ipv6 out-of-the-box now this patch forces ipv6 support.
+Switch SITE to use BR2_KERNEL_MIRROR as well.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/clamav/clamav.hash |    4 ++--
- package/clamav/clamav.mk   |    5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 7913388..21983f9 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 011af6f..86ab34c 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
 @@ -1,2 +1,2 @@
--# From http://sourceforge.net/projects/clamav/files/clamav/0.98.6/
--sha1	03cb9a20a08aba9176b1f58d5527d06ec8261f9c	clamav-0.98.6.tar.gz
-+# From http://sourceforge.net/projects/clamav/files/clamav/0.98.7/
-+sha1	c9793d67c041e2b944116d912f8681c8bd6e4432	clamav-0.98.7.tar.gz
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 6a8fddf..e6a1195 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256	248862a7e7e06188bb495bbaa05d3e0e34628b61a10ef03234b3b00698ce88db	btrfs-progs-v3.19.1.tar.xz
++sha256	179cf1acc1b0061548b8f1d9cf973a8338bf96f192cecad99ecdace9ae065a1f	btrfs-progs-v4.0.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 842531f..ce5c27e 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--CLAMAV_VERSION = 0.98.6
-+CLAMAV_VERSION = 0.98.7
- CLAMAV_SITE = http://sourceforge.net/projects/clamav/files/clamav/$(CLAMAV_VERSION)
- CLAMAV_LICENSE = GPLv2
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
-@@ -16,7 +16,8 @@ CLAMAV_DEPENDENCIES = openssl zlib $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- 
- # mmap cannot be detected when cross-compiling, needed for mempool support
- CLAMAV_CONF_ENV = \
--	ac_cv_c_mmap_private=yes
-+	ac_cv_c_mmap_private=yes \
-+	have_cv_ipv6=yes
- 
- CLAMAV_CONF_OPTS = \
- 	--with-dbdir=/var/lib/clamav \
+-BTRFS_PROGS_VERSION = 3.19.1
+-BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
++BTRFS_PROGS_VERSION = 4.0
++BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf acl attr e2fsprogs lzo util-linux zlib
+ BTRFS_PROGS_CONF_OPTS = --disable-backtrace
 -- 
-1.7.10.4
+2.0.5
