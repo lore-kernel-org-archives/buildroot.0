@@ -1,33 +1,60 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 29 Apr 2015 10:27:24 +0000 (UTC)
-Subject: [Buildroot] [Bug 29] strftime dosen't display correct localized
- month and daynames
-In-Reply-To: <bug-29-163@https.bugs.busybox.net/>
-References: <bug-29-163@https.bugs.busybox.net/>
-Message-ID: <20150429102724.6F34881D82@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Apr 2015 12:28:19 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: fix rebuild/reinstall for
+	Linaro toolchains
+Message-ID: <1430303299-24519-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=29
+For Linaro toolchains, a special post install staging hook is used to
+create two symlinks needed for the dynamic loader to find the
+libraries. However, the way the link is created prevents a 'make
+toolchain-external-reinstall' from succeeding, because the symlink
+already exists and points to a directory:
 
-Bernhard Reutner-Fischer <aldot@uclibc.org> changed:
+ln -sf . /home/thomas/projets/outputs/training/target/lib/arm-linux-gnueabihf
+ln: '/home/thomas/projets/outputs/training/target/lib/arm-linux-gnueabihf/.': cannot overwrite directory
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-   Target Milestone|---                         |0.9.34
+This commit adjust the hook to pass the '-n' option so that the link
+name is treated as a normal file if it is a symbolic link to a
+directory.
 
---- Comment #2 from Bernhard Reutner-Fischer <aldot@uclibc.org> 2015-04-29 10:27:24 UTC ---
-LC_ALL="pl_PL.UTF-8" ./busybox_unstripped date
-?ro kwi 29 12:25:13 CEST 2015
-LC_ALL="pl_PL.UTF-8" ./busybox_unstripped date -d '2009-01-09 21:15:19'
-pi? sty  9 21:15:19 CET 2009
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index fd796a0..35bba31 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -239,18 +239,18 @@ endif
+ # {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
+ # {/usr,}/lib, so we need to create a symbolic link.
+ define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+-	ln -sf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
+-	ln -sf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
++	ln -snf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
++	ln -snf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
+ endef
+ 
+ define TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+-	ln -sf . $(TARGET_DIR)/lib/armeb-linux-gnueabihf
+-	ln -sf . $(TARGET_DIR)/usr/lib/armeb-linux-gnueabihf
++	ln -snf . $(TARGET_DIR)/lib/armeb-linux-gnueabihf
++	ln -snf . $(TARGET_DIR)/usr/lib/armeb-linux-gnueabihf
+ endef
+ 
+ define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+-	ln -sf . $(TARGET_DIR)/lib/aarch64-linux-gnu
+-	ln -sf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
++	ln -snf . $(TARGET_DIR)/lib/aarch64-linux-gnu
++	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
+ endef
+ 
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.1.0
