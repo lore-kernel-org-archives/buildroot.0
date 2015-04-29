@@ -1,103 +1,33 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 29 Apr 2015 10:37:14 +0200
-Subject: [Buildroot] uClibc build verbosity control
-In-Reply-To: <C2D7FE5348E1B147BCA15975FBA230756659BE0C@IN01WEMBXB.internal.synopsys.com>
-References: <C2D7FE5348E1B147BCA15975FBA230756659BC9F@IN01WEMBXB.internal.synopsys.com>
- <20150427092110.GF8309@waldemar-brodkorb.de>
- <64AC6559-D358-40F8-8543-1C2D6DEEE01E@gmail.com>
- <C2D7FE5348E1B147BCA15975FBA230756659BE0C@IN01WEMBXB.internal.synopsys.com>
-Message-ID: <CAC1BbcSrg=NYqv4p_mgw8Njv3nfVOxZTa=EO=1iN+Z5cA1ix4A@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 29 Apr 2015 10:27:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 29] strftime dosen't display correct localized
+ month and daynames
+In-Reply-To: <bug-29-163@https.bugs.busybox.net/>
+References: <bug-29-163@https.bugs.busybox.net/>
+Message-ID: <20150429102724.6F34881D82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28 April 2015 at 08:38, Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
-> On Tuesday 28 April 2015 01:46 AM, Bernhard Reutner-Fischer wrote:
->
-> On April 27, 2015 11:21:10 AM GMT+02:00, Waldemar Brodkorb <wbx@openadk.org><mailto:wbx@openadk.org> wrote:
->
->
->>Hi Vineet,
->>Vineet Gupta wrote,
->>
->
->
->>> Hi,
->>>
->>> uClibc verbosity control V=xx is different from other mainstream
->
->
->>projects: namely Busybox and Linux kernel.
+https://bugs.busybox.net/show_bug.cgi?id=29
 
-These are kbuild-based, fwiw.
->
->
->>> To print full cmdlines (when debugging obscure toolchain issues) we
->
->
->>need to pass V=2 whereas kernel/busybox take V=1.
->
->
->>>
->>> Can this be changed (I can provide a patch) assuming this doesn't
->
->
->>break existing scripts upsetting some people.
->
->
->>>
->>> My issue is specifically when using likes of Buildroot, there's no
->
->
->>obvious way to get the cmdlines of uClibc and/or other projects (unless
->>there's some obvious way I'm missing).
->
->
-> Just add V=2 to make flags used for uclibc?
->
-> Still requires manually hacking some Makefile etc, since V=xx is tyoically given at cmdline once for entire build.
+Bernhard Reutner-Fischer <aldot@uclibc.org> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+   Target Milestone|---                         |0.9.34
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index ce9b2b4..402966c 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -359,6 +359,13 @@ UCLIBC_MAKE_FLAGS = \
-  UCLIBC_EXTRA_CFLAGS="$(UCLIBC_EXTRA_CFLAGS) $(TARGET_ABI)" \
-  HOSTCC="$(HOSTCC)"
+--- Comment #2 from Bernhard Reutner-Fischer <aldot@uclibc.org> 2015-04-29 10:27:24 UTC ---
+LC_ALL="pl_PL.UTF-8" ./busybox_unstripped date
+?ro kwi 29 12:25:13 CEST 2015
+LC_ALL="pl_PL.UTF-8" ./busybox_unstripped date -d '2009-01-09 21:15:19'
+pi? sty  9 21:15:19 CET 2009
 
-+ifeq ($(KBUILD_VERBOSE),0)
-+ UCLIBC_MAKE_FLAGS += "V=0" # default anyway
-+endif
-+ifeq ($(KBUILD_VERBOSE),1)
-+ UCLIBC_MAKE_FLAGS += "V=2"
-+endif
-+
- define UCLIBC_KCONFIG_FIXUP_CMDS
-  $(call KCONFIG_SET_OPT,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D)/.config)
-  $(call KCONFIG_ENABLE_OPT,TARGET_$(UCLIBC_TARGET_ARCH),$(@D)/.config)
-
-but anyway.
->
->
->
->>
->>Good idea. Send a patch. I am pro.
->
->
-> I found the terse output with just defines rather neat.
-> If there is consensus that the current V=1 has no benefit then we can drop it in favour of just silent 0 and fully verbose 1.
->
->
-> No, the idea is to keep both V=1 and V=2, but make them like other projects.
-> e.g. in kernel build, V=2 prints the single liners, while V=1 prints the verbose cmdline,
-> While in uClibc it's the other way around. Same with Busybox AFAIKR.
->
-> Simple patch below addresses that, please consider applying.
-
-Patch did not include help-text adjustment nor locale generation verbosity.
-Fixed thus, please try current master.
-
-thanks,
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
