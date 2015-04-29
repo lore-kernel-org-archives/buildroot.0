@@ -1,45 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Apr 2015 23:01:20 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{10, 14, 18,
-	19}.x and 4.0 series
-Message-ID: <20150429213022.5B08681D97@busybox.osuosl.org>
+Date: Wed, 29 Apr 2015 23:27:12 +0200
+Subject: [Buildroot] [git commit] package/clamav: bump version to 0.98.7,
+	enable ipv6 support
+Message-ID: <20150429213022.A325E7FDBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f1df4d9598fecf0ee0f0cadcd71d7419d9676dee
+commit: http://git.buildroot.net/buildroot/commit/?id=1591799094038353f34efdb580787dfa868b8d75
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Clamav uses AC_TRY_RUN in m4/reorganization/code_checks/ipv6.m4 to check
+for ipv6 support, which is not cross-compile safe. Since buildroot
+supports ipv6 out-of-the-box now this patch forces ipv6 support.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ package/clamav/clamav.hash |    4 ++--
+ package/clamav/clamav.mk   |    5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e0a676d..74c1b08 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -200,15 +200,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.68"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.75"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.76"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.40"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.39"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.40"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.11"	if BR2_KERNEL_HEADERS_3_18
--	default "3.19.5"	if BR2_KERNEL_HEADERS_3_19
--	default "4.0"		if BR2_KERNEL_HEADERS_4_0
-+	default "3.18.12"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.19.6"	if BR2_KERNEL_HEADERS_3_19
-+	default "4.0.1"		if BR2_KERNEL_HEADERS_4_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 7913388..21983f9 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,2 +1,2 @@
+-# From http://sourceforge.net/projects/clamav/files/clamav/0.98.6/
+-sha1	03cb9a20a08aba9176b1f58d5527d06ec8261f9c	clamav-0.98.6.tar.gz
++# From http://sourceforge.net/projects/clamav/files/clamav/0.98.7/
++sha1	c9793d67c041e2b944116d912f8681c8bd6e4432	clamav-0.98.7.tar.gz
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 6a8fddf..e6a1195 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLAMAV_VERSION = 0.98.6
++CLAMAV_VERSION = 0.98.7
+ CLAMAV_SITE = http://sourceforge.net/projects/clamav/files/clamav/$(CLAMAV_VERSION)
+ CLAMAV_LICENSE = GPLv2
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+@@ -16,7 +16,8 @@ CLAMAV_DEPENDENCIES = openssl zlib $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ 
+ # mmap cannot be detected when cross-compiling, needed for mempool support
+ CLAMAV_CONF_ENV = \
+-	ac_cv_c_mmap_private=yes
++	ac_cv_c_mmap_private=yes \
++	have_cv_ipv6=yes
+ 
+ CLAMAV_CONF_OPTS = \
+ 	--with-dbdir=/var/lib/clamav \
