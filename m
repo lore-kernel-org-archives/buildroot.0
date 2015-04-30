@@ -1,40 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 30 Apr 2015 11:05:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 8066] New: nodejs crashes when built with gcc 4.9
-Message-ID: <bug-8066-163@https.bugs.busybox.net/>
+From: Antoine Tenart <antoine.tenart@free-electrons.com>
+Date: Thu, 30 Apr 2015 13:26:08 +0200
+Subject: [Buildroot] [PATCH] imx-usb-loader: new host package
+In-Reply-To: <6061599.b1S2CSsYX5@sagittea>
+References: <1430142459-9448-1-git-send-email-antoine.tenart@free-electrons.com>
+ <6061599.b1S2CSsYX5@sagittea>
+Message-ID: <20150430112608.GB4433@kwain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8066
+J?r?me,
 
-              Host: Xeon
-            Target: x86_64 i7
-           Summary: nodejs crashes when built with gcc 4.9
-           Product: buildroot
-           Version: 2015.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: ian_ormshaw at waters.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Mon, Apr 27, 2015 at 07:56:38PM +0200, J?r?me Pouiller wrote:
+> On Monday 27 April 2015 15:47:39 Antoine Tenart wrote:
+> > This host package allows to build tools to download and execute code on
+> > Freescale i.MX5/i.MX6 and Vybrid SoCs through the Serial Download
+> > Protocol.
+> > 
+> > The work behind this commit was funded by ECA Group
+> > <http://www.ecagroup.com>. ECA Group is the copyright owner of the
+> > contributed code.
+> > 
+> > Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+> > ---
+> >  package/Config.in.host                   |  1 +
+> >  package/imx-usb-loader/Config.in.host    | 10 ++++++++++
+> >  package/imx-usb-loader/imx-usb-loader.mk | 22 ++++++++++++++++++++++
+> >  3 files changed, 33 insertions(+)
+> >  create mode 100644 package/imx-usb-loader/Config.in.host
+> >  create mode 100644 package/imx-usb-loader/imx-usb-loader.mk
+> [...]
+> > +define HOST_IMX_USB_LOADER_INSTALL_CMDS
+> > +	$(MAKE) -C $(@D)	\
+> > +		DESTDIR=$(HOST_DIR) install
+> > +endef
+> hmm... configuration files are installed in $(HOST_DIR)/usr/etc, 
+> $(HOST_DIR)/etc would be better.
 
+OK.
 
-Created attachment 6016
-  --> https://bugs.busybox.net/attachment.cgi?id=6016
-Config file
+> More annoying, it seems installed binaries look for configuration files in 
+> /etc instead of $(HOST_DIR)/etc.
 
-nodejs crashed whenever it is run on an i7 system when compiled with gcc 4.9.
-Using the exact same configuration but with gcc 4.8 works correctly.
+You can use the -c option to specify the configuration directory path.
+
+Antoine
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Antoine T?nart, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
