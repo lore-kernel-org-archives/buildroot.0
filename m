@@ -1,30 +1,34 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 30 Apr 2015 09:38:58 +0200
-Subject: [Buildroot] [PATCH 0/2] mono: bump to version 4.0.1
-Message-ID: <1430379540-4459-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Thu, 30 Apr 2015 09:38:59 +0200
+Subject: [Buildroot] [PATCH 1/2] package/monolite: bump to version 117
+In-Reply-To: <1430379540-4459-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1430379540-4459-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <1430379540-4459-2-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series bumps mono version to 4.0.1.
-It also removes no more needed patches accepted upstream.
+This bump is required for proper compiling mono 4.0.1.
 
-Angelo Compagnucci (2):
-  package/monolite: bump to version 117
-  package/mono: bump to version 4.0.1
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/monolite/monolite.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- .../0003-mono-context.h-fix-build-on-MIPS.patch    | 33 --------
- ...e-ppc-sigctx-monoctx-conversion-code-to-m.patch | 92 ----------------------
- ...build-errors-in-mono-context.c-on-ppc64el.patch | 84 --------------------
- package/mono/Config.in                             | 22 ------
- package/mono/mono.mk                               |  9 +--
- package/monolite/monolite.mk                       |  2 +-
- 6 files changed, 2 insertions(+), 240 deletions(-)
- delete mode 100644 package/mono/0003-mono-context.h-fix-build-on-MIPS.patch
- delete mode 100644 package/mono/0004-jit-Move-the-ppc-sigctx-monoctx-conversion-code-to-m.patch
- delete mode 100644 package/mono/0005-Fix-build-errors-in-mono-context.c-on-ppc64el.patch
-
+diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
+index b3c7553..aa6c28c 100644
+--- a/package/monolite/monolite.mk
++++ b/package/monolite/monolite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONOLITE_VERSION = 111
++MONOLITE_VERSION = 117
+ MONOLITE_SITE = http://storage.bos.xamarin.com/mono-dist-master/latest
+ MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
+ MONOLITE_LICENSE = LGPLv2 or commercial
 -- 
 1.9.1
