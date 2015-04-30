@@ -1,9 +1,10 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 30 Apr 2015 10:47:17 +0200
-Subject: [Buildroot] [v6,08/15] qt5base: apply new patch naming policy
-In-Reply-To: <1421451251-23366-9-git-send-email-jezz@sysmic.org>
-References: <1421451251-23366-9-git-send-email-jezz@sysmic.org>
-Message-ID: <20150430084717.GH24549@t450s.lan>
+Date: Thu, 30 Apr 2015 10:52:30 +0200
+Subject: [Buildroot] [v6,
+	09/15] qt5base: fix compilation with Vivante headers.
+In-Reply-To: <1421451251-23366-10-git-send-email-jezz@sysmic.org>
+References: <1421451251-23366-10-git-send-email-jezz@sysmic.org>
+Message-ID: <20150430085230.GI24549@t450s.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,82 @@ To: buildroot@busybox.net
 
 Hi all,
 
-On Sat, Jan 17, 2015 at 12:34:04AM +0100, J?r?me Pouiller wrote:
+On Sat, Jan 17, 2015 at 12:34:05AM +0100, J?r?me Pouiller wrote:
 > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 > ---
->  .../{qt5base-0002-mkspecs-files.patch => 0002-mkspecs-files.patch}        | 0
->  .../{qt5base-0003-uclibc-no-lfs.patch => 0003-uclibc-no-lfs.patch}        | 0
->  2 files changed, 0 insertions(+), 0 deletions(-)
->  rename package/qt5/qt5base/{qt5base-0002-mkspecs-files.patch => 0002-mkspecs-files.patch} (100%)
->  rename package/qt5/qt5base/{qt5base-0003-uclibc-no-lfs.patch => 0003-uclibc-no-lfs.patch} (100%)
+>  package/qt5/qt5base/0004-xcb-egl-fixes.patch | 63 ++++++++++++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 package/qt5/qt5base/0004-xcb-egl-fixes.patch
 > 
-> diff --git a/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch b/package/qt5/qt5base/0002-mkspecs-files.patch
-> similarity index 100%
-> rename from package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
-> rename to package/qt5/qt5base/0002-mkspecs-files.patch
-> diff --git a/package/qt5/qt5base/qt5base-0003-uclibc-no-lfs.patch b/package/qt5/qt5base/0003-uclibc-no-lfs.patch
-> similarity index 100%
-> rename from package/qt5/qt5base/qt5base-0003-uclibc-no-lfs.patch
-> rename to package/qt5/qt5base/0003-uclibc-no-lfs.patch
+> diff --git a/package/qt5/qt5base/0004-xcb-egl-fixes.patch b/package/qt5/qt5base/0004-xcb-egl-fixes.patch
+> new file mode 100644
+> index 0000000..2bbd849
+> --- /dev/null
+> +++ b/package/qt5/qt5base/0004-xcb-egl-fixes.patch
+> @@ -0,0 +1,63 @@
+> +The vivante headers pull in X11 defines which break eglconvenience
+> +
+> +* Adds a missing include to qeglplatformcontext.cpp
+> +* Fix namespace collision on CursorShape, pulled in from X11/X.h
+> +* Do not pass MESA_EGL_NO_X11_HEADERS when xcb is use
+> +
+> +[based on patch from Yocto project]
+> +Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> +
+> +
+> +diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
+> +--- a/src/platformsupport/eglconvenience/eglconvenience.pri	2014-08-07 16:53:50.038277168 -0400
+> ++++ b/src/platformsupport/eglconvenience/eglconvenience.pri	2014-08-07 16:54:52.874278651 -0400
+> +@@ -30,8 +30,10 @@
+> +         }
+> +     }
+> + 
+> +-    # Avoid X11 header collision
+> +-    DEFINES += MESA_EGL_NO_X11_HEADERS
+> ++    !contains(QT_CONFIG,xcb) {
+> ++        # Avoid X11 header collision
+> ++        DEFINES += MESA_EGL_NO_X11_HEADERS
+> ++    }
+> + 
+> +     contains(QT_CONFIG,xlib) {
+> +         HEADERS += \
+> +diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/platformsupport/eglconvenience/qeglplatformcontext.cpp
+> +--- a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp	2014-08-07 16:53:50.038277168 -0400
+> ++++ b/src/platformsupport/eglconvenience/qeglplatformcontext.cpp	2014-08-07 16:56:00.630280249 -0400
+> +@@ -39,6 +39,7 @@
+> + **
+> + ****************************************************************************/
+> + 
+> ++#include <qtextstream.h>
+> + #include "qeglplatformcontext_p.h"
+> + #include "qeglconvenience_p.h"
+> + #include "qeglpbuffer_p.h"
+> +--- a/src/platformsupport/eglconvenience/qeglplatformcursor_p.h	2014-08-07 16:53:50.038277168 -0400
+> ++++ b/src/platformsupport/eglconvenience/qeglplatformcursor_p.h	2014-08-07 16:58:49.014284222 -0400
+> +@@ -42,6 +42,11 @@
+> + #ifndef QEGLPLATFORMCURSOR_H
+> + #define QEGLPLATFORMCURSOR_H
+> + 
+> ++// avoid namespace collision with X11/X.h
+> ++#ifdef CursorShape
+> ++#undef CursorShape
+> ++#endif
+> ++
+> + #include <qpa/qplatformcursor.h>
+> + #include <qpa/qplatformscreen.h>
+> + 
+> +--- a/src/platformsupport/eglconvenience/qeglplatformcursor.cpp	2014-08-07 16:53:50.038277168 -0400
+> ++++ b/src/platformsupport/eglconvenience/qeglplatformcursor.cpp	2014-08-07 17:00:36.806286766 -0400
+> +@@ -49,8 +49,8 @@
+> + 
+> + #include <QtPlatformSupport/private/qdevicediscovery_p.h>
+> + 
+> +-#include "qeglplatformcursor_p.h"
+> + #include "qeglplatformintegration_p.h"
+> ++#include "qeglplatformcursor_p.h"
+> + 
+> + QT_BEGIN_NAMESPACE
+> + 
 
 As explained in my answer to the cover letter, this series of patch has
 been successfully tested on a Nitrogen6x board.
