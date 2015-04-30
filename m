@@ -1,44 +1,74 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Thu, 30 Apr 2015 16:48:47 +0200
-Subject: [Buildroot] [PATCH 1/2] raspberrypi2: switch Linux kernel to
- rpi-3.18.y
-In-Reply-To: <1430314604-28680-1-git-send-email-fhunleth@troodon-software.com>
-References: <1430314604-28680-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <554240CF.20605@je-eigen-domein.nl>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 30 Apr 2015 09:48:13 -0500
+Subject: [Buildroot] [PATCH 1/1] busybox: udhcpc create leases file
+In-Reply-To: <87zj5pvgba.fsf@dell.be.48ers.dk>
+References: <1430358118-5304-1-git-send-email-matt@thewebers.ws>
+ <87zj5pvgba.fsf@dell.be.48ers.dk>
+Message-ID: <CANQCQpaw-Ft7NFRCHYns6em8GU78+LBvU-2yhZapqOMxzH_VFg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/29/2015 03:36 PM, Frank Hunleth wrote:
-> This changes the kernel used on the Raspberry Pi 2 from the 3.19 branch
-> back to the 3.18 branch. This provides a couple of advantages:
+Peter,
+
+On Thu, Apr 30, 2015 at 9:31 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Matt" == Matt Weber <matt@thewebers.ws> writes:
 >
->    1. mmc0 works again. Floris Bos found out that this was due to using
->       the precompiled DTB files from rpi-firmware. These DTBs were built
->       using 3.18.
->    2. The rpi-3.18.y branch is not regularly rebased like rpi-3.19.y
->       according to popcornmix. See
->       https://github.com/raspberrypi/linux/issues/915.
+>  > Signed-off-by: Matt Weber <matt@thewebers.ws>
+>  > ---
+>  >  package/busybox/udhcpc.script | 23 +++++++++++++++++++++++
+>  >  1 file changed, 23 insertions(+)
 >
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+>  > diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+>  > index 50c52e6..d5d81bf 100755
+>  > --- a/package/busybox/udhcpc.script
+>  > +++ b/package/busybox/udhcpc.script
+>  > @@ -61,6 +61,29 @@ case "$1" in
+>  >                      echo adding dns $i
+>  >                      echo "nameserver $i # $interface" >> $RESOLV_CONF
+>  >              done
+>  > +
+>  > +            # Based on http://sourceforge.net/p/kboot/mailman/message/1168535/
+>
+> A more detailed commit message would be good. After looking at that URL
+> I'm still not quite sure what this is needed for? It doesn't seem to be
+> read again anywhere.
 
-Can confirm buildroot's raspberrypi2_defconfig now works on a Pi 2 
-including mmc0, so patch works as intended.
+Sorry, I can add that.  In general, it adds the leases functionality
+that mimics full dhclient behavior.  This file can then be used at a
+system level to know least expiration and other server provided
+information.
 
-Reviewed-by: Floris Bos <bos@je-eigen-domein.nl>
+>
+>> +             } >> /var/lib/misc/udhcpc-$interface.leases
+>
+> Are you sure this should append the file and not overwrite it? Why would
+> you want to keep older lease info around when you receive a new one?
 
+I just mimic'd dhclient but I could see in a embedded space you might
+only want to keep the latest and when a lease expires, removing this
+file.  I think the full client usually used this file to set an
+interface after reboot to the previous lease if one was still valid.
+I wasn't going to keep this behavior since for embedded devices it
+doesn't make sense.
 
-Did notice the rpi-firmware package itself could use some more work.
-Besides the binary device tree files always being installed thing, the 
-sample config.txt in package/rpi-firmware/config.txt also contains 
-values that are not that suitable for the Pi 2.
-E.g. the Pi 2 normally runs at 900 Mhz but is being downclocked to 700 
-by "arm_freq=700" there.
-Might be better not to have any low level settings like that there, just 
-"kernel=zImage"
+>
+> Perhaps this belongs in a hook in your rootfs overlay?
 
-Yours sincerely,
+Right now there isn't any way to get dhcp lease information after a
+lease is provided.  It seemed this should be a standard capability of
+the script.  I do agree I should make it not append and clean up when
+there isnt' a lease.
 
-Floris Bos
+Thanks for the feedback!
+-- 
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
