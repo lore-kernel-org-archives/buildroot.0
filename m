@@ -1,28 +1,39 @@
 From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Thu, 30 Apr 2015 16:40:28 +0200
-Subject: [Buildroot] [PATCH 0/8] configs: defconfigs for Atmel boards
-In-Reply-To: <CAMQcK5JsC7TpJ5pdWmF-6m8zUa0_gXKYUBWQwWEA0-tx2uONQw@mail.gmail.com>
+Date: Thu, 30 Apr 2015 16:40:58 +0200
+Subject: [Buildroot] [PATCH 8/8] configs: rename atmel_xplained_defconfig
+In-Reply-To: <CAMQcK5Lb5fGQ1TuiAEG7vV+nhV8KX_vYxHn81wTKDGyWp+A7PQ@mail.gmail.com>
 References: <1430398311-10804-1-git-send-email-alexandre.belloni@free-electrons.com>
- <CAMQcK5JsC7TpJ5pdWmF-6m8zUa0_gXKYUBWQwWEA0-tx2uONQw@mail.gmail.com>
-Message-ID: <20150430144028.GC12076@piout.net>
+ <1430398311-10804-9-git-send-email-alexandre.belloni@free-electrons.com>
+ <CAMQcK5Lb5fGQ1TuiAEG7vV+nhV8KX_vYxHn81wTKDGyWp+A7PQ@mail.gmail.com>
+Message-ID: <20150430144058.GD12076@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30/04/2015 at 09:33:50 -0500, Ryan Barnett wrote :
-> Since you are moving all of the Atmel boards to use NAND boot
-> configuration, it would be good to have a 'README' that explains how
-> to load the boards utilizing the SAM-BA tool (it appears all the NAND
-> configurations are using this). At minimum it would be to point to
-> Linux4SAM wiki for loading instructions.
+On 30/04/2015 at 09:36:14 -0500, Ryan Barnett wrote :
+> Alexandre,
 > 
-> Thoughts?
+> On Thu, Apr 30, 2015 at 7:51 AM, Alexandre Belloni
+> <alexandre.belloni@free-electrons.com> wrote:
+> > For consistency, rename atmel_xplained_defconfig to
+> > atmel_sama5d3_xplained_mmc_defconfig as this configuration supports
+> > booting the sama5d3 Xplained with an MMC card (as opposed to the NAND
+> > flash).
+> >
+> > Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+> > ---
+> >  .../{atmel_xplained_defconfig => atmel_sama5d3_xplained_mmc_defconfig}    | 0
+> >  1 file changed, 0 insertions(+), 0 deletions(-)
+> >  rename configs/{atmel_xplained_defconfig => atmel_sama5d3_xplained_mmc_defconfig} (100%)
+> 
+> I believe the readme.txt under board/atmel/xplained should be updated
+> to say atmel_sama5d3_xplained_mmc_defconfig instead of
+> atmel_xplained_defconfig.
 > 
 
-Sure, I'm actually planning to provide the tcl scripts to use with
-SAM-BA to help people load the generated images on their board.
+Indeed, I'll update it.
 
 
 -- 
