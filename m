@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Apr 2015 15:29:50 +0200
-Subject: [Buildroot] [PATCH] libmicrohttpd: bump to version 0.9.41
-In-Reply-To: <1430391254-3928-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 30 Apr 2015 07:54:14 -0300")
-References: <1430391254-3928-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87fv7hwxpt.fsf@dell.be.48ers.dk>
+Date: Thu, 30 Apr 2015 15:30:13 +0200
+Subject: [Buildroot] [PATCH] libtasn1: bump to version 4.5
+In-Reply-To: <1430391521-12768-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 30 Apr 2015 07:58:41 -0300")
+References: <1430391521-12768-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87bni5wxp6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
