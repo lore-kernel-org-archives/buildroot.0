@@ -1,42 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Apr 2015 15:29:14 +0200
-Subject: [Buildroot] [git commit] stunnel: bump to version 5.17
-Message-ID: <20150430133027.933BA81DAF@busybox.osuosl.org>
+Date: Thu, 30 Apr 2015 15:38:05 +0200
+Subject: [Buildroot] [PATCH 2/2] package/mono: bump to version 4.0.1
+In-Reply-To: <1430379540-4459-3-git-send-email-angelo.compagnucci@gmail.com>
+ (Angelo Compagnucci's message of "Thu, 30 Apr 2015 09:39:00 +0200")
+References: <1430379540-4459-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1430379540-4459-3-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <874mnxwxc2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=740929ec78f4be6ea5e13e9618a32d49281e59da
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/stunnel/stunnel.hash |    4 ++--
- package/stunnel/stunnel.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > This patch:
+ > * bumps mono version to 4.0.1.
+ > * Removes no more needed patches included upstream
+ > * Removes profile switches no more present in configure
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 8545341..e45e691 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From https://www.stunnel.org/pipermail/stunnel-announce/2015-April/000098.html
--sha256	b6b7e93fb2626eaabae1c8474e1dfa23962cfde8fa35c8602289fcaa4f53608d	stunnel-5.16.tar.gz
-+# From https://www.stunnel.org/pipermail/stunnel-announce/2015-April/000100.html
-+sha256	c3e79e582621a0827125e35e1c00450190104fc02dc3c5274cb02b05859fd472	stunnel-5.17.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 7a6bb46..2d35e75 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+So what does that mean? Does it build all profiles or are some of them
+dropped upstream?
  
--STUNNEL_VERSION = 5.16
-+STUNNEL_VERSION = 5.17
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/5.x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+ >  	  http://download.mono-project.com/sources/mono/
+ 
+ > -if BR2_PACKAGE_MONO
+ > -
+ > -config BR2_PACKAGE_MONO_20
+ > -	bool "2.0/3.5 .Net Runtime"
+ > -	help
+ > -	  This option enables the installation of the 2.0/3.5 version
+ > -	  of the Mono .Net runtime to the target
+ > -
+ > -config BR2_PACKAGE_MONO_40
+ > -	bool "4.0 .Net Runtime"
+ > -	help
+ > -	  This option enables the installation of the 4.0 version
+ > -	  of the Mono .Net runtime to the target
+ > -
+ > -config BR2_PACKAGE_MONO_45
+ > -	bool "4.5 .Net Runtime"
+ > -	help
+ > -	  This option enables the installation of the 4.5 version
+ > -	  of the Mono .Net runtime to the target
+ > -
+ > -endif
+ > -
+ >  comment "mono needs a toolchain w/ IPv6, threads"
+ >  	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
+
+It doesn't apply:
+
+Applying patch #466431 using 'git am -s3'
+Description: [2/2] package/mono: bump to version 4.0.1
+Applying: package/mono: bump to version 4.0.1
+Using index info to reconstruct a base tree...
+M       package/mono/Config.in
+Falling back to patching base and 3-way merge...
+Auto-merging package/mono/Config.in
+CONFLICT (content): Merge conflict in package/mono/Config.in
+Removing package/mono/0005-Fix-build-errors-in-mono-context.c-on-ppc64el.patch
+Removing package/mono/0004-jit-Move-the-ppc-sigctx-monoctx-conversion-code-to-m.patch
+Removing package/mono/0003-mono-context.h-fix-build-on-MIPS.patch
+Failed to merge in the changes.
+Patch failed at 0001 package/mono: bump to version 4.0.1
+The copy of the patch that failed is found in:
+   /home/peko/source/buildroot/.git/rebase-apply/patch
+
+
+Judging from the IPv6 comment above it seems like your tree is now
+uptodate. Could you please rebase your patches against HEAD and resend?
+
+-- 
+Bye, Peter Korsgaard
