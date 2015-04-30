@@ -1,40 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Apr 2015 10:26:52 +0200
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 30 Apr 2015 10:21:45 +0200
 Subject: [Buildroot] [v6,
- 01/15] mesa3d: Give possibility to external backends to enable
- DRI/Gallium
-In-Reply-To: <20150430081618.GA24549@t450s.lan>
-References: <1421451251-23366-2-git-send-email-jezz@sysmic.org>
- <20150430081618.GA24549@t450s.lan>
-Message-ID: <20150430102652.421b13b2@free-electrons.com>
+	02/15] gpu-viv-bin-mx6q: fix compiling issues with EGL_API_FB
+In-Reply-To: <1421451251-23366-3-git-send-email-jezz@sysmic.org>
+References: <1421451251-23366-3-git-send-email-jezz@sysmic.org>
+Message-ID: <20150430082145.GB24549@t450s.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary Bisson,
+Hi all,
 
-On Thu, 30 Apr 2015 10:16:18 +0200, Gary Bisson wrote:
-
-> As explained in my answer to the cover letter, this series of patch has
-> been successfully tested on a Nitrogen6x board.
-> http://lists.busybox.net/pipermail/buildroot/2015-April/124739.html
+On Sat, Jan 17, 2015 at 12:33:58AM +0100, J?r?me Pouiller wrote:
+> To compile with Vivante header and use framebuffer, it is necessary to
+> pass option -DEGL_API_FB. This option is declared in pkg-config file of
+> Vivante library. But many packages (especialy qt5 components) does not
+> consider these flags.
 > 
-> Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> So instead of patching every packages that use EGL, it is more
+> convenient to patch Vivante headers.
+> 
+> This commit add #define EGL_API_FB on top of eglvivante.h when
+> necessary.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  package/freescale-imx/gpu-viv-bin-mx6q/egl.pc              |  2 +-
+>  package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc           |  2 +-
+>  package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 10 ++++++----
+>  package/freescale-imx/gpu-viv-bin-mx6q/vg.pc               |  2 +-
+>  4 files changed, 9 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+> index c984247..d1d09a0 100644
+> --- a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+> +++ b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+> @@ -7,4 +7,4 @@ Name: egl
+>  Description: Freescale gpu-viv-bin-mx6q implementation of EGL
+>  Version: 1.0
+>  Libs: -L${libdir} -lGAL -lEGL
+> -Cflags: -I${includedir}/ -DEGL_API_FB=1
+> +Cflags: -I${includedir}/
+> diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+> index 7cfb5e7..74ce792 100644
+> --- a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+> +++ b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+> @@ -7,4 +7,4 @@ Name: glesv2
+>  Description: Freescale gpu-viv-bin-mx6q implementation of OpenGL ESv2
+>  Version: 2.0
+>  Libs: -L${libdir} -lGAL -lEGL -lGLESv2
+> -Cflags: -I${includedir}/ -DEGL_API_FB=1
+> +Cflags: -I${includedir}/
+> diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+> index 79c7a92..eb54b80 100644
+> --- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+> +++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+> @@ -48,14 +48,16 @@ endef
+>  
+>  define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
+>  	cp -r $(@D)/usr/* $(STAGING_DIR)/usr
+> +	if [ $(GPU_VIV_BIN_MX6Q_LIB_TARGET) == fb ]; then \
+> +		$(SED) '/#define EGLAPIENTRY/ a \
+> +			#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) \n\
+> +			#define EGL_API_FB \n\
+> +			#endif' $(STAGING_DIR)/usr/include/EGL/eglvivante.h; \
+> +	fi
+>  	for lib in egl glesv2 vg; do \
+>  		$(INSTALL) -m 0644 -D \
+>  			package/freescale-imx/gpu-viv-bin-mx6q/$${lib}.pc \
+>  			$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
+> -		if [ "$(GPU_VIV_BIN_MX6Q_LIB_TARGET)" != "fb" ]; then \
+> -			$(SED) "s/-DEGL_API_FB=1//" \
+> -				$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
+> -		fi; \
+>  	done
+>  endef
+>  
+> diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
+> index fb14005..677a7ee 100644
+> --- a/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
+> +++ b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
+> @@ -7,4 +7,4 @@ Name: vg
+>  Description: Freescale gpu-viv-bin-mx6q implementation of OpenVG
+>  Version: 1.1
+>  Libs: -L${libdir} -lGAL -lEGL -lOpenVG
+> -Cflags: -I${includedir}/ -DEGL_API_FB=1
+> +Cflags: -I${includedir}/
 
-Thanks. Could you, or J?r?me provide a more detailed (i.e non-empty)
-commit log for this commit? What's happening is not that trivial, but
-the commit log is empty.
+As explained in my answer to the cover letter, this series of patch has
+been successfully tested on a Nitrogen6x board.
+http://lists.busybox.net/pipermail/buildroot/2015-April/124739.html
 
-No need to resend the patch, just provide in a mail a better commit
-log, and Peter or I will integrate the new commit log when applying the
-patch.
+Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Gary
