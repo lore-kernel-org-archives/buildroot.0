@@ -1,51 +1,76 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 30 Apr 2015 20:32:55 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/bsdiff: add patch to fix missing
-	header for u_char
-Message-ID: <1430418775-19094-1-git-send-email-joerg.krause@embedded.rocks>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 30 Apr 2015 20:57:16 +0200
+Subject: [Buildroot] [v7,
+	02/13] gpu-viv-bin-mx6q: fix compiling issues with EGL_API_FB
+In-Reply-To: <1430406748-8493-3-git-send-email-jezz@sysmic.org>
+References: <1430406748-8493-3-git-send-email-jezz@sysmic.org>
+Message-ID: <20150430185716.GA8609@t450s.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix missing header <sys/types.h> for u_char in bspatch.c.
+Hi Jerome,
 
-Fixes http://autobuild.buildroot.net/results/31a/31a837cf6e34b02dce498f2b12e40d6d16a5a8e6/
+On Thu, Apr 30, 2015 at 05:12:17PM +0200, J?r?me Pouiller wrote:
+> To compile with Vivante header and use framebuffer, it is necessary to
+> pass option -DEGL_API_FB. This option is declared in pkg-config file of
+> Vivante library. But many packages (especialy qt5 components) does not
+> consider these flags.
+> 
+> So instead of patching every packages that use EGL, it is more
+> convenient to patch Vivante headers.
+> 
+> This commit add #define EGL_API_FB on top of eglvivante.h when
+> necessary.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> ---
+>  package/freescale-imx/gpu-viv-bin-mx6q/egl.pc              |  2 +-
+>  package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc           |  2 +-
+>  package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 14 ++++++++++----
+>  package/freescale-imx/gpu-viv-bin-mx6q/vg.pc               |  2 +-
+>  4 files changed, 13 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+> index c984247..d1d09a0 100644
+> --- a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+> +++ b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+> @@ -7,4 +7,4 @@ Name: egl
+>  Description: Freescale gpu-viv-bin-mx6q implementation of EGL
+>  Version: 1.0
+>  Libs: -L${libdir} -lGAL -lEGL
+> -Cflags: -I${includedir}/ -DEGL_API_FB=1
+> +Cflags: -I${includedir}/
+> diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+> index 7cfb5e7..74ce792 100644
+> --- a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+> +++ b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+> @@ -7,4 +7,4 @@ Name: glesv2
+>  Description: Freescale gpu-viv-bin-mx6q implementation of OpenGL ESv2
+>  Version: 2.0
+>  Libs: -L${libdir} -lGAL -lEGL -lGLESv2
+> -Cflags: -I${includedir}/ -DEGL_API_FB=1
+> +Cflags: -I${includedir}/
+> diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+> index 79c7a92..0304ba1 100644
+> --- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+> +++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+> @@ -46,16 +46,22 @@ define GPU_VIV_BIN_MX6Q_BUILD_CMDS
+>  	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1.2.0
+>  endef
+>  
+> +ifeq ($(GPU_VIV_BIN_MX6Q_LIB_TARGET),fb)
+> +define GPU_VIV_BIN_MX6Q_FIXUP_FB_HEADERS
+> +	$(SED) '/#define EGLAPIENTRY/ a \
+> +		#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) \n\
+> +		#define EGL_API_FB \n\
+> +		#endif' $(STAGING_DIR)/usr/include/EGL/eglvivante.h; \
 
-Patch not sent upstream - no maintainer mail address or repository found.
+Can you re-send this patch without the backslash at the end of the line
+as it breaks the build (missing endif error)?
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
-Changes v1 -> v2:
-  - Add description and Sob to patch file
----
- package/bsdiff/0001-Add-missing-header-for-u_char.patch | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
- create mode 100644 package/bsdiff/0001-Add-missing-header-for-u_char.patch
-
-diff --git a/package/bsdiff/0001-Add-missing-header-for-u_char.patch b/package/bsdiff/0001-Add-missing-header-for-u_char.patch
-new file mode 100644
-index 0000000..56affb4
---- /dev/null
-+++ b/package/bsdiff/0001-Add-missing-header-for-u_char.patch
-@@ -0,0 +1,17 @@
-+bspatch: Fix missing header <sys/types.h> for u_char
-+
-+Fixes http://autobuild.buildroot.net/results/31a/31a837cf6e34b02dce498f2b12e40d6d16a5a8e6/
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+
-+diff -purN bsdiff-4.3.orig/bspatch.c bsdiff-4.3/bspatch.c
-+--- bsdiff-4.3.orig/bspatch.c	2015-04-30 13:47:26.485903359 +0200
-++++ bsdiff-4.3/bspatch.c	2015-04-30 13:48:14.808908672 +0200
-+@@ -35,6 +35,7 @@ __FBSDID("$FreeBSD: src/usr.bin/bsdiff/b
-+ #include <err.h>
-+ #include <unistd.h>
-+ #include <fcntl.h>
-++#include <sys/types.h>
-+
-+ static off_t offtin(u_char *buf)
-+ {
--- 
-2.3.7
+Regards,
+Gary
