@@ -1,39 +1,37 @@
-From: Nikolay Dimitrov <picmaster@mail.bg>
-Date: Thu, 30 Apr 2015 19:04:45 +0300
-Subject: [Buildroot] [PATCH 1/1] configs/riotboard: bump u-boot to
-	version 2015.04
-In-Reply-To: <1430253524-22053-1-git-send-email-picmaster@mail.bg>
-References: <1430253524-22053-1-git-send-email-picmaster@mail.bg>
-Message-ID: <5542529D.7070707@mail.bg>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Thu, 30 Apr 2015 18:12:16 +0200
+Subject: [Buildroot] [PATCH] lighttpd: run as non-privileged user www-data
+Message-ID: <1430410336-8292-1-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys,
+Previously the stock lighttpd configuration was patched to run as user root,
+because we do not have a lighttpd user.
+Patch it to use www-data instead, which is a user available in the default
+skeleton, and is the same other webserver packages (like nginx) use.
 
-On 04/28/2015 11:38 PM, Nikolay Dimitrov wrote:
-> Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
-> ---
->   configs/riotboard_defconfig |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-> index 6e581fa..72c3e04 100644
-> --- a/configs/riotboard_defconfig
-> +++ b/configs/riotboard_defconfig
-> @@ -14,7 +14,7 @@ BR2_ROOTFS_OVERLAY="board/embest/riotboard/rootfs_overlay"
->
->   # bootloader
->   BR2_TARGET_UBOOT=y
-> -BR2_TARGET_UBOOT_VERSION="2015.01"
-> +BR2_TARGET_UBOOT_VERSION="2015.04"
->   BR2_TARGET_UBOOT_BOARDNAME="riotboard"
->   BR2_TARGET_UBOOT_FORMAT_IMX=y
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+---
+ package/lighttpd/0001-Fix-default-config-file.patch | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Please don't apply this patch. Additional testing revealed an issue.
-I'll send an update when I find a solution. Thanks.
-
-Regards,
-Nikolay
+diff --git a/package/lighttpd/0001-Fix-default-config-file.patch b/package/lighttpd/0001-Fix-default-config-file.patch
+index 88d2c6f..bffc2a8 100644
+--- a/package/lighttpd/0001-Fix-default-config-file.patch
++++ b/package/lighttpd/0001-Fix-default-config-file.patch
+@@ -51,8 +51,8 @@ diff -Nurp a/doc/config/lighttpd.conf b/doc/config/lighttpd.conf
+  ##
+ -server.username  = "lighttpd"
+ -server.groupname = "lighttpd"
+-+# server.username  = "lighttpd"
+-+# server.groupname = "lighttpd"
+++server.username  = "www-data"
+++server.groupname = "www-data"
+  
+  ## 
+  ## enable core files.
+-- 
+2.1.4
