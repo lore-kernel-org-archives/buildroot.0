@@ -1,47 +1,49 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri,  1 May 2015 18:19:43 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain-external: remove non-existent
-	mips-sf musl toolchains
-In-Reply-To: <1430497183-23847-1-git-send-email-arnout@mind.be>
-References: <1430497183-23847-1-git-send-email-arnout@mind.be>
-Message-ID: <1430497183-23847-2-git-send-email-arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 1 May 2015 18:21:13 +0200
+Subject: [Buildroot] [PATCH 3/7] boot/uboot: do not check hash for
+ custom versions
+In-Reply-To: <5543A044.30604@mind.be>
+References: <cover.1430260630.git.yann.morin.1998@free.fr>
+ <12d715d71a908668d9156cfb3c0a0de1966bea66.1430260630.git.yann.morin.1998@free.fr>
+ <55437C36.6020707@mind.be> <20150501153117.GB4206@free.fr>
+ <5543A044.30604@mind.be>
+Message-ID: <20150501162113.GE4206@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since 1.1.6, the mips softfloat toolchains are merged into the mips
-toolchain using multilib. Our external toolchain infrastructure copies
-the correct version to the target depending on the BR2_SOFT_FLOAT
-option.
+Arnout, All,
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- toolchain/toolchain-external/toolchain-external.mk | 8 --------
- 1 file changed, 8 deletions(-)
+On 2015-05-01 17:48 +0200, Arnout Vandecappelle spake thusly:
+> On 01/05/15 17:31, Yann E. MORIN wrote:
+[--SNIP--]
+> > Acutally, I prefer we explicitly exclude only what we really want to be
+> > excluded.
+[--SNIP--]
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 35bba31..b293ba9 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -367,17 +367,9 @@ TOOLCHAIN_EXTERNAL_SOURCE = crossx86-i486-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSIO
- else ifeq ($(BR2_microblazebe),y)
- TOOLCHAIN_EXTERNAL_SOURCE = crossx86-microblaze-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- else ifeq ($(BR2_mips),y)
--ifeq ($(BR2_SOFT_FLOAT),y)
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mips-sf-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
--else
- TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mips-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
--endif # BR2_SOFT_FLOAT
- else ifeq ($(BR2_mipsel),y)
--ifeq ($(BR2_SOFT_FLOAT),y)
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-sf-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
--else
- TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
--endif # BR2_SOFT_FLOAT
- else ifeq ($(BR2_powerpc),y)
- TOOLCHAIN_EXTERNAL_SOURCE = crossx86-powerpc-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- else ifeq ($(BR2_x86_64),y)
+Thanks! :-)
+
+> >> Actually, before patch 2/7, the VCS cases wouldn't
+> >> even be added because UBOOT_SOURCE is not set yet at that point :-)
+> > 
+> > Well, in my patch, it is set a few lines above. And patch 2 is already
+> > applied! ;-)
+> 
+>  Is it? Or do you mean patch 1?
+
+Well, I meant "patch 2 is applied in the series, before this one patch",
+so your proposal was OK.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
