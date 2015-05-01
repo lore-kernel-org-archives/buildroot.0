@@ -1,110 +1,98 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2015 23:35:46 +0200
-Subject: [Buildroot] [PATCH 6/7] linux: do not check hashes for custom
- versions and tarballs
-In-Reply-To: <554380DB.40503@mind.be>
-References: <cover.1430260630.git.yann.morin.1998@free.fr>
- <f033e301266baba536c3d63902cc2439e45eb3a4.1430260630.git.yann.morin.1998@free.fr>
- <554380DB.40503@mind.be>
-Message-ID: <20150501213546.GI4206@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 01 May 2015 23:39:54 +0200
+Subject: [Buildroot] [PATCH 28/30] package/matchbox-panel: add option to
+ use ACPI for the battery applet
+In-Reply-To: <cbb90f6326af77c2c466fa72ee970fee6a9040f1.1429725549.git.yann.morin.1998@free.fr>
+References: <cover.1429725549.git.yann.morin.1998@free.fr>
+ <cbb90f6326af77c2c466fa72ee970fee6a9040f1.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <5543F2AA.6070706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
-
-On 2015-05-01 15:34 +0200, Arnout Vandecappelle spake thusly:
->  Hah, this is a tough one...
+On 22/04/15 20:09, Yann E. MORIN wrote:
+> It is possible to use ACPI to monitor the battery with the battery
+> min-applet. If ACPI is not explicitly enabled, then APM is used if
+> available; if ACPI is not explcitly enabled and APM is not available,
+> then the battery applet id not built.
 > 
->  With the combination BR2_LINUX_SAME_AS_HEADERS and BR2_KERNEL_HEADERS_VERSION
-> you can still get a custom version...
+> What is a pity is that there is no way to explicitly enable or disable
+> the applet; it only relies on auto-detection... :-(
 > 
->  So I'm thinking if it wouldn't be simpler to just always disable the hash:
-> BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
+> So, add an option to enable use of ACPI, visible only on architectures
+> that have at least some hope of having ACPI support.
+
+ Since APM exists only on x86, there is basically no way to disable the applet
+on x86. The only thing that the configure option does is to force the applet to
+use the deprecated and most likely unavailable APM interface.
+
+ Therefore, I'd remove the Config.in option and just pass --enable-acpi-linux
+unconditionally on x86 and aarch64. The worst that can happen is that you build
+a tiny applet that turns out not to work.
+
+ That said, the applet doesn't build for me (with Sourcery x86_64 toolchain)
+because the 'line_parse' inner function is declared static...
+
+
+ Regards,
+ Arnout
+
 > 
->  Note that the hash, if it exists, will still be checked; it just won't be an
-> error if the hash doesn't exist (so the variable is not named very accurately in
-> fact). Therefore I think it's safe to disable it completely for linux. Or, if
-> you prefer you can make it depend on !BR2_LINUX_KERNEL_LATEST_VERSION &&
-> !(BR2_LINUX_SAME_AS_HEADERS && !BR2_KERNEL_HEADERS_VERSION) (good luck
-> expressing that in make syntax :-).
-
-Well, it seems it was pretty easy to do in the end (when onlt excluding
-what needs be, and not everyting), though a bit redundant:
-
-    ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
-    BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
-    endif
-    ifeq ($(BR2_LINUX_KERNEL_SAME_AS_HEADERS)$(BR2_KERNEL_HEADERS_VERSION),yy)
-    BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
-    endif
-
-OK, that's not very nice either, but the code is simple enough, and
-splits unrelated parts apart.
-
-> On 29/04/15 00:40, Yann E. MORIN wrote:
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > ---
-> >  linux/linux.mk | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/linux/linux.mk b/linux/linux.mk
-> > index 0c348da..959c564 100644
-> > --- a/linux/linux.mk
-> > +++ b/linux/linux.mk
-> > @@ -13,8 +13,10 @@ ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
-> >  LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
-> >  LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
-> >  LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
-> > +BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
-> >  else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
-> >  LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
-> > +# For 'local', there is no hash check, so no need to set BR_NO_CHECK_HASH_FOR
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/matchbox/matchbox-panel/Config.in         | 15 +++++++++++++++
+>  package/matchbox/matchbox-panel/matchbox-panel.mk |  6 ++++++
+>  2 files changed, 21 insertions(+)
 > 
->  Why do you add that comment here and not in the VCS cases? I don't think it is
-> needed, move it to the commit message.
-
-Besides, it is really wrong: there can't be hash checks, because this
-is not am archive, but a directory that is rsync-ed. Comment dropped.
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
->  Regards,
->  Arnout
+> diff --git a/package/matchbox/matchbox-panel/Config.in b/package/matchbox/matchbox-panel/Config.in
+> index 47bd10a..93241f0 100644
+> --- a/package/matchbox/matchbox-panel/Config.in
+> +++ b/package/matchbox/matchbox-panel/Config.in
+> @@ -4,3 +4,18 @@ config BR2_PACKAGE_MATCHBOX_PANEL
+>  	help
+>  	  A flexible always present 'window bar' for holding
+>  	  application launchers.
+> +
+> +if BR2_PACKAGE_MATCHBOX_PANEL
+> +
+> +config BR2_PACKAGE_MATCHBOX_PANEL_ACPI
+> +	bool "use ACPI for battery mini-applet"
+> +	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64
+> +	help
+> +	  Use ACPI to monitor the battery.
+> +
+> +	  Say 'y' here to use ACPI to monitor the battery.
+> +	  If you say 'n', then APM will be used if available;
+> +	  otherwise the battery monitor mini-applet is not
+> +	  built.
+> +
+> +endif # BR2_PACKAGE_MATCHBOX_PANEL
+> diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
+> index f7d699b..aa9018c 100644
+> --- a/package/matchbox/matchbox-panel/matchbox-panel.mk
+> +++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
+> @@ -20,6 +20,12 @@ else
+>  MATCHBOX_PANEL_CONF_OPTS += --disable-startup-notification
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_MATCHBOX_PANEL_ACPI),y)
+> +MATCHBOX_PANEL_CONF_OPTS += --enable-acpi-linux
+> +else
+> +MATCHBOX_PANEL_CONF_OPTS += --disable-acpi-linux
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS),y)
+>  MATCHBOX_PANEL_DEPENDENCIES += wireless_tools
+>  endif
 > 
-> >  LINUX_SITE_METHOD = local
-> >  else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
-> >  LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-> > @@ -24,6 +26,9 @@ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-> >  LINUX_SITE_METHOD = hg
-> >  else
-> >  LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
-> > +ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
-> > +BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
-> > +endif
-> >  # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
-> >  # to use the $(word) function. We support versions such as 4.0, 3.1,
-> >  # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
-> > 
-> 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
