@@ -1,81 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 17:54:49 +0200
-Subject: [Buildroot] [PATCH] doc/manual: fix generating manual after
-	legacy overhaul
-In-Reply-To: <1430492786-17842-1-git-send-email-yann.morin.1998@free.fr>
-References: <1430492786-17842-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <5543A1C9.2070801@mind.be>
+From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
+Date: Fri,  1 May 2015 17:58:51 +0200
+Subject: [Buildroot] [PATCH 1/1] autobuild-run: show options along with
+	their defaults
+Message-ID: <1430495931-20779-1-git-send-email-dywi@mailerd.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/05/15 17:06, Yann E. MORIN wrote:
-> Commit 53903a15 (*config: improve handling of BR2_LEGACY) added an
-> option to entirely skip legacy entries, by passing a variable in the
-> environment.
-> 
-> Howerver, it mised one location where that variable is also needed,
-  However      missed
+Currently, the default values for options are printed at the end of the help
+message, so there is a visual distance between the "--<option>" help and its
+default value that increases with every newly introduced option.
 
-> which is generating the list of packages and deprecated features for
-> inclusion in the manual.
-> 
-> Fix that by re-using the global $(COMMON_CONFIG_ENV) variable,
-> overriding just what we don't want (i.e. br2-external location and
-> defconfig path).
-> 
-> Also, slightly re-order variables so the ones we override come right
-> after the common settings, moving the specific pnes at the end.
-                                                 ones
+Move them closer together by means of str-dict formatting, "%(key)s".
 
- And split into one variable per line.
+"[default: ]" cannot be used as it gets parsed by docopt,
+using "Defaults to ...", "Not set by default", ... phrases instead.
 
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  docs/manual/manual.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-> index d5db2c2..2755582 100644
-> --- a/docs/manual/manual.mk
-> +++ b/docs/manual/manual.mk
-> @@ -12,8 +12,10 @@ MANUAL_RESOURCES = $(TOPDIR)/docs/images
->  # should not be included in the manual.
->  define MANUAL_GEN_LISTS
->  	$(Q)$(call MESSAGE,"Updating the manual lists...")
-> -	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(@D) \
-> +	$(Q)$(COMMON_CONFIG_ENV) \
-> +		BR2_DEFCONFIG="" \
->  		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
-> +		TOPDIR=$(TOPDIR) O=$(@D) \
+Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
+---
+ scripts/autobuild-run | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
- Except here you put two variables on a single line...
-
-
- Regards,
- Arnout
-
- Otherwise:
-  Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Regards,
- Arnout
-
->  		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
->  endef
->  MANUAL_POST_RSYNC_HOOKS += MANUAL_GEN_LISTS
-> 
-
-
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 0e12080..6d029b5 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -74,17 +74,23 @@ Options:
+   -h, --help                     show this help message and exit
+   -V, --version                  show version
+   -n, --ninstances NINSTANCES    number of parallel instances
++                                 Defaults to %(--ninstances)s.
+   -j, --njobs NJOBS              number of parallel jobs
++                                 Defaults to %(--njobs)s.
+   -s, --submitter SUBMITTER      name/machine of submitter
++                                 Defaults to %(--submitter)s.
+   --http-login LOGIN             username to send results with
++                                 Not set by default.
+   --http-password PASSWORD       password to send results with (for security
+                                  reasons it is recommended to define this in the
+                                  config file instead, with user-read permissions
+                                  only)
++                                 Not set by default.
+   --make-opts OPTSTRING          string of extra options to pass to Buildroot
+                                  make, such as specific command wrappers
+-                                 [default: ]
++                                 Empty by default.
+   -c, --config CONFIG            path to configuration file
++                                 Not set by default.
+ 
+ Format of the configuration file:
+ 
+@@ -99,11 +105,8 @@ Format of the configuration file:
+    http-password = <value>
+    submitter = <value>
+ 
+-Default values for the arguments are:
+ 
+-  %s
+-""" % '\n  '.join(
+-    ['%s = %s' % (key, val) for (key, val) in defaults.items()])
++""" % defaults
+ 
+ __doc__ = doc
+ 
+@@ -839,7 +842,7 @@ def main():
+                 http_login = args['--http-login'],
+                 http_password = args['--http-password'],
+                 submitter = args['--submitter'],
+-                make_opts = args['--make-opts'],
++                make_opts = (args['--make-opts'] or ''),
+                 upload = upload,
+                 buildpid = buildpid
+             ))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+2.3.6
