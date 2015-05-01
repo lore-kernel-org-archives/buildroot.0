@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 02 May 2015 00:23:10 +0200
-Subject: [Buildroot] [PATCH] php.ini: set date.timezone to UTC
-In-Reply-To: <1430503955-24928-1-git-send-email-bos@je-eigen-domein.nl>
+Date: Sat, 02 May 2015 00:34:59 +0200
+Subject: [Buildroot] [PATCH v2 1/3] php: fpm sapi: install startup script
+In-Reply-To: <1430503955-24928-2-git-send-email-bos@je-eigen-domein.nl>
 References: <1430503955-24928-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <5543FCCE.2000904@mind.be>
+ <1430503955-24928-2-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <5543FF93.4080200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,46 +12,76 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 01/05/15 20:12, Floris Bos wrote:
-> Prevent a warning being logged each time a PHP date/time method is
-> used by setting UTC as (default) timezone in php.ini
+> Install the startup script if using the FastCGI Process Manager.
 > 
 > Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-> ---
->  package/php/php.mk | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index 3b9a117..7bd3f63 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -288,6 +288,7 @@ define PHP_INSTALL_FIXUP
->  	rm -f $(TARGET_DIR)/usr/bin/phpize
->  	$(INSTALL) -D -m 0755 $(PHP_DIR)/php.ini-production \
->  		$(TARGET_DIR)/etc/php.ini
-> +	$(SED) 's/;date.timezone =/date.timezone = UTC/' $(TARGET_DIR)/etc/php.ini
+> ---
+> v2: add systemd support
+> ---
+>  package/php/0006-fix-php-fpm.service.in.patch | 35 +++++++++++++++++++++++++++
+>  package/php/php.mk                            | 15 ++++++++++++
+>  2 files changed, 50 insertions(+)
+>  create mode 100644 package/php/0006-fix-php-fpm.service.in.patch
+> 
+> diff --git a/package/php/0006-fix-php-fpm.service.in.patch b/package/php/0006-fix-php-fpm.service.in.patch
+> new file mode 100644
+> index 0000000..a182a25
+> --- /dev/null
+> +++ b/package/php/0006-fix-php-fpm.service.in.patch
+> @@ -0,0 +1,35 @@
+> +From bb19125781c0794da9a63fee62e263ff4efff661 Mon Sep 17 00:00:00 2001
+> +From: Floris Bos <bos@je-eigen-domein.nl>
+> +Date: Fri, 1 May 2015 15:28:55 +0200
+> +Subject: [PATCH] Fix php-fpm.service.in
+> +
+> +- Expand file paths.
+> +- Remove obsolete After=syslog.target. Syslog is socket activated nowadays.
 
- Would it be possible to use BR2_TARGET_LOCALTIME (if set) instead? Something like:
+ Well, we do have a unit file for rsyslogd...
 
-ifeq ($(BR2_TARGET_LOCALTIME),)
-PHP_LOCALTIME = UTC
-else
-PHP_LOCALTIME = $(BR2_TARGET_LOCALTIME)
-endif
+ Will you submit this patch upstream?
 
-	$(SED) 's%;date.timezone =.*%date.timezone = $(PHP_LOCALTIME)%' \
-		$(TARGET_DIR)/etc/php.ini
+> +
+> +Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> +---
+> + sapi/fpm/php-fpm.service.in | 6 +++---
+> + 1 file changed, 3 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/sapi/fpm/php-fpm.service.in b/sapi/fpm/php-fpm.service.in
+> +index a2df30e..c135f04 100644
+> +--- a/sapi/fpm/php-fpm.service.in
+> ++++ b/sapi/fpm/php-fpm.service.in
+> +@@ -1,11 +1,11 @@
+> + [Unit]
+> + Description=The PHP FastCGI Process Manager
+> +-After=syslog.target network.target
+> ++After=network.target
 
- That is, assuming that php can deal with complex timezones like Europe/Brussels.
+ I actually don't see why this is needed. If no syslog.target is defined, then
+it will be ignored (at least that's what I understand from the systemd
+documentation [1]).
+
 
  Regards,
  Arnout
 
->  endef
->  
->  PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
-> 
+> + 
+> + [Service]
+> + Type=@php_fpm_systemd@
+> +-PIDFile=@localstatedir@/run/php-fpm.pid
+> +-ExecStart=@sbindir@/php-fpm --nodaemonize --fpm-config @sysconfdir@/php-fpm.conf
+> ++PIDFile=@EXPANDED_LOCALSTATEDIR@/run/php-fpm.pid
+> ++ExecStart=@EXPANDED_SBINDIR@/php-fpm --nodaemonize --fpm-config @EXPANDED_SYSCONFDIR@/php-fpm.conf
+> + ExecReload=/bin/kill -USR2 $MAINPID
+> + 
+> + [Install]
+> +-- 
+> +2.1.4
 
+[snip]
 
+[1] http://www.freedesktop.org/software/systemd/man/systemd.unit.html
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
