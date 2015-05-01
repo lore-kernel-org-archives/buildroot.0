@@ -1,45 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 May 2015 23:10:02 +0200
-Subject: [Buildroot] [PATCH] autobuild-run: do not build evtest using
- extrenal arc-2014.12 toolchain
-In-Reply-To: <1427190703-2935-1-git-send-email-abrodkin@synopsys.com>
-References: <1427190703-2935-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150501231002.1bd0f207@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 01 May 2015 23:13:05 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: udhcpc create leases file
+In-Reply-To: <55428A75.7000401@mind.be> (Arnout Vandecappelle's message of
+ "Thu, 30 Apr 2015 22:03:01 +0200")
+References: <1430358118-5304-1-git-send-email-matt@thewebers.ws>
+ <87zj5pvgba.fsf@dell.be.48ers.dk>
+ <CANQCQpaw-Ft7NFRCHYns6em8GU78+LBvU-2yhZapqOMxzH_VFg@mail.gmail.com>
+ <87vbgdvezw.fsf@dell.be.48ers.dk> <55428A75.7000401@mind.be>
+Message-ID: <87a8xouhlq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Tue, 24 Mar 2015 12:51:43 +0300, Alexey Brodkin wrote:
-> This external arc-2014.12 toolchain has uClibc with disabled
-> UCLIBC_HAS_PROGRAM_INVOCATION_NAME.
-> 
-> Because of this following build failure happens in autobuilder -
-> http://autobuild.buildroot.net/results/0fd/0fd36a0d79c4d82aedebb5aca8d3ce4214b1ed61/
-> --->8---
-> evtest.c: In function 'version':
-> evtest.c:730:20: error: 'program_invocation_short_name' undeclared (first use in this function)
->   printf("%s %s\n", program_invocation_short_name, PACKAGE_VERSION);
->                     ^
-> evtest.c:730:20: note: each undeclared identifier is reported only once for each function it appears in
-> evtest.c: In function 'usage':
-> evtest.c:742:38: error: 'program_invocation_short_name' undeclared (first use in this function)
->   printf("   %s /dev/input/eventX\n", program_invocation_short_name);
-> --->8---
+Hi,
 
-I've marked this patch as Rejected, since I have committed another
-patch to mark the Synopsys ARC external toolchain as "broken" because
-the uClibc configuration is too far from the default Buildroot uClibc
-configuration. We'll re-enable this toolchain once a new release is
-made upstream, as we discussed.
+ >> > Sorry, I can add that.  In general, it adds the leases functionality
+ >> > that mimics full dhclient behavior.  This file can then be used at a
+ >> > system level to know least expiration and other server provided
+ >> > information.
+ >> 
+ >> Ok, good. Is that really something we want to enforce for everyone using
+ >> udhcpc with Buildroot?
 
-Thanks,
+ >  I don't see why not. It's creating a small file in /tmp, that's all. Except for
+ > the appending, of course, otherwise a long-running system could just fill up
+ > /tmp with leases. Overwriting has the disadvantage that there's a race condition
+ > when the file is truncated at the same time that another process is reading from
+ > it, but I don't think the complexity of fixing that race is worth the bother.
 
-Thomas
+True. I would like to see this (and other non-essential things like
+E.G. avahi-autoipd) move to hooks though.
+
+I wonder if the dhclient format is a sensible choice. Is that something
+any "standard" programs can work with? It doesn't seem very easy to
+parse in shell scripts. Maybe just shell compatible NAME="<val>" strings
+would be better?
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
