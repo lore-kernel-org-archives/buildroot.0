@@ -1,92 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 May 2015 22:57:19 +0200
-Subject: [Buildroot] [git commit] qmx6_defconfig: update
-Message-ID: <20150501205734.9804981DED@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 01 May 2015 22:58:44 +0200
+Subject: [Buildroot] [PATCH 23/30] package/matchbox: drop useless
+ dependencies
+In-Reply-To: <5543E50C.2080602@mind.be>
+References: <cover.1429725549.git.yann.morin.1998@free.fr>
+ <0f88fac02eba1f18605db80731bfb130d00721cb.1429725549.git.yann.morin.1998@free.fr>
+ <5543E50C.2080602@mind.be>
+Message-ID: <5543E904.5010600@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d59749363f2b51853cb076679d47bcc0bde8c24e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 01/05/15 22:41, Arnout Vandecappelle wrote:
+> On 22/04/15 20:09, Yann E. MORIN wrote:
+>> xlib-libXft is only needed when building a 'standalone' matchbox, which
+>> means not using matchbox-lib.
+>>
+>> But we *are* building matchbox-lib, and we do not support the standalone
+>> mode (and probably won't, as even upstream says it is ugly, by lack of
+>> theming).
+>>
+>> Similarly, xlib-libXext is only used for its 'xsync' extension, for
+>> which support is entirely commented-out in matchbox.
+>>
+>> So, drop the dependency on xlib-libXft, and make it explicit we're not
+>> building either standalone modes; drop xlib-libXext.
+>>
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> ---
+>>  package/matchbox/Config.in   | 1 -
+>>  package/matchbox/matchbox.mk | 6 +++++-
+>>  2 files changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+>> index 9d8d060..fa186e9 100644
+>> --- a/package/matchbox/Config.in
+>> +++ b/package/matchbox/Config.in
+>> @@ -4,7 +4,6 @@ menuconfig BR2_PACKAGE_MATCHBOX
+>>  	depends on BR2_USE_MMU # fork()
+>>  	select BR2_PACKAGE_FONTCONFIG
+>>  	select BR2_PACKAGE_EXPAT
+>> -	select BR2_PACKAGE_XLIB_LIBXEXT
+>>  	select BR2_PACKAGE_XLIB_LIBXCURSOR
+>>  	select BR2_PACKAGE_MATCHBOX_LIB
+>>  	help
+>> diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+>> index 4ec3fb5..bce9520 100644
+>> --- a/package/matchbox/matchbox.mk
+>> +++ b/package/matchbox/matchbox.mk
+>> @@ -11,7 +11,11 @@ MATCHBOX_LICENSE = GPLv2+
+>>  MATCHBOX_LICENSE_FILES = COPYING
+>>  
+>>  MATCHBOX_DEPENDENCIES = matchbox-lib
+>> -MATCHBOX_CONF_OPTS = --enable-expat --disable-composite
+>> +MATCHBOX_CONF_OPTS = \
+>> +	--enable-expat \
+>> +	--disable-composite \
+>> +	--disable-standalone \
+>> +	--disable-standalone-xft
+> 
+>  So, is the dependency on xlib_libXft a few lines lower still relevant? If so,
+> comment on it in the commit message.
 
-- Update kernel
-- Add u-boot configuration
-- 6q_bootscript.txt is no more needed by new version of u-boot
+ It actually is, configure checks for it and it is used in the code. So
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+but I'd still like it to be mentioned in the commit message.
 
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
-[build test only]
+ Regards,
+ Arnout
 
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/congatec/qmx6/6q_bootscript.txt |    2 --
- board/congatec/qmx6/post-build.sh     |    7 -------
- configs/qmx6_defconfig                |   25 +++++++++++++++++++++----
- 3 files changed, 21 insertions(+), 13 deletions(-)
+> 
+>  Regards,
+>  Arnout
+> 
+>>  
+>>  # Workaround bug in configure script
+>>  MATCHBOX_CONF_ENV = expat=yes
+>>
+> 
+> 
 
-diff --git a/board/congatec/qmx6/6q_bootscript.txt b/board/congatec/qmx6/6q_bootscript.txt
-deleted file mode 100644
-index 1382220..0000000
---- a/board/congatec/qmx6/6q_bootscript.txt
-+++ /dev/null
-@@ -1,2 +0,0 @@
--set bootargs console=ttymxc1,115200 root=/dev/mmcblk0p1 rootwait consoleblank=0
--${fs}load mmc ${disk}:1 10800000 /boot/uImage && bootm 10800000 ; echo "Error loading kernel image"
-diff --git a/board/congatec/qmx6/post-build.sh b/board/congatec/qmx6/post-build.sh
-deleted file mode 100755
-index 92251a5..0000000
---- a/board/congatec/qmx6/post-build.sh
-+++ /dev/null
-@@ -1,7 +0,0 @@
--#!/bin/sh
--
--TARGET_DIR=$1
--BOARD_DIR="$(dirname $0)"
--
--mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n "boot script" \
--    -d $BOARD_DIR/6q_bootscript.txt $TARGET_DIR/6q_bootscript
-diff --git a/configs/qmx6_defconfig b/configs/qmx6_defconfig
-index 143e058..ff035a9 100644
---- a/configs/qmx6_defconfig
-+++ b/configs/qmx6_defconfig
-@@ -1,16 +1,33 @@
- BR2_arm=y
- BR2_cortex_a9=y
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.0.101"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
-+BR2_DEFAULT_KERNEL_VERSION="3.10.17"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/congatec/qmx6/post-build.sh"
-+
-+# Notice you need a recent version of u-boot (with DT support) to be able
-+# to boot this kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0_QMX6_R1.1.2"
-+# Last version of branch cgt_imx_3.10.17_1.0.0
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
- BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# Change boardname depending of your product number
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="cgt_qmx6_pn016103"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_uboot.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="6388c474189b42c07bb865dd604c74483da099f3"
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.pn016103.imx"
-+
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_3=y
-+
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
