@@ -1,39 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 May 2015 10:23:12 +0200
-Subject: [Buildroot] [git commit] raspberrypi: bump raspberrypi_dt_defconfig
-	kernel
-Message-ID: <20150501082317.B95D07F9DA@busybox.osuosl.org>
+Date: Fri, 1 May 2015 10:25:58 +0200
+Subject: [Buildroot] [PATCH 1/2] raspberrypi2: switch Linux kernel to
+ rpi-3.18.y
+In-Reply-To: <1430314604-28680-1-git-send-email-fhunleth@troodon-software.com>
+References: <1430314604-28680-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20150501102558.338835cc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a066ff0d73ee038e200bd3e44ea17821fcdab068
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Frank Hunleth,
 
-This brings the raspberrypi_dt_defconfig up to the same kernel used by
-the raspberrypi2_defconfig. Also changed the git URL to use HTTP for
-consistency.
+On Wed, 29 Apr 2015 09:36:43 -0400, Frank Hunleth wrote:
+> This changes the kernel used on the Raspberry Pi 2 from the 3.19 branch
+> back to the 3.18 branch. This provides a couple of advantages:
+> 
+>   1. mmc0 works again. Floris Bos found out that this was due to using
+>      the precompiled DTB files from rpi-firmware. These DTBs were built
+>      using 3.18.
+>   2. The rpi-3.18.y branch is not regularly rebased like rpi-3.19.y
+>      according to popcornmix. See
+>      https://github.com/raspberrypi/linux/issues/915.
+> 
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> ---
+>  configs/raspberrypi2_defconfig | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/raspberrypi_dt_defconfig |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Applied both patches, thanks.
 
-diff --git a/configs/raspberrypi_dt_defconfig b/configs/raspberrypi_dt_defconfig
-index c727a7c..991460e 100644
---- a/configs/raspberrypi_dt_defconfig
-+++ b/configs/raspberrypi_dt_defconfig
-@@ -11,8 +11,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="246530ff8a4f302b8666c6d9cf509407d8c1257a"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="2747cc0bde4ca441691260fae1e34c9ef954ccae"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.18-rpi-dt.defconfig"
- BR2_LINUX_KERNEL_ZIMAGE=y
+What about the raspberrypi_defconfig ? Is there any reason to keep it
+around using the 3.12 kernel ? Or can we rename
+raspberrypi_dt_defconfig to raspberrypi_defconfig ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
