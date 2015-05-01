@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 23:44:34 +0200
-Subject: [Buildroot] [PATCH 29/30] package/matchbox-panel: add support
- for dnotify
-In-Reply-To: <39072254f3d646691a8c637e551ffaede7b9928c.1429725549.git.yann.morin.1998@free.fr>
+Date: Fri, 01 May 2015 23:45:33 +0200
+Subject: [Buildroot] [PATCH 30/30] package/matchbox-panel: fix WiFi
+ monitoring
+In-Reply-To: <3de1b4334c76469f95d791d578f769831ab2f3a5.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <39072254f3d646691a8c637e551ffaede7b9928c.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <5543F3C2.4020004@mind.be>
+ <3de1b4334c76469f95d791d578f769831ab2f3a5.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <5543F3FD.5010802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +13,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 22/04/15 20:09, Yann E. MORIN wrote:
-> Using dnotify, matchbox-panel can automatically reload its menu.
+> matchbox-panel can build a simple applet to monitor the WiFi. For that,
+> it tries to see if libiwl is available; if so, WiFi monitoring is
+> enabled, otherwise it is disabled; there is not option to explicitly
+> enable or disable it.
 > 
-> dnotify requires a kernel >=2.4, which we can consider to be
-> virtually for granted.
+> Currently, matchbox-panel depends on the wireless-tools package.
+> However, that's not enough, since the library will only be installed if
+> explictly enabled in the menuconfig *and* this is not a static build.
+  explicitly
 
- So, why not enable this unconditionally?
+> 
+> Change the dependency to be on the library, not the package.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  package/matchbox/matchbox-panel/Config.in         | 7 +++++++
->  package/matchbox/matchbox-panel/matchbox-panel.mk | 6 ++++++
->  2 files changed, 13 insertions(+)
+>  package/matchbox/matchbox-panel/matchbox-panel.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/matchbox/matchbox-panel/Config.in b/package/matchbox/matchbox-panel/Config.in
-> index 93241f0..6daf2db 100644
-> --- a/package/matchbox/matchbox-panel/Config.in
-> +++ b/package/matchbox/matchbox-panel/Config.in
-> @@ -18,4 +18,11 @@ config BR2_PACKAGE_MATCHBOX_PANEL_ACPI
->  	  otherwise the battery monitor mini-applet is not
->  	  built.
->  
-> +config BR2_PACKAGE_MATCHBOX_PANEL_DNOTIFY
-> +	bool "use dnotify"
-> +	help
-> +	  Using dnotify allows matchbox-panel to automatically reload
-> +	  its menu when entries are changed (e.g. when a new application
-> +	  is installed).
-> +
->  endif # BR2_PACKAGE_MATCHBOX_PANEL
 > diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
-> index aa9018c..dedbab6 100644
+> index dedbab6..455ae34 100644
 > --- a/package/matchbox/matchbox-panel/matchbox-panel.mk
 > +++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
-> @@ -26,6 +26,12 @@ else
->  MATCHBOX_PANEL_CONF_OPTS += --disable-acpi-linux
+> @@ -32,7 +32,7 @@ else
+>  MATCHBOX_PANEL_CONF_OPTS += --disable-dnotify
 >  endif
 >  
-> +ifeq ($(BR2_PACKAGE_MATCHBOX_PANEL_DNOTIFY),y)
-> +MATCHBOX_PANEL_CONF_OPTS += --enable-dnotify
-> +else
-> +MATCHBOX_PANEL_CONF_OPTS += --disable-dnotify
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS),y)
+> -ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS),y)
+> +ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_LIB),y)
 >  MATCHBOX_PANEL_DEPENDENCIES += wireless_tools
 >  endif
+>  
 > 
 
 
