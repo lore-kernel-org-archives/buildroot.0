@@ -1,80 +1,131 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2015 17:38:41 +0200
-Subject: [Buildroot] [PATCH 6/7] linux: do not check hashes for custom
- versions and tarballs
-In-Reply-To: <554380DB.40503@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 01 May 2015 17:45:43 +0200
+Subject: [Buildroot] [PATCH 2/7] pkg-infra: assign BR_NO_CHECK_HASH_FOR
+ so it is recursively-expanded
+In-Reply-To: <20150501152648.GA4206@free.fr>
 References: <cover.1430260630.git.yann.morin.1998@free.fr>
- <f033e301266baba536c3d63902cc2439e45eb3a4.1430260630.git.yann.morin.1998@free.fr>
- <554380DB.40503@mind.be>
-Message-ID: <20150501153841.GD4206@free.fr>
+ <e8cce5d9bbb1b75dbf02c0f9ee44ee23a0314d38.1430260630.git.yann.morin.1998@free.fr>
+ <55437A92.3060007@mind.be> <20150501152648.GA4206@free.fr>
+Message-ID: <55439FA7.1010807@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
-
-On 2015-05-01 15:34 +0200, Arnout Vandecappelle spake thusly:
->  Hah, this is a tough one...
-
-Doh, right...
-
->  With the combination BR2_LINUX_SAME_AS_HEADERS and BR2_KERNEL_HEADERS_VERSION
-> you can still get a custom version...
-
-Hmm.. I missed that case... :-/
-
->  So I'm thinking if it wouldn't be simpler to just always disable the hash:
-> BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
+On 01/05/15 17:26, Yann E. MORIN wrote:
+> arnout, All,
 > 
->  Note that the hash, if it exists, will still be checked; it just won't be an
-> error if the hash doesn't exist (so the variable is not named very accurately in
-> fact). Therefore I think it's safe to disable it completely for linux.
-
-Well, I stand on my position that I'd like we only exclude only what we
-strictly require to be excluded.
-
-> Or, if
-> you prefer you can make it depend on !BR2_LINUX_KERNEL_LATEST_VERSION &&
-> !(BR2_LINUX_SAME_AS_HEADERS && !BR2_KERNEL_HEADERS_VERSION) (good luck
-> expressing that in make syntax :-).
-
-Well, we still have the option of expressing that in Kconfig if that can
-help...
-
-> On 29/04/15 00:40, Yann E. MORIN wrote:
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > ---
-> >  linux/linux.mk | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/linux/linux.mk b/linux/linux.mk
-> > index 0c348da..959c564 100644
-> > --- a/linux/linux.mk
-> > +++ b/linux/linux.mk
-> > @@ -13,8 +13,10 @@ ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
-> >  LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
-> >  LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
-> >  LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
-> > +BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
-> >  else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
-> >  LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
-> > +# For 'local', there is no hash check, so no need to set BR_NO_CHECK_HASH_FOR
+> On 2015-05-01 15:07 +0200, Arnout Vandecappelle spake thusly:
+>> On 29/04/15 00:39, Yann E. MORIN wrote:
+>>> Currently, assigning to BR_NO_CHECK_HASH_FOR in conditionals, but
+>>> referencing vairaible assigned to later, fails. Here's a failing
+>>               variable
+>>
+>>> test-case, which is the reduced test-case of how we handle
+>>> BR_NO_CHECK_HASH_FOR for now:
+>>>
+>>>     export FOO
+>>>
+>>>     ifeq ($(BAR_V),)
+>>>     BAR_V=1
+>>>     else
+>>>     FOO += $(BAR_S)
+>>>     endif
+>>
+>>  I think the test case is too complicated - in fact the conditional construct
+>> has nothing to do with it.
 > 
->  Why do you add that comment here and not in the VCS cases? I don't think it is
-> needed, move it to the commit message.
+> Yup, right, I know. However, I wanted a reduced test-case that still
+> ressembled our current code base.
+> 
+>> The culprit is appending to it, which means we never
+>> explicitly set it to recursively expanded. Exported variables that are not
+>> defined explicitly for some reason default to be immediately expanded rather
+>> than recursively.
+> 
+> Exactly. However, there's nothing like so explained in the make manual.
 
-OK.
+ So patch the make manual :-)
 
-Regards,
-Yann E. MORIN.
+> 
+>> export FOO
+>> FOO += $(BAR)
+>> $(warning FOO='$(FOO)' BAR='$(BAR)')
+>> BAR = BAR
+>> $(warning FOO='$(FOO)' BAR='$(BAR)')
+>> default:
+>>
+>> Will give
+>>
+>> /tmp/Makefile:3: FOO=' ' BAR=''
+>> /tmp/Makefile:5: FOO=' ' BAR='BAR'
+>>
+>> while explicitly setting FOO to be recursively expanded:
+>>
+>> export FOO =
+>>
+>> will give
+>>
+>> /tmp/Makefile:3: FOO=' ' BAR=''
+>> /tmp/Makefile:5: FOO=' BAR' BAR='BAR'
+> 
+> Do you prefere I use your even-more-simplified test-case, or may I keep
+> the reduced test-case I provided that ressemble our current code-path?
+
+ Well, the relevant part of our current code path (taking your example) is:
+
+export FOO
+FOO += $(BAR_S)
+BAR_S = bar.tar
+
+ Whether or not BAR_V and FOO are defined in two separate conditional branches
+and whether or not BAR_S contains a reference to BAR_V is really irrelevant.
+
+ If you want to make it resemble our code path more, then just use the real
+variable names:
+
+export BR_NO_CHECK_HASH_FOR
+BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
+
+[snip]
+>>>  # Expressly do not check hashes for those files
+>>> -export BR_NO_CHECK_HASH_FOR
+>>> +# It needs to be assigned so as to be a recursively-expanded variable, and
+>>> +# so that it can be assigned inside conditionals.
+>>
+>> # Exported variables default to immediately expanded,
+> 
+> I would avoid stating that. That's the behaviour we observed, but
+> nothing is said about that in the make manual. If a future version of
+> make changes that behaviour, the comment would be wrong.
+
+ Then say "in some versions of make".
+
+ Regards,
+ Arnout
+
+> 
+> However, I'll ditch the comment about conditionals.
+> 
+>> # but we need it to be
+>> # recursively-epxanded, so explicitly define it.
+>>
+>>
+>>  With all that,
+>>
+>>   Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
