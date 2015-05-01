@@ -1,90 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 1 May 2015 22:57:19 +0200
-Subject: [Buildroot] [git commit] qt5base: fix compilation with Vivante
-	headers.
-Message-ID: <20150501205734.615928081B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Vivante drivers: bump to version
+	3.10.17-1.0.1
+Message-ID: <20150501205734.77C4C81DED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1095b7ccda2bf52b3c0e385407a4431872889b26
+commit: http://git.buildroot.net/buildroot/commit/?id=04249c64fc409b46ac4d524a4f8dcaad7b1e0634
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/0004-xcb-egl-fixes.patch |   63 ++++++++++++++++++++++++++
- 1 files changed, 63 insertions(+), 0 deletions(-)
+ .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |    5 +++--
+ .../xdriver_xf86-video-imx-viv.mk                  |    2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5base/0004-xcb-egl-fixes.patch b/package/qt5/qt5base/0004-xcb-egl-fixes.patch
-new file mode 100644
-index 0000000..2bbd849
---- /dev/null
-+++ b/package/qt5/qt5base/0004-xcb-egl-fixes.patch
-@@ -0,0 +1,63 @@
-+The vivante headers pull in X11 defines which break eglconvenience
-+
-+* Adds a missing include to qeglplatformcontext.cpp
-+* Fix namespace collision on CursorShape, pulled in from X11/X.h
-+* Do not pass MESA_EGL_NO_X11_HEADERS when xcb is use
-+
-+[based on patch from Yocto project]
-+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-+
-+
-+diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
-+--- a/src/platformsupport/eglconvenience/eglconvenience.pri	2014-08-07 16:53:50.038277168 -0400
-++++ b/src/platformsupport/eglconvenience/eglconvenience.pri	2014-08-07 16:54:52.874278651 -0400
-+@@ -30,8 +30,10 @@
-+         }
-+     }
-+ 
-+-    # Avoid X11 header collision
-+-    DEFINES += MESA_EGL_NO_X11_HEADERS
-++    !contains(QT_CONFIG,xcb) {
-++        # Avoid X11 header collision
-++        DEFINES += MESA_EGL_NO_X11_HEADERS
-++    }
-+ 
-+     contains(QT_CONFIG,xlib) {
-+         HEADERS += \
-+diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/platformsupport/eglconvenience/qeglplatformcontext.cpp
-+--- a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp	2014-08-07 16:53:50.038277168 -0400
-++++ b/src/platformsupport/eglconvenience/qeglplatformcontext.cpp	2014-08-07 16:56:00.630280249 -0400
-+@@ -39,6 +39,7 @@
-+ **
-+ ****************************************************************************/
-+ 
-++#include <qtextstream.h>
-+ #include "qeglplatformcontext_p.h"
-+ #include "qeglconvenience_p.h"
-+ #include "qeglpbuffer_p.h"
-+--- a/src/platformsupport/eglconvenience/qeglplatformcursor_p.h	2014-08-07 16:53:50.038277168 -0400
-++++ b/src/platformsupport/eglconvenience/qeglplatformcursor_p.h	2014-08-07 16:58:49.014284222 -0400
-+@@ -42,6 +42,11 @@
-+ #ifndef QEGLPLATFORMCURSOR_H
-+ #define QEGLPLATFORMCURSOR_H
-+ 
-++// avoid namespace collision with X11/X.h
-++#ifdef CursorShape
-++#undef CursorShape
-++#endif
-++
-+ #include <qpa/qplatformcursor.h>
-+ #include <qpa/qplatformscreen.h>
-+ 
-+--- a/src/platformsupport/eglconvenience/qeglplatformcursor.cpp	2014-08-07 16:53:50.038277168 -0400
-++++ b/src/platformsupport/eglconvenience/qeglplatformcursor.cpp	2014-08-07 17:00:36.806286766 -0400
-+@@ -49,8 +49,8 @@
-+ 
-+ #include <QtPlatformSupport/private/qdevicediscovery_p.h>
-+ 
-+-#include "qeglplatformcursor_p.h"
-+ #include "qeglplatformintegration_p.h"
-++#include "qeglplatformcursor_p.h"
-+ 
-+ QT_BEGIN_NAMESPACE
-+ 
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index 4884616..ec779a4 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
+ 
++GPU_VIV_BIN_MX6Q_BASE_VERSION = 3.10.17-1.0.1
+ ifeq ($(BR2_ARM_EABIHF),y)
+-GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)-hfp
++GPU_VIV_BIN_MX6Q_VERSION = $(GPU_VIV_BIN_MX6Q_BASE_VERSION)-hfp
+ else
+-GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)-sfp
++GPU_VIV_BIN_MX6Q_VERSION = $(GPU_VIV_BIN_MX6Q_BASE_VERSION)-sfp
+ endif
+ GPU_VIV_BIN_MX6Q_SITE = $(FREESCALE_IMX_SITE)
+ GPU_VIV_BIN_MX6Q_SOURCE = gpu-viv-bin-mx6q-$(GPU_VIV_BIN_MX6Q_VERSION).bin
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+index 06ea815..1e9a665 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = $(FREESCALE_IMX_VERSION)
++XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 3.10.17-1.0.1
+ XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
+ XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
+ XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = gpu-viv-bin-mx6q xserver_xorg-server \
