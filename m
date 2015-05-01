@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 22:44:55 +0200
-Subject: [Buildroot] [PATCH 25/30] package/matchbox-common: explicitly
- disable PDA folders when not selected
-In-Reply-To: <641cee0951bdc99ad2d26f6a13373ca9c6a3892e.1429725549.git.yann.morin.1998@free.fr>
+Date: Fri, 01 May 2015 22:45:17 +0200
+Subject: [Buildroot] [PATCH 24/30] package/matchbox-keyboard: enforce
+ disabling support for cairo
+In-Reply-To: <082cf033f1f2c8e12260b05f14b9c6300c5d44b5.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <641cee0951bdc99ad2d26f6a13373ca9c6a3892e.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <5543E5C7.5020605@mind.be>
+ <082cf033f1f2c8e12260b05f14b9c6300c5d44b5.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <5543E5DD.6080909@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +13,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 22/04/15 20:09, Yann E. MORIN wrote:
+> We usually explicitly enforce disabling optional support when it is
+> possible.
+> 
+> Do so for Cairo.
+> 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Though for an option that is not related to a dependency I think it's less
-important to explicitly disable, it's still nice to do the same thing everywhere.
 
  Regards,
  Arnout
 
 > ---
->  package/matchbox/matchbox-common/matchbox-common.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/matchbox/matchbox-keyboard/matchbox-keyboard.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/matchbox/matchbox-common/matchbox-common.mk b/package/matchbox/matchbox-common/matchbox-common.mk
-> index da6bec7..038dd59 100644
-> --- a/package/matchbox/matchbox-common/matchbox-common.mk
-> +++ b/package/matchbox/matchbox-common/matchbox-common.mk
-> @@ -14,6 +14,8 @@ MATCHBOX_COMMON_DEPENDENCIES = matchbox-lib
->  
->  ifeq ($(strip $(BR2_PACKAGE_MATCHBOX_COMMON_PDA)),y)
->  MATCHBOX_COMMON_CONF_OPTS += --enable-pda-folders
-> +else
-> +MATCHBOX_COMMON_CONF_OPTS += --disable-pda-folders
+> diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+> index 2017730..368a883 100644
+> --- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+> +++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+> @@ -24,6 +24,7 @@ ifeq ($(BR2_PACKAGE_CAIRO),y)
+>  MATCHBOX_KEYBOARD_CONF_OPTS += --enable-cairo
+>  MATCHBOX_KEYBOARD_DEPENDENCIES += cairo
+>  else
+> +MATCHBOX_KEYBOARD_CONF_OPTS += --disable-cairo
+>  MATCHBOX_KEYBOARD_DEPENDENCIES += xlib_libXft
 >  endif
 >  
->  $(eval $(autotools-package))
 > 
 
 
