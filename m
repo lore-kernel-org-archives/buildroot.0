@@ -1,44 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 May 2015 10:16:58 +0200
-Subject: [Buildroot] [git commit] package/boost: bump to version 1.58.0
-Message-ID: <20150501081705.8B6B780052@busybox.osuosl.org>
+Date: Fri, 1 May 2015 10:17:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/celt051: Add patch to fix musl
+ build
+In-Reply-To: <1430421295-663-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1430421295-663-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150501101720.4a588e4d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=25655021fb66f58afe4966face0afdda1e7be65a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear J?rg Krause,
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/boost/boost.hash |    6 +++---
- package/boost/boost.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Thu, 30 Apr 2015 21:14:55 +0200, J?rg Krause wrote:
+> musl does not define __GNUC_PREREQ. Use patch from Alpine Linux
+> (http://git.alpinelinux.org/cgit/aports/plain/main/celt051/fix-gnuc-prereq.patch).
+> 
+> Fixes http://autobuild.buildroot.net/results/223/223ba6003bdd7e0c896455c21fa8fee943b4e716/
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/celt051/0001-fix-gnuc-prereq.patch | 29 +++++++++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>  create mode 100644 package/celt051/0001-fix-gnuc-prereq.patch
 
-diff --git a/package/boost/boost.hash b/package/boost/boost.hash
-index 2019743..706eea2 100644
---- a/package/boost/boost.hash
-+++ b/package/boost/boost.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/boost/files/boost/1.57.0/
--md5	1be49befbdd9a5ce9def2983ba3e7b76	boost_1_57_0.tar.bz2
--sha1	e151557ae47afd1b43dc3fac46f8b04a8fe51c12	boost_1_57_0.tar.bz2
-+# From http://sourceforge.net/projects/boost/files/boost/1.58.0/
-+md5	b8839650e61e9c1c0a89f371dd475546	boost_1_58_0.tar.bz2
-+sha1	2fc96c1651ac6fe9859b678b165bd78dc211e881	boost_1_58_0.tar.bz2
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 7060591..c658628 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BOOST_VERSION = 1.57.0
-+BOOST_VERSION = 1.58.0
- BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
- BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
- BOOST_INSTALL_STAGING = YES
+Applied, thanks. Please try to submit the patch upstream if possible.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
