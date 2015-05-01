@@ -1,68 +1,60 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 02 May 2015 00:21:09 +0200
-Subject: [Buildroot] [PATCH 3/3] package/wvstreams: add argp-standalone
- as optionnal dependency
-In-Reply-To: <20150501230402.57253929@free-electrons.com>
-References: <1430498686-10719-1-git-send-email-romain.naour@openwide.fr>	<1430498686-10719-3-git-send-email-romain.naour@openwide.fr>
- <20150501230402.57253929@free-electrons.com>
-Message-ID: <5543FC55.2040203@openwide.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 02 May 2015 00:23:10 +0200
+Subject: [Buildroot] [PATCH] php.ini: set date.timezone to UTC
+In-Reply-To: <1430503955-24928-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1430503955-24928-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <5543FCCE.2000904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-Le 01/05/2015 23:04, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
+On 01/05/15 20:12, Floris Bos wrote:
+> Prevent a warning being logged each time a PHP date/time method is
+> used by setting UTC as (default) timezone in php.ini
 > 
-> On Fri,  1 May 2015 18:44:46 +0200, Romain Naour wrote:
->> This ensures the build reproducibility.
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> ---
->>  package/wvstreams/wvstreams.mk | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/package/wvstreams/wvstreams.mk b/package/wvstreams/wvstreams.mk
->> index bc7c5d4..3db317a 100644
->> --- a/package/wvstreams/wvstreams.mk
->> +++ b/package/wvstreams/wvstreams.mk
->> @@ -32,6 +32,11 @@ ifneq ($(BR2_STATIC_LIBS),y)
->>  WVSTREAMS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fPIC"
->>  endif
->>  
->> +# wvstreams use argp.h which can be provided by argp-standalone package.
->> +ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
->> +WVSTREAMS_DEPENDENCIES += argp-standalone
->> +endif
+> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> ---
+>  package/php/php.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Applied after fixing typos in the commit title and comment.
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index 3b9a117..7bd3f63 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -288,6 +288,7 @@ define PHP_INSTALL_FIXUP
+>  	rm -f $(TARGET_DIR)/usr/bin/phpize
+>  	$(INSTALL) -D -m 0755 $(PHP_DIR)/php.ini-production \
+>  		$(TARGET_DIR)/etc/php.ini
+> +	$(SED) 's/;date.timezone =/date.timezone = UTC/' $(TARGET_DIR)/etc/php.ini
 
-Thanks.
+ Would it be possible to use BR2_TARGET_LOCALTIME (if set) instead? Something like:
 
+ifeq ($(BR2_TARGET_LOCALTIME),)
+PHP_LOCALTIME = UTC
+else
+PHP_LOCALTIME = $(BR2_TARGET_LOCALTIME)
+endif
+
+	$(SED) 's%;date.timezone =.*%date.timezone = $(PHP_LOCALTIME)%' \
+		$(TARGET_DIR)/etc/php.ini
+
+ That is, assuming that php can deal with complex timezones like Europe/Brussels.
+
+ Regards,
+ Arnout
+
+>  endef
+>  
+>  PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
 > 
-> I wonder if we shouldn't make the argp-standalone package only
-> available on !glibc builds, since glibc provides its own argp
-> implementation.
 
-I'm agree, most of packages which uses argp.h select argp-standalone only when a
-uClibc toolchain is used.
-Except libpthsem package which select argp-standalone unconditionally.
-However, I built successfully libpthsem with a glibc toolchain and without
-argp-standalone installed.
 
-It appears that argp.h from glibc is more up to date should be preferred to
-argp-standalone one.
-
-I can do the change if you want.
-
-Best regards,
-Romain
-
-> 
-> Thanks,
-> 
-> Thomas
-> 
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
