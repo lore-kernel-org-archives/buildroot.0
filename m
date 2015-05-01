@@ -1,41 +1,75 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 17:52:15 +0200
-Subject: [Buildroot] [PATCH 4/7] boot/barebox: do not check hash for
- custom versions
-In-Reply-To: <20150501153205.GC4206@free.fr>
-References: <cover.1430260630.git.yann.morin.1998@free.fr>
- <895f0c166335e5dfb49a30dd8cf0b2986a5f7431.1430260630.git.yann.morin.1998@free.fr>
- <55437C59.2080502@mind.be> <20150501153205.GC4206@free.fr>
-Message-ID: <5543A12F.9010800@mind.be>
+Date: Fri, 01 May 2015 17:54:49 +0200
+Subject: [Buildroot] [PATCH] doc/manual: fix generating manual after
+	legacy overhaul
+In-Reply-To: <1430492786-17842-1-git-send-email-yann.morin.1998@free.fr>
+References: <1430492786-17842-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <5543A1C9.2070801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/05/15 17:32, Yann E. MORIN wrote:
-> Arnout, All,
+On 01/05/15 17:06, Yann E. MORIN wrote:
+> Commit 53903a15 (*config: improve handling of BR2_LEGACY) added an
+> option to entirely skip legacy entries, by passing a variable in the
+> environment.
 > 
-> On 2015-05-01 15:15 +0200, Arnout Vandecappelle spake thusly:
->> On 29/04/15 00:40, Yann E. MORIN wrote:
-> [--SNIP--]
->>> @@ -18,6 +19,9 @@ else
->>>  # Handle stable official Barebox versions
->>>  BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
->>>  BAREBOX_SITE = http://www.barebox.org/download
->>> +ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_VERSION),y)
->>> +BR_NO_CHECK_HASH_FOR += $(BAREBOX_SOURCE)
->>> +endif
->>>  endif
->>
->>  Same comment as for U-Boot.
-> 
-> Same answer. ;-)
+> Howerver, it mised one location where that variable is also needed,
+  However      missed
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> which is generating the list of packages and deprecated features for
+> inclusion in the manual.
+> 
+> Fix that by re-using the global $(COMMON_CONFIG_ENV) variable,
+> overriding just what we don't want (i.e. br2-external location and
+> defconfig path).
+> 
+> Also, slightly re-order variables so the ones we override come right
+> after the common settings, moving the specific pnes at the end.
+                                                 ones
+
+ And split into one variable per line.
+
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  docs/manual/manual.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+> index d5db2c2..2755582 100644
+> --- a/docs/manual/manual.mk
+> +++ b/docs/manual/manual.mk
+> @@ -12,8 +12,10 @@ MANUAL_RESOURCES = $(TOPDIR)/docs/images
+>  # should not be included in the manual.
+>  define MANUAL_GEN_LISTS
+>  	$(Q)$(call MESSAGE,"Updating the manual lists...")
+> -	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(@D) \
+> +	$(Q)$(COMMON_CONFIG_ENV) \
+> +		BR2_DEFCONFIG="" \
+>  		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
+> +		TOPDIR=$(TOPDIR) O=$(@D) \
+
+ Except here you put two variables on a single line...
+
 
  Regards,
  Arnout
+
+ Otherwise:
+  Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+>  		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
+>  endef
+>  MANUAL_POST_RSYNC_HOOKS += MANUAL_GEN_LISTS
+> 
 
 
 -- 
