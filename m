@@ -1,29 +1,30 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 1 May 2015 20:29:19 +0300
-Subject: [Buildroot] [PATCH 2/3] package/argp-standalone: add missing
-	limits.h
-In-Reply-To: <1430498686-10719-2-git-send-email-romain.naour@openwide.fr>
-References: <1430498686-10719-1-git-send-email-romain.naour@openwide.fr>
- <1430498686-10719-2-git-send-email-romain.naour@openwide.fr>
-Message-ID: <CAMo8BfLy_EoVwk++MxiKnoEsxNe-KQuGNvsZSDWnRRKOPPDTDg@mail.gmail.com>
+From: Mark Mason <mason+buildroot@postdiluvian.org>
+Date: Fri, 1 May 2015 13:54:18 -0400
+Subject: [Buildroot] grub on target
+In-Reply-To: <553FD70B.40209@mind.be>
+References: <HKXPR01MB0312A3D64DA648D6B74794C9C2EF0@HKXPR01MB0312.apcprd01.prod.exchangelabs.com>
+ <20150422195220.GA19841@postdiluvian.org>
+ <20150424174149.GA627@postdiluvian.org> <553FD70B.40209@mind.be>
+Message-ID: <20150501175418.GA15939@postdiluvian.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, May 1, 2015 at 7:44 PM, Romain Naour <romain.naour@openwide.fr> wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/b80/b802cc638a4b11d2a2098b82615f2c0ccadf8e3f/build-end.log
->
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> ---
->  package/argp-standalone/0002-isprint.patch | 23 ++++++++++++++++-------
->  1 file changed, 16 insertions(+), 7 deletions(-)
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
+>  Hi Mark,
+> 
+> On 04/24/15 19:41, Mark Mason wrote:
+> > To answer my own question, it looks like I was having some sort of
+> > UEFI-related problem, and it was fixed by a newer version of Grub2.
+> 
+>  Perhaps you'd like to submit a patch to bump grub2 to a newer version?
+> 
+>  Regards,
+>  Arnout
 
--- 
-Thanks.
--- Max
+I will do that when I get one.  I needed a working grub immediately,
+so I took a newer grubx64.efi off an Ubuntu machine and patched it
+with emacs to use the generic paths that I needed.
