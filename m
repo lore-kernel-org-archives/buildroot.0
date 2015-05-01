@@ -1,59 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  1 May 2015 18:35:34 +0200
-Subject: [Buildroot] [PATCHv2] doc/manual: fix generating manual after
-	legacy overhaul
-Message-ID: <1430498134-8798-1-git-send-email-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri,  1 May 2015 18:44:46 +0200
+Subject: [Buildroot] [PATCH 3/3] package/wvstreams: add argp-standalone as
+	optionnal dependency
+In-Reply-To: <1430498686-10719-1-git-send-email-romain.naour@openwide.fr>
+References: <1430498686-10719-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1430498686-10719-3-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 53903a15 (*config: improve handling of BR2_LEGACY) added an
-option to entirely skip legacy entries, by passing a variable in the
-environment.
+This ensures the build reproducibility.
 
-However, it missed one location where that variable is also needed,
-which is generating the list of packages and deprecated features for
-inclusion in the manual.
-
-Fix that by re-using the global $(COMMON_CONFIG_ENV) variable,
-overriding just what we don't want (i.e. br2-external location and
-defconfig path).
-
-Also, slightly re-order variables so the ones we override come right
-after the common settings, moving the specific ones at the end, one
-variable per line.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-Changes v1 -> v2:
-  - only one variable per line  (Arnout)
-  - typoes  (arnout)
----
- docs/manual/manual.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/wvstreams/wvstreams.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index d5db2c2..ad9bd90 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -12,8 +12,11 @@ MANUAL_RESOURCES = $(TOPDIR)/docs/images
- # should not be included in the manual.
- define MANUAL_GEN_LISTS
- 	$(Q)$(call MESSAGE,"Updating the manual lists...")
--	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(@D) \
-+	$(Q)$(COMMON_CONFIG_ENV) \
-+		BR2_DEFCONFIG="" \
- 		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
-+		TOPDIR=$(TOPDIR) \
-+		O=$(@D) \
- 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
- endef
- MANUAL_POST_RSYNC_HOOKS += MANUAL_GEN_LISTS
+diff --git a/package/wvstreams/wvstreams.mk b/package/wvstreams/wvstreams.mk
+index bc7c5d4..3db317a 100644
+--- a/package/wvstreams/wvstreams.mk
++++ b/package/wvstreams/wvstreams.mk
+@@ -32,6 +32,11 @@ ifneq ($(BR2_STATIC_LIBS),y)
+ WVSTREAMS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fPIC"
+ endif
+ 
++# wvstreams use argp.h which can be provided by argp-standalone package.
++ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
++WVSTREAMS_DEPENDENCIES += argp-standalone
++endif
++
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ WVSTREAMS_DEPENDENCIES += dbus
+ WVSTREAMS_CONF_OPTS += --with-dbus
 -- 
-1.9.1
+1.9.3
