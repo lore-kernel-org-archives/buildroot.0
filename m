@@ -1,65 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 May 2015 22:57:19 +0200
-Subject: [Buildroot] [git commit] freescale_imx6*_defconfig: bump kernel to
-	3.10.17_1.0.1_ga
-Message-ID: <20150501205734.8D89A81DED@busybox.osuosl.org>
+Date: Fri, 1 May 2015 22:57:18 +0200
+Subject: [Buildroot] [git commit] gpu-viv-bin-mx6q: make fb/x11 choice
+	explicit
+Message-ID: <20150501205734.30D298081B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6e4515cc535666fd4b76241827a8d4a9e99d467c
+commit: http://git.buildroot.net/buildroot/commit/?id=87523028fa4c559ca38f30858b775904273c483a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This approach is less error-prone during development.
+
+Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/freescale_imx6dlsabresd_defconfig   |    3 ++-
- configs/freescale_imx6qsabresd_defconfig    |    3 ++-
- configs/freescale_imx6sololiteevk_defconfig |    3 ++-
- 3 files changed, 6 insertions(+), 3 deletions(-)
+ package/freescale-imx/gpu-viv-bin-mx6q/Config.in   |   23 ++++++++++++++++++-
+ .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |    2 +-
+ 2 files changed, 22 insertions(+), 3 deletions(-)
 
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-index a13d2b9..dd17358 100644
---- a/configs/freescale_imx6dlsabresd_defconfig
-+++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -17,7 +17,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
-+# Last version of branch imx_3.10.17_1.0.1_ga
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="dac46dcf913585956a0e7a838e6f4b7465f00f57"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index 95f29d7..98ed7d4 100644
---- a/configs/freescale_imx6qsabresd_defconfig
-+++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -17,7 +17,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
-+# Last version of branch imx_3.10.17_1.0.1_ga
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="dac46dcf913585956a0e7a838e6f4b7465f00f57"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
-index 2bb47af..93d842b 100644
---- a/configs/freescale_imx6sololiteevk_defconfig
-+++ b/configs/freescale_imx6sololiteevk_defconfig
-@@ -9,7 +9,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
-+# Last version of branch imx_3.10.17_1.0.1_ga
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="dac46dcf913585956a0e7a838e6f4b7465f00f57"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+index c59535e..c770346 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+@@ -7,8 +7,6 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_HAS_LIBOPENVG
+-	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+ 	depends on BR2_arm # Only relevant for i.MX6
+ 	# Library binaries are linked against libc.so.6
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+@@ -25,6 +23,27 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+ 
+ if BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+ 
++choice
++	prompt "Output option"
++	help
++	  There are two versions of this library: one for
++	  direct framebuffer access, one for X11 rendering.
++	  Choose here which version to install.
++
++config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
++	bool "X11"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXEXT
++
++comment "X11 backend needs Xorg package"
++	depends on !BR2_PACKAGE_XORG7
++
++config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB
++	bool "Framebuffer"
++
++endchoice
++
+ config BR2_PACKAGE_PROVIDES_LIBEGL
+ 	default "gpu-viv-bin-mx6q"
+ 
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index bad1658..f96087b 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -21,7 +21,7 @@ GPU_VIV_BIN_MX6Q_REDISTRIBUTE = NO
+ GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
+ 
+ # DirectFB is not supported (wrong version)
+-ifeq ($(BR2_PACKAGE_XORG7),y)
++ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11),y)
+ GPU_VIV_BIN_MX6Q_DEPENDENCIES = xlib_libXdamage xlib_libXext
+ GPU_VIV_BIN_MX6Q_LIB_TARGET = x11
+ else
