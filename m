@@ -1,163 +1,32 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Fri, 01 May 2015 12:42:41 +0200
-Subject: [Buildroot] [PATCH] php: fpm sapi: install startup script
-In-Reply-To: <5542B8A8.20100@mind.be>
-References: <1430422567-14903-1-git-send-email-bos@je-eigen-domein.nl>
- <5542901D.30403@mind.be> <5542A99C.5060409@je-eigen-domein.nl>
- <5542B8A8.20100@mind.be>
-Message-ID: <554358A1.6030006@je-eigen-domein.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 May 2015 12:46:21 +0200
+Subject: [Buildroot] [PATCH 1/2] raspberrypi2: switch Linux kernel to
+ rpi-3.18.y
+In-Reply-To: <CA+-urNS+Bp2KA49kn8-d04TPMbKZ4NzOcQ1sqM=Lh7Pqwpfg9A@mail.gmail.com>
+References: <1430314604-28680-1-git-send-email-fhunleth@troodon-software.com>
+ <20150501102558.338835cc@free-electrons.com>
+ <CA+-urNS+Bp2KA49kn8-d04TPMbKZ4NzOcQ1sqM=Lh7Pqwpfg9A@mail.gmail.com>
+Message-ID: <20150501124621.23e44abe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/01/2015 01:20 AM, Arnout Vandecappelle wrote:
->>>> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
->>>> ---
->>>>   package/php/php-fpm.conf | 14 ++++++++++++++
->>>>   package/php/php.mk       | 15 +++++++++++++++
->>>>   2 files changed, 29 insertions(+)
->>>>   create mode 100644 package/php/php-fpm.conf
->>>>
->>>> diff --git a/package/php/php-fpm.conf b/package/php/php-fpm.conf
->>>> new file mode 100644
->>>> index 0000000..2ffe595
->>>> --- /dev/null
->>>> +++ b/package/php/php-fpm.conf
->>>> @@ -0,0 +1,14 @@
->>>> +[www]
->>>> +# Only start children when there are requests to be processed
->>>> +pm = ondemand
->>>> +# Terminate them again after there haven't been any for 2 minutes
->>>> +pm.process_idle_timeout = 120s
->>>> +# Maximum number of children processing PHP requests concurrently
->>>> +pm.max_children = 32
->>>   Isn't that a bit high? Typically embedded web servers will not have the power
->>> to handle that many parallel requests efficiently.
->> Some of the web applications we use feature an AJAX web interface that uses a
->> form of "long polling" to poll for certain events.
->   I thought long polling was exactly the opposite: close the connection and poll
-> again later. But I don't know about these things :-)
+Hello,
 
-Letting the client Javascript code poll at set intervals -e.g. every 
-second- and the server returning a response immediately each time, is 
-traditional polling.
+On Fri, 1 May 2015 06:20:28 -0400, Frank Hunleth wrote:
 
-With long polling you let the client wait LONG for the response instead.
-The server (PHP code) delays sending the response until there is new 
-data to report, or a timeout happens (29 seconds in our case) after 
-which a dummy response is sent to keep the line open, and the client 
-sends a new long poll request immediately.
-Advantage is that the client receives the new data as soon as it is 
-available, and does not have to have to wait until the next client poll 
-interval, resulting in a smoother user experience.
-Downside is that it esentially ties up at least one PHP process per 
-logged-in webinterface user, just for the polling.
+> > What about the raspberrypi_defconfig ? Is there any reason to keep it
+> > around using the 3.12 kernel ? Or can we rename
+> > raspberrypi_dt_defconfig to raspberrypi_defconfig ?
+> 
+> I've never used raspberrypi_defconfig, so I would be in favor of this.
 
->
->> That essentially ties up a PHP process per logged-in user, so I like the number
->> a bit higher than usual.
->> Doesn't consume much resources (at least not cpu), but does block for 29 seconds
->> if no events come in.
->> Also scripts that query data from external servers can block as well.
->>
->> The number could be made a little lower, as not everybody does stuff like that.
->> But it doesn't really harm others either, as extra children are only started if
->> all the existing ones are occupied. Not by default.
->   However, in a memory-constrained system (which still is one of buildroot's core
-> targets), it will trigger OOM when there actually are so many children.
+Yann, your thought?
 
-So how many would you recommend as buildroot default?
-2? 4? 8? 16?
-
->
->>>> +
->>>> +listen = /var/run/php-fpm.sock
->>>> +listen.owner = www-data
->>>> +listen.group = www-data
->>>> +user = www-data
->>>> +group = www-data
->>>> +
->>>> diff --git a/package/php/php.mk b/package/php/php.mk
->>>> index e4331f2..6c42aba 100644
->>>> --- a/package/php/php.mk
->>>> +++ b/package/php/php.mk
->>>> @@ -251,6 +251,21 @@ PHP_CONF_OPTS += \
->>>>   PHP_DEPENDENCIES += jpeg libpng freetype
->>>>   endif
->>>>   
->>>> +ifeq ($(BR2_PACKAGE_PHP_FPM),y)
->>>> +define PHP_INSTALL_INIT_SYSV
->>>> +	$(INSTALL) -D -m 0755 $(@D)/sapi/fpm/init.d.php-fpm \
->>>> +		$(TARGET_DIR)/etc/init.d/S49php-fpm
->>>> +endef
->>>   There's also a php-fpm.service that you can install for systemd.
->> Yes, I noticed that before submitting the patch.
->> But I never had much luck with systemd on buildroot.
->>
->> The .service file generated by the PHP build did not work as-is when I tried it
->> this morning.
->>
->> ==
->> Konsole output [Unit]
->> Description=The PHP FastCGI Process Manager
->> After=syslog.target network.target
->>
->> [Service]
->> Type=simple
->> PIDFile=/var/run/php-fpm.pid
->> ExecStart=${exec_prefix}/sbin/php-fpm --nodaemonize --fpm-config /etc/php-fpm.conf
->> ExecReload=/bin/kill -USR2 $MAINPID
->>
->> [Install]
->> WantedBy=multi-user.target
->> ==
->>
->> First problem was that systemd didn't like the ${exec_prefix}
->   That should probably have been substituted away by the conf.in -> conf
-> conversion...
-
-Also seems to happen when compiling PHP outside of buildroot.
-
-==
-max at lynx:/tmp/p/php-5.6.8/sapi/fpm$ cat php-fpm.service
-[Unit]
-Description=The PHP FastCGI Process Manager
-After=syslog.target network.target
-
-[Service]
-Type=simple
-PIDFile=${prefix}/var/run/php-fpm.pid
-ExecStart=${exec_prefix}/sbin/php-fpm --nodaemonize --fpm-config 
-${prefix}/etc/php-fpm.conf
-ExecReload=/bin/kill -USR2 $MAINPID
-
-[Install]
-WantedBy=multi-user.target
-
-max at lynx:/tmp/p/php-5.6.8/sapi/fpm$ cat php-fpm.service.in
-[Unit]
-Description=The PHP FastCGI Process Manager
-After=syslog.target network.target
-
-[Service]
-Type=@php_fpm_systemd@
-PIDFile=@localstatedir@/run/php-fpm.pid
-ExecStart=@sbindir@/php-fpm --nodaemonize --fpm-config 
-@sysconfdir@/php-fpm.conf
-ExecReload=/bin/kill -USR2 $MAINPID
-
-[Install]
-WantedBy=multi-user.target
-
-==
-
-Is that a bug in PHP, or does systemd support variables in .service 
-descriptions like this, and is the real problem perhaps that we are 
-failing to set exec_prefix in some kind of global systemd environment file?
-
-
-Yours sincerely,
-
-Floris Bos
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
