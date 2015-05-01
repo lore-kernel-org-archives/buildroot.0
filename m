@@ -1,121 +1,101 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 17:45:43 +0200
-Subject: [Buildroot] [PATCH 2/7] pkg-infra: assign BR_NO_CHECK_HASH_FOR
- so it is recursively-expanded
-In-Reply-To: <20150501152648.GA4206@free.fr>
+Date: Fri, 01 May 2015 17:48:20 +0200
+Subject: [Buildroot] [PATCH 3/7] boot/uboot: do not check hash for
+ custom versions
+In-Reply-To: <20150501153117.GB4206@free.fr>
 References: <cover.1430260630.git.yann.morin.1998@free.fr>
- <e8cce5d9bbb1b75dbf02c0f9ee44ee23a0314d38.1430260630.git.yann.morin.1998@free.fr>
- <55437A92.3060007@mind.be> <20150501152648.GA4206@free.fr>
-Message-ID: <55439FA7.1010807@mind.be>
+ <12d715d71a908668d9156cfb3c0a0de1966bea66.1430260630.git.yann.morin.1998@free.fr>
+ <55437C36.6020707@mind.be> <20150501153117.GB4206@free.fr>
+Message-ID: <5543A044.30604@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/05/15 17:26, Yann E. MORIN wrote:
-> arnout, All,
+On 01/05/15 17:31, Yann E. MORIN wrote:
+> Arnout, All,
 > 
-> On 2015-05-01 15:07 +0200, Arnout Vandecappelle spake thusly:
->> On 29/04/15 00:39, Yann E. MORIN wrote:
->>> Currently, assigning to BR_NO_CHECK_HASH_FOR in conditionals, but
->>> referencing vairaible assigned to later, fails. Here's a failing
->>               variable
->>
->>> test-case, which is the reduced test-case of how we handle
->>> BR_NO_CHECK_HASH_FOR for now:
+> On 2015-05-01 15:14 +0200, Arnout Vandecappelle spake thusly:
+>> On 29/04/15 00:40, Yann E. MORIN wrote:
+>>> For custom tarballs, it's quite obvious we can not check hashes.
 >>>
->>>     export FOO
+>>> For custom versions, that's not so obvious. One might think we could
+>>> have hashes for all the official releases, but that's not possible: if
+>>> the user uses a released version of Buildroot (say 2015.05) much later
+>>> in the future, and wants to use the then-released 2038.02 U-Boot. It now
+>>> seems pretty obvious that Buildroot 2015.02 can't know the hash for
+>>> U-Boot 2038.02.
 >>>
->>>     ifeq ($(BAR_V),)
->>>     BAR_V=1
->>>     else
->>>     FOO += $(BAR_S)
->>>     endif
+>>> So, disable checking the hash for custom tarballs and custom versions.
+>>>
+>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>> Cc: Vincent Stehle <vincent.stehle@laposte.net>
+>>> ---
+>>>  boot/uboot/uboot.mk | 4 ++++
+>>>  1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+>>> index 01aaf2c..410d8d8 100644
+>>> --- a/boot/uboot/uboot.mk
+>>> +++ b/boot/uboot/uboot.mk
+>>> @@ -17,6 +17,7 @@ ifeq ($(UBOOT_VERSION),custom)
+>>>  UBOOT_TARBALL = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION))
+>>>  UBOOT_SITE = $(patsubst %/,%,$(dir $(UBOOT_TARBALL)))
+>>>  UBOOT_SOURCE = $(notdir $(UBOOT_TARBALL))
+>>> +BR_NO_CHECK_HASH_FOR += $(UBOOT_SOURCE)
+>>>  else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT),y)
+>>>  UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
+>>>  UBOOT_SITE_METHOD = git
+>>> @@ -27,6 +28,9 @@ else
+>>>  # Handle stable official U-Boot versions
+>>>  UBOOT_SITE = ftp://ftp.denx.de/pub/u-boot
+>>>  UBOOT_SOURCE = u-boot-$(UBOOT_VERSION).tar.bz2
+>>> +ifeq ($(BR2_TARGET_UBOOT_CUSTOM_VERSION),y)
+>>> +BR_NO_CHECK_HASH_FOR += $(UBOOT_SOURCE)
+>>> +endif
+>>>  endif
 >>
->>  I think the test case is too complicated - in fact the conditional construct
->> has nothing to do with it.
+>>  Since we really only have a hash for the latest version, I would prefer a
+>> simple check after the entire condition:
+>>
+>> ifeq ($(BR2_TARGET_UBOOT_LATEST_VERSION),)
+>> BR_NO_CHECK_HASH_FOR += $(UBOOT_SOURCE)
+>> endif
+>>
+>>  This redundantly handles the VCS cases, but OTOH it doesn't hurt to have these
+>> tarballs in there either.
 > 
-> Yup, right, I know. However, I wanted a reduced test-case that still
-> ressembled our current code base.
+> Acutally, I prefer we explicitly exclude only what we really want to be
+> excluded.
 > 
->> The culprit is appending to it, which means we never
->> explicitly set it to recursively expanded. Exported variables that are not
->> defined explicitly for some reason default to be immediately expanded rather
->> than recursively.
+> VCS sutff is forcibly excluded, becasue the git/hg/cvs/svn/bzr macros do
+> explicitly disable checking hashes by themselves.
 > 
-> Exactly. However, there's nothing like so explained in the make manual.
+> Also, I would ultimately like that it is an error if there is a hash for
+> something that is excluded. Granted, it;'s currently not possible, but
+> long-term I;d like to revisit this.
+> 
+> So, in the end, I'd really like to only exckude what really needs to be
+> excluded.
 
- So patch the make manual :-)
+ OK. So:
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 > 
->> export FOO
->> FOO += $(BAR)
->> $(warning FOO='$(FOO)' BAR='$(BAR)')
->> BAR = BAR
->> $(warning FOO='$(FOO)' BAR='$(BAR)')
->> default:
->>
->> Will give
->>
->> /tmp/Makefile:3: FOO=' ' BAR=''
->> /tmp/Makefile:5: FOO=' ' BAR='BAR'
->>
->> while explicitly setting FOO to be recursively expanded:
->>
->> export FOO =
->>
->> will give
->>
->> /tmp/Makefile:3: FOO=' ' BAR=''
->> /tmp/Makefile:5: FOO=' BAR' BAR='BAR'
+>> Actually, before patch 2/7, the VCS cases wouldn't
+>> even be added because UBOOT_SOURCE is not set yet at that point :-)
 > 
-> Do you prefere I use your even-more-simplified test-case, or may I keep
-> the reduced test-case I provided that ressemble our current code-path?
+> Well, in my patch, it is set a few lines above. And patch 2 is already
+> applied! ;-)
 
- Well, the relevant part of our current code path (taking your example) is:
-
-export FOO
-FOO += $(BAR_S)
-BAR_S = bar.tar
-
- Whether or not BAR_V and FOO are defined in two separate conditional branches
-and whether or not BAR_S contains a reference to BAR_V is really irrelevant.
-
- If you want to make it resemble our code path more, then just use the real
-variable names:
-
-export BR_NO_CHECK_HASH_FOR
-BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
-XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
-
-[snip]
->>>  # Expressly do not check hashes for those files
->>> -export BR_NO_CHECK_HASH_FOR
->>> +# It needs to be assigned so as to be a recursively-expanded variable, and
->>> +# so that it can be assigned inside conditionals.
->>
->> # Exported variables default to immediately expanded,
-> 
-> I would avoid stating that. That's the behaviour we observed, but
-> nothing is said about that in the make manual. If a future version of
-> make changes that behaviour, the comment would be wrong.
-
- Then say "in some versions of make".
+ Is it? Or do you mean patch 1?
 
  Regards,
  Arnout
 
-> 
-> However, I'll ditch the comment about conditionals.
-> 
->> # but we need it to be
->> # recursively-epxanded, so explicitly define it.
->>
->>
->>  With all that,
->>
->>   Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
 > Regards,
 > Yann E. MORIN.
