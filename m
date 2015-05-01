@@ -1,25 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 May 2015 22:46:05 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain-external: add hashes for musl
-	toolchains
-In-Reply-To: <1430497183-23847-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Fri, 1 May 2015 18:19:42 +0200")
-References: <1430497183-23847-1-git-send-email-arnout@mind.be>
-Message-ID: <87ioccuiuq.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 May 2015 22:48:44 +0200
+Subject: [Buildroot] [PATCH 2/3] package/argp-standalone: add missing
+ limits.h
+In-Reply-To: <1430498686-10719-2-git-send-email-romain.naour@openwide.fr>
+References: <1430498686-10719-1-git-send-email-romain.naour@openwide.fr>
+ <1430498686-10719-2-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150501224844.368fa119@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+Dear Romain Naour,
 
- > Add hashes for all musl toolchains, including the ones that we
- > currently don't support (arm hf, sh4, x86_64-x32).
+On Fri,  1 May 2015 18:44:45 +0200, Romain Naour wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/b80/b802cc638a4b11d2a2098b82615f2c0ccadf8e3f/build-end.log
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Cc: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  package/argp-standalone/0002-isprint.patch | 23 ++++++++++++++++-------
+>  1 file changed, 16 insertions(+), 7 deletions(-)
 
-Committed, thanks.
+I have already done a similar fix a few hours ago:
+http://git.buildroot.net/buildroot/commit/?id=2a4ece2ed3e3766c463ef8f61a3362ba86c8a6cf.
 
-Why don't we support those toolchains?
+Best regards,
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
