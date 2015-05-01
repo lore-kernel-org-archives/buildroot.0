@@ -1,13 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2015 18:22:34 +0200
-Subject: [Buildroot] [PATCH 2/7] pkg-infra: assign BR_NO_CHECK_HASH_FOR
- so it is recursively-expanded
-In-Reply-To: <55439FA7.1010807@mind.be>
-References: <cover.1430260630.git.yann.morin.1998@free.fr>
- <e8cce5d9bbb1b75dbf02c0f9ee44ee23a0314d38.1430260630.git.yann.morin.1998@free.fr>
- <55437A92.3060007@mind.be> <20150501152648.GA4206@free.fr>
- <55439FA7.1010807@mind.be>
-Message-ID: <20150501162234.GF4206@free.fr>
+Date: Fri, 1 May 2015 18:25:00 +0200
+Subject: [Buildroot] [PATCH] doc/manual: fix generating manual after
+	legacy overhaul
+In-Reply-To: <5543A1C9.2070801@mind.be>
+References: <1430492786-17842-1-git-send-email-yann.morin.1998@free.fr>
+ <5543A1C9.2070801@mind.be>
+Message-ID: <20150501162500.GG4206@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,53 +14,48 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2015-05-01 17:45 +0200, Arnout Vandecappelle spake thusly:
-> On 01/05/15 17:26, Yann E. MORIN wrote:
-> > On 2015-05-01 15:07 +0200, Arnout Vandecappelle spake thusly:
-> >> On 29/04/15 00:39, Yann E. MORIN wrote:
+On 2015-05-01 17:54 +0200, Arnout Vandecappelle spake thusly:
+> On 01/05/15 17:06, Yann E. MORIN wrote:
 [--SNIP--]
-> > Exactly. However, there's nothing like so explained in the make manual.
+> > Also, slightly re-order variables so the ones we override come right
+> > after the common settings, moving the specific pnes at the end.
+>                                                  ones
 > 
->  So patch the make manual :-)
+>  And split into one variable per line.
 
-Eh! ;-)
+No, I did not want to explicitly set one variable per line.
 
-[--SNIP--]
-> > Do you prefere I use your even-more-simplified test-case, or may I keep
-> > the reduced test-case I provided that ressemble our current code-path?
-> 
->  Well, the relevant part of our current code path (taking your example) is:
-> 
-> export FOO
-> FOO += $(BAR_S)
-> BAR_S = bar.tar
-> 
->  Whether or not BAR_V and FOO are defined in two separate conditional branches
-> and whether or not BAR_S contains a reference to BAR_V is really irrelevant.
-> 
->  If you want to make it resemble our code path more, then just use the real
-> variable names:
-> 
-> export BR_NO_CHECK_HASH_FOR
-> BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
-> XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
+The fact that BR2_DEFCONFIG and BR2_EXTERNAL are on their own line each
+is just becasue the line would be more than 80-char wide otherwise.
 
-Right, will switch to using those three lines.
+But if you prefer I put a single vazriable per line, I'm OK with that; I
+also prefer a single variable per line.
 
-> >>>  # Expressly do not check hashes for those files
-> >>> -export BR_NO_CHECK_HASH_FOR
-> >>> +# It needs to be assigned so as to be a recursively-expanded variable, and
-> >>> +# so that it can be assigned inside conditionals.
-> >>
-> >> # Exported variables default to immediately expanded,
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > ---
+> >  docs/manual/manual.mk | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
 > > 
-> > I would avoid stating that. That's the behaviour we observed, but
-> > nothing is said about that in the make manual. If a future version of
-> > make changes that behaviour, the comment would be wrong.
+> > diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+> > index d5db2c2..2755582 100644
+> > --- a/docs/manual/manual.mk
+> > +++ b/docs/manual/manual.mk
+> > @@ -12,8 +12,10 @@ MANUAL_RESOURCES = $(TOPDIR)/docs/images
+> >  # should not be included in the manual.
+> >  define MANUAL_GEN_LISTS
+> >  	$(Q)$(call MESSAGE,"Updating the manual lists...")
+> > -	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(@D) \
+> > +	$(Q)$(COMMON_CONFIG_ENV) \
+> > +		BR2_DEFCONFIG="" \
+> >  		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
+> > +		TOPDIR=$(TOPDIR) O=$(@D) \
 > 
->  Then say "in some versions of make".
+>  Except here you put two variables on a single line...
 
-OK.
+Because that was not the goal! ;-)
+
+But I'll change.
 
 Thanks! :-)
 
