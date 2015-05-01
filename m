@@ -1,46 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 May 2015 16:29:31 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/boost: bump to version 1.58.0
-In-Reply-To: <55437264.90900@zacarias.com.ar>
-References: <1430482091-8140-1-git-send-email-joerg.krause@embedded.rocks>
- <55437264.90900@zacarias.com.ar>
-Message-ID: <20150501162931.5c466549@free-electrons.com>
+Date: Fri, 1 May 2015 16:30:13 +0200
+Subject: [Buildroot] [git commit] toolchain-external: fix rebuild/reinstall
+	for Linaro toolchains
+Message-ID: <20150501143020.E3758800B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=22a59e1bc2cf8040fc22facbd70e6c3fb5b72981
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 01 May 2015 09:32:36 -0300, Gustavo Zacarias wrote:
-> On 05/01/2015 09:08 AM, J?rg Krause wrote:
-> 
-> > Add upstream patch from [1] to fix autobuild error [2] for mips:
-> > 	mipsel-linux-g++: error: unrecognized command line option '-m32'
-> > 
-> > [1] https://github.com/boostorg/build/commit/c0634341d9ee2c02d3a55c91dafb988afc066c49
-> > [2] http://autobuild.buildroot.org/results/66c/66c3a868816dfe4bd4d0ffafec6988fd87a2c058/
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> 
-> Hi.
-> It will need some extra tweaking since it failed in a similar way for sh4:
-> http://autobuild.buildroot.net/results/ccd/ccd5c83963032ba49b1627b1dff39e34a9486943/build-end.log
+For Linaro toolchains, a special post install staging hook is used to
+create two symlinks needed for the dynamic loader to find the
+libraries. However, the way the link is created prevents a 'make
+toolchain-external-reinstall' from succeeding, because the symlink
+already exists and points to a directory:
 
-Generally speaking, doing:
+ln -sf . /home/thomas/projets/outputs/training/target/lib/arm-linux-gnueabihf
+ln: '/home/thomas/projets/outputs/training/target/lib/arm-linux-gnueabihf/.': cannot overwrite directory
 
-if $(arch) != arm && $(arch) != mips1
+This commit adjust the hook to pass the '-n' option so that the link
+name is treated as a normal file if it is a symbolic link to a
+directory.
 
-to decide whether to use -m32 is going to cause numerous problems. It
-should be an opt-in test rather than an opt-out test. I.e only those
-architectures that actually need -m32 should use it, rather than trying
-to exclude all architectures that do not provide -m32.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ toolchain/toolchain-external/toolchain-external.mk |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index fd796a0..35bba31 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -239,18 +239,18 @@ endif
+ # {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
+ # {/usr,}/lib, so we need to create a symbolic link.
+ define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+-	ln -sf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
+-	ln -sf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
++	ln -snf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
++	ln -snf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
+ endef
+ 
+ define TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+-	ln -sf . $(TARGET_DIR)/lib/armeb-linux-gnueabihf
+-	ln -sf . $(TARGET_DIR)/usr/lib/armeb-linux-gnueabihf
++	ln -snf . $(TARGET_DIR)/lib/armeb-linux-gnueabihf
++	ln -snf . $(TARGET_DIR)/usr/lib/armeb-linux-gnueabihf
+ endef
+ 
+ define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+-	ln -sf . $(TARGET_DIR)/lib/aarch64-linux-gnu
+-	ln -sf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
++	ln -snf . $(TARGET_DIR)/lib/aarch64-linux-gnu
++	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
+ endef
+ 
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
