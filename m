@@ -1,48 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 May 2015 22:57:18 +0200
-Subject: [Buildroot] [git commit] mesa3d: Give possibility to external
-	backends to enable DRI/Gallium
-Message-ID: <20150501205734.1FD9D81DC6@busybox.osuosl.org>
+Date: Fri, 1 May 2015 22:57:19 +0200
+Subject: [Buildroot] [git commit] qt5base: fix compilation with Vivante
+	headers.
+Message-ID: <20150501205734.615928081B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f0964c8dc4d8273c81df4f1d3386322374bc095f
+commit: http://git.buildroot.net/buildroot/commit/?id=1095b7ccda2bf52b3c0e385407a4431872889b26
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thus, it is possible to force compilation of Gallium/DRI support in
-mesa3d even if no Gallium/DRI drivers are selected. This is intended to
-be used by external OpenGL provider (especialy further imx6 support).
-
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/mesa3d.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt5/qt5base/0004-xcb-egl-fixes.patch |   63 ++++++++++++++++++++++++++
+ 1 files changed, 63 insertions(+), 0 deletions(-)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index dffbe46..f1c38bf 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -61,7 +61,7 @@ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I915)   += i915
- MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965)   += i965
- MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON) += radeon
- 
--ifeq ($(MESA3D_GALLIUM_DRIVERS-y),)
-+ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER),)
- MESA3D_CONF_OPTS += \
- 	--without-gallium-drivers
- else
-@@ -70,7 +70,7 @@ MESA3D_CONF_OPTS += \
- 	--with-gallium-drivers=$(subst $(space),$(comma),$(MESA3D_GALLIUM_DRIVERS-y))
- endif
- 
--ifeq ($(MESA3D_DRI_DRIVERS-y),)
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
- MESA3D_CONF_OPTS += \
- 	--without-dri-drivers --without-dri --disable-dri3
- else
+diff --git a/package/qt5/qt5base/0004-xcb-egl-fixes.patch b/package/qt5/qt5base/0004-xcb-egl-fixes.patch
+new file mode 100644
+index 0000000..2bbd849
+--- /dev/null
++++ b/package/qt5/qt5base/0004-xcb-egl-fixes.patch
+@@ -0,0 +1,63 @@
++The vivante headers pull in X11 defines which break eglconvenience
++
++* Adds a missing include to qeglplatformcontext.cpp
++* Fix namespace collision on CursorShape, pulled in from X11/X.h
++* Do not pass MESA_EGL_NO_X11_HEADERS when xcb is use
++
++[based on patch from Yocto project]
++Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
++
++
++diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
++--- a/src/platformsupport/eglconvenience/eglconvenience.pri	2014-08-07 16:53:50.038277168 -0400
+++++ b/src/platformsupport/eglconvenience/eglconvenience.pri	2014-08-07 16:54:52.874278651 -0400
++@@ -30,8 +30,10 @@
++         }
++     }
++ 
++-    # Avoid X11 header collision
++-    DEFINES += MESA_EGL_NO_X11_HEADERS
+++    !contains(QT_CONFIG,xcb) {
+++        # Avoid X11 header collision
+++        DEFINES += MESA_EGL_NO_X11_HEADERS
+++    }
++ 
++     contains(QT_CONFIG,xlib) {
++         HEADERS += \
++diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/platformsupport/eglconvenience/qeglplatformcontext.cpp
++--- a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp	2014-08-07 16:53:50.038277168 -0400
+++++ b/src/platformsupport/eglconvenience/qeglplatformcontext.cpp	2014-08-07 16:56:00.630280249 -0400
++@@ -39,6 +39,7 @@
++ **
++ ****************************************************************************/
++ 
+++#include <qtextstream.h>
++ #include "qeglplatformcontext_p.h"
++ #include "qeglconvenience_p.h"
++ #include "qeglpbuffer_p.h"
++--- a/src/platformsupport/eglconvenience/qeglplatformcursor_p.h	2014-08-07 16:53:50.038277168 -0400
+++++ b/src/platformsupport/eglconvenience/qeglplatformcursor_p.h	2014-08-07 16:58:49.014284222 -0400
++@@ -42,6 +42,11 @@
++ #ifndef QEGLPLATFORMCURSOR_H
++ #define QEGLPLATFORMCURSOR_H
++ 
+++// avoid namespace collision with X11/X.h
+++#ifdef CursorShape
+++#undef CursorShape
+++#endif
+++
++ #include <qpa/qplatformcursor.h>
++ #include <qpa/qplatformscreen.h>
++ 
++--- a/src/platformsupport/eglconvenience/qeglplatformcursor.cpp	2014-08-07 16:53:50.038277168 -0400
+++++ b/src/platformsupport/eglconvenience/qeglplatformcursor.cpp	2014-08-07 17:00:36.806286766 -0400
++@@ -49,8 +49,8 @@
++ 
++ #include <QtPlatformSupport/private/qdevicediscovery_p.h>
++ 
++-#include "qeglplatformcursor_p.h"
++ #include "qeglplatformintegration_p.h"
+++#include "qeglplatformcursor_p.h"
++ 
++ QT_BEGIN_NAMESPACE
++ 
