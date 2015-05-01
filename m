@@ -1,122 +1,156 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri,  1 May 2015 17:13:45 +0200
-Subject: [Buildroot] [PATCH v7] python-pyxml: new package
-Message-ID: <1430493225-19081-1-git-send-email-arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 1 May 2015 17:26:48 +0200
+Subject: [Buildroot] [PATCH 2/7] pkg-infra: assign BR_NO_CHECK_HASH_FOR
+ so it is recursively-expanded
+In-Reply-To: <55437A92.3060007@mind.be>
+References: <cover.1430260630.git.yann.morin.1998@free.fr>
+ <e8cce5d9bbb1b75dbf02c0f9ee44ee23a0314d38.1430260630.git.yann.morin.1998@free.fr>
+ <55437A92.3060007@mind.be>
+Message-ID: <20150501152648.GA4206@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+arnout, All,
 
-It always uses its own copy of pyexpat, but we can at least make it use
-buildroot's expat.so.
+On 2015-05-01 15:07 +0200, Arnout Vandecappelle spake thusly:
+> On 29/04/15 00:39, Yann E. MORIN wrote:
+> > Currently, assigning to BR_NO_CHECK_HASH_FOR in conditionals, but
+> > referencing vairaible assigned to later, fails. Here's a failing
+>               variable
+> 
+> > test-case, which is the reduced test-case of how we handle
+> > BR_NO_CHECK_HASH_FOR for now:
+> > 
+> >     export FOO
+> > 
+> >     ifeq ($(BAR_V),)
+> >     BAR_V=1
+> >     else
+> >     FOO += $(BAR_S)
+> >     endif
+> 
+>  I think the test case is too complicated - in fact the conditional construct
+> has nothing to do with it.
 
-Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Changes:
-	v7: use bundled pyexpat, fix using external expat, remove
-	    double spaces from help text (Arnout)
-	v6: remove host-python dependency, fix formatting (Thomas Petazzoni)
-	v5: refresh the patch, so it can applied without errors
-  	v3: updated to use python package type (Matt W)
-	    added hash file (Matt W)
----
- package/Config.in                                  |  1 +
- package/python-pyxml/Config.in                     | 11 +++++++++++
- package/python-pyxml/python-xml.hash               |  2 ++
- package/python-pyxml/python-xml.mk                 | 17 +++++++++++++++++
- toolchain/toolchain-external/toolchain-external.mk |  8 --------
- 5 files changed, 31 insertions(+), 8 deletions(-)
- create mode 100644 package/python-pyxml/Config.in
- create mode 100644 package/python-pyxml/python-xml.hash
- create mode 100644 package/python-pyxml/python-xml.mk
+Yup, right, I know. However, I wanted a reduced test-case that still
+ressembled our current code base.
 
-diff --git a/package/Config.in b/package/Config.in
-index 4e20e4d..8b02486 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -629,6 +629,7 @@ menu "external python modules"
- 	source "package/python-pysnmp-mibs/Config.in"
- 	source "package/python-pyusb/Config.in"
- 	source "package/python-pyxb/Config.in"
-+	source "package/python-pyxml/Config.in"
- 	source "package/python-pyzmq/Config.in"
- 	source "package/python-requests/Config.in"
- 	source "package/python-rtslib-fb/Config.in"
-diff --git a/package/python-pyxml/Config.in b/package/python-pyxml/Config.in
-new file mode 100644
-index 0000000..e6d20fa
---- /dev/null
-+++ b/package/python-pyxml/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_PYXML
-+	bool "python-pyxml"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  This is the Python XML package. The distribution contains a
-+	  validating XML parser, an implementation of the SAX and DOM
-+	  programming interfaces, an interface to the Expat parser (and the
-+	  Expat parser itself), and a C helper module that can speed up
-+	  xmllib.py by a factor of 5. There's even documentation!
-+
-+	  http://pyxml.sourceforge.net/topics/index.html
-diff --git a/package/python-pyxml/python-xml.hash b/package/python-pyxml/python-xml.hash
-new file mode 100644
-index 0000000..df98c46
---- /dev/null
-+++ b/package/python-pyxml/python-xml.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 9fab66f9584fb8e67aebd8745a5c97bf1c5a2e2e461adf68862bcec64e448c13  PyXML-0.8.4.tar.gz
-diff --git a/package/python-pyxml/python-xml.mk b/package/python-pyxml/python-xml.mk
-new file mode 100644
-index 0000000..bfe2c89
---- /dev/null
-+++ b/package/python-pyxml/python-xml.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# python-pyxml
-+#
-+################################################################################
-+
-+PYTHON_PYXML_VERSION = 0.8.4
-+PYTHON_PYXML_SOURCE = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
-+PYTHON_PYXML_SITE = http://downloads.sourceforge.net/project/pyxml/pyxml/0.8.4/
-+PYTHON_PYXML_LICENSE = BSD-3c
-+PYTHON_PYXML_LICENSE_FILES = LICENSE
-+PYTHON_PYXML_SETUP_TYPE = distutils
-+PYTHON_PYXML_DEPENDENCIES = expat
-+PYTHON_PYXML_BUILD_OPTS = --with-libexpat=$(STAGING_DIR)/usr
-+PYTHON_PYXML_INSTALL_TARGET_OPTS = --with-libexpat=$(STAGING_DIR)/usr
-+
-+$(eval $(python-package))
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index fd796a0..c38692a 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -367,17 +367,9 @@ TOOLCHAIN_EXTERNAL_SOURCE = crossx86-i486-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSIO
- else ifeq ($(BR2_microblazebe),y)
- TOOLCHAIN_EXTERNAL_SOURCE = crossx86-microblaze-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- else ifeq ($(BR2_mips),y)
--ifeq ($(BR2_SOFT_FLOAT),y)
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mips-sf-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
--else
- TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mips-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
--endif # BR2_SOFT_FLOAT
- else ifeq ($(BR2_mipsel),y)
--ifeq ($(BR2_SOFT_FLOAT),y)
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-sf-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
--else
- TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
--endif # BR2_SOFT_FLOAT
- else ifeq ($(BR2_powerpc),y)
- TOOLCHAIN_EXTERNAL_SOURCE = crossx86-powerpc-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- else ifeq ($(BR2_x86_64),y)
+> The culprit is appending to it, which means we never
+> explicitly set it to recursively expanded. Exported variables that are not
+> defined explicitly for some reason default to be immediately expanded rather
+> than recursively.
+
+Exactly. However, there's nothing like so explained in the make manual.
+
+> export FOO
+> FOO += $(BAR)
+> $(warning FOO='$(FOO)' BAR='$(BAR)')
+> BAR = BAR
+> $(warning FOO='$(FOO)' BAR='$(BAR)')
+> default:
+> 
+> Will give
+> 
+> /tmp/Makefile:3: FOO=' ' BAR=''
+> /tmp/Makefile:5: FOO=' ' BAR='BAR'
+> 
+> while explicitly setting FOO to be recursively expanded:
+> 
+> export FOO =
+> 
+> will give
+> 
+> /tmp/Makefile:3: FOO=' ' BAR=''
+> /tmp/Makefile:5: FOO=' BAR' BAR='BAR'
+
+Do you prefere I use your even-more-simplified test-case, or may I keep
+the reduced test-case I provided that ressemble our current code-path?
+
+> > 
+> >     BAR_S = bar-$(BAR_V).tar
+> > 
+> >     all:
+> >         @echo "BAR_S=\"$(BAR_S)\""
+> >         @$(SHELL) -c 'echo "FOO=\"$${FOO}\""'
+> > 
+> > Run it with:
+> > 
+> >     $ make
+> >     BAR_S="bar-1.tar"
+> >     FOO=""
+> >     $ make BAR_V=2
+> >     BAR_S="bar-2.tar"
+> >     FOO=" "
+> > 
+> > Now, change the firstline to read:
+> > 
+> >     export FOO =
+> > 
+> > And we now get:
+> > 
+> >     $ make
+> >     BAR_S="bar-1.tar"
+> >     FOO=""
+> >     $ make BAR_V=2
+> >     BAR_S="bar-2.tar"
+> >     FOO=" bar-2.tar"
+> > 
+> > This new behaviour will be needed later for Xenomai, which handles the
+> > version string in an unusual way.
+> > 
+> > (Note how there's a leading space in both cases? In Buildroot, we do not
+> > care that extra space, it is simply ignored).
+> 
+>  The leading space is there because += always inserts a space, even if the
+> variable was empty before.
+
+Yes, I know. I'll ditch that comment.
+
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> >  package/pkg-download.mk | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> > index a38062e..f0651db 100644
+> > --- a/package/pkg-download.mk
+> > +++ b/package/pkg-download.mk
+> > @@ -56,7 +56,9 @@ domainseparator = $(if $(1),$(1),/)
+> >  github = https://github.com/$(1)/$(2)/archive/$(3)
+> >  
+> >  # Expressly do not check hashes for those files
+> > -export BR_NO_CHECK_HASH_FOR
+> > +# It needs to be assigned so as to be a recursively-expanded variable, and
+> > +# so that it can be assigned inside conditionals.
+> 
+> # Exported variables default to immediately expanded,
+
+I would avoid stating that. That's the behaviour we observed, but
+nothing is said about that in the make manual. If a future version of
+make changes that behaviour, the comment would be wrong.
+
+However, I'll ditch the comment about conditionals.
+
+> # but we need it to be
+> # recursively-epxanded, so explicitly define it.
+> 
+> 
+>  With all that,
+> 
+>   Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
