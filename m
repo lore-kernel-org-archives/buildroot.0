@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 22:02:09 +0200
-Subject: [Buildroot] [PATCH 15/30] package/matchbox-common: break
- dependency chain for display
-In-Reply-To: <decaf19e18b41b46067fa48d59ba2171e4893598.1429725549.git.yann.morin.1998@free.fr>
+Date: Fri, 01 May 2015 22:07:08 +0200
+Subject: [Buildroot] [PATCH 16/30] package/matchbox-fakekey: add missing
+ dependency
+In-Reply-To: <77c2f1a456664204e74551ed55c4a6578d94874d.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <decaf19e18b41b46067fa48d59ba2171e4893598.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <5543DBC1.4010706@mind.be>
+ <77c2f1a456664204e74551ed55c4a6578d94874d.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <5543DCEC.6060607@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +13,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 22/04/15 20:09, Yann E. MORIN wrote:
-> Currently, matchbox-common depends on either matchbox-dsktop or
-> matchbox-panel, and the three are organised so that matchbox-common gets
-> indented in the menuconfig.
+> matchbox-fakekey build-depends on xlib_libXtst, but does not select it.
 > 
-> That's a feature of menuconfig to consider the dependency chain to
-> indent sub-options.
-> 
-> Add a fake, prompt-less option to break that dependency chain.
-> 
-> Note: yes, this is an dirty hack.
+> Fix that.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- Now that you've moved the packages out of the matchbox/ directory and sorted
-them alphabetically, this is no longer needed.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Or else, I missed the point :-)
+> ---
+>  package/matchbox/matchbox-fakekey/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/matchbox/matchbox-fakekey/Config.in b/package/matchbox/matchbox-fakekey/Config.in
+> index 334f3a2..4708292 100644
+> --- a/package/matchbox/matchbox-fakekey/Config.in
+> +++ b/package/matchbox/matchbox-fakekey/Config.in
+> @@ -1,2 +1,3 @@
+>  config BR2_PACKAGE_MATCHBOX_FAKEKEY
+>  	bool
+> +	select BR2_PACKAGE_XLIB_LIBXTST
+
+ It also depends on matchbox-lib without selecting it (like all matchbox
+packages BTW).
+
+ Of course, matchbox-lib is always selected because matchbox selects it and
+matchbox-* depends on matchbox. However, if there is ever going to be a
+checkpackage script, it will check for consistency between select and
+DEPENDENCIES. So you can just as well add it now.
+
+ Probably best to do that for all matchbox packages in a single commit, so not
+in this patch. Hence my Ack.
 
  Regards,
  Arnout
 
-> ---
->  package/matchbox/matchbox-common/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/matchbox/matchbox-common/Config.in b/package/matchbox/matchbox-common/Config.in
-> index 6ec4697..93761f5 100644
-> --- a/package/matchbox/matchbox-common/Config.in
-> +++ b/package/matchbox/matchbox-common/Config.in
-> @@ -1,3 +1,8 @@
-> +# Hack! Break dependency chain so that matchbox-common does
-> +# not get indented below matchbox-panel or matchbox-desktop.
-> +config FOO
-> +    bool
-> +
->  config BR2_PACKAGE_MATCHBOX_COMMON
->  	bool "matchbox-common"
->  	depends on BR2_PACKAGE_MATCHBOX_PANEL || BR2_PACKAGE_MATCHBOX_DESKTOP
 > 
 
 
