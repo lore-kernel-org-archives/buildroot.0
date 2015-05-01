@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 15:15:05 +0200
-Subject: [Buildroot] [PATCH 4/7] boot/barebox: do not check hash for
- custom versions
-In-Reply-To: <895f0c166335e5dfb49a30dd8cf0b2986a5f7431.1430260630.git.yann.morin.1998@free.fr>
+Date: Fri, 01 May 2015 15:25:20 +0200
+Subject: [Buildroot] [PATCH 5/7] boot/mxs-bootlets: do not check hash of
+ custom tarball
+In-Reply-To: <bc53db66cfabb6adc0571eb614866bfdb68737ec.1430260630.git.yann.morin.1998@free.fr>
 References: <cover.1430260630.git.yann.morin.1998@free.fr>
- <895f0c166335e5dfb49a30dd8cf0b2986a5f7431.1430260630.git.yann.morin.1998@free.fr>
-Message-ID: <55437C59.2080502@mind.be>
+ <bc53db66cfabb6adc0571eb614866bfdb68737ec.1430260630.git.yann.morin.1998@free.fr>
+Message-ID: <55437EC0.8010102@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,48 +13,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 29/04/15 00:40, Yann E. MORIN wrote:
-> As we recently did for U-Boot, disable chekcing hashes for custom
-                                         checking
-
-> versions of barebox.
-> 
-> Note that we currently have no hash file for barebox, but avoiding the
-> check will already be in place when we do add it.
-> 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  boot/barebox/barebox.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> index 54f52bb..764791d 100644
-> --- a/boot/barebox/barebox.mk
-> +++ b/boot/barebox/barebox.mk
-> @@ -11,6 +11,7 @@ ifeq ($(BAREBOX_VERSION),custom)
->  BAREBOX_TARBALL = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
->  BAREBOX_SITE = $(patsubst %/,%,$(dir $(BAREBOX_TARBALL)))
->  BAREBOX_SOURCE = $(notdir $(BAREBOX_TARBALL))
-> +BR_NO_CHECK_HASH_FOR += $(BAREBOX_SOURCE)
->  else ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
->  BAREBOX_SITE = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
->  BAREBOX_SITE_METHOD = git
-> @@ -18,6 +19,9 @@ else
->  # Handle stable official Barebox versions
->  BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
->  BAREBOX_SITE = http://www.barebox.org/download
-> +ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_VERSION),y)
-> +BR_NO_CHECK_HASH_FOR += $(BAREBOX_SOURCE)
-> +endif
->  endif
-
- Same comment as for U-Boot.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ by adding an empty .hash file and checking that it fails for the default
+version but not for a custom version.
 
  Regards,
  Arnout
 
->  
->  BAREBOX_DEPENDENCIES = host-lzop
+> ---
+>  boot/mxs-bootlets/mxs-bootlets.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/boot/mxs-bootlets/mxs-bootlets.mk b/boot/mxs-bootlets/mxs-bootlets.mk
+> index 9b6bd7a..17af6dc 100644
+> --- a/boot/mxs-bootlets/mxs-bootlets.mk
+> +++ b/boot/mxs-bootlets/mxs-bootlets.mk
+> @@ -8,6 +8,7 @@ ifeq ($(BR2_TARGET_MXS_BOOTLETS_CUSTOM_TARBALL),y)
+>  MXS_BOOTLETS_TARBALL = $(call qstrip,$(BR2_TARGET_MXS_BOOTLETS_CUSTOM_TARBALL_URL))
+>  MXS_BOOTLETS_SITE = $(patsubst %/,%,$(dir $(MXS_BOOTLETS_TARBALL)))
+>  MXS_BOOTLETS_SOURCE = $(notdir $(MXS_BOOTLETS_TARBALL))
+> +BR_NO_CHECK_HASH_FOR += $(MXS_BOOTLETS_SOURCE)
+>  else ifeq ($(BR2_TARGET_MXS_BOOTLETS_CUSTOM_GIT),y)
+>  MXS_BOOTLETS_SITE = $(BR2_TARGET_MXS_BOOTLETS_CUSTOM_GIT_URL)
+>  MXS_BOOTLETS_SITE_METHOD = git
 > 
 
 
