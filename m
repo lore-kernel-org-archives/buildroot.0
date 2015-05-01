@@ -1,72 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 15:34:19 +0200
-Subject: [Buildroot] [PATCH 6/7] linux: do not check hashes for custom
- versions and tarballs
-In-Reply-To: <f033e301266baba536c3d63902cc2439e45eb3a4.1430260630.git.yann.morin.1998@free.fr>
+Date: Fri, 01 May 2015 15:37:42 +0200
+Subject: [Buildroot] [PATCH 7/7] package/xenomai: ignore custom versions
+In-Reply-To: <c7721b4bf0d66994d78b3ad75a5371bdbe390d9a.1430260630.git.yann.morin.1998@free.fr>
 References: <cover.1430260630.git.yann.morin.1998@free.fr>
- <f033e301266baba536c3d63902cc2439e45eb3a4.1430260630.git.yann.morin.1998@free.fr>
-Message-ID: <554380DB.40503@mind.be>
+ <c7721b4bf0d66994d78b3ad75a5371bdbe390d9a.1430260630.git.yann.morin.1998@free.fr>
+Message-ID: <554381A6.40307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hah, this is a tough one...
-
- With the combination BR2_LINUX_SAME_AS_HEADERS and BR2_KERNEL_HEADERS_VERSION
-you can still get a custom version...
-
- So I'm thinking if it wouldn't be simpler to just always disable the hash:
-BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
-
- Note that the hash, if it exists, will still be checked; it just won't be an
-error if the hash doesn't exist (so the variable is not named very accurately in
-fact). Therefore I think it's safe to disable it completely for linux. Or, if
-you prefer you can make it depend on !BR2_LINUX_KERNEL_LATEST_VERSION &&
-!(BR2_LINUX_SAME_AS_HEADERS && !BR2_KERNEL_HEADERS_VERSION) (good luck
-expressing that in make syntax :-).
-
-
 On 29/04/15 00:40, Yann E. MORIN wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
 > ---
->  linux/linux.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+>  package/xenomai/xenomai.mk | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 0c348da..959c564 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -13,8 +13,10 @@ ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
->  LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
->  LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
->  LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
-> +BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
->  else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
->  LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
-> +# For 'local', there is no hash check, so no need to set BR_NO_CHECK_HASH_FOR
+> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+> index ccbae35..17299ac 100644
+> --- a/package/xenomai/xenomai.mk
+> +++ b/package/xenomai/xenomai.mk
+> @@ -7,6 +7,9 @@
+>  XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+>  ifeq ($(XENOMAI_VERSION),)
+>  XENOMAI_VERSION = 2.6.4
+> +else
+> +# We can do that because it's a recursively-expanded variable
 
- Why do you add that comment here and not in the VCS cases? I don't think it is
-needed, move it to the commit message.
+ I don't think this comment is needed. Move it to the commit message.
+
+ Either way: Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
->  LINUX_SITE_METHOD = local
->  else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
->  LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-> @@ -24,6 +26,9 @@ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
->  LINUX_SITE_METHOD = hg
->  else
->  LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
-> +ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
-> +BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
-> +endif
->  # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
->  # to use the $(word) function. We support versions such as 4.0, 3.1,
->  # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
+> +BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+>  endif
+>  
+>  XENOMAI_SITE = http://download.gna.org/xenomai/stable
 > 
 
 
