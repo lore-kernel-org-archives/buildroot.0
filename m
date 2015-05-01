@@ -1,51 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 22:32:22 +0200
-Subject: [Buildroot] [PATCH 21/30] package/matchbox: make it a menu
-In-Reply-To: <533fd5f85aa1c8de1d693443c78be0902b87ed8d.1429725549.git.yann.morin.1998@free.fr>
-References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <533fd5f85aa1c8de1d693443c78be0902b87ed8d.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <5543E2D6.3050105@mind.be>
+From: Carlos Soto <csotoalonso@gmail.com>
+Date: Fri, 1 May 2015 22:41:19 +0200
+Subject: [Buildroot] Libtool problem building mesa3d-demos
+Message-ID: <CAD7j7Q96pGF1qedawQw4-FHSyC15EyXH1DBu=MNkvFQg_Ys-dg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/04/15 20:09, Yann E. MORIN wrote:
-> We're about to add a few more options, so it now warrants a menu for
-> itself.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Hi,
+I'm using buildroot to create a rootfs for iMX6-quad. I'm using an external
+toolchain created with crosstool-ng (arm-cortexa9_neon-linux-gnueabihf).
+When building mesa3d-demos, there is an error creating libutil.la:
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+libtool:   error:
+'/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf/lib/gcc/arm-cortexa9_neon-linux-gnueabihf/4.9.1/../../../../arm-cortexa9_neon-linux-gnueabihf/lib/libstdc++.la'
+is not a valid libtool archive
 
- I would move this earlier in the series (around the time you move everything
-one directory up), but that's not so important.
+Of corse, this path is not right, it seems to be joining two different
+paths.
 
- Regards,
- Arnout
+I've tracked the source of the problem, and it seems to be related with the
+libtool used by buildroot. I've modified the resulting Makefiles to use the
+host libtool, and the problem disappears:
 
-> ---
->  package/matchbox/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-> index 39eb616..9d8d060 100644
-> --- a/package/matchbox/Config.in
-> +++ b/package/matchbox/Config.in
-> @@ -1,4 +1,4 @@
-> -config BR2_PACKAGE_MATCHBOX
-> +menuconfig BR2_PACKAGE_MATCHBOX
->  	bool "matchbox"
->  	depends on BR2_PACKAGE_XORG7
->  	depends on BR2_USE_MMU # fork()
-> 
+LIBTOOL = $(SHELL) $(top_builddir)/libtool to
+LIBTOOL = $(SHELL) /usr/bin/libtool
 
+Any thoughts about what it's going wrong?
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Regards,
+Carlos
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150501/fa9acd1f/attachment.html>
