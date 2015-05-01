@@ -1,65 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 02 May 2015 00:14:37 +0200
-Subject: [Buildroot] Libtool problem building mesa3d-demos
-In-Reply-To: <CAD7j7Q96pGF1qedawQw4-FHSyC15EyXH1DBu=MNkvFQg_Ys-dg@mail.gmail.com>
-References: <CAD7j7Q96pGF1qedawQw4-FHSyC15EyXH1DBu=MNkvFQg_Ys-dg@mail.gmail.com>
-Message-ID: <5543FACD.4010307@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 02 May 2015 00:21:09 +0200
+Subject: [Buildroot] [PATCH 3/3] package/wvstreams: add argp-standalone
+ as optionnal dependency
+In-Reply-To: <20150501230402.57253929@free-electrons.com>
+References: <1430498686-10719-1-git-send-email-romain.naour@openwide.fr>	<1430498686-10719-3-git-send-email-romain.naour@openwide.fr>
+ <20150501230402.57253929@free-electrons.com>
+Message-ID: <5543FC55.2040203@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/05/15 22:41, Carlos Soto wrote:
-> Hi,
-> I'm using buildroot to create a rootfs for iMX6-quad. I'm using an external
-> toolchain created with crosstool-ng (arm-cortexa9_neon-linux-gnueabihf).
-> When building mesa3d-demos, there is an error creating libutil.la
-> <http://libutil.la>:
-> 
-> libtool:   error:
-> '/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf/lib/gcc/arm-cortexa9_neon-linux-gnueabihf/4.9.1/../../../../arm-cortexa9_neon-linux-gnueabihf/lib/libstdc++.la'
-> is not a valid libtool archive
-> 
-> Of corse, this path is not right, it seems to be joining two different paths.
-> 
-> I've tracked the source of the problem, and it seems to be related with the
-> libtool used by buildroot. I've modified the resulting Makefiles to use the host
-> libtool, and the problem disappears:
+Hi Thomas,
 
- You have to use buildroot's libtool, otherwise you may get other problems with
-cross-compilation.
-
+Le 01/05/2015 23:04, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
 > 
-> LIBTOOL = $(SHELL) $(top_builddir)/libtool to
-> LIBTOOL = $(SHELL) /usr/bin/libtool
+> On Fri,  1 May 2015 18:44:46 +0200, Romain Naour wrote:
+>> This ensures the build reproducibility.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>  package/wvstreams/wvstreams.mk | 5 +++++
+>>  1 file changed, 5 insertions(+)
+>>
+>> diff --git a/package/wvstreams/wvstreams.mk b/package/wvstreams/wvstreams.mk
+>> index bc7c5d4..3db317a 100644
+>> --- a/package/wvstreams/wvstreams.mk
+>> +++ b/package/wvstreams/wvstreams.mk
+>> @@ -32,6 +32,11 @@ ifneq ($(BR2_STATIC_LIBS),y)
+>>  WVSTREAMS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fPIC"
+>>  endif
+>>  
+>> +# wvstreams use argp.h which can be provided by argp-standalone package.
+>> +ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+>> +WVSTREAMS_DEPENDENCIES += argp-standalone
+>> +endif
 > 
-> Any thoughts about what it's going wrong?
+> Applied after fixing typos in the commit title and comment.
 
- Can you tell us which options are given to libtool, and perhaps run it with -v
-to see what it does?
-
- Regards,
- Arnout
+Thanks.
 
 > 
-> Regards,
-> Carlos
-> 
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+> I wonder if we shouldn't make the argp-standalone package only
+> available on !glibc builds, since glibc provides its own argp
+> implementation.
 
+I'm agree, most of packages which uses argp.h select argp-standalone only when a
+uClibc toolchain is used.
+Except libpthsem package which select argp-standalone unconditionally.
+However, I built successfully libpthsem with a glibc toolchain and without
+argp-standalone installed.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+It appears that argp.h from glibc is more up to date should be preferred to
+argp-standalone one.
+
+I can do the change if you want.
+
+Best regards,
+Romain
+
+> 
+> Thanks,
+> 
+> Thomas
+> 
