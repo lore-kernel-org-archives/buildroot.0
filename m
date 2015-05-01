@@ -1,42 +1,75 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 01 May 2015 23:40:13 +0200
-Subject: [Buildroot] [PATCH 2/3] package/argp-standalone: add missing
- limits.h
-In-Reply-To: <20150501224844.368fa119@free-electrons.com>
-References: <1430498686-10719-1-git-send-email-romain.naour@openwide.fr>	<1430498686-10719-2-git-send-email-romain.naour@openwide.fr>
- <20150501224844.368fa119@free-electrons.com>
-Message-ID: <5543F2BD.60606@openwide.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 01 May 2015 23:44:34 +0200
+Subject: [Buildroot] [PATCH 29/30] package/matchbox-panel: add support
+ for dnotify
+In-Reply-To: <39072254f3d646691a8c637e551ffaede7b9928c.1429725549.git.yann.morin.1998@free.fr>
+References: <cover.1429725549.git.yann.morin.1998@free.fr>
+ <39072254f3d646691a8c637e551ffaede7b9928c.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <5543F3C2.4020004@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-Le 01/05/2015 22:48, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
+On 22/04/15 20:09, Yann E. MORIN wrote:
+> Using dnotify, matchbox-panel can automatically reload its menu.
 > 
-> On Fri,  1 May 2015 18:44:45 +0200, Romain Naour wrote:
->> Fixes:
->> http://autobuild.buildroot.net/results/b80/b802cc638a4b11d2a2098b82615f2c0ccadf8e3f/build-end.log
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> Cc: Max Filippov <jcmvbkbc@gmail.com>
->> ---
->>  package/argp-standalone/0002-isprint.patch | 23 ++++++++++++++++-------
->>  1 file changed, 16 insertions(+), 7 deletions(-)
-> 
-> I have already done a similar fix a few hours ago:
-> http://git.buildroot.net/buildroot/commit/?id=2a4ece2ed3e3766c463ef8f61a3362ba86c8a6cf.
+> dnotify requires a kernel >=2.4, which we can consider to be
+> virtually for granted.
 
-Sorry, I missed it.
+ So, why not enable this unconditionally?
 
-Best regards,
-Romain
+ Regards,
+ Arnout
 
 > 
-> Best regards,
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/matchbox/matchbox-panel/Config.in         | 7 +++++++
+>  package/matchbox/matchbox-panel/matchbox-panel.mk | 6 ++++++
+>  2 files changed, 13 insertions(+)
 > 
-> Thomas
+> diff --git a/package/matchbox/matchbox-panel/Config.in b/package/matchbox/matchbox-panel/Config.in
+> index 93241f0..6daf2db 100644
+> --- a/package/matchbox/matchbox-panel/Config.in
+> +++ b/package/matchbox/matchbox-panel/Config.in
+> @@ -18,4 +18,11 @@ config BR2_PACKAGE_MATCHBOX_PANEL_ACPI
+>  	  otherwise the battery monitor mini-applet is not
+>  	  built.
+>  
+> +config BR2_PACKAGE_MATCHBOX_PANEL_DNOTIFY
+> +	bool "use dnotify"
+> +	help
+> +	  Using dnotify allows matchbox-panel to automatically reload
+> +	  its menu when entries are changed (e.g. when a new application
+> +	  is installed).
+> +
+>  endif # BR2_PACKAGE_MATCHBOX_PANEL
+> diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
+> index aa9018c..dedbab6 100644
+> --- a/package/matchbox/matchbox-panel/matchbox-panel.mk
+> +++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
+> @@ -26,6 +26,12 @@ else
+>  MATCHBOX_PANEL_CONF_OPTS += --disable-acpi-linux
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_MATCHBOX_PANEL_DNOTIFY),y)
+> +MATCHBOX_PANEL_CONF_OPTS += --enable-dnotify
+> +else
+> +MATCHBOX_PANEL_CONF_OPTS += --disable-dnotify
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS),y)
+>  MATCHBOX_PANEL_DEPENDENCIES += wireless_tools
+>  endif
 > 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
