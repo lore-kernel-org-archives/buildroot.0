@@ -1,264 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  1 May 2015 10:40:47 -0300
-Subject: [Buildroot] [PATCH] sane-backends: bump to version 1.0.24
-Message-ID: <1430487647-9710-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 01 May 2015 15:54:46 +0200
+Subject: [Buildroot] [PATCH 8/7] package/xenomai: add hash file
+In-Reply-To: <1430261200-20963-1-git-send-email-yann.morin.1998@free.fr>
+References: <cover.1430260630.git.yann.morin.1998@free.fr>
+ <1430261200-20963-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <554385A6.1010904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump sane-backends to a "modern" 1.0.24 version.
-Tweak the patches to avoid autoreconf (it doesn't seem to be happy for
-me in gentoo).
-Disable cups support (checks are wrong and it's no longer required).
-Disable systemd support (checks are wrong and we never accounted for
-this).
+On 29/04/15 00:46, Yann E. MORIN wrote:
+> Now that custom versions are properly excluded from the list, we can add
+> a hash for the version we package.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Should fix wine failure (i was unable to build sane-backends before):
-http://autobuild.buildroot.net/results/d01/d01a3c7786df8cfd962a27f39283851db45c6165/
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../0002-remove-unsafe-headers-path.patch          | 24 ++++++++
- package/sane-backends/0002-v4l.patch               | 66 ----------------------
- .../0003-remove-cups-and-systemd-support.patch     | 56 ++++++++++++++++++
- .../0003-remove-unsafe-headers-path.patch          | 28 ---------
- package/sane-backends/sane-backends.hash           |  2 +
- package/sane-backends/sane-backends.mk             |  6 +-
- 6 files changed, 84 insertions(+), 98 deletions(-)
- create mode 100644 package/sane-backends/0002-remove-unsafe-headers-path.patch
- delete mode 100644 package/sane-backends/0002-v4l.patch
- create mode 100644 package/sane-backends/0003-remove-cups-and-systemd-support.patch
- delete mode 100644 package/sane-backends/0003-remove-unsafe-headers-path.patch
- create mode 100644 package/sane-backends/sane-backends.hash
+Also verified the .sig file (against Gilles' unfortunately expired key).
 
-diff --git a/package/sane-backends/0002-remove-unsafe-headers-path.patch b/package/sane-backends/0002-remove-unsafe-headers-path.patch
-new file mode 100644
-index 0000000..6217b0a
---- /dev/null
-+++ b/package/sane-backends/0002-remove-unsafe-headers-path.patch
-@@ -0,0 +1,24 @@
-+From 3c03e4b81c9de73e57a56029f7f8cda8bec24e91 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sat, 10 Jan 2015 15:48:21 +0100
-+Subject: [PATCH] configure.in: remove unsafe headers path
-+
-+Forcing /usr/local/include headers path in CFLAGS is unsafe for
-+cross-compilation.
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+[Gustavo: update to just patch configure and avoid an autoreconf]
-+---
-+
-+diff -Nura sane-backends-1.0.24.orig/configure sane-backends-1.0.24/configure
-+--- sane-backends-1.0.24.orig/configure	2015-05-01 09:51:19.479785064 -0300
-++++ sane-backends-1.0.24/configure	2015-05-01 09:51:48.411767378 -0300
-+@@ -5192,8 +5192,6 @@
-+ fi
-+ 
-+ 
-+-INCLUDES="${INCLUDES} -I/usr/local/include"
-+-
-+ 
-+ if test "${ac_cv_c_compiler_gnu}" = "yes"; then
-+   NORMAL_CFLAGS="\
-diff --git a/package/sane-backends/0002-v4l.patch b/package/sane-backends/0002-v4l.patch
-deleted file mode 100644
-index e9bdd20..0000000
---- a/package/sane-backends/0002-v4l.patch
-+++ /dev/null
-@@ -1,66 +0,0 @@
--From Fedora git: http://pkgs.fedoraproject.org/gitweb/?p=sane-backends.git;a=blob;f=sane-backends-1.0.22-v4l.patch;hb=4c4b8135b896ef9f00b926ce5f435ae5c9b156d5
--
--From 26c69b228b29f612faf4b0cc85db969ee7cc4ea6 Mon Sep 17 00:00:00 2001
--From: Nils Philippsen <nils@redhat.com>
--Date: Mon, 14 Mar 2011 13:35:05 +0100
--Subject: [PATCH] patch: v4l
--
--Squashed commit of the following:
--
--commit 23381932c76846191b42a48e505b37cd74711265
--Author: Julien BLACHE <jb@jblache.org>
--Date:   Wed Feb 16 19:37:43 2011 +0100
--
--    Fix v4l build with libv4l 0.8.3+
--
--    (cherry picked from commit c5ca46c2d1be78c651afb843cc834cf2b5b24953)
--
--    Conflicts:
--
--    	ChangeLog
--
--    Signed-off-by: Nils Philippsen <nils@redhat.com>
-----
-- backend/v4l.c |    3 +--
-- backend/v4l.h |    3 ++-
-- 2 files changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/backend/v4l.c b/backend/v4l.c
--index 6510ef0..38595ed 100644
----- a/backend/v4l.c
--+++ b/backend/v4l.c
--@@ -84,9 +84,8 @@
-- #include "../include/sane/sanei_config.h"
-- #define V4L_CONFIG_FILE "v4l.conf"
-- 
---#include "v4l.h"
---
-- #include <libv4l1.h>
--+#include "v4l.h"
-- 
-- static const SANE_Device **devlist = NULL;
-- static int num_devices;
--diff --git a/backend/v4l.h b/backend/v4l.h
--index 588b96e..6aee586 100644
----- a/backend/v4l.h
--+++ b/backend/v4l.h
--@@ -29,6 +29,7 @@
-- #ifndef v4l_h
-- #define v4l_h
-- 
--+#ifndef __LINUX_VIDEODEV_H
-- /* Kernel interface */
-- /* Only the stuff we need. For more features, more defines are needed */
-- 
--@@ -165,7 +166,7 @@ struct video_channel
-- 
-- 
-- /* end of kernel interface */
---
--+#endif /* !__LINUX_VIDEODEV_H */
-- 
-- #include <../include/sane/sane.h>
-- 
---- 
--1.7.4
--
-diff --git a/package/sane-backends/0003-remove-cups-and-systemd-support.patch b/package/sane-backends/0003-remove-cups-and-systemd-support.patch
-new file mode 100644
-index 0000000..e9a637e
---- /dev/null
-+++ b/package/sane-backends/0003-remove-cups-and-systemd-support.patch
-@@ -0,0 +1,56 @@
-+These tests use absolute directories and host leakage is granted
-+when cups and systemd are around. In fact there's no way these could work
-+in any predictable manner.
-+
-+CUPS support was in fact disabled upstream since it's not required
-+in commit efb04936b8ad3bf313c289a522ae5832e22c1b7e
-+
-+And for systemd we never handled it properly anyway.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura sane-backends-1.0.24.orig/configure sane-backends-1.0.24/configure
-+--- sane-backends-1.0.24.orig/configure	2015-05-01 09:51:19.479785064 -0300
-++++ sane-backends-1.0.24/configure	2015-05-01 10:08:49.834447226 -0300
-+@@ -9649,33 +9649,6 @@
-+ 
-+ fi
-+ 
-+-$as_echo "checking for cups"
-+-if test -e /usr/include/cups/cups.h ; then
-+-
-+-$as_echo "#define HAVE_CUPS 1" >>confdefs.h
-+-
-+-	with_cups="yes"
-+-	LIBS="-lcups  $LIBS"
-+-else
-+-	$as_echo "cups.h not found, you may want to install a cups development package"
-+-	$as_echo "in order to autodetect network scanners in kodakaio."
-+-	with_cups="no"
-+-fi
-+-
-+-$as_echo_n "Checking for systemd..."
-+-if test -e /usr/include/systemd/sd-daemon.h ; then
-+-
-+-$as_echo "#define HAVE_SYSTEMD 1" >>confdefs.h
-+-
-+-    with_systemd="yes"
-+-    SYSTEMD_LIBS=" -lsystemd-daemon"
-+-
-+-    $as_echo "yes"
-+-else
-+-    with_systemd="no"
-+-    $as_echo "no"
-+-fi
-+-
-+ 
-+ # Check whether --enable-libusb_1_0 was given.
-+ if test "${enable_libusb_1_0+set}" = set; then :
-+@@ -21180,7 +21153,6 @@
-+ echo "IPv6 support:  `eval eval echo ${ipv6}`"
-+ echo "Avahi support: `eval eval echo ${enable_avahi}`"
-+ echo "SNMP support:  `eval eval echo ${with_snmp}`"
-+-echo "CUPS support:  `eval eval echo ${with_cups}`"
-+ echo "-> The following backends will be built:"
-+ for backend in ${BACKENDS} ; do
-+   echo $ECHO_N "${backend} "
-diff --git a/package/sane-backends/0003-remove-unsafe-headers-path.patch b/package/sane-backends/0003-remove-unsafe-headers-path.patch
-deleted file mode 100644
-index 29b8d04..0000000
---- a/package/sane-backends/0003-remove-unsafe-headers-path.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 3c03e4b81c9de73e57a56029f7f8cda8bec24e91 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@openwide.fr>
--Date: Sat, 10 Jan 2015 15:48:21 +0100
--Subject: [PATCH] configure.in: remove unsafe headers path
--
--Forcing /usr/local/include headers path in CFLAGS is unsafe for
--cross-compilation.
--
--Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-----
-- configure.in | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/configure.in b/configure.in
--index a8fc950..93a4b77 100644
----- a/configure.in
--+++ b/configure.in
--@@ -82,7 +82,6 @@ AM_CONDITIONAL(CROSS_COMPILING, test x$cross_compiling = xyes)
-- dnl ***********************************************************************
-- dnl set compiler/linker flags
-- dnl ***********************************************************************
---INCLUDES="${INCLUDES} -I/usr/local/include"
-- AC_SUBST(INCLUDES)
-- SANE_SET_CFLAGS([$is_release])
-- SANE_SET_LDFLAGS
---- 
--1.9.3
--
-diff --git a/package/sane-backends/sane-backends.hash b/package/sane-backends/sane-backends.hash
-new file mode 100644
-index 0000000..44aea50
---- /dev/null
-+++ b/package/sane-backends/sane-backends.hash
-@@ -0,0 +1,2 @@
-+# From https://alioth.debian.org/frs/download.php/file/3956/sane-backends-1.0.24.tar.gz.md5
-+md5	1ca68e536cd7c1852322822f5f6ac3a4	sane-backends-1.0.24.tar.gz
-diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
-index bde8e6a..4b29dda 100644
---- a/package/sane-backends/sane-backends.mk
-+++ b/package/sane-backends/sane-backends.mk
-@@ -4,14 +4,12 @@
- #
- ################################################################################
- 
--SANE_BACKENDS_VERSION = 1.0.22
--SANE_BACKENDS_SITE = http://sources.buildroot.net
-+SANE_BACKENDS_VERSION = 1.0.24
-+SANE_BACKENDS_SITE = https://alioth.debian.org/frs/download.php/file/3958
- SANE_BACKENDS_CONFIG_SCRIPTS = sane-config
- SANE_BACKENDS_LICENSE = GPLv2+
- SANE_BACKENDS_LICENSE_FILES = COPYING
- SANE_BACKENDS_INSTALL_STAGING = YES
--# 0003-remove-unsafe-headers-path.patch patch configure.in
--SANE_BACKENDS_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_LIBUSB),y)
- SANE_BACKENDS_DEPENDENCIES += libusb
+ Regards,
+ Arnout
+
+> ---
+>  package/xenomai/xenomai.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/xenomai/xenomai.hash
+> 
+> diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
+> new file mode 100644
+> index 0000000..4d74472
+> --- /dev/null
+> +++ b/package/xenomai/xenomai.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed;
+> +sha256  b6ff723cb0f3b1c2c4e15bccfd114b248dea1b4164a0ac0e612815379ce7caf8  xenomai-2.6.4.tar.bz2
+> 
+
+
 -- 
-2.0.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
