@@ -1,50 +1,126 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  1 May 2015 17:06:26 +0200
-Subject: [Buildroot] [PATCH] doc/manual: fix generating manual after legacy
-	overhaul
-Message-ID: <1430492786-17842-1-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 01 May 2015 17:06:37 +0200
+Subject: [Buildroot] [PATCH v6] python-pyxml: new package
+In-Reply-To: <1430250272-23842-1-git-send-email-yegorslists@googlemail.com>
+References: <1430250272-23842-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <5543967D.3060802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 53903a15 (*config: improve handling of BR2_LEGACY) added an
-option to entirely skip legacy entries, by passing a variable in the
-environment.
+On 28/04/15 21:44, Yegor Yefremov wrote:
+> From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+> 
+> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+> Changes:
+> 	v6: remove host-python dependency, fix formatting (Thomas Petazzoni)
+> 	v5: refresh the patch, so it can applied without errors
+>   	v3: updated to use python package type (Matt W)
+> 	    added hash file (Matt W)
+> 
+>  package/Config.in                    |  1 +
+>  package/python-pyxml/Config.in       | 12 ++++++++++++
+>  package/python-pyxml/python-xml.hash |  2 ++
+>  package/python-pyxml/python-xml.mk   | 21 +++++++++++++++++++++
+>  4 files changed, 36 insertions(+)
+>  create mode 100644 package/python-pyxml/Config.in
+>  create mode 100644 package/python-pyxml/python-xml.hash
+>  create mode 100644 package/python-pyxml/python-xml.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 4e20e4d..8b02486 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -629,6 +629,7 @@ menu "external python modules"
+>  	source "package/python-pysnmp-mibs/Config.in"
+>  	source "package/python-pyusb/Config.in"
+>  	source "package/python-pyxb/Config.in"
+> +	source "package/python-pyxml/Config.in"
+>  	source "package/python-pyzmq/Config.in"
+>  	source "package/python-requests/Config.in"
+>  	source "package/python-rtslib-fb/Config.in"
+> diff --git a/package/python-pyxml/Config.in b/package/python-pyxml/Config.in
+> new file mode 100644
+> index 0000000..73f7e16
+> --- /dev/null
+> +++ b/package/python-pyxml/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_PYTHON_PYXML
+> +	bool "python-pyxml"
+> +	depends on BR2_PACKAGE_PYTHON
+> +	select BR2_PACKAGE_PYTHON_PYEXPAT
 
-Howerver, it mised one location where that variable is also needed,
-which is generating the list of packages and deprecated features for
-inclusion in the manual.
+ Actually, it turns out that pyxml always builds its own version of pyexpat and
+doesn't use the one from python itself. So this is not needed.
 
-Fix that by re-using the global $(COMMON_CONFIG_ENV) variable,
-overriding just what we don't want (i.e. br2-external location and
-defconfig path).
+> +	help
+> +	  This is the Python XML package.  The distribution contains a
 
-Also, slightly re-order variables so the ones we override come right
-after the common settings, moving the specific pnes at the end.
+ We just approved to use just a single space after the dot.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- docs/manual/manual.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> +	  validating XML parser, an implementation of the SAX and DOM
+> +	  programming interfaces, an interface to the Expat parser (and the
+> +	  Expat parser itself), and a C helper module that can speed up
+> +	  xmllib.py by a factor of 5.  There's even documentation!
+> +
+> +	  http://pyxml.sourceforge.net/topics/index.html
+> diff --git a/package/python-pyxml/python-xml.hash b/package/python-pyxml/python-xml.hash
+> new file mode 100644
+> index 0000000..df98c46
+> --- /dev/null
+> +++ b/package/python-pyxml/python-xml.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256 9fab66f9584fb8e67aebd8745a5c97bf1c5a2e2e461adf68862bcec64e448c13  PyXML-0.8.4.tar.gz
+> diff --git a/package/python-pyxml/python-xml.mk b/package/python-pyxml/python-xml.mk
+> new file mode 100644
+> index 0000000..0b31156
+> --- /dev/null
+> +++ b/package/python-pyxml/python-xml.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# python-pyxml
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYXML_VERSION = 0.8.4
+> +PYTHON_PYXML_SOURCE = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
+> +PYTHON_PYXML_SITE = http://downloads.sourceforge.net/project/pyxml/pyxml/0.8.4/
+> +PYTHON_PYXML_LICENSE = BSD-3c
+> +PYTHON_PYXML_LICENSE_FILES = LICENSE
+> +PYTHON_PYXML_SETUP_TYPE = distutils
+> +
+> +# tell setup.py, where to find libexpat
+> +define PYTHON_PYXML_CONFIGURE_CMDS
+> +	(cd $(@D); \
+> +		$(HOST_DIR)/usr/bin/python setup.py \
+> +		config --with-libexpat=$(STAGING_DIR)/usr)
 
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index d5db2c2..2755582 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -12,8 +12,10 @@ MANUAL_RESOURCES = $(TOPDIR)/docs/images
- # should not be included in the manual.
- define MANUAL_GEN_LISTS
- 	$(Q)$(call MESSAGE,"Updating the manual lists...")
--	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(@D) \
-+	$(Q)$(COMMON_CONFIG_ENV) \
-+		BR2_DEFCONFIG="" \
- 		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
-+		TOPDIR=$(TOPDIR) O=$(@D) \
- 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
- endef
- MANUAL_POST_RSYNC_HOOKS += MANUAL_GEN_LISTS
+ This actually doesn't work, because distutils has no concept of a configure
+step that stores the configuration somewhere. Instead, this option should be
+added to the build step.
+
+ I'll resubmit a new version. Yegor, Clayton, could you test that?
+
+ Regards,
+ Arnout
+
+> +endef
+> +
+> +$(eval $(python-package))
+> 
+
+
 -- 
-1.9.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
