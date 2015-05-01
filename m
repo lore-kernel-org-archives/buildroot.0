@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 22:07:08 +0200
-Subject: [Buildroot] [PATCH 16/30] package/matchbox-fakekey: add missing
- dependency
-In-Reply-To: <77c2f1a456664204e74551ed55c4a6578d94874d.1429725549.git.yann.morin.1998@free.fr>
+Date: Fri, 01 May 2015 22:19:49 +0200
+Subject: [Buildroot] [PATCH 17/30] package/matchbox-startup-monitor: add
+ misisng dependency
+In-Reply-To: <d6c5dc5f48792b116eef4284d919fdc5b96ea293.1429725549.git.yann.morin.1998@free.fr>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <77c2f1a456664204e74551ed55c4a6578d94874d.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <5543DCEC.6060607@mind.be>
+ <d6c5dc5f48792b116eef4284d919fdc5b96ea293.1429725549.git.yann.morin.1998@free.fr>
+Message-ID: <5543DFE5.8080703@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,8 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 22/04/15 20:09, Yann E. MORIN wrote:
-> matchbox-fakekey build-depends on xlib_libXtst, but does not select it.
+> matchbox-startup-monitor build-depends on startup-notifications, but
+> does not select it.
 > 
 > Fix that.
 > 
@@ -21,33 +22,21 @@ On 22/04/15 20:09, Yann E. MORIN wrote:
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> ---
->  package/matchbox/matchbox-fakekey/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/matchbox/matchbox-fakekey/Config.in b/package/matchbox/matchbox-fakekey/Config.in
-> index 334f3a2..4708292 100644
-> --- a/package/matchbox/matchbox-fakekey/Config.in
-> +++ b/package/matchbox/matchbox-fakekey/Config.in
-> @@ -1,2 +1,3 @@
->  config BR2_PACKAGE_MATCHBOX_FAKEKEY
->  	bool
-> +	select BR2_PACKAGE_XLIB_LIBXTST
-
- It also depends on matchbox-lib without selecting it (like all matchbox
-packages BTW).
-
- Of course, matchbox-lib is always selected because matchbox selects it and
-matchbox-* depends on matchbox. However, if there is ever going to be a
-checkpackage script, it will check for consistency between select and
-DEPENDENCIES. So you can just as well add it now.
-
- Probably best to do that for all matchbox packages in a single commit, so not
-in this patch. Hence my Ack.
-
  Regards,
  Arnout
 
+> ---
+>  package/matchbox/matchbox-startup-monitor/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/matchbox/matchbox-startup-monitor/Config.in b/package/matchbox/matchbox-startup-monitor/Config.in
+> index 4dd088f..92a1241 100644
+> --- a/package/matchbox/matchbox-startup-monitor/Config.in
+> +++ b/package/matchbox/matchbox-startup-monitor/Config.in
+> @@ -1,2 +1,3 @@
+>  config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
+>  	bool
+> +	select BR2_PACKAGE_STARTUP_NOTIFICATION
 > 
 
 
