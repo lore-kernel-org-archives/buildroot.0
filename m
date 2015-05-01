@@ -1,56 +1,38 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 23:45:33 +0200
-Subject: [Buildroot] [PATCH 30/30] package/matchbox-panel: fix WiFi
- monitoring
-In-Reply-To: <3de1b4334c76469f95d791d578f769831ab2f3a5.1429725549.git.yann.morin.1998@free.fr>
-References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <3de1b4334c76469f95d791d578f769831ab2f3a5.1429725549.git.yann.morin.1998@free.fr>
-Message-ID: <5543F3FD.5010802@mind.be>
+Date: Fri, 01 May 2015 23:49:31 +0200
+Subject: [Buildroot] [PATCH v8] python-pyxml: new package
+In-Reply-To: <87mw1ouj00.fsf@dell.be.48ers.dk>
+References: <1430493225-19081-1-git-send-email-arnout@mind.be>	<1430496084-22705-1-git-send-email-arnout@mind.be>
+ <87mw1ouj00.fsf@dell.be.48ers.dk>
+Message-ID: <5543F4EB.8020409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/04/15 20:09, Yann E. MORIN wrote:
-> matchbox-panel can build a simple applet to monitor the WiFi. For that,
-> it tries to see if libiwl is available; if so, WiFi monitoring is
-> enabled, otherwise it is disabled; there is not option to explicitly
-> enable or disable it.
+On 01/05/15 22:42, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 > 
-> Currently, matchbox-panel depends on the wireless-tools package.
-> However, that's not enough, since the library will only be installed if
-> explictly enabled in the menuconfig *and* this is not a static build.
-  explicitly
+>  > From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+>  > It always uses its own copy of pyexpat, but we can at least make it use
+>  > buildroot's expat.so.
+> 
+>  > Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+>  > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>  > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>  > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>  > ---
+>  > Changes:
+>  > 	v8: Remove unrelated musl fix (Arnout)
+> 
+> Committed with a 'select BR2_PACKAGE_EXPAT' added, thanks.
 
-> 
-> Change the dependency to be on the library, not the package.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Ouch, thanks for fixing.
 
  Regards,
  Arnout
 
-> ---
->  package/matchbox/matchbox-panel/matchbox-panel.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
-> index dedbab6..455ae34 100644
-> --- a/package/matchbox/matchbox-panel/matchbox-panel.mk
-> +++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
-> @@ -32,7 +32,7 @@ else
->  MATCHBOX_PANEL_CONF_OPTS += --disable-dnotify
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS),y)
-> +ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_LIB),y)
->  MATCHBOX_PANEL_DEPENDENCIES += wireless_tools
->  endif
->  
-> 
 
 
 -- 
