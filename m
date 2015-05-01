@@ -1,70 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 May 2015 16:20:07 +0200
-Subject: [Buildroot] [git commit] argp-standalone: fix build issue caused by
-	UCHAR_MAX definition
-Message-ID: <20150501142049.BA8DC7FAE9@busybox.osuosl.org>
+Date: Fri, 1 May 2015 16:21:30 +0200
+Subject: [Buildroot] [git commit] gptfdisk: reinstate ldlibs support patch
+Message-ID: <20150501142303.C7E707FE1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2a4ece2ed3e3766c463ef8f61a3362ba86c8a6cf
+commit: http://git.buildroot.net/buildroot/commit/?id=9238795c2aaae2cb9ceaf6575529ff77a4894773
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The issue was simply that the patch from Max Filippov forgot to
-include <limits.h> to get the definition of UCHAR_MAX.
+I removed that in fac3042cc53a9aff87cb047f55a12d23c9973f4d because the
+ICU part was no longer required.
+However the LDLIBS part is for static builds and should have been a
+separate patch to avoid confusion. Fixes:
+http://autobuild.buildroot.net/results/a90/a9092d01a71e2d799e5b7b3afb9fd3e304370d0c/
 
-Fixes:
-
-  http://autobuild.buildroot.org/results/bd1/bd120ada4830fda3db96da945513d4f6f7b2d419/
-
-and lots of similar build failures.
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/argp-standalone/0002-isprint.patch |   24 +++++++++++++++++-------
- 1 files changed, 17 insertions(+), 7 deletions(-)
+ package/gptfdisk/0001-ldlibs.patch |   31 +++++++++++++++++++++++++++++++
+ 1 files changed, 31 insertions(+), 0 deletions(-)
 
-diff --git a/package/argp-standalone/0002-isprint.patch b/package/argp-standalone/0002-isprint.patch
-index a2962a1..9c08366 100644
---- a/package/argp-standalone/0002-isprint.patch
-+++ b/package/argp-standalone/0002-isprint.patch
-@@ -9,10 +9,19 @@ Restrict isprint argument range to values representable by unsigned char.
- 
- Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
- ---
--diff -bu argp-standalone-1.3/argp.h argp-standalone-1.3-/argp.h
----- argp-standalone-1.3/argp.h	2015-04-28 10:31:39.015319337 +0300
--+++ argp-standalone-1.3-/argp.h	2015-04-28 10:27:46.526770624 +0300
--@@ -577,7 +577,7 @@
-+Index: b/argp.h
-+===================================================================
-+--- a/argp.h
-++++ b/argp.h
-+@@ -23,6 +23,7 @@
+diff --git a/package/gptfdisk/0001-ldlibs.patch b/package/gptfdisk/0001-ldlibs.patch
+new file mode 100644
+index 0000000..ca1d7fb
+--- /dev/null
++++ b/package/gptfdisk/0001-ldlibs.patch
+@@ -0,0 +1,31 @@
++Add $(LDLIBS) support to enable clean static builds (for libintl).
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura gptfdisk-0.8.10.orig/Makefile gptfdisk-0.8.10/Makefile
++--- gptfdisk-0.8.10.orig/Makefile	2015-05-01 08:45:14.667748141 -0300
+++++ gptfdisk-0.8.10/Makefile	2015-05-01 08:45:42.685699419 -0300
++@@ -14,19 +14,19 @@
++ all:	cgdisk gdisk sgdisk fixparts
 + 
-+ #include <stdio.h>
-+ #include <ctype.h>
-++#include <limits.h>
++ gdisk:	$(LIB_OBJS) gdisk.o gpttext.o
++-	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -luuid -o gdisk
+++	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -luuid $(LDLIBS) -o gdisk
++ #	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -licuio -licuuc -luuid -o gdisk
 + 
-+ #define __need_error_t
-+ #include <errno.h>
-+@@ -577,7 +578,7 @@
-    else
-      {
-        int __key = __opt->key;
-@@ -21,9 +30,10 @@ diff -bu argp-standalone-1.3/argp.h argp-standalone-1.3-/argp.h
-      }
-  }
-  
--diff -bu argp-standalone-1.3/argp-parse.c argp-standalone-1.3-/argp-parse.c
----- argp-standalone-1.3/argp-parse.c	2015-04-28 10:31:39.016319380 +0300
--+++ argp-standalone-1.3-/argp-parse.c	2015-04-28 10:27:21.810818130 +0300
-+Index: b/argp-parse.c
-+===================================================================
-+--- a/argp-parse.c
-++++ b/argp-parse.c
- @@ -1292,7 +1292,7 @@
-        int __key = __opt->key;
-        /* FIXME: whether or not a particular key implies a short option
++ cgdisk: $(LIB_OBJS) cgdisk.o gptcurses.o
++-	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncursesw -o cgdisk
+++	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncursesw $(LDLIBS) -o cgdisk
++ #	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -licuio -licuuc -luuid -lncurses -o cgdisk
++ 
++ sgdisk: $(LIB_OBJS) sgdisk.o gptcl.o
++-	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -luuid -lpopt -o sgdisk
+++	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -luuid -lpopt $(LDLIBS) -o sgdisk
++ #	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -licuio -licuuc -luuid -lpopt -o sgdisk
++ 
++ fixparts: $(MBR_LIB_OBJS) fixparts.o
++-	$(CXX) $(MBR_LIB_OBJS) fixparts.o $(LDFLAGS) -o fixparts
+++	$(CXX) $(MBR_LIB_OBJS) fixparts.o $(LDFLAGS) $(LDLIBS) -o fixparts
++ 
++ lint:	#no pre-reqs
++ 	lint $(SRCS)
