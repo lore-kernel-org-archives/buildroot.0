@@ -1,38 +1,59 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 23:49:31 +0200
-Subject: [Buildroot] [PATCH v8] python-pyxml: new package
-In-Reply-To: <87mw1ouj00.fsf@dell.be.48ers.dk>
-References: <1430493225-19081-1-git-send-email-arnout@mind.be>	<1430496084-22705-1-git-send-email-arnout@mind.be>
- <87mw1ouj00.fsf@dell.be.48ers.dk>
-Message-ID: <5543F4EB.8020409@mind.be>
+Date: Sat, 02 May 2015 00:14:37 +0200
+Subject: [Buildroot] Libtool problem building mesa3d-demos
+In-Reply-To: <CAD7j7Q96pGF1qedawQw4-FHSyC15EyXH1DBu=MNkvFQg_Ys-dg@mail.gmail.com>
+References: <CAD7j7Q96pGF1qedawQw4-FHSyC15EyXH1DBu=MNkvFQg_Ys-dg@mail.gmail.com>
+Message-ID: <5543FACD.4010307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/05/15 22:42, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+On 01/05/15 22:41, Carlos Soto wrote:
+> Hi,
+> I'm using buildroot to create a rootfs for iMX6-quad. I'm using an external
+> toolchain created with crosstool-ng (arm-cortexa9_neon-linux-gnueabihf).
+> When building mesa3d-demos, there is an error creating libutil.la
+> <http://libutil.la>:
 > 
->  > From: Clayton Shotwell <clshotwe@rockwellcollins.com>
->  > It always uses its own copy of pyexpat, but we can at least make it use
->  > buildroot's expat.so.
+> libtool:   error:
+> '/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf/lib/gcc/arm-cortexa9_neon-linux-gnueabihf/4.9.1/../../../../arm-cortexa9_neon-linux-gnueabihf/lib/libstdc++.la'
+> is not a valid libtool archive
 > 
->  > Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
->  > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->  > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->  > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->  > ---
->  > Changes:
->  > 	v8: Remove unrelated musl fix (Arnout)
+> Of corse, this path is not right, it seems to be joining two different paths.
 > 
-> Committed with a 'select BR2_PACKAGE_EXPAT' added, thanks.
+> I've tracked the source of the problem, and it seems to be related with the
+> libtool used by buildroot. I've modified the resulting Makefiles to use the host
+> libtool, and the problem disappears:
 
- Ouch, thanks for fixing.
+ You have to use buildroot's libtool, otherwise you may get other problems with
+cross-compilation.
+
+> 
+> LIBTOOL = $(SHELL) $(top_builddir)/libtool to
+> LIBTOOL = $(SHELL) /usr/bin/libtool
+> 
+> Any thoughts about what it's going wrong?
+
+ Can you tell us which options are given to libtool, and perhaps run it with -v
+to see what it does?
 
  Regards,
  Arnout
 
+> 
+> Regards,
+> Carlos
+> 
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 
 -- 
