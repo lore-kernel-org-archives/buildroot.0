@@ -1,83 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 17:50:12 +0200
-Subject: [Buildroot] [PATCH 6/7] linux: do not check hashes for custom
- versions and tarballs
-In-Reply-To: <20150501153841.GD4206@free.fr>
+Date: Fri, 01 May 2015 17:52:15 +0200
+Subject: [Buildroot] [PATCH 4/7] boot/barebox: do not check hash for
+ custom versions
+In-Reply-To: <20150501153205.GC4206@free.fr>
 References: <cover.1430260630.git.yann.morin.1998@free.fr>
- <f033e301266baba536c3d63902cc2439e45eb3a4.1430260630.git.yann.morin.1998@free.fr>
- <554380DB.40503@mind.be> <20150501153841.GD4206@free.fr>
-Message-ID: <5543A0B4.3040307@mind.be>
+ <895f0c166335e5dfb49a30dd8cf0b2986a5f7431.1430260630.git.yann.morin.1998@free.fr>
+ <55437C59.2080502@mind.be> <20150501153205.GC4206@free.fr>
+Message-ID: <5543A12F.9010800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/05/15 17:38, Yann E. MORIN wrote:
+On 01/05/15 17:32, Yann E. MORIN wrote:
 > Arnout, All,
 > 
-> On 2015-05-01 15:34 +0200, Arnout Vandecappelle spake thusly:
->>  Hah, this is a tough one...
-> 
-> Doh, right...
-> 
->>  With the combination BR2_LINUX_SAME_AS_HEADERS and BR2_KERNEL_HEADERS_VERSION
->> you can still get a custom version...
-> 
-> Hmm.. I missed that case... :-/
-> 
->>  So I'm thinking if it wouldn't be simpler to just always disable the hash:
->> BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
+> On 2015-05-01 15:15 +0200, Arnout Vandecappelle spake thusly:
+>> On 29/04/15 00:40, Yann E. MORIN wrote:
+> [--SNIP--]
+>>> @@ -18,6 +19,9 @@ else
+>>>  # Handle stable official Barebox versions
+>>>  BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
+>>>  BAREBOX_SITE = http://www.barebox.org/download
+>>> +ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_VERSION),y)
+>>> +BR_NO_CHECK_HASH_FOR += $(BAREBOX_SOURCE)
+>>> +endif
+>>>  endif
 >>
->>  Note that the hash, if it exists, will still be checked; it just won't be an
->> error if the hash doesn't exist (so the variable is not named very accurately in
->> fact). Therefore I think it's safe to disable it completely for linux.
+>>  Same comment as for U-Boot.
 > 
-> Well, I stand on my position that I'd like we only exclude only what we
-> strictly require to be excluded.
-> 
->> Or, if
->> you prefer you can make it depend on !BR2_LINUX_KERNEL_LATEST_VERSION &&
->> !(BR2_LINUX_SAME_AS_HEADERS && !BR2_KERNEL_HEADERS_VERSION) (good luck
->> expressing that in make syntax :-).
-> 
-> Well, we still have the option of expressing that in Kconfig if that can
-> help...
+> Same answer. ;-)
 
- It could look a bit strange though.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
-
-> 
->> On 29/04/15 00:40, Yann E. MORIN wrote:
->>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>> ---
->>>  linux/linux.mk | 5 +++++
->>>  1 file changed, 5 insertions(+)
->>>
->>> diff --git a/linux/linux.mk b/linux/linux.mk
->>> index 0c348da..959c564 100644
->>> --- a/linux/linux.mk
->>> +++ b/linux/linux.mk
->>> @@ -13,8 +13,10 @@ ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
->>>  LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
->>>  LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
->>>  LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
->>> +BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
->>>  else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
->>>  LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
->>> +# For 'local', there is no hash check, so no need to set BR_NO_CHECK_HASH_FOR
->>
->>  Why do you add that comment here and not in the VCS cases? I don't think it is
->> needed, move it to the commit message.
-> 
-> OK.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
 
 
 -- 
