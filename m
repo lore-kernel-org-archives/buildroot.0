@@ -1,79 +1,112 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  2 May 2015 17:13:54 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/vlc: Fix strerror_l related
-	compile error
-Message-ID: <1430579634-32527-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 May 2015 17:22:44 +0200
+Subject: [Buildroot] [PATCH 28/30] package/matchbox-panel: add option to
+ use ACPI for the battery applet
+In-Reply-To: <5543F2AA.6070706@mind.be>
+References: <cover.1429725549.git.yann.morin.1998@free.fr>
+ <cbb90f6326af77c2c466fa72ee970fee6a9040f1.1429725549.git.yann.morin.1998@free.fr>
+ <5543F2AA.6070706@mind.be>
+Message-ID: <20150502152244.GG13701@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-strerror_l is not implemented by uClibc.
+Arnout, All,
 
-Fixes
-http://autobuild.buildroot.net/results/ae3/ae31f4585d2c2f850473c446f1ccfba7699c711b/
-http://autobuild.buildroot.net/results/504/504cf78a08315e2fc6eaeb9a29ae791972753830/
-http://autobuild.buildroot.net/results/092/09280c5d63da9b8b58916c32e6040a98f7ff0ee8/
-http://autobuild.buildroot.net/results/da6/da62d97ea060ce03db94f59a91d84a235d03e8f0/
-http://autobuild.buildroot.net/results/7a4/7a40f66b3be8cd71a27df04415c4851cd4426cc3/
+On 2015-05-01 23:39 +0200, Arnout Vandecappelle spake thusly:
+> On 22/04/15 20:09, Yann E. MORIN wrote:
+> > It is possible to use ACPI to monitor the battery with the battery
+> > min-applet. If ACPI is not explicitly enabled, then APM is used if
+> > available; if ACPI is not explcitly enabled and APM is not available,
+> > then the battery applet id not built.
+> > 
+> > What is a pity is that there is no way to explicitly enable or disable
+> > the applet; it only relies on auto-detection... :-(
+> > 
+> > So, add an option to enable use of ACPI, visible only on architectures
+> > that have at least some hope of having ACPI support.
+> 
+>  Since APM exists only on x86, there is basically no way to disable the applet
+> on x86. The only thing that the configure option does is to force the applet to
+> use the deprecated and most likely unavailable APM interface.
+> 
+>  Therefore, I'd remove the Config.in option and just pass --enable-acpi-linux
+> unconditionally on x86 and aarch64. The worst that can happen is that you build
+> a tiny applet that turns out not to work.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: add configure check for strerror_l (Thomas)
+Ok, done: ACPI forcibly used on supported platforms.
 
- package/vlc/0007-strerror.patch |   43 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/vlc/0007-strerror.patch
+>  That said, the applet doesn't build for me (with Sourcery x86_64 toolchain)
+> because the 'line_parse' inner function is declared static...
 
-diff --git a/package/vlc/0007-strerror.patch b/package/vlc/0007-strerror.patch
-new file mode 100644
-index 0000000..e9f3141
---- /dev/null
-+++ b/package/vlc/0007-strerror.patch
-@@ -0,0 +1,43 @@
-+Fix compile error
-+
-+  CCLD     vlc
-+/home/br/br3/output/build/vlc-2.2.1/src/.libs/libvlccore.so: undefined reference to `strerror_l'
-+
-+Code for #else condition was taken from
-+http://patches.osdyson.org/patch/series/view/vlc/2.2.0~rc2-1+dyson2/dyson.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr vlc-2.2.1.org/configure.ac vlc-2.2.1/configure.ac
-+--- vlc-2.2.1.org/configure.ac	2015-04-13 09:57:54.000000000 +0200
-++++ vlc-2.2.1/configure.ac	2015-05-02 16:13:22.800448380 +0200
-+@@ -534,7 +534,7 @@
-+ 
-+ dnl Check for usual libc functions
-+ AC_CHECK_DECLS([nanosleep],,,[#include <time.h>])
-+-AC_CHECK_FUNCS([daemon fcntl fstatvfs fork getenv getpwuid_r isatty lstat memalign mmap open_memstream openat pread posix_fadvise posix_madvise setlocale stricmp strnicmp strptime uselocale])
-++AC_CHECK_FUNCS([daemon fcntl fstatvfs fork getenv getpwuid_r isatty lstat memalign mmap open_memstream openat pread posix_fadvise posix_madvise setlocale strerror_l stricmp strnicmp strptime uselocale])
-+ AC_REPLACE_FUNCS([atof atoll dirfd fdopendir flockfile fsync getdelim getpid gmtime_r lldiv localtime_r nrand48 poll posix_memalign rewind setenv strcasecmp strcasestr strdup strlcpy strndup strnlen strsep strtof strtok_r strtoll swab tdestroy strverscmp])
-+ AC_CHECK_FUNCS(fdatasync,,
-+   [AC_DEFINE(fdatasync, fsync, [Alias fdatasync() to fsync() if missing.])
-+diff -uNr vlc-2.2.1.org/src/posix/error.c vlc-2.2.1/src/posix/error.c
-+--- vlc-2.2.1.org/src/posix/error.c	2014-08-14 09:20:04.000000000 +0200
-++++ vlc-2.2.1/src/posix/error.c	2015-05-02 16:25:24.075378369 +0200
-+@@ -31,6 +31,7 @@
-+ 
-+ static const char *vlc_strerror_l(int errnum, const char *lname)
-+ {
-++#ifdef HAVE_STRERROR_L
-+     int saved_errno = errno;
-+     locale_t loc = newlocale(LC_MESSAGES_MASK, lname, (locale_t)0);
-+ 
-+@@ -51,6 +52,9 @@
-+     const char *buf = strerror_l(errnum, loc);
-+ 
-+     freelocale(loc);
-++#else
-++    const char *buf = strerror(errnum);
-++#endif
-+     return buf;
-+ }
-+ 
+Weird, itworked for me, but with another toolchain. Fixed.
+
+Regards,
+Yann E. MORIN.
+
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/matchbox/matchbox-panel/Config.in         | 15 +++++++++++++++
+> >  package/matchbox/matchbox-panel/matchbox-panel.mk |  6 ++++++
+> >  2 files changed, 21 insertions(+)
+> > 
+> > diff --git a/package/matchbox/matchbox-panel/Config.in b/package/matchbox/matchbox-panel/Config.in
+> > index 47bd10a..93241f0 100644
+> > --- a/package/matchbox/matchbox-panel/Config.in
+> > +++ b/package/matchbox/matchbox-panel/Config.in
+> > @@ -4,3 +4,18 @@ config BR2_PACKAGE_MATCHBOX_PANEL
+> >  	help
+> >  	  A flexible always present 'window bar' for holding
+> >  	  application launchers.
+> > +
+> > +if BR2_PACKAGE_MATCHBOX_PANEL
+> > +
+> > +config BR2_PACKAGE_MATCHBOX_PANEL_ACPI
+> > +	bool "use ACPI for battery mini-applet"
+> > +	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64
+> > +	help
+> > +	  Use ACPI to monitor the battery.
+> > +
+> > +	  Say 'y' here to use ACPI to monitor the battery.
+> > +	  If you say 'n', then APM will be used if available;
+> > +	  otherwise the battery monitor mini-applet is not
+> > +	  built.
+> > +
+> > +endif # BR2_PACKAGE_MATCHBOX_PANEL
+> > diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
+> > index f7d699b..aa9018c 100644
+> > --- a/package/matchbox/matchbox-panel/matchbox-panel.mk
+> > +++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
+> > @@ -20,6 +20,12 @@ else
+> >  MATCHBOX_PANEL_CONF_OPTS += --disable-startup-notification
+> >  endif
+> >  
+> > +ifeq ($(BR2_PACKAGE_MATCHBOX_PANEL_ACPI),y)
+> > +MATCHBOX_PANEL_CONF_OPTS += --enable-acpi-linux
+> > +else
+> > +MATCHBOX_PANEL_CONF_OPTS += --disable-acpi-linux
+> > +endif
+> > +
+> >  ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS),y)
+> >  MATCHBOX_PANEL_DEPENDENCIES += wireless_tools
+> >  endif
+> > 
+> 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
