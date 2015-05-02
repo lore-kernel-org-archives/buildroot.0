@@ -1,47 +1,114 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 2 May 2015 12:29:12 +0200
-Subject: [Buildroot] [git commit] squid: security bump to version 3.5.4
-Message-ID: <20150502102948.665B580417@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 02 May 2015 12:37:04 +0200
+Subject: [Buildroot] [PATCH v2 1/5] kconfig-package: add support for
+ config fragments
+In-Reply-To: <1430231675-8613-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1430231675-8613-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <5544A8D0.5080009@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5fd9f81fec0e8136342f9c412bcb65161ef95bc6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 28/04/15 16:34, Floris Bos wrote:
+> Adds functionality to the kconfig infrastructure to merge additional
+> configuration fragment files to the main configuration file of
+> kconfig packages, using support/kconfig/merge_config.sh
+> 
+> Typical use-case is when you want your configuration to be
+> kept in sync with an upstream (def)config file, but do require
+> some minor local modifications.
+> 
+> Disables -update-config and -update-defconfig targets when
+> fragment files are set.
+> 
+> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 
-Fixes:
-CVE-2015-3455 - Incorrect X509 server certificate validation
+[snip]
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/squid/squid.hash |    6 +++---
- package/squid/squid.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> +* +FOO_KCONFIG_FRAGMENT_FILES+: a space-separated list of configuration
+> +  fragment files that are merged to the main configuration file.
+> +  Fragment files are typically used when there is a desire to stay in sync
+> +  with an upstream (def)config file, with some minor modifications.
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 85f467a..50e2e7b 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.3.tar.xz.asc
--md5	6cd553300a2253c0913f498beb79ee51	squid-3.5.3.tar.xz
--sha1	6919305e16f59387197cf543f525e41f510b4727	squid-3.5.3.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.4.tar.xz.asc
-+md5	5b53d5bb47fa033b76857f7956d0c36b	squid-3.5.4.tar.xz
-+sha1	71a04a5f7c4c38464a8a08ae1089c47abcea0e49	squid-3.5.4.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index f4d6ae3..745c9ad 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).3
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).4
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+ I should have noticed this in the first iteration, but why do we need an
+additional config option for this? We could just rename _KCONFIG_FILE to
+_KCONFIG_FILES and update the help texts to explain that the files may consist
+of fragments.
+
+> +
+>  * +FOO_KCONFIG_OPTS+: extra options to pass when calling the kconfig
+>    editors. This may need to include '$(FOO_MAKE_OPTS)', for example. By
+>    default, empty.
+> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> index 8361064..21fbfdb 100644
+> --- a/package/pkg-kconfig.mk
+> +++ b/package/pkg-kconfig.mk
+> @@ -35,18 +35,20 @@ $(call inner-generic-package,$(1),$(2),$(3),$(4))
+>  $(2)_KCONFIG_EDITORS ?= menuconfig
+>  $(2)_KCONFIG_OPTS ?=
+>  $(2)_KCONFIG_FIXUP_CMDS ?=
+> +$(2)_KCONFIG_FRAGMENT_FILES ?=
+>  
+>  # The config file could be in-tree, so before depending on it the package should
+>  # be extracted (and patched) first
+>  $$($(2)_KCONFIG_FILE): | $(1)-patch
+
+ The fragments could also be in-tree, in theory.
+
+ Not that it matters in practice because it is only relevant for the .config
+dependency.
+
+>  
+> -# The .config file is obtained by copying it from the specified source
+> -# configuration file, after the package has been patched.
+> +# The specified source configuration file and any additional configuration file
+> +# fragments are merged together to .config, after the package has been patched.
+>  # Since the file could be a defconfig file it needs to be expanded to a
+>  # full .config first. We use 'make oldconfig' because this can be safely
+>  # done even when the package does not support defconfigs.
+> -$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE)
+> -	$$(INSTALL) -m 0644 $$($(2)_KCONFIG_FILE) $$($(2)_DIR)/.config
+> +$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+> +	support/kconfig/merge_config.sh -m -O $$(@D) \
+> +		$$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+>  	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+>  		$$($(2)_KCONFIG_OPTS) oldconfig
+>  
+> @@ -87,6 +89,8 @@ $(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>  # Even though we could use 'cp --preserve-timestamps' here, the separate
+>  # cp and 'touch --reference' is used for symmetry with $(1)-update-defconfig.
+>  $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+> +	$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
+
+ So this could be
+	$$(if $$(word 2,$$($(2)_KCONFIG_FILES)), \
+
+
+ Regards,
+ Arnout
+
+> +		echo "Unable to perform $(1)-update-config when fragment files are set"; exit 1)
+>  	cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+>  	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+>  
+> @@ -95,6 +99,8 @@ $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>  # $(1)-update-config, the reference for 'touch' is _not_ the file from which
+>  # we copy.
+>  $(1)-update-defconfig: $(1)-savedefconfig
+> +	$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
+> +		echo "Unable to perform $(1)-update-defconfig when fragment files are set"; exit 1)
+>  	cp -f $$($(2)_DIR)/defconfig $$($(2)_KCONFIG_FILE)
+>  	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+>  
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
