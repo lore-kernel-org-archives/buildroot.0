@@ -1,31 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 02 May 2015 10:15:25 -0300
-Subject: [Buildroot] [PATCH v2 1/1] package/boost: bump to version 1.58.0
-In-Reply-To: <20150501162931.5c466549@free-electrons.com>
-References: <1430482091-8140-1-git-send-email-joerg.krause@embedded.rocks>	<55437264.90900@zacarias.com.ar>
- <20150501162931.5c466549@free-electrons.com>
-Message-ID: <5544CDED.5010207@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 May 2015 15:11:01 +0200
+Subject: [Buildroot] [git commit] package/xenomai: add hash file
+Message-ID: <20150502131735.A0C71817AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/01/2015 11:29 AM, Thomas Petazzoni wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=f95a59c3a0a32ff0259d5d3fb31d9b1068bbc9b3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->> Hi.
->> It will need some extra tweaking since it failed in a similar way for sh4:
->> http://autobuild.buildroot.net/results/ccd/ccd5c83963032ba49b1627b1dff39e34a9486943/build-end.log
-> 
-> Generally speaking, doing:
-> 
-> if $(arch) != arm && $(arch) != mips1
-> 
-> to decide whether to use -m32 is going to cause numerous problems. It
-> should be an opt-in test rather than an opt-out test. I.e only those
-> architectures that actually need -m32 should use it, rather than trying
-> to exclude all architectures that do not provide -m32.
+Now that custom versions are properly excluded from the list, we can add
+a hash for the version we package.
 
-Actually on second thought they shouldn't even do that, that's compiler
-setup and it's up to packaging to care care of it, via CFLAGS.
-Regards.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xenomai/xenomai.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
+new file mode 100644
+index 0000000..4d74472
+--- /dev/null
++++ b/package/xenomai/xenomai.hash
+@@ -0,0 +1,2 @@
++# Locally computed;
++sha256  b6ff723cb0f3b1c2c4e15bccfd114b248dea1b4164a0ac0e612815379ce7caf8  xenomai-2.6.4.tar.bz2
