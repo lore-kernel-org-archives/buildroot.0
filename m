@@ -1,56 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  2 May 2015 11:05:01 +0200
-Subject: [Buildroot] [PATCH 2/7 v2] boot/uboot: do not check hash for custom
-	versions
+Date: Sat,  2 May 2015 11:05:03 +0200
+Subject: [Buildroot] [PATCH 4/7 v2] boot/mxs-bootlets: do not check hash of
+	custom tarball
 In-Reply-To: <cover.1430557268.git.yann.morin.1998@free.fr>
 References: <cover.1430557268.git.yann.morin.1998@free.fr>
-Message-ID: <556a67cd69258e751dda551652720eae509108cd.1430557268.git.yann.morin.1998@free.fr>
+Message-ID: <49e041a09bf9f91be8c1cdb8cbce29975eac940c.1430557268.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For custom tarballs, it's quite obvious we can not check hashes.
-
-For custom versions, that's not so obvious. One might think we could
-have hashes for all the official releases, but that's not possible: if
-the user uses a released version of Buildroot (say 2015.05) much later
-in the future, and wants to use the then-released 2038.02 U-Boot. It now
-seems pretty obvious that Buildroot 2015.02 can't know the hash for
-U-Boot 2038.02.
-
-So, disable checking the hash for custom tarballs and custom versions.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Vincent Stehle <vincent.stehle@laposte.net>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- boot/uboot/uboot.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 01aaf2c..410d8d8 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -17,6 +17,7 @@ ifeq ($(UBOOT_VERSION),custom)
- UBOOT_TARBALL = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION))
- UBOOT_SITE = $(patsubst %/,%,$(dir $(UBOOT_TARBALL)))
- UBOOT_SOURCE = $(notdir $(UBOOT_TARBALL))
-+BR_NO_CHECK_HASH_FOR += $(UBOOT_SOURCE)
- else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT),y)
- UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
- UBOOT_SITE_METHOD = git
-@@ -27,6 +28,9 @@ else
- # Handle stable official U-Boot versions
- UBOOT_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_SOURCE = u-boot-$(UBOOT_VERSION).tar.bz2
-+ifeq ($(BR2_TARGET_UBOOT_CUSTOM_VERSION),y)
-+BR_NO_CHECK_HASH_FOR += $(UBOOT_SOURCE)
-+endif
- endif
- 
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
+---
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ by adding an empty .hash file and checking that it fails for the default
+version but not for a custom version.
+---
+ boot/mxs-bootlets/mxs-bootlets.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/boot/mxs-bootlets/mxs-bootlets.mk b/boot/mxs-bootlets/mxs-bootlets.mk
+index 9b6bd7a..17af6dc 100644
+--- a/boot/mxs-bootlets/mxs-bootlets.mk
++++ b/boot/mxs-bootlets/mxs-bootlets.mk
+@@ -8,6 +8,7 @@ ifeq ($(BR2_TARGET_MXS_BOOTLETS_CUSTOM_TARBALL),y)
+ MXS_BOOTLETS_TARBALL = $(call qstrip,$(BR2_TARGET_MXS_BOOTLETS_CUSTOM_TARBALL_URL))
+ MXS_BOOTLETS_SITE = $(patsubst %/,%,$(dir $(MXS_BOOTLETS_TARBALL)))
+ MXS_BOOTLETS_SOURCE = $(notdir $(MXS_BOOTLETS_TARBALL))
++BR_NO_CHECK_HASH_FOR += $(MXS_BOOTLETS_SOURCE)
+ else ifeq ($(BR2_TARGET_MXS_BOOTLETS_CUSTOM_GIT),y)
+ MXS_BOOTLETS_SITE = $(BR2_TARGET_MXS_BOOTLETS_CUSTOM_GIT_URL)
+ MXS_BOOTLETS_SITE_METHOD = git
 -- 
 1.9.1
