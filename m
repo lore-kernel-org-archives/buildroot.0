@@ -1,51 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 May 2015 14:00:26 +0200
-Subject: [Buildroot] [PATCH 15/30] package/matchbox-common: break
- dependency chain for display
-In-Reply-To: <5543DBC1.4010706@mind.be>
-References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <decaf19e18b41b46067fa48d59ba2171e4893598.1429725549.git.yann.morin.1998@free.fr>
- <5543DBC1.4010706@mind.be>
-Message-ID: <20150502120026.GA4232@free.fr>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Sat, 02 May 2015 14:15:42 +0200
+Subject: [Buildroot] [PATCH] php.ini: set date.timezone to UTC
+In-Reply-To: <55448176.6050108@mind.be>
+References: <1430503955-24928-1-git-send-email-bos@je-eigen-domein.nl>
+ <5543FCCE.2000904@mind.be> <55440789.50004@je-eigen-domein.nl>
+ <55448176.6050108@mind.be>
+Message-ID: <5544BFEE.5020603@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+On 05/02/2015 09:49 AM, Arnout Vandecappelle wrote:
+> On 02/05/15 01:08, Floris Bos wrote:
+>> On 05/02/2015 12:23 AM, Arnout Vandecappelle wrote:
+>> == Warning: strtotime(): It is not safe to rely on the system's 
+>> timezone settings. 
+>   Any idea _why_ it is not safe? I've tried to google it but didn't come up with
+> a reason, just a lot of fixes.
 
-On 2015-05-01 22:02 +0200, Arnout Vandecappelle spake thusly:
-> On 22/04/15 20:09, Yann E. MORIN wrote:
-> > Currently, matchbox-common depends on either matchbox-dsktop or
-> > matchbox-panel, and the three are organised so that matchbox-common gets
-> > indented in the menuconfig.
-> > 
-> > That's a feature of menuconfig to consider the dependency chain to
-> > indent sub-options.
-> > 
-> > Add a fake, prompt-less option to break that dependency chain.
-> > 
-> > Note: yes, this is an dirty hack.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
->  Now that you've moved the packages out of the matchbox/ directory and sorted
-> them alphabetically, this is no longer needed.
-> 
->  Or else, I missed the point :-)
+No idea.
 
-No, that's correct. I'll drop this.
+>> You are *required* to use the date.timezone setting or the
+>> date_default_timezone_set() function. In case you used any of those methods and
+>> you are still getting this warning, you most likely misspelled the timezone
+>> identifier. We selected the timezone 'UTC' for now, but please set date.timezone
+>> to select your timezone.
+>> ==
+>>
+>> It certainly does work for common names like Europe/Brussels, but not sure if
+>> that goes for every zone name.
+>   Hm, php (like so often) has its own re-implementation of the timezone
+> database... . It's based on the same Olson database so it's probably OK for
+> valid timezones, but tzdata has additional posix/ and right/ variants and it
+> also has the old SystemV/ timezones...
+>
+>   Well, people who use one of these weird timezones will see the php error so
+> they can solve it I guess.
 
-Thanks! :-)
+I do know Debian has a patch to let PHP use the system's timezone 
+database instead of the internal one.
+We could borrow that one, but then we would be deviating from upstream 
+(which did not want the patch, and prefers to stick with their internal db).
 
-Regards,
-Yann E. MORIN.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Yours sincerely,
+
+Floris Bos
