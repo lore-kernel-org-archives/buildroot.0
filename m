@@ -1,45 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 2 May 2015 13:24:42 +0200
-Subject: [Buildroot] [git commit] imx-usb-loader: cleanup
-Message-ID: <20150502112622.B605480113@busybox.osuosl.org>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Sat, 02 May 2015 13:30:13 +0200
+Subject: [Buildroot] [PATCH v2 1/5] kconfig-package: add support for
+ config fragments
+In-Reply-To: <5544A8D0.5080009@mind.be>
+References: <1430231675-8613-1-git-send-email-bos@je-eigen-domein.nl>
+ <5544A8D0.5080009@mind.be>
+Message-ID: <5544B545.6060809@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e8e3e8209edad816e149612d419a7ec14241676
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 05/02/2015 12:37 PM, Arnout Vandecappelle wrote:
+> On 28/04/15 16:34, Floris Bos wrote:
+>> Adds functionality to the kconfig infrastructure to merge additional
+>> configuration fragment files to the main configuration file of
+>> kconfig packages, using support/kconfig/merge_config.sh
+>>
+>> Typical use-case is when you want your configuration to be
+>> kept in sync with an upstream (def)config file, but do require
+>> some minor local modifications.
+>>
+>> Disables -update-config and -update-defconfig targets when
+>> fragment files are set.
+>>
+>> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> [snip]
+>
+>> +* +FOO_KCONFIG_FRAGMENT_FILES+: a space-separated list of configuration
+>> +  fragment files that are merged to the main configuration file.
+>> +  Fragment files are typically used when there is a desire to stay in sync
+>> +  with an upstream (def)config file, with some minor modifications.
+>   I should have noticed this in the first iteration, but why do we need an
+> additional config option for this? We could just rename _KCONFIG_FILE to
+> _KCONFIG_FILES and update the help texts to explain that the files may consist
+> of fragments.
 
-HOST_CONFIGURE_OPTS is a superset of HOST_MAKE_ENV, so there is no need to
-pass them both.  Also use HOST_CONFIGURE_OPTS for the install step for
-consistency, and finally, add host-pkgconf to _DEPENDENCIES as it is
-explicitly used (currently gets pulled in by host-libusb though).
+Has been briefly discussed during the first iteration.
+Main problem is _KCONFIG_FILE is not just a source file, but also a 
+destination file for the update-config and update-defconfig targets.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/imx-usb-loader/imx-usb-loader.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/imx-usb-loader/imx-usb-loader.mk b/package/imx-usb-loader/imx-usb-loader.mk
-index fdabb6a..280ffc0 100644
---- a/package/imx-usb-loader/imx-usb-loader.mk
-+++ b/package/imx-usb-loader/imx-usb-loader.mk
-@@ -8,14 +8,14 @@ IMX_USB_LOADER_VERSION = f96aee286ea17c832b7ec922dd76842deb5ce299
- IMX_USB_LOADER_SITE = $(call github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
- IMX_USB_LOADER_LICENSE = LGPLv2.1+
- IMX_USB_LOADER_LICENSE_FILES = COPYING
--IMX_USB_LOADER_DEPENDENCIES = host-libusb
-+IMX_USB_LOADER_DEPENDENCIES = host-libusb host-pkgconf
- 
- define HOST_IMX_USB_LOADER_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
- 
- define HOST_IMX_USB_LOADER_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
- 		DESTDIR=$(HOST_DIR) sysconfdir=/etc install
- endef
- 
+-- 
+Yours sincerely,
+
+Floris Bos
