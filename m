@@ -1,87 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 2 May 2015 09:04:46 +0200
-Subject: [Buildroot] [git commit] package/ola: fix autoreconf issue for
-	host-ola
-Message-ID: <20150502070657.D9B9F7FCC3@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 May 2015 09:11:28 +0200
+Subject: [Buildroot] [git commit] python-pyxml: fix <pkg>_LICENSE_FILES
+Message-ID: <20150502071150.912B48055B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=884af65fd5ddc548f19a26162f905a32ef0b53b3
+commit: http://git.buildroot.net/buildroot/commit/?id=8c3862c07548c0bc43858eeec12d9ede645163b1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CXX variable is overwritten with an empy value when
-host-autoconf-archive package has been installed before
-host-ola.
-
-config.log:
-configure:19965:  -o conftest -O2 [snip -I and -L] conftest.cpp  -ldl
-
 Fixes:
-http://autobuild.buildroot.net/results/8fa/8fa0a64422a96023a926412a033d9a4f01af5a71/build-end.log
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+  http://autobuild.buildroot.org/results/972/9727fdeccc6df40c791f8ab31a606e0a8caedb87/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...on-t-overwrite-CC-and-CXX-with-ACX_PTHREA.patch |   51 ++++++++++++++++++++
- 1 files changed, 51 insertions(+), 0 deletions(-)
+ package/python-pyxml/python-xml.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/ola/0002-autotools-don-t-overwrite-CC-and-CXX-with-ACX_PTHREA.patch b/package/ola/0002-autotools-don-t-overwrite-CC-and-CXX-with-ACX_PTHREA.patch
-new file mode 100644
-index 0000000..80d21bc
---- /dev/null
-+++ b/package/ola/0002-autotools-don-t-overwrite-CC-and-CXX-with-ACX_PTHREA.patch
-@@ -0,0 +1,51 @@
-+From 991eef9f84a5ef58eaab8ea0a85f3b4bce7b00a3 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sat, 2 May 2015 01:50:14 +0200
-+Subject: [PATCH] autotools: don't overwrite CC and CXX with ACX_PTHREAD
-+ success
-+
-+If ACX_PTHREAD sucess, CC and CXX value are overwriten respectively
-+to PTHREAD_CC and PTHREAD_CXX. But ACX_PTHREAD has been hacked to
-+set PTHREAD_CXX variable for the C++ compiler and configure.ac has
-+been modified accordingly.
-+
-+If ax_pthread.m4 wich provide standard AX_PTHREAD macro (and it's
-+alias ACX_PTHREAD and AX_PTHREAD), is installed on the system by
-+autoconf-archive package, then ax_pthread.m4 is used during
-+autoreconf instread of acx_pthread.m4 bundled with ola.
-+
-+AX_PTHREAD macro from ax_pthread.m4 check only the thread support
-+with the C compiler. As a result, the C++ compiler variable
-+PTHREAD_CXX is not initialized, so CXX become empy and the build
-+fail during resolv.h check.
-+
-+configure:19945: checking for 2-arg pthread_setname_np
-+configure:19965:  -o conftest -O2 [snip -I and -L] conftest.cpp  -ldl  >&5
-+./configure: line 2037: -o: command not found
-+
-+In the Buildroot use case, it's safe to remove CC and CXX overwrite
-+since only gcc/g++ compiler are used.
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ configure.ac | 4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index b1946b6..ef85af5 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -303,9 +303,7 @@ AM_CONDITIONAL([HAVE_NCURSES], [test "x$have_ncurses" = xyes])
-+ ACX_PTHREAD([
-+              LIBS="$PTHREAD_LIBS $LIBS"
-+              CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
-+-             CXXFLAGS="$CXXFLAGS $PTHREAD_CXXFLAGS"
-+-             CC="$PTHREAD_CC"
-+-             CXX="$PTHREAD_CXX"],
-++             CXXFLAGS="$CXXFLAGS $PTHREAD_CXXFLAGS"],
-+             [AC_MSG_ERROR([Missing pthread, please install it])])
-+ 
-+ # pthread_setname_np can take either 1 or 2 arguments.
-+-- 
-+1.9.3
-+
+diff --git a/package/python-pyxml/python-xml.mk b/package/python-pyxml/python-xml.mk
+index bfe2c89..77863f5 100644
+--- a/package/python-pyxml/python-xml.mk
++++ b/package/python-pyxml/python-xml.mk
+@@ -8,7 +8,7 @@ PYTHON_PYXML_VERSION = 0.8.4
+ PYTHON_PYXML_SOURCE = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
+ PYTHON_PYXML_SITE = http://downloads.sourceforge.net/project/pyxml/pyxml/0.8.4/
+ PYTHON_PYXML_LICENSE = BSD-3c
+-PYTHON_PYXML_LICENSE_FILES = LICENSE
++PYTHON_PYXML_LICENSE_FILES = LICENCE
+ PYTHON_PYXML_SETUP_TYPE = distutils
+ PYTHON_PYXML_DEPENDENCIES = expat
+ PYTHON_PYXML_BUILD_OPTS = --with-libexpat=$(STAGING_DIR)/usr
