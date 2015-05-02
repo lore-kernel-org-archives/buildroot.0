@@ -1,95 +1,97 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 May 2015 15:40:42 +0200
-Subject: [Buildroot] [PATCH 23/30] package/matchbox: drop useless
- dependencies
-In-Reply-To: <5543E904.5010600@mind.be>
-References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <0f88fac02eba1f18605db80731bfb130d00721cb.1429725549.git.yann.morin.1998@free.fr>
- <5543E50C.2080602@mind.be> <5543E904.5010600@mind.be>
-Message-ID: <20150502134042.GD13701@free.fr>
+From: Maxim Mikityanskiy <maxtram95@gmail.com>
+Date: Sat, 2 May 2015 16:57:21 +0300
+Subject: [Buildroot] Reminder about your pending Buildroot patches
+In-Reply-To: <20150421124308.283B288A@mail.free-electrons.com>
+References: <20150421124308.283B288A@mail.free-electrons.com>
+Message-ID: <CAKErNvrOX4jiO_oq+-Jdqxwf_-KYhez__6+gppOGSMW7vPa8VQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hello!
 
-On 2015-05-01 22:58 +0200, Arnout Vandecappelle spake thusly:
-> On 01/05/15 22:41, Arnout Vandecappelle wrote:
-> > On 22/04/15 20:09, Yann E. MORIN wrote:
-> >> xlib-libXft is only needed when building a 'standalone' matchbox, which
-> >> means not using matchbox-lib.
-> >>
-> >> But we *are* building matchbox-lib, and we do not support the standalone
-> >> mode (and probably won't, as even upstream says it is ugly, by lack of
-> >> theming).
-> >>
-> >> Similarly, xlib-libXext is only used for its 'xsync' extension, for
-> >> which support is entirely commented-out in matchbox.
-> >>
-> >> So, drop the dependency on xlib-libXft, and make it explicit we're not
-> >> building either standalone modes; drop xlib-libXext.
-> >>
-> >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >> ---
-> >>  package/matchbox/Config.in   | 1 -
-> >>  package/matchbox/matchbox.mk | 6 +++++-
-> >>  2 files changed, 5 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-> >> index 9d8d060..fa186e9 100644
-> >> --- a/package/matchbox/Config.in
-> >> +++ b/package/matchbox/Config.in
-> >> @@ -4,7 +4,6 @@ menuconfig BR2_PACKAGE_MATCHBOX
-> >>  	depends on BR2_USE_MMU # fork()
-> >>  	select BR2_PACKAGE_FONTCONFIG
-> >>  	select BR2_PACKAGE_EXPAT
-> >> -	select BR2_PACKAGE_XLIB_LIBXEXT
-> >>  	select BR2_PACKAGE_XLIB_LIBXCURSOR
-> >>  	select BR2_PACKAGE_MATCHBOX_LIB
-> >>  	help
-> >> diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-> >> index 4ec3fb5..bce9520 100644
-> >> --- a/package/matchbox/matchbox.mk
-> >> +++ b/package/matchbox/matchbox.mk
-> >> @@ -11,7 +11,11 @@ MATCHBOX_LICENSE = GPLv2+
-> >>  MATCHBOX_LICENSE_FILES = COPYING
-> >>  
-> >>  MATCHBOX_DEPENDENCIES = matchbox-lib
-> >> -MATCHBOX_CONF_OPTS = --enable-expat --disable-composite
-> >> +MATCHBOX_CONF_OPTS = \
-> >> +	--enable-expat \
-> >> +	--disable-composite \
-> >> +	--disable-standalone \
-> >> +	--disable-standalone-xft
-> > 
-> >  So, is the dependency on xlib_libXft a few lines lower still relevant? If so,
-> > comment on it in the commit message.
-> 
->  It actually is, configure checks for it and it is used in the code. So
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> but I'd still like it to be mentioned in the commit message.
+2015-04-21 15:43 GMT+03:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> This is a reminder about your Buildroot patches that are older than 30
+> days.
+>
+> We need your help to know if your patches are still relevant or not.
+> To help us, make sure to update the status of your patches in
+> patchwork as appropriate, or to resend an updated version that applies
+> on the latest Buildroot master. Especially let us know if you would
+> like to withdraw your patch if you are no longer interested.
+>
+> Here is the list of patches you have submitted that are still pending:
+>
+>  - [01/16] package/busybox: optional udhcpc script
+>    http://patchwork.ozlabs.org/patch/430588/
 
-Well, not sure. AFAICS, checks for libxft are done only when either
-standalone or standalone-xft is specified. Also, Xft is only used in
-src/mbtheme-standalone.c, which as its name implies, is the standalone
-mode.
+I have new version of this patch.
 
-So, I'll remove that dependency in the patch that disable standalone
-mode (pending a test-build without libXft, but pretty confident it'll
-work, nothing selects it in matchbox, I never manually selected it, and
-all my previous builds were successfull).
+>  - [03/16] package/dbus: fix machine-id when using systemd
+>    http://patchwork.ozlabs.org/patch/430583/
 
-Thanks!
+Applies cleanly and still relevant, I think.
 
-Regards,
-Yann E. MORIN.
+>  - [04/16] package/systemd: add missing dependencies
+>    http://patchwork.ozlabs.org/patch/430582/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Still relevant and reviewed by Samuel.
+
+>  - [05/16] package/systemd: apply locale settings in user shells
+>    http://patchwork.ozlabs.org/patch/430584/
+
+I need to clarify something about this patch.
+
+>  - [08/16] package/e2fsprogs: make /sbin/fsck available
+>    http://patchwork.ozlabs.org/patch/430587/
+
+Still relevant and reviewed by Samuel.
+
+>  - [09/16] package/minidlna: improve systemd support
+>    http://patchwork.ozlabs.org/patch/430589/
+
+I have new version of this patch.
+
+>  - [10/16] package/transmission: improve systemd support
+>    http://patchwork.ozlabs.org/patch/430590/
+
+I have new version of this patch.
+
+>  - [12/16] package/samba: add systemd support
+>    http://patchwork.ozlabs.org/patch/430592/
+
+I have new version of this patch.
+
+>  - [15/16] package/vim: add default vimrc
+>    http://patchwork.ozlabs.org/patch/430595/
+
+Still relevant and reviewed by Samuel.
+
+>  - [16/16] package/rng-tools: add systemd support for rngd
+>    http://patchwork.ozlabs.org/patch/430596/
+>
+> We have a lot of pending patches:
+>    https://patchwork.ozlabs.org/project/buildroot/list/
+>
+> You can help shorten this list by reviewing and testing patches, which
+> helps the maintainers when applying patches. The more patches are
+> reviewed or tested patches, the more are applied; the more are
+> applied, the shorter the list; the shorter the list, the faster
+> patches are applied.
+>
+> Thanks a lot for your help and contribution to Buildroot!
+> --
+> Buildroot, http://buildroot.org
+
+Please tell me how can I update those patches that need updating.
+Should I just send new versions to this mailing list, or should I send
+them as answers in original threads, or is there any other preferred
+way?
+
+Best regards,
+Maxim
