@@ -1,58 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  2 May 2015 23:40:53 +0200
-Subject: [Buildroot] [PATCHv2] docs/manual: add list of instrumentation steps
-Message-ID: <1430602853-1836-1-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat,  2 May 2015 23:50:50 +0200
+Subject: [Buildroot] [PATCH] autotools-package: also handle pre-installed
+	external toolchain in .la fixup
+Message-ID: <1430603450-17855-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The names of steps is not obvious, so add this list to the manual.
+The .la fixup handling looks for paths starting with /usr and assumes
+that they are missing the installation prefix (i.e. $(STAGING_DIR)). It
+already handles the cases that $(STAGING_DIR) itself and $(BASE_DIR)
+are under /usr, but it does not yet handle the case that a
+pre-installed external toolchain is under /usr (and tracks that fact
+in some .la file). For instance, if you use buildroot to generate a
+toolchain with HOST_DIR=/usr/local/some_path, this problem will occur.
 
-Small formatting fix at the same time.
+Fix this in the same way as $(STAGING_DIR) and $(BASE_DIR), but in
+addition check that TOOLCHAIN_EXTERNAL_INSTALL_DIR is non-empty. For
+internal toolchains, it is empty and the sed expression would fail.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reported-by: Carlos Soto <csotoalonso@gmail.com>
+Cc: Carlos Soto <csotoalonso@gmail.com>
 ---
-Changes v1 -> v2:
-  - remove reference to target-finalize, it's currently not a step
----
- docs/manual/debugging-buildroot.txt | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+I haven't been able to test this very extensively because it's not so
+easy to find .la files where it goes wrong.
 
-diff --git a/docs/manual/debugging-buildroot.txt b/docs/manual/debugging-buildroot.txt
-index b97f633..844744b 100644
---- a/docs/manual/debugging-buildroot.txt
-+++ b/docs/manual/debugging-buildroot.txt
-@@ -12,8 +12,8 @@ space-separated list, you want called before and after each step. The
- scripts are called in sequence, with three parameters:
- 
-   - +start+ or +end+ to denote the start (resp. the end) of a step;
--  - the name of the step about to be started, or which just ended.
--  - the name of the package
-+  - the name of the step about to be started, or which just ended;
-+  - the name of the package.
- 
- For example :
- 
-@@ -21,6 +21,17 @@ For example :
- make BR2_INSTRUMENTATION_SCRIPTS="/path/to/my/script1 /path/to/my/script2"
- ----
- 
-+The list of steps are:
-+
-+  - +extract+
-+  - +patch+
-+  - +configure+
-+  - +build+
-+  - +install-host+, when a host-package is installed in +$(HOST_DIR)+
-+  - +install-target+, when a target-package is installed in +$(TARGET_DIR)+
-+  - +install-staging+, when a target-package is installed in +$(STAGING_DIR)+
-+  - +install-image+, when a target-package installs files in +$(BINARIES_DIR)+
-+
- That script has access to the following variables:
- 
-   - +BR2_CONFIG+: the path to the Buildroot .config file
+Carlos, can you check if this patch solves the problem for you?
+---
+ package/pkg-autotools.mk | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 49b42d4..9dea08a 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -304,10 +304,13 @@ endif
+ # needs to be applied to any path that starts with /usr.
+ #
+ # To protect against the case that the output or staging directories
+-# themselves are under /usr, we first substitute away any occurrences
+-# of these directories as @BASE_DIR@ and @STAGING_DIR at . Note that
+-# STAGING_DIR can be outside BASE_DIR when the user sets BR2_HOST_DIR
+-# to a custom value.
++# or the pre-installed external toolchain themselves are under /usr,
++# we first substitute away any occurrences of these directories as
++# @BASE_DIR@, @STAGING_DIR@ and @TOOLCHAIN_EXTERNAL_INSTALL_DIR@ respectively.
++# Note that STAGING_DIR can be outside BASE_DIR when the user sets
++# BR2_HOST_DIR to a custom value. Note that TOOLCHAIN_EXTERNAL_INSTALL_DIR
++# can be under @BASE_DIR@ when it's a downloaded toolchain, and can be empty
++# when we use an internal toolchain.
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+@@ -315,7 +318,11 @@ define $(2)_INSTALL_STAGING_CMDS
+ 	find $$(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
+ 		$$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
+ 			-e "s:$$(STAGING_DIR):@STAGING_DIR@:g" \
++			$$(if $$(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
++				-e "s:$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
+ 			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
++			$$(if $$(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
++				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
+ 			-e "s:@STAGING_DIR@:$$(STAGING_DIR):g" \
+ 			-e "s:@BASE_DIR@:$$(BASE_DIR):g"
+ endef
 -- 
-1.9.1
+2.1.4
