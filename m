@@ -1,29 +1,69 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 02 May 2015 09:18:58 -0300
-Subject: [Buildroot] [PATCH] php.ini: set date.timezone to UTC
-In-Reply-To: <5544BFEE.5020603@je-eigen-domein.nl>
-References: <1430503955-24928-1-git-send-email-bos@je-eigen-domein.nl>
- <5543FCCE.2000904@mind.be> <55440789.50004@je-eigen-domein.nl>
- <55448176.6050108@mind.be> <5544BFEE.5020603@je-eigen-domein.nl>
-Message-ID: <5544C0B2.2010107@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 02 May 2015 14:21:50 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libpthsem: remove
+ argp-standalone dependency
+In-Reply-To: <1430562486-23625-1-git-send-email-romain.naour@openwide.fr>
+References: <1430562486-23625-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <5544C15E.9060103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/02/2015 09:15 AM, Floris Bos wrote:
+On 02/05/15 12:28, Romain Naour wrote:
+> argp-standalone provide libargp.a and argp.h which are
+> never used in libpthsem.
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-> I do know Debian has a patch to let PHP use the system's timezone
-> database instead of the internal one.
-> We could borrow that one, but then we would be deviating from upstream
-> (which did not want the patch, and prefers to stick with their internal
-> db).
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Build-test with and without the _COMPAT option, and checked that there is no
+reference to argp in the source.
 
-As far as i remember it's a chicken-and-egg problem.
-PHP is used in many old distros/systems that don't have modern tzdata
-and that was a problem, so they bundled it (also cross-operating system
-consistent behaviour).
-But then the bundled one might be out of date as well, and takes up space :)
-IMHO it should be a build-time php option.
-Regards.
+ Adding the original submitter of this package in Cc for final verification.
+Gregory, do you remember why you added the argp-standalone dependency?
+
+ Regards,
+ Arnout
+
+> ---
+>  package/libpthsem/Config.in    | 1 -
+>  package/libpthsem/libpthsem.mk | 1 -
+>  2 files changed, 2 deletions(-)
+> 
+> diff --git a/package/libpthsem/Config.in b/package/libpthsem/Config.in
+> index 932acec..3219de1 100644
+> --- a/package/libpthsem/Config.in
+> +++ b/package/libpthsem/Config.in
+> @@ -1,7 +1,6 @@
+>  config BR2_PACKAGE_LIBPTHSEM
+>  	bool "libpthsem"
+>  	depends on BR2_USE_MMU # fork()
+> -	select BR2_PACKAGE_ARGP_STANDALONE
+>  	help
+>  	  GNU pth is a user mode multi threading library. pthsem is an extend
+>  	  version, with support for semaphores added.
+> diff --git a/package/libpthsem/libpthsem.mk b/package/libpthsem/libpthsem.mk
+> index 7c1de86..f9f6f71 100644
+> --- a/package/libpthsem/libpthsem.mk
+> +++ b/package/libpthsem/libpthsem.mk
+> @@ -11,7 +11,6 @@ LIBPTHSEM_LICENSE = LGPLv2.1+
+>  LIBPTHSEM_LICENSE_FILES = COPYING
+>  LIBPTHSEM_AUTORECONF = YES
+>  LIBPTHSEM_INSTALL_STAGING = YES
+> -LIBPTHSEM_DEPENDENCIES = argp-standalone
+>  LIBPTHSEM_CONFIG_SCRIPTS = pthsem-config
+>  
+>  ifeq ($(BR2_PACKAGE_LIBPTHSEM_COMPAT),y)
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
