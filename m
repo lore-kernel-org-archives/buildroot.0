@@ -1,40 +1,41 @@
-From: John Keeping <john@keeping.me.uk>
-Date: Sat,  2 May 2015 11:58:18 +0100
-Subject: [Buildroot] [PATCH] libcurl: use c-ares if available
-Message-ID: <de47ffa2f80c24f58f017282718c43b5d0dbc79e.1430563714.git.john@keeping.me.uk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 May 2015 13:11:41 +0200
+Subject: [Buildroot] [git commit] imx-usb-loader: fix build issue
+Message-ID: <20150502111256.CC390800AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default libcurl uses the C library's DNS resolver which is
-synchronous, even if an application is using libcurl's non-blocking mode
-of operation.
+commit: http://git.buildroot.net/buildroot/commit/?id=2acb231eaec310f80980e3f1d0eccb4136bf02f2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Configure libcurl to use c-ares if it is selected so that it can resolve
-addresses asynchronously if required.
+host-imx-usb-loader uses pkg-config to find libusb-1.0, but since it's
+a host package, pkg-config needs to be passed the appropriate
+environment variables, which are in $(HOST_CONFIGURE_OPTS). Therefore,
+we now pass $(HOST_CONFIGURE_OPTS) in the environment when building
+host-imx-usb-loader.
 
-Signed-off-by: John Keeping <john@keeping.me.uk>
+Fixes:
+
+  http://autobuild.buildroot.org/results/fba/fba11afe003c512ed5c529c417f3a0feb920b0ed/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcurl/libcurl.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/imx-usb-loader/imx-usb-loader.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 014c5e3..825c844 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -46,6 +46,11 @@ LIBCURL_CONF_OPTS += --without-ssl --without-gnutls \
- 	--without-polarssl --without-nss
- endif
+diff --git a/package/imx-usb-loader/imx-usb-loader.mk b/package/imx-usb-loader/imx-usb-loader.mk
+index 4b60505..fdabb6a 100644
+--- a/package/imx-usb-loader/imx-usb-loader.mk
++++ b/package/imx-usb-loader/imx-usb-loader.mk
+@@ -11,7 +11,7 @@ IMX_USB_LOADER_LICENSE_FILES = COPYING
+ IMX_USB_LOADER_DEPENDENCIES = host-libusb
  
-+ifeq ($(BR2_PACKAGE_C_ARES),y)
-+LIBCURL_DEPENDENCIES += c-ares
-+LIBCURL_CONF_OPTS += --enable-ares
-+endif
-+
- # Configure curl to support libssh2
- ifeq ($(BR2_PACKAGE_LIBSSH2),y)
- LIBCURL_DEPENDENCIES += libssh2
--- 
-2.4.0.rc2.272.g764ef63
+ define HOST_IMX_USB_LOADER_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+ 
+ define HOST_IMX_USB_LOADER_INSTALL_CMDS
