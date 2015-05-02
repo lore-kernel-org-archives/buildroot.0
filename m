@@ -1,82 +1,158 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 02 May 2015 23:26:08 +0200
-Subject: [Buildroot] Libtool problem building mesa3d-demos
-In-Reply-To: <CAD7j7Q8_T_i2baF-x2XKjuLO6ckykqgohstdW75VzPXWQ-rJng@mail.gmail.com>
-References: <CAD7j7Q96pGF1qedawQw4-FHSyC15EyXH1DBu=MNkvFQg_Ys-dg@mail.gmail.com>	<5543FACD.4010307@mind.be>	<CAD7j7Q-9n+y-38sHk+ESnOkr4rBnRAQ8tvt5fMC=_f7J-0wkHA@mail.gmail.com>	<55452348.7030306@mind.be>	<CAD7j7Q9-bJDVNo7yfOowfuiD6X=KTPjTwvGtznoenG8c2Hzqxg@mail.gmail.com>	<55453750.9080302@mind.be>
- <CAD7j7Q8_T_i2baF-x2XKjuLO6ckykqgohstdW75VzPXWQ-rJng@mail.gmail.com>
-Message-ID: <554540F0.9040701@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  2 May 2015 23:30:15 +0200
+Subject: [Buildroot] [PATCHv6] system: allow/disallow root login,
+	accept encoded passwords
+Message-ID: <1430602215-20128-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/05/15 23:16, Carlos Soto wrote:
-> 
-> 
-> 2015-05-02 22:45 GMT+02:00 Arnout Vandecappelle <arnout@mind.be
-> <mailto:arnout@mind.be>>:
-> 
->     On 02/05/15 22:42, Carlos Soto wrote:
->     >
->     >      Since this xtools thing is not passed on the command line, it must be in your
->     >     environment. Can you do 'env | grep xtools'?
->     >
->     >      Regards,
->     >      Arnout
->     >
->     > No, it's not in my environment. As far as I can tell, libtool seems to be
->     > joining together my toolchain path
->     > (usr/local/xtools//arm-cortexa9_neon-linux-gnueabihf) and the buildroot staging
->     > sysroot path (
->     > /home/starsl/iMX6/buildroot/output/host/usr/lib)
-> 
->      OK, so then there must be some .la file which has something funny. Can you grep
->     for xtools in all the .la files in output/ ?
-> 
->      Regards,
->      Arnout
-> 
-> 
-> Done. Yes, there is something funny in some .la files.
-> I've found this line
-> libdir='/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf/arm-cortexa9_neon-linux-gnueabihf/lib'
-> in some .la files in /host/usr/arm-buildroot-linux-gnueabihf/sysroot/lib, but
-> that's expected because these are copied from my external toolchain.
-> 
-> The awful one is libGLU.la, which contains the strange search path for
-> libstdc++.la in 'dependency_libs'
-> There are 4 libGLU.la in my output directory, and 3 of them have a valid path
-> ./build/libglu-9.0.0/libGLU.la
-> ./build/libglu-9.0.0/.libs/libGLU.la
-> ./target/usr/lib/libGLU.la
-> 
-> But this one
-> ./host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libGLU.la
-> has the wrong path:
+From: Lorenzo Catucci <lorenzo@sancho.ccd.uniroma2.it>
 
- Right, I had a feeling that that was going to be the issue...
+Currently, there is only two possibilities regarding the root account:
+  - it is enabled with no password (the default)
+  - it is enabled, using a clear-text, user-provided password
 
- In pkg-autotools, there is a fixup of the .la files which is done in
-_INSTALL_STAGING_CMDS. There's a big explanation above it why it is needed. It
-basically assumes that any occurrence of /usr means it's something that points
-to the host environment while it shouldn't, so $(STAGING_DIR) is prepended to
-it. The logic takes into account that $(STAGING_DIR) and $(BASE_DIR) could be
-under /usr as well, so these are handled. But it doesn't take into account that
-$(TOOLCHAIN_EXTERNAL_INSTALL_DIR) could be in /usr (most people put it in /opt).
+This is deemed insufficient in many cases, especially when the .config
+file has to be published (e.g. for the GPL compliance, or any other
+reason.).
 
- I'll see if I can come up with a patch...
+Fix that in two ways:
 
- Regards,
- Arnout
+  - add a bolean option that allows/disallows root login altogether,
+    which defaults to 'y' to keep backward compatibility;
 
-[snip]
+  - accept already-encoded passwords, which we recognise as starting
+    with either of $1$, $5$ or $6$ (resp. for md5, sha256 or sha512).
 
+Signed-off-by: Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
+[yann.morin.1998 at free.fr:
+  - don't add a choice to select between clear-text/encoded password,
+    use a single prompt;
+  - differentiate in the password hook itself;
+  - rewrite parts of the help entry;
+  - rewrite and expand the commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Tested-by: "Lorenzo M. Catucci" <lorenzo@sancho.ccd.uniroma2.it>
 
+---
+Notes:
+Lorenzo, I did not add your Acked-by tag, since there was some changes
+prompted by Arnout; I however kept your Tested-by since the logic is
+still the same. Feel free to review this iteration again. Thanks! :-)
+
+---
+Chanages v5 -> v6:
+  - use simpler $(filter)  (Arnout)
+  - fix default value  (Arnout)
+  - expand help about doubling $s  (Arnout)
+
+Changes v4 -> v5:
+  - use makefile syntax instead of shell  (Thomas)
+  - typoes  (Thomas)
+  - fix up the commit log (it never was possible to disable root login)
+---
+ system/Config.in | 30 +++++++++++++++++++++---------
+ system/system.mk | 22 ++++++++++++++++------
+ 2 files changed, 37 insertions(+), 15 deletions(-)
+
+diff --git a/system/Config.in b/system/Config.in
+index 84cde94..dc46401 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -176,26 +176,38 @@ endif
+ 
+ if BR2_ROOTFS_SKELETON_DEFAULT
+ 
++config BR2_TARGET_ENABLE_ROOT_LOGIN
++	bool "Enable root login"
++	default y
++	help
++	  Enable root login password
++
+ config BR2_TARGET_GENERIC_ROOT_PASSWD
+ 	string "Root password"
+ 	default ""
++	depends on BR2_TARGET_ENABLE_ROOT_LOGIN
+ 	help
+-	  Set the initial root password (in clear). It will be md5-encrypted.
++	  Set the initial root password.
+ 
+ 	  If set to empty (the default), then no root password will be set,
+ 	  and root will need no password to log in.
+ 
+-	  WARNING! WARNING!
+-	  Although pretty strong, MD5 is now an old hash function, and
+-	  suffers from some weaknesses, which makes it susceptible to attacks.
+-	  It is showing its age, so this root password should not be trusted
+-	  to properly secure any product that can be shipped to the wide,
+-	  hostile world.
++	  If the password starts with any of $1$, $5$ or $6$, it is considered
++	  to be already crypt-encoded with respectively md5, sha256 or sha512.
++	  Any other value is taken to be a clear-text value, and is crypt-encoded
++	  as per the "Passwords encoding" scheme, above.
++
++	  Note: "$" signs in the hashed password must be doubled. For example,
++	  if the hashed password is "$1$longsalt$v35DIIeMo4yUfI23yditq0",
++	  then you must enter it as "$$1$$longsalt$$v35DIIeMo4yUfI23yditq0"
++	  (this is necessary otherwise make would attempt to interpret the $
++	  as a variable expansion).
+ 
+ 	  WARNING! WARNING!
+-	  The password appears in clear in the .config file, and may appear
++	  The password appears as-is in the .config file, and may appear
+ 	  in the build log! Avoid using a valuable password if either the
+-	  .config file or the build log may be distributed!
++	  .config file or the build log may be distributed, or at the
++	  very least use a strong cryptographic hash for your password!
+ 
+ choice
+ 	bool "/bin/sh"
+diff --git a/system/system.mk b/system/system.mk
+index c95e436..53a990b 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -34,7 +34,7 @@ endef
+ TARGET_FINALIZE_HOOKS += SYSTEM_ISSUE
+ endif
+ 
+-ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
++ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
+ PACKAGES += host-mkpasswd
+ endif
+ 
+@@ -69,12 +69,22 @@ TARGET_FINALIZE_HOOKS += SET_NETWORK
+ 
+ ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+ 
+-define SYSTEM_ROOT_PASSWD
+-	[ -n "$(TARGET_GENERIC_ROOT_PASSWD)" ] && \
+-		TARGET_GENERIC_ROOT_PASSWD_HASH=$$($(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)"); \
+-	$(SED) "s,^root:[^:]*:,root:$$TARGET_GENERIC_ROOT_PASSWD_HASH:," $(TARGET_DIR)/etc/shadow
++ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
++ifeq ($(TARGET_GENERIC_ROOT_PASSWD),)
++SYSTEM_ROOT_PASSWORD =
++else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(TARGET_GENERIC_ROOT_PASSWD)),)
++SYSTEM_ROOT_PASSWORD = $(TARGET_GENERIC_ROOT_PASSWD)
++else
++SYSTEM_ROOT_PASSWORD = $(shell $(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)")
++endif
++else # !BR2_TARGET_ENABLE_ROOT_LOGIN
++SYSTEM_ROOT_PASSWORD = *
++endif
++
++define SYSTEM_SET_ROOT_PASSWD
++	$(SED) 's,^root:[^:]*:,root:$(SYSTEM_ROOT_PASSWORD):,' $(TARGET_DIR)/etc/shadow
+ endef
+-TARGET_FINALIZE_HOOKS += SYSTEM_ROOT_PASSWD
++TARGET_FINALIZE_HOOKS += SYSTEM_SET_ROOT_PASSWD
+ 
+ ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
+ define SYSTEM_BIN_SH
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.1
