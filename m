@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  2 May 2015 10:17:36 +0200
-Subject: [Buildroot] [PATCH 02/10] package/x11r7/xlib_libxkbfile: bump
-	version to 1.0.9
+Date: Sat,  2 May 2015 10:17:43 +0200
+Subject: [Buildroot] [PATCH 09/10] package/libpciaccess: bump version to
+	0.13.4
 In-Reply-To: <1430554664-19320-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1430554664-19320-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1430554664-19320-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1430554664-19320-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash |    4 ++--
- package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk   |    2 +-
+ package/libpciaccess/libpciaccess.hash |    4 ++--
+ package/libpciaccess/libpciaccess.mk   |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash
-index 83431cb..759b2ae 100644
---- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash
-+++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash
+diff --git a/package/libpciaccess/libpciaccess.hash b/package/libpciaccess/libpciaccess.hash
+index 10efd1c..0483c4c 100644
+--- a/package/libpciaccess/libpciaccess.hash
++++ b/package/libpciaccess/libpciaccess.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/pipermail/xorg/2012-March/054011.html
--sha256	8aa94e19c537c43558f30906650cea6e15fa012591445d9f927658c3b32a8f3a	libxkbfile-1.0.8.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-April/002592.html
-+sha256	51817e0530961975d9513b773960b4edd275f7d5c72293d5a151ed4f42aeb16a	libxkbfile-1.0.9.tar.bz2
-diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
-index 2d5e574..51c58c0 100644
---- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
-+++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+-# From http://lists.x.org/archives/xorg-announce/2015-February/002528.html
+-sha256	6cd76ccae4e06eee47d3ead84a118740e9406e2a9b7adc9b08e92c69ce89c2e3	libpciaccess-0.13.3.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-April/002590.html
++sha256	07f864654561e4ac8629a0ef9c8f07fbc1f8592d1b6c418431593e9ba2cf2fcf	libpciaccess-0.13.4.tar.bz2
+diff --git a/package/libpciaccess/libpciaccess.mk b/package/libpciaccess/libpciaccess.mk
+index ade4cc6..ced0786 100644
+--- a/package/libpciaccess/libpciaccess.mk
++++ b/package/libpciaccess/libpciaccess.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXKBFILE_VERSION = 1.0.8
-+XLIB_LIBXKBFILE_VERSION = 1.0.9
- XLIB_LIBXKBFILE_SOURCE = libxkbfile-$(XLIB_LIBXKBFILE_VERSION).tar.bz2
- XLIB_LIBXKBFILE_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXKBFILE_LICENSE = MIT
+-LIBPCIACCESS_VERSION = 0.13.3
++LIBPCIACCESS_VERSION = 0.13.4
+ LIBPCIACCESS_SOURCE = libpciaccess-$(LIBPCIACCESS_VERSION).tar.bz2
+ LIBPCIACCESS_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ LIBPCIACCESS_LICENSE = MIT
 -- 
 1.7.10.4
