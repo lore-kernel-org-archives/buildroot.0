@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  2 May 2015 10:17:40 +0200
-Subject: [Buildroot] [PATCH 06/10] package/x11r7/xlib_libXaw: bump version
-	to 1.0.13
+Date: Sat,  2 May 2015 10:17:39 +0200
+Subject: [Buildroot] [PATCH 05/10] package/x11r7/xlib_libXrender: bump
+	version to 0.9.9
 In-Reply-To: <1430554664-19320-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1430554664-19320-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1430554664-19320-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1430554664-19320-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXaw/xlib_libXaw.hash |    4 ++--
- package/x11r7/xlib_libXaw/xlib_libXaw.mk   |    2 +-
+ package/x11r7/xlib_libXrender/xlib_libXrender.hash |    4 ++--
+ package/x11r7/xlib_libXrender/xlib_libXrender.mk   |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.hash b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
-index a8bb3f9..a948e8f 100644
---- a/package/x11r7/xlib_libXaw/xlib_libXaw.hash
-+++ b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
+diff --git a/package/x11r7/xlib_libXrender/xlib_libXrender.hash b/package/x11r7/xlib_libXrender/xlib_libXrender.hash
+index c2a623d..2a9912a 100644
+--- a/package/x11r7/xlib_libXrender/xlib_libXrender.hash
++++ b/package/x11r7/xlib_libXrender/xlib_libXrender.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/xorg/2013-September/056008.html
--sha256	96fc314874fce9979556321d1d6ee00b5baf32fb333b7278853b4983bc3cdbf6	libXaw-1.0.12.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-April/002591.html
-+sha256	8ef8067312571292ccc2bbe94c41109dcf022ea5a4ec71656a83d8cce9edb0cd	libXaw-1.0.13.tar.bz2
-diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.mk b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-index ac8684e..d78adff 100644
---- a/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-+++ b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+-# From http://lists.x.org/archives/xorg-announce/2013-June/002249.html
+-sha256	1d14b02f0060aec5d90dfdcf16a996f17002e515292906ed26e3dcbba0f4fc62	libXrender-0.9.8.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-April/002593.html
++sha256	fc2fe57980a14092426dffcd1f2d9de0987b9d40adea663bd70d6342c0e9be1a	libXrender-0.9.9.tar.bz2
+diff --git a/package/x11r7/xlib_libXrender/xlib_libXrender.mk b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
+index 52ff30e..949dea3 100644
+--- a/package/x11r7/xlib_libXrender/xlib_libXrender.mk
++++ b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXAW_VERSION = 1.0.12
-+XLIB_LIBXAW_VERSION = 1.0.13
- XLIB_LIBXAW_SOURCE = libXaw-$(XLIB_LIBXAW_VERSION).tar.bz2
- XLIB_LIBXAW_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXAW_LICENSE = MIT
+-XLIB_LIBXRENDER_VERSION = 0.9.8
++XLIB_LIBXRENDER_VERSION = 0.9.9
+ XLIB_LIBXRENDER_SOURCE = libXrender-$(XLIB_LIBXRENDER_VERSION).tar.bz2
+ XLIB_LIBXRENDER_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXRENDER_LICENSE = MIT
 -- 
 1.7.10.4
