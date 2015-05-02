@@ -1,97 +1,66 @@
-From: Maxim Mikityanskiy <maxtram95@gmail.com>
-Date: Sat, 2 May 2015 16:57:21 +0300
-Subject: [Buildroot] Reminder about your pending Buildroot patches
-In-Reply-To: <20150421124308.283B288A@mail.free-electrons.com>
-References: <20150421124308.283B288A@mail.free-electrons.com>
-Message-ID: <CAKErNvrOX4jiO_oq+-Jdqxwf_-KYhez__6+gppOGSMW7vPa8VQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  2 May 2015 16:07:09 +0200
+Subject: [Buildroot] [PATCH 1/2] package/x11r7/libepoxy: Fix OpenGL / EGL
+	dependencies
+Message-ID: <1430575630-11283-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
+Also add the usual cflags for RPI and re-wrap the Config.in help text.
 
-2015-04-21 15:43 GMT+03:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> This is a reminder about your Buildroot patches that are older than 30
-> days.
->
-> We need your help to know if your patches are still relevant or not.
-> To help us, make sure to update the status of your patches in
-> patchwork as appropriate, or to resend an updated version that applies
-> on the latest Buildroot master. Especially let us know if you would
-> like to withdraw your patch if you are no longer interested.
->
-> Here is the list of patches you have submitted that are still pending:
->
->  - [01/16] package/busybox: optional udhcpc script
->    http://patchwork.ozlabs.org/patch/430588/
+Fixes
+http://autobuild.buildroot.net/results/596/596f44a26aad45c027f0f4f97d63e97a1f4fd001
 
-I have new version of this patch.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/libepoxy/Config.in   |    8 ++++++--
+ package/x11r7/libepoxy/libepoxy.mk |   12 +++++++++++-
+ 2 files changed, 17 insertions(+), 3 deletions(-)
 
->  - [03/16] package/dbus: fix machine-id when using systemd
->    http://patchwork.ozlabs.org/patch/430583/
-
-Applies cleanly and still relevant, I think.
-
->  - [04/16] package/systemd: add missing dependencies
->    http://patchwork.ozlabs.org/patch/430582/
-
-Still relevant and reviewed by Samuel.
-
->  - [05/16] package/systemd: apply locale settings in user shells
->    http://patchwork.ozlabs.org/patch/430584/
-
-I need to clarify something about this patch.
-
->  - [08/16] package/e2fsprogs: make /sbin/fsck available
->    http://patchwork.ozlabs.org/patch/430587/
-
-Still relevant and reviewed by Samuel.
-
->  - [09/16] package/minidlna: improve systemd support
->    http://patchwork.ozlabs.org/patch/430589/
-
-I have new version of this patch.
-
->  - [10/16] package/transmission: improve systemd support
->    http://patchwork.ozlabs.org/patch/430590/
-
-I have new version of this patch.
-
->  - [12/16] package/samba: add systemd support
->    http://patchwork.ozlabs.org/patch/430592/
-
-I have new version of this patch.
-
->  - [15/16] package/vim: add default vimrc
->    http://patchwork.ozlabs.org/patch/430595/
-
-Still relevant and reviewed by Samuel.
-
->  - [16/16] package/rng-tools: add systemd support for rngd
->    http://patchwork.ozlabs.org/patch/430596/
->
-> We have a lot of pending patches:
->    https://patchwork.ozlabs.org/project/buildroot/list/
->
-> You can help shorten this list by reviewing and testing patches, which
-> helps the maintainers when applying patches. The more patches are
-> reviewed or tested patches, the more are applied; the more are
-> applied, the shorter the list; the shorter the list, the faster
-> patches are applied.
->
-> Thanks a lot for your help and contribution to Buildroot!
-> --
-> Buildroot, http://buildroot.org
-
-Please tell me how can I update those patches that need updating.
-Should I just send new versions to this mailing list, or should I send
-them as answers in original threads, or is there any other preferred
-way?
-
-Best regards,
-Maxim
+diff --git a/package/x11r7/libepoxy/Config.in b/package/x11r7/libepoxy/Config.in
+index c4f5794..875ccc5 100644
+--- a/package/x11r7/libepoxy/Config.in
++++ b/package/x11r7/libepoxy/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_LIBEPOXY
+ 	bool "epoxy"
+-	depends on BR2_PACKAGE_MESA3D
++	depends on BR2_PACKAGE_HAS_LIBEGL
+ 	help
+-	  Epoxy is a library for handling OpenGL function pointer management for you.
++	  Epoxy is a library for handling OpenGL function pointer
++	  management for you.
+ 
+ 	  https://github.com/anholt/libepoxy
++
++comment "epoxy needs an OpenGL EGL backend"
++	depends on !BR2_PACKAGE_HAS_LIBEGL
+diff --git a/package/x11r7/libepoxy/libepoxy.mk b/package/x11r7/libepoxy/libepoxy.mk
+index d908893..fc1ede4 100644
+--- a/package/x11r7/libepoxy/libepoxy.mk
++++ b/package/x11r7/libepoxy/libepoxy.mk
+@@ -8,8 +8,18 @@ LIBEPOXY_VERSION = v1.2
+ LIBEPOXY_SITE = $(call github,anholt,libepoxy,$(LIBEPOXY_VERSION))
+ LIBEPOXY_INSTALL_STAGING = YES
+ LIBEPOXY_AUTORECONF = YES
+-LIBEPOXY_DEPENDENCIES = mesa3d
++LIBEPOXY_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_HAS_LIBEGL),libegl) \
++	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl)
+ LIBEPOXY_LICENSE = MIT
+ LIBEPOXY_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++LIBEPOXY_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) \
++		-I$(STAGING_DIR)/usr/include/IL \
++		-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
++		-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
++endif
++
+ $(eval $(autotools-package))
+-- 
+1.7.10.4
