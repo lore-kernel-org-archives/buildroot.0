@@ -1,201 +1,78 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  2 May 2015 19:01:48 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/x11r7/libepoxy: Fix OpenGL / EGL
-	dependencies
-Message-ID: <1430586108-23704-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 May 2015 19:15:10 +0200
+Subject: [Buildroot] [git commit] package/vlc: Fix strerror_l related
+	compile error
+Message-ID: <20150502171520.78727807FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libepoxy depeneds on EGL, OpenGL is an optional dependency.
-These packages can also be provided by other packages, not only mesa3d.
-In order to avoid build errors with rpi-userland, it installs its header
-files in an usual place, two upstream patches are backported.
+commit: http://git.buildroot.net/buildroot/commit/?id=8e3d20bd4052295b2477ec3a44b9ed917bec2899
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+strerror_l is not implemented by uClibc.
 
 Fixes
-http://autobuild.buildroot.net/results/596/596f44a26aad45c027f0f4f97d63e97a1f4fd001
+http://autobuild.buildroot.net/results/ae3/ae31f4585d2c2f850473c446f1ccfba7699c711b/
+http://autobuild.buildroot.net/results/504/504cf78a08315e2fc6eaeb9a29ae791972753830/
+http://autobuild.buildroot.net/results/092/09280c5d63da9b8b58916c32e6040a98f7ff0ee8/
+http://autobuild.buildroot.net/results/da6/da62d97ea060ce03db94f59a91d84a235d03e8f0/
+http://autobuild.buildroot.net/results/7a4/7a40f66b3be8cd71a27df04415c4851cd4426cc3/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2: Check for egl by using pkgconfig (Thomas)
+ package/vlc/0007-strerror.patch |   43 +++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 43 insertions(+), 0 deletions(-)
 
- package/x11r7/libepoxy/0001-egl-pkgconfig.patch    |   59 ++++++++++++++++++
- .../x11r7/libepoxy/0002-Avoid-name-conflict.patch  |   64 ++++++++++++++++++++
- package/x11r7/libepoxy/Config.in                   |    8 ++-
- package/x11r7/libepoxy/libepoxy.mk                 |    4 +-
- 4 files changed, 132 insertions(+), 3 deletions(-)
- create mode 100644 package/x11r7/libepoxy/0001-egl-pkgconfig.patch
- create mode 100644 package/x11r7/libepoxy/0002-Avoid-name-conflict.patch
-
-diff --git a/package/x11r7/libepoxy/0001-egl-pkgconfig.patch b/package/x11r7/libepoxy/0001-egl-pkgconfig.patch
+diff --git a/package/vlc/0007-strerror.patch b/package/vlc/0007-strerror.patch
 new file mode 100644
-index 0000000..b725c28
+index 0000000..e9f3141
 --- /dev/null
-+++ b/package/x11r7/libepoxy/0001-egl-pkgconfig.patch
-@@ -0,0 +1,59 @@
-+From d56f21c494b315306215c4730835a9b291360e9b Mon Sep 17 00:00:00 2001
-+From: Eric Anholt <eric@anholt.net>
-+Date: Fri, 13 Jun 2014 14:59:37 -0700
-+Subject: [PATCH] Use the EGL pkgconfig for finding eglplatform.h.
++++ b/package/vlc/0007-strerror.patch
+@@ -0,0 +1,43 @@
++Fix compile error
 +
-+We don't ever explicity link against libEGL, so no need to make use of
-+EGL_LIBS.
++  CCLD     vlc
++/home/br/br3/output/build/vlc-2.2.1/src/.libs/libvlccore.so: undefined reference to `strerror_l'
 +
-+Fixes #30.
-+
-+Upstream status: committed
-+https://github.com/anholt/libepoxy/commit/d56f21c494b315306215c4730835a9b291360e9b
++Code for #else condition was taken from
++http://patches.osdyson.org/patch/series/view/vlc/2.2.0~rc2-1+dyson2/dyson.patch
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure.ac     | 1 +
-+ src/Makefile.am  | 1 +
-+ test/Makefile.am | 4 +++-
-+ 3 files changed, 5 insertions(+), 1 deletion(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 399e351..f97c9b0 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -98,6 +98,7 @@ AC_SUBST(EPOXY_LINK_LIBS)
++diff -uNr vlc-2.2.1.org/configure.ac vlc-2.2.1/configure.ac
++--- vlc-2.2.1.org/configure.ac	2015-04-13 09:57:54.000000000 +0200
+++++ vlc-2.2.1/configure.ac	2015-05-02 16:13:22.800448380 +0200
++@@ -534,7 +534,7 @@
 + 
-+ AM_CONDITIONAL(BUILD_EGL, test x$build_egl = xyes)
-+ if test x$build_egl = xyes; then
-++    PKG_CHECK_MODULES(EGL, [egl])
-+     AC_DEFINE([BUILD_EGL], [1], [build EGL tests])
-+ fi
++ dnl Check for usual libc functions
++ AC_CHECK_DECLS([nanosleep],,,[#include <time.h>])
++-AC_CHECK_FUNCS([daemon fcntl fstatvfs fork getenv getpwuid_r isatty lstat memalign mmap open_memstream openat pread posix_fadvise posix_madvise setlocale stricmp strnicmp strptime uselocale])
+++AC_CHECK_FUNCS([daemon fcntl fstatvfs fork getenv getpwuid_r isatty lstat memalign mmap open_memstream openat pread posix_fadvise posix_madvise setlocale strerror_l stricmp strnicmp strptime uselocale])
++ AC_REPLACE_FUNCS([atof atoll dirfd fdopendir flockfile fsync getdelim getpid gmtime_r lldiv localtime_r nrand48 poll posix_memalign rewind setenv strcasecmp strcasestr strdup strlcpy strndup strnlen strsep strtof strtok_r strtoll swab tdestroy strverscmp])
++ AC_CHECK_FUNCS(fdatasync,,
++   [AC_DEFINE(fdatasync, fsync, [Alias fdatasync() to fsync() if missing.])
++diff -uNr vlc-2.2.1.org/src/posix/error.c vlc-2.2.1/src/posix/error.c
++--- vlc-2.2.1.org/src/posix/error.c	2014-08-14 09:20:04.000000000 +0200
+++++ vlc-2.2.1/src/posix/error.c	2015-05-02 16:25:24.075378369 +0200
++@@ -31,6 +31,7 @@
 + 
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 8e20cd6..49c3507 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -28,6 +28,7 @@ AM_CFLAGS = \
-+ 	$(CWARNFLAGS) \
-+ 	$(VISIBILITY_CFLAGS) \
-+ 	$(X11_CFLAGS) \
-++	$(EGL_CFLAGS) \
-+ 	$()
++ static const char *vlc_strerror_l(int errnum, const char *lname)
++ {
+++#ifdef HAVE_STRERROR_L
++     int saved_errno = errno;
++     locale_t loc = newlocale(LC_MESSAGES_MASK, lname, (locale_t)0);
 + 
-+ epoxyincludedir = $(includedir)/epoxy
-+diff --git a/test/Makefile.am b/test/Makefile.am
-+index ffb330e..f29baca 100644
-+--- a/test/Makefile.am
-++++ b/test/Makefile.am
-+@@ -46,7 +46,9 @@ libwgl_common_la_LIBADD = $(EPOXY)
-+ AM_CPPFLAGS = \
-+ 	-I$(top_srcdir)/include \
-+ 	-I$(top_builddir)/include \
-+-	$(X11_CFLAGS)
-++	$(X11_CFLAGS) \
-++	$(EGL_CFLAGS) \
-++	$()
++@@ -51,6 +52,9 @@
++     const char *buf = strerror_l(errnum, loc);
 + 
-+ AM_CFLAGS = $(CWARNFLAGS)
++     freelocale(loc);
+++#else
+++    const char *buf = strerror(errnum);
+++#endif
++     return buf;
++ }
 + 
-diff --git a/package/x11r7/libepoxy/0002-Avoid-name-conflict.patch b/package/x11r7/libepoxy/0002-Avoid-name-conflict.patch
-new file mode 100644
-index 0000000..d646253
---- /dev/null
-+++ b/package/x11r7/libepoxy/0002-Avoid-name-conflict.patch
-@@ -0,0 +1,64 @@
-+From b2ae054b3aa0d6796b6936c7a89b8cce7cefe7ba Mon Sep 17 00:00:00 2001
-+From: Eric Anholt <eric@anholt.net>
-+Date: Fri, 13 Jun 2014 15:54:29 -0700
-+Subject: [PATCH] Avoid name conflicts between pkgconfig's EGL_LIBS and a
-+ temporary var.
-+
-+I felt a little uncomfortable knowing I had two things defining
-+EGL_LIBS, but it worked on my system.  It failed on the travis ci
-+build.
-+
-+Upstream status: committed
-+https://github.com/anholt/libepoxy/commit/b2ae054b3aa0d6796b6936c7a89b8cce7cefe7ba
-+
-+This patch fixes an error created by 0001-egl-pkgconfig.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ test/Makefile.am | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/test/Makefile.am b/test/Makefile.am
-+index f29baca..1892b17 100644
-+--- a/test/Makefile.am
-++++ b/test/Makefile.am
-+@@ -22,9 +22,9 @@
-+ EPOXY = $(builddir)/../src/libepoxy.la
-+ 
-+ check_LTLIBRARIES = \
-+-	$(EGL_LIBS) \
-+-	$(GLX_LIBS) \
-+-	$(WGL_LIBS) \
-++	$(EGL_UTIL_LIB) \
-++	$(GLX_UTIL_LIB) \
-++	$(WGL_UTIL_LIB) \
-+ 	$()
-+ 
-+ libegl_common_la_SOURCES = \
-+@@ -78,7 +78,7 @@ EGL_TESTS = \
-+ 	egl_gles2_without_glx \
-+ 	$()
-+ 
-+-EGL_LIBS = libegl_common.la
-++EGL_UTIL_LIB = libegl_common.la
-+ endif
-+ 
-+ if BUILD_GLX
-+@@ -116,7 +116,7 @@ GLX_TESTS = \
-+         $(GLX_NON_APPLE_TESTS) \
-+ 	$()
-+ 
-+-GLX_LIBS = libglx_common.la
-++GLX_UTIL_LIB = libglx_common.la
-+ endif
-+ 
-+ if BUILD_WGL
-+@@ -127,7 +127,7 @@ WGL_TESTS = \
-+ 	wgl_usefontbitmaps_unicode$(EXEEXT) \
-+ 	$()
-+ 
-+-WGL_LIBS = libwgl_common.la
-++WGL_UTIL_LIB = libwgl_common.la
-+ endif
-+ 
-+ egl_has_extension_nocontext_LDADD = $(EPOXY) libegl_common.la $(X11_LIBS)
-diff --git a/package/x11r7/libepoxy/Config.in b/package/x11r7/libepoxy/Config.in
-index c4f5794..875ccc5 100644
---- a/package/x11r7/libepoxy/Config.in
-+++ b/package/x11r7/libepoxy/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_LIBEPOXY
- 	bool "epoxy"
--	depends on BR2_PACKAGE_MESA3D
-+	depends on BR2_PACKAGE_HAS_LIBEGL
- 	help
--	  Epoxy is a library for handling OpenGL function pointer management for you.
-+	  Epoxy is a library for handling OpenGL function pointer
-+	  management for you.
- 
- 	  https://github.com/anholt/libepoxy
-+
-+comment "epoxy needs an OpenGL EGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL
-diff --git a/package/x11r7/libepoxy/libepoxy.mk b/package/x11r7/libepoxy/libepoxy.mk
-index d908893..001d05d 100644
---- a/package/x11r7/libepoxy/libepoxy.mk
-+++ b/package/x11r7/libepoxy/libepoxy.mk
-@@ -8,7 +8,9 @@ LIBEPOXY_VERSION = v1.2
- LIBEPOXY_SITE = $(call github,anholt,libepoxy,$(LIBEPOXY_VERSION))
- LIBEPOXY_INSTALL_STAGING = YES
- LIBEPOXY_AUTORECONF = YES
--LIBEPOXY_DEPENDENCIES = mesa3d
-+LIBEPOXY_DEPENDENCIES = xlib_libX11 xutil_util-macros \
-+	$(if $(BR2_PACKAGE_HAS_LIBEGL),libegl) \
-+	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl)
- LIBEPOXY_LICENSE = MIT
- LIBEPOXY_LICENSE_FILES = COPYING
- 
--- 
-1.7.10.4
