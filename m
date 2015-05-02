@@ -1,42 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 02 May 2015 08:57:35 +0200
-Subject: [Buildroot] [PATCH 3/3] package/wvstreams: add argp-standalone
-	as optionnal dependency
-In-Reply-To: <5543FC55.2040203@openwide.fr> (Romain Naour's message of "Sat,
- 02 May 2015 00:21:09 +0200")
-References: <1430498686-10719-1-git-send-email-romain.naour@openwide.fr>
- <1430498686-10719-3-git-send-email-romain.naour@openwide.fr>
- <20150501230402.57253929@free-electrons.com>
- <5543FC55.2040203@openwide.fr>
-Message-ID: <87383fv540.fsf@dell.be.48ers.dk>
+Date: Sat, 02 May 2015 09:01:57 +0200
+Subject: [Buildroot] [PATCHv2] doc/manual: fix generating manual after
+	legacy overhaul
+In-Reply-To: <1430498134-8798-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Fri, 1 May 2015 18:35:34 +0200")
+References: <1430498134-8798-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87y4l7tqca.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Hi,
+ > Commit 53903a15 (*config: improve handling of BR2_LEGACY) added an
+ > option to entirely skip legacy entries, by passing a variable in the
+ > environment.
 
->> I wonder if we shouldn't make the argp-standalone package only
- >> available on !glibc builds, since glibc provides its own argp
- >> implementation.
+ > However, it missed one location where that variable is also needed,
+ > which is generating the list of packages and deprecated features for
+ > inclusion in the manual.
 
- > I'm agree, most of packages which uses argp.h select argp-standalone only when a
- > uClibc toolchain is used.
- > Except libpthsem package which select argp-standalone unconditionally.
- > However, I built successfully libpthsem with a glibc toolchain and without
- > argp-standalone installed.
+ > Fix that by re-using the global $(COMMON_CONFIG_ENV) variable,
+ > overriding just what we don't want (i.e. br2-external location and
+ > defconfig path).
 
- > It appears that argp.h from glibc is more up to date should be preferred to
- > argp-standalone one.
+ > Also, slightly re-order variables so the ones we override come right
+ > after the common settings, moving the specific ones at the end, one
+ > variable per line.
 
-Yes, sounds sensible.
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- > I can do the change if you want.
+ > ---
+ > Changes v1 -> v2:
+ >   - only one variable per line  (Arnout)
+ >   - typoes  (arnout)
 
-Please do - Thanks!
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
