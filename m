@@ -1,41 +1,88 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat,  2 May 2015 16:32:33 +0200
-Subject: [Buildroot] [PATCH 1/2] package/tiff: create a symlink to
-	libtiff-4.pc
-Message-ID: <1430577154-5790-1-git-send-email-romain.naour@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 May 2015 16:33:03 +0200
+Subject: [Buildroot] [PATCH 27/30] package/matchbox: xlib-libXcursor is
+ an optional dependency
+In-Reply-To: <5543E9D4.7010901@mind.be>
+References: <cover.1429725549.git.yann.morin.1998@free.fr>
+ <14d4c02b30caadb404949b98238f87ba3b509e40.1429725549.git.yann.morin.1998@free.fr>
+ <5543E9D4.7010901@mind.be>
+Message-ID: <20150502143303.GF13701@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages like libevas still use pkg-config --libs libtiff
-to find libtiff's LDFLAGS.
-Since Buildroot only have tiff 4.0.3, create a symlink to
-libtiff-4.pc for theses packages.
+Arnout, All,
 
-Fixes:
-http://autobuild.buildroot.net/results/e5f/e5fb1e62cb634b20233751b4ea3b0630de70e9e0/
+On 2015-05-01 23:02 +0200, Arnout Vandecappelle spake thusly:
+> On 22/04/15 20:09, Yann E. MORIN wrote:
+> > matchbox selects xlib-libXcursor, but does not build-depend on it.
+> > 
+> > But xlib-libXcursor is only an optional dependency.
+> > 
+> > Fix that by removing the select, and properly build-depend on it when
+> > it is enabled.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>  While you're at it: configure also has --disable-gconf (we don't have the
+> package but maybe in the future...) and the script checks for xlib_libXfixes.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/tiff/tiff.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+Both fixed. Thanks! :-)
 
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 6db2abd..7eb2cae 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -74,4 +74,10 @@ endif
- 
- TIFF_MAKE = $(MAKE) SUBDIRS="$(TIFF_SUBDIRS)"
- 
-+define TIFF_PKG_CONFIG_FIXUP
-+	ln -s libtiff-4.pc $(STAGING_DIR)/usr/lib/pkgconfig/libtiff.pc
-+endef
-+
-+TIFF_POST_INSTALL_STAGING_HOOKS = TIFF_PKG_CONFIG_FIXUP
-+
- $(eval $(autotools-package))
+Regards,
+Yann E. MORIN.
+
+> > ---
+> >  package/matchbox/Config.in   | 1 -
+> >  package/matchbox/matchbox.mk | 4 ++++
+> >  2 files changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+> > index fa186e9..ad68718 100644
+> > --- a/package/matchbox/Config.in
+> > +++ b/package/matchbox/Config.in
+> > @@ -4,7 +4,6 @@ menuconfig BR2_PACKAGE_MATCHBOX
+> >  	depends on BR2_USE_MMU # fork()
+> >  	select BR2_PACKAGE_FONTCONFIG
+> >  	select BR2_PACKAGE_EXPAT
+> > -	select BR2_PACKAGE_XLIB_LIBXCURSOR
+> >  	select BR2_PACKAGE_MATCHBOX_LIB
+> >  	help
+> >  	  Matchbox is an Open Source base environment for the X Window
+> > diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+> > index bce9520..d2c3451 100644
+> > --- a/package/matchbox/matchbox.mk
+> > +++ b/package/matchbox/matchbox.mk
+> > @@ -38,6 +38,10 @@ else
+> >  MATCHBOX_CONF_OPTS += --disable-session
+> >  endif
+> >  
+> > +ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
+> > +MATCHBOX_DEPENDENCIES += xlib_libXcursor
+> > +endif
+> > +
+> >  $(eval $(autotools-package))
+> >  
+> >  # After we called a package infra, w ecan include more files
+> > 
+> 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+
 -- 
-1.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
