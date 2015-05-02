@@ -1,39 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 May 2015 19:17:43 +0200
-Subject: [Buildroot] [PATCH 2/2] rpi-firmware: modify settings for Pi 2
-In-Reply-To: <1430579415-22802-2-git-send-email-bos@je-eigen-domein.nl>
-References: <1430579415-22802-1-git-send-email-bos@je-eigen-domein.nl>
- <1430579415-22802-2-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20150502191743.66ea584f@free-electrons.com>
+Date: Sat, 2 May 2015 19:18:11 +0200
+Subject: [Buildroot] [git commit] php.ini: set date.timezone
+Message-ID: <20150502171816.E4B308079D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Floris Bos,
+commit: http://git.buildroot.net/buildroot/commit/?id=5f37843ab78d2faa5a1cf48f7dd97df29d1fcd80
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  2 May 2015 17:10:14 +0200, Floris Bos wrote:
-> Remove low-level settings from config.txt like arm_freq and sdram_freq.
-> The defaults should be good for most and differ by Pi model.
-> E.g. the Pi 2 runs at 900 Mhz by default, setting arm_freq=700
-> like we had previously would underclock it.
-> 
-> Add short description in comments to options.
-> Mention initramfs option.
-> 
-> Remove obsolete options from cmdline.txt
-> 
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-> ---
->  package/rpi-firmware/cmdline.txt |  2 +-
->  package/rpi-firmware/config.txt  | 14 ++++++++++----
->  2 files changed, 11 insertions(+), 5 deletions(-)
+Set date.timezone in php.ini to match time zone settings.
+Prevents a warning being logged about it not being set
+each time a PHP date/time method is used.
 
-Applied, thanks.
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/php/php.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 3b9a117..47811ff 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -24,6 +24,12 @@ PHP_CONF_ENV = \
+ 	ac_cv_func_strcasestr=yes \
+ 	EXTRA_LIBS="$(PHP_EXTRA_LIBS)"
+ 
++ifeq ($(BR2_TARGET_LOCALTIME),)
++PHP_LOCALTIME = UTC
++else
++PHP_LOCALTIME = $(BR2_TARGET_LOCALTIME)
++endif
++
+ # PHP can't be AUTORECONFed the standard way unfortunately
+ PHP_DEPENDENCIES += host-autoconf host-automake host-libtool
+ define PHP_BUILDCONF
+@@ -288,6 +294,8 @@ define PHP_INSTALL_FIXUP
+ 	rm -f $(TARGET_DIR)/usr/bin/phpize
+ 	$(INSTALL) -D -m 0755 $(PHP_DIR)/php.ini-production \
+ 		$(TARGET_DIR)/etc/php.ini
++	$(SED) 's%;date.timezone =.*%date.timezone = $(PHP_LOCALTIME)%' \
++		$(TARGET_DIR)/etc/php.ini
+ endef
+ 
+ PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
