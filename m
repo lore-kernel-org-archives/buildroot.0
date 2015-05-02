@@ -1,68 +1,86 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 02 May 2015 17:43:38 +0200
-Subject: [Buildroot] [PATCH v2] php.ini: set date.timezone
-In-Reply-To: <1430579415-22802-3-git-send-email-bos@je-eigen-domein.nl>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 May 2015 17:56:07 +0200
+Subject: [Buildroot] [PATCH 2/2] rpi-firmware: modify settings for Pi 2
+In-Reply-To: <1430579415-22802-2-git-send-email-bos@je-eigen-domein.nl>
 References: <1430579415-22802-1-git-send-email-bos@je-eigen-domein.nl>
- <1430579415-22802-3-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <5544F0AA.7050305@mind.be>
+ <1430579415-22802-2-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <20150502155607.GI13701@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/05/15 17:10, Floris Bos wrote:
-> Set date.timezone in php.ini to match time zone settings.
-> Prevents a warning being logged about it not being set
-> each time a PHP date/time method is used.
+Floris, All,
+
+On 2015-05-02 17:10 +0200, Floris Bos spake thusly:
+> Remove low-level settings from config.txt like arm_freq and sdram_freq.
+> The defaults should be good for most and differ by Pi model.
+> E.g. the Pi 2 runs at 900 Mhz by default, setting arm_freq=700
+> like we had previously would underclock it.
+> 
+> Add short description in comments to options.
+> Mention initramfs option.
+> 
+> Remove obsolete options from cmdline.txt
 > 
 > Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- Regards,
- Arnout
+Regards,
+Yann E. MORIN.
 
-> 
 > ---
-> v2: follows Arnout's suggestion, using BR2_TARGET_LOCALTIME
-> ---
->  package/php/php.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  package/rpi-firmware/cmdline.txt |  2 +-
+>  package/rpi-firmware/config.txt  | 14 ++++++++++----
+>  2 files changed, 11 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index 3b9a117..47811ff 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -24,6 +24,12 @@ PHP_CONF_ENV = \
->  	ac_cv_func_strcasestr=yes \
->  	EXTRA_LIBS="$(PHP_EXTRA_LIBS)"
+> diff --git a/package/rpi-firmware/cmdline.txt b/package/rpi-firmware/cmdline.txt
+> index 061e54b..38aa378 100644
+> --- a/package/rpi-firmware/cmdline.txt
+> +++ b/package/rpi-firmware/cmdline.txt
+> @@ -1 +1 @@
+> -dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootwait
+> +root=/dev/mmcblk0p2 rootwait
+> diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
+> index 994972b..aa8d2ab 100644
+> --- a/package/rpi-firmware/config.txt
+> +++ b/package/rpi-firmware/config.txt
+> @@ -4,11 +4,17 @@
+>  # See http://buildroot.org/downloads/manual/manual.html#rootfs-custom
+>  # and http://elinux.org/RPiconfig for a description of config.txt syntax
 >  
-> +ifeq ($(BR2_TARGET_LOCALTIME),)
-> +PHP_LOCALTIME = UTC
-> +else
-> +PHP_LOCALTIME = $(BR2_TARGET_LOCALTIME)
-> +endif
+> -arm_freq=700
+> -core_freq=250
+>  kernel=zImage
 > +
->  # PHP can't be AUTORECONFed the standard way unfortunately
->  PHP_DEPENDENCIES += host-autoconf host-automake host-libtool
->  define PHP_BUILDCONF
-> @@ -288,6 +294,8 @@ define PHP_INSTALL_FIXUP
->  	rm -f $(TARGET_DIR)/usr/bin/phpize
->  	$(INSTALL) -D -m 0755 $(PHP_DIR)/php.ini-production \
->  		$(TARGET_DIR)/etc/php.ini
-> +	$(SED) 's%;date.timezone =.*%date.timezone = $(PHP_LOCALTIME)%' \
-> +		$(TARGET_DIR)/etc/php.ini
->  endef
->  
->  PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
+> +# To use an external initramfs file
+> +#initramfs rootfs.cpio.gz
+> +
+> +# Disable overscan assuming the display supports displaying the full resolution
+> +# If the text shown on the screen disappears off the edge, comment this out
+>  disable_overscan=1
+> +
+> +# How much memory in MB to assign to the GPU on Pi models having
+> +# 256, 512 or 1024 MB total memory
+>  gpu_mem_256=100
+>  gpu_mem_512=100
+> -sdram_freq=400
+> -over_voltage=0
+> +gpu_mem_1024=100
+> -- 
+> 2.1.4
 > 
-
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
