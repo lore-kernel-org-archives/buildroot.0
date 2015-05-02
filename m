@@ -1,105 +1,157 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 May 2015 14:28:01 +0200
-Subject: [Buildroot] [PATCH 18/30] package/matchbox: finally add prompts
- to all sub-packages
-In-Reply-To: <5543E0B2.8080909@mind.be>
-References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <a90f4e35e2853ec395a481fbd2a504212a3591ae.1429725549.git.yann.morin.1998@free.fr>
- <5543E0B2.8080909@mind.be>
-Message-ID: <20150502122801.GA13701@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 02 May 2015 14:43:43 +0200
+Subject: [Buildroot] [PATCH v2 1/5] kconfig-package: add support for
+ config fragments
+In-Reply-To: <1430231675-8613-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1430231675-8613-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <5544C67F.2030304@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
-
-On 2015-05-01 22:23 +0200, Arnout Vandecappelle spake thusly:
-> On 22/04/15 20:09, Yann E. MORIN wrote:
-> > We currently do not have that many packages without a prompt, and when
-> > we do, they are limited to system-related packages that can't be
-> > selected or are forcibly selected under various system-specific
-> > conditions.
-> > 
-> > This is clearly not the case for the matchbox sub-packages, so just give
-> > them a prompt, even when they are forcibly selected by the main matchbox
-> > package, and can't be selected without it.
-> > 
-> > That will at least tell the user those packages exist and are to be
-> > built.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 28/04/15 16:34, Floris Bos wrote:
+> Adds functionality to the kconfig infrastructure to merge additional
+> configuration fragment files to the main configuration file of
+> kconfig packages, using support/kconfig/merge_config.sh
 > 
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Typical use-case is when you want your configuration to be
+> kept in sync with an upstream (def)config file, but do require
+> some minor local modifications.
 > 
->  Actually, for startup-monitor, it couldn't be selected anymore after you
-> inverted the dependency chain (9b7e06a in your current branch). So perhaps that
-> part should move to the previous commit.
-
-Indeed, I missed that case. I'll fix it.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
->  Regards,
->  Arnout
+> Disables -update-config and -update-defconfig targets when
+> fragment files are set.
 > 
-> > ---
-> >  package/matchbox/matchbox-fakekey/Config.in         | 4 +++-
-> >  package/matchbox/matchbox-lib/Config.in             | 4 +++-
-> >  package/matchbox/matchbox-startup-monitor/Config.in | 4 +++-
-> >  3 files changed, 9 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/package/matchbox/matchbox-fakekey/Config.in b/package/matchbox/matchbox-fakekey/Config.in
-> > index 4708292..889d039 100644
-> > --- a/package/matchbox/matchbox-fakekey/Config.in
-> > +++ b/package/matchbox/matchbox-fakekey/Config.in
-> > @@ -1,3 +1,5 @@
-> >  config BR2_PACKAGE_MATCHBOX_FAKEKEY
-> > -	bool
-> > +	bool "matchbox-fakekey"
-> >  	select BR2_PACKAGE_XLIB_LIBXTST
-> > +	help
-> > +	  Library for simulating key press events under X11.
-> > diff --git a/package/matchbox/matchbox-lib/Config.in b/package/matchbox/matchbox-lib/Config.in
-> > index 480e6fe..e50a543 100644
-> > --- a/package/matchbox/matchbox-lib/Config.in
-> > +++ b/package/matchbox/matchbox-lib/Config.in
-> > @@ -1,2 +1,4 @@
-> >  config BR2_PACKAGE_MATCHBOX_LIB
-> > -	bool
-> > +	bool "matchbox-lib"
-> > +	help
-> > +	  Matchbox common functionality library.
-> > diff --git a/package/matchbox/matchbox-startup-monitor/Config.in b/package/matchbox/matchbox-startup-monitor/Config.in
-> > index 92a1241..744e2b6 100644
-> > --- a/package/matchbox/matchbox-startup-monitor/Config.in
-> > +++ b/package/matchbox/matchbox-startup-monitor/Config.in
-> > @@ -1,3 +1,5 @@
-> >  config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
-> > -	bool
-> > +	bool "matchbox-startup-monitor"
-> >  	select BR2_PACKAGE_STARTUP_NOTIFICATION
-> > +	help
-> > +	  Matchbox Panel Startup Monitor Applet.
-> > 
+> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+
+ Some trivial feedback below, with that:
+  Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Build test of linux-configure after applying patch 2, verified that the config
+options in the fragment end up in the configuration, checked that
+linux-update-{def,}config errors out with fragment and works without fragments,
+
+ When the fragment file doesn't exist, you get:
+
+make: *** No rule to make target 'test_fragment', needed by
+'/home/arnout/src/buildroot/output/build/linux-3.15.10/.config'.  Stop.
+
+which is good enough for me.
+
 > 
+> ---
+> v2:
 > 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> - use shell commands to print error message when
+> update-(def)config target is used while fragment files are set.
+> 
+> - document changes to kconfig infrastructure.
+> ---
+>  docs/manual/adding-packages-kconfig.txt | 11 +++++++++++
+>  package/pkg-kconfig.mk                  | 14 ++++++++++----
+>  2 files changed, 21 insertions(+), 4 deletions(-)
+> 
+> diff --git a/docs/manual/adding-packages-kconfig.txt b/docs/manual/adding-packages-kconfig.txt
+> index e87d393..dc9ea11 100644
+> --- a/docs/manual/adding-packages-kconfig.txt
+> +++ b/docs/manual/adding-packages-kconfig.txt
+> @@ -36,6 +36,12 @@ This snippet creates the following make targets:
+>  
+>  * +foo-update-config+, which copies the configuration back to the source
+>    configuration file.
+> +  It is not possible to use this target when fragment files are set.
+
+ There is not reason to start a new line - in the generated manual, the line
+split will vanish anyway.
+
+> +
+> +* +foo-update-defconfig+, which copies the configuration back to the source
+> +  configuration file. The configuration file will only list the
+> +  options that differ from the default values.
+
+ Word wrapping is a bit weird here.
+
+> +  It is not possible to use this target when fragment files are set.
+>  
+>  and ensures that the source configuration file is copied to the build
+>  directory at the right moment.
+> @@ -46,6 +52,11 @@ be set to suit the needs of the package under consideration:
+>  * +FOO_KCONFIG_EDITORS+: a space-separated list of kconfig editors to
+>    support, for example 'menuconfig xconfig'. By default, 'menuconfig'.
+>  
+> +* +FOO_KCONFIG_FRAGMENT_FILES+: a space-separated list of configuration
+> +  fragment files that are merged to the main configuration file.
+> +  Fragment files are typically used when there is a desire to stay in sync
+> +  with an upstream (def)config file, with some minor modifications.
+> +
+>  * +FOO_KCONFIG_OPTS+: extra options to pass when calling the kconfig
+>    editors. This may need to include '$(FOO_MAKE_OPTS)', for example. By
+>    default, empty.
+> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> index 8361064..21fbfdb 100644
+> --- a/package/pkg-kconfig.mk
+> +++ b/package/pkg-kconfig.mk
+> @@ -35,18 +35,20 @@ $(call inner-generic-package,$(1),$(2),$(3),$(4))
+>  $(2)_KCONFIG_EDITORS ?= menuconfig
+>  $(2)_KCONFIG_OPTS ?=
+>  $(2)_KCONFIG_FIXUP_CMDS ?=
+> +$(2)_KCONFIG_FRAGMENT_FILES ?=
+>  
+>  # The config file could be in-tree, so before depending on it the package should
+>  # be extracted (and patched) first
+>  $$($(2)_KCONFIG_FILE): | $(1)-patch
+>  
+> -# The .config file is obtained by copying it from the specified source
+> -# configuration file, after the package has been patched.
+> +# The specified source configuration file and any additional configuration file
+> +# fragments are merged together to .config, after the package has been patched.
+>  # Since the file could be a defconfig file it needs to be expanded to a
+>  # full .config first. We use 'make oldconfig' because this can be safely
+>  # done even when the package does not support defconfigs.
+> -$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE)
+> -	$$(INSTALL) -m 0644 $$($(2)_KCONFIG_FILE) $$($(2)_DIR)/.config
+> +$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+> +	support/kconfig/merge_config.sh -m -O $$(@D) \
+> +		$$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+>  	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+>  		$$($(2)_KCONFIG_OPTS) oldconfig
+>  
+> @@ -87,6 +89,8 @@ $(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>  # Even though we could use 'cp --preserve-timestamps' here, the separate
+>  # cp and 'touch --reference' is used for symmetry with $(1)-update-defconfig.
+>  $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+> +	$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
+> +		echo "Unable to perform $(1)-update-config when fragment files are set"; exit 1)
+
+ There should be an @ in front of this, otherwise you see the error twice.
+
+>  	cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+>  	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+>  
+> @@ -95,6 +99,8 @@ $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>  # $(1)-update-config, the reference for 'touch' is _not_ the file from which
+>  # we copy.
+>  $(1)-update-defconfig: $(1)-savedefconfig
+> +	$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
+> +		echo "Unable to perform $(1)-update-defconfig when fragment files are set"; exit 1)
+
+ And here.
+
+
+ Regards,
+ Arnout
+
+>  	cp -f $$($(2)_DIR)/defconfig $$($(2)_KCONFIG_FILE)
+>  	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+>  
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
