@@ -1,154 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 02 May 2015 17:38:07 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/openpowerlink2: add demo mn
- console application
-In-Reply-To: <1430494560-5196-3-git-send-email-romain.naour@openwide.fr>
-References: <1430494560-5196-1-git-send-email-romain.naour@openwide.fr>
- <1430494560-5196-3-git-send-email-romain.naour@openwide.fr>
-Message-ID: <5544EF5F.2010201@mind.be>
+Date: Sat, 02 May 2015 17:43:38 +0200
+Subject: [Buildroot] [PATCH v2] php.ini: set date.timezone
+In-Reply-To: <1430579415-22802-3-git-send-email-bos@je-eigen-domein.nl>
+References: <1430579415-22802-1-git-send-email-bos@je-eigen-domein.nl>
+ <1430579415-22802-3-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <5544F0AA.7050305@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/05/15 17:36, Romain Naour wrote:
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
-> v2: add missing -DCFG_DEBUG_LVL in CONF_OPTS
-> ---
->  package/openpowerlink2/Config.in                   |  1 +
->  .../openpowerlink2/openpowerlink2-apps/Config.in   |  2 +
->  .../openpowerlink2-apps-demo-mn-console/Config.in  |  5 +++
->  .../openpowerlink2-apps-demo-mn-console.mk         | 45 ++++++++++++++++++++++
->  .../openpowerlink2-apps/openpowerlink2-apps.mk     |  2 +
->  package/openpowerlink2/openpowerlink2.mk           |  1 +
->  6 files changed, 56 insertions(+)
->  create mode 100644 package/openpowerlink2/openpowerlink2-apps/Config.in
->  create mode 100644 package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps-demo-mn-console/Config.in
->  create mode 100644 package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps-demo-mn-console/openpowerlink2-apps-demo-mn-console.mk
->  create mode 100644 package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps.mk
+On 02/05/15 17:10, Floris Bos wrote:
+> Set date.timezone in php.ini to match time zone settings.
+> Prevents a warning being logged about it not being set
+> each time a PHP date/time method is used.
 > 
-> diff --git a/package/openpowerlink2/Config.in b/package/openpowerlink2/Config.in
-> index c651031..e82e738 100644
-> --- a/package/openpowerlink2/Config.in
-> +++ b/package/openpowerlink2/Config.in
-> @@ -35,6 +35,7 @@ choice
->  
->  endchoice
->  
-> +source "package/openpowerlink2/openpowerlink2-apps/Config.in"
->  source "package/openpowerlink2/openpowerlink2-drivers/Config.in"
->  source "package/openpowerlink2/openpowerlink2-stack/Config.in"
+> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 
- Actually, shouldn't the _DEBUG_LEVEL option come before the sourcing of the
-other packages?
-
->  
-> diff --git a/package/openpowerlink2/openpowerlink2-apps/Config.in b/package/openpowerlink2/openpowerlink2-apps/Config.in
-> new file mode 100644
-> index 0000000..6f10a6a
-> --- /dev/null
-> +++ b/package/openpowerlink2/openpowerlink2-apps/Config.in
-> @@ -0,0 +1,2 @@
-> +
-> +source "package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps-demo-mn-console/Config.in"
-> diff --git a/package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps-demo-mn-console/Config.in b/package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps-demo-mn-console/Config.in
-> new file mode 100644
-> index 0000000..dcf2605
-> --- /dev/null
-> +++ b/package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps-demo-mn-console/Config.in
-> @@ -0,0 +1,5 @@
-> +
-> +config BR2_PACKAGE_OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE
-> +	bool "demo_mn_console"
-
- Shouldn't this depend on BR2_PACKAGE_OPENPOWERLINK2_MN and either select or
-depend on the stack?
-
-> +	help
-> +	  Managing Node console demo application
-> diff --git a/package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps-demo-mn-console/openpowerlink2-apps-demo-mn-console.mk b/package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps-demo-mn-console/openpowerlink2-apps-demo-mn-console.mk
-> new file mode 100644
-> index 0000000..23c17b5
-> --- /dev/null
-> +++ b/package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps-demo-mn-console/openpowerlink2-apps-demo-mn-console.mk
-> @@ -0,0 +1,45 @@
-> +################################################################################
-> +#
-> +# openpowerlink2-apps-demo-mn-console
-> +#
-> +################################################################################
-> +
-> +OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_VERSION = $(OPENPOWERLINK2_VERSION)
-> +
-> +OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_LICENSE = $(OPENPOWERLINK2_LICENSE)
-> +OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_LICENSE_FILES = $(OPENPOWERLINK2_LICENSE_FILES)
-> +
-> +# We want to use the same archive for all sub-packages.
-> +OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_SOURCE =
-> +OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_DEPENDENCIES = openpowerlink2-stack
-> +
-> +define OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_SYMLINK_TO_SRC_HOOK
-> +	ln -s $(OPENPOWERLINK2_DIR) $(OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_DIR)/src
-> +endef
-> +
-> +OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_POST_EXTRACT_HOOKS += \
-> +	OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_SYMLINK_TO_SRC_HOOK
-> +
-> +OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_SUBDIR = src/apps/demo_mn_console/
-> +
-> +# See apps/common/cmake/configure-linux.cmake for available options list.
-> +
-> +OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_CONF_OPTS = \
-> +	-DCFG_DEBUG_LVL=$(call qstrip,$(BR2_PACKAGE_OPENPOWERLINK2_DEBUG_LEVEL))
-> +	
-> +# PCAP is used for directlink or userspace daemon
-
- Why is this here?
-
-> +ifeq ($(BR2_PACKAGE_OPENPOWERLINK2_STACK_MONOLITHIC_USER_STACK_LIB),y)
-> +OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_CONF_OPTS += \
-> +	-DCFG_BUILD_KERNEL_STACK="Link to Application"
-> +else ifeq ($(BR2_PACKAGE_OPENPOWERLINK2_STACK_USERSPACE_DAEMON_LIB),y)
-> +OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_CONF_OPTS += \
-> +	-DCFG_BUILD_KERNEL_STACK="Linux Userspace Daemon" \
-> +	-DCFG_DEMO_MN_CONSOLE_USE_SYNCTHREAD=ON
-> +else ifeq ($(BR2_PACKAGE_OPENPOWERLINK2_STACK_KERNEL_STACK_LIB),y)
-> +# kernel stack
-
- Well, yes, obviously...
-
-
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-> +OPENPOWERLINK2_APPS_DEMO_MN_CONSOLE_CONF_OPTS += \
-> +	-DCFG_BUILD_KERNEL_STACK="Linux Kernel Module" \
-> +	-DCFG_DEMO_MN_CONSOLE_USE_SYNCTHREAD=ON
+> 
+> ---
+> v2: follows Arnout's suggestion, using BR2_TARGET_LOCALTIME
+> ---
+>  package/php/php.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index 3b9a117..47811ff 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -24,6 +24,12 @@ PHP_CONF_ENV = \
+>  	ac_cv_func_strcasestr=yes \
+>  	EXTRA_LIBS="$(PHP_EXTRA_LIBS)"
+>  
+> +ifeq ($(BR2_TARGET_LOCALTIME),)
+> +PHP_LOCALTIME = UTC
+> +else
+> +PHP_LOCALTIME = $(BR2_TARGET_LOCALTIME)
 > +endif
 > +
-> +$(eval $(cmake-package))
-> diff --git a/package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps.mk b/package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps.mk
-> new file mode 100644
-> index 0000000..802dcbf
-> --- /dev/null
-> +++ b/package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps.mk
-> @@ -0,0 +1,2 @@
-> +
-> +include $(sort $(wildcard package/openpowerlink2/openpowerlink2-apps/*/*.mk))
-> diff --git a/package/openpowerlink2/openpowerlink2.mk b/package/openpowerlink2/openpowerlink2.mk
-> index 144fa98..ba0d418 100644
-> --- a/package/openpowerlink2/openpowerlink2.mk
-> +++ b/package/openpowerlink2/openpowerlink2.mk
-> @@ -14,5 +14,6 @@ OPENPOWERLINK2_LICENSE_FILES = license.md
+>  # PHP can't be AUTORECONFed the standard way unfortunately
+>  PHP_DEPENDENCIES += host-autoconf host-automake host-libtool
+>  define PHP_BUILDCONF
+> @@ -288,6 +294,8 @@ define PHP_INSTALL_FIXUP
+>  	rm -f $(TARGET_DIR)/usr/bin/phpize
+>  	$(INSTALL) -D -m 0755 $(PHP_DIR)/php.ini-production \
+>  		$(TARGET_DIR)/etc/php.ini
+> +	$(SED) 's%;date.timezone =.*%date.timezone = $(PHP_LOCALTIME)%' \
+> +		$(TARGET_DIR)/etc/php.ini
+>  endef
 >  
->  $(eval $(generic-package))
->  
-> +include package/openpowerlink2/openpowerlink2-apps/openpowerlink2-apps.mk
->  include package/openpowerlink2/openpowerlink2-drivers/openpowerlink2-drivers.mk
->  include package/openpowerlink2/openpowerlink2-stack/openpowerlink2-stack.mk
+>  PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
 > 
 
 
