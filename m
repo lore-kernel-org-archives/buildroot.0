@@ -1,65 +1,85 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Sat, 02 May 2015 01:08:57 +0200
-Subject: [Buildroot] [PATCH] php.ini: set date.timezone to UTC
-In-Reply-To: <5543FCCE.2000904@mind.be>
-References: <1430503955-24928-1-git-send-email-bos@je-eigen-domein.nl>
- <5543FCCE.2000904@mind.be>
-Message-ID: <55440789.50004@je-eigen-domein.nl>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat,  2 May 2015 02:14:51 +0200
+Subject: [Buildroot] [PATCH] package/ola: fix autoreconf issue for host-ola
+Message-ID: <1430525691-4810-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/02/2015 12:23 AM, Arnout Vandecappelle wrote:
-> On 01/05/15 20:12, Floris Bos wrote:
->> Prevent a warning being logged each time a PHP date/time method is
->> used by setting UTC as (default) timezone in php.ini
->>
->> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
->> ---
->>   package/php/php.mk | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/package/php/php.mk b/package/php/php.mk
->> index 3b9a117..7bd3f63 100644
->> --- a/package/php/php.mk
->> +++ b/package/php/php.mk
->> @@ -288,6 +288,7 @@ define PHP_INSTALL_FIXUP
->>   	rm -f $(TARGET_DIR)/usr/bin/phpize
->>   	$(INSTALL) -D -m 0755 $(PHP_DIR)/php.ini-production \
->>   		$(TARGET_DIR)/etc/php.ini
->> +	$(SED) 's/;date.timezone =/date.timezone = UTC/' $(TARGET_DIR)/etc/php.ini
->   Would it be possible to use BR2_TARGET_LOCALTIME (if set) instead? Something like:
->
-> ifeq ($(BR2_TARGET_LOCALTIME),)
-> PHP_LOCALTIME = UTC
-> else
-> PHP_LOCALTIME = $(BR2_TARGET_LOCALTIME)
-> endif
->
-> 	$(SED) 's%;date.timezone =.*%date.timezone = $(PHP_LOCALTIME)%' \
-> 		$(TARGET_DIR)/etc/php.ini
->
->   That is, assuming that php can deal with complex timezones like Europe/Brussels.
+CXX variable is overwritten with an empy value when
+host-autoconf-archive package has been installed before
+host-ola.
 
-PHP used to use the system's time zone name automatically in older PHP 
-versions.
-But nowadays fills your log with warnings that is not reliable:
+config.log:
+configure:19965:  -o conftest -O2 [snip -I and -L] conftest.cpp  -ldl
 
-==
-Warning: strtotime(): It is not safe to rely on the system's timezone 
-settings. You are *required* to use the date.timezone setting or the 
-date_default_timezone_set() function. In case you used any of those 
-methods and you are still getting this warning, you most likely 
-misspelled the timezone identifier. We selected the timezone 'UTC' for 
-now, but please set date.timezone to select your timezone.
-==
+Fixes:
+http://autobuild.buildroot.net/results/8fa/8fa0a64422a96023a926412a033d9a4f01af5a71/build-end.log
 
-It certainly does work for common names like Europe/Brussels, but not 
-sure if that goes for every zone name.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ ...on-t-overwrite-CC-and-CXX-with-ACX_PTHREA.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/ola/0002-autotools-don-t-overwrite-CC-and-CXX-with-ACX_PTHREA.patch
 
-
-Yours sincerely,
-
-Floris Bos
+diff --git a/package/ola/0002-autotools-don-t-overwrite-CC-and-CXX-with-ACX_PTHREA.patch b/package/ola/0002-autotools-don-t-overwrite-CC-and-CXX-with-ACX_PTHREA.patch
+new file mode 100644
+index 0000000..80d21bc
+--- /dev/null
++++ b/package/ola/0002-autotools-don-t-overwrite-CC-and-CXX-with-ACX_PTHREA.patch
+@@ -0,0 +1,51 @@
++From 991eef9f84a5ef58eaab8ea0a85f3b4bce7b00a3 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sat, 2 May 2015 01:50:14 +0200
++Subject: [PATCH] autotools: don't overwrite CC and CXX with ACX_PTHREAD
++ success
++
++If ACX_PTHREAD sucess, CC and CXX value are overwriten respectively
++to PTHREAD_CC and PTHREAD_CXX. But ACX_PTHREAD has been hacked to
++set PTHREAD_CXX variable for the C++ compiler and configure.ac has
++been modified accordingly.
++
++If ax_pthread.m4 wich provide standard AX_PTHREAD macro (and it's
++alias ACX_PTHREAD and AX_PTHREAD), is installed on the system by
++autoconf-archive package, then ax_pthread.m4 is used during
++autoreconf instread of acx_pthread.m4 bundled with ola.
++
++AX_PTHREAD macro from ax_pthread.m4 check only the thread support
++with the C compiler. As a result, the C++ compiler variable
++PTHREAD_CXX is not initialized, so CXX become empy and the build
++fail during resolv.h check.
++
++configure:19945: checking for 2-arg pthread_setname_np
++configure:19965:  -o conftest -O2 [snip -I and -L] conftest.cpp  -ldl  >&5
++./configure: line 2037: -o: command not found
++
++In the Buildroot use case, it's safe to remove CC and CXX overwrite
++since only gcc/g++ compiler are used.
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ configure.ac | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index b1946b6..ef85af5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -303,9 +303,7 @@ AM_CONDITIONAL([HAVE_NCURSES], [test "x$have_ncurses" = xyes])
++ ACX_PTHREAD([
++              LIBS="$PTHREAD_LIBS $LIBS"
++              CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
++-             CXXFLAGS="$CXXFLAGS $PTHREAD_CXXFLAGS"
++-             CC="$PTHREAD_CC"
++-             CXX="$PTHREAD_CXX"],
+++             CXXFLAGS="$CXXFLAGS $PTHREAD_CXXFLAGS"],
++             [AC_MSG_ERROR([Missing pthread, please install it])])
++ 
++ # pthread_setname_np can take either 1 or 2 arguments.
++-- 
++1.9.3
++
+-- 
+1.9.3
