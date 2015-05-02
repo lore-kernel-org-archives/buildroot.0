@@ -1,73 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  2 May 2015 12:43:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: Fix strerror_l related compile
-	error
-Message-ID: <1430563403-22945-1-git-send-email-bernd.kuhls@t-online.de>
+From: John Keeping <john@keeping.me.uk>
+Date: Sat,  2 May 2015 11:58:18 +0100
+Subject: [Buildroot] [PATCH] libcurl: use c-ares if available
+Message-ID: <de47ffa2f80c24f58f017282718c43b5d0dbc79e.1430563714.git.john@keeping.me.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/ae3/ae31f4585d2c2f850473c446f1ccfba7699c711b/
-http://autobuild.buildroot.net/results/504/504cf78a08315e2fc6eaeb9a29ae791972753830/
-http://autobuild.buildroot.net/results/092/09280c5d63da9b8b58916c32e6040a98f7ff0ee8/
-http://autobuild.buildroot.net/results/da6/da62d97ea060ce03db94f59a91d84a235d03e8f0/
-http://autobuild.buildroot.net/results/7a4/7a40f66b3be8cd71a27df04415c4851cd4426cc3/
+By default libcurl uses the C library's DNS resolver which is
+synchronous, even if an application is using libcurl's non-blocking mode
+of operation.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Configure libcurl to use c-ares if it is selected so that it can resolve
+addresses asynchronously if required.
+
+Signed-off-by: John Keeping <john@keeping.me.uk>
 ---
- package/vlc/0007-strerror.patch |   41 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/vlc/0007-strerror.patch
+ package/libcurl/libcurl.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/vlc/0007-strerror.patch b/package/vlc/0007-strerror.patch
-new file mode 100644
-index 0000000..5d65ff7
---- /dev/null
-+++ b/package/vlc/0007-strerror.patch
-@@ -0,0 +1,41 @@
-+Fix compile error
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 014c5e3..825c844 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -46,6 +46,11 @@ LIBCURL_CONF_OPTS += --without-ssl --without-gnutls \
+ 	--without-polarssl --without-nss
+ endif
+ 
++ifeq ($(BR2_PACKAGE_C_ARES),y)
++LIBCURL_DEPENDENCIES += c-ares
++LIBCURL_CONF_OPTS += --enable-ares
++endif
 +
-+  CCLD     vlc
-+/home/br/br3/output/build/vlc-2.2.1/src/.libs/libvlccore.so: undefined reference to `strerror_l'
-+
-+Patch downloaded from
-+http://patches.osdyson.org/patch/series/view/vlc/2.2.0~rc2-1+dyson2/dyson.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr vlc-2.2.1.org/src/posix/error.c vlc-2.2.1/src/posix/error.c
-+--- vlc-2.2.1.org/src/posix/error.c	2014-08-14 09:20:04.000000000 +0200
-++++ vlc-2.2.1/src/posix/error.c	2015-05-02 12:35:30.000000000 +0200
-+@@ -31,26 +31,7 @@
-+ 
-+ static const char *vlc_strerror_l(int errnum, const char *lname)
-+ {
-+-    int saved_errno = errno;
-+-    locale_t loc = newlocale(LC_MESSAGES_MASK, lname, (locale_t)0);
-+-
-+-    if (unlikely(loc == (locale_t)0))
-+-    {
-+-        if (errno == ENOENT) /* fallback to POSIX locale */
-+-            loc = newlocale(LC_MESSAGES_MASK, "C", (locale_t)0);
-+-
-+-        if (unlikely(loc == (locale_t)0))
-+-        {
-+-            assert(errno != EINVAL && errno != ENOENT);
-+-            errno = saved_errno;
-+-            return "Error message unavailable";
-+-        }
-+-        errno = saved_errno;
-+-    }
-+-
-+-    const char *buf = strerror_l(errnum, loc);
-+-
-+-    freelocale(loc);
-++    const char *buf = strerror(errnum);
-+     return buf;
-+ }
-+ 
+ # Configure curl to support libssh2
+ ifeq ($(BR2_PACKAGE_LIBSSH2),y)
+ LIBCURL_DEPENDENCIES += libssh2
 -- 
-1.7.10.4
+2.4.0.rc2.272.g764ef63
