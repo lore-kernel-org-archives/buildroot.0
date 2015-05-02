@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 May 2015 17:22:44 +0200
-Subject: [Buildroot] [PATCH 28/30] package/matchbox-panel: add option to
- use ACPI for the battery applet
-In-Reply-To: <5543F2AA.6070706@mind.be>
+Date: Sat, 2 May 2015 17:23:14 +0200
+Subject: [Buildroot] [PATCH 29/30] package/matchbox-panel: add support
+ for dnotify
+In-Reply-To: <5543F3C2.4020004@mind.be>
 References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <cbb90f6326af77c2c466fa72ee970fee6a9040f1.1429725549.git.yann.morin.1998@free.fr>
- <5543F2AA.6070706@mind.be>
-Message-ID: <20150502152244.GG13701@free.fr>
+ <39072254f3d646691a8c637e551ffaede7b9928c.1429725549.git.yann.morin.1998@free.fr>
+ <5543F3C2.4020004@mind.be>
+Message-ID: <20150502152314.GH13701@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,78 +15,54 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2015-05-01 23:39 +0200, Arnout Vandecappelle spake thusly:
+On 2015-05-01 23:44 +0200, Arnout Vandecappelle spake thusly:
 > On 22/04/15 20:09, Yann E. MORIN wrote:
-> > It is possible to use ACPI to monitor the battery with the battery
-> > min-applet. If ACPI is not explicitly enabled, then APM is used if
-> > available; if ACPI is not explcitly enabled and APM is not available,
-> > then the battery applet id not built.
+> > Using dnotify, matchbox-panel can automatically reload its menu.
 > > 
-> > What is a pity is that there is no way to explicitly enable or disable
-> > the applet; it only relies on auto-detection... :-(
-> > 
-> > So, add an option to enable use of ACPI, visible only on architectures
-> > that have at least some hope of having ACPI support.
+> > dnotify requires a kernel >=2.4, which we can consider to be
+> > virtually for granted.
 > 
->  Since APM exists only on x86, there is basically no way to disable the applet
-> on x86. The only thing that the configure option does is to force the applet to
-> use the deprecated and most likely unavailable APM interface.
-> 
->  Therefore, I'd remove the Config.in option and just pass --enable-acpi-linux
-> unconditionally on x86 and aarch64. The worst that can happen is that you build
-> a tiny applet that turns out not to work.
+>  So, why not enable this unconditionally?
 
-Ok, done: ACPI forcibly used on supported platforms.
-
->  That said, the applet doesn't build for me (with Sourcery x86_64 toolchain)
-> because the 'line_parse' inner function is declared static...
-
-Weird, itworked for me, but with another toolchain. Fixed.
+Well... OK, done.
 
 Regards,
 Yann E. MORIN.
 
 > > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > > ---
-> >  package/matchbox/matchbox-panel/Config.in         | 15 +++++++++++++++
-> >  package/matchbox/matchbox-panel/matchbox-panel.mk |  6 ++++++
-> >  2 files changed, 21 insertions(+)
+> >  package/matchbox/matchbox-panel/Config.in         | 7 +++++++
+> >  package/matchbox/matchbox-panel/matchbox-panel.mk | 6 ++++++
+> >  2 files changed, 13 insertions(+)
 > > 
 > > diff --git a/package/matchbox/matchbox-panel/Config.in b/package/matchbox/matchbox-panel/Config.in
-> > index 47bd10a..93241f0 100644
+> > index 93241f0..6daf2db 100644
 > > --- a/package/matchbox/matchbox-panel/Config.in
 > > +++ b/package/matchbox/matchbox-panel/Config.in
-> > @@ -4,3 +4,18 @@ config BR2_PACKAGE_MATCHBOX_PANEL
-> >  	help
-> >  	  A flexible always present 'window bar' for holding
-> >  	  application launchers.
-> > +
-> > +if BR2_PACKAGE_MATCHBOX_PANEL
-> > +
-> > +config BR2_PACKAGE_MATCHBOX_PANEL_ACPI
-> > +	bool "use ACPI for battery mini-applet"
-> > +	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64
+> > @@ -18,4 +18,11 @@ config BR2_PACKAGE_MATCHBOX_PANEL_ACPI
+> >  	  otherwise the battery monitor mini-applet is not
+> >  	  built.
+> >  
+> > +config BR2_PACKAGE_MATCHBOX_PANEL_DNOTIFY
+> > +	bool "use dnotify"
 > > +	help
-> > +	  Use ACPI to monitor the battery.
+> > +	  Using dnotify allows matchbox-panel to automatically reload
+> > +	  its menu when entries are changed (e.g. when a new application
+> > +	  is installed).
 > > +
-> > +	  Say 'y' here to use ACPI to monitor the battery.
-> > +	  If you say 'n', then APM will be used if available;
-> > +	  otherwise the battery monitor mini-applet is not
-> > +	  built.
-> > +
-> > +endif # BR2_PACKAGE_MATCHBOX_PANEL
+> >  endif # BR2_PACKAGE_MATCHBOX_PANEL
 > > diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
-> > index f7d699b..aa9018c 100644
+> > index aa9018c..dedbab6 100644
 > > --- a/package/matchbox/matchbox-panel/matchbox-panel.mk
 > > +++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
-> > @@ -20,6 +20,12 @@ else
-> >  MATCHBOX_PANEL_CONF_OPTS += --disable-startup-notification
+> > @@ -26,6 +26,12 @@ else
+> >  MATCHBOX_PANEL_CONF_OPTS += --disable-acpi-linux
 > >  endif
 > >  
-> > +ifeq ($(BR2_PACKAGE_MATCHBOX_PANEL_ACPI),y)
-> > +MATCHBOX_PANEL_CONF_OPTS += --enable-acpi-linux
+> > +ifeq ($(BR2_PACKAGE_MATCHBOX_PANEL_DNOTIFY),y)
+> > +MATCHBOX_PANEL_CONF_OPTS += --enable-dnotify
 > > +else
-> > +MATCHBOX_PANEL_CONF_OPTS += --disable-acpi-linux
+> > +MATCHBOX_PANEL_CONF_OPTS += --disable-dnotify
 > > +endif
 > > +
 > >  ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS),y)
