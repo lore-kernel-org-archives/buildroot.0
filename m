@@ -1,30 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 02 May 2015 10:44:42 +0200
-Subject: [Buildroot] [PATCH] network-manager: remove redundant
-	dependencies
-In-Reply-To: <1430555918-15398-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sat, 2 May 2015 10:38:38 +0200")
-References: <20150502082317.22A878073F@busybox.osuosl.org>
- <1430555918-15398-1-git-send-email-arnout@mind.be>
-Message-ID: <87pp6jtll1.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  2 May 2015 11:05:01 +0200
+Subject: [Buildroot] [PATCH 0/7 v2] hashes: add more custom versions to the
+	exclusion list (branch yem/no-hash-custom)
+Message-ID: <cover.1430557268.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+Hello All!
 
- > Now network-manager depends on glibc, there is no need anymore for the
- > wchar and threads dependencies (implied by glibc). So remove them.
+This series adds more custom versions to the list of files excluded from
+the hash check.
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+It first fixes the way we declare the BR_NO_CHECK_HASH_FOR variable,
+goes on to exclude custom versions for the bootloaders and the kernel,
+and ads a hash for Xenomai.
 
-True, I kept them as documentation in case NM in the future would again
-become available on !glibc.
+Thanks to Arnout for his thorough review of the first iteration! :-)
 
-But ok, we still have that information in the git history, so committed
-- Thanks.
+
+Changes v1 -> v2:
+  - smaller'n'better test-case for BR_NO_CHECK_HASH_FOR  (Arnout)
+  - fix'n'tweak some commit logs  (Arnout)
+  - handle same-as-headers kernel version  (Arnout)
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 40df43ac667bf6fff9ec7072ade19cb3a311a1da:
+
+  network-manager: needs (e)glibc (2015-05-02 10:23:05 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/no-hash-custom
+
+for you to fetch changes up to 60d37b8077174e14c662179b863d4f5045a8ffd1:
+
+  linux: do not check hashes for custom versions and tarballs (2015-05-02 10:57:26 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (7):
+      pkg-infra: assign BR_NO_CHECK_HASH_FOR so it is recursively-expanded
+      boot/uboot: do not check hash for custom versions
+      boot/barebox: do not check hash for custom versions
+      boot/mxs-bootlets: do not check hash of custom tarball
+      package/xenomai: ignore custom versions
+      package/xenomai: add hash file
+      linux: do not check hashes for custom versions and tarballs
+
+ boot/barebox/barebox.mk           | 4 ++++
+ boot/mxs-bootlets/mxs-bootlets.mk | 1 +
+ boot/uboot/uboot.mk               | 4 ++++
+ linux/linux.mk                    | 7 +++++++
+ package/pkg-download.mk           | 4 +++-
+ package/xenomai/xenomai.hash      | 2 ++
+ package/xenomai/xenomai.mk        | 2 ++
+ 7 files changed, 23 insertions(+), 1 deletion(-)
+ create mode 100644 package/xenomai/xenomai.hash
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
