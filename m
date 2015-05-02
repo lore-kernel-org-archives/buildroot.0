@@ -1,48 +1,51 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Sat, 02 May 2015 13:30:13 +0200
-Subject: [Buildroot] [PATCH v2 1/5] kconfig-package: add support for
- config fragments
-In-Reply-To: <5544A8D0.5080009@mind.be>
-References: <1430231675-8613-1-git-send-email-bos@je-eigen-domein.nl>
- <5544A8D0.5080009@mind.be>
-Message-ID: <5544B545.6060809@je-eigen-domein.nl>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 May 2015 14:00:26 +0200
+Subject: [Buildroot] [PATCH 15/30] package/matchbox-common: break
+ dependency chain for display
+In-Reply-To: <5543DBC1.4010706@mind.be>
+References: <cover.1429725549.git.yann.morin.1998@free.fr>
+ <decaf19e18b41b46067fa48d59ba2171e4893598.1429725549.git.yann.morin.1998@free.fr>
+ <5543DBC1.4010706@mind.be>
+Message-ID: <20150502120026.GA4232@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/02/2015 12:37 PM, Arnout Vandecappelle wrote:
-> On 28/04/15 16:34, Floris Bos wrote:
->> Adds functionality to the kconfig infrastructure to merge additional
->> configuration fragment files to the main configuration file of
->> kconfig packages, using support/kconfig/merge_config.sh
->>
->> Typical use-case is when you want your configuration to be
->> kept in sync with an upstream (def)config file, but do require
->> some minor local modifications.
->>
->> Disables -update-config and -update-defconfig targets when
->> fragment files are set.
->>
->> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-> [snip]
->
->> +* +FOO_KCONFIG_FRAGMENT_FILES+: a space-separated list of configuration
->> +  fragment files that are merged to the main configuration file.
->> +  Fragment files are typically used when there is a desire to stay in sync
->> +  with an upstream (def)config file, with some minor modifications.
->   I should have noticed this in the first iteration, but why do we need an
-> additional config option for this? We could just rename _KCONFIG_FILE to
-> _KCONFIG_FILES and update the help texts to explain that the files may consist
-> of fragments.
+Arnout, All,
 
-Has been briefly discussed during the first iteration.
-Main problem is _KCONFIG_FILE is not just a source file, but also a 
-destination file for the update-config and update-defconfig targets.
+On 2015-05-01 22:02 +0200, Arnout Vandecappelle spake thusly:
+> On 22/04/15 20:09, Yann E. MORIN wrote:
+> > Currently, matchbox-common depends on either matchbox-dsktop or
+> > matchbox-panel, and the three are organised so that matchbox-common gets
+> > indented in the menuconfig.
+> > 
+> > That's a feature of menuconfig to consider the dependency chain to
+> > indent sub-options.
+> > 
+> > Add a fake, prompt-less option to break that dependency chain.
+> > 
+> > Note: yes, this is an dirty hack.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+>  Now that you've moved the packages out of the matchbox/ directory and sorted
+> them alphabetically, this is no longer needed.
+> 
+>  Or else, I missed the point :-)
 
+No, that's correct. I'll drop this.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Yours sincerely,
-
-Floris Bos
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
