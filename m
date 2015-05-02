@@ -1,123 +1,151 @@
-From: Carlos Soto <csotoalonso@gmail.com>
-Date: Sat, 2 May 2015 18:04:32 +0200
-Subject: [Buildroot] Libtool problem building mesa3d-demos
-In-Reply-To: <5543FACD.4010307@mind.be>
-References: <CAD7j7Q96pGF1qedawQw4-FHSyC15EyXH1DBu=MNkvFQg_Ys-dg@mail.gmail.com>
- <5543FACD.4010307@mind.be>
-Message-ID: <CAD7j7Q-9n+y-38sHk+ESnOkr4rBnRAQ8tvt5fMC=_f7J-0wkHA@mail.gmail.com>
+From: =?UTF-8?B?TmlscyBLw7ZobGVy?= <nk_clean@ibt-interfaces.de>
+Date: Sat, 02 May 2015 18:18:00 +0200
+Subject: [Buildroot] Question about passing the right TARGET_CC and
+ TARGET_LD to .c and .cpp Makefile in same project
+Message-ID: <5544F8B8.4080701@ibt-interfaces.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-05-02 0:14 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+Hello,
 
-> On 01/05/15 22:41, Carlos Soto wrote:
-> > Hi,
-> > I'm using buildroot to create a rootfs for iMX6-quad. I'm using an
-> external
-> > toolchain created with crosstool-ng (arm-cortexa9_neon-linux-gnueabihf).
-> > When building mesa3d-demos, there is an error creating libutil.la
-> > <http://libutil.la>:
-> >
-> > libtool:   error:
-> >
-> '/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf/lib/gcc/arm-cortexa9_neon-linux-gnueabihf/4.9.1/../../../../arm-cortexa9_neon-linux-gnueabihf/lib/libstdc++.la'
-> > is not a valid libtool archive
-> >
-> > Of corse, this path is not right, it seems to be joining two different
-> paths.
-> >
-> > I've tracked the source of the problem, and it seems to be related with
-> the
-> > libtool used by buildroot. I've modified the resulting Makefiles to use
-> the host
-> > libtool, and the problem disappears:
->
->  You have to use buildroot's libtool, otherwise you may get other problems
-> with
-> cross-compilation.
->
-> >
-> > LIBTOOL = $(SHELL) $(top_builddir)/libtool to
-> > LIBTOOL = $(SHELL) /usr/bin/libtool
-> >
-> > Any thoughts about what it's going wrong?
->
->  Can you tell us which options are given to libtool, and perhaps run it
-> with -v
-> to see what it does?
->
-> That is the libtool command from the Makefile (just for
-mesa3d-demos/src/util , but it's the same for other directories)
-/bin/bash ../../libtool --silent --tag=CC   --mode=link
-/home/starsl/iMX6/buildroot/output/host/usr/bin/arm-cortexa9_neon-linux-gnueabihf-gcc
--DMESA_EGL_NO_X11_HEADERS
--I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libdrm
--I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include
--I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/GL
--DMESA_EGL_NO_X11_HEADERS
--I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libdrm
--I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include
--DMESA_EGL_NO_X11_HEADERS
--I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libdrm
--I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include
--D_GNU_SOURCE -DPTHREADS -Wall -Wpointer-arith -Wstrict-prototypes
--Wmissing-prototypes -Wmissing-declarations -Wnested-externs
--fno-strict-aliasing -Wbad-function-cast -Wold-style-definition
--Wdeclaration-after-statement  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64   -Os -g2
--L/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
--lGL
--L/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
--lGLEW -lGLU
--L/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
--lGL   -lGLU
--L/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
--lGL   -lm   -o libutil.la  readtex.lo showbuffer.lo trackball.lo
+I have a problem to compile .c and .cpp sources together in one project.
+For .c files everything is fine. but with .cpp i run into problems. It 
+compiles witout any error, but will not run on target.
+The executeble itselv is present, but linked against host. I can run the 
+executeble on the host but not on the target.
 
-And the output is:
-/bin/grep:
-/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf/lib/gcc/arm-cortexa9_neon-linux-gnueabihf/4.9.1/../../../../arm-cortexa9_neon-linux-gnueabihf/lib/libstdc++.la:
-No such file or directory
-/bin/sed: can't read
-/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf/lib/gcc/arm-cortexa9_neon-linux-gnueabihf/4.9.1/../../../../arm-cortexa9_neon-linux-gnueabihf/lib/libstdc++.la:
-No such file or directory
-libtool:   error:
-'/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf/lib/gcc/arm-cortexa9_neon-linux-gnueabihf/4.9.1/../../../../arm-cortexa9_neon-linux-gnueabihf/lib/libstdc++.la'
-is not a valid libtool archive
+I have googeled a lot but actually i found no way to solve the problem.
+
+I monitored two problems to build my .cpp executebles of a project named 
+connect:
+
+     1. Problem
+         For a multi input file .cpp application the host g++ is used, 
+instead of the TARGET_CC, it seems that TARGET_CC is not passed 
+correctly into the makefile see below [1. Problem]
+
+     2. Problem
+         In case of linking the parts together LD="" Libary path is emty 
+see below [2. Problem]
+
+     The pure .c program the project is compiling fine with right lib 
+and gcc, it also runs on the target.
+
+[Cmmented part output of a make run]
+
+[1. Problem]
+g++  -Wall -Wextra -m32 -g -rdynamic -pedantic -Wshadow -fbounds-check 
+-fstack-protector-all  -c -o util.o util.cpp
+g++  -Wall -Wextra -m32 -g -rdynamic -pedantic -Wshadow -fbounds-check 
+-fstack-protector-all  -c -o tally.o tally.cpp
+g++ -Wall -Wextra -m32 -g -rdynamic -pedantic -Wshadow -fbounds-check 
+-fstack-protector-all -o tally tally.o util.o
+
+[2. Problem]
+#    /usr/bin/make -j2 
+CXX"/home/koehler/s/br/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-g++" 
+LD="" -C /home/koehler/s/br/buildroot/out
+put/build/connect-1.0 tally
 
 
-I've tried passing the --verbose flag instead of --silent, but the output
-does not change.
+[Normal .c program in same project compiles fine and run on target too]
+#    /usr/bin/make -j2 
+CC="/home/koehler/s/br/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc" 
+LD="/home/koehler/s/br/buildroot/output/h
+ost/usr/bin/i586-buildroot-linux-uclibc-ld" -C 
+/home/koehler/s/br/buildroot/output/build/connect-1.0 gpi_mon
 
 
- Regards,
->  Arnout
->
-> >
-> > Regards,
-> > Carlos
-> >
-> >
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150502/adf326e5/attachment.html>
+Does anyone have an idear for me how to solve this issue?
+
+Regards
+
+NIls
+
+
+----------------------------------------------------------------------------------
+Here are the part of the buildroot makefile I use:
+
+connect.mk for CONNECT Package:
+
+define CONNECT_BUILD_CMDS
+     $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+     $(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) modules_install
+endef
+
+define CONNECT_INSTALL_TARGET_CMDS
+     $(INSTALL) -D -m 0755 $(@D)/tally $(TARGET_DIR)/bin/tally
+     $(INSTALL) -D -m 0755 $(@D)/gpi_mon $(TARGET_DIR)/bin/gpi_mon
+endef
+
+define CONNECT_DEVICES
+     /dev/debug  c  666  0  0  42  0  -  -  -
+endef
+
+$(eval $(generic-package))
+
+------------------------------------------------------------------------------------
+
+And the Makefile for my sourcecode:
+# source makefile
+ccflags-y+=-DUSE_PLATFORM_DEVICE
+ccflags-y+=-Wall -rdynamic -Wshadow -fbounds-check
+
+# Executebles and objects
+EXEC = gpi_mon tally
+OBJS = tally.o util.o
+
+#dependencies CPP program
+tally: tally.o util.o
+tally.o: defines.h tally.h tally.cpp
+util.o: defines.h tally.h util.cpp
+
+#dependencies C program
+gpi_mon.o: defines.h gpi_mon.c
+
+KERNELDIR ?= 
+/home/koehler/s/br/buildroot/output/build/linux-$(BR2_LINUX_KERNEL_VERSION)
+
+
+all: modules program
+
+modules:
+     $(MAKE) -C $(KERNELDIR) M=$$PWD modules
+
+modules_install:
+     $(MAKE) -C $(KERNELDIR) M=$$PWD modules_install
+
+program: $(EXEC)
+     $(CC) $(LDFLAGS) -o $@ $(OBJS) $(LDLIBS)
+
+clean:
+     rm -rf *.o *~ core .depend .*.cmd *.ko *.mod.c .tmp_versions 
+modules.order Module.symvers dio *.tmp tally gpi_mon
+
+----------------------------------------------------------------------------------------------------
+I use buildroot actual git rep last pull:
+koehler at koehler-laptop-ubuntu-final:~/s/br/buildroot$ git log
+commit 94856075660dab56249fbe3452b34e489c2a79c5
+Author: Peter Korsgaard <peter@korsgaard.com>
+Date:   Mon Apr 27 00:10:53 2015 +0200
+
+Linux Kernel 3.18.12
+
+
+
+-- 
+-------------------------------------------------
+
+IBT Interfaces
+inh. Nils K?hler
+Im Taubhaus 19
+63322 R?dermark
+
+Tel. +49-6074-6964-160
+Tel. +49-6074-6964-161
+Email: nils.koehler at ibt-interfaces.de
+
+Ust-IdNr:DE813155747
