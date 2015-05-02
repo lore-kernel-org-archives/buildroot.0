@@ -1,68 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 02 May 2015 14:47:40 +0200
-Subject: [Buildroot] [PATCH v2 3/5] busybox: add option to specify
- config fragments
-In-Reply-To: <1430231675-8613-3-git-send-email-bos@je-eigen-domein.nl>
-References: <1430231675-8613-1-git-send-email-bos@je-eigen-domein.nl>
- <1430231675-8613-3-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <5544C76C.9000300@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 May 2015 14:46:24 +0200
+Subject: [Buildroot] [git commit] package/libpthsem: remove argp-standalone
+	dependency
+Message-ID: <20150502124833.81C977FFE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/04/15 16:34, Floris Bos wrote:
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+commit: http://git.buildroot.net/buildroot/commit/?id=bafa150c691c435dfe44aa1c3692afb4b2672e20
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+argp-standalone provide libargp.a and argp.h which are
+never used in libpthsem.
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libpthsem/Config.in    |    1 -
+ package/libpthsem/libpthsem.mk |    1 -
+ 2 files changed, 0 insertions(+), 2 deletions(-)
 
- Not tested but obviously correct :-)
-
- Regards,
- Arnout
-
-> ---
->  package/busybox/Config.in  | 6 ++++++
->  package/busybox/busybox.mk | 1 +
->  2 files changed, 7 insertions(+)
-> 
-> diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-> index b4f949f..6847a60 100644
-> --- a/package/busybox/Config.in
-> +++ b/package/busybox/Config.in
-> @@ -20,6 +20,12 @@ config BR2_PACKAGE_BUSYBOX_CONFIG
->  
->  	  Most people will just use the default BusyBox configuration file.
->  
-> +config BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES
-> +	string "Additional BusyBox configuration fragment files"
-> +	help
-> +	  A space-separated list of configuration fragment files,
-> +	  that will be merged to the main BusyBox configuration file.
-> +
->  config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  	bool "Show packages that are also provided by busybox"
->  	help
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 1ce508a..090e174 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -46,6 +46,7 @@ ifndef BUSYBOX_CONFIG_FILE
->  endif
->  
->  BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
-> +BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES))
->  BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
->  BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
->  
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/libpthsem/Config.in b/package/libpthsem/Config.in
+index 932acec..3219de1 100644
+--- a/package/libpthsem/Config.in
++++ b/package/libpthsem/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LIBPTHSEM
+ 	bool "libpthsem"
+ 	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_ARGP_STANDALONE
+ 	help
+ 	  GNU pth is a user mode multi threading library. pthsem is an extend
+ 	  version, with support for semaphores added.
+diff --git a/package/libpthsem/libpthsem.mk b/package/libpthsem/libpthsem.mk
+index 7c1de86..f9f6f71 100644
+--- a/package/libpthsem/libpthsem.mk
++++ b/package/libpthsem/libpthsem.mk
+@@ -11,7 +11,6 @@ LIBPTHSEM_LICENSE = LGPLv2.1+
+ LIBPTHSEM_LICENSE_FILES = COPYING
+ LIBPTHSEM_AUTORECONF = YES
+ LIBPTHSEM_INSTALL_STAGING = YES
+-LIBPTHSEM_DEPENDENCIES = argp-standalone
+ LIBPTHSEM_CONFIG_SCRIPTS = pthsem-config
+ 
+ ifeq ($(BR2_PACKAGE_LIBPTHSEM_COMPAT),y)
