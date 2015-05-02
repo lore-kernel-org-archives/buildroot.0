@@ -1,86 +1,123 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 May 2015 17:56:07 +0200
-Subject: [Buildroot] [PATCH 2/2] rpi-firmware: modify settings for Pi 2
-In-Reply-To: <1430579415-22802-2-git-send-email-bos@je-eigen-domein.nl>
-References: <1430579415-22802-1-git-send-email-bos@je-eigen-domein.nl>
- <1430579415-22802-2-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20150502155607.GI13701@free.fr>
+From: Carlos Soto <csotoalonso@gmail.com>
+Date: Sat, 2 May 2015 18:04:32 +0200
+Subject: [Buildroot] Libtool problem building mesa3d-demos
+In-Reply-To: <5543FACD.4010307@mind.be>
+References: <CAD7j7Q96pGF1qedawQw4-FHSyC15EyXH1DBu=MNkvFQg_Ys-dg@mail.gmail.com>
+ <5543FACD.4010307@mind.be>
+Message-ID: <CAD7j7Q-9n+y-38sHk+ESnOkr4rBnRAQ8tvt5fMC=_f7J-0wkHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Floris, All,
+2015-05-02 0:14 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
 
-On 2015-05-02 17:10 +0200, Floris Bos spake thusly:
-> Remove low-level settings from config.txt like arm_freq and sdram_freq.
-> The defaults should be good for most and differ by Pi model.
-> E.g. the Pi 2 runs at 900 Mhz by default, setting arm_freq=700
-> like we had previously would underclock it.
-> 
-> Add short description in comments to options.
-> Mention initramfs option.
-> 
-> Remove obsolete options from cmdline.txt
-> 
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> On 01/05/15 22:41, Carlos Soto wrote:
+> > Hi,
+> > I'm using buildroot to create a rootfs for iMX6-quad. I'm using an
+> external
+> > toolchain created with crosstool-ng (arm-cortexa9_neon-linux-gnueabihf).
+> > When building mesa3d-demos, there is an error creating libutil.la
+> > <http://libutil.la>:
+> >
+> > libtool:   error:
+> >
+> '/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf/lib/gcc/arm-cortexa9_neon-linux-gnueabihf/4.9.1/../../../../arm-cortexa9_neon-linux-gnueabihf/lib/libstdc++.la'
+> > is not a valid libtool archive
+> >
+> > Of corse, this path is not right, it seems to be joining two different
+> paths.
+> >
+> > I've tracked the source of the problem, and it seems to be related with
+> the
+> > libtool used by buildroot. I've modified the resulting Makefiles to use
+> the host
+> > libtool, and the problem disappears:
+>
+>  You have to use buildroot's libtool, otherwise you may get other problems
+> with
+> cross-compilation.
+>
+> >
+> > LIBTOOL = $(SHELL) $(top_builddir)/libtool to
+> > LIBTOOL = $(SHELL) /usr/bin/libtool
+> >
+> > Any thoughts about what it's going wrong?
+>
+>  Can you tell us which options are given to libtool, and perhaps run it
+> with -v
+> to see what it does?
+>
+> That is the libtool command from the Makefile (just for
+mesa3d-demos/src/util , but it's the same for other directories)
+/bin/bash ../../libtool --silent --tag=CC   --mode=link
+/home/starsl/iMX6/buildroot/output/host/usr/bin/arm-cortexa9_neon-linux-gnueabihf-gcc
+-DMESA_EGL_NO_X11_HEADERS
+-I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libdrm
+-I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include
+-I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/GL
+-DMESA_EGL_NO_X11_HEADERS
+-I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libdrm
+-I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include
+-DMESA_EGL_NO_X11_HEADERS
+-I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libdrm
+-I/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include
+-D_GNU_SOURCE -DPTHREADS -Wall -Wpointer-arith -Wstrict-prototypes
+-Wmissing-prototypes -Wmissing-declarations -Wnested-externs
+-fno-strict-aliasing -Wbad-function-cast -Wold-style-definition
+-Wdeclaration-after-statement  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64   -Os -g2
+-L/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+-lGL
+-L/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+-lGLEW -lGLU
+-L/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+-lGL   -lGLU
+-L/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+-lGL   -lm   -o libutil.la  readtex.lo showbuffer.lo trackball.lo
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+And the output is:
+/bin/grep:
+/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf/lib/gcc/arm-cortexa9_neon-linux-gnueabihf/4.9.1/../../../../arm-cortexa9_neon-linux-gnueabihf/lib/libstdc++.la:
+No such file or directory
+/bin/sed: can't read
+/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf/lib/gcc/arm-cortexa9_neon-linux-gnueabihf/4.9.1/../../../../arm-cortexa9_neon-linux-gnueabihf/lib/libstdc++.la:
+No such file or directory
+libtool:   error:
+'/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf/lib/gcc/arm-cortexa9_neon-linux-gnueabihf/4.9.1/../../../../arm-cortexa9_neon-linux-gnueabihf/lib/libstdc++.la'
+is not a valid libtool archive
 
-Regards,
-Yann E. MORIN.
 
-> ---
->  package/rpi-firmware/cmdline.txt |  2 +-
->  package/rpi-firmware/config.txt  | 14 ++++++++++----
->  2 files changed, 11 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/rpi-firmware/cmdline.txt b/package/rpi-firmware/cmdline.txt
-> index 061e54b..38aa378 100644
-> --- a/package/rpi-firmware/cmdline.txt
-> +++ b/package/rpi-firmware/cmdline.txt
-> @@ -1 +1 @@
-> -dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootwait
-> +root=/dev/mmcblk0p2 rootwait
-> diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
-> index 994972b..aa8d2ab 100644
-> --- a/package/rpi-firmware/config.txt
-> +++ b/package/rpi-firmware/config.txt
-> @@ -4,11 +4,17 @@
->  # See http://buildroot.org/downloads/manual/manual.html#rootfs-custom
->  # and http://elinux.org/RPiconfig for a description of config.txt syntax
->  
-> -arm_freq=700
-> -core_freq=250
->  kernel=zImage
-> +
-> +# To use an external initramfs file
-> +#initramfs rootfs.cpio.gz
-> +
-> +# Disable overscan assuming the display supports displaying the full resolution
-> +# If the text shown on the screen disappears off the edge, comment this out
->  disable_overscan=1
-> +
-> +# How much memory in MB to assign to the GPU on Pi models having
-> +# 256, 512 or 1024 MB total memory
->  gpu_mem_256=100
->  gpu_mem_512=100
-> -sdram_freq=400
-> -over_voltage=0
-> +gpu_mem_1024=100
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I've tried passing the --verbose flag instead of --silent, but the output
+does not change.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+ Regards,
+>  Arnout
+>
+> >
+> > Regards,
+> > Carlos
+> >
+> >
+> >
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150502/adf326e5/attachment.html>
