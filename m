@@ -1,69 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 02 May 2015 14:21:50 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libpthsem: remove
- argp-standalone dependency
-In-Reply-To: <1430562486-23625-1-git-send-email-romain.naour@openwide.fr>
-References: <1430562486-23625-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <5544C15E.9060103@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 May 2015 14:25:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: Fix strerror_l related
+ compile error
+In-Reply-To: <1430563403-22945-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1430563403-22945-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150502142514.2304411c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/05/15 12:28, Romain Naour wrote:
-> argp-standalone provide libargp.a and argp.h which are
-> never used in libpthsem.
+Dear Bernd Kuhls,
+
+On Sat,  2 May 2015 12:43:23 +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/ae3/ae31f4585d2c2f850473c446f1ccfba7699c711b/
+> http://autobuild.buildroot.net/results/504/504cf78a08315e2fc6eaeb9a29ae791972753830/
+> http://autobuild.buildroot.net/results/092/09280c5d63da9b8b58916c32e6040a98f7ff0ee8/
+> http://autobuild.buildroot.net/results/da6/da62d97ea060ce03db94f59a91d84a235d03e8f0/
+> http://autobuild.buildroot.net/results/7a4/7a40f66b3be8cd71a27df04415c4851cd4426cc3/
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Build-test with and without the _COMPAT option, and checked that there is no
-reference to argp in the source.
-
- Adding the original submitter of this package in Cc for final verification.
-Gregory, do you remember why you added the argp-standalone dependency?
-
- Regards,
- Arnout
-
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libpthsem/Config.in    | 1 -
->  package/libpthsem/libpthsem.mk | 1 -
->  2 files changed, 2 deletions(-)
-> 
-> diff --git a/package/libpthsem/Config.in b/package/libpthsem/Config.in
-> index 932acec..3219de1 100644
-> --- a/package/libpthsem/Config.in
-> +++ b/package/libpthsem/Config.in
-> @@ -1,7 +1,6 @@
->  config BR2_PACKAGE_LIBPTHSEM
->  	bool "libpthsem"
->  	depends on BR2_USE_MMU # fork()
-> -	select BR2_PACKAGE_ARGP_STANDALONE
->  	help
->  	  GNU pth is a user mode multi threading library. pthsem is an extend
->  	  version, with support for semaphores added.
-> diff --git a/package/libpthsem/libpthsem.mk b/package/libpthsem/libpthsem.mk
-> index 7c1de86..f9f6f71 100644
-> --- a/package/libpthsem/libpthsem.mk
-> +++ b/package/libpthsem/libpthsem.mk
-> @@ -11,7 +11,6 @@ LIBPTHSEM_LICENSE = LGPLv2.1+
->  LIBPTHSEM_LICENSE_FILES = COPYING
->  LIBPTHSEM_AUTORECONF = YES
->  LIBPTHSEM_INSTALL_STAGING = YES
-> -LIBPTHSEM_DEPENDENCIES = argp-standalone
->  LIBPTHSEM_CONFIG_SCRIPTS = pthsem-config
->  
->  ifeq ($(BR2_PACKAGE_LIBPTHSEM_COMPAT),y)
-> 
+>  package/vlc/0007-strerror.patch |   41 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 package/vlc/0007-strerror.patch
 
+I think you should add the explanation to the commit log as to why
+strerror_l() is not available. glibc implements it, but not uClibc.
+However it is available on musl.
 
+So a better fix would be to add a configure.ac check for strerror_l().
+Maybe such a fix would be acceptable upstream.
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
