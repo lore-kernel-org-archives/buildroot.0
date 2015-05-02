@@ -1,58 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 May 2015 16:12:09 +0200
-Subject: [Buildroot] [PATCH 23/30] package/matchbox: drop useless
- dependencies
-In-Reply-To: <20150502134042.GD13701@free.fr>
-References: <cover.1429725549.git.yann.morin.1998@free.fr>
- <0f88fac02eba1f18605db80731bfb130d00721cb.1429725549.git.yann.morin.1998@free.fr>
- <5543E50C.2080602@mind.be> <5543E904.5010600@mind.be>
- <20150502134042.GD13701@free.fr>
-Message-ID: <20150502141209.GE13701@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat,  2 May 2015 16:32:34 +0200
+Subject: [Buildroot] [PATCH 2/2] package/efl/libecore: x-includes and
+	x-libraries must be set for cross-compiling
+In-Reply-To: <1430577154-5790-1-git-send-email-romain.naour@openwide.fr>
+References: <1430577154-5790-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1430577154-5790-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+The generated file ecore-x.pc contains unsafe libraries paths
+in Libs.private if x-include and x-libraries are not set in
+libecore.mk.
 
-On 2015-05-02 15:40 +0200, Yann E. MORIN spake thusly:
-> On 2015-05-01 22:58 +0200, Arnout Vandecappelle spake thusly:
-> > On 01/05/15 22:41, Arnout Vandecappelle wrote:
-> > > On 22/04/15 20:09, Yann E. MORIN wrote:
-> > >> xlib-libXft is only needed when building a 'standalone' matchbox, which
-> > >> means not using matchbox-lib.
-[--SNIP--]
-> > >  So, is the dependency on xlib_libXft a few lines lower still relevant? If so,
-> > > comment on it in the commit message.
-> > 
-> >  It actually is, configure checks for it and it is used in the code. So
-> > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > but I'd still like it to be mentioned in the commit message.
-> 
-> Well, not sure. AFAICS, checks for libxft are done only when either
-> standalone or standalone-xft is specified. Also, Xft is only used in
-> src/mbtheme-standalone.c, which as its name implies, is the standalone
-> mode.
-> 
-> So, I'll remove that dependency in the patch that disable standalone
-> mode (pending a test-build without libXft, but pretty confident it'll
-> work, nothing selects it in matchbox, I never manually selected it, and
-> all my previous builds were successfull).
+Fixes:
+http://autobuild.buildroot.net/results/306/306c9fc737ee76d4659e14bf3102b94a57ea45dd/
 
-OK, the build goes on successfully as expected.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/efl/libecore/libecore.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-So I'll drop the dependency on libXft.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
+index dc73687..1f711a8 100644
+--- a/package/efl/libecore/libecore.mk
++++ b/package/efl/libecore/libecore.mk
+@@ -74,7 +74,10 @@ LIBECORE_CONF_OPTS += --disable-ecore-sdl
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBECORE_X),y)
+-LIBECORE_CONF_OPTS += --enable-ecore-x
++LIBECORE_CONF_OPTS += --enable-ecore-x \
++	--with-x=$(STAGING_DIR) \
++	--x-includes=$(STAGING_DIR)/usr/include \
++	--x-libraries=$(STAGING_DIR)/usr/lib
+ LIBECORE_DEPENDENCIES += xlib_libXext xlib_libX11
+ else
+ LIBECORE_CONF_OPTS += --disable-ecore-x --disable-ecore-imf-xim
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.3
