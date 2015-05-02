@@ -1,47 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 2 May 2015 10:44:37 +0200
-Subject: [Buildroot] [git commit] network-manager: remove redundant
-	dependencies
-Message-ID: <20150502102651.AB1347FDDD@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat,  2 May 2015 12:28:06 +0200
+Subject: [Buildroot] [PATCH 2/2] package/argp-standalone: is useless for
+	(e)glibc toolchains
+In-Reply-To: <1430562486-23625-1-git-send-email-romain.naour@openwide.fr>
+References: <1430562486-23625-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1430562486-23625-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bea690baa2e310e8c2964ce36b6973b068e75c54
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+According to Thomas's remark [1], (e)glibc toolchains provide it's
+own argp.h version.
+Also, it appears that argp.h from glibc is more up to date should
+be preferred to argp-standalone one.
 
-Now network-manager depends on glibc, there is no need anymore for the
-wchar and threads dependencies (implied by glibc). So remove them.
+[1] http://lists.busybox.net/pipermail/buildroot/2015-May/127511.html
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/network-manager/Config.in |    8 +++-----
- 1 files changed, 3 insertions(+), 5 deletions(-)
+Note: I didn't add a comment in Config.in to tell that argp-standalone
+      package is useless for (e)glibc toolchains.
+---
+ package/argp-standalone/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index 41cd2d4..f6d8564 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -1,7 +1,5 @@
- config BR2_PACKAGE_NETWORK_MANAGER
- 	bool "networkmanager"
--	depends on BR2_USE_WCHAR # libglib2 and gnutls
--	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-@@ -51,8 +49,8 @@ config BR2_PACKAGE_NETWORK_MANAGER_PPPD
- 	  This option enables support for PPPD daemon
- endif
+diff --git a/package/argp-standalone/Config.in b/package/argp-standalone/Config.in
+index 5a0c051..3319dd9 100644
+--- a/package/argp-standalone/Config.in
++++ b/package/argp-standalone/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_ARGP_STANDALONE
+ 	bool "argp-standalone"
++	# glibc provides its own argp implementation.
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  Glibc hierarchical argument parsing standalone library.
  
--comment "NetworkManager needs udev /dev management and a (e)glibc toolchain w/ wchar, threads, headers >= 3.7"
-+comment "NetworkManager needs udev /dev management and a (e)glibc toolchain w/ headers >= 3.7"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 || \
-+	depends on !BR2_PACKAGE_HAS_UDEV || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 || \
- 		!BR2_TOOLCHAIN_USES_GLIBC
+-- 
+1.9.3
