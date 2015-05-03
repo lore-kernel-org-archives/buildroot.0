@@ -1,69 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  3 May 2015 13:05:00 +0000 (UTC)
-Subject: [Buildroot] [Bug 8081] New: systemd init system: /tmp is not mode
-	1777
-Message-ID: <bug-8081-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  3 May 2015 15:08:59 +0200
+Subject: [Buildroot] [PATCH] cc-tool: fix missing stdarg.h include on uClibc
+Message-ID: <1430658539-7438-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8081
+This commit adds a patch to fix a missing <stdarg.h> include for
+va_list.
 
-           Summary: systemd init system: /tmp is not mode 1777
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: bos at je-eigen-domein.nl
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Fixes:
 
+  http://autobuild.buildroot.org/results/9c8/9c828b1da8983577f93bdfae5275fc5122ae874f/
 
-Using:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cc-tool/0001-add-missing-stdarg-include.patch | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 package/cc-tool/0001-add-missing-stdarg-include.patch
 
-- latest buildroot from git
-- start with raspberrypi2_defconfig
-- set systemd as init system
-- initramfs linked into kernel
-
-/tmp is not mode 1777 causing software that does not run as root and wants to
-write to /tmp or (linked folders like /var/log) to fail.
-
-==
-# ls -ld /tmp
-drwxr-xr-x    7 root     root           220 Jan  1 00:00 /tmp
-==
-
-Also tmpfiles service fails to start:
-
-==
- systemd-tmpfiles-setup.service - Create Volatile Files and Directories
-   Loaded: loaded (/lib/systemd/system/systemd-tmpfiles-setup.service; static;
-vendor preset: enabled)
-   Active: failed (Result: exit-code) since Thu 1970-01-01 00:00:06 UTC; 2min
-8s ago
-     Docs: man:tmpfiles.d(5)
-           man:systemd-tmpfiles(8)
-  Process: 131 ExecStart=/bin/systemd-tmpfiles --create --remove --boot
---exclude-prefix=/dev (code=exited, status=1/FAILURE)
- Main PID: 131 (code=exited, status=1/FAILURE)
-==
-
-And logging is not functional:
-
-==
-# journalctl
-No journal files were found.
-==
-
+diff --git a/package/cc-tool/0001-add-missing-stdarg-include.patch b/package/cc-tool/0001-add-missing-stdarg-include.patch
+new file mode 100644
+index 0000000..c4f47fd
+--- /dev/null
++++ b/package/cc-tool/0001-add-missing-stdarg-include.patch
+@@ -0,0 +1,18 @@
++Add missing <stdarg.h> include for va_list
++
++Fixes the build on uClibc.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/src/common/log.h
++===================================================================
++--- a/src/common/log.h
+++++ b/src/common/log.h
++@@ -13,6 +13,7 @@
++ 
++ #include <stdio.h>
++ #include <stdlib.h>
+++#include <stdarg.h>
++ #include "common.h"
++ 
++ class Log
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.1.0
