@@ -1,64 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 May 2015 14:43:13 +0200
-Subject: [Buildroot] [PATCH v2 1/1] libfreeimage: new package
-In-Reply-To: <1428916598-16537-1-git-send-email-remi.rerolle@gmail.com>
-References: <1428916598-16537-1-git-send-email-remi.rerolle@gmail.com>
-Message-ID: <20150503144313.0ee370ff@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  3 May 2015 13:05:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 8081] New: systemd init system: /tmp is not mode
+	1777
+Message-ID: <bug-8081-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear R?mi R?rolle,
+https://bugs.busybox.net/show_bug.cgi?id=8081
 
-On Mon, 13 Apr 2015 11:16:38 +0200, R?mi R?rolle wrote:
-> FreeImage is an Open Source library project for developers who would like to
-> support popular graphics image formats like PNG, BMP, JPEG, TIFF and others as
-> needed by today's multimedia applications.
-> 
-> See: http://freeimage.sourceforge.net
-> 
-> Signed-off-by: R?mi R?rolle <remi.rerolle@gmail.com>
+           Summary: systemd init system: /tmp is not mode 1777
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: bos at je-eigen-domein.nl
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Could you help us with some rather several build issues on
-libfreeimage? I fixed a number of them, but on Blackfin there are some
-really weird things being uncovered.
 
-I fixed
-http://autobuild.buildroot.org/results/fe7/fe72243a84a91b68ef3138847294674b36f16c58/build-end.log
-with http://patchwork.ozlabs.org/patch/467381/.
+Using:
 
-I fixed
-http://autobuild.buildroot.org/results/054/054d8496f1555274c8525c8c7381aaada27f9e70/build-end.log
-which seems to be a compiler issue by simply disabling libfreeimage on
-the ARC architecture, see http://patchwork.ozlabs.org/patch/467380/.
-Don't try to fix that one, it's really a compiler problem.
+- latest buildroot from git
+- start with raspberrypi2_defconfig
+- set systemd as init system
+- initramfs linked into kernel
 
-However, the Blackfin case is much more interesting. As explained in
-http://patchwork.ozlabs.org/patch/467380/, I tried to fix the build
-issue visible at
-http://autobuild.buildroot.org/results/f3b/f3bd6be448cffed3caae7850233168e6d0f6a5bd/build-end.log.
-I fixed the first build issue, then another one, and finally had
-another build issue that clearly indicates that the libfreeimage source
-code seems to be a piece of crap, using 40 bits constants in 32 bits
-variables. Can you have a look at this? For now we're going to disable
-the package on Blackfin, but I believe it's also buggy on other
-architectures.
+/tmp is not mode 1777 causing software that does not run as root and wants to
+write to /tmp or (linked folders like /var/log) to fail.
 
-Here is a simple Buildroot configuration file to reproduce the problem:
+==
+# ls -ld /tmp
+drwxr-xr-x    7 root     root           220 Jan  1 00:00 /tmp
+==
 
-BR2_bfin=y
-BR2_COMPILER_PARANOID_UNSAFE_PATH=y
-BR2_INIT_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_LIBFREEIMAGE=y
-# BR2_TARGET_ROOTFS_TAR is not set
+Also tmpfiles service fails to start:
 
-Thanks for your help,
+==
+ systemd-tmpfiles-setup.service - Create Volatile Files and Directories
+   Loaded: loaded (/lib/systemd/system/systemd-tmpfiles-setup.service; static;
+vendor preset: enabled)
+   Active: failed (Result: exit-code) since Thu 1970-01-01 00:00:06 UTC; 2min
+8s ago
+     Docs: man:tmpfiles.d(5)
+           man:systemd-tmpfiles(8)
+  Process: 131 ExecStart=/bin/systemd-tmpfiles --create --remove --boot
+--exclude-prefix=/dev (code=exited, status=1/FAILURE)
+ Main PID: 131 (code=exited, status=1/FAILURE)
+==
 
-Thomas
+And logging is not functional:
+
+==
+# journalctl
+No journal files were found.
+==
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
