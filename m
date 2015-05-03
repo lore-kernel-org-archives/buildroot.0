@@ -1,40 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 May 2015 13:23:46 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20150503105009.2b42c375@free-electrons.com> (Thomas Petazzoni's
- message of "Sun, 3 May 2015 10:50:09 +0200")
-References: <20150502063016.3950D100FB0@stock.ovh.net>
- <20150503105009.2b42c375@free-electrons.com>
-Message-ID: <87h9rtucot.fsf@dell.be.48ers.dk>
+Date: Sun, 3 May 2015 13:33:02 +0200
+Subject: [Buildroot] [git commit] bcusdk: needs argp-standalone on uClibc
+Message-ID: <20150503113506.26F3F80DF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=25206d6e26dc4ce9c272e68876f31d0ca7d30e67
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fixes:
+http://autobuild.buildroot.net/results/181/181f12d3a46ef10113ab47f75ccf57cfc1b6210f/
+http://autobuild.buildroot.net/results/25c/25cb21dd5a0dad318c498fcf7a889ae2ce93c697/
 
- > Hello,
- > On Sat,  2 May 2015 08:30:16 +0200 (CEST), Thomas Petazzoni wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bcusdk/Config.in |    1 +
+ package/bcusdk/bcusdk.mk |    5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
 
- >> mips64el | qt-4.8.6 | NOK |
- >> http://autobuild.buildroot.net/results/3c50ed4bb15ab35341c7682ce4706b7a05a6f702/
- >> mips64el | qt-4.8.6 | NOK |
- >> http://autobuild.buildroot.net/results/07aca0c27a07761621d46fb690e3ccd50cbc2ef5/
-
- > error: redefinition of 'bool QTest::qCompare
-
- > Needs investigation.
-
-Sounds related to:
-
-http://lists.busybox.net/pipermail/buildroot/2015-April/127153.html
-
-We currently only allow BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE for soft
-float toolchains, but perhaps it needs to also be disallowed for mips64?
-Richard, care to take a look?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/bcusdk/Config.in b/package/bcusdk/Config.in
+index 658c592..72deef1 100644
+--- a/package/bcusdk/Config.in
++++ b/package/bcusdk/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_BCUSDK
+ 	depends on BR2_USE_MMU # libpthsem
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_LIBPTHSEM
++	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
+ 	help
+ 	  A free development environment for the Bus Coupling Units of
+ 	  the European Installation Bus.
+diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
+index 80c98af..697b5ce 100644
+--- a/package/bcusdk/bcusdk.mk
++++ b/package/bcusdk/bcusdk.mk
+@@ -20,7 +20,10 @@ BCUSDK_CONF_OPTS = \
+ 	--without-pth-test \
+ 	--with-pth=$(STAGING_DIR)/usr
+ 
+-BCUSDK_DEPENDENCIES = libpthsem
++BCUSDK_DEPENDENCIES = \
++	libpthsem \
++	$(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone)
++
+ 
+ define BCUSDK_REMOVE_EXAMPLES
+ 	$(RM) -rf $(TARGET_DIR)/usr/share/bcusdk
