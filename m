@@ -1,49 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 May 2015 15:31:34 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/mono: bump to version 4.0.1
-In-Reply-To: <1430402595-5355-3-git-send-email-angelo.compagnucci@gmail.com>
-References: <1430402595-5355-1-git-send-email-angelo.compagnucci@gmail.com>
- <1430402595-5355-3-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150503153134.5f5764f4@free-electrons.com>
+Date: Sun,  3 May 2015 15:41:12 +0200
+Subject: [Buildroot] [PATCH 1/2] poppler: add patch to fix invalid syntax in
+	configure script
+Message-ID: <1430660473-6997-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+When configuring poppler, a shell error occurs:
 
-On Thu, 30 Apr 2015 16:03:15 +0200, Angelo Compagnucci wrote:
-> This patch:
-> 
-> * bumps mono version to 4.0.1.
-> * Removes no more needed patches included upstream
-> * Removes profile switches no more present in configure
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  .../0003-mono-context.h-fix-build-on-MIPS.patch    | 33 --------
->  ...e-ppc-sigctx-monoctx-conversion-code-to-m.patch | 92 ----------------------
->  ...build-errors-in-mono-context.c-on-ppc64el.patch | 84 --------------------
->  package/mono/Config.in                             | 22 ------
->  package/mono/mono.mk                               |  9 +--
->  5 files changed, 1 insertion(+), 239 deletions(-)
->  delete mode 100644 package/mono/0003-mono-context.h-fix-build-on-MIPS.patch
->  delete mode 100644 package/mono/0004-jit-Move-the-ppc-sigctx-monoctx-conversion-code-to-m.patch
->  delete mode 100644 package/mono/0005-Fix-build-errors-in-mono-context.c-on-ppc64el.patch
+./configure: line 19741: test: x: unary operator expected
 
-This commit is causing a build failure:
-http://autobuild.buildroot.org/results/b97/b97543b26f8bc25a9e997bb66434ae9660a2f198/build-end.log.
-It might be a parallel installation issue:
+This is due to an invalid configure test, which is fixed by a newly
+added patch. We patch the configure script directly because poppler
+doesn't autoreconf properly. A patch on configure.ac has been
+submitted upstream so that hopefully we can drop our patch in a future
+release of poppler.
 
-/usr/bin/install: cannot create regular file `/home/peko/autobuild/instance-0/output/host/usr/lib/mono/xbuild-frameworks/.NETFramework/v3.0/RedistList/FrameworkList.xml': File exists/usr/bin/install: cannot create regular file `/home/peko/autobuild/instance-0/output/host/usr/lib/mono/xbuild/Microsoft/Portable/v4.5/Microsoft.Portable.Common.targets': File exists
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...invalid-shell-comparaison-in-libtiff-test.patch | 23 ++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch
 
-Can you investigate?
-
-Thanks,
-
-Thomas
+diff --git a/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch b/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch
+new file mode 100644
+index 0000000..f40bee1
+--- /dev/null
++++ b/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch
+@@ -0,0 +1,23 @@
++Fix syntax issue in configure script
++
++The change is not done in configure.ac, because the package doesn't
++autoreconf properly.
++
++Patch on configure.ac submitted upstream at
++https://bugs.freedesktop.org/show_bug.cgi?id=90292.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/configure
++===================================================================
++--- a/configure
+++++ b/configure
++@@ -19738,7 +19738,7 @@
++ CXXFLAGS="$CXXFLAGS $LIBTIFF_CFLAGS"
++ LIBS="$LIBS $LIBTIFF_LIBS"
++ if test x$enable_libtiff = xyes; then
++-  if test x"$LIBTIFF_LIBS" != ; then
+++  if test x"$LIBTIFF_LIBS" != x; then
++     ac_fn_cxx_check_func "$LINENO" "TIFFOpen" "ac_cv_func_TIFFOpen"
++ if test "x$ac_cv_func_TIFFOpen" = xyes; then :
++ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
