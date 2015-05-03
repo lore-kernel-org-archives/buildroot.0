@@ -1,36 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 May 2015 19:21:52 +0200
-Subject: [Buildroot] [PATCH 2/2] package/argp-standalone: is useless for
-	(e)glibc toolchains
-In-Reply-To: <1430562486-23625-2-git-send-email-romain.naour@openwide.fr>
- (Romain Naour's message of "Sat, 2 May 2015 12:28:06 +0200")
-References: <1430562486-23625-1-git-send-email-romain.naour@openwide.fr>
- <1430562486-23625-2-git-send-email-romain.naour@openwide.fr>
-Message-ID: <87wq0pshjj.fsf@dell.be.48ers.dk>
+Date: Sun, 03 May 2015 19:25:15 +0200
+Subject: [Buildroot] [PATCH] libcurl: use c-ares if available
+In-Reply-To: <de47ffa2f80c24f58f017282718c43b5d0dbc79e.1430563714.git.john@keeping.me.uk>
+ (John Keeping's message of "Sat, 2 May 2015 11:58:18 +0100")
+References: <de47ffa2f80c24f58f017282718c43b5d0dbc79e.1430563714.git.john@keeping.me.uk>
+Message-ID: <87sibdshdw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+>>>>> "John" == John Keeping <john@keeping.me.uk> writes:
 
- > According to Thomas's remark [1], (e)glibc toolchains provide it's
- > own argp.h version.
- > Also, it appears that argp.h from glibc is more up to date should
- > be preferred to argp-standalone one.
+ > By default libcurl uses the C library's DNS resolver which is
+ > synchronous, even if an application is using libcurl's non-blocking mode
+ > of operation.
 
- > [1] http://lists.busybox.net/pipermail/buildroot/2015-May/127511.html
+ > Configure libcurl to use c-ares if it is selected so that it can resolve
+ > addresses asynchronously if required.
 
- > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
- > ---
- > Note: I didn't add a comment in Config.in to tell that argp-standalone
- >       package is useless for (e)glibc toolchains.
+ > Signed-off-by: John Keeping <john@keeping.me.uk>
 
-I think it is OK to not display anything as it doesn't make sense on
-glibc.
+> ---
+ >  package/libcurl/libcurl.mk | 5 +++++
+ >  1 file changed, 5 insertions(+)
 
-Committed, thanks.
+ > diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+ > index 014c5e3..825c844 100644
+ > --- a/package/libcurl/libcurl.mk
+ > +++ b/package/libcurl/libcurl.mk
+ > @@ -46,6 +46,11 @@ LIBCURL_CONF_OPTS += --without-ssl --without-gnutls \
+ >  	--without-polarssl --without-nss
+ >  endif
+ 
+ > +ifeq ($(BR2_PACKAGE_C_ARES),y)
+ > +LIBCURL_DEPENDENCIES += c-ares
+ > +LIBCURL_CONF_OPTS += --enable-ares
+ > +endif
+
+We prefer to be explicit about these dependencies, so I've added a
+--disable-ares in the else clause and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
