@@ -1,99 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 May 2015 14:37:49 +0200
-Subject: [Buildroot] [PATCH 1/2] libfreeimage: add patch to fix x86 build
-	problem
-Message-ID: <1430656670-919-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 May 2015 14:43:13 +0200
+Subject: [Buildroot] [PATCH v2 1/1] libfreeimage: new package
+In-Reply-To: <1428916598-16537-1-git-send-email-remi.rerolle@gmail.com>
+References: <1428916598-16537-1-git-send-email-remi.rerolle@gmail.com>
+Message-ID: <20150503144313.0ee370ff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to fix an x86 build problem caused by invalid register
-usage when -fPIC is used.
+Dear R?mi R?rolle,
 
-Fixes:
+On Mon, 13 Apr 2015 11:16:38 +0200, R?mi R?rolle wrote:
+> FreeImage is an Open Source library project for developers who would like to
+> support popular graphics image formats like PNG, BMP, JPEG, TIFF and others as
+> needed by today's multimedia applications.
+> 
+> See: http://freeimage.sourceforge.net
+> 
+> Signed-off-by: R?mi R?rolle <remi.rerolle@gmail.com>
 
-  http://autobuild.buildroot.org/results/fe7/fe72243a84a91b68ef3138847294674b36f16c58/
+Could you help us with some rather several build issues on
+libfreeimage? I fixed a number of them, but on Blackfin there are some
+really weird things being uncovered.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libfreeimage/0002-fix-cpuid-x86.patch | 67 +++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
- create mode 100644 package/libfreeimage/0002-fix-cpuid-x86.patch
+I fixed
+http://autobuild.buildroot.org/results/fe7/fe72243a84a91b68ef3138847294674b36f16c58/build-end.log
+with http://patchwork.ozlabs.org/patch/467381/.
 
-diff --git a/package/libfreeimage/0002-fix-cpuid-x86.patch b/package/libfreeimage/0002-fix-cpuid-x86.patch
-new file mode 100644
-index 0000000..98b0e9c
---- /dev/null
-+++ b/package/libfreeimage/0002-fix-cpuid-x86.patch
-@@ -0,0 +1,67 @@
-+Fix build issue caused by invalid register usage on x86
-+
-+Patch taken from https://github.com/openexr/openexr/issues/128.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/Source/OpenEXR/IlmImf/ImfSystemSpecific.cpp
-+===================================================================
-+--- a/Source/OpenEXR/IlmImf/ImfSystemSpecific.cpp
-++++ b/Source/OpenEXR/IlmImf/ImfSystemSpecific.cpp
-+@@ -40,21 +40,19 @@
-+ 
-+ namespace {
-+ #if defined(IMF_HAVE_SSE2) &&  defined(__GNUC__)
-+-
-++#include <cpuid.h>
-+     // Helper functions for gcc + SSE enabled
-+-    void cpuid(int n, int &eax, int &ebx, int &ecx, int &edx)
-++    void cpuid(unsigned int n, unsigned int &eax, unsigned int &ebx,
-++					unsigned int &ecx, unsigned int &edx)
-+     {
-+-        __asm__ __volatile__ (
-+-            "cpuid"
-+-            : /* Output  */ "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx) 
-+-            : /* Input   */ "a"(n)
-+-            : /* Clobber */);
-++		__get_cpuid(n, &eax, &ebx, &ecx, &edx);
-+     }
-+ 
-+ #else // IMF_HAVE_SSE2 && __GNUC__
-+ 
-+     // Helper functions for generic compiler - all disabled
-+-    void cpuid(int n, int &eax, int &ebx, int &ecx, int &edx)
-++    void cpuid(unsigned int n, unsigned int &eax, unsigned int &ebx,
-++					unsigned int &ecx, unsigned int &edx)
-+     {
-+         eax = ebx = ecx = edx = 0;
-+     }
-+@@ -64,7 +62,7 @@
-+ 
-+ #ifdef OPENEXR_IMF_HAVE_GCC_INLINE_ASM_AVX
-+ 
-+-    void xgetbv(int n, int &eax, int &edx)
-++    void xgetbv(unsigned int n, unsigned int &eax, unsigned int &edx)
-+     {
-+         __asm__ __volatile__ (
-+             "xgetbv"
-+@@ -75,7 +73,7 @@
-+ 
-+ #else //  OPENEXR_IMF_HAVE_GCC_INLINE_ASM_AVX
-+ 
-+-    void xgetbv(int n, int &eax, int &edx)
-++    void xgetbv(unsigned int n, unsigned int &eax, unsigned int &edx)
-+     {
-+         eax = edx = 0;
-+     }
-+@@ -94,8 +92,8 @@
-+     f16c(false)
-+ {
-+     bool osxsave = false;
-+-    int  max     = 0;
-+-    int  eax, ebx, ecx, edx;
-++    unsigned int  max     = 0;
-++    unsigned int  eax, ebx, ecx, edx;
-+ 
-+     cpuid(0, max, ebx, ecx, edx);
-+     if (max > 0)
+I fixed
+http://autobuild.buildroot.org/results/054/054d8496f1555274c8525c8c7381aaada27f9e70/build-end.log
+which seems to be a compiler issue by simply disabling libfreeimage on
+the ARC architecture, see http://patchwork.ozlabs.org/patch/467380/.
+Don't try to fix that one, it's really a compiler problem.
+
+However, the Blackfin case is much more interesting. As explained in
+http://patchwork.ozlabs.org/patch/467380/, I tried to fix the build
+issue visible at
+http://autobuild.buildroot.org/results/f3b/f3bd6be448cffed3caae7850233168e6d0f6a5bd/build-end.log.
+I fixed the first build issue, then another one, and finally had
+another build issue that clearly indicates that the libfreeimage source
+code seems to be a piece of crap, using 40 bits constants in 32 bits
+variables. Can you have a look at this? For now we're going to disable
+the package on Blackfin, but I believe it's also buggy on other
+architectures.
+
+Here is a simple Buildroot configuration file to reproduce the problem:
+
+BR2_bfin=y
+BR2_COMPILER_PARANOID_UNSAFE_PATH=y
+BR2_INIT_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_LIBFREEIMAGE=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+Thanks for your help,
+
+Thomas
 -- 
-2.1.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
