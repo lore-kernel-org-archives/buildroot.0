@@ -1,100 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 May 2015 19:33:31 +0200
-Subject: [Buildroot] [git commit] libfreeimage: add patch to fix x86 build
-	problem
-Message-ID: <20150503173426.01B9B80836@busybox.osuosl.org>
+From: bert <bert@gtw4c.com>
+Date: Sun, 03 May 2015 15:22:04 -0400
+Subject: [Buildroot] Buildroot->Raspberry Pi 2 Build Error on
+ conftest--Output Does Not Boot.
+Message-ID: <5546755C.20204@gtw4c.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=21c656bc47e8f042e4eee52c285baa0e778fd07c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Issue Date: 2015.05.03
 
-Add a patch to fix an x86 build problem caused by invalid register
-usage when -fPIC is used.
+Build host:  "Linux version 3.19.0-15-generic (buildd at komainu) (gcc 
+version 4.9.2 (Ubuntu 4.9.2-10ubuntu13) ) #15-Ubuntu SMP Thu Apr 16 
+23:32:37 UTC 2015" running as virtualbox guest on
+same OS host. All buildroot-required packages are installed.
 
-Fixes:
+Target: Rasperry Pi 2
 
-  http://autobuild.buildroot.org/results/fe7/fe72243a84a91b68ef3138847294674b36f16c58/
+Reproduce:
+1) Clone buildroot from buildroot git repo. 
+(git://git.buildroot.net/buildroot, using master branch)
+2) cd buildroot
+3) make raspberrypi2_defconfig
+4) make
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libfreeimage/0002-fix-cpuid-x86.patch |   67 +++++++++++++++++++++++++
- 1 files changed, 67 insertions(+), 0 deletions(-)
+No changes were made to any configuration items.  During the build, a 
+box indicating the conftest has failed is presented by the build system 
+GUI. No 'conftest' executable or script is found.  The system is looking 
+for the program at output/build/host.
 
-diff --git a/package/libfreeimage/0002-fix-cpuid-x86.patch b/package/libfreeimage/0002-fix-cpuid-x86.patch
-new file mode 100644
-index 0000000..98b0e9c
---- /dev/null
-+++ b/package/libfreeimage/0002-fix-cpuid-x86.patch
-@@ -0,0 +1,67 @@
-+Fix build issue caused by invalid register usage on x86
-+
-+Patch taken from https://github.com/openexr/openexr/issues/128.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/Source/OpenEXR/IlmImf/ImfSystemSpecific.cpp
-+===================================================================
-+--- a/Source/OpenEXR/IlmImf/ImfSystemSpecific.cpp
-++++ b/Source/OpenEXR/IlmImf/ImfSystemSpecific.cpp
-+@@ -40,21 +40,19 @@
-+ 
-+ namespace {
-+ #if defined(IMF_HAVE_SSE2) &&  defined(__GNUC__)
-+-
-++#include <cpuid.h>
-+     // Helper functions for gcc + SSE enabled
-+-    void cpuid(int n, int &eax, int &ebx, int &ecx, int &edx)
-++    void cpuid(unsigned int n, unsigned int &eax, unsigned int &ebx,
-++					unsigned int &ecx, unsigned int &edx)
-+     {
-+-        __asm__ __volatile__ (
-+-            "cpuid"
-+-            : /* Output  */ "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx) 
-+-            : /* Input   */ "a"(n)
-+-            : /* Clobber */);
-++		__get_cpuid(n, &eax, &ebx, &ecx, &edx);
-+     }
-+ 
-+ #else // IMF_HAVE_SSE2 && __GNUC__
-+ 
-+     // Helper functions for generic compiler - all disabled
-+-    void cpuid(int n, int &eax, int &ebx, int &ecx, int &edx)
-++    void cpuid(unsigned int n, unsigned int &eax, unsigned int &ebx,
-++					unsigned int &ecx, unsigned int &edx)
-+     {
-+         eax = ebx = ecx = edx = 0;
-+     }
-+@@ -64,7 +62,7 @@
-+ 
-+ #ifdef OPENEXR_IMF_HAVE_GCC_INLINE_ASM_AVX
-+ 
-+-    void xgetbv(int n, int &eax, int &edx)
-++    void xgetbv(unsigned int n, unsigned int &eax, unsigned int &edx)
-+     {
-+         __asm__ __volatile__ (
-+             "xgetbv"
-+@@ -75,7 +73,7 @@
-+ 
-+ #else //  OPENEXR_IMF_HAVE_GCC_INLINE_ASM_AVX
-+ 
-+-    void xgetbv(int n, int &eax, int &edx)
-++    void xgetbv(unsigned int n, unsigned int &eax, unsigned int &edx)
-+     {
-+         eax = edx = 0;
-+     }
-+@@ -94,8 +92,8 @@
-+     f16c(false)
-+ {
-+     bool osxsave = false;
-+-    int  max     = 0;
-+-    int  eax, ebx, ecx, edx;
-++    unsigned int  max     = 0;
-++    unsigned int  eax, ebx, ecx, edx;
-+ 
-+     cpuid(0, max, ebx, ecx, edx);
-+     if (max > 0)
+The resulting output placed on the target does not boot (known good 
+hardware).  Both zImage and zImage put through mkknlimg utility fail to 
+boot.  All the output products appear to be in the correct location.
