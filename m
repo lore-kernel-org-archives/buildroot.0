@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 May 2015 16:32:44 +0200
-Subject: [Buildroot] [PATCH 1/2] poppler: add patch to fix invalid
-	syntax in configure script
-In-Reply-To: <1430660473-6997-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 3 May 2015 15:41:12 +0200")
+Date: Sun, 03 May 2015 16:33:34 +0200
+Subject: [Buildroot] [PATCH 2/2] poppler: help finding libtiff in static
+	linking scenarios
+In-Reply-To: <1430660473-6997-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 3 May 2015 15:41:13 +0200")
 References: <1430660473-6997-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <876189u3xv.fsf@dell.be.48ers.dk>
+ <1430660473-6997-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <871tixu3wh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,14 +15,19 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > When configuring poppler, a shell error occurs:
- > ./configure: line 19741: test: x: unary operator expected
+ > In static linking scenarios, poppler doesn't find libtiff because it
+ > doesn't use pkg-config, so it doesn't know which additional libraries
+ > it should link with to test the availability of libtiff. We help
+ > poppler in this work by passing a LIBTIFF_LIBS variable, resulting for
+ > a pkg-config invocation.
 
- > This is due to an invalid configure test, which is fixed by a newly
- > added patch. We patch the configure script directly because poppler
- > doesn't autoreconf properly. A patch on configure.ac has been
- > submitted upstream so that hopefully we can drop our patch in a future
- > release of poppler.
+ > Also, since poppler uses pkg-config, we make this dependency explicit
+ > in this patch, even though it was already carried by the fontconfig
+ > dependency.
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.org/results/be7/be78957dd852233c81bd364ddf664564ce8f0208/
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
