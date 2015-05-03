@@ -1,64 +1,112 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 May 2015 17:42:44 +0200
-Subject: [Buildroot] [PATCHv3] docs/manual: add list of instrumentation steps
-Message-ID: <1430667764-17877-1-git-send-email-yann.morin.1998@free.fr>
+From: Carlos Soto <csotoalonso@gmail.com>
+Date: Sun, 3 May 2015 18:11:01 +0200
+Subject: [Buildroot] [PATCH] autotools-package: also handle
+ pre-installed external toolchain in .la fixup
+In-Reply-To: <1430603450-17855-1-git-send-email-arnout@mind.be>
+References: <1430603450-17855-1-git-send-email-arnout@mind.be>
+Message-ID: <CAD7j7Q_wnis38K8pMdDN6h=zZ6cpD5wnwdey1bExFcqMbFL8jg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The names of steps are not obvious, so add this list to the manual.
+2015-05-02 23:50 GMT+02:00 Arnout Vandecappelle (Essensium/Mind) <
+arnout@mind.be>:
 
-Small formatting fix at the same time.
+> The .la fixup handling looks for paths starting with /usr and assumes
+> that they are missing the installation prefix (i.e. $(STAGING_DIR)). It
+> already handles the cases that $(STAGING_DIR) itself and $(BASE_DIR)
+> are under /usr, but it does not yet handle the case that a
+> pre-installed external toolchain is under /usr (and tracks that fact
+> in some .la file). For instance, if you use buildroot to generate a
+> toolchain with HOST_DIR=/usr/local/some_path, this problem will occur.
+>
+> Fix this in the same way as $(STAGING_DIR) and $(BASE_DIR), but in
+> addition check that TOOLCHAIN_EXTERNAL_INSTALL_DIR is non-empty. For
+> internal toolchains, it is empty and the sed expression would fail.
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Reported-by: Carlos Soto <csotoalonso@gmail.com>
+> Cc: Carlos Soto <csotoalonso@gmail.com>
+> ---
+> I haven't been able to test this very extensively because it's not so
+> easy to find .la files where it goes wrong.
+>
+> Carlos, can you check if this patch solves the problem for you?
+>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Hi Arnout,
+I'm afraid it does not work. I've tried patching buildroot but it gave me
+errors. So I've applied manually the changes to pkg-autotools.mk and that's
+what happened after a make clean && make
+find
+/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib*
+-name "*.la" | xargs --no-run-if-empty /bin/sed -i -e
+"s:/home/starsl/iMX6/buildroot/output:@BASE_DIR@:g" -e
+"s:/home/starsl/iMX6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot:@STAGING_DIR@:g"
+-e
+"s:/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g"
+-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g"  -e
+"s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:/usr/local/xtools/arm-cortexa9_neon-linux-gnueabihf:g"
+\
+/bin/sed: can't read     : No such file or directory
+make: ***
+[/home/starsl/iMX6/buildroot/output/build/alsa-lib-1.0.28/.stamp_staging_installed]
+Error 123
 
----
-Changes v2 -> v3:
-  - typoes  (Arnout)
 
-Changes v1 -> v2:
-  - remove reference to target-finalize, it's currently not a step
----
- docs/manual/debugging-buildroot.txt | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/debugging-buildroot.txt b/docs/manual/debugging-buildroot.txt
-index b97f633..f575fc4 100644
---- a/docs/manual/debugging-buildroot.txt
-+++ b/docs/manual/debugging-buildroot.txt
-@@ -12,8 +12,8 @@ space-separated list, you want called before and after each step. The
- scripts are called in sequence, with three parameters:
- 
-   - +start+ or +end+ to denote the start (resp. the end) of a step;
--  - the name of the step about to be started, or which just ended.
--  - the name of the package
-+  - the name of the step about to be started, or which just ended;
-+  - the name of the package.
- 
- For example :
- 
-@@ -21,7 +21,18 @@ For example :
- make BR2_INSTRUMENTATION_SCRIPTS="/path/to/my/script1 /path/to/my/script2"
- ----
- 
--That script has access to the following variables:
-+The list of steps is:
-+
-+  - +extract+
-+  - +patch+
-+  - +configure+
-+  - +build+
-+  - +install-host+, when a host-package is installed in +$(HOST_DIR)+
-+  - +install-target+, when a target-package is installed in +$(TARGET_DIR)+
-+  - +install-staging+, when a target-package is installed in +$(STAGING_DIR)+
-+  - +install-image+, when a target-package installs files in +$(BINARIES_DIR)+
-+
-+The script has access to the following variables:
- 
-   - +BR2_CONFIG+: the path to the Buildroot .config file
-   - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
--- 
-1.9.1
+
+
+> ---
+>  package/pkg-autotools.mk | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> index 49b42d4..9dea08a 100644
+> --- a/package/pkg-autotools.mk
+> +++ b/package/pkg-autotools.mk
+> @@ -304,10 +304,13 @@ endif
+>  # needs to be applied to any path that starts with /usr.
+>  #
+>  # To protect against the case that the output or staging directories
+> -# themselves are under /usr, we first substitute away any occurrences
+> -# of these directories as @BASE_DIR@ and @STAGING_DIR at . Note that
+> -# STAGING_DIR can be outside BASE_DIR when the user sets BR2_HOST_DIR
+> -# to a custom value.
+> +# or the pre-installed external toolchain themselves are under /usr,
+> +# we first substitute away any occurrences of these directories as
+> +# @BASE_DIR@, @STAGING_DIR@ and @TOOLCHAIN_EXTERNAL_INSTALL_DIR@
+> respectively.
+> +# Note that STAGING_DIR can be outside BASE_DIR when the user sets
+> +# BR2_HOST_DIR to a custom value. Note that TOOLCHAIN_EXTERNAL_INSTALL_DIR
+> +# can be under @BASE_DIR@ when it's a downloaded toolchain, and can be
+> empty
+> +# when we use an internal toolchain.
+>  #
+>  ifndef $(2)_INSTALL_STAGING_CMDS
+>  define $(2)_INSTALL_STAGING_CMDS
+> @@ -315,7 +318,11 @@ define $(2)_INSTALL_STAGING_CMDS
+>         find $$(STAGING_DIR)/usr/lib* -name "*.la" | xargs
+> --no-run-if-empty \
+>                 $$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
+>                         -e "s:$$(STAGING_DIR):@STAGING_DIR@:g" \
+> +                       $$(if $$(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+> +                               -e
+> "s:$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g")
+> \
+>                         -e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+> +                       $$(if $$(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+> +                               -e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g")
+> \
+>                         -e "s:@STAGING_DIR@:$$(STAGING_DIR):g" \
+>                         -e "s:@BASE_DIR@:$$(BASE_DIR):g"
+>  endef
+> --
+> 2.1.4
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150503/6ac25091/attachment.html>
