@@ -1,45 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 May 2015 19:25:24 +0200
-Subject: [Buildroot] [git commit] libcurl: use c-ares if available
-Message-ID: <20150503172942.0AAA180793@busybox.osuosl.org>
+Date: Sun, 03 May 2015 19:32:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libatomic_ops: bump version to
+	7.4.2
+In-Reply-To: <1430603605-27408-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sat, 2 May 2015 23:53:25 +0200")
+References: <1430603605-27408-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87oam1sh1m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff05e241f877615c127477dcda2ba99667a8d798
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-By default libcurl uses the C library's DNS resolver which is
-synchronous, even if an application is using libcurl's non-blocking mode
-of operation.
+ > Also add project URL to Config.in
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Configure libcurl to use c-ares if it is selected so that it can resolve
-addresses asynchronously if required.
+Committed, thanks.
 
-[Peter: explicitly disable c-ares support if not enabled]
-Signed-off-by: John Keeping <john@keeping.me.uk>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcurl/libcurl.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
-
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index f0d7bac..0ce2dfd 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -46,6 +46,13 @@ LIBCURL_CONF_OPTS += --without-ssl --without-gnutls \
- 	--without-polarssl --without-nss
- endif
- 
-+ifeq ($(BR2_PACKAGE_C_ARES),y)
-+LIBCURL_DEPENDENCIES += c-ares
-+LIBCURL_CONF_OPTS += --enable-ares
-+else
-+LIBCURL_CONF_OPTS += --disable-ares
-+endif
-+
- # Configure curl to support libssh2
- ifeq ($(BR2_PACKAGE_LIBSSH2),y)
- LIBCURL_DEPENDENCIES += libssh2
+-- 
+Bye, Peter Korsgaard
