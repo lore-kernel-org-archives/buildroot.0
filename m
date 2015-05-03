@@ -1,66 +1,39 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun, 3 May 2015 22:37:19 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 03 May 2015 23:14:13 +0200
 Subject: [Buildroot] [PATCH v2 2/2] package/mono: bump to version 4.0.1
-In-Reply-To: <20150503153134.5f5764f4@free-electrons.com>
+In-Reply-To: <CA+TH9Vkxv4xdt+WZpkhyQa-LF-8J+3LDq-K37fhA0OgqZEQ_Tg@mail.gmail.com>
+ (Angelo Compagnucci's message of "Sun, 3 May 2015 22:37:19 +0200")
 References: <1430402595-5355-1-git-send-email-angelo.compagnucci@gmail.com>
  <1430402595-5355-3-git-send-email-angelo.compagnucci@gmail.com>
  <20150503153134.5f5764f4@free-electrons.com>
-Message-ID: <CA+TH9Vkxv4xdt+WZpkhyQa-LF-8J+3LDq-K37fhA0OgqZEQ_Tg@mail.gmail.com>
+ <CA+TH9Vkxv4xdt+WZpkhyQa-LF-8J+3LDq-K37fhA0OgqZEQ_Tg@mail.gmail.com>
+Message-ID: <877fsps6sa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-2015-05-03 15:31 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Angelo Compagnucci,
->
-> On Thu, 30 Apr 2015 16:03:15 +0200, Angelo Compagnucci wrote:
->> This patch:
->>
->> * bumps mono version to 4.0.1.
->> * Removes no more needed patches included upstream
->> * Removes profile switches no more present in configure
->>
->> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->> ---
->>  .../0003-mono-context.h-fix-build-on-MIPS.patch    | 33 --------
->>  ...e-ppc-sigctx-monoctx-conversion-code-to-m.patch | 92 ----------------------
->>  ...build-errors-in-mono-context.c-on-ppc64el.patch | 84 --------------------
->>  package/mono/Config.in                             | 22 ------
->>  package/mono/mono.mk                               |  9 +--
->>  5 files changed, 1 insertion(+), 239 deletions(-)
->>  delete mode 100644 package/mono/0003-mono-context.h-fix-build-on-MIPS.patch
->>  delete mode 100644 package/mono/0004-jit-Move-the-ppc-sigctx-monoctx-conversion-code-to-m.patch
->>  delete mode 100644 package/mono/0005-Fix-build-errors-in-mono-context.c-on-ppc64el.patch
->
-> This commit is causing a build failure:
-> http://autobuild.buildroot.org/results/b97/b97543b26f8bc25a9e997bb66434ae9660a2f198/build-end.log.
-> It might be a parallel installation issue:
->
-> /usr/bin/install: cannot create regular file `/home/peko/autobuild/instance-0/output/host/usr/lib/mono/xbuild-frameworks/.NETFramework/v3.0/RedistList/FrameworkList.xml': File exists/usr/bin/install: cannot create regular file `/home/peko/autobuild/instance-0/output/host/usr/lib/mono/xbuild/Microsoft/Portable/v4.5/Microsoft.Portable.Common.targets': File exists
->
-> Can you investigate?
+Hi,
 
-Sure! Honestly it seems a little strange for me, I had several
-compilation test and a system with mono running for a side project and
-this is not happened.
+>> /usr/bin/install: cannot create regular file
+ >> `/home/peko/autobuild/instance-0/output/host/usr/lib/mono/xbuild-frameworks/.NETFramework/v3.0/RedistList/FrameworkList.xml':
+ >> File exists/usr/bin/install: cannot create regular file
+ >> `/home/peko/autobuild/instance-0/output/host/usr/lib/mono/xbuild/Microsoft/Portable/v4.5/Microsoft.Portable.Common.targets':
+ >> File exists
+ >> 
+ >> Can you investigate?
 
-Tomorrow I will look to it.
+ > Sure! Honestly it seems a little strange for me, I had several
+ > compilation test and a system with mono running for a side project and
+ > this is not happened.
 
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+ > Tomorrow I will look to it.
 
-
+It looks like a parallel build issue with high BR2_JLEVEL settings. We
+could move to MAKE1 but that will probably slow down the build quite a bit.
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Bye, Peter Korsgaard
