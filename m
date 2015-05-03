@@ -1,52 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 May 2015 19:34:04 +0200
-Subject: [Buildroot] [PATCH 2/2] libfreeimage: disable on ARC and
-	Blackfin
-In-Reply-To: <1430656670-919-2-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 3 May 2015 14:37:50 +0200")
-References: <1430656670-919-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1430656670-919-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87bni1sgz7.fsf@dell.be.48ers.dk>
+Date: Sun, 3 May 2015 19:32:49 +0200
+Subject: [Buildroot] [git commit] gdb: disable on Blackfin
+Message-ID: <20150503173425.ECA4E80836@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=60e5ed19e75c5f446aa42d01282cfc8032f449c8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > libfreeimage fails to build on ARC, due to compiler issues:
- >   Error: invalid register number `63'
+gdbserver does not build on Blackfin FLAT (undefined reference to
+`_td_thr_tlsbase') and while it builds on Blackfin FDPIC, it's pretty
+unlikely that it is going to work properly with the cross-gdb provided
+by the Analog Devices toolchain: the Analog Devices toolchain provides
+a 6.6 cross-gdb, while we use gdb 7.8.2 for gdbserver.
 
- > This should probably be fixed at the compiler level.
+Therefore, let's simply disable gdb completely for Blackfin.
 
- > It also fails to build on Blackfin, due to numerous libfreeimage
- > issues:
+Fixes:
 
- >   1/ Missing LL suffixes in Source/OpenEXR/IlmImf/ImfFastHuf.cpp. This
- >      can be fixed by backporting upstream OpenEXR commit
- >      https://github.com/openexr/openexr/commit/57ecf581d053f5cacf2e8fc3c024490e0bbe536f.patch.
+  http://autobuild.buildroot.org/results/2e5/2e5310d0e869f036ec70b978c62c7bd9d3d2bd70/
 
- >   2/ Invalid characters in libraw_x3f.cpp. This can be fixed by
- >      applying dos2unix on the file.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gdb/Config.in |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
- >   3/ Usage of too long constants in an unsigned long in
- >      dcraw_common.cpp, in code like "id == 0x4434303430" where id is
- >      an "unsigned long" i.e 32 bits on 32 bits platform.
-
- > Due to (3) being apparently unsolved upstream, and causing a build
- > error on Blackfin, we disable libfreeimage on this
- > architecture. However, this code seems so broken that making
- > libfreeimage as entirely broken would maybe be a better option.
-
- > Fixes:
-
- >   http://autobuild.buildroot.org/results/b33/b3372581c82786cc0a87f8cc2e78f047cc079255/ (ARC issue)
- >   http://autobuild.buildroot.org/results/f3b/f3bd6be448cffed3caae7850233168e6d0f6a5bd/ (Blackfin issue)
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index db6adf5..feab01d 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -1,5 +1,5 @@
+ comment "gdb/gdbserver needs a toolchain w/ threads, threads debug"
+-	depends on !BR2_nios2
++	depends on !BR2_nios2 && !BR2_bfin
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 
+ config BR2_PACKAGE_GDB
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_GDB
+ 	select BR2_PACKAGE_GDB_SERVER if \
+ 		(!BR2_PACKAGE_GDB_DEBUGGER && !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS && BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+-	depends on !BR2_nios2
++	depends on !BR2_nios2 && !BR2_bfin
+ 	help
+ 	  GDB, the GNU Project debugger, allows you to see what is
+ 	  going on `inside' another program while it executes -- or
+@@ -40,10 +40,10 @@ config BR2_PACKAGE_GDB_DEBUGGER
+ 	bool "full debugger"
+ 	select BR2_PACKAGE_NCURSES
+ 	depends on BR2_USE_WCHAR
+-	depends on !BR2_sh && !BR2_sh64 && !BR2_microblaze && !BR2_bfin
++	depends on !BR2_sh && !BR2_sh64 && !BR2_microblaze
+ 
+ comment "full gdb on target needs a toolchain w/ wchar"
+-	depends on !BR2_sh && !BR2_sh64 && !BR2_microblaze && !BR2_bfin
++	depends on !BR2_sh && !BR2_sh64 && !BR2_microblaze
+ 	depends on !BR2_USE_WCHAR
+ 
+ if BR2_PACKAGE_GDB_DEBUGGER
