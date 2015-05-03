@@ -1,45 +1,36 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 03 May 2015 18:59:45 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libpthsem: remove
- argp-standalone dependency
-In-Reply-To: <5544C15E.9060103@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 03 May 2015 19:21:52 +0200
+Subject: [Buildroot] [PATCH 2/2] package/argp-standalone: is useless for
+	(e)glibc toolchains
+In-Reply-To: <1430562486-23625-2-git-send-email-romain.naour@openwide.fr>
+ (Romain Naour's message of "Sat, 2 May 2015 12:28:06 +0200")
 References: <1430562486-23625-1-git-send-email-romain.naour@openwide.fr>
- <5544C15E.9060103@mind.be>
-Message-ID: <55465401.4080207@openwide.fr>
+ <1430562486-23625-2-git-send-email-romain.naour@openwide.fr>
+Message-ID: <87wq0pshjj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, All
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
-Le 02/05/2015 14:21, Arnout Vandecappelle a ?crit :
-> On 02/05/15 12:28, Romain Naour wrote:
->> argp-standalone provide libargp.a and argp.h which are
->> never used in libpthsem.
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> 
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->  Build-test with and without the _COMPAT option, and checked that there is no
-> reference to argp in the source.
-> 
->  Adding the original submitter of this package in Cc for final verification.
-> Gregory, do you remember why you added the argp-standalone dependency?
-> 
-Peter find why argp-standalone was added to libpthsem:
-http://git.buildroot.net/buildroot/commit/?id=25206d6e26dc4ce9c272e68876f31d0ca7d30e67
+ > According to Thomas's remark [1], (e)glibc toolchains provide it's
+ > own argp.h version.
+ > Also, it appears that argp.h from glibc is more up to date should
+ > be preferred to argp-standalone one.
 
-Gregory is also the original submitter of bcusdk package and it seems that he
-added argp-standalone dependency to libpthsem instead of bcusdk.
+ > [1] http://lists.busybox.net/pipermail/buildroot/2015-May/127511.html
 
-Thank you Arnout for your review and test.
+ > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+ > ---
+ > Note: I didn't add a comment in Config.in to tell that argp-standalone
+ >       package is useless for (e)glibc toolchains.
 
-Best regards,
-Romain
+I think it is OK to not display anything as it doesn't make sense on
+glibc.
 
->  Regards,
->  Arnout
-> 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
