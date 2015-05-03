@@ -1,77 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 May 2015 23:30:34 +0200
-Subject: [Buildroot] [PATCH 0/2 v2] pkg-infra: better fix libtool files wrt.
-	/usr (branch yem/libtool)
-Message-ID: <cover.1430687963.git.yann.morin.1998@free.fr>
+Date: Sun,  3 May 2015 23:30:38 +0200
+Subject: [Buildroot] [PATCH 1/2 v2] autotools-package: also handle
+	pre-installed external toolchain in .la fixup
+In-Reply-To: <cover.1430687963.git.yann.morin.1998@free.fr>
+References: <cover.1430687963.git.yann.morin.1998@free.fr>
+Message-ID: <71ddaa7abe2063c33ad88194ed1e499a7d06ef78.1430687963.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Arnout Vandecappelle <arnout@mind.be>
 
-This small series aims at better fixing libtool's .la files.
+The .la fixup handling looks for paths starting with /usr and assumes
+that they are missing the installation prefix (i.e. $(STAGING_DIR)). It
+already handles the cases that $(STAGING_DIR) itself and $(BASE_DIR)
+are under /usr, but it does not yet handle the case that a
+pre-installed external toolchain is under /usr (and tracks that fact
+in some .la file). For instance, if you use buildroot to generate a
+toolchain with HOST_DIR=/usr/local/some_path, this problem will occur.
 
-Currently, we fix .la files by per-prending the path to the sysroot to
-any path that starts with /usr . However, if either or both of the base
-directory (basically, $(O) ) or the staging directory are themselves
-sub-directories of /usr , we avoid doing that transformation, by
-carefully 'protecting' those two paths, to keep them intact.
+Fix this in the same way as $(STAGING_DIR) and $(BASE_DIR), but in
+addition check that TOOLCHAIN_EXTERNAL_INSTALL_DIR is non-empty. For
+internal toolchains, it is empty and the sed expression would fail.
 
-However, if the toolchain itself is present as a sub-directory of /usr
-(i.e. a pre-installed custom toolchain), it may also contain .la files
-with paths starting with /usr . This means we would currently prepend
-the path to the staging directory to such paths in those .la files.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reported-by: Carlos Soto <csotoalonso@gmail.com>
+Cc: Carlos Soto <csotoalonso@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Of course, that breaks. :-(
+---
+I haven't been able to test this very extensively because it's not so
+easy to find .la files where it goes wrong.
 
-So this series adds two fixes for that:
+Carlos, can you check if this patch solves the problem for you?
+---
+ package/pkg-autotools.mk | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-  - first, it properly protects the path to the custom pre-installed
-    toolchain, the same way we handle the base and staging directories,
-    (patch by Arnout),
-
-  - second, it moves .la munging into the generic package
-    infrastructure, as even non-autotools-based packages may also
-    install .la files (patch by me).
-
-
-Changes v1 -> v2:
-  - add the second patch
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 6e55cd5d604b51a5f6658d4bf2f602a360d9c887:
-
-  libfreeimage: disable on ARC and Blackfin (2015-05-03 19:33:52 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/libtool
-
-for you to fetch changes up to 2498f2352f5b65d77d91f6405d39e6349de640dc:
-
-  pkg-infra: munging .la files is not limited to autotools packages (2015-05-03 23:17:44 +0200)
-
-----------------------------------------------------------------
-Arnout Vandecappelle (1):
-      autotools-package: also handle pre-installed external toolchain in .la fixup
-
-Yann E. MORIN (1):
-      pkg-infra: munging .la files is not limited to autotools packages
-
- package/pkg-autotools.mk | 20 --------------------
- package/pkg-generic.mk   | 30 ++++++++++++++++++++++++++++++
- 2 files changed, 30 insertions(+), 20 deletions(-)
-
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 49b42d4..9dea08a 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -304,10 +304,13 @@ endif
+ # needs to be applied to any path that starts with /usr.
+ #
+ # To protect against the case that the output or staging directories
+-# themselves are under /usr, we first substitute away any occurrences
+-# of these directories as @BASE_DIR@ and @STAGING_DIR at . Note that
+-# STAGING_DIR can be outside BASE_DIR when the user sets BR2_HOST_DIR
+-# to a custom value.
++# or the pre-installed external toolchain themselves are under /usr,
++# we first substitute away any occurrences of these directories as
++# @BASE_DIR@, @STAGING_DIR@ and @TOOLCHAIN_EXTERNAL_INSTALL_DIR@ respectively.
++# Note that STAGING_DIR can be outside BASE_DIR when the user sets
++# BR2_HOST_DIR to a custom value. Note that TOOLCHAIN_EXTERNAL_INSTALL_DIR
++# can be under @BASE_DIR@ when it's a downloaded toolchain, and can be empty
++# when we use an internal toolchain.
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+@@ -315,7 +318,11 @@ define $(2)_INSTALL_STAGING_CMDS
+ 	find $$(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
+ 		$$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
+ 			-e "s:$$(STAGING_DIR):@STAGING_DIR@:g" \
++			$$(if $$(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
++				-e "s:$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
+ 			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
++			$$(if $$(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
++				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
+ 			-e "s:@STAGING_DIR@:$$(STAGING_DIR):g" \
+ 			-e "s:@BASE_DIR@:$$(BASE_DIR):g"
+ endef
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
