@@ -1,42 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 May 2015 11:44:41 +0200
-Subject: [Buildroot] [git commit] libecore: x-includes and x-libraries must
-	be set for cross-compiling
-Message-ID: <20150503094553.9438980160@busybox.osuosl.org>
+Date: Sun, 3 May 2015 11:44:13 +0200
+Subject: [Buildroot] [git commit] package/efl/libevas: x-includes and
+	x-libraries must be set for cross-compiling
+Message-ID: <20150503094553.85F9C80160@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0d9d8984a9240a27f5ed2e15f1977ada67266906
+commit: http://git.buildroot.net/buildroot/commit/?id=da50b6b61c4a566fd28888f5a3a6dcb06fe1b495
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If those flags are not explicitly passed, the libecore configure
-script will include -I/usr/X11R6/include and -L/usr/X11R6/lib in the
-compile flags, which are obviously unsafe for cross-compilation.
+evas_engine_software_xlib_cflags and evas_engine_software_xlib_libs
+contains unsafe libraries paths if x-include and x-libraries are
+not set in libevas.mk.
 
-The fix is similar to "package/efl/libevas: x-includes and x-libraries
-must be set for cross-compiling" done by Romain Naour on libecore.
+config.log:
+evas_engine_software_xlib_cflags='-I/usr/X11R6/include'
+evas_engine_software_xlib_libs='-L/usr/X11R6/lib -lX11 -lXext'
 
+Fixes:
+http://autobuild.buildroot.net/results/e5f/e5fb1e62cb634b20233751b4ea3b0630de70e9e0/
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/libecore/libecore.mk |    5 ++++-
+ package/efl/libevas/libevas.mk |    5 ++++-
  1 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
-index dc73687..1f711a8 100644
---- a/package/efl/libecore/libecore.mk
-+++ b/package/efl/libecore/libecore.mk
-@@ -74,7 +74,10 @@ LIBECORE_CONF_OPTS += --disable-ecore-sdl
+diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+index 8312902..8113162 100644
+--- a/package/efl/libevas/libevas.mk
++++ b/package/efl/libevas/libevas.mk
+@@ -63,7 +63,10 @@ LIBEVAS_CONF_OPTS += --enable-buffer
  endif
  
- ifeq ($(BR2_PACKAGE_LIBECORE_X),y)
--LIBECORE_CONF_OPTS += --enable-ecore-x
-+LIBECORE_CONF_OPTS += --enable-ecore-x \
+ ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
+-LIBEVAS_CONF_OPTS += --enable-software-xlib
++LIBEVAS_CONF_OPTS += --enable-software-xlib \
 +	--with-x=$(STAGING_DIR) \
 +	--x-includes=$(STAGING_DIR)/usr/include \
 +	--x-libraries=$(STAGING_DIR)/usr/lib
- LIBECORE_DEPENDENCIES += xlib_libXext xlib_libX11
+ LIBEVAS_DEPENDENCIES += xlib_libX11 xlib_libXext
  else
- LIBECORE_CONF_OPTS += --disable-ecore-x --disable-ecore-imf-xim
+ LIBEVAS_CONF_OPTS += --disable-software-xlib
