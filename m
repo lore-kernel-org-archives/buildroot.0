@@ -1,30 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 May 2015 11:53:54 +0200
-Subject: [Buildroot] 2015.08 release goals
-Message-ID: <20150503115354.2fc19b90@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 03 May 2015 12:00:48 +0200
+Subject: [Buildroot] [PATCH] package/efl/libevas: x-includes and
+ x-libraries must be set for cross-compiling
+In-Reply-To: <20150503114628.37e24683@free-electrons.com>
+References: <1430597796-23584-1-git-send-email-romain.naour@openwide.fr>
+ <20150503114628.37e24683@free-electrons.com>
+Message-ID: <5545F1D0.7000904@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-Since 2015.05-rc1 is approaching, we will stop merging new features. So
-I've started collecting a list of release goals for 2015.08 at
-http://elinux.org/Buildroot:2015.08_Release_Goals.
+Le 03/05/2015 11:46, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
+> 
+> On Sat,  2 May 2015 22:16:36 +0200, Romain Naour wrote:
+>> evas_engine_software_xlib_cflags and evas_engine_software_xlib_libs
+>> contains unsafe libraries paths if x-include and x-libraries are
+>> not set in libevas.mk.
+>>
+>> config.log:
+>> evas_engine_software_xlib_cflags='-I/usr/X11R6/include'
+>> evas_engine_software_xlib_libs='-L/usr/X11R6/lib -lX11 -lXext'
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/e5f/e5fb1e62cb634b20233751b4ea3b0630de70e9e0/
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>  package/efl/libevas/libevas.mk | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> Applied, thanks. I've done a second commit on libecore with the exact
+> same fix, because the exact same problem occurred on libecore in my
+> test build. See
+> http://git.buildroot.net/buildroot/commit/?id=0d9d8984a9240a27f5ed2e15f1977ada67266906.
 
-This is not intended to be an exhaustive list of all the package
-updates and so on, only the "big" items, either infrastructure changes
-or major package changes/updates.
+This is what this path does ;)
+http://patchwork.ozlabs.org/patch/467259/
 
-People are welcome to help on those big topics by reviewing/testing the
-patch series that have already been proposed.
+Thanks for fixing this.
 
 Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Romain
+> 
+> Best regards,
+> 
+> Thomas
+> 
