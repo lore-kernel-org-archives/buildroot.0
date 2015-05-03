@@ -1,37 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 May 2015 16:33:34 +0200
-Subject: [Buildroot] [PATCH 2/2] poppler: help finding libtiff in static
-	linking scenarios
-In-Reply-To: <1430660473-6997-2-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 3 May 2015 15:41:13 +0200")
-References: <1430660473-6997-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1430660473-6997-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <871tixu3wh.fsf@dell.be.48ers.dk>
+Date: Sun, 3 May 2015 16:33:46 +0200
+Subject: [Buildroot] [git commit] cc-tool: fix missing stdarg.h include on
+	uClibc
+Message-ID: <20150503143419.0E1D5818B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a500dff16875392b6ae91ab10e0595020b8289fd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > In static linking scenarios, poppler doesn't find libtiff because it
- > doesn't use pkg-config, so it doesn't know which additional libraries
- > it should link with to test the availability of libtiff. We help
- > poppler in this work by passing a LIBTIFF_LIBS variable, resulting for
- > a pkg-config invocation.
+This commit adds a patch to fix a missing <stdarg.h> include for
+va_list.
 
- > Also, since poppler uses pkg-config, we make this dependency explicit
- > in this patch, even though it was already carried by the fontconfig
- > dependency.
+Fixes:
 
- > Fixes:
+  http://autobuild.buildroot.org/results/9c8/9c828b1da8983577f93bdfae5275fc5122ae874f/
 
- >   http://autobuild.buildroot.org/results/be7/be78957dd852233c81bd364ddf664564ce8f0208/
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../cc-tool/0001-add-missing-stdarg-include.patch  |   18 ++++++++++++++++++
+ 1 files changed, 18 insertions(+), 0 deletions(-)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cc-tool/0001-add-missing-stdarg-include.patch b/package/cc-tool/0001-add-missing-stdarg-include.patch
+new file mode 100644
+index 0000000..c4f47fd
+--- /dev/null
++++ b/package/cc-tool/0001-add-missing-stdarg-include.patch
+@@ -0,0 +1,18 @@
++Add missing <stdarg.h> include for va_list
++
++Fixes the build on uClibc.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/src/common/log.h
++===================================================================
++--- a/src/common/log.h
+++++ b/src/common/log.h
++@@ -13,6 +13,7 @@
++ 
++ #include <stdio.h>
++ #include <stdlib.h>
+++#include <stdarg.h>
++ #include "common.h"
++ 
++ class Log
