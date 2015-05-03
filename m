@@ -1,51 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 May 2015 13:33:02 +0200
-Subject: [Buildroot] [git commit] bcusdk: needs argp-standalone on uClibc
-Message-ID: <20150503113506.26F3F80DF0@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 3 May 2015 14:53:27 +0300
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150503105009.2b42c375@free-electrons.com>
+References: <20150502063016.3950D100FB0@stock.ovh.net>
+ <20150503105009.2b42c375@free-electrons.com>
+Message-ID: <20150503115327.GS2265@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=25206d6e26dc4ce9c272e68876f31d0ca7d30e67
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Fixes:
-http://autobuild.buildroot.net/results/181/181f12d3a46ef10113ab47f75ccf57cfc1b6210f/
-http://autobuild.buildroot.net/results/25c/25cb21dd5a0dad318c498fcf7a889ae2ce93c697/
+On Sun, May 03, 2015 at 10:50:09AM +0200, Thomas Petazzoni wrote:
+> 
+> >          arm | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/12fd2a248b121d9178406f3216e35c866d391667/
+> >          arm | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/b69dcc39847e927349c598a840caecfd14c36b87/
+> >       xtensa | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/971bd6e6b66f0c3c3fcd06a830d83b87a53f03b2/
+> >          arm | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/029cd2c19681445d38d76b7fcd8f939652e8fcf1/
+> 
+> libm missing when linking. Could some CMake person have a look?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bcusdk/Config.in |    1 +
- package/bcusdk/bcusdk.mk |    5 ++++-
- 2 files changed, 5 insertions(+), 1 deletions(-)
+I don't think so. uClibc variants don't export the 'long double' versions of 
+pow(), ceil(), etc., even with DO_C99_MATH=y. We'll probably need to add 
+another check_symbol_exists() to CMakeLists.txt.
 
-diff --git a/package/bcusdk/Config.in b/package/bcusdk/Config.in
-index 658c592..72deef1 100644
---- a/package/bcusdk/Config.in
-+++ b/package/bcusdk/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_BCUSDK
- 	depends on BR2_USE_MMU # libpthsem
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBPTHSEM
-+	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
- 	help
- 	  A free development environment for the Bus Coupling Units of
- 	  the European Installation Bus.
-diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
-index 80c98af..697b5ce 100644
---- a/package/bcusdk/bcusdk.mk
-+++ b/package/bcusdk/bcusdk.mk
-@@ -20,7 +20,10 @@ BCUSDK_CONF_OPTS = \
- 	--without-pth-test \
- 	--with-pth=$(STAGING_DIR)/usr
- 
--BCUSDK_DEPENDENCIES = libpthsem
-+BCUSDK_DEPENDENCIES = \
-+	libpthsem \
-+	$(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone)
-+
- 
- define BCUSDK_REMOVE_EXAMPLES
- 	$(RM) -rf $(TARGET_DIR)/usr/share/bcusdk
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
