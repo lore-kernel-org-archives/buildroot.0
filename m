@@ -1,39 +1,78 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 May 2015 23:14:13 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/mono: bump to version 4.0.1
-In-Reply-To: <CA+TH9Vkxv4xdt+WZpkhyQa-LF-8J+3LDq-K37fhA0OgqZEQ_Tg@mail.gmail.com>
- (Angelo Compagnucci's message of "Sun, 3 May 2015 22:37:19 +0200")
-References: <1430402595-5355-1-git-send-email-angelo.compagnucci@gmail.com>
- <1430402595-5355-3-git-send-email-angelo.compagnucci@gmail.com>
- <20150503153134.5f5764f4@free-electrons.com>
- <CA+TH9Vkxv4xdt+WZpkhyQa-LF-8J+3LDq-K37fhA0OgqZEQ_Tg@mail.gmail.com>
-Message-ID: <877fsps6sa.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun,  3 May 2015 23:14:20 +0200
+Subject: [Buildroot] [PATCH] package/autoconf-archive: fix ax_tls syntax
+	error
+Message-ID: <1430687660-29414-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+The ax_tls.m4 serial 11 produce a syntax error
+in configure scripts.
 
-Hi,
+Fixes:
+http://autobuild.buildroot.net/results/619/619339810617212a667fe72278ec727ee992ffbf/
 
->> /usr/bin/install: cannot create regular file
- >> `/home/peko/autobuild/instance-0/output/host/usr/lib/mono/xbuild-frameworks/.NETFramework/v3.0/RedistList/FrameworkList.xml':
- >> File exists/usr/bin/install: cannot create regular file
- >> `/home/peko/autobuild/instance-0/output/host/usr/lib/mono/xbuild/Microsoft/Portable/v4.5/Microsoft.Portable.Common.targets':
- >> File exists
- >> 
- >> Can you investigate?
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ .../0001-AX_TLS-fix-syntax-error.patch             | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
 
- > Sure! Honestly it seems a little strange for me, I had several
- > compilation test and a system with mono running for a side project and
- > this is not happened.
-
- > Tomorrow I will look to it.
-
-It looks like a parallel build issue with high BR2_JLEVEL settings. We
-could move to MAKE1 but that will probably slow down the build quite a bit.
-
+diff --git a/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch b/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
+new file mode 100644
+index 0000000..431b6c5
+--- /dev/null
++++ b/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
+@@ -0,0 +1,47 @@
++From cb6a769ba7ea8ff03849c455bbce4c5e9bdfa5a5 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sun, 3 May 2015 23:02:34 +0200
++Subject: [PATCH] AX_TLS: fix syntax error
++
++The commit e012eb17b3d67f31dee477592328207437206c33 introduce
++a syntax error due to an empty "else" statement.
++
++confifure:
++if test "$ac_cv_tls" != "none"; then :
++cat >>confdefs.h <<_ACEOF
++_ACEOF
++else
++
++fi
++
++Remove the third part of AS_IF
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ m4/ax_tls.m4 | 5 ++---
++ 1 file changed, 2 insertions(+), 3 deletions(-)
++
++diff --git a/m4/ax_tls.m4 b/m4/ax_tls.m4
++index 809b761..5d43e57 100644
++--- a/m4/ax_tls.m4
+++++ b/m4/ax_tls.m4
++@@ -44,7 +44,7 @@
++ #   modified version of the Autoconf Macro, you may extend this special
++ #   exception to the GPL to apply to your modified version as well.
++ 
++-#serial 11
+++#serial 12
++ 
++ AC_DEFUN([AX_TLS], [
++   AC_MSG_CHECKING([for thread local storage (TLS) class])
++@@ -69,6 +69,5 @@ AC_DEFUN([AX_TLS], [
++ 
++   AS_IF([test "$ac_cv_tls" != "none"],
++     [AC_DEFINE_UNQUOTED([TLS],[$ac_cv_tls],[If the compiler supports a TLS storage class define it to that here])
++-     m4_ifnblank([$1],[$1])],
++-    [m4_ifnblank([$2],[$2])])
+++     m4_ifnblank([$1],[$1])])
++ ])
++-- 
++1.9.3
++
 -- 
-Bye, Peter Korsgaard
+1.9.3
