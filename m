@@ -1,59 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 May 2015 16:33:46 +0200
-Subject: [Buildroot] [git commit] poppler: add patch to fix invalid syntax
-	in configure script
-Message-ID: <20150503143419.1B9E2818B0@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 3 May 2015 16:52:39 +0200
+Subject: [Buildroot] [PATCH] autotools-package: also handle
+ pre-installed external toolchain in .la fixup
+In-Reply-To: <5545EDB2.3090500@mind.be>
+References: <1430603450-17855-1-git-send-email-arnout@mind.be>
+ <20150502223434.GK13701@free.fr> <5545EDB2.3090500@mind.be>
+Message-ID: <20150503145239.GA4154@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bc8423a8d485283e1c5c44026d3777173afb469a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Arnout, All,
 
-When configuring poppler, a shell error occurs:
+On 2015-05-03 11:43 +0200, Arnout Vandecappelle spake thusly:
+> On 03/05/15 00:34, Yann E. MORIN wrote:
+> > On 2015-05-02 23:50 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> >> The .la fixup handling looks for paths starting with /usr and assumes
+> >> that they are missing the installation prefix (i.e. $(STAGING_DIR)). It
+> >> already handles the cases that $(STAGING_DIR) itself and $(BASE_DIR)
+> >> are under /usr, but it does not yet handle the case that a
+> >> pre-installed external toolchain is under /usr (and tracks that fact
+> >> in some .la file). For instance, if you use buildroot to generate a
+> >> toolchain with HOST_DIR=/usr/local/some_path, this problem will occur.
+> >>
+> >> Fix this in the same way as $(STAGING_DIR) and $(BASE_DIR), but in
+> >> addition check that TOOLCHAIN_EXTERNAL_INSTALL_DIR is non-empty. For
+> >> internal toolchains, it is empty and the sed expression would fail.
+> >>
+> >> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> >> Reported-by: Carlos Soto <csotoalonso@gmail.com>
+> >> Cc: Carlos Soto <csotoalonso@gmail.com>
+> > 
+> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > I however wonder: shouldn't we do that .la munging in a hook that we
+> > forcibly add to the list of post-staging-install hooks, so that it is
+> > run even for those packages that redefine their _INSTALL_STAGING_CMDS ?
+> 
+>  I had the same thought... Even more: it is not really tied to autotools-package
+> because generic packages may also use libtool, so it could go directly into the
+> .stamp_staging_installed code.
 
-./configure: line 19741: test: x: unary operator expected
+Agreed. Shall I do it, or do you already have something on your side?
 
-This is due to an invalid configure test, which is fixed by a newly
-added patch. We patch the configure script directly because poppler
-doesn't autoreconf properly. A patch on configure.ac has been
-submitted upstream so that hopefully we can drop our patch in a future
-release of poppler.
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...invalid-shell-comparaison-in-libtiff-test.patch |   23 ++++++++++++++++++++
- 1 files changed, 23 insertions(+), 0 deletions(-)
-
-diff --git a/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch b/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch
-new file mode 100644
-index 0000000..f40bee1
---- /dev/null
-+++ b/package/poppler/0001-Fix-invalid-shell-comparaison-in-libtiff-test.patch
-@@ -0,0 +1,23 @@
-+Fix syntax issue in configure script
-+
-+The change is not done in configure.ac, because the package doesn't
-+autoreconf properly.
-+
-+Patch on configure.ac submitted upstream at
-+https://bugs.freedesktop.org/show_bug.cgi?id=90292.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/configure
-+===================================================================
-+--- a/configure
-++++ b/configure
-+@@ -19738,7 +19738,7 @@
-+ CXXFLAGS="$CXXFLAGS $LIBTIFF_CFLAGS"
-+ LIBS="$LIBS $LIBTIFF_LIBS"
-+ if test x$enable_libtiff = xyes; then
-+-  if test x"$LIBTIFF_LIBS" != ; then
-++  if test x"$LIBTIFF_LIBS" != x; then
-+     ac_fn_cxx_check_func "$LINENO" "TIFFOpen" "ac_cv_func_TIFFOpen"
-+ if test "x$ac_cv_func_TIFFOpen" = xyes; then :
-+ 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
