@@ -1,46 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 May 2015 19:25:15 +0200
-Subject: [Buildroot] [PATCH] libcurl: use c-ares if available
-In-Reply-To: <de47ffa2f80c24f58f017282718c43b5d0dbc79e.1430563714.git.john@keeping.me.uk>
- (John Keeping's message of "Sat, 2 May 2015 11:58:18 +0100")
-References: <de47ffa2f80c24f58f017282718c43b5d0dbc79e.1430563714.git.john@keeping.me.uk>
-Message-ID: <87sibdshdw.fsf@dell.be.48ers.dk>
+Date: Sun, 3 May 2015 19:19:25 +0200
+Subject: [Buildroot] [git commit] package/argp-standalone: is useless for
+	(e)glibc toolchains
+Message-ID: <20150503172941.F2B59818B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "John" == John Keeping <john@keeping.me.uk> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3d1807f935b10001b9703c9614f3cd4f9b14d69e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > By default libcurl uses the C library's DNS resolver which is
- > synchronous, even if an application is using libcurl's non-blocking mode
- > of operation.
+According to Thomas's remark [1], (e)glibc toolchains provide it's
+own argp.h version.
+Also, it appears that argp.h from glibc is more up to date should
+be preferred to argp-standalone one.
 
- > Configure libcurl to use c-ares if it is selected so that it can resolve
- > addresses asynchronously if required.
+[1] http://lists.busybox.net/pipermail/buildroot/2015-May/127511.html
 
- > Signed-off-by: John Keeping <john@keeping.me.uk>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/argp-standalone/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-> ---
- >  package/libcurl/libcurl.mk | 5 +++++
- >  1 file changed, 5 insertions(+)
-
- > diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
- > index 014c5e3..825c844 100644
- > --- a/package/libcurl/libcurl.mk
- > +++ b/package/libcurl/libcurl.mk
- > @@ -46,6 +46,11 @@ LIBCURL_CONF_OPTS += --without-ssl --without-gnutls \
- >  	--without-polarssl --without-nss
- >  endif
+diff --git a/package/argp-standalone/Config.in b/package/argp-standalone/Config.in
+index 5a0c051..3319dd9 100644
+--- a/package/argp-standalone/Config.in
++++ b/package/argp-standalone/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_ARGP_STANDALONE
+ 	bool "argp-standalone"
++	# glibc provides its own argp implementation.
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  Glibc hierarchical argument parsing standalone library.
  
- > +ifeq ($(BR2_PACKAGE_C_ARES),y)
- > +LIBCURL_DEPENDENCIES += c-ares
- > +LIBCURL_CONF_OPTS += --enable-ares
- > +endif
-
-We prefer to be explicit about these dependencies, so I've added a
---disable-ares in the else clause and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
