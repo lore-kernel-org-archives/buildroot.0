@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 May 2015 15:37:34 +0200
-Subject: [Buildroot] [PATCH 1/2 v2] docs/manual: also document md5 hash
-In-Reply-To: <64ebdddcde18c7c33ca79c5afe6955b0d695b90e.1430667367.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 3 May 2015 17:37:39 +0200")
+Date: Mon, 04 May 2015 15:40:05 +0200
+Subject: [Buildroot] [PATCH 2/2 v2] manual: Add notes about GitHub and
+	hashes
+In-Reply-To: <65108fc814c42059f26b7690ccd505c0ebb6afb5.1430667367.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 3 May 2015 17:37:40 +0200")
 References: <cover.1430667367.git.yann.morin.1998@free.fr>
- <64ebdddcde18c7c33ca79c5afe6955b0d695b90e.1430667367.git.yann.morin.1998@free.fr>
-Message-ID: <87h9rsqx9d.fsf@dell.be.48ers.dk>
+ <65108fc814c42059f26b7690ccd505c0ebb6afb5.1430667367.git.yann.morin.1998@free.fr>
+Message-ID: <87d22gqx56.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +15,55 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > We accept an md5 hash, but only if coming from upstream, and if also
- > accompanied with a stronger hash.
+ > From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > We can't take hashes from GitHub, unless the tarball has been uploaded by
+ > the maintainer, otherwise it is generated and may change over time,
+ > which renders hash files useless.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
  > Cc: Samuel Martin <s.martin49@gmail.com>
  > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  > ---
- > Chanves v1 -> v2:
- >   - fix merge-gone-wild  (Arnout)
- >   - clarify that we prefer sha256 for locally computed hashes  (Arnout)
- >   - make the comment in the example aligned with current customs  (Arnout)
- >   - typoes in commit log  (Arnout)
+ > v3 -> v4 :
+ >   - typo  (Arnout)
 
-Committed, thanks.
+ > v2 -> v3 (YEM):
+ >   - move the block down, to be with with the other "note"
+ >   - add reference to the GitHub helper
+ >   - small grammatical fix s/automated/automatically/
+
+ > v1 -> v2:
+ >   - Add changes as requested by Yann E. Morin
+ >   - Reword the comment on released tarball
+ > ---
+ >  docs/manual/adding-packages-directory.txt | 7 +++++++
+ >  1 file changed, 7 insertions(+)
+
+ > diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+ > index 6c478c2..fb3764e 100644
+ > --- a/docs/manual/adding-packages-directory.txt
+ > +++ b/docs/manual/adding-packages-directory.txt
+ > @@ -442,6 +442,13 @@ strong hash yourself (preferably +sha256+, but not +md5+), and mention
+ >  this in a comment line above the hashes.
+ 
+ >  .Note
+ > +If +libfoo+ is from GitHub (see xref:github-download-url[] for details), we
+ > +can only accept a +.hash+ file if the package is a released (e.g. uploaded
+ > +by the maintainer) tarball. Otherwise, the automatically generated tarball
+ > +may change over time, and thus its hashes may be different each time it is
+ > +downloaded, making the +.hash+ file irrelevant for that tarball.
+
+I wouldn't call it irrelevant, it is more that the hash won't match the
+tarball.
+
+I've changed it to:
+
+downloaded, causing a +.hash+ mismatch for that tarball.
+
+And committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
