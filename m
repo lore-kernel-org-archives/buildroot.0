@@ -1,198 +1,350 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 May 2015 21:43:56 +0200
-Subject: [Buildroot] Buildroot 2015.05-rc1 released
-Message-ID: <87vbg8p1qb.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon,  4 May 2015 22:10:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/swupdate: new package
+Message-ID: <1430770258-8938-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This patch is based on an WIP version submitted by Romain Naour, commented by
+Arnout Vandecappelle:
+https://patchwork.ozlabs.org/patch/401270/
 
-Buildroot 2015.05-rc1 is released - Go download it at:
+We use the latest commit of swupdate instead of the last release 2014.07 to
+obtain several bug fixes and get support for the image downloading feature and
+the JSON parser.
 
-http://buildroot.net/downloads/buildroot-2015.05-rc1.tar.gz
+The package build file does not detect which dependencies are available. So we
+provide a default configuration which selects the external dependencies by
+default except for lua. Lua support can be added by the user by customizing
+the configuration file (swupdate.config) add select the Lua 5.2 interpreter
+manually.
 
-or
+Furthermore the U-Boot handler is not enabled by default, as it may cause
+runtime issues if the U-Boot environment configuration file (fw_env.config) is
+not present on the target system.
 
-http://buildroot.net/downloads/buildroot-2015.05-rc1.tar.bz2
+The package provides a default website which can be installed to the target to
+enable firmware update within a browser.
 
-Or get it from Git:
+Add a patch file with two squashed fixes for building swupdate with the musl C
+library. Both fixes sent upstream.
 
-git://git.buildroot.net/buildroot
+Note, swupdate does not implement a savedefconfig and nconfig target.
+Note, swupdate provides its own versions of mongoose and lsqlite3:
+  - mongoose is version 3.8 from year 2013
+  - lsqlite3 is version 0.8 from year 2011
 
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Cc: Romain Naour <romain.naour@openwide.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Tested-by: Mike Williams <mike@mikebwilliams.com>
+---
+Changes v4 -> v5:
+  - bump to latest commit 524e3d729267fd430f539eb65e8a710abd89d0f4
+  - enable new feature JSON parser in .config and add dependency for json-c
+  - remove upstream applied patch "Add missing header for off_t"
+  - add musl patch
+  - point to the homepage in help text (Yann)
+  - add MIT and Public Domain to LICENSE (Yann), maybe not necessary (Thomas)
+  - clarify used versions of bundled mongoose and lsqlite3
 
-git shortlog -s -n 2015.02..
+Changes v3 -> v4:
+  - bump to latest commit c68f02320858f89f2d441ff2057d49489fb6f586
+  - remove lua dependency (Mike, Arnout)
+  - remove U-Boot handler in swupdate.config (Arnout)
+  - align help text
+  - sent patch upstream
 
-   389	Bernd Kuhls
-   389	Gustavo Zacarias
-   113	Yann E. MORIN
-   112	Thomas Petazzoni
-    49	Peter Korsgaard
-    32	Fabio Porcedda
-    29	Andr? Hentschel
-    29	Romain Naour
-    28	Francois Perrad
-    24	Peter Seiderer
-    22	Baruch Siach
-    21	Jerzy Grzegorek
-    20	Mike Williams
-    20	Vicente Olivert Riera
-    16	J?r?me Pouiller
-    15	Bartosz Golaszewski
-    14	J?rg Krause
-    14	Yegor Yefremov
-    13	Arnout Vandecappelle
-    12	Angelo Compagnucci
-    11	Gwenhael Goavec-Merou
-    11	Steven Noonan
-    11	Thomas De Schampheleire
-    10	Max Filippov
-     8	Frank Hunleth
-     8	Petr Vorel
-     7	Johan Sagaert
-     6	Ezequiel Garc?a
-     6	Floris Bos
-     6	Karoly Kasza
-     6	Luca Ceresoli
-     6	Samuel Martin
-     6	Vincent Stehl?
-     6	Waldemar Brodkorb
-     5	Philippe Proulx
-     4	Alexey Brodkin
-     4	Johan Oudinet
-     4	Julien Boibessot
-     4	Maxim Mikityanskiy
-     4	Maxime Hadjinlian
-     4	Nikolay Dimitrov
-     4	Olivier Schonken
-     4	Stefan S?rensen
-     4	Steve Kenton
-     4	Will Wagner
-     3	Alex Suykov
-     3	Davide Viti
-     3	Markos Chandras
-     3	Masahiro Yamada
-     3	Matt Weber
-     3	Mauro Condarelli
-     3	Nicolas Serafini
-     3	Peter K?mmel
-     3	Ryan Barnett
-     3	erico.nunes
-     2	Antoine T?nart
-     2	Aur?lien Chabot
-     2	Beno?t Th?baudeau
-     2	Christophe Vu-Brugier
-     2	Clayton Shotwell
-     2	C?dric Marie
-     2	James Hebden
-     2	Jerome Oufella
-     2	Lionel Orry
-     2	Robert P. J. Day
-     2	Ryan Coe
-     2	S?bastien Szymanski
-     1	Alexandre Belloni
-     1	Alexey Mednyy
-     1	Andrew Parlane
-     1	Baptiste Moraine
-     1	Carlos Santos
-     1	Dale Ghent
-     1	Damien Lanson
-     1	Daniel Sangue
-     1	David Bachelart
-     1	David Graziano
-     1	Doug Kehn
-     1	Gary Bisson
-     1	Ivo Slanina
-     1	Jan Heylen
-     1	Jens Rosenboom
-     1	Jens Zettelmeyer
-     1	John Keeping
-     1	Julien D'Ascenzio
-     1	J?r?me Oufella
-     1	Lahoudere Fabien
-     1	Marcin Bis
-     1	Matthew Bastian
-     1	Michael Trimarchi
-     1	Nicolas Cavallari
-     1	No? Rubinstein
-     1	Philippe Reynes
-     1	Rhys Williams
-     1	Richard Genoud
-     1	R?mi R?rolle
-     1	Sebastien Bourdelin
-     1	Simon Marchi
-     1	Sonic Zhang
-     1	Steve James
-     1	Vanya Sergeev
-     1	Vivien Didelot
-     1	Yann E. Morin
-     1	Yannick Kiekens
-     1	david.barbion at ext.leroymerlin.fr
+Changes v2 -> v3:
+  - bump to latest commit d7753be4fd8bdf2ba4ba56ee869550663b2cca80
+  - enable all dependencies (Arnout)
+  - rewrite help text for configuration file
+  - add option to install default website
 
-And a special thanks to our patch reviewers:
+Changes v1 -> v2:
+  - bump to latest commit d9f58b5a3263b1b00c6d011cd8cdd65e69890b46
+  - update Sob email address
 
-git log 2015.02.. | grep -Ei '(reviewed|acked)-by:' | \
-    sed 's/.*by: //' | sort | uniq -c | sort -n -r
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/Config.in                          |  1 +
+ package/swupdate/0001-Fix-musl-build.patch | 48 +++++++++++++++++
+ package/swupdate/Config.in                 | 42 +++++++++++++++
+ package/swupdate/swupdate.config           | 83 ++++++++++++++++++++++++++++++
+ package/swupdate/swupdate.mk               | 54 +++++++++++++++++++
+ 5 files changed, 228 insertions(+)
+ create mode 100644 package/swupdate/0001-Fix-musl-build.patch
+ create mode 100644 package/swupdate/Config.in
+ create mode 100644 package/swupdate/swupdate.config
+ create mode 100644 package/swupdate/swupdate.mk
 
-     89 "Yann E. MORIN" <yann.morin.1998@free.fr>
-     59 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-     25 Samuel Martin <s.martin49@gmail.com>
-     10 Romain Naour <romain.naour@openwide.fr>
-     10 Gustavo Zacarias <gustavo@zacarias.com.ar>
-      9 Yegor Yefremov <yegorslists@googlemail.com>
-      7 Gary Bisson <gary.bisson@boundarydevices.com>
-      6 Bernd Kuhls <bernd.kuhls@t-online.de>
-      5 Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-      4 Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-      2 Ryan Barnett <ryan.barnett@rockwellcollins.com>
-      2 Fabio Porcedda <fabio.porcedda@gmail.com>
-      2 Andr? Hentschel <nerv@dawncrow.de>
-      1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-      1 Mike Williams <mike@mikebwilliams.com>
-      1 Luca Ceresoli <luca@lucaceresoli.net>
-      1 J?rg Krause <joerg.krause@embedded.rocks>
-      1 Francois Perrad <francois.perrad@gadz.org>
-      1 Floris Bos <bos@je-eigen-domein.nl>
-      1 Baruch Siach <baruch@tkos.co.il>
-      1 Angelo Compagnucci <angelo.compagnucci@gmail.com>
-
-This was a *BIG* cycle! We had more than 1600 (a new record!) changes
-all over the tree and more than 100 unique contributors! I'm very happy
-to see so many "new" people next to the "oldtimers".
-
-Of noteworthy new features/changes we have:
-
- - Architectures: Removed AVR32 support, deprecate SH64, added support
-   for steamroller, corei7-avx and core-avx2 x86 variants.
-
- - Toolchains: IPv6 and Largefile support now enforced for
-   uClibc. Corresponding Kconfig symbols removed.
-   Internal toolchain support for Nios2 added, Blackfin
-   removed. Aarch64 and sh musl support. uClibc-ng support added.
-
- - Libatomic is now handled for internal and external toolchains. Link
-   time optimization (LTO) support.
-
- - Defconfigs: Freescale i.MX28 EVK, i.MX31 PDK and SABRE Auto,
-   Raspberry Pi 2 and RIoTboard added.
-
- - Infrastructure: Hashes for a large number of packages have been
-   added. Missing hashes now stop the build unless explicitly disabled.
-
- - Large number of new packages (96): Perl and Python modules, Apache,
-   GNURadio, NVIDIA + Tegra GPU drivers, Tor, Wine, ..
-
-And the usual package version updates and bug fixes. See the CHANGES
-file for details:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.05-rc1
-
-Like usual, I will now create a next branch and start merging in new
-features, rather than wait until 2015.05 is released.
-
+diff --git a/package/Config.in b/package/Config.in
+index af4d2b7..f4462b2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1412,6 +1412,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/start-stop-daemon/Config.in"
+ endif
+ 	source "package/supervisor/Config.in"
++	source "package/swupdate/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/sysklogd/Config.in"
+ endif
+diff --git a/package/swupdate/0001-Fix-musl-build.patch b/package/swupdate/0001-Fix-musl-build.patch
+new file mode 100644
+index 0000000..e8c3a37
+--- /dev/null
++++ b/package/swupdate/0001-Fix-musl-build.patch
+@@ -0,0 +1,48 @@
++From 5e8a2c5c6aacff0889a58674720656d663eafc29 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Mon, 4 May 2015 21:26:04 +0200
++Subject: [PATCH 1/1] Fix musl build
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Use bsdqueue.h in JSON parser
++
++Commit 6785d764e2e16d83952ac8e65e3290d2cd797b0d adds a locale file
++bsdqueue.h which provides a C library independent queue implementation.
++
++Use this header file instead of sys/queue.h for the JSON parser, too.
++
++Set correct path for <fcntl.h> in JSON parser
++
++The correct path defined in the POSIX.1-2008 Standard is <fcntl.h>.
++
++Removes "redirecting incorrect #include <sys/fcntl.h> to <fcntl.h>" warning
++when building swupdate with enabled JSON parser with the musl C library.
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ parser/parse_json.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/parser/parse_json.c b/parser/parse_json.c
++index a450874..5bf2714 100644
++--- a/parser/parse_json.c
+++++ b/parser/parse_json.c
++@@ -25,12 +25,12 @@
++ #include <string.h>
++ #include <sys/types.h>
++ #include <errno.h>
++-#include <sys/queue.h>
++ #include <json-c/json.h>
++ #include <unistd.h>
++-#include <sys/fcntl.h>
+++#include <fcntl.h>
++ #include <sys/stat.h>
++ #include "autoconf.h"
+++#include "bsdqueue.h"
++ #include "util.h"
++ #include "swupdate.h"
++ #include "parsers.h"
++--
++2.3.7
+diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
+new file mode 100644
+index 0000000..520fc87
+--- /dev/null
++++ b/package/swupdate/Config.in
+@@ -0,0 +1,42 @@
++config BR2_PACKAGE_SWUPDATE
++	bool "swupdate"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # OpenSSL
++	select BR2_PACKAGE_JSON_C
++	select BR2_PACKAGE_LIBCONFIG
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_MTD
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_ZLIB
++	help
++	  swupdate provides a reliable way to update the software on an
++	  embedded system.
++
++	  https://sbabic.github.io/swupdate
++
++if BR2_PACKAGE_SWUPDATE
++
++config BR2_PACKAGE_SWUPDATE_CONFIG
++	string "swupdate configuration file"
++	default "package/swupdate/swupdate.config"
++	help
++	  The default swupdate configuration file will enable swupdate with
++	  an image downloader and a webserver, a parser based on libconfig and
++	  a JSON parser, as well as handlers for UBI volumes, raw NAND or NOR
++	  flash, SD cards and shell scripts.
++
++	  Most people will just use the default swupdate configuration file.
++	  However, some people may wish to use their own modified swupdate
++	  configuration file, and will specify their config file location
++	  with this option.
++
++	  Note that if you add lua support in the configuration file you need
++	  the Lua 5.2 interpreter (BR_PACKAGE_LUA_5_2) manually.
++
++config BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE
++	bool "install default website"
++	help
++	  Install the provided website to /var/www/swupdate.
++endif
++
++comment "swupate support needs toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/swupdate/swupdate.config b/package/swupdate/swupdate.config
+new file mode 100644
+index 0000000..dbd8a52
+--- /dev/null
++++ b/package/swupdate/swupdate.config
+@@ -0,0 +1,83 @@
++#
++# Automatically generated make config: don't edit
++# swupdate version: 2014.07.0
++# Mon May  4 21:05:28 2015
++#
++CONFIG_HAVE_DOT_CONFIG=y
++
++#
++# Swupdate Settings
++#
++
++#
++# General Configuration
++#
++CONFIG_SCRIPTS=y
++# CONFIG_HW_COMPATIBILITY is not set
++CONFIG_HW_COMPATIBILITY_FILE=""
++# CONFIG_LUA is not set
++# CONFIG_FEATURE_SYSLOG is not set
++
++#
++# Build Options
++#
++# CONFIG_STATIC is not set
++CONFIG_CROSS_COMPILER_PREFIX=""
++CONFIG_SYSROOT=""
++CONFIG_EXTRA_CFLAGS=""
++CONFIG_EXTRA_LDFLAGS=""
++CONFIG_EXTRA_LDLIBS=""
++
++#
++# Debugging Options
++#
++# CONFIG_DEBUG is not set
++# CONFIG_DEBUG_PESSIMIZE is not set
++# CONFIG_WERROR is not set
++# CONFIG_NOCLEANUP is not set
++CONFIG_DOWNLOAD=y
++CONFIG_WEBSERVER=y
++
++#
++# Webserver Features
++#
++CONFIG_MONGOOSE=y
++
++#
++# Mongoose Feature
++#
++# CONFIG_MONGOOSELUA is not set
++# CONFIG_MONGOOSESQL is not set
++CONFIG_MONGOOSEIPV6=y
++CONFIG_MONGOOSESSL=y
++
++#
++# Archival Features
++#
++CONFIG_CPIO=y
++CONFIG_GUNZIP=y
++
++#
++# Parser Features
++#
++CONFIG_LIBCONFIG=y
++CONFIG_JSON=y
++# CONFIG_LUAEXTERNAL is not set
++# CONFIG_SETEXTPARSERNAME is not set
++CONFIG_EXTPARSERNAME=""
++# CONFIG_SETSWDESCRIPTION is not set
++CONFIG_SWDESCRIPTION=""
++
++#
++# Image Handlers
++#
++CONFIG_UBIVOL=y
++CONFIG_UBIBLACKLIST=""
++CONFIG_UBIVIDOFFSET=0
++CONFIG_CFI=y
++CONFIG_RAW=y
++# CONFIG_LUASCRIPTHANDLER is not set
++CONFIG_SHELLSCRIPTHANDLER=y
++# CONFIG_HANDLER_IN_LUA is not set
++# CONFIG_UBOOT is not set
++CONFIG_UBOOT_FWENV=""
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+new file mode 100644
+index 0000000..ebc7bf2
+--- /dev/null
++++ b/package/swupdate/swupdate.mk
+@@ -0,0 +1,54 @@
++################################################################################
++#
++# swupdate
++#
++################################################################################
++
++SWUPDATE_VERSION = 524e3d729267fd430f539eb65e8a710abd89d0f4
++SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
++SWUPDATE_LICENSE = GPLv2+, MIT, Public Domain
++SWUPDATE_LICENSE_FILES = COPYING
++
++# swupdate bundles its own version of mongoose (version 3.8) and
++# lsqlite3 (version 0.8)
++SWUPDATE_DEPENDENCIES = json-c libconfig libcurl mtd openssl zlib
++
++SWUPDATE_BUILD_CONFIG = $(@D)/.config
++
++SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
++SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig
++
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++define SWUPDATE_PREFER_STATIC
++	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC,$(SWUPDATE_BUILD_CONFIG))
++endef
++endif
++
++define SWUPDATE_SET_BUILD_OPTIONS
++	$(call KCONFIG_SET_OPT,CONFIG_CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)", \
++		$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_SET_OPT,CONFIG_SYSROOT,"$(STAGING_DIR)", \
++		$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_CFLAGS,"$(TARGET_CFLAGS)", \
++		$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_LDFLAGS,"$(TARGET_LDFLAGS)", \
++		$(SWUPDATE_BUILD_CONFIG))
++endef
++
++define SWUPDATE_KCONFIG_FIXUP_CMDS
++	$(SWUPDATE_PREFER_STATIC)
++	$(SWUPDATE_SET_BUILD_OPTIONS)
++endef
++
++define SWUPDATE_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define SWUPDATE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/swupdate $(TARGET_DIR)/usr/bin/swupdate
++	$(if $(BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE), \
++		mkdir -p $(TARGET_DIR)/var/www/swupdate; \
++		cp -dpf $(@D)/www/* $(TARGET_DIR)/var/www/swupdate)
++endef
++
++$(eval $(kconfig-package))
 -- 
-Bye, Peter Korsgaard
+2.3.7
