@@ -1,58 +1,47 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 4 May 2015 15:50:20 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/mono: bump to version 4.0.1
-In-Reply-To: <877fsps6sa.fsf@dell.be.48ers.dk>
-References: <1430402595-5355-1-git-send-email-angelo.compagnucci@gmail.com>
- <1430402595-5355-3-git-send-email-angelo.compagnucci@gmail.com>
- <20150503153134.5f5764f4@free-electrons.com>
- <CA+TH9Vkxv4xdt+WZpkhyQa-LF-8J+3LDq-K37fhA0OgqZEQ_Tg@mail.gmail.com>
- <877fsps6sa.fsf@dell.be.48ers.dk>
-Message-ID: <CA+TH9VnbJ_Dng_TPEzH20thDa1Hm3is+g1NP5LP8apqVwkmszQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 May 2015 15:52:03 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <87h9rtucot.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sun, 03 May 2015 13:23:46 +0200")
+References: <20150502063016.3950D100FB0@stock.ovh.net>
+ <20150503105009.2b42c375@free-electrons.com>
+ <87h9rtucot.fsf@dell.be.48ers.dk>
+Message-ID: <878ud4qwl8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard, Thomas Petazzoni,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-2015-05-03 23:14 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
->>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
->
-> Hi,
->
->>> /usr/bin/install: cannot create regular file
->  >> `/home/peko/autobuild/instance-0/output/host/usr/lib/mono/xbuild-frameworks/.NETFramework/v3.0/RedistList/FrameworkList.xml':
->  >> File exists/usr/bin/install: cannot create regular file
->  >> `/home/peko/autobuild/instance-0/output/host/usr/lib/mono/xbuild/Microsoft/Portable/v4.5/Microsoft.Portable.Common.targets':
->  >> File exists
->  >>
->  >> Can you investigate?
->
->  > Sure! Honestly it seems a little strange for me, I had several
->  > compilation test and a system with mono running for a side project and
->  > this is not happened.
->
->  > Tomorrow I will look to it.
->
-> It looks like a parallel build issue with high BR2_JLEVEL settings. We
-> could move to MAKE1 but that will probably slow down the build quite a bit.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+ > Hi,
 
-I cannot reproduce the problem here. I did several compilation with
-make and make -j (2-4-8-24-32) with various values but the compilation
-always ends correctly.
-I used both the .config of autobuild, both other configs created for
-the purpose.
+ >> Hello,
+ >> On Sat,  2 May 2015 08:30:16 +0200 (CEST), Thomas Petazzoni wrote:
 
-Please advice on a better way to help to debug this problem.
+ >>> mips64el | qt-4.8.6 | NOK |
+ >>> http://autobuild.buildroot.net/results/3c50ed4bb15ab35341c7682ce4706b7a05a6f702/
+ >>> mips64el | qt-4.8.6 | NOK |
+ >>> http://autobuild.buildroot.net/results/07aca0c27a07761621d46fb690e3ccd50cbc2ef5/
 
->
-> --
-> Bye, Peter Korsgaard
+ >> error: redefinition of 'bool QTest::qCompare
 
-Sincerely, Angelo.
+ >> Needs investigation.
 
+ > Sounds related to:
 
+ > http://lists.busybox.net/pipermail/buildroot/2015-April/127153.html
+
+ > We currently only allow BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE for soft
+ > float toolchains, but perhaps it needs to also be disallowed for mips64?
+ > Richard, care to take a look?
+
+QT_COORD_TYPE_DOUBLE also causes issues with python-pyqt because of
+qreal* -> float* conversion. Could you take a look?
+
+http://autobuild.buildroot.net/results/891/891dc6ad46039740867a0b436281fc489cfb2772/build-end.log
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Bye, Peter Korsgaard
