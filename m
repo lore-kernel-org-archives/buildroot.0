@@ -1,14 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 May 2015 20:51:32 +0200
-Subject: [Buildroot] [git commit] hostapd: apply upstream security patches
-Message-ID: <20150504185518.CA42F801F7@busybox.osuosl.org>
+Date: Mon, 4 May 2015 20:51:41 +0200
+Subject: [Buildroot] [git commit] wpa_supplicant: apply upstream security
+	patches
+Message-ID: <20150504185518.DEB6C800CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=476c6c6e093f1986e65cb922316c02491cd9b753
+commit: http://git.buildroot.net/buildroot/commit/?id=39a4a79d8aad8e5bf754f360efd15442894dcaf1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit adds patches for three different upstream security advisories. No
@@ -23,14 +24,14 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  ...Fix-HTTP-chunked-transfer-encoding-parser.patch |   50 +++++++
  ...integer-underflow-in-WMM-Action-frame-par.patch |   42 ++++++
- package/hostapd/0003-EAP-pwd-fixes.patch           |  154 ++++++++++++++++++++
+ package/wpa_supplicant/0004-EAP-pwd-fixes.patch    |  154 ++++++++++++++++++++
  3 files changed, 246 insertions(+), 0 deletions(-)
 
-diff --git a/package/hostapd/0001-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch b/package/hostapd/0001-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
+diff --git a/package/wpa_supplicant/0002-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch b/package/wpa_supplicant/0002-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
 new file mode 100644
 index 0000000..d9dccf9
 --- /dev/null
-+++ b/package/hostapd/0001-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
++++ b/package/wpa_supplicant/0002-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
 @@ -0,0 +1,50 @@
 +From 5acd23f4581da58683f3cf5e36cb71bbe4070bd7 Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <j@w1.fi>
@@ -82,11 +83,11 @@ index 0000000..d9dccf9
 +-- 
 +2.1.4
 +
-diff --git a/package/hostapd/0002-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch b/package/hostapd/0002-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
+diff --git a/package/wpa_supplicant/0003-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch b/package/wpa_supplicant/0003-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
 new file mode 100644
 index 0000000..307297b
 --- /dev/null
-+++ b/package/hostapd/0002-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
++++ b/package/wpa_supplicant/0003-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
 @@ -0,0 +1,42 @@
 +From ef566a4d4f74022e1fdb0a2addfe81e6de9f4aae Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <j@w1.fi>
@@ -130,11 +131,11 @@ index 0000000..307297b
 +-- 
 +2.1.4
 +
-diff --git a/package/hostapd/0003-EAP-pwd-fixes.patch b/package/hostapd/0003-EAP-pwd-fixes.patch
+diff --git a/package/wpa_supplicant/0004-EAP-pwd-fixes.patch b/package/wpa_supplicant/0004-EAP-pwd-fixes.patch
 new file mode 100644
 index 0000000..16a1f53
 --- /dev/null
-+++ b/package/hostapd/0003-EAP-pwd-fixes.patch
++++ b/package/wpa_supplicant/0004-EAP-pwd-fixes.patch
 @@ -0,0 +1,154 @@
 +This patch combines the following upstream security fixes:
 +
