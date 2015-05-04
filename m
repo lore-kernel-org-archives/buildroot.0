@@ -1,43 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 May 2015 23:22:17 +0200
-Subject: [Buildroot] Autobuilder updates
-Message-ID: <20150504232217.6832581d@free-electrons.com>
+Date: Mon, 4 May 2015 23:30:58 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <CACQ1gAiHWPPCABQL5JSGUabkbu5dYOZ5dWo7Sn_Bpc+X7CfmdQ@mail.gmail.com>
+References: <20150502063016.3950D100FB0@stock.ovh.net>
+ <20150503105009.2b42c375@free-electrons.com>
+ <87h9rtucot.fsf@dell.be.48ers.dk> <878ud4qwl8.fsf@dell.be.48ers.dk>
+ <CACQ1gAiHWPPCABQL5JSGUabkbu5dYOZ5dWo7Sn_Bpc+X7CfmdQ@mail.gmail.com>
+Message-ID: <20150504233058.2e5e1a59@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Richard Genoud,
 
-A few news from the autobuilders setup:
+On Mon, 4 May 2015 16:57:59 +0200, Richard Genoud wrote:
 
- * Increased the timeout for builds from 4 hours to 8 hours, in an
-   attempt to reduce the number of bogus build results simply hitting
-   the timeout. This will require people running autobuilder instances
-   to update their scripts, which might take a little bit of time (they
-   have been notified).
+> >  > We currently only allow BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE for soft
+> >  > float toolchains, but perhaps it needs to also be disallowed for mips64?
+> >  > Richard, care to take a look?
+> >
+> > QT_COORD_TYPE_DOUBLE also causes issues with python-pyqt because of
+> > qreal* -> float* conversion. Could you take a look?
+> >
+> > http://autobuild.buildroot.net/results/891/891dc6ad46039740867a0b436281fc489cfb2772/build-end.log
+> 
+> yes, no problem.
 
- * Removed the musl based toolchain configuration from the
-   autobuilders, for the duration of the stabilization phase. Musl is
-   still causing build issues with a very large number of packages,
-   causing quite a bit of noise in the build results. Such noise
-   doesn't make the stabilization effort easy, and the musl support is
-   still marked as experimental in Buildroot so it's an acceptable
-   trade-off. The musl based configuration will be re-enabled once
-   2015.05 is released, and provided enough work is done on musl
-   support in the 2015.08 cycle, we'll keep this toolchain
-   configuration in the autobuilders (and possibly add some more to
-   test other architectures than ARM)
+And I also believe
+http://autobuild.buildroot.org/results/3a7/3a70305be4a78af9404b0bd027dbcdd011ca01b3/build-end.log
+is caused by BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE:
 
- * Re-enabled gcc75 as an autobuilder instance.
+../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QPen::setWidthF(float)'
+../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QTransform::translate(float, float)'
+../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QMatrix::setMatrix(float, float, float, float, float, float)'
+../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QTransform::rotate(float, Qt::Axis)'
+../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QColor::setRgbF(float, float, float, float)'
+../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QPen::setDashOffset(float)'
+../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QColor::setAlphaF(float)'
+../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QPen::setMiterLimit(float)'
+../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QTransform::QTransform(float, float, float, float, float, float)'
+../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QColor::setCmykF(float, float, float, float, float)'
+../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QPen::setDashPattern(QVector<float> const&)'
 
- * Merged some pending patches from Samuel Martin, which will include
-   CMake related log files in the build results when the build failure
-   occurs in a CMake package (similar to what we have been doing with
-   saving config.log for autotools packages).
+The libpoppler code is expecting "float" arguments for all these
+functions, but they are now taking "double" instead.
 
-Best regards,
+Seems like using a double type is breaking a lot of assumptions of
+existing applications and libraries. Do we really want to support this
+option?
+
+I would personally suggest to revert the patch for now in 2015.05, and
+take the time to make sure it is properly tested with all the Qt-based
+libraries and applications.
+
+Richard, what do you think?
 
 Thomas
 -- 
