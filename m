@@ -1,37 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 May 2015 11:26:44 +0200
-Subject: [Buildroot] [git commit] CHANGES: Update with recent changes
-In-Reply-To: <20150504112015.55294499@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 4 May 2015 11:20:15 +0200")
-References: <20150504082612.0FE1C7FA94@busybox.osuosl.org>
- <20150504112015.55294499@free-electrons.com>
-Message-ID: <87y4l4r8vf.fsf@dell.be.48ers.dk>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 04 May 2015 12:28:33 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150503105009.2b42c375@free-electrons.com>
+References: <20150502063016.3950D100FB0@stock.ovh.net>
+ <20150503105009.2b42c375@free-electrons.com>
+Message-ID: <1430735313.2799.15.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Thomas,
 
- > Peter,
- > On Mon, 4 May 2015 10:25:30 +0200, Peter Korsgaard wrote:
+On So, 2015-05-03 at 10:50 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> >         sh4a |                   boost-1.58.0 | NOK | http://autobu
+> > ild.buildroot.net/results/ccd5c83963032ba49b1627b1dff39e34a9486943/
+> >       mipsel |                   boost-1.58.0 | NOK | http://autobu
+> > ild.buildroot.net/results/66c3a868816dfe4bd4d0ffafec6988fd87a2c058/
+> 
+> Fixed by reverting to 1.57.
 
- >> +	Infrastructure: Hashes for a large number of packages have
- >> +	been added. Missing hashes now stop the build unless
- >> +	explicitly disabled.
+Fixed by http://patchwork.ozlabs.org/patch/467255/?
 
- > I think another infrastructure change is how make source, make
- > legal-info, make source-check and make external-deps are handled. Most
- > of the changes are purely internal and users don't care, except that
- > the results given by these commands is now correct (i.e includes all
- > packages), while it was not the case in the past. So users should not
- > be surprised to see a different output for 'make legal-info' or 'make
- > external-deps'.
+> 
+> >          arm |                 libtirpc-0.2.4 | NOK | http://autobu
+> > ild.buildroot.net/results/c64cb1874e6287da1942533d85d26b12192c73df/
+> >          arm |                 libtirpc-0.2.4 | NOK | http://autobu
+> > ild.buildroot.net/results/9f08353e94eadb914332aa80fc90c4315bfef7c2/
+> 
+> libtirpc fails to build on musl.
 
-True. I had it on my list, but found it more of an implementation
-detail. I'll write up something.
+> I started working on this topic, but it's not that simple...
 
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Me, too. Yeah, removing sys/cdefs.h, replacing __BEGIN_DECLS,
+__END_DECLS, and __THROW, replacing sys/queue.h, and some things
+more...
+
+Best regards
+J?rg Krause
