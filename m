@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 May 2015 22:12:37 +0200
-Subject: [Buildroot] [autobuild v2 2/3] autobuild-run: also save CMake
- config log files on package failure
-In-Reply-To: <5541613E.80604@mailerd.de>
-References: <1430338217-25518-1-git-send-email-s.martin49@gmail.com>
- <1430338217-25518-2-git-send-email-s.martin49@gmail.com>
- <5541613E.80604@mailerd.de>
-Message-ID: <20150504221237.6920abf7@free-electrons.com>
+Date: Mon, 4 May 2015 22:16:48 +0200
+Subject: [Buildroot] [PATCH 1/1] autobuild-run: show options along with
+ their defaults
+In-Reply-To: <1430495931-20779-1-git-send-email-dywi@mailerd.de>
+References: <1430495931-20779-1-git-send-email-dywi@mailerd.de>
+Message-ID: <20150504221648.62f22498@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,22 +13,22 @@ To: buildroot@busybox.net
 
 Dear Andr? Erdmann,
 
-On Thu, 30 Apr 2015 00:54:54 +0200, Andr? Erdmann wrote:
-
-> config_files = set(('config.log', ...))
+On Fri,  1 May 2015 17:58:51 +0200, Andr? Erdmann wrote:
+> Currently, the default values for options are printed at the end of the help
+> message, so there is a visual distance between the "--<option>" help and its
+> default value that increases with every newly introduced option.
 > 
-> It's negligible in terms of real time difference (<= 0.0d seconds),
-> but for efficiency reasons, don't use a tuple or list when doing
-> lookups ("fname in config_files").
+> Move them closer together by means of str-dict formatting, "%(key)s".
 > 
-> os.walk() might return 100s or 1000s of file names in total,
-> and for each fname, you have to through the entire list/tuple
-> (until fname found or end of list, whatever comes first).
-> Data structures like set/frozenset/dict perform lookups faster (on average).
+> "[default: ]" cannot be used as it gets parsed by docopt,
+> using "Defaults to ...", "Not set by default", ... phrases instead.
+> 
+> Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
+> ---
+>  scripts/autobuild-run | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
 
-Can you submit a follow-up patch implementing this suggestion?
-
-Thanks a lot!
+Applied, thanks.
 
 Thomas
 -- 
