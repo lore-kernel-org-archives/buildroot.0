@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 May 2015 15:35:31 +0200
-Subject: [Buildroot] [PATCH 1/2 v2] autotools-package: also handle
-	pre-installed external toolchain in .la fixup
-In-Reply-To: <71ddaa7abe2063c33ad88194ed1e499a7d06ef78.1430687963.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 3 May 2015 23:30:38 +0200")
-References: <cover.1430687963.git.yann.morin.1998@free.fr>
- <71ddaa7abe2063c33ad88194ed1e499a7d06ef78.1430687963.git.yann.morin.1998@free.fr>
-Message-ID: <87lhh4qxcs.fsf@dell.be.48ers.dk>
+Date: Mon, 04 May 2015 15:37:34 +0200
+Subject: [Buildroot] [PATCH 1/2 v2] docs/manual: also document md5 hash
+In-Reply-To: <64ebdddcde18c7c33ca79c5afe6955b0d695b90e.1430667367.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 3 May 2015 17:37:39 +0200")
+References: <cover.1430667367.git.yann.morin.1998@free.fr>
+ <64ebdddcde18c7c33ca79c5afe6955b0d695b90e.1430667367.git.yann.morin.1998@free.fr>
+Message-ID: <87h9rsqx9d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +14,20 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > From: Arnout Vandecappelle <arnout@mind.be>
- > The .la fixup handling looks for paths starting with /usr and assumes
- > that they are missing the installation prefix (i.e. $(STAGING_DIR)). It
- > already handles the cases that $(STAGING_DIR) itself and $(BASE_DIR)
- > are under /usr, but it does not yet handle the case that a
- > pre-installed external toolchain is under /usr (and tracks that fact
- > in some .la file). For instance, if you use buildroot to generate a
- > toolchain with HOST_DIR=/usr/local/some_path, this problem will occur.
+ > We accept an md5 hash, but only if coming from upstream, and if also
+ > accompanied with a stronger hash.
 
- > Fix this in the same way as $(STAGING_DIR) and $(BASE_DIR), but in
- > addition check that TOOLCHAIN_EXTERNAL_INSTALL_DIR is non-empty. For
- > internal toolchains, it is empty and the sed expression would fail.
-
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > Reported-by: Carlos Soto <csotoalonso@gmail.com>
- > Cc: Carlos Soto <csotoalonso@gmail.com>
- > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Cc: Samuel Martin <s.martin49@gmail.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
  > ---
- > I haven't been able to test this very extensively because it's not so
- > easy to find .la files where it goes wrong.
-
- > Carlos, can you check if this patch solves the problem for you?
+ > Chanves v1 -> v2:
+ >   - fix merge-gone-wild  (Arnout)
+ >   - clarify that we prefer sha256 for locally computed hashes  (Arnout)
+ >   - make the comment in the example aligned with current customs  (Arnout)
+ >   - typoes in commit log  (Arnout)
 
 Committed, thanks.
 
