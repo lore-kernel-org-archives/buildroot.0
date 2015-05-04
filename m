@@ -1,51 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 May 2015 17:15:43 +0200
-Subject: [Buildroot] [PATCH v7 10/13] Vivante drivers: bump to version
- 3.10.17-1.0.1
-In-Reply-To: <20150504151227.GC11312@kwain>
-References: <1430406748-8493-1-git-send-email-jezz@sysmic.org>
- <1430406748-8493-11-git-send-email-jezz@sysmic.org>
- <20150501225109.66e3b7ba@free-electrons.com>
- <20150504151227.GC11312@kwain>
-Message-ID: <20150504171543.68eb13fc@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 04 May 2015 18:38:12 +0200
+Subject: [Buildroot] 2015.08 release goals
+In-Reply-To: <CAMQcK5+DtuXQRSx4W7GhbpxBxy12H9f1PNYGMLuFpyCbTm4RGQ@mail.gmail.com>
+References: <20150503115354.2fc19b90@free-electrons.com>
+ <CAMQcK5JYGAkJT0y9VCHdEQiBA8AWaojpSqdKYYD4jHjNUKxvMg@mail.gmail.com>
+ <20150504163010.188f3ef5@free-electrons.com>
+ <CAMQcK5+DtuXQRSx4W7GhbpxBxy12H9f1PNYGMLuFpyCbTm4RGQ@mail.gmail.com>
+Message-ID: <5547A074.2010808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Mon, 4 May 2015 17:12:27 +0200, Antoine T?nart wrote:
-
-> > Applied, thanks. Is 3.10.17 the latest version of the GPU drivers? I
-> > think my colleague Antoine T?nart used a more recent version with the
-> > 3.10.53 Freescale kernel. Antoine, can you clarify?
+On 04/05/15 16:45, Ryan Barnett wrote:
+> Thomas,
 > 
-> The latest version of the Vivante drivers seems to be the 5.0.11.p4.1
-> one, at least that's what meta-fsl-arm is using since April, 2nd. I've
-> tested this new version with a 3.10.53 Freescale kernel, and it's
-> working fine.
+> On Mon, May 4, 2015 at 9:30 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+[snip]
 > 
-> You can see the version scheme does not follow the previous one, and
-> that's also true for other parts of this release: the binary name is
-> different and the sources aren't organized the same way.
+>> Also, I think if you want to get things merged in 2015.08, it would be
+>> good to increase the frequency of the patch submissions to take into
+>> account review comments and so on. If you wait several months between
+>> each iteration, then it's going to take ages because reviewers are
+>> losing/forgetting the context and you kind of start over again from
+>> scratch each time.
 > 
-> Also, the package/freescale-imx/gpu-viv-bin-mx6q/0001-correct-HAL-include.patch
-> patch isn't needed anymore and some other minor modifications can be
-> done.
-> 
-> I'd be happy to send a patch, but because this isn't just a version bump
-> it's not (easily) possible to have both 3.10.17 and 5.0.11 versions to
-> live alongside. What's you thoughts on this?
+> Correct - we will make sure that we respond in a much more timely
+> manner since this has become a priority for us.
 
-J?r?me, Gary, would you be able to test the new version of the GPU
-drivers, and see if they work with both 3.10.17 and 3.10.53 ?
+ It would also help if there would be a subset of the series that has some
+relevance on its own and that could be reviewed and applied first. A 27-patch
+series of large changes is just daunting...
 
-Thanks,
+ Regards,
+ Arnout
 
-Thomas
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
