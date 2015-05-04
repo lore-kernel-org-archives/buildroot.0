@@ -1,47 +1,54 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Mon, 4 May 2015 10:05:15 -0500
-Subject: [Buildroot] 2015.08 release goals
-In-Reply-To: <20150504164841.40856c60@free-electrons.com>
-References: <20150503115354.2fc19b90@free-electrons.com>
- <CAMQcK5JYGAkJT0y9VCHdEQiBA8AWaojpSqdKYYD4jHjNUKxvMg@mail.gmail.com>
- <20150504163010.188f3ef5@free-electrons.com>
- <CAMQcK5+DtuXQRSx4W7GhbpxBxy12H9f1PNYGMLuFpyCbTm4RGQ@mail.gmail.com>
- <20150504164841.40856c60@free-electrons.com>
-Message-ID: <CAMQcK5L2gyMfXMEJMx3+Xntny7CNwajNv5sT-OpTKZq8_9oDcg@mail.gmail.com>
+From: Antoine =?iso-8859-1?Q?T=E9nart?= <antoine.tenart@free-electrons.com>
+Date: Mon, 4 May 2015 17:12:27 +0200
+Subject: [Buildroot] [PATCH v7 10/13] Vivante drivers: bump to version
+ 3.10.17-1.0.1
+In-Reply-To: <20150501225109.66e3b7ba@free-electrons.com>
+References: <1430406748-8493-1-git-send-email-jezz@sysmic.org>
+ <1430406748-8493-11-git-send-email-jezz@sysmic.org>
+ <20150501225109.66e3b7ba@free-electrons.com>
+Message-ID: <20150504151227.GC11312@kwain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hi,
 
-On Mon, May 4, 2015 at 9:48 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Ryan,
->
-> On Mon, 4 May 2015 09:45:59 -0500, Ryan Barnett wrote:
->
->> > Have you been able to work with upstream about the Python stuff?
->>
->> We no longer are doing the "Python stuff" in the audit package - which
->> is what you are referring to here.
->
-> Yes, exactly. So what was the solution to overcome the
-> cross-compilation issue of the upstream audit logic?
+On Fri, May 01, 2015 at 10:51:09PM +0200, Thomas Petazzoni wrote:
+> On Thu, 30 Apr 2015 17:12:25 +0200, J?r?me Pouiller wrote:
+> > Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> > Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> > ---
+> >  package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           | 5 +++--
+> >  .../x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk   | 2 +-
+> >  2 files changed, 4 insertions(+), 3 deletions(-)
+> 
+> Applied, thanks. Is 3.10.17 the latest version of the GPU drivers? I
+> think my colleague Antoine T?nart used a more recent version with the
+> 3.10.53 Freescale kernel. Antoine, can you clarify?
 
-We have a patch that is based on
-https://www.redhat.com/archives/linux-audit/2012-November/msg00000.html
+The latest version of the Vivante drivers seems to be the 5.0.11.p4.1
+one, at least that's what meta-fsl-arm is using since April, 2nd. I've
+tested this new version with a 3.10.53 Freescale kernel, and it's
+working fine.
 
-More detail will be provided when v5 of the patchset is sent out in
-the next week or two.
+You can see the version scheme does not follow the previous one, and
+that's also true for other parts of this release: the binary name is
+different and the sources aren't organized the same way.
 
-Thanks,
--Ryan
+Also, the package/freescale-imx/gpu-viv-bin-mx6q/0001-correct-HAL-include.patch
+patch isn't needed anymore and some other minor modifications can be
+done.
+
+I'd be happy to send a patch, but because this isn't just a version bump
+it's not (easily) possible to have both 3.10.17 and 5.0.11 versions to
+live alongside. What's you thoughts on this?
+
+Antoine
 
 -- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+Antoine T?nart, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
