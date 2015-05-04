@@ -1,7 +1,10 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon,  4 May 2015 21:04:39 +0300
-Subject: [Buildroot] [PATCH 1/2] hostapd: apply upstream security patches
-Message-ID: <b4f58df743722b3573c4adf90495d3757aefaef0.1430762680.git.baruch@tkos.co.il>
+Date: Mon,  4 May 2015 21:04:40 +0300
+Subject: [Buildroot] [PATCH 2/2] wpa_supplicant: apply upstream security
+	patches
+In-Reply-To: <b4f58df743722b3573c4adf90495d3757aefaef0.1430762680.git.baruch@tkos.co.il>
+References: <b4f58df743722b3573c4adf90495d3757aefaef0.1430762680.git.baruch@tkos.co.il>
+Message-ID: <44800be10e173dbe7811c0e60dd29b729269f479.1430762680.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,17 +22,17 @@ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
  ...Fix-HTTP-chunked-transfer-encoding-parser.patch |  50 +++++++
  ...integer-underflow-in-WMM-Action-frame-par.patch |  42 ++++++
- package/hostapd/0003-EAP-pwd-fixes.patch           | 154 +++++++++++++++++++++
+ package/wpa_supplicant/0004-EAP-pwd-fixes.patch    | 154 +++++++++++++++++++++
  3 files changed, 246 insertions(+)
- create mode 100644 package/hostapd/0001-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
- create mode 100644 package/hostapd/0002-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
- create mode 100644 package/hostapd/0003-EAP-pwd-fixes.patch
+ create mode 100644 package/wpa_supplicant/0002-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
+ create mode 100644 package/wpa_supplicant/0003-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
+ create mode 100644 package/wpa_supplicant/0004-EAP-pwd-fixes.patch
 
-diff --git a/package/hostapd/0001-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch b/package/hostapd/0001-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
+diff --git a/package/wpa_supplicant/0002-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch b/package/wpa_supplicant/0002-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
 new file mode 100644
 index 000000000000..d9dccf911669
 --- /dev/null
-+++ b/package/hostapd/0001-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
++++ b/package/wpa_supplicant/0002-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
 @@ -0,0 +1,50 @@
 +From 5acd23f4581da58683f3cf5e36cb71bbe4070bd7 Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <j@w1.fi>
@@ -81,11 +84,11 @@ index 000000000000..d9dccf911669
 +-- 
 +2.1.4
 +
-diff --git a/package/hostapd/0002-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch b/package/hostapd/0002-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
+diff --git a/package/wpa_supplicant/0003-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch b/package/wpa_supplicant/0003-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
 new file mode 100644
 index 000000000000..307297b9e3c9
 --- /dev/null
-+++ b/package/hostapd/0002-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
++++ b/package/wpa_supplicant/0003-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
 @@ -0,0 +1,42 @@
 +From ef566a4d4f74022e1fdb0a2addfe81e6de9f4aae Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <j@w1.fi>
@@ -129,11 +132,11 @@ index 000000000000..307297b9e3c9
 +-- 
 +2.1.4
 +
-diff --git a/package/hostapd/0003-EAP-pwd-fixes.patch b/package/hostapd/0003-EAP-pwd-fixes.patch
+diff --git a/package/wpa_supplicant/0004-EAP-pwd-fixes.patch b/package/wpa_supplicant/0004-EAP-pwd-fixes.patch
 new file mode 100644
 index 000000000000..16a1f5398833
 --- /dev/null
-+++ b/package/hostapd/0003-EAP-pwd-fixes.patch
++++ b/package/wpa_supplicant/0004-EAP-pwd-fixes.patch
 @@ -0,0 +1,154 @@
 +This patch combines the following upstream security fixes:
 +
