@@ -1,36 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 May 2015 16:27:10 +0200
-Subject: [Buildroot] [git commit] vlc: ensure correct directfb-config is used
-Message-ID: <20150504142839.A9043818BE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 May 2015 16:30:10 +0200
+Subject: [Buildroot] 2015.08 release goals
+In-Reply-To: <CAMQcK5JYGAkJT0y9VCHdEQiBA8AWaojpSqdKYYD4jHjNUKxvMg@mail.gmail.com>
+References: <20150503115354.2fc19b90@free-electrons.com>
+ <CAMQcK5JYGAkJT0y9VCHdEQiBA8AWaojpSqdKYYD4jHjNUKxvMg@mail.gmail.com>
+Message-ID: <20150504163010.188f3ef5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac95a7a27bf319a69db4183bc9bdd4ec9543d575
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Ryan,
 
-Otherwise we can end up using host includes/libraries if the build host has
-directfb-config.
+On Mon, 4 May 2015 09:20:50 -0500, Ryan Barnett wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/361/3612b54b0bbc2a55ba6f0febb7be32595b523d96/
+> We were hoping that our outstanding SE Linux patchset could be
+> targeted for merge during this time too.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/vlc/vlc.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+For 2015.05 it's obviously too late, Peter will probably cut -rc1
+either today or in the next few days.
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index ab9aaae..acd67ee 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -88,6 +88,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_DIRECTFB),y)
- VLC_CONF_OPTS += --enable-directfb
-+VLC_CONF_ENV += ac_cv_path_DIRECTFB_CONFIG=$(STAGING_DIR)/usr/bin/directfb-config
- VLC_DEPENDENCIES += directfb
- else
- VLC_CONF_OPTS += --disable-directfb
+> The patches have seen a lot
+> of changes since the last version including a reduction in the number
+> of patches. We plan on sending out a v5 towards the end of this month.
+
+Have you been able to work with upstream about the Python stuff?
+
+Also, I think if you want to get things merged in 2015.08, it would be
+good to increase the frequency of the patch submissions to take into
+account review comments and so on. If you wait several months between
+each iteration, then it's going to take ages because reviewers are
+losing/forgetting the context and you kind of start over again from
+scratch each time.
+
+> I have updated the elinux page linked above with this.
+
+Good!
+
+Thanks a lot for working on this!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
