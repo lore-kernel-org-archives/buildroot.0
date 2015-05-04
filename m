@@ -1,69 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 May 2015 15:40:05 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] manual: Add notes about GitHub and
-	hashes
-In-Reply-To: <65108fc814c42059f26b7690ccd505c0ebb6afb5.1430667367.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 3 May 2015 17:37:40 +0200")
-References: <cover.1430667367.git.yann.morin.1998@free.fr>
- <65108fc814c42059f26b7690ccd505c0ebb6afb5.1430667367.git.yann.morin.1998@free.fr>
-Message-ID: <87d22gqx56.fsf@dell.be.48ers.dk>
+Date: Mon, 4 May 2015 14:38:02 +0200
+Subject: [Buildroot] [git commit] autotools-package: also handle
+	pre-installed external toolchain in .la fixup
+Message-ID: <20150504134035.58B1481941@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8c488211385b4f46cb290fbdc79bdb1912c1d1be
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > We can't take hashes from GitHub, unless the tarball has been uploaded by
- > the maintainer, otherwise it is generated and may change over time,
- > which renders hash files useless.
+The .la fixup handling looks for paths starting with /usr and assumes
+that they are missing the installation prefix (i.e. $(STAGING_DIR)). It
+already handles the cases that $(STAGING_DIR) itself and $(BASE_DIR)
+are under /usr, but it does not yet handle the case that a
+pre-installed external toolchain is under /usr (and tracks that fact
+in some .la file). For instance, if you use buildroot to generate a
+toolchain with HOST_DIR=/usr/local/some_path, this problem will occur.
 
- > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Samuel Martin <s.martin49@gmail.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fix this in the same way as $(STAGING_DIR) and $(BASE_DIR), but in
+addition check that TOOLCHAIN_EXTERNAL_INSTALL_DIR is non-empty. For
+internal toolchains, it is empty and the sed expression would fail.
 
- > ---
- > v3 -> v4 :
- >   - typo  (Arnout)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reported-by: Carlos Soto <csotoalonso@gmail.com>
+Cc: Carlos Soto <csotoalonso@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-autotools.mk |   15 +++++++++++----
+ 1 files changed, 11 insertions(+), 4 deletions(-)
 
- > v2 -> v3 (YEM):
- >   - move the block down, to be with with the other "note"
- >   - add reference to the GitHub helper
- >   - small grammatical fix s/automated/automatically/
-
- > v1 -> v2:
- >   - Add changes as requested by Yann E. Morin
- >   - Reword the comment on released tarball
- > ---
- >  docs/manual/adding-packages-directory.txt | 7 +++++++
- >  1 file changed, 7 insertions(+)
-
- > diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
- > index 6c478c2..fb3764e 100644
- > --- a/docs/manual/adding-packages-directory.txt
- > +++ b/docs/manual/adding-packages-directory.txt
- > @@ -442,6 +442,13 @@ strong hash yourself (preferably +sha256+, but not +md5+), and mention
- >  this in a comment line above the hashes.
- 
- >  .Note
- > +If +libfoo+ is from GitHub (see xref:github-download-url[] for details), we
- > +can only accept a +.hash+ file if the package is a released (e.g. uploaded
- > +by the maintainer) tarball. Otherwise, the automatically generated tarball
- > +may change over time, and thus its hashes may be different each time it is
- > +downloaded, making the +.hash+ file irrelevant for that tarball.
-
-I wouldn't call it irrelevant, it is more that the hash won't match the
-tarball.
-
-I've changed it to:
-
-downloaded, causing a +.hash+ mismatch for that tarball.
-
-And committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 49b42d4..9dea08a 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -304,10 +304,13 @@ endif
+ # needs to be applied to any path that starts with /usr.
+ #
+ # To protect against the case that the output or staging directories
+-# themselves are under /usr, we first substitute away any occurrences
+-# of these directories as @BASE_DIR@ and @STAGING_DIR at . Note that
+-# STAGING_DIR can be outside BASE_DIR when the user sets BR2_HOST_DIR
+-# to a custom value.
++# or the pre-installed external toolchain themselves are under /usr,
++# we first substitute away any occurrences of these directories as
++# @BASE_DIR@, @STAGING_DIR@ and @TOOLCHAIN_EXTERNAL_INSTALL_DIR@ respectively.
++# Note that STAGING_DIR can be outside BASE_DIR when the user sets
++# BR2_HOST_DIR to a custom value. Note that TOOLCHAIN_EXTERNAL_INSTALL_DIR
++# can be under @BASE_DIR@ when it's a downloaded toolchain, and can be empty
++# when we use an internal toolchain.
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+@@ -315,7 +318,11 @@ define $(2)_INSTALL_STAGING_CMDS
+ 	find $$(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
+ 		$$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
+ 			-e "s:$$(STAGING_DIR):@STAGING_DIR@:g" \
++			$$(if $$(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
++				-e "s:$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
+ 			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
++			$$(if $$(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
++				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
+ 			-e "s:@STAGING_DIR@:$$(STAGING_DIR):g" \
+ 			-e "s:@BASE_DIR@:$$(BASE_DIR):g"
+ endef
