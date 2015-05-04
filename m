@@ -1,47 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 May 2015 15:52:03 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <87h9rtucot.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sun, 03 May 2015 13:23:46 +0200")
-References: <20150502063016.3950D100FB0@stock.ovh.net>
- <20150503105009.2b42c375@free-electrons.com>
- <87h9rtucot.fsf@dell.be.48ers.dk>
-Message-ID: <878ud4qwl8.fsf@dell.be.48ers.dk>
+Date: Mon, 4 May 2015 16:01:37 +0200
+Subject: [Buildroot] [git commit] toolchain-external: mark musl based
+	toolchains as experimental
+Message-ID: <20150504140740.C7624819BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3ed34ff119adecfba460c13585da156d1368dd21
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
- > Hi,
+Like we do for the internal musl backend. We still see a large number of
+build failures with musl, so warn users about it.
 
- >> Hello,
- >> On Sat,  2 May 2015 08:30:16 +0200 (CEST), Thomas Petazzoni wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/toolchain-external/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- >>> mips64el | qt-4.8.6 | NOK |
- >>> http://autobuild.buildroot.net/results/3c50ed4bb15ab35341c7682ce4706b7a05a6f702/
- >>> mips64el | qt-4.8.6 | NOK |
- >>> http://autobuild.buildroot.net/results/07aca0c27a07761621d46fb690e3ccd50cbc2ef5/
-
- >> error: redefinition of 'bool QTest::qCompare
-
- >> Needs investigation.
-
- > Sounds related to:
-
- > http://lists.busybox.net/pipermail/buildroot/2015-April/127153.html
-
- > We currently only allow BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE for soft
- > float toolchains, but perhaps it needs to also be disallowed for mips64?
- > Richard, care to take a look?
-
-QT_COORD_TYPE_DOUBLE also causes issues with python-pyqt because of
-qreal* -> float* conversion. Could you take a look?
-
-http://autobuild.buildroot.net/results/891/891dc6ad46039740867a0b436281fc489cfb2772/build-end.log
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 665a15b..6ea6838 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -814,7 +814,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
+ 	  glibc 2.18, gdb 7.7.50 and kernel headers 3.13.
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+-	bool "Musl 1.1.6 toolchain"
++	bool "Musl 1.1.6 toolchain (experimental)"
+ 	depends on (BR2_arm && BR2_ARM_EABI) || (BR2_armeb && BR2_ARM_EABI) || \
+ 		(BR2_i386 && !BR2_x86_i386) || BR2_microblazebe || BR2_mips || \
+ 		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || BR2_x86_64
+@@ -1102,7 +1102,7 @@ comment "(e)glibc only available with shared lib support"
+ 	depends on BR2_STATIC_LIBS
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
+-	bool "musl"
++	bool "musl (experimental)"
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+ 	  Select this option if your external toolchain uses the
