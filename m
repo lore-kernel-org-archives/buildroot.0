@@ -1,42 +1,36 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Mon, 4 May 2015 09:20:50 -0500
-Subject: [Buildroot] 2015.08 release goals
-In-Reply-To: <20150503115354.2fc19b90@free-electrons.com>
-References: <20150503115354.2fc19b90@free-electrons.com>
-Message-ID: <CAMQcK5JYGAkJT0y9VCHdEQiBA8AWaojpSqdKYYD4jHjNUKxvMg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 4 May 2015 16:27:10 +0200
+Subject: [Buildroot] [git commit] vlc: ensure correct directfb-config is used
+Message-ID: <20150504142839.A9043818BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=ac95a7a27bf319a69db4183bc9bdd4ec9543d575
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, May 3, 2015 at 4:53 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> Since 2015.05-rc1 is approaching, we will stop merging new features. So
-> I've started collecting a list of release goals for 2015.08 at
-> http://elinux.org/Buildroot:2015.08_Release_Goals.
->
-> This is not intended to be an exhaustive list of all the package
-> updates and so on, only the "big" items, either infrastructure changes
-> or major package changes/updates.
+Otherwise we can end up using host includes/libraries if the build host has
+directfb-config.
 
-We were hoping that our outstanding SE Linux patchset could be
-targeted for merge during this time too. The patches have seen a lot
-of changes since the last version including a reduction in the number
-of patches. We plan on sending out a v5 towards the end of this month.
+Fixes:
+http://autobuild.buildroot.net/results/361/3612b54b0bbc2a55ba6f0febb7be32595b523d96/
 
-I have updated the elinux page linked above with this.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vlc/vlc.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thanks,
--Ryan
-
--- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index ab9aaae..acd67ee 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -88,6 +88,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_DIRECTFB),y)
+ VLC_CONF_OPTS += --enable-directfb
++VLC_CONF_ENV += ac_cv_path_DIRECTFB_CONFIG=$(STAGING_DIR)/usr/bin/directfb-config
+ VLC_DEPENDENCIES += directfb
+ else
+ VLC_CONF_OPTS += --disable-directfb
