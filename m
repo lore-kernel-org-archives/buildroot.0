@@ -1,293 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 May 2015 20:51:41 +0200
-Subject: [Buildroot] [git commit] wpa_supplicant: apply upstream security
-	patches
-Message-ID: <20150504185518.DEB6C800CC@busybox.osuosl.org>
+Date: Mon, 4 May 2015 21:28:31 +0200
+Subject: [Buildroot] [git commit] Update for 2015.05-rc1
+Message-ID: <20150504192859.7C5FE818A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=39a4a79d8aad8e5bf754f360efd15442894dcaf1
+commit: http://git.buildroot.net/buildroot/commit/?id=5628a15a69ad386a04af24f6dab130cdca01bf23
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds patches for three different upstream security advisories. No
-CVE numbers stated.
-
-http://w1.fi/security/2015-2/wps-upnp-http-chunked-transfer-encoding.txt
-http://w1.fi/security/2015-3/integer-underflow-in-ap-mode-wmm-action-frame.txt
-http://w1.fi/security/2015-4/eap-pwd-missing-payload-length-validation.txt
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...Fix-HTTP-chunked-transfer-encoding-parser.patch |   50 +++++++
- ...integer-underflow-in-WMM-Action-frame-par.patch |   42 ++++++
- package/wpa_supplicant/0004-EAP-pwd-fixes.patch    |  154 ++++++++++++++++++++
- 3 files changed, 246 insertions(+), 0 deletions(-)
+ CHANGES                    |    2 +-
+ Makefile                   |    2 +-
+ docs/website/download.html |   14 +++++++-------
+ docs/website/news.html     |   13 +++++++++++++
+ 4 files changed, 22 insertions(+), 9 deletions(-)
 
-diff --git a/package/wpa_supplicant/0002-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch b/package/wpa_supplicant/0002-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
-new file mode 100644
-index 0000000..d9dccf9
---- /dev/null
-+++ b/package/wpa_supplicant/0002-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
-@@ -0,0 +1,50 @@
-+From 5acd23f4581da58683f3cf5e36cb71bbe4070bd7 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Tue, 28 Apr 2015 17:08:33 +0300
-+Subject: [PATCH] WPS: Fix HTTP chunked transfer encoding parser
+diff --git a/CHANGES b/CHANGES
+index 975fa1b..e28eef7 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,4 @@
+-2015.05, Not yet released
++2015.05-rc1, Released May 4th, 2015
+ 
+ 	Fixes all over the tree and new features.
+ 
+diff --git a/Makefile b/Makefile
+index 3983fce..282c7ea 100644
+--- a/Makefile
++++ b/Makefile
+@@ -28,7 +28,7 @@
+ all:
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2015.05-git
++export BR2_VERSION := 2015.05-rc1
+ 
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION = 3.81
+diff --git a/docs/website/download.html b/docs/website/download.html
+index e8cde7d..6a880c6 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -17,22 +17,22 @@ or
+ (<a href="/downloads/buildroot-2015.02.tar.bz2.sign">PGP signature</a>).
+ 
+ <p>
+-<!--
+-The latest release candidate is <b>2015.02-rc3</b>, which can be
 +
-+strtoul() return value may end up overflowing the int h->chunk_size and
-+resulting in a negative value to be stored as the chunk_size. This could
-+result in the following memcpy operation using a very large length
-+argument which would result in a buffer overflow and segmentation fault.
++The latest release candidate is <b>2015.05-rc1</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2015.02-rc3.tar.gz">buildroot-2015.02-rc3.tar.gz</a>
+-(<a href="/downloads/buildroot-2015.02-rc3.tar.gz.sign">PGP signature</a>)
++<a href="/downloads/buildroot-2015.05-rc1.tar.gz">buildroot-2015.05-rc1.tar.gz</a>
++(<a href="/downloads/buildroot-2015.05-rc1.tar.gz.sign">PGP signature</a>)
+ or
+-<a href="/downloads/buildroot-2015.02-rc3.tar.bz2">buildroot-2015.02-rc3.tar.bz2</a>
+-(<a href="/downloads/buildroot-2015.02-rc3.tar.bz2.sign">PGP signature</a>).
++<a href="/downloads/buildroot-2015.05-rc1.tar.bz2">buildroot-2015.05-rc1.tar.bz2</a>
++(<a href="/downloads/buildroot-2015.05-rc1.tar.bz2.sign">PGP signature</a>).
+ <p>
+ 
+ This and earlier releases (and their PGP signatures) can always be downloaded from
+ <a href="/downloads/">http://buildroot.net/downloads/</a>.
+ 
+ <p>
+--->
 +
-+This could have been used to cause a denial service by any device that
-+has been authorized for network access (either wireless or wired). This
-+would affect both the WPS UPnP functionality in a WPS AP (hostapd with
-+upnp_iface parameter set in the configuration) and WPS ER
-+(wpa_supplicant with WPS_ER_START control interface command used).
+ You can also obtain daily snapshots of the latest Buildroot source tree if you
+ want to follow development, but cannot or do not wish to use Git.
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 308152a..eef668c 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -8,6 +8,19 @@
+ <p>
+ 
+ <ul>
++  <li><b>4 May 2015 -- 2015.05-rc1 released</b>
 +
-+Validate the parsed chunk length value to avoid this. In addition to
-+rejecting negative values, we can also reject chunk size that would be
-+larger than the maximum configured body length.
++    <p>We have a new release candidate! Lots of changes all over the
++    tree, see the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.05-rc1">CHANGES</a>
++    file for details.</p>
 +
-+Thanks to Kostya Kortchinsky of Google security team for discovering and
-+reporting this issue.
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2015.05-rc1.tar.bz2">2015.05-rc1
++    release candidate</a>, and report any problems found to the
++    <a href="support.html">mailing list</a> or
++    <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
 +
-+Signed-off-by: Jouni Malinen <j@w1.fi>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ src/wps/httpread.c | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/src/wps/httpread.c b/src/wps/httpread.c
-+index 2f08f37275c0..d2855e32fd0f 100644
-+--- a/src/wps/httpread.c
-++++ b/src/wps/httpread.c
-+@@ -533,6 +533,13 @@ static void httpread_read_handler(int sd, void *eloop_ctx, void *sock_ctx)
-+ 					if (!isxdigit(*cbp))
-+ 						goto bad;
-+ 					h->chunk_size = strtoul(cbp, NULL, 16);
-++					if (h->chunk_size < 0 ||
-++					    h->chunk_size > h->max_bytes) {
-++						wpa_printf(MSG_DEBUG,
-++							   "httpread: Invalid chunk size %d",
-++							   h->chunk_size);
-++						goto bad;
-++					}
-+ 					/* throw away chunk header
-+ 					 * so we have only real data
-+ 					 */
-+-- 
-+2.1.4
-+
-diff --git a/package/wpa_supplicant/0003-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch b/package/wpa_supplicant/0003-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
-new file mode 100644
-index 0000000..307297b
---- /dev/null
-+++ b/package/wpa_supplicant/0003-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
-@@ -0,0 +1,42 @@
-+From ef566a4d4f74022e1fdb0a2addfe81e6de9f4aae Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Wed, 29 Apr 2015 02:21:53 +0300
-+Subject: [PATCH] AP WMM: Fix integer underflow in WMM Action frame parser
-+
-+The length of the WMM Action frame was not properly validated and the
-+length of the information elements (int left) could end up being
-+negative. This would result in reading significantly past the stack
-+buffer while parsing the IEs in ieee802_11_parse_elems() and while doing
-+so, resulting in segmentation fault.
-+
-+This can result in an invalid frame being used for a denial of service
-+attack (hostapd process killed) against an AP with a driver that uses
-+hostapd for management frame processing (e.g., all mac80211-based
-+drivers).
-+
-+Thanks to Kostya Kortchinsky of Google security team for discovering and
-+reporting this issue.
-+
-+Signed-off-by: Jouni Malinen <j@w1.fi>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ src/ap/wmm.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/src/ap/wmm.c b/src/ap/wmm.c
-+index 6d4177c2a847..314e244bc956 100644
-+--- a/src/ap/wmm.c
-++++ b/src/ap/wmm.c
-+@@ -274,6 +274,9 @@ void hostapd_wmm_action(struct hostapd_data *hapd,
-+ 		return;
-+ 	}
-+ 
-++	if (left < 0)
-++		return; /* not a valid WMM Action frame */
-++
-+ 	/* extract the tspec info element */
-+ 	if (ieee802_11_parse_elems(pos, left, &elems, 1) == ParseFailed) {
-+ 		hostapd_logger(hapd, mgmt->sa, HOSTAPD_MODULE_IEEE80211,
-+-- 
-+2.1.4
-+
-diff --git a/package/wpa_supplicant/0004-EAP-pwd-fixes.patch b/package/wpa_supplicant/0004-EAP-pwd-fixes.patch
-new file mode 100644
-index 0000000..16a1f53
---- /dev/null
-+++ b/package/wpa_supplicant/0004-EAP-pwd-fixes.patch
-@@ -0,0 +1,154 @@
-+This patch combines the following upstream security fixes:
-+
-+28a069a545b0 EAP-pwd peer: Fix asymmetric fragmentation behavior
-+3035cc2894e0 EAP-pwd server: Fix Total-Length parsing for fragment reassembly
-+477c74395acd EAP-pwd peer: Fix Total-Length parsing for fragment reassembly
-+e28a58be2618 EAP-pwd server: Fix payload length validation for Commit and Confirm
-+dd2f043c9c43 EAP-pwd peer: Fix payload length validation for Commit and Confirm
-+
-+Details at 
-+http://w1.fi/security/2015-4/eap-pwd-missing-payload-length-validation.txt
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+diff --git a/src/eap_peer/eap_pwd.c b/src/eap_peer/eap_pwd.c
-+index f2b092669a42..e58b13a42f73 100644
-+--- a/src/eap_peer/eap_pwd.c
-++++ b/src/eap_peer/eap_pwd.c
-+@@ -355,6 +355,23 @@ eap_pwd_perform_commit_exchange(struct eap_sm *sm, struct eap_pwd_data *data,
-+ 	BIGNUM *mask = NULL, *x = NULL, *y = NULL, *cofactor = NULL;
-+ 	u16 offset;
-+ 	u8 *ptr, *scalar = NULL, *element = NULL;
-++	size_t prime_len, order_len;
-++
-++	if (data->state != PWD_Commit_Req) {
-++		ret->ignore = TRUE;
-++		goto fin;
-++	}
-++
-++	prime_len = BN_num_bytes(data->grp->prime);
-++	order_len = BN_num_bytes(data->grp->order);
-++
-++	if (payload_len != 2 * prime_len + order_len) {
-++		wpa_printf(MSG_INFO,
-++			   "EAP-pwd: Unexpected Commit payload length %u (expected %u)",
-++			   (unsigned int) payload_len,
-++			   (unsigned int) (2 * prime_len + order_len));
-++		goto fin;
-++	}
-+ 
-+ 	if (((data->private_value = BN_new()) == NULL) ||
-+ 	    ((data->my_element = EC_POINT_new(data->grp->group)) == NULL) ||
-+@@ -554,6 +571,18 @@ eap_pwd_perform_confirm_exchange(struct eap_sm *sm, struct eap_pwd_data *data,
-+ 	u8 conf[SHA256_MAC_LEN], *cruft = NULL, *ptr;
-+ 	int offset;
-+ 
-++	if (data->state != PWD_Confirm_Req) {
-++		ret->ignore = TRUE;
-++		goto fin;
-++	}
-++
-++	if (payload_len != SHA256_MAC_LEN) {
-++		wpa_printf(MSG_INFO,
-++			   "EAP-pwd: Unexpected Confirm payload length %u (expected %u)",
-++			   (unsigned int) payload_len, SHA256_MAC_LEN);
-++		goto fin;
-++	}
-++
-+ 	/*
-+ 	 * first build up the ciphersuite which is group | random_function |
-+ 	 *	prf
-+@@ -837,11 +866,23 @@ eap_pwd_process(struct eap_sm *sm, void *priv, struct eap_method_ret *ret,
-+ 	 * if it's the first fragment there'll be a length field
-+ 	 */
-+ 	if (EAP_PWD_GET_LENGTH_BIT(lm_exch)) {
-++		if (len < 2) {
-++			wpa_printf(MSG_DEBUG,
-++				   "EAP-pwd: Frame too short to contain Total-Length field");
-++			ret->ignore = TRUE;
-++			return NULL;
-++		}
-+ 		tot_len = WPA_GET_BE16(pos);
-+ 		wpa_printf(MSG_DEBUG, "EAP-pwd: Incoming fragments whose "
-+ 			   "total length = %d", tot_len);
-+ 		if (tot_len > 15000)
-+ 			return NULL;
-++		if (data->inbuf) {
-++			wpa_printf(MSG_DEBUG,
-++				   "EAP-pwd: Unexpected new fragment start when previous fragment is still in use");
-++			ret->ignore = TRUE;
-++			return NULL;
-++		}
-+ 		data->inbuf = wpabuf_alloc(tot_len);
-+ 		if (data->inbuf == NULL) {
-+ 			wpa_printf(MSG_INFO, "Out of memory to buffer "
-+@@ -927,6 +968,7 @@ eap_pwd_process(struct eap_sm *sm, void *priv, struct eap_method_ret *ret,
-+ 	/*
-+ 	 * we have output! Do we need to fragment it?
-+ 	 */
-++	lm_exch = EAP_PWD_GET_EXCHANGE(lm_exch);
-+ 	len = wpabuf_len(data->outbuf);
-+ 	if ((len + EAP_PWD_HDR_SIZE) > data->mtu) {
-+ 		resp = eap_msg_alloc(EAP_VENDOR_IETF, EAP_TYPE_PWD, data->mtu,
-+diff --git a/src/eap_server/eap_server_pwd.c b/src/eap_server/eap_server_pwd.c
-+index 66bd5d2e9179..2bfc3c27647d 100644
-+--- a/src/eap_server/eap_server_pwd.c
-++++ b/src/eap_server/eap_server_pwd.c
-+@@ -656,9 +656,21 @@ eap_pwd_process_commit_resp(struct eap_sm *sm, struct eap_pwd_data *data,
-+ 	BIGNUM *x = NULL, *y = NULL, *cofactor = NULL;
-+ 	EC_POINT *K = NULL, *point = NULL;
-+ 	int res = 0;
-++	size_t prime_len, order_len;
-+ 
-+ 	wpa_printf(MSG_DEBUG, "EAP-pwd: Received commit response");
-+ 
-++	prime_len = BN_num_bytes(data->grp->prime);
-++	order_len = BN_num_bytes(data->grp->order);
-++
-++	if (payload_len != 2 * prime_len + order_len) {
-++		wpa_printf(MSG_INFO,
-++			   "EAP-pwd: Unexpected Commit payload length %u (expected %u)",
-++			   (unsigned int) payload_len,
-++			   (unsigned int) (2 * prime_len + order_len));
-++		goto fin;
-++	}
-++
-+ 	if (((data->peer_scalar = BN_new()) == NULL) ||
-+ 	    ((data->k = BN_new()) == NULL) ||
-+ 	    ((cofactor = BN_new()) == NULL) ||
-+@@ -774,6 +786,13 @@ eap_pwd_process_confirm_resp(struct eap_sm *sm, struct eap_pwd_data *data,
-+ 	u8 conf[SHA256_MAC_LEN], *cruft = NULL, *ptr;
-+ 	int offset;
-+ 
-++	if (payload_len != SHA256_MAC_LEN) {
-++		wpa_printf(MSG_INFO,
-++			   "EAP-pwd: Unexpected Confirm payload length %u (expected %u)",
-++			   (unsigned int) payload_len, SHA256_MAC_LEN);
-++		goto fin;
-++	}
-++
-+ 	/* build up the ciphersuite: group | random_function | prf */
-+ 	grp = htons(data->group_num);
-+ 	ptr = (u8 *) &cs;
-+@@ -923,11 +942,21 @@ static void eap_pwd_process(struct eap_sm *sm, void *priv,
-+ 	 * the first fragment has a total length
-+ 	 */
-+ 	if (EAP_PWD_GET_LENGTH_BIT(lm_exch)) {
-++		if (len < 2) {
-++			wpa_printf(MSG_DEBUG,
-++				   "EAP-pwd: Frame too short to contain Total-Length field");
-++			return;
-++		}
-+ 		tot_len = WPA_GET_BE16(pos);
-+ 		wpa_printf(MSG_DEBUG, "EAP-pwd: Incoming fragments, total "
-+ 			   "length = %d", tot_len);
-+ 		if (tot_len > 15000)
-+ 			return;
-++		if (data->inbuf) {
-++			wpa_printf(MSG_DEBUG,
-++				   "EAP-pwd: Unexpected new fragment start when previous fragment is still in use");
-++			return;
-++		}
-+ 		data->inbuf = wpabuf_alloc(tot_len);
-+ 		if (data->inbuf == NULL) {
-+ 			wpa_printf(MSG_INFO, "EAP-pwd: Out of memory to "
+   <li><b>1 March 2015 -- 2015.02 released</b>
+ 
+     <p>The stable 2015.02 release is out - Thanks to everyone
