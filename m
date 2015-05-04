@@ -1,53 +1,41 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon,  4 May 2015 08:43:38 +0200
-Subject: [Buildroot] [PATCH] barebox: bump to version 2015.04.0 and add hash
-	file
-Message-ID: <1430721818-8142-1-git-send-email-fabio.porcedda@gmail.com>
+From: Richard Genoud <richard.genoud@gmail.com>
+Date: Mon, 4 May 2015 08:50:28 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <87h9rtucot.fsf@dell.be.48ers.dk>
+References: <20150502063016.3950D100FB0@stock.ovh.net>
+ <20150503105009.2b42c375@free-electrons.com>
+ <87h9rtucot.fsf@dell.be.48ers.dk>
+Message-ID: <CACQ1gAjEdWVRs68Xj=nKC8BTXbAELPwCh9De4fLjDdOX+=KLMQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 5 +++++
- 2 files changed, 7 insertions(+), 2 deletions(-)
- create mode 100644 boot/barebox/barebox.hash
+2015-05-03 13:23 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>
+> Hi,
+>
+>  > Hello,
+>  > On Sat,  2 May 2015 08:30:16 +0200 (CEST), Thomas Petazzoni wrote:
+>
+>  >> mips64el | qt-4.8.6 | NOK |
+>  >> http://autobuild.buildroot.net/results/3c50ed4bb15ab35341c7682ce4706b7a05a6f702/
+>  >> mips64el | qt-4.8.6 | NOK |
+>  >> http://autobuild.buildroot.net/results/07aca0c27a07761621d46fb690e3ccd50cbc2ef5/
+>
+>  > error: redefinition of 'bool QTest::qCompare
+>
+>  > Needs investigation.
+>
+> Sounds related to:
+>
+> http://lists.busybox.net/pipermail/buildroot/2015-April/127153.html
+>
+> We currently only allow BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE for soft
+> float toolchains, but perhaps it needs to also be disallowed for mips64?
+> Richard, care to take a look?
+Yes, I'm gonna look at that.
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 48431bd..a250f3b 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2015.02.0"
-+	bool "2015.04.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2015.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2015.04.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-new file mode 100644
-index 0000000..5782fb5
---- /dev/null
-+++ b/boot/barebox/barebox.hash
-@@ -0,0 +1,5 @@
-+
-+# http://www.barebox.org/download/barebox-2015.04.0.tar.bz2.md5
-+md5 749436075f39d4cd051c71ea52b24f67 barebox-2015.04.0.tar.bz2
-+# Locally calculated
-+sha256 905757f84366d8934c718165af4bba8a7c7f3187c29f05ee532566681711a903 barebox-2015.04.0.tar.bz2
--- 
-2.3.5
+Richard.
