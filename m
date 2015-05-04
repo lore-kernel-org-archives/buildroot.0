@@ -1,30 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 May 2015 22:12:16 +0200
+Date: Mon, 4 May 2015 22:12:37 +0200
 Subject: [Buildroot] [autobuild v2 2/3] autobuild-run: also save CMake
  config log files on package failure
-In-Reply-To: <1430338217-25518-2-git-send-email-s.martin49@gmail.com>
+In-Reply-To: <5541613E.80604@mailerd.de>
 References: <1430338217-25518-1-git-send-email-s.martin49@gmail.com>
  <1430338217-25518-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150504221216.6bedf5af@free-electrons.com>
+ <5541613E.80604@mailerd.de>
+Message-ID: <20150504221237.6920abf7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Andr? Erdmann,
 
-On Wed, 29 Apr 2015 22:10:16 +0200, Samuel Martin wrote:
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+On Thu, 30 Apr 2015 00:54:54 +0200, Andr? Erdmann wrote:
+
+> config_files = set(('config.log', ...))
 > 
-> ---
-> changes v1->v2
-> - none
-> ---
->  scripts/autobuild-run | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> It's negligible in terms of real time difference (<= 0.0d seconds),
+> but for efficiency reasons, don't use a tuple or list when doing
+> lookups ("fname in config_files").
+> 
+> os.walk() might return 100s or 1000s of file names in total,
+> and for each fname, you have to through the entire list/tuple
+> (until fname found or end of list, whatever comes first).
+> Data structures like set/frozenset/dict perform lookups faster (on average).
 
-Applied, thanks.
+Can you submit a follow-up patch implementing this suggestion?
+
+Thanks a lot!
 
 Thomas
 -- 
