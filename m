@@ -1,48 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 May 2015 16:48:41 +0200
-Subject: [Buildroot] 2015.08 release goals
-In-Reply-To: <CAMQcK5+DtuXQRSx4W7GhbpxBxy12H9f1PNYGMLuFpyCbTm4RGQ@mail.gmail.com>
-References: <20150503115354.2fc19b90@free-electrons.com>
- <CAMQcK5JYGAkJT0y9VCHdEQiBA8AWaojpSqdKYYD4jHjNUKxvMg@mail.gmail.com>
- <20150504163010.188f3ef5@free-electrons.com>
- <CAMQcK5+DtuXQRSx4W7GhbpxBxy12H9f1PNYGMLuFpyCbTm4RGQ@mail.gmail.com>
-Message-ID: <20150504164841.40856c60@free-electrons.com>
+From: Richard Genoud <richard.genoud@gmail.com>
+Date: Mon, 4 May 2015 16:57:59 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <878ud4qwl8.fsf@dell.be.48ers.dk>
+References: <20150502063016.3950D100FB0@stock.ovh.net>
+ <20150503105009.2b42c375@free-electrons.com>
+ <87h9rtucot.fsf@dell.be.48ers.dk> <878ud4qwl8.fsf@dell.be.48ers.dk>
+Message-ID: <CACQ1gAiHWPPCABQL5JSGUabkbu5dYOZ5dWo7Sn_Bpc+X7CfmdQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan,
+2015-05-04 15:52 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>  > Hi,
+>
+>  >> Hello,
+>  >> On Sat,  2 May 2015 08:30:16 +0200 (CEST), Thomas Petazzoni wrote:
+>
+>  >>> mips64el | qt-4.8.6 | NOK |
+>  >>> http://autobuild.buildroot.net/results/3c50ed4bb15ab35341c7682ce4706b7a05a6f702/
+>  >>> mips64el | qt-4.8.6 | NOK |
+>  >>> http://autobuild.buildroot.net/results/07aca0c27a07761621d46fb690e3ccd50cbc2ef5/
+>
+>  >> error: redefinition of 'bool QTest::qCompare
+>
+>  >> Needs investigation.
+>
+>  > Sounds related to:
+>
+>  > http://lists.busybox.net/pipermail/buildroot/2015-April/127153.html
+>
+>  > We currently only allow BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE for soft
+>  > float toolchains, but perhaps it needs to also be disallowed for mips64?
+>  > Richard, care to take a look?
+>
+> QT_COORD_TYPE_DOUBLE also causes issues with python-pyqt because of
+> qreal* -> float* conversion. Could you take a look?
+>
+> http://autobuild.buildroot.net/results/891/891dc6ad46039740867a0b436281fc489cfb2772/build-end.log
 
-On Mon, 4 May 2015 09:45:59 -0500, Ryan Barnett wrote:
-
-> > Have you been able to work with upstream about the Python stuff?
-> 
-> We no longer are doing the "Python stuff" in the audit package - which
-> is what you are referring to here.
-
-Yes, exactly. So what was the solution to overcome the
-cross-compilation issue of the upstream audit logic?
-
-> 
-> > Also, I think if you want to get things merged in 2015.08, it would be
-> > good to increase the frequency of the patch submissions to take into
-> > account review comments and so on. If you wait several months between
-> > each iteration, then it's going to take ages because reviewers are
-> > losing/forgetting the context and you kind of start over again from
-> > scratch each time.
-> 
-> Correct - we will make sure that we respond in a much more timely
-> manner since this has become a priority for us.
-
-Excellent. I will also try to dedicate some time to reviewing/testing
-your submissions, since I did that in the past for the SELinux stuff.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+yes, no problem.
