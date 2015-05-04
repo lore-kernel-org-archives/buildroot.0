@@ -1,43 +1,42 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 04 May 2015 12:28:33 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20150503105009.2b42c375@free-electrons.com>
-References: <20150502063016.3950D100FB0@stock.ovh.net>
- <20150503105009.2b42c375@free-electrons.com>
-Message-ID: <1430735313.2799.15.camel@embedded.rocks>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  4 May 2015 07:49:30 -0300
+Subject: [Buildroot] [PATCH] gnutls: security bump to version 3.3.15
+Message-ID: <1430736570-7364-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes:
+GNUTLS-SA-2015-2 - Fix for MD5 downgrade in TLS 1.2 signatures.
 
-On So, 2015-05-03 at 10:50 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> >         sh4a |                   boost-1.58.0 | NOK | http://autobu
-> > ild.buildroot.net/results/ccd5c83963032ba49b1627b1dff39e34a9486943/
-> >       mipsel |                   boost-1.58.0 | NOK | http://autobu
-> > ild.buildroot.net/results/66c3a868816dfe4bd4d0ffafec6988fd87a2c058/
-> 
-> Fixed by reverting to 1.57.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gnutls/gnutls.hash | 2 +-
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Fixed by http://patchwork.ozlabs.org/patch/467255/?
-
-> 
-> >          arm |                 libtirpc-0.2.4 | NOK | http://autobu
-> > ild.buildroot.net/results/c64cb1874e6287da1942533d85d26b12192c73df/
-> >          arm |                 libtirpc-0.2.4 | NOK | http://autobu
-> > ild.buildroot.net/results/9f08353e94eadb914332aa80fc90c4315bfef7c2/
-> 
-> libtirpc fails to build on musl.
-
-> I started working on this topic, but it's not that simple...
-
-Me, too. Yeah, removing sys/cdefs.h, replacing __BEGIN_DECLS,
-__END_DECLS, and __THROW, replacing sys/queue.h, and some things
-more...
-
-Best regards
-J?rg Krause
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 53cf3fe..3009478 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	0dfa0030faad8909c1e904105198232d6bc0123cae8cf4933b2bac85ee7cec52	gnutls-3.3.14.tar.xz
++sha256	8961227852911a1974e15bc017ddbcd4779876c867226d199f06648d8b27ba4b	gnutls-3.3.15.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index b99cacb..9ccc23e 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.3
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).14
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).15
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+-- 
+2.0.5
