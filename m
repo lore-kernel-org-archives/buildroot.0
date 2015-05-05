@@ -1,29 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 May 2015 15:47:52 +0200
+Date: Tue, 5 May 2015 15:48:26 +0200
 Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <5548C932.3050502@zacarias.com.ar>
+In-Reply-To: <5548C487.90604@gmail.com>
 References: <20150505063016.079181016A5@stock.ovh.net>
  <20150505095952.4ddfd5b4@free-electrons.com>
- <5548C932.3050502@zacarias.com.ar>
-Message-ID: <20150505154752.4757219c@free-electrons.com>
+ <5548C487.90604@gmail.com>
+Message-ID: <20150505154826.65c104f8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo,
+Hello,
 
-On Tue, 05 May 2015 10:44:18 -0300, Gustavo Zacarias wrote:
+On Tue, 05 May 2015 15:24:23 +0200, Pascal Huerst wrote:
 
-> Yes, md2 has been disabled for some time, the problem is that ipmiutil's
-> configure uses LIB_DIR to check for md2 availability in libcrypto.
-> But we can't override that otherwise libipmiutil doesn't get installed
-> in the correct place :-/
-> Quick solution is to force it off, ideally a well-done tests would be
-> better.
+> According to:
+> 
+> https://breakpad.appspot.com/2824002/
+> 
+> support has been added for release r1407. I tried to build that
+> revision, but I got the same error as reported above. I'm not really
+> familiar with the internals of breakpad, but I asked on the breakpad
+> mailing list. Maybe someone there already knows that issue... I'll keep
+> you updated.
 
-Ok, thanks. Can you send a patch to force it off?
+Thanks. We'll wait a bit for them to give some feedback, and if it
+doesn't come soon enough, we'll disable breakpad on aarch64 for now.
 
 Thanks,
 
