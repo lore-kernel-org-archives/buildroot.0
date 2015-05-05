@@ -1,87 +1,53 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 06 May 2015 00:19:29 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix staging install for
- CodeSourcery AArch64 toolchain
-In-Reply-To: <5549377D.5060305@mind.be>
-References: <1430776908-1030-1-git-send-email-romain.naour@openwide.fr>
- <5549377D.5060305@mind.be>
-Message-ID: <554941F1.4030302@openwide.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 6 May 2015 00:42:13 +0200
+Subject: [Buildroot] Build issue on OpenCV: multiple Qt related
+	undefined references
+In-Reply-To: <CAHXCMM+cbdbMYr0kfy=yP2rcUooaM5-wcv-hPcJsbkJ0hGOU8Q@mail.gmail.com>
+References: <20150503113551.60d21f26@free-electrons.com>
+ <CAHXCMM+cbdbMYr0kfy=yP2rcUooaM5-wcv-hPcJsbkJ0hGOU8Q@mail.gmail.com>
+Message-ID: <CAHXCMMKR2e=NfCr8m7yf21nO7h3j3xOU4apEV3m9Hb_Fj+DNXQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Thomas, all,
 
-Le 05/05/2015 23:34, Arnout Vandecappelle a ?crit :
-> On 05/05/15 00:01, Romain Naour wrote:
->> The extracted toolchain sources contains a single symlink in the
->> aarch64-linux-gnu/libc/lib directory wich is lost during Buildroot's
->> staging install.
+On Mon, May 4, 2015 at 3:28 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+> Hi Thomas,
+>
+> On Sun, May 3, 2015 at 11:35 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello Samuel,
 >>
->> aarch64-linux-gnu/libc/
+>> I did an allyespackageconfig build yesterday, and it failed because of
+>> an OpenCV/Qt build issue during the OpenCV build. Here is the error:
 >>
->> Add a custom post install staging hook to create it manually.
+>> ../../lib/libopencv_highgui.so.2.4.10: undefined reference to `QFont::setLetterSpacing(QFont::SpacingType, float)'
+>> ../../lib/libopencv_highgui.so.2.4.10: undefined reference to `QTransform::QTransform(float, float, float, float, float, float, float, float, float)'
+>> ../../lib/libopencv_highgui.so.2.4.10: undefined reference to `QTransform::map(float, float, float*, float*) const'
+>> ../../lib/libopencv_highgui.so.2.4.10: undefined reference to `QPen::QPen(QBrush const&, float, Qt::PenStyle, Qt::PenCapStyle, Qt::PenJoinStyle)'
+>> ../../lib/libopencv_highgui.so.2.4.10: undefined reference to `QTransform::scale(float, float)'
+>> ../../lib/libopencv_highgui.so.2.4.10: undefined reference to `QTransform::translate(float, float)'
+>> collect2: error: ld returned 1 exit status
 >>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> ---
->>  toolchain/toolchain-external/toolchain-external.mk | 4 ++++
->>  1 file changed, 4 insertions(+)
->>
->> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
->> index b293ba9..e66db77 100644
->> --- a/toolchain/toolchain-external/toolchain-external.mk
->> +++ b/toolchain/toolchain-external/toolchain-external.mk
->> @@ -355,6 +355,10 @@ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH
->>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
->>  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/aarch64-linux-gnu
->>  TOOLCHAIN_EXTERNAL_SOURCE = aarch64-2014.05-30-aarch64-linux-gnu-i686-pc-linux-gnu.tar.bz2
->> +define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_FIXUP
->> +	ln -sf ld-2.18.so $(STAGING_DIR)/lib/ld-linux-aarch64.so.1
-> 
->  Shouldn't this instead be added to LIB_EXTERNAL_LIBS like the other ld*.so* ?
-> Actually, it matches the ld*.so* pattern, so how come this isn't symlinked already?
+>> The defconfig is below, but beware, it takes ages to build (200 minutes
+>> of real time on a relatively fast build server). If you could have a
+>> look, it would be great.
 
-I think it's because ARCH_LIB_DIR=lib64 and copy_toolchain_lib_root doesn't take
-into account the content of lib directory in that case.
+As reported yesterday on IRC, the root cause of this issue is a
+prototype mismatch in the above mentioned methods (when used in
+OpenCV, they expect float arguments, whereas the libQtGui.so provides
+the same methods but with double arguments).
 
-Other toolchains contains this symlink in lib or lib64.
+I confirm that this revert [1] does fix this issue.
 
-libc/lib:
-ld-linux.so.2 -> ld-2.18.so
 
-libc/lib64:
-ld-linux-x86-64.so.2 -> ld-2.18.so
+[1] http://git.buildroot.net/buildroot/commit/?id=078c1c4416648eea4a3d1f116e10c8ad6071b3d1
 
-But here we have:
-libc/lib:
-ld-linux-aarch64.so.1 -> ../lib64/ld-2.18.so
 
-and no symlink in lib64 directory.
+Regards,
 
-> Actually, why is it even needed to symlink an ld.so in the staging dir?
-
-Maybe just to avoid to link against a library with a specific version
-(ld-2.18.do) and be sure that the correct ELF dynamic linker is user depending
-on arch's name (ld-linux-aarch64.so.1).
-Otherwise, I don't know.
-
-Best regards,
-Romain
-
-> 
-> 
->  Regards,
->  Arnout
-> 
-> 
->> +endef
->> +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_FIXUP
->>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
->>  TOOLCHAIN_EXTERNAL_VERSION = 1.1.6
->>  TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)
->>
-> 
-> 
+-- 
+Samuel
