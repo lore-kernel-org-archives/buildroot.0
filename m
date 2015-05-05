@@ -1,31 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 May 2015 17:26:13 +0200
-Subject: [Buildroot] [PATCH v3 1/2] python-pyqt: fix install
-In-Reply-To: <1430836434-24257-1-git-send-email-gwenj@trabucayre.com>
- (Gwenhael Goavec-Merou's message of "Tue, 5 May 2015 16:33:53 +0200")
-References: <1430836434-24257-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <876187oxka.fsf@dell.be.48ers.dk>
+Date: Tue, 5 May 2015 17:09:20 +0200
+Subject: [Buildroot] [git commit] website/sponsors: fix typo
+Message-ID: <20150505152638.6C5E181DA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gwenhael" == Gwenhael Goavec-Merou <gwenj@trabucayre.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cb3d3bb8a6e9a23184a627fac8527fbe921537ae
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
- > PyQt4 provides two version for some py files: one for python2.x and one for
- > python3.x. This two versions are installed in TARGET_DIR.
- > After installing files, python is used to generate all .pyc files, but fails
- > like :
- > class ProxyBase(metaclass=ProxyMetaclass):
- >                              ^
- > 							 SyntaxError: invalid syntax
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/sponsors.html |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > This is not a package build failure and this fix is only cosmetic.
- > This patch suppress directory for not targeted python version.
-
-Do we have any autobuilder results showing this?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
+index 1da813b..9de0605 100644
+--- a/docs/website/sponsors.html
++++ b/docs/website/sponsors.html
+@@ -70,7 +70,7 @@
+         <a href="http://www.mind.be">Mind</a> sponsored the dinner of
+         the FOSDEM 2014 Developers Meeting (Brussels), the meeting
+         room and the dinner for the ELCE 2014 Developers Meeting
+-        (D??sseldorf), and the dinner for the FOSDME 2015 Developers
++        (D??sseldorf), and the dinner for the FOSDEM 2015 Developers
+         meeting (Brussels).
+       </div>
+     </div>
