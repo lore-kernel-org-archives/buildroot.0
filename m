@@ -1,47 +1,34 @@
-From: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
-Date: Tue, 5 May 2015 13:47:37 +0000
-Subject: [Buildroot] [PATCH v7 10/13] Vivante drivers: bump to version
- 3.10.17-1.0.1
-In-Reply-To: <CAAMH-yuv542b5_EdSJw8L5UcDdPB07Se=EH8vNkb03yZsf6JgQ@mail.gmail.com>
-References: <1430406748-8493-1-git-send-email-jezz@sysmic.org>
- <1430406748-8493-11-git-send-email-jezz@sysmic.org>
- <20150501225109.66e3b7ba@free-electrons.com>	<20150504151227.GC11312@kwain>
- <20150504171543.68eb13fc@free-electrons.com>
- <CAAMH-ysBAw_r4XrTZBRvfMZnKd+py8KKZEWxmJm_-Tm9AcHmKQ@mail.gmail.com>
- <HE1PR04MB1290A44B5B363C5D90272A7CEAD10@HE1PR04MB1290.eurprd04.prod.outlook.com>
- <CAAMH-yv2L-H8yYcdzoxaU4-TWhsywMTgmi9OD+CPz-sGOZwffw@mail.gmail.com>
- <HE1PR04MB12904DAC27D4138F86E1B391EAD10@HE1PR04MB1290.eurprd04.prod.outlook.com>
- <CAAMH-yuv542b5_EdSJw8L5UcDdPB07Se=EH8vNkb03yZsf6JgQ@mail.gmail.com>
-Message-ID: <HE1PR04MB12906D50F43D4AD557CBAE42EAD10@HE1PR04MB1290.eurprd04.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 May 2015 15:47:52 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <5548C932.3050502@zacarias.com.ar>
+References: <20150505063016.079181016A5@stock.ovh.net>
+ <20150505095952.4ddfd5b4@free-electrons.com>
+ <5548C932.3050502@zacarias.com.ar>
+Message-ID: <20150505154752.4757219c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
+Gustavo,
 
-> Don't worry there's no rush, the GPU package isn't updated yet.
-> However it's great to know you are willing to update the defconfig, we will
-> ping you as soon as everything is ready.
+On Tue, 05 May 2015 10:44:18 -0300, Gustavo Zacarias wrote:
 
-Okay, so this will not be integrated in next BuildRoot release I presume.
+> Yes, md2 has been disabled for some time, the problem is that ipmiutil's
+> configure uses LIB_DIR to check for md2 availability in libcrypto.
+> But we can't override that otherwise libipmiutil doesn't get installed
+> in the correct place :-/
+> Quick solution is to force it off, ideally a well-done tests would be
+> better.
 
- 
-> > Which packages should be integrated into the build/image?
-> > Of course the Vivante driver, but what else?
-> 
-> Actually the Vivante package is the ultimate test to perform as it requires a
-> match between the libraries and the kernel driver version.
-> The rest of the packages (VPU, gstreamer plugins etc...) are good to test but
-> not mandatory I'd say.
+Ok, thanks. Can you send a patch to force it off?
 
-Okay, seems not to be too complicated to check.
+Thanks,
 
-> 
-> Thanks,
-> Gary
-
-Your welcome ;-)
-
-Fabrice
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
