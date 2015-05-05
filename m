@@ -1,108 +1,77 @@
-From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-Date: Tue, 05 May 2015 12:31:01 +0200
-Subject: [Buildroot] integrating MariaDB Galera Cluster into BR
-In-Reply-To: <20150424175438.GG4244@free.fr>
-References: <553A5805.3080701@green-communications.fr>
- <20150424175438.GG4244@free.fr>
-Message-ID: <55489BE5.6070402@green-communications.fr>
+From: Richard Genoud <richard.genoud@gmail.com>
+Date: Tue, 05 May 2015 13:00:41 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150504233058.2e5e1a59@free-electrons.com>
+References: <20150502063016.3950D100FB0@stock.ovh.net>	<20150503105009.2b42c375@free-electrons.com>	<87h9rtucot.fsf@dell.be.48ers.dk>	<878ud4qwl8.fsf@dell.be.48ers.dk>	<CACQ1gAiHWPPCABQL5JSGUabkbu5dYOZ5dWo7Sn_Bpc+X7CfmdQ@mail.gmail.com>
+ <20150504233058.2e5e1a59@free-electrons.com>
+Message-ID: <5548A2D9.8020900@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+On 04/05/2015 23:30, Thomas Petazzoni wrote:
+> Dear Richard Genoud,
+> 
+> On Mon, 4 May 2015 16:57:59 +0200, Richard Genoud wrote:
+> 
+>>>  > We currently only allow BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE for soft
+>>>  > float toolchains, but perhaps it needs to also be disallowed for mips64?
+>>>  > Richard, care to take a look?
+>>>
+>>> QT_COORD_TYPE_DOUBLE also causes issues with python-pyqt because of
+>>> qreal* -> float* conversion. Could you take a look?
+>>>
+>>> http://autobuild.buildroot.net/results/891/891dc6ad46039740867a0b436281fc489cfb2772/build-end.log
+>>
+>> yes, no problem.
+> 
+> And I also believe
+> http://autobuild.buildroot.org/results/3a7/3a70305be4a78af9404b0bd027dbcdd011ca01b3/build-end.log
+> is caused by BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE:
+> 
+> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QPen::setWidthF(float)'
+> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QTransform::translate(float, float)'
+> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QMatrix::setMatrix(float, float, float, float, float, float)'
+> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QTransform::rotate(float, Qt::Axis)'
+> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QColor::setRgbF(float, float, float, float)'
+> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QPen::setDashOffset(float)'
+> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QColor::setAlphaF(float)'
+> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QPen::setMiterLimit(float)'
+> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QTransform::QTransform(float, float, float, float, float, float)'
+> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QColor::setCmykF(float, float, float, float, float)'
+> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QPen::setDashPattern(QVector<float> const&)'
+> 
+> The libpoppler code is expecting "float" arguments for all these
+> functions, but they are now taking "double" instead.
+> 
+> Seems like using a double type is breaking a lot of assumptions of
+> existing applications and libraries. Do we really want to support this
+> option?
+> 
+> I would personally suggest to revert the patch for now in 2015.05, and
+> take the time to make sure it is properly tested with all the Qt-based
+> libraries and applications.
+> 
+> Richard, what do you think?
 
-Hi
+Ok, I've found the right Config.in depends to set to BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE.
+It shouldn't break in any arch now.
+I also corrected the breakage with python-pyqt.
 
-Thanks for your fast reply! Sorry mine is late, I was on vacation.
+BUT, there's still some packages (at least poppler and pinentry (I started to compile more packages, but my internet liaison at work stalls quite often))
+that are breaking when BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE is set.
+The reason is that those packages are not using qmake, so the -DQT_COORD_TYPE=double doesn't appear in their CFLAGS/CXXFLAGS.
+So, for all packages that use Qt but not qmake, the CFLAGS/CXXFLAGS have to be appended with -DQT_COORD_TYPE=double
 
-On 24/04/2015 19:54, Yann E. MORIN wrote:
-> Sylvain, All,
-> 
-> On 2015-04-24 16:49 +0200, Sylvain Raybaud spake thusly:
+That said, this option was originally created for QWT (http://qwt.sourceforge.net/ ):
+The problem was that QWT uses qreals to draw its curves/plots/... and when you want to have dates(QwtDate) on an axe, the dates are converted to qreal,
+and if qreal is float, the precision is not enough (not even by a day).
+So, forcing qreal to float seems a good solution.
 
->> a) Create a meta-package, for example "mysql compatible DB", the 
->> selection of which would let the user choose between MariaDB
->> Galera Cluster or MySQL?
->> 
->> b) Integrate MariaDB Galera Cluster into MySQL package and let
->> the user choose which implementation he wants?
->> 
->> c) Make these packages mutually exclusive using "depends on !"?
-> 
-> I would say either b) or c). Which one depends on how MariaDB
-> Galera is seen with respect to MySQL:
-> 
-> 1- is it a completely different implementation that is 100%
-> compatible?
-> 
-> 2- is it a fork that is 100% compatible?
-> 
-> 3- is it a fork that is not 100% compatible?
-> 
-> For 1 or 2, I'd say go with b), otherwise go for c).
 
-MariaDB is supposed to be a "drop-in replacement for MySQL" so I
-suppose I should go for b).
-https://mariadb.com/kb/en/mariadb/mariadb-vs-mysql-compatibility/
-lists some differences but it seems that everything you can do with
-MySQL you can do with MariaDB.
+Given the fact that 2015.05 is close, and that there's quite some packages to test with this option (and that it's not a huge feature-killer), I agree with
+Thomas for reverting it.
 
-Does option b) allow dependencies specific to MariaDB?
-
-> 
-> If you decide for c), then only one can depend on not the ther 
-> (otherwise you'd have a crcular dependency). That is, something
-> like:
-> 
-> config BR2_PKG_MYSQL bool "mysql"
-> 
-> config BR2_PKG_MARIADB bool "mariadb" depends on !BR2_PKG_MYSQL
-> 
-> Anyway, if you're not sure, go for c); we will review the patch,
-> and we can guide you based on the details.
-> 
-> in any case, be sure to read:
-> 
-> - the section(s) from the "Adding new packages to Buildroot"
-> chapter, that applies to mariadb (e.g. generic, autotools,
-> cmake...): 
-> http://buildroot.net/downloads/manual/manual.html#adding-packages
-> 
-> - the section on how to send patches: 
-> http://buildroot.net/downloads/manual/manual.html#submitting-patches
-
-Doing
-> 
-so now. Thanks again!
-
-Sylvain
-
-> 
-> Happy hacking! ;-)
-> 
-> Regards, Yann E. MORIN.
-> 
-
-- -- 
-Sylvain Raybaud
-www.green-communications.fr
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQIcBAEBAgAGBQJVSJvlAAoJEEkkwl4JtJ9ybe0QAIEH9Yx2Y8Wxoqb+XXpjTjAE
-9BLu/ev4h9lyBCvQkYjmeM/0pwU0atUTazEfNMVV/sJFsO5FmoC/jddNuPznHFcc
-XPcWynMmhjDGlPSBGgY7wqWV1UCvZ5GOmPUJlQsehAq1QLQpzGoV00FJ33xl5roF
-Lk8ugiWIMldvqTrjsnsmsCwvxnYFO02fEYJFpEeGmemMdFP0aCsJvSKXuo3ETxGp
-ajMluiqiqNAiQnj/s33ZtytxOtbp7LjDnQ6qDIFA4/UjdXh9QTWBvvLlGuoRDboR
-iNvHeksSBzsW8AmgUeL3qwurMPPpaOY8qI+rRo6LtfGOPmXvltKaUxK1jFH+4V1D
-buG87tUXp3dGeg91WJP46GC+DbsSjm1ygzFH3Nsxtyj5zFVNXw7QmsjtFpgPpIRN
-uTW4Ks80pwFn8FAZ14NpHPVgB3t58yskHmMzvN1Fbb+/82G2xU77hgWmXUVOTTyo
-EWzdZwlhZ3g/Xv4nqHXGmLRnIqspwOh/+UDekZc3YT5PwbERYAZTfMztarLc83aq
-0VlYzAJyWcGRcTH+IOom+ZExanIpSfgfWIMD2nLl6xW/Vqn8/9iiPI2+u04ByZlu
-GcE8mK2yE68kHLWjQrfe/MBe+jQCOlptm4NaXo7n6Iv2V5YzWcR/+fLIlNg3+qXf
-8cMwqBnt8FGwblLrv9rm
-=R/jW
------END PGP SIGNATURE-----
+For reference, I'm pasting the patch I've come with to prevent breaking any architecture.
