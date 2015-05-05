@@ -1,46 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 May 2015 17:12:15 +0200
-Subject: [Buildroot] [git commit] package/neard: needs shared libs
-Message-ID: <20150505152638.77CDA81DCF@busybox.osuosl.org>
+Date: Tue, 5 May 2015 17:25:09 +0200
+Subject: [Buildroot] [git commit] ipmiutil: force md2 off
+Message-ID: <20150505152638.83F137FAE9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c61c3d3d4b9e1b97418c2c3699ec2943d76ef295
+commit: http://git.buildroot.net/buildroot/commit/?id=ec45eb1619da40ea97fa39dfe60cee2a9b8e78c6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-neard uses dlopen(), so needs shared libs.
+The configure test runs against LIB_DIR (which is --libdir in configure
+parlay) hence it's against the distro openssl version.
+On newish openssl versions md2 is disabled by default, and buildroot
+doesn't try to enable it (it's obsolete), but if the distro
+libcrypto/openssl has it enabled then ipmiutil tries to use it.
 
-Fixes:
-    http://autobuild.buildroot.org/results/0a4/0a466cde55c5e128a2e201924f80f0ec6b8b5c2a/
+Force it off to avoid build breakage. Fixes:
+http://autobuild.buildroot.net/results/cd2/cd2e617f8e2b00581ab5936029f85e62ed3259ba/
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/neard/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/ipmiutil/ipmiutil.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/neard/Config.in b/package/neard/Config.in
-index ed20e06..353d1af 100644
---- a/package/neard/Config.in
-+++ b/package/neard/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_NEARD
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl, dbus, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
-+	depends on !BR2_STATIC_LIBS # dlopen
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBNL
-@@ -23,6 +24,6 @@ config BR2_PACKAGE_NEARD_TOOLS
+diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
+index 8e281d4..c3d791c 100644
+--- a/package/ipmiutil/ipmiutil.mk
++++ b/package/ipmiutil/ipmiutil.mk
+@@ -10,7 +10,9 @@ IPMIUTIL_LICENSE = BSD-3c
+ IPMIUTIL_LICENSE_FILES = COPYING
+ # We're patching configure.ac
+ IPMIUTIL_AUTORECONF = YES
+-
++# tests against distro libcrypto so it might get a false positive when
++# the openssl version is old, so force it off
++IPMIUTIL_CONF_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS) -DSKIP_MD2"
+ IPMIUTIL_DEPENDENCIES = openssl
  
- endif
- 
--comment "neard needs a toolchain w/ wchar, threads"
-+comment "neard needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ $(eval $(autotools-package))
