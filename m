@@ -1,31 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 May 2015 22:43:39 +0200
-Subject: [Buildroot] [PATCH] freerdp: fix build with uClibc
-In-Reply-To: <3c74f8fefa032d007e95814c4a6a72f0c88703d8.1430849732.git.baruch@tkos.co.il>
-References: <3c74f8fefa032d007e95814c4a6a72f0c88703d8.1430849732.git.baruch@tkos.co.il>
-Message-ID: <20150505224339.44e96ee2@free-electrons.com>
+Date: Tue, 5 May 2015 22:44:12 +0200
+Subject: [Buildroot] [PATCH v2] arch/Config.in.xtensa: provide
+ BR2_ENDIAN symbol
+In-Reply-To: <1430842704-28771-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1430842704-28771-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20150505224412.451cab4b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Max Filippov,
 
-On Tue,  5 May 2015 21:15:32 +0300, Baruch Siach wrote:
-> Add upstream patch disabling use of C99 long double math functions (powl,
-> ceill, ...) that uClibc(-ng) don't have.
+On Tue,  5 May 2015 19:18:24 +0300, Max Filippov wrote:
+> Packages get hints from the buildroot at configure time, e.g.
+> ac_cv_c_bigendian=yes/no. This particular hint is based on the value of
+> BR2_ENDIAN and when it doesn't match actual toolchain endiannes the
+> build may break.
+> Provide BR2_ENDIAN for xtensa to fix this sort of build errors.
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/bda/bda53fffd4a0937fd4b2313cdf2d12ced95cc7a7/
-> http://autobuild.buildroot.net/results/d96/d9613c9f791157e1de3a34923f1c91b35cec693f/
-> http://autobuild.buildroot.net/results/bfd/bfd4ef86b257ee918e3c4463ebc5cf77694244a0/
+>   http://autobuild.buildroot.net/results/31115fe8d88f52d77ed0f2da769eb8896a1b34a2/
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 > ---
->  .../0003-dont-use-unavailable-c99-math.patch       | 95 ++++++++++++++++++++++
->  1 file changed, 95 insertions(+)
->  create mode 100644 package/freerdp/0003-dont-use-unavailable-c99-math.patch
+> Changes v1->v2:
+> - add spaces between configure items;
+> - expand changelog.
 
 Applied, thanks.
 
