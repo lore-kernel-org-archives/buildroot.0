@@ -1,52 +1,87 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 6 May 2015 00:14:56 +0200
-Subject: [Buildroot] [PATCH v7 10/13] Vivante drivers: bump to version
-	3.10.17-1.0.1
-In-Reply-To: <20150505111326.72efc84c@free-electrons.com>
-References: <1430406748-8493-1-git-send-email-jezz@sysmic.org>
- <1430406748-8493-11-git-send-email-jezz@sysmic.org>
- <20150501225109.66e3b7ba@free-electrons.com>
- <20150504151227.GC11312@kwain>
- <20150504171543.68eb13fc@free-electrons.com>
- <CAAMH-ysBAw_r4XrTZBRvfMZnKd+py8KKZEWxmJm_-Tm9AcHmKQ@mail.gmail.com>
- <20150505101021.09a0a96e@free-electrons.com>
- <CAAMH-ysr3OCUScHsnTFzusXpNKRDVJsn+z7S0a3RN-JVskXhNg@mail.gmail.com>
- <20150505111326.72efc84c@free-electrons.com>
-Message-ID: <CAAMH-ysOC7LaP6msJjWaQGoCoy=z1Hn1sqwzvnm9N0KLuD=Hnw@mail.gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 06 May 2015 00:19:29 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: fix staging install for
+ CodeSourcery AArch64 toolchain
+In-Reply-To: <5549377D.5060305@mind.be>
+References: <1430776908-1030-1-git-send-email-romain.naour@openwide.fr>
+ <5549377D.5060305@mind.be>
+Message-ID: <554941F1.4030302@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Antoine, Jerome, All
+Hi Arnout,
 
-On Tue, May 5, 2015 at 11:13 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Gary,
->
-> On Tue, 5 May 2015 11:07:59 +0200, Gary Bisson wrote:
->
->> > Well, you're only looking at boards that have a defconfig in Buildroot.
->> > But I'm pretty sure there are lots of people using Buildroot on custom
->> > i.MX6 boards, which may not necessarily be supported by all kernel
->> > versions.
+Le 05/05/2015 23:34, Arnout Vandecappelle a ?crit :
+> On 05/05/15 00:01, Romain Naour wrote:
+>> The extracted toolchain sources contains a single symlink in the
+>> aarch64-linux-gnu/libc/lib directory wich is lost during Buildroot's
+>> staging install.
 >>
->> Sure but the other way around applies too, like what Antoine had to do
->> when working on a 3.10.53 kernel.
->
-> Absolutely, but if the 3.10.53-compatible GPU drivers also work with
-> 3.10.17, then we would have a situation where one single version of the
-> GPU drivers can address both 3.10.17 and 3.10.53 based configurations.
-> While what we have today only works for 3.10.17 based configurations.
+>> aarch64-linux-gnu/libc/
+>>
+>> Add a custom post install staging hook to create it manually.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> ---
+>>  toolchain/toolchain-external/toolchain-external.mk | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+>> index b293ba9..e66db77 100644
+>> --- a/toolchain/toolchain-external/toolchain-external.mk
+>> +++ b/toolchain/toolchain-external/toolchain-external.mk
+>> @@ -355,6 +355,10 @@ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH
+>>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
+>>  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/aarch64-linux-gnu
+>>  TOOLCHAIN_EXTERNAL_SOURCE = aarch64-2014.05-30-aarch64-linux-gnu-i686-pc-linux-gnu.tar.bz2
+>> +define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_FIXUP
+>> +	ln -sf ld-2.18.so $(STAGING_DIR)/lib/ld-linux-aarch64.so.1
+> 
+>  Shouldn't this instead be added to LIB_EXTERNAL_LIBS like the other ld*.so* ?
+> Actually, it matches the ld*.so* pattern, so how come this isn't symlinked already?
 
-Actually this is not the case, 3.10.53 gpu libs are not compatible
-with 3.10.17 kernels, see the meta-fsl mailing list links below.
-https://lists.yoctoproject.org/pipermail/meta-freescale/2015-April/013234.html
-https://lists.yoctoproject.org/pipermail/meta-freescale/2015-April/013267.html
+I think it's because ARCH_LIB_DIR=lib64 and copy_toolchain_lib_root doesn't take
+into account the content of lib directory in that case.
 
-But the good news is that 3.14.28 and 3.10.53 kernels/libs are
-compatible, so we could update to the 3.14.28 GA release directly.
+Other toolchains contains this symlink in lib or lib64.
 
-Regards,
-Gary
+libc/lib:
+ld-linux.so.2 -> ld-2.18.so
+
+libc/lib64:
+ld-linux-x86-64.so.2 -> ld-2.18.so
+
+But here we have:
+libc/lib:
+ld-linux-aarch64.so.1 -> ../lib64/ld-2.18.so
+
+and no symlink in lib64 directory.
+
+> Actually, why is it even needed to symlink an ld.so in the staging dir?
+
+Maybe just to avoid to link against a library with a specific version
+(ld-2.18.do) and be sure that the correct ELF dynamic linker is user depending
+on arch's name (ld-linux-aarch64.so.1).
+Otherwise, I don't know.
+
+Best regards,
+Romain
+
+> 
+> 
+>  Regards,
+>  Arnout
+> 
+> 
+>> +endef
+>> +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_FIXUP
+>>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
+>>  TOOLCHAIN_EXTERNAL_VERSION = 1.1.6
+>>  TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)
+>>
+> 
+> 
