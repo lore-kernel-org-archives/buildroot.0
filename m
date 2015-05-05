@@ -1,223 +1,50 @@
-From: imrehg at gmail.com <imrehg@gmail.com>
-Date: Tue,  5 May 2015 15:59:30 +0800
-Subject: [Buildroot] [PATCH v3 1/1] board: add support for VIA
-	VAB-820/AMOS-820
-Message-ID: <1430812770-4374-1-git-send-email-imrehg@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 May 2015 10:10:21 +0200
+Subject: [Buildroot] [PATCH v7 10/13] Vivante drivers: bump to version
+ 3.10.17-1.0.1
+In-Reply-To: <CAAMH-ysBAw_r4XrTZBRvfMZnKd+py8KKZEWxmJm_-Tm9AcHmKQ@mail.gmail.com>
+References: <1430406748-8493-1-git-send-email-jezz@sysmic.org>
+ <1430406748-8493-11-git-send-email-jezz@sysmic.org>
+ <20150501225109.66e3b7ba@free-electrons.com>
+ <20150504151227.GC11312@kwain>
+ <20150504171543.68eb13fc@free-electrons.com>
+ <CAAMH-ysBAw_r4XrTZBRvfMZnKd+py8KKZEWxmJm_-Tm9AcHmKQ@mail.gmail.com>
+Message-ID: <20150505101021.09a0a96e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gergely Imreh <imrehg@gmail.com>
+Gary,
 
-The VIA VAB-820 board (and the AMOS-820 system built around it) is
-based on Freescale i.MX6 for embedded and industrial computing.
+On Tue, 5 May 2015 10:06:11 +0200, Gary Bisson wrote:
 
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
----
-Changes v2 -> v3:
-  - updated to kernel 3.10.17 (from 3.0.35), and u-boot 2013.04 (from 2009.08)
-    from the latest BSP release
-  - added minimal patch to enable SD card default boot in updated u-boot
-  - removed post-build script and environment defaults that used to generate
-    boot script as not needed with the updated u-boot anymore
-  - updated setup steps and information in readme.txt 
-  - updated defconfig to generate suitable output for the new defaults (device
-    tree and kernel), removed some settings where buildroot defaults now work
+> > J?r?me, Gary, would you be able to test the new version of the GPU
+> > drivers, and see if they work with both 3.10.17 and 3.10.53 ?
+> 
+> I'll try it out, but why don't we update the package and the kernel
+> versions at once. A quick glance at the git repos shows that there's a
+> 3.10.53 version for QMX6, Nitrogen6x and all the Freescale boards.
+> Then the Wandboard doesn't appear to be maintained as it's still using
+> a 3.0.x kernel and the riotboard uses mainline kernel.
 
-Changes v1 -> v2:
-  - fixed typos on in readme.txt and clarified setup steps
-  - updated defconfig kernel headers and rootfs settings (suggested by Thomas)
----
- .../uboot/default-to-boot-from-the-SD-card.patch   |  25 +++++
- board/via/imx6_vab820/readme.txt                   | 107 +++++++++++++++++++++
- configs/via_imx6_vab820_defconfig                  |  31 ++++++
- 3 files changed, 163 insertions(+)
- create mode 100644 board/via/imx6_vab820/patches/uboot/default-to-boot-from-the-SD-card.patch
- create mode 100644 board/via/imx6_vab820/readme.txt
- create mode 100644 configs/via_imx6_vab820_defconfig
+Well, you're only looking at boards that have a defconfig in Buildroot.
+But I'm pretty sure there are lots of people using Buildroot on custom
+i.MX6 boards, which may not necessarily be supported by all kernel
+versions.
 
-diff --git a/board/via/imx6_vab820/patches/uboot/default-to-boot-from-the-SD-card.patch b/board/via/imx6_vab820/patches/uboot/default-to-boot-from-the-SD-card.patch
-new file mode 100644
-index 0000000..9b219f7
---- /dev/null
-+++ b/board/via/imx6_vab820/patches/uboot/default-to-boot-from-the-SD-card.patch
-@@ -0,0 +1,25 @@
-+From 6e72bef18c928753c9861c1f6fc8c2c4dd5d1e97 Mon Sep 17 00:00:00 2001
-+From: Gergely Imreh <imrehg@gmail.com>
-+Date: Thu, 30 Apr 2015 16:24:38 +0800
-+Subject: [PATCH] default to boot from the SD card
-+
-+---
-+ include/configs/mx6qvab820_common.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/configs/mx6qvab820_common.h b/include/configs/mx6qvab820_common.h
-+index 99bc8a9..2e70c94 100644
-+--- a/include/configs/mx6qvab820_common.h
-++++ b/include/configs/mx6qvab820_common.h
-+@@ -216,7 +216,7 @@
-+ 	"bootcmd_mmc=setenv mmcdev 1; setenv rootdev 0; setenv mmcname mmc; run bootcmd_main;\0"
-+ 
-+ #define CONFIG_BOOTCOMMAND \
-+-	"run bootcmd_mmc"
-++	"run bootcmd_sd"
-+ 
-+ #define CONFIG_ARP_TIMEOUT     200UL
-+ 
-+-- 
-+2.3.7
-+
-diff --git a/board/via/imx6_vab820/readme.txt b/board/via/imx6_vab820/readme.txt
-new file mode 100644
-index 0000000..7345e5d
---- /dev/null
-+++ b/board/via/imx6_vab820/readme.txt
-@@ -0,0 +1,107 @@
-+VIA VAB-820/AMOS-820
-+====================
-+
-+This file documents the Buildroot support for the VIA VAB-820 board and
-+VIA AMOS-820 system, which are built around a Freescale i.MX6 Quad/Dual SoC.
-+The kernel and u-boot is based on the official VIA BSP, which is in turn
-+based on the Freescale Linux 3.10.17_1.0.0_ga BSP.
-+
-+
-+Configuring and building Buildroot
-+----------------------------------
-+
-+Start from the defconfig:
-+
-+  $ make via_imx6_vab820_defconfig
-+
-+You can edit build options the usual way:
-+
-+  $ make menuconfig
-+
-+When you are happy with the setup, run:
-+
-+  $ make
-+
-+The result of the build with the default settings should be these files:
-+
-+  output/images
-+  ??? imx6q-vab820.dtb
-+  ??? rootfs.tar
-+  ??? u-boot.imx
-+  ??? uImage
-+
-+
-+Set up your SD card
-+-------------------
-+
-+*Important*: pay attention which partition you are modifying so you don't
-+accidentally erase the wrong file system, e.g your host computer or your
-+external storage!
-+
-+In the default setup you need to create 2 partitions on your SD card:
-+a boot partition and a root partition. In this guide and in the default u-boot
-+settings the boot partition is vfat, while the root partition is ext4.
-+
-+You also need to leave space for u-boot at the beginning of the card, before
-+all the partitions.
-+
-+For example, if your SD card is at /dev/sdX, using fdisk, and starting from
-+an empty card, the steps are along these lines:
-+
-+  # fdisk /dev/sdX
-+  n         (new partition)
-+  p         (primary partition)
-+  1	    (first partition)
-+  <return>  (default first sector, should be at least 1MB from the beginning
-+             which is 2048 sectors if the sector size is 512KB)
-+  +50M      (50MB size, as an example)
-+  t         (switch partition type)
-+  b         (select "W95 FAT32" type)
-+  n         (the second partition)
-+  p         (primary partition)
-+  2	    (second partition)
-+  <return>  (default first sector)
-+  <return>  (use all remaining space)
-+  p         (print so the partition looks something like this below)
-+    Device     Boot  Start      End  Sectors  Size Id Type
-+    /dev/sdX1         2048   104447   102400   50M  b W95 FAT32
-+    /dev/sdX2       104448 15564799 15460352  7.4G 83 Linux
-+  w         (save changes)
-+
-+After this you need to format the newly created file system:
-+
-+  # mkfs.vfat -L boot /dev/sdX1
-+  # mkfs.ext4 -L rootfs /dev/sdX2
-+
-+Now the system can be copied onto the card. First copy the u-boot onto
-+the region of the card before the first partition (starting from the
-+root directory of buildroot):
-+
-+  # dd if=output/images/u-boot.imx of=/dev/sdX bs=512 seek=2
-+
-+Mount the first partition /dev/sdX1, and copy the kernel and the
-+compiled device tree:
-+
-+  # cp output/images/uImage /mnt/<BOOT-PARTITION>
-+  # cp output/images/imx6q-vab820.dtb /mnt/<BOOT-PARTITION>
-+
-+Finally, copy the root file system onto the mounted (empty) /dev/sdX2
-+rootfs partition:
-+
-+  # tar xf output/images/rootfs.tar -C /mnt/<ROOTFS-PARTITION>
-+
-+
-+Booting
-+-------
-+
-+To use the on-card u-boot, you need adjust jumper J11 located just next to
-+the SD card slot on the VAB-820 board. The correct position for SD card
-+boot is jumping the two pins towards the inside of the board.
-+
-+To modify the default boot parameters compiled into u-boot, you can create
-+a boot script with the file name `boot.scr` and place it onto the boot
-+partition (same directory as `uImage`).
-+
-+If you want to have the login prompt on the serial debug line instead of
-+the console, adjust the buildroot settings as:
-+"System Configuration > getty options > TTY port > ttymxc1"
-diff --git a/configs/via_imx6_vab820_defconfig b/configs/via_imx6_vab820_defconfig
-new file mode 100644
-index 0000000..8f24c65
---- /dev/null
-+++ b/configs/via_imx6_vab820_defconfig
-@@ -0,0 +1,31 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_ARM_EABIHF=y
-+BR2_ARM_FPU_VFPV3=y
-+
-+# Toolchain
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.10.17"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+BR2_GLOBAL_PATCH_DIR="board/via/imx6_vab820/patches"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/viaembedded/vab820-kernel-bsp.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="via_3.10.17_2.0.1"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_UIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_USE_INTREE_DTS=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-vab820"
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx6qvab820"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/viaembedded/vab820-uboot-bsp.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="via_3.10.17_2.0.1"
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
+That being said, the jump from 3.10.17 to 3.10.53 is probably
+relatively easy, so people having such custom i.MX6 boards could just
+as well do the jump.
+
+So, I'd indeed suggest to move all i.MX6 defconfigs in Buildroot to
+3.10.53, and update the GPU drivers accordingly.
+
+Best regards,
+
+Thomas
 -- 
-2.3.7
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
