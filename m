@@ -1,86 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 05 May 2015 23:18:51 +0200
-Subject: [Buildroot] integrating MariaDB Galera Cluster into BR
-In-Reply-To: <55489BE5.6070402@green-communications.fr>
-References: <553A5805.3080701@green-communications.fr>	<20150424175438.GG4244@free.fr>
- <55489BE5.6070402@green-communications.fr>
-Message-ID: <554933BB.80404@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  5 May 2015 23:36:45 +0200
+Subject: [Buildroot] [PATCH] cc-tool: fix static build problem with boost
+	regex
+Message-ID: <1430861805-16232-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/05/15 12:31, Sylvain Raybaud wrote:
-> On 24/04/2015 19:54, Yann E. MORIN wrote:
->> On 2015-04-24 16:49 +0200, Sylvain Raybaud spake thusly:
-> 
->>> a) Create a meta-package, for example "mysql compatible DB", the 
->>> selection of which would let the user choose between MariaDB
->>> Galera Cluster or MySQL?
->>>
->>> b) Integrate MariaDB Galera Cluster into MySQL package and let
->>> the user choose which implementation he wants?
->>>
->>> c) Make these packages mutually exclusive using "depends on !"?
-> 
->> I would say either b) or c). Which one depends on how MariaDB
->> Galera is seen with respect to MySQL:
-> 
->> 1- is it a completely different implementation that is 100%
->> compatible?
-> 
->> 2- is it a fork that is 100% compatible?
-> 
->> 3- is it a fork that is not 100% compatible?
-> 
->> For 1 or 2, I'd say go with b), otherwise go for c).
-> 
-> MariaDB is supposed to be a "drop-in replacement for MySQL" so I
-> suppose I should go for b).
-> https://mariadb.com/kb/en/mariadb/mariadb-vs-mysql-compatibility/
-> lists some differences but it seems that everything you can do with
-> MySQL you can do with MariaDB.
-> 
-> Does option b) allow dependencies specific to MariaDB?
+The boost.m4 logic is a bit crappy, and needs some help to know that
+boost_regex needs the pthread library.
 
- It's very easy to add something like this to mysql.mk:
+Fixes:
 
-ifeq ($(BR2_PACKAGE_MYSQL_MARIADB),y)
-MYSQL_DEPENDENCIES += foo
-else
-MYSQL_DEPENDENCIES += bar
-endif
+  http://autobuild.buildroot.org/results/69a/69aff0b9d0ac8fe08e1d2f7ffb691f6a8fc8693b/
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cc-tool/cc-tool.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- And so on for all other things that are different between the two builds. Even
-if they were completely different, you could put a big ifeq around the entire
-.mk file.
-
- You'll have more trouble with the patches. The only solution for those is to
-move them to a version-specific directory, so 5.1/ for the mysql version and
-10.0.17 for MariaDB.
-
-
- Regards,
- Arnout
-
-
-[snip]
-
-
+diff --git a/package/cc-tool/cc-tool.mk b/package/cc-tool/cc-tool.mk
+index 7312bd3..3a3f85a 100644
+--- a/package/cc-tool/cc-tool.mk
++++ b/package/cc-tool/cc-tool.mk
+@@ -14,4 +14,10 @@ CC_TOOL_DEPENDENCIES = boost libusb
+ # Configure script "discovers" boost in /usr/local if not given explicitly
+ CC_TOOL_CONF_OPTS = --with-boost=$(STAGING_DIR)/usr
+ 
++# Help boost.m4 find the Boost Regex library, which needs the pthread
++# library, but isn't detected using a modern (pkg-config) mechanism.
++ifeq ($(BR2_STATIC_LIBS),y)
++CC_TOOL_CONF_ENV += LIBS="-lpthread"
++endif
++
+ $(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150505/2d023c98/attachment.asc>
+2.1.0
