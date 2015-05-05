@@ -1,77 +1,51 @@
-From: Richard Genoud <richard.genoud@gmail.com>
-Date: Tue, 05 May 2015 13:00:41 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20150504233058.2e5e1a59@free-electrons.com>
-References: <20150502063016.3950D100FB0@stock.ovh.net>	<20150503105009.2b42c375@free-electrons.com>	<87h9rtucot.fsf@dell.be.48ers.dk>	<878ud4qwl8.fsf@dell.be.48ers.dk>	<CACQ1gAiHWPPCABQL5JSGUabkbu5dYOZ5dWo7Sn_Bpc+X7CfmdQ@mail.gmail.com>
- <20150504233058.2e5e1a59@free-electrons.com>
-Message-ID: <5548A2D9.8020900@gmail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 5 May 2015 15:39:53 +0200
+Subject: [Buildroot] [PATCH v7 10/13] Vivante drivers: bump to version
+	3.10.17-1.0.1
+In-Reply-To: <HE1PR04MB12904DAC27D4138F86E1B391EAD10@HE1PR04MB1290.eurprd04.prod.outlook.com>
+References: <1430406748-8493-1-git-send-email-jezz@sysmic.org>
+ <1430406748-8493-11-git-send-email-jezz@sysmic.org>
+ <20150501225109.66e3b7ba@free-electrons.com>
+ <20150504151227.GC11312@kwain>
+ <20150504171543.68eb13fc@free-electrons.com>
+ <CAAMH-ysBAw_r4XrTZBRvfMZnKd+py8KKZEWxmJm_-Tm9AcHmKQ@mail.gmail.com>
+ <HE1PR04MB1290A44B5B363C5D90272A7CEAD10@HE1PR04MB1290.eurprd04.prod.outlook.com>
+ <CAAMH-yv2L-H8yYcdzoxaU4-TWhsywMTgmi9OD+CPz-sGOZwffw@mail.gmail.com>
+ <HE1PR04MB12904DAC27D4138F86E1B391EAD10@HE1PR04MB1290.eurprd04.prod.outlook.com>
+Message-ID: <CAAMH-yuv542b5_EdSJw8L5UcDdPB07Se=EH8vNkb03yZsf6JgQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/05/2015 23:30, Thomas Petazzoni wrote:
-> Dear Richard Genoud,
-> 
-> On Mon, 4 May 2015 16:57:59 +0200, Richard Genoud wrote:
-> 
->>>  > We currently only allow BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE for soft
->>>  > float toolchains, but perhaps it needs to also be disallowed for mips64?
->>>  > Richard, care to take a look?
->>>
->>> QT_COORD_TYPE_DOUBLE also causes issues with python-pyqt because of
->>> qreal* -> float* conversion. Could you take a look?
->>>
->>> http://autobuild.buildroot.net/results/891/891dc6ad46039740867a0b436281fc489cfb2772/build-end.log
->>
->> yes, no problem.
-> 
-> And I also believe
-> http://autobuild.buildroot.org/results/3a7/3a70305be4a78af9404b0bd027dbcdd011ca01b3/build-end.log
-> is caused by BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE:
-> 
-> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QPen::setWidthF(float)'
-> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QTransform::translate(float, float)'
-> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QMatrix::setMatrix(float, float, float, float, float, float)'
-> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QTransform::rotate(float, Qt::Axis)'
-> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QColor::setRgbF(float, float, float, float)'
-> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QPen::setDashOffset(float)'
-> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QColor::setAlphaF(float)'
-> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QPen::setMiterLimit(float)'
-> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QTransform::QTransform(float, float, float, float, float, float)'
-> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QColor::setCmykF(float, float, float, float, float)'
-> ../../qt4/src/.libs/libpoppler-qt4.so: undefined reference to `QPen::setDashPattern(QVector<float> const&)'
-> 
-> The libpoppler code is expecting "float" arguments for all these
-> functions, but they are now taking "double" instead.
-> 
-> Seems like using a double type is breaking a lot of assumptions of
-> existing applications and libraries. Do we really want to support this
-> option?
-> 
-> I would personally suggest to revert the patch for now in 2015.05, and
-> take the time to make sure it is properly tested with all the Qt-based
-> libraries and applications.
-> 
-> Richard, what do you think?
+Hi Fabrice,
 
-Ok, I've found the right Config.in depends to set to BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE.
-It shouldn't break in any arch now.
-I also corrected the breakage with python-pyqt.
+On Tue, May 5, 2015 at 11:58 AM, Fabrice Mousset | GEOCEPT GmbH
+<fabrice.mousset@geocept.com> wrote:
+> Hi Gary
+>
+>> Thanks for sharing this link! I actually wanted to say that the Wandboard
+>> *defconfig* in Buildroot isn't maintained. Once the packages will be updated,
+>> would you be willing to update the Wandboard defconfig if you happen to
+>> have the board?
+>
+> Yes, I've got a Wandboard Quad, so I could upgrade defconfig for the Quad board.
+> This should also works for Dual and Solo board, there are minimal differences.
+> I'm a little busy at the moment, so I would do this in the next 2 or 3 days.
+> Is this okay for you?
 
-BUT, there's still some packages (at least poppler and pinentry (I started to compile more packages, but my internet liaison at work stalls quite often))
-that are breaking when BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE is set.
-The reason is that those packages are not using qmake, so the -DQT_COORD_TYPE=double doesn't appear in their CFLAGS/CXXFLAGS.
-So, for all packages that use Qt but not qmake, the CFLAGS/CXXFLAGS have to be appended with -DQT_COORD_TYPE=double
+Don't worry there's no rush, the GPU package isn't updated yet.
+However it's great to know you are willing to update the defconfig, we
+will ping you as soon as everything is ready.
 
-That said, this option was originally created for QWT (http://qwt.sourceforge.net/ ):
-The problem was that QWT uses qreals to draw its curves/plots/... and when you want to have dates(QwtDate) on an axe, the dates are converted to qreal,
-and if qreal is float, the precision is not enough (not even by a day).
-So, forcing qreal to float seems a good solution.
+> Which packages should be integrated into the build/image?
+> Of course the Vivante driver, but what else?
 
+Actually the Vivante package is the ultimate test to perform as it
+requires a match between the libraries and the kernel driver version.
+The rest of the packages (VPU, gstreamer plugins etc...) are good to
+test but not mandatory I'd say.
 
-Given the fact that 2015.05 is close, and that there's quite some packages to test with this option (and that it's not a huge feature-killer), I agree with
-Thomas for reverting it.
-
-For reference, I'm pasting the patch I've come with to prevent breaking any architecture.
+Thanks,
+Gary
