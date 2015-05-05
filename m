@@ -1,61 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 May 2015 17:54:37 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <871tivowgh.fsf@dell.be.48ers.dk>
-References: <20150505063016.079181016A5@stock.ovh.net>
- <20150505095952.4ddfd5b4@free-electrons.com>
- <87egmvoxqf.fsf@dell.be.48ers.dk>
- <20150505172610.5e76bcb9@free-electrons.com>
- <871tivowgh.fsf@dell.be.48ers.dk>
-Message-ID: <20150505175437.3a32e936@free-electrons.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue,  5 May 2015 19:18:24 +0300
+Subject: [Buildroot] [PATCH v2] arch/Config.in.xtensa: provide BR2_ENDIAN
+	symbol
+Message-ID: <1430842704-28771-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Packages get hints from the buildroot at configure time, e.g.
+ac_cv_c_bigendian=yes/no. This particular hint is based on the value of
+BR2_ENDIAN and when it doesn't match actual toolchain endiannes the
+build may break.
+Provide BR2_ENDIAN for xtensa to fix this sort of build errors.
 
-On Tue, 05 May 2015 17:50:06 +0200, Peter Korsgaard wrote:
+Fixes:
+  http://autobuild.buildroot.net/results/31115fe8d88f52d77ed0f2da769eb8896a1b34a2/
 
->  > From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  > To: buildroot at uclibc.org
->  > Cc: Simon Dawson <spdawson@gmail.com>, Pascal Huerst
->  > <pascal.huerst@gmail.com>, Gustavo Zacarias <gustavo@zacarias.com.ar>,
->  > Vicente Olivert Riera <Vincent.Riera@imgtec.com>, Max Filippov
->  > <jcmvbkbc@gmail.com>, Samuel Martin <s.martin49@gmail.com>, Bernd
->  > Kuhls <berndkuhls@hotmail.com>
-> 
->  > If the mailing list configuration could be changed to not do this
->  > stupid trimming of the Cc addresses, it would be great.
-> 
-> I had a look around, and according to this, it is because these users
-> have the nodupes option enabled:
-> 
-> https://bugs.launchpad.net/mailman/+bug/1216960
-> 
-> As described below, I have changed the default for new subscribers to
-> NOT enable this option, but I don't know how to do it in any bulk way
-> for the current subscribers (and if people want that):
-> 
-> https://www.ietf.org/mail-archive/web/ietf/current/msg37128.html
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+Changes v1->v2:
+- add spaces between configure items;
+- expand changelog.
 
-I suppose it cannot be changed from the Mailman admin interface?
+ arch/Config.in.xtensa | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
->  >> J?rg mentioned that OE has a patch:
->  >> 
->  >> http://patchwork.openembedded.org/patch/91893/
-> 
->  > So let's use it :-)
-> 
-> Yeah, will you send a patch? ;)
-
-If nobody beats me at it, I'll try.
-
-Thanks,
-
-Thomas
+diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+index ff71e0b..0687319 100644
+--- a/arch/Config.in.xtensa
++++ b/arch/Config.in.xtensa
+@@ -33,6 +33,23 @@ config BR2_XTENSA_OVERLAY_DIR
+ 	  configurations. They are provided by the processor vendor or
+ 	  directly from Tensilica.
+ 
++choice
++	prompt "Target Architecture Endianness"
++	depends on BR2_XTENSA_CUSTOM
++	default BR2_XTENSA_LITTLE_ENDIAN
++
++config BR2_XTENSA_LITTLE_ENDIAN
++	bool "Little endian"
++
++config BR2_XTENSA_BIG_ENDIAN
++	bool "Big endian"
++
++endchoice
++
++config BR2_ENDIAN
++	default "LITTLE"	if BR2_XTENSA_LITTLE_ENDIAN
++	default "BIG"		if BR2_xtensa_fsf || BR2_XTENSA_BIG_ENDIAN
++
+ config BR2_ARCH
+ 	default "xtensa"	if BR2_xtensa
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.4
