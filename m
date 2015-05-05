@@ -1,51 +1,41 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 5 May 2015 15:39:53 +0200
-Subject: [Buildroot] [PATCH v7 10/13] Vivante drivers: bump to version
-	3.10.17-1.0.1
-In-Reply-To: <HE1PR04MB12904DAC27D4138F86E1B391EAD10@HE1PR04MB1290.eurprd04.prod.outlook.com>
-References: <1430406748-8493-1-git-send-email-jezz@sysmic.org>
- <1430406748-8493-11-git-send-email-jezz@sysmic.org>
- <20150501225109.66e3b7ba@free-electrons.com>
- <20150504151227.GC11312@kwain>
- <20150504171543.68eb13fc@free-electrons.com>
- <CAAMH-ysBAw_r4XrTZBRvfMZnKd+py8KKZEWxmJm_-Tm9AcHmKQ@mail.gmail.com>
- <HE1PR04MB1290A44B5B363C5D90272A7CEAD10@HE1PR04MB1290.eurprd04.prod.outlook.com>
- <CAAMH-yv2L-H8yYcdzoxaU4-TWhsywMTgmi9OD+CPz-sGOZwffw@mail.gmail.com>
- <HE1PR04MB12904DAC27D4138F86E1B391EAD10@HE1PR04MB1290.eurprd04.prod.outlook.com>
-Message-ID: <CAAMH-yuv542b5_EdSJw8L5UcDdPB07Se=EH8vNkb03yZsf6JgQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  5 May 2015 10:43:54 -0300
+Subject: [Buildroot] [PATCH] ipmiutil: force md2 off
+Message-ID: <1430833434-717-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+The configure test runs against LIB_DIR (which is --libdir in configure
+parlay) hence it's against the distro openssl version.
+On newish openssl versions md2 is disabled by default, and buildroot
+doesn't try to enable it (it's obsolete), but if the distro
+libcrypto/openssl has it enabled then ipmiutil tries to use it.
 
-On Tue, May 5, 2015 at 11:58 AM, Fabrice Mousset | GEOCEPT GmbH
-<fabrice.mousset@geocept.com> wrote:
-> Hi Gary
->
->> Thanks for sharing this link! I actually wanted to say that the Wandboard
->> *defconfig* in Buildroot isn't maintained. Once the packages will be updated,
->> would you be willing to update the Wandboard defconfig if you happen to
->> have the board?
->
-> Yes, I've got a Wandboard Quad, so I could upgrade defconfig for the Quad board.
-> This should also works for Dual and Solo board, there are minimal differences.
-> I'm a little busy at the moment, so I would do this in the next 2 or 3 days.
-> Is this okay for you?
+Force it off to avoid build breakage. Fixes:
+http://autobuild.buildroot.net/results/cd2/cd2e617f8e2b00581ab5936029f85e62ed3259ba/
 
-Don't worry there's no rush, the GPU package isn't updated yet.
-However it's great to know you are willing to update the defconfig, we
-will ping you as soon as everything is ready.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ipmiutil/ipmiutil.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> Which packages should be integrated into the build/image?
-> Of course the Vivante driver, but what else?
-
-Actually the Vivante package is the ultimate test to perform as it
-requires a match between the libraries and the kernel driver version.
-The rest of the packages (VPU, gstreamer plugins etc...) are good to
-test but not mandatory I'd say.
-
-Thanks,
-Gary
+diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
+index 8e281d4..c3d791c 100644
+--- a/package/ipmiutil/ipmiutil.mk
++++ b/package/ipmiutil/ipmiutil.mk
+@@ -10,7 +10,9 @@ IPMIUTIL_LICENSE = BSD-3c
+ IPMIUTIL_LICENSE_FILES = COPYING
+ # We're patching configure.ac
+ IPMIUTIL_AUTORECONF = YES
+-
++# tests against distro libcrypto so it might get a false positive when
++# the openssl version is old, so force it off
++IPMIUTIL_CONF_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS) -DSKIP_MD2"
+ IPMIUTIL_DEPENDENCIES = openssl
+ 
+ $(eval $(autotools-package))
+-- 
+2.0.5
