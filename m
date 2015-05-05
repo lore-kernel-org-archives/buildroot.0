@@ -1,40 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  5 May 2015 23:36:45 +0200
-Subject: [Buildroot] [PATCH] cc-tool: fix static build problem with boost
-	regex
-Message-ID: <1430861805-16232-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 05 May 2015 23:34:53 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: fix staging install for
+ CodeSourcery AArch64 toolchain
+In-Reply-To: <1430776908-1030-1-git-send-email-romain.naour@openwide.fr>
+References: <1430776908-1030-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <5549377D.5060305@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The boost.m4 logic is a bit crappy, and needs some help to know that
-boost_regex needs the pthread library.
+On 05/05/15 00:01, Romain Naour wrote:
+> The extracted toolchain sources contains a single symlink in the
+> aarch64-linux-gnu/libc/lib directory wich is lost during Buildroot's
+> staging install.
+> 
+> aarch64-linux-gnu/libc/lib/ld-linux-aarch64.so.1 -> ../lib64/ld-2.18.so
+> 
+> Add a custom post install staging hook to create it manually.
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  toolchain/toolchain-external/toolchain-external.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index b293ba9..e66db77 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -355,6 +355,10 @@ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
+>  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/aarch64-linux-gnu
+>  TOOLCHAIN_EXTERNAL_SOURCE = aarch64-2014.05-30-aarch64-linux-gnu-i686-pc-linux-gnu.tar.bz2
+> +define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_FIXUP
+> +	ln -sf ld-2.18.so $(STAGING_DIR)/lib/ld-linux-aarch64.so.1
 
-Fixes:
+ Shouldn't this instead be added to LIB_EXTERNAL_LIBS like the other ld*.so* ?
+Actually, it matches the ld*.so* pattern, so how come this isn't symlinked already?
+Actually, why is it even needed to symlink an ld.so in the staging dir?
 
-  http://autobuild.buildroot.org/results/69a/69aff0b9d0ac8fe08e1d2f7ffb691f6a8fc8693b/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cc-tool/cc-tool.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Regards,
+ Arnout
 
-diff --git a/package/cc-tool/cc-tool.mk b/package/cc-tool/cc-tool.mk
-index 7312bd3..3a3f85a 100644
---- a/package/cc-tool/cc-tool.mk
-+++ b/package/cc-tool/cc-tool.mk
-@@ -14,4 +14,10 @@ CC_TOOL_DEPENDENCIES = boost libusb
- # Configure script "discovers" boost in /usr/local if not given explicitly
- CC_TOOL_CONF_OPTS = --with-boost=$(STAGING_DIR)/usr
- 
-+# Help boost.m4 find the Boost Regex library, which needs the pthread
-+# library, but isn't detected using a modern (pkg-config) mechanism.
-+ifeq ($(BR2_STATIC_LIBS),y)
-+CC_TOOL_CONF_ENV += LIBS="-lpthread"
-+endif
-+
- $(eval $(autotools-package))
+
+> +endef
+> +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_FIXUP
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
+>  TOOLCHAIN_EXTERNAL_VERSION = 1.1.6
+>  TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)
+> 
+
+
 -- 
-2.1.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
