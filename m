@@ -1,32 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 May 2015 17:09:20 +0200
-Subject: [Buildroot] [git commit] website/sponsors: fix typo
-Message-ID: <20150505152638.6C5E181DA3@busybox.osuosl.org>
+Date: Tue, 5 May 2015 17:06:13 +0200
+Subject: [Buildroot] [git commit] Revert "qt: QT_COORD_TYPE_DOUBLE should
+	only be set on soft float"
+Message-ID: <20150505152638.5605381DCC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cb3d3bb8a6e9a23184a627fac8527fbe921537ae
+commit: http://git.buildroot.net/buildroot/commit/?id=ed8c73a47404f61a955d2fc26896b986d353b9dc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+This reverts commit e07ec136ee3dd4bf16b18571623ac57f99136faa.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/sponsors.html |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/qt/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
-index 1da813b..9de0605 100644
---- a/docs/website/sponsors.html
-+++ b/docs/website/sponsors.html
-@@ -70,7 +70,7 @@
-         <a href="http://www.mind.be">Mind</a> sponsored the dinner of
-         the FOSDEM 2014 Developers Meeting (Brussels), the meeting
-         room and the dinner for the ELCE 2014 Developers Meeting
--        (D??sseldorf), and the dinner for the FOSDME 2015 Developers
-+        (D??sseldorf), and the dinner for the FOSDEM 2015 Developers
-         meeting (Brussels).
-       </div>
-     </div>
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 9568b70..83fdeec 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -121,7 +121,6 @@ config BR2_PACKAGE_QT_CONFIG_FILE
+ 	  file, which Buildroot will give to Qt at compile time.
+ 
+ config BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE
+-	depends on BR2_SOFT_FLOAT
+ 	bool "QT_COORD_TYPE to double"
+ 	help
+ 	  Set QT_COORD_TYPE to double. On ARM-based platforms, qreal
