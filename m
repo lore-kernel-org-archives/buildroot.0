@@ -1,68 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  6 May 2015 22:15:08 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/x11r7/libepoxy: Fix OpenGL / EGL
-	dependencies
-Message-ID: <1430943308-13319-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 May 2015 22:43:37 +0200
+Subject: [Buildroot] [PATCH] google-breakpad: disable on AArch64
+In-Reply-To: <554A6F99.2020600@openwide.fr>
+References: <1430940523-24342-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <554A6F99.2020600@openwide.fr>
+Message-ID: <20150506224337.44d7e77e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/596/596f44a26aad45c027f0f4f97d63e97a1f4fd001
+Dear Romain Naour,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: Add missing select lines to Config.in (Thomas)
+On Wed, 06 May 2015 21:46:33 +0200, Romain Naour wrote:
+> Hi Thomas,
+> 
+> Le 06/05/2015 21:28, Thomas Petazzoni a ?crit :
+> > Currently doesn't build, will be fixed upstream in a later version.
+> 
+> If you try with the aarch64 cs toolchain and the patch [1], google-breakpad
+> build fine.
+> But I don't have a aarch64 cpu to do a runtime test through.
+> 
+> [1] http://patchwork.ozlabs.org/patch/467857/
 
- package/x11r7/libepoxy/Config.in   |   10 ++++++++--
- package/x11r7/libepoxy/libepoxy.mk |   12 +++++++++++-
- 2 files changed, 19 insertions(+), 3 deletions(-)
+With the Linaro toolchain, it fails with:
 
-diff --git a/package/x11r7/libepoxy/Config.in b/package/x11r7/libepoxy/Config.in
-index c4f5794..1b1ca3f 100644
---- a/package/x11r7/libepoxy/Config.in
-+++ b/package/x11r7/libepoxy/Config.in
-@@ -1,7 +1,13 @@
- config BR2_PACKAGE_LIBEPOXY
- 	bool "epoxy"
--	depends on BR2_PACKAGE_MESA3D
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XUTIL_UTIL_MACROS
- 	help
--	  Epoxy is a library for handling OpenGL function pointer management for you.
-+	  Epoxy is a library for handling OpenGL function pointer
-+	  management for you.
- 
- 	  https://github.com/anholt/libepoxy
-+
-+comment "epoxy needs an OpenGL EGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL
-diff --git a/package/x11r7/libepoxy/libepoxy.mk b/package/x11r7/libepoxy/libepoxy.mk
-index d908893..fc1ede4 100644
---- a/package/x11r7/libepoxy/libepoxy.mk
-+++ b/package/x11r7/libepoxy/libepoxy.mk
-@@ -8,8 +8,18 @@ LIBEPOXY_VERSION = v1.2
- LIBEPOXY_SITE = $(call github,anholt,libepoxy,$(LIBEPOXY_VERSION))
- LIBEPOXY_INSTALL_STAGING = YES
- LIBEPOXY_AUTORECONF = YES
--LIBEPOXY_DEPENDENCIES = mesa3d
-+LIBEPOXY_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_HAS_LIBEGL),libegl) \
-+	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl)
- LIBEPOXY_LICENSE = MIT
- LIBEPOXY_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+LIBEPOXY_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) \
-+		-I$(STAGING_DIR)/usr/include/IL \
-+		-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
-+		-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
-+endif
-+
- $(eval $(autotools-package))
+  http://autobuild.buildroot.org/results/f45/f45925e63dd6ce09e41e1ce9a449d8fd57575314/build-end.log
+
+But if it builds with the CS AArch64 toolchain, then the issue is
+different.
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
