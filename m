@@ -1,35 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 May 2015 09:44:44 +0200
+From: gwenhael.goavec <gwenj@trabucayre.com>
+Date: Wed, 6 May 2015 10:07:43 +0200
 Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CA+TH9Vk=EW0X4Z+6c8F=99-62fFt1J0LxkNwo_cNp2trMZ-8UA@mail.gmail.com>
-References: <20150505063016.079181016A5@stock.ovh.net>
- <20150505095952.4ddfd5b4@free-electrons.com>
- <CA+TH9Vk=EW0X4Z+6c8F=99-62fFt1J0LxkNwo_cNp2trMZ-8UA@mail.gmail.com>
-Message-ID: <20150506094444.0c4e6fb6@free-electrons.com>
+In-Reply-To: <20150506094236.114894a2@free-electrons.com>
+References: <20150506063017.6B6A61015C1@stock.ovh.net>
+ <20150506094236.114894a2@free-electrons.com>
+Message-ID: <20150506100743.6e5c9fcd@x230.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+hello
+On Wed, 6 May 2015 09:42:36 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-On Wed, 6 May 2015 09:34:32 +0200, Angelo Compagnucci wrote:
+[SNIP]
+> 
+> >         sh4a |             python-pyqt-4.11.3 | NOK | http://autobuild.buildroot.net/results/09302c153418c3af6dc4cdd12a0149505cfbca0b/
+> >          sh4 |             python-pyqt-4.11.3 | NOK | http://autobuild.buildroot.net/results/96f8a9758f0116aec999028fde1b9c983c143809/
+> >         sh4a |             python-pyqt-4.11.3 | NOK | http://autobuild.buildroot.net/results/848b9433c09d6cbc81c8d1e22778ae68223b43f3/
+> >          arm |             python-pyqt-4.11.3 | NOK | http://autobuild.buildroot.net/results/2062208c171207428c9121215971e00c52bf306a/
+> >          arm |             python-pyqt-4.11.3 | NOK | http://autobuild.buildroot.net/results/57ef99b9dd0623e3e9b61e5964eb45e611b89cd5/
+> 
+> Some of these were due to the Qt coord patch that we reverted. However,
+> one of them,
+> http://autobuild.buildroot.org/results/848/848b9433c09d6cbc81c8d1e22778ae68223b43f3/,
+> appeared after the revert. So there is still a problem with python-pyqt
+> it seems. Gwenhael, can you have a look?
+> 
+It's seems strange. I've tested with PyQt_qreal_double enabled, this works.
+Theorically PyQt_qreal_double must be disabled for SH4(a) because QT_NO_FPU is
+not set... 
 
-> Stating at today (2015-05-06) report, the error is gone. Honestly I
-> think there is something in autobuild that makes parallel installation
-> screws, cause I repeated at least a dozen of tests with different
-> configurations and I'm using it in a side project (several more
-> compilations) and never encountered this bug on my quad core machine.
+I need to check for the first ARM build failure.
+The last build failure is fixed by http://patchwork.ozlabs.org/patch/468134/
 
-No it isn't gone: it occurred again two times during this night,
-http://autobuild.buildroot.org/?reason=host-mono-4.0.1.
+ [SNIP]
 
-(The 2015-05-06 autobuild e-mail reports failures that took place
-between 2015-05-05 00:00 and 2015-05-06 00:00, European time).
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Gwenhael Goavec-Merou
