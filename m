@@ -1,44 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 May 2015 21:23:18 +0200
-Subject: [Buildroot] [PATCH] uclibc-ng: enable context functions
-In-Reply-To: <20150506175030.GA2853@waldemar-brodkorb.de>
-References: <20150506175030.GA2853@waldemar-brodkorb.de>
-Message-ID: <20150506212318.6025af52@free-electrons.com>
+Date: Wed,  6 May 2015 21:28:43 +0200
+Subject: [Buildroot] [PATCH] google-breakpad: disable on AArch64
+Message-ID: <1430940523-24342-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Currently doesn't build, will be fixed upstream in a later version.
 
-On Wed, 6 May 2015 19:50:30 +0200, Waldemar Brodkorb wrote:
-> For mongrel2/libsigsegv we need to enable this in the uClibc-ng config.
-> Tested with ARM:
-> 
-> file output/target/usr/bin/mongrel2
-> output/target/usr/bin/mongrel2: ELF 32-bit LSB executable, ARM, version 1 (SYSV), dynamically linked (uses shared libs), stripped
-> 
-> Should fix:
-> http://autobuild.buildroot.net/results/a144bc6024415a5272c3cbe60ff636d078d0a555/
-> http://autobuild.buildroot.net/results/00195d89a115a314bf4916af127407f61cd1b418/
-> http://autobuild.buildroot.net/results/5ee7e83ebcfa43f6ee0a2a8b9f40f1ae84664aca/
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/uclibc/uClibc-ng.config |    1 +
->  1 file changed, 1 insertion(+)
+Fixes:
 
-We don't have this option enabled in uClibc-0.9.33.config. Should I
-assume that it's because this option doesn't exist in the 0.9.33.x
-uClibc branch?
+  http://autobuild.buildroot.org/results/f45/f45925e63dd6ce09e41e1ce9a449d8fd57575314/
 
-Also, why don't we have this option enabled in uClibc-snapshot.config?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/google-breakpad/Config.in      | 4 +++-
+ package/lua-periphery/lua-periphery.mk | 1 +
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-Thanks,
-
-Thomas
+diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
+index a95bf63..401a983 100644
+--- a/package/google-breakpad/Config.in
++++ b/package/google-breakpad/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_i386 || BR2_x86_64 || BR2_arm || BR2_aarch64 || \
++	# Even though the source code pretends to support aarch64, it
++	# doesn't build as of Google Breakpad r1373.
++	default y if BR2_i386 || BR2_x86_64 || BR2_arm || \
+ 		BR2_mips || BR2_mipsel
+ 
+ config BR2_PACKAGE_GOOGLE_BREAKPAD
+diff --git a/package/lua-periphery/lua-periphery.mk b/package/lua-periphery/lua-periphery.mk
+index 0717a27..9bf38de 100644
+--- a/package/lua-periphery/lua-periphery.mk
++++ b/package/lua-periphery/lua-periphery.mk
+@@ -9,5 +9,6 @@ LUA_PERIPHERY_VERSION = $(LUA_PERIPHERY_VERSION_UPSTREAM)-1
+ LUA_PERIPHERY_SUBDIR = lua-periphery
+ LUA_PERIPHERY_LICENSE = MIT
+ LUA_PERIPHERY_LICENSE_FILES = $(LUA_PERIPHERY_SUBDIR)/LICENSE
++LUA_PERIPHERY_DEPENDENCIES = c-periphery
+ 
+ $(eval $(luarocks-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
