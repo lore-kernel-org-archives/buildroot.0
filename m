@@ -1,44 +1,76 @@
-From: gwenhael.goavec <gwenj@trabucayre.com>
-Date: Wed, 6 May 2015 17:41:20 +0200
-Subject: [Buildroot] [PATCH 1/1] python-pyqt: fix opengl build failure
-In-Reply-To: <20150506171450.4c3b4f28@free-electrons.com>
-References: <1430924376-26750-1-git-send-email-gwenj@trabucayre.com>
- <20150506171450.4c3b4f28@free-electrons.com>
-Message-ID: <20150506174120.7872f5aa@x230.trabucayre.com>
+From: Christian Artin <christian@gridshowsystems.com>
+Date: Wed,  6 May 2015 13:26:58 -0400
+Subject: [Buildroot] [PATCH] Backport valgrind patch to fix build on 4.0
+	host kernels
+Message-ID: <1430933218-10933-1-git-send-email-christian@gridshowsystems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes.
-There are something funny in the logic of this disabling the disable of
-something to enabling openglES support...
-Gwen
+Valgrind fails to build when the host kernel is >=4.0. This patch
+backports the commit from upstream that fixes the kernel version
+verification. This verification is pointless for buildroot anyway, but
+it fixes the building process.
 
-On Wed, 6 May 2015 17:14:50 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Signed-off-by: Christian Artin <christian@gridshowsystems.com>
+---
+ ...01-Fix-configure-for-Linux-kernel-4.0-rc1.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/valgrind/0001-Fix-configure-for-Linux-kernel-4.0-rc1.patch
 
-> Dear Gwenhael Goavec-Merou,
-> 
-> On Wed,  6 May 2015 16:59:36 +0200, Gwenhael Goavec-Merou wrote:
-> 
-> > +ifeq ($(BR2_PACKAGE_QT_OPENGL_ES),y)
-> > +PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_NoOpenGLES
-> > +endif
-> 
-> Wow, this is a lot of negation.
-> 
-> So, when OpenGL ES is available, you need to disable the fact of not
-> using OpenGL ES.
-> 
-> Interesting :-)
-> 
-> Maybe a comment above this piece of code would be useful, because it's
-> a bit twisted.
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+diff --git a/package/valgrind/0001-Fix-configure-for-Linux-kernel-4.0-rc1.patch b/package/valgrind/0001-Fix-configure-for-Linux-kernel-4.0-rc1.patch
+new file mode 100644
+index 0000000..4b33d63
+--- /dev/null
++++ b/package/valgrind/0001-Fix-configure-for-Linux-kernel-4.0-rc1.patch
+@@ -0,0 +1,46 @@
++From 8e958577f01e2e877fb1dbdca09718ef6ea0c748 Mon Sep 17 00:00:00 2001
++From: cborntra <cborntra@a5019735-40e9-0310-863c-91ae7b9d1cf9>
++Date: Mon, 23 Feb 2015 20:19:03 +0000
++Subject: [PATCH] Fix configure for Linux kernel >= 4.0-rc1 In addition raise
++ the minimal Linux version to 2.6 as there is almost no test coverage for 2.4
++ and 2.6 was released in 2003.
++
++git-svn-id: svn://svn.valgrind.org/valgrind/trunk at 14955 a5019735-40e9-0310-863c-91ae7b9d1cf9
++---
++ configure.ac | 18 ++++++------------
++ 1 file changed, 6 insertions(+), 12 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index bdf5f22..136f49a 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -325,20 +325,14 @@ case "${host_os}" in
++         kernel=`uname -r`
++ 
++         case "${kernel}" in
++-             2.6.*|3.*) 
++-        	    AC_MSG_RESULT([2.6.x/3.x family (${kernel})])
++-        	    AC_DEFINE([KERNEL_2_6], 1, [Define to 1 if you're using Linux 2.6.x or Linux 3.x])
++-        	    ;;
++-
++-             2.4.*) 
++-        	    AC_MSG_RESULT([2.4 family (${kernel})])
++-        	    AC_DEFINE([KERNEL_2_4], 1, [Define to 1 if you're using Linux 2.4.x])
++-        	    ;;
++-
++-             *) 
+++             0.*|1.*|2.0.*|2.1.*|2.2.*|2.3.*|2.4.*|2.5.*) 
++         	    AC_MSG_RESULT([unsupported (${kernel})])
++-        	    AC_MSG_ERROR([Valgrind works on kernels 2.4, 2.6])
+++        	    AC_MSG_ERROR([Valgrind needs a Linux kernel >= 2.6])
++         	    ;;
+++
+++             *)
+++        	    AC_MSG_RESULT([2.6 or later (${kernel})])
+++                    ;;
++         esac
++ 
++         ;;
++-- 
++2.3.7
++
+-- 
+2.3.7
