@@ -1,102 +1,60 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 06 May 2015 23:02:45 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix staging install for
- CodeSourcery AArch64 toolchain
-In-Reply-To: <554941F1.4030302@openwide.fr>
-References: <1430776908-1030-1-git-send-email-romain.naour@openwide.fr>
- <5549377D.5060305@mind.be> <554941F1.4030302@openwide.fr>
-Message-ID: <554A8175.2040301@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 06 May 2015 23:32:18 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <1430945922.2395.16.camel@synopsys.com> (Alexey Brodkin's message
+ of "Wed, 6 May 2015 20:58:43 +0000")
+References: <20150506063017.6B6A61015C1@stock.ovh.net>
+ <20150506094236.114894a2@free-electrons.com>
+ <1430945922.2395.16.camel@synopsys.com>
+Message-ID: <87vbg5mly5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, all
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-Le 06/05/2015 00:19, Romain Naour a ?crit :
-> Hi Arnout,
-> 
-> Le 05/05/2015 23:34, Arnout Vandecappelle a ?crit :
->> On 05/05/15 00:01, Romain Naour wrote:
->>> The extracted toolchain sources contains a single symlink in the
->>> aarch64-linux-gnu/libc/lib directory wich is lost during Buildroot's
->>> staging install.
->>>
->>> aarch64-linux-gnu/libc/
->>>
->>> Add a custom post install staging hook to create it manually.
+ > Hi Thomas,
+ > On Wed, 2015-05-06 at 09:42 +0200, Thomas Petazzoni wrote:
+ >> > arc | python-2.7.9 | NOK |
+ >> http://autobuild.buildroot.net/results/4c694d715f66de49964ef36f7236c7575c3a0b5a/
+ >> 
+ >> relocation R_ARC_32 against `.text' can not be used when making a
+ >> shared object; recompile with -fPIC
 
-The simlink is also needed in the target directory.
+ > That failure looks pretty expected to me.
+ > In defconfig
+ > (http://autobuild.buildroot.net/results/4c6/4c694d715f66de49964ef36f7236c7575c3a0b5a/defconfig)
+ > I see "BR2_STATIC_LIBS=y". And libffi is built statically then. In
+ > that case fixed relocation R_ARC_32 is used (symbol gets resolved
+ > during final linkage and then offset is inserted in-place in .text
+ > section which means there's no way to relocate that symbol later on).
 
-Best regards,
-Romain
+ > ctypes.so is attempted to be built dynamically and here our linker
+ > throws an error:
 
->>>
->>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>> ---
->>>  toolchain/toolchain-external/toolchain-external.mk | 4 ++++
->>>  1 file changed, 4 insertions(+)
->>>
->>> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
->>> index b293ba9..e66db77 100644
->>> --- a/toolchain/toolchain-external/toolchain-external.mk
->>> +++ b/toolchain/toolchain-external/toolchain-external.mk
->>> @@ -355,6 +355,10 @@ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH
->>>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
->>>  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/aarch64-linux-gnu
->>>  TOOLCHAIN_EXTERNAL_SOURCE = aarch64-2014.05-30-aarch64-linux-gnu-i686-pc-linux-gnu.tar.bz2
->>> +define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_FIXUP
->>> +	ln -sf ld-2.18.so $(STAGING_DIR)/lib/ld-linux-aarch64.so.1
->>
->>  Shouldn't this instead be added to LIB_EXTERNAL_LIBS like the other ld*.so* ?
->> Actually, it matches the ld*.so* pattern, so how come this isn't symlinked already?
-> 
-> I think it's because ARCH_LIB_DIR=lib64 and copy_toolchain_lib_root doesn't take
-> into account the content of lib directory in that case.
-> 
-> Other toolchains contains this symlink in lib or lib64.
-> 
-> libc/lib:
-> ld-linux.so.2 -> ld-2.18.so
-> 
-> libc/lib64:
-> ld-linux-x86-64.so.2 -> ld-2.18.so
-> 
-> But here we have:
-> libc/lib:
-> ld-linux-aarch64.so.1 -> ../lib64/ld-2.18.so
-> 
-> and no symlink in lib64 directory.
-> 
->> Actually, why is it even needed to symlink an ld.so in the staging dir?
-> 
-> Maybe just to avoid to link against a library with a specific version
-> (ld-2.18.do) and be sure that the correct ELF dynamic linker is user depending
-> on arch's name (ld-linux-aarch64.so.1).
-> Otherwise, I don't know.
-> 
-> Best regards,
-> Romain
-> 
->>
->>
->>  Regards,
->>  Arnout
->>
->>
->>> +endef
->>> +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_FIXUP
->>>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
->>>  TOOLCHAIN_EXTERNAL_VERSION = 1.1.6
->>>  TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)
->>>
->>
->>
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Hmm, why is it even building python when python depends on
+!BR2_STATIC_LIBS?
+
+It seems like I forgot to propagate that dependency:
+
+git grep -l 'select BR2_PACKAGE_PYTHON$'
+package/dstat/Config.in
+package/gnuradio/Config.in
+package/kodi/Config.in
+package/ola/Config.in
+package/samba4/Config.in
+
+But everything but kodi and gnuradio can be built statically:
+
+git grep -l 'select BR2_PACKAGE_PYTHON$'|xargs grep -l STATIC_LIBS
+package/gnuradio/Config.in
+package/kodi/Config.in
+
+From the defconfig I guess the reason here was dstat.
+
+I'll fix these dependencies now, thanks.
+
+-- 
+Bye, Peter Korsgaard
