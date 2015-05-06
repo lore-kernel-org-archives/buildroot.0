@@ -1,41 +1,102 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  6 May 2015 21:02:04 +0000 (UTC)
-Subject: [Buildroot] [Bug 8086] Cannot select systemd as init with Linaro
- 2014.09 toolchain selected
-In-Reply-To: <bug-8086-163@https.bugs.busybox.net/>
-References: <bug-8086-163@https.bugs.busybox.net/>
-Message-ID: <20150506210204.8194A800FA@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 06 May 2015 23:02:45 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: fix staging install for
+ CodeSourcery AArch64 toolchain
+In-Reply-To: <554941F1.4030302@openwide.fr>
+References: <1430776908-1030-1-git-send-email-romain.naour@openwide.fr>
+ <5549377D.5060305@mind.be> <554941F1.4030302@openwide.fr>
+Message-ID: <554A8175.2040301@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8086
+Hi Arnout, all
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Le 06/05/2015 00:19, Romain Naour a ?crit :
+> Hi Arnout,
+> 
+> Le 05/05/2015 23:34, Arnout Vandecappelle a ?crit :
+>> On 05/05/15 00:01, Romain Naour wrote:
+>>> The extracted toolchain sources contains a single symlink in the
+>>> aarch64-linux-gnu/libc/lib directory wich is lost during Buildroot's
+>>> staging install.
+>>>
+>>> aarch64-linux-gnu/libc/
+>>>
+>>> Add a custom post install staging hook to create it manually.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
+The simlink is also needed in the target directory.
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2015-05-06 21:02:04 UTC ---
-Where do you see that the 2014.09 toolchain is built against 3.17? I don't see
-that anywhere on that page (I do see they have released a 3.17-based kernel,
-but that doesn't mean the toolchain is built against it.
+Best regards,
+Romain
 
-And checking linux/version.h from the toolchain correctly shows that it was
-built against 3.1.1:
-
-cat output/staging/usr/include/linux/version.h
-#define LINUX_VERSION_CODE 196865
-#define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))
-
-printf '0x%x\n' 196865
-0x30101
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+>>>
+>>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>> ---
+>>>  toolchain/toolchain-external/toolchain-external.mk | 4 ++++
+>>>  1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+>>> index b293ba9..e66db77 100644
+>>> --- a/toolchain/toolchain-external/toolchain-external.mk
+>>> +++ b/toolchain/toolchain-external/toolchain-external.mk
+>>> @@ -355,6 +355,10 @@ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH
+>>>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
+>>>  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/aarch64-linux-gnu
+>>>  TOOLCHAIN_EXTERNAL_SOURCE = aarch64-2014.05-30-aarch64-linux-gnu-i686-pc-linux-gnu.tar.bz2
+>>> +define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_FIXUP
+>>> +	ln -sf ld-2.18.so $(STAGING_DIR)/lib/ld-linux-aarch64.so.1
+>>
+>>  Shouldn't this instead be added to LIB_EXTERNAL_LIBS like the other ld*.so* ?
+>> Actually, it matches the ld*.so* pattern, so how come this isn't symlinked already?
+> 
+> I think it's because ARCH_LIB_DIR=lib64 and copy_toolchain_lib_root doesn't take
+> into account the content of lib directory in that case.
+> 
+> Other toolchains contains this symlink in lib or lib64.
+> 
+> libc/lib:
+> ld-linux.so.2 -> ld-2.18.so
+> 
+> libc/lib64:
+> ld-linux-x86-64.so.2 -> ld-2.18.so
+> 
+> But here we have:
+> libc/lib:
+> ld-linux-aarch64.so.1 -> ../lib64/ld-2.18.so
+> 
+> and no symlink in lib64 directory.
+> 
+>> Actually, why is it even needed to symlink an ld.so in the staging dir?
+> 
+> Maybe just to avoid to link against a library with a specific version
+> (ld-2.18.do) and be sure that the correct ELF dynamic linker is user depending
+> on arch's name (ld-linux-aarch64.so.1).
+> Otherwise, I don't know.
+> 
+> Best regards,
+> Romain
+> 
+>>
+>>
+>>  Regards,
+>>  Arnout
+>>
+>>
+>>> +endef
+>>> +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_FIXUP
+>>>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
+>>>  TOOLCHAIN_EXTERNAL_VERSION = 1.1.6
+>>>  TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)
+>>>
+>>
+>>
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
