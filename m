@@ -1,39 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 May 2015 22:43:37 +0200
-Subject: [Buildroot] [PATCH] google-breakpad: disable on AArch64
-In-Reply-To: <554A6F99.2020600@openwide.fr>
-References: <1430940523-24342-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <554A6F99.2020600@openwide.fr>
-Message-ID: <20150506224337.44d7e77e@free-electrons.com>
+Date: Wed, 6 May 2015 22:50:27 +0200
+Subject: [Buildroot] [git commit] giflib: remove from the description the
+	reference to libungif
+Message-ID: <20150506205034.16BD58081B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=2633f0e54645f0fc44e25e3363bb41fe03356f72
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 06 May 2015 21:46:33 +0200, Romain Naour wrote:
-> Hi Thomas,
-> 
-> Le 06/05/2015 21:28, Thomas Petazzoni a ?crit :
-> > Currently doesn't build, will be fixed upstream in a later version.
-> 
-> If you try with the aarch64 cs toolchain and the patch [1], google-breakpad
-> build fine.
-> But I don't have a aarch64 cpu to do a runtime test through.
-> 
-> [1] http://patchwork.ozlabs.org/patch/467857/
+Starting from version 5.0 giflib it's no longer compatible with
+libungif, also the libungif is now deprecated so just remove the
+reference to libungif.
 
-With the Linaro toolchain, it fails with:
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/giflib/Config.in |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-  http://autobuild.buildroot.org/results/f45/f45925e63dd6ce09e41e1ce9a449d8fd57575314/build-end.log
-
-But if it builds with the CS AArch64 toolchain, then the issue is
-different.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/giflib/Config.in b/package/giflib/Config.in
+index 70368dc..fc1f85d 100644
+--- a/package/giflib/Config.in
++++ b/package/giflib/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_GIFLIB
+ 	bool "giflib"
+ 	help
+-	  giflib is a library for reading and writing gif images. It is API and
+-	  ABI compatible with libungif which was in wide use while the LZW
+-	  compression algorithm was patented.
++	  giflib is a library for reading and writing gif images.
+ 
+ 	  http://sourceforge.net/projects/giflib
