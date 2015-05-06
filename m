@@ -1,46 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 May 2015 23:42:34 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <1430945922.2395.16.camel@synopsys.com>
-References: <20150506063017.6B6A61015C1@stock.ovh.net>
- <20150506094236.114894a2@free-electrons.com>
- <1430945922.2395.16.camel@synopsys.com>
-Message-ID: <20150506234234.189dd169@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 6 May 2015 23:48:51 +0200
+Subject: [Buildroot] [git commit] ola: depend on python for bindings instead
+	of selecting it
+Message-ID: <20150506214905.2D35D7FA34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+commit: http://git.buildroot.net/buildroot/commit/?id=1f751579945792d6127ffa239fd803d996709e18
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 6 May 2015 20:58:43 +0000, Alexey Brodkin wrote:
+Most likely people have already enabled python if they want to use the
+bindings for ola, so use depends on instead of select so we don't need to
+propagate the dependencies here.
 
-> That failure looks pretty expected to me.
+Python already depends on mmu, so drop that here.
 
-[...]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ola/Config.in |    6 ++----
+ 1 files changed, 2 insertions(+), 4 deletions(-)
 
-> So I'm not sure how to solve it properly.
-> I would say that building of shared object should not happen if
-> BR2_STATIC_LIBS=y, and probably we need to patch Python build system to
-> troubleshoot that problem.
-> 
-> I'm also wondering if something similar happens for other arches?
-
-You're absolutely correct.
-
-However, python has been marked as "depends on !BR2_STATIC_LIBS"
-recently, in commit 5b4d18dd1cc33c4cfd62a20704f4c48d2097c9c1. So this
-means that something is selecting Python without taking care of this
-dependency.
-
-Peter, it seems like when you did this commit, you didn't take into
-account the places where BR2_PACKAGE_PYTHON is selected. Did you?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ola/Config.in b/package/ola/Config.in
+index 1c4b8d8..f587db5 100644
+--- a/package/ola/Config.in
++++ b/package/ola/Config.in
+@@ -32,9 +32,8 @@ config BR2_PACKAGE_OLA_WEB
+ 
+ config BR2_PACKAGE_OLA_PYTHON_BINDINGS
+ 	bool "python bindings"
+-	select BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_PYTHON_PROTOBUF
+-	depends on BR2_USE_MMU
+ 	help
+ 	  Build OLA with support for the Python language.
+ 
+@@ -55,8 +54,7 @@ config BR2_PACKAGE_OLA_EXAMPLES
+ 
+ config BR2_PACKAGE_OLA_RDM_TESTS
+ 	bool "rdm tests"
+-	select BR2_PACKAGE_OLA_PYTHON_BINDINGS
+-	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_OLA_PYTHON_BINDINGS
+ 	help
+ 	  Build OLA RDM tests.
+ 
