@@ -1,28 +1,44 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 6 May 2015 19:53:30 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20150506094236.114894a2@free-electrons.com>
-References: <20150506063017.6B6A61015C1@stock.ovh.net>
- <20150506094236.114894a2@free-electrons.com>
-Message-ID: <20150506175329.GQ8309@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 May 2015 21:23:18 +0200
+Subject: [Buildroot] [PATCH] uclibc-ng: enable context functions
+In-Reply-To: <20150506175030.GA2853@waldemar-brodkorb.de>
+References: <20150506175030.GA2853@waldemar-brodkorb.de>
+Message-ID: <20150506212318.6025af52@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Dear Waldemar Brodkorb,
 
-> >          arm |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/a144bc6024415a5272c3cbe60ff636d078d0a555/
-> >          arm |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/00195d89a115a314bf4916af127407f61cd1b418/
+On Wed, 6 May 2015 19:50:30 +0200, Waldemar Brodkorb wrote:
+> For mongrel2/libsigsegv we need to enable this in the uClibc-ng config.
+> Tested with ARM:
 > 
-> error: unknown type name 'ucontext_t'
+> file output/target/usr/bin/mongrel2
+> output/target/usr/bin/mongrel2: ELF 32-bit LSB executable, ARM, version 1 (SYSV), dynamically linked (uses shared libs), stripped
 > 
-> Happens with uClibc-ng only it seems. Waldemar, can you have a look?
+> Should fix:
+> http://autobuild.buildroot.net/results/a144bc6024415a5272c3cbe60ff636d078d0a555/
+> http://autobuild.buildroot.net/results/00195d89a115a314bf4916af127407f61cd1b418/
+> http://autobuild.buildroot.net/results/5ee7e83ebcfa43f6ee0a2a8b9f40f1ae84664aca/
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/uclibc/uClibc-ng.config |    1 +
+>  1 file changed, 1 insertion(+)
 
-Patch sent. A symbol in the config is required to enable these
-needed SuSv3 functions. Fixes also the mongrel2 compile errors.
+We don't have this option enabled in uClibc-0.9.33.config. Should I
+assume that it's because this option doesn't exist in the 0.9.33.x
+uClibc branch?
 
-best regards
- Waldemar
+Also, why don't we have this option enabled in uClibc-snapshot.config?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
