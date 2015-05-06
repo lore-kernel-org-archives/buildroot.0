@@ -1,24 +1,29 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Wed, 6 May 2015 09:36:32 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-05-05
-In-Reply-To: <20150506063017.6B6A61015C1@stock.ovh.net>
-References: <20150506063017.6B6A61015C1@stock.ovh.net>
-Message-ID: <CAMo8BfKuTgid-He89t6vvsVi3Tc2SnvFW6UCh-Y9vR=mtn9f2Q@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 6 May 2015 09:34:32 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150505095952.4ddfd5b4@free-electrons.com>
+References: <20150505063016.079181016A5@stock.ovh.net>
+ <20150505095952.4ddfd5b4@free-electrons.com>
+Message-ID: <CA+TH9Vk=EW0X4Z+6c8F=99-62fFt1J0LxkNwo_cNp2trMZ-8UA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 6, 2015 at 9:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Build statistics for 2015-05-05
-> ===============================
->       xtensa |                  mesa3d-10.5.4 | NOK | http://autobuild.buildroot.net/results/3e2e24f697e26c93d4d95782b1cb7799fa620a7a/
+Dear Thomas Petazzoni,
 
-Yet another linker bug. I'm looking at it.
+>>      powerpc |                host-mono-4.0.1 | NOK | http://autobuild.buildroot.net/results/7980bbd50ab63ea2bf482b8f58493ac39790a213/
+>>          arm |                host-mono-4.0.1 | NOK | http://autobuild.buildroot.net/results/1eeb6b7f4c055968f1683a37cec2b2142923cd28/
+>
+> Smells like parallel installation issue, but not sure. Angelo tried to
+> investigate, but was not able to reach a conclusion. Anyone to look at
+> this?
 
--- 
-Thanks.
--- Max
+Stating at today (2015-05-06) report, the error is gone. Honestly I
+think there is something in autobuild that makes parallel installation
+screws, cause I repeated at least a dozen of tests with different
+configurations and I'm using it in a side project (several more
+compilations) and never encountered this bug on my quad core machine.
+
+Sincerely, Angelo
