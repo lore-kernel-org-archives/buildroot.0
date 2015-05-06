@@ -1,58 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 May 2015 00:01:02 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20150506094236.114894a2@free-electrons.com>
-References: <20150506063017.6B6A61015C1@stock.ovh.net>
- <20150506094236.114894a2@free-electrons.com>
-Message-ID: <20150507000102.1c814d69@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 7 May 2015 00:10:19 +0200
+Subject: [Buildroot] [PATCH] uclibc-ng: enable context functions
+In-Reply-To: <20150506212318.6025af52@free-electrons.com>
+References: <20150506175030.GA2853@waldemar-brodkorb.de>
+ <20150506212318.6025af52@free-electrons.com>
+Message-ID: <20150506221019.GA3916@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Wed, 6 May 2015 09:42:36 +0200, Thomas Petazzoni wrote:
-
-> >       x86_64 |                   snmppp-3.3.4 | NOK | http://autobuild.buildroot.net/results/45858c9754b8aa017a58f3f74463b28042fdf9cb/
-> >      powerpc |                   snmppp-3.3.4 | NOK | http://autobuild.buildroot.net/results/c479c9a9f1ba2271ece2f316cc7b6c2c9d39e60d/
+On 2015-05-06 21:23 +0200, Thomas Petazzoni spake thusly:
+> On Wed, 6 May 2015 19:50:30 +0200, Waldemar Brodkorb wrote:
+> > For mongrel2/libsigsegv we need to enable this in the uClibc-ng config.
+> > Tested with ARM:
+> > 
+> > file output/target/usr/bin/mongrel2
+> > output/target/usr/bin/mongrel2: ELF 32-bit LSB executable, ARM, version 1 (SYSV), dynamically linked (uses shared libs), stripped
+> > 
+> > Should fix:
+> > http://autobuild.buildroot.net/results/a144bc6024415a5272c3cbe60ff636d078d0a555/
+> > http://autobuild.buildroot.net/results/00195d89a115a314bf4916af127407f61cd1b418/
+> > http://autobuild.buildroot.net/results/5ee7e83ebcfa43f6ee0a2a8b9f40f1ae84664aca/
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> > ---
+> >  package/uclibc/uClibc-ng.config |    1 +
+> >  1 file changed, 1 insertion(+)
 > 
-> Weird stuff happening:
-> 
-> libtool:   error: unrecognised option: '-DHAVE_CONFIG_H'
-> libtool:   error: unrecognised option: '-DHAVE_CONFIG_H'
+> We don't have this option enabled in uClibc-0.9.33.config. Should I
+> assume that it's because this option doesn't exist in the 0.9.33.x
+> uClibc branch?
 
-I've analyzed this one. It happens when host-autoconf-archive is built
-before snmpp. The problem is that snmpp defines and uses its own
-ACX_PTHREAD m4 macro, and host-autoconf-archive as well. But they don't
-behave in the same way: snmpp macro's define PTHREAD_CXX, but not
-host-autoconf-archive's one. Then CXX is empty, which leads to the
-above failure.
+Yes, context stuff is only on master (added 2013-01-09).
 
-The exact same problem was solved by Romain on the ola package in
-commit 884af65fd5ddc548f19a26162f905a32ef0b53b3. However, I am not too
-happy with the solution: it consists in tweaking the ola configure.ac
-script so that it can work with either the ola-provided ACX_PTHREAD
-macro or the host-autoconf-archive provided ACX_PTHREAD macro.
+Regards,
+Yann E. MORIN.
 
-I researched a bit, and it is apparently normal for the macros
-in /usr/share/aclocal/ to take precedence over the ones defined in the
-local m4/ directory.
-
-My suggestion would therefore be to change host-autoconf-archive to
-install in a path that isn't in the standard include path of
-autoreconf/aclocal. This way, no package doing AUTORECONF = YES would
-be "polluted" by the presence of host-autoconf-archive. And only those
-few packages that actually need host-autoconf-archive can add the
-relevant -I option to AUTORECONF_OPTS. I've tested that installing
-host-autoconf-archive to a custom location works, but I haven't tested
-the other part of the solution.
-
-Thoughts?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
