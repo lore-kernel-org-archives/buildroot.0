@@ -1,39 +1,22 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed,  6 May 2015 15:28:49 +0200
-Subject: [Buildroot] [PATCH 1/1] qt: fix missing target
-Message-ID: <1430918929-26496-1-git-send-email-gwenj@trabucayre.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  6 May 2015 14:54:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 8036] alsa-lib headers problem that prevents to
+ compile alsa dependent projects
+In-Reply-To: <bug-8036-163@https.bugs.busybox.net/>
+References: <bug-8036-163@https.bugs.busybox.net/>
+Message-ID: <20150506145433.C880B81DAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+https://bugs.busybox.net/show_bug.cgi?id=8036
 
-Fix : 
- http://autobuild.buildroot.net/results/093/09302c153418c3af6dc4cdd12a0149505cfbca0b/
- http://autobuild.buildroot.net/results/96f/96f8a9758f0116aec999028fde1b9c983c143809/
+--- Comment #5 from Juan <jrmcorreo-linux@yahoo.es> 2015-05-06 14:54:33 UTC ---
+I attach buildroot config too.
 
-sh target must be provided instead of generic to have the correct QT_NO_FPU
-behaviour.
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/qt/qt.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 919137b..0fd0468 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -224,6 +224,8 @@ else ifeq ($(BR2_mips)$(BR2_mipsel),y)
- QT_EMB_PLATFORM = mips
- else ifeq ($(BR2_powerpc),y)
- QT_EMB_PLATFORM = powerpc
-+else ifeq ($(BR2_sh4)$(BR2_sh4eb)$(BR2_sh4a)$(BR2_sh4aeb),y)
-+QT_EMB_PLATFORM = sh
- else
- QT_EMB_PLATFORM = generic
- endif
 -- 
-2.3.6
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
