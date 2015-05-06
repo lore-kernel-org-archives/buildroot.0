@@ -1,157 +1,144 @@
 From: Gergely Imreh <imrehg@gmail.com>
-Date: Wed, 6 May 2015 09:58:18 +0800
-Subject: [Buildroot] [PATCHv7] system: allow/disallow root login,
- accept encoded passwords
-In-Reply-To: <1430666896-30217-1-git-send-email-yann.morin.1998@free.fr>
-References: <1430666896-30217-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAJ3iQcooaKUcVJAGSp7kRyJbnGy=DYAa1ShExzDHkgdQxs1jyQ@mail.gmail.com>
+Date: Wed, 6 May 2015 12:14:48 +0800
+Subject: [Buildroot] [PATCH v2 1/5] kconfig-package: add support for
+ config fragments
+In-Reply-To: <5544C67F.2030304@mind.be>
+References: <1430231675-8613-1-git-send-email-bos@je-eigen-domein.nl>
+ <5544C67F.2030304@mind.be>
+Message-ID: <CAJ3iQcoOqTC9ETog5n8Xm9UOCpeoeMJa2uSFMf4quYwAERYA8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 3 May 2015 at 23:28, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Signed-off-by: Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
-> [yann.morin.1998 at free.fr:
->   - don't add a choice to select between clear-text/encoded password,
->     use a single prompt;
->   - differentiate in the password hook itself;
->   - rewrite parts of the help entry;
->   - rewrite and expand the commit log
-> ]
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Tested-by: "Lorenzo M. Catucci" <lorenzo@sancho.ccd.uniroma2.it>
-> Acked-by: "Lorenzo M. Catucci" <lorenzo@sancho.ccd.uniroma2.it>
+On 2 May 2015 at 20:43, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 28/04/15 16:34, Floris Bos wrote:
+>> Adds functionality to the kconfig infrastructure to merge additional
+>> configuration fragment files to the main configuration file of
+>> kconfig packages, using support/kconfig/merge_config.sh
+>>
+>> Typical use-case is when you want your configuration to be
+>> kept in sync with an upstream (def)config file, but do require
+>> some minor local modifications.
+>>
+>> Disables -update-config and -update-defconfig targets when
+>> fragment files are set.
+>>
+>> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+>
+>  Some trivial feedback below, with that:
+>   Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Tested-by: Gergely Imreh <imrehg@gmail.com>
-  by adding SHA512-encoded password; disabling root login.
+  together with patch 2/5 of this series: kernel fragment ending up in
+config; make targets error out when fragments were set and fine when
+not
 
+>> ---
+>> v2:
+>>
+>> - use shell commands to print error message when
+>> update-(def)config target is used while fragment files are set.
+>>
+>> - document changes to kconfig infrastructure.
+>> ---
+>>  docs/manual/adding-packages-kconfig.txt | 11 +++++++++++
+>>  package/pkg-kconfig.mk                  | 14 ++++++++++----
+>>  2 files changed, 21 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/docs/manual/adding-packages-kconfig.txt b/docs/manual/adding-packages-kconfig.txt
+>> index e87d393..dc9ea11 100644
+>> --- a/docs/manual/adding-packages-kconfig.txt
+>> +++ b/docs/manual/adding-packages-kconfig.txt
+>> @@ -36,6 +36,12 @@ This snippet creates the following make targets:
+>>
+>>  * +foo-update-config+, which copies the configuration back to the source
+>>    configuration file.
+>> +  It is not possible to use this target when fragment files are set.
 >
-> ---
-> Changes v6 -> v7:
->   - expand help entry, clarify prompt  (Arnout, Lorenzo)
->   - only depend on host-mkpasswd when needed  (Arnout, Lorenzo)
+>  There is not reason to start a new line - in the generated manual, the line
+> split will vanish anyway.
 >
-> Chanages v5 -> v6:
->   - use simpler $(filter)  (Arnout)
->   - fix default value  (Arnout)
->   - expand help about doubling $s  (Arnout)
+>> +
+>> +* +foo-update-defconfig+, which copies the configuration back to the source
+>> +  configuration file. The configuration file will only list the
+>> +  options that differ from the default values.
 >
-> Changes v4 -> v5:
->   - use makefile syntax instead of shell  (Thomas)
->   - typoes  (Thomas)
->   - fix up the commit log (it never was possible to disable root login)
-> ---
->  system/Config.in | 35 ++++++++++++++++++++++++++---------
->  system/system.mk | 27 ++++++++++++++++++---------
->  2 files changed, 44 insertions(+), 18 deletions(-)
+>  Word wrapping is a bit weird here.
 >
-> diff --git a/system/Config.in b/system/Config.in
-> index 84cde94..d0ecbb3 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -176,26 +176,43 @@ endif
+>> +  It is not possible to use this target when fragment files are set.
+>>
+>>  and ensures that the source configuration file is copied to the build
+>>  directory at the right moment.
+>> @@ -46,6 +52,11 @@ be set to suit the needs of the package under consideration:
+>>  * +FOO_KCONFIG_EDITORS+: a space-separated list of kconfig editors to
+>>    support, for example 'menuconfig xconfig'. By default, 'menuconfig'.
+>>
+>> +* +FOO_KCONFIG_FRAGMENT_FILES+: a space-separated list of configuration
+>> +  fragment files that are merged to the main configuration file.
+>> +  Fragment files are typically used when there is a desire to stay in sync
+>> +  with an upstream (def)config file, with some minor modifications.
+>> +
+>>  * +FOO_KCONFIG_OPTS+: extra options to pass when calling the kconfig
+>>    editors. This may need to include '$(FOO_MAKE_OPTS)', for example. By
+>>    default, empty.
+>> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+>> index 8361064..21fbfdb 100644
+>> --- a/package/pkg-kconfig.mk
+>> +++ b/package/pkg-kconfig.mk
+>> @@ -35,18 +35,20 @@ $(call inner-generic-package,$(1),$(2),$(3),$(4))
+>>  $(2)_KCONFIG_EDITORS ?= menuconfig
+>>  $(2)_KCONFIG_OPTS ?=
+>>  $(2)_KCONFIG_FIXUP_CMDS ?=
+>> +$(2)_KCONFIG_FRAGMENT_FILES ?=
+>>
+>>  # The config file could be in-tree, so before depending on it the package should
+>>  # be extracted (and patched) first
+>>  $$($(2)_KCONFIG_FILE): | $(1)-patch
+>>
+>> -# The .config file is obtained by copying it from the specified source
+>> -# configuration file, after the package has been patched.
+>> +# The specified source configuration file and any additional configuration file
+>> +# fragments are merged together to .config, after the package has been patched.
+>>  # Since the file could be a defconfig file it needs to be expanded to a
+>>  # full .config first. We use 'make oldconfig' because this can be safely
+>>  # done even when the package does not support defconfigs.
+>> -$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE)
+>> -     $$(INSTALL) -m 0644 $$($(2)_KCONFIG_FILE) $$($(2)_DIR)/.config
+>> +$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+>> +     support/kconfig/merge_config.sh -m -O $$(@D) \
+>> +             $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+>>       @yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+>>               $$($(2)_KCONFIG_OPTS) oldconfig
+>>
+>> @@ -87,6 +89,8 @@ $(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>>  # Even though we could use 'cp --preserve-timestamps' here, the separate
+>>  # cp and 'touch --reference' is used for symmetry with $(1)-update-defconfig.
+>>  $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>> +     $$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
+>> +             echo "Unable to perform $(1)-update-config when fragment files are set"; exit 1)
 >
->  if BR2_ROOTFS_SKELETON_DEFAULT
+>  There should be an @ in front of this, otherwise you see the error twice.
 >
-> +config BR2_TARGET_ENABLE_ROOT_LOGIN
-> +       bool "Enable root login with password"
-> +       default y
-> +       help
-> +         Allow root to log in with a password.
-> +
-> +         If not enabled, root will not be able to log in with a password.
-> +         However, if you have an ssh server and you add an ssh key, you
-> +         can still allow root to log in. Alternatively, you can use sudo
-> +         to become root.
-> +
->  config BR2_TARGET_GENERIC_ROOT_PASSWD
->         string "Root password"
->         default ""
-> +       depends on BR2_TARGET_ENABLE_ROOT_LOGIN
->         help
-> -         Set the initial root password (in clear). It will be md5-encrypted.
-> +         Set the initial root password.
+>>       cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+>>       touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+>>
+>> @@ -95,6 +99,8 @@ $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>>  # $(1)-update-config, the reference for 'touch' is _not_ the file from which
+>>  # we copy.
+>>  $(1)-update-defconfig: $(1)-savedefconfig
+>> +     $$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
+>> +             echo "Unable to perform $(1)-update-defconfig when fragment files are set"; exit 1)
 >
->           If set to empty (the default), then no root password will be set,
->           and root will need no password to log in.
+>  And here.
 >
-> -         WARNING! WARNING!
-> -         Although pretty strong, MD5 is now an old hash function, and
-> -         suffers from some weaknesses, which makes it susceptible to attacks.
-> -         It is showing its age, so this root password should not be trusted
-> -         to properly secure any product that can be shipped to the wide,
-> -         hostile world.
-> +         If the password starts with any of $1$, $5$ or $6$, it is considered
-> +         to be already crypt-encoded with respectively md5, sha256 or sha512.
-> +         Any other value is taken to be a clear-text value, and is crypt-encoded
-> +         as per the "Passwords encoding" scheme, above.
-> +
-> +         Note: "$" signs in the hashed password must be doubled. For example,
-> +         if the hashed password is "$1$longsalt$v35DIIeMo4yUfI23yditq0",
-> +         then you must enter it as "$$1$$longsalt$$v35DIIeMo4yUfI23yditq0"
-> +         (this is necessary otherwise make would attempt to interpret the $
-> +         as a variable expansion).
 >
->           WARNING! WARNING!
-> -         The password appears in clear in the .config file, and may appear
-> +         The password appears as-is in the .config file, and may appear
->           in the build log! Avoid using a valuable password if either the
-> -         .config file or the build log may be distributed!
-> +         .config file or the build log may be distributed, or at the
-> +         very least use a strong cryptographic hash for your password!
+>  Regards,
+>  Arnout
 >
->  choice
->         bool "/bin/sh"
-> diff --git a/system/system.mk b/system/system.mk
-> index c95e436..2794667 100644
-> --- a/system/system.mk
-> +++ b/system/system.mk
-> @@ -34,10 +34,6 @@ endef
->  TARGET_FINALIZE_HOOKS += SYSTEM_ISSUE
->  endif
->
-> -ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
-> -PACKAGES += host-mkpasswd
-> -endif
-> -
->  define SET_NETWORK_LOCALHOST
->         ( \
->                 echo "# interface file auto-generated by buildroot"; \
-> @@ -69,12 +65,25 @@ TARGET_FINALIZE_HOOKS += SET_NETWORK
->
->  ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
->
-> -define SYSTEM_ROOT_PASSWD
-> -       [ -n "$(TARGET_GENERIC_ROOT_PASSWD)" ] && \
-> -               TARGET_GENERIC_ROOT_PASSWD_HASH=$$($(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)"); \
-> -       $(SED) "s,^root:[^:]*:,root:$$TARGET_GENERIC_ROOT_PASSWD_HASH:," $(TARGET_DIR)/etc/shadow
-> +ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
-> +ifeq ($(TARGET_GENERIC_ROOT_PASSWD),)
-> +SYSTEM_ROOT_PASSWORD =
-> +else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(TARGET_GENERIC_ROOT_PASSWD)),)
-> +SYSTEM_ROOT_PASSWORD = $(TARGET_GENERIC_ROOT_PASSWD)
-> +else
-> +PACKAGES += host-mkpasswd
-> +# This variable will only be evaluated in the finalize stage, so we can
-> +# be sure that host-mkpasswd will have already been built by that time.
-> +SYSTEM_ROOT_PASSWORD = $(shell $(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)")
-> +endif
-> +else # !BR2_TARGET_ENABLE_ROOT_LOGIN
-> +SYSTEM_ROOT_PASSWORD = *
-> +endif
-> +
-> +define SYSTEM_SET_ROOT_PASSWD
-> +       $(SED) 's,^root:[^:]*:,root:$(SYSTEM_ROOT_PASSWORD):,' $(TARGET_DIR)/etc/shadow
->  endef
-> -TARGET_FINALIZE_HOOKS += SYSTEM_ROOT_PASSWD
-> +TARGET_FINALIZE_HOOKS += SYSTEM_SET_ROOT_PASSWD
->
->  ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
->  define SYSTEM_BIN_SH
-> --
-> 1.9.1
+>>       cp -f $$($(2)_DIR)/defconfig $$($(2)_KCONFIG_FILE)
+>>       touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+>>
+>>
