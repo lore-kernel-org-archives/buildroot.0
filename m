@@ -1,24 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  6 May 2015 14:58:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 8036] alsa-lib headers problem that prevents to
- compile alsa dependent projects
-In-Reply-To: <bug-8036-163@https.bugs.busybox.net/>
-References: <bug-8036-163@https.bugs.busybox.net/>
-Message-ID: <20150506145826.A03B881DE6@busybox.osuosl.org>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Wed,  6 May 2015 16:59:36 +0200
+Subject: [Buildroot] [PATCH 1/1] python-pyqt: fix opengl build failure
+Message-ID: <1430924376-26750-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8036
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
---- Comment #6 from Juan <jrmcorreo-linux@yahoo.es> 2015-05-06 14:58:26 UTC ---
-Created attachment 6036
-  --> https://bugs.busybox.net/attachment.cgi?id=6036
-buildroot config
+Fix:
+http://autobuild.buildroot.net/results/206/2062208c171207428c9121215971e00c52bf306a/
 
+According to configure-ng.py, PyQt_NoOpenGLES must be added to qtdetail when
+QT_OPENGL_ES is set.
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/python-pyqt/python-pyqt.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/python-pyqt/python-pyqt.mk b/package/python-pyqt/python-pyqt.mk
+index 2445567..f10d508 100644
+--- a/package/python-pyqt/python-pyqt.mk
++++ b/package/python-pyqt/python-pyqt.mk
+@@ -40,6 +40,10 @@ ifeq ($(BR2_PACKAGE_QT_OPENSSL),)
+ PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_OpenSSL
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT_OPENGL_ES),y)
++PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_NoOpenGLES
++endif
++
+ # PyQt_qreal_double must be disabled on a number of architectures that
+ # use float for qreal.
+ ifeq ($(BR2_PACKAGE_PYTHON_PYQT_ARCH_USES_QREAL_FLOAT),y)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.3.6
