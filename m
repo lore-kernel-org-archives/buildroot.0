@@ -1,47 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 May 2015 22:20:28 +0200
-Subject: [Buildroot] [git commit] cryptsetup: disable on broken NIOS 2
-	toolchains
-Message-ID: <20150507202544.5FCD681DFD@busybox.osuosl.org>
+Date: Thu, 07 May 2015 22:36:43 +0200
+Subject: [Buildroot] [PATCH] Backport valgrind patch to fix build on 4.0
+	host kernels
+In-Reply-To: <1430933218-10933-1-git-send-email-christian@gridshowsystems.com>
+ (Christian Artin's message of "Wed, 6 May 2015 13:26:58 -0400")
+References: <1430933218-10933-1-git-send-email-christian@gridshowsystems.com>
+Message-ID: <871tism8f8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b6b38f525f91d18cda9d570a776655b646e8b0aa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Christian" == Christian Artin <christian@gridshowsystems.com> writes:
 
-This package triggers the infamous _gp issue with the external NIOS 2
-toolchains, so let's disable it.
+ > Valgrind fails to build when the host kernel is >=4.0. This patch
+ > backports the commit from upstream that fixes the kernel version
+ > verification. This verification is pointless for buildroot anyway, but
+ > it fixes the building process.
 
-Fixes:
+ > Signed-off-by: Christian Artin <christian@gridshowsystems.com>
 
-  http://autobuild.buildroot.org/results/ff4/ff456344eb5bc8af619c1f5d88be0cb758dd5075/
+Thanks, committed with a few minor fixes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cryptsetup/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+- We already have a 0001-.. patch for valgrind, so renamed to 0002-Fix..
+- Added your Signed-off-by to the patch as well.
+- Reworded title so it starts with valgrind:
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 89cc4b5..3d3c47d 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -8,6 +8,9 @@ config BR2_PACKAGE_CRYPTSETUP
- 	depends on BR2_USE_MMU # lvm2, e2fsprogs
- 	depends on !BR2_STATIC_LIBS # lvm2
- 	depends on BR2_USE_WCHAR # util-linux
-+	# Triggers the _gp link issue
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	help
- 	  This tool helps manipulate dm-crypt and luks partitions for
- 	  on-disk encryption.
-@@ -17,3 +20,5 @@ config BR2_PACKAGE_CRYPTSETUP
- comment "cryptsetup needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+-- 
+Bye, Peter Korsgaard
