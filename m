@@ -1,29 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 07 May 2015 22:22:04 +0200
-Subject: [Buildroot] [PATCH] cc-tool: fix static build problem with
-	boost regex
-In-Reply-To: <1430861805-16232-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 5 May 2015 23:36:45 +0200")
-References: <1430861805-16232-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <876184m93n.fsf@dell.be.48ers.dk>
+Date: Thu, 7 May 2015 22:16:38 +0200
+Subject: [Buildroot] [git commit] iproute2: fix static build
+Message-ID: <20150507202544.57B5E7FEAA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cebea9a0f482516e634ead0fce155b7d3af48230
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The boost.m4 logic is a bit crappy, and needs some help to know that
- > boost_regex needs the pthread library.
+Fixes:
+http://autobuild.buildroot.net/results/a10/a107ac3252ad48732069ec0de6ff8692b32c6a71/
+http://autobuild.buildroot.net/results/e27/e2785a35bc6bc63d5da77e406e589889e7d39055/
 
- > Fixes:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/iproute2/iproute2.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
- >   http://autobuild.buildroot.org/results/69a/69aff0b9d0ac8fe08e1d2f7ffb691f6a8fc8693b/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 102a222..9595165 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -61,7 +61,8 @@ define IPROUTE2_BUILD_CMDS
+ 	$(SED) 's/$$(CCOPTS)//' $(@D)/netem/Makefile
+ 	$(TARGET_MAKE_ENV) $(MAKE) \
+ 		DBM_INCLUDE="$(STAGING_DIR)/usr/include" \
+-		CCOPTS="$(TARGET_CFLAGS) -D_GNU_SOURCE" -C $(@D)
++		CCOPTS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
++		SHARED_LIBS="$(if $(BR2_STATIC_LIBS),n,y)" -C $(@D)
+ endef
+ 
+ define IPROUTE2_INSTALL_TARGET_CMDS
