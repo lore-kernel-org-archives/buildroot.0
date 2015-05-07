@@ -1,41 +1,28 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Thu, 07 May 2015 10:13:56 +0200
-Subject: [Buildroot] Proposal to remove patches from patchwork,
-	or find adopters
-In-Reply-To: <20150506235353.7740a9d3@free-electrons.com>
-References: <20150506235353.7740a9d3@free-electrons.com>
-Message-ID: <3636354.fxv6q18u86@sagittea>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  7 May 2015 08:15:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 7892] systemd-journald is broken
+In-Reply-To: <bug-7892-163@https.bugs.busybox.net/>
+References: <bug-7892-163@https.bugs.busybox.net/>
+Message-ID: <20150507081515.1BA3481DE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=7892
 
-On Wednesday 06 May 2015 23:53:53 Thomas Petazzoni wrote:
-[...]
-> Volunteers interested in adopting one or several of the below patches,
-> please speak up.
-> 
-> Here is the list of such patches:
-> 
-[...]
->  * [1/2] Use package framework to manage skeleton
->  * [2/2] Change deps between $(TARGET_DIRS) and rootfs-dirs
-IMHO, they continue to make sense. I will respin and resend.
+--- Comment #13 from nroach44 at gmail.com 2015-05-07 08:15:14 UTC ---
+As per the conversation over IRC a while ago:
 
-[...]
->  * [RFC,3/4] opengl-registry: Also provide DRI interface
->  * [RFC,4/4] xorg-server: Depends on libgl to enable DRI/GLX
-These 2 ones was based on opengl-registry. This package was replaced by
-mesa3d-headers. However, I think there is something to do on this 
-subject. I mark the first as Not-Applicable and the second as Change 
-Request. I will rework them.
+This issue occurs when the 'rw' flag is given to the kernel. This flag was
+added many versions ago as a workaround for another issue.
 
-[...]
+The fix/workaround seems to be to edit in "Storage=Volatile" in
+/etc/systemd/journald.conf , as per
+http://patchwork.ozlabs.org/patch/444707/.http://patchwork.ozlabs.org/patch/444707/
 
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
