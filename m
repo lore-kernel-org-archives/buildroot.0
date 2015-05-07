@@ -1,28 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  7 May 2015 09:35:26 +0300
-Subject: [Buildroot] [PATCH] expedite: fix dependencies comment logic
-Message-ID: <449494eb27dddced7fb68aa39d1fe2fad0aa8cd4.1430980526.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 07 May 2015 08:51:29 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150507000102.1c814d69@free-electrons.com> (Thomas Petazzoni's
+ message of "Thu, 7 May 2015 00:01:02 +0200")
+References: <20150506063017.6B6A61015C1@stock.ovh.net>
+ <20150506094236.114894a2@free-electrons.com>
+ <20150507000102.1c814d69@free-electrons.com>
+Message-ID: <87r3qsnamm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/efl/expedite/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/efl/expedite/Config.in b/package/efl/expedite/Config.in
-index ddbf020f078c..1e121088ada8 100644
---- a/package/efl/expedite/Config.in
-+++ b/package/efl/expedite/Config.in
-@@ -12,5 +12,4 @@ config BR2_PACKAGE_EXPEDITE
- 	  reproduce real world usage cases.
- 
- comment "expedite needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+Hi,
+
+ > My suggestion would therefore be to change host-autoconf-archive to
+ > install in a path that isn't in the standard include path of
+ > autoreconf/aclocal. This way, no package doing AUTORECONF = YES would
+ > be "polluted" by the presence of host-autoconf-archive. And only those
+ > few packages that actually need host-autoconf-archive can add the
+ > relevant -I option to AUTORECONF_OPTS. I've tested that installing
+ > host-autoconf-archive to a custom location works, but I haven't tested
+ > the other part of the solution.
+
+ > Thoughts?
+
+Yes, that also sounds like the best approach to me. Will you send a
+patch to do so?
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
