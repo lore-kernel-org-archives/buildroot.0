@@ -1,35 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 07 May 2015 08:51:29 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20150507000102.1c814d69@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 7 May 2015 00:01:02 +0200")
-References: <20150506063017.6B6A61015C1@stock.ovh.net>
- <20150506094236.114894a2@free-electrons.com>
- <20150507000102.1c814d69@free-electrons.com>
-Message-ID: <87r3qsnamm.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  7 May 2015 10:20:12 +0300
+Subject: [Buildroot] [PATCH] iproute2: fix static build
+Message-ID: <084f90b46a37424d769beafa00a5faa685fcc5e0.1430983212.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Fixes:
+http://autobuild.buildroot.net/results/a10/a107ac3252ad48732069ec0de6ff8692b32c6a71/
+http://autobuild.buildroot.net/results/e27/e2785a35bc6bc63d5da77e406e589889e7d39055/
 
-Hi,
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/iproute2/iproute2.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- > My suggestion would therefore be to change host-autoconf-archive to
- > install in a path that isn't in the standard include path of
- > autoreconf/aclocal. This way, no package doing AUTORECONF = YES would
- > be "polluted" by the presence of host-autoconf-archive. And only those
- > few packages that actually need host-autoconf-archive can add the
- > relevant -I option to AUTORECONF_OPTS. I've tested that installing
- > host-autoconf-archive to a custom location works, but I haven't tested
- > the other part of the solution.
-
- > Thoughts?
-
-Yes, that also sounds like the best approach to me. Will you send a
-patch to do so?
-
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 102a222da12f..9595165ec6a5 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -61,7 +61,8 @@ define IPROUTE2_BUILD_CMDS
+ 	$(SED) 's/$$(CCOPTS)//' $(@D)/netem/Makefile
+ 	$(TARGET_MAKE_ENV) $(MAKE) \
+ 		DBM_INCLUDE="$(STAGING_DIR)/usr/include" \
+-		CCOPTS="$(TARGET_CFLAGS) -D_GNU_SOURCE" -C $(@D)
++		CCOPTS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
++		SHARED_LIBS="$(if $(BR2_STATIC_LIBS),n,y)" -C $(@D)
+ endef
+ 
+ define IPROUTE2_INSTALL_TARGET_CMDS
 -- 
-Bye, Peter Korsgaard
+2.1.4
