@@ -1,40 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 May 2015 09:25:32 +0200
-Subject: [Buildroot] [PATCH] uclibc-ng: enable context functions
-In-Reply-To: <20150507040116.GR8309@waldemar-brodkorb.de>
-References: <20150506175030.GA2853@waldemar-brodkorb.de>
- <20150506212318.6025af52@free-electrons.com>
- <20150507040116.GR8309@waldemar-brodkorb.de>
-Message-ID: <20150507092532.57cd58ab@free-electrons.com>
+Date: Thu, 7 May 2015 09:31:29 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <87r3qsnamm.fsf@dell.be.48ers.dk>
+References: <20150506063017.6B6A61015C1@stock.ovh.net>
+ <20150506094236.114894a2@free-electrons.com>
+ <20150507000102.1c814d69@free-electrons.com>
+ <87r3qsnamm.fsf@dell.be.48ers.dk>
+Message-ID: <20150507093129.08aa1b47@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Peter,
 
-On Thu, 7 May 2015 06:01:16 +0200, Waldemar Brodkorb wrote:
+On Thu, 07 May 2015 08:51:29 +0200, Peter Korsgaard wrote:
 
-> > We don't have this option enabled in uClibc-0.9.33.config. Should I
-> > assume that it's because this option doesn't exist in the 0.9.33.x
-> > uClibc branch?
+>  > My suggestion would therefore be to change host-autoconf-archive to
+>  > install in a path that isn't in the standard include path of
+>  > autoreconf/aclocal. This way, no package doing AUTORECONF = YES would
+>  > be "polluted" by the presence of host-autoconf-archive. And only those
+>  > few packages that actually need host-autoconf-archive can add the
+>  > relevant -I option to AUTORECONF_OPTS. I've tested that installing
+>  > host-autoconf-archive to a custom location works, but I haven't tested
+>  > the other part of the solution.
 > 
-> Right, it was added later:
-> http://git.uclibc.org/uClibc/commit/extra/Configs/Config.in?id=a8dc90eaaa5e6474beac828558d969b1aafee4af
-
-Ok, thanks.
-
-> > Also, why don't we have this option enabled in uClibc-snapshot.config?
+>  > Thoughts?
 > 
-> I don't know how often this file get updated?
+> Yes, that also sounds like the best approach to me. Will you send a
+> patch to do so?
 
-I'd say quite regularly, since it is used for the ARC and Xtensa builds.
-
-Can you send an updated version of your patch that also updates
-uClibc-snapshot.config ?
-
-Thanks a lot!
+I'll try, but I'm not sure when I'll have the time to do so. It might
+have to wait until next week.
 
 Thomas
 -- 
