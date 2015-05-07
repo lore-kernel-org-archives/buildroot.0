@@ -1,10 +1,10 @@
-From: Jeremy Kerr <jk@ozlabs.org>
-Date: Thu, 07 May 2015 07:59:52 +0800
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 7 May 2015 06:42:37 +0300
 Subject: [Buildroot] Proposal to remove patches from patchwork,
 	or find adopters
 In-Reply-To: <20150506235353.7740a9d3@free-electrons.com>
 References: <20150506235353.7740a9d3@free-electrons.com>
-Message-ID: <554AAAF8.3030808@ozlabs.org>
+Message-ID: <20150507034237.GQ2183@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,16 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-> * [6/7,v3] package/petitboot: Add petitboot, the userspace
-> bootloader
+On Wed, May 06, 2015 at 11:53:53PM +0200, Thomas Petazzoni wrote:
+>  * wireshark: remove RPATH tag
 
-This has had some review, and needs some changes. I've marked this as
-'Changes Requested' in patchwork.
+I agree with marking this patch as rejected. The RPATH problem needs some kind 
+of general solution, though. As the umount "bug" report from some time ago 
+indicates, spurious RPATH might cause hard to debug problems.
 
-> * [7/7,v3] Add powerpc64 petitboot defconfig
+baruch
 
-We don't really need this one; I'll send a replacement if we still want
-a defconfig. I've marked as Superseded.
-
-> * [RFC] Separate target-building make targets from image-building
-> make targets
-
-Still interested in this one, but it hasn't had any feedback.
-
-Regards,
-
-
-Jeremy
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
