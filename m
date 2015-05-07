@@ -1,42 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 May 2015 22:21:33 +0200
-Subject: [Buildroot] [git commit] cc-tool: fix static build problem with
-	boost regex
-Message-ID: <20150507202544.693F281E01@busybox.osuosl.org>
+Date: Thu, 7 May 2015 22:20:28 +0200
+Subject: [Buildroot] [git commit] cryptsetup: disable on broken NIOS 2
+	toolchains
+Message-ID: <20150507202544.5FCD681DFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4051756ad45452a5a949835fb39544d4e425721a
+commit: http://git.buildroot.net/buildroot/commit/?id=b6b38f525f91d18cda9d570a776655b646e8b0aa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The boost.m4 logic is a bit crappy, and needs some help to know that
-boost_regex needs the pthread library.
+This package triggers the infamous _gp issue with the external NIOS 2
+toolchains, so let's disable it.
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/69a/69aff0b9d0ac8fe08e1d2f7ffb691f6a8fc8693b/
+  http://autobuild.buildroot.org/results/ff4/ff456344eb5bc8af619c1f5d88be0cb758dd5075/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cc-tool/cc-tool.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/cryptsetup/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/cc-tool/cc-tool.mk b/package/cc-tool/cc-tool.mk
-index 7312bd3..3a3f85a 100644
---- a/package/cc-tool/cc-tool.mk
-+++ b/package/cc-tool/cc-tool.mk
-@@ -14,4 +14,10 @@ CC_TOOL_DEPENDENCIES = boost libusb
- # Configure script "discovers" boost in /usr/local if not given explicitly
- CC_TOOL_CONF_OPTS = --with-boost=$(STAGING_DIR)/usr
- 
-+# Help boost.m4 find the Boost Regex library, which needs the pthread
-+# library, but isn't detected using a modern (pkg-config) mechanism.
-+ifeq ($(BR2_STATIC_LIBS),y)
-+CC_TOOL_CONF_ENV += LIBS="-lpthread"
-+endif
-+
- $(eval $(autotools-package))
+diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+index 89cc4b5..3d3c47d 100644
+--- a/package/cryptsetup/Config.in
++++ b/package/cryptsetup/Config.in
+@@ -8,6 +8,9 @@ config BR2_PACKAGE_CRYPTSETUP
+ 	depends on BR2_USE_MMU # lvm2, e2fsprogs
+ 	depends on !BR2_STATIC_LIBS # lvm2
+ 	depends on BR2_USE_WCHAR # util-linux
++	# Triggers the _gp link issue
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ 	help
+ 	  This tool helps manipulate dm-crypt and luks partitions for
+ 	  on-disk encryption.
+@@ -17,3 +20,5 @@ config BR2_PACKAGE_CRYPTSETUP
+ comment "cryptsetup needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
