@@ -1,38 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 May 2015 09:31:29 +0200
+Date: Thu, 7 May 2015 09:33:12 +0200
 Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <87r3qsnamm.fsf@dell.be.48ers.dk>
+In-Reply-To: <20150507040526.GS8309@waldemar-brodkorb.de>
 References: <20150506063017.6B6A61015C1@stock.ovh.net>
  <20150506094236.114894a2@free-electrons.com>
- <20150507000102.1c814d69@free-electrons.com>
- <87r3qsnamm.fsf@dell.be.48ers.dk>
-Message-ID: <20150507093129.08aa1b47@free-electrons.com>
+ <20150507040526.GS8309@waldemar-brodkorb.de>
+Message-ID: <20150507093312.5e6840ef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Waldemar,
 
-On Thu, 07 May 2015 08:51:29 +0200, Peter Korsgaard wrote:
+On Thu, 7 May 2015 06:05:26 +0200, Waldemar Brodkorb wrote:
 
->  > My suggestion would therefore be to change host-autoconf-archive to
->  > install in a path that isn't in the standard include path of
->  > autoreconf/aclocal. This way, no package doing AUTORECONF = YES would
->  > be "polluted" by the presence of host-autoconf-archive. And only those
->  > few packages that actually need host-autoconf-archive can add the
->  > relevant -I option to AUTORECONF_OPTS. I've tested that installing
->  > host-autoconf-archive to a custom location works, but I haven't tested
->  > the other part of the solution.
+> Fixed in uClibc-ng. 
+> wbx at helium:~/buildroot $ grep UCLIBC_VERSION_NG .config                                                                                                    
+> BR2_UCLIBC_VERSION_NG=y
+> wbx at helium:~/buildroot $ file output/target/usr/bin/genisoimage                                                                                              
+> output/target/usr/bin/genisoimage: ELF 32-bit LSB executable, ARM,
+> version 1 (SYSV), statically linked, stripped
 > 
->  > Thoughts?
-> 
-> Yes, that also sounds like the best approach to me. Will you send a
-> patch to do so?
+> It is not fixed in uClibc master.
 
-I'll try, but I'm not sure when I'll have the time to do so. It might
-have to wait until next week.
+Ok, thanks for the confirmation.
+
+So here is my proposal:
+
+ 1/ For the 2015.05 release, we simply add exceptions to the
+    autobuilder script to avoid such problematic cases.
+
+ 2/ For the 2015.08 release, we switch to uClibc-ng as the default
+    uClibc version, and I rebuild all uClibc based external toolchains
+    to use uClibc-ng.
+
+What do others think?
 
 Thomas
 -- 
