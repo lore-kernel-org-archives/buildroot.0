@@ -1,50 +1,109 @@
-From: =?ISO-8859-1?Q?C=E9dric?= Castanet <cedriccastanet@free.fr>
-Date: Thu, 07 May 2015 18:02:27 +0200
-Subject: [Buildroot] probleme building tesseract-ocr
-Message-ID: <1431014547.27289.16.camel@halley>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 7 May 2015 21:53:31 +0200
+Subject: [Buildroot] [PATCH v2 2/2] docs/manual: add U-Boot configuration
+In-Reply-To: <1429454341-27909-2-git-send-email-joerg.krause@embedded.rocks>
+References: <1429454341-27909-1-git-send-email-joerg.krause@embedded.rocks>
+ <1429454341-27909-2-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <CAGm1_ktARra83kJMFe5ox9TijauXbZQNo1KaawkeriAmtgyu1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I started recently to use buildroot for a Pi Target.
-I'm not sure i'm on the right place to ask for support, if not please
-tel where to post.
+On Sun, Apr 19, 2015 at 4:39 PM, J?rg Krause
+<joerg.krause@embedded.rocks> wrote:
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-after somme succes building target whith simple custom package, I succed
-in adding leptonica (leptonica.org) as autotools-package, but i find a
-probleme for adding tesseract-ocr as autotools-package: 
-during the build process, it include file
-from /usr/local/include/leptonica in place of $STAGING_DIR/... !!!
-so there is a warning for this during compilation then an error probably
-du to this.
+Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-ex : arm-none-linux-gnueabi-g++: WARNING: unsafe header/library path
-used in cross-compilation: '/usr/local/include/leptonica'
-
-here is my .mk file : 
-
-################################################################################
-#
-# TESSERACT_OCR
-#
-################################################################################
-
-# TESSERACT_OCR_VERSION = 53eab2ee9239a2400f97c6194207432e5837aede
-TESSERACT_OCR_SITE = https://code.google.com/p/tesseract-ocr/
-TESSERACT_OCR_SITE_METHOD = git
-TESSERACT_OCR_VERSION = d508751e585559e2bfe1dcb1c460cba765470884
-TESSERACT_OCR_LICENSE = Apache
-TESSERACT_OCR_AUTORECONF = YES
-TESSERACT_OCR_AUTORECONF_ENV = ./autogen.sh
-TESSERACT_OCR_INSTALL_STAGING = YES
-TESSERACT_OCR_DEPENDENCIES = leptonica
-
-$(eval $(autotools-package))
-
-
-I've found the right includes in the staging directory. I ned help to
-solve my problem.
-regards 
+> ---
+> Changes v1 -> v2:
+>   - None
+> ---
+>  docs/manual/configure-other-components.txt | 8 ++++++++
+>  docs/manual/customize-configuration.txt    | 6 ++++--
+>  docs/manual/customize-quick-guide.txt      | 2 ++
+>  docs/manual/make-tips.txt                  | 2 ++
+>  4 files changed, 16 insertions(+), 2 deletions(-)
+>
+> diff --git a/docs/manual/configure-other-components.txt b/docs/manual/configure-other-components.txt
+> index deb1fa2..60a80f0 100644
+> --- a/docs/manual/configure-other-components.txt
+> +++ b/docs/manual/configure-other-components.txt
+> @@ -50,3 +50,11 @@ kernel. The corresponding configuration variables are
+>  +BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG+ and
+>  +BR2_TARGET_BAREBOX_USE_DEFCONFIG+. To open the configuration editor,
+>  use +make barebox-menuconfig+.
+> +
+> +U-Boot::
+> ++
+> +Configuration of U-Boot (version 2015.04 or newer) is done in the same
+> +way as for the Linux kernel. The corresponding configuration variables
+> +are +BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG+ and
+> ++BR2_TARGET_UBOOT_USE_DEFCONFIG+. To open the configuration editor,
+> +use +make uboot-menuconfig+.
+> diff --git a/docs/manual/customize-configuration.txt b/docs/manual/customize-configuration.txt
+> index 6224d40..ae6cebe 100644
+> --- a/docs/manual/customize-configuration.txt
+> +++ b/docs/manual/customize-configuration.txt
+> @@ -24,8 +24,8 @@ Alternatively, you can copy the file to any other place and rebuild with
+>  [[customize-store-package-config]]
+>  === Storing the configuration of other components
+>
+> -The configuration files for BusyBox, the Linux kernel, Barebox and
+> -uClibc should be stored as well if changed. For each of these
+> +The configuration files for BusyBox, the Linux kernel, Barebox, U-Boot
+> +and uClibc should be stored as well if changed. For each of these
+>  components, a Buildroot configuration option exists to point to an input
+>  configuration file, e.g. +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+. To store
+>  their configuration, set these configuration options to a path where you
+> @@ -56,6 +56,8 @@ configuration files easier.
+>    path specified by +BR2_UCLIBC_CONFIG+.
+>  * +make barebox-update-defconfig+ saves the barebox configuration to the
+>    path specified by +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+.
+> +* +make uboot-update-defconfig+ saves the U-Boot configuration to the
+> +  path specified by +BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE+.
+>  * For at91bootstrap3, no helper exists so you have to copy the config
+>    file manually to +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
+>
+> diff --git a/docs/manual/customize-quick-guide.txt b/docs/manual/customize-quick-guide.txt
+> index 4ff185a..627ecba 100644
+> --- a/docs/manual/customize-quick-guide.txt
+> +++ b/docs/manual/customize-quick-guide.txt
+> @@ -20,6 +20,7 @@ your project can be skipped.
+>     * +BR2_UCLIBC_CONFIG+
+>     * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
+>     * +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+
+> +   * +BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE+
+>  1. Write the configuration files:
+>     * +make linux-update-defconfig+
+>     * +make busybox-update-config+
+> @@ -27,6 +28,7 @@ your project can be skipped.
+>     * +cp <output>/build/at91bootstrap3-*/.config
+>       board/<manufacturer>/<boardname>/at91bootstrap3.config+
+>     * +make barebox-update-defconfig+
+> +   * +make uboot-update-defconfig+
+>  1. Create +board/<manufacturer>/<boardname>/rootfs-overlay/+ and fill it
+>     with additional files you need on your rootfs, e.g.
+>     +board/<manufacturer>/<boardname>/rootfs-overlay/etc/inittab+.
+> diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+> index 1cf1544..97a3302 100644
+> --- a/docs/manual/make-tips.txt
+> +++ b/docs/manual/make-tips.txt
+> @@ -34,6 +34,8 @@ some settings in the +.config+ file may hide some targets:
+>    selected in the internal toolchain backend;
+>  * +barebox-menuconfig+ and +barebox-savedefconfig+ only work when the
+>    +barebox+ bootloader is enabled.
+> +* +uboot-menuconfig+ and +uboot-savedefconfig+ only work when the
+> +  +U-Boot+ bootloader is enabled.
+>
+>  .Cleaning:
+>
+> --
+> 2.3.5
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
