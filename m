@@ -1,10 +1,10 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 8 May 2015 07:52:05 +0300
-Subject: [Buildroot] [PATCH 1/2] librtas: new package
-In-Reply-To: <780e48cca88c90480b3b038c5965e52db284d403.1431059241.git.sam.bobroff@au1.ibm.com>
+Date: Fri, 8 May 2015 07:57:58 +0300
+Subject: [Buildroot] [PATCH 2/2] powerpc-utils: remove --without-librtas
+In-Reply-To: <05714bb15869de4bead83eec7df5e9c9b0bd8fa7.1431059241.git.sam.bobroff@au1.ibm.com>
 References: <cover.1431059241.git.sam.bobroff@au1.ibm.com>
- <780e48cca88c90480b3b038c5965e52db284d403.1431059241.git.sam.bobroff@au1.ibm.com>
-Message-ID: <20150508045205.GG2183@tarshish>
+ <05714bb15869de4bead83eec7df5e9c9b0bd8fa7.1431059241.git.sam.bobroff@au1.ibm.com>
+Message-ID: <20150508045758.GH2183@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +13,56 @@ To: buildroot@busybox.net
 
 Hi Sam,
 
-On Fri, May 08, 2015 at 02:27:48PM +1000, Sam Bobroff wrote:
-> diff --git a/package/librtas/librtas.mk b/package/librtas/librtas.mk
-> new file mode 100644
-> index 0000000..d13c876
-> --- /dev/null
-> +++ b/package/librtas/librtas.mk
-> @@ -0,0 +1,27 @@
-> +################################################################################
-> +#
-> +# librtas
-> +#
-> +################################################################################
-> +
-> +LIBRTAS_VERSION = 1.3.13
-> +LIBRTAS_SITE = http://downloads.sourceforge.net/project/librtas
-> +LIBRTAS_LICENSE = Common Public License Version 1.0
-> +LIBRTAS_LICENSE_FILES = COPYRIGHT
-> +LIBRTAS_INSTALL_STAGING = YES
-> +LIBRTAS_INSTALL_TARGET = YES
+On Fri, May 08, 2015 at 02:27:49PM +1000, Sam Bobroff wrote:
+> Now that librtas is available, remove --without-librtas and make the
+> rtas-dependant functions available.
+> 
+> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> ---
+>  package/powerpc-utils/Config.in        |    1 +
+>  package/powerpc-utils/powerpc-utils.mk |    3 +--
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
+> index eded41e..a754899 100644
+> --- a/package/powerpc-utils/Config.in
+> +++ b/package/powerpc-utils/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_POWERPC_UTILS
+>  	bool "powerpc-utils"
+>  	depends on BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+>  	select BR2_PACKAGE_ZLIB
+> +	select BR2_PACKAGE_LIBRTAS
+>  	help
+>  	  System utilities for PowerPC machines.
+>  
+> diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
+> index 3b30458..3fb9e24 100644
+> --- a/package/powerpc-utils/powerpc-utils.mk
+> +++ b/package/powerpc-utils/powerpc-utils.mk
+> @@ -6,11 +6,10 @@
+>  
+>  POWERPC_UTILS_VERSION = 1.2.24
+>  POWERPC_UTILS_SITE = http://downloads.sourceforge.net/project/powerpc-utils/powerpc-utils
+> -POWERPC_UTILS_DEPENDENCIES = zlib
+> +POWERPC_UTILS_DEPENDENCIES = zlib librtas
 
-Not needed, this is the default.
+Why not make librtas an optional dependency? Something like:
 
-> +
-> +define LIBRTAS_BUILD_CMDS
-> +	$(MAKE) -C $(@D) CC="$(TARGET_CC)" LD="$(TARGET_LD)"
-> +endef
-> +
-> +define LIBRTAS_INSTALL_STAGING_CMDS
-> +	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-> +endef
-> +
-> +define LIBRTAS_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-> +endef
-> +
-> +
-> +$(eval $(generic-package))
-> diff --git a/package/librtas/missing-librtas.so.1.patch b/package/librtas/missing-librtas.so.1.patch
-> new file mode 100644
-> index 0000000..de21d66
-> --- /dev/null
-> +++ b/package/librtas/missing-librtas.so.1.patch
-> @@ -0,0 +1,11 @@
+ifeq ($(BR2_PACKAGE_LIBRTAS),y)
+POWERPC_UTILS_DEPENDENCIES += librtas
+POWERPC_UTILS_CONF_OPTS = --with-librtas
+else
+POWERPC_UTILS_CONF_OPTS = --without-librtas
+endif
 
-Please add your Sign-off here.
+>  POWERPC_UTILS_LICENSE = Common Public License Version 1.0
+>  POWERPC_UTILS_LICENSE_FILES = COPYRIGHT
+>  
+> -POWERPC_UTILS_CONF_OPTS = --without-librtas
+>  POWERPC_UTILS_CONF_ENV = \
+>  	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
 
-> +diff -purN librtas-1.3.12.orig/librtas_src/Makefile librtas-1.3.12/librtas_src/Makefile
-> +--- librtas-1.3.12.orig/librtas_src/Makefile	2015-04-09 10:45:19.772381633 +1000
-> ++++ librtas-1.3.12/librtas_src/Makefile	2015-04-09 10:45:57.968604762 +1000
-> +@@ -33,6 +33,7 @@ install:
-> + 	@$(call install_lib,$(LIBRTAS),$(DESTDIR))
-> + 	@$(call install_inc,$(HEADERS),$(DESTDIR))
-> + 	@ln -sf $(LIBRTAS) $(DESTDIR)/$(LIB_DIR)$(call is_lib64,$(LIBRTAS))/$(LIBRTAS_SONAME)
-> ++	@ln -sf $(LIBRTAS) $(DESTDIR)/$(LIB_DIR)$(call is_lib64,$(LIBRTAS))/$(LIBRTAS_SONAME).1
-> + 
-> + uninstall:
-> + 	@$(call uninstall_lib,$(LIBRTAS),$(DESTDIR))
+baruch
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
