@@ -1,46 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 May 2015 09:42:27 +0200
-Subject: [Buildroot] [PATCH 1/2] librtas: new package
-In-Reply-To: <20150508045205.GG2183@tarshish> (Baruch Siach's message of "Fri, 
- 8 May 2015 07:52:05 +0300")
-References: <cover.1431059241.git.sam.bobroff@au1.ibm.com>
- <780e48cca88c90480b3b038c5965e52db284d403.1431059241.git.sam.bobroff@au1.ibm.com>
- <20150508045205.GG2183@tarshish>
-Message-ID: <874mnnldlo.fsf@dell.be.48ers.dk>
+Date: Fri, 8 May 2015 09:51:05 +0200
+Subject: [Buildroot] [git commit] sqlite: security bump to 3.8.10
+Message-ID: <20150508081947.10DFC81952@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=89f96ea96c16ba62117089e10f582b34c59623fe
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fixes: CVE-2015-3414, CVE-2015-3415 and CVE-2015-3416.
 
- >> diff --git a/package/librtas/missing-librtas.so.1.patch b/package/librtas/missing-librtas.so.1.patch
- >> new file mode 100644
- >> index 0000000..de21d66
- >> --- /dev/null
- >> +++ b/package/librtas/missing-librtas.so.1.patch
- >> @@ -0,0 +1,11 @@
+For details, see the Debian advisory:
+https://www.debian.org/security/2015/dsa-3252
 
- > Please add your Sign-off here.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sqlite/sqlite.hash |    2 +-
+ package/sqlite/sqlite.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-And a description. Why is it needed, has the patch been sent upstream?
-What is the status?
-
- >> +diff -purN librtas-1.3.12.orig/librtas_src/Makefile librtas-1.3.12/librtas_src/Makefile
- >> +--- librtas-1.3.12.orig/librtas_src/Makefile	2015-04-09 10:45:19.772381633 +1000
- >> ++++ librtas-1.3.12/librtas_src/Makefile	2015-04-09 10:45:57.968604762 +1000
- >> +@@ -33,6 +33,7 @@ install:
- >> + 	@$(call install_lib,$(LIBRTAS),$(DESTDIR))
- >> + 	@$(call install_inc,$(HEADERS),$(DESTDIR))
- >> + 	@ln -sf $(LIBRTAS) $(DESTDIR)/$(LIB_DIR)$(call is_lib64,$(LIBRTAS))/$(LIBRTAS_SONAME)
- >> ++	@ln -sf $(LIBRTAS) $(DESTDIR)/$(LIB_DIR)$(call is_lib64,$(LIBRTAS))/$(LIBRTAS_SONAME).1
- >> + 
- >> + uninstall:
- >> + 	@$(call uninstall_lib,$(LIBRTAS),$(DESTDIR))
-
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index b57fdfb..d524dbe 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,2 +1,2 @@
+ # From http://www.sqlite.org/download.html
+-sha1	db70dee268700b312cbaa5b3e5cf8454e1c8b7b9	sqlite-autoconf-3080900.tar.gz
++sha1	7e92b4f78d4648fb2a97a4dc721490cc08653a0b	sqlite-autoconf-3081000.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index d8ea1c7..fff219a 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3080900
++SQLITE_VERSION = 3081000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2015
+ SQLITE_LICENSE = Public domain
