@@ -1,33 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 May 2015 07:16:20 +0200
-Subject: [Buildroot] [git commit] fix typo in package install suggestion for
-	dependencies
-Message-ID: <20150508051709.D746280793@busybox.osuosl.org>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Fri, 08 May 2015 15:37:22 +1000
+Subject: [Buildroot] [PATCH 1/2] librtas: new package
+In-Reply-To: <20150508045205.GG2183@tarshish>
+References: <cover.1431059241.git.sam.bobroff@au1.ibm.com>
+ <780e48cca88c90480b3b038c5965e52db284d403.1431059241.git.sam.bobroff@au1.ibm.com>
+ <20150508045205.GG2183@tarshish>
+Message-ID: <554C4B92.5060203@au1.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=965e3b96b6e2d5fe7ee5f0db7249242b098baddd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 08/05/15 14:52, Baruch Siach wrote:
+> Hi Sam,
+> 
+> On Fri, May 08, 2015 at 02:27:48PM +1000, Sam Bobroff wrote:
+>> diff --git a/package/librtas/librtas.mk b/package/librtas/librtas.mk
+>> new file mode 100644
+>> index 0000000..d13c876
+>> --- /dev/null
+>> +++ b/package/librtas/librtas.mk
+>> @@ -0,0 +1,27 @@
+>> +################################################################################
+>> +#
+>> +# librtas
+>> +#
+>> +################################################################################
+>> +
+>> +LIBRTAS_VERSION = 1.3.13
+>> +LIBRTAS_SITE = http://downloads.sourceforge.net/project/librtas
+>> +LIBRTAS_LICENSE = Common Public License Version 1.0
+>> +LIBRTAS_LICENSE_FILES = COPYRIGHT
+>> +LIBRTAS_INSTALL_STAGING = YES
+>> +LIBRTAS_INSTALL_TARGET = YES
+> 
+> Not needed, this is the default.
 
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/dependencies/dependencies.sh |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+OK.
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 52305e1..01ad828 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -217,7 +217,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
- 		echo "Your Buildroot configuration uses pre-built tools for the x86 architecture,"
- 		echo "but your build machine uses the x86-64 architecture without the 32 bits compatibility"
- 		echo "library."
--		echo "If you're running a Debian/Ubuntu distribution, install the libc6-386,"
-+		echo "If you're running a Debian/Ubuntu distribution, install the libc6-i386,"
- 		echo "lib32stdc++6, and lib32z1 packages (or alternatively libc6:i386,"
- 		echo "libstdc++6:i386, and zlib1g:i386)."
- 		echo "For other distributions, refer to the documentation on how to install the 32 bits"
+> 
+>> +
+>> +define LIBRTAS_BUILD_CMDS
+>> +	$(MAKE) -C $(@D) CC="$(TARGET_CC)" LD="$(TARGET_LD)"
+>> +endef
+>> +
+>> +define LIBRTAS_INSTALL_STAGING_CMDS
+>> +	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+>> +endef
+>> +
+>> +define LIBRTAS_INSTALL_TARGET_CMDS
+>> +	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+>> +endef
+>> +
+>> +
+>> +$(eval $(generic-package))
+>> diff --git a/package/librtas/missing-librtas.so.1.patch b/package/librtas/missing-librtas.so.1.patch
+>> new file mode 100644
+>> index 0000000..de21d66
+>> --- /dev/null
+>> +++ b/package/librtas/missing-librtas.so.1.patch
+>> @@ -0,0 +1,11 @@
+> 
+> Please add your Sign-off here.
+
+OK. Will do.
+
+> 
+>> +diff -purN librtas-1.3.12.orig/librtas_src/Makefile librtas-1.3.12/librtas_src/Makefile
+>> +--- librtas-1.3.12.orig/librtas_src/Makefile	2015-04-09 10:45:19.772381633 +1000
+>> ++++ librtas-1.3.12/librtas_src/Makefile	2015-04-09 10:45:57.968604762 +1000
+>> +@@ -33,6 +33,7 @@ install:
+>> + 	@$(call install_lib,$(LIBRTAS),$(DESTDIR))
+>> + 	@$(call install_inc,$(HEADERS),$(DESTDIR))
+>> + 	@ln -sf $(LIBRTAS) $(DESTDIR)/$(LIB_DIR)$(call is_lib64,$(LIBRTAS))/$(LIBRTAS_SONAME)
+>> ++	@ln -sf $(LIBRTAS) $(DESTDIR)/$(LIB_DIR)$(call is_lib64,$(LIBRTAS))/$(LIBRTAS_SONAME).1
+>> + 
+>> + uninstall:
+>> + 	@$(call uninstall_lib,$(LIBRTAS),$(DESTDIR))
+> 
+
+Thanks for the comments.
+
+Sam.
