@@ -1,31 +1,52 @@
-From: Gergely Imreh <imrehg@gmail.com>
-Date: Fri, 08 May 2015 02:42:29 +0000
-Subject: [Buildroot] [PATCH 1/1] fix typo in package install suggestion for
-	dependencies
-Message-ID: <1431052939-16078-1-git-send-email-imrehg@gmail.com>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Fri,  8 May 2015 14:27:49 +1000
+Subject: [Buildroot] [PATCH 2/2] powerpc-utils: remove --without-librtas
+In-Reply-To: <cover.1431059241.git.sam.bobroff@au1.ibm.com>
+References: <cover.1431059241.git.sam.bobroff@au1.ibm.com>
+Message-ID: <05714bb15869de4bead83eec7df5e9c9b0bd8fa7.1431059241.git.sam.bobroff@au1.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
----
- support/dependencies/dependencies.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Now that librtas is available, remove --without-librtas and make the
+rtas-dependant functions available.
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 52305e1..01ad828 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -217,7 +217,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
- 		echo "Your Buildroot configuration uses pre-built tools for the x86 architecture,"
- 		echo "but your build machine uses the x86-64 architecture without the 32 bits compatibility"
- 		echo "library."
--		echo "If you're running a Debian/Ubuntu distribution, install the libc6-386,"
-+		echo "If you're running a Debian/Ubuntu distribution, install the libc6-i386,"
- 		echo "lib32stdc++6, and lib32z1 packages (or alternatively libc6:i386,"
- 		echo "libstdc++6:i386, and zlib1g:i386)."
- 		echo "For other distributions, refer to the documentation on how to install the 32 bits"
+Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+---
+ package/powerpc-utils/Config.in        |    1 +
+ package/powerpc-utils/powerpc-utils.mk |    3 +--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
+index eded41e..a754899 100644
+--- a/package/powerpc-utils/Config.in
++++ b/package/powerpc-utils/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_POWERPC_UTILS
+ 	bool "powerpc-utils"
+ 	depends on BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+ 	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_LIBRTAS
+ 	help
+ 	  System utilities for PowerPC machines.
+ 
+diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
+index 3b30458..3fb9e24 100644
+--- a/package/powerpc-utils/powerpc-utils.mk
++++ b/package/powerpc-utils/powerpc-utils.mk
+@@ -6,11 +6,10 @@
+ 
+ POWERPC_UTILS_VERSION = 1.2.24
+ POWERPC_UTILS_SITE = http://downloads.sourceforge.net/project/powerpc-utils/powerpc-utils
+-POWERPC_UTILS_DEPENDENCIES = zlib
++POWERPC_UTILS_DEPENDENCIES = zlib librtas
+ POWERPC_UTILS_LICENSE = Common Public License Version 1.0
+ POWERPC_UTILS_LICENSE_FILES = COPYRIGHT
+ 
+-POWERPC_UTILS_CONF_OPTS = --without-librtas
+ POWERPC_UTILS_CONF_ENV = \
+ 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
+ 
 -- 
-1.9.1
+1.7.10.4
