@@ -1,45 +1,93 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 May 2015 09:51:05 +0200
-Subject: [Buildroot] [git commit] sqlite: security bump to 3.8.10
-Message-ID: <20150508081947.10DFC81952@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri,  8 May 2015 12:42:59 +0200
+Subject: [Buildroot] [PATCH] package/tinyxml2: Use BUILD_SHARED_LIBS cmake
+	standard
+Message-ID: <1431081780-21595-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=89f96ea96c16ba62117089e10f582b34c59623fe
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Backport an upstream patch to fix the static build:
+c8ec6fcab4eb501cc5bd328c19dcbd4b30722d52
 
-Fixes: CVE-2015-3414, CVE-2015-3415 and CVE-2015-3416.
-
-For details, see the Debian advisory:
-https://www.debian.org/security/2015/dsa-3252
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/sqlite/sqlite.hash |    2 +-
- package/sqlite/sqlite.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch | 65 ++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index b57fdfb..d524dbe 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1	db70dee268700b312cbaa5b3e5cf8454e1c8b7b9	sqlite-autoconf-3080900.tar.gz
-+sha1	7e92b4f78d4648fb2a97a4dc721490cc08653a0b	sqlite-autoconf-3081000.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index d8ea1c7..fff219a 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3080900
-+SQLITE_VERSION = 3081000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2015
- SQLITE_LICENSE = Public domain
+diff --git a/package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch b/package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
+new file mode 100644
+index 0000000..52288c5
+--- /dev/null
++++ b/package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
+@@ -0,0 +1,65 @@
++From 69acf13fa679628259063c4d0cd17e59b8bb0b75 Mon Sep 17 00:00:00 2001
++From: xantares <xantares09@hotmail.com>
++Date: Fri, 14 Nov 2014 19:40:58 +0100
++Subject: [PATCH] Use BUILD_SHARED_LIBS cmake standard.
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ CMakeLists.txt | 27 +++++++++------------------
++ 1 file changed, 9 insertions(+), 18 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 91c61a4..4375bb9 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -10,8 +10,8 @@ include(GNUInstallDirs)
++ ################################
++ # set lib version here
++ 
++-set(GENERIC_LIB_VERSION "2.2.0")
++-set(GENERIC_LIB_SOVERSION "2")
+++set(GENERIC_LIB_VERSION "2.2.0")
+++set(GENERIC_LIB_SOVERSION "2")
++ 
++ 
++ ################################
++@@ -46,12 +46,8 @@ endif(MSVC)
++ 
++ ################################
++ # Add targets
++-set(BUILD_STATIC_LIBS ON CACHE BOOL "Set to ON to build static libraries")
++-if(BUILD_STATIC_LIBS)
++-	add_library(tinyxml2static STATIC tinyxml2.cpp tinyxml2.h)
++-	set_target_properties(tinyxml2static PROPERTIES OUTPUT_NAME tinyxml2)
++-endif(BUILD_STATIC_LIBS)
++-add_library(tinyxml2 SHARED tinyxml2.cpp tinyxml2.h)
+++option(BUILD_SHARED_LIBS "build shared or static libraries" ON)
+++add_library(tinyxml2 tinyxml2.cpp tinyxml2.h)
++ set_target_properties(tinyxml2 PROPERTIES
++         COMPILE_DEFINITIONS "TINYXML2_EXPORT"
++ 	VERSION "${GENERIC_LIB_VERSION}"
++@@ -63,16 +59,11 @@ add_dependencies(test ${TARGET_DATA_COPY})
++ target_link_libraries(test tinyxml2)
++ 
++ 
++-if(BUILD_STATIC_LIBS)
++-	install(TARGETS tinyxml2 tinyxml2static
++-		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++-		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++-		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
++-else(BUILD_STATIC_LIBS)
++-	install(TARGETS tinyxml2
++-		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++-		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
++-endif(BUILD_STATIC_LIBS)
+++install(TARGETS tinyxml2
+++        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+++        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+++        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+++
++ install(FILES tinyxml2.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++ 
++ foreach(p LIB INCLUDE)
++-- 
++1.9.3
++
+-- 
+1.9.3
