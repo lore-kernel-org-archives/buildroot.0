@@ -1,9 +1,9 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri,  8 May 2015 12:43:00 +0200
-Subject: [Buildroot] [PATCH] package/tinyxml2: fix cmake warning
-In-Reply-To: <1431081780-21595-1-git-send-email-romain.naour@openwide.fr>
-References: <1431081780-21595-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1431081780-21595-2-git-send-email-romain.naour@openwide.fr>
+Date: Fri,  8 May 2015 12:49:55 +0200
+Subject: [Buildroot] [PATCH v2] package/tinyxml2: fix cmake warning
+In-Reply-To: <1431082195-22498-1-git-send-email-romain.naour@openwide.fr>
+References: <1431082195-22498-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1431082195-22498-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
