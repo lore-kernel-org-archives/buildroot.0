@@ -1,125 +1,80 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 08 May 2015 22:21:10 +0200
-Subject: [Buildroot] [PATCH] package/tinyxml2: Use BUILD_SHARED_LIBS
- cmake standard
-In-Reply-To: <CAHXCMMJXDf62TLk+pmwb+bzDq99FUs=TuagFFZS9=yedawuM0g@mail.gmail.com>
-References: <1431081780-21595-1-git-send-email-romain.naour@openwide.fr>
- <CAHXCMMJXDf62TLk+pmwb+bzDq99FUs=TuagFFZS9=yedawuM0g@mail.gmail.com>
-Message-ID: <554D1AB6.5020401@openwide.fr>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Fri, 8 May 2015 22:20:53 +0200
+Subject: [Buildroot] probleme building tesseract-ocr
+In-Reply-To: <1431014547.27289.16.camel@halley>
+References: <1431014547.27289.16.camel@halley>
+Message-ID: <CAKcgs2yf20HHub-qRXMsct88BfrFRxeKdbLVDhh7fEXKEHEEBA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Samuel,
+Hello Cedric,
 
-Le 08/05/2015 21:53, Samuel Martin a ?crit :
-> Hi Romain,
-> 
-> On Fri, May 8, 2015 at 12:42 PM, Romain Naour <romain.naour@openwide.fr> wrote:
->> Backport an upstream patch to fix the static build:
->> c8ec6fcab4eb501cc5bd328c19dcbd4b30722d52
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> ---
->>  ...0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch | 65 ++++++++++++++++++++++
->>  1 file changed, 65 insertions(+)
->>  create mode 100644 package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
->>
->> diff --git a/package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch b/package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
->> new file mode 100644
->> index 0000000..52288c5
->> --- /dev/null
->> +++ b/package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
->> @@ -0,0 +1,65 @@
->> +From 69acf13fa679628259063c4d0cd17e59b8bb0b75 Mon Sep 17 00:00:00 2001
->> +From: xantares <xantares09@hotmail.com>
->> +Date: Fri, 14 Nov 2014 19:40:58 +0100
->> +Subject: [PATCH] Use BUILD_SHARED_LIBS cmake standard.
->> +
->> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> +---
->> + CMakeLists.txt | 27 +++++++++------------------
->> + 1 file changed, 9 insertions(+), 18 deletions(-)
->> +
->> +diff --git a/CMakeLists.txt b/CMakeLists.txt
->> +index 91c61a4..4375bb9 100644
->> +--- a/CMakeLists.txt
->> ++++ b/CMakeLists.txt
->> +@@ -10,8 +10,8 @@ include(GNUInstallDirs)
->> + ################################
->> + # set lib version here
->> +
->> +-set(GENERIC_LIB_VERSION "2.2.0")
->> +-set(GENERIC_LIB_SOVERSION "2")
->> ++set(GENERIC_LIB_VERSION "2.2.0")
->> ++set(GENERIC_LIB_SOVERSION "2")
-> What is the change here?
+2015-05-07 18:02 GMT+02:00 C?dric Castanet <cedriccastanet@free.fr>:
+> Hello,
+> I started recently to use buildroot for a Pi Target.
+> I'm not sure i'm on the right place to ask for support, if not please
+> tel where to post.
+You have come to the right place.
 
-Some space changes it seems.
 
-> 
->> +
->> +
->> + ################################
->> +@@ -46,12 +46,8 @@ endif(MSVC)
->> +
->> + ################################
->> + # Add targets
->> +-set(BUILD_STATIC_LIBS ON CACHE BOOL "Set to ON to build static libraries")
->> +-if(BUILD_STATIC_LIBS)
->> +-      add_library(tinyxml2static STATIC tinyxml2.cpp tinyxml2.h)
->> +-      set_target_properties(tinyxml2static PROPERTIES OUTPUT_NAME tinyxml2)
->> +-endif(BUILD_STATIC_LIBS)
->> +-add_library(tinyxml2 SHARED tinyxml2.cpp tinyxml2.h)
->> ++option(BUILD_SHARED_LIBS "build shared or static libraries" ON)
-> Not needed, this is a global CMake flag.
+> after somme succes building target whith simple custom package, I succed
+> in adding leptonica (leptonica.org) as autotools-package, but i find a
+> probleme for adding tesseract-ocr as autotools-package:
+> during the build process, it include file
+> from /usr/local/include/leptonica in place of $STAGING_DIR/... !!!
+> so there is a warning for this during compilation then an error probably
+> du to this.
+>
+> ex : arm-none-linux-gnueabi-g++: WARNING: unsafe header/library path
+> used in cross-compilation: '/usr/local/include/leptonica'
+>
+> here is my .mk file :
+>
+> ################################################################################
+> #
+> # TESSERACT_OCR
+> #
+> ################################################################################
+>
+> # TESSERACT_OCR_VERSION = 53eab2ee9239a2400f97c6194207432e5837aede
+> TESSERACT_OCR_SITE = https://code.google.com/p/tesseract-ocr/
+> TESSERACT_OCR_SITE_METHOD = git
+> TESSERACT_OCR_VERSION = d508751e585559e2bfe1dcb1c460cba765470884
+> TESSERACT_OCR_LICENSE = Apache
+> TESSERACT_OCR_AUTORECONF = YES
+> TESSERACT_OCR_AUTORECONF_ENV = ./autogen.sh
+> TESSERACT_OCR_INSTALL_STAGING = YES
+> TESSERACT_OCR_DEPENDENCIES = leptonica
+>
+> $(eval $(autotools-package))
+>
+>
+> I've found the right includes in the staging directory. I ned help to
+> solve my problem.
+> regards
+I have some work-in-progress patches around these packages, that you
+can re-use. Both packages build and have been quickly tested. However,
+they need to be cleaned up, verified against toolchain dependencies,
+etc...
+Patches are attached, I'd be grateful if you could clean them up and
+send them for review once you are happy with them.
 
-I have just cherry-picked the patch and keep things as is.
-I can rework the patch an keep only useful part if you prefer ;-)
-
-Best regards,
-Romain
-
-> 
->> ++add_library(tinyxml2 tinyxml2.cpp tinyxml2.h)
->> + set_target_properties(tinyxml2 PROPERTIES
->> +         COMPILE_DEFINITIONS "TINYXML2_EXPORT"
->> +       VERSION "${GENERIC_LIB_VERSION}"
->> +@@ -63,16 +59,11 @@ add_dependencies(test ${TARGET_DATA_COPY})
->> + target_link_libraries(test tinyxml2)
->> +
->> +
->> +-if(BUILD_STATIC_LIBS)
->> +-      install(TARGETS tinyxml2 tinyxml2static
->> +-              RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
->> +-              LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
->> +-              ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
->> +-else(BUILD_STATIC_LIBS)
->> +-      install(TARGETS tinyxml2
->> +-              RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
->> +-              LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
->> +-endif(BUILD_STATIC_LIBS)
->> ++install(TARGETS tinyxml2
->> ++        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
->> ++        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
->> ++        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
->> ++
->> + install(FILES tinyxml2.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
->> +
->> + foreach(p LIB INCLUDE)
->> +--
->> +1.9.3
->> +
->> --
->> 1.9.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> Regards,
-> 
-> 
+Thanks
+Gilles.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-leptonica-new-package.patch
+Type: text/x-patch
+Size: 2646 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150508/792cb4e7/attachment.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0002-tesseract-ocr-new-package.patch
+Type: text/x-patch
+Size: 23226 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150508/792cb4e7/attachment-0001.bin>
