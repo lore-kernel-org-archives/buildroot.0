@@ -1,25 +1,28 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 09 May 2015 09:55:04 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-05-08
-References: <20150509063015.990CD10160E@stock.ovh.net>
-Message-ID: <XnsA49564E40BDF9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sat,  9 May 2015 10:41:26 +0200
+Subject: [Buildroot] [PATCH 0/3] Mono: fixing latest build failures
+Message-ID: <1431160889-3851-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20150509063015.990CD10160E at stock.ovh.net: 
+This patch series should fix the latest build failures for mono.
 
-> microblazeel |                 xapp_xfs-1.1.4 | NOK |
-> http://autobuild.buildroot.net/results/688a839ec57e7bc83b490535871b2dac0b
-> 1309ff/ 
+Fixes http://autobuild.buildroot.net/results/227/227f942107e4fcbc14bb1e7d97e1e2758d6f3f2d/
 
-Hi,
+Angelo Compagnucci (3):
+  package/mono: fixing mono version
+  package/mono: adding hash file
+  package/monolite: adding hash file
 
-fixed by http://patchwork.ozlabs.org/patch/442068/
+ package/mono/mono.hash         | 2 ++
+ package/mono/mono.mk           | 2 +-
+ package/monolite/monolite.hash | 2 ++
+ 3 files changed, 5 insertions(+), 1 deletion(-)
+ create mode 100644 package/mono/mono.hash
+ create mode 100644 package/monolite/monolite.hash
 
-Regards, Bernd
+-- 
+1.9.1
