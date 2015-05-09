@@ -1,28 +1,35 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat,  9 May 2015 10:41:26 +0200
-Subject: [Buildroot] [PATCH 0/3] Mono: fixing latest build failures
-Message-ID: <1431160889-3851-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Sat,  9 May 2015 10:41:27 +0200
+Subject: [Buildroot] [PATCH 1/3] package/mono: fixing mono version
+In-Reply-To: <1431160889-3851-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1431160889-3851-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <1431160889-3851-2-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series should fix the latest build failures for mono.
+This patch fixes to the correct mono version 4.0.0 as stated on
+the download page.
 
-Fixes http://autobuild.buildroot.net/results/227/227f942107e4fcbc14bb1e7d97e1e2758d6f3f2d/
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/mono/mono.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Angelo Compagnucci (3):
-  package/mono: fixing mono version
-  package/mono: adding hash file
-  package/monolite: adding hash file
-
- package/mono/mono.hash         | 2 ++
- package/mono/mono.mk           | 2 +-
- package/monolite/monolite.hash | 2 ++
- 3 files changed, 5 insertions(+), 1 deletion(-)
- create mode 100644 package/mono/mono.hash
- create mode 100644 package/monolite/monolite.hash
-
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index c0a0827..63026f1 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONO_VERSION = 4.0.1
++MONO_VERSION = 4.0.0
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
 -- 
 1.9.1
