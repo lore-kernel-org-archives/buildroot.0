@@ -1,30 +1,52 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat,  9 May 2015 10:41:29 +0200
-Subject: [Buildroot] [PATCH 3/3] package/monolite: adding hash file
-In-Reply-To: <1431160889-3851-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1431160889-3851-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1431160889-3851-4-git-send-email-angelo.compagnucci@gmail.com>
+From: Florent Valette <florent.valette@gmail.com>
+Date: Sat,  9 May 2015 18:21:20 +0200
+Subject: [Buildroot] [PATCH 1/1] flashrom: Bump to version 0.9.8
+Message-ID: <1431188480-20889-1-git-send-email-florent.valette@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds hash file for monolite version 117.
+Add libusb and libftdi depedencies because new flashrom version
+support usb-spi device such as pickit2 and ftdi usb-spi.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Florent Valette <florent.valette@gmail.com>
 ---
- package/monolite/monolite.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/monolite/monolite.hash
+ package/flashrom/Config.in   | 3 +++
+ package/flashrom/flashrom.mk | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
-new file mode 100644
-index 0000000..1139c0a
---- /dev/null
-+++ b/package/monolite/monolite.hash
-@@ -0,0 +1,2 @@
-+# sha256 locally computed
-+sha256 07a8573feef0053ec28b98355feba8c83dcfb3f99c2d0913a16a287382daf4b8  monolite-117-latest.tar.gz
+diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
+index 956500f..6ceacdf 100644
+--- a/package/flashrom/Config.in
++++ b/package/flashrom/Config.in
+@@ -1,6 +1,9 @@
+ config BR2_PACKAGE_FLASHROM
+ 	bool "flashrom"
+ 	select BR2_PACKAGE_PCIUTILS
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_LIBUSB_COMPAT
++	select BR2_PACKAGE_LIBFTDI
+ 	# dmidecode is only a runtime dependency
+ 	select BR2_PACKAGE_DMIDECODE
+ 	depends on BR2_i386 || BR2_x86_64
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index 70bbe30..525470a 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-FLASHROM_VERSION = 0.9.7
++FLASHROM_VERSION = 0.9.8
+ FLASHROM_SOURCE = flashrom-$(FLASHROM_VERSION).tar.bz2
+ FLASHROM_SITE = http://download.flashrom.org/releases
+-FLASHROM_DEPENDENCIES = pciutils
++FLASHROM_DEPENDENCIES = pciutils libusb libusb-compat libftdi
+ FLASHROM_LICENSE = GPLv2+
+ FLASHROM_LICENSE_FILES = COPYING
+ 
 -- 
 1.9.1
