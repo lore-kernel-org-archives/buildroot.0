@@ -1,31 +1,25 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 9 May 2015 09:14:05 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 09 May 2015 09:55:04 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
 	2015-05-08
-In-Reply-To: <20150509063015.990CD10160E@stock.ovh.net>
 References: <20150509063015.990CD10160E@stock.ovh.net>
-Message-ID: <CA+TH9VnQN1Vs-J+dMXgBc6uCWgugprDh=v85RKebcs=60dQFAQ@mail.gmail.com>
+Message-ID: <XnsA49564E40BDF9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20150509063015.990CD10160E at stock.ovh.net: 
 
->          arm |                host-mono-4.0.1 | NOK | http://autobuild.buildroot.net/results/227f942107e4fcbc14bb1e7d97e1e2758d6f3f2d/
+> microblazeel |                 xapp_xfs-1.1.4 | NOK |
+> http://autobuild.buildroot.net/results/688a839ec57e7bc83b490535871b2dac0b
+> 1309ff/ 
 
-I think I found the cause of the problem. Unfortunately mono 4.0.1 is
-not the latest version, but 4.0.0 is. It's not obvious from the
-download listing page, it's a little bit clearer from the download
-front page that clearly says "The latest Mono release is: 4.0.0".
-Indeed mono-4.0.0.tar.bz2 was updated on May 5th, mono-4.0.1.tar.bz2
-it's a couple of weeks older. Probably mono-4.0.1.tar.bz2 was just
-released as a mistake.
+Hi,
 
-I'll send a patch in minutes!
+fixed by http://patchwork.ozlabs.org/patch/442068/
 
-Sincerely, Angelo
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Regards, Bernd
