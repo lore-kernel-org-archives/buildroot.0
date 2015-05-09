@@ -1,7 +1,7 @@
 From: Florent Valette <florent.valette@gmail.com>
-Date: Sat,  9 May 2015 18:21:20 +0200
+Date: Sat,  9 May 2015 18:22:24 +0200
 Subject: [Buildroot] [PATCH 1/1] flashrom: Bump to version 0.9.8
-Message-ID: <1431188480-20889-1-git-send-email-florent.valette@gmail.com>
+Message-ID: <1431188544-20933-1-git-send-email-florent.valette@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
