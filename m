@@ -1,35 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2015 22:31:29 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-05-08
-In-Reply-To: <XnsA49564E40BDF9berndkuhlsPkbjNfxxIA@bernd-kuhls.de> (Bernd
- Kuhls's message of "Sat, 09 May 2015 09:55:04 +0200")
-References: <20150509063015.990CD10160E@stock.ovh.net>
- <XnsA49564E40BDF9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <87zj5cjhsu.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 10 May 2015 22:33:06 +0200
+Subject: [Buildroot] [PATCH 3/3] package/gnuchess: add hash
+In-Reply-To: <1431289986-20427-1-git-send-email-romain.naour@openwide.fr>
+References: <1431289986-20427-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1431289986-20427-3-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/gnuchess/gnuchess.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/gnuchess/gnuchess.hash
 
- > Thomas Petazzoni
- > <thomas.petazzoni@free-electrons.com> wrote
- > in news:20150509063015.990CD10160E at stock.ovh.net: 
-
- >> microblazeel |                 xapp_xfs-1.1.4 | NOK |
- >> http://autobuild.buildroot.net/results/688a839ec57e7bc83b490535871b2dac0b
- >> 1309ff/ 
-
- > Hi,
-
- > fixed by http://patchwork.ozlabs.org/patch/442068/
-
-I had a closer look at this, and the real issue is actually weak symbol
-misdetection in libXfont, so I've marked that patch as rejected and
-pushed a fix for libXfont instead.
-
+diff --git a/package/gnuchess/gnuchess.hash b/package/gnuchess/gnuchess.hash
+new file mode 100644
+index 0000000..26342bc
+--- /dev/null
++++ b/package/gnuchess/gnuchess.hash
+@@ -0,0 +1,2 @@
++# sha256 locally computed
++sha256	17caab725539447bcb17a14b17905242cbf287087e53a6777524feb7bbaeed06	gnuchess-6.2.1.tar.gz
 -- 
-Bye, Peter Korsgaard
+1.9.3
