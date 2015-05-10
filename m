@@ -1,22 +1,49 @@
-From: Jordi Llonch <jordi.llonch@rochsystems.com>
-Date: Mon, 11 May 2015 08:25:33 +1000
-Subject: [Buildroot] aspell: some questions
-Message-ID: <etPan.554fdadd.2f69450c.c9c6@MacBook-Pro-de-Jordi.local>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Mon, 11 May 2015 09:58:06 +1000
+Subject: [Buildroot] [PATCH 1/2] librtas: new package
+In-Reply-To: <874mnnldlo.fsf@dell.be.48ers.dk>
+References: <cover.1431059241.git.sam.bobroff@au1.ibm.com>	<780e48cca88c90480b3b038c5965e52db284d403.1431059241.git.sam.bobroff@au1.ibm.com>	<20150508045205.GG2183@tarshish>
+ <874mnnldlo.fsf@dell.be.48ers.dk>
+Message-ID: <554FF08E.5080203@au1.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 08/05/15 17:42, Peter Korsgaard wrote:
+>>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+> 
+> Hi,
+> 
+>  >> diff --git a/package/librtas/missing-librtas.so.1.patch b/package/librtas/missing-librtas.so.1.patch
+>  >> new file mode 100644
+>  >> index 0000000..de21d66
+>  >> --- /dev/null
+>  >> +++ b/package/librtas/missing-librtas.so.1.patch
+>  >> @@ -0,0 +1,11 @@
+> 
+>  > Please add your Sign-off here.
+> 
+> And a description. Why is it needed, has the patch been sent upstream?
+> What is the status?
 
-I have built a package for GNU aspell (http://aspell.net) binary but to complete the package will be great to configure the addition of dictionaries (ftp://ftp.gnu.org/gnu/aspell/dict/0index.html).
-
-We have to consider dictionary versioning. What will be the best strategy to download and build (configure && make) aspell dictionaries at the host stage?
+OK, I'll add all that to the patch.
 
 Thanks,
-?
-Jordi
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150511/71ddc6dd/attachment.html>
+
+Sam.
+
+>  >> +diff -purN librtas-1.3.12.orig/librtas_src/Makefile librtas-1.3.12/librtas_src/Makefile
+>  >> +--- librtas-1.3.12.orig/librtas_src/Makefile	2015-04-09 10:45:19.772381633 +1000
+>  >> ++++ librtas-1.3.12/librtas_src/Makefile	2015-04-09 10:45:57.968604762 +1000
+>  >> +@@ -33,6 +33,7 @@ install:
+>  >> + 	@$(call install_lib,$(LIBRTAS),$(DESTDIR))
+>  >> + 	@$(call install_inc,$(HEADERS),$(DESTDIR))
+>  >> + 	@ln -sf $(LIBRTAS) $(DESTDIR)/$(LIB_DIR)$(call is_lib64,$(LIBRTAS))/$(LIBRTAS_SONAME)
+>  >> ++	@ln -sf $(LIBRTAS) $(DESTDIR)/$(LIB_DIR)$(call is_lib64,$(LIBRTAS))/$(LIBRTAS_SONAME).1
+>  >> + 
+>  >> + uninstall:
+>  >> + 	@$(call uninstall_lib,$(LIBRTAS),$(DESTDIR))
+> 
+> 
