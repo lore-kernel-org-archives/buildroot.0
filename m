@@ -1,53 +1,34 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 10 May 2015 22:33:04 +0200
-Subject: [Buildroot] [PATCH 1/3] package/gnuchess: add gettext dependency
-Message-ID: <1431289986-20427-1-git-send-email-romain.naour@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 10 May 2015 23:07:53 +0200
+Subject: [Buildroot] [PATCH 1/1] Makefile: Handle whitespace when
+	stripping .ko
+In-Reply-To: <1431203133-17961-1-git-send-email-erico.nunes@datacom.ind.br>
+ (Erico Nunes's message of "Sat, 9 May 2015 17:25:33 -0300")
+References: <1431203133-17961-1-git-send-email-erico.nunes@datacom.ind.br>
+Message-ID: <87vbg0jg46.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gnuchess check for libintl library if BR2_NEEDS_GETTEXT_IF_LOCALE is set.
+>>>>> "Erico" == Erico Nunes <erico.nunes@datacom.ind.br> writes:
 
-checking for GNU gettext in libintl... yes
-checking whether to use NLS... yes
-checking where the gettext function comes from... external libintl
-checking how to link with libintl... -lintl
+ > It is possible to end up with a path containing spaces if the kernel
+ > localversion contains spaces.
+ > Be it good practice or not, there are third party vendors which
+ > distribute kernel configuration files for reference platforms which have
+ > quoted strings containing whitespaces in the localversion.
 
-But the dependency on gettext package is missing to ensures
-reproducible builds.
+ > There was already a fix to handle paths with whitespaces or other
+ > special characters when running strip, which consists of using the find
+ > -print0 and xargs -0 pair of arguments, but the kernel module stripping
+ > wasn't included in the fix.
+ > This commit includes the same fix to the kernel module stripping line.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/gnuchess/Config.in   | 1 +
- package/gnuchess/gnuchess.mk | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ > Signed-off-by: Erico Nunes <erico.nunes@datacom.ind.br>
 
-diff --git a/package/gnuchess/Config.in b/package/gnuchess/Config.in
-index aa446f4..4993b1a 100644
---- a/package/gnuchess/Config.in
-+++ b/package/gnuchess/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_GNUCHESS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_FLEX
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  GNU Chess lets most modern computers play a full game of chess.
- 
-diff --git a/package/gnuchess/gnuchess.mk b/package/gnuchess/gnuchess.mk
-index 48e8bc8..0555cb1 100644
---- a/package/gnuchess/gnuchess.mk
-+++ b/package/gnuchess/gnuchess.mk
-@@ -10,6 +10,7 @@ GNUCHESS_LICENSE = GPLv2+
- GNUCHESS_LICENSE_FILES = COPYING
- 
- GNUCHESS_DEPENDENCIES = host-flex flex
--GNUCHESS_DEPENDENCIES += $(if $(BR2_PACKAGE_READLINE),readline)
-+GNUCHESS_DEPENDENCIES += $(if $(BR2_PACKAGE_READLINE),readline) \
-+	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- 
- $(eval $(autotools-package))
+Committed, thanks.
+
 -- 
-1.9.3
+Bye, Peter Korsgaard
