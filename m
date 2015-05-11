@@ -1,30 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2015 09:00:32 +0200
-Subject: [Buildroot] [PATCH 1/3] package/gnuchess: add gettext dependency
-In-Reply-To: <1431289986-20427-1-git-send-email-romain.naour@openwide.fr>
- (Romain Naour's message of "Sun, 10 May 2015 22:33:04 +0200")
-References: <1431289986-20427-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <87fv73k38v.fsf@dell.be.48ers.dk>
+Date: Mon, 11 May 2015 08:59:18 +0200
+Subject: [Buildroot] [git commit] package/gnuchess: add hash
+Message-ID: <20150511070052.B2275805FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1c8750c3b64f7504554e1f50475e870053bc89e5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > gnuchess check for libintl library if BR2_NEEDS_GETTEXT_IF_LOCALE is set.
- > checking for GNU gettext in libintl... yes
- > checking whether to use NLS... yes
- > checking where the gettext function comes from... external libintl
- > checking how to link with libintl... -lintl
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gnuchess/gnuchess.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- > But the dependency on gettext package is missing to ensures
- > reproducible builds.
-
- > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-
-Committed all 3, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gnuchess/gnuchess.hash b/package/gnuchess/gnuchess.hash
+new file mode 100644
+index 0000000..26342bc
+--- /dev/null
++++ b/package/gnuchess/gnuchess.hash
+@@ -0,0 +1,2 @@
++# sha256 locally computed
++sha256	17caab725539447bcb17a14b17905242cbf287087e53a6777524feb7bbaeed06	gnuchess-6.2.1.tar.gz
