@@ -1,41 +1,101 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2015 17:37:46 +0200
-Subject: [Buildroot] [git commit] php: openssl support needs to link against
-	zlib for static linking
-Message-ID: <20150511154919.774CF8196D@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 11 May 2015 18:14:10 +0200
+Subject: [Buildroot] [PATCH v2 0/4] openpowerlink2
+Message-ID: <1431360854-18305-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5c518ff7d2fb178a4a2a97839457ac16f9b31240
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From doc/openpowerlink.md:
+"The openPOWERLINK release V2.X is an evolution of the openPOWERLINK V1 stack.
+Running the kernel and user layers of openPOWERLINK on different processors in
+a multi-processor/multi-platform architecture, required fundamental changes in
+the Communication Abstraction Layer. Additionally, the existing code base was
+greatly improved so that it is easier to understand and maintain. Due to these
+reasons a new major release was started."
 
-Fixes:
-http://autobuild.buildroot.net/results/490/490a9558635c90bf510b6f80cd0891fe322c3f46/
-http://autobuild.buildroot.net/results/bf1/bf12eb189ab35ce00a2212695d2dbf8b8a126529/
+The openpowerlink2 package archive contains several cmake projects,
+and each of them must be packaged separately in Buildroot.
 
-Otherwise the configure script fails to detect openssl and bails out.
+"With version 2.0, the source code has been cleanly split into an
+application-oriented user library and a time-critical stack driver."
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/php/php.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+This complicates the packaging but it helps to refine the dependencies
+compared to openpowerlink v1 build system.
+(openpowerlink v1 requires C++ only for the qt demo)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 47811ff..279ebf8 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -109,6 +109,11 @@ endif
- ifeq ($(BR2_PACKAGE_PHP_EXT_OPENSSL),y)
- PHP_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += openssl
-+# openssl needs zlib, but the configure script forgets to link against
-+# it causing detection failures with static linking
-+ifeq ($(BR2_STATIC_LIBS),y)
-+PHP_CONF_ENV += LIBS='-lz'
-+endif
- endif
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_LIBXML2),y)
+The openpowerlink2 package provide all patches which should be used by
+other openpowerlink2-* packages by using an patch hook.
+Doing this avoids patches duplication over all sub-packages.
+
+All patches fix several issues with the cmake build system and will be
+submitted upstream.
+
+There is one project for the EPL (Ethernet PowerLink) stack
+libraries wich provides:
+ * an user space EPL stack to be linked into application
+ * an user space EPL stack pcap daemon
+ * an kernel space EPL library interface
+
+There are two projects for the EPL network driver:
+ * pcap daemon driver
+ * kernel module driver.
+
+Note: On x86/x86_64 only few EPL ethernet driver are available for
+the EPL kernel stack implementation:
+ * Intel 82573
+ * Intel 8255x
+ * Intel I210
+ * Realtek RTL-8111/8168 (new since V2.1.0)
+ * Realtek RTL-8139
+
+There is one project for each demo application:
+ * demo_cn_embedded
+ * demo_mn_embedded
+ * demo_cn_console
+ * demo_mn_console
+ * demo_mn_qt
+
+Only demo_mn_console will be packaged in Buildroot for now.
+
+[1] http://sourceforge.net/p/openpowerlink/discussion/newbie/thread/3f13af65/
+
+Romain Naour (4):
+  package/openpowerlink2: new package
+  package/openpowerlink2-kernel-drivers: new package
+  package/openpowerlink2-pcap-daemon: new package
+  package/openpowerlink2-apps-demo-mn-console: new package
+
+ package/Config.in                                  |   1 +
+ ...a-better-regex-for-CMAKE_SYSTEM_PROCESSOR.patch | 153 +++++++++++++++++++++
+ ...ink-demos-with-Debug-and-Release-librarie.patch | 124 +++++++++++++++++
+ ...l-the-stack-libraries-to-lib-subdirectory.patch | 110 +++++++++++++++
+ ...0004-FIX-cmake-install-oplk-headers-files.patch |  30 ++++
+ package/openpowerlink2/Config.in                   |  88 ++++++++++++
+ .../openpowerlink2-apps-demo-mn-console/Config.in  |   6 +
+ .../openpowerlink2-apps-demo-mn-console.mk         |  50 +++++++
+ .../openpowerlink2-kernel-drivers/Config.in        |  33 +++++
+ .../openpowerlink2-kernel-drivers.mk               |  52 +++++++
+ .../openpowerlink2-pcap-daemon/Config.in           |  12 ++
+ .../openpowerlink2-pcap-daemon.mk                  |  38 +++++
+ package/openpowerlink2/openpowerlink2.hash         |   2 +
+ package/openpowerlink2/openpowerlink2.mk           |  72 ++++++++++
+ 14 files changed, 771 insertions(+)
+ create mode 100644 package/openpowerlink2/0001-FIX-use-a-better-regex-for-CMAKE_SYSTEM_PROCESSOR.patch
+ create mode 100644 package/openpowerlink2/0002-FIX-Don-t-link-demos-with-Debug-and-Release-librarie.patch
+ create mode 100644 package/openpowerlink2/0003-FIX-install-the-stack-libraries-to-lib-subdirectory.patch
+ create mode 100644 package/openpowerlink2/0004-FIX-cmake-install-oplk-headers-files.patch
+ create mode 100644 package/openpowerlink2/Config.in
+ create mode 100644 package/openpowerlink2/openpowerlink2-apps-demo-mn-console/Config.in
+ create mode 100644 package/openpowerlink2/openpowerlink2-apps-demo-mn-console/openpowerlink2-apps-demo-mn-console.mk
+ create mode 100644 package/openpowerlink2/openpowerlink2-kernel-drivers/Config.in
+ create mode 100644 package/openpowerlink2/openpowerlink2-kernel-drivers/openpowerlink2-kernel-drivers.mk
+ create mode 100644 package/openpowerlink2/openpowerlink2-pcap-daemon/Config.in
+ create mode 100644 package/openpowerlink2/openpowerlink2-pcap-daemon/openpowerlink2-pcap-daemon.mk
+ create mode 100644 package/openpowerlink2/openpowerlink2.hash
+ create mode 100644 package/openpowerlink2/openpowerlink2.mk
+
+-- 
+1.9.3
