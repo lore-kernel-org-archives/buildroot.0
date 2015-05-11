@@ -1,57 +1,42 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 11 May 2015 10:12:34 +0200
-Subject: [Buildroot] [PATCH] uclibc-ng/uclibc: enable context functions
-Message-ID: <20150511081234.GA20953@waldemar-brodkorb.de>
+Date: Mon, 11 May 2015 10:16:29 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-05-10
+In-Reply-To: <877fsfk1d4.fsf@dell.be.48ers.dk>
+References: <20150511063014.873E6100FEC@stock.ovh.net>
+ <877fsfk1d4.fsf@dell.be.48ers.dk>
+Message-ID: <20150511081629.GB16123@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For mongrel2/libsigsegv we need to enable this in the uClibc-ng/uClibc-snapshot config.
-Tested with ARM:
+Hi Peter,
+Peter Korsgaard wrote,
 
-file output/target/usr/bin/mongrel2
-output/target/usr/bin/mongrel2: ELF 32-bit LSB executable, ARM, version 1 (SYSV), dynamically linked (uses shared libs), stripped
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> 
+>  > Build statistics for 2015-05-10
+>  > ===============================
+> 
+>  >         success : 279
+>  >        failures : 18 
+>  >        timeouts : 0  
+>  >           TOTAL : 297
+> 
+> Wee, it's starting to look pretty good.
+> 
+>  >          arm |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/793e1774a5922db4424619aa5a397ec3d3d497b4/
+> 
+> It seems uClibc-ng (but not uClibc) has a ucontext_t issue. Waldemar,
+> any ideas?
+> 
+> http://autobuild.buildroot.net/?reason=libsigsegv-2.10
 
-Should fix:
-http://autobuild.buildroot.net/results/a144bc6024415a5272c3cbe60ff636d078d0a555/
-http://autobuild.buildroot.net/results/00195d89a115a314bf4916af127407f61cd1b418/
-http://autobuild.buildroot.net/results/5ee7e83ebcfa43f6ee0a2a8b9f40f1ae84664aca/
+I sent an update patch a few minutes ago.
+A config symbol must be enabled. The feature is only available in
+uClibc snapshot and uClibc-ng.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-v2:
-  - add to uClibc-snapshot as requested by Thomas Petazzoni
-
----
- package/uclibc/uClibc-ng.config       |    1 +
- package/uclibc/uClibc-snapshot.config |    1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
-index c6e7ff9..b1f039a 100644
---- a/package/uclibc/uClibc-ng.config
-+++ b/package/uclibc/uClibc-ng.config
-@@ -117,6 +117,7 @@ UCLIBC_DYNAMIC_ATEXIT=y
- # COMPAT_ATEXIT is not set
- UCLIBC_SUSV2_LEGACY=y
- UCLIBC_SUSV3_LEGACY=y
-+UCLIBC_HAS_CONTEXT_FUNCS=y
- # UCLIBC_SUSV3_LEGACY_MACROS is not set
- UCLIBC_SUSV4_LEGACY=y
- # UCLIBC_STRICT_HEADERS is not set
-diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
-index ac3d9b0..d8ed726 100644
---- a/package/uclibc/uClibc-snapshot.config
-+++ b/package/uclibc/uClibc-snapshot.config
-@@ -117,6 +117,7 @@ UCLIBC_DYNAMIC_ATEXIT=y
- # COMPAT_ATEXIT is not set
- UCLIBC_SUSV2_LEGACY=y
- UCLIBC_SUSV3_LEGACY=y
-+UCLIBC_HAS_CONTEXT_FUNCS=y
- # UCLIBC_SUSV3_LEGACY_MACROS is not set
- UCLIBC_SUSV4_LEGACY=y
- # UCLIBC_STRICT_HEADERS is not set
--- 
-1.7.10.4
+best regards
+ Waldemar
