@@ -1,43 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 May 2015 11:30:02 +0200
-Subject: [Buildroot] [PATCH] package/tinyxml2: Use BUILD_SHARED_LIBS
- cmake standard
-In-Reply-To: <554D1AB6.5020401@openwide.fr>
-References: <1431081780-21595-1-git-send-email-romain.naour@openwide.fr>
- <CAHXCMMJXDf62TLk+pmwb+bzDq99FUs=TuagFFZS9=yedawuM0g@mail.gmail.com>
- <554D1AB6.5020401@openwide.fr>
-Message-ID: <20150511113002.12e1cc72@free-electrons.com>
+Date: Mon, 11 May 2015 11:31:41 +0200
+Subject: [Buildroot] [PATCH 1/2] librtas: new package
+In-Reply-To: <874mnnldlo.fsf@dell.be.48ers.dk>
+References: <cover.1431059241.git.sam.bobroff@au1.ibm.com>
+ <780e48cca88c90480b3b038c5965e52db284d403.1431059241.git.sam.bobroff@au1.ibm.com>
+ <20150508045205.GG2183@tarshish> <874mnnldlo.fsf@dell.be.48ers.dk>
+Message-ID: <20150511113141.1c2b0b0c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Peter Korsgaard,
 
-On Fri, 08 May 2015 22:21:10 +0200, Romain Naour wrote:
+On Fri, 08 May 2015 09:42:27 +0200, Peter Korsgaard wrote:
 
-> >> + ################################
-> >> +@@ -46,12 +46,8 @@ endif(MSVC)
-> >> +
-> >> + ################################
-> >> + # Add targets
-> >> +-set(BUILD_STATIC_LIBS ON CACHE BOOL "Set to ON to build static libraries")
-> >> +-if(BUILD_STATIC_LIBS)
-> >> +-      add_library(tinyxml2static STATIC tinyxml2.cpp tinyxml2.h)
-> >> +-      set_target_properties(tinyxml2static PROPERTIES OUTPUT_NAME tinyxml2)
-> >> +-endif(BUILD_STATIC_LIBS)
-> >> +-add_library(tinyxml2 SHARED tinyxml2.cpp tinyxml2.h)
-> >> ++option(BUILD_SHARED_LIBS "build shared or static libraries" ON)
-> > Not needed, this is a global CMake flag.
+>  >> diff --git a/package/librtas/missing-librtas.so.1.patch b/package/librtas/missing-librtas.so.1.patch
+>  >> new file mode 100644
+>  >> index 0000000..de21d66
+>  >> --- /dev/null
+>  >> +++ b/package/librtas/missing-librtas.so.1.patch
+>  >> @@ -0,0 +1,11 @@
 > 
-> I have just cherry-picked the patch and keep things as is.
-> I can rework the patch an keep only useful part if you prefer ;-)
+>  > Please add your Sign-off here.
+> 
+> And a description. Why is it needed, has the patch been sent upstream?
+> What is the status?
 
-No, if it is an upstream patch, please keep it as unmodified as
-possible when backporting it to Buildroot.
-
-Thanks,
+And patch should be named 0001-<foo>.patch.
 
 Thomas
 -- 
