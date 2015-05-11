@@ -1,44 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 May 2015 00:19:14 +0200
-Subject: [Buildroot] [PATCH] libmemcached: don't use -fPIE and -pie with
-	FLAT binaries
-In-Reply-To: <1431377736-2574-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 11 May 2015 22:55:36 +0200")
-References: <1431377736-2574-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87d226iwpp.fsf@dell.be.48ers.dk>
+Date: Tue, 12 May 2015 00:19:59 +0200
+Subject: [Buildroot] [PATCH] package/gcc (arc): backport PR56780 patches
+In-Reply-To: <1431380716-5176-1-git-send-email-romain.naour@openwide.fr>
+ (Romain Naour's message of "Mon, 11 May 2015 23:45:16 +0200")
+References: <1431380716-5176-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <878ucuiwog.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
- > FLAT binaries cannot use -fPIE and -pie code, so let's teach
- > libmemcached to not use such flags when BR2_BINFMT_FLAT=y.
+ > --disable-install-libiberty configure option is broken
+ > in gcc 4.8.x, so libiberty.a is always installed in HOST_DIR.
 
- > Fixes:
+ > This library broke the host-gdb build due to a fpic/fPIC issue.
 
- >   http://autobuild.buildroot.org/results/8cb/8cbf57f9136cb42be31c88e0f1f32d3d2353e5ff/
- >   and many previous similar build failures
+ > Note: host-binutils-arc-2014.12 install libiberty.a in HOST_DIR
+ > but it was overwritten by the gcc one. The host-binutils's
+ > libiberty.a also broke the host-gdb build. This should be
+ > fixed in a followup patch.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
- > +# Help libmemcached to understand that -fPIE and -pie should not be
- > +# used when FLAT binaries are used (shared libraries are not
- > +# supported).
- > +ifeq ($(BR2_BINFMT_FLAT),y)
- > +LIBMEMCACHED_CONF_ENV += \
- > +	ax_cv_check_cflags__Werror__fPIE=no \
- > +	ax_cv_check_cflags__Werror__pie=no \
- > +	ax_cv_check_cxxflags__Werror__fPIE=no \
- > +	ax_cv_check_cxxflags__Werror__pie=no
- > +endif
+ > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+ > Cc: Alexey Brodkin <abrodkin@synopsys.com>
+ > ---
+ > Alexey, --disable-install-libiberty doesn't work
+ > for host-binutils-arc-2014.12. Can you have a look ?
+ > Thanks
 
-BINFMT_FLAT implies BR2_STATIC_LIBS and (elf) static libraries should
-also not be built with -fPIE / -pie, right?
-
-Is there any specific reason to only do this workaround for BINFMT_FLAT?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
