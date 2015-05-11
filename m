@@ -1,52 +1,24 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 11 May 2015 22:32:21 +0200
-Subject: [Buildroot] [PATCH] package/gcc: backport PR56780 patches
-In-Reply-To: <20150511170219.GA4279@free.fr>
-References: <1431284486-4996-1-git-send-email-romain.naour@openwide.fr>
- <20150511170731.003c9663@free-electrons.com> <20150511170219.GA4279@free.fr>
-Message-ID: <555111D5.2050907@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 May 2015 22:36:12 +0200
+Subject: [Buildroot] [PATCH 0/3] Mono: fixing latest build failures
+In-Reply-To: <1431160889-3851-1-git-send-email-angelo.compagnucci@gmail.com>
+ (Angelo Compagnucci's message of "Sat, 9 May 2015 10:41:26 +0200")
+References: <1431160889-3851-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <87lhguj1hf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Yann, All
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-Le 11/05/2015 19:02, Yann E. MORIN a ?crit :
-> Thomas, All,
-> 
-> On 2015-05-11 17:07 +0200, Thomas Petazzoni spake thusly:
->> On Sun, 10 May 2015 21:01:26 +0200, Romain Naour wrote:
->>> --disable-install-libiberty configure option is broken
->>> in gcc 4.8.x, so libiberty.a is always installed in HOST_DIR.
->>>
->>> This library broke the host-gdb build due to a fpic/fPIC issue.
->>>
->>> Fixes:
->>> http://autobuild.buildroot.net/results/28f/28f3074e99a35f4321dad2fa6c5abdad14d2d2c6/
->>>
->>> And many more.
->>>
->>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>> ---
->>>  package/gcc/4.8.4/851-PR-other-56780.patch | 244 +++++++++++++++++++++++++++++
->>>  1 file changed, 244 insertions(+)
->>>  create mode 100644 package/gcc/4.8.4/851-PR-other-56780.patch
->>
->> We also need this on other gcc versions:
->> http://autobuild.buildroot.org/results/408/4089d707339291073f48187466817dd17198a3b2/
-> 
-> Right, even though this is also a gcc-4.8 (but the ARC variant).
+ > This patch series should fix the latest build failures for mono.
+ > Fixes http://autobuild.buildroot.net/results/227/227f942107e4fcbc14bb1e7d97e1e2758d6f3f2d/
 
-Thanks, I'll cook another patch for arc.
+It unfortunately doesn't sem to have fixed the issue :/
 
-Best regards,
-Romain
+http://autobuild.buildroot.net/results/81a/81aadff4232cf1f1c36d8effe309a87d706b858f/build-end.log
 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+-- 
+Bye, Peter Korsgaard
