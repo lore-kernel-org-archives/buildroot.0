@@ -1,36 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 May 2015 00:19:59 +0200
-Subject: [Buildroot] [PATCH] package/gcc (arc): backport PR56780 patches
-In-Reply-To: <1431380716-5176-1-git-send-email-romain.naour@openwide.fr>
- (Romain Naour's message of "Mon, 11 May 2015 23:45:16 +0200")
-References: <1431380716-5176-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <878ucuiwog.fsf@dell.be.48ers.dk>
+Date: Tue, 12 May 2015 00:09:02 +0200
+Subject: [Buildroot] [git commit] qemu: fix build on sh4a and sh4aeb
+Message-ID: <20150511222305.BA18581D3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=18f998b0c5ede6ee96af96cf0039690b79d78c2c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > --disable-install-libiberty configure option is broken
- > in gcc 4.8.x, so libiberty.a is always installed in HOST_DIR.
+Qemu doesn't understand sh4a and sh4aeb as separate architectures, it
+only knows about sh4 and sh4eb. However, it does support sh4a, since
+it emulates the SH7785 CPU which is a SH4A.
 
- > This library broke the host-gdb build due to a fpic/fPIC issue.
+Therefore, with this commit, sh4a/sh4aeb are translated as sh4/sh4eb
+for Qemu.
 
- > Note: host-binutils-arc-2014.12 install libiberty.a in HOST_DIR
- > but it was overwritten by the gcc one. The host-binutils's
- > libiberty.a also broke the host-gdb build. This should be
- > fixed in a followup patch.
+Fixes:
 
- > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
- > Cc: Alexey Brodkin <abrodkin@synopsys.com>
- > ---
- > Alexey, --disable-install-libiberty doesn't work
- > for host-binutils-arc-2014.12. Can you have a look ?
- > Thanks
+  http://autobuild.buildroot.org/results/8f9/8f99a776f35d4ab0841d9fd2db509850ef603bd4/
+  and many previous similar build failures
 
-Committed, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qemu/qemu.mk |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index d565c88..04df79f 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -38,8 +38,8 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-p
+ #       sh2a            not supported
+ #       sh4             sh4
+ #       sh4eb           sh4eb
+-#       sh4a            ?
+-#       sh4aeb          ?
++#       sh4a            sh4
++#       sh4aeb          sh4eb
+ #       sh64            not supported
+ #       sparc           sparc
+ 
+@@ -56,6 +56,12 @@ endif
+ ifeq ($(HOST_QEMU_ARCH),powerpc)
+ HOST_QEMU_ARCH = ppc
+ endif
++ifeq ($(HOST_QEMU_ARCH),sh4a)
++HOST_QEMU_ARCH = sh4
++endif
++ifeq ($(HOST_QEMU_ARCH),sh4aeb)
++HOST_QEMU_ARCH = sh4eb
++endif
+ HOST_QEMU_TARGETS = $(HOST_QEMU_ARCH)-linux-user
+ 
+ ifeq ($(BR2_PACKAGE_HOST_QEMU),y)
