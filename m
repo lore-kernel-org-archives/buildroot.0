@@ -1,57 +1,70 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 11 May 2015 19:48:26 +0200
-Subject: [Buildroot] [PATCH v7 10/13] Vivante drivers: bump to version
-	3.10.17-1.0.1
-In-Reply-To: <CAAMH-yvrDWD5Sgi1d=YTxqVMQfDNHHdoyx94izA8eX3mz4woeQ@mail.gmail.com>
-References: <1430406748-8493-1-git-send-email-jezz@sysmic.org>
- <20150511132307.GA21085@kwain>
- <CAAMH-yvrDWD5Sgi1d=YTxqVMQfDNHHdoyx94izA8eX3mz4woeQ@mail.gmail.com>
-Message-ID: <1754040.vn4Oi7W8vI@sagittea>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Mon, 11 May 2015 15:09:55 -0400
+Subject: [Buildroot] Reminder about your pending Buildroot patches
+In-Reply-To: <20150421125643.A04F688A@mail.free-electrons.com>
+References: <20150421125643.A04F688A@mail.free-electrons.com>
+Message-ID: <CANxTyt7kUnJcjkyhVfNrDaFJA=tQSPMoFwakEBoCrysJn6BJoQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gary,
+Thomas,
 
-On Monday 11 May 2015 18:32:35 Gary Bisson wrote:
-> Antoine, All,
-> 
-> On Mon, May 11, 2015 at 3:23 PM, Antoine T?nart
-> <antoine.tenart@free-electrons.com> wrote:
-> > On Tue, May 05, 2015 at 11:07:59AM +0200, Gary Bisson wrote:
-> >> On Tue, May 5, 2015 at 10:10 AM, Thomas Petazzoni
-> >> <thomas.petazzoni@free-electrons.com> wrote:
-> >> > On Tue, 5 May 2015 10:06:11 +0200, Gary Bisson wrote:
-> >>
-> >> Antoine, do you have a patch ready for the GPU package? Because it
-> >> seems that it's not just a version bump:
-> >> https://github.com/Freescale/meta-fsl-arm/commit/74c86aa9639f6f20991ab64ea75177a017f8749a
-> >
-> > Please find the patch I used to bump the Vivante version to 5.0.11.p4.1
-> > attached.
-> >
-> > I'll be happy to have some feedbacks and to update the patch
-> > accordingly.
-> 
-> Thanks for the patch! Maybe we should start a new thread for this?
-> 
-> Here are my remarks with the current version:
-> - The package has been renamed from gpu-viv-bin-mx6q to imx-gpu-viv in
-> Yocto, I guess it'd be nice to follow their lead as I'm sure it
-> announces that this package will be used on other iMX platforms. Then
-> I don't know if it's better to have a commit just for renaming the
-> package and another one for the version bump.
-Since this package seems to be incompatible with kernels < 3.10.54, maybe we 
-should provide imx-gpu-viv AND gpu-viv-bin-mx6q, no?
+On Tue, Apr 21, 2015 at 8:56 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> This is a reminder about your Buildroot patches that are older than 30
+> days.
+>
+> We need your help to know if your patches are still relevant or not.
+> To help us, make sure to update the status of your patches in
+> patchwork as appropriate, or to resend an updated version that applies
+> on the latest Buildroot master. Especially let us know if you would
+> like to withdraw your patch if you are no longer interested.
+>
+> Here is the list of patches you have submitted that are still pending:
+>
+>  - [1/3] ccache: change compilercheck to use compiler and toolchain info
+>    http://patchwork.ozlabs.org/patch/287383/
 
-> - Also in Yocto they get rid of all the pkg-config files, do we still
-> need those in our case?
-True, it seems they are not needed anymore.
+I'm content to maintain my own limited solution (external toolchain,
+no shared cache dirs) as a private buildroot mod, as it meets my
+needs.  By all means, reject away.
 
 
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+>  - [2/2] ntp: prevent keyword-gen failure during ntp_keyword.h check
+>    http://patchwork.ozlabs.org/patch/371305/
+
+I am still able to reproduce this on my buildroot-2014.05 system with
+NTP updated to the latest version and patches - but I cannot reproduce
+this issue using HEAD with the save defconfig.  I don't understand it,
+but its hard to argue with success.  Lets withdraw this one as well.
+
+
+>  - [v2] qt: add gst-plugins-base dependency to multimedia module
+>    http://patchwork.ozlabs.org/patch/389171/
+
+I've no personal investment with this one.  You asked me to look into
+an autobuilder failure, and this was the resulting fix.  The defconfig
+from that original failure *still* causes a Qt build failure, and the
+patch still applies (with a shift), and still fixes the build failure.
+So I think this patch is still applicable, and okay as-is.
+
+Danomi -
+
+
+> We have a lot of pending patches:
+>    https://patchwork.ozlabs.org/project/buildroot/list/
+>
+> You can help shorten this list by reviewing and testing patches, which
+> helps the maintainers when applying patches. The more patches are
+> reviewed or tested patches, the more are applied; the more are
+> applied, the shorter the list; the shorter the list, the faster
+> patches are applied.
+>
+> Thanks a lot for your help and contribution to Buildroot!
+> --
+> Buildroot, http://buildroot.org
