@@ -1,74 +1,44 @@
-From: Roman Akopov <adontz@gmail.com>
-Date: Mon, 11 May 2015 11:54:09 +0400
-Subject: [Buildroot] Build Issue when depending on systemd
-Message-ID: <55506021.60705@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 May 2015 09:56:24 +0200
+Subject: [Buildroot] [PATCH 2/2] powerpc-utils: remove --without-librtas
+In-Reply-To: <20150511060007.GQ2558@tarshish> (Baruch Siach's message of "Mon, 
+ 11 May 2015 09:00:07 +0300")
+References: <cover.1431059241.git.sam.bobroff@au1.ibm.com>
+ <05714bb15869de4bead83eec7df5e9c9b0bd8fa7.1431059241.git.sam.bobroff@au1.ibm.com>
+ <20150508045758.GH2183@tarshish> <554FFB2F.2010102@au1.ibm.com>
+ <20150511043445.GO2558@tarshish>
+ <20150511055303.GA3583@ocelot.ozlabs.ibm.com>
+ <20150511060007.GQ2558@tarshish>
+Message-ID: <873833k0nr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-I have C++/Qt application which does a lot of things, and among them, 
-forwards journald logs to web service. I failed to build it correctly 
-under buildroot-2015-02.
+Hi,
 
-Config.in looks like this
+>> > These are valid reasons. What is the target installed size of librtas compared 
+ >> > to powerpc-utils?
+ >> 
+ >> This might be a bit rough but it looks like:
+ >> 
+ >> * librtas: 360Kb
+ >> * powerpc-utils with librtas: 1,660Kb
+ >> .. for a total of  2020Kb
+ >> 
+ >> * powerpc-utils without librtas: 484Kb
+ >> 
+ >> So it looks like the increase is about 1.5Mb (or 3x, depending on how you look
+ >> at it).
 
-config BR2_PACKAGE_DASHBOARD_CLIENT
-     bool "dashboard-client"
-     depends on BR2_PACKAGE_HAS_LIBEGL
-     depends on BR2_PACKAGE_QT5
-     depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-     depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-     depends on BR2_PACKAGE_QT5BASE_EGLFS
-     depends on BR2_PACKAGE_QT5BASE_NETWORK
-     depends on BR2_PACKAGE_QT5BASE_PNG
-     depends on BR2_PACKAGE_QT5BASE_WIDGETS
-     depends on BR2_PACKAGE_QT5GRAPHICALEFFECTS
-     depends on BR2_PACKAGE_SYSTEMD
-     help
-       DASHBOARD client
+ > This is a significant increase. In this case I think it is best to give the 
+ > user an explicit option like you suggested. Mentioning these numbers in the 
+ > option help text should also be useful, I guess.
 
-and I get the following compilation error on clean build
+Yes, I agree for such a big increase in size.
 
-fatal error: systemd/sd-journal.h: No such file or directory
-  #include <systemd/sd-journal.h>
-                                 ^
-compilation terminated.
-
-This is because systemd is build after my package, I see this from log. 
-If I unselect my package, build system, reselect my package and build 
-again everything build just fine. Also,
-
-make dashboard-client-graph-depends
-
-outputs
-
-Getting dependencies for ['dashboard-client']
-Getting dependencies for ['toolchain', 'qt5base', 'qt5multimedia', 
-'qt5graphicaleffects', 'qt5imageformats', 'qt5declarative', 'qt5webkit']
-Getting dependencies for ['host-flex', 'host-bison', 
-'toolchain-buildroot', 'libpng', 'host-ruby', 'jpeg', 'host-pkgconf', 
-'libegl', 'zlib', 'openssl', 'qt5xmlpatterns', 'sqlite', 'host-gperf', 
-'fontconfig', 'pcre', 'icu', 'libgles']
-Getting dependencies for ['host-gcc-final', 'jpeg-turbo', 'host-m4', 
-'expat', 'readline', 'rpi-userland', 'ncurses', 'host-icu', 'freetype']
-Getting dependencies for ['host-libtool', 'host-automake', 'host-gmp', 
-'host-autoconf', 'host-mpfr', 'host-binutils', 'host-ncurses', 'glibc', 
-'host-mpc', 'host-cmake']
-Getting dependencies for ['host-gawk', 'linux-headers', 'host-gcc-initial']
-
-And there is no mention of systemd in generated PDF too.
-
-So either there I declare dependency on systemd incorrectly (then what 
-is the correct way?), or there is some dependency resolution problem.
-
-How can I debug this issue?
-
-With best regards,
-Roman
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150511/bbf246c8/attachment.html>
+-- 
+Bye, Peter Korsgaard
