@@ -1,39 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2015 09:01:50 +0200
-Subject: [Buildroot] [git commit] package/mono: fixing mono version
-Message-ID: <20150511070533.C7B40819BE@busybox.osuosl.org>
+Date: Mon, 11 May 2015 09:04:24 +0200
+Subject: [Buildroot] [git commit] package/monolite: adding hash file
+Message-ID: <20150511070533.E44597FE0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd31e75c0935b375a3a9b090214a37f6092d7d8d
+commit: http://git.buildroot.net/buildroot/commit/?id=5fc2e8ec65ec152bcffcefb78c08cf4fb779a6fc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch fixes to the correct mono version 4.0.0 as stated on
-the download page.
+This patch adds hash file for monolite version 117.
 
-Fixes:
-http://autobuild.buildroot.net/results/227/227f942107e4fcbc14bb1e7d97e1e2758d6f3f2d/
-
-[Peter: add autobuilder reference]
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mono/mono.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/monolite/monolite.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index c0a0827..63026f1 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONO_VERSION = 4.0.1
-+MONO_VERSION = 4.0.0
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
- MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
+diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
+new file mode 100644
+index 0000000..1139c0a
+--- /dev/null
++++ b/package/monolite/monolite.hash
+@@ -0,0 +1,2 @@
++# sha256 locally computed
++sha256 07a8573feef0053ec28b98355feba8c83dcfb3f99c2d0913a16a287382daf4b8  monolite-117-latest.tar.gz
