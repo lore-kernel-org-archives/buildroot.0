@@ -1,41 +1,57 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 11 May 2015 22:44:43 +0200
-Subject: [Buildroot] [PATCH 0/3] Mono: fixing latest build failures
-In-Reply-To: <87lhguj1hf.fsf@dell.be.48ers.dk>
-References: <1431160889-3851-1-git-send-email-angelo.compagnucci@gmail.com>
- <87lhguj1hf.fsf@dell.be.48ers.dk>
-Message-ID: <CA+TH9VnCUu0+C5Qeu=UX2_Qpd3dZ8qrZ4074Qkg1DkhQ045cjA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 11 May 2015 22:53:41 +0200
+Subject: [Buildroot] [PATCH] qemu: fix build on sh4a and sh4aeb
+Message-ID: <1431377621-2446-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Qemu doesn't understand sh4a and sh4aeb as separate architectures, it
+only knows about sh4 and sh4eb. However, it does support sh4a, since
+it emulates the SH7785 CPU which is a SH4A.
 
-2015-05-11 22:36 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
->>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
->
->  > This patch series should fix the latest build failures for mono.
->  > Fixes http://autobuild.buildroot.net/results/227/227f942107e4fcbc14bb1e7d97e1e2758d6f3f2d/
->
-> It unfortunately doesn't sem to have fixed the issue :/
->
-> http://autobuild.buildroot.net/results/81a/81aadff4232cf1f1c36d8effe309a87d706b858f/build-end.log
+Therefore, with this commit, sh4a/sh4aeb are translated as sh4/sh4eb
+for Qemu.
 
-That's really unfortunate cause on my test machine everithing goes
-well. I tested up to make -j32 and make without arguments, never
-encountered that problem.
+Fixes:
 
-Could you suggest a better way to find the root cause of the bug?
+  http://autobuild.buildroot.org/results/8f9/8f99a776f35d4ab0841d9fd2db509850ef603bd4/
+  and many previous similar build failures
 
-Sincerely, Angelo
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qemu/qemu.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
->
-> --
-> Bye, Peter Korsgaard
-
-
-
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index d565c88..04df79f 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -38,8 +38,8 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-p
+ #       sh2a            not supported
+ #       sh4             sh4
+ #       sh4eb           sh4eb
+-#       sh4a            ?
+-#       sh4aeb          ?
++#       sh4a            sh4
++#       sh4aeb          sh4eb
+ #       sh64            not supported
+ #       sparc           sparc
+ 
+@@ -56,6 +56,12 @@ endif
+ ifeq ($(HOST_QEMU_ARCH),powerpc)
+ HOST_QEMU_ARCH = ppc
+ endif
++ifeq ($(HOST_QEMU_ARCH),sh4a)
++HOST_QEMU_ARCH = sh4
++endif
++ifeq ($(HOST_QEMU_ARCH),sh4aeb)
++HOST_QEMU_ARCH = sh4eb
++endif
+ HOST_QEMU_TARGETS = $(HOST_QEMU_ARCH)-linux-user
+ 
+ ifeq ($(BR2_PACKAGE_HOST_QEMU),y)
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+2.1.0
