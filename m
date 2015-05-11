@@ -1,45 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2015 22:26:39 +0200
-Subject: [Buildroot] [git commit] fbterm: fix linking issue when static
-	linking and a toolchain with threads
-Message-ID: <20150511203048.9864F8198B@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 11 May 2015 22:32:21 +0200
+Subject: [Buildroot] [PATCH] package/gcc: backport PR56780 patches
+In-Reply-To: <20150511170219.GA4279@free.fr>
+References: <1431284486-4996-1-git-send-email-romain.naour@openwide.fr>
+ <20150511170731.003c9663@free-electrons.com> <20150511170219.GA4279@free.fr>
+Message-ID: <555111D5.2050907@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1951143a366920e33c6fe487c2d96272510e2cae
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas, Yann, All
 
-Fixes:
-http://autobuild.buildroot.net/results/899/899eb7e36dc31b7dcb51c0dd23d91965111d22c4/
-http://autobuild.buildroot.net/results/43a/43a34d8b64f536caa579709508bb5e00633ba6e7/
-http://autobuild.buildroot.net/results/f34/f343d015b127f29d614e7ea38b173d3a5c270d84/
-http://autobuild.buildroot.net/results/da8/da88f40dfc51aea122c146e5bfee19b031cfaab6/
+Le 11/05/2015 19:02, Yann E. MORIN a ?crit :
+> Thomas, All,
+> 
+> On 2015-05-11 17:07 +0200, Thomas Petazzoni spake thusly:
+>> On Sun, 10 May 2015 21:01:26 +0200, Romain Naour wrote:
+>>> --disable-install-libiberty configure option is broken
+>>> in gcc 4.8.x, so libiberty.a is always installed in HOST_DIR.
+>>>
+>>> This library broke the host-gdb build due to a fpic/fPIC issue.
+>>>
+>>> Fixes:
+>>> http://autobuild.buildroot.net/results/28f/28f3074e99a35f4321dad2fa6c5abdad14d2d2c6/
+>>>
+>>> And many more.
+>>>
+>>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> ---
+>>>  package/gcc/4.8.4/851-PR-other-56780.patch | 244 +++++++++++++++++++++++++++++
+>>>  1 file changed, 244 insertions(+)
+>>>  create mode 100644 package/gcc/4.8.4/851-PR-other-56780.patch
+>>
+>> We also need this on other gcc versions:
+>> http://autobuild.buildroot.org/results/408/4089d707339291073f48187466817dd17198a3b2/
+> 
+> Right, even though this is also a gcc-4.8 (but the ARC variant).
 
-And many more.
+Thanks, I'll cook another patch for arc.
 
-Fontconfig uses pthreads if available, but fbterm forgets to link with it
-breaking static builds.
+Best regards,
+Romain
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fbterm/fbterm.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
-
-diff --git a/package/fbterm/fbterm.mk b/package/fbterm/fbterm.mk
-index 7e9d324..d78d6b7 100644
---- a/package/fbterm/fbterm.mk
-+++ b/package/fbterm/fbterm.mk
-@@ -10,4 +10,10 @@ FBTERM_LICENSE = GPLv2+
- FBTERM_LICENSE_FILES = COPYING
- FBTERM_DEPENDENCIES = fontconfig liberation
- 
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-+# fontconfig uses pthreads if available, but fbterm forgets to link
-+# with it breaking static builds
-+FBTERM_CONF_ENV += LIBS='-lpthread'
-+endif
-+
- $(eval $(autotools-package))
+> 
+> Regards,
+> Yann E. MORIN.
+> 
