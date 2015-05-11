@@ -1,41 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 May 2015 17:07:31 +0200
-Subject: [Buildroot] [PATCH] package/gcc: backport PR56780 patches
-In-Reply-To: <1431284486-4996-1-git-send-email-romain.naour@openwide.fr>
-References: <1431284486-4996-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150511170731.003c9663@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 May 2015 17:37:46 +0200
+Subject: [Buildroot] [git commit] php: openssl support needs to link against
+	zlib for static linking
+Message-ID: <20150511154919.774CF8196D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=5c518ff7d2fb178a4a2a97839457ac16f9b31240
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 10 May 2015 21:01:26 +0200, Romain Naour wrote:
-> --disable-install-libiberty configure option is broken
-> in gcc 4.8.x, so libiberty.a is always installed in HOST_DIR.
-> 
-> This library broke the host-gdb build due to a fpic/fPIC issue.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/28f/28f3074e99a35f4321dad2fa6c5abdad14d2d2c6/
-> 
-> And many more.
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/gcc/4.8.4/851-PR-other-56780.patch | 244 +++++++++++++++++++++++++++++
->  1 file changed, 244 insertions(+)
->  create mode 100644 package/gcc/4.8.4/851-PR-other-56780.patch
+Fixes:
+http://autobuild.buildroot.net/results/490/490a9558635c90bf510b6f80cd0891fe322c3f46/
+http://autobuild.buildroot.net/results/bf1/bf12eb189ab35ce00a2212695d2dbf8b8a126529/
 
-We also need this on other gcc versions:
-http://autobuild.buildroot.org/results/408/4089d707339291073f48187466817dd17198a3b2/
+Otherwise the configure script fails to detect openssl and bails out.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/php/php.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 47811ff..279ebf8 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -109,6 +109,11 @@ endif
+ ifeq ($(BR2_PACKAGE_PHP_EXT_OPENSSL),y)
+ PHP_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
+ PHP_DEPENDENCIES += openssl
++# openssl needs zlib, but the configure script forgets to link against
++# it causing detection failures with static linking
++ifeq ($(BR2_STATIC_LIBS),y)
++PHP_CONF_ENV += LIBS='-lz'
++endif
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PHP_EXT_LIBXML2),y)
