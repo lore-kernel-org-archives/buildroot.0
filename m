@@ -1,66 +1,33 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 12 May 2015 00:09:52 +0200
-Subject: [Buildroot] [PATCH] package/libmemcached: disable documentation
-Message-ID: <1431382192-3141-1-git-send-email-romain.naour@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 May 2015 00:11:56 +0200
+Subject: [Buildroot] [PATCH] qemu: fix build on sh4a and sh4aeb
+In-Reply-To: <1431377621-2446-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 11 May 2015 22:53:41 +0200")
+References: <1431377621-2446-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87h9riix1v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libmemcached fail to build the documentation/man due to
-an python sphinx error.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
-This is probably an error throw by my Fedora 21 host.
----
- .../libmemcached/0004-disable-doc-and-man.patch    | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/libmemcached/0004-disable-doc-and-man.patch
+ > Qemu doesn't understand sh4a and sh4aeb as separate architectures, it
+ > only knows about sh4 and sh4eb. However, it does support sh4a, since
+ > it emulates the SH7785 CPU which is a SH4A.
 
-diff --git a/package/libmemcached/0004-disable-doc-and-man.patch b/package/libmemcached/0004-disable-doc-and-man.patch
-new file mode 100644
-index 0000000..9605095
---- /dev/null
-+++ b/package/libmemcached/0004-disable-doc-and-man.patch
-@@ -0,0 +1,37 @@
-+From 6c01bd3562cc18fbafdf950bbeb73a399c1adcdd Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Tue, 12 May 2015 00:00:02 +0200
-+Subject: [PATCH] disable doc and man
-+
-+WARNING: master file /home/naourr/git/buildroot/test/libmemcached-bfin/build/libmemcached-1.0.18/docs/index.rst not found
-+
-+Exception occurred:
-+  File "/usr/lib/python2.7/site-packages/sphinx/environment.py", line 1213, in get_doctree
-+    f = open(doctree_filename, 'rb')
-+IOError: [Errno 2] No such file or directory: '/home/naourr/buildroot-test/test/libmemcached-bfin/build/libmemcached-1.0.18/man/.doctrees/hashkit_create.doctree'
-+The full traceback has been saved in /tmp/sphinx-err-JCIsnB.log, if you want to report the issue to the developers.
-+Please also report this if it was a user error, so that a better error message can be provided next time.
-+Either send bugs to the mailing list at <http://groups.google.com/group/sphinx-dev/>,
-+or report them in the tracker at <http://bitbucket.org/birkenfeld/sphinx/issues/>. Thanks!
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ Makefile.am | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 7f44102..cb7d058 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -55,8 +55,6 @@ endif
-+ include libmemcachedutil-1.0/include.am
-+ 
-+ include clients/include.am
-+-include docs/include.am
-+-include man/include.am
-+ 
-+ if BUILD_LIBMEMCACHED_PROTOCOL
-+ include example/include.am
-+-- 
-+1.9.3
-+
+ > Therefore, with this commit, sh4a/sh4aeb are translated as sh4/sh4eb
+ > for Qemu.
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.org/results/8f9/8f99a776f35d4ab0841d9fd2db509850ef603bd4/
+ >   and many previous similar build failures
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-1.9.3
+Bye, Peter Korsgaard
