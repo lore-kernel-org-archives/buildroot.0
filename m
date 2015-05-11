@@ -1,70 +1,45 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 11 May 2015 15:09:55 -0400
-Subject: [Buildroot] Reminder about your pending Buildroot patches
-In-Reply-To: <20150421125643.A04F688A@mail.free-electrons.com>
-References: <20150421125643.A04F688A@mail.free-electrons.com>
-Message-ID: <CANxTyt7kUnJcjkyhVfNrDaFJA=tQSPMoFwakEBoCrysJn6BJoQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 May 2015 22:26:39 +0200
+Subject: [Buildroot] [git commit] fbterm: fix linking issue when static
+	linking and a toolchain with threads
+Message-ID: <20150511203048.9864F8198B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=1951143a366920e33c6fe487c2d96272510e2cae
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Apr 21, 2015 at 8:56 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> This is a reminder about your Buildroot patches that are older than 30
-> days.
->
-> We need your help to know if your patches are still relevant or not.
-> To help us, make sure to update the status of your patches in
-> patchwork as appropriate, or to resend an updated version that applies
-> on the latest Buildroot master. Especially let us know if you would
-> like to withdraw your patch if you are no longer interested.
->
-> Here is the list of patches you have submitted that are still pending:
->
->  - [1/3] ccache: change compilercheck to use compiler and toolchain info
->    http://patchwork.ozlabs.org/patch/287383/
+Fixes:
+http://autobuild.buildroot.net/results/899/899eb7e36dc31b7dcb51c0dd23d91965111d22c4/
+http://autobuild.buildroot.net/results/43a/43a34d8b64f536caa579709508bb5e00633ba6e7/
+http://autobuild.buildroot.net/results/f34/f343d015b127f29d614e7ea38b173d3a5c270d84/
+http://autobuild.buildroot.net/results/da8/da88f40dfc51aea122c146e5bfee19b031cfaab6/
 
-I'm content to maintain my own limited solution (external toolchain,
-no shared cache dirs) as a private buildroot mod, as it meets my
-needs.  By all means, reject away.
+And many more.
 
+Fontconfig uses pthreads if available, but fbterm forgets to link with it
+breaking static builds.
 
->  - [2/2] ntp: prevent keyword-gen failure during ntp_keyword.h check
->    http://patchwork.ozlabs.org/patch/371305/
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/fbterm/fbterm.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-I am still able to reproduce this on my buildroot-2014.05 system with
-NTP updated to the latest version and patches - but I cannot reproduce
-this issue using HEAD with the save defconfig.  I don't understand it,
-but its hard to argue with success.  Lets withdraw this one as well.
-
-
->  - [v2] qt: add gst-plugins-base dependency to multimedia module
->    http://patchwork.ozlabs.org/patch/389171/
-
-I've no personal investment with this one.  You asked me to look into
-an autobuilder failure, and this was the resulting fix.  The defconfig
-from that original failure *still* causes a Qt build failure, and the
-patch still applies (with a shift), and still fixes the build failure.
-So I think this patch is still applicable, and okay as-is.
-
-Danomi -
-
-
-> We have a lot of pending patches:
->    https://patchwork.ozlabs.org/project/buildroot/list/
->
-> You can help shorten this list by reviewing and testing patches, which
-> helps the maintainers when applying patches. The more patches are
-> reviewed or tested patches, the more are applied; the more are
-> applied, the shorter the list; the shorter the list, the faster
-> patches are applied.
->
-> Thanks a lot for your help and contribution to Buildroot!
-> --
-> Buildroot, http://buildroot.org
+diff --git a/package/fbterm/fbterm.mk b/package/fbterm/fbterm.mk
+index 7e9d324..d78d6b7 100644
+--- a/package/fbterm/fbterm.mk
++++ b/package/fbterm/fbterm.mk
+@@ -10,4 +10,10 @@ FBTERM_LICENSE = GPLv2+
+ FBTERM_LICENSE_FILES = COPYING
+ FBTERM_DEPENDENCIES = fontconfig liberation
+ 
++ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
++# fontconfig uses pthreads if available, but fbterm forgets to link
++# with it breaking static builds
++FBTERM_CONF_ENV += LIBS='-lpthread'
++endif
++
+ $(eval $(autotools-package))
