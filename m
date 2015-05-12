@@ -1,42 +1,56 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Tue, 12 May 2015 13:19:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mmc-utils: bump to latest commit
-Message-ID: <1431429559-31351-1-git-send-email-sebastien.szymanski@armadeus.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 May 2015 14:20:03 +0200
+Subject: [Buildroot] [PATCH] libmemcached: don't use -fPIE and -pie with
+	FLAT binaries
+In-Reply-To: <20150512132632.2cbbc566@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 12 May 2015 13:26:32 +0200")
+References: <1431377736-2574-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87d226iwpp.fsf@dell.be.48ers.dk>
+ <20150512132632.2cbbc566@free-electrons.com>
+Message-ID: <87wq0egf7w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The changes are:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-d0b4644 mmc-utils: add ability to enable/disable optional eMMC cache
-64c2de8 mmc-utils: Add command to set the boot bus conditions
-7891236 mmc-utils: add support to create gp partition
-4afc8c8 mmc-utils: add check for max enhanced user area
-50b6854 fix building errors on Android
-f4eb241 Fit usage to 80 cols
-c6cb053 mmc-utils: RPMB: add support for 4 rpmb operations
-35c31fe mmc-utils: RPMB: add HMAC SHA256 support
-a8276f5 fix make handling
+ > Dear Peter Korsgaard,
+ > On Tue, 12 May 2015 00:19:14 +0200, Peter Korsgaard wrote:
 
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
----
- package/mmc-utils/mmc-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ >> BINFMT_FLAT implies BR2_STATIC_LIBS and (elf) static libraries should
+ >> also not be built with -fPIE / -pie, right?
+ >> 
+ >> Is there any specific reason to only do this workaround for BINFMT_FLAT?
 
-diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
-index ca74298..82468bc 100644
---- a/package/mmc-utils/mmc-utils.mk
-+++ b/package/mmc-utils/mmc-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MMC_UTILS_VERSION = 11f2ceabc4ad3f0dd568e0ce68166e4803e0615b
-+MMC_UTILS_VERSION = d0b46442b50794217e53b2455c1344c548d9d088
- MMC_UTILS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
- MMC_UTILS_LICENSE = GPLv2
- 
+ > Actually, I'm a bit confused. Shouldn't FLAT binaries be PIE ? Since
+ > there's no MMU, each binary will be loaded at a different address, so
+ > binaries should be PIE, no?
+
+ > But the original reason why I removed -pie is because of:
+
+ >   https://www.mail-archive.com/toolchain-devel at blackfin.uclinux.org/msg02113.html
+
+ > For the exact same error, Mike Frysinger says to remove the -pie flag.
+
+ > Hum, http://www.kdvelectronics.eu/uClinux-cisco2500/exotica.html seems
+ > to indicate that PIE is not required in all cases for FLAT binaries.
+
+ > I would tend to trust Mike Frysinger on this, though :)
+
+That's also the understanding I get from reading:
+
+http://retired.beyondlogic.org/uClinux/bflt.htm
+
+The flat format has its own relocation table that gets applied when
+loading.
+
+I'm not quite sure how this would work with XIP though. The bottom of
+that page mentions that the binary then has to be built in PIC mode.
+
+But my question was actually why we shouldn't disable PIE/PIC for static
+builds in general, and not just for flat mode?
+
 -- 
-2.0.5
+Peter Korsgaard 
