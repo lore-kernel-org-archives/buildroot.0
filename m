@@ -1,47 +1,63 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 12 May 2015 23:51:24 +0200
-Subject: [Buildroot] [PATCH v2 2/2] Revert "harfbuzz: fix static linking of
-	test programs when toolchain has threads support"
-In-Reply-To: <1431467484-14459-1-git-send-email-romain.naour@openwide.fr>
-References: <1431467484-14459-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1431467484-14459-2-git-send-email-romain.naour@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 13 May 2015 00:02:22 +0200
+Subject: [Buildroot] [git commit] czmq: unbreak static linking
+In-Reply-To: <20150512223405.595a8139@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 12 May 2015 22:34:05 +0200")
+References: <20150512184711.BDF2381DA3@busybox.osuosl.org>
+ <20150512210011.4ed7af1d@free-electrons.com>
+ <87a8x9h9uw.fsf@dell.be.48ers.dk>
+ <20150512223405.595a8139@free-electrons.com>
+Message-ID: <87617xh2tt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-harfbuzz version was updated since this change and
-it's no not useful anymore to add -pthread in LDFLAGS (fixed upstream).
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Also, test programs are not build anymore since --disable-tests
-was used in harfbuzz.mk
+Hi,
 
-This reverts commit 3d03017f53c2566ed32a0ae76d79eeb1ef4a7feb.
+>> I agree that it would be better if we could get this kind of fixes
+ >> upstream. I don't know how receptive upstream will be as this doesn't
+ >> affect "normal people" though.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
-v2: reword commit log
-    add Sob line
----
- package/harfbuzz/harfbuzz.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ > Well, upstream zeromq should be able to accept patches making their .pc
+ > file more correct.
 
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 3f0b028..c5182a4 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -30,11 +30,6 @@ HOST_HARFBUZZ_CONF_OPTS = \
- # beta libtool version
- HARFBUZZ_AUTORECONF = YES
- 
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--# forgets to link test programs with -pthread breaking static link
--HARFBUZZ_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) -pthread"
--endif
--
- ifeq ($(BR2_PACKAGE_CAIRO),y)
- HARFBUZZ_DEPENDENCIES += cairo
- HARFBUZZ_CONF_OPTS += --with-cairo=yes
+True.
+
+ >> That is arguable correct, but things are a bit more complicated as:
+ >> 
+ >> - libzerozmq is written in C++ and uses libstdc++ but exposes a C api
+ >> - czmq is a higher level wrapper also written in C
+ >> - Test program (czmq_selftest) is a C program linking against libczmq
+ >> (and in term libzeromq)
+
+ > Right, but that still doesn't answer whether using gcc to link a
+ > C program against a C++ library is correct or not :-)
+
+I believe it is. How are people using E.G. libczmq to know that they
+need to link with g++ just because a library libczmq uses happens to use
+C++?
+
+
+ >> >  * Or using gcc to link with a C++ library is correct, and in this
+ >> >    case, libzmq.pc should be fixed to include -lstdc++ in Libs.private.
+ >> 
+ >> While this is correct, it is not directly related to this. Czmq doesn't
+ >> use its own .pc file to know how to link the selftest program.
+
+ > I'm not talking about fixing the czmq .pc file, but the zeromq one. If
+ > zeromq uses C++, then its .pc file should have -lstdc++, no?
+
+Ahh, now I get it. Yes, fixing libzmq.pc to have a Libs.privat: -lstdc++
+should also work.
+
+I'll give it a try.
+
+czmq seems to be missing a dependency on host-pkgconf though.
+
 -- 
-1.9.3
+Venlig hilsen,
+Peter Korsgaard 
