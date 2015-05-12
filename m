@@ -1,75 +1,80 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Tue, 12 May 2015 14:12:08 +1000
-Subject: [Buildroot] [PATCH v2 2/2] powerpc-utils: optionally use librtas
-In-Reply-To: <cover.1431403924.git.sam.bobroff@au1.ibm.com>
-References: <cover.1431403924.git.sam.bobroff@au1.ibm.com>
-Message-ID: <4a40d63bb8a0fdf9a3dc8811a62dc7872fcddd87.1431403924.git.sam.bobroff@au1.ibm.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 12 May 2015 07:55:24 +0200
+Subject: [Buildroot] [PATCH 0/3] Mono: fixing latest build failures
+In-Reply-To: <55511741.7090802@openwide.fr>
+References: <1431160889-3851-1-git-send-email-angelo.compagnucci@gmail.com>
+ <87lhguj1hf.fsf@dell.be.48ers.dk>
+ <CA+TH9VnCUu0+C5Qeu=UX2_Qpd3dZ8qrZ4074Qkg1DkhQ045cjA@mail.gmail.com>
+ <55511741.7090802@openwide.fr>
+Message-ID: <CA+TH9Vk0X=hWWHAh+TnE9YcskJLvdwJf9yS_nWJzNF3N16MMFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that librtas is available, optionally use it with powerpc-utils to
-enable it's RTAS dependant functionality.  It is used by default, as
-most distros do, but made optional because it adds several new programs
-and significantly increases the size of the installed package.
+Dear Romain Naour,
 
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
----
-v2:
+2015-05-11 22:55 GMT+02:00 Romain Naour <romain.naour@openwide.fr>:
+> Hi Angelo,
+>
+> Le 11/05/2015 22:44, Angelo Compagnucci a ?crit :
+>> Dear Peter Korsgaard,
+>>
+>> 2015-05-11 22:36 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+>>>
+>>>  > This patch series should fix the latest build failures for mono.
+>>>  > Fixes http://autobuild.buildroot.net/results/227/227f942107e4fcbc14bb1e7d97e1e2758d6f3f2d/
+>>>
+>>> It unfortunately doesn't sem to have fixed the issue :/
+>>>
+>>> http://autobuild.buildroot.net/results/81a/81aadff4232cf1f1c36d8effe309a87d706b858f/build-end.log
+>>
+>> That's really unfortunate cause on my test machine everithing goes
+>> well. I tested up to make -j32 and make without arguments, never
+>> encountered that problem.
+>>
+>> Could you suggest a better way to find the root cause of the bug?
+>
+> This issue look like the imagemagick one:
+> http://git.buildroot.net/buildroot/commit/?id=7395ee9d3b88e45798143e05a28d6d4b51409130
+>
+> You need to find by looking the Makefile from which targets the same file can be
+> installed.
+> Not easy though.
 
-Make librtas support in powerpc-utils optional due to size concerns.
+You are probably right!
 
- package/powerpc-utils/Config.in        |   18 ++++++++++++++++++
- package/powerpc-utils/powerpc-utils.mk |    5 +++++
- 2 files changed, 23 insertions(+)
+Effectively this is strange:
 
-diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
-index eded41e..8b3e3d1 100644
---- a/package/powerpc-utils/Config.in
-+++ b/package/powerpc-utils/Config.in
-@@ -6,3 +6,21 @@ config BR2_PACKAGE_POWERPC_UTILS
- 	  System utilities for PowerPC machines.
- 
- 	  http://sourceforge.net/projects/powerpc-utils/
-+
-+if BR2_PACKAGE_POWERPC_UTILS
-+
-+config BR2_PACKAGE_POWERPC_UTILS_RTAS
-+	bool "RTAS support"
-+	select BR2_PACKAGE_LIBRTAS
-+	default y
-+	help
-+	  Enable support for functions that require RTAS.
-+
-+	  This adds a dependency on librtas and provides the following
-+	  additional features at the cost of increasing the installed package
-+	  size from about 0.5MB to about 2MB:
-+	  ppc64_cpu --run-mode, uesensor, set_poweron_time, drmgr, lsslot,
-+	  activate_firmware, rtas_ibm_get_vpd, serv_config,
-+	  rtas_event_decode, sys_ident.
-+
-+endif
-diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
-index 3b30458..486ed20 100644
---- a/package/powerpc-utils/powerpc-utils.mk
-+++ b/package/powerpc-utils/powerpc-utils.mk
-@@ -7,10 +7,15 @@
- POWERPC_UTILS_VERSION = 1.2.24
- POWERPC_UTILS_SITE = http://downloads.sourceforge.net/project/powerpc-utils/powerpc-utils
- POWERPC_UTILS_DEPENDENCIES = zlib
-+ifeq ($(BR2_PACKAGE_POWERPC_UTILS_RTAS),y)
-+POWERPC_UTILS_DEPENDENCIES += librtas
-+endif
- POWERPC_UTILS_LICENSE = Common Public License Version 1.0
- POWERPC_UTILS_LICENSE_FILES = COPYRIGHT
- 
-+ifeq ($(BR2_PACKAGE_POWERPC_UTILS_RTAS),)
- POWERPC_UTILS_CONF_OPTS = --without-librtas
-+endif
- POWERPC_UTILS_CONF_ENV = \
- 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
- 
+/usr/bin/install -c -c -m 644 frameworks/net_4.5.xml
+/ssd1/thomas/autobuild/instance-0/output/host/usr/lib/mono/xbuild-frameworks/.NETFramework/v4.5/RedistList/FrameworkList.xml
+/usr/bin/install -c -c -m 644 frameworks/net_4.5.xml
+/ssd1/thomas/autobuild/instance-0/output/host/usr/lib/mono/xbuild-frameworks/.NETFramework/v4.5/RedistList/FrameworkList.xml
+
+I'm looking at cause of this double installation.
+
+Thank you for your help!
+
+Sincerely, Angelo
+
+
+>
+> Best regards,
+> Romain
+>
+>>
+>> Sincerely, Angelo
+>>
+>>>
+>>> --
+>>> Bye, Peter Korsgaard
+>>
+>>
+>>
+
+
+
 -- 
-1.7.10.4
+Profile: http://it.linkedin.com/in/compagnucciangelo
