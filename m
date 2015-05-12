@@ -1,56 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 May 2015 14:20:03 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 12 May 2015 14:22:46 +0200
 Subject: [Buildroot] [PATCH] libmemcached: don't use -fPIE and -pie with
-	FLAT binaries
-In-Reply-To: <20150512132632.2cbbc566@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 12 May 2015 13:26:32 +0200")
+ FLAT binaries
+In-Reply-To: <87wq0egf7w.fsf@dell.be.48ers.dk>
 References: <1431377736-2574-1-git-send-email-thomas.petazzoni@free-electrons.com>
  <87d226iwpp.fsf@dell.be.48ers.dk>
  <20150512132632.2cbbc566@free-electrons.com>
-Message-ID: <87wq0egf7w.fsf@dell.be.48ers.dk>
+ <87wq0egf7w.fsf@dell.be.48ers.dk>
+Message-ID: <20150512142246.590460cb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Peter Korsgaard,
 
- > Dear Peter Korsgaard,
- > On Tue, 12 May 2015 00:19:14 +0200, Peter Korsgaard wrote:
+On Tue, 12 May 2015 14:20:03 +0200, Peter Korsgaard wrote:
 
- >> BINFMT_FLAT implies BR2_STATIC_LIBS and (elf) static libraries should
- >> also not be built with -fPIE / -pie, right?
- >> 
- >> Is there any specific reason to only do this workaround for BINFMT_FLAT?
+> That's also the understanding I get from reading:
+> 
+> http://retired.beyondlogic.org/uClinux/bflt.htm
+> 
+> The flat format has its own relocation table that gets applied when
+> loading.
 
- > Actually, I'm a bit confused. Shouldn't FLAT binaries be PIE ? Since
- > there's no MMU, each binary will be loaded at a different address, so
- > binaries should be PIE, no?
+Ok.
 
- > But the original reason why I removed -pie is because of:
+> I'm not quite sure how this would work with XIP though. The bottom of
+> that page mentions that the binary then has to be built in PIC mode.
+> 
+> But my question was actually why we shouldn't disable PIE/PIC for static
+> builds in general, and not just for flat mode?
 
- >   https://www.mail-archive.com/toolchain-devel at blackfin.uclinux.org/msg02113.html
+Yes, -fPIC is not needed for static, but it works (it generates
+slightly less efficient code though). But I'm fine with turning this
+BR2_BINFMT_FLAT condition to a BR2_STATIC_LIBS condition.
 
- > For the exact same error, Mike Frysinger says to remove the -pie flag.
+But in practice, they are lots of packages that build code only once to
+generate both a shared library and a static library, and they use -fPIC
+for both. Guaranteeing that all static libraries have non-PIC code
+would be a major effort.
 
- > Hum, http://www.kdvelectronics.eu/uClinux-cisco2500/exotica.html seems
- > to indicate that PIE is not required in all cases for FLAT binaries.
+Should I resend an updated patch, or will you commit after doing the
+change?
 
- > I would tend to trust Mike Frysinger on this, though :)
+Thanks,
 
-That's also the understanding I get from reading:
-
-http://retired.beyondlogic.org/uClinux/bflt.htm
-
-The flat format has its own relocation table that gets applied when
-loading.
-
-I'm not quite sure how this would work with XIP though. The bottom of
-that page mentions that the binary then has to be built in PIC mode.
-
-But my question was actually why we shouldn't disable PIE/PIC for static
-builds in general, and not just for flat mode?
-
+Thomas
 -- 
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
