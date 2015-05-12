@@ -1,51 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 May 2015 16:28:15 +0200
-Subject: [Buildroot] [git commit] libmemcached: don't use -fPIE and -pie
-	when linking statically
-Message-ID: <20150512142853.CA27F80481@busybox.osuosl.org>
+From: John OSullivan <john.osullivan@cloudiumsystems.com>
+Date: Tue, 12 May 2015 17:38:03 +0100
+Subject: [Buildroot] Question about filesystem and Valgrind
+Message-ID: <00a301d08cd2$050a5b50$0f1f11f0$@osullivan@cloudiumsystems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b9fcc83fbe9bcf7a3d58f82c532f36462ba21267
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-These compiler options shouldn't be used when linking statically, and in
-particular FLAT binaries cannot use -fPIE and -pie code, so let's teach
-libmemcached to not use such flags in those setups.
+I am not sure if this is a buildroot issue, but buildroot 2015.02 is the
+tool I use to build my filesystem for an Arm based embedded board that I am
+using.
 
-Fixes:
+I am using libc  (rather than uclibc) and when I run Valgrind on my target
+it fails with. 
 
-  http://autobuild.buildroot.org/results/8cb/8cbf57f9136cb42be31c88e0f1f32d3d2353e5ff/
-  and many previous similar build failures
+> --2993:0:aspacem  Valgrind: FATAL: aspacem assertion failed:
 
-[Peter: rework/reword to do this based on BR2_STATIC_LIBS]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-Tested-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libmemcached/libmemcached.mk |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+> --2993:0:aspacem    segment_is_sane
 
-diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
-index d442b3c..a5ea4f5 100644
---- a/package/libmemcached/libmemcached.mk
-+++ b/package/libmemcached/libmemcached.mk
-@@ -18,4 +18,14 @@ LIBMEMCACHED_AUTORECONF = YES
- LIBMEMCACHED_LICENSE = BSD-3c
- LIBMEMCACHED_LICENSE_FILES = COPYING
  
-+# Help libmemcached to understand that -fPIE and -pie should not be
-+# used when linking statically.
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LIBMEMCACHED_CONF_ENV += \
-+	ax_cv_check_cflags__Werror__fPIE=no \
-+	ax_cv_check_cflags__Werror__pie=no \
-+	ax_cv_check_cxxflags__Werror__fPIE=no \
-+	ax_cv_check_cxxflags__Werror__pie=no
-+endif
-+
- $(eval $(autotools-package))
+
+The issue it is identifying is with the filesystem:
+
+If I cat /proc/self/maps I get
+
+00008000-00106000 r-xp 00000000 00:00 8773       /bin/busybox
+
+0010e000-0010f000 rw-p 000fe000 00:00 8773       /bin/busybox
+
+0010f000-00111000 rw-p 00000000 00:00 0          [heap]
+
+b6dae000-b6eea000 r-xp 00000000 00:00 8937       /lib/libc-2.13.so
+
+                                ^^^^^
+
+                                 dev & ino are always zero
+
+ 
+
+the entry for /lib/libc-2.13.so should not have 00 for the device number.
+
+I am not sure where to start with this, is this something I can configure
+via build root or is it a kernel config  issue. Any clues on where to start
+would be greatly appreciated.
+
+ 
+
+Regards
+
+John
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150512/fa206689/attachment.html>
