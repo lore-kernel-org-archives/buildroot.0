@@ -1,40 +1,46 @@
-From: Mark Mason <mason+buildroot@postdiluvian.org>
-Date: Tue, 12 May 2015 13:51:08 -0400
-Subject: [Buildroot] Question about filesystem and Valgrind
-In-Reply-To: <00a301d08cd2$050a5b50$0f1f11f0$@osullivan@cloudiumsystems.com>
-References: <00a301d08cd2$050a5b50$0f1f11f0$@osullivan@cloudiumsystems.com>
-Message-ID: <20150512175108.GA8540@postdiluvian.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 May 2015 20:43:12 +0200
+Subject: [Buildroot] [git commit] czmq: unbreak static linking
+Message-ID: <20150512184711.BDF2381DA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-John OSullivan <john.osullivan@cloudiumsystems.com> wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=aa5254f1a2bc0ea3181d51990c18681b3071b9db
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hi,
-> 
-> I am not sure if this is a buildroot issue, but buildroot 2015.02 is the tool I
-> use to build my filesystem for an Arm based embedded board that I am using.
-> 
-> I am using libc  (rather than uclibc) and when I run Valgrind on my target it
-> fails with.
-> 
-> > --2993:0:aspacem  Valgrind: FATAL: aspacem assertion failed:
-> > --2993:0:aspacem    segment_is_sane
-> 
-> The issue it is identifying is with the filesystem:
-> 
-> If I cat /proc/self/maps I get
-> 
-> 00008000-00106000 r-xp 00000000 00:00 8773       /bin/busybox
-> 0010e000-0010f000 rw-p 000fe000 00:00 8773       /bin/busybox
-> 0010f000-00111000 rw-p 00000000 00:00 0          [heap]
-> b6dae000-b6eea000 r-xp 00000000 00:00 8937       /lib/libc-2.13.so
->                                 ^^^^^
->                                  dev & ino are always zero
-> 
-> the entry for /lib/libc-2.13.so should not have 00 for the device number.
+Fixes:
+http://autobuild.buildroot.net/results/faf/faf0bb00fccb1350afaef55f6cf14c11a5f5dc3c/
+http://autobuild.buildroot.net/results/8d2/8d279baa4c8bffbb01f897119092c7b736942df4/
+http://autobuild.buildroot.net/results/4d3/4d3dea604da9a5a1e7fe20548813f8de474ae33f/
+http://autobuild.buildroot.net/results/fd6/fd602617839817352763e51754553960b7f795ac/
 
-0 generally means memory.  Are you running from a ramdisk with
-execute-in-place?
+And many more.
+
+Zeromq uses C++, but czmq forgets to explicitly link with libstdc++
+(or use g++ to link), breaking static linking.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/czmq/czmq.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
+index d25bf01..789e700 100644
+--- a/package/czmq/czmq.mk
++++ b/package/czmq/czmq.mk
+@@ -18,6 +18,12 @@ CZMQ_LICENSE_FILES = LICENSE
+ # host-python, so disable asciidoc entirely.
+ CZMQ_CONF_ENV = ac_cv_prog_czmq_have_asciidoc=no
+ 
++# zeromq uses C++, but czmq forgets to explicitly link with libstdc++
++# (or use g++ to link), breaking static linking.
++ifeq ($(BR2_STATIC_LIBS),y)
++CZMQ_CONF_ENV += LIBS='-lstdc++'
++endif
++
+ define CZMQ_CREATE_CONFIG_DIR
+ 	mkdir -p $(@D)/config
+ endef
