@@ -1,55 +1,46 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 12 May 2015 21:51:37 +0200
-Subject: [Buildroot] [RFC v1] rsyslog: fix xtensa/uclibc-ng postgresql
-	linking problem
-Message-ID: <1431460297-1278-1-git-send-email-ps.report@gmx.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 12 May 2015 23:10:06 +0300
+Subject: [Buildroot] [PATCH 1/2] postgresql: avoid AC_TRY_RUN when testing
+	snprintf()
+Message-ID: <e2f2e9591f74058025374bfeb2f41de5b6d4c47d.1431461407.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add explicit linking with '-lm', fixes missing __isnan while postgresql
-configure detection.
+A few snprintf() compatibility tests in config/c-library.m4 use AC_TRY_RUN
+that doesn't work for cross compilation. As a result configure.in decides to
+build a bundled implementation of snprintf(). This implementation calls
+isnan(), but -lm is missing. This breaks link with libpq.so. Preseed the
+correct values to make the configure script happy, and fix rsyslog build.
 
-Fixes [1]:
+Fixes:
+http://autobuild.buildroot.net/results/e76/e769982e3131581b38698c109c9bc5215e3d5b11/
+http://autobuild.buildroot.net/results/2b9/2b9d3edc8341675455bc3b74d1e84c8c0c24c521/
+http://autobuild.buildroot.net/results/2a8/2a80357237ed7225823a008b5ff02bab01269814/
 
-checking for pg_config... (cached) /home/seiderer/Work/zeiss/freescale-imx6/build_xtensa_001/host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/bin/pg_config
-checking for PQconnectdb in -lpq... no
-configure: error: in `/home/seiderer/Work/zeiss/freescale-imx6/build_xtensa_001/build/rsyslog-8.9.0':
-configure: error: PgSQL library is missing
+and many more.
 
-From rsyslog-8.9.0/config.log:
-
-configure:17859: checking for PQconnectdb in -lpq
-configure:17885: .../host/usr/bin/xtensa-linux-gcc -std=c99 -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mtext-section-literals  -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lpq -L.../host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/lib
-    >&5
-.../host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libpq.so: undefined reference to `__isnan'
-
-[1] http://autobuild.buildroot.net/results/e76/e769982e3131581b38698c109c9bc5215e3d5b11
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Similare patch(es) to fix the problem (plus additional -lpthread)
-from Yann E. MORIN and Bernd Kuhls:
+ package/postgresql/postgresql.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-https://patchwork.ozlabs.org/patch/460348/
----
- package/rsyslog/rsyslog.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 99e6eba..2998c9f 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -48,6 +48,8 @@ ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
- RSYSLOG_DEPENDENCIES += postgresql
- RSYSLOG_CONF_OPTS += --enable-pgsql
- RSYSLOG_CONF_ENV += ac_cv_prog_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
-+# fix libpq linking problem with xtensa/uclibc-ng toolchain
-+RSYSLOG_CONF_ENV += LIBS="-lm"
- else
- RSYSLOG_CONF_OPTS += --disable-pgsql
- endif
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 1a6aa880286f..eda547c18023 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -11,7 +11,9 @@ POSTGRESQL_LICENSE = PostgreSQL
+ POSTGRESQL_LICENSE_FILES = COPYRIGHT
+ POSTGRESQL_INSTALL_STAGING = YES
+ POSTGRESQL_CONFIG_SCRIPTS = pg_config
+-POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes
++POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes \
++		      pgac_cv_snprintf_long_long_int_format="%lld" \
++		      pgac_cv_snprintf_size_t_support=yes
+ POSTGRESQL_AUTORECONF = YES
+ 
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
 -- 
 2.1.4
