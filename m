@@ -1,63 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 May 2015 00:02:22 +0200
-Subject: [Buildroot] [git commit] czmq: unbreak static linking
-In-Reply-To: <20150512223405.595a8139@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 12 May 2015 22:34:05 +0200")
-References: <20150512184711.BDF2381DA3@busybox.osuosl.org>
- <20150512210011.4ed7af1d@free-electrons.com>
- <87a8x9h9uw.fsf@dell.be.48ers.dk>
- <20150512223405.595a8139@free-electrons.com>
-Message-ID: <87617xh2tt.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 13 May 2015 00:06:54 +0200
+Subject: [Buildroot] [PATCH] google-breakpad: add patch to fix AArch64
+ build issue
+In-Reply-To: <1431467285-28262-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1431467285-28262-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <5552797E.1080106@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Thomas,
 
-Hi,
+Le 12/05/2015 23:48, Thomas Petazzoni a ?crit :
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/b2b/b2bfbcc922b3041ab3a1892d5c1469ec68476682/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  .../0001-add-missing-asm-ptrace-include.patch      | 31 ++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>  create mode 100644 package/google-breakpad/0001-add-missing-asm-ptrace-include.patch
+> 
+> diff --git a/package/google-breakpad/0001-add-missing-asm-ptrace-include.patch b/package/google-breakpad/0001-add-missing-asm-ptrace-include.patch
+> new file mode 100644
+> index 0000000..30e6160
+> --- /dev/null
+> +++ b/package/google-breakpad/0001-add-missing-asm-ptrace-include.patch
+> @@ -0,0 +1,31 @@
+> +Include <asm/ptrace.h> to get necessary definitions on AArch64
+> +
+> +In glibc commit
+> +https://sourceware.org/git/?p=glibc.git;a=commit;h=7d05a8168b45c0580e1f9a79c2dd26c8f0d31fca,
+> +including <asm/ptrace.h> from <sys/user.h> on AArch64 has been
+> +removed. So the Google Breakpad code, which used to build fine on
+> +glibc 2.18 (CodeSourcery toolchain for example), no longer builds wiht
 
->> I agree that it would be better if we could get this kind of fixes
- >> upstream. I don't know how receptive upstream will be as this doesn't
- >> affect "normal people" though.
+with
 
- > Well, upstream zeromq should be able to accept patches making their .pc
- > file more correct.
+> +glibc 2.19 (Linaro toolchain for example).
+> +
+> +To fix this, this patch adds the missing <asm/ptrace.h> include (for
+> +AArch64 only, to be conservative).
+> +
+> +This patch has not been submitted upstream, since more recent versions
+> +of Google Breakpad have completely changed this part of the code.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-True.
+Build tested with Linaro and Code Sourcery toolchains.
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+Tested-by: Romain Naour <romain.naour@openwide.fr>
 
- >> That is arguable correct, but things are a bit more complicated as:
- >> 
- >> - libzerozmq is written in C++ and uses libstdc++ but exposes a C api
- >> - czmq is a higher level wrapper also written in C
- >> - Test program (czmq_selftest) is a C program linking against libczmq
- >> (and in term libzeromq)
-
- > Right, but that still doesn't answer whether using gcc to link a
- > C program against a C++ library is correct or not :-)
-
-I believe it is. How are people using E.G. libczmq to know that they
-need to link with g++ just because a library libczmq uses happens to use
-C++?
-
-
- >> >  * Or using gcc to link with a C++ library is correct, and in this
- >> >    case, libzmq.pc should be fixed to include -lstdc++ in Libs.private.
- >> 
- >> While this is correct, it is not directly related to this. Czmq doesn't
- >> use its own .pc file to know how to link the selftest program.
-
- > I'm not talking about fixing the czmq .pc file, but the zeromq one. If
- > zeromq uses C++, then its .pc file should have -lstdc++, no?
-
-Ahh, now I get it. Yes, fixing libzmq.pc to have a Libs.privat: -lstdc++
-should also work.
-
-I'll give it a try.
-
-czmq seems to be missing a dependency on host-pkgconf though.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Best regards,
+Romain
+> +
+> +Index: b/src/client/linux/minidump_writer/linux_dumper.h
+> +===================================================================
+> +--- a/src/client/linux/minidump_writer/linux_dumper.h
+> ++++ b/src/client/linux/minidump_writer/linux_dumper.h
+> +@@ -43,6 +43,9 @@
+> + #include <stdint.h>
+> + #include <sys/types.h>
+> + #include <sys/user.h>
+> ++#if defined(__aarch64__)
+> ++#include <asm/ptrace.h>
+> ++#endif
+> + 
+> + #include "common/memory.h"
+> + #include "google_breakpad/common/minidump_format.h"
+> 
