@@ -1,44 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 May 2015 10:18:13 +0200
-Subject: [Buildroot] [PATCH v7 10/13] Vivante drivers: bump to version
- 3.10.17-1.0.1
-In-Reply-To: <CAAMH-yu_i+bdN_+Tp8VLfbq5cE=nyOD5ULfNcx1fhg9rfbm0Kw@mail.gmail.com>
-References: <1430406748-8493-1-git-send-email-jezz@sysmic.org>
- <20150511132307.GA21085@kwain>
- <CAAMH-yvrDWD5Sgi1d=YTxqVMQfDNHHdoyx94izA8eX3mz4woeQ@mail.gmail.com>
- <1754040.vn4Oi7W8vI@sagittea>
- <CAAMH-yu_i+bdN_+Tp8VLfbq5cE=nyOD5ULfNcx1fhg9rfbm0Kw@mail.gmail.com>
-Message-ID: <20150512101813.3c62cb3b@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 May 2015 10:51:31 +0200
+Subject: [Buildroot] [PATCH] package: add host-faketime
+Message-ID: <1431420691-5258-1-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary Bisson,
+For use by packages or post-build/image scripts to fake the current time for
+obnoxious programs that insists on adding a timestamp.
 
-On Tue, 12 May 2015 09:56:10 +0200, Gary Bisson wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Config.in.host          |  1 +
+ package/faketime/Config.in.host |  7 +++++++
+ package/faketime/faketime.mk    | 20 ++++++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/faketime/Config.in.host
+ create mode 100644 package/faketime/faketime.mk
 
-> > Since this package seems to be incompatible with kernels < 3.10.54, maybe we
-> > should provide imx-gpu-viv AND gpu-viv-bin-mx6q, no?
-> 
-> Well the gpu-viv-bin-mx6q is only good for 3.10.17 whereas the new
-> imx-gpu-viv apparently works for both 3.10.53 and 3.14.28. Also most
-> of the kernels offered by manufacturers are now 3.10.53 or above. But
-> let's consider the option, wouldn't it be a headache for packages that
-> depend on it such as gst1-imx or xdriver_xf86-video-imx-viv? I guess
-> it'd need to check on the kernel headers versions to know which
-> package it depends on.
-
-We could use a virtual package, but it indeed seems to be too much of
-an headache. If the new version of the i.MX6 GPU drivers support both
-3.10.53 and 3.14.28, then I think we should package just this latest
-version. People running 3.10.17 should upgrade :)
-
-Best regards,
-
-Thomas
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 051bc4a..1e047aa 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -7,6 +7,7 @@ menu "Host utilities"
+ 	source "package/dosfstools/Config.in.host"
+ 	source "package/e2fsprogs/Config.in.host"
+ 	source "package/e2tools/Config.in.host"
++	source "package/faketime/Config.in.host"
+ 	source "package/genext2fs/Config.in.host"
+ 	source "package/genimage/Config.in.host"
+ 	source "package/genpart/Config.in.host"
+diff --git a/package/faketime/Config.in.host b/package/faketime/Config.in.host
+new file mode 100644
+index 0000000..0ebb963
+--- /dev/null
++++ b/package/faketime/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_FAKETIME
++	bool "host faketime"
++	help
++	  Faketime reports faked system time to programs without
++	  having to change the system-wide time.
++
++	  https://github.com/wolfcw/libfaketime
+diff --git a/package/faketime/faketime.mk b/package/faketime/faketime.mk
+new file mode 100644
+index 0000000..292fe17
+--- /dev/null
++++ b/package/faketime/faketime.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# libfaketime
++#
++################################################################################
++
++FAKETIME_VERSION = v0.9.6
++FAKETIME_SITE = $(call github,wolfcw,libfaketime,$(FAKETIME_VERSION))
++FAKETIME_LICENSE = GPLv2
++FAKETIME_LICENSE_FILES = COPYING
++
++define HOST_FAKETIME_BUILD_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr
++endef
++
++define HOST_FAKETIME_INSTALL_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install
++endef
++
++$(eval $(host-generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
