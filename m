@@ -1,40 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 May 2015 09:34:22 +0200
-Subject: [Buildroot] [PATCH 1/1] bash: added option to disable locale
-	support
-In-Reply-To: <CANQCQpb+2iguEy6dWpj3FAScQdXFxC7HLqep5aWLhkUDeLeFGw@mail.gmail.com>
-References: <1425935595-46330-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20150309224257.2c985fbf@free-electrons.com>
- <CANQCQpbKmA6of1MQrBB1WY16rfApDYaA6J0uK8PEtHmxn96inA@mail.gmail.com>
- <87zj7kock8.fsf@dell.be.48ers.dk>
- <CANQCQpb+2iguEy6dWpj3FAScQdXFxC7HLqep5aWLhkUDeLeFGw@mail.gmail.com>
-Message-ID: <20150512093422.0d1a2c6a@free-electrons.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 12 May 2015 09:56:10 +0200
+Subject: [Buildroot] [PATCH v7 10/13] Vivante drivers: bump to version
+	3.10.17-1.0.1
+In-Reply-To: <1754040.vn4Oi7W8vI@sagittea>
+References: <1430406748-8493-1-git-send-email-jezz@sysmic.org>
+ <20150511132307.GA21085@kwain>
+ <CAAMH-yvrDWD5Sgi1d=YTxqVMQfDNHHdoyx94izA8eX3mz4woeQ@mail.gmail.com>
+ <1754040.vn4Oi7W8vI@sagittea>
+Message-ID: <CAAMH-yu_i+bdN_+Tp8VLfbq5cE=nyOD5ULfNcx1fhg9rfbm0Kw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matthew Weber,
+Hi Jerome,
 
-On Mon, 11 May 2015 22:17:26 -0500, Matthew Weber wrote:
+On Mon, May 11, 2015 at 7:48 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+> Hello Gary,
+>
+> On Monday 11 May 2015 18:32:35 Gary Bisson wrote:
+>> Antoine, All,
+>>
+>> On Mon, May 11, 2015 at 3:23 PM, Antoine T?nart
+>> <antoine.tenart@free-electrons.com> wrote:
+>> > On Tue, May 05, 2015 at 11:07:59AM +0200, Gary Bisson wrote:
+>> >> On Tue, May 5, 2015 at 10:10 AM, Thomas Petazzoni
+>> >> <thomas.petazzoni@free-electrons.com> wrote:
+>> >> > On Tue, 5 May 2015 10:06:11 +0200, Gary Bisson wrote:
+>> >>
+>> >> Antoine, do you have a patch ready for the GPU package? Because it
+>> >> seems that it's not just a version bump:
+>> >> https://github.com/Freescale/meta-fsl-arm/commit/74c86aa9639f6f20991ab64ea75177a017f8749a
+>> >
+>> > Please find the patch I used to bump the Vivante version to 5.0.11.p4.1
+>> > attached.
+>> >
+>> > I'll be happy to have some feedbacks and to update the patch
+>> > accordingly.
+>>
+>> Thanks for the patch! Maybe we should start a new thread for this?
+>>
+>> Here are my remarks with the current version:
+>> - The package has been renamed from gpu-viv-bin-mx6q to imx-gpu-viv in
+>> Yocto, I guess it'd be nice to follow their lead as I'm sure it
+>> announces that this package will be used on other iMX platforms. Then
+>> I don't know if it's better to have a commit just for renaming the
+>> package and another one for the version bump.
+> Since this package seems to be incompatible with kernels < 3.10.54, maybe we
+> should provide imx-gpu-viv AND gpu-viv-bin-mx6q, no?
 
-> > So what is the impact exactly of having/not having this option?
-> 
-> I'd like to drop this patch at this point.  I think I figured out what
-> was happening and resolved it through additional busybox options being
-> enabled.  Pending more testing I might submit a follow on if it is
-> really required.  Should I transition it to rejected and archive it?
+Well the gpu-viv-bin-mx6q is only good for 3.10.17 whereas the new
+imx-gpu-viv apparently works for both 3.10.53 and 3.14.28. Also most
+of the kernels offered by manufacturers are now 3.10.53 or above. But
+let's consider the option, wouldn't it be a headache for packages that
+depend on it such as gst1-imx or xdriver_xf86-video-imx-viv? I guess
+it'd need to check on the kernel headers versions to know which
+package it depends on.
 
-Yes, you can manage all your patches in patchwork by yourself, as long
-as you have a patchwork account matching the e-mail address with which
-you're sending the patches. So feel free to update the status of your
-patches as needed, this is actually very helpful for us.
-
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks,
+Gary
