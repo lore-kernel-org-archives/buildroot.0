@@ -1,46 +1,35 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 12 May 2015 23:10:06 +0300
-Subject: [Buildroot] [PATCH 1/2] postgresql: avoid AC_TRY_RUN when testing
-	snprintf()
-Message-ID: <e2f2e9591f74058025374bfeb2f41de5b6d4c47d.1431461407.git.baruch@tkos.co.il>
+Date: Tue, 12 May 2015 23:10:07 +0300
+Subject: [Buildroot] [PATCH 2/2] rsyslog: drop autoreconf
+In-Reply-To: <e2f2e9591f74058025374bfeb2f41de5b6d4c47d.1431461407.git.baruch@tkos.co.il>
+References: <e2f2e9591f74058025374bfeb2f41de5b6d4c47d.1431461407.git.baruch@tkos.co.il>
+Message-ID: <9f7884794b6133f0a53ee03b5ac040d8285e1379.1431461407.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A few snprintf() compatibility tests in config/c-library.m4 use AC_TRY_RUN
-that doesn't work for cross compilation. As a result configure.in decides to
-build a bundled implementation of snprintf(). This implementation calls
-isnan(), but -lm is missing. This breaks link with libpq.so. Preseed the
-correct values to make the configure script happy, and fix rsyslog build.
-
-Fixes:
-http://autobuild.buildroot.net/results/e76/e769982e3131581b38698c109c9bc5215e3d5b11/
-http://autobuild.buildroot.net/results/2b9/2b9d3edc8341675455bc3b74d1e84c8c0c24c521/
-http://autobuild.buildroot.net/results/2a8/2a80357237ed7225823a008b5ff02bab01269814/
-
-and many more.
+The patches touching configure.ac were dropped in 9d9bbf9b7935 (rsyslog: bump
+to version 8.8.0, 2015-02-25). Remove autoreconf as well.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/postgresql/postgresql.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/rsyslog/rsyslog.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 1a6aa880286f..eda547c18023 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -11,7 +11,9 @@ POSTGRESQL_LICENSE = PostgreSQL
- POSTGRESQL_LICENSE_FILES = COPYRIGHT
- POSTGRESQL_INSTALL_STAGING = YES
- POSTGRESQL_CONFIG_SCRIPTS = pg_config
--POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes
-+POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes \
-+		      pgac_cv_snprintf_long_long_int_format="%lld" \
-+		      pgac_cv_snprintf_size_t_support=yes
- POSTGRESQL_AUTORECONF = YES
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 99e6eba38dc5..261f59dd35c9 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -16,8 +16,6 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
+ 	pmaixforwardedfrom pmciscoios pmcisconames pmlastmsg pmsnare
+ RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
+ 	$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
+-# For mysql and pgsql support patches
+-RSYSLOG_AUTORECONF = YES
  
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ # Build after BusyBox
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
 -- 
 2.1.4
