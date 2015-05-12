@@ -1,41 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 May 2015 23:07:04 +0200
-Subject: [Buildroot] [PATCH] vsftpd: use pkg-config to get OpenSSL link flags
-Message-ID: <1431464824-22153-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 12 May 2015 23:21:21 +0200
+Subject: [Buildroot] [PATCH] lxc: mark as not available in BR2_STATIC_LIBS
+	configs
+Message-ID: <1431465681-12071-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of hardcoding -lssl -lcrypto as the linker flags to link with
-OpenSSL, use pkg-config to fetch those flags. This allows to behave
-properly when doing static linking, since pkg-config returns the
-entire set of libraries we should link against.
+Even though lxc uses the autotools, it does not use libtool to build
+its libraries, and does it manually. It forces building a shared
+library. So let's comply with this decision, and mark lxc as not
+available in BR2_STATIC_LIBS configurations.
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/d71/d710ecfa9ed0a8e3f97d2010d3dabb372485c7f2/
+  http://autobuild.buildroot.org/results/588/588dc28315a9114374f148bbc64c4ec3d7b4e295/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vsftpd/vsftpd.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/lxc/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index b94328d..ed15f00 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -23,8 +23,8 @@ VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_DISABLE_UTMPX
- endif
+diff --git a/package/lxc/Config.in b/package/lxc/Config.in
+index 10a668d..ffd9b4a 100644
+--- a/package/lxc/Config.in
++++ b/package/lxc/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_LXC
+ 	select BR2_PACKAGE_LIBCAP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
++	# build system forcefully builds a shared library
++	depends on !BR2_STATIC_LIBS
+ 	# the toolchain doesn't support setns syscall
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+@@ -14,9 +16,10 @@ config BR2_PACKAGE_LXC
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--VSFTPD_DEPENDENCIES += openssl
--VSFTPD_LIBS += -lssl -lcrypto
-+VSFTPD_DEPENDENCIES += openssl host-pkgconf
-+VSFTPD_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl)
- VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_ENABLE_SSL
- endif
+ 	  https://linuxcontainers.org/
  
+-comment "lxc needs a toolchain w/ threads, headers >= 3.0"
++comment "lxc needs a toolchain w/ threads, headers >= 3.0, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
++		|| BR2_STATIC_LIBS
 -- 
 2.1.0
