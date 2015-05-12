@@ -1,64 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 May 2015 21:00:11 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 May 2015 21:30:31 +0200
 Subject: [Buildroot] [git commit] czmq: unbreak static linking
-In-Reply-To: <20150512184711.BDF2381DA3@busybox.osuosl.org>
+In-Reply-To: <20150512210011.4ed7af1d@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 12 May 2015 21:00:11 +0200")
 References: <20150512184711.BDF2381DA3@busybox.osuosl.org>
-Message-ID: <20150512210011.4ed7af1d@free-electrons.com>
+ <20150512210011.4ed7af1d@free-electrons.com>
+Message-ID: <87a8x9h9uw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 12 May 2015 20:43:12 +0200, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=aa5254f1a2bc0ea3181d51990c18681b3071b9db
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/faf/faf0bb00fccb1350afaef55f6cf14c11a5f5dc3c/
-> http://autobuild.buildroot.net/results/8d2/8d279baa4c8bffbb01f897119092c7b736942df4/
-> http://autobuild.buildroot.net/results/4d3/4d3dea604da9a5a1e7fe20548813f8de474ae33f/
-> http://autobuild.buildroot.net/results/fd6/fd602617839817352763e51754553960b7f795ac/
-> 
-> And many more.
-> 
-> Zeromq uses C++, but czmq forgets to explicitly link with libstdc++
-> (or use g++ to link), breaking static linking.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/czmq/czmq.mk |    6 ++++++
->  1 files changed, 6 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-> index d25bf01..789e700 100644
-> --- a/package/czmq/czmq.mk
-> +++ b/package/czmq/czmq.mk
-> @@ -18,6 +18,12 @@ CZMQ_LICENSE_FILES = LICENSE
->  # host-python, so disable asciidoc entirely.
->  CZMQ_CONF_ENV = ac_cv_prog_czmq_have_asciidoc=no
->  
-> +# zeromq uses C++, but czmq forgets to explicitly link with libstdc++
-> +# (or use g++ to link), breaking static linking.
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +CZMQ_CONF_ENV += LIBS='-lstdc++'
-> +endif
+Hi,
 
-I continue to remain unhappy with such changes. There are two options
-here:
+ > I continue to remain unhappy with such changes. There are two options
+ > here:
 
- * Either using gcc to link with a C++ library is incorrect, and czmq
-   should be fixed to use g++.
+I agree that it would be better if we could get this kind of fixes
+upstream. I don't know how receptive upstream will be as this doesn't
+affect "normal people" though.
 
- * Or using gcc to link with a C++ library is correct, and in this
-   case, libzmq.pc should be fixed to include -lstdc++ in Libs.private.
+ >  * Either using gcc to link with a C++ library is incorrect, and czmq
+ >    should be fixed to use g++.
 
-Best regards,
+That is arguable correct, but things are a bit more complicated as:
 
-Thomas
+- libzerozmq is written in C++ and uses libstdc++ but exposes a C api
+- czmq is a higher level wrapper also written in C
+- Test program (czmq_selftest) is a C program linking against libczmq
+  (and in term libzeromq)
+
+ >  * Or using gcc to link with a C++ library is correct, and in this
+ >    case, libzmq.pc should be fixed to include -lstdc++ in Libs.private.
+
+While this is correct, it is not directly related to this. Czmq doesn't
+use its own .pc file to know how to link the selftest program.
+
+Alternatively we can simply mark czmq !BR2_STATIC_LIBS.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
