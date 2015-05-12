@@ -1,46 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 May 2015 21:30:31 +0200
-Subject: [Buildroot] [git commit] czmq: unbreak static linking
-In-Reply-To: <20150512210011.4ed7af1d@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 12 May 2015 21:00:11 +0200")
-References: <20150512184711.BDF2381DA3@busybox.osuosl.org>
- <20150512210011.4ed7af1d@free-electrons.com>
-Message-ID: <87a8x9h9uw.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 12 May 2015 21:51:37 +0200
+Subject: [Buildroot] [RFC v1] rsyslog: fix xtensa/uclibc-ng postgresql
+	linking problem
+Message-ID: <1431460297-1278-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Add explicit linking with '-lm', fixes missing __isnan while postgresql
+configure detection.
 
-Hi,
+Fixes [1]:
 
- > I continue to remain unhappy with such changes. There are two options
- > here:
+checking for pg_config... (cached) /home/seiderer/Work/zeiss/freescale-imx6/build_xtensa_001/host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/bin/pg_config
+checking for PQconnectdb in -lpq... no
+configure: error: in `/home/seiderer/Work/zeiss/freescale-imx6/build_xtensa_001/build/rsyslog-8.9.0':
+configure: error: PgSQL library is missing
 
-I agree that it would be better if we could get this kind of fixes
-upstream. I don't know how receptive upstream will be as this doesn't
-affect "normal people" though.
+From rsyslog-8.9.0/config.log:
 
- >  * Either using gcc to link with a C++ library is incorrect, and czmq
- >    should be fixed to use g++.
+configure:17859: checking for PQconnectdb in -lpq
+configure:17885: .../host/usr/bin/xtensa-linux-gcc -std=c99 -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mtext-section-literals  -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lpq -L.../host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/lib
+    >&5
+.../host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libpq.so: undefined reference to `__isnan'
 
-That is arguable correct, but things are a bit more complicated as:
+[1] http://autobuild.buildroot.net/results/e76/e769982e3131581b38698c109c9bc5215e3d5b11
 
-- libzerozmq is written in C++ and uses libstdc++ but exposes a C api
-- czmq is a higher level wrapper also written in C
-- Test program (czmq_selftest) is a C program linking against libczmq
-  (and in term libzeromq)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Similare patch(es) to fix the problem (plus additional -lpthread)
+from Yann E. MORIN and Bernd Kuhls:
 
- >  * Or using gcc to link with a C++ library is correct, and in this
- >    case, libzmq.pc should be fixed to include -lstdc++ in Libs.private.
+https://patchwork.ozlabs.org/patch/460348/
+---
+ package/rsyslog/rsyslog.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-While this is correct, it is not directly related to this. Czmq doesn't
-use its own .pc file to know how to link the selftest program.
-
-Alternatively we can simply mark czmq !BR2_STATIC_LIBS.
-
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 99e6eba..2998c9f 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -48,6 +48,8 @@ ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
+ RSYSLOG_DEPENDENCIES += postgresql
+ RSYSLOG_CONF_OPTS += --enable-pgsql
+ RSYSLOG_CONF_ENV += ac_cv_prog_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
++# fix libpq linking problem with xtensa/uclibc-ng toolchain
++RSYSLOG_CONF_ENV += LIBS="-lm"
+ else
+ RSYSLOG_CONF_OPTS += --disable-pgsql
+ endif
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.1.4
