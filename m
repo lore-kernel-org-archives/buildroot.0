@@ -1,9 +1,10 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Wed, 13 May 2015 16:39:26 -0500
-Subject: [Buildroot] [PATCH v5 13/24] dbus: selinux file context support
+Date: Wed, 13 May 2015 16:39:28 -0500
+Subject: [Buildroot] [PATCH v5 15/24] util-linux: selinux, audit,
+	and pam support
 In-Reply-To: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1431553177-7280-14-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1431553177-7280-16-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +14,63 @@ To: buildroot@busybox.net
 From: Matt Weber <matthew.weber@rockwellcollins.com>
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
 ---
-Changes v4 -> v5
-  - No changes
-
-Changes v1 -> v4:
-  - Did not exist
+Changes v4 -> v5:
+  - New patch
+  - Added pam file tweaks for selinux support (Clayton S.)
 ---
- package/dbus/S30dbus |  4 ++++
- package/dbus/dbus.mk | 14 ++++++++++++++
- 2 files changed, 18 insertions(+)
- mode change 100755 => 100644 package/dbus/S30dbus
+ package/util-linux/util-linux.mk | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
-old mode 100755
-new mode 100644
-index 0d15c73..be51807
---- a/package/dbus/S30dbus
-+++ b/package/dbus/S30dbus
-@@ -17,6 +17,10 @@
- [ -d /var/run/dbus ] || mkdir -p /var/run/dbus
- [ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
- [ -d /tmp/dbus ] || mkdir -p /tmp/dbus
-+[ -d /var/lib/dbus ] || mkdir -p /var/lib/dbus
-+if [ -e /sbin/restorecon ]; then
-+   restorecon -R /var/run/dbus /var/lock/subsys /tmp/dbus /var/lib/dbus
-+fi
- 
- RETVAL=0
- 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index c810800..a5ec807 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -44,6 +44,20 @@ ifeq ($(BR2_microblaze),y)
- DBUS_CONF_OPTS += --disable-inotify
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 3ca147a..259334f 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -59,6 +59,20 @@ ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
+ UTIL_LINUX_DEPENDENCIES += libcap-ng
  endif
  
 +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+DBUS_CONF_OPTS += --enable-selinux
-+DBUS_DEPENDENCIES += libselinux
++UTIL_LINUX_DEPENDENCIES += libselinux
++UTIL_LINUX_CONF_OPTS += --with-selinux
 +else
-+DBUS_CONF_OPTS += --disable-selinux
++UTIL_LINUX_CONF_OPTS += --without-selinux
 +endif
 +
 +ifeq ($(BR2_PACKAGE_AUDIT),y)
-+DBUS_CONF_OPTS += --enable-libaudit
-+DBUS_DEPENDENCIES += audit libcap-ng
++UTIL_LINUX_DEPENDENCIES += audit
++UTIL_LINUX_CONF_OPTS += --with-audit
 +else
-+DBUS_CONF_OPTS += --disable-libaudit
++UTIL_LINUX_CONF_OPTS += --without-audit
 +endif
 +
- ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
- DBUS_CONF_OPTS += --with-x
- DBUS_DEPENDENCIES += xlib_libX11
+ # Used by cramfs utils
+ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
+ 
+@@ -146,9 +160,22 @@ define UTIL_LINUX_INSTALL_PAMFILES
+ 	$(INSTALL) -m 0644 package/util-linux/su.pam \
+ 		$(TARGET_DIR)/etc/pam.d/su-l
+ endef
++
++# Add the required hooks to the pam files if SELinux is enabled
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++define UTIL_LINUX_FIXUP_PAMFILES
++	for file in login su su-l ; do \
++		$(SED) '/selinux/d' $(TARGET_DIR)/etc/pam.d/$${file}; \
++		$(SED) '0,/session/s/session/session		required	pam_selinux.so close\nsession/' $(TARGET_DIR)/etc/pam.d/$${file}; \
++		echo "session		required	pam_selinux.so open" >> $(TARGET_DIR)/etc/pam.d/$${file}; \
++	done
++endef
++endif
++
+ endif
+ 
+ UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
++UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_FIXUP_PAMFILES
+ 
+ # Install agetty->getty symlink to avoid breakage when there's no busybox
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_AGETTY),y)
 -- 
 1.9.1
