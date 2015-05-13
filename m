@@ -1,45 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 May 2015 10:10:40 +0200
-Subject: [Buildroot] [git commit branch/next] package/mmc-utils: bump to
-	latest commit
-Message-ID: <20150513081305.886DE8081B@busybox.osuosl.org>
+Date: Wed, 13 May 2015 10:12:17 +0200
+Subject: [Buildroot] [git commit branch/next] package: add host-faketime
+Message-ID: <20150513081305.94D6D8010C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cd305934285c5cb5d5b8817219332e880875963c
+commit: http://git.buildroot.net/buildroot/commit/?id=ffce535003f18a4f7fc7f0bb2a1c7fcf5d42624c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The changes are:
+For use by packages or post-build/image scripts to fake the current time for
+obnoxious programs that insists on adding a timestamp.
 
-d0b4644 mmc-utils: add ability to enable/disable optional eMMC cache
-64c2de8 mmc-utils: Add command to set the boot bus conditions
-7891236 mmc-utils: add support to create gp partition
-4afc8c8 mmc-utils: add check for max enhanced user area
-50b6854 fix building errors on Android
-f4eb241 Fit usage to 80 cols
-c6cb053 mmc-utils: RPMB: add support for 4 rpmb operations
-35c31fe mmc-utils: RPMB: add HMAC SHA256 support
-a8276f5 fix make handling
-
-Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mmc-utils/mmc-utils.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in.host          |    1 +
+ package/faketime/Config.in.host |    7 +++++++
+ package/faketime/faketime.mk    |   20 ++++++++++++++++++++
+ 3 files changed, 28 insertions(+), 0 deletions(-)
 
-diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
-index ca74298..82468bc 100644
---- a/package/mmc-utils/mmc-utils.mk
-+++ b/package/mmc-utils/mmc-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MMC_UTILS_VERSION = 11f2ceabc4ad3f0dd568e0ce68166e4803e0615b
-+MMC_UTILS_VERSION = d0b46442b50794217e53b2455c1344c548d9d088
- MMC_UTILS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
- MMC_UTILS_LICENSE = GPLv2
- 
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 051bc4a..1e047aa 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -7,6 +7,7 @@ menu "Host utilities"
+ 	source "package/dosfstools/Config.in.host"
+ 	source "package/e2fsprogs/Config.in.host"
+ 	source "package/e2tools/Config.in.host"
++	source "package/faketime/Config.in.host"
+ 	source "package/genext2fs/Config.in.host"
+ 	source "package/genimage/Config.in.host"
+ 	source "package/genpart/Config.in.host"
+diff --git a/package/faketime/Config.in.host b/package/faketime/Config.in.host
+new file mode 100644
+index 0000000..0ebb963
+--- /dev/null
++++ b/package/faketime/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_FAKETIME
++	bool "host faketime"
++	help
++	  Faketime reports faked system time to programs without
++	  having to change the system-wide time.
++
++	  https://github.com/wolfcw/libfaketime
+diff --git a/package/faketime/faketime.mk b/package/faketime/faketime.mk
+new file mode 100644
+index 0000000..292fe17
+--- /dev/null
++++ b/package/faketime/faketime.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# libfaketime
++#
++################################################################################
++
++FAKETIME_VERSION = v0.9.6
++FAKETIME_SITE = $(call github,wolfcw,libfaketime,$(FAKETIME_VERSION))
++FAKETIME_LICENSE = GPLv2
++FAKETIME_LICENSE_FILES = COPYING
++
++define HOST_FAKETIME_BUILD_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr
++endef
++
++define HOST_FAKETIME_INSTALL_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install
++endef
++
++$(eval $(host-generic-package))
