@@ -1,57 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 May 2015 22:21:32 +0200
-Subject: [Buildroot] [git commit] openldap: fix static link with openssl
-Message-ID: <20150513204818.9F59B8198E@busybox.osuosl.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 13 May 2015 20:53:15 +0000
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
+ results for 2015-05-10
+In-Reply-To: <20150511063014.10BC4100F6A@stock.ovh.net>
+References: <20150511063014.10BC4100F6A@stock.ovh.net>
+Message-ID: <1431550395.3047.14.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=660dff80f854b05f6c7e28e2e9059d8f58fb6a13
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Use pkg-config to get openssl link dependencies.
+On Mon, 2015-05-11 at 08:30 +0200, Thomas Petazzoni wrote:
+> Those results are limited to the arc architecture.
+> 
+> Build statistics for 2015-05-10
+> ===============================
+> 
+>         success : 19 
+>        failures : 1  
+>        timeouts : 0  
+>           TOTAL : 20 
+> 
+> Classification of failures by reason
+> ====================================
+> 
+>       host-gdb-arc-2014.12-gdb | 1 
+> 
+> Detail of failures
+> ===================
+> 
+>          arc |       host-gdb-arc-2014.12-gdb | NOK | http://autobuild.buildroot.net/results/aeb2c1e8ef895c1963eff5fbba3fc9b2e12b70cf/
 
-Fixes:
-http://autobuild.buildroot.net/results/dd3/dd3821e713b7da7cde0f059409fba46371c8bc40/
-http://autobuild.buildroot.net/results/d60/d60c8b4522e99cf385ee41aa20a1d49deb59c5fb/
-http://autobuild.buildroot.net/results/b41/b41c043fb3b2fad1d9cea0a95b512fb4942b5b19/
+Looks like that could be fixed by copy of "851-PR-other-56780.patch" to
+"package/binutils/arc-2014.12" since arc-2014.12 binutils are basd on
+upstream 2.23 and so corresponding patches are missing
 
-and more.
+Discussing this with Romain.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openldap/openldap.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
-
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index 991d369..68464ab 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
-@@ -10,6 +10,7 @@ OPENLDAP_SITE = ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release
- OPENLDAP_LICENSE = OpenLDAP Public License
- OPENLDAP_LICENSE_FILES = LICENSE
- OPENLDAP_INSTALL_STAGING = YES
-+OPENLDAP_DEPENDENCIES = host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- OPENLDAP_TLS = openssl
-@@ -30,6 +31,7 @@ endif
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- OPENLDAP_MP = bignum
- OPENLDAP_DEPENDENCIES += openssl
-+OPENLDAP_CONF_ENV = LIBS="$(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto)"
- else ifeq ($(BR2_PACKAGE_GMP),y)
- OPENLDAP_MP = gmp
- OPENLDAP_DEPENDENCIES += gmp
-@@ -37,7 +39,7 @@ else
- OPENLDAP_MP = longlong
- endif
- 
--OPENLDAP_CONF_ENV = ac_cv_func_memcmp_working=yes
-+OPENLDAP_CONF_ENV += ac_cv_func_memcmp_working=yes
- 
- OPENLDAP_CONF_OPTS += \
- 	--enable-syslog \
+-Alexey
