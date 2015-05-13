@@ -1,45 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 May 2015 15:31:59 +0200
-Subject: [Buildroot] [git commit] libnftnl: needs kernel headers >= 3.1
-Message-ID: <20150513133734.7529C7FADF@busybox.osuosl.org>
+Date: Wed, 13 May 2015 15:31:23 +0200
+Subject: [Buildroot] [git commit] dhcpcd: needs kernel headers >= 3.1
+Message-ID: <20150513133734.6874481DEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8bef8038dfd43ca24a5f65bbb5c4990890b1b07
+commit: http://git.buildroot.net/buildroot/commit/?id=80e651db43a9cbd4da7149d091b1ba1fdbb7d678
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Contrary to what commit f5866484f (libnftnl: exclude for CS PPC toolchains)
-stated, a missing sa_family_t definition IS specific to the kernel headers
-version, and not something particular to the CS toolchains, so instead
-require 3.1+ headers.
+commit dfbfa6ef (dhcpcd: blacklist Sourcery PowerPC toolchains) blacklisted
+specific toolchains, but the issue is actually that the kernel headers
+before 3.1 didn't define sa_family_t, so instead require 3.1+ headers.
 
 The specific kernel change fixing the headers is:
 https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=6602a4baf4d1a73cc
 
-The only reverse dependency of libnftnl (nftables) already needs 3.4+, so
-this dependency doesn't need to be propagated.
+The only reverse dependency of dhcpcd (network-manager) already needs 3.7+,
+so this dependency doesn't need to be propagated.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnftnl/Config.in |    6 ++++--
+ package/dhcpcd/Config.in |    6 ++++--
  1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnftnl/Config.in b/package/libnftnl/Config.in
-index dcbfde0..365ab10 100644
---- a/package/libnftnl/Config.in
-+++ b/package/libnftnl/Config.in
-@@ -1,7 +1,9 @@
-+comment "libnftnl needs a toolchain w/ headers >= 3.1"
+diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
+index f2ca099..88f2e48 100644
+--- a/package/dhcpcd/Config.in
++++ b/package/dhcpcd/Config.in
+@@ -1,9 +1,11 @@
++comment "dhcpcd needs a toolchain w/ headers >= 3.1"
 +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
 +
- config BR2_PACKAGE_LIBNFTNL
- 	bool "libnftnl"
+ config BR2_PACKAGE_DHCPCD
+ 	bool "dhcpcd"
+ 	# No support for AI_ADDRCONFIG
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
 -	# bad headers, no sa_family_t in linux/socket.h
 -	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
- 	select BR2_PACKAGE_LIBMNL
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1 # sa_family_t in linux/socket.h
  	help
- 	  libnftnl is a userspace library providing a low-level
+ 	  An RFC2131 compliant DHCP client
+ 
