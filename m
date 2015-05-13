@@ -1,278 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 14 May 2015 00:36:40 +0200
-Subject: [Buildroot] [git commit] package/binutils (arc): backport PR56780
-	patches
-Message-ID: <20150513223821.3720281DED@busybox.osuosl.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 14 May 2015 01:40:17 +0300
+Subject: [Buildroot] [PATCH] armadillo: bump versin to 5.100.2
+Message-ID: <1431556817-20966-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0c12f72775b332fe7e3f7589ec4d08534b8ec64e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This is the most recent version of the package.
 
---disable-install-libiberty configure option is broken
-in gcc 4.8.x, so libiberty.a is always installed in HOST_DIR.
+Also it fixes static builds (see
+http://autobuild.buildroot.net/results/1cc/1ccf0829c13896c000aed1956155a34844207b2f)
+with commit http://sourceforge.net/p/arma/code/3569/ that was made right
+before 4.400.0 release.
 
-This library broke the host-gdb build due to a fpic/fPIC issue.
-
-Since binutils use a copy of gcc's libiberty sources, it's
-affected by the same bug.
-
-binutils-arc-2014.11 which is based on 2.23 branch doesn't have
-the PR56780 fixies, so backport them.
-
-Fixes:
-http://autobuild.buildroot.net/results/ca4/ca45297aa0ffbc9062ed92dc7ac070b0b33001de/
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
 ---
- .../binutils/arc-2014.12/0001-PR-other-56780.patch |  236 ++++++++++++++++++++
- 1 files changed, 236 insertions(+), 0 deletions(-)
+ package/armadillo/armadillo.hash | 2 +-
+ package/armadillo/armadillo.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/binutils/arc-2014.12/0001-PR-other-56780.patch b/package/binutils/arc-2014.12/0001-PR-other-56780.patch
-new file mode 100644
-index 0000000..b418a2f
---- /dev/null
-+++ b/package/binutils/arc-2014.12/0001-PR-other-56780.patch
-@@ -0,0 +1,236 @@
-+From 7827cdf59a1894abe18aa20043a63c8c875c3fce Mon Sep 17 00:00:00 2001
-+From: DJ Delorie <dj@redhat.com>
-+Date: Sat, 1 Jun 2013 01:01:44 +0000
-+Subject: [PATCH] PR other/56780 merge from gcc
-+
-+binutils-gdb upstream a4818a052efb4cea976a03a2f7cb0b38b23d12d0
-+
-+libiberty: fix --enable-install-libiberty flag [PR 56780]
-+
-+Commit 199570 fixed the --disable-install-libiberty behavior, but it also
-+added a bug where the enable path never works because the initial clear
-+of target_header_dir wasn't deleted.  So we end up initializing properly
-+at the top only to reset it at the end all the time.
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 206367 138bc75d-0d04-0410-961f-82ee72b054a4
-+
-+[Romain
-+  rename patch name
-+  squash the two upstream commits
-+  Remove the ChangeLog]
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ libiberty/Makefile.in  | 24 ++++++++++-----------
-+ libiberty/configure    | 57 +++++++++++++++++++++++++++-----------------------
-+ libiberty/configure.ac | 47 ++++++++++++++++++++++-------------------
-+ 3 files changed, 68 insertions(+), 60 deletions(-)
-+
-+diff --git a/libiberty/Makefile.in b/libiberty/Makefile.in
-+index 0a5da31..4f40c72 100644
-+--- a/libiberty/Makefile.in
-++++ b/libiberty/Makefile.in
-+@@ -354,19 +354,19 @@ install-strip: install
-+ # since it will be passed the multilib flags.
-+ MULTIOSDIR = `$(CC) $(CFLAGS) -print-multi-os-directory`
-+ install_to_libdir: all
-+-	${mkinstalldirs} $(DESTDIR)$(libdir)/$(MULTIOSDIR)
-+-	$(INSTALL_DATA) $(TARGETLIB) $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)n
-+-	( cd $(DESTDIR)$(libdir)/$(MULTIOSDIR) ; chmod 644 $(TARGETLIB)n ;$(RANLIB) $(TARGETLIB)n )
-+-	mv -f $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)n $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)
-+ 	if test -n "${target_header_dir}"; then \
-+-	  case "${target_header_dir}" in \
-+-	    /*)    thd=${target_header_dir};; \
-+-	    *)     thd=${includedir}/${target_header_dir};; \
-+-	  esac; \
-+-	  ${mkinstalldirs} $(DESTDIR)$${thd}; \
-+-	  for h in ${INSTALLED_HEADERS}; do \
-+-	    ${INSTALL_DATA} $$h $(DESTDIR)$${thd}; \
-+-	  done; \
-++		${mkinstalldirs} $(DESTDIR)$(libdir)/$(MULTIOSDIR); \
-++		$(INSTALL_DATA) $(TARGETLIB) $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)n; \
-++		( cd $(DESTDIR)$(libdir)/$(MULTIOSDIR) ; chmod 644 $(TARGETLIB)n ;$(RANLIB) $(TARGETLIB)n ); \
-++		mv -f $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)n $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB); \
-++		case "${target_header_dir}" in \
-++		  /*)    thd=${target_header_dir};; \
-++		  *)     thd=${includedir}/${target_header_dir};; \
-++		esac; \
-++		${mkinstalldirs} $(DESTDIR)$${thd}; \
-++		for h in ${INSTALLED_HEADERS}; do \
-++		  ${INSTALL_DATA} $$h $(DESTDIR)$${thd}; \
-++		done; \
-+ 	fi
-+ 	@$(MULTIDO) $(FLAGS_TO_PASS) multi-do DO=install
-+ 
-+diff --git a/libiberty/configure b/libiberty/configure
-+index 6e98352..44d1f78 100755
-+--- a/libiberty/configure
-++++ b/libiberty/configure
-+@@ -675,8 +675,8 @@ with_cross_host
-+ with_newlib
-+ enable_maintainer_mode
-+ enable_multilib
-+-enable_largefile
-+ enable_install_libiberty
-++enable_largefile
-+ '
-+       ac_precious_vars='build_alias
-+ host_alias
-+@@ -1303,8 +1303,8 @@ Optional Features:
-+                           enable make rules and dependencies not useful
-+                           (and sometimes confusing) to the casual installer
-+   --enable-multilib       build many library versions (default)
-++  --enable-install-libiberty       Install headers and library for end users
-+   --disable-largefile     omit support for large files
-+-  --enable-install-libiberty       Install headers for end users
-+ 
-+ Optional Packages:
-+   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-+@@ -2784,6 +2784,35 @@ if test $cross_compiling = no && test $multilib = yes \
-+    cross_compiling=maybe
-+ fi
-+ 
-++# We may wish to install the target headers somewhere.
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to install libiberty headers and static library" >&5
-++$as_echo_n "checking whether to install libiberty headers and static library... " >&6; }
-++
-++# Check whether --enable-install-libiberty was given.
-++if test "${enable_install_libiberty+set}" = set; then :
-++  enableval=$enable_install_libiberty; enable_install_libiberty=$enableval
-++else
-++  enable_install_libiberty=no
-++fi
-++
-++# Option parsed, now set things appropriately.
-++case x"$enable_install_libiberty" in
-++  xyes|x)
-++    target_header_dir=libiberty
-++    ;;
-++  xno)
-++    target_header_dir=
-++    ;;
-++  *)
-++    # This could be sanity-checked in various ways...
-++    target_header_dir="${enable_install_libiberty}"
-++    ;;
-++esac
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_install_libiberty" >&5
-++$as_echo "$enable_install_libiberty" >&6; }
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: target_header_dir = $target_header_dir" >&5
-++$as_echo "$as_me: target_header_dir = $target_header_dir" >&6;}
-++
-+ 
-+ ac_ext=c
-+ ac_cpp='$CPP $CPPFLAGS'
-+@@ -5475,7 +5504,6 @@ fi
-+ 
-+ setobjs=
-+ CHECK=
-+-target_header_dir=
-+ if test -n "${with_target_subdir}"; then
-+ 
-+   # We are being configured as a target library.  AC_REPLACE_FUNCS
-+@@ -5752,29 +5780,6 @@ _ACEOF
-+ 
-+   esac
-+ 
-+-  # We may wish to install the target headers somewhere.
-+-  # Check whether --enable-install-libiberty was given.
-+-if test "${enable_install_libiberty+set}" = set; then :
-+-  enableval=$enable_install_libiberty; enable_install_libiberty=$enableval
-+-else
-+-  enable_install_libiberty=no
-+-fi
-+-
-+-  # Option parsed, now set things appropriately.
-+-  case x"$enable_install_libiberty" in
-+-    xyes|x)
-+-      target_header_dir=libiberty
-+-      ;;
-+-    xno)
-+-      target_header_dir=
-+-      ;;
-+-    *)
-+-      # This could be sanity-checked in various ways...
-+-      target_header_dir="${enable_install_libiberty}"
-+-      ;;
-+-  esac
-+-
-+-
-+ else
-+ 
-+    # Not a target library, so we set things up to run the test suite.
-+diff --git a/libiberty/configure.ac b/libiberty/configure.ac
-+index 754b66a..04260ec 100644
-+--- a/libiberty/configure.ac
-++++ b/libiberty/configure.ac
-+@@ -128,6 +128,31 @@ if test $cross_compiling = no && test $multilib = yes \
-+    cross_compiling=maybe
-+ fi
-+ 
-++# We may wish to install the target headers somewhere.
-++AC_MSG_CHECKING([whether to install libiberty headers and static library])
-++dnl install-libiberty is disabled by default
-++
-++AC_ARG_ENABLE(install-libiberty,
-++[  --enable-install-libiberty       Install headers and library for end users],
-++enable_install_libiberty=$enableval,
-++enable_install_libiberty=no)dnl
-++
-++# Option parsed, now set things appropriately.
-++case x"$enable_install_libiberty" in
-++  xyes|x)
-++    target_header_dir=libiberty
-++    ;;
-++  xno)   
-++    target_header_dir=
-++    ;;
-++  *) 
-++    # This could be sanity-checked in various ways...
-++    target_header_dir="${enable_install_libiberty}"
-++    ;;
-++esac
-++AC_MSG_RESULT($enable_install_libiberty)
-++AC_MSG_NOTICE([target_header_dir = $target_header_dir])
-++
-+ GCC_NO_EXECUTABLES
-+ AC_PROG_CC
-+ AC_SYS_LARGEFILE
-+@@ -379,7 +404,6 @@ fi
-+ 
-+ setobjs=
-+ CHECK=
-+-target_header_dir=
-+ if test -n "${with_target_subdir}"; then
-+ 
-+   # We are being configured as a target library.  AC_REPLACE_FUNCS
-+@@ -490,27 +514,6 @@ if test -n "${with_target_subdir}"; then
-+ 
-+   esac
-+ 
-+-  # We may wish to install the target headers somewhere.
-+-  AC_ARG_ENABLE(install-libiberty,
-+-  [  --enable-install-libiberty       Install headers for end users],
-+-  enable_install_libiberty=$enableval,
-+-  enable_install_libiberty=no)dnl
-+-  
-+-  # Option parsed, now set things appropriately.
-+-  case x"$enable_install_libiberty" in
-+-    xyes|x)
-+-      target_header_dir=libiberty
-+-      ;;
-+-    xno)   
-+-      target_header_dir=
-+-      ;;
-+-    *) 
-+-      # This could be sanity-checked in various ways...
-+-      target_header_dir="${enable_install_libiberty}"
-+-      ;;
-+-  esac
-+-
-+-
-+ else
-+ 
-+    # Not a target library, so we set things up to run the test suite.
-+-- 
-+1.9.3
-+
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index d74d6b0..0046c56 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  0664caca9a9be410ba467a3f4fd7d4556ccda62a9e061f2935904be2afe22132  armadillo-4.000.4.tar.gz
++sha256  63150f12bf7c7c598ea55b7271d99fce349ff386a3dc2cae3904b244f6e35320  armadillo-5.100.2.tar.gz
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 58b8fc1..607103c 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-ARMADILLO_VERSION_MAJOR = 4.000
+-ARMADILLO_VERSION = $(ARMADILLO_VERSION_MAJOR).4
++ARMADILLO_VERSION_MAJOR = 5.100
++ARMADILLO_VERSION = $(ARMADILLO_VERSION_MAJOR).2
+ ARMADILLO_SITE = http://downloads.sourceforge.net/project/arma
+ ARMADILLO_DEPENDENCIES = clapack
+ ARMADILLO_INSTALL_STAGING = YES
+-- 
+2.1.0
