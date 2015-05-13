@@ -1,10 +1,9 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Wed, 13 May 2015 16:39:33 -0500
-Subject: [Buildroot] [PATCH v5 20/24] libsemanage: cleanup python use and
-	license definition
+Date: Wed, 13 May 2015 16:39:25 -0500
+Subject: [Buildroot] [PATCH v5 12/24] sysvinit: added libselinux dependency
 In-Reply-To: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1431553177-7280-21-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1431553177-7280-13-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,132 +12,87 @@ To: buildroot@busybox.net
 
 From: Matt Weber <matthew.weber@rockwellcollins.com>
 
-The original package supported python on target, now we just use
-it as part of the host tools.  The license was also mis-assigned.
-
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 ---
 Changes v4 -> v5:
-  - Added a 'm' to the end of the python3 major version used
-    in the include path.
----
- package/libsemanage/Config.in      | 10 -------
- package/libsemanage/libsemanage.mk | 54 ++++++++++++++++----------------------
- 2 files changed, 22 insertions(+), 42 deletions(-)
+  - Removed unnecessary += when adding buysbox dependency (Ryan B.)
+  - Removed duplicate assignment of OPTS (Matt W.)
+  - Added description to patch and signed off line (Clayton S.)
 
-diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
-index 130fd82..78b6315 100644
---- a/package/libsemanage/Config.in
-+++ b/package/libsemanage/Config.in
-@@ -16,15 +16,5 @@ config BR2_PACKAGE_LIBSEMANAGE
- 
- 	  http://selinuxproject.org/page/Main_Page
- 
--if BR2_PACKAGE_LIBSEMANAGE
--
--config BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS
--	depends on BR2_PACKAGE_PYTHON
--	bool "python bindings"
--	help
--	  Enable building python bindings
--
--endif
--
- comment "libsemanage needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index 17e8fea..197c14e 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
-@@ -6,66 +6,56 @@
- 
- LIBSEMANAGE_VERSION = 2.1.10
- LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
--LIBSEPOL_LICENSE = LGPLv2.1+
--LIBSEPOL_LICENSE_FILES = COPYING
--
-+LIBSEMANAGE_LICENSE = LGPLv2.1+
-+LIBSEMANAGE_LICENSE_FILES = COPYING
- LIBSEMANAGE_DEPENDENCIES = host-bison host-flex libselinux ustr bzip2
--
- LIBSEMANAGE_INSTALL_STAGING = YES
- 
- LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
- 
--ifeq ($(BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS),y)
--
--LIBSEMANAGE_DEPENDENCIES += python host-swig
--LIBSEMANAGE_MAKE_OPTS += \
--	PYINC="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
--	PYTHONLIBDIR="-L$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
--	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
--	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
--
--define LIBSEMANAGE_PYTHON_BUILD_CMDS
--	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) swigify pywrap
--endef
--
--define LIBSEMANAGE_PYTHON_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install-pywrap
--endef
--
--define LIBSEMANAGE_PYTHON_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install-pywrap
--endef
--
--endif # End of BR2_PACKAGE_PYTHON
--
- define LIBSEMANAGE_BUILD_CMDS
- 	# DESTDIR is needed during the compile to compute library and
- 	# header paths.
- 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
--	$(LIBSEMANAGE_PYTHON_BUILD_CMDS)
- endef
- 
- define LIBSEMANAGE_INSTALL_STAGING_CMDS
- 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
--	$(LIBSEMANAGE_PYTHON_INSTALL_STAGING_CMDS)
- endef
- 
- define LIBSEMANAGE_INSTALL_TARGET_CMDS
- 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
--	$(LIBSEMANAGE_PYTHON_INSTALL_TARGET_CMDS)
- endef
- 
--HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol \
--	host-libselinux host-ustr host-bzip2
-+HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol host-libselinux \
-+				host-ustr host-bzip2 host-swig
-+HOST_LIBSEMANAGE_MAKE_OPTS += $(HOST_CONFIGURE_OPTS) \
-+	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
+Changes v1 -> v4:
+  - Did not exist
+---
+ ...1-Fix-SELinux-compile-flags-and-libraries.patch | 44 ++++++++++++++++++++++
+ package/sysvinit/sysvinit.mk                       |  5 +++
+ 2 files changed, 49 insertions(+)
+ create mode 100644 package/sysvinit/0001-Fix-SELinux-compile-flags-and-libraries.patch
+
+diff --git a/package/sysvinit/0001-Fix-SELinux-compile-flags-and-libraries.patch b/package/sysvinit/0001-Fix-SELinux-compile-flags-and-libraries.patch
+new file mode 100644
+index 0000000..f857e07
+--- /dev/null
++++ b/package/sysvinit/0001-Fix-SELinux-compile-flags-and-libraries.patch
+@@ -0,0 +1,44 @@
++From e7dc523c1850534d98ab90dd02e07ee214e21f24 Mon Sep 17 00:00:00 2001
++From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
++Date: Fri, 1 May 2015 10:58:47 -0500
++Subject: [PATCH] Fix SELinux compile flags and libraries
 +
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+HOST_LIBSEMANAGE_DEPENDENCIES += host-python3
-+HOST_LIBSEMANAGE_MAKE_OPTS += \
-+	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m/" \
-+	PYTHONLIBDIR="-L$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/" \
-+	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
-+else
-+HOST_LIBSEMANAGE_DEPENDENCIES += host-python
-+HOST_LIBSEMANAGE_MAKE_OPTS += \
-+	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
-+	PYTHONLIBDIR="-L$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
-+	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
++The SELinux flags, added as CPPFLAGS, end up getting dropped by the
++Makefile. Also ensuring sulogin is linked against libsepol which is
++required.
++
++Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
++---
++ src/Makefile | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/Makefile b/src/Makefile
++index e2b8028..bf1ae81 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -104,7 +104,7 @@ utmpdump:	utmpdump.o
++ 
++ runlevel:	runlevel.o
++ 
++-sulogin:	LDLIBS += $(SULOGINLIBS) $(STATIC)
+++sulogin:	LDLIBS += $(SULOGINLIBS) $(INITLIBS) $(STATIC)
++ sulogin:	sulogin.o
++ 
++ wall:		dowall.o wall.o
++@@ -114,10 +114,10 @@ shutdown:	dowall.o shutdown.o utmp.o reboot.h
++ bootlogd:	LDLIBS += -lutil
++ bootlogd:	bootlogd.o
++ 
++-sulogin.o:	CPPFLAGS += $(SELINUX_DEF)
++-sulogin.o:	sulogin.c 
+++sulogin.o:	CFLAGS += $(SELINUX_DEF)
+++sulogin.o:	sulogin.c
++ 
++-init.o:		CPPFLAGS += $(SELINUX_DEF)
+++init.o:		CFLAGS += $(SELINUX_DEF)
++ init.o:		init.c init.h set.h reboot.h initreq.h
++ 
++ utmp.o:		utmp.c init.h
++-- 
++1.9.1
++
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index 53640a4..9669a29 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -16,6 +16,11 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ SYSVINIT_DEPENDENCIES = busybox
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++SYSVINIT_DEPENDENCIES += libselinux
++TARGET_CONFIGURE_OPTS += WITH_SELINUX="yes" ROOT="$(TARGET_DIR)"
 +endif
- 
- define HOST_LIBSEMANAGE_BUILD_CMDS
- 	# DESTDIR is needed during the compile to compute library and
- 	# header paths.
- 	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) all
-+	$(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
- endef
- 
- define HOST_LIBSEMANAGE_INSTALL_CMDS
- 	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) install
-+	$(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
- endef
- 
- $(eval $(generic-package))
++
+ define SYSVINIT_DEBIAN_PATCHES
+ 	if [ -d $(@D)/debian/patches ]; then \
+ 		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
 -- 
 1.9.1
