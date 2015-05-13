@@ -1,45 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 May 2015 10:02:58 +0200
-Subject: [Buildroot] [git commit] vsftpd: use pkg-config to get OpenSSL link
-	flags
-Message-ID: <20150513080938.28F9380411@busybox.osuosl.org>
+Date: Wed, 13 May 2015 10:12:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mmc-utils: bump to latest commit
+In-Reply-To: <1431429559-31351-1-git-send-email-sebastien.szymanski@armadeus.com>
+ (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Tue, 12 May 2015
+ 13:19:19 +0200")
+References: <1431429559-31351-1-git-send-email-sebastien.szymanski@armadeus.com>
+Message-ID: <87617wgalj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1d046a5c3d9c92a3b7a69e7474b05cc9e52ffce5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "S?bastien" == S?bastien Szymanski <sebastien.szymanski@armadeus.com> writes:
 
-Instead of hardcoding -lssl -lcrypto as the linker flags to link with
-OpenSSL, use pkg-config to fetch those flags. This allows to behave
-properly when doing static linking, since pkg-config returns the
-entire set of libraries we should link against.
+ > The changes are:
+ > d0b4644 mmc-utils: add ability to enable/disable optional eMMC cache
+ > 64c2de8 mmc-utils: Add command to set the boot bus conditions
+ > 7891236 mmc-utils: add support to create gp partition
+ > 4afc8c8 mmc-utils: add check for max enhanced user area
+ > 50b6854 fix building errors on Android
+ > f4eb241 Fit usage to 80 cols
+ > c6cb053 mmc-utils: RPMB: add support for 4 rpmb operations
+ > 35c31fe mmc-utils: RPMB: add HMAC SHA256 support
+ > a8276f5 fix make handling
 
-Fixes:
+ > Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 
-  http://autobuild.buildroot.org/results/d71/d710ecfa9ed0a8e3f97d2010d3dabb372485c7f2/
+Committed to next, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Gergely Imreh <imrehg@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/vsftpd/vsftpd.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index b94328d..ed15f00 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -23,8 +23,8 @@ VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_DISABLE_UTMPX
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--VSFTPD_DEPENDENCIES += openssl
--VSFTPD_LIBS += -lssl -lcrypto
-+VSFTPD_DEPENDENCIES += openssl host-pkgconf
-+VSFTPD_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl)
- VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_ENABLE_SSL
- endif
- 
+-- 
+Bye, Peter Korsgaard
