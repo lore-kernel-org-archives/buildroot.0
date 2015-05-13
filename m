@@ -1,55 +1,50 @@
-From: Gergely Imreh <imrehg@gmail.com>
-Date: Wed, 13 May 2015 11:14:55 +0800
-Subject: [Buildroot] [PATCH] vsftpd: use pkg-config to get OpenSSL link
-	flags
-In-Reply-To: <1431464824-22153-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1431464824-22153-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAJ3iQcq7riYNc_6dK8Bn65K1Kx1Rqovo1j+go0iAkg2SeZ-uUw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 13 May 2015 06:16:17 +0300
+Subject: [Buildroot] [PATCH v2 2/2] powerpc-utils: optionally use librtas
+In-Reply-To: <4a40d63bb8a0fdf9a3dc8811a62dc7872fcddd87.1431403924.git.sam.bobroff@au1.ibm.com>
+References: <cover.1431403924.git.sam.bobroff@au1.ibm.com>
+ <4a40d63bb8a0fdf9a3dc8811a62dc7872fcddd87.1431403924.git.sam.bobroff@au1.ibm.com>
+Message-ID: <20150513031617.GD2558@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13 May 2015 at 05:07, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Instead of hardcoding -lssl -lcrypto as the linker flags to link with
-> OpenSSL, use pkg-config to fetch those flags. This allows to behave
-> properly when doing static linking, since pkg-config returns the
-> entire set of libraries we should link against.
->
-> Fixes:
->
->   http://autobuild.buildroot.org/results/d71/d710ecfa9ed0a8e3f97d2010d3dabb372485c7f2/
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Hi Sam,
 
-Tested-by: Gergely Imreh <imrehg@gmail.com>
-  by running `make vsftpd` with patch
+On Tue, May 12, 2015 at 02:12:08PM +1000, Sam Bobroff wrote:
+> diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
+> index 3b30458..486ed20 100644
+> --- a/package/powerpc-utils/powerpc-utils.mk
+> +++ b/package/powerpc-utils/powerpc-utils.mk
+> @@ -7,10 +7,15 @@
+>  POWERPC_UTILS_VERSION = 1.2.24
+>  POWERPC_UTILS_SITE = http://downloads.sourceforge.net/project/powerpc-utils/powerpc-utils
+>  POWERPC_UTILS_DEPENDENCIES = zlib
+> +ifeq ($(BR2_PACKAGE_POWERPC_UTILS_RTAS),y)
+> +POWERPC_UTILS_DEPENDENCIES += librtas
+> +endif
+>  POWERPC_UTILS_LICENSE = Common Public License Version 1.0
+>  POWERPC_UTILS_LICENSE_FILES = COPYRIGHT
+>  
+> +ifeq ($(BR2_PACKAGE_POWERPC_UTILS_RTAS),)
+>  POWERPC_UTILS_CONF_OPTS = --without-librtas
+> +endif
 
-> ---
->  package/vsftpd/vsftpd.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-> index b94328d..ed15f00 100644
-> --- a/package/vsftpd/vsftpd.mk
-> +++ b/package/vsftpd/vsftpd.mk
-> @@ -23,8 +23,8 @@ VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_DISABLE_UTMPX
->  endif
->
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> -VSFTPD_DEPENDENCIES += openssl
-> -VSFTPD_LIBS += -lssl -lcrypto
-> +VSFTPD_DEPENDENCIES += openssl host-pkgconf
-> +VSFTPD_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl)
->  VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_ENABLE_SSL
->  endif
->
-> --
-> 2.1.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+The usual convention is to put dependency handling in one place, and to have 
+both "with" and "without".
+
+ifeq ($(BR2_PACKAGE_POWERPC_UTILS_RTAS),y)
+POWERPC_UTILS_DEPENDENCIES += librtas
+POWERPC_UTILS_CONF_OPTS = --with-librtas
+else
+POWERPC_UTILS_CONF_OPTS = --without-librtas
+endif
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
