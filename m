@@ -1,32 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 13 May 2015 09:31:26 +0300
-Subject: [Buildroot] [PATCH 1/2] libmodbus: update download location
-Message-ID: <5f820f3049a52d079c5900368eef6f4f7ba14a25.1431498687.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 13 May 2015 09:19:21 +0200
+Subject: [Buildroot] [git commit] czmq: unbreak static linking
+In-Reply-To: <CAKAx1ciU57KJKuZoQ+vTT5muE9tTM+kVgKF1wMzOq6D-L6xs4w@mail.gmail.com>
+ (Lionel Orry's message of "Wed, 13 May 2015 07:44:23 +0200")
+References: <20150512184711.BDF2381DA3@busybox.osuosl.org>
+ <20150512210011.4ed7af1d@free-electrons.com>
+ <87a8x9h9uw.fsf@dell.be.48ers.dk>
+ <20150512223405.595a8139@free-electrons.com>
+ <87617xh2tt.fsf@dell.be.48ers.dk>
+ <CAKAx1ciU57KJKuZoQ+vTT5muE9tTM+kVgKF1wMzOq6D-L6xs4w@mail.gmail.com>
+Message-ID: <871tilgd1i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Saves one HTTP 301 redirection.
+>>>>> "Lionel" == Lionel Orry <lionel.orry@gmail.com> writes:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libmodbus/libmodbus.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
-index cf3735907e49..1f8c7303623c 100644
---- a/package/libmodbus/libmodbus.mk
-+++ b/package/libmodbus/libmodbus.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBMODBUS_VERSION = 3.0.6
--LIBMODBUS_SITE = http://libmodbus.org/site_media/build
-+LIBMODBUS_SITE = http://libmodbus.org/releases
- LIBMODBUS_LICENSE = LGPLv2.1+
- LIBMODBUS_LICENSE_FILES = COPYING.LESSER
- LIBMODBUS_INSTALL_STAGING = YES
+ >> Ahh, now I get it. Yes, fixing libzmq.pc to have a Libs.privat: -lstdc++
+ >> should also work.
+ >> 
+ >> I'll give it a try.
+
+ > I agree, the libzmq.pc needs to be fixed. It is not specific to czmq
+ > but to all software components which statically link against libzmq
+ > but are not necessarily written in C++.
+ > I have this issue on other projects and I manually add '-lstdc++'.
+
+Ok, good.
+
+I've sent a patch doing that upstream as it has now been accepted:
+
+https://github.com/zeromq/libzmq/pull/1398
+
+And I've added it to buildroot as well.
+
 -- 
-2.1.4
+Venlig hilsen,
+Peter Korsgaard 
