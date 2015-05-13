@@ -1,10 +1,10 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 13 May 2015 20:53:15 +0000
+Date: Wed, 13 May 2015 21:12:26 +0000
 Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2015-05-10
-In-Reply-To: <20150511063014.10BC4100F6A@stock.ovh.net>
-References: <20150511063014.10BC4100F6A@stock.ovh.net>
-Message-ID: <1431550395.3047.14.camel@synopsys.com>
+ results for 2015-05-09
+In-Reply-To: <20150510063016.82480100F50@stock.ovh.net>
+References: <20150510063016.82480100F50@stock.ovh.net>
+Message-ID: <1431551546.3047.18.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,39 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Mon, 2015-05-11 at 08:30 +0200, Thomas Petazzoni wrote:
+On Sun, 2015-05-10 at 08:30 +0200, Thomas Petazzoni wrote:
 > Those results are limited to the arc architecture.
 > 
-> Build statistics for 2015-05-10
+> Build statistics for 2015-05-09
 > ===============================
 > 
 >         success : 19 
->        failures : 1  
+>        failures : 2  
 >        timeouts : 0  
->           TOTAL : 20 
+>           TOTAL : 21 
 > 
 > Classification of failures by reason
 > ====================================
 > 
+>                     gpm-1.20.7 | 1 
 >       host-gdb-arc-2014.12-gdb | 1 
 > 
 > Detail of failures
 > ===================
 > 
->          arc |       host-gdb-arc-2014.12-gdb | NOK | http://autobuild.buildroot.net/results/aeb2c1e8ef895c1963eff5fbba3fc9b2e12b70cf/
+>          arc |                     gpm-1.20.7 | NOK | http://autobuild.buildroot.net/results/f80b17513ae5c2797c9d0bb4db4b40e4c2e1560e/
 
-Looks like that could be fixed by copy of "851-PR-other-56780.patch" to
-"package/binutils/arc-2014.12" since arc-2014.12 binutils are basd on
-upstream 2.23 and so corresponding patches are missing
+I see that build log
+http://autobuild.buildroot.net/results/f80/f80b17513ae5c2797c9d0bb4db4b40e4c2e1560e/build-end.log ends with:
+------->8------------
+/usr/bin/install -c
+gpm /ssd1/thomas/autobuild/instance-3/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/sbin/gpm
+/usr/bin/install: cannot create regular file
+'/ssd1/thomas/autobuild/instance-3/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/sbin/gpm': No such file or directory
+Makefile:107: recipe for target 'install' failed
+------->8------------
 
-Discussing this with Romain.
+Is there a chance that autobuilder run out of disk space etc and so
+"install" command wasn't able to create an output file?
 
 -Alexey
