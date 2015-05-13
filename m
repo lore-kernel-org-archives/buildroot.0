@@ -1,33 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 May 2015 09:17:49 +0200
-Subject: [Buildroot] [git commit] czmq: needs host-pkgconf
-Message-ID: <20150513071940.72AA7818DB@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 May 2015 09:23:03 +0200
+Subject: [Buildroot] [git commit] czmq: unbreak static linking
+In-Reply-To: <871tilgd1i.fsf@dell.be.48ers.dk>
+References: <20150512184711.BDF2381DA3@busybox.osuosl.org>
+ <20150512210011.4ed7af1d@free-electrons.com>
+ <87a8x9h9uw.fsf@dell.be.48ers.dk>
+ <20150512223405.595a8139@free-electrons.com>
+ <87617xh2tt.fsf@dell.be.48ers.dk>
+ <CAKAx1ciU57KJKuZoQ+vTT5muE9tTM+kVgKF1wMzOq6D-L6xs4w@mail.gmail.com>
+ <871tilgd1i.fsf@dell.be.48ers.dk>
+Message-ID: <20150513092303.30595c6b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=daa8485bc12d44c6bf697f7a1bde488250486ea2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Korsgaard,
 
-It uses pkg-config to find zeromq, so ensure it is available.
+On Wed, 13 May 2015 09:19:21 +0200, Peter Korsgaard wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/czmq/czmq.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> Ok, good.
+> 
+> I've sent a patch doing that upstream as it has now been accepted:
+> 
+> https://github.com/zeromq/libzmq/pull/1398
+> 
+> And I've added it to buildroot as well.
 
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-index d25bf01..3d82095 100644
---- a/package/czmq/czmq.mk
-+++ b/package/czmq/czmq.mk
-@@ -10,7 +10,7 @@ CZMQ_SITE = $(call github,zeromq,czmq,$(CZMQ_VERSION))
- # Autoreconf required as we use the git tree
- CZMQ_AUTORECONF = YES
- CZMQ_INSTALL_STAGING = YES
--CZMQ_DEPENDENCIES = zeromq
-+CZMQ_DEPENDENCIES = zeromq host-pkgconf
- CZMQ_LICENSE = MPLv2.0
- CZMQ_LICENSE_FILES = LICENSE
- 
+Thanks a lot for doing this, it seems like a much better solution to me.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
