@@ -1,40 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 May 2015 09:16:27 +0200
-Subject: [Buildroot] [git commit] Revert "czmq: unbreak static linking"
-Message-ID: <20150513071940.6886C7FD09@busybox.osuosl.org>
+Date: Wed, 13 May 2015 09:17:49 +0200
+Subject: [Buildroot] [git commit] czmq: needs host-pkgconf
+Message-ID: <20150513071940.72AA7818DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=878b9aaba9c0bd77c0964cdc78c63cc07aaf96cf
+commit: http://git.buildroot.net/buildroot/commit/?id=daa8485bc12d44c6bf697f7a1bde488250486ea2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit aa5254f1a2bc0ea3181d51990c18681b3071b9db.
-
-Now that zeromq's pkg-config file is fixed, we no longer need this
-workaround for static linking.
+It uses pkg-config to find zeromq, so ensure it is available.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/czmq/czmq.mk |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+ package/czmq/czmq.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-index 789e700..d25bf01 100644
+index d25bf01..3d82095 100644
 --- a/package/czmq/czmq.mk
 +++ b/package/czmq/czmq.mk
-@@ -18,12 +18,6 @@ CZMQ_LICENSE_FILES = LICENSE
- # host-python, so disable asciidoc entirely.
- CZMQ_CONF_ENV = ac_cv_prog_czmq_have_asciidoc=no
+@@ -10,7 +10,7 @@ CZMQ_SITE = $(call github,zeromq,czmq,$(CZMQ_VERSION))
+ # Autoreconf required as we use the git tree
+ CZMQ_AUTORECONF = YES
+ CZMQ_INSTALL_STAGING = YES
+-CZMQ_DEPENDENCIES = zeromq
++CZMQ_DEPENDENCIES = zeromq host-pkgconf
+ CZMQ_LICENSE = MPLv2.0
+ CZMQ_LICENSE_FILES = LICENSE
  
--# zeromq uses C++, but czmq forgets to explicitly link with libstdc++
--# (or use g++ to link), breaking static linking.
--ifeq ($(BR2_STATIC_LIBS),y)
--CZMQ_CONF_ENV += LIBS='-lstdc++'
--endif
--
- define CZMQ_CREATE_CONFIG_DIR
- 	mkdir -p $(@D)/config
- endef
