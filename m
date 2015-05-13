@@ -1,79 +1,87 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Wed, 13 May 2015 07:44:23 +0200
-Subject: [Buildroot] [git commit] czmq: unbreak static linking
-In-Reply-To: <87617xh2tt.fsf@dell.be.48ers.dk>
-References: <20150512184711.BDF2381DA3@busybox.osuosl.org>
- <20150512210011.4ed7af1d@free-electrons.com>
- <87a8x9h9uw.fsf@dell.be.48ers.dk>
- <20150512223405.595a8139@free-electrons.com>
- <87617xh2tt.fsf@dell.be.48ers.dk>
-Message-ID: <CAKAx1ciU57KJKuZoQ+vTT5muE9tTM+kVgKF1wMzOq6D-L6xs4w@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 13 May 2015 08:22:31 +0200
+Subject: [Buildroot] [RFC v3 30/30] pkg-generic: add support for
+ per-package staging directory
+In-Reply-To: <54F8F4BA.7020800@mind.be>
+References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
+ <1425374255-6827-31-git-send-email-fabio.porcedda@gmail.com>
+ <54F8F4BA.7020800@mind.be>
+Message-ID: <CAHkwnC_ASroFNeEwQ6Rrs7B=m93wpQuH5cefu9P8jyj07fBXoQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, Mar 6, 2015 at 1:28 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 03/03/15 10:17, Fabio Porcedda wrote:
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-On Wed, May 13, 2015 at 12:02 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->
-> Hi,
->
->>> I agree that it would be better if we could get this kind of fixes
->  >> upstream. I don't know how receptive upstream will be as this doesn't
->  >> affect "normal people" though.
->
->  > Well, upstream zeromq should be able to accept patches making their .pc
->  > file more correct.
->
-> True.
->
->  >> That is arguable correct, but things are a bit more complicated as:
->  >>
->  >> - libzerozmq is written in C++ and uses libstdc++ but exposes a C api
->  >> - czmq is a higher level wrapper also written in C
->  >> - Test program (czmq_selftest) is a C program linking against libczmq
->  >> (and in term libzeromq)
->
->  > Right, but that still doesn't answer whether using gcc to link a
->  > C program against a C++ library is correct or not :-)
->
-> I believe it is. How are people using E.G. libczmq to know that they
-> need to link with g++ just because a library libczmq uses happens to use
-> C++?
->
->
->  >> >  * Or using gcc to link with a C++ library is correct, and in this
->  >> >    case, libzmq.pc should be fixed to include -lstdc++ in Libs.private.
->  >>
->  >> While this is correct, it is not directly related to this. Czmq doesn't
->  >> use its own .pc file to know how to link the selftest program.
->
->  > I'm not talking about fixing the czmq .pc file, but the zeromq one. If
->  > zeromq uses C++, then its .pc file should have -lstdc++, no?
->
-> Ahh, now I get it. Yes, fixing libzmq.pc to have a Libs.privat: -lstdc++
-> should also work.
->
-> I'll give it a try.
+<snip>
 
-I agree, the libzmq.pc needs to be fixed. It is not specific to czmq
-but to all software components which statically link against libzmq
-but are not necessarily written in C++.
-I have this issue on other projects and I manually add '-lstdc++'.
-
+>> + $(2)_TARGET_LDFLAGS = $$(TARGET_LDFLAGS) -L$$($(2)_STAGING_DIR)/usr/lib -Wl,-rpath,$$($(2)_STAGING_DIR)/usr/lib
+>> + $(2)_TARGET_CONFIGURE_OPTS = \
+>> +     $$(TARGET_CONFIGURE_OPTS) \
+>> +     PKG_CONFIG_SYSROOT_DIR="$$($(2)_STAGING_DIR)" \
+>> +     PKG_CONFIG_PATH="$$($(2)_STAGING_DIR)/usr/lib/pkgconfig"
+>> + $(2)_TARGET_MAKE_ENV = \
+>> +     $$(TARGET_MAKE_ENV) \
+>> +     PKG_CONFIG_SYSROOT_DIR="$$($(2)_STAGING_DIR)" \
+>> +     PKG_CONFIG_PATH="$$($(2)_STAGING_DIR)/usr/lib/pkgconfig"
+>> +else
+>> + $(2)_STAGING_DIR = $$(STAGING_DIR)
+>> + $(2)_TARGET_CONFIGURE_OPTS = $$(TARGET_CONFIGURE_OPTS)
+>> + $(2)_TARGET_MAKE_ENV = $$(TARGET_MAKE_ENV)
+>> +endif
+>> +
+>> +ifeq ($$($(2)_ADD_TOOLCHAIN_DEPENDENCY),YES)
+>> + $(2)_STAGING_DIRS = $$(wildcard $$(foreach dep,\
+>> +     $$(filter-out host-% toolchain,$$($(2)_FINAL_DEPENDENCIES)),\
+>> +     $$($$(call UPPERCASE,$$(dep))_STAGING_DIR)))
+>> +
+>> + define $(2)_PREPARE_STAGING_DIR
+>> +     mkdir -p $$(STAGING_DIR)/usr/include $$(STAGING_DIR)/usr/lib
+>> +     $$(if $$($(2)_STAGING_DIRS),
+>> +             cp -rdpf $$(addsuffix /*,$$($(2)_STAGING_DIRS)) \
+>> +                     $$($(2)_STAGING_DIR))
 >
-> czmq seems to be missing a dependency on host-pkgconf though.
->
-> --
-> Venlig hilsen,
-> Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  Why not just
+>                 cp -rdpf -t $$($(2)_STAGING_DIR) $$($(2)_STAGING_DIRS)
+> ?
 
-Regards,
-Lionel
+Because that command copy each source directory as a new sub directory
+instead of copy the contents, e.g.:
+
+directories:
+dir_a/
+  file_1
+  file_2
+
+dir_b/
+  file_3
+
+dest_dir/
+
+command:
+cp -rdpf -t dest_dir dir_a dir_b
+
+result:
+dest_dir/
+  dir_a/
+     file_1
+     file_2
+  dir_b/
+     file_3
+
+instead of:
+
+cp -rdpf -t dest_dir dir_a/* dir_b/*
+
+dest_dir/
+  file_1
+  file_2
+  file_3
+
+Thanks and BR
+-- 
+Fabio Porcedda
