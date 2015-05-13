@@ -1,64 +1,55 @@
-From: Florent Valette <florent.valette@gmail.com>
-Date: Wed, 13 May 2015 19:40:15 +0200
-Subject: [Buildroot] [PATCH v2] flashrom: Bump to version 0.9.8
-Message-ID: <1431538815-2215-1-git-send-email-florent.valette@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 13 May 2015 21:22:07 +0300
+Subject: [Buildroot] [PATCH] openldap: fix static link with openssl
+Message-ID: <33a0cb92a9390f2851bde5dc52b48da398305c28.1431541327.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version adds support for new Intel SoC (e.g. BayTrail) and
-spi over spi devices such as pickit2 and ftdi usb-spi.
+Use pkg-config to get openssl link dependencies.
 
-Signed-off-by: Florent Valette <florent.valette@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/dd3/dd3821e713b7da7cde0f059409fba46371c8bc40/
+http://autobuild.buildroot.net/results/d60/d60c8b4522e99cf385ee41aa20a1d49deb59c5fb/
+http://autobuild.buildroot.net/results/b41/b41c043fb3b2fad1d9cea0a95b512fb4942b5b19/
 
+and more.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Changes v1 -> v2:
- propagate the dependencies for libusb and libftdi
- Note, libftdi1 is not supported, it only uses libftdi.
+ package/openldap/openldap.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Signed-off-by: Florent Valette <florent.valette@gmail.com>
----
- package/flashrom/Config.in   | 5 +++++
- package/flashrom/flashrom.mk | 4 ++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
-index 956500f..8bd5882 100644
---- a/package/flashrom/Config.in
-+++ b/package/flashrom/Config.in
-@@ -1,9 +1,14 @@
- config BR2_PACKAGE_FLASHROM
- 	bool "flashrom"
- 	select BR2_PACKAGE_PCIUTILS
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
-+	select BR2_PACKAGE_LIBFTDI
- 	# dmidecode is only a runtime dependency
- 	select BR2_PACKAGE_DMIDECODE
- 	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_TOOLCHAIN_HAS_THREADS 	# libusb
-+	depends on BR2_ARCH_HAS_ATOMICS 	# libftdi
- 	help
- 	  BIOS-updating utility.
- 	  Requires PCIUtils libraries.
-diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index 70bbe30..525470a 100644
---- a/package/flashrom/flashrom.mk
-+++ b/package/flashrom/flashrom.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 991d36953f3e..68464abcea2c 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -10,6 +10,7 @@ OPENLDAP_SITE = ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
+ OPENLDAP_LICENSE_FILES = LICENSE
+ OPENLDAP_INSTALL_STAGING = YES
++OPENLDAP_DEPENDENCIES = host-pkgconf
  
--FLASHROM_VERSION = 0.9.7
-+FLASHROM_VERSION = 0.9.8
- FLASHROM_SOURCE = flashrom-$(FLASHROM_VERSION).tar.bz2
- FLASHROM_SITE = http://download.flashrom.org/releases
--FLASHROM_DEPENDENCIES = pciutils
-+FLASHROM_DEPENDENCIES = pciutils libusb libusb-compat libftdi
- FLASHROM_LICENSE = GPLv2+
- FLASHROM_LICENSE_FILES = COPYING
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OPENLDAP_TLS = openssl
+@@ -30,6 +31,7 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OPENLDAP_MP = bignum
+ OPENLDAP_DEPENDENCIES += openssl
++OPENLDAP_CONF_ENV = LIBS="$(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto)"
+ else ifeq ($(BR2_PACKAGE_GMP),y)
+ OPENLDAP_MP = gmp
+ OPENLDAP_DEPENDENCIES += gmp
+@@ -37,7 +39,7 @@ else
+ OPENLDAP_MP = longlong
+ endif
  
+-OPENLDAP_CONF_ENV = ac_cv_func_memcmp_working=yes
++OPENLDAP_CONF_ENV += ac_cv_func_memcmp_working=yes
+ 
+ OPENLDAP_CONF_OPTS += \
+ 	--enable-syslog \
 -- 
-1.9.1
+2.1.4
