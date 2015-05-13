@@ -1,29 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 May 2015 22:47:58 +0200
-Subject: [Buildroot] [PATCH] openldap: fix static link with openssl
-In-Reply-To: <33a0cb92a9390f2851bde5dc52b48da398305c28.1431541327.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 13 May 2015 21:22:07 +0300")
-References: <33a0cb92a9390f2851bde5dc52b48da398305c28.1431541327.git.baruch@tkos.co.il>
-Message-ID: <87oalodx1d.fsf@dell.be.48ers.dk>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 13 May 2015 20:48:10 +0000
+Subject: [Buildroot] [PATCH] package/gcc (arc): backport PR56780 patches
+In-Reply-To: <1431380716-5176-1-git-send-email-romain.naour@openwide.fr>
+References: <1431380716-5176-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1431550090.3047.11.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Hi Romain,
 
- > Use pkg-config to get openssl link dependencies.
- > Fixes:
- > http://autobuild.buildroot.net/results/dd3/dd3821e713b7da7cde0f059409fba46371c8bc40/
- > http://autobuild.buildroot.net/results/d60/d60c8b4522e99cf385ee41aa20a1d49deb59c5fb/
- > http://autobuild.buildroot.net/results/b41/b41c043fb3b2fad1d9cea0a95b512fb4942b5b19/
+On Mon, 2015-05-11 at 23:45 +0200, Romain Naour wrote:
+> --disable-install-libiberty configure option is broken
+> in gcc 4.8.x, so libiberty.a is always installed in HOST_DIR.
+> 
+> This library broke the host-gdb build due to a fpic/fPIC issue.
+> 
+> Note: host-binutils-arc-2014.12 install libiberty.a in HOST_DIR
+> but it was overwritten by the gcc one. The host-binutils's
+> libiberty.a also broke the host-gdb build. This should be
+> fixed in a followup patch.
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Cc: Alexey Brodkin <abrodkin@synopsys.com>
+> ---
+> Alexey, --disable-install-libiberty doesn't work
+> for host-binutils-arc-2014.12. Can you have a look ?
+> Thanks
 
- > and more.
+Indeed our binutils are still based on 2.23 branch and corresponding
+patches were missing.
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+What I did I just copied your "851-PR-other-56780.patch" to
+"package/binutils/arc-2014.12" folder and on host-binutils rebuild no
+libiberty.a was put in "host/usr/lib64".
 
-Committed, thanks.
+Care to send another patch that adds "851-PR-other-56780.patch" to
+"package/binutils/arc-2014.12" or should I do it myself?
 
--- 
-Bye, Peter Korsgaard
+-Alexey
