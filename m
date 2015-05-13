@@ -1,74 +1,55 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 13 May 2015 00:06:54 +0200
-Subject: [Buildroot] [PATCH] google-breakpad: add patch to fix AArch64
- build issue
-In-Reply-To: <1431467285-28262-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1431467285-28262-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <5552797E.1080106@openwide.fr>
+From: Gergely Imreh <imrehg@gmail.com>
+Date: Wed, 13 May 2015 11:14:55 +0800
+Subject: [Buildroot] [PATCH] vsftpd: use pkg-config to get OpenSSL link
+	flags
+In-Reply-To: <1431464824-22153-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1431464824-22153-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAJ3iQcq7riYNc_6dK8Bn65K1Kx1Rqovo1j+go0iAkg2SeZ-uUw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-Le 12/05/2015 23:48, Thomas Petazzoni a ?crit :
+On 13 May 2015 at 05:07, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Instead of hardcoding -lssl -lcrypto as the linker flags to link with
+> OpenSSL, use pkg-config to fetch those flags. This allows to behave
+> properly when doing static linking, since pkg-config returns the
+> entire set of libraries we should link against.
+>
 > Fixes:
-> 
->   http://autobuild.buildroot.org/results/b2b/b2bfbcc922b3041ab3a1892d5c1469ec68476682/
-> 
+>
+>   http://autobuild.buildroot.org/results/d71/d710ecfa9ed0a8e3f97d2010d3dabb372485c7f2/
+>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Tested-by: Gergely Imreh <imrehg@gmail.com>
+  by running `make vsftpd` with patch
+
 > ---
->  .../0001-add-missing-asm-ptrace-include.patch      | 31 ++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 package/google-breakpad/0001-add-missing-asm-ptrace-include.patch
-> 
-> diff --git a/package/google-breakpad/0001-add-missing-asm-ptrace-include.patch b/package/google-breakpad/0001-add-missing-asm-ptrace-include.patch
-> new file mode 100644
-> index 0000000..30e6160
-> --- /dev/null
-> +++ b/package/google-breakpad/0001-add-missing-asm-ptrace-include.patch
-> @@ -0,0 +1,31 @@
-> +Include <asm/ptrace.h> to get necessary definitions on AArch64
-> +
-> +In glibc commit
-> +https://sourceware.org/git/?p=glibc.git;a=commit;h=7d05a8168b45c0580e1f9a79c2dd26c8f0d31fca,
-> +including <asm/ptrace.h> from <sys/user.h> on AArch64 has been
-> +removed. So the Google Breakpad code, which used to build fine on
-> +glibc 2.18 (CodeSourcery toolchain for example), no longer builds wiht
-
-with
-
-> +glibc 2.19 (Linaro toolchain for example).
-> +
-> +To fix this, this patch adds the missing <asm/ptrace.h> include (for
-> +AArch64 only, to be conservative).
-> +
-> +This patch has not been submitted upstream, since more recent versions
-> +of Google Breakpad have completely changed this part of the code.
-> +
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Build tested with Linaro and Code Sourcery toolchains.
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-Tested-by: Romain Naour <romain.naour@openwide.fr>
-
-Best regards,
-Romain
-> +
-> +Index: b/src/client/linux/minidump_writer/linux_dumper.h
-> +===================================================================
-> +--- a/src/client/linux/minidump_writer/linux_dumper.h
-> ++++ b/src/client/linux/minidump_writer/linux_dumper.h
-> +@@ -43,6 +43,9 @@
-> + #include <stdint.h>
-> + #include <sys/types.h>
-> + #include <sys/user.h>
-> ++#if defined(__aarch64__)
-> ++#include <asm/ptrace.h>
-> ++#endif
-> + 
-> + #include "common/memory.h"
-> + #include "google_breakpad/common/minidump_format.h"
-> 
+>  package/vsftpd/vsftpd.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+> index b94328d..ed15f00 100644
+> --- a/package/vsftpd/vsftpd.mk
+> +++ b/package/vsftpd/vsftpd.mk
+> @@ -23,8 +23,8 @@ VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_DISABLE_UTMPX
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> -VSFTPD_DEPENDENCIES += openssl
+> -VSFTPD_LIBS += -lssl -lcrypto
+> +VSFTPD_DEPENDENCIES += openssl host-pkgconf
+> +VSFTPD_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl)
+>  VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_ENABLE_SSL
+>  endif
+>
+> --
+> 2.1.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
