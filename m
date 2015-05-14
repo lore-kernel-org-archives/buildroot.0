@@ -1,38 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 May 2015 21:59:14 +0200
-Subject: [Buildroot] Generating Debug Info Files
-In-Reply-To: <00b501d08d9b$87eae570$97c0b050$@osullivan@cloudiumsystems.com>
-References: <00b501d08d9b$87eae570$97c0b050$@osullivan@cloudiumsystems.com>
-Message-ID: <20150514215914.10e83cad@free-electrons.com>
+Date: Thu, 14 May 2015 22:57:15 +0200
+Subject: [Buildroot] [PATCH 1/2] host-autoconf-archive: install to a
+	non-standard location
+Message-ID: <1431637036-8089-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear John OSullivan,
+The host-autoconf-archive package was added to provide the necessary
+autoconf macros for the libsigrok package, and later also used for the
+thrift package.
 
-On Wed, 13 May 2015 17:40:31 +0100, John OSullivan wrote:
+However, it installs its autoconf macro in
+$(HOST_DIR)/usr/share/aclocal, which is part of the include directory
+of autoconf macros used for all autoreconf invocations. Unfortunately,
+using those macros for all packages is causing a number of
+regressions: one on host-ola fixed in commit
+884af65fd5ddc548f19a26162f905a32ef0b53b3, and one in snmpp. Those
+packages are autoreconf'ed, but if they are autoreconf'ed with the
+autoconf-archive macros installed, they no longer work.
 
-> When I run perf on my buildroot based system it complains about missing
-> symbols for my libraries and applications. I know it is possible to generate
-> binaries with symbolic information in the staging area by selecting 'build
-> packages with debugging symbols', but is there any way of generating
-> separate .debug type files or do I need to do this in postBuild with a
-> script based on objcopy.
+To solve this problem, this commit implements a simple solution that
+makes using host-autoconf-archive macros an opt-in mechanism. To
+achieve this, the autoconf-archive package is modified to install its
+macros in a special directory, and only the packages that really want
+to use those macros will have to pass a -I flag pointing to this
+directory in their <pkg>_AUTORECONF_OPTS variable.
 
-No, we don't have support for separate .debug files currently.
+Fixes:
 
-But how would it work exactly, since perf is running on the target?
+  http://autobuild.buildroot.org/results/712/712c8083b9eeafa41b60790961028c40b28f59ad/
 
-Don't you simply need to have debugging symbols on the target? If
-that's the case, you can simply do BR2_ENABLE_DEBUG=y and
-BR2_strip_none=y.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/autoconf-archive/autoconf-archive.mk | 1 +
+ package/libsigrok/libsigrok.mk               | 1 +
+ package/thrift/thrift.mk                     | 1 +
+ 3 files changed, 3 insertions(+)
 
-Best regards,
-
-Thomas
+diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
+index bd3b0c8..673a57f 100644
+--- a/package/autoconf-archive/autoconf-archive.mk
++++ b/package/autoconf-archive/autoconf-archive.mk
+@@ -9,5 +9,6 @@ AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
+ AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
+ AUTOCONF_ARCHIVE_LICENSE = GPLv3+ with exception
+ AUTOCONF_ARCHIVE_LICENSE_FILES = COPYING COPYING.EXCEPTION
++HOST_AUTOCONF_ARCHIVE_INSTALL_OPTS = aclocaldir=$(HOST_DIR)/usr/share/autoconf-archive install
+ 
+ $(eval $(host-autotools-package))
+diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
+index 7394f64..21d8259 100644
+--- a/package/libsigrok/libsigrok.mk
++++ b/package/libsigrok/libsigrok.mk
+@@ -48,6 +48,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSIGROKCXX),y)
+ LIBSIGROK_CONF_OPTS += --enable-cxx
++LIBSIGROK_AUTORECONF_OPTS += -I $(HOST_DIR)/usr/share/autoconf-archive
+ LIBSIGROK_DEPENDENCIES += \
+ 	host-autoconf-archive \
+ 	glibmm \
+diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
+index b4b3a2c..a40ddad 100644
+--- a/package/thrift/thrift.mk
++++ b/package/thrift/thrift.mk
+@@ -21,6 +21,7 @@ HOST_THRIFT_CONF_OPTS = --with-sysroot=$(HOST_DIR) \
+ 	--disable-tests \
+ 	--disable-tutorial
+ THRIFT_AUTORECONF = YES
++THRIFT_AUTORECONF_OPTS = -I $(HOST_DIR)/usr/share/autoconf-archive
+ THRIFT_LICENSE = Apache-2.0
+ THRIFT_LICENSE_FILES = LICENSE
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
