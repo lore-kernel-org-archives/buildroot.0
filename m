@@ -1,29 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 May 2015 00:59:52 +0200
-Subject: [Buildroot] [PATCH 2/2] Revert "package/ola: fix autoreconf
-	issue for host-ola"
-In-Reply-To: <1431637036-8089-2-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 14 May 2015 22:57:16 +0200")
-References: <1431637036-8089-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1431637036-8089-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87pp62datz.fsf@dell.be.48ers.dk>
+Date: Fri, 15 May 2015 00:08:27 +0200
+Subject: [Buildroot] [git commit] armadillo: bump versin to 5.100.2
+Message-ID: <20150514230013.789BB7FADF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f7d2c99afb0010d65407ab9df4f398d7e9430bb9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This reverts commit 884af65fd5ddc548f19a26162f905a32ef0b53b3. Thanks
- > to the change of the installation path of host-autoconf-archive
- > macros, host-ola will no longer see them when doing its autoreconf, so
- > the patch that was added by the commit being reverted here is no
- > longer needed.
+This is the most recent version of the package.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Also it fixes static builds (see
+http://autobuild.buildroot.net/results/1cc/1ccf0829c13896c000aed1956155a34844207b2f)
+with commit http://sourceforge.net/p/arma/code/3569/ that was made right
+before 4.400.0 release.
 
-Committed, thanks.
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/armadillo/armadillo.hash |    2 +-
+ package/armadillo/armadillo.mk   |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index d74d6b0..0046c56 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  0664caca9a9be410ba467a3f4fd7d4556ccda62a9e061f2935904be2afe22132  armadillo-4.000.4.tar.gz
++sha256  63150f12bf7c7c598ea55b7271d99fce349ff386a3dc2cae3904b244f6e35320  armadillo-5.100.2.tar.gz
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 58b8fc1..607103c 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-ARMADILLO_VERSION_MAJOR = 4.000
+-ARMADILLO_VERSION = $(ARMADILLO_VERSION_MAJOR).4
++ARMADILLO_VERSION_MAJOR = 5.100
++ARMADILLO_VERSION = $(ARMADILLO_VERSION_MAJOR).2
+ ARMADILLO_SITE = http://downloads.sourceforge.net/project/arma
+ ARMADILLO_DEPENDENCIES = clapack
+ ARMADILLO_INSTALL_STAGING = YES
