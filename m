@@ -1,40 +1,32 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Thu, 14 May 2015 07:39:00 +0300
-Subject: [Buildroot] [PATCH 2/2] Revert "kmod: disable --gc-sections ld
-	option when building for xtensa"
-In-Reply-To: <1431578340-11753-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1431578340-11753-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <1431578340-11753-3-git-send-email-jcmvbkbc@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 14 May 2015 06:55:54 +0200
+Subject: [Buildroot] [PATCH] armadillo: bump versin to 5.100.2
+In-Reply-To: <1431556817-20966-1-git-send-email-abrodkin@synopsys.com>
+References: <1431556817-20966-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <CAHXCMMLkX2DKmE6ZehvTOkByViv2misSGVCMPuTr1n==pJKz2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 55c83179c4b30c9ec715a75297849abd74a63e05.
-Now that binutils bug with --gc-section is fixed this workaroud is no
-longer needed.
+On Thu, May 14, 2015 at 12:40 AM, Alexey Brodkin
+<Alexey.Brodkin@synopsys.com> wrote:
+> This is the most recent version of the package.
+>
+> Also it fixes static builds (see
+> http://autobuild.buildroot.net/results/1cc/1ccf0829c13896c000aed1956155a34844207b2f)
+> with commit http://sourceforge.net/p/arma/code/3569/ that was made right
+> before 4.400.0 release.
+>
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- package/kmod/kmod.mk | 5 -----
- 1 file changed, 5 deletions(-)
+Regards,
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 1ac83ea..98d9998 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -39,11 +39,6 @@ KMOD_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
- KMOD_CONF_OPTS += --enable-python
- endif
- 
--# --gc-sections triggers a bug in the current Xtensa binutils
--ifeq ($(BR2_xtensa),y)
--KMOD_CONF_ENV += cc_cv_LDFLAGS__Wl___gc_sections=no
--endif
--
- ifeq ($(BR2_PACKAGE_KMOD_TOOLS),y)
- 
- # add license info for kmod tools
 -- 
-1.8.1.4
+Samuel
