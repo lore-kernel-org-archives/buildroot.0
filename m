@@ -1,34 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 14 May 2015 06:37:23 +0300
-Subject: [Buildroot] [PATCH v2 8/9] atmel: add a flashing helper and
- documentation
-In-Reply-To: <1431544977-2274-9-git-send-email-alexandre.belloni@free-electrons.com>
-References: <1431544977-2274-1-git-send-email-alexandre.belloni@free-electrons.com>
- <1431544977-2274-9-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <20150514033723.GA2558@tarshish>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 14 May 2015 07:38:58 +0300
+Subject: [Buildroot] [PATCH 0/2] binutils: fix xtensa ld bug triggered by
+	--gc-sections
+Message-ID: <1431578340-11753-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexandre,
+Hi,
 
-On Wed, May 13, 2015 at 09:22:56PM +0200, Alexandre Belloni wrote:
-> +You can then flash the board using the provided flasher.sh script in board/atmel:
-> +
-> +board/atmel/flasher.sh <builddir_path> <interface> <board>
-> +
-> +For example:
-> +board/atmel/flasher.sh /tmp/atmel_sama5d3_xplained/ /dev/ttyACM0 sama5d3_xplained
+this series backports binutils fix for xtensa ld and reverts old workaround
+for this bug.
 
-Since you didn't mention out of tree build in this document, I think 
-'./output/' would be better as first argument example. Adding a comment on out 
-of tree build would be nice, though.
+Max Filippov (2):
+  binutils: fix xtensa ld bug triggered by --gc-sections
+  Revert "kmod: disable --gc-sections ld option when building for
+    xtensa"
 
-baruch
+ ...localized-symbol-refcounting-with-gc-sect.patch | 57 ++++++++++++++++++++++
+ ...localized-symbol-refcounting-with-gc-sect.patch | 57 ++++++++++++++++++++++
+ ...localized-symbol-refcounting-with-gc-sect.patch | 57 ++++++++++++++++++++++
+ ...localized-symbol-refcounting-with-gc-sect.patch | 57 ++++++++++++++++++++++
+ package/kmod/kmod.mk                               |  5 --
+ 5 files changed, 228 insertions(+), 5 deletions(-)
+ create mode 100644 package/binutils/2.22/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
+ create mode 100644 package/binutils/2.23.2/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
+ create mode 100644 package/binutils/2.24/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
+ create mode 100644 package/binutils/2.25/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.8.1.4
