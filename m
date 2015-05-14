@@ -1,38 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 14 May 2015 23:17:13 +0200
-Subject: [Buildroot] [git commit] libupnpp: fix static linking issue
-	with libcurl
-In-Reply-To: <20150514231444.4ea9a128@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 14 May 2015 23:14:44 +0200")
-References: <20150514210426.753DC800DE@busybox.osuosl.org>
- <20150514231444.4ea9a128@free-electrons.com>
-Message-ID: <877fsaeu5i.fsf@dell.be.48ers.dk>
+Date: Fri, 15 May 2015 00:08:46 +0200
+Subject: [Buildroot] [PATCH] armadillo: bump versin to 5.100.2
+In-Reply-To: <1431556817-20966-1-git-send-email-abrodkin@synopsys.com> (Alexey
+ Brodkin's message of "Thu, 14 May 2015 01:40:17 +0300")
+References: <1431556817-20966-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <87zj56dd75.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
- > Dear Peter Korsgaard,
- > On Thu, 14 May 2015 22:44:06 +0200, Peter Korsgaard wrote:
+ > This is the most recent version of the package.
+ > Also it fixes static builds (see
+ > http://autobuild.buildroot.net/results/1cc/1ccf0829c13896c000aed1956155a34844207b2f)
+ > with commit http://sourceforge.net/p/arma/code/3569/ that was made right
+ > before 4.400.0 release.
 
- >> # configure script fails to link against the dependencies of libupnp
- >> -# causing upnp detection to fail when statically linking
- >> +# and libcurl causing detection to fail when statically linking
- >> ifeq ($(BR2_STATIC_LIBS),y)
- >> -LIBUPNPP_CONF_ENV += LIBS='-lthreadutil -lixml -pthread'
- >> +LIBUPNPP_DEPENDENCIES += host-pkgconf
- >> +LIBUPNPP_CONF_ENV += \
- >> +	LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs libupnp libcurl)'
- >> endif
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Samuel Martin <s.martin49@gmail.com>
 
- > I'm glad to see that we're moving away from a hardcoded LIBS value to
- > using pkg-config :-)
-
-Yeah ;)
+Committed, thanks.
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Bye, Peter Korsgaard
