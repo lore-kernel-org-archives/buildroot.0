@@ -1,38 +1,34 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 13 May 2015 19:42:48 -0500
-Subject: [Buildroot] [PATCH v5 21/24] bash: added option to disable
-	locale support
-In-Reply-To: <1431553177-7280-22-git-send-email-clayton.shotwell@rockwellcollins.com>
-References: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1431553177-7280-22-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <CANQCQpZKqSLtBQ8kkucOgWriqAx6DYY6p7eiDt_K9NTYHw14+Q@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 14 May 2015 06:37:23 +0300
+Subject: [Buildroot] [PATCH v2 8/9] atmel: add a flashing helper and
+ documentation
+In-Reply-To: <1431544977-2274-9-git-send-email-alexandre.belloni@free-electrons.com>
+References: <1431544977-2274-1-git-send-email-alexandre.belloni@free-electrons.com>
+ <1431544977-2274-9-git-send-email-alexandre.belloni@free-electrons.com>
+Message-ID: <20150514033723.GA2558@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Clayton,
+Hi Alexandre,
 
-On Wed, May 13, 2015 at 4:39 PM, Clayton Shotwell
-<clayton.shotwell@rockwellcollins.com> wrote:
-> From: Matt Weber <matthew.weber@rockwellcollins.com>
->
-> ---
->  package/bash/Config.in | 10 ++++++++++
->  package/bash/bash.mk   |  9 +++++++++
->  2 files changed, 19 insertions(+)
->
-<snip>
-This patch needs to be removed from v6.  Accidentally included....
+On Wed, May 13, 2015 at 09:22:56PM +0200, Alexandre Belloni wrote:
+> +You can then flash the board using the provided flasher.sh script in board/atmel:
+> +
+> +board/atmel/flasher.sh <builddir_path> <interface> <board>
+> +
+> +For example:
+> +board/atmel/flasher.sh /tmp/atmel_sama5d3_xplained/ /dev/ttyACM0 sama5d3_xplained
 
+Since you didn't mention out of tree build in this document, I think 
+'./output/' would be better as first argument example. Adding a comment on out 
+of tree build would be nice, though.
+
+baruch
 
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
