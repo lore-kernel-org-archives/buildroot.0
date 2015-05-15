@@ -1,59 +1,38 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 15 May 2015 21:22:56 +0200
-Subject: [Buildroot] [RFC] package/boost: fix powerpc uClibc build issue
-In-Reply-To: <20150515204256.7028a9d1@free-electrons.com>
-References: <1431709207-25679-1-git-send-email-romain.naour@openwide.fr>
- <20150515204256.7028a9d1@free-electrons.com>
-Message-ID: <55564790.3020109@openwide.fr>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri, 15 May 2015 17:14:38 -0300 (BRT)
+Subject: [Buildroot] Proposal to remove patches from patchwork,
+ or find adopters
+In-Reply-To: <270429755.78568.1431714517112.JavaMail.zimbra@datacom.ind.br>
+References: <20150506235353.7740a9d3@free-electrons.com>
+ <667225900.3762560.1430997299636.JavaMail.zimbra@datacom.ind.br>
+ <270429755.78568.1431714517112.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <105193480.134539.1431720878285.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+----- Original Message -----
+> From: "Carlos Santos" <casantos@datacom.ind.br>
+> To: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> Cc: "erico.nunes" <erico.nunes@datacom.ind.br>, buildroot at uclibc.org
+> Sent: Friday, May 15, 2015 3:28:37 PM
+> Subject: Re: [Buildroot] Proposal to remove patches from patchwork, or find adopters
 
-Le 15/05/2015 20:42, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
+> Hello Thomas,
 > 
-> On Fri, 15 May 2015 19:00:07 +0200, Romain Naour wrote:
->> With powerpc target and uClibc toolchain the spirit library doesn't
->> build properly due to an invalid field access.
->>
->> The "bits" field is intended only for internal use in
->> include/boost/math/special_functions/sign.hpp not from
->> include/boost/spirit/home/support/detail/sign.hpp.
->>
->> Simply call (boost::math::changesign)(x) from
->> include/boost/spirit/home/support/detail/sign.hpp to fixes this.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/be1/be1069e8528d299f487f431f7e2d793413ccbab8/
->>
->> And many more.
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> ---
->> It's not clear why this issue is only trigged by powerpc
->> with uClibc toolchain.
->> Also, it's a pity that the spirit library doesn't use directly
->> math library instead of using a wrapper.
-> 
-> My opinion is that this patch is too tricky to be committed without
-> being checked by upstream Boost developers, especially since there is
-> no explanation as to why the problem occurs only on PowerPC.
-> 
-> I would prefer to disable boost-log on PowerPC/uClibc, as proposed by
-> the patch I submitted shortly after this one.
+> OK, I finally found some time to work on this patch again. The answers to your
+> previous questions were included in the commit message and in comments in
+> gmock.mk.
 
-I'm agree with your proposal and I'll wait for upstream comment on this patch:
+Here is the new link:
 
-http://sourceforge.net/p/spirit/mailman/message/34116604/
+    http://patchwork.ozlabs.org/patch/472894/
 
-Best regards,
-Romain
+This one can be discarded
 
-> Best regards,
-> 
-> Thomas
-> 
+    http://patchwork.ozlabs.org/patch/445297/
+
+Carlos Santos (Casantos)
+DATACOM, P&D
