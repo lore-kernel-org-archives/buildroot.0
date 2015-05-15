@@ -1,51 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 May 2015 20:42:56 +0200
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 15 May 2015 21:22:56 +0200
 Subject: [Buildroot] [RFC] package/boost: fix powerpc uClibc build issue
-In-Reply-To: <1431709207-25679-1-git-send-email-romain.naour@openwide.fr>
+In-Reply-To: <20150515204256.7028a9d1@free-electrons.com>
 References: <1431709207-25679-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150515204256.7028a9d1@free-electrons.com>
+ <20150515204256.7028a9d1@free-electrons.com>
+Message-ID: <55564790.3020109@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Hi Thomas,
 
-On Fri, 15 May 2015 19:00:07 +0200, Romain Naour wrote:
-> With powerpc target and uClibc toolchain the spirit library doesn't
-> build properly due to an invalid field access.
+Le 15/05/2015 20:42, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
 > 
-> The "bits" field is intended only for internal use in
-> include/boost/math/special_functions/sign.hpp not from
-> include/boost/spirit/home/support/detail/sign.hpp.
+> On Fri, 15 May 2015 19:00:07 +0200, Romain Naour wrote:
+>> With powerpc target and uClibc toolchain the spirit library doesn't
+>> build properly due to an invalid field access.
+>>
+>> The "bits" field is intended only for internal use in
+>> include/boost/math/special_functions/sign.hpp not from
+>> include/boost/spirit/home/support/detail/sign.hpp.
+>>
+>> Simply call (boost::math::changesign)(x) from
+>> include/boost/spirit/home/support/detail/sign.hpp to fixes this.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/be1/be1069e8528d299f487f431f7e2d793413ccbab8/
+>>
+>> And many more.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>> It's not clear why this issue is only trigged by powerpc
+>> with uClibc toolchain.
+>> Also, it's a pity that the spirit library doesn't use directly
+>> math library instead of using a wrapper.
 > 
-> Simply call (boost::math::changesign)(x) from
-> include/boost/spirit/home/support/detail/sign.hpp to fixes this.
+> My opinion is that this patch is too tricky to be committed without
+> being checked by upstream Boost developers, especially since there is
+> no explanation as to why the problem occurs only on PowerPC.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/be1/be1069e8528d299f487f431f7e2d793413ccbab8/
-> 
-> And many more.
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
-> It's not clear why this issue is only trigged by powerpc
-> with uClibc toolchain.
-> Also, it's a pity that the spirit library doesn't use directly
-> math library instead of using a wrapper.
+> I would prefer to disable boost-log on PowerPC/uClibc, as proposed by
+> the patch I submitted shortly after this one.
 
-My opinion is that this patch is too tricky to be committed without
-being checked by upstream Boost developers, especially since there is
-no explanation as to why the problem occurs only on PowerPC.
+I'm agree with your proposal and I'll wait for upstream comment on this patch:
 
-I would prefer to disable boost-log on PowerPC/uClibc, as proposed by
-the patch I submitted shortly after this one.
+http://sourceforge.net/p/spirit/mailman/message/34116604/
 
 Best regards,
+Romain
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Best regards,
+> 
+> Thomas
+> 
