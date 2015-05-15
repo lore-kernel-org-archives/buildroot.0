@@ -1,53 +1,58 @@
-From: John OSullivan <john.osullivan@cloudiumsystems.com>
-Date: Fri, 15 May 2015 12:05:25 +0100
-Subject: [Buildroot] Generating Debug Info Files
-In-Reply-To: <20150514215914.10e83cad@free-electrons.com>
-References: <00b501d08d9b$87eae570$97c0b050$@osullivan@cloudiumsystems.com>
- <20150514215914.10e83cad@free-electrons.com>
-Message-ID: <5555D2F5.80308@cloudiumsystems.com>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Fri, 15 May 2015 14:26:40 +0200
+Subject: [Buildroot] [PATCH 1/1] zmqpp: fix compilation with some toolchains
+Message-ID: <1431692800-15539-1-git-send-email-lionel.orry@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thanks for your reply, I already have debugging symbols on for the test 
-application running on my target but perf still complains:
-Failed to open test_application, continuing without symbols
+Fixes:
+http://autobuild.buildroot.net/results/d9ec39dc5829aac1b25bfea7484458fcebd68412/
 
-The file has symbols and is not stripped and gdb has no problem finding 
-the symbols so I think the issue is that perf is expecting to find the 
-symbols in some separate file, its difficult to get clarity on this but 
-I believe that in Ubuntu you would install a debug package, I believe 
-this installs separate files with symbol information in certain 
-locations like for example /usr/lib/.debug for libraries.
-I was going to try and do something similar with my buildroot file 
-system to see if it resolved the perf problem.
+add cstdlib header to ensure EXIT_FAILURE presence
 
-regards
-John
+Using some cross-compiling toolchains, EXIT_FAILURE is not always
+properly defined without this inclusion.
 
-On 14/05/15 20:59, Thomas Petazzoni wrote:
+Patch is upstream:
+https://github.com/zeromq/zmqpp/pull/109
 
-> Dear John OSullivan,
->
-> On Wed, 13 May 2015 17:40:31 +0100, John OSullivan wrote:
->
->> When I run perf on my buildroot based system it complains about missing
->> symbols for my libraries and applications. I know it is possible to generate
->> binaries with symbolic information in the staging area by selecting 'build
->> packages with debugging symbols', but is there any way of generating
->> separate .debug type files or do I need to do this in postBuild with a
->> script based on objcopy.
-> No, we don't have support for separate .debug files currently.
->
-> But how would it work exactly, since perf is running on the target?
->
-> Don't you simply need to have debugging symbols on the target? If
-> that's the case, you can simply do BR2_ENABLE_DEBUG=y and
-> BR2_strip_none=y.
->
-> Best regards,
->
-> Thomas
+Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+---
+ package/zmqpp/0001-add-ctsdlib-header.patch | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 package/zmqpp/0001-add-ctsdlib-header.patch
+
+diff --git a/package/zmqpp/0001-add-ctsdlib-header.patch b/package/zmqpp/0001-add-ctsdlib-header.patch
+new file mode 100644
+index 0000000..a4ae16e
+--- /dev/null
++++ b/package/zmqpp/0001-add-ctsdlib-header.patch
+@@ -0,0 +1,23 @@
++commit 57a27ccebdc2bc375267fcf0b82f5a66b20f86fa
++Author: Lionel Orry <lionel.orry@gmail.com>
++Date:   Fri May 15 14:13:22 2015 +0200
++
++    add cstdlib header to ensure EXIT_FAILURE presence
++    
++    Using some cross-compiling toolchains, EXIT_FAILURE is not always
++    properly defined without this inclusion.
++    
++    Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
++
++diff --git a/src/client/main.cpp b/src/client/main.cpp
++index 082c06b..760f01a 100644
++--- a/src/client/main.cpp
+++++ b/src/client/main.cpp
++@@ -3,6 +3,7 @@
++  *      Author: @benjamg
++  */
++ 
+++#include <cstdlib>
++ #include <array>
++ #include <iostream>
++ #include <tuple>
+-- 
+2.1.0
