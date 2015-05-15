@@ -1,43 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 May 2015 15:12:18 +0200
-Subject: [Buildroot] Generating Debug Info Files
-In-Reply-To: <5555D2F5.80308@cloudiumsystems.com>
-References: <00b501d08d9b$87eae570$97c0b050$@osullivan@cloudiumsystems.com>
- <20150514215914.10e83cad@free-electrons.com>
- <5555D2F5.80308@cloudiumsystems.com>
-Message-ID: <20150515151218.2cb0d3e4@free-electrons.com>
+Date: Fri, 15 May 2015 15:37:05 +0200
+Subject: [Buildroot] [git commit] libcap-ng: cannot be built with nios2
+ CS 2014.05 toolchain
+In-Reply-To: <20150514230014.126BC7FADF@busybox.osuosl.org>
+References: <20150514230014.126BC7FADF@busybox.osuosl.org>
+Message-ID: <20150515153705.37f9e610@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear John OSullivan,
+Dear Peter Korsgaard,
 
-On Fri, 15 May 2015 12:05:25 +0100, John OSullivan wrote:
+On Fri, 15 May 2015 00:33:25 +0200, Peter Korsgaard wrote:
 
-> Thanks for your reply, I already have debugging symbols on for the test 
-> application running on my target but perf still complains:
-> Failed to open test_application, continuing without symbols
+>  config BR2_PACKAGE_CONNMAN_OFONO
+>  	bool "enable ofono support"
+> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # libcap-ng
 
-Ok.
-
-> The file has symbols and is not stripped and gdb has no problem finding 
-> the symbols so I think the issue is that perf is expecting to find the 
-> symbols in some separate file, its difficult to get clarity on this but 
-> I believe that in Ubuntu you would install a debug package, I believe 
-> this installs separate files with symbol information in certain 
-> locations like for example /usr/lib/.debug for libraries.
-> I was going to try and do something similar with my buildroot file 
-> system to see if it resolved the perf problem.
-
-I am not sure that having the debugging symbols in a separate file
-makes a difference here. It's indeed the way desktop/server distros
-such as Ubuntu distribute the debugging symbols, but I 'm not sure it
-will make a difference for perf.
-
-Maybe perf needs some dependency such as libunwind to be able to use
-the debugging symbols?
+I think you should have probably excluded
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305 as well. I haven't
+tested, but it's pretty likely that it will also break with this
+toolchain.
 
 Thomas
 -- 
