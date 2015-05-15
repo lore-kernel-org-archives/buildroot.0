@@ -1,34 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 15 May 2015 13:41:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 8106] mkfs.jffs2 uses the --pagesize parameter
-	incorrectly
-In-Reply-To: <bug-8106-163@https.bugs.busybox.net/>
-References: <bug-8106-163@https.bugs.busybox.net/>
-Message-ID: <20150515134138.68520801F7@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 15 May 2015 15:53:21 +0200
+Subject: [Buildroot] [git commit] libcap-ng: cannot be built with nios2
+	CS 2014.05 toolchain
+In-Reply-To: <20150515153705.37f9e610@free-electrons.com> (Thomas Petazzoni's
+ message of "Fri, 15 May 2015 15:37:05 +0200")
+References: <20150514230014.126BC7FADF@busybox.osuosl.org>
+ <20150515153705.37f9e610@free-electrons.com>
+Message-ID: <87d222c5gu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8106
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-05-15 13:41:38 UTC ---
-Wow, thanks for this bug report! It seems you are absolutely correct, and I
-actually learned with your bug report that the --pagesize option is for the
-virtual memory page size, not the NAND page size.
+ > Dear Peter Korsgaard,
+ > On Fri, 15 May 2015 00:33:25 +0200, Peter Korsgaard wrote:
 
-Do you think you can cook a patch to address this problem?
+ >> config BR2_PACKAGE_CONNMAN_OFONO
+ >> bool "enable ofono support"
+ >> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # libcap-ng
 
-One issue is that Buildroot has no idea what is the virtual memory page size on
-the target system. I would suggest to just not pass any --pagesize option, and
-leave the default of 4 KB, since this is what the vast majority of systems are
-using.
+ > I think you should have probably excluded
+ > BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305 as well. I haven't
+ > tested, but it's pretty likely that it will also break with this
+ > toolchain.
 
-And I'm pretty sure that if you use --pagesize 4K on a system that uses 8 KB or
-64 KB pages, it will continue to work fine.
+Yes, possibly. I had a quick look at the autobuilder failures and didn't
+see any with the 2013 version, but I can do a test build.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Venlig hilsen,
+Peter Korsgaard 
