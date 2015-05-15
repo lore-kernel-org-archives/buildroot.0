@@ -1,113 +1,162 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 15 May 2015 19:00:07 +0200
-Subject: [Buildroot] [RFC] package/boost: fix powerpc uClibc build issue
-Message-ID: <1431709207-25679-1-git-send-email-romain.naour@openwide.fr>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri, 15 May 2015 15:05:19 -0300
+Subject: [Buildroot] [PATCH v2 1/1] gmock: new package
+In-Reply-To: <1425304883-4332-2-git-send-email-casantos@datacom.ind.br>
+References: <1425304883-4332-2-git-send-email-casantos@datacom.ind.br>
+Message-ID: <1431713119-2821-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With powerpc target and uClibc toolchain the spirit library doesn't
-build properly due to an invalid field access.
+Inspired by jMock, EasyMock, and Hamcrest, and designed with C++'s
+specifics in mind, Google C++ Mocking Framework (or Google Mock for
+short) is a library for writing and using C++ mock classes.
 
-The "bits" field is intended only for internal use in
-include/boost/math/special_functions/sign.hpp not from
-include/boost/spirit/home/support/detail/sign.hpp.
+Google Mock:
 
-Simply call (boost::math::changesign)(x) from
-include/boost/spirit/home/support/detail/sign.hpp to fixes this.
+  * lets you create mock classes trivially using simple macros,
+  * supports a rich set of matchers and actions,
+  * handles unordered, partially ordered, or completely ordered
+    expectations,
+  * is extensible by users, and
+  * works on Linux, Mac OS X, Windows, Windows Mobile, minGW, and
+    Symbian.
 
-Fixes:
-http://autobuild.buildroot.net/results/be1/be1069e8528d299f487f431f7e2d793413ccbab8/
+  http://code.google.com/p/googlemock/
 
-And many more.
+There are both host and target packages. The target one has include
+files required to compile the tests and the static libraries required
+to link/run them. The host package installs gmock_gen, a Python script
+used to generate code mocks.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Marcelo Barbosa <marcelo.barbosa@datacom.ind.br>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
-It's not clear why this issue is only trigged by powerpc
-with uClibc toolchain.
-Also, it's a pity that the spirit library doesn't use directly
-math library instead of using a wrapper.
----
- .../boost/0002-spirit-fix-changesign-wrapper.patch | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100644 package/boost/0002-spirit-fix-changesign-wrapper.patch
+ package/Config.in        |  1 +
+ package/gmock/Config.in  | 31 +++++++++++++++++++++++++++++
+ package/gmock/gmock.hash |  2 ++
+ package/gmock/gmock.mk   | 52 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 86 insertions(+)
+ create mode 100644 package/gmock/Config.in
+ create mode 100644 package/gmock/gmock.hash
+ create mode 100644 package/gmock/gmock.mk
 
-diff --git a/package/boost/0002-spirit-fix-changesign-wrapper.patch b/package/boost/0002-spirit-fix-changesign-wrapper.patch
+diff --git a/package/Config.in b/package/Config.in
+index af4d2b7..3190bf8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1014,6 +1014,7 @@ menu "Other"
+ 	source "package/flann/Config.in"
+ 	source "package/glibmm/Config.in"
+ 	source "package/glm/Config.in"
++	source "package/gmock/Config.in"
+ 	source "package/gmp/Config.in"
+ 	source "package/gsl/Config.in"
+ 	source "package/gtest/Config.in"
+diff --git a/package/gmock/Config.in b/package/gmock/Config.in
 new file mode 100644
-index 0000000..f238549
+index 0000000..8a18c29
 --- /dev/null
-+++ b/package/boost/0002-spirit-fix-changesign-wrapper.patch
-@@ -0,0 +1,69 @@
-+From 7d367aa89713995ccf5d8d3f03e27137bc254dc1 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Fri, 15 May 2015 18:46:04 +0200
-+Subject: [PATCH] spirit: fix changesign wrapper
++++ b/package/gmock/Config.in
+@@ -0,0 +1,31 @@
++config BR2_PACKAGE_GMOCK
++	bool "gmock"
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # fork()
++	help
++	  Inspired by jMock, EasyMock, and Hamcrest, and designed with C++'s
++	  specifics in mind, Google C++ Mocking Framework (or Google Mock for
++	  short) is a library for writing and using C++ mock classes.
++	  
++	  Google Mock:
++	  
++	    * lets you create mock classes trivially using simple macros,
++	    * supports a rich set of matchers and actions,
++	    * handles unordered, partially ordered, or completely ordered
++	      expectations,
++	    * is extensible by users, and
++	    * works on Linux, Mac OS X, Windows, Windows Mobile, minGW, and
++	      Symbian.
++	  
++	    http://code.google.com/p/googlemock/
++	  
++	  There are both host and target packages. The target one has include
++	  files required to compile the tests and the static libraries required
++	  to link/run them. The host package installs gmock_gen, a Python script
++	  used to generate code mocks.
 +
-+With powerpc target and uClibc toolchain the spirit library doesn't
-+build properly due to an invalid field access.
++comment "gmock needs a toolchain w/ C++, wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/gmock/gmock.hash b/package/gmock/gmock.hash
+new file mode 100644
+index 0000000..2b71739
+--- /dev/null
++++ b/package/gmock/gmock.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 26fcbb5925b74ad5fc8c26b0495dfc96353f4d553492eb97e85a8a6d2f43095b  gmock-1.7.0.zip
+diff --git a/package/gmock/gmock.mk b/package/gmock/gmock.mk
+new file mode 100644
+index 0000000..3a7173e
+--- /dev/null
++++ b/package/gmock/gmock.mk
+@@ -0,0 +1,52 @@
++################################################################################
++#
++# gmock
++#
++################################################################################
 +
-+The "bits" field is intended only for internal use in
-+include/boost/math/special_functions/sign.hpp not from
-+include/boost/spirit/home/support/detail/sign.hpp.
++GMOCK_VERSION = 1.7.0
++GMOCK_SOURCE = gmock-$(GMOCK_VERSION).zip
++GMOCK_SITE = http://googlemock.googlecode.com/files
++GMOCK_INSTALL_STAGING = YES
++GMOCK_INSTALL_TARGET = NO
++GMOCK_LICENSE = BSD-3c
++GMOCK_LICENSE_FILES = LICENSE
++GMOCK_DEPENDENCIES = gtest
++HOST_GMOCK_DEPENDENCIES = host-python
 +
-+This lead to the following build failure:
++GMOCK_CONF_OPTS = --enable-static --disable-shared
 +
-+In file included from ./boost/spirit/home/qi/numeric/detail/real_impl.hpp:22:0,
-+                 from ./boost/spirit/home/qi/numeric/real.hpp:21,
-+                 from ./boost/spirit/home/qi/numeric.hpp:17,
-+                 from ./boost/spirit/include/qi_core.hpp:23,
-+                 from libs/log/src/default_filter_factory.cpp:21:
-+./boost/spirit/home/support/detail/sign.hpp: In instantiation of 'T boost::spirit::detail::changesign(T) [with T = long double]':
-+./boost/spirit/home/qi/numeric/detail/real_impl.hpp:94:50:   required from here
-+./boost/spirit/home/support/detail/sign.hpp:60:36: error:
-+no type named 'bits' in 'traits_type {aka struct boost::math::detail::fp_traits_non_native<long double, boost::math::detail::extended_double_precision>}'
-+         typename traits_type::bits a;
++define GMOCK_EXTRACT_CMDS
++	$(UNZIP) $(DL_DIR)/$(GMOCK_SOURCE) -d $(BUILD_DIR)
++endef
 +
-+Simply call (boost::math::changesign)(x) from include/boost/spirit/home/support/detail/sign.hpp
-+to fixes this.
++# We can't use the default rule for autotools-package staging because it fails
++# because it tries to rebuild/install gtest stuff and fails after this error:
++#    "'make install' is dangerous and not supported. Instead, see README for
++#      how to integrate Google Test into your build system."
++define GMOCK_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgmock.a $(STAGING_DIR)/usr/lib/libgmock.a
++	$(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgmock_main.a $(STAGING_DIR)/usr/lib/libgmock_main.a
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gmock/
++	cp -rp $(@D)/include/gmock/* $(STAGING_DIR)/usr/include/gmock/
++endef
 +
-+Fixes:
-+http://autobuild.buildroot.net/results/be1/be1069e8528d299f487f431f7e2d793413ccbab8/build-end.log
++# Unzipping inside $(@D) and moving everything from the created subdirectory is
++# required because unzipping directly in $(BUILD_DIR) would cause host-gmock to
++# overwrite the gmock subdir instead of unzipping in a host-gmock subdir.
++define HOST_GMOCK_EXTRACT_CMDS
++	$(UNZIP) $(DL_DIR)/$(GMOCK_SOURCE) -d $(@D)
++	mv $(@D)/gmock-$(GMOCK_VERSION)/* $(@D)
++	rmdir $(@D)/gmock-$(GMOCK_VERSION)
++endef
 +
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++define HOST_GMOCK_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/scripts/generator/gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen.py
++	ln -sf gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen
++	cp -rp $(@D)/scripts/generator/cpp $(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++endef
 +
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ boost/spirit/home/support/detail/sign.hpp | 10 ++--------
-+ 1 file changed, 2 insertions(+), 8 deletions(-)
-+
-+diff --git a/boost/spirit/home/support/detail/sign.hpp b/boost/spirit/home/support/detail/sign.hpp
-+index 7c1bfb0..a5fc7e1 100644
-+--- a/boost/spirit/home/support/detail/sign.hpp
-++++ b/boost/spirit/home/support/detail/sign.hpp
-+@@ -15,7 +15,7 @@
-+ 
-+ #include <boost/config/no_tr1/cmath.hpp>
-+ #include <boost/version.hpp>
-+-#if BOOST_VERSION < 104000 
-++#if BOOST_VERSION < 104000
-+ #include <boost/spirit/home/support/detail/math/fpclassify.hpp>
-+ #include <boost/spirit/home/support/detail/math/signbit.hpp>
-+ #else
-+@@ -55,13 +55,7 @@ namespace boost { namespace spirit { namespace detail
-+ #if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && !defined(BOOST_MATH_DISABLE_STD_FPCLASSIFY)
-+         return -x;
-+ #else
-+-        typedef typename math::detail::fp_traits<T>::type traits_type;
-+-
-+-        typename traits_type::bits a;
-+-        traits_type::get_bits(x, a);
-+-        a ^= traits_type::sign;
-+-        traits_type::set_bits(x, a);
-+-        return x;
-++        return (boost::math::changesign)(x);
-+ #endif
-+     }
-+ #endif
-+-- 
-+1.9.3
-+
++$(eval $(autotools-package))
++# The host package does not build anything, just installs gmock_gen stuff, so
++# it does not need to be a host-autotools-package.
++$(eval $(host-generic-package))
 -- 
-1.9.3
+2.1.0
