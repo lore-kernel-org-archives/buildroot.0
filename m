@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 16 May 2015 15:35:52 +0200
-Subject: [Buildroot] [PATCH 6/6] qt5base: add patch to fix gold linker
-	issue
-In-Reply-To: <20150516153130.2853b37f@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 16 May 2015 15:31:30 +0200")
+Date: Sat, 16 May 2015 15:36:06 +0200
+Subject: [Buildroot] [PATCH 4/6] postgresql: mark as not available for
+	static linking
+In-Reply-To: <20150516153216.1eab6cf4@free-electrons.com> (Thomas Petazzoni's
+ message of "Sat, 16 May 2015 15:32:16 +0200")
 References: <1431714233-24324-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1431714233-24324-6-git-send-email-thomas.petazzoni@free-electrons.com>
- <87egmgbr7b.fsf@dell.be.48ers.dk>
- <20150516153130.2853b37f@free-electrons.com>
-Message-ID: <871tigbq6f.fsf@dell.be.48ers.dk>
+ <1431714233-24324-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87mw14br9l.fsf@dell.be.48ers.dk>
+ <20150516153216.1eab6cf4@free-electrons.com>
+Message-ID: <87wq08abll.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,19 +17,20 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ >> What about the reverse dependencies?
+ >> 
+ >> git grep 'select BR2_PACKAGE_POSTGRESQL'
+ >> package/bandwidthd/Config.in:   select BR2_PACKAGE_POSTGRESQL
+ >> package/collectd/Config.in:     select BR2_PACKAGE_POSTGRESQL
+ >> package/php/Config.ext: select BR2_PACKAGE_POSTGRESQL
+ >> package/qt/Config.sql.in:       select BR2_PACKAGE_POSTGRESQL
+ >> package/qt5/qt5base/Config.in:  select BR2_PACKAGE_POSTGRESQL
 
->> Committed, thanks. Don't forget to send the patch upstream.
+ > Gah, shit indeed. For some reason I assumed postgresql is an
+ > application, not a library, so it should not have reverse dependencies.
+ > I'll fix that up and resend.
 
- > I already submitted the patch as part of a bug report, which URL is
- > mentioned in my Buildroot patch. However, they ask me to follow the
- > entire Qt contribution process for just a one line patch, which I'm not
- > sure I'm willing to do :-/
-
-Sorry, somehow I missed that line in the patch description.
-
-Yeah, I understand that you don't want to go through a bunch of hoops
-for that patch.
+Thanks!
 
 -- 
 Venlig hilsen,
