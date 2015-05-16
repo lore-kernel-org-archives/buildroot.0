@@ -1,19 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 16 May 2015 23:19:53 +0200
-Subject: [Buildroot] [git commit] c-periphery: new package
-Message-ID: <20150516213338.1E7057FBDB@busybox.osuosl.org>
+Date: Sat, 16 May 2015 23:27:23 +0200
+Subject: [Buildroot] [git commit] lua-periphery: depend on c-periphery
+	instead of cloning it
+Message-ID: <20150516213338.3F5617FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=416e35b44a107316532bdde416128dcffaed49ff
+commit: http://git.buildroot.net/buildroot/commit/?id=01dfbb48c5c0725a4656518864af792c0f532e99
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package is needed as a dependency of lua-periphery. Currently,
-c-periphery is automatically cloned by lua-periphery, which causes two
-problems:
+lua-periphery currently clones and builds the c-periphery library by
+itself. This causes two problems:
 
  1/ It does not integrate properly with the download infrastructure of
     Buildroot, making offline builds impossible since not the entire
@@ -22,83 +22,174 @@ problems:
  2/ It does not use the latest version of c-periphery, which has some
     fixes contributed by Vicente to fix c-periphery on MIPS.
 
-Introducing this package is needed as part of the fix for the
-following build failure:
+This commit fixes:
 
   http://autobuild.buildroot.org/results/0ad/0ad656970b3cbc84b5531b28155ba2f747715fe3/
 
+[Peter: fix minor typo in patch 0001 description]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                  |    1 +
- package/c-periphery/Config.in      |   16 ++++++++++++++++
- package/c-periphery/c-periphery.mk |   27 +++++++++++++++++++++++++++
- 3 files changed, 44 insertions(+), 0 deletions(-)
+ ...01-Makefile-don-t-clone-build-c-periphery.patch |   32 +++++++
+ package/lua-periphery/0002-Fix-include-paths.patch |   89 ++++++++++++++++++++
+ package/lua-periphery/Config.in                    |    1 +
+ package/lua-periphery/lua-periphery.mk             |    1 +
+ 4 files changed, 123 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index af4d2b7..e0c2e2a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -811,6 +811,7 @@ menu "Graphics"
- endmenu
+diff --git a/package/lua-periphery/0001-Makefile-don-t-clone-build-c-periphery.patch b/package/lua-periphery/0001-Makefile-don-t-clone-build-c-periphery.patch
+new file mode 100644
+index 0000000..f6d3f27
+--- /dev/null
++++ b/package/lua-periphery/0001-Makefile-don-t-clone-build-c-periphery.patch
+@@ -0,0 +1,32 @@
++From 395bb4cb37612a4ac94346531b13ff0e901ed05e Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Tue, 5 May 2015 23:59:17 +0200
++Subject: [PATCH 1/2] Makefile: don't clone/build c-periphery
++
++This patch adjusts lua-periphery Makefile to not clone and build the
++c-periphery library by itself, and instead use the already available
++c-periphery library.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makefile | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/lua-periphery/Makefile b/lua-periphery/Makefile
++index bed9b32..a4c68eb 100644
++--- a/lua-periphery/Makefile
+++++ b/lua-periphery/Makefile
++@@ -36,8 +36,8 @@ install:
++ 
++ ###########################################################################
++ 
++-$(LIB): $(C_PERIPHERY_LIB) $(SRCS)
++-	$(CC) $(CFLAGS) $(LDFLAGS) $(SRCS) $(C_PERIPHERY_LIB) -o $@
+++$(LIB): $(SRCS)
+++	$(CC) $(CFLAGS) $(LDFLAGS) $(SRCS) -lc-periphery -o $@
++ 
++ $(C_PERIPHERY_LIB): $(C_PERIPHERY)/Makefile
++ 	cd $(C_PERIPHERY); $(MAKE)
++-- 
++2.1.0
++
+diff --git a/package/lua-periphery/0002-Fix-include-paths.patch b/package/lua-periphery/0002-Fix-include-paths.patch
+new file mode 100644
+index 0000000..ede4e30
+--- /dev/null
++++ b/package/lua-periphery/0002-Fix-include-paths.patch
+@@ -0,0 +1,89 @@
++From b0a48721c48e0857458eb46b36ae575281412c64 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 16 May 2015 15:12:30 +0200
++Subject: [PATCH 2/2] Fix include paths for c-periphery
++
++The lua-periphery source code is designed to have c-periphery cloned
++and built internally, so the include paths are written with this
++assumption.
++
++This commit adjusts the header paths of the c-periphery headers to be
++compatible with a separated build/installation of c-periphery.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/lua_gpio.c   | 2 +-
++ src/lua_i2c.c    | 2 +-
++ src/lua_mmio.c   | 2 +-
++ src/lua_serial.c | 2 +-
++ src/lua_spi.c    | 2 +-
++ 5 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/lua-periphery/src/lua_gpio.c b/lua-periphery/src/lua_gpio.c
++index cfeb03d..711d7e1 100644
++--- a/lua-periphery/src/lua_gpio.c
+++++ b/lua-periphery/src/lua_gpio.c
++@@ -13,7 +13,7 @@
++ #include <stdint.h>
++ #include <errno.h>
++ 
++-#include <c-periphery/src/gpio.h>
+++#include <c-periphery/gpio.h>
++ #include "lua_periphery.h"
++ #include "lua_51compat.h"
++ 
++diff --git a/lua-periphery/src/lua_i2c.c b/lua-periphery/src/lua_i2c.c
++index ebdab79..7b38f6f 100644
++--- a/lua-periphery/src/lua_i2c.c
+++++ b/lua-periphery/src/lua_i2c.c
++@@ -13,7 +13,7 @@
++ #include <stdint.h>
++ #include <errno.h>
++ 
++-#include <c-periphery/src/i2c.h>
+++#include <c-periphery/i2c.h>
++ #include "lua_periphery.h"
++ #include "lua_51compat.h"
++ 
++diff --git a/lua-periphery/src/lua_mmio.c b/lua-periphery/src/lua_mmio.c
++index 5ab1188..7dd399b 100644
++--- a/lua-periphery/src/lua_mmio.c
+++++ b/lua-periphery/src/lua_mmio.c
++@@ -13,7 +13,7 @@
++ #include <stdint.h>
++ #include <errno.h>
++ 
++-#include <c-periphery/src/mmio.h>
+++#include <c-periphery/mmio.h>
++ #include "lua_periphery.h"
++ #include "lua_51compat.h"
++ 
++diff --git a/lua-periphery/src/lua_serial.c b/lua-periphery/src/lua_serial.c
++index 7d332af..85afa4a 100644
++--- a/lua-periphery/src/lua_serial.c
+++++ b/lua-periphery/src/lua_serial.c
++@@ -13,7 +13,7 @@
++ #include <stdint.h>
++ #include <errno.h>
++ 
++-#include <c-periphery/src/serial.h>
+++#include <c-periphery/serial.h>
++ #include "lua_periphery.h"
++ #include "lua_51compat.h"
++ 
++diff --git a/lua-periphery/src/lua_spi.c b/lua-periphery/src/lua_spi.c
++index a4735a2..0c1e583 100644
++--- a/lua-periphery/src/lua_spi.c
+++++ b/lua-periphery/src/lua_spi.c
++@@ -13,7 +13,7 @@
++ #include <stdint.h>
++ #include <errno.h>
++ 
++-#include <c-periphery/src/spi.h>
+++#include <c-periphery/spi.h>
++ #include "lua_periphery.h"
++ #include "lua_51compat.h"
++ 
++-- 
++2.1.0
++
+diff --git a/package/lua-periphery/Config.in b/package/lua-periphery/Config.in
+index de5a716..df0546f 100644
+--- a/package/lua-periphery/Config.in
++++ b/package/lua-periphery/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LUA_PERIPHERY
+ 	bool "lua-periphery"
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	select BR2_PACKAGE_C_PERIPHERY
+ 	help
+ 	  A library for GPIO, SPI, I2C, MMIO, and Serial peripheral I/O
+ 	  interface access in userspace Linux with Lua.
+diff --git a/package/lua-periphery/lua-periphery.mk b/package/lua-periphery/lua-periphery.mk
+index 0717a27..99e1dbe 100644
+--- a/package/lua-periphery/lua-periphery.mk
++++ b/package/lua-periphery/lua-periphery.mk
+@@ -7,6 +7,7 @@
+ LUA_PERIPHERY_VERSION_UPSTREAM = 1.0.4
+ LUA_PERIPHERY_VERSION = $(LUA_PERIPHERY_VERSION_UPSTREAM)-1
+ LUA_PERIPHERY_SUBDIR = lua-periphery
++LUA_PERIPHERY_DEPENDENCIES = c-periphery
+ LUA_PERIPHERY_LICENSE = MIT
+ LUA_PERIPHERY_LICENSE_FILES = $(LUA_PERIPHERY_SUBDIR)/LICENSE
  
- menu "Hardware handling"
-+	source "package/c-periphery/Config.in"
- 	source "package/ccid/Config.in"
- 	source "package/dtc/Config.in"
- 	source "package/gnu-efi/Config.in"
-diff --git a/package/c-periphery/Config.in b/package/c-periphery/Config.in
-new file mode 100644
-index 0000000..0bfb4b1
---- /dev/null
-+++ b/package/c-periphery/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_C_PERIPHERY
-+	bool "c-periphery"
-+	help
-+	  c-periphery is a set of C wrapper functions for GPIO, SPI,
-+	  I2C, MMIO, and Serial peripheral I/O interface access in
-+	  userspace Linux. The c-periphery wrappers simplify and
-+	  consolidate the native Linux APIs to these
-+	  interfaces. c-periphery is useful in embedded Linux
-+	  environments (including BeagleBone, Raspberry Pi,
-+	  etc. platforms) for interfacing with external
-+	  peripherals. c-periphery is re-entrant, uses static
-+	  allocations, has no dependencies outside the standard C
-+	  library and Linux, compiles into a static library for easy
-+	  integration with other projects, and is MIT licensed.
-+
-+	  https://github.com/vsergeev/c-periphery
-diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
-new file mode 100644
-index 0000000..68193d7
---- /dev/null
-+++ b/package/c-periphery/c-periphery.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# c-periphery
-+#
-+################################################################################
-+
-+C_PERIPHERY_VERSION = 0fdfac3264f1dce32991f4ec30d084e34b35181d
-+C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,$(C_PERIPHERY_VERSION))
-+C_PERIPHERY_INSTALL_STAGING = YES
-+# only a static library
-+C_PERIPHERY_INSTALL_TARGET = NO
-+C_PERIPHERY_LICENSE = MIT
-+C_PERIPHERY_LICENSE_FILES = LICENSE
-+
-+define C_PERIPHERY_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
-+
-+# There is no 'install' rule in the Makefile, so we handle things
-+# manually.
-+define C_PERIPHERY_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/periphery.a $(STAGING_DIR)/usr/lib/libc-periphery.a
-+	mkdir -p $(STAGING_DIR)/usr/include/c-periphery/
-+	cp -dpfr $(@D)/src/*.h $(STAGING_DIR)/usr/include/c-periphery/
-+endef
-+
-+$(eval $(generic-package))
