@@ -1,44 +1,37 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 16 May 2015 23:22:22 +0200
-Subject: [Buildroot] [PATCH] package/heirloom-mailx: fix link issue with
-	getopt
-Message-ID: <1431811342-22781-1-git-send-email-romain.naour@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 16 May 2015 23:26:47 +0200
+Subject: [Buildroot] [PATCH 1/2] c-periphery: new package
+In-Reply-To: <1431784161-5771-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 16 May 2015 15:49:20 +0200")
+References: <1431784161-5771-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87382w9pt4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With NIOS2 toolchain, heirloom-mailx fail to build
-due to missing -fPIC when linking with its own getopt.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Since static build for heirloom-mailx is disabled,
-always pass -fPIC in CFLAGS.
+ > This package is needed as a dependency of lua-periphery. Currently,
+ > c-periphery is automatically cloned by lua-periphery, which causes two
+ > problems:
 
-Fixes:
-http://autobuild.buildroot.net/results/333/33346f4555ed403bab7b739dd5d47814efa8eb4c
+ >  1/ It does not integrate properly with the download infrastructure of
+ >     Buildroot, making offline builds impossible since not the entire
+ >     source code is downloaded by Buildroot.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/heirloom-mailx/heirloom-mailx.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ >  2/ It does not use the latest version of c-periphery, which has some
+ >     fixes contributed by Vicente to fix c-periphery on MIPS.
 
-diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
-index 7343479..044cd8c 100644
---- a/package/heirloom-mailx/heirloom-mailx.mk
-+++ b/package/heirloom-mailx/heirloom-mailx.mk
-@@ -18,8 +18,11 @@ define HEIRLOOM_MAILX_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) $(SHELL) ./makeconfig)
- endef
- 
-+# -fPIC is needed to build with NIOS2 toolchains.
- define HEIRLOOM_MAILX_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
-+		CFLAGS="$(TARGET_CFLAGS) -fPIC" \
-+		-C $(@D)
- endef
- 
- define HEIRLOOM_MAILX_INSTALL_TARGET_CMDS
+ > Introducing this package is needed as part of the fix for the
+ > following build failure:
+
+ >   http://autobuild.buildroot.org/results/0ad/0ad656970b3cbc84b5531b28155ba2f747715fe3/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-1.9.3
+Bye, Peter Korsgaard
