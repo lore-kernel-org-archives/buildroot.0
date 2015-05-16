@@ -1,45 +1,53 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Sat, 16 May 2015 23:53:00 +0200
-Subject: [Buildroot] [PATCH v2 8/9] atmel: add a flashing helper and
- documentation
-In-Reply-To: <20150514033723.GA2558@tarshish>
-References: <1431544977-2274-1-git-send-email-alexandre.belloni@free-electrons.com>
- <1431544977-2274-9-git-send-email-alexandre.belloni@free-electrons.com>
- <20150514033723.GA2558@tarshish>
-Message-ID: <20150516215300.GO3338@piout.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 17 May 2015 01:11:45 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-05-11
+In-Reply-To: <20150512063016.AD506100F8B@stock.ovh.net>
+References: <20150512063016.AD506100F8B@stock.ovh.net>
+Message-ID: <20150516231145.GA7903@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Samuel, Romain, All,
 
-On 14/05/2015 at 06:37:23 +0300, Baruch Siach wrote :
-> On Wed, May 13, 2015 at 09:22:56PM +0200, Alexandre Belloni wrote:
-> > +You can then flash the board using the provided flasher.sh script in board/atmel:
-> > +
-> > +board/atmel/flasher.sh <builddir_path> <interface> <board>
-> > +
-> > +For example:
-> > +board/atmel/flasher.sh /tmp/atmel_sama5d3_xplained/ /dev/ttyACM0 sama5d3_xplained
-> 
-> Since you didn't mention out of tree build in this document, I think 
-> './output/' would be better as first argument example. Adding a comment on out 
-> of tree build would be nice, though.
-> 
+On 2015-05-12 08:30 +0200, Thomas Petazzoni spake thusly:
+> Build statistics for 2015-05-11
+>      powerpc |         gst1-plugins-bad-1.4.5 | NOK | http://autobuild.buildroot.net/results/c70f793c7c3b380428d6e2e622a90805cffc4dd1/
 
-Yeah, I thought about that and that is why I used ./output in usage().
+This failure is the same as the one I'm currently investigating:
+    http://autobuild.buildroot.org/results/e03/e0392859a1943d1db2a5ee2f7fdf93764369d979/
 
-I'll switch to:
+The root cause (I think) is opencv.pc, which contains:
 
-"
-For example, for an out of tree build made in
-/tmp/atmel_sama5d3_xplained/ for the sama5d3 Xplained, you would use:
-board/atmel/flasher.sh /tmp/atmel_sama5d3_xplained/ /dev/ttyACM0 sama5d3_xplained
-"
+    Libs:  ${exec_prefix}/lib/libopencv_calib3d.so
+        ${exec_prefix}/lib/libopencv_contrib.so
+        [...]
+        ${exec_prefix}/lib/libopencv_ts.a
+        ${exec_prefix}/lib/libopencv_video.so
+        -lrt -lpthread -lm -ldl
+
+(It's all on one line, but split here for readability, and lots of libs
+stripped out).
+
+OK, so at link time, an opencv-using package (like gst2-plugins-bad)
+will just try to link against ${exec_prefix}/lib/libopencv_ts.a , which
+expands to /usr/lib/libopencv_ts.a and that is:
+
+ 1- not caught ny our paranoid toolchain wrapper
+ 2- not prefix-expanded by pkg-conf
+
+I'll see what I can do with that, but tomorrow... ;-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Alexandre Belloni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
