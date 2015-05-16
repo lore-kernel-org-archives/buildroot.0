@@ -1,31 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 16 May 2015 15:13:44 +0200
-Subject: [Buildroot] [PATCH 6/6] qt5base: add patch to fix gold linker
-	issue
-In-Reply-To: <1431714233-24324-6-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 15 May 2015 20:23:53 +0200")
-References: <1431714233-24324-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1431714233-24324-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87egmgbr7b.fsf@dell.be.48ers.dk>
+Date: Sat, 16 May 2015 15:15:11 +0200
+Subject: [Buildroot] [PATCH] package/ipmiutil: really force md2 off
+In-Reply-To: <1431731188-23565-1-git-send-email-romain.naour@openwide.fr>
+ (Romain Naour's message of "Sat, 16 May 2015 01:06:28 +0200")
+References: <1431731188-23565-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <87a8x4br4w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
- > The newly added patch makes sure that gold linker functionality is not
- > used when doing host builds, since qt5 only tests the availability of
- > this feature with the target compiler.
-
+ > If ALLOW_GNU is not defined, SKIP_MD2 is a nop.
  > Fixes:
+ > http://autobuild.buildroot.net/results/f606ec1fff4cea257a4c6274bc5603efdfc439ad/
 
- >   http://autobuild.buildroot.net/results/f403a76ac0abbf8488373c0dffb4487f5d98c55d/
+ > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+ > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks. Don't forget to send the patch upstream.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
