@@ -1,49 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 16 May 2015 15:13:58 +0200
-Subject: [Buildroot] [git commit] boost: do not allow boost-log on PowerPC
-	with uClibc
-Message-ID: <20150516131759.C901781768@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] mosquitto: disable with broken NIOS 2
+	toolchains
+Message-ID: <20150516131759.D15B681768@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7aaa9bee2e6009c6c00fa2a356b8f014999e9a54
+commit: http://git.buildroot.net/buildroot/commit/?id=749dcfe8a89e7082f51670567510adccd326aba3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The build of boost-log with a uClibc toolchain on PowerPC fails with
-some weird C++ issues. Since nobody ever looked into this problem,
-let's "fix" the autobuilder issue by not allowing to select boost-log
-in such a situation.
+mosquitto triggers the infamous _gp issue with the NIOS 2 toolchains,
+so let's not allow mosquitto in such situations.
 
 Fixes:
 
-   http://autobuild.buildroot.net/results/13b43105caf4d3952de70030b51f8d96cf6604ee/
-   (and many, many similar build failures)
+  http://autobuild.buildroot.net/results/b853369452115b0c6f32c6c960af2dbdf71a74af/
 
-[Peter: also add dependency to comment]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boost/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/mosquitto/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 0ed8dd2..92d59c2 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -99,9 +99,13 @@ comment "boost-locale needs a toolchain w/ wchar"
- config BR2_PACKAGE_BOOST_LOG
- 	bool "boost-log"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	# for some reason, uClibc on PowerPC fails to build the boost
-+	# log module
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
- 
- comment "boost-log needs a toolchain w/ NPTL"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
- 
- config BR2_PACKAGE_BOOST_MATH
- 	bool "boost-math"
+diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
+index 50937d0..4053c62 100644
+--- a/package/mosquitto/Config.in
++++ b/package/mosquitto/Config.in
+@@ -2,6 +2,9 @@ config BR2_PACKAGE_MOSQUITTO
+ 	bool "mosquitto"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # builds .so
++	# Triggers the _gp link issue
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	help
+ 	  Mosquitto is an open source message broker that implements
+ 	  the MQ Telemetry Transport protocol versions 3.1 and
+@@ -16,3 +19,5 @@ config BR2_PACKAGE_MOSQUITTO
+ comment "mosquitto needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
