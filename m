@@ -1,53 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 May 2015 00:08:35 +0200
-Subject: [Buildroot] [git commit] python-pyqt: fix install
-Message-ID: <20150517070339.7D761800B0@busybox.osuosl.org>
+Date: Sun, 17 May 2015 00:11:30 +0200
+Subject: [Buildroot] [git commit] qt: fix webkit dependencies
+Message-ID: <20150517070339.8C02480448@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=348be778ff683491e99d00a5c235110fbec05584
+commit: http://git.buildroot.net/buildroot/commit/?id=5d496bdddb44c6f8f97d0f573a7220ebf0ec41eb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-PyQt4 provides two version for some py files: one for python2.x and one for
-python3.x. This two versions are installed in TARGET_DIR.
-After installing files, python is used to generate all .pyc files, but fails
-like :
-class ProxyBase(metaclass=ProxyMetaclass):
-                             ^
-							 SyntaxError: invalid syntax
+fix:
+http://autobuild.buildroot.net/results/ce8/ce89ad1ca6aec9f7bb5549301bf4c0dcba9e0e37/
 
-This is not a package build failure and this fix is only cosmetic.
-This patch suppress directory for not targeted python version.
+qtwebkit includes qscript headers.
+For packages like python-pyqt if webkit is available but not qscript, the
+compilation fails with :
+buildroot/output/build/python-pyqt-4.11.3/sip/QtWebKit/qwebframe.sip:79:0:
+../../../host/usr/i686-buildroot-linux-gnu/sysroot/usr/include/QtWebKit/qwebframe.h:28:36:
+	fatal error: QtScript/qscriptengine.h: No such file or directory
 
+This problem is not seen with Qt compilation because some relative include
+directly from sources are added.
+
+[Peter: also adjust comment]
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyqt/python-pyqt.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/qt/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pyqt/python-pyqt.mk b/package/python-pyqt/python-pyqt.mk
-index 292398d..fa298c4 100644
---- a/package/python-pyqt/python-pyqt.mk
-+++ b/package/python-pyqt/python-pyqt.mk
-@@ -14,8 +14,10 @@ PYTHON_PYQT_DEPENDENCIES = python-sip host-python-sip qt
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 43f5a0f..67d5561 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -417,6 +417,7 @@ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
  
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- PYTHON_PYQT_PYTHON_DIR = python$(PYTHON_VERSION_MAJOR)
-+PYTHON_PYQT_RM_PORT_BASE = port_v3
- else ifeq ($(BR2_PACKAGE_PYTHON3),y)
- PYTHON_PYQT_PYTHON_DIR = python$(PYTHON3_VERSION_MAJOR)
-+PYTHON_PYQT_RM_PORT_BASE = port_v2
- endif
+ config BR2_PACKAGE_QT_WEBKIT
+ 	bool "WebKit Module"
++	depends on BR2_PACKAGE_QT_SCRIPT
+ 	depends on BR2_PACKAGE_QT_SHARED
+ 	depends on BR2_PACKAGE_QT_GUI_MODULE
+ 	depends on BR2_PACKAGE_QT_NETWORK
+@@ -426,8 +427,9 @@ config BR2_PACKAGE_QT_WEBKIT
+ 	  Build the WebKit module.
+ 	  If unsure, say n.
  
- ifeq ($(BR2_PACKAGE_QT_EMBEDDED),y)
-@@ -105,6 +107,7 @@ endef
- define PYTHON_PYQT_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install
- 	touch $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/__init__.py
-+	$(RM) -rf $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/uic/$(PYTHON_PYQT_RM_PORT_BASE)
- 	PYTHONPATH="$(PYTHON_PATH)" \
- 		$(HOST_DIR)/usr/bin/python -c "import compileall; \
- 		compileall.compile_dir('$(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4')"
+-comment "WebKit needs shared library/NPTL toolchain/gui/network support"
+-	depends on !(BR2_PACKAGE_QT_SHARED && BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
++comment "WebKit needs shared library/NPTL toolchain/script/gui/network support"
++	depends on !(BR2_PACKAGE_QT_SCRIPT && BR2_PACKAGE_QT_SHARED && \
++		BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+ 
