@@ -1,195 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 16 May 2015 23:27:23 +0200
-Subject: [Buildroot] [git commit] lua-periphery: depend on c-periphery
-	instead of cloning it
-Message-ID: <20150516213338.3F5617FBDB@busybox.osuosl.org>
+Date: Sat, 16 May 2015 23:28:18 +0200
+Subject: [Buildroot] [git commit] package/mono: fix install with parallel
+	builds
+Message-ID: <20150516213338.4B24D7FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=01dfbb48c5c0725a4656518864af792c0f532e99
+commit: http://git.buildroot.net/buildroot/commit/?id=f28af782655c8c4ccc2d9180d6c9f3ac36d71d00
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-lua-periphery currently clones and builds the c-periphery library by
-itself. This causes two problems:
+Due to a race in the 'install' utility, installing the same file twice
+in parallel often results in one of the install calls to fail.
 
- 1/ It does not integrate properly with the download infrastructure of
-    Buildroot, making offline builds impossible since not the entire
-    source code is downloaded by Buildroot.
+Ensure proper ordering of conflicting rules.
 
- 2/ It does not use the latest version of c-periphery, which has some
-    fixes contributed by Vicente to fix c-periphery on MIPS.
+Fixes:
+    http://autobuild.buildroot.org/results/c32/c3288c5d1fb94474f14a4a889e76135878d403bc/
+    http://autobuild.buildroot.org/results/f70/f708e89f613ec0b42cdf49ccbef39b02f4a271fb/
+    http://autobuild.buildroot.org/results/3cb/3cb99e5c5672cbaa2a86020129a05dfde47cdb8f/
+    ...
 
-This commit fixes:
-
-  http://autobuild.buildroot.org/results/0ad/0ad656970b3cbc84b5531b28155ba2f747715fe3/
-
-[Peter: fix minor typo in patch 0001 description]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-Makefile-don-t-clone-build-c-periphery.patch |   32 +++++++
- package/lua-periphery/0002-Fix-include-paths.patch |   89 ++++++++++++++++++++
- package/lua-periphery/Config.in                    |    1 +
- package/lua-periphery/lua-periphery.mk             |    1 +
- 4 files changed, 123 insertions(+), 0 deletions(-)
+ package/mono/0003-fix-parallel-install.patch |   40 ++++++++++++++++++++++++++
+ 1 files changed, 40 insertions(+), 0 deletions(-)
 
-diff --git a/package/lua-periphery/0001-Makefile-don-t-clone-build-c-periphery.patch b/package/lua-periphery/0001-Makefile-don-t-clone-build-c-periphery.patch
+diff --git a/package/mono/0003-fix-parallel-install.patch b/package/mono/0003-fix-parallel-install.patch
 new file mode 100644
-index 0000000..f6d3f27
+index 0000000..c151173
 --- /dev/null
-+++ b/package/lua-periphery/0001-Makefile-don-t-clone-build-c-periphery.patch
-@@ -0,0 +1,32 @@
-+From 395bb4cb37612a4ac94346531b13ff0e901ed05e Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Tue, 5 May 2015 23:59:17 +0200
-+Subject: [PATCH 1/2] Makefile: don't clone/build c-periphery
++++ b/package/mono/0003-fix-parallel-install.patch
+@@ -0,0 +1,40 @@
++mcs: fix installation with parallel make
 +
-+This patch adjusts lua-periphery Makefile to not clone and build the
-+c-periphery library by itself, and instead use the already available
-+c-periphery library.
++In mcs/ the install of xbuild_12 and xbuild_14 will end-up installing
++the same files:
++    ${NETFRAMEWORK_DIR}/v2.0/RedistList/FrameworkList.xml
++    ${NETFRAMEWORK_DIR}/v3.0/RedistList/FrameworkList.xml
++    ${NETFRAMEWORK_DIR}/v3.5/RedistList/FrameworkList.xml
++    ${NETFRAMEWORK_DIR}/v4.0/Profile/Client/RedistList/FrameworkList.xml
++    ${NETFRAMEWORK_DIR}/v4.0/RedistList/FrameworkList.xml
++    ${NETFRAMEWORK_DIR}/v4.5.1/RedistList/FrameworkList.xml
++    ${NETFRAMEWORK_DIR}/v4.5/RedistList/FrameworkList.xml
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++This is because there is no atomicity when installing each file, and
++xbuild_12 and xbuild_14 may well run in parallel, each trying to install
++each of those files; but the 'install' utility will first check if the
++target file exists or not, and behaves differently if it does than if it
++does not, thus leading to build failures like so:
++    http://autobuild.buildroot.org/results/c32/c3288c5d1fb94474f14a4a889e76135878d403bc/build-end.log
 +
-+diff --git a/lua-periphery/Makefile b/lua-periphery/Makefile
-+index bed9b32..a4c68eb 100644
-+--- a/lua-periphery/Makefile
-++++ b/lua-periphery/Makefile
-+@@ -36,8 +36,8 @@ install:
-+ 
-+ ###########################################################################
-+ 
-+-$(LIB): $(C_PERIPHERY_LIB) $(SRCS)
-+-	$(CC) $(CFLAGS) $(LDFLAGS) $(SRCS) $(C_PERIPHERY_LIB) -o $@
-++$(LIB): $(SRCS)
-++	$(CC) $(CFLAGS) $(LDFLAGS) $(SRCS) -lc-periphery -o $@
-+ 
-+ $(C_PERIPHERY_LIB): $(C_PERIPHERY)/Makefile
-+ 	cd $(C_PERIPHERY); $(MAKE)
-+-- 
-+2.1.0
++So, ensure ordering of the install of xbuild_12 and xbuild_14 (the
++ordering is completely arbitrary, either way gives the same installed
++files).
 +
-diff --git a/package/lua-periphery/0002-Fix-include-paths.patch b/package/lua-periphery/0002-Fix-include-paths.patch
-new file mode 100644
-index 0000000..ede4e30
---- /dev/null
-+++ b/package/lua-periphery/0002-Fix-include-paths.patch
-@@ -0,0 +1,89 @@
-+From b0a48721c48e0857458eb46b36ae575281412c64 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 16 May 2015 15:12:30 +0200
-+Subject: [PATCH 2/2] Fix include paths for c-periphery
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 +
-+The lua-periphery source code is designed to have c-periphery cloned
-+and built internally, so the include paths are written with this
-+assumption.
-+
-+This commit adjusts the header paths of the c-periphery headers to be
-+compatible with a separated build/installation of c-periphery.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ src/lua_gpio.c   | 2 +-
-+ src/lua_i2c.c    | 2 +-
-+ src/lua_mmio.c   | 2 +-
-+ src/lua_serial.c | 2 +-
-+ src/lua_spi.c    | 2 +-
-+ 5 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/lua-periphery/src/lua_gpio.c b/lua-periphery/src/lua_gpio.c
-+index cfeb03d..711d7e1 100644
-+--- a/lua-periphery/src/lua_gpio.c
-++++ b/lua-periphery/src/lua_gpio.c
-+@@ -13,7 +13,7 @@
-+ #include <stdint.h>
-+ #include <errno.h>
++diff -durN host-mono-4.0.0.orig/mcs/Makefile host-mono-4.0.0/mcs/Makefile
++--- host-mono-4.0.0.orig/mcs/Makefile	2015-04-09 16:55:53.000000000 +0200
+++++ host-mono-4.0.0/mcs/Makefile	2015-05-16 17:25:44.475542483 +0200
++@@ -43,6 +43,10 @@
++ profile-do--%:
++ 	$(MAKE) PROFILE=$(subst --, ,$*)
 + 
-+-#include <c-periphery/src/gpio.h>
-++#include <c-periphery/gpio.h>
-+ #include "lua_periphery.h"
-+ #include "lua_51compat.h"
-+ 
-+diff --git a/lua-periphery/src/lua_i2c.c b/lua-periphery/src/lua_i2c.c
-+index ebdab79..7b38f6f 100644
-+--- a/lua-periphery/src/lua_i2c.c
-++++ b/lua-periphery/src/lua_i2c.c
-+@@ -13,7 +13,7 @@
-+ #include <stdint.h>
-+ #include <errno.h>
-+ 
-+-#include <c-periphery/src/i2c.h>
-++#include <c-periphery/i2c.h>
-+ #include "lua_periphery.h"
-+ #include "lua_51compat.h"
-+ 
-+diff --git a/lua-periphery/src/lua_mmio.c b/lua-periphery/src/lua_mmio.c
-+index 5ab1188..7dd399b 100644
-+--- a/lua-periphery/src/lua_mmio.c
-++++ b/lua-periphery/src/lua_mmio.c
-+@@ -13,7 +13,7 @@
-+ #include <stdint.h>
-+ #include <errno.h>
-+ 
-+-#include <c-periphery/src/mmio.h>
-++#include <c-periphery/mmio.h>
-+ #include "lua_periphery.h"
-+ #include "lua_51compat.h"
-+ 
-+diff --git a/lua-periphery/src/lua_serial.c b/lua-periphery/src/lua_serial.c
-+index 7d332af..85afa4a 100644
-+--- a/lua-periphery/src/lua_serial.c
-++++ b/lua-periphery/src/lua_serial.c
-+@@ -13,7 +13,7 @@
-+ #include <stdint.h>
-+ #include <errno.h>
-+ 
-+-#include <c-periphery/src/serial.h>
-++#include <c-periphery/serial.h>
-+ #include "lua_periphery.h"
-+ #include "lua_51compat.h"
-+ 
-+diff --git a/lua-periphery/src/lua_spi.c b/lua-periphery/src/lua_spi.c
-+index a4735a2..0c1e583 100644
-+--- a/lua-periphery/src/lua_spi.c
-++++ b/lua-periphery/src/lua_spi.c
-+@@ -13,7 +13,7 @@
-+ #include <stdint.h>
-+ #include <errno.h>
-+ 
-+-#include <c-periphery/src/spi.h>
-++#include <c-periphery/spi.h>
-+ #include "lua_periphery.h"
-+ #include "lua_51compat.h"
-+ 
-+-- 
-+2.1.0
-+
-diff --git a/package/lua-periphery/Config.in b/package/lua-periphery/Config.in
-index de5a716..df0546f 100644
---- a/package/lua-periphery/Config.in
-+++ b/package/lua-periphery/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LUA_PERIPHERY
- 	bool "lua-periphery"
- 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	select BR2_PACKAGE_C_PERIPHERY
- 	help
- 	  A library for GPIO, SPI, I2C, MMIO, and Serial peripheral I/O
- 	  interface access in userspace Linux with Lua.
-diff --git a/package/lua-periphery/lua-periphery.mk b/package/lua-periphery/lua-periphery.mk
-index 0717a27..99e1dbe 100644
---- a/package/lua-periphery/lua-periphery.mk
-+++ b/package/lua-periphery/lua-periphery.mk
-@@ -7,6 +7,7 @@
- LUA_PERIPHERY_VERSION_UPSTREAM = 1.0.4
- LUA_PERIPHERY_VERSION = $(LUA_PERIPHERY_VERSION_UPSTREAM)-1
- LUA_PERIPHERY_SUBDIR = lua-periphery
-+LUA_PERIPHERY_DEPENDENCIES = c-periphery
- LUA_PERIPHERY_LICENSE = MIT
- LUA_PERIPHERY_LICENSE_FILES = $(LUA_PERIPHERY_SUBDIR)/LICENSE
- 
+++# xbuild_12 and xbuild_14 will try to install the same files, so they need
+++# to be ordered
+++profile-do--xbuild_14--install: profile-do--xbuild_12--install
+++
++ # We don't want to run the tests in parallel.  We want behaviour like -k.
++ profiles-do--run-test:
++ 	ret=:; $(foreach p,$(PROFILES), { $(MAKE) PROFILE=$(p) run-test || ret=false; }; ) $$ret
