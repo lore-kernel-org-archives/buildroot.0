@@ -1,31 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 16 May 2015 17:26:43 +0200
-Subject: [Buildroot] [PATCHv2] postgresql: mark as not available for
-	static linking
-In-Reply-To: <1431785564-7475-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 16 May 2015 16:12:44 +0200")
-References: <1431785564-7475-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87fv6wa6h8.fsf@dell.be.48ers.dk>
+Date: Sat, 16 May 2015 17:24:05 +0200
+Subject: [Buildroot] [git commit] libmatroska: add host-pkgconf dependency
+Message-ID: <20150516152710.1B16D81762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c69bafe0aef71b9846866270da9462c3492d9508
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > postgresql currently does not build in BR2_STATIC_LIBS=y
- > configurations, and since there is little interest in using such a big
- > piece of software in statically linked configuration, this commit
- > makes postgresql depends on !BR2_STATIC_LIBS.
+libmatroska configure.ac uses PKG_CHECK_MODULES(), so this package
+needs to depend on host-pkgconf.
 
- > Fixes:
+Fixes:
 
- >   http://autobuild.buildroot.net/results/f9ed96d22e91cdba9ad92c4d4ea52e422bf1f1c9/
+  http://autobuild.buildroot.org/results/80a/80a9f0f5594ab833600ea8514dc184e50d2bf08c/
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libmatroska/libmatroska.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libmatroska/libmatroska.mk b/package/libmatroska/libmatroska.mk
+index 1086e87..5e2d9b1 100644
+--- a/package/libmatroska/libmatroska.mk
++++ b/package/libmatroska/libmatroska.mk
+@@ -10,6 +10,6 @@ LIBMATROSKA_SITE = http://dl.matroska.org/downloads/libmatroska
+ LIBMATROSKA_INSTALL_STAGING = YES
+ LIBMATROSKA_LICENSE = LGPLv2.1+
+ LIBMATROSKA_LICENSE_FILES = LICENSE.LGPL
+-LIBMATROSKA_DEPENDENCIES = libebml
++LIBMATROSKA_DEPENDENCIES = libebml host-pkgconf
+ 
+ $(eval $(autotools-package))
