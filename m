@@ -1,23 +1,22 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 16 May 2015 14:25:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 8121] New: php opcache extension doesn't get
-	installed
-Message-ID: <bug-8121-163@https.bugs.busybox.net/>
+Date: Sat, 16 May 2015 14:32:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 8126] New: exim lacks plaintext and cram-md5 auth
+Message-ID: <bug-8126-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8121
+https://bugs.busybox.net/show_bug.cgi?id=8126
 
-           Summary: php opcache extension doesn't get installed
+           Summary: exim lacks plaintext and cram-md5 auth
            Product: buildroot
            Version: 2015.02
           Platform: All
         OS/Version: Linux
             Status: NEW
-          Severity: normal
+          Severity: minor
           Priority: P5
          Component: Other
         AssignedTo: unassigned at buildroot.uclibc.org
@@ -26,10 +25,8 @@ https://bugs.busybox.net/show_bug.cgi?id=8121
    Estimated Hours: 0.0
 
 
-this happens because there's a "rm -rf $(TARGET_DIR)/usr/lib/php" on line 298
-in php.mk
-
-maybe it was rather meant to delete /usr/lib/php/build or sth?
+they're disabled by default, and so it's impossible to forward mails to another
+mailserver which needs authentication
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
