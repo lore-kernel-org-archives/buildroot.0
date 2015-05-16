@@ -1,104 +1,136 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 May 2015 15:49:20 +0200
-Subject: [Buildroot] [PATCH 1/2] c-periphery: new package
-Message-ID: <1431784161-5771-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 16 May 2015 16:12:44 +0200
+Subject: [Buildroot] [PATCHv2] postgresql: mark as not available for static
+	linking
+Message-ID: <1431785564-7475-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package is needed as a dependency of lua-periphery. Currently,
-c-periphery is automatically cloned by lua-periphery, which causes two
-problems:
+postgresql currently does not build in BR2_STATIC_LIBS=y
+configurations, and since there is little interest in using such a big
+piece of software in statically linked configuration, this commit
+makes postgresql depends on !BR2_STATIC_LIBS.
 
- 1/ It does not integrate properly with the download infrastructure of
-    Buildroot, making offline builds impossible since not the entire
-    source code is downloaded by Buildroot.
+Fixes:
 
- 2/ It does not use the latest version of c-periphery, which has some
-    fixes contributed by Vicente to fix c-periphery on MIPS.
-
-Introducing this package is needed as part of the fix for the
-following build failure:
-
-  http://autobuild.buildroot.org/results/0ad/0ad656970b3cbc84b5531b28155ba2f747715fe3/
+  http://autobuild.buildroot.net/results/f9ed96d22e91cdba9ad92c4d4ea52e422bf1f1c9/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                  |  1 +
- package/c-periphery/Config.in      | 16 ++++++++++++++++
- package/c-periphery/c-periphery.mk | 27 +++++++++++++++++++++++++++
- 3 files changed, 44 insertions(+)
- create mode 100644 package/c-periphery/Config.in
- create mode 100644 package/c-periphery/c-periphery.mk
+Changes since v1:
+ - Propagate the !BR2_STATIC_LIBS dependency to the reverse
+   dependencies of BR2_PACKAGE_POSTGRESQL.
 
-diff --git a/package/Config.in b/package/Config.in
-index af4d2b7..e0c2e2a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -811,6 +811,7 @@ menu "Graphics"
- endmenu
+ package/bandwidthd/Config.in  | 4 ++++
+ package/php/Config.ext        | 5 +++++
+ package/postgresql/Config.in  | 7 +++++++
+ package/qt/Config.sql.in      | 4 ++++
+ package/qt5/qt5base/Config.in | 5 +++++
+ 5 files changed, 25 insertions(+)
+
+diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
+index 0d51f5e..b4a47f2 100644
+--- a/package/bandwidthd/Config.in
++++ b/package/bandwidthd/Config.in
+@@ -33,12 +33,16 @@ if BR2_PACKAGE_BANDWIDTHD
+ config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
+ 	bool "enable postgresql log target support"
+ 	select BR2_PACKAGE_POSTGRESQL
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Enable support for logging the bandwidthd data to a remote
+ 	  (or local) postgresql server. This data can then be viewed
+ 	  through a php site. See README in the source code
+ 	  (github.com/nroach44/bandwidthd) for more information.
  
- menu "Hardware handling"
-+	source "package/c-periphery/Config.in"
- 	source "package/ccid/Config.in"
- 	source "package/dtc/Config.in"
- 	source "package/gnu-efi/Config.in"
-diff --git a/package/c-periphery/Config.in b/package/c-periphery/Config.in
-new file mode 100644
-index 0000000..0bfb4b1
---- /dev/null
-+++ b/package/c-periphery/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_C_PERIPHERY
-+	bool "c-periphery"
-+	help
-+	  c-periphery is a set of C wrapper functions for GPIO, SPI,
-+	  I2C, MMIO, and Serial peripheral I/O interface access in
-+	  userspace Linux. The c-periphery wrappers simplify and
-+	  consolidate the native Linux APIs to these
-+	  interfaces. c-periphery is useful in embedded Linux
-+	  environments (including BeagleBone, Raspberry Pi,
-+	  etc. platforms) for interfacing with external
-+	  peripherals. c-periphery is re-entrant, uses static
-+	  allocations, has no dependencies outside the standard C
-+	  library and Linux, compiles into a static library for easy
-+	  integration with other projects, and is MIT licensed.
++comment "postgresql support needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
 +
-+	  https://github.com/vsergeev/c-periphery
-diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
-new file mode 100644
-index 0000000..68193d7
---- /dev/null
-+++ b/package/c-periphery/c-periphery.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# c-periphery
-+#
-+################################################################################
+ config BR2_PACKAGE_BANDWIDTHD_SQLITE3
+ 	bool "enable sqlite3 log storage"
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 4995090..5324e79 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -159,9 +159,14 @@ config BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL
+ 	bool "PostgreSQL"
+ 	select BR2_PACKAGE_POSTGRESQL
+ 	depends on BR2_USE_MMU # postgresql
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  PDO driver for PostgreSQL
+ 
++comment "PostgreSQL drivers need a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
 +
-+C_PERIPHERY_VERSION = 0fdfac3264f1dce32991f4ec30d084e34b35181d
-+C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,$(C_PERIPHERY_VERSION))
-+C_PERIPHERY_INSTALL_STAGING = YES
-+# only a static library
-+C_PERIPHERY_INSTALL_TARGET = NO
-+C_PERIPHERY_LICENSE = MIT
-+C_PERIPHERY_LICENSE_FILES = LICENSE
+ config BR2_PACKAGE_PHP_EXT_PDO_SQLITE
+ 	bool "SQLite3"
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+index 4c53703..e9b8f48 100644
+--- a/package/postgresql/Config.in
++++ b/package/postgresql/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_POSTGRESQL
+ 	bool "postgresql"
+ 	depends on BR2_USE_MMU # fork()
++	# fails to build in a pure static linking scenario, and
++	# postgresql is unlikely to be used in a pure statically
++	# linked environment.
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  PostgreSQL is a powerful, open source object-relational
+ 	  database system.
+@@ -13,3 +17,6 @@ config BR2_PACKAGE_POSTGRESQL
+ 	  archives with pg_dump and pg_restore.
+ 
+ 	  http://www.postgresql.org
 +
-+define C_PERIPHERY_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
++comment "postgresql needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/qt/Config.sql.in b/package/qt/Config.sql.in
+index 037837f..452edd5 100644
+--- a/package/qt/Config.sql.in
++++ b/package/qt/Config.sql.in
+@@ -31,10 +31,14 @@ config BR2_PACKAGE_QT_ODBC
+ config BR2_PACKAGE_QT_PSQL
+ 	bool "PostgreSQL Driver"
+ 	select BR2_PACKAGE_POSTGRESQL
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Build PostgreSQL driver
+ 	  If unsure, say n.
+ 
++comment "PostgreSQL driver needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
 +
-+# There is no 'install' rule in the Makefile, so we handle things
-+# manually.
-+define C_PERIPHERY_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/periphery.a $(STAGING_DIR)/usr/lib/libc-periphery.a
-+	mkdir -p $(STAGING_DIR)/usr/include/c-periphery/
-+	cp -dpfr $(@D)/src/*.h $(STAGING_DIR)/usr/include/c-periphery/
-+endef
+ choice
+ 	prompt "SQLite 3 support"
+ 	default BR2_PACKAGE_QT_SQLITE_NONE
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 20fd905..df1d3dc 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -61,10 +61,15 @@ config BR2_PACKAGE_QT5BASE_PSQL
+ 	bool "PostgreSQL Plugin"
+ 	select BR2_PACKAGE_POSTGRESQL
+ 	depends on BR2_USE_MMU # postgresql
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Build PostgreSQL plugin
+ 	  If unsure, say n.
+ 
++comment "PostgreSQL plugin needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
 +
-+$(eval $(generic-package))
+ choice
+ 	prompt "SQLite 3 support"
+ 	default BR2_PACKAGE_QT5BASE_SQLITE_NONE
 -- 
 2.1.0
