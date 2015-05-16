@@ -1,45 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 May 2015 14:20:05 +0200
-Subject: [Buildroot] [PATCH 1/1] zmqpp: fix compilation with some
- toolchains
-In-Reply-To: <1431692800-15539-1-git-send-email-lionel.orry@gmail.com>
-References: <1431692800-15539-1-git-send-email-lionel.orry@gmail.com>
-Message-ID: <20150516142005.745583d4@free-electrons.com>
+From: julien.viarddegalbert at openwide.fr <julien.viarddegalbert@openwide.fr>
+Date: Sat, 16 May 2015 14:20:02 +0200
+Subject: [Buildroot] [PATCH v2] dieharder: new package
+Message-ID: <1431778802-15637-1-git-send-email-julien.viarddegalbert@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lionel Orry,
+From: Julien Viard de Galbert <julien@vdg.name>
 
-On Fri, 15 May 2015 14:26:40 +0200, Lionel Orry wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/d9ec39dc5829aac1b25bfea7484458fcebd68412/
-> 
-> add cstdlib header to ensure EXIT_FAILURE presence
-> 
-> Using some cross-compiling toolchains, EXIT_FAILURE is not always
-> properly defined without this inclusion.
-> 
-> Patch is upstream:
-> https://github.com/zeromq/zmqpp/pull/109
-> 
-> Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
-> ---
->  package/zmqpp/0001-add-ctsdlib-header.patch | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->  create mode 100644 package/zmqpp/0001-add-ctsdlib-header.patch
+Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+---
+Changes v1 -> v2
+  - fixed typo "bin" instead of "big" (thanks Thomas Petazoni)
+  - select gls in config (suggested by Romain Naour)
+  - specified "includedir" to fix unsafe header path
 
-I've applied your patch, but I've replaced the patch you included which
-was just the output of 'git show' or 'git log -p' by a patch properly
-formatted with 'git format-patch', so that it can be applied with 'git
-am'.
+Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+---
+ package/Config.in              |  1 +
+ package/dieharder/Config.in    |  9 +++++++++
+ package/dieharder/dieharder.mk | 26 ++++++++++++++++++++++++++
+ 3 files changed, 36 insertions(+)
+ create mode 100644 package/dieharder/Config.in
+ create mode 100644 package/dieharder/dieharder.mk
 
-Thanks!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index af4d2b7..cc0bd79 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -61,6 +61,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/bonnie/Config.in"
+ 	source "package/cache-calibrator/Config.in"
+ 	source "package/dhrystone/Config.in"
++	source "package/dieharder/Config.in"
+ 	source "package/dmalloc/Config.in"
+ 	source "package/dropwatch/Config.in"
+ 	source "package/dstat/Config.in"
+diff --git a/package/dieharder/Config.in b/package/dieharder/Config.in
+new file mode 100644
+index 0000000..9f81876
+--- /dev/null
++++ b/package/dieharder/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_DIEHARDER
++	bool "dieharder"
++	select BR2_PACKAGE_GSL
++	help
++	  dieharder is a fairly involved random number/uniform deviate generator
++	  tester. It is thus suitable for use in testing both software RNG's and
++	  hardware RNG's.
++	  
++	  http://www.phy.duke.edu/~rgb/General/dieharder.php
+diff --git a/package/dieharder/dieharder.mk b/package/dieharder/dieharder.mk
+new file mode 100644
+index 0000000..646a042
+--- /dev/null
++++ b/package/dieharder/dieharder.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# dieharder
++#
++################################################################################
++
++DIEHARDER_VERSION = 3.31.1
++DIEHARDER_SITE = http://www.phy.duke.edu/~rgb/General/dieharder/
++DIEHARDER_SOURCE = dieharder-$(DIEHARDER_VERSION).tgz
++DIEHARDER_SUBDIR = dieharder-$(DIEHARDER_VERSION)
++DIEHARDER_LICENSE = GPLv2b
++DIEHARDER_LICENSE_FILES = $(DIEHARDER_SUBDIR)/COPYING
++DIEHARDER_DEPENDENCIES = gsl
++
++# fix endiannes detection
++ifeq ($(BR2_ENDIAN),"BIG")
++BR2_AC_CV_C_ENDIAN = ac_cv_c_endian=big
++else
++BR2_AC_CV_C_ENDIAN = ac_cv_c_endian=little
++endif
++DIEHARDER_CONF_OPTS = $(BR2_AC_CV_C_ENDIAN) --includedir=$(STAGING_DIR)/usr/include
++
++# parallel build fail, disable it
++DIEHARDER_MAKE=$(MAKE1)
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
