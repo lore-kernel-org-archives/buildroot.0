@@ -1,29 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 16 May 2015 11:52:03 +0000 (UTC)
-Subject: [Buildroot] [Bug 8111] 2015.05.rc2 LIBFOO_CONF_OPTS not working
-In-Reply-To: <bug-8111-163@https.bugs.busybox.net/>
-References: <bug-8111-163@https.bugs.busybox.net/>
-Message-ID: <20150516115203.8ADF780D95@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 16 May 2015 13:55:58 +0200
+Subject: [Buildroot] [PATCH] uboot-tools: fix static linking with OpenSSL
+In-Reply-To: <5556FA75.60903@openwide.fr> (Romain Naour's message of "Sat, 16
+ May 2015 10:06:13 +0200")
+References: <1431464533-15795-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87sib0gb28.fsf@dell.be.48ers.dk> <5556FA75.60903@openwide.fr>
+Message-ID: <87zj54busx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8111
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Hi,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
+ > It doesn't work for BR2_SHARED_LIBS only:
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-05-16 11:52:03 UTC ---
-Of course, <foo>_CONF_OPTS only affect target packages. You should use
-HOST_<foo>_CONF_OPTS for host packages.
+ > http://autobuild.buildroot.net/results/483/48345d936c7972dc27ea12bdccfe0d02bbc4112b/build-end.log
+
+ > -lcrypto is required for PEM_read_X509 and X509_free symbols.
+
+ > What's about using 'pkg-config --libs openssl' instead ?
+
+Or pkg-config --libs libssl libcrypto like I did for vsftpd in
+205f07755661b64da215.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Venlig hilsen,
+Peter Korsgaard 
