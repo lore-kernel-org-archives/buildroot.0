@@ -1,89 +1,37 @@
-From: julien.viarddegalbert at openwide.fr <julien.viarddegalbert@openwide.fr>
-Date: Sat, 16 May 2015 14:20:02 +0200
-Subject: [Buildroot] [PATCH v2] dieharder: new package
-Message-ID: <1431778802-15637-1-git-send-email-julien.viarddegalbert@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 16 May 2015 14:20:47 +0200
+Subject: [Buildroot] [git commit] package/boost: stop on the first error
+	during install to staging
+Message-ID: <20150516122100.A982481768@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Viard de Galbert <julien@vdg.name>
+commit: http://git.buildroot.net/buildroot/commit/?id=e94a9531590609d1530837c2009d96d29cc148b1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+-q option is missing in BOOST_INSTALL_STAGING_CMDS,
+so the build doesn't stop on the first error.
+This help to see what happened.
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v1 -> v2
-  - fixed typo "bin" instead of "big" (thanks Thomas Petazoni)
-  - select gls in config (suggested by Romain Naour)
-  - specified "includedir" to fix unsafe header path
+ package/boost/boost.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
----
- package/Config.in              |  1 +
- package/dieharder/Config.in    |  9 +++++++++
- package/dieharder/dieharder.mk | 26 ++++++++++++++++++++++++++
- 3 files changed, 36 insertions(+)
- create mode 100644 package/dieharder/Config.in
- create mode 100644 package/dieharder/dieharder.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index af4d2b7..cc0bd79 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -61,6 +61,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/bonnie/Config.in"
- 	source "package/cache-calibrator/Config.in"
- 	source "package/dhrystone/Config.in"
-+	source "package/dieharder/Config.in"
- 	source "package/dmalloc/Config.in"
- 	source "package/dropwatch/Config.in"
- 	source "package/dstat/Config.in"
-diff --git a/package/dieharder/Config.in b/package/dieharder/Config.in
-new file mode 100644
-index 0000000..9f81876
---- /dev/null
-+++ b/package/dieharder/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_DIEHARDER
-+	bool "dieharder"
-+	select BR2_PACKAGE_GSL
-+	help
-+	  dieharder is a fairly involved random number/uniform deviate generator
-+	  tester. It is thus suitable for use in testing both software RNG's and
-+	  hardware RNG's.
-+	  
-+	  http://www.phy.duke.edu/~rgb/General/dieharder.php
-diff --git a/package/dieharder/dieharder.mk b/package/dieharder/dieharder.mk
-new file mode 100644
-index 0000000..646a042
---- /dev/null
-+++ b/package/dieharder/dieharder.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# dieharder
-+#
-+################################################################################
-+
-+DIEHARDER_VERSION = 3.31.1
-+DIEHARDER_SITE = http://www.phy.duke.edu/~rgb/General/dieharder/
-+DIEHARDER_SOURCE = dieharder-$(DIEHARDER_VERSION).tgz
-+DIEHARDER_SUBDIR = dieharder-$(DIEHARDER_VERSION)
-+DIEHARDER_LICENSE = GPLv2b
-+DIEHARDER_LICENSE_FILES = $(DIEHARDER_SUBDIR)/COPYING
-+DIEHARDER_DEPENDENCIES = gsl
-+
-+# fix endiannes detection
-+ifeq ($(BR2_ENDIAN),"BIG")
-+BR2_AC_CV_C_ENDIAN = ac_cv_c_endian=big
-+else
-+BR2_AC_CV_C_ENDIAN = ac_cv_c_endian=little
-+endif
-+DIEHARDER_CONF_OPTS = $(BR2_AC_CV_C_ENDIAN) --includedir=$(STAGING_DIR)/usr/include
-+
-+# parallel build fail, disable it
-+DIEHARDER_MAKE=$(MAKE1)
-+
-+$(eval $(autotools-package))
--- 
-2.1.4
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 7060591..3fe44e3 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -148,7 +148,7 @@ define HOST_BOOST_INSTALL_CMDS
+ endef
+ 
+ define BOOST_INSTALL_STAGING_CMDS
+-	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -d+1 \
++	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -q -d+1 \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPTS) \
+ 	--prefix=$(STAGING_DIR)/usr \
