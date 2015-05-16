@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 16 May 2015 14:32:14 +0000 (UTC)
-Subject: [Buildroot] [Bug 8126] New: exim lacks plaintext and cram-md5 auth
-Message-ID: <bug-8126-163@https.bugs.busybox.net/>
+Date: Sat, 16 May 2015 14:33:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 8126] exim lacks plaintext and cram-md5 auth
+In-Reply-To: <bug-8126-163@https.bugs.busybox.net/>
+References: <bug-8126-163@https.bugs.busybox.net/>
+Message-ID: <20150516143359.4D48781776@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,23 +12,10 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=8126
 
-           Summary: exim lacks plaintext and cram-md5 auth
-           Product: buildroot
-           Version: 2015.02
-          Platform: All
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: pud at nerdpunx.net
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-they're disabled by default, and so it's impossible to forward mails to another
-mailserver which needs authentication
+--- Comment #1 from pud at nerdpunx.net 2015-05-16 14:33:59 UTC ---
+Created attachment 6041
+  --> https://bugs.busybox.net/attachment.cgi?id=6041
+patch to enableAUTH_PLAINTEXT and AUTH_CRAM_MD5
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
