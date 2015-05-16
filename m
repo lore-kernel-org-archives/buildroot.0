@@ -1,37 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 16 May 2015 15:36:06 +0200
-Subject: [Buildroot] [PATCH 4/6] postgresql: mark as not available for
-	static linking
-In-Reply-To: <20150516153216.1eab6cf4@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 16 May 2015 15:32:16 +0200")
-References: <1431714233-24324-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1431714233-24324-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <87mw14br9l.fsf@dell.be.48ers.dk>
- <20150516153216.1eab6cf4@free-electrons.com>
-Message-ID: <87wq08abll.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 16 May 2015 15:36:50 +0200
+Subject: [Buildroot] [PATCH] libmatroska: add host-pkgconf dependency
+Message-ID: <1431783410-1351-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+libmatroska configure.ac uses PKG_CHECK_MODULES(), so this package
+needs to depend on host-pkgconf.
 
- >> What about the reverse dependencies?
- >> 
- >> git grep 'select BR2_PACKAGE_POSTGRESQL'
- >> package/bandwidthd/Config.in:   select BR2_PACKAGE_POSTGRESQL
- >> package/collectd/Config.in:     select BR2_PACKAGE_POSTGRESQL
- >> package/php/Config.ext: select BR2_PACKAGE_POSTGRESQL
- >> package/qt/Config.sql.in:       select BR2_PACKAGE_POSTGRESQL
- >> package/qt5/qt5base/Config.in:  select BR2_PACKAGE_POSTGRESQL
+Fixes:
 
- > Gah, shit indeed. For some reason I assumed postgresql is an
- > application, not a library, so it should not have reverse dependencies.
- > I'll fix that up and resend.
+  http://autobuild.buildroot.org/results/80a/80a9f0f5594ab833600ea8514dc184e50d2bf08c/
 
-Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libmatroska/libmatroska.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/libmatroska/libmatroska.mk b/package/libmatroska/libmatroska.mk
+index 1086e87..5e2d9b1 100644
+--- a/package/libmatroska/libmatroska.mk
++++ b/package/libmatroska/libmatroska.mk
+@@ -10,6 +10,6 @@ LIBMATROSKA_SITE = http://dl.matroska.org/downloads/libmatroska
+ LIBMATROSKA_INSTALL_STAGING = YES
+ LIBMATROSKA_LICENSE = LGPLv2.1+
+ LIBMATROSKA_LICENSE_FILES = LICENSE.LGPL
+-LIBMATROSKA_DEPENDENCIES = libebml
++LIBMATROSKA_DEPENDENCIES = libebml host-pkgconf
+ 
+ $(eval $(autotools-package))
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.1.0
