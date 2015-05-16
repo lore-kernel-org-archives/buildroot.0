@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 May 2015 14:08:16 +0200
-Subject: [Buildroot] [PATCH v2] package/tinyxml2: Use BUILD_SHARED_LIBS
- cmake standard
-In-Reply-To: <1431082195-22498-1-git-send-email-romain.naour@openwide.fr>
+Date: Sat, 16 May 2015 14:10:50 +0200
+Subject: [Buildroot] [PATCH v2] package/tinyxml2: fix cmake warning
+In-Reply-To: <1431082195-22498-2-git-send-email-romain.naour@openwide.fr>
 References: <1431082195-22498-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150516140816.66d0459a@free-electrons.com>
+ <1431082195-22498-2-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150516141050.4ec449f3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,19 @@ To: buildroot@busybox.net
 
 Dear Romain Naour,
 
-On Fri,  8 May 2015 12:49:54 +0200, Romain Naour wrote:
-> Backport an upstream patch to fix the static build:
-> c8ec6fcab4eb501cc5bd328c19dcbd4b30722d52
+On Fri,  8 May 2015 12:49:55 +0200, Romain Naour wrote:
+> CMake complains about Policy CMP0037 that reserve some
+> target name such "test".
+> So remove the warning by renaming test to xmltest.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/e56/e568d81030087f66f8ac4ccd4f496b550930cbae/
+> Backport an upstream patch:
+> 0b2c22bd46be95b08f234b8b4cb262f72ab3f0e8
 > 
 > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > ---
-> v2 add autobuilder link
-> ---
->  ...0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch | 65 ++++++++++++++++++++++
->  1 file changed, 65 insertions(+)
->  create mode 100644 package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
+>  .../0002-Rename-test-fixed-cmake-warning.patch     | 38 ++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/tinyxml2/0002-Rename-test-fixed-cmake-warning.patch
 
 Applied, thanks.
 
