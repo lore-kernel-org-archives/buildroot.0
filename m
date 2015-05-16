@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 May 2015 15:31:30 +0200
-Subject: [Buildroot] [PATCH 6/6] qt5base: add patch to fix gold linker
-	issue
-In-Reply-To: <87egmgbr7b.fsf@dell.be.48ers.dk>
+Date: Sat, 16 May 2015 15:32:16 +0200
+Subject: [Buildroot] [PATCH 4/6] postgresql: mark as not available for
+ static linking
+In-Reply-To: <87mw14br9l.fsf@dell.be.48ers.dk>
 References: <1431714233-24324-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1431714233-24324-6-git-send-email-thomas.petazzoni@free-electrons.com>
- <87egmgbr7b.fsf@dell.be.48ers.dk>
-Message-ID: <20150516153130.2853b37f@free-electrons.com>
+ <1431714233-24324-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87mw14br9l.fsf@dell.be.48ers.dk>
+Message-ID: <20150516153216.1eab6cf4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +15,34 @@ To: buildroot@busybox.net
 
 Dear Peter Korsgaard,
 
-On Sat, 16 May 2015 15:13:44 +0200, Peter Korsgaard wrote:
+On Sat, 16 May 2015 15:12:22 +0200, Peter Korsgaard wrote:
 > >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 > 
->  > The newly added patch makes sure that gold linker functionality is not
->  > used when doing host builds, since qt5 only tests the availability of
->  > this feature with the target compiler.
+>  > postgresql currently does not build in BR2_STATIC_LIBS=y
+>  > configurations, and since there is little interest in using such a big
+>  > piece of software in statically linked configuration, this commit
+>  > makes postgresql depends on !BR2_STATIC_LIBS.
 > 
 >  > Fixes:
 > 
->  >   http://autobuild.buildroot.net/results/f403a76ac0abbf8488373c0dffb4487f5d98c55d/
+>  >   http://autobuild.buildroot.net/results/f9ed96d22e91cdba9ad92c4d4ea52e422bf1f1c9/
 > 
 >  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
-> Committed, thanks. Don't forget to send the patch upstream.
+> What about the reverse dependencies?
+> 
+> git grep 'select BR2_PACKAGE_POSTGRESQL'
+> package/bandwidthd/Config.in:   select BR2_PACKAGE_POSTGRESQL
+> package/collectd/Config.in:     select BR2_PACKAGE_POSTGRESQL
+> package/php/Config.ext: select BR2_PACKAGE_POSTGRESQL
+> package/qt/Config.sql.in:       select BR2_PACKAGE_POSTGRESQL
+> package/qt5/qt5base/Config.in:  select BR2_PACKAGE_POSTGRESQL
 
-I already submitted the patch as part of a bug report, which URL is
-mentioned in my Buildroot patch. However, they ask me to follow the
-entire Qt contribution process for just a one line patch, which I'm not
-sure I'm willing to do :-/
+Gah, shit indeed. For some reason I assumed postgresql is an
+application, not a library, so it should not have reverse dependencies.
+I'll fix that up and resend.
+
+Thanks,
 
 Thomas
 -- 
