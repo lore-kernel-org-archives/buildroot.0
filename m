@@ -1,36 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 May 2015 15:36:50 +0200
-Subject: [Buildroot] [PATCH] libmatroska: add host-pkgconf dependency
-Message-ID: <1431783410-1351-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 16 May 2015 15:38:51 +0200
+Subject: [Buildroot] [PATCH] acl, attr: fix libdir variable in .la files
+In-Reply-To: <1431780866-26839-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 16 May 2015 14:54:26 +0200")
+References: <1431780866-26839-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87siawabh0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libmatroska configure.ac uses PKG_CHECK_MODULES(), so this package
-needs to depend on host-pkgconf.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes:
+ > The acl and attr packages are using autoconf and libtool, but not
+ > automake, which causes all sort of troubles. Some of them are already
+ > worked around in acl.mk and attr.mk, but there is another one: the
+ > libdir variable in the .la file remains empty, which causes libtool to
+ > sometimes be confused about where the acl and attr libraries are
+ > installed.
 
-  http://autobuild.buildroot.org/results/80a/80a9f0f5594ab833600ea8514dc184e50d2bf08c/
+ > This was causing build issues with libarchive, but interestingly only
+ > in situations where we had zlib *and* libxml2 also part of the build,
+ > which maybe affects how libtool in libarchive behaves since libarchive
+ > can use zlib and libxml2 as optional dependencies.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libmatroska/libmatroska.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > So what this patch does is to mungle the libattr.la and libacl.la
+ > files to make sure they contain the right libdir values. Yocto is
+ > doing exactly the same thing.
 
-diff --git a/package/libmatroska/libmatroska.mk b/package/libmatroska/libmatroska.mk
-index 1086e87..5e2d9b1 100644
---- a/package/libmatroska/libmatroska.mk
-+++ b/package/libmatroska/libmatroska.mk
-@@ -10,6 +10,6 @@ LIBMATROSKA_SITE = http://dl.matroska.org/downloads/libmatroska
- LIBMATROSKA_INSTALL_STAGING = YES
- LIBMATROSKA_LICENSE = LGPLv2.1+
- LIBMATROSKA_LICENSE_FILES = LICENSE.LGPL
--LIBMATROSKA_DEPENDENCIES = libebml
-+LIBMATROSKA_DEPENDENCIES = libebml host-pkgconf
- 
- $(eval $(autotools-package))
+ > Upstream attr and acl have been converted fully to automake, so
+ > hopefully the upcoming upstream release will allow us to get rid of
+ > those hacks, but in the mean time, it seems to be the most appropriate
+ > solution.
+
+ > Here is a minimal defconfig that exhibits the problem, and which
+ > allows to show that this patch fixes it:
+
+ > BR2_bfin=y
+ > BR2_BINFMT_FLAT=y
+ > BR2_COMPILER_PARANOID_UNSAFE_PATH=y
+ > BR2_INIT_NONE=y
+ > BR2_PACKAGE_LIBARCHIVE=y
+ > BR2_PACKAGE_LIBARCHIVE_BSDCPIO=y
+ > BR2_PACKAGE_ZLIB=y
+ > BR2_PACKAGE_LIBXML2=y
+ > BR2_PACKAGE_ACL=y
+
+Committed, thanks. I still find it odd that it only happens with that
+specific combination through.
+
 -- 
-2.1.0
+Bye, Peter Korsgaard
