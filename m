@@ -1,96 +1,29 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 17 May 2015 22:57:35 +0200
-Subject: [Buildroot] [PATCH] libsodium: new package
-In-Reply-To: <CA+-urNTixTObmKHSWe5siw4wB3yqm_OTCCQdRHC5xoy9ZXRFNQ@mail.gmail.com>
-References: <1431819535-9598-1-git-send-email-fhunleth@troodon-software.com>
- <55587EF9.1010003@openwide.fr>
- <CA+-urNTixTObmKHSWe5siw4wB3yqm_OTCCQdRHC5xoy9ZXRFNQ@mail.gmail.com>
-Message-ID: <555900BF.6080704@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 17 May 2015 23:05:21 +0200
+Subject: [Buildroot] [PATCH 1/2] gst1-plugins-bad: remove obsolete make
+	rules
+In-Reply-To: <1431010700-3356-1-git-send-email-benoit@wsystem.com>
+ (=?utf-8?Q?=22Beno=C3=AEt=09Th=C3=A9baudeau=22's?= message of "Thu, 7 May
+ 2015 16:58:19 +0200")
+References: <1431010700-3356-1-git-send-email-benoit@wsystem.com>
+Message-ID: <87oali7w4u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Frank,
+>>>>> "Beno?t" == Beno?t Th?baudeau <benoit@wsystem.com> writes:
 
-Le 17/05/2015 20:25, Frank Hunleth a ?crit :
-> Hi Romain,
-> 
-> On Sun, May 17, 2015 at 7:43 AM, Romain Naour <romain.naour@openwide.fr> wrote:
->> Hi Frank,
->>
->> Le 17/05/2015 01:38, Frank Hunleth a ?crit :
->>> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
->>> ---
->>>  package/Config.in                |  1 +
->>>  package/libsodium/Config.in      |  6 ++++++
->>>  package/libsodium/libsodium.hash |  2 ++
->>>  package/libsodium/libsodium.mk   | 14 ++++++++++++++
->>>  4 files changed, 23 insertions(+)
->>>  create mode 100644 package/libsodium/Config.in
->>>  create mode 100644 package/libsodium/libsodium.hash
->>>  create mode 100644 package/libsodium/libsodium.mk
->>>
->>
->> Since you are adding a new library, some packages will try to link with it.
->> As far I know, zeromq can link with libsodium, so a new dependency should be
->> added in a follow up patch.
-> 
-> Thanks. I didn't know about the zeromq dependency. Before I submit a
-> new patch, do you know of an easy way to figure out what other
-> packages have a hidden dependency like this?
+ > Commit 83e29f2656a237e2c300d523776868837d3bc646 "gst1-plugins-bad: bump
+ > version" (from 1.2.4 to 1.4.1) removed the configuration options for the
+ > cdaudio and eglglessink plugins as a consequence of their removal in
+ > 1.3.1. However, that commit did not remove the corresponding make rules,
+ > so remove them now.
 
-There is no easy way, maybe by using the package manager from your GNU/Linux
-distribution to find some hit.
+> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
 
-Something like (debian8): sudo apt-cache rdepends libsodium13
-libsodium13
-Reverse Depends:
-  libzmq3
-  libzmq3
-  libsodium-dev
-  libsodium-dbg
+Committed to next, thanks.
 
-> 
->> There is even an upstream path to disable libsodium in zeromq:
->> https://github.com/zeromq/zeromq4-x/commit/faaf4550263395b84e6a80d3f9d7ba8816cdd714
-> 
-> I looked at it. I'm not a zeromq user, so I don't really understand
-> why someone would want to have libsodium support disabled if they have
-> it. It seems simpler for now to make sure the dependency is there in
-> BR if libsodium is enabled. Maybe this is more of a desktop need?
-
-It's sometime required to do this construct in .mk files in order to handle
-properly the package dependency. (from nmap.mk)
-
-ifeq ($(BR2_PACKAGE_OPENSSL),y)
-NMAP_CONF_OPTS += --with-openssl="$(STAGING_DIR)/usr"
-NMAP_DEPENDENCIES += openssl
-else
-NMAP_CONF_OPTS += --without-openssl
-endif
-
-It's also depends if the option is on/off by default.
-
-But you're right, you need only something like this since libsodium is not
-enabled by default.
-
-ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
-ZEROMQ_DEPENDENCIES += libsodium
-ZEROMQ_CONF_OPTS += --with-libsodium="$(STAGING_DIR)/usr"
-endif
-
-Best regards,
-Romain
-
-> 
-> Thanks,
-> Frank
-> 
-> 
->>
->> Care to take a look ?
->>
->> Best regards,
->> Romain
+-- 
+Bye, Peter Korsgaard
