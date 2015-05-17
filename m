@@ -1,45 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 May 2015 20:44:40 +0200
-Subject: [Buildroot] [PATCH] package/opencv: fix opencv.pc generation
-In-Reply-To: <1431867794-6291-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Sun, 17 May 2015 15:03:14 +0200")
-References: <1431867794-6291-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <871tif82nb.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 17 May 2015 20:48:02 +0200
+Subject: [Buildroot] [PATCH] package/libsigrok: blacklist CS powerpc
+	toolchains
+Message-ID: <1431888482-27125-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+Even though BR2_PACKAGE_LIBSIGROKCXX is selected, the C++
+binding is disabled due to lack of C++11 support in the toolchain.
 
- > This change fixes build of packages depending on opencv and using
- > pkg-config to get the opencv LDFLAGS, which were wrongly ordered for
- > static build and included absolute path pointing to the host system
- > libraries instead of the sysroot ones.
+Configure output:
+Enabled language bindings:
+ - C++............................. no (C++11 compiler required)
 
- > This patch fixes build issues with gst1-plugins-bad and vlc.
+So disable libsigrok C++ binding and pulseview for CS powerpc toolchains.
 
- > This change introduce and new patch to opencv, which is already merged
- > upstream [1].
+Fixes:
+http://autobuild.buildroot.net/results/737/737453011ac0d13ab197258171ffa0f81bc4c368/
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/c70/c70f793c7c3b380428d6e2e622a90805cffc4dd1/
- >   ... and many others
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/libsigrok/Config.in | 2 ++
+ package/pulseview/Config.in | 2 ++
+ 2 files changed, 4 insertions(+)
 
- > [1] https://github.com/Itseez/opencv/commit/eceada586bbf18fc267e437522ec4f1f23ddc656
-
- > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
-Committed, thanks.
-
- > ---
- > Note that this fix is for upcoming 2015.05 release, and I am already
- > preparing a series bumping of the opencv package for the next release. :)
-
-great!
-
+diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+index 93bd06f..cd44118 100644
+--- a/package/libsigrok/Config.in
++++ b/package/libsigrok/Config.in
+@@ -22,6 +22,8 @@ config BR2_PACKAGE_LIBSIGROKCXX
+ 	bool "build C++ bindings"
+ 	select BR2_PACKAGE_GLIBMM
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	# CS powerpc g++ are too old. libsigrokcxx needs C++11
++	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
+ 	help
+ 	  Build libsigrok C++ bindings as well.
+ 
+diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+index df27cde..00cf37b 100644
+--- a/package/pulseview/Config.in
++++ b/package/pulseview/Config.in
+@@ -16,6 +16,8 @@ config BR2_PACKAGE_PULSEVIEW
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	# CS powerpc g++ are too old. libsigrokcxx needs C++11
++	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
+ 	help
+ 	  PulseView is a Qt based logic analyzer, oscilloscope
+ 	  and MSO GUI for sigrok.
 -- 
-Bye, Peter Korsgaard
+1.9.3
