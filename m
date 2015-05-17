@@ -1,51 +1,56 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 17 May 2015 18:40:46 +0200
-Subject: [Buildroot] [PATCH] package/enlightenment: disable ptrace with
-	xtensa and uClibc-ng
-Message-ID: <1431880846-28839-1-git-send-email-romain.naour@openwide.fr>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sun, 17 May 2015 14:25:00 -0400
+Subject: [Buildroot] [PATCH] libsodium: new package
+In-Reply-To: <55587EF9.1010003@openwide.fr>
+References: <1431819535-9598-1-git-send-email-fhunleth@troodon-software.com>
+ <55587EF9.1010003@openwide.fr>
+Message-ID: <CA+-urNTixTObmKHSWe5siw4wB3yqm_OTCCQdRHC5xoy9ZXRFNQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uCLibc-ng needs to backport the uClibc commit
-de6561f6669308e5d2297589b39a217d4c14df1c to add
-PT_GETSIGINFO definition.
+Hi Romain,
 
-This commit is already merged in uClibc-snapshot used by
-Buildroot's toolchains for xtensa.
+On Sun, May 17, 2015 at 7:43 AM, Romain Naour <romain.naour@openwide.fr> wrote:
+> Hi Frank,
+>
+> Le 17/05/2015 01:38, Frank Hunleth a ?crit :
+>> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+>> ---
+>>  package/Config.in                |  1 +
+>>  package/libsodium/Config.in      |  6 ++++++
+>>  package/libsodium/libsodium.hash |  2 ++
+>>  package/libsodium/libsodium.mk   | 14 ++++++++++++++
+>>  4 files changed, 23 insertions(+)
+>>  create mode 100644 package/libsodium/Config.in
+>>  create mode 100644 package/libsodium/libsodium.hash
+>>  create mode 100644 package/libsodium/libsodium.mk
+>>
+>
+> Since you are adding a new library, some packages will try to link with it.
+> As far I know, zeromq can link with libsodium, so a new dependency should be
+> added in a follow up patch.
 
-For now, disable ptrace with xtensa uClibc-ng toolchains.
+Thanks. I didn't know about the zeromq dependency. Before I submit a
+new patch, do you know of an easy way to figure out what other
+packages have a hidden dependency like this?
 
-Thanks to Gergely Imreh for the initial investigation and
-patch:
-http://patchwork.ozlabs.org/patch/470073/
+> There is even an upstream path to disable libsodium in zeromq:
+> https://github.com/zeromq/zeromq4-x/commit/faaf4550263395b84e6a80d3f9d7ba8816cdd714
 
-Fixes:
-http://autobuild.buildroot.net/results/77b/77b82e5b437d0778b3f6a3813f2c0a5c39b52db9
+I looked at it. I'm not a zeromq user, so I don't really understand
+why someone would want to have libsodium support disabled if they have
+it. It seems simpler for now to make sure the dependency is there in
+BR if libsodium is enabled. Maybe this is more of a desktop need?
 
-Reported-by: Gergely Imreh <imrehg@gmail.com>
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/enlightenment/enlightenment.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+Thanks,
+Frank
 
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index ddebe06..ac15642 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -34,6 +34,11 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_powerpc)$(BR2_sparc),yy)
- ENLIGHTENMENT_CONF_ENV += ac_cv_header_sys_ptrace_h=no
- endif
- 
-+# uClibc-ng has an old incomplete sys/ptrace.h for xtensa
-+ifeq ($(BR2_UCLIBC_VERSION_NG)$(BR2_xtensa),yy)
-+ENLIGHTENMENT_CONF_ENV += ac_cv_header_sys_ptrace_h=no
-+endif
-+
- # alsa backend needs mixer support
- ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
- ENLIGHTENMENT_DEPENDENCIES += alsa-lib
--- 
-1.9.3
+
+>
+> Care to take a look ?
+>
+> Best regards,
+> Romain
