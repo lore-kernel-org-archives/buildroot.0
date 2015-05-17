@@ -1,39 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 May 2015 21:02:38 +0200
-Subject: [Buildroot] [PATCH] package/enlightenment: disable ptrace with
-	xtensa and uClibc-ng
-In-Reply-To: <1431880846-28839-1-git-send-email-romain.naour@openwide.fr>
- (Romain Naour's message of "Sun, 17 May 2015 18:40:46 +0200")
-References: <1431880846-28839-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <87siav6n8x.fsf@dell.be.48ers.dk>
+Date: Sun, 17 May 2015 20:43:47 +0200
+Subject: [Buildroot] [git commit] qt: do not allow webkit with SuperH
+	Sourcery toolchain
+Message-ID: <20150517190414.B5A3080E27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=68167055154d9a550cb1de85456ecd47d0c6c529
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > uCLibc-ng needs to backport the uClibc commit
- > de6561f6669308e5d2297589b39a217d4c14df1c to add
- > PT_GETSIGINFO definition.
+Building webkit with the SuperH Sourcery toolchain fails with an
+assertion in binutils, so let's not allow to select webkit with this
+toolchain. We do not need to worry about reverse dependencies, since
+we use the existing BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT symbol to add
+this new dependency.
 
- > This commit is already merged in uClibc-snapshot used by
- > Buildroot's toolchains for xtensa.
+Fixes:
 
- > For now, disable ptrace with xtensa uClibc-ng toolchains.
+  http://autobuild.buildroot.net/results/508cdeb67f272b61209f331ab7b990cb56f30817/
 
- > Thanks to Gergely Imreh for the initial investigation and
- > patch:
- > http://patchwork.ozlabs.org/patch/470073/
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt/Config.in |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
- > Fixes:
- > http://autobuild.buildroot.net/results/77b/77b82e5b437d0778b3f6a3813f2c0a5c39b52db9
-
- > Reported-by: Gergely Imreh <imrehg@gmail.com>
- > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 67d5561..306fe1f 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -412,8 +412,11 @@ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+ 	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazeel || \
+ 		BR2_microblazebe || BR2_mips || BR2_mipsel || \
+ 		(BR2_mips64 || BR2_mips64el) && !BR2_MIPS_NABI32 || BR2_powerpc || \
+-		BR2_powerpc64 || BR2_powerpc64le || BR2_sh4 || BR2_sh4eb || \
+-		BR2_sh4a || BR2_sh4aeb || BR2_sparc || BR2_x86_64
++		BR2_powerpc64 || BR2_powerpc64le || BR2_sparc || BR2_x86_64
++	# The CodeSourcery SuperH toolchain fails to build Webkit,
++	# with an assertion failure in binutils.
++	default y if (BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb) && \
++		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
+ 
+ config BR2_PACKAGE_QT_WEBKIT
+ 	bool "WebKit Module"
