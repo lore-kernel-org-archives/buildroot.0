@@ -1,41 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 May 2015 21:15:28 +0200
-Subject: [Buildroot] [git commit] libuv: not available for static only builds
-Message-ID: <20150517191636.598C781776@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 17 May 2015 22:57:35 +0200
+Subject: [Buildroot] [PATCH] libsodium: new package
+In-Reply-To: <CA+-urNTixTObmKHSWe5siw4wB3yqm_OTCCQdRHC5xoy9ZXRFNQ@mail.gmail.com>
+References: <1431819535-9598-1-git-send-email-fhunleth@troodon-software.com>
+ <55587EF9.1010003@openwide.fr>
+ <CA+-urNTixTObmKHSWe5siw4wB3yqm_OTCCQdRHC5xoy9ZXRFNQ@mail.gmail.com>
+Message-ID: <555900BF.6080704@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5eff8b850c6031e74e51461f00012ae9de9bdea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Frank,
 
-Fixes:
-http://autobuild.buildroot.net/results/031/031c2c005f4946af5012be7432b55d11ca891d60/
+Le 17/05/2015 20:25, Frank Hunleth a ?crit :
+> Hi Romain,
+> 
+> On Sun, May 17, 2015 at 7:43 AM, Romain Naour <romain.naour@openwide.fr> wrote:
+>> Hi Frank,
+>>
+>> Le 17/05/2015 01:38, Frank Hunleth a ?crit :
+>>> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+>>> ---
+>>>  package/Config.in                |  1 +
+>>>  package/libsodium/Config.in      |  6 ++++++
+>>>  package/libsodium/libsodium.hash |  2 ++
+>>>  package/libsodium/libsodium.mk   | 14 ++++++++++++++
+>>>  4 files changed, 23 insertions(+)
+>>>  create mode 100644 package/libsodium/Config.in
+>>>  create mode 100644 package/libsodium/libsodium.hash
+>>>  create mode 100644 package/libsodium/libsodium.mk
+>>>
+>>
+>> Since you are adding a new library, some packages will try to link with it.
+>> As far I know, zeromq can link with libsodium, so a new dependency should be
+>> added in a follow up patch.
+> 
+> Thanks. I didn't know about the zeromq dependency. Before I submit a
+> new patch, do you know of an easy way to figure out what other
+> packages have a hidden dependency like this?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libuv/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+There is no easy way, maybe by using the package manager from your GNU/Linux
+distribution to find some hit.
 
-diff --git a/package/libuv/Config.in b/package/libuv/Config.in
-index 66cd3f2..26cb97e 100644
---- a/package/libuv/Config.in
-+++ b/package/libuv/Config.in
-@@ -2,12 +2,13 @@ config BR2_PACKAGE_LIBUV
- 	bool "libuv"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  libuv is a multi-platform support library with a focus
- 	  on asynchronous I/O.
- 
- 	  https://github.com/libuv/libuv
- 
--comment "libuv needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "libuv needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
+Something like (debian8): sudo apt-cache rdepends libsodium13
+libsodium13
+Reverse Depends:
+  libzmq3
+  libzmq3
+  libsodium-dev
+  libsodium-dbg
+
+> 
+>> There is even an upstream path to disable libsodium in zeromq:
+>> https://github.com/zeromq/zeromq4-x/commit/faaf4550263395b84e6a80d3f9d7ba8816cdd714
+> 
+> I looked at it. I'm not a zeromq user, so I don't really understand
+> why someone would want to have libsodium support disabled if they have
+> it. It seems simpler for now to make sure the dependency is there in
+> BR if libsodium is enabled. Maybe this is more of a desktop need?
+
+It's sometime required to do this construct in .mk files in order to handle
+properly the package dependency. (from nmap.mk)
+
+ifeq ($(BR2_PACKAGE_OPENSSL),y)
+NMAP_CONF_OPTS += --with-openssl="$(STAGING_DIR)/usr"
+NMAP_DEPENDENCIES += openssl
+else
+NMAP_CONF_OPTS += --without-openssl
+endif
+
+It's also depends if the option is on/off by default.
+
+But you're right, you need only something like this since libsodium is not
+enabled by default.
+
+ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
+ZEROMQ_DEPENDENCIES += libsodium
+ZEROMQ_CONF_OPTS += --with-libsodium="$(STAGING_DIR)/usr"
+endif
+
+Best regards,
+Romain
+
+> 
+> Thanks,
+> Frank
+> 
+> 
+>>
+>> Care to take a look ?
+>>
+>> Best regards,
+>> Romain
