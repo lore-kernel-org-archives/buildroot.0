@@ -1,23 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 17 May 2015 15:58:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 8121] php opcache extension doesn't get installed
-In-Reply-To: <bug-8121-163@https.bugs.busybox.net/>
-References: <bug-8121-163@https.bugs.busybox.net/>
-Message-ID: <20150517155816.E941D80E16@busybox.osuosl.org>
+From: Mirko Langisch <pud@nerdpunx.net>
+Date: Sun, 17 May 2015 17:58:21 +0200
+Subject: [Buildroot] [PATCH 1/1] exim: enable plaintext and cram-md5
+	authenticators
+Message-ID: <1431878301-13745-1-git-send-email-pud@nerdpunx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8121
+Signed-off-by: Mirko Langisch <pud@nerdpunx.net>
+---
+ package/exim/exim.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- Comment #1 from pud at nerdpunx.net 2015-05-17 15:58:16 UTC ---
-a little more explaination: opcache is the only extension (i know of) that gets
-installed to /usr/lib/php, rather than being linked into the binary, so
-removing that directory also removes the extension
-
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index ed309de..b852793 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -46,6 +46,8 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
+ 	$(call exim-config-change,PCRE_CONFIG,no)
+ 	$(call exim-config-change,HAVE_ICONV,no)
+ 	$(call exim-config-unset,EXIM_MONITOR)
++	$(call exim-config-change,AUTH_PLAINTEXT,yes)
++	$(call exim-config-change,AUTH_CRAM_MD5,yes)
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_DOVECOT),y)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.4.0
