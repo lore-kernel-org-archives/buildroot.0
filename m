@@ -1,53 +1,200 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 May 2015 21:02:29 +0200
-Subject: [Buildroot] [git commit] package/enlightenment: disable ptrace with
-	xtensa and uClibc-ng
-Message-ID: <20150517190414.D6F9B817E5@busybox.osuosl.org>
+Date: Sun, 17 May 2015 20:43:35 +0200
+Subject: [Buildroot] [git commit] package/opencv: fix opencv.pc generation
+Message-ID: <20150517190414.AA23A80E07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cce148558119047254981aab686deff16dbba1eb
+commit: http://git.buildroot.net/buildroot/commit/?id=e7a7d53c9421f93f4cae7102f8a43deeb0fafdf1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-uCLibc-ng needs to backport the uClibc commit
-de6561f6669308e5d2297589b39a217d4c14df1c to add
-PT_GETSIGINFO definition.
+This change fixes build of packages depending on opencv and using
+pkg-config to get the opencv LDFLAGS, which were wrongly ordered for
+static build and included absolute path pointing to the host system
+libraries instead of the sysroot ones.
 
-This commit is already merged in uClibc-snapshot used by
-Buildroot's toolchains for xtensa.
+This patch fixes build issues with gst1-plugins-bad and vlc.
 
-For now, disable ptrace with xtensa uClibc-ng toolchains.
-
-Thanks to Gergely Imreh for the initial investigation and
-patch:
-http://patchwork.ozlabs.org/patch/470073/
+This change introduce and new patch to opencv, which is already merged
+upstream [1].
 
 Fixes:
-http://autobuild.buildroot.net/results/77b/77b82e5b437d0778b3f6a3813f2c0a5c39b52db9
+  http://autobuild.buildroot.net/results/c70/c70f793c7c3b380428d6e2e622a90805cffc4dd1/
+  ... and many others
 
-Reported-by: Gergely Imreh <imrehg@gmail.com>
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+[1] https://github.com/Itseez/opencv/commit/eceada586bbf18fc267e437522ec4f1f23ddc656
+
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/enlightenment/enlightenment.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ ...VGenPkgconfig.cmake-rework-opencv.pc-gene.patch |  156 ++++++++++++++++++++
+ 1 files changed, 156 insertions(+), 0 deletions(-)
 
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index ddebe06..ac15642 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -34,6 +34,11 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_powerpc)$(BR2_sparc),yy)
- ENLIGHTENMENT_CONF_ENV += ac_cv_header_sys_ptrace_h=no
- endif
- 
-+# uClibc-ng has an old incomplete sys/ptrace.h for xtensa
-+ifeq ($(BR2_UCLIBC_VERSION_NG)$(BR2_xtensa),yy)
-+ENLIGHTENMENT_CONF_ENV += ac_cv_header_sys_ptrace_h=no
-+endif
+diff --git a/package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch b/package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch
+new file mode 100644
+index 0000000..768f08d
+--- /dev/null
++++ b/package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch
+@@ -0,0 +1,156 @@
++From eceada586bbf18fc267e437522ec4f1f23ddc656 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Fri, 3 Oct 2014 00:32:40 +0200
++Subject: [PATCH] cmake/OpenCVGenPkgconfig.cmake: rework opencv.pc generation
 +
- # alsa backend needs mixer support
- ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
- ENLIGHTENMENT_DEPENDENCIES += alsa-lib
++Using absolute path to locate the components in the "Libs:" field of the
++*.pc can badly break cross-compilation, especially when building
++statically linked objects.
++
++Indeed, pkg-config automatically replaces the '-I...' and '-L...' paths
++when the PKG_CONFIG_SYSROOT_DIR and PKG_CONFIG_LIBDIR environment
++variables are set [1]. This feature is very helpful and common in
++cross-compilation framework like Buildroot [2,3].
++
++When there are absolute paths in the *.pc files, pkg-config won't be
++able to do the path substitions for these paths when the afromentioned
++environment variables are set.
++In such case, since the prefix is the target one, not the sysroot one,
++these libraries' abolute paths will point to:
++- in the best case: a non-existing file (i.e. these files do not exists
++  on the host system;
++- at worst: the host system's libraries. This will make the linking
++  failed because these host system's libraries will most likely not be
++  build for the target architecture [4].
++
++So, this patch replace the components' absolute paths by the form:
++  -L<libdir> -l<libname>
++
++This way, the linker will be able to resolve each dependency path,
++whatever the kind of objects/build (shared object or static build) it
++is dealing with.
++
++Note that for static link, the library order does matter [5]. The order
++of the opencv components has been carefully chosen to comply with this
++requirement.
++
++Fixes #3931
++
++[1] http://linux.die.net/man/1/pkg-config
++[2] http://buildroot.org/
++[3] http://git.buildroot.net/buildroot/tree/package/pkgconf/pkg-config.in
++[4] http://autobuild.buildroot.net/results/e8a/e8a859276db34aff87ef181b0cce98916b0afc90/build-end.log
++[5] http://stackoverflow.com/questions/45135/linker-order-gcc
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++
++---
++Note: this patch properly applies on top of the master branch, though it
++      has been written on top of the 2.4 branch.
++---
++ cmake/OpenCVGenPkgconfig.cmake | 64 +++++++++++++++++++++++++++---------------
++ 1 file changed, 42 insertions(+), 22 deletions(-)
++
++diff --git a/cmake/OpenCVGenPkgconfig.cmake b/cmake/OpenCVGenPkgconfig.cmake
++index fa57db9..183c56d 100644
++--- a/cmake/OpenCVGenPkgconfig.cmake
+++++ b/cmake/OpenCVGenPkgconfig.cmake
++@@ -8,10 +8,6 @@
++ #
++ # ${BIN_DIR}/unix-install/opencv.pc -> For use *with* "make install"
++ # -------------------------------------------------------------------------------------------
++-set(prefix      "${CMAKE_INSTALL_PREFIX}")
++-set(exec_prefix "\${prefix}")
++-set(libdir      "") #TODO: need link paths for OpenCV_EXTRA_COMPONENTS
++-set(includedir  "\${prefix}/${OPENCV_INCLUDE_INSTALL_PATH}")
++ 
++ if(CMAKE_BUILD_TYPE MATCHES "Release")
++   set(ocv_optkind OPT)
++@@ -35,42 +31,66 @@ ocv_list_reverse(OpenCV_LIB_COMPONENTS)
++ ocv_list_reverse(OpenCV_EXTRA_COMPONENTS)
++ 
++ #build the list of components
++-set(OpenCV_LIB_COMPONENTS_ "")
++-foreach(CVLib ${OpenCV_LIB_COMPONENTS})
++-  get_target_property(libpath ${CVLib} LOCATION_${CMAKE_BUILD_TYPE})
++-  get_filename_component(libname "${libpath}" NAME)
++ 
++-  if(INSTALL_TO_MANGLED_PATHS)
++-    set(libname "${libname}.${OPENCV_VERSION}")
++-  endif()
+++# Note:
+++#   when linking against static libraries, if libfoo depends on libbar, then
+++#   libfoo must come first in the linker flags.
+++
+++# world is a special target whose library should come first, especially for
+++# static link.
+++if(OpenCV_LIB_COMPONENTS MATCHES "opencv_world")
+++  list(REMOVE_ITEM OpenCV_LIB_COMPONENTS "opencv_world")
+++  list(INSERT OpenCV_LIB_COMPONENTS 0 "opencv_world")
+++endif()
+++
+++set(OpenCV_LIB_COMPONENTS_)
+++foreach(CVLib ${OpenCV_LIB_COMPONENTS})
++ 
++-  #need better solution....
++-  if(libpath MATCHES "3rdparty")
++-    set(installDir "share/OpenCV/3rdparty/${OPENCV_LIB_INSTALL_PATH}")
+++  get_target_property(libloc ${CVLib} LOCATION_${CMAKE_BUILD_TYPE})
+++  if(libloc MATCHES "3rdparty")
+++    set(libpath "\${exec_prefix}/share/OpenCV/3rdparty/${OPENCV_LIB_INSTALL_PATH}")
++   else()
++-    set(installDir "${OPENCV_LIB_INSTALL_PATH}")
+++    set(libpath "\${exec_prefix}/${OPENCV_LIB_INSTALL_PATH}")
++   endif()
+++  list(APPEND OpenCV_LIB_COMPONENTS_ "-L${libpath}")
+++
+++  get_filename_component(libname ${CVLib} NAME_WE)
+++  string(REGEX REPLACE "^lib" "" libname "${libname}")
+++  list(APPEND OpenCV_LIB_COMPONENTS_ "-l${libname}")
++ 
++-  set(OpenCV_LIB_COMPONENTS_ "${OpenCV_LIB_COMPONENTS_} \${exec_prefix}/${installDir}/${libname}")
++ endforeach()
++ 
++ # add extra dependencies required for OpenCV
++-set(OpenCV_LIB_COMPONENTS ${OpenCV_LIB_COMPONENTS_})
++ if(OpenCV_EXTRA_COMPONENTS)
++   foreach(extra_component ${OpenCV_EXTRA_COMPONENTS})
++ 
++-    if(extra_component MATCHES "^-[lL]" OR extra_component MATCHES "[\\/]")
++-      set(maybe_l_prefix "")
+++    if(extra_component MATCHES "^-[lL]")
+++      set(libprefix "")
+++      set(libname "${extra_component}")
+++    elseif(extra_component MATCHES "[\\/]")
+++      get_filename_component(libdir "${extra_component}" PATH)
+++      list(APPEND OpenCV_LIB_COMPONENTS_ "-L${libdir}")
+++      get_filename_component(libname "${extra_component}" NAME_WE)
+++      string(REGEX REPLACE "^lib" "" libname "${libname}")
+++      set(libprefix "-l")
++     else()
++-      set(maybe_l_prefix "-l")
+++      set(libprefix "-l")
+++      set(libname "${extra_component}")
++     endif()
++-
++-    set(OpenCV_LIB_COMPONENTS "${OpenCV_LIB_COMPONENTS} ${maybe_l_prefix}${extra_component}")
+++    list(APPEND OpenCV_LIB_COMPONENTS_ "${libprefix}${libname}")
++ 
++   endforeach()
++ endif()
++ 
+++list(REMOVE_DUPLICATES OpenCV_LIB_COMPONENTS_)
+++string(REPLACE ";" " " OpenCV_LIB_COMPONENTS "${OpenCV_LIB_COMPONENTS_}")
+++
++ #generate the .pc file
+++set(prefix      "${CMAKE_INSTALL_PREFIX}")
+++set(exec_prefix "\${prefix}")
+++set(libdir      "\${exec_prefix}/${OPENCV_LIB_INSTALL_PATH}")
+++set(includedir  "\${prefix}/${OPENCV_INCLUDE_INSTALL_PATH}")
+++
++ if(INSTALL_TO_MANGLED_PATHS)
++   set(OPENCV_PC_FILE_NAME "opencv-${OPENCV_VERSION}.pc")
++ else()
++-- 
++2.4.1
++
