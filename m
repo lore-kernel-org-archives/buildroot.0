@@ -1,33 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 May 2015 09:05:35 +0200
-Subject: [Buildroot] [PATCH v3 1/2] python-pyqt: fix install
-In-Reply-To: <1430836434-24257-1-git-send-email-gwenj@trabucayre.com>
- (Gwenhael Goavec-Merou's message of "Tue, 5 May 2015 16:33:53 +0200")
-References: <1430836434-24257-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <87a8x38z0g.fsf@dell.be.48ers.dk>
+Date: Sun, 17 May 2015 09:11:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: add iwlwifi
+	6000g2a firmware
+In-Reply-To: <1431708623-6661-1-git-send-email-colleen@skycatch.com>
+ (colleen@skycatch.com's message of "Fri, 15 May 2015 16:50:23 +0000")
+References: <1431708623-6661-1-git-send-email-colleen@skycatch.com>
+Message-ID: <87617r8yqb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gwenhael" == Gwenhael Goavec-Merou <gwenj@trabucayre.com> writes:
+>>>>> "Colleen" == Colleen  <colleen@skycatch.com> writes:
 
- > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
- > PyQt4 provides two version for some py files: one for python2.x and one for
- > python3.x. This two versions are installed in TARGET_DIR.
- > After installing files, python is used to generate all .pyc files, but fails
- > like :
- > class ProxyBase(metaclass=ProxyMetaclass):
- >                              ^
- > 							 SyntaxError: invalid syntax
+ > Signed-off-by: Colleen <colleen@skycatch.com>
 
- > This is not a package build failure and this fix is only cosmetic.
- > This patch suppress directory for not targeted python version.
-
- > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-
-Sorry, just to be clear - It was the v3 versions I committed.
+Looks good, but please use your full name in from and signed-off-by.
 
 -- 
 Bye, Peter Korsgaard
