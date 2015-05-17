@@ -1,91 +1,64 @@
-From: julien.viarddegalbert at openwide.fr <julien.viarddegalbert@openwide.fr>
-Date: Sun, 17 May 2015 09:43:23 +0200
-Subject: [Buildroot] [PATCH v3] dieharder: new package
-Message-ID: <1431848603-30142-1-git-send-email-julien.viarddegalbert@openwide.fr>
+From: Florent Valette <florent.valette@gmail.com>
+Date: Sun, 17 May 2015 10:16:24 +0200
+Subject: [Buildroot] [PATCH v2 1/1] flashrom: Bump to version 0.9.8
+Message-ID: <1431850584-6913-1-git-send-email-florent.valette@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Viard de Galbert <julien@vdg.name>
+This version adds support for new Intel SoC (e.g. BayTrail) and
+spi over usb devices such as pickit2 and ftdi usb-spi.
 
-Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+Signed-off-by: Florent Valette <florent.valette@gmail.com>
+
 ---
-Changes v2 -> v3
-  - remove intermediate variable use (suggested by Baruch Siach)
-Changes v1 -> v2
-  - fixed typo "bin" instead of "big" (thanks Thomas Petazoni)
-  - select gls in config (suggested by Romain Naour)
-  - specified "includedir" to fix unsafe header path
+Changes v1 -> v2:
+ propagate the dependencies for libusb and libftdi
+ Note, libftdi1 is not supported, it only uses libftdi.
 
-Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+Signed-off-by: Florent Valette <florent.valette@gmail.com>
 ---
- package/Config.in              |  1 +
- package/dieharder/Config.in    |  9 +++++++++
- package/dieharder/dieharder.mk | 26 ++++++++++++++++++++++++++
- 3 files changed, 36 insertions(+)
- create mode 100644 package/dieharder/Config.in
- create mode 100644 package/dieharder/dieharder.mk
+ package/flashrom/Config.in   | 5 +++++
+ package/flashrom/flashrom.mk | 4 ++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index af4d2b7..cc0bd79 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -61,6 +61,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/bonnie/Config.in"
- 	source "package/cache-calibrator/Config.in"
- 	source "package/dhrystone/Config.in"
-+	source "package/dieharder/Config.in"
- 	source "package/dmalloc/Config.in"
- 	source "package/dropwatch/Config.in"
- 	source "package/dstat/Config.in"
-diff --git a/package/dieharder/Config.in b/package/dieharder/Config.in
-new file mode 100644
-index 0000000..9f81876
---- /dev/null
-+++ b/package/dieharder/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_DIEHARDER
-+	bool "dieharder"
-+	select BR2_PACKAGE_GSL
-+	help
-+	  dieharder is a fairly involved random number/uniform deviate generator
-+	  tester. It is thus suitable for use in testing both software RNG's and
-+	  hardware RNG's.
-+	  
-+	  http://www.phy.duke.edu/~rgb/General/dieharder.php
-diff --git a/package/dieharder/dieharder.mk b/package/dieharder/dieharder.mk
-new file mode 100644
-index 0000000..2a3d46b
---- /dev/null
-+++ b/package/dieharder/dieharder.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# dieharder
-+#
-+################################################################################
-+
-+DIEHARDER_VERSION = 3.31.1
-+DIEHARDER_SITE = http://www.phy.duke.edu/~rgb/General/dieharder/
-+DIEHARDER_SOURCE = dieharder-$(DIEHARDER_VERSION).tgz
-+DIEHARDER_SUBDIR = dieharder-$(DIEHARDER_VERSION)
-+DIEHARDER_LICENSE = GPLv2b
-+DIEHARDER_LICENSE_FILES = $(DIEHARDER_SUBDIR)/COPYING
-+DIEHARDER_DEPENDENCIES = gsl
-+
-+DIEHARDER_CONF_OPTS = --includedir=$(STAGING_DIR)/usr/include
-+# fix endiannes detection
-+ifeq ($(BR2_ENDIAN),"BIG")
-+DIEHARDER_CONF_OPTS += ac_cv_c_endian=big
-+else
-+DIEHARDER_CONF_OPTS += ac_cv_c_endian=little
-+endif
-+
-+# parallel build fail, disable it
-+DIEHARDER_MAKE=$(MAKE1)
-+
-+$(eval $(autotools-package))
+diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
+index 956500f..8bd5882 100644
+--- a/package/flashrom/Config.in
++++ b/package/flashrom/Config.in
+@@ -1,9 +1,14 @@
+ config BR2_PACKAGE_FLASHROM
+ 	bool "flashrom"
+ 	select BR2_PACKAGE_PCIUTILS
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_LIBUSB_COMPAT
++	select BR2_PACKAGE_LIBFTDI
+ 	# dmidecode is only a runtime dependency
+ 	select BR2_PACKAGE_DMIDECODE
+ 	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_HAS_THREADS 	# libusb
++	depends on BR2_ARCH_HAS_ATOMICS 	# libftdi
+ 	help
+ 	  BIOS-updating utility.
+ 	  Requires PCIUtils libraries.
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index 70bbe30..525470a 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-FLASHROM_VERSION = 0.9.7
++FLASHROM_VERSION = 0.9.8
+ FLASHROM_SOURCE = flashrom-$(FLASHROM_VERSION).tar.bz2
+ FLASHROM_SITE = http://download.flashrom.org/releases
+-FLASHROM_DEPENDENCIES = pciutils
++FLASHROM_DEPENDENCIES = pciutils libusb libusb-compat libftdi
+ FLASHROM_LICENSE = GPLv2+
+ FLASHROM_LICENSE_FILES = COPYING
+ 
 -- 
-2.1.4
+1.9.1
