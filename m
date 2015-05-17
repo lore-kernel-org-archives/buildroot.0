@@ -1,41 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 May 2015 15:58:27 +0200
-Subject: [Buildroot] [PATCH v2 1/1] flashrom: Bump to version 0.9.8
-In-Reply-To: <CAAN6onKPONY-V9Lt=TpMNnJyKsF0O_vN4cZACe9t072NzaqO5w@mail.gmail.com>
-References: <1431850584-6913-1-git-send-email-florent.valette@gmail.com>
- <20150517125603.7aca72a4@free-electrons.com>
- <CAAN6onKPONY-V9Lt=TpMNnJyKsF0O_vN4cZACe9t072NzaqO5w@mail.gmail.com>
-Message-ID: <20150517155827.574ffb9e@free-electrons.com>
+Date: Sun, 17 May 2015 16:15:38 +0200
+Subject: [Buildroot] [PATCH 1/3] qt: do not allow webkit with SuperH
+	Sourcery toolchain
+Message-ID: <1431872140-765-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Florent,
+Building webkit with the SuperH Sourcery toolchain fails with an
+assertion in binutils, so let's not allow to select webkit with this
+toolchain. We do not need to worry about reverse dependencies, since
+we use the existing BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT symbol to add
+this new dependency.
 
-On Sun, 17 May 2015 13:12:23 +0200, Florent Valette wrote:
+Fixes:
 
-> The fist time, i misused "git send-email", my bad, i tried to reply
-> and send v2 in the same time.
+  http://autobuild.buildroot.net/results/508cdeb67f272b61209f331ab7b990cb56f30817/
 
-No problem.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-> Then, i sent it to buildroot at busybox.net and buildroot at buildroot.org,
-> there are two emails addresses for the mailing list and this is not
-> obvious which one is the right one. Some people sends to
-> buildroot.org, others to busybox.net. As i only received the cc (git
-> send-email  sends cc to sender by default) to the mail send to
-> @buildroot.org, i re-send it to @busybox.net (i received twice this
-> one, the one from mailing list and the cc to myself).
-
-Yes, I know it's a bit confusing. Just use one or the other, they both
-send to the same location.
-
-Best regards,
-
-Thomas
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 43f5a0f..ceab91b 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -412,8 +412,11 @@ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+ 	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazeel || \
+ 		BR2_microblazebe || BR2_mips || BR2_mipsel || \
+ 		(BR2_mips64 || BR2_mips64el) && !BR2_MIPS_NABI32 || BR2_powerpc || \
+-		BR2_powerpc64 || BR2_powerpc64le || BR2_sh4 || BR2_sh4eb || \
+-		BR2_sh4a || BR2_sh4aeb || BR2_sparc || BR2_x86_64
++		BR2_powerpc64 || BR2_powerpc64le || BR2_sparc || BR2_x86_64
++	# The CodeSourcery SuperH toolchain fails to build Webkit,
++	# with an assertion failure in binutils.
++	default y if (BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb) && \
++		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
+ 
+ config BR2_PACKAGE_QT_WEBKIT
+ 	bool "WebKit Module"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
