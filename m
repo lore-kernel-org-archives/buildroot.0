@@ -1,128 +1,202 @@
-From: Julien Viard de Galbert <julien.viarddegalbert@openwide.fr>
-Date: Sun, 17 May 2015 14:18:15 +0200
-Subject: [Buildroot] [PATCH v3] dieharder: new package
-In-Reply-To: <20150517102036.464066b9@free-electrons.com>
-References: <1431848603-30142-1-git-send-email-julien.viarddegalbert@openwide.fr>
- <20150517102036.464066b9@free-electrons.com>
-Message-ID: <20150517121815.GA29019@vdg.name>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 17 May 2015 15:03:14 +0200
+Subject: [Buildroot] [PATCH] package/opencv: fix opencv.pc generation
+Message-ID: <1431867794-6291-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, May 17, 2015 at 10:20:36AM +0200, Thomas Petazzoni wrote:
-> Hello Julien,
-> 
-> On Sun, 17 May 2015 09:43:23 +0200, julien.viarddegalbert at openwide.fr
-> wrote:
-> 
-> > diff --git a/package/Config.in b/package/Config.in
-> > index af4d2b7..cc0bd79 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -61,6 +61,7 @@ menu "Debugging, profiling and benchmark"
-> >  	source "package/bonnie/Config.in"
-> >  	source "package/cache-calibrator/Config.in"
-> >  	source "package/dhrystone/Config.in"
-> > +	source "package/dieharder/Config.in"
-> >  	source "package/dmalloc/Config.in"
-> >  	source "package/dropwatch/Config.in"
-> >  	source "package/dstat/Config.in"
-> > diff --git a/package/dieharder/Config.in b/package/dieharder/Config.in
-> > new file mode 100644
-> > index 0000000..9f81876
-> > --- /dev/null
-> > +++ b/package/dieharder/Config.in
-> > @@ -0,0 +1,9 @@
-> > +config BR2_PACKAGE_DIEHARDER
-> > +	bool "dieharder"
-> > +	select BR2_PACKAGE_GSL
-> > +	help
-> > +	  dieharder is a fairly involved random number/uniform deviate generator
-> > +	  tester. It is thus suitable for use in testing both software RNG's and
-> > +	  hardware RNG's.
-> 
-> Those help lines look fairly too long. Make sure they're not longer
-> than 72 columns.
-> 
-Ok, also I just sent another patch to document that point.
+This change fixes build of packages depending on opencv and using
+pkg-config to get the opencv LDFLAGS, which were wrongly ordered for
+static build and included absolute path pointing to the host system
+libraries instead of the sysroot ones.
 
-> > diff --git a/package/dieharder/dieharder.mk b/package/dieharder/dieharder.mk
-> > new file mode 100644
-> > index 0000000..2a3d46b
-> > --- /dev/null
-> > +++ b/package/dieharder/dieharder.mk
-> > @@ -0,0 +1,26 @@
-> > +################################################################################
-> > +#
-> > +# dieharder
-> > +#
-> > +################################################################################
-> > +
-> > +DIEHARDER_VERSION = 3.31.1
-> > +DIEHARDER_SITE = http://www.phy.duke.edu/~rgb/General/dieharder/
-> > +DIEHARDER_SOURCE = dieharder-$(DIEHARDER_VERSION).tgz
-> > +DIEHARDER_SUBDIR = dieharder-$(DIEHARDER_VERSION)
-> > +DIEHARDER_LICENSE = GPLv2b
-> 
-> What is GPLv2b ? We normally have GPLv2 or GPLv2+.
-> 
-You are right this should be made more explicit, there is an
-extra "beverage" clause in the licence file.
-I could either use the syntax the software uses:
-DIEHARDER_LICENSE = GPLv2b (b for beverage)
+This patch fixes build issues with gst1-plugins-bad and vlc.
 
-Or make it simply:
-DIEHARDER_LICENSE = GPLv2 with beverage clause
+This change introduce and new patch to opencv, which is already merged
+upstream [1].
 
-What do you think ?
+Fixes:
+  http://autobuild.buildroot.net/results/c70/c70f793c7c3b380428d6e2e622a90805cffc4dd1/
+  ... and many others
 
-> > +DIEHARDER_LICENSE_FILES = $(DIEHARDER_SUBDIR)/COPYING
-> > +DIEHARDER_DEPENDENCIES = gsl
-> > +
-> > +DIEHARDER_CONF_OPTS = --includedir=$(STAGING_DIR)/usr/include
-> 
-> Why do you need this? This looks wrong, as it would install the
-> headers in a completely wrong location, if dieharder would be
-> installing headers. --includedir is not used to specify where a program
-> should look for headers of libraries, but to tell where it should
-> install its own headers.
-> 
-That was to try to fix the build using "/usr/include/" but it's wrong.
-I overlooked the normal --includedir function. So I guess the upstream
-scripts are wrong as they use the --includedir value to also specify
-some include search path...
+[1] https://github.com/Itseez/opencv/commit/eceada586bbf18fc267e437522ec4f1f23ddc656
 
-Also it _really_ do install some headers there. We probably don't want
-those on the target rootfs. So I guess I need to find how to tell it not
-to do that...
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-> > +# fix endiannes detection
-> > +ifeq ($(BR2_ENDIAN),"BIG")
-> > +DIEHARDER_CONF_OPTS += ac_cv_c_endian=big
-> > +else
-> > +DIEHARDER_CONF_OPTS += ac_cv_c_endian=little
-> > +endif
-> 
-> We generally pass such values in <pkg>_CONF_ENV instead.
-> 
-OK, I'll do that.
+---
+Note that this fix is for upcoming 2015.05 release, and I am already
+preparing a series bumping of the opencv package for the next release. :)
+---
+ ...VGenPkgconfig.cmake-rework-opencv.pc-gene.patch | 156 +++++++++++++++++++++
+ 1 file changed, 156 insertions(+)
+ create mode 100644 package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch
 
-> > +
-> > +# parallel build fail, disable it
-> > +DIEHARDER_MAKE=$(MAKE1)
-> 
-> Spaces around = sign please.
-OK, sorry, I read about that one... my mistake.
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
+diff --git a/package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch b/package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch
+new file mode 100644
+index 0000000..768f08d
+--- /dev/null
++++ b/package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch
+@@ -0,0 +1,156 @@
++From eceada586bbf18fc267e437522ec4f1f23ddc656 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Fri, 3 Oct 2014 00:32:40 +0200
++Subject: [PATCH] cmake/OpenCVGenPkgconfig.cmake: rework opencv.pc generation
++
++Using absolute path to locate the components in the "Libs:" field of the
++*.pc can badly break cross-compilation, especially when building
++statically linked objects.
++
++Indeed, pkg-config automatically replaces the '-I...' and '-L...' paths
++when the PKG_CONFIG_SYSROOT_DIR and PKG_CONFIG_LIBDIR environment
++variables are set [1]. This feature is very helpful and common in
++cross-compilation framework like Buildroot [2,3].
++
++When there are absolute paths in the *.pc files, pkg-config won't be
++able to do the path substitions for these paths when the afromentioned
++environment variables are set.
++In such case, since the prefix is the target one, not the sysroot one,
++these libraries' abolute paths will point to:
++- in the best case: a non-existing file (i.e. these files do not exists
++  on the host system;
++- at worst: the host system's libraries. This will make the linking
++  failed because these host system's libraries will most likely not be
++  build for the target architecture [4].
++
++So, this patch replace the components' absolute paths by the form:
++  -L<libdir> -l<libname>
++
++This way, the linker will be able to resolve each dependency path,
++whatever the kind of objects/build (shared object or static build) it
++is dealing with.
++
++Note that for static link, the library order does matter [5]. The order
++of the opencv components has been carefully chosen to comply with this
++requirement.
++
++Fixes #3931
++
++[1] http://linux.die.net/man/1/pkg-config
++[2] http://buildroot.org/
++[3] http://git.buildroot.net/buildroot/tree/package/pkgconf/pkg-config.in
++[4] http://autobuild.buildroot.net/results/e8a/e8a859276db34aff87ef181b0cce98916b0afc90/build-end.log
++[5] http://stackoverflow.com/questions/45135/linker-order-gcc
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++
++---
++Note: this patch properly applies on top of the master branch, though it
++      has been written on top of the 2.4 branch.
++---
++ cmake/OpenCVGenPkgconfig.cmake | 64 +++++++++++++++++++++++++++---------------
++ 1 file changed, 42 insertions(+), 22 deletions(-)
++
++diff --git a/cmake/OpenCVGenPkgconfig.cmake b/cmake/OpenCVGenPkgconfig.cmake
++index fa57db9..183c56d 100644
++--- a/cmake/OpenCVGenPkgconfig.cmake
+++++ b/cmake/OpenCVGenPkgconfig.cmake
++@@ -8,10 +8,6 @@
++ #
++ # ${BIN_DIR}/unix-install/opencv.pc -> For use *with* "make install"
++ # -------------------------------------------------------------------------------------------
++-set(prefix      "${CMAKE_INSTALL_PREFIX}")
++-set(exec_prefix "\${prefix}")
++-set(libdir      "") #TODO: need link paths for OpenCV_EXTRA_COMPONENTS
++-set(includedir  "\${prefix}/${OPENCV_INCLUDE_INSTALL_PATH}")
++ 
++ if(CMAKE_BUILD_TYPE MATCHES "Release")
++   set(ocv_optkind OPT)
++@@ -35,42 +31,66 @@ ocv_list_reverse(OpenCV_LIB_COMPONENTS)
++ ocv_list_reverse(OpenCV_EXTRA_COMPONENTS)
++ 
++ #build the list of components
++-set(OpenCV_LIB_COMPONENTS_ "")
++-foreach(CVLib ${OpenCV_LIB_COMPONENTS})
++-  get_target_property(libpath ${CVLib} LOCATION_${CMAKE_BUILD_TYPE})
++-  get_filename_component(libname "${libpath}" NAME)
++ 
++-  if(INSTALL_TO_MANGLED_PATHS)
++-    set(libname "${libname}.${OPENCV_VERSION}")
++-  endif()
+++# Note:
+++#   when linking against static libraries, if libfoo depends on libbar, then
+++#   libfoo must come first in the linker flags.
+++
+++# world is a special target whose library should come first, especially for
+++# static link.
+++if(OpenCV_LIB_COMPONENTS MATCHES "opencv_world")
+++  list(REMOVE_ITEM OpenCV_LIB_COMPONENTS "opencv_world")
+++  list(INSERT OpenCV_LIB_COMPONENTS 0 "opencv_world")
+++endif()
+++
+++set(OpenCV_LIB_COMPONENTS_)
+++foreach(CVLib ${OpenCV_LIB_COMPONENTS})
++ 
++-  #need better solution....
++-  if(libpath MATCHES "3rdparty")
++-    set(installDir "share/OpenCV/3rdparty/${OPENCV_LIB_INSTALL_PATH}")
+++  get_target_property(libloc ${CVLib} LOCATION_${CMAKE_BUILD_TYPE})
+++  if(libloc MATCHES "3rdparty")
+++    set(libpath "\${exec_prefix}/share/OpenCV/3rdparty/${OPENCV_LIB_INSTALL_PATH}")
++   else()
++-    set(installDir "${OPENCV_LIB_INSTALL_PATH}")
+++    set(libpath "\${exec_prefix}/${OPENCV_LIB_INSTALL_PATH}")
++   endif()
+++  list(APPEND OpenCV_LIB_COMPONENTS_ "-L${libpath}")
+++
+++  get_filename_component(libname ${CVLib} NAME_WE)
+++  string(REGEX REPLACE "^lib" "" libname "${libname}")
+++  list(APPEND OpenCV_LIB_COMPONENTS_ "-l${libname}")
++ 
++-  set(OpenCV_LIB_COMPONENTS_ "${OpenCV_LIB_COMPONENTS_} \${exec_prefix}/${installDir}/${libname}")
++ endforeach()
++ 
++ # add extra dependencies required for OpenCV
++-set(OpenCV_LIB_COMPONENTS ${OpenCV_LIB_COMPONENTS_})
++ if(OpenCV_EXTRA_COMPONENTS)
++   foreach(extra_component ${OpenCV_EXTRA_COMPONENTS})
++ 
++-    if(extra_component MATCHES "^-[lL]" OR extra_component MATCHES "[\\/]")
++-      set(maybe_l_prefix "")
+++    if(extra_component MATCHES "^-[lL]")
+++      set(libprefix "")
+++      set(libname "${extra_component}")
+++    elseif(extra_component MATCHES "[\\/]")
+++      get_filename_component(libdir "${extra_component}" PATH)
+++      list(APPEND OpenCV_LIB_COMPONENTS_ "-L${libdir}")
+++      get_filename_component(libname "${extra_component}" NAME_WE)
+++      string(REGEX REPLACE "^lib" "" libname "${libname}")
+++      set(libprefix "-l")
++     else()
++-      set(maybe_l_prefix "-l")
+++      set(libprefix "-l")
+++      set(libname "${extra_component}")
++     endif()
++-
++-    set(OpenCV_LIB_COMPONENTS "${OpenCV_LIB_COMPONENTS} ${maybe_l_prefix}${extra_component}")
+++    list(APPEND OpenCV_LIB_COMPONENTS_ "${libprefix}${libname}")
++ 
++   endforeach()
++ endif()
++ 
+++list(REMOVE_DUPLICATES OpenCV_LIB_COMPONENTS_)
+++string(REPLACE ";" " " OpenCV_LIB_COMPONENTS "${OpenCV_LIB_COMPONENTS_}")
+++
++ #generate the .pc file
+++set(prefix      "${CMAKE_INSTALL_PREFIX}")
+++set(exec_prefix "\${prefix}")
+++set(libdir      "\${exec_prefix}/${OPENCV_LIB_INSTALL_PATH}")
+++set(includedir  "\${prefix}/${OPENCV_INCLUDE_INSTALL_PATH}")
+++
++ if(INSTALL_TO_MANGLED_PATHS)
++   set(OPENCV_PC_FILE_NAME "opencv-${OPENCV_VERSION}.pc")
++ else()
++-- 
++2.4.1
++
 -- 
-Julien Viard de Galbert
+2.4.1
