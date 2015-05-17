@@ -1,112 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 May 2015 09:22:49 +0200
-Subject: [Buildroot] [git commit] pulseaudio: needs dynamic library support
-Message-ID: <20150517072309.BA27880DF0@busybox.osuosl.org>
+From: julien.viarddegalbert at openwide.fr <julien.viarddegalbert@openwide.fr>
+Date: Sun, 17 May 2015 09:43:23 +0200
+Subject: [Buildroot] [PATCH v3] dieharder: new package
+Message-ID: <1431848603-30142-1-git-send-email-julien.viarddegalbert@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3ed9137fee544875fa6dca7c0369808ec4b274d4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Julien Viard de Galbert <julien@vdg.name>
 
-Fixes:
-http://autobuild.buildroot.net/results/75a/75a3380fdcce88f1f9f2a77c4f059787623919d7/
-http://autobuild.buildroot.net/results/f4a/f4a22344bd5c8f59e6f8cacb6a549f8d8fe99af2/
-
-Pulseaudio uses dlfcn.h, so it cannot work in a pure static environment.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
 ---
- package/gstreamer/gst-plugins-good/Config.in   |    5 +++--
- package/gstreamer1/gst1-plugins-good/Config.in |    5 +++--
- package/mpd/Config.in                          |    4 ++++
- package/pulseaudio/Config.in                   |    5 +++--
- 4 files changed, 13 insertions(+), 6 deletions(-)
+Changes v2 -> v3
+  - remove intermediate variable use (suggested by Baruch Siach)
+Changes v1 -> v2
+  - fixed typo "bin" instead of "big" (thanks Thomas Petazoni)
+  - select gls in config (suggested by Romain Naour)
+  - specified "includedir" to fix unsafe header path
 
-diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
-index 70ae9c1..0544b7c 100644
---- a/package/gstreamer/gst-plugins-good/Config.in
-+++ b/package/gstreamer/gst-plugins-good/Config.in
-@@ -205,13 +205,14 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
- 	depends on BR2_USE_MMU # pulseaudio
- 	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
-+	depends on !BR2_STATIC_LIBS # pulseaudio
- 	select BR2_PACKAGE_PULSEAUDIO
- 	bool "pulseaudio"
- 
--comment "pulseaudio support needs a toolchain w/ threads"
-+comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
- 	bool "souphttpsrc (http client)"
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index b3929b4..6216c7f 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -312,15 +312,16 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
- 	depends on BR2_USE_MMU # pulseaudio
- 	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
-+	depends on !BR2_STATIC_LIBS # pulseaudio
- 	select BR2_PACKAGE_PULSEAUDIO
- 	bool "pulseaudio"
- 	help
- 	  PulseAudio plugin library
- 
--comment "pulseaudio support needs a toolchain w/ threads"
-+comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
- 	bool "souphttpsrc (http client)"
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index b57aa55..ed036fe 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -238,10 +238,14 @@ config BR2_PACKAGE_MPD_OSS
- config BR2_PACKAGE_MPD_PULSEAUDIO
- 	bool "pulseaudio"
- 	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
-+	depends on !BR2_STATIC_LIBS # pulseaudio
- 	select BR2_PACKAGE_PULSEAUDIO
- 	help
- 	  Enable pulseaudio output support.
- 
-+comment "pulseaudio support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
+Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+---
+ package/Config.in              |  1 +
+ package/dieharder/Config.in    |  9 +++++++++
+ package/dieharder/dieharder.mk | 26 ++++++++++++++++++++++++++
+ 3 files changed, 36 insertions(+)
+ create mode 100644 package/dieharder/Config.in
+ create mode 100644 package/dieharder/dieharder.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index af4d2b7..cc0bd79 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -61,6 +61,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/bonnie/Config.in"
+ 	source "package/cache-calibrator/Config.in"
+ 	source "package/dhrystone/Config.in"
++	source "package/dieharder/Config.in"
+ 	source "package/dmalloc/Config.in"
+ 	source "package/dropwatch/Config.in"
+ 	source "package/dstat/Config.in"
+diff --git a/package/dieharder/Config.in b/package/dieharder/Config.in
+new file mode 100644
+index 0000000..9f81876
+--- /dev/null
++++ b/package/dieharder/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_DIEHARDER
++	bool "dieharder"
++	select BR2_PACKAGE_GSL
++	help
++	  dieharder is a fairly involved random number/uniform deviate generator
++	  tester. It is thus suitable for use in testing both software RNG's and
++	  hardware RNG's.
++	  
++	  http://www.phy.duke.edu/~rgb/General/dieharder.php
+diff --git a/package/dieharder/dieharder.mk b/package/dieharder/dieharder.mk
+new file mode 100644
+index 0000000..2a3d46b
+--- /dev/null
++++ b/package/dieharder/dieharder.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# dieharder
++#
++################################################################################
 +
- comment "Miscellaneous plugins"
- 
- config BR2_PACKAGE_MPD_AVAHI_SUPPORT
-diff --git a/package/pulseaudio/Config.in b/package/pulseaudio/Config.in
-index b2be9ab..63c8ca4 100644
---- a/package/pulseaudio/Config.in
-+++ b/package/pulseaudio/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PULSEAUDIO
- 	bool "pulseaudio"
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBTOOL
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_LIBSNDFILE
-@@ -30,7 +31,7 @@ config BR2_PACKAGE_PULSEAUDIO_DAEMON
- 
- endif
- 
--comment "pulseaudio needs a toolchain w/ wchar, threads"
-+comment "pulseaudio needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++DIEHARDER_VERSION = 3.31.1
++DIEHARDER_SITE = http://www.phy.duke.edu/~rgb/General/dieharder/
++DIEHARDER_SOURCE = dieharder-$(DIEHARDER_VERSION).tgz
++DIEHARDER_SUBDIR = dieharder-$(DIEHARDER_VERSION)
++DIEHARDER_LICENSE = GPLv2b
++DIEHARDER_LICENSE_FILES = $(DIEHARDER_SUBDIR)/COPYING
++DIEHARDER_DEPENDENCIES = gsl
++
++DIEHARDER_CONF_OPTS = --includedir=$(STAGING_DIR)/usr/include
++# fix endiannes detection
++ifeq ($(BR2_ENDIAN),"BIG")
++DIEHARDER_CONF_OPTS += ac_cv_c_endian=big
++else
++DIEHARDER_CONF_OPTS += ac_cv_c_endian=little
++endif
++
++# parallel build fail, disable it
++DIEHARDER_MAKE=$(MAKE1)
++
++$(eval $(autotools-package))
+-- 
+2.1.4
