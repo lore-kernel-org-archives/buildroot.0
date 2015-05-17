@@ -1,65 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 May 2015 15:55:22 +0200
-Subject: [Buildroot] [PATCH v3] dieharder: new package
-In-Reply-To: <20150517121815.GA29019@vdg.name>
-References: <1431848603-30142-1-git-send-email-julien.viarddegalbert@openwide.fr>
- <20150517102036.464066b9@free-electrons.com>
- <20150517121815.GA29019@vdg.name>
-Message-ID: <20150517155522.7b71a525@free-electrons.com>
+Date: Sun, 17 May 2015 15:58:27 +0200
+Subject: [Buildroot] [PATCH v2 1/1] flashrom: Bump to version 0.9.8
+In-Reply-To: <CAAN6onKPONY-V9Lt=TpMNnJyKsF0O_vN4cZACe9t072NzaqO5w@mail.gmail.com>
+References: <1431850584-6913-1-git-send-email-florent.valette@gmail.com>
+ <20150517125603.7aca72a4@free-electrons.com>
+ <CAAN6onKPONY-V9Lt=TpMNnJyKsF0O_vN4cZACe9t072NzaqO5w@mail.gmail.com>
+Message-ID: <20150517155827.574ffb9e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Julien Viard de Galbert,
+Florent,
 
-On Sun, 17 May 2015 14:18:15 +0200, Julien Viard de Galbert wrote:
+On Sun, 17 May 2015 13:12:23 +0200, Florent Valette wrote:
 
-> > Those help lines look fairly too long. Make sure they're not longer
-> > than 72 columns.
-> > 
-> Ok, also I just sent another patch to document that point.
+> The fist time, i misused "git send-email", my bad, i tried to reply
+> and send v2 in the same time.
 
-Sure, good idea.
+No problem.
 
-> You are right this should be made more explicit, there is an
-> extra "beverage" clause in the licence file.
-> I could either use the syntax the software uses:
-> DIEHARDER_LICENSE = GPLv2b (b for beverage)
-> 
-> Or make it simply:
-> DIEHARDER_LICENSE = GPLv2 with beverage clause
-> 
-> What do you think ?
+> Then, i sent it to buildroot at busybox.net and buildroot at buildroot.org,
+> there are two emails addresses for the mailing list and this is not
+> obvious which one is the right one. Some people sends to
+> buildroot.org, others to busybox.net. As i only received the cc (git
+> send-email  sends cc to sender by default) to the mail send to
+> @buildroot.org, i re-send it to @busybox.net (i received twice this
+> one, the one from mailing list and the cc to myself).
 
-The second solution you propose looks better to me.
+Yes, I know it's a bit confusing. Just use one or the other, they both
+send to the same location.
 
-> > > +DIEHARDER_LICENSE_FILES = $(DIEHARDER_SUBDIR)/COPYING
-> > > +DIEHARDER_DEPENDENCIES = gsl
-> > > +
-> > > +DIEHARDER_CONF_OPTS = --includedir=$(STAGING_DIR)/usr/include
-> > 
-> > Why do you need this? This looks wrong, as it would install the
-> > headers in a completely wrong location, if dieharder would be
-> > installing headers. --includedir is not used to specify where a program
-> > should look for headers of libraries, but to tell where it should
-> > install its own headers.
-> > 
-> That was to try to fix the build using "/usr/include/" but it's wrong.
-> I overlooked the normal --includedir function. So I guess the upstream
-> scripts are wrong as they use the --includedir value to also specify
-> some include search path...
-> 
-> Also it _really_ do install some headers there. We probably don't want
-> those on the target rootfs. So I guess I need to find how to tell it not
-> to do that...
-
-As long as headers are installed in $(TARGET_DIR)/usr/include, you
-shouldn't do anything: Buildroot automatically deletes this directory
-at the end of the build process.
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
