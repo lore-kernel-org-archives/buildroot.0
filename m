@@ -1,72 +1,71 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 17 May 2015 06:35:40 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-05-11
-In-Reply-To: <20150516231145.GA7903@free.fr>
-References: <20150512063016.AD506100F8B@stock.ovh.net>
- <20150516231145.GA7903@free.fr>
-Message-ID: <CAHXCMMJfaXA3u75rBvG7C9_sZE_cQJf=DuxE55iKEcppt3ioLQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 17 May 2015 08:30:17 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-05-16
+Message-ID: <20150517063017.77AD4100D35@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+Build statistics for 2015-05-16
+===============================
 
-On Sun, May 17, 2015 at 1:11 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Samuel, Romain, All,
->
-> On 2015-05-12 08:30 +0200, Thomas Petazzoni spake thusly:
->> Build statistics for 2015-05-11
->>      powerpc |         gst1-plugins-bad-1.4.5 | NOK | http://autobuild.buildroot.net/results/c70f793c7c3b380428d6e2e622a90805cffc4dd1/
->
-> This failure is the same as the one I'm currently investigating:
->     http://autobuild.buildroot.org/results/e03/e0392859a1943d1db2a5ee2f7fdf93764369d979/
->
-> The root cause (I think) is opencv.pc, which contains:
->
->     Libs:  ${exec_prefix}/lib/libopencv_calib3d.so
->         ${exec_prefix}/lib/libopencv_contrib.so
->         [...]
->         ${exec_prefix}/lib/libopencv_ts.a
->         ${exec_prefix}/lib/libopencv_video.so
->         -lrt -lpthread -lm -ldl
->
-> (It's all on one line, but split here for readability, and lots of libs
-> stripped out).
->
-> OK, so at link time, an opencv-using package (like gst2-plugins-bad)
-> will just try to link against ${exec_prefix}/lib/libopencv_ts.a , which
-> expands to /usr/lib/libopencv_ts.a and that is:
->
->  1- not caught ny our paranoid toolchain wrapper
->  2- not prefix-expanded by pkg-conf
->
-> I'll see what I can do with that, but tomorrow... ;-)
->
-Yeah, I know opencv.pc generation is broken. A patch fixing it is
-available at [1], which is fortunatelly part of the 2.4.11 release
-(the latest stable release).
-And, as I write these lines, I'm running build tests on the opencv
-bump series [2] (rebased on next and which I intend to submit for the
-next release cycle).
+        success : 300
+       failures : 29 
+       timeouts : 0  
+          TOTAL : 329
 
-[1] https://github.com/Itseez/opencv/commit/eceada586bbf18fc267e437522ec4f1f23ddc656
-[2] https://github.com/tSed/buildroot/commits/sma/opencv
+Classification of failures by reason
+====================================
 
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+                tinyxml2-2.2.0 | 9 
+               host-mono-4.0.0 | 3 
+                      qt-4.8.6 | 2 
+           heirloom-mailx-12.5 | 2 
+                ipmiutil-2.9.5 | 2 
+         lua-periphery-1.0.4-1 | 2 
+            python-pyqt-4.11.3 | 2 
+                 cdrkit-1.1.11 | 2 
+           uboot-tools-2015.04 | 1 
+                   duma-2.5.15 | 1 
+          enlightenment-0.17.6 | 1 
+             libmatroska-1.4.2 | 1 
+        gst1-plugins-bad-1.4.5 | 1 
 
-Regards,
+Detail of failures
+===================
+
+      mipsel |                  cdrkit-1.1.11 | NOK | http://autobuild.buildroot.net/results/22cdb25b20dd41075a6096b38f6ef76f781763b1/
+        i686 |                  cdrkit-1.1.11 | NOK | http://autobuild.buildroot.net/results/9455dd040520ac06249314295714e0765e8485c9/
+      xtensa |                    duma-2.5.15 | NOK | http://autobuild.buildroot.net/results/ccfc79586516a6ebb05badfad258aad0b6b9d2a2/
+      xtensa |           enlightenment-0.17.6 | NOK | http://autobuild.buildroot.net/results/c1ef3b4fae3ddf3206ee79141dc36bef50085b6a/
+         arm |         gst1-plugins-bad-1.4.5 | NOK | http://autobuild.buildroot.net/results/e0392859a1943d1db2a5ee2f7fdf93764369d979/
+       nios2 |            heirloom-mailx-12.5 | NOK | http://autobuild.buildroot.net/results/33346f4555ed403bab7b739dd5d47814efa8eb4c/
+       nios2 |            heirloom-mailx-12.5 | NOK | http://autobuild.buildroot.net/results/d4683dd0913340c0aec143adde141658ef36cfc0/
+     powerpc |                host-mono-4.0.0 | NOK | http://autobuild.buildroot.net/results/c3288c5d1fb94474f14a4a889e76135878d403bc/
+     powerpc |                host-mono-4.0.0 | NOK | http://autobuild.buildroot.net/results/f708e89f613ec0b42cdf49ccbef39b02f4a271fb/
+         arm |                host-mono-4.0.0 | NOK | http://autobuild.buildroot.net/results/3cb99e5c5672cbaa2a86020129a05dfde47cdb8f/
+        i686 |                 ipmiutil-2.9.5 | NOK | http://autobuild.buildroot.net/results/b42e16c664c70ccb430f848060e7fe26a3c9bd09/
+        i686 |                 ipmiutil-2.9.5 | NOK | http://autobuild.buildroot.net/results/100098242091ca5844177e6ed1d3cecb77072f3a/
+        bfin |              libmatroska-1.4.2 | NOK | http://autobuild.buildroot.net/results/80a9f0f5594ab833600ea8514dc184e50d2bf08c/
+        mips |          lua-periphery-1.0.4-1 | NOK | http://autobuild.buildroot.net/results/0ad656970b3cbc84b5531b28155ba2f747715fe3/
+    mips64el |          lua-periphery-1.0.4-1 | NOK | http://autobuild.buildroot.net/results/65bc6e4f6e0c6d2110a5de67b04f2f746a510a1b/
+     powerpc |             python-pyqt-4.11.3 | NOK | http://autobuild.buildroot.net/results/7af8b620028ead3731c170b9cd16382701860267/
+         arm |             python-pyqt-4.11.3 | NOK | http://autobuild.buildroot.net/results/f05f5c6de0f5b0c1389cd916baaf29151f91c753/
+        sh4a |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/508cdeb67f272b61209f331ab7b990cb56f30817/
+         sh4 |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/b28993215e09840cfa4d2c0c0d50466b1b6f94b3/
+        bfin |                 tinyxml2-2.2.0 | NOK | http://autobuild.buildroot.net/results/b749e7af2ab3e118ec1e0cfaa037e6c030a191cf/
+     powerpc |                 tinyxml2-2.2.0 | NOK | http://autobuild.buildroot.net/results/3a5a9c5df751f730e59e94b4c886373da3a005be/
+      xtensa |                 tinyxml2-2.2.0 | NOK | http://autobuild.buildroot.net/results/9a0dd91cd52faebb2b76874d3909fa7993318c25/
+    mips64el |                 tinyxml2-2.2.0 | NOK | http://autobuild.buildroot.net/results/06c6c0407d6ad9e63b14e651fa8ba08190dbd466/
+     powerpc |                 tinyxml2-2.2.0 | NOK | http://autobuild.buildroot.net/results/4210adfcb9006e77742849e2c632729e2c124c5d/
+         arm |                 tinyxml2-2.2.0 | NOK | http://autobuild.buildroot.net/results/4b469274cf1a29e84143795b47c533d56dc233ee/
+         arm |                 tinyxml2-2.2.0 | NOK | http://autobuild.buildroot.net/results/469de84e49b9a8237f972f433a447e760106e7ef/
+        bfin |                 tinyxml2-2.2.0 | NOK | http://autobuild.buildroot.net/results/c84589011b9ad9ab7e5d5ab7b40ba5a3b2d8fff8/
+    mips64el |                 tinyxml2-2.2.0 | NOK | http://autobuild.buildroot.net/results/408825465ea861721be91459d39f5fa9a039bf6b/
+        mips |            uboot-tools-2015.04 | NOK | http://autobuild.buildroot.net/results/48345d936c7972dc27ea12bdccfe0d02bbc4112b/
+
 
 -- 
-Samuel
+http://autobuild.buildroot.net
