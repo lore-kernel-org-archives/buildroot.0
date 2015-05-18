@@ -1,80 +1,61 @@
 From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
-Date: Mon, 18 May 2015 11:24:42 -0300
-Subject: [Buildroot] [PATCH v2 0/6] Add ARM Cortex-M3 support
-Message-ID: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
+Date: Mon, 18 May 2015 11:24:44 -0300
+Subject: [Buildroot] [PATCH v2 2/6] pkg-utils: implement INFLATE for .deb
+	files
+In-Reply-To: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <1431959088-15257-3-git-send-email-guido@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+This allows to use packages that are shipped in the .deb format.
 
-this patchset introduces support for the M3 processors. These processors
-don't have an MMU and they don't support the regular ARM mode (only
-Thumb and Thumb2).
-
-The OSELAS 2014.12.0 toolchain is added, along with a few patches to
-make it usable within BR since it has some quirks. The toolchain is
-packaged as a .deb package, so I implemented INFLATE.deb so we don't
-need special EXTRACT_CMDS for it (although that isn't really too ugly,
-so it's up for discussion).
-
-I'm planning to send a defconfig for the CIAA board[1] once it's
-mainlined in Linux. But, for now, this config can generate a proper
-rootfs:
-  BR2_arm=y
-  BR2_cortex_m3=y
-  BR2_TOOLCHAIN_EXTERNAL=y
-
-The changes from v1 (sent by Ezequiel) are:
- - Patch 1 was accepted, so dropped it.
-
- - The toolchain checked is not skipped, but done with a different
- output as Yann suggested.
-
- - This toolchain version is newer than the previous one (2014.12.0 vs
- (2013.12.2).
-
- - Added a script to implement INFLATE.deb in support/extract/, to avoid
- custom extract commands. This might also be useful for other packages.
-
-When we sent out v1 there was a discussion about adding
-BR2_HAS_{ELF,FLAT}_SUPPORT and BR2_HAS_OPTIONAL_MMU to avoid
-blacklisting each architecture on the ELF, FLAT and MMU configs. I
-haven't done this for now as it would make it a huge patchset and is a
-different objective (I think), but I can send a new patch for that if
-there's interest.
-
-Any comments and testing welcome!
-
-[1] http://www.proyecto-ciaa.com.ar/
-
---
-
-Guido Mart?nez (6):
-  arm: update processor types
-  pkg-utils: implement INFLATE for .deb files
-  toolchain: allow for stupid toolchains
-  toolchain: introduce BR2_TOOLCHAIN_HAS_RESOLVER
-  nommu/flat: don't add -elf2flt for some toolchains
-  toolchain-external: add OSELAS 2014.12.0 Cortex-M3 toolchain
-
- Makefile                                           |  2 +
- arch/Config.in                                     |  8 ++--
- arch/Config.in.arm                                 |  5 +++
- package/Makefile.in                                |  3 ++
- package/busybox/busybox.mk                         |  3 ++
- package/pkg-utils.mk                               |  1 +
- support/extract/inflate-deb.sh                     |  5 +++
- toolchain/Config.in                                |  6 +++
- toolchain/helpers.mk                               |  6 ++-
- toolchain/toolchain-common.in                      |  6 ++-
- toolchain/toolchain-external/Config.in             | 43 ++++++++++++++++++++++
- .../toolchain-external/toolchain-external.hash     |  4 ++
- toolchain/toolchain-external/toolchain-external.mk | 10 +++++
- 13 files changed, 94 insertions(+), 8 deletions(-)
+Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+---
+ Makefile                       | 2 ++
+ package/pkg-utils.mk           | 1 +
+ support/extract/inflate-deb.sh | 5 +++++
+ 3 files changed, 8 insertions(+)
  create mode 100755 support/extract/inflate-deb.sh
 
+diff --git a/Makefile b/Makefile
+index 5c4293b..c20da1f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -339,6 +339,8 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+ ZCAT := $(call qstrip,$(BR2_ZCAT))
+ BZCAT := $(call qstrip,$(BR2_BZCAT))
+ XZCAT := $(call qstrip,$(BR2_XZCAT))
++export ZCAT BZCAT XZCAT
++
+ TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+ 
+ # packages compiled for the host go here
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 99a3c1e..196dd36 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -77,6 +77,7 @@ INFLATE.tbz  = $(BZCAT)
+ INFLATE.tbz2 = $(BZCAT)
+ INFLATE.tgz  = $(ZCAT)
+ INFLATE.xz   = $(XZCAT)
++INFLATE.deb  = ./support/extract/inflate-deb.sh
+ INFLATE.tar  = cat
+ # suitable-extractor(filename): returns extractor based on suffix
+ suitable-extractor = $(INFLATE$(suffix $(1)))
+diff --git a/support/extract/inflate-deb.sh b/support/extract/inflate-deb.sh
+new file mode 100755
+index 0000000..39e7b52
+--- /dev/null
++++ b/support/extract/inflate-deb.sh
+@@ -0,0 +1,5 @@
++#!/usr/bin/env bash
++
++DEBFILE=$1
++
++ar fp ${DEBFILE} data.tar.xz | ${XZCAT} -d
 -- 
 2.1.4
