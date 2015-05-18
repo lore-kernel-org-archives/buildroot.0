@@ -1,101 +1,59 @@
 From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
-Date: Mon, 18 May 2015 11:24:48 -0300
-Subject: [Buildroot] [PATCH v2 6/6] toolchain-external: add OSELAS 2014.12.0
-	Cortex-M3 toolchain
+Date: Mon, 18 May 2015 11:24:47 -0300
+Subject: [Buildroot] [PATCH v2 5/6] nommu/flat: don't add -elf2flt for some
+	toolchains
 In-Reply-To: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
 References: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <1431959088-15257-7-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <1431959088-15257-6-git-send-email-guido@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Binary toolchain based on uClibc for Cortex-M3 processor based on GCC
-4.9.2.
-
-This toolchain has no resolver support, and runs elf2flt automatically
-when called. Thus, we don't select BR2_HAS_RESOLVER_SUPPORT and we do
-select BR2_TOOLCHAIN_DONT_ELF2FLT.
+Some toolchains (OSELAS 2014.12.0, for instance) internally do elf2flt
+conversion without having to add anything to {C,CXX,LD}FLAGS. So, add an
+option that allows to not add these flags.
 
 Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
 ---
- toolchain/toolchain-external/Config.in               | 14 ++++++++++++++
- toolchain/toolchain-external/toolchain-external.hash |  4 ++++
- toolchain/toolchain-external/toolchain-external.mk   | 10 ++++++++++
- 3 files changed, 28 insertions(+)
+ package/Makefile.in | 3 +++
+ toolchain/Config.in | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 3469fbc..34a0835 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -195,6 +195,19 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+diff --git a/package/Makefile.in b/package/Makefile.in
+index a0c5a7a..0ac1a94 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -142,12 +142,15 @@ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
  
- 	  This toolchain uses software-floating point.
+ ifeq ($(BR2_BINFMT_FLAT),y)
++# Don't add any flags for toolchains that don't require it
++ifneq ($(BR2_TOOLCHAIN_DONT_ELF2FLT),y)
+ TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
+ 	-Wl$(comma)-elf2flt)
+ TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
+ 	-Wl$(comma)-elf2flt)
+ TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-elf2flt)
+ endif
++endif
  
-+config BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412
-+	bool "OSELAS ARM Cortex-M3 2014.12"
-+	depends on BR2_arm
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
-+	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	select BR2_LARGEFILE
-+	select BR2_INET_IPV6
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_DONT_ELF2FLT
-+	help
-+	  OSELAS binary toolchain for Cortex-M3.
+ ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
+ TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 7e66de0..fd8dc43 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -23,6 +23,9 @@ config BR2_TOOLCHAIN_USES_UCLIBC
+ config BR2_TOOLCHAIN_HAS_RESOLVER
+ 	bool
+ 
++config BR2_TOOLCHAIN_DONT_ELF2FLT
++	bool
 +
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
- 	bool "Sourcery CodeBench MIPS 2014.11"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-@@ -941,6 +954,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201405
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
-+	default "arm-cortexm3-uclinuxeabi" if BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 444ddfd..ada42c8 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -74,3 +74,7 @@ sha256 79a1a4be93e2a63acb137170e98bdfbf744bd9ca7b15b76ab512d1e0dfec834e  crossx8
- sha256 aec4d560dc601e397fc86a9759166005afba22ad666d1a48019b5102c534ccc1  crossx86-sh4eb-linux-musl-1.1.6.tar.xz
- sha256 68eda0795aacd4371b45a6c58c5c75e86c0c2fdf7ebc2c0b7d3752462c848260  crossx86-x86_64-linux-musl-1.1.6.tar.xz
- sha256 6bef5ee2cdb9fa35e49ce0a270f6d7c48f3268c6f6345ad5ca0b8137982b4690  crossx86-x86_64-x32-linux-musl-1.1.6.tar.xz
-+
-+# Oselas Cortex-M3 toolchain
-+# Locally calculated
-+sha1	75e7ae45b514b10ad64ff5588770434cea755496	oselas.toolchain-2014.12.0-arm-cortexm3-uclinuxeabi-gcc-4.9.2-uclibc-0.9.33.2-binutils-2.24-kernel-3.16-sanitized_2014.12.0_i386.deb
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index b293ba9..808ee85 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -293,6 +293,9 @@ TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.11-22-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://debian.pengutronix.de/debian/pool/main/o/oselas.toolchain/
-+TOOLCHAIN_EXTERNAL_SOURCE = oselas.toolchain-2014.12.0-arm-cortexm3-uclinuxeabi-gcc-4.9.2-uclibc-0.9.33.2-binutils-2.24-kernel-3.16-sanitized_2014.12.0_i386.deb
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
-@@ -421,6 +424,13 @@ define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
- 	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS) | \
- 		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
- endef
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412),y)
-+# Special handling for OSELAS toolchains
-+define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
-+	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
-+	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
-+		$(TAR) $(TAR_STRIP_COMPONENTS)=5 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-+endef
- else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
- # Normal handling of toolchain tarball extraction.
- define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
+ config BR2_TOOLCHAIN_USES_MUSL
+ 	bool
+ 	select BR2_USE_WCHAR
 -- 
 2.1.4
