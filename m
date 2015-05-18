@@ -1,39 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 May 2015 23:13:44 +0200
-Subject: [Buildroot] [PATCH v2 8/9] atmel: add a flashing helper and
- documentation
-In-Reply-To: <1431544977-2274-9-git-send-email-alexandre.belloni@free-electrons.com>
-References: <1431544977-2274-1-git-send-email-alexandre.belloni@free-electrons.com>
- <1431544977-2274-9-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <20150518231344.0c9f0dbd@free-electrons.com>
+Date: Mon, 18 May 2015 23:16:59 +0200
+Subject: [Buildroot] [PATCH v5 01/24] sepolgen: new package
+In-Reply-To: <1431553177-7280-2-git-send-email-clayton.shotwell@rockwellcollins.com>
+References: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <1431553177-7280-2-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <20150518231659.5973a78f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexandre Belloni,
+Dear Clayton Shotwell,
 
-On Wed, 13 May 2015 21:22:56 +0200, Alexandre Belloni wrote:
-> Provide a flashing helper to properly select the sam-ba configuration
-> and reuse the sam-ba tcl script provided by Atmel with minimal
-> modifications.
-> 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-> ---
->  board/atmel/flasher.sh    |  74 ++++++++++
->  board/atmel/nandflash.tcl | 346 ++++++++++++++++++++++++++++++++++++++++++++++
->  board/atmel/nandflash.txt | 106 ++++++++++++++
+On Wed, 13 May 2015 16:39:14 -0500, Clayton Shotwell wrote:
 
-This file should really be called readme.txt and not nandflash.txt. I
-know it doesn't cover anything but NAND flash for the moment, but
-readme.txt is really the convention we use for all platforms.
+> Changes v4 -> v5:
+>   - Fixed package name to be BR2_PACKAGE_HOST_SEPOLGEN (Suggested by
+>     Thomas P.)
 
-Otherwise, great job. I really like the tutorial covering all the
-evaluation boards, with details on connecting the debug UART and the
-USB device cable.
+This contradicts...
 
-Thanks!
+>   - No menu entry needed as host dependency aren't reflected in
+>     Config.in files (Suggested by Thomas P.)
+
+.. this, no? :-)
+
+> diff --git a/package/sepolgen/sepolgen.hash b/package/sepolgen/sepolgen.hash
+> new file mode 100644
+> index 0000000..a377c66
+> --- /dev/null
+> +++ b/package/sepolgen/sepolgen.hash
+> @@ -0,0 +1,2 @@
+> +# https://github.com/SELinuxProject/selinux/wiki/Releases
+> +sha256 8a1c6d3a78c9b6ad3555c74def555f65a62950bf21c111c585bfc382fec3a645  sepolgen-1.1.9.tar.gz
+> diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
+> new file mode 100644
+> index 0000000..7c95866
+> --- /dev/null
+> +++ b/package/sepolgen/sepolgen.mk
+> @@ -0,0 +1,30 @@
+> +################################################################################
+> +#
+> +# sepolgen
+> +#
+> +################################################################################
+> +
+> +SEPOLGEN_VERSION = 1.1.9
+> +SEPOLGEN_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
+> +SEPOLGEN_LICENSE = GPLv2
+> +SEPOLGEN_LICENSE_FILES = COPYING
+> +
+> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> +HOST_SEPOLGEN_DEPENDENCIES = host-python3
+> +HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
+> +	PYTHONLIBDIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+> +else
+> +HOST_SEPOLGEN_DEPENDENCIES = host-python
+> +HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
+> +	PYTHONLIBDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+> +endif
+> +
+> +define HOST_SEPOLGEN_BUILD_CMDS
+> +	$(MAKE) -C $(@D) $(HOST_SEPOLGEN_MAKE_CMDS) DESTDIR=$(HOST_DIR)
+> +endef
+> +
+> +define HOST_SEPOLGEN_INSTALL_CMDS
+> +	$(MAKE) -C $(@D) $(HOST_SEPOLGEN_MAKE_CMDS) DESTDIR=$(HOST_DIR) install
+> +endef
+> +
+> +$(eval $(host-generic-package))
+
+This looks good to me. Any reason not to use the latest 1.2.2 version?
+
+Thanks,
 
 Thomas
 -- 
