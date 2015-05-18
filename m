@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 May 2015 21:58:41 +0200
-Subject: [Buildroot] [PATCH v2 5/6] nommu/flat: don't add -elf2flt for
- some toolchains
-In-Reply-To: <1431959088-15257-6-git-send-email-guido@vanguardiasur.com.ar>
+Date: Mon, 18 May 2015 22:05:12 +0200
+Subject: [Buildroot] [PATCH v2 1/6] arm: update processor types
+In-Reply-To: <1431959088-15257-2-git-send-email-guido@vanguardiasur.com.ar>
 References: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
- <1431959088-15257-6-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <20150518215841.2926908a@free-electrons.com>
+ <1431959088-15257-2-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <20150518220512.556d53ae@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +13,36 @@ To: buildroot@busybox.net
 
 Dear Guido Mart?nez,
 
-On Mon, 18 May 2015 11:24:47 -0300, Guido Mart?nez wrote:
+On Mon, 18 May 2015 11:24:43 -0300, Guido Mart?nez wrote:
 
->  ifeq ($(BR2_BINFMT_FLAT),y)
-> +# Don't add any flags for toolchains that don't require it
-> +ifneq ($(BR2_TOOLCHAIN_DONT_ELF2FLT),y)
+>  config BR2_USE_MMU
+> -	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_sh || BR2_xtensa
+> -	default y if !BR2_bfin
+> +	bool "Enable MMU support"
+> +	depends on BR2_arm || BR2_armeb || BR2_sh || BR2_xtensa
+> +	depends on !BR2_cortex_m3 && !BR2_bfin
 
-An option named "DONT_<something>" really isn't nice.
+This breaks things, because now BR2_USE_MMU is empty on architectures
+others than arm, armeb, sh and xtensa.
 
->  TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
->  	-Wl$(comma)-elf2flt)
->  TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
->  	-Wl$(comma)-elf2flt)
->  TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-elf2flt)
+What we probably need is something like this:
 
-But the Blackfin toolchain also doesn't need -elf2flt as far as I know,
-the FLAT toolchain also directly produces FLAT binaries without
-specifying any flags. Maybe we should instead adjust the logic here
-instead of working around it?
+config BR2_ARCH_MMU_OPTIONAL
+	bool
 
-Thanks,
+config BR2_ARCH_MMU_MANDATORY
+	bool
+
+and have all ARM cores select BR2_ARCH_MMU_OPTIONAL except Cortex M3,
+SuperH and Xtensa select BR2_ARCH_MMU_OPTIONAL, all other architectures
+except Blackfin selecting BR2_ARCH_MMU_MANDATORY.
+
+And then:
+
+	bool "Enable MMU support" if BR2_ARCH_MMU_OPTIONAL
+	default y if BR2_ARCH_MMU_MANDATORY || BR2_ARCH_MMU_OPTIONAL
+
+or something like that.
 
 Thomas
 -- 
