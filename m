@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 May 2015 08:43:45 +0200
-Subject: [Buildroot] [PATCH v2 1/1] wvstreams: not available for static
-	only builds
-In-Reply-To: <1431930472-1423-1-git-send-email-imrehg@gmail.com> (Gergely
- Imreh's message of "Mon, 18 May 2015 06:27:54 +0000")
-References: <1431930472-1423-1-git-send-email-imrehg@gmail.com>
-Message-ID: <87bnhi75cu.fsf@dell.be.48ers.dk>
+Date: Mon, 18 May 2015 09:17:21 +0200
+Subject: [Buildroot] [git commit] package/enlightenment: disable ptrace
+	with xtensa and uClibc-ng
+In-Reply-To: <CAJ3iQcomP9xHGszw38yFx2i6+3dKud-iaN1o197N9i+wQCQK8g@mail.gmail.com>
+ (Gergely Imreh's message of "Mon, 18 May 2015 09:45:42 +0800")
+References: <20150517190414.D6F9B817E5@busybox.osuosl.org>
+ <CAJ3iQcomP9xHGszw38yFx2i6+3dKud-iaN1o197N9i+wQCQK8g@mail.gmail.com>
+Message-ID: <877fs673su.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +15,26 @@ To: buildroot@busybox.net
 
 >>>>> "Gergely" == Gergely Imreh <imrehg@gmail.com> writes:
 
- > Also propagated to wvdial as it selects wvstreams.
- > Fixes:
- >  http://autobuild.buildroot.org/results/0cd/0cd5e0263b42e6845504d97688632e16206bd000/
- >  http://autobuild.buildroot.org/results/4e0/4e0ab461ea7ed7a288303741eec89156abd49864/
+Hi,
 
- > Signed-off-by: Gergely Imreh <imrehg@gmail.com>
- > ---
- > Changes v1 -> v2:
- >  Add dependency changes to wvdial as well (thanks Baruch Siach)
+>> For now, disable ptrace with xtensa uClibc-ng toolchains.
+ >> 
+ >> Thanks to Gergely Imreh for the initial investigation and
+ >> patch:
+ >> http://patchwork.ozlabs.org/patch/470073/
+ >> 
 
-Committed, thanks.
+ > Awesome, thanks! As a procedural question (since this is the first
+ > time for me like this), should I mark that linked patch in patchworks
+ > as Superseeded and archived? I'm sure someone's doing housecleaning
+ > there every now and than, but the less time they have to spend
+ > reviewing things the better.
+
+Yes, that's normally the way to go. I've gone ahead and marked the patch
+as superseeded.
+
+Thank you both.
 
 -- 
-Bye, Peter Korsgaard
+Venlig hilsen,
+Peter Korsgaard 
