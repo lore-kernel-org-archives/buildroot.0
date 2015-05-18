@@ -1,41 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 May 2015 08:40:41 +0200
-Subject: [Buildroot] [git commit branch/next] configs/riotboard: bump kernel
-	to version 4.0
-Message-ID: <20150518064221.6C3B68196B@busybox.osuosl.org>
+Date: Mon, 18 May 2015 08:42:23 +0200
+Subject: [Buildroot] [git commit] wvstreams: not available for static only
+	builds
+Message-ID: <20150518064351.6849A8196B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=99fdd2e0c7e5ce156511447f3fde73c0d1380da0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: http://git.buildroot.net/buildroot/commit/?id=be1287e7e5ca2a11cd6dea84ac481d10eaa48edb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
+Also propagated to wvdial as it selects wvstreams.
+
+Fixes:
+ http://autobuild.buildroot.org/results/0cd/0cd5e0263b42e6845504d97688632e16206bd000/
+ http://autobuild.buildroot.org/results/4e0/4e0ab461ea7ed7a288303741eec89156abd49864/
+
+Signed-off-by: Gergely Imreh <imrehg@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/riotboard_defconfig |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/wvdial/Config.in    |    5 +++--
+ package/wvstreams/Config.in |    5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-index 72c3e04..7d37c25 100644
---- a/configs/riotboard_defconfig
-+++ b/configs/riotboard_defconfig
-@@ -20,13 +20,13 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+diff --git a/package/wvdial/Config.in b/package/wvdial/Config.in
+index e57f975..5d415b1 100644
+--- a/package/wvdial/Config.in
++++ b/package/wvdial/Config.in
+@@ -2,12 +2,13 @@ config BR2_PACKAGE_WVDIAL
+ 	bool "wvdial"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # wvstreams
++	depends on !BR2_STATIC_LIBS # wvstreams
+ 	select BR2_PACKAGE_WVSTREAMS
+ 	help
+ 	  wvdial is an intelligent Point-to-Point Protocol dialer
  
- # kernel headers
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.19.3"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
-+BR2_DEFAULT_KERNEL_VERSION="4.0"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
+ 	  http://wvdial.googlecode.com/
  
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-comment "wvdial needs a toolchain w/ C++"
++comment "wvdial needs a toolchain w/ C++, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+diff --git a/package/wvstreams/Config.in b/package/wvstreams/Config.in
+index 3080dc7..0cbe60a 100644
+--- a/package/wvstreams/Config.in
++++ b/package/wvstreams/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_WVSTREAMS
+ 	bool "wvstreams"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+@@ -9,6 +10,6 @@ config BR2_PACKAGE_WVSTREAMS
+ 
+ 	  http://wvstreams.googlecode.com/
+ 
+-comment "wvstreams needs a toolchain w/ C++"
++comment "wvstreams needs a toolchain w/ C++, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
