@@ -1,55 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 May 2015 23:06:40 +0200
-Subject: [Buildroot] [PATCH v2 1/9] configs: update at91sam9g45m10ek
- defconfig
-In-Reply-To: <1431544977-2274-2-git-send-email-alexandre.belloni@free-electrons.com>
+Date: Mon, 18 May 2015 23:09:23 +0200
+Subject: [Buildroot] [PATCH v2 4/9] configs: add defconfig for Atmel
+ sama5d3xek
+In-Reply-To: <1431544977-2274-5-git-send-email-alexandre.belloni@free-electrons.com>
 References: <1431544977-2274-1-git-send-email-alexandre.belloni@free-electrons.com>
- <1431544977-2274-2-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <20150518230640.376e0748@free-electrons.com>
+ <1431544977-2274-5-git-send-email-alexandre.belloni@free-electrons.com>
+Message-ID: <20150518230923.51541ce3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alex,
+Dear Alexandre Belloni,
 
-On Wed, 13 May 2015 21:22:49 +0200, Alexandre Belloni wrote:
-> Use kernel (3.18) and u-boot (2015.01) from Atmel's repositories.
-> 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-> ---
->  configs/at91sam9g45m10ek_defconfig | 22 +++++++++++++++++-----
->  1 file changed, 17 insertions(+), 5 deletions(-)
-> 
-> diff --git a/configs/at91sam9g45m10ek_defconfig b/configs/at91sam9g45m10ek_defconfig
-> index c958859df1a3..147789d165df 100644
-> --- a/configs/at91sam9g45m10ek_defconfig
-> +++ b/configs/at91sam9g45m10ek_defconfig
-> @@ -1,9 +1,21 @@
->  BR2_arm=y
->  BR2_arm926t=y
-> -BR2_PACKAGE_HOST_SAM_BA=y
-> -BR2_TARGET_AT91BOOTSTRAP=y
-> -BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9m10g45ek"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
+On Wed, 13 May 2015 21:22:52 +0200, Alexandre Belloni wrote:
 
-You also need to ensure that the kernel headers used for the toolchain
-are of the same version or older than the kernel you're
-building/running.
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sama5d31ek sama5d31ek_pda4 sama5d31ek_pda7 sama5d31ek_revc sama5d31ek_revc_pda4 sama5d31ek_revc_pda7 sama5d33ek sama5d33ek_pda4 sama5d33ek_pda7 sama5d33ek_revc sama5d33ek_revc_pda4 sama5d33ek_revc_pda7 sama5d34ek sama5d34ek_pda4 sama5d34ek_pda7 sama5d34ek_revc sama5d34ek_revc_pda4 sama5d34ek_revc_pda7 sama5d35ek sama5d35ek_revc sama5d36ek sama5d36ek_pda4 sama5d36ek_pda7 sama5d36ek_revc sama5d36ek_revc_pda4 sama5d36ek_revc_pda7"
 
-So, something like:
-
-BR2_KERNEL_HEADERS_VERSION=y
-BR2_DEFAULT_KERNEL_VERSION="3.18"
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-
-And ditto for all your other defconfigs.
-
-Thanks!
+Hum, at some point we'll have to think about using $(wildcard ...) or
+something like that to allow wildcards in this option. But since
+there's only one user for now, and it's not very common to have
+gazillions of DTs for a given board, it's probably not worth the effort.
 
 Thomas
 -- 
