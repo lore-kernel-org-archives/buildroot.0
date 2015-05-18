@@ -1,51 +1,52 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 18 May 2015 22:54:13 +0200
-Subject: [Buildroot] [PATCH] package/iproute2: disable iptables support for
-	static build
-Message-ID: <1431982453-17867-1-git-send-email-romain.naour@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 May 2015 23:03:46 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/harfbuzz: disable test
+ programs
+In-Reply-To: <1431467484-14459-1-git-send-email-romain.naour@openwide.fr>
+References: <1431467484-14459-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150518230346.4c8a9a45@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If iptable support is enabled, it will try to build m_xt.so even
-for static build only.
+Dear Romain Naour,
 
-So, disable iptables support for static build and remove
-TC_CONFIG_IPSET and TC_CONFIG_XT if previously added by the
-configure script.
+On Tue, 12 May 2015 23:51:23 +0200, Romain Naour wrote:
+> Workaround a build issue by disabling all test
+> binaries since it forget to link with -lstd++.
+> 
+> Add a new configure option to disable test programs
+> in a upstreamable way.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-Fixes:
-http://autobuild.buildroot.net/results/3b3/3b37871bdf5766677fc20dca22c13177091d104f/
+I was almost going to apply this one, but I'm not entirely happy in
+fact. I really works around the real problem, and does not fix it:
+imagine a real program now links statically to harfbuzz using harfbuzz
+pkg-config file. This pkg-config file does not advertise the dependency
+on libstdc++ in its Libs.private, so the link would also fail, just
+like it currently fails for the test programs.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/iproute2/iproute2.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Unfortunately, fixing the .pc file would not fix the internal harfbuzz
+test programs, since they don't use pkg-config to get the link flags.
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 9595165..d97e75e 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -18,7 +18,7 @@ IPROUTE2_DEPENDENCIES += busybox
- endif
- 
- # If we've got iptables enable xtables support for tc
--ifeq ($(BR2_PACKAGE_IPTABLES),y)
-+ifeq ($(BR2_PACKAGE_IPTABLES)x$(BR2_STATIC_LIBS),yx)
- IPROUTE2_DEPENDENCIES += iptables
- define IPROUTE2_WITH_IPTABLES
- 	# Makefile is busted so it never passes IPT_LIB_DIR properly
-@@ -27,6 +27,9 @@ define IPROUTE2_WITH_IPTABLES
- endef
- else
- define IPROUTE2_WITH_IPTABLES
-+	# delete TC_CONFIG_IPSET and TC_CONFIG_XT if any
-+	$(SED) '/TC_CONFIG_IPSET/d' $(IPROUTE2_DIR)/Config
-+	$(SED) '/TC_CONFIG_XT/d' $(IPROUTE2_DIR)/Config
- 	# em_ipset needs xtables, but configure misdetects it
- 	echo "TC_CONFIG_IPSET:=n" >>$(IPROUTE2_DIR)/Config
- endef
+To be honest, I am not sure what is the correct automake way of fixing
+this problem. Maybe:
+
+-LDADD = $(top_builddir)/src/libharfbuzz.la $(GLIB_LIBS)
++LDADD = $(top_builddir)/src/libharfbuzz.la $(GLIB_LIBS) -lstdc++
+
+in test/api/Makefile.am ?
+
+Best regards,
+
+Thomas
 -- 
-1.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
