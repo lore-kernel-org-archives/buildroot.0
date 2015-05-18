@@ -1,49 +1,44 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 18 May 2015 16:24:40 +0200
-Subject: [Buildroot] [PATCH v5 24/24] cpio: new package
-In-Reply-To: <CANn-YGQg-N9OFeCHX-uopuP5cRS5ctFOSVrc+2koihJ2=RLbXQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 May 2015 16:30:17 +0200
+Subject: [Buildroot] [PATCH v5 09/24] busybox: selinux support
+In-Reply-To: <CANn-YGQn8EmFxguMC_0+5037zXTaRFHCYL5JL5FumaTEar7myg@mail.gmail.com>
 References: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1431553177-7280-25-git-send-email-clayton.shotwell@rockwellcollins.com>
- <CAHXCMMJKiJ2hvSpLb1mq20_My+HASOgVro8n79B8xZGuR3qCWQ@mail.gmail.com>
- <CANn-YGRXCwhNgKo=Xb-e_ev_iRg=qbLmC_eUP0zaz2PZ1ceGLg@mail.gmail.com>
- <20150518161304.656913c5@free-electrons.com>
- <CANn-YGQg-N9OFeCHX-uopuP5cRS5ctFOSVrc+2koihJ2=RLbXQ@mail.gmail.com>
-Message-ID: <CAHXCMM+0=sarX=T+v-8uXyw1DUtZFNyBD2sK6QnuGqOA-+P9jw@mail.gmail.com>
+ <1431553177-7280-10-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <CAHXCMM+9VKZ=i_=QZtLGjA3P=kuFbJDQhBiom10_80ahKjk1ZQ@mail.gmail.com>
+ <CANn-YGQn8EmFxguMC_0+5037zXTaRFHCYL5JL5FumaTEar7myg@mail.gmail.com>
+Message-ID: <20150518163017.2d87c2a7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Clayton,
+Dear Clayton Shotwell,
 
-On Mon, May 18, 2015 at 4:16 PM, Clayton Shotwell
-<clayton.shotwell@rockwellcollins.com> wrote:
-> Thomas,
->
-> On Mon, May 18, 2015 at 9:13 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Clayton Shotwell,
->>
->> On Mon, 18 May 2015 09:09:05 -0500, Clayton Shotwell wrote:
->>
->>> That is a good question. I am only adding the package because I need
->>> to be able to create a cpio archive on my target.
->>
->> So why do you add a host variant?
->
-> I added it mainly because I could and I had an easy way to test it. I
-> can remove the host option if needed. What is the reasoning behind
-> relying on the host system cpio tool?
-Currently, it is just a pre-requisite [1] ;)
+On Mon, 18 May 2015 09:14:54 -0500, Clayton Shotwell wrote:
 
-[1] http://nightly.buildroot.org/#requirement-mandatory
+> >> +config BR2_PACKAGE_BUSYBOX_SELINUX
+> >> +       select BR2_PACKAGE_LIBSELINUX
+> >> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+> >> +       depends on !BR2_STATIC_LIBS
+> >> +       bool "Enable SELinux support"
+> > Does not this option also need to select
+> > BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES?
+> 
+> Those features are not necessarily dependent, it mostly depends on
+> what parts of busybox are being used. For instance, if a configuration
+> only used a couple of minor busybox features, such as simple command
+> line utilities, the symlinked version of busybox could be used to save
+> space. If busybox was providing more features, such as crond, then
+> individual binaries would have to be enabled for the SELinux type
+> transitions to occur properly. I would like to leave that up to the
+> individual user to enable the individual binaries as needed.
 
->
-> Thanks,
-> Clayton
+Then exactly this needs to be copy/pasted in the help text of this
+option :-)
 
-Regards,
-
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
