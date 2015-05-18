@@ -1,31 +1,31 @@
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Mon, 18 May 2015 09:09:05 -0500
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 May 2015 16:13:04 +0200
 Subject: [Buildroot] [PATCH v5 24/24] cpio: new package
-In-Reply-To: <CAHXCMMJKiJ2hvSpLb1mq20_My+HASOgVro8n79B8xZGuR3qCWQ@mail.gmail.com>
+In-Reply-To: <CANn-YGRXCwhNgKo=Xb-e_ev_iRg=qbLmC_eUP0zaz2PZ1ceGLg@mail.gmail.com>
 References: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
  <1431553177-7280-25-git-send-email-clayton.shotwell@rockwellcollins.com>
  <CAHXCMMJKiJ2hvSpLb1mq20_My+HASOgVro8n79B8xZGuR3qCWQ@mail.gmail.com>
-Message-ID: <CANn-YGRXCwhNgKo=Xb-e_ev_iRg=qbLmC_eUP0zaz2PZ1ceGLg@mail.gmail.com>
+ <CANn-YGRXCwhNgKo=Xb-e_ev_iRg=qbLmC_eUP0zaz2PZ1ceGLg@mail.gmail.com>
+Message-ID: <20150518161304.656913c5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel,
+Dear Clayton Shotwell,
 
->> Adding the cpio archive utility for the target and host. Patches have
->> been pulled from ArchLinux and Debian to fix CVE issues and compile
->> issues.
->>
->
-> Does this mean cpio will no longer be a mandatory program?
+On Mon, 18 May 2015 09:09:05 -0500, Clayton Shotwell wrote:
 
-That is a good question. I am only adding the package because I need
-to be able to create a cpio archive on my target. I did not add in any
-of the other dependencies that would be required to have this package
-generate the cpio tool used during file system creation. They could be
-added later if needed.
+> That is a good question. I am only adding the package because I need
+> to be able to create a cpio archive on my target.
+
+So why do you add a host variant?
 
 Thanks,
-Clayton
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
