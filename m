@@ -1,62 +1,43 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Mon, 18 May 2015 10:20:39 +0200
-Subject: [Buildroot] [PATCH 1/1] zmqpp: fix compilation with some
-	toolchains
-In-Reply-To: <20150516142005.745583d4@free-electrons.com>
-References: <1431692800-15539-1-git-send-email-lionel.orry@gmail.com>
- <20150516142005.745583d4@free-electrons.com>
-Message-ID: <CAKAx1cigQyMobB5QEdomW-TpAgwo9wxtGg1=6A7=zOW4vaytCQ@mail.gmail.com>
+From: Nikolay Dimitrov <picmaster@mail.bg>
+Date: Mon, 18 May 2015 11:21:16 +0300
+Subject: [Buildroot] [PATCH 1/1] configs/riotboard: bump kernel to
+	version 4.0
+In-Reply-To: <87fv6u75g2.fsf@dell.be.48ers.dk>
+References: <1431910358-8952-1-git-send-email-picmaster@mail.bg>
+ <87fv6u75g2.fsf@dell.be.48ers.dk>
+Message-ID: <5559A0FC.9060307@mail.bg>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Peter,
 
-On Sat, May 16, 2015 at 2:20 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Lionel Orry,
+On 05/18/2015 09:41 AM, Peter Korsgaard wrote:
+>>>>>> "Nikolay" == Nikolay Dimitrov <picmaster@mail.bg> writes:
 >
-> On Fri, 15 May 2015 14:26:40 +0200, Lionel Orry wrote:
->> Fixes:
->> http://autobuild.buildroot.net/results/d9ec39dc5829aac1b25bfea7484458fcebd68412/
->>
->> add cstdlib header to ensure EXIT_FAILURE presence
->>
->> Using some cross-compiling toolchains, EXIT_FAILURE is not always
->> properly defined without this inclusion.
->>
->> Patch is upstream:
->> https://github.com/zeromq/zmqpp/pull/109
->>
->> Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
->> ---
->>  package/zmqpp/0001-add-ctsdlib-header.patch | 23 +++++++++++++++++++++++
->>  1 file changed, 23 insertions(+)
->>  create mode 100644 package/zmqpp/0001-add-ctsdlib-header.patch
+>   > Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
+>   > ---
+>   >  configs/riotboard_defconfig |    6 +++---
+>   >  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> I've applied your patch, but I've replaced the patch you included which
-> was just the output of 'git show' or 'git log -p' by a patch properly
-> formatted with 'git format-patch', so that it can be applied with 'git
-> am'.
-
-I did not know it was a preferred format, thanks for making that.
-Maybe it could be interesting to give some more precisions about the
-preferred package patches format in the manual, and how to prepare
-them? cf. http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
-
-(of course it depends on the upstream software SCM and the method used
-to make the patch...)
-
+>   > diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
+>   > index 6e581fa..91cdb1a 100644
+>   > --- a/configs/riotboard_defconfig
+>   > +++ b/configs/riotboard_defconfig
+>   > @@ -20,13 +20,13 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
 >
-> Thanks!
+>   >  # kernel headers
+>   >  BR2_KERNEL_HEADERS_VERSION=y
+>   > -BR2_DEFAULT_KERNEL_VERSION="3.19.3"
+>   > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+>   > +BR2_DEFAULT_KERNEL_VERSION="4.0"
+>   > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
 >
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> Committed to next, thanks.
 
-BR,
-Lionel
+Thanks, have a nice week!
+
+Regards,
+Nikolay
