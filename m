@@ -1,31 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 May 2015 23:33:32 +0200
-Subject: [Buildroot] [PATCH v5 01/24] sepolgen: new package
-In-Reply-To: <CANn-YGQVO6cP=LQ9cLRrjGRD750ZR7f+30CP5hCMjfUui9J4dw@mail.gmail.com>
-References: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1431553177-7280-2-git-send-email-clayton.shotwell@rockwellcollins.com>
- <20150518231659.5973a78f@free-electrons.com>
- <CANn-YGQVO6cP=LQ9cLRrjGRD750ZR7f+30CP5hCMjfUui9J4dw@mail.gmail.com>
-Message-ID: <20150518233332.05f640a7@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 18 May 2015 23:40:02 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/harfbuzz: disable test
+	programs
+In-Reply-To: <20150518230346.4c8a9a45@free-electrons.com>
+References: <1431467484-14459-1-git-send-email-romain.naour@openwide.fr>
+ <20150518230346.4c8a9a45@free-electrons.com>
+Message-ID: <555A5C32.1030209@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Clayton Shotwell,
+Hi Thomas,
 
-On Mon, 18 May 2015 16:30:35 -0500, Clayton Shotwell wrote:
-
-> > This looks good to me. Any reason not to use the latest 1.2.2 version?
+Le 18/05/2015 23:03, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
 > 
-> Have not had time to test the latest versions. Would it be possible to
-> get the initial patch set merged in and then bump versions?
+> On Tue, 12 May 2015 23:51:23 +0200, Romain Naour wrote:
+>> Workaround a build issue by disabling all test
+>> binaries since it forget to link with -lstd++.
+>>
+>> Add a new configure option to disable test programs
+>> in a upstreamable way.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> 
+> I was almost going to apply this one, but I'm not entirely happy in
+> fact. I really works around the real problem, and does not fix it:
+> imagine a real program now links statically to harfbuzz using harfbuzz
+> pkg-config file. This pkg-config file does not advertise the dependency
+> on libstdc++ in its Libs.private, so the link would also fail, just
+> like it currently fails for the test programs.
 
-Yes, that's fine with me.
+-lstdc++ is only needed by libharfbuzz-icu.la which use the icu package.
+So maybe -lstdc++ is missing in Libs.private from icu-uc.pc ?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> 
+> Unfortunately, fixing the .pc file would not fix the internal harfbuzz
+> test programs, since they don't use pkg-config to get the link flags.
+> 
+> To be honest, I am not sure what is the correct automake way of fixing
+> this problem. Maybe:
+> 
+> -LDADD = $(top_builddir)/src/libharfbuzz.la $(GLIB_LIBS)
+> +LDADD = $(top_builddir)/src/libharfbuzz.la $(GLIB_LIBS) -lstdc++
+> 
+> in test/api/Makefile.am ?
+
+You would said ;)
+test_unicode_LDADD += $(top_builddir)/src/libharfbuzz-icu.la -lstdc++
+
+With that fixed, Harbuzz build fine.
+
+Thanks for the review.
+
+Best regards,
+Romain
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
