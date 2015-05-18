@@ -1,48 +1,80 @@
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Mon, 18 May 2015 09:31:44 -0500
-Subject: [Buildroot] [PATCH v5 09/24] busybox: selinux support
-In-Reply-To: <20150518163017.2d87c2a7@free-electrons.com>
-References: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1431553177-7280-10-git-send-email-clayton.shotwell@rockwellcollins.com>
- <CAHXCMM+9VKZ=i_=QZtLGjA3P=kuFbJDQhBiom10_80ahKjk1ZQ@mail.gmail.com>
- <CANn-YGQn8EmFxguMC_0+5037zXTaRFHCYL5JL5FumaTEar7myg@mail.gmail.com>
- <20150518163017.2d87c2a7@free-electrons.com>
-Message-ID: <CANn-YGRKoBk3oxxjv7mPWhpdY0iH4j-4+F+EwxVh9b-4PNihtQ@mail.gmail.com>
+From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
+Date: Mon, 18 May 2015 11:24:42 -0300
+Subject: [Buildroot] [PATCH v2 0/6] Add ARM Cortex-M3 support
+Message-ID: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hi all,
 
-On Mon, May 18, 2015 at 9:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Clayton Shotwell,
->
-> On Mon, 18 May 2015 09:14:54 -0500, Clayton Shotwell wrote:
->
->> >> +config BR2_PACKAGE_BUSYBOX_SELINUX
->> >> +       select BR2_PACKAGE_LIBSELINUX
->> >> +       depends on BR2_TOOLCHAIN_HAS_THREADS
->> >> +       depends on !BR2_STATIC_LIBS
->> >> +       bool "Enable SELinux support"
->> > Does not this option also need to select
->> > BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES?
->>
->> Those features are not necessarily dependent, it mostly depends on
->> what parts of busybox are being used. For instance, if a configuration
->> only used a couple of minor busybox features, such as simple command
->> line utilities, the symlinked version of busybox could be used to save
->> space. If busybox was providing more features, such as crond, then
->> individual binaries would have to be enabled for the SELinux type
->> transitions to occur properly. I would like to leave that up to the
->> individual user to enable the individual binaries as needed.
->
-> Then exactly this needs to be copy/pasted in the help text of this
-> option :-)
+this patchset introduces support for the M3 processors. These processors
+don't have an MMU and they don't support the regular ARM mode (only
+Thumb and Thumb2).
 
-Good point. I'll add that in there.
+The OSELAS 2014.12.0 toolchain is added, along with a few patches to
+make it usable within BR since it has some quirks. The toolchain is
+packaged as a .deb package, so I implemented INFLATE.deb so we don't
+need special EXTRACT_CMDS for it (although that isn't really too ugly,
+so it's up for discussion).
 
-Thanks,
-Clayton
+I'm planning to send a defconfig for the CIAA board[1] once it's
+mainlined in Linux. But, for now, this config can generate a proper
+rootfs:
+  BR2_arm=y
+  BR2_cortex_m3=y
+  BR2_TOOLCHAIN_EXTERNAL=y
+
+The changes from v1 (sent by Ezequiel) are:
+ - Patch 1 was accepted, so dropped it.
+
+ - The toolchain checked is not skipped, but done with a different
+ output as Yann suggested.
+
+ - This toolchain version is newer than the previous one (2014.12.0 vs
+ (2013.12.2).
+
+ - Added a script to implement INFLATE.deb in support/extract/, to avoid
+ custom extract commands. This might also be useful for other packages.
+
+When we sent out v1 there was a discussion about adding
+BR2_HAS_{ELF,FLAT}_SUPPORT and BR2_HAS_OPTIONAL_MMU to avoid
+blacklisting each architecture on the ELF, FLAT and MMU configs. I
+haven't done this for now as it would make it a huge patchset and is a
+different objective (I think), but I can send a new patch for that if
+there's interest.
+
+Any comments and testing welcome!
+
+[1] http://www.proyecto-ciaa.com.ar/
+
+--
+
+Guido Mart?nez (6):
+  arm: update processor types
+  pkg-utils: implement INFLATE for .deb files
+  toolchain: allow for stupid toolchains
+  toolchain: introduce BR2_TOOLCHAIN_HAS_RESOLVER
+  nommu/flat: don't add -elf2flt for some toolchains
+  toolchain-external: add OSELAS 2014.12.0 Cortex-M3 toolchain
+
+ Makefile                                           |  2 +
+ arch/Config.in                                     |  8 ++--
+ arch/Config.in.arm                                 |  5 +++
+ package/Makefile.in                                |  3 ++
+ package/busybox/busybox.mk                         |  3 ++
+ package/pkg-utils.mk                               |  1 +
+ support/extract/inflate-deb.sh                     |  5 +++
+ toolchain/Config.in                                |  6 +++
+ toolchain/helpers.mk                               |  6 ++-
+ toolchain/toolchain-common.in                      |  6 ++-
+ toolchain/toolchain-external/Config.in             | 43 ++++++++++++++++++++++
+ .../toolchain-external/toolchain-external.hash     |  4 ++
+ toolchain/toolchain-external/toolchain-external.mk | 10 +++++
+ 13 files changed, 94 insertions(+), 8 deletions(-)
+ create mode 100755 support/extract/inflate-deb.sh
+
+-- 
+2.1.4
