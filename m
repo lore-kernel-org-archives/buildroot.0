@@ -1,93 +1,82 @@
 From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Mon, 18 May 2015 09:20:40 -0400
-Subject: [Buildroot] [PATCH] libsodium: new package
-In-Reply-To: <555900BF.6080704@openwide.fr>
-References: <1431819535-9598-1-git-send-email-fhunleth@troodon-software.com>
- <55587EF9.1010003@openwide.fr>
- <CA+-urNTixTObmKHSWe5siw4wB3yqm_OTCCQdRHC5xoy9ZXRFNQ@mail.gmail.com>
- <555900BF.6080704@openwide.fr>
-Message-ID: <CA+-urNT83-HMHiQ+KZB5N_jiKqoaEJMydWYNZUZzzx9u-WFmxQ@mail.gmail.com>
+Date: Mon, 18 May 2015 09:19:03 -0400
+Subject: [Buildroot] [PATCH v2 1/2] libsodium: new package
+Message-ID: <1431955144-31785-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+Changes v1 -> v2:
+  - fix curly braces on variables (thanks to Thomas for noticing)
+  - added patch for zeromq (in separate patch) to address libsodium
+    dependency in that library (thanks to Romain for this). I didn't
+    find any other packages with a similar dependency, but it's not
+    that easy to do that search.
 
-On Sun, May 17, 2015 at 4:57 PM, Romain Naour <romain.naour@openwide.fr> wrote:
-> Hi Frank,
->
-> Le 17/05/2015 20:25, Frank Hunleth a ?crit :
->> Hi Romain,
->>
->> On Sun, May 17, 2015 at 7:43 AM, Romain Naour <romain.naour@openwide.fr> wrote:
->>> Hi Frank,
->>>
->>> Le 17/05/2015 01:38, Frank Hunleth a ?crit :
->>>> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
->>>> ---
->>>>  package/Config.in                |  1 +
->>>>  package/libsodium/Config.in      |  6 ++++++
->>>>  package/libsodium/libsodium.hash |  2 ++
->>>>  package/libsodium/libsodium.mk   | 14 ++++++++++++++
->>>>  4 files changed, 23 insertions(+)
->>>>  create mode 100644 package/libsodium/Config.in
->>>>  create mode 100644 package/libsodium/libsodium.hash
->>>>  create mode 100644 package/libsodium/libsodium.mk
->>>>
->>>
->>> Since you are adding a new library, some packages will try to link with it.
->>> As far I know, zeromq can link with libsodium, so a new dependency should be
->>> added in a follow up patch.
->>
->> Thanks. I didn't know about the zeromq dependency. Before I submit a
->> new patch, do you know of an easy way to figure out what other
->> packages have a hidden dependency like this?
->
-> There is no easy way, maybe by using the package manager from your GNU/Linux
-> distribution to find some hit.
->
-> Something like (debian8): sudo apt-cache rdepends libsodium13
-> libsodium13
-> Reverse Depends:
->   libzmq3
->   libzmq3
->   libsodium-dev
->   libsodium-dbg
+ package/Config.in                |  1 +
+ package/libsodium/Config.in      |  6 ++++++
+ package/libsodium/libsodium.hash |  2 ++
+ package/libsodium/libsodium.mk   | 14 ++++++++++++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 package/libsodium/Config.in
+ create mode 100644 package/libsodium/libsodium.hash
+ create mode 100644 package/libsodium/libsodium.mk
 
-I see basically the same list on my system. I did some searching
-around and didn't see anything else.
-
->>> There is even an upstream path to disable libsodium in zeromq:
->>> https://github.com/zeromq/zeromq4-x/commit/faaf4550263395b84e6a80d3f9d7ba8816cdd714
->>
->> I looked at it. I'm not a zeromq user, so I don't really understand
->> why someone would want to have libsodium support disabled if they have
->> it. It seems simpler for now to make sure the dependency is there in
->> BR if libsodium is enabled. Maybe this is more of a desktop need?
->
-> It's sometime required to do this construct in .mk files in order to handle
-> properly the package dependency. (from nmap.mk)
->
-> ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> NMAP_CONF_OPTS += --with-openssl="$(STAGING_DIR)/usr"
-> NMAP_DEPENDENCIES += openssl
-> else
-> NMAP_CONF_OPTS += --without-openssl
-> endif
->
-> It's also depends if the option is on/off by default.
->
-> But you're right, you need only something like this since libsodium is not
-> enabled by default.
->
-> ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
-> ZEROMQ_DEPENDENCIES += libsodium
-> ZEROMQ_CONF_OPTS += --with-libsodium="$(STAGING_DIR)/usr"
-> endif
-
-I'm sending a followup patch series with this shortly.
-
-Thanks,
-Frank
+diff --git a/package/Config.in b/package/Config.in
+index e0c2e2a..5b99639 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -723,6 +723,7 @@ menu "Crypto"
+ 	source "package/libnss/Config.in"
+ 	source "package/libsecret/Config.in"
+ 	source "package/libsha1/Config.in"
++	source "package/libsodium/Config.in"
+ 	source "package/libssh2/Config.in"
+ 	source "package/nettle/Config.in"
+ 	source "package/openssl/Config.in"
+diff --git a/package/libsodium/Config.in b/package/libsodium/Config.in
+new file mode 100644
+index 0000000..47b9bb3
+--- /dev/null
++++ b/package/libsodium/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBSODIUM
++	bool "libsodium"
++	help
++	  A modern and easy-to-use crypto library.
++
++	  http://libsodium.org/
+diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
+new file mode 100644
+index 0000000..089dc03
+--- /dev/null
++++ b/package/libsodium/libsodium.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	cbcfc63cc90c05d18a20f229a62c7e7054a73731d0aa858c0517152c549b1288	libsodium-1.0.3.tar.gz
+diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+new file mode 100644
+index 0000000..f58c324
+--- /dev/null
++++ b/package/libsodium/libsodium.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# libsodium
++#
++################################################################################
++
++LIBSODIUM_VERSION = 1.0.3
++LIBSODIUM_SITE = https://github.com/jedisct1/libsodium/releases/download/$(LIBSODIUM_VERSION)
++LIBSODIUM_LICENSE = ISC
++LIBSODIUM_LICENSE_FILES = LICENSE
++LIBSODIUM_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
+--
+2.1.4
