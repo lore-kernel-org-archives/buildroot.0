@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 May 2015 11:51:01 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libxml-parser-perl: add hash
-	file
-In-Reply-To: <1431940552-9490-1-git-send-email-fabio.porcedda@gmail.com>
- (Fabio Porcedda's message of "Mon, 18 May 2015 11:15:51 +0200")
+Date: Mon, 18 May 2015 11:51:07 +0200
+Subject: [Buildroot] [PATCH 2/2] package/wireless_tools: add hash file
+In-Reply-To: <1431940552-9490-2-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Mon, 18 May 2015 11:15:52 +0200")
 References: <1431940552-9490-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <87382u6woq.fsf@dell.be.48ers.dk>
+ <1431940552-9490-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87y4km5i44.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
