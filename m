@@ -1,45 +1,31 @@
-From: g4 at novadsp.com <g4@novadsp.com>
-Date: Mon, 18 May 2015 14:28:45 +0100
-Subject: [Buildroot] Beaglebone Black ?
-Message-ID: <07fe01d0916e$917ea2d0$b47be870$@novadsp.com>
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Date: Mon, 18 May 2015 08:51:20 -0500
+Subject: [Buildroot] [PATCH v5 05/24] audit: new package
+In-Reply-To: <CAHXCMML9oehV+CVYc6_NbDa6e8YHvORvV-ipbbGGr1WKSYuXpw@mail.gmail.com>
+References: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <1431553177-7280-6-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <CAHXCMML9oehV+CVYc6_NbDa6e8YHvORvV-ipbbGGr1WKSYuXpw@mail.gmail.com>
+Message-ID: <CANn-YGS+9DWyk24DLthKJWfSTGK=yEiYYj70TN+AtwU1zOF5qw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using the latest BR (2015.02) etc. I do not seem to be able to get a working
-installation for a Beaglebone Black. Anyone else tried using
-beaglebone_defconfig recently?
+Samuel,
 
-u-boot spew follows.
+>> +ifeq ($(BR2_armeb),y)
+>> +       AUDIT_CONF_OPTS += --with-arm
+>> +endif
+>> +ifeq ($(BR2_arm),y)
+>> +       AUDIT_CONF_OPTS += --with-arm
+>> +endif
+> This could be condensed in:
+> ifeq ($(BR2_armeb)$(BR2_arm),y)
+>        AUDIT_CONF_OPTS += --with-arm
+> endif
 
-Both mmc 0:1 and mmc 0:2 show the expected SD card content. It just looks
-like uEnv is wrong (?). Changing uEnv so bootfile=zImage ensures zImage is
-read but still halts in u-boot console.
+I can make that change.
 
-Any help/suggestions here would be much appreciated. TVMIA
-
------------------------snip----------------------------------------
-micro SD card found
-mmc0 is current device
-gpio: pin 54 (gpio 54) value is 1
-SD/MMC found on device 0
-reading uEnv.txt
-96 bytes read in 3 ms (31.3 KiB/s)
-Loaded environment from uEnv.txt
-Importing environment from mmc ...
-Running uenvcmd ...
-## Error: "loadimage" not defined
-reading ramdisk.gz
-** Unable to read file ramdisk.gz **
-reading /am335x-boneblack.dtb
-34004 bytes read in 9 ms (3.6 MiB/s)
-Booting from ramdisk ...
-Wrong Image Format for bootm command
-ERROR: can't get kernel image!
-gpio: pin 55 (gpio 55) value is 1
-reading /uImage
-** Unable to read file /uImage **
-U-Boot#
------------------------snip----------------------------------------
+Thanks,
+Clayton
