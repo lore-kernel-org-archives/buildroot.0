@@ -1,72 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 May 2015 22:39:16 +0200
-Subject: [Buildroot] [git commit] gpsd: requires shared library support
-Message-ID: <20150518204023.AD631805F4@busybox.osuosl.org>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Mon, 18 May 2015 22:48:27 +0200
+Subject: [Buildroot] [PATCH 3/6] php: enable opcache extension in
+ php.ini if selected
+In-Reply-To: <20150518223609.6e103d96@free-electrons.com>
+References: <1431978724-25081-1-git-send-email-bos@je-eigen-domein.nl>	<1431978724-25081-3-git-send-email-bos@je-eigen-domein.nl>
+ <20150518223609.6e103d96@free-electrons.com>
+Message-ID: <555A501B.8030606@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=db989f89c9fb1ebc3997d8a3c517948392611d77
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thomas,
 
-gpsd always tries to build a shared library, so make it 'depends on
-!BR2_STATIC_LIBS'. We also propagate this to the only gpsd reverse
-dependency, the location support of sconeserver. While we're at it, we
-add a comment indicating the dependencies of this location support,
-which was missing.
+On 05/18/2015 10:36 PM, Thomas Petazzoni wrote:
+> On Mon, 18 May 2015 21:52:01 +0200, Floris Bos wrote:
+>> Add a line to load the opcache extension in php.ini, at the
+>> bottom of the "dynamic extensions" section.
+>>
+>> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+>> ---
+>>   package/php/php.mk | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/package/php/php.mk b/package/php/php.mk
+>> index c36a80c..65d5015 100644
+>> --- a/package/php/php.mk
+>> +++ b/package/php/php.mk
+>> @@ -296,6 +296,9 @@ define PHP_INSTALL_FIXUP
+>>   		$(TARGET_DIR)/etc/php.ini
+>>   	$(SED) 's%;date.timezone =.*%date.timezone = $(PHP_LOCALTIME)%' \
+>>   		$(TARGET_DIR)/etc/php.ini
+>> +	$(if $(BR2_PACKAGE_PHP_EXT_OPCACHE),
+>> +		$(SED) '/;extension=php_xsl.dll/azend_extension=opcache.so' \
+> Why are you replacing the extension=php_xsl.dll line specifically?
 
-Fixes:
+I am not.
 
-  http://autobuild.buildroot.org/results/f52/f5261a0933f9b5449d1f4e5cab1bb02e7154e683/
+"/a" means Append line after the range specified.
+Replacing would be done with the "s" from Substitute instead.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gpsd/Config.in        |    6 ++++--
- package/sconeserver/Config.in |    6 ++++++
- 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index fac8756..fa8b8f6 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -1,6 +1,6 @@
--comment "gpsd needs a toolchain w/ threads"
-+comment "gpsd needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 	depends on !BR2_microblaze
- 
- config BR2_PACKAGE_GPSD
-@@ -8,6 +8,8 @@ config BR2_PACKAGE_GPSD
- 	# Uses fork()
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# Always tries to build a shared library
-+	depends on !BR2_STATIC_LIBS
- 	# triggers gcc ice
- 	depends on !BR2_microblaze
- 	help
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index c7d602f..f16e683 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -64,10 +64,16 @@ config BR2_PACKAGE_SCONESERVER_LOCATION
- 	depends on BR2_USE_MMU # gpsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gpsd
- 	depends on !BR2_microblaze # gpsd
-+	depends on !BR2_STATIC_LIBS # gpsd
- 	select BR2_PACKAGE_GPSD
- 	help
- 	  Location module for Sconeserver
- 
-+comment "location support needs a toolchain w/ theads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBRARY
-+	depends on !BR2_microblaze
-+
- config BR2_PACKAGE_SCONESERVER_LETTUCE
- 	bool "lettuce"
- 	help
+Yours sincerely,
+
+Floris Bos
