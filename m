@@ -1,43 +1,36 @@
-From: Gergely Imreh <imrehg@gmail.com>
-Date: Mon, 18 May 2015 05:47:55 +0000
-Subject: [Buildroot] [PATCH 1/1] wvstreams: not available for static only
-	builds
-Message-ID: <1431928065-20878-1-git-send-email-imrehg@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 18 May 2015 08:52:57 +0300
+Subject: [Buildroot] [PATCH 1/1] wvstreams: not available for static
+ only builds
+In-Reply-To: <1431928065-20878-1-git-send-email-imrehg@gmail.com>
+References: <1431928065-20878-1-git-send-email-imrehg@gmail.com>
+Message-ID: <20150518055256.GI2845@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- http://autobuild.buildroot.org/results/0cd/0cd5e0263b42e6845504d97688632e16206bd000/
- http://autobuild.buildroot.org/results/4e0/4e0ab461ea7ed7a288303741eec89156abd49864/
+Hi Gergely,
 
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
----
- package/wvstreams/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On Mon, May 18, 2015 at 05:47:55AM +0000, Gergely Imreh wrote:
+> diff --git a/package/wvstreams/Config.in b/package/wvstreams/Config.in
+> index 3080dc7..0cbe60a 100644
+> --- a/package/wvstreams/Config.in
+> +++ b/package/wvstreams/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_WVSTREAMS
+>  	bool "wvstreams"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on !BR2_STATIC_LIBS
 
-diff --git a/package/wvstreams/Config.in b/package/wvstreams/Config.in
-index 3080dc7..0cbe60a 100644
---- a/package/wvstreams/Config.in
-+++ b/package/wvstreams/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_WVSTREAMS
- 	bool "wvstreams"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
-@@ -9,6 +10,6 @@ config BR2_PACKAGE_WVSTREAMS
- 
- 	  http://wvstreams.googlecode.com/
- 
--comment "wvstreams needs a toolchain w/ C++"
-+comment "wvstreams needs a toolchain w/ C++, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+You need to propagate this to packages selecting BR2_PACKAGE_WVSTREAMS. In 
+this case only wvdial seems to be affected.
+
+baruch
+
+
 -- 
-2.1.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
