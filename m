@@ -1,59 +1,48 @@
-From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
-Date: Mon, 18 May 2015 11:24:47 -0300
-Subject: [Buildroot] [PATCH v2 5/6] nommu/flat: don't add -elf2flt for some
-	toolchains
-In-Reply-To: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
-References: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <1431959088-15257-6-git-send-email-guido@vanguardiasur.com.ar>
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Date: Mon, 18 May 2015 09:31:44 -0500
+Subject: [Buildroot] [PATCH v5 09/24] busybox: selinux support
+In-Reply-To: <20150518163017.2d87c2a7@free-electrons.com>
+References: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <1431553177-7280-10-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <CAHXCMM+9VKZ=i_=QZtLGjA3P=kuFbJDQhBiom10_80ahKjk1ZQ@mail.gmail.com>
+ <CANn-YGQn8EmFxguMC_0+5037zXTaRFHCYL5JL5FumaTEar7myg@mail.gmail.com>
+ <20150518163017.2d87c2a7@free-electrons.com>
+Message-ID: <CANn-YGRKoBk3oxxjv7mPWhpdY0iH4j-4+F+EwxVh9b-4PNihtQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some toolchains (OSELAS 2014.12.0, for instance) internally do elf2flt
-conversion without having to add anything to {C,CXX,LD}FLAGS. So, add an
-option that allows to not add these flags.
+Thomas,
 
-Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
----
- package/Makefile.in | 3 +++
- toolchain/Config.in | 3 +++
- 2 files changed, 6 insertions(+)
+On Mon, May 18, 2015 at 9:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Clayton Shotwell,
+>
+> On Mon, 18 May 2015 09:14:54 -0500, Clayton Shotwell wrote:
+>
+>> >> +config BR2_PACKAGE_BUSYBOX_SELINUX
+>> >> +       select BR2_PACKAGE_LIBSELINUX
+>> >> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+>> >> +       depends on !BR2_STATIC_LIBS
+>> >> +       bool "Enable SELinux support"
+>> > Does not this option also need to select
+>> > BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES?
+>>
+>> Those features are not necessarily dependent, it mostly depends on
+>> what parts of busybox are being used. For instance, if a configuration
+>> only used a couple of minor busybox features, such as simple command
+>> line utilities, the symlinked version of busybox could be used to save
+>> space. If busybox was providing more features, such as crond, then
+>> individual binaries would have to be enabled for the SELinux type
+>> transitions to occur properly. I would like to leave that up to the
+>> individual user to enable the individual binaries as needed.
+>
+> Then exactly this needs to be copy/pasted in the help text of this
+> option :-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a0c5a7a..0ac1a94 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -142,12 +142,15 @@ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
- ifeq ($(BR2_BINFMT_FLAT),y)
-+# Don't add any flags for toolchains that don't require it
-+ifneq ($(BR2_TOOLCHAIN_DONT_ELF2FLT),y)
- TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
- 	-Wl$(comma)-elf2flt)
- TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
- 	-Wl$(comma)-elf2flt)
- TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-elf2flt)
- endif
-+endif
- 
- ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
- TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 7e66de0..fd8dc43 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -23,6 +23,9 @@ config BR2_TOOLCHAIN_USES_UCLIBC
- config BR2_TOOLCHAIN_HAS_RESOLVER
- 	bool
- 
-+config BR2_TOOLCHAIN_DONT_ELF2FLT
-+	bool
-+
- config BR2_TOOLCHAIN_USES_MUSL
- 	bool
- 	select BR2_USE_WCHAR
--- 
-2.1.4
+Good point. I'll add that in there.
+
+Thanks,
+Clayton
