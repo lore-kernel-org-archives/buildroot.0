@@ -1,37 +1,45 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Mon, 18 May 2015 09:19:04 -0400
-Subject: [Buildroot] [PATCH v2 2/2] zeromq: depend on libsodium if available
-In-Reply-To: <1431955144-31785-1-git-send-email-fhunleth@troodon-software.com>
-References: <1431955144-31785-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <1431955144-31785-2-git-send-email-fhunleth@troodon-software.com>
+From: g4 at novadsp.com <g4@novadsp.com>
+Date: Mon, 18 May 2015 14:28:45 +0100
+Subject: [Buildroot] Beaglebone Black ?
+Message-ID: <07fe01d0916e$917ea2d0$b47be870$@novadsp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ZeroMQ doesn't require libsodium, but will enable CURVE security if it's
-available. This patch adds the optional dependency.
+Using the latest BR (2015.02) etc. I do not seem to be able to get a working
+installation for a Beaglebone Black. Anyone else tried using
+beaglebone_defconfig recently?
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/zeromq/zeromq.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+u-boot spew follows.
 
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 7e9ed19..a876d5e 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -34,4 +34,10 @@ ZEROMQ_DEPENDENCIES += host-pkgconf openpgm
- ZEROMQ_CONF_OPTS += --with-system-pgm
- endif
- 
-+# ZeroMQ uses libsodium if it's available.
-+ifeq ($(BR2_PACKAGE_LIBSODIUM), y)
-+ZEROMQ_DEPENDENCIES += libsodium
-+ZEROMQ_CONF_OPTS += --with-libsodium="$(STAGING_DIR)/usr"
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.1.4
+Both mmc 0:1 and mmc 0:2 show the expected SD card content. It just looks
+like uEnv is wrong (?). Changing uEnv so bootfile=zImage ensures zImage is
+read but still halts in u-boot console.
+
+Any help/suggestions here would be much appreciated. TVMIA
+
+-----------------------snip----------------------------------------
+micro SD card found
+mmc0 is current device
+gpio: pin 54 (gpio 54) value is 1
+SD/MMC found on device 0
+reading uEnv.txt
+96 bytes read in 3 ms (31.3 KiB/s)
+Loaded environment from uEnv.txt
+Importing environment from mmc ...
+Running uenvcmd ...
+## Error: "loadimage" not defined
+reading ramdisk.gz
+** Unable to read file ramdisk.gz **
+reading /am335x-boneblack.dtb
+34004 bytes read in 9 ms (3.6 MiB/s)
+Booting from ramdisk ...
+Wrong Image Format for bootm command
+ERROR: can't get kernel image!
+gpio: pin 55 (gpio 55) value is 1
+reading /uImage
+** Unable to read file /uImage **
+U-Boot#
+-----------------------snip----------------------------------------
