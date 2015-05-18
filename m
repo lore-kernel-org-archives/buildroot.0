@@ -1,44 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 May 2015 16:30:17 +0200
-Subject: [Buildroot] [PATCH v5 09/24] busybox: selinux support
-In-Reply-To: <CANn-YGQn8EmFxguMC_0+5037zXTaRFHCYL5JL5FumaTEar7myg@mail.gmail.com>
-References: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1431553177-7280-10-git-send-email-clayton.shotwell@rockwellcollins.com>
- <CAHXCMM+9VKZ=i_=QZtLGjA3P=kuFbJDQhBiom10_80ahKjk1ZQ@mail.gmail.com>
- <CANn-YGQn8EmFxguMC_0+5037zXTaRFHCYL5JL5FumaTEar7myg@mail.gmail.com>
-Message-ID: <20150518163017.2d87c2a7@free-electrons.com>
+From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
+Date: Mon, 18 May 2015 11:24:45 -0300
+Subject: [Buildroot] [PATCH v2 3/6] toolchain: allow for stupid toolchains
+In-Reply-To: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <1431959088-15257-4-git-send-email-guido@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Clayton Shotwell,
+check_arm_abi builds a test C file to check that the toolchain is
+working correctly, with the output redirected to /dev/null.
 
-On Mon, 18 May 2015 09:14:54 -0500, Clayton Shotwell wrote:
+However, some toolchains (OSELAS 2014.12.0, for instance) foolishly
+append ".gdb" to the output filename for an intermediate file, causing
+an attempt to write to /dev/null.gdb, which obviously fails.
 
-> >> +config BR2_PACKAGE_BUSYBOX_SELINUX
-> >> +       select BR2_PACKAGE_LIBSELINUX
-> >> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> >> +       depends on !BR2_STATIC_LIBS
-> >> +       bool "Enable SELinux support"
-> > Does not this option also need to select
-> > BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES?
-> 
-> Those features are not necessarily dependent, it mostly depends on
-> what parts of busybox are being used. For instance, if a configuration
-> only used a couple of minor busybox features, such as simple command
-> line utilities, the symlinked version of busybox could be used to save
-> space. If busybox was providing more features, such as crond, then
-> individual binaries would have to be enabled for the SELinux type
-> transitions to occur properly. I would like to leave that up to the
-> individual user to enable the individual binaries as needed.
+Fix this by adding changing the output to a temporary file, which is
+later removed along with any other "suffixed" files.
 
-Then exactly this needs to be copy/pasted in the help text of this
-option :-)
+Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+---
+ toolchain/helpers.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thomas
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 30eb065..0dc1864 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -308,12 +308,14 @@ check_arm_abi = \
+ 		echo "External toolchain uses the unsuported OABI" ; \
+ 		exit 1 ; \
+ 	fi ; \
+-	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o /dev/null - ; then \
++	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o $(BUILD_DIR)/.br-toolchain-test.tmp - ; then \
++		rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*; \
+ 		abistr_$(BR2_ARM_EABI)='EABI'; \
+ 		abistr_$(BR2_ARM_EABIHF)='EABIhf'; \
+ 		echo "Incorrect ABI setting: $${abistr_y} selected, but toolchain is incompatible"; \
+ 		exit 1 ; \
+-	fi
++	fi ; \
++	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
+ 
+ #
+ # Check that the external toolchain supports C++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
