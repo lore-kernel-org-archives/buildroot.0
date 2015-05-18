@@ -1,38 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 May 2015 10:24:34 +0200
-Subject: [Buildroot] [PATCH 1/1] zmqpp: fix compilation with some
- toolchains
-In-Reply-To: <CAKAx1cigQyMobB5QEdomW-TpAgwo9wxtGg1=6A7=zOW4vaytCQ@mail.gmail.com>
-References: <1431692800-15539-1-git-send-email-lionel.orry@gmail.com>
- <20150516142005.745583d4@free-electrons.com>
- <CAKAx1cigQyMobB5QEdomW-TpAgwo9wxtGg1=6A7=zOW4vaytCQ@mail.gmail.com>
-Message-ID: <20150518102434.6618c174@free-electrons.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 18 May 2015 11:15:51 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libxml-parser-perl: add hash file
+Message-ID: <1431940552-9490-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lionel,
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ package/libxml-parser-perl/libxml-parser-perl.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/libxml-parser-perl/libxml-parser-perl.hash
 
-On Mon, 18 May 2015 10:20:39 +0200, Lionel Orry wrote:
-
-> > I've applied your patch, but I've replaced the patch you included which
-> > was just the output of 'git show' or 'git log -p' by a patch properly
-> > formatted with 'git format-patch', so that it can be applied with 'git
-> > am'.
-> 
-> I did not know it was a preferred format, thanks for making that.
-> Maybe it could be interesting to give some more precisions about the
-> preferred package patches format in the manual, and how to prepare
-> them? cf. http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
-
-Sure, feel free to send patches to the Buildroot documentation!
-
-Thanks,
-
-Thomas
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.hash b/package/libxml-parser-perl/libxml-parser-perl.hash
+new file mode 100644
+index 0000000..4a8c0d3
+--- /dev/null
++++ b/package/libxml-parser-perl/libxml-parser-perl.hash
+@@ -0,0 +1,2 @@
++# locally computed hash
++sha256 b48197cd2265a26c5f016489f11a7b450d8833cb8b3d6a46ee15975740894de9 XML-Parser-2.41.tar.gz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.1
