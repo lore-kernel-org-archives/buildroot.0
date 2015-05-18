@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 May 2015 22:25:04 +0200
-Subject: [Buildroot] [PATCH 4/6] php: add PHP_VERSION_MAJOR variable
-In-Reply-To: <1431978724-25081-4-git-send-email-bos@je-eigen-domein.nl>
+Date: Mon, 18 May 2015 22:32:51 +0200
+Subject: [Buildroot] [PATCH 1/6] php: delete /usr/lib/php/build instead
+ of /usr/lib/php
+In-Reply-To: <1431978724-25081-1-git-send-email-bos@je-eigen-domein.nl>
 References: <1431978724-25081-1-git-send-email-bos@je-eigen-domein.nl>
- <1431978724-25081-4-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20150518222504.35a1edad@free-electrons.com>
+Message-ID: <20150518223251.3dc8ab72@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,17 @@ To: buildroot@busybox.net
 
 Dear Floris Bos,
 
-On Mon, 18 May 2015 21:52:02 +0200, Floris Bos wrote:
-> Add PHP_VERSION_MAJOR variable to php.mk for use by other packages.
-> E.g. to install the Ioncube loader binary, it is necessary to
-> know the PHP major version.
+On Mon, 18 May 2015 21:51:59 +0200, Floris Bos wrote:
+> External PHP modules like the OPcache may live in
+> /usr/lib/php/extensions, so only delete /usr/lib/php/build
+> 
+> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> ---
+>  package/php/php.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Are such packages going to be submitted to Buildroot at some point?
-
-Thanks,
+This patch fixes bug #8121,
+https://bugs.busybox.net/show_bug.cgi?id=8121.
 
 Thomas
 -- 
