@@ -1,87 +1,55 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Tue, 19 May 2015 10:24:10 +0200
-Subject: [Buildroot] [PATCH] busybox: add option to install ntp startup
- script
-In-Reply-To: <CAJ3iQcrTBMLEU8zeQYFXmP9ugvrLyD4J1aKfcUmUyJhKtOwB5A@mail.gmail.com>
-References: <1431979101-25367-1-git-send-email-bos@je-eigen-domein.nl>
- <CAJ3iQcrTBMLEU8zeQYFXmP9ugvrLyD4J1aKfcUmUyJhKtOwB5A@mail.gmail.com>
-Message-ID: <555AF32A.60403@je-eigen-domein.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 19 May 2015 10:32:11 +0200
+Subject: [Buildroot] [PATCH] package/libsigrok: blacklist CS powerpc
+ toolchains
+In-Reply-To: <1431888482-27125-1-git-send-email-romain.naour@openwide.fr>
+References: <1431888482-27125-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150519103211.10b2ccc2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Romain Naour,
 
-On 05/19/2015 05:08 AM, Gergely Imreh wrote:
-> On 19 May 2015 at 03:58, Floris Bos <bos@je-eigen-domein.nl> wrote:
->> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
->> ---
->>   package/busybox/Config.in  |  6 ++++++
->>   package/busybox/S49ntp     | 34 ++++++++++++++++++++++++++++++++++
->>   package/busybox/busybox.mk | 15 +++++++++++++++
->>   package/busybox/ntp.conf   |  2 ++
->>   4 files changed, 57 insertions(+)
->>   create mode 100644 package/busybox/S49ntp
->>   create mode 100644 package/busybox/ntp.conf
->>
->> diff --git a/package/busybox/Config.in b/package/busybox/Config.in
->> index b4f949f..0b74536 100644
->> --- a/package/busybox/Config.in
->> +++ b/package/busybox/Config.in
->> @@ -26,6 +26,12 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->>            Show packages in menuconfig that are potentially also provided
->>            by busybox.
->>
->> +config BR2_PACKAGE_BUSYBOX_NTP
->> +       bool "Install the ntp startup script"
->> +       help
->> +         Install the ntp daemon startup script, that by default operates in
->> +         client-only mode and synchronizes the system time with pool.ntp.org.
->> +
-> Should this section be wrapped in an "if BR2_PACKAGE_NTP" / "endif"
-> block? I guess there's no point showing the option if the NTP package
-> is not selected.
->
-> On a higher level, wouldn't it make sense to add this option to the
-> NTP package itself, instead of busybox?
+On Sun, 17 May 2015 20:48:02 +0200, Romain Naour wrote:
 
-Note that this patch is about enabling the ntpd applet included in 
-Busybox, as a light-weight alternative to the full blown standalone NTP 
-package.
-So no, it does not depend on BR2_PACKAGE_NTP.
+> diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+> index 93bd06f..cd44118 100644
+> --- a/package/libsigrok/Config.in
+> +++ b/package/libsigrok/Config.in
+> @@ -22,6 +22,8 @@ config BR2_PACKAGE_LIBSIGROKCXX
+>  	bool "build C++ bindings"
+>  	select BR2_PACKAGE_GLIBMM
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> +	# CS powerpc g++ are too old. libsigrokcxx needs C++11
+> +	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
+>  	help
+>  	  Build libsigrok C++ bindings as well.
+>  
+> diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+> index df27cde..00cf37b 100644
+> --- a/package/pulseview/Config.in
+> +++ b/package/pulseview/Config.in
+> @@ -16,6 +16,8 @@ config BR2_PACKAGE_PULSEVIEW
+>  	depends on BR2_USE_MMU
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+> +	# CS powerpc g++ are too old. libsigrokcxx needs C++11
+> +	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
+>  	help
+>  	  PulseView is a Qt based logic analyzer, oscilloscope
+>  	  and MSO GUI for sigrok.
 
-BR2_PACKAGE_NTP and BR2_PACKAGE_OPENNTPD already have startup scripts of 
-their own.
-But if you just want your device to retrieve the time because it lacks a 
-RTC (as opposed to playing server and providing the time to others), 
-installing those is overkill in my opinion.
+You forgot to propagate this new dependency to the Config.in comment
+related to the BR2_PACKAGE_LIBSIGROKCXX and BR2_PACKAGE_PULSEVIEW
+options.
 
+Thanks,
 
->   Especially because NTP is not the only ntp client supported by busybox, there's also chrony.
- >Ideally that should also have an option for default setup and startup 
-script, just like the this patch aims to do for ntp.
-
-Chrony is a standalone buildroot package, and not an applet provided by 
-busybox.
-Doesn't it install a startup script implicity, if you select it in 
-buildroot?
-
->> +++ b/package/busybox/ntp.conf
->> @@ -0,0 +1,2 @@
->> +server 0.pool.ntp.org
->> +server 1.pool.ntp.org
-> Isn't 2 servers too few in general? If there's a default conf, maybe
-> use the same setup as the NTP Pool project page's simple setup at
-> http://www.pool.ntp.org/en/use.html
-
-It is the same we currently have for the standalone ntp package in 
-package/ntp/ntpd.etc.conf
-Am open to change that, but I do think the standalone ntp config should 
-be changed too then.
-
+Thomas
 -- 
-Yours sincerely,
-
-Floris Bos
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
