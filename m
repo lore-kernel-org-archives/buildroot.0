@@ -1,55 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 May 2015 10:32:11 +0200
-Subject: [Buildroot] [PATCH] package/libsigrok: blacklist CS powerpc
- toolchains
-In-Reply-To: <1431888482-27125-1-git-send-email-romain.naour@openwide.fr>
-References: <1431888482-27125-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150519103211.10b2ccc2@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 19 May 2015 12:13:17 +0300
+Subject: [Buildroot] [PATCH v2] ntp: install after busybox
+Message-ID: <a09a3696a8c28729f8806aa8a5bf01aa669d25f8.1432026797.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Make sure that ntp installs after busybox so that it overrides the busybox
+provided ntpd applet.
 
-On Sun, 17 May 2015 20:48:02 +0200, Romain Naour wrote:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2:
+   Don't depend on busybox when busybox is not enabled (Thomas P)
+---
+ package/ntp/ntp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
-> index 93bd06f..cd44118 100644
-> --- a/package/libsigrok/Config.in
-> +++ b/package/libsigrok/Config.in
-> @@ -22,6 +22,8 @@ config BR2_PACKAGE_LIBSIGROKCXX
->  	bool "build C++ bindings"
->  	select BR2_PACKAGE_GLIBMM
->  	depends on BR2_INSTALL_LIBSTDCPP
-> +	# CS powerpc g++ are too old. libsigrokcxx needs C++11
-> +	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
->  	help
->  	  Build libsigrok C++ bindings as well.
->  
-> diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
-> index df27cde..00cf37b 100644
-> --- a/package/pulseview/Config.in
-> +++ b/package/pulseview/Config.in
-> @@ -16,6 +16,8 @@ config BR2_PACKAGE_PULSEVIEW
->  	depends on BR2_USE_MMU
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-> +	# CS powerpc g++ are too old. libsigrokcxx needs C++11
-> +	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
->  	help
->  	  PulseView is a Qt based logic analyzer, oscilloscope
->  	  and MSO GUI for sigrok.
-
-You forgot to propagate this new dependency to the Config.in comment
-related to the BR2_PACKAGE_LIBSIGROKCXX and BR2_PACKAGE_PULSEVIEW
-options.
-
-Thanks,
-
-Thomas
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 554094db1b3a..36fc53792061 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -7,7 +7,7 @@
+ NTP_VERSION_MAJOR = 4.2
+ NTP_VERSION = $(NTP_VERSION_MAJOR).8p2
+ NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+-NTP_DEPENDENCIES = host-pkgconf libevent
++NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ NTP_LICENSE = ntp license
+ NTP_LICENSE_FILES = COPYRIGHT
+ NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
