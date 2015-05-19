@@ -1,10 +1,10 @@
 From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Tue, 19 May 2015 16:21:44 +0200
-Subject: [Buildroot] [PATCH v3 5/9] configs: add defconfig for Atmel
-	sama5d4ek
+Date: Tue, 19 May 2015 16:21:45 +0200
+Subject: [Buildroot] [PATCH v3 6/9] configs: add defconfig for Atmel sama5d4
+	Xplained Ultra
 In-Reply-To: <1432045308-16825-1-git-send-email-alexandre.belloni@free-electrons.com>
 References: <1432045308-16825-1-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <1432045308-16825-6-git-send-email-alexandre.belloni@free-electrons.com>
+Message-ID: <1432045308-16825-7-git-send-email-alexandre.belloni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,15 @@ To: buildroot@busybox.net
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 ---
- configs/atmel_sama5d4ek_defconfig | 33 +++++++++++++++++++++++++++++++++
+ configs/atmel_sama5d4_xplained_defconfig | 33 ++++++++++++++++++++++++++++++++
  1 file changed, 33 insertions(+)
- create mode 100644 configs/atmel_sama5d4ek_defconfig
+ create mode 100644 configs/atmel_sama5d4_xplained_defconfig
 
-diff --git a/configs/atmel_sama5d4ek_defconfig b/configs/atmel_sama5d4ek_defconfig
+diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
 new file mode 100644
-index 000000000000..36b625b31231
+index 000000000000..84b6518a76eb
 --- /dev/null
-+++ b/configs/atmel_sama5d4ek_defconfig
++++ b/configs/atmel_sama5d4_xplained_defconfig
 @@ -0,0 +1,33 @@
 +BR2_arm=y
 +BR2_cortex_a5=y
@@ -39,7 +39,7 @@ index 000000000000..36b625b31231
 +BR2_LINUX_KERNEL_DEFCONFIG="sama5"
 +BR2_LINUX_KERNEL_ZIMAGE=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4ek"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained"
 +BR2_TARGET_ROOTFS_UBIFS=y
 +BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x3e000
 +BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1000
@@ -48,9 +48,9 @@ index 000000000000..36b625b31231
 +BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
 +BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
 +BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4eknf_uboot_secure"
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
 +BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="sama5d4ek_nandflash"
++BR2_TARGET_UBOOT_BOARDNAME="sama5d4_xplained_nandflash"
 +BR2_TARGET_UBOOT_CUSTOM_GIT=y
 +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
 +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
