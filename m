@@ -1,42 +1,48 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Tue, 19 May 2015 19:57:09 +0200
-Subject: [Buildroot] [PATCH v3 0/9] configs: defconfigs for Atmel boards
-In-Reply-To: <20150519174404.5d19d2cf@free-electrons.com>
-References: <1432045308-16825-1-git-send-email-alexandre.belloni@free-electrons.com>
- <20150519174404.5d19d2cf@free-electrons.com>
-Message-ID: <20150519175709.GA3338@piout.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 May 2015 19:59:17 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <1432043386.4108.23.camel@synopsys.com> (Alexey Brodkin's message
+ of "Tue, 19 May 2015 13:49:46 +0000")
+References: <20150519063012.E7D2A100C5F@stock.ovh.net>
+ <20150519100045.44f1b3a4@free-electrons.com>
+ <1432043386.4108.23.camel@synopsys.com>
+Message-ID: <87mw105tze.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+
 Hi,
 
-On 19/05/2015 at 17:44:04 +0200, Thomas Petazzoni wrote :
-> Dear Alexandre Belloni,
-> 
-> On Tue, 19 May 2015 16:21:39 +0200, Alexandre Belloni wrote:
-> 
-> > Changes in v3:
-> >  - select 3.18 headers for the toolchain
-> >  - rename the documentation
-> >  - update the flasher helper to support more boards
-> >  - update the tcl script to the latest version from Atmel (demos v4.7)
-> >    It has better debug messages and takes the dtb filename as a parameter
-> >    It also supports giving different video modes to support the DRM/KMS display driver
-> 
-> Ah, so the TCL script is available somewhere upstream? In this case,
-> why don't we create a simple Buildroot package to download it and
-> install it somewhere, instead of having it copy/pasted inside Buildroot?
-> 
+ > Well this is sort of expected failure. Even though I have never tried
+ > building vanilla Qt for ARC, but as it turned out that doesn't work.
 
-It is not really available per se. It is distributed alongside with the
-demos in a 160MB and more often than not is only aimed at supporting the
-specific SoC supported by the demo.
+ > But we've been sitting for a while on Qt4 patches that enable building
+ > for and running on ARC. And now decision has been made to finally submit
+ > those pretty simple patches upstream and in parallel (until patches are
+ > accepted and the next minor release of Qt 4.x is cut.. if ever) add
+ > patches in Buildroot so people may happily build and run Qt on ARC.
 
+ > I'll send patches shortly.
+
+Qt4? Really? Is upstream really accepting feature patches for Qt4
+nowadays?
+
+ > As for Qt5:
+ >  [1] It requires tools with NPTL which (I really hope) will be available
+ > for ARC in few weeks, but until that time we may not worry about Qt5 for
+ > ARC - it won't be built.
+
+ >  [2] Once ARC toolchain with NPTL is in Buildroot we'll need to cook
+ > something similar to what we've done for Qt4 and I hope it will really
+ > be that same simple. But probably for starters we'll disable Qt5 for
+ > ARC.
+
+Ok, ARC support patches for Qt5 are probably more likely to get accepted
+upstream than Qt4 ones.
 
 -- 
-Alexandre Belloni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
