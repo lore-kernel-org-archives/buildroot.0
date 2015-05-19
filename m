@@ -1,37 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 May 2015 21:41:10 +0200
-Subject: [Buildroot] [git commit] php: enable opcache extension in php.ini
-	if selected
-Message-ID: <20150519200603.B18D781DCF@busybox.osuosl.org>
+Date: Tue, 19 May 2015 21:34:26 +0200
+Subject: [Buildroot] [git commit] ntp: install after busybox
+Message-ID: <20150519200603.BDCF381DCC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ccbeeb8a8cf1157eaf01550d4d6b479883bbcae7
+commit: http://git.buildroot.net/buildroot/commit/?id=dafcb53ea493045ebda61646fbaa2b468b627a06
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a line to load the opcache extension in php.ini, at the
-bottom of the "dynamic extensions" section.
+Make sure that ntp installs after busybox so that it overrides the busybox
+provided ntpd applet.
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/ntp/ntp.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index bc3794a..6e0e216 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -301,6 +301,9 @@ define PHP_INSTALL_FIXUP
- 		$(TARGET_DIR)/etc/php.ini
- 	$(SED) 's%;date.timezone =.*%date.timezone = $(PHP_LOCALTIME)%' \
- 		$(TARGET_DIR)/etc/php.ini
-+	$(if $(BR2_PACKAGE_PHP_EXT_OPCACHE),
-+		$(SED) '/;extension=php_xsl.dll/azend_extension=opcache.so' \
-+		$(TARGET_DIR)/etc/php.ini)
- endef
- 
- PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 554094d..36fc537 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -7,7 +7,7 @@
+ NTP_VERSION_MAJOR = 4.2
+ NTP_VERSION = $(NTP_VERSION_MAJOR).8p2
+ NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+-NTP_DEPENDENCIES = host-pkgconf libevent
++NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ NTP_LICENSE = ntp license
+ NTP_LICENSE_FILES = COPYRIGHT
+ NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
