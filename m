@@ -1,35 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 May 2015 21:36:49 +0200
-Subject: [Buildroot] [PATCH 0/2] xtensa fixes for jasper
-In-Reply-To: <1432060140-13611-1-git-send-email-jcmvbkbc@gmail.com> (Max
- Filippov's message of "Tue, 19 May 2015 21:28:58 +0300")
-References: <1432060140-13611-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <87617o5pgu.fsf@dell.be.48ers.dk>
+Date: Tue, 19 May 2015 21:38:33 +0200
+Subject: [Buildroot] [PATCH 1/6] php: delete /usr/lib/php/build instead
+	of /usr/lib/php
+In-Reply-To: <1431978724-25081-1-git-send-email-bos@je-eigen-domein.nl>
+ (Floris Bos's message of "Mon, 18 May 2015 21:51:59 +0200")
+References: <1431978724-25081-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <871tic5pdy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
+>>>>> "Floris" == Floris Bos <bos@je-eigen-domein.nl> writes:
 
- > Hi,
- > There are two patches: one makes jasper configure script preserve CFLAGS
- > when --enable-debug is specified.
+ > External PHP modules like the OPcache may live in
+ > /usr/lib/php/extensions, so only delete /usr/lib/php/build
 
- > I was hoping that that'd be enough for jasper to build on xtensa, but
- > unfortunately no: a bunch of one kind of literal-out-of-range errors is gone
- > but a smaller bunch of other kind of the same error appeared. Xtensa gcc
- > does nothing to place literals closer to their corresponding literal load
- > instructions in functions with huge code size generated with -O0.
+ > Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 
- > So the second patch disables debug for jasper when building for xtensa.
-
- > Max Filippov (2):
- >   jasper: Don't overwrite CFLAGS when configured with --enable-debug
- >   jasper: Disable debugging when building for xtensa
-
-Committed both, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
