@@ -1,33 +1,65 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 19 May 2015 08:07:23 +0300
-Subject: [Buildroot] [PATCH] ntp: install after busybox
-Message-ID: <b7e8d9cf7284fc2740398f50b767427e8e39c29b.1432012043.git.baruch@tkos.co.il>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Tue, 19 May 2015 15:59:54 +1000
+Subject: [Buildroot] [PATCH v3 0/2] Improve powerpc-utils with librtas
+Message-ID: <cover.1432015191.git.sam.bobroff@au1.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make sure that ntp installs after busybox so that it overrides the busybox
-provided ntpd applet.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/ntp/ntp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Many useful functions are missing from powerpc-utils when built by
+buildroot, because they depend on librtas which is not included.
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 554094db1b3a..6254dc2a7313 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -7,7 +7,7 @@
- NTP_VERSION_MAJOR = 4.2
- NTP_VERSION = $(NTP_VERSION_MAJOR).8p2
- NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
--NTP_DEPENDENCIES = host-pkgconf libevent
-+NTP_DEPENDENCIES = host-pkgconf libevent busybox
- NTP_LICENSE = ntp license
- NTP_LICENSE_FILES = COPYRIGHT
- NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
+This set adds the librtas package, a small patch to fix a problem with
+it's make install target, and tweaks the powerpc-utils config
+to include it. This makes the following additional programs available
+from powerpc-utils:
+
+* uesensor
+* set_poweron_time
+* drmgr
+* lsslot
+* activate_firmware
+* rtas_ibm_get_vpd
+* serv_config
+* rtas_event_decode
+* sys_ident
+
+
+Changes v2 -> v3:
+Patch 2/2: powerpc-utils: optionally use librtas
+
+Group "with" and "without" clauses.
+
+
+Changes v1 -> v2:
+Patch 1/2: librtas: new package
+
+Remove redundant INSTALL_TARGET=yes.
+Add patch description and patch signed-off-by.
+Rename patch with correct prefix (0001-).
+
+Patch 2/2: powerpc-utils: optionally use librtas
+
+Make librtas support in powerpc-utils optional due to size concerns.
+
+
+Sam Bobroff (2):
+  librtas: new package
+  powerpc-utils: optionally use librtas
+
+ package/Config.in                                  |    1 +
+ ...0001-librtas-install-librtas.so.1-symlink.patch |   31 ++++++++++++++++++++
+ package/librtas/Config.in                          |    9 ++++++
+ package/librtas/librtas.mk                         |   26 ++++++++++++++++
+ package/powerpc-utils/Config.in                    |   18 ++++++++++++
+ package/powerpc-utils/powerpc-utils.mk             |    8 ++++-
+ 6 files changed, 92 insertions(+), 1 deletion(-)
+ create mode 100644 package/librtas/0001-librtas-install-librtas.so.1-symlink.patch
+ create mode 100644 package/librtas/Config.in
+ create mode 100644 package/librtas/librtas.mk
+
 -- 
-2.1.4
+1.7.10.4
