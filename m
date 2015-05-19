@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 May 2015 21:42:19 +0200
-Subject: [Buildroot] [PATCH 5/6] php: bump version to 5.6.9
-In-Reply-To: <1431978724-25081-5-git-send-email-bos@je-eigen-domein.nl>
- (Floris Bos's message of "Mon, 18 May 2015 21:52:03 +0200")
+Date: Tue, 19 May 2015 22:03:09 +0200
+Subject: [Buildroot] [PATCH 6/6] php: fpm: remove sample status page
+In-Reply-To: <1431978724-25081-6-git-send-email-bos@je-eigen-domein.nl>
+ (Floris Bos's message of "Mon, 18 May 2015 21:52:04 +0200")
 References: <1431978724-25081-1-git-send-email-bos@je-eigen-domein.nl>
- <1431978724-25081-5-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <87oalg4an8.fsf@dell.be.48ers.dk>
+ <1431978724-25081-6-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <87k2w449oi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Floris" == Floris Bos <bos@je-eigen-domein.nl> writes:
 
+ > php-fpm installs a sample status page to $datadir/fpm/status.html
+ > It is not of any use in that directory, so remove it from target.
+ > If someone wants to use it, he can copy it to webroot manually.
+
  > Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 
-Anything critical in this version bump? E.G. should we include this for
-the 2015.05 release?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
