@@ -1,25 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 May 2015 20:04:18 +0200
-Subject: [Buildroot] [PATCH 1/1] hwloc: fix condition to display comment
-	message in menuconfig
-In-Reply-To: <1431852724-7692-1-git-send-email-florent.valette@gmail.com>
- (Florent Valette's message of "Sun, 17 May 2015 10:52:04 +0200")
-References: <1431852724-7692-1-git-send-email-florent.valette@gmail.com>
-Message-ID: <87iobo5tr1.fsf@dell.be.48ers.dk>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue, 19 May 2015 21:28:58 +0300
+Subject: [Buildroot] [PATCH 0/2] xtensa fixes for jasper
+Message-ID: <1432060140-13611-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Florent" == Florent Valette <florent.valette@gmail.com> writes:
+Hi,
 
- > The comment message shows up if the toolchain has threads instead
- > of not having threads.
+There are two patches: one makes jasper configure script preserve CFLAGS
+when --enable-debug is specified.
 
- > Signed-off-by: Florent Valette <florent.valette@gmail.com>
+I was hoping that that'd be enough for jasper to build on xtensa, but
+unfortunately no: a bunch of one kind of literal-out-of-range errors is gone
+but a smaller bunch of other kind of the same error appeared. Xtensa gcc
+does nothing to place literals closer to their corresponding literal load
+instructions in functions with huge code size generated with -O0.
 
-Committed, thanks.
+So the second patch disables debug for jasper when building for xtensa.
+
+Max Filippov (2):
+  jasper: Don't overwrite CFLAGS when configured with --enable-debug
+  jasper: Disable debugging when building for xtensa
+
+ package/jasper/0007-preserve-cflags.patch | 27 +++++++++++++++++++++++++++
+ package/jasper/jasper.mk                  |  6 ++++++
+ 2 files changed, 33 insertions(+)
+ create mode 100644 package/jasper/0007-preserve-cflags.patch
 
 -- 
-Bye, Peter Korsgaard
+1.8.1.4
