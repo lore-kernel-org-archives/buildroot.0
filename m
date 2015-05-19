@@ -1,50 +1,40 @@
 From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
-Date: Tue, 19 May 2015 12:53:42 -0300
-Subject: [Buildroot] [PATCH v2 1/6] arm: update processor types
-In-Reply-To: <20150518220512.556d53ae@free-electrons.com>
+Date: Tue, 19 May 2015 13:00:58 -0300
+Subject: [Buildroot] [PATCH v2 2/6] pkg-utils: implement INFLATE for
+ .deb files
+In-Reply-To: <20150518215558.0cde581c@free-electrons.com>
 References: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
- <1431959088-15257-2-git-send-email-guido@vanguardiasur.com.ar>
- <20150518220512.556d53ae@free-electrons.com>
-Message-ID: <20150519155342.GA23051@fox>
+ <1431959088-15257-3-git-send-email-guido@vanguardiasur.com.ar>
+ <20150518215558.0cde581c@free-electrons.com>
+Message-ID: <20150519160058.GB23051@fox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 18, 2015 at 10:05:12PM +0200, Thomas Petazzoni wrote:
-> >  config BR2_USE_MMU
-> > -	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_sh || BR2_xtensa
-> > -	default y if !BR2_bfin
-> > +	bool "Enable MMU support"
-> > +	depends on BR2_arm || BR2_armeb || BR2_sh || BR2_xtensa
-> > +	depends on !BR2_cortex_m3 && !BR2_bfin
+On Mon, May 18, 2015 at 09:55:58PM +0200, Thomas Petazzoni wrote:
+> Dear Guido Mart?nez,
 > 
-> This breaks things, because now BR2_USE_MMU is empty on architectures
-> others than arm, armeb, sh and xtensa.
-Ugh, stupid me.
+> On Mon, 18 May 2015 11:24:44 -0300, Guido Mart?nez wrote:
+> 
+> > +ar fp ${DEBFILE} data.tar.xz | ${XZCAT} -d
+> 
+> Are all Debian .deb packages compressed with the xz compression? How
+> many packages would benefit for this being supported at the package
+> infra level vs. handling it directly in the toolchain-external package?
+I had tried with several packages and found they were all XZ-compressed,
+but I just tried with ~6000 packages and saw that only 90% are
+XZ-compressed, so this wouldn't work.
 
-> What we probably need is something like this:
-> 
-> config BR2_ARCH_MMU_OPTIONAL
-> 	bool
-> 
-> config BR2_ARCH_MMU_MANDATORY
-> 	bool
-> 
-> and have all ARM cores select BR2_ARCH_MMU_OPTIONAL except Cortex M3,
-> SuperH and Xtensa select BR2_ARCH_MMU_OPTIONAL, all other architectures
-> except Blackfin selecting BR2_ARCH_MMU_MANDATORY.
-> 
-> And then:
-> 
-> 	bool "Enable MMU support" if BR2_ARCH_MMU_OPTIONAL
-> 	default y if BR2_ARCH_MMU_MANDATORY || BR2_ARCH_MMU_OPTIONAL
-> 
-> or something like that.
-Yes, I'll work on something like that.
+I also don't know of any packages we might want to use are only shipped
+the .deb format.
 
-Sorry for the noise :(
+> We normally try to not clutter the package infra with features only
+> useful to one package, especially when the feature can easily be
+> implemented at the package level.
+Yeah, I agree. I'll drop this and revert back to custom extract
+commands.
 
 -- 
 Guido Mart?nez, VanguardiaSur
