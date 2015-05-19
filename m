@@ -1,63 +1,83 @@
 From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue, 19 May 2015 08:05:03 -0400
-Subject: [Buildroot] [PATCH v2 1/2] libsodium: new package
-In-Reply-To: <20150518215350.50ff6ca5@free-electrons.com>
-References: <1431955144-31785-1-git-send-email-fhunleth@troodon-software.com>
- <20150518153137.GM2845@tarshish>
- <CA+-urNRu=qpsQ_-O_y16-MVoYw-Vxqwc1myZw3mTqV=3aSDiOg@mail.gmail.com>
- <20150518215350.50ff6ca5@free-electrons.com>
-Message-ID: <CA+-urNTnRDDqSkS3zGWvGGWbgHBoxGoAfmmyomF86tU6ep1D5A@mail.gmail.com>
+Date: Tue, 19 May 2015 08:01:10 -0400
+Subject: [Buildroot] [PATCH v3 1/2] libsodium: new package
+Message-ID: <1432036871-3244-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+Changes v1 -> v2:
+  - fix curly braces on variables (thanks to Thomas for noticing)
+  - added patch for zeromq (in separate patch) to address libsodium
+    dependency in that library (thanks to Romain for this). I didn't
+    find any other packages with a similar dependency, but it's not
+    that easy to do that search.
+Changes v2 -> v3:
+  - removed host build (thanks to Baruch and Thomas)
 
-On Mon, May 18, 2015 at 3:53 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Frank Hunleth,
->
-> On Mon, 18 May 2015 12:07:24 -0400, Frank Hunleth wrote:
->
->> As I said in a previous email, I use the host package and asked for
->> guidance for including host packages or not. I didn't see a response.
->> While I certainly don't mind removing it, it would be nice to know why
->> host packages are such a problem. For me, it is very convenient that
->> Buildroot requires so little of the host Linux environment to work.
->> Libsodium, in particular, is annoying since you can't apt-get install
->> it in Ubuntu 12.04. I know that's old, but it's around. Anyway, that's
->> my 2 cents. It will be gone for v3...
->
-> The thing is that we generally don't like to have "dangling" packages,
-> that are not used by anything in Buildroot.
->
-> Normally, host packages fall into one of the two following categories:
->
->  * Used as a dependency to build a target package. In this case, the
->    host package is listed as host-<foo> in the <pkg>_DEPENDENCIES of
->    another package. So it is actually used by something in Buildroot.
->
->  * Used as a tool (for flashing, creating images, debugging, etc.) and
->    in this case, it's listed in the "Host utilities" menu in
->    menuconfig. In this case, it is directly visible to the user.
->
-> But what you propose here does not fall into any of these two cases. We
-> don't put host libraries in the "Host utilities" menu, and your host
-> package is not used by any other package in Buildroot, hence Baruch's
-> reaction.
->
-> I think we may have made a couple of exceptions in the past, but I'm
-> not sure how many. And they still have the major drawback that such
-> packages will never be tested, because they cannot be reached by
-> autobuilder testing.
+ package/Config.in                |  1 +
+ package/libsodium/Config.in      |  6 ++++++
+ package/libsodium/libsodium.hash |  2 ++
+ package/libsodium/libsodium.mk   | 13 +++++++++++++
+ 4 files changed, 22 insertions(+)
+ create mode 100644 package/libsodium/Config.in
+ create mode 100644 package/libsodium/libsodium.hash
+ create mode 100644 package/libsodium/libsodium.mk
 
-Thanks for the explanation. That encourages me to get the host utility
-that uses libsodium submitted. :)
-
-A follow-up patch for libsodium is coming shortly. Hopefully this one
-passes muster.
-
-Thanks,
-Frank
+diff --git a/package/Config.in b/package/Config.in
+index e0c2e2a..5b99639 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -723,6 +723,7 @@ menu "Crypto"
+ 	source "package/libnss/Config.in"
+ 	source "package/libsecret/Config.in"
+ 	source "package/libsha1/Config.in"
++	source "package/libsodium/Config.in"
+ 	source "package/libssh2/Config.in"
+ 	source "package/nettle/Config.in"
+ 	source "package/openssl/Config.in"
+diff --git a/package/libsodium/Config.in b/package/libsodium/Config.in
+new file mode 100644
+index 0000000..47b9bb3
+--- /dev/null
++++ b/package/libsodium/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBSODIUM
++	bool "libsodium"
++	help
++	  A modern and easy-to-use crypto library.
++
++	  http://libsodium.org/
+diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
+new file mode 100644
+index 0000000..089dc03
+--- /dev/null
++++ b/package/libsodium/libsodium.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	cbcfc63cc90c05d18a20f229a62c7e7054a73731d0aa858c0517152c549b1288	libsodium-1.0.3.tar.gz
+diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+new file mode 100644
+index 0000000..c032863
+--- /dev/null
++++ b/package/libsodium/libsodium.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# libsodium
++#
++################################################################################
++
++LIBSODIUM_VERSION = 1.0.3
++LIBSODIUM_SITE = https://github.com/jedisct1/libsodium/releases/download/$(LIBSODIUM_VERSION)
++LIBSODIUM_LICENSE = ISC
++LIBSODIUM_LICENSE_FILES = LICENSE
++LIBSODIUM_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+-- 
+2.1.4
