@@ -1,65 +1,87 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 19 May 2015 10:12:13 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20150519100045.44f1b3a4@free-electrons.com>
-References: <20150519063012.E7D2A100C5F@stock.ovh.net>
- <20150519100045.44f1b3a4@free-electrons.com>
-Message-ID: <555AF05D.7040905@openwide.fr>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Tue, 19 May 2015 10:24:10 +0200
+Subject: [Buildroot] [PATCH] busybox: add option to install ntp startup
+ script
+In-Reply-To: <CAJ3iQcrTBMLEU8zeQYFXmP9ugvrLyD4J1aKfcUmUyJhKtOwB5A@mail.gmail.com>
+References: <1431979101-25367-1-git-send-email-bos@je-eigen-domein.nl>
+ <CAJ3iQcrTBMLEU8zeQYFXmP9ugvrLyD4J1aKfcUmUyJhKtOwB5A@mail.gmail.com>
+Message-ID: <555AF32A.60403@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 
-Le 19/05/2015 10:00, Thomas Petazzoni a ?crit :
-> Hello all,
-> 
-> This is *really* looking better and better. There are still around 10
-> days left before the final release, I'm sure we can reach even lower
-> build failure numbers.
-> 
-> Let's have a look at the build issues from yesterday. Yann, Alexey,
-> Bartosz, there are some questions/things for you, see below.
-> 
+On 05/19/2015 05:08 AM, Gergely Imreh wrote:
+> On 19 May 2015 at 03:58, Floris Bos <bos@je-eigen-domein.nl> wrote:
+>> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+>> ---
+>>   package/busybox/Config.in  |  6 ++++++
+>>   package/busybox/S49ntp     | 34 ++++++++++++++++++++++++++++++++++
+>>   package/busybox/busybox.mk | 15 +++++++++++++++
+>>   package/busybox/ntp.conf   |  2 ++
+>>   4 files changed, 57 insertions(+)
+>>   create mode 100644 package/busybox/S49ntp
+>>   create mode 100644 package/busybox/ntp.conf
+>>
+>> diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+>> index b4f949f..0b74536 100644
+>> --- a/package/busybox/Config.in
+>> +++ b/package/busybox/Config.in
+>> @@ -26,6 +26,12 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>>            Show packages in menuconfig that are potentially also provided
+>>            by busybox.
+>>
+>> +config BR2_PACKAGE_BUSYBOX_NTP
+>> +       bool "Install the ntp startup script"
+>> +       help
+>> +         Install the ntp daemon startup script, that by default operates in
+>> +         client-only mode and synchronizes the system time with pool.ntp.org.
+>> +
+> Should this section be wrapped in an "if BR2_PACKAGE_NTP" / "endif"
+> block? I guess there's no point showing the option if the NTP package
+> is not selected.
+>
+> On a higher level, wouldn't it make sense to add this option to the
+> NTP package itself, instead of busybox?
 
-[snip]
+Note that this patch is about enabling the ntpd applet included in 
+Busybox, as a light-weight alternative to the full blown standalone NTP 
+package.
+So no, it does not depend on BR2_PACKAGE_NTP.
 
-> 
->>      powerpc | pulseview-198f9bc74d6c955a7... | NOK | http://autobuild.buildroot.net/results/90d8a0cad1ec56f251970b591e9cdf35e57b35ef/
-> 
-> -- checking for module 'libsigrokcxx>=0.3.0'
-> --   package 'libsigrokcxx>=0.3.0' not found
-> CMake Error at /ssd1/thomas/autobuild/instance-0/output/host/usr/share/cmake-3.1/Modules/FindPkgConfig.cmake:340 (message):
-> 
-> Bartosz, since you are the author of the pulseview package, can you
-> have a look? Thanks!
+BR2_PACKAGE_NTP and BR2_PACKAGE_OPENNTPD already have startup scripts of 
+their own.
+But if you just want your device to retrieve the time because it lacks a 
+RTC (as opposed to playing server and providing the time to others), 
+installing those is overkill in my opinion.
 
-libsigrokcxx needs C++11
-see http://patchwork.ozlabs.org/patch/473213/
 
-Best regards,
-Romain
+>   Especially because NTP is not the only ntp client supported by busybox, there's also chrony.
+ >Ideally that should also have an option for default setup and startup 
+script, just like the this patch aims to do for ntp.
 
-[snip]
+Chrony is a standalone buildroot package, and not an applet provided by 
+busybox.
+Doesn't it install a startup script implicity, if you select it in 
+buildroot?
 
-> 
-> So let's do the overall math, on 11 build failures, we have:
-> 
->  * 2 build failures already handled by a new exception in the
->    autobuilder script.
-> 
->  * 2 build failures already fixed by committed patches
-> 
->  * 1 build failure fixed by a proposed patch
-> 
->  * 2 build failures that look quite easy to solve (conntrack-tools,
->    sysstat)
-> 
->  * 4 that look a bit more complicated (qt, sqlite, pulseview)
-> 
-> Best regards,
-> 
-> Thomas
-> 
+>> +++ b/package/busybox/ntp.conf
+>> @@ -0,0 +1,2 @@
+>> +server 0.pool.ntp.org
+>> +server 1.pool.ntp.org
+> Isn't 2 servers too few in general? If there's a default conf, maybe
+> use the same setup as the NTP Pool project page's simple setup at
+> http://www.pool.ntp.org/en/use.html
+
+It is the same we currently have for the standalone ntp package in 
+package/ntp/ntpd.etc.conf
+Am open to change that, but I do think the standalone ntp config should 
+be changed too then.
+
+-- 
+Yours sincerely,
+
+Floris Bos
