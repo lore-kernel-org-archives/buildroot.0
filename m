@@ -1,228 +1,55 @@
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Tue, 19 May 2015 08:22:42 -0500
-Subject: [Buildroot] [PATCH v5 03/24] setools: new package
-In-Reply-To: <20150518233139.6252c732@free-electrons.com>
-References: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1431553177-7280-4-git-send-email-clayton.shotwell@rockwellcollins.com>
- <20150518233139.6252c732@free-electrons.com>
-Message-ID: <CANn-YGS3C=YGwg=d8fXS-Vx7qPTXoMG=q1ywVAnt7vc5jUxX5w@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 19 May 2015 13:49:46 +0000
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150519100045.44f1b3a4@free-electrons.com>
+References: <20150519063012.E7D2A100C5F@stock.ovh.net>
+ <20150519100045.44f1b3a4@free-electrons.com>
+Message-ID: <1432043386.4108.23.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hi Thomas,
 
-On Mon, May 18, 2015 at 4:31 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Clayton Shotwell,
->
-> On Wed, 13 May 2015 16:39:16 -0500, Clayton Shotwell wrote:
->> From: Matt Weber <matthew.weber@rockwellcollins.com>
->>
->> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
->> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->>
->> ---
->> Changes v4 -> v5:
->>   - Added dependency on libsepol (Matt W.)
->>   - Removed limitation of arch it could build for  (Matt W.)
->>   - Removed depends on GLIBC (Matt W.)
->>   - Consolidated python configuration (Ryan B.)
->>   - Removed swig (patch and enabling), it's only needed for
->>     graphical apol tool (Ryan B.)
->>   - Added comment to cross compile patch about not upstreaming.
->>     The package is stable and no updates/reworking since 2013.
->>     Currently a 4.0 version is in the works but is a major
->>     build infrastructure rework when compared to 3.3.x. (Ryan B.)
->>   - Added comments noting why autoreconf and not libtool patch
->>     (Suggested by Thomas P.)
->>   - Added comments explaining why python on host but not target
->>     (Suggested by Thomas P.)
->>   - Add a dependency on not static libs because libselinux requires not
->>     static libs. (Clayton S.)
->>   - Added licene info (Clayton S.)
->>   - Added depends on C++ (Matt W.)
->>   - Removed largefile dependency (Clayton S.)
->
-> Thanks a lot for this detailed changelog, very useful.
+On Tue, 2015-05-19 at 10:00 +0200, Thomas Petazzoni wrote:
+> >          arc |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/e781d4ce27ce17067b2e5e298e1e8ba9add41371/
+> 
+> Compiler problem:
+> 
+> /tmp/ccQkdXjH.s: Assembler messages:
+> /tmp/ccQkdXjH.s: Error: unaligned opcodes detected in executable segment
+> make[2]: *** [.obj/release-shared-emb-generic/qxquerytokenizer.o] Error 1
+> 
+> Alexey, can you have a look? Thanks!
 
-You're very welcome.
+Well this is sort of expected failure. Even though I have never tried
+building vanilla Qt for ARC, but as it turned out that doesn't work.
 
+But we've been sitting for a while on Qt4 patches that enable building
+for and running on ARC. And now decision has been made to finally submit
+those pretty simple patches upstream and in parallel (until patches are
+accepted and the next minor release of Qt 4.x is cut.. if ever) add
+patches in Buildroot so people may happily build and run Qt on ARC.
 
->> +comment "setools needs a toolchain w/ threads, c++, dynamic library"
->
-> nit of the day: C++ in uppercase.
+I'll send patches shortly.
 
-Will fix for v6.
+As for Qt5:
+ [1] It requires tools with NPTL which (I really hope) will be available
+for ARC in few weeks, but until that time we may not worry about Qt5 for
+ARC - it won't be built.
 
->> diff --git a/package/setools/setools.mk b/package/setools/setools.mk
->> new file mode 100644
->> index 0000000..bd4de5f
->> --- /dev/null
->> +++ b/package/setools/setools.mk
->> @@ -0,0 +1,85 @@
->> +################################################################################
->> +#
->> +# setools
->> +#
->> +################################################################################
->> +
->> +SETOOLS_VERSION = 3.3.8
->> +SETOOLS_SOURCE = setools-$(SETOOLS_VERSION).tar.bz2
->> +SETOOLS_SITE = https://raw.githubusercontent.com/wiki/TresysTechnology/setools3/files/dists/setools-$(SETOOLS_VERSION)/
->> +SETOOLS_DEPENDENCIES = libselinux sqlite libxml2 bzip2
->
-> Here you don't list libsepol explicitly (which is OK since libselinux
-> depends on it), but in the host variant of setools, you do depend
-> explicitly on host-libsepol. Pick one of the two possibilities, but
-> don't mix them :)
+ [2] Once ARC toolchain with NPTL is in Buildroot we'll need to cook
+something similar to what we've done for Qt4 and I hope it will really
+be that same simple. But probably for starters we'll disable Qt5 for
+ARC.
 
-Good catch. I will add the dependency here.
+BTW if I'm not mistaken (and "git log" is my witness) it was you who
+initially added Qt5 support in Buildroot, so I may assume you have some
+experience with that animal and if so I would really like to ask you to
+do my first external reviewer of Qt patch for ARC (for Qt4 now and Qt5
+later).
 
->> +SETOOLS_INSTALL_STAGING = YES
->> +SETOOLS_LICENSE = GPLv2+ LGPLv2.1+
->> +SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
->> +
->> +# Generate the configuration script
->
-> That's not explaining anything, we know what autoreconf is doing. The
-> question is *why*.
-
-I will fix the comment for v6.
-
->> +SETOOLS_AUTORECONF = YES
->> +SETOOLS_AUTORECONF_OPTS = -i -s
->> +# Prevent patching since autoreconf sets ltmain.sh as a symlink to
->> +# to host/usr/share/libtool/build-aux/ltmain.sh
->
-> Weird autoreconf is used all over the place by many packages, and it's
-> not causing this problem.
-
-I'll try removing it and see what happens. More than likely everything
-will work just fine.
-
->> +SETOOLS_LIBTOOL_PATCH = NO
->> +
->> +# Notes: Need "disable-selinux-check" so the configure does not check to see
->> +#        if host has selinux enabled.
->> +#        No python support as only the libraries and commandline tools are
->> +#        installed on target
->> +SETOOLS_CONF_OPTS = \
->> +     --disable-debug \
->> +     --disable-gui \
->> +     --disable-bwidget-check \
->> +     --disable-selinux-check \
->> +     --disable-swig-java \
->> +     --disable-swig-python \
->> +     --disable-swig-tcl \
->> +     --with-sepol-devel="$(STAGING_DIR)/usr" \
->> +     --with-selinux-devel="$(STAGING_DIR)/usr"
->> +
->> +HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol host-sqlite \
->> +     host-libxml2 host-bzip2
->> +
->> +# Generate the configuration script
->> +HOST_SETOOLS_AUTORECONF = YES
->> +HOST_SETOOLS_AUTORECONF_OPTS = -i -s
->> +
->
-> i.e here (see below).
->
->> +# Notes: Need "disable-selinux-check" so the configure does not check to see
->> +#        if host has selinux enabled.
->> +#        Host builds with python support to enable tools for offline target
->> +#        policy analysis
->> +HOST_SETOOLS_CONF_OPTS = \
->> +     --disable-debug \
->> +     --disable-gui \
->> +     --disable-bwidget-check \
->> +     --disable-selinux-check \
->> +     --disable-swig-java \
->> +     --disable-swig-python \
->> +     --disable-swig-tcl \
->> +     --with-sepol-devel="$(HOST_DIR)/usr" \
->> +     --with-selinux-devel="$(HOST_DIR)/usr" \
->> +     PYTHON_LDFLAGS="-L$(HOST_DIR)/usr/lib/"
->> +
->> +HOST_SETOOLS_CONF_ENV += \
->> +     am_cv_pathless_PYTHON=python \
->> +     ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python \
->> +     am_cv_python_platform=linux2
->> +
->> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
->> +HOST_SETOOLS_PYTHON_VERSION=$(PYTHON3_VERSION_MAJOR)
->> +HOST_SETOOLS_DEPENDENCIES += host-python3
->> +HOST_SETOOLS_CONF_ENV += am_cv_python_version=$(PYTHON3_VERSION)
->> +else
->> +HOST_SETOOLS_PYTHON_VERSION=$(PYTHON_VERSION_MAJOR)
->> +HOST_SETOOLS_DEPENDENCIES += host-python
->> +HOST_SETOOLS_CONF_ENV += am_cv_python_version=$(PYTHON_VERSION)
->> +endif
->
-> This should be put a bit earlier.
->
->> +
->> +HOST_SETOOLS_CONF_ENV += \
->> +     am_cv_python_pythondir=$(HOST_DIR)/usr/lib/python$(HOST_SETOOLS_PYTHON_VERSION)/site-packages \
->> +     am_cv_python_pyexecdir=$(HOST_DIR)/usr/lib/python$(HOST_SETOOLS_PYTHON_VERSION)/site-packages \
->> +     am_cv_python_includes=-I$(HOST_DIR)/usr/include/python$(HOST_SETOOLS_PYTHON_VERSION)
->> +HOST_SETOOLS_CONF_OPTS += \
->> +     PYTHON_CPPFLAGS="-I$(HOST_DIR)/usr/include/python$(HOST_SETOOLS_PYTHON_VERSION)" \
->> +     PYTHON_SITE_PKG="$(HOST_DIR)/usr/lib/python$(HOST_SETOOLS_PYTHON_VERSION)/site-packages" \
->> +     PYTHON_EXTRA_LIBS="-lpthread -ldl -lutil -lpython$(HOST_SETOOLS_PYTHON_VERSION)"
->
-> So that these can be squashed with the HOST_SETOOLS_CONF_ENV and
-> HOST_SETOOLS_CONF_OPTS definitions. Also, I'm pretty sure we can do
-> something a bit better than that.
->
-> ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> HOST_SETOOLS_DEPENDENCIES += host-python3
-> HOST_SETOOLS_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
-> else
-> HOST_SETOOLS_DEPENDENCIES += host-python
-> HOST_SETOOLS_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
-> endif
->
-> HOST_SETOOLS_PYTHON_SITE_PACKAGES = $(HOST_DIR)/usr/lib/python$(HOST_SETOOLS_PYTHON_VERSION)/site-packages
-> HOST_SETOOLS_PYTHON_INCLUDES = $(HOST_DIR)/usr/include/python$(HOST_SETOOLS_PYTHON_VERSION)
-> HOST_SETOOLS_PYTHON_LIB = -lpython$(HOST_SETOOLS_PYTHON_VERSION)
->
-> And then:
->
->> +HOST_SETOOLS_CONF_OPTS = \
->> +     --disable-debug \
->> +     --disable-gui \
->> +     --disable-bwidget-check \
->> +     --disable-selinux-check \
->> +     --disable-swig-java \
->> +     --disable-swig-python \
->> +     --disable-swig-tcl \
->> +     --with-sepol-devel="$(HOST_DIR)/usr" \
->> +     --with-selinux-devel="$(HOST_DIR)/usr" \
->> +     PYTHON_LDFLAGS="-L$(HOST_DIR)/usr/lib/" \
->> +     PYTHON_CPPFLAGS="-I$(HOST_SETOOLS_PYTHON_INCLUDES)" \
->> +     PYTHON_SITE_PKG="$(HOST_SETOOLS_PYTHON_SITE_PACKAGES") \
->> +     PYTHON_EXTRA_LIBS="-lpthread -ldl -lutil $(HOST_SETOOLS_PYTHON_LIB)"
->
->> +HOST_SETOOLS_CONF_ENV += \
->> +     am_cv_pathless_PYTHON=python \
->> +     ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python \
->> +     am_cv_python_platform=linux2
->> +     am_cv_python_version=$(HOST_SETOOLS_PYTHON_VERSION)
->> +     am_cv_python_pythondir=$(HOST_SETOOLS_PYTHON_SITE_PACKAGES)
->> +     am_cv_python_pyexecdir=$(HOST_SETOOLS_PYTHON_SITE_PACKAGES)
->> +     am_cv_python_includes=-I$(HOST_SETOOLS_PYTHON_INCLUDES)
->
-> and there you are.
-
-Thanks for cleaning up the python flags. I'll get that changed and
-tested for v6.
-
-Thanks,
-Clayton
-
-Clayton Shotwell
-Senior Software Engineer, Rockwell Collins
-clayton.shotwell at rockwellcollins.com
+Regards,
+Alexey
