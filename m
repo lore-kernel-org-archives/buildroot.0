@@ -1,49 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 May 2015 08:30:12 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-05-18
-Message-ID: <20150519063012.E7D2A100C5F@stock.ovh.net>
+Date: Tue, 19 May 2015 09:33:05 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/harfbuzz: disable test
+ programs
+In-Reply-To: <555A5C32.1030209@openwide.fr>
+References: <1431467484-14459-1-git-send-email-romain.naour@openwide.fr>
+ <20150518230346.4c8a9a45@free-electrons.com>
+ <555A5C32.1030209@openwide.fr>
+Message-ID: <20150519093305.78a0e85d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2015-05-18
-===============================
+Romain,
 
-        success : 325
-       failures : 11 
-       timeouts : 0  
-          TOTAL : 336
+On Mon, 18 May 2015 23:40:02 +0200, Romain Naour wrote:
 
-Classification of failures by reason
-====================================
+> > I was almost going to apply this one, but I'm not entirely happy in
+> > fact. I really works around the real problem, and does not fix it:
+> > imagine a real program now links statically to harfbuzz using harfbuzz
+> > pkg-config file. This pkg-config file does not advertise the dependency
+> > on libstdc++ in its Libs.private, so the link would also fail, just
+> > like it currently fails for the test programs.
+> 
+> -lstdc++ is only needed by libharfbuzz-icu.la which use the icu package.
+> So maybe -lstdc++ is missing in Libs.private from icu-uc.pc ?
 
-                      qt-4.8.6 | 2 
-                       kmod-20 | 2 
-         conntrack-tools-1.4.2 | 1 
-                     gpsd-3.11 | 1 
-                sqlite-3081000 | 1 
-               wvstreams-4.6.1 | 1 
-pulseview-198f9bc74d6c955a7... | 1 
-                sysstat-11.0.4 | 1 
-               harfbuzz-0.9.40 | 1 
+Yes, might be. It's weird: harfbuzz uses .cc as the extension for its
+source files, but it seems to be only pure C, not C++. And to add to
+the confusion, it also uses AC_PROG_CXX in its configure.ac, which
+would also indicate it's in C++.
 
-Detail of failures
-===================
-
-      xtensa |          conntrack-tools-1.4.2 | NOK | http://autobuild.buildroot.net/results/ab1ae40f1862300cd7667b7bd03cc59d7455a769/
-         arm |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/f5261a0933f9b5449d1f4e5cab1bb02e7154e683/
-         arm |                harfbuzz-0.9.40 | NOK | http://autobuild.buildroot.net/results/057499012d6443a736f384fd1d7e283396ab1c2e/
-      xtensa |                        kmod-20 | NOK | http://autobuild.buildroot.net/results/a12744849118fd49b9c811f31919ddb12c1eff29/
-      xtensa |                        kmod-20 | NOK | http://autobuild.buildroot.net/results/5af2245025568af230d682863307236700d0d206/
-     powerpc | pulseview-198f9bc74d6c955a7... | NOK | http://autobuild.buildroot.net/results/90d8a0cad1ec56f251970b591e9cdf35e57b35ef/
-         arc |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/e781d4ce27ce17067b2e5e298e1e8ba9add41371/
-       nios2 |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/7a478f03e0b38ffdcffa4153c17eef9cc4457b8c/
-     powerpc |                 sqlite-3081000 | NOK | http://autobuild.buildroot.net/results/aed3690689b60844e3278626da3c3eb75f2a2586/
-         arm |                 sysstat-11.0.4 | NOK | http://autobuild.buildroot.net/results/bea726de24801385f335e02271671e030f857e3e/
-         arc |                wvstreams-4.6.1 | NOK | http://autobuild.buildroot.net/results/0cd5e0263b42e6845504d97688632e16206bd000/
+But obviously, icu is implemented in C++, so the icu-uc pkg-config file
+should have the corresponding -lstdc++ Libs.private flag.
 
 
+> You would said ;)
+> test_unicode_LDADD += $(top_builddir)/src/libharfbuzz-icu.la -lstdc++
+> 
+> With that fixed, Harbuzz build fine.
+
+Sounds good to me.
+
+Thanks!
+
+Thomas
 -- 
-http://autobuild.buildroot.net
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
