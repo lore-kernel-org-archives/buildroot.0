@@ -1,27 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 May 2015 21:34:38 +0200
-Subject: [Buildroot] [PATCH v2] ntp: install after busybox
-In-Reply-To: <a09a3696a8c28729f8806aa8a5bf01aa669d25f8.1432026797.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 19 May 2015 12:13:17 +0300")
-References: <a09a3696a8c28729f8806aa8a5bf01aa669d25f8.1432026797.git.baruch@tkos.co.il>
-Message-ID: <87a8x05pkh.fsf@dell.be.48ers.dk>
+Date: Tue, 19 May 2015 21:36:49 +0200
+Subject: [Buildroot] [PATCH 0/2] xtensa fixes for jasper
+In-Reply-To: <1432060140-13611-1-git-send-email-jcmvbkbc@gmail.com> (Max
+ Filippov's message of "Tue, 19 May 2015 21:28:58 +0300")
+References: <1432060140-13611-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <87617o5pgu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
 
- > Make sure that ntp installs after busybox so that it overrides the busybox
- > provided ntpd applet.
+ > Hi,
+ > There are two patches: one makes jasper configure script preserve CFLAGS
+ > when --enable-debug is specified.
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > v2:
- >    Don't depend on busybox when busybox is not enabled (Thomas P)
+ > I was hoping that that'd be enough for jasper to build on xtensa, but
+ > unfortunately no: a bunch of one kind of literal-out-of-range errors is gone
+ > but a smaller bunch of other kind of the same error appeared. Xtensa gcc
+ > does nothing to place literals closer to their corresponding literal load
+ > instructions in functions with huge code size generated with -O0.
 
-Committed, thanks.
+ > So the second patch disables debug for jasper when building for xtensa.
+
+ > Max Filippov (2):
+ >   jasper: Don't overwrite CFLAGS when configured with --enable-debug
+ >   jasper: Disable debugging when building for xtensa
+
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
