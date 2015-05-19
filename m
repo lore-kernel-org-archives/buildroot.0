@@ -1,43 +1,49 @@
-From: Bryce Schober <bryce.schober@gmail.com>
-Date: Tue, 19 May 2015 11:37:55 -0700
-Subject: [Buildroot] [OT] Cross-platform Host-SDK infrastructure similar to
-	buildroot?
-Message-ID: <CAJpxd05f9fofuOdRSOREL6nz8fqMb_+-nrko9_SSv2M6aWYkTw@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 19 May 2015 20:49:59 +0200
+Subject: [Buildroot] [PATCH 6/6] qt5base: add patch to fix gold linker
+ issue
+Message-ID: <trinity-3de94631-d08e-4f79-9d49-cd96a12c36c3-1432061399031@3capp-gmx-bs29>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello folks, I have a question that is only tangentially related to
-buildroot...
+Hello Thomas,
 
-I really like the "buildroot" style of managing the versions of packages
-and libraries and configurations in one place to generate a self-consistent
-"SDK" for the target... But what I'd really like is the same convenience
-for the host. Is there anything like buildroot that enables you to easily
-build a set of libraries and packages for the host? Especially one that
-could handle multiple platforms, for example including linux as well as
-mingw and osx... Does such a fabled unicorn of awsomeness exist?
+On Sat, May 16, 2015 at 03:31:30PM +0200, Thomas Petazzoni wrote:
+> Dear Peter Korsgaard,
+> 
+> On Sat, 16 May 2015 15:13:44 +0200, Peter Korsgaard wrote:
+> > >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> > 
+> >  > The newly added patch makes sure that gold linker functionality is not
+> >  > used when doing host builds, since qt5 only tests the availability of
+> >  > this feature with the target compiler.
+> > 
+> >  > Fixes:
+> > 
+> >  >   http://autobuild.buildroot.net/results/f403a76ac0abbf8488373c0dffb4487f5d98c55d/
+> > 
+> >  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > 
+> > Committed, thanks. Don't forget to send the patch upstream.
+> 
+> I already submitted the patch as part of a bug report, which URL is
+> mentioned in my Buildroot patch. However, they ask me to follow the
+> entire Qt contribution process for just a one line patch, which I'm not
+> sure I'm willing to do :-/
+> 
 
-I've been abusing buildroot a bit to have it build some of the less
-host-configuration-dependent libraries, but it's not a great fit. If I
-build for a "target" that matches the host configuration, then all of the
-dependencies must be met with buildroot-generated libraries, and it can't
-depend on even commonly-available host libraries. If I build host versions
-of packages, then I often have to hack / improve the buildroot package to
-even support building for the host. So neither way really works very
-cleanly. And I can't really imagine what it would take to hack buildroot
-into cross-building for mingw-64...
+If you don't mind I can (try to) submit your one line patch through
+the Qt contribution process?
 
-And buildroot is pretty root-file-system focused as well. I imagine that
-what I would need is for the the "build" part of buildroot to be more
-independent from the "root" part of buildroot, so that it could be more
-target-agnostic. Has this subject ever come up under the buildroot umbrella
-before?
+Regards,
+Peter
 
-<><  <><  <><
-Bryce Schober
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150519/8aee2aaa/attachment.html>
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> 
