@@ -1,35 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 May 2015 21:34:26 +0200
-Subject: [Buildroot] [git commit] ntp: install after busybox
-Message-ID: <20150519200603.BDCF381DCC@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 20 May 2015 00:35:33 +0200
+Subject: [Buildroot] [PATCH] package/freerdp: fix build with gstreamer
+	support
+Message-ID: <1432074933-4039-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dafcb53ea493045ebda61646fbaa2b468b627a06
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+FreeRDP with gstreamer support enabled needs gstreamer and gst-plugins-base
+with gstapp.
 
-Make sure that ntp installs after busybox so that it overrides the busybox
-provided ntpd applet.
+Fixes:
+  http://autobuild.buildroot.net/results/937/9373d4238bc3f027e571581bd3531018c4faed91/
+  http://autobuild.buildroot.org/results/f77/f77a2c9eea7973b54a22e12ab33ee8964adaddfd/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/ntp/ntp.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/freerdp/Config.in  | 2 ++
+ package/freerdp/freerdp.mk | 3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 554094d..36fc537 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -7,7 +7,7 @@
- NTP_VERSION_MAJOR = 4.2
- NTP_VERSION = $(NTP_VERSION_MAJOR).8p2
- NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
--NTP_DEPENDENCIES = host-pkgconf libevent
-+NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- NTP_LICENSE = ntp license
- NTP_LICENSE_FILES = COPYRIGHT
- NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
+diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+index 2e879b4..f7d6550 100644
+--- a/package/freerdp/Config.in
++++ b/package/freerdp/Config.in
+@@ -5,6 +5,8 @@ config BR2_PACKAGE_FREERDP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_GST_PLUGINS_BASE if BR2_PACKAGE_GSTREAMER
++	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP if BR2_PACKAGE_GSTREAMER
+ 	help
+ 	  FreeRDP is a free implementation of the Remote Desktop
+ 	  Protocol (RDP), released under the Apache license
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index c7c933e..0d10ef8 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -17,7 +17,8 @@ FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF -Wno-dev
+ 
+ ifeq ($(BR2_PACKAGE_GSTREAMER),y)
+ FREERDP_CONF_OPTS += -DWITH_GSTREAMER=ON
+-FREERDP_DEPENDENCIES += gstreamer
++# freerdp needs gstinterface and gstapp from gst-plugins-base
++FREERDP_DEPENDENCIES += gstreamer gst-plugins-base
+ else
+ FREERDP_CONF_OPTS += -DWITH_GSTREAMER=OFF
+ endif
+-- 
+2.4.1
