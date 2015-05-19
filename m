@@ -1,49 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 19 May 2015 20:49:59 +0200
-Subject: [Buildroot] [PATCH 6/6] qt5base: add patch to fix gold linker
- issue
-Message-ID: <trinity-3de94631-d08e-4f79-9d49-cd96a12c36c3-1432061399031@3capp-gmx-bs29>
+From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
+Date: Tue, 19 May 2015 16:00:31 -0300
+Subject: [Buildroot] [PATCH v2 5/6] nommu/flat: don't add -elf2flt for
+ some toolchains
+In-Reply-To: <20150518215841.2926908a@free-electrons.com>
+References: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1431959088-15257-6-git-send-email-guido@vanguardiasur.com.ar>
+ <20150518215841.2926908a@free-electrons.com>
+Message-ID: <20150519190030.GA27380@fox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-
-On Sat, May 16, 2015 at 03:31:30PM +0200, Thomas Petazzoni wrote:
-> Dear Peter Korsgaard,
+On Mon, May 18, 2015 at 09:58:41PM +0200, Thomas Petazzoni wrote:
+> Dear Guido Mart?nez,
 > 
-> On Sat, 16 May 2015 15:13:44 +0200, Peter Korsgaard wrote:
-> > >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> > 
-> >  > The newly added patch makes sure that gold linker functionality is not
-> >  > used when doing host builds, since qt5 only tests the availability of
-> >  > this feature with the target compiler.
-> > 
-> >  > Fixes:
-> > 
-> >  >   http://autobuild.buildroot.net/results/f403a76ac0abbf8488373c0dffb4487f5d98c55d/
-> > 
-> >  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > 
-> > Committed, thanks. Don't forget to send the patch upstream.
+> On Mon, 18 May 2015 11:24:47 -0300, Guido Mart?nez wrote:
 > 
-> I already submitted the patch as part of a bug report, which URL is
-> mentioned in my Buildroot patch. However, they ask me to follow the
-> entire Qt contribution process for just a one line patch, which I'm not
-> sure I'm willing to do :-/
+> >  ifeq ($(BR2_BINFMT_FLAT),y)
+> > +# Don't add any flags for toolchains that don't require it
+> > +ifneq ($(BR2_TOOLCHAIN_DONT_ELF2FLT),y)
 > 
-
-If you don't mind I can (try to) submit your one line patch through
-the Qt contribution process?
-
-Regards,
-Peter
-
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> An option named "DONT_<something>" really isn't nice.
 > 
+> >  TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
+> >  	-Wl$(comma)-elf2flt)
+> >  TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
+> >  	-Wl$(comma)-elf2flt)
+> >  TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-elf2flt)
+> 
+> But the Blackfin toolchain also doesn't need -elf2flt as far as I know,
+> the FLAT toolchain also directly produces FLAT binaries without
+> specifying any flags.
+Hm, that's right. In that case I don't know why -elf2flt is specified
+when there's no $(PKG)_FLAT_STACKSIZE. For this particular toolchain it
+causes the linker to explode while building U-boot, which doesn't happen
+with other toolchains.
+
+Removing "-Wl$(comma)-elf2flt" from the else-part fixes it too.
+
+I'll into it some more.
+
+-- 
+Guido Mart?nez, VanguardiaSur
+www.vanguardiasur.com.ar
