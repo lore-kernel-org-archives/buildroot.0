@@ -1,68 +1,65 @@
 From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Tue, 19 May 2015 16:21:39 +0200
-Subject: [Buildroot] [PATCH v3 0/9] configs: defconfigs for Atmel boards
-Message-ID: <1432045308-16825-1-git-send-email-alexandre.belloni@free-electrons.com>
+Date: Tue, 19 May 2015 16:21:43 +0200
+Subject: [Buildroot] [PATCH v3 4/9] configs: add defconfig for Atmel
+	sama5d3xek
+In-Reply-To: <1432045308-16825-1-git-send-email-alexandre.belloni@free-electrons.com>
+References: <1432045308-16825-1-git-send-email-alexandre.belloni@free-electrons.com>
+Message-ID: <1432045308-16825-5-git-send-email-alexandre.belloni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series updates and adds defconfigs for the recent(ish) atmel boards. They
-use Atmel's u-boot and kernel tree and are meant to be flashed on the NAND
-flash.
+This supports:
+ - sama5d31ek
+ - sama5d33ek
+ - sama5d34ek
+ - sama5d35ek
+ - sama5d36ek
 
-It also provides a flahing helper to ease the flashing of the board and
-includes documentation on how to do so.
+with or without the PDA4 or PDA7 screens.
 
-Changes in v3:
- - select 3.18 headers for the toolchain
- - rename the documentation
- - update the flasher helper to support more boards
- - update the tcl script to the latest version from Atmel (demos v4.7)
-   It has better debug messages and takes the dtb filename as a parameter
-   It also supports giving different video modes to support the DRM/KMS display driver
-
-Changes in v2:
- - Add flashing helper and instructions
- - Update the existing xplained readme
- - Use commit ids instead of branch names
- - Include ubi image generation in the defconfig
-
-Alexandre Belloni (9):
-  configs: update at91sam9g45m10ek defconfig
-  configs: add defconfig for Atmel at91sam9rlek
-  configs: add defconfig for Atmel at91sam9x5ek
-  configs: add defconfig for Atmel sama5d3xek
-  configs: add defconfig for Atmel sama5d4ek
-  configs: add defconfig for Atmel sama5d4 Xplained Ultra
-  configs: add defconfig for Atmel sama5d3 Xplained
-  atmel: add a flashing helper and documentation
-  configs: rename atmel_xplained_defconfig
-
- board/atmel/flasher.sh                             | 136 ++++++++
- board/atmel/nandflash.tcl                          | 358 +++++++++++++++++++++
- board/atmel/readme.txt                             | 107 ++++++
- board/atmel/xplained/readme.txt                    |   8 +-
- configs/at91sam9g45m10ek_defconfig                 |  25 +-
- configs/at91sam9rlek_defconfig                     |  24 ++
- configs/at91sam9x5ek_defconfig                     |  25 ++
- configs/atmel_sama5d3_xplained_defconfig           |  29 ++
- ...config => atmel_sama5d3_xplained_mmc_defconfig} |   0
- configs/atmel_sama5d3xek_defconfig                 |  29 ++
- configs/atmel_sama5d4_xplained_defconfig           |  33 ++
- configs/atmel_sama5d4ek_defconfig                  |  33 ++
- 12 files changed, 798 insertions(+), 9 deletions(-)
- create mode 100755 board/atmel/flasher.sh
- create mode 100644 board/atmel/nandflash.tcl
- create mode 100644 board/atmel/readme.txt
- create mode 100644 configs/at91sam9rlek_defconfig
- create mode 100644 configs/at91sam9x5ek_defconfig
- create mode 100644 configs/atmel_sama5d3_xplained_defconfig
- rename configs/{atmel_xplained_defconfig => atmel_sama5d3_xplained_mmc_defconfig} (100%)
+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+---
+ configs/atmel_sama5d3xek_defconfig | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
  create mode 100644 configs/atmel_sama5d3xek_defconfig
- create mode 100644 configs/atmel_sama5d4_xplained_defconfig
- create mode 100644 configs/atmel_sama5d4ek_defconfig
 
+diff --git a/configs/atmel_sama5d3xek_defconfig b/configs/atmel_sama5d3xek_defconfig
+new file mode 100644
+index 000000000000..cc34bf926582
+--- /dev/null
++++ b/configs/atmel_sama5d3xek_defconfig
+@@ -0,0 +1,29 @@
++BR2_arm=y
++BR2_cortex_a5=y
++BR2_ARM_EABIHF=y
++BR2_ARM_FPU_VFPV4D16=y
++BR2_ARM_INSTRUCTIONS_THUMB2=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.18"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
++BR2_LINUX_KERNEL_DEFCONFIG="sama5"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sama5d31ek sama5d31ek_pda4 sama5d31ek_pda7 sama5d31ek_revc sama5d31ek_revc_pda4 sama5d31ek_revc_pda7 sama5d33ek sama5d33ek_pda4 sama5d33ek_pda7 sama5d33ek_revc sama5d33ek_revc_pda4 sama5d33ek_revc_pda7 sama5d34ek sama5d34ek_pda4 sama5d34ek_pda7 sama5d34ek_revc sama5d34ek_revc_pda4 sama5d34ek_revc_pda7 sama5d35ek sama5d35ek_revc sama5d36ek sama5d36ek_pda4 sama5d36ek_pda7 sama5d36ek_revc sama5d36ek_revc_pda4 sama5d36ek_revc_pda7"
++BR2_TARGET_ROOTFS_UBIFS=y
++BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
++BR2_TARGET_ROOTFS_UBI=y
++BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
++BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3xeknf_uboot"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="sama5d3xek_nandflash"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
++BR2_TARGET_UBOOT_SPL=y
++BR2_PACKAGE_HOST_SAM_BA=y
 -- 
 2.1.4
