@@ -1,53 +1,42 @@
-From: Colleen Twitty <colleen@skycatch.com>
-Date: Tue, 19 May 2015 16:07:58 +0000
-Subject: [Buildroot] [[updated v2] 1/1] package/linux-firmware: add iwlwifi
-	6000g2a firmware
-Message-ID: <1432051679-27223-1-git-send-email-colleen@skycatch.com>
+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Date: Tue, 19 May 2015 19:57:09 +0200
+Subject: [Buildroot] [PATCH v3 0/9] configs: defconfigs for Atmel boards
+In-Reply-To: <20150519174404.5d19d2cf@free-electrons.com>
+References: <1432045308-16825-1-git-send-email-alexandre.belloni@free-electrons.com>
+ <20150519174404.5d19d2cf@free-electrons.com>
+Message-ID: <20150519175709.GA3338@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-Signed-off-by: Colleen Twitty <colleen@skycatch.com>
----
- package/linux-firmware/Config.in         |    6 ++++++
- package/linux-firmware/linux-firmware.mk |    5 +++++
- 2 files changed, 11 insertions(+)
+On 19/05/2015 at 17:44:04 +0200, Thomas Petazzoni wrote :
+> Dear Alexandre Belloni,
+> 
+> On Tue, 19 May 2015 16:21:39 +0200, Alexandre Belloni wrote:
+> 
+> > Changes in v3:
+> >  - select 3.18 headers for the toolchain
+> >  - rename the documentation
+> >  - update the flasher helper to support more boards
+> >  - update the tcl script to the latest version from Atmel (demos v4.7)
+> >    It has better debug messages and takes the dtb filename as a parameter
+> >    It also supports giving different video modes to support the DRM/KMS display driver
+> 
+> Ah, so the TCL script is available somewhere upstream? In this case,
+> why don't we create a simple Buildroot package to download it and
+> install it somewhere, instead of having it copy/pasted inside Buildroot?
+> 
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 7265990..2e4c205 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -81,6 +81,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000
- 	  Firmware files for the Intel Wifi 5000 devices supported by
- 	  the iwlwifi kernel driver.
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A
-+	bool "Intel iwlwifi 6000G2A"
-+	help
-+	  Firmware files for the Intel Wifi 6000G2A devices supported by
-+	  the iwlwifi kernel driver.
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260
- 	bool "Intel iwlwifi 7260"
- 	select BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_NEED_REV
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 9acfc53..7a31bad 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -197,6 +197,11 @@ LINUX_FIRMWARE_FILES += iwlwifi-5000-5.ucode
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A),y)
-+LINUX_FIRMWARE_FILES += iwlwifi-6000g2a-6.ucode
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260),y)
- LINUX_FIRMWARE_FILES += iwlwifi-7260-$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV).ucode
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+It is not really available per se. It is distributed alongside with the
+demos in a 160MB and more often than not is only aimed at supporting the
+specific SoC supported by the demo.
+
+
 -- 
-1.7.9.5
+Alexandre Belloni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
