@@ -1,79 +1,49 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Tue, 19 May 2015 15:59:56 +1000
-Subject: [Buildroot] [PATCH v3 2/2] powerpc-utils: optionally use librtas
-In-Reply-To: <cover.1432015191.git.sam.bobroff@au1.ibm.com>
-References: <cover.1432015191.git.sam.bobroff@au1.ibm.com>
-Message-ID: <9a73202315e0a236b78d9644905c20b79572f93d.1432015191.git.sam.bobroff@au1.ibm.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 19 May 2015 08:30:12 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-05-18
+Message-ID: <20150519063012.E7D2A100C5F@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that librtas is available, optionally use it with powerpc-utils to
-enable it's RTAS dependant functionality.  It is used by default, as
-most distros do, but made optional because it adds several new programs
-and significantly increases the size of the installed package.
+Build statistics for 2015-05-18
+===============================
 
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
----
-v3:
+        success : 325
+       failures : 11 
+       timeouts : 0  
+          TOTAL : 336
 
-Group "with" and "without" clauses.
+Classification of failures by reason
+====================================
 
-v2:
+                      qt-4.8.6 | 2 
+                       kmod-20 | 2 
+         conntrack-tools-1.4.2 | 1 
+                     gpsd-3.11 | 1 
+                sqlite-3081000 | 1 
+               wvstreams-4.6.1 | 1 
+pulseview-198f9bc74d6c955a7... | 1 
+                sysstat-11.0.4 | 1 
+               harfbuzz-0.9.40 | 1 
 
-Make librtas support in powerpc-utils optional due to size concerns.
+Detail of failures
+===================
 
- package/powerpc-utils/Config.in        |   18 ++++++++++++++++++
- package/powerpc-utils/powerpc-utils.mk |    8 +++++++-
- 2 files changed, 25 insertions(+), 1 deletion(-)
+      xtensa |          conntrack-tools-1.4.2 | NOK | http://autobuild.buildroot.net/results/ab1ae40f1862300cd7667b7bd03cc59d7455a769/
+         arm |                      gpsd-3.11 | NOK | http://autobuild.buildroot.net/results/f5261a0933f9b5449d1f4e5cab1bb02e7154e683/
+         arm |                harfbuzz-0.9.40 | NOK | http://autobuild.buildroot.net/results/057499012d6443a736f384fd1d7e283396ab1c2e/
+      xtensa |                        kmod-20 | NOK | http://autobuild.buildroot.net/results/a12744849118fd49b9c811f31919ddb12c1eff29/
+      xtensa |                        kmod-20 | NOK | http://autobuild.buildroot.net/results/5af2245025568af230d682863307236700d0d206/
+     powerpc | pulseview-198f9bc74d6c955a7... | NOK | http://autobuild.buildroot.net/results/90d8a0cad1ec56f251970b591e9cdf35e57b35ef/
+         arc |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/e781d4ce27ce17067b2e5e298e1e8ba9add41371/
+       nios2 |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/7a478f03e0b38ffdcffa4153c17eef9cc4457b8c/
+     powerpc |                 sqlite-3081000 | NOK | http://autobuild.buildroot.net/results/aed3690689b60844e3278626da3c3eb75f2a2586/
+         arm |                 sysstat-11.0.4 | NOK | http://autobuild.buildroot.net/results/bea726de24801385f335e02271671e030f857e3e/
+         arc |                wvstreams-4.6.1 | NOK | http://autobuild.buildroot.net/results/0cd5e0263b42e6845504d97688632e16206bd000/
 
-diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
-index eded41e..8b3e3d1 100644
---- a/package/powerpc-utils/Config.in
-+++ b/package/powerpc-utils/Config.in
-@@ -6,3 +6,21 @@ config BR2_PACKAGE_POWERPC_UTILS
- 	  System utilities for PowerPC machines.
- 
- 	  http://sourceforge.net/projects/powerpc-utils/
-+
-+if BR2_PACKAGE_POWERPC_UTILS
-+
-+config BR2_PACKAGE_POWERPC_UTILS_RTAS
-+	bool "RTAS support"
-+	select BR2_PACKAGE_LIBRTAS
-+	default y
-+	help
-+	  Enable support for functions that require RTAS.
-+
-+	  This adds a dependency on librtas and provides the following
-+	  additional features at the cost of increasing the installed package
-+	  size from about 0.5MB to about 2MB:
-+	  ppc64_cpu --run-mode, uesensor, set_poweron_time, drmgr, lsslot,
-+	  activate_firmware, rtas_ibm_get_vpd, serv_config,
-+	  rtas_event_decode, sys_ident.
-+
-+endif
-diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
-index 3b30458..ae4d662 100644
---- a/package/powerpc-utils/powerpc-utils.mk
-+++ b/package/powerpc-utils/powerpc-utils.mk
-@@ -10,8 +10,14 @@ POWERPC_UTILS_DEPENDENCIES = zlib
- POWERPC_UTILS_LICENSE = Common Public License Version 1.0
- POWERPC_UTILS_LICENSE_FILES = COPYRIGHT
- 
--POWERPC_UTILS_CONF_OPTS = --without-librtas
- POWERPC_UTILS_CONF_ENV = \
- 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
- 
-+ifeq ($(BR2_PACKAGE_POWERPC_UTILS_RTAS),y)
-+POWERPC_UTILS_DEPENDENCIES += librtas
-+POWERPC_UTILS_CONF_OPTS = --with-librtas
-+else
-+POWERPC_UTILS_CONF_OPTS = --without-librtas
-+endif
-+
- $(eval $(autotools-package))
+
 -- 
-1.7.10.4
+http://autobuild.buildroot.net
