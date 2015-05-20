@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 May 2015 23:30:26 +0200
-Subject: [Buildroot] [git commit] package/usbredir: add hash file
-Message-ID: <20150520213403.BF9A081DB7@busybox.osuosl.org>
+Date: Wed, 20 May 2015 23:46:48 +0200
+Subject: [Buildroot] [PATCH 1/7] package/wavpack: add hash file
+In-Reply-To: <1432095686-18628-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1432095686-18628-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20150520234648.41b7801c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c9ccbeb18ba07b3bb3e2a859750771e12a581d85
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Fabio Porcedda,
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/usbredir/usbredir.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Wed, 20 May 2015 06:21:20 +0200, Fabio Porcedda wrote:
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> ---
+>  package/wavpack/wavpack.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/wavpack/wavpack.hash
 
-diff --git a/package/usbredir/usbredir.hash b/package/usbredir/usbredir.hash
-new file mode 100644
-index 0000000..8328bb5
---- /dev/null
-+++ b/package/usbredir/usbredir.hash
-@@ -0,0 +1,2 @@
-+# locally computed hash
-+sha256 028184960044ea4124030000b3c55a35c3238835116e3a0fbcaff449df2c8edf usbredir-0.6.tar.bz2
+All applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
