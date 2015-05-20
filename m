@@ -1,25 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 19 May 2015 21:00:36 -0700
-Subject: [Buildroot] [PATCH 5/6] php: bump version to 5.6.9
-In-Reply-To: <87oalg4an8.fsf@dell.be.48ers.dk>
-References: <1431978724-25081-1-git-send-email-bos@je-eigen-domein.nl>
- <1431978724-25081-5-git-send-email-bos@je-eigen-domein.nl>
- <87oalg4an8.fsf@dell.be.48ers.dk>
-Message-ID: <555C06E4.9070409@zacarias.com.ar>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 20 May 2015 06:21:20 +0200
+Subject: [Buildroot] [PATCH 1/7] package/wavpack: add hash file
+Message-ID: <1432095686-18628-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ package/wavpack/wavpack.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/wavpack/wavpack.hash
 
-
-On 19/05/15 12:42, Peter Korsgaard wrote:
-
-> Anything critical in this version bump? E.G. should we include this for
-> the 2015.05 release?
-
-https://bugs.php.net/bug.php?id=69418
-There's a CVE regression in there, so from me for 2015.05:
-
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
+new file mode 100644
+index 0000000..18dcfbc
+--- /dev/null
++++ b/package/wavpack/wavpack.hash
+@@ -0,0 +1,2 @@
++# locally computed hash
++sha256 2cade379b0aba99fbc4e442ccc6dac6c609f6212e46516a083e24c8c364430a4 wavpack-4.70.0.tar.bz2
+-- 
+2.4.1
