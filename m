@@ -1,33 +1,31 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Wed, 20 May 2015 13:13:27 +0200
-Subject: [Buildroot] [PATCH] Handle defconfig as .config in .gitignore
-	and distclean.
-In-Reply-To: <530190200.250863.1432112666116.JavaMail.root@openwide.fr>
-References: <555c49ac.0a64b40a.3499.ffffb3f0@mx.google.com>
- <530190200.250863.1432112666116.JavaMail.root@openwide.fr>
-Message-ID: <CABbD_XAgJWoQ5R6-01Enp37CP18i6fNgj6oCRB7uxvrkY4TmRA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 20 May 2015 13:15:28 +0200
+Subject: [Buildroot] [PATCH 5/6] php: bump version to 5.6.9
+In-Reply-To: <555C06E4.9070409@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Tue, 19 May 2015 21:00:36 -0700")
+References: <1431978724-25081-1-git-send-email-bos@je-eigen-domein.nl>
+ <1431978724-25081-5-git-send-email-bos@je-eigen-domein.nl>
+ <87oalg4an8.fsf@dell.be.48ers.dk> <555C06E4.9070409@zacarias.com.ar>
+Message-ID: <87fv6r4i0f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jeremy,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Thanks for reviewing!
+ > On 19/05/15 12:42, Peter Korsgaard wrote:
 
-people are told to work with a clone of buildroot and adding defconfig
->  to gitignore means that ther is a high chance of not adding it to git
-> and loosing it...
->
+ >> Anything critical in this version bump? E.G. should we include this for
+ >> the 2015.05 release?
 
-You are right in this context, but .config is also in .gitignore, which
-also shouldn't be there if a custom repo is used.
-I think .gitignore should be tuned to the git repo currently used -
-buildroot's own repo in the vanilla BR case.
+ > https://bugs.php.net/bug.php?id=69418
+ > There's a CVE regression in there, so from me for 2015.05:
 
-Best regards,
-Karoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150520/a35097b0/attachment.html>
+ > Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Ok, committed - Thanks.
+
+-- 
+Peter Korsgaard 
