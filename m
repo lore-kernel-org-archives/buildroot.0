@@ -1,37 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 May 2015 13:13:35 +0200
-Subject: [Buildroot] [git commit] php: add PHP_VERSION_MAJOR variable
-Message-ID: <20150520132935.D181681D67@busybox.osuosl.org>
+Date: Wed, 20 May 2015 13:13:50 +0200
+Subject: [Buildroot] [git commit] php: bump version to 5.6.9
+Message-ID: <20150520132935.D7FC5800B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=24d340fd46c082f71d04db186fdb703b39b57f22
+commit: http://git.buildroot.net/buildroot/commit/?id=50a34eeb1bf5ff15443bec0f3f11fe90c0e97b70
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add PHP_VERSION_MAJOR variable to php.mk for use by other packages.
-E.g. to install the Ioncube loader binary, it is necessary to
-know the PHP major version.
-
 Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/php/php.hash |    2 +-
+ package/php/php.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 210c9f0..fe938f5 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-md5	526a5a7f593de632cd9e8546335de8b7	php-5.6.8.tar.xz
++sha256	1fac497b596f5e4e87d87a7ca90f8725e39a8ca3f9d7adb500fa83c4bb70a73f	php-5.6.9.tar.xz
 diff --git a/package/php/php.mk b/package/php/php.mk
-index 3e4601e..abbdc24 100644
+index abbdc24..6492747 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
-@@ -4,7 +4,8 @@
- #
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PHP_VERSION = 5.6.8
-+PHP_VERSION_MAJOR = 5.6
-+PHP_VERSION = $(PHP_VERSION_MAJOR).8
+ PHP_VERSION_MAJOR = 5.6
+-PHP_VERSION = $(PHP_VERSION_MAJOR).8
++PHP_VERSION = $(PHP_VERSION_MAJOR).9
  PHP_SITE = http://www.php.net/distributions
  PHP_SOURCE = php-$(PHP_VERSION).tar.xz
  PHP_INSTALL_STAGING = YES
