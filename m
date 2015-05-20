@@ -1,57 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 May 2015 08:30:15 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-05-19
-Message-ID: <20150520063015.F3A9A10113A@stock.ovh.net>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Wed, 20 May 2015 09:33:18 +0200
+Subject: [Buildroot] [PATCH 1/1] index/rss: Fix base url for results
+Message-ID: <1432107198-27968-1-git-send-email-lionel.orry@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2015-05-19
-===============================
+This commit fixes the base url previously pointing at
+http://buildroot.humanoidz.org to the right base url
+http://autobuild.buildroot.org.
 
-        success : 317
-       failures : 14 
-       timeouts : 2  
-          TOTAL : 333
+Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+---
+ web/rss.php | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Classification of failures by reason
-====================================
-
-freerdp-770c67d340d5f0a7b48... | 2 
-       host-erlang-rebar-2.5.1 | 2 
-                       kmod-20 | 2 
-filemq-482797b8aa30fcc9ea13... | 2 
-          sane-backends-1.0.24 | 1 
-pulseview-198f9bc74d6c955a7... | 1 
-                iproute2-4.0.0 | 1 
-                     php-5.6.8 | 1 
-                 jack2-v1.9.10 | 1 
-               libedbus-1.7.10 | 1 
-                oprofile-1.0.0 | 1 
-                nodejs-0.10.38 | 1 
-
-Detail of failures
-===================
-
-         arm | filemq-482797b8aa30fcc9ea13... | NOK | http://autobuild.buildroot.net/results/6a14124221801fcd5dbb41b450627b1785686cc3/
-      mipsel | filemq-482797b8aa30fcc9ea13... | NOK | http://autobuild.buildroot.net/results/4e192c4e13f91d91769274d004367cf59fb395c3/
-         arm | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/f77a2c9eea7973b54a22e12ab33ee8964adaddfd/
-      mipsel | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/9373d4238bc3f027e571581bd3531018c4faed91/
-      x86_64 |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/fd1b9cc33094427c4fba1053e51fe06b57ca5b26/
-         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/3f9381a410e8411c390ccf5632a06c66b1c93524/
-         arm |                 iproute2-4.0.0 | NOK | http://autobuild.buildroot.net/results/f42bbbf5be4594a8806d0e571586ce2bf119582d/
-     powerpc |                  jack2-v1.9.10 | NOK | http://autobuild.buildroot.net/results/e537a500852ddb8aa0b1155ea9bc8a17636dd50d/
-      xtensa |                        kmod-20 | NOK | http://autobuild.buildroot.net/results/9d0e53e12626b069246b86f079c6a9f26b0f3eac/
-      xtensa |                        kmod-20 | NOK | http://autobuild.buildroot.net/results/e7490ed91237cc726ea0b0f8a4c227a8a56ca11d/
-         arc |                libedbus-1.7.10 | NOK | http://autobuild.buildroot.net/results/4a0b4db5fdad581e1ec3e8133bfdb1c485105a65/
-         arm |                 nodejs-0.10.38 | NOK | http://autobuild.buildroot.net/results/824bbeeeee5e04039bf9d7645a44f3f2aeca7628/
-         arm |                 oprofile-1.0.0 | NOK | http://autobuild.buildroot.net/results/87d0d4f1ab5cd358df94cebcd2c33188088a85a9/
-        bfin |                      php-5.6.8 | NOK | http://autobuild.buildroot.net/results/e6993d66aeebbe994063a60871412b2235ce5455/
-     powerpc | pulseview-198f9bc74d6c955a7... | NOK | http://autobuild.buildroot.net/results/db7314d0ce444dfb48fe75ed61685c9fa5ea7bc9/
-       nios2 |           sane-backends-1.0.24 | NOK | http://autobuild.buildroot.net/results/b2a1a4ab3c83b47e73096a1e47e531dd94fe5dbd/
-
-
+diff --git a/web/rss.php b/web/rss.php
+index fee8cd7..8b02a07 100644
+--- a/web/rss.php
++++ b/web/rss.php
+@@ -26,7 +26,7 @@ $results = bab_get_results(0, 50);
+ echo " <items>\n";
+ echo "  <rdf:Seq>\n";
+ while ($current = mysql_fetch_object($results))
+-  echo "<rdf:li rdf:resource=\"http://buildroot.humanoidz.org/results/" .
++  echo "<rdf:li rdf:resource=\"http://autobuild.buildroot.org/results/" .
+     $current->identifier . "\"/>\n";
+ echo "  </rdf:Seq>\n";
+ echo " </items>\n";
+@@ -35,7 +35,7 @@ echo "</channel>\n";
+ mysql_data_seek($results, 0);
+ 
+ while ($current = mysql_fetch_object($results)) {
+-  echo " <item rdf:about=\"http://buildroot.humanoidz.org/results/" .
++  echo " <item rdf:about=\"http://autobuild.buildroot.org/results/" .
+     $current->identifier . "\">\n";
+ 
+   if ($current->status == 0)
+@@ -46,7 +46,7 @@ while ($current = mysql_fetch_object($results)) {
+     $status = "timed out";
+ 
+     echo "  <title>Build " . $status . " at " . $current->builddate . "</title>\n";
+-    echo "  <link>http://buildroot.humanoidz.org/results/" .
++    echo "  <link>http://autobuild.buildroot.org/results/" .
+       $current->identifier . "</link>\n";
+     echo "  <description>\n";
+     if ($current->status == 0) {
 -- 
-http://autobuild.buildroot.net
+2.1.0
