@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 May 2015 23:30:29 +0200
-Subject: [Buildroot] [git commit] package/unionfs: add hash file
-Message-ID: <20150520213403.C908181DB7@busybox.osuosl.org>
+Date: Wed, 20 May 2015 23:30:26 +0200
+Subject: [Buildroot] [git commit] package/usbredir: add hash file
+Message-ID: <20150520213403.BF9A081DB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a280078412e6a41925822444710310b8fc8c7a8
+commit: http://git.buildroot.net/buildroot/commit/?id=c9ccbeb18ba07b3bb3e2a859750771e12a581d85
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/unionfs/unionfs.hash |    2 ++
+ package/usbredir/usbredir.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/unionfs/unionfs.hash b/package/unionfs/unionfs.hash
+diff --git a/package/usbredir/usbredir.hash b/package/usbredir/usbredir.hash
 new file mode 100644
-index 0000000..2cadf0f
+index 0000000..8328bb5
 --- /dev/null
-+++ b/package/unionfs/unionfs.hash
++++ b/package/usbredir/usbredir.hash
 @@ -0,0 +1,2 @@
 +# locally computed hash
-+sha256 8d5c9dcb51ecb9a9b03890e16d17e37d602b0c1f23ed6a9ddec2b0f719c9f662 unionfs-fuse-0.26.tar.xz
++sha256 028184960044ea4124030000b3c55a35c3238835116e3a0fbcaff449df2c8edf usbredir-0.6.tar.bz2
