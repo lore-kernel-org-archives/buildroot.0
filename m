@@ -1,88 +1,167 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 20 May 2015 12:12:22 +0200
-Subject: [Buildroot] [PATCH 11/13] board/boundarydevices: update
-	6x_bootscript
+Date: Wed, 20 May 2015 12:12:23 +0200
+Subject: [Buildroot] [PATCH 12/13] freescale_imx6*_defconfig: bump version
+	to 3.10.53-1.1.0 GA
 In-Reply-To: <1432116744-25760-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1432116744-25760-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1432116744-25760-12-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1432116744-25760-13-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="hz-gb-2312"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-VGhpcyBzY3JpcHQgaXMgZXhlY3V0ZWQgYnkgdS1ib290IGluIG9yZGVyIHRvIGRldGVjdCB0aGUg
-aGFyZHdhcmUKY29uZmlndXJhdGlvbiAoYm9hcmQsIGRpc3BsYXlzIGV0Yy4uLikgYW5kIGNvbmZp
-Z3VyZSB0aGUgYm9vdGFyZ3MgYW5kCmRldmljZSB0cmVlIGFjY29yZGluZ2x5LgoKVGhpcyB1cGRh
-dGUgaXMgbmVjZXNzYXJ5IGR1ZSB0byB0aGUga2VybmVsIGJ1bXAgdG8gdmVyc2lvbiAzLjEwLjUz
-LgoKU2lnbmVkLW9mZi1ieTogR2FyeSBCaXNzb24gPGdhcnkuYmlzc29uQGJvdW5kYXJ5ZGV2aWNl
-cy5jb20+Ci0tLQogYm9hcmQvYm91bmRhcnlkZXZpY2VzL25pdHJvZ2VuNngvNnhfYm9vdHNjcmlw
-dCB8IEJpbiAzMjA3IC0+IDQ2ODIgYnl0ZXMKIDEgZmlsZSBjaGFuZ2VkLCAwIGluc2VydGlvbnMo
-KyksIDAgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvYm9hcmQvYm91bmRhcnlkZXZpY2VzL25p
-dHJvZ2VuNngvNnhfYm9vdHNjcmlwdCBiL2JvYXJkL2JvdW5kYXJ5ZGV2aWNlcy9uaXRyb2dlbjZ4
-LzZ4X2Jvb3RzY3JpcHQKaW5kZXggMDU0NDJhNmIwZWVmZmFmYWJkZjg4NTdmYzU3ZmVkNzNiNWI2
-Y2JhYy4uNWI1MWUzNTQ0YjZiZjI3NTcwM2VkYjgzMTlkMzI3ZWY3MWIzNjdhZSAxMDA2NDQKR0lU
-IGJpbmFyeSBwYXRjaApsaXRlcmFsIDQ2ODIKemNtYlZRLUVQfTk2Yj1lPmZESCBhdCAtZGJoaCUp
-aiZKSWJ8bEFmKHEkVWZIZUZqRlU1QlJZMkpBd2hDRTZ5VUE2S0ZpCnpXcmcyaFBxQjl5dXFXQWI+
-Pk4gYXQgUUNDQk5LPkxRaklwOHhOQkpvTGw2VSUmdEIlWGswJEBfWUIrb3Q9QiNvJEM0Zgp6X15V
-dGYtdVlyIGF0IG5xP0EtRmMoV3t7PFpPVz8rel4jVD1NaUJYZ2thMjF3NEclP1RRKW5LRio0RG9V
-c1ZzQjYrI3cKellrQ3BJKzRAQCNKb25KMDJVZ0cxXlB3eXk5RCFXJHY8dnU8SGp5bHxUKjUld3Qt
-WUN1Y19JR2ItSS03cGd5ZS1CCno3VH1aKV8mJEYwQX57VzIhWDJablEhVig4TlhtKEcpYXteU015
-I0JpekJ6ZVFOcnVhbm04ISthYkVSPHwjUkhWKQp6YVpDUkE8ZClJfT97PkIqfDNKRGlzRnJ0Pz5T
-IGF0IE9Fc050SVc/aVh5RHFjYWxxayg+JEJgckcgYXQgY0htLTtHdWNPVWAKem04ODMqRXQhbCZ6
-T0tfJUUlPnxpdmE3X1o+ZHFuPXVxZXZHRXhuTntvJV9FPD8kdHVwbHFwZWQ2OENeb1Q8YDk3Cno4
-YTVZVnpDZkZePmduPkJhPiZDKTJGYHRhO0NZXkJJU3xmN0khQTw9bjJhR1JJeG1JUE5xN0sqc31I
-PDllKkZwfQp6Z21FWkVtVWhKYCNCYi18ITRidHNVemQzezw+PCUwVFJYME8oQXI/WiZiZH5UV1R9
-dUB6S0ohUmFUZHFmTVVaQWAKeiRYVHQoZ2lEXlEySXwjc05mYCE8Qz10VWZqVn1XZkA7d1p2M1pL
-XkMrNENvbVdEemV3PkU7bitzZGp8PU0rTDdrCnpifUoqVUhHO2tsdUM+dHp3dShkczNBK1NMNTFZ
-Kn1nRkdVdWgpUHs1cyZBZUVNRzt7NEZKcEZUPlIwNzEle0RWZgp6e2teP1hDLTA5Pm8wWVFOT2VB
-biRrd0FQTjYjKV48KHpaPmJTYypgN2hHIGF0IGxOMnAyMyhjP19naGQ5OXR6JmUkZE0Keit8anQ0
-eEd1KGBTTDMtaUkmQDFVdTZse1kzb0lIMWpHR1gqNUp5d01EMXt0UVMtIGF0IC1qaHkxRWkwM3d3
-PHBSdGUhCnpPSGxeMU0xdTQ3I25hSylZM3pAdHlBO2N5XjcwMjRXPH1oT219RytzNXk9STdIeVZI
-NlBJS0ZPP0kpPkc4Uj5SQQp6SG5BI2Y3YW1QQkRZSnh0Xk9LTnlIc3xSaWMrSlhoPlA5NFYyYyFj
-VHNfS29BQ2FYcWt4TVBkeE0hRTtPSC01fUgKekZHM2JgczRfdDVIbFZFYVEgYXQgUyo0RHZWbypZ
-KiUyPSl1O252cj9iKHVkeHpHdzI3eD19JD8/O3t1Zk0lYFYkUDJ4CnpMb18obVFQZV5JTFVjUkxk
-RXJ5KGA+T09FZ05GXjI3e3tBSjIlKX0kUCVZRjFrKXJPY0lXVVZnNW0tdT8kXkZ1dQp6MWhOPWY9
-WCYpaz1DbD17MUF+OykkJXZeSikwYDIlKnstTXkgYXQgSlR4alFOTzdOWlBEM3RPfShfQUFoVDd0
-Zkd8ckQKelNhSGwxRko3MHhaR0Mye2RGODBERj1OWVI8UXNqYW5kbDFXSiROTHU8dT01KHZTLUBj
-eihjaUJwaDAzMHJOTkZOCnomY3U5YGJKYk5JJTx4b3RTLX0jdDJxa09fITJ9fn0xPjx+OEdJbStm
-TitZT1gxVn1uXlJSQlNkRCR3JH1oMEQpJQp6LUxUJmsqRyoyV2QmdXE8KXBxJW9VUnhFUD9RK0c9
-SCo+al9yUTNMfFc7aiE9YzIkbngwZj4yO0FxWTUpQzBMKm8Kej1WQmItM09idTZMQmRNcFdUNkh0
-JWZwUnsxV3VrRUhfbz9lNVlrdT1CT0ktLU9lQUI9WkpXRGtSJWtOdTA3MUQqCnpCWTFjRTNgZS19
-KjR9SSgzRTZ7eEFvaD8mNyZLXzAhNjIyKkVkK3V4V00kWnBeOVBmSShmRlcwSUdCdzRCWWJgUQp6
-KmdNJGs/LTVIcjl2JHhXMlp4aldKPWImbGxsfWQgYXQgTnpFO3tHcVVOZSVEQz40IyZJPXs+Skdr
-WC1rIVkwdTVoPWQKempSdXlEJTt7TX5xYWxkSCN0N2RtaUd+WUp1Qnp+UUtCQSo+KDxpRkB3Tj95
-MVkrVntRcy1tfmB3YE1jKyZkZXArCnokWSNEQmQ7QjJINjxOJUVES0J3Ml80PU4tazV6e0FndlFV
-JUFHX3tyVnRkKiVqYWhvO3lPODV0ZCU9V3NTfik2fQp6Jkx6VzM5JGlOMlZpMXlPKSVRJWlNRSYz
-dElRQWVqZk1hZnhIclArTk9TYik4OU9pZTZofTlOUlJGNiRgK29UNjsKenI+KDR0PjIgYXQgUH1w
-Wil0O0hqVEk/WTthWUpSVHR5TjlvVEg4Jmx9bEZsNWlUSWpoM3ctalRUakleVG1BTExoYXNtCnp3
-SDE/WE1MdTJpKiktPENUK0c/fWBlSXBWO3BKaTI2dFZ+fkgrRFBZVSZJTHVaPSY9ZjR2fihCeFpD
-ZTNBJW0pYAp6SV9KdyghanFkUW9pbllLI3Vffkh2c0gxNUtURyZNdD5KbkwjUjZ9Q2N5dzRCYmRE
-QEB5Yk9UOFpFc0RiNjJsKXcKd3RlNnRQNj1ValZ6cVEhUUAjPEI9PURnSyZpVCRCdjBRTjQ5Q0R2
-VGh6R3Q4RG9iRkE2KUh2UCQwRT9mVzxOeUV3CgpsaXRlcmFsIDMyMDcKemNtZDU8JjJITzk1SDxw
-JmZRVEc+PjF8Mzc9JUpFS0dPe1lmQVd8b0IreUw8PDBnflE/QzNoKDtPbWJ5JUJ+dndZCno9dTcw
-I0MrZXhVSzFrbzd2cjheWEZeWFpnaGp1Ul9Ja1dUbyY1eW8me0xQMm98TUVZKnxMeGE1a0IqKlA5
-TSRMUgp6TjhUVGdBQU5OYzNMJkEwYT13eT0pY2J3JVR6JWolSUphIGF0IEpPOVl8I01DRXFIY0l0
-cl9TRyM4KGM8IyhxMmlFNz0KelctTG55cnkhUnN2ajdqdkhvKClCJFImKHElaigyRFZGbXclU3U4
-MS08fTg/MCUqclp+RkFCVSMhaTNGbDIkJUN6CnpQIUA8ZHdxa0JzSERrc344SG8oc1FfSkZoMWU5
-JlNnSHNGNVJqO2REZ2JkdkIjNUx2JmBXbD1AKk0/SWpnMHpnewp6KDdDTXpAMUNLPVVgYk94XiEl
-QXl7QH1acEtUaDJ0a0Fycz9GWl92UjxpJW1pUW4yKzs7TGs0WSh+NEJDYXhnfFoKej1IWXdyRHdo
-Vz1TXy1nN2BhbVkmciZwSjZBUWMmeEIxYUwqUXskSDNjZ21nb0UyazB+NCZUMGRHNVkhOXRhZktR
-CnpvbXZCb29NZVJyK3FHZkR1RTd7eHIqbS03VmI5ZUw+b29RXzVIJV9eeUNMI2UxOVY2V2N3a3N3
-PVpxQipOZjtwQgp6UnRlZGYqekJrST44eSF9MClYO2tUITM5RkgkUzRFSFV0NV9JeENXfiNPezA0
-ME8zQjZQfD8kZkstZ2N0WWF5WHkKeklLWUJwRVghRkRENHJxbVNjQ29HSlkxUlVQcyVBT3lGKFlV
-NDNWVkBeTTlPM2dPZFl9I2AyX2VyKm0xMStjLUpSCnpxbFJGY0o0OWl8Uk1JZzBKant2WUJEMCRg
-LSVDczlYMyFPKjw1Wj1rVXgkXjZBakxYYjB5WT8jaXpIITlOJCRnTAp6QCYodmtaeCY9OWE7QERw
-anN5RnQgYXQgMFJ7IzQgYXQgM1MkYiZuYl40ZGN0VlhKIGF0IDAyQUcrMTUqaTEhcnlYTChCOU1Q
-ZHUKejM7JjsxSihmKjVuWXEyMXpnZ25jc0MoMztMV2sqNTcreHh4bVY1d3RoZyY/KDZkVzBNXzlk
-aUtrK0VqKDlGWG5rCnpLNCU2fiEoZ3xgS3BZaCFWUyR1ZW9IRXxmXkc8eDZuNDZSJmlITCM7N1By
-RWg7dDNPeVQ/SD1XSTApNzd2dkNmegp6OWooK2RSfE14TkhuZyVxbH5Tc3syM3xFZU9lLSZsUjZx
-cFY0RFBtb2BzMSk7dUYgYXQgU0c8TlB9PUN9fWp9KXBsSH4Kejtva0lfYnJCdmBxUFYpfUFMJXAj
-YlhrfWVeTHNDZVgmUXllbUFsJD0jWW4oMVFwMStZRmU1MW9ZIGF0IFVgPUVVI3xSCnpyfDtvZ0p3
-QnE8eCglU1lwK2MrZz95ZzY1Z2EpNn0zWnlBTFVBZ3M4M0kpayZEXzZlOzFxcE1PVV5pNV5Ke1Ja
-UQp6WVBRYE5Ob29WP0t0di0kKFNAV3UtfGItcEtMcDIkYSVfeWJkJCZXQj5mTnB0PWhVX3xWd1lz
-WSBhdCBMUzszZyBhdCBvLVcKenJnQmF3JjJqKG95aD1oLW5+SnZOaXpVK0hgcVVlZDVvOWJnbGMx
-fnxRbClZOyZxTms2KGtTbnp6YiFlZXYkQCpkCnojdik2JGJHKU1zdGgmQVcxVFc5ZWFOblk9MDQ8
-cU96LT59KlZRTzdQMW5sQU1BJlBKJUhRPWlCcTB5citzdjgxWAp6USFYR1NUZm1pLSM0KEVgcWk4
-IGF0IDRtJUI0JHcobUFXPm8rTWB1cUglWlhnR0MgYXQgX25YSCswVX5YO15MN09GMnFXLW4KZ0s8
-TWQlX0VyOSE9ZWZ2MXtYeVdfMDxLdCZPQlN5RVhvWVM0NFhVWn15OHIrSAoKLS0gCjIuMS40Cgo=
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+Hi all,
+
+I've updated all the configs making sure the tag was correct on Freescale repo
+but I have no board to try it on. Let me know if you get any issue with it.
+http://git.freescale.com/git/cgit.cgi/imx/linux-2.6-imx.git/tag/?id=rel_imx_3.10.53_1.1.0_ga
+
+Regards,
+Gary
+---
+ configs/freescale_imx6dlsabreauto_defconfig | 6 +++---
+ configs/freescale_imx6dlsabresd_defconfig   | 7 +++----
+ configs/freescale_imx6qsabreauto_defconfig  | 6 +++---
+ configs/freescale_imx6qsabresd_defconfig    | 7 +++----
+ configs/freescale_imx6sololiteevk_defconfig | 5 ++---
+ 5 files changed, 14 insertions(+), 17 deletions(-)
+
+diff --git a/configs/freescale_imx6dlsabreauto_defconfig b/configs/freescale_imx6dlsabreauto_defconfig
+index f4fc48a..6a80712 100644
+--- a/configs/freescale_imx6dlsabreauto_defconfig
++++ b/configs/freescale_imx6dlsabreauto_defconfig
+@@ -7,7 +7,7 @@ BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
+ 
+ # toolchain
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.17"
++BR2_DEFAULT_KERNEL_VERSION="3.10.53"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+ 
+ # system
+@@ -17,7 +17,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -32,4 +32,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabreauto"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
+diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
+index dd17358..0aac2de 100644
+--- a/configs/freescale_imx6dlsabresd_defconfig
++++ b/configs/freescale_imx6dlsabresd_defconfig
+@@ -7,7 +7,7 @@ BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
+ 
+ # toolchain
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.17"
++BR2_DEFAULT_KERNEL_VERSION="3.10.53"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+ 
+ # system
+@@ -17,8 +17,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-# Last version of branch imx_3.10.17_1.0.1_ga
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="dac46dcf913585956a0e7a838e6f4b7465f00f57"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -33,4 +32,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabresd"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
+diff --git a/configs/freescale_imx6qsabreauto_defconfig b/configs/freescale_imx6qsabreauto_defconfig
+index 0831d24..f0d6a5e 100644
+--- a/configs/freescale_imx6qsabreauto_defconfig
++++ b/configs/freescale_imx6qsabreauto_defconfig
+@@ -7,7 +7,7 @@ BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
+ 
+ # toolchain
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.17"
++BR2_DEFAULT_KERNEL_VERSION="3.10.53"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+ 
+ # system
+@@ -17,7 +17,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -32,4 +32,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
+diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
+index 98ed7d4..a705534 100644
+--- a/configs/freescale_imx6qsabresd_defconfig
++++ b/configs/freescale_imx6qsabresd_defconfig
+@@ -7,7 +7,7 @@ BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
+ 
+ # toolchain
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.17"
++BR2_DEFAULT_KERNEL_VERSION="3.10.53"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+ 
+ # system
+@@ -17,8 +17,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-# Last version of branch imx_3.10.17_1.0.1_ga
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="dac46dcf913585956a0e7a838e6f4b7465f00f57"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -33,4 +32,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
+diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
+index 93d842b..d4cca4e 100644
+--- a/configs/freescale_imx6sololiteevk_defconfig
++++ b/configs/freescale_imx6sololiteevk_defconfig
+@@ -9,8 +9,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-# Last version of branch imx_3.10.17_1.0.1_ga
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="dac46dcf913585956a0e7a838e6f4b7465f00f57"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -25,4 +24,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6slevk"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
+-- 
+2.1.4
