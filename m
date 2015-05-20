@@ -1,31 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 May 2015 13:15:28 +0200
-Subject: [Buildroot] [PATCH 5/6] php: bump version to 5.6.9
-In-Reply-To: <555C06E4.9070409@zacarias.com.ar> (Gustavo Zacarias's message of
- "Tue, 19 May 2015 21:00:36 -0700")
+Date: Wed, 20 May 2015 13:17:47 +0200
+Subject: [Buildroot] [PATCH 4/6] php: add PHP_VERSION_MAJOR variable
+In-Reply-To: <1431978724-25081-4-git-send-email-bos@je-eigen-domein.nl>
+ (Floris Bos's message of "Mon, 18 May 2015 21:52:02 +0200")
 References: <1431978724-25081-1-git-send-email-bos@je-eigen-domein.nl>
- <1431978724-25081-5-git-send-email-bos@je-eigen-domein.nl>
- <87oalg4an8.fsf@dell.be.48ers.dk> <555C06E4.9070409@zacarias.com.ar>
-Message-ID: <87fv6r4i0f.fsf@dell.be.48ers.dk>
+ <1431978724-25081-4-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <87a8wz4hwk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Floris" == Floris Bos <bos@je-eigen-domein.nl> writes:
 
- > On 19/05/15 12:42, Peter Korsgaard wrote:
+ > Add PHP_VERSION_MAJOR variable to php.mk for use by other packages.
+ > E.g. to install the Ioncube loader binary, it is necessary to
+ > know the PHP major version.
 
- >> Anything critical in this version bump? E.G. should we include this for
- >> the 2015.05 release?
+ > Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 
- > https://bugs.php.net/bug.php?id=69418
- > There's a CVE regression in there, so from me for 2015.05:
-
- > Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Ok, committed - Thanks.
+Committed, thanks.
 
 -- 
-Peter Korsgaard 
+Bye, Peter Korsgaard
