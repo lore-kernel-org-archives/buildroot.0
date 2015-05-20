@@ -1,43 +1,52 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 20 May 2015 10:26:38 +0200
-Subject: [Buildroot] [PATCH/next 7/7] package/sqlite: bump version to
-	3.8.10.1
-In-Reply-To: <1432110398-22791-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1432110398-22791-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1432110398-22791-7-git-send-email-bernd.kuhls@t-online.de>
+From: kaszak at gmail.com <kaszak@gmail.com>
+Date: Wed, 20 May 2015 10:45:27 +0200
+Subject: [Buildroot] [PATCH] Handle defconfig as .config in .gitignore and
+	distclean.
+Message-ID: <555c49ac.0a64b40a.3499.ffffb3f0@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Karoly Kasza <kaszak@gmail.com>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+After using "make safedefconfig", a defconfig file appears which is an
+extract of the .config file. When running git, it incorrectly detects it as a
+source code change, while make distclean forgets to remove it.
+
+This patch adds /defconfig to .gitignore and to the distclean Makefile target.
+
+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 ---
- package/sqlite/sqlite.hash |    2 +-
- package/sqlite/sqlite.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .gitignore |    1 +
+ Makefile   |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index d524dbe..908d33e 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1	7e92b4f78d4648fb2a97a4dc721490cc08653a0b	sqlite-autoconf-3081000.tar.gz
-+sha1	86bfed5752783fb24c051f3efac5972ce11023f0	sqlite-autoconf-3081001.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index fff219a..41a900f 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/.gitignore b/.gitignore
+index bb02d9f..66f5ac1 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -5,6 +5,7 @@
+ /.config.old
+ /..config.tmp
+ /.config
++/defconfig
+ *.depend
+ *.o
+ /*.patch
+diff --git a/Makefile b/Makefile
+index 5c4293b..bc890dd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -814,7 +814,7 @@ endif
+ ifeq ($(O),output)
+ 	rm -rf $(O)
+ endif
+-	rm -rf $(BR2_CONFIG) $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/..config.tmp \
++	rm -rf $(BR2_CONFIG) $(CONFIG_DIR)/defconfig $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/..config.tmp \
+ 		$(CONFIG_DIR)/.auto.deps
  
--SQLITE_VERSION = 3081000
-+SQLITE_VERSION = 3081001
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2015
- SQLITE_LICENSE = Public domain
+ help:
 -- 
 1.7.10.4
