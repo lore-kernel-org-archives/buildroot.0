@@ -1,53 +1,40 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 20 May 2015 00:35:33 +0200
-Subject: [Buildroot] [PATCH] package/freerdp: fix build with gstreamer
-	support
-Message-ID: <1432074933-4039-1-git-send-email-s.martin49@gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Wed, 20 May 2015 03:03:20 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-05-15
+In-Reply-To: <CAMo8Bf+bnv4u=6bh3iots6rr0n8+i2AHHP4Y=mGbVchmWHn_eQ@mail.gmail.com>
+References: <20150516063015.D2BB91018B2@stock.ovh.net>
+ <CAMo8Bf+bnv4u=6bh3iots6rr0n8+i2AHHP4Y=mGbVchmWHn_eQ@mail.gmail.com>
+Message-ID: <CAMo8Bf+yPQJ2Krp5s3zNQ+rFMVmZH3RFTQXPFWU7N4K-oVkBKg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-FreeRDP with gstreamer support enabled needs gstreamer and gst-plugins-base
-with gstapp.
+On Sat, May 16, 2015 at 5:40 PM, Max Filippov <jcmvbkbc@gmail.com> wrote:
+> On Sat, May 16, 2015 at 9:30 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Build statistics for 2015-05-15
+>>       xtensa |                  glibmm-2.36.1 | NOK | http://autobuild.buildroot.net/results/81a3bca5cbcf789c7ce1aa221a6a4154dd7c3917/
+>
+> Apparently arch ABI compiler flags need to be passed to libstdc++ build.
+> Looking at it.
 
-Fixes:
-  http://autobuild.buildroot.net/results/937/9373d4238bc3f027e571581bd3531018c4faed91/
-  http://autobuild.buildroot.org/results/f77/f77a2c9eea7973b54a22e12ab33ee8964adaddfd/
+There's a patch in the patchwork that seemed to do the right thing:
+http://patchwork.ozlabs.org/patch/453849/
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/freerdp/Config.in  | 2 ++
- package/freerdp/freerdp.mk | 3 ++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+I've tested it and it appears that it breaks libgcc build for xtensa:
+we need to filter out -mtext-section-literals from the CFLAGS, but
+only for libgcc build. Other libraries bundled with gcc seem to build
+well with target CFLAGS.
 
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index 2e879b4..f7d6550 100644
---- a/package/freerdp/Config.in
-+++ b/package/freerdp/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_FREERDP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_GST_PLUGINS_BASE if BR2_PACKAGE_GSTREAMER
-+	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP if BR2_PACKAGE_GSTREAMER
- 	help
- 	  FreeRDP is a free implementation of the Remote Desktop
- 	  Protocol (RDP), released under the Apache license
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index c7c933e..0d10ef8 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -17,7 +17,8 @@ FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF -Wno-dev
- 
- ifeq ($(BR2_PACKAGE_GSTREAMER),y)
- FREERDP_CONF_OPTS += -DWITH_GSTREAMER=ON
--FREERDP_DEPENDENCIES += gstreamer
-+# freerdp needs gstinterface and gstapp from gst-plugins-base
-+FREERDP_DEPENDENCIES += gstreamer gst-plugins-base
- else
- FREERDP_CONF_OPTS += -DWITH_GSTREAMER=OFF
- endif
+OTOH the issue at hand can be fixed by adding --enable-cxx-flags=$(TARGET_ABI)
+to the HOST_GCC_FINAL_CONF_OPTS, but AFAIU that option only
+applies to libstdc++.
+
+Thoughts?
+
 -- 
-2.4.1
+Thanks.
+-- Max
