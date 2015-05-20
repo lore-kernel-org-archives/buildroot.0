@@ -1,91 +1,78 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Wed, 20 May 2015 11:04:26 +0200 (CEST)
-Subject: [Buildroot] [PATCH] Handle defconfig as .config in .gitignore
- and	distclean.
-In-Reply-To: <555c49ac.0a64b40a.3499.ffffb3f0@mx.google.com>
-Message-ID: <530190200.250863.1432112666116.JavaMail.root@openwide.fr>
+From: Pascal Mazon <pascal.mazon@6wind.com>
+Date: Wed, 20 May 2015 11:11:34 +0200
+Subject: [Buildroot] [PATCH 1/1] ncurses: generate libtermcap
+Message-ID: <555C4FC6.2030809@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm not sure I like that...
+Hello,
 
-people are told to work with a clone of buildroot and adding defconfig
- to gitignore means that ther is a high chance of not adding it to git
-and loosing it... 
+I haven't had a feedback to my last answer on the subject of libtermcap 
+within the ncurses package, therefore I'd like to address the issue again.
 
-(i'm perfectly fine with the distclean part)
+Indeed, I would prefer to have a solution upstream, rather than keeping 
+a local patch.
 
-Cordialement 
+Thank you,
 
-J?r?my Rosen 
-+33 (0)1 42 68 28 04
+Date: Mon, 27 Apr 2015 10:11:07 +0200
+From: Pascal Mazon <pascal.mazon@6wind.com>
+To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: buildroot at buildroot.org
+Subject: Re: [Buildroot] [PATCH 1/1] ncurses: generate libtermcap
+Message-ID: <553DEF1B.3070807@6wind.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 
-fight key loggers : write some perl using vim 
+On 04/24/2015 04:18 PM, Thomas Petazzoni wrote:
+  > Dear Pascal Mazon,
+  >
+  > On Fri, 24 Apr 2015 14:54:26 +0200, Pascal Mazon wrote:
+  >> There is no libtermcap package in buildroot, but ncurses implements
+termcap
+  >> natively. Furthermore, ncurses already provides the termcap.h header
+file.
+  >>
+  >> With this patch, we fix an issue encountered with some external
+toolchains
+  >> that include a libtermcap.a (typically the GNU libtermcap version)
+in their
+  >> sysroot folder.
+  >
+  > Which external toolchains are in this situation?
 
+I encountered this with a Cavium OCTEON toolchain.
 
-Open Wide Ingenierie
+  >
+  >> Bash, for instance, would be linking with this libtermcap while using
+  >> headers from ncurses.
+  >>
+  >> In order to be consistent, let's make sure there is only the ncurses'
+  >> termcap library. To that effect, we:
+  >> - remove any libtermcap.* in the staging dir,
+  >
+  > I think this should probably not be done by the ncurses package, but as
+  > a post-install hook of the external toolchain.
 
-23, rue Daviel
-75013 Paris - France
-www.openwide.fr
+But in that case, would it still be possible not to delete libtermcap.a
+if ncurses is not selected (to still be able to link against it)?
 
+I put this patch in the ncurses package, as the issue arises only when
+it is enabled, and it is intimately associated with ncurses selection.
+I've been thinking that as ncurses provides libtermcap and it is the
+implementation of choice, it ought to be done there.
 
+I've looked on Debian, the termcap.h and libtermcap.so are provided in
+the libncurses-dev package itself, too.
 
+  >
+  > Thomas
+  >
 
+-- Pascal Mazon www.6wind.com
 
------ Mail original -----
-> From: Karoly Kasza <kaszak@gmail.com>
-> 
-> After using "make safedefconfig", a defconfig file appears which is
-> an
-> extract of the .config file. When running git, it incorrectly detects
-> it as a
-> source code change, while make distclean forgets to remove it.
-> 
-> This patch adds /defconfig to .gitignore and to the distclean
-> Makefile target.
-> 
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-> ---
->  .gitignore |    1 +
->  Makefile   |    2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/.gitignore b/.gitignore
-> index bb02d9f..66f5ac1 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -5,6 +5,7 @@
->  /.config.old
->  /..config.tmp
->  /.config
-> +/defconfig
->  *.depend
->  *.o
->  /*.patch
-> diff --git a/Makefile b/Makefile
-> index 5c4293b..bc890dd 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -814,7 +814,7 @@ endif
->  ifeq ($(O),output)
->  	rm -rf $(O)
->  endif
-> -	rm -rf $(BR2_CONFIG) $(CONFIG_DIR)/.config.old
-> $(CONFIG_DIR)/..config.tmp \
-> +	rm -rf $(BR2_CONFIG) $(CONFIG_DIR)/defconfig
-> $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/..config.tmp \
->  		$(CONFIG_DIR)/.auto.deps
->  
->  help:
-> --
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-- 
+Pascal Mazon
+www.6wind.com
