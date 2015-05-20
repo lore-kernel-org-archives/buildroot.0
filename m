@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 May 2015 23:28:53 +0200
-Subject: [Buildroot] [PATCH] qt5base: remove never set
- QT5BASE_CONFIGURE_ENV
-In-Reply-To: <68f1652755a14911b5e98255662454f63ddf315f.1432137630.git.baruch@tkos.co.il>
-References: <68f1652755a14911b5e98255662454f63ddf315f.1432137630.git.baruch@tkos.co.il>
-Message-ID: <20150520232853.3534a4cc@free-electrons.com>
+Date: Wed, 20 May 2015 23:30:13 +0200
+Subject: [Buildroot] [git commit] package/wsapi: add hash file
+Message-ID: <20150520213403.966DC81DB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=fad2721d900004a919cc635ed0a4567f15701c3f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 20 May 2015 19:00:30 +0300, Baruch Siach wrote:
-> Since 1b54fbc925f4 (qt5base: fix postgresql plugin compile, 2015-02-19)
-> QT5BASE_CONFIGURE_ENV is never set. Remove it.
-> 
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/qt5/qt5base/qt5base.mk | 1 -
->  1 file changed, 1 deletion(-)
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wsapi/wsapi.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wsapi/wsapi.hash b/package/wsapi/wsapi.hash
+new file mode 100644
+index 0000000..3abbfc9
+--- /dev/null
++++ b/package/wsapi/wsapi.hash
+@@ -0,0 +1,2 @@
++# locally computed hash
++sha256 f7f1b0ddc68c257965c42ac7155904d8ff7c2b7256f65ef1b82fda0039137d61 wsapi-1.6.1-1.src.rock
