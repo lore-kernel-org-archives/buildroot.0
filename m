@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 20 May 2015 10:26:33 +0200
-Subject: [Buildroot] [PATCH/next 2/7] package/dovecot-pigeonhole: bump
-	version to 0.4.8
+Date: Wed, 20 May 2015 10:26:36 +0200
+Subject: [Buildroot] [PATCH/next 5/7] package/x11r7/xlib_libXrandr: bump
+	version to 1.5.0
 In-Reply-To: <1432110398-22791-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1432110398-22791-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1432110398-22791-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1432110398-22791-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +14,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash |    2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.hash |    4 ++--
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index 6353a86..ac94e41 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
+index 1f2ce3e..e4b86a0 100644
+--- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
++++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256	04a13ec11652cbff812519eacf4db7dda648ab5c4c5f63b43a437d1fb0cc8d2a	dovecot-2.2-pigeonhole-0.4.7.tar.gz
-+sha256	d73c1c5a11cdfdcb58304a1c1272cce6c8e1868e3f61d393b3b8a725f3bf665b	dovecot-2.2-pigeonhole-0.4.8.tar.gz
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index fde95e8..5e6504e 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+-# From http://lists.freedesktop.org/archives/xorg/2013-September/056011.html
+-sha256	caa7b31ac769be51a532343c65376f1d4df3f307afaed58e34fb5e82e8b825ad	libXrandr-1.4.2.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-May/002606.html
++sha256	6f864959b7fc35db11754b270d71106ef5b5cf363426aa58589cb8ac8266de58	libXrandr-1.5.0.tar.bz2
+diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+index 25c77fe..5abd8b1 100644
+--- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
++++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOVECOT_PIGEONHOLE_VERSION = 0.4.7
-+DOVECOT_PIGEONHOLE_VERSION = 0.4.8
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
- DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
+-XLIB_LIBXRANDR_VERSION = 1.4.2
++XLIB_LIBXRANDR_VERSION = 1.5.0
+ XLIB_LIBXRANDR_SOURCE = libXrandr-$(XLIB_LIBXRANDR_VERSION).tar.bz2
+ XLIB_LIBXRANDR_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXRANDR_LICENSE = MIT
 -- 
 1.7.10.4
