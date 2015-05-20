@@ -1,51 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 20 May 2015 20:23:24 +0300
-Subject: [Buildroot] [PATCH] qt5base: remove never set
-	QT5BASE_CONFIGURE_ENV
-In-Reply-To: <68f1652755a14911b5e98255662454f63ddf315f.1432137630.git.baruch@tkos.co.il>
-References: <68f1652755a14911b5e98255662454f63ddf315f.1432137630.git.baruch@tkos.co.il>
-Message-ID: <20150520172324.GG2586@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 20 May 2015 19:49:36 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150519100045.44f1b3a4@free-electrons.com>
+References: <20150519063012.E7D2A100C5F@stock.ovh.net>
+ <20150519100045.44f1b3a4@free-electrons.com>
+Message-ID: <20150520174936.GA4157@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot list,
+Thomas, All,
 
-On Wed, May 20, 2015 at 07:00:30PM +0300, Baruch Siach wrote:
-> Since 1b54fbc925f4 (qt5base: fix postgresql plugin compile, 2015-02-19)
-> QT5BASE_CONFIGURE_ENV is never set. Remove it.
+On 2015-05-19 10:00 +0200, Thomas Petazzoni spake thusly:
+> >      powerpc |                 sqlite-3081000 | NOK | http://autobuild.buildroot.net/results/aed3690689b60844e3278626da3c3eb75f2a2586/
 > 
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Parallel build issue, Yann already reproduced the issue and was
+> investigating it yesterday evening, but I'm not sure if he managed to
+> find a solution.
 
-Adding Peter's Reviewed-by tag from the other email with a proper In-Reply-To 
-header for patchwork:
+Sorry, I haven't had time to commit to this task since monday evening.
+I'll resume investigatign tonight.
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+However, it looks like sqlite does not build a lot of files (something
+like 3 or four .o, a .so I think, and an executable) so it looks like a
+quick workaround would be to disable parallel builds for sqlite, without
+incurring too big a penalty on build time.
 
-Thanks,
-baruch
+If I can't get aroudn a proper fix tonight, I'll submit that workaround.
 
-> ---
->  package/qt5/qt5base/qt5base.mk | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index 3de824f5424b..e2db5d1e029c 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -174,7 +174,6 @@ define QT5BASE_CONFIGURE_CMDS
->  		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
->  		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
->  		MAKEFLAGS="$(MAKEFLAGS) -j$(PARALLEL_JOBS)" \
-> -		$(QT5BASE_CONFIGURE_ENV) \
->  		./configure \
->  		-v \
->  		-prefix /usr \
+Regards,
+Yann E. MORIN.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
