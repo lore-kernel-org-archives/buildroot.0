@@ -1,48 +1,151 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 May 2015 23:27:20 +0200
-Subject: [Buildroot] [PATCH v2] package/libsigrok: blacklist CS powerpc
- toolchains
-In-Reply-To: <1432033797-9842-1-git-send-email-romain.naour@openwide.fr>
-References: <1432033797-9842-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150520232720.5c7362dc@free-electrons.com>
+Date: Wed, 20 May 2015 23:27:30 +0200
+Subject: [Buildroot] [git commit] gcc: fix PR 65730 (ICE on xtensa cores w/o
+	hardware multiplication)
+Message-ID: <20150520212733.E6C4F819D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=086537a5097993dd5fcf64b1b719bb13943217ac
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 19 May 2015 13:09:57 +0200, Romain Naour wrote:
-> Even though BR2_PACKAGE_LIBSIGROKCXX is selected, the C++
-> binding is disabled due to lack of C++11 support in the toolchain.
-> 
-> Configure output:
-> Enabled language bindings:
->  - C++............................. no (C++11 compiler required)
-> 
-> So disable libsigrok C++ binding and pulseview for CS powerpc toolchains.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/737/737453011ac0d13ab197258171ffa0f81bc4c368/
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
-> v2: Propagate the dependency to the Config.in's comment for pulseview
->     and libsigrok packages. (Thomas Petazzoni)
-> ---
->  package/libsigrok/Config.in | 3 +++
->  package/pulseview/Config.in | 3 +++
->  2 files changed, 6 insertions(+)
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/4.7.4/111-pr65730.patch |   37 +++++++++++++++++++++++++++++++++++
+ package/gcc/4.8.4/111-pr65730.patch |   37 +++++++++++++++++++++++++++++++++++
+ package/gcc/4.9.2/111-pr65730.patch |   37 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 111 insertions(+), 0 deletions(-)
 
-Applied, thanks. However, I've changed the conditions from !(foo ||
-bar) to !foo && !bar, which to me sounded more logical in this
-situation.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gcc/4.7.4/111-pr65730.patch b/package/gcc/4.7.4/111-pr65730.patch
+new file mode 100644
+index 0000000..f195e30
+--- /dev/null
++++ b/package/gcc/4.7.4/111-pr65730.patch
+@@ -0,0 +1,37 @@
++From b9a7775674d91c7af8043a83211ffeaa576327d7 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Fri, 10 Apr 2015 17:46:30 +0300
++Subject: [PATCH] Fix PR target/65730
++
++2015-05-20  Max Filippov  <jcmvbkbc@gmail.com>
++gcc/
++	* config/xtensa/xtensa.c (init_alignment_context): Replace MULT
++	by BITS_PER_UNIT with ASHIFT by exact_log2 (BITS_PER_UNIT).
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 223452
++Changes to ChangeLog are dropped.
++
++ gcc/config/xtensa/xtensa.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
++index eb039ba..7296e36 100644
++--- a/gcc/config/xtensa/xtensa.c
+++++ b/gcc/config/xtensa/xtensa.c
++@@ -1461,8 +1461,9 @@ init_alignment_context (struct alignment_context *ac, rtx mem)
++   if (ac->shift != NULL_RTX)
++     {
++       /* Shift is the byte count, but we need the bitcount.  */
++-      ac->shift = expand_simple_binop (SImode, MULT, ac->shift,
++-				       GEN_INT (BITS_PER_UNIT),
+++      gcc_assert (exact_log2 (BITS_PER_UNIT) >= 0);
+++      ac->shift = expand_simple_binop (SImode, ASHIFT, ac->shift,
+++				       GEN_INT (exact_log2 (BITS_PER_UNIT)),
++ 				       NULL_RTX, 1, OPTAB_DIRECT);
++       ac->modemask = expand_simple_binop (SImode, ASHIFT,
++ 					  GEN_INT (GET_MODE_MASK (mode)),
++-- 
++1.8.1.4
++
+diff --git a/package/gcc/4.8.4/111-pr65730.patch b/package/gcc/4.8.4/111-pr65730.patch
+new file mode 100644
+index 0000000..f195e30
+--- /dev/null
++++ b/package/gcc/4.8.4/111-pr65730.patch
+@@ -0,0 +1,37 @@
++From b9a7775674d91c7af8043a83211ffeaa576327d7 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Fri, 10 Apr 2015 17:46:30 +0300
++Subject: [PATCH] Fix PR target/65730
++
++2015-05-20  Max Filippov  <jcmvbkbc@gmail.com>
++gcc/
++	* config/xtensa/xtensa.c (init_alignment_context): Replace MULT
++	by BITS_PER_UNIT with ASHIFT by exact_log2 (BITS_PER_UNIT).
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 223452
++Changes to ChangeLog are dropped.
++
++ gcc/config/xtensa/xtensa.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
++index eb039ba..7296e36 100644
++--- a/gcc/config/xtensa/xtensa.c
+++++ b/gcc/config/xtensa/xtensa.c
++@@ -1461,8 +1461,9 @@ init_alignment_context (struct alignment_context *ac, rtx mem)
++   if (ac->shift != NULL_RTX)
++     {
++       /* Shift is the byte count, but we need the bitcount.  */
++-      ac->shift = expand_simple_binop (SImode, MULT, ac->shift,
++-				       GEN_INT (BITS_PER_UNIT),
+++      gcc_assert (exact_log2 (BITS_PER_UNIT) >= 0);
+++      ac->shift = expand_simple_binop (SImode, ASHIFT, ac->shift,
+++				       GEN_INT (exact_log2 (BITS_PER_UNIT)),
++ 				       NULL_RTX, 1, OPTAB_DIRECT);
++       ac->modemask = expand_simple_binop (SImode, ASHIFT,
++ 					  GEN_INT (GET_MODE_MASK (mode)),
++-- 
++1.8.1.4
++
+diff --git a/package/gcc/4.9.2/111-pr65730.patch b/package/gcc/4.9.2/111-pr65730.patch
+new file mode 100644
+index 0000000..f195e30
+--- /dev/null
++++ b/package/gcc/4.9.2/111-pr65730.patch
+@@ -0,0 +1,37 @@
++From b9a7775674d91c7af8043a83211ffeaa576327d7 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Fri, 10 Apr 2015 17:46:30 +0300
++Subject: [PATCH] Fix PR target/65730
++
++2015-05-20  Max Filippov  <jcmvbkbc@gmail.com>
++gcc/
++	* config/xtensa/xtensa.c (init_alignment_context): Replace MULT
++	by BITS_PER_UNIT with ASHIFT by exact_log2 (BITS_PER_UNIT).
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 223452
++Changes to ChangeLog are dropped.
++
++ gcc/config/xtensa/xtensa.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
++index eb039ba..7296e36 100644
++--- a/gcc/config/xtensa/xtensa.c
+++++ b/gcc/config/xtensa/xtensa.c
++@@ -1461,8 +1461,9 @@ init_alignment_context (struct alignment_context *ac, rtx mem)
++   if (ac->shift != NULL_RTX)
++     {
++       /* Shift is the byte count, but we need the bitcount.  */
++-      ac->shift = expand_simple_binop (SImode, MULT, ac->shift,
++-				       GEN_INT (BITS_PER_UNIT),
+++      gcc_assert (exact_log2 (BITS_PER_UNIT) >= 0);
+++      ac->shift = expand_simple_binop (SImode, ASHIFT, ac->shift,
+++				       GEN_INT (exact_log2 (BITS_PER_UNIT)),
++ 				       NULL_RTX, 1, OPTAB_DIRECT);
++       ac->modemask = expand_simple_binop (SImode, ASHIFT,
++ 					  GEN_INT (GET_MODE_MASK (mode)),
++-- 
++1.8.1.4
++
