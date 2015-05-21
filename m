@@ -1,26 +1,336 @@
-From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
-Date: Thu, 21 May 2015 13:51:19 -0300
-Subject: [Buildroot] [PATCH v2 1/6] arm: update processor types
-In-Reply-To: <20150519155342.GA23051@fox>
-References: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
- <1431959088-15257-2-git-send-email-guido@vanguardiasur.com.ar>
- <20150518220512.556d53ae@free-electrons.com>
- <20150519155342.GA23051@fox>
-Message-ID: <20150521165119.GA9505@fox>
+From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
+Date: Thu, 21 May 2015 13:54:08 -0300
+Subject: [Buildroot] [PATCH 1/2] arch: tidy up mmu config
+Message-ID: <1432227249-15345-1-git-send-email-guido@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 19, 2015 at 12:53:42PM -0300, Guido Mart?nez wrote:
-> Yes, I'll work on something like that.
+Instead of blacklisting which architectures support MMUs (mandatorily
+or optionally), introduce two Kconfig options that are selected by each
+architecture in each case.
 
-I'm sending two patches tidying up the MMU and BINFMT configs. After
-that I'll respin the m3 series with the changes discussed.
+This simplifies the logic in BR2_USE_MMU.
 
-Thanks for the comments!
+Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+---
+ arch/Config.in                | 26 ++++++++++++++++++++++++++
+ arch/Config.in.arm            | 17 +++++++++++++++++
+ toolchain/toolchain-common.in |  4 ++--
+ 3 files changed, 45 insertions(+), 2 deletions(-)
 
+diff --git a/arch/Config.in b/arch/Config.in
+index 06aff2c..3fb3838 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -9,6 +9,12 @@ config BR2_KERNEL_64_USERLAND_32
+ config BR2_SOFT_FLOAT
+ 	bool
+ 
++config BR2_ARCH_HAS_MMU_MANDATORY
++	bool
++
++config BR2_ARCH_HAS_MMU_OPTIONAL
++	bool
++
+ choice
+ 	prompt "Target Architecture"
+ 	default BR2_i386
+@@ -17,6 +23,7 @@ choice
+ 
+ config BR2_arcle
+ 	bool "ARC (little endian)"
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
+ 	  that can be used from deeply embedded to high performance host
+@@ -24,6 +31,7 @@ config BR2_arcle
+ 
+ config BR2_arceb
+ 	bool "ARC (big endian)"
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
+ 	  that can be used from deeply embedded to high performance host
+@@ -48,6 +56,7 @@ config BR2_armeb
+ config BR2_aarch64
+ 	bool "AArch64"
+ 	select BR2_ARCH_IS_64
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
+ 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
+@@ -63,12 +72,14 @@ config BR2_bfin
+ 
+ config BR2_i386
+ 	bool "i386"
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  Intel i386 architecture compatible microprocessor
+ 	  http://en.wikipedia.org/wiki/I386
+ 
+ config BR2_m68k
+ 	bool "m68k"
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	depends on BROKEN # ice in uclibc / inet_ntoa_r
+ 	help
+ 	  Motorola 68000 family microprocessor
+@@ -76,6 +87,7 @@ config BR2_m68k
+ 
+ config BR2_microblazeel
+ 	bool "Microblaze AXI (little endian)"
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  Soft processor core designed for Xilinx FPGAs from Xilinx. AXI bus
+ 	  based architecture (little endian)
+@@ -84,6 +96,7 @@ config BR2_microblazeel
+ 
+ config BR2_microblazebe
+ 	bool "Microblaze non-AXI (big endian)"
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  Soft processor core designed for Xilinx FPGAs from Xilinx. PLB bus
+ 	  based architecture (non-AXI, big endian)
+@@ -92,6 +105,7 @@ config BR2_microblazebe
+ 
+ config BR2_mips
+ 	bool "MIPS (big endian)"
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  MIPS is a RISC microprocessor from MIPS Technologies. Big endian.
+ 	  http://www.mips.com/
+@@ -99,6 +113,7 @@ config BR2_mips
+ 
+ config BR2_mipsel
+ 	bool "MIPS (little endian)"
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  MIPS is a RISC microprocessor from MIPS Technologies. Little endian.
+ 	  http://www.mips.com/
+@@ -107,6 +122,7 @@ config BR2_mipsel
+ config BR2_mips64
+ 	bool "MIPS64 (big endian)"
+ 	select BR2_ARCH_IS_64
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  MIPS is a RISC microprocessor from MIPS Technologies. Big endian.
+ 	  http://www.mips.com/
+@@ -115,6 +131,7 @@ config BR2_mips64
+ config BR2_mips64el
+ 	bool "MIPS64 (little endian)"
+ 	select BR2_ARCH_IS_64
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  MIPS is a RISC microprocessor from MIPS Technologies. Little endian.
+ 	  http://www.mips.com/
+@@ -122,6 +139,7 @@ config BR2_mips64el
+ 
+ config BR2_nios2
+ 	bool "Nios II"
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  Nios II is a soft core processor from Altera Corporation.
+ 	  http://www.altera.com/
+@@ -129,6 +147,7 @@ config BR2_nios2
+ 
+ config BR2_powerpc
+ 	bool "PowerPC"
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
+ 	  Big endian.
+@@ -138,6 +157,7 @@ config BR2_powerpc
+ config BR2_powerpc64
+ 	bool "PowerPC64 (big endian)"
+ 	select BR2_ARCH_IS_64
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
+ 	  Big endian.
+@@ -147,6 +167,7 @@ config BR2_powerpc64
+ config BR2_powerpc64le
+ 	bool "PowerPC64 (little endian)"
+ 	select BR2_ARCH_IS_64
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
+ 	  Little endian.
+@@ -155,6 +176,7 @@ config BR2_powerpc64le
+ 
+ config BR2_sh
+ 	bool "SuperH"
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	help
+ 	  SuperH (or SH) is a 32-bit reduced instruction set computer (RISC)
+ 	  instruction set architecture (ISA) developed by Hitachi.
+@@ -164,6 +186,7 @@ config BR2_sh
+ config BR2_sh64
+ 	bool "SuperH64"
+ 	depends on BR2_DEPRECATED_SINCE_2015_05
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  SuperH64 (or SH) is a 64-bit reduced instruction set computer (RISC)
+ 	  instruction set architecture (ISA) developed by Hitachi.
+@@ -172,6 +195,7 @@ config BR2_sh64
+ 
+ config BR2_sparc
+ 	bool "SPARC"
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  SPARC (from Scalable Processor Architecture) is a RISC instruction
+ 	  set architecture (ISA) developed by Sun Microsystems.
+@@ -181,6 +205,7 @@ config BR2_sparc
+ config BR2_x86_64
+ 	bool "x86_64"
+ 	select BR2_ARCH_IS_64
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  x86-64 is an extension of the x86 instruction set (Intel i386
+ 	  architecture compatible microprocessor).
+@@ -188,6 +213,7 @@ config BR2_x86_64
+ 
+ config BR2_xtensa
+ 	bool "Xtensa"
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	help
+ 	  Xtensa is a Tensilica processor IP architecture.
+ 	  http://en.wikipedia.org/wiki/Xtensa
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index f5d317b..a2f00d2 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -64,34 +64,40 @@ config BR2_arm920t
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV4
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_arm922t
+ 	bool "arm922t"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV4
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_arm926t
+ 	bool "arm926t"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_MAYBE_HAS_VFPV2
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV5
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_arm1136jf_s
+ 	bool "arm1136jf-s"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_VFPV2
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_arm1176jz_s
+ 	bool "arm1176jz-s"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_arm1176jzf_s
+ 	bool "arm1176jzf-s"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_VFPV2
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_a5
+ 	bool "cortex-A5"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -99,6 +105,7 @@ config BR2_cortex_a5
+ 	select BR2_ARM_CPU_MAYBE_HAS_VFPV4
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_a7
+ 	bool "cortex-A7"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -106,6 +113,7 @@ config BR2_cortex_a7
+ 	select BR2_ARM_CPU_HAS_VFPV4
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_a8
+ 	bool "cortex-A8"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -113,6 +121,7 @@ config BR2_cortex_a8
+ 	select BR2_ARM_CPU_HAS_VFPV3
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_a9
+ 	bool "cortex-A9"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -120,6 +129,7 @@ config BR2_cortex_a9
+ 	select BR2_ARM_CPU_MAYBE_HAS_VFPV3
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_a12
+ 	bool "cortex-A12"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -127,6 +137,7 @@ config BR2_cortex_a12
+ 	select BR2_ARM_CPU_HAS_VFPV4
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_a15
+ 	bool "cortex-A15"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -134,28 +145,34 @@ config BR2_cortex_a15
+ 	select BR2_ARM_CPU_HAS_VFPV4
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_fa526
+ 	bool "fa526/626"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_ARMV4
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_pj4
+ 	bool "pj4"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_VFPV3
+ 	select BR2_ARM_CPU_ARMV7A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_strongarm
+ 	bool "strongarm sa110/sa1100"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_ARMV4
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_xscale
+ 	bool "xscale"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV5
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_iwmmxt
+ 	bool "iwmmxt"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_ARMV5
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ endchoice
+ 
+ choice
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index d50c908..4f411c3 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -108,8 +108,8 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
+ 
+ config BR2_USE_MMU
+-	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_sh || BR2_xtensa
+-	default y if !BR2_bfin
++	bool "Enable MMU support" if BR2_ARCH_HAS_MMU_OPTIONAL
++	default y if BR2_ARCH_HAS_MMU_OPTIONAL || BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  If your target has a MMU, you should say Y here.  If you
+ 	  are unsure, just say Y.
 -- 
-Guido Mart?nez, VanguardiaSur
-www.vanguardiasur.com.ar
+2.1.4
