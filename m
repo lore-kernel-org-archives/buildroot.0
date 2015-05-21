@@ -1,34 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 May 2015 23:22:15 +0200
-Subject: [Buildroot] [PATCH] package/iproute2: disable iptables support
-	for static build
-In-Reply-To: <1431982453-17867-1-git-send-email-romain.naour@openwide.fr>
- (Romain Naour's message of "Mon, 18 May 2015 22:54:13 +0200")
-References: <1431982453-17867-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <87vbfl39tk.fsf@dell.be.48ers.dk>
+Date: Thu, 21 May 2015 23:22:34 +0200
+Subject: [Buildroot] [PATCH] iproute2: disable xtables on static build
+In-Reply-To: <fa972eff514e12b82ce7d6c557950f6e63b57724.1432188465.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 21 May 2015 09:07:45 +0300")
+References: <fa972eff514e12b82ce7d6c557950f6e63b57724.1432188465.git.baruch@tkos.co.il>
+Message-ID: <87r3q939t1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > If iptable support is enabled, it will try to build m_xt.so even
- > for static build only.
-
- > So, disable iptables support for static build and remove
- > TC_CONFIG_IPSET and TC_CONFIG_XT if previously added by the
- > configure script.
-
+ > iproute2 always builds m_xt.so as a shared library.
  > Fixes:
+ > http://autobuild.buildroot.net/results/f42/f42bbbf5be4594a8806d0e571586ce2bf119582d/
  > http://autobuild.buildroot.net/results/3b3/3b37871bdf5766677fc20dca22c13177091d104f/
 
-FYI, I ended up applying Baruch's patch (and then some followup patches
-of my own). Your two patches were almost identical, but for his patch I
-didn't have to drop the SED lines, and I was lazy ;)
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Thanks!
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
