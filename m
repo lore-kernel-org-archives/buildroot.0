@@ -1,41 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 May 2015 00:04:32 +0200
-Subject: [Buildroot] [git commit] neardal: properly quote output of
-	pkg-config
-Message-ID: <20150521220835.B0D427F99C@busybox.osuosl.org>
+Date: Fri, 22 May 2015 00:20:39 +0200
+Subject: [Buildroot] [git commit] rpi-userland: not available for static
+	only builds
+Message-ID: <20150521222210.A45E781E08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ae0e16afd1eb3e48c9b49de87f8b1a382a95112
+commit: http://git.buildroot.net/buildroot/commit/?id=fa4d2a66d7d7ef7bd43df492995f00f58aef3097
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 5504039c4e (neardal: fix readline/libedit detection with static
-linking) added the output of pkg-config to the LIBS shell variable without
-adding quotes around it, breaking the logic if the output would ever consist
-of more than 1 word.
-
-Now, pkg-config --libs ncurses currently only outputs '-lncurses', so
-nothing is really broken (for now atleast), but lets add the quotes before
-it does or the syntax gets copied somewhere else where it does.
+Fixes:
+http://autobuild.buildroot.net/results/e9e/e9ea569b5fe6fd875b3fa8f4eee82e3fddd95e90/
+http://autobuild.buildroot.net/results/c97/c97f7df043469bc51ebbb41ddf30f8e82d4e6bb5/
+http://autobuild.buildroot.net/results/ba8/ba82769109f205123834627bbf782bd1811ea43e/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/neardal/neardal.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/rpi-userland/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/neardal/neardal.mk b/package/neardal/neardal.mk
-index c65a5e6..ddaecbe 100644
---- a/package/neardal/neardal.mk
-+++ b/package/neardal/neardal.mk
-@@ -25,7 +25,7 @@ endif
- # forgets to take that into account, causing the detection to fail
- # when linking statically
- ifeq ($(BR2_STATIC_LIBS),y)
--NEARDAL_CONF_ENV += LIBS=$(shell $(PKG_CONFIG_HOST_BINARY) --libs ncurses)
-+NEARDAL_CONF_ENV += LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs ncurses)'
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index 6adb9e3..0e88908 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_RPI_USERLAND
+ 	depends on BR2_arm
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_HAS_LIBOPENVG
+@@ -39,6 +40,7 @@ config BR2_PACKAGE_RPI_USERLAND_START_VCFILED
+ 
  endif
  
- define NEARDAL_INSTALL_NCL
+-comment "rpi-userland needs a toolchain w/ C++, threads"
++comment "rpi-userland needs a toolchain w/ C++, threads, dynamic library"
+ 	depends on BR2_arm
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
