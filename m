@@ -1,34 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 11:34:45 +0200
-Subject: [Buildroot] [PATCH 08/13] gpu-viv-bin-mx6q: rename package to
- imx-gpu-viv
-In-Reply-To: <1432116744-25760-9-git-send-email-gary.bisson@boundarydevices.com>
-References: <1432116744-25760-1-git-send-email-gary.bisson@boundarydevices.com>
- <1432116744-25760-9-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <20150521113445.40004616@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 21 May 2015 11:49:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/snmppp: Update site url
+Message-ID: <1432201773-14371-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary Bisson,
 
-On Wed, 20 May 2015 12:12:19 +0200, Gary Bisson wrote:
-> In order to be in line with new Freescale naming convention:
-> 
-> https://github.com/Freescale/meta-fsl-arm/commit/74c86aa9
-> 
-> "Graphics recipe is renamed from gpu-viv-bin-mx6q to imx-gpu-viv"
-> 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/snmppp/snmppp.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You need to add Config.in.legacy handling when renaming a package.
-
-Thanks!
-
-Thomas
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 74acee4..147af60 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -6,7 +6,7 @@
+ 
+ SNMPPP_VERSION = 3.3.4
+ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+-SNMPPP_SITE = http://www.agentpp.com
++SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
+ SNMPPP_INSTALL_STAGING = YES
+ # no configure script in tarball
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
