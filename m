@@ -1,38 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 23:08:41 +0200
-Subject: [Buildroot] [git commit] flashrom: improve Config.in description
-Message-ID: <20150601220248.73CEB81D62@busybox.osuosl.org>
+Date: Thu, 21 May 2015 23:09:49 +0200
+Subject: [Buildroot] [git commit] flashrom: add hash file
+Message-ID: <20150601220248.7E69981D62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=317dfa83b063197e03b247b59e30ef848924a922
+commit: http://git.buildroot.net/buildroot/commit/?id=6402edf9917a81649f1e628c6ea5a2a851460e5c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Use some text from the flashrom website to provide a better Config.in
-help text about flashrom.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/flashrom/Config.in |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ package/flashrom/flashrom.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
-index 17a0416..9420cc6 100644
---- a/package/flashrom/Config.in
-+++ b/package/flashrom/Config.in
-@@ -10,7 +10,11 @@ config BR2_PACKAGE_FLASHROM
- 	depends on BR2_TOOLCHAIN_HAS_THREADS 	# libusb
- 	depends on BR2_ARCH_HAS_ATOMICS 	# libftdi
- 	help
--	  BIOS-updating utility.
-+	  flashrom is a utility for identifying, reading, writing,
-+	  verifying and erasing flash chips. It is designed to flash
-+	  BIOS/EFI/coreboot/firmware/optionROM images on mainboards,
-+	  network/graphics/storage controller cards, and various other
-+	  programmer devices.
- 
- 	  http://flashrom.org/
- 
+diff --git a/package/flashrom/flashrom.hash b/package/flashrom/flashrom.hash
+new file mode 100644
+index 0000000..a216869
+--- /dev/null
++++ b/package/flashrom/flashrom.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 13dc7c895e583111ecca370363a3527d237d178a134a94b20db7df177c05f934 flashrom-0.9.8.tar.bz2
