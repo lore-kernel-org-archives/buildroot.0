@@ -1,50 +1,92 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 May 2015 00:32:31 +0200
-Subject: [Buildroot] [git commit] newt: not available for static only builds
-Message-ID: <20150521223521.6A08981E12@busybox.osuosl.org>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Thu, 21 May 2015 19:03:00 -0400
+Subject: [Buildroot] [PATCH 1/1] package/cpupower: new package
+Message-ID: <1432249380-5920-1-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8bee6ae663f592f53d71f4dfb031281cb46dabb8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-http://autobuild.buildroot.net/results/a40/a400e1fe7291d3bd3171ad04ce5fd7ba235d39af/
-http://autobuild.buildroot.net/results/ec3/ec38d0f1d1faa2a87321bab10f87772eb819adc9/
-http://autobuild.buildroot.net/results/7cb/7cbc8cd265d527c7b56d57e511903b23a4a84489/
-
-newt uses autoconf but not automake, and unconditionally tries to build a
-.so file - So it doesn't work in static only builds.
-
-The only reverse dependency is network-manager, which already depends on
-glibc.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 ---
- package/newt/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/Config.in            |  1 +
+ package/cpupower/Config.in   | 10 ++++++++++
+ package/cpupower/cpupower.mk | 37 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+)
+ create mode 100644 package/cpupower/Config.in
+ create mode 100644 package/cpupower/cpupower.mk
 
-diff --git a/package/newt/Config.in b/package/newt/Config.in
-index 1b3068a..a221615 100644
---- a/package/newt/Config.in
-+++ b/package/newt/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_NEWT
- 	bool "newt"
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU # slang
-+	depends on !BR2_STATIC_LIBS # unconditionally creates .so
- 	select BR2_PACKAGE_SLANG
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-@@ -10,6 +11,6 @@ config BR2_PACKAGE_NEWT
- 
- 	  http://www.redhat.com/
- 
--comment "newt needs a toolchain w/ wchar"
-+comment "newt needs a toolchain w/ wchar, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
+diff --git a/package/Config.in b/package/Config.in
+index e0c2e2a..0bd6eb6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1378,6 +1378,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/coreutils/Config.in"
+ endif
+ 	source "package/cpuload/Config.in"
++	source "package/cpupower/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/dcron/Config.in"
+ 	source "package/debianutils/Config.in"
+diff --git a/package/cpupower/Config.in b/package/cpupower/Config.in
+new file mode 100644
+index 0000000..745dd2b
+--- /dev/null
++++ b/package/cpupower/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_CPUPOWER
++	bool "cpupower"
++	depends on BR2_LINUX_KERNEL
++	select BR2_PACKAGE_PCIUTILS
++	help
++	  cpupower is a collection of tools to examine and tune power 
++	  saving related features of your processor.
++
++comment "cpupower needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/cpupower/cpupower.mk b/package/cpupower/cpupower.mk
+new file mode 100644
+index 0000000..cb1f938
+--- /dev/null
++++ b/package/cpupower/cpupower.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# cpupower
++#
++################################################################################
++
++# Source taken from the Linux kernel tree
++CPUPOWER_SOURCE =
++CPUPOWER_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
++
++CPUPOWER_DEPENDENCIES = linux pciutils
++
++define CPUPOWER_BUILD_CMDS
++	$(Q)if test ! -f $(LINUX_DIR)/tools/power/cpupower/Makefile ; then \
++		echo "Your kernel version is too old and does not have the cpupower tool." ; \
++		echo "At least kernel 3.4 must be used." ; \
++		exit 1 ; \
++	fi
++	
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
++		CROSS=$(TARGET_CROSS) \
++		CPUFREQ_BENCH=false \
++		DEBUG=false \
++		cpupower
++endef
++
++define CPUPOWER_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(LINUX_DIR)/tools/power/cpupower/cpupower \
++		$(TARGET_DIR)/usr/bin/cpupower
++
++	$(INSTALL) -D -m 0755 $(LINUX_DIR)/tools/power/cpupower/libcpupower.so.0.0.0 \
++		$(TARGET_DIR)/lib/libcpupower.so.0.0.0
++	ln -snf libcpupower.so.0.0.0 $(TARGET_DIR)/lib/libcpupower.so
++	ln -snf libcpupower.so.0.0.0 $(TARGET_DIR)/lib/libcpupower.so.0
++endef
++
++$(eval $(generic-package))
+-- 
+1.9.5.msysgit.1
