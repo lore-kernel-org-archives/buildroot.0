@@ -1,33 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 22:56:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qemu: Compare host/target Linux
- version only during build phase
-In-Reply-To: <1432198043-20364-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1432198043-20364-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150521225650.12e8f177@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 21 May 2015 20:58:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 8126] exim lacks plaintext and cram-md5 auth
+In-Reply-To: <bug-8126-163@https.bugs.busybox.net/>
+References: <bug-8126-163@https.bugs.busybox.net/>
+Message-ID: <20150521205822.8308C81E1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+https://bugs.busybox.net/show_bug.cgi?id=8126
 
-On Thu, 21 May 2015 10:47:23 +0200, Bernd Kuhls wrote:
-> This patch fixes an error during source-check.
-> 
-> Thanks to Thomas for the hint:
-> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/116183
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/qemu/qemu.mk |    2 ++
->  1 file changed, 2 insertions(+)
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Applied, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Thomas
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> 2015-05-21 20:58:22 UTC ---
+Patch committed as 924578ae03cfbb49264f1d0cc31a214026a67b84, thanks!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
