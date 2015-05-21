@@ -1,27 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 19:11:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libuv: bump to version 1.5.0
-In-Reply-To: <1432115721-2018-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1432115721-2018-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150521191127.61069d22@free-electrons.com>
+Date: Thu, 21 May 2015 19:12:03 +0200
+Subject: [Buildroot] [git commit branch/next] package/luajit: renumber
+	patches
+Message-ID: <20150521171410.19111819E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=e672cfbe57de29f55047af6502de6711cb017418
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 20 May 2015 11:55:21 +0200, J?rg Krause wrote:
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/libuv/libuv.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...bin-symlink.patch => 0001-no-bin-symlink.patch} |    0
+ ...05-install-inc.patch => 0002-install-inc.patch} |    0
+ ...0006-install-so.patch => 0003-install-so.patch} |    0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/luajit/0004-no-bin-symlink.patch b/package/luajit/0001-no-bin-symlink.patch
+similarity index 100%
+rename from package/luajit/0004-no-bin-symlink.patch
+rename to package/luajit/0001-no-bin-symlink.patch
+diff --git a/package/luajit/0005-install-inc.patch b/package/luajit/0002-install-inc.patch
+similarity index 100%
+rename from package/luajit/0005-install-inc.patch
+rename to package/luajit/0002-install-inc.patch
+diff --git a/package/luajit/0006-install-so.patch b/package/luajit/0003-install-so.patch
+similarity index 100%
+rename from package/luajit/0006-install-so.patch
+rename to package/luajit/0003-install-so.patch
