@@ -1,44 +1,26 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Thu, 21 May 2015 08:16:47 -0700
-Subject: [Buildroot] Configure WiFi for AP on boot
-In-Reply-To: <CANT5W8gNodadKUCfxJ8hyN5DTCuCUVMhW27WvfgFyWvkoc2JcQ@mail.gmail.com>
-References: <CANT5W8gNodadKUCfxJ8hyN5DTCuCUVMhW27WvfgFyWvkoc2JcQ@mail.gmail.com>
-Message-ID: <CAJJ6jxuj8=xP2fw+mkDFtBf5xhQ3rdV9Qfbj95yD9xUWBCfk8Q@mail.gmail.com>
+From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
+Date: Thu, 21 May 2015 13:51:19 -0300
+Subject: [Buildroot] [PATCH v2 1/6] arm: update processor types
+In-Reply-To: <20150519155342.GA23051@fox>
+References: <1431959088-15257-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1431959088-15257-2-git-send-email-guido@vanguardiasur.com.ar>
+ <20150518220512.556d53ae@free-electrons.com>
+ <20150519155342.GA23051@fox>
+Message-ID: <20150521165119.GA9505@fox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-What you want is the rpi to be an access point. Look at hostapd.
+On Tue, May 19, 2015 at 12:53:42PM -0300, Guido Mart?nez wrote:
+> Yes, I'll work on something like that.
 
-Maybe this will help:
-http://www.daveconroy.com/turn-your-raspberry-pi-into-a-wifi-hotspot-with-edimax-nano-usb-ew-7811un-rtl8188cus-chipset/
+I'm sending two patches tidying up the MMU and BINFMT configs. After
+that I'll respin the m3 series with the changes discussed.
 
-Regards, Steve
+Thanks for the comments!
 
-On Wed, May 20, 2015 at 11:42 PM, Henrik Aagaard J?rgensen
-<henrikaagaardjorgensen@gmail.com> wrote:
-> Dear buildroot-community.
->
-> I'm just trying out buildroot for the very first time, for my Raspberry Pi
-> 2.
->
-> Everything seems quite easy to work with and I've compiled my very first
-> Linux system.
->
-> However, I would like to have the system create a Wireless network, which I
-> can SSH into on boot.
->
-> I've added WiFi by following this guide:
-> http://www.digitalpeer.com/blog/wireless-on-raspberry-pi-with-buildroot
->
-> However, I still need to SSH into the Pi with ethernet at the very first
-> logon, to setup WiFi.
->
-> Is it possible to have the Pi show itself for SSH login?
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Guido Mart?nez, VanguardiaSur
+www.vanguardiasur.com.ar
