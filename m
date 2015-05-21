@@ -1,64 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 May 2015 23:41:13 +0200
-Subject: [Buildroot] [git commit] jack2: not available for static only builds
-Message-ID: <20150521214332.E166081D99@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 May 2015 23:50:49 +0200
+Subject: [Buildroot] [git commit branch/next] barebox: add option to specify
+	config fragments
+Message-ID: <20150521215059.59F027FDC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f84f204df52df9d561235b6977e3482e053dfc0e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: http://git.buildroot.net/buildroot/commit/?id=7241aee4ed7d85659a0eb0f369d8a3a44ffc176e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/e53/e537a500852ddb8aa0b1155ea9bc8a17636dd50d/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/jack2/Config.in |    6 ++++--
- package/mpd/Config.in   |    4 ++++
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ boot/barebox/Config.in  |    6 ++++++
+ boot/barebox/barebox.mk |    1 +
+ 2 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/jack2/Config.in b/package/jack2/Config.in
-index eeeb8da..350a342 100644
---- a/package/jack2/Config.in
-+++ b/package/jack2/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_JACK2
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBSAMPLERATE
- 	select BR2_PACKAGE_LIBSNDFILE
- 	select BR2_PACKAGE_ALSA_LIB
-@@ -20,7 +21,8 @@ config BR2_PACKAGE_JACK2
- 
- 	  http://jackaudio.org/
- 
--comment "jack2 needs a toolchain w/ threads, C++"
-+comment "jack2 needs a toolchain w/ threads, C++, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
-+		BR2_STATIC_LIBS
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index ed036fe..65b46df 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -226,10 +226,14 @@ config BR2_PACKAGE_MPD_AO
- config BR2_PACKAGE_MPD_JACK2
- 	bool "jack2"
- 	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on !BR2_STATIC_LIBS # jack2
- 	select BR2_PACKAGE_JACK2
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index a250f3b..53d8013 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -91,6 +91,12 @@ config BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE
  	help
- 	  Enable jack output support.
+ 	  Path to the barebox configuration file
  
-+comment "jack support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
++config BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES
++	string "Additional configuration fragment files"
++	help
++	  A space-separated list of configuration fragment files,
++	  that will be merged to the main Barebox configuration file.
 +
- config BR2_PACKAGE_MPD_OSS
- 	bool "oss"
+ config BR2_TARGET_BAREBOX_BAREBOXENV
+ 	bool "bareboxenv tool in target"
  	help
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 294acbd..7e53037 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -64,6 +64,7 @@ BAREBOX_SOURCE_CONFIG = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE))
+ endif
+ 
+ BAREBOX_KCONFIG_FILE = $(BAREBOX_SOURCE_CONFIG)
++BAREBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES))
+ BAREBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ BAREBOX_KCONFIG_OPTS = $(BAREBOX_MAKE_FLAGS)
+ 
