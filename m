@@ -1,47 +1,66 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 21 May 2015 19:19:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apr: Add libuuid as optional
-	dependency
-Message-ID: <1432228748-24980-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 21 May 2015 20:06:10 +0200
+Subject: [Buildroot] [PATCH] package/sqlite: fix parallel build failures
+In-Reply-To: <20150521120742.0b0d7fdc@free-electrons.com>
+References: <1432159112-28325-1-git-send-email-yann.morin.1998@free.fr>
+ <20150521120742.0b0d7fdc@free-electrons.com>
+Message-ID: <20150521180609.GA4244@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libuuid is picked up by apr when present:
+Thomas, All,
 
-Checking for OS UUID Support...
-checking uuid/uuid.h usability... yes
-checking uuid/uuid.h presence... yes
-checking for uuid/uuid.h... yes
-checking for library containing uuid_generate... -luuid
-checking for uuid_generate... yes
-checking for os uuid usability... yes
+On 2015-05-21 12:07 +0200, Thomas Petazzoni spake thusly:
+> On Wed, 20 May 2015 23:58:32 +0200, Yann E. MORIN wrote:
+> > Fixes:
+> >     http://autobuild.buildroot.org/results/aed/aed3690689b60844e3278626da3c3eb75f2a2586/
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/sqlite/0001-fix-parallel-build.patch | 22 ++++++++++++++++++++++
+> >  package/sqlite/sqlite.mk                     |  3 +++
+> >  2 files changed, 25 insertions(+)
+> >  create mode 100644 package/sqlite/0001-fix-parallel-build.patch
+> 
+> Applied, thanks. I guess you've submitted this patch upstream, right?
 
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libapr-1.so | grep libuuid
- 0x00000001 (NEEDED)                     Shared library: [libuuid.so.1]
+TLD;DR: no.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/apr/apr.mk |    5 +++++
- 1 file changed, 5 insertions(+)
+Full story:
 
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index 69524a6..b398d44 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -12,6 +12,11 @@ APR_INSTALL_STAGING = YES
- # We have a patch touching configure.in and Makefile.in,
- # so we need to autoreconf:
- APR_AUTORECONF = YES
-+
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
-+APR_DEPENDENCIES = util-linux
-+endif
-+
- APR_CONF_ENV = \
- 	CC_FOR_BUILD="$(HOSTCC)" \
- 	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
+  - sqlite uses fossil as its VCS;
+
+  - cloning a fossil repo creates a single file (the DB) in the current
+    directory;
+
+  - "checking out" the repository is also done in the curent directory,
+    polluting it;
+
+  - there is no "fossil log" command;
+
+  - the content of the fossil repository is clearly not aligned with
+    that of the tarball;
+
+  - there is autostuff in the repository, but it is in a sub-dorectory,
+    and there is no explanation on how to use it; there is no explanation
+    on how to generate the archive from the repository;
+
+  - the mailing list are not very newbie-friendly: they are
+    subscription-only (OK) but even the archives require subscription to
+    be browsed (not OK).
+
+So, in the end, I just threw in the towel...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
