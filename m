@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 22:56:21 +0200
-Subject: [Buildroot] [git commit] package/qemu: Compare host/target Linux
-	version only during build phase
-Message-ID: <20150521205633.ECA9F81E1D@busybox.osuosl.org>
+Date: Thu, 21 May 2015 22:56:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apr: Add libuuid as optional
+ dependency
+In-Reply-To: <1432228748-24980-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1432228748-24980-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150521225645.13d2188b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1b1657621668ee8160f896cddc3009fc803b25ee
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-This patch fixes an error during source-check.
+On Thu, 21 May 2015 19:19:08 +0200, Bernd Kuhls wrote:
+> libuuid is picked up by apr when present:
+> 
+> Checking for OS UUID Support...
+> checking uuid/uuid.h usability... yes
+> checking uuid/uuid.h presence... yes
+> checking for uuid/uuid.h... yes
+> checking for library containing uuid_generate... -luuid
+> checking for uuid_generate... yes
+> checking for os uuid usability... yes
+> 
+> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libapr-1.so | grep libuuid
+>  0x00000001 (NEEDED)                     Shared library: [libuuid.so.1]
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/apr/apr.mk |    5 +++++
+>  1 file changed, 5 insertions(+)
 
-Thanks to Thomas for the hint:
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/116183
+Applied, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qemu/qemu.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
-
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 04df79f..0620804 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -85,10 +85,12 @@ HOST_QEMU_COMPARE_VERSION = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION) -ge $(
- # built with kernel headers that are older or the same as the kernel
- # version running on the host machine.
- #
-+ifeq ($(BR_BUILDING),y)
- ifneq ($(HOST_QEMU_COMPARE_VERSION),OK)
- $(error "Refusing to build qemu-user: target Linux version newer than host's.")
- endif
- endif
-+endif
- 
- define HOST_QEMU_CONFIGURE_CMDS
- 	cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
