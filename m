@@ -1,64 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 20 May 2015 23:58:32 +0200
-Subject: [Buildroot] [PATCH] package/sqlite: fix parallel build failures
-Message-ID: <1432159112-28325-1-git-send-email-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 21 May 2015 08:04:09 +0200
+Subject: [Buildroot] [PATCH 1/1] exim: enable plaintext and cram-md5
+	authenticators
+References: <1431878301-13745-1-git-send-email-pud@nerdpunx.net>
+Message-ID: <XnsA4A15215AE77EberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/aed/aed3690689b60844e3278626da3c3eb75f2a2586/
+Mirko Langisch <pud@nerdpunx.net> wrote in 
+news:1431878301-13745-1-git-send-email-pud at nerdpunx.net:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/sqlite/0001-fix-parallel-build.patch | 22 ++++++++++++++++++++++
- package/sqlite/sqlite.mk                     |  3 +++
- 2 files changed, 25 insertions(+)
- create mode 100644 package/sqlite/0001-fix-parallel-build.patch
+> Signed-off-by: Mirko Langisch <pud@nerdpunx.net>
+> ---
+>  package/exim/exim.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+> index ed309de..b852793 100644
+> --- a/package/exim/exim.mk
+> +++ b/package/exim/exim.mk
+> @@ -46,6 +46,8 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
+>       $(call exim-config-change,PCRE_CONFIG,no)
+>       $(call exim-config-change,HAVE_ICONV,no)
+>       $(call exim-config-unset,EXIM_MONITOR)
+> +     $(call exim-config-change,AUTH_PLAINTEXT,yes)
+> +     $(call exim-config-change,AUTH_CRAM_MD5,yes)
+>  endef
+>  
+>  ifeq ($(BR2_PACKAGE_DOVECOT),y)
 
-diff --git a/package/sqlite/0001-fix-parallel-build.patch b/package/sqlite/0001-fix-parallel-build.patch
-new file mode 100644
-index 0000000..79d80fb
---- /dev/null
-+++ b/package/sqlite/0001-fix-parallel-build.patch
-@@ -0,0 +1,22 @@
-+Use correct dependency in Makefile.am
-+
-+Depending on a libtool library should be done using the .la name, not on
-+the object file.
-+
-+Fixes hard-to-reproduce parallel build failures, like so:
-+    http://autobuild.buildroot.org/results/aed/aed3690689b60844e3278626da3c3eb75f2a2586/build-end.log
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN sqlite-3081000.orig/Makefile.am sqlite-3081000/Makefile.am
-+--- sqlite-3081000.orig/Makefile.am	2015-05-07 16:59:22.000000000 +0200
-++++ sqlite-3081000/Makefile.am	2015-05-20 23:30:03.878784079 +0200
-+@@ -7,7 +7,7 @@
-+ 
-+ bin_PROGRAMS = sqlite3
-+ sqlite3_SOURCES = shell.c sqlite3.h
-+-sqlite3_LDADD = sqlite3.$(OBJEXT) @READLINE_LIBS@
-++sqlite3_LDADD = libsqlite3.la @READLINE_LIBS@
-+ 
-+ include_HEADERS = sqlite3.h sqlite3ext.h
-+ 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index fff219a..b2283f0 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -10,6 +10,9 @@ SQLITE_SITE = http://www.sqlite.org/2015
- SQLITE_LICENSE = Public domain
- SQLITE_INSTALL_STAGING = YES
- 
-+# Patching Makefile.am:
-+SQLITE_AUTORECONF = YES
-+
- ifeq ($(BR2_PACKAGE_SQLITE_STAT3),y)
- SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT3
- endif
--- 
-1.9.1
+lgtm
+
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Regards, Bernd
