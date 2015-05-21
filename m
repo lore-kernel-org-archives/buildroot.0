@@ -1,41 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 May 2015 08:40:41 +0200
-Subject: [Buildroot] [git commit] configs/riotboard: bump kernel to version
-	4.0
-Message-ID: <20150601220248.2468C81D62@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 May 2015 19:12:00 +0200
+Subject: [Buildroot] [git commit] package/luajit: bump to version 2.0.4
+Message-ID: <20150601220248.3B94B81D62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=99fdd2e0c7e5ce156511447f3fde73c0d1380da0
+commit: http://git.buildroot.net/buildroot/commit/?id=de8494e31a5ef75017c140d294155ddee6390490
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/riotboard_defconfig |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/luajit/luajit.hash |    2 +-
+ package/luajit/luajit.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-index 72c3e04..7d37c25 100644
---- a/configs/riotboard_defconfig
-+++ b/configs/riotboard_defconfig
-@@ -20,13 +20,13 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
+index 9c238e7..086bef0 100644
+--- a/package/luajit/luajit.hash
++++ b/package/luajit/luajit.hash
+@@ -1,2 +1,2 @@
+ # Hashes from: http://luajit.org/download.html
+-md5 f14e9104be513913810cd59c8c658dc0    LuaJIT-2.0.3.tar.gz
++md5 dd9c38307f2223a504cbfb96e477eca0    LuaJIT-2.0.4.tar.gz
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 89f6a1d..d45598e 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # kernel headers
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.19.3"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
-+BR2_DEFAULT_KERNEL_VERSION="4.0"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
- 
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-LUAJIT_VERSION = 2.0.3
++LUAJIT_VERSION = 2.0.4
+ LUAJIT_SOURCE = LuaJIT-$(LUAJIT_VERSION).tar.gz
+ LUAJIT_SITE = http://luajit.org/download
+ LUAJIT_LICENSE = MIT
