@@ -1,64 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 12:37:59 +0200
-Subject: [Buildroot] [PATCH] package/harfbuzz: fix static linking for
- test-unicode program
-In-Reply-To: <1431988660-3991-1-git-send-email-romain.naour@openwide.fr>
-References: <1431988660-3991-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150521123759.5b3c9706@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 21 May 2015 12:57:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/protobuf: Update site url
+Message-ID: <1432205874-23855-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Package moved to github:
+https://developers.google.com/protocol-buffers/docs/downloads
+"Our old Google Code repositiory is: https://code.google.com/p/protobuf/.
+ We moved to github on Aug 26, 2014 [...]"
 
-On Tue, 19 May 2015 00:37:40 +0200, Romain Naour wrote:
-> During static build, -lstdc++ is required to link
-> against libicuuc.a.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  ...1-test-unicode-add-lstdc-for-static-build.patch | 29
-> ++++++++++++++++++++++ 1 file changed, 29 insertions(+)
->  create mode 100644
-> package/harfbuzz/0001-test-unicode-add-lstdc-for-static-build.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/protobuf/Config.in   |    2 +-
+ package/protobuf/protobuf.mk |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Maybe I'm missing something, but I still don't think this is the right
-fix. harfbuzz is using pkg-config to detect icu-uc. So the problem is
-really that the icu-uc .pc file does not declare its dependency on
-lstdc++.
-
-I've tried on my Ubuntu distro. Try to build the following stupid
-program:
-
-#include <unicode/utypes.h>
-#include <unicode/ustring.h>
-
-int main(void) {
- UChar         source            [42];
- u_uastrcpy(source, "This is a test.");
- return 0;
-}
-
-If you build it with:
-
-$ gcc -static -o foo foo.c $(pkg-config --static --libs --cflags icu-uc)
-
-it fails like our build failure. Now if you fix the icu-uc .pc file by
-adding -lstdc++ -lpthread in base_libs (which gets used in
-Libs.private), the build succeeds.
-
-So shouldn't we fix icu-uc.pc instead of hardcoding the need for
--lstdc++ in harfbuzz?
-
-Thanks,
-
-Thomas
+diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
+index 6015b13..bbb927f 100644
+--- a/package/protobuf/Config.in
++++ b/package/protobuf/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_PROTOBUF
+ 	  Protocol buffers are Google's language-neutral, platform-neutral,
+ 	  extensible mechanism for serializing structured data.
+ 
+-	  http://code.google.com/p/protobuf/
++	  https://developers.google.com/protocol-buffers
+ 
+ comment "protobuf needs a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 9043f98..b426873 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PROTOBUF_VERSION = 2.5.0
+-PROTOBUF_SITE = http://protobuf.googlecode.com/files
++PROTOBUF_VERSION = v2.5.0
++PROTOBUF_SITE = $(call github,google,protobuf,$(PROTOBUF_VERSION))
+ PROTOBUF_LICENSE = BSD-3c
+ PROTOBUF_LICENSE_FILES = COPYING.txt
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
