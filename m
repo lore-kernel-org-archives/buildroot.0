@@ -1,40 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 May 2015 00:00:05 +0200
-Subject: [Buildroot] [git commit] portaudio: fix static linking issue with
-	portaudio
-Message-ID: <20150521220835.A573B81DF9@busybox.osuosl.org>
+Date: Fri, 22 May 2015 00:04:32 +0200
+Subject: [Buildroot] [git commit] neardal: properly quote output of
+	pkg-config
+Message-ID: <20150521220835.B0D427F99C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dea306c78b5d4c571555c50512e212a725b594b9
+commit: http://git.buildroot.net/buildroot/commit/?id=1ae0e16afd1eb3e48c9b49de87f8b1a382a95112
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/25f/25f8088ecb276ff4559a56fcc4f1b92d11f7deac/
+Commit 5504039c4e (neardal: fix readline/libedit detection with static
+linking) added the output of pkg-config to the LIBS shell variable without
+adding quotes around it, breaking the logic if the output would ever consist
+of more than 1 word.
 
-As opposed to the other audio backends, the configure script does NOT use
-pkg-config to figure out how to link with portaudio, breaking static linking
-as portaudio uses pthreads.
+Now, pkg-config --libs ncurses currently only outputs '-lncurses', so
+nothing is really broken (for now atleast), but lets add the quotes before
+it does or the syntax gets copied somewhere else where it does.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpg123/mpg123.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/neardal/neardal.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index c2d7b1f..c9acb6b 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -52,6 +52,9 @@ ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
- MPG123_AUDIO += portaudio
- MPG123_CONF_OPTS += --with-default-audio=portaudio
- MPG123_DEPENDENCIES += portaudio
-+# configure script does NOT use pkg-config to figure out how to link
-+# with portaudio, breaking static linking as portaudio uses pthreads
-+MPG123_CONF_ENV += LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs portaudio-2.0)'
+diff --git a/package/neardal/neardal.mk b/package/neardal/neardal.mk
+index c65a5e6..ddaecbe 100644
+--- a/package/neardal/neardal.mk
++++ b/package/neardal/neardal.mk
+@@ -25,7 +25,7 @@ endif
+ # forgets to take that into account, causing the detection to fail
+ # when linking statically
+ ifeq ($(BR2_STATIC_LIBS),y)
+-NEARDAL_CONF_ENV += LIBS=$(shell $(PKG_CONFIG_HOST_BINARY) --libs ncurses)
++NEARDAL_CONF_ENV += LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs ncurses)'
  endif
  
- ifeq ($(BR2_PACKAGE_SDL),y)
+ define NEARDAL_INSTALL_NCL
