@@ -1,23 +1,35 @@
 From: root <pongracz.istvan@gmail.com>
-Date: Thu, 21 May 2015 14:39:25 +0200
-Subject: [Buildroot] [PATCH 1/2] Adding owfs support
-Message-ID: <1432211965-26028-1-git-send-email-pongracz.istvan@gmail.com>
+Date: Thu, 21 May 2015 15:02:45 +0200
+Subject: [Buildroot] [PATCH] Adding owfs support
+Message-ID: <1432213365-444-1-git-send-email-pongracz.istvan@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Istvan Pongracz <pongracz.istvan@gmail.com>
 ---
+ package/Config.in                                  |   1 +
  .../0001-fix-owshell-libusb-for-owfs-3.1p0.patch   | 127 +++++++++++++++++++++
  package/owfs/Config.in                             |  33 ++++++
  package/owfs/owfs.mk                               |  20 ++++
- 3 files changed, 180 insertions(+)
+ 4 files changed, 181 insertions(+)
  create mode 100644 package/owfs/0001-fix-owshell-libusb-for-owfs-3.1p0.patch
  create mode 100644 package/owfs/Config.in
  create mode 100644 package/owfs/owfs.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index e0c2e2a..bbc20a8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -846,6 +846,7 @@ menu "Hardware handling"
+ 	source "package/mtdev/Config.in"
+ 	source "package/ne10/Config.in"
+ 	source "package/neardal/Config.in"
++        source "package/owfs/Config.in"
+ 	source "package/pcsc-lite/Config.in"
+ 	source "package/tslib/Config.in"
+ 	source "package/urg/Config.in"
 diff --git a/package/owfs/0001-fix-owshell-libusb-for-owfs-3.1p0.patch b/package/owfs/0001-fix-owshell-libusb-for-owfs-3.1p0.patch
 new file mode 100644
 index 0000000..cdaa39d
