@@ -1,54 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 23:42:48 +0200
-Subject: [Buildroot] [git commit branch/next] linux: add option to specify
+Date: Thu, 21 May 2015 23:50:41 +0200
+Subject: [Buildroot] [git commit branch/next] uclibc: add option to specify
 	config fragments
-Message-ID: <20150521215059.35B8681E04@busybox.osuosl.org>
+Message-ID: <20150521215059.4C9AD81E04@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87bd1e3724d6ffbe868a6c38fdb2b56ae20cabbd
+commit: http://git.buildroot.net/buildroot/commit/?id=e34e12c5c3e0b851ac672603307ac300067ccf54
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Gergely Imreh <imrehg@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |    6 ++++++
- linux/linux.mk  |    1 +
+ package/uclibc/Config.in |    6 ++++++
+ package/uclibc/uclibc.mk |    1 +
  2 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f2d4652..30e38e4 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -164,6 +164,12 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
- 	  Note: this can be a defconfig file or a complete .config file,
- 	  which can later be saved back with make linux-update-(def)config.
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index b5525e5..dd23853 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -86,6 +86,12 @@ config BR2_UCLIBC_CONFIG
+ 	  See also docs/README in this package.
+ 	  If unsure, use the default.
  
-+config BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES
-+	string "Additional configuration fragment files"
++config BR2_UCLIBC_CONFIG_FRAGMENT_FILES
++	string "Additional uClibc configuration fragment files"
 +	help
-+	  A space-separated list of kernel configuration fragment files,
-+	  that will be merged to the main kernel configuration file.
++	  A space-separated list of configuration fragment files,
++	  that will be merged to the main uClibc configuration file.
 +
- #
- # Binary format
- #
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c765954..eca1450 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -182,6 +182,7 @@ KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
+ config BR2_TOOLCHAIN_BUILDROOT_INET_RPC
+ 	bool "Enable RPC support"
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index ce9b2b4..b9dce7e 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -42,6 +42,7 @@ UCLIBC_CONFIG_FILE = $(call qstrip,$(BR2_UCLIBC_CONFIG))
  endif
  
- LINUX_KCONFIG_FILE = $(KERNEL_SOURCE_CONFIG)
-+LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
- LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
- LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
+ UCLIBC_KCONFIG_FILE = $(UCLIBC_CONFIG_FILE)
++UCLIBC_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_UCLIBC_CONFIG_FRAGMENT_FILES))
  
+ UCLIBC_KCONFIG_OPTS = \
+ 	$(UCLIBC_MAKE_FLAGS) \
