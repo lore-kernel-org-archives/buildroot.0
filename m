@@ -1,53 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 21 May 2015 23:22:52 +0200
-Subject: [Buildroot] [git commit] package/protobuf: Update site url
-Message-ID: <20150521212656.A5C75818A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] iproute2: needs host-pkgconf
+Message-ID: <20150521212656.BF7DE800F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f68dca626a8273f0b704bbcea512dc9f5aa9960
+commit: http://git.buildroot.net/buildroot/commit/?id=a9aa2ba02f5457ff4cbb10d0812568e0f8174492
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Package moved to github:
-https://developers.google.com/protocol-buffers/docs/downloads
-"Our old Google Code repositiory is: https://code.google.com/p/protobuf/.
- We moved to github on Aug 26, 2014 [...]"
+The (handwritten) configure script uses pkg-config, so ensure it is
+available.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+With this in place XT and IPT_LIB_DIR detection works correctly, so drop the
+overrides.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/protobuf/Config.in   |    2 +-
- package/protobuf/protobuf.mk |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/iproute2/iproute2.mk |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index 6015b13..bbb927f 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_PROTOBUF
- 	  Protocol buffers are Google's language-neutral, platform-neutral,
- 	  extensible mechanism for serializing structured data.
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 3315d67..ab374e1 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -7,7 +7,7 @@
+ IPROUTE2_VERSION = 4.0.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+-IPROUTE2_DEPENDENCIES = host-bison host-flex
++IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf
+ IPROUTE2_LICENSE = GPLv2
+ IPROUTE2_LICENSE_FILES = COPYING
  
--	  http://code.google.com/p/protobuf/
-+	  https://developers.google.com/protocol-buffers
- 
- comment "protobuf needs a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 9043f98..b426873 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PROTOBUF_VERSION = 2.5.0
--PROTOBUF_SITE = http://protobuf.googlecode.com/files
-+PROTOBUF_VERSION = v2.5.0
-+PROTOBUF_SITE = $(call github,google,protobuf,$(PROTOBUF_VERSION))
- PROTOBUF_LICENSE = BSD-3c
- PROTOBUF_LICENSE_FILES = COPYING.txt
- 
+@@ -23,7 +23,6 @@ IPROUTE2_DEPENDENCIES += iptables
+ define IPROUTE2_WITH_IPTABLES
+ 	# Makefile is busted so it never passes IPT_LIB_DIR properly
+ 	$(SED) "s/-DIPT/-DXT/" $(IPROUTE2_DIR)/tc/Makefile
+-	echo "TC_CONFIG_XT:=y" >>$(IPROUTE2_DIR)/Config
+ endef
+ else
+ define IPROUTE2_WITH_IPTABLES
+@@ -53,7 +52,6 @@ define IPROUTE2_CONFIGURE_CMDS
+ 	$(SED) 's/gcc/$$CC $$CFLAGS/g' $(@D)/configure
+ 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
+ 	$(SED) 's/-Werror//' $(IPROUTE2_DIR)/Makefile
+-	echo "IPT_LIB_DIR:=/usr/lib/xtables" >>$(IPROUTE2_DIR)/Config
+ 	$(IPROUTE2_DISABLE_ARPD)
+ 	$(IPROUTE2_WITH_IPTABLES)
+ endef
