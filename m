@@ -1,40 +1,73 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 21 May 2015 10:47:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qemu: Compare host/target Linux
-	version only during build phase
-Message-ID: <1432198043-20364-1-git-send-email-bernd.kuhls@t-online.de>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
+Date: Thu, 21 May 2015 11:10:09 +0200
+Subject: [Buildroot] [PATCH] imx6sabre: refresh u-boot patch
+In-Reply-To: <1432116744-25760-13-git-send-email-gary.bisson@boundarydevices.com>
+References: <1432116744-25760-13-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1432199409-18909-1-git-send-email-vincent.stehle@freescale.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes an error during source-check.
+After bump to version to 3.10.53-1.1.0 GA.
 
-Thanks to Thomas for the hint:
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/116183
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
+Cc: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/qemu/qemu.mk |    2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 04df79f..0620804 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -85,10 +85,12 @@ HOST_QEMU_COMPARE_VERSION = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION) -ge $(
- # built with kernel headers that are older or the same as the kernel
- # version running on the host machine.
- #
-+ifeq ($(BR_BUILDING),y)
- ifneq ($(HOST_QEMU_COMPARE_VERSION),OK)
- $(error "Refusing to build qemu-user: target Linux version newer than host's.")
- endif
- endif
-+endif
+Hi,
+
+Thank you Gary for updating the Freescale "components" versions in
+buildroot.
+
+I am testing a bit your patch queue and I needed to update one patch for
+proper build of u-boot with freescale_imx6qsabresd_defconfig.
+
+Best regards,
+
+V.
+
+ ...abre_common-boot-Linux-to-init-in-mfgtools-mode.patch | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/board/freescale/imx6sabre/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch b/board/freescale/imx6sabre/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
+index c01df4e..9e2aebf 100644
+--- a/board/freescale/imx6sabre/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
++++ b/board/freescale/imx6sabre/patches/uboot/uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch
+@@ -1,4 +1,4 @@
+-From 4a7cd7c5b165317dccf45cfc235da3e14bc339e8 Mon Sep 17 00:00:00 2001
++From 90ecc0ad14337898b75843efc6530fc4a34f7808 Mon Sep 17 00:00:00 2001
+ From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
+ Date: Tue, 12 Aug 2014 10:17:31 +0200
+ Subject: [PATCH] mx6qsabre_common: boot Linux to /init in mfgtools mode
+@@ -15,14 +15,14 @@ buildroot system entirely through USB.
  
- define HOST_QEMU_CONFIGURE_CMDS
- 	cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
+ Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
+ ---
+- include/configs/mx6qsabre_common.h | 2 +-
++ include/configs/mx6sabre_common.h | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-diff --git a/include/configs/mx6qsabre_common.h b/include/configs/mx6qsabre_common.h
+-index 69ff0df..ec7b665 100644
+---- a/include/configs/mx6qsabre_common.h
+-+++ b/include/configs/mx6qsabre_common.h
+-@@ -129,7 +129,7 @@
++diff --git a/include/configs/mx6sabre_common.h b/include/configs/mx6sabre_common.h
++index 93d4c4b..d2e7efd 100644
++--- a/include/configs/mx6sabre_common.h
+++++ b/include/configs/mx6sabre_common.h
++@@ -106,7 +106,7 @@
+  
+  #define CONFIG_MFG_ENV_SETTINGS \
+  	"mfgtool_args=setenv bootargs console=" CONFIG_CONSOLE_DEV ",115200 " \
+@@ -32,5 +32,5 @@ index 69ff0df..ec7b665 100644
+  		"g_mass_storage.idVendor=0x066F g_mass_storage.idProduct=0x37FF "\
+  		"g_mass_storage.iSerialNumber=\"\" "\
+ -- 
+-2.0.1
++2.1.4
+ 
 -- 
-1.7.10.4
+2.1.4
