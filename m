@@ -1,28 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 21 May 2015 20:58:22 +0000 (UTC)
-Subject: [Buildroot] [Bug 8126] exim lacks plaintext and cram-md5 auth
-In-Reply-To: <bug-8126-163@https.bugs.busybox.net/>
-References: <bug-8126-163@https.bugs.busybox.net/>
-Message-ID: <20150521205822.8308C81E1D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 May 2015 23:09:49 +0200
+Subject: [Buildroot] [git commit branch/next] flashrom: add hash file
+Message-ID: <20150521211005.F143B80E2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8126
+commit: http://git.buildroot.net/buildroot/commit/?id=6402edf9917a81649f1e628c6ea5a2a851460e5c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/flashrom/flashrom.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> 2015-05-21 20:58:22 UTC ---
-Patch committed as 924578ae03cfbb49264f1d0cc31a214026a67b84, thanks!
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/flashrom/flashrom.hash b/package/flashrom/flashrom.hash
+new file mode 100644
+index 0000000..a216869
+--- /dev/null
++++ b/package/flashrom/flashrom.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 13dc7c895e583111ecca370363a3527d237d178a134a94b20db7df177c05f934 flashrom-0.9.8.tar.bz2
