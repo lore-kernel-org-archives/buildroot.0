@@ -1,36 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 May 2015 23:22:53 +0200
-Subject: [Buildroot] [git commit] exim: enable plaintext and cram-md5
-	authenticators
-Message-ID: <20150521212656.D4A4C800F3@busybox.osuosl.org>
+Date: Thu, 21 May 2015 23:22:52 +0200
+Subject: [Buildroot] [git commit] iproute2: ensure TARGET_LDFLAGS are used
+Message-ID: <20150521212656.CA70F800F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=41793eabfd2efc13bc86622fb139b14d8a45bd89
+commit: http://git.buildroot.net/buildroot/commit/?id=dc587bf92c238e7d497bc1d4d9658923ada5c7be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes #8126
+Otherwise we can end up with various linker issues (E.G. linking shared
+against libc for a static build, ..).
 
-Signed-off-by: Mirko Langisch <pud@nerdpunx.net>
-Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exim/exim.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/iproute2/iproute2.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index ed309de..b852793 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -46,6 +46,8 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
- 	$(call exim-config-change,PCRE_CONFIG,no)
- 	$(call exim-config-change,HAVE_ICONV,no)
- 	$(call exim-config-unset,EXIM_MONITOR)
-+	$(call exim-config-change,AUTH_PLAINTEXT,yes)
-+	$(call exim-config-change,AUTH_CRAM_MD5,yes)
- endef
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index ab374e1..49b1fdc 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -58,7 +58,7 @@ endef
  
- ifeq ($(BR2_PACKAGE_DOVECOT),y)
+ define IPROUTE2_BUILD_CMDS
+ 	$(SED) 's/$$(CCOPTS)//' $(@D)/netem/Makefile
+-	$(TARGET_MAKE_ENV) $(MAKE) \
++	$(TARGET_MAKE_ENV) LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) \
+ 		DBM_INCLUDE="$(STAGING_DIR)/usr/include" \
+ 		CCOPTS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+ 		SHARED_LIBS="$(if $(BR2_STATIC_LIBS),n,y)" -C $(@D)
