@@ -1,65 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 23:12:06 +0200
-Subject: [Buildroot] [git commit] sepolgen: new package
-Message-ID: <20150601220248.897B381D62@busybox.osuosl.org>
+Date: Thu, 21 May 2015 19:12:03 +0200
+Subject: [Buildroot] [git commit] package/luajit: renumber patches
+Message-ID: <20150601220248.4486981D62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d28882745daa79f43c6e0592818cc9d3b2df5ec5
+commit: http://git.buildroot.net/buildroot/commit/?id=e672cfbe57de29f55047af6502de6711cb017418
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sepolgen/sepolgen.hash |    2 ++
- package/sepolgen/sepolgen.mk   |   30 ++++++++++++++++++++++++++++++
- 2 files changed, 32 insertions(+), 0 deletions(-)
+ ...bin-symlink.patch => 0001-no-bin-symlink.patch} |    0
+ ...05-install-inc.patch => 0002-install-inc.patch} |    0
+ ...0006-install-so.patch => 0003-install-so.patch} |    0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/sepolgen/sepolgen.hash b/package/sepolgen/sepolgen.hash
-new file mode 100644
-index 0000000..a377c66
---- /dev/null
-+++ b/package/sepolgen/sepolgen.hash
-@@ -0,0 +1,2 @@
-+# https://github.com/SELinuxProject/selinux/wiki/Releases
-+sha256 8a1c6d3a78c9b6ad3555c74def555f65a62950bf21c111c585bfc382fec3a645  sepolgen-1.1.9.tar.gz
-diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
-new file mode 100644
-index 0000000..7c95866
---- /dev/null
-+++ b/package/sepolgen/sepolgen.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# sepolgen
-+#
-+################################################################################
-+
-+SEPOLGEN_VERSION = 1.1.9
-+SEPOLGEN_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-+SEPOLGEN_LICENSE = GPLv2
-+SEPOLGEN_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+HOST_SEPOLGEN_DEPENDENCIES = host-python3
-+HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
-+	PYTHONLIBDIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
-+else
-+HOST_SEPOLGEN_DEPENDENCIES = host-python
-+HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
-+	PYTHONLIBDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+endif
-+
-+define HOST_SEPOLGEN_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(HOST_SEPOLGEN_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+endef
-+
-+define HOST_SEPOLGEN_INSTALL_CMDS
-+	$(MAKE) -C $(@D) $(HOST_SEPOLGEN_MAKE_CMDS) DESTDIR=$(HOST_DIR) install
-+endef
-+
-+$(eval $(host-generic-package))
+diff --git a/package/luajit/0004-no-bin-symlink.patch b/package/luajit/0001-no-bin-symlink.patch
+similarity index 100%
+rename from package/luajit/0004-no-bin-symlink.patch
+rename to package/luajit/0001-no-bin-symlink.patch
+diff --git a/package/luajit/0005-install-inc.patch b/package/luajit/0002-install-inc.patch
+similarity index 100%
+rename from package/luajit/0005-install-inc.patch
+rename to package/luajit/0002-install-inc.patch
+diff --git a/package/luajit/0006-install-so.patch b/package/luajit/0003-install-so.patch
+similarity index 100%
+rename from package/luajit/0006-install-so.patch
+rename to package/luajit/0003-install-so.patch
