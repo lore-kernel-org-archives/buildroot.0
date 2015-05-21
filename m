@@ -1,46 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 12:08:29 +0200
-Subject: [Buildroot] [git commit] package/leafnode2: Update upstream URL
-Message-ID: <20150521204803.A726481DED@busybox.osuosl.org>
+Date: Thu, 21 May 2015 22:47:44 +0200
+Subject: [Buildroot] [git commit] package/apr: Add libuuid as optional
+	dependency
+Message-ID: <20150521204803.BF1D47FC02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3372fb39f07543f9f31e4c2fecc92f57f3bd710
+commit: http://git.buildroot.net/buildroot/commit/?id=fd25b0128945aa118cb5f66e665d445d0da1d7dd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream URL has changed:
-http://article.gmane.org/gmane.network.leafnode/4773
+libuuid is picked up by apr when present:
+
+Checking for OS UUID Support...
+checking uuid/uuid.h usability... yes
+checking uuid/uuid.h presence... yes
+checking for uuid/uuid.h... yes
+checking for library containing uuid_generate... -luuid
+checking for uuid_generate... yes
+checking for os uuid usability... yes
+
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libapr-1.so | grep libuuid
+ 0x00000001 (NEEDED)                     Shared library: [libuuid.so.1]
+
+[Thomas: move the added chunk a bit further down, and use += instead
+of =.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/leafnode2/Config.in    |    2 +-
- package/leafnode2/leafnode2.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/apr/apr.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/leafnode2/Config.in b/package/leafnode2/Config.in
-index ec5fa80..348e6da 100644
---- a/package/leafnode2/Config.in
-+++ b/package/leafnode2/Config.in
-@@ -13,4 +13,4 @@ config BR2_PACKAGE_LEAFNODE2
- 	  For example, you can add this line to inetd.conf:
- 	  nntp    stream  tcp     nowait  news    /usr/sbin/leafnode
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 69524a6..0fed19c 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -12,6 +12,7 @@ APR_INSTALL_STAGING = YES
+ # We have a patch touching configure.in and Makefile.in,
+ # so we need to autoreconf:
+ APR_AUTORECONF = YES
++
+ APR_CONF_ENV = \
+ 	CC_FOR_BUILD="$(HOSTCC)" \
+ 	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
+@@ -34,6 +35,10 @@ endif
+ # Fix lfs detection when cross compiling
+ APR_CONF_ENV += apr_cv_use_lfs64=yes
  
--	  http://www.dt.e-technik.uni-dortmund.de/~ma/leafnode/beta/
-+	  http://www.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
-diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
-index 0fc2a8d..5b9b854 100644
---- a/package/leafnode2/leafnode2.mk
-+++ b/package/leafnode2/leafnode2.mk
-@@ -6,7 +6,7 @@
- 
- LEAFNODE2_VERSION = 2.0.0.alpha20140727b
- LEAFNODE2_SOURCE = leafnode-$(LEAFNODE2_VERSION).tar.bz2
--LEAFNODE2_SITE = http://home.pages.de/~mandree/leafnode/beta
-+LEAFNODE2_SITE = http://www.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
- LEAFNODE2_LICENSE = LGPLv2.1
- LEAFNODE2_LICENSE_FILES = COPYING COPYING.LGPL
- LEAFNODE2_DEPENDENCIES = host-pcre pcre
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
++APR_DEPENDENCIES += util-linux
++endif
++
+ define APR_CLEANUP_UNNEEDED_FILES
+ 	$(RM) -rf $(TARGET_DIR)/usr/build-1/
+ endef
