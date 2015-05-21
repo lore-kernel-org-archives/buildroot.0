@@ -1,31 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 15:33:49 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CAMpxmJXByT8SX1RkYw3Khd9mTOudN++vx5ZvWnthcSfHeEJ+LQ@mail.gmail.com>
-References: <20150519063012.E7D2A100C5F@stock.ovh.net>
- <20150519100045.44f1b3a4@free-electrons.com>
- <555AF05D.7040905@openwide.fr>
- <CAMpxmJXByT8SX1RkYw3Khd9mTOudN++vx5ZvWnthcSfHeEJ+LQ@mail.gmail.com>
-Message-ID: <20150521153349.4030009f@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 21 May 2015 16:13:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/protobuf: Update site url
+In-Reply-To: <1432205874-23855-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Thu, 21 May 2015 12:57:54 +0200")
+References: <1432205874-23855-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87617m3tol.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bartosz Golaszewski,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Thu, 21 May 2015 15:28:24 +0200, Bartosz Golaszewski wrote:
+ > Package moved to github:
+ > https://developers.google.com/protocol-buffers/docs/downloads
+ > "Our old Google Code repositiory is: https://code.google.com/p/protobuf/.
+ >  We moved to github on Aug 26, 2014 [...]"
 
-> Sorry, I didn't see this message before. I can see Romain's patch in
-> current git - has it fixed the issue?
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Yes, I've committed Romain's patch. It does the job.
+Committed, thanks.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
