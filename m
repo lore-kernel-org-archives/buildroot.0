@@ -1,39 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 23:08:41 +0200
-Subject: [Buildroot] [git commit branch/next] flashrom: improve Config.in
-	description
-Message-ID: <20150521211005.E552880E2B@busybox.osuosl.org>
+Date: Thu, 21 May 2015 23:11:30 +0200
+Subject: [Buildroot] [PATCH v2 1/1] flashrom: Bump to version 0.9.8
+In-Reply-To: <1431850584-6913-1-git-send-email-florent.valette@gmail.com>
+References: <1431850584-6913-1-git-send-email-florent.valette@gmail.com>
+Message-ID: <20150521231130.6cf333fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=317dfa83b063197e03b247b59e30ef848924a922
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Florent Valette,
 
-Use some text from the flashrom website to provide a better Config.in
-help text about flashrom.
+On Sun, 17 May 2015 10:16:24 +0200, Florent Valette wrote:
+> This version adds support for new Intel SoC (e.g. BayTrail) and
+> spi over usb devices such as pickit2 and ftdi usb-spi.
+> 
+> Signed-off-by: Florent Valette <florent.valette@gmail.com>
+> 
+> ---
+> Changes v1 -> v2:
+>  propagate the dependencies for libusb and libftdi
+>  Note, libftdi1 is not supported, it only uses libftdi.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/flashrom/Config.in |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+Applied, thanks. I've done a few changes:
 
-diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
-index 17a0416..9420cc6 100644
---- a/package/flashrom/Config.in
-+++ b/package/flashrom/Config.in
-@@ -10,7 +10,11 @@ config BR2_PACKAGE_FLASHROM
- 	depends on BR2_TOOLCHAIN_HAS_THREADS 	# libusb
- 	depends on BR2_ARCH_HAS_ATOMICS 	# libftdi
- 	help
--	  BIOS-updating utility.
-+	  flashrom is a utility for identifying, reading, writing,
-+	  verifying and erasing flash chips. It is designed to flash
-+	  BIOS/EFI/coreboot/firmware/optionROM images on mainboards,
-+	  network/graphics/storage controller cards, and various other
-+	  programmer devices.
- 
- 	  http://flashrom.org/
- 
+    [Thomas:
+      - add missing Config.in comment about the thread dependency
+      - remove 'Requires PCIUtils libraries' from the Config.in help text,
+        since flashrom now requires more than PCIUtils library, and we
+        typically don't document such dependencies in Config.in help
+        texts.]
+
+Also, I did some followup commits to improve the Config.in help text,
+and add a hash file.
+
+Finally, the pciutils, libusb and libftdi dependencies could be made
+optional, since they are only needed for some of the flashrom drivers.
+However, the mechanism to select each flashrom drivers is a bit
+annoying, and I'm not sure it's really worth the effort.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
