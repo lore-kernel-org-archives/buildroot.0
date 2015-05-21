@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 22:56:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apr: Add libuuid as optional
- dependency
-In-Reply-To: <1432228748-24980-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1432228748-24980-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150521225645.13d2188b@free-electrons.com>
+Date: Thu, 21 May 2015 22:56:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qemu: Compare host/target Linux
+ version only during build phase
+In-Reply-To: <1432198043-20364-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1432198043-20364-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150521225650.12e8f177@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,16 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Thu, 21 May 2015 19:19:08 +0200, Bernd Kuhls wrote:
-> libuuid is picked up by apr when present:
+On Thu, 21 May 2015 10:47:23 +0200, Bernd Kuhls wrote:
+> This patch fixes an error during source-check.
 > 
-> Checking for OS UUID Support...
-> checking uuid/uuid.h usability... yes
-> checking uuid/uuid.h presence... yes
-> checking for uuid/uuid.h... yes
-> checking for library containing uuid_generate... -luuid
-> checking for uuid_generate... yes
-> checking for os uuid usability... yes
-> 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libapr-1.so | grep libuuid
->  0x00000001 (NEEDED)                     Shared library: [libuuid.so.1]
+> Thanks to Thomas for the hint:
+> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/116183
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/apr/apr.mk |    5 +++++
->  1 file changed, 5 insertions(+)
+>  package/qemu/qemu.mk |    2 ++
+>  1 file changed, 2 insertions(+)
 
 Applied, thanks.
 
