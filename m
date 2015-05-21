@@ -1,41 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 19:12:00 +0200
-Subject: [Buildroot] [git commit] package/luajit: bump to version 2.0.4
-Message-ID: <20150601220248.3B94B81D62@busybox.osuosl.org>
+Date: Thu, 21 May 2015 23:08:41 +0200
+Subject: [Buildroot] [git commit] flashrom: improve Config.in description
+Message-ID: <20150601220248.73CEB81D62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=de8494e31a5ef75017c140d294155ddee6390490
+commit: http://git.buildroot.net/buildroot/commit/?id=317dfa83b063197e03b247b59e30ef848924a922
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Use some text from the flashrom website to provide a better Config.in
+help text about flashrom.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/luajit/luajit.hash |    2 +-
- package/luajit/luajit.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/flashrom/Config.in |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
-index 9c238e7..086bef0 100644
---- a/package/luajit/luajit.hash
-+++ b/package/luajit/luajit.hash
-@@ -1,2 +1,2 @@
- # Hashes from: http://luajit.org/download.html
--md5 f14e9104be513913810cd59c8c658dc0    LuaJIT-2.0.3.tar.gz
-+md5 dd9c38307f2223a504cbfb96e477eca0    LuaJIT-2.0.4.tar.gz
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 89f6a1d..d45598e 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
+index 17a0416..9420cc6 100644
+--- a/package/flashrom/Config.in
++++ b/package/flashrom/Config.in
+@@ -10,7 +10,11 @@ config BR2_PACKAGE_FLASHROM
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS 	# libusb
+ 	depends on BR2_ARCH_HAS_ATOMICS 	# libftdi
+ 	help
+-	  BIOS-updating utility.
++	  flashrom is a utility for identifying, reading, writing,
++	  verifying and erasing flash chips. It is designed to flash
++	  BIOS/EFI/coreboot/firmware/optionROM images on mainboards,
++	  network/graphics/storage controller cards, and various other
++	  programmer devices.
  
--LUAJIT_VERSION = 2.0.3
-+LUAJIT_VERSION = 2.0.4
- LUAJIT_SOURCE = LuaJIT-$(LUAJIT_VERSION).tar.gz
- LUAJIT_SITE = http://luajit.org/download
- LUAJIT_LICENSE = MIT
+ 	  http://flashrom.org/
+ 
