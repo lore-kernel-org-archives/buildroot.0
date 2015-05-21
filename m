@@ -1,22 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 May 2015 22:42:26 +0200
-Subject: [Buildroot] [PATCH 1/1] exim: enable plaintext and cram-md5
-	authenticators
-In-Reply-To: <1431878301-13745-1-git-send-email-pud@nerdpunx.net> (Mirko
- Langisch's message of "Sun, 17 May 2015 17:58:21 +0200")
-References: <1431878301-13745-1-git-send-email-pud@nerdpunx.net>
-Message-ID: <87zj4x3bnx.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 May 2015 12:08:29 +0200
+Subject: [Buildroot] [git commit] package/leafnode2: Update upstream URL
+Message-ID: <20150521204803.A726481DED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mirko" == Mirko Langisch <pud@nerdpunx.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d3372fb39f07543f9f31e4c2fecc92f57f3bd710
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Mirko Langisch <pud@nerdpunx.net>
+Upstream URL has changed:
+http://article.gmane.org/gmane.network.leafnode/4773
 
-Committed, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/leafnode2/Config.in    |    2 +-
+ package/leafnode2/leafnode2.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/leafnode2/Config.in b/package/leafnode2/Config.in
+index ec5fa80..348e6da 100644
+--- a/package/leafnode2/Config.in
++++ b/package/leafnode2/Config.in
+@@ -13,4 +13,4 @@ config BR2_PACKAGE_LEAFNODE2
+ 	  For example, you can add this line to inetd.conf:
+ 	  nntp    stream  tcp     nowait  news    /usr/sbin/leafnode
+ 
+-	  http://www.dt.e-technik.uni-dortmund.de/~ma/leafnode/beta/
++	  http://www.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
+diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
+index 0fc2a8d..5b9b854 100644
+--- a/package/leafnode2/leafnode2.mk
++++ b/package/leafnode2/leafnode2.mk
+@@ -6,7 +6,7 @@
+ 
+ LEAFNODE2_VERSION = 2.0.0.alpha20140727b
+ LEAFNODE2_SOURCE = leafnode-$(LEAFNODE2_VERSION).tar.bz2
+-LEAFNODE2_SITE = http://home.pages.de/~mandree/leafnode/beta
++LEAFNODE2_SITE = http://www.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
+ LEAFNODE2_LICENSE = LGPLv2.1
+ LEAFNODE2_LICENSE_FILES = COPYING COPYING.LGPL
+ LEAFNODE2_DEPENDENCIES = host-pcre pcre
