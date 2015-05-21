@@ -1,44 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 10:27:26 +0200
-Subject: [Buildroot] [PATCH 2/2] qemu: add host/target Linux version
- check
-In-Reply-To: <XnsA4A16452115E4berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1418249519-15794-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1418249519-15794-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <XnsA4A16452115E4berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20150521102726.7826d7f7@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 21 May 2015 10:47:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qemu: Compare host/target Linux
+	version only during build phase
+Message-ID: <1432198043-20364-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+This patch fixes an error during source-check.
 
-On Thu, 21 May 2015 09:51:43 +0200, Bernd Kuhls wrote:
+Thanks to Thomas for the hint:
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/116183
 
-> > +ifneq
-> > ($(HOST_QEMU_COMPARE_VERSION_MAJOR)$(HOST_QEMU_COMPARE_VERSION_MINOR),OKO
-> > K) +$(error "Refusing to build qemu-user: target Linux version newer
-> > than host's.") +endif
-> 
-> while testing an allyesconfig with "make source-check" this error was
-> raised. I had to comment this line in order to run the source-check. Is it
-> possible to run this check only during a build phase? 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/qemu/qemu.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-Yes, but that's not the proper solution. The proper solution is to
-enclose the test with:
-
-ifeq ($(BR_BUILDING),y)
-...
-endif
-
-See how it's used in linux.mk or uboot.mk.
-
-Best regards,
-
-Thomas
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 04df79f..0620804 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -85,10 +85,12 @@ HOST_QEMU_COMPARE_VERSION = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION) -ge $(
+ # built with kernel headers that are older or the same as the kernel
+ # version running on the host machine.
+ #
++ifeq ($(BR_BUILDING),y)
+ ifneq ($(HOST_QEMU_COMPARE_VERSION),OK)
+ $(error "Refusing to build qemu-user: target Linux version newer than host's.")
+ endif
+ endif
++endif
+ 
+ define HOST_QEMU_CONFIGURE_CMDS
+ 	cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
