@@ -1,34 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 23:15:50 +0200
-Subject: [Buildroot] [PATCH v5 01/24] sepolgen: new package
-In-Reply-To: <1431553177-7280-2-git-send-email-clayton.shotwell@rockwellcollins.com>
-References: <1431553177-7280-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1431553177-7280-2-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <20150521231550.57ff5f8f@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 21 May 2015 23:22:15 +0200
+Subject: [Buildroot] [PATCH] package/iproute2: disable iptables support
+	for static build
+In-Reply-To: <1431982453-17867-1-git-send-email-romain.naour@openwide.fr>
+ (Romain Naour's message of "Mon, 18 May 2015 22:54:13 +0200")
+References: <1431982453-17867-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <87vbfl39tk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Clayton Shotwell,
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
-On Wed, 13 May 2015 16:39:14 -0500, Clayton Shotwell wrote:
-> From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-> 
-> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
-> Changes v4 -> v5:
->   - Fixed package name to be BR2_PACKAGE_HOST_SEPOLGEN (Suggested by
->     Thomas P.)
->   - No menu entry needed as host dependency aren't reflected in
->     Config.in files (Suggested by Thomas P.)
+ > If iptable support is enabled, it will try to build m_xt.so even
+ > for static build only.
 
-Applied to next, thanks!
+ > So, disable iptables support for static build and remove
+ > TC_CONFIG_IPSET and TC_CONFIG_XT if previously added by the
+ > configure script.
 
-Thomas
+ > Fixes:
+ > http://autobuild.buildroot.net/results/3b3/3b37871bdf5766677fc20dca22c13177091d104f/
+
+FYI, I ended up applying Baruch's patch (and then some followup patches
+of my own). Your two patches were almost identical, but for his patch I
+didn't have to drop the SED lines, and I was lazy ;)
+
+Thanks!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
