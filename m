@@ -1,51 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 23:50:34 +0200
-Subject: [Buildroot] [git commit branch/next] busybox: add option to specify
+Date: Thu, 21 May 2015 23:42:48 +0200
+Subject: [Buildroot] [git commit branch/next] linux: add option to specify
 	config fragments
-Message-ID: <20150521215059.40A6381E04@busybox.osuosl.org>
+Message-ID: <20150521215059.35B8681E04@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=73e8345c9873477c1998e1b9ed8e522031191250
+commit: http://git.buildroot.net/buildroot/commit/?id=87bd1e3724d6ffbe868a6c38fdb2b56ae20cabbd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Gergely Imreh <imrehg@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/busybox/Config.in  |    6 ++++++
- package/busybox/busybox.mk |    1 +
+ linux/Config.in |    6 ++++++
+ linux/linux.mk  |    1 +
  2 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index b4f949f..6847a60 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -20,6 +20,12 @@ config BR2_PACKAGE_BUSYBOX_CONFIG
+diff --git a/linux/Config.in b/linux/Config.in
+index f2d4652..30e38e4 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -164,6 +164,12 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+ 	  Note: this can be a defconfig file or a complete .config file,
+ 	  which can later be saved back with make linux-update-(def)config.
  
- 	  Most people will just use the default BusyBox configuration file.
- 
-+config BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES
-+	string "Additional BusyBox configuration fragment files"
++config BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES
++	string "Additional configuration fragment files"
 +	help
-+	  A space-separated list of configuration fragment files,
-+	  that will be merged to the main BusyBox configuration file.
++	  A space-separated list of kernel configuration fragment files,
++	  that will be merged to the main kernel configuration file.
 +
- config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	bool "Show packages that are also provided by busybox"
- 	help
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 1ce508a..090e174 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -46,6 +46,7 @@ ifndef BUSYBOX_CONFIG_FILE
+ #
+ # Binary format
+ #
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c765954..eca1450 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -182,6 +182,7 @@ KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
  endif
  
- BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
-+BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES))
- BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
- BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
+ LINUX_KCONFIG_FILE = $(KERNEL_SOURCE_CONFIG)
++LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
+ LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
  
