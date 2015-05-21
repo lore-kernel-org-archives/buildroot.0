@@ -1,37 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 23:54:40 +0200
-Subject: [Buildroot] [PATCH v3] package/boost: bump to version 1.58.0
-In-Reply-To: <1430570700-26938-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1430570700-26938-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150521235440.676d8a17@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 22 May 2015 00:00:05 +0200
+Subject: [Buildroot] [git commit] portaudio: fix static linking issue with
+	portaudio
+Message-ID: <20150521220835.A573B81DF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=dea306c78b5d4c571555c50512e212a725b594b9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  2 May 2015 14:45:00 +0200, J?rg Krause wrote:
-> Add patch to fix build issues for mips and sh targets:
-> error: unrecognized command line option '-m32'
-> 
-> Fixes:
-> http://autobuild.buildroot.org/results/66c/66c3a868816dfe4bd4d0ffafec6988fd87a2c058/
-> http://autobuild.buildroot.net/results/ccd/ccd5c83963032ba49b1627b1dff39e34a9486943/
-> 
-> Patch send upstream:
-> https://github.com/boostorg/build/pull/76
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
-> Changes v2 -> v3:
->   - Replace upstream patch
+Fixes:
+http://autobuild.buildroot.net/results/25f/25f8088ecb276ff4559a56fcc4f1b92d11f7deac/
 
-Applied to next, thanks.
+As opposed to the other audio backends, the configure script does NOT use
+pkg-config to figure out how to link with portaudio, breaking static linking
+as portaudio uses pthreads.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mpg123/mpg123.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index c2d7b1f..c9acb6b 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -52,6 +52,9 @@ ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
+ MPG123_AUDIO += portaudio
+ MPG123_CONF_OPTS += --with-default-audio=portaudio
+ MPG123_DEPENDENCIES += portaudio
++# configure script does NOT use pkg-config to figure out how to link
++# with portaudio, breaking static linking as portaudio uses pthreads
++MPG123_CONF_ENV += LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs portaudio-2.0)'
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SDL),y)
