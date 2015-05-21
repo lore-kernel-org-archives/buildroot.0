@@ -1,7 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 21:21:50 +0200
+Date: Thu, 21 May 2015 21:47:26 +0200
 Subject: [Buildroot] Issue with host-erlang-rebar causing timeouts
-Message-ID: <20150521212150.3f39f1c1@free-electrons.com>
+In-Reply-To: <20150521212150.3f39f1c1@free-electrons.com>
+References: <20150521212150.3f39f1c1@free-electrons.com>
+Message-ID: <20150521214726.19fc73fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,98 +12,64 @@ To: buildroot@busybox.net
 
 Hello Johan,
 
-We have an issue with host-erlang-rebar: it causes some timeouts in our
-builds. See
-http://autobuild.buildroot.org/?reason=host-erlang-rebar-2.5.1.
+On Thu, 21 May 2015 21:21:50 +0200, Thomas Petazzoni wrote:
 
-The script that does the autobuilder builds kills the build if it lasts
-for more than 8 hours. And in the last few days, all the timeouts we
-have had were only caused by host-erlang-rebar.
+> Do you have any idea of what could cause this problem? Is this to only
+> happen on certain build machines (so maybe the version of some host
+> tools is playing a role), but also not always.
 
-If you look at the link above, things are fairly strange:
+I've done a bit more "data mining" on this issue. I looked at *all* the
+build results of gcc75 since I restarted it on May 4th, and looked at
+the one that built host-erlang-rebar.
 
- * We had three of such timeouts back on March 16, all on the gcc10
-   machine.
+Up to May 19th, every time host-erlang-rebar was built, there was no
+problem. Not a single failure. The last successful build that built
+host-erlang-rebar was:
 
- * Since May 19th, we have the exact same timeouts, but this time only
-   on gcc75.
+  http://autobuild.buildroot.org/results/083/08369dd2c7147d620b50ed799c74acea38bf1457/
 
-All the timeouts take place at exactly the same point, during the
-"build" step of host-erlang-rebar:
+This build was done on May 19th at 8h26.
 
-./bootstrap
-package/pkg-generic.mk:156: recipe for target '/ssd1/thomas/autobuild/instance-2/output/build/host-erlang-rebar-2.5.1/.stamp_built' failed
-make: *** [/ssd1/thomas/autobuild/instance-2/output/build/host-erlang-rebar-2.5.1/.stamp_built] Terminated
-Makefile:7: recipe for target 'all' failed
-make[1]: *** [all] Terminated
+Then later on that day, at 21h26, the first timeout occurred on
+host-erlang-rebar, with this build result:
 
-So it's the ./bootstrap program that either hangs forever, or does an
-infinite loop.
+  http://autobuild.buildroot.org/results/3f9/3f9381a410e8411c390ccf5632a06c66b1c93524/
 
-Let's take a closer look at
-http://autobuild.buildroot.org/results/73d/73d491670cb29ab68cb8552b4b9bd82d31571e62/.
-From the logs of the autobuilder instance (only visible on gcc75), I
-see:
+After that one, *all* builds that needed to build host-erlang-rebar
+timed out.
 
-[Wed, 20 May 2015 14:11:36] INFO: generate the configuration
-[Wed, 20 May 2015 14:11:44] INFO: build started
-[Wed, 20 May 2015 22:11:44] INFO: build timed out
-Importing 73d491670cb29ab68cb8552b4b9bd82d31571e62 from /tmp/phpS9zcmM
+Looking at the Buildroot Git commit being tested by both of those
+builds, they are exactly the same:
 
-So the build started at 14h11, and timed out at 22h11, so exactly 8
-hours after the start of the build, which is expected.
+  db989f89c9fb1ebc3997d8a3c517948392611d77
 
-Now, we can correlate this with the build-time.log information
-available at
-http://autobuild.buildroot.org/results/73d/73d491670cb29ab68cb8552b4b9bd82d31571e62//build-time.log,
-which gives us the starting and ending time of each step of the build
-process.
+So it really smells like a change in the machine configuration. The
+last working build of host-erlang-rebar took place at:
 
-The first line is:
+1432011188:start:build               : host-erlang-rebar
 
-1432123908:start:extract             : toolchain-external
+that is Tue May 19 06:53:08 CEST 2015.
 
-The Unix time stamp 1432123908 corresponds to:
+The first non-working build of host-erlang-rebar too place at:
 
-thomas at skate:~$ LANG=C date -d @1432123908
-Wed May 20 14:11:48 CEST 2015
+$ LANG=C date -d @1432038506
+Tue May 19 14:28:26 CEST 2015
 
-So this is exactly matching the 14h11 start time for the build.
+So just a few hours later.
 
-The last line of build-time.log is the starting time of
-host-erlang-rebar build:
+According to the apt and dpkg logs on this machine, no package updates
+have been made since May 4th.
 
-1432126776:start:build               : host-erlang-rebar
+The weird thing is that the problem happens in *all* builds of
+host-erlang-rebar, but I'm not able to reproduce on the same machine,
+outside of the autobuild infrastructure.
 
-And this time stamp corresponds to:
+I'm puzzled.
 
-$ LANG=C date -d @1432126776
-Wed May 20 14:59:36 CEST 2015
-
-So basically about 48 minutes after the start of the build process, we
-started building host-erlang-rebar.
-
-And then nothing happened for the next 7+ hours, until the build got
-killed at 22h11.
-
-I've used the br-reproduce-build script on gcc75 to attempt to
-reproduce exactly this 73d491670cb29ab68cb8552b4b9bd82d31571e62 build,
-but it didn't occur: the build succeeded completely without an error,
-and without any hang. The ./bootstrap part went just fine:
-
-./bootstrap
-Recompile: src/rebar
-Recompile: src/rebar_abnfc_compiler
-Recompile: src/rebar_app_utils
-[...]
-
-Do you have any idea of what could cause this problem? Is this to only
-happen on certain build machines (so maybe the version of some host
-tools is playing a role), but also not always.
-
-Do you have any idea?
-
-Thanks a lot,
+Maybe I should set up a cronjob that checks every minute if we are in
+this situation, and send me an e-mail, so that maybe I can catch the
+situation while it's happening, and see a bit more what's going on. I
+don't really have better ideas :/
 
 Thomas
 -- 
