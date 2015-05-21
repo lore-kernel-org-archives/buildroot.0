@@ -1,25 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 11:59:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/snmppp: Update site url
-In-Reply-To: <1432201773-14371-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1432201773-14371-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150521115906.07f82c3c@free-electrons.com>
+Date: Thu, 21 May 2015 12:02:04 +0200
+Subject: [Buildroot] [PATCH] iproute2: disable xtables on static build
+In-Reply-To: <fa972eff514e12b82ce7d6c557950f6e63b57724.1432188465.git.baruch@tkos.co.il>
+References: <fa972eff514e12b82ce7d6c557950f6e63b57724.1432188465.git.baruch@tkos.co.il>
+Message-ID: <20150521120204.4658ba22@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Baruch Siach,
 
-On Thu, 21 May 2015 11:49:33 +0200, Bernd Kuhls wrote:
+On Thu, 21 May 2015 09:07:45 +0300, Baruch Siach wrote:
+> iproute2 always builds m_xt.so as a shared library.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Fixes:
+> http://autobuild.buildroot.net/results/f42/f42bbbf5be4594a8806d0e571586ce2bf119582d/
+> http://autobuild.buildroot.net/results/3b3/3b37871bdf5766677fc20dca22c13177091d104f/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/snmppp/snmppp.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/iproute2/iproute2.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Applied, thanks.
+There was already a patch posted by Romain for the same issue,
+http://patchwork.ozlabs.org/patch/473600/. Some discussion with
+Peter/Gustavo followed. Not clear what the conclusion was, though.
 
 Thomas
 -- 
