@@ -1,48 +1,46 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 22 May 2015 11:18:08 -0500
-Subject: [Buildroot] [PATCH 1/1] package/cpupower: new package
-In-Reply-To: <CALe+oY9Bu2oO9aoEv0+YTeN9TZ2tDFF=cocXT+eWo3o1SOi+HA@mail.gmail.com>
-References: <1432249380-5920-1-git-send-email-james.knight@rockwellcollins.com>
- <CANQCQpb1FtMMi8zmmS8CiSOmCb7osBBKfG2M0YTp4H8bf=qwOg@mail.gmail.com>
- <CALe+oY9Bu2oO9aoEv0+YTeN9TZ2tDFF=cocXT+eWo3o1SOi+HA@mail.gmail.com>
-Message-ID: <CANQCQpbf7EWNu19y=-r2=oZdXs+_ZzAFR=MU-k+=td4y9oETHQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 22 May 2015 19:24:41 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-05-21
+In-Reply-To: <874mn52i52.fsf@dell.be.48ers.dk>
+References: <20150522063013.33F0D100C04@stock.ovh.net>
+ <874mn52i52.fsf@dell.be.48ers.dk>
+Message-ID: <20150522172441.GB5153@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James,
+Peter, Thomas, All,
 
+On 2015-05-22 09:20 +0200, Peter Korsgaard spake thusly:
+>  >         i686 |                 ipmiutil-2.9.5 | NOK | http://autobuild.buildroot.net/results/04a1c48d484debd7894fd32997ed50d3a0110b93/
+>  >       x86_64 |                 ipmiutil-2.9.5 | NOK | http://autobuild.buildroot.net/results/9accdfec87aa9922a4096b84a61a6e2dfd53561e/
+> Gaah, more ipmiutil issues. I believe Yann is looking into this.
 
-On Fri, May 22, 2015 at 11:09 AM, James Knight
-<james.knight@rockwellcollins.com> wrote:
-> Thanks Matthew.
->
-Please don't top post.
+ipmiutil's Makefile.am-s are, let's say it politely, not the easiest to
+work with...
 
-> I was attempting to follow the `perf` package style for this new package:
->
->    http://git.buildroot.net/buildroot/tree/package/perf/perf.mk
->
-> My main reason for following this was to prevent having the process from
-> re-downloading the kernel/etc. again. I don't mind adding license
-> information as well but I don't know the correct way in doing this since
-> this package is based off the selected kernel option (although I can just
-> copy the license value set by LINUX_LICENSE). Is the perf package
-> out-of-date? I don't mind following the `spidev_test` package; I just want
-> to make sure I'm doing it right.
+So, regarding the parallel build issue, I'm bailing out. I am able to
+reproduce it in about 1 build out of ten, but then hacking Makefile.am
+is just of my league (they are ugly...).
 
-Yep, completely understand that approach.  Ah perf, that doesn't have
-license info.....  I'll leave that as an open question (I'm not sure)
+Now, I'm looking at those new build failures. I suspect:
+     25e15fd package/ipmiutil: really force md2 off
 
-Thanks,
+which introduced -DALLOW_GNU in the CFLAGS, and that has much mpre
+impact...
+
+Investigation in progress...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
