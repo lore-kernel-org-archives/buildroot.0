@@ -1,93 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 May 2015 00:15:22 +0200
-Subject: [Buildroot] [PATCH 1/1] scripts/mkusers: allow users with no
- password value set
-In-Reply-To: <1432308977-1284-1-git-send-email-james.knight@rockwellcollins.com>
-References: <1432308977-1284-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <20150522221522.GD5153@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 23 May 2015 00:18:41 +0200
+Subject: [Buildroot] [RFC v1] racehound: new package
+Message-ID: <1432333121-26888-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ToDo:
+ - add dependency/check for linux-kenel >= 3.14
+ - only compile tested, not yet runtime tested
+---
+ package/Config.in              |  1 +
+ package/racehound/Config.in    | 30 ++++++++++++++++++++++++++++++
+ package/racehound/racehound.mk | 21 +++++++++++++++++++++
+ 3 files changed, 52 insertions(+)
+ create mode 100644 package/racehound/Config.in
+ create mode 100644 package/racehound/racehound.mk
 
-On 2015-05-22 11:36 -0400, James Knight spake thusly:
-> The following allows a user definition to specify that a created user
-> entry should not have a password value set. Original implementation
-> allowed a user definition to provide a password value of "-" (no quotes)
-> to generate a crypt-encoded empty string value. In some cases, it may be
-> desired to have no value specified for a user's password. By using a
-> value "-" for a password, no value will be set in the shadow value.
-
-I fail to see how that is different from using an empty password as
-(without quotes): "="
-
-From man 5 passwd:
-
-    The encrypted password field may be blank, in which case no password
-    is required to authenticate as the specified login name. However,
-    some applications which read the /etc/passwd file may decide not to
-    permit any access at all if the password field is blank.
-
-Thus, I believe it is safest to store an encoded empty password rather
-than set the password field empty.
-
-Did I miss something?
-
-Of course, the manual could be updated to reflect that a password-less
-account should use "=" in the password field.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-> ---
->  docs/manual/makeusers-syntax.txt | 3 ++-
->  support/scripts/mkusers          | 3 +++
->  2 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/makeusers-syntax.txt b/docs/manual/makeusers-syntax.txt
-> index ffdb961..467e596 100644
-> --- a/docs/manual/makeusers-syntax.txt
-> +++ b/docs/manual/makeusers-syntax.txt
-> @@ -31,7 +31,8 @@ Where:
->    then login is disabled. If prefixed with +=+, then it is interpreted
->    as clear-text, and will be crypt-encoded (using MD5). If prefixed with
->    +!=+, then the password will be crypt-encoded (using MD5) and login
-> -  will be disabled. If set to +*+, then login is not allowed.
-> +  will be disabled. If set to +*+, then login is not allowed. If set to 
-> +  +-+, then no password value will be set.
->  - +home+ is the desired home directory for the user. If set to '-', no
->    home directory will be created, and the user's home will be +/+.
->    Explicitly setting +home+ to +/+ is not allowed.
-> diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-> index 026519e..9c5c4dc 100755
-> --- a/support/scripts/mkusers
-> +++ b/support/scripts/mkusers
-> @@ -318,6 +318,9 @@ add_one_user() {
->          *)  fail "home must be an absolute path\n";;
->      esac
->      case "${passwd}" in
-> +        -)
-> +            _passwd=""
-> +            ;;
->          !=*)
->              _passwd='!'"$( encode_password "${passwd#!=}" )"
->              ;;
-> -- 
-> 1.9.5.msysgit.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index e0c2e2a..5263374 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -89,6 +89,7 @@ endif
+ 	source "package/pax-utils/Config.in"
+ 	source "package/perf/Config.in"
+ 	source "package/pv/Config.in"
++	source "package/racehound/Config.in"
+ 	source "package/ramsmp/Config.in"
+ 	source "package/ramspeed/Config.in"
+ 	source "package/rt-tests/Config.in"
+diff --git a/package/racehound/Config.in b/package/racehound/Config.in
+new file mode 100644
+index 0000000..ff3be27
+--- /dev/null
++++ b/package/racehound/Config.in
+@@ -0,0 +1,30 @@
++config BR2_PACKAGE_RACEHOUND
++	bool "racehound"
++	select BR2_PACKAGE_ELFUTILS
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR # elfutils
++	depends on !BR2_STATIC_LIBS # elfutils
++	# only x86/x86_64 supported
++	depends on BR2_i386 || BR2_x86_64
++	help
++	  RaceHound can be used to detect data races in the Linux
++	  kernel on x86.
++
++	  RaceHound needs the following kernel configurations enabled:
++	  - CONFIG_X86_32 or CONFIG_X86_64
++	  - CONFIG_MODULES
++	  - CONFIG_MODULE_UNLOAD
++	  - CONFIG_SYSFS
++	  - CONFIG_DEBUG_FS
++	  - CONFIG_KALLSYMS
++
++	  https://github.com/winnukem/racehound
++
++comment "racehound needs an Linux kernel to be built
++	depends on !BR2_LINUX_KERNEL
++	depends on BR2_i386 || BR2_x86_64
++
++comment "racehound needs a toolchain w/ C++, wchar, dynamic library"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR) || BR2_STATIC_LIBS
++	depends on BR2_i386 || BR2_x86_64
+diff --git a/package/racehound/racehound.mk b/package/racehound/racehound.mk
+new file mode 100644
+index 0000000..2d94b21
+--- /dev/null
++++ b/package/racehound/racehound.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# racehound
++#
++################################################################################
++
++RACEHOUND_VERSION = adbf840a40adda77318b376da913ba3288ef9c7a
++RACEHOUND_SITE = $(call github,winnukem,racehound,$(RACEHOUND_VERSION))
++RACEHOUND_LICENSE = GPLv2
++RACEHOUND_LICENSE_FILES = LICENSE
++RACEHOUND_SUPPORTS_IN_SOURCE_BUILD = NO
++
++RACEHOUND_DEPENDENCIES = elfutils linux
++
++RACEHOUND_CONF_OPTS += \
++	-DKERNEL_VERSION_OK=YES \
++	-DMODULE_BUILD_SUPPORTED=YES \
++	-DKERNEL_CONFIG_OK=YES \
++	-DKBUILD_BUILD_DIR=$(LINUX_DIR)
++
++$(eval $(cmake-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.4
