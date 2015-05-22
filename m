@@ -1,162 +1,236 @@
-From: Doug Kehn <rdkehn@yahoo.com>
-Date: Fri, 22 May 2015 16:58:41 -0500
-Subject: [Buildroot] [PATCH 1/1] package/unscd: new package
-Message-ID: <1432331921-9417-1-git-send-email-rdkehn@yahoo.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 23 May 2015 00:01:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nss-pam-ldapd: new package
+In-Reply-To: <1432329673-6145-1-git-send-email-rdkehn@yahoo.com>
+References: <1432329673-6145-1-git-send-email-rdkehn@yahoo.com>
+Message-ID: <20150522220148.GC5153@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A daemon which handles passwd, group and host lookups for running
-programs and caches the results for the next query. You only need this
-package if you are using slow Name Services like LDAP, NIS or NIS+.
+Doug, All,
 
-This particular NSCD is a complete rewrite of the GNU glibc nscd which
-is a single threaded server process which offloads all NSS lookups to
-worker children; cache hits are handled by the parent, and only cache
-misses start worker children, making the parent immune to resource
-leaks, hangs, and crashes in NSS libraries.
+On 2015-05-22 16:21 -0500, Doug Kehn spake thusly:
+> Name Service Switch (NSS) module that allows your LDAP server to provide
+> user account, group, host name, alias, netgroup, and basically any other
+> information that you would normally get from /etc flat files or NIS. It
+> also provides a Pluggable Authentication Module (PAM) to do
+> authentication to an LDAP server.
 
-It should mostly be a drop-in replacement for existing installs using
-nscd.
+He! Great! :-)
 
-Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
----
- package/Config.in        |  1 +
- package/unscd/Config.in  |  6 ++++++
- package/unscd/S46unscd   | 31 +++++++++++++++++++++++++++++++
- package/unscd/unscd.hash |  4 ++++
- package/unscd/unscd.mk   | 47 +++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 89 insertions(+)
- create mode 100644 package/unscd/Config.in
- create mode 100644 package/unscd/S46unscd
- create mode 100644 package/unscd/unscd.hash
- create mode 100644 package/unscd/unscd.mk
+> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+[--SNIP--]
+> diff --git a/package/nss-pam-ldapd/Config.in b/package/nss-pam-ldapd/Config.in
+> new file mode 100644
+> index 0000000..9dda7a7
+> --- /dev/null
+> +++ b/package/nss-pam-ldapd/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_NSS_PAM_LDAPD
+> +	bool "nss-pam-ldapd"
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	help
+> +	  nss-pam-ldapd which provides a Name Service Switch (NSS)
 
-diff --git a/package/Config.in b/package/Config.in
-index e0c2e2a..39ef6c4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1420,6 +1420,7 @@ endif
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/sysvinit/Config.in"
- endif
-+	source "package/unscd/Config.in"
- 	source "package/util-linux/Config.in"
- endmenu
- 
-diff --git a/package/unscd/Config.in b/package/unscd/Config.in
-new file mode 100644
-index 0000000..c448489
---- /dev/null
-+++ b/package/unscd/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_UNSCD
-+	bool "unscd"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	help
-+	  Micro Name Service Caching Daemon
-diff --git a/package/unscd/S46unscd b/package/unscd/S46unscd
-new file mode 100644
-index 0000000..59a1358
---- /dev/null
-+++ b/package/unscd/S46unscd
-@@ -0,0 +1,31 @@
-+#!/bin/sh
-+
-+NAME="nscd"
-+DAEMON="/usr/sbin/${NAME}"
-+DAEMON_CONF="/etc/${NAME}.conf"
-+
-+[ -x ${DAEMON} ] || exit 0
-+[ -f ${DAEMON_CONF} ] || exit 0
-+
-+case "$1" in
-+start)
-+        echo -n "Starting ${NAME}: "
-+        start-stop-daemon -S -x ${DAEMON}
-+        [ $? -eq 0 ] && echo "OK" || echo "FAIL"
-+        ;;
-+stop)
-+        echo -n "Stopping ${NAME}: "
-+        start-stop-daemon -K -x ${DAEMON}
-+        [ $? -eq 0 ] && echo "OK" || echo "FAIL"
-+        ;;
-+restart|reload)
-+        $0 stop
-+        $0 start
-+        ;;
-+*)
-+        echo "Usage: $0 {start|stop|restart|reload}"
-+        exit 1
-+esac
-+
-+exit 0
-+
-diff --git a/package/unscd/unscd.hash b/package/unscd/unscd.hash
-new file mode 100644
-index 0000000..173c59f
---- /dev/null
-+++ b/package/unscd/unscd.hash
-@@ -0,0 +1,4 @@
-+# From http://snapshot.debian.org/archive/debian/20150519T094547Z/pool/main/u/unscd/unscd_0.51-1.dsc
-+sha256	0dbf717726e1c29af8f4ef7d2d2695e5eedb342320a730a56ae0d56fe32891f8	unscd_0.51.orig.tar.gz
-+sha256	8ae16a826afd464639f6c6372fabafee5b93aea9645b3fbf23970296d4961f27	unscd_0.51-1.debian.tar.gz
-+
-diff --git a/package/unscd/unscd.mk b/package/unscd/unscd.mk
-new file mode 100644
-index 0000000..51da0b1
---- /dev/null
-+++ b/package/unscd/unscd.mk
-@@ -0,0 +1,47 @@
-+################################################################################
-+#
-+# unscd
-+#
-+################################################################################
-+
-+UNSCD_VERSION = 0.51
-+UNSCD_SOURCE = unscd_$(UNSCD_VERSION).orig.tar.gz
-+UNSCD_SITE = http://snapshot.debian.org/archive/debian/20150519T094547Z/pool/main/u/unscd/
-+UNSCD_EXTRA_DOWNLOADS = unscd_$(UNSCD_VERSION)-1.debian.tar.gz
-+UNSCD_LICENSE = GPLv2
-+UNSCD_LICENSE_FILES = debian/copyright
-+
-+define UNSCD_EXTRACT_DEBIAN
-+	gzip -d -c $(BR2_DL_DIR)/$(UNSCD_EXTRA_DOWNLOADS) | tar -C $(@D) -xf -
-+endef
-+
-+UNSCD_POST_EXTRACT_HOOKS += UNSCD_EXTRACT_DEBIAN
-+
-+define UNSCD_APPLY_DEBIAN_PATCHES
-+	for f in `grep -Ev "^#" $(@D)/debian/patches/series 2> /dev/null`; do \
-+		cat "$(@D)/debian/patches/$${f}" | patch -g0 -p1 -E -d "$(@D)" -t -N; \
-+	done
-+endef
-+
-+UNSCD_POST_PATCH_HOOKS += UNSCD_APPLY_DEBIAN_PATCHES
-+
-+define UNSCD_BUILD_CMDS
-+	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-+		$(@D)/nscd.c -o $(@D)/nscd
-+endef
-+
-+define UNSCD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 -D $(@D)/nscd $(TARGET_DIR)/usr/sbin/nscd
-+	$(INSTALL) -m 600 -D $(@D)/debian/nscd.conf $(TARGET_DIR)/etc/nscd.conf
-+endef
-+
-+define UNSCD_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 755 -D package/unscd/S46unscd \
-+		$(TARGET_DIR)/etc/init.d/S46unscd
-+endef
-+
-+define UNSCD_USERS
-+	unscd -1 unscd -1 * - - - unscd user
-+endef
-+
-+$(eval $(generic-package))
+s/which//
+
+> +	  module that allows your LDAP server to provide user account,
+> +	  group, host name, alias, netgroup, and basically any other
+> +	  information that you would normally get from /etc flat files
+> +	  or NIS. It also provides a Pluggable Authentication Module
+> +	  (PAM) to do authentication to an LDAP server.
+
+Should the PAM module be alwaus installed, even if we do not have
+linux-pam installed? I.e. use --enable-pam / --disable-pam
+accordingly...
+
+> +	  http://arthurdejong.org/nss-pam-ldapd/
+
+Since the package has a dependency on glibc, there's no need to depend
+on MMU (because glibc already itself is only available on systems with
+an MMU).
+
+Beside, you need to add a comment stating that nss-pam-ldapd needs a
+(e)glibc toolchain, like explained in the manual, chapter "17.2.2.
+Dependencies on target and toolchain options" :
+
+    http://buildroot.net/downloads/manual/manual.html#dependencies-target-toolchain-options
+
+like so:
+
+    comment "nss-pam-ldapd needs an (e)glibc toolchain"
+        depends on !BR2_TOOLCHAIN_USES_GLIBC
+
+> diff --git a/package/nss-pam-ldapd/S45nslcd b/package/nss-pam-ldapd/S45nslcd
+> new file mode 100644
+> index 0000000..e9c00f3
+> --- /dev/null
+> +++ b/package/nss-pam-ldapd/S45nslcd
+> @@ -0,0 +1,31 @@
+> +#!/bin/sh
+> +
+> +NAME="nslcd"
+> +DAEMON="/usr/sbin/${NAME}"
+> +DAEMON_CONF="/etc/${NAME}.conf"
+> +
+> +[ -x ${DAEMON} ] || exit 0
+
+Since this script is only installed when nss-pam-ldapd itself is
+installed, you are guaranteed the daemon will be installed, no need to
+check for that.
+
+> +[ -f ${DAEMON_CONF} ] || exit 0
+
+This variable is used nowhere in this startup script, so get rid of it.
+If you really need to test that the configuration file exists, just use:
+
+    if [ ! -f /etc/nslcd.conf ]; then
+        printf "No configuration file\n" >&2
+        exit 0  # Or '1' to explicitly return an error code
+    fi
+
+However, I think it is best to just install the sample config file
+packaged with nss-pam-ldapd which ensures there *is* a config file on
+the target, so you don;t even have to check its existence in the startup
+script.
+
+> +case "$1" in
+> +start)
+> +        echo -n "Starting ${NAME}: "
+> +        start-stop-daemon -S -x ${DAEMON}
+> +        [ $? -eq 0 ] && echo "OK" || echo "FAIL"
+> +        ;;
+> +stop)
+> +        echo -n "Stopping ${NAME}: "
+> +        start-stop-daemon -K -x ${DAEMON}
+> +        [ $? -eq 0 ] && echo "OK" || echo "FAIL"
+> +        ;;
+> +restart|reload)
+> +        $0 stop
+> +        $0 start
+> +        ;;
+> +*)
+> +        echo "Usage: $0 {start|stop|restart|reload}"
+> +        exit 1
+> +esac
+> +
+> +exit 0
+
+"exit 0" not needed.
+
+> diff --git a/package/nss-pam-ldapd/nss-pam-ldapd.hash b/package/nss-pam-ldapd/nss-pam-ldapd.hash
+> new file mode 100644
+> index 0000000..21e61f6
+> --- /dev/null
+> +++ b/package/nss-pam-ldapd/nss-pam-ldapd.hash
+> @@ -0,0 +1,2 @@
+> +# From http://arthurdejong.org/nss-pam-ldapd/
+> +md5	1f0517d2c46ca1d8ecdbe23a671edc83	nss-pam-ldapd-0.9.5.tar.gz
+
+When upstream only provides an md5 (or no hash at all), we add a
+locally-computed stronger hash, and we like to use sha256. So add it as
+thus:
+
+    # From http://arthurdejong.org/nss-pam-ldapd/
+    md5  1f0517d2c46ca1d8ecdbe23a671edc83  nss-pam-ldapd-0.9.5.tar.gz
+    # Locally computed:
+    sha256  abcdef1234567890abcdef1234567890  nss-pam-ldapd-0.9.5.tar.gz
+
+If you can check the signature (http://arthurdejong.org/nss-pam-ldapd/nss-pam-ldapd-0.9.5.tar.gz.sig)
+(i.e. you have a path of trust to the signer), you can change the
+comment as thus;
+
+    # Locally computed after checking http://arthurdejong.org/nss-pam-ldapd/nss-pam-ldapd-0.9.5.tar.gz.sig:
+
+> diff --git a/package/nss-pam-ldapd/nss-pam-ldapd.mk b/package/nss-pam-ldapd/nss-pam-ldapd.mk
+> new file mode 100644
+> index 0000000..a650803
+> --- /dev/null
+> +++ b/package/nss-pam-ldapd/nss-pam-ldapd.mk
+> @@ -0,0 +1,22 @@
+> +################################################################################
+> +#
+> +# nss-pam-ldapd
+> +#
+> +################################################################################
+> +
+> +NSS_PAM_LDAPD_VERSION = 0.9.5
+> +NSS_PAM_LDAPD_SITE = http://arthurdejong.org/nss-pam-ldapd
+> +NSS_PAM_LDAPD_LICENSE = LGPLv2.1+
+> +NSS_PAM_LDAPD_LICENSE_FILES = LICENSE
+> +NSS_PAM_LDAPD_INSTALL_STAGING = YES
+
+It has a build-dependency on linux-pam:
+
+    checking security/pam_modutil.h usability... no
+    checking security/pam_modutil.h presence... no
+    checking for security/pam_modutil.h... no
+    configure: error: PAM header files are missing
+
+So you need to select it in Config.in (and inherit the dependencies of
+linux-pam), or depend on it in Config.in, and then add:
+
+    NSS_PAM_LDAPD_DEPENDENCIES = linux-pam
+
+Also, taking into account that linux-pam can be made optional:
+
+    ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+    NSS_PAM_LDAPD_CONF_OPTS = --enable-pam
+    NSS_PAM_LDAPD_DEPENDENCIES = linux-pam
+    else
+    NSS_PAM_LDAPD_CONF_OPTS = --enable-pam
+    endif
+
+It then breaks because it can't find ldap.h:
+
+    checking for ldap.h... no
+    configure: error: could not locate <ldap.h>
+
+So it probably also needs to depend on openldap:
+
+    NSS_PAM_LDAPD_DEPENDENCIES += openldap
+
+I haven't build further for now, so there might be other dependencies. A
+simple way to find them is to do a build with just nss-pam-ldapd enabled
+and see what breaks.
+
+> +define NSS_PAM_LDAPD_USERS
+> +	nslcd -1 nslcd -1 * - - - nslcd user
+> +endef
+> +
+> +define NSS_PAM_LDAPD_INSTALL_INIT_SYSV
+> +	$(INSTALL) -m 755 -D package/nss-pam-ldapd/S45nslcd \
+> +		$(TARGET_DIR)/etc/init.d/S45nslcd
+> +endef
+
+Do you think you could provide a systemd unit file as well? That would
+be great if you could. ;-)
+
+Care to address those issues, then resubmit (and Cc: me please, so I
+notice).
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+> +$(eval $(autotools-package))
+> -- 
+> 2.4.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.4.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
