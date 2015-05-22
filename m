@@ -1,37 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 22 May 2015 10:07:47 +0200
-Subject: [Buildroot] [PATCH 11/13] board/boundarydevices: update
- 6x_bootscript
-In-Reply-To: <CAAMH-yt2G4rVszAoWRYQEQZ4rYzs_XC0jG1oEnLU1vjQYhxkng@mail.gmail.com>
-References: <1432116744-25760-1-git-send-email-gary.bisson@boundarydevices.com>
- <1432116744-25760-12-git-send-email-gary.bisson@boundarydevices.com>
- <20150521190509.044f7661@free-electrons.com>
- <CAAMH-yt2G4rVszAoWRYQEQZ4rYzs_XC0jG1oEnLU1vjQYhxkng@mail.gmail.com>
-Message-ID: <20150522100747.5acc94e0@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 22 May 2015 11:34:45 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix mkfs.jffs2 --pagesize parameter
+	usage.
+In-Reply-To: <1432059990-5541-1-git-send-email-mlesniew@gmail.com>
+ (=?utf-8?Q?=22Micha=C5=82=09Le=C5=9Bniewski=22's?= message of "Tue, 19 May
+ 2015 20:26:30 +0200")
+References: <1432059990-5541-1-git-send-email-mlesniew@gmail.com>
+Message-ID: <87twv50xca.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary Bisson,
+>>>>> "Micha?" == Micha? Le?niewski <mlesniew@gmail.com> writes:
 
-On Fri, 22 May 2015 09:57:12 +0200, Gary Bisson wrote:
+ > This fixes bug 8186 on Bugzilla.
+ > The mkfs.jffs2 accepts a --pagesize parameter, which allows specifying
+ > the size of the virtual memory page size of the target machine, where
+ > the image will be used.  (This is the value of the PAGE_SIZE macro in
+ > Linux.)  In most cases the parameter doesn't need to be set as the
+ > default value of 4 kB is usually correct.
 
-> Yes actually there is, I just removed the Yocto-specific part of this script:
-> https://github.com/boundarydevices/u-boot-imx6/blob/staging/board/boundary/nitrogen6x/6x_bootscript-yocto-3.10.53.txt
-> 
-> Same goes for the other script/binary:
-> https://github.com/boundarydevices/u-boot-imx6/blob/staging/board/boundary/nitrogen6x/6x_upgrade.txt
-> 
-> I'll make a V2 that adds BR2_PACKAGE_HOST_UBOOT_TOOLS to the
-> nitrogen6x_defconfig and modify our post-build.sh to generate the
-> binaries from the .txt files.
+ > The parameter was used incorrectly in Buildroot -- it was set to the
+ > page size of flash memory chip --  this commit fixes this problem.  Now
+ > the --pagesize parameter is not used at all (unless the user explicitly
+ > chooses to use a custom value during configuration).  All defconfigs existing
+ > defconfigs were corrected to match the new configuration variable names.
 
-Excellent, thanks a lot!
+ > Signed-off-by: Micha? Le?niewski <mlesniew@gmail.com>
 
-Thoams
+Thanks, committed with a slightly reworded commit message and
+Config.in.legacy handling for the renamed symbols.
+ 
+ > +config BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
+ > +	bool "Select custom virtual memory page size"
+ > +	default false
+
+NIT: bool symbols default to false, so this line isn't needed.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
