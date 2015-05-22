@@ -1,22 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 May 2015 08:47:53 +0200
-Subject: [Buildroot] [PATCH 2/2] tiff: add hash
-In-Reply-To: <142151711a52137a98e0359e8cd6bff5edc59d63.1432268992.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 22 May 2015 07:29:52 +0300")
-References: <aaa8912d0c6e0b54281fbc749d45982210ec6f18.1432268992.git.baruch@tkos.co.il>
- <142151711a52137a98e0359e8cd6bff5edc59d63.1432268992.git.baruch@tkos.co.il>
-Message-ID: <878uch2jmu.fsf@dell.be.48ers.dk>
+Date: Fri, 22 May 2015 07:58:51 +0200
+Subject: [Buildroot] [git commit] gdk-pixbuf: fix static build with libtiff
+Message-ID: <20150522065628.7856D81E3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=435dfee047746fc7fe995d28d32167031fb707b6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes:
+http://autobuild.buildroot.net/results/ce6/ce61d5aaf5dfdda92fcecb08a30b6093926d6f01/
+http://autobuild.buildroot.net/results/76b/76b550da06fe547716f089e46d96a1406043268a/
 
-Committed, thanks.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gdk-pixbuf/gdk-pixbuf.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 0977d92..eb30215 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -33,7 +33,9 @@ endif
+ ifneq ($(BR2_PACKAGE_TIFF),y)
+ GDK_PIXBUF_CONF_OPTS += --without-libtiff
+ else
+-GDK_PIXBUF_DEPENDENCIES += tiff
++GDK_PIXBUF_DEPENDENCIES += tiff host-pkgconf
++GDK_PIXBUF_CONF_ENV += \
++	LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs libtiff-4)'
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
