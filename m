@@ -1,38 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 May 2015 07:58:51 +0200
-Subject: [Buildroot] [git commit] gdk-pixbuf: fix static build with libtiff
-Message-ID: <20150522065628.7856D81E3B@busybox.osuosl.org>
+Date: Fri, 22 May 2015 07:58:54 +0200
+Subject: [Buildroot] [git commit] tiff: add hash
+Message-ID: <20150522065628.8A96F7F8D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=435dfee047746fc7fe995d28d32167031fb707b6
+commit: http://git.buildroot.net/buildroot/commit/?id=e8f4f052b14e21d617234a3705a1bee0f9c1dd36
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-http://autobuild.buildroot.net/results/ce6/ce61d5aaf5dfdda92fcecb08a30b6093926d6f01/
-http://autobuild.buildroot.net/results/76b/76b550da06fe547716f089e46d96a1406043268a/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdk-pixbuf/gdk-pixbuf.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/tiff/tiff.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 0977d92..eb30215 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -33,7 +33,9 @@ endif
- ifneq ($(BR2_PACKAGE_TIFF),y)
- GDK_PIXBUF_CONF_OPTS += --without-libtiff
- else
--GDK_PIXBUF_DEPENDENCIES += tiff
-+GDK_PIXBUF_DEPENDENCIES += tiff host-pkgconf
-+GDK_PIXBUF_CONF_ENV += \
-+	LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs libtiff-4)'
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
+new file mode 100644
+index 0000000..361b5e1
+--- /dev/null
++++ b/package/tiff/tiff.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 ea1aebe282319537fb2d4d7805f478dd4e0e05c33d0928baba76a7c963684872	tiff-4.0.3.tar.gz
