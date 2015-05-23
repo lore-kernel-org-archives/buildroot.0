@@ -1,58 +1,51 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sat, 23 May 2015 13:03:35 +0300
-Subject: [Buildroot] [PATCH 08/38] gpsd: systemd support
+Date: Sat, 23 May 2015 13:03:45 +0300
+Subject: [Buildroot] [PATCH 09/38] inadyn: systemd support
 In-Reply-To: <cover.1432332802.git.alex.suykov@gmail.com>
 References: <cover.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <99b199604291189d9c5aa2448b721b28601497b6.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <2ffe7e630d07e63d8bc7e7f67364d17241e63019.1432332802.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Just like with the sysv script, non-empty DEVICES value
-must be substituted in the installed file.
-
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 ---
- package/gpsd/gpsd.mk      | 10 ++++++++++
- package/gpsd/gpsd.service | 10 ++++++++++
- 2 files changed, 20 insertions(+)
- create mode 100644 package/gpsd/gpsd.service
+ package/inadyn/inadyn.mk      |  8 ++++++++
+ package/inadyn/inadyn.service | 10 ++++++++++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 package/inadyn/inadyn.service
 
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 1bf4415..953da66 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -208,6 +208,16 @@ define GPSD_INSTALL_INIT_SYSV
- 	$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index b002f94..5c3b0e3 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -30,4 +30,12 @@ define INADYN_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S70inadyn
  endef
  
-+define GPSD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/gpsd/gpsd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/gpsd.service
-+	$(SED) 's at DEVICES@$(BR2_PACKAGE_GPSD_DEVICES)@' \
-+		$(TARGET_DIR)/usr/lib/systemd/system/gpsd.service
++define INADYN_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/inadyn/inadyn.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/inadyn.service
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf /usr/lib/systemd/system/gpsd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/gpsd.service
++	ln -sf /usr/lib/systemd/system/inadyn.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/inadyn.service
 +endef
 +
- define GPSD_INSTALL_STAGING_CMDS
- 	(cd $(@D); \
- 		$(GPSD_SCONS_ENV) \
-diff --git a/package/gpsd/gpsd.service b/package/gpsd/gpsd.service
+ $(eval $(autotools-package))
+diff --git a/package/inadyn/inadyn.service b/package/inadyn/inadyn.service
 new file mode 100644
-index 0000000..4608b99
+index 0000000..abc0a1e
 --- /dev/null
-+++ b/package/gpsd/gpsd.service
++++ b/package/inadyn/inadyn.service
 @@ -0,0 +1,10 @@
 +[Unit]
-+Description=GPS daemon
++Description=DDNS client
 +After=syslog.target network.target
 +
 +[Service]
-+ExecStart=/usr/sbin/gpsd -N DEVICES
++ExecStart=/usr/bin/inadyn
 +Restart=always
 +
 +[Install]
