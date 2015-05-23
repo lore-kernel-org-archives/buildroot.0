@@ -1,175 +1,58 @@
-From: rdkehn at yahoo.com <rdkehn@yahoo.com>
-Date: Fri, 22 May 2015 17:51:10 -0500
-Subject: [Buildroot] [PATCH 1/1] package/unscd: new package
-In-Reply-To: <1432331921-9417-1-git-send-email-rdkehn@yahoo.com>
-References: <1432331921-9417-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <20150522225110.GA9679@dkarchlinux64.currentcomm.com>
+From: James Knight <james.d.knight@live.com>
+Date: Sat, 23 May 2015 06:11:51 +0000 (UTC)
+Subject: [Buildroot] [PATCH 1/1] scripts/mkusers: allow users with no
+	password value set
+References: <1432308977-1284-1-git-send-email-james.knight@rockwellcollins.com>
+ <20150522221522.GD5153@free.fr>
+Message-ID: <loom.20150523T080722-553@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Yann,
 
-I will apply your feedback to nss-pam-ldapd to this submission and
-re-submit.  Of course, let me know if there is something else
-wrong...
+> On 2015-05-22 11:36 -0400, James Knight spake thusly:
+> > The following allows a user definition to specify that a created 
+user
+> > entry should not have a password value set. Original implementation
+> > allowed a user definition to provide a password value of "-" (no 
+quotes)
+> > to generate a crypt-encoded empty string value. In some cases, it 
+may be
+> > desired to have no value specified for a user's password. By using a
+> > value "-" for a password, no value will be set in the shadow value.
+> 
+> I fail to see how that is different from using an empty password as
+> (without quotes): "="
+> 
+> From man 5 passwd:
+> 
+>     The encrypted password field may be blank, in which case no 
+password
+>     is required to authenticate as the specified login name. However,
+>     some applications which read the /etc/passwd file may decide not 
+to
+>     permit any access at all if the password field is blank.
+> 
+> Thus, I believe it is safest to store an encoded empty password rather
+> than set the password field empty.
+> 
+> Did I miss something?
+> 
+> Of course, the manual could be updated to reflect that a password-less
+> account should use "=" in the password field.
+> 
+> Regards,
+> Yann E. MORIN.
 
-Regards,
-...doug
+Logging into a session with an encoded empty password will prompt me to 
+enter a password since it doesn't know the password is empty. In this 
+case, I would simply just hit enter to supply an empty password and it 
+would authenticate.
 
-On Fri, May 22, 2015 at 04:58:41PM -0500, Doug Kehn wrote:
-> A daemon which handles passwd, group and host lookups for running
-> programs and caches the results for the next query. You only need this
-> package if you are using slow Name Services like LDAP, NIS or NIS+.
-> 
-> This particular NSCD is a complete rewrite of the GNU glibc nscd which
-> is a single threaded server process which offloads all NSS lookups to
-> worker children; cache hits are handled by the parent, and only cache
-> misses start worker children, making the parent immune to resource
-> leaks, hangs, and crashes in NSS libraries.
-> 
-> It should mostly be a drop-in replacement for existing installs using
-> nscd.
-> 
-> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-> ---
->  package/Config.in        |  1 +
->  package/unscd/Config.in  |  6 ++++++
->  package/unscd/S46unscd   | 31 +++++++++++++++++++++++++++++++
->  package/unscd/unscd.hash |  4 ++++
->  package/unscd/unscd.mk   | 47 +++++++++++++++++++++++++++++++++++++++++++++++
->  5 files changed, 89 insertions(+)
->  create mode 100644 package/unscd/Config.in
->  create mode 100644 package/unscd/S46unscd
->  create mode 100644 package/unscd/unscd.hash
->  create mode 100644 package/unscd/unscd.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index e0c2e2a..39ef6c4 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1420,6 +1420,7 @@ endif
->  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  	source "package/sysvinit/Config.in"
->  endif
-> +	source "package/unscd/Config.in"
->  	source "package/util-linux/Config.in"
->  endmenu
->  
-> diff --git a/package/unscd/Config.in b/package/unscd/Config.in
-> new file mode 100644
-> index 0000000..c448489
-> --- /dev/null
-> +++ b/package/unscd/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_UNSCD
-> +	bool "unscd"
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	help
-> +	  Micro Name Service Caching Daemon
-> diff --git a/package/unscd/S46unscd b/package/unscd/S46unscd
-> new file mode 100644
-> index 0000000..59a1358
-> --- /dev/null
-> +++ b/package/unscd/S46unscd
-> @@ -0,0 +1,31 @@
-> +#!/bin/sh
-> +
-> +NAME="nscd"
-> +DAEMON="/usr/sbin/${NAME}"
-> +DAEMON_CONF="/etc/${NAME}.conf"
-> +
-> +[ -x ${DAEMON} ] || exit 0
-> +[ -f ${DAEMON_CONF} ] || exit 0
-> +
-> +case "$1" in
-> +start)
-> +        echo -n "Starting ${NAME}: "
-> +        start-stop-daemon -S -x ${DAEMON}
-> +        [ $? -eq 0 ] && echo "OK" || echo "FAIL"
-> +        ;;
-> +stop)
-> +        echo -n "Stopping ${NAME}: "
-> +        start-stop-daemon -K -x ${DAEMON}
-> +        [ $? -eq 0 ] && echo "OK" || echo "FAIL"
-> +        ;;
-> +restart|reload)
-> +        $0 stop
-> +        $0 start
-> +        ;;
-> +*)
-> +        echo "Usage: $0 {start|stop|restart|reload}"
-> +        exit 1
-> +esac
-> +
-> +exit 0
-> +
-> diff --git a/package/unscd/unscd.hash b/package/unscd/unscd.hash
-> new file mode 100644
-> index 0000000..173c59f
-> --- /dev/null
-> +++ b/package/unscd/unscd.hash
-> @@ -0,0 +1,4 @@
-> +# From http://snapshot.debian.org/archive/debian/20150519T094547Z/pool/main/u/unscd/unscd_0.51-1.dsc
-> +sha256	0dbf717726e1c29af8f4ef7d2d2695e5eedb342320a730a56ae0d56fe32891f8	unscd_0.51.orig.tar.gz
-> +sha256	8ae16a826afd464639f6c6372fabafee5b93aea9645b3fbf23970296d4961f27	unscd_0.51-1.debian.tar.gz
-> +
-> diff --git a/package/unscd/unscd.mk b/package/unscd/unscd.mk
-> new file mode 100644
-> index 0000000..51da0b1
-> --- /dev/null
-> +++ b/package/unscd/unscd.mk
-> @@ -0,0 +1,47 @@
-> +################################################################################
-> +#
-> +# unscd
-> +#
-> +################################################################################
-> +
-> +UNSCD_VERSION = 0.51
-> +UNSCD_SOURCE = unscd_$(UNSCD_VERSION).orig.tar.gz
-> +UNSCD_SITE = http://snapshot.debian.org/archive/debian/20150519T094547Z/pool/main/u/unscd/
-> +UNSCD_EXTRA_DOWNLOADS = unscd_$(UNSCD_VERSION)-1.debian.tar.gz
-> +UNSCD_LICENSE = GPLv2
-> +UNSCD_LICENSE_FILES = debian/copyright
-> +
-> +define UNSCD_EXTRACT_DEBIAN
-> +	gzip -d -c $(BR2_DL_DIR)/$(UNSCD_EXTRA_DOWNLOADS) | tar -C $(@D) -xf -
-> +endef
-> +
-> +UNSCD_POST_EXTRACT_HOOKS += UNSCD_EXTRACT_DEBIAN
-> +
-> +define UNSCD_APPLY_DEBIAN_PATCHES
-> +	for f in `grep -Ev "^#" $(@D)/debian/patches/series 2> /dev/null`; do \
-> +		cat "$(@D)/debian/patches/$${f}" | patch -g0 -p1 -E -d "$(@D)" -t -N; \
-> +	done
-> +endef
-> +
-> +UNSCD_POST_PATCH_HOOKS += UNSCD_APPLY_DEBIAN_PATCHES
-> +
-> +define UNSCD_BUILD_CMDS
-> +	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-> +		$(@D)/nscd.c -o $(@D)/nscd
-> +endef
-> +
-> +define UNSCD_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 755 -D $(@D)/nscd $(TARGET_DIR)/usr/sbin/nscd
-> +	$(INSTALL) -m 600 -D $(@D)/debian/nscd.conf $(TARGET_DIR)/etc/nscd.conf
-> +endef
-> +
-> +define UNSCD_INSTALL_INIT_SYSV
-> +	$(INSTALL) -m 755 -D package/unscd/S46unscd \
-> +		$(TARGET_DIR)/etc/init.d/S46unscd
-> +endef
-> +
-> +define UNSCD_USERS
-> +	unscd -1 unscd -1 * - - - unscd user
-> +endef
-> +
-> +$(eval $(generic-package))
-> -- 
-> 2.4.1
-> 
+If I alternatively set the password field blank, my login session will 
+not prompt a password and will just login (since it knows there is no 
+password set). This is what I'm hoping to achieve for the current target 
+I'm developing.
