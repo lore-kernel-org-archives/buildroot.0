@@ -1,9 +1,9 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sat, 23 May 2015 13:03:19 +0300
-Subject: [Buildroot] [PATCH 06/38] ejabberd: systemd support
+Date: Sat, 23 May 2015 13:03:27 +0300
+Subject: [Buildroot] [PATCH 07/38] exim: systemd support
 In-Reply-To: <cover.1432332802.git.alex.suykov@gmail.com>
 References: <cover.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <06a1c8291627eaa04e8454148a478a758c5464a6.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <2bc7b8864f7f664c36ceb90062d39aee6e29345d.1432332802.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +12,40 @@ To: buildroot@busybox.net
 
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 ---
- package/ejabberd/ejabberd.mk      |  8 ++++++++
- package/ejabberd/ejabberd.service | 10 ++++++++++
+ package/exim/exim.mk      |  8 ++++++++
+ package/exim/exim.service | 10 ++++++++++
  2 files changed, 18 insertions(+)
- create mode 100644 package/ejabberd/ejabberd.service
+ create mode 100644 package/exim/exim.service
 
-diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
-index 07ce78e..d8a931f 100644
---- a/package/ejabberd/ejabberd.mk
-+++ b/package/ejabberd/ejabberd.mk
-@@ -48,4 +48,12 @@ define EJABBERD_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S50ejabberd
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index b852793..c950f4b 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -125,4 +125,12 @@ define EXIM_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S86exim
  endef
  
-+define EJABBERD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/ejabberd/ejabberd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/ejabberd.service
++define EXIM_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/exim/exim.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/exim.service
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf /usr/lib/systemd/system/ejabberd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ejabberd.service
++	ln -sf /usr/lib/systemd/system/exim.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/exim.service
 +endef
 +
- $(eval $(rebar-package))
-diff --git a/package/ejabberd/ejabberd.service b/package/ejabberd/ejabberd.service
+ $(eval $(generic-package))
+diff --git a/package/exim/exim.service b/package/exim/exim.service
 new file mode 100644
-index 0000000..830fdd6
+index 0000000..26daabc
 --- /dev/null
-+++ b/package/ejabberd/ejabberd.service
++++ b/package/exim/exim.service
 @@ -0,0 +1,10 @@
 +[Unit]
-+Description=Erlang Jabber daemon
-+After=network.target
++Description=Exim MTA
++After=syslog.target network.target
 +
 +[Service]
-+ExecStart=/usr/bin/ejabberd
++ExecStart=/usr/bin/exim -bdf
 +Restart=always
 +
 +[Install]
