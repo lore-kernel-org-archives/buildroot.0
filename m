@@ -1,12 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 May 2015 11:18:14 +0200
+Date: Sat, 23 May 2015 11:23:19 +0200
 Subject: [Buildroot] [PATCH 1/1] scripts/mkusers: allow users with no
  password value set
-In-Reply-To: <loom.20150523T080722-553@post.gmane.org>
+In-Reply-To: <1432308977-1284-1-git-send-email-james.knight@rockwellcollins.com>
 References: <1432308977-1284-1-git-send-email-james.knight@rockwellcollins.com>
- <20150522221522.GD5153@free.fr>
- <loom.20150523T080722-553@post.gmane.org>
-Message-ID: <20150523091814.GB3708@free.fr>
+Message-ID: <20150523092319.GC3708@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,55 +13,78 @@ To: buildroot@busybox.net
 
 James, All,
 
-On 2015-05-23 06:11 +0000, James Knight spake thusly:
-> > On 2015-05-22 11:36 -0400, James Knight spake thusly:
-> > > The following allows a user definition to specify that a created 
-> user
-> > > entry should not have a password value set. Original implementation
-> > > allowed a user definition to provide a password value of "-" (no 
-> quotes)
-> > > to generate a crypt-encoded empty string value. In some cases, it 
-> may be
-> > > desired to have no value specified for a user's password. By using a
-> > > value "-" for a password, no value will be set in the shadow value.
-> > 
-> > I fail to see how that is different from using an empty password as
-> > (without quotes): "="
-> > 
-> > From man 5 passwd:
-> > 
-> >     The encrypted password field may be blank, in which case no 
-> password
-> >     is required to authenticate as the specified login name. However,
-> >     some applications which read the /etc/passwd file may decide not 
-> to
-> >     permit any access at all if the password field is blank.
-> > 
-> > Thus, I believe it is safest to store an encoded empty password rather
-> > than set the password field empty.
-> > 
-> > Did I miss something?
-> > 
-> > Of course, the manual could be updated to reflect that a password-less
-> > account should use "=" in the password field.
-> > 
-> > Regards,
-> > Yann E. MORIN.
-> 
-> Logging into a session with an encoded empty password will prompt me to 
-> enter a password since it doesn't know the password is empty. In this 
-> case, I would simply just hit enter to supply an empty password and it 
-> would authenticate.
-> 
-> If I alternatively set the password field blank, my login session will 
-> not prompt a password and will just login (since it knows there is no 
-> password set). This is what I'm hoping to achieve for the current target 
-> I'm developing.
+On 2015-05-22 11:36 -0400, James Knight spake thusly:
+> The following allows a user definition to specify that a created user
+> entry should not have a password value set. Original implementation
+> allowed a user definition to provide a password value of "-" (no quotes)
+> to generate a crypt-encoded empty string value. In some cases, it may be
+> desired to have no value specified for a user's password. By using a
+> value "-" for a password, no value will be set in the shadow value.
 
-Ah, right, that's what I missed. OK.
+Well, that commit log was not completely explicit about what the goal
+was. What about something like:
+
+    Currently, it is not possible to create a password-less user, i.e. a
+    user that can log without providing a password. All we can do is
+    create a user with an empty password, but a pasword nonetheless.
+
+    Accept '-' as the password field, meaning that no password is set,
+    which allows a user to log in by just providing is login, and no
+    password will even be asked.
+
+If you have yet a better explanation, go for it! ;-)
+
+> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+
+With the commit log more explicit, you can add:
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  docs/manual/makeusers-syntax.txt | 3 ++-
+>  support/scripts/mkusers          | 3 +++
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/docs/manual/makeusers-syntax.txt b/docs/manual/makeusers-syntax.txt
+> index ffdb961..467e596 100644
+> --- a/docs/manual/makeusers-syntax.txt
+> +++ b/docs/manual/makeusers-syntax.txt
+> @@ -31,7 +31,8 @@ Where:
+>    then login is disabled. If prefixed with +=+, then it is interpreted
+>    as clear-text, and will be crypt-encoded (using MD5). If prefixed with
+>    +!=+, then the password will be crypt-encoded (using MD5) and login
+> -  will be disabled. If set to +*+, then login is not allowed.
+> +  will be disabled. If set to +*+, then login is not allowed. If set to 
+> +  +-+, then no password value will be set.
+>  - +home+ is the desired home directory for the user. If set to '-', no
+>    home directory will be created, and the user's home will be +/+.
+>    Explicitly setting +home+ to +/+ is not allowed.
+> diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+> index 026519e..9c5c4dc 100755
+> --- a/support/scripts/mkusers
+> +++ b/support/scripts/mkusers
+> @@ -318,6 +318,9 @@ add_one_user() {
+>          *)  fail "home must be an absolute path\n";;
+>      esac
+>      case "${passwd}" in
+> +        -)
+> +            _passwd=""
+> +            ;;
+>          !=*)
+>              _passwd='!'"$( encode_password "${passwd#!=}" )"
+>              ;;
+> -- 
+> 1.9.5.msysgit.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
