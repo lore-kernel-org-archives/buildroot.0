@@ -1,49 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 May 2015 18:25:16 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-05-21
-In-Reply-To: <874mn52i52.fsf@dell.be.48ers.dk>
-References: <20150522063013.33F0D100C04@stock.ovh.net>
- <874mn52i52.fsf@dell.be.48ers.dk>
-Message-ID: <20150523162516.GC19247@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 23 May 2015 18:46:16 +0200
+Subject: [Buildroot] [PATCH] package/efl/libelementary: disable on
+ static lib only build
+In-Reply-To: <20150523161837.GB19247@free.fr>
+References: <1432389399-12671-1-git-send-email-s.martin49@gmail.com>
+ <20150523161837.GB19247@free.fr>
+Message-ID: <CAHXCMM+aQMnsVp9=T057eOWcz1kk7Y3LS3wrizGyaj5aJVJ9Aw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas, All,
+Yann, all,
 
-On 2015-05-22 09:20 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->  > Build statistics for 2015-05-21
->  >         i686 |                 ipmiutil-2.9.5 | NOK | http://autobuild.buildroot.net/results/04a1c48d484debd7894fd32997ed50d3a0110b93/
->  >       x86_64 |                 ipmiutil-2.9.5 | NOK | http://autobuild.buildroot.net/results/9accdfec87aa9922a4096b84a61a6e2dfd53561e/
-> 
-> Gaah, more ipmiutil issues. I believe Yann is looking into this.
+On Sat, May 23, 2015 at 6:18 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Samuel, All,
+>
+> On 2015-05-23 15:56 +0200, Samuel Martin spake thusly:
+>> libelementary sources include dlfcn.h header when HAVE_FORK symbol is defined;
+>> this is always the case because elf already depends on BR2_USE_MMU.
+Ooops, sorry for the typo, i mean efl (not elf), and more specifically [1]:
 
-The first issue above is again about an openssl issue, I'm investigating
-now.
 
-The second issue is about missing internal symbols:
+>
+> Although I understand the thechnical reason to require !STATIC, I fail
+> to see the how this commit log describes the actual change.
+>
+> That is, I fail to see why "fork + ELF + MMU" implies we need to depend
+> on !STATIC.
+>
+> Also, ELF requiring an MMU is absolutely wrong. You can run ELF files on
+> MMU-less systems.
+>
+> Regards,
+> Yann E. MORIN.
+>
 
-    isensor2.o: In function `read_sdr_binfile':
-    /home/test/autobuild/instance-0/output/build/ipmiutil-2.9.5/util/isensor.c:2990:
-    undefined reference to `get_LastError'
-or:
-    libipmiutil.a(ipmicmd.o): In function `ipmi_open':
-    ipmicmd.c:(.text+0x5be): undefined reference to `ipmi_open_lan'
+So, in the end, it is: MMU + efl enables fork support in efl; thus
+libelementary includes dlfcn.h. So libelementary should depend on
+!STATIC.
 
-I'm unable (after ~25 builds) to reproduce that second issue. So I'm
-bailing out on that one... :-(
+
+[1] http://git.buildroot.net/buildroot/tree/package/efl/Config.in#n5
 
 Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel
