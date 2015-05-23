@@ -1,80 +1,47 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sat, 23 May 2015 13:14:26 +0300
-Subject: [Buildroot] [PATCH 36/38] samba: systemd support
+Date: Sat, 23 May 2015 13:14:42 +0300
+Subject: [Buildroot] [PATCH 37/38] samba4: install systemd files
 In-Reply-To: <cover.1432332802.git.alex.suykov@gmail.com>
 References: <cover.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <12c8c34cbd4d1196b3074bee8c11b4168af38e3f.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <a98e85c22089032761afba40c1df85b04c3da942.1432332802.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The package comes with usable .service files for
+smbd, nmbd and winbind, but does not install them.
+
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 ---
- package/samba/nmbd.service | 12 ++++++++++++
- package/samba/samba.mk     | 12 ++++++++++++
- package/samba/smbd.service | 12 ++++++++++++
- 3 files changed, 36 insertions(+)
- create mode 100644 package/samba/nmbd.service
- create mode 100644 package/samba/smbd.service
+ package/samba4/samba4.mk | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/package/samba/nmbd.service b/package/samba/nmbd.service
-new file mode 100644
-index 0000000..52b3920
---- /dev/null
-+++ b/package/samba/nmbd.service
-@@ -0,0 +1,12 @@
-+[Unit]
-+Description=Samba NMB daemon
-+After=network.target
-+
-+[Service]
-+ExecStartPre=mkdir -p /var/log/samba
-+ExecStart=/usr/sbin/nmbd -F
-+Restart=always
-+PermissionsStartOnly=true
-+
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 68da9d9..9ba0cf4 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -186,4 +186,16 @@ define SAMBA_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index e5971fb..77ae62a 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -155,4 +155,20 @@ define SAMBA4_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S91smb
  endef
  
-+define SAMBA_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/samba/nmbd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/nmbd.service
-+	$(INSTALL) -D -m 644 package/samba/smbd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/smbd.service
++define SAMBA4_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/nmb.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/nmb.service
++	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/smb.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/smb.service
++	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/winbind.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/winbind.service
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf /usr/lib/systemd/system/nmbd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nmbd.service
-+	ln -sf /usr/lib/systemd/system/smbd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/smbd.service
++	ln -sf /usr/lib/systemd/system/nmb.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nmb.service
++	ln -sf /usr/lib/systemd/system/smb.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/smb.service
++	ln -sf /usr/lib/systemd/system/winbind.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/winbind.service
 +endef
 +
- $(eval $(autotools-package))
-diff --git a/package/samba/smbd.service b/package/samba/smbd.service
-new file mode 100644
-index 0000000..4c97ce3
---- /dev/null
-+++ b/package/samba/smbd.service
-@@ -0,0 +1,12 @@
-+[Unit]
-+Description=Samba SMB daemon
-+After=network.target
-+
-+[Service]
-+ExecStartPre=mkdir -p /var/log/samba
-+ExecStart=/usr/sbin/smbd -F
-+Restart=always
-+PermissionsStartOnly=true
-+
-+[Install]
-+WantedBy=multi-user.target
+ $(eval $(generic-package))
 -- 
 2.0.3
