@@ -1,90 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 May 2015 11:23:19 +0200
-Subject: [Buildroot] [PATCH 1/1] scripts/mkusers: allow users with no
- password value set
-In-Reply-To: <1432308977-1284-1-git-send-email-james.knight@rockwellcollins.com>
-References: <1432308977-1284-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <20150523092319.GC3708@free.fr>
+Date: Sat, 23 May 2015 11:59:36 +0200
+Subject: [Buildroot] Possible libarchive.mk issue
+In-Reply-To: <CALoSW64Xv5-_T3eqHG_kPzv1JsGQNcyPmLG_yBX56vMt9+1bsQ@mail.gmail.com>
+References: <CALoSW64Xv5-_T3eqHG_kPzv1JsGQNcyPmLG_yBX56vMt9+1bsQ@mail.gmail.com>
+Message-ID: <20150523095936.GA19247@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Nimai, All,
 
-On 2015-05-22 11:36 -0400, James Knight spake thusly:
-> The following allows a user definition to specify that a created user
-> entry should not have a password value set. Original implementation
-> allowed a user definition to provide a password value of "-" (no quotes)
-> to generate a crypt-encoded empty string value. In some cases, it may be
-> desired to have no value specified for a user's password. By using a
-> value "-" for a password, no value will be set in the shadow value.
+On 2015-05-22 18:41 -0400, Nimai Mahajan spake thusly:
+> Just wanted to get this resolved before the official 2015.05 release.
+> Is there any reason libarchive has LIBARCHIVE_CONF_OPTS =
+> --without-lzma hard coded/defined without if/else's?
 
-Well, that commit log was not completely explicit about what the goal
-was. What about something like:
+Because nobody needed it so far. ;-)
 
-    Currently, it is not possible to create a password-less user, i.e. a
-    user that can log without providing a password. All we can do is
-    create a user with an empty password, but a pasword nonetheless.
+> We use libarchive
+> with xz on our project and don't know how to pre patch these
+> package/*.mk files before a build so was wondering if this change
+> could be made now. My assumption is that this was an oversight and
+> guessing it should be like this ... will push a patch if so.
+> 
+> ifeq ($(BR2_PACKAGE_XZ),y)
+> LIBARCHIVE_DEPENDENCIES += xz
+> else
+> LIBARCHIVE_CONF_OPTS += --without-lzma
+> endif
 
-    Accept '-' as the password field, meaning that no password is set,
-    which allows a user to log in by just providing is login, and no
-    password will even be asked.
+Yeah, looks sane. Please send a patch.
 
-If you have yet a better explanation, go for it! ;-)
-
-> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-
-With the commit log more explicit, you can add:
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Thanks! :-)
+However, we're in feature-freeze for the up-coming release, only
+bug-fixes are accepted, and that would be a new feature, so will not be
+in the upcming release, but the next one (~3 months from now).
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  docs/manual/makeusers-syntax.txt | 3 ++-
->  support/scripts/mkusers          | 3 +++
->  2 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/makeusers-syntax.txt b/docs/manual/makeusers-syntax.txt
-> index ffdb961..467e596 100644
-> --- a/docs/manual/makeusers-syntax.txt
-> +++ b/docs/manual/makeusers-syntax.txt
-> @@ -31,7 +31,8 @@ Where:
->    then login is disabled. If prefixed with +=+, then it is interpreted
->    as clear-text, and will be crypt-encoded (using MD5). If prefixed with
->    +!=+, then the password will be crypt-encoded (using MD5) and login
-> -  will be disabled. If set to +*+, then login is not allowed.
-> +  will be disabled. If set to +*+, then login is not allowed. If set to 
-> +  +-+, then no password value will be set.
->  - +home+ is the desired home directory for the user. If set to '-', no
->    home directory will be created, and the user's home will be +/+.
->    Explicitly setting +home+ to +/+ is not allowed.
-> diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-> index 026519e..9c5c4dc 100755
-> --- a/support/scripts/mkusers
-> +++ b/support/scripts/mkusers
-> @@ -318,6 +318,9 @@ add_one_user() {
->          *)  fail "home must be an absolute path\n";;
->      esac
->      case "${passwd}" in
-> +        -)
-> +            _passwd=""
-> +            ;;
->          !=*)
->              _passwd='!'"$( encode_password "${passwd#!=}" )"
->              ;;
-> -- 
-> 1.9.5.msysgit.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
