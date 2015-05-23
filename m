@@ -1,52 +1,56 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sat, 23 May 2015 13:02:10 +0300
-Subject: [Buildroot] [PATCH 01/38] at: systemd support
+Date: Sat, 23 May 2015 13:02:24 +0300
+Subject: [Buildroot] [PATCH 02/38] chrony: systemd support
 In-Reply-To: <cover.1432332802.git.alex.suykov@gmail.com>
 References: <cover.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <f3aa3efc49568ce60fa774f02c3f031ccbf40da2.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <34254cc0f199ed486318f4274d9276e7149a93bd.1432332802.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+systemd has its own NTP daemon, which must be disabled before
+starting chrony. Possible (but unlikely) conflict with openntpd
+is not marked in either package.
+
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 ---
- package/at/at.mk       |  8 ++++++++
- package/at/atd.service | 11 +++++++++++
+ package/chrony/chrony.mk      |  8 ++++++++
+ package/chrony/chrony.service | 11 +++++++++++
  2 files changed, 19 insertions(+)
- create mode 100644 package/at/atd.service
+ create mode 100644 package/chrony/chrony.service
 
-diff --git a/package/at/at.mk b/package/at/at.mk
-index 1504e32..be4c0b2 100644
---- a/package/at/at.mk
-+++ b/package/at/at.mk
-@@ -25,4 +25,12 @@ define AT_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/at/S99at $(TARGET_DIR)/etc/init.d/S99at
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index 8e41ddc..f8012ac 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -45,4 +45,12 @@ define CHRONY_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/chrony/S49chrony $(TARGET_DIR)/etc/init.d/S49chrony
  endef
  
-+define AT_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/at/atd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/atd.service
++define CHRONY_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/chrony/chrony.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/chrony.service
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf /usr/lib/systemd/system/atd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/atd.service
++	ln -sf /usr/lib/systemd/system/chrony.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/chrony.service
 +endef
 +
- $(eval $(autotools-package))
-diff --git a/package/at/atd.service b/package/at/atd.service
+ $(eval $(generic-package))
+diff --git a/package/chrony/chrony.service b/package/chrony/chrony.service
 new file mode 100644
-index 0000000..543cbc3
+index 0000000..6000fce
 --- /dev/null
-+++ b/package/at/atd.service
++++ b/package/chrony/chrony.service
 @@ -0,0 +1,11 @@
 +[Unit]
-+Description=Run jobs queued for later execution
-+After=syslog.target
++Description=Chrony Network Time Daemon
++After=syslog.target network.target
++Conflicts=systemd-timesyncd.service
 +
 +[Service]
-+UMask=077
-+ExecStart=/usr/sbin/atd -f
++ExecStart=/usr/bin/chronyd -n
 +Restart=always
 +
 +[Install]
