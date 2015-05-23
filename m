@@ -1,55 +1,55 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sat, 23 May 2015 13:13:27 +0300
-Subject: [Buildroot] [PATCH 29/38] tftpd: systemd support
+Date: Sat, 23 May 2015 13:13:37 +0300
+Subject: [Buildroot] [PATCH 31/38] transmission: systemd support
 In-Reply-To: <cover.1432332802.git.alex.suykov@gmail.com>
 References: <cover.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <23834175280549825307d0d73e7684efe024ccc3.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <34ef01e3789585c066c0db5b3e7d0007bad06b14.1432332802.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The code below assumes sysv initscript is correct.
-Which I have doubts about.
-
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 ---
- package/tftpd/tftpd.mk      |  8 ++++++++
- package/tftpd/tftpd.service | 10 ++++++++++
- 2 files changed, 18 insertions(+)
- create mode 100644 package/tftpd/tftpd.service
+ package/transmission/transmission.mk      |  8 ++++++++
+ package/transmission/transmission.service | 11 +++++++++++
+ 2 files changed, 19 insertions(+)
+ create mode 100644 package/transmission/transmission.service
 
-diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-index 78df835..0d6a2ed 100644
---- a/package/tftpd/tftpd.mk
-+++ b/package/tftpd/tftpd.mk
-@@ -23,4 +23,12 @@ define TFTPD_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/tftpd/S80tftpd-hpa $(TARGET_DIR)/etc/init.d/S80tftpd-hpa
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index bbc32bf..7587a6a 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -41,6 +41,14 @@ define TRANSMISSION_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S92transmission
  endef
  
-+define TFTPD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/tftpd/tftpd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/tftpd.service
++define TRANSMISSION_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/transmission/transmission.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/transmission.service
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf /usr/lib/systemd/system/tftpd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/tftpd.service
++	ln -sf /usr/lib/systemd/system/transmission.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/transmission.service
 +endef
 +
- $(eval $(autotools-package))
-diff --git a/package/tftpd/tftpd.service b/package/tftpd/tftpd.service
+ else
+ TRANSMISSION_CONF_OPTS += --disable-daemon
+ endif
+diff --git a/package/transmission/transmission.service b/package/transmission/transmission.service
 new file mode 100644
-index 0000000..b7a29a3
+index 0000000..0cc22be
 --- /dev/null
-+++ b/package/tftpd/tftpd.service
-@@ -0,0 +1,10 @@
++++ b/package/transmission/transmission.service
+@@ -0,0 +1,11 @@
 +[Unit]
-+Description=TFTP daemon
-+After=syslog.target network.target
++Description=Transmission BitTorrent Daemon
++After=network.target
 +
 +[Service]
-+ExecStart=/usr/sbin/tftpd -L -c -s /var/lib/tftpboot
-+Restart=always
++User=transmission
++ExecStart=/usr/bin/transmission-daemon -f --log-error
++ExecReload=/bin/kill -s HUP $MAINPID
 +
 +[Install]
 +WantedBy=multi-user.target
