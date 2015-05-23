@@ -1,55 +1,51 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sat, 23 May 2015 13:06:03 +0300
-Subject: [Buildroot] [PATCH 18/38] netsnmp: systemd support
+Date: Sat, 23 May 2015 13:06:09 +0300
+Subject: [Buildroot] [PATCH 19/38] olsr: systemd support
 In-Reply-To: <cover.1432332802.git.alex.suykov@gmail.com>
 References: <cover.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <3163c13927d94a844be0b4a1b3a5f2123f09aec1.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <ac31cdd39a0dbb6b172575dc356a93e81389e080.1432332802.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The service file follows sysv startup script with 127.0.0.1
-and the rest of the options hardcoded.
-
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 ---
- package/netsnmp/netsnmp.mk    |  7 +++++++
- package/netsnmp/snmpd.service | 10 ++++++++++
- 2 files changed, 17 insertions(+)
- create mode 100644 package/netsnmp/snmpd.service
+ package/olsr/olsr.mk      |  8 ++++++++
+ package/olsr/olsr.service | 10 ++++++++++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 package/olsr/olsr.service
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 6eff5e3..b364c5c 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -94,6 +94,13 @@ define NETSNMP_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/netsnmp/S59snmpd \
- 		$(TARGET_DIR)/etc/init.d/S59snmpd
+diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
+index 7e28b1e..f07770a 100644
+--- a/package/olsr/olsr.mk
++++ b/package/olsr/olsr.mk
+@@ -40,4 +40,12 @@ define OLSR_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S50olsr
  endef
-+define NETSNMP_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/netsnmp/snmpd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/snmpd.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf /usr/lib/systemd/system/snmpd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/snmpd.service
-+endef
- endif
  
- define NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
-diff --git a/package/netsnmp/snmpd.service b/package/netsnmp/snmpd.service
++define OLSR_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/olsr/olsr.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/olsr.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf /usr/lib/systemd/system/olsr.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/olsr.service
++endef
++
+ $(eval $(generic-package))
+diff --git a/package/olsr/olsr.service b/package/olsr/olsr.service
 new file mode 100644
-index 0000000..6926b9b
+index 0000000..9ec8930
 --- /dev/null
-+++ b/package/netsnmp/snmpd.service
++++ b/package/olsr/olsr.service
 @@ -0,0 +1,10 @@
 +[Unit]
-+Description=SNMP daemon
-+After=syslog.target network.target
++Description=Ad-hoc wireless mesh routing daemon
++After=network.target
 +
 +[Service]
-+ExecStart=/usr/sbin/snmpd -f -M /usr/share/snmp/mibs -Lsd 127.0.0.1
++ExecStart=/usr/sbin/olsrd -nofork
 +Restart=always
 +
 +[Install]
