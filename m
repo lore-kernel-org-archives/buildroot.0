@@ -1,44 +1,47 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 23 May 2015 15:56:39 +0200
-Subject: [Buildroot] [PATCH] package/efl/libelementary: disable on static
-	lib only build
-Message-ID: <1432389399-12671-1-git-send-email-s.martin49@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 23 May 2015 17:40:33 +0200
+Subject: [Buildroot] [PATCH] package/ipmiutil: disable parallel build
+Message-ID: <1432395633-3506-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libelementary sources include dlfcn.h header when HAVE_FORK symbol is defined;
-this is always the case because elf already depends on BR2_USE_MMU.
+ipmiutil has a race when generating the object files and the executable,
+because it uses very odd (to say the least) constructs in its
+Makefile.am, leading to improper dependency-tracking.
+
+Since impmiutil is pretty small, and because it is just mindbloggingly
+complex to fix its Makefile.am, just disable parallel build.
 
 Fixes:
-  http://autobuild.buildroot.org/results/07c/07c97918dab24215f5c5130a9cd2788adca0a27d/
+    http://autobuild.buildroot.org/results/661/661373306d0440aaea67e394fbbfc47fd4481589/
+    http://autobuild.buildroot.org/results/a6c/a6c5f9d8e0e0bad27b8ca1fa217bfda4216f2cd8/
+    http://autobuild.buildroot.org/results/f0b/f0bbbd54349b5239872d6de185e16c1d90b3f779/
+    http://autobuild.buildroot.org/results/20c/20c09695481c3d1030852330c1d1f1f9489f1f41/
+    ...
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Romain Naour <romain.naour@openwide.fr>
+Cc Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/libelementary/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/ipmiutil/ipmiutil.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
-index c193ef1..4f62592 100644
---- a/package/efl/libelementary/Config.in
-+++ b/package/efl/libelementary/Config.in
-@@ -1,5 +1,5 @@
--comment "libelementary needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "libelementary needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
+index 011c0b6..736e430 100644
+--- a/package/ipmiutil/ipmiutil.mk
++++ b/package/ipmiutil/ipmiutil.mk
+@@ -11,6 +11,8 @@ IPMIUTIL_LICENSE_FILES = COPYING
+ # We're patching configure.ac
+ IPMIUTIL_AUTORECONF = YES
  
- config BR2_PACKAGE_LIBELEMENTARY
- 	bool "libelementary"
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_LIBELEMENTARY
- 	select BR2_PACKAGE_LIBECORE
- 	select BR2_PACKAGE_LIBEDJE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  Elementary is a widget toolkit and EFL wrapper and convenience
- 	  library to make it easy to build applications and tools with UIs
++IPMIUTIL_MAKE = $(MAKE1)
++
+ # forgets to link against libcrypto dependencies breaking static link
+ ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
+ # tests against distro libcrypto so it might get a false positive when
 -- 
-2.4.1
+1.9.1
