@@ -1,54 +1,50 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sat, 23 May 2015 13:14:00 +0300
-Subject: [Buildroot] [PATCH 33/38] vsftpd: systemd support
+Date: Sat, 23 May 2015 13:14:07 +0300
+Subject: [Buildroot] [PATCH 34/38] triggerhappy: systemd support
 In-Reply-To: <cover.1432332802.git.alex.suykov@gmail.com>
 References: <cover.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <63144b95f35408d9343a649ed057e2cb1eb3041e.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <dc9d8d0b528d349289f87b54f476f736d25ea1b4.1432332802.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Foreground/background mode can be set either way in the config file,
-so command line override is used to force foreground.
-
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 ---
- package/vsftpd/vsftpd.mk      |  8 ++++++++
- package/vsftpd/vsftpd.service | 10 ++++++++++
- 2 files changed, 18 insertions(+)
- create mode 100644 package/vsftpd/vsftpd.service
+ package/triggerhappy/triggerhappy.mk      | 8 ++++++++
+ package/triggerhappy/triggerhappy.service | 9 +++++++++
+ 2 files changed, 17 insertions(+)
+ create mode 100644 package/triggerhappy/triggerhappy.service
 
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index 3091f06..6f6964a 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -55,4 +55,12 @@ define VSFTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -d -m 700 $(TARGET_DIR)/usr/share/empty
+diff --git a/package/triggerhappy/triggerhappy.mk b/package/triggerhappy/triggerhappy.mk
+index d3dfc6a..a643342 100644
+--- a/package/triggerhappy/triggerhappy.mk
++++ b/package/triggerhappy/triggerhappy.mk
+@@ -34,4 +34,12 @@ define TRIGGERHAPPY_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S10triggerhappy
  endef
  
-+define VSFTPD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/vsftpd/vsftpd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/vsftpd.service
++define TRIGGERHAPPY_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/triggerhappy/triggerhappy.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/triggerhappy.service
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf /usr/lib/systemd/system/vsftpd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/vsftpd.service
++	ln -sf /usr/lib/systemd/system/triggerhappy.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/triggerhappy.service
 +endef
 +
  $(eval $(generic-package))
-diff --git a/package/vsftpd/vsftpd.service b/package/vsftpd/vsftpd.service
+diff --git a/package/triggerhappy/triggerhappy.service b/package/triggerhappy/triggerhappy.service
 new file mode 100644
-index 0000000..a1c370a
+index 0000000..8449c1c
 --- /dev/null
-+++ b/package/vsftpd/vsftpd.service
-@@ -0,0 +1,10 @@
++++ b/package/triggerhappy/triggerhappy.service
+@@ -0,0 +1,9 @@
 +[Unit]
-+Description=FTP daemon
-+After=syslog.target network.target auditd.target
++Description=Triggerhappy daemon
 +
 +[Service]
-+ExecStart=/usr/bin/vsftpd /etc/vsftpd.conf -obackground=NO
++ExecStart=/usr/sbin/thd --triggers /etc/triggerhappy/triggers.d --socket /var/run/thd.socket --user nobody /dev/input/event*
 +Restart=always
 +
 +[Install]
