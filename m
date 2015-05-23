@@ -1,9 +1,9 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sat, 23 May 2015 13:05:13 +0300
-Subject: [Buildroot] [PATCH 14/38] mongoose: systemd support
+Date: Sat, 23 May 2015 13:05:20 +0300
+Subject: [Buildroot] [PATCH 15/38] neard: systemd support
 In-Reply-To: <cover.1432332802.git.alex.suykov@gmail.com>
 References: <cover.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <fa462132229bb0c222bd9d3598cd0c8c9e741f8c.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <fa0bed763359b6b38358e16ee82ef281878ec8c1.1432332802.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +12,40 @@ To: buildroot@busybox.net
 
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 ---
- package/mongoose/mongoose.mk      |  8 ++++++++
- package/mongoose/mongoose.service | 10 ++++++++++
+ package/neard/neard.mk      |  8 ++++++++
+ package/neard/neard.service | 10 ++++++++++
  2 files changed, 18 insertions(+)
- create mode 100644 package/mongoose/mongoose.service
+ create mode 100644 package/neard/neard.service
 
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 6797e58..38f76af 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -36,6 +36,14 @@ define MONGOOSE_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S85mongoose
+diff --git a/package/neard/neard.mk b/package/neard/neard.mk
+index fc92421..dd18b0a 100644
+--- a/package/neard/neard.mk
++++ b/package/neard/neard.mk
+@@ -23,4 +23,12 @@ define NEARD_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S53neard
  endef
  
-+define MONGOOSE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/mongoose/mongoose.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/mongoose.service
++define NEARD_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/neard/neard.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/neard.service
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf /usr/lib/systemd/system/mongoose.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mongoose.service
++	ln -sf /usr/lib/systemd/system/neard.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/neard.service
 +endef
 +
- define MONGOOSE_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D -m 644 $(@D)/libmongoose.a \
- 		$(STAGING_DIR)/usr/lib/libmongoose.a
-diff --git a/package/mongoose/mongoose.service b/package/mongoose/mongoose.service
+ $(eval $(autotools-package))
+diff --git a/package/neard/neard.service b/package/neard/neard.service
 new file mode 100644
-index 0000000..12a731c
+index 0000000..978163d
 --- /dev/null
-+++ b/package/mongoose/mongoose.service
++++ b/package/neard/neard.service
 @@ -0,0 +1,10 @@
 +[Unit]
-+Description=Mongoose HTTP server
-+After=network.target
++Description=Near-field communication daemon
++After=syslog.target
 +
 +[Service]
-+ExecStart=/usr/sbin/mongoose -document_root /var/www -listening_port 80
++ExecStart=/usr/libexec/nfc/neard -d '*'
 +Restart=always
 +
 +[Install]
