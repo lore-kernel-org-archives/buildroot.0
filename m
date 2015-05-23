@@ -1,9 +1,9 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sat, 23 May 2015 13:07:01 +0300
-Subject: [Buildroot] [PATCH 24/38] smstools3: systemd support
+Date: Sat, 23 May 2015 13:07:07 +0300
+Subject: [Buildroot] [PATCH 25/38] rpi-userland: systemd support
 In-Reply-To: <cover.1432332802.git.alex.suykov@gmail.com>
 References: <cover.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <142f0a6ba96f097f1fea57227786b9cf341aedca.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <be47e4f10ee527a05bf4ac9831ef3db640d9d257.1432332802.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,49 +12,42 @@ To: buildroot@busybox.net
 
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 ---
- package/smstools3/smsd.service | 14 ++++++++++++++
- package/smstools3/smstools3.mk |  8 ++++++++
- 2 files changed, 22 insertions(+)
- create mode 100644 package/smstools3/smsd.service
+ package/rpi-userland/rpi-userland.mk | 7 +++++++
+ package/rpi-userland/vcfiled.service | 8 ++++++++
+ 2 files changed, 15 insertions(+)
+ create mode 100644 package/rpi-userland/vcfiled.service
 
-diff --git a/package/smstools3/smsd.service b/package/smstools3/smsd.service
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 20a6af0..e1ce2b6 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -19,6 +19,13 @@ define RPI_USERLAND_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/rpi-userland/S94vcfiled \
+ 		$(TARGET_DIR)/etc/init.d/S94vcfiled
+ endef
++define RPI_USERLAND_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/rpi-userland/vcfiled.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/vcfiled.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf /usr/lib/systemd/system/vcfiled.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/vcfiled.service
++endef
+ endif
+ 
+ define RPI_USERLAND_POST_TARGET_CLEANUP
+diff --git a/package/rpi-userland/vcfiled.service b/package/rpi-userland/vcfiled.service
 new file mode 100644
-index 0000000..fd6e088
+index 0000000..2b8f1dc
 --- /dev/null
-+++ b/package/smstools3/smsd.service
-@@ -0,0 +1,14 @@
++++ b/package/rpi-userland/vcfiled.service
+@@ -0,0 +1,8 @@
 +[Unit]
-+Description=SMS Server Tools 3
-+After=syslog.target
++Description=VideoCore file server daemon
 +
 +[Service]
-+ExecStartPre=mkdir -p /var/spool/sms/outgoing
-+ExecStartPre=mkdir -p /var/spool/sms/incoming
-+ExecStartPre=mkdir -p /var/spool/sms/checked
-+ExecStart=/usr/bin/smsd -c /etc/smsd.conf -s
-+Restart=always
-+PermissionsStartOnly=true
++ExecStart=/usr/sbin/vcfiled --foreground
 +
 +[Install]
 +WantedBy=multi-user.target
-diff --git a/package/smstools3/smstools3.mk b/package/smstools3/smstools3.mk
-index a1684de..60ca5b6 100644
---- a/package/smstools3/smstools3.mk
-+++ b/package/smstools3/smstools3.mk
-@@ -22,6 +22,14 @@ define SMSTOOLS3_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S50smsd
- endef
- 
-+define SMSTOOLS3_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/smstools3/smsd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/smsd.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf /usr/lib/systemd/system/smsd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/smsd.service
-+endef
-+
- define SMSTOOLS3_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/src/smsd \
- 		$(TARGET_DIR)/usr/bin/smsd
 -- 
 2.0.3
