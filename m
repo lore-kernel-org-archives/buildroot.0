@@ -1,49 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 May 2015 14:57:56 +0200
-Subject: [Buildroot] [PATCH] package/php: fix build without threads and pcre
-Message-ID: <1432385876-13578-1-git-send-email-yann.morin.1998@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 23 May 2015 15:56:39 +0200
+Subject: [Buildroot] [PATCH] package/efl/libelementary: disable on static
+	lib only build
+Message-ID: <1432389399-12671-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The pcre library bundled in php is not configurable through the usual
---enable/disable options, but wants to be thread-safe by default, so it
-wants to use pthreads (uncludes pthread.h and uses pthread_* functions).
-
-So, just override the default configuration to explicitly require the
-bundled pcre library be single-threaded when we have no thread and are
-not using the external pcre library.
+libelementary sources include dlfcn.h header when HAVE_FORK symbol is defined;
+this is always the case because elf already depends on BR2_USE_MMU.
 
 Fixes:
-    http://autobuild.buildroot.org/results/f50/f50f4e569466ad74e49a3eac9ea2e6cfc4dd30e3/
+  http://autobuild.buildroot.org/results/07c/07c97918dab24215f5c5130a9cd2788adca0a27d/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Floris Bos <bos@je-eigen-domein.nl>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/php/php.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/efl/libelementary/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 6492747..448b7ef 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -213,6 +213,13 @@ endif
- ifeq ($(BR2_PACKAGE_PCRE),y)
- PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += pcre
-+else
-+# The bundled pcre library is not configurable through ./configure options,
-+# and by default is configured to be thread-safe, so it wants pthreads. So
-+# we must explicitly tell it when we don't have threads.
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-+PHP_CFLAGS += -DSLJIT_SINGLE_THREADED=1
-+endif
- endif
+diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
+index c193ef1..4f62592 100644
+--- a/package/efl/libelementary/Config.in
++++ b/package/efl/libelementary/Config.in
+@@ -1,5 +1,5 @@
+-comment "libelementary needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "libelementary needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
  
- ifeq ($(BR2_PACKAGE_PHP_EXT_CURL),y)
+ config BR2_PACKAGE_LIBELEMENTARY
+ 	bool "libelementary"
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_LIBELEMENTARY
+ 	select BR2_PACKAGE_LIBECORE
+ 	select BR2_PACKAGE_LIBEDJE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Elementary is a widget toolkit and EFL wrapper and convenience
+ 	  library to make it easy to build applications and tools with UIs
 -- 
-1.9.1
+2.4.1
