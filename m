@@ -1,49 +1,23 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 May 2015 11:59:36 +0200
-Subject: [Buildroot] Possible libarchive.mk issue
-In-Reply-To: <CALoSW64Xv5-_T3eqHG_kPzv1JsGQNcyPmLG_yBX56vMt9+1bsQ@mail.gmail.com>
-References: <CALoSW64Xv5-_T3eqHG_kPzv1JsGQNcyPmLG_yBX56vMt9+1bsQ@mail.gmail.com>
-Message-ID: <20150523095936.GA19247@free.fr>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Sat, 23 May 2015 13:01:57 +0300
+Subject: [Buildroot] [PATCH 00/38] systemd support for various packages
+Message-ID: <cover.1432332802.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nimai, All,
+This set adds systemd support to packages that install sysv
+initscripts but not systemd services. The idea is that the
+choice between BR2_INIT_SYSV and BR2_INIT_SYSTEMD should affect
+the process list in the resulting system as little as possible.
 
-On 2015-05-22 18:41 -0400, Nimai Mahajan spake thusly:
-> Just wanted to get this resolved before the official 2015.05 release.
-> Is there any reason libarchive has LIBARCHIVE_CONF_OPTS =
-> --without-lzma hard coded/defined without if/else's?
+All services start foreground processes (Type=simple), and follow
+current initscripts otherwise whenever possible.
 
-Because nobody needed it so far. ;-)
+This set is not complete, several difficult packages including nfs
+were skipped.
 
-> We use libarchive
-> with xz on our project and don't know how to pre patch these
-> package/*.mk files before a build so was wondering if this change
-> could be made now. My assumption is that this was an oversight and
-> guessing it should be like this ... will push a patch if so.
-> 
-> ifeq ($(BR2_PACKAGE_XZ),y)
-> LIBARCHIVE_DEPENDENCIES += xz
-> else
-> LIBARCHIVE_CONF_OPTS += --without-lzma
-> endif
-
-Yeah, looks sane. Please send a patch.
-
-However, we're in feature-freeze for the up-coming release, only
-bug-fixes are accepted, and that would be a new feature, so will not be
-in the upcming release, but the next one (~3 months from now).
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+All patches are independent, and can be reviewed/commited one at a time
+in any order. And this is for the next branch of course.
