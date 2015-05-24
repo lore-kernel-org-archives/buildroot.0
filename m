@@ -1,31 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 May 2015 23:34:21 +0200
-Subject: [Buildroot] [git commit] package/libgsasl: fix typo in variable name
-Message-ID: <20150524214953.7E81C818F5@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 May 2015 23:49:51 +0200
+Subject: [Buildroot] [PATCH 0/2] docs/manual: slight eye-candy about
+	br2-external (branch yem/manual)
+Message-ID: <cover.1432504112.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fdbe1b0a0ff679c1f605197caefb144168d90447
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libgsasl/libgsasl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+This series does some slight eye-candy in the manual, about
+br2-external.
 
-diff --git a/package/libgsasl/libgsasl.mk b/package/libgsasl/libgsasl.mk
-index ea634bc..f2660ca 100644
---- a/package/libgsasl/libgsasl.mk
-+++ b/package/libgsasl/libgsasl.mk
-@@ -9,6 +9,6 @@ LIBGSASL_SITE = $(BR2_GNU_MIRROR)/gsasl
- LIBGSASL_LICENSE = LGPLv2.1+ (library), GPLv3+ (programs)
- LIBGSASL_LICENSE_FILES = README COPYING.LIB COPYING
- LIBGSASL_INSTALL_STAGING = YES
--LIBGSAS_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBIDN),libidn)
-+LIBGSASL_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBIDN),libidn)
- 
- $(eval $(autotools-package))
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 6fe42d07fa6f5ab4ff175be5f8014734954c5b52:
+
+  gptfdisk: fix static linking issue with iconv (2015-05-22 14:49:32 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/manual
+
+for you to fetch changes up to fab2dd23c2efd2f8eb0586dcb0c71d54c3a5caf4:
+
+  docs/manual/br2-external: use proper .Note sections (2015-05-24 23:46:24 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      docs/manual/br2-external: remove superfluous leading tabs in code blocks
+      docs/manual/br2-external: use proper .Note sections
+
+ docs/manual/customize-outside-br.txt | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
