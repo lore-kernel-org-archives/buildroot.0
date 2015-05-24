@@ -1,58 +1,65 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 May 2015 12:56:18 +0200
-Subject: [Buildroot] [PATCH/next v2 1/1] package/{mesa3d,
-	mesa3d-headers}: bump version to 10.5.6
-Message-ID: <1432464978-28648-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 May 2015 13:02:50 +0200
+Subject: [Buildroot] Help for another newbie,
+ AT91sam9x25 incorrect defconfig or incorrect rootfs.ubi
+In-Reply-To: <1432452387471-101939.post@n4.nabble.com>
+References: <1432452387471-101939.post@n4.nabble.com>
+Message-ID: <20150524130250.36ebd47d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Ted Salazar,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: bump to 10.5.6
+On Sun, 24 May 2015 00:26:27 -0700 (PDT), Ted Salazar wrote:
 
- package/mesa3d-headers/mesa3d-headers.mk |    2 +-
- package/mesa3d/mesa3d.hash               |    4 ++--
- package/mesa3d/mesa3d.mk                 |    2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+> 1. Built the At91Bootstrap Ver 3.7.2:
+> location: tsalazar at Ubuntu14-64:~/at91bootstrap/binaries/
+> Output file: at91sam9x5ek-nandflashboot-uboot-3.7.2.bin
+> 
+> 2. Built Uboot ver 2015.01:
+> location: tsalazar at Ubuntu14-64:~/u-boot-at91/
+> Output file: u-boot.bin
+> 
+> 3. Built the Kernel ver 3.6.9  (I plan to upgrade to 3.18 but I'm trying to
+> duplicate a working demo first)
+> location: tsalazar at Ubuntu14-64:~/linux-at91/arch/arm/boot/
+> Output file: at91sam9x25ek.dtb  
+> location: tsalazar at Ubuntu14-64:~/linux-at91/arch/arm/boot/
+> Output file: zImage
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 67cdf70..f0799a9 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 10.5.4
-+MESA3D_HEADERS_VERSION = 10.5.6
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 9b63e4d..7a789a0 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/mesa-announce/2015-April/000151.html
--sha256	b51e723f3a20d842c88a92d809435b229fc4744ca0dbec0317d9d4a3ac4c6803	mesa-10.5.4.tar.xz
-+# From http://lists.freedesktop.org/archives/mesa-announce/2015-May/000154.html
-+sha256	66017853bde5f7a6647db3eede30512a091a3491daa1708e0ad8027c328ba595	mesa-10.5.6.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index f1c38bf..ff303c4 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 10.5.4
-+MESA3D_VERSION = 10.5.6
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+Why do you build AT91Bootstrap, U-Boot and the kernel? Buildroot will
+build them for you, no need to build these manually.
+
+> 4. Built buildroot-at91 ver 2014.05 ( This is where I have all my problems)
+> 
+> https://github.com/linux4sam/buildroot-at91/tree/buildroot-2014.05-at91/configs
+
+This is the Atmel fork of Buildroot. You're contacting the official
+Buildroot mailing list, we only support the mainline Buildroot.
+
+You should rather try the updated Atmel defconfigs recently posted by
+Alexandre Belloni (they are only available in the Buildroot patchwork
+for the moment, since they haven't been applied yet).
+
+> Q1) Does someone know where I can get an at91sam9x25ek_defconfig file for
+> BuildRoot-at91 Ver 2014.05?
+
+No, because you're talking about an Atmel fork of Buildroot, and this
+mailing list is only supporting the official Buildrot.
+
+You should apply the patch http://patchwork.ozlabs.org/patch/473928/ on
+the mainline Buildroot and use the at91sam9x5ek_defconfig. Also, make
+sure to apply http://patchwork.ozlabs.org/patch/473935/ and read the
+readme.txt file. These patches should be applied to the next Buildroot
+version.
+
+Best regards,
+
+Thomas Petazzoni
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
