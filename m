@@ -1,43 +1,76 @@
-From: g4 at novadsp.com <g4@novadsp.com>
-Date: Mon, 25 May 2015 20:02:04 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 May 2015 21:05:05 +0200
 Subject: [Buildroot] BR 2015.02: questions re builds for a B3?
-In-Reply-To: <CAGm1_kt5r9W0UeRi+4LWg87kNdtMsDOjF6HrvUOt_VAEca0bfQ@mail.gmail.com>
+In-Reply-To: <016301d09701$da9e8e10$8fdbaa30$@novadsp.com>
 References: <016301d09701$da9e8e10$8fdbaa30$@novadsp.com>
- <CAGm1_kswdDzE4C1QrxEjHvcfnV2KRe7Weu9J87br7NgF_HdPFQ@mail.gmail.com>
- <018201d0970c$8786bb20$96943160$@novadsp.com>
- <CAGm1_kt550Li788Z4_D1VMq83atzXgabaVvynB8NxhBW4Tj=Sg@mail.gmail.com>
- <01a101d0971a$f66fa480$e34eed80$@novadsp.com>
- <CAGm1_kt5r9W0UeRi+4LWg87kNdtMsDOjF6HrvUOt_VAEca0bfQ@mail.gmail.com>
-Message-ID: <01b001d0971d$4a86fa30$df94ee90$@novadsp.com>
+Message-ID: <20150525210505.53b449b7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor
+Hello,
 
-> Have you read about BR2_EXTERNAL mechanism (the link I've sent you in my
-> first mail)? You just need to create your own repo with following
-> folders:
-> 
-> board/mycompany/bbb
-> configs
-> package
-> 
-> in board/mycompany/bbb you create following folders like
-> 
-> board/mycompany/bbb/fs-overlay/etc/network/
-> 
-> there you place your custom interfaces file.
-> 
-> You kernel config can be saved in board/mycompany/bbb and you BR
-> defconfig goes to configs folder.
-> 
+On Mon, 25 May 2015 16:45:40 +0100, g4 at novadsp.com wrote:
 
-OK.  Got that too. 
+> 2. If I configure the default kernel (3.12.10 ish) to build (specifically)
+> USB gadget modules, modprobe and friends do not work on the target. The .ko
+> modules are in the expected folder but somewhere a step is getting missed.
+> Any thoughts?
 
-Have you got an example .config you'd care to post that shows the relevant paths? 
-Part of my problem here is knowing/discovering which entries need to be qualified and which do not
+Insufficient details. There is nothing we can say if all you provide
+is "do not work". Please give more details (what happens when you
+modprobe, what is your kernel configuration, etc.).
 
-Ta x3
+> 3. If I even need to do this by hand, how do I set up
+> /etc/network/interfaces to use etho? Does this need a custom script or can
+> it be added to some default file somewhere? Or, can I create an interfaces
+> file in $BUILDROOT /board/beaglebone?
+
+Please read
+http://buildroot.org/downloads/manual/manual.html#rootfs-custom.
+
+> 4. Is there an officially sanctioned way to get a complete log of all build
+> steps? Redirection to stdout/stderr is a bit brittle. And I'd prefer to
+> avoid hacking remake or pymake
+
+I typically use:
+
+	make 2>&1 | tee build.log
+
+> 5. More generally, which .config files need to be backed up? I get
+> $BUILDROOT but how about for the kernel?
+
+Please read
+http://buildroot.org/downloads/manual/manual.html#customize-store-package-config/.
+
+> >>> linux linux-3.14.41-ti-r63 Downloading
+> 
+> Doing full clone
+> 
+> Cloning into bare repository 'linux-linux-3.14.41-ti-r63'...
+> 
+> remote: Counting objects: 4862708, done.
+> 
+> remote: Compressing objects: 100% (721124/721124), done.
+> 
+> remote: Total 4862708 (delta 4114542), reused 4854896 (delta 4107066)
+> Receiving objects: 100% (4862708/4862708), 942.31 MiB | 294.00 KiB/s, done.
+> 
+> Resolving deltas: 100% (4114542/4114542), done.
+> 
+> Checking connectivity... done.
+> 
+> fatal: Not a valid object name
+
+This means that the Git tag you're pointing to simply for the
+Linux kernel doesn't exist.
+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
