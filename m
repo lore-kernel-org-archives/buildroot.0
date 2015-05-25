@@ -1,39 +1,31 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 25 May 2015 14:12:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/musl: bump to version 1.1.9
-Message-ID: <1432555925-23325-1-git-send-email-joerg.krause@embedded.rocks>
+From: Peter Bouda <pbouda@cidles.eu>
+Date: Mon, 25 May 2015 14:51:49 +0100
+Subject: [Buildroot] [PATCH 1/1] Removed Python dependency from
+	python-pygame package. With the dependency,
+	it was only possible to build the package with Python 2. Without the
+	dependency it is now possible to also use Python 3.
+Message-ID: <1432561909-15488-1-git-send-email-pbouda@cidles.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Peter Bouda <pbouda@cidles.eu>
 ---
- package/musl/musl.hash | 2 +-
- package/musl/musl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pygame/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index 20bb2f8..d6b28e2 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	fa928506415b9c555977daaf874c190eaf7fbbd16028cc5c5f33a00a83227813	musl-1.1.8.tar.gz
-+sha256	00bf7173caf972c88cd07cb0d420c082a2f35efcccc1a81f8909bec2d030283e  musl-1.1.9.tar.gz
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 6cba5bb..a089327 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUSL_VERSION = 1.1.8
-+MUSL_VERSION = 1.1.9
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+diff --git a/package/python-pygame/Config.in b/package/python-pygame/Config.in
+index f72ee31..932b0f1 100644
+--- a/package/python-pygame/Config.in
++++ b/package/python-pygame/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_PYGAME
+ 	bool "python-pygame"
+-	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_SDL
+ 	help
+ 	  Pygame is a cross-platfrom library designed to make it easy to write
 -- 
-2.4.1
+2.1.4
