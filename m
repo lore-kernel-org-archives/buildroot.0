@@ -1,106 +1,92 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 25 May 2015 12:11:17 +0200
-Subject: [Buildroot] [PATCH 1/1] linux: Add support for FIT image
-Message-ID: <1432548677-5194-1-git-send-email-joerg.krause@embedded.rocks>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 25 May 2015 11:08:51 +0000
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150519174844.1ef6eb28@free-electrons.com>
+References: <20150519063012.E7D2A100C5F@stock.ovh.net>
+ <20150519100045.44f1b3a4@free-electrons.com>
+ <1432043386.4108.23.camel@synopsys.com>
+ <20150519174844.1ef6eb28@free-electrons.com>
+Message-ID: <1432552131.2709.20.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The FIT (Flattened Image Tree) image format is a much more advanced and
-flexible format compared to regular uImage, let alone zImage.
+Hi Thomas,
 
-The FIT image format allows for storing multiple kernel images, multiple
-device tree blobs and even multiple configurations for their combinations
-in a single image.
+On Tue, 2015-05-19 at 17:48 +0200, Thomas Petazzoni wrote:
+> Alexey,
+> 
+> On Tue, 19 May 2015 13:49:46 +0000, Alexey Brodkin wrote:
+> 
+> > > /tmp/ccQkdXjH.s: Assembler messages:
+> > > /tmp/ccQkdXjH.s: Error: unaligned opcodes detected in executable segment
+> > > make[2]: *** [.obj/release-shared-emb-generic/qxquerytokenizer.o] Error 1
+> > > 
+> > > Alexey, can you have a look? Thanks!
+> > 
+> > Well this is sort of expected failure. Even though I have never tried
+> > building vanilla Qt for ARC, but as it turned out that doesn't work.
+> > 
+> > But we've been sitting for a while on Qt4 patches that enable building
+> > for and running on ARC. And now decision has been made to finally submit
+> > those pretty simple patches upstream and in parallel (until patches are
+> > accepted and the next minor release of Qt 4.x is cut.. if ever) add
+> > patches in Buildroot so people may happily build and run Qt on ARC.
+> > 
+> > I'll send patches shortly.
+> 
+> Great, that would be nice.
 
-Furthermore, it enhances integrity protection of images with sha1, sha256
-and md5 checksums as well as signature verification against a public key.
+Looks like I spoke too soon. The problem reported by autobuilder has
+nothing to do with missing patches for ARC in Qt.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- linux/Config.in | 13 +++++++++++++
- linux/linux.mk  | 15 ++++++++++++++-
- 2 files changed, 27 insertions(+), 1 deletion(-)
+That's just a tools problem (I assume on compiler side) that happens on
+compilation of the one particular file with following combination of
+compiler options "-Os -g". This has been filed as internal bug report
+and I expect we'll fix it before the upcoming release.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 457ada6..03ce8cf 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -174,6 +174,13 @@ config BR2_LINUX_KERNEL_UBOOT_IMAGE
- choice
- 	prompt "Kernel binary format"
- 
-+config BR2_LINUX_KERNEL_FITIMAGE
-+	bool "fitImage"
-+	depends on BR2_arc || BR2_arm || BR2_armeb || BR2_bfin || \
-+		   BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64 || \
-+		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	select BR2_LINUX_KERNEL_UBOOT_IMAGE
-+
- config BR2_LINUX_KERNEL_UIMAGE
- 	bool "uImage"
- 	depends on BR2_arc || BR2_arm || BR2_armeb || BR2_bfin || \
-@@ -248,6 +255,12 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
- 
- endchoice
- 
-+config BR2_LINUX_KERNEL_FITIMAGE_ITS_FILE
-+	string "FIT image device tree descriptor file path"
-+	depends on BR2_LINUX_KERNEL_FITIMAGE
-+	help
-+	  Path to the FIT image device tree descriptor.
-+
- config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
- 	string "Kernel image target name"
- 	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c765954..6c48fe8 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -108,6 +108,9 @@ LINUX_TARGET_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
- ifeq ($(LINUX_IMAGE_NAME),)
- LINUX_IMAGE_NAME = $(LINUX_TARGET_NAME)
- endif
-+else ifeq ($(BR2_LINUX_KERNEL_FITIMAGE),y)
-+LINUX_IMAGE_NAME = fitImage
-+LINUX_TARGET_NAME = zImage
- else
- ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
- LINUX_IMAGE_NAME = uImage
-@@ -155,7 +158,9 @@ else
- KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/$(KERNEL_ARCH)
- endif
- 
--ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
-+ifeq ($(BR2_LINUX_KERNEL_FITIMAGE),y)
-+LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
-+else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
- LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
- LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
-@@ -277,6 +282,13 @@ LINUX_APPEND_DTB += $(sep) MKIMAGE_ARGS=`$(MKIMAGE) -l $(LINUX_IMAGE_PATH) |\
- endif
- endif
- 
-+define LINUX_BUILD_FITIMAGE
-+	$(LINUX_INSTALL_HOST_TOOLS)
-+	cp $(call qstrip,$(BR2_LINUX_KERNEL_FITIMAGE_ITS_FILE)) $(@D)/fit-image.its
-+	$(TARGET_MAKE_ENV) $(MKIMAGE) -f $(@D)/fit-image.its $(@D)/$(LINUX_IMAGE_NAME)
-+	rm $(@D)/fit-image.its
-+endef
-+
- # Compilation. We make sure the kernel gets rebuilt when the
- # configuration has changed.
- define LINUX_BUILD_CMDS
-@@ -286,6 +298,7 @@ define LINUX_BUILD_CMDS
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
- 		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
- 	fi
-+	$(if $(BR2_LINUX_KERNEL_FITIMAGE), $(LINUX_BUILD_FITIMAGE))
- 	$(LINUX_BUILD_DTB)
- 	$(LINUX_APPEND_DTB)
- endef
--- 
-2.4.1
+Still I posted my patches in Qt's Gerrit here:
+ [1] https://codereview.qt-project.org/#/c/112667/
+ [2] https://codereview.qt-project.org/#/c/112668/
+
+But as correctly mentioned by Peter these days Qt4 could only be updated
+with a back-port of Qt5 change (even though that "back-port" may have
+nothing in common with change in Qt5 considering differences in
+code-bases).
+
+And so I have no other options other than creating patch for Qt5. And I
+started to look into it but was a bit surprised that in Buildroot we
+still don't have QtWebEngine (which is considered as a better
+replacement of QtWebKit). I assume that's not because we don't want
+QtWebEngine but just because nobody ever needed it, right?
+
+If so then I'll try to fill this missing entry because I'll need to make
+sure web-related apps could be built and run on ARC.
+
+> Well, don't assume too much about my Qt5 knowledge. I've indeed done
+> the initial packaging, so I have a limited knowledge of the Qt5 build
+> system, but it doesn't go much beyond that. The rest of Qt5 remains
+> largely a thing I've never looked at. But I will be happy to look at
+> your patches. I think what we will be the most interested in is to make
+> sure that the effort to push them upstream is being done, but I know
+> you have a good track record of pushing ARC related fixes to the
+> relevant upstream projects, so I'm really not worried at all about this.
+
+From the first glance it looks like there's not much to do in Qt5
+really. For example I was able to build and run "analogclock" app with
+existing Buildroot with zero changes for ARC - which is really
+promising. And if we put aside infrastructure things that were required
+in Qt4 for Qt5 generic things work very well. The only other change that
+was required for Qt4 - it was fix for unaligned access in WebKit's
+JavaScript engine.
+
+But now with switch from WebKit to Chromium looks like unaligned access
+is no longer a problem (one of the reasons behind switch from WebKit to
+Chromiom/Blink was significantly better support of multiple
+architectures), i.e. there's no need in ARC-specific quirks.
+
+So hopefully patches for Qt5 will be very short if at all.
+
+-Alexey
