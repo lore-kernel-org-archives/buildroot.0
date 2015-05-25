@@ -1,28 +1,36 @@
-From: g4 at novadsp.com <g4@novadsp.com>
-Date: Mon, 25 May 2015 20:50:16 +0100
-Subject: [Buildroot] showstopper 404 problem ...
-In-Reply-To: <20150525210558.39e88c66@free-electrons.com>
-References: <01a201d0971b$fca690b0$f5f3b210$@novadsp.com>
- <20150525210558.39e88c66@free-electrons.com>
-Message-ID: <01c901d09724$065bca00$13135e00$@novadsp.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 25 May 2015 22:03:49 +0200
+Subject: [Buildroot] [PATCH] package/php: fix build without threads and
+	pcre
+In-Reply-To: <1432385876-13578-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 23 May 2015 14:57:56 +0200")
+References: <1432385876-13578-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87mw0szaoq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas and thanks
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-> > BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="4.0.4"
-> >
-> > BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/ti-linux-
-> kernel/ti-
-> > linux-
-> > kernel.git"
-> 
-> As explained by Yegor, use the mainline kernel, not TI's fork.
-> 
+ > The pcre library bundled in php is not configurable through the usual
+ > --enable/disable options, but wants to be thread-safe by default, so it
+ > wants to use pthreads (uncludes pthread.h and uses pthread_* functions).
 
-As in kernel.org? An example or the canonical repo would be really handy.
+ > So, just override the default configuration to explicitly require the
+ > bundled pcre library be single-threaded when we have no thread and are
+ > not using the external pcre library.
 
-TIA.
+ > Fixes:
+ >     http://autobuild.buildroot.org/results/f50/f50f4e569466ad74e49a3eac9ea2e6cfc4dd30e3/
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Floris Bos <bos@je-eigen-domein.nl>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Peter Korsgaard <jacmet@uclibc.org>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
