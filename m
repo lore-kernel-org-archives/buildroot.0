@@ -1,33 +1,43 @@
-From: g4 at novadsp.com <g4@novadsp.com>
-Date: Mon, 25 May 2015 18:01:59 +0100
-Subject: [Buildroot] BR 2015.02: questions re builds for a B3?
-In-Reply-To: <CAGm1_kswdDzE4C1QrxEjHvcfnV2KRe7Weu9J87br7NgF_HdPFQ@mail.gmail.com>
-References: <016301d09701$da9e8e10$8fdbaa30$@novadsp.com>
- <CAGm1_kswdDzE4C1QrxEjHvcfnV2KRe7Weu9J87br7NgF_HdPFQ@mail.gmail.com>
-Message-ID: <018201d0970c$8786bb20$96943160$@novadsp.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Mon, 25 May 2015 19:20:25 +0200
+Subject: [Buildroot] [PATCH] openssl: always install openssl.cnf
+Message-ID: <1432574426-17098-1-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor. Thanks and TIA for your patience, which might get tested :)
+Install openssl.cnf even when the OpenSSL binary is not selected,
+because other packages that use the OpenSSL library may use it as
+well.
 
-> 
-> What about just using upstream kernel? Select 4.0.4, omap2plus_defconfig
-> and am335x-boneblack.dtb and you're done.
-> 
+E.g. PHP's methods to programmatically create private keys and
+certificates depend on it.
+See: http://php.net/manual/en/function.openssl-pkey-new.php
 
-So I:
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+---
+ package/openssl/openssl.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-'make menuconfig' for BR. 
-Kernel >> custom repo version >> change hash to 4.0.4
-set BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE to 
-
-'output/build/linux-4.0.4/arch/arm/configs/omap2plus_defconfig' ?
-
-Then make again to pull+build ...
-
-BR,
-
-Jerry
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index f90c811..9cbf42d 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -19,7 +19,13 @@ define OPENSSL_DISABLE_APPS
+ 	$(SED) '/^build_apps/! s/build_apps//' $(@D)/Makefile.org
+ 	$(SED) '/^DIRS=/ s/apps//' $(@D)/Makefile.org
+ endef
++# Do always install openssl.cnf as other packages may depend on it
++define OPENSSL_INSTALL_CNF
++	$(INSTALL) -m 0644 $(@D)/apps/openssl.cnf \
++		$(TARGET_DIR)/etc/ssl/openssl.cnf
++endef
+ OPENSSL_PRE_CONFIGURE_HOOKS += OPENSSL_DISABLE_APPS
++OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_INSTALL_CNF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
+-- 
+2.1.4
