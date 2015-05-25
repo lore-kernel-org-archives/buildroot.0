@@ -1,42 +1,40 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Mon, 25 May 2015 16:38:10 +0200
-Subject: [Buildroot] Help for another newbie,
- AT91sam9x25 incorrect defconfig or incorrect rootfs.ubi
-In-Reply-To: <B03A893ADFE80748942D13AFAF28451924E703A8C9@ITSVLEX06.it.maxim-ic.internal>
-References: <1432452387471-101939.post@n4.nabble.com>
- <20150524130250.36ebd47d@free-electrons.com>
- <B03A893ADFE80748942D13AFAF28451924E703A8C9@ITSVLEX06.it.maxim-ic.internal>
-Message-ID: <20150525143810.GB3199@piout.net>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 25 May 2015 15:52:39 +0100
+Subject: [Buildroot] [PATCH 2/2] ltrace: enable for mips/mipsel
+In-Reply-To: <1432565559-60249-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1432565559-60249-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1432565559-60249-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+ltrace was disabled for MIPS due to a build failure on this
+architecture. Now that problem has been fixed so we can enable this
+package again.
 
-On 24/05/2015 at 19:06:36 -0700, Ted Salazar wrote :
-> 
-> [TS: Yes I was aware of Alexandre's patches but several things were not clear enough to me to be able to use it. Sorry this is basic to you but not to me.
-> 
-> 1.       Who  runs the at91.com/Linux4Sam website? I thought this was an Atmel run website? If so and you only support mainline BuildRoot then why does Alexandre's sam9x5ek patches contain Linux4sam URLs (ie URL=https://github.com/linux4sam/linux-at91.git and URL="git://github.com/linux4sam/u-boot-at91.git" ) shown here http://patchwork.ozlabs.org/patch/473928/
-> 
+Related:
+http://git.buildroot.net/buildroot/commit/?id=dfaa18af00dfcff71a0159adaafb0880e58fa6a1
+http://anonscm.debian.org/cgit/collab-maint/ltrace.git/commit/?id=a8ff0ff2b6e6c229f8a9242828fb47f1a5a78967
 
-Atmel is. I'm using their version of the kernel, u-boot and
-at91bootstrap because they are maintaining stble versions of each.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/ltrace/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> 3.       Does Alexandre's patch create all of the required at91sam9x5 defconfig files needed in order to build the AT91Bootstrap, uboot, Kernel and .ubifs filesystem too?
-> 
-
-Yes.
-
-> 4.       OK, if Alexandre's patch does not work on Atmel's forked BuildRoot then I will try using mainline BuildRoot. In fact, I'll probably try both BuildRoot versions no matter what. I'll read the manual at http://buildroot.uclibc.org/downloads/manual/manual.html
-> 
-
-It will also work on buildroot-at91 but this doesn't make any sense to try that. As it is older and is actually outdated.
-
-
+diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+index af932df..2b42a84 100644
+--- a/package/ltrace/Config.in
++++ b/package/ltrace/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_LTRACE
+ 	# broken (error: 'struct ltelf' has no member named
+ 	# 'relplt_count'). Issue reported upstream at
+ 	# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=756764.
+-	depends on (BR2_i386 || BR2_arm \
++	depends on (BR2_i386 || BR2_arm || BR2_mips || BR2_mipsel \
+ 		|| BR2_powerpc || BR2_sparc || BR2_x86_64 || BR2_xtensa)
+ 	select BR2_PACKAGE_ELFUTILS
+ 	depends on BR2_USE_WCHAR # elfutils
 -- 
-Alexandre Belloni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.1
