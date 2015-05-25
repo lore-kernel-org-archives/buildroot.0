@@ -1,73 +1,79 @@
-From: Ted Salazar <Ted.Salazar@maximintegrated.com>
-Date: Mon, 25 May 2015 14:18:54 -0700
-Subject: [Buildroot] Help for another newbie,
- AT91sam9x25 incorrect defconfig or incorrect rootfs.ubi
-In-Reply-To: <20150525143810.GB3199@piout.net>
-References: <1432452387471-101939.post@n4.nabble.com>
- <20150524130250.36ebd47d@free-electrons.com>
- <B03A893ADFE80748942D13AFAF28451924E703A8C9@ITSVLEX06.it.maxim-ic.internal>
- <20150525143810.GB3199@piout.net>
-Message-ID: <B03A893ADFE80748942D13AFAF28451924E703AA20@ITSVLEX06.it.maxim-ic.internal>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 May 2015 23:56:44 +0200
+Subject: [Buildroot] [PATCH v4 2015.08 1/4] pkg-generic: add step_pkg_size
+	global instrumentation hook
+In-Reply-To: <1432591007-27689-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1432591007-27689-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1432591007-27689-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexandre,
+This patch adds a global instrumentation hook that collects the list
+of files installed in $(TARGET_DIR) by each package, and stores this
+list into a file called $(BUILD_DIR)/packages-file-list.txt. It can
+later be used to determine the size contribution of each package to
+the target root filesystem.
 
-Thanks again for your response. I think mainline BuildRoot is the way to go.
+Note that in order to detect if a file installed by one package is
+later overriden by another package, we calculate the md5 of installed
+files and compare them at each installation of a new package.
 
-Just two quick questions on the commands to apply your patch...from BuildRoot documentation.
+This commit also adds a Config.in option to enable the collection of
+this data, as calculating the md5 of all installed files at the
+beginning and end of the installation of each package can be
+considered a time-consuming process which maybe some users will not be
+willing to suffer from.
 
-$ git checkout -b <test-branch-name>
-$ wget -O - <mbox-url> | git am
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-generic.mk | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-Q1: Does <test-branch-name> = http://git.buildroot.net/buildroot/tag/?id=2015.02 ?
-Q2: Does <mbox-url> = http://patchwork.ozlabs.org/patch/473928/mbox/ ?
-
-Thanks
-Ted
-
-21.3.1. Applying Patches from Patchwork
-The main use of Buildroot's Patchwork website for a developer is for pulling in patches into their local git repository for testing purposes.
-
-When browsing patches in the patchwork management interface, an mbox link is provided at the top of the page. Copy this link address and run the following commands:
-
-$ git checkout -b <test-branch-name>
-$ wget -O - <mbox-url> | git am
-
-
-
------Original Message-----
-From: Alexandre Belloni [mailto:alexandre.belloni at free-electrons.com] 
-Sent: Monday, May 25, 2015 7:38 AM
-To: Ted Salazar
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] Help for another newbie, AT91sam9x25 incorrect defconfig or incorrect rootfs.ubi
-
-Hi,
-
-On 24/05/2015 at 19:06:36 -0700, Ted Salazar wrote :
-> 
-> [TS: Yes I was aware of Alexandre's patches but several things were not clear enough to me to be able to use it. Sorry this is basic to you but not to me.
-> 
-> 1.       Who  runs the at91.com/Linux4Sam website? I thought this was an Atmel run website? If so and you only support mainline BuildRoot then why does Alexandre's sam9x5ek patches contain Linux4sam URLs (ie URL=https://github.com/linux4sam/linux-at91.git and URL="git://github.com/linux4sam/u-boot-at91.git" ) shown here http://patchwork.ozlabs.org/patch/473928/
-> 
-
-Atmel is. I'm using their version of the kernel, u-boot and at91bootstrap because they are maintaining stble versions of each.
-
-> 3.       Does Alexandre's patch create all of the required at91sam9x5 defconfig files needed in order to build the AT91Bootstrap, uboot, Kernel and .ubifs filesystem too?
-> 
-
-Yes.
-
-> 4.       OK, if Alexandre's patch does not work on Atmel's forked BuildRoot then I will try using mainline BuildRoot. In fact, I'll probably try both BuildRoot versions no matter what. I'll read the manual at http://buildroot.uclibc.org/downloads/manual/manual.html
-> 
-
-It will also work on buildroot-at91 but this doesn't make any sense to try that. As it is older and is actually outdated.
-
-
---
-Alexandre Belloni, Free Electrons
-Embedded Linux, Kernel and Android engineering http://free-electrons.com
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index d5b29f0..944b0fc 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -55,6 +55,38 @@ define step_time
+ endef
+ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+ 
++# Hooks to collect statistics about installed files
++
++# This hook will be called before the target installation of a
++# package. We store in a file named .br_filelist_before the list of
++# files currently installed in the target. Note that the MD5 is also
++# stored, in order to identify if the files are overwritten.
++define step_pkg_size_start
++	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
++		$($(PKG)_DIR)/.br_filelist_before
++endef
++
++# This hook will be called after the target installation of a
++# package. We store in a file named .br_filelist_after the list of
++# files (and their MD5) currently installed in the target. We then do
++# a diff with the .br_filelist_before to compute the list of files
++# installed by this package.
++define step_pkg_size_end
++	(cd $(TARGET_DIR); find . -type f -print0 | xargs -0 md5sum) | sort > \
++		$($(PKG)_DIR)/.br_filelist_after
++	comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
++		while read hash file ; do \
++			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
++		done
++endef
++
++define step_pkg_size
++	$(if $(filter install-target,$(2)),\
++		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
++		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
++endef
++GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
++
+ # User-supplied script
+ ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
+ define step_user
+-- 
+2.1.0
