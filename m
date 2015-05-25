@@ -1,27 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 May 2015 22:18:10 +0200
-Subject: [Buildroot] [git commit] package/knock: add hash file
-Message-ID: <20150525205004.32A447FC1E@busybox.osuosl.org>
+Date: Mon, 25 May 2015 22:07:57 +0200
+Subject: [Buildroot] [git commit] package/efl/libelementary: disable on
+	static lib only build
+Message-ID: <20150525205004.215B07FC1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9bd5cfab61ba04a79c4ce67c66d9d9f0797a1f85
+commit: http://git.buildroot.net/buildroot/commit/?id=4d5f9f4b73c3cfa2daa663a5b7789789a5a7f206
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+libelementary sources include dlfcn.h header when HAVE_FORK symbol is defined;
+this is always the case because efl already depends on BR2_USE_MMU.
+
+Fixes:
+  http://autobuild.buildroot.org/results/07c/07c97918dab24215f5c5130a9cd2788adca0a27d/
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/knock/knock.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/efl/libelementary/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/knock/knock.hash b/package/knock/knock.hash
-new file mode 100644
-index 0000000..ae152db
---- /dev/null
-+++ b/package/knock/knock.hash
-@@ -0,0 +1,2 @@
-+# locally computed hash
-+sha256 9938479c321066424f74c61f6bee46dfd355a828263dc89561a1ece3f56578a4 knock-0.7.tar.gz
+diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
+index c193ef1..4f62592 100644
+--- a/package/efl/libelementary/Config.in
++++ b/package/efl/libelementary/Config.in
+@@ -1,5 +1,5 @@
+-comment "libelementary needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "libelementary needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_LIBELEMENTARY
+ 	bool "libelementary"
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_LIBELEMENTARY
+ 	select BR2_PACKAGE_LIBECORE
+ 	select BR2_PACKAGE_LIBEDJE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Elementary is a widget toolkit and EFL wrapper and convenience
+ 	  library to make it easy to build applications and tools with UIs
