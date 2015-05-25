@@ -1,46 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 May 2015 22:07:57 +0200
-Subject: [Buildroot] [git commit] package/efl/libelementary: disable on
-	static lib only build
-Message-ID: <20150525205004.215B07FC1E@busybox.osuosl.org>
+Date: Mon, 25 May 2015 22:19:30 +0200
+Subject: [Buildroot] [git commit] package/directfb: add hash file
+Message-ID: <20150525205004.3B4B880E4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4d5f9f4b73c3cfa2daa663a5b7789789a5a7f206
+commit: http://git.buildroot.net/buildroot/commit/?id=f12d5da0dde3b661e4d397efd47d3b187fe57d68
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libelementary sources include dlfcn.h header when HAVE_FORK symbol is defined;
-this is always the case because efl already depends on BR2_USE_MMU.
-
-Fixes:
-  http://autobuild.buildroot.org/results/07c/07c97918dab24215f5c5130a9cd2788adca0a27d/
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efl/libelementary/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/directfb/directfb.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
-index c193ef1..4f62592 100644
---- a/package/efl/libelementary/Config.in
-+++ b/package/efl/libelementary/Config.in
-@@ -1,5 +1,5 @@
--comment "libelementary needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "libelementary needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_LIBELEMENTARY
- 	bool "libelementary"
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_LIBELEMENTARY
- 	select BR2_PACKAGE_LIBECORE
- 	select BR2_PACKAGE_LIBEDJE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  Elementary is a widget toolkit and EFL wrapper and convenience
- 	  library to make it easy to build applications and tools with UIs
+diff --git a/package/directfb/directfb.hash b/package/directfb/directfb.hash
+new file mode 100644
+index 0000000..a577cba
+--- /dev/null
++++ b/package/directfb/directfb.hash
+@@ -0,0 +1,2 @@
++# locally computed hash
++sha256 7a96aced0f69b2ec0810e9923068e61c21e6b19dd593e09394c872414df75e70 DirectFB-1.6.3.tar.gz
