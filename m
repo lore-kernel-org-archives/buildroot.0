@@ -1,164 +1,382 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 25 May 2015 10:27:59 +0200
-Subject: [Buildroot] [PATCH] package/harfbuzz: fix static linking for
- test-unicode program
-In-Reply-To: <20150521123759.5b3c9706@free-electrons.com>
-References: <1431988660-3991-1-git-send-email-romain.naour@openwide.fr>
- <20150521123759.5b3c9706@free-electrons.com>
-Message-ID: <5562DD0F.8020707@openwide.fr>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Mon, 25 May 2015 05:02:00 -0400
+Subject: [Buildroot] [PATCH] binutils: improve poison system directory
+	support
+Message-ID: <1432544520-665-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Mike Frysinger <vapier@chromium.org>
 
-Le 21/05/2015 12:37, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
-> 
-> On Tue, 19 May 2015 00:37:40 +0200, Romain Naour wrote:
->> During static build, -lstdc++ is required to link
->> against libicuuc.a.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> ---
->>  ...1-test-unicode-add-lstdc-for-static-build.patch | 29
->> ++++++++++++++++++++++ 1 file changed, 29 insertions(+)
->>  create mode 100644
->> package/harfbuzz/0001-test-unicode-add-lstdc-for-static-build.patch
-> 
-> Maybe I'm missing something, but I still don't think this is the right
-> fix. harfbuzz is using pkg-config to detect icu-uc. So the problem is
-> really that the icu-uc .pc file does not declare its dependency on
-> lstdc++.
-> 
-> I've tried on my Ubuntu distro. Try to build the following stupid
-> program:
-> 
-> #include <unicode/utypes.h>
-> #include <unicode/ustring.h>
-> 
-> int main(void) {
->  UChar         source            [42];
->  u_uastrcpy(source, "This is a test.");
->  return 0;
-> }
-> 
-> If you build it with:
-> 
-> $ gcc -static -o foo foo.c $(pkg-config --static --libs --cflags icu-uc)
-> 
-> it fails like our build failure. Now if you fix the icu-uc .pc file by
-> adding -lstdc++ -lpthread in base_libs (which gets used in
-> Libs.private), the build succeeds.
+I've added support for the gold linker and reworked a bit the system:
+* The command line flags are always available.
+* The flag names are tweaked slightly to match existing flag standards.
+* We can turn on & off the warning via the command line.
+* The configure option controls the default warning behavior.
 
-On Fedora 20/21 there is no icu static libraries bundled in the icu's rpm...
+This makes it easier for distros to take the patch and drop it into their
+setups.  If they don't pass the configure flag, then it isn't enabled by
+default, and they get the same behavior w/out the patch.  The difference
+is that people can still opt in to the warnings/errors via LDFLAGS.
 
-> 
-> So shouldn't we fix icu-uc.pc instead of hardcoding the need for
-> -lstdc++ in harfbuzz?
+Signed-off-by: Mike Frysinger <vapier@chromium.org>
+---
+ .../2.25/600-poison-system-directories.patch       | 254 +++++++++++++--------
+ 1 file changed, 154 insertions(+), 100 deletions(-)
 
-Yes you're right, but it would require invasive change in icu build system.
-If we want to do things right, we needs to patch configure.ac to add -lstdc++
-when --enable-static is passed to icu's configure script.
-
-Something like:
-# When building release static library, there might be some optimization flags
-we can use
-if test "$ENABLE_STATIC" = "YES"; then
-
-    [snip]
-
-    case "${host}" in
-    *-linux*|i*86-*-*bsd*|i*86-pc-gnu)
-        # Add -lstdc++ in Libs.private
-        LIBS="${LIBS} -lstdc++"
-        ;;
-    *)
-        ;;
-    esac
-fi
-
-Unfortunately, we can't autoreconf icu since we have a patch
-0003-detect-compiler-symbol-prefix.patch which modify configure script without
-updating configure.ac accordingly.
-
-./out/tmp/icudt55l_dat.S: Assembler messages:
-./out/tmp/icudt55l_dat.S:1: Error: expected symbol name
-./out/tmp/icudt55l_dat.S:8: Error: Missing symbol name in directive
-./out/tmp/icudt55l_dat.S:8: Error: unrecognized symbol type "SYMBOL_PREFIX"
-./out/tmp/icudt55l_dat.S:8: Error: junk at end of line, first unrecognized
-character is `@'
-./out/tmp/icudt55l_dat.S:9: Error: junk at end of line, first unrecognized
-character is `@'
--- return status = 256
-
-[snip]
-
-/home/naourr/git/buildroot/test/harfbuzz/host/usr/bin/x86_64-linux-g++
-[snip]
-uconvmsg/lib at SYMBOL_PREFIX@uconvmsg.a
-[snip]
-uconv.cpp:(.text._ZL7initMsgPKc.part.0+0x2): undefined reference to `uconvmsg_dat'
-collect2: error: ld returned 1 exit status
-
-So at least I can patch only the configure script.
-
-But even with icu-uc.pc fixed, test-unicode doesn't build correctly (as you said
-in a previous mail)
-"Unfortunately, fixing the .pc file would not fix the internal harfbuzz
-test programs, since they don't use pkg-config to get the link flags."
-
-To fix that I added $(ICU_LIBS) in test/api/Makefile.am
-
-test_unicode_LDADD += $(top_builddir)/src/libharfbuzz-icu.la $(ICU_LIBS)
-
-from the config.log:
-ICU_LIBS='-L/home/naourr/git/buildroot/test/harfbuzz/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib
--licuuc -licudata -lpthread -ldl -lm  -lstdc++  '
-
-Sadly, the build fail due to a well known uClibc issue...
-
-  CCLD     test-unicode
-/home/naourr/git/buildroot/test/harfbuzz/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libpthread.a(lowlevellock.os):
-In function `__lll_lock_wait_private':
-(.text+0x0): multiple definition of `__lll_lock_wait_private'
-/home/naourr/git/buildroot/test/harfbuzz/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(libc-lowlevellock.os):(.text+0x0):
-first defined here
-/home/naourr/git/buildroot/test/harfbuzz/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libpthread.a(lowlevellock.os):
-In function `__lll_unlock_wake_private':
-(.text+0xa0): multiple definition of `__lll_unlock_wake_private'
-/home/naourr/git/buildroot/test/harfbuzz/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(libc-lowlevellock.os):(.text+0x30):
-first defined here
-collect2: error: ld returned 1 exit status
-
-I reverted this change and tried to fix libharfbuzz-icu.la instead where
--lstdc++ seems to be missing in dependency_libs
-
-dependency_libs='
--L/home/naourr/git/buildroot/test/harfbuzz/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib
--licuuc -licudata -ldl
-/home/naourr/buildroot-test/test/harfbuzz/build/harfbuzz-0.9.40/src/libharfbuzz.la
-/home/naourr/git/buildroot/test/harfbuzz/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libglib-2.0.la
--lintl -lpthread
-/home/naourr/git/buildroot/test/harfbuzz/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libpcre.la
-/home/naourr/git/buildroot/test/harfbuzz/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libintl.la
-/home/naourr/git/buildroot/test/harfbuzz/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libfreetype.la
--lbz2
-/home/naourr/git/buildroot/test/harfbuzz/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libpng16.la
--lz'
-
-But I don't know how to fix this properly...
-
-Best regards,
-Romain
-
-> 
-> Thanks,
-> 
-> Thomas
-> 
+diff --git a/package/binutils/2.25/600-poison-system-directories.patch b/package/binutils/2.25/600-poison-system-directories.patch
+index ec3622b..432a6a0 100644
+--- a/package/binutils/2.25/600-poison-system-directories.patch
++++ b/package/binutils/2.25/600-poison-system-directories.patch
+@@ -1,3 +1,11 @@
++Updates by Mike Frysinger <vapier@chromium.org>:
++* The command line flags are always available.
++* The flag names are tweaked slightly to match existing flag standards.
++* We can turn on & off the warning via the command line.
++* The configure option controls the default warning behavior.
++* Add support for gold.
++Signed-off-by: Mike Frysinger <vapier@chromium.org>
++
+ Patch adapted to binutils 2.23.2 and extended to use
+ BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
+ 
+@@ -59,9 +67,60 @@ Code Merged from Sourcery G++ binutils 2.19 - 4.4-277
+ Signed-off-by: Mark Hatle <mark.hatle@windriver.com>
+ Signed-off-by: Scott Garman <scott.a.garman@intel.com>
+ 
+-diff -Nura a/ld/config.in b/ld/config.in
+---- a/ld/config.in	2014-10-14 04:32:04.000000000 -0300
+-+++ b/ld/config.in	2014-12-24 08:07:28.997918918 -0300
++--- a/gold/options.cc
+++++ b/gold/options.cc
++@@ -1201,6 +1201,33 @@ General_options::finalize()
++   // in the path, as appropriate.
++   this->add_sysroot();
++ 
+++  // Now check if library_path is poisoned.
+++  if (this->warn_poison_system_directories())
+++    {
+++      std::vector<std::string> bad_paths;
+++
+++      bad_paths.push_back("/lib");
+++      bad_paths.push_back("/usr/lib");
+++      bad_paths.push_back("/usr/local/lib");
+++      bad_paths.push_back("/usr/X11R6/lib");
+++
+++      for (std::vector<std::string>::const_iterator b = bad_paths.begin();
+++	   b != bad_paths.end();
+++	   ++b)
+++	for (Dir_list::iterator p = this->library_path_.value.begin();
+++	     p != this->library_path_.value.end();
+++	     ++p)
+++	  if (!p->name().compare(0, b->size(), *b))
+++	    {
+++	      if (this->error_poison_system_directories())
+++		gold_fatal(_("library search path \"%s\" is unsafe for "
+++			     "cross-compilation"), p->name().c_str());
+++	      else
+++		gold_warning(_("library search path \"%s\" is unsafe for "
+++			       "cross-compilation"), p->name().c_str());
+++	    }
+++    }
+++
++   // --dynamic-list overrides -Bsymbolic and -Bsymbolic-functions.
++   if (this->have_dynamic_list())
++     {
++--- a/gold/options.h
+++++ b/gold/options.h
++@@ -1206,6 +1206,13 @@ class General_options
++   DEFINE_bool(warn_multiple_gp, options::TWO_DASHES, '\0', false,
++ 	      N_("Ignored"), NULL);
++ 
+++  DEFINE_bool(warn_poison_system_directories, options::TWO_DASHES, '\0', false,
+++	      N_("Warn for -L options using system directories"),
+++	      N_("Do not warn for -L options using system directories"));
+++  DEFINE_bool(error_poison_system_directories, options::TWO_DASHES, '\0', false,
+++	      N_("Give an error for -L options using system directories"),
+++	      NULL);
+++
++   DEFINE_bool(warn_search_mismatch, options::TWO_DASHES, '\0', true,
++ 	      N_("Warn when skipping an incompatible library"),
++ 	      N_("Don't warn when skipping an incompatible library"));
++--- a/ld/config.in
+++++ b/ld/config.in
+ @@ -11,6 +11,9 @@
+     language is requested. */
+  #undef ENABLE_NLS
+@@ -72,10 +131,9 @@ diff -Nura a/ld/config.in b/ld/config.in
+  /* Additional extension a shared object might have. */
+  #undef EXTRA_SHLIB_EXTENSION
+  
+-diff -Nura a/ld/configure b/ld/configure
+---- a/ld/configure	2014-12-23 11:22:07.000000000 -0300
+-+++ b/ld/configure	2014-12-24 08:07:29.002919088 -0300
+-@@ -783,6 +783,7 @@
++--- a/ld/configure
+++++ b/ld/configure
++@@ -774,6 +774,7 @@ with_lib_path
+  enable_targets
+  enable_64_bit_bfd
+  with_sysroot
+@@ -83,7 +141,7 @@ diff -Nura a/ld/configure b/ld/configure
+  enable_gold
+  enable_got
+  enable_werror
+-@@ -1439,6 +1440,8 @@
++@@ -1429,6 +1430,8 @@ Optional Features:
+    --disable-largefile     omit support for large files
+    --enable-targets        alternative target configurations
+    --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
+@@ -92,7 +150,7 @@ diff -Nura a/ld/configure b/ld/configure
+    --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
+    --enable-got=<type>     GOT handling scheme (target, single, negative,
+                            multigot)
+-@@ -15487,7 +15490,18 @@
++@@ -4339,7 +4342,18 @@ else
+  fi
+  
+  
+@@ -111,10 +169,9 @@ diff -Nura a/ld/configure b/ld/configure
+  
+  # Check whether --enable-got was given.
+  if test "${enable_got+set}" = set; then :
+-diff -Nura a/ld/configure.ac b/ld/configure.ac
+---- a/ld/configure.ac	2014-10-14 04:32:04.000000000 -0300
+-+++ b/ld/configure.ac	2014-12-24 08:07:29.002919088 -0300
+-@@ -94,6 +94,16 @@
++--- a/ld/configure.ac
+++++ b/ld/configure.ac
++@@ -87,6 +87,16 @@ AC_SUBST(use_sysroot)
+  AC_SUBST(TARGET_SYSTEM_ROOT)
+  AC_SUBST(TARGET_SYSTEM_ROOT_DEFINE)
+  
+@@ -131,43 +188,37 @@ diff -Nura a/ld/configure.ac b/ld/configure.ac
+  dnl Use --enable-gold to decide if this linker should be the default.
+  dnl "install_as_default" is set to false if gold is the default linker.
+  dnl "installed_linker" is the installed BFD linker name.
+-diff -Nura a/ld/ldfile.c b/ld/ldfile.c
+---- a/ld/ldfile.c	2014-10-14 04:32:04.000000000 -0300
+-+++ b/ld/ldfile.c	2014-12-24 08:07:29.002919088 -0300
+-@@ -114,6 +114,23 @@
++--- a/ld/ldfile.c
+++++ b/ld/ldfile.c
++@@ -116,6 +116,20 @@ ldfile_add_library_path (const char *name, bfd_boolean cmdline)
+      new_dirs->name = concat (ld_sysroot, name + 1, (const char *) NULL);
+    else
+      new_dirs->name = xstrdup (name);
+ +
+-+#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+  if (command_line.poison_system_directories
+-+  && ((!strncmp (name, "/lib", 4))
+-+      || (!strncmp (name, "/usr/lib", 8))
+-+      || (!strncmp (name, "/usr/local/lib", 14))
+-+      || (!strncmp (name, "/usr/X11R6/lib", 14))))
+-+   {
+-+     if (command_line.error_poison_system_directories)
+-+       einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
+-+            "cross-compilation\n"), name);
+-+     else
+-+       einfo (_("%P: warning: library search path \"%s\" is unsafe for "
+-+            "cross-compilation\n"), name);
+-+   }
+-+#endif
+-+
+++  if (command_line.warn_poison_system_directories
+++      && (!strncmp (name, "/lib", 4)
+++	  || !strncmp (name, "/usr/lib", 8)
+++	  || !strncmp (name, "/usr/local/lib", 14)
+++	  || !strncmp (name, "/usr/X11R6/lib", 14)))
+++    {
+++      if (command_line.error_poison_system_directories)
+++	einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
+++	         "cross-compilation\n"), name);
+++      else
+++	einfo (_("%P: warning: library search path \"%s\" is unsafe for "
+++	         "cross-compilation\n"), name);
+++    }
+  }
+  
+  /* Try to open a BFD for a lang_input_statement.  */
+-diff -Nura a/ld/ld.h b/ld/ld.h
+---- a/ld/ld.h	2014-10-14 04:32:04.000000000 -0300
+-+++ b/ld/ld.h	2014-12-24 08:07:29.003919122 -0300
+-@@ -161,6 +161,14 @@
++--- a/ld/ld.h
+++++ b/ld/ld.h
++@@ -180,6 +180,13 @@ typedef struct {
+    /* If TRUE we'll just print the default output on stdout.  */
+    bfd_boolean print_output_format;
+  
+-+  /* If TRUE (the default) warn for uses of system directories when
+-+     cross linking.  */
+-+  bfd_boolean poison_system_directories;
+++  /* If TRUE warn for uses of system directories when cross linking.  */
+++  bfd_boolean warn_poison_system_directories;
+ +
+ +  /* If TRUE (default FALSE) give an error for uses of system
+ +     directories when cross linking instead of a warning.  */
+@@ -176,40 +227,55 @@ diff -Nura a/ld/ld.h b/ld/ld.h
+    /* Big or little endian as set on command line.  */
+    enum endian_enum endian;
+  
+-diff -Nura a/ld/ldlex.h b/ld/ldlex.h
+---- a/ld/ldlex.h	2014-11-04 06:54:41.000000000 -0300
+-+++ b/ld/ldlex.h	2014-12-24 08:09:47.477644294 -0300
+-@@ -140,6 +140,8 @@
++--- a/ld/ldlex.h
+++++ b/ld/ldlex.h
++@@ -138,6 +138,9 @@ enum option_values
++   OPTION_PRINT_OUTPUT_FORMAT,
++   OPTION_PRINT_SYSROOT,
+    OPTION_IGNORE_UNRESOLVED_SYMBOL,
+++  OPTION_WARN_POISON_SYSTEM_DIRECTORIES,
+++  OPTION_NO_WARN_POISON_SYSTEM_DIRECTORIES,
+++  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
+    OPTION_PUSH_STATE,
+    OPTION_POP_STATE,
+-+  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
+-+  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
+  };
+- 
+- /* The initial parser states.  */
+-diff -Nura a/ld/ldmain.c b/ld/ldmain.c
+---- a/ld/ldmain.c	2014-10-14 04:32:04.000000000 -0300
+-+++ b/ld/ldmain.c	2014-12-24 08:07:29.003919122 -0300
+-@@ -266,6 +266,8 @@
++--- a/ld/ldmain.c
+++++ b/ld/ldmain.c
++@@ -266,6 +266,19 @@ main (int argc, char **argv)
+    command_line.warn_mismatch = TRUE;
+    command_line.warn_search_mismatch = TRUE;
+    command_line.check_section_addresses = -1;
+-+  command_line.poison_system_directories = TRUE;
+++  command_line.warn_poison_system_directories =
+++#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+++    TRUE;
+++#else
+++    FALSE;
+++#endif
+ +  command_line.error_poison_system_directories = FALSE;
+++
+++  {
+++    const char *BR_paranoid_env = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+++    if (BR_paranoid_env && strlen(BR_paranoid_env) > 0)
+++      command_line.error_poison_system_directories = TRUE;
+++  }
+  
+    /* We initialize DEMANGLING based on the environment variable
+       COLLECT_NO_DEMANGLE.  The gcc collect2 program will demangle the
+-diff -Nura a/ld/ld.texinfo b/ld/ld.texinfo
+---- a/ld/ld.texinfo	2014-12-23 05:47:10.000000000 -0300
+-+++ b/ld/ld.texinfo	2014-12-24 08:07:29.005919191 -0300
+-@@ -2212,6 +2212,18 @@
++--- a/ld/ld.texinfo
+++++ b/ld/ld.texinfo
++@@ -2175,6 +2175,24 @@ string identifying the original linked file does not change.
+  
+  Passing @code{none} for @var{style} disables the setting from any
+  @code{--build-id} options earlier on the command line.
+ +
+-+ at kindex --no-poison-system-directories
+-+ at item --no-poison-system-directories
+++ at kindex --warn-poison-system-directories
+++ at item --warn-poison-system-directories
+++Warn for @option{-L} options using system directories such as
+++ at file{/usr/lib} when cross linking.  This option is intended for use
+++in environments that want to detect and reject incorrect link settings.
+++
+++ at kindex --no-warn-poison-system-directories
+++ at item --no-warn-poison-system-directories
+ +Do not warn for @option{-L} options using system directories such as
+ + at file{/usr/lib} when cross linking.  This option is intended for use
+ +in chroot environments when such directories contain the correct
+@@ -222,55 +288,43 @@ diff -Nura a/ld/ld.texinfo b/ld/ld.texinfo
+  @end table
+  
+  @c man end
+-diff -Nura a/ld/lexsup.c b/ld/lexsup.c
+---- a/ld/lexsup.c	2014-11-04 06:54:41.000000000 -0300
+-+++ b/ld/lexsup.c	2014-12-24 08:48:50.136583414 -0300
+-@@ -513,6 +513,14 @@
+-   { {"pop-state", no_argument, NULL, OPTION_POP_STATE},
+-     '\0', NULL, N_("Pop state of flags governing input file handling"),
+-     TWO_DASHES },
+-+  { {"no-poison-system-directories", no_argument, NULL,
+-+    OPTION_NO_POISON_SYSTEM_DIRECTORIES},
++--- a/ld/lexsup.c
+++++ b/ld/lexsup.c
++@@ -507,6 +507,18 @@ static const struct ld_option ld_options[] =
++     OPTION_IGNORE_UNRESOLVED_SYMBOL},
++     '\0', N_("SYMBOL"),
++     N_("Unresolved SYMBOL will not cause an error or warning"), TWO_DASHES },
+++  { {"warn-poison-system-directories", no_argument, NULL,
+++     OPTION_WARN_POISON_SYSTEM_DIRECTORIES},
+++    '\0', NULL, N_("Warn for -L options using system directories"),
+++    TWO_DASHES },
+++  { {"no-warn-poison-system-directories", no_argument, NULL,
+++     OPTION_NO_WARN_POISON_SYSTEM_DIRECTORIES},
+ +    '\0', NULL, N_("Do not warn for -L options using system directories"),
+ +    TWO_DASHES },
+ +  { {"error-poison-system-directories", no_argument, NULL,
+-+    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
+++     OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
+ +    '\0', NULL, N_("Give an error for -L options using system directories"),
+ +    TWO_DASHES },
+- };
+- 
+- #define OPTION_COUNT ARRAY_SIZE (ld_options)
+-@@ -525,6 +533,7 @@
+-   int ingroup = 0;
+-   char *default_dirlist = NULL;
+-   char *shortopts;
+-+  char *BR_paranoid_env;
+-   struct option *longopts;
+-   struct option *really_longopts;
+-   int last_optind;
+-@@ -1458,6 +1467,14 @@
++   { {"push-state", no_argument, NULL, OPTION_PUSH_STATE},
++     '\0', NULL, N_("Push state of flags governing input file handling"),
++     TWO_DASHES },
++@@ -1442,6 +1454,18 @@ parse_args (unsigned argc, char **argv)
++               einfo (_("%P%X: --hash-size needs a numeric argument\n"));
+            }
+            break;
+- 
+-+	case OPTION_NO_POISON_SYSTEM_DIRECTORIES:
+-+	  command_line.poison_system_directories = FALSE;
+-+	  break;
+ +
+-+	case OPTION_ERROR_POISON_SYSTEM_DIRECTORIES:
+-+	  command_line.error_poison_system_directories = TRUE;
+-+	  break;
+++   case OPTION_WARN_POISON_SYSTEM_DIRECTORIES:
+++     command_line.warn_poison_system_directories = TRUE;
+++     break;
+ +
+++   case OPTION_NO_WARN_POISON_SYSTEM_DIRECTORIES:
+++     command_line.warn_poison_system_directories = FALSE;
+++     break;
+++
+++   case OPTION_ERROR_POISON_SYSTEM_DIRECTORIES:
+++     command_line.error_poison_system_directories = TRUE;
+++     break;
++ 
+  	case OPTION_PUSH_STATE:
+  	  input_flags.pushed = xmemdup (&input_flags,
+- 					sizeof (input_flags),
+-@@ -1483,6 +1500,10 @@
+-       command_line.soname = NULL;
+-     }
+- 
+-+  BR_paranoid_env = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+-+  if (BR_paranoid_env && strlen(BR_paranoid_env) > 0)
+-+    command_line.error_poison_system_directories = TRUE;
+-+
+-   while (ingroup)
+-     {
+-       lang_leave_group ();
+-- 
+2.4.1
