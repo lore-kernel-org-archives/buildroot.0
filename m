@@ -1,7 +1,9 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 25 May 2015 17:30:34 +0200
-Subject: [Buildroot] [PATCH 1/5] package/udpcast: add hash file
-Message-ID: <1432567838-2948-1-git-send-email-fabio.porcedda@gmail.com>
+Date: Mon, 25 May 2015 17:30:35 +0200
+Subject: [Buildroot] [PATCH 2/5] package/knock: add hash file
+In-Reply-To: <1432567838-2948-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1432567838-2948-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1432567838-2948-2-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/udpcast/udpcast.hash | 2 ++
+ package/knock/knock.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/udpcast/udpcast.hash
+ create mode 100644 package/knock/knock.hash
 
-diff --git a/package/udpcast/udpcast.hash b/package/udpcast/udpcast.hash
+diff --git a/package/knock/knock.hash b/package/knock/knock.hash
 new file mode 100644
-index 0000000..133e1db
+index 0000000..ae152db
 --- /dev/null
-+++ b/package/udpcast/udpcast.hash
++++ b/package/knock/knock.hash
 @@ -0,0 +1,2 @@
 +# locally computed hash
-+sha256 ce9090ef80b6035a744a9b5ac335e61c99baa92c39ff53277266fbfcb836445a udpcast-20120424.tar.gz
++sha256 9938479c321066424f74c61f6bee46dfd355a828263dc89561a1ece3f56578a4 knock-0.7.tar.gz
 -- 
 2.4.1
