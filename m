@@ -1,322 +1,54 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 26 May 2015 09:13:53 +0300
-Subject: [Buildroot] [PATCH] qt - fix execution on ARC
-Message-ID: <1432620833-5698-1-git-send-email-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 May 2015 08:30:14 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-05-25
+Message-ID: <20150526063015.24C63101085@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Even though Qt4 could be built for ARC cores during execution
-of Qt4 applications on target issues will happen.
+Build statistics for 2015-05-25
+===============================
 
-Most notable is will be segfaults due to unaligned access to data,
-especially in WebKit applications.
+        success : 229
+       failures : 12 
+       timeouts : 2  
+          TOTAL : 243
 
-Both patches were submitted upstream and if they ever get accepted
-they should be removed from Buildroot.
+Classification of failures by reason
+====================================
 
-https://codereview.qt-project.org/#/c/112667
-https://codereview.qt-project.org/#/c/112668
+                     php-5.6.9 | 3 
+       host-erlang-rebar-2.5.1 | 2 
+                      qt-4.8.6 | 1 
+                 glibmm-2.36.1 | 1 
+                 fio-fio-2.1.4 | 1 
+                 clamav-0.98.7 | 1 
+                   ncurses-5.9 | 1 
+filemq-482797b8aa30fcc9ea13... | 1 
+                    wine-1.6.2 | 1 
+                    qemu-2.3.0 | 1 
+                   perl-5.20.2 | 1 
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Anton Kolesov <akolesov@synopsys.com>
-Cc: Vineet Gupta <vgupta@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...9-Add-initial-support-of-ARC-architecture.patch | 183 +++++++++++++++++++++
- .../qt/0010-Prevent-unaligned-access-on-ARC.patch  |  92 +++++++++++
- 2 files changed, 275 insertions(+)
- create mode 100644 package/qt/0009-Add-initial-support-of-ARC-architecture.patch
- create mode 100644 package/qt/0010-Prevent-unaligned-access-on-ARC.patch
+Detail of failures
+===================
 
-diff --git a/package/qt/0009-Add-initial-support-of-ARC-architecture.patch b/package/qt/0009-Add-initial-support-of-ARC-architecture.patch
-new file mode 100644
-index 0000000..4470d3b
---- /dev/null
-+++ b/package/qt/0009-Add-initial-support-of-ARC-architecture.patch
-@@ -0,0 +1,183 @@
-+From a695eec2ef21240bbc6cd8cd1bdbab76f8da8dfd Mon Sep 17 00:00:00 2001
-+From: Vineet Gupta <vgupta@synopsys.com>
-+Date: Wed, 20 May 2015 10:37:25 +0300
-+Subject: [PATCH 1/2] Add initial support of ARC architecture
-+
-+DesignWare ARC 700 and ARC HS38 are families of 32-bit CPUs
-+developed by Synopsys, Inc.
-+
-+This change implements following:
-+ [1] Defines ARC as one embedded targets
-+ [2] Defines default tools prefixed for ARC like
-+     arc-linux-g++ etc
-+ [3] Defines "inotify" syscall numbers for ARC
-+     (note ARC fully compliant to Linux UAPI headers)
-+ [4] Disables 16-bit aligned data access
-+
-+For now we're using generic atomic ops even though it may
-+introduce performance panalty.
-+
-+Change-Id: I91e879ac55c2f3643a544f97cd59671a81ccc3c2
-+
-+This patch was submited in upstream Qt4 and if it ever gets accepted,
-+it should be removed from Buildroot.
-+
-+https://codereview.qt-project.org/#/c/112667
-+---
-+ configure                                     |  6 ++++
-+ mkspecs/qws/linux-arc-g++/qmake.conf          | 21 ++++++++++++++
-+ mkspecs/qws/linux-arc-g++/qplatformdefs.h     | 42 +++++++++++++++++++++++++++
-+ src/corelib/arch/qatomic_arch.h               |  2 ++
-+ src/corelib/io/qfilesystemwatcher_inotify.cpp |  5 ++++
-+ src/gui/painting/qblendfunctions.cpp          |  4 +--
-+ 6 files changed, 78 insertions(+), 2 deletions(-)
-+ create mode 100644 mkspecs/qws/linux-arc-g++/qmake.conf
-+ create mode 100644 mkspecs/qws/linux-arc-g++/qplatformdefs.h
-+
-+diff --git a/configure b/configure
-+index 10ad7ca..c7ef074 100755
-+--- a/configure
-++++ b/configure
-+@@ -2829,6 +2829,9 @@ if [ "$CFG_EMBEDDED" != "no" ]; then
-+                     *86_64)
-+                         CFG_EMBEDDED=x86_64
-+                         ;;
-++                    *arc)
-++                        CFG_EMBEDDED=arc
-++                        ;;
-+                     *)
-+                         CFG_EMBEDDED=generic
-+                         ;;
-+@@ -3309,6 +3312,9 @@ if [ "$PLATFORM" != "$XPLATFORM" -a "$CFG_EMBEDDED" != "no" ]; then
-+     arm*)
-+         CFG_ARCH=arm
-+         ;;
-++    arc)
-++        CFG_ARCH=arc
-++        ;;
-+     *)
-+         CFG_ARCH="$CFG_EMBEDDED"
-+         ;;
-+diff --git a/mkspecs/qws/linux-arc-g++/qmake.conf b/mkspecs/qws/linux-arc-g++/qmake.conf
-+new file mode 100644
-+index 0000000..a14587b
-+--- /dev/null
-++++ b/mkspecs/qws/linux-arc-g++/qmake.conf
-+@@ -0,0 +1,21 @@
-++#
-++# qmake configuration for building with arc-linux-g++
-++#
-++
-++include(../../common/linux.conf)
-++include(../../common/gcc-base-unix.conf)
-++include(../../common/g++-unix.conf)
-++include(../../common/qws.conf)
-++
-++# modifications to g++.conf
-++QMAKE_CC                = arc-linux-gcc
-++QMAKE_CXX               = arc-linux-g++
-++QMAKE_LINK              = arc-linux-g++
-++QMAKE_LINK_SHLIB        = arc-linux-g++
-++
-++# modifications to linux.conf
-++QMAKE_AR                = arc-linux-ar cqs
-++QMAKE_OBJCOPY           = arc-linux-objcopy
-++QMAKE_STRIP             = arc-linux-strip
-++
-++load(qt_config)
-+diff --git a/mkspecs/qws/linux-arc-g++/qplatformdefs.h b/mkspecs/qws/linux-arc-g++/qplatformdefs.h
-+new file mode 100644
-+index 0000000..a654aa7
-+--- /dev/null
-++++ b/mkspecs/qws/linux-arc-g++/qplatformdefs.h
-+@@ -0,0 +1,42 @@
-++/****************************************************************************
-++**
-++** Copyright (C) 2015 The Qt Company Ltd.
-++** Contact: http://www.qt.io/licensing/
-++**
-++** This file is part of the qmake spec of the Qt Toolkit.
-++**
-++** $QT_BEGIN_LICENSE:LGPL$
-++** Commercial License Usage
-++** Licensees holding valid commercial Qt licenses may use this file in
-++** accordance with the commercial license agreement provided with the
-++** Software or, alternatively, in accordance with the terms contained in
-++** a written agreement between you and The Qt Company. For licensing terms
-++** and conditions see http://www.qt.io/terms-conditions. For further
-++** information use the contact form at http://www.qt.io/contact-us.
-++**
-++** GNU Lesser General Public License Usage
-++** Alternatively, this file may be used under the terms of the GNU Lesser
-++** General Public License version 2.1 or version 3 as published by the Free
-++** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-++** LICENSE.LGPLv3 included in the packaging of this file. Please review the
-++** following information to ensure the GNU Lesser General Public License
-++** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-++** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-++**
-++** As a special exception, The Qt Company gives you certain additional
-++** rights. These rights are described in The Qt Company LGPL Exception
-++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
-++**
-++** GNU General Public License Usage
-++** Alternatively, this file may be used under the terms of the GNU
-++** General Public License version 3.0 as published by the Free Software
-++** Foundation and appearing in the file LICENSE.GPL included in the
-++** packaging of this file.  Please review the following information to
-++** ensure the GNU General Public License version 3.0 requirements will be
-++** met: http://www.gnu.org/copyleft/gpl.html.
-++**
-++** $QT_END_LICENSE$
-++**
-++****************************************************************************/
-++
-++#include "../../linux-g++/qplatformdefs.h"
-+diff --git a/src/corelib/arch/qatomic_arch.h b/src/corelib/arch/qatomic_arch.h
-+index d154b7e..a48c42a 100644
-+--- a/src/corelib/arch/qatomic_arch.h
-++++ b/src/corelib/arch/qatomic_arch.h
-+@@ -94,6 +94,8 @@ QT_BEGIN_HEADER
-+ #  include "QtCore/qatomic_sh4a.h"
-+ #elif defined(QT_ARCH_NACL)
-+ #  include "QtCore/qatomic_generic.h"
-++#elif defined(QT_ARCH_ARC)
-++#  include "QtCore/qatomic_generic.h"
-+ #else
-+ #  error "Qt has not been ported to this architecture"
-+ #endif
-+diff --git a/src/corelib/io/qfilesystemwatcher_inotify.cpp b/src/corelib/io/qfilesystemwatcher_inotify.cpp
-+index 8bca422..e3e2565 100644
-+--- a/src/corelib/io/qfilesystemwatcher_inotify.cpp
-++++ b/src/corelib/io/qfilesystemwatcher_inotify.cpp
-+@@ -143,6 +143,11 @@
-+ # define __NR_inotify_add_watch 27
-+ # define __NR_inotify_rm_watch  28
-+ // no inotify_init for aarch64
-++#elif defined (__arc__)
-++# define __NR_inotify_init      1043
-++# define __NR_inotify_add_watch 27
-++# define __NR_inotify_rm_watch  28
-++# define __NR_inotify_init1     26
-+ #else
-+ # error "This architecture is not supported. Please talk to qt-bugs at trolltech.com"
-+ #endif
-+diff --git a/src/gui/painting/qblendfunctions.cpp b/src/gui/painting/qblendfunctions.cpp
-+index de8790a..cc2f5b6 100644
-+--- a/src/gui/painting/qblendfunctions.cpp
-++++ b/src/gui/painting/qblendfunctions.cpp
-+@@ -309,9 +309,9 @@ template <typename T> void qt_blend_argb24_on_rgb16(uchar *destPixels, int dbpl,
-+         const uchar *src = srcPixels + y * sbpl;
-+         const uchar *srcEnd = src + srcOffset;
-+         while (src < srcEnd) {
-+-#if defined(QT_ARCH_ARMV5) || defined(QT_ARCH_POWERPC) || defined(QT_ARCH_SH) || defined(QT_ARCH_AVR32) || (defined(QT_ARCH_WINDOWSCE) && !defined(_X86_)) || (defined(QT_ARCH_SPARC) && defined(Q_CC_GNU)) || (defined(QT_ARCH_INTEGRITY) && !defined(_X86_))
-++#if defined(QT_ARCH_ARMV5) || defined(QT_ARCH_POWERPC) || defined(QT_ARCH_SH) || defined(QT_ARCH_AVR32) || (defined(QT_ARCH_WINDOWSCE) && !defined(_X86_)) || (defined(QT_ARCH_SPARC) && defined(Q_CC_GNU)) || (defined(QT_ARCH_INTEGRITY) && !defined(_X86_)) || defined(QT_ARCH_ARC)
-+             // non-16-bit aligned memory access is not possible on PowerPC,
-+-            // ARM <v6 (QT_ARCH_ARMV5) & SH & AVR32 & SPARC w/GCC
-++            // ARM <v6 (QT_ARCH_ARMV5) & SH & AVR32 & SPARC w/GCC & ARC
-+             quint16 spix = (quint16(src[2])<<8) + src[1];
-+ #else
-+             quint16 spix = *(quint16 *) (src + 1);
-+-- 
-+2.1.0
-+
-diff --git a/package/qt/0010-Prevent-unaligned-access-on-ARC.patch b/package/qt/0010-Prevent-unaligned-access-on-ARC.patch
-new file mode 100644
-index 0000000..684a5b4
---- /dev/null
-+++ b/package/qt/0010-Prevent-unaligned-access-on-ARC.patch
-@@ -0,0 +1,92 @@
-+From 9392d29bf0ad0390c6895933fdec0f690d2bdedf Mon Sep 17 00:00:00 2001
-+From: Alexey Brodkin <abrodkin@synopsys.com>
-+Date: Wed, 20 May 2015 10:53:59 +0300
-+Subject: [PATCH 2/2] Prevent unaligned access on ARC
-+
-+As many other architectures ARC cores by default don't support
-+unaligned word access to data.
-+
-+Even though it's possible to enable unaligned access to data in
-+ARC HS38 core (we're talking about configuration of core design)
-+to make sure Qt could be executed on any flavour of ARC fall-back
-+to byte-accesses is used.
-+
-+Change-Id: I96068d40b449f11ba987ed1e5d5e44f493d1eb5f
-+
-+This patch was submited in upstream Qt4 and if it ever gets accepted,
-+it should be removed from Buildroot.
-+
-+https://codereview.qt-project.org/#/c/112668
-+---
-+ src/3rdparty/webkit/Source/JavaScriptCore/runtime/UString.h |  2 +-
-+ src/3rdparty/webkit/Source/JavaScriptCore/wtf/Platform.h    | 13 ++++++++++++-
-+ .../webkit/Source/JavaScriptCore/wtf/text/AtomicString.cpp  |  2 +-
-+ .../webkit/Source/JavaScriptCore/wtf/text/StringHash.h      |  2 +-
-+ 4 files changed, 15 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/3rdparty/webkit/Source/JavaScriptCore/runtime/UString.h b/src/3rdparty/webkit/Source/JavaScriptCore/runtime/UString.h
-+index 2d76809..ee9b7f0 100644
-+--- a/src/3rdparty/webkit/Source/JavaScriptCore/runtime/UString.h
-++++ b/src/3rdparty/webkit/Source/JavaScriptCore/runtime/UString.h
-+@@ -202,7 +202,7 @@ struct UStringHash {
-+ 
-+         // FIXME: perhaps we should have a more abstract macro that indicates when
-+         // going 4 bytes at a time is unsafe
-+-#if CPU(ARM) || CPU(SH4) || CPU(MIPS) || CPU(SPARC)
-++#if CPU(ARM) || CPU(SH4) || CPU(MIPS) || CPU(SPARC) || CPU(ARC)
-+         const UChar* aChars = a->characters();
-+         const UChar* bChars = b->characters();
-+         for (unsigned i = 0; i != aLength; ++i) {
-+diff --git a/src/3rdparty/webkit/Source/JavaScriptCore/wtf/Platform.h b/src/3rdparty/webkit/Source/JavaScriptCore/wtf/Platform.h
-+index e8b03be..cd17e9c 100644
-+--- a/src/3rdparty/webkit/Source/JavaScriptCore/wtf/Platform.h
-++++ b/src/3rdparty/webkit/Source/JavaScriptCore/wtf/Platform.h
-+@@ -369,7 +369,18 @@
-+ 
-+ #endif /* ARM */
-+ 
-+-#if CPU(ARM) || CPU(MIPS) || CPU(SH4)
-++/* CPU(ARC) - ARC, any version*/
-++#if   defined(arc) \
-++    || defined(__arc__) \
-++    || defined(ARC) \
-++    || defined(_ARC_)
-++#define WTF_CPU_ARC 1
-++#if defined(__BIG_ENDIAN__)
-++#define WTF_CPU_BIG_ENDIAN 1
-++#endif
-++#endif
-++
-++#if CPU(ARM) || CPU(MIPS) || CPU(SH4) || CPU(ARC)
-+ #define WTF_CPU_NEEDS_ALIGNED_ACCESS 1
-+ #endif
-+ 
-+diff --git a/src/3rdparty/webkit/Source/JavaScriptCore/wtf/text/AtomicString.cpp b/src/3rdparty/webkit/Source/JavaScriptCore/wtf/text/AtomicString.cpp
-+index 9dd655e..bd3ab95 100644
-+--- a/src/3rdparty/webkit/Source/JavaScriptCore/wtf/text/AtomicString.cpp
-++++ b/src/3rdparty/webkit/Source/JavaScriptCore/wtf/text/AtomicString.cpp
-+@@ -142,7 +142,7 @@ static inline bool equal(StringImpl* string, const UChar* characters, unsigned l
-+ 
-+     // FIXME: perhaps we should have a more abstract macro that indicates when
-+     // going 4 bytes at a time is unsafe
-+-#if CPU(ARM) || CPU(SH4) || CPU(MIPS) || CPU(SPARC)
-++#if CPU(ARM) || CPU(SH4) || CPU(MIPS) || CPU(SPARC) || CPU(ARC)
-+     const UChar* stringCharacters = string->characters();
-+     for (unsigned i = 0; i != length; ++i) {
-+         if (*stringCharacters++ != *characters++)
-+diff --git a/src/3rdparty/webkit/Source/JavaScriptCore/wtf/text/StringHash.h b/src/3rdparty/webkit/Source/JavaScriptCore/wtf/text/StringHash.h
-+index 4637c3d..91cef81 100644
-+--- a/src/3rdparty/webkit/Source/JavaScriptCore/wtf/text/StringHash.h
-++++ b/src/3rdparty/webkit/Source/JavaScriptCore/wtf/text/StringHash.h
-+@@ -55,7 +55,7 @@ namespace WTF {
-+ 
-+             // FIXME: perhaps we should have a more abstract macro that indicates when
-+             // going 4 bytes at a time is unsafe
-+-#if CPU(ARM) || CPU(SH4) || CPU(MIPS) || CPU(SPARC)
-++#if CPU(ARM) || CPU(SH4) || CPU(MIPS) || CPU(SPARC) || CPU(ARC)
-+             const UChar* aChars = a->characters();
-+             const UChar* bChars = b->characters();
-+             for (unsigned i = 0; i != aLength; ++i) {
-+-- 
-+2.1.0
-+
+     powerpc |                  clamav-0.98.7 | NOK | http://autobuild.buildroot.net/results/a99b96f2fa639dd5299501596daf553b0d7e22e6/
+      x86_64 | filemq-482797b8aa30fcc9ea13... | NOK | http://autobuild.buildroot.net/results/f6f8a41d7682122e4af17cd797458c5295dc6642/
+      xtensa |                  fio-fio-2.1.4 | NOK | http://autobuild.buildroot.net/results/275dc359d72513fd567b7ccbbd4061dffd8a5266/
+      xtensa |                  glibmm-2.36.1 | NOK | http://autobuild.buildroot.net/results/4943b214c29951ecc7af0a1f360b6454485c0b9b/
+         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/0d5ae08ac4bf37126e32f3fa967200a037fd5933/
+     powerpc |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/1587c58cde998b1db0c076e2a8d84a359c9ca427/
+        bfin |                    ncurses-5.9 | NOK | http://autobuild.buildroot.net/results/dd7242de96f3ee6c0231681bac2d166d1d52aad1/
+        i686 |                    perl-5.20.2 | NOK | http://autobuild.buildroot.net/results/9404e004ac24c5f3eedc8e7bc8afadd35983de70/
+         arc |                      php-5.6.9 | NOK | http://autobuild.buildroot.net/results/7c2ff5061e5f75814e4525a8feb02a7df57eb50d/
+         arm |                      php-5.6.9 | NOK | http://autobuild.buildroot.net/results/b1c69606453f4180aa61f3b3ee5b7b7bf4e52d95/
+         arc |                      php-5.6.9 | NOK | http://autobuild.buildroot.net/results/930948ed7db4f0a8867c793393ce70cc035b7d42/
+        i686 |                     qemu-2.3.0 | NOK | http://autobuild.buildroot.net/results/98b196c65a2f9be63eb80095880d5070120fa21d/
+         arc |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/8ece96e2ced2dcc1c68b177c6a0ec833107c93ab/
+        i686 |                     wine-1.6.2 | NOK | http://autobuild.buildroot.net/results/5e43108dc6902101f55e0aaf28c326e06d519b9a/
+
+
 -- 
-2.1.0
+http://autobuild.buildroot.net
