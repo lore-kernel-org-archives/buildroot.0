@@ -1,31 +1,38 @@
-From: Laurent Joli <l.joli@expemb.com>
-Date: Tue, 26 May 2015 18:34:43 +0200
-Subject: [Buildroot] sky2 not created
-Message-ID: <CAJtzDg-NoVNk_W8CnV0y0sY+dhZNCKTu66tfePnyUoDNj+bTeg@mail.gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue, 26 May 2015 21:33:21 +0200
+Subject: [Buildroot] [PATCH] package/gptfdisk: propagate ncurses reverse
+	dependency
+Message-ID: <1432668801-29112-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi ,
+gptfdisk cgdisk select nucurses wchar support which is disabled
+on bfin with FLAT binary format.
 
-My Host : Ubuntu 14.04
+Add the ncurses's reverse dependency to gptfdisk.
 
-I would like to build for an qmx6 board from congatec.
+Fixes:
+http://autobuild.buildroot.net/results/ce3/ce35c072f0b7c3a7a1918cb865a2eecbba8a1b23/
 
-So, I do :
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/gptfdisk/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- make qmx6_defconfig
-
-When I ticked for Marvell driver : SKY2 and  SKY2_DEBUG
-
-At the end of the build, I have not sky2.ko in my rootfs.
-
-What can I do for obtain sky2 drivers ?
-
-Thanks,
-Koax
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150526/b798b24d/attachment.html>
+diff --git a/package/gptfdisk/Config.in b/package/gptfdisk/Config.in
+index 61692f6..befdf77 100644
+--- a/package/gptfdisk/Config.in
++++ b/package/gptfdisk/Config.in
+@@ -38,6 +38,7 @@ config BR2_PACKAGE_GPTFDISK_CGDISK
+ 	bool "ncurses cgdisk"
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_NCURSES_WCHAR # needed because of UTF-16
++	depends on !(BR2_bfin && BR2_BINFMT_FLAT) # ncurses wchar support
+ 	help
+ 	  Install the ncurses-based GUID partition table (GPT)
+ 	  manipulator /usr/sbin/cgdisk.
+-- 
+2.1.0
