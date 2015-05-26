@@ -1,47 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 May 2015 23:53:34 +0200
-Subject: [Buildroot] [git commit] postgresql: security bump to version 9.4.2
-Message-ID: <20150526215408.6D14281DA5@busybox.osuosl.org>
+Date: Tue, 26 May 2015 23:58:15 +0200
+Subject: [Buildroot] [PATCH] fio: disable for static build
+In-Reply-To: <040ffd722b63c11d5bf128805174329812d723b9.1432635693.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 26 May 2015 13:21:33 +0300")
+References: <040ffd722b63c11d5bf128805174329812d723b9.1432635693.git.baruch@tkos.co.il>
+Message-ID: <87fv6jxaq0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dffd39168af7ee419f3fe86152d36db2d1dfcc5a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Fixes:
-CVE-2015-3165 (denial of service)
-CVE-2015-3166 (information disclosure)
-CVE-2015-3167 (side-channel key exposure)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/275/275dc359d72513fd567b7ccbbd4061dffd8a5266/
+ > http://autobuild.buildroot.net/results/5e8/5e8cc28da6a17dcb142eb6d8a8cada735b211e2e/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/postgresql/postgresql.hash |    4 ++--
- package/postgresql/postgresql.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index ea2be3e..2f8de30 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.postgresql.org/pub/source/v9.4.1/postgresql-9.4.1.tar.bz2.sha256
--sha256	29ddb77c820095b8f52e5455e9c6c6c20cf979b0834ed1986a8857b84888c3a6  postgresql-9.4.1.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v9.4.2/postgresql-9.4.2.tar.bz2.sha256
-+sha256	81fda191c165ba1d25d75cd0166ece5abdcb4a7f5eca01b349371e279ebb4d11  postgresql-9.4.2.tar.bz2
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index eda547c..d4895a0 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 9.4.1
-+POSTGRESQL_VERSION = 9.4.2
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
