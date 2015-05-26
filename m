@@ -1,203 +1,80 @@
-From: Vincent Stehle <vincent.stehle@laposte.net>
-Date: Tue, 26 May 2015 16:42:22 +0200
-Subject: [Buildroot] [PATCH] configs: add Freescale i.MX6 SoloX Sabre SD
-	support
-Message-ID: <1432651342-30564-1-git-send-email-vincent.stehle@laposte.net>
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Date: Tue, 26 May 2015 18:24:28 +0200
+Subject: [Buildroot] [PATCH 1/1] fcgiwrap: new package
+Message-ID: <1432657468-17210-1-git-send-email-thomas.claveirole@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vincent Stehl? <vincent.stehle@laposte.net>
+Add package fcgiwrap from https://nginx.localdomain.pl/wiki/FcgiWrap
 
-The i.MX6 SoloX SABRE board for smart devices is Freescale's reference design
-board based on the heterogeneous ARM Cortex-A9 + Cortex-M4 i.MX6 SoloX
-applications processor.
+fcgiwrap is a simple server for running CGI applications over
+FastCGI. It hopes to provide clean CGI support to Nginx (and other web
+servers that may need it).
 
-This defconfig is inspired from previous freescale_imx6*sabresd_defconfig, and
-is based on Freescale "official" git repo on git.freescale.com and SW release
-3.10.53_1.1.0_ga.
-
-Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
-Cc: Gary Bisson <bisson.gary@gmail.com>
-Cc: J?r?me Pouiller <jezz@sysmic.org>
-Cc: Gilles Talis <gilles.talis@gmail.com>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 ---
+ package/Config.in            |  1 +
+ package/fcgiwrap/Config.in   | 10 ++++++++++
+ package/fcgiwrap/fcgiwrap.mk | 19 +++++++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/fcgiwrap/Config.in
+ create mode 100644 package/fcgiwrap/fcgiwrap.mk
 
-
-Hi,
-
-This is a proposed defconfig for i.MX6 SoloX.
-
-Because the i.MX6 SoloX is not supported with the Freescale release 3.10.17
-currently in use by i.MX6 defconfigs in buildroot, and because patches to
-"bump" other i.MX6 boards to release 3.10.53 have been kindly submitted by Gary
-[1], this defconfig is based on release 3.10.53 for consistency.
-
-To compile properly, this defconfig depends on a "refresh" of an u-boot patch,
-posted earlier [2].
-
-Best regards,
-
-V.
-
-[1] http://patchwork.ozlabs.org/patch/476413/ and more
-[2] http://patchwork.ozlabs.org/patch/474897/
-
-
- board/freescale/imx6sabre/readme.txt      | 63 ++++++++++++++++++++++++-------
- configs/freescale_imx6sxsabresd_defconfig | 35 +++++++++++++++++
- 2 files changed, 84 insertions(+), 14 deletions(-)
- create mode 100644 configs/freescale_imx6sxsabresd_defconfig
-
-diff --git a/board/freescale/imx6sabre/readme.txt b/board/freescale/imx6sabre/readme.txt
-index 6850885..6c44e22 100644
---- a/board/freescale/imx6sabre/readme.txt
-+++ b/board/freescale/imx6sabre/readme.txt
-@@ -1,14 +1,19 @@
--*******************************************************
--Freescale i.MX6Q and i.MX6DL SABRESD development boards
--*******************************************************
-+********************************************************
-+Freescale i.MX6 Q, DL and SoloX SABRE development boards
-+********************************************************
- 
--This file documents the Buildroot support for the Freescale SABRE Board for
--Smart Devices Based on the i.MX 6 Series (SABRESD), as well as the Freescale
--SABRE Board for Automotive Infotainment.
-+This file documents the Buildroot support for the Freescale SABRE Board
-+for Smart Devices Based on the i.MX 6 and i.MX 6SoloX Series (SABRESD),
-+as well as the Freescale SABRE Board for Automotive Infotainment.
- 
--Read the SABRESD Quick Start Guide for an introduction to the board:
-+Read the i.MX 6 SABRESD Quick Start Guide for an introduction to the
-+board:
- http://cache.freescale.com/files/32bit/doc/quick_start_guide/SABRESDB_IMX6_QSG.pdf
- 
-+Read the i.MX 6 SoloX SABRESD Quick Start Guide for an introduction to
-+the board:
-+http://cache.freescale.com/files/32bit/doc/user_guide/IMX6SOLOXQSG.pdf
-+
- Read the SABRE for Automotive Infotainment Quick Start Guide for an
- introduction to the board:
- http://cache.freescale.com/files/32bit/doc/user_guide/IMX6SABREINFOQSG.pdf
-@@ -25,6 +30,10 @@ For i.MX6DL SABRE SD board:
- 
-   make freescale_imx6dlsabresd_defconfig
- 
-+For i.MX6 SoloX SABRE SD board:
-+
-+  make freescale_imx6sxsabresd_defconfig
-+
- For i.MX6Q SABRE Auto board:
- 
-   make freescale_imx6qsabreauto_defconfig
-@@ -38,12 +47,12 @@ Build all components:
-   make
- 
- You will find in ./output/images/ the following files:
--  - imx6dl-sabresd.dtb or imx6q-sabresd.dtb or imx6q-sabreauto.dtb or
--    imx6dl-sabreauto.dtb
-+  - imx6dl-sabresd.dtb or imx6q-sabresd.dtb or imx6sx-sdb.dtb or
-+    imx6q-sabreauto.dtb or imx6dl-sabreauto.dtb
-   - rootfs.ext2
-   - rootfs.tar
-   - u-boot.imx
--  - uImage
-+  - uImage, or zImage for i.MX6 SoloX
- 
- Create a bootable SD card
- =========================
-@@ -63,17 +72,43 @@ and copy the bootloader, kernel, DTBs and root filesystem as needed.
- Boot the SABRE board
- ====================
- 
--SABRE SD
----------
-+i.MX6 SABRE SD
-+--------------
- 
--To boot your newly created system on a SABRE SD Board (refer to the SABRE SD
--Quick Start Guide for guidance):
-+To boot your newly created system on an i.MX6 SABRE SD Board (refer to
-+the i.MX6 SABRE SD Quick Start Guide for guidance):
- - insert the SD card in the SD3 slot of the board;
- - locate the BOOT dip switches (SW6), set dips 2 and 7 to ON, all others to OFF;
- - connect a Micro USB cable to Debug Port and connect using a terminal emulator
-   at 115200 bps, 8n1;
- - power on the board.
- 
-+i.MX6 SoloX SABRE SD
-+--------------------
-+
-+To boot your newly created system on an i.MX6 SoloX SABRE SD Board
-+(refer to the i.MX6 SoloX SABRE SD Quick Start Guide for guidance):
-+- insert the SD card in the J4-SD4 socket at the bottom of the board;
-+- Set the SW10, SW11 and SW12 DIP switches at the top of the board in
-+  their default position, to boot from SD card. Reference configuration:
-+
-+    SW10
-+     1   2   3   4   5   6   7   8
-+    off off off off off off off off
-+
-+    SW11
-+     1   2  3  4  5   6   7   8
-+    off off ON ON ON off off off
-+
-+    SW12
-+     1  2   3   4   5   6   7   8
-+    off ON off off off off off off
-+
-+- connect a Micro USB cable to the J16 Debug Port at the bottom of the
-+  board. This is a dual UART debug port; connect to the first tty using
-+  a terminal emulator at 115200 bps, 8n1;
-+- power on the board with the SW1-PWR switch at the top of the board.
-+
- SABRE Auto
- ----------
- 
-diff --git a/configs/freescale_imx6sxsabresd_defconfig b/configs/freescale_imx6sxsabresd_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index e0c2e2a..188ff0d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1168,6 +1168,7 @@ endif
+ 	source "package/ejabberd/Config.in"
+ 	source "package/ethtool/Config.in"
+ 	source "package/faifa/Config.in"
++	source "package/fcgiwrap/Config.in"
+ 	source "package/fmc/Config.in"
+ 	source "package/foomatic-filters/Config.in"
+ 	source "package/fping/Config.in"
+diff --git a/package/fcgiwrap/Config.in b/package/fcgiwrap/Config.in
 new file mode 100644
-index 0000000..bd0d6cc
+index 0000000..a5c15a0
 --- /dev/null
-+++ b/configs/freescale_imx6sxsabresd_defconfig
-@@ -0,0 +1,35 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
++++ b/package/fcgiwrap/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_FCGIWRAP
++	bool "fcgiwrap"
++	depends on BR2_USE_MMU # Transitive dependency from libfcgi.
++	select BR2_PACKAGE_LIBFCGI
++	help
++	  fcgiwrap is a simple server for running CGI applications
++	  over FastCGI. It hopes to provide clean CGI support to Nginx
++	  (and other web servers that may need it).
 +
-+# patches
-+BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
++	  https://nginx.localdomain.pl/wiki/FcgiWrap
+diff --git a/package/fcgiwrap/fcgiwrap.mk b/package/fcgiwrap/fcgiwrap.mk
+new file mode 100644
+index 0000000..053f1d0
+--- /dev/null
++++ b/package/fcgiwrap/fcgiwrap.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# fcgiwrap
++#
++################################################################################
 +
-+# toolchain
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.10.53"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
++FCGIWRAP_VERSION = 1.1.0
++FCGIWRAP_SITE = $(call github,gnosek,fcgiwrap,$(FCGIWRAP_VERSION))
++FCGIWRAP_DEPENDENCIES = libfcgi
++FCGIWRAP_LICENSE = MIT
++FCGIWRAP_AUTORECONF = YES
 +
-+# system
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++# We need -lm to link with libfcgi, and fcgiwrap does not add it automatically.
++FCGIWRAP_CONF_OPTS = LDFLAGS=-lm
 +
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-sdb"
++# fcgiwrap uses Autoconf, but not Automake, so we need to provide these to make.
++FCGIWRAP_MAKE_OPTS = CC="$(TARGET_CC)" LD="$(TARGET_LD)" $(FCGIWRAP_CONF_OPTS)
 +
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx6sxsabresd"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
++$(eval $(autotools-package))
 -- 
 2.1.4
