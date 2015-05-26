@@ -1,98 +1,95 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 27 May 2015 01:42:14 +0200
-Subject: [Buildroot] [PATCH 19/21 RFC] support/scripts: teach
-	gen-manual-lists about BR2_EXTERNAL
+Date: Wed, 27 May 2015 01:42:15 +0200
+Subject: [Buildroot] [PATCH 20/21 RFC] docs/manual: include packages from
+	BR2_EXTERNAL if set
 In-Reply-To: <cover.1432681414.git.yann.morin.1998@free.fr>
 References: <cover.1432681414.git.yann.morin.1998@free.fr>
-Message-ID: <66a04ef770db393a305d62f2e4a084be747446e2.1432681414.git.yann.morin.1998@free.fr>
+Message-ID: <11c270bce68df31b215198daf83e235e59488516.1432681414.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using BR2_EXTERNAL, generate the list of packages from there.
+If the user is using one or more br2-external trees, add the list of
+packages therein to the manual.
 
-This is currently effectively unused for now, as BR2_EXTERNAL is not
-available (not exported in the environment); that will be updated in a
-later patch.
+Note that we do re-introduce BR2_EXTERNAL (when it was removed in
+[-SHA1-] (docs/manual: do not override BR2_EXTERNAL). The reason for
+the removal is that BR2_EXTERNAL is no longer used as a Kconfig option.
+
+However, BR2_EXTERNAL is now used by the gen-manual-lists.py script,
+which needs it to find packages' .mk files in the br2-external trees,
+not as a Kconfig option (which it is not).
+
+So, even though that looks like a revert, that's not: the purpose is
+different, and we only pass it when not empty.
+
+In case we have no br2-external, we want to create an empty file, so
+we can't just touch it, in case it was previously generated with
+br2-external trees; instead, we printf an empty string in there to
+ensure the file exists and is empty.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
- support/scripts/gen-manual-lists.py | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
+ docs/manual/appendix.txt |  5 +++++
+ docs/manual/manual.mk    | 18 ++++++++++++++++++
+ 2 files changed, 23 insertions(+)
 
-diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-index ec59030..7d9356c 100644
---- a/support/scripts/gen-manual-lists.py
-+++ b/support/scripts/gen-manual-lists.py
-@@ -146,7 +146,6 @@ class Buildroot:
+diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
+index 87a20bd..7ef8bbc 100644
+--- a/docs/manual/appendix.txt
++++ b/docs/manual/appendix.txt
+@@ -40,3 +40,8 @@ year following deprecation. For example, a symbol depending on
+ +BR2_DEPRECATED_SINCE_2013_05+ can be removed from 2014.05 onwards.
  
-     """
-     root_config = "Config.in"
--    package_dirname = "package"
-     package_prefixes = ["BR2_PACKAGE_", "BR2_PACKAGE_HOST_"]
-     re_pkg_prefix = re.compile(r"^(" + "|".join(package_prefixes) + ").*")
-     deprecated_symbol = "BR2_DEPRECATED"
-@@ -187,12 +186,22 @@ class Buildroot:
-             'format': "_format_symbol_prompt_location",
-             'sorted': False,
-         },
-+        'external': {
-+            'filename': "br2-external-package-list",
-+            'root_menu': "User-provided options",
-+            'filter': "_is_real_package",
-+            'format': "_format_symbol_prompt_location",
-+            'sorted': True,
-+        },
-     }
+ include::deprecated-list.txt[]
++
++// This file is generated:
++// - with the list of br2-external packages if BR2_EXTERNAL is set
++// - empty otherwise
++include::br2-external.txt[]
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index b26f912..3b4cef4 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -10,14 +10,32 @@ MANUAL_RESOURCES = $(TOPDIR)/docs/images
+ # Ensure the kconfig snippet is generated (for MANUAL_GEN_LISTS, below):
+ MANUAL_DEPENDENCIES += prepare-kconfig
  
-     def __init__(self):
-         self.base_dir = os.environ.get("TOPDIR")
-         self.output_dir = os.environ.get("O")
--        self.package_dir = os.path.join(self.base_dir, self.package_dirname)
-+        self.package_dirs = []
-+        self.package_dirs.append(os.path.join(self.base_dir, "package"))
-+        if os.getenv('BR2_EXTERNAL'):
-+            self.package_dirs.extend(os.environ["BR2_EXTERNAL"].split())
-         # The kconfiglib requires an environment variable named "srctree" to
-         # load the configuration, so set it.
-         os.environ.update({'srctree': self.base_dir})
-@@ -266,9 +275,10 @@ class Buildroot:
-         #   symbol.
-         if not hasattr(self, "_package_list"):
-             pkg_list = []
--            for _, _, files in os.walk(self.package_dir):
--                for file_ in (f for f in files if f.endswith(".mk")):
--                    pkg_list.append(re.sub(r"(.*?)\.mk", r"\1", file_))
-+            for d in self.package_dirs:
-+                for _, _, files in os.walk(d):
-+                    for file_ in (f for f in files if f.endswith(".mk")):
-+                        pkg_list.append(re.sub(r"(.*?)\.mk", r"\1", file_))
-             setattr(self, "_package_list", pkg_list)
-         for pkg in getattr(self, "_package_list"):
-             if type == 'real':
-@@ -495,6 +505,8 @@ class Buildroot:
++# If using one or more BR2_EXTERNAL trees, include the list of
++# packages therein, otherwise, generate an empty file
++ifeq ($(BR_EXTERNAL),)
++define MANUAL_GEN_LISTS_BR2_EXTERNAL
++	$(Q)printf "" >$(@D)/br2-external.txt
++endef
++else
++define MANUAL_GEN_LISTS_BR2_EXTERNAL
++	$(Q)( \
++		printf "== List of BR2_EXTERNAL packages\n\n"; \
++		printf "include::br2-external-package-list.txt[]\n"; \
++	) >$(@D)/br2-external.txt
++endef
++MANUAL_GEN_LISTS_ENV = BR2_EXTERNAL="$(BR_EXTERNAL)"
++endif
++
+ # Our manual needs to generate lists
+ define MANUAL_GEN_LISTS
+ 	$(Q)$(call MESSAGE,"Updating the manual lists...")
+ 	$(Q)$(COMMON_CONFIG_ENV) \
+ 		BR2_DEFCONFIG="" \
++		$(MANUAL_GEN_LISTS_ENV) \
+ 		TOPDIR=$(TOPDIR) \
+ 		O=$(@D) \
+ 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
++	$(MANUAL_GEN_LISTS_BR2_EXTERNAL)
+ endef
+ MANUAL_POST_RSYNC_HOOKS += MANUAL_GEN_LISTS
  
- if __name__ == '__main__':
-     list_types = ['target-packages', 'host-packages', 'virtual-packages', 'deprecated']
-+    if os.getenv('BR2_EXTERNAL'):
-+        list_types.append('external')
-     parser = ArgumentParser()
-     parser.add_argument("list_type", nargs="?", choices=list_types,
-                         help="""\
-@@ -509,6 +521,8 @@ Generate the given list (generate all lists if unspecified)""")
-                         help="Output virtual package file")
-     parser.add_argument("--output-deprecated", dest="output_deprecated",
-                         help="Output deprecated file")
-+    parser.add_argument("--output-external", dest="output_external",
-+                        help="Output br2-external file")
-     args = parser.parse_args()
-     lists = [args.list_type] if args.list_type else list_types
-     buildroot = Buildroot()
 -- 
 1.9.1
