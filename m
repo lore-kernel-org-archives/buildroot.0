@@ -1,51 +1,36 @@
-From: Gergely Imreh <imrehg@gmail.com>
-Date: Tue, 26 May 2015 14:34:51 +0800
-Subject: [Buildroot] showstopper 404 problem ...
-In-Reply-To: <01c901d09724$065bca00$13135e00$@novadsp.com>
-References: <01a201d0971b$fca690b0$f5f3b210$@novadsp.com>
- <20150525210558.39e88c66@free-electrons.com>
- <01c901d09724$065bca00$13135e00$@novadsp.com>
-Message-ID: <CAJ3iQcpEX=3MBXwHki78F7NhELhQOb=WGapZFSXSzenYi4+R3w@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 26 May 2015 07:11:50 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-05-19
+In-Reply-To: <20150520231825.240a9292@free-electrons.com>
+References: <20150520063015.F3A9A10113A@stock.ovh.net>
+ <20150520231825.240a9292@free-electrons.com>
+Message-ID: <1432624310.2727.5.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26 May 2015 at 03:50,  <g4@novadsp.com> wrote:
-> Hello Thomas and thanks
->
->> > BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="4.0.4"
->> >
->> > BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/ti-linux-
->> kernel/ti-
->> > linux-
->> > kernel.git"
->>
->> As explained by Yegor, use the mainline kernel, not TI's fork.
->>
->
-> As in kernel.org? An example or the canonical repo would be really handy.
+Hi Thomas,
 
-I'd guess Thomas means that for the mainline kernel you don't need any
-custom repo, just use the default kernel version (it's already 4.0.4
-in the current Buildroot). Much simpler and quicker that way.
+On Wed, 2015-05-20 at 23:18 +0200, Thomas Petazzoni wrote:
+> >          arc |                libedbus-1.7.10 | NOK | http://autobuild.buildroot.net/results/4a0b4db5fdad581e1ec3e8133bfdb1c485105a65/
+> 
+> uClibc bug in static linking:
+> 
+> multiple definition of `__GI_raise'
+> 
+> Alexey, can you have a look and see if it's fixed in uClibc master?
 
-If for whatever reason you want to use the git version of the tree,
-you can find the clone URLs at the bottom of this page:
-https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/
-The https://git.kernel.org/cgit/ has all the various kernel repos that
-you will never have to use directly. Just FYI.
+Looks like that's a generic problem with statically built uClibc with
+Linuxthreads.old
 
-Cheers,
-   Greg
+In case of NPTL "libc/signals/raise.c" won't be compiled so there's no
+even possibility for such a clash.
 
->
-> TIA.
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+We'll take a look at that problem, still since we're moving toward NPTL
+tools if there's no simple solution we may just leave it as it is now
+until there's anybody interested in fixing that for good.
+
+-Alexey
