@@ -1,55 +1,42 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 26 May 2015 13:30:35 +0300
-Subject: [Buildroot] [PATCH v2 1/1] package/mtd: add patch to fix host
- build error with gcc 5.1
-In-Reply-To: <1432635941-25395-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1432635941-25395-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150526103035.GS2260@tarshish>
+Date: Tue, 26 May 2015 13:36:47 +0300
+Subject: [Buildroot] [PATCH] janus-gateway: disable for static build
+Message-ID: <29110f591b47ab63c92023efdf9d419a7630a09b.1432636607.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
+janus-gateway requires dlopen().
 
-On Tue, May 26, 2015 at 12:25:41PM +0200, J?rg Krause wrote:
-> diff --git a/package/mtd/0005-mkfs.ubifs-Fix-build-with-gcc-5.1.patch b/package/mtd/0005-mkfs.ubifs-Fix-build-with-gcc-5.1.patch
-> new file mode 100644
-> index 0000000..1fb9372
-> --- /dev/null
-> +++ b/package/mtd/0005-mkfs.ubifs-Fix-build-with-gcc-5.1.patch
-> @@ -0,0 +1,72 @@
-> +From patchwork Sat May  2 12:38:06 2015
-> +Content-Type: text/plain; charset="utf-8"
-> +MIME-Version: 1.0
-> +Content-Transfer-Encoding: 7bit
-> +Subject: mkfs.ubifs: Fix build with gcc 5.1
-> +From: Bernhard Walle <bernhard@bwalle.de>
-> +X-Patchwork-Id: 467254
-> +Message-Id: <1430570286-30434-1-git-send-email-bernhard@bwalle.de>
-> +To: linux-mtd at lists.infradead.org
-> +Cc: Bernhard Walle <bernhard@bwalle.de>
-> +Date: Sat,  2 May 2015 14:38:06 +0200
-> +
-> +In gcc 5.1, the default C standard which is used to compile a C file,
-> +has changed from gnu89 to gnu11. This changed the meaning of 'extern
-> +inline'. See https://gcc.gnu.org/gcc-5/porting_to.html.
-> +
-> +In mkfs.ubifs, this leads to multiple definitions of
-> +hashtable_iterator_key and -hashtable_iterator_value. I think the most
-> +pragmatic way to fix the issue is to replace 'extern inline' with
-> +'static inline' here.
-> +
-> +Signed-off-by: Bernhard Walle <bernhard@bwalle.de>
+Fixes:
+http://autobuild.buildroot.net/results/092/092aac2b8abe0edd868a7e0cc59cdaaf28ca4ad5/
 
-Please add your sign-off here. Also please add a link to 
-https://patchwork.ozlabs.org/patch/467254/ to the patch description as well.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/janus-gateway/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Thanks,
-baruch
-
+diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
+index 6ba5f6a1e1db..035ee6c3345e 100644
+--- a/package/janus-gateway/Config.in
++++ b/package/janus-gateway/Config.in
+@@ -10,12 +10,13 @@ config BR2_PACKAGE_JANUS_GATEWAY
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libmicrohttpd
+ 	depends on BR2_USE_WCHAR # libnice -> libglib2
+ 	depends on BR2_USE_MMU # libnice
++	depends on !BR2_STATIC_LIBS # dlopen
+ 	help
+ 	  Janus is an open source, general purpose, WebRTC gateway
+ 	  designed and developed by Meetecho.
+ 
+ 	  https://github.com/meetecho/janus-gateway
+ 
+-comment "janus-gateway needs a toolchain w/ threads, wchar"
++comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.4
