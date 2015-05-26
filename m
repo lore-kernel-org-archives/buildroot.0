@@ -1,36 +1,41 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 26 May 2015 07:11:50 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-05-19
-In-Reply-To: <20150520231825.240a9292@free-electrons.com>
-References: <20150520063015.F3A9A10113A@stock.ovh.net>
- <20150520231825.240a9292@free-electrons.com>
-Message-ID: <1432624310.2727.5.camel@synopsys.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue, 26 May 2015 10:32:36 +0300
+Subject: [Buildroot] [PATCH] gcc/gcc-final: pass TARGET_ABI flags to
+	configure with --enable-cxx-flags
+Message-ID: <1432625556-14611-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+libstdc++ is in all regards a normal library, it needs to be built with
+TARGET_ABI flags, otherwise linking it with other C++ code may fail.
 
-On Wed, 2015-05-20 at 23:18 +0200, Thomas Petazzoni wrote:
-> >          arc |                libedbus-1.7.10 | NOK | http://autobuild.buildroot.net/results/4a0b4db5fdad581e1ec3e8133bfdb1c485105a65/
-> 
-> uClibc bug in static linking:
-> 
-> multiple definition of `__GI_raise'
-> 
-> Alexey, can you have a look and see if it's fixed in uClibc master?
+Pass TARGET_ABI flags to gcc-final configure script in the
+--enable-cxx-flags parameter.
 
-Looks like that's a generic problem with statically built uClibc with
-Linuxthreads.old
+Fixes:
+  http://autobuild.buildroot.net/results/81a3bca5cbcf789c7ce1aa221a6a4154dd7c3917/
+  http://autobuild.buildroot.net/results/4943b214c29951ecc7af0a1f360b6454485c0b9b/
 
-In case of NPTL "libc/signals/raise.c" won't be compiled so there's no
-even possibility for such a clash.
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ package/gcc/gcc-final/gcc-final.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-We'll take a look at that problem, still since we're moving toward NPTL
-tools if there's no simple solution we may just leave it as it is now
-until there's anybody interested in fixing that for good.
-
--Alexey
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index d873aa6..8d7009b 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -185,4 +185,8 @@ endef
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_USR_LIBS
+ endif
+ 
++ifeq ($(BR2_xtensa),y)
++HOST_GCC_FINAL_CONF_OPTS += --enable-cxx-flags="$(TARGET_ABI)"
++endif
++
+ $(eval $(host-autotools-package))
+-- 
+1.8.1.4
