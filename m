@@ -1,453 +1,304 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 26 May 2015 10:19:37 +0200
-Subject: [Buildroot] [PATCH v2 08/13] gpu-viv-bin-mx6q: rename package to
-	imx-gpu-viv
+Date: Tue, 26 May 2015 10:19:40 +0200
+Subject: [Buildroot] [PATCH v2 11/13] board/boundarydevices: rework and
+	update u-boot scripts
 In-Reply-To: <1432628382-16799-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1432628382-16799-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1432628382-16799-9-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1432628382-16799-12-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to be in line with new Freescale naming convention:
+Those scripts are executed by u-boot in order to detect the hardware
+configuration (board, displays etc...), configure the bootargs and
+device tree accordingly or update the bootloader located in NOR flash.
 
-https://github.com/Freescale/meta-fsl-arm/commit/74c86aa9
+This update is necessary due to the kernel bump to version 3.10.53.
 
-"Graphics recipe is renamed from gpu-viv-bin-mx6q to imx-gpu-viv"
+The rework consists of replacing the binaries by their text file
+equivalent and generate the binaries from the post-build.sh script.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
-Hi all,
+ board/boundarydevices/nitrogen6x/6x_bootscript     | Bin 3207 -> 0 bytes
+ board/boundarydevices/nitrogen6x/6x_bootscript.txt | 186 +++++++++++++++++++++
+ .../nitrogen6x/{6x_upgrade => 6x_upgrade.txt}      | Bin 1465 -> 1393 bytes
+ board/boundarydevices/nitrogen6x/post-build.sh     |   6 +-
+ configs/nitrogen6x_defconfig                       |   1 +
+ 5 files changed, 191 insertions(+), 2 deletions(-)
+ delete mode 100644 board/boundarydevices/nitrogen6x/6x_bootscript
+ create mode 100644 board/boundarydevices/nitrogen6x/6x_bootscript.txt
+ rename board/boundarydevices/nitrogen6x/{6x_upgrade => 6x_upgrade.txt} (92%)
 
-This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/74c86aa9639f6f20991ab64ea75177a017f8749a
-
-It is just the follow-up of previous patch in order to separate the package
-renaming from the update.
-
-v1 -> v2:
-- Add previous package name to Config.in.legacy
-
-Regards,
-Gary
----
- Config.in.legacy                                   | 12 +++
- package/freescale-imx/Config.in                    |  2 +-
- .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           | 98 ----------------------
- .../{gpu-viv-bin-mx6q => imx-gpu-viv}/Config.in    | 26 +++---
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 98 ++++++++++++++++++++++
- package/gstreamer1/gst1-imx/Config.in              |  6 +-
- package/gstreamer1/gst1-imx/gst1-imx.mk            |  2 +-
- package/qt5/qt5base/qt5base.mk                     |  2 +-
- package/x11r7/xdriver_xf86-video-imx-viv/Config.in |  6 +-
- .../xdriver_xf86-video-imx-viv.mk                  |  2 +-
- 10 files changed, 133 insertions(+), 121 deletions(-)
- delete mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
- rename package/freescale-imx/{gpu-viv-bin-mx6q => imx-gpu-viv}/Config.in (72%)
- create mode 100644 package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 44de941..db3cc13 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -105,6 +105,18 @@ comment "----------------------------------------------------"
- endif
- 
- ###############################################################################
-+comment "Legacy options removed in 2015.08"
-+
-+config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
-+	bool "gpu-viv-bin-mx6q"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_IMX_GPU_VIV
-+	help
-+	  Vivante graphics libraries have been renamed to
-+	  BR2_PACKAGE_IMX_GPU_VIV to be aligned with upstream
-+	  package name.
-+
-+###############################################################################
- comment "Legacy options removed in 2015.05"
- 
- config BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_512_16K
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 72d3c59..dffe76f 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -50,7 +50,7 @@ source "package/freescale-imx/gpu-amd-bin-mx51/Config.in"
- source "package/freescale-imx/libz160/Config.in"
- endif
- if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
--source "package/freescale-imx/gpu-viv-bin-mx6q/Config.in"
-+source "package/freescale-imx/imx-gpu-viv/Config.in"
- endif
- 
- endif
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+diff --git a/board/boundarydevices/nitrogen6x/6x_bootscript b/board/boundarydevices/nitrogen6x/6x_bootscript
 deleted file mode 100644
-index 678bfdf..0000000
---- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-+++ /dev/null
-@@ -1,98 +0,0 @@
--################################################################################
--#
--# gpu-viv-bin-mx6q
--#
--################################################################################
--
--GPU_VIV_BIN_MX6Q_BASE_VERSION = 5.0.11.p4.1
--ifeq ($(BR2_ARM_EABIHF),y)
--GPU_VIV_BIN_MX6Q_VERSION = $(GPU_VIV_BIN_MX6Q_BASE_VERSION)-hfp
--else
--GPU_VIV_BIN_MX6Q_VERSION = $(GPU_VIV_BIN_MX6Q_BASE_VERSION)-sfp
--endif
--GPU_VIV_BIN_MX6Q_SITE = $(FREESCALE_IMX_SITE)
--GPU_VIV_BIN_MX6Q_SOURCE = imx-gpu-viv-$(GPU_VIV_BIN_MX6Q_VERSION).bin
--
--GPU_VIV_BIN_MX6Q_INSTALL_STAGING = YES
--
--GPU_VIV_BIN_MX6Q_LICENSE = Freescale Semiconductor Software License Agreement
--GPU_VIV_BIN_MX6Q_LICENSE_FILES = EULA
--GPU_VIV_BIN_MX6Q_REDISTRIBUTE = NO
--
--GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
--GPU_VIV_BIN_MX6Q_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT))
--
--define GPU_VIV_BIN_MX6Q_EXTRACT_CMDS
--	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(GPU_VIV_BIN_MX6Q_SOURCE))
--endef
--
--# For some reason libGAL_egl for x11 is called libGAL_egl.dri.so
--ifeq ($(GPU_VIV_BIN_MX6Q_LIB_TARGET),x11)
--define GPU_VIV_BIN_MX6Q_FIXUP_SYMLINKS
--	ln -sf libGAL_egl.dri.so $(@D)/gpu-core/usr/lib/libGAL_egl.so
--endef
--endif
--
--# Instead of building, we fix up the inconsistencies that exist
--# in the upstream archive here.
--# Make sure these commands are idempotent.
--define GPU_VIV_BIN_MX6Q_BUILD_CMDS
--	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/gpu-core/usr/include/*/*.h
--	ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so
--	ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so.1
--	ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so.1.2.0
--	ln -sf libEGL-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so
--	ln -sf libEGL-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so.1
--	ln -sf libEGL-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so.1.0
--	ln -sf libGLESv2-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so
--	ln -sf libGLESv2-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so.2
--	ln -sf libGLESv2-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so.2.0.0
--	ln -sf libVIVANTE-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libVIVANTE.so
--	ln -sf libGAL-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGAL.so
--	ln -sf libGAL_egl.$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGAL_egl.so
--	$(GPU_VIV_BIN_MX6Q_FIXUP_SYMLINKS)
--endef
--
--ifeq ($(GPU_VIV_BIN_MX6Q_LIB_TARGET),fb)
--define GPU_VIV_BIN_MX6Q_FIXUP_FB_HEADERS
--	$(SED) '39i\
--		#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) \n\
--		#define EGL_API_FB \n\
--		#endif' $(STAGING_DIR)/usr/include/EGL/eglvivante.h
--endef
--endif
--
--define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
--	cp -r $(@D)/gpu-core/usr/* $(STAGING_DIR)/usr
--	$(GPU_VIV_BIN_MX6Q_FIXUP_FB_HEADERS)
--	for lib in egl glesv2 vg; do \
--		$(INSTALL) -m 0644 -D \
--			$(@D)/gpu-core/usr/lib/pkgconfig/$${lib}.pc \
--			$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
--	done
--endef
--
--ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES),y)
--define GPU_VIV_BIN_MX6Q_INSTALL_EXAMPLES
--	mkdir -p $(TARGET_DIR)/usr/share/examples/
--	cp -r $(@D)/gpu-demos/opt/* $(TARGET_DIR)/usr/share/examples/
--endef
--endif
--
--# On the target, remove the unused libraries.
--# Note that this is _required_, else ldconfig may create symlinks
--# to the wrong library
--define GPU_VIV_BIN_MX6Q_INSTALL_TARGET_CMDS
--	$(GPU_VIV_BIN_MX6Q_INSTALL_EXAMPLES)
--	cp -a $(@D)/gpu-core/usr/lib $(TARGET_DIR)/usr
--	for lib in EGL GAL VIVANTE GLESv2; do \
--		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
--			case $$f in \
--				*-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so) : ;; \
--				*) $(RM) $$f ;; \
--			esac; \
--		done; \
--	done
--endef
--
--$(eval $(generic-package))
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-similarity index 72%
-rename from package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-rename to package/freescale-imx/imx-gpu-viv/Config.in
-index db2a10e..2a0cf84 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-+++ b/package/freescale-imx/imx-gpu-viv/Config.in
-@@ -1,9 +1,9 @@
--comment "gpu-viv-bin-mx6q needs an (e)glibc toolchain"
-+comment "imx-gpu-viv needs an (e)glibc toolchain"
- 	depends on BR2_arm
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC
- 
--config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
--	bool "gpu-viv-bin-mx6q"
-+config BR2_PACKAGE_IMX_GPU_VIV
-+	bool "imx-gpu-viv"
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_HAS_LIBOPENVG
-@@ -21,7 +21,7 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
- 	  This library is provided by Freescale as-is and doesn't have
- 	  an upstream.
- 
--if BR2_PACKAGE_GPU_VIV_BIN_MX6Q
-+if BR2_PACKAGE_IMX_GPU_VIV
- 
- choice
- 	prompt "Output option"
-@@ -30,7 +30,7 @@ choice
- 	  direct framebuffer access, one for X11 rendering.
- 	  Choose here which version to install.
- 
--config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
-+config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
- 	bool "X11"
- 	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE # Runtime dependency
-@@ -39,26 +39,26 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
- comment "X11 backend needs Xorg package"
- 	depends on !BR2_PACKAGE_XORG7
- 
--config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB
-+config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
- 	bool "Framebuffer"
- 
- endchoice
- 
--config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT
-+config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT
- 	string
--	default "x11" if BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
--	default "fb" if BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB
-+	default "x11" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
-+	default "fb" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
- 
- config BR2_PACKAGE_PROVIDES_LIBEGL
--	default "gpu-viv-bin-mx6q"
-+	default "imx-gpu-viv"
- 
- config BR2_PACKAGE_PROVIDES_LIBGLES
--	default "gpu-viv-bin-mx6q"
-+	default "imx-gpu-viv"
- 
- config BR2_PACKAGE_PROVIDES_LIBOPENVG
--	default "gpu-viv-bin-mx6q"
-+	default "imx-gpu-viv"
- 
--config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES
-+config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
- 	bool "install examples"
- 	help
- 	  Copy the Vivante examples to the target.
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index 05442a6b0eeffafabdf8857fc57fed73b5b6cbac..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 3207
+zcmd5<&2HO95H<p&fQTG>>1|37=%JEKGO{YfAW|oB+yL<<0g~Q?C3h(;Omby%B~vwY
+z=u70#C+exUK1ko7vr8^XF^XZghjuR_IkWTo&5yo&{LP2o|MEY*|Lxa5kB**P9M$LR
+zN8TTgAANNc3L&A0a=wy=)cbw%Tz%j%IJa at JO9Y|#MCEqHcItr_SG#8(c<#(q2iE7=
+zW-Lnyry!Rsvj7jvHo()B$R&(q%j(2DVFmw%Su81-<}8?0%*rZ~FABU#!i3Fl2$%Cz
+zP!@<dwqkBsHDks~8Ho(sQ_JFh1e9&SgHsF5Rj;dDgbdvB#5Lv&`Wl=@*M?Ijg0zg{
+z(7CMz@1CK=U`bOx^!%Ay{@}ZpKTh2tkArs?FZ_vR<i%miQn2+;;Lk4Y(~4BCaxg|Z
+z=HYwrDwhW=S_-g7`amY&r&pJ6AQc&xB1aL*Q{$H3cgmgoE2k0~4&T0dG5Y!9tafKQ
+zomvBooMeRr+qGfDuE7{xr*m-7Vb9eL>ooQ_5H%_^yCL#e19V6Wcwksw=ZqB*Nf;pB
+zRtedf*zBkI>8y!}0)X;kT!39FH$S4EHUt5_IxCW~#O{040O3B6P|?$fK-gctYayXy
+zIKYBpEX!FDD4rqmScCoGJY1RUPs%AOyF(YU43VV@^M9O3gOdY}#`2_er*m11+c-JR
+zqlRFcJ49i|RMIg0Jj{vYBD0$`-%Cs9X3!O*<5Z=kUx$^6AjLXb0yY?#izH!9N$$gL
+z@&(vkZx&=9a;@DpjsyFt at 0R{#4 at 3S$b&nb^4dctVXJ at 02AG+15*i1!ryXL(B9MPdu
+z3;&;1J(f*5nYq21zggncsC(3;LWk*57+xxxmV5wthg&?(6dW0M_9diKk+Ej(9FXnk
+zK4%6~!(g|`KpYh!VS$ueoHE|f^G<x6n46R&iHL#;7PrEh;t3OyT?H=WI0)77vvCfz
+z9j(+dR|MxNHng%ql~Ss{23|EeOe-&lR6qpV4DPmo`s1);uF at SG<NP}=C}}j})plH~
+z;okI_brBv`qPV)}AL%p#bXk}e^LsCeX&QyemAl$=#Yn(1Qp1+YFe51oY at U`=EU#|R
+zr|;ogJwBq<x(%SYp+c+g?yg65ga)6}3ZyALUAgs83I)k&D_6e;1qpMOU^i5^J{RZQ
+zYPQ`NNooV?Ktv-$(S@Wu-|b-pKLp2$a%_ybd$&WB>fNpt=hU_|VwYsY at LS;3g at o-W
+zrgBaw&2j(oyh=h-n~JvNizU+H`qUed5o9bglc1~|Ql)Y;&qNk6(kSnzzb!eev$@*d
+z#v)6$bG)Msth&AW1TW9eaNnY=04<qOz->}*VQO7P1nlAMA&PJ%HQ=iBq0yr+sv81X
+zQ!XGSTfmi-#4(E`qi8 at 4m%B4$w(mAW>o+M`uqH%ZXgGC at _nXH+0U~X;^L7OF2qW-n
+gK<Md%_Er9!=efv1{XyW_0<Kt&OBSyEXoYS44XUZ}y8r+H
+
+diff --git a/board/boundarydevices/nitrogen6x/6x_bootscript.txt b/board/boundarydevices/nitrogen6x/6x_bootscript.txt
 new file mode 100644
-index 0000000..ef2399f
+index 0000000..ac86fe5
 --- /dev/null
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -0,0 +1,98 @@
-+################################################################################
-+#
-+# imx-gpu-viv
-+#
-+################################################################################
++++ b/board/boundarydevices/nitrogen6x/6x_bootscript.txt
+@@ -0,0 +1,186 @@
++setenv bootargs ''
 +
-+IMX_GPU_VIV_BASE_VERSION = 5.0.11.p4.1
-+ifeq ($(BR2_ARM_EABIHF),y)
-+IMX_GPU_VIV_VERSION = $(IMX_GPU_VIV_BASE_VERSION)-hfp
++if ${fs}load ${dtype} ${disk}:1 10800000 uEnv.txt ; then
++    env import -t 10800000 $filesize
++fi
++
++if itest.s "x" == "x$dtbname" ; then
++	dtbname="imx6";
++	if itest.s x6SOLO == "x$cpu" ; then
++		dtbname=${dtbname}dl-;
++	elif itest.s x6DL == "x$cpu" ; then
++		dtbname=${dtbname}dl-;
++	else
++		dtbname=${dtbname}q-;
++	fi
++	if itest.s x == "x$board" ; then
++		board=sabrelite
++	fi
++	dtbname=${dtbname}${board}.dtb;
++fi
++
++if itest.s x == x${bootdir} ; then
++	bootdir=/boot/
++fi
++
++setenv fdt_addr 0x12000000
++if ${fs}load ${dtype} ${disk}:1 $fdt_addr ${bootdir}$dtbname ; then
++	fdt addr $fdt_addr
++	setenv fdt_high 0xffffffff
 +else
-+IMX_GPU_VIV_VERSION = $(IMX_GPU_VIV_BASE_VERSION)-sfp
-+endif
-+IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
-+IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
++	echo "!!!! Error loading ${bootdir}$dtbname";
++	exit;
++fi
 +
-+IMX_GPU_VIV_INSTALL_STAGING = YES
++# ------------------- HDMI detection
++i2c dev 1 ;
++if i2c probe 0x50 ; then
++	echo "------ have HDMI monitor";
++	if itest.s x == x$allow_noncea ; then
++		setenv bootargs $bootargs mxc_hdmi.only_cea=1;
++		echo "only CEA modes allowed on HDMI port";
++	else
++		setenv bootargs $bootargs mxc_hdmi.only_cea=0;
++		echo "non-CEA modes allowed on HDMI, audio may be affected";
++	fi
++else
++	fdt rm hdmi_display
++	echo "------ no HDMI monitor";
++fi
 +
-+IMX_GPU_VIV_LICENSE = Freescale Semiconductor Software License Agreement
-+IMX_GPU_VIV_LICENSE_FILES = EULA
-+IMX_GPU_VIV_REDISTRIBUTE = NO
++# ------------------- LVDS detection
++if itest.s "x" != "x$lvds_1080p" ; then
++	echo "----- 1080P dual channel LVDS";
++	fdt rm okaya1024x600
++	fdt rm lg1280x800
++	fdt rm hannstar;
++	fdt set ldb split-mode 1
++	fdt set lvds_display interface_pix_fmt "RGB24"
++	fdt set ldb/lvds-channel@0 fsl,data-width <24>
++else
++	fdt rm ldb split-mode
++	fdt rm lvds1080p
 +
-+IMX_GPU_VIV_PROVIDES = libegl libgles libopenvg
-+IMX_GPU_VIV_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT))
++	# -------- LVDS0 (bottom on Nitrogen6_Max)
++	setenv have_lvds
++	i2c dev 2
++	if i2c probe 0x04 ; then
++		echo "------ have Freescale display";
++		setenv have_lvds 1
++	else
++		echo "------ no Freescale display";
++		fdt rm hannstar;
++	fi
 +
-+define IMX_GPU_VIV_EXTRACT_CMDS
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_GPU_VIV_SOURCE))
-+endef
++	if i2c probe 0x38 ; then
++		if itest.s "xLDB-WXGA" == "x$panel"; then
++			screenres=1280,800
++			fdt rm okaya1024x600
++		else
++			screenres=1024,600
++			fdt rm lg1280x800
++		fi
++		setenv have_lvds 1
++		setenv bootargs $bootargs ft5x06_ts.screenres=$screenres
++		if itest.s "x" -ne "x$calibration" ; then
++			setenv bootargs $bootargs ft5x06_ts.calibration=$calibration
++		fi
++	else
++		echo "------ no ft5x06 touch controller";
++		fdt rm okaya1024x600
++		fdt rm lg1280x800
++	fi
 +
-+# For some reason libGAL_egl for x11 is called libGAL_egl.dri.so
-+ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
-+define IMX_GPU_VIV_FIXUP_SYMLINKS
-+	ln -sf libGAL_egl.dri.so $(@D)/gpu-core/usr/lib/libGAL_egl.so
-+endef
-+endif
++	if itest.s "x" == "x$have_lvds"; then
++		fdt rm lvds_display;
++	fi
 +
-+# Instead of building, we fix up the inconsistencies that exist
-+# in the upstream archive here.
-+# Make sure these commands are idempotent.
-+define IMX_GPU_VIV_BUILD_CMDS
-+	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/gpu-core/usr/include/*/*.h
-+	ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so
-+	ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so.1
-+	ln -sf libGL.so.1.2 $(@D)/gpu-core/usr/lib/libGL.so.1.2.0
-+	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so
-+	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so.1
-+	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so.1.0
-+	ln -sf libGLESv2-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so
-+	ln -sf libGLESv2-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so.2
-+	ln -sf libGLESv2-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so.2.0.0
-+	ln -sf libVIVANTE-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libVIVANTE.so
-+	ln -sf libGAL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGAL.so
-+	ln -sf libGAL_egl.$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGAL_egl.so
-+	$(IMX_GPU_VIV_FIXUP_SYMLINKS)
-+endef
++	# -------- LVDS1 (top on Nitrogen6_Max)
++	if itest.s "xhannstar" == "x$lvds1_panel" ; then
++		echo "configure LVDS1 for Hannstar panel"
++		fdt rm okaya1024x600_2;
++		fdt rm lg1280x800_2;
++		fdt set lvds_display_2 status okay
++	elif itest.s "xokaya1024x600" == "x$lvds1_panel" ; then
++		echo "configure LVDS1 for 1024x600 panel"
++		fdt rm hannstar_2;
++		fdt rm lg1280x800_2;
++		fdt set lvds_display_2 status okay
++	elif itest.s "xlg1280x800" == "x$lvds1_panel" ; then
++		echo "configure LVDS1 for 1280x800 panel"
++		fdt rm hannstar_2;
++		fdt rm okaya1024x600_2;
++		fdt set lvds_display_2 status okay
++	else
++		fdt rm lvds_display_2 ; # ignore errors on boards != 6_max
++	fi
++fi
 +
-+ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
-+define IMX_GPU_VIV_FIXUP_FB_HEADERS
-+	$(SED) '39i\
-+		#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) \n\
-+		#define EGL_API_FB \n\
-+		#endif' $(STAGING_DIR)/usr/include/EGL/eglvivante.h
-+endef
-+endif
++# ------------------- LCD detection
++setenv have_lcd '';
++if i2c probe 0x48 ; then
++	setenv have_lcd 1;
++	echo "------- found TSC2004 touch controller";
++	if itest.s "x" -eq "x$tsc_calibration" ; then
++		setenv bootargs $bootargs tsc2004.calibration=-67247,-764,272499173,324,69283,-8653010,65536
++	else
++		setenv bootargs $bootargs tsc2004.calibration=$tsc_calibration
++	fi
++elif i2c probe 0x4d ; then
++	setenv have_lcd 1;
++	echo "------- found AR1020 touch controller";
++fi
 +
-+define IMX_GPU_VIV_INSTALL_STAGING_CMDS
-+	cp -r $(@D)/gpu-core/usr/* $(STAGING_DIR)/usr
-+	$(IMX_GPU_VIV_FIXUP_FB_HEADERS)
-+	for lib in egl glesv2 vg; do \
-+		$(INSTALL) -m 0644 -D \
-+			$(@D)/gpu-core/usr/lib/pkgconfig/$${lib}.pc \
-+			$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
-+	done
-+endef
++if itest.s "x" != "x$ignore_lcd" ; then
++	echo "------ ignoring LCD display";
++	setenv have_lcd '';
++fi
 +
-+ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES),y)
-+define IMX_GPU_VIV_INSTALL_EXAMPLES
-+	mkdir -p $(TARGET_DIR)/usr/share/examples/
-+	cp -r $(@D)/gpu-demos/opt/* $(TARGET_DIR)/usr/share/examples/
-+endef
-+endif
++if itest.s "x" != "x$have_lcd" ; then
++	echo "----- found LCD display";
++else
++	fdt rm lcd_display;
++fi
 +
-+# On the target, remove the unused libraries.
-+# Note that this is _required_, else ldconfig may create symlinks
-+# to the wrong library
-+define IMX_GPU_VIV_INSTALL_TARGET_CMDS
-+	$(IMX_GPU_VIV_INSTALL_EXAMPLES)
-+	cp -a $(@D)/gpu-core/usr/lib $(TARGET_DIR)/usr
-+	for lib in EGL GAL VIVANTE GLESv2; do \
-+		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
-+			case $$f in \
-+				*-$(IMX_GPU_VIV_LIB_TARGET).so) : ;; \
-+				*) $(RM) $$f ;; \
-+			esac; \
-+		done; \
-+	done
-+endef
++setenv bootargs "$bootargs console=ttymxc1,115200 vmalloc=400M consoleblank=0 rootwait"
 +
-+$(eval $(generic-package))
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index 840c0fb..f7284f4 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -1,7 +1,7 @@
- comment "gst1-imx needs an imx-specific Linux kernel to be built"
- 	depends on BR2_arm && !BR2_LINUX_KERNEL
++if itest.s x$bootpart == x ; then
++	bootpart=1
++fi
++
++if test "sata" = "${dtype}" ; then
++	setenv bootargs "$bootargs root=/dev/sda$bootpart" ;
++else
++        if test "usb" = "${dtype}" ; then
++                setenv bootargs "$bootargs root=/dev/sda$bootpart" ;
++        elif itest 0 -eq ${disk}; then
++                setenv bootargs "$bootargs root=/dev/mmcblk2p$bootpart" ;
++        else
++                setenv bootargs "$bootargs root=/dev/mmcblk3p$bootpart" ;
++        fi
++fi
++
++if itest.s "x" != "x${disable_giga}" ; then
++	setenv bootargs $bootargs fec.disable_giga=1
++fi
++
++if itest.s "x" != "x$wlmac" ; then
++	setenv bootargs $bootargs wlcore.mac=$wlmac
++fi
++
++if itest.s "x" != "x$gpumem" ; then
++	setenv bootargs $bootargs galcore.contiguousSize=$gpumem
++fi
++
++if itest.s "x" != "x$show_fdt" ; then
++	fdt print /
++fi
++
++if itest.s "x" != "x$show_env" ; then
++	printenv
++fi
++
++if ${fs}load ${dtype} ${disk}:1 10800000 ${bootdir}uImage ; then
++	bootm 10800000 - $fdt_addr
++fi
++echo "Error loading kernel image"
+diff --git a/board/boundarydevices/nitrogen6x/6x_upgrade b/board/boundarydevices/nitrogen6x/6x_upgrade.txt
+similarity index 92%
+rename from board/boundarydevices/nitrogen6x/6x_upgrade
+rename to board/boundarydevices/nitrogen6x/6x_upgrade.txt
+index 395f13faee825d22c4104d91af785436f59a745c..3f1b96ff3401219cc8a9606a9adffa872d3401f6 100644
+GIT binary patch
+delta 8
+PcmdnV{gG><M<FW!5O@PG
+
+delta 80
+zcmey!wUgUJomDdI;@(At!9kmDGcd4LGC%=OWoj2I6B|QPetwBUadJ^+K?zI>jb<$b
+J32Z221pp@&4|)Iq
+
+diff --git a/board/boundarydevices/nitrogen6x/post-build.sh b/board/boundarydevices/nitrogen6x/post-build.sh
+index 2b43aa3..f68fa0e 100755
+--- a/board/boundarydevices/nitrogen6x/post-build.sh
++++ b/board/boundarydevices/nitrogen6x/post-build.sh
+@@ -8,11 +8,13 @@
+ BOARD_DIR="$(dirname $0)"
  
--# Required by gpu-viv-bin-mx6q
-+# Required by imx-gpu-viv
- comment "gst1-imx needs an (e)glibc toolchain"
- 	depends on BR2_arm
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC
-@@ -10,8 +10,8 @@ config BR2_PACKAGE_GST1_IMX
- 	bool "gst1-imx"
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_arm # Only relevant for i.MX
--	depends on BR2_TOOLCHAIN_USES_GLIBC # gpu-viv-bin-mx6q
--	depends on BR2_PACKAGE_GPU_VIV_BIN_MX6Q
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # imx-gpu-viv
-+	depends on BR2_PACKAGE_IMX_GPU_VIV
- 	depends on BR2_PACKAGE_LIBFSLVPUWRAP
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	help
-diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
-index 516babf..9ba7550 100644
---- a/package/gstreamer1/gst1-imx/gst1-imx.mk
-+++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
-@@ -13,7 +13,7 @@ GST1_IMX_LICENSE_FILES = LICENSE
- GST1_IMX_INSTALL_STAGING = YES
+ # bd u-boot looks for bootscript here
+-install -D -m 0644 $BOARD_DIR/6x_bootscript $TARGET_DIR/6x_bootscript
++$HOST_DIR/usr/bin/mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
++-n "boot script" -d $BOARD_DIR/6x_bootscript.txt $TARGET_DIR/6x_bootscript
  
- GST1_IMX_DEPENDENCIES += host-pkgconf host-python \
--	gpu-viv-bin-mx6q gstreamer1 gst1-plugins-base libfslvpuwrap
-+	imx-gpu-viv gstreamer1 gst1-plugins-base libfslvpuwrap
+ # u-boot / update script for bd upgradeu command
+ if [ -e $BINARIES_DIR/u-boot.imx ];
+ then
+     install -D -m 0644 $BINARIES_DIR/u-boot.imx $TARGET_DIR/u-boot.imx
+-    install -D -m 0644 $BOARD_DIR/6x_upgrade $TARGET_DIR/6x_upgrade
++    $HOST_DIR/usr/bin/mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
++    -n "upgrade script" -d $BOARD_DIR/6x_upgrade.txt $TARGET_DIR/6x_upgrade
+ fi
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index d04745d..71b01f0 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -6,6 +6,7 @@ BR2_cortex_a9=y
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
  
- # needs access to imx-specific kernel headers
- GST1_IMX_DEPENDENCIES += linux
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index e2db5d1..2eebb5b 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -115,7 +115,7 @@ QT5BASE_CONFIGURE_OPTS += $(if $(QT5BASE_DEFAULT_QPA),-qpa $(QT5BASE_DEFAULT_QPA
- ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
- QT5BASE_CONFIGURE_OPTS += -eglfs
- QT5BASE_DEPENDENCIES   += libegl
--ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
-+ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
- QT5BASE_EXTRA_CFLAGS = -DENABLE_MX6_WORKAROUND
- QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
- 	$(@D)/mkspecs/devices/linux-imx6-g++/qeglfshooks_imx6.cpp
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-index 8926a50..baf7ca4 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
- 	bool "xf86-video-imx-viv"
--	depends on BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
-+	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
- 	select BR2_PACKAGE_MESA3D # Needed in order to compile xorg with glx/dri
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_LIBDRM
-@@ -26,6 +26,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
- 	  this driver (else, Xorg will exit with an obscur message like
- 	  "Segmentation fault at address 0xc").
- 
--comment "xf86-video-imx-viv depends on gpu-viv-bin-mx6q with X11 output"
-+comment "xf86-video-imx-viv depends on imx-gpu-viv with X11 output"
- 	depends on BR2_arm
--	depends on !BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
-+	depends on !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-index 1e9a665..fbd7325 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-@@ -7,7 +7,7 @@
- XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 3.10.17-1.0.1
- XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
- XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
--XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = gpu-viv-bin-mx6q xserver_xorg-server \
-+XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv xserver_xorg-server \
- 	xproto_xproto xproto_xf86driproto libdrm
- XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE = GPLv2+
- XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING = YES
+ # filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
 -- 
 2.1.4
