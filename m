@@ -1,41 +1,79 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 26 May 2015 10:32:36 +0300
-Subject: [Buildroot] [PATCH] gcc/gcc-final: pass TARGET_ABI flags to
-	configure with --enable-cxx-flags
-Message-ID: <1432625556-14611-1-git-send-email-jcmvbkbc@gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 26 May 2015 09:34:14 +0200
+Subject: [Buildroot] [PATCH] package:sysdig: bump to version 0.1.100
+Message-ID: <1432625654-16560-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libstdc++ is in all regards a normal library, it needs to be built with
-TARGET_ABI flags, otherwise linking it with other C++ code may fail.
+This patch bumps to version 0.1.100, removes the no more
+neded upstream included patch and adds the ENABLE_DKMS=OFF
+configure option.
 
-Pass TARGET_ABI flags to gcc-final configure script in the
---enable-cxx-flags parameter.
-
-Fixes:
-  http://autobuild.buildroot.net/results/81a3bca5cbcf789c7ce1aa221a6a4154dd7c3917/
-  http://autobuild.buildroot.net/results/4943b214c29951ecc7af0a1f360b6454485c0b9b/
-
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/gcc/gcc-final/gcc-final.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../sysdig/0001-remove-dkms-module-updater.patch   | 31 ----------------------
+ package/sysdig/sysdig.mk                           |  4 +--
+ 2 files changed, 2 insertions(+), 33 deletions(-)
+ delete mode 100644 package/sysdig/0001-remove-dkms-module-updater.patch
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index d873aa6..8d7009b 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -185,4 +185,8 @@ endef
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_USR_LIBS
- endif
+diff --git a/package/sysdig/0001-remove-dkms-module-updater.patch b/package/sysdig/0001-remove-dkms-module-updater.patch
+deleted file mode 100644
+index 8d5c99d..0000000
+--- a/package/sysdig/0001-remove-dkms-module-updater.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-Remove DKMS module updater
+-
+-This patch disables the in target installation of DKMS module updater
+-mechanism unneeded in buildroot.
+-
+-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+-
+---- a/driver/CMakeLists.txt
+-+++ b/driver/CMakeLists.txt
+-@@ -39,21 +39,3 @@ add_custom_target(install_driver
+- 	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+- 	VERBATIM)
+- 
+--install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Makefile.dkms
+--	RENAME Makefile
+--	DESTINATION "src/sysdig-${SYSDIG_VERSION}")
+--
+--install(FILES
+--	${CMAKE_CURRENT_BINARY_DIR}/dkms.conf
+--	dynamic_params_table.c
+--	event_table.c
+--	flags_table.c
+--	main.c
+--	ppm.h
+--	ppm_events.c
+--	ppm_events.h
+--	ppm_events_public.h
+--	ppm_fillers.c
+--	ppm_ringbuffer.h
+--	syscall_table.c
+--	DESTINATION "src/sysdig-${SYSDIG_VERSION}")
+diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+index fb348ff..d07d467 100644
+--- a/package/sysdig/sysdig.mk
++++ b/package/sysdig/sysdig.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_xtensa),y)
-+HOST_GCC_FINAL_CONF_OPTS += --enable-cxx-flags="$(TARGET_ABI)"
-+endif
-+
- $(eval $(host-autotools-package))
+-SYSDIG_VERSION = 0.1.99
++SYSDIG_VERSION = 0.1.100
+ SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
+ SYSDIG_LICENSE = GPLv2
+ SYSDIG_LICENSE_FILES = COPYING
+ SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF \
+-	-DUSE_BUNDLED_JSONCPP=OFF
++	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF
+ SYSDIG_DEPENDENCIES = zlib luajit jsoncpp linux
+ SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
 -- 
-1.8.1.4
+1.9.1
