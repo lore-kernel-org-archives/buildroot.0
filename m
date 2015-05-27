@@ -1,41 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 May 2015 20:08:32 +0200
-Subject: [Buildroot] scons and check
-In-Reply-To: <5565F4ED.8070705@green-communications.fr>
-References: <5565DCA4.5040002@green-communications.fr>
- <CAHXCMMJEh45R-78biuCVpGF2QxLD5FYEEuw=tmkndzKuCJNmew@mail.gmail.com>
- <5565F4ED.8070705@green-communications.fr>
-Message-ID: <20150527200832.21bcf81c@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 27 May 2015 21:51:38 +0300
+Subject: [Buildroot] [PATCH 10/21 RFC] docs/manual: prepare-config can
+ be used as a dependency of documents
+In-Reply-To: <7bc5de3f455dccc34aad9604d20d5ef0cc1d86a5.1432681414.git.yann.morin.1998@free.fr>
+References: <cover.1432681414.git.yann.morin.1998@free.fr>
+ <7bc5de3f455dccc34aad9604d20d5ef0cc1d86a5.1432681414.git.yann.morin.1998@free.fr>
+Message-ID: <20150527185138.GY2260@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sylvain Raybaud,
+Hi Yann,
 
-On Wed, 27 May 2015 18:46:37 +0200, Sylvain Raybaud wrote:
-
-> I made galera dependent on host-check. As a result check is built and
-> installed. The header is present in output/host/usr/include/check.h
-> and the .pc file in output/host/usr/lib/pkgconfig/check.pc.
+On Wed, May 27, 2015 at 01:42:05AM +0200, Yann E. MORIN wrote:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> ---
+>  docs/manual/adding-packages-asciidoc.txt | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Just to be sure I tried to also make it dependent on target check, it
-> didn't work either (check is installed on target but scons cannot find
-> it).
+> diff --git a/docs/manual/adding-packages-asciidoc.txt b/docs/manual/adding-packages-asciidoc.txt
+> index 0c10fd1..a278d44 100644
+> --- a/docs/manual/adding-packages-asciidoc.txt
+> +++ b/docs/manual/adding-packages-asciidoc.txt
+> @@ -65,6 +65,8 @@ information is (assuming the document name is +foo+) :
+>  
+>  * +FOO_DEPENDENCIES+, optional, the list of packages (most probably,
+>    host-packages) that must be built before building this document.
+> +  If a hook of your document needs to access the _Kconfig_ structure,
+> +  you may add +prepare-kconfig+ to the list of dependencies.
 
-Well, the fact that it doesn't find it may also be due to the
-SConstruct not doing the right thing. So make sure to really understand
-how "check" is used by galera, and only that will allow you to know if
-a host "check" or target "check" package is needed.
+Why not move the 'doc/asciidoc: add possibility to define document 
+dependencies' patch here, and merge it with this one?
 
-Installing a host-check just because it makes things "work" might be a
-mistake.
+baruch
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
