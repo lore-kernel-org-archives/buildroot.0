@@ -1,77 +1,30 @@
-From: Peter Bouda <pbouda@cidles.eu>
-Date: Wed, 27 May 2015 15:11:20 +0100
-Subject: [Buildroot] [PATCH 1/1] Removed Python dependency from
-	python-pygame package. With the dependency,
-	it was only possible to build the package with Python 2. Without the
-	dependency it is now possible to also use Python 3.
-In-Reply-To: <CAMQcK5Ly-s1_LVrTJRgmu-0eEbJuw7om_Kw-dNLJBN0yrEMK0A@mail.gmail.com>
-References: <1432561909-15488-1-git-send-email-pbouda@cidles.eu>
- <CAMQcK5Ly-s1_LVrTJRgmu-0eEbJuw7om_Kw-dNLJBN0yrEMK0A@mail.gmail.com>
-Message-ID: <5545931.sRUYvYoo9D@pbouda-kubuntu>
+From: g4 at novadsp.com <g4@novadsp.com>
+Date: Wed, 27 May 2015 15:15:43 +0100
+Subject: [Buildroot] showstopper 404 problem ...
+In-Reply-To: <CAJ3iQcpEX=3MBXwHki78F7NhELhQOb=WGapZFSXSzenYi4+R3w@mail.gmail.com>
+References: <01a201d0971b$fca690b0$f5f3b210$@novadsp.com>
+ <20150525210558.39e88c66@free-electrons.com>
+ <01c901d09724$065bca00$13135e00$@novadsp.com>
+ <CAJ3iQcpEX=3MBXwHki78F7NhELhQOb=WGapZFSXSzenYi4+R3w@mail.gmail.com>
+Message-ID: <04ce01d09887$9ebdf340$dc39d9c0$@novadsp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ryan,
+Hi Gergely and thanks.
 
-thanks for the comment, I will resubmit.
+> 
+> I'd guess Thomas means that for the mainline kernel you don't need any
+> custom repo, just use the default kernel version (it's already 4.0.4 in the
+> current Buildroot). Much simpler and quicker that way.
+> 
 
-Best,
-Peter
+I've been using 2015.02 stable which seems to stop at 3.18 hence my latest round of questions :)
 
-Am Mittwoch 27 Mai 2015, 08:33:22 schrieb Ryan Barnett:
-> Hi Peter,
-> 
-> On Mon, May 25, 2015 at 8:51 AM, Peter Bouda <pbouda@cidles.eu> wrote:
-> 
-> The title (subject) of a commit is usually limited to less than 70
-> characters. The body of the commit message should also be no longer
-> than 70 characters as well.
-> 
-> If you don't mind resubmitting this patch with a title and subject as
-> follows:
-> 
-> python-pygame: remove python dependency
-> 
-> With the dependency on BR2_PACKAGE_PYTHON it was only possible to
-> build the package with python2. However, python-pygame works with
-> python3 so enable it to be built with it.
-> 
-> > Signed-off-by: Peter Bouda <pbouda@cidles.eu>
-> > ---
-> > 
-> >  package/python-pygame/Config.in | 1 -
-> >  1 file changed, 1 deletion(-)
-> > 
-> > diff --git a/package/python-pygame/Config.in
-> > b/package/python-pygame/Config.in index f72ee31..932b0f1 100644
-> > --- a/package/python-pygame/Config.in
-> > +++ b/package/python-pygame/Config.in
-> > @@ -1,6 +1,5 @@
-> > 
-> >  config BR2_PACKAGE_PYTHON_PYGAME
-> >  
-> >         bool "python-pygame"
-> > 
-> > -       depends on BR2_PACKAGE_PYTHON
-> > 
-> >         select BR2_PACKAGE_SDL
-> >         help
-> >         
-> >           Pygame is a cross-platfrom library designed to make it easy to
-> >           write
-> 
-> Thanks,
-> -Ryan
+Is RC3 stable enough for use?
 
--- 
-Peter Bouda
-Centro Interdisciplinar de Documenta??o Lingu?stica e Social
-http://www.cidles.eu/
+TVMIA.
 
-E-Mail: pbouda at cidles.eu
-Website: http://www.cidles.eu/about/team/peter-bouda/
-Skype: peter.bouda
-Phone: +351 917 403 181
+Jerry
