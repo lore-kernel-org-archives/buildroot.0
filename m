@@ -1,40 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 May 2015 13:40:18 +0200
-Subject: [Buildroot] [git commit] package/gptfdisk: propagate ncurses
-	reverse dependency
-Message-ID: <20150527114110.61C9681E11@busybox.osuosl.org>
+From: Laurent Joli <l.joli@expemb.com>
+Date: Wed, 27 May 2015 13:56:47 +0200
+Subject: [Buildroot] sky2 not created
+In-Reply-To: <20150527115112.44652358@free-electrons.com>
+References: <CAJtzDg-NoVNk_W8CnV0y0sY+dhZNCKTu66tfePnyUoDNj+bTeg@mail.gmail.com>
+ <20150527094643.0dcb2107@free-electrons.com>
+ <CAJtzDg9LiZjeTJcRXp=Eng8kfynfDjdYrtKD=kVJ=GJjuGobWg@mail.gmail.com>
+ <20150527101333.1c2f6137@free-electrons.com>
+ <CAJtzDg9TN7oH0owqeRu32p_=u=gtrjbwcAVjWabsO6=R+VT7tA@mail.gmail.com>
+ <20150527103020.0aec65d2@free-electrons.com>
+ <CAJtzDg8wS89HmskSNaB60NkOZgg-WQoYGmQtmJGVa3zJHDuBCA@mail.gmail.com>
+ <20150527105234.76b1512a@free-electrons.com>
+ <CAJtzDg85zxiYo7ntyHS_=pGorTyMjaR=zogDRdy_NaxWZKHikg@mail.gmail.com>
+ <20150527115112.44652358@free-electrons.com>
+Message-ID: <CAJtzDg9F4jZs=YyVy62m0Zzjnzgy8QAYaES8UQzT2sxFfLnytQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a4a7aeed539631a91cae2c00dec4d20ccc6dda31
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Ok, Thanks for all this information.
 
-gptfdisk cgdisk select nucurses wchar support which is disabled
-on bfin with FLAT binary format.
+I will continue to search on kernel configuration.
 
-Add the ncurses's reverse dependency to gptfdisk.
+And use sky2 module dynamically kernel
 
-Fixes:
-http://autobuild.buildroot.net/results/ce3/ce35c072f0b7c3a7a1918cb865a2eecbba8a1b23/
+Best regards,
+Laurent joli
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gptfdisk/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/gptfdisk/Config.in b/package/gptfdisk/Config.in
-index 61692f6..befdf77 100644
---- a/package/gptfdisk/Config.in
-+++ b/package/gptfdisk/Config.in
-@@ -38,6 +38,7 @@ config BR2_PACKAGE_GPTFDISK_CGDISK
- 	bool "ncurses cgdisk"
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_NCURSES_WCHAR # needed because of UTF-16
-+	depends on !(BR2_bfin && BR2_BINFMT_FLAT) # ncurses wchar support
- 	help
- 	  Install the ncurses-based GUID partition table (GPT)
- 	  manipulator /usr/sbin/cgdisk.
+2015-05-27 11:51 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
+> Dear Laurent Joli,
+>
+> On Wed, 27 May 2015 11:20:52 +0200, Laurent Joli wrote:
+> > Ok, I see now.
+> >
+> > But When I boot with this rootfs ( ext2 ) on my board, I have :
+> >
+> > buildroot login: root
+> > #
+> > #
+> > # lsmod
+> > Module                  Size  Used by    Not tainted
+> > # modprobe sky2
+> > modprobe: module sky2 not found in modules.dep
+>
+> I think you should do some research about how to do the kernel
+> configuration.
+>
+> If you enable a driver to be compiled statically, it is compiled
+> statically inside the kernel image, and there is no kernel module.
+>
+> If you enable a driver to be compiled as a kernel module, then you get
+> a kernel module.
+>
+> Since you selected your sky2 driver to be compiled statically, then
+> obviously you don't have a kernel module.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150527/2ffa798b/attachment.html>
