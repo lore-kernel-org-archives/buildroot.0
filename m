@@ -1,9 +1,10 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Wed, 27 May 2015 17:17:17 -0500
-Subject: [Buildroot] [PATCH v6 13/22] openssh: selinux and pam support
+Date: Wed, 27 May 2015 17:17:18 -0500
+Subject: [Buildroot] [PATCH v6 14/22] util-linux: selinux, audit,
+	and pam support
 In-Reply-To: <1432765046-1223-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1432765046-1223-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1432765046-1223-14-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1432765046-1223-15-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +14,7 @@ To: buildroot@busybox.net
 From: Matt Weber <matthew.weber@rockwellcollins.com>
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
 ---
 Changes v5 -> v6:
@@ -20,40 +22,58 @@ Changes v5 -> v6:
 
 Changes v4 -> v5:
   - New patch
-  - Added without assignments (Matt W.)
-  - Moved install pam define in conditional (Matt W.)
+  - Added pam file tweaks for selinux support (Clayton S.)
 ---
- package/openssh/openssh.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ package/util-linux/util-linux.mk | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 24af079..00cdf6c 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -30,8 +30,24 @@ endif
- OPENSSH_DEPENDENCIES = zlib openssl
- 
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+define OPENSSH_INSTALL_PAM_CONF
-+	$(INSTALL) -D -m 644 $(@D)/contrib/sshd.pam.generic $(TARGET_DIR)/etc/pam.d/sshd
-+	sed -i '/password   required     \/lib\/security\/pam_cracklib.so/d' $(TARGET_DIR)/etc/pam.d/sshd
-+	sed -i -e 's/\#UsePAM no/UsePAM yes/' $(TARGET_DIR)/etc/ssh/sshd_config
-+endef
-+
- OPENSSH_DEPENDENCIES += linux-pam
- OPENSSH_CONF_OPTS += --with-pam
-+OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_PAM_CONF
-+else
-+OPENSSH_CONF_OPTS += --without-pam
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+OPENSSH_DEPENDENCIES += libselinux
-+OPENSSH_CONF_OPTS += --with-selinux
-+else
-+OPENSSH_CONF_OPTS += --without-selinux
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 3ca147a..259334f 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -59,6 +59,20 @@ ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
+ UTIL_LINUX_DEPENDENCIES += libcap-ng
  endif
  
- define OPENSSH_INSTALL_INIT_SYSTEMD
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++UTIL_LINUX_DEPENDENCIES += libselinux
++UTIL_LINUX_CONF_OPTS += --with-selinux
++else
++UTIL_LINUX_CONF_OPTS += --without-selinux
++endif
++
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++UTIL_LINUX_DEPENDENCIES += audit
++UTIL_LINUX_CONF_OPTS += --with-audit
++else
++UTIL_LINUX_CONF_OPTS += --without-audit
++endif
++
+ # Used by cramfs utils
+ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
+ 
+@@ -146,9 +160,22 @@ define UTIL_LINUX_INSTALL_PAMFILES
+ 	$(INSTALL) -m 0644 package/util-linux/su.pam \
+ 		$(TARGET_DIR)/etc/pam.d/su-l
+ endef
++
++# Add the required hooks to the pam files if SELinux is enabled
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++define UTIL_LINUX_FIXUP_PAMFILES
++	for file in login su su-l ; do \
++		$(SED) '/selinux/d' $(TARGET_DIR)/etc/pam.d/$${file}; \
++		$(SED) '0,/session/s/session/session		required	pam_selinux.so close\nsession/' $(TARGET_DIR)/etc/pam.d/$${file}; \
++		echo "session		required	pam_selinux.so open" >> $(TARGET_DIR)/etc/pam.d/$${file}; \
++	done
++endef
++endif
++
+ endif
+ 
+ UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
++UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_FIXUP_PAMFILES
+ 
+ # Install agetty->getty symlink to avoid breakage when there's no busybox
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_AGETTY),y)
 -- 
 1.9.1
