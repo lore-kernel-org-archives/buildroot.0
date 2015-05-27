@@ -1,47 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 May 2015 08:30:15 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-05-26
-Message-ID: <20150527063015.C2B78101008@stock.ovh.net>
+From: Ted Salazar <Ted.Salazar@maximintegrated.com>
+Date: Tue, 26 May 2015 23:58:17 -0700
+Subject: [Buildroot] Newbie help,
+ AT91sam9x25 patch Installation Questions
+In-Reply-To: <C7F5ED2AEEF9C0468B6F205055DC2A1D23DC4424DF@ITSVLEX06.it.maxim-ic.internal>
+References: <1432452387471-101939.post@n4.nabble.com>
+ <20150524130250.36ebd47d@free-electrons.com>
+ <B03A893ADFE80748942D13AFAF28451924E703A8C9@ITSVLEX06.it.maxim-ic.internal>
+ <20150525143810.GB3199@piout.net>,
+ <C7F5ED2AEEF9C0468B6F205055DC2A1D23DC4424DF@ITSVLEX06.it.maxim-ic.internal>
+Message-ID: <B03A893ADFE80748942D13AFAF28451924E6E93556@ITSVLEX06.it.maxim-ic.internal>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2015-05-26
-===============================
+To all you patch experts...Just curious why the BuildRoot manual checksout a branch to patch instead a tag? The newest branch is 2013.xx but the newest stable tag is 2015.02, which is what I want. Also, don't I need to add a patch command at the end of those two commands as well? Something like $ patch < hello.patch ?
 
-        success : 290
-       failures : 7  
-       timeouts : 3  
-          TOTAL : 300
+21.3.1. Applying Patches from Patchwork
+The main use of Buildroot?s Patchwork website for a developer is for pulling in patches into their local git repository for testing purposes.
 
-Classification of failures by reason
-====================================
+When browsing patches in the patchwork management interface, an mbox link is provided@the top of the page. Copy this link address and run the following commands:
 
-                     php-5.6.9 | 2 
-       host-erlang-rebar-2.5.1 | 2 
-janus-gateway-c632c1e9da5ff... | 1 
-            gst-ffmpeg-0.10.13 | 1 
-                 glibmm-2.36.1 | 1 
-                 cdrkit-1.1.11 | 1 
-                   ncurses-5.9 | 1 
-          sane-backends-1.0.24 | 1 
+$ git checkout -b <test-branch-name>
+$ wget -O - <mbox-url> | git am
 
-Detail of failures
-===================
+I hope to get your life saving patches installed tomorrow.
 
-     powerpc |                  cdrkit-1.1.11 | NOK | http://autobuild.buildroot.net/results/c777d97e5b5e631d4ac787b0c3d350c12b1ac607/
-      xtensa |                  glibmm-2.36.1 | NOK | http://autobuild.buildroot.net/results/8377d4ad576f2aa3d12c17d1ded3a8bf61536b3f/
-microblazeel |             gst-ffmpeg-0.10.13 | TIM | http://autobuild.buildroot.net/results/49bac6223583b9b74d36b6306cbc2c217a4ea7ae/
-         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/5b5745982719cfc3ef4f00285a13a34ad2a2d141/
-         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/e355f82fb2223a8cf7b6ab123fa98736b3776c5f/
-      xtensa | janus-gateway-c632c1e9da5ff... | NOK | http://autobuild.buildroot.net/results/092aac2b8abe0edd868a7e0cc59cdaaf28ca4ad5/
-        bfin |                    ncurses-5.9 | NOK | http://autobuild.buildroot.net/results/ce35c072f0b7c3a7a1918cb865a2eecbba8a1b23/
-      xtensa |                      php-5.6.9 | NOK | http://autobuild.buildroot.net/results/ac3764f69ceab8e3d5cd62a0d4bfb4d07d965a2f/
-        sh4a |                      php-5.6.9 | NOK | http://autobuild.buildroot.net/results/dad1128f58fc601bf96da5fa0635b9b9c6c8f0b8/
-       nios2 |           sane-backends-1.0.24 | NOK | http://autobuild.buildroot.net/results/cb4cfe47f4fc86f996603d846b6af1803955c3bd/
+Thank you,
+Ted
+________________________________________
+From: Ted Salazar
+Sent: Monday, May 25, 2015 2:18 PM
+To: Alexandre Belloni
+Cc: buildroot at busybox.net
+Subject: RE: [Buildroot] Help for another newbie, AT91sam9x25 incorrect defconfig or incorrect rootfs.ubi
+
+Hi Alexandre,
+
+Thanks again for your response. I think mainline BuildRoot is the way to go.
+
+Just two quick questions on the commands to apply your patch...from BuildRoot documentation.
+
+$ git checkout -b <test-branch-name>
+$ wget -O - <mbox-url> | git am
+
+Q1: Does <test-branch-name> = http://git.buildroot.net/buildroot/tag/?id=2015.02 ?
+Q2: Does <mbox-url> = http://patchwork.ozlabs.org/patch/473928/mbox/ ?
+
+Thanks
+Ted
+
+21.3.1. Applying Patches from Patchwork
+The main use of Buildroot?s Patchwork website for a developer is for pulling in patches into their local git repository for testing purposes.
+
+When browsing patches in the patchwork management interface, an mbox link is provided at the top of the page. Copy this link address and run the following commands:
+
+$ git checkout -b <test-branch-name>
+$ wget -O - <mbox-url> | git am
 
 
--- 
-http://autobuild.buildroot.net
+
+-----Original Message-----
+From: Alexandre Belloni [mailto:alexandre.belloni at free-electrons.com]
+Sent: Monday, May 25, 2015 7:38 AM
+To: Ted Salazar
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] Help for another newbie, AT91sam9x25 incorrect defconfig or incorrect rootfs.ubi
+
+Hi,
+
+On 24/05/2015 at 19:06:36 -0700, Ted Salazar wrote :
+>
+> [TS: Yes I was aware of Alexandre's patches but several things were not clear enough to me to be able to use it. Sorry this is basic to you but not to me.
+>
+> 1.       Who  runs the at91.com/Linux4Sam website? I thought this was an Atmel run website? If so and you only support mainline BuildRoot then why does Alexandre's sam9x5ek patches contain Linux4sam URLs (ie URL=https://github.com/linux4sam/linux-at91.git and URL="git://github.com/linux4sam/u-boot-at91.git" ) shown here http://patchwork.ozlabs.org/patch/473928/
+>
+
+Atmel is. I'm using their version of the kernel, u-boot and at91bootstrap because they are maintaining stble versions of each.
+
+> 3.       Does Alexandre's patch create all of the required at91sam9x5 defconfig files needed in order to build the AT91Bootstrap, uboot, Kernel and .ubifs filesystem too?
+>
+
+Yes.
+
+> 4.       OK, if Alexandre's patch does not work on Atmel's forked BuildRoot then I will try using mainline BuildRoot. In fact, I'll probably try both BuildRoot versions no matter what. I'll read the manual at http://buildroot.uclibc.org/downloads/manual/manual.html
+>
+
+It will also work on buildroot-at91 but this doesn't make any sense to try that. As it is older and is actually outdated.
+
+
+--
+Alexandre Belloni, Free Electrons
+Embedded Linux, Kernel and Android engineering http://free-electrons.com
