@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 May 2015 09:46:43 +0200
+Date: Wed, 27 May 2015 10:13:33 +0200
 Subject: [Buildroot] sky2 not created
-In-Reply-To: <CAJtzDg-NoVNk_W8CnV0y0sY+dhZNCKTu66tfePnyUoDNj+bTeg@mail.gmail.com>
+In-Reply-To: <CAJtzDg9LiZjeTJcRXp=Eng8kfynfDjdYrtKD=kVJ=GJjuGobWg@mail.gmail.com>
 References: <CAJtzDg-NoVNk_W8CnV0y0sY+dhZNCKTu66tfePnyUoDNj+bTeg@mail.gmail.com>
-Message-ID: <20150527094643.0dcb2107@free-electrons.com>
+ <20150527094643.0dcb2107@free-electrons.com>
+ <CAJtzDg9LiZjeTJcRXp=Eng8kfynfDjdYrtKD=kVJ=GJjuGobWg@mail.gmail.com>
+Message-ID: <20150527101333.1c2f6137@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +14,24 @@ To: buildroot@busybox.net
 
 Dear Laurent Joli,
 
-On Tue, 26 May 2015 18:34:43 +0200, Laurent Joli wrote:
+On Wed, 27 May 2015 09:58:16 +0200, Laurent Joli wrote:
 
-> When I ticked for Marvell driver : SKY2 and  SKY2_DEBUG
+> First of all, Thank you for your answer.
 > 
-> At the end of the build, I have not sky2.ko in my rootfs.
+> I would like create *a sky2.ko as a module.*
 > 
-> What can I do for obtain sky2 drivers ?
+> I use buildroot-2015.05-rc3 and do what you say :
+> 
+> make qmx6_defconfig
+>         make linux-menuconfig
+>         ... select the sky2 driver ...
+> make
 
-Depends on how you enabled these drivers: as a module, or statically
-linked into the kernel?
+Please show the result of:
 
-Also, what was your exact flow of work?
+grep SKY2 output/build/linux-3.10.17/.config
 
-Basically, you need to do:
-
-	make qmx6_defconfig
-	make linux-menuconfig
-	... select the sky2 driver ...
-	make
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
