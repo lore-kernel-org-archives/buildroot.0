@@ -1,52 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 May 2015 23:50:41 +0200
-Subject: [Buildroot] [git commit] uclibc: add option to specify config
-	fragments
-Message-ID: <20150601220248.C7DE27FD8C@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 May 2015 13:28:05 +0200
+Subject: [Buildroot] [git commit] e2fsprogs: bump to version 1.42.13
+Message-ID: <20150601220249.049FC81D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e34e12c5c3e0b851ac672603307ac300067ccf54
+commit: http://git.buildroot.net/buildroot/commit/?id=9b6a122841664ec8bea2b84e585adb3528909227
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/uclibc/Config.in |    6 ++++++
- package/uclibc/uclibc.mk |    1 +
- 2 files changed, 7 insertions(+), 0 deletions(-)
+Includes the security patch so drop it.
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index b5525e5..dd23853 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -86,6 +86,12 @@ config BR2_UCLIBC_CONFIG
- 	  See also docs/README in this package.
- 	  If unsure, use the default.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-fix-potential-buffer-overflow-in-closefs.patch |   59 --------------------
+ package/e2fsprogs/e2fsprogs.hash                   |    4 +-
+ package/e2fsprogs/e2fsprogs.mk                     |    2 +-
+ 3 files changed, 3 insertions(+), 62 deletions(-)
+
+diff --git a/package/e2fsprogs/0001-libext2fs-fix-potential-buffer-overflow-in-closefs.patch b/package/e2fsprogs/0001-libext2fs-fix-potential-buffer-overflow-in-closefs.patch
+deleted file mode 100644
+index bcf3083..0000000
+--- a/package/e2fsprogs/0001-libext2fs-fix-potential-buffer-overflow-in-closefs.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 49d0fe2a14f2a23da2fe299643379b8c1d37df73 Mon Sep 17 00:00:00 2001
+-From: Theodore Ts'o <tytso@mit.edu>
+-Date: Fri, 6 Feb 2015 12:46:39 -0500
+-Subject: [PATCH] libext2fs: fix potential buffer overflow in closefs()
+-
+-Upstream commit 49d0fe2a14f2.
+-
+-The bug fix in f66e6ce4446: "libext2fs: avoid buffer overflow if
+-s_first_meta_bg is too big" had a typo in the fix for
+-ext2fs_closefs().  In practice most of the security exposure was from
+-the openfs path, since this meant if there was a carefully crafted
+-file system, buffer overrun would be triggered when the file system was
+-opened.
+-
+-However, if corrupted file system didn't trip over some corruption
+-check, and then the file system was modified via tune2fs or debugfs,
+-such that the superblock was marked dirty and then written out via the
+-closefs() path, it's possible that the buffer overrun could be
+-triggered when the file system is closed.
+-
+-Also clear up a signed vs unsigned warning while we're at it.
+-
+-Thanks to Nick Kralevich <nnk@google.com> for asking me to look at
+-compiler warning in the code in question, which led me to notice the
+-bug in f66e6ce4446.
+-
+-Addresses: CVE-2015-1572
+-
+-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+- lib/ext2fs/closefs.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/lib/ext2fs/closefs.c b/lib/ext2fs/closefs.c
+-index 1f9911311a1a..ab5b2fb2365e 100644
+---- a/lib/ext2fs/closefs.c
+-+++ b/lib/ext2fs/closefs.c
+-@@ -287,7 +287,7 @@ errcode_t ext2fs_flush2(ext2_filsys fs, int flags)
+- 	dgrp_t		j;
+- #endif
+- 	char	*group_ptr;
+--	int	old_desc_blocks;
+-+	blk64_t	old_desc_blocks;
+- 	struct ext2fs_numeric_progress_struct progress;
+- 
+- 	EXT2_CHECK_MAGIC(fs, EXT2_ET_MAGIC_EXT2FS_FILSYS);
+-@@ -346,7 +346,7 @@ errcode_t ext2fs_flush2(ext2_filsys fs, int flags)
+- 	group_ptr = (char *) group_shadow;
+- 	if (fs->super->s_feature_incompat & EXT2_FEATURE_INCOMPAT_META_BG) {
+- 		old_desc_blocks = fs->super->s_first_meta_bg;
+--		if (old_desc_blocks > fs->super->s_first_meta_bg)
+-+		if (old_desc_blocks > fs->desc_blocks)
+- 			old_desc_blocks = fs->desc_blocks;
+- 	} else
+- 		old_desc_blocks = fs->desc_blocks;
+--- 
+-2.1.4
+-
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index 8384296..1585037 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,2 +1,2 @@
+-# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.42.12/sha256sums.asc
+-sha256 6dadcd3b759195150d20154ab9d6516e3b3cbb35d66d461f55ae94a2854e7de8 e2fsprogs-1.42.12.tar.xz
++# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.42.13/sha256sums.asc
++sha256 e16474b5a3a30f9197160c4b91bd48d5a463583049c0fcc405b6f0f7075aa0c7 e2fsprogs-1.42.13.tar.xz
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index fd77638..e0c4ee2 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_UCLIBC_CONFIG_FRAGMENT_FILES
-+	string "Additional uClibc configuration fragment files"
-+	help
-+	  A space-separated list of configuration fragment files,
-+	  that will be merged to the main uClibc configuration file.
-+
- config BR2_TOOLCHAIN_BUILDROOT_INET_RPC
- 	bool "Enable RPC support"
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index ce9b2b4..b9dce7e 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -42,6 +42,7 @@ UCLIBC_CONFIG_FILE = $(call qstrip,$(BR2_UCLIBC_CONFIG))
- endif
- 
- UCLIBC_KCONFIG_FILE = $(UCLIBC_CONFIG_FILE)
-+UCLIBC_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_UCLIBC_CONFIG_FRAGMENT_FILES))
- 
- UCLIBC_KCONFIG_OPTS = \
- 	$(UCLIBC_MAKE_FLAGS) \
+-E2FSPROGS_VERSION = 1.42.12
++E2FSPROGS_VERSION = 1.42.13
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
