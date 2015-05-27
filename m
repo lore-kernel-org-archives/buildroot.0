@@ -1,72 +1,83 @@
-From: Laurent Joli <l.joli@expemb.com>
-Date: Wed, 27 May 2015 13:56:47 +0200
-Subject: [Buildroot] sky2 not created
-In-Reply-To: <20150527115112.44652358@free-electrons.com>
-References: <CAJtzDg-NoVNk_W8CnV0y0sY+dhZNCKTu66tfePnyUoDNj+bTeg@mail.gmail.com>
- <20150527094643.0dcb2107@free-electrons.com>
- <CAJtzDg9LiZjeTJcRXp=Eng8kfynfDjdYrtKD=kVJ=GJjuGobWg@mail.gmail.com>
- <20150527101333.1c2f6137@free-electrons.com>
- <CAJtzDg9TN7oH0owqeRu32p_=u=gtrjbwcAVjWabsO6=R+VT7tA@mail.gmail.com>
- <20150527103020.0aec65d2@free-electrons.com>
- <CAJtzDg8wS89HmskSNaB60NkOZgg-WQoYGmQtmJGVa3zJHDuBCA@mail.gmail.com>
- <20150527105234.76b1512a@free-electrons.com>
- <CAJtzDg85zxiYo7ntyHS_=pGorTyMjaR=zogDRdy_NaxWZKHikg@mail.gmail.com>
- <20150527115112.44652358@free-electrons.com>
-Message-ID: <CAJtzDg9F4jZs=YyVy62m0Zzjnzgy8QAYaES8UQzT2sxFfLnytQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 May 2015 15:21:40 +0200
+Subject: [Buildroot] [PATCH 1/1] fcgiwrap: new package
+In-Reply-To: <1432657468-17210-1-git-send-email-thomas.claveirole@green-communications.fr>
+ (Thomas Claveirole's message of "Tue, 26 May 2015 18:24:28 +0200")
+References: <1432657468-17210-1-git-send-email-thomas.claveirole@green-communications.fr>
+Message-ID: <87twuyw3yz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok, Thanks for all this information.
+>>>>> "Thomas" == Thomas Claveirole <thomas.claveirole@green-communications.fr> writes:
 
-I will continue to search on kernel configuration.
+ > Add package fcgiwrap from https://nginx.localdomain.pl/wiki/FcgiWrap
+ > fcgiwrap is a simple server for running CGI applications over
+ > FastCGI. It hopes to provide clean CGI support to Nginx (and other web
+ > servers that may need it).
 
-And use sky2 module dynamically kernel
+ > Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+> ---
+ >  package/Config.in            |  1 +
+ >  package/fcgiwrap/Config.in   | 10 ++++++++++
+ >  package/fcgiwrap/fcgiwrap.mk | 19 +++++++++++++++++++
+ >  3 files changed, 30 insertions(+)
+ >  create mode 100644 package/fcgiwrap/Config.in
+ >  create mode 100644 package/fcgiwrap/fcgiwrap.mk
 
-Best regards,
-Laurent joli
+ > diff --git a/package/Config.in b/package/Config.in
+ > index e0c2e2a..188ff0d 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -1168,6 +1168,7 @@ endif
+ >  	source "package/ejabberd/Config.in"
+ >  	source "package/ethtool/Config.in"
+ >  	source "package/faifa/Config.in"
+ > +	source "package/fcgiwrap/Config.in"
+ >  	source "package/fmc/Config.in"
+ >  	source "package/foomatic-filters/Config.in"
+ >  	source "package/fping/Config.in"
+ > diff --git a/package/fcgiwrap/Config.in b/package/fcgiwrap/Config.in
+ > new file mode 100644
+ > index 0000000..a5c15a0
+ > --- /dev/null
+ > +++ b/package/fcgiwrap/Config.in
+ > @@ -0,0 +1,10 @@
+ > +config BR2_PACKAGE_FCGIWRAP
+ > +	bool "fcgiwrap"
+ > +	depends on BR2_USE_MMU # Transitive dependency from libfcgi.
+ > +	select BR2_PACKAGE_LIBFCGI
+ > +	help
+ > +	  fcgiwrap is a simple server for running CGI applications
+ > +	  over FastCGI. It hopes to provide clean CGI support to Nginx
+ > +	  (and other web servers that may need it).
+ > +
+ > +	  https://nginx.localdomain.pl/wiki/FcgiWrap
 
+FYI, the trac instance at that location seems to have some database
+issues.
 
-2015-05-27 11:51 GMT+02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+Thanks, but it doesn't work here:
 
-> Dear Laurent Joli,
->
-> On Wed, 27 May 2015 11:20:52 +0200, Laurent Joli wrote:
-> > Ok, I see now.
-> >
-> > But When I boot with this rootfs ( ext2 ) on my board, I have :
-> >
-> > buildroot login: root
-> > #
-> > #
-> > # lsmod
-> > Module                  Size  Used by    Not tainted
-> > # modprobe sky2
-> > modprobe: module sky2 not found in modules.dep
->
-> I think you should do some research about how to do the kernel
-> configuration.
->
-> If you enable a driver to be compiled statically, it is compiled
-> statically inside the kernel image, and there is no kernel module.
->
-> If you enable a driver to be compiled as a kernel module, then you get
-> a kernel module.
->
-> Since you selected your sky2 driver to be compiled statically, then
-> obviously you don't have a kernel module.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150527/2ffa798b/attachment.html>
+>>> fcgiwrap 1.1.0 Autoreconfiguring
+configure.ac:32: error: possibly undefined macro: AC_DEFINE
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+autoreconf: /home/peko/source/buildroot/output/host/usr/bin/autoconf failed with exit status: 1
+package/pkg-generic.mk:146: recipe for target '/home/peko/source/buildroot/output/build/fcgiwrap-1.1.0/.stamp_configured' failed
+
+From a quick look it seems like you are missing a dependency on
+host-pkgconf. With that added autoreconf works, but configure fails to
+detect libfcgi when linking statically because you are passing LIBS=-lm
+to it.
+
+With that fixed, linking fails as LDFLAGS (and hence your -lm) comes
+before -lfcgi, so I guess you should add LDLIBS='-lfcgi -lm' to
+_MAKE_OPTS instead.
+
+Care to fix these issues and resend? Thanks!
+
+-- 
+Bye, Peter Korsgaard
