@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Wed, 27 May 2015 17:17:15 -0500
-Subject: [Buildroot] [PATCH v6 11/22] sysvinit: added libselinux dependency
+Date: Wed, 27 May 2015 17:17:16 -0500
+Subject: [Buildroot] [PATCH v6 12/22] dbus: selinux file context support
 In-Reply-To: <1432765046-1223-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1432765046-1223-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1432765046-1223-12-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1432765046-1223-13-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,84 +18,58 @@ Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Changes v5 -> v6:
   - No changes
 
-Changes v4 -> v5:
-  - Removed unnecessary += when adding buysbox dependency (Ryan B.)
-  - Removed duplicate assignment of OPTS (Matt W.)
-  - Added description to patch and signed off line (Clayton S.)
+Changes v4 -> v5
+  - No changes
 
 Changes v1 -> v4:
   - Did not exist
 ---
- ...1-Fix-SELinux-compile-flags-and-libraries.patch | 44 ++++++++++++++++++++++
- package/sysvinit/sysvinit.mk                       |  5 +++
- 2 files changed, 49 insertions(+)
- create mode 100644 package/sysvinit/0001-Fix-SELinux-compile-flags-and-libraries.patch
+ package/dbus/S30dbus |  4 ++++
+ package/dbus/dbus.mk | 14 ++++++++++++++
+ 2 files changed, 18 insertions(+)
+ mode change 100755 => 100644 package/dbus/S30dbus
 
-diff --git a/package/sysvinit/0001-Fix-SELinux-compile-flags-and-libraries.patch b/package/sysvinit/0001-Fix-SELinux-compile-flags-and-libraries.patch
-new file mode 100644
-index 0000000..f857e07
---- /dev/null
-+++ b/package/sysvinit/0001-Fix-SELinux-compile-flags-and-libraries.patch
-@@ -0,0 +1,44 @@
-+From e7dc523c1850534d98ab90dd02e07ee214e21f24 Mon Sep 17 00:00:00 2001
-+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+Date: Fri, 1 May 2015 10:58:47 -0500
-+Subject: [PATCH] Fix SELinux compile flags and libraries
-+
-+The SELinux flags, added as CPPFLAGS, end up getting dropped by the
-+Makefile. Also ensuring sulogin is linked against libsepol which is
-+required.
-+
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+---
-+ src/Makefile | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/Makefile b/src/Makefile
-+index e2b8028..bf1ae81 100644
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -104,7 +104,7 @@ utmpdump:	utmpdump.o
-+ 
-+ runlevel:	runlevel.o
-+ 
-+-sulogin:	LDLIBS += $(SULOGINLIBS) $(STATIC)
-++sulogin:	LDLIBS += $(SULOGINLIBS) $(INITLIBS) $(STATIC)
-+ sulogin:	sulogin.o
-+ 
-+ wall:		dowall.o wall.o
-+@@ -114,10 +114,10 @@ shutdown:	dowall.o shutdown.o utmp.o reboot.h
-+ bootlogd:	LDLIBS += -lutil
-+ bootlogd:	bootlogd.o
-+ 
-+-sulogin.o:	CPPFLAGS += $(SELINUX_DEF)
-+-sulogin.o:	sulogin.c 
-++sulogin.o:	CFLAGS += $(SELINUX_DEF)
-++sulogin.o:	sulogin.c
-+ 
-+-init.o:		CPPFLAGS += $(SELINUX_DEF)
-++init.o:		CFLAGS += $(SELINUX_DEF)
-+ init.o:		init.c init.h set.h reboot.h initreq.h
-+ 
-+ utmp.o:		utmp.c init.h
-+-- 
-+1.9.1
-+
-diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-index 53640a4..9669a29 100644
---- a/package/sysvinit/sysvinit.mk
-+++ b/package/sysvinit/sysvinit.mk
-@@ -16,6 +16,11 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- SYSVINIT_DEPENDENCIES = busybox
+diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
+old mode 100755
+new mode 100644
+index 0d15c73..be51807
+--- a/package/dbus/S30dbus
++++ b/package/dbus/S30dbus
+@@ -17,6 +17,10 @@
+ [ -d /var/run/dbus ] || mkdir -p /var/run/dbus
+ [ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
+ [ -d /tmp/dbus ] || mkdir -p /tmp/dbus
++[ -d /var/lib/dbus ] || mkdir -p /var/lib/dbus
++if [ -e /sbin/restorecon ]; then
++   restorecon -R /var/run/dbus /var/lock/subsys /tmp/dbus /var/lib/dbus
++fi
+ 
+ RETVAL=0
+ 
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index c810800..a5ec807 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -44,6 +44,20 @@ ifeq ($(BR2_microblaze),y)
+ DBUS_CONF_OPTS += --disable-inotify
  endif
  
 +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+SYSVINIT_DEPENDENCIES += libselinux
-+TARGET_CONFIGURE_OPTS += WITH_SELINUX="yes" ROOT="$(TARGET_DIR)"
++DBUS_CONF_OPTS += --enable-selinux
++DBUS_DEPENDENCIES += libselinux
++else
++DBUS_CONF_OPTS += --disable-selinux
 +endif
 +
- define SYSVINIT_DEBIAN_PATCHES
- 	if [ -d $(@D)/debian/patches ]; then \
- 		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++DBUS_CONF_OPTS += --enable-libaudit
++DBUS_DEPENDENCIES += audit libcap-ng
++else
++DBUS_CONF_OPTS += --disable-libaudit
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+ DBUS_CONF_OPTS += --with-x
+ DBUS_DEPENDENCIES += xlib_libX11
 -- 
 1.9.1
