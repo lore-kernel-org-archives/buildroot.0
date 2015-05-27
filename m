@@ -1,147 +1,62 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Wed, 27 May 2015 17:17:23 -0500
-Subject: [Buildroot] [PATCH v6 19/22] libsemanage: cleanup python use and
-	license definition
+Date: Wed, 27 May 2015 17:17:24 -0500
+Subject: [Buildroot] [PATCH v6 20/22] squashfs: Add xattr support
 In-Reply-To: <1432765046-1223-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1432765046-1223-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1432765046-1223-20-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1432765046-1223-21-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Matt Weber <matthew.weber@rockwellcollins.com>
+Adding extended attribute support for the squashfs tools when the attr
+package is selected. This is needed for SELinux support.
 
-The original package supported python on target, now we just use
-it as part of the host tools.  The license was also mis-assigned.
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
 ---
 Changes v5 -> v6:
   - No changes
-
-Changes v4 -> v5:
-  - Added a 'm' to the end of the python3 major version used
-    in the include path.
 ---
- package/libsemanage/Config.in      | 10 -------
- package/libsemanage/libsemanage.mk | 54 ++++++++++++++++----------------------
- 2 files changed, 22 insertions(+), 42 deletions(-)
+ package/squashfs/squashfs.mk | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
-index 130fd82..78b6315 100644
---- a/package/libsemanage/Config.in
-+++ b/package/libsemanage/Config.in
-@@ -16,15 +16,5 @@ config BR2_PACKAGE_LIBSEMANAGE
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index 8ca9e2e..f44ef9f 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -10,9 +10,6 @@ SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squas
+ SQUASHFS_LICENSE = GPLv2+
+ SQUASHFS_LICENSE_FILES = COPYING
  
- 	  http://selinuxproject.org/page/Main_Page
+-# no libattr in BR
+-SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=0
+-
+ ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
+ SQUASHFS_DEPENDENCIES += lz4
+ SQUASHFS_MAKE_ARGS += LZ4_SUPPORT=1 COMP_DEFAULT=lz4
+@@ -52,13 +49,20 @@ HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lz4 host-lzo host-xz
  
--if BR2_PACKAGE_LIBSEMANAGE
--
--config BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS
--	depends on BR2_PACKAGE_PYTHON
--	bool "python bindings"
--	help
--	  Enable building python bindings
--
--endif
--
- comment "libsemanage needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index 17e8fea..197c14e 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
-@@ -6,66 +6,56 @@
+ # no libattr/xz in BR
+ HOST_SQUASHFS_MAKE_ARGS = \
+-	XATTR_SUPPORT=0 \
+ 	XZ_SUPPORT=1    \
+ 	GZIP_SUPPORT=1  \
+ 	LZ4_SUPPORT=1	\
+ 	LZO_SUPPORT=1	\
+ 	LZMA_XZ_SUPPORT=1
  
- LIBSEMANAGE_VERSION = 2.1.10
- LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
--LIBSEPOL_LICENSE = LGPLv2.1+
--LIBSEPOL_LICENSE_FILES = COPYING
--
-+LIBSEMANAGE_LICENSE = LGPLv2.1+
-+LIBSEMANAGE_LICENSE_FILES = COPYING
- LIBSEMANAGE_DEPENDENCIES = host-bison host-flex libselinux ustr bzip2
--
- LIBSEMANAGE_INSTALL_STAGING = YES
- 
- LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
- 
--ifeq ($(BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS),y)
--
--LIBSEMANAGE_DEPENDENCIES += python host-swig
--LIBSEMANAGE_MAKE_OPTS += \
--	PYINC="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
--	PYTHONLIBDIR="-L$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
--	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
--	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
--
--define LIBSEMANAGE_PYTHON_BUILD_CMDS
--	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) swigify pywrap
--endef
--
--define LIBSEMANAGE_PYTHON_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install-pywrap
--endef
--
--define LIBSEMANAGE_PYTHON_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install-pywrap
--endef
--
--endif # End of BR2_PACKAGE_PYTHON
--
- define LIBSEMANAGE_BUILD_CMDS
- 	# DESTDIR is needed during the compile to compute library and
- 	# header paths.
- 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
--	$(LIBSEMANAGE_PYTHON_BUILD_CMDS)
- endef
- 
- define LIBSEMANAGE_INSTALL_STAGING_CMDS
- 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
--	$(LIBSEMANAGE_PYTHON_INSTALL_STAGING_CMDS)
- endef
- 
- define LIBSEMANAGE_INSTALL_TARGET_CMDS
- 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
--	$(LIBSEMANAGE_PYTHON_INSTALL_TARGET_CMDS)
- endef
- 
--HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol \
--	host-libselinux host-ustr host-bzip2
-+HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol host-libselinux \
-+				host-ustr host-bzip2 host-swig
-+HOST_LIBSEMANAGE_MAKE_OPTS += $(HOST_CONFIGURE_OPTS) \
-+	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+HOST_LIBSEMANAGE_DEPENDENCIES += host-python3
-+HOST_LIBSEMANAGE_MAKE_OPTS += \
-+	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m/" \
-+	PYTHONLIBDIR="-L$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/" \
-+	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
++ifeq ($(BR2_PACKAGE_ATTR),y)
++	SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=1
++	HOST_SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=1
 +else
-+HOST_LIBSEMANAGE_DEPENDENCIES += host-python
-+HOST_LIBSEMANAGE_MAKE_OPTS += \
-+	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
-+	PYTHONLIBDIR="-L$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
-+	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
++	SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=0
++	HOST_SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=0
 +endif
- 
- define HOST_LIBSEMANAGE_BUILD_CMDS
- 	# DESTDIR is needed during the compile to compute library and
- 	# header paths.
- 	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) all
-+	$(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
- endef
- 
- define HOST_LIBSEMANAGE_INSTALL_CMDS
- 	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) install
-+	$(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
- endef
- 
- $(eval $(generic-package))
++
+ define SQUASHFS_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE)    \
+ 		CC="$(TARGET_CC)"           \
 -- 
 1.9.1
