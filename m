@@ -1,75 +1,88 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 28 May 2015 22:43:36 +0200
-Subject: [Buildroot] [PATCH] support/download: relocate the git clone
- comment
-In-Reply-To: <3984ae0102b12ee65d6cf41e2f20bde2d6cea3ae.1432812928.git.baruch@tkos.co.il>
-References: <3984ae0102b12ee65d6cf41e2f20bde2d6cea3ae.1432812928.git.baruch@tkos.co.il>
-Message-ID: <55677DF8.9030906@mind.be>
+Date: Fri, 29 May 2015 00:00:39 +0200
+Subject: [Buildroot] [PATCH v2 1/2] libfcgi
+ (0003-link-against-math.patch): Do actually link when needed.
+In-Reply-To: <1432827404-1096-2-git-send-email-thomas.claveirole@green-communications.fr>
+References: <1432827404-1096-1-git-send-email-thomas.claveirole@green-communications.fr>
+ <1432827404-1096-2-git-send-email-thomas.claveirole@green-communications.fr>
+Message-ID: <55679007.7060401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/28/15 13:35, Baruch Siach wrote:
-> Following commit 95a572282e87 (pkg-infra: move the git download helper to a
-> script, 2014-07-02), move the comment describing the shallow clone trickery as
-> well. Merge this comment with the existing helper comment that was added in
-> 7e40a1103a91 (support/download: convert git to use the wrapper, 2014-08-03).
+On 05/28/15 17:36, Thomas Claveirole wrote:
+> libfcgi uses frexp() and thus should link with libm, but fails to do
+> so.  Thus link errors with programs that use libfcgi (the bug does
+> appear only with uClibc, because the GNU libc provides frexp()
+> directly in libc.so).  Modify 0003-link-against-math.patch so libfcgi
+> links against math, instead of programs that need it.
 > 
-> Rename $($(PKG)_DL_VERSION) to ${cset} to match the helper code context.
-> 
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Looks good, but the patch should still have your Signed-off-by to the patch:
+
+> ---
+>  package/libfcgi/0003-link-against-math.patch | 36 +++++++++-------------------
+>  1 file changed, 11 insertions(+), 25 deletions(-)
+> 
+> diff --git a/package/libfcgi/0003-link-against-math.patch b/package/libfcgi/0003-link-against-math.patch
+> index 4c87ea6..ccf648a 100644
+> --- a/package/libfcgi/0003-link-against-math.patch
+> +++ b/package/libfcgi/0003-link-against-math.patch
+> @@ -1,28 +1,14 @@
+> -Link against math libraries when needed
+> +Link libfcgi against the math library.
+>  
+> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+ Here.
+
+ With that:
+  Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
  Regards,
  Arnout
 
-> ---
->  package/pkg-download.mk | 6 ------
->  support/download/git    | 9 +++++++--
->  2 files changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index f6ed8be56781..c86b9abcff75 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -73,12 +73,6 @@ export BR_NO_CHECK_HASH_FOR =
->  # to get all the sources needed for one's build configuration.
->  ################################################################################
->  
-> -# Try a shallow clone - but that only works if the version is a ref (tag or
-> -# branch). Before trying to do a shallow clone we check if $($(PKG)_DL_VERSION)
-> -# is in the list provided by git ls-remote. If not we fall back on a full clone.
-> -#
-> -# Messages for the type of clone used are provided to ease debugging in case of
-> -# problems
->  define DOWNLOAD_GIT
->  	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
->  		-o $(DL_DIR)/$($(PKG)_SOURCE) \
-> diff --git a/support/download/git b/support/download/git
-> index 73cbc0f7d173..fd5f5392ddec 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -25,8 +25,13 @@ repo="${2}"
->  cset="${3}"
->  basename="${4}"
->  
-> -# Try to see if we can do a shallow clone, since it is faster
-> -# than a full clone.
-> +# Try a shallow clone, since it is faster than a full clone - but that only
-> +# works if the version is a ref (tag or branch). Before trying to do a shallow
-> +# clone we check if ${cset} is in the list provided by git ls-remote. If not
-> +# we fall back on a full clone.
-> +#
-> +# Messages for the type of clone used are provided to ease debugging in case of
-> +# problems
->  git_done=0
->  if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
->      printf "Doing shallow clone\n"
+> -
+> -Index: b/cgi-fcgi/Makefile.am
+> -===================================================================
+> ---- a/cgi-fcgi/Makefile.am
+> -+++ b/cgi-fcgi/Makefile.am
+> -@@ -11,5 +11,5 @@
+> - LIBDIR      = ../libfcgi
+> - LIBFCGI     = $(LIBDIR)/libfcgi.la
+> - 
+> --LDADD = $(LIBFCGI)
+> -+LDADD = $(LIBFCGI) -lm
+> - cgi_fcgi_SOURCES = $(INCLUDE_FILES) cgi-fcgi.c
+> -Index: b/examples/Makefile.am
+> +Index: b/libfcgi/Makefile.am
+>  ===================================================================
+> ---- a/examples/Makefile.am
+> -+++ b/examples/Makefile.am
+> -@@ -21,7 +21,7 @@
+> - LIBDIR      = ../libfcgi
+> - LIBFCGI     = $(LIBDIR)/libfcgi.la
+> - 
+> --LDADD = $(LIBFCGI)
+> -+LDADD = $(LIBFCGI) -lm
+> +--- a/libfcgi/Makefile.am
+> ++++ b/libfcgi/Makefile.am
+> +@@ -18,6 +18,7 @@
+> +                      os_ at SYSTEM@.c
+> + libfcgi_la_CC      = @PTHREAD_CC@
+> + libfcgi_la_CFLAGS  = @PTHREAD_CFLAGS@
+> ++libfcgi_la_LIBADD  = -lm
+>   
+> - echo_SOURCES       = $(INCLUDE_FILES) echo.c
+> - echo_x_SOURCES     = $(INCLUDE_FILES) echo-x.c
+> + libfcgi___la_SOURCES = $(INCLUDE_FILES)       \
+> +                        $(INCLUDEDIR)/fcgio.h  \
 > 
 
 
