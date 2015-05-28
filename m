@@ -1,63 +1,92 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 28 May 2015 14:35:28 +0300
-Subject: [Buildroot] [PATCH] support/download: relocate the git clone comment
-Message-ID: <3984ae0102b12ee65d6cf41e2f20bde2d6cea3ae.1432812928.git.baruch@tkos.co.il>
+From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
+Date: Thu, 28 May 2015 14:07:43 +0200
+Subject: [Buildroot] scons and check
+In-Reply-To: <5566F418.5040809@green-communications.fr>
+References: <5565DCA4.5040002@green-communications.fr>
+ <11559664.aMO1ZzHy8u@pbouda-kubuntu>
+ <5566F418.5040809@green-communications.fr>
+Message-ID: <5567050F.9030507@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following commit 95a572282e87 (pkg-infra: move the git download helper to a
-script, 2014-07-02), move the comment describing the shallow clone trickery as
-well. Merge this comment with the existing helper comment that was added in
-7e40a1103a91 (support/download: convert git to use the wrapper, 2014-08-03).
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Rename $($(PKG)_DL_VERSION) to ${cset} to match the helper code context.
+Hi all,
 
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/pkg-download.mk | 6 ------
- support/download/git    | 9 +++++++--
- 2 files changed, 7 insertions(+), 8 deletions(-)
+I had to fix more things in SConstruct file and pass the proper
+extra_sysroot argument to scons but I think I got it working. Thanks
+again. I'll submit a bunch of patches for adding check, galera and
+mariadb probably next week. Hopefully.
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index f6ed8be56781..c86b9abcff75 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -73,12 +73,6 @@ export BR_NO_CHECK_HASH_FOR =
- # to get all the sources needed for one's build configuration.
- ################################################################################
- 
--# Try a shallow clone - but that only works if the version is a ref (tag or
--# branch). Before trying to do a shallow clone we check if $($(PKG)_DL_VERSION)
--# is in the list provided by git ls-remote. If not we fall back on a full clone.
--#
--# Messages for the type of clone used are provided to ease debugging in case of
--# problems
- define DOWNLOAD_GIT
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
-diff --git a/support/download/git b/support/download/git
-index 73cbc0f7d173..fd5f5392ddec 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -25,8 +25,13 @@ repo="${2}"
- cset="${3}"
- basename="${4}"
- 
--# Try to see if we can do a shallow clone, since it is faster
--# than a full clone.
-+# Try a shallow clone, since it is faster than a full clone - but that only
-+# works if the version is a ref (tag or branch). Before trying to do a shallow
-+# clone we check if ${cset} is in the list provided by git ls-remote. If not
-+# we fall back on a full clone.
-+#
-+# Messages for the type of clone used are provided to ease debugging in case of
-+# problems
- git_done=0
- if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
-     printf "Doing shallow clone\n"
--- 
-2.1.4
+Cheers,
+
+Sylvain
+
+On 28/05/2015 12:55, Sylvain Raybaud wrote:
+> On 28/05/2015 09:47, Peter Bouda wrote:
+>> Hi Sylvain,
+> 
+>> Am Mittwoch 27 Mai 2015, 17:03:00 schrieb Sylvain Raybaud:
+>>> 
+>>> A few packages in buildroot already use scons (exfat, 
+>>> exfat-utils, benejson, gpsd). Their build commands look like 
+>>> this:
+>>> 
+>>> FOO_SCONS_ENV = $(TARGET_CONFIGURE_OPTS) FOO_SCONS_OPTS = 
+>>> "prefix=/usr"
+>>> 
+>>> define FOO_BUILD_CMDS cd $(@D) && \ $(FOO_SCONS_ENV) \ 
+>>> CROSS=$(TARGET_CROSS) \ $(SCONS) $(FOO_SCONS_OPTS) endef
+>>> 
+> 
+>> I had a similar problem recently, I had to change my SConstruct 
+>> file, so that the CROSS variable is actually used in the target 
+>> build process. The lines I added are:
+> 
+>> if 'CROSS' in os.environ: cross = os.environ['CROSS'] 
+>> env.Append(CROSS = cross) env.Replace(CC = cross + 'gcc') 
+>> env.Replace(CXX = cross + 'g++') env.Replace(LD = cross + 'ld')
+> 
+>> Best, Peter
+> 
+> 
+> 
+> Hi
+> 
+> Thank you very much. I think with this I fixed a number of other 
+> problems I had not yet spotted. Scons was indeed looking for things
+> in the wrong place. However it still cannot find check :) But I
+> think the SConstruct should be fixed so I'll dig deeper and let you
+> know.
+> 
+> Cheers,
+> 
+> _______________________________________________ buildroot mailing
+> list buildroot at busybox.net 
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+- -- 
+Sylvain Raybaud
+www.green-communications.fr
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBAgAGBQJVZwUPAAoJEEkkwl4JtJ9ybpYP/RWqEI7Xm7usznKbZMcNQUAR
+Hg/KDg9CKEAFzxnyQBWsELu2s/+jz6iosCj6OW78C/hyU8cbAg2mpZ5MUCWidq70
+BJyxhuphTUFOnenmwwpKZo2URtrF2oo26a+ofZqHTj+swzHL0WtHO0Bwb81NRiHu
+9qPHj4wKxVhscNklqmMG+bl6GqbrHoTgX9ztueJ1kE2AEvz/kpQvB7puJJpvR8Iv
+wUDF1NNunWc/xreSgbNqTHNTRHZ+tuEVfd+uegnzaVgys/9dDyXJxWDzgzcgi7nr
+gySft4KQ0MX3DJeBGMv527iRkCvVnPWll5dkvHNFcpbxQ8p0YJ1m3NOSAZ9nIzaJ
+Y4SuSXZM2Is9pCuAsoHqvoe2rkgdxqScYtq2uNfpxksS2HdxJIFDjczKsUz8a22T
+6PznRP+wP/Atr73EeJ2hs9r7ee/URB16fL9sjtoiJf9PwuHzxh7WX3VnBN4/LtKR
+esD0pKceyEy+FQMP2ES4ax348qib0F5dxVf6PY05pQKDqi6pU/n1dBftG0JceqNc
+/O9fvWuxseZTfFt0s0BGDq7C/U2ZEjKQah8vKKS1o+3yHNO9gtyVqZUFdqFhkMsJ
+f45aywJwc/iYNUjgQAIO3NydD2vU+wFUBfVXnxawucA6EvhdmFR9NEXUU3c9YK4H
+d7ATcMb1lYa6kVLJn/ja
+=YTjt
+-----END PGP SIGNATURE-----
