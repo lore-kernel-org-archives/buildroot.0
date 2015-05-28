@@ -1,8 +1,10 @@
 From: Pascal de Bruijn <pmjdebruijn@pcode.nl>
-Date: Thu, 28 May 2015 20:41:46 +0200
-Subject: [Buildroot] [PATCH 1/5] nano: work around broken syntax
-	highlighting regexes
-Message-ID: <1432838510-1848-1-git-send-email-pmjdebruijn@pcode.nl>
+Date: Thu, 28 May 2015 20:41:47 +0200
+Subject: [Buildroot] [PATCH 2/5] defconfig: update raspberry pi 2 to linux
+	3.18.14
+In-Reply-To: <1432838510-1848-1-git-send-email-pmjdebruijn@pcode.nl>
+References: <1432838510-1848-1-git-send-email-pmjdebruijn@pcode.nl>
+Message-ID: <1432838510-1848-2-git-send-email-pmjdebruijn@pcode.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,22 +13,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Pascal de Bruijn <pmjdebruijn@pcode.nl>
 ---
- package/nano/nano.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ configs/raspberrypi2_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 4d47fdb..c6eb29c 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -11,6 +11,9 @@ NANO_LICENSE_FILES = COPYING
- NANO_CONF_OPTS = --without-slang
- NANO_DEPENDENCIES = ncurses
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index 5859749..3fe3fe9 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -9,13 +9,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
  
-+# work around broken syntax highlighting regexes
-+NANO_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DGNU_WORDBOUNDS=1"
-+
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
- NANO_CONF_ENV += ac_cv_prog_NCURSESW_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
- else
+ # Lock to 3.18 headers as the RPi2 kernel is based off the 3.18 branch
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18"
++BR2_DEFAULT_KERNEL_VERSION="3.18.14"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="2747cc0bde4ca441691260fae1e34c9ef954ccae"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="7d54f1754fd89bc11b27ca249ec148695f2eed06"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ 
 -- 
 1.9.1
