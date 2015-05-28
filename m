@@ -1,32 +1,25 @@
-From: Pascal de Bruijn <pmjdebruijn@pcode.nl>
-Date: Thu, 28 May 2015 20:41:50 +0200
-Subject: [Buildroot] [PATCH 5/5] rpi-userland: update to match linux 3.18.14
-In-Reply-To: <1432838510-1848-1-git-send-email-pmjdebruijn@pcode.nl>
-References: <1432838510-1848-1-git-send-email-pmjdebruijn@pcode.nl>
-Message-ID: <1432838510-1848-5-git-send-email-pmjdebruijn@pcode.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 May 2015 21:13:15 +0200
+Subject: [Buildroot] Warning: patchwork not registering patches
+Message-ID: <20150528211315.53b6e047@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pascal de Bruijn <pmjdebruijn@pcode.nl>
----
- package/rpi-userland/rpi-userland.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello,
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 20a6af0..3b343de 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_USERLAND_VERSION = 8f542a1647e6f88f254eadd9ad6929301c81913b
-+RPI_USERLAND_VERSION = d4aa617de3b196399bb8e2ce32e181768cb52179
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
+For some reason, patchwork is no longer registering the patches sent on
+the mailing list. The last patch it registered is:
+
+  [1/1] package/ncurses: Fix GCC 5.x preprocessor failure
+
+All the patches posted *after* this one have not been registered by
+patchwork, and will not be tracked.
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
