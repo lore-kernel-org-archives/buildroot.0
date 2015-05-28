@@ -1,37 +1,82 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 28 May 2015 23:36:02 +0300
-Subject: [Buildroot] [PATCH] gdbm: handle optional dependency gettext
-In-Reply-To: <CAB0FRss9-+251CWRnMSi2NPe=ySQ4wMU4XRUbr-ye_B+xstitQ@mail.gmail.com>
-References: <1432755579-10890-1-git-send-email-francois.perrad@gadz.org>
- <20150527195559.GZ2260@tarshish>
- <CAB0FRss9-+251CWRnMSi2NPe=ySQ4wMU4XRUbr-ye_B+xstitQ@mail.gmail.com>
-Message-ID: <20150528203602.GK2260@tarshish>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 28 May 2015 22:43:36 +0200
+Subject: [Buildroot] [PATCH] support/download: relocate the git clone
+ comment
+In-Reply-To: <3984ae0102b12ee65d6cf41e2f20bde2d6cea3ae.1432812928.git.baruch@tkos.co.il>
+References: <3984ae0102b12ee65d6cf41e2f20bde2d6cea3ae.1432812928.git.baruch@tkos.co.il>
+Message-ID: <55677DF8.9030906@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fran?ois,
-
-On Thu, May 28, 2015 at 08:37:22PM +0200, Fran?ois Perrad wrote:
-> 2015-05-27 21:55 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
-> > On Wed, May 27, 2015 at 09:39:39PM +0200, Francois Perrad wrote:
-> >> gdbm itself is an optional dependency of perl
-> >
-> > Is this a fix for
-> > http://autobuild.buildroot.net/results/940/9404e004ac24c5f3eedc8e7bc8afadd35983de70/
-> >
-> > ?
+On 05/28/15 13:35, Baruch Siach wrote:
+> Following commit 95a572282e87 (pkg-infra: move the git download helper to a
+> script, 2014-07-02), move the comment describing the shallow clone trickery as
+> well. Merge this comment with the existing helper comment that was added in
+> 7e40a1103a91 (support/download: convert git to use the wrapper, 2014-08-03).
 > 
-> I found this dependency issue during my investigation for this build failure.
-> But it is not the fix for it.
+> Rename $($(PKG)_DL_VERSION) to ${cset} to match the helper code context.
+> 
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-OK. Thanks.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-baruch
+
+ Regards,
+ Arnout
+
+> ---
+>  package/pkg-download.mk | 6 ------
+>  support/download/git    | 9 +++++++--
+>  2 files changed, 7 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index f6ed8be56781..c86b9abcff75 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -73,12 +73,6 @@ export BR_NO_CHECK_HASH_FOR =
+>  # to get all the sources needed for one's build configuration.
+>  ################################################################################
+>  
+> -# Try a shallow clone - but that only works if the version is a ref (tag or
+> -# branch). Before trying to do a shallow clone we check if $($(PKG)_DL_VERSION)
+> -# is in the list provided by git ls-remote. If not we fall back on a full clone.
+> -#
+> -# Messages for the type of clone used are provided to ease debugging in case of
+> -# problems
+>  define DOWNLOAD_GIT
+>  	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
+>  		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+> diff --git a/support/download/git b/support/download/git
+> index 73cbc0f7d173..fd5f5392ddec 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -25,8 +25,13 @@ repo="${2}"
+>  cset="${3}"
+>  basename="${4}"
+>  
+> -# Try to see if we can do a shallow clone, since it is faster
+> -# than a full clone.
+> +# Try a shallow clone, since it is faster than a full clone - but that only
+> +# works if the version is a ref (tag or branch). Before trying to do a shallow
+> +# clone we check if ${cset} is in the list provided by git ls-remote. If not
+> +# we fall back on a full clone.
+> +#
+> +# Messages for the type of clone used are provided to ease debugging in case of
+> +# problems
+>  git_done=0
+>  if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
+>      printf "Doing shallow clone\n"
+> 
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
