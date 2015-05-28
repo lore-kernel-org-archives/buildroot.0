@@ -1,111 +1,40 @@
-From: Mike Williams <mike@mikebwilliams.com>
-Date: Thu, 28 May 2015 15:21:32 -0400
-Subject: [Buildroot] Package Support with systemd
-	(LIBFOO_INSTALL_INIT_SYSTEMD)
-In-Reply-To: <CALe+oY-tezAuQPFRVzmJky3JOCpGMyorPFSZ8U0Xh6qJsaiZ=w@mail.gmail.com>
-References: <CALe+oY-tezAuQPFRVzmJky3JOCpGMyorPFSZ8U0Xh6qJsaiZ=w@mail.gmail.com>
-Message-ID: <CANPyyuOHQFwdrtLa2MJj4K1V5nujCp0zsqX13V-fQci8_EfDMg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 28 May 2015 21:24:10 +0200
+Subject: [Buildroot] [PATCH] gcc/gcc-final: pass TARGET_ABI flags to
+ configure with --enable-cxx-flags
+In-Reply-To: <CAMo8BfKmBgweFoO3JoVv7gwBg1g3ba39ywGaYyH=CtmedSqWCw@mail.gmail.com>
+References: <1432625556-14611-1-git-send-email-jcmvbkbc@gmail.com>	<55663AFF.4090107@mind.be>
+ <CAMo8BfKmBgweFoO3JoVv7gwBg1g3ba39ywGaYyH=CtmedSqWCw@mail.gmail.com>
+Message-ID: <55676B5A.7080902@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James,
+On 05/28/15 05:10, Max Filippov wrote:
+> On Thu, May 28, 2015 at 12:45 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 05/26/15 09:32, Max Filippov wrote:
+>>> libstdc++ is in all regards a normal library, it needs to be built with
+>>> TARGET_ABI flags, otherwise linking it with other C++ code may fail.
+>>
+>>  Then why only do it for xtensa? And why not pass the full TARGET_CFLAGS?
+> 
+> To minimize the impact of the change: currently it's only problem for xtensa
+> and only TARGET_ABI flags are really missing.
+> Yes, passing TARGET_CFLAGS works too. And probably it works for other
+> architectures, but that needs testing. I can send v2 with these changes.
 
-On Thu, May 28, 2015 at 1:56 PM, James Knight
-<james.knight@rockwellcollins.com> wrote:
-> Recent work I'm doing consists of building a target which uses
-> systemd. I've been cleaning up my target's file system; the specific
-> cleanup I want to mention is the location of my services and startup
-> (*-wants) locations. Some packages appear to install an
-> example/provided systemd service file into the "/etc/systemd/system/"
-> or configure automatic startup under a "/etc/systemd/system/*.wants/"
-> folder. Is there a reason why the /etc root path is being used instead
-> of /usr/lib (or /lib)?
+ I guess we need this patch for 2015.05 then and TARGET_CFLAGS for -next.
 
-Putting services in /etc and /lib is probably just a result of
-historical ambiguity over the correct path; there weren't really any
-rules about where to place service files before. If you look through
-the commit logs you'll see myself and others moving services a few at
-a time to /usr/lib/systemd/system. buildroot's systemd itself has
-flip-flopped from /usr/lib to /lib back and forth a few times as well.
+ Regards,
+ Arnout
 
-I thought /lib was in theory only supported for systems that still
-maintain an unmerged /usr (only Debian+derivatives now?), see here:
-https://wiki.freedesktop.org/www/Software/systemd/TheCaseForTheUsrMerge/
 
-Personally, I would like buildroot to merge those directories in the
-base skeleton, as it would track what all distros seem headed towards,
-but I don't know enough about other use cases to recommend it
-categorically.
-
->
-> From what I know, systemd will look up system services, targets and
-> more under the following paths:
->  - /etc/systemd/system/*
->  - /run/systemd/system/*
->  - /usr/lib/systemd/system/*
->  - /lib/systemd/system/*
->
-> (see http://www.freedesktop.org/software/systemd/man/systemd.unit.html)
->
-> On the manual page it notes that the /etc root location is for "local
-> configuration" versus "installed packages". Doesn't it make sense for
-> built target's to use a lib folder than the etc folder? This would
-> allow, on a persistable system, a user to "easily" override a built
-> target's services (without having to worry about saving the original;
-> ignoring any restriction the builder may want to impose). I would
-> imagine the following would be better approach:
->
-> ```
-> $(INSTALL) -D -m 644 package/<package>/<package>.service \
-> $(TARGET_DIR)/usr/lib/systemd/system/<package>.service
-> mkdir -p $(TARGET_DIR)/usr/lib/systemd/system/multi-user.target.wants
-> ln -fs ../../../../usr/lib/systemd/system/<package>.service \
-> $(TARGET_DIR)/usr/lib/systemd/system/multi-user.target.wants/<package>.service
-> ```
-
-I guess it depends on if you view buildroot's default configuration as
-'local configuration' or 'installed packages'. I approached it as
-default local configuration, mostly because buildroot tries to use
-unmodified upstream as much as possible, so only upstream service
-files (and buildroot provided .service files for packages that do not
-provide their own) should go in /usr/lib/systemd/system. Same thing
-for those packages that have their own .wants links, those go in /usr.
-This makes it clear which parts of the filesystem are stock upstream
-and which are either buildroot or user customizations. Then, buildroot
-provides default local configuration in /etc enabling services, along
-with all other types of default configuration placed there.
-
-Part of my motivation is that I basically rm -rf output/target/etc
-before copying my fs-overlay/etc and fs-overlay/usr. This removes all
-of buildroot's default configuration and lets me place my own in both
-dirs. It's easier to do this than to keep track of which files in
-/usr/lib/systemd/system have been put there by buildroot instead of
-upstream, and then individually removing them in post-build.sh.
-
->
-> Examples]
->  ntp installs service and auto-start into etc:
->   http://git.buildroot.net/buildroot/tree/package/ntp/ntp.mk
->
->  postgresql installs into lib and auto-start into etc:
->   http://git.buildroot.net/buildroot/tree/package/postgresql/postgresql.mk
->
->  new packages configuring auto-start into etc:
->   https://patchwork.ozlabs.org/patch/475859/
->
-> ps>
-> I would have even suggested using the "/lib/systemd/system/" location
-> over "/usr/lib/systemd/system/" but I don't see any mention of the
-> path in the manual (although I do see the path used in systemd code
-> and the default install location of basic services/targets right now
-> is "/lib/systemd/system").
-
-Yeah, I started moving things to /usr/lib over /lib because of the man
-pages, it seemed like it would make more sense to newcomers to
-buildroot if their package's service files ended up where the man
-pages say they should.
-
-Mike
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
