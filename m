@@ -1,32 +1,47 @@
 From: Peter Bouda <pbouda@cidles.eu>
-Date: Thu, 28 May 2015 08:22:04 +0100
-Subject: [Buildroot] [PATCH 1/1] python-pygame: remove python dependency
-Message-ID: <1432797724-5329-1-git-send-email-pbouda@cidles.eu>
+Date: Thu, 28 May 2015 08:47:24 +0100
+Subject: [Buildroot] scons and check
+In-Reply-To: <5565DCA4.5040002@green-communications.fr>
+References: <5565DCA4.5040002@green-communications.fr>
+Message-ID: <11559664.aMO1ZzHy8u@pbouda-kubuntu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the dependency on BR2_PACKAGE_PYTHON it was only possible to
-build the package with python2. However, python-pygame works with
-python3 so enable it to be built with it.
+Hi Sylvain,
 
-Signed-off-by: Peter Bouda <pbouda@cidles.eu>
----
- package/python-pygame/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+Am Mittwoch 27 Mai 2015, 17:03:00 schrieb Sylvain Raybaud:
+> 
+> A few packages in buildroot already use scons (exfat, exfat-utils,
+> benejson, gpsd). Their build commands look like this:
+> 
+> FOO_SCONS_ENV = $(TARGET_CONFIGURE_OPTS)
+> FOO_SCONS_OPTS = "prefix=/usr"
+> 
+> define FOO_BUILD_CMDS
+>         cd $(@D) && \
+> 	 $(FOO_SCONS_ENV) \
+> 	 CROSS=$(TARGET_CROSS) \
+> 	 $(SCONS) $(FOO_SCONS_OPTS)
+> endef
+> 
 
-diff --git a/package/python-pygame/Config.in b/package/python-pygame/Config.in
-index f72ee31..932b0f1 100644
---- a/package/python-pygame/Config.in
-+++ b/package/python-pygame/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_PYGAME
- 	bool "python-pygame"
--	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_SDL
- 	help
- 	  Pygame is a cross-platfrom library designed to make it easy to write
+I had a similar problem recently, I had to change my SConstruct file, so that 
+the CROSS variable is actually used in the target build process. The lines I 
+added are:
+
+if 'CROSS' in os.environ:
+        cross = os.environ['CROSS']
+        env.Append(CROSS = cross)
+        env.Replace(CC = cross + 'gcc')
+        env.Replace(CXX = cross + 'g++')
+        env.Replace(LD = cross + 'ld')
+
+Best,
+Peter
+
+
 -- 
-2.1.4
+http://www.peterbouda.eu
