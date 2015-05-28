@@ -1,75 +1,51 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 28 May 2015 17:36:07 +0200
-Subject: [Buildroot] [PATCH] package/schedtool: new package
-Message-ID: <1432827367-3043-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Date: Thu, 28 May 2015 17:36:42 +0200
+Subject: [Buildroot] [PATCH v2 0/2] fcgiwrap: new package
+In-Reply-To: <87twuyw3yz.fsf@dell.be.48ers.dk>
+References: <87twuyw3yz.fsf@dell.be.48ers.dk>
+Message-ID: <1432827404-1096-1-git-send-email-thomas.claveirole@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Schedtool is the definitive interface to Linux's scheduler.
+> configure.ac:32: error: possibly undefined macro: AC_DEFINE
+> [...]
+>
+> From a quick look it seems like you are missing a dependency on
+> host-pkgconf.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/Config.in              |  1 +
- package/schedtool/Config.in    | 10 ++++++++++
- package/schedtool/schedtool.mk | 18 ++++++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/schedtool/Config.in
- create mode 100644 package/schedtool/schedtool.mk
+Right.  Thanks for pointing this out.
 
-diff --git a/package/Config.in b/package/Config.in
-index 6661240..35f02e5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1414,6 +1414,7 @@ endif
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/rsyslog/Config.in"
- endif
-+	source "package/schedtool/Config.in"
- 	source "package/smack/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/start-stop-daemon/Config.in"
-diff --git a/package/schedtool/Config.in b/package/schedtool/Config.in
-new file mode 100644
-index 0000000..928a02e
---- /dev/null
-+++ b/package/schedtool/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_SCHEDTOOL
-+	bool "schedtool"
-+	help
-+	  schedtool was born, because there was no tool to change or query
-+	  all CPU-scheduling policies under Linux, in one handy command.
-+	  Support for CPU-affinity has also been added and most recently
-+	  (re-)nicing of processes.
-+	  Thus, schedtool is the definitive interface to Linux's scheduler.
-+
-+	  https://github.com/jlelli/schedtool-dl
-diff --git a/package/schedtool/schedtool.mk b/package/schedtool/schedtool.mk
-new file mode 100644
-index 0000000..a75f844
---- /dev/null
-+++ b/package/schedtool/schedtool.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# schedtool
-+#
-+################################################################################
-+
-+SCHEDTOOL_VERSION = 3ffb479929c31cbae09de08f94f58b8f0f061d91
-+SCHEDTOOL_SITE = $(call github,jlelli,schedtool-dl,$(SCHEDTOOL_VERSION))
-+
-+define SCHEDTOOL_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-+endef
-+
-+define SCHEDTOOL_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/schedtool $(TARGET_DIR)/usr/bin
-+endef
-+
-+$(eval $(generic-package))
+> With that added autoreconf works, but configure fails to detect
+> libfcgi when linking statically because you are passing LIBS=-lm to
+> it.
+
+I investigated that and found it is actually a bug with libfcgi.
+libfcgi's Buildroot package does already include a patch to address
+that, but the patch is wrong: it adds -lm to libfcgi programs that
+link against libfcgi, while it should directly add -lm to libfcgi
+instead.  See first patch in my new series.
+
+By the way, I reproduced it, fixed it, and tested with both static and
+dynamic libraries.  This works, at least on my system.
+
+> Care to fix these issues and resend? Thanks!
+
+Yes, here it is.  Thanks for the help. :-)
+
+Thomas Claveirole (2):
+  libfcgi (0003-link-against-math.patch): Do actually link when needed.
+  fcgiwrap: new package
+
+ package/Config.in                            |  1 +
+ package/fcgiwrap/Config.in                   | 10 ++++++++
+ package/fcgiwrap/fcgiwrap.mk                 | 13 ++++++++++
+ package/libfcgi/0003-link-against-math.patch | 36 +++++++++-------------------
+ 4 files changed, 35 insertions(+), 25 deletions(-)
+ create mode 100644 package/fcgiwrap/Config.in
+ create mode 100644 package/fcgiwrap/fcgiwrap.mk
+
 -- 
-1.9.1
+2.1.4
