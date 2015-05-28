@@ -1,76 +1,99 @@
-From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Date: Thu, 28 May 2015 17:36:44 +0200
-Subject: [Buildroot] [PATCH v2 2/2] fcgiwrap: new package
-In-Reply-To: <1432827404-1096-1-git-send-email-thomas.claveirole@green-communications.fr>
-References: <1432827404-1096-1-git-send-email-thomas.claveirole@green-communications.fr>
-Message-ID: <1432827404-1096-3-git-send-email-thomas.claveirole@green-communications.fr>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Thu, 28 May 2015 10:46:14 -0500
+Subject: [Buildroot] [PATCH] package/schedtool: new package
+In-Reply-To: <1432827367-3043-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1432827367-3043-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <CAMQcK5+z=ZHFZ02SNbYqnnrk_5svS1EoVPtg-3k4GZskWw-j1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add package fcgiwrap from https://nginx.localdomain.pl/wiki/FcgiWrap
+Angelo,
 
-fcgiwrap is a simple server for running CGI applications over
-FastCGI. It hopes to provide clean CGI support to Nginx (and other web
-servers that may need it).
+On Thu, May 28, 2015 at 10:36 AM, Angelo Compagnucci
+<angelo.compagnucci@gmail.com> wrote:
+> Schedtool is the definitive interface to Linux's scheduler.
+>
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+>  package/Config.in              |  1 +
+>  package/schedtool/Config.in    | 10 ++++++++++
+>  package/schedtool/schedtool.mk | 18 ++++++++++++++++++
+>  3 files changed, 29 insertions(+)
+>  create mode 100644 package/schedtool/Config.in
+>  create mode 100644 package/schedtool/schedtool.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 6661240..35f02e5 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1414,6 +1414,7 @@ endif
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>         source "package/rsyslog/Config.in"
+>  endif
+> +       source "package/schedtool/Config.in"
+>         source "package/smack/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>         source "package/start-stop-daemon/Config.in"
+> diff --git a/package/schedtool/Config.in b/package/schedtool/Config.in
+> new file mode 100644
+> index 0000000..928a02e
+> --- /dev/null
+> +++ b/package/schedtool/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_SCHEDTOOL
+> +       bool "schedtool"
+> +       help
+> +         schedtool was born, because there was no tool to change or query
+> +         all CPU-scheduling policies under Linux, in one handy command.
+> +         Support for CPU-affinity has also been added and most recently
+> +         (re-)nicing of processes.
+> +         Thus, schedtool is the definitive interface to Linux's scheduler.
+> +
+> +         https://github.com/jlelli/schedtool-dl
+> diff --git a/package/schedtool/schedtool.mk b/package/schedtool/schedtool.mk
+> new file mode 100644
+> index 0000000..a75f844
+> --- /dev/null
+> +++ b/package/schedtool/schedtool.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# schedtool
+> +#
+> +################################################################################
+> +
+> +SCHEDTOOL_VERSION = 3ffb479929c31cbae09de08f94f58b8f0f061d91
+> +SCHEDTOOL_SITE = $(call github,jlelli,schedtool-dl,$(SCHEDTOOL_VERSION))
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
----
- package/Config.in            |  1 +
- package/fcgiwrap/Config.in   | 10 ++++++++++
- package/fcgiwrap/fcgiwrap.mk | 13 +++++++++++++
- 3 files changed, 24 insertions(+)
- create mode 100644 package/fcgiwrap/Config.in
- create mode 100644 package/fcgiwrap/fcgiwrap.mk
+Please add license information (GPLv2)
 
-diff --git a/package/Config.in b/package/Config.in
-index e0c2e2a..188ff0d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1168,6 +1168,7 @@ endif
- 	source "package/ejabberd/Config.in"
- 	source "package/ethtool/Config.in"
- 	source "package/faifa/Config.in"
-+	source "package/fcgiwrap/Config.in"
- 	source "package/fmc/Config.in"
- 	source "package/foomatic-filters/Config.in"
- 	source "package/fping/Config.in"
-diff --git a/package/fcgiwrap/Config.in b/package/fcgiwrap/Config.in
-new file mode 100644
-index 0000000..a5c15a0
---- /dev/null
-+++ b/package/fcgiwrap/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_FCGIWRAP
-+	bool "fcgiwrap"
-+	depends on BR2_USE_MMU # Transitive dependency from libfcgi.
-+	select BR2_PACKAGE_LIBFCGI
-+	help
-+	  fcgiwrap is a simple server for running CGI applications
-+	  over FastCGI. It hopes to provide clean CGI support to Nginx
-+	  (and other web servers that may need it).
-+
-+	  https://nginx.localdomain.pl/wiki/FcgiWrap
-diff --git a/package/fcgiwrap/fcgiwrap.mk b/package/fcgiwrap/fcgiwrap.mk
-new file mode 100644
-index 0000000..844f1a3
---- /dev/null
-+++ b/package/fcgiwrap/fcgiwrap.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# fcgiwrap
-+#
-+################################################################################
-+
-+FCGIWRAP_VERSION = 1.1.0
-+FCGIWRAP_SITE = $(call github,gnosek,fcgiwrap,$(FCGIWRAP_VERSION))
-+FCGIWRAP_DEPENDENCIES = host-pkgconf libfcgi
-+FCGIWRAP_LICENSE = MIT
-+FCGIWRAP_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
+> +define SCHEDTOOL_BUILD_CMDS
+> +       $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+
+I would suggest using TARGET_CONFIGURE_OPTS variable in order to set
+CC/LD so this would become:
+
+$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+
+> +endef
+> +
+> +define SCHEDTOOL_INSTALL_TARGET_CMDS
+> +       $(INSTALL) -D -m 0755 $(@D)/schedtool $(TARGET_DIR)/usr/bin
+> +endef
+> +
+> +$(eval $(generic-package))
+
+Would you be able to update with these suggestions?
+
+Thanks,
+-Ryan
+
 -- 
-2.1.4
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
