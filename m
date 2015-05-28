@@ -1,11 +1,11 @@
 From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Wed, 27 May 2015 22:18:32 -0500
-Subject: [Buildroot] [PATCH v4 2015.08 2/4] support/scripts: add
- size-stats script
-In-Reply-To: <1432591007-27689-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 May 2015 22:29:27 -0500
+Subject: [Buildroot] [PATCH v4 2015.08 1/4] pkg-generic: add
+ step_pkg_size global instrumentation hook
+In-Reply-To: <1432591007-27689-2-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1432591007-27689-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1432591007-27689-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CALq67GB6scfWxE4F4NZfVFzZHQZ2QAaL9GoE_KsBnmhXvaU0Dg@mail.gmail.com>
+ <1432591007-27689-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CALq67GBsNHhkg6gHn=NX8FM1uNz2k0eddSwnU26aCKhDOTutag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,139 +16,71 @@ Thomas,
 
 On Mon, May 25, 2015 at 4:56 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> This new script uses the data collected by the step_pkg_size
-> instrumentation hook to generate a pie chart of the size contribution
-> of each package to the target root filesystem, and two CSV files with
-> statistics about the package size and file size. To achieve this, it
-> looks at each file in $(TARGET_DIR), and using the
-> packages-file-list.txt information collected by the step_pkg_size
-> hook, it determines to which package the file belongs. It is therefore
-> able to give the size installed by each package.
+> This patch adds a global instrumentation hook that collects the list
+> of files installed in $(TARGET_DIR) by each package, and stores this
+> list into a file called $(BUILD_DIR)/packages-file-list.txt. It can
+> later be used to determine the size contribution of each package to
+> the target root filesystem.
+>
+> Note that in order to detect if a file installed by one package is
+> later overriden by another package, we calculate the md5 of installed
+> files and compare them at each installation of a new package.
+>
+> This commit also adds a Config.in option to enable the collection of
+> this data, as calculating the md5 of all installed files at the
+> beginning and end of the installation of each package can be
+> considered a time-consuming process which maybe some users will not be
+> willing to suffer from.
 >
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  support/scripts/size-stats | 238 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 238 insertions(+)
->  create mode 100755 support/scripts/size-stats
-
-Other than a few minor suggestion below, things look good.
 
 Reviewed-by: Ryan Barnett <ryanbarnett3@gmail.com>
-Tested-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Test-by: Ryan Barnett <ryanbarnett3@gmail.com>
 
-> diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-> new file mode 100755
-> index 0000000..48a64cd
-> --- /dev/null
-> +++ b/support/scripts/size-stats
-> @@ -0,0 +1,238 @@
-
-[...]
-
-> +#
-> +# This function builds a dictionary that contains the name of a
-> +# package as key, and the size of the files installed by this package
-> +# as the value.
-> +#
-> +# filesdict: dictionary with the name of the files as key, and as
-> +# value a tuple containing the name of the package to which the files
-> +# belongs, and the size of the file. As returned by
-> +# build_package_dict.
-> +#
-> +# builddir: path to the Buildroot output directory
-> +#
-> +def build_package_size(filesdict, builddir):
-> +    pkgsize = collections.defaultdict(int)
+> ---
+>  package/pkg-generic.mk | 32 ++++++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index d5b29f0..944b0fc 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -55,6 +55,38 @@ define step_time
+>  endef
+>  GLOBAL_INSTRUMENTATION_HOOKS += step_time
+>
+> +# Hooks to collect statistics about installed files
 > +
-> +    for root, _, files in os.walk(os.path.join(builddir, "target")):
-> +        for f in files:
-> +            fpath = os.path.join(root, f)
-> +            if os.path.islink(fpath):
-> +                continue
-> +            frelpath = os.path.relpath(fpath, os.path.join(builddir, "target"))
-> +            if not frelpath in filesdict:
-> +                print("WARNING: %s is not part of any package" % frelpath)
-
-Would it be useful to have an exclusion list since this will always be
-printed out?
-
-Every time you run 'make clean all size-stats' you will be faced with
-warnings such as this:
-
-WARNING: THIS_IS_NOT_YOUR_ROOT_FILESYSTEM is not part of any package
-WARNING: etc/ld.so.cache is not part of any package
-WARNING: etc/hostname is not part of any package
-WARNING: etc/os-release is not part of any package
-WARNING: etc/nsswitch.conf is not part of any package
-WARNING: etc/ld.so.conf is not part of any package
-WARNING: etc/network/interfaces is not part of any package
-WARNING: tmp/ldconfig/aux-cache is not part of any package
-WARNING: dev/console is not part of any package
-
-Initially when I saw this I didn't do something correct, however, I
-quickly released that these are files that are generated by
-buildroot's makefiles (such as THIS_IS_NOT_YOUR_ROOT_FILESYSTEM and
-etc/hostname). Since this files are generated by buildroot and one
-shouldn't be concerned about this files not being a part of any
-package. While typing this, would it make sense to create a package
-called 'buildroot' whose files are defined statically within this
-script?
-
-> +                pkg = "unknown"
-> +            else:
-> +                pkg = filesdict[frelpath][0]
+> +# This hook will be called before the target installation of a
+> +# package. We store in a file named .br_filelist_before the list of
+> +# files currently installed in the target. Note that the MD5 is also
+> +# stored, in order to identify if the files are overwritten.
+> +define step_pkg_size_start
+> +       (cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
+> +               $($(PKG)_DIR)/.br_filelist_before
+> +endef
 > +
-> +            pkgsize[pkg] += os.path.getsize(fpath)
+> +# This hook will be called after the target installation of a
+> +# package. We store in a file named .br_filelist_after the list of
+> +# files (and their MD5) currently installed in the target. We then do
+> +# a diff with the .br_filelist_before to compute the list of files
+> +# installed by this package.
+> +define step_pkg_size_end
+> +       (cd $(TARGET_DIR); find . -type f -print0 | xargs -0 md5sum) | sort > \
+> +               $($(PKG)_DIR)/.br_filelist_after
+> +       comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
+> +               while read hash file ; do \
+> +                       echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
+> +               done
+> +endef
 > +
-> +    return pkgsize
+> +define step_pkg_size
+> +       $(if $(filter install-target,$(2)),\
+> +               $(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
+> +               $(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
+> +endef
+> +GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
 > +
-> +#
-> +# Given a dict returned by build_package_size(), this function
-> +# generates a pie chart of the size installed by each package.
-> +#
-> +# pkgsize: dictionary with the name of the package as a key, and the
-> +# size as the value, as returned by build_package_size.
-> +#
-> +# outputf: output file for the graph
-> +#
-> +def draw_graph(pkgsize, outputf):
-> +    total = sum(pkgsize.values())
-> +    labels = []
-> +    values = []
-> +    other_value = 0
-> +    for (p, sz) in pkgsize.items():
-> +        if sz < (total * 0.01):
-> +            other_value += sz
-> +        else:
-> +            labels.append("%s (%d kB)" % (p, sz / 1000.))
-> +            values.append(sz)
-> +    labels.append("Other (%d kB)" % (other_value / 1000.))
-> +    values.append(other_value)
-> +
-> +    plt.figure()
-> +    patches, texts, autotexts = plt.pie(values, labels=labels,
-> +                                        autopct='%1.1f%%', shadow=True,
-> +                                        colors=colors)
-> +    # Reduce text size
-> +    proptease = fm.FontProperties()
-> +    proptease.set_size('xx-small')
-> +    plt.setp(autotexts, fontproperties=proptease)
-> +    plt.setp(texts, fontproperties=proptease)
-
-Could the total size of filesystem be placed on this graph? I was
-thinking maybe at the bottom of the graph in as a subtitle - don't
-know if this possible?
-
-Another idea would be the option to specify a chart title. This could
-be something that could be used with dependency graph as well or any
-other graph generated by buildroot (can't think of any others off at
-this moment). However, I would say that should be a future feature
-that is implemented.
-
-Thanks,
--Ryan
-
-> +    plt.title('Size per package')
-> +    plt.savefig(outputf)
-
-[...]
+>  # User-supplied script
+>  ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
+>  define step_user
