@@ -1,45 +1,74 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Thu, 28 May 2015 13:05:00 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-05-27
-In-Reply-To: <20150528115902.01440c3e@free-electrons.com>
-References: <20150528063014.33A10100E89@stock.ovh.net>
- <CAMo8Bf+rVtLH0OizwAcc4Wds50UkgpMppS+m1=RGL3=dfA8iJQ@mail.gmail.com>
- <20150528095356.GD2260@tarshish>
- <20150528115902.01440c3e@free-electrons.com>
-Message-ID: <CAMo8BfKodv5JiY0YSUhwYaK2MMF+UXWWGL2jiqFhuCwmDWKqeA@mail.gmail.com>
+From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
+Date: Thu, 28 May 2015 12:55:20 +0200
+Subject: [Buildroot] scons and check
+In-Reply-To: <11559664.aMO1ZzHy8u@pbouda-kubuntu>
+References: <5565DCA4.5040002@green-communications.fr>
+ <11559664.aMO1ZzHy8u@pbouda-kubuntu>
+Message-ID: <5566F418.5040809@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, May 28, 2015 at 12:59 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Baruch,
->
-> On Thu, 28 May 2015 12:53:56 +0300, Baruch Siach wrote:
->> Hi Max,
->>
->> On Thu, May 28, 2015 at 12:49:35PM +0300, Max Filippov wrote:
->> > On Thu, May 28, 2015 at 9:30 AM, Thomas Petazzoni
->> > <thomas.petazzoni@free-electrons.com> wrote:
->> > > Build statistics for 2015-05-27
->> > >
->> > >       xtensa |                harfbuzz-0.9.40 | NOK | http://autobuild.buildroot.net/results/15aadcad23a79bdb64789a6edd271f1aca999973/
->> >
->> > Fixed by https://patchwork.ozlabs.org/patch/476389/
->>
->> Thanks for fixing. But technically, since this build uses an external
->> toolchain, it will only be fixed when Thomas rebuilds the toolchain.
->
-> I typically rebuild all toolchains after a Buildroot release has been
-> made, so it should happen soon, hopefully.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-I wonder if I should resend that patch with changes suggested by
-Arnout (for all arches, not only for xtensa and with TARGET_CFLAGS
-instead of TARGET_ABI), or its v1 is fine?
+On 28/05/2015 09:47, Peter Bouda wrote:
+> Hi Sylvain,
+> 
+> Am Mittwoch 27 Mai 2015, 17:03:00 schrieb Sylvain Raybaud:
+>> 
+>> A few packages in buildroot already use scons (exfat,
+>> exfat-utils, benejson, gpsd). Their build commands look like
+>> this:
+>> 
+>> FOO_SCONS_ENV = $(TARGET_CONFIGURE_OPTS) FOO_SCONS_OPTS =
+>> "prefix=/usr"
+>> 
+>> define FOO_BUILD_CMDS cd $(@D) && \ $(FOO_SCONS_ENV) \ 
+>> CROSS=$(TARGET_CROSS) \ $(SCONS) $(FOO_SCONS_OPTS) endef
+>> 
+> 
+> I had a similar problem recently, I had to change my SConstruct
+> file, so that the CROSS variable is actually used in the target
+> build process. The lines I added are:
+> 
+> if 'CROSS' in os.environ: cross = os.environ['CROSS'] 
+> env.Append(CROSS = cross) env.Replace(CC = cross + 'gcc') 
+> env.Replace(CXX = cross + 'g++') env.Replace(LD = cross + 'ld')
+> 
+> Best, Peter
+> 
+> 
 
--- 
-Thanks.
--- Max
+Hi
+
+Thank you very much. I think with this I fixed a number of other
+problems I had not yet spotted. Scons was indeed looking for things in
+the wrong place. However it still cannot find check :) But I think the
+SConstruct should be fixed so I'll dig deeper and let you know.
+
+Cheers,
+
+- -- 
+Sylvain Raybaud
+www.green-communications.fr
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBAgAGBQJVZvQXAAoJEEkkwl4JtJ9yWRgP/0Z2NxC9z4gKuheX/l/zqhHS
+cOhiXt7MMBC4Ae+OoGVTZ9gyvhsV3zEaTwwoWWtCfDOn4C9dfA8McUv9x2UaRW3Y
+RfoegRbvD+AF69iduTKcZHqgTNFXxJNkha+VJXng86UN156qsszZh2A2u/y6atG7
+B06bveL6rfTo1cJeFDOG7YsKltInS1BfcG4TOZtaf7g9iBuvhLArNXHUbJ4kICEp
+B7GESI0c1R2Ja8fVYCvuulPrAa7OAjBC5nMmwubnCVtuMQdIdM2gLjZtoi1roluk
+uvSLOIW+kdSjxCEEi4jrbFQIjXcKJ7Yfb0Z2J4zXPiXFwk9m3Vxk2KDCHgtLBbG+
+IiL6gHwVSW3tVkZu6qulcQaeB/Al9uroceh2sKgqAP5C5YAji9PKgV3OnFQwEPrJ
+UQv/pq/x67FuzU6ccr93BCwn8DGzt3MPj4yGyzzLww3S4V/4BXwMeUADtANgpQ5a
+40Nsc6E6FQgS015vf2L7X5FUXiX9Hjetv0F/cF12vDSQMkbydcwEuaf9Q7HTcjc4
+/dS5V1n4ZrrbE66VqOozcxQlWGZD/Aboe+Ci+paQIBifJjfqhVb2lO5MPClcd9wh
+mNZNfszptCsOOlDVHJOgLL9bM2nRgRij5NJXki4WQlM3gIr8PXUJg9uKi84ovwuQ
+sFk2POh4nXCyu4DsfJMT
+=cXgN
+-----END PGP SIGNATURE-----
