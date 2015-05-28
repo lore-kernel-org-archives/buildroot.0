@@ -1,66 +1,29 @@
-From: Doug Kehn <rdkehn@yahoo.com>
-Date: Wed, 27 May 2015 18:51:53 -0500
-Subject: [Buildroot] [PATCH 1/1] package/ncurses: Fix GCC 5.x preprocessor
-	failure
-Message-ID: <1432770713-18309-1-git-send-email-rdkehn@yahoo.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 28 May 2015 06:10:01 +0300
+Subject: [Buildroot] [PATCH] gcc/gcc-final: pass TARGET_ABI flags to
+ configure with --enable-cxx-flags
+In-Reply-To: <55663AFF.4090107@mind.be>
+References: <1432625556-14611-1-git-send-email-jcmvbkbc@gmail.com>
+ <55663AFF.4090107@mind.be>
+Message-ID: <CAMo8BfKmBgweFoO3JoVv7gwBg1g3ba39ywGaYyH=CtmedSqWCw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building ncurses 5.9 with GCC 5.x fails with a syntax error, caused by
-earlier preprocessing. This failure is more likely when building for
-host (e.g. host-ncurses) that recently updated to GCC 5.x.
+On Thu, May 28, 2015 at 12:45 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 05/26/15 09:32, Max Filippov wrote:
+>> libstdc++ is in all regards a normal library, it needs to be built with
+>> TARGET_ABI flags, otherwise linking it with other C++ code may fail.
+>
+>  Then why only do it for xtensa? And why not pass the full TARGET_CFLAGS?
 
-This patch is taken from the following link (more information is also
-available here):
-https://groups.google.com/forum/#!topic/sage-trac/U31shviuqzk
+To minimize the impact of the change: currently it's only problem for xtensa
+and only TARGET_ABI flags are really missing.
+Yes, passing TARGET_CFLAGS works too. And probably it works for other
+architectures, but that needs testing. I can send v2 with these changes.
 
-Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
----
- package/ncurses/0002-gcc-5.x-MKlib_gen.patch | 33 ++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/ncurses/0002-gcc-5.x-MKlib_gen.patch
-
-diff --git a/package/ncurses/0002-gcc-5.x-MKlib_gen.patch b/package/ncurses/0002-gcc-5.x-MKlib_gen.patch
-new file mode 100644
-index 0000000..0771208
---- /dev/null
-+++ b/package/ncurses/0002-gcc-5.x-MKlib_gen.patch
-@@ -0,0 +1,33 @@
-+Fix GCC 5.x preprocessor failure
-+
-+Building ncurses 5.9 with GCC 5.x fails with a syntax error, caused by
-+earlier preprocessing. This failure is more likely when building for
-+host (e.g. host-ncurses) that recently updated to GCC 5.x.
-+
-+This patch is taken from the following link (more information is also
-+available here):
-+https://groups.google.com/forum/#!topic/sage-trac/U31shviuqzk
-+
-+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-+
-+Index: b/ncurses/base/MKlib_gen.sh
-+===================================================================
-+--- a/ncurses/base/MKlib_gen.sh
-++++ b/ncurses/base/MKlib_gen.sh
-+@@ -62,7 +62,15 @@ if test "${LC_MESSAGES+set}" = set; then
-+ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
-+ if test "${LC_COLLATE+set}"  = set; then LC_COLLATE=C;  export LC_COLLATE;  fi
-+ 
-+-preprocessor="$1 -DNCURSES_INTERNALS -I../include"
-++# Work around "unexpected" output of GCC 5.1.0's cpp w.r.t. #line directives
-++# by simply suppressing them:
-++case `$1 -dumpversion 2>/dev/null` in
-++	5.[01].*)  # assume a "broken" one
-++		preprocessor="$1 -P -DNCURSES_INTERNALS -I../include"
-++		;;
-++	*)
-++		preprocessor="$1 -DNCURSES_INTERNALS -I../include"
-++esac
-+ AWK="$2"
-+ USE="$3"
-+ 
 -- 
-2.4.1
+Thanks.
+-- Max
