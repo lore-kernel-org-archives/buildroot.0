@@ -1,11 +1,11 @@
 From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Wed, 27 May 2015 22:29:27 -0500
-Subject: [Buildroot] [PATCH v4 2015.08 1/4] pkg-generic: add
- step_pkg_size global instrumentation hook
-In-Reply-To: <1432591007-27689-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 May 2015 22:32:19 -0500
+Subject: [Buildroot] [PATCH v4 2015.08 3/4] Makefile: implement a
+ size-stats target
+In-Reply-To: <1432591007-27689-4-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1432591007-27689-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1432591007-27689-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CALq67GBsNHhkg6gHn=NX8FM1uNz2k0eddSwnU26aCKhDOTutag@mail.gmail.com>
+ <1432591007-27689-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CALq67GDhQbvZba3SBfuL5FXxnOkpoLm4CMpai=0dPnJax=Jzzg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,71 +16,50 @@ Thomas,
 
 On Mon, May 25, 2015 at 4:56 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> This patch adds a global instrumentation hook that collects the list
-> of files installed in $(TARGET_DIR) by each package, and stores this
-> list into a file called $(BUILD_DIR)/packages-file-list.txt. It can
-> later be used to determine the size contribution of each package to
-> the target root filesystem.
->
-> Note that in order to detect if a file installed by one package is
-> later overriden by another package, we calculate the md5 of installed
-> files and compare them at each installation of a new package.
->
-> This commit also adds a Config.in option to enable the collection of
-> this data, as calculating the md5 of all installed files at the
-> beginning and end of the installation of each package can be
-> considered a time-consuming process which maybe some users will not be
-> willing to suffer from.
+> This commit implements a size-stats target that calls the script of
+> the same name to generate the graph and CSV files related to package
+> and file sizes.
 >
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: Ryan Barnett <ryanbarnett3@gmail.com>
-Test-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Tested-by: Ryan Barnett <ryanbarnett3@gmail.com>
 
 > ---
->  package/pkg-generic.mk | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
+>  Makefile | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 >
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index d5b29f0..944b0fc 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -55,6 +55,38 @@ define step_time
->  endef
->  GLOBAL_INSTRUMENTATION_HOOKS += step_time
+> diff --git a/Makefile b/Makefile
+> index cf244d7..c9b1e72 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -666,6 +666,14 @@ graph-depends: graph-depends-requirements
+>         |tee $(GRAPHS_DIR)/$(@).dot \
+>         |dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(GRAPHS_DIR)/$(@).$(BR_GRAPH_OUT)
 >
-> +# Hooks to collect statistics about installed files
+> +size-stats:
+> +       $(Q)mkdir -p $(GRAPHS_DIR)
+> +       $(Q)$(TOPDIR)/support/scripts/size-stats --builddir $(BASE_DIR) \
+> +               --graph $(BASE_DIR)/graphs/graph-size.$(BR_GRAPH_OUT) \
+> +               --file-size-csv $(BASE_DIR)/build/file-size-stats.csv \
+> +               --package-size-csv $(BASE_DIR)/build/package-size-stats.csv \
+> +               --skeleton-path $(TARGET_SKELETON)
 > +
-> +# This hook will be called before the target installation of a
-> +# package. We store in a file named .br_filelist_before the list of
-> +# files currently installed in the target. Note that the MD5 is also
-> +# stored, in order to identify if the files are overwritten.
-> +define step_pkg_size_start
-> +       (cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
-> +               $($(PKG)_DIR)/.br_filelist_before
-> +endef
-> +
-> +# This hook will be called after the target installation of a
-> +# package. We store in a file named .br_filelist_after the list of
-> +# files (and their MD5) currently installed in the target. We then do
-> +# a diff with the .br_filelist_before to compute the list of files
-> +# installed by this package.
-> +define step_pkg_size_end
-> +       (cd $(TARGET_DIR); find . -type f -print0 | xargs -0 md5sum) | sort > \
-> +               $($(PKG)_DIR)/.br_filelist_after
-> +       comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
-> +               while read hash file ; do \
-> +                       echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
-> +               done
-> +endef
-> +
-> +define step_pkg_size
-> +       $(if $(filter install-target,$(2)),\
-> +               $(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
-> +               $(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
-> +endef
-> +GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
-> +
->  # User-supplied script
->  ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
->  define step_user
+>  else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+>
+>  all: menuconfig
+> @@ -883,6 +891,7 @@ endif
+>         @echo '  manual-epub            - build manual in ePub'
+>         @echo '  graph-build            - generate graphs of the build times'
+>         @echo '  graph-depends          - generate graph of the dependency tree'
+> +       @echo '  size-stats             - generate stats of the filesystem size'
+>         @echo '  list-defconfigs        - list all defconfigs (pre-configured minimal systems)'
+>         @echo
+>         @echo 'Miscellaneous:'
+> --
+> 2.1.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
