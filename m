@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 29 May 2015 00:00:39 +0200
-Subject: [Buildroot] [PATCH v2 1/2] libfcgi
- (0003-link-against-math.patch): Do actually link when needed.
-In-Reply-To: <1432827404-1096-2-git-send-email-thomas.claveirole@green-communications.fr>
+Date: Fri, 29 May 2015 00:19:19 +0200
+Subject: [Buildroot] [PATCH v2 2/2] fcgiwrap: new package
+In-Reply-To: <1432827404-1096-3-git-send-email-thomas.claveirole@green-communications.fr>
 References: <1432827404-1096-1-git-send-email-thomas.claveirole@green-communications.fr>
- <1432827404-1096-2-git-send-email-thomas.claveirole@green-communications.fr>
-Message-ID: <55679007.7060401@mind.be>
+ <1432827404-1096-3-git-send-email-thomas.claveirole@green-communications.fr>
+Message-ID: <55679467.7090801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,76 +12,97 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 05/28/15 17:36, Thomas Claveirole wrote:
-> libfcgi uses frexp() and thus should link with libm, but fails to do
-> so.  Thus link errors with programs that use libfcgi (the bug does
-> appear only with uClibc, because the GNU libc provides frexp()
-> directly in libc.so).  Modify 0003-link-against-math.patch so libfcgi
-> links against math, instead of programs that need it.
+> Add package fcgiwrap from https://nginx.localdomain.pl/wiki/FcgiWrap
+> 
+> fcgiwrap is a simple server for running CGI applications over
+> FastCGI. It hopes to provide clean CGI support to Nginx (and other web
+> servers that may need it).
 > 
 > Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-
- Looks good, but the patch should still have your Signed-off-by to the patch:
-
 > ---
->  package/libfcgi/0003-link-against-math.patch | 36 +++++++++-------------------
->  1 file changed, 11 insertions(+), 25 deletions(-)
+>  package/Config.in            |  1 +
+>  package/fcgiwrap/Config.in   | 10 ++++++++++
+>  package/fcgiwrap/fcgiwrap.mk | 13 +++++++++++++
+>  3 files changed, 24 insertions(+)
+>  create mode 100644 package/fcgiwrap/Config.in
+>  create mode 100644 package/fcgiwrap/fcgiwrap.mk
 > 
-> diff --git a/package/libfcgi/0003-link-against-math.patch b/package/libfcgi/0003-link-against-math.patch
-> index 4c87ea6..ccf648a 100644
-> --- a/package/libfcgi/0003-link-against-math.patch
-> +++ b/package/libfcgi/0003-link-against-math.patch
-> @@ -1,28 +1,14 @@
-> -Link against math libraries when needed
-> +Link libfcgi against the math library.
->  
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> diff --git a/package/Config.in b/package/Config.in
+> index e0c2e2a..188ff0d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1168,6 +1168,7 @@ endif
+>  	source "package/ejabberd/Config.in"
+>  	source "package/ethtool/Config.in"
+>  	source "package/faifa/Config.in"
+> +	source "package/fcgiwrap/Config.in"
+>  	source "package/fmc/Config.in"
+>  	source "package/foomatic-filters/Config.in"
+>  	source "package/fping/Config.in"
+> diff --git a/package/fcgiwrap/Config.in b/package/fcgiwrap/Config.in
+> new file mode 100644
+> index 0000000..a5c15a0
+> --- /dev/null
+> +++ b/package/fcgiwrap/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_FCGIWRAP
+> +	bool "fcgiwrap"
+> +	depends on BR2_USE_MMU # Transitive dependency from libfcgi.
 
- Here.
+ Just say # libfcgi
 
- With that:
-  Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> +	select BR2_PACKAGE_LIBFCGI
+> +	help
+> +	  fcgiwrap is a simple server for running CGI applications
+> +	  over FastCGI. It hopes to provide clean CGI support to Nginx
+> +	  (and other web servers that may need it).
+> +
+> +	  https://nginx.localdomain.pl/wiki/FcgiWrap
+> diff --git a/package/fcgiwrap/fcgiwrap.mk b/package/fcgiwrap/fcgiwrap.mk
+> new file mode 100644
+> index 0000000..844f1a3
+> --- /dev/null
+> +++ b/package/fcgiwrap/fcgiwrap.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# fcgiwrap
+> +#
+> +################################################################################
+> +
+> +FCGIWRAP_VERSION = 1.1.0
+> +FCGIWRAP_SITE = $(call github,gnosek,fcgiwrap,$(FCGIWRAP_VERSION))
+> +FCGIWRAP_DEPENDENCIES = host-pkgconf libfcgi
+> +FCGIWRAP_LICENSE = MIT
 
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Please add a license file. There isn't a separate one, so just use fcgiwrap.c.
+
+> +FCGIWRAP_AUTORECONF = YES
+
+ This package also has an optional dependency on systemd, so add:
+
+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+FCGIWRAP_DEPENDENCIES += systemd
+FCGIWRAP_CONF_OPTS += --with-systemd
+else
+FCGIWRAP_CONF_OPTS += --without-systemd
+endif
+
+> +
+> +$(eval $(autotools-package))
+
+ This doesn't work because it's not a proper autotools package: it doesn't have
+a Makefile.am, only a Makefile.in. Because of this, CC etc. don't get set in the
+generated Makefile.
+
+ Normally we say to make it a generic package, but that means you also have to
+define the autoreconf expansion. So in this case, I'd say to just define
+FCGIWRAP_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
 
 
  Regards,
  Arnout
 
-> -
-> -Index: b/cgi-fcgi/Makefile.am
-> -===================================================================
-> ---- a/cgi-fcgi/Makefile.am
-> -+++ b/cgi-fcgi/Makefile.am
-> -@@ -11,5 +11,5 @@
-> - LIBDIR      = ../libfcgi
-> - LIBFCGI     = $(LIBDIR)/libfcgi.la
-> - 
-> --LDADD = $(LIBFCGI)
-> -+LDADD = $(LIBFCGI) -lm
-> - cgi_fcgi_SOURCES = $(INCLUDE_FILES) cgi-fcgi.c
-> -Index: b/examples/Makefile.am
-> +Index: b/libfcgi/Makefile.am
->  ===================================================================
-> ---- a/examples/Makefile.am
-> -+++ b/examples/Makefile.am
-> -@@ -21,7 +21,7 @@
-> - LIBDIR      = ../libfcgi
-> - LIBFCGI     = $(LIBDIR)/libfcgi.la
-> - 
-> --LDADD = $(LIBFCGI)
-> -+LDADD = $(LIBFCGI) -lm
-> +--- a/libfcgi/Makefile.am
-> ++++ b/libfcgi/Makefile.am
-> +@@ -18,6 +18,7 @@
-> +                      os_ at SYSTEM@.c
-> + libfcgi_la_CC      = @PTHREAD_CC@
-> + libfcgi_la_CFLAGS  = @PTHREAD_CFLAGS@
-> ++libfcgi_la_LIBADD  = -lm
->   
-> - echo_SOURCES       = $(INCLUDE_FILES) echo.c
-> - echo_x_SOURCES     = $(INCLUDE_FILES) echo-x.c
-> + libfcgi___la_SOURCES = $(INCLUDE_FILES)       \
-> +                        $(INCLUDEDIR)/fcgio.h  \
 > 
 
 
