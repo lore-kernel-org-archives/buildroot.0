@@ -1,68 +1,26 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 29 May 2015 11:12:42 +0200
-Subject: [Buildroot] [PATCH] package/python-can: new package
-Message-ID: <1432890762-24842-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Fri, 29 May 2015 11:38:43 +0200
+Subject: [Buildroot] [PATCH 0/3] Caring at91bootstrap3
+Message-ID: <1432892326-10261-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch provides controller area network support for Python.
+This patch series:
+* Add license information to at91bootstrap
+* Bumps to v3.7.2
+* Add the option to download via git from custom url
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/Config.in                |  1 +
- package/python-can/Config.in     |  6 ++++++
- package/python-can/python-can.mk | 15 +++++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/python-can/Config.in
- create mode 100644 package/python-can/python-can.mk
+Angelo Compagnucci (3):
+  boot/at91bootstrap3: add license information
+  boot/at91bootstrap3: bump to version 3.7.2
+  boot/at91bootstrap3: download via cutom git url
 
-diff --git a/package/Config.in b/package/Config.in
-index d18343c..6661240 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -577,6 +577,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "external python modules"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-bottle/Config.in"
-+	source "package/python-can/Config.in"
- 	source "package/python-certifi/Config.in"
- 	source "package/python-cffi/Config.in"
- 	source "package/python-cheetah/Config.in"
-diff --git a/package/python-can/Config.in b/package/python-can/Config.in
-new file mode 100644
-index 0000000..6b4e0fa
---- /dev/null
-+++ b/package/python-can/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_CAN
-+	bool "python-can"
-+	help
-+	  This module provides controller area network support for Python.
-+
-+	  https://bitbucket.org/hardbyte/python-can
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-new file mode 100644
-index 0000000..50477a3
---- /dev/null
-+++ b/package/python-can/python-can.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-can
-+#
-+################################################################################
-+
-+PYTHON_CAN_VERSION = ae5b6cf
-+PYTHON_CAN_SITE = https://bitbucket.org/hardbyte/python-can
-+PYTHON_CAN_SITE_METHOD = hg
-+PYTHON_CAN_LICENSE = GPLv3
-+PYTHON_CAN_LICENSE_FILES = LICENSE.txt
-+PYTHON_CAN_DEPENDENCIES = python
-+PYTHON_CAN_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+ boot/at91bootstrap3/Config.in         | 34 ++++++++++++++++++++++++++++++++++
+ boot/at91bootstrap3/at91bootstrap3.mk | 11 ++++++++++-
+ 2 files changed, 44 insertions(+), 1 deletion(-)
+
 -- 
 1.9.1
