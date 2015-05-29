@@ -1,121 +1,99 @@
-From: Ted Salazar <Ted.Salazar@maximintegrated.com>
-Date: Thu, 28 May 2015 19:42:37 -0700
-Subject: [Buildroot] installing custom library and hello world
-Message-ID: <B03A893ADFE80748942D13AFAF28451924E723F110@ITSVLEX06.it.maxim-ic.internal>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 29 May 2015 07:40:05 +0300
+Subject: [Buildroot] [PATCH 1/1] Solid-Run HummingBoard i2eX defconfig
+ and bootable microSD Bash script
+In-Reply-To: <1432820170-10513-1-git-send-email-yba@tkos.co.il>
+References: <1432820170-10513-1-git-send-email-yba@tkos.co.il>
+Message-ID: <20150529044005.GM2260@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Wow! Mainline BuildRoot is much easier than manually building the at91bootstrap, uboot and kernel as you guys said.
+Hi Yonatan,
 
+On Thu, May 28, 2015 at 04:36:10PM +0300, Jonathan Ben-Avraham wrote:
+> Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
+> ---
+>  board/solid-run/hummingboard-i2eX/make_sd_card.sh | 207 ++++++++++++++++++++++
 
+The board directory should also have a readme.txt file with prose description 
+board specific Buildroot installation instructions.
 
-Thanks so much for all your past help and guiding me to mainline BuildRoot.
+>  configs/hummingboard_i2eX_defconfig               |  24 +++
+>  2 files changed, 231 insertions(+)
+>  create mode 100755 board/solid-run/hummingboard-i2eX/make_sd_card.sh
+>  create mode 100644 configs/hummingboard_i2eX_defconfig
+> 
+> diff --git a/board/solid-run/hummingboard-i2eX/make_sd_card.sh b/board/solid-run/hummingboard-i2eX/make_sd_card.sh
+> new file mode 100755
+> index 0000000..55c0f17
+> --- /dev/null
+> +++ b/board/solid-run/hummingboard-i2eX/make_sd_card.sh
+> @@ -0,0 +1,207 @@
+> +#!/bin/bash -eu
 
+Are you sure bash is mandatory? All other scripts we have under board/ or 
+support/ use /bin/sh.
 
+> +# @(#) Create a bootable SD card from Buildroot tree for the HummingBoard i2eX
+> +#
+> +# Copyright (c) 2015 Tk Open Systems Ltd. all rights reserved
+> +# License granted for public use under the terms of the "Attribution-ShareAlike
+> +# 4.0 International" license, See full text at
+> +# https://creativecommons.org/licenses/by-sa/4.0/legalcode
 
-I only have four more tasks, listed below, to complete my part of this project. I will be reading documentation on how to do these last tasks. So far I have found the following documents related to these tasks. If you know of any other documentation I should be reading to accomplish this please let me know. I am using the ubifs.
+Buildroot code itself is under GPLv2. See 
+http://nightly.buildroot.org/manual.html#_complying_with_the_buildroot_license. 
+Is this license GPLv2 compatible?
 
+Is this script better/different than board/freescale/create-boot-sd.sh? I 
+think we should have one script for this job. A "SoM vendor neutral" location 
+for this script is likely to be board/freescale/ in this case. The readme.txt 
+file, once added, should mention this script.
 
-http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages
+[...]
 
- http://armbedded.eu/node/318
+> diff --git a/configs/hummingboard_i2eX_defconfig 
+> b/configs/hummingboard_i2eX_defconfig
+> new file mode 100644
+> index 0000000..0463bae
+> --- /dev/null
+> +++ b/configs/hummingboard_i2eX_defconfig
+> @@ -0,0 +1,24 @@
 
+Most other defconfigs have section titles. See 
+configs/freescale_imx6qsabreauto_defconfig for example.
 
+> +BR2_arm=y
+> +BR2_cortex_a9=y
+> +BR2_ARM_EABIHF=y
+> +BR2_ARM_FPU_VFPV3=y
+> +BR2_TOOLCHAIN_EXTERNAL=y
+> +BR2_TARGET_GENERIC_HOSTNAME="HummingBoard"
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to HummingBoard i2eX"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/SolidRun/linux-imx6-3.14.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ea83bda1b403d745c67fbf6ea307d05ca138577f"
+> +BR2_LINUX_KERNEL_DEFCONFIG="imx_v7_cbi_hb"
+> +BR2_LINUX_KERNEL_ZIMAGE=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-hummingboard"
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARDNAME="mx6_cubox-i"
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/SolidRun/u-boot-imx6.git"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="e817fa3165a607b581433a6abfe37e095a5d1dc9"
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_SPL_NAME="SPL"
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 
-Open Tasks:
+baruch
 
-17.          Add custom IC SPI/I2C adaptation layer => TODO
-
-18.          Install custom IC host library in userland leveraging the /dev/spiX device file to communicate => TODO
-
-19.          Compile an example hello world program to run on the Terminal after EK Board boot up => TODO
-
-20.          Compile a simple custom application to run on the Terminal after EK Board boot up => TODO
-
-
-
-
-
-[cid:image001.png at 01D0997D.06775530]
-
-
-
-
-
-Thank you,
-
-Ted
-
-
-
------Original Message-----
-From: Alexandre Belloni [mailto:alexandre.belloni at free-electrons.com]
-Sent: Wednesday, May 27, 2015 2:58 AM
-To: Ted Salazar
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] Newbie help, AT91sam9x25 patch Installation Questions
-
-
-
-Hi,
-
-
-
-On 26/05/2015 at 23:58:17 -0700, Ted Salazar wrote :
-
-> To all you patch experts...Just curious why the BuildRoot manual checksout a branch to patch instead a tag? The newest branch is 2013.xx but the newest stable tag is 2015.02, which is what I want. Also, don't I need to add a patch command at the end of those two commands as well? Something like $ patch < hello.patch ?
-
->
-
-> 21.3.1. Applying Patches from Patchwork The main use of Buildroot?s
-
-> Patchwork website for a developer is for pulling in patches into their local git repository for testing purposes.
-
->
-
-> When browsing patches in the patchwork management interface, an mbox link is provided at the top of the page. Copy this link address and run the following commands:
-
->
-
-> $ git checkout -b <test-branch-name>
-
-> $ wget -O - <mbox-url> | git am
-
->
-
-> I hope to get your life saving patches installed tomorrow.
-
->
-
-
-
-Use:
-
-
-
-git clone git://git.buildroot.net/buildroot git checkout 2015.02 wget -O - http://patchwork.ozlabs.org/patch/473928/mbox/ | git am wget -O - http://patchwork.ozlabs.org/patch/473935/mbox/ | git am make at91sam9x5ek_defconfig make
-
-
-
-Those are step by step instructions but like I already said, you should probably read more documentation or get a training.
-
-
-
---
-
-Alexandre Belloni, Free Electrons
-
-Embedded Linux, Kernel and Android engineering http://free-electrons.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150528/6449d1ec/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image001.png
-Type: image/png
-Size: 52288 bytes
-Desc: image001.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150528/6449d1ec/attachment-0001.png>
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
