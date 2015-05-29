@@ -1,127 +1,45 @@
-From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Fri, 29 May 2015 08:26:32 +0300 (IDT)
-Subject: [Buildroot] [PATCH 1/1] Solid-Run HummingBoard i2eX defconfig
- and bootable microSD Bash script
-In-Reply-To: <20150529044005.GM2260@tarshish>
-References: <1432820170-10513-1-git-send-email-yba@tkos.co.il>
- <20150529044005.GM2260@tarshish>
-Message-ID: <alpine.DEB.2.11.1505290820360.2289@tanhuma.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 May 2015 08:30:12 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-05-28
+Message-ID: <20150529063012.14588100CFC@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
-Regarding the scripting language for scripts under board/ and support/, I 
-don't know that anyone has formally specified what scripting languages 
-are supported, or specified that /bin/sh  hashbangs must be tested with 
-Bourne shell.
+Build statistics for 2015-05-28
+===============================
 
-I suspect that some of those scripts might in fact not work if Bourne 
-shell were invoked by /bin/sh.
+        success : 229
+       failures : 5  
+       timeouts : 4  
+          TOTAL : 238
 
-The make_sd_card.sh script that I contributed has Bash-specific usages 
-that might work in some versions of ash but would not work in Bourne, so 
-I was carefull to specify the hashbang as /bin/bash.
+Classification of failures by reason
+====================================
 
-  - yba
+       host-erlang-rebar-2.5.1 | 3 
+            gst-ffmpeg-0.10.13 | 1 
+                      qt-4.8.6 | 1 
+                     php-5.6.9 | 1 
+                   sudo-1.8.13 | 1 
+         conntrack-tools-1.4.2 | 1 
+                   perl-5.20.2 | 1 
 
+Detail of failures
+===================
 
-On Fri, 29 May 2015, Baruch Siach wrote:
+         arm |          conntrack-tools-1.4.2 | NOK | http://autobuild.buildroot.net/results/470197fad2402be9222b8abf96dd45c341a850e9/
+microblazeel |             gst-ffmpeg-0.10.13 | TIM | http://autobuild.buildroot.net/results/b07539405b19ab16eee51cf7e7d8367659bb92ce/
+        i686 |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/04692c495cb53a1041d4aa712c715f6cf560dc74/
+         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/234d9176453296e52580e8bafbb23da5776ef84b/
+     powerpc |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/5b3da79a633e53eeaa406651cbe091289ab2ab4e/
+        i686 |                    perl-5.20.2 | NOK | http://autobuild.buildroot.net/results/93c213edd4554f9cfe000b22c263d233e059a731/
+        bfin |                      php-5.6.9 | NOK | http://autobuild.buildroot.net/results/9a19ab7912416d89a4193e4d1afaf23167b34567/
+       nios2 |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/c237a44cb3d801352ef9f740279c33a959b9602f/
+         arm |                    sudo-1.8.13 | NOK | http://autobuild.buildroot.net/results/439cfb42623b106d49f81b6d800496cb70e1d7a6/
 
-> Date: Fri, 29 May 2015 07:40:05 +0300
-> From: Baruch Siach <baruch@tkos.co.il>
-> To: Jonathan Ben-Avraham <yba@tkos.co.il>
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH 1/1] Solid-Run HummingBoard i2eX defconfig and
->      bootable microSD Bash script
-> 
-> Hi Yonatan,
->
-> On Thu, May 28, 2015 at 04:36:10PM +0300, Jonathan Ben-Avraham wrote:
->> Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
->> ---
->>  board/solid-run/hummingboard-i2eX/make_sd_card.sh | 207 ++++++++++++++++++++++
->
-> The board directory should also have a readme.txt file with prose description
-> board specific Buildroot installation instructions.
->
->>  configs/hummingboard_i2eX_defconfig               |  24 +++
->>  2 files changed, 231 insertions(+)
->>  create mode 100755 board/solid-run/hummingboard-i2eX/make_sd_card.sh
->>  create mode 100644 configs/hummingboard_i2eX_defconfig
->>
->> diff --git a/board/solid-run/hummingboard-i2eX/make_sd_card.sh b/board/solid-run/hummingboard-i2eX/make_sd_card.sh
->> new file mode 100755
->> index 0000000..55c0f17
->> --- /dev/null
->> +++ b/board/solid-run/hummingboard-i2eX/make_sd_card.sh
->> @@ -0,0 +1,207 @@
->> +#!/bin/bash -eu
->
-> Are you sure bash is mandatory? All other scripts we have under board/ or
-> support/ use /bin/sh.
->
->> +# @(#) Create a bootable SD card from Buildroot tree for the HummingBoard i2eX
->> +#
->> +# Copyright (c) 2015 Tk Open Systems Ltd. all rights reserved
->> +# License granted for public use under the terms of the "Attribution-ShareAlike
->> +# 4.0 International" license, See full text at
->> +# https://creativecommons.org/licenses/by-sa/4.0/legalcode
->
-> Buildroot code itself is under GPLv2. See
-> http://nightly.buildroot.org/manual.html#_complying_with_the_buildroot_license.
-> Is this license GPLv2 compatible?
->
-> Is this script better/different than board/freescale/create-boot-sd.sh? I
-> think we should have one script for this job. A "SoM vendor neutral" location
-> for this script is likely to be board/freescale/ in this case. The readme.txt
-> file, once added, should mention this script.
->
-> [...]
->
->> diff --git a/configs/hummingboard_i2eX_defconfig
->> b/configs/hummingboard_i2eX_defconfig
->> new file mode 100644
->> index 0000000..0463bae
->> --- /dev/null
->> +++ b/configs/hummingboard_i2eX_defconfig
->> @@ -0,0 +1,24 @@
->
-> Most other defconfigs have section titles. See
-> configs/freescale_imx6qsabreauto_defconfig for example.
->
->> +BR2_arm=y
->> +BR2_cortex_a9=y
->> +BR2_ARM_EABIHF=y
->> +BR2_ARM_FPU_VFPV3=y
->> +BR2_TOOLCHAIN_EXTERNAL=y
->> +BR2_TARGET_GENERIC_HOSTNAME="HummingBoard"
->> +BR2_TARGET_GENERIC_ISSUE="Welcome to HummingBoard i2eX"
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/SolidRun/linux-imx6-3.14.git"
->> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ea83bda1b403d745c67fbf6ea307d05ca138577f"
->> +BR2_LINUX_KERNEL_DEFCONFIG="imx_v7_cbi_hb"
->> +BR2_LINUX_KERNEL_ZIMAGE=y
->> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
->> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-hummingboard"
->> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
->> +BR2_TARGET_UBOOT=y
->> +BR2_TARGET_UBOOT_BOARDNAME="mx6_cubox-i"
->> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
->> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/SolidRun/u-boot-imx6.git"
->> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="e817fa3165a607b581433a6abfe37e095a5d1dc9"
->> +BR2_TARGET_UBOOT_SPL=y
->> +BR2_TARGET_UBOOT_SPL_NAME="SPL"
->> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
->
-> baruch
->
->
 
 -- 
-  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
-mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
+http://autobuild.buildroot.net
