@@ -1,91 +1,61 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 29 May 2015 11:38:46 +0200
-Subject: [Buildroot] [PATCH 3/3] boot/at91bootstrap3: download via custom
-	git url
-In-Reply-To: <1432892326-10261-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1432892326-10261-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1432892326-10261-4-git-send-email-angelo.compagnucci@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 29 May 2015 17:08:16 +0200
+Subject: [Buildroot] Proposal to remove patches from patchwork,
+	or find adopters
+In-Reply-To: <CAAXf6LW2v0PG4mWR_WV=G_iFuu=C_7DcwxTy=kBmmvfq=Jt8Sw@mail.gmail.com>
+References: <20150506235353.7740a9d3@free-electrons.com>
+ <CAAXf6LW2v0PG4mWR_WV=G_iFuu=C_7DcwxTy=kBmmvfq=Jt8Sw@mail.gmail.com>
+Message-ID: <CAAXf6LUVw=bz7sB9QQfOtbuqnSjLSMg+S3iXCcjYJFehMLhePA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds the option to download at91bootstrap3 from
-a custom git URL. This is a requirement for all that boards
-that use a custom at91bootstrap3 version.
+On Sun, May 10, 2015 at 12:00 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> On May 6, 2015 11:53:53 PM CEST, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>>Hello,
+>>
+>>On April 21th, I sent a personal reminder to all the patch authors who
+>>had patches older than 15 days pending in Buildroot's patchwork.
+>>
+>>Since then, a number of authors have responded to indicate whether they
+>>are still interested or not by their patches, which is great.
+>>
+>>However, a fairly significant portion of the patches have not been
+>>given any feedback by their respective authors. I have triaged the
+>>answers from the authors, and classified such patches. The list of such
+>>patches follows. Note that the authors of such patches are again added
+>>in the To: field of this e-mail, to get their attention.
+>>
+>>I hereby propose to mark all those patches as "Rejected" on May 21 (i.e
+>>one month after the reminder), if the authors still haven't expressed
+>>interest and nobody else volunteered to adopt the patch. I believe we
+>>can't keep for months or years patches that the original author has
+>>lost interest in, and nobody else seems to be interested in.
+>>
+>>Let me know if you agree or disagree with this proposal.
+>>
+>>Volunteers interested in adopting one or several of the below patches,
+>>please speak up.
+>>
+>>Here is the list of such patches:
+>
+>>* [PATCHv3,for,next,1/2] toolchain-external: improve lib subdirectory
+>>matching
+>>* [PATCHv3,for,next,2/2] toolchain: create symlink to 'lib' from
+>>ARCH_LIB_DIR iso fixed lib32/lib64
+>
+> Sorry for my late reply.
+> These patches are still relevant and I think they should be applied. I
+> recall you telling me on IRC that you had an odd feeling about the
+> entire external toolchain directory matching, but I think it's the
+> reality we're in and there is nothing extraordinary going on in these
+> patches so that it could be a basis to reject them.
+>
+> I just checked and they still apply on top of master.
+>
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- boot/at91bootstrap3/Config.in         | 34 ++++++++++++++++++++++++++++++++++
- boot/at91bootstrap3/at91bootstrap3.mk |  9 ++++++++-
- 2 files changed, 42 insertions(+), 1 deletion(-)
-
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index 8ac40ed..9f2f49b 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -10,6 +10,40 @@ config BR2_TARGET_AT91BOOTSTRAP3
- 
- if BR2_TARGET_AT91BOOTSTRAP3
- 
-+choice
-+
-+	prompt "AT91 Bootstrap 3 version"
-+
-+config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	bool "3.7.2"
-+
-+config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-+	bool "Custom Git repository"
-+	help
-+	  This option allows Buildroot to get the AT91 Bootstrap 3 source
-+	  code from a Git repository.
-+
-+endchoice
-+
-+if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-+
-+config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL
-+	string "URL of custom repository"
-+
-+config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION
-+	string "Custom repository version"
-+	help
-+	  Revision to use in the typical format used by Git
-+	  E.G. a sha id, a tag, branch, ..
-+
-+endif
-+
-+config BR2_TARGET_AT91BOOTSTRAP3_VERSION
-+	string
-+	default "v3.7.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
-+		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-+
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR
- 	string "custom patch dir"
- 	help
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index b73821e..fae2e8e 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -4,8 +4,15 @@
- #
- ################################################################################
- 
--AT91BOOTSTRAP3_VERSION = v3.7.2
-+AT91BOOTSTRAP3_VERSION = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_VERSION))
-+
-+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
-+AT91BOOTSTRAP3_SITE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL))
-+AT91BOOTSTRAP3_SITE_METHOD = git
-+else
- AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
-+endif
-+
- AT91BOOTSTRAP3_LICENSE = BSD-2c
- AT91BOOTSTRAP3_LICENSE_FILES = main.c
- 
--- 
-1.9.1
+What is your opinion here? Is there anything I can do?
