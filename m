@@ -1,32 +1,121 @@
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Fri, 29 May 2015 12:41:26 -0500
-Subject: [Buildroot] [PATCH v6 06/22] refpolicy: new package
-In-Reply-To: <1432765046-1223-7-git-send-email-clayton.shotwell@rockwellcollins.com>
-References: <1432765046-1223-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1432765046-1223-7-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <CANn-YGRQyHEkQQHrTW2OZt6D=iayk62Mx5W1zA+561z8CvWvSQ@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 29 May 2015 21:32:52 +0200
+Subject: [Buildroot] [PATCH v2 1/1] linux: Add support for FIT image
+Message-ID: <1432927972-6571-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Everyone,
+The FIT (Flattened Image Tree) image format is a much more advanced and
+flexible format compared to regular uImage, let alone zImage.
 
-> diff --git a/package/refpolicy/0001-Fix-awk-references-to-use-variable.patch b/package/refpolicy/0001-Fix-awk-references-to-use-variable.patch
-> new file mode 100644
-> index 0000000..8236fa2
-> --- /dev/null
-> +++ b/package/refpolicy/0001-Fix-awk-references-to-use-variable.patch
+The FIT image format allows for storing multiple kernel images, multiple
+device tree blobs and even multiple configurations for their combinations
+in a single image.
 
-After running some tests, it looks like I am going to have to move
-this patch into a 20131204 folder to ensure the patch does not get
-applied when the custom git repo option is enabled. I will get this
-fixed for v7 of the patch set.
+Furthermore, it enhances integrity protection of images with sha1, sha256
+and md5 checksums as well as signature verification against a public key.
 
-Thanks,
-Clayton
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+Changes in v2:
+  - build the device tree blob prior to the FIT image
+  - add error message if file path is missing
+---
+ linux/Config.in | 13 +++++++++++++
+ linux/linux.mk  | 21 ++++++++++++++++++++-
+ 2 files changed, 33 insertions(+), 1 deletion(-)
 
-Clayton Shotwell
-Senior Software Engineer, Rockwell Collins
-clayton.shotwell at rockwellcollins.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 457ada6..03ce8cf 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -174,6 +174,13 @@ config BR2_LINUX_KERNEL_UBOOT_IMAGE
+ choice
+ 	prompt "Kernel binary format"
+ 
++config BR2_LINUX_KERNEL_FITIMAGE
++	bool "fitImage"
++	depends on BR2_arc || BR2_arm || BR2_armeb || BR2_bfin || \
++		   BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64 || \
++		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	select BR2_LINUX_KERNEL_UBOOT_IMAGE
++
+ config BR2_LINUX_KERNEL_UIMAGE
+ 	bool "uImage"
+ 	depends on BR2_arc || BR2_arm || BR2_armeb || BR2_bfin || \
+@@ -248,6 +255,12 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
+ 
+ endchoice
+ 
++config BR2_LINUX_KERNEL_FITIMAGE_ITS_FILE
++	string "FIT image device tree descriptor file path"
++	depends on BR2_LINUX_KERNEL_FITIMAGE
++	help
++	  Path to the FIT image device tree descriptor.
++
+ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
+ 	string "Kernel image target name"
+ 	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c765954..a4fbe47 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -108,6 +108,9 @@ LINUX_TARGET_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
+ ifeq ($(LINUX_IMAGE_NAME),)
+ LINUX_IMAGE_NAME = $(LINUX_TARGET_NAME)
+ endif
++else ifeq ($(BR2_LINUX_KERNEL_FITIMAGE),y)
++LINUX_IMAGE_NAME = fitImage
++LINUX_TARGET_NAME = zImage
+ else
+ ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
+ LINUX_IMAGE_NAME = uImage
+@@ -155,7 +158,9 @@ else
+ KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/$(KERNEL_ARCH)
+ endif
+ 
+-ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
++ifeq ($(BR2_LINUX_KERNEL_FITIMAGE),y)
++LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
++else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+ LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
+ LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+@@ -277,6 +282,13 @@ LINUX_APPEND_DTB += $(sep) MKIMAGE_ARGS=`$(MKIMAGE) -l $(LINUX_IMAGE_PATH) |\
+ endif
+ endif
+ 
++define LINUX_BUILD_FITIMAGE
++	$(LINUX_INSTALL_HOST_TOOLS)
++	cp $(call qstrip,$(BR2_LINUX_KERNEL_FITIMAGE_ITS_FILE)) $(@D)/fit-image.its
++	$(TARGET_MAKE_ENV) $(MKIMAGE) -f $(@D)/fit-image.its $(@D)/$(LINUX_IMAGE_NAME)
++	rm $(@D)/fit-image.its
++endef
++
+ # Compilation. We make sure the kernel gets rebuilt when the
+ # configuration has changed.
+ define LINUX_BUILD_CMDS
+@@ -288,6 +300,7 @@ define LINUX_BUILD_CMDS
+ 	fi
+ 	$(LINUX_BUILD_DTB)
+ 	$(LINUX_APPEND_DTB)
++	$(if $(BR2_LINUX_KERNEL_FITIMAGE), $(LINUX_BUILD_FITIMAGE))
+ endef
+ 
+ 
+@@ -374,4 +387,10 @@ $(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUST
+ endif
+ endif
+ 
++ifeq ($(BR2_LINUX_KERNEL_FITIMAGE),y)
++ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_FITIMAGE_ITS_FILE)),)
++$(error No FIT image device tree descriptor file specified, check your BR2_LINUX_KERNEL_FITIMAGE_ITS_FILE setting)
++endif
++endif
++
+ endif
+-- 
+2.4.2
