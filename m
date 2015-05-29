@@ -1,62 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 May 2015 22:52:24 +0200
-Subject: [Buildroot] [PATCH 2/2] python3: add patch to fix logic to get gcc
-	paths
-In-Reply-To: <1432932744-27818-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1432932744-27818-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1432932744-27818-2-git-send-email-thomas.petazzoni@free-electrons.com>
+From: rdkehn at yahoo.com <rdkehn@yahoo.com>
+Date: Fri, 29 May 2015 16:54:45 -0500
+Subject: [Buildroot] [PATCH v3 1/1] package/mtd: add patch to fix host
+ build error with gcc 5.1
+In-Reply-To: <1432928349.3676.3.camel@embedded.rocks>
+References: <1432636689-26907-1-git-send-email-joerg.krause@embedded.rocks>
+ <1432928349.3676.3.camel@embedded.rocks>
+Message-ID: <20150529215445.GA597@dkarchlinux64.currentcomm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Python setup.py has a function called add_gcc_paths(), which
-executes gcc -E -v to get the list of header paths searched by
-gcc. However, the logic of setup.py is only valid with the normal
-english output of gcc: it doesn't work if a non-english locale is
-set. This causes setup.py to not find certain headers (such as zlib.h)
-and therefore disabling the build of such extensions.
+Hi All,
 
-Reported-by: Bruno Coudoin <bruno.coudoin@gcompris.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python3/019-fix-add-gcc-paths-logic.patch | 27 +++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/python3/019-fix-add-gcc-paths-logic.patch
+On Fri, May 29, 2015 at 09:39:09PM +0200, J?rg Krause wrote:
+> Hi all,
+> 
+> On Di, 2015-05-26 at 12:38 +0200, J?rg Krause wrote:
+> > host-mtd build fails with gcc 5.1:
+> >   error: redefinition of ?hashtable_iterator_key?
+> >   error: redefinition of ?hashtable_iterator_value?
+> > 
+> > Indeed, both functions are defined twice - once in the header and 
+> > once in the
+> > source file. This is permitted in C11 (and maybe in C99).
+> > 
+> > Add a patch sent to upstream:
+> > https://patchwork.ozlabs.org/patch/467254/
+> > 
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Tested-by: Doug Kehn <rdkehn@yahoo.com>
 
-diff --git a/package/python3/019-fix-add-gcc-paths-logic.patch b/package/python3/019-fix-add-gcc-paths-logic.patch
-new file mode 100644
-index 0000000..179a29a
---- /dev/null
-+++ b/package/python3/019-fix-add-gcc-paths-logic.patch
-@@ -0,0 +1,27 @@
-+Override system locale and set to default when adding gcc paths
-+
-+Forces the use of the default locale in the function
-+add_gcc_paths, which is called when cross compiling to add the
-+include and library paths. This is necessary because otherwise
-+the gcc output is localized and the output parsing fails, which
-+results in no paths added and detect_modules not able to find
-+any system library (eg. libz, libssl, etc.)
-+
-+[Thomas: patch taken from https://bugs.python.org/issue23767.]
-+
-+Signed-off-by: Samuel Cabrero <samuelcabrero@gmail.com>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/setup.py
-+===================================================================
-+--- a/setup.py
-++++ b/setup.py
-+@@ -423,7 +423,7 @@
-+         tmpfile = os.path.join(self.build_temp, 'gccpaths')
-+         if not os.path.exists(self.build_temp):
-+             os.makedirs(self.build_temp)
-+-        ret = os.system('%s -E -v - </dev/null 2>%s 1>/dev/null' % (gcc, tmpfile))
-++        ret = os.system('LC_ALL=C %s -E -v - </dev/null 2>%s 1>/dev/null' % (gcc, tmpfile))
-+         is_gcc = False
-+         in_incdirs = False
-+         inc_dirs = []
--- 
-2.1.0
+> > ---
+> > Changes v2 -> v3:
+> >   - Add Sob and URL to patch description (Baruch Siach)
+> > 
+> > Changes v1 -> v2:
+> >   - Use (identical) patch sent upstream
+> > ---
+> 
+> Patch is accepted upstream now. I suggest to add this patch to 2015.05.
+
+Tested on Arch Linux host with GCC 5.1.0 and target
+arm-buildroot-linux-gnueabihf toolchain.  Buildroot master
+a4a7aeed539631a91cae2c00dec4d20ccc6dda31.
+
+Regards,
+...doug
