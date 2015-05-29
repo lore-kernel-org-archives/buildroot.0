@@ -1,11 +1,11 @@
 From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Fri, 29 May 2015 08:19:42 +0300 (IDT)
+Date: Fri, 29 May 2015 08:26:32 +0300 (IDT)
 Subject: [Buildroot] [PATCH 1/1] Solid-Run HummingBoard i2eX defconfig
  and bootable microSD Bash script
 In-Reply-To: <20150529044005.GM2260@tarshish>
 References: <1432820170-10513-1-git-send-email-yba@tkos.co.il>
  <20150529044005.GM2260@tarshish>
-Message-ID: <alpine.DEB.2.11.1505290801380.2289@tanhuma.tkos.co.il>
+Message-ID: <alpine.DEB.2.11.1505290820360.2289@tanhuma.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,17 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Hi Baruch,
-I will reply separately to each point. First, regarding the 
-boards/<vendor>/<board>/readme.txt file. Most of these readme.txt files 
-are in fact English language pseudo-code for scripts to create boot 
-media. They don't have any other important information. Rather than 
-provide that type of lazy answer, I provided a complete working 
-script. The difference between that type of lazy readme.txt and the script 
-that I provided is about six hours of work * the number of people who use 
-the script. That's a lot of time saved for humanity to work on more 
-important things. The only thing missing from the script to be a readme 
-is to tell the user to do "make .._defconfig" and "make", as written in 
-the other readme.txts. But those are pretty lame instructions, since 
-anyone who knows what "boards" directory is will already know this. AFAIK 
-there is no formal requirement for a readme.txt in the sense that not 
-having one would break some script. If that were the case I would add a 
-readme.txt that just says "Read the make_sd_card.sh script". If you think 
-that there is really some specific engineering information missing then I 
-would reconsider.
+Regarding the scripting language for scripts under board/ and support/, I 
+don't know that anyone has formally specified what scripting languages 
+are supported, or specified that /bin/sh  hashbangs must be tested with 
+Bourne shell.
+
+I suspect that some of those scripts might in fact not work if Bourne 
+shell were invoked by /bin/sh.
+
+The make_sd_card.sh script that I contributed has Bash-specific usages 
+that might work in some versions of ash but would not work in Bourne, so 
+I was carefull to specify the hashbang as /bin/bash.
 
   - yba
 
