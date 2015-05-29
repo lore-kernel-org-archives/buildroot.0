@@ -1,35 +1,60 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 29 May 2015 22:07:30 +0200
-Subject: [Buildroot] disable-optimization in libgcrypt?
-In-Reply-To: <CANxTyt5C=hBMxALObfjcxTjYBQL8NhkeOoTy4YxN=EPxc4X=Vg@mail.gmail.com>
-References: <CANxTyt5C=hBMxALObfjcxTjYBQL8NhkeOoTy4YxN=EPxc4X=Vg@mail.gmail.com>
-Message-ID: <A748888D-3084-4353-93C7-F22AC548A0C2@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 May 2015 22:52:23 +0200
+Subject: [Buildroot] [PATCH 1/2] python: add patch to fix logic to get gcc
+	paths
+Message-ID: <1432932744-27818-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On May 29, 2015 9:34:26 PM GMT+02:00, Danomi Manchego <danomimanchego123@gmail.com> wrote:
->All,
->
->We noticed that libgcrypt.mk explicitly disables optimizations:
->
->   LIBGCRYPT_CONF_OPTS = \
->    --disable-optimization \
->    --with-gpg-error-prefix=$(STAGING_DIR)/usr
->
->Looking through the history, it has been so since 2007, commit
->595e070364fa578dcc44bea7256ef635368bad9c by Bernhard Reutner-Fischer.
->The commit log does not explain why - "remove duplicate includedir".
->
->I don't see optimization being disabled in OE, Yocto, PTXdist.
->
->Does anyone know why optimization is disabled in libgcrypt?
+The Python setup.py has a function called add_gcc_paths(), which
+executes gcc -E -v to get the list of header paths searched by
+gcc. However, the logic of setup.py is only valid with the normal
+english output of gcc: it doesn't work if a non-english locale is
+set. This causes setup.py to not find certain headers (such as zlib.h)
+and therefore disabling the build of such extensions.
 
-I do not remember if i disabled it on purpose, maybe an ICE?
-Or maybe I wanted the buildroot flags to take effect rather than the -O3 (?) the package wanted to, back then. The latter sounds more likely, now that I think of it.
+Reported-by: Bruno Coudoin <bruno.coudoin@gcompris.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python/018-fix-add-gcc-paths-logic.patch | 27 ++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/python/018-fix-add-gcc-paths-logic.patch
 
-Please drop it if it fits the current buildroot style.
-
-Cheers,
+diff --git a/package/python/018-fix-add-gcc-paths-logic.patch b/package/python/018-fix-add-gcc-paths-logic.patch
+new file mode 100644
+index 0000000..af6efcc
+--- /dev/null
++++ b/package/python/018-fix-add-gcc-paths-logic.patch
+@@ -0,0 +1,27 @@
++Override system locale and set to default when adding gcc paths
++
++Forces the use of the default locale in the function
++add_gcc_paths, which is called when cross compiling to add the
++include and library paths. This is necessary because otherwise
++the gcc output is localized and the output parsing fails, which
++results in no paths added and detect_modules not able to find
++any system library (eg. libz, libssl, etc.)
++
++[Thomas: patch taken from https://bugs.python.org/issue23767.]
++
++Signed-off-by: Samuel Cabrero <samuelcabrero@gmail.com>
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/setup.py
++===================================================================
++--- a/setup.py
+++++ b/setup.py
++@@ -414,7 +414,7 @@
++         tmpfile = os.path.join(self.build_temp, 'gccpaths')
++         if not os.path.exists(self.build_temp):
++             os.makedirs(self.build_temp)
++-        ret = os.system('%s -E -v - </dev/null 2>%s 1>/dev/null' % (gcc, tmpfile))
+++        ret = os.system('LC_ALL=C %s -E -v - </dev/null 2>%s 1>/dev/null' % (gcc, tmpfile))
++         is_gcc = False
++         in_incdirs = False
++         inc_dirs = []
+-- 
+2.1.0
