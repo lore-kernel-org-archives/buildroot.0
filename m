@@ -1,8 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 May 2015 22:52:23 +0200
-Subject: [Buildroot] [PATCH 1/2] python: add patch to fix logic to get gcc
+Date: Fri, 29 May 2015 22:52:24 +0200
+Subject: [Buildroot] [PATCH 2/2] python3: add patch to fix logic to get gcc
 	paths
-Message-ID: <1432932744-27818-1-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1432932744-27818-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1432932744-27818-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1432932744-27818-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,15 +21,15 @@ and therefore disabling the build of such extensions.
 Reported-by: Bruno Coudoin <bruno.coudoin@gcompris.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python/018-fix-add-gcc-paths-logic.patch | 27 ++++++++++++++++++++++++
+ package/python3/019-fix-add-gcc-paths-logic.patch | 27 +++++++++++++++++++++++
  1 file changed, 27 insertions(+)
- create mode 100644 package/python/018-fix-add-gcc-paths-logic.patch
+ create mode 100644 package/python3/019-fix-add-gcc-paths-logic.patch
 
-diff --git a/package/python/018-fix-add-gcc-paths-logic.patch b/package/python/018-fix-add-gcc-paths-logic.patch
+diff --git a/package/python3/019-fix-add-gcc-paths-logic.patch b/package/python3/019-fix-add-gcc-paths-logic.patch
 new file mode 100644
-index 0000000..af6efcc
+index 0000000..179a29a
 --- /dev/null
-+++ b/package/python/018-fix-add-gcc-paths-logic.patch
++++ b/package/python3/019-fix-add-gcc-paths-logic.patch
 @@ -0,0 +1,27 @@
 +Override system locale and set to default when adding gcc paths
 +
@@ -47,7 +49,7 @@ index 0000000..af6efcc
 +===================================================================
 +--- a/setup.py
 ++++ b/setup.py
-+@@ -414,7 +414,7 @@
++@@ -423,7 +423,7 @@
 +         tmpfile = os.path.join(self.build_temp, 'gccpaths')
 +         if not os.path.exists(self.build_temp):
 +             os.makedirs(self.build_temp)
