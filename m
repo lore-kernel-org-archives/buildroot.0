@@ -1,109 +1,121 @@
-From: Oli Vogt <oli.vogt.pub01@gmail.com>
-Date: Fri, 29 May 2015 10:48:58 +1200
-Subject: [Buildroot] Are these packages already present or easy to add?
-In-Reply-To: <5567963E.3070900@mind.be>
-References: <CA+BV=GWq-a_Jvma7X9DBpbYUPyPhRkU=L3+BJ9yffWQV3iT8dg@mail.gmail.com>
- <5567963E.3070900@mind.be>
-Message-ID: <CAAwwcmS_2j38iU3kK+6rYdrmgJid8cxd4+-b8KH=oWBCQhMHwA@mail.gmail.com>
+From: Ted Salazar <Ted.Salazar@maximintegrated.com>
+Date: Thu, 28 May 2015 19:42:37 -0700
+Subject: [Buildroot] installing custom library and hello world
+Message-ID: <B03A893ADFE80748942D13AFAF28451924E723F110@ITSVLEX06.it.maxim-ic.internal>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jo, Arnout.
+Wow! Mainline BuildRoot is much easier than manually building the at91bootstrap, uboot and kernel as you guys said.
 
-There is a patch for python-smbus and as far as I know it is not committed
-yet. <http://lists.busybox.net/pipermail/buildroot/2015-March/122280.html>
 
-I'm to busy to test it myself. All I have done is compile it successfully.
 
-Regards, oli
+Thanks so much for all your past help and guiding me to mainline BuildRoot.
 
-On 29 May 2015 at 10:27, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-> On 05/28/15 16:36, Jo wrote:
-> > Hi,
-> >
-> > For my open-source project www.samplerbox.org, I think that using
-> > Buildroot would be great (fast boot time, etc.).
-> >
-> > The requirements for https://github.com/josephernest/SamplerBox  are:
-> >
-> > * python-dev  (probably already there?)
+
+I only have four more tasks, listed below, to complete my part of this project. I will be reading documentation on how to do these last tasks. So far I have found the following documents related to these tasks. If you know of any other documentation I should be reading to accomplish this please let me know. I am using the ubifs.
+
+
+http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages
+
+ http://armbedded.eu/node/318
+
+
+
+Open Tasks:
+
+17.          Add custom IC SPI/I2C adaptation layer => TODO
+
+18.          Install custom IC host library in userland leveraging the /dev/spiX device file to communicate => TODO
+
+19.          Compile an example hello world program to run on the Terminal after EK Board boot up => TODO
+
+20.          Compile a simple custom application to run on the Terminal after EK Board boot up => TODO
+
+
+
+
+
+[cid:image001.png at 01D0997D.06775530]
+
+
+
+
+
+Thank you,
+
+Ted
+
+
+
+-----Original Message-----
+From: Alexandre Belloni [mailto:alexandre.belloni at free-electrons.com]
+Sent: Wednesday, May 27, 2015 2:58 AM
+To: Ted Salazar
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] Newbie help, AT91sam9x25 patch Installation Questions
+
+
+
+Hi,
+
+
+
+On 26/05/2015 at 23:58:17 -0700, Ted Salazar wrote :
+
+> To all you patch experts...Just curious why the BuildRoot manual checksout a branch to patch instead a tag? The newest branch is 2013.xx but the newest stable tag is 2015.02, which is what I want. Also, don't I need to add a patch command at the end of those two commands as well? Something like $ patch < hello.patch ?
+
 >
->  Buildroot doesn't have separate -dev packages, so it's just the python
-> package.
+
+> 21.3.1. Applying Patches from Patchwork The main use of Buildroot?s
+
+> Patchwork website for a developer is for pulling in patches into their local git repository for testing purposes.
+
 >
-> > * cython   (not needed on target, only on host)
+
+> When browsing patches in the patchwork management interface, an mbox link is provided at the top of the page. Copy this link address and run the following commands:
+
 >
->  Peter Bouda just posted a patch to add it.
+
+> $ git checkout -b <test-branch-name>
+
+> $ wget -O - <mbox-url> | git am
+
 >
-> > * python-smbus    (present?)
+
+> I hope to get your life saving patches installed tomorrow.
+
 >
->  That's part of i2c-tools.
->
-> > * portaudio19-dev    (present?)
->
->  Just portaudio.
->
-> > * https://github.com/superquadratic/rtmidi-python.git       (to be
-> done...)
-> > * http://people.csail.mit.edu/hubert/git/pyaudio.git           (to be
-> done...)
->
->  Indeed these are to be done, but adding python packages is generally not
-> hard.
-> Read the manual and look at some of the existing python-* packages for
-> examples.
->
->
->  Regards,
->  Arnout
->
-> >
-> > I imagine you are already busy on lots of projects, but if some of you
-> > have skills to build  the missing packages or contribute to making a
-> > Buildroot for SamplerBox, it would help me a lot.
-> >
-> > I will happily donate for help :)
-> >
-> > Best
-> >
-> > Jo
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> >
-> >
-> >
-> ************************************************************************************
-> > This footnote confirms that this email message has been scanned by
-> > PineApp Mail-SeCure for the presence of malicious code, vandals &
-> computer viruses.
-> >
-> ************************************************************************************
-> >
-> >
-> >
-> >
-> >
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+
+
+
+Use:
+
+
+
+git clone git://git.buildroot.net/buildroot git checkout 2015.02 wget -O - http://patchwork.ozlabs.org/patch/473928/mbox/ | git am wget -O - http://patchwork.ozlabs.org/patch/473935/mbox/ | git am make at91sam9x5ek_defconfig make
+
+
+
+Those are step by step instructions but like I already said, you should probably read more documentation or get a training.
+
+
+
+--
+
+Alexandre Belloni, Free Electrons
+
+Embedded Linux, Kernel and Android engineering http://free-electrons.com
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150529/2db04e2b/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150528/6449d1ec/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: image001.png
+Type: image/png
+Size: 52288 bytes
+Desc: image001.png
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150528/6449d1ec/attachment-0001.png>
