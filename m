@@ -1,32 +1,92 @@
-From: Jaap Crezee <jaap@jcz.nl>
-Date: Sat, 30 May 2015 13:49:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ncurses: Fix GCC 5.x
- preprocessor failure
-In-Reply-To: <1432770713-18309-1-git-send-email-rdkehn@yahoo.com>
-References: <1432770713-18309-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <5569A3BB.2070502@jcz.nl>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 30 May 2015 16:19:11 +0200
+Subject: [Buildroot] [PATCH] package/sconeserver: fix static link with
+	openssl
+Message-ID: <1432995551-11598-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/28/15 01:51, Doug Kehn wrote:
-> Building ncurses 5.9 with GCC 5.x fails with a syntax error, caused by
-> earlier preprocessing. This failure is more likely when building for
-> host (e.g. host-ncurses) that recently updated to GCC 5.x.
-> 
-> This patch is taken from the following link (more information is also
-> available here):
-> https://groups.google.com/forum/#!topic/sage-trac/U31shviuqzk
-> 
-> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+When linking statically, the order of libraries on the linker command
+line is important, and sconeserver got it wrong.
 
-Acked-by: Jaap Crezee <jaap@jcz.nl>
-Tested-by: Jaap Crezee <jaap@jcz.nl>
+Also, isconeserver does not use pkg-config, so it misses the private
+libs of -lcrypto, which is linking with -lz.
 
-This patch works for me on my Archlinux updated system (gcc 5.1.0)
+Fix that:
+  - add a patch to configure.in to fix the order of libraries;
+  - forcibly pass -lz when lkinking statically with openssl.
 
-Regards,
+Note: we were already reconfiguring sconeserver, because it comes from
+the github repository.
 
-Jaap Crezee
+Fixes:
+    http://autobuild.buildroot.org/results/403/403eac974ecdaacdb66b8241fbdcf19ec5e07480
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ .../sconeserver/0001-fix-ssl-libs-ordering.patch   | 36 ++++++++++++++++++++++
+ package/sconeserver/sconeserver.mk                 |  3 ++
+ 2 files changed, 39 insertions(+)
+ create mode 100644 package/sconeserver/0001-fix-ssl-libs-ordering.patch
+
+diff --git a/package/sconeserver/0001-fix-ssl-libs-ordering.patch b/package/sconeserver/0001-fix-ssl-libs-ordering.patch
+new file mode 100644
+index 0000000..f1f25b9
+--- /dev/null
++++ b/package/sconeserver/0001-fix-ssl-libs-ordering.patch
+@@ -0,0 +1,36 @@
++configure: re-order SSL libs when linking
++
++When doing static builds, the ordering of libs is important, as the
++linker does not back-pedal to previous libraries specified on the
++command line to find missing symbols, and only searches for those
++missing symbols in the following libs.
++
++Thus, as -lssl needs symbols from -lcrypto, it needs to come before
++-lcrypto.
++
++And globally, we do *not* append new libraries, we prepend them.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN a/configure.in b/configure.in
++--- a/configure.in	2014-10-16 11:12:08.000000000 +0200
+++++ b/configure.in	2015-05-30 15:44:25.540329788 +0200
++@@ -133,12 +133,14 @@
++     [AC_MSG_ERROR([header file <openssl/ssl.h> is required for OpenSSL, use --with-openssl-path=PATH])]
++   )
++   AC_CHECK_LIB([crypto],[CRYPTO_new_ex_data],
++-    [SSL_LIBADD="$SSL_LIBADD -lcrypto"],
++-    [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])]
+++    [SSL_LIBADD="-lcrypto $SSL_LIBADD"],
+++    [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])],
+++    [$SSL_LIBADD]
++   )
++   AC_CHECK_LIB([ssl],[SSL_library_init],
++-    [SSL_LIBADD="$SSL_LIBADD -lssl"],
++-    [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])]
+++    [SSL_LIBADD="-lssl $SSL_LIBADD"],
+++    [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])],
+++    [$SSL_LIBADD]
++   )
++   AC_SUBST(SSL_LIBADD)
++ fi
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index 3ff891b..beca926 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -24,6 +24,9 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ SCONESERVER_DEPENDENCIES += openssl
+ SCONESERVER_CONF_OPTS += --with-ssl
++ifeq ($(BR2_STATIC_LIBS),y)
++SCONESERVER_CONF_ENV += SSL_LIBADD=-lz
++endif
+ else
+ SCONESERVER_CONF_OPTS += --without-ssl
+ endif
+-- 
+1.9.1
