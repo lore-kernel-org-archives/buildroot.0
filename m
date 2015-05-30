@@ -1,65 +1,58 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Fri, 29 May 2015 21:10:12 -0400
-Subject: [Buildroot] disable-optimization in libgcrypt?
-In-Reply-To: <A748888D-3084-4353-93C7-F22AC548A0C2@gmail.com>
-References: <CANxTyt5C=hBMxALObfjcxTjYBQL8NhkeOoTy4YxN=EPxc4X=Vg@mail.gmail.com>
- <A748888D-3084-4353-93C7-F22AC548A0C2@gmail.com>
-Message-ID: <CANxTyt4kUByN0ngB_3jxOSBThXg97SOUx9i2qGMHDTzZzdOP6g@mail.gmail.com>
+From: Oli Vogt <oli.vogt.pub01@gmail.com>
+Date: Sat, 30 May 2015 14:00:07 +1200
+Subject: [Buildroot] Are these packages already present or easy to add?
+In-Reply-To: <20150529090352.7c288297@free-electrons.com>
+References: <CA+BV=GWq-a_Jvma7X9DBpbYUPyPhRkU=L3+BJ9yffWQV3iT8dg@mail.gmail.com>
+ <5567963E.3070900@mind.be>
+ <CAAwwcmS_2j38iU3kK+6rYdrmgJid8cxd4+-b8KH=oWBCQhMHwA@mail.gmail.com>
+ <20150529090352.7c288297@free-electrons.com>
+Message-ID: <CAAwwcmQPWJgRr2bx+5myKSHgioez08Tk1w8O8_5k9ciEG0DWmg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, May 29, 2015 at 4:07 PM, Bernhard Reutner-Fischer
-<rep.dot.nop@gmail.com> wrote:
-> On May 29, 2015 9:34:26 PM GMT+02:00, Danomi Manchego <danomimanchego123@gmail.com> wrote:
->>All,
->>
->>We noticed that libgcrypt.mk explicitly disables optimizations:
->>
->>   LIBGCRYPT_CONF_OPTS = \
->>    --disable-optimization \
->>    --with-gpg-error-prefix=$(STAGING_DIR)/usr
->>
->>Looking through the history, it has been so since 2007, commit
->>595e070364fa578dcc44bea7256ef635368bad9c by Bernhard Reutner-Fischer.
->>The commit log does not explain why - "remove duplicate includedir".
->>
->>I don't see optimization being disabled in OE, Yocto, PTXdist.
->>
->>Does anyone know why optimization is disabled in libgcrypt?
+Dear Thomas.
+
+Thank you for taking the time to explain.
+
+Regards, oli
+
+On 29 May 2015 at 19:03, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Oli Vogt,
 >
-> I do not remember if i disabled it on purpose, maybe an ICE?
-> Or maybe I wanted the buildroot flags to take effect rather than the -O3 (?) the package wanted to, back then. The latter sounds more likely, now that I think of it.
-
-The buildroot optimization setting is not making it down to the
-compile lines.  We got a tremendous run time improvement when we
-removed the --disable-optimization.
-
-It looks like the --disable-optimization actively kills any -O passed
-in on CFLAGS in libgcrypt's configure script:
-
-# This is handy for debugging so the compiler doesn't rearrange
-# things and eliminate variables.
-# Check whether --enable-optimization was given.
-if test "${enable_optimization+set}" = set; then :
-  enableval=$enable_optimization; if test $enableval = no ; then
-                         CFLAGS=`echo $CFLAGS | sed 's/-O[0-9]//'`
-                       fi
-fi
-
-
-The optimization level set in the menuconfig appears to survive when I
-remove this option from the .mk file.
-
-Seems like that's the way to go.
-
-Danomi -
-
-
-> Please drop it if it fits the current buildroot style.
+> On Fri, 29 May 2015 10:48:58 +1200, Oli Vogt wrote:
 >
-> Cheers,
+> > There is a patch for python-smbus and as far as I know it is not
+> committed
+> > yet. <
+> http://lists.busybox.net/pipermail/buildroot/2015-March/122280.html>
+> >
+> > I'm to busy to test it myself. All I have done is compile it
+> successfully.
 >
+> The patch you're pointing to is no longer needed. As Arnout said,
+> python-smbus is installed by the i2c-tools package, but the source code
+> of python-smbus is in i2c-tools.
 >
+> The issue with the patch you're pointing to is that it was sharing
+> variables between python-smbus.mk and i2c-tools.mk, which is not
+> correct (relies on the assumption that i2c-tools.mk gets included
+> before python-smbus.mk, which is true because alphabetically they are
+> ordered properly, but the same strategy wouldn't work in the opposite
+> way).
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150530/47ec2649/attachment.html>
