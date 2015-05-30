@@ -1,50 +1,65 @@
-From: rdkehn at yahoo.com <rdkehn@yahoo.com>
-Date: Fri, 29 May 2015 16:54:45 -0500
-Subject: [Buildroot] [PATCH v3 1/1] package/mtd: add patch to fix host
- build error with gcc 5.1
-In-Reply-To: <1432928349.3676.3.camel@embedded.rocks>
-References: <1432636689-26907-1-git-send-email-joerg.krause@embedded.rocks>
- <1432928349.3676.3.camel@embedded.rocks>
-Message-ID: <20150529215445.GA597@dkarchlinux64.currentcomm.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Fri, 29 May 2015 21:10:12 -0400
+Subject: [Buildroot] disable-optimization in libgcrypt?
+In-Reply-To: <A748888D-3084-4353-93C7-F22AC548A0C2@gmail.com>
+References: <CANxTyt5C=hBMxALObfjcxTjYBQL8NhkeOoTy4YxN=EPxc4X=Vg@mail.gmail.com>
+ <A748888D-3084-4353-93C7-F22AC548A0C2@gmail.com>
+Message-ID: <CANxTyt4kUByN0ngB_3jxOSBThXg97SOUx9i2qGMHDTzZzdOP6g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+On Fri, May 29, 2015 at 4:07 PM, Bernhard Reutner-Fischer
+<rep.dot.nop@gmail.com> wrote:
+> On May 29, 2015 9:34:26 PM GMT+02:00, Danomi Manchego <danomimanchego123@gmail.com> wrote:
+>>All,
+>>
+>>We noticed that libgcrypt.mk explicitly disables optimizations:
+>>
+>>   LIBGCRYPT_CONF_OPTS = \
+>>    --disable-optimization \
+>>    --with-gpg-error-prefix=$(STAGING_DIR)/usr
+>>
+>>Looking through the history, it has been so since 2007, commit
+>>595e070364fa578dcc44bea7256ef635368bad9c by Bernhard Reutner-Fischer.
+>>The commit log does not explain why - "remove duplicate includedir".
+>>
+>>I don't see optimization being disabled in OE, Yocto, PTXdist.
+>>
+>>Does anyone know why optimization is disabled in libgcrypt?
+>
+> I do not remember if i disabled it on purpose, maybe an ICE?
+> Or maybe I wanted the buildroot flags to take effect rather than the -O3 (?) the package wanted to, back then. The latter sounds more likely, now that I think of it.
 
-On Fri, May 29, 2015 at 09:39:09PM +0200, J?rg Krause wrote:
-> Hi all,
-> 
-> On Di, 2015-05-26 at 12:38 +0200, J?rg Krause wrote:
-> > host-mtd build fails with gcc 5.1:
-> >   error: redefinition of ?hashtable_iterator_key?
-> >   error: redefinition of ?hashtable_iterator_value?
-> > 
-> > Indeed, both functions are defined twice - once in the header and 
-> > once in the
-> > source file. This is permitted in C11 (and maybe in C99).
-> > 
-> > Add a patch sent to upstream:
-> > https://patchwork.ozlabs.org/patch/467254/
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-Tested-by: Doug Kehn <rdkehn@yahoo.com>
+The buildroot optimization setting is not making it down to the
+compile lines.  We got a tremendous run time improvement when we
+removed the --disable-optimization.
 
-> > ---
-> > Changes v2 -> v3:
-> >   - Add Sob and URL to patch description (Baruch Siach)
-> > 
-> > Changes v1 -> v2:
-> >   - Use (identical) patch sent upstream
-> > ---
-> 
-> Patch is accepted upstream now. I suggest to add this patch to 2015.05.
+It looks like the --disable-optimization actively kills any -O passed
+in on CFLAGS in libgcrypt's configure script:
 
-Tested on Arch Linux host with GCC 5.1.0 and target
-arm-buildroot-linux-gnueabihf toolchain.  Buildroot master
-a4a7aeed539631a91cae2c00dec4d20ccc6dda31.
+# This is handy for debugging so the compiler doesn't rearrange
+# things and eliminate variables.
+# Check whether --enable-optimization was given.
+if test "${enable_optimization+set}" = set; then :
+  enableval=$enable_optimization; if test $enableval = no ; then
+                         CFLAGS=`echo $CFLAGS | sed 's/-O[0-9]//'`
+                       fi
+fi
 
-Regards,
-...doug
+
+The optimization level set in the menuconfig appears to survive when I
+remove this option from the .mk file.
+
+Seems like that's the way to go.
+
+Danomi -
+
+
+> Please drop it if it fits the current buildroot style.
+>
+> Cheers,
+>
+>
