@@ -1,37 +1,27 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sat, 30 May 2015 21:44:14 -0400
-Subject: [Buildroot] [PATCH v2] libgcrypt: allow optimization
-Message-ID: <1433036654-2258-1-git-send-email-danomimanchego123@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 31 May 2015 05:51:28 +0300
+Subject: [Buildroot] [PATCH 1/1] package/nmap: Fix static linking
+In-Reply-To: <1433022977-18011-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1433022977-18011-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150531025128.GA2282@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop the --disable-optimization option, which makes the libgcrypt configure
-remove buildroot's optimization setting passed in from CFLAGS.
+Hi Bernd,
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+On Sat, May 30, 2015 at 11:56:17PM +0200, Bernd Kuhls wrote:
+> +# needed by libpcap
+> +NMAP_LIBS_FOR_STATIC_LINK += -lz
 
----
+Have you tried using pcap-config? See for example 
+package/dhcpdump/dhcpdump.mk.
 
-Changes v1 -> v2:
-  - Add sign-off line and fix spelling in commit log.
----
- package/libgcrypt/libgcrypt.mk |    1 -
- 1 file changed, 1 deletion(-)
+baruch
 
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 57c5ab1..9153fb8 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -16,7 +16,6 @@ LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
- LIBGCRYPT_CONF_ENV = \
- 	ac_cv_sys_symbol_underscore=no
- LIBGCRYPT_CONF_OPTS = \
--	--disable-optimization \
- 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
- 
- # Code doesn't build in thumb mode
 -- 
-1.7.9.5
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
