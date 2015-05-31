@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 May 2015 21:44:55 +0200
-Subject: [Buildroot] [git commit] python: add patch to fix logic to get gcc
+Date: Sun, 31 May 2015 21:45:04 +0200
+Subject: [Buildroot] [git commit] python3: add patch to fix logic to get gcc
 	paths
-Message-ID: <20150531200253.B8C65801CC@busybox.osuosl.org>
+Message-ID: <20150531200253.C1C85801CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=238bf198cf4f31a3301b81a924d5e22044945955
+commit: http://git.buildroot.net/buildroot/commit/?id=4433c7d647f4c9385d9a7e3f0ce912d61edfd519
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The Python setup.py has a function called add_gcc_paths(), which
@@ -23,14 +23,14 @@ Reported-by: Bruno Coudoin <bruno.coudoin@gcompris.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python/018-fix-add-gcc-paths-logic.patch |   27 ++++++++++++++++++++++
+ package/python3/019-fix-add-gcc-paths-logic.patch |   27 +++++++++++++++++++++
  1 files changed, 27 insertions(+), 0 deletions(-)
 
-diff --git a/package/python/018-fix-add-gcc-paths-logic.patch b/package/python/018-fix-add-gcc-paths-logic.patch
+diff --git a/package/python3/019-fix-add-gcc-paths-logic.patch b/package/python3/019-fix-add-gcc-paths-logic.patch
 new file mode 100644
-index 0000000..af6efcc
+index 0000000..179a29a
 --- /dev/null
-+++ b/package/python/018-fix-add-gcc-paths-logic.patch
++++ b/package/python3/019-fix-add-gcc-paths-logic.patch
 @@ -0,0 +1,27 @@
 +Override system locale and set to default when adding gcc paths
 +
@@ -50,7 +50,7 @@ index 0000000..af6efcc
 +===================================================================
 +--- a/setup.py
 ++++ b/setup.py
-+@@ -414,7 +414,7 @@
++@@ -423,7 +423,7 @@
 +         tmpfile = os.path.join(self.build_temp, 'gccpaths')
 +         if not os.path.exists(self.build_temp):
 +             os.makedirs(self.build_temp)
