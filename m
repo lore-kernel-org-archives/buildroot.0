@@ -1,34 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 May 2015 10:22:28 +0200
-Subject: [Buildroot] [git commit] libgcrypt: allow optimization
-Message-ID: <20150531082235.7E21E8041D@busybox.osuosl.org>
+Date: Sun, 31 May 2015 10:22:41 +0200
+Subject: [Buildroot] [PATCH v2] libgcrypt: allow optimization
+In-Reply-To: <1433036654-2258-1-git-send-email-danomimanchego123@gmail.com>
+References: <1433036654-2258-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20150531102241.717bf31b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=32e4bceaebdd40f5ab482243cc17930a2aa673a9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Danomi Manchego,
 
-Drop the --disable-optimization option, which makes the libgcrypt configure
-remove buildroot's optimization setting passed in from CFLAGS.
+On Sat, 30 May 2015 21:44:14 -0400, Danomi Manchego wrote:
+> Drop the --disable-optimization option, which makes the libgcrypt configure
+> remove buildroot's optimization setting passed in from CFLAGS.
+> 
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> 
+> ---
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libgcrypt/libgcrypt.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 57c5ab1..9153fb8 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -16,7 +16,6 @@ LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
- LIBGCRYPT_CONF_ENV = \
- 	ac_cv_sys_symbol_underscore=no
- LIBGCRYPT_CONF_OPTS = \
--	--disable-optimization \
- 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
- 
- # Code doesn't build in thumb mode
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
