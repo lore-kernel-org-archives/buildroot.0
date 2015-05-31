@@ -1,54 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 May 2015 15:21:23 +0200
-Subject: [Buildroot] [git commit] package/nmap: Fix static linking
-Message-ID: <20150531132531.201377F93D@busybox.osuosl.org>
+Date: Sun, 31 May 2015 14:35:34 +0200
+Subject: [Buildroot] [git commit] keyutils: uses dl*,
+	disable for static build
+Message-ID: <20150531132531.1214580105@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58af3f27dff51c19a97e850ea53fcf4d7bb650c5
+commit: http://git.buildroot.net/buildroot/commit/?id=15ab99a7f189ccd532b5f2a518c4efffc49b1cb8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/040/040129539257d88d9437d113752bc8634fd9b2b2/
-http://autobuild.buildroot.net/results/73a/73a562a3a1f356c1a39b2fb57f0848c4b99fe8b1/
-http://autobuild.buildroot.net/results/767/767b8eafe7a204327eaa182c065ca5cfff18096f/
-http://autobuild.buildroot.net/results/0f7/0f7f3a56815dc6422a466fe9b4357ace98f78e11/
+And drop the unused static handling from the .mk file.
 
-[Peter: add host-pkgconf to _DEPENDENCIES]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+http://autobuild.buildroot.net/results/8a2/8a2ff0af4faeda4d2d224dcaf543a574d7eba30c/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nmap/nmap.mk |   10 +++++++++-
- 1 files changed, 9 insertions(+), 1 deletions(-)
+ package/ecryptfs-utils/Config.in |    2 +-
+ package/keyutils/Config.in       |    6 ++++++
+ package/keyutils/keyutils.mk     |    4 ----
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index c8c16e6..d46d58b 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -14,6 +14,13 @@ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
- NMAP_LICENSE = GPLv2
- NMAP_LICENSE_FILES = COPYING
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index d243da6..cb70e00 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
+ 	depends on !BR2_MIPS_NABI32 # libnss
+-	depends on !BR2_STATIC_LIBS # libnss
++	depends on !BR2_STATIC_LIBS # libnss, keyutils
+ 	help
+ 	  eCryptfs is a POSIX-compliant enterprise cryptographic
+ 	  filesystem for Linux. It is stacked on top of any other
+diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
+index fcb075f..6f0758f 100644
+--- a/package/keyutils/Config.in
++++ b/package/keyutils/Config.in
+@@ -2,8 +2,14 @@ config BR2_PACKAGE_KEYUTILS
+ 	bool "keyutils"
+ 	depends on !BR2_microblaze
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS # dlopen
+ 	help
+ 	  These tools are used to control the key management system
+ 	  built into the Linux kernel.
  
-+# needed by libpcap
-+NMAP_LIBS_FOR_STATIC_LINK += $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)
+ 	  http://people.redhat.com/~dhowells/keyutils/
 +
-+ifeq ($(BR2_STATIC_LIBS),y)
-+NMAP_CONF_ENV += LIBS='$(NMAP_LIBS_FOR_STATIC_LINK)'
-+endif
-+
- # for 0001-libdnet-wrapper-configure.patch
- define NMAP_WRAPPER_EXEC
- 	chmod +x $(@D)/libdnet-stripped/configure.gnu
-@@ -22,7 +29,8 @@ NMAP_POST_PATCH_HOOKS += NMAP_WRAPPER_EXEC
++comment "keyutils needs a toolchain w/ dynamic library"
++	depends on !BR2_microblaze
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
+diff --git a/package/keyutils/keyutils.mk b/package/keyutils/keyutils.mk
+index 36588e6..3d6697e 100644
+--- a/package/keyutils/keyutils.mk
++++ b/package/keyutils/keyutils.mk
+@@ -19,10 +19,6 @@ KEYUTILS_MAKE_PARAMS =                    \
+ 	CPPFLAGS="$(TARGET_CPPFLAGS) -I." \
+ 	LNS="$(HOSTLN) -sf"
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- NMAP_CONF_OPTS += --with-openssl="$(STAGING_DIR)/usr"
--NMAP_DEPENDENCIES += openssl
-+NMAP_DEPENDENCIES += host-pkgconf openssl
-+NMAP_LIBS_FOR_STATIC_LINK += $(shell $(PKG_CONFIG_HOST_BINARY) --libs --static openssl)
- else
- NMAP_CONF_OPTS += --without-openssl
+-ifeq ($(BR2_STATIC_LIBS),y)
+-KEYUTILS_MAKE_PARAMS += NO_SOLIB=1
+-endif
+-
+ ifeq ($(BR2_SHARED_LIBS),y)
+ KEYUTILS_MAKE_PARAMS += NO_ARLIB=1
  endif
