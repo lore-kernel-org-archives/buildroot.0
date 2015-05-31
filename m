@@ -1,68 +1,48 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 31 May 2015 09:25:03 +0300
-Subject: [Buildroot] [PATCH 1/1] Solid-Run HummingBoard i2eX defconfig
- and bootable microSD Bash script
-In-Reply-To: <alpine.DEB.2.11.1505291022180.2289@tanhuma.tkos.co.il>
-References: <1432820170-10513-1-git-send-email-yba@tkos.co.il>
- <20150529044005.GM2260@tarshish>
- <alpine.DEB.2.11.1505291022180.2289@tanhuma.tkos.co.il>
-Message-ID: <20150531062503.GC2282@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 31 May 2015 08:30:13 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-05-30
+Message-ID: <20150531063013.E7022100CF2@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yonatan,
+Build statistics for 2015-05-30
+===============================
 
-On Fri, May 29, 2015 at 10:56:14AM +0300, Jonathan Ben Avraham wrote:
-> On Fri, 29 May 2015, Baruch Siach wrote:
-> >On Thu, May 28, 2015 at 04:36:10PM +0300, Jonathan Ben-Avraham wrote:
-> >>Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
-> >>---
-> >> board/solid-run/hummingboard-i2eX/make_sd_card.sh | 207 ++++++++++++++++++++++
-> >
-> >Is this script better/different than board/freescale/create-boot-sd.sh? I
-> >think we should have one script for this job. A "SoM vendor neutral" location
-> >for this script is likely to be board/freescale/ in this case. The readme.txt
-> >file, once added, should mention this script.
->
-> I provided the board/solid-run/hummingboard-i2eX/make_sd_card.sh script
-> rather than use the board/freescale/create-boot-sd.sh script for the
-> following reasons.
-> 
-> 1. make_sd_card.sh supports OOT builds. Also support parameters in
-> environment variables or command line.
-> 
-> 2. make_sd_card.sh handles the likely multipath problem that happen in newer
-> distros when you change partitions on media.
-> 
-> 3. Moved the error control to the begining of the script so that there is
-> less chance of leaving a mounted filesystem or temporary mount point if some
-> requried file is missing and the -e kicks in.
-> 
-> 4. Provides cumulative error control and check for many more types of error.
-> That is, doesn't stop at the first error but continues noting all errors
-> possible to detect before actually making any changes.
-> 
-> 5. Copy only the specific images required rather than using wildcards that
-> can result in the wrong images being copied and can leave the newbie
-> wondering why the SD doesn't boot.
+        success : 250
+       failures : 8  
+       timeouts : 4  
+          TOTAL : 262
 
-All these are welcome improvements to board/freescale/create-boot-sd.sh.
+Classification of failures by reason
+====================================
 
-> 6. Having a separate script takes into account the fact that we are using
-> forked U-Boot repo whose bootcmd might change from the bootcmd in the
-> upstream repo.
+       host-erlang-rebar-2.5.1 | 4 
+                     php-5.6.9 | 3 
+                 cdrkit-1.1.11 | 1 
+                netatalk-3.1.7 | 1 
+                     nmap-6.47 | 1 
+           qt5multimedia-5.4.1 | 1 
+                keyutils-1.5.9 | 1 
 
-Which bootcmd you refer to? Is it the U-Boot autoboot environment variable? Or 
-the i.MX specific DCD (Device Configuration Data)? If the latter, please note 
-that SolidRun provided U-Boot doesn't use DCD at all. The U-Boot SPL 
-configures RAM at run time.
+Detail of failures
+===================
 
-baruch
+     powerpc |                  cdrkit-1.1.11 | NOK | http://autobuild.buildroot.net/results/28656ec8de26fb6f710e1d2c4140d96e2324c44e/
+         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/ead83b847e7c0b58473fdf3fc24cf6edfe4cb8a0/
+         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/591353c1cd3fa368416ae55709b5f911dcc3653d/
+      x86_64 |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/834004c78673c2e253fcdc49930cee0aa03bc04b/
+         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/28520f25902b5387193ff5276583ebc68ec37962/
+         arm |                 keyutils-1.5.9 | NOK | http://autobuild.buildroot.net/results/8a2ff0af4faeda4d2d224dcaf543a574d7eba30c/
+      x86_64 |                 netatalk-3.1.7 | NOK | http://autobuild.buildroot.net/results/7ec6e0766b768478b24d6d718c99521e5c6a6a2f/
+      xtensa |                      nmap-6.47 | NOK | http://autobuild.buildroot.net/results/040129539257d88d9437d113752bc8634fd9b2b2/
+        bfin |                      php-5.6.9 | NOK | http://autobuild.buildroot.net/results/157749f8b44bc02fbed0232a2b33137aba495134/
+        bfin |                      php-5.6.9 | NOK | http://autobuild.buildroot.net/results/75c1cce4748d070602f027e4063213b4becb4da1/
+        bfin |                      php-5.6.9 | NOK | http://autobuild.buildroot.net/results/966d6c47d1ed13a90c2846d96fb3d193df4b2aaa/
+         arm |            qt5multimedia-5.4.1 | NOK | http://autobuild.buildroot.net/results/ff2afd46da6e3bf75ee47a0f77f2582f5889a7ef/
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+http://autobuild.buildroot.net
