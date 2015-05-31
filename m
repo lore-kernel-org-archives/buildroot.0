@@ -1,53 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 May 2015 21:42:07 +0200
-Subject: [Buildroot] [git commit] upmpdcli: fix static linking issue
-Message-ID: <20150531194305.36A6680501@busybox.osuosl.org>
+Date: Sun, 31 May 2015 22:02:01 +0200
+Subject: [Buildroot] [PATCH 1/2] python: add patch to fix logic to get
+	gcc paths
+In-Reply-To: <1432932744-27818-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 29 May 2015 22:52:23 +0200")
+References: <1432932744-27818-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87zj4kv7ly.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62d925ee68fd3aa3fece9af11f19cf61fb6b5140
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/7ed/7ed85071bc06b4806e90b278a0736ea70c01b456/
+ > The Python setup.py has a function called add_gcc_paths(), which
+ > executes gcc -E -v to get the list of header paths searched by
+ > gcc. However, the logic of setup.py is only valid with the normal
+ > english output of gcc: it doesn't work if a non-english locale is
+ > set. This causes setup.py to not find certain headers (such as zlib.h)
+ > and therefore disabling the build of such extensions.
 
-Upmpdcli forgets to take the dependencies of libupnpp into consideration,
-breaking static linking, so help it.
+ > Reported-by: Bruno Coudoin <bruno.coudoin@gcompris.net>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Libupnpp unfortunately doesn't provide a .pc file, so manually handle its
-dependencies here.
+Committed both, thanks.
 
-The build system doesn't expand LIBS from the configure step, so manually
-pass it to make.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/upmpdcli/upmpdcli.mk |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
-
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 0be4d91..a5c6370 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -10,6 +10,18 @@ UPMPDCLI_LICENSE = GPLv2+
- UPMPDCLI_LICENSE_FILES = COPYING
- UPMPDCLI_DEPENDENCIES = libmpdclient libupnpp
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+# Upmpdcli forgets to take the dependencies of libupnpp into
-+# consideration, breaking static linking, so help it.
-+# Libupnpp unfortunately doesn't provide a .pc file, so manually
-+# handle the dependencies here.
-+# The build system doesn't expand LIBS from the configure step, so
-+# manually pass it to make.
-+UPMPDCLI_DEPENDENCIES += host-pkgconf
-+UPMPDCLI_MAKE_OPTS = \
-+	LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs expat libcurl libupnp)'
-+endif
-+
- # Upmpdcli only runs if user upmpdcli exists
- define UPMPDCLI_USERS
- 	upmpdcli -1 upmpdcli -1 * - - - Upmpdcli MPD UPnP Renderer Front-End
+-- 
+Bye, Peter Korsgaard
