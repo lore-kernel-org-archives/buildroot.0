@@ -1,66 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 May 2015 11:56:56 +0200
-Subject: [Buildroot] [git commit] support/download: relocate the git clone
-	comment
-Message-ID: <20150531095750.6C50B80E19@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 31 May 2015 13:06:29 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/nmap: Fix static linking
+Message-ID: <1433070389-8581-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ef92d32f19f1f92d78a42530ddb75355a9861d77
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes
+http://autobuild.buildroot.net/results/040/040129539257d88d9437d113752bc8634fd9b2b2/
+http://autobuild.buildroot.net/results/73a/73a562a3a1f356c1a39b2fb57f0848c4b99fe8b1/
+http://autobuild.buildroot.net/results/767/767b8eafe7a204327eaa182c065ca5cfff18096f/
+http://autobuild.buildroot.net/results/0f7/0f7f3a56815dc6422a466fe9b4357ace98f78e11/
 
-Following commit 95a572282e87 (pkg-infra: move the git download helper to a
-script, 2014-07-02), move the comment describing the shallow clone trickery as
-well. Merge this comment with the existing helper comment that was added in
-7e40a1103a91 (support/download: convert git to use the wrapper, 2014-08-03).
-
-Rename $($(PKG)_DL_VERSION) to ${cset} to match the helper code context.
-
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/pkg-download.mk |    6 ------
- support/download/git    |    9 +++++++--
- 2 files changed, 7 insertions(+), 8 deletions(-)
+v2: reworked to use pcap-config, add openssl libs (libz was missing) (Baruch)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index f6ed8be..c86b9ab 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -73,12 +73,6 @@ export BR_NO_CHECK_HASH_FOR =
- # to get all the sources needed for one's build configuration.
- ################################################################################
+ package/nmap/nmap.mk |    8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index c8c16e6..5273c4f 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -14,6 +14,13 @@ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
+ NMAP_LICENSE = GPLv2
+ NMAP_LICENSE_FILES = COPYING
  
--# Try a shallow clone - but that only works if the version is a ref (tag or
--# branch). Before trying to do a shallow clone we check if $($(PKG)_DL_VERSION)
--# is in the list provided by git ls-remote. If not we fall back on a full clone.
--#
--# Messages for the type of clone used are provided to ease debugging in case of
--# problems
- define DOWNLOAD_GIT
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
-diff --git a/support/download/git b/support/download/git
-index 73cbc0f..fd5f539 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -25,8 +25,13 @@ repo="${2}"
- cset="${3}"
- basename="${4}"
- 
--# Try to see if we can do a shallow clone, since it is faster
--# than a full clone.
-+# Try a shallow clone, since it is faster than a full clone - but that only
-+# works if the version is a ref (tag or branch). Before trying to do a shallow
-+# clone we check if ${cset} is in the list provided by git ls-remote. If not
-+# we fall back on a full clone.
-+#
-+# Messages for the type of clone used are provided to ease debugging in case of
-+# problems
- git_done=0
- if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
-     printf "Doing shallow clone\n"
++# needed by libpcap
++NMAP_LIBS_FOR_STATIC_LINK += $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)
++
++ifeq ($(BR2_STATIC_LIBS),y)
++NMAP_CONF_ENV += LIBS='$(NMAP_LIBS_FOR_STATIC_LINK)'
++endif
++
+ # for 0001-libdnet-wrapper-configure.patch
+ define NMAP_WRAPPER_EXEC
+ 	chmod +x $(@D)/libdnet-stripped/configure.gnu
+@@ -23,6 +30,7 @@ NMAP_POST_PATCH_HOOKS += NMAP_WRAPPER_EXEC
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ NMAP_CONF_OPTS += --with-openssl="$(STAGING_DIR)/usr"
+ NMAP_DEPENDENCIES += openssl
++NMAP_LIBS_FOR_STATIC_LINK += $(shell $(PKG_CONFIG_HOST_BINARY) --libs --static openssl)
+ else
+ NMAP_CONF_OPTS += --without-openssl
+ endif
+-- 
+1.7.10.4
