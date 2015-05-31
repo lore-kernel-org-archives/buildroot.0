@@ -1,12 +1,12 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 31 May 2015 07:14:12 +0300
+Date: Sun, 31 May 2015 09:25:03 +0300
 Subject: [Buildroot] [PATCH 1/1] Solid-Run HummingBoard i2eX defconfig
  and bootable microSD Bash script
-In-Reply-To: <alpine.DEB.2.11.1505290930060.2289@tanhuma.tkos.co.il>
+In-Reply-To: <alpine.DEB.2.11.1505291022180.2289@tanhuma.tkos.co.il>
 References: <1432820170-10513-1-git-send-email-yba@tkos.co.il>
  <20150529044005.GM2260@tarshish>
- <alpine.DEB.2.11.1505290930060.2289@tanhuma.tkos.co.il>
-Message-ID: <20150531041412.GB2282@tarshish>
+ <alpine.DEB.2.11.1505291022180.2289@tanhuma.tkos.co.il>
+Message-ID: <20150531062503.GC2282@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,43 +15,50 @@ To: buildroot@busybox.net
 
 Hi Yonatan,
 
-On Fri, May 29, 2015 at 09:56:25AM +0300, Jonathan Ben Avraham wrote:
+On Fri, May 29, 2015 at 10:56:14AM +0300, Jonathan Ben Avraham wrote:
 > On Fri, 29 May 2015, Baruch Siach wrote:
 > >On Thu, May 28, 2015 at 04:36:10PM +0300, Jonathan Ben-Avraham wrote:
-> >>+# @(#) Create a bootable SD card from Buildroot tree for the HummingBoard 
-> >>i2eX
-> >>+#
-> >>+# Copyright (c) 2015 Tk Open Systems Ltd. all rights reserved
-> >>+# License granted for public use under the terms of the "Attribution-ShareAlike
-> >>+# 4.0 International" license, See full text at
-> >>+# https://creativecommons.org/licenses/by-sa/4.0/legalcode
+> >>Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
+> >>---
+> >> board/solid-run/hummingboard-i2eX/make_sd_card.sh | 207 ++++++++++++++++++++++
 > >
-> >Buildroot code itself is under GPLv2. See
-> >http://nightly.buildroot.org/manual.html#_complying_with_the_buildroot_license.
-> >Is this license GPLv2 compatible?
+> >Is this script better/different than board/freescale/create-boot-sd.sh? I
+> >think we should have one script for this job. A "SoM vendor neutral" location
+> >for this script is likely to be board/freescale/ in this case. The readme.txt
+> >file, once added, should mention this script.
 >
-> Regarding the use of the CC SA license, it seems to me that if there are
-> packages using the MIT and BSD licenses in Buildroot then the CC AS license
-> should be Ok also.
+> I provided the board/solid-run/hummingboard-i2eX/make_sd_card.sh script
+> rather than use the board/freescale/create-boot-sd.sh script for the
+> following reasons.
 > 
-> If you want to claim that there is a difference between packages that are
-> downloaded and contributions that are part of Buildroot itself, then I would
-> say that the difference between GPLv2 and CC SA for a Bash script - which is
-> not compiled and cannot be linked against, is not significant.
+> 1. make_sd_card.sh supports OOT builds. Also support parameters in
+> environment variables or command line.
 > 
-> I prefer to use the CC licenses, because they  are simpler, clearer, and
-> more appropriate to configuration files and scripts which are not compiled
-> or linked against, and they avoid both the heavy RMS idealogical baggage and
-> the legal confusions associated with the GPL licenses without any loss of
-> rights to the public.
+> 2. make_sd_card.sh handles the likely multipath problem that happen in newer
+> distros when you change partitions on media.
+> 
+> 3. Moved the error control to the begining of the script so that there is
+> less chance of leaving a mounted filesystem or temporary mount point if some
+> requried file is missing and the -e kicks in.
+> 
+> 4. Provides cumulative error control and check for many more types of error.
+> That is, doesn't stop at the first error but continues noting all errors
+> possible to detect before actually making any changes.
+> 
+> 5. Copy only the specific images required rather than using wildcards that
+> can result in the wrong images being copied and can leave the newbie
+> wondering why the SD doesn't boot.
 
-The fact that all of Buildroot code itself is released under GPLv2 should make 
-life easier for downstream Buildroot distributors (and their legal 
-departments).
+All these are welcome improvements to board/freescale/create-boot-sd.sh.
 
-Anyway, in case Buildroot maintainers agree to accept scripts under a 
-different license, please add a patch to section 12.3 of the manual to clarify
-Buildroot license.
+> 6. Having a separate script takes into account the fact that we are using
+> forked U-Boot repo whose bootcmd might change from the bootcmd in the
+> upstream repo.
+
+Which bootcmd you refer to? Is it the U-Boot autoboot environment variable? Or 
+the i.MX specific DCD (Device Configuration Data)? If the latter, please note 
+that SolidRun provided U-Boot doesn't use DCD at all. The U-Boot SPL 
+configures RAM at run time.
 
 baruch
 
