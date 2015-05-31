@@ -1,93 +1,34 @@
-From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Sun, 31 May 2015 10:57:25 +0300 (IDT)
-Subject: [Buildroot] [PATCH 1/1] Solid-Run HummingBoard i2eX defconfig
- and bootable microSD Bash script
-In-Reply-To: <20150531062503.GC2282@tarshish>
-References: <1432820170-10513-1-git-send-email-yba@tkos.co.il>
- <20150529044005.GM2260@tarshish>
- <alpine.DEB.2.11.1505291022180.2289@tanhuma.tkos.co.il>
- <20150531062503.GC2282@tarshish>
-Message-ID: <alpine.DEB.2.11.1505311052260.1709@tanhuma.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 31 May 2015 10:22:28 +0200
+Subject: [Buildroot] [git commit] libgcrypt: allow optimization
+Message-ID: <20150531082235.7E21E8041D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
-See one inline comment below.
+commit: http://git.buildroot.net/buildroot/commit/?id=32e4bceaebdd40f5ab482243cc17930a2aa673a9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 31 May 2015, Baruch Siach wrote:
+Drop the --disable-optimization option, which makes the libgcrypt configure
+remove buildroot's optimization setting passed in from CFLAGS.
 
-> Date: Sun, 31 May 2015 09:25:03 +0300
-> From: Baruch Siach <baruch@tkos.co.il>
-> To: Jonathan Ben Avraham <yba@tkos.co.il>
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH 1/1] Solid-Run HummingBoard i2eX defconfig and
->      bootable microSD Bash script
-> 
-> Hi Yonatan,
->
-> On Fri, May 29, 2015 at 10:56:14AM +0300, Jonathan Ben Avraham wrote:
->> On Fri, 29 May 2015, Baruch Siach wrote:
->>> On Thu, May 28, 2015 at 04:36:10PM +0300, Jonathan Ben-Avraham wrote:
->>>> Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
->>>> ---
->>>> board/solid-run/hummingboard-i2eX/make_sd_card.sh | 207 ++++++++++++++++++++++
->>>
->>> Is this script better/different than board/freescale/create-boot-sd.sh? I
->>> think we should have one script for this job. A "SoM vendor neutral" location
->>> for this script is likely to be board/freescale/ in this case. The readme.txt
->>> file, once added, should mention this script.
->>
->> I provided the board/solid-run/hummingboard-i2eX/make_sd_card.sh script
->> rather than use the board/freescale/create-boot-sd.sh script for the
->> following reasons.
->>
->> 1. make_sd_card.sh supports OOT builds. Also support parameters in
->> environment variables or command line.
->>
->> 2. make_sd_card.sh handles the likely multipath problem that happen in newer
->> distros when you change partitions on media.
->>
->> 3. Moved the error control to the begining of the script so that there is
->> less chance of leaving a mounted filesystem or temporary mount point if some
->> requried file is missing and the -e kicks in.
->>
->> 4. Provides cumulative error control and check for many more types of error.
->> That is, doesn't stop at the first error but continues noting all errors
->> possible to detect before actually making any changes.
->>
->> 5. Copy only the specific images required rather than using wildcards that
->> can result in the wrong images being copied and can leave the newbie
->> wondering why the SD doesn't boot.
->
-> All these are welcome improvements to board/freescale/create-boot-sd.sh.
->
->> 6. Having a separate script takes into account the fact that we are using
->> forked U-Boot repo whose bootcmd might change from the bootcmd in the
->> upstream repo.
->
-> Which bootcmd you refer to? Is it the U-Boot autoboot environment variable?
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libgcrypt/libgcrypt.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-Yes. This script takes into account that Solid-Run could change the kernel 
-command line to use a rootfs in the first or third partition for example. 
-to do that with board/freescale/create-boot-sd.sh we would need to add 
-extra parameters or env vars.
-
-  - yba
-
-
-> Or
-> the i.MX specific DCD (Device Configuration Data)? If the latter, please note
-> that SolidRun provided U-Boot doesn't use DCD at all. The U-Boot SPL
-> configures RAM at run time.
->
-> baruch
->
->
-
--- 
-  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
-mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 57c5ab1..9153fb8 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -16,7 +16,6 @@ LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
+ LIBGCRYPT_CONF_ENV = \
+ 	ac_cv_sys_symbol_underscore=no
+ LIBGCRYPT_CONF_OPTS = \
+-	--disable-optimization \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
+ 
+ # Code doesn't build in thumb mode
