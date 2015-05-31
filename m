@@ -1,73 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 May 2015 14:35:34 +0200
-Subject: [Buildroot] [git commit] keyutils: uses dl*,
-	disable for static build
-Message-ID: <20150531132531.1214580105@busybox.osuosl.org>
+Date: Sun, 31 May 2015 16:07:17 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/php: Fix static linking by
+	reworking static libs handling
+In-Reply-To: <1433071782-21109-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sun, 31 May 2015 13:29:42 +0200")
+References: <1433071782-21109-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <874mmsx2lm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=15ab99a7f189ccd532b5f2a518c4efffc49b1cb8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-And drop the unused static handling from the .mk file.
+ > Fixes
+ > http://autobuild.buildroot.net/results/157/157749f8b44bc02fbed0232a2b33137aba495134/
+ > http://autobuild.buildroot.net/results/df4/df4e2ea098b0126867455af1891837c6d7d99a92/
+ > http://autobuild.buildroot.net/results/e69/e6993d66aeebbe994063a60871412b2235ce5455/
 
-Fixes:
-http://autobuild.buildroot.net/results/8a2/8a2ff0af4faeda4d2d224dcaf543a574d7eba30c/
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ > v2: merged sqlite and unixodbc fix, switched to pkgconf for sqlite,
+ >     add openssl to new variable PHP_STATIC_LIBS and switch to pkgconf
+ >     (Thomas)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ecryptfs-utils/Config.in |    2 +-
- package/keyutils/Config.in       |    6 ++++++
- package/keyutils/keyutils.mk     |    4 ----
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ > @@ -225,6 +228,9 @@ endif
+ >  ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_UNIXODBC),y)
+ >  PHP_CONF_OPTS += --with-pdo-odbc=unixODBC,$(STAGING_DIR)/usr
+ >  PHP_DEPENDENCIES += unixodbc
+ > +ifeq ($(BR2_STATIC_LIBS),y)
+ > +PHP_STATIC_LIBS += -lpthread
+ > +endif
 
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index d243da6..cb70e00 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
- 	depends on !BR2_MIPS_NABI32 # libnss
--	depends on !BR2_STATIC_LIBS # libnss
-+	depends on !BR2_STATIC_LIBS # libnss, keyutils
- 	help
- 	  eCryptfs is a POSIX-compliant enterprise cryptographic
- 	  filesystem for Linux. It is stacked on top of any other
-diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
-index fcb075f..6f0758f 100644
---- a/package/keyutils/Config.in
-+++ b/package/keyutils/Config.in
-@@ -2,8 +2,14 @@ config BR2_PACKAGE_KEYUTILS
- 	bool "keyutils"
- 	depends on !BR2_microblaze
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # dlopen
- 	help
- 	  These tools are used to control the key management system
- 	  built into the Linux kernel.
- 
- 	  http://people.redhat.com/~dhowells/keyutils/
-+
-+comment "keyutils needs a toolchain w/ dynamic library"
-+	depends on !BR2_microblaze
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/keyutils/keyutils.mk b/package/keyutils/keyutils.mk
-index 36588e6..3d6697e 100644
---- a/package/keyutils/keyutils.mk
-+++ b/package/keyutils/keyutils.mk
-@@ -19,10 +19,6 @@ KEYUTILS_MAKE_PARAMS =                    \
- 	CPPFLAGS="$(TARGET_CPPFLAGS) -I." \
- 	LNS="$(HOSTLN) -sf"
- 
--ifeq ($(BR2_STATIC_LIBS),y)
--KEYUTILS_MAKE_PARAMS += NO_SOLIB=1
--endif
--
- ifeq ($(BR2_SHARED_LIBS),y)
- KEYUTILS_MAKE_PARAMS += NO_ARLIB=1
- endif
+unixodbc can be built without pthread support (by a patch from you), so
+this should be:
+
+ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
