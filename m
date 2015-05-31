@@ -1,54 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 May 2015 10:33:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: Add -lpthread to detect
- unixodbc for static build
-In-Reply-To: <1433019093-16740-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1433019093-16740-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150531103306.499b604f@free-electrons.com>
+Date: Sun, 31 May 2015 10:36:35 +0200
+Subject: [Buildroot] [git commit] package/sconeserver: fix static link with
+	openssl
+Message-ID: <20150531083702.68E9C804CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=5f08ba100e97f677424971e30d8643d885c92c72
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 30 May 2015 22:51:33 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/157/157749f8b44bc02fbed0232a2b33137aba495134/
-> http://autobuild.buildroot.net/results/df4/df4e2ea098b0126867455af1891837c6d7d99a92/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/php/php.mk |    3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index 9be07d5..8e79c49 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -225,6 +225,9 @@ endif
->  ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_UNIXODBC),y)
->  PHP_CONF_OPTS += --with-pdo-odbc=unixODBC,$(STAGING_DIR)/usr
->  PHP_DEPENDENCIES += unixodbc
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +PHP_CONF_ENV += LIBS='-lpthread'
+When linking statically, the order of libraries on the linker command
+line is important, and sconeserver got it wrong.
 
-What happens if you have multiple of such occurrences? You will pass
-LIBS='-lfoo' LIBS='-lbar', etc.
+Also, sconeserver does not use pkg-config, so it misses the private
+libs of -lcrypto, which is linking with -lz.
 
-Shouldn't we instead do:
+Fix that:
+  - add a patch to configure.in to fix the order of libraries;
+  - forcibly pass -lz when linking statically with openssl.
 
-PHP_LIBS += -lpthread
+Note: we were already reconfiguring sconeserver, because it comes from
+the github repository.
 
-and then later, a single PHP_CONF_ENV += LIBS=$(PHP_LIBS)
+Fixes:
+    http://autobuild.buildroot.org/results/403/403eac974ecdaacdb66b8241fbdcf19ec5e07480
 
-Also, it's a shame unixodbc doesn't use pkg-config. It installs its own
-odbc-config, but I guess it's compiled for the target, and most likely
-returns results that are inappropriate for cross compilation.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../sconeserver/0001-fix-ssl-libs-ordering.patch   |   36 ++++++++++++++++++++
+ package/sconeserver/sconeserver.mk                 |    3 ++
+ 2 files changed, 39 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/sconeserver/0001-fix-ssl-libs-ordering.patch b/package/sconeserver/0001-fix-ssl-libs-ordering.patch
+new file mode 100644
+index 0000000..f1f25b9
+--- /dev/null
++++ b/package/sconeserver/0001-fix-ssl-libs-ordering.patch
+@@ -0,0 +1,36 @@
++configure: re-order SSL libs when linking
++
++When doing static builds, the ordering of libs is important, as the
++linker does not back-pedal to previous libraries specified on the
++command line to find missing symbols, and only searches for those
++missing symbols in the following libs.
++
++Thus, as -lssl needs symbols from -lcrypto, it needs to come before
++-lcrypto.
++
++And globally, we do *not* append new libraries, we prepend them.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN a/configure.in b/configure.in
++--- a/configure.in	2014-10-16 11:12:08.000000000 +0200
+++++ b/configure.in	2015-05-30 15:44:25.540329788 +0200
++@@ -133,12 +133,14 @@
++     [AC_MSG_ERROR([header file <openssl/ssl.h> is required for OpenSSL, use --with-openssl-path=PATH])]
++   )
++   AC_CHECK_LIB([crypto],[CRYPTO_new_ex_data],
++-    [SSL_LIBADD="$SSL_LIBADD -lcrypto"],
++-    [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])]
+++    [SSL_LIBADD="-lcrypto $SSL_LIBADD"],
+++    [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])],
+++    [$SSL_LIBADD]
++   )
++   AC_CHECK_LIB([ssl],[SSL_library_init],
++-    [SSL_LIBADD="$SSL_LIBADD -lssl"],
++-    [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])]
+++    [SSL_LIBADD="-lssl $SSL_LIBADD"],
+++    [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])],
+++    [$SSL_LIBADD]
++   )
++   AC_SUBST(SSL_LIBADD)
++ fi
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index 3ff891b..beca926 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -24,6 +24,9 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ SCONESERVER_DEPENDENCIES += openssl
+ SCONESERVER_CONF_OPTS += --with-ssl
++ifeq ($(BR2_STATIC_LIBS),y)
++SCONESERVER_CONF_ENV += SSL_LIBADD=-lz
++endif
+ else
+ SCONESERVER_CONF_OPTS += --without-ssl
+ endif
