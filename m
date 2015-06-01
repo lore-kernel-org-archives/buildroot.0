@@ -1,112 +1,50 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 01 Jun 2015 21:35:05 +0200
-Subject: [Buildroot] [PATCH 3/3] boot/at91bootstrap3: download via
- custom git url
-In-Reply-To: <1432892326-10261-4-git-send-email-angelo.compagnucci@gmail.com>
-References: <1432892326-10261-1-git-send-email-angelo.compagnucci@gmail.com>
- <1432892326-10261-4-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <556CB3E9.6060802@mind.be>
+Date: Mon, 01 Jun 2015 22:09:32 +0200
+Subject: [Buildroot] [PATCH 1/2] arch: tidy up mmu config
+In-Reply-To: <1432227249-15345-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1432227249-15345-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <556CBBFC.4080002@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/29/15 11:38, Angelo Compagnucci wrote:
-> This patch adds the option to download at91bootstrap3 from
-> a custom git URL. This is a requirement for all that boards
-> that use a custom at91bootstrap3 version.
+On 05/21/15 18:54, Guido Mart?nez wrote:
+> Instead of blacklisting which architectures support MMUs (mandatorily
+> or optionally), introduce two Kconfig options that are selected by each
+> architecture in each case.
 > 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  boot/at91bootstrap3/Config.in         | 34 ++++++++++++++++++++++++++++++++++
->  boot/at91bootstrap3/at91bootstrap3.mk |  9 ++++++++-
->  2 files changed, 42 insertions(+), 1 deletion(-)
+> This simplifies the logic in BR2_USE_MMU.
 > 
-> diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-> index 8ac40ed..9f2f49b 100644
-> --- a/boot/at91bootstrap3/Config.in
-> +++ b/boot/at91bootstrap3/Config.in
-> @@ -10,6 +10,40 @@ config BR2_TARGET_AT91BOOTSTRAP3
->  
->  if BR2_TARGET_AT91BOOTSTRAP3
->  
-> +choice
-> +
-> +	prompt "AT91 Bootstrap 3 version"
-> +
-> +config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-> +	bool "3.7.2"
-> +
-> +config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-> +	bool "Custom Git repository"
-> +	help
-> +	  This option allows Buildroot to get the AT91 Bootstrap 3 source
-> +	  code from a Git repository.
-> +
-> +endchoice
-> +
-> +if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-> +
-> +config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL
-> +	string "URL of custom repository"
-> +
-> +config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION
-> +	string "Custom repository version"
-> +	help
-> +	  Revision to use in the typical format used by Git
-> +	  E.G. a sha id, a tag, branch, ..
-> +
-> +endif
-> +
-> +config BR2_TARGET_AT91BOOTSTRAP3_VERSION
-> +	string
-> +	default "v3.7.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-> +	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
-> +		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-> +
->  config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR
->  	string "custom patch dir"
->  	help
-> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-> index b73821e..fae2e8e 100644
-> --- a/boot/at91bootstrap3/at91bootstrap3.mk
-> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
-> @@ -4,8 +4,15 @@
->  #
->  ################################################################################
->  
-> -AT91BOOTSTRAP3_VERSION = v3.7.2
-> +AT91BOOTSTRAP3_VERSION = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_VERSION))
-> +
-> +ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
-> +AT91BOOTSTRAP3_SITE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL))
-> +AT91BOOTSTRAP3_SITE_METHOD = git
-> +else
->  AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
-> +endif
-> +
->  AT91BOOTSTRAP3_LICENSE = BSD-2c
->  AT91BOOTSTRAP3_LICENSE_FILES = main.c
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
 
- There should be a check against an empty version in the custom repo case,
-similar like it's done for uboot. Otherwise you get the cryptic:
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
->>> at91bootstrap3  Downloading
-Doing full clone
-fatal: The empty string is not a valid path
---2015-06-01 21:29:11--  http://sources.buildroot.net/at91bootstrap3-.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
-Connecting to sources.buildroot.net (sources.buildroot.net)|176.9.16.109|:80...
-connected.
-HTTP request sent, awaiting response... 404 Not Found
-2015-06-01 21:29:12 ERROR 404: Not Found.
+ Two small improvements, but even without them this patch is OK for me.
+
+- In arch/Config.in, the ARM section and the Blackfin section look the same to
+the casual onlooker, but for ARM the MMU options depend on the subarchitecture,
+while for Blackfin it's always NOMMU. So I'd make this explicit by adding a
+comment for ARM:
+
+config BR2_arm
+        bool "ARM (little endian)"
+	# MMU support is set by subarchitectur in Config.in.arm
+
+ Same for ELF in the second patch.
+
+- Like you did for ARM, I think you should move the MMU selection to the
+subarches for xtensa as well. Since in fact, the fsf variant is always MMU.
 
 
- Otherwise, looks good to me.
+ So if you repost this patch and make the above changes, you can add my Acked-by.
+
 
  Regards,
  Arnout
+
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
