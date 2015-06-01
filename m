@@ -1,27 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Jun 2015 00:02:06 +0200
-Subject: [Buildroot] [PATCH] strongswan: security bump to version 5.3.1
-In-Reply-To: <1433195001-4823-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 1 Jun 2015 18:43:21 -0300")
-References: <1433195001-4823-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bngzt7dt.fsf@dell.be.48ers.dk>
+Date: Mon, 01 Jun 2015 22:02:48 -0000
+Subject: [Buildroot] [git commit] configs/riotboard: bump u-boot to version
+	2015.04
+Message-ID: <20150601220247.B606181D62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7b84f2c36b28178974719565aa00862c037c2d3e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > CVE-2015-3991 - denial-of-service and potential remote code execution
- > vulnerability triggered by IKEv1/IKEv2 messages that contain payloads
- > for the respective other IKE version.
- > other IKE version
+Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/riotboard_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Patch is too large, so refusing to show it
