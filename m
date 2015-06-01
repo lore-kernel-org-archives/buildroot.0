@@ -1,49 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Jun 2015 00:02:00 +0200
-Subject: [Buildroot] [git commit] strongswan: security bump to version 5.3.1
-Message-ID: <20150601220249.B1ED781D62@busybox.osuosl.org>
+Date: Mon, 1 Jun 2015 23:54:37 +0200
+Subject: [Buildroot] [git commit] iw: bump to version 4.1
+Message-ID: <20150601220249.619BB81D62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=373031bfd82c1386f5abb0f2ca49376571917cc5
+commit: http://git.buildroot.net/buildroot/commit/?id=1782a5aff8d31590cfa0c38918176112ce654662
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-
-CVE-2015-3991 - denial-of-service and potential remote code execution
-vulnerability triggered by IKEv1/IKEv2 messages that contain payloads
-for the respective other IKE version.
-other IKE version
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strongswan/strongswan.hash |    4 ++--
- package/strongswan/strongswan.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/iw/iw.hash |    2 +-
+ package/iw/iw.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index 626356a..e38c736 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
+diff --git a/package/iw/iw.hash b/package/iw/iw.hash
+index be0428c..02f9a52 100644
+--- a/package/iw/iw.hash
++++ b/package/iw/iw.hash
 @@ -1,2 +1,2 @@
--# From http://download.strongswan.org/strongswan-5.3.0.tar.bz2.md5
--md5	c52d4228231c2025d9c320d0e9990327	strongswan-5.3.0.tar.bz2
-+# From http://download.strongswan.org/strongswan-5.3.1.tar.bz2.md5
-+md5	66f258901a3d6c271da1a0c7fb3e5013	strongswan-5.3.1.tar.bz2
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index af21dda..f165eb1 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
+ # From https://www.kernel.org/pub/software/network/iw/sha256sums.asc
+-sha256	2b4b7906d5ce89ce0ab523e5de8b619cddcc18fee7a2bfd6f9c62efab2d3bed6	iw-4.0.tar.xz
++sha256	5164aaacd8e82501d84a2187af194e8285a5a5b76e200447eb58d4dd78d1a34b	iw-4.1.tar.xz
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 4fd18ac..2766850 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRONGSWAN_VERSION = 5.3.0
-+STRONGSWAN_VERSION = 5.3.1
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_LICENSE = GPLv2+
+-IW_VERSION = 4.0
++IW_VERSION = 4.1
+ IW_SOURCE = iw-$(IW_VERSION).tar.xz
+ IW_SITE = $(BR2_KERNEL_MIRROR)/software/network/iw
+ IW_LICENSE = iw license
