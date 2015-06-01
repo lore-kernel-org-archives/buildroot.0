@@ -1,72 +1,38 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon,  1 Jun 2015 18:24:41 +0200
-Subject: [Buildroot] [PATCH v2] package/python-can: new package
-Message-ID: <1433175881-26365-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Mon, 01 Jun 2015 13:59:17 -0300
+Subject: [Buildroot] [PATCH 1/2] arch: tidy up mmu config
+In-Reply-To: <1432227249-15345-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1432227249-15345-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <556C8F65.4000809@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch provides controller area network support for Python.
+Thomas, Romain:
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
-Chages v1 -> v2:
- - Fixed license
- - Removed hg clone for package retrival
+On 05/21/2015 01:54 PM, Guido Mart?nez wrote:
+> Instead of blacklisting which architectures support MMUs (mandatorily
+> or optionally), introduce two Kconfig options that are selected by each
+> architecture in each case.
+> 
+> This simplifies the logic in BR2_USE_MMU.
+> 
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> ---
+>  arch/Config.in                | 26 ++++++++++++++++++++++++++
+>  arch/Config.in.arm            | 17 +++++++++++++++++
+>  toolchain/toolchain-common.in |  4 ++--
+>  3 files changed, 45 insertions(+), 2 deletions(-)
+> 
 
- package/Config.in                |  1 +
- package/python-can/Config.in     |  6 ++++++
- package/python-can/python-can.mk | 15 +++++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/python-can/Config.in
- create mode 100644 package/python-can/python-can.mk
+Any news about this and the next one?
 
-diff --git a/package/Config.in b/package/Config.in
-index e0c2e2a..88c9aa2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -572,6 +572,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "external python modules"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-bottle/Config.in"
-+	source "package/python-can/Config.in"
- 	source "package/python-certifi/Config.in"
- 	source "package/python-cffi/Config.in"
- 	source "package/python-cheetah/Config.in"
-diff --git a/package/python-can/Config.in b/package/python-can/Config.in
-new file mode 100644
-index 0000000..6b4e0fa
---- /dev/null
-+++ b/package/python-can/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_CAN
-+	bool "python-can"
-+	help
-+	  This module provides controller area network support for Python.
-+
-+	  https://bitbucket.org/hardbyte/python-can
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-new file mode 100644
-index 0000000..8db5732
---- /dev/null
-+++ b/package/python-can/python-can.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-can
-+#
-+################################################################################
-+
-+PYTHON_CAN_VERSION = ae5b6cf
-+PYTHON_CAN_SITE = https://bitbucket.org/hardbyte/python-can/get/
-+PYTHON_CAN_SOURCE = $(PYTHON_CAN_VERSION).tar.bz2
-+PYTHON_CAN_LICENSE = LGPLv3
-+PYTHON_CAN_LICENSE_FILES = LICENSE.txt
-+PYTHON_CAN_DEPENDENCIES = python
-+PYTHON_CAN_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+We'd really like to move forward with the cortex-M support. (BTW, Linux
+v4.2 will probably carry a good amount of support for LPC43xx.)
+
+Thanks!
 -- 
-2.4.2
+Ezequiel Garcia, VanguardiaSur
+www.vanguardiasur.com.ar
