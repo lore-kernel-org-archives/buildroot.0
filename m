@@ -1,170 +1,29 @@
-From: James Knight <james.d.knight@live.com>
-Date: Tue, 30 Jun 2015 23:22:59 -0400
-Subject: [Buildroot] [PATCH v2 1/1] google-material-design-icons: new package
-In-Reply-To: <BLU437-SMTP141B2B324B33F6E9C3B2F8A0A80@phx.gbl>
-References: <BLU437-SMTP141B2B324B33F6E9C3B2F8A0A80@phx.gbl>
-Message-ID: <BLU436-SMTP888BA5090A489AF5DB13E5A0A80@phx.gbl>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 1 Jun 2015 06:07:35 +0300
+Subject: [Buildroot] [PATCH 1/1] package/pppd: install pon/poff option
+In-Reply-To: <1433125147-11903-1-git-send-email-rdkehn@yahoo.com>
+References: <1433125147-11903-1-git-send-email-rdkehn@yahoo.com>
+Message-ID: <20150601030735.GQ2282@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Knight <james.d.knight@live.com>
----
-Changes v2 -> v3:
-  - Adding missing change log.
-  
-Changes v1 -> v2:
-  - Simplified and cleaned up the configuration items*
-  - Refactored icon installation loop*
-  - Removed unnecessary install for Material icon font installation*
-  
-* suggested by Thomas Petazzoni
----
- package/Config.in                                  |  1 +
- package/google-material-design-icons/Config.in     | 40 ++++++++++++++
- .../google-material-design-icons.hash              |  2 +
- .../google-material-design-icons.mk                | 63 ++++++++++++++++++++++
- 4 files changed, 106 insertions(+)
- create mode 100644 package/google-material-design-icons/Config.in
- create mode 100644 package/google-material-design-icons/google-material-design-icons.hash
- create mode 100644 package/google-material-design-icons/google-material-design-icons.mk
+Hi Doug,
 
-diff --git a/package/Config.in b/package/Config.in
-index 477cc47..13a7e74 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -188,6 +188,7 @@ comment "Fonts"
- 
- comment "Icons"
- 	source "package/adwaita-icon-theme/Config.in"
-+	source "package/google-material-design-icons/Config.in"
- 	source "package/hicolor-icon-theme/Config.in"
- 
- comment "Sounds"
-diff --git a/package/google-material-design-icons/Config.in b/package/google-material-design-icons/Config.in
-new file mode 100644
-index 0000000..a200429
---- /dev/null
-+++ b/package/google-material-design-icons/Config.in
-@@ -0,0 +1,40 @@
-+config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS
-+	bool "google-material-design-icons"
-+	help
-+	  Material design icons are the official icon set from Google that
-+	  are designed under the material design guidelines.
-+
-+	  https://github.com/google/material-design-icons
-+
-+if BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS
-+
-+config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_PNG
-+	bool "Install PNG icons"
-+	help
-+	  Use PNG icon types.
-+
-+	  The default. Traditional format; simplicity and compatibility.
-+
-+config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_SVG
-+	bool "Install SVG icons"
-+	help
-+	  Use SVG icon types.
-+
-+	  Vector format that is limitlessly scalable.
-+
-+config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_FONT
-+	bool "Install TrueType font"
-+	help
-+	  Install the Material TrueType font (ttf) on the target system.
-+
-+config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_SPRITES_CSS
-+	bool "Install CSS sprites"
-+	help
-+	  Install CSS (PNG) spritesheets.
-+
-+config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_SPRITES_SVG
-+	bool "Install SVG sprites"
-+	help
-+	  Install SVG spritesheets.
-+
-+endif
-diff --git a/package/google-material-design-icons/google-material-design-icons.hash b/package/google-material-design-icons/google-material-design-icons.hash
-new file mode 100644
-index 0000000..7bcfcb5
---- /dev/null
-+++ b/package/google-material-design-icons/google-material-design-icons.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  87d7c8515207edecd3438a96bdf5129df91e0b29261d5f8c52f672957c11af65  2.0.0.tar.gz
-diff --git a/package/google-material-design-icons/google-material-design-icons.mk b/package/google-material-design-icons/google-material-design-icons.mk
-new file mode 100644
-index 0000000..b1f9cd5
---- /dev/null
-+++ b/package/google-material-design-icons/google-material-design-icons.mk
-@@ -0,0 +1,63 @@
-+################################################################################
-+#
-+# google-material-design-icons
-+#
-+################################################################################
-+
-+GOOGLE_MATERIAL_DESIGN_ICONS_VERSION = 2.0.0
-+GOOGLE_MATERIAL_DESIGN_ICONS_SOURCE = \
-+	$(GOOGLE_MATERIAL_DESIGN_ICONS_VERSION).tar.gz
-+GOOGLE_MATERIAL_DESIGN_ICONS_SITE = \
-+	https://github.com/google/material-design-icons/archive
-+GOOGLE_MATERIAL_DESIGN_ICONS_LICENSE = CC-BY-4.0
-+GOOGLE_MATERIAL_DESIGN_ICONS_LICENSE_FILES = LICENSE
-+
-+GOOGLE_MATERIAL_DESIGN_ICONS_LIST = \
-+	action alert av communication content device editor file \
-+	hardware image maps navigation notification social toggle
-+
-+ifneq (,$(filter \
-+		$(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_PNG) \
-+		$(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_SVG),y))
-+define GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_IMAGES
-+	$(foreach family,$(GOOGLE_MATERIAL_DESIGN_ICONS_LIST),\
-+		$(INSTALL) -d $(TARGET_DIR)/usr/share/google-material/$(family) \
-+			|| exit 1; \
-+		$(if $(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_PNG), \
-+			$(INSTALL) -D -m 0644 $(@D)/$(family)/1x_web/*.png \
-+				$(TARGET_DIR)/usr/share/google-material/$(family) || exit 1;) \
-+		$(if $(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_SVG), \
-+			$(INSTALL) -D -m 0644 $(@D)/$(family)/svg/production/*.svg \
-+				$(TARGET_DIR)/usr/share/google-material/$(family) || exit 1;) \
-+	)
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_FONT),y)
-+define GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_FONT
-+	$(INSTALL) -D -m 0644 $(@D)/iconfont/MaterialIcons-Regular.ttf \
-+		$(TARGET_DIR)/usr/share/fonts/google-material/MaterialIcons-Regular.ttf \
-+		|| exit 1
-+endef
-+endif
-+
-+define GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_SPRITES
-+	$(if $(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_SPRITES_CSS), \
-+		$(INSTALL) -d $(TARGET_DIR)/usr/share/google-material/css-sprite \
-+			|| exit 1; \
-+		$(INSTALL) -D -m 0644 $(@D)/sprites/css-sprite/* \
-+			$(TARGET_DIR)/usr/share/google-material/css-sprite || exit 1)
-+	$(if $(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_SPRITES_SVG), \
-+		$(INSTALL) -d $(TARGET_DIR)/usr/share/google-material/svg-sprite \
-+			|| exit 1; \
-+		$(INSTALL) -D -m 0644 $(@D)/sprites/svg-sprite/* \
-+			$(TARGET_DIR)/usr/share/google-material/svg-sprite || exit 1)
-+endef
-+
-+define GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_TARGET_CMDS
-+	$(GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_FONT)
-+	$(GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_IMAGES)
-+	$(GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_SPRITES)
-+endef
-+
-+$(eval $(generic-package))
+On Sun, May 31, 2015 at 09:19:07PM -0500, Doug Kehn wrote:
+> +config BR2_PACKAGE_PPPD_PON_POFF
+> +	bool "pon poff scripts"
+> +	help
+> +	  Install pon and poff scripts.
+
+No need to add an option for these scripts. Their size is negligible (less 
+than 5K combined) compared to pppd itself. Just install them unconditionally.
+
+baruch
+
 -- 
-1.9.5.msysgit.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
