@@ -1,75 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 01 Jun 2015 22:02:48 -0000
-Subject: [Buildroot] [git commit] package: add host-faketime
-Message-ID: <20150601220248.09E2381D62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gst1-plugins-bad: remove obsolete make
+	rules
+Message-ID: <20150601220248.1994E81D62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ffce535003f18a4f7fc7f0bb2a1c7fcf5d42624c
+commit: http://git.buildroot.net/buildroot/commit/?id=fa5619143da84b1f5a89737c86031b255363e993
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For use by packages or post-build/image scripts to fake the current time for
-obnoxious programs that insists on adding a timestamp.
+Commit 83e29f2656a237e2c300d523776868837d3bc646 "gst1-plugins-bad: bump
+version" (from 1.2.4 to 1.4.1) removed the configuration options for the
+cdaudio and eglglessink plugins as a consequence of their removal in
+1.3.1. However, that commit did not remove the corresponding make rules,
+so remove them now.
 
+Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in.host          |    1 +
- package/faketime/Config.in.host |    7 +++++++
- package/faketime/faketime.mk    |   20 ++++++++++++++++++++
- 3 files changed, 28 insertions(+), 0 deletions(-)
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |   24 --------------------
+ 1 files changed, 0 insertions(+), 24 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 051bc4a..1e047aa 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -7,6 +7,7 @@ menu "Host utilities"
- 	source "package/dosfstools/Config.in.host"
- 	source "package/e2fsprogs/Config.in.host"
- 	source "package/e2tools/Config.in.host"
-+	source "package/faketime/Config.in.host"
- 	source "package/genext2fs/Config.in.host"
- 	source "package/genimage/Config.in.host"
- 	source "package/genpart/Config.in.host"
-diff --git a/package/faketime/Config.in.host b/package/faketime/Config.in.host
-new file mode 100644
-index 0000000..0ebb963
---- /dev/null
-+++ b/package/faketime/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_FAKETIME
-+	bool "host faketime"
-+	help
-+	  Faketime reports faked system time to programs without
-+	  having to change the system-wide time.
-+
-+	  https://github.com/wolfcw/libfaketime
-diff --git a/package/faketime/faketime.mk b/package/faketime/faketime.mk
-new file mode 100644
-index 0000000..292fe17
---- /dev/null
-+++ b/package/faketime/faketime.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# libfaketime
-+#
-+################################################################################
-+
-+FAKETIME_VERSION = v0.9.6
-+FAKETIME_SITE = $(call github,wolfcw,libfaketime,$(FAKETIME_VERSION))
-+FAKETIME_LICENSE = GPLv2
-+FAKETIME_LICENSE_FILES = COPYING
-+
-+define HOST_FAKETIME_BUILD_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr
-+endef
-+
-+define HOST_FAKETIME_INSTALL_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install
-+endef
-+
-+$(eval $(host-generic-package))
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 6280fd9..0e00ffd 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -544,13 +544,6 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-bz2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CDAUDIO),y)
+-GST1_PLUGINS_BAD_CONF_OPTS += --enable-cdaudio
+-GST1_PLUGINS_BAD_DEPENDENCIES += libcdaudio
+-else
+-GST1_PLUGINS_BAD_CONF_OPTS += --disable-cdaudio
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CURL),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-curl
+ GST1_PLUGINS_BAD_DEPENDENCIES += libcurl
+@@ -663,23 +656,6 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-rsvg
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_EGLGLES),y)
+-GST1_PLUGINS_BAD_CONF_OPTS += --enable-eglgles
+-GST1_PLUGINS_BAD_DEPENDENCIES += libegl libgles
+-
+-ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+-# RPI has odd locations for several required headers.
+-GST1_PLUGINS_BAD_CONF_OPTS += --with-egl-window-system=rpi
+-GST1_PLUGINS_BAD_CONF_ENV += \
+-	CFLAGS="$(TARGET_CFLAGS) \
+-	-I$(STAGING_DIR)/usr/include/IL \
+-	-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
+-	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
+-endif
+-else
+-GST1_PLUGINS_BAD_CONF_OPTS += --disable-eglgles
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDL),y)
+ GST1_PLUGINS_BAD_CONF_ENV += ac_cv_path_SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-sdl
