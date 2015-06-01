@@ -1,70 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 01 Jun 2015 21:17:42 +0200
-Subject: [Buildroot] [PATCH 1/3] boot/at91bootstrap3: add license
- information
-In-Reply-To: <CA+TH9VnxnMj6SXxAagocarZWtay9kXvQhqPVTvQs26Jn=UNxgA@mail.gmail.com>
-References: <1432892326-10261-1-git-send-email-angelo.compagnucci@gmail.com>	<1432892326-10261-2-git-send-email-angelo.compagnucci@gmail.com>	<20150531104310.48e68079@free-electrons.com>
- <CA+TH9VnxnMj6SXxAagocarZWtay9kXvQhqPVTvQs26Jn=UNxgA@mail.gmail.com>
-Message-ID: <556CAFD6.3060306@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Jun 2015 21:19:46 +0200
+Subject: [Buildroot] Buildroot 2015.05 released
+In-Reply-To: <556CAD93.8090906@mind.be> (Arnout Vandecappelle's message of
+ "Mon, 01 Jun 2015 21:08:03 +0200")
+References: <87mw0kv3fx.fsf@dell.be.48ers.dk> <556CAD93.8090906@mind.be>
+Message-ID: <87iob7utgt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/01/15 18:03, Angelo Compagnucci wrote:
-> Dear Thomas Petazzoni,
-> 
-> 2015-05-31 10:43 GMT+02:00 Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com>:
->> Dear Angelo Compagnucci,
->>
->> On Fri, 29 May 2015 11:38:44 +0200, Angelo Compagnucci wrote:
->>> This patch adds licensing informations to at91bootstrap3
->>>
->>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->>> ---
->>>  boot/at91bootstrap3/at91bootstrap3.mk | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
->>> index ff49e14..2164a74 100644
->>> --- a/boot/at91bootstrap3/at91bootstrap3.mk
->>> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
->>> @@ -6,6 +6,8 @@
->>>
->>>  AT91BOOTSTRAP3_VERSION = v3.7.1
->>>  AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
->>> +AT91BOOTSTRAP3_LICENSE = BSD-2c
->>> +AT91BOOTSTRAP3_LICENSE_FILES = main.c
->>
->> I *think* it is actually closer to a BSD-3c, since it has the following
->> text:
->>
->>  * Atmel's name may not be used to endorse or promote products derived from
->>  * this software without specific prior written permission.
->>
->> However, the wording is not 100% the one of the BSD-3c, so I'm not sure
->> if we should call it BSD-3c or not.
-> 
-> Probably you are right, the wording is more similar to a BSD-3c
-> instead of a BSD-2c, but it's different. Can we use something like
-> BSD-custom or BSD-modified?
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- I would say
+ > On 05/31/15 23:32, Peter Korsgaard wrote:
+ > [snip]
+ >> And a special thanks to our patch reviewers:
+ >> 
+ >> git log 2015.02.. | grep -Ei '(reviewed|acked)-by:' | \
+ >> sed 's/.*by: //' | sort | uniq -c | sort -n -r
 
-BSD-2c with endorsement clause
+ >  For the future, perhaps also include the testers:
 
- That's still relatively short but also clear.
+ > git log 2015.02..2015.05 | grep -i 'tested-by:' | \
+ >     sed 's/.*by: //' | sort | uniq -c | sort -n -r
 
- Regards,
- Arnout
+Yes, I'll do that from now on. Feel free to remind me close to the
+2015.08 release in case I forget :P
 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Peter Korsgaard 
