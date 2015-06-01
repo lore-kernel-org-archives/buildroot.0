@@ -1,41 +1,66 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  1 Jun 2015 12:59:20 -0300
-Subject: [Buildroot] [PATCH 2/2] ethtool: bump to version 4.0
-In-Reply-To: <1433174360-1519-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1433174360-1519-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1433174360-1519-2-git-send-email-gustavo@zacarias.com.ar>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 1 Jun 2015 18:03:49 +0200
+Subject: [Buildroot] [PATCH 1/3] boot/at91bootstrap3: add license
+	information
+In-Reply-To: <20150531104310.48e68079@free-electrons.com>
+References: <1432892326-10261-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1432892326-10261-2-git-send-email-angelo.compagnucci@gmail.com>
+ <20150531104310.48e68079@free-electrons.com>
+Message-ID: <CA+TH9VnxnMj6SXxAagocarZWtay9kXvQhqPVTvQs26Jn=UNxgA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Dear Thomas Petazzoni,
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index f383037..5fde687 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256	813ffe59fddd2db423c578448b10e33e2e2d4cc2ba780f1f0c603642b20342f6	ethtool-3.18.tar.xz
-+sha256	904887acc7d2f9c35dec04eb0e8a727a3205f346af4f4c95560ea3798de5ecff	ethtool-4.0.tar.xz
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index 24e0f59..c358c62 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ETHTOOL_VERSION = 3.18
-+ETHTOOL_VERSION = 4.0
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPLv2
+2015-05-31 10:43 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Angelo Compagnucci,
+>
+> On Fri, 29 May 2015 11:38:44 +0200, Angelo Compagnucci wrote:
+>> This patch adds licensing informations to at91bootstrap3
+>>
+>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>> ---
+>>  boot/at91bootstrap3/at91bootstrap3.mk | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+>> index ff49e14..2164a74 100644
+>> --- a/boot/at91bootstrap3/at91bootstrap3.mk
+>> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
+>> @@ -6,6 +6,8 @@
+>>
+>>  AT91BOOTSTRAP3_VERSION = v3.7.1
+>>  AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
+>> +AT91BOOTSTRAP3_LICENSE = BSD-2c
+>> +AT91BOOTSTRAP3_LICENSE_FILES = main.c
+>
+> I *think* it is actually closer to a BSD-3c, since it has the following
+> text:
+>
+>  * Atmel's name may not be used to endorse or promote products derived from
+>  * this software without specific prior written permission.
+>
+> However, the wording is not 100% the one of the BSD-3c, so I'm not sure
+> if we should call it BSD-3c or not.
+
+Probably you are right, the wording is more similar to a BSD-3c
+instead of a BSD-2c, but it's different. Can we use something like
+BSD-custom or BSD-modified?
+
+Sincerely, Angelo
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+
+
 -- 
-2.3.6
+Profile: http://it.linkedin.com/in/compagnucciangelo
