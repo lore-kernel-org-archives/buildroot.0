@@ -1,40 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 01 Jun 2015 22:02:48 -0000
-Subject: [Buildroot] [git commit] mosquitto: bump version
-Message-ID: <20150601220247.D51997FD8C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package: add host-faketime
+Message-ID: <20150601220248.09E2381D62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=89cc05b66f06859883e74db2b11c517698967674
+commit: http://git.buildroot.net/buildroot/commit/?id=ffce535003f18a4f7fc7f0bb2a1c7fcf5d42624c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mosquitto/mosquitto.hash |    2 +-
- package/mosquitto/mosquitto.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+For use by packages or post-build/image scripts to fake the current time for
+obnoxious programs that insists on adding a timestamp.
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 2f38bdb..90133d7 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	75a8b051c7859a2426ffc15bf45b44f79c8288395a325d791ba54e5df9af58a8  mosquitto-1.4.1.tar.gz
-+sha256	5ebc3800a0018bfbec62dcc3748fb29f628df068acd39c62c4ef651d9276647e  mosquitto-1.4.2.tar.gz
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 0016750..281833c 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.4.1
-+MOSQUITTO_VERSION = 1.4.2
- MOSQUITTO_SITE = http://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in.host          |    1 +
+ package/faketime/Config.in.host |    7 +++++++
+ package/faketime/faketime.mk    |   20 ++++++++++++++++++++
+ 3 files changed, 28 insertions(+), 0 deletions(-)
+
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 051bc4a..1e047aa 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -7,6 +7,7 @@ menu "Host utilities"
+ 	source "package/dosfstools/Config.in.host"
+ 	source "package/e2fsprogs/Config.in.host"
+ 	source "package/e2tools/Config.in.host"
++	source "package/faketime/Config.in.host"
+ 	source "package/genext2fs/Config.in.host"
+ 	source "package/genimage/Config.in.host"
+ 	source "package/genpart/Config.in.host"
+diff --git a/package/faketime/Config.in.host b/package/faketime/Config.in.host
+new file mode 100644
+index 0000000..0ebb963
+--- /dev/null
++++ b/package/faketime/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_FAKETIME
++	bool "host faketime"
++	help
++	  Faketime reports faked system time to programs without
++	  having to change the system-wide time.
++
++	  https://github.com/wolfcw/libfaketime
+diff --git a/package/faketime/faketime.mk b/package/faketime/faketime.mk
+new file mode 100644
+index 0000000..292fe17
+--- /dev/null
++++ b/package/faketime/faketime.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# libfaketime
++#
++################################################################################
++
++FAKETIME_VERSION = v0.9.6
++FAKETIME_SITE = $(call github,wolfcw,libfaketime,$(FAKETIME_VERSION))
++FAKETIME_LICENSE = GPLv2
++FAKETIME_LICENSE_FILES = COPYING
++
++define HOST_FAKETIME_BUILD_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr
++endef
++
++define HOST_FAKETIME_INSTALL_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install
++endef
++
++$(eval $(host-generic-package))
