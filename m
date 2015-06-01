@@ -1,28 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Jun 2015 23:57:16 +0200
-Subject: [Buildroot] [git commit] grantlee: add hash
-Message-ID: <20150601220249.88CEA81D62@busybox.osuosl.org>
+Date: Mon, 1 Jun 2015 23:55:12 +0200
+Subject: [Buildroot] [git commit] ethtool: bump to version 4.0
+Message-ID: <20150601220249.6B94881D62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b27ca3da3d2931793513c05b3c16635eab83c72
+commit: http://git.buildroot.net/buildroot/commit/?id=57a5e6547e3dedb90cd96a6541d1f3b7d209c42e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/grantlee/grantlee.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/ethtool/ethtool.hash |    2 +-
+ package/ethtool/ethtool.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/grantlee/grantlee.hash b/package/grantlee/grantlee.hash
-new file mode 100644
-index 0000000..7f02bb3
---- /dev/null
-+++ b/package/grantlee/grantlee.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated after checking pgp signature
-+sha256	191809bf4c9b7ef877af0fd29345061c2372edfb4506aa7d5df5c71a570fa0ac	grantlee-0.5.1.tar.gz
-+sha256	eaf22ba92e53b8eb5dd8bca045fe81b734d3445445ed9e0c1af2a0a7c375b161	grantlee-5.0.0.tar.gz
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index f383037..5fde687 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256	813ffe59fddd2db423c578448b10e33e2e2d4cc2ba780f1f0c603642b20342f6	ethtool-3.18.tar.xz
++sha256	904887acc7d2f9c35dec04eb0e8a727a3205f346af4f4c95560ea3798de5ecff	ethtool-4.0.tar.xz
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 24e0f59..c358c62 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ETHTOOL_VERSION = 3.18
++ETHTOOL_VERSION = 4.0
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPLv2
