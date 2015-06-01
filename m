@@ -1,81 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 1 Jun 2015 07:18:19 +0300
-Subject: [Buildroot] [PATCH v3 0/2] Improve powerpc-utils with librtas
-In-Reply-To: <20150601040529.GA10144@ocelot.ozlabs.ibm.com>
-References: <cover.1432015191.git.sam.bobroff@au1.ibm.com>
- <20150601040529.GA10144@ocelot.ozlabs.ibm.com>
-Message-ID: <20150601041819.GT2282@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  1 Jun 2015 08:30:11 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-05-31
+Message-ID: <20150601063012.3193F100D5F@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sam,
+Build statistics for 2015-05-31
+===============================
 
-On Mon, Jun 01, 2015 at 02:05:29PM +1000, Sam Bobroff wrote:
-> Thanks again for the reviews. I think I've addressed all of the issues. Is
-> there anything else I need to do?
+        success : 261
+       failures : 12 
+       timeouts : 1  
+          TOTAL : 274
 
-Just wait for the maintainers to review/apply your patches. The backlog of 
-patches is visible at http://patchwork.ozlabs.org/project/buildroot/list/, and 
-as you can see it is quite long. You may help shortening this list by 
-reviewing other patches from that list. As the list shortens your contribution 
-will be considered sooner.
+Classification of failures by reason
+====================================
 
-baruch
+                     php-5.6.9 | 2 
+                  guile-2.0.11 | 2 
+         conntrack-tools-1.4.2 | 2 
+                   sudo-1.8.13 | 1 
+                      nbd-3.11 | 1 
+                 cdrkit-1.1.11 | 1 
+       host-erlang-rebar-2.5.1 | 1 
+                upmpdcli-0.8.6 | 1 
+              strongswan-5.3.0 | 1 
+                    qemu-2.3.0 | 1 
 
-> On Tue, May 19, 2015 at 03:59:54PM +1000, Sam Bobroff wrote:
-> > Many useful functions are missing from powerpc-utils when built by
-> > buildroot, because they depend on librtas which is not included.
-> > 
-> > This set adds the librtas package, a small patch to fix a problem with
-> > it's make install target, and tweaks the powerpc-utils config
-> > to include it. This makes the following additional programs available
-> > from powerpc-utils:
-> > 
-> > * uesensor
-> > * set_poweron_time
-> > * drmgr
-> > * lsslot
-> > * activate_firmware
-> > * rtas_ibm_get_vpd
-> > * serv_config
-> > * rtas_event_decode
-> > * sys_ident
-> > 
-> > Changes v2 -> v3:
-> > Patch 2/2: powerpc-utils: optionally use librtas
-> > 
-> > Group "with" and "without" clauses.
-> > 
-> > Changes v1 -> v2:
-> > Patch 1/2: librtas: new package
-> > 
-> > Remove redundant INSTALL_TARGET=yes.
-> > Add patch description and patch signed-off-by.
-> > Rename patch with correct prefix (0001-).
-> > 
-> > Patch 2/2: powerpc-utils: optionally use librtas
-> > 
-> > Make librtas support in powerpc-utils optional due to size concerns.
-> > 
-> > Sam Bobroff (2):
-> >   librtas: new package
-> >   powerpc-utils: optionally use librtas
-> > 
-> >  package/Config.in                                  |    1 +
-> >  ...0001-librtas-install-librtas.so.1-symlink.patch |   31 ++++++++++++++++++++
-> >  package/librtas/Config.in                          |    9 ++++++
-> >  package/librtas/librtas.mk                         |   26 ++++++++++++++++
-> >  package/powerpc-utils/Config.in                    |   18 ++++++++++++
-> >  package/powerpc-utils/powerpc-utils.mk             |    8 ++++-
-> >  6 files changed, 92 insertions(+), 1 deletion(-)
-> >  create mode 100644 package/librtas/0001-librtas-install-librtas.so.1-symlink.patch
-> >  create mode 100644 package/librtas/Config.in
-> >  create mode 100644 package/librtas/librtas.mk
+Detail of failures
+===================
+
+      x86_64 |                  cdrkit-1.1.11 | NOK | http://autobuild.buildroot.net/results/2f5ad4fa38119733a408b75858dad9c6dbe97ffc/
+     powerpc |          conntrack-tools-1.4.2 | NOK | http://autobuild.buildroot.net/results/74222a44ad168148c18af479878d8f848d3d6a73/
+      xtensa |          conntrack-tools-1.4.2 | NOK | http://autobuild.buildroot.net/results/fff4865c9bb8ca42d3cece903d0fc3daea504f67/
+      x86_64 |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/38d672ed550666f3abf9892451d147c1dcf34ee8/
+         arm |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/a1795dafc4967f1a07e674e7676f7b1d3fb39241/
+         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/201c12c2071c5f3d07df81db1c0e32ae49ec9cba/
+      mipsel |                       nbd-3.11 | NOK | http://autobuild.buildroot.net/results/3a2d4124f78d4e504e8e961fabe038e570923408/
+        sh4a |                      php-5.6.9 | NOK | http://autobuild.buildroot.net/results/06a078fb6603a83c4097042fe5c5b087541acd29/
+         sh4 |                      php-5.6.9 | NOK | http://autobuild.buildroot.net/results/ee7eaca346d84bc4b0552063e21cc8b342e5a653/
+        i686 |                     qemu-2.3.0 | NOK | http://autobuild.buildroot.net/results/c81b1d9f5a52199ae7b3da9b7264737a2d46f25c/
+microblazeel |               strongswan-5.3.0 | NOK | http://autobuild.buildroot.net/results/7e5c4d835444965ac9c32eb6fcabfd5f1b209f10/
+         arm |                    sudo-1.8.13 | NOK | http://autobuild.buildroot.net/results/79b2fa4128c70d859dcb9dcc0ffdcf6c60d7066f/
+         sh4 |                 upmpdcli-0.8.6 | NOK | http://autobuild.buildroot.net/results/7ed85071bc06b4806e90b278a0736ea70c01b456/
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+http://autobuild.buildroot.net
