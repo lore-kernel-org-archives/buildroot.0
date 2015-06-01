@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 01 Jun 2015 22:09:32 +0200
-Subject: [Buildroot] [PATCH 1/2] arch: tidy up mmu config
-In-Reply-To: <1432227249-15345-1-git-send-email-guido@vanguardiasur.com.ar>
+Date: Mon, 01 Jun 2015 22:32:00 +0200
+Subject: [Buildroot] [PATCH 2/2] arch: tidy up binary formats config
+In-Reply-To: <1432227249-15345-2-git-send-email-guido@vanguardiasur.com.ar>
 References: <1432227249-15345-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <556CBBFC.4080002@mind.be>
+ <1432227249-15345-2-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <556CC140.6000001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,40 +12,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 05/21/15 18:54, Guido Mart?nez wrote:
-> Instead of blacklisting which architectures support MMUs (mandatorily
-> or optionally), introduce two Kconfig options that are selected by each
-> architecture in each case.
-> 
-> This simplifies the logic in BR2_USE_MMU.
+> Instead of blacklisting architectures when deciding the binary format,
+> let's have each one select the binary formats it supports. The
+> preferred default is ELF, then FDPIC, and finally FLAT.
 > 
 > Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ In the kernel, we simply have:
 
- Two small improvements, but even without them this patch is OK for me.
+config BINFMT_ELF
+	depends on MMU
 
-- In arch/Config.in, the ARM section and the Blackfin section look the same to
-the casual onlooker, but for ARM the MMU options depend on the subarchitecture,
-while for Blackfin it's always NOMMU. So I'd make this explicit by adding a
-comment for ARM:
+config BINFMT_ELF_FDPIC
+	depends on (BLACKFIN || (SUPERH32 && !MMU))
 
-config BR2_arm
-        bool "ARM (little endian)"
-	# MMU support is set by subarchitectur in Config.in.arm
+config BINFMT_FLAT
+	depends on !MMU
 
- Same for ELF in the second patch.
+(removed the parts that are not relevant for us).
 
-- Like you did for ARM, I think you should move the MMU selection to the
-subarches for xtensa as well. Since in fact, the fsf variant is always MMU.
-
-
- So if you repost this patch and make the above changes, you can add my Acked-by.
+ So for the ELF and FLAT options, I'd just make it depend on USE_MMU. For FDPIC
+it makes sense to keep this patch.
 
 
  Regards,
  Arnout
-
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
