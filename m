@@ -1,41 +1,108 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Jun 2015 23:56:17 +0200
-Subject: [Buildroot] [git commit] tcpdump: bump to version 4.7.4
-Message-ID: <20150601220249.7EF8681D62@busybox.osuosl.org>
+Date: Mon, 1 Jun 2015 23:54:14 +0200
+Subject: [Buildroot] [git commit] wireshark: security bump to version 1.12.5
+Message-ID: <20150601220249.534DC81D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=76fae54638ccabe6ac4dfba4a548c243ac948e7d
+commit: http://git.buildroot.net/buildroot/commit/?id=c1aa0bb1097892bc4c5743bc6149668300c451cc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes:
+CVE-2015-3808 CVE-2015-3809 - The LBMR dissector could go into an
+infinite loop.
+CVE-2015-3811 - The WCP dissector could crash while decompressing data.
+CVE-2015-3812 - The X11 dissector could leak memory.
+CVE-2015-3813 - The packet reassembly code could leak memory.
+CVE-2015-3814 - The IEEE 802.11 dissector could go into an infinite
+loop.
+CVE-2015-3815 - The Android Logcat file parser could crash.
+
+Patch upstream so drop and disable autoreconf.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcpdump/tcpdump.hash |    2 +-
- package/tcpdump/tcpdump.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...001-fix-wrong-cflags-for-build-assumption.patch |   38 --------------------
+ package/wireshark/wireshark.hash                   |    6 ++--
+ package/wireshark/wireshark.mk                     |    4 +--
+ 3 files changed, 4 insertions(+), 44 deletions(-)
 
-diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-index 36e1c3b..5943347 100644
---- a/package/tcpdump/tcpdump.hash
-+++ b/package/tcpdump/tcpdump.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	1f87fb652ce996d41e7a06c601bc6ea29b13fee922945b23770c29490f1d8ace	tcpdump-4.7.3.tar.gz
-+sha256	6be520269a89036f99c0b2126713a60965953eab921002b07608ccfc0c47d9af	tcpdump-4.7.4.tar.gz
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 71b844a..6a88305 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/wireshark/0001-fix-wrong-cflags-for-build-assumption.patch b/package/wireshark/0001-fix-wrong-cflags-for-build-assumption.patch
+deleted file mode 100644
+index 14cb957..0000000
+--- a/package/wireshark/0001-fix-wrong-cflags-for-build-assumption.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-AC_WIRESHARK_GCC_CFLAGS_CHECK checks for valid CFLAGS against CC and pushes
+-them into CFLAGS and CFLAGS_FOR_BUILD.
+-This is wrong since CC_FOR_BUILD might be wildly different and older than CC
+-leading to build errors.
+-
+-Upstream status: reported in tracker
+-https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9507
+-
+-Patch status: Interim to fix:
+-http://autobuild.buildroot.net/results/2b1/2b1a0654b649618422d65edf370b82476ba84491/
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura wireshark-1.12.0.orig/acinclude.m4 wireshark-1.12.0/acinclude.m4
+---- wireshark-1.12.0.orig/acinclude.m4	2014-09-04 15:45:38.365255309 -0300
+-+++ wireshark-1.12.0/acinclude.m4	2014-09-04 15:46:23.349810353 -0300
+-@@ -1755,10 +1755,6 @@
+-               # just the new option.
+-               #
+-               CFLAGS="$CFLAGS_saved $GCC_OPTION"
+--              #
+--              # Add it to the flags we use when building build tools.
+--              #
+--              CFLAGS_FOR_BUILD="$CFLAGS_FOR_BUILD $GCC_OPTION"
+-             ],
+-             [
+-               AC_MSG_RESULT(yes)
+-@@ -1771,10 +1767,6 @@
+-           # just the new option.
+-           #
+-           CFLAGS="$CFLAGS_saved $GCC_OPTION"
+--          #
+--          # Add it to the flags we use when building build tools.
+--          #
+--          CFLAGS_FOR_BUILD="$CFLAGS_FOR_BUILD $GCC_OPTION"
+-         fi
+-       ],
+-       [
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index fa4cf18..35eb1a2 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,3 +1,3 @@
+-# From https://www.wireshark.org/download/SIGNATURES-1.12.4.txt
+-md5	acfa156fd35cb66c867b1ace992e4b5b	wireshark-1.12.4.tar.bz2
+-sha1	dbbd4090c02fe170f35b26fa26d8aba0b399c659	wireshark-1.12.4.tar.bz2
++# From https://www.wireshark.org/download/SIGNATURES-1.12.5.txt
++md5	9ee199dde4f36a3d71f7b81dd6764e93	wireshark-1.12.5.tar.bz2
++sha1	379686f0b6355ae2e6b3f7055578317a07ce5590	wireshark-1.12.5.tar.bz2
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 434687c..eb56808 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,14 +4,12 @@
  #
  ################################################################################
  
--TCPDUMP_VERSION = 4.7.3
-+TCPDUMP_VERSION = 4.7.4
- TCPDUMP_SITE = http://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3c
- TCPDUMP_LICENSE_FILES = LICENSE
+-WIRESHARK_VERSION = 1.12.4
++WIRESHARK_VERSION = 1.12.5
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
+ WIRESHARK_LICENSE_FILES = COPYING
+ WIRESHARK_DEPENDENCIES = libpcap libgcrypt libglib2
+-# For wrong cflags patch
+-WIRESHARK_AUTORECONF = YES
+ WIRESHARK_CONF_ENV = \
+ 	LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+ 	ac_cv_path_PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
