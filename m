@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  1 Jun 2015 18:42:41 -0300
-Subject: [Buildroot] [PATCH] libfuse: security bump to version 2.9.4
-Message-ID: <1433194961-4776-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  1 Jun 2015 18:43:21 -0300
+Subject: [Buildroot] [PATCH] strongswan: security bump to version 5.3.1
+Message-ID: <1433195001-4823-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +10,38 @@ To: buildroot@busybox.net
 
 Fixes:
 
-CVE-2015-3202 - fix exec environment for mount and umount.
+CVE-2015-3991 - denial-of-service and potential remote code execution
+vulnerability triggered by IKEv1/IKEv2 messages that contain payloads
+for the respective other IKE version.
+other IKE version
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libfuse/libfuse.hash | 5 +++--
- package/libfuse/libfuse.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/strongswan/strongswan.hash | 4 ++--
+ package/strongswan/strongswan.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libfuse/libfuse.hash b/package/libfuse/libfuse.hash
-index d37c521..b1bbee3 100644
---- a/package/libfuse/libfuse.hash
-+++ b/package/libfuse/libfuse.hash
-@@ -1,2 +1,3 @@
--# Locally computed:
--sha256  0beb83eaf2c5e50730fc553406ef124d77bc02c64854631bdfc86bfd6437391c  fuse-2.9.3.tar.gz
-+# From http://sourceforge.net/projects/fuse/files/fuse-2.X/2.9.4/
-+md5	ecb712b5ffc6dffd54f4a405c9b372d8	fuse-2.9.4.tar.gz
-+sha1	c8b25419f33624dc5240af6a5d26f2c04367ca71	fuse-2.9.4.tar.gz
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index 000d2b4..7a28a81 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index 626356a..e38c736 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -1,2 +1,2 @@
+-# From http://download.strongswan.org/strongswan-5.3.0.tar.bz2.md5
+-md5	c52d4228231c2025d9c320d0e9990327	strongswan-5.3.0.tar.bz2
++# From http://download.strongswan.org/strongswan-5.3.1.tar.bz2.md5
++md5	66f258901a3d6c271da1a0c7fb3e5013	strongswan-5.3.1.tar.bz2
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index af21dda..f165eb1 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFUSE_VERSION = 2.9.3
-+LIBFUSE_VERSION = 2.9.4
- LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE = http://downloads.sourceforge.net/project/fuse/fuse-2.X/$(LIBFUSE_VERSION)
- LIBFUSE_LICENSE = GPLv2 LGPLv2.1
+-STRONGSWAN_VERSION = 5.3.0
++STRONGSWAN_VERSION = 5.3.1
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
+ STRONGSWAN_LICENSE = GPLv2+
 -- 
 2.3.6
