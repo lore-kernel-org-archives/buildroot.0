@@ -1,39 +1,61 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Mon,  1 Jun 2015 21:02:57 +0200
-Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.9.1-4
-Message-ID: <1433185377-5118-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 01 Jun 2015 21:08:03 +0200
+Subject: [Buildroot] Buildroot 2015.05 released
+In-Reply-To: <87mw0kv3fx.fsf@dell.be.48ers.dk>
+References: <87mw0kv3fx.fsf@dell.be.48ers.dk>
+Message-ID: <556CAD93.8090906@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 05/31/15 23:32, Peter Korsgaard wrote:
+[snip]
+> And a special thanks to our patch reviewers:
+> 
+> git log 2015.02.. | grep -Ei '(reviewed|acked)-by:' | \
+>     sed 's/.*by: //' | sort | uniq -c | sort -n -r
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index b1c9caf..7ac3298 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
--sha256 8f6ebeb1a1321fd7b7d3161a66461743ea5bbc352e4339c792b3bab52c379378 ImageMagick-6.9.1-1.tar.xz
-+sha256 74973478058069ce44040ff76b61df713d70adcadfd207836cc0622cadf1e4bf ImageMagick-6.9.1-4.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 1594f69..298d0a8 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 6.9.1-1
-+IMAGEMAGICK_VERSION = 6.9.1-4
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+ For the future, perhaps also include the testers:
+
+git log 2015.02..2015.05 | grep -i 'tested-by:' | \
+    sed 's/.*by: //' | sort | uniq -c | sort -n -r
+
+     19 Yann E. MORIN
+     15 Arnout Vandecappelle (Essensium/Mind)
+     12 Gary Bisson
+      7 Gustavo Zacarias
+      6 Romain Naour
+      5 Vicente Olivert Riera
+      4 Gwenhael Goavec-Merou
+      4 Gergely Imreh
+      2 Waldemar Brodkorb
+      2 Thomas Petazzoni
+      2 Samuel Martin
+      2 Luca Ceresoli
+      2 J?rg Krause
+      2 Fabio Porcedda
+      1 Thomas De Schampheleire
+      1 Steven Noonan
+      1 Ryan Barnett
+      1 Ryan Barnett
+      1 Rostislav Lisovy
+      1 Jaap Crezee
+      1 Baruch Siach
+      1 Angelo Compagnucci
+      1 Andr? Hentschel
+      1 Maxime Hadjinlian
+
+
+
+ Regards,
+ Arnout
+
 -- 
-1.9.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
