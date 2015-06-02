@@ -1,24 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Jun 2015 22:58:38 +0200
-Subject: [Buildroot] [PATCH 3/3] Config.in: remove
-	BR2_DEPRECATED_SINCE_2014_05
-In-Reply-To: <1433267534-12710-3-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 2 Jun 2015 14:52:14 -0300")
-References: <1433267534-12710-1-git-send-email-gustavo@zacarias.com.ar>
- <1433267534-12710-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bngxrfnl.fsf@dell.be.48ers.dk>
+Date: Tue, 2 Jun 2015 22:50:59 +0200
+Subject: [Buildroot] [git commit] Config.in: Add BR2_DEPRECATED_SINCE_2015_08
+Message-ID: <20150602205903.752458082E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=602692a225d48f01c3c50eb3a09f8b4c0a81c6bf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The symbol is unused so remove it.
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+In preparation for the deprecation of certain features in 2015.08, add
+the BR2_DEPRECATED_SINCE_2015_08 symbol.
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/Config.in b/Config.in
+index 2b39d6a..bdff7df 100644
+--- a/Config.in
++++ b/Config.in
+@@ -312,6 +312,10 @@ config BR2_DEPRECATED_SINCE_2015_05
+ 	bool
+ 	default y
+ 
++config BR2_DEPRECATED_SINCE_2015_08
++	bool
++	default y
++
+ endif
+ 
+ config BR2_ENABLE_DEBUG
