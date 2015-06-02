@@ -1,39 +1,46 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  2 Jun 2015 09:41:05 -0300
-Subject: [Buildroot] [PATCH 1/2] samba: bump to version 4.2.2
-Message-ID: <1433248866-20991-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  2 Jun 2015 09:41:06 -0300
+Subject: [Buildroot] [PATCH 2/2] samba4: enable for uclibc-ng
+In-Reply-To: <1433248866-20991-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1433248866-20991-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1433248866-20991-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+uClibc-ng has the required functionality for samba 4.2.x without the
+need for any special tricks.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/Config.in | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 42bfb93..11c15b7 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	37eaa239c116dc2c22c29c5a2931eb178ed22e48b594687247446703119b4ac3	samba-4.2.1.tar.gz
-+sha256	27d6c69dc3afee38fd28051001d2d4bdae38c567612a9ec6477bb5567e2abc1e	samba-4.2.2.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index e5971fb..d7d5299 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+index 57adadd..db8c91d 100644
+--- a/package/samba4/Config.in
++++ b/package/samba4/Config.in
+@@ -1,10 +1,16 @@
+-comment "samba4 needs an (e)glibc toolchain"
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC
++comment "samba4 needs an (e)glibc or uClibc-ng toolchain w/ RPC, wchar"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_UCLIBC_VERSION_NG
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on BR2_USE_MMU
  
--SAMBA4_VERSION = 4.2.1
-+SAMBA4_VERSION = 4.2.2
- SAMBA4_SITE = http://ftp.samba.org/pub/samba
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ config BR2_PACKAGE_SAMBA4
+ 	bool "samba4"
+ 	depends on !BR2_PACKAGE_SAMBA
+-	depends on BR2_TOOLCHAIN_USES_GLIBC # needs $ORIGIN support
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_WCHAR # e2fsprogs
++	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	# needs $ORIGIN support
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_UCLIBC_VERSION_NG
+ 	depends on !BR2_nios2 # binary too large, relocations don't fit
+ 	select BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_POPT
 -- 
 2.3.6
