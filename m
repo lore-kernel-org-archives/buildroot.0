@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Jun 2015 22:41:04 +0200
-Subject: [Buildroot] [git commit] package/musl: bump to version 1.1.9
-Message-ID: <20150602205020.E2E4D818DB@busybox.osuosl.org>
+Date: Tue, 2 Jun 2015 22:44:21 +0200
+Subject: [Buildroot] [git commit] wireless-regdb: bump to version 2015.05.15
+Message-ID: <20150602205021.28BF680417@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bffee1ad254ccd3604e445ed5ca2eb1b113aeee1
+commit: http://git.buildroot.net/buildroot/commit/?id=9781aa6af3b87f99bc4ab88562993f93eab2b87d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/musl/musl.hash |    2 +-
- package/musl/musl.mk   |    2 +-
+ package/wireless-regdb/wireless-regdb.hash |    2 +-
+ package/wireless-regdb/wireless-regdb.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index 20bb2f8..d6b28e2 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index 115b490..1afb023 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	fa928506415b9c555977daaf874c190eaf7fbbd16028cc5c5f33a00a83227813	musl-1.1.8.tar.gz
-+sha256	00bf7173caf972c88cd07cb0d420c082a2f35efcccc1a81f8909bec2d030283e  musl-1.1.9.tar.gz
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 6cba5bb..a089327 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256	4c4a10b3aa97ac494dda5bc13a045bda211437aab24341fe11d78530e640f133	wireless-regdb-2015.04.06.tar.xz
++sha256	fe5b5fae4934b29f2d15e018fbecae013fda44cf023c10285a669c86c5a33da3	wireless-regdb-2015.05.15.tar.xz
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 20b330f..8a5b6ab 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MUSL_VERSION = 1.1.8
-+MUSL_VERSION = 1.1.9
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+-WIRELESS_REGDB_VERSION = 2015.04.06
++WIRELESS_REGDB_VERSION = 2015.05.15
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
