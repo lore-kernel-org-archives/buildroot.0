@@ -1,10 +1,9 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Tue,  2 Jun 2015 08:28:30 -0500
-Subject: [Buildroot] [PATCH v7 14/22] util-linux: selinux, audit,
-	and pam support
+Date: Tue,  2 Jun 2015 08:28:31 -0500
+Subject: [Buildroot] [PATCH v7 15/22] vim: selinux support
 In-Reply-To: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1433251718-3167-15-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1433251718-3167-16-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,7 +13,6 @@ To: buildroot@busybox.net
 From: Matt Weber <matthew.weber@rockwellcollins.com>
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
 ---
 Changes v6 -> v7:
@@ -25,58 +23,27 @@ Changes v5 -> v6:
 
 Changes v4 -> v5:
   - New patch
-  - Added pam file tweaks for selinux support (Clayton S.)
 ---
- package/util-linux/util-linux.mk | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ package/vim/vim.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 3ca147a..259334f 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -59,6 +59,20 @@ ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
- UTIL_LINUX_DEPENDENCIES += libcap-ng
- endif
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index da84d14..518afaf 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -28,6 +28,13 @@ VIM_CONF_OPTS = --with-tlib=ncurses --enable-gui=no --without-x
+ VIM_LICENSE = Charityware
+ VIM_LICENSE_FILES = README.txt
  
 +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+UTIL_LINUX_DEPENDENCIES += libselinux
-+UTIL_LINUX_CONF_OPTS += --with-selinux
++VIM_CONF_OPTS += --enable-selinux
++VIM_DEPENDENCIES += libselinux
 +else
-+UTIL_LINUX_CONF_OPTS += --without-selinux
++VIM_CONF_OPTS += --disable-selinux
 +endif
 +
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+UTIL_LINUX_DEPENDENCIES += audit
-+UTIL_LINUX_CONF_OPTS += --with-audit
-+else
-+UTIL_LINUX_CONF_OPTS += --without-audit
-+endif
-+
- # Used by cramfs utils
- UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
- 
-@@ -146,9 +160,22 @@ define UTIL_LINUX_INSTALL_PAMFILES
- 	$(INSTALL) -m 0644 package/util-linux/su.pam \
- 		$(TARGET_DIR)/etc/pam.d/su-l
- endef
-+
-+# Add the required hooks to the pam files if SELinux is enabled
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+define UTIL_LINUX_FIXUP_PAMFILES
-+	for file in login su su-l ; do \
-+		$(SED) '/selinux/d' $(TARGET_DIR)/etc/pam.d/$${file}; \
-+		$(SED) '0,/session/s/session/session		required	pam_selinux.so close\nsession/' $(TARGET_DIR)/etc/pam.d/$${file}; \
-+		echo "session		required	pam_selinux.so open" >> $(TARGET_DIR)/etc/pam.d/$${file}; \
-+	done
-+endef
-+endif
-+
- endif
- 
- UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
-+UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_FIXUP_PAMFILES
- 
- # Install agetty->getty symlink to avoid breakage when there's no busybox
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_AGETTY),y)
+ define VIM_INSTALL_TARGET_CMDS
+ 	cd $(@D)/src; \
+ 		$(MAKE) DESTDIR=$(TARGET_DIR) installvimbin; \
 -- 
 1.9.1
