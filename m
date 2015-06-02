@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  2 Jun 2015 13:30:46 -0300
-Subject: [Buildroot] [PATCH] squid: bump to version 3.5.5
-Message-ID: <1433262646-32740-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  2 Jun 2015 13:31:12 -0300
+Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2015.05.15
+Message-ID: <1433262672-766-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 50e2e7b..64d2fac 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.4.tar.xz.asc
--md5	5b53d5bb47fa033b76857f7956d0c36b	squid-3.5.4.tar.xz
--sha1	71a04a5f7c4c38464a8a08ae1089c47abcea0e49	squid-3.5.4.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.5.tar.xz.asc
-+md5	9a323a97753143ddd935aed58a0193ae	squid-3.5.5.tar.xz
-+sha1	2c168e8b13251ed8050d9e780127c4de016dcb61	squid-3.5.5.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 745c9ad..3d0f4d8 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index 115b490..1afb023 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256	4c4a10b3aa97ac494dda5bc13a045bda211437aab24341fe11d78530e640f133	wireless-regdb-2015.04.06.tar.xz
++sha256	fe5b5fae4934b29f2d15e018fbecae013fda44cf023c10285a669c86c5a33da3	wireless-regdb-2015.05.15.tar.xz
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 20b330f..8a5b6ab 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).4
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).5
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+-WIRELESS_REGDB_VERSION = 2015.04.06
++WIRELESS_REGDB_VERSION = 2015.05.15
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
 -- 
 2.3.6
