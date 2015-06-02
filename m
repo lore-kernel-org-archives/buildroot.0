@@ -1,44 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Jun 2015 22:45:02 +0200
-Subject: [Buildroot] [git commit] mpg123: bump to version 1.22.2
-Message-ID: <20150602205021.82B017F8CB@busybox.osuosl.org>
+Date: Tue, 2 Jun 2015 22:45:59 +0200
+Subject: [Buildroot] [git commit] gawk: bump to version 4.1.3
+Message-ID: <20150602205021.AABF580187@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74d585b49cb7ae9849fcff7b381a6afa35580df8
+commit: http://git.buildroot.net/buildroot/commit/?id=4e5ab5e54e3c5eed73a493bd83490b7118256f83
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpg123/mpg123.hash |    6 +++---
- package/mpg123/mpg123.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gawk/gawk.hash |    2 +-
+ package/gawk/gawk.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index e9f04b4..bf81f2a 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.1/
--md5	abf310c716d56c283561eff0903bcb69	mpg123-1.22.1.tar.bz2
--sha1	c3193902b1cf923a625ed94360c91e28d84753d3	mpg123-1.22.1.tar.bz2
-+# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.2/
-+md5	6f6d2178c354f39207bf97e062936110	mpg123-1.22.2.tar.bz2
-+sha1	9125b4eabf6327c71a439e07e16eb39b712085e2	mpg123-1.22.2.tar.bz2
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index c9acb6b..a16e400 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
+diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
+index 8720031..7f746d8 100644
+--- a/package/gawk/gawk.hash
++++ b/package/gawk/gawk.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	ea8b53c5834ee27012fecba7273f97fca7104884975cf81ddae6f85c5581f481	gawk-4.1.2.tar.xz
++sha256	e3cf55e91e31ea2845f8338bedd91e40671fc30e4d82ea147d220e687abda625	gawk-4.1.3.tar.xz
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index 653a5a0..1820689 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPG123_VERSION = 1.22.1
-+MPG123_VERSION = 1.22.2
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
+-GAWK_VERSION = 4.1.2
++GAWK_VERSION = 4.1.3
+ GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
+ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
+ GAWK_DEPENDENCIES = host-gawk $(if $(BR2_PACKAGE_MPFR),mpfr)
