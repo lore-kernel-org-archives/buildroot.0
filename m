@@ -1,78 +1,42 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  2 Jun 2015 18:32:59 +0200
-Subject: [Buildroot] [PATCH 5/5] luajit: clean fuzz/offset in patches
-In-Reply-To: <1433262779-20797-1-git-send-email-francois.perrad@gadz.org>
-References: <1433262779-20797-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1433262779-20797-5-git-send-email-francois.perrad@gadz.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  2 Jun 2015 13:58:01 -0300
+Subject: [Buildroot] [PATCH] mpg123: bump to version 1.22.2
+Message-ID: <1433264281-22078-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/luajit/0001-no-bin-symlink.patch | 4 ++--
- package/luajit/0002-install-inc.patch    | 4 ++--
- package/luajit/0003-install-so.patch     | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/mpg123/mpg123.hash | 6 +++---
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/luajit/0001-no-bin-symlink.patch b/package/luajit/0001-no-bin-symlink.patch
-index 6391f39..37298dd 100644
---- a/package/luajit/0001-no-bin-symlink.patch
-+++ b/package/luajit/0001-no-bin-symlink.patch
-@@ -6,7 +6,7 @@ Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -42,8 +42,7 @@
-+@@ -43,8 +43,7 @@
-  INSTALL_MAN= $(INSTALL_SHARE)/man/man1
-  INSTALL_PKGCONFIG= $(INSTALL_LIB)/pkgconfig
-  
-@@ -16,7 +16,7 @@ Index: b/Makefile
-  INSTALL_ANAME= libluajit-$(ABIVER).a
-  INSTALL_SONAME= libluajit-$(ABIVER).so.$(MAJVER).$(MINVER).$(RELVER)
-  INSTALL_SOSHORT= libluajit-$(ABIVER).so
--@@ -57,7 +56,6 @@
-+@@ -58,7 +57,6 @@
-  INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
-  INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
-  INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
-diff --git a/package/luajit/0002-install-inc.patch b/package/luajit/0002-install-inc.patch
-index 1fd11b1..86b766d 100644
---- a/package/luajit/0002-install-inc.patch
-+++ b/package/luajit/0002-install-inc.patch
-@@ -6,9 +6,9 @@ Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -31,7 +31,7 @@ DPREFIX= $(DESTDIR)$(PREFIX)
-+@@ -32,7 +32,7 @@
-  INSTALL_BIN=   $(DPREFIX)/bin
-- INSTALL_LIB=   $(DPREFIX)/lib
-+ INSTALL_LIB=   $(DPREFIX)/$(MULTILIB)
-  INSTALL_SHARE= $(DPREFIX)/share
- -INSTALL_INC=   $(DPREFIX)/include/luajit-$(MAJVER).$(MINVER)
- +INSTALL_INC=   $(DPREFIX)/include
-diff --git a/package/luajit/0003-install-so.patch b/package/luajit/0003-install-so.patch
-index 738ec07..5929595 100644
---- a/package/luajit/0003-install-so.patch
-+++ b/package/luajit/0003-install-so.patch
-@@ -11,12 +11,12 @@ Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -56,7 +56,7 @@
-+@@ -55,7 +55,7 @@
-  INSTALL_STATIC= $(INSTALL_LIB)/$(INSTALL_ANAME)
-  INSTALL_DYN= $(INSTALL_LIB)/$(INSTALL_SONAME)
-  INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
- -INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
- +INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT).$(MAJVER)
-  INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
-- INSTALL_TSYM= $(INSTALL_BIN)/$(INSTALL_TSYMNAME)
-  INSTALL_PC= $(INSTALL_PKGCONFIG)/$(INSTALL_PCNAME)
-+ 
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index e9f04b4..bf81f2a 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.1/
+-md5	abf310c716d56c283561eff0903bcb69	mpg123-1.22.1.tar.bz2
+-sha1	c3193902b1cf923a625ed94360c91e28d84753d3	mpg123-1.22.1.tar.bz2
++# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.2/
++md5	6f6d2178c354f39207bf97e062936110	mpg123-1.22.2.tar.bz2
++sha1	9125b4eabf6327c71a439e07e16eb39b712085e2	mpg123-1.22.2.tar.bz2
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index c9acb6b..a16e400 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPG123_VERSION = 1.22.1
++MPG123_VERSION = 1.22.2
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
 -- 
-2.1.4
+2.3.6
