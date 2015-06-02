@@ -1,28 +1,53 @@
-From: Mathieu Slabbinck <matty.slabbinck@gmail.com>
-Date: Tue, 2 Jun 2015 09:57:29 +0200
-Subject: [Buildroot] Nodejs 0.10.36 execvp: printf: Argument list too long
-Message-ID: <CAOFH_kHEookn4NDJBujS7pizjt9QuX4qQMgx3ks6N01CdRd=Pw@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Tue,  2 Jun 2015 10:27:30 +0200
+Subject: [Buildroot] [PATCH] barebox: bump to version 2015.05.0
+Message-ID: <1433233650-3788-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+---
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 7 ++++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-I'm having trouble building nodjes for my target getting following error:
-
-make[2]: execvp: printf: Argument list too long
-
-I found a patch related to this but this is for 0.8 and using the patch
-results in a broken build.
-http://patchwork.openembedded.org/patch/72811/
-
-Anyone have any idea how to fix this?
-
-Kr
-
-Mathieu
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150602/7d576211/attachment.html>
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 53d8013..ffac979 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2015.04.0"
++	bool "2015.05.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2015.04.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2015.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 5782fb5..aa0f12e 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,6 @@
+ 
+-# http://www.barebox.org/download/barebox-2015.04.0.tar.bz2.md5
+-md5 749436075f39d4cd051c71ea52b24f67 barebox-2015.04.0.tar.bz2
++# http://www.barebox.org/download/barebox-2015.05.0.tar.bz2.md5
++md5 3b4f2c72ec3b7cc2f1f294fd2baf0c4d barebox-2015.05.0.tar.bz2
++
+ # Locally calculated
+-sha256 905757f84366d8934c718165af4bba8a7c7f3187c29f05ee532566681711a903 barebox-2015.04.0.tar.bz2
++sha256 f650e15c7a6da8cb779bb1787829fa4184b3189baf604c8af3af4e0deefa5e8e barebox-2015.05.0.tar.bz2
+-- 
+2.4.1
