@@ -1,628 +1,1289 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Tue,  2 Jun 2015 08:28:38 -0500
-Subject: [Buildroot] [PATCH v7 22/22] cpio: new package
+Date: Tue,  2 Jun 2015 08:28:33 -0500
+Subject: [Buildroot] [PATCH v7 17/22] qemu x86 selinux: added common selinux
+	support files
 In-Reply-To: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1433251718-3167-23-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1433251718-3167-18-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding the cpio archive utility for the target and host. Patches have
-been pulled from ArchLinux and Debian to fix CVE issues and compile
-issues.
+From: Matt Weber <matthew.weber@rockwellcollins.com>
 
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Add a default busybox SELinux config which disables init and uses
+sysvinit. Add base skeleton with inittab and fstab tailored to selinux
+Add base skeleton audit configuration (didn't seem to merit being
+the package default).
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 ---
 Changes v6 -> v7:
-  - Added dependency on argp-standalone package for uclibc toolchains
-    to fix build error (Clayton S.)
-  - Added hash file (Clayton S.)
+  - No changes
 
 Changes v5 -> v6:
   - No changes
----
- package/Config.in                                  |   1 +
- package/Config.in.host                             |   1 +
- package/cpio/0001-stdio.in.patch                   |  19 ++
- package/cpio/0002-CVE-2014-9112.patch              | 218 +++++++++++++++++++++
- package/cpio/0003-testsuite-CVE-2014-9112.patch    |  36 ++++
- .../0004-check_for_symlinks-CVE-2015-1197.patch    | 158 +++++++++++++++
- package/cpio/0005-stat.patch                       |  31 +++
- package/cpio/Config.in                             |   8 +
- package/cpio/Config.in.host                        |   6 +
- package/cpio/cpio.hash                             |   2 +
- package/cpio/cpio.mk                               |  21 ++
- 11 files changed, 501 insertions(+)
- create mode 100644 package/cpio/0001-stdio.in.patch
- create mode 100644 package/cpio/0002-CVE-2014-9112.patch
- create mode 100644 package/cpio/0003-testsuite-CVE-2014-9112.patch
- create mode 100644 package/cpio/0004-check_for_symlinks-CVE-2015-1197.patch
- create mode 100644 package/cpio/0005-stat.patch
- create mode 100644 package/cpio/Config.in
- create mode 100644 package/cpio/Config.in.host
- create mode 100644 package/cpio/cpio.hash
- create mode 100644 package/cpio/cpio.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 23912c2..301a7f2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -148,6 +148,7 @@ endmenu
- menu "Filesystem and flash utilities"
- 	source "package/btrfs-progs/Config.in"
- 	source "package/cifs-utils/Config.in"
-+	source "package/cpio/Config.in"
- 	source "package/cramfs/Config.in"
- 	source "package/curlftpfs/Config.in"
- 	source "package/dosfstools/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 1e047aa..9a4f176 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,6 +1,7 @@
- menu "Host utilities"
- 
- 	source "package/checkpolicy/Config.in.host"
-+	source "package/cpio/Config.in.host"
- 	source "package/cramfs/Config.in.host"
- 	source "package/dfu-util/Config.in.host"
- 	source "package/dos2unix/Config.in.host"
-diff --git a/package/cpio/0001-stdio.in.patch b/package/cpio/0001-stdio.in.patch
+Changes v4 -> v5:
+ - Update the selinux busybox config to the latest version of busybox
+    (Clayton S.)
+
+Changes v1 -> v4:
+  - Did not exist
+---
+ board/common_selinux/busybox-selinux.config        | 1058 ++++++++++++++++++++
+ board/common_selinux/post_build.sh                 |   30 +
+ .../common_selinux/skeleton/etc/audit/auditd.conf  |   32 +
+ .../skeleton/etc/audit/rules.d/audit.rules         |    3 +
+ board/common_selinux/skeleton/etc/fstab            |   15 +
+ board/common_selinux/skeleton/etc/inittab          |   29 +
+ board/common_selinux/skeleton_permissions.txt      |   26 +
+ 7 files changed, 1193 insertions(+)
+ create mode 100644 board/common_selinux/busybox-selinux.config
+ create mode 100755 board/common_selinux/post_build.sh
+ create mode 100644 board/common_selinux/skeleton/etc/audit/auditd.conf
+ create mode 100644 board/common_selinux/skeleton/etc/audit/rules.d/audit.rules
+ create mode 100755 board/common_selinux/skeleton/etc/fstab
+ create mode 100755 board/common_selinux/skeleton/etc/inittab
+ create mode 100755 board/common_selinux/skeleton_permissions.txt
+
+diff --git a/board/common_selinux/busybox-selinux.config b/board/common_selinux/busybox-selinux.config
 new file mode 100644
-index 0000000..89728e1
+index 0000000..2e86c22
 --- /dev/null
-+++ b/package/cpio/0001-stdio.in.patch
-@@ -0,0 +1,19 @@
-+Patch pulled from Arch Linux repo at the link below
++++ b/board/common_selinux/busybox-selinux.config
+@@ -0,0 +1,1058 @@
++#
++# Automatically generated make config: don't edit
++# Busybox version: 1.23.2
++# Wed May  6 10:14:52 2015
++#
++CONFIG_HAVE_DOT_CONFIG=y
 +
-+https://projects.archlinux.org/svntogit/packages.git/plain/trunk/cpio-2.11-stdio.in.patch?h=packages/cpio
++#
++# Busybox Settings
++#
 +
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
++#
++# General Configuration
++#
++CONFIG_DESKTOP=y
++# CONFIG_EXTRA_COMPAT is not set
++CONFIG_INCLUDE_SUSv2=y
++# CONFIG_USE_PORTABLE_CODE is not set
++CONFIG_PLATFORM_LINUX=y
++CONFIG_FEATURE_BUFFERS_USE_MALLOC=y
++# CONFIG_FEATURE_BUFFERS_GO_ON_STACK is not set
++# CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
++CONFIG_SHOW_USAGE=y
++CONFIG_FEATURE_VERBOSE_USAGE=y
++# CONFIG_FEATURE_COMPRESS_USAGE is not set
++CONFIG_FEATURE_INSTALLER=y
++# CONFIG_INSTALL_NO_USR is not set
++# CONFIG_LOCALE_SUPPORT is not set
++# CONFIG_UNICODE_SUPPORT is not set
++# CONFIG_UNICODE_USING_LOCALE is not set
++# CONFIG_FEATURE_CHECK_UNICODE_IN_ENV is not set
++CONFIG_SUBST_WCHAR=0
++CONFIG_LAST_SUPPORTED_WCHAR=0
++# CONFIG_UNICODE_COMBINING_WCHARS is not set
++# CONFIG_UNICODE_WIDE_WCHARS is not set
++# CONFIG_UNICODE_BIDI_SUPPORT is not set
++# CONFIG_UNICODE_NEUTRAL_TABLE is not set
++# CONFIG_UNICODE_PRESERVE_BROKEN is not set
++CONFIG_PAM=y
++CONFIG_FEATURE_USE_SENDFILE=y
++CONFIG_LONG_OPTS=y
++CONFIG_FEATURE_DEVPTS=y
++CONFIG_FEATURE_CLEAN_UP=y
++CONFIG_FEATURE_UTMP=y
++CONFIG_FEATURE_WTMP=y
++# CONFIG_FEATURE_PIDFILE is not set
++CONFIG_PID_FILE_PATH=""
++CONFIG_FEATURE_SUID=y
++# CONFIG_FEATURE_SUID_CONFIG is not set
++# CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
++CONFIG_SELINUX=y
++# CONFIG_FEATURE_PREFER_APPLETS is not set
++CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
++CONFIG_FEATURE_SYSLOG=y
++CONFIG_FEATURE_HAVE_RPC=y
 +
-+diff -urNp cpio-2.11-orig/gnu/stdio.in.h cpio-2.11/gnu/stdio.in.h
-+--- cpio-2.11-orig/gnu/stdio.in.h	2010-03-10 10:27:03.000000000 +0100
-++++ cpio-2.11/gnu/stdio.in.h	2012-06-04 10:23:23.804471185 +0200
-+@@ -139,7 +139,9 @@ _GL_WARN_ON_USE (fflush, "fflush is not 
-+    so any use of gets warrants an unconditional warning.  Assume it is
-+    always declared, since it is required by C89.  */
-+ #undef gets
-++#if HAVE_RAW_DECL_GETS
-+ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
-++#endif
-+ 
-+ #if @GNULIB_FOPEN@
-+ # if @REPLACE_FOPEN@
-diff --git a/package/cpio/0002-CVE-2014-9112.patch b/package/cpio/0002-CVE-2014-9112.patch
-new file mode 100644
-index 0000000..20b27b5
++#
++# Build Options
++#
++# CONFIG_STATIC is not set
++# CONFIG_PIE is not set
++# CONFIG_NOMMU is not set
++CONFIG_BUILD_LIBBUSYBOX=y
++CONFIG_FEATURE_INDIVIDUAL=y
++# CONFIG_FEATURE_SHARED_BUSYBOX is not set
++CONFIG_LFS=y
++CONFIG_CROSS_COMPILER_PREFIX=""
++CONFIG_SYSROOT=""
++CONFIG_EXTRA_CFLAGS=""
++CONFIG_EXTRA_LDFLAGS=""
++CONFIG_EXTRA_LDLIBS=""
++
++#
++# Debugging Options
++#
++# CONFIG_DEBUG is not set
++# CONFIG_DEBUG_PESSIMIZE is not set
++# CONFIG_UNIT_TEST is not set
++# CONFIG_WERROR is not set
++CONFIG_NO_DEBUG_LIB=y
++# CONFIG_DMALLOC is not set
++# CONFIG_EFENCE is not set
++
++#
++# Installation Options ("make install" behavior)
++#
++CONFIG_INSTALL_APPLET_SYMLINKS=y
++# CONFIG_INSTALL_APPLET_HARDLINKS is not set
++# CONFIG_INSTALL_APPLET_SCRIPT_WRAPPERS is not set
++# CONFIG_INSTALL_APPLET_DONT is not set
++# CONFIG_INSTALL_SH_APPLET_SYMLINK is not set
++# CONFIG_INSTALL_SH_APPLET_HARDLINK is not set
++# CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER is not set
++CONFIG_PREFIX="./_install"
++
++#
++# Busybox Library Tuning
++#
++# CONFIG_FEATURE_SYSTEMD is not set
++CONFIG_FEATURE_RTMINMAX=y
++CONFIG_PASSWORD_MINLEN=6
++CONFIG_MD5_SMALL=1
++CONFIG_SHA3_SMALL=1
++# CONFIG_FEATURE_FAST_TOP is not set
++# CONFIG_FEATURE_ETC_NETWORKS is not set
++CONFIG_FEATURE_USE_TERMIOS=y
++CONFIG_FEATURE_EDITING=y
++CONFIG_FEATURE_EDITING_MAX_LEN=1024
++CONFIG_FEATURE_EDITING_VI=y
++CONFIG_FEATURE_EDITING_HISTORY=999
++CONFIG_FEATURE_EDITING_SAVEHISTORY=y
++# CONFIG_FEATURE_EDITING_SAVE_ON_EXIT is not set
++CONFIG_FEATURE_REVERSE_SEARCH=y
++CONFIG_FEATURE_TAB_COMPLETION=y
++# CONFIG_FEATURE_USERNAME_COMPLETION is not set
++CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
++# CONFIG_FEATURE_EDITING_ASK_TERMINAL is not set
++CONFIG_FEATURE_NON_POSIX_CP=y
++# CONFIG_FEATURE_VERBOSE_CP_MESSAGE is not set
++CONFIG_FEATURE_COPYBUF_KB=4
++CONFIG_FEATURE_SKIP_ROOTFS=y
++CONFIG_MONOTONIC_SYSCALL=y
++CONFIG_IOCTL_HEX2STR_ERROR=y
++CONFIG_FEATURE_HWIB=y
++
++#
++# Applets
++#
++
++#
++# Archival Utilities
++#
++# CONFIG_FEATURE_SEAMLESS_XZ is not set
++# CONFIG_FEATURE_SEAMLESS_LZMA is not set
++# CONFIG_FEATURE_SEAMLESS_BZ2 is not set
++# CONFIG_FEATURE_SEAMLESS_GZ is not set
++# CONFIG_FEATURE_SEAMLESS_Z is not set
++CONFIG_AR=y
++# CONFIG_FEATURE_AR_LONG_FILENAMES is not set
++CONFIG_FEATURE_AR_CREATE=y
++# CONFIG_UNCOMPRESS is not set
++CONFIG_GUNZIP=y
++CONFIG_BUNZIP2=y
++CONFIG_UNLZMA=y
++# CONFIG_FEATURE_LZMA_FAST is not set
++CONFIG_LZMA=y
++CONFIG_UNXZ=y
++CONFIG_XZ=y
++# CONFIG_BZIP2 is not set
++CONFIG_CPIO=y
++# CONFIG_FEATURE_CPIO_O is not set
++# CONFIG_FEATURE_CPIO_P is not set
++# CONFIG_DPKG is not set
++# CONFIG_DPKG_DEB is not set
++# CONFIG_FEATURE_DPKG_DEB_EXTRACT_ONLY is not set
++CONFIG_GZIP=y
++# CONFIG_FEATURE_GZIP_LONG_OPTIONS is not set
++CONFIG_GZIP_FAST=0
++# CONFIG_LZOP is not set
++# CONFIG_LZOP_COMPR_HIGH is not set
++# CONFIG_RPM is not set
++# CONFIG_RPM2CPIO is not set
++CONFIG_TAR=y
++CONFIG_FEATURE_TAR_CREATE=y
++# CONFIG_FEATURE_TAR_AUTODETECT is not set
++CONFIG_FEATURE_TAR_FROM=y
++# CONFIG_FEATURE_TAR_OLDGNU_COMPATIBILITY is not set
++# CONFIG_FEATURE_TAR_OLDSUN_COMPATIBILITY is not set
++CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
++CONFIG_FEATURE_TAR_LONG_OPTIONS=y
++CONFIG_FEATURE_TAR_TO_COMMAND=y
++# CONFIG_FEATURE_TAR_UNAME_GNAME is not set
++# CONFIG_FEATURE_TAR_NOPRESERVE_TIME is not set
++CONFIG_FEATURE_TAR_SELINUX=y
++CONFIG_UNZIP=y
++
++#
++# Coreutils
++#
++CONFIG_BASENAME=y
++CONFIG_CAT=y
++CONFIG_DATE=y
++CONFIG_FEATURE_DATE_ISOFMT=y
++# CONFIG_FEATURE_DATE_NANO is not set
++CONFIG_FEATURE_DATE_COMPAT=y
++CONFIG_HOSTID=y
++CONFIG_ID=y
++CONFIG_GROUPS=y
++CONFIG_SHUF=y
++CONFIG_TEST=y
++CONFIG_FEATURE_TEST_64=y
++CONFIG_TOUCH=y
++CONFIG_FEATURE_TOUCH_NODEREF=y
++CONFIG_FEATURE_TOUCH_SUSV3=y
++CONFIG_TR=y
++CONFIG_FEATURE_TR_CLASSES=y
++CONFIG_FEATURE_TR_EQUIV=y
++CONFIG_UNLINK=y
++# CONFIG_BASE64 is not set
++CONFIG_WHO=y
++CONFIG_USERS=y
++# CONFIG_CAL is not set
++CONFIG_CATV=y
++CONFIG_CHGRP=y
++CONFIG_CHMOD=y
++CONFIG_CHOWN=y
++# CONFIG_FEATURE_CHOWN_LONG_OPTIONS is not set
++CONFIG_CHROOT=y
++CONFIG_CKSUM=y
++# CONFIG_COMM is not set
++CONFIG_CP=y
++# CONFIG_FEATURE_CP_LONG_OPTIONS is not set
++CONFIG_CUT=y
++CONFIG_DD=y
++CONFIG_FEATURE_DD_SIGNAL_HANDLING=y
++# CONFIG_FEATURE_DD_THIRD_STATUS_LINE is not set
++CONFIG_FEATURE_DD_IBS_OBS=y
++CONFIG_DF=y
++# CONFIG_FEATURE_DF_FANCY is not set
++CONFIG_DIRNAME=y
++CONFIG_DOS2UNIX=y
++CONFIG_UNIX2DOS=y
++CONFIG_DU=y
++CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K=y
++CONFIG_ECHO=y
++CONFIG_FEATURE_FANCY_ECHO=y
++CONFIG_ENV=y
++# CONFIG_FEATURE_ENV_LONG_OPTIONS is not set
++# CONFIG_EXPAND is not set
++# CONFIG_FEATURE_EXPAND_LONG_OPTIONS is not set
++CONFIG_EXPR=y
++CONFIG_EXPR_MATH_SUPPORT_64=y
++CONFIG_FALSE=y
++CONFIG_FOLD=y
++# CONFIG_FSYNC is not set
++CONFIG_HEAD=y
++CONFIG_FEATURE_FANCY_HEAD=y
++CONFIG_INSTALL=y
++CONFIG_FEATURE_INSTALL_LONG_OPTIONS=y
++CONFIG_LN=y
++CONFIG_LOGNAME=y
++CONFIG_LS=y
++CONFIG_FEATURE_LS_FILETYPES=y
++CONFIG_FEATURE_LS_FOLLOWLINKS=y
++CONFIG_FEATURE_LS_RECURSIVE=y
++CONFIG_FEATURE_LS_SORTFILES=y
++CONFIG_FEATURE_LS_TIMESTAMPS=y
++CONFIG_FEATURE_LS_USERNAME=y
++CONFIG_FEATURE_LS_COLOR=y
++CONFIG_FEATURE_LS_COLOR_IS_DEFAULT=y
++CONFIG_MD5SUM=y
++CONFIG_MKDIR=y
++CONFIG_FEATURE_MKDIR_LONG_OPTIONS=y
++CONFIG_MKFIFO=y
++CONFIG_MKNOD=y
++CONFIG_MV=y
++CONFIG_FEATURE_MV_LONG_OPTIONS=y
++CONFIG_NICE=y
++CONFIG_NOHUP=y
++CONFIG_OD=y
++CONFIG_PRINTENV=y
++CONFIG_PRINTF=y
++CONFIG_PWD=y
++CONFIG_READLINK=y
++CONFIG_FEATURE_READLINK_FOLLOW=y
++CONFIG_REALPATH=y
++CONFIG_RM=y
++CONFIG_RMDIR=y
++# CONFIG_FEATURE_RMDIR_LONG_OPTIONS is not set
++CONFIG_SEQ=y
++CONFIG_SHA1SUM=y
++CONFIG_SHA256SUM=y
++CONFIG_SHA512SUM=y
++CONFIG_SHA3SUM=y
++CONFIG_SLEEP=y
++CONFIG_FEATURE_FANCY_SLEEP=y
++CONFIG_FEATURE_FLOAT_SLEEP=y
++CONFIG_SORT=y
++CONFIG_FEATURE_SORT_BIG=y
++# CONFIG_SPLIT is not set
++# CONFIG_FEATURE_SPLIT_FANCY is not set
++# CONFIG_STAT is not set
++# CONFIG_FEATURE_STAT_FORMAT is not set
++CONFIG_STTY=y
++# CONFIG_SUM is not set
++CONFIG_SYNC=y
++# CONFIG_TAC is not set
++CONFIG_TAIL=y
++CONFIG_FEATURE_FANCY_TAIL=y
++CONFIG_TEE=y
++CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
++CONFIG_TRUE=y
++CONFIG_TTY=y
++CONFIG_UNAME=y
++# CONFIG_UNEXPAND is not set
++# CONFIG_FEATURE_UNEXPAND_LONG_OPTIONS is not set
++CONFIG_UNIQ=y
++CONFIG_USLEEP=y
++CONFIG_UUDECODE=y
++CONFIG_UUENCODE=y
++CONFIG_WC=y
++# CONFIG_FEATURE_WC_LARGE is not set
++CONFIG_WHOAMI=y
++CONFIG_YES=y
++
++#
++# Common options
++#
++CONFIG_FEATURE_VERBOSE=y
++
++#
++# Common options for cp and mv
++#
++CONFIG_FEATURE_PRESERVE_HARDLINKS=y
++
++#
++# Common options for ls, more and telnet
++#
++CONFIG_FEATURE_AUTOWIDTH=y
++
++#
++# Common options for df, du, ls
++#
++CONFIG_FEATURE_HUMAN_READABLE=y
++
++#
++# Common options for md5sum, sha1sum, sha256sum, sha512sum, sha3sum
++#
++CONFIG_FEATURE_MD5_SHA1_SUM_CHECK=y
++
++#
++# Console Utilities
++#
++CONFIG_CHVT=y
++# CONFIG_FGCONSOLE is not set
++CONFIG_CLEAR=y
++CONFIG_DEALLOCVT=y
++CONFIG_DUMPKMAP=y
++# CONFIG_KBD_MODE is not set
++CONFIG_LOADFONT=y
++CONFIG_LOADKMAP=y
++CONFIG_OPENVT=y
++CONFIG_RESET=y
++CONFIG_RESIZE=y
++CONFIG_FEATURE_RESIZE_PRINT=y
++CONFIG_SETCONSOLE=y
++# CONFIG_FEATURE_SETCONSOLE_LONG_OPTIONS is not set
++# CONFIG_SETFONT is not set
++# CONFIG_FEATURE_SETFONT_TEXTUAL_MAP is not set
++CONFIG_DEFAULT_SETFONT_DIR=""
++CONFIG_SETKEYCODES=y
++CONFIG_SETLOGCONS=y
++# CONFIG_SHOWKEY is not set
++
++#
++# Common options for loadfont and setfont
++#
++CONFIG_FEATURE_LOADFONT_PSF2=y
++CONFIG_FEATURE_LOADFONT_RAW=y
++
++#
++# Debian Utilities
++#
++CONFIG_MKTEMP=y
++CONFIG_PIPE_PROGRESS=y
++CONFIG_RUN_PARTS=y
++CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
++# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
++CONFIG_START_STOP_DAEMON=y
++CONFIG_FEATURE_START_STOP_DAEMON_FANCY=y
++CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y
++CONFIG_WHICH=y
++
++#
++# Editors
++#
++CONFIG_AWK=y
++# CONFIG_FEATURE_AWK_LIBM is not set
++CONFIG_FEATURE_AWK_GNU_EXTENSIONS=y
++CONFIG_CMP=y
++CONFIG_DIFF=y
++# CONFIG_FEATURE_DIFF_LONG_OPTIONS is not set
++CONFIG_FEATURE_DIFF_DIR=y
++# CONFIG_ED is not set
++CONFIG_PATCH=y
++CONFIG_SED=y
++CONFIG_VI=y
++CONFIG_FEATURE_VI_MAX_LEN=4096
++CONFIG_FEATURE_VI_8BIT=y
++CONFIG_FEATURE_VI_COLON=y
++CONFIG_FEATURE_VI_YANKMARK=y
++CONFIG_FEATURE_VI_SEARCH=y
++# CONFIG_FEATURE_VI_REGEX_SEARCH is not set
++CONFIG_FEATURE_VI_USE_SIGNALS=y
++CONFIG_FEATURE_VI_DOT_CMD=y
++CONFIG_FEATURE_VI_READONLY=y
++CONFIG_FEATURE_VI_SETOPTS=y
++CONFIG_FEATURE_VI_SET=y
++CONFIG_FEATURE_VI_WIN_RESIZE=y
++CONFIG_FEATURE_VI_ASK_TERMINAL=y
++CONFIG_FEATURE_VI_UNDO=y
++CONFIG_FEATURE_VI_UNDO_QUEUE=y
++CONFIG_FEATURE_VI_UNDO_QUEUE_MAX=256
++CONFIG_FEATURE_ALLOW_EXEC=y
++
++#
++# Finding Utilities
++#
++CONFIG_FIND=y
++CONFIG_FEATURE_FIND_PRINT0=y
++CONFIG_FEATURE_FIND_MTIME=y
++CONFIG_FEATURE_FIND_MMIN=y
++CONFIG_FEATURE_FIND_PERM=y
++CONFIG_FEATURE_FIND_TYPE=y
++CONFIG_FEATURE_FIND_XDEV=y
++CONFIG_FEATURE_FIND_MAXDEPTH=y
++CONFIG_FEATURE_FIND_NEWER=y
++CONFIG_FEATURE_FIND_INUM=y
++CONFIG_FEATURE_FIND_EXEC=y
++CONFIG_FEATURE_FIND_EXEC_PLUS=y
++CONFIG_FEATURE_FIND_USER=y
++CONFIG_FEATURE_FIND_GROUP=y
++CONFIG_FEATURE_FIND_NOT=y
++CONFIG_FEATURE_FIND_DEPTH=y
++CONFIG_FEATURE_FIND_PAREN=y
++CONFIG_FEATURE_FIND_SIZE=y
++CONFIG_FEATURE_FIND_PRUNE=y
++# CONFIG_FEATURE_FIND_DELETE is not set
++CONFIG_FEATURE_FIND_PATH=y
++CONFIG_FEATURE_FIND_REGEX=y
++# CONFIG_FEATURE_FIND_CONTEXT is not set
++# CONFIG_FEATURE_FIND_LINKS is not set
++CONFIG_GREP=y
++CONFIG_FEATURE_GREP_EGREP_ALIAS=y
++CONFIG_FEATURE_GREP_FGREP_ALIAS=y
++CONFIG_FEATURE_GREP_CONTEXT=y
++CONFIG_XARGS=y
++# CONFIG_FEATURE_XARGS_SUPPORT_CONFIRMATION is not set
++CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
++CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
++CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
++CONFIG_FEATURE_XARGS_SUPPORT_REPL_STR=y
++
++#
++# Init Utilities
++#
++# CONFIG_BOOTCHARTD is not set
++# CONFIG_FEATURE_BOOTCHARTD_BLOATED_HEADER is not set
++# CONFIG_FEATURE_BOOTCHARTD_CONFIG_FILE is not set
++# CONFIG_HALT is not set
++# CONFIG_FEATURE_CALL_TELINIT is not set
++CONFIG_TELINIT_PATH=""
++# CONFIG_INIT is not set
++# CONFIG_FEATURE_USE_INITTAB is not set
++# CONFIG_FEATURE_KILL_REMOVED is not set
++CONFIG_FEATURE_KILL_DELAY=0
++# CONFIG_FEATURE_INIT_SCTTY is not set
++# CONFIG_FEATURE_INIT_SYSLOG is not set
++# CONFIG_FEATURE_EXTRA_QUIET is not set
++# CONFIG_FEATURE_INIT_COREDUMPS is not set
++# CONFIG_FEATURE_INITRD is not set
++CONFIG_INIT_TERMINAL_TYPE=""
++CONFIG_MESG=y
++CONFIG_FEATURE_MESG_ENABLE_ONLY_GROUP=y
++
++#
++# Login/Password Management Utilities
++#
++# CONFIG_ADD_SHELL is not set
++# CONFIG_REMOVE_SHELL is not set
++# CONFIG_FEATURE_SHADOWPASSWDS is not set
++# CONFIG_USE_BB_PWD_GRP is not set
++# CONFIG_USE_BB_SHADOW is not set
++# CONFIG_USE_BB_CRYPT is not set
++# CONFIG_USE_BB_CRYPT_SHA is not set
++# CONFIG_ADDUSER is not set
++# CONFIG_FEATURE_ADDUSER_LONG_OPTIONS is not set
++# CONFIG_FEATURE_CHECK_NAMES is not set
++CONFIG_LAST_ID=0
++CONFIG_FIRST_SYSTEM_ID=0
++CONFIG_LAST_SYSTEM_ID=0
++# CONFIG_ADDGROUP is not set
++# CONFIG_FEATURE_ADDGROUP_LONG_OPTIONS is not set
++# CONFIG_FEATURE_ADDUSER_TO_GROUP is not set
++# CONFIG_DELUSER is not set
++# CONFIG_DELGROUP is not set
++# CONFIG_FEATURE_DEL_USER_FROM_GROUP is not set
++CONFIG_GETTY=y
++# CONFIG_LOGIN is not set
++# CONFIG_LOGIN_SESSION_AS_CHILD is not set
++# CONFIG_LOGIN_SCRIPTS is not set
++# CONFIG_FEATURE_NOLOGIN is not set
++# CONFIG_FEATURE_SECURETTY is not set
++# CONFIG_PASSWD is not set
++# CONFIG_FEATURE_PASSWD_WEAK_CHECK is not set
++# CONFIG_CRYPTPW is not set
++# CONFIG_CHPASSWD is not set
++CONFIG_FEATURE_DEFAULT_PASSWD_ALGO=""
++# CONFIG_SU is not set
++# CONFIG_FEATURE_SU_SYSLOG is not set
++# CONFIG_FEATURE_SU_CHECKS_SHELLS is not set
++# CONFIG_SULOGIN is not set
++# CONFIG_VLOCK is not set
++
++#
++# Linux Ext2 FS Progs
++#
++# CONFIG_CHATTR is not set
++CONFIG_FSCK=y
++# CONFIG_LSATTR is not set
++# CONFIG_TUNE2FS is not set
++
++#
++# Linux Module Utilities
++#
++# CONFIG_MODINFO is not set
++# CONFIG_MODPROBE_SMALL is not set
++# CONFIG_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE is not set
++# CONFIG_FEATURE_MODPROBE_SMALL_CHECK_ALREADY_LOADED is not set
++# CONFIG_INSMOD is not set
++# CONFIG_RMMOD is not set
++# CONFIG_LSMOD is not set
++# CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT is not set
++# CONFIG_MODPROBE is not set
++# CONFIG_FEATURE_MODPROBE_BLACKLIST is not set
++# CONFIG_DEPMOD is not set
++
++#
++# Options common to multiple modutils
++#
++# CONFIG_FEATURE_2_4_MODULES is not set
++# CONFIG_FEATURE_INSMOD_TRY_MMAP is not set
++# CONFIG_FEATURE_INSMOD_VERSION_CHECKING is not set
++# CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS is not set
++# CONFIG_FEATURE_INSMOD_LOADINKMEM is not set
++# CONFIG_FEATURE_INSMOD_LOAD_MAP is not set
++# CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL is not set
++# CONFIG_FEATURE_CHECK_TAINTED_MODULE is not set
++# CONFIG_FEATURE_MODUTILS_ALIAS is not set
++# CONFIG_FEATURE_MODUTILS_SYMBOLS is not set
++CONFIG_DEFAULT_MODULES_DIR=""
++CONFIG_DEFAULT_DEPMOD_FILE=""
++
++#
++# Linux System Utilities
++#
++# CONFIG_BLOCKDEV is not set
++CONFIG_FATATTR=y
++CONFIG_FSTRIM=y
++CONFIG_MDEV=y
++CONFIG_FEATURE_MDEV_CONF=y
++CONFIG_FEATURE_MDEV_RENAME=y
++# CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
++CONFIG_FEATURE_MDEV_EXEC=y
++# CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
++# CONFIG_REV is not set
++# CONFIG_ACPID is not set
++# CONFIG_FEATURE_ACPID_COMPAT is not set
++CONFIG_BLKID=y
++# CONFIG_FEATURE_BLKID_TYPE is not set
++CONFIG_DMESG=y
++CONFIG_FEATURE_DMESG_PRETTY=y
++# CONFIG_FBSET is not set
++# CONFIG_FEATURE_FBSET_FANCY is not set
++# CONFIG_FEATURE_FBSET_READMODE is not set
++CONFIG_FDFLUSH=y
++CONFIG_FDFORMAT=y
++CONFIG_FDISK=y
++# CONFIG_FDISK_SUPPORT_LARGE_DISKS is not set
++CONFIG_FEATURE_FDISK_WRITABLE=y
++# CONFIG_FEATURE_AIX_LABEL is not set
++# CONFIG_FEATURE_SGI_LABEL is not set
++# CONFIG_FEATURE_SUN_LABEL is not set
++# CONFIG_FEATURE_OSF_LABEL is not set
++CONFIG_FEATURE_GPT_LABEL=y
++CONFIG_FEATURE_FDISK_ADVANCED=y
++# CONFIG_FINDFS is not set
++# CONFIG_FLOCK is not set
++CONFIG_FREERAMDISK=y
++# CONFIG_FSCK_MINIX is not set
++# CONFIG_MKFS_EXT2 is not set
++# CONFIG_MKFS_MINIX is not set
++# CONFIG_FEATURE_MINIX2 is not set
++# CONFIG_MKFS_REISER is not set
++# CONFIG_MKFS_VFAT is not set
++CONFIG_GETOPT=y
++CONFIG_FEATURE_GETOPT_LONG=y
++CONFIG_HEXDUMP=y
++# CONFIG_FEATURE_HEXDUMP_REVERSE is not set
++# CONFIG_HD is not set
++CONFIG_HWCLOCK=y
++CONFIG_FEATURE_HWCLOCK_LONG_OPTIONS=y
++CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS=y
++CONFIG_IPCRM=y
++CONFIG_IPCS=y
++CONFIG_LOSETUP=y
++CONFIG_LSPCI=y
++CONFIG_LSUSB=y
++CONFIG_MKSWAP=y
++# CONFIG_FEATURE_MKSWAP_UUID is not set
++CONFIG_MORE=y
++CONFIG_MOUNT=y
++# CONFIG_FEATURE_MOUNT_FAKE is not set
++CONFIG_FEATURE_MOUNT_VERBOSE=y
++CONFIG_FEATURE_MOUNT_HELPERS=y
++CONFIG_FEATURE_MOUNT_LABEL=y
++CONFIG_FEATURE_MOUNT_NFS=y
++CONFIG_FEATURE_MOUNT_CIFS=y
++CONFIG_FEATURE_MOUNT_FLAGS=y
++CONFIG_FEATURE_MOUNT_FSTAB=y
++# CONFIG_PIVOT_ROOT is not set
++CONFIG_RDATE=y
++# CONFIG_RDEV is not set
++CONFIG_READPROFILE=y
++# CONFIG_RTCWAKE is not set
++# CONFIG_SCRIPT is not set
++# CONFIG_SCRIPTREPLAY is not set
++CONFIG_SETARCH=y
++CONFIG_SWAPONOFF=y
++CONFIG_FEATURE_SWAPON_DISCARD=y
++# CONFIG_FEATURE_SWAPON_PRI is not set
++CONFIG_SWITCH_ROOT=y
++CONFIG_UMOUNT=y
++CONFIG_FEATURE_UMOUNT_ALL=y
++
++#
++# Common options for mount/umount
++#
++CONFIG_FEATURE_MOUNT_LOOP=y
++CONFIG_FEATURE_MOUNT_LOOP_CREATE=y
++# CONFIG_FEATURE_MTAB_SUPPORT is not set
++CONFIG_VOLUMEID=y
++
++#
++# Filesystem/Volume identification
++#
++# CONFIG_FEATURE_VOLUMEID_BTRFS is not set
++# CONFIG_FEATURE_VOLUMEID_CRAMFS is not set
++CONFIG_FEATURE_VOLUMEID_EXFAT=y
++CONFIG_FEATURE_VOLUMEID_EXT=y
++CONFIG_FEATURE_VOLUMEID_F2FS=y
++CONFIG_FEATURE_VOLUMEID_FAT=y
++# CONFIG_FEATURE_VOLUMEID_HFS is not set
++# CONFIG_FEATURE_VOLUMEID_ISO9660 is not set
++# CONFIG_FEATURE_VOLUMEID_JFS is not set
++# CONFIG_FEATURE_VOLUMEID_LINUXRAID is not set
++# CONFIG_FEATURE_VOLUMEID_LINUXSWAP is not set
++# CONFIG_FEATURE_VOLUMEID_LUKS is not set
++# CONFIG_FEATURE_VOLUMEID_NILFS is not set
++# CONFIG_FEATURE_VOLUMEID_NTFS is not set
++# CONFIG_FEATURE_VOLUMEID_OCFS2 is not set
++# CONFIG_FEATURE_VOLUMEID_REISERFS is not set
++# CONFIG_FEATURE_VOLUMEID_ROMFS is not set
++# CONFIG_FEATURE_VOLUMEID_SQUASHFS is not set
++# CONFIG_FEATURE_VOLUMEID_SYSV is not set
++# CONFIG_FEATURE_VOLUMEID_UDF is not set
++# CONFIG_FEATURE_VOLUMEID_XFS is not set
++
++#
++# Miscellaneous Utilities
++#
++# CONFIG_CONSPY is not set
++CONFIG_CROND=y
++# CONFIG_FEATURE_CROND_D is not set
++# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
++CONFIG_FEATURE_CROND_DIR="/var/spool/cron"
++CONFIG_LESS=y
++CONFIG_FEATURE_LESS_MAXLINES=9999999
++CONFIG_FEATURE_LESS_BRACKETS=y
++CONFIG_FEATURE_LESS_FLAGS=y
++# CONFIG_FEATURE_LESS_MARKS is not set
++CONFIG_FEATURE_LESS_REGEXP=y
++# CONFIG_FEATURE_LESS_WINCH is not set
++# CONFIG_FEATURE_LESS_ASK_TERMINAL is not set
++# CONFIG_FEATURE_LESS_DASHCMD is not set
++# CONFIG_FEATURE_LESS_LINENUMS is not set
++# CONFIG_NANDWRITE is not set
++# CONFIG_NANDDUMP is not set
++# CONFIG_RFKILL is not set
++CONFIG_SETSERIAL=y
++# CONFIG_TASKSET is not set
++# CONFIG_FEATURE_TASKSET_FANCY is not set
++# CONFIG_UBIATTACH is not set
++# CONFIG_UBIDETACH is not set
++# CONFIG_UBIMKVOL is not set
++# CONFIG_UBIRMVOL is not set
++# CONFIG_UBIRSVOL is not set
++# CONFIG_UBIUPDATEVOL is not set
++# CONFIG_WALL is not set
++# CONFIG_ADJTIMEX is not set
++# CONFIG_BBCONFIG is not set
++# CONFIG_FEATURE_COMPRESS_BBCONFIG is not set
++# CONFIG_BEEP is not set
++CONFIG_FEATURE_BEEP_FREQ=0
++CONFIG_FEATURE_BEEP_LENGTH_MS=0
++# CONFIG_CHAT is not set
++# CONFIG_FEATURE_CHAT_NOFAIL is not set
++# CONFIG_FEATURE_CHAT_TTY_HIFI is not set
++# CONFIG_FEATURE_CHAT_IMPLICIT_CR is not set
++# CONFIG_FEATURE_CHAT_SWALLOW_OPTS is not set
++# CONFIG_FEATURE_CHAT_SEND_ESCAPES is not set
++# CONFIG_FEATURE_CHAT_VAR_ABORT_LEN is not set
++# CONFIG_FEATURE_CHAT_CLR_ABORT is not set
++CONFIG_CHRT=y
++CONFIG_CRONTAB=y
++CONFIG_DC=y
++# CONFIG_FEATURE_DC_LIBM is not set
++# CONFIG_DEVFSD is not set
++# CONFIG_DEVFSD_MODLOAD is not set
++# CONFIG_DEVFSD_FG_NP is not set
++# CONFIG_DEVFSD_VERBOSE is not set
++# CONFIG_FEATURE_DEVFS is not set
++CONFIG_DEVMEM=y
++CONFIG_EJECT=y
++# CONFIG_FEATURE_EJECT_SCSI is not set
++# CONFIG_FBSPLASH is not set
++# CONFIG_FLASHCP is not set
++# CONFIG_FLASH_LOCK is not set
++# CONFIG_FLASH_UNLOCK is not set
++# CONFIG_FLASH_ERASEALL is not set
++# CONFIG_IONICE is not set
++# CONFIG_INOTIFYD is not set
++CONFIG_LAST=y
++CONFIG_FEATURE_LAST_SMALL=y
++# CONFIG_FEATURE_LAST_FANCY is not set
++CONFIG_HDPARM=y
++CONFIG_FEATURE_HDPARM_GET_IDENTITY=y
++# CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is not set
++# CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is not set
++# CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET is not set
++# CONFIG_FEATURE_HDPARM_HDIO_TRISTATE_HWIF is not set
++# CONFIG_FEATURE_HDPARM_HDIO_GETSET_DMA is not set
++CONFIG_MAKEDEVS=y
++# CONFIG_FEATURE_MAKEDEVS_LEAF is not set
++CONFIG_FEATURE_MAKEDEVS_TABLE=y
++# CONFIG_MAN is not set
++CONFIG_MICROCOM=y
++CONFIG_MOUNTPOINT=y
++CONFIG_MT=y
++# CONFIG_RAIDAUTORUN is not set
++# CONFIG_READAHEAD is not set
++CONFIG_RUNLEVEL=y
++# CONFIG_RX is not set
++CONFIG_SETSID=y
++CONFIG_STRINGS=y
++CONFIG_TIME=y
++# CONFIG_TIMEOUT is not set
++# CONFIG_TTYSIZE is not set
++# CONFIG_VOLNAME is not set
++CONFIG_WATCHDOG=y
++
++#
++# Networking Utilities
++#
++CONFIG_NAMEIF=y
++# CONFIG_FEATURE_NAMEIF_EXTENDED is not set
++# CONFIG_NBDCLIENT is not set
++# CONFIG_NC is not set
++# CONFIG_NC_SERVER is not set
++# CONFIG_NC_EXTRA is not set
++# CONFIG_NC_110_COMPAT is not set
++CONFIG_PING=y
++# CONFIG_PING6 is not set
++CONFIG_FEATURE_FANCY_PING=y
++# CONFIG_WHOIS is not set
++CONFIG_FEATURE_IPV6=y
++# CONFIG_FEATURE_UNIX_LOCAL is not set
++# CONFIG_FEATURE_PREFER_IPV4_ADDRESS is not set
++# CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
++# CONFIG_ARP is not set
++CONFIG_ARPING=y
++# CONFIG_BRCTL is not set
++# CONFIG_FEATURE_BRCTL_FANCY is not set
++# CONFIG_FEATURE_BRCTL_SHOW is not set
++CONFIG_DNSD=y
++CONFIG_ETHER_WAKE=y
++# CONFIG_FAKEIDENTD is not set
++# CONFIG_FTPD is not set
++# CONFIG_FEATURE_FTP_WRITE is not set
++# CONFIG_FEATURE_FTPD_ACCEPT_BROKEN_LIST is not set
++# CONFIG_FEATURE_FTP_AUTHENTICATION is not set
++# CONFIG_FTPGET is not set
++# CONFIG_FTPPUT is not set
++# CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS is not set
++CONFIG_HOSTNAME=y
++# CONFIG_HTTPD is not set
++# CONFIG_FEATURE_HTTPD_RANGES is not set
++# CONFIG_FEATURE_HTTPD_SETUID is not set
++# CONFIG_FEATURE_HTTPD_BASIC_AUTH is not set
++# CONFIG_FEATURE_HTTPD_AUTH_MD5 is not set
++# CONFIG_FEATURE_HTTPD_CGI is not set
++# CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR is not set
++# CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV is not set
++# CONFIG_FEATURE_HTTPD_ENCODE_URL_STR is not set
++# CONFIG_FEATURE_HTTPD_ERROR_PAGES is not set
++# CONFIG_FEATURE_HTTPD_PROXY is not set
++# CONFIG_FEATURE_HTTPD_GZIP is not set
++CONFIG_IFCONFIG=y
++CONFIG_FEATURE_IFCONFIG_STATUS=y
++CONFIG_FEATURE_IFCONFIG_SLIP=y
++CONFIG_FEATURE_IFCONFIG_MEMSTART_IOADDR_IRQ=y
++CONFIG_FEATURE_IFCONFIG_HW=y
++# CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS is not set
++# CONFIG_IFENSLAVE is not set
++# CONFIG_IFPLUGD is not set
++CONFIG_IFUPDOWN=y
++CONFIG_IFUPDOWN_IFSTATE_PATH="/var/run/ifstate"
++CONFIG_FEATURE_IFUPDOWN_IP=y
++# CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN is not set
++# CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN is not set
++CONFIG_FEATURE_IFUPDOWN_IPV4=y
++CONFIG_FEATURE_IFUPDOWN_IPV6=y
++CONFIG_FEATURE_IFUPDOWN_MAPPING=y
++# CONFIG_FEATURE_IFUPDOWN_EXTERNAL_DHCP is not set
++# CONFIG_INETD is not set
++# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO is not set
++# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD is not set
++# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_TIME is not set
++# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DAYTIME is not set
++# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_CHARGEN is not set
++# CONFIG_FEATURE_INETD_RPC is not set
++CONFIG_IP=y
++CONFIG_FEATURE_IP_ADDRESS=y
++CONFIG_FEATURE_IP_LINK=y
++CONFIG_FEATURE_IP_ROUTE=y
++CONFIG_FEATURE_IP_TUNNEL=y
++CONFIG_FEATURE_IP_RULE=y
++CONFIG_FEATURE_IP_SHORT_FORMS=y
++# CONFIG_FEATURE_IP_RARE_PROTOCOLS is not set
++CONFIG_IPADDR=y
++CONFIG_IPLINK=y
++CONFIG_IPROUTE=y
++CONFIG_IPTUNNEL=y
++CONFIG_IPRULE=y
++# CONFIG_IPCALC is not set
++# CONFIG_FEATURE_IPCALC_FANCY is not set
++# CONFIG_FEATURE_IPCALC_LONG_OPTIONS is not set
++CONFIG_NETSTAT=y
++# CONFIG_FEATURE_NETSTAT_WIDE is not set
++# CONFIG_FEATURE_NETSTAT_PRG is not set
++CONFIG_NSLOOKUP=y
++# CONFIG_NTPD is not set
++# CONFIG_FEATURE_NTPD_SERVER is not set
++# CONFIG_FEATURE_NTPD_CONF is not set
++# CONFIG_PSCAN is not set
++CONFIG_ROUTE=y
++# CONFIG_SLATTACH is not set
++# CONFIG_TCPSVD is not set
++CONFIG_TELNET=y
++CONFIG_FEATURE_TELNET_TTYPE=y
++CONFIG_FEATURE_TELNET_AUTOLOGIN=y
++# CONFIG_TELNETD is not set
++# CONFIG_FEATURE_TELNETD_STANDALONE is not set
++# CONFIG_FEATURE_TELNETD_INETD_WAIT is not set
++CONFIG_TFTP=y
++# CONFIG_TFTPD is not set
++
++#
++# Common options for tftp/tftpd
++#
++CONFIG_FEATURE_TFTP_GET=y
++CONFIG_FEATURE_TFTP_PUT=y
++CONFIG_FEATURE_TFTP_BLOCKSIZE=y
++# CONFIG_FEATURE_TFTP_PROGRESS_BAR is not set
++# CONFIG_TFTP_DEBUG is not set
++CONFIG_TRACEROUTE=y
++# CONFIG_TRACEROUTE6 is not set
++# CONFIG_FEATURE_TRACEROUTE_VERBOSE is not set
++# CONFIG_FEATURE_TRACEROUTE_SOURCE_ROUTE is not set
++# CONFIG_FEATURE_TRACEROUTE_USE_ICMP is not set
++# CONFIG_TUNCTL is not set
++# CONFIG_FEATURE_TUNCTL_UG is not set
++# CONFIG_UDHCPC6 is not set
++# CONFIG_UDHCPD is not set
++# CONFIG_DHCPRELAY is not set
++# CONFIG_DUMPLEASES is not set
++# CONFIG_FEATURE_UDHCPD_WRITE_LEASES_EARLY is not set
++# CONFIG_FEATURE_UDHCPD_BASE_IP_ON_MAC is not set
++CONFIG_DHCPD_LEASES_FILE=""
++CONFIG_UDHCPC=y
++CONFIG_FEATURE_UDHCPC_ARPING=y
++CONFIG_FEATURE_UDHCPC_SANITIZEOPT=y
++# CONFIG_FEATURE_UDHCP_PORT is not set
++CONFIG_UDHCP_DEBUG=0
++# CONFIG_FEATURE_UDHCP_RFC3397 is not set
++CONFIG_FEATURE_UDHCP_8021Q=y
++CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
++CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
++CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n"
++# CONFIG_UDPSVD is not set
++CONFIG_VCONFIG=y
++CONFIG_WGET=y
++CONFIG_FEATURE_WGET_STATUSBAR=y
++CONFIG_FEATURE_WGET_AUTHENTICATION=y
++CONFIG_FEATURE_WGET_LONG_OPTIONS=y
++CONFIG_FEATURE_WGET_TIMEOUT=y
++# CONFIG_ZCIP is not set
++
++#
++# Print Utilities
++#
++# CONFIG_LPD is not set
++# CONFIG_LPR is not set
++# CONFIG_LPQ is not set
++
++#
++# Mail Utilities
++#
++# CONFIG_MAKEMIME is not set
++CONFIG_FEATURE_MIME_CHARSET=""
++# CONFIG_POPMAILDIR is not set
++# CONFIG_FEATURE_POPMAILDIR_DELIVERY is not set
++# CONFIG_REFORMIME is not set
++# CONFIG_FEATURE_REFORMIME_COMPAT is not set
++# CONFIG_SENDMAIL is not set
++
++#
++# Process Utilities
++#
++# CONFIG_IOSTAT is not set
++CONFIG_LSOF=y
++# CONFIG_MPSTAT is not set
++# CONFIG_NMETER is not set
++# CONFIG_PMAP is not set
++# CONFIG_POWERTOP is not set
++# CONFIG_PSTREE is not set
++# CONFIG_PWDX is not set
++# CONFIG_SMEMCAP is not set
++CONFIG_TOP=y
++CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
++CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS=y
++# CONFIG_FEATURE_TOP_SMP_CPU is not set
++# CONFIG_FEATURE_TOP_DECIMALS is not set
++# CONFIG_FEATURE_TOP_SMP_PROCESS is not set
++# CONFIG_FEATURE_TOPMEM is not set
++CONFIG_UPTIME=y
++# CONFIG_FEATURE_UPTIME_UTMP_SUPPORT is not set
++CONFIG_FREE=y
++CONFIG_FUSER=y
++CONFIG_KILL=y
++CONFIG_KILLALL=y
++CONFIG_KILLALL5=y
++# CONFIG_PGREP is not set
++CONFIG_PIDOF=y
++CONFIG_FEATURE_PIDOF_SINGLE=y
++CONFIG_FEATURE_PIDOF_OMIT=y
++# CONFIG_PKILL is not set
++CONFIG_PS=y
++# CONFIG_FEATURE_PS_WIDE is not set
++# CONFIG_FEATURE_PS_LONG is not set
++# CONFIG_FEATURE_PS_TIME is not set
++# CONFIG_FEATURE_PS_ADDITIONAL_COLUMNS is not set
++# CONFIG_FEATURE_PS_UNUSUAL_SYSTEMS is not set
++CONFIG_RENICE=y
++CONFIG_BB_SYSCTL=y
++# CONFIG_FEATURE_SHOW_THREADS is not set
++CONFIG_WATCH=y
++
++#
++# Runit Utilities
++#
++# CONFIG_RUNSV is not set
++# CONFIG_RUNSVDIR is not set
++# CONFIG_FEATURE_RUNSVDIR_LOG is not set
++# CONFIG_SV is not set
++CONFIG_SV_DEFAULT_SERVICE_DIR=""
++# CONFIG_SVLOGD is not set
++# CONFIG_CHPST is not set
++# CONFIG_SETUIDGID is not set
++# CONFIG_ENVUIDGID is not set
++# CONFIG_ENVDIR is not set
++# CONFIG_SOFTLIMIT is not set
++
++#
++# SELinux Utilities
++#
++CONFIG_CHCON=y
++CONFIG_FEATURE_CHCON_LONG_OPTIONS=y
++# CONFIG_GETENFORCE is not set
++# CONFIG_GETSEBOOL is not set
++# CONFIG_LOAD_POLICY is not set
++# CONFIG_MATCHPATHCON is not set
++# CONFIG_RESTORECON is not set
++CONFIG_RUNCON=y
++CONFIG_FEATURE_RUNCON_LONG_OPTIONS=y
++CONFIG_SELINUXENABLED=y
++# CONFIG_SETENFORCE is not set
++# CONFIG_SETFILES is not set
++# CONFIG_FEATURE_SETFILES_CHECK_OPTION is not set
++# CONFIG_SETSEBOOL is not set
++# CONFIG_SESTATUS is not set
++
++#
++# Shells
++#
++CONFIG_ASH=y
++CONFIG_ASH_BASH_COMPAT=y
++CONFIG_ASH_IDLE_TIMEOUT=y
++CONFIG_ASH_JOB_CONTROL=y
++CONFIG_ASH_ALIAS=y
++CONFIG_ASH_GETOPTS=y
++CONFIG_ASH_BUILTIN_ECHO=y
++CONFIG_ASH_BUILTIN_PRINTF=y
++CONFIG_ASH_BUILTIN_TEST=y
++CONFIG_ASH_HELP=y
++CONFIG_ASH_CMDCMD=y
++# CONFIG_ASH_MAIL is not set
++CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
++CONFIG_ASH_RANDOM_SUPPORT=y
++CONFIG_ASH_EXPAND_PRMT=y
++# CONFIG_CTTYHACK is not set
++# CONFIG_HUSH is not set
++# CONFIG_HUSH_BASH_COMPAT is not set
++# CONFIG_HUSH_BRACE_EXPANSION is not set
++# CONFIG_HUSH_HELP is not set
++# CONFIG_HUSH_INTERACTIVE is not set
++# CONFIG_HUSH_SAVEHISTORY is not set
++# CONFIG_HUSH_JOB is not set
++# CONFIG_HUSH_TICK is not set
++# CONFIG_HUSH_IF is not set
++# CONFIG_HUSH_LOOPS is not set
++# CONFIG_HUSH_CASE is not set
++# CONFIG_HUSH_FUNCTIONS is not set
++# CONFIG_HUSH_LOCAL is not set
++# CONFIG_HUSH_RANDOM_SUPPORT is not set
++# CONFIG_HUSH_EXPORT_N is not set
++# CONFIG_HUSH_MODE_X is not set
++# CONFIG_MSH is not set
++CONFIG_FEATURE_SH_IS_ASH=y
++# CONFIG_FEATURE_SH_IS_HUSH is not set
++# CONFIG_FEATURE_SH_IS_NONE is not set
++CONFIG_FEATURE_BASH_IS_ASH=y
++# CONFIG_FEATURE_BASH_IS_HUSH is not set
++# CONFIG_FEATURE_BASH_IS_NONE is not set
++CONFIG_SH_MATH_SUPPORT=y
++# CONFIG_SH_MATH_SUPPORT_64 is not set
++CONFIG_FEATURE_SH_EXTRA_QUIET=y
++# CONFIG_FEATURE_SH_STANDALONE is not set
++# CONFIG_FEATURE_SH_NOFORK is not set
++# CONFIG_FEATURE_SH_HISTFILESIZE is not set
++
++#
++# System Logging Utilities
++#
++# CONFIG_SYSLOGD is not set
++# CONFIG_FEATURE_ROTATE_LOGFILE is not set
++# CONFIG_FEATURE_REMOTE_LOG is not set
++# CONFIG_FEATURE_SYSLOGD_DUP is not set
++# CONFIG_FEATURE_SYSLOGD_CFG is not set
++CONFIG_FEATURE_SYSLOGD_READ_BUFFER_SIZE=0
++# CONFIG_FEATURE_IPC_SYSLOG is not set
++CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=0
++# CONFIG_LOGREAD is not set
++# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
++# CONFIG_FEATURE_KMSG_SYSLOG is not set
++# CONFIG_KLOGD is not set
++# CONFIG_FEATURE_KLOGD_KLOGCTL is not set
++CONFIG_LOGGER=y
+diff --git a/board/common_selinux/post_build.sh b/board/common_selinux/post_build.sh
+new file mode 100755
+index 0000000..3509de9
 --- /dev/null
-+++ b/package/cpio/0002-CVE-2014-9112.patch
-@@ -0,0 +1,218 @@
-+Patch pulled from Arch Linux repo at the link below
-+
-+https://projects.archlinux.org/svntogit/packages.git/plain/trunk/cpio-2.11-CVE-2014-9112.patch?h=packages/cpio
-+
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+
-+diff --git a/src/copyin.c b/src/copyin.c
-+index d505407..db8ee66 100644
-+--- a/src/copyin.c
-++++ b/src/copyin.c
-+@@ -124,10 +124,30 @@ tape_skip_padding (int in_file_des, off_t offset)
-+   if (pad != 0)
-+     tape_toss_input (in_file_des, pad);
-+ }
-+-
-++
-++static char *
-++get_link_name (struct cpio_file_stat *file_hdr, int in_file_des)
-++{
-++  char *link_name;
-++  
-++  if (file_hdr->c_filesize < 0 || file_hdr->c_filesize > SIZE_MAX-1)
-++    {
-++      error (0, 0, _("%s: stored filename length is out of range"),
-++	     file_hdr->c_name);
-++      link_name = NULL;
-++    }
-++  else
-++    {
-++      link_name = xmalloc (file_hdr->c_filesize + 1);
-++      tape_buffered_read (link_name, in_file_des, file_hdr->c_filesize);
-++      link_name[file_hdr->c_filesize] = '\0';
-++      tape_skip_padding (in_file_des, file_hdr->c_filesize);
-++    }
-++  return link_name;
-++}
-+ 
-+ static void
-+-list_file(struct cpio_file_stat* file_hdr, int in_file_des)
-++list_file (struct cpio_file_stat* file_hdr, int in_file_des)
-+ {
-+   if (verbose_flag)
-+     {
-+@@ -136,21 +156,16 @@ list_file(struct cpio_file_stat* file_hdr, int in_file_des)
-+ 	{
-+ 	  if (archive_format != arf_tar && archive_format != arf_ustar)
-+ 	    {
-+-	      char *link_name = NULL;	/* Name of hard and symbolic links.  */
-+-
-+-	      link_name = (char *) xmalloc ((unsigned int) file_hdr->c_filesize + 1);
-+-	      link_name[file_hdr->c_filesize] = '\0';
-+-	      tape_buffered_read (link_name, in_file_des, file_hdr->c_filesize);
-+-	      long_format (file_hdr, link_name);
-+-	      free (link_name);
-+-	      tape_skip_padding (in_file_des, file_hdr->c_filesize);
-+-	      return;
-++	      char *link_name = get_link_name (file_hdr, in_file_des);
-++	      if (link_name)
-++		{
-++		  long_format (file_hdr, link_name);
-++		  free (link_name);
-++		}
-+ 	    }
-+ 	  else
-+-	    {
-+-	      long_format (file_hdr, file_hdr->c_tar_linkname);
-+-	      return;
-+-	    }
-++	    long_format (file_hdr, file_hdr->c_tar_linkname);
-++	  return;
-+ 	}
-+       else
-+ #endif
-+@@ -650,10 +665,7 @@ copyin_link(struct cpio_file_stat *file_hdr, int in_file_des)
-+ 
-+   if (archive_format != arf_tar && archive_format != arf_ustar)
-+     {
-+-      link_name = (char *) xmalloc ((unsigned int) file_hdr->c_filesize + 1);
-+-      link_name[file_hdr->c_filesize] = '\0';
-+-      tape_buffered_read (link_name, in_file_des, file_hdr->c_filesize);
-+-      tape_skip_padding (in_file_des, file_hdr->c_filesize);
-++      link_name = get_link_name (file_hdr, in_file_des);
-+     }
-+   else
-+     {
-+diff --git a/tests/Makefile.am b/tests/Makefile.am
-+index b3e8e60..cf186da 100644
-+--- a/tests/Makefile.am
-++++ b/tests/Makefile.am
-+@@ -52,6 +52,8 @@ TESTSUITE_AT = \
-+  setstat04.at\
-+  setstat05.at\
-+  symlink.at\
-++ symlink-bad-length.at\
-++ symlink-long.at\
-+  version.at
-+ 
-+ TESTSUITE = $(srcdir)/testsuite
-+diff --git a/tests/symlink-bad-length.at b/tests/symlink-bad-length.at
-+new file mode 100644
-+index 0000000..cbf4aa7
-+--- /dev/null
-++++ b/tests/symlink-bad-length.at
-+@@ -0,0 +1,49 @@
-++# Process this file with autom4te to create testsuite.  -*- Autotest -*-
-++# Copyright (C) 2014 Free Software Foundation, Inc.
-++
-++# This program is free software; you can redistribute it and/or modify
-++# it under the terms of the GNU General Public License as published by
-++# the Free Software Foundation; either version 3, or (at your option)
-++# any later version.
-++
-++# This program is distributed in the hope that it will be useful,
-++# but WITHOUT ANY WARRANTY; without even the implied warranty of
-++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-++# GNU General Public License for more details.
-++
-++# You should have received a copy of the GNU General Public License
-++# along with this program; if not, write to the Free Software
-++# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-++# 02110-1301 USA.
-++
-++# Cpio v2.11 did segfault with badly set symlink length.
-++# References:
-++# http://lists.gnu.org/archive/html/bug-cpio/2014-11/msg00007.html
-++
-++AT_SETUP([symlink-bad-length])
-++AT_KEYWORDS([symlink-long copyout])
-++
-++AT_DATA([ARCHIVE.base64],
-++[x3EjAIBAtIEtJy8nAQAAAHRUYW0FAAAADQBGSUxFAABzb21lIGNvbnRlbnQKAMdxIwBgQ/+hLScv
-++JwEAAAB0VEhuBQD/////TElOSwAARklMRcdxAAAAAAAAAAAAAAEAAAAAAAAACwAAAAAAVFJBSUxF
-++UiEhIQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-++AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-++AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-++AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-++AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-++AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-++AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-++])
-++
-++AT_CHECK([
-++base64 -d ARCHIVE.base64 > ARCHIVE || AT_SKIP_TEST
-++cpio -ntv < ARCHIVE
-++test $? -eq 2
-++],
-++[0],
-++[-rw-rw-r--   1 10029    10031          13 Nov 25 13:52 FILE
-++],[cpio: LINK: stored filename length is out of range
-++cpio: premature end of file
-++])
-++
-++AT_CLEANUP
-+diff --git a/tests/symlink-long.at b/tests/symlink-long.at
-+new file mode 100644
-+index 0000000..d3def2d
-+--- /dev/null
-++++ b/tests/symlink-long.at
-+@@ -0,0 +1,46 @@
-++# Process this file with autom4te to create testsuite.  -*- Autotest -*-
-++# Copyright (C) 2014 Free Software Foundation, Inc.
-++
-++# This program is free software; you can redistribute it and/or modify
-++# it under the terms of the GNU General Public License as published by
-++# the Free Software Foundation; either version 3, or (at your option)
-++# any later version.
-++
-++# This program is distributed in the hope that it will be useful,
-++# but WITHOUT ANY WARRANTY; without even the implied warranty of
-++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-++# GNU General Public License for more details.
-++
-++# You should have received a copy of the GNU General Public License
-++# along with this program; if not, write to the Free Software
-++# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-++# 02110-1301 USA.
-++
-++# Cpio v2.11.90 changed the way symlink name is read from archive.
-++# References:
-++# http://lists.gnu.org/archive/html/bug-cpio/2014-11/msg00007.html
-++
-++AT_SETUP([symlink-long])
-++AT_KEYWORDS([symlink-long copyout])
-++
-++AT_CHECK([
-++
-++# len(dirname) > READBUFSIZE
-++dirname=
-++for i in {1..52}; do
-++    dirname="xxxxxxxxx/$dirname"
-++    mkdir "$dirname"
-++done
-++ln -s "$dirname" x || AT_SKIP_TEST
-++
-++echo x | cpio -o > ar
-++list=`cpio -tv < ar | sed 's|.*-> ||'`
-++test "$list" = "$dirname" && echo success || echo fail
-++],
-++[0],
-++[success
-++],[2 blocks
-++2 blocks
-++])
-++
-++AT_CLEANUP
-+diff --git a/tests/testsuite.at b/tests/testsuite.at
-+index 8f3330b..590bdcb 100644
-+--- a/tests/testsuite.at
-++++ b/tests/testsuite.at
-+@@ -31,6 +31,8 @@ m4_include([version.at])
-+ 
-+ m4_include([inout.at])
-+ m4_include([symlink.at])
-++m4_include([symlink-bad-length.at])
-++m4_include([symlink-long.at])
-+ m4_include([interdir.at])
-+ 
-+ m4_include([setstat01.at])
-diff --git a/package/cpio/0003-testsuite-CVE-2014-9112.patch b/package/cpio/0003-testsuite-CVE-2014-9112.patch
-new file mode 100644
-index 0000000..47fc4c6
---- /dev/null
-+++ b/package/cpio/0003-testsuite-CVE-2014-9112.patch
-@@ -0,0 +1,36 @@
-+Patch pulled from Arch Linux repo at the link below
-+
-+https://projects.archlinux.org/svntogit/packages.git/plain/trunk/cpio-2.11-testsuite-CVE-2014-9112.patch?h=packages/cpio
-+
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+
-+diff --git a/tests/symlink-bad-length.at b/tests/symlink-bad-length.at
-+index cbf4aa7..d8d250b 100644
-+--- a/tests/symlink-bad-length.at
-++++ b/tests/symlink-bad-length.at
-+@@ -37,13 +37,20 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-+ 
-+ AT_CHECK([
-+ base64 -d ARCHIVE.base64 > ARCHIVE || AT_SKIP_TEST
-+-cpio -ntv < ARCHIVE
-+-test $? -eq 2
-++TZ=UTC cpio -ntv < ARCHIVE 2>stderr
-++rc=$?
-++cat stderr | grep -v \
-++    -e 'stored filename length is out of range' \
-++    -e 'premature end of file' \
-++    -e 'archive header has reverse byte-order' \
-++    -e 'memory exhausted' \
-++    >&2
-++echo >&2 STDERR
-++test "$rc" -ne 0
-+ ],
-+ [0],
-+-[-rw-rw-r--   1 10029    10031          13 Nov 25 13:52 FILE
-+-],[cpio: LINK: stored filename length is out of range
-+-cpio: premature end of file
-++[-rw-rw-r--   1 10029    10031          13 Nov 25 11:52 FILE
-++],[STDERR
-+ ])
-+ 
-+ AT_CLEANUP
-diff --git a/package/cpio/0004-check_for_symlinks-CVE-2015-1197.patch b/package/cpio/0004-check_for_symlinks-CVE-2015-1197.patch
-new file mode 100644
-index 0000000..fd89a8d
---- /dev/null
-+++ b/package/cpio/0004-check_for_symlinks-CVE-2015-1197.patch
-@@ -0,0 +1,158 @@
-+Patch pulled from Arch Linux repo at the link below
-+
-+https://projects.archlinux.org/svntogit/packages.git/plain/trunk/cpio-2.11-check_for_symlinks-CVE-2015-1197.patch?h=packages/cpio
-+
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+
-+Index: cpio-2.11/src/copyin.c
-+===================================================================
-+--- cpio-2.11.orig/src/copyin.c	2014-07-01 14:02:39.991007263 +0200
-++++ cpio-2.11/src/copyin.c	2014-07-22 16:05:28.171344584 +0200
-+@@ -686,6 +686,51 @@ copyin_link(struct cpio_file_stat *file_
-+   free (link_name);
-+ }
-+ 
-++
-++static int
-++path_contains_symlink(char *path)
-++{
-++  struct stat st;
-++  char *slash;
-++  char *nextslash;
-++
-++  /* we got NULL pointer or empty string */
-++  if (!path || !*path) {
-++    return false;
-++  }
-++
-++  slash = path;
-++
-++  while ((nextslash = strchr(slash + 1, '/')) != NULL) {
-++    slash = nextslash;
-++    *slash = '\0';
-++
-++    if (lstat(path, &st) != 0) {
-++      if (errno == ELOOP) {
-++        /* ELOOP - too many symlinks */
-++        *slash = '/';
-++        return true;
-++      } else if (errno == ENOMEM) {
-++        /* No memory for lstat - terminate */
-++        xalloc_die();
-++      } else {
-++        /* cannot lstat path - give up */
-++        *slash = '/';
-++        return false;
-++      }
-++    }
-++
-++    if (S_ISLNK(st.st_mode)) {
-++      *slash = '/';
-++      return true;
-++    }
-++
-++    *slash = '/';
-++  }
-++
-++  return false;
-++}
-++
-+ static void
-+ copyin_file (struct cpio_file_stat *file_hdr, int in_file_des)
-+ {
-+@@ -1463,6 +1508,23 @@ process_copy_in ()
-+ 	{
-+ 	  /* Copy the input file into the directory structure.  */
-+ 
-++          /* Can we write files over symlinks? */
-++          if (!extract_over_symlinks)
-++            {
-++              if (path_contains_symlink(file_hdr.c_name))
-++                {
-++                  /* skip the file */
-++                  /*
-++                  fprintf(stderr, "Can't write over symlinks. Skipping %s\n", file_hdr.c_name);
-++                  tape_toss_input (in_file_des, file_hdr.c_filesize);
-++                  tape_skip_padding (in_file_des, file_hdr.c_filesize);
-++                  continue;
-++                  */
-++                  /* terminate */
-++	          error (1, 0, _("Can't write over symlinks: %s\n"), file_hdr.c_name);
-++                }
-++            }
-++
-+ 	  /* Do we need to rename the file? */
-+ 	  if (rename_flag || rename_batch_file)
-+ 	    {
-+Index: cpio-2.11/src/global.c
-+===================================================================
-+--- cpio-2.11.orig/src/global.c	2014-07-17 16:33:09.768900927 +0200
-++++ cpio-2.11/src/global.c	2014-07-21 17:45:58.563494706 +0200
-+@@ -187,6 +187,9 @@ bool to_stdout_option = false;
-+ /* The name this program was run with.  */
-+ char *program_name;
-+ 
-++/* Extract files over symbolic links */
-++bool extract_over_symlinks;
-++
-+ /* A pointer to either lstat or stat, depending on whether
-+    dereferencing of symlinks is done for input files.  */
-+ int (*xstat) ();
-+Index: cpio-2.11/src/main.c
-+===================================================================
-+--- cpio-2.11.orig/src/main.c	2014-07-01 14:02:39.840005051 +0200
-++++ cpio-2.11/src/main.c	2014-07-17 20:33:47.839215571 +0200
-+@@ -57,7 +57,8 @@ enum cpio_options {
-+   FORCE_LOCAL_OPTION,            
-+   DEBUG_OPTION,                  
-+   BLOCK_SIZE_OPTION,             
-+-  TO_STDOUT_OPTION
-++  TO_STDOUT_OPTION,
-++  EXTRACT_OVER_SYMLINKS
-+ };
-+ 
-+ const char *program_authors[] =
-+@@ -222,6 +223,8 @@ static struct argp_option options[] = {
-+    N_("Create leading directories where needed"), GRID+1 },
-+   {"no-preserve-owner", NO_PRESERVE_OWNER_OPTION, 0, 0,
-+    N_("Do not change the ownership of the files"), GRID+1 },
-++  {"extract-over-symlinks", EXTRACT_OVER_SYMLINKS, 0, 0,
-++   N_("Force writing over symbolic links"), GRID+1 },
-+   {"unconditional", 'u', NULL, 0,
-+    N_("Replace all files unconditionally"), GRID+1 },
-+   {"sparse", SPARSE_OPTION, NULL, 0,
-+@@ -413,6 +416,10 @@ crc newc odc bin ustar tar (all-caps als
-+       no_chown_flag = true;
-+       break;
-+ 
-++    case EXTRACT_OVER_SYMLINKS:		        /* --extract-over-symlinks */
-++      extract_over_symlinks = true;
-++      break;
-++
-+     case 'o':		/* Copy-out mode.  */
-+       if (copy_function != 0)
-+ 	error (PAXEXIT_FAILURE, 0, _("Mode already defined"));
-+Index: cpio-2.11/src/extern.h
-+===================================================================
-+--- cpio-2.11.orig/src/extern.h	2014-07-01 14:02:39.907006032 +0200
-++++ cpio-2.11/src/extern.h	2014-07-17 17:11:20.948908806 +0200
-+@@ -95,6 +95,7 @@ extern char input_is_special;
-+ extern char output_is_special;
-+ extern char input_is_seekable;
-+ extern char output_is_seekable;
-++extern bool extract_over_symlinks;
-+ extern int (*xstat) ();
-+ extern void (*copy_function) ();
-+ 
-+Index: cpio-2.11/doc/cpio.1
-+===================================================================
-+--- cpio-2.11.orig/doc/cpio.1	2009-02-14 19:15:50.000000000 +0100
-++++ cpio-2.11/doc/cpio.1	2014-07-21 23:00:33.878746855 +0200
-+@@ -22,6 +22,7 @@ cpio \- copy files to and from archives
-+ [\-\-owner=[user][:.][group]] [\-\-no-preserve-owner] [\-\-message=message]
-+ [\-\-force\-local] [\-\-no\-absolute\-filenames] [\-\-sparse]
-+ [\-\-only\-verify\-crc] [\-\-to\-stdout] [\-\-quiet] [\-\-rsh-command=command]
-++[\-\-extract\-over\-symlinks]
-+ [\-\-help] [\-\-version] [pattern...] [< archive]
-+ 
-+ .B cpio
-diff --git a/package/cpio/0005-stat.patch b/package/cpio/0005-stat.patch
-new file mode 100644
-index 0000000..fd824fc
---- /dev/null
-+++ b/package/cpio/0005-stat.patch
-@@ -0,0 +1,31 @@
-+Pulled from the Gentoo sources repository at
-+
-+https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-arch/cpio/files/cpio-2.11-stat.patch?revision=1.1
-+
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+
-+http://bugs.gentoo.org/328531
-+
-+From 3a7a1820d4cecbd77c7b74c785af5942510bf080 Mon Sep 17 00:00:00 2001
-+From: Sergey Poznyakoff <gray@gnu.org.ua>
-+Date: Thu, 22 Jul 2010 13:13:34 +0300
-+Subject: [PATCH] Minor fix.
-+
-+* src/filetypes.h: Remove declarations of stat and lstat.
-+---
-+ src/filetypes.h |    2 --
-+ 1 files changed, 0 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/filetypes.h b/src/filetypes.h
-+index f80faab..81f0c32 100644
-+--- a/src/filetypes.h
-++++ b/src/filetypes.h
-+@@ -81,5 +81,3 @@
-+ #ifndef S_ISLNK
-+ #define lstat stat
-+ #endif
-+-int lstat ();
-+-int stat ();
-+-- 
-+1.7.3
-+
-diff --git a/package/cpio/Config.in b/package/cpio/Config.in
-new file mode 100644
-index 0000000..1787f39
---- /dev/null
-+++ b/package/cpio/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_CPIO
-+	bool "cpio"
-+	# Need argp.h support
-+	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
-+	help
-+	  cpio archive utility for creation and extraction.
-+
-+	  https://www.gnu.org/software/cpio/
-diff --git a/package/cpio/Config.in.host b/package/cpio/Config.in.host
-new file mode 100644
-index 0000000..e927952
---- /dev/null
-+++ b/package/cpio/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_CPIO
-+	bool "host cpio"
-+	help
-+	  cpio archive utility for creation and extraction.
-+
-+	  https://www.gnu.org/software/cpio/
-diff --git a/package/cpio/cpio.hash b/package/cpio/cpio.hash
-new file mode 100644
-index 0000000..ba4087f
---- /dev/null
-+++ b/package/cpio/cpio.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	601b1d774cd6e4cd39416203c91ec59dbd65dd27d79d75e1a9b89497ea643978	cpio-2.11.tar.gz
-diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
-new file mode 100644
-index 0000000..e637327
---- /dev/null
-+++ b/package/cpio/cpio.mk
-@@ -0,0 +1,21 @@
++++ b/board/common_selinux/post_build.sh
+@@ -0,0 +1,30 @@
++#!/bin/bash
 +################################################################################
 +#
-+# cpio
++# DESCRIPTION:
++#     This script will do any "post-build" steps (after all packages are built
++#     but before image creation). Any filesystem permission issues should be
++#     fixed in this script.
++#
++#     The script requires following variables to be passed into it.
++#        $1 - the target directory (passed in by default by buildroot if
++#             script is BR2_ROOTFS_POST_BUILD_SCRIPT)
 +#
 +################################################################################
 +
-+CPIO_VERSION = 2.11
-+CPIO_SITE = http://ftp.gnu.org/gnu/cpio
-+CPIO_LICENSE = GPLv3
-+CPIO_LICENSE_FILES = COPYING
++DEST_DIR=$1
 +
-+# cpio uses argp.h which is not provided by uclibc by default.
-+# Use the argp-standalone package to provide this but make sure
-+# the host package does not try to use the host version.
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+CPIO_DEPENDENCIES += argp-standalone
-+HOST_CPIO_DEPENDENCIES =
-+endif
++# For SELinux targets, the /var directory symlinks need to be removed
++# and replaced with actual folders. The removal is done here and the
++# recreation is done in the permissions file for the common_selinux
++# local_skeleton
++for link in ${DEST_DIR}/var/{cache,lock,log,run,spool,tmp} ${DEST_DIR}/var/lib/misc; do
++	if [ -h ${link} ]; then
++		echo "Removing symlink ${link}"
++		unlink ${link}
++	fi
++done
 +
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++# Replace the /run folder with a symlink to /var/run
++rm -rf ${DEST_DIR}/run
++ln -sf -t ${DEST_DIR} run var/run
+diff --git a/board/common_selinux/skeleton/etc/audit/auditd.conf b/board/common_selinux/skeleton/etc/audit/auditd.conf
+new file mode 100644
+index 0000000..039b7f0
+--- /dev/null
++++ b/board/common_selinux/skeleton/etc/audit/auditd.conf
+@@ -0,0 +1,32 @@
++#
++# This file controls the configuration of the audit daemon
++#
++
++log_file = /var/log/audit/audit.log
++log_format = RAW
++log_group = root
++priority_boost = 4
++flush = INCREMENTAL
++freq = 20
++num_logs = 5
++disp_qos = lossy
++dispatcher = /usr/sbin/audispd
++name_format = NONE
++##name = mydomain
++max_log_file = 6 
++max_log_file_action = ROTATE
++space_left = 75
++space_left_action = IGNORE
++action_mail_acct = root
++admin_space_left = 50
++admin_space_left_action = IGNORE
++disk_full_action = IGNORE
++disk_error_action = IGNORE
++##tcp_listen_port = 
++tcp_listen_queue = 5
++tcp_max_per_addr = 1
++##tcp_client_ports = 1024-65535
++tcp_client_max_idle = 0
++enable_krb5 = no
++krb5_principal = auditd
++##krb5_key_file = /etc/audit/audit.key
+diff --git a/board/common_selinux/skeleton/etc/audit/rules.d/audit.rules b/board/common_selinux/skeleton/etc/audit/rules.d/audit.rules
+new file mode 100644
+index 0000000..7c90606
+--- /dev/null
++++ b/board/common_selinux/skeleton/etc/audit/rules.d/audit.rules
+@@ -0,0 +1,3 @@
++-D
++-b 1024
++-e 2
+diff --git a/board/common_selinux/skeleton/etc/fstab b/board/common_selinux/skeleton/etc/fstab
+new file mode 100755
+index 0000000..d772349
+--- /dev/null
++++ b/board/common_selinux/skeleton/etc/fstab
+@@ -0,0 +1,15 @@
++# /etc/fstab: static file system information.
++#
++# <file system> <mount pt>     <type>    <options>                      <dump> <pass>
++/dev/root       /              ext3      rw,noauto                       0      1
++proc            /proc          proc      defaults                        0      0
++devpts          /dev/pts       devpts    defaults,gid=5,mode=620         0      0
++tmpfs           /dev/shm       tmpfs     mode=0700,nodev,nosuid,noexec,size=1M    0      0
++tmpfs           /tmp           tmpfs     mode=0700,nodev,nosuid,noexec,size=200M  0      0
++tmpfs           /var/cache     tmpfs     mode=0700,nodev,nosuid,noexec,size=1M    0      0
++tmpfs           /var/lock      tmpfs     mode=0700,nodev,nosuid,noexec,size=1M    0      0
++tmpfs           /var/log       tmpfs     mode=0700,nodev,nosuid,noexec,size=50M   0      0
++tmpfs           /var/run       tmpfs     mode=0700,nodev,nosuid,noexec,size=1M    0      0
++tmpfs           /var/spool     tmpfs     mode=0700,nodev,nosuid,noexec,size=1M    0      0
++sysfs           /sys           sysfs     defaults                 0      0
++none            /selinux       selinuxfs noauto                   0      0
+diff --git a/board/common_selinux/skeleton/etc/inittab b/board/common_selinux/skeleton/etc/inittab
+new file mode 100755
+index 0000000..05e05b2
+--- /dev/null
++++ b/board/common_selinux/skeleton/etc/inittab
+@@ -0,0 +1,29 @@
++# /etc/inittab
++#
++# This inittab is a basic inittab sample for sysvinit, which mimics
++# Buildroot's default inittab for BusyBox.
++id:1:initdefault:
++
++proc::sysinit:/bin/mount -t proc proc /proc
++sysf::sysinit:/bin/mount -t sysfs sysfs /sys
++dpts::sysinit:/bin/mkdir -p /dev/pts -Z `matchpathcon -n /dev/pts`
++dshm::sysinit:/bin/mkdir -p /dev/shm -Z `matchpathcon -n /dev/shm`
++mpts::sysinit:/bin/mkdir -p /dev/pts
++mshm::sysinit:/bin/mkdir -p /dev/shm
++fsck::sysinit:/sbin/fsck -ARy
++moun::sysinit:/bin/mount -a
++host::sysinit:/bin/hostname -F /etc/hostname
++
++# now run any rc scripts
++init::bootwait:/etc/init.d/rcS
++
++S0::respawn:/sbin/getty -L  ttyS0 115200 vt100 # GENERIC_SERIAL
++
++# Stuff to do before rebooting
++shd0:06:wait:/etc/init.d/rcK
++shd1:06:wait:/sbin/swapoff -a
++shd2:06:wait:/bin/umount -a -r
++
++# The usual halt or reboot actions
++lt0:0:wait:/sbin/halt -dhp
++reb0:6:wait:/sbin/reboot
+diff --git a/board/common_selinux/skeleton_permissions.txt b/board/common_selinux/skeleton_permissions.txt
+new file mode 100755
+index 0000000..374adbc
+--- /dev/null
++++ b/board/common_selinux/skeleton_permissions.txt
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# See <buildroot-source>/package/makedevs/README for details
++#
++# This device table is used to assign proper ownership and permissions
++# on the files in the local-skeleton directory. It doesn't create any device
++# file, as it is used in both static device configurations (where /dev/ is static)
++# and in dynamic configurations (where devtmpfs, mdev or udev are used).
++#
++# <name>				<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
++
++# All the necessary file permissions for /etc
++/etc/audit/auditd.conf			f	644	0	0	-	-	-	-	-
++/etc/audit/rules.d/audit.rules		f	644	0	0	-	-	-	-	-
++/etc/fstab				f	644	0	0	-	-	-	-	-
++/etc/inittab				f	644	0	0	-	-	-	-	-
++
++# Setup entries for all of the /var/* directories that need proper
++# mount points
++/var/cache				d	755	0	0	-	-	-	-	-
++/var/lib/misc				d	755	0	0	-	-	-	-	-
++/var/lock				d	755	0	0	-	-	-	-	-
++/var/log				d	755	0	0	-	-	-	-	-
++/var/run				d	755	0	0	-	-	-	-	-
++/var/spool				d	755	0	0	-	-	-	-	-
++/var/tmp				d	755	0	0	-	-	-	-	-
 -- 
 1.9.1
