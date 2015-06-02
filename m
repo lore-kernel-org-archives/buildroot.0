@@ -1,46 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  2 Jun 2015 09:41:06 -0300
-Subject: [Buildroot] [PATCH 2/2] samba4: enable for uclibc-ng
-In-Reply-To: <1433248866-20991-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1433248866-20991-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1433248866-20991-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  2 Jun 2015 10:02:18 -0300
+Subject: [Buildroot] [PATCH] sqlite: bump to version 3.8.10.2
+Message-ID: <1433250138-28662-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc-ng has the required functionality for samba 4.2.x without the
-need for any special tricks.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/samba4/Config.in | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ package/sqlite/sqlite.hash | 2 +-
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index 57adadd..db8c91d 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -1,10 +1,16 @@
--comment "samba4 needs an (e)glibc toolchain"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+comment "samba4 needs an (e)glibc or uClibc-ng toolchain w/ RPC, wchar"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_UCLIBC_VERSION_NG
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	depends on BR2_USE_MMU
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index d524dbe..85e9709 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,2 +1,2 @@
+ # From http://www.sqlite.org/download.html
+-sha1	7e92b4f78d4648fb2a97a4dc721490cc08653a0b	sqlite-autoconf-3081000.tar.gz
++sha1	c2f2c17d3dc4c4e179d35cc04e4420636d48a152	sqlite-autoconf-3081002.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index b2283f0..9aac8e6 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_SAMBA4
- 	bool "samba4"
- 	depends on !BR2_PACKAGE_SAMBA
--	depends on BR2_TOOLCHAIN_USES_GLIBC # needs $ORIGIN support
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR # e2fsprogs
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	# needs $ORIGIN support
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_UCLIBC_VERSION_NG
- 	depends on !BR2_nios2 # binary too large, relocations don't fit
- 	select BR2_PACKAGE_E2FSPROGS
- 	select BR2_PACKAGE_POPT
+-SQLITE_VERSION = 3081000
++SQLITE_VERSION = 3081002
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2015
+ SQLITE_LICENSE = Public domain
 -- 
 2.3.6
