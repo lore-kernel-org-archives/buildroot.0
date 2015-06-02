@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Jun 2015 22:44:21 +0200
-Subject: [Buildroot] [git commit] wireless-regdb: bump to version 2015.05.15
-Message-ID: <20150602205021.28BF680417@busybox.osuosl.org>
+Date: Tue, 2 Jun 2015 22:45:02 +0200
+Subject: [Buildroot] [git commit] mpg123: bump to version 1.22.2
+Message-ID: <20150602205021.82B017F8CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9781aa6af3b87f99bc4ab88562993f93eab2b87d
+commit: http://git.buildroot.net/buildroot/commit/?id=74d585b49cb7ae9849fcff7b381a6afa35580df8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireless-regdb/wireless-regdb.hash |    2 +-
- package/wireless-regdb/wireless-regdb.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mpg123/mpg123.hash |    6 +++---
+ package/mpg123/mpg123.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 115b490..1afb023 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	4c4a10b3aa97ac494dda5bc13a045bda211437aab24341fe11d78530e640f133	wireless-regdb-2015.04.06.tar.xz
-+sha256	fe5b5fae4934b29f2d15e018fbecae013fda44cf023c10285a669c86c5a33da3	wireless-regdb-2015.05.15.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 20b330f..8a5b6ab 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index e9f04b4..bf81f2a 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.1/
+-md5	abf310c716d56c283561eff0903bcb69	mpg123-1.22.1.tar.bz2
+-sha1	c3193902b1cf923a625ed94360c91e28d84753d3	mpg123-1.22.1.tar.bz2
++# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.2/
++md5	6f6d2178c354f39207bf97e062936110	mpg123-1.22.2.tar.bz2
++sha1	9125b4eabf6327c71a439e07e16eb39b712085e2	mpg123-1.22.2.tar.bz2
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index c9acb6b..a16e400 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRELESS_REGDB_VERSION = 2015.04.06
-+WIRELESS_REGDB_VERSION = 2015.05.15
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-MPG123_VERSION = 1.22.1
++MPG123_VERSION = 1.22.2
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
