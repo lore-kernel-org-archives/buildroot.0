@@ -1,78 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Jun 2015 22:48:35 +0200
-Subject: [Buildroot] [git commit] luajit: clean fuzz/offset in patches
-Message-ID: <20150602205021.F3FBF7F8CB@busybox.osuosl.org>
+Date: Tue, 2 Jun 2015 22:44:08 +0200
+Subject: [Buildroot] [git commit] squid: bump to version 3.5.5
+Message-ID: <20150602205021.1853A80187@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=930b2cb92afe167346ff04e734e93e937ac2ac3c
+commit: http://git.buildroot.net/buildroot/commit/?id=1bdbf14973d8bc0a9e08888c073ca6587961c3d1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luajit/0001-no-bin-symlink.patch |    4 ++--
- package/luajit/0002-install-inc.patch    |    4 ++--
- package/luajit/0003-install-so.patch     |    4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/squid/squid.hash |    6 +++---
+ package/squid/squid.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/luajit/0001-no-bin-symlink.patch b/package/luajit/0001-no-bin-symlink.patch
-index 6391f39..37298dd 100644
---- a/package/luajit/0001-no-bin-symlink.patch
-+++ b/package/luajit/0001-no-bin-symlink.patch
-@@ -6,7 +6,7 @@ Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -42,8 +42,7 @@
-+@@ -43,8 +43,7 @@
-  INSTALL_MAN= $(INSTALL_SHARE)/man/man1
-  INSTALL_PKGCONFIG= $(INSTALL_LIB)/pkgconfig
-  
-@@ -16,7 +16,7 @@ Index: b/Makefile
-  INSTALL_ANAME= libluajit-$(ABIVER).a
-  INSTALL_SONAME= libluajit-$(ABIVER).so.$(MAJVER).$(MINVER).$(RELVER)
-  INSTALL_SOSHORT= libluajit-$(ABIVER).so
--@@ -57,7 +56,6 @@
-+@@ -58,7 +57,6 @@
-  INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
-  INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
-  INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
-diff --git a/package/luajit/0002-install-inc.patch b/package/luajit/0002-install-inc.patch
-index 1fd11b1..86b766d 100644
---- a/package/luajit/0002-install-inc.patch
-+++ b/package/luajit/0002-install-inc.patch
-@@ -6,9 +6,9 @@ Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -31,7 +31,7 @@ DPREFIX= $(DESTDIR)$(PREFIX)
-+@@ -32,7 +32,7 @@
-  INSTALL_BIN=   $(DPREFIX)/bin
-- INSTALL_LIB=   $(DPREFIX)/lib
-+ INSTALL_LIB=   $(DPREFIX)/$(MULTILIB)
-  INSTALL_SHARE= $(DPREFIX)/share
- -INSTALL_INC=   $(DPREFIX)/include/luajit-$(MAJVER).$(MINVER)
- +INSTALL_INC=   $(DPREFIX)/include
-diff --git a/package/luajit/0003-install-so.patch b/package/luajit/0003-install-so.patch
-index 738ec07..5929595 100644
---- a/package/luajit/0003-install-so.patch
-+++ b/package/luajit/0003-install-so.patch
-@@ -11,12 +11,12 @@ Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -56,7 +56,7 @@
-+@@ -55,7 +55,7 @@
-  INSTALL_STATIC= $(INSTALL_LIB)/$(INSTALL_ANAME)
-  INSTALL_DYN= $(INSTALL_LIB)/$(INSTALL_SONAME)
-  INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
- -INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
- +INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT).$(MAJVER)
-  INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
-- INSTALL_TSYM= $(INSTALL_BIN)/$(INSTALL_TSYMNAME)
-  INSTALL_PC= $(INSTALL_PKGCONFIG)/$(INSTALL_PCNAME)
-+ 
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 50e2e7b..64d2fac 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.4.tar.xz.asc
+-md5	5b53d5bb47fa033b76857f7956d0c36b	squid-3.5.4.tar.xz
+-sha1	71a04a5f7c4c38464a8a08ae1089c47abcea0e49	squid-3.5.4.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.5.tar.xz.asc
++md5	9a323a97753143ddd935aed58a0193ae	squid-3.5.5.tar.xz
++sha1	2c168e8b13251ed8050d9e780127c4de016dcb61	squid-3.5.5.tar.xz
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 745c9ad..3d0f4d8 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).4
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).5
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
