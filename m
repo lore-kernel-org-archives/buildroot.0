@@ -1,21 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 02 Jun 2015 10:16:53 -0300
-Subject: [Buildroot] [PATCH 3/3] package/mtd: add hash file
-In-Reply-To: <1433240788-14191-3-git-send-email-fabio.porcedda@gmail.com>
-References: <1433240788-14191-1-git-send-email-fabio.porcedda@gmail.com>
- <1433240788-14191-3-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <556DACC5.2060204@zacarias.com.ar>
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Date: Tue,  2 Jun 2015 08:28:17 -0500
+Subject: [Buildroot] [PATCH v7 01/22] sqlite: Add host build support
+In-Reply-To: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1433251718-3167-2-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Host sqlite is required by the host build of the setools package which
+is required for SELinux support.
 
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
-On 02/06/15 07:26, Fabio Porcedda wrote:
+---
+Changes v6 -> v7:
+  - No changes
 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Changes v5 -> v6:
+  - No changes
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-(verified signature against locally cached tarball)
+Changes v4 -> v5:
+  - No changes
+---
+ package/sqlite/sqlite.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index b2283f0..4d74625 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -53,3 +53,4 @@ SQLITE_CONF_OPTS += --disable-readline
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+-- 
+1.9.1
