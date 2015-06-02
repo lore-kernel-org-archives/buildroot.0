@@ -1,33 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Jun 2015 22:51:09 +0200
-Subject: [Buildroot] [git commit] linux-headers: mark EOL versions deprecated
-Message-ID: <20150602205903.82A678082E@busybox.osuosl.org>
+Date: Tue, 2 Jun 2015 22:58:19 +0200
+Subject: [Buildroot] [git commit] build: remove deprecated sstrip option
+Message-ID: <20150602205903.9BD3B7FEB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3eb61964640bc40b3a2106aaa525f62926920ef6
+commit: http://git.buildroot.net/buildroot/commit/?id=106f5b8c509352dc64249ca941dabb34ccc31f8e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Follow the upstream EOL cycle and mark 3.19 as deprecated for 2015.08.
+It's been deprecated since the 2014.05 release (a year).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ Config.in |   13 -------------
+ 1 files changed, 0 insertions(+), 13 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d81cd36..653209e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -79,6 +79,7 @@ choice
+diff --git a/Config.in b/Config.in
+index bdff7df..eaf47dd 100644
+--- a/Config.in
++++ b/Config.in
+@@ -372,19 +372,6 @@ config BR2_STRIP_strip
+ 	  symbols on the target are needed for native debugging, but
+ 	  not when remote debugging is used.
  
- 	config BR2_KERNEL_HEADERS_3_19
- 		bool "Linux 3.19.x kernel headers"
-+		depends on BR2_DEPRECATED_SINCE_2015_08
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
- 
- 	config BR2_KERNEL_HEADERS_4_0
+-config BR2_STRIP_sstrip
+-	bool "sstrip"
+-	select BR2_PACKAGE_SSTRIP_HOST
+-	depends on !BR2_PACKAGE_HOST_ELF2FLT
+-	depends on BR2_DEPRECATED_SINCE_2014_05
+-	help
+-	  Binaries and libraries in the target filesystem will be
+-	  stripped using the 'sstrip' command, which strips a little
+-	  bit more than the traditional 'strip' command. This allows to
+-	  save space, mainly by removing debugging symbols. Debugging
+-	  symbols on the target are needed for native debugging, but
+-	  not when remote debugging is used.
+-
+ config BR2_STRIP_none
+ 	bool "none"
+ 	help
