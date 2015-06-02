@@ -1,389 +1,620 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Tue,  2 Jun 2015 08:28:18 -0500
-Subject: [Buildroot] [PATCH v7 02/22] setools: new package
+Date: Tue,  2 Jun 2015 08:28:21 -0500
+Subject: [Buildroot] [PATCH v7 05/22] policycoreutils: new package
 In-Reply-To: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1433251718-3167-3-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1433251718-3167-6-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-
 Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
 ---
 Changes v6 -> v7:
-  - Added a patch to cause configure to only check for Python when
-    swig-python is enabled. (Clayton S.)
-
-Changes v5 -> v6:
-  - Fixed spelling error in Config.in file (Suggested by Thomas P.)
-  - Added missing libsepol dependency to the target setool (Suggested by
-    Thomas P.)
-  - Added a comment to explain why the autoreconfigure is happening
-    (Suggested by Thomas P.)
-  - Reworked the host setools Python configure variables (Suggested by
-    Thomas P.)
-  - Removed unneeded libtool patch option and autoreconf opts (Suggested
-    by Thomas P.)
-
-Changes v4 -> v5:
-  - Added dependency on libsepol (Matt W.)
-  - Removed limitation of arch it could build for  (Matt W.)
-  - Removed depends on GLIBC (Matt W.)
-  - Consolidated python configuration (Ryan B.)
-  - Removed swig (patch and enabling), it's only needed for
-    graphical apol tool (Ryan B.)
-  - Added comment to cross compile patch about not upstreaming.
-    The package is stable and no updates/reworking since 2013.
-    Currently a 4.0 version is in the works but is a major
-    build infrastructure rework when compared to 3.3.x. (Ryan B.)
-  - Added comments noting why autoreconf and not libtool patch
-    (Suggested by Thomas P.)
-  - Added comments explaining why python on host but not target
-    (Suggested by Thomas P.)
-  - Add a dependency on not static libs because libselinux requires not
-    static libs. (Clayton S.)
-  - Added licene info (Clayton S.)
-  - Added depends on C++ (Matt W.)
-  - Removed largefile dependency (Clayton S.)
-
-Changes v3 -> v4:
   - No changes
 
+Changes v5 -> v6:
+  - No changes
+
+Changes v4 -> v5:
+  - Updated depends and removed glibc dependency (Matt W.)
+  - Updated site to github (Matt W.)
+  - Added host python 2/3 support (Matt W.)
+  - Removed sandbox and mctrans support (Matt W.)
+  - Removed restorcon init script (Matt W.)
+  - Agree as optional settings were removed so menu isn't needed
+    (Suggested by Ryan B. and Thomas P.)
+  - added Config.in select for LIBCAP_NG (Suggested by Thomas P.)
+  - cleaned up pam/audit ifeq (Suggested by Thomas P.)
+  - fixed CFLAGS to include target_cflags instead of += (Suggested by
+    Thomas P.)
+  - Refactored lists of build/install steps into loops  (Suggested by
+    Thomas P.)
+  - Removed += on first host depends assignment (Suggested by Thomas P.)
+  - Refactored host make opts assignments (Suggested by Thomas P.)
+  - Limited to glibc because of fts.h, some uclibc toolchains have it
+    others don't.  Eventually this would be good to fix with the updated
+    method of file traversal. (Matt W.)
+  - Gettext fixups for uclibc support.  Counter productive as we
+    now limit to glibc only. (Matt W.)
+  - Added musl as possible lib type (Matt W.)
+  - Removed largefile dependency (Clayton S.)
+  - Changed dbus-glib select to a depends on in the Config.in (suggested
+    by Ryan B.)
+
+Changes v3 -> v4:
+  - Add a select for the libselinux Python bindings when debugging
+    is enabled.  This will cause Python to be built for the target
+    (suggested by Thomas P.)
+  - Cleaned up the configure comments (suggested by Thomas).
+  - Added a dependency on BR2_USE_MMU for the debugging option
+    because python requires it (suggested by Thomas P.)
+  - Removed the dependencies on audit and linux-pam. Both packages
+    are now optional dependencies based on whether or not the package
+    has been selected
+  - Moved the dependency on dbus-glib to only the restorecond option
+    where it is used
+  - Added a INSTALL_INIT_SYSV for the restorecond daemon rather than
+    just installing it directly
+  - Adding a dependency on glibc
+  - Removed the clean commands
+
 Changes v2 -> v3:
-  - Fixed kconfig menu as sepolgen removal removed initial menu
-    entry to add to
+  - Added dependencies on BR2_TOOLCHAIN_HAS_THREADS and BR2_LARGEFILE
+    (suggested by Thomas P.)
+  - Changes patch naming convention (suggested by Thomas P.)
+  - Added selects for linux-pam and audit
 
 Changes v1 -> v2:
-  - Handle Python 2 vs. Python 3 for the host package.
-  - Added hash file
-  - Updated download site
+  - General cleanup to the mk file to conform to the standard format
+  - Fixed the patch naming to avoid using the version number
+  - Cleaned up the patch to include a signed-off-by line
+  - Changed package dependencies into selects in the config
 ---
- package/Config.in                              |   4 +
- package/setools/0001-cross-compile-fixes.patch | 125 +++++++++++++++++++++++++
- package/setools/0002-move-python-check.patch   |  25 +++++
- package/setools/Config.in                      |  25 +++++
- package/setools/setools.hash                   |   4 +
- package/setools/setools.mk                     |  84 +++++++++++++++++
- 6 files changed, 267 insertions(+)
- create mode 100644 package/setools/0001-cross-compile-fixes.patch
- create mode 100644 package/setools/0002-move-python-check.patch
- create mode 100644 package/setools/Config.in
- create mode 100644 package/setools/setools.hash
- create mode 100644 package/setools/setools.mk
+ package/Config.in                                  |   1 +
+ .../policycoreutils/0001-cross-compile-fixes.patch | 332 +++++++++++++++++++++
+ package/policycoreutils/Config.in                  |  53 ++++
+ package/policycoreutils/policycoreutils.hash       |   2 +
+ package/policycoreutils/policycoreutils.mk         | 107 +++++++
+ 5 files changed, 495 insertions(+)
+ create mode 100644 package/policycoreutils/0001-cross-compile-fixes.patch
+ create mode 100644 package/policycoreutils/Config.in
+ create mode 100644 package/policycoreutils/policycoreutils.hash
+ create mode 100644 package/policycoreutils/policycoreutils.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e0c2e2a..cab7f66 100644
+index a5c2186..dfa06fc 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1338,6 +1338,10 @@ menu "Real-Time"
- 	source "package/xenomai/Config.in"
+@@ -1339,6 +1339,7 @@ menu "Real-Time"
  endmenu
  
-+menu "Security"
-+	source "package/setools/Config.in"
-+endmenu
-+
- menu "Shell and utilities"
- comment "Shells"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/setools/0001-cross-compile-fixes.patch b/package/setools/0001-cross-compile-fixes.patch
+ menu "Security"
++	source "package/policycoreutils/Config.in"
+ 	source "package/setools/Config.in"
+ endmenu
+ 
+diff --git a/package/policycoreutils/0001-cross-compile-fixes.patch b/package/policycoreutils/0001-cross-compile-fixes.patch
 new file mode 100644
-index 0000000..1a4af0c
+index 0000000..8f47907
 --- /dev/null
-+++ b/package/setools/0001-cross-compile-fixes.patch
-@@ -0,0 +1,125 @@
-+Correct build issues to enable cross compiling.  These changes require the
-+package to be auto reconfigured.
-+
-+These updates were not upsteamed as the 3.3.x version has stablized and they
-+were only taking bug fixes.  Also the 4.0 preview has completely reworked
-+the build infrastructure which will require this to be revisited.
++++ b/package/policycoreutils/0001-cross-compile-fixes.patch
+@@ -0,0 +1,332 @@
++Patch to enable cross compile build and install.
 +
 +Signed-off-by Clayton Shotwell <clshotwe@rockwellcollins.com>
 +
-+diff -urN a/configure.ac b/configure.ac
-+--- a/configure.ac	2013-01-16 10:36:24.000000000 -0600
-++++ b/configure.ac	2013-07-12 08:22:10.380255248 -0500
-+@@ -448,8 +448,9 @@
-+               sepol_srcdir="")
-+ if test "x${sepol_srcdir}" = "x"; then
-+    sepol_srcdir=${sepol_devel_libdir}
-+-   AC_CHECK_FILE([${sepol_srcdir}/libsepol.a],,
-+-      AC_MSG_ERROR([make sure libsepol-static is installed]))
-++   if test ! -f ${sepol_srcdir}/libsepol.a; then
-++      AC_MSG_ERROR([could not find precompiled libsepol.a])
-++   fi
-+ else
-+    AC_MSG_CHECKING([for compatible sepol source tree])
-+    sepol_version=${sepol_srcdir}/VERSION
-+@@ -484,8 +485,9 @@
-+    AC_CHECK_HEADER([sepol/policydb/policydb.h], , AC_MSG_ERROR([could not find sepol source tree]))
-+    CFLAGS="${sepol_src_save_CFLAGS}"
-+    CPPFLAGS="${sepol_src_save_CPPFLAGS}"
-+-   AC_CHECK_FILE([${sepol_srcdir}/libsepol.a],,
-+-      AC_MSG_ERROR([could not find precompiled libsepol.a]))
-++   if test ! -f ${sepol_srcdir}/libsepol.a; then
-++      AC_MSG_ERROR([could not find precompiled libsepol.a])
-++   fi
-+    sepol_devel_incdir="${sepol_srcdir}/../include"
-+ fi
-+ SELINUX_CFLAGS="-I${sepol_devel_incdir} -I${selinux_devel_incdir}"
-+@@ -578,12 +580,13 @@
-+                          [AC_LANG_SOURCE([
-+ #include <sepol/policydb/expand.h>
-+ int main () {
-+-  return expand_module_avrules(NULL, NULL, NULL, NULL, NULL, 0, 0);
-++  return expand_module_avrules(NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0);
-+ }])],
-+                          AC_MSG_RESULT([yes]),
-+                          AC_MSG_ERROR([this version of libsepol is incompatible with SETools]))
-+     fi
-+     sepol_new_expand_boolmap="yes"
-++    sepol_new_user_role_mapping="yes"
-+ else
-+     sepol_new_expand_boolmap="no"
-+ fi
-+@@ -607,7 +610,8 @@
-+     exit(EXIT_FAILURE);
-+ }])],
-+     sepol_policy_version_max=`cat conftest.data`,
-+-    AC_MSG_FAILURE([could not determine maximum libsepol policy version]))
-++    AC_MSG_FAILURE([could not determine maximum libsepol policy version]),
-++    sepol_policy_version_max="26")
-+ AC_DEFINE_UNQUOTED(SEPOL_POLICY_VERSION_MAX, ${sepol_policy_version_max}, [maximum policy version supported by libsepol])
-+ CFLAGS="${sepol_save_CFLAGS}"
-+ CPPFLAGS="${sepol_save_CPPFLAGS}"
-+@@ -631,7 +635,7 @@
-+     changequote([,])dnl
-+     selinux_save_CFLAGS="${CFLAGS}"
-+     CFLAGS="${SELINUX_CFLAGS} ${SELINUX_LIB_FLAG} -lselinux -lsepol ${CFLAGS}"
-+-    gcc ${CFLAGS} -o conftest conftest.c >&5
-++    ${CC} ${CFLAGS} -o conftest conftest.c >&5
-+     selinux_policy_dir=`./conftest`
-+     AC_MSG_RESULT(${selinux_policy_dir})
-+     CFLAGS="${selinux_save_CFLAGS}"
-+diff -urN a/libqpol/src/policy_define.c b/libqpol/src/policy_define.c
-+--- a/libqpol/src/policy_define.c	2013-01-16 10:36:24.000000000 -0600
-++++ b/libqpol/src/policy_define.c	2013-07-12 08:22:10.380255248 -0500
-+@@ -2135,7 +2135,7 @@
-+ #ifdef HAVE_SEPOL_ROLE_ATTRS
-+ 	if (role_set_expand(&roles, &e_roles, policydbp, NULL, NULL))
-+ #elif HAVE_SEPOL_USER_ROLE_MAPPING
-+-	if (role_set_expand(&roles, &e_roles, policydbp, NULL))
-++	if (role_set_expand(&roles, &e_roles, policydbp, NULL, NULL))
-+ #else
-+ 	if (role_set_expand(&roles, &e_roles, policydbp))
-+ #endif
-+diff -urN a/m4/ac_python_devel.m4 b/m4/ac_python_devel.m4
-+--- a/m4/ac_python_devel.m4	2013-01-16 10:36:22.000000000 -0600
-++++ b/m4/ac_python_devel.m4	2013-07-12 08:22:10.380255248 -0500
-+@@ -234,7 +234,7 @@
-+ 	AC_MSG_CHECKING([consistency of all components of python development environment])
-+ 	AC_LANG_PUSH([C])
-+ 	# save current global flags
-+-	LIBS="$ac_save_LIBS $PYTHON_LDFLAGS"
-++	LIBS="$ac_save_LIBS $PYTHON_EXTRA_LIBS $PYTHON_LDFLAGS"
-+ 	CPPFLAGS="$ac_save_CPPFLAGS $PYTHON_CPPFLAGS"
-+ 	AC_TRY_LINK([
-+ 		#include <Python.h>
-+diff -urN a/python/setools/Makefile.am b/python/setools/Makefile.am
-+--- a/python/setools/Makefile.am	2013-01-16 10:36:22.000000000 -0600
-++++ b/python/setools/Makefile.am	2013-07-12 08:22:19.200251011 -0500
-+@@ -22,13 +22,13 @@
-+ python-build: sesearch.c seinfo.c
-+ 	@mkdir -p setools
-+ 	@cp __init__.py setools
-+-	LIBS="$(QPOL_LIB_FLAG) $(APOL_LIB_FLAG)" INCLUDES="$(QPOL_CFLAGS) $(APOL_CFLAGS)" $(PYTHON) setup.py build
-++	LIBS="$(QPOL_LIB_FLAG) $(APOL_LIB_FLAG)" LIBDIRS="$(PYTHON_LDFLAGS)" INCLUDES="$(PYTHON_CPPFLAGS) $(QPOL_CFLAGS) $(APOL_CFLAGS)" CC="$(CC)" CFLAGS="$(CFLAGS)" LDSHARED="$(CC) -shared" LDFLAGS="$(LDFLAGS)" $(PYTHON) setup.py build_ext
++diff -urN a/audit2allow/Makefile b/audit2allow/Makefile
++--- a/audit2allow/Makefile	2013-02-05 19:43:22.000000000 -0600
+++++ b/audit2allow/Makefile	2013-08-23 09:16:21.282917254 -0500
++@@ -3,7 +3,7 @@
++ BINDIR ?= $(PREFIX)/bin
++ LIBDIR ?= $(PREFIX)/lib
++ MANDIR ?= $(PREFIX)/share/man
++-LOCALEDIR ?= /usr/share/locale
+++LOCALEDIR ?= $(DESTDIR)/usr/share/locale
 + 
-+ install-exec-hook:
-+-	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
-++	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --prefix=$(DESTDIR)/usr`
++ all: ;
 + 
-+ uninstall-hook: 
-+-	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
-++	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --prefix=$(DESTDIR)/usr`
++diff -urN a/load_policy/Makefile b/load_policy/Makefile
++--- a/load_policy/Makefile	2013-02-05 19:43:22.000000000 -0600
+++++ b/load_policy/Makefile	2013-08-23 09:16:21.282917254 -0500
++@@ -3,7 +3,7 @@
++ SBINDIR ?= $(DESTDIR)/sbin
++ USRSBINDIR ?= $(PREFIX)/sbin
++ MANDIR ?= $(PREFIX)/share/man
++-LOCALEDIR ?= /usr/share/locale
+++LOCALEDIR ?= $(DESTDIR)/usr/share/locale
 + 
-+ clean-local:
-+ 	$(PYTHON) setup.py clean -a 
-+--- a/python/setools/setup.py	2013-01-16 10:36:22.000000000 -0600
-++++ b/python/setools/setup.py	2013-09-04 09:17:48.452916991 -0500
-+@@ -8,7 +8,7 @@
-+ try:
-+     inc=os.getenv("INCLUDES").split(" ")    
-+     INCLUDES=map(lambda x: x[2:], inc)
-+-    LIBDIRS=map(lambda x: "/".join(x.split("/")[:-1]), os.getenv("LIBS").split())
-++    LIBDIRS=map(lambda x: "/".join(x.split("/")[:-1]), os.getenv("LIBS").split()) + map(lambda x: x[2:], os.getenv("LIBDIRS").split())
-+ except:
-+     INCLUDES=""
-+     LIBDIRS=""
-diff --git a/package/setools/0002-move-python-check.patch b/package/setools/0002-move-python-check.patch
-new file mode 100644
-index 0000000..cef2cec
---- /dev/null
-+++ b/package/setools/0002-move-python-check.patch
-@@ -0,0 +1,25 @@
-+Correct a build issue that occurs when python is not found
-+in the path. This check should only be done if swig-python
-+option is selected.
-+
-+Signed-off-by Clayton Shotwell <clshotwe@rockwellcollins.com>
-+
-+--- a/configure.ac	2015-05-15 12:28:07.566060349 -0500
-++++ b/configure.ac	2015-05-28 15:07:25.357072800 -0500
-+@@ -217,8 +217,6 @@
-+    do_swigify=yes
-+ fi
++ CFLAGS ?= -Werror -Wall -W
++ override CFLAGS += $(LDFLAGS) -I$(PREFIX)/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
++diff -urN a/Makefile b/Makefile
++--- a/Makefile	2013-02-05 19:43:22.000000000 -0600
+++++ b/Makefile	2013-08-23 09:16:21.292985286 -0500
++@@ -1,8 +1,8 @@
++ SUBDIRS = sepolicy setfiles semanage load_policy newrole run_init sandbox secon audit2allow audit2why sestatus semodule_package semodule semodule_link semodule_expand semodule_deps sepolgen-ifgen setsebool scripts po man gui
 + 
-+-AM_PATH_PYTHON(2.7)
++-INOTIFYH = $(shell ls /usr/include/sys/inotify.h 2>/dev/null)
+++INOTIFYH = $(shell ls $(DESTDIR)/usr/include/sys/inotify.h 2>/dev/null)
++ 
++-ifeq (${INOTIFYH}, /usr/include/sys/inotify.h)
+++ifeq (${INOTIFYH}, $(DESTDIR)/usr/include/sys/inotify.h)
++ 	SUBDIRS += restorecond
++ endif
++ 
++diff -urN a/mcstrans/src/Makefile b/mcstrans/src/Makefile
++--- a/mcstrans/src/Makefile	2013-02-05 19:43:22.000000000 -0600
+++++ b/mcstrans/src/Makefile	2013-08-23 09:41:18.782916946 -0500
++@@ -1,22 +1,8 @@
++-ARCH = $(shell uname -i)
++-ifeq "$(ARCH)" "x86_64"
++-	# In case of 64 bit system, use these lines
++-	LIBDIR=/usr/lib64
++-else 
++-ifeq "$(ARCH)" "i686"
++-	# In case of 32 bit system, use these lines
++-	LIBDIR=/usr/lib
++-else
++-ifeq "$(ARCH)" "i386"
++-	# In case of 32 bit system, use these lines
++-	LIBDIR=/usr/lib
++-endif
++-endif
++-endif
++ # Installation directories.
++ PREFIX  ?= $(DESTDIR)/usr
++-SBINDIR ?= $(DESTDIR)/sbin
++-INITDIR ?= $(DESTDIR)/etc/rc.d/init.d
+++LIBDIR  ?= $(PREFIX)/lib
+++SBINDIR ?= $(PREFIX)/sbin
+++INITDIR ?= $(DESTDIR)/etc/init.d
++ 
++ PROG_SRC=mcstrans.c  mcscolor.c  mcstransd.c  mls_level.c
++ PROG_OBJS= $(patsubst %.c,%.o,$(PROG_SRC))
++@@ -40,5 +26,5 @@
++ 	install -m 755 $(INITSCRIPT).init $(INITDIR)/$(INITSCRIPT)
++ 
++ clean: 
++-	-rm -f $(OBJS) $(LOBJS) $(TARGET) $(PROG) $(PROG_OBJS) *~ \#*
+++	-rm -f $(PROG) $(PROG_OBJS) *.o *~ \#*
++ 
++diff -urN a/mcstrans/utils/Makefile b/mcstrans/utils/Makefile
++--- a/mcstrans/utils/Makefile	2013-02-05 19:43:22.000000000 -0600
+++++ b/mcstrans/utils/Makefile	2013-08-23 09:16:21.292985286 -0500
++@@ -1,24 +1,8 @@
++ # Installation directories.
++ PREFIX ?= $(DESTDIR)/usr
+++LIBDIR  ?= $(PREFIX)/lib
++ BINDIR ?= $(PREFIX)/sbin
++ 
++-ARCH = $(shell uname -i)
++-ifeq "$(ARCH)" "x86_64"
++-        # In case of 64 bit system, use these lines
++-        LIBDIR=/usr/lib64
++-else
++-ifeq "$(ARCH)" "i686"
++-        # In case of 32 bit system, use these lines
++-        LIBDIR=/usr/lib
++-else
++-ifeq "$(ARCH)" "i386"
++-        # In case of 32 bit system, use these lines
++-        LIBDIR=/usr/lib
++-endif
++-endif
++-endif
 +-
-+ AC_ARG_ENABLE(swig-python,
-+               AC_HELP_STRING([--enable-swig-python],
-+                              [build SWIG interfaces for Python]),
-+@@ -227,6 +225,7 @@
-+    if test ${do_swigify} = no; then
-+       AC_PROG_SWIG(2.0.0)
-+    fi
-++   AM_PATH_PYTHON(2.7)
-+    SWIG_PYTHON
-+    do_swigify_python=yes
-+    do_swigify=yes
-diff --git a/package/setools/Config.in b/package/setools/Config.in
++-
++ CFLAGS ?= -Wall
++ override CFLAGS += -I../src -D_GNU_SOURCE
++ LDLIBS += -L../src ../src/mcstrans.o ../src/mls_level.o -lselinux -lpcre $(LIBDIR)/libsepol.a
++diff -urN a/newrole/Makefile b/newrole/Makefile
++--- a/newrole/Makefile	2013-02-05 19:43:22.000000000 -0600
+++++ b/newrole/Makefile	2013-08-23 09:16:21.292985286 -0500
++@@ -3,9 +3,9 @@
++ BINDIR ?= $(PREFIX)/bin
++ MANDIR ?= $(PREFIX)/share/man
++ ETCDIR ?= $(DESTDIR)/etc
++-LOCALEDIR = /usr/share/locale
++-PAMH = $(shell ls /usr/include/security/pam_appl.h 2>/dev/null)
++-AUDITH = $(shell ls /usr/include/libaudit.h 2>/dev/null)
+++LOCALEDIR = $(DESTDIR)/usr/share/locale
+++PAMH = $(shell ls $(DESTDIR)/usr/include/security/pam_appl.h 2>/dev/null)
+++AUDITH = $(shell ls $(DESTDIR)/usr/include/libaudit.h 2>/dev/null)
++ # Enable capabilities to permit newrole to generate audit records.
++ # This will make newrole a setuid root program.
++ # The capabilities used are: CAP_AUDIT_WRITE.
++@@ -24,7 +24,7 @@
++ EXTRA_OBJS =
++ override CFLAGS += -DVERSION=\"$(VERSION)\" $(LDFLAGS) -I$(PREFIX)/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
++ LDLIBS += -lselinux -L$(PREFIX)/lib
++-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
+++ifeq ($(PAMH), $(DESTDIR)/usr/include/security/pam_appl.h)
++ 	override CFLAGS += -DUSE_PAM
++ 	EXTRA_OBJS += hashtab.o
++ 	LDLIBS += -lpam -lpam_misc
++@@ -32,7 +32,7 @@
++ 	override CFLAGS += -D_XOPEN_SOURCE=500
++ 	LDLIBS += -lcrypt
++ endif
++-ifeq ($(AUDITH), /usr/include/libaudit.h)
+++ifeq ($(AUDITH), $(DESTDIR)/usr/include/libaudit.h)
++ 	override CFLAGS += -DUSE_AUDIT
++ 	LDLIBS += -laudit
++ endif
++@@ -66,7 +66,7 @@
++ 	test -d $(MANDIR)/man1 || install -m 755 -d $(MANDIR)/man1
++ 	install -m $(MODE) newrole $(BINDIR)
++ 	install -m 644 newrole.1 $(MANDIR)/man1/
++-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
+++ifeq ($(PAMH), $(DESTDIR)/usr/include/security/pam_appl.h)
++ 	test -d $(ETCDIR)/pam.d || install -m 755 -d $(ETCDIR)/pam.d
++ ifeq ($(LSPP_PRIV),y)
++ 	install -m 644 newrole-lspp.pamd $(ETCDIR)/pam.d/newrole
++diff -urN a/restorecond/Makefile b/restorecond/Makefile
++--- a/restorecond/Makefile	2013-02-05 19:43:22.000000000 -0600
+++++ b/restorecond/Makefile	2013-08-23 09:16:21.292985286 -0500
++@@ -2,24 +2,29 @@
++ PREFIX ?= $(DESTDIR)/usr
++ SBINDIR ?= $(PREFIX)/sbin
++ LIBDIR ?= $(PREFIX)/lib
++-MANDIR = $(PREFIX)/share/man
+++MANDIR ?= $(PREFIX)/share/man
++ AUTOSTARTDIR = $(DESTDIR)/etc/xdg/autostart
++ DBUSSERVICEDIR = $(DESTDIR)/usr/share/dbus-1/services
++ 
++ autostart_DATA = sealertauto.desktop
++-INITDIR = $(DESTDIR)/etc/rc.d/init.d
+++INITDIR = $(DESTDIR)/etc/init.d
++ SELINUXDIR = $(DESTDIR)/etc/selinux
++ 
++-DBUSFLAGS = -DHAVE_DBUS -I/usr/include/dbus-1.0 -I/usr/lib64/dbus-1.0/include -I/usr/lib/dbus-1.0/include
+++DBUSFLAGS = -DHAVE_DBUS -I$(PREFIX)/include/dbus-1.0 -I$(PREFIX)/lib64/dbus-1.0/include \
+++		-I$(PREFIX)/lib/dbus-1.0/include
++ DBUSLIB = -ldbus-glib-1 -ldbus-1
++ 
++ CFLAGS ?= -g -Werror -Wall -W
++-override CFLAGS += -I$(PREFIX)/include $(DBUSFLAGS) -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib/glib-2.0/include
+++override CFLAGS += -I$(PREFIX)/include $(DBUSFLAGS) -I$(PREFIX)/include/glib-2.0 \
+++		-I$(PREFIX)/lib64/glib-2.0/include -I$(PREFIX)/lib/glib-2.0/include
++ 
++ LDLIBS += -lselinux $(DBUSLIB) -lglib-2.0 -L$(LIBDIR)
++ 
++ all: restorecond
++ 
+++%.o: %.c
+++	$(CC) $(CFLAGS) -c -o $@ $<
+++
++ restorecond.o utmpwatcher.o stringslist.o user.o watch.o: restorecond.h
++ 
++ restorecond:  ../setfiles/restore.o restorecond.o utmpwatcher.o stringslist.o user.o watch.o
++diff -urN a/run_init/Makefile b/run_init/Makefile
++--- a/run_init/Makefile	2013-02-05 19:43:22.000000000 -0600
+++++ b/run_init/Makefile	2013-08-23 09:16:21.292985286 -0500
++@@ -4,21 +4,21 @@
++ SBINDIR ?= $(PREFIX)/sbin
++ MANDIR ?= $(PREFIX)/share/man
++ ETCDIR ?= $(DESTDIR)/etc
++-LOCALEDIR ?= /usr/share/locale
++-PAMH = $(shell ls /usr/include/security/pam_appl.h 2>/dev/null)
++-AUDITH = $(shell ls /usr/include/libaudit.h 2>/dev/null)
+++LOCALEDIR ?= $(DESTDIR)/usr/share/locale
+++PAMH = $(shell ls $(DESTDIR)/usr/include/security/pam_appl.h 2>/dev/null)
+++AUDITH = $(shell ls $(DESTDIR)/usr/include/libaudit.h 2>/dev/null)
++ 
++ CFLAGS ?= -Werror -Wall -W
++ override CFLAGS += -I$(PREFIX)/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
++ LDLIBS += -lselinux -L$(PREFIX)/lib
++-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
+++ifeq ($(PAMH), $(DESTDIR)/usr/include/security/pam_appl.h)
++ 	override CFLAGS += -DUSE_PAM
++ 	LDLIBS += -lpam -lpam_misc
++ else
++ 	override CFLAGS += -D_XOPEN_SOURCE=500
++ 	LDLIBS += -lcrypt
++ endif
++-ifeq ($(AUDITH), /usr/include/libaudit.h)
+++ifeq ($(AUDITH), $(DESTDIR)/usr/include/libaudit.h)
++ 	override CFLAGS += -DUSE_AUDIT
++ 	LDLIBS += -laudit
++ endif
++@@ -38,7 +38,7 @@
++ 	install -m 755 open_init_pty $(SBINDIR)
++ 	install -m 644 run_init.8 $(MANDIR)/man8/
++ 	install -m 644 open_init_pty.8 $(MANDIR)/man8/
++-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
+++ifeq ($(PAMH), $(DESTDIR)/usr/include/security/pam_appl.h)
++ 	install -m 644 run_init.pamd $(ETCDIR)/pam.d/run_init
++ endif
++ 
++diff -urN a/semodule/Makefile b/semodule/Makefile
++--- a/semodule/Makefile	2013-02-05 19:43:22.000000000 -0600
+++++ b/semodule/Makefile	2013-08-23 09:16:21.302924109 -0500
++@@ -2,7 +2,7 @@
++ PREFIX ?= $(DESTDIR)/usr
++ INCLUDEDIR ?= $(PREFIX)/include
++ SBINDIR ?= $(PREFIX)/sbin
++-MANDIR = $(PREFIX)/share/man
+++MANDIR ?= $(PREFIX)/share/man
++ LIBDIR ?= $(PREFIX)/lib
++ 
++ CFLAGS ?= -Werror -Wall -W
++diff -urN a/sepolicy/Makefile b/sepolicy/Makefile
++--- a/sepolicy/Makefile	2013-02-05 19:43:22.000000000 -0600
+++++ b/sepolicy/Makefile	2013-08-23 09:16:21.302924109 -0500
++@@ -5,25 +5,32 @@
++ BINDIR ?= $(PREFIX)/bin
++ SBINDIR ?= $(PREFIX)/sbin
++ MANDIR ?= $(PREFIX)/share/man
++-LOCALEDIR ?= /usr/share/locale
+++LOCALEDIR ?= $(DESTDIR)/usr/share/locale
++ PYTHON ?= /usr/bin/python
++ BASHCOMPLETIONDIR ?= $(DESTDIR)/etc/bash_completion.d/
++ SHAREDIR ?= $(PREFIX)/share/sandbox
++-override CFLAGS = $(LDFLAGS) -I$(PREFIX)/include -DPACKAGE="policycoreutils" -Wall -Werror -Wextra -W  -DSHARED -shared
+++override CFLAGS += $(LDFLAGS) -I$(PREFIX)/include -DPACKAGE="policycoreutils" -Wall -Werror -Wextra -W  -DSHARED -shared
++ 
++ BASHCOMPLETIONS=sepolicy-bash-completion.sh 
++ 
+++PYTHON_ARGS = LDSHARED="$(CC) -shared" \
+++		CROSS_COMPILING=yes              \
+++		_python_sysroot=$(DESTDIR)       \
+++		_python_srcdir=$(PYTHON_SRC)     \
+++		_python_prefix=/usr              \
+++		_python_exec_prefix=/usr
+++
++ all: python-build
++ 
++ python-build: info.c search.c common.h policy.h policy.c
++-	$(PYTHON) setup.py build
+++	$(PYTHON_ARGS) $(PYTHON) setup.py build
++ 
++ clean:
++ 	$(PYTHON) setup.py clean
++ 	-rm -rf build *~ \#* *pyc .#*
++ 
++ install:
++-	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
+++	$(PYTHON_ARGS) $(PYTHON) setup.py install --prefix=$(PREFIX)
++ 	[ -d $(BINDIR) ] || mkdir -p $(BINDIR)
++ 	install -m 755 sepolicy.py $(BINDIR)/sepolicy
++ 	-mkdir -p $(MANDIR)/man8
++diff -urN a/sestatus/Makefile b/sestatus/Makefile
++--- a/sestatus/Makefile	2013-02-05 19:43:22.000000000 -0600
+++++ b/sestatus/Makefile	2013-08-23 09:16:21.302924109 -0500
++@@ -1,11 +1,11 @@
++ # Installation directories.
++ PREFIX ?= $(DESTDIR)/usr
++ SBINDIR ?= $(PREFIX)/sbin
++-MANDIR = $(PREFIX)/share/man
+++MANDIR ?= $(PREFIX)/share/man
++ ETCDIR ?= $(DESTDIR)/etc
++ LIBDIR ?= $(PREFIX)/lib
++ 
++-CFLAGS = -Werror -Wall -W
+++CFLAGS ?= -Werror -Wall -W
++ override CFLAGS += -I$(PREFIX)/include -D_FILE_OFFSET_BITS=64
++ LDLIBS = -lselinux -L$(LIBDIR)
++ 
++diff -urN a/setfiles/Makefile b/setfiles/Makefile
++--- a/setfiles/Makefile	2013-02-05 19:43:22.000000000 -0600
+++++ b/setfiles/Makefile	2013-08-23 09:16:21.302924109 -0500
++@@ -1,24 +1,27 @@
++ # Installation directories.
++ PREFIX ?= $(DESTDIR)/usr
++ SBINDIR ?= $(DESTDIR)/sbin
++-MANDIR = $(PREFIX)/share/man
+++MANDIR ?= $(PREFIX)/share/man
++ LIBDIR ?= $(PREFIX)/lib
++-AUDITH = $(shell ls /usr/include/libaudit.h 2>/dev/null)
+++AUDITH = $(shell ls $(DESTDIR)/usr/include/libaudit.h 2>/dev/null)
++ 
++-PROGRESS_STEP=$(shell grep "^\#define STAR_COUNT" restore.h | awk -S '{ print $$3 }')
++-ABORT_ON_ERRORS=$(shell grep "^\#define ABORT_ON_ERRORS" setfiles.c | awk -S '{ print $$3 }')
+++PROGRESS_STEP=$(shell grep "^\#define STAR_COUNT" restore.h | awk '{ print $$3 }')
+++ABORT_ON_ERRORS=$(shell grep "^\#define ABORT_ON_ERRORS" setfiles.c | awk '{ print $$3 }')
++ 
++-CFLAGS = -g -Werror -Wall -W
+++CFLAGS ?= -g -Werror -Wall -W
++ override CFLAGS += -I$(PREFIX)/include
++ LDLIBS = -lselinux -lsepol -L$(LIBDIR)
++ 
++-ifeq ($(AUDITH), /usr/include/libaudit.h)
+++ifeq ($(AUDITH), $(DESTDIR)/usr/include/libaudit.h)
++ 	override CFLAGS += -DUSE_AUDIT
++ 	LDLIBS += -laudit
++ endif
++ 
++ all: setfiles restorecon man
++ 
+++%.o: %.c
+++	$(CC) $(CFLAGS) -c -o $@ $<
+++
++ setfiles:  setfiles.o restore.o
++ 
++ restorecon: setfiles
+diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
 new file mode 100644
-index 0000000..57397a5
+index 0000000..733b896
 --- /dev/null
-+++ b/package/setools/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_PACKAGE_SETOOLS
-+	bool "setools"
-+	select BR2_PACKAGE_LIBSELINUX
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_BZIP2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_INSTALL_LIBSTDCPP
++++ b/package/policycoreutils/Config.in
+@@ -0,0 +1,53 @@
++config BR2_PACKAGE_POLICYCOREUTILS
++	bool "policycoreutils"
++	select BR2_PACKAGE_LIBSEMANAGE
++	select BR2_PACKAGE_LIBCAP_NG
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # uses fts.h
 +	help
-+	  SETools is an open source project designed to facilitate
-+	  SELinux policy analysis. The primary tools are:
-+	   * apol - analyze a SELinux policy.
-+	   * seaudit - analyze audit messages from SELinux.
-+	   * seaudit-report - generate highly-customized audit log
-+	     reports.
-+	   * sechecker - command line tool for performing modular
-+	     checks on an SELinux policy.
-+	   * sediff - semantic policy difference tool for SELinux.
-+	   * secmds - command-line tools to analyze and search SELinux
-+             policy.
++	  Policycoreutils is a collection of policy utilities (originally
++	  the "core" set of utilities needed to use SELinux, although it
++	  has grown a bit over time), which have different dependencies.
++	  sestatus, secon, run_init, and newrole only use libselinux.
++	  load_policy and setfiles only use libselinux and libsepol.
++	  semodule and semanage use libsemanage (and thus bring in
++	  dependencies on libsepol and libselinux as well). setsebool
++	  uses libselinux to make non-persistent boolean changes (via
++	  the kernel interface) and uses libsemanage to make persistent
++	  boolean changes.
 +
-+comment "setools needs a toolchain w/ threads, C++, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
-+		|| !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/setools/setools.hash b/package/setools/setools.hash
++	  The base package will install the following utilities:
++	      load_policy
++	      newrole
++	      restorecond
++	      run_init
++	      secon
++	      semodule
++	      semodule_deps
++	      semodule_expand
++	      semodule_link
++	      semodule_package
++	      sepolgen-ifgen
++	      sestatus
++	      setfiles
++	      setsebool
++
++	  http://selinuxproject.org/page/Main_Page
++
++comment "policycoreutils needs a toolchain w/ threads, glibc or musl"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS  \
++		|| !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++
++if BR2_PACKAGE_POLICYCOREUTILS
++
++config BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND
++	bool "restorecond Utility"
++	depends on BR2_PACKAGE_DBUS_GLIB
++	help
++	  Enable restorecond to be built
++
++comment "restorecond needs dbus-glib"
++	depends on !BR2_PACKAGE_DBUS_GLIB
++
++endif
+diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
 new file mode 100644
-index 0000000..3fac21d
+index 0000000..575dd25
 --- /dev/null
-+++ b/package/setools/setools.hash
-@@ -0,0 +1,4 @@
-+# From https://github.com/TresysTechnology/setools3/wiki/Download
-+md5	d68d0d4e4da0f01da0f208782ff04b91	setools-3.3.8.tar.bz2
-+#Locally computed
-+sha256	44387ecc9a231ec536a937783440cd8960a72c51f14bffc1604b7525e341e999	setools-3.3.8.tar.bz2
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
++++ b/package/policycoreutils/policycoreutils.hash
+@@ -0,0 +1,2 @@
++# https://github.com/SELinuxProject/selinux/wiki/Releases
++sha256 b6881741f9f9988346a73bfeccb0299941dc117349753f0ef3f23ee86f06c1b5  policycoreutils-2.1.14.tar.gz
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
 new file mode 100644
-index 0000000..90195f0
+index 0000000..b03ea5c
 --- /dev/null
-+++ b/package/setools/setools.mk
-@@ -0,0 +1,84 @@
++++ b/package/policycoreutils/policycoreutils.mk
+@@ -0,0 +1,107 @@
 +################################################################################
 +#
-+# setools
++# policycoreutils
 +#
 +################################################################################
 +
-+SETOOLS_VERSION = 3.3.8
-+SETOOLS_SOURCE = setools-$(SETOOLS_VERSION).tar.bz2
-+SETOOLS_SITE = https://raw.githubusercontent.com/wiki/TresysTechnology/setools3/files/dists/setools-$(SETOOLS_VERSION)/
-+SETOOLS_DEPENDENCIES = libselinux libsepol sqlite libxml2 bzip2
-+SETOOLS_INSTALL_STAGING = YES
-+SETOOLS_LICENSE = GPLv2+ LGPLv2.1+
-+SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
++POLICYCOREUTILS_VERSION = 2.1.14
++POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
++POLICYCOREUTILS_LICENSE = GPLv2
++POLICYCOREUTILS_LICENSE_FILES = COPYING
 +
-+# configure.ac is patched by the cross compile patch,
-+# so autoreconf is necessary
-+SETOOLS_AUTORECONF = YES
++# gettext for load_policy.c use of libintl_* functions
++POLICYCOREUTILS_DEPENDENCIES = libsemanage libcap-ng $(if $(BR2_NEEDS_GETTEXT),gettext)
 +
-+# Notes: Need "disable-selinux-check" so the configure does not check to see
-+#        if host has selinux enabled.
-+#        No python support as only the libraries and commandline tools are
-+#        installed on target
-+SETOOLS_CONF_OPTS = \
-+	--disable-debug \
-+	--disable-gui \
-+	--disable-bwidget-check \
-+	--disable-selinux-check \
-+	--disable-swig-java \
-+	--disable-swig-python \
-+	--disable-swig-tcl \
-+	--with-sepol-devel="$(STAGING_DIR)/usr" \
-+	--with-selinux-devel="$(STAGING_DIR)/usr"
-+
-+HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol host-sqlite \
-+	host-libxml2 host-bzip2
-+
-+# configure.ac is patched by the cross compile patch,
-+# so autoreconf is necessary
-+HOST_SETOOLS_AUTORECONF = YES
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+HOST_SETOOLS_PYTHON_VERSION=$(PYTHON3_VERSION_MAJOR)
-+HOST_SETOOLS_DEPENDENCIES += host-python3
-+HOST_SETOOLS_CONF_ENV += am_cv_python_version=$(PYTHON3_VERSION)
-+else
-+HOST_SETOOLS_PYTHON_VERSION=$(PYTHON_VERSION_MAJOR)
-+HOST_SETOOLS_DEPENDENCIES += host-python
-+HOST_SETOOLS_CONF_ENV += am_cv_python_version=$(PYTHON_VERSION)
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++	POLICYCOREUTILS_DEPENDENCIES += linux-pam
++	POLICYCOREUTILS_MAKE_OPTS += NAMESPACE_PRIV=y
++define POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS
++	$(INSTALL) -D -m 0644 $(@D)/newrole/newrole-lspp.pamd $(TARGET_DIR)/etc/pam.d/newrole
++	$(INSTALL) -D -m 0644 $(@D)/run_init/run_init.pamd $(TARGET_DIR)/etc/pam.d/run_init
++endef
 +endif
 +
-+HOST_SETOOLS_PYTHON_SITE_PACKAGES = $(HOST_DIR)/usr/lib/python$(HOST_SETOOLS_PYTHON_VERSION)/site-packages
-+HOST_SETOOLS_PYTHON_INCLUDES = $(HOST_DIR)/usr/include/python$(HOST_SETOOLS_PYTHON_VERSION)
-+HOST_SETOOLS_PYTHON_LIB = -lpython$(HOST_SETOOLS_PYTHON_VERSION)
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++	POLICYCOREUTILS_DEPENDENCIES += audit
++	POLICYCOREUTILS_MAKE_OPTS += AUDIT_LOG_PRIV=y
++endif
 +
-+# Notes: Need "disable-selinux-check" so the configure does not check to see
-+#        if host has selinux enabled.
-+#        Host builds with python support to enable tools for offline target
-+#        policy analysis
-+HOST_SETOOLS_CONF_OPTS = \
-+	--disable-debug \
-+	--disable-gui \
-+	--disable-bwidget-check \
-+	--disable-selinux-check \
-+	--disable-swig-java \
-+	--disable-swig-python \
-+	--disable-swig-tcl \
-+	--with-sepol-devel="$(HOST_DIR)/usr" \
-+	--with-selinux-devel="$(HOST_DIR)/usr" \
-+	PYTHON_LDFLAGS="-L$(HOST_DIR)/usr/lib/" \
-+	PYTHON_CPPFLAGS="-I$(HOST_SETOOLS_PYTHON_INCLUDES)" \
-+	PYTHON_SITE_PKG="$(HOST_SETOOLS_PYTHON_SITE_PACKAGES)" \
-+	PYTHON_EXTRA_LIBS="-lpthread -ldl -lutil $(HOST_SETOOLS_PYTHON_LIB)"
++# Enable LSPP_PRIV if both audit and linux pam are enabled
++ifeq ($(BR2_PACKAGE_LINUX_PAM)$(BR2_PACKAGE_AUDIT),yy)
++	POLICYCOREUTILS_MAKE_OPTS += LSPP_PRIV=y
++endif
 +
-+HOST_SETOOLS_CONF_ENV += \
-+	am_cv_pathless_PYTHON=python \
-+	ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python \
-+	am_cv_python_platform=linux2 \
-+	am_cv_python_version=$(HOST_SETOOLS_PYTHON_VERSION) \
-+	am_cv_python_pythondir=$(HOST_SETOOLS_PYTHON_SITE_PACKAGES) \
-+	am_cv_python_pyexecdir=$(HOST_SETOOLS_PYTHON_SITE_PACKAGES) \
-+	am_cv_python_includes=-I$(HOST_SETOOLS_PYTHON_INCLUDES)
++# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
++# large file support.
++# See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
++POLICYCOREUTILS_MAKE_OPTS = \
++	$(TARGET_CONFIGURE_OPTS) \
++	CFLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS" \
++	LDFLAGS="$(TARGET_LDFLAGS) $(if $(BR2_NEEDS_GETTEXT),-lintl)"
 +
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++POLICYCOREUTILS_MAKE_DIRS = load_policy newrole run_init \
++	secon semodule semodule_deps semodule_expand semodule_link \
++	semodule_package sepolgen-ifgen sestatus setfiles setsebool
++
++ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND),y)
++POLICYCOREUTILS_DEPENDENCIES += dbus-glib
++POLICYCOREUTILS_MAKE_DIRS += restorecond
++endif
++
++define POLICYCOREUTILS_BUILD_CMDS
++	for dir in $(POLICYCOREUTILS_MAKE_DIRS) ; do \
++		$(MAKE) -C $(@D)/$${dir} $(POLICYCOREUTILS_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all || exit 1 ; \
++	done
++endef
++
++define POLICYCOREUTILS_INSTALL_TARGET_CMDS
++	for dir in $(POLICYCOREUTILS_MAKE_DIRS) ; do \
++		$(MAKE) -C $(@D)/$${dir} $(POLICYCOREUTILS_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install || exit 1 ; \
++	done
++endef
++
++HOST_POLICYCOREUTILS_DEPENDENCIES = host-libsemanage host-dbus-glib host-sepolgen host-setools
++
++# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
++# large file support.
++# See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
++HOST_POLICYCOREUTILS_MAKE_OPTS = \
++	$(HOST_CONFIGURE_OPTS) \
++	CFLAGS+="-U_FILE_OFFSET_BITS" \
++	PYTHON="$(HOST_DIR)/usr/bin/python"
++
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++HOST_POLICYCOREUTILS_DEPENDENCIES += host-python3
++HOST_POLICYCOREUTILS_MAKE_OPTS += \
++	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)" \
++	PYTHON_SRC="$(BUILD_DIR)/host-python$(PYTHON3_VERSION)"
++else
++HOST_POLICYCOREUTILS_DEPENDENCIES += host-python
++HOST_POLICYCOREUTILS_MAKE_OPTS += \
++	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
++	PYTHON_SRC="$(BUILD_DIR)/host-python$(PYTHON_VERSION)"
++endif
++
++# Note: We are only building the programs required by the refpolicy build
++HOST_POLICYCOREUTILS_MAKE_DIRS = load_policy semodule semodule_deps semodule_expand semodule_link \
++	semodule_package setfiles restorecond audit2allow audit2why scripts semanage sepolicy
++
++define HOST_POLICYCOREUTILS_BUILD_CMDS
++	for dir in $(HOST_POLICYCOREUTILS_MAKE_DIRS) ; do \
++		$(MAKE) -C $(@D)/$${dir} $(HOST_POLICYCOREUTILS_MAKE_OPTS) DESTDIR=$(HOST_DIR) all || exit 1 ; \
++	done
++endef
++
++define HOST_POLICYCOREUTILS_INSTALL_CMDS
++	for dir in $(HOST_POLICYCOREUTILS_MAKE_DIRS) ; do \
++		$(MAKE) -C $(@D)/$${dir} $(HOST_POLICYCOREUTILS_MAKE_OPTS) DESTDIR=$(HOST_DIR) install || exit 1 ; \
++	done
++	# Fix python paths
++	$(SED) 's~/usr/bin/~$(HOST_DIR)/usr/bin/~g' $(HOST_DIR)/usr/bin/audit2allow
++	$(SED) 's~/usr/bin/~$(HOST_DIR)/usr/bin/~g' $(HOST_DIR)/usr/bin/audit2why
++	$(SED) 's~/usr/bin/~$(HOST_DIR)/usr/bin/~g' $(HOST_DIR)/usr/bin/sepolgen-ifgen
++	$(SED) 's~/usr/bin/~$(HOST_DIR)/usr/bin/~g' $(HOST_DIR)/usr/bin/sepolicy
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 1.9.1
