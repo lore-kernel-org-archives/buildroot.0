@@ -1,76 +1,39 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 2 Jun 2015 13:03:48 +0200
-Subject: [Buildroot] [PATCH v3] packages: fix and improve support for
- top-level parallel makefile
-In-Reply-To: <1433241961-16445-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1433241961-16445-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <CAHkwnC8b3p4V1CZmRFP=WSB7nb4SYFTO84Bf3Pkah+ZBK5W3Fw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  2 Jun 2015 09:41:05 -0300
+Subject: [Buildroot] [PATCH 1/2] samba: bump to version 4.2.2
+Message-ID: <1433248866-20991-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 2, 2015 at 12:46 PM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> To fix packages that fail to build when PARALLEL_JOBS is empty instead
-> of using an empty PARALLEL_JOBS just avoid to using it in
-> the MAKE variable.
->
-> Check the MAKEFLAGS variable to know automatically if the -j option is
-> being used, but use the "=" operator instead of the ":=" operator
-> because it can be checked only in a "recursively expanded variable".
-> Use "override" because otherwise it's impossible to change the
-> automatic variable "MAKE".
->
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-v3:
-- add Acked-by (Arnout)
-v2:
-- Use MAKEFLAGS to check if the "-j" option is used
-- Don't empty the PARALLEL_JOBS variable (Thomas P.)
-
->  Makefile            | 4 ++--
->  package/Makefile.in | 3 ++-
->  2 files changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 43b5ba5..9f82c6d 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -58,8 +58,8 @@ export HOSTARCH := $(shell uname -m | \
->  #
->  # Taking into account the above considerations, if you still want to execute
->  # this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
-> -# build using the following command:
-> -#      make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
-> +# use the -j<jobs> option when building, e.g:
-> +#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
->  .NOTPARALLEL:
->
->  # absolute path
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index a0c5a7a..55c65f2 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -18,7 +18,8 @@ PARALLEL_JOBS := $(BR2_JLEVEL)
->  endif
->
->  MAKE1 := $(HOSTMAKE) -j1
-> -MAKE := $(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
-> +override MAKE = $(HOSTMAKE) \
-> +       $(if $(findstring j,$(filter-out --%,$(MAKEFLAGS))),,-j$(PARALLEL_JOBS))
->
->  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
->  TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
-> --
-> 2.4.1
->
-
-
-
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 42bfb93..11c15b7 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	37eaa239c116dc2c22c29c5a2931eb178ed22e48b594687247446703119b4ac3	samba-4.2.1.tar.gz
++sha256	27d6c69dc3afee38fd28051001d2d4bdae38c567612a9ec6477bb5567e2abc1e	samba-4.2.2.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index e5971fb..d7d5299 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.2.1
++SAMBA4_VERSION = 4.2.2
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-Fabio Porcedda
+2.3.6
