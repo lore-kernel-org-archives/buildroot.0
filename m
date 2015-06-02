@@ -1,16 +1,16 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Tue,  2 Jun 2015 08:28:37 -0500
-Subject: [Buildroot] [PATCH v7 21/22] mtd: Add xattr support
+Date: Tue,  2 Jun 2015 08:28:36 -0500
+Subject: [Buildroot] [PATCH v7 20/22] squashfs: Add xattr support
 In-Reply-To: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1433251718-3167-22-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1433251718-3167-21-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding extended attribute support for the mtd tools when theattr
+Adding extended attribute support for the squashfs tools when the attr
 package is selected. This is needed for SELinux support.
 
 Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
@@ -22,41 +22,44 @@ Changes v6 -> v7:
 Changes v5 -> v6:
   - No changes
 ---
- package/mtd/mtd.mk | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ package/squashfs/squashfs.mk | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 3397ebc..653848c 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -24,7 +24,18 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- MTD_DEPENDENCIES += busybox
- endif
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index 8ca9e2e..f44ef9f 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -10,9 +10,6 @@ SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squas
+ SQUASHFS_LICENSE = GPLv2+
+ SQUASHFS_LICENSE_FILES = COPYING
  
--HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-e2fsprogs
-+MTD_MAKE_OPTS = WITHOUT_LARGEFILE=1
-+
-+# If extended attributes are required, the acl package must
-+# also be enabled which will also include the attr package.
-+ifeq ($(BR2_PACKAGE_ACL),y)
-+MTD_DEPENDENCIES += acl
-+MTD_MAKE_OPTS += WITHOUT_XATTR=0
+-# no libattr in BR
+-SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=0
+-
+ ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
+ SQUASHFS_DEPENDENCIES += lz4
+ SQUASHFS_MAKE_ARGS += LZ4_SUPPORT=1 COMP_DEFAULT=lz4
+@@ -52,13 +49,20 @@ HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lz4 host-lzo host-xz
+ 
+ # no libattr/xz in BR
+ HOST_SQUASHFS_MAKE_ARGS = \
+-	XATTR_SUPPORT=0 \
+ 	XZ_SUPPORT=1    \
+ 	GZIP_SUPPORT=1  \
+ 	LZ4_SUPPORT=1	\
+ 	LZO_SUPPORT=1	\
+ 	LZMA_XZ_SUPPORT=1
+ 
++ifeq ($(BR2_PACKAGE_ATTR),y)
++	SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=1
++	HOST_SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=1
 +else
-+MTD_MAKE_OPTS += WITHOUT_XATTR=1
++	SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=0
++	HOST_SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=0
 +endif
 +
-+HOST_MTD_DEPENDENCIES += host-zlib host-lzo host-e2fsprogs
- 
- define HOST_MTD_BUILD_CMDS
- 	$(HOST_CONFIGURE_OPTS) $(MAKE1) \
-@@ -84,7 +95,7 @@ MTD_TARGETS_$(BR2_PACKAGE_MTD_MKFSUBIFS) += mkfs.ubifs/mkfs.ubifs
- 
- define MTD_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CROSS=$(TARGET_CROSS) \
--		BUILDDIR=$(@D) WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1 -C $(@D) \
-+		BUILDDIR=$(@D) $(MTD_MAKE_OPTS) -C $(@D) \
- 		$(addprefix $(@D)/,$(MTD_TARGETS_y)) \
- 		$(addprefix $(@D)/,$(MTD_STAGING_y))
- endef
+ define SQUASHFS_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE)    \
+ 		CC="$(TARGET_CC)"           \
 -- 
 1.9.1
