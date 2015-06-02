@@ -1,28 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  2 Jun 2015 07:51:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 8151] x86-64 make fails with ncurses 5.9
-In-Reply-To: <bug-8151-163@https.bugs.busybox.net/>
-References: <bug-8151-163@https.bugs.busybox.net/>
-Message-ID: <20150602075132.466B9819CE@busybox.osuosl.org>
+From: Mathieu Slabbinck <matty.slabbinck@gmail.com>
+Date: Tue, 2 Jun 2015 09:57:29 +0200
+Subject: [Buildroot] Nodejs 0.10.36 execvp: printf: Argument list too long
+Message-ID: <CAOFH_kHEookn4NDJBujS7pizjt9QuX4qQMgx3ks6N01CdRd=Pw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8151
+Hi,
 
---- Comment #1 from Antoine Pierlot-Garcin <antoine.pierlot-garcin@scle.fr> 2015-06-02 07:51:31 UTC ---
-I also encountered this bug, using host GCC 5. An upstream fix is available
-here:
+I'm having trouble building nodjes for my target getting following error:
 
-http://ncurses.scripts.mit.edu/?p=ncurses.git;a=blobdiff;f=ncurses/base/MKlib_gen.sh;h=b91398c740a266f10edbbce19f19c52b9709556f;hp=d8cc3c9751faa157d0c8cb8e16fbe4217703966b;hb=97bb4678dc03e753290b39bbff30ba2825df9517;hpb=762520a7930d7f698d542628d3c04bc201f7dac2
+make[2]: execvp: printf: Argument list too long
 
-Additional information on this Gentoo bug report:
+I found a patch related to this but this is for 0.8 and using the patch
+results in a broken build.
+http://patchwork.openembedded.org/patch/72811/
 
-https://bugs.gentoo.org/show_bug.cgi?id=545114
+Anyone have any idea how to fix this?
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Kr
+
+Mathieu
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150602/7d576211/attachment.html>
