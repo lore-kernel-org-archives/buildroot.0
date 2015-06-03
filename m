@@ -1,86 +1,53 @@
-From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
-Date: Wed,  3 Jun 2015 11:12:29 -0300
-Subject: [Buildroot] [PATCH v2 2/2] arch: tidy up binary formats config
-In-Reply-To: <1433340749-7711-1-git-send-email-guido@vanguardiasur.com.ar>
+From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
+Date: Wed, 3 Jun 2015 11:12:54 -0300
+Subject: [Buildroot] [PATCH 1/2] arch: tidy up mmu config
+In-Reply-To: <556CBBFC.4080002@mind.be>
 References: <1432227249-15345-1-git-send-email-guido@vanguardiasur.com.ar>
- <1433340749-7711-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <1433340749-7711-2-git-send-email-guido@vanguardiasur.com.ar>
+ <556CBBFC.4080002@mind.be>
+Message-ID: <20150603141254.GA18352@fox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of (black)listing architectures when deciding the binary format,
-we can enable the ELF format only when using an MMU and FLAT only when
-we're not. This mimics the logic in the Linux kernel for user binaries
-support.
+Hi Arnout!
 
-For FDPIC, we introduce a Kconfig option to enable its selection, and
-have blackfin select it.
+On Mon, Jun 01, 2015 at 10:09:32PM +0200, Arnout Vandecappelle wrote:
+> On 05/21/15 18:54, Guido Mart?nez wrote:
+> > Instead of blacklisting which architectures support MMUs (mandatorily
+> > or optionally), introduce two Kconfig options that are selected by each
+> > architecture in each case.
+> > 
+> > This simplifies the logic in BR2_USE_MMU.
+> > 
+> > Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> 
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>  Two small improvements, but even without them this patch is OK for me.
+> 
+> - In arch/Config.in, the ARM section and the Blackfin section look the same to
+> the casual onlooker, but for ARM the MMU options depend on the subarchitecture,
+> while for Blackfin it's always NOMMU. So I'd make this explicit by adding a
+> comment for ARM:
+> 
+> config BR2_arm
+>         bool "ARM (little endian)"
+> 	# MMU support is set by subarchitectur in Config.in.arm
+> 
+>  Same for ELF in the second patch.
+> 
+> - Like you did for ARM, I think you should move the MMU selection to the
+> subarches for xtensa as well. Since in fact, the fsf variant is always MMU.
+> 
+> 
+>  So if you repost this patch and make the above changes, you can add my Acked-by.
+Just resent the patches after applying these comments and the binfmt one
+too.
 
-Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
----
- arch/Config.in | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+Thanks a lot for reviewing!
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 3ad9574..ace1cfe 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -15,6 +15,9 @@ config BR2_ARCH_HAS_MMU_MANDATORY
- config BR2_ARCH_HAS_MMU_OPTIONAL
- 	bool
- 
-+config BR2_ARCH_HAS_FDPIC_SUPPORT
-+	bool
-+
- choice
- 	prompt "Target Architecture"
- 	default BR2_i386
-@@ -66,6 +69,7 @@ config BR2_aarch64
- 
- config BR2_bfin
- 	bool "Blackfin"
-+	select BR2_ARCH_HAS_FDPIC_SUPPORT
- 	help
- 	  The Blackfin is a family of 16 or 32-bit microprocessors developed,
- 	  manufactured and marketed by Analog Devices.
-@@ -272,13 +276,13 @@ config BR2_BINFMT_SUPPORTS_SHARED
- # Set up target binary format
- choice
- 	prompt "Target Binary Format"
--	default BR2_BINFMT_ELF if !(BR2_bfin || BR2_m68k)
--	default BR2_BINFMT_FDPIC if BR2_bfin
--	default BR2_BINFMT_FLAT if BR2_m68k
-+	default BR2_BINFMT_ELF		if BR2_USE_MMU
-+	default BR2_BINFMT_FDPIC	if BR2_ARCH_HAS_FDPIC_SUPPORT
-+	default BR2_BINFMT_FLAT		if !BR2_USE_MMU
- 
- config BR2_BINFMT_ELF
- 	bool "ELF"
--	depends on !BR2_bfin && !BR2_m68k
-+	depends on BR2_USE_MMU
- 	select BR2_BINFMT_SUPPORTS_SHARED
- 	help
- 	  ELF (Executable and Linkable Format) is a format for libraries and
-@@ -287,7 +291,7 @@ config BR2_BINFMT_ELF
- 
- config BR2_BINFMT_FDPIC
- 	bool "FDPIC"
--	depends on BR2_bfin
-+	depends on BR2_ARCH_HAS_FDPIC_SUPPORT
- 	select BR2_BINFMT_SUPPORTS_SHARED
- 	help
- 	  ELF FDPIC binaries are based on ELF, but allow the individual load
-@@ -297,7 +301,7 @@ config BR2_BINFMT_FDPIC
- 
- config BR2_BINFMT_FLAT
- 	bool "FLAT"
--	depends on BR2_bfin || BR2_m68k
-+	depends on !BR2_USE_MMU
- 	help
- 	  FLAT binary is a relatively simple and lightweight executable format
- 	  based on the original a.out format. It is widely used in environment
 -- 
-2.1.4
+Guido Mart?nez, VanguardiaSur
+www.vanguardiasur.com.ar
