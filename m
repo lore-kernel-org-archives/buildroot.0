@@ -1,75 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Jun 2015 22:41:19 +0200
-Subject: [Buildroot] [PATCH 02/32 v2] package/matchbox: make matchbox-lib a
-	real package
+Date: Wed,  3 Jun 2015 22:41:21 +0200
+Subject: [Buildroot] [PATCH 04/32 v2] package/matchbox: make matchbox-panel
+	a real package
 In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
 References: <cover.1433362840.git.yann.morin.1998@free.fr>
-Message-ID: <501a725180d262b28e280681b8c0c1a035d162a6.1433362840.git.yann.morin.1998@free.fr>
+Message-ID: <95db421642518010242dd2df02dda42e8717fc7b.1433362840.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the matchbox package is using weird, legacy constructs to
-build its different parts.
+Currently, matchbox-panel is treated as if it were an option of the
+matchbox package.
 
-Notably, it adds matchbox-lib to the list of packages to build, even
-though it is not a real package since it does not have a Kconfig entry.
+But that's not true, since it is a real package all by itself, with its
+own archive and its own buildsystem.
 
-Fix that:
-  - add a Kconfig entry for matchbox-lib
-  - select it from the top-level matchbox package
-
-Note that matchbox-common already depends on matchbox-lib.
+So, make it a real package.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/matchbox/Config.in              | 3 +++
- package/matchbox/matchbox-lib/Config.in | 2 ++
- package/matchbox/matchbox.mk            | 2 +-
- 3 files changed, 6 insertions(+), 1 deletion(-)
- create mode 100644 package/matchbox/matchbox-lib/Config.in
+ package/matchbox/Config.in                | 7 +------
+ package/matchbox/matchbox-panel/Config.in | 6 ++++++
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+ create mode 100644 package/matchbox/matchbox-panel/Config.in
 
 diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 7867ae3..70cc168 100644
+index 15b1017..e791cea 100644
 --- a/package/matchbox/Config.in
 +++ b/package/matchbox/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_MATCHBOX
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
-+	select BR2_PACKAGE_MATCHBOX_LIB
- 	help
- 	  Matchbox is an Open Source base environment for the X Window
- 	  System running on non-desktop embedded platforms such as
-@@ -17,6 +18,8 @@ config BR2_PACKAGE_MATCHBOX
+@@ -21,12 +21,7 @@ if BR2_PACKAGE_MATCHBOX
  
- if BR2_PACKAGE_MATCHBOX
+ source "package/matchbox/matchbox-lib/Config.in"
+ source "package/matchbox/matchbox-wm/Config.in"
+-
+-config BR2_PACKAGE_MATCHBOX_PANEL
+-	bool "Matchbox Panel"
+-	help
+-	  A flexible always present 'window bar' for holding
+-	  application launchers.
++source "package/matchbox/matchbox-panel/Config.in"
  
-+source "package/matchbox/matchbox-lib/Config.in"
-+
- config BR2_PACKAGE_MATCHBOX_PANEL
- 	bool "Matchbox Panel"
- 	help
-diff --git a/package/matchbox/matchbox-lib/Config.in b/package/matchbox/matchbox-lib/Config.in
+ config BR2_PACKAGE_MATCHBOX_DESKTOP
+ 	bool "Matchbox Desktop"
+diff --git a/package/matchbox/matchbox-panel/Config.in b/package/matchbox/matchbox-panel/Config.in
 new file mode 100644
-index 0000000..480e6fe
+index 0000000..e3daaf5
 --- /dev/null
-+++ b/package/matchbox/matchbox-lib/Config.in
-@@ -0,0 +1,2 @@
-+config BR2_PACKAGE_MATCHBOX_LIB
-+	bool
-diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-index fe1a7db..e367df2 100644
---- a/package/matchbox/matchbox.mk
-+++ b/package/matchbox/matchbox.mk
-@@ -1,4 +1,4 @@
- ifeq ($(BR2_PACKAGE_MATCHBOX),y)
- include $(sort $(wildcard package/matchbox/*/*.mk))
--PACKAGES += matchbox-lib matchbox-wm
-+PACKAGES += matchbox-wm
- endif
++++ b/package/matchbox/matchbox-panel/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_MATCHBOX_PANEL
++	bool "Matchbox Panel"
++	select BR2_PACKAGE_MATCHBOX_LIB
++	help
++	  A flexible always present 'window bar' for holding
++	  application launchers.
 -- 
 1.9.1
