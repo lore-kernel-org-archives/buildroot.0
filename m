@@ -1,98 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Jun 2015 22:41:31 +0200
-Subject: [Buildroot] [PATCH 14/32 v2] package/matchbox: fix option prompts
+Date: Wed,  3 Jun 2015 22:41:33 +0200
+Subject: [Buildroot] [PATCH 16/32 v2] package/matchbox-common: fix
+	dependencies
 In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
 References: <cover.1433362840.git.yann.morin.1998@free.fr>
-Message-ID: <4cf0daab83aaddba2df47f6f31e614ad08bedb26.1433362840.git.yann.morin.1998@free.fr>
+Message-ID: <9fa81fd7cbd6c1694dd4718ccf1ec24fe45f63fe.1433362840.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the package names instead of some fancy human-readable strings. ;-)
-
-Note: the matchbox package is really named matchbox-window-manager by
-upstream. However:
-  - it already is in a section of the menu title 'X window managers'
-  - users are probably only looking for 'matchbox'
-  - keeping just 'matchbox' keeps it in sync with the Kconfig variable,
-    and allows us to not handle a legacy entry (see a previous commit)
-  - matchbox-window-manager is a bit long. ;-)
-
-So, in this case, the short 'matchbox' prompt is used instead of the
-real upstream name.
+matchbox-common can be used by both matchbox-desktop and matchbox-panel,
+so it needs to depend on either, not both.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/matchbox-common/Config.in   | 4 ++--
- package/matchbox-desktop/Config.in  | 2 +-
- package/matchbox-keyboard/Config.in | 2 +-
- package/matchbox-panel/Config.in    | 2 +-
- package/matchbox/Config.in          | 2 +-
- 5 files changed, 6 insertions(+), 6 deletions(-)
+ package/matchbox-common/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/matchbox-common/Config.in b/package/matchbox-common/Config.in
-index 7d22d05..f1c4ce3 100644
+index 33d6cc4..5a038e1 100644
 --- a/package/matchbox-common/Config.in
 +++ b/package/matchbox-common/Config.in
-@@ -1,9 +1,9 @@
+@@ -1,7 +1,7 @@
  config BR2_PACKAGE_MATCHBOX_COMMON
--	bool "Matchbox session common files"
-+	bool "matchbox-common"
- 	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
+ 	bool "matchbox-common"
+ 	select BR2_PACKAGE_MATCHBOX_LIB
+-	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
++	depends on BR2_PACKAGE_MATCHBOX_PANEL || BR2_PACKAGE_MATCHBOX_DESKTOP
  	help
  	  Common desktop folders and matchbox-session script.
  
- config BR2_PACKAGE_MATCHBOX_COMMON_PDA
--	bool "PDA style desktop folders"
-+	bool "PDA style app folder"
- 	depends on BR2_PACKAGE_MATCHBOX_COMMON
-diff --git a/package/matchbox-desktop/Config.in b/package/matchbox-desktop/Config.in
-index c9fd196..ed80c22 100644
---- a/package/matchbox-desktop/Config.in
-+++ b/package/matchbox-desktop/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_MATCHBOX_DESKTOP
--	bool "Matchbox Desktop"
-+	bool "matchbox-desktop"
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  A PDA style application launcher or 'item browser'.
-diff --git a/package/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
-index e017358..056a255 100644
---- a/package/matchbox-keyboard/Config.in
-+++ b/package/matchbox-keyboard/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_MATCHBOX_KEYBOARD
--	bool "Matchbox Virtual Keyboard"
-+	bool "matchbox-keyboard"
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_MATCHBOX_FAKEKEY
-diff --git a/package/matchbox-panel/Config.in b/package/matchbox-panel/Config.in
-index e3daaf5..47bd10a 100644
---- a/package/matchbox-panel/Config.in
-+++ b/package/matchbox-panel/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_MATCHBOX_PANEL
--	bool "Matchbox Panel"
-+	bool "matchbox-panel"
- 	select BR2_PACKAGE_MATCHBOX_LIB
- 	help
- 	  A flexible always present 'window bar' for holding
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 3d771d3..344635c 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_MATCHBOX
--	bool "MatchBox Window Manager"
-+	bool "matchbox"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_FONTCONFIG
 -- 
 1.9.1
