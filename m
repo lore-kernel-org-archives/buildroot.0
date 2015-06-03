@@ -1,63 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Jun 2015 22:41:25 +0200
-Subject: [Buildroot] [PATCH 08/32 v2] package/matchbox: make
-	matchbox-keyboard a real package
+Date: Wed,  3 Jun 2015 22:41:28 +0200
+Subject: [Buildroot] [PATCH 11/32 v2] package/matchbox: point to new home
 In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
 References: <cover.1433362840.git.yann.morin.1998@free.fr>
-Message-ID: <2450d6a6c0dfc9cd61534e52ef652674cf5f4c39.1433362840.git.yann.morin.1998@free.fr>
+Message-ID: <4b5bcd8acdc0066232191a5869d876f469fe9e56.1433362840.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, matchbox-keyboard is treated as if it were an option of the
-matchbox package.
-
-But that's not true, since it is a real package all by itself, with its
-own archive and its own buildsystem.
-
-So, make it a real package.
+The new home of the matchbox project is with the Yocto project.
+The old home was already redirecting to it anyway, but better point
+directly to the official location.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 ---
- package/matchbox/Config.in                   | 9 +--------
- package/matchbox/matchbox-keyboard/Config.in | 7 +++++++
- 2 files changed, 8 insertions(+), 8 deletions(-)
- create mode 100644 package/matchbox/matchbox-keyboard/Config.in
+Changes v1 -> v2:
+  - change commit log to remove dubious sarcastic joke  (Alexandre)
+---
+ package/matchbox/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 8d4ebc7..9b27d4d 100644
+index 2f9b73d..891ac95 100644
 --- a/package/matchbox/Config.in
 +++ b/package/matchbox/Config.in
-@@ -25,13 +25,6 @@ source "package/matchbox/matchbox-panel/Config.in"
- source "package/matchbox/matchbox-desktop/Config.in"
- source "package/matchbox/matchbox-common/Config.in"
- source "package/matchbox/matchbox-fakekey/Config.in"
--
--config BR2_PACKAGE_MATCHBOX_KEYBOARD
--	bool "Matchbox Virtual Keyboard"
--	select BR2_PACKAGE_XLIB_LIBXTST
--	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
--	select BR2_PACKAGE_MATCHBOX_FAKEKEY
--	help
--	  Virtual Keyboard
-+source "package/matchbox/matchbox-keyboard/Config.in"
+@@ -15,7 +15,7 @@ config BR2_PACKAGE_MATCHBOX
+ 	  handhelds, set-top boxes, kiosks and anything else for which
+ 	  screen space, input mechanisms or system resources are limited.
  
- endif
-diff --git a/package/matchbox/matchbox-keyboard/Config.in b/package/matchbox/matchbox-keyboard/Config.in
-new file mode 100644
-index 0000000..e017358
---- /dev/null
-+++ b/package/matchbox/matchbox-keyboard/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_MATCHBOX_KEYBOARD
-+	bool "Matchbox Virtual Keyboard"
-+	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_MATCHBOX_FAKEKEY
-+	help
-+	  Virtual Keyboard
+-	  http://matchbox-project.org/
++	  https://www.yoctoproject.org/tools-resources/projects/matchbox
+ 
+ if BR2_PACKAGE_MATCHBOX
+ 
 -- 
 1.9.1
