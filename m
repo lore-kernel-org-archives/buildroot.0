@@ -1,65 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Jun 2015 22:41:20 +0200
-Subject: [Buildroot] [PATCH 03/32 v2] package/matchbox: make matchbox-wm a
-	real package
+Date: Wed,  3 Jun 2015 22:41:23 +0200
+Subject: [Buildroot] [PATCH 06/32 v2] package/matchbox: make matchbox-common
+	a real package
 In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
 References: <cover.1433362840.git.yann.morin.1998@free.fr>
-Message-ID: <dbde4c47b90d5855e702e00664bb1a7fafc7bb64.1433362840.git.yann.morin.1998@free.fr>
+Message-ID: <2fdb869eb5b975028b6ab006ab0e2a055962d7ca.1433362840.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Similarly to what we just did for matchbox-lib, we make matchbox-wm a
-real package.
+Currently, matchbox-common is treated as if it were an option of the
+matchbox package.
+
+But that's not true, since it is a real package all by itself, with its
+own archive and its own buildsystem.
+
+So, make it a real package.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/matchbox/Config.in             | 2 ++
- package/matchbox/matchbox-wm/Config.in | 3 +++
- package/matchbox/matchbox.mk           | 1 -
- 3 files changed, 5 insertions(+), 1 deletion(-)
- create mode 100644 package/matchbox/matchbox-wm/Config.in
+ package/matchbox/Config.in                 | 11 +----------
+ package/matchbox/matchbox-common/Config.in |  9 +++++++++
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+ create mode 100644 package/matchbox/matchbox-common/Config.in
 
 diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 70cc168..15b1017 100644
+index 39aff3c..ead2649 100644
 --- a/package/matchbox/Config.in
 +++ b/package/matchbox/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_MATCHBOX
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 	select BR2_PACKAGE_MATCHBOX_LIB
-+	select BR2_PACKAGE_MATCHBOX_WM
- 	help
- 	  Matchbox is an Open Source base environment for the X Window
- 	  System running on non-desktop embedded platforms such as
-@@ -19,6 +20,7 @@ config BR2_PACKAGE_MATCHBOX
- if BR2_PACKAGE_MATCHBOX
+@@ -23,16 +23,7 @@ source "package/matchbox/matchbox-lib/Config.in"
+ source "package/matchbox/matchbox-wm/Config.in"
+ source "package/matchbox/matchbox-panel/Config.in"
+ source "package/matchbox/matchbox-desktop/Config.in"
+-
+-config BR2_PACKAGE_MATCHBOX_COMMON
+-	bool "Matchbox session common files"
+-	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
+-	help
+-	  Common desktop folders and matchbox-session script.
+-
+-config BR2_PACKAGE_MATCHBOX_COMMON_PDA
+-	bool "PDA style desktop folders"
+-	depends on BR2_PACKAGE_MATCHBOX_COMMON
++source "package/matchbox/matchbox-common/Config.in"
  
- source "package/matchbox/matchbox-lib/Config.in"
-+source "package/matchbox/matchbox-wm/Config.in"
- 
- config BR2_PACKAGE_MATCHBOX_PANEL
- 	bool "Matchbox Panel"
-diff --git a/package/matchbox/matchbox-wm/Config.in b/package/matchbox/matchbox-wm/Config.in
+ config BR2_PACKAGE_MATCHBOX_KEYBOARD
+ 	bool "Matchbox Virtual Keyboard"
+diff --git a/package/matchbox/matchbox-common/Config.in b/package/matchbox/matchbox-common/Config.in
 new file mode 100644
-index 0000000..6ad5dfc
+index 0000000..7d22d05
 --- /dev/null
-+++ b/package/matchbox/matchbox-wm/Config.in
-@@ -0,0 +1,3 @@
-+config BR2_PACKAGE_MATCHBOX_WM
-+	bool
-+	select BR2_PACKAGE_MATCHBOX_LIB
-diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-index e367df2..17d89d8 100644
---- a/package/matchbox/matchbox.mk
-+++ b/package/matchbox/matchbox.mk
-@@ -1,4 +1,3 @@
- ifeq ($(BR2_PACKAGE_MATCHBOX),y)
- include $(sort $(wildcard package/matchbox/*/*.mk))
--PACKAGES += matchbox-wm
- endif
++++ b/package/matchbox/matchbox-common/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_MATCHBOX_COMMON
++	bool "Matchbox session common files"
++	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
++	help
++	  Common desktop folders and matchbox-session script.
++
++config BR2_PACKAGE_MATCHBOX_COMMON_PDA
++	bool "PDA style desktop folders"
++	depends on BR2_PACKAGE_MATCHBOX_COMMON
 -- 
 1.9.1
