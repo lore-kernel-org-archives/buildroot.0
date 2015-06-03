@@ -1,167 +1,249 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Jun 2015 22:41:29 +0200
-Subject: [Buildroot] [PATCH 12/32 v2] package/matchbox: get rid of
-	intermediate non-package matchbox
+Date: Wed,  3 Jun 2015 22:41:30 +0200
+Subject: [Buildroot] [PATCH 13/32 v2] package/matchbox-common: move one
+	directory higher
 In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
 References: <cover.1433362840.git.yann.morin.1998@free.fr>
-Message-ID: <d7b1f4cbe279dd83cff17a1dac1a66a0dba73157.1433362840.git.yann.morin.1998@free.fr>
+Message-ID: <be877917f9d59bbe45208ca64f39c665475ff6b4.1433362840.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the matchbox entry in the menu is a non-package entry, that
-forcibly selects the matchbox-wm package, which is the real matchbox WM.
+We usually do not have a sub-directory for a family of related
+packages, so move matchbox packages one directory higher, so they
+all are in packages/
 
-So, get rid of the current matchbox option, rename the existing
-matchbox-wm to simply matchbox, so we have a real package from the
-onset.
+Also re-order packages alphabetically.
 
-Since we're re-using the previous option for the WM package, there is no
-need for an entry in the legacy menu.
-
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .../{matchbox-wm => }/0001-defaulttheme.patch      |  0
- package/matchbox/Config.in                         |  2 --
- package/matchbox/matchbox-wm/Config.in             |  3 --
- package/matchbox/matchbox-wm/matchbox-wm.mk        | 38 --------------------
- .../matchbox-wm.hash => matchbox.hash}             |  0
- package/matchbox/matchbox.mk                       | 40 ++++++++++++++++++++++
- 6 files changed, 40 insertions(+), 43 deletions(-)
- rename package/matchbox/{matchbox-wm => }/0001-defaulttheme.patch (100%)
- delete mode 100644 package/matchbox/matchbox-wm/Config.in
- delete mode 100644 package/matchbox/matchbox-wm/matchbox-wm.mk
- rename package/matchbox/{matchbox-wm/matchbox-wm.hash => matchbox.hash} (100%)
 
-diff --git a/package/matchbox/matchbox-wm/0001-defaulttheme.patch b/package/matchbox/0001-defaulttheme.patch
+---
+Notes:
+  - Arnout suggested keeping the 'source' directive in matchbox'
+    Config.in, like we do for Kodi;
+  - some typoes preventively spotted by Arnout. Thanks! :-)
+---
+ package/{matchbox => }/matchbox-common/Config.in           |  0
+ .../{matchbox => }/matchbox-common/matchbox-common.hash    |  0
+ package/{matchbox => }/matchbox-common/matchbox-common.mk  |  0
+ package/{matchbox => }/matchbox-desktop/Config.in          |  0
+ .../{matchbox => }/matchbox-desktop/matchbox-desktop.hash  |  0
+ .../{matchbox => }/matchbox-desktop/matchbox-desktop.mk    |  0
+ package/{matchbox => }/matchbox-fakekey/Config.in          |  0
+ .../{matchbox => }/matchbox-fakekey/matchbox-fakekey.hash  |  0
+ .../{matchbox => }/matchbox-fakekey/matchbox-fakekey.mk    |  0
+ package/{matchbox => }/matchbox-keyboard/Config.in         |  0
+ .../matchbox-keyboard/matchbox-keyboard.hash               |  0
+ .../{matchbox => }/matchbox-keyboard/matchbox-keyboard.mk  |  2 +-
+ .../matchbox-keyboard/mb-applet-kbd-wrapper.sh             |  0
+ .../{matchbox => }/matchbox-lib/0001-index-is-legacy.patch |  0
+ package/{matchbox => }/matchbox-lib/0002-libpng15.patch    |  0
+ .../matchbox-lib/0003-include-setjmp-h.patch               |  0
+ package/{matchbox => }/matchbox-lib/Config.in              |  0
+ package/{matchbox => }/matchbox-lib/matchbox-lib.hash      |  0
+ package/{matchbox => }/matchbox-lib/matchbox-lib.mk        |  0
+ .../matchbox-panel/0001-index-is-legacy.patch              |  0
+ .../matchbox-panel/0002-mb-applet-wireless.patch           |  0
+ package/{matchbox => }/matchbox-panel/Config.in            |  0
+ package/{matchbox => }/matchbox-panel/matchbox-panel.hash  |  0
+ package/{matchbox => }/matchbox-panel/matchbox-panel.mk    |  0
+ .../matchbox-startup-monitor/0001-true-false.patch         |  0
+ package/{matchbox => }/matchbox-startup-monitor/Config.in  |  0
+ .../matchbox-startup-monitor/matchbox-startup-monitor.hash |  0
+ .../matchbox-startup-monitor/matchbox-startup-monitor.mk   |  0
+ package/matchbox/Config.in                                 | 14 +++++++-------
+ package/matchbox/matchbox.mk                               |  3 ---
+ 30 files changed, 8 insertions(+), 11 deletions(-)
+ rename package/{matchbox => }/matchbox-common/Config.in (100%)
+ rename package/{matchbox => }/matchbox-common/matchbox-common.hash (100%)
+ rename package/{matchbox => }/matchbox-common/matchbox-common.mk (100%)
+ rename package/{matchbox => }/matchbox-desktop/Config.in (100%)
+ rename package/{matchbox => }/matchbox-desktop/matchbox-desktop.hash (100%)
+ rename package/{matchbox => }/matchbox-desktop/matchbox-desktop.mk (100%)
+ rename package/{matchbox => }/matchbox-fakekey/Config.in (100%)
+ rename package/{matchbox => }/matchbox-fakekey/matchbox-fakekey.hash (100%)
+ rename package/{matchbox => }/matchbox-fakekey/matchbox-fakekey.mk (100%)
+ rename package/{matchbox => }/matchbox-keyboard/Config.in (100%)
+ rename package/{matchbox => }/matchbox-keyboard/matchbox-keyboard.hash (100%)
+ rename package/{matchbox => }/matchbox-keyboard/matchbox-keyboard.mk (88%)
+ rename package/{matchbox => }/matchbox-keyboard/mb-applet-kbd-wrapper.sh (100%)
+ rename package/{matchbox => }/matchbox-lib/0001-index-is-legacy.patch (100%)
+ rename package/{matchbox => }/matchbox-lib/0002-libpng15.patch (100%)
+ rename package/{matchbox => }/matchbox-lib/0003-include-setjmp-h.patch (100%)
+ rename package/{matchbox => }/matchbox-lib/Config.in (100%)
+ rename package/{matchbox => }/matchbox-lib/matchbox-lib.hash (100%)
+ rename package/{matchbox => }/matchbox-lib/matchbox-lib.mk (100%)
+ rename package/{matchbox => }/matchbox-panel/0001-index-is-legacy.patch (100%)
+ rename package/{matchbox => }/matchbox-panel/0002-mb-applet-wireless.patch (100%)
+ rename package/{matchbox => }/matchbox-panel/Config.in (100%)
+ rename package/{matchbox => }/matchbox-panel/matchbox-panel.hash (100%)
+ rename package/{matchbox => }/matchbox-panel/matchbox-panel.mk (100%)
+ rename package/{matchbox => }/matchbox-startup-monitor/0001-true-false.patch (100%)
+ rename package/{matchbox => }/matchbox-startup-monitor/Config.in (100%)
+ rename package/{matchbox => }/matchbox-startup-monitor/matchbox-startup-monitor.hash (100%)
+ rename package/{matchbox => }/matchbox-startup-monitor/matchbox-startup-monitor.mk (100%)
+
+diff --git a/package/matchbox/matchbox-common/Config.in b/package/matchbox-common/Config.in
 similarity index 100%
-rename from package/matchbox/matchbox-wm/0001-defaulttheme.patch
-rename to package/matchbox/0001-defaulttheme.patch
+rename from package/matchbox/matchbox-common/Config.in
+rename to package/matchbox-common/Config.in
+diff --git a/package/matchbox/matchbox-common/matchbox-common.hash b/package/matchbox-common/matchbox-common.hash
+similarity index 100%
+rename from package/matchbox/matchbox-common/matchbox-common.hash
+rename to package/matchbox-common/matchbox-common.hash
+diff --git a/package/matchbox/matchbox-common/matchbox-common.mk b/package/matchbox-common/matchbox-common.mk
+similarity index 100%
+rename from package/matchbox/matchbox-common/matchbox-common.mk
+rename to package/matchbox-common/matchbox-common.mk
+diff --git a/package/matchbox/matchbox-desktop/Config.in b/package/matchbox-desktop/Config.in
+similarity index 100%
+rename from package/matchbox/matchbox-desktop/Config.in
+rename to package/matchbox-desktop/Config.in
+diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.hash b/package/matchbox-desktop/matchbox-desktop.hash
+similarity index 100%
+rename from package/matchbox/matchbox-desktop/matchbox-desktop.hash
+rename to package/matchbox-desktop/matchbox-desktop.hash
+diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.mk b/package/matchbox-desktop/matchbox-desktop.mk
+similarity index 100%
+rename from package/matchbox/matchbox-desktop/matchbox-desktop.mk
+rename to package/matchbox-desktop/matchbox-desktop.mk
+diff --git a/package/matchbox/matchbox-fakekey/Config.in b/package/matchbox-fakekey/Config.in
+similarity index 100%
+rename from package/matchbox/matchbox-fakekey/Config.in
+rename to package/matchbox-fakekey/Config.in
+diff --git a/package/matchbox/matchbox-fakekey/matchbox-fakekey.hash b/package/matchbox-fakekey/matchbox-fakekey.hash
+similarity index 100%
+rename from package/matchbox/matchbox-fakekey/matchbox-fakekey.hash
+rename to package/matchbox-fakekey/matchbox-fakekey.hash
+diff --git a/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk b/package/matchbox-fakekey/matchbox-fakekey.mk
+similarity index 100%
+rename from package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
+rename to package/matchbox-fakekey/matchbox-fakekey.mk
+diff --git a/package/matchbox/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
+similarity index 100%
+rename from package/matchbox/matchbox-keyboard/Config.in
+rename to package/matchbox-keyboard/Config.in
+diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.hash b/package/matchbox-keyboard/matchbox-keyboard.hash
+similarity index 100%
+rename from package/matchbox/matchbox-keyboard/matchbox-keyboard.hash
+rename to package/matchbox-keyboard/matchbox-keyboard.hash
+diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox-keyboard/matchbox-keyboard.mk
+similarity index 88%
+rename from package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+rename to package/matchbox-keyboard/matchbox-keyboard.mk
+index 2017730..fcdd8b1 100644
+--- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
++++ b/package/matchbox-keyboard/matchbox-keyboard.mk
+@@ -15,7 +15,7 @@ MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expa
+ MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
+ 
+ define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
+-	$(INSTALL) -D -m 0755 package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
++	$(INSTALL) -D -m 0755 package/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
+ endef
+ 
+ MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
+diff --git a/package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh b/package/matchbox-keyboard/mb-applet-kbd-wrapper.sh
+similarity index 100%
+rename from package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh
+rename to package/matchbox-keyboard/mb-applet-kbd-wrapper.sh
+diff --git a/package/matchbox/matchbox-lib/0001-index-is-legacy.patch b/package/matchbox-lib/0001-index-is-legacy.patch
+similarity index 100%
+rename from package/matchbox/matchbox-lib/0001-index-is-legacy.patch
+rename to package/matchbox-lib/0001-index-is-legacy.patch
+diff --git a/package/matchbox/matchbox-lib/0002-libpng15.patch b/package/matchbox-lib/0002-libpng15.patch
+similarity index 100%
+rename from package/matchbox/matchbox-lib/0002-libpng15.patch
+rename to package/matchbox-lib/0002-libpng15.patch
+diff --git a/package/matchbox/matchbox-lib/0003-include-setjmp-h.patch b/package/matchbox-lib/0003-include-setjmp-h.patch
+similarity index 100%
+rename from package/matchbox/matchbox-lib/0003-include-setjmp-h.patch
+rename to package/matchbox-lib/0003-include-setjmp-h.patch
+diff --git a/package/matchbox/matchbox-lib/Config.in b/package/matchbox-lib/Config.in
+similarity index 100%
+rename from package/matchbox/matchbox-lib/Config.in
+rename to package/matchbox-lib/Config.in
+diff --git a/package/matchbox/matchbox-lib/matchbox-lib.hash b/package/matchbox-lib/matchbox-lib.hash
+similarity index 100%
+rename from package/matchbox/matchbox-lib/matchbox-lib.hash
+rename to package/matchbox-lib/matchbox-lib.hash
+diff --git a/package/matchbox/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
+similarity index 100%
+rename from package/matchbox/matchbox-lib/matchbox-lib.mk
+rename to package/matchbox-lib/matchbox-lib.mk
+diff --git a/package/matchbox/matchbox-panel/0001-index-is-legacy.patch b/package/matchbox-panel/0001-index-is-legacy.patch
+similarity index 100%
+rename from package/matchbox/matchbox-panel/0001-index-is-legacy.patch
+rename to package/matchbox-panel/0001-index-is-legacy.patch
+diff --git a/package/matchbox/matchbox-panel/0002-mb-applet-wireless.patch b/package/matchbox-panel/0002-mb-applet-wireless.patch
+similarity index 100%
+rename from package/matchbox/matchbox-panel/0002-mb-applet-wireless.patch
+rename to package/matchbox-panel/0002-mb-applet-wireless.patch
+diff --git a/package/matchbox/matchbox-panel/Config.in b/package/matchbox-panel/Config.in
+similarity index 100%
+rename from package/matchbox/matchbox-panel/Config.in
+rename to package/matchbox-panel/Config.in
+diff --git a/package/matchbox/matchbox-panel/matchbox-panel.hash b/package/matchbox-panel/matchbox-panel.hash
+similarity index 100%
+rename from package/matchbox/matchbox-panel/matchbox-panel.hash
+rename to package/matchbox-panel/matchbox-panel.hash
+diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox-panel/matchbox-panel.mk
+similarity index 100%
+rename from package/matchbox/matchbox-panel/matchbox-panel.mk
+rename to package/matchbox-panel/matchbox-panel.mk
+diff --git a/package/matchbox/matchbox-startup-monitor/0001-true-false.patch b/package/matchbox-startup-monitor/0001-true-false.patch
+similarity index 100%
+rename from package/matchbox/matchbox-startup-monitor/0001-true-false.patch
+rename to package/matchbox-startup-monitor/0001-true-false.patch
+diff --git a/package/matchbox/matchbox-startup-monitor/Config.in b/package/matchbox-startup-monitor/Config.in
+similarity index 100%
+rename from package/matchbox/matchbox-startup-monitor/Config.in
+rename to package/matchbox-startup-monitor/Config.in
+diff --git a/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.hash b/package/matchbox-startup-monitor/matchbox-startup-monitor.hash
+similarity index 100%
+rename from package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.hash
+rename to package/matchbox-startup-monitor/matchbox-startup-monitor.hash
+diff --git a/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk b/package/matchbox-startup-monitor/matchbox-startup-monitor.mk
+similarity index 100%
+rename from package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
+rename to package/matchbox-startup-monitor/matchbox-startup-monitor.mk
 diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 891ac95..7d06bb2 100644
+index 7d06bb2..3d771d3 100644
 --- a/package/matchbox/Config.in
 +++ b/package/matchbox/Config.in
-@@ -8,7 +8,6 @@ config BR2_PACKAGE_MATCHBOX
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 	select BR2_PACKAGE_MATCHBOX_LIB
--	select BR2_PACKAGE_MATCHBOX_WM
- 	help
- 	  Matchbox is an Open Source base environment for the X Window
- 	  System running on non-desktop embedded platforms such as
-@@ -20,7 +19,6 @@ config BR2_PACKAGE_MATCHBOX
+@@ -18,12 +18,12 @@ config BR2_PACKAGE_MATCHBOX
+ 
  if BR2_PACKAGE_MATCHBOX
  
- source "package/matchbox/matchbox-lib/Config.in"
--source "package/matchbox/matchbox-wm/Config.in"
- source "package/matchbox/matchbox-panel/Config.in"
- source "package/matchbox/matchbox-desktop/Config.in"
- source "package/matchbox/matchbox-common/Config.in"
-diff --git a/package/matchbox/matchbox-wm/Config.in b/package/matchbox/matchbox-wm/Config.in
-deleted file mode 100644
-index 6ad5dfc..0000000
---- a/package/matchbox/matchbox-wm/Config.in
-+++ /dev/null
-@@ -1,3 +0,0 @@
--config BR2_PACKAGE_MATCHBOX_WM
--	bool
--	select BR2_PACKAGE_MATCHBOX_LIB
-diff --git a/package/matchbox/matchbox-wm/matchbox-wm.mk b/package/matchbox/matchbox-wm/matchbox-wm.mk
-deleted file mode 100644
-index da9efd7..0000000
---- a/package/matchbox/matchbox-wm/matchbox-wm.mk
-+++ /dev/null
-@@ -1,38 +0,0 @@
--################################################################################
--#
--# matchbox-wm
--#
--################################################################################
--
--MATCHBOX_WM_VERSION = 1.2
--MATCHBOX_WM_SOURCE = matchbox-window-manager-$(MATCHBOX_WM_VERSION).tar.bz2
--MATCHBOX_WM_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-window-manager/$(MATCHBOX_WM_VERSION)
--MATCHBOX_WM_LICENSE = GPLv2+
--MATCHBOX_WM_LICENSE_FILES = COPYING
--
--MATCHBOX_WM_DEPENDENCIES = matchbox-lib
--MATCHBOX_WM_CONF_OPTS = --enable-expat
--
--# Workaround bug in configure script
--MATCHBOX_WM_CONF_ENV = expat=yes
--
--ifeq ($(BR2_PACKAGE_X11R7_LIBXCOMPOSITE),y)
--ifeq ($(BR2_PACKAGE_X11R7_LIBXPM),y)
--MATCHBOX_WM_CONF_OPTS += --enable-composite
--MATCHBOX_WM_DEPENDENCIES += xlib_libXcomposite
--MATCHBOX_WM_DEPENDENCIES += xlib_libXpm
--endif
--endif
--
--ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
--MATCHBOX_WM_DEPENDENCIES += xlib_libXft
--endif
--
--ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
--MATCHBOX_WM_CONF_OPTS += --enable-startup-notification
--MATCHBOX_WM_DEPENDENCIES += startup-notification
--else
--MATCHBOX_WM_CONF_OPTS += --disable-startup-notification
--endif
--
--$(eval $(autotools-package))
-diff --git a/package/matchbox/matchbox-wm/matchbox-wm.hash b/package/matchbox/matchbox.hash
-similarity index 100%
-rename from package/matchbox/matchbox-wm/matchbox-wm.hash
-rename to package/matchbox/matchbox.hash
+-source "package/matchbox/matchbox-lib/Config.in"
+-source "package/matchbox/matchbox-panel/Config.in"
+-source "package/matchbox/matchbox-desktop/Config.in"
+-source "package/matchbox/matchbox-common/Config.in"
+-source "package/matchbox/matchbox-fakekey/Config.in"
+-source "package/matchbox/matchbox-keyboard/Config.in"
+-source "package/matchbox/matchbox-startup-monitor/Config.in"
++source "package/matchbox-common/Config.in"
++source "package/matchbox-desktop/Config.in"
++source "package/matchbox-fakekey/Config.in"
++source "package/matchbox-keyboard/Config.in"
++source "package/matchbox-lib/Config.in"
++source "package/matchbox-panel/Config.in"
++source "package/matchbox-startup-monitor/Config.in"
+ 
+ endif
 diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-index ae989b3..100a633 100644
+index 100a633..29e240e 100644
 --- a/package/matchbox/matchbox.mk
 +++ b/package/matchbox/matchbox.mk
-@@ -1 +1,41 @@
-+################################################################################
-+#
-+# matchbox
-+#
-+################################################################################
-+
-+MATCHBOX_VERSION = 1.2
-+MATCHBOX_SOURCE = matchbox-window-manager-$(MATCHBOX_VERSION).tar.bz2
-+MATCHBOX_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-window-manager/$(MATCHBOX_VERSION)
-+MATCHBOX_LICENSE = GPLv2+
-+MATCHBOX_LICENSE_FILES = COPYING
-+
-+MATCHBOX_DEPENDENCIES = matchbox-lib
-+MATCHBOX_CONF_OPTS = --enable-expat
-+
-+# Workaround bug in configure script
-+MATCHBOX_CONF_ENV = expat=yes
-+
-+ifeq ($(BR2_PACKAGE_X11R7_LIBXCOMPOSITE),y)
-+ifeq ($(BR2_PACKAGE_X11R7_LIBXPM),y)
-+MATCHBOX_CONF_OPTS += --enable-composite
-+MATCHBOX_DEPENDENCIES += xlib_libXcomposite
-+MATCHBOX_DEPENDENCIES += xlib_libXpm
-+endif
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
-+MATCHBOX_DEPENDENCIES += xlib_libXft
-+endif
-+
-+ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
-+MATCHBOX_CONF_OPTS += --enable-startup-notification
-+MATCHBOX_DEPENDENCIES += startup-notification
-+else
-+MATCHBOX_CONF_OPTS += --disable-startup-notification
-+endif
-+
-+$(eval $(autotools-package))
-+
-+# After we called a package infra, we can include more files
- include $(sort $(wildcard package/matchbox/*/*.mk))
+@@ -36,6 +36,3 @@ MATCHBOX_CONF_OPTS += --disable-startup-notification
+ endif
+ 
+ $(eval $(autotools-package))
+-
+-# After we called a package infra, we can include more files
+-include $(sort $(wildcard package/matchbox/*/*.mk))
 -- 
 1.9.1
