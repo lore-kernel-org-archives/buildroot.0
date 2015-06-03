@@ -1,45 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Jun 2015 22:41:48 +0200
-Subject: [Buildroot] [PATCH 31/32 v2] package/matchbox-panel: add support
-	for dnotify
+Date: Wed,  3 Jun 2015 22:41:49 +0200
+Subject: [Buildroot] [PATCH 32/32 v2] package/matchbox-panel: fix WiFi
+	monitoring
 In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
 References: <cover.1433362840.git.yann.morin.1998@free.fr>
-Message-ID: <322f4dbcfe5191e203c6b054793a0657956e2abd.1433362840.git.yann.morin.1998@free.fr>
+Message-ID: <0186d2b3c5d0409658ade1fbfca5d07b8044e119.1433362840.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using dnotify, matchbox-panel can automatically reload its menu.
-dnotify requires a kernel >=2.4, which we can consider to be
-virtually for granted.
+matchbox-panel can build a simple applet to monitor the WiFi. For that,
+it tries to see if libiwl is available; if so, WiFi monitoring is
+enabled, otherwise it is disabled; there is not option to explicitly
+enable or disable it.
 
-So, forcibly use dnotify.
+Currently, matchbox-panel depends on the wireless-tools package.
+However, that's not enough, since the library will only be installed if
+explicitly enabled in the menuconfig *and* this is not a static build.
+
+Change the dependency to be on the library, not the package.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
 Changes v1 -> v2:
-  - remove the option, always use dnotify  (Arnout)
+  - typo  (Arnout)
 ---
  package/matchbox-panel/matchbox-panel.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/matchbox-panel/matchbox-panel.mk b/package/matchbox-panel/matchbox-panel.mk
-index a5da780..e71337c 100644
+index e71337c..aa2d417 100644
 --- a/package/matchbox-panel/matchbox-panel.mk
 +++ b/package/matchbox-panel/matchbox-panel.mk
-@@ -11,7 +11,7 @@ MATCHBOX_PANEL_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchb
- MATCHBOX_PANEL_LICENSE = GPLv2+
- MATCHBOX_PANEL_LICENSE_FILES = COPYING
- MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib
--MATCHBOX_PANEL_CONF_OPTS = --enable-expat
-+MATCHBOX_PANEL_CONF_OPTS = --enable-expat --enable-dnotify
+@@ -27,7 +27,7 @@ else
+ MATCHBOX_PANEL_CONF_OPTS += --disable-acpi-linux
+ endif
  
- ifeq ($(BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR),y)
- MATCHBOX_PANEL_CONF_OPTS += --enable-startup-notification
+-ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS),y)
++ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_LIB),y)
+ MATCHBOX_PANEL_DEPENDENCIES += wireless_tools
+ endif
+ 
 -- 
 1.9.1
