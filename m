@@ -1,75 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Jun 2015 22:41:26 +0200
-Subject: [Buildroot] [PATCH 09/32 v2] package/matchbox: make
-	match-startup-monitor a real package
+Date: Wed,  3 Jun 2015 22:41:40 +0200
+Subject: [Buildroot] [PATCH 23/32 v2] package/matchbox: enable support for
+	the Xsession manager
 In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
 References: <cover.1433362840.git.yann.morin.1998@free.fr>
-Message-ID: <5cd476aabdc148407817406453007a4a3c213146.1433362840.git.yann.morin.1998@free.fr>
+Message-ID: <8f33998f39bb0d9c429c078b66ad339243767bce.1433362840.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, matchbox-startup-monitor is missing a Kconfig entry, but is
-so far solely a build-time dependency of matchbox-panel.
+Since this is a non-obvious dependency, just select the appropriate
+library.
 
-So, make it a real package, and only build-depend on it when enabled.
-Fix the condition to build-depend on it.
-
-To keep the existing behaviour, default to 'y' when startup-notification
-is enabled.
+Also, add a comment to act as a separator between matchbox' options
+and the other matchbox packages.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
 
 ---
-Changes v1 -> v2:
-  - restore previous behaviour, to be used whenever startup-notification
-    is enabled  (Arnout)
+Changes v1 -. v2:
+  - add a Kconfig option rather than relying only on a build-dependency
+    (Arnout)
 ---
- package/matchbox/Config.in                          | 1 +
- package/matchbox/matchbox-panel/matchbox-panel.mk   | 4 ++--
- package/matchbox/matchbox-startup-monitor/Config.in | 3 +++
- 3 files changed, 6 insertions(+), 2 deletions(-)
- create mode 100644 package/matchbox/matchbox-startup-monitor/Config.in
+ package/matchbox/Config.in   | 8 ++++++++
+ package/matchbox/matchbox.mk | 7 +++++++
+ 2 files changed, 15 insertions(+)
 
 diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 9b27d4d..2f9b73d 100644
+index ae33ecf..d42b90f 100644
 --- a/package/matchbox/Config.in
 +++ b/package/matchbox/Config.in
-@@ -26,5 +26,6 @@ source "package/matchbox/matchbox-desktop/Config.in"
- source "package/matchbox/matchbox-common/Config.in"
- source "package/matchbox/matchbox-fakekey/Config.in"
- source "package/matchbox/matchbox-keyboard/Config.in"
-+source "package/matchbox/matchbox-startup-monitor/Config.in"
+@@ -17,6 +17,14 @@ menuconfig BR2_PACKAGE_MATCHBOX
  
- endif
-diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
-index d3efed9..f7d699b 100644
---- a/package/matchbox/matchbox-panel/matchbox-panel.mk
-+++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
-@@ -13,9 +13,9 @@ MATCHBOX_PANEL_LICENSE_FILES = COPYING
- MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib
- MATCHBOX_PANEL_CONF_OPTS = --enable-expat
+ if BR2_PACKAGE_MATCHBOX
  
--ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
-+ifeq ($(BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR),y)
- MATCHBOX_PANEL_CONF_OPTS += --enable-startup-notification
--MATCHBOX_PANEL_DEPENDENCIES += startup-notification matchbox-startup-monitor
-+MATCHBOX_PANEL_DEPENDENCIES += matchbox-startup-monitor
- else
- MATCHBOX_PANEL_CONF_OPTS += --disable-startup-notification
++config BR2_PACKAGE_MATCHBOX_SM
++	bool "session manager"
++	select BR2_PACKAGE_XLIB_LIBSM
++	help
++	  Enable support for the Session Manager.
++
++comment "matchbox utilities"
++
+ source "package/matchbox-common/Config.in"
+ source "package/matchbox-desktop/Config.in"
+ source "package/matchbox-fakekey/Config.in"
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 43f6b4b..b1f96a6 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -27,4 +27,11 @@ else
+ MATCHBOX_CONF_OPTS += --disable-startup-notification
  endif
-diff --git a/package/matchbox/matchbox-startup-monitor/Config.in b/package/matchbox/matchbox-startup-monitor/Config.in
-new file mode 100644
-index 0000000..95af5fc
---- /dev/null
-+++ b/package/matchbox/matchbox-startup-monitor/Config.in
-@@ -0,0 +1,3 @@
-+config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
-+	bool
-+	default y if BR2_PACKAGE_STARTUP_NOTIFICATION
+ 
++ifeq ($(BR2_PACKAGE_MATCHBOX_SM),y)
++MATCHBOX_CONF_OPTS += --enable-session
++MATCHBOX_DEPENDENCIES += xlib_libSM
++else
++MATCHBOX_CONF_OPTS += --disable-session
++endif
++
+ $(eval $(autotools-package))
 -- 
 1.9.1
