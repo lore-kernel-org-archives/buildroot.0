@@ -1,49 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Jun 2015 22:41:44 +0200
-Subject: [Buildroot] [PATCH 27/32 v2] package/matchbox: wrap long lines
+Date: Wed,  3 Jun 2015 22:41:46 +0200
+Subject: [Buildroot] [PATCH 29/32 v2] package/matchbox: xlib_libXfixes is an
+	optional dependency
 In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
 References: <cover.1433362840.git.yann.morin.1998@free.fr>
-Message-ID: <93be8fa367f942abeab6168e3515a78d3711533a.1433362840.git.yann.morin.1998@free.fr>
+Message-ID: <67c7e9a9c9b0c7832067f74e8914279081685044.1433362840.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/matchbox-keyboard/matchbox-keyboard.mk | 3 ++-
- package/matchbox-lib/matchbox-lib.mk           | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+matchbox can use xlib_libXfixes to completely and really hide the
+cursor, so build-depend on it if enabled.
 
-diff --git a/package/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox-keyboard/matchbox-keyboard.mk
-index ba524c0..3ffaca6 100644
---- a/package/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox-keyboard/matchbox-keyboard.mk
-@@ -15,7 +15,8 @@ MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expa
- MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/matchbox/matchbox.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 3b6a0eb..9094b1e 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -39,4 +39,8 @@ ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
+ MATCHBOX_DEPENDENCIES += xlib_libXcursor
+ endif
  
- define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
--	$(INSTALL) -D -m 0755 package/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
-+	$(INSTALL) -D -m 0755 package/matchbox-keyboard/mb-applet-kbd-wrapper.sh \
-+		$(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
- endef
- 
- MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
-diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
-index 3b697bb..d43e2b8 100644
---- a/package/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox-lib/matchbox-lib.mk
-@@ -15,7 +15,8 @@ MATCHBOX_LIB_CONF_OPTS = --enable-expat --disable-doxygen-docs
- MATCHBOX_LIB_CONF_ENV = LIBS="-lX11"
- 
- define MATCHBOX_LIB_POST_INSTALL_FIXES
--	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' $(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
-+	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
- endef
- 
- MATCHBOX_LIB_POST_INSTALL_STAGING_HOOKS += MATCHBOX_LIB_POST_INSTALL_FIXES
++ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
++MATCHBOX_DEPENDENCIES += xlib_libXfixes
++endif
++
+ $(eval $(autotools-package))
 -- 
 1.9.1
