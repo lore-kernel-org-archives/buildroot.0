@@ -1,60 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Jun 2015 22:41:22 +0200
-Subject: [Buildroot] [PATCH 05/32 v2] package/matchbox: make
-	matchbox-desktop a real package
+Date: Wed,  3 Jun 2015 22:41:20 +0200
+Subject: [Buildroot] [PATCH 03/32 v2] package/matchbox: make matchbox-wm a
+	real package
 In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
 References: <cover.1433362840.git.yann.morin.1998@free.fr>
-Message-ID: <2af12f3fb912ccbc5ac5c1a0d7791a92e981bc39.1433362840.git.yann.morin.1998@free.fr>
+Message-ID: <dbde4c47b90d5855e702e00664bb1a7fafc7bb64.1433362840.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, matchbox-desktop is treated as if it were an option of the
-matchbox package.
-
-But that's not true, since it is a real package all by itself, with its
-own archive and its own buildsystem.
-
-So, make it a real package.
+Similarly to what we just did for matchbox-lib, we make matchbox-wm a
+real package.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/matchbox/Config.in                  | 7 +------
- package/matchbox/matchbox-desktop/Config.in | 5 +++++
- 2 files changed, 6 insertions(+), 6 deletions(-)
- create mode 100644 package/matchbox/matchbox-desktop/Config.in
+ package/matchbox/Config.in             | 2 ++
+ package/matchbox/matchbox-wm/Config.in | 3 +++
+ package/matchbox/matchbox.mk           | 1 -
+ 3 files changed, 5 insertions(+), 1 deletion(-)
+ create mode 100644 package/matchbox/matchbox-wm/Config.in
 
 diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index e791cea..39aff3c 100644
+index 70cc168..15b1017 100644
 --- a/package/matchbox/Config.in
 +++ b/package/matchbox/Config.in
-@@ -22,12 +22,7 @@ if BR2_PACKAGE_MATCHBOX
- source "package/matchbox/matchbox-lib/Config.in"
- source "package/matchbox/matchbox-wm/Config.in"
- source "package/matchbox/matchbox-panel/Config.in"
--
--config BR2_PACKAGE_MATCHBOX_DESKTOP
--	bool "Matchbox Desktop"
--	select BR2_PACKAGE_ZLIB
--	help
--	  A PDA style application launcher or 'item browser'.
-+source "package/matchbox/matchbox-desktop/Config.in"
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_MATCHBOX
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_MATCHBOX_LIB
++	select BR2_PACKAGE_MATCHBOX_WM
+ 	help
+ 	  Matchbox is an Open Source base environment for the X Window
+ 	  System running on non-desktop embedded platforms such as
+@@ -19,6 +20,7 @@ config BR2_PACKAGE_MATCHBOX
+ if BR2_PACKAGE_MATCHBOX
  
- config BR2_PACKAGE_MATCHBOX_COMMON
- 	bool "Matchbox session common files"
-diff --git a/package/matchbox/matchbox-desktop/Config.in b/package/matchbox/matchbox-desktop/Config.in
+ source "package/matchbox/matchbox-lib/Config.in"
++source "package/matchbox/matchbox-wm/Config.in"
+ 
+ config BR2_PACKAGE_MATCHBOX_PANEL
+ 	bool "Matchbox Panel"
+diff --git a/package/matchbox/matchbox-wm/Config.in b/package/matchbox/matchbox-wm/Config.in
 new file mode 100644
-index 0000000..c9fd196
+index 0000000..6ad5dfc
 --- /dev/null
-+++ b/package/matchbox/matchbox-desktop/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_MATCHBOX_DESKTOP
-+	bool "Matchbox Desktop"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  A PDA style application launcher or 'item browser'.
++++ b/package/matchbox/matchbox-wm/Config.in
+@@ -0,0 +1,3 @@
++config BR2_PACKAGE_MATCHBOX_WM
++	bool
++	select BR2_PACKAGE_MATCHBOX_LIB
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index e367df2..17d89d8 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -1,4 +1,3 @@
+ ifeq ($(BR2_PACKAGE_MATCHBOX),y)
+ include $(sort $(wildcard package/matchbox/*/*.mk))
+-PACKAGES += matchbox-wm
+ endif
 -- 
 1.9.1
