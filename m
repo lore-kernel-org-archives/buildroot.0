@@ -1,49 +1,98 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Jun 2015 22:41:49 +0200
-Subject: [Buildroot] [PATCH 32/32 v2] package/matchbox-panel: fix WiFi
-	monitoring
+Date: Wed,  3 Jun 2015 22:41:31 +0200
+Subject: [Buildroot] [PATCH 14/32 v2] package/matchbox: fix option prompts
 In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
 References: <cover.1433362840.git.yann.morin.1998@free.fr>
-Message-ID: <0186d2b3c5d0409658ade1fbfca5d07b8044e119.1433362840.git.yann.morin.1998@free.fr>
+Message-ID: <4cf0daab83aaddba2df47f6f31e614ad08bedb26.1433362840.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-matchbox-panel can build a simple applet to monitor the WiFi. For that,
-it tries to see if libiwl is available; if so, WiFi monitoring is
-enabled, otherwise it is disabled; there is not option to explicitly
-enable or disable it.
+Use the package names instead of some fancy human-readable strings. ;-)
 
-Currently, matchbox-panel depends on the wireless-tools package.
-However, that's not enough, since the library will only be installed if
-explicitly enabled in the menuconfig *and* this is not a static build.
+Note: the matchbox package is really named matchbox-window-manager by
+upstream. However:
+  - it already is in a section of the menu title 'X window managers'
+  - users are probably only looking for 'matchbox'
+  - keeping just 'matchbox' keeps it in sync with the Kconfig variable,
+    and allows us to not handle a legacy entry (see a previous commit)
+  - matchbox-window-manager is a bit long. ;-)
 
-Change the dependency to be on the library, not the package.
+So, in this case, the short 'matchbox' prompt is used instead of the
+real upstream name.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
 ---
-Changes v1 -> v2:
-  - typo  (Arnout)
----
- package/matchbox-panel/matchbox-panel.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/matchbox-common/Config.in   | 4 ++--
+ package/matchbox-desktop/Config.in  | 2 +-
+ package/matchbox-keyboard/Config.in | 2 +-
+ package/matchbox-panel/Config.in    | 2 +-
+ package/matchbox/Config.in          | 2 +-
+ 5 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/matchbox-panel/matchbox-panel.mk b/package/matchbox-panel/matchbox-panel.mk
-index e71337c..aa2d417 100644
---- a/package/matchbox-panel/matchbox-panel.mk
-+++ b/package/matchbox-panel/matchbox-panel.mk
-@@ -27,7 +27,7 @@ else
- MATCHBOX_PANEL_CONF_OPTS += --disable-acpi-linux
- endif
+diff --git a/package/matchbox-common/Config.in b/package/matchbox-common/Config.in
+index 7d22d05..f1c4ce3 100644
+--- a/package/matchbox-common/Config.in
++++ b/package/matchbox-common/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_MATCHBOX_COMMON
+-	bool "Matchbox session common files"
++	bool "matchbox-common"
+ 	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
+ 	help
+ 	  Common desktop folders and matchbox-session script.
  
--ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS),y)
-+ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_LIB),y)
- MATCHBOX_PANEL_DEPENDENCIES += wireless_tools
- endif
- 
+ config BR2_PACKAGE_MATCHBOX_COMMON_PDA
+-	bool "PDA style desktop folders"
++	bool "PDA style app folder"
+ 	depends on BR2_PACKAGE_MATCHBOX_COMMON
+diff --git a/package/matchbox-desktop/Config.in b/package/matchbox-desktop/Config.in
+index c9fd196..ed80c22 100644
+--- a/package/matchbox-desktop/Config.in
++++ b/package/matchbox-desktop/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_MATCHBOX_DESKTOP
+-	bool "Matchbox Desktop"
++	bool "matchbox-desktop"
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  A PDA style application launcher or 'item browser'.
+diff --git a/package/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
+index e017358..056a255 100644
+--- a/package/matchbox-keyboard/Config.in
++++ b/package/matchbox-keyboard/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_MATCHBOX_KEYBOARD
+-	bool "Matchbox Virtual Keyboard"
++	bool "matchbox-keyboard"
+ 	select BR2_PACKAGE_XLIB_LIBXTST
+ 	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_MATCHBOX_FAKEKEY
+diff --git a/package/matchbox-panel/Config.in b/package/matchbox-panel/Config.in
+index e3daaf5..47bd10a 100644
+--- a/package/matchbox-panel/Config.in
++++ b/package/matchbox-panel/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_MATCHBOX_PANEL
+-	bool "Matchbox Panel"
++	bool "matchbox-panel"
+ 	select BR2_PACKAGE_MATCHBOX_LIB
+ 	help
+ 	  A flexible always present 'window bar' for holding
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index 3d771d3..344635c 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_MATCHBOX
+-	bool "MatchBox Window Manager"
++	bool "matchbox"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_FONTCONFIG
 -- 
 1.9.1
