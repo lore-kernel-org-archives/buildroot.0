@@ -1,97 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Jun 2015 22:41:38 +0200
-Subject: [Buildroot] [PATCH 21/32 v2] package/matchbox: forcibly disable
-	support for compositing
+Date: Wed,  3 Jun 2015 22:41:41 +0200
+Subject: [Buildroot] [PATCH 24/32 v2] package/matchbox: drop useless
+	dependencies
 In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
 References: <cover.1433362840.git.yann.morin.1998@free.fr>
-Message-ID: <0d1d2ce6fb4d67396ee1f6031ac62e13880c3bef.1433362840.git.yann.morin.1998@free.fr>
+Message-ID: <72ba5e4ae01b659f8458b391cd7aa11c4f4a5044.1433362840.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building with the experimental support for compositing is broken:
+xlib-libXft is only needed when building a 'standalone' matchbox, which
+means not using matchbox-lib.
 
-    /home/ymorin/dev/buildroot/O/host/usr/bin/arm-linux-gnueabihf-gcc
-    -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-    -Os -o matchbox-window-manager main.o wm.o base_client.o main_client.o
-    toolbar_client.o toolbar_client_alt.o dockbar_client.o dialog_client.o
-    select_client.o desktop_client.o ewmh.o misc.o client_common.o keys.o
-    list.o stack.o composite-engine.o session.o mbtheme.o xml.o
-    -lmb -lX11
-    -L/home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-    -lXext -lXcomposite -lXdamage -lXfixes -lXrender
-    -L/home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-    -lX11 -lexpat
-    -L/home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-    -lXfixes
-    composite-engine.o: In function `gaussian':
-    /home/ymorin/dev/buildroot/O/build/matchbox-1.2/src/composite-engine.c:65:
-    undefined reference to `exp'
+But we *are* building matchbox-lib, and we do not support the standalone
+mode (and probably won't, as even upstream says it is ugly, by lack of
+theming).
 
-That's because it forgets to link with -lm.
+Similarly, xlib-libXext is only used for its 'xsync' extension, for
+which support is entirely commented-out in matchbox.
 
-However, adding "MATCHBOX_CONF_ENV = -lm" does not solve the issue, as
-it still does not link with -lm at all.
-
-Furthermore, the package does not autoreconf, since it is missing the
-gconf m4 macros, and Buildroot does not have a package for gconf, hence
-we can not even patch Makefile.am and autoreconf.
-
-Patching Makefile.in (in addition to .am) could be a solution, but
-support for compositing is explicitly marked as being experimental.
-
-So, just forcibly disable it altogether.
+So, drop the dependency on xlib-libXft, and make it explicit we're not
+building either standalone modes; drop xlib-libXext.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
----
-Changes v1 -> v2:
-  - simply drop support for compositing without trying to first fix it
-    (Arnout)
+Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
 ---
  package/matchbox/Config.in   |  1 -
- package/matchbox/matchbox.mk | 10 +---------
- 2 files changed, 1 insertion(+), 10 deletions(-)
+ package/matchbox/matchbox.mk | 11 ++++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 344635c..d850a39 100644
+index d42b90f..0c7e5ea 100644
 --- a/package/matchbox/Config.in
 +++ b/package/matchbox/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_MATCHBOX
+@@ -4,7 +4,6 @@ menuconfig BR2_PACKAGE_MATCHBOX
+ 	depends on BR2_USE_MMU # fork()
  	select BR2_PACKAGE_FONTCONFIG
  	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+-	select BR2_PACKAGE_XLIB_LIBXEXT
  	select BR2_PACKAGE_XLIB_LIBXCURSOR
  	select BR2_PACKAGE_MATCHBOX_LIB
  	help
 diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-index 0899208..43f6b4b 100644
+index b1f96a6..1abcfd8 100644
 --- a/package/matchbox/matchbox.mk
 +++ b/package/matchbox/matchbox.mk
-@@ -11,19 +11,11 @@ MATCHBOX_LICENSE = GPLv2+
+@@ -11,15 +11,16 @@ MATCHBOX_LICENSE = GPLv2+
  MATCHBOX_LICENSE_FILES = COPYING
  
  MATCHBOX_DEPENDENCIES = matchbox-lib
--MATCHBOX_CONF_OPTS = --enable-expat --disable-gconf
-+MATCHBOX_CONF_OPTS = --enable-expat --disable-gconf --disable-composite
+-MATCHBOX_CONF_OPTS = --enable-expat --disable-gconf --disable-composite
++MATCHBOX_CONF_OPTS = \
++	--enable-expat \
++	--disable-gconf \
++	--disable-composite \
++	--disable-standalone \
++	--disable-standalone-xft
  
  # Workaround bug in configure script
  MATCHBOX_CONF_ENV = expat=yes
  
--ifeq ($(BR2_PACKAGE_X11R7_LIBXCOMPOSITE),y)
--ifeq ($(BR2_PACKAGE_X11R7_LIBXPM),y)
--MATCHBOX_CONF_OPTS += --enable-composite
--MATCHBOX_DEPENDENCIES += xlib_libXcomposite
--MATCHBOX_DEPENDENCIES += xlib_libXpm
--endif
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
+-MATCHBOX_DEPENDENCIES += xlib_libXft
 -endif
 -
- ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
- MATCHBOX_DEPENDENCIES += xlib_libXft
- endif
+ ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
+ MATCHBOX_CONF_OPTS += --enable-startup-notification
+ MATCHBOX_DEPENDENCIES += startup-notification
 -- 
 1.9.1
