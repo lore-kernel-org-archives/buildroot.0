@@ -1,68 +1,97 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Jun 2015 22:41:35 +0200
-Subject: [Buildroot] [PATCH 18/32 v2] package/matchbox: finally add prompts
-	to all sub-packages
+Date: Wed,  3 Jun 2015 22:41:38 +0200
+Subject: [Buildroot] [PATCH 21/32 v2] package/matchbox: forcibly disable
+	support for compositing
 In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
 References: <cover.1433362840.git.yann.morin.1998@free.fr>
-Message-ID: <5f4b5cf38761c88677667e03bf7b67f2c699a853.1433362840.git.yann.morin.1998@free.fr>
+Message-ID: <0d1d2ce6fb4d67396ee1f6031ac62e13880c3bef.1433362840.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We currently do not have that many packages without a prompt, and when
-we do, they are limited to system-related packages that can't be
-selected or are forcibly selected under various system-specific
-conditions.
+Building with the experimental support for compositing is broken:
 
-This is clearly not the case for the matchbox sub-packages, so just give
-them a prompt, even when they are forcibly selected by the main matchbox
-package, and can't be selected without it.
+    /home/ymorin/dev/buildroot/O/host/usr/bin/arm-linux-gnueabihf-gcc
+    -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+    -Os -o matchbox-window-manager main.o wm.o base_client.o main_client.o
+    toolbar_client.o toolbar_client_alt.o dockbar_client.o dialog_client.o
+    select_client.o desktop_client.o ewmh.o misc.o client_common.o keys.o
+    list.o stack.o composite-engine.o session.o mbtheme.o xml.o
+    -lmb -lX11
+    -L/home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+    -lXext -lXcomposite -lXdamage -lXfixes -lXrender
+    -L/home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+    -lX11 -lexpat
+    -L/home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+    -lXfixes
+    composite-engine.o: In function `gaussian':
+    /home/ymorin/dev/buildroot/O/build/matchbox-1.2/src/composite-engine.c:65:
+    undefined reference to `exp'
 
-That will at least tell the user those packages exist and are to be
-built.
+That's because it forgets to link with -lm.
+
+However, adding "MATCHBOX_CONF_ENV = -lm" does not solve the issue, as
+it still does not link with -lm at all.
+
+Furthermore, the package does not autoreconf, since it is missing the
+gconf m4 macros, and Buildroot does not have a package for gconf, hence
+we can not even patch Makefile.am and autoreconf.
+
+Patching Makefile.in (in addition to .am) could be a solution, but
+support for compositing is explicitly marked as being experimental.
+
+So, just forcibly disable it altogether.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/matchbox-fakekey/Config.in         | 4 +++-
- package/matchbox-lib/Config.in             | 4 +++-
- package/matchbox-startup-monitor/Config.in | 4 +++-
- 3 files changed, 9 insertions(+), 3 deletions(-)
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/matchbox-fakekey/Config.in b/package/matchbox-fakekey/Config.in
-index 97413ab..1a1f134 100644
---- a/package/matchbox-fakekey/Config.in
-+++ b/package/matchbox-fakekey/Config.in
-@@ -1,4 +1,6 @@
- config BR2_PACKAGE_MATCHBOX_FAKEKEY
--	bool
-+	bool "matchbox-fakekey"
+---
+Changes v1 -> v2:
+  - simply drop support for compositing without trying to first fix it
+    (Arnout)
+---
+ package/matchbox/Config.in   |  1 -
+ package/matchbox/matchbox.mk | 10 +---------
+ 2 files changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index 344635c..d850a39 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_MATCHBOX
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
  	select BR2_PACKAGE_MATCHBOX_LIB
- 	select BR2_PACKAGE_XLIB_LIBXTST
-+	help
-+	  Library for simulating key press events under X11.
-diff --git a/package/matchbox-lib/Config.in b/package/matchbox-lib/Config.in
-index 480e6fe..e50a543 100644
---- a/package/matchbox-lib/Config.in
-+++ b/package/matchbox-lib/Config.in
-@@ -1,2 +1,4 @@
- config BR2_PACKAGE_MATCHBOX_LIB
--	bool
-+	bool "matchbox-lib"
-+	help
-+	  Matchbox common functionality library.
-diff --git a/package/matchbox-startup-monitor/Config.in b/package/matchbox-startup-monitor/Config.in
-index 522d7f7..15dac60 100644
---- a/package/matchbox-startup-monitor/Config.in
-+++ b/package/matchbox-startup-monitor/Config.in
-@@ -1,4 +1,6 @@
- config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
--	bool
-+	bool "matchbox-startup-monitor"
- 	select BR2_PACKAGE_MATCHBOX_LIB
- 	default y if BR2_PACKAGE_STARTUP_NOTIFICATION
-+	help
-+	  Matchbox Panel Startup Monitor Applet.
+ 	help
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 0899208..43f6b4b 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -11,19 +11,11 @@ MATCHBOX_LICENSE = GPLv2+
+ MATCHBOX_LICENSE_FILES = COPYING
+ 
+ MATCHBOX_DEPENDENCIES = matchbox-lib
+-MATCHBOX_CONF_OPTS = --enable-expat --disable-gconf
++MATCHBOX_CONF_OPTS = --enable-expat --disable-gconf --disable-composite
+ 
+ # Workaround bug in configure script
+ MATCHBOX_CONF_ENV = expat=yes
+ 
+-ifeq ($(BR2_PACKAGE_X11R7_LIBXCOMPOSITE),y)
+-ifeq ($(BR2_PACKAGE_X11R7_LIBXPM),y)
+-MATCHBOX_CONF_OPTS += --enable-composite
+-MATCHBOX_DEPENDENCIES += xlib_libXcomposite
+-MATCHBOX_DEPENDENCIES += xlib_libXpm
+-endif
+-endif
+-
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
+ MATCHBOX_DEPENDENCIES += xlib_libXft
+ endif
 -- 
 1.9.1
