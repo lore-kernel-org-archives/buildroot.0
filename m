@@ -1,28 +1,72 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  3 Jun 2015 15:19:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 8066] nodejs crashes when built with gcc 4.9
-In-Reply-To: <bug-8066-163@https.bugs.busybox.net/>
-References: <bug-8066-163@https.bugs.busybox.net/>
-Message-ID: <20150603151954.7AB5C81E14@busybox.osuosl.org>
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Date: Wed, 3 Jun 2015 10:50:28 -0500
+Subject: [Buildroot] [PATCH v4 2015.08 2/4] support/scripts: add
+ size-stats script
+In-Reply-To: <1432591007-27689-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1432591007-27689-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1432591007-27689-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CANn-YGSgXy4fTJtw3mJyFF-4zkWbBh_hg_qWNLcFu5cdjk3XbA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8066
+Thomas,
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-06-03 15:19:54 UTC ---
-To help us in solving this bug, could you provide a minimal working Buildroot
-configuration, and a minimal non-working Buildroot configuration, as well as
-the exact steps to reproduce the problem?
+On Mon, May 25, 2015 at 4:56 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> This new script uses the data collected by the step_pkg_size
+> instrumentation hook to generate a pie chart of the size contribution
+> of each package to the target root filesystem, and two CSV files with
+> statistics about the package size and file size. To achieve this, it
+> looks at each file in $(TARGET_DIR), and using the
+> packages-file-list.txt information collected by the step_pkg_size
+> hook, it determines to which package the file belongs. It is therefore
+> able to give the size installed by each package.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  support/scripts/size-stats | 238 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 238 insertions(+)
+>  create mode 100755 support/scripts/size-stats
+>
+> diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+> new file mode 100755
+> index 0000000..48a64cd
+> --- /dev/null
+> +++ b/support/scripts/size-stats
 
-Also, please be sure to include the exact Buildroot version you have used, so
-that we can now which version of gcc 4.8.x and gcc 4.9.x you have tested.
+> +import sys
+> +import os
+> +import os.path
+> +import argparse
+> +import csv
+> +import collections
+> +
+> +try:
 
-Thanks!
+Would it be possible to add in the following lines here to ensure the
+graphing does not try to connect to an X-server?
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+import matplotlib
+matplotlib.use('Agg')
+
+I ran into an issue testing this on my setup where I ssh into my build
+server using screen. I found this solution on stack overflow at the
+following link.
+
+http://stackoverflow.com/questions/4706451/how-to-save-a-figure-remotely-with-pylab/4706614#4706614
+
+> +    import matplotlib.font_manager as fm
+> +    import matplotlib.pyplot as plt
+> +except ImportError:
+> +    sys.stderr.write("You need python-matplotlib to generate the size graph\n")
+> +    exit(1)
+
+Thanks,
+Clayton
+
+Clayton Shotwell
+Senior Software Engineer, Rockwell Collins
+clayton.shotwell at rockwellcollins.com
