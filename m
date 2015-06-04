@@ -1,64 +1,40 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 4 Jun 2015 13:22:48 +0200
-Subject: [Buildroot] [PATCH 1/2] ltrace: update to current master
-In-Reply-To: <7882478.jq8kHfg8lW@sagittea>
-References: <1432565559-60249-1-git-send-email-Vincent.Riera@imgtec.com>
- <7882478.jq8kHfg8lW@sagittea>
-Message-ID: <55703508.3000002@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  4 Jun 2015 09:52:02 -0300
+Subject: [Buildroot] [PATCH 1/2] gnupg2: bump to version 2.0.28
+Message-ID: <1433422323-23055-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello J?r?me,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gnupg2/gnupg2.hash | 4 ++--
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-ok, perfect. Could you please let me know if your patch gets accepted so 
-I can respin my patches? Or you can do it yourself if you want, I don't 
-mind.
-
-Regards,
---
-vincent
-
-On 05/06/15 01:13, J?r?me Pouiller wrote:
-> Hello Vicente,
->
-> On Monday 25 May 2015 15:52:38 Vicente Olivert Riera wrote:
->> Lots of fixes have been made to ltrace, including the ones for fixing a
->> build failure for MIPS architecture. Updating to current master will
->> allow us to re-enable this package for MIPS and also remove some
->> upstreamed patches.
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
->>   .../{0002-arm-plt.patch => 0001-arm-plt.patch}     |    0
->>   package/ltrace/0001-events.patch                   |   47 -
->>   package/ltrace/0003-PPC-fix-PPC32-build.patch      |   31 -
->>   .../ltrace/0004-xtensa-add-xtensa-support.patch    | 1612 --------------------
->>   package/ltrace/ltrace.mk                           |    2 +-
->>   5 files changed, 1 insertions(+), 1691 deletions(-)
->>   rename package/ltrace/{0002-arm-plt.patch => 0001-arm-plt.patch} (100%)
->>   delete mode 100644 package/ltrace/0001-events.patch
->>   delete mode 100644 package/ltrace/0003-PPC-fix-PPC32-build.patch
->>   delete mode 100644 package/ltrace/0004-xtensa-add-xtensa-support.patch
-> [..]
->> diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
->> index 7f00ce3..8a78a2a 100644
->> --- a/package/ltrace/ltrace.mk
->> +++ b/package/ltrace/ltrace.mk
->> @@ -4,7 +4,7 @@
->>   #
->>   ################################################################################
->>
->> -LTRACE_VERSION = 0896ce554f80afdcba81d9754f6104f863dea803
->> +LTRACE_VERSION = be0c6870e08a3be43b3a0d210fb8dc7614b1e82f
-> It seems this version has a bug introduced by 5ba9e10 ("Split type definitions
-> from the bundled configs into their own files").
->
-> Two new configuration files are not installed. Therefore, ltrace fail with
-> messages like :
-> /usr/share/ltrace/libm.so.conf:333: error: unknown type around 'ldouble erfl(ldouble);
->
-> I have just sent a patch to upstream.
->
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 404c40b..2a2305c 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.gnupg.org/pipermail/gnupg-announce/2015q1/000362.html
+-sha1	d065be185f5bac8ea07b210ab7756e79b83b63d4	gnupg-2.0.27.tar.bz2
++# From http://lists.gnupg.org/pipermail/gnupg-announce/2015q2/000367.html
++sha1	9a1050f72b6c9afe2b4a0a3f2e9dca2abba8e4ef	gnupg-2.0.28.tar.bz2
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index aa35c36..ab3a59a 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG2_VERSION = 2.0.27
++GNUPG2_VERSION = 2.0.28
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG2_LICENSE = GPLv3+
+-- 
+2.3.6
