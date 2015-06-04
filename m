@@ -1,32 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  4 Jun 2015 10:17:56 -0300
-Subject: [Buildroot] [PATCH] icu: enable parallel build
-Message-ID: <1433423876-23823-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 04 Jun 2015 15:30:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ccache: bump to version 3.2.2
+In-Reply-To: <1433164670-39296-1-git-send-email-kaszak@gmail.com> (Karoly
+ Kasza's message of "Mon, 1 Jun 2015 15:17:50 +0200")
+References: <1433164670-39296-1-git-send-email-kaszak@gmail.com>
+Message-ID: <87y4jzob21.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Re-enable parallel builds, it doesn't seem to be affected by the issue
-worked around in 5a8c7934 any more.
+>>>>> "Karoly" == Karoly Kasza <kaszak@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/icu/icu.mk | 1 -
- 1 file changed, 1 deletion(-)
+ > Bump ccache to minor version 3.2.2.
+ > Also changed download URL to https.
 
-diff --git a/package/icu/icu.mk b/package/icu/icu.mk
-index 2590178..e89290a 100644
---- a/package/icu/icu.mk
-+++ b/package/icu/icu.mk
-@@ -24,7 +24,6 @@ HOST_ICU_CONF_OPTS = \
- 	--disable-icuio \
- 	--disable-layout \
- 	--disable-renaming
--ICU_MAKE = $(MAKE1)
- ICU_SUBDIR = source
- HOST_ICU_SUBDIR = source
- 
+ > Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+
+Committed, thanks.
+
+I was going to say that we prefer http:// over https:// when we have a
+hash file (as older wget versions have various problems), but as http://
+redirects to https anyway, it doesn't matter.
+
 -- 
-2.3.6
+Bye, Peter Korsgaard
