@@ -1,42 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  4 Jun 2015 08:30:10 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-06-03
-Message-ID: <20150604063010.2D723100B8E@stock.ovh.net>
+From: Herve Codina <Herve.CODINA@celad.com>
+Date: Thu, 4 Jun 2015 10:16:33 +0200
+Subject: [Buildroot] [PATCH 1/1] savedefconfig: Remove BR2_DEFCONFIG from
+	saved defconfig file
+Message-ID: <1433405793-26785-1-git-send-email-Herve.CODINA@celad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2015-06-03
-===============================
+BR2_DEFCONFIG should not be present in saved defconfig file.
 
-        success : 226
-       failures : 5  
-       timeouts : 2  
-          TOTAL : 233
+The use case is:
+make qemu_arm_versatile
+make savedefconfig BR2_DEFCONFIG=my_custom_defconfig
 
-Classification of failures by reason
-====================================
+BR2_DEFCONFIG is set in my_custom_defconfig with an absolute path
+to qemu_arm_versatile (value present in .config) and set in
+my_custom_defconfig as it is different from default mentionned in
+config.in (default is BR2_DEFCONFIG from environnement).
 
-       host-erlang-rebar-2.5.1 | 2 
-               expedite-1.7.10 | 1 
-      gst-plugins-ugly-0.10.19 | 1 
-                     vlc-2.2.1 | 1 
-               qt5webkit-5.4.1 | 1 
-                     nut-2.7.2 | 1 
+On savedefconfig recipe, simply remove BR2_DEFCONFIG from generated file
 
-Detail of failures
-===================
+Signed-off-by: Herve Codina <Herve.CODINA@celad.com>
+---
+ Makefile |    1 +
+ 1 file changed, 1 insertion(+)
 
-      x86_64 |                expedite-1.7.10 | NOK | http://autobuild.buildroot.net/results/17f57d1f2ba13336b9853f653c489f4da1f53a4e/
-     powerpc |       gst-plugins-ugly-0.10.19 | NOK | http://autobuild.buildroot.net/results/7972fc849be208eac17e96a8d9dd381c4e45e46c/
-        i686 |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/79acc72885b6f4be959fb4bddde3a49fc0dd5a62/
-     powerpc |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/7bc8dc557cb01973aad5789a932a78cdf7dc9dbf/
-        i686 |                      nut-2.7.2 | NOK | http://autobuild.buildroot.net/results/fce72d09c84b80609bfd94b5cf70b664df199ca4/
-         arm |                qt5webkit-5.4.1 | NOK | http://autobuild.buildroot.net/results/cbf8f70785bd3b5329f8e1dfbef19e2b2e38a2e2/
-         arm |                      vlc-2.2.1 | NOK | http://autobuild.buildroot.net/results/e639dabfb260006acb8a204851b96f9275ce53a7/
-
-
+diff --git a/Makefile b/Makefile
+index 43b5ba5..3c9e6fb 100644
+--- a/Makefile
++++ b/Makefile
+@@ -777,6 +777,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< \
+ 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+ 		$(CONFIG_CONFIG_IN)
++	@sed -i '/BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
+ 
+ .PHONY: defconfig savedefconfig
+ 
 -- 
-http://autobuild.buildroot.net
+1.7.9.5
