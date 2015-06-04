@@ -1,35 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  4 Jun 2015 21:21:42 +0000 (UTC)
-Subject: [Buildroot] [Bug 8156] pkg-kconfig infra broken for
-	*-update-{config, defconfig}
-In-Reply-To: <bug-8156-163@https.bugs.busybox.net/>
-References: <bug-8156-163@https.bugs.busybox.net/>
-Message-ID: <20150604212142.8558F81E32@busybox.osuosl.org>
+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Date: Thu,  4 Jun 2015 17:21:53 -0400
+Subject: [Buildroot] [PATCH v2 0/3] kyua: new package and dependencies
+Message-ID: <1433452916-4378-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8156
+This patchset introduces the Kyua testing framework with its
+dependencies.
 
---- Comment #6 from Yann E. MORIN <yann.morin.1998@free.fr> 2015-06-04 21:21:42 UTC ---
-Thomas, All,
+https://github.com/jmmv/kyua
 
-So, we have a bunch of pkg-kconfig issues introduced with the pkg-kconfig
-infra itself, but also further bugs hiding those first ones, later bugs
-introduced with the support for kconfig fragments.
+Sebastien Bourdelin (3):
+  atf: new package
+  lutok: new package
+  kyua: new package
 
-For a starter, merge-config.sh does not bail out if the input file(s) do
-not exist. Once that is fixed, your problem indeed re-appears. And I'm
-afraid there's more going on behind the scene... :-(
-
-I'm working on that, but that's far from trivial... :-(
-
-Regards,
-Yann E. MORIN.
+ package/Config.in       |  3 +++
+ package/atf/Config.in   | 11 +++++++++++
+ package/atf/atf.hash    |  2 ++
+ package/atf/atf.mk      | 21 +++++++++++++++++++++
+ package/kyua/Config.in  | 18 ++++++++++++++++++
+ package/kyua/kyua.hash  |  2 ++
+ package/kyua/kyua.mk    | 26 ++++++++++++++++++++++++++
+ package/lutok/Config.in | 11 +++++++++++
+ package/lutok/lutok.mk  | 19 +++++++++++++++++++
+ 9 files changed, 113 insertions(+)
+ create mode 100644 package/atf/Config.in
+ create mode 100644 package/atf/atf.hash
+ create mode 100644 package/atf/atf.mk
+ create mode 100644 package/kyua/Config.in
+ create mode 100644 package/kyua/kyua.hash
+ create mode 100644 package/kyua/kyua.mk
+ create mode 100644 package/lutok/Config.in
+ create mode 100644 package/lutok/lutok.mk
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.4.0
