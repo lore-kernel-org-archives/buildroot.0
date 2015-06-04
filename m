@@ -1,102 +1,124 @@
 From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Thu,  4 Jun 2015 17:21:54 -0400
-Subject: [Buildroot] [PATCH v2 1/3] atf: new package
+Date: Thu,  4 Jun 2015 17:21:56 -0400
+Subject: [Buildroot] [PATCH v2 3/3] kyua: new package
 In-Reply-To: <1433452916-4378-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
 References: <1433452916-4378-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-Message-ID: <1433452916-4378-2-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+Message-ID: <1433452916-4378-4-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ATF, or Automated Testing Framework, is a collection of libraries to
-write test programs in C, C++ and POSIX shell.
+Kyua is a testing framework for infrastructure software, originally
+designed to equip BSD-based operating systems with a test suite. This
+means that Kyua is lightweight and simple, and that Kyua integrates
+well with various build systems and continuous integration frameworks.
 
-https://github.com/jmmv/atf
+https://github.com/jmmv/kyua
 
 Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
 ---
 Changes v1 -> v2:
+  - don't generate the doxygen doc
+
   suggested by Arnout Vandecapelle <arnout@mind.be>:
-  - bump the version
-  - uses the release archive instead of the github automatic one
-  - updates the hash
-  - removes host-pkgconf from dependencies
+  - reworks dependencies in Config.in
+  - uses the uploaded archive instead of the github automatic one
+  - changes the hash
+  - removes the useless AUTORECONF
   - changes the license
-  - reworks the comment around CONF_ENV to avoid error
+  - fixes a mistake with POST_INSTALL_HOOK
 ---
- package/Config.in     |  1 +
- package/atf/Config.in | 11 +++++++++++
- package/atf/atf.hash  |  2 ++
- package/atf/atf.mk    | 21 +++++++++++++++++++++
- 4 files changed, 35 insertions(+)
- create mode 100644 package/atf/Config.in
- create mode 100644 package/atf/atf.hash
- create mode 100644 package/atf/atf.mk
+ package/Config.in      |  1 +
+ package/kyua/Config.in | 23 +++++++++++++++++++++++
+ package/kyua/kyua.hash |  2 ++
+ package/kyua/kyua.mk   | 27 +++++++++++++++++++++++++++
+ 4 files changed, 53 insertions(+)
+ create mode 100644 package/kyua/Config.in
+ create mode 100644 package/kyua/kyua.hash
+ create mode 100644 package/kyua/kyua.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e0c2e2a..78ed223 100644
+index 628f36c..3b2a886 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -57,6 +57,7 @@ endif
- endmenu
- 
- menu "Debugging, profiling and benchmark"
-+	source "package/atf/Config.in"
- 	source "package/blktrace/Config.in"
- 	source "package/bonnie/Config.in"
- 	source "package/cache-calibrator/Config.in"
-diff --git a/package/atf/Config.in b/package/atf/Config.in
+@@ -73,6 +73,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/kexec/Config.in"
+ 	source "package/kexec-lite/Config.in"
+ 	source "package/ktap/Config.in"
++	source "package/kyua/Config.in"
+ 	source "package/latencytop/Config.in"
+ 	source "package/lmbench/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/kyua/Config.in b/package/kyua/Config.in
 new file mode 100644
-index 0000000..59712ab
+index 0000000..7489782
 --- /dev/null
-+++ b/package/atf/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_ATF
-+	bool "atf"
++++ b/package/kyua/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_KYUA
++	bool "kyua"
 +	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER \
++		&& !BR2_PACKAGE_LUAJIT # lutok
++	select BR2_PACKAGE_ATF
++	select BR2_PACKAGE_LUTOK
++	select BR2_PACKAGE_SQLITE
 +	help
-+	  ATF, or Automated Testing Framework, is a collection of
-+	  libraries to write test programs in C, C++ and POSIX shell.
++	  Kyua is a testing framework for infrastructure software,
++	  originally designed to equip BSD-based operating systems
++	  with a test suite. This means that Kyua is lightweight
++	  and simple, and that Kyua integrates well with various build
++	  systems and continuous integration frameworks.
 +
-+	  https://github.com/jmmv/atf
++	  https://github.com/jmmv/kyua
 +
-+comment "atf needs a toolchain w/ C++"
++comment "kyua needs a toolchain w/ C++"
 +	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/atf/atf.hash b/package/atf/atf.hash
++
++comment "kyua needs a Lua 5.1 interpreter or above"
++	depends on BR2_INSTALL_LIBSTDCPP && \
++		(!BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_PACKAGE_LUAJIT)
+diff --git a/package/kyua/kyua.hash b/package/kyua/kyua.hash
 new file mode 100644
-index 0000000..78cd3c6
+index 0000000..938e556
 --- /dev/null
-+++ b/package/atf/atf.hash
++++ b/package/kyua/kyua.hash
 @@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 92bc64180135eea8fe84c91c9f894e678767764f6dbc8482021d4dde09857505 atf-0.21.tar.gz
-diff --git a/package/atf/atf.mk b/package/atf/atf.mk
++# Locally Calculted
++sha256 2b8b64a458b642df75086eeb73e8073d105b8d9cff04c9b1a905b68bc8502560 kyua-0.11.tar.gz
+diff --git a/package/kyua/kyua.mk b/package/kyua/kyua.mk
 new file mode 100644
-index 0000000..34a5ca0
+index 0000000..783d3db
 --- /dev/null
-+++ b/package/atf/atf.mk
-@@ -0,0 +1,21 @@
++++ b/package/kyua/kyua.mk
+@@ -0,0 +1,27 @@
 +################################################################################
 +#
-+# atf
++# kyua
 +#
 +################################################################################
 +
-+ATF_VERSION = 0.21
-+ATF_SITE = https://github.com/jmmv/atf/releases/download/atf-$(ATF_VERSION)
-+ATF_AUTORECONF = YES
-+ATF_INSTALL_STAGING = YES
-+ATF_LICENSE = BSD-3c
-+ATF_LICENSE_FILES = COPYING
-+
-+# ATF_SHELL defaults to the host's bash
-+ATF_CONF_ENV = \
-+	kyua_cv_getopt_plus=yes \
++KYUA_VERSION = 0.11
++KYUA_SITE = https://github.com/jmmv/kyua/releases/download/kyua-$(KYUA_VERSION)
++KYUA_DEPENDENCIES = host-pkgconf atf lutok sqlite
++KYUA_CONF_OPTS = --without-doxygen
++KYUA_LICENSE = BSD-3c
++KYUA_LICENSE_FILES = COPYING
++KYUA_CONF_ENV = \
 +	kyua_cv_attribute_noreturn=yes \
-+	kyua_cv_getcwd_works=yes \
-+	ATF_SHELL=/bin/sh
++	kyua_cv_getcwd_dyn=yes \
++	kyua_cv_lchmod_works=no \
++	kyua_cv_getopt_gnu=yes \
++	kyua_cv_getopt_optind_reset_value=0 \
++	kyua_cv_signals_lastno=15
++
++define KYUA_INSTALL_CONFIG
++	$(INSTALL) -D -m 644 $(@D)/examples/kyua.conf $(TARGET_DIR)/etc/kyua/kyua.conf
++endef
++
++KYUA_POST_INSTALL_HOOKS += KYUA_INSTALL_CONFIG
 +
 +$(eval $(autotools-package))
 -- 
