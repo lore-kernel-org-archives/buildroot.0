@@ -1,51 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Jun 2015 15:32:31 +0200
-Subject: [Buildroot] [git commit] docs/website: link to the Free Electrons
-	training materials
-Message-ID: <20150604133645.D70A081E32@busybox.osuosl.org>
+Date: Thu, 4 Jun 2015 15:34:01 +0200
+Subject: [Buildroot] [git commit] gnupg2: bump to version 2.0.28
+Message-ID: <20150604133645.F17C381E3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97f6d7dcb5f6e74420008edb0875288331a29329
+commit: http://git.buildroot.net/buildroot/commit/?id=90687cc72aa439e17484442ba372ae08932617bb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/docs.html |   20 +++++++++++++++++++-
- 1 files changed, 19 insertions(+), 1 deletions(-)
+ package/gnupg2/gnupg2.hash |    4 ++--
+ package/gnupg2/gnupg2.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/website/docs.html b/docs/website/docs.html
-index c44ad8b..3bd3172 100644
---- a/docs/website/docs.html
-+++ b/docs/website/docs.html
-@@ -24,7 +24,25 @@ things. It is available as:</p>
- </ul>
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 404c40b..2a2305c 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.gnupg.org/pipermail/gnupg-announce/2015q1/000362.html
+-sha1	d065be185f5bac8ea07b210ab7756e79b83b63d4	gnupg-2.0.27.tar.bz2
++# From http://lists.gnupg.org/pipermail/gnupg-announce/2015q2/000367.html
++sha1	9a1050f72b6c9afe2b4a0a3f2e9dca2abba8e4ef	gnupg-2.0.28.tar.bz2
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index aa35c36..ab3a59a 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- <p>If you find any errors (factual, grammatical, whatever) please
--report them to us.</p>
-+  report them to us.</p>
-+
-+<h2>Training</h2>
-+
-+<p><a href="http://www.free-electrons.com">Free Electrons</a> offers a
-+complete <a href="http://free-electrons.com/training/buildroot/">3-days
-+training course on Buildroot</a>. They also make the training
-+materials freely available:</p>
-+
-+<ul>
-+  <li><a href="http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf">slides
-+      (PDF)</a></li>
-+  <li><a href="http://free-electrons.com/doc/training/buildroot/buildroot-labs.pdf">practical
-+      labs (PDF)</a></li>
-+  <li><a href="http://free-electrons.com/doc/training/buildroot/buildroot-labs.tar.xz">practical
-+      labs data (.tar.xz)</a></li>
-+</ul>
-+
-+<h2>Getting support</h2>
- 
- <p>If you find that you need help with Buildroot, you can ask for
- help:</p>
+-GNUPG2_VERSION = 2.0.27
++GNUPG2_VERSION = 2.0.28
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG2_LICENSE = GPLv3+
