@@ -1,137 +1,131 @@
 From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Thu, 04 Jun 2015 16:29:56 -0400
-Subject: [Buildroot] [PATCH 1/3] atf: new package
-In-Reply-To: <556F7747.4060408@mind.be>
+Date: Thu, 04 Jun 2015 16:31:20 -0400
+Subject: [Buildroot] [PATCH 2/3] lutok: new package
+In-Reply-To: <556F7CFD.20301@mind.be>
 References: <1433357276-7083-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
- <1433357276-7083-2-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
- <556F7747.4060408@mind.be>
-Message-ID: <5570B544.2060502@savoirfairelinux.com>
+ <1433357276-7083-3-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+ <556F7CFD.20301@mind.be>
+Message-ID: <5570B598.2010007@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout.
+Hi Arnout,
 
-On 06/03/2015 05:53 PM, Arnout Vandecappelle wrote:
+On 06/03/2015 06:17 PM, Arnout Vandecappelle wrote:
 > On 06/03/15 20:47, Sebastien Bourdelin wrote:
->> ATF, or Automated Testing Framework, is a collection of libraries to
->> write test programs in C, C++ and POSIX shell.
+>> Lutok is a lightweight C++ API library for Lua.
 >>
->> https://github.com/jmmv/atf
+>> https://github.com/jmmv/lutok
 >>
 >> Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
 >> ---
->>  package/Config.in     |  1 +
->>  package/atf/Config.in | 11 +++++++++++
->>  package/atf/atf.hash  |  2 ++
->>  package/atf/atf.mk    | 21 +++++++++++++++++++++
->>  4 files changed, 35 insertions(+)
->>  create mode 100644 package/atf/Config.in
->>  create mode 100644 package/atf/atf.hash
->>  create mode 100644 package/atf/atf.mk
+>>  package/Config.in       |  1 +
+>>  package/lutok/Config.in | 11 +++++++++++
+>>  package/lutok/lutok.mk  | 19 +++++++++++++++++++
+>>  3 files changed, 31 insertions(+)
+>>  create mode 100644 package/lutok/Config.in
+>>  create mode 100644 package/lutok/lutok.mk
 >>
 >> diff --git a/package/Config.in b/package/Config.in
->> index e0c2e2a..78ed223 100644
+>> index 78ed223..628f36c 100644
 >> --- a/package/Config.in
 >> +++ b/package/Config.in
->> @@ -57,6 +57,7 @@ endif
->>  endmenu
->>  
->>  menu "Debugging, profiling and benchmark"
->> +	source "package/atf/Config.in"
->>  	source "package/blktrace/Config.in"
->>  	source "package/bonnie/Config.in"
->>  	source "package/cache-calibrator/Config.in"
->> diff --git a/package/atf/Config.in b/package/atf/Config.in
+>> @@ -457,6 +457,7 @@ endif
+>>  	source "package/lua/Config.in"
+>>  	source "package/luainterpreter/Config.in"
+>>  	source "package/luajit/Config.in"
+>> +	source "package/lutok/Config.in"
+>>  if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
+>>  # lua modules are dynamically loaded, so not available on static builds
+>>  menu "Lua libraries/modules"
+>> diff --git a/package/lutok/Config.in b/package/lutok/Config.in
 >> new file mode 100644
->> index 0000000..59712ab
+>> index 0000000..b94c093
 >> --- /dev/null
->> +++ b/package/atf/Config.in
+>> +++ b/package/lutok/Config.in
 >> @@ -0,0 +1,11 @@
->> +config BR2_PACKAGE_ATF
->> +	bool "atf"
+>> +config BR2_PACKAGE_LUTOK
+>> +	bool "lutok"
 >> +	depends on BR2_INSTALL_LIBSTDCPP
+>> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+>  Did you check if it works with luajit as well?
+I just try now, and it does not, thanks!
+
+>  Have you checked if it works with STATIC?
+Yes
+
 >> +	help
->> +	  ATF, or Automated Testing Framework, is a collection of
->> +	  libraries to write test programs in C, C++ and POSIX shell.
+>> +	  Lutok is a lightweight C++ API library for Lua.
 >> +
->> +	  https://github.com/jmmv/atf
+>> +	  https://github.com/jmmv/lutok
 >> +
->> +comment "atf needs a toolchain w/ C++"
+>> +comment "lutok needs a toolchain w/ C++"
 >> +	depends on !BR2_INSTALL_LIBSTDCPP
->> diff --git a/package/atf/atf.hash b/package/atf/atf.hash
+>  This should also depend on BR2_PACKAGE_HAS_LUAINTERPRETER
+Ok i was thinking you only want toolchain dependencies here.
+Is it ok to write something like that:
+
+comment "lutok needs a Lua 5.1 interpreter or above"
+    depends on BR2_INSTALL_LIBSTDCPP && \
+        (!BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_PACKAGE_LUAJIT)
+
+>> diff --git a/package/lutok/lutok.mk b/package/lutok/lutok.mk
 >> new file mode 100644
->> index 0000000..cd929b8
+>> index 0000000..25f4070
 >> --- /dev/null
->> +++ b/package/atf/atf.hash
->> @@ -0,0 +1,2 @@
->> +# Locally computed
->> +sha256 3677cf957d7f574835b8bdd385984ba928d5695b3ff28f958e4227f810483ab7 atf-0.20.tar.gz
->> diff --git a/package/atf/atf.mk b/package/atf/atf.mk
->> new file mode 100644
->> index 0000000..af691f5
->> --- /dev/null
->> +++ b/package/atf/atf.mk
->> @@ -0,0 +1,21 @@
+>> +++ b/package/lutok/lutok.mk
+>> @@ -0,0 +1,19 @@
 >> +################################################################################
 >> +#
->> +# atf
+>> +# lutok
 >> +#
 >> +################################################################################
 >> +
->> +ATF_VERSION = 0.20
->  Why not use 0.21? Seems to be bugfixes only.
-You are right, thanks!
-
->> +ATF_SOURCE = atf-$(ATF_VERSION).tar.gz
->> +ATF_SITE = https://github.com/jmmv/atf/archive
->  There's an uploaded archive at
-> https://github.com/jmmv/atf/releases/download/atf-0.21/atf-0.21.tar.gz
-> (same for 0.20). Then you don't need to AUTORECONF. Well, except that it has the
-> unreleased libtool beta which means that our patch doesn't apply so you need to
-> to autoreconf after all. But anyway, we prefer the uploaded archive.
+>> +LUTOK_VERSION = 740c34180384520086302f5e107ae0ae37a7e617
+>  This is the uploaded 0.4 release, so you can use
 >
->  I you use the automatic archive (i.e. the URL you gave), then you can't have a
-> hash file. Also, you should use the github helper.
-Ok, i will go for the uploaded archive, do you prefer a comment above
-the AUTORECONF to explain it's still required and when it could be
-remove, a TODO in fact ?
+> https://github.com/jmmv/lutok/releases/download/lutok-0.4/lutok-0.4.tar.gz
+>
+> instead, avoiding AUTORECONF, and making it possible to add a hash file.
+Great thanks!
 
->> +ATF_DEPENDENCIES = host-pkgconf
->  As far as I can see, pkg-config is not used at build time, it's just some of
-> the tests that need it.
-I think you are right, it seems to work without pkgconf in my buildroot
-
->> +ATF_AUTORECONF = YES
->> +ATF_INSTALL_STAGING = YES
->> +ATF_LICENSE = BSD
->  BSD-2c, BSD-3c
+>> +LUTOK_SITE = git://github.com/jmmv/lutok
+>> +LUTOK_AUTORECONF = YES
+>> +LUTOK_INSTALL_STAGING = YES
+>> +LUTOK_DEPENDENCIES = host-pkgconf lua
+>  It seems to have an optional dependency on atf as well, so you need something like
+>
+> ifeq ($(BR2_PACKAGE_ATF),y)
+> LUTOK_DEPENDENCIES += atf
+> LUTOK_CONF_OPTS += --with-atf
+> else
+> LUTOK_CONF_OPTS += --without-atf
+> endif
 Ok.
 
->> +ATF_LICENSE_FILES = COPYING
->> +ATF_CONF_ENV = \
->> +	kyua_cv_getopt_plus=yes \
->> +	kyua_cv_attribute_noreturn=yes \
->> +	kyua_cv_getcwd_works=yes \
->> +	ATF_SHELL=/bin/sh # default is /usr/bin/bash
->  I think the default is actually the first shell it can find in the host path,
-> which in _your_ case happens to be /usr/bin/bash.
-You are right.
-
->  Anyway, putting a comment at the end of the line is a bit dangerous, so I'd
-> rather put this above ATF_CONF_ENV:
-Right again :)
-
-> # ATF_SHELL defaults to the host's bash
-> ATF_CONF_ENV = \
-> 	...
+>  Also it tries to use doxygen if available, we don't care about documentation so add
+> LUTOK_CONF_OPTS = --without-doxygen
 >
->
+Ok.
+
+>> +LUTOK_LICENSE = BSD
+>  BSD-3c
+Ok.
+
+>> +LUTOK_LICENSE_FILES = COPYING
+>> +
+>> +ifneq ($(BR2_STATIC_LIBS),y)
+>> +LUTOK_MAKE_OPTS = LIBS=-ldl
+>  Is this really needed? The configure script should detect that automatically...
+Doesn't seem to work without.
+
 >  Regards,
 >  Arnout
 >
+>> +endif
 >> +
 >> +$(eval $(autotools-package))
 >>
