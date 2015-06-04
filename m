@@ -1,42 +1,186 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Jun 2015 15:51:20 +0200
-Subject: [Buildroot] [git commit] libgtk3: bump to version 3.14.13
-Message-ID: <20150604135708.15A3B7FE54@busybox.osuosl.org>
+From: John OSullivan <john.osullivan@cloudiumsystems.com>
+Date: Thu, 4 Jun 2015 15:30:58 +0100
+Subject: [Buildroot] Valgrind on buildroot
+Message-ID: <00f501d09ed3$13c8d000$3b5a7000$@osullivan@cloudiumsystems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d8b0b0525e283a83aaf704915ea50d9da2d1dea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libgtk3/libgtk3.hash |    4 ++--
- package/libgtk3/libgtk3.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I have been trying to get valgrind working on a buildroot 2013.05 arm board.
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index e9e900f..de78751 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.14/gtk+-3.14.11.sha256sum
--sha256	3fb59e99de38001b1b84a7f292553d0e2305991053d6989d6cd09acd1418f7c8	gtk+-3.14.11.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.14/gtk+-3.14.13.sha256sum
-+sha256	b1efcb1ef299f9b205e6f4512428315fd03484e5790f65bd3ac164e84ade90b0	gtk+-3.14.13.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 6badba3..ee73291 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+valgrind -d -d
+
+fails to run with 
+
+--2993:0:aspacem  Valgrind: FATAL: aspacem assertion failed:
+
+--2993:0:aspacem    segment_is_sane
+
+--2993:0:aspacem    at m_aspacemgr/aspacemgr-linux.c:1477 (add_segment)
+
+--2993:0:aspacem  Exiting now.
+
  
- LIBGTK3_VERSION_MAJOR = 3.14
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).11
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).13
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPLv2+
+
+The issue is with the device node for libc
+
+00008000-00106000 r-xp 00000000 00:00 8773       /bin/busybox
+
+0010e000-0010f000 rw-p 000fe000 00:00 8773       /bin/busybox
+
+0010f000-00111000 rw-p 00000000 00:00 0          [heap]
+
+b6dae000-b6eea000 r-xp 00000000 00:00 8937       /lib/libc-2.13.so
+
+                                ^^^^^
+
+                                 dev & ino are always zero
+
+ 
+
+valgrind is not expecting a zero for b6dae000-b6eea000 r-xp 00000000 00:00
+8937       /lib/libc-2.13.so
+
+ 
+
+The build options I am using are:
+
+ 
+
+Filesystem images->cpio the root filesystem (initial RAM Filoesystem)
+
+Filesystem images->ext2/3/4 root filesystem
+
+(0)Size in blocks
+
+(0)Inodes (auto calculation)
+
+(0)Reserved blocks percentage
+
+ 
+
+Any ideas on how to change this to non-zero so that Valgrind will read it
+correctly, it works fine on rabpberrypi, but my filesystem is on the SD
+Card,
+
+Other info that might be useful follows
+
+ 
+
+ 
+
+ 
+
+My /proc/self/maps is as follows:
+
+--------------------------
+
+00008000-00106000 r-xp 00000000 00:00 8773       /bin/busybox
+
+0010e000-0010f000 rw-p 000fe000 00:00 8773       /bin/busybox
+
+0010f000-00111000 rw-p 00000000 00:00 0          [heap]
+
+b6dae000-b6eea000 r-xp 00000000 00:00 8937       /lib/libc-2.13.so
+
+b6eea000-b6ef2000 ---p 0013c000 00:00 8937       /lib/libc-2.13.so
+
+b6ef2000-b6ef4000 r--p 0013c000 00:00 8937       /lib/libc-2.13.so
+
+b6ef4000-b6ef5000 rw-p 0013e000 00:00 8937       /lib/libc-2.13.so
+
+b6ef5000-b6ef8000 rw-p 00000000 00:00 0 
+
+b6ef8000-b6f66000 r-xp 00000000 00:00 8935       /lib/libm-2.13.so
+
+b6f66000-b6f6d000 ---p 0006e000 00:00 8935       /lib/libm-2.13.so
+
+b6f6d000-b6f6e000 r--p 0006d000 00:00 8935       /lib/libm-2.13.so
+
+b6f6e000-b6f6f000 rw-p 0006e000 00:00 8935       /lib/libm-2.13.so
+
+b6f6f000-b6f8f000 r-xp 00000000 00:00 8945       /lib/ld-2.13.so
+
+b6f91000-b6f92000 rw-p 00000000 00:00 0
+
+b6f94000-b6f95000 rw-p 00000000 00:00 0 
+
+b6f95000-b6f96000 r-xp 00000000 00:00 0          [sigpage]
+
+b6f96000-b6f97000 r--p 0001f000 00:00 8945       /lib/ld-2.13.so
+
+b6f97000-b6f98000 rw-p 00020000 00:00 8945       /lib/ld-2.13.so
+
+bee7c000-bee9d000 rw-p 00000000 00:00 0          [stack]
+
+ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]
+
+----------------------------------------------
+
+# cat /proc/cpuinfo 
+
+processor       : 0
+
+model name      : ARMv7 Processor rev 0 (v7l)
+
+Features        : swp half thumb fastmult vfp edsp neon vfpv3 tls
+
+vfpd32
+
+CPU implementer : 0x41
+
+CPU architecture: 7
+
+CPU variant     : 0x3
+
+CPU part        : 0xc09
+
+CPU revision    : 0
+
+ 
+
+processor       : 1
+
+model name      : ARMv7 Processor rev 0 (v7l)
+
+Features        : swp half thumb fastmult vfp edsp neon vfpv3 tls
+
+vfpd32
+
+CPU implementer : 0x41
+
+CPU architecture: 7
+
+CPU variant     : 0x3
+
+CPU part        : 0xc09
+
+CPU revision    : 0
+
+ 
+
+Hardware        : Xilinx Zynq Platform
+
+Revision        : 0000
+
+Serial          : 0000000000000000
+
+ 
+
+Regards
+
+John
+
+ 
+
+ 
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150604/cc626682/attachment.html>
