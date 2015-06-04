@@ -1,31 +1,22 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Thu, 4 Jun 2015 15:34:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ccache: bump to version 3.2.2
-In-Reply-To: <87y4jzob21.fsf@dell.be.48ers.dk>
-References: <1433164670-39296-1-git-send-email-kaszak@gmail.com>
- <87y4jzob21.fsf@dell.be.48ers.dk>
-Message-ID: <CABbD_XCoZesMCiMG150wTQOQtibvo5=x6M8mDBxJmSHG3+WZJg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 04 Jun 2015 15:34:59 +0200
+Subject: [Buildroot] [PATCH 2/2] libassuan: bump to version 2.2.1
+In-Reply-To: <1433422323-23055-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 4 Jun 2015 09:52:03 -0300")
+References: <1433422323-23055-1-git-send-email-gustavo@zacarias.com.ar>
+ <1433422323-23055-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d21boav0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
->
-> I was going to say that we prefer http:// over https:// when we have a
-> hash file (as older wget versions have various problems), but as http://
-> redirects to https anyway, it doesn't matter.
->
-> --
-> Bye, Peter Korsgaard
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Yup, I only changed the URL exactly because of that.
+Committed, thanks.
 
-Kind regards,
-
-Karoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150604/0cd84427/attachment.html>
+-- 
+Bye, Peter Korsgaard
