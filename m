@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 04 Jun 2015 15:34:59 +0200
-Subject: [Buildroot] [PATCH 2/2] libassuan: bump to version 2.2.1
-In-Reply-To: <1433422323-23055-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 4 Jun 2015 09:52:03 -0300")
-References: <1433422323-23055-1-git-send-email-gustavo@zacarias.com.ar>
- <1433422323-23055-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87d21boav0.fsf@dell.be.48ers.dk>
+Date: Thu, 04 Jun 2015 15:35:26 +0200
+Subject: [Buildroot] [PATCH] configs/qemu: update mips* malta
+	configurations
+In-Reply-To: <1433423449-23655-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 4 Jun 2015 10:10:49 -0300")
+References: <1433423449-23655-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878ubzoau9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +13,9 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+
+ > Enable USB UHCI to be able to use usb mouse emulation for graphic
+ > application tests.
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
