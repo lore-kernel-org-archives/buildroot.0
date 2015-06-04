@@ -1,47 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Jun 2015 15:28:22 +0200
-Subject: [Buildroot] [git commit] package/ccache: bump to version 3.2.2
-Message-ID: <20150604133645.BE8F280136@busybox.osuosl.org>
+Date: Thu, 4 Jun 2015 15:35:22 +0200
+Subject: [Buildroot] [git commit] configs/qemu: update mips* malta
+	configurations
+Message-ID: <20150604133646.148FF80136@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67524ba4e8591c1dc02e8e52408adcba34cb8c43
+commit: http://git.buildroot.net/buildroot/commit/?id=a4d666beae250e5c702bb6c2a0d48665b4cc90e2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump ccache to minor version 3.2.2.
-Also changed download URL to https.
+Enable USB UHCI to be able to use usb mouse emulation for graphic
+application tests.
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ccache/ccache.hash |    4 ++--
- package/ccache/ccache.mk   |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ board/qemu/mips-malta/linux-4.0.config     |    2 ++
+ board/qemu/mips64-malta/linux-4.0.config   |    2 ++
+ board/qemu/mips64el-malta/linux-4.0.config |    2 ++
+ board/qemu/mipsel-malta/linux-4.0.config   |    2 ++
+ 4 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 49012af..56bf0d0 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,2 +1,2 @@
--# Verified key http://samba.org/ftp/ccache/ccache-3.2.1.tar.xz.asc - sha256 computed locally
--sha256	872af34e1d2cef18694001d29db7f167d644e7602ca32cd6c74b28d81458bd9d	ccache-3.2.1.tar.xz
-+# Verified key https://samba.org/ftp/ccache/ccache-3.2.2.tar.xz.asc - sha256 computed locally
-+sha256	4f0d99699f24d198494addca0f41a93b0150cdfd01491f15a5d7eb02c7c2a0ca	ccache-3.2.2.tar.xz
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 52b5c67..3bd2803 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--CCACHE_VERSION = 3.2.1
--CCACHE_SITE = http://samba.org/ftp/ccache
-+CCACHE_VERSION = 3.2.2
-+CCACHE_SITE = https://samba.org/ftp/ccache
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPLv3+, others
- CCACHE_LICENSE_FILES = LICENSE.txt GPL-3.0.txt
+diff --git a/board/qemu/mips-malta/linux-4.0.config b/board/qemu/mips-malta/linux-4.0.config
+index 60fcd70..3a26ac8 100644
+--- a/board/qemu/mips-malta/linux-4.0.config
++++ b/board/qemu/mips-malta/linux-4.0.config
+@@ -23,6 +23,8 @@ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
+ CONFIG_FB=y
+ CONFIG_FB_CIRRUS=y
++CONFIG_USB=y
++CONFIG_USB_UHCI_HCD=y
+ CONFIG_EXT4_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_TMPFS_POSIX_ACL=y
+diff --git a/board/qemu/mips64-malta/linux-4.0.config b/board/qemu/mips64-malta/linux-4.0.config
+index 9b5d4e6..cd0b560 100644
+--- a/board/qemu/mips64-malta/linux-4.0.config
++++ b/board/qemu/mips64-malta/linux-4.0.config
+@@ -27,6 +27,8 @@ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
+ CONFIG_FB=y
+ CONFIG_FB_CIRRUS=y
++CONFIG_USB=y
++CONFIG_USB_UHCI_HCD=y
+ CONFIG_EXT4_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_TMPFS_POSIX_ACL=y
+diff --git a/board/qemu/mips64el-malta/linux-4.0.config b/board/qemu/mips64el-malta/linux-4.0.config
+index 8877a2e..c6b46d4 100644
+--- a/board/qemu/mips64el-malta/linux-4.0.config
++++ b/board/qemu/mips64el-malta/linux-4.0.config
+@@ -28,6 +28,8 @@ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
+ CONFIG_FB=y
+ CONFIG_FB_CIRRUS=y
++CONFIG_USB=y
++CONFIG_USB_UHCI_HCD=y
+ CONFIG_EXT4_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_TMPFS_POSIX_ACL=y
+diff --git a/board/qemu/mipsel-malta/linux-4.0.config b/board/qemu/mipsel-malta/linux-4.0.config
+index b9a743f..79d7352 100644
+--- a/board/qemu/mipsel-malta/linux-4.0.config
++++ b/board/qemu/mipsel-malta/linux-4.0.config
+@@ -24,6 +24,8 @@ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
+ CONFIG_FB=y
+ CONFIG_FB_CIRRUS=y
++CONFIG_USB=y
++CONFIG_USB_UHCI_HCD=y
+ CONFIG_EXT4_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_TMPFS_POSIX_ACL=y
