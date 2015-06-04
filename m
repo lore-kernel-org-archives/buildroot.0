@@ -1,20 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 04 Jun 2015 23:00:54 +0200
-Subject: [Buildroot] [PATCH] gpsd: bump to version 3.15
-In-Reply-To: <9e32fe22f8cf7dc862ee21d009e8c7085d4ce754.1433430349.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 4 Jun 2015 18:05:49 +0300")
-References: <9e32fe22f8cf7dc862ee21d009e8c7085d4ce754.1433430349.git.baruch@tkos.co.il>
-Message-ID: <87r3prmbnd.fsf@dell.be.48ers.dk>
+Date: Thu, 04 Jun 2015 23:01:07 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: add CodeSourcery MIPS
+	2015.05, remove 2013.11
+In-Reply-To: <1433433823-15985-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Thu, 4 Jun 2015 17:03:43 +0100")
+References: <1433433823-15985-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87mw0fmbn0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Drop upstream patches #1 and #3. Drop the no longer needed patch #2.
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > - Add CodeSourcery MIPS 2015.05 toolchain
+ > - Remove CodeSourcery MIPS 2013.11 toolchain
+ > - Update the hash file
+
+ > Toolchain datasheet:
+ >   https://sourcery.mentor.com/GNUToolchain/release3068?@template=datasheet
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed, thanks.
 
