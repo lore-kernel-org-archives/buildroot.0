@@ -1,43 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  4 Jun 2015 17:30:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 8156] pkg-kconfig infra broken for
-	*-update-{config, defconfig}
-In-Reply-To: <bug-8156-163@https.bugs.busybox.net/>
-References: <bug-8156-163@https.bugs.busybox.net/>
-Message-ID: <20150604173034.6A2787FCD9@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  4 Jun 2015 14:39:43 -0300
+Subject: [Buildroot] [PATCH] libpng: bump to version 1.6.17
+Message-ID: <1433439583-32343-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8156
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libpng/libpng.hash | 6 +++---
+ package/libpng/libpng.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
---- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> 2015-06-04 17:30:32 UTC ---
-Thomas, All,
-
-OK, I was using master to do thechecks, while you were probably stuck
-on 2015.02, right? So, I had the kconfig fragment stuff coming into
-play, and that hid the problem (but see below).
-
-And in the end, I looked more in-depth at what was going on, and it is
-even worse than what you reported: 'make linux-update-config' ends
-without error, but the resulting file is garbage (does not match the
-actual configuration).
-
-So, indeed, there is a problem: errors are not caught, and that leaves
-the user with the impresion everything was OK, when the resulting file
-is broken.
-
-I'll work on that.
-
-Trust the y_morin on IRC, he was right after all (but not for the good
-reason!).
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index d0027c7..dd4af06 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.16/
+-md5	23b7286b5d4a86de950fd2ffc5cac742	libpng-1.6.16.tar.xz
+-sha1	31855a8438ae795d249574b0da15b34eb0922e13	libpng-1.6.16.tar.xz
++# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.17/
++md5	430a9b76b78533235cd4b9b26ce75c7e	libpng-1.6.17.tar.xz
++sha1	6394f3c0847c3b9ea69f4f972dddae3786592050	libpng-1.6.17.tar.xz
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 2f53a95..08d8196 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPNG_VERSION = 1.6.16
++LIBPNG_VERSION = 1.6.17
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.3.6
