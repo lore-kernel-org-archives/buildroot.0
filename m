@@ -1,162 +1,164 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Jun 2015 22:46:34 +0200
-Subject: [Buildroot] [git commit] toolchain-external: add CodeSourcery MIPS
-	2015.05, remove 2013.11
-Message-ID: <20150604211320.563E881E29@busybox.osuosl.org>
+Date: Thu, 4 Jun 2015 22:44:54 +0200
+Subject: [Buildroot] [git commit] gpsd: bump to version 3.15
+Message-ID: <20150604211320.49B0881E29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9f4ec376567f94a68ea3e67a48f9a000814b04ca
+commit: http://git.buildroot.net/buildroot/commit/?id=583edd3f865e1ba298d7e8fe765e27a0a0eb7069
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Add CodeSourcery MIPS 2015.05 toolchain
-- Remove CodeSourcery MIPS 2013.11 toolchain
-- Update the hash file
+Drop upstream patches #1 and #3. Drop the no longer needed patch #2.
 
-Toolchain datasheet:
-  https://sourcery.mentor.com/GNUToolchain/release3068?@template=datasheet
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/Config.in             |   32 ++++++++++----------
- .../toolchain-external/toolchain-external.hash     |    4 +-
- toolchain/toolchain-external/toolchain-external.mk |    6 ++--
- 3 files changed, 21 insertions(+), 21 deletions(-)
+ ...0001-Fix-build-error-when-ntpshm-is-false.patch |   39 ------------------
+ package/gpsd/0002-sconstruct-disable-rpath.patch   |   18 --------
+ ...apping-of-ntpshm_latch-function-in-ifdef-.patch |   43 --------------------
+ package/gpsd/gpsd.hash                             |    2 +-
+ package/gpsd/gpsd.mk                               |    2 +-
+ 5 files changed, 2 insertions(+), 102 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 6ea6838..017e913 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -188,8 +188,8 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+diff --git a/package/gpsd/0001-Fix-build-error-when-ntpshm-is-false.patch b/package/gpsd/0001-Fix-build-error-when-ntpshm-is-false.patch
+deleted file mode 100644
+index 9c444c4..0000000
+--- a/package/gpsd/0001-Fix-build-error-when-ntpshm-is-false.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 8e081f1bd5c82b842ee317cd55e70f646ae31f05 Mon Sep 17 00:00:00 2001
+-From: Simon Dawson <spdawson@gmail.com>
+-Date: Mon, 25 Aug 2014 10:26:11 +0100
+-Subject: [PATCH] Fix build error when ntpshm is false
+-To: gpsd-dev at nongnu.org
+-
+-The build fails as follows
+-
+-libgpsd_core.c: In function 'ntpshm_latch':
+-libgpsd_core.c:1660:24: error: 'const struct gps_type_t' has no member named 'time_offset'
+-  || device->device_type->time_offset == NULL)
+-                        ^
+-libgpsd_core.c:1663:33: error: 'const struct gps_type_t' has no member named 'time_offset'
+-  fix_time += device->device_type->time_offset(device);
+-                                 ^
+-scons: *** [libgpsd_core.os] Error 1
+-
+-The solution is to wrap #ifdef NTPSHM_ENABLE around the ntpshm_latch function
+-
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+----
+-diff -Nurp a/libgpsd_core.c b/libgpsd_core.c
+---- a/libgpsd_core.c	2014-08-22 21:33:55.000000000 +0100
+-+++ b/libgpsd_core.c	2014-09-03 18:48:34.184931741 +0100
+-@@ -1642,6 +1642,7 @@ void gpsd_zero_satellites( /*@out@*/ str
+- #endif
+- }
+- 
+-+#ifdef NTPSHM_ENABLE
+- void ntpshm_latch(struct gps_device_t *device, struct timedrift_t /*@out@*/*td)
+- /* latch the fact that we've saved a fix */
+- {
+-@@ -1672,5 +1673,6 @@ void ntpshm_latch(struct gps_device_t *d
+-     device->last_fixtime.clock = td->clock.tv_sec + td->clock.tv_nsec / 1e9;
+- #endif /* S_SPLINT_S */
+- }
+-+#endif /* NTPSHM_ENABLE */
+- 
+- /* end */
+diff --git a/package/gpsd/0002-sconstruct-disable-rpath.patch b/package/gpsd/0002-sconstruct-disable-rpath.patch
+deleted file mode 100644
+index 8251cfc..0000000
+--- a/package/gpsd/0002-sconstruct-disable-rpath.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-Disable addition of RPATH to the generated libraries
+-
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-diff -Nurp a/SConstruct b/SConstruct
+---- a/SConstruct	2014-08-23 18:41:09.000000000 +0100
+-+++ b/SConstruct	2014-08-25 09:46:53.754364989 +0100
+-@@ -300,9 +300,6 @@ if env["sysroot"]:
+- 
+- # Don't hack RPATH unless libdir points somewhere that is not on the
+- # minimum default load path.
+--if env["shared"]:
+--    if env["libdir"] not in ["/usr/lib", "/lib"]:
+--        env.Prepend(RPATH=[installdir('libdir')])
+- 
+- # Give deheader a way to set compiler flags
+- if 'MORECFLAGS' in os.environ:
+diff --git a/package/gpsd/0003-Complete-wrapping-of-ntpshm_latch-function-in-ifdef-.patch b/package/gpsd/0003-Complete-wrapping-of-ntpshm_latch-function-in-ifdef-.patch
+deleted file mode 100644
+index 2d21690..0000000
+--- a/package/gpsd/0003-Complete-wrapping-of-ntpshm_latch-function-in-ifdef-.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 519314d488624885a73f6204e3113aab850a36a0 Mon Sep 17 00:00:00 2001
+-From: Simon Dawson <spdawson@gmail.com>
+-Date: Wed, 3 Sep 2014 18:39:22 +0100
+-Subject: [PATCH] Complete wrapping of ntpshm_latch function in #ifdef
+- NTPSHM_ENABLE
+-To: gpsd-dev at nongnu.org
+-
+-Currently, the build fails as follows
+-
+-gpsmon.o: In function `gpsmon_hook':
+-gpsmon.c:(.text+0x8b0): undefined reference to `ntpshm_latch'
+-collect2: error: ld returned 1 exit status
+-scons: *** [gpsmon] Error 1
+-
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+----
+-diff -Nurp a/gpsd.h-tail b/gpsd.h-tail
+---- a/gpsd.h-tail	2014-08-22 21:35:56.000000000 +0100
+-+++ b/gpsd.h-tail	2014-09-03 18:52:04.048627518 +0100
+-@@ -842,7 +842,9 @@ extern unsigned int ais_binary_encode(st
+- extern void ntpshm_context_init(struct gps_context_t *);
+- extern void ntpshm_session_init(struct gps_device_t *);
+- extern int ntpshm_put(struct gps_device_t *, int, struct timedrift_t *);
+-+#ifdef NTPSHM_ENABLE
+- extern void ntpshm_latch(struct gps_device_t *device,  /*@out@*/struct timedrift_t *td);
+-+#endif /* NTPSHM_ENABLE */
+- extern void ntpshm_link_deactivate(struct gps_device_t *);
+- extern void ntpshm_link_activate(struct gps_device_t *);
+- 
+-diff -Nurp a/gpsmon.c b/gpsmon.c
+---- a/gpsmon.c	2014-08-22 21:06:58.000000000 +0100
+-+++ b/gpsmon.c	2014-09-03 18:52:23.172628059 +0100
+-@@ -778,8 +778,10 @@ static void gpsmon_hook(struct gps_devic
+- 
+-     report_unlock();
+- 
+-+#ifdef NTPSHM_ENABLE
+-     /* Update the last fix time seen for PPS. FIXME: do this here? */
+-     ntpshm_latch(device, &td);
+-+#endif /* NTPSHM_ENABLE */
+- }
+- /*@+observertrans +nullpass +globstate +compdef +uniondef@*/
+- 
+diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
+index 80703c1..8e27ff0 100644
+--- a/package/gpsd/gpsd.hash
++++ b/package/gpsd/gpsd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	ed66c6b6b1e2b4951de2c0b2399c22f77fe9f5927ef6b948dd8eb023ff53b7ee	gpsd-3.11.tar.gz
++sha256	81c89e271ae112313e68655ab30d227bc38fe7841ffbff0f1860b12a9d7696ea	gpsd-3.15.tar.gz
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 1bf4415..2199e31 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  This toolchain uses software-floating point.
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
--	bool "Sourcery CodeBench MIPS 2014.11"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
-+	bool "Sourcery CodeBench MIPS 2015.05"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-@@ -198,11 +198,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.9.1, binutils 2.24.51, glibc
--	  2.20, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.16.2. It
-+	  Mentor Graphics. It uses gcc 4.9.2, binutils 2.24.51, glibc
-+	  2.21, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.19. It
- 	  has support for the following variants:
- 	    - MIPS32r2 - Big-Endian, 2008 NaN, O32
- 	      Select MIPS (big endian) core
-@@ -273,8 +273,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
- 	      Select the n64 ABI
- 	      Select BR2_SOFT_FLOAT
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
--	bool "Sourcery CodeBench MIPS 2014.05"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
-+	bool "Sourcery CodeBench MIPS 2014.11"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-@@ -283,11 +283,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
--	  2.18, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.13. It
-+	  Mentor Graphics. It uses gcc 4.9.1, binutils 2.24.51, glibc
-+	  2.20, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.16.2. It
- 	  has support for the following variants:
- 	    - MIPS32r2 - Big-Endian, 2008 NaN, O32
- 	      Select MIPS (big endian) core
-@@ -358,8 +358,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
- 	      Select the n64 ABI
- 	      Select BR2_SOFT_FLOAT
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
--	bool "Sourcery CodeBench MIPS 2013.11"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
-+	bool "Sourcery CodeBench MIPS 2014.05"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-@@ -368,11 +368,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
--	  2.18, uClibc 0.9.30 and gdb 7.6.50, kernel headers 3.11. It
-+	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
-+	  2.18, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.13. It
- 	  has support for the following variants:
- 	    - MIPS32r2 - Big-Endian, 2008 NaN, O32
- 	      Select MIPS (big endian) core
-@@ -914,9 +914,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
--	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
-+	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
- 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 444ddfd..3980c62 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -1,10 +1,10 @@
- # Sourcery CodeBench Lite for MIPS
-+# From: https://sourcery.mentor.com/GNUToolchain/release3068
-+md5  0fcdc0fee260c7bed060c999bfe8440d  mips-2015.05-18-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- # From: https://sourcery.mentor.com/GNUToolchain/release2935
- md5  ad4a66e4791606c5df70f48c4a97b0ec  mips-2014.11-22-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- # From: https://sourcery.mentor.com/GNUToolchain/release2791
- md5  14facaac538a43533b89d969d7904d46  mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
--# From: https://sourcery.mentor.com/GNUToolchain/release2640
--md5  0ba8bc4923c04728ee3787bed4cd5148  mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- 
- # Sourcery CodeBench Lite for AMD64
- # From https://sourcery.mentor.com/GNUToolchain/release2777
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index b293ba9..22f8118 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -284,15 +284,15 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311),y)
--TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
--TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.11-22-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
-+TOOLCHAIN_EXTERNAL_SOURCE = mips-2015.05-18-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-GPSD_VERSION = 3.11
++GPSD_VERSION = 3.15
+ GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
+ GPSD_LICENSE = BSD-3c
+ GPSD_LICENSE_FILES = COPYING
