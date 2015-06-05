@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 5 Jun 2015 23:00:10 +0200
-Subject: [Buildroot] [PATCH 03/12] fs/iso9660: use if ... endif block
- instead of depends on
-In-Reply-To: <1433430330-2166-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 5 Jun 2015 23:18:40 +0200
+Subject: [Buildroot] [PATCH 04/12] fs/iso9660: enable Joliet extension
+In-Reply-To: <1433430330-2166-5-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1433430330-2166-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1433430330-2166-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150605210010.GC3641@free.fr>
+ <1433430330-2166-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150605211840.GD3641@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,44 +14,47 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-06-04 17:05 +0200, Thomas Petazzoni spake thusly:
-> In preparation to the addition of numerous additional options to the
-> iso9660 filesystem logic, use a if ... endif block instead of a
-> depends on for the only option that currently exists.
+> We already enable the Rockridge extension by default when building
+> ISO9660, so let's also enable the Joliet extension which allows to
+> support Unicode file names and long file names.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Maybe you could re-order that to come earlier in the series (since it is
-an easy patch, and does not depend on the previous ones)?
+However, see a comment, below...
+
+> ---
+>  fs/iso9660/iso9660.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+> index 5a29673..6a04fe6 100644
+> --- a/fs/iso9660/iso9660.mk
+> +++ b/fs/iso9660/iso9660.mk
+> @@ -44,7 +44,7 @@ endef
+>  ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_PREPARATION
+>  
+>  define ROOTFS_ISO9660_CMD
+> -	$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito \
+> +	$(HOST_DIR)/usr/bin/genisoimage -J -R -b boot/grub/stage2_eltorito \
+
+Only tangentially related to your change:
+
+-R is for RockRidge, but it seems using -r would be better:
+
+    -r  This is like the -R option, but file ownership and modes are set
+        to more useful values. [--snip--]
+
+Reading the full entry for -r is instructive, and makes it sound like
+that's what we would want to use instead of -R.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  fs/iso9660/Config.in | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-> index 50b4377..9d00ab8 100644
-> --- a/fs/iso9660/Config.in
-> +++ b/fs/iso9660/Config.in
-> @@ -8,11 +8,14 @@ config BR2_TARGET_ROOTFS_ISO9660
->  	help
->  	  Build a bootable iso9660 image
->  
-> +if BR2_TARGET_ROOTFS_ISO9660
-> +
->  config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
->  	string "Boot menu.lst file"
-> -	depends on BR2_TARGET_ROOTFS_ISO9660
->  	default "fs/iso9660/menu.lst"
->  
-> +endif
-> +
->  comment "iso image needs a Linux kernel to be built"
->  	depends on BR2_i386 || BR2_x86_64
->  	depends on !BR2_LINUX_KERNEL
+>  		-no-emul-boot -boot-load-size 4 -boot-info-table \
+>  		-o $@ $(ISO9660_TARGET_DIR)
+>  endef
 > -- 
 > 2.1.0
 > 
