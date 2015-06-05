@@ -1,33 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  5 Jun 2015 08:00:19 +0000 (UTC)
-Subject: [Buildroot] [Bug 8036] alsa-lib headers problem that prevents to
- compile alsa dependent projects
-In-Reply-To: <bug-8036-163@https.bugs.busybox.net/>
-References: <bug-8036-163@https.bugs.busybox.net/>
-Message-ID: <20150605080019.6C05381E5A@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 5 Jun 2015 11:43:46 +0200
+Subject: [Buildroot] [PATCH 01/12] fs/common: add <fs>_POST_GEN_HOOKS
+	support
+In-Reply-To: <1433430330-2166-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1433430330-2166-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1433430330-2166-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAHXCMM+CciW03-FuXxjqiGC-mZbL6dJ7QOS92dfO76LDuC558A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8036
+Hi Thomas, all,
 
-Juan <jrmcorreo-linux@yahoo.es> changed:
+On Thu, Jun 4, 2015 at 5:05 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> The common filesystem infrastructure already supports a
+> <fs>_PRE_GEN_HOOKS variable, which allows filesystem makefiles to
+> register some actions to be done before the root filesystem image is
+> generated.
+>
+> This commit adds a similiar <fs>_POST_GEN_HOOKS variable, which will
+> allow filesystem makefiles to do some actions after the filesystem
+> image has been generated. It will initially be used by the iso9660
+> filesystem to delete the temporary directory it creates.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #6031|0                           |1
-        is obsolete|                            |
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
---- Comment #11 from Juan <jrmcorreo-linux@yahoo.es> 2015-06-05 08:00:19 UTC ---
-Created attachment 6056
-  --> https://bugs.busybox.net/attachment.cgi?id=6056
-kernel config for S3C2440 (ARM920t) with ALSA
-
-Correct configuration.
+Regards,
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Samuel
