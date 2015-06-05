@@ -1,54 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Jun 2015 15:36:32 +0200
-Subject: [Buildroot] [V2] moarvm: new package
-In-Reply-To: <CAB0FRssQa117taJbxzpF9rbszqzN=tqPgd91dyj=V1LO96MxRA@mail.gmail.com>
-References: <1433448072-13632-1-git-send-email-francois.perrad@gadz.org>
- <20150605075007.410bd306@free-electrons.com>
- <CAB0FRssQa117taJbxzpF9rbszqzN=tqPgd91dyj=V1LO96MxRA@mail.gmail.com>
-Message-ID: <20150605153632.390b9055@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  5 Jun 2015 14:21:28 +0000 (UTC)
+Subject: [Buildroot] [Bug 8036] alsa-lib headers problem that prevents to
+ compile alsa dependent projects
+In-Reply-To: <bug-8036-163@https.bugs.busybox.net/>
+References: <bug-8036-163@https.bugs.busybox.net/>
+Message-ID: <20150605142128.AF2178077E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fran?ois Perrad,
+https://bugs.busybox.net/show_bug.cgi?id=8036
 
-On Fri, 5 Jun 2015 09:21:16 +0200, Fran?ois Perrad wrote:
+--- Comment #12 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-06-05 14:21:28 UTC ---
+The Buildroot configuration you provided builds just fine (I've only disabled
+the kernel, but it's irrelevant to the alsa-utils problem). And you also say
+that you managed to build alsa-utils successfully.
 
-> >> diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
-> >> new file mode 100644
-> >> index 0000000..4427e55
-> >> --- /dev/null
-> >> +++ b/package/moarvm/Config.in
-> >> @@ -0,0 +1,14 @@
-> >> +config BR2_PACKAGE_MOARVM
-> >> +     bool "moarvm"
-> >> +     depends on BR2_TOOLCHAIN_HAS_THREADS
-> >> +     depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
-> >
-> > You don't use libatomic, so: why?
-> >
-> 
-> The MoarVM tarball embeds its own copy of libatomic.
+So: what is the bug ?
 
-Ah, ok. Since this is not trivial/obvious, please add a comment above
-this 'depends on'.
-
-> > Is using the system provided Perl OK or should we use host-perl instead?
-> >
-> 
-> Work with the system perl.
-
-Ok, we'll see if this is effectively true when we'll start building in
-the autobuilders with various different/old versions of Perl. But no
-need to worry about this now, the autobuilders will tell us what they
-think :-)
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
