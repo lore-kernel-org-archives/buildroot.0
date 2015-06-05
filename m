@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 5 Jun 2015 23:43:42 +0200
+Date: Sat, 6 Jun 2015 00:06:26 +0200
 Subject: [Buildroot] [PATCH 07/12] fs/iso9660: prepare cleaner
  kernel/initrd path handling
 In-Reply-To: <1433430330-2166-8-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1433430330-2166-1-git-send-email-thomas.petazzoni@free-electrons.com>
  <1433430330-2166-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150605214342.GG3641@free.fr>
+Message-ID: <20150605220626.GH3641@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,14 +26,25 @@ On 2015-06-04 17:05 +0200, Thomas Petazzoni spake thusly:
 > values. They can therefore be used where needed in grub menu.lst, and
 > in similar configuration files of other bootloaders, as will be
 > supported in the following commits.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+You forgot to document in the commit log that you are also moving the
+locations where the kernel image and initrd files are now stored.
+
+I understand this is needed later on when we add support for using the
+iso9660 directly as the rootfs, because the kernel will be forcibly
+installed in the target (with the appropriate Kconfig option), and that
+you also move the initrd to match.
+
+Still, this is missing in the commit log (and I forgot to write this in
+my previous mail, sorry).
+
+However, I trust you to come up with a delightfull-to-read explanation,
+so my Acked-by still stands! ;-)
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
 >  fs/iso9660/Config.in  |  5 +++++
 >  fs/iso9660/iso9660.mk | 11 ++++++++---
