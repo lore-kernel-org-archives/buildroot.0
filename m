@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  5 Jun 2015 07:59:01 +0000 (UTC)
+Date: Fri,  5 Jun 2015 08:00:19 +0000 (UTC)
 Subject: [Buildroot] [Bug 8036] alsa-lib headers problem that prevents to
  compile alsa dependent projects
 In-Reply-To: <bug-8036-163@https.bugs.busybox.net/>
 References: <bug-8036-163@https.bugs.busybox.net/>
-Message-ID: <20150605075901.334C58079F@busybox.osuosl.org>
+Message-ID: <20150605080019.6C05381E5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,13 +17,13 @@ Juan <jrmcorreo-linux@yahoo.es> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-   Attachment #6036|0                           |1
+   Attachment #6031|0                           |1
         is obsolete|                            |
 
---- Comment #10 from Juan <jrmcorreo-linux@yahoo.es> 2015-06-05 07:59:01 UTC ---
-Created attachment 6051
-  --> https://bugs.busybox.net/attachment.cgi?id=6051
-config for S3C2440 (ARM920t) with ALSA
+--- Comment #11 from Juan <jrmcorreo-linux@yahoo.es> 2015-06-05 08:00:19 UTC ---
+Created attachment 6056
+  --> https://bugs.busybox.net/attachment.cgi?id=6056
+kernel config for S3C2440 (ARM920t) with ALSA
 
 Correct configuration.
 
