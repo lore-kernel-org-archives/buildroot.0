@@ -1,37 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  5 Jun 2015 16:16:56 +0000 (UTC)
-Subject: [Buildroot] [Bug 8036] alsa-lib headers problem that prevents to
- compile alsa dependent projects
-In-Reply-To: <bug-8036-163@https.bugs.busybox.net/>
-References: <bug-8036-163@https.bugs.busybox.net/>
-Message-ID: <20150605161656.6D96B81E43@busybox.osuosl.org>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Fri, 5 Jun 2015 19:03:36 +0000 (UTC)
+Subject: [Buildroot] [PATCH 50/51] protobuf-c: bump version
+References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1414349157-22749-50-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <loom.20150605T205633-25@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8036
+Maxime Hadjinlian <maxime.hadjinlian@...> writes:
+> The releases contains generated Makefile and configure, there's no need
+> to AUTORECONF anymore.
 
---- Comment #13 from Juan <jrmcorreo-linux@yahoo.es> 2015-06-05 16:16:56 UTC ---
-As you said, at last it worked fine. I can only say that now it works and
-before not. I think the problem was related about make clean command, that
-didn't cleaned properly the compile environment.
+Acked-by: James Knight <james.knight@rockwellcollins.com>
 
-The first time I compiled alsa was in order to compile openjdk, and I've
-applied both at once. This time I've compiled first buildroot with alsa, then I
-added openjdk after.
+> Also add a hash file since the release tarball has been uploaded by the
+> maintainer.
 
-Sincerely, I thought that it was a bug because after applying a make clean
-command and try to compile only alsa didn't worked fine, but finally it
-worked... and worked without removing competely the buildroot environment I'm
-using since the begining.
-
-If you can't reproduce it and don't consider it as a bug, then is not a bug and
-probably was caused after introducing a new package not in the
-official/mainstream release.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Any chance you can re-submit the patch with a version bump to 1.1.1 and 
+respective hash change (although I can do it if you don't want to)?
