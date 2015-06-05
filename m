@@ -1,39 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Jun 2015 16:26:53 +0200
-Subject: [Buildroot] [PATCH v2 1/3] Remove --{enable,
- disable}-debug configure flags.
-In-Reply-To: <1426173147-27755-1-git-send-email-johan.oudinet@gmail.com>
-References: <1426173147-27755-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <20150605162653.3dd451ad@free-electrons.com>
+Date: Fri, 5 Jun 2015 16:29:37 +0200
+Subject: [Buildroot] [PATCH] package/libpthsem: correctly handle --{en,
+ dis}able-debug arguments on configure
+In-Reply-To: <1426798923-13980-2-git-send-email-steven@uplinklabs.net>
+References: <1426798923-13980-1-git-send-email-steven@uplinklabs.net>
+ <1426798923-13980-2-git-send-email-steven@uplinklabs.net>
+Message-ID: <20150605162937.40e218c0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Johan Oudinet,
+Dear Steven Noonan,
 
-On Thu, 12 Mar 2015 16:12:25 +0100, Johan Oudinet wrote:
-> Adding this flag when BR2_ENABLE_DEBUG is activated make several
-> packages to produce binaries that do not work as expected (e.g., dhcp,
-> lame, nano). Moreover, the help message of BR2_ENABLE_DEBUG does not
-> say it is adding this flag. It is supposed to build packages with
-> debugging symbols enabled. So, let it do that only.
+On Thu, 19 Mar 2015 14:02:03 -0700, Steven Noonan wrote:
+> The pthsem package was incorrectly handling --{en,dis}able-debug. If either of
+> the two were provided, it always assumed that meant that debugging should be
+> enabled, which resulted in *extremely* noisy debug logging (e.g. this can be
+> observed by generating a GPG keypair).
 > 
-> * package/Makefile.in: Do not add --{enable,disable}-debug flags.
-> * package/pkg-autotools.mk: Remove ENABLE_DEBUG as it is not set
->   anymore.
+> This patch makes pthsem handle the argument correctly.
 > 
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
 > ---
-> Changes v1 -> v2:
->   - Do not pass --disable-debug neither.
-> ---
->  package/Makefile.in      | 6 ------
->  package/pkg-autotools.mk | 1 -
->  2 files changed, 7 deletions(-)
+>  .../0002-fix-configure-disable-debug.patch         | 54 ++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 package/libpthsem/0002-fix-configure-disable-debug.patch
 
-Applied the three patches of this series, thanks!
+We are no longer passing --enable-debug / --disable-debug to packages,
+so I believe this patch is no longer necessary. I've marked it as
+"Rejected" in our patch tracking system. If you think it is still
+needed, to do hesitate to switch it back to the "New" state (or ask us
+to do so if you don't have a patchwork account).
+
+For reference, the URL of the patch in patchwork is:
+
+	http://patchwork.ozlabs.org/patch/452271/
+
+Thanks,
 
 Thomas
 -- 
