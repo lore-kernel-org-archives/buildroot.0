@@ -1,36 +1,61 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  4 Jun 2015 21:28:47 -0300
-Subject: [Buildroot] [PATCH] gcc/gcc-final: install libatomic via
-	HOST_GCC_FINAL_GCC_LIB_DIR
-Message-ID: <1433464127-10834-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 5 Jun 2015 07:50:07 +0200
+Subject: [Buildroot] [V2] moarvm: new package
+In-Reply-To: <1433448072-13632-1-git-send-email-francois.perrad@gadz.org>
+References: <1433448072-13632-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150605075007.410bd306@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Otherwise it's a no-op for sh4.
+Dear Francois Perrad,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gcc/gcc-final/gcc-final.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Thu,  4 Jun 2015 22:01:12 +0200, Francois Perrad wrote:
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 8d7009b..16bf4ee 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -131,9 +131,9 @@ endef
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBGCC
- 
- define HOST_GCC_FINAL_INSTALL_LIBATOMIC
--	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libatomic* \
-+	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libatomic* \
- 		$(STAGING_DIR)/lib/
--	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libatomic* \
-+	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libatomic* \
- 		$(TARGET_DIR)/lib/
- endef
- 
+> diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
+> new file mode 100644
+> index 0000000..4427e55
+> --- /dev/null
+> +++ b/package/moarvm/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_MOARVM
+> +	bool "moarvm"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
+
+You don't use libatomic, so: why?
+
+> +	help
+> +	  MoarVM (short for Metamodel On A Runtime Virtual Machine) is
+> +	  a runtime built for the 6model object system. It is primarily aimed
+> +	  at running NQP and Rakudo Perl 6, but should be able to serve as
+> +	  a backend for any compilers built using the NQP compiler toolchain.
+
+I think the lines of the help text are slightly too long.
+
+> +MOARVM_CONF_OPTS = \
+> +	--build=$(GNU_HOST_NAME) \
+> +	--host=$(GNU_TARGET_NAME) \
+> +	--ar="$(TARGET_AR)" \
+> +	--cc="$(TARGET_CC)" \
+> +	--ld="$(TARGET_CC)" \
+> +	--prefix="/usr"
+> +
+> +ifeq ($(BR2_ENDIAN),"BIG")
+> +MOARVM_CONF_OPTS += --big-endian
+> +endif
+> +
+> +define MOARVM_CONFIGURE_CMDS
+> +	(cd $(@D); perl Configure.pl $(MOARVM_CONF_OPTS))
+
+Is using the system provided Perl OK or should we use host-perl instead?
+
+Thanks,
+
+Thomas
 -- 
-2.3.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
