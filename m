@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 5 Jun 2015 23:30:00 +0200
-Subject: [Buildroot] [PATCH 06/12] fs/iso9660: change the location of
- the splash image
-In-Reply-To: <1433430330-2166-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 5 Jun 2015 23:43:42 +0200
+Subject: [Buildroot] [PATCH 07/12] fs/iso9660: prepare cleaner
+ kernel/initrd path handling
+In-Reply-To: <1433430330-2166-8-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1433430330-2166-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1433430330-2166-7-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150605213000.GF3641@free.fr>
+ <1433430330-2166-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150605214342.GG3641@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,68 +15,95 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-06-04 17:05 +0200, Thomas Petazzoni spake thusly:
-> In order to simplify the introduction of the support for using ISO9660
-> as the real root filesystem, this commit changes the location of the
-> grub splash image. This makes it match where the splash image in
-> $(TARGET_DIR).
-
-It looks like that last sentence is incorrect (missing verb?) and I had
-a bit of a hard time udnerstanding what it meant (but see later).
-
+> The iso9660.mk modifies the menu.lst file from Grub to set the correct
+> initrd/kernel image locations. However, with the upcoming support of
+> other bootloaders for iso9660 filesystems, we need to modify a bit
+> this logic.
+> 
+> Instead of relying on the specific details of the grub menu.lst
+> syntax, we introduce the __KERNEL_PATH__ and __INITRD_PATH__ magic
+> keywords, which iso9660.mk will replace by the appropriate
+> values. They can therefore be used where needed in grub menu.lst, and
+> in similar configuration files of other bootloaders, as will be
+> supported in the following commits.
+> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-(Comments below...)
-
-> ---
->  fs/iso9660/iso9660.mk | 2 +-
->  fs/iso9660/menu.lst   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-> index 0c7ef3b..80971d3 100644
-> --- a/fs/iso9660/iso9660.mk
-> +++ b/fs/iso9660/iso9660.mk
-> @@ -16,7 +16,7 @@ endef
->  else
->  define ROOTFS_ISO9660_SPLASHSCREEN
->  	$(INSTALL) -D -m 0644 boot/grub/splash.xpm.gz \
-> -		$(ROOTFS_ISO9660_TARGET_DIR)/splash.xpm.gz
-> +		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/splash.xpm.gz
-
-Since iso9660 already depends on grub, grub would have already installed
-that file in $(TARGET_DIR)   (and that's where I finally understood that
-sentence of yours, above).
-
-Also, fs images are generated after the post-build scripts and rootfs
-overlays, which would leave to the user the option to replace the
-bootsplash with its own.
-
-So. maybe we should grab the image from $(TARGET_DIR) rather than picking
-it from the grub package?
-
-Of course, that should be a separate patch.
-
 Regards,
 Yann E. MORIN.
 
+> ---
+>  fs/iso9660/Config.in  |  5 +++++
+>  fs/iso9660/iso9660.mk | 11 ++++++++---
+>  fs/iso9660/menu.lst   |  4 ++--
+>  3 files changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+> index 9d00ab8..111158b 100644
+> --- a/fs/iso9660/Config.in
+> +++ b/fs/iso9660/Config.in
+> @@ -13,6 +13,11 @@ if BR2_TARGET_ROOTFS_ISO9660
+>  config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
+>  	string "Boot menu.lst file"
+>  	default "fs/iso9660/menu.lst"
+> +	help
+> +	  Use this option to provide a custom Grub menu.lst file. Note
+> +	  that the strings __KERNEL_PATH__ and __INITRD_PATH__ will
+> +	  automatically be replaced by the path to the kernel and
+> +	  initrd images respectively.
+>  
+>  endif
+>  
+> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+> index 80971d3..2a8a447 100644
+> --- a/fs/iso9660/iso9660.mk
+> +++ b/fs/iso9660/iso9660.mk
+> @@ -22,12 +22,14 @@ endif
+>  
+>  ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+>  define ROOTFS_ISO9660_INITRD
+> -	$(SED) '/initrd/d'  $(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
+> +	$(SED) '/__INITRD_PATH__/d'  $(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
+>  endef
+>  else
+>  define ROOTFS_ISO9660_INITRD
+>  	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
+> -		$(ROOTFS_ISO9660_TARGET_DIR)/initrd
+> +		$(ROOTFS_ISO9660_TARGET_DIR)/boot/initrd
+> +	$(SED) "s%__INITRD_PATH__%/boot/initrd%" \
+> +		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
 >  endef
 >  endif
 >  
+> @@ -36,7 +38,10 @@ define ROOTFS_ISO9660_PREPARATION
+>  		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/stage2_eltorito
+>  	$(INSTALL) -D -m 0644 $(ROOTFS_ISO9660_BOOT_MENU) \
+>  		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
+> -	$(INSTALL) -D -m 0644 $(LINUX_IMAGE_PATH) $(ROOTFS_ISO9660_TARGET_DIR)/kernel
+> +	$(INSTALL) -D -m 0644 $(LINUX_IMAGE_PATH) \
+> +		$(ROOTFS_ISO9660_TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
+> +	$(SED) "s%__KERNEL_PATH__%/boot/$(LINUX_IMAGE_NAME)%" \
+> +		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
+>  	$(ROOTFS_ISO9660_SPLASHSCREEN)
+>  	$(ROOTFS_ISO9660_INITRD)
+>  endef
 > diff --git a/fs/iso9660/menu.lst b/fs/iso9660/menu.lst
-> index c0bbff6..fd5c76a 100644
+> index fd5c76a..8e8309f 100644
 > --- a/fs/iso9660/menu.lst
 > +++ b/fs/iso9660/menu.lst
-> @@ -5,7 +5,7 @@ timeout		10
->  color 		cyan/blue white/blue
+> @@ -12,8 +12,8 @@ foreground 	000000
+>  background 	cccccc
 >  
->  # Gets enabled/disabled depending on Grub support for splashimage
-> -splashimage	/splash.xpm.gz
-> +splashimage	/boot/grub/splash.xpm.gz
+>  title		Buildroot ISO9660 image
+> -kernel		/kernel
+> -initrd		/initrd
+> +kernel		__KERNEL_PATH__
+> +initrd		__INITRD_PATH__
 >  
->  # Used when a splashimage is enabled
->  foreground 	000000
+>  title		Hard Drive (first partition)
+>  rootnoverify	(hd0)
 > -- 
 > 2.1.0
 > 
