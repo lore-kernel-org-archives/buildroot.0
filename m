@@ -1,41 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 06 Jun 2015 00:44:45 +0200
-Subject: [Buildroot] [PATCH 02/12] fs/iso9660: convert to the filesystem
- infrastructure
-In-Reply-To: <1433430330-2166-3-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 6 Jun 2015 00:51:05 +0200
+Subject: [Buildroot] [PATCH 10/12] fs/iso9660: add hybrid image support
+In-Reply-To: <1433430330-2166-11-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1433430330-2166-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1433430330-2166-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <5572265D.4060204@mind.be>
+ <1433430330-2166-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150605225105.GK3641@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/04/15 17:05, Thomas Petazzoni wrote:
-> Now that we have <fs>_POST_GEN_HOOKS, there is nothing that prevents
-> the iso9660 filesystem logic from using the common filesystem
-> infrastructure.
+Thomas, All,
+
+On 2015-06-04 17:05 +0200, Thomas Petazzoni spake thusly:
+> This commit adds a new option, which allows, when isolinux is used as
+> the bootloader, to generate an "hybrid" ISO image. Such images can
+> either be booted from CD-ROM or from USB keys. It simply uses the
+> isohybrid tool provided by syslinux.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- However, instead of doing the cleanup in a _POST_GEN_HOOK, I would skip the
-cleanup completely. We normally don't clean up any build artefact, so why should
-we do it here?
+However, a comment, below...
 
+> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+> index c95485c..792a770 100644
+> --- a/fs/iso9660/iso9660.mk
+> +++ b/fs/iso9660/iso9660.mk
+> @@ -142,4 +142,12 @@ endef
+>  ROOTFS_ISO9660_POST_GEN_HOOKS += ROOTFS_ISO9660_REMOVE_TEMPDIR
+>  endif
+>  
+> +ifeq ($(BR2_TARGET_ROOTFS_ISO9660_HYBRID),y)
+> +define ROOTFS_ISO9660_GEN_HYBRID
+> +	$(HOST_DIR)/usr/bin/isohybrid $@
 
- Regards,
- Arnout
+The default partition type is 0x17, which is nothing very interesting.
+What about setting it to 0x96 instead, which is 'ISO-9660 file system':
 
+    https://en.wikipedia.org/wiki/Partition_type
 
-[snip]
+Regards,
+Yann E. MORIN.
+
+> +endef
+> +
+> +ROOTFS_ISO9660_POST_GEN_HOOKS += ROOTFS_ISO9660_GEN_HYBRID
+> +endif
+> +
+>  $(eval $(call ROOTFS_TARGET,iso9660))
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
