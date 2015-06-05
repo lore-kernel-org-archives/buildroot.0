@@ -1,46 +1,75 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 05 Jun 2015 22:37:43 +0200
-Subject: [Buildroot] [PATCH 1/3] atf: new package
-In-Reply-To: <5570B544.2060502@savoirfairelinux.com>
-References: <1433357276-7083-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>	<1433357276-7083-2-git-send-email-sebastien.bourdelin@savoirfairelinux.com>	<556F7747.4060408@mind.be>
- <5570B544.2060502@savoirfairelinux.com>
-Message-ID: <55720897.3040006@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 5 Jun 2015 22:49:01 +0200
+Subject: [Buildroot] [PATCH 01/12] fs/common: add <fs>_POST_GEN_HOOKS
+ support
+In-Reply-To: <1433430330-2166-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1433430330-2166-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1433430330-2166-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150605204901.GA3641@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/04/15 22:29, Sebastien Bourdelin wrote:
-> Hi Arnout.
+Thomas, All,
+
+On 2015-06-04 17:05 +0200, Thomas Petazzoni spake thusly:
+> The common filesystem infrastructure already supports a
+> <fs>_PRE_GEN_HOOKS variable, which allows filesystem makefiles to
+> register some actions to be done before the root filesystem image is
+> generated.
 > 
-> On 06/03/2015 05:53 PM, Arnout Vandecappelle wrote:
->> On 06/03/15 20:47, Sebastien Bourdelin wrote:
-[snip]
->>> +ATF_SITE = https://github.com/jmmv/atf/archive
->>  There's an uploaded archive at
->> https://github.com/jmmv/atf/releases/download/atf-0.21/atf-0.21.tar.gz
->> (same for 0.20). Then you don't need to AUTORECONF. Well, except that it has the
->> unreleased libtool beta which means that our patch doesn't apply so you need to
->> to autoreconf after all. But anyway, we prefer the uploaded archive.
-> Ok, i will go for the uploaded archive, do you prefer a comment above
-> the AUTORECONF to explain it's still required and when it could be
-> remove, a TODO in fact ?
+> This commit adds a similiar <fs>_POST_GEN_HOOKS variable, which will
+> allow filesystem makefiles to do some actions after the filesystem
+> image has been generated. It will initially be used by the iso9660
+> filesystem to delete the temporary directory it creates.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- Yes, please add a comment like lzo:
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-# Ships a beta libtool version hence our patch doesn't apply.
+Regards,
+Yann E. MORIN.
 
+> ---
+>  fs/common.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 4387d06..40389bd 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -16,6 +16,9 @@
+>  #  ROOTFS_$(FSTYPE)_PRE_GEN_HOOKS, a list of hooks to call before
+>  #  generating the filesystem image
+>  #
+> +#  ROOTFS_$(FSTYPE)_POST_GEN_HOOKS, a list of hooks to call after
+> +#  generating the filesystem image
+> +#
+>  #  ROOTFS_$(FSTYPE)_POST_TARGETS, the list of targets that should be
+>  #  run after running the main filesystem target. This is useful for
+>  #  initramfs, to rebuild the kernel once the initramfs is generated.
+> @@ -96,6 +99,7 @@ endif
+>  ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
+>  	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
+>  endif
+> +	$$(foreach hook,$$(ROOTFS_$(2)_POST_GEN_HOOKS),$$(call $$(hook))$$(sep))
+>  
+>  rootfs-$(1)-show-depends:
+>  	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
- Regards,
- Arnout
-
-
-[snip]
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
