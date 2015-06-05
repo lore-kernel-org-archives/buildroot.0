@@ -1,30 +1,39 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 5 Jun 2015 15:30:28 +0200
-Subject: [Buildroot] [PATCH 12/12] fs/iso9660: add support for grub2
-In-Reply-To: <1433430330-2166-13-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 5 Jun 2015 15:34:40 +0200
+Subject: [Buildroot] [PATCH 02/12] fs/iso9660: convert to the filesystem
+ infrastructure
+In-Reply-To: <CAHXCMMLLPS5=_OWMVigMu=Ebbi0dxu-Ph5k7M5B4a4J9zrrgyw@mail.gmail.com>
 References: <1433430330-2166-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1433430330-2166-13-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMMLq9-AHLuQN_DOrqX-RT+=1ku2kcGQbroc9uAfDROnJVw@mail.gmail.com>
+ <1433430330-2166-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAHXCMMLLPS5=_OWMVigMu=Ebbi0dxu-Ph5k7M5B4a4J9zrrgyw@mail.gmail.com>
+Message-ID: <20150605153440.74d12bb8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, all,
+Dear Samuel Martin,
 
-On Thu, Jun 4, 2015 at 5:05 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> After having extended the iso9660 support to allow isolinux as an
-> alternative to grub, this commit adds grub2 as a third
-> alternative. With the previous work done to support isolinux, adding
-> support for grub2 is fairly trivial.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Fri, 5 Jun 2015 13:59:50 +0200, Samuel Martin wrote:
 
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+> > +define ROOTFS_ISO9660_CMD
+> > +       $(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito \
+> > +               -no-emul-boot -boot-load-size 4 -boot-info-table \
+> > +               -o $@ $(ISO9660_TARGET_DIR)
+> 
+> Why the fakeroot trickery on genisoimage call is gone? or why is it
+> not needed anymore?
 
-Regards,
+That's the whole point of moving to the common rootfs infrastructure:
+all the fakeroot trickery is handled by it. Look at the ext2 or ubifs
+logic, none of them call fakeroot, because it's done in common code in
+fs/common.mk.
 
+Thanks for the review!
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
