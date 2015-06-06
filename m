@@ -1,13 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Jun 2015 11:01:48 +0200
-Subject: [Buildroot] [PATCH 02/12] fs/iso9660: convert to the filesystem
- infrastructure
-In-Reply-To: <20150606024203.6651cc1a@free-electrons.com>
+Date: Sat, 6 Jun 2015 11:02:45 +0200
+Subject: [Buildroot] [PATCH 04/12] fs/iso9660: enable Joliet extension
+In-Reply-To: <20150606024643.15fb2bc7@free-electrons.com>
 References: <1433430330-2166-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1433430330-2166-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150605205841.GB3641@free.fr>
- <20150606024203.6651cc1a@free-electrons.com>
-Message-ID: <20150606090148.GA3581@free.fr>
+ <1433430330-2166-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150605211840.GD3641@free.fr>
+ <20150606024643.15fb2bc7@free-electrons.com>
+Message-ID: <20150606090245.GB3581@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,41 +15,36 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2015-06-06 02:42 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 5 Jun 2015 22:58:41 +0200, Yann E. MORIN wrote:
+On 2015-06-06 02:46 +0200, Thomas Petazzoni spake thusly:
+> On Fri, 5 Jun 2015 23:18:40 +0200, Yann E. MORIN wrote:
 > 
-> > >  ifeq ($(BR2_TARGET_GRUB_SPLASH),)
+> > Only tangentially related to your change:
 > > 
-> > I know this was pre-existing code, but we usually prefer positive logic.
-> > Do you think you might arrange to fix the logic in this test with
-> > anotehr patch? ;-)
+> > -R is for RockRidge, but it seems using -r would be better:
+> > 
+> >     -r  This is like the -R option, but file ownership and modes are set
+> >         to more useful values. [--snip--]
+> > 
+> > Reading the full entry for -r is instructive, and makes it sound like
+> > that's what we would want to use instead of -R.
 > 
-> Isn't that already positive logic?
+> I'm actually not sure. Let's list what -r is doing compared to -R:
 > 
-> "if BR2_TARGET_GRUB_SPLASH is disabled"
+>  * Setting uid:gid to 0:0 to all files. We already do that using
+>    fakeroot, and we also set some other ownership for specific files
+>    using <pkg>_PERMISSIONS and the device table. So getting all of that
+>    reset to 0:0 is wrong.
 > 
-> The other solution is:
+>  * Changing permissions all over. Why do we care? We already take care
+>    of dependencies, and -r makes everything world-readable, which we
+>    clearly don't want.
 > 
-> ifneq ($(BR2_TARGET_GRUB_SPLASH),y)
+>  * It apparently clears the set-id bit, which would make all setuid
+>    application to break.
 > 
-> which is "if not BR2_TARGET_GRUB_SPLASH is enabled"
-> 
-> which looks worse.
-> 
-> Am I missing something?
+> So, in fact I'm rather convinced that we should keep -R and not use -r.
 
-Well, sorry, I was not completely explicit. What I meant was:
-
-    ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
-    define ROOTFS_ISO9660_SPLASHSCREEN
-        $(INSTALL) -D -m 0644 boot/grub/splash.xpm.gz \
-            $(ISO9660_TARGET_DIR)/splash.xpm.gz
-    endef
-    else
-    define ROOTFS_ISO9660_SPLASHSCREEN
-        $(SED) '/^splashimage/d' $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
-    endef
-    endif
+Yes, you're right! :-)
 
 Regards,
 Yann E. MORIN.
