@@ -1,34 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 06 Jun 2015 13:54:11 +0200
-Subject: [Buildroot] [PATCH 1/1] savedefconfig: Remove BR2_DEFCONFIG
-	from saved defconfig file
-In-Reply-To: <1433405793-26785-1-git-send-email-Herve.CODINA@celad.com> (Herve
- Codina's message of "Thu, 4 Jun 2015 10:16:33 +0200")
-References: <1433405793-26785-1-git-send-email-Herve.CODINA@celad.com>
-Message-ID: <871thpm4rg.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  6 Jun 2015 13:54:22 +0200
+Subject: [Buildroot] [PATCH 0/4] core/pkg-kconfig: fix saving back the
+	configuration (branch yem/pr8156)
+Message-ID: <cover.1433591404.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Herve" == Herve Codina <Herve.CODINA@celad.com> writes:
+Hello All!
 
- > BR2_DEFCONFIG should not be present in saved defconfig file.
- > The use case is:
- > make qemu_arm_versatile
- > make savedefconfig BR2_DEFCONFIG=my_custom_defconfig
+This series is an attempt at fixing the pkg-kconfig infrastructure as
+reported in PR8156:
+    https://bugs.busybox.net/show_bug.cgi?id=8156
 
- > BR2_DEFCONFIG is set in my_custom_defconfig with an absolute path
- > to qemu_arm_versatile (value present in .config) and set in
- > my_custom_defconfig as it is different from default mentionned in
- > config.in (default is BR2_DEFCONFIG from environnement).
+The basic underlying idea of PR8156 is to kick-start the configuration
+of a kconfig-based package (say, Linux), using a (def)config bundled in
+that package, then tweak that configuration to suit ones needs, and
+eventually save it back to a custom (def)config for later re-use.
 
- > On savedefconfig recipe, simply remove BR2_DEFCONFIG from generated file
+That is currently broken. It has in fact never worked, but is a
+completely valid and useful use-case.
 
- > Signed-off-by: Herve Codina <Herve.CODINA@celad.com>
+This 4-patch series is an attempt at making that possible.
 
-Committed with the issues pointed out by Arnout fixed, thanks.
+Patch 1:
+First, the initial (def)config file is inexistent since we want to
+create it, so make believe it has to re-do all the targets that depend
+on that file. Since we really do need that rule, we have to manually
+check the files do exist.
+
+Patches 2-3:
+Second, because configurators remove the kconfig-fixup-done stamp file,
+we'd save the .config file as directly configured by the user, which
+might be missing our requirements. So, as soon as we exit the
+configurators, we re-run the fixups, so the .config file is always
+clean with our fixups.
+
+Patch 4:
+Third, the dependency chain for foo-update-config goes way back to that
+base kconfig file, so saving the configuration will have make believe it
+has to rebuild all targets in that dependency chain. We clearly do not
+want that, as the file is really non-exitent and we want to create it.
+So, we break the dependency chain and add a terminal rule which purpose
+is to check the package is properly configured first.
+
+Pfeww, that one was not trivial... ;-)
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit e1cf34a39538e58ecf50d091482b2304c2f7e6d8:
+
+  gcc/gcc-final: install libatomic via HOST_GCC_FINAL_GCC_LIB_DIR (2015-06-06 03:15:23 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/pr8156
+
+for you to fetch changes up to a195692f03dab1f3074825feab277c905379dfa2:
+
+  core/pkg-kconfig: allow saving config to a non-existing custom config file (2015-06-06 13:45:06 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      core/pkg-kconfig: ensure kconfig file and fragments exist
+      core/pkg-kconfig: move the kconfig fixups to a macro
+      core/pkg-kconfig: run the kconfig fixups after exiting configurators
+      core/pkg-kconfig: allow saving config to a non-existing custom config file
+
+ package/pkg-kconfig.mk | 64 ++++++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 57 insertions(+), 7 deletions(-)
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
