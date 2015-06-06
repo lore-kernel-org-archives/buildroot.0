@@ -1,74 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Jun 2015 11:31:02 +0200
-Subject: [Buildroot] [PATCH 11/12] grub2: prepare and install El Torito
- image
-In-Reply-To: <20150606025737.4f5a6567@free-electrons.com>
-References: <1433430330-2166-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1433430330-2166-12-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150605230911.GN3641@free.fr>
- <20150606025737.4f5a6567@free-electrons.com>
-Message-ID: <20150606093102.GE3581@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  6 Jun 2015 10:09:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 8156] pkg-kconfig infra broken for
+	*-update-{config, defconfig}
+In-Reply-To: <bug-8156-163@https.bugs.busybox.net/>
+References: <bug-8156-163@https.bugs.busybox.net/>
+Message-ID: <20150606100902.DC15580438@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+https://bugs.busybox.net/show_bug.cgi?id=8156
 
-On 2015-06-06 02:57 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 6 Jun 2015 01:09:11 +0200, Yann E. MORIN wrote:
-> 
-> > > diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-> > > index 697f0ad..dd04bb3 100644
-> > > --- a/boot/grub2/grub2.mk
-> > > +++ b/boot/grub2/grub2.mk
-> > > @@ -76,6 +76,8 @@ define GRUB2_IMAGE_INSTALLATION
-> > >  		-p "$(GRUB2_PREFIX)" \
-> > >  		$(if $(GRUB2_BUILTIN_CONFIG),-c $(GRUB2_BUILTIN_CONFIG)) \
-> > >  		$(GRUB2_BUILTIN_MODULES)
-> > > +	cat $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE)/cdboot.img \
-> > > +		$(GRUB2_IMAGE) > $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE)/grub-eltorito.img
+--- Comment #11 from Yann E. MORIN <yann.morin.1998@free.fr> 2015-06-06 10:09:01 UTC ---
+Floris, All,
+
+(In reply to comment #10)
+> (In reply to comment #9)
+> > Floris,
 > > 
-> > In retrospect, I think you should install that in $(BINARIES_DIR), like
-> > is done for $(GRUB2_IMAGE), not in $(HOST_DIR).
+> > (In reply to comment #8)
+> > > But shouldn't make bail out with a "No rule to make target name-of-file" type
+> > > of error first because the input files do are listed as a dependency for
+> > > .config?
+> > > 
+> > > $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+> > 
+> > Yep, I would have expected so, too. But it does not...
+> > 
+> > I'm using make-3.81, and it does not error-out. I've installed a
+> > make-4.0, and it does not break either.
 > 
-> Well, I had a reason to install it in HOST_DIR rather than
-> BINARIES_DIR. Since I'm producing this image unconditionally, even if
-> the user is not interested in ISO9660, I didn't want to clutter
-> BINARIES_DIR with this file, which would appear as soon as the user
-> enables grub2. So I preferred to install it together with all the other
-> "internal" Grub images in HOST_DIR, and pick it up from there in the
-> iso9660.mk logic.
+> Strange, that dependency rule did work for me when I submitted and tested the
+> kconfig patch.
+
+Nah, it did not work, because it is not the same thing.
+
+What is not working is checking the _base_ kconfig file; a missing base
+kconfig file is not caught, but missing fragments are properly caught
+(but that's a problem, too).
+
+The problem is that the base kconfig file has a dependency, but no rule,
+and in this case is a non-existent file, so "make imagines this target
+to have been updated whenever its rule is run. This implies that all
+targets depending on this one will always have their recipe run."
+
+    https://www.gnu.org/software/make/manual/make.html#Force-Targets
+
+And this is exactly what happens here... Sigh...
+
+I've already fixed that.
+
+Now, I'm also saying that detecting missing fragments is an issue,
+because they do not depend on the package being extracted first (like
+the base kconfig file does), in case they are bundled in the package.
+
+I'm fixing that now.
+
+> And seems it worked for Arnout as well:
+> http://lists.busybox.net/pipermail/buildroot/2015-May/127584.html
 > 
-> Now, if you think cluttering BINARIES_DIR with this file only useful
-> for ISO booting as soon as Grub 2 is enabled is fine, then I'll happily
-> change it.
+> But that's when running make normally with a fragment file missing that do was
+> specified. Haven't tested the exact scenario reported in this bug, and looked
+> what might make it different.
 
-Well, yes, I'd prefer that's what we do, for these reasons:
-
-  - first, that file is really small,
-
-  - second, we already do that for other bootloaders (like
-    rpi-firmware),
-
-  - finally, we never said we only installed only the strictly
-    minimum set of files,
-
-  - if the user really does not want it, there's still the
-    post-build scripts to remove that extra file.
-
-> Thanks for the review!
-
-My pleasure! :-)
+Don't worry, it's not your fault, the bug was pre-existing the kconfig
+fragments, but that's what exposed it.
 
 Regards,
 Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
