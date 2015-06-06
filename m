@@ -1,58 +1,141 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Jun 2015 11:02:45 +0200
-Subject: [Buildroot] [PATCH 04/12] fs/iso9660: enable Joliet extension
-In-Reply-To: <20150606024643.15fb2bc7@free-electrons.com>
-References: <1433430330-2166-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1433430330-2166-5-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150605211840.GD3641@free.fr>
- <20150606024643.15fb2bc7@free-electrons.com>
-Message-ID: <20150606090245.GB3581@free.fr>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sat, 6 Jun 2015 11:03:38 +0200
+Subject: [Buildroot] [PATCH v4] moarvm: new package
+In-Reply-To: <1433543601-17425-1-git-send-email-arnout@mind.be>
+References: <1433516541-16421-1-git-send-email-francois.perrad@gadz.org>
+ <1433543601-17425-1-git-send-email-arnout@mind.be>
+Message-ID: <CAB0FRsu3Fh42P6d1sv6zk8YDRV7DCa-OSKn4P1dS7vgEP10j2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+2015-06-06 0:33 GMT+02:00 Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be>:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>  [use buildroot's libatomic_ops, libuv and host-luajit; add
+>   dependencies from libuv]
+> ---
+> v4 (Arnout): - use buildroot's libatomic_ops, libuv and host-luajit
+>              - add dependencies from libuv
+> ---
+>  package/Config.in          |  1 +
+>  package/moarvm/Config.in   | 19 +++++++++++++++++++
+>  package/moarvm/moarvm.hash |  2 ++
+>  package/moarvm/moarvm.mk   | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 68 insertions(+)
+>  create mode 100644 package/moarvm/Config.in
+>  create mode 100644 package/moarvm/moarvm.hash
+>  create mode 100644 package/moarvm/moarvm.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index e0c2e2a..00c9ce3 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -499,6 +499,7 @@ menu "Lua libraries/modules"
+>         source "package/xavante/Config.in"
+>  endmenu
+>  endif
+> +       source "package/moarvm/Config.in"
+>         source "package/mono/Config.in"
+>         source "package/nodejs/Config.in"
+>         source "package/perl/Config.in"
+> diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
+> new file mode 100644
+> index 0000000..8657345
+> --- /dev/null
+> +++ b/package/moarvm/Config.in
+> @@ -0,0 +1,19 @@
+> +config BR2_PACKAGE_MOARVM
+> +       bool "moarvm"
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
+> +       depends on !BR2_STATIC_LIBS # libuv
+> +       depends on BR2_USE_MMU # libuv
+> +       depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS # libatomic_ops
+> +       select BR2_PACKAGE_LIBUV
+> +       select BR2_PACKAGE_LIBATOMIC_OPS
+> +       help
+> +         Short for "Metamodel On A Runtime", MoarVM is a virtual machine
+> +         built especially for Rakudo Perl 6 and the NQP Compiler Toolchain.
+> +
+> +         http://moarvm.com
+> +
+> +comment "moarvm needs a toolchain w/ threads"
+> +       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> +       depends on BR2_USE_MMU
+> +       depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
+> +
+> diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
+> new file mode 100644
+> index 0000000..d5cc911
+> --- /dev/null
+> +++ b/package/moarvm/moarvm.hash
+> @@ -0,0 +1,2 @@
+> +
+> +sha256  828843eb3da020ee24ff83933b63aebf4aa774b815a3dfa3a758d6334779565e  MoarVM-2015.05.tar.gz
+> diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+> new file mode 100644
+> index 0000000..5889436
+> --- /dev/null
+> +++ b/package/moarvm/moarvm.mk
+> @@ -0,0 +1,46 @@
+> +################################################################################
+> +#
+> +# moarvm
+> +#
+> +################################################################################
+> +
+> +MOARVM_VERSION = 2015.05
+> +MOARVM_SITE = http://moarvm.com/releases
+> +MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+> +MOARVM_LICENSE = Artistic-2.0
+> +MOARVM_LICENSE_FILES = Artistic2.txt
+> +MOARVM_INSTALL_STAGING = YES
+> +MOARVM_DEPENDENCIES = host-luajit libuv libatomic_ops
 
-On 2015-06-06 02:46 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 5 Jun 2015 23:18:40 +0200, Yann E. MORIN wrote:
-> 
-> > Only tangentially related to your change:
-> > 
-> > -R is for RockRidge, but it seems using -r would be better:
-> > 
-> >     -r  This is like the -R option, but file ownership and modes are set
-> >         to more useful values. [--snip--]
-> > 
-> > Reading the full entry for -r is instructive, and makes it sound like
-> > that's what we would want to use instead of -R.
-> 
-> I'm actually not sure. Let's list what -r is doing compared to -R:
-> 
->  * Setting uid:gid to 0:0 to all files. We already do that using
->    fakeroot, and we also set some other ownership for specific files
->    using <pkg>_PERMISSIONS and the device table. So getting all of that
->    reset to 0:0 is wrong.
-> 
->  * Changing permissions all over. Why do we care? We already take care
->    of dependencies, and -r makes everything world-readable, which we
->    clearly don't want.
-> 
->  * It apparently clears the set-id bit, which would make all setuid
->    application to break.
-> 
-> So, in fact I'm rather convinced that we should keep -R and not use -r.
+host-luajit seems overkill.
 
-Yes, you're right! :-)
+Fran?ois
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> +
+> +MOARVM_CONF_OPTS = \
+> +       --build=$(GNU_HOST_NAME) \
+> +       --host=$(GNU_TARGET_NAME) \
+> +       --ar="$(TARGET_AR)" \
+> +       --cc="$(TARGET_CC)" \
+> +       --ld="$(TARGET_CC)" \
+> +       --prefix="/usr" \
+> +       --lua=$(HOST_DIR)/usr/bin/luajit \
+> +       --has-libuv \
+> +       --has-libatomic
+> +
+> +ifeq ($(BR2_ENDIAN),"BIG")
+> +MOARVM_CONF_OPTS += --big-endian
+> +endif
+> +
+> +define MOARVM_CONFIGURE_CMDS
+> +       (cd $(@D); perl Configure.pl $(MOARVM_CONF_OPTS))
+> +endef
+> +
+> +define MOARVM_BUILD_CMDS
+> +       $(MAKE) -C $(@D)
+> +endef
+> +
+> +define MOARVM_INSTALL_STAGING_CMDS
+> +       $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+> +endef
+> +
+> +define MOARVM_INSTALL_TARGET_CMDS
+> +       $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
