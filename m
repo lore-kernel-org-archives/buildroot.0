@@ -1,48 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Jun 2015 02:43:13 +0200
-Subject: [Buildroot] [PATCH 02/12] fs/iso9660: convert to the filesystem
- infrastructure
-In-Reply-To: <5572265D.4060204@mind.be>
+Date: Sat, 6 Jun 2015 02:46:43 +0200
+Subject: [Buildroot] [PATCH 04/12] fs/iso9660: enable Joliet extension
+In-Reply-To: <20150605211840.GD3641@free.fr>
 References: <1433430330-2166-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1433430330-2166-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <5572265D.4060204@mind.be>
-Message-ID: <20150606024313.51afc7ff@free-electrons.com>
+ <1433430330-2166-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150605211840.GD3641@free.fr>
+Message-ID: <20150606024643.15fb2bc7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Yann E. MORIN,
 
-On Sat, 06 Jun 2015 00:44:45 +0200, Arnout Vandecappelle wrote:
-> On 06/04/15 17:05, Thomas Petazzoni wrote:
-> > Now that we have <fs>_POST_GEN_HOOKS, there is nothing that prevents
-> > the iso9660 filesystem logic from using the common filesystem
-> > infrastructure.
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Fri, 5 Jun 2015 23:18:40 +0200, Yann E. MORIN wrote:
+
+> Only tangentially related to your change:
 > 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> -R is for RockRidge, but it seems using -r would be better:
 > 
->  However, instead of doing the cleanup in a _POST_GEN_HOOK, I would skip the
-> cleanup completely. We normally don't clean up any build artefact, so why should
-> we do it here?
+>     -r  This is like the -R option, but file ownership and modes are set
+>         to more useful values. [--snip--]
+> 
+> Reading the full entry for -r is instructive, and makes it sound like
+> that's what we would want to use instead of -R.
 
-That's actually true. The only advantage by cleaning up is that if you
-redo a build and the contents of the temporary directory have changed,
-it's properly accurate. But we could also do:
+I'm actually not sure. Let's list what -r is doing compared to -R:
 
-	remove temp dir
-	create empty temp dir
-	do stuff
-	create image
+ * Setting uid:gid to 0:0 to all files. We already do that using
+   fakeroot, and we also set some other ownership for specific files
+   using <pkg>_PERMISSIONS and the device table. So getting all of that
+   reset to 0:0 is wrong.
 
-and that's it.
+ * Changing permissions all over. Why do we care? We already take care
+   of dependencies, and -r makes everything world-readable, which we
+   clearly don't want.
 
-Do you want to change it in this direction?
+ * It apparently clears the set-id bit, which would make all setuid
+   application to break.
 
-Thanks,
+So, in fact I'm rather convinced that we should keep -R and not use -r.
+
+Best regards,
 
 Thomas
 -- 
