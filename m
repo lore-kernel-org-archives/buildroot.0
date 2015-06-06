@@ -1,156 +1,185 @@
-From: Vanya Sergeev <vsergeev@gmail.com>
-Date: Fri,  5 Jun 2015 17:11:09 -0700
+From: Ivan Sergeev <vsergeev@gmail.com>
+Date: Fri, 5 Jun 2015 17:12:15 -0700
 Subject: [Buildroot] [PATCH 2/2] opkg: remove opkg-build script
-Message-ID: <1433549469-29273-1-git-send-email-vsergeev@gmail.com>
+In-Reply-To: <1433549469-29273-1-git-send-email-vsergeev@gmail.com>
+References: <1433549469-29273-1-git-send-email-vsergeev@gmail.com>
+Message-ID: <CAAMhL_QjAVQcOuu9rvKHvgK9DBDGcJNPH7XvRCmDRn=YHaL2AQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package building script is several years old and unused by buildroot.
-opkg users looking for a current version of this script should visit the
-opkg-utils repository at http://git.yoctoproject.org/cgit/cgit.cgi/opkg-utils/,
-where this script is maintained and versioned.
+Apologies for the patch misnumbering.
 
-Signed-off-by: Vanya Sergeev <vsergeev@gmail.com>
----
- package/opkg/opkg-build | 127 ------------------------------------------------
- 1 file changed, 127 deletions(-)
- delete mode 100755 package/opkg/opkg-build
+Thanks,
+~vsergeev
+Ivan Sergeev
 
-diff --git a/package/opkg/opkg-build b/package/opkg/opkg-build
-deleted file mode 100755
-index 7fd0d3f..0000000
---- a/package/opkg/opkg-build
-+++ /dev/null
-@@ -1,127 +0,0 @@
--#!/bin/sh
--
--# opkg-build -- construct a .opk from a directory
--# Carl Worth <cworth@east.isi.edu>
--# based on a script by Steve Redler IV, steve at sr-tech.com 5-21-2001
--set -e
--
--opkg_extract_value() {
--	sed -e "s/^[^:]*:[[:space:]]*//"
--}
--
--required_field() {
--	field=$1
--
--	value=`grep "^$field:" < $CONTROL/control | opkg_extract_value`
--	if [ -z "$value" ]; then
--		echo "opkg-build: Error: $CONTROL/control is missing field $field" ;
--		PKG_ERROR=1
--	fi
--	echo $value
--}
--
--pkg_appears_sane() {
--	local pkg_dir=$1
--
--	local owd=`pwd`
--	cd $pkg_dir
--
--	PKG_ERROR=0
--	if [ ! -f "$CONTROL/control" ]; then
--		echo "opkg-build: Error: Control file $pkg_dir/$CONTROL/control not found."
--		cd $owd
--		return 1
--	fi
--
--	pkg=`required_field Package`
--	version=`required_field Version`
--	arch=`required_field Architecture`
--	required_field Maintainer >/dev/null
--	required_field Description >/dev/null
--
--	if echo $pkg | grep '[^a-z0-9.+-]'; then
--		echo "opkg-build: Error: Package name $name contains illegal characters, (other than [a-z0-9.+-])"
--		PKG_ERROR=1;
--	fi
--
--	local bad_fields=`sed -ne 's/^\([^[:space:]][^:[:space:]]\+[[:space:]]\+\)[^:].*/\1/p' < $CONTROL/control | sed -e 's/\\n//'`
--	if [ -n "$bad_fields" ]; then
--		bad_fields=`echo $bad_fields`
--		echo "opkg-build: Error: The following fields in $CONTROL/control are missing a ':'"
--		echo "	$bad_fields"
--		echo "opkg-build: This may be due to a missing initial space for a multi-line field value"
--		PKG_ERROR=1
--	fi
--
--	for script in $CONTROL/preinst $CONTROL/postinst $CONTROL/prerm $CONTROL/postrm; do
--		if [ -f $script -a ! -x $script ]; then
--			echo "opkg-build: Error: package script $script is not executable"
--			PKG_ERROR=1
--		fi
--	done
--
--	if [ -f $CONTROL/conffiles ]; then
--		for cf in `cat $CONTROL/conffiles`; do
--			if [ ! -f ./$cf ]; then
--				echo "opkg-build: Error: $CONTROL/conffiles mentions conffile $cf which does not exist"
--				PKG_ERROR=1
--			fi
--		done
--	fi
--
--	cd $owd
--	return $PKG_ERROR
--}
--
--###
--# opkg-build "main"
--###
--
--case $# in
--1)
--	dest_dir=.
--	;;
--2)
--	dest_dir=$2
--	;;
--*)
--	echo "Usage: opkg-build <pkg_directory> [<destination_directory>]" ;
--	exit 1 
--	;;
--esac
--
--pkg_dir=$1
--
--if [ ! -d $pkg_dir ]; then
--	echo "opkg-build: Error: Directory $pkg_dir does not exist"
--	exit 1
--fi
--
--# CONTROL is second so that it takes precedence
--CONTROL=
--[ -d $pkg_dir/DEBIAN ] && CONTROL=DEBIAN
--[ -d $pkg_dir/CONTROL ] && CONTROL=CONTROL
--if [ -z "$CONTROL" ]; then
--	echo "opkg-build: Error: Directory $pkg_dir has no CONTROL subdirectory."
--	exit 1
--fi
--
--if ! pkg_appears_sane $pkg_dir; then
--	echo "Please fix the above errors and try again."
--	exit 1
--fi
--
--tmp_dir=$dest_dir/OPKG_BUILD.$$
--mkdir $tmp_dir
--
--tar -C $pkg_dir -czf $tmp_dir/data.tar.gz . --exclude=$CONTROL
--tar -C $pkg_dir/$CONTROL -czf $tmp_dir/control.tar.gz .
--
--echo "2.0" > $tmp_dir/debian-binary
--
--pkg_file=$dest_dir/${pkg}_${version}_${arch}.opk
--tar -C $tmp_dir -czf $pkg_file debian-binary data.tar.gz control.tar.gz
--rm $tmp_dir/debian-binary $tmp_dir/data.tar.gz $tmp_dir/control.tar.gz
--rmdir $tmp_dir
--
--echo "Packaged contents of $pkg_dir into $pkg_file"
--- 
-2.4.2
+On Fri, Jun 5, 2015 at 5:11 PM, Vanya Sergeev <vsergeev@gmail.com> wrote:
+
+> This package building script is several years old and unused by buildroot.
+> opkg users looking for a current version of this script should visit the
+> opkg-utils repository at
+> http://git.yoctoproject.org/cgit/cgit.cgi/opkg-utils/,
+> where this script is maintained and versioned.
+>
+> Signed-off-by: Vanya Sergeev <vsergeev@gmail.com>
+> ---
+>  package/opkg/opkg-build | 127
+> ------------------------------------------------
+>  1 file changed, 127 deletions(-)
+>  delete mode 100755 package/opkg/opkg-build
+>
+> diff --git a/package/opkg/opkg-build b/package/opkg/opkg-build
+> deleted file mode 100755
+> index 7fd0d3f..0000000
+> --- a/package/opkg/opkg-build
+> +++ /dev/null
+> @@ -1,127 +0,0 @@
+> -#!/bin/sh
+> -
+> -# opkg-build -- construct a .opk from a directory
+> -# Carl Worth <cworth@east.isi.edu>
+> -# based on a script by Steve Redler IV, steve at sr-tech.com 5-21-2001
+> -set -e
+> -
+> -opkg_extract_value() {
+> -       sed -e "s/^[^:]*:[[:space:]]*//"
+> -}
+> -
+> -required_field() {
+> -       field=$1
+> -
+> -       value=`grep "^$field:" < $CONTROL/control | opkg_extract_value`
+> -       if [ -z "$value" ]; then
+> -               echo "opkg-build: Error: $CONTROL/control is missing field
+> $field" ;
+> -               PKG_ERROR=1
+> -       fi
+> -       echo $value
+> -}
+> -
+> -pkg_appears_sane() {
+> -       local pkg_dir=$1
+> -
+> -       local owd=`pwd`
+> -       cd $pkg_dir
+> -
+> -       PKG_ERROR=0
+> -       if [ ! -f "$CONTROL/control" ]; then
+> -               echo "opkg-build: Error: Control file
+> $pkg_dir/$CONTROL/control not found."
+> -               cd $owd
+> -               return 1
+> -       fi
+> -
+> -       pkg=`required_field Package`
+> -       version=`required_field Version`
+> -       arch=`required_field Architecture`
+> -       required_field Maintainer >/dev/null
+> -       required_field Description >/dev/null
+> -
+> -       if echo $pkg | grep '[^a-z0-9.+-]'; then
+> -               echo "opkg-build: Error: Package name $name contains
+> illegal characters, (other than [a-z0-9.+-])"
+> -               PKG_ERROR=1;
+> -       fi
+> -
+> -       local bad_fields=`sed -ne
+> 's/^\([^[:space:]][^:[:space:]]\+[[:space:]]\+\)[^:].*/\1/p' <
+> $CONTROL/control | sed -e 's/\\n//'`
+> -       if [ -n "$bad_fields" ]; then
+> -               bad_fields=`echo $bad_fields`
+> -               echo "opkg-build: Error: The following fields in
+> $CONTROL/control are missing a ':'"
+> -               echo "  $bad_fields"
+> -               echo "opkg-build: This may be due to a missing initial
+> space for a multi-line field value"
+> -               PKG_ERROR=1
+> -       fi
+> -
+> -       for script in $CONTROL/preinst $CONTROL/postinst $CONTROL/prerm
+> $CONTROL/postrm; do
+> -               if [ -f $script -a ! -x $script ]; then
+> -                       echo "opkg-build: Error: package script $script is
+> not executable"
+> -                       PKG_ERROR=1
+> -               fi
+> -       done
+> -
+> -       if [ -f $CONTROL/conffiles ]; then
+> -               for cf in `cat $CONTROL/conffiles`; do
+> -                       if [ ! -f ./$cf ]; then
+> -                               echo "opkg-build: Error:
+> $CONTROL/conffiles mentions conffile $cf which does not exist"
+> -                               PKG_ERROR=1
+> -                       fi
+> -               done
+> -       fi
+> -
+> -       cd $owd
+> -       return $PKG_ERROR
+> -}
+> -
+> -###
+> -# opkg-build "main"
+> -###
+> -
+> -case $# in
+> -1)
+> -       dest_dir=.
+> -       ;;
+> -2)
+> -       dest_dir=$2
+> -       ;;
+> -*)
+> -       echo "Usage: opkg-build <pkg_directory> [<destination_directory>]"
+> ;
+> -       exit 1
+> -       ;;
+> -esac
+> -
+> -pkg_dir=$1
+> -
+> -if [ ! -d $pkg_dir ]; then
+> -       echo "opkg-build: Error: Directory $pkg_dir does not exist"
+> -       exit 1
+> -fi
+> -
+> -# CONTROL is second so that it takes precedence
+> -CONTROL=
+> -[ -d $pkg_dir/DEBIAN ] && CONTROL=DEBIAN
+> -[ -d $pkg_dir/CONTROL ] && CONTROL=CONTROL
+> -if [ -z "$CONTROL" ]; then
+> -       echo "opkg-build: Error: Directory $pkg_dir has no CONTROL
+> subdirectory."
+> -       exit 1
+> -fi
+> -
+> -if ! pkg_appears_sane $pkg_dir; then
+> -       echo "Please fix the above errors and try again."
+> -       exit 1
+> -fi
+> -
+> -tmp_dir=$dest_dir/OPKG_BUILD.$$
+> -mkdir $tmp_dir
+> -
+> -tar -C $pkg_dir -czf $tmp_dir/data.tar.gz . --exclude=$CONTROL
+> -tar -C $pkg_dir/$CONTROL -czf $tmp_dir/control.tar.gz .
+> -
+> -echo "2.0" > $tmp_dir/debian-binary
+> -
+> -pkg_file=$dest_dir/${pkg}_${version}_${arch}.opk
+> -tar -C $tmp_dir -czf $pkg_file debian-binary data.tar.gz control.tar.gz
+> -rm $tmp_dir/debian-binary $tmp_dir/data.tar.gz $tmp_dir/control.tar.gz
+> -rmdir $tmp_dir
+> -
+> -echo "Packaged contents of $pkg_dir into $pkg_file"
+> --
+> 2.4.2
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150605/e2acbeb7/attachment-0001.html>
