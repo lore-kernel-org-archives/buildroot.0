@@ -1,45 +1,68 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat,  6 Jun 2015 23:54:27 +0300
-Subject: [Buildroot] [PATCH 2/2] kodi: propagate the dynamic library
-	dependency of python
-In-Reply-To: <2e5c9f50b0166df6fbd783a63da7d74a2ba2425d.1433624067.git.baruch@tkos.co.il>
-References: <2e5c9f50b0166df6fbd783a63da7d74a2ba2425d.1433624067.git.baruch@tkos.co.il>
-Message-ID: <ea7975a35140de42a281a3497178700a6464db5f.1433624067.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 6 Jun 2015 22:56:50 +0200
+Subject: [Buildroot] [PATCH] ofono: needs dynamic library support
+In-Reply-To: <22ce3bf2a6a0a4284fc350731e0e52d005e50d5b.1433622461.git.baruch@tkos.co.il>
+References: <22ce3bf2a6a0a4284fc350731e0e52d005e50d5b.1433622461.git.baruch@tkos.co.il>
+Message-ID: <20150606205650.GG3581@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/kodi/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Baruch, All,
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index a4d1aab21405..ea4b44973ec6 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -3,9 +3,10 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	default y if (BR2_arm || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 
- 
--comment "kodi needs a toolchain w/ C++, threads, wchar"
-+comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library"
- 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_KODI_EGL_GLES
-@@ -97,6 +98,7 @@ menuconfig BR2_PACKAGE_KODI
- 	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
- 	depends on BR2_USE_MMU # python
- 	depends on BR2_USE_WCHAR
-+	depends on !BR2_STATIC_LIBS # python
- 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	help
- 	  Kodi is an award-winning free and open source (GPL) software
+On 2015-06-06 23:27 +0300, Baruch Siach spake thusly:
+> The only package selection ofono, connman, requires dynamic library already.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/c5b/c5bb44c192c076b42538f805062a465318051df4/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/ofono/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/ofono/Config.in b/package/ofono/Config.in
+> index eb1856fdb794..f709b04180d4 100644
+> --- a/package/ofono/Config.in
+> +++ b/package/ofono/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_OFONO
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+>  	depends on BR2_USE_MMU # dbus, libglib2
+>  	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # libcap-ng
+> +	depends on !BR2_STATIC_LIBS # dlopen()
+>  	select BR2_PACKAGE_LIBCAP_NG
+>  	select BR2_PACKAGE_DBUS
+>  	select BR2_PACKAGE_LIBGLIB2
+> @@ -15,7 +16,7 @@ config BR2_PACKAGE_OFONO
+>  
+>  	  http://ofono.org/
+>  
+> -comment "ofono needs a toolchain w/ wchar, threads"
+> +comment "ofono needs a toolchain w/ dynamic library, wchar, threads"
+>  	depends on BR2_USE_MMU
+> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
