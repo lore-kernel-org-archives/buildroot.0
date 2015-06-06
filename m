@@ -1,83 +1,82 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  6 Jun 2015 13:54:22 +0200
-Subject: [Buildroot] [PATCH 0/4] core/pkg-kconfig: fix saving back the
-	configuration (branch yem/pr8156)
-Message-ID: <cover.1433591404.git.yann.morin.1998@free.fr>
+Date: Sat,  6 Jun 2015 13:54:23 +0200
+Subject: [Buildroot] [PATCH 1/4] core/pkg-kconfig: ensure kconfig file and
+	fragments exist
+In-Reply-To: <cover.1433591404.git.yann.morin.1998@free.fr>
+References: <cover.1433591404.git.yann.morin.1998@free.fr>
+Message-ID: <22cb4293142894b08d3103f39ceaa2351b0e357b.1433591404.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Because the base kconfig file has a dependency but no rule, make will
+always try to rebuild targets that depend on it:
 
-This series is an attempt at fixing the pkg-kconfig infrastructure as
-reported in PR8156:
-    https://bugs.busybox.net/show_bug.cgi?id=8156
+    https://www.gnu.org/software/make/manual/make.html#Force-Targets
 
-The basic underlying idea of PR8156 is to kick-start the configuration
-of a kconfig-based package (say, Linux), using a (def)config bundled in
-that package, then tweak that configuration to suit ones needs, and
-eventually save it back to a custom (def)config for later re-use.
+To complexify things yet a little bit more, missing kconfig fragments
+are properly caught, but since they could be bundled in the package,
+they should depend on it being extracted. And then we'd have the same
+issue as with the base kconfig file, above.
 
-That is currently broken. It has in fact never worked, but is a
-completely valid and useful use-case.
+Furthermore, merge-config.sh does not check for the existence of the
+fragments, not even the existence of the base file.
 
-This 4-patch series is an attempt at making that possible.
+So, this patch does more than one single thing, but they are clearly all
+pretty much inter-woven each with the others, and thus are done together:
 
-Patch 1:
-First, the initial (def)config file is inexistent since we want to
-create it, so make believe it has to re-do all the targets that depend
-on that file. Since we really do need that rule, we have to manually
-check the files do exist.
+  - make kconfig fragments depend on the package being patched, like the
+    base kconfig file,
 
-Patches 2-3:
-Second, because configurators remove the kconfig-fixup-done stamp file,
-we'd save the .config file as directly configured by the user, which
-might be missing our requirements. So, as soon as we exit the
-configurators, we re-run the fixups, so the .config file is always
-clean with our fixups.
+  - manualy check that the base and fragments do exist.
 
-Patch 4:
-Third, the dependency chain for foo-update-config goes way back to that
-base kconfig file, so saving the configuration will have make believe it
-has to rebuild all targets in that dependency chain. We clearly do not
-want that, as the file is really non-exitent and we want to create it.
-So, we break the dependency chain and add a terminal rule which purpose
-is to check the package is properly configured first.
+Ideally, merge-config.sh should be fixed, but it's easier to have
+code in our makefiles rather than patch the linux-inherited kconfig,
+which we are trying to keep as close as possible to upstream.
 
-Pfeww, that one was not trivial... ;-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Floris Bos <bos@je-eigen-domein.nl>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-kconfig.mk | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit e1cf34a39538e58ecf50d091482b2304c2f7e6d8:
-
-  gcc/gcc-final: install libatomic via HOST_GCC_FINAL_GCC_LIB_DIR (2015-06-06 03:15:23 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/pr8156
-
-for you to fetch changes up to a195692f03dab1f3074825feab277c905379dfa2:
-
-  core/pkg-kconfig: allow saving config to a non-existing custom config file (2015-06-06 13:45:06 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      core/pkg-kconfig: ensure kconfig file and fragments exist
-      core/pkg-kconfig: move the kconfig fixups to a macro
-      core/pkg-kconfig: run the kconfig fixups after exiting configurators
-      core/pkg-kconfig: allow saving config to a non-existing custom config file
-
- package/pkg-kconfig.mk | 64 ++++++++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 57 insertions(+), 7 deletions(-)
-
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index dcaed53..1d69722 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -37,16 +37,26 @@ $(2)_KCONFIG_OPTS ?=
+ $(2)_KCONFIG_FIXUP_CMDS ?=
+ $(2)_KCONFIG_FRAGMENT_FILES ?=
+ 
+-# The config file could be in-tree, so before depending on it the package should
+-# be extracted (and patched) first
+-$$($(2)_KCONFIG_FILE): | $(1)-patch
++# The config file as well as the fragments could be in-tree, so before
++# depending on them the package should be extracted (and patched) first
++$$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+ 
+ # The specified source configuration file and any additional configuration file
+ # fragments are merged together to .config, after the package has been patched.
+ # Since the file could be a defconfig file it needs to be expanded to a
+ # full .config first. We use 'make oldconfig' because this can be safely
+ # done even when the package does not support defconfigs.
++#
++# merge-config.sh does not check for the existence of the fragments, not even
++# the existence of the base file, so we do it manually.
++#
+ $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
++	for f in $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES); do \
++		if [ ! -f "$$$${f}" ]; then \
++			printf "Kconfig fragment '%s' for '%s' does not exist\n" "$$$${f}" "$(1)"; \
++			exit 1; \
++		fi; \
++	done
+ 	support/kconfig/merge_config.sh -m -O $$(@D) \
+ 		$$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+ 	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
