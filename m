@@ -1,47 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Jun 2015 13:54:26 +0200
-Subject: [Buildroot] [git commit] savedefconfig: Remove BR2_DEFCONFIG from
-	saved defconfig file
-Message-ID: <20150606115442.C82AF7F933@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  6 Jun 2015 11:58:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 8156] pkg-kconfig infra broken for
+	*-update-{config, defconfig}
+In-Reply-To: <bug-8156-163@https.bugs.busybox.net/>
+References: <bug-8156-163@https.bugs.busybox.net/>
+Message-ID: <20150606115827.2F01F8081D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f71a621d91ec27f175fc84012962f88b1107305f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=8156
 
-BR2_DEFCONFIG should not be present in saved defconfig file.
+--- Comment #12 from Yann E. MORIN <yann.morin.1998@free.fr> 2015-06-06 11:58:26 UTC ---
+Thomas, Floris, All,
 
-The use case is:
-make qemu_arm_versatile
-make savedefconfig BR2_DEFCONFIG=my_custom_defconfig
+Patch series just posted:
+    http://lists.busybox.net/pipermail/buildroot/2015-June/129644.html
 
-BR2_DEFCONFIG is set in my_custom_defconfig with an absolute path
-to qemu_arm_versatile (value present in .config) and set in
-my_custom_defconfig as it is different from default mentioned in
-config.in (default is BR2_DEFCONFIG from environment).
+Regards,
+Yann E. MORIN.
 
-On savedefconfig recipe, simply remove BR2_DEFCONFIG from generated file
-
-[Peter: fixup typos and use SED as noted by Arnout]
-Signed-off-by: Herve Codina <Herve.CODINA@celad.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 43b5ba5..d3f80c4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -777,6 +777,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< \
- 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
- 		$(CONFIG_CONFIG_IN)
-+	@$(SED) '/BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
- 
- .PHONY: defconfig savedefconfig
- 
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
