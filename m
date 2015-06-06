@@ -1,51 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Jun 2015 15:38:56 +0200
-Subject: [Buildroot] [git commit] opkg: gpg support needs libgpg-error
-Message-ID: <20150606133953.807FE8177E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 6 Jun 2015 16:57:51 +0200
+Subject: [Buildroot] [PATCH 02/12] fs/iso9660: convert to the filesystem
+ infrastructure
+In-Reply-To: <20150606090148.GA3581@free.fr>
+References: <1433430330-2166-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1433430330-2166-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150605205841.GB3641@free.fr>
+ <20150606024203.6651cc1a@free-electrons.com>
+ <20150606090148.GA3581@free.fr>
+Message-ID: <20150606165751.6397dc6e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=de823a5bd3976ac9fcf039c57869ccf8e9fc0a45
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Fixes:
-http://autobuild.buildroot.net/results/1ec/1ec6990354016a740a8f54e07066e5fa4e732ab0/
+On Sat, 6 Jun 2015 11:01:48 +0200, Yann E. MORIN wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/opkg/Config.in |    1 +
- package/opkg/opkg.mk   |    6 ++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+> Well, sorry, I was not completely explicit. What I meant was:
+> 
+>     ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
+>     define ROOTFS_ISO9660_SPLASHSCREEN
+>         $(INSTALL) -D -m 0644 boot/grub/splash.xpm.gz \
+>             $(ISO9660_TARGET_DIR)/splash.xpm.gz
+>     endef
+>     else
+>     define ROOTFS_ISO9660_SPLASHSCREEN
+>         $(SED) '/^splashimage/d' $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+>     endef
+>     endif
 
-diff --git a/package/opkg/Config.in b/package/opkg/Config.in
-index df6ebff..495ce91 100644
---- a/package/opkg/Config.in
-+++ b/package/opkg/Config.in
-@@ -23,6 +23,7 @@ if BR2_PACKAGE_OPKG
- config BR2_PACKAGE_OPKG_GPG_SIGN
- 	bool "gnupg support"
- 	select BR2_PACKAGE_LIBGPGME
-+	select BR2_PACKAGE_LIBGPG_ERROR
- 	help
- 	  Enable opkg package signature checking support using
- 	  gnupg/libgpgme.
-diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-index 5c79fc7..bcf3f78 100644
---- a/package/opkg/opkg.mk
-+++ b/package/opkg/opkg.mk
-@@ -22,8 +22,10 @@ endef
- 
- ifeq ($(BR2_PACKAGE_OPKG_GPG_SIGN),y)
- OPKG_CONF_OPTS += --enable-gpg
--OPKG_CONF_ENV = ac_cv_path_GPGME_CONFIG=$(STAGING_DIR)/usr/bin/gpgme-config
--OPKG_DEPENDENCIES += libgpgme
-+OPKG_CONF_ENV += \
-+	ac_cv_path_GPGME_CONFIG=$(STAGING_DIR)/usr/bin/gpgme-config \
-+	ac_cv_path_GPGERR_CONFIG=$(STAGING_DIR)/usr/bin/gpg-error-config
-+OPKG_DEPENDENCIES += libgpgme libgpg-error
- else
- OPKG_CONF_OPTS += --disable-gpg
- endif
+Yes, but no.
+
+The $(SED) '/^splashimage/d' case needs to be done in all cases if
+BR2_TARGET_GRUB_SPLASH is disabled (regardless whether we're using
+initrd/initramfs or a real iso9660 for the rootfs).
+
+However, the $(INSTALL) needs to be done only if
+BR2_TARGET_GRUB_SPLASH=y *and* we are using an initrd/initramfs, not if
+we are using directly the rootfs in the iso9660 filesystem. So this
+part only needs to be done if BR2_TARGET_GRUB_SPLASH=y *and*
+ROOTFS_ISO9660_USE_INITRD=YES.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
