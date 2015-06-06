@@ -1,12 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Jun 2015 11:25:05 +0200
-Subject: [Buildroot] [PATCH 09/12] fs/iso9660: add support for isolinux
-In-Reply-To: <20150606030327.199f2daf@free-electrons.com>
+Date: Sat, 6 Jun 2015 11:31:02 +0200
+Subject: [Buildroot] [PATCH 11/12] grub2: prepare and install El Torito
+ image
+In-Reply-To: <20150606025737.4f5a6567@free-electrons.com>
 References: <1433430330-2166-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1433430330-2166-10-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150605223856.GJ3641@free.fr>
- <20150606030327.199f2daf@free-electrons.com>
-Message-ID: <20150606092505.GD3581@free.fr>
+ <1433430330-2166-12-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150605230911.GN3641@free.fr>
+ <20150606025737.4f5a6567@free-electrons.com>
+Message-ID: <20150606093102.GE3581@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,52 +16,51 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2015-06-06 03:03 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 6 Jun 2015 00:38:56 +0200, Yann E. MORIN wrote:
-> > Since I'm quite interested in the end-result of this series
-> > (multi-format bootable images), I can help if you don;t have time. Just
-> > ping me... ;-)
+On 2015-06-06 02:57 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 6 Jun 2015 01:09:11 +0200, Yann E. MORIN wrote:
 > 
-> Actually, your review is arriving at exactly the right time. I'm having
-> a 10+ hours flight tomorrow, which will be a perfect opportunity to
-> prepare a v2 of this series.
-> 
-> I did the v1 on the 10+ hours flight to go, so having something to do
-> on the return trip is great.
-
-Happy flight! ;-)
-
-> > > diff --git a/fs/iso9660/isolinux.cfg b/fs/iso9660/isolinux.cfg
-> > > new file mode 100644
-> > > index 0000000..2bdf48b
-> > > --- /dev/null
-> > > +++ b/fs/iso9660/isolinux.cfg
-> > > @@ -0,0 +1,6 @@
-> > > +default 1
-> > > +display sample.msg
+> > > diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+> > > index 697f0ad..dd04bb3 100644
+> > > --- a/boot/grub2/grub2.mk
+> > > +++ b/boot/grub2/grub2.mk
+> > > @@ -76,6 +76,8 @@ define GRUB2_IMAGE_INSTALLATION
+> > >  		-p "$(GRUB2_PREFIX)" \
+> > >  		$(if $(GRUB2_BUILTIN_CONFIG),-c $(GRUB2_BUILTIN_CONFIG)) \
+> > >  		$(GRUB2_BUILTIN_MODULES)
+> > > +	cat $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE)/cdboot.img \
+> > > +		$(GRUB2_IMAGE) > $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE)/grub-eltorito.img
 > > 
-> > Where's that file comming from?
-> > 
-> > Also, there is the possibility for syslinux/isolinux to display
-> > graphics, too, but it is much more invvolved (but that'd be great!)
+> > In retrospect, I think you should install that in $(BINARIES_DIR), like
+> > is done for $(GRUB2_IMAGE), not in $(HOST_DIR).
 > 
-> The precise reason why there is this leftover "display sample.msg" is
-> because I tried to get the splash image support of isolinux to work.
-> I didn't succeed and gave up (no Internet access while flying, so I was
-> limited to just the isolinux documentation and source code) but forgot
-> to kill that line. I'll kill it off for now, until someone interested
-> enough in having a splash image with isolinux works on that.
+> Well, I had a reason to install it in HOST_DIR rather than
+> BINARIES_DIR. Since I'm producing this image unconditionally, even if
+> the user is not interested in ISO9660, I didn't want to clutter
+> BINARIES_DIR with this file, which would appear as soon as the user
+> enables grub2. So I preferred to install it together with all the other
+> "internal" Grub images in HOST_DIR, and pick it up from there in the
+> iso9660.mk logic.
+> 
+> Now, if you think cluttering BINARIES_DIR with this file only useful
+> for ISO booting as soon as Grub 2 is enabled is fine, then I'll happily
+> change it.
 
-Yeah, I tried a lng time ago, and it was not easy. Hopefully, things
-have changed since then, but that can indeed be left as an exercise for
-the interested party! :-]
+Well, yes, I'd prefer that's what we do, for these reasons:
 
-I'm not too fond of splahscreens in the bootloader anyway, so I won't
-press for that. I really prefer to have a quick boot that gives me a
-running kernel as fast as possible, so I can get access to the
-framebuffer from userland, and splash an image early in the boot process
-from userland. Bootloader-born splashscreen is for those that can't do
-fast boot! Hehehe! :-]
+  - first, that file is really small,
+
+  - second, we already do that for other bootloaders (like
+    rpi-firmware),
+
+  - finally, we never said we only installed only the strictly
+    minimum set of files,
+
+  - if the user really does not want it, there's still the
+    post-build scripts to remove that extra file.
+
+> Thanks for the review!
+
+My pleasure! :-)
 
 Regards,
 Yann E. MORIN.
