@@ -1,94 +1,147 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Jun 2015 00:20:43 +0200
-Subject: [Buildroot] [PATCH 0/11] pkg-kernel-module: new infra to ease
-	building kernel modules (branch yem/kernel-modules)
-Message-ID: <cover.1433628825.git.yann.morin.1998@free.fr>
+Date: Sun,  7 Jun 2015 00:20:37 +0200
+Subject: [Buildroot] [PATCH 01/11] package-infra: add helper to build kernel
+	modules
+In-Reply-To: <cover.1433628825.git.yann.morin.1998@free.fr>
+References: <cover.1433628825.git.yann.morin.1998@free.fr>
+Message-ID: <7f37dfb955f969acf85ea5044c1c4020096d2270.1433628825.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+The Linux kernel offers a nice and easy-to-use infra to build
+out-of-tree kernel modules.
 
-This series introduces a new infrastructure to help writing packages
-that build kernel modules.
+Currently, we have quite a few packages that build kernel modules, and
+most dupliacte (or rewrite) the same code over-and-over again.
 
-Unlike other package infrastrucutre, this new kernel-module
-infrastructure is not stand-alone, but is made as a complement to
-existing infrastructures, so that packages can build both userland and
-kernel modules.
+Introduce a new infrastructure that provides helpers to build kernel
+modules, so packages do not have to duplicate/rewrite that.
 
-A few packages (9) are converted to use that new infrastructure, and it
-greatly simplifies most of them (even allowing us to drop some of our
-patches).
+The infrastrucutre, unlike any other package infra, is not standalone.
+It needs another package infra to be used. This is so that packages that
+provide both userland and kernel modules can be built easily. So, this
+infra only defines post-build and post-install hooks, that will build
+the kernel modules after the rest of the package.
 
-Furthermore, as a side effect of converting it to this new inra, it also
-fixes the sysdig package, which is cirrently broken because it tries to
-build with the host kernel.
-
-Unfortunately, not all packages that build kernel headers were
-converted, becasue they use very custom (aka convoluted) Makefiles to
-reinvent out-of-tree module building, and it is too much work to fix
-them.
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit de823a5bd3976ac9fcf039c57869ccf8e9fc0a45:
-
-  opkg: gpg support needs libgpg-error (2015-06-06 15:38:56 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/kernel-modules
-
-for you to fetch changes up to e2ea306fbb76707d821144673bf6805cd2f3e532:
-
-  package/sysdig: use kernel-module helper (2015-06-07 00:04:03 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (11):
-      package-infra: add helper to build kernel modules
-      docs/manual: add kernel-module
-      package/lttng-modules: use kernel-module helper
-      package/igh-ethercat: use kernel-module helper
-      package/ktap: use kernel-module helper
-      package/cryptodev-linux: use the kernel-module helper
-      package/ocf-linux: use kernel-module helper
-      package/on2-8170-modules: use kernel-module helper
-      package/owl-linux: use kernel-module helper
-      package/simicsfs: use kernel-module helper
-      package/sysdig: use kernel-module helper
-
- docs/manual/adding-packages-kernel-module.txt      | 120 +++++++++++++++++++++
- docs/manual/adding-packages.txt                    |   2 +
- package/Makefile.in                                |   1 +
- package/cryptodev-linux/cryptodev-linux.mk         |  13 +--
- package/igh-ethercat/igh-ethercat.mk               |  14 +--
- package/ktap/ktap.mk                               |   7 +-
- package/lttng-modules/lttng-modules.mk             |  11 +-
- package/ocf-linux/0001-modules-cross.patch         |  42 --------
- package/ocf-linux/ocf-linux.mk                     |  17 ++-
- package/on2-8170-modules/on2-8170-modules.mk       |  11 +-
- .../0001-fix-CROSS_COMPILE-usage-in-Makefile.patch |  16 ---
- ...-3.3.x.patch => 0001-fix-for-linux-3.3.x.patch} |   0
- package/owl-linux/owl-linux.mk                     |  11 +-
- package/pkg-kernel-module.mk                       |  94 ++++++++++++++++
- package/simicsfs/simicsfs.mk                       |  10 +-
- package/sysdig/sysdig.mk                           |  22 +++-
- 16 files changed, 254 insertions(+), 137 deletions(-)
- create mode 100644 docs/manual/adding-packages-kernel-module.txt
- delete mode 100644 package/ocf-linux/0001-modules-cross.patch
- delete mode 100644 package/owl-linux/0001-fix-CROSS_COMPILE-usage-in-Makefile.patch
- rename package/owl-linux/{0002-fix-for-linux-3.3.x.patch => 0001-fix-for-linux-3.3.x.patch} (100%)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.in          |  1 +
+ package/pkg-kernel-module.mk | 94 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 95 insertions(+)
  create mode 100644 package/pkg-kernel-module.mk
 
+diff --git a/package/Makefile.in b/package/Makefile.in
+index c02d31f..180fd46 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -398,3 +398,4 @@ include package/pkg-virtual.mk
+ include package/pkg-generic.mk
+ include package/pkg-kconfig.mk
+ include package/pkg-rebar.mk
++include package/pkg-kernel-module.mk
+diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
+new file mode 100644
+index 0000000..2a2a2cb
+--- /dev/null
++++ b/package/pkg-kernel-module.mk
+@@ -0,0 +1,94 @@
++################################################################################
++# kernel module infrastructure for building Linux kernel modules
++#
++# This file implements an frastructure that eases development of package .mk
++# files for out-of-tree Linux kernel modules. It should be used for all
++# packages that build a Linux kernel module.
++#
++# In terms of implementation, this infrastructure requires the .mk file to
++# only specify metadata information about the package: name, version,
++# download URL, etc.
++#
++# It defines post-build and post-install hooks, so that packages can both
++# build user-space (with any of the other *-package infra) and/or build
++# kernel modules.
++#
++# As such, it is to be used in conjunction with another *-package infra,
++# like so:
++#
++#   $(eval $(kernel-module))
++#   $(eval $(generic-package))
++#
++# Note: if the caller needs access to the kernel modules (either after they
++# are built or after they are installed), it will have to define its own
++# post-build/install hooks after calling kernel-module, but before calling
++# the other *-package infra, like so:
++#
++#   $(eval $(kernel-module))
++#   define FOO_MOD_TWEAK
++#   	# do something
++#   endef
++#   FOO_POST_BUILD_HOOKS += FOO_MOD_TWEAK
++#   $(eval $(generic-package))
++#
++# Note: this infra does not check that the kernel is enabled; it is expected
++# to be enforced at the Kconfig level with proper 'depends on'.
++################################################################################
++
++################################################################################
++# inner-kernel-module -- generates the make targets needed to support building
++# a kernel module
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including a HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (always 'target')
++################################################################################
++
++define inner-kernel-module
++
++# The kernel must be built first.
++$(2)_DEPENDENCIES += linux
++
++# Duplicate that from pkg-generic because we need it now
++ifndef $(2)_MAKE
++  $(2)_MAKE = $(MAKE)
++endif
++
++ifndef $(2)_MODULE_SUBDIRS
++  $(2)_MODULE_SUBDIRS = .
++endif
++
++# Build the kernel module(s)
++define $(2)_KERNEL_MODULES_BUILD
++	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
++		@$$(call MESSAGE,"Building kernel module '$$(d)'")$$(sep) \
++		$$($$(PKG)_MAKE) -C $$(LINUX_DIR) \
++			$$(LINUX_MAKE_FLAGS) \
++			$$($(2)_MODULE_MAKE_OPTS) \
++			M=$$($(2)_DIR)/$$(d) \
++			modules$$(sep))
++endef
++$(2)_POST_BUILD_HOOKS += $(2)_KERNEL_MODULES_BUILD
++
++# Install the kernel module(s)
++define $(2)_KERNEL_MODULES_INSTALL
++	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
++		@$$(call MESSAGE,"Installing kernel module '$$(d)'")$$(sep) \
++		$$($$(PKG)_MAKE) -C $$(LINUX_DIR) \
++			$$(LINUX_MAKE_FLAGS) \
++			$$($(2)_MODULE_MAKE_OPTS) \
++			M=$$($(2)_DIR)/$$(d) \
++			modules_install$$(sep))
++endef
++$(2)_POST_INSTALL_TARGET_HOOKS += $(2)_KERNEL_MODULES_INSTALL
++
++endef
++
++################################################################################
++# kernel-module -- the target generator macro for kernel module packages
++################################################################################
++
++kernel-module = $(call inner-kernel-module,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
