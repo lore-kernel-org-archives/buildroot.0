@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Jun 2015 00:20:42 +0200
-Subject: [Buildroot] [PATCH 06/11] package/cryptodev-linux: use the
+Date: Sun,  7 Jun 2015 00:20:44 +0200
+Subject: [Buildroot] [PATCH 08/11] package/on2-8170-modules: use
 	kernel-module helper
 In-Reply-To: <cover.1433628825.git.yann.morin.1998@free.fr>
 References: <cover.1433628825.git.yann.morin.1998@free.fr>
-Message-ID: <0f3d2e118ecb2c6250751eb42bebe811652ca162.1433628825.git.yann.morin.1998@free.fr>
+Message-ID: <7869d3e2329c7788db5d3fbcb6e222ee89cd1b1d.1433628825.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/cryptodev-linux/cryptodev-linux.mk | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+ package/on2-8170-modules/on2-8170-modules.mk | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index 6f41930..02f59f8 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
-@@ -6,23 +6,18 @@
+diff --git a/package/on2-8170-modules/on2-8170-modules.mk b/package/on2-8170-modules/on2-8170-modules.mk
+index 209bcb5..b40ed86 100644
+--- a/package/on2-8170-modules/on2-8170-modules.mk
++++ b/package/on2-8170-modules/on2-8170-modules.mk
+@@ -7,17 +7,8 @@
+ ON2_8170_MODULES_VERSION = 73b08061d30789178e692bc332b73d1d9922bf39
+ ON2_8170_MODULES_SITE = $(call github,alexandrebelloni,on2-8170-modules,$(ON2_8170_MODULES_VERSION))
  
- CRYPTODEV_LINUX_VERSION = 1.7
- CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
--CRYPTODEV_LINUX_DEPENDENCIES = linux
- CRYPTODEV_LINUX_INSTALL_STAGING = YES
- CRYPTODEV_LINUX_LICENSE = GPLv2+
- CRYPTODEV_LINUX_LICENSE_FILES = COPYING
+-ON2_8170_MODULES_DEPENDENCIES = linux
+-
+ ON2_8170_MODULES_LICENSE = GPLv2+
+ #There is no license file
  
--define CRYPTODEV_LINUX_BUILD_CMDS
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR)
+-define ON2_8170_MODULES_BUILD_CMDS
+-	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D)
 -endef
 -
--define CRYPTODEV_LINUX_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR) \
--		PREFIX=$(TARGET_DIR) modules_install
+-define ON2_8170_MODULES_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) modules_install
 -endef
-+CRYPTODEV_LINUX_MODULE_MAKE_OPTS = \
-+	KERNEL_DIR=$(LINUX_DIR) \
-+	PREFIX=$(TARGET_DIR)
- 
- define CRYPTODEV_LINUX_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D -m 644 $(@D)/crypto/cryptodev.h \
- 		$(STAGING_DIR)/usr/include/crypto/cryptodev.h
- endef
- 
+-
 +$(eval $(kernel-module))
  $(eval $(generic-package))
 -- 
