@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Jun 2015 00:20:40 +0200
-Subject: [Buildroot] [PATCH 04/11] package/igh-ethercat: use kernel-module
+Date: Sun,  7 Jun 2015 00:20:39 +0200
+Subject: [Buildroot] [PATCH 03/11] package/lttng-modules: use kernel-module
 	helper
 In-Reply-To: <cover.1433628825.git.yann.morin.1998@free.fr>
 References: <cover.1433628825.git.yann.morin.1998@free.fr>
-Message-ID: <63e68bf4982621f390bcf1e8735529e7039ad9a1.1433628825.git.yann.morin.1998@free.fr>
+Message-ID: <272e640fce1448ef32ac0dabb713b22faf27c38a.1433628825.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/igh-ethercat/igh-ethercat.mk | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+ package/lttng-modules/lttng-modules.mk | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
-index b5221f8..32c49a3 100644
---- a/package/igh-ethercat/igh-ethercat.mk
-+++ b/package/igh-ethercat/igh-ethercat.mk
-@@ -10,7 +10,6 @@ IGH_ETHERCAT_SOURCE = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
- IGH_ETHERCAT_LICENSE = GPLv2 (IgH EtherCAT master), LGPLv2.1 (libraries)
- IGH_ETHERCAT_LICENSE_FILES = COPYING COPYING.LESSER
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index 6833ad2..30c581e 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -10,14 +10,5 @@ LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 for kernel modules; MIT for lib/bitfield.h and lib/prio_heap/*
+ LTTNG_MODULES_LICENSE_FILES = lgpl-2.1.txt gpl-2.0.txt mit-license.txt LICENSE
  
--IGH_ETHERCAT_DEPENDENCIES = linux
- IGH_ETHERCAT_INSTALL_STAGING = YES
- 
- IGH_ETHERCAT_CONF_OPTS = \
-@@ -22,16 +21,5 @@ IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,
- IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e)
- IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
- 
--define IGH_ETHERCAT_BUILD_MODULES
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
+-LTTNG_MODULES_DEPENDENCIES = linux
+-
+-define LTTNG_MODULES_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
 -endef
 -
--IGH_ETHERCAT_POST_BUILD_HOOKS += IGH_ETHERCAT_BUILD_MODULES
--
--define IGH_ETHERCAT_INSTALL_MODULES
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules_install
+-define LTTNG_MODULES_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR) modules_install
 -endef
--
--IGH_ETHERCAT_POST_INSTALL_TARGET_HOOKS += IGH_ETHERCAT_INSTALL_MODULES
 -
 +$(eval $(kernel-module))
- $(eval $(autotools-package))
+ $(eval $(generic-package))
 -- 
 1.9.1
