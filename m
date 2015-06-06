@@ -1,41 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 7 Jun 2015 06:22:35 +0300
-Subject: [Buildroot] [PATCH 01/11] package-infra: add helper to build
- kernel modules
-In-Reply-To: <7f37dfb955f969acf85ea5044c1c4020096d2270.1433628825.git.yann.morin.1998@free.fr>
-References: <cover.1433628825.git.yann.morin.1998@free.fr>
- <7f37dfb955f969acf85ea5044c1c4020096d2270.1433628825.git.yann.morin.1998@free.fr>
-Message-ID: <20150607032235.GA2671@tarshish>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Sat,  6 Jun 2015 09:15:20 +0200
+Subject: [Buildroot] [PATCH 2/3] lbreakout2: add LBREAKOUT2_VERSION_MAJOR
+	variable
+In-Reply-To: <1433574921-30965-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1433574921-30965-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <1433574921-30965-2-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/lbreakout2/lbreakout2.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-On Sun, Jun 07, 2015 at 12:20:37AM +0200, Yann E. MORIN wrote:
-> +################################################################################
-> +# inner-kernel-module -- generates the make targets needed to support building
-> +# a kernel module
-> +#
-> +#  argument 1 is the lowercase package name
-> +#  argument 2 is the uppercase package name, including a HOST_ prefix
-> +#             for host packages
-> +#  argument 3 is the uppercase package name, without the HOST_ prefix
-> +#             for host packages
-
-What is the meaning of building "host" kernel module? These are the target 
-kernel headers we are using here. Besides, you do not provide a 
-host-kernel-module macro, at least in this patch.
-
-> +#  argument 4 is the type (always 'target')
-
-And here only target is allowed.
-
-baruch
-
+diff --git a/package/lbreakout2/lbreakout2.mk b/package/lbreakout2/lbreakout2.mk
+index d72b949..5dc4c71 100644
+--- a/package/lbreakout2/lbreakout2.mk
++++ b/package/lbreakout2/lbreakout2.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-LBREAKOUT2_SITE = http://downloads.sourceforge.net/lgames/lbreakout2/2.6
+-LBREAKOUT2_VERSION = 2.6.4
++LBREAKOUT2_VERSION_MAJOR = 2.6
++LBREAKOUT2_VERSION = $(LBREAKOUT2_VERSION_MAJOR).4
++LBREAKOUT2_SITE = http://downloads.sourceforge.net/lgames/lbreakout2/$(LBREAKOUT2_VERSION_MAJOR)
+ LBREAKOUT2_LICENSE = GPLv2+
+ LBREAKOUT2_LICENSE_FILES = COPYING
+ 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.9.1
