@@ -1,9 +1,9 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun,  7 Jun 2015 11:37:19 +0200
-Subject: [Buildroot] [PATCH 6/6] package/xfsprogs: add hash file
+Date: Sun,  7 Jun 2015 11:37:17 +0200
+Subject: [Buildroot] [PATCH 4/6] packages/xvkbd: add hash file
 In-Reply-To: <1433669839-21599-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1433669839-21599-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1433669839-21599-6-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1433669839-21599-4-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/xfsprogs/xfsprogs.hash | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 package/xfsprogs/xfsprogs.hash
+ package/xvkbd/xvkbd.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/xvkbd/xvkbd.hash
 
-diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
+diff --git a/package/xvkbd/xvkbd.hash b/package/xvkbd/xvkbd.hash
 new file mode 100644
-index 0000000..3fb02df
+index 0000000..a9fa10d
 --- /dev/null
-+++ b/package/xfsprogs/xfsprogs.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated after checking pgp signature:
-+#   ftp://oss.sgi.com/projects/xfs/cmd_tars/xfsprogs-3.1.11.tar.gz.sig
-+sha256 adf4980177b5c890c1ca86b9c0e3e4d69a3f95bfc01746844280c2393cf4d6be xfsprogs-3.1.11.tar.gz
++++ b/package/xvkbd/xvkbd.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 93c4bdced9f13f22c367d990e98ffbc53f8210fa28a816fa9c610d86e78bf807 xvkbd-3.2.tar.gz
 -- 
 2.4.2
