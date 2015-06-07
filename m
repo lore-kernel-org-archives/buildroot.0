@@ -1,21 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 08 Jun 2015 00:08:05 +0200
-Subject: [Buildroot] [PATCH 2/2] kodi: propagate the dynamic library
-	dependency of python
-In-Reply-To: <ea7975a35140de42a281a3497178700a6464db5f.1433624067.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sat, 6 Jun 2015 23:54:27 +0300")
-References: <2e5c9f50b0166df6fbd783a63da7d74a2ba2425d.1433624067.git.baruch@tkos.co.il>
- <ea7975a35140de42a281a3497178700a6464db5f.1433624067.git.baruch@tkos.co.il>
-Message-ID: <87fv63kw8q.fsf@dell.be.48ers.dk>
+Date: Mon, 08 Jun 2015 00:09:27 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libdrm: bump version to 2.4.61
+In-Reply-To: <1433693658-20065-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sun, 7 Jun 2015 18:14:16 +0200")
+References: <1433693658-20065-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87bngrkw6g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
