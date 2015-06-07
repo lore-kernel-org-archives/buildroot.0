@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Jun 2015 14:16:54 +0200
-Subject: [Buildroot] [PATCH v5 06/13] package/opencv: add qt5 support
-In-Reply-To: <1433672799-21387-7-git-send-email-s.martin49@gmail.com>
+Date: Sun, 7 Jun 2015 14:22:16 +0200
+Subject: [Buildroot] [PATCH v5 07/13] package/opencv: add python support
+In-Reply-To: <1433672799-21387-8-git-send-email-s.martin49@gmail.com>
 References: <1433672799-21387-1-git-send-email-s.martin49@gmail.com>
- <1433672799-21387-7-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150607121654.GG3545@free.fr>
+ <1433672799-21387-8-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150607122216.GH3545@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,45 +14,131 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2015-06-07 12:26 +0200, Samuel Martin spake thusly:
-> Starting with the 2.4.6 release, OpenCV supports both Qt4 and Qt5,
-> but only one can be enabled at the same time.
+> opencv_python module needs python-numpy because it uses some numpy
+> headers in this wrapper.
 > 
-> Since Buildroot does not support Qt4/Qt5 co-existence, we keep the Qt
-> support knob as a boolean, but make it depend on BR2_PACKAGE_QT or
-> BR2_PACKAGE_QT5, and automatically uses the enabled one.
+> From its 2.4 release, OpenCV offers python bindings, but they required
+> most of the OpenCV modules to be enabled.
 > 
-> Note that we usually use 'select ...' to express the dependencies
-> between packages, but in this case, we cannot since the Qt4/Qt5
-> co-existence exclusion is not handled by a simple choice, but by a
-> dependency. This makes impossible using 'select ...' for the Qt
-> support knob without triggering a circular dependency at the kconfig
-> level.
-> 
-> Besides, we already use 'depends on ...' to express the dependencies
-> with some "big" packages (like xorg or libgtk2). qt or qt5* packages
-> are fairly big. So, I don't think it will hurt that much to use a
-> 'depends on ...' statement in this case.
+> Since OpenCV-3.0.0, python bindings have been reworked:
+> - it now supports both python2 and python3
+> - only built modules supporting wrapped in python will be included in
+>   the bindings.
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[--SNIP--]
-> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-> index 58a6ccb..4866780 100644
-> --- a/package/opencv/Config.in
-> +++ b/package/opencv/Config.in
-> @@ -209,13 +209,37 @@ config BR2_PACKAGE_OPENCV_WITH_QT
-[--SNIP--]
-> +comment "qt backend needs either Qt4 or Qt5"
-> +	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
-> +	depends on !BR2_avr32
 
-We no longer support avr32. I should know, I ditched it! ;-)
-
-Otherwise, looks good.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
+> ---
+> changes v4->v5:
+> - rebase
+> - update commit log
+> - fix python-numpy selection
+> - add python3 support
+> 
+> changes v3->v4:
+> - rebase
+> - rename _OPT -> _OPTS
+> - remove python/numpy patch (merged upstream since opencv bump)
+> 
+> changes v2->v3:
+> - rebase
+> - add fetch uri in the opencv's patch (Yann)
+> - move pyhton module knob under the multi-line if block about python deps
+>   (Yann)
+> 
+> changes v1->v2:
+> - rebase
+> - use patch merged upstream
+> ---
+>  package/opencv/Config.in | 12 +++++++++++-
+>  package/opencv/opencv.mk | 33 +++++++++++++++++++++++++++++++--
+>  2 files changed, 42 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+> index 4866780..db950f4 100644
+> --- a/package/opencv/Config.in
+> +++ b/package/opencv/Config.in
+> @@ -83,7 +83,17 @@ config BR2_PACKAGE_OPENCV_LIB_PHOTO
+>  	help
+>  	  Include opencv_photo module into the OpenCV build.
+>  
+> -comment "opencv_python module requires numpy which is not yet available."
+> +config BR2_PACKAGE_OPENCV_LIB_PYTHON
+> +	bool "python"
+> +	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+> +	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+> +		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
+> +		|| BR2_sh || BR2_x86_64 # python-numpy
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64 # python-numpy
+> +	select BR2_PACKAGE_PYTHON_NUMPY
+> +	help
+> +	  Include opencv_python module into the OpenCV build.
+> +	  No python example is installed.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_SHAPE
+>  	bool "shape (shape descriptors and matchers)"
+> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+> index 07bc893..aa972dc 100644
+> --- a/package/opencv/opencv.mk
+> +++ b/package/opencv/opencv.mk
+> @@ -64,8 +64,6 @@ OPENCV_CONF_OPTS += \
+>  	-DBUILD_opencv_ml=$(if $(BR2_PACKAGE_OPENCV_LIB_ML),ON,OFF) \
+>  	-DBUILD_opencv_objdetect=$(if $(BR2_PACKAGE_OPENCV_LIB_OBJDETECT),ON,OFF) \
+>  	-DBUILD_opencv_photo=$(if $(BR2_PACKAGE_OPENCV_LIB_PHOTO),ON,OFF) \
+> -	-DBUILD_opencv_python2=OFF \
+> -	-DBUILD_opencv_python3=OFF \
+>  	-DBUILD_opencv_shape=$(if $(BR2_PACKAGE_OPENCV_LIB_SHAPE),ON,OFF) \
+>  	-DBUILD_opencv_stitching=$(if $(BR2_PACKAGE_OPENCV_LIB_STITCHING),ON,OFF) \
+>  	-DBUILD_opencv_superres=$(if $(BR2_PACKAGE_OPENCV_LIB_SUPERRES),ON,OFF) \
+> @@ -270,6 +268,37 @@ else
+>  OPENCV_CONF_OPTS += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_OPENCV_LIB_PYTHON),y)
+> +ifeq ($(BR2_PACKAGE_PYTHON),y)
+> +OPENCV_CONF_OPTS += \
+> +	-DBUILD_opencv_python2=ON \
+> +	-DBUILD_opencv_python3=OFF \
+> +	-DPYTHON2_EXECUTABLE=$(HOST_DIR)/usr/bin/python2 \
+> +	-DPYTHON2_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
+> +	-DPYTHON2_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR).so \
+> +	-DPYTHON2_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/numpy/core/include \
+> +	-DPYTHON2_PACKAGES_PATH=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+> +	-DPYTHON2_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
+> +OPENCV_DEPENDENCIES += python
+> +else
+> +OPENCV_CONF_OPTS += \
+> +	-DBUILD_opencv_python2=OFF \
+> +	-DBUILD_opencv_python3=ON \
+> +	-DPYTHON3_EXECUTABLE=$(HOST_DIR)/usr/bin/python3 \
+> +	-DPYTHON3_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m \
+> +	-DPYTHON3_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)m.so \
+> +	-DPYTHON3_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/include \
+> +	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+> +	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
+> +OPENCV_DEPENDENCIES += python3
+> +endif
+> +OPENCV_DEPENDENCIES += python-numpy
+> +else
+> +OPENCV_CONF_OPTS += \
+> +	-DBUILD_opencv_python2=OFF \
+> +	-DBUILD_opencv_python3=OFF
+> +endif
+> +
+>  # Installation hooks:
+>  define OPENCV_CLEAN_INSTALL_DOC
+>  	$(RM) -fr $(TARGET_DIR)/usr/share/OpenCV/doc
+> -- 
+> 2.4.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
