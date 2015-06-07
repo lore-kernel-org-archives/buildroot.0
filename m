@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Jun 2015 23:59:13 +0200
-Subject: [Buildroot] [PATCH] ofono: needs dynamic library support
-In-Reply-To: <22ce3bf2a6a0a4284fc350731e0e52d005e50d5b.1433622461.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sat, 6 Jun 2015 23:27:41 +0300")
-References: <22ce3bf2a6a0a4284fc350731e0e52d005e50d5b.1433622461.git.baruch@tkos.co.il>
-Message-ID: <87oakrkwni.fsf@dell.be.48ers.dk>
+Date: Mon, 08 Jun 2015 00:07:59 +0200
+Subject: [Buildroot] [PATCH 1/2] samba4: propagate python dependencies
+In-Reply-To: <2e5c9f50b0166df6fbd783a63da7d74a2ba2425d.1433624067.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sat, 6 Jun 2015 23:54:26 +0300")
+References: <2e5c9f50b0166df6fbd783a63da7d74a2ba2425d.1433624067.git.baruch@tkos.co.il>
+Message-ID: <87k2vfkw8w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,9 +13,9 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The only package selection ofono, connman, requires dynamic library already.
+ > Fix the toolchain dependencies comment condition while at it.
  > Fixes:
- > http://autobuild.buildroot.net/results/c5b/c5bb44c192c076b42538f805062a465318051df4/
+ > http://autobuild.buildroot.net/results/e32/e32b85728a84bfea741709eabcc6d4a7af0b41a1/
 
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
