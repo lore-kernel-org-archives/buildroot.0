@@ -1,28 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 08 Jun 2015 00:11:07 +0200
-Subject: [Buildroot] [PATCH 2/3] package/{mesa3d,
-	mesa3d-headers}: bump version to 10.5.7
-In-Reply-To: <1433693658-20065-2-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Sun, 7 Jun 2015 18:14:17 +0200")
-References: <1433693658-20065-1-git-send-email-bernd.kuhls@t-online.de>
- <1433693658-20065-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <877frfkw3o.fsf@dell.be.48ers.dk>
+Date: Sun, 7 Jun 2015 22:46:31 +0200
+Subject: [Buildroot] [git commit] package/libsvg-cairo: add hash file
+Message-ID: <20150607221446.3DBE080824@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9aea87dec6c85cdc594603330846442f6444a38d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- >  package/mesa3d-headers/mesa3d-headers.mk |    2 +-
- >  package/mesa3d/mesa3d.hash               |    4 ++--
- >  package/mesa3d/mesa3d.mk                 |    2 +-
- >  3 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libsvg-cairo/libsvg-cairo.hash |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libsvg-cairo/libsvg-cairo.hash b/package/libsvg-cairo/libsvg-cairo.hash
+new file mode 100644
+index 0000000..fba96de
+--- /dev/null
++++ b/package/libsvg-cairo/libsvg-cairo.hash
+@@ -0,0 +1,5 @@
++# From http://cairographics.org/snapshots/libsvg-cairo-0.1.6.tar.gz.md5
++md5 d79da7b3a60ad8c8e4b902c9b3563047  libsvg-cairo-0.1.6.tar.gz
++
++# Locally calculated
++sha256 a380be6a78ec2938100ce904363815a94068fca372c666b8cc82aa8711a0215c libsvg-cairo-0.1.6.tar.gz
