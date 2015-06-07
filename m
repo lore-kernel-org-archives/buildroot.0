@@ -1,30 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jun 2015 22:46:55 +0200
-Subject: [Buildroot] [git commit] package/libsvg: add hash file
-Message-ID: <20150607221446.447288082E@busybox.osuosl.org>
+Date: Sun, 7 Jun 2015 22:42:32 +0200
+Subject: [Buildroot] [git commit] package/libdaemon: add hash file
+Message-ID: <20150607221446.32E7880D90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f638d12678e1600a9020b9af1aaa962682b15267
+commit: http://git.buildroot.net/buildroot/commit/?id=b1310c43f10f98fdcf48ac024eaafd545fee3199
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsvg/libsvg.hash |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/libdaemon/libdaemon.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libsvg/libsvg.hash b/package/libsvg/libsvg.hash
+diff --git a/package/libdaemon/libdaemon.hash b/package/libdaemon/libdaemon.hash
 new file mode 100644
-index 0000000..c500849
+index 0000000..8dbbb5a
 --- /dev/null
-+++ b/package/libsvg/libsvg.hash
-@@ -0,0 +1,5 @@
-+# From http://cairographics.org/snapshots/libsvg-0.1.4.tar.gz.md5
-+md5 ce0715e3013f78506795fba16e8455d3 libsvg-0.1.4.tar.gz
-+
++++ b/package/libdaemon/libdaemon.hash
+@@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 4c3bf9292e676a72b12338691be64d0f38cd7f2ea5e8b67fbbf45f1ed404bc8f libsvg-0.1.4.tar.gz
++sha256 fd23eb5f6f986dcc7e708307355ba3289abe03cc381fc47a80bca4a50aa6b834 libdaemon-0.14.tar.gz
