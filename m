@@ -1,63 +1,220 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  7 Jun 2015 12:26:26 +0200
-Subject: [Buildroot] [PATCH v5 00/13] OpenCV bump
-Message-ID: <1433672799-21387-1-git-send-email-s.martin49@gmail.com>
+Date: Sun,  7 Jun 2015 12:26:27 +0200
+Subject: [Buildroot] [PATCH v5 01/13] package/opencv: cleanup spaces at ends
+	of line
+In-Reply-To: <1433672799-21387-1-git-send-email-s.martin49@gmail.com>
+References: <1433672799-21387-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1433672799-21387-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Nothing more than removing white spaces before '\' characters.
+Of course, 'git diff -w' shows no change at all.
 
-Here is another round for the bump of OpenCV package, and related
-features/packages.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Patches 1 and 2 clean-up the current opencv.mk file.
-Patch 3 does the actual bump
-Patch 4 fixes a long-standing issue in the OpenCV integration.
-Patch 5 improves the OpenCV menu.
-Patches 6 to 11 add/improve 3rd-party supports.
-Patches 12 and 13 fix reverse dependencies (vlc and gst1-plugins-bad).
+---
+changes v4->v5:
+- new patch
+---
+ package/opencv/opencv.mk | 112 +++++++++++++++++++++++------------------------
+ 1 file changed, 56 insertions(+), 56 deletions(-)
 
-Regards,
-
-Samuel
-
-
-Samuel Martin (13):
-  package/opencv: cleanup spaces at ends of line
-  package/opencv: alphabetically sorted each _CONF_OPTS group
-  package/opencv: bump to version 3.0
-  package/opencv: define modules inter-dependencies
-  package/opencv: reword modules' prompt and help text
-  package/opencv: add qt5 support
-  package/opencv: add python support
-  package/opencv: add gstreamer-1.x support
-  package/opencv: add opengl support
-  package/opencv: add openmp support
-  package/opencv: add gtk3 support
-  package/vlc: add opencv support
-  package/gstreamer1/gst1-plugins-bad: disable opencv plugin with
-    opencv-3
-
- Config.in.legacy                                   |  16 ++
- package/gstreamer1/gst1-plugins-bad/Config.in      |   1 +
- .../0001-core-fix-x86-PIC-code-compilation.patch   |  49 ----
- ...ix-return-type-value-VideoFrameSource_GPU.patch |  40 ----
- ...VGenPkgconfig.cmake-rework-opencv.pc-gene.patch | 156 -------------
- package/opencv/Config.in                           | 235 ++++++++++++++------
- package/opencv/opencv.mk                           | 247 ++++++++++++++-------
- ...opencv_wrapper-use-opencv2-style-includes.patch |  34 +++
- ...cv_example-add-missing-include-statements.patch |  27 +++
- package/vlc/Config.in                              |   2 +
- package/vlc/vlc.mk                                 |   8 +-
- 11 files changed, 425 insertions(+), 390 deletions(-)
- delete mode 100644 package/opencv/0001-core-fix-x86-PIC-code-compilation.patch
- delete mode 100644 package/opencv/0002-superres-Fix-return-type-value-VideoFrameSource_GPU.patch
- delete mode 100644 package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch
- create mode 100644 package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
- create mode 100644 package/vlc/0009-opencv_example-add-missing-include-statements.patch
-
---
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index ee84312..9967abc 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -18,51 +18,51 @@ OPENCV_CONF_OPTS += \
+ 
+ # OpenCV build options
+ OPENCV_CONF_OPTS += \
+-	-DBUILD_WITH_STATIC_CRT=OFF      \
+-	-DENABLE_FAST_MATH=ON            \
+-	-DENABLE_NOISY_WARNINGS=OFF      \
+-	-DENABLE_OMIT_FRAME_POINTER=ON   \
++	-DBUILD_WITH_STATIC_CRT=OFF \
++	-DENABLE_FAST_MATH=ON \
++	-DENABLE_NOISY_WARNINGS=OFF \
++	-DENABLE_OMIT_FRAME_POINTER=ON \
+ 	-DENABLE_PRECOMPILED_HEADERS=OFF \
+-	-DENABLE_PROFILING=OFF           \
++	-DENABLE_PROFILING=OFF \
+ 	-DOPENCV_CAN_BREAK_BINARY_COMPATIBILITY=ON
+ 
+ # OpenCV link options
+ OPENCV_CONF_OPTS += \
+ 	-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=OFF \
+-	-DCMAKE_SKIP_RPATH=OFF                  \
++	-DCMAKE_SKIP_RPATH=OFF \
+ 	-DCMAKE_USE_RELATIVE_PATHS=OFF
+ 
+ # OpenCV packaging options:
+ OPENCV_CONF_OPTS += \
+-	-DBUILD_PACKAGE=OFF           \
++	-DBUILD_PACKAGE=OFF \
+ 	-DENABLE_SOLUTION_FOLDERS=OFF \
+ 	-DINSTALL_CREATE_DISTRIB=OFF
+ 
+ # OpenCV module selection
+ OPENCV_CONF_OPTS += \
+-	-DBUILD_opencv_androidcamera=OFF                                        \
+-	-DBUILD_opencv_apps=OFF                                                 \
+-	-DBUILD_opencv_calib3d=$(if $(BR2_PACKAGE_OPENCV_LIB_CALIB3D),ON,OFF)   \
+-	-DBUILD_opencv_contrib=$(if $(BR2_PACKAGE_OPENCV_LIB_CONTRIB),ON,OFF)   \
+-	-DBUILD_opencv_core=ON                                                  \
+-	-DBUILD_opencv_dynamicuda=OFF                                           \
++	-DBUILD_opencv_androidcamera=OFF \
++	-DBUILD_opencv_apps=OFF \
++	-DBUILD_opencv_calib3d=$(if $(BR2_PACKAGE_OPENCV_LIB_CALIB3D),ON,OFF) \
++	-DBUILD_opencv_contrib=$(if $(BR2_PACKAGE_OPENCV_LIB_CONTRIB),ON,OFF) \
++	-DBUILD_opencv_core=ON \
++	-DBUILD_opencv_dynamicuda=OFF \
+ 	-DBUILD_opencv_features2d=$(if $(BR2_PACKAGE_OPENCV_LIB_FEATURES2D),ON,OFF) \
+-	-DBUILD_opencv_flann=$(if $(BR2_PACKAGE_OPENCV_LIB_FLANN),ON,OFF)       \
+-	-DBUILD_opencv_gpu=$(if $(BR2_PACKAGE_OPENCV_LIB_GPU),ON,OFF)           \
+-	-DBUILD_opencv_highgui=$(if $(BR2_PACKAGE_OPENCV_LIB_HIGHGUI),ON,OFF)   \
+-	-DBUILD_opencv_imgproc=$(if $(BR2_PACKAGE_OPENCV_LIB_IMGPROC),ON,OFF)   \
+-	-DBUILD_opencv_java=OFF                                                 \
+-	-DBUILD_opencv_legacy=$(if $(BR2_PACKAGE_OPENCV_LIB_LEGACY),ON,OFF)     \
+-	-DBUILD_opencv_ml=$(if $(BR2_PACKAGE_OPENCV_LIB_ML),ON,OFF)             \
+-	-DBUILD_opencv_nonfree=$(if $(BR2_PACKAGE_OPENCV_LIB_NONFREE),ON,OFF)   \
++	-DBUILD_opencv_flann=$(if $(BR2_PACKAGE_OPENCV_LIB_FLANN),ON,OFF) \
++	-DBUILD_opencv_gpu=$(if $(BR2_PACKAGE_OPENCV_LIB_GPU),ON,OFF) \
++	-DBUILD_opencv_highgui=$(if $(BR2_PACKAGE_OPENCV_LIB_HIGHGUI),ON,OFF) \
++	-DBUILD_opencv_imgproc=$(if $(BR2_PACKAGE_OPENCV_LIB_IMGPROC),ON,OFF) \
++	-DBUILD_opencv_java=OFF \
++	-DBUILD_opencv_legacy=$(if $(BR2_PACKAGE_OPENCV_LIB_LEGACY),ON,OFF) \
++	-DBUILD_opencv_ml=$(if $(BR2_PACKAGE_OPENCV_LIB_ML),ON,OFF) \
++	-DBUILD_opencv_nonfree=$(if $(BR2_PACKAGE_OPENCV_LIB_NONFREE),ON,OFF) \
+ 	-DBUILD_opencv_objdetect=$(if $(BR2_PACKAGE_OPENCV_LIB_OBJDETECT),ON,OFF) \
+-	-DBUILD_opencv_ocl=OFF                                                  \
+-	-DBUILD_opencv_photo=$(if $(BR2_PACKAGE_OPENCV_LIB_PHOTO),ON,OFF)       \
+-	-DBUILD_opencv_python=OFF                                               \
++	-DBUILD_opencv_ocl=OFF \
++	-DBUILD_opencv_photo=$(if $(BR2_PACKAGE_OPENCV_LIB_PHOTO),ON,OFF) \
++	-DBUILD_opencv_python=OFF \
+ 	-DBUILD_opencv_stitching=$(if $(BR2_PACKAGE_OPENCV_LIB_STITCHING),ON,OFF) \
+ 	-DBUILD_opencv_superres=$(if $(BR2_PACKAGE_OPENCV_LIB_SUPERRES),ON,OFF) \
+-	-DBUILD_opencv_ts=$(if $(BR2_PACKAGE_OPENCV_LIB_TS),ON,OFF)             \
+-	-DBUILD_opencv_video=$(if $(BR2_PACKAGE_OPENCV_LIB_VIDEO),ON,OFF)       \
++	-DBUILD_opencv_ts=$(if $(BR2_PACKAGE_OPENCV_LIB_TS),ON,OFF) \
++	-DBUILD_opencv_video=$(if $(BR2_PACKAGE_OPENCV_LIB_VIDEO),ON,OFF) \
+ 	-DBUILD_opencv_videostab=$(if $(BR2_PACKAGE_OPENCV_LIB_VIDEOSTAB),ON,OFF) \
+ 	-DBUILD_opencv_world=OFF
+ 
+@@ -72,10 +72,10 @@ OPENCV_CONF_OPTS += \
+ #   adding '-mcpu=G3 -mtune=G5' to them, which is already handled by Buildroot.
+ OPENCV_CONF_OPTS += \
+ 	-DENABLE_POWERPC=OFF \
+-	-DENABLE_SSE=$(if $(BR2_X86_CPU_HAS_SSE),ON,OFF)     \
+-	-DENABLE_SSE2=$(if $(BR2_X86_CPU_HAS_SSE2),ON,OFF)   \
+-	-DENABLE_SSE3=$(if $(BR2_X86_CPU_HAS_SSE3),ON,OFF)   \
+-	-DENABLE_SSE41=$(if $(BR2_X86_CPU_HAS_SSE4),ON,OFF)  \
++	-DENABLE_SSE=$(if $(BR2_X86_CPU_HAS_SSE),ON,OFF) \
++	-DENABLE_SSE2=$(if $(BR2_X86_CPU_HAS_SSE2),ON,OFF) \
++	-DENABLE_SSE3=$(if $(BR2_X86_CPU_HAS_SSE3),ON,OFF) \
++	-DENABLE_SSE41=$(if $(BR2_X86_CPU_HAS_SSE4),ON,OFF) \
+ 	-DENABLE_SSE42=$(if $(BR2_X86_CPU_HAS_SSE42),ON,OFF) \
+ 	-DENABLE_AVX=$(if $(BR2_X86_CPU_HAS_AVX),ON,OFF) \
+ 	-DENABLE_AVX2=$(if $(BR2_X86_CPU_HAS_AVX2),ON,OFF) \
+@@ -84,7 +84,7 @@ OPENCV_CONF_OPTS += \
+ # Cuda stuff
+ OPENCV_CONF_OPTS += \
+ 	-DWITH_CUBLAS=OFF \
+-	-DWITH_CUDA=OFF   \
++	-DWITH_CUDA=OFF \
+ 	-DWITH_CUFFT=OFF
+ 
+ # NVidia stuff
+@@ -98,7 +98,7 @@ OPENCV_CONF_OPTS += \
+ # Intel stuff
+ OPENCV_CONF_OPTS += \
+ 	-DWITH_INTELPERC=OFF \
+-	-DWITH_IPP=OFF       \
++	-DWITH_IPP=OFF \
+ 	-DWITH_TBB=OFF
+ 
+ # Smartek stuff
+@@ -112,53 +112,53 @@ OPENCV_CONF_OPTS += -DWITH_XIMEA=OFF
+ 
+ # Non-Linux support (Android options) must remain OFF:
+ OPENCV_CONF_OPTS += \
+-	-DWITH_ANDROID_CAMERA=OFF          \
++	-DWITH_ANDROID_CAMERA=OFF \
+ 	-DBUILD_ANDROID_CAMERA_WRAPPER=OFF \
+-	-DBUILD_ANDROID_EXAMPLES=OFF	   \
+-	-DINSTALL_ANDROID_EXAMPLES=OFF     \
+-	-DBUILD_FAT_JAVA_LIB=OFF           \
++	-DBUILD_ANDROID_EXAMPLES=OFF \
++	-DINSTALL_ANDROID_EXAMPLES=OFF \
++	-DBUILD_FAT_JAVA_LIB=OFF \
+ 	-DBUILD_JAVA_SUPPORT=OFF
+ 
+ # Non-Linux support (Mac OSX options) must remain OFF:
+ OPENCV_CONF_OPTS += \
+-	-DWITH_AVFOUNDATION=OFF	\
+-	-DWITH_CARBON=OFF       \
++	-DWITH_AVFOUNDATION=OFF \
++	-DWITH_CARBON=OFF \
+ 	-DWITH_QUICKTIME=OFF
+ 
+ # Non-Linux support (Windows options) must remain OFF:
+ OPENCV_CONF_OPTS += \
+-	-DWITH_VFW=OFF      \
+-	-DWITH_WIN32UI=OFF  \
++	-DWITH_VFW=OFF \
++	-DWITH_WIN32UI=OFF \
+ 	-DWITH_CSTRIPES=OFF \
+-	-DWITH_DSHOW=OFF    \
+-	-DWITH_MSMF=OFF     \
++	-DWITH_DSHOW=OFF \
++	-DWITH_MSMF=OFF \
+ 	-DWITH_VIDEOINPUT=OFF
+ 
+ # Software/3rd-party support options.
+ OPENCV_CONF_OPTS += \
+-	-DBUILD_JASPER=OFF  \
+-	-DBUILD_JPEG=OFF    \
++	-DBUILD_JASPER=OFF \
++	-DBUILD_JPEG=OFF \
+ 	-DBUILD_OPENEXR=OFF \
+-	-DBUILD_PNG=OFF	    \
+-	-DBUILD_TIFF=OFF    \
+-	-DBUILD_ZLIB=OFF    \
++	-DBUILD_PNG=OFF \
++	-DBUILD_TIFF=OFF \
++	-DBUILD_ZLIB=OFF \
+ 	-DBUILD_NEW_PYTHON_SUPPORT=OFF \
+-	-DINSTALL_C_EXAMPLES=OFF       \
+-	-DINSTALL_PYTHON_EXAMPLES=OFF  \
++	-DINSTALL_C_EXAMPLES=OFF \
++	-DINSTALL_PYTHON_EXAMPLES=OFF \
+ 	-DINSTALL_TO_MANGLED_PATHS=OFF
+ 
+ # Disabled features (mostly because they are not available in Buildroot), but
+ # - eigen: OpenCV does not use it, not take any benefit from it.
+ OPENCV_CONF_OPTS += \
+-	-DWITH_1394=OFF    \
+-	-DWITH_EIGEN=OFF   \
++	-DWITH_1394=OFF \
++	-DWITH_EIGEN=OFF \
+ 	-DWITH_IMAGEIO=OFF \
+-	-DWITH_OPENCL=OFF  \
++	-DWITH_OPENCL=OFF \
+ 	-DWITH_OPENEXR=OFF \
+-	-DWITH_OPENGL=OFF  \
+-	-DWITH_OPENMP=OFF  \
+-	-DWITH_OPENNI=OFF  \
+-	-DWITH_UNICAP=OFF  \
++	-DWITH_OPENGL=OFF \
++	-DWITH_OPENMP=OFF \
++	-DWITH_OPENNI=OFF \
++	-DWITH_UNICAP=OFF \
+ 	-DWITH_XINE=OFF
+ 
+ OPENCV_DEPENDENCIES += zlib
+-- 
 2.4.2
