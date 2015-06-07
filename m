@@ -1,127 +1,109 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  7 Jun 2015 12:26:33 +0200
-Subject: [Buildroot] [PATCH v5 07/13] package/opencv: add python support
+Date: Sun,  7 Jun 2015 12:26:34 +0200
+Subject: [Buildroot] [PATCH v5 08/13] package/opencv: add gstreamer-1.x
+	support
 In-Reply-To: <1433672799-21387-1-git-send-email-s.martin49@gmail.com>
 References: <1433672799-21387-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1433672799-21387-8-git-send-email-s.martin49@gmail.com>
+Message-ID: <1433672799-21387-9-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-opencv_python module needs python-numpy because it uses some numpy
-headers in this wrapper.
+Starting with the 2.4.10 release, OpenCV supports both Gstreamer-0.10
+and Gstreamer-1, but only one can be enabled at the same time (OpenCV
+uses Gstreamer-1 when available).
 
-From its 2.4 release, OpenCV offers python bindings, but they required
-most of the OpenCV modules to be enabled.
-
-Since OpenCV-3.0.0, python bindings have been reworked:
-- it now supports both python2 and python3
-- only built modules supporting wrapped in python will be included in
-  the bindings.
+Since Buildroot allows both Gstreamer versions to co-exist, the
+configure options and dependencies are set to reflect the OpenCV
+preference.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
 changes v4->v5:
 - rebase
-- update commit log
-- fix python-numpy selection
-- add python3 support
+- rework gst-X backend selection (use similar structure for qt)
+- remove patch merged upstream
 
 changes v3->v4:
-- rebase
-- rename _OPT -> _OPTS
-- remove python/numpy patch (merged upstream since opencv bump)
-
-changes v2->v3:
-- rebase
-- add fetch uri in the opencv's patch (Yann)
-- move pyhton module knob under the multi-line if block about python deps
-  (Yann)
-
-changes v1->v2:
-- rebase
-- use patch merged upstream
+- new patch
 ---
- package/opencv/Config.in | 12 +++++++++++-
- package/opencv/opencv.mk | 33 +++++++++++++++++++++++++++++++--
- 2 files changed, 42 insertions(+), 3 deletions(-)
+ package/opencv/Config.in | 34 ++++++++++++++++++++++++++--------
+ package/opencv/opencv.mk |  9 +++++++--
+ 2 files changed, 33 insertions(+), 10 deletions(-)
 
 diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 4866780..db950f4 100644
+index db950f4..55e7580 100644
 --- a/package/opencv/Config.in
 +++ b/package/opencv/Config.in
-@@ -83,7 +83,17 @@ config BR2_PACKAGE_OPENCV_LIB_PHOTO
- 	help
- 	  Include opencv_photo module into the OpenCV build.
+@@ -170,17 +170,35 @@ config BR2_PACKAGE_OPENCV_WITH_FFMPEG
+ 	  Use ffmpeg from the target system.
  
--comment "opencv_python module requires numpy which is not yet available."
-+config BR2_PACKAGE_OPENCV_LIB_PYTHON
-+	bool "python"
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-+	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
-+		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
-+		|| BR2_sh || BR2_x86_64 # python-numpy
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64 # python-numpy
-+	select BR2_PACKAGE_PYTHON_NUMPY
+ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
+-	bool "gstreamer support"
+-	depends on BR2_USE_MMU # gstreamer -> libglib2
+-	depends on BR2_USE_WCHAR # gstreamer -> libglib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
+-	select BR2_PACKAGE_GSTREAMER
++	bool "gstreamer backend support"
++	depends on BR2_PACKAGE_GSTREAMER || BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_OPENCV_GSTREAMER_BACKEND  if BR2_PACKAGE_GSTREAMER && \
++		!BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_OPENCV_GSTREAMER1_BACKEND if BR2_PACKAGE_GSTREAMER1
 +	help
-+	  Include opencv_python module into the OpenCV build.
-+	  No python example is installed.
++	  Enable Gstreamer support for OpenCV.
++
++	  This uses whatever Gstreamer version you enabled: Gstreamer-0.10
++	  or Gstreamer-1.
++
++	  If both Gstreamer version are enable, only Gstreamer-1 will be
++	  used by OpenCV.
++
++config BR2_PACKAGE_OPENCV_GSTREAMER_BACKEND
++	bool
++	# no need to select gstreamer
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
  
- config BR2_PACKAGE_OPENCV_LIB_SHAPE
- 	bool "shape (shape descriptors and matchers)"
+-comment "gstreamer support needs a toolchain w/ wchar, threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++config BR2_PACKAGE_OPENCV_GSTREAMER1_BACKEND
++	bool
++	# no need to select gstreamer1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
++
++comment "gstreamer backend needs either Gstreamer-0.10 or Gstreamer-1"
++	depends on !BR2_PACKAGE_GSTREAMER && !BR2_PACKAGE_GSTREAMER1
++	depends on BR2_USE_MMU # gstreamer -> libglib2
+ 
+ config BR2_PACKAGE_OPENCV_WITH_GTK
+ 	bool "gtk support"
 diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 07bc893..aa972dc 100644
+index aa972dc..6162d1e 100644
 --- a/package/opencv/opencv.mk
 +++ b/package/opencv/opencv.mk
-@@ -64,8 +64,6 @@ OPENCV_CONF_OPTS += \
- 	-DBUILD_opencv_ml=$(if $(BR2_PACKAGE_OPENCV_LIB_ML),ON,OFF) \
- 	-DBUILD_opencv_objdetect=$(if $(BR2_PACKAGE_OPENCV_LIB_OBJDETECT),ON,OFF) \
- 	-DBUILD_opencv_photo=$(if $(BR2_PACKAGE_OPENCV_LIB_PHOTO),ON,OFF) \
--	-DBUILD_opencv_python2=OFF \
--	-DBUILD_opencv_python3=OFF \
- 	-DBUILD_opencv_shape=$(if $(BR2_PACKAGE_OPENCV_LIB_SHAPE),ON,OFF) \
- 	-DBUILD_opencv_stitching=$(if $(BR2_PACKAGE_OPENCV_LIB_STITCHING),ON,OFF) \
- 	-DBUILD_opencv_superres=$(if $(BR2_PACKAGE_OPENCV_LIB_SUPERRES),ON,OFF) \
-@@ -270,6 +268,37 @@ else
- OPENCV_CONF_OPTS += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
+@@ -211,10 +211,15 @@ OPENCV_CONF_OPTS += -DWITH_FFMPEG=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENCV_LIB_PYTHON),y)
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+OPENCV_CONF_OPTS += \
-+	-DBUILD_opencv_python2=ON \
-+	-DBUILD_opencv_python3=OFF \
-+	-DPYTHON2_EXECUTABLE=$(HOST_DIR)/usr/bin/python2 \
-+	-DPYTHON2_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
-+	-DPYTHON2_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR).so \
-+	-DPYTHON2_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/numpy/core/include \
-+	-DPYTHON2_PACKAGES_PATH=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-+	-DPYTHON2_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
-+OPENCV_DEPENDENCIES += python
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER),y)
+-OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON
++ifeq ($(BR2_PACKAGE_GSTREAMER1),y)
++OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON -DWITH_GSTREAMER_0_10=OFF
++OPENCV_DEPENDENCIES += gstreamer1 gst1-plugins-base
 +else
-+OPENCV_CONF_OPTS += \
-+	-DBUILD_opencv_python2=OFF \
-+	-DBUILD_opencv_python3=ON \
-+	-DPYTHON3_EXECUTABLE=$(HOST_DIR)/usr/bin/python3 \
-+	-DPYTHON3_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m \
-+	-DPYTHON3_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)m.so \
-+	-DPYTHON3_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/include \
-+	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-+	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
-+OPENCV_DEPENDENCIES += python3
++OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=ON
+ OPENCV_DEPENDENCIES += gstreamer gst-plugins-base
 +endif
-+OPENCV_DEPENDENCIES += python-numpy
-+else
-+OPENCV_CONF_OPTS += \
-+	-DBUILD_opencv_python2=OFF \
-+	-DBUILD_opencv_python3=OFF
-+endif
-+
- # Installation hooks:
- define OPENCV_CLEAN_INSTALL_DOC
- 	$(RM) -fr $(TARGET_DIR)/usr/share/OpenCV/doc
+ else
+-OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF
++OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK),y)
 -- 
 2.4.2
