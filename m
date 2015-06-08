@@ -1,46 +1,115 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  8 Jun 2015 10:50:06 -0300
-Subject: [Buildroot] [PATCH] strongswan: security bump to version 5.3.2
-Message-ID: <1433771406-17543-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  8 Jun 2015 11:07:16 -0300
+Subject: [Buildroot] [PATCHv4 0/4] The big webkitgtk bump
+Message-ID: <1433772440-18090-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Fouth take at the webkit/midori bump...
 
-CVE-2015-4171 - rogue servers with a valid certificate
-accepted by the client to trick it into disclosing its username and even
-password (if the client accepts EAP-GTC).
+There's support for libgtk2 & libgtk3, though libgtk2 is always needed
+for the plugin system.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/strongswan/strongswan.hash | 4 ++--
- package/strongswan/strongswan.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+GL* support was only tested via mesa software renderer.
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index e38c736..8b31de4 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -1,2 +1,2 @@
--# From http://download.strongswan.org/strongswan-5.3.1.tar.bz2.md5
--md5	66f258901a3d6c271da1a0c7fb3e5013	strongswan-5.3.1.tar.bz2
-+# From http://download.strongswan.org/strongswan-5.3.2.tar.bz2.md5
-+md5	fab014be1477ef4ebf9a765e10f8802c	strongswan-5.3.2.tar.bz2
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index f165eb1..47a28a3 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRONGSWAN_VERSION = 5.3.1
-+STRONGSWAN_VERSION = 5.3.2
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_LICENSE = GPLv2+
+Wayland support wasn't enabled because it still needs gtk2 (plugins) -
+this could possibly be patched away.
+
+Multimedia support is automatic via detection of gst1-plugins-base,
+ideally this should be an option but right now opencv+gst generate a
+dependency loop if gstreamer1 is selected. Also codecs will need to be
+catered by the user via the appropiate gst selects.
+
+MIPS support was disabled pending libatomic support for
+__sync_fetch_and_add_8 which is handled there for some 32-bit
+architectures.
+Update for v2: MIPS(eb) SIGBUSes, so disabled in general, kept the
+libatomic tweak for reference. MIPSel untested.
+Update for v4: Little-endian works so enabled.
+
+Possible TODOs:
+Wayland in a proper way, granite support, gcr support, more arch
+testing/support.
+
+v4:
+* Bump to version 2.4.9 [Gustavo]
+
+* Install MiniBrowser (the test browser for gtk3+) [Gustavo]
+
+* Enable mipsel & mips64el [Gustavo]
+  These seem to work with the emulator, only big-endian is broken.
+
+* Fix make 3.81 workaround, it was doing the opposite [Gustavo]
+
+* Add libatomic fix for SuperH as well [Gustavo]
+  It's required to build properly, but runtime testing says it
+  doesn't work, though it might be related with Qemu not being
+  able to emulate more than 64MB RAM for sh4-r2d.
+
+* Update deprecation version to 2015.08
+
+v3:
+* Work around make 3.81 looping bug for webkitgtk24. [Gustavo]
+
+* Fold libatomic patches.
+  webkitgtk24 requires libatomic for i386 support.
+  While a better solution is desirable for other packages such as
+  strongswan on microblazeel there's no final solution yet, and it
+  most likely will require copying them anyway. [Gustavo]
+
+* Add host variants of: harfbuzz, cairo, pango, librsvg.
+  host-librsvg is required by midori for rsvg-convert.
+  The rest are just dependencies of host-librsvg. [Gustavo]
+
+v2:
+* Needs NPTL [Gustavo]
+  It uses pthread_getattr_np()
+
+* Handle libatomic [Gustavo]
+  Needed for i386, mips & mipsel at least.
+
+* Deprecate libgail, no longer used by any package [Gustavo]
+
+v1:
+
+* Bump webkitgtk to version 2.4.x in a versioned package.
+  This is because midori can't use 2.6.x or 2.8.x and this way we can
+  have another webkitgtk package in parallel for other uses.
+  The series is still security-supported upstream.
+
+* Bump midori to version 0.5.9.
+  No effort was made to enable support for the old webkit 1.x. series,
+  it may be possible to do so but it makes no sense.
+
+* Deprecate old webkit package.
+  Security bugs, build issues, general instability.
+Gustavo Zacarias (4):
+  webkitgtk24: new package
+  midori: bump to version 0.5.9
+  webkit: mark as deprecated
+  libgail: mark as deprecated
+
+ package/Config.in                           |   1 +
+ package/libgail/Config.in                   |   2 +
+ package/midori/0001-disable-libnotify.patch |  43 +++++++++++
+ package/midori/Config.in                    |  39 +++++++---
+ package/midori/midori.hash                  |   2 +
+ package/midori/midori.mk                    |  54 ++++++-------
+ package/webkit/Config.in                    |   3 +
+ package/webkitgtk24/0001-fix-ppc32.patch    |  34 ++++++++
+ package/webkitgtk24/Config.in               |  59 ++++++++++++++
+ package/webkitgtk24/webkitgtk24.hash        |   2 +
+ package/webkitgtk24/webkitgtk24.mk          | 116 ++++++++++++++++++++++++++++
+ 11 files changed, 316 insertions(+), 39 deletions(-)
+ create mode 100644 package/midori/0001-disable-libnotify.patch
+ create mode 100644 package/midori/midori.hash
+ create mode 100644 package/webkitgtk24/0001-fix-ppc32.patch
+ create mode 100644 package/webkitgtk24/Config.in
+ create mode 100644 package/webkitgtk24/webkitgtk24.hash
+ create mode 100644 package/webkitgtk24/webkitgtk24.mk
+
 -- 
 2.3.6
