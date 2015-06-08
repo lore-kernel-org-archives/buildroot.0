@@ -1,85 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 09 Jun 2015 00:02:21 +0200
-Subject: [Buildroot] [PATCH 02/11] docs/manual: add kernel-module
-In-Reply-To: <55760D21.9080107@mind.be>
-References: <cover.1433628825.git.yann.morin.1998@free.fr>	<5c16fb51d4dd1fdf8d5660ccc2121895f28ca17c.1433628825.git.yann.morin.1998@free.fr>
- <55760D21.9080107@mind.be>
-Message-ID: <557610ED.9060408@mind.be>
+Date: Tue, 09 Jun 2015 00:09:54 +0200
+Subject: [Buildroot] [PATCH 2/3] mc: update hash file
+In-Reply-To: <1433799967-7694-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1433799967-7694-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <1433799967-7694-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <557612B2.3010300@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/08/15 23:46, Arnout Vandecappelle wrote:
-> On 06/07/15 00:20, Yann E. MORIN wrote:
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> Cc: Samuel Martin <s.martin49@gmail.com>
->> ---
->>  docs/manual/adding-packages-kernel-module.txt | 120 ++++++++++++++++++++++++++
->>  docs/manual/adding-packages.txt               |   2 +
->>  2 files changed, 122 insertions(+)
->>  create mode 100644 docs/manual/adding-packages-kernel-module.txt
->>
->> diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
->> new file mode 100644
->> index 0000000..1fe359a
->> --- /dev/null
->> +++ b/docs/manual/adding-packages-kernel-module.txt
->> @@ -0,0 +1,120 @@
->> +// -*- mode:doc; -*-
->> +// vim: set syntax=asciidoc:
->> +
->> +=== Infrastructure for packages building kernel modules
->> +
->> +Some packages, in addition to the usual user-space components it builds,
->> +may also need to build and install kernel modules.
+On 06/08/15 23:46, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+>  package/mc/mc.hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->  How about:
+> diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+> index 588bbaa..7ae1c3b 100644
+> --- a/package/mc/mc.hash
+> +++ b/package/mc/mc.hash
+> @@ -1,2 +1,2 @@
+>  # Hash from http://ftp.midnight-commander.org/mc-4.8.14.sha256:
+> -sha256  61fd0fd2280c3d09d7e0aec8ab001fc89dad8e4fd9941f386414667b55152ec5  mc-4.8.14.tar.bz2
+> +sha256  6b1f74efbdf394bfab084f4d2ea2e72173de5f12cd42be2533ca2c3b72edb8e6  mc-4.8.14.tar.xz
 > 
-> Buildroot offers a helper infrastructure to make it easy to write packages that
-> build and install Linux kernel modules. Some packages only contain a kernel
-> module, other packages contain programs and libraries in addition to kernel
-> modules. Buildroot's helper infrastructure supports either case.
-> 
->> +
->> +Buildroot offers a helper infrastructure to ease writing such packages.
->> +
->> +[[kernel-module-tutorial]]
->> +==== +kernel-module+ tutorial
->> +
->> +Let's start with an example on how to prepare a simple package that only
->> +builds a kernel module, and no other component:
->> +
->> +----
->> +01: ################################################################################
->> +02: #
->> +03: # foo
->> +04: #
->> +05: ################################################################################
->> +06: 
->> +07: FOO_VERSION = 1.2.3
->> +08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
->> +09: FOO_SITE = http://www.foosoftware.org/download
 
- One more thing: we want to encourage adding license info, so perhaps include in
-the example:
+ This should be squashed with the preceding patch.
 
-FOO_LICENSE = GPLv2
-FOO_LICENSE_FILES = COPYING
+ Otherwise:
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
  Regards,
  Arnout
-
->> +10: 
->> +11: $(eval $(kernel-module))
->> +12: $(eval $(generic-package))
->> +----
->> +
-[snip]
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
