@@ -1,123 +1,127 @@
-From: Ted Salazar <Ted.Salazar@maximintegrated.com>
-Date: Mon, 8 Jun 2015 09:59:05 -0700
-Subject: [Buildroot] nand id format in /nandflash.c
-In-Reply-To: <20150607093402.GG2671@tarshish>
-References: <B03A893ADFE80748942D13AFAF28451924E7512BF8@ITSVLEX06.it.maxim-ic.internal>
- <20150607093402.GG2671@tarshish>
-Message-ID: <B03A893ADFE80748942D13AFAF28451924E7513045@ITSVLEX06.it.maxim-ic.internal>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Jun 2015 19:12:06 +0200
+Subject: [Buildroot] [PATCH 06/11] package/cryptodev-linux: use the
+ kernel-module helper
+In-Reply-To: <20150608123358.GA27673@dkarchlinux64.currentcomm.com>
+References: <cover.1433628825.git.yann.morin.1998@free.fr>
+ <0f3d2e118ecb2c6250751eb42bebe811652ca162.1433628825.git.yann.morin.1998@free.fr>
+ <20150608123358.GA27673@dkarchlinux64.currentcomm.com>
+Message-ID: <20150608171206.GA3590@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Doug, All,
 
-Thank you for your response. You are correct the prototype of those parameters are in nand.h. and you basically answered my question, thank you very much.
-
-Regarding your second comment that hard coding the parameters in the nand ids array not being needed because it is ONFI compliant is a little confusing to me though for a few reasons:
-
-1. Atmel told me I have to add in the new IDs in that file if the NandFlash part number is changed
-2. The nandflash.c file is used by mainline BuildRoot and is located on my setup at
- /home/tsalazar/buildroot/output/build/at91bootstrap3-v3.7.1/driver. 
-
-In this file there are several of NandFlash part numbers in there so it only makes sense to me that I would need to add it in if I used one that was not listed.
-
-#ifdef CONFIG_NANDFLASH_SMALL_BLOCKS
-static struct nand_chip nand_ids[] = {
-	/* Samsung 32MB 8Bit */
-	{0xec75, 0x800, 0x4000,  0x200, 0x10, 0x0},
-	{0,}
-};
-#else
-static struct nand_chip nand_ids[] = {
-#ifdef CONFIG_AT91SAM9260EK
-	/* Samsung K9F2G08U0M 256MB */
-	{0xecda, 0x800, 0x20000, 0x800, 0x40, 0x0},
-	/* Samsung K9F2G08U0A 256MB */
-	{0xecaa, 0x800, 0x20000, 0x800, 0x40, 0x0},
-	/* Micron MT29F2G16AAB 256MB */
-	{0x2cca, 0x800, 0x20000, 0x800, 0x40, 0x1},
-	/* Micron MT29F2G08AAC 256MB  */
-	{0x2cda, 0x800, 0x20000, 0x800, 0x40, 0x0},
-	/* Micron MT29F2G08ABD 256MB */
-	{0x2caa, 0x800, 0x20000, 0x800, 0x40, 0x0},
-	/* Mircon MT29H8G08ACAH1 1GB */
-	{0x2c38, 0x800, 0x80000, 0x1000, 0xe0, 0x0},
-#else
-	/* Samsung K9F2G08U0M 256MB */
-	{0xecda, 0x800, 0x20000, 0x800, 0x40, 0x0},
-	/* Samsung K9F2G08U0A 256MB */
-	{0xecaa, 0x800, 0x20000, 0x800, 0x40, 0x0},
-	/* Micron MT29F2G16AAB 256MB */
-	{0x2cca, 0x800, 0x20000, 0x800, 0x40, 0x1},
-	/* Micron MT29F2G08AAC 256MB  */
-	{0x2cda, 0x800, 0x20000, 0x800, 0x40, 0x0},
-	/* Micron MT29F2G08ABD 256MB */
-	{0x2caa, 0x800, 0x20000, 0x800, 0x40, 0x0},
-	/* Hynix HY27UF082G2A 256MB */
-	{0xadda, 0x800, 0x20000, 0x800, 0x40, 0x0},
-	/* Hynix HY27UF162G2A 256MB */
-	{0xadca, 0x800, 0x20000, 0x800, 0x40, 0x1},
-	/* Mircon MT29H8G08ACAH1 1GB */
-	{0x2c38, 0x800, 0x80000, 0x1000, 0xe0, 0x0},
-	/* EON EN27LN1G08 128MB */
-	{0x92f1, 0x400, 0x20000, 0x800, 0x40, 0x0},
-#endif
-
-
-Is it everyone else's experience the same as Baruch's that if you use ONFI compatible NandFlash that you should not need to manually add ids to :
-
-/buildroot/output/build/at91bootstrap3-v3.7.1/driver/nandflash.c
-
-Thank you
-Ted
-
------Original Message-----
-From: Baruch Siach [mailto:baruch at tkos.co.il] 
-Sent: Sunday, June 07, 2015 2:34 AM
-To: Ted Salazar
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] nand id format in /nandflash.c
-
-Hi Ted,
-
-On Sun, Jun 07, 2015 at 02:00:54AM -0700, Ted Salazar wrote:
-> Not sure why this is not commented in the source code by Atmel but can 
-> one of you tell me what the nand id format is in /nandflash.c. You 
-> guys must do this all the time. I know the first four hex numbers are 
-> the manufacturer ID and the device ID from the data sheet but what is 
-> the format for the other hex values?
-
-This file is not part of Buildroot. In case you refer to driver/nandflash.c from the at91bootstrap project, please direct your question to at91bootstrap developers as listed at the end of the README file.
-
-Two short answers below.
-
-> For example,
+On 2015-06-08 07:33 -0500, rdkehn at yahoo.com spake thusly:
+> On Sun, Jun 07, 2015 at 12:20:42AM +0200, Yann E. MORIN wrote:
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/cryptodev-linux/cryptodev-linux.mk | 13 ++++---------
+> >  1 file changed, 4 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+> > index 6f41930..02f59f8 100644
+> > --- a/package/cryptodev-linux/cryptodev-linux.mk
+> > +++ b/package/cryptodev-linux/cryptodev-linux.mk
+> > @@ -6,23 +6,18 @@
+> >  
+> >  CRYPTODEV_LINUX_VERSION = 1.7
+> >  CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
+> > -CRYPTODEV_LINUX_DEPENDENCIES = linux
+> >  CRYPTODEV_LINUX_INSTALL_STAGING = YES
+> >  CRYPTODEV_LINUX_LICENSE = GPLv2+
+> >  CRYPTODEV_LINUX_LICENSE_FILES = COPYING
+> >  
+> > -define CRYPTODEV_LINUX_BUILD_CMDS
+> > -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR)
+> > -endef
+> > -
+> > -define CRYPTODEV_LINUX_INSTALL_TARGET_CMDS
+> > -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR) \
+> > -		PREFIX=$(TARGET_DIR) modules_install
+> > -endef
+> > +CRYPTODEV_LINUX_MODULE_MAKE_OPTS = \
+> > +	KERNEL_DIR=$(LINUX_DIR) \
+> > +	PREFIX=$(TARGET_DIR)
+> >  
+> >  define CRYPTODEV_LINUX_INSTALL_STAGING_CMDS
+> >  	$(INSTALL) -D -m 644 $(@D)/crypto/cryptodev.h \
+> >  		$(STAGING_DIR)/usr/include/crypto/cryptodev.h
+> >  endef
+> >  
+> > +$(eval $(kernel-module))
+> >  $(eval $(generic-package))
+> > -- 
+> > 1.9.1
 > 
-> static struct nand_chip nand_ids[] = {
->                 /* Micron MT29F2G16AAB 256MB */
->                 {0x2cca, 0x800, 0x20000, 0x800, 0x40, 0x1},
->                 /* Micron MT29F2G08AAC 256MB  */
->                 {0x2cda, 0x800, 0x20000, 0x800, 0x40, 0x0}, ...
+> cryptodev-linux fails to build because version.h does not get
+> generated before compiling the source.  Adding a PRE_BUILD_HOOK
+> resolves the problem.
+
+Weird, I'm pretty sure it did build here without that hook.
+But you're right, it does not.
+
+Maybe I tested the wrong patch... Who knows? ;-)
+
+> Regards,
+> ...doug
 > 
-> What does the 2nd (0x800), 3rd (0x20000) , 4th (0x800), 5th (0x40), 
-> and 6th
-> (0x1) hex numbers represent since I need to move to a different memory 
-> manufacturer and will need to create a new nandflash option.
+> diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+> index 6f41930..9e1d53d 100644
+> --- a/package/cryptodev-linux/cryptodev-linux.mk
+> +++ b/package/cryptodev-linux/cryptodev-linux.mk
+> @@ -6,23 +6,24 @@
+>  
+>  CRYPTODEV_LINUX_VERSION = 1.7
+>  CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
+> -CRYPTODEV_LINUX_DEPENDENCIES = linux
+>  CRYPTODEV_LINUX_INSTALL_STAGING = YES
+>  CRYPTODEV_LINUX_LICENSE = GPLv2+
+>  CRYPTODEV_LINUX_LICENSE_FILES = COPYING
+>  
+> -define CRYPTODEV_LINUX_BUILD_CMDS
+> -       $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR)
+> +define CRYPTODEV_LINUX_VERSION_H
+> +       $(MAKE) -C $(@D) version.h
 
-See the definition of 'struct nand_chip' at include/nand.h.
+Indeed, that makes it work. Thanks! :-)
+May I add your Signed-off-by to the patch?
 
-> Micron nandflash data sheet link below:
-> http://media.digikey.com/pdf/Data%20Sheets/Micron%20Technology%20Inc%2
-> 0PDFs/MT29F2G%2808,16%29AAD,ABD.pdf
+Regards,
+Yann E. MORIN.
 
-This NAND flash chip is ONFI compliant. Hard coding its parameters in the nand_ids array should not be needed.
-
-Hope this helps,
-baruch
+>  endef
+>  
+> -define CRYPTODEV_LINUX_INSTALL_TARGET_CMDS
+> -       $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR) \
+> -               PREFIX=$(TARGET_DIR) modules_install
+> -endef
+> +CRYPTODEV_LINUX_PRE_BUILD_HOOKS += CRYPTODEV_LINUX_VERSION_H
+> +
+> +CRYPTODEV_LINUX_MODULE_MAKE_OPTS = \
+> +       KERNEL_DIR=$(LINUX_DIR) \
+> +       PREFIX=$(TARGET_DIR)
+>  
+>  define CRYPTODEV_LINUX_INSTALL_STAGING_CMDS
+>         $(INSTALL) -D -m 644 $(@D)/crypto/cryptodev.h \
+>                 $(STAGING_DIR)/usr/include/crypto/cryptodev.h
+>  endef
+>  
+> +$(eval $(kernel-module))
+>  $(eval $(generic-package))
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
