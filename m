@@ -1,39 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jun 2015 23:33:00 +0200
-Subject: [Buildroot] [PATCH 01/11] package-infra: add helper to build
- kernel modules
-In-Reply-To: <20150608212519.GC3590@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Jun 2015 23:34:13 +0200
+Subject: [Buildroot] [PATCH 05/11] package/ktap: use kernel-module helper
+In-Reply-To: <20150608213131.GD3590@free.fr>
 References: <cover.1433628825.git.yann.morin.1998@free.fr>
- <7f37dfb955f969acf85ea5044c1c4020096d2270.1433628825.git.yann.morin.1998@free.fr>
- <55760493.1070807@mind.be> <20150608212519.GC3590@free.fr>
-Message-ID: <20150608233300.677fe6d8@free-electrons.com>
+ <b83c94f8a4484928bd45a9b4ed55c6c7d9f2751c.1433628825.git.yann.morin.1998@free.fr>
+ <20150608232559.743f42e6@free-electrons.com>
+ <20150608213131.GD3590@free.fr>
+Message-ID: <20150608213413.GE3590@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Thomas, All,
 
-On Mon, 8 Jun 2015 23:25:19 +0200, Yann E. MORIN wrote:
-
-> > > +# Build the kernel module(s)
-> > > +define $(2)_KERNEL_MODULES_BUILD
-> > > +	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
-> > > +		@$$(call MESSAGE,"Building kernel module '$$(d)'")$$(sep) \
+On 2015-06-08 23:31 +0200, Yann E. MORIN spake thusly:
+> On 2015-06-08 23:25 +0200, Thomas Petazzoni spake thusly:
+> > On Sun,  7 Jun 2015 00:20:41 +0200, Yann E. MORIN wrote:
+> > >  define KTAP_BUILD_CMDS
+> > >  	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) $(KTAP_FLAGS) ktap
+> > > -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) mod
+> > >  endef
+> > >  
+> > >  define KTAP_INSTALL_TARGET_CMDS
+> > >  	$(INSTALL) -D -m755 $(@D)/ktap  $(TARGET_DIR)/usr/bin/ktap
+> > > -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) modules_install
+> > >  endef
 > > 
-> >  I think that "Building kernel module '.'" looks a bit weird... But again, I
-> > can't think of an alternative.
+> > I think you are effectively getting rid of the KERNEL_SRC definition
+> > here. Did you test that it was working OK without this variable?
 > 
-> Neither do I. I'll see if I can do something about that...
+> Well, it does build a kernel module, yes.
 
-Just don't show a message for each subdir, only one for the overall
-build command:
+Sorry, I sent too early, forgot to say:
 
-	$$(call MESAGE,"Building kernel module(s)")
+KERNEL_SRC is used i ktap's Makefile only to run commands like:
 
-Thomas
+    $(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules
+
+So, since that's our infra now doing that, KERNEL_SRC is no longer
+needed.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
