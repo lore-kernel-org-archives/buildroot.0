@@ -1,206 +1,30 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 08 Jun 2015 23:46:09 +0200
-Subject: [Buildroot] [PATCH 02/11] docs/manual: add kernel-module
-In-Reply-To: <5c16fb51d4dd1fdf8d5660ccc2121895f28ca17c.1433628825.git.yann.morin.1998@free.fr>
-References: <cover.1433628825.git.yann.morin.1998@free.fr>
- <5c16fb51d4dd1fdf8d5660ccc2121895f28ca17c.1433628825.git.yann.morin.1998@free.fr>
-Message-ID: <55760D21.9080107@mind.be>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Mon,  8 Jun 2015 23:46:05 +0200
+Subject: [Buildroot] [PATCH 1/3] mc: change tarball compression to xz
+Message-ID: <1433799967-7694-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/07/15 00:20, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> ---
->  docs/manual/adding-packages-kernel-module.txt | 120 ++++++++++++++++++++++++++
->  docs/manual/adding-packages.txt               |   2 +
->  2 files changed, 122 insertions(+)
->  create mode 100644 docs/manual/adding-packages-kernel-module.txt
-> 
-> diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
-> new file mode 100644
-> index 0000000..1fe359a
-> --- /dev/null
-> +++ b/docs/manual/adding-packages-kernel-module.txt
-> @@ -0,0 +1,120 @@
-> +// -*- mode:doc; -*-
-> +// vim: set syntax=asciidoc:
-> +
-> +=== Infrastructure for packages building kernel modules
-> +
-> +Some packages, in addition to the usual user-space components it builds,
-> +may also need to build and install kernel modules.
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/mc/mc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- How about:
-
-Buildroot offers a helper infrastructure to make it easy to write packages that
-build and install Linux kernel modules. Some packages only contain a kernel
-module, other packages contain programs and libraries in addition to kernel
-modules. Buildroot's helper infrastructure supports either case.
-
-> +
-> +Buildroot offers a helper infrastructure to ease writing such packages.
-> +
-> +[[kernel-module-tutorial]]
-> +==== +kernel-module+ tutorial
-> +
-> +Let's start with an example on how to prepare a simple package that only
-> +builds a kernel module, and no other component:
-> +
-> +----
-> +01: ################################################################################
-> +02: #
-> +03: # foo
-> +04: #
-> +05: ################################################################################
-> +06: 
-> +07: FOO_VERSION = 1.2.3
-> +08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
-> +09: FOO_SITE = http://www.foosoftware.org/download
-> +10: 
-> +11: $(eval $(kernel-module))
-> +12: $(eval $(generic-package))
-> +----
-> +
-> +Lines 7-9 define the usual meta-data to specify the version, archive name
-> +and remote URI where to find the package source.
-> +
-> +On line 11, we invoke the +kernel-module+ helper infrastructure, that
-> +generates all the appropriate Makefile rules and variables to build
-> +that kernel module.
-> +
-> +Finally, on line 12, we invoke the
-> +xref:generic-package-tutorial[+generic-package+ infrastructure].
-> +
-> +The dependency on +linux+ is automatically added, so it is not needed to
-> +specify it in +FOO_DEPENDENCIES+.
-> +
-> +What you may have noticed is that, unlike other package infrastructures,
-> +we explicitly invoke a second infrastructure. This allows a package to
-> +build a kernel module, but also, if needed, use any one of other package
-> +inftrastructures to build normal userland components (libraries,
-
- infrastructures
-
-> +executables...). Using the +kernel-module+ infrastructure on its own is
-> +not sufficient; another package infrastructure *must* be used.
-
- It's a pity that it's not possible to add a check for that...
-
-> +
-> +Let's look at a more complex example:
-> +
-> +----
-> +01: ################################################################################
-> +02: #
-> +03: # foo
-> +04: #
-> +05: ################################################################################
-> +06: 
-> +07: FOO_VERSION = 1.2.3
-> +08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
-> +09: FOO_SITE = http://www.foosoftware.org/download
-> +10: FOO_DEPENDENCIES = libbar
-> +11: 
-> +12: FOO_CONF_OPTS = --enable-bar
-> +13: 
-> +14: FOO_MODULE_SUBDIRS = driver-base driver-bar
-> +15: FOO_MODULE_MAKE_OPTS = FOO_STUFF=some-value
-
- I think this is a little too abstract to understand. Perhaps use a more
-concrete example, e.g. the one from ktap:
-
-FOO_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
-
-(which is also an opportunity to talk about the otherwise undocumented but in
-this context important LINUX_VERSION_PROBED variable).
-
-> +16: 
-> +17: $(eval $(kernel-module))
-> +18: $(eval $(autotools-package))
-> +----
-> +
-> +Here, we see that we have an autotools-based package, that also builds
-> +kernel modules located into sub-directories +driver-base+ and +driver-bar+,
-> +and defines the variable +FOO_STUFF+ to be passed to the Linux buildsystem
-> +when building the module(s) (see below for the reference for those two
-> +variables).
-> +
-> +
-> +[[kernel-module-reference]]
-> +==== +kernel-module+ reference
-> +
-> +The main macro for the  kernel module infrastructure is +kernel-module+.
-> +Unlike other package infrastructures, it is not stand-alone, and requires
-> +any of the other +*-package+ macro be called after it.
-                                ^^^^^
-                                macros
-
-> +
-> +The +kernel-module+ macro defines post-build and post-target-install
-> +hooks to build the kernel modules. If the package's +.mk+ needs access
-> +to the built kernel modules, it should do so in a post-build hook,
-> +registered after the call to +kernel-module+. Similarly, if the package's
-> ++.mk+ needs access to the kernel module after it has been installed, it
-> +should do so in a post-install hook, registered after the call to
-> ++kernel-module+. Here's an example:
-> +
-> +----
-> +$(eval $(kernel-module))
-> +
-> +define FOO_DO_STUFF_WITH_KERNEL_MODULE
-> +    # Do something with it...
-> +endef
-> +FOO_POST_BUILD_HOOKS += FOO_DO_STUFF_WITH_KERNEL_MODULE
-> +
-> +$(eval $(generic-package))
-> +----
-> +
-> +Finally, unlike the other package infrastructures, there is no
-> ++host-kernel-module+ variant to build a host kernel module.
-> +
-> +Additional variable are available to further configure the build of
-> +the kernel module:
-
-The following additional variables can optionally be defined to further
-configure the build of the kernel module:
-
-
- Regards,
- Arnout
-
-> +
-> +* +FOO_MODULE_SUBDIRS+ may be set to one or more sub-directories (relative
-> +  to the package source top-directory) where the kernel module sources are.
-> +  If empty or not set, the sources for the kernel module(s) are considered
-> +  to be located at the top of the package source tree.
-> +
-> +* +FOO_MODULE_MAKE_OPTS+ may be set to contain extra variable definitions
-> +  to pass to the Linux buildsystem.
-> diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-> index b8674f8..721fe39 100644
-> --- a/docs/manual/adding-packages.txt
-> +++ b/docs/manual/adding-packages.txt
-> @@ -29,6 +29,8 @@ include::adding-packages-kconfig.txt[]
->  
->  include::adding-packages-rebar.txt[]
->  
-> +include::adding-packages-kernel-module.txt[]
-> +
->  include::adding-packages-asciidoc.txt[]
->  
->  include::adding-packages-hooks.txt[]
-> 
-
-
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index f96d396..742b8e8 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MC_VERSION = 4.8.14
+-MC_SOURCE = mc-$(MC_VERSION).tar.bz2
++MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE =  GPLv3+
+ MC_LICENSE_FILES = COPYING
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.1
