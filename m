@@ -1,49 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 09 Jun 2015 00:10:13 +0200
-Subject: [Buildroot] [PATCH 3/3] mc: remove extra white space
-In-Reply-To: <1433799967-7694-3-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1433799967-7694-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <1433799967-7694-3-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <557612C5.9080304@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 Jun 2015 00:11:09 +0200
+Subject: [Buildroot] [PATCH 05/11] package/ktap: use kernel-module helper
+In-Reply-To: <20150608213413.GE3590@free.fr>
+References: <cover.1433628825.git.yann.morin.1998@free.fr>
+ <b83c94f8a4484928bd45a9b4ed55c6c7d9f2751c.1433628825.git.yann.morin.1998@free.fr>
+ <20150608232559.743f42e6@free-electrons.com>
+ <20150608213131.GD3590@free.fr> <20150608213413.GE3590@free.fr>
+Message-ID: <20150609001109.03b08f87@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/08/15 23:46, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Dear Yann E. MORIN,
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Mon, 8 Jun 2015 23:34:13 +0200, Yann E. MORIN wrote:
 
-
- Regards,
- Arnout
-
-> ---
->  package/mc/mc.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Sorry, I sent too early, forgot to say:
 > 
-> diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-> index 742b8e8..2803c90 100644
-> --- a/package/mc/mc.mk
-> +++ b/package/mc/mc.mk
-> @@ -7,7 +7,7 @@
->  MC_VERSION = 4.8.14
->  MC_SOURCE = mc-$(MC_VERSION).tar.xz
->  MC_SITE = http://ftp.midnight-commander.org
-> -MC_LICENSE =  GPLv3+
-> +MC_LICENSE = GPLv3+
->  MC_LICENSE_FILES = COPYING
->  MC_DEPENDENCIES = libglib2 host-pkgconf
->  
+> KERNEL_SRC is used i ktap's Makefile only to run commands like:
 > 
+>     $(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules
+> 
+> So, since that's our infra now doing that, KERNEL_SRC is no longer
+> needed.
 
+Ok, makes sense. Might be worth mentioning in the commit log.
 
+Thanks!
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
