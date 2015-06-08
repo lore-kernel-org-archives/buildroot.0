@@ -1,41 +1,100 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  8 Jun 2015 08:11:32 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.0.5
-In-Reply-To: <1433761892-18711-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1433761892-18711-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1433761892-18711-2-git-send-email-gustavo@zacarias.com.ar>
+From: rdkehn at yahoo.com <rdkehn@yahoo.com>
+Date: Mon, 8 Jun 2015 07:33:59 -0500
+Subject: [Buildroot] [PATCH 06/11] package/cryptodev-linux: use the
+ kernel-module helper
+In-Reply-To: <0f3d2e118ecb2c6250751eb42bebe811652ca162.1433628825.git.yann.morin.1998@free.fr>
+References: <cover.1433628825.git.yann.morin.1998@free.fr>
+ <0f3d2e118ecb2c6250751eb42bebe811652ca162.1433628825.git.yann.morin.1998@free.fr>
+Message-ID: <20150608123358.GA27673@dkarchlinux64.currentcomm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Yann,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index b564085..7951aff 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+On Sun, Jun 07, 2015 at 12:20:42AM +0200, Yann E. MORIN wrote:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/cryptodev-linux/cryptodev-linux.mk | 13 ++++---------
+>  1 file changed, 4 insertions(+), 9 deletions(-)
+> 
+> diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+> index 6f41930..02f59f8 100644
+> --- a/package/cryptodev-linux/cryptodev-linux.mk
+> +++ b/package/cryptodev-linux/cryptodev-linux.mk
+> @@ -6,23 +6,18 @@
+>  
+>  CRYPTODEV_LINUX_VERSION = 1.7
+>  CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
+> -CRYPTODEV_LINUX_DEPENDENCIES = linux
+>  CRYPTODEV_LINUX_INSTALL_STAGING = YES
+>  CRYPTODEV_LINUX_LICENSE = GPLv2+
+>  CRYPTODEV_LINUX_LICENSE_FILES = COPYING
+>  
+> -define CRYPTODEV_LINUX_BUILD_CMDS
+> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR)
+> -endef
+> -
+> -define CRYPTODEV_LINUX_INSTALL_TARGET_CMDS
+> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR) \
+> -		PREFIX=$(TARGET_DIR) modules_install
+> -endef
+> +CRYPTODEV_LINUX_MODULE_MAKE_OPTS = \
+> +	KERNEL_DIR=$(LINUX_DIR) \
+> +	PREFIX=$(TARGET_DIR)
+>  
+>  define CRYPTODEV_LINUX_INSTALL_STAGING_CMDS
+>  	$(INSTALL) -D -m 644 $(@D)/crypto/cryptodev.h \
+>  		$(STAGING_DIR)/usr/include/crypto/cryptodev.h
+>  endef
+>  
+> +$(eval $(kernel-module))
+>  $(eval $(generic-package))
+> -- 
+> 1.9.1
+
+cryptodev-linux fails to build because version.h does not get
+generated before compiling the source.  Adding a PRE_BUILD_HOOK
+resolves the problem.
+
+Regards,
+...doug
+
+diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+index 6f41930..9e1d53d 100644
+--- a/package/cryptodev-linux/cryptodev-linux.mk
++++ b/package/cryptodev-linux/cryptodev-linux.mk
+@@ -6,23 +6,24 @@
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "4.0.4"
-+	bool "4.0.5"
+ CRYPTODEV_LINUX_VERSION = 1.7
+ CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
+-CRYPTODEV_LINUX_DEPENDENCIES = linux
+ CRYPTODEV_LINUX_INSTALL_STAGING = YES
+ CRYPTODEV_LINUX_LICENSE = GPLv2+
+ CRYPTODEV_LINUX_LICENSE_FILES = COPYING
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+-define CRYPTODEV_LINUX_BUILD_CMDS
+-       $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR)
++define CRYPTODEV_LINUX_VERSION_H
++       $(MAKE) -C $(@D) version.h
+ endef
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.0.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.0.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
--- 
-2.3.6
+-define CRYPTODEV_LINUX_INSTALL_TARGET_CMDS
+-       $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR) \
+-               PREFIX=$(TARGET_DIR) modules_install
+-endef
++CRYPTODEV_LINUX_PRE_BUILD_HOOKS += CRYPTODEV_LINUX_VERSION_H
++
++CRYPTODEV_LINUX_MODULE_MAKE_OPTS = \
++       KERNEL_DIR=$(LINUX_DIR) \
++       PREFIX=$(TARGET_DIR)
+ 
+ define CRYPTODEV_LINUX_INSTALL_STAGING_CMDS
+        $(INSTALL) -D -m 644 $(@D)/crypto/cryptodev.h \
+                $(STAGING_DIR)/usr/include/crypto/cryptodev.h
+ endef
+ 
++$(eval $(kernel-module))
+ $(eval $(generic-package))
