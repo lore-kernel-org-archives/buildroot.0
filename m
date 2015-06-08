@@ -1,155 +1,46 @@
-From: rdkehn at yahoo.com <rdkehn@yahoo.com>
-Date: Mon, 8 Jun 2015 07:49:18 -0500
-Subject: [Buildroot] [PATCH 01/11] package-infra: add helper to build
- kernel modules
-In-Reply-To: <7f37dfb955f969acf85ea5044c1c4020096d2270.1433628825.git.yann.morin.1998@free.fr>
-References: <cover.1433628825.git.yann.morin.1998@free.fr>
- <7f37dfb955f969acf85ea5044c1c4020096d2270.1433628825.git.yann.morin.1998@free.fr>
-Message-ID: <20150608124918.GA27760@dkarchlinux64.currentcomm.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  8 Jun 2015 10:50:06 -0300
+Subject: [Buildroot] [PATCH] strongswan: security bump to version 5.3.2
+Message-ID: <1433771406-17543-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jun 07, 2015 at 12:20:37AM +0200, Yann E. MORIN wrote:
-> The Linux kernel offers a nice and easy-to-use infra to build
-> out-of-tree kernel modules.
-> 
-> Currently, we have quite a few packages that build kernel modules, and
-> most dupliacte (or rewrite) the same code over-and-over again.
-> 
-> Introduce a new infrastructure that provides helpers to build kernel
-> modules, so packages do not have to duplicate/rewrite that.
-> 
-> The infrastrucutre, unlike any other package infra, is not standalone.
-> It needs another package infra to be used. This is so that packages that
-> provide both userland and kernel modules can be built easily. So, this
-> infra only defines post-build and post-install hooks, that will build
-> the kernel modules after the rest of the package.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Doug Kehn <rdkehn@yahoo.com>
-> ---
->  package/Makefile.in          |  1 +
->  package/pkg-kernel-module.mk | 94 ++++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 95 insertions(+)
->  create mode 100644 package/pkg-kernel-module.mk
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index c02d31f..180fd46 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -398,3 +398,4 @@ include package/pkg-virtual.mk
->  include package/pkg-generic.mk
->  include package/pkg-kconfig.mk
->  include package/pkg-rebar.mk
-> +include package/pkg-kernel-module.mk
-> diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
-> new file mode 100644
-> index 0000000..2a2a2cb
-> --- /dev/null
-> +++ b/package/pkg-kernel-module.mk
-> @@ -0,0 +1,94 @@
-> +################################################################################
-> +# kernel module infrastructure for building Linux kernel modules
-> +#
-> +# This file implements an frastructure that eases development of package .mk
-> +# files for out-of-tree Linux kernel modules. It should be used for all
-> +# packages that build a Linux kernel module.
-> +#
-> +# In terms of implementation, this infrastructure requires the .mk file to
-> +# only specify metadata information about the package: name, version,
-> +# download URL, etc.
-> +#
-> +# It defines post-build and post-install hooks, so that packages can both
-> +# build user-space (with any of the other *-package infra) and/or build
-> +# kernel modules.
-> +#
-> +# As such, it is to be used in conjunction with another *-package infra,
-> +# like so:
-> +#
-> +#   $(eval $(kernel-module))
-> +#   $(eval $(generic-package))
-> +#
-> +# Note: if the caller needs access to the kernel modules (either after they
-> +# are built or after they are installed), it will have to define its own
-> +# post-build/install hooks after calling kernel-module, but before calling
-> +# the other *-package infra, like so:
-> +#
-> +#   $(eval $(kernel-module))
-> +#   define FOO_MOD_TWEAK
-> +#   	# do something
-> +#   endef
-> +#   FOO_POST_BUILD_HOOKS += FOO_MOD_TWEAK
-> +#   $(eval $(generic-package))
-> +#
-> +# Note: this infra does not check that the kernel is enabled; it is expected
-> +# to be enforced at the Kconfig level with proper 'depends on'.
-> +################################################################################
-> +
-> +################################################################################
-> +# inner-kernel-module -- generates the make targets needed to support building
-> +# a kernel module
-> +#
-> +#  argument 1 is the lowercase package name
-> +#  argument 2 is the uppercase package name, including a HOST_ prefix
-> +#             for host packages
-> +#  argument 3 is the uppercase package name, without the HOST_ prefix
-> +#             for host packages
-> +#  argument 4 is the type (always 'target')
-> +################################################################################
-> +
-> +define inner-kernel-module
-> +
-> +# The kernel must be built first.
-> +$(2)_DEPENDENCIES += linux
-> +
-> +# Duplicate that from pkg-generic because we need it now
-> +ifndef $(2)_MAKE
-> +  $(2)_MAKE = $(MAKE)
-> +endif
-> +
-> +ifndef $(2)_MODULE_SUBDIRS
-> +  $(2)_MODULE_SUBDIRS = .
-> +endif
-> +
-> +# Build the kernel module(s)
-> +define $(2)_KERNEL_MODULES_BUILD
-> +	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
-> +		@$$(call MESSAGE,"Building kernel module '$$(d)'")$$(sep) \
-> +		$$($$(PKG)_MAKE) -C $$(LINUX_DIR) \
-> +			$$(LINUX_MAKE_FLAGS) \
-> +			$$($(2)_MODULE_MAKE_OPTS) \
-> +			M=$$($(2)_DIR)/$$(d) \
-> +			modules$$(sep))
-> +endef
-> +$(2)_POST_BUILD_HOOKS += $(2)_KERNEL_MODULES_BUILD
-> +
-> +# Install the kernel module(s)
-> +define $(2)_KERNEL_MODULES_INSTALL
-> +	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
-> +		@$$(call MESSAGE,"Installing kernel module '$$(d)'")$$(sep) \
-> +		$$($$(PKG)_MAKE) -C $$(LINUX_DIR) \
-> +			$$(LINUX_MAKE_FLAGS) \
-> +			$$($(2)_MODULE_MAKE_OPTS) \
-> +			M=$$($(2)_DIR)/$$(d) \
-> +			modules_install$$(sep))
-> +endef
-> +$(2)_POST_INSTALL_TARGET_HOOKS += $(2)_KERNEL_MODULES_INSTALL
-> +
-> +endef
-> +
-> +################################################################################
-> +# kernel-module -- the target generator macro for kernel module packages
-> +################################################################################
-> +
-> +kernel-module = $(call inner-kernel-module,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes:
+
+CVE-2015-4171 - rogue servers with a valid certificate
+accepted by the client to trick it into disclosing its username and even
+password (if the client accepts EAP-GTC).
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/strongswan/strongswan.hash | 4 ++--
+ package/strongswan/strongswan.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index e38c736..8b31de4 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -1,2 +1,2 @@
+-# From http://download.strongswan.org/strongswan-5.3.1.tar.bz2.md5
+-md5	66f258901a3d6c271da1a0c7fb3e5013	strongswan-5.3.1.tar.bz2
++# From http://download.strongswan.org/strongswan-5.3.2.tar.bz2.md5
++md5	fab014be1477ef4ebf9a765e10f8802c	strongswan-5.3.2.tar.bz2
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index f165eb1..47a28a3 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRONGSWAN_VERSION = 5.3.1
++STRONGSWAN_VERSION = 5.3.2
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
+ STRONGSWAN_LICENSE = GPLv2+
+-- 
+2.3.6
