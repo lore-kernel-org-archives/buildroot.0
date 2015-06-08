@@ -1,46 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jun 2015 12:09:07 +0200
-Subject: [Buildroot] [PATCH 1/1] eudev: add cxx dependency
-In-Reply-To: <CAJ4oOgzDeYod0HsYKL8hVbVUKd8G2v5zKparT0jaFE7pJBib9w@mail.gmail.com>
-References: <1433616116-30527-1-git-send-email-tomasz.gorochowik@gmail.com>
- <20150606210404.GH3581@free.fr>
- <CAJ4oOgypx858taa1cef4uivge-jyS07WZ=5R2=g-w_MaVWjxMQ@mail.gmail.com>
- <XnsA4B2872B0D9DEberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <CAJ4oOgzDeYod0HsYKL8hVbVUKd8G2v5zKparT0jaFE7pJBib9w@mail.gmail.com>
-Message-ID: <20150608120907.243ab639@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  8 Jun 2015 08:11:31 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10,
+	14}.x and 4.0.x series
+Message-ID: <1433761892-18711-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Tomasz Gorochowik,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On Sun, 7 Jun 2015 15:13:31 +0200, Tomasz Gorochowik wrote:
-
-> I did a build on a different machine, with a different OS and it
-> indeed did work.
-> 
-> It turns out, that the eudev configure script was trying to execute
-> the /lib/cpp binary, which was not present in my system (Arch). For
-> some reason I thought it only executes the downloaded binaries while
-> builduing all of the packages.
-> 
-> Making a symlink to that path fixed the issue, so the patch I
-> submitted should clearly be ignored, as it is more of a uedev issue
-> than buildroot (for executing cpp with full path instead of looking
-> for it in the $PATH).
-> 
-> Once again - thanks for your time, and sorry for introducing the confusion.
-
-Even though your original patch is maybe not the correct solution, I
-think there is still a problem. You shouldn't have to mess up things in
-your system to get Buildroot to build eudev.
-
-Best regards,
-
-Thomas
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 653209e..043a3c7 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -201,15 +201,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.79"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.80"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.43"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.43"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.44"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.14"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+-	default "4.0.4"		if BR2_KERNEL_HEADERS_4_0
++	default "4.0.5"		if BR2_KERNEL_HEADERS_4_0
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.3.6
