@@ -1,27 +1,66 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Mon,  8 Jun 2015 23:46:06 +0200
-Subject: [Buildroot] [PATCH 2/3] mc: update hash file
-In-Reply-To: <1433799967-7694-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1433799967-7694-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <1433799967-7694-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 08 Jun 2015 23:52:40 +0200
+Subject: [Buildroot] [PATCH 01/11] package-infra: add helper to build
+ kernel modules
+In-Reply-To: <20150608214443.GH3590@free.fr>
+References: <cover.1433628825.git.yann.morin.1998@free.fr>	<7f37dfb955f969acf85ea5044c1c4020096d2270.1433628825.git.yann.morin.1998@free.fr>	<55760493.1070807@mind.be>
+ <20150608214443.GH3590@free.fr>
+Message-ID: <55760EA8.1000503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/mc/mc.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 06/08/15 23:44, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2015-06-08 23:09 +0200, Arnout Vandecappelle spake thusly:
+>> On 06/07/15 00:20, Yann E. MORIN wrote:
+> [--SNIP--]
+>>> +# Duplicate that from pkg-generic because we need it now
+>>> +ifndef $(2)_MAKE
+>>> +  $(2)_MAKE = $(MAKE)
+>>> +endif
+>>
+>>  I don't see why this is needed... The defines below will only be expanded when
+>> the rule is executed (otherwise $(PKG) would not even be defined), so the
+>> definition from pkg-generic is enough, no?
+> 
+> Well, I tried to remove it, and it does not work (indetation added by me):
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index 588bbaa..7ae1c3b 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
-@@ -1,2 +1,2 @@
- # Hash from http://ftp.midnight-commander.org/mc-4.8.14.sha256:
--sha256  61fd0fd2280c3d09d7e0aec8ab001fc89dad8e4fd9941f386414667b55152ec5  mc-4.8.14.tar.bz2
-+sha256  6b1f74efbdf394bfab084f4d2ea2e72173de5f12cd42be2533ca2c3b72edb8e6  mc-4.8.14.tar.xz
+ D'oh, it's actually defined in pkg-autotools, not pkg-generic, but the comment
+above confused me. Which in fact makes the comment redundant, because it's not a
+redifinition.
+
+ That said, I think it's better like this:
+
+$(2)_MAKE ?= $$(MAKE)
+
+
+ Regards,
+ Arnout
+
+> 
+>>>> cryptodev-linux 1.7 Building kernel module(s)
+> C /home/ymorin/dev/buildroot/O/build/linux-4.0.4 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=i386
+>     INSTALL_MOD_PATH=/home/ymorin/dev/buildroot/O/target CROSS_COMPILE="/home/ymorin/dev/buildroot/O/host/usr/bin/i686-pc-linux-gnu-"
+>     DEPMOD=/home/ymorin/dev/buildroot/O/host/sbin/depmod KERNEL_DIR=/home/ymorin/dev/buildroot/O/build/linux-4.0.4
+>     PREFIX=/home/ymorin/dev/buildroot/O/target M=/home/ymorin/dev/buildroot/O/build/cryptodev-linux-1.7/. modules
+> /bin/sh: C: command not found
+> make[1]:
+> [/home/ymorin/dev/buildroot/O/build/cryptodev-linux-1.7/.stamp_built]
+> Error 127 (ignored)
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+
 -- 
-1.9.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
