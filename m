@@ -1,62 +1,84 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 08 Jun 2015 23:59:52 +0200
-Subject: [Buildroot] [PATCH 01/11] package-infra: add helper to build
- kernel modules
-In-Reply-To: <20150608215828.GI3590@free.fr>
-References: <cover.1433628825.git.yann.morin.1998@free.fr>	<7f37dfb955f969acf85ea5044c1c4020096d2270.1433628825.git.yann.morin.1998@free.fr>	<55760493.1070807@mind.be>
- <20150608214443.GH3590@free.fr>	<55760EA8.1000503@mind.be>
- <20150608215828.GI3590@free.fr>
-Message-ID: <55761058.40706@mind.be>
+Date: Tue, 09 Jun 2015 00:02:21 +0200
+Subject: [Buildroot] [PATCH 02/11] docs/manual: add kernel-module
+In-Reply-To: <55760D21.9080107@mind.be>
+References: <cover.1433628825.git.yann.morin.1998@free.fr>	<5c16fb51d4dd1fdf8d5660ccc2121895f28ca17c.1433628825.git.yann.morin.1998@free.fr>
+ <55760D21.9080107@mind.be>
+Message-ID: <557610ED.9060408@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/08/15 23:58, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2015-06-08 23:52 +0200, Arnout Vandecappelle spake thusly:
->> On 06/08/15 23:44, Yann E. MORIN wrote:
->>> On 2015-06-08 23:09 +0200, Arnout Vandecappelle spake thusly:
->>>> On 06/07/15 00:20, Yann E. MORIN wrote:
->>>>> +# Duplicate that from pkg-generic because we need it now
->>>>> +ifndef $(2)_MAKE
->>>>> +  $(2)_MAKE = $(MAKE)
->>>>> +endif
->>>>
->>>>  I don't see why this is needed... The defines below will only be expanded when
->>>> the rule is executed (otherwise $(PKG) would not even be defined), so the
->>>> definition from pkg-generic is enough, no?
->>>
->>> Well, I tried to remove it, and it does not work (indetation added by me):
+On 06/08/15 23:46, Arnout Vandecappelle wrote:
+> On 06/07/15 00:20, Yann E. MORIN wrote:
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> Cc: Samuel Martin <s.martin49@gmail.com>
+>> ---
+>>  docs/manual/adding-packages-kernel-module.txt | 120 ++++++++++++++++++++++++++
+>>  docs/manual/adding-packages.txt               |   2 +
+>>  2 files changed, 122 insertions(+)
+>>  create mode 100644 docs/manual/adding-packages-kernel-module.txt
 >>
->>  D'oh, it's actually defined in pkg-autotools, not pkg-generic, but the comment
->> above confused me. Which in fact makes the comment redundant, because it's not a
->> redifinition.
+>> diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
+>> new file mode 100644
+>> index 0000000..1fe359a
+>> --- /dev/null
+>> +++ b/docs/manual/adding-packages-kernel-module.txt
+>> @@ -0,0 +1,120 @@
+>> +// -*- mode:doc; -*-
+>> +// vim: set syntax=asciidoc:
+>> +
+>> +=== Infrastructure for packages building kernel modules
+>> +
+>> +Some packages, in addition to the usual user-space components it builds,
+>> +may also need to build and install kernel modules.
 > 
-> Ah, yes, right, my bad.
+>  How about:
 > 
-> I tested with a generic-package. Maybe an autotools-package (or any
-> other infra) would have no issue, since it is defined for them.
+> Buildroot offers a helper infrastructure to make it easy to write packages that
+> build and install Linux kernel modules. Some packages only contain a kernel
+> module, other packages contain programs and libraries in addition to kernel
+> modules. Buildroot's helper infrastructure supports either case.
 > 
->>  That said, I think it's better like this:
->>
->> $(2)_MAKE ?= $$(MAKE)
-> 
-> Yup, I'll do (already usinf $$(MaKE) locally.
+>> +
+>> +Buildroot offers a helper infrastructure to ease writing such packages.
+>> +
+>> +[[kernel-module-tutorial]]
+>> +==== +kernel-module+ tutorial
+>> +
+>> +Let's start with an example on how to prepare a simple package that only
+>> +builds a kernel module, and no other component:
+>> +
+>> +----
+>> +01: ################################################################################
+>> +02: #
+>> +03: # foo
+>> +04: #
+>> +05: ################################################################################
+>> +06: 
+>> +07: FOO_VERSION = 1.2.3
+>> +08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
+>> +09: FOO_SITE = http://www.foosoftware.org/download
 
- I also mean ?= is better than ifndef.
+ One more thing: we want to encourage adding license info, so perhaps include in
+the example:
+
+FOO_LICENSE = GPLv2
+FOO_LICENSE_FILES = COPYING
+
 
  Regards,
  Arnout
 
-> 
-> Thanks! :-)
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+>> +10: 
+>> +11: $(eval $(kernel-module))
+>> +12: $(eval $(generic-package))
+>> +----
+>> +
+[snip]
 
 
 -- 
