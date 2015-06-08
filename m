@@ -1,49 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Jun 2015 23:34:13 +0200
-Subject: [Buildroot] [PATCH 05/11] package/ktap: use kernel-module helper
-In-Reply-To: <20150608213131.GD3590@free.fr>
+Date: Mon, 8 Jun 2015 23:35:07 +0200
+Subject: [Buildroot] [PATCH 07/11] package/ocf-linux: use kernel-module
+	helper
+In-Reply-To: <4efd619bc93860107ecf52076857ae06321f0e61.1433628825.git.yann.morin.1998@free.fr>
 References: <cover.1433628825.git.yann.morin.1998@free.fr>
- <b83c94f8a4484928bd45a9b4ed55c6c7d9f2751c.1433628825.git.yann.morin.1998@free.fr>
- <20150608232559.743f42e6@free-electrons.com>
- <20150608213131.GD3590@free.fr>
-Message-ID: <20150608213413.GE3590@free.fr>
+ <4efd619bc93860107ecf52076857ae06321f0e61.1433628825.git.yann.morin.1998@free.fr>
+Message-ID: <20150608213506.GF3590@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+All,
 
-On 2015-06-08 23:31 +0200, Yann E. MORIN spake thusly:
-> On 2015-06-08 23:25 +0200, Thomas Petazzoni spake thusly:
-> > On Sun,  7 Jun 2015 00:20:41 +0200, Yann E. MORIN wrote:
-> > >  define KTAP_BUILD_CMDS
-> > >  	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) $(KTAP_FLAGS) ktap
-> > > -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) mod
-> > >  endef
-> > >  
-> > >  define KTAP_INSTALL_TARGET_CMDS
-> > >  	$(INSTALL) -D -m755 $(@D)/ktap  $(TARGET_DIR)/usr/bin/ktap
-> > > -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) modules_install
-> > >  endef
-> > 
-> > I think you are effectively getting rid of the KERNEL_SRC definition
-> > here. Did you test that it was working OK without this variable?
+On 2015-06-07 00:20 +0200, Yann E. MORIN spake thusly:
+> Remove our patch since it is no longer needed.
 > 
-> Well, it does build a kernel module, yes.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[--SNIP--]
+> diff --git a/package/ocf-linux/ocf-linux.mk b/package/ocf-linux/ocf-linux.mk
+> index 8ca5578..3ebf462 100644
+> --- a/package/ocf-linux/ocf-linux.mk
+> +++ b/package/ocf-linux/ocf-linux.mk
+> @@ -6,22 +6,19 @@
+>  
+>  OCF_LINUX_VERSION = 20120127
+>  OCF_LINUX_SITE = http://downloads.sourceforge.net/project/ocf-linux/ocf-linux/$(OCF_LINUX_VERSION)
+> -OCF_LINUX_DEPENDENCIES = linux
+>  OCF_LINUX_INSTALL_STAGING = YES
+>  
+> -define OCF_LINUX_BUILD_CMDS
+> -	$(MAKE) -C $(@D)/ocf $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) \
+> -		ocf_modules
+> -endef
+> -
+> -define OCF_LINUX_INSTALL_TARGET_CMDS
+> -	$(MAKE) -C $(@D)/ocf $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) \
+> -		ocf_install
+> -endef
+> +OCF_LINUX_MODULE_DIR = ocf
 
-Sorry, I sent too early, forgot to say:
-
-KERNEL_SRC is used i ktap's Makefile only to run commands like:
-
-    $(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules
-
-So, since that's our infra now doing that, KERNEL_SRC is no longer
-needed.
+Before any notices: that's wrong, and already fixed locally.
 
 Regards,
 Yann E. MORIN.
+
+> +OCF_LINUX_MODULE_MAKE_OPTS = \
+> +	CONFIG_OCF_OCF=m \
+> +	CONFIG_OCF_CRYPTOSOFT=m \
+> +	CONFIG_OCF_BENCH=m \
+> +	CONFIG_OCF_OCFNULL=m
+>  
+>  define OCF_LINUX_INSTALL_STAGING_CMDS
+>  	$(INSTALL) -D -m 644 $(@D)/ocf/cryptodev.h \
+>  		$(STAGING_DIR)/usr/include/crypto/cryptodev.h
+>  endef
+>  
+> +$(eval $(kernel-module))
+>  $(eval $(generic-package))
+> -- 
+> 1.9.1
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
