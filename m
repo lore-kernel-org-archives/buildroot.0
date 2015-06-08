@@ -1,48 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 9 Jun 2015 00:24:36 +0200
-Subject: [Buildroot] [PATCH 02/11] docs/manual: add kernel-module
-In-Reply-To: <557610ED.9060408@mind.be>
-References: <cover.1433628825.git.yann.morin.1998@free.fr>
- <5c16fb51d4dd1fdf8d5660ccc2121895f28ca17c.1433628825.git.yann.morin.1998@free.fr>
- <55760D21.9080107@mind.be> <557610ED.9060408@mind.be>
-Message-ID: <20150608222436.GJ3590@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 09 Jun 2015 00:27:40 +0200
+Subject: [Buildroot] Option for debug support in DirectFB package
+In-Reply-To: <55760F79.8080501@openmailbox.org>
+References: <55760F79.8080501@openmailbox.org>
+Message-ID: <557616DC.5050508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
-
-On 2015-06-09 00:02 +0200, Arnout Vandecappelle spake thusly:
-> On 06/08/15 23:46, Arnout Vandecappelle wrote:
-> > On 06/07/15 00:20, Yann E. MORIN wrote:
-[--SNIP--]
-> >> +01: ################################################################################
-> >> +02: #
-> >> +03: # foo
-> >> +04: #
-> >> +05: ################################################################################
-> >> +06: 
-> >> +07: FOO_VERSION = 1.2.3
-> >> +08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
-> >> +09: FOO_SITE = http://www.foosoftware.org/download
+On 06/08/15 23:56, C?dric Marie wrote:
+> Hi,
 > 
->  One more thing: we want to encourage adding license info, so perhaps include in
-> the example:
+> DirectFB provides two configure options for debug:
+> * --enable-debug (default is no)
+> * --enable-debug-support (default is yes)
+> The first one enables verbose mode in DirectFB, while the second one
+> only provide the functions to print debug information, that might be
+> used by an external DirectFB driver.
 > 
-> FOO_LICENSE = GPLv2
-> FOO_LICENSE_FILES = COPYING
+> When these options are both disabled, the installation path is suffixed
+> with -pure (i.e. /usr/lib/directfb-x.y.z-pure instead of
+> /usr/lib/directfb-x.y.z).
+> 
+> Buildroot only gives the possibility to enable/disable the first one
+> (with BR2_PACKAGE_DIRECTFB_DEBUG).
+> 
+> Some external DirectFB driver, when compiled in release mode, would
+> expect debug support to be disabled, and would install in the -pure
+> suffixed directory.
+> 
+> Therefore it would be helpful:
+> - either to have another option for debug support (and debug option
+>   would depend on debug support option, in Config.in)
+> - or to disable debug support when debug is disabled: the two options
+>   would always be forced to have the same value.
+> 
+> I believe the first solution is better, but let me know what you
+> think... I can provide the patch if you agree with the suggestion.
 
-That and your previous comments acted upon. Thanks! :-)
+ That indeed sounds like a good solution. As mentioned by Thomas, the
+BR2_PACKAGE_DIRECTFB_DEBUG option will go away, so I'd suggest an option
+BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT that defaults to y.
 
-Regards,
-Yann E. MORIN.
+ Regards,
+ Arnout
+
+> 
+> That would also prevent DirectFB to compile some useless features
+> in release mode.
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
