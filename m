@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Jun 2015 23:25:59 +0200
-Subject: [Buildroot] [PATCH 05/11] package/ktap: use kernel-module helper
-In-Reply-To: <b83c94f8a4484928bd45a9b4ed55c6c7d9f2751c.1433628825.git.yann.morin.1998@free.fr>
-References: <cover.1433628825.git.yann.morin.1998@free.fr>
- <b83c94f8a4484928bd45a9b4ed55c6c7d9f2751c.1433628825.git.yann.morin.1998@free.fr>
-Message-ID: <20150608232559.743f42e6@free-electrons.com>
+Date: Mon, 8 Jun 2015 23:28:50 +0200
+Subject: [Buildroot] New makedevs.c which can now handle users/groups
+ created via FOO_USERS
+In-Reply-To: <CACiQJzwO=snzcFXDJY7-eJ==dd7tcGrkvBahksHTv7UmfO_ZLA@mail.gmail.com>
+References: <CACiQJzwO=snzcFXDJY7-eJ==dd7tcGrkvBahksHTv7UmfO_ZLA@mail.gmail.com>
+Message-ID: <20150608232850.017e1915@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Jonathan,
 
-On Sun,  7 Jun 2015 00:20:41 +0200, Yann E. MORIN wrote:
+On Mon, 8 Jun 2015 16:39:59 -0400, Jonathan Boivin wrote:
 
->  define KTAP_BUILD_CMDS
->  	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) $(KTAP_FLAGS) ktap
-> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) mod
->  endef
->  
->  define KTAP_INSTALL_TARGET_CMDS
->  	$(INSTALL) -D -m755 $(@D)/ktap  $(TARGET_DIR)/usr/bin/ktap
-> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) modules_install
->  endef
+> This new version is useful when a package create new users via
+> FOO_USERS and want to use the username newly created into
+> FOO_PERMISSIONS.
+> 
+> http://pastebin.com/UK5WDm7X
 
-I think you are effectively getting rid of the KERNEL_SRC definition
-here. Did you test that it was working OK without this variable?
+Thanks. However, this is not the proper way of doing a patch submission
+to Buildroot. See
+http://buildroot.org/downloads/manual/manual.html#submitting-patches
+for details on how to do a proper patch submission.
+
+Thanks,
 
 Thomas
 -- 
