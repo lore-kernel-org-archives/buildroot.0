@@ -1,38 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 22:52:00 +0200
-Subject: [Buildroot] [PATCH v3 1/2] arch: tidy up mmu config
-In-Reply-To: <1433370844-11584-1-git-send-email-guido@vanguardiasur.com.ar>
-References: <1433340749-7711-1-git-send-email-guido@vanguardiasur.com.ar>
- <1433370844-11584-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <20150609225200.1b9bb712@free-electrons.com>
+Date: Tue, 9 Jun 2015 22:52:19 +0200
+Subject: [Buildroot] [git commit] lbreakout2: add LBREAKOUT2_VERSION_MAJOR
+	variable
+Message-ID: <20150609205248.4B9A681D83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Guido Mart?nez,
+commit: http://git.buildroot.net/buildroot/commit/?id=cee449a1ce14b587a397707cac3a4835a8e5ceca
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  3 Jun 2015 19:34:03 -0300, Guido Mart?nez wrote:
-> Instead of blacklisting which architectures support MMUs (mandatorily
-> or optionally), introduce two Kconfig options that are selected by each
-> architecture in each case.
-> 
-> This simplifies the logic in BR2_USE_MMU.
-> 
-> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  arch/Config.in                | 28 ++++++++++++++++++++++++++++
->  arch/Config.in.arm            | 17 +++++++++++++++++
->  arch/Config.in.xtensa         |  2 ++
->  toolchain/toolchain-common.in |  4 ++--
->  4 files changed, 49 insertions(+), 2 deletions(-)
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lbreakout2/lbreakout2.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-Both patches applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lbreakout2/lbreakout2.mk b/package/lbreakout2/lbreakout2.mk
+index d72b949..5dc4c71 100644
+--- a/package/lbreakout2/lbreakout2.mk
++++ b/package/lbreakout2/lbreakout2.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-LBREAKOUT2_SITE = http://downloads.sourceforge.net/lgames/lbreakout2/2.6
+-LBREAKOUT2_VERSION = 2.6.4
++LBREAKOUT2_VERSION_MAJOR = 2.6
++LBREAKOUT2_VERSION = $(LBREAKOUT2_VERSION_MAJOR).4
++LBREAKOUT2_SITE = http://downloads.sourceforge.net/lgames/lbreakout2/$(LBREAKOUT2_VERSION_MAJOR)
+ LBREAKOUT2_LICENSE = GPLv2+
+ LBREAKOUT2_LICENSE_FILES = COPYING
+ 
