@@ -1,41 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 23:10:21 +0200
-Subject: [Buildroot] [git commit] package/matchbox-panel: add support for
-	dnotify
-Message-ID: <20150609211053.1862D7FEE8@busybox.osuosl.org>
+Date: Tue, 9 Jun 2015 23:09:13 +0200
+Subject: [Buildroot] [git commit] package/matchbox: xlib-libXcursor is an
+	optional dependency
+Message-ID: <20150609211052.E5E777FEE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a18788d388cc9d531272d6ca73cce13fd118594d
+commit: http://git.buildroot.net/buildroot/commit/?id=fe13eac8c8a5c5af84a8bbbc8f08a5e39543272a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Using dnotify, matchbox-panel can automatically reload its menu.
-dnotify requires a kernel >=2.4, which we can consider to be
-virtually for granted.
+matchbox selects xlib-libXcursor, but does not build-depend on it.
 
-So, forcibly use dnotify.
+But xlib-libXcursor is only an optional dependency.
+
+Fix that by removing the select, and properly build-depend on it when
+it is enabled.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox-panel/matchbox-panel.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/matchbox/Config.in   |    1 -
+ package/matchbox/matchbox.mk |    4 ++++
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/matchbox-panel/matchbox-panel.mk b/package/matchbox-panel/matchbox-panel.mk
-index a5da780..e71337c 100644
---- a/package/matchbox-panel/matchbox-panel.mk
-+++ b/package/matchbox-panel/matchbox-panel.mk
-@@ -11,7 +11,7 @@ MATCHBOX_PANEL_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchb
- MATCHBOX_PANEL_LICENSE = GPLv2+
- MATCHBOX_PANEL_LICENSE_FILES = COPYING
- MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib
--MATCHBOX_PANEL_CONF_OPTS = --enable-expat
-+MATCHBOX_PANEL_CONF_OPTS = --enable-expat --enable-dnotify
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index 0c7e5ea..3a9f118 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -4,7 +4,6 @@ menuconfig BR2_PACKAGE_MATCHBOX
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_MATCHBOX_LIB
+ 	help
+ 	  Matchbox is an Open Source base environment for the X Window
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 1abcfd8..3b6a0eb 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -35,4 +35,8 @@ else
+ MATCHBOX_CONF_OPTS += --disable-session
+ endif
  
- ifeq ($(BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR),y)
- MATCHBOX_PANEL_CONF_OPTS += --enable-startup-notification
++ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
++MATCHBOX_DEPENDENCIES += xlib_libXcursor
++endif
++
+ $(eval $(autotools-package))
