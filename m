@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 21:37:26 +0200
-Subject: [Buildroot] [git commit] olsr: needs dynamic library support
-Message-ID: <20150609193737.5951381D56@busybox.osuosl.org>
+Date: Tue, 9 Jun 2015 21:38:07 +0200
+Subject: [Buildroot] [git commit] mc: change tarball compression to xz
+Message-ID: <20150609193832.E50A08185E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=07c170dc794a9dcf720854b98fbc7496d318392f
+commit: http://git.buildroot.net/buildroot/commit/?id=c281673065ea8983b714e8845d942b3d2b3b8698
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/08a/08a29bc48667f10d6dce4cb5cbb1ae6bec009e2c/
-http://autobuild.buildroot.net/results/33e/33e69998d152f819176c7aa3028a962dd32c1daf/
-http://autobuild.buildroot.net/results/e7a/e7aabfc9e80bd36958c6deeb5b02d5ef97629ae4/
+The hash file is updated accordingly.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/olsr/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/mc/mc.hash |    2 +-
+ package/mc/mc.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/olsr/Config.in b/package/olsr/Config.in
-index 70e5a48..a49c4e0 100644
---- a/package/olsr/Config.in
-+++ b/package/olsr/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_OLSR
- 	bool "olsrd"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  The Optimized Link State Routing protocol (OLSR) is a
- 	  routing protocol that is optimised for mobile ad-hoc
-@@ -12,6 +13,6 @@ config BR2_PACKAGE_OLSR
+diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+index 588bbaa..7ae1c3b 100644
+--- a/package/mc/mc.hash
++++ b/package/mc/mc.hash
+@@ -1,2 +1,2 @@
+ # Hash from http://ftp.midnight-commander.org/mc-4.8.14.sha256:
+-sha256  61fd0fd2280c3d09d7e0aec8ab001fc89dad8e4fd9941f386414667b55152ec5  mc-4.8.14.tar.bz2
++sha256  6b1f74efbdf394bfab084f4d2ea2e72173de5f12cd42be2533ca2c3b72edb8e6  mc-4.8.14.tar.xz
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index f96d396..742b8e8 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- 	  http://www.olsr.org/
- 
--comment "olsr needs a toolchain w/ threads"
-+comment "olsr needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ MC_VERSION = 4.8.14
+-MC_SOURCE = mc-$(MC_VERSION).tar.bz2
++MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE =  GPLv3+
+ MC_LICENSE_FILES = COPYING
