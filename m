@@ -1,30 +1,39 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 9 Jun 2015 16:04:08 +0200
-Subject: [Buildroot] Kernel zImage under 1MB
-In-Reply-To: <CADMiy=KWH-W4VGUjaMF8mmFTSRUxT13xbTeoWigo=gme8GDwKw@mail.gmail.com>
-References: <CADMiy=KWH-W4VGUjaMF8mmFTSRUxT13xbTeoWigo=gme8GDwKw@mail.gmail.com>
-Message-ID: <CAGm1_ksTzLFdBJuezjs=774Zx_sMoTnaiWQJDQqYsxd0B6jS4Q@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  9 Jun 2015 17:20:09 +0300
+Subject: [Buildroot] [PATCH] libxmlrpc: fix static build
+Message-ID: <5425b32256128e928f8ad22c596f91ab7ac5f9e8.1433859609.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 9, 2015 at 3:17 PM, Michal Gonda <gonda.miso@gmail.com> wrote:
-> Hi guys,
->
-> I am trying to build minimal kernel under 1 Mb with Buildroot. It is
-> intended for small board with qspi memory and basic functionality, ethernet,
-> usb, spi, and some GPIO's. Basic terminal access via ssh and UART. My first
-> thoughts are if it is even possible to modify kernel .config via
-> linux-menuconfig to reach this size.
->
-> Also if it is possible to identify the redundant parts without deep
-> knowledge about kernel architecture and exclude them from compilation.
->
-> If someone can direct me to good direction how to solve this problem or even
-> specify some tools and ways how to do it would be very helpful.
+Fixes:
+http://autobuild.buildroot.net/results/16d/16de14ace7b4e089f56b9cb173542e487cae3a9d/
 
-Take a look at this project: https://tiny.wiki.kernel.org/
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libxmlrpc/libxmlrpc.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Yegor
+diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+index c3788d6c3f36..a6137e07b828 100644
+--- a/package/libxmlrpc/libxmlrpc.mk
++++ b/package/libxmlrpc/libxmlrpc.mk
+@@ -35,4 +35,14 @@ LIBXMLRPC_MAKE_ENV = \
+ 	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
+ 	LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)"
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBXMLRPC_STATIC_OPTS = SHARED_LIB_TYPE=NONE MUST_BUILD_SHLIB=N
++endif
++
++LIBXMLRPC_MAKE_OPTS = $(LIBXMLRPC_STATIC_OPTS)
++LIBXMLRPC_INSTALL_STAGING_OPTS = $(LIBXMLRPC_STATIC_OPTS) \
++	DESTDIR=$(STAGING_DIR) install
++LIBXMLRPC_INSTALL_TARGET_OPTS = $(LIBXMLRPC_STATIC_OPTS) \
++	DESTDIR=$(TARGET_DIR) install
++
+ $(eval $(autotools-package))
+-- 
+2.1.4
