@@ -1,43 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 22:54:04 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{10,
-	14}.x and 4.0.x series
-Message-ID: <20150609211051.590AD81D65@busybox.osuosl.org>
+Date: Tue, 9 Jun 2015 22:55:48 +0200
+Subject: [Buildroot] [git commit] package/matchbox: make matchbox-lib a real
+	package
+Message-ID: <20150609211051.9D0FD81D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=65ac66892d54b0352a7a839c75b87ece91e3f98b
+commit: http://git.buildroot.net/buildroot/commit/?id=4c1280ed853f1340fc8c07a62807879abc6ba3a2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Currently, the matchbox package is using weird, legacy constructs to
+build its different parts.
+
+Notably, it adds matchbox-lib to the list of packages to build, even
+though it is not a real package since it does not have a Kconfig entry.
+
+Fix that:
+  - add a Kconfig entry for matchbox-lib
+  - select it from the top-level matchbox package
+
+Note that matchbox-common already depends on matchbox-lib.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/matchbox/Config.in              |    3 +++
+ package/matchbox/matchbox-lib/Config.in |    2 ++
+ package/matchbox/matchbox.mk            |    2 +-
+ 3 files changed, 6 insertions(+), 1 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 653209e..043a3c7 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -201,15 +201,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.79"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.80"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.43"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.43"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.44"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.14"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
--	default "4.0.4"		if BR2_KERNEL_HEADERS_4_0
-+	default "4.0.5"		if BR2_KERNEL_HEADERS_4_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index 7867ae3..70cc168 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_MATCHBOX
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
++	select BR2_PACKAGE_MATCHBOX_LIB
+ 	help
+ 	  Matchbox is an Open Source base environment for the X Window
+ 	  System running on non-desktop embedded platforms such as
+@@ -17,6 +18,8 @@ config BR2_PACKAGE_MATCHBOX
+ 
+ if BR2_PACKAGE_MATCHBOX
+ 
++source "package/matchbox/matchbox-lib/Config.in"
++
+ config BR2_PACKAGE_MATCHBOX_PANEL
+ 	bool "Matchbox Panel"
+ 	help
+diff --git a/package/matchbox/matchbox-lib/Config.in b/package/matchbox/matchbox-lib/Config.in
+new file mode 100644
+index 0000000..480e6fe
+--- /dev/null
++++ b/package/matchbox/matchbox-lib/Config.in
+@@ -0,0 +1,2 @@
++config BR2_PACKAGE_MATCHBOX_LIB
++	bool
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index fe1a7db..e367df2 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -1,4 +1,4 @@
+ ifeq ($(BR2_PACKAGE_MATCHBOX),y)
+ include $(sort $(wildcard package/matchbox/*/*.mk))
+-PACKAGES += matchbox-lib matchbox-wm
++PACKAGES += matchbox-wm
+ endif
