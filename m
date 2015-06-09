@@ -1,29 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 22:47:52 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/eudev: bump version to 3.1.1
-In-Reply-To: <1433675910-30087-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1433675910-30087-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150609224752.5840da94@free-electrons.com>
+Date: Tue, 9 Jun 2015 22:47:39 +0200
+Subject: [Buildroot] [git commit] package/eudev: bump version to 3.1.1
+Message-ID: <20150609204746.4D65D80448@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=80b91a21d3707dfaa5d26e9e3a08d439f80be16e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  7 Jun 2015 13:18:30 +0200, Bernd Kuhls wrote:
-> Removed patch applied upstream:
-> https://github.com/gentoo/eudev/commit/d2aeb8b63dfcb15161c4dd3e80491c844c3f0581#diff-0a5e92f58aded4146365ea36ee8b3c21
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: bump to version 3.1.1
+Removed patch applied upstream:
+https://github.com/gentoo/eudev/commit/d2aeb8b63dfcb15161c4dd3e80491c844c3f0581#diff-0a5e92f58aded4146365ea36ee8b3c21
 
-Applied, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: Doug Kehn <rdkehn at yahoo.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...evert-udev-rules-modernise-add_rule-a-bit.patch |   46 --------------------
+ package/eudev/eudev.hash                           |    2 +-
+ package/eudev/eudev.mk                             |    2 +-
+ 3 files changed, 2 insertions(+), 48 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/eudev/0002-Revert-udev-rules-modernise-add_rule-a-bit.patch b/package/eudev/0002-Revert-udev-rules-modernise-add_rule-a-bit.patch
+deleted file mode 100644
+index d0109c8..0000000
+--- a/package/eudev/0002-Revert-udev-rules-modernise-add_rule-a-bit.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From d2aeb8b63dfcb15161c4dd3e80491c844c3f0581 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sat, 4 Apr 2015 13:47:32 +0200
+-Subject: [PATCH] Revert "udev: rules - modernise add_rule a bit"
+-
+-Initialisers for anonymous unions are unknown to gcc-4.5, which is still
+-quite widely used.
+-
+-See the following build failure, reported by the Buildroot autobuilders:
+-    http://autobuild.buildroot.org/results/11e/11ebb926b891862e270b9cb39fd2ed4344b736a8/build-end.log
+-
+-This reverts commit 5cb98078479d93e25099c1cb73fa9c46aa9ccf29.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Cc: Tom Gundersen <teg@jklm.no>
+----
+-Notes:
+-  - submitted upstream: https://github.com/gentoo/eudev/pull/113
+-
+----
+- src/udev/udev-rules.c | 8 ++++----
+- 1 file changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/src/udev/udev-rules.c b/src/udev/udev-rules.c
+-index 5a4792e..3a96c8a 100644
+---- a/src/udev/udev-rules.c
+-+++ b/src/udev/udev-rules.c
+-@@ -1047,11 +1047,11 @@ static int add_rule(struct udev_rules *rules, char *line,
+-                     const char *filename, unsigned int filename_off, unsigned int lineno) {
+-         char *linepos;
+-         const char *attr;
+--        struct rule_tmp rule_tmp = {
+--                .rules = rules,
+--                .rule.type = TK_RULE,
+--        };
+-+        struct rule_tmp rule_tmp;
+- 
+-+        memzero(&rule_tmp, sizeof(struct rule_tmp));
+-+        rule_tmp.rules = rules;
+-+        rule_tmp.rule.type = TK_RULE;
+-         /* the offset in the rule is limited to unsigned short */
+-         if (filename_off < USHRT_MAX)
+-                 rule_tmp.rule.rule.filename_off = filename_off;
+--- 
+-1.9.1
+-
+diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
+index 49f86ae..7c750a9 100644
+--- a/package/eudev/eudev.hash
++++ b/package/eudev/eudev.hash
+@@ -1,2 +1,2 @@
+ # From http://dev.gentoo.org/~blueness/eudev/
+-md5	a2706a1413723b6b82eecb7d6982763c	eudev-3.0.tar.gz
++md5	d8d6b2ae5c9a740967b1ae2dccbae95b	eudev-3.1.1.tar.gz
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index cfff94a..101d510 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EUDEV_VERSION = 3.0
++EUDEV_VERSION = 3.1.1
+ EUDEV_SOURCE = eudev-$(EUDEV_VERSION).tar.gz
+ EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
+ EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
