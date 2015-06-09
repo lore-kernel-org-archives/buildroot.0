@@ -1,58 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 23:56:54 +0200
-Subject: [Buildroot] [PATCH v5] moarvm: new package
-In-Reply-To: <1433548025-25414-1-git-send-email-arnout@mind.be>
-References: <1433543601-17425-1-git-send-email-arnout@mind.be>
- <1433548025-25414-1-git-send-email-arnout@mind.be>
-Message-ID: <20150609235654.052a279a@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 9 Jun 2015 23:57:33 +0200
+Subject: [Buildroot] [PATCH 1/2] gflags: new package
+In-Reply-To: <20150609090119.1523b5f6@free-electrons.com>
+References: <1433831250-31968-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <1433831250-31968-2-git-send-email-rahul.bedarkar@imgtec.com>
+ <20150609090119.1523b5f6@free-electrons.com>
+Message-ID: <20150609215733.GC3671@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+Thomas, Rahul, All,
 
-On Sat,  6 Jun 2015 01:47:05 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->  [use buildroot's libatomic_ops, libuv and host-luajit; add
->   dependencies from libuv]
-> ---
-> v5 (Arnout): - add dynamic library to to comment
-> v4 (Arnout): - use buildroot's libatomic_ops, libuv and host-luajit
->              - add dependencies from libuv
-> ---
->  package/Config.in          |  1 +
->  package/moarvm/Config.in   | 19 +++++++++++++++++++
->  package/moarvm/moarvm.hash |  2 ++
->  package/moarvm/moarvm.mk   | 46 ++++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 68 insertions(+)
->  create mode 100644 package/moarvm/Config.in
->  create mode 100644 package/moarvm/moarvm.hash
->  create mode 100644 package/moarvm/moarvm.mk
+On 2015-06-09 09:01 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 9 Jun 2015 11:57:29 +0530, Rahul Bedarkar wrote:
+> 
+> > diff --git a/package/gflags/gflags.hash b/package/gflags/gflags.hash
+> > new file mode 100644
+> > index 0000000..9c8b27a
+> > --- /dev/null
+> > +++ b/package/gflags/gflags.hash
+> > @@ -0,0 +1,2 @@
+> > +# No hash for v2.1.2, comes from the github-helper:
+> > +none	xxx	gflags-v2.1.2.tar.gz
+> 
+> I believe in this case, we generally do not provide a hash file at all.
+> Though maybe in the future we will want to have a hash file for *all*
+> packages. Yann, what is our policy on this?
 
-I've applied, after fixing one little thing.
+Hmm. Ideally, I think we want a .hash file for all packages, so that can
+eventually be a hard error when one is missing.
 
+However, I can see that can be cumbersome to add a .hash file to just
+say 'talk to my hand, I have no hash'. Especially as we're not enforcing
+it so far...
 
-> diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-> new file mode 100644
-> index 0000000..d5cc911
-> --- /dev/null
-> +++ b/package/moarvm/moarvm.hash
-> @@ -0,0 +1,2 @@
-> +
-> +sha256  828843eb3da020ee24ff83933b63aebf4aa774b815a3dfa3a758d6334779565e  MoarVM-2015.05.tar.gz
+But I was planning on working on .hash sometime this summer to add all
+those missing at the time, so we have all .hash files for the lat
+release of the year. I'm pretty happy to see so many hashes being added
+in the meantime! ;-)
 
-The comment on the origin of the hash was missing. Since I couldn't
-find it on the website, I simply added "Locally computed", since I also
-verified the hash locally.
+So, to answer the specific question: I think that is good to have a
+none-hash file; and to top it off, it's nicely commented. :-)
 
-Thanks!
+Regards,
+Yann E. MORIN.
 
-Thomas
+> > +GFLAGS_VERSION = v2.1.2
+> > +GFLAGS_SITE = $(call github,gflags,gflags,$(GFLAGS_VERSION))
+> > +GFLAGS_INSTALL_STAGING = YES
+> > +GFLAGS_LICENSE = BSD-3c
+> > +GFLAGS_LICENSE_FILES = COPYING.txt
+> > +
+> > +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),n)
+> 
+> This should be:
+> 
+> ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+> 
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
