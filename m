@@ -1,30 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 21:40:29 +0200
-Subject: [Buildroot] [PATCH 1/3] mc: change tarball compression to xz
-In-Reply-To: <1433799967-7694-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1433799967-7694-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20150609214029.30e92753@free-electrons.com>
+From: =?UTF-8?q?C=C3=A9dric=20Marie?= <cedric.marie@openmailbox.org>
+Date: Tue,  9 Jun 2015 22:32:38 +0200
+Subject: [Buildroot] [PATCH] directfb: add an option for debugging support
+Message-ID: <1433881958-15591-1-git-send-email-cedric.marie@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+DirectFB debugging support is enabled by default. This new option makes
+it possible to disable it (--disable-debug-support) and build the
+library with no debug feature at all.
 
-On Mon,  8 Jun 2015 23:46:05 +0200, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/mc/mc.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+NB: When debugging support is disabled, the target installation path is
+suffixed with -pure.
 
-Series applied, after squashing patch 2 into patch 1 as suggested by
-Arnout. Without doing this, if only patch 1 was applied, you would
-have broken the build of the mc package: when a hash file exists, it
-*must* have the hashes of all files downloaded by the package.
+Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
+---
+ package/directfb/Config.in   | 7 +++++++
+ package/directfb/directfb.mk | 4 ++++
+ 2 files changed, 11 insertions(+)
 
-Thomas
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 7759f8f..0015c0c 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -20,8 +20,15 @@ config BR2_PACKAGE_DIRECTFB_MULTI
+ comment "directfb multi application needs a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL
+ 
++config BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT
++	bool "directfb debugging support"
++	default y
++	help
++	  Compile DirectFB with debugging support
++
+ config BR2_PACKAGE_DIRECTFB_DEBUG
+ 	bool "directfb debugging"
++	depends on BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT
+ 	help
+ 	  Compile DirectFB with lots of debug output
+ 
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index e3dc506..d8af56e 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -39,6 +39,10 @@ DIRECTFB_CONF_OPTS += --enable-multi --enable-fusion
+ DIRECTFB_DEPENDENCIES += linux-fusion
+ endif
+ 
++ifneq ($(BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT),y)
++DIRECTFB_CONF_OPTS += --disable-debug-support
++endif
++
+ ifeq ($(BR2_PACKAGE_DIRECTFB_DEBUG),y)
+ DIRECTFB_CONF_OPTS += --enable-debug
+ endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
