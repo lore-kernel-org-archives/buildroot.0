@@ -1,66 +1,27 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Tue, 9 Jun 2015 20:09:01 +0200
-Subject: [Buildroot] Complete Buildroot training,
-	with freely available materials
-In-Reply-To: <20150604165324.0ddd67fd@free-electrons.com>
-References: <1433297794-12521-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAKAx1cgVP3QVdRiP6=VP_Hr8mKxsS20TkQ-anLTM=Vq63oZxQw@mail.gmail.com>
- <20150604165324.0ddd67fd@free-electrons.com>
-Message-ID: <CAKAx1cjvD_0vcaaJ6Fa5yb3T5X9084RjpCX5GTBHD8ZYZm98og@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 Jun 2015 21:35:19 +0200
+Subject: [Buildroot] [git commit] stress: add hash file
+Message-ID: <20150609193544.E0517807E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=a7a927cde5a356f7b66454b99591fc73504c3c27
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Jun 4, 2015 at 4:53 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu, 4 Jun 2015 10:44:01 +0200, Lionel Orry wrote:
->
->> > I'm happy to announce that Free Electrons has developed a complete
->> > 3-days training course on Buildroot:
->> >
->> >   http://free-electrons.com/training/buildroot/
->>
->> Awesome work! Thanks a lot to everyone who contributed to this guide.
->> I've read it entirely and I learned a lot of useful stuff and tips.
->
-> Thanks! Glad to know this is useful. As you can imagine, it required
-> quite a bit of preparation work :-)
->
->> >  * LaTeX source code
->> >    http://git.free-electrons.com/training-materials/
->> >
->>
->> In case we wish to suggest some corrections / additions, where should
->> we send patches for review ?
->
-> I *think* you can send them to our training-materials-update mailing
-> list, to which you can subscribe at
-> http://lists.free-electrons.com/mailman/listinfo/training-materials-updates.
-> If that doesn't work, just send them to me.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/stress/stress.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Well I eventually sent them to you since I'm still waiting for
-moderator approval on the training-materials-update list... :)
-
->
-> However, for non-trivial contributions, we do ask contributors to
-> assign their copyright to Free Electrons (which just requires an
-> e-mail, no paperwork involved).
->
-> Looking forward to seeing your patches!
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-Regards,
-Lionel
+diff --git a/package/stress/stress.hash b/package/stress/stress.hash
+new file mode 100644
+index 0000000..24cf043
+--- /dev/null
++++ b/package/stress/stress.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256 057e4fc2a7706411e1014bf172e4f94b63a12f18412378fca8684ca92408825b stress-1.0.4.tar.gz
