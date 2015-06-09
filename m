@@ -1,38 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 23:07:06 +0200
-Subject: [Buildroot] [git commit] package/matchbox-keyboard: enforce
-	disabling support for cairo
-Message-ID: <20150609211052.C7E717FEE8@busybox.osuosl.org>
+Date: Tue, 9 Jun 2015 23:06:59 +0200
+Subject: [Buildroot] [git commit] package/matchbox: drop useless dependencies
+Message-ID: <20150609211052.BEFA77FEE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9f90345c8eaf1bcf06bba7a1bfd69f7a3fabc483
+commit: http://git.buildroot.net/buildroot/commit/?id=d890098d0510b6ae6f53be34eb48d5cbc50d8bdf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We usually explicitly enforce disabling optional support when it is
-possible.
+xlib-libXft is only needed when building a 'standalone' matchbox, which
+means not using matchbox-lib.
 
-Do so for Cairo.
+But we *are* building matchbox-lib, and we do not support the standalone
+mode (and probably won't, as even upstream says it is ugly, by lack of
+theming).
+
+Similarly, xlib-libXext is only used for its 'xsync' extension, for
+which support is entirely commented-out in matchbox.
+
+So, drop the dependency on xlib-libXft, and make it explicit we're not
+building either standalone modes; drop xlib-libXext.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox-keyboard/matchbox-keyboard.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/matchbox/Config.in   |    1 -
+ package/matchbox/matchbox.mk |   11 ++++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox-keyboard/matchbox-keyboard.mk
-index fcdd8b1..ba524c0 100644
---- a/package/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox-keyboard/matchbox-keyboard.mk
-@@ -24,6 +24,7 @@ ifeq ($(BR2_PACKAGE_CAIRO),y)
- MATCHBOX_KEYBOARD_CONF_OPTS += --enable-cairo
- MATCHBOX_KEYBOARD_DEPENDENCIES += cairo
- else
-+MATCHBOX_KEYBOARD_CONF_OPTS += --disable-cairo
- MATCHBOX_KEYBOARD_DEPENDENCIES += xlib_libXft
- endif
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index d42b90f..0c7e5ea 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -4,7 +4,6 @@ menuconfig BR2_PACKAGE_MATCHBOX
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_MATCHBOX_LIB
+ 	help
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index b1f96a6..1abcfd8 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -11,15 +11,16 @@ MATCHBOX_LICENSE = GPLv2+
+ MATCHBOX_LICENSE_FILES = COPYING
  
+ MATCHBOX_DEPENDENCIES = matchbox-lib
+-MATCHBOX_CONF_OPTS = --enable-expat --disable-gconf --disable-composite
++MATCHBOX_CONF_OPTS = \
++	--enable-expat \
++	--disable-gconf \
++	--disable-composite \
++	--disable-standalone \
++	--disable-standalone-xft
+ 
+ # Workaround bug in configure script
+ MATCHBOX_CONF_ENV = expat=yes
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
+-MATCHBOX_DEPENDENCIES += xlib_libXft
+-endif
+-
+ ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
+ MATCHBOX_CONF_OPTS += --enable-startup-notification
+ MATCHBOX_DEPENDENCIES += startup-notification
