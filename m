@@ -1,60 +1,47 @@
-From: =?UTF-8?q?C=C3=A9dric=20Marie?= <cedric.marie@openmailbox.org>
-Date: Tue,  9 Jun 2015 22:32:38 +0200
-Subject: [Buildroot] [PATCH] directfb: add an option for debugging support
-Message-ID: <1433881958-15591-1-git-send-email-cedric.marie@openmailbox.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 Jun 2015 22:42:16 +0200
+Subject: [Buildroot] [git commit] package/ca-certificates: bump version to
+	20150426
+Message-ID: <20150609204231.E22F681D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-DirectFB debugging support is enabled by default. This new option makes
-it possible to disable it (--disable-debug-support) and build the
-library with no debug feature at all.
+commit: http://git.buildroot.net/buildroot/commit/?id=09071d4a039ef332bfaa148e1f210a18a8d5ee82
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-NB: When debugging support is disabled, the target installation path is
-suffixed with -pure.
-
-Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/directfb/Config.in   | 7 +++++++
- package/directfb/directfb.mk | 4 ++++
- 2 files changed, 11 insertions(+)
+ package/ca-certificates/ca-certificates.hash |    4 ++--
+ package/ca-certificates/ca-certificates.mk   |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 7759f8f..0015c0c 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -20,8 +20,15 @@ config BR2_PACKAGE_DIRECTFB_MULTI
- comment "directfb multi application needs a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index 0165cb5..06120f5 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,3 +1,3 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1   6013ce6a3bf13e73a7e1feddcd17f5b2c09e5bd3                         ca-certificates_20141019.tar.xz
+-sha256 684902d3f4e9ad27829f4af0d9d2d588afed03667997579b9c2be86fcd1eb73a ca-certificates_20141019.tar.xz
++sha1   c2d7ae81e28ff1f8a6b9ef7602c4e756ff08503c                         ca-certificates_20150426.tar.xz
++sha256 37dbaa93ed64cc4ae93ac295f9248fbc741bd51376438cfb1257f17efab5494f ca-certificates_20150426.tar.xz
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 8fe26c9..b64120e 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT
-+	bool "directfb debugging support"
-+	default y
-+	help
-+	  Compile DirectFB with debugging support
-+
- config BR2_PACKAGE_DIRECTFB_DEBUG
- 	bool "directfb debugging"
-+	depends on BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT
- 	help
- 	  Compile DirectFB with lots of debug output
- 
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index e3dc506..d8af56e 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -39,6 +39,10 @@ DIRECTFB_CONF_OPTS += --enable-multi --enable-fusion
- DIRECTFB_DEPENDENCIES += linux-fusion
- endif
- 
-+ifneq ($(BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT),y)
-+DIRECTFB_CONF_OPTS += --disable-debug-support
-+endif
-+
- ifeq ($(BR2_PACKAGE_DIRECTFB_DEBUG),y)
- DIRECTFB_CONF_OPTS += --enable-debug
- endif
--- 
-2.1.4
+-CA_CERTIFICATES_VERSION = 20141019
++CA_CERTIFICATES_VERSION = 20150426
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20150528T221654Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
+ CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
