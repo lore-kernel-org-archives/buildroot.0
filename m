@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 22:43:17 +0200
-Subject: [Buildroot] [git commit] postgresql: bump to version 9.4.3
-Message-ID: <20150609204351.1DF9E7F95F@busybox.osuosl.org>
+Date: Tue, 9 Jun 2015 22:43:34 +0200
+Subject: [Buildroot] [git commit] openvpn: bump to version 2.3.7
+Message-ID: <20150609204351.2A55081D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=233862860cfd4474dcc2d298d54b1f058b624e8e
+commit: http://git.buildroot.net/buildroot/commit/?id=fb67b749cacacb5aaf8cf594dfb80d975982dfe2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/postgresql/postgresql.hash |    4 ++--
- package/postgresql/postgresql.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/openvpn/openvpn.hash |    2 +-
+ package/openvpn/openvpn.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 2f8de30..d0d40a1 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 38579ab..9a917b9 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
 @@ -1,2 +1,2 @@
--# From https://ftp.postgresql.org/pub/source/v9.4.2/postgresql-9.4.2.tar.bz2.sha256
--sha256	81fda191c165ba1d25d75cd0166ece5abdcb4a7f5eca01b349371e279ebb4d11  postgresql-9.4.2.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v9.4.3/postgresql-9.4.3.tar.bz2.sha256
-+sha256	734acfd2ac352dd0cd353d226f3199c2e1a2730200998aea5b38cf685136d755  postgresql-9.4.3.tar.bz2
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index d4895a0..c4fa36c 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
+ # Locally calculated after checking pgp signature
+-sha256	adae2ef34c9225347a844683b88caa87cde0979b7f2390fd1776db0eb51510ed 	openvpn-2.3.6.tar.xz
++sha256	4062ce972500f98988e9c6e9dd1040be25582f0d49aa7e69f3f4cff96e9aebee 	openvpn-2.3.7.tar.xz
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 74e5783..336d491 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POSTGRESQL_VERSION = 9.4.2
-+POSTGRESQL_VERSION = 9.4.3
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+-OPENVPN_VERSION = 2.3.6
++OPENVPN_VERSION = 2.3.7
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf
