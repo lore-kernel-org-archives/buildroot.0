@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 21:35:19 +0200
-Subject: [Buildroot] [git commit] stress: add hash file
-Message-ID: <20150609193544.E0517807E9@busybox.osuosl.org>
+Date: Tue, 9 Jun 2015 21:35:49 +0200
+Subject: [Buildroot] [PATCH] stress: add hash file
+In-Reply-To: <5403625348634d9e572aadb582f4abe1b5d0d566.1433826235.git.baruch@tkos.co.il>
+References: <5403625348634d9e572aadb582f4abe1b5d0d566.1433826235.git.baruch@tkos.co.il>
+Message-ID: <20150609213549.5d0eb9f9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a7a927cde5a356f7b66454b99591fc73504c3c27
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Baruch Siach,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/stress/stress.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Tue,  9 Jun 2015 08:03:55 +0300, Baruch Siach wrote:
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/stress/stress.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/stress/stress.hash
 
-diff --git a/package/stress/stress.hash b/package/stress/stress.hash
-new file mode 100644
-index 0000000..24cf043
---- /dev/null
-+++ b/package/stress/stress.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256 057e4fc2a7706411e1014bf172e4f94b63a12f18412378fca8684ca92408825b stress-1.0.4.tar.gz
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
