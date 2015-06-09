@@ -1,57 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 23:55:39 +0200
-Subject: [Buildroot] [PATCH 16/32 v2] package/matchbox-common: fix
- dependencies
-In-Reply-To: <20150609215104.GA3671@free.fr>
-References: <cover.1433362840.git.yann.morin.1998@free.fr>
- <9fa81fd7cbd6c1694dd4718ccf1ec24fe45f63fe.1433362840.git.yann.morin.1998@free.fr>
- <20150609230440.6a91bd70@free-electrons.com>
- <20150609215104.GA3671@free.fr>
-Message-ID: <20150609235539.60591c63@free-electrons.com>
+Date: Tue, 9 Jun 2015 23:13:41 +0200
+Subject: [Buildroot] [git commit] scripts/mkusers: allow users with no
+	password value set
+Message-ID: <20150609215551.97BBD81DCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=8d972df185de6e841a1752b67e466e8ffc95bfac
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 9 Jun 2015 23:51:04 +0200, Yann E. MORIN wrote:
+The following allows a user definition to specify that a created user
+entry should not have a password value set. Original implementation
+allowed a user definition to provide a password value of "=" (no quotes)
+to generate a crypt-encoded empty string value. In some cases, it may be
+desired to have no value specified for a user's password. By using a
+value "-" for a password, no value will be set in the shadow value.
 
-> As far as I understand it, matchbox-common installs the "desktop
-> folders" which are only meaningful with a "desktop manager", i.e. either
-> matchbox-panel or matchbox-desktop.
-> 
-> Conversely, neither "matchbox-panel" nor "matchbox-desktop" require
-> "matchbox-common".
-> 
-> So I still believe the dependency is correct:
->   - no reason to expose matchbox-common if neither matchbox-panel nor
->     matchbox-desktop is available,
->   - expose matchbox-common when either or both are enabled,
->   - no reason to forcibly select matchbox-common from either of those
->     two packages.
+An example when this can be used is when logging into a terminal.
+Logging into a session with an encoded empty password will prompt a user
+to enter a password since it does not know the password is empty. If the
+password field blank, a login session will not prompt for a password.
 
-Hum, well then in such cases, for other packages in Buildroot, we
-simply don't have any "depends on". We don't try to hide libraries when
-no application using them is enabled, for example.
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/makeusers-syntax.txt |    3 ++-
+ support/scripts/mkusers          |    3 +++
+ 2 files changed, 5 insertions(+), 1 deletions(-)
 
-> [
-> Unrelated to that patch, but worth commenting on, however:
-> 
-> Besides, matchbox-panel and matchbox-desktop are not mutually exclusive
-> at build time; at runtime, they can't both run simultaneously on the
-> same X display, probably (it would be like running both Kwin and Unity
-> at the same time on the same X display).
-> ]
-
-I haven't looked at all, but isn't matchbox-desktop taking care of the
-"desktop" (i.e background, etc.) while matchbox-panel is taking care
-really of the panel (with the menu to start applications, the taskbar
-and al.) ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/manual/makeusers-syntax.txt b/docs/manual/makeusers-syntax.txt
+index ffdb961..467e596 100644
+--- a/docs/manual/makeusers-syntax.txt
++++ b/docs/manual/makeusers-syntax.txt
+@@ -31,7 +31,8 @@ Where:
+   then login is disabled. If prefixed with +=+, then it is interpreted
+   as clear-text, and will be crypt-encoded (using MD5). If prefixed with
+   +!=+, then the password will be crypt-encoded (using MD5) and login
+-  will be disabled. If set to +*+, then login is not allowed.
++  will be disabled. If set to +*+, then login is not allowed. If set to 
++  +-+, then no password value will be set.
+ - +home+ is the desired home directory for the user. If set to '-', no
+   home directory will be created, and the user's home will be +/+.
+   Explicitly setting +home+ to +/+ is not allowed.
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index 026519e..9c5c4dc 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -318,6 +318,9 @@ add_one_user() {
+         *)  fail "home must be an absolute path\n";;
+     esac
+     case "${passwd}" in
++        -)
++            _passwd=""
++            ;;
+         !=*)
+             _passwd='!'"$( encode_password "${passwd#!=}" )"
+             ;;
