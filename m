@@ -1,88 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 9 Jun 2015 23:51:04 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 Jun 2015 23:55:39 +0200
 Subject: [Buildroot] [PATCH 16/32 v2] package/matchbox-common: fix
  dependencies
-In-Reply-To: <20150609230440.6a91bd70@free-electrons.com>
+In-Reply-To: <20150609215104.GA3671@free.fr>
 References: <cover.1433362840.git.yann.morin.1998@free.fr>
  <9fa81fd7cbd6c1694dd4718ccf1ec24fe45f63fe.1433362840.git.yann.morin.1998@free.fr>
  <20150609230440.6a91bd70@free-electrons.com>
-Message-ID: <20150609215104.GA3671@free.fr>
+ <20150609215104.GA3671@free.fr>
+Message-ID: <20150609235539.60591c63@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2015-06-09 23:04 +0200, Thomas Petazzoni spake thusly:
-> On Wed,  3 Jun 2015 22:41:33 +0200, Yann E. MORIN wrote:
-> > matchbox-common can be used by both matchbox-desktop and matchbox-panel,
-> > so it needs to depend on either, not both.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > ---
-> >  package/matchbox-common/Config.in | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/package/matchbox-common/Config.in b/package/matchbox-common/Config.in
-> > index 33d6cc4..5a038e1 100644
-> > --- a/package/matchbox-common/Config.in
-> > +++ b/package/matchbox-common/Config.in
-> > @@ -1,7 +1,7 @@
-> >  config BR2_PACKAGE_MATCHBOX_COMMON
-> >  	bool "matchbox-common"
-> >  	select BR2_PACKAGE_MATCHBOX_LIB
-> > -	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
-> > +	depends on BR2_PACKAGE_MATCHBOX_PANEL || BR2_PACKAGE_MATCHBOX_DESKTOP
-> >  	help
-> >  	  Common desktop folders and matchbox-session script.
-> >  
+On Tue, 9 Jun 2015 23:51:04 +0200, Yann E. MORIN wrote:
+
+> As far as I understand it, matchbox-common installs the "desktop
+> folders" which are only meaningful with a "desktop manager", i.e. either
+> matchbox-panel or matchbox-desktop.
 > 
-> I'll apply because I want to apply the rest of the series, but why are
-> we doing this in the first place? I don't think packages in Buildroot
-> have a "depends on" on things that can *use* them. The dependencies in
-> Buildroot are always the other way around: you use a 'depends on' or a
-> 'select' because you need some other thing.
+> Conversely, neither "matchbox-panel" nor "matchbox-desktop" require
+> "matchbox-common".
 > 
-> Why isn't matchbox-common maybe always visible, like we do for all
-> packages ?
+> So I still believe the dependency is correct:
+>   - no reason to expose matchbox-common if neither matchbox-panel nor
+>     matchbox-desktop is available,
+>   - expose matchbox-common when either or both are enabled,
+>   - no reason to forcibly select matchbox-common from either of those
+>     two packages.
 
-As far as I understand it, matchbox-common installs the "desktop
-folders" which are only meaningful with a "desktop manager", i.e. either
-matchbox-panel or matchbox-desktop.
+Hum, well then in such cases, for other packages in Buildroot, we
+simply don't have any "depends on". We don't try to hide libraries when
+no application using them is enabled, for example.
 
-Conversely, neither "matchbox-panel" nor "matchbox-desktop" require
-"matchbox-common".
+> [
+> Unrelated to that patch, but worth commenting on, however:
+> 
+> Besides, matchbox-panel and matchbox-desktop are not mutually exclusive
+> at build time; at runtime, they can't both run simultaneously on the
+> same X display, probably (it would be like running both Kwin and Unity
+> at the same time on the same X display).
+> ]
 
-So I still believe the dependency is correct:
-  - no reason to expose matchbox-common if neither matchbox-panel nor
-    matchbox-desktop is available,
-  - expose matchbox-common when either or both are enabled,
-  - no reason to forcibly select matchbox-common from either of those
-    two packages.
+I haven't looked at all, but isn't matchbox-desktop taking care of the
+"desktop" (i.e background, etc.) while matchbox-panel is taking care
+really of the panel (with the menu to start applications, the taskbar
+and al.) ?
 
-Of course, someone actually using matchbox may well prove me wrong. ;-)
-Until then, that's all I can explain of what I understand of the
-matchbox stack.
-
-[
-Unrelated to that patch, but worth commenting on, however:
-
-Besides, matchbox-panel and matchbox-desktop are not mutually exclusive
-at build time; at runtime, they can't both run simultaneously on the
-same X display, probably (it would be like running both Kwin and Unity
-at the same time on the same X display).
-]
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
