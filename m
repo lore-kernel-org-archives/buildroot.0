@@ -1,43 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Jun 2015 00:11:26 +0200
-Subject: [Buildroot] Kernel zImage under 1MB
-In-Reply-To: <CADMiy=KWH-W4VGUjaMF8mmFTSRUxT13xbTeoWigo=gme8GDwKw@mail.gmail.com>
- (Michal Gonda's message of "Tue, 9 Jun 2015 15:17:40 +0200")
-References: <CADMiy=KWH-W4VGUjaMF8mmFTSRUxT13xbTeoWigo=gme8GDwKw@mail.gmail.com>
-Message-ID: <87pp54jzw1.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  9 Jun 2015 19:52:00 -0300
+Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2015.06.05
+Message-ID: <1433890320-23081-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michal" == Michal Gonda <gonda.miso@gmail.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Hi guys,
- > I am trying to build *minimal kernel under 1 Mb with Buildroot*. It is
- > intended for small board with *qspi memory* and *basic functionality,
- > ethernet, usb, spi,* and *some GPIO's*. Basic terminal access via *ssh* and
- > *UART*. My first thoughts are if it is even possible to modify kernel
- > *.config* via *linux-menuconfig* to reach this size.
-
- > Also if it is possible to *identify the redundant parts* without deep
- > knowledge about kernel architecture and exclude them from compilation.
-
- > If someone can direct me to good direction how to solve this problem or
- > even specify some tools and ways how to do it would be very helpful.
-
-This is more of a kernel question than something specific to
-Buildroot. You didn't specify your exact hardware setup, and if your 1MB
-(I guess you mean MB=megabyte and not Mb=megabit) is flash size or
-runtime memory use, but a modern Linux kernel with the above features is
-unlikely to fit within that space with just tweaking configuration
-options.
-
-For buildroot itself, for a static uClibc based build with busybox +
-dropbear (ARMv7, thumb2) our .xz compressed rootfs is ~450KB, but our
-default busybox config is quite bloated, so it can easily be trimmed to
-something significantly smaller (I did a quick test and ended up ~250KB
-still with a shell and the basic coreutils and networking commands).
-
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index 1afb023..250f4d8 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256	fe5b5fae4934b29f2d15e018fbecae013fda44cf023c10285a669c86c5a33da3	wireless-regdb-2015.05.15.tar.xz
++sha256	69306cfd5ae97ae5f905e0e1e167b6ac8d28e49b58880621ad0024b59f4f8564	wireless-regdb-2015.06.05.tar.xz
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 8a5b6ab..92068a6 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRELESS_REGDB_VERSION = 2015.05.15
++WIRELESS_REGDB_VERSION = 2015.06.05
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
 -- 
-Bye, Peter Korsgaard
+2.3.6
