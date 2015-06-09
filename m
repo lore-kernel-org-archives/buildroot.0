@@ -1,65 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 23:12:21 +0200
-Subject: [Buildroot] [PATCH 0/32 v2] matchbox: huge cleanups (branch
- yem/matchbox)
-In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
-References: <cover.1433362840.git.yann.morin.1998@free.fr>
-Message-ID: <20150609231221.5754aa31@free-electrons.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue, 09 Jun 2015 23:28:25 +0200
+Subject: [Buildroot] [PATCH 1/3] mc: change tarball compression to xz
+In-Reply-To: <20150609214029.30e92753@free-electrons.com>
+References: <1433799967-7694-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <20150609214029.30e92753@free-electrons.com>
+Message-ID: <55775A79.1090300@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hi Thomas,
 
-On Wed,  3 Jun 2015 22:41:44 +0200, Yann E. MORIN wrote:
+> Dear Jerzy Grzegorek,
+>
+> On Mon,  8 Jun 2015 23:46:05 +0200, Jerzy Grzegorek wrote:
+>> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+>> ---
+>>   package/mc/mc.mk | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+> Series applied, after squashing patch 2 into patch 1 as suggested by
+> Arnout. Without doing this, if only patch 1 was applied, you would
+> have broken the build of the mc package: when a hash file exists, it
+> *must* have the hashes of all files downloaded by the package.
 
-> Yann E. MORIN (32):
->       package/matchbox-wm: drop useless commented options
->       package/matchbox: make matchbox-lib a real package
->       package/matchbox: make matchbox-wm a real package
->       package/matchbox: make matchbox-panel a real package
->       package/matchbox: make matchbox-desktop a real package
->       package/matchbox: make matchbox-common a real package
->       package/matchbox: make matchbox-fakekey a real package
->       package/matchbox: make matchbox-keyboard a real package
->       package/matchbox: make match-startup-monitor a real package
->       package/matchbox: remove superfluous conditional includes
->       package/matchbox: point to new home
->       package/matchbox: get rid of intermediate non-package matchbox
->       package/matchbox-common: move one directory higher
->       package/matchbox: fix option prompts
->       package/matchbox: add missing dependencies to matchbox-lib
->       package/matchbox-common: fix dependencies
->       package/matchbox-fakekey: add missing dependency
->       package/matchbox: finally add prompts to all sub-packages
->       package/matchbox-startup-monitor: invert dependency chain
->       package/matchbox: forcibly disable gconf
->       package/matchbox: forcibly disable support for compositing
->       package/matchbox: make it a menu
->       package/matchbox: enable support for the Xsession manager
->       package/matchbox: drop useless dependencies
->       package/matchbox-keyboard: enforce disabling support for cairo
->       package/matchbox-common: explicitly disable PDA folders when not selected
->       package/matchbox: wrap long lines
->       package/matchbox: xlib-libXcursor is an optional dependency
->       package/matchbox: xlib_libXfixes is an optional dependency
->       package/matchbox-panel: use ACPI for the battery applet
->       package/matchbox-panel: add support for dnotify
->       package/matchbox-panel: fix WiFi monitoring
+Sounds logical.
+Thanks.
 
-Entire series applied. Thanks a lot to you for having worked on
-Matchbox, and to Arnout for the review work.
+Regards,
+Jerzy
 
-Please have a look at the comment I made against patch 16. For the
-rest, it seemed to be alright, and even if there are minor issues, it's
-still much much better than what existed.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>
+> Thomas
