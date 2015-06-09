@@ -1,59 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 22:56:24 +0200
-Subject: [Buildroot] [git commit] package/matchbox: make matchbox-desktop a
-	real package
-Message-ID: <20150609211051.C4A747FEE8@busybox.osuosl.org>
+Date: Tue, 9 Jun 2015 23:03:06 +0200
+Subject: [Buildroot] [git commit] package/matchbox: add missing dependencies
+	to matchbox-lib
+Message-ID: <20150609211052.692BB7FEE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=29e7cf4ed2a3520ccc257430ab240f3f43f4af6f
+commit: http://git.buildroot.net/buildroot/commit/?id=b9a4e61087f324b7eac49c0c1f8c006119196621
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, matchbox-desktop is treated as if it were an option of the
-matchbox package.
+Most of the matchbox packages build-depend on matchbox-lib, but were not
+selecting it from their Config.in.
 
-But that's not true, since it is a real package all by itself, with its
-own archive and its own buildsystem.
+Fix that.
 
-So, make it a real package.
-
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox/Config.in                  |    7 +------
- package/matchbox/matchbox-desktop/Config.in |    5 +++++
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/matchbox-common/Config.in          |    1 +
+ package/matchbox-desktop/Config.in         |    1 +
+ package/matchbox-fakekey/Config.in         |    1 +
+ package/matchbox-keyboard/Config.in        |    1 +
+ package/matchbox-startup-monitor/Config.in |    1 +
+ 5 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index e791cea..39aff3c 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -22,12 +22,7 @@ if BR2_PACKAGE_MATCHBOX
- source "package/matchbox/matchbox-lib/Config.in"
- source "package/matchbox/matchbox-wm/Config.in"
- source "package/matchbox/matchbox-panel/Config.in"
--
--config BR2_PACKAGE_MATCHBOX_DESKTOP
--	bool "Matchbox Desktop"
--	select BR2_PACKAGE_ZLIB
--	help
--	  A PDA style application launcher or 'item browser'.
-+source "package/matchbox/matchbox-desktop/Config.in"
- 
+diff --git a/package/matchbox-common/Config.in b/package/matchbox-common/Config.in
+index f1c4ce3..33d6cc4 100644
+--- a/package/matchbox-common/Config.in
++++ b/package/matchbox-common/Config.in
+@@ -1,5 +1,6 @@
  config BR2_PACKAGE_MATCHBOX_COMMON
- 	bool "Matchbox session common files"
-diff --git a/package/matchbox/matchbox-desktop/Config.in b/package/matchbox/matchbox-desktop/Config.in
-new file mode 100644
-index 0000000..c9fd196
---- /dev/null
-+++ b/package/matchbox/matchbox-desktop/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_MATCHBOX_DESKTOP
-+	bool "Matchbox Desktop"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  A PDA style application launcher or 'item browser'.
+ 	bool "matchbox-common"
++	select BR2_PACKAGE_MATCHBOX_LIB
+ 	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
+ 	help
+ 	  Common desktop folders and matchbox-session script.
+diff --git a/package/matchbox-desktop/Config.in b/package/matchbox-desktop/Config.in
+index ed80c22..22c568b 100644
+--- a/package/matchbox-desktop/Config.in
++++ b/package/matchbox-desktop/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_MATCHBOX_DESKTOP
+ 	bool "matchbox-desktop"
++	select BR2_PACKAGE_MATCHBOX_LIB
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  A PDA style application launcher or 'item browser'.
+diff --git a/package/matchbox-fakekey/Config.in b/package/matchbox-fakekey/Config.in
+index 334f3a2..c0cde42 100644
+--- a/package/matchbox-fakekey/Config.in
++++ b/package/matchbox-fakekey/Config.in
+@@ -1,2 +1,3 @@
+ config BR2_PACKAGE_MATCHBOX_FAKEKEY
+ 	bool
++	select BR2_PACKAGE_MATCHBOX_LIB
+diff --git a/package/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
+index 056a255..8bd2a79 100644
+--- a/package/matchbox-keyboard/Config.in
++++ b/package/matchbox-keyboard/Config.in
+@@ -3,5 +3,6 @@ config BR2_PACKAGE_MATCHBOX_KEYBOARD
+ 	select BR2_PACKAGE_XLIB_LIBXTST
+ 	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_MATCHBOX_FAKEKEY
++	select BR2_PACKAGE_MATCHBOX_LIB
+ 	help
+ 	  Virtual Keyboard
+diff --git a/package/matchbox-startup-monitor/Config.in b/package/matchbox-startup-monitor/Config.in
+index 95af5fc..522d7f7 100644
+--- a/package/matchbox-startup-monitor/Config.in
++++ b/package/matchbox-startup-monitor/Config.in
+@@ -1,3 +1,4 @@
+ config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
+ 	bool
++	select BR2_PACKAGE_MATCHBOX_LIB
+ 	default y if BR2_PACKAGE_STARTUP_NOTIFICATION
