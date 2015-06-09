@@ -1,41 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 23:05:25 +0200
-Subject: [Buildroot] [git commit] package/matchbox-startup-monitor: invert
-	dependency chain
-Message-ID: <20150609211052.8E13781D65@busybox.osuosl.org>
+Date: Tue, 9 Jun 2015 23:05:35 +0200
+Subject: [Buildroot] [git commit] package/matchbox: forcibly disable gconf
+Message-ID: <20150609211052.976DD7FEE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fbb13a764387af71bb8a7937bdd37445c9cac6b6
+commit: http://git.buildroot.net/buildroot/commit/?id=60844a34122bd36e846a28728e4ab0e2541586bb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Previously, matchbox-startup-monitor was forcibly enabled whenever
-startup-notification was. Now that it has a prompt, it merely defaults
-to 'y' in this case, leaving the user the possibility to disable it.
-This is not very logical.
+Buildroot does not have a gconf package, so explicitly disable gconf
+support (to avoid it ends up picking the host one).
 
-Instead, invert the logic, and select startup-notification from
-matchbox-startup-monitor.
-
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox-startup-monitor/Config.in |    2 +-
+ package/matchbox/matchbox.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/matchbox-startup-monitor/Config.in b/package/matchbox-startup-monitor/Config.in
-index 15dac60..9dce60e 100644
---- a/package/matchbox-startup-monitor/Config.in
-+++ b/package/matchbox-startup-monitor/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
- 	bool "matchbox-startup-monitor"
- 	select BR2_PACKAGE_MATCHBOX_LIB
--	default y if BR2_PACKAGE_STARTUP_NOTIFICATION
-+	select BR2_PACKAGE_STARTUP_NOTIFICATION
- 	help
- 	  Matchbox Panel Startup Monitor Applet.
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 29e240e..0899208 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -11,7 +11,7 @@ MATCHBOX_LICENSE = GPLv2+
+ MATCHBOX_LICENSE_FILES = COPYING
+ 
+ MATCHBOX_DEPENDENCIES = matchbox-lib
+-MATCHBOX_CONF_OPTS = --enable-expat
++MATCHBOX_CONF_OPTS = --enable-expat --disable-gconf
+ 
+ # Workaround bug in configure script
+ MATCHBOX_CONF_ENV = expat=yes
