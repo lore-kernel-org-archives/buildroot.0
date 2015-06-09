@@ -1,45 +1,39 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue,  9 Jun 2015 15:40:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ca-certificates: bump version to
-	20150426
-Message-ID: <1433860857-3031-1-git-send-email-martin@barkynet.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  9 Jun 2015 14:24:53 -0300
+Subject: [Buildroot] [PATCH] libgpgme: bump to version 1.5.5
+Message-ID: <1433870693-8561-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ca-certificates/ca-certificates.hash | 4 ++--
- package/ca-certificates/ca-certificates.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libgpgme/libgpgme.hash | 2 +-
+ package/libgpgme/libgpgme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
-index 0165cb5..06120f5 100644
---- a/package/ca-certificates/ca-certificates.hash
-+++ b/package/ca-certificates/ca-certificates.hash
-@@ -1,3 +1,3 @@
- # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
--sha1   6013ce6a3bf13e73a7e1feddcd17f5b2c09e5bd3                         ca-certificates_20141019.tar.xz
--sha256 684902d3f4e9ad27829f4af0d9d2d588afed03667997579b9c2be86fcd1eb73a ca-certificates_20141019.tar.xz
-+sha1   c2d7ae81e28ff1f8a6b9ef7602c4e756ff08503c                         ca-certificates_20150426.tar.xz
-+sha256 37dbaa93ed64cc4ae93ac295f9248fbc741bd51376438cfb1257f17efab5494f ca-certificates_20150426.tar.xz
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index 8fe26c9..b64120e 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
+index a6d2d44..a7efbf6 100644
+--- a/package/libgpgme/libgpgme.hash
++++ b/package/libgpgme/libgpgme.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	bb38c0ec8815c9e94e6047b484984808a8dad9d6bec8df33dc5339fd55ffea6c	gpgme-1.5.4.tar.bz2
++sha256	0b3d3d5107680c594777aae65882a1ff6dd1ba629a83432e719c8b82a743c207	gpgme-1.5.5.tar.bz2
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 79b44bd..ec64d37 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CA_CERTIFICATES_VERSION = 20141019
-+CA_CERTIFICATES_VERSION = 20150426
- CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
--CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/ca-certificates
-+CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20150528T221654Z/pool/main/c/ca-certificates
- CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
- CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
- CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+-LIBGPGME_VERSION = 1.5.4
++LIBGPGME_VERSION = 1.5.5
+ LIBGPGME_SITE = ftp://ftp.gnupg.org/gcrypt/gpgme
+ LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
+ LIBGPGME_LICENSE = LGPLv2.1+
 -- 
-2.1.4
+2.3.6
