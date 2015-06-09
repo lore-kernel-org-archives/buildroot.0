@@ -1,63 +1,28 @@
-From: =?UTF-8?q?C=C3=A9dric=20Marie?= <cedric.marie@openmailbox.org>
-Date: Tue,  9 Jun 2015 22:43:43 +0200
-Subject: [Buildroot] [PATCH] directfb: add an option for debugging support
-Message-ID: <1433882623-15782-1-git-send-email-cedric.marie@openmailbox.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 Jun 2015 22:44:09 +0200
+Subject: [Buildroot] [PATCH] openvpn: bump to version 2.3.7
+In-Reply-To: <1433791231-9201-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1433791231-9201-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150609224409.18316f4b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-DirectFB debugging support is enabled by default. This new option makes
-it possible to disable it (--disable-debug-support) and build the
-library with no debug feature at all.
+Dear Gustavo Zacarias,
 
-NB: When debugging support is disabled, the target installation path is
-suffixed with -pure.
+On Mon,  8 Jun 2015 16:20:31 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/openvpn/openvpn.hash | 2 +-
+>  package/openvpn/openvpn.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
----
- package/directfb/Config.in   | 7 +++++++
- package/directfb/directfb.mk | 4 ++++
- 2 files changed, 11 insertions(+)
+Applied, thanks.
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 7759f8f..0015c0c 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -20,8 +20,15 @@ config BR2_PACKAGE_DIRECTFB_MULTI
- comment "directfb multi application needs a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL
- 
-+config BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT
-+	bool "directfb debugging support"
-+	default y
-+	help
-+	  Compile DirectFB with debugging support
-+
- config BR2_PACKAGE_DIRECTFB_DEBUG
- 	bool "directfb debugging"
-+	depends on BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT
- 	help
- 	  Compile DirectFB with lots of debug output
- 
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index e3dc506..cf0609c 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -39,9 +39,13 @@ DIRECTFB_CONF_OPTS += --enable-multi --enable-fusion
- DIRECTFB_DEPENDENCIES += linux-fusion
- endif
- 
-+ifeq ($(BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT),y)
- ifeq ($(BR2_PACKAGE_DIRECTFB_DEBUG),y)
- DIRECTFB_CONF_OPTS += --enable-debug
- endif
-+else
-+DIRECTFB_CONF_OPTS += --disable-debug-support
-+endif
- 
- ifeq ($(BR2_PACKAGE_DIRECTFB_TRACE),y)
- DIRECTFB_CONF_OPTS += --enable-trace
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
