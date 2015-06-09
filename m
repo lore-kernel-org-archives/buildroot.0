@@ -1,43 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 23:13:44 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] scripts/mkusers: allow users with no
- password value set
-In-Reply-To: <1432403497-4132-1-git-send-email-james.knight@rockwellcollins.com>
-References: <1432403497-4132-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <20150609231344.69fed325@free-electrons.com>
+Date: Tue, 9 Jun 2015 23:12:21 +0200
+Subject: [Buildroot] [PATCH 0/32 v2] matchbox: huge cleanups (branch
+ yem/matchbox)
+In-Reply-To: <cover.1433362840.git.yann.morin.1998@free.fr>
+References: <cover.1433362840.git.yann.morin.1998@free.fr>
+Message-ID: <20150609231221.5754aa31@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear James Knight,
+Dear Yann E. MORIN,
 
-On Sat, 23 May 2015 13:51:37 -0400, James Knight wrote:
-> The following allows a user definition to specify that a created user
-> entry should not have a password value set. Original implementation
-> allowed a user definition to provide a password value of "=" (no quotes)
-> to generate a crypt-encoded empty string value. In some cases, it may be
-> desired to have no value specified for a user's password. By using a
-> value "-" for a password, no value will be set in the shadow value.
-> 
-> An example when this can be used is when logging into a terminal.
-> Logging into a session with an encoded empty password will prompt a user
-> to enter a password since it does not know the password is empty. If the
-> password field blank, a login session will not prompt for a password.
-> 
-> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
-> Changes v1 -> v2:
->   - Correct error in commit message.
->   - More explicit example in commit message (suggested by Yann).
->    
->  docs/manual/makeusers-syntax.txt | 3 ++-
->  support/scripts/mkusers          | 3 +++
->  2 files changed, 5 insertions(+), 1 deletion(-)
+On Wed,  3 Jun 2015 22:41:44 +0200, Yann E. MORIN wrote:
 
-Applied, thanks.
+> Yann E. MORIN (32):
+>       package/matchbox-wm: drop useless commented options
+>       package/matchbox: make matchbox-lib a real package
+>       package/matchbox: make matchbox-wm a real package
+>       package/matchbox: make matchbox-panel a real package
+>       package/matchbox: make matchbox-desktop a real package
+>       package/matchbox: make matchbox-common a real package
+>       package/matchbox: make matchbox-fakekey a real package
+>       package/matchbox: make matchbox-keyboard a real package
+>       package/matchbox: make match-startup-monitor a real package
+>       package/matchbox: remove superfluous conditional includes
+>       package/matchbox: point to new home
+>       package/matchbox: get rid of intermediate non-package matchbox
+>       package/matchbox-common: move one directory higher
+>       package/matchbox: fix option prompts
+>       package/matchbox: add missing dependencies to matchbox-lib
+>       package/matchbox-common: fix dependencies
+>       package/matchbox-fakekey: add missing dependency
+>       package/matchbox: finally add prompts to all sub-packages
+>       package/matchbox-startup-monitor: invert dependency chain
+>       package/matchbox: forcibly disable gconf
+>       package/matchbox: forcibly disable support for compositing
+>       package/matchbox: make it a menu
+>       package/matchbox: enable support for the Xsession manager
+>       package/matchbox: drop useless dependencies
+>       package/matchbox-keyboard: enforce disabling support for cairo
+>       package/matchbox-common: explicitly disable PDA folders when not selected
+>       package/matchbox: wrap long lines
+>       package/matchbox: xlib-libXcursor is an optional dependency
+>       package/matchbox: xlib_libXfixes is an optional dependency
+>       package/matchbox-panel: use ACPI for the battery applet
+>       package/matchbox-panel: add support for dnotify
+>       package/matchbox-panel: fix WiFi monitoring
+
+Entire series applied. Thanks a lot to you for having worked on
+Matchbox, and to Arnout for the review work.
+
+Please have a look at the comment I made against patch 16. For the
+rest, it seemed to be alright, and even if there are minor issues, it's
+still much much better than what existed.
+
+Thanks!
 
 Thomas
 -- 
