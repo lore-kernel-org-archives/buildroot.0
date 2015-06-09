@@ -1,49 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Jun 2015 23:07:27 +0200
-Subject: [Buildroot] [git commit] package/matchbox: wrap long lines
-Message-ID: <20150609211052.DADB97FEE8@busybox.osuosl.org>
+Date: Tue, 9 Jun 2015 23:04:59 +0200
+Subject: [Buildroot] [git commit] package/matchbox-fakekey: add missing
+	dependency
+Message-ID: <20150609211052.7C89B81D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=12a9e85f031626fa2b557e78c0db834dcdc99d1e
+commit: http://git.buildroot.net/buildroot/commit/?id=17ed46a3e6b6d60b8664a4febc5f628ded043f2d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+matchbox-fakekey build-depends on xlib_libXtst, but does not select it.
+
+Fix that.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox-keyboard/matchbox-keyboard.mk |    3 ++-
- package/matchbox-lib/matchbox-lib.mk           |    3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/matchbox-fakekey/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox-keyboard/matchbox-keyboard.mk
-index ba524c0..3ffaca6 100644
---- a/package/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox-keyboard/matchbox-keyboard.mk
-@@ -15,7 +15,8 @@ MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expa
- MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
- 
- define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
--	$(INSTALL) -D -m 0755 package/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
-+	$(INSTALL) -D -m 0755 package/matchbox-keyboard/mb-applet-kbd-wrapper.sh \
-+		$(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
- endef
- 
- MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
-diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
-index 3b697bb..d43e2b8 100644
---- a/package/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox-lib/matchbox-lib.mk
-@@ -15,7 +15,8 @@ MATCHBOX_LIB_CONF_OPTS = --enable-expat --disable-doxygen-docs
- MATCHBOX_LIB_CONF_ENV = LIBS="-lX11"
- 
- define MATCHBOX_LIB_POST_INSTALL_FIXES
--	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' $(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
-+	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
- endef
- 
- MATCHBOX_LIB_POST_INSTALL_STAGING_HOOKS += MATCHBOX_LIB_POST_INSTALL_FIXES
+diff --git a/package/matchbox-fakekey/Config.in b/package/matchbox-fakekey/Config.in
+index c0cde42..97413ab 100644
+--- a/package/matchbox-fakekey/Config.in
++++ b/package/matchbox-fakekey/Config.in
+@@ -1,3 +1,4 @@
+ config BR2_PACKAGE_MATCHBOX_FAKEKEY
+ 	bool
+ 	select BR2_PACKAGE_MATCHBOX_LIB
++	select BR2_PACKAGE_XLIB_LIBXTST
