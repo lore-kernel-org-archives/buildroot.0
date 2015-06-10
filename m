@@ -1,44 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Jun 2015 09:27:05 +0200
-Subject: [Buildroot] [git commit] infra/pkg-kconfig: require an non-empty
-	KCONFIG_FILE
-Message-ID: <20150610073829.5AD3481E16@busybox.osuosl.org>
+Date: Wed, 10 Jun 2015 09:38:42 +0200
+Subject: [Buildroot] [PATCH 2/2] infra/pkg-kconfig: require an non-empty
+ KCONFIG_FILE
+In-Reply-To: <c5c81694cabca70c5651fe42a7de99247275659c.1428512591.git.yann.morin.1998@free.fr>
+References: <cover.1428512591.git.yann.morin.1998@free.fr>
+ <c5c81694cabca70c5651fe42a7de99247275659c.1428512591.git.yann.morin.1998@free.fr>
+Message-ID: <20150610093842.289707b7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=932a958672b1239d2fb872573f723aa99bf8991b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Currently, we only check that the variable is defined, which is not
-enough since we really want it to be non-empty.
+On Wed,  8 Apr 2015 19:08:35 +0200, Yann E. MORIN wrote:
+> Currently, we only check that the variable is defined, which is not
+> enough since we really want it to be non-empty.
+> 
+> We however can't check it points to an existing file, because the
+> package might well not be extracted yet, and we may use an internal
+> defconfig. If that file does not eventually exist, there will be a
+> failure down the road at build time when we try to copy it...
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> ---
+>  package/pkg-kconfig.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-We however can't check it points to an existing file, because the
-package might well not be extracted yet, and we may use an internal
-defconfig. If that file does not eventually exist, there will be a
-failure down the road at build time when we try to copy it...
+Applied, thanks.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-kconfig.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index dcaed53..7a00fff 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -70,7 +70,7 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
- ifeq ($$($$($(2)_KCONFIG_VAR)),y)
- 
- # FOO_KCONFIG_FILE is required
--ifndef $(2)_KCONFIG_FILE
-+ifeq ($$($(2)_KCONFIG_FILE),)
- $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
- endif
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
