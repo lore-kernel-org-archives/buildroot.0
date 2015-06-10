@@ -1,40 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Jun 2015 10:39:09 +0200
-Subject: [Buildroot] Kernel zImage under 1MB
-In-Reply-To: <87lhfsj7ro.fsf@dell.be.48ers.dk>
-References: <CADMiy=KWH-W4VGUjaMF8mmFTSRUxT13xbTeoWigo=gme8GDwKw@mail.gmail.com>
- <87pp54jzw1.fsf@dell.be.48ers.dk>
- <CADMiy=JZSro09MASQy51wKeDy2uES0D-kWwNgtL95s6z1AmxrA@mail.gmail.com>
- <87lhfsj7ro.fsf@dell.be.48ers.dk>
-Message-ID: <20150610103909.59514ae1@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 10 Jun 2015 08:53:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 8066] nodejs crashes when built with gcc 4.9
+In-Reply-To: <bug-8066-163@https.bugs.busybox.net/>
+References: <bug-8066-163@https.bugs.busybox.net/>
+Message-ID: <20150610085356.C7EB981E1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=8066
 
-On Wed, 10 Jun 2015 10:18:51 +0200, Peter Korsgaard wrote:
+--- Comment #2 from Dr I J Ormshaw <ian_ormshaw@waters.com> 2015-06-10 08:53:56 UTC ---
+Created attachment 6066
+  --> https://bugs.busybox.net/attachment.cgi?id=6066
+The good config file
 
->  > As a question aside, Is it enough just
->  > "make manuconfig" and "make" rebuild the kernel and rootfs or do i need to
-> 
-> Buildroot doesn't track changes in the configuration file / what files
-> were added by a package, so it will not remove a package if you do a
-> build and then use menuconfig to remove the package again.
-> 
-> It WILL rebuild the kernel or busybox after you used make
-> linux-menuconfig or make busybox-menuconfig to tweak the configuration.
-
-See also:
-
- http://buildroot.org/downloads/manual/manual.html#full-rebuild
-
-for more details.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
