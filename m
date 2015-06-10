@@ -1,34 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Jun 2015 09:38:42 +0200
-Subject: [Buildroot] [PATCH 2/2] infra/pkg-kconfig: require an non-empty
- KCONFIG_FILE
-In-Reply-To: <c5c81694cabca70c5651fe42a7de99247275659c.1428512591.git.yann.morin.1998@free.fr>
-References: <cover.1428512591.git.yann.morin.1998@free.fr>
- <c5c81694cabca70c5651fe42a7de99247275659c.1428512591.git.yann.morin.1998@free.fr>
-Message-ID: <20150610093842.289707b7@free-electrons.com>
+Date: Wed, 10 Jun 2015 09:39:01 +0200
+Subject: [Buildroot] [PATCH] whois: bump to version 5.2.9
+In-Reply-To: <1433891131-4512-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1433891131-4512-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150610093901.7acc6ce2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Gustavo Zacarias,
 
-On Wed,  8 Apr 2015 19:08:35 +0200, Yann E. MORIN wrote:
-> Currently, we only check that the variable is defined, which is not
-> enough since we really want it to be non-empty.
-> 
-> We however can't check it points to an existing file, because the
-> package might well not be extracted yet, and we may use an internal
-> defconfig. If that file does not eventually exist, there will be a
-> failure down the road at build time when we try to copy it...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+On Tue,  9 Jun 2015 20:05:31 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/pkg-kconfig.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/whois/whois.hash | 4 ++--
+>  package/whois/whois.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied, thanks.
 
