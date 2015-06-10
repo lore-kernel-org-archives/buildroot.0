@@ -1,31 +1,33 @@
 From: Ulf Magnusson <ulfalizer@gmail.com>
-Date: Wed, 10 Jun 2015 15:27:08 +0200
-Subject: [Buildroot] [PATCH 4/4] support: update readme.kconfiglib commit
-	reference
-Message-ID: <1433942828-16702-1-git-send-email-ulfalizer@gmail.com>
+Date: Wed, 10 Jun 2015 15:30:37 +0200
+Subject: [Buildroot] [PATCH 1/3] support: update Kconfiglib to the
+	latest version
+In-Reply-To: <20150610131500.GG2671@tarshish>
+References: <1433941511-15596-1-git-send-email-ulfalizer@gmail.com>
+ <20150610131500.GG2671@tarshish>
+Message-ID: <CAFkk2KQU-FOKNrja0C5MdZ2e5ogM7ii0aPyO6ZjDaCyWN=5WKg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ulf Magnusson <ulfalizer@gmail.com>
----
- support/scripts/readme.kconfiglib | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Jun 10, 2015 at 3:15 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Ulf,
+>
+> On Wed, Jun 10, 2015 at 03:05:09PM +0200, Ulf Magnusson wrote:
+>> Corresponds to a95f477 in https://github.com/ulfalizer/Kconfiglib.
+>
+> Please update the commit reference in support/scripts/readme.kconfiglib as
+> well.
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
 
-diff --git a/support/scripts/readme.kconfiglib b/support/scripts/readme.kconfiglib
-index 5c82b6f..4b653b8 100644
---- a/support/scripts/readme.kconfiglib
-+++ b/support/scripts/readme.kconfiglib
-@@ -8,7 +8,7 @@ This python module, developped by Ulf Magnusson and released under the ISC
- license, is fetched from:
- 
- https://github.com/ulfalizer/Kconfiglib
--commit: 02103fba9ae32a78291af53e50ee5d4bb3f69c1e
-+commit: a95f477eafc0b6708c3ce671fce7302ecec4f789
- 
- Kconfiglib license
- ~~~~~~~~~~~~~~~~~~
--- 
-2.1.4
+Hrm, I'll make it a v2 patch instead. Now the numbering's broken. :)
+
+/Ulf
