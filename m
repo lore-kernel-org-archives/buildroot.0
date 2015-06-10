@@ -1,256 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Jun 2015 11:47:46 +0200
-Subject: [Buildroot] [git commit] valgrind: backport support for glibc 2.20+
-Message-ID: <20150610094751.315DD80E36@busybox.osuosl.org>
+From: Marco Pastorelli <mpastorelli@gmail.com>
+Date: Wed, 10 Jun 2015 12:06:52 +0200
+Subject: [Buildroot] BR variable that points the built kernel
+In-Reply-To: <20150610103606.31b56e0b@free-electrons.com>
+References: <CAFRxoJ=gnhumch8GfcSEp0ettOYaRQUhc8in3uwO3MaH1d4wyg@mail.gmail.com>
+ <20150609140338.49987c19@free-electrons.com>
+ <CAFRxoJnECac59y=bjeHYvXP4bDwU7Em9tcGm8kxixq_EjHr0MA@mail.gmail.com>
+ <20150609160304.021d6edb@free-electrons.com>
+ <CAFRxoJ=O5=UvmRJPu3+qn2zVu6dniym7qTAdvWSWMf9Dpozk0Q@mail.gmail.com>
+ <20150610103606.31b56e0b@free-electrons.com>
+Message-ID: <CAFRxoJnZEi83_Zj45gAXMvwxZ5x=Cp1o-iMMhU9jVFHWArzbEw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74c67922edbfcf1b1aaa04ab68fce218e2b903e9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thomas,
 
-Fixes:
-http://autobuild.buildroot.net/results/352/352d087bf5daed8ce2c7e2d61db2e75db9b069b9/
-http://autobuild.buildroot.net/results/a2c/a2c46d35b1c1da45f4d136f5a2be926695695bd9/
+Thanks for your help, now it's more clear.
+Just to give more details I'm trying to write a post-build script in order
+to create a log file of the build. One information that is important for me
+is the kernel version, so I wrote the following line:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...nfigure.ac-Generalize-glibc-version-check.patch |  228 ++++++++++++++++++++
- 1 files changed, 228 insertions(+), 0 deletions(-)
+LINUX_VERSION=$(cat $(LINUX_DIR)/include/config/kernel.release)
 
-diff --git a/package/valgrind/0004-configure.ac-Generalize-glibc-version-check.patch b/package/valgrind/0004-configure.ac-Generalize-glibc-version-check.patch
-new file mode 100644
-index 0000000..5b1d07b
---- /dev/null
-+++ b/package/valgrind/0004-configure.ac-Generalize-glibc-version-check.patch
-@@ -0,0 +1,228 @@
-+From 4f3062b90b12f3e031a1c949c50a79e0d13de485 Mon Sep 17 00:00:00 2001
-+From: bart <bart@a5019735-40e9-0310-863c-91ae7b9d1cf9>
-+Date: Sat, 13 Sep 2014 10:53:00 +0000
-+Subject: [PATCH] configure.ac: Generalize glibc version check
-+
-+git-svn-id: svn://svn.valgrind.org/valgrind/trunk at 14530 a5019735-40e9-0310-863c-91ae7b9d1cf9
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ configure.ac        | 139 +++++++---------------------------------------------
-+ coregrind/m_redir.c |  11 ++---
-+ 2 files changed, 22 insertions(+), 128 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index ba11ec6..863cd7e 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -875,141 +875,41 @@ AC_EGREP_CPP([BIONIC_LIBC], [
-+ GLIBC_VERSION="bionic")
-+ 
-+ 
-+-AC_MSG_CHECKING([the GLIBC_VERSION version])
-++AC_MSG_CHECKING([the glibc version])
-+ 
-+ case "${GLIBC_VERSION}" in
-+      2.2)
-+-	AC_MSG_RESULT(2.2 family)
-+-	AC_DEFINE([GLIBC_2_2], 1, [Define to 1 if you're using glibc 2.2.x])
-++	AC_MSG_RESULT(${GLIBC_VERSION} family)
-+ 	DEFAULT_SUPP="glibc-2.2.supp ${DEFAULT_SUPP}"
-+ 	DEFAULT_SUPP="glibc-2.2-LinuxThreads-helgrind.supp ${DEFAULT_SUPP}"
-+ 	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+ 	;;
-+-
-+-     2.3)
-+-	AC_MSG_RESULT(2.3 family)
-+-	AC_DEFINE([GLIBC_2_3], 1, [Define to 1 if you're using glibc 2.3.x])
-+-	DEFAULT_SUPP="glibc-2.3.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-	;;
-+-
-+-     2.4)
-+-	AC_MSG_RESULT(2.4 family)
-+-	AC_DEFINE([GLIBC_2_4], 1, [Define to 1 if you're using glibc 2.4.x])
-+-	DEFAULT_SUPP="glibc-2.4.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-	;;
-+-
-+-     2.5)
-+-	AC_MSG_RESULT(2.5 family)
-+-	AC_DEFINE([GLIBC_2_5], 1, [Define to 1 if you're using glibc 2.5.x])
-+-	DEFAULT_SUPP="glibc-2.5.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-	;;
-+-     2.6)
-+-	AC_MSG_RESULT(2.6 family)
-+-	AC_DEFINE([GLIBC_2_6], 1, [Define to 1 if you're using glibc 2.6.x])
-+-	DEFAULT_SUPP="glibc-2.6.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-	;;
-+-     2.7)
-+-	AC_MSG_RESULT(2.7 family)
-+-	AC_DEFINE([GLIBC_2_7], 1, [Define to 1 if you're using glibc 2.7.x])
-+-	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-	;;
-+-     2.8)
-+-	AC_MSG_RESULT(2.8 family)
-+-	AC_DEFINE([GLIBC_2_8], 1, [Define to 1 if you're using glibc 2.8.x])
-+-	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-	;;
-+-     2.9)
-+-	AC_MSG_RESULT(2.9 family)
-+-	AC_DEFINE([GLIBC_2_9], 1, [Define to 1 if you're using glibc 2.9.x])
-+-	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-	;;
-+-     2.10)
-+-	AC_MSG_RESULT(2.10 family)
-+-	AC_DEFINE([GLIBC_2_10], 1, [Define to 1 if you're using glibc 2.10.x])
-+-	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-	;;
-+-     2.11)
-+-	AC_MSG_RESULT(2.11 family)
-+-	AC_DEFINE([GLIBC_2_11], 1, [Define to 1 if you're using glibc 2.11.x])
-+-	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-        ;;
-+-     2.12)
-+-	AC_MSG_RESULT(2.12 family)
-+-	AC_DEFINE([GLIBC_2_12], 1, [Define to 1 if you're using glibc 2.12.x])
-+-	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-	;;
-+-     2.13)
-+-	AC_MSG_RESULT(2.13 family)
-+-	AC_DEFINE([GLIBC_2_13], 1, [Define to 1 if you're using glibc 2.13.x])
-+-	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-	;;
-+-     2.14)
-+-	AC_MSG_RESULT(2.14 family)
-+-	AC_DEFINE([GLIBC_2_14], 1, [Define to 1 if you're using glibc 2.14.x])
-+-	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-++     2.[[3-6]])
-++	AC_MSG_RESULT(${GLIBC_VERSION} family)
-++	DEFAULT_SUPP="glibc-${GLIBC_VERSION}.supp ${DEFAULT_SUPP}"
-+ 	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+ 	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+ 	;;
-+-     2.15)
-+-	AC_MSG_RESULT(2.15 family)
-+-	AC_DEFINE([GLIBC_2_15], 1, [Define to 1 if you're using glibc 2.15.x])
-++     2.[[7-9]])
-++	AC_MSG_RESULT(${GLIBC_VERSION} family)
-+ 	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-+ 	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+ 	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+ 	;;
-+-     2.16)
-+-	AC_MSG_RESULT(2.16 family)
-+-	AC_DEFINE([GLIBC_2_16], 1, [Define to 1 if you're using glibc 2.16.x])
-++     2.10|2.11)
-++	AC_MSG_RESULT(${GLIBC_VERSION} family)
-++	AC_DEFINE([GLIBC_MANDATORY_STRLEN_REDIRECT], 1,
-++		  [Define to 1 if strlen() has been optimized heavily (amd64 glibc >= 2.10)])
-+ 	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-+ 	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+ 	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+ 	;;
-+-     2.17)
-+-	AC_MSG_RESULT(2.17 family)
-+-	AC_DEFINE([GLIBC_2_17], 1, [Define to 1 if you're using glibc 2.17.x])
-+-	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-	;;
-+-     2.18)
-+-	AC_MSG_RESULT(2.18 family)
-+-	AC_DEFINE([GLIBC_2_18], 1, [Define to 1 if you're using glibc 2.18.x])
-+-	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-	;;
-+-     2.19)
-+-	AC_MSG_RESULT(2.19 family)
-+-	AC_DEFINE([GLIBC_2_19], 1, [Define to 1 if you're using glibc 2.19.x])
-+-	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+-	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+-	;;
-+-     2.20)
-+-	AC_MSG_RESULT(2.20 family)
-+-	AC_DEFINE([GLIBC_2_20], 1, [Define to 1 if you're using glibc 2.20.x])
-++     2.*)
-++	AC_MSG_RESULT(${GLIBC_VERSION} family)
-++	AC_DEFINE([GLIBC_MANDATORY_STRLEN_REDIRECT], 1,
-++		  [Define to 1 if strlen() has been optimized heavily (amd64 glibc >= 2.10)])
-++	AC_DEFINE([GLIBC_MANDATORY_INDEX_AND_STRLEN_REDIRECT], 1,
-++		  [Define to 1 if index() and strlen() have been optimized heavily (x86 glibc >= 2.12)])
-+ 	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-+ 	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+ 	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+@@ -1024,10 +924,9 @@ case "${GLIBC_VERSION}" in
-+ 	AC_DEFINE([BIONIC_LIBC], 1, [Define to 1 if you're using Bionic])
-+ 	DEFAULT_SUPP="bionic.supp ${DEFAULT_SUPP}"
-+ 	;;
-+-
-+-     *)
-++     2.0|2.1|*)
-+ 	AC_MSG_RESULT([unsupported version ${GLIBC_VERSION}])
-+-	AC_MSG_ERROR([Valgrind requires glibc version 2.2 - 2.19])
-++	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later])
-+ 	AC_MSG_ERROR([or Darwin or Bionic libc])
-+ 	;;
-+ esac
-+diff --git a/coregrind/m_redir.c b/coregrind/m_redir.c
-+index 9d3c9b1..9aee707 100644
-+--- a/coregrind/m_redir.c
-++++ b/coregrind/m_redir.c
-+@@ -53,7 +53,7 @@
-+ #include "pub_core_demangle.h"     // VG_(maybe_Z_demangle)
-+ #include "pub_core_libcproc.h"     // VG_(libdir)
-+ 
-+-#include "config.h" /* GLIBC_2_* */
-++#include "config.h" /* GLIBC_MANDATORY_*_REDIRECT */
-+ 
-+ 
-+ /* This module is a critical part of the redirection/intercept system.
-+@@ -1242,10 +1242,7 @@ void VG_(redir_initialise) ( void )
-+       start, otherwise ld.so (glibc-2.3.5) makes a lot of noise. */
-+    if (0==VG_(strcmp)("Memcheck", VG_(details).name)) {
-+       const HChar** mandatory;
-+-#     if defined(GLIBC_2_2) || defined(GLIBC_2_3) || defined(GLIBC_2_4) \
-+-         || defined(GLIBC_2_5) || defined(GLIBC_2_6) || defined(GLIBC_2_7) \
-+-         || defined(GLIBC_2_8) || defined(GLIBC_2_9) \
-+-         || defined(GLIBC_2_10) || defined(GLIBC_2_11)
-++#     ifndef GLIBC_MANDATORY_INDEX_AND_STRLEN_REDIRECT
-+       mandatory = NULL;
-+ #     else
-+       /* for glibc-2.12 and later, this is mandatory - can't sanely
-+@@ -1282,9 +1279,7 @@ void VG_(redir_initialise) ( void )
-+       add_hardwired_spec(
-+          "ld-linux-x86-64.so.2", "strlen",
-+          (Addr)&VG_(amd64_linux_REDIR_FOR_strlen),
-+-#        if defined(GLIBC_2_2) || defined(GLIBC_2_3) || defined(GLIBC_2_4) \
-+-            || defined(GLIBC_2_5) || defined(GLIBC_2_6) || defined(GLIBC_2_7) \
-+-            || defined(GLIBC_2_8) || defined(GLIBC_2_9)
-++#        ifndef GLIBC_MANDATORY_STRLEN_REDIRECT
-+          NULL
-+ #        else
-+          /* for glibc-2.10 and later, this is mandatory - can't sanely
-+-- 
-+2.1.4
-+
+That's where I run into the error.
+
+So far the only way I've found is to add a makefile based package, but I
+guess using a post build script could be a better solution...
+
+Regards,
+Marco.
+
+On 10 June 2015 at 10:36, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Marco Pastorelli,
+>
+> On Wed, 10 Jun 2015 10:29:16 +0200, Marco Pastorelli wrote:
+>
+> > You're right, is there a way to use make variables inside the post-build
+> > script? Or this is a wrong approach?
+>
+> Some of the make variables are passed in the environment of post build
+> script, but clearly not all of them. Especially the <pkg>_DIR variable
+> for each packages is not passed.
+>
+> You're probably trying to do something that should be done in a
+> different way. You should have a package installing whatever you need
+> from $(LINUX_DIR) to $(TARGET_DIR) rather than doing it from a
+> post-build script.
+>
+> However, your provide so little details about what you're trying to do
+> that it's quite impossible to give a good advice.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150610/43e3041f/attachment.html>
