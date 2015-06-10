@@ -1,47 +1,79 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Jun 2015 23:25:05 +0200
-Subject: [Buildroot] [PATCH 1/1] openvmtools: add
- OPENVMTOOLS_VERSION_MAJOR variable
-In-Reply-To: <1433918670-16552-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1433918670-16552-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <5578AB31.9090309@mind.be>
+Date: Wed, 10 Jun 2015 23:45:16 +0200
+Subject: [Buildroot] [PATCH] directfb: add an option for debugging
+	support
+In-Reply-To: <1433882623-15782-1-git-send-email-cedric.marie@openmailbox.org>
+References: <1433882623-15782-1-git-send-email-cedric.marie@openmailbox.org>
+Message-ID: <5578AFEC.4020107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/10/15 08:44, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+On 06/09/15 22:43, C?dric Marie wrote:
+> DirectFB debugging support is enabled by default. This new option makes
+> it possible to disable it (--disable-debug-support) and build the
+> library with no debug feature at all.
+> 
+> NB: When debugging support is disabled, the target installation path is
+> suffixed with -pure.
+> 
+> Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
+> ---
+>  package/directfb/Config.in   | 7 +++++++
+>  package/directfb/directfb.mk | 4 ++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+> index 7759f8f..0015c0c 100644
+> --- a/package/directfb/Config.in
+> +++ b/package/directfb/Config.in
+> @@ -20,8 +20,15 @@ config BR2_PACKAGE_DIRECTFB_MULTI
+>  comment "directfb multi application needs a Linux kernel to be built"
+>  	depends on !BR2_LINUX_KERNEL
+>  
+> +config BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT
+> +	bool "directfb debugging support"
+> +	default y
+> +	help
+> +	  Compile DirectFB with debugging support
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ I think the explanation you gave in your first mail would be valuable here.
+Certainly, the fact that the target installation path is suffixed with -pure
+should be clarified.
 
- Note that the proposed move to github is a good idea, but a separate patch anyway.
+ Do all the packages that depend on directfb still build correctly with this
+-pure suffix?
 
  Regards,
  Arnout
 
-> ---
->  package/openvmtools/openvmtools.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-> index ef6544a..92ecd36 100644
-> --- a/package/openvmtools/openvmtools.mk
-> +++ b/package/openvmtools/openvmtools.mk
-> @@ -4,9 +4,10 @@
->  #
->  ################################################################################
+> +
+>  config BR2_PACKAGE_DIRECTFB_DEBUG
+>  	bool "directfb debugging"
+> +	depends on BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT
+>  	help
+>  	  Compile DirectFB with lots of debug output
 >  
-> -OPENVMTOOLS_VERSION = 9.10.0-2476743
-> +OPENVMTOOLS_VERSION_MAJOR = 9.10.0
-> +OPENVMTOOLS_VERSION = $(OPENVMTOOLS_VERSION_MAJOR)-2476743
->  OPENVMTOOLS_SOURCE = open-vm-tools-$(OPENVMTOOLS_VERSION).tar.gz
-> -OPENVMTOOLS_SITE = http://downloads.sourceforge.net/project/open-vm-tools/open-vm-tools/stable-9.10.0
-> +OPENVMTOOLS_SITE = http://downloads.sourceforge.net/project/open-vm-tools/open-vm-tools/stable-$(OPENVMTOOLS_VERSION_MAJOR)
->  OPENVMTOOLS_LICENSE = LGPLv2.1
->  OPENVMTOOLS_LICENSE_FILES = COPYING
->  # Autoreconf needed or config/missing will run configure again at buildtime
+> diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+> index e3dc506..cf0609c 100644
+> --- a/package/directfb/directfb.mk
+> +++ b/package/directfb/directfb.mk
+> @@ -39,9 +39,13 @@ DIRECTFB_CONF_OPTS += --enable-multi --enable-fusion
+>  DIRECTFB_DEPENDENCIES += linux-fusion
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT),y)
+>  ifeq ($(BR2_PACKAGE_DIRECTFB_DEBUG),y)
+>  DIRECTFB_CONF_OPTS += --enable-debug
+>  endif
+> +else
+> +DIRECTFB_CONF_OPTS += --disable-debug-support
+> +endif
+>  
+>  ifeq ($(BR2_PACKAGE_DIRECTFB_TRACE),y)
+>  DIRECTFB_CONF_OPTS += --enable-trace
 > 
 
 
