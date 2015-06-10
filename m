@@ -1,22 +1,44 @@
-From: Ulf Magnusson <ulfalizer@gmail.com>
-Date: Wed, 10 Jun 2015 15:46:49 +0200
-Subject: [Buildroot] [PATCH 4/4] support: update readme.kconfiglib
-	commit reference
-In-Reply-To: <1433942828-16702-1-git-send-email-ulfalizer@gmail.com>
-References: <1433942828-16702-1-git-send-email-ulfalizer@gmail.com>
-Message-ID: <CAFkk2KRY4gFFm616k46zfkF2egO7qAW1=i4mCqiveD2591ooOA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 10 Jun 2015 16:17:47 +0200
+Subject: [Buildroot] bc segfaults when using math library, and patch
+In-Reply-To: <55776F11.3080803@gmail.com> (grepper@gmail.com's message of
+ "Tue, 09 Jun 2015 18:56:17 -0400")
+References: <55776F11.3080803@gmail.com>
+Message-ID: <87egljk5pw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ignore this one. The proper ordering is
+>>>>> "grepper" == grepper  <grepper@gmail.com> writes:
 
-[PATCH v2 1/3] support: update Kconfiglib to the latest version
-[PATCH 2/3] support: gen-manual-lists.py base directory simplification
-[PATCH 3/3] support: get prompts via official Kconfiglib APIs
+ > I have attached a patch that fixes the segfault in bc when it is used
+ > with the math library loaded. A developer on #buildroot also commented
+ > that perhaps buildroot should use the alpha version of bc like many
+ > distros instead - I can't comment on that.
 
-Sorry about that.
+I was going to ask if this is already upstream and if you had a
+reference to the upstream version control, but GNU bc doesn't seem to
+have any public vcs (or any real activity).
 
-/Ulf
+I see the latest alpha release is from 2006, and that one does make
+save_adr static and NEWS contains the following note:
+
+Bug fixes:
+        fixes bug in load_code introduced by mathlib string storage in 1.06.
+
+
+I personally don't use bc, but if people (and other distributions) think
+the 1.06.95 alpha version is better then lets use it.
+
+A quick look at the Debian package shows that they are carrying some
+patches that might be interesting, E.G. 03_array_initialize.diff seems
+like a clear bugfix:
+
+https://packages.debian.org/jessie/bc
+
+Care to send a patch to bump the version with this info?
+
+-- 
+Bye, Peter Korsgaard
