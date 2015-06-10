@@ -1,156 +1,176 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 10 Jun 2015 21:22:05 +0200
-Subject: [Buildroot] [PATCH 01/11 v2] package-infra: add helper to build
-	kernel modules
+Date: Wed, 10 Jun 2015 21:22:06 +0200
+Subject: [Buildroot] [PATCH 02/11 v2] docs/manual: add kernel-module
 In-Reply-To: <cover.1433964001.git.yann.morin.1998@free.fr>
 References: <cover.1433964001.git.yann.morin.1998@free.fr>
-Message-ID: <a9355834b4604ad9989556affbddeb9926343abd.1433964001.git.yann.morin.1998@free.fr>
+Message-ID: <97e1da52cd44a346541ddb2e1c6a445fffb79c5b.1433964001.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Linux kernel offers a nice and easy-to-use infra to build
-out-of-tree kernel modules.
-
-Currently, we have quite a few packages that build kernel modules, and
-most duplicate (or rewrite) the same code over-and-over again.
-
-Introduce a new infrastructure that provides helpers to build kernel
-modules, so packages do not have to duplicate/rewrite that.
-
-The infrastructure, unlike any other package infra, is not standalone.
-It needs another package infra to be used. This is so that packages that
-provide both userland and kernel modules can be built easily. So, this
-infra only defines post-build and post-install hooks, that will build
-the kernel modules after the rest of the package.
-
-Also, no host version is provided, since it does not make sense to build
-kernel modules for the host.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 
 ---
 Changes v1 -> v2:
-  - drop third and fourth args to inner macro: we're never going to
-    build kernel modules for the host  (Baruch, Arnout)
-  - add missing LINUX_MAKE_ENV  (Arnout)
-  - use $$(@D), not $$($(2)_DIR)  (Arnout)
-  - print a single MESSAGE  (Arnout, Thomas)
-  - typoes  (Arnout)
+  - some rephrasing and refactoring  (Arnout)
 ---
- package/Makefile.in          |  1 +
- package/pkg-kernel-module.mk | 89 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 90 insertions(+)
- create mode 100644 package/pkg-kernel-module.mk
+ docs/manual/adding-packages-kernel-module.txt | 129 ++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt               |   2 +
+ 2 files changed, 131 insertions(+)
+ create mode 100644 docs/manual/adding-packages-kernel-module.txt
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index c02d31f..180fd46 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -398,3 +398,4 @@ include package/pkg-virtual.mk
- include package/pkg-generic.mk
- include package/pkg-kconfig.mk
- include package/pkg-rebar.mk
-+include package/pkg-kernel-module.mk
-diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
+diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
 new file mode 100644
-index 0000000..608c9e6
+index 0000000..39927b2
 --- /dev/null
-+++ b/package/pkg-kernel-module.mk
-@@ -0,0 +1,89 @@
-+################################################################################
-+# kernel module infrastructure for building Linux kernel modules
-+#
-+# This file implements an infrastructure that eases development of package
-+# .mk files for out-of-tree Linux kernel modules. It should be used for all
-+# packages that build a Linux kernel module using the kernel's out-of-tree
-+# buildsystem, unless they use a complex custom build-system.
-+#
-+# In terms of implementation, this infrastructure relies on another package
-+# infrastructure, and only defines post-build and post-install hooks, so that
-+# packages can both build user-space (with any of the other *-package infra)
-+# and/or build kernel modules.
-+#
-+# As such, it is to be used in conjunction with another *-package infra,
-+# like so:
-+#
-+#   $(eval $(kernel-module))
-+#   $(eval $(generic-package))
-+#
-+# Note: if the caller needs access to the kernel modules (either after they
-+# are built or after they are installed), it will have to define its own
-+# post-build/install hooks after calling kernel-module, but before calling
-+# the other *-package infra, like so:
-+#
-+#   $(eval $(kernel-module))
-+#   define FOO_MOD_TWEAK
-+#   	# do something
-+#   endef
-+#   FOO_POST_BUILD_HOOKS += FOO_MOD_TWEAK
-+#   $(eval $(generic-package))
-+#
-+# Note: this infra does not check that the kernel is enabled; it is expected
-+# to be enforced at the Kconfig level with proper 'depends on'.
-+################################################################################
++++ b/docs/manual/adding-packages-kernel-module.txt
+@@ -0,0 +1,129 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+################################################################################
-+# inner-kernel-module -- generates the make targets needed to support building
-+# a kernel module
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name
-+################################################################################
++=== Infrastructure for packages building kernel modules
 +
-+define inner-kernel-module
++Buildroot offers a helper infrastructure to make it easy to write packages that
++build and install Linux kernel modules. Some packages only contain a kernel
++module, other packages contain programs and libraries in addition to kernel
++modules. Buildroot's helper infrastructure supports either case.
 +
-+# The kernel must be built first.
-+$(2)_DEPENDENCIES += linux
++[[kernel-module-tutorial]]
++==== +kernel-module+ tutorial
 +
-+# This is only defined in some infrastructures (e.g. autotools, cmake), but
-+# not in others (generic). So define it if not already defined.
-+$(2)_MAKE ?= $$(MAKE)
++Let's start with an example on how to prepare a simple package that only
++builds a kernel module, and no other component:
 +
-+# If not specified, consider the source of the kernel module to be at
-+# the root of the package.
-+$(2)_MODULE_SUBDIRS ?= .
++----
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06: 
++07: FOO_VERSION = 1.2.3
++08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
++09: FOO_SITE = http://www.foosoftware.org/download
++10: FOO_LICENSE = GPLv2
++11: FOO_LICENSE_FILES = COPYING
++12: 
++13: $(eval $(kernel-module))
++14: $(eval $(generic-package))
++----
 +
-+# Build the kernel module(s)
-+define $(2)_KERNEL_MODULES_BUILD
-+	@$$(call MESSAGE,"Building kernel module(s)")
-+	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
-+		$$(LINUX_MAKE_ENV) $$($$(PKG)_MAKE) \
-+			-C $$(LINUX_DIR) \
-+			$$(LINUX_MAKE_FLAGS) \
-+			$$($(2)_MODULE_MAKE_OPTS) \
-+			M=$$(@D)/$$(d) \
-+			modules$$(sep))
++Lines 7-11 define the usual meta-data to specify the version, archive name,
++remote URI where to find the package source, licensing information.
++
++On line 13, we invoke the +kernel-module+ helper infrastructure, that
++generates all the appropriate Makefile rules and variables to build
++that kernel module.
++
++Finally, on line 14, we invoke the
++xref:generic-package-tutorial[+generic-package+ infrastructure].
++
++The dependency on +linux+ is automatically added, so it is not needed to
++specify it in +FOO_DEPENDENCIES+.
++
++What you may have noticed is that, unlike other package infrastructures,
++we explicitly invoke a second infrastructure. This allows a package to
++build a kernel module, but also, if needed, use any one of other package
++infrastructures to build normal userland components (libraries,
++executables...). Using the +kernel-module+ infrastructure on its own is
++not sufficient; another package infrastructure *must* be used.
++
++Let's look at a more complex example:
++
++----
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06: 
++07: FOO_VERSION = 1.2.3
++08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
++09: FOO_SITE = http://www.foosoftware.org/download
++10: FOO_LICENSE = GPLv2
++11: FOO_LICENSE_FILES = COPYING
++12: 
++13: FOO_MODULE_SUBDIRS = driver/base
++14: FOO_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
++15: 
++16: ifeq ($(BR2_PACKAGE_LIBBAR),y)
++17: FOO_DEPENDENCIES = libbar
++18: FOO_CONF_OPTS = --enable-bar
++19: FOO_MODULE_SUBDIRS += driver/bar
++20: else
++21: FOO_CONF_OPTS = --disable-bar
++22: endif
++23: 
++24: $(eval $(kernel-module))
++26: $(eval $(autotools-package))
++----
++
++Here, we see that we have an autotools-based package, that also builds
++the kernel module located in sub-directory +driver/base+ and, if libbar
++is enabled, the kernel module located in sub-directory +driver/bar+, and
++defines the variable +KVERSION+ to be passed to the Linux buildsystem
++when building the module(s).
++
++
++[[kernel-module-reference]]
++==== +kernel-module+ reference
++
++The main macro for the  kernel module infrastructure is +kernel-module+.
++Unlike other package infrastructures, it is not stand-alone, and requires
++any of the other +*-package+ macros be called after it.
++
++The +kernel-module+ macro defines post-build and post-target-install
++hooks to build the kernel modules. If the package's +.mk+ needs access
++to the built kernel modules, it should do so in a post-build hook,
++registered after the call to +kernel-module+. Similarly, if the package's
+++.mk+ needs access to the kernel module after it has been installed, it
++should do so in a post-install hook, registered after the call to
+++kernel-module+. Here's an example:
++
++----
++$(eval $(kernel-module))
++
++define FOO_DO_STUFF_WITH_KERNEL_MODULE
++    # Do something with it...
 +endef
-+$(2)_POST_BUILD_HOOKS += $(2)_KERNEL_MODULES_BUILD
++FOO_POST_BUILD_HOOKS += FOO_DO_STUFF_WITH_KERNEL_MODULE
 +
-+# Install the kernel module(s)
-+define $(2)_KERNEL_MODULES_INSTALL
-+	@$$(call MESSAGE,"Installing kernel module(s)")
-+	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
-+		$$(LINUX_MAKE_ENV) $$($$(PKG)_MAKE) \
-+			-C $$(LINUX_DIR) \
-+			$$(LINUX_MAKE_FLAGS) \
-+			$$($(2)_MODULE_MAKE_OPTS) \
-+			M=$$(@D)/$$(d) \
-+			modules_install$$(sep))
-+endef
-+$(2)_POST_INSTALL_TARGET_HOOKS += $(2)_KERNEL_MODULES_INSTALL
++$(eval $(generic-package))
++----
 +
-+endef
++Finally, unlike the other package infrastructures, there is no
+++host-kernel-module+ variant to build a host kernel module.
 +
-+################################################################################
-+# kernel-module -- the target generator macro for kernel module packages
-+################################################################################
++The following additional variables can optionally be defined to further
++configure the build of the kernel module:
 +
-+kernel-module = $(call inner-kernel-module,$(pkgname),$(call UPPERCASE,$(pkgname)))
++* +FOO_MODULE_SUBDIRS+ may be set to one or more sub-directories (relative
++  to the package source top-directory) where the kernel module sources are.
++  If empty or not set, the sources for the kernel module(s) are considered
++  to be located at the top of the package source tree.
++
++* +FOO_MODULE_MAKE_OPTS+ may be set to contain extra variable definitions
++  to pass to the Linux buildsystem.
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index b8674f8..721fe39 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -29,6 +29,8 @@ include::adding-packages-kconfig.txt[]
+ 
+ include::adding-packages-rebar.txt[]
+ 
++include::adding-packages-kernel-module.txt[]
++
+ include::adding-packages-asciidoc.txt[]
+ 
+ include::adding-packages-hooks.txt[]
 -- 
 1.9.1
