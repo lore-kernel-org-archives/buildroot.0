@@ -1,90 +1,54 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Wed, 10 Jun 2015 11:20:49 +0530
-Subject: [Buildroot] [PATCH v2 2/2] glog: new package
-In-Reply-To: <1433915449-15994-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1433915449-15994-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <1433915449-15994-3-git-send-email-rahul.bedarkar@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Jun 2015 08:30:12 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-06-09
+Message-ID: <20150610063013.261A2100C01@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Reviewed-by: Abhimanyu Vishwakarma <abhimanyu.v@imgtec.com>
-Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
----
-Changes v1 -> v2:
-	no change
----
- package/Config.in      |  1 +
- package/glog/Config.in | 11 +++++++++++
- package/glog/glog.hash |  2 ++
- package/glog/glog.mk   | 17 +++++++++++++++++
- 4 files changed, 31 insertions(+)
- create mode 100644 package/glog/Config.in
- create mode 100644 package/glog/glog.hash
- create mode 100644 package/glog/glog.mk
+Build statistics for 2015-06-09
+===============================
 
-diff --git a/package/Config.in b/package/Config.in
-index 84248c4..1d9c972 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -892,6 +892,7 @@ menu "JSON/XML"
- endmenu
- 
- menu "Logging"
-+	source "package/glog/Config.in"
- 	source "package/liblog4c-localtime/Config.in"
- 	source "package/liblogging/Config.in"
- 	source "package/log4cplus/Config.in"
-diff --git a/package/glog/Config.in b/package/glog/Config.in
-new file mode 100644
-index 0000000..aed0a3e
---- /dev/null
-+++ b/package/glog/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_GLOG
-+	bool "glog"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  C++ implementation of the Google logging module
-+
-+	  https://github.com/google/glog
-+
-+comment "glog needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/glog/glog.hash b/package/glog/glog.hash
-new file mode 100644
-index 0000000..dad1543
---- /dev/null
-+++ b/package/glog/glog.hash
-@@ -0,0 +1,2 @@
-+# No hash for v0.3.4, comes from the github-helper:
-+none	xxx	glog-v0.3.4.tar.gz
-diff --git a/package/glog/glog.mk b/package/glog/glog.mk
-new file mode 100644
-index 0000000..8a84094
---- /dev/null
-+++ b/package/glog/glog.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# glog
-+#
-+################################################################################
-+
-+GLOG_VERSION = v0.3.4
-+GLOG_SITE = $(call github,google,glog,$(GLOG_VERSION))
-+GLOG_INSTALL_STAGING = YES
-+GLOG_LICENSE = BSD-3c
-+GLOG_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_GFLAGS),y)
-+GLOG_DEPENDENCIES = gflags
-+endif
-+
-+$(eval $(autotools-package))
+        success : 231
+       failures : 11 
+       timeouts : 2  
+          TOTAL : 244
+
+Classification of failures by reason
+====================================
+
+                  stress-1.0.4 | 2 
+       host-erlang-rebar-2.5.1 | 1 
+             alsa-utils-1.0.29 | 1 
+                    qemu-2.3.0 | 1 
+              strongswan-5.3.1 | 1 
+                 libssh2-1.5.0 | 1 
+                    webp-0.4.3 | 1 
+            gst-ffmpeg-0.10.13 | 1 
+                   zmqpp-3.2.0 | 1 
+               valgrind-3.10.1 | 1 
+                     php-5.6.9 | 1 
+                 libepoxy-v1.2 | 1 
+
+Detail of failures
+===================
+
+        i686 |              alsa-utils-1.0.29 | NOK | http://autobuild.buildroot.net/results/bd50805edf02f498dcad39defb843fc9f0c7f1e1/
+microblazeel |             gst-ffmpeg-0.10.13 | TIM | http://autobuild.buildroot.net/results/57e8e2640d59391a06e1a56f60562df2f1a9c46d/
+         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/06826b263d43482c65808ca6186b04f19ec15d30/
+         arm |                  libepoxy-v1.2 | NOK | http://autobuild.buildroot.net/results/3f25428b9c81f483b7f923ecd41ea1b51196b597/
+       nios2 |                  libssh2-1.5.0 | NOK | http://autobuild.buildroot.net/results/c4af12e247ca0d9616147eadb79fe1663f722535/
+        bfin |                      php-5.6.9 | NOK | http://autobuild.buildroot.net/results/1ace407113aad9b607d3d982695d9b2805dc6dc7/
+        i686 |                     qemu-2.3.0 | NOK | http://autobuild.buildroot.net/results/e3422fd005443a37a9a24d64f3672e7f9dcec0e3/
+         arm |                   stress-1.0.4 | NOK | http://autobuild.buildroot.net/results/9a8dbd66bc072475aed4d5b38597ee34b54a769e/
+      x86_64 |                   stress-1.0.4 | NOK | http://autobuild.buildroot.net/results/dc2367dd3def7f4fcdda8cce6bf72fa07b470014/
+        sh4a |               strongswan-5.3.1 | NOK | http://autobuild.buildroot.net/results/8179be910901c161402c1cb59a50e9d37489f3b2/
+    mips64el |                valgrind-3.10.1 | NOK | http://autobuild.buildroot.net/results/352d087bf5daed8ce2c7e2d61db2e75db9b069b9/
+     aarch64 |                     webp-0.4.3 | NOK | http://autobuild.buildroot.net/results/153ccf9557958e64f75f6dc3c44dd91fcfefd960/
+         arm |                    zmqpp-3.2.0 | NOK | http://autobuild.buildroot.net/results/bd6923858681338acecc4ffac13fdd9b7b5a1e50/
+
+
 -- 
-1.9.1
+http://autobuild.buildroot.net
