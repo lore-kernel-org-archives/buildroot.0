@@ -1,58 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 10 Jun 2015 21:22:09 +0200
-Subject: [Buildroot] [PATCH 05/11 v2] package/ktap: use kernel-module helper
+Date: Wed, 10 Jun 2015 21:22:10 +0200
+Subject: [Buildroot] [PATCH 06/11 v2] package/cryptodev-linux: use the
+	kernel-module helper
 In-Reply-To: <cover.1433964001.git.yann.morin.1998@free.fr>
 References: <cover.1433964001.git.yann.morin.1998@free.fr>
-Message-ID: <57032a1bba2511167d80bc55424ad32f5f061869.1433964001.git.yann.morin.1998@free.fr>
+Message-ID: <329d95315f937a0cbd912b8035fb0ccc0e94a9ed.1433964001.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Passing the KERNEL_SRC variable is no longer needed, since it was only
-used to run commands like:
-    $(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules
-
-which is basically what the new kernel-module infra is now doing.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Doug: add pre-build hook to build version.h]
+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
 
 ---
-Changes v1 -> v2;
-  - explain why we get rid of a variable  (Thomas)
+Cyhanges v1 -> v2:
+  - fix missing version.h  (Doug)
 ---
- package/ktap/ktap.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/cryptodev-linux/cryptodev-linux.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
-index 4a0e51c..966b51c 100644
---- a/package/ktap/ktap.mk
-+++ b/package/ktap/ktap.mk
-@@ -9,8 +9,6 @@ KTAP_SITE = $(call github,ktap,ktap,$(KTAP_VERSION))
- KTAP_LICENSE = GPLv2
- KTAP_LICENSE_FILES = LICENSE-GPL
+diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+index 6f41930..6eec602 100644
+--- a/package/cryptodev-linux/cryptodev-linux.mk
++++ b/package/cryptodev-linux/cryptodev-linux.mk
+@@ -6,23 +6,23 @@
  
--KTAP_DEPENDENCIES = linux
--
- ifeq ($(BR2_PACKAGE_ELFUTILS),y)
- KTAP_DEPENDENCIES += elfutils
- else
-@@ -19,12 +17,13 @@ endif
+ CRYPTODEV_LINUX_VERSION = 1.7
+ CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
+-CRYPTODEV_LINUX_DEPENDENCIES = linux
+ CRYPTODEV_LINUX_INSTALL_STAGING = YES
+ CRYPTODEV_LINUX_LICENSE = GPLv2+
+ CRYPTODEV_LINUX_LICENSE_FILES = COPYING
  
- define KTAP_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) $(KTAP_FLAGS) ktap
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) mod
+-define CRYPTODEV_LINUX_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR)
++define CRYPTODEV_LINUX_VERSION_H
++	$(MAKE) -C $(@D) version.h
+ endef
++CRYPTODEV_LINUX_PRE_BUILD_HOOKS += CRYPTODEV_LINUX_VERSION_H
+ 
+-define CRYPTODEV_LINUX_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR) \
+-		PREFIX=$(TARGET_DIR) modules_install
+-endef
++CRYPTODEV_LINUX_MODULE_MAKE_OPTS = \
++	KERNEL_DIR=$(LINUX_DIR) \
++	PREFIX=$(TARGET_DIR)
+ 
+ define CRYPTODEV_LINUX_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D -m 644 $(@D)/crypto/cryptodev.h \
+ 		$(STAGING_DIR)/usr/include/crypto/cryptodev.h
  endef
  
- define KTAP_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m755 $(@D)/ktap  $(TARGET_DIR)/usr/bin/ktap
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) modules_install
- endef
- 
-+KTAP_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
-+
 +$(eval $(kernel-module))
  $(eval $(generic-package))
 -- 
