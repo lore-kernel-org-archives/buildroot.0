@@ -1,44 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Jun 2015 16:17:47 +0200
-Subject: [Buildroot] bc segfaults when using math library, and patch
-In-Reply-To: <55776F11.3080803@gmail.com> (grepper@gmail.com's message of
- "Tue, 09 Jun 2015 18:56:17 -0400")
-References: <55776F11.3080803@gmail.com>
-Message-ID: <87egljk5pw.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 10 Jun 2015 19:15:32 +0200
+Subject: [Buildroot] BR variable that points the built kernel
+In-Reply-To: <CAFRxoJnZEi83_Zj45gAXMvwxZ5x=Cp1o-iMMhU9jVFHWArzbEw@mail.gmail.com>
+References: <CAFRxoJ=gnhumch8GfcSEp0ettOYaRQUhc8in3uwO3MaH1d4wyg@mail.gmail.com>
+ <20150609140338.49987c19@free-electrons.com>
+ <CAFRxoJnECac59y=bjeHYvXP4bDwU7Em9tcGm8kxixq_EjHr0MA@mail.gmail.com>
+ <20150609160304.021d6edb@free-electrons.com>
+ <CAFRxoJ=O5=UvmRJPu3+qn2zVu6dniym7qTAdvWSWMf9Dpozk0Q@mail.gmail.com>
+ <20150610103606.31b56e0b@free-electrons.com>
+ <CAFRxoJnZEi83_Zj45gAXMvwxZ5x=Cp1o-iMMhU9jVFHWArzbEw@mail.gmail.com>
+Message-ID: <20150610171532.GA3700@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "grepper" == grepper  <grepper@gmail.com> writes:
+Marco, All,
 
- > I have attached a patch that fixes the segfault in bc when it is used
- > with the math library loaded. A developer on #buildroot also commented
- > that perhaps buildroot should use the alpha version of bc like many
- > distros instead - I can't comment on that.
+On 2015-06-10 12:06 +0200, Marco Pastorelli spake thusly:
+> Thanks for your help, now it's more clear.
+> Just to give more details I'm trying to write a post-build script in order
+> to create a log file of the build. One information that is important for me
+> is the kernel version, so I wrote the following line:
+> 
+> LINUX_VERSION=$(cat $(LINUX_DIR)/include/config/kernel.release)
+> 
+> That's where I run into the error.
 
-I was going to ask if this is already upstream and if you had a
-reference to the upstream version control, but GNU bc doesn't seem to
-have any public vcs (or any real activity).
+That's because you're writting a shell script, not a Makefile. And in
+shell script, $(foo) means running the command 'foo', not evaluating the
+variable foo.
 
-I see the latest alpha release is from 2006, and that one does make
-save_adr static and NEWS contains the following note:
+Besides, as Thomas said, not all variables are exported, and especially
+the variables cotaining the packages build directories are not exported.
+So, you can't refer to them from a post-build or post-image script.
 
-Bug fixes:
-        fixes bug in load_code introduced by mathlib string storage in 1.06.
+However, there *is* a way to get them, which is asking Buildroot for
+them. I have a similar need, and here's what I do:
 
+    linux_dir_as_shell_variable=$(
+        make printvars 2>/dev/null \
+        |sed -r -e '/^LINUX_DIR=([^[:space:]]+)[[:space:]]+.*/!d; s//\1/;'
+    )
 
-I personally don't use bc, but if people (and other distributions) think
-the 1.06.95 alpha version is better then lets use it.
+    printf "LINUX_DIR from Buildroot is '%s'\n" "${linux_dir_as_shell_variable}"
 
-A quick look at the Debian package shows that they are carrying some
-patches that might be interesting, E.G. 03_array_initialize.diff seems
-like a clear bugfix:
+And since you are only interested in the Linux version, you can replace
+LINUX_DIR with LINUX_VERSION (or even LINUX_VERSION_PROBED).
 
-https://packages.debian.org/jessie/bc
+However, it takes quite some time to run, because it is evaluating *all*
+variables for *all* enabled packages, so it works OK if all you need is
+only a few variable. If you need more, then you'd need a more complex
+solution (or pay the price of calling make for each variable you need).
 
-Care to send a patch to bump the version with this info?
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
