@@ -1,64 +1,41 @@
 From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Thu, 11 Jun 2015 16:48:21 -0400
-Subject: [Buildroot] [PATCH v3 1/3] atf: new package
-In-Reply-To: <5579F365.5030206@mind.be>
-References: <1433717727-30214-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>	<1433717727-30214-2-git-send-email-sebastien.bourdelin@savoirfairelinux.com>	<20150611223430.47b7fb18@free-electrons.com>
- <5579F272.4070109@savoirfairelinux.com> <5579F365.5030206@mind.be>
-Message-ID: <5579F415.2010407@savoirfairelinux.com>
+Date: Thu, 11 Jun 2015 17:00:56 -0400
+Subject: [Buildroot] [PATCH v4 0/3] kyua: new package and dependencies
+Message-ID: <1434056459-24075-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout.
+This patchset introduces the Kyua testing framework with its
+dependencies.
 
-My mistake, i took it as a BSD-2c "or" BSD-3c.
+https://github.com/jmmv/kyua
 
-I will fix that.
+Sebastien Bourdelin (3):
+  atf: new package
+  lutok: new package
+  kyua: new package
 
-Thanks.
+ package/Config.in       |  3 +++
+ package/atf/Config.in   | 11 +++++++++++
+ package/atf/atf.hash    |  2 ++
+ package/atf/atf.mk      | 21 +++++++++++++++++++++
+ package/kyua/Config.in  | 18 ++++++++++++++++++
+ package/kyua/kyua.hash  |  2 ++
+ package/kyua/kyua.mk    | 26 ++++++++++++++++++++++++++
+ package/lutok/Config.in | 11 +++++++++++
+ package/lutok/lutok.mk  | 19 +++++++++++++++++++
+ 9 files changed, 113 insertions(+)
+ create mode 100644 package/atf/Config.in
+ create mode 100644 package/atf/atf.hash
+ create mode 100644 package/atf/atf.mk
+ create mode 100644 package/kyua/Config.in
+ create mode 100644 package/kyua/kyua.hash
+ create mode 100644 package/kyua/kyua.mk
+ create mode 100644 package/lutok/Config.in
+ create mode 100644 package/lutok/lutok.mk
 
-On 06/11/2015 04:45 PM, Arnout Vandecappelle wrote:
-> On 06/11/15 22:41, Sebastien Bourdelin wrote:
->> Hi Thomas.
->>
->> I do not know a lot about licenses, so it will be a lucky mistake if
->> it's correct otherwise i can add the BSD-2c if you think it's required.
->  BSD-2c, BSD-3c is exactly what I suggested in my review of v1... But that was
-> probably not clear enough.
->
->  Regards,
->  Arnout
->
->> Thanks.
->>
->> On 06/11/2015 04:34 PM, Thomas Petazzoni wrote:
->>> Dear Sebastien Bourdelin,
->>>
->>> On Sun,  7 Jun 2015 18:55:25 -0400, Sebastien Bourdelin wrote:
->>>
->>>> +ATF_VERSION = 0.21
->>>> +ATF_SITE = https://github.com/jmmv/atf/releases/download/atf-$(ATF_VERSION)
->>>> +ATF_INSTALL_STAGING = YES
->>>> +ATF_LICENSE = BSD-3c
->>> The COPYING file actually has both BSD-2c and BSD-3c. Maybe specifying
->>> only BSD-3c is OK since it's the same as BSD-2c + an additional
->>> restriction. But I was just wondering what lead to mentioning only
->>> BSD-3c.
->>>
->>> Thanks,
->>>
->>> Thomas
->>
->>  
->>  
->> ************************************************************************************
->> This footnote confirms that this email message has been scanned by
->> PineApp Mail-SeCure for the presence of malicious code, vandals & computer viruses.
->> ************************************************************************************
->>
->>
->>
->>
->
+-- 
+2.4.0
