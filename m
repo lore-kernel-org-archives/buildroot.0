@@ -1,84 +1,90 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 11 Jun 2015 13:50:54 +0000
-Subject: [Buildroot] default getty port
-In-Reply-To: <1434019141.26331.141.camel@linux.intel.com>
-References: <1434019141.26331.141.camel@linux.intel.com>
-Message-ID: <1434030653.2817.15.camel@synopsys.com>
+From: Michal Gonda <gonda.miso@gmail.com>
+Date: Thu, 11 Jun 2015 16:39:53 +0200
+Subject: [Buildroot] Kernel zImage under 1MB
+In-Reply-To: <87lhfsj7ro.fsf@dell.be.48ers.dk>
+References: <CADMiy=KWH-W4VGUjaMF8mmFTSRUxT13xbTeoWigo=gme8GDwKw@mail.gmail.com>
+ <87pp54jzw1.fsf@dell.be.48ers.dk>
+ <CADMiy=JZSro09MASQy51wKeDy2uES0D-kWwNgtL95s6z1AmxrA@mail.gmail.com>
+ <87lhfsj7ro.fsf@dell.be.48ers.dk>
+Message-ID: <CADMiy=JBW02jQ2wfEJGR8i5TyjRq8_Q62k2VttP0xADn9_w9zw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Andy,
+On Wed, Jun 10, 2015 at 10:18 AM, Peter Korsgaard <peter@korsgaard.com>
+wrote:
 
-On Thu, 2015-06-11 at 13:39 +0300, Andy Shevchenko wrote:
-> I tried to play with the patch a bit and got confused. It would be
-> nice if someone could clarify a situation.
+> >>>>> "Michal" == Michal Gonda <gonda.miso@gmail.com> writes:
+>
+>  > Thank you Yegor for link.
+>  > Hi Peter,
+>
+>  > Yes I ment 1MB, sorry for the typo :)
+>  > To specify little bit more the setup. Altera SoC cyclon 5 arm 9.
+>  > 1GB sdRam but unfortunatelly just around ~6MB qspi flash for kernel +
+>  > rootfs image.
+>
+> 6MB? I thought you said 1MB for kernel+rootfs? 6MB is a lot more doable
+> with minimal effort.
+>
 
-So let me try to help you here.
+No around 1MB for kernel and than I would like to have more space for
+rootfs (aplications and services like openVPN, zeroMQ, less crippled
+busybox etc.)
+And since I dont need support for all the optional drivers why not to
+remove them (but I was not sure how to do that, now it is much more clearer)
 
-> (In our environment we are using something like
-> console=tty1 console=ttyS0,115200n8
-> as kernel command line with the specific patch to
-> system/skeleton/inittab to always run getty on /dev/tty1.)
-> 
-> First of all, /dev/tty0 (as proposed in the example in the commit
-> message) has special meaning in Linux. You can't just use it as a
-> console since it refers to current foreground console in the kernel.
-> Moreover, it has no record in the /etc/securetty (and of course it
-> shouldn't be there by security reasons!). So, we have to use any 
-> virtual console but tty0.
+>
+>  > But what you described is exactly what I need to accomplish.
+>  > A static uClibc based build with busybox +
+>  > dropbear as smallest possible image is perfect.
+>  > As you said I can drop probably more later on but few kB here and there
+> if
+>  > kernel is ~1MB is perfect.
+>  > Even better ~450kB as you did.
+>
+> Notice that the 450KB was for the rootfs. I don't know how big your
+> socfgpa kernel image is, but I would guess it is significantly bigger
+> than 1MB even with XZ compression?
 
-Speaking about example in commit message note that it clearly mentions
-that the last "console" item will be used for instantiation of getty,
-so in the particular example getty will be run on "ttyS3".
 
-> Next thing is /dev/console as parameter to getty. I don't know if it
-> supposed to work on some configurations, but in our case it makes 
-> things weird: when I type 'root' + Enter on the local (tty1) console 
-> I got one more 'r' printed and password is asked. Looks like racy 
-> input between /dev/console and /dev/tty1 since it is the same at that
-> point.
+If I build it with default settings, uImage is 3,5MB and rootfs around 5MB.
+I am tinkering around but getting kernel panic :D
 
-Hm... probably your problem happens because you select that option and
-also have another entry for getty in inittab.
 
-And to make things a bit more clear I'd like to see your /etc/inittab
-that is generated with Buildroot (essentially with your
-customizations).
+>  > If you have a time could you briefly point out the steps and parts I
+> should
+>  > focused on ?
+>
+> For the kernel? Basically just turn off all options that you don't need
+> and compress the kernel with XZ (config KERNEL_XZ).
+>
+> For Buildroot just enable static linking (Build
+> options->libraries->static only) and only busybox+dropbear. For
+> filesystem you can either use an initramfs embedded in the kernel or
+> squashfs (with XZ compression).
+>
 
-If I'm not mistaken behavior that you describe (request for password)
-happens if corresponding tty doesn't exist in /etc/securetty list.
-Thomas may correct me if I'm wrong here.
+I will look at those options.
 
-> I also am not sure about validity of B0. I didn't check actual kernel
-> code, though it might go down to the driver level where not all 
-> drivers behave the same when got B0.
 
-Well I cannot answer for all drivers but from what I saw personally it
-worked nice. Probably there're exceptions in drivers but it has to be
-confirmed I guess.
-
-> So, for my opinion the patch brought more problems than tries to 
-> solve.
-
-Let's try to solve your problems first.
-And even this patch doesn't work for you there's a simple work-around
-with explicit specification of tty device you want to use with getty.
-
-We're talking about default value for getty's tty and I think even if
-"console" is not the best option for all but equally ttyS0 doesn't work
-well for many of us - there're lots of boards with non-16550 serial
-ports.
-
-And if we're talking about regression for devices with ttyS0 and new
-default ("console") I would rather add "ttyS0" in defconfigs for
-affected devices in Buildroot.
-
-> I would be happy to understand the background deeply and correct 
-> myself.
-
-Not sure if my comments make sense but I really tried to help :)
-
--Alexey
+>  > As a question aside, Is it enough just
+>  > "make manuconfig" and "make" rebuild the kernel and rootfs or do i need
+> to
+>
+> Buildroot doesn't track changes in the configuration file / what files
+> were added by a package, so it will not remove a package if you do a
+> build and then use menuconfig to remove the package again.
+>
+> It WILL rebuild the kernel or busybox after you used make
+> linux-menuconfig or make busybox-menuconfig to tweak the configuration.
+>
+> --
+> Venlig hilsen,
+> Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150611/cbf10d95/attachment.html>
