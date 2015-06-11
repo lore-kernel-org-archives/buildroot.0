@@ -1,47 +1,70 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Thu, 11 Jun 2015 13:39:01 +0300
-Subject: [Buildroot] default getty port
-Message-ID: <1434019141.26331.141.camel@linux.intel.com>
+From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
+Date: Thu, 11 Jun 2015 14:58:33 +0200
+Subject: [Buildroot] [PATCH] directfb: add an option for debugging
+	support
+In-Reply-To: <5578AFEC.4020107@mind.be>
+References: <1433882623-15782-1-git-send-email-cedric.marie@openmailbox.org>
+ <5578AFEC.4020107@mind.be>
+Message-ID: <339271dfef37197a3b13ecbd8222c28a@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hi,
 
-Yesterday suddenly discovered the commit 131300e6f1d0 (system: run getty
-on boot console by default) in the mainline.
+Le 2015-06-10 23:45, Arnout Vandecappelle a ?crit?:
+>  I think the explanation you gave in your first mail would be valuable 
+> here.
 
-I tried to play with the patch a bit and got confused. It would be nice
-if someone could clarify a situation.
+OK. I didn't want to give too much details in the end, but you're right.
 
-(In our environment we are using something like
-console=tty1 console=ttyS0,115200n8
-as kernel command line with the specific patch to
-system/skeleton/inittab to always run getty on /dev/tty1.)
 
-First of all, /dev/tty0 (as proposed in the example in the commit
-message) has special meaning in Linux. You can't just use it as a
-console since it refers to current foreground console in the kernel.
-Moreover, it has no record in the /etc/securetty (and of course it
-shouldn't be there by security reasons!). So, we have to use any virtual
-console but tty0.
+> Certainly, the fact that the target installation path is suffixed with 
+> -pure
+> should be clarified.
+> 
+>  Do all the packages that depend on directfb still build correctly with 
+> this
+> -pure suffix?
 
-Next thing is /dev/console as parameter to getty. I don't know if it
-supposed to work on some configurations, but in our case it makes things
-weird: when I type 'root' + Enter on the local (tty1) console I got one
-more 'r' printed and password is asked. Looks like racy input
-between /dev/console and /dev/tty1 since it is the same at that point.
+The public library is not moved: /usr/lib/libdirectfb.so
+Only internal libraries are placed in a different directory: 
+/usr/lib/directfb-x.y.z-pure/
+It contains following directories: gfxdrivers, inputdrivers, interfaces, 
+systems, wm.
+It makes no difference for applications using DFB.
 
-I also am not sure about validity of B0. I didn't check actual kernel
-code, though it might go down to the driver level where not all drivers
-behave the same when got B0.
 
-So, for my opinion the patch brought more problems than tries to solve.
+Would you be satisfied with that description below, as a commit message?
 
-I would be happy to understand the background deeply and correct myself.
+
+DirectFB provides two options for debug:
+* --enable-debug-support (default is yes)
+* --enable-debug (default is no)
+The first one provides the functions to print debug information. These
+functions can be called inside DirectFB, or by an external DirectFB
+driver in another package.
+The second one enables verbose mode in DirectFB, using these functions.
+
+Buildroot currently provides an option for the second one only. The
+first one - which is necessary for the second one - is always enabled,
+because this is the default value.
+
+The new option (BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT) makes it possible
+to disable debugging support (--disable-debug-support) in order to
+build the library with no debug feature at all.
+
+When debugging support is disabled, the target installation path of
+internal libraries (/usr/lib/directfb-<version>) is suffixed with
+-pure. The public library (/usr/lib/libdirectfb.so) remains unchanged.
+
+Some external DirectFB drivers will install in
+/usr/lib/directfb-<version>-pure in release mode. For that reason, it
+is important that DirectFB can be configured to use this directory.
+
+
 
 -- 
-Andy Shevchenko <andriy.shevchenko@intel.com>
-Intel Finland Oy
+C?dric
