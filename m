@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 12 Jun 2015 00:53:12 +0200
-Subject: [Buildroot] [PATCH 05/11 v2] package/ktap: use kernel-module
-	helper
-In-Reply-To: <57032a1bba2511167d80bc55424ad32f5f061869.1433964001.git.yann.morin.1998@free.fr>
+Date: Fri, 12 Jun 2015 01:02:57 +0200
+Subject: [Buildroot] [PATCH 06/11 v2] package/cryptodev-linux: use the
+ kernel-module helper
+In-Reply-To: <329d95315f937a0cbd912b8035fb0ccc0e94a9ed.1433964001.git.yann.morin.1998@free.fr>
 References: <cover.1433964001.git.yann.morin.1998@free.fr>
- <57032a1bba2511167d80bc55424ad32f5f061869.1433964001.git.yann.morin.1998@free.fr>
-Message-ID: <557A1158.5030409@mind.be>
+ <329d95315f937a0cbd912b8035fb0ccc0e94a9ed.1433964001.git.yann.morin.1998@free.fr>
+Message-ID: <557A13A1.2000500@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +13,58 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 06/10/15 21:22, Yann E. MORIN wrote:
-> Passing the KERNEL_SRC variable is no longer needed, since it was only
-> used to run commands like:
->     $(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules
-> 
-> which is basically what the new kernel-module infra is now doing.
-> 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> [Doug: add pre-build hook to build version.h]
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ The version.h thing deserves a slightly more explicit commit message, like:
+
+The cryptodev-linux Makefile defines the following:
+
+build: version.h
+        make ${KERNEL_MAKE_OPTS} modules
+
+modules_install:
+        make -C $(KERNEL_DIR) SUBDIRS=`pwd` modules_install
+        @echo "Installing cryptodev.h in $(PREFIX)/usr/include/crypto ..."
+        @install -D crypto/cryptodev.h $(PREFIX)/usr/include/crypto/cryptodev.h
+
+So when we use the kernel-module infrastructure, we have to explicitly handle
+version.h and cryptodev.h. cryptodev.h was already handled specifically because
+it goes to STAGING_DIR. For version.h, we add a pre-build hook.
+
+
+ That said, SUBDIRS= does not behave exactly the same as M=, but I don't know
+what the difference is. So that part should probably be mentioned explicitly in
+the commit message as well.
+
+> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+
+[snip]
+> -define CRYPTODEV_LINUX_INSTALL_TARGET_CMDS
+> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR) \
+> -		PREFIX=$(TARGET_DIR) modules_install
+> -endef
+> +CRYPTODEV_LINUX_MODULE_MAKE_OPTS = \
+> +	KERNEL_DIR=$(LINUX_DIR) \
+> +	PREFIX=$(TARGET_DIR)
+
+ PREFIX is only used for installing cryptodev.h, which is now no longer done. So
+we don't need to define it, right? Same for KERNEL_DIR, it's only used by the
+rules we no longer use.
+
+ If you remove these, it should of course also be mentioned explicitly in the
+commit message.
+
 
  Regards,
  Arnout
 
-> 
-> ---
-> Changes v1 -> v2;
->   - explain why we get rid of a variable  (Thomas)
-> ---
->  package/ktap/ktap.mk | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
-> index 4a0e51c..966b51c 100644
-> --- a/package/ktap/ktap.mk
-> +++ b/package/ktap/ktap.mk
-> @@ -9,8 +9,6 @@ KTAP_SITE = $(call github,ktap,ktap,$(KTAP_VERSION))
->  KTAP_LICENSE = GPLv2
->  KTAP_LICENSE_FILES = LICENSE-GPL
 >  
-> -KTAP_DEPENDENCIES = linux
-> -
->  ifeq ($(BR2_PACKAGE_ELFUTILS),y)
->  KTAP_DEPENDENCIES += elfutils
->  else
-> @@ -19,12 +17,13 @@ endif
->  
->  define KTAP_BUILD_CMDS
->  	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) $(KTAP_FLAGS) ktap
-> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) mod
+>  define CRYPTODEV_LINUX_INSTALL_STAGING_CMDS
+>  	$(INSTALL) -D -m 644 $(@D)/crypto/cryptodev.h \
+>  		$(STAGING_DIR)/usr/include/crypto/cryptodev.h
 >  endef
 >  
->  define KTAP_INSTALL_TARGET_CMDS
->  	$(INSTALL) -D -m755 $(@D)/ktap  $(TARGET_DIR)/usr/bin/ktap
-> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) modules_install
->  endef
->  
-> +KTAP_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
-> +
 > +$(eval $(kernel-module))
 >  $(eval $(generic-package))
 > 
