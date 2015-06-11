@@ -1,131 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 12 Jun 2015 00:13:59 +0200
-Subject: [Buildroot] [PATCH v4 3/3] kyua: new package
-In-Reply-To: <1434056459-24075-4-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-References: <1434056459-24075-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
- <1434056459-24075-4-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-Message-ID: <557A0827.4050404@mind.be>
+Date: Fri, 12 Jun 2015 00:24:21 +0200
+Subject: [Buildroot] [PATCH] directfb: add an option for debugging
+	support
+In-Reply-To: <5579FB8D.1020509@openmailbox.org>
+References: <1433882623-15782-1-git-send-email-cedric.marie@openmailbox.org>	<5578AFEC.4020107@mind.be>	<339271dfef37197a3b13ecbd8222c28a@openmailbox.org>
+ <5579F071.40802@mind.be> <5579FB8D.1020509@openmailbox.org>
+Message-ID: <557A0A95.7020206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/11/15 23:00, Sebastien Bourdelin wrote:
-> Kyua is a testing framework for infrastructure software, originally
-> designed to equip BSD-based operating systems with a test suite. This
-> means that Kyua is lightweight and simple, and that Kyua integrates
-> well with various build systems and continuous integration frameworks.
+On 06/11/15 23:20, C?dric Marie wrote:
+> Hi,
 > 
-> https://github.com/jmmv/kyua
+> Le 11/06/2015 22:32, Arnout Vandecappelle a ?crit :
+>>   Yes, but I was in fact mainly talking about the help text of the new option.
 > 
-> Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-[snip]
-> diff --git a/package/Config.in b/package/Config.in
-> index b006211..1d7b7bc 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -72,6 +72,7 @@ menu "Debugging, profiling and benchmark"
-
- Before someone makes the remark: unlike atf, this one should _not_ move to
-Libs->Other, because kyua is not a library.
-
->  	source "package/kexec/Config.in"
->  	source "package/kexec-lite/Config.in"
->  	source "package/ktap/Config.in"
-> +	source "package/kyua/Config.in"
->  	source "package/latencytop/Config.in"
->  	source "package/lmbench/Config.in"
->  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> diff --git a/package/kyua/Config.in b/package/kyua/Config.in
-> new file mode 100644
-> index 0000000..7489782
-> --- /dev/null
-> +++ b/package/kyua/Config.in
-> @@ -0,0 +1,23 @@
-> +config BR2_PACKAGE_KYUA
-> +	bool "kyua"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER \
-> +		&& !BR2_PACKAGE_LUAJIT # lutok
-
- Same comment as for lutok. Repeat the # lutok on both lines.
-
-> +	select BR2_PACKAGE_ATF
-> +	select BR2_PACKAGE_LUTOK
-> +	select BR2_PACKAGE_SQLITE
-> +	help
-> +	  Kyua is a testing framework for infrastructure software,
-> +	  originally designed to equip BSD-based operating systems
-> +	  with a test suite. This means that Kyua is lightweight
-> +	  and simple, and that Kyua integrates well with various build
-> +	  systems and continuous integration frameworks.
-> +
-> +	  https://github.com/jmmv/kyua
-> +
-> +comment "kyua needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> +
-> +comment "kyua needs a Lua 5.1 interpreter or above"
-> +	depends on BR2_INSTALL_LIBSTDCPP && \
-> +		(!BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_PACKAGE_LUAJIT)
-
- This comment should be exactly the same as for lutok:
-
-comment "kyua needs a toolchain w/ C++ and full Lua"
-	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
-	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-
-[snip]
-> diff --git a/package/kyua/kyua.mk b/package/kyua/kyua.mk
-> new file mode 100644
-> index 0000000..783d3db
-> --- /dev/null
-> +++ b/package/kyua/kyua.mk
-> @@ -0,0 +1,27 @@
-> +################################################################################
-> +#
-> +# kyua
-> +#
-> +################################################################################
-> +
-> +KYUA_VERSION = 0.11
-> +KYUA_SITE = https://github.com/jmmv/kyua/releases/download/kyua-$(KYUA_VERSION)
-> +KYUA_DEPENDENCIES = host-pkgconf atf lutok sqlite
-> +KYUA_CONF_OPTS = --without-doxygen
-> +KYUA_LICENSE = BSD-3c
-> +KYUA_LICENSE_FILES = COPYING
-> +KYUA_CONF_ENV = \
-> +	kyua_cv_attribute_noreturn=yes \
-> +	kyua_cv_getcwd_dyn=yes \
-> +	kyua_cv_lchmod_works=no \
-> +	kyua_cv_getopt_gnu=yes \
-> +	kyua_cv_getopt_optind_reset_value=0 \
-> +	kyua_cv_signals_lastno=15
-> +
-> +define KYUA_INSTALL_CONFIG
-> +	$(INSTALL) -D -m 644 $(@D)/examples/kyua.conf $(TARGET_DIR)/etc/kyua/kyua.conf
-> +endef
-> +
-> +KYUA_POST_INSTALL_HOOKS += KYUA_INSTALL_CONFIG
-> +
-> +$(eval $(autotools-package))
+> Oops, sorry.
+> But I suppose I shouldn't give so much details in the help text, as in the
+> commit message.
+> What do you think is important to mention?
 > 
+> Here is a proposal, feel free to comment/modify:
+> 
+> Compile DirectFB with debugging support. It provides functions to print debug
+> information, for DirectFB as well as external DirectFB drivers.
+> When disabled, DirectFB has got no debug feature at all, and the directory that
 
- Again, kyua installs a bunch of tests.
+When disabled, DirectFB does not print any debug information. The drivers will
+be installed to and loaded from /usr/lib/directfb-<version>-pure instead of
+/usr/lib/directfb-<version>-.
 
- But in fact, you don't even need atf to build kyua. Just specifying
---without-atf is enough to avoid installing the self-tests.
+> contains the internal libraries is suffixed with -pure
+> (/usr/lib/directfb-<version>-pure/).
+> 
+> 
+> NB: I'm not really satisfied with "internal libraries", but I can't find the
+> right expression for that. It contains gfx drivers, but not only...
 
- And the same goes for lutok: you don't need atf to build or run either of them...
-
- So, I'm in favour of configuring lutok and kyua with --without-atf as a way to
-avoid installing the tests. For atf itself, you still need the install-exec
-workaround.
+ gfx drivers, input drivers, window systems drivers, ... I think it's drivers
+:-) Only interfaces doesn't fit.
 
 
  Regards,
  Arnout
+
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
