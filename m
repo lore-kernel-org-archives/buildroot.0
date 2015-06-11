@@ -1,43 +1,49 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Thu, 11 Jun 2015 09:32:00 +0200 (CEST)
-Subject: [Buildroot] [PATCH 02/11 v2] docs/manual: add kernel-module
-In-Reply-To: <97e1da52cd44a346541ddb2e1c6a445fffb79c5b.1433964001.git.yann.morin.1998@free.fr>
-Message-ID: <2037622940.1424474.1434007920086.JavaMail.root@openwide.fr>
+From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
+Date: Thu, 11 Jun 2015 09:37:17 +0200
+Subject: [Buildroot] CMake and VERBOSE variable
+In-Reply-To: <5578B394.1010503@mind.be>
+References: <9943347198fceae1227501e1d00f818a@openmailbox.org>
+ <5578B394.1010503@mind.be>
+Message-ID: <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey, thx interesting work, a slight comment below....
+Hi,
+
+Le 2015-06-11 00:00, Arnout Vandecappelle a ?crit?:
+>  The reason to export is, is to pass it to sub-makes that make use of 
+> the same
+> mechanism, e.g. the kernel.
+> 
+>  However, there's something to be said for exporting it only if V=1.
+
+Is it OK to export it when defined? i.e.:
+
+ifndef VERBOSE
+   export VERBOSE = 1
+endif
+
+This is the local fix I'm using.
 
 
-> +
-> +Let's look at a more complex example:
-> +
-> +----
-> +01:
-> ################################################################################
-> +02: #
-> +03: # foo
-> +04: #
-> +05:
-> ################################################################################
-> +06:
-> +07: FOO_VERSION = 1.2.3
-> +08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
-> +09: FOO_SITE = http://www.foosoftware.org/download
-> +10: FOO_LICENSE = GPLv2
-> +11: FOO_LICENSE_FILES = COPYING
-> +12:
-> +13: FOO_MODULE_SUBDIRS = driver/base
-> +14: FOO_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
-> +15:
+>> NB: All other variables in that list seems to always be not empty.
+
+Replying to myself: No, most of them are also exported empty, but it is 
+alright. Only VERBOSE will have a special meaning when defined empty.
 
 
-^ This variable is not documented anywhere, you might want to do that...
+>  The thing is, the working of CMAKE_NO_VERBOSE is not intuitive either 
+> (because
+> it can still be combined with VERBOSE=1).
+
+The different kinds of verbose modes seem to be neither intuitive nor 
+documented...
 
 
-Regards
+Thank you,
 
-Jeremy
+-- 
+C?dric
