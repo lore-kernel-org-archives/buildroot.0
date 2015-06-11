@@ -1,28 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Jun 2015 22:09:18 +0200
-Subject: [Buildroot] [PATCH 1/1] openvmtools: add
- OPENVMTOOLS_VERSION_MAJOR variable
-In-Reply-To: <1433918670-16552-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1433918670-16552-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20150611220918.7d4ca9fd@free-electrons.com>
+Date: Thu, 11 Jun 2015 22:08:35 +0200
+Subject: [Buildroot] [git commit] gflags: define NO_THREADS if toolchain
+	doesn't support threads
+Message-ID: <20150611200926.83F6580D90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+commit: http://git.buildroot.net/buildroot/commit/?id=33d1e7cf0faf0f334f9c48c724d97d1051624c8e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 10 Jun 2015 08:44:30 +0200, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/openvmtools/openvmtools.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/a42/a4288ed5050ce0d14e589745bf26c0a95acf645e/
 
-Applied, thanks.
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gflags/gflags.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gflags/gflags.mk b/package/gflags/gflags.mk
+index 661dad8..9dc4e15 100644
+--- a/package/gflags/gflags.mk
++++ b/package/gflags/gflags.mk
+@@ -11,7 +11,7 @@ GFLAGS_LICENSE = BSD-3c
+ GFLAGS_LICENSE_FILES = COPYING.txt
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+-GFLAGS_CONF_OPTS = -DBUILD_gflags_LIB=OFF
++GFLAGS_CONF_OPTS = -DBUILD_gflags_LIB=OFF -DCMAKE_CXX_FLAGS=-DNO_THREADS
+ endif
+ 
+ $(eval $(cmake-package))
