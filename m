@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 11 Jun 2015 23:56:24 +0200
-Subject: [Buildroot] [PATCH v4 2/3] lutok: new package
-In-Reply-To: <1434056459-24075-3-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+Date: Fri, 12 Jun 2015 00:13:59 +0200
+Subject: [Buildroot] [PATCH v4 3/3] kyua: new package
+In-Reply-To: <1434056459-24075-4-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
 References: <1434056459-24075-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
- <1434056459-24075-3-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-Message-ID: <557A0408.6030903@mind.be>
+ <1434056459-24075-4-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+Message-ID: <557A0827.4050404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,62 +12,116 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 06/11/15 23:00, Sebastien Bourdelin wrote:
-> Lutok is a lightweight C++ API library for Lua.
+> Kyua is a testing framework for infrastructure software, originally
+> designed to equip BSD-based operating systems with a test suite. This
+> means that Kyua is lightweight and simple, and that Kyua integrates
+> well with various build systems and continuous integration frameworks.
 > 
-> https://github.com/jmmv/lutok
+> https://github.com/jmmv/kyua
 > 
 > Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
 [snip]
-> diff --git a/package/lutok/Config.in b/package/lutok/Config.in
+> diff --git a/package/Config.in b/package/Config.in
+> index b006211..1d7b7bc 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -72,6 +72,7 @@ menu "Debugging, profiling and benchmark"
+
+ Before someone makes the remark: unlike atf, this one should _not_ move to
+Libs->Other, because kyua is not a library.
+
+>  	source "package/kexec/Config.in"
+>  	source "package/kexec-lite/Config.in"
+>  	source "package/ktap/Config.in"
+> +	source "package/kyua/Config.in"
+>  	source "package/latencytop/Config.in"
+>  	source "package/lmbench/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> diff --git a/package/kyua/Config.in b/package/kyua/Config.in
 > new file mode 100644
-> index 0000000..ef885c8
+> index 0000000..7489782
 > --- /dev/null
-> +++ b/package/lutok/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_LUTOK
-> +	bool "lutok"
+> +++ b/package/kyua/Config.in
+> @@ -0,0 +1,23 @@
+> +config BR2_PACKAGE_KYUA
+> +	bool "kyua"
 > +	depends on BR2_INSTALL_LIBSTDCPP
 > +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER \
-> +		&& !BR2_PACKAGE_LUAJIT
+> +		&& !BR2_PACKAGE_LUAJIT # lutok
 
- We only put several depends on one line if they're ||-ed. So make this
+ Same comment as for lutok. Repeat the # lutok on both lines.
 
-	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-	depends on BR2_PACKAGE_LUAJIT
-
+> +	select BR2_PACKAGE_ATF
+> +	select BR2_PACKAGE_LUTOK
+> +	select BR2_PACKAGE_SQLITE
 > +	help
-> +	  Lutok is a lightweight C++ API library for Lua.
+> +	  Kyua is a testing framework for infrastructure software,
+> +	  originally designed to equip BSD-based operating systems
+> +	  with a test suite. This means that Kyua is lightweight
+> +	  and simple, and that Kyua integrates well with various build
+> +	  systems and continuous integration frameworks.
 > +
-> +	  https://github.com/jmmv/lutok
+> +	  https://github.com/jmmv/kyua
 > +
-> +comment "lutok needs a toolchain w/ C++ and full Lua"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
-> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+> +comment "kyua needs a toolchain w/ C++"
+> +	depends on !BR2_INSTALL_LIBSTDCPP
+> +
+> +comment "kyua needs a Lua 5.1 interpreter or above"
+> +	depends on BR2_INSTALL_LIBSTDCPP && \
+> +		(!BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_PACKAGE_LUAJIT)
+
+ This comment should be exactly the same as for lutok:
+
+comment "kyua needs a toolchain w/ C++ and full Lua"
+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+
 [snip]
-> +ifneq ($(BR2_STATIC_LIBS),y)
-> +LUTOK_MAKE_OPTS = LIBS=-ldl
-> +endif
-
- This is actually not needed for this package, it is needed for liblua. So add a
-comment like in haserl:
-
-# liblua uses dlopen when dynamically linked
-
-
+> diff --git a/package/kyua/kyua.mk b/package/kyua/kyua.mk
+> new file mode 100644
+> index 0000000..783d3db
+> --- /dev/null
+> +++ b/package/kyua/kyua.mk
+> @@ -0,0 +1,27 @@
+> +################################################################################
+> +#
+> +# kyua
+> +#
+> +################################################################################
+> +
+> +KYUA_VERSION = 0.11
+> +KYUA_SITE = https://github.com/jmmv/kyua/releases/download/kyua-$(KYUA_VERSION)
+> +KYUA_DEPENDENCIES = host-pkgconf atf lutok sqlite
+> +KYUA_CONF_OPTS = --without-doxygen
+> +KYUA_LICENSE = BSD-3c
+> +KYUA_LICENSE_FILES = COPYING
+> +KYUA_CONF_ENV = \
+> +	kyua_cv_attribute_noreturn=yes \
+> +	kyua_cv_getcwd_dyn=yes \
+> +	kyua_cv_lchmod_works=no \
+> +	kyua_cv_getopt_gnu=yes \
+> +	kyua_cv_getopt_optind_reset_value=0 \
+> +	kyua_cv_signals_lastno=15
+> +
+> +define KYUA_INSTALL_CONFIG
+> +	$(INSTALL) -D -m 644 $(@D)/examples/kyua.conf $(TARGET_DIR)/etc/kyua/kyua.conf
+> +endef
+> +
+> +KYUA_POST_INSTALL_HOOKS += KYUA_INSTALL_CONFIG
 > +
 > +$(eval $(autotools-package))
 > 
 
- Like atf, this package installs a bunch of tests in /usr/tests.
+ Again, kyua installs a bunch of tests.
 
- Short term, get rid of them, either with a POST_INSTALL_TARGET_HOOK or by using
-install-exec.
+ But in fact, you don't even need atf to build kyua. Just specifying
+--without-atf is enough to avoid installing the self-tests.
 
- Long term, we should consider adding a global option BR2_INSTALL_TESTS that
-installs various tests. There are a bunch of packages that have a local option
-for installing tests, but that's not sustainable. If we ever get around to doing
-runtime tests, we'll need something like that. In the meantime, it could already
-be useful for others.
+ And the same goes for lutok: you don't need atf to build or run either of them...
+
+ So, I'm in favour of configuring lutok and kyua with --without-atf as a way to
+avoid installing the tests. For atf itself, you still need the install-exec
+workaround.
 
 
  Regards,
