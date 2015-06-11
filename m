@@ -1,41 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 12 Jun 2015 16:23:11 -0300
-Subject: [Buildroot] [PATCH 3/3] sysstat: bump to version 11.0.5
-In-Reply-To: <1434136991-26950-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1434136991-26950-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1434136991-26950-3-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Jun 2015 22:35:00 +0200
+Subject: [Buildroot] [git commit] package/pppd: install pon, poff scripts
+Message-ID: <20150612192737.BF47E81E6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sysstat/sysstat.hash | 2 +-
- package/sysstat/sysstat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=8e05d4ffe08af3b1489548176dadce1ca352e21c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
-index 226ff06..a170f81 100644
---- a/package/sysstat/sysstat.hash
-+++ b/package/sysstat/sysstat.hash
-@@ -1,2 +1,2 @@
- # From http://sebastien.godard.pagesperso-orange.fr/download.html
--md5	df1ed75656eb06320088d54247f0e803	sysstat-11.0.4.tar.xz
-+md5	4d8e6e72d057189a1660462a678d9ada	sysstat-11.0.5.tar.xz
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 6bdd3b8..b28c029 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pppd/pppd.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 0f9945f..554b830 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -98,6 +98,8 @@ define PPPD_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/openl2tp.so
+ 	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/pppol2tp/pppol2tp.so \
+ 		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/pppol2tp.so
++	$(INSTALL) -D -m 0755 $(PPPD_DIR)/scripts/pon $(TARGET_DIR)/usr/bin/pon
++	$(INSTALL) -D -m 0755 $(PPPD_DIR)/scripts/poff $(TARGET_DIR)/usr/bin/poff
+ 	$(PPPD_INSTALL_RADIUS)
+ endef
  
--SYSSTAT_VERSION = 11.0.4
-+SYSSTAT_VERSION = 11.0.5
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
--- 
-2.3.6
