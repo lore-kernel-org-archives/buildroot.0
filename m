@@ -1,120 +1,84 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Thu, 11 Jun 2015 18:51:32 -0400
-Subject: [Buildroot] [PATCH v5 2/3] lutok: new package
-In-Reply-To: <1434063093-14906-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-References: <1434063093-14906-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-Message-ID: <1434063093-14906-3-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 12 Jun 2015 00:51:40 +0200
+Subject: [Buildroot] [PATCH 04/11 v2] package/igh-ethercat: use
+ kernel-module helper
+In-Reply-To: <67fa2434cd648918b67fe560841ceacd75bed3ac.1433964001.git.yann.morin.1998@free.fr>
+References: <cover.1433964001.git.yann.morin.1998@free.fr>
+ <67fa2434cd648918b67fe560841ceacd75bed3ac.1433964001.git.yann.morin.1998@free.fr>
+Message-ID: <557A10FC.5010309@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lutok is a lightweight C++ API library for Lua.
+On 06/10/15 21:22, Yann E. MORIN wrote:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-https://github.com/jmmv/lutok
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
----
-Changes v4 -> v5:
-  suggested by Arnout Vandecapelle <arnout@mind.be>:
-  - force the --without-atf option to not build the example tests.
-  - puts the dependencies &&-ed in Config.in on 2 lines
-  - adds comment to explain the need of dlopen
+ Perhaps it would be better for changes like this to mention in the commit
+message what the Makefile does. If there is a commit message like this, I trust
+the patch a whole lot more:
 
-Changes v3 -> v4:
-  - rebase
+igh-ethercat's Makefile has these rules, so our kernel-module helper does
+exactly the same:
 
-Changes v2 -> v3:
-  - rebase
+modules:
+        $(MAKE) -C "$(LINUX_SOURCE_DIR)" M="$(@D)" modules
 
-  suggested by Arnout Vandecapelle <arnout@mind.be>:
-  - reworks comment in the Config.in for the required lua dependencies
+modules_install:
+        $(MAKE) -C "$(LINUX_SOURCE_DIR)" M="$(@D)" \
+                INSTALL_MOD_DIR="$(INSTALL_MOD_DIR)" modules_install
 
-Changes v1 -> v2:
-  suggested by Arnout Vandecapelle <arnout@mind.be>:
-  - reworks lua dependencies, doesn't work with luajit
-  - adds comment in the Config.in for the required lua dependencies
-  - uses the release archive instead of the github automatic one
-  - updates the hash
-  - removes the useless AUTORECONF option
-  - adds optional dependency on atf
-  - don't generate the doxygen doc
-  - changes the license
----
- package/Config.in        |  1 +
- package/lutok/Config.in  | 13 +++++++++++++
- package/lutok/lutok.hash |  2 ++
- package/lutok/lutok.mk   | 20 ++++++++++++++++++++
- 4 files changed, 36 insertions(+)
- create mode 100644 package/lutok/Config.in
- create mode 100644 package/lutok/lutok.hash
- create mode 100644 package/lutok/lutok.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index d111a82..b006211 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -456,6 +456,7 @@ endif
- 	source "package/lua/Config.in"
- 	source "package/luainterpreter/Config.in"
- 	source "package/luajit/Config.in"
-+	source "package/lutok/Config.in"
- if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
- # lua modules are dynamically loaded, so not available on static builds
- menu "Lua libraries/modules"
-diff --git a/package/lutok/Config.in b/package/lutok/Config.in
-new file mode 100644
-index 0000000..d6c87cf
---- /dev/null
-+++ b/package/lutok/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LUTOK
-+	bool "lutok"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	depends on !BR2_PACKAGE_LUAJIT
-+	help
-+	  Lutok is a lightweight C++ API library for Lua.
-+
-+	  https://github.com/jmmv/lutok
-+
-+comment "lutok needs a toolchain w/ C++ and full Lua"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-diff --git a/package/lutok/lutok.hash b/package/lutok/lutok.hash
-new file mode 100644
-index 0000000..0ec8988
---- /dev/null
-+++ b/package/lutok/lutok.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 2cec51efa0c8d65ace8b21eaa08384b77abc5087b46e785f78de1c21fb754cd5 lutok-0.4.tar.gz
-diff --git a/package/lutok/lutok.mk b/package/lutok/lutok.mk
-new file mode 100644
-index 0000000..0b1f214
---- /dev/null
-+++ b/package/lutok/lutok.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# lutok
-+#
-+################################################################################
-+
-+LUTOK_VERSION = 0.4
-+LUTOK_SITE = https://github.com/jmmv/lutok/releases/download/lutok-$(LUTOK_VERSION)
-+LUTOK_INSTALL_STAGING = YES
-+LUTOK_DEPENDENCIES = host-pkgconf lua
-+LUTOK_CONF_OPTS = --without-doxygen --without-atf
-+LUTOK_LICENSE = BSD-3c
-+LUTOK_LICENSE_FILES = COPYING
-+
-+# liblua uses dlopen when dynamically linked
-+ifneq ($(BR2_STATIC_LIBS),y)
-+LUTOK_MAKE_OPTS = LIBS=-ldl
-+endif
-+
-+$(eval $(autotools-package))
+(for convenience I replaced the full path with $(@D)).
+
+
+ Regards,
+ Arnout
+
+> ---
+>  package/igh-ethercat/igh-ethercat.mk | 14 +-------------
+>  1 file changed, 1 insertion(+), 13 deletions(-)
+> 
+> diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
+> index b5221f8..32c49a3 100644
+> --- a/package/igh-ethercat/igh-ethercat.mk
+> +++ b/package/igh-ethercat/igh-ethercat.mk
+> @@ -10,7 +10,6 @@ IGH_ETHERCAT_SOURCE = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
+>  IGH_ETHERCAT_LICENSE = GPLv2 (IgH EtherCAT master), LGPLv2.1 (libraries)
+>  IGH_ETHERCAT_LICENSE_FILES = COPYING COPYING.LESSER
+>  
+> -IGH_ETHERCAT_DEPENDENCIES = linux
+>  IGH_ETHERCAT_INSTALL_STAGING = YES
+>  
+>  IGH_ETHERCAT_CONF_OPTS = \
+> @@ -22,16 +21,5 @@ IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,
+>  IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e)
+>  IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
+>  
+> -define IGH_ETHERCAT_BUILD_MODULES
+> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
+> -endef
+> -
+> -IGH_ETHERCAT_POST_BUILD_HOOKS += IGH_ETHERCAT_BUILD_MODULES
+> -
+> -define IGH_ETHERCAT_INSTALL_MODULES
+> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules_install
+> -endef
+> -
+> -IGH_ETHERCAT_POST_INSTALL_TARGET_HOOKS += IGH_ETHERCAT_INSTALL_MODULES
+> -
+> +$(eval $(kernel-module))
+>  $(eval $(autotools-package))
+> 
+
+
 -- 
-2.4.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
