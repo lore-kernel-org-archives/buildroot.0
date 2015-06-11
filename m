@@ -1,41 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Jun 2015 22:10:01 +0200
-Subject: [Buildroot] [git commit] support: update Kconfiglib to the latest
-	version
-Message-ID: <20150611201229.9BFCA817B4@busybox.osuosl.org>
+Date: Thu, 11 Jun 2015 22:10:21 +0200
+Subject: [Buildroot] [git commit] support: get prompts via official
+	Kconfiglib APIs
+Message-ID: <20150611201229.B1E187FAA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=00cc2431701929728df5b616f2e51268053cfd2c
+commit: http://git.buildroot.net/buildroot/commit/?id=b4250efb2f5f4a56f4b073a8679f399fab603586
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Corresponds to a95f477 in https://github.com/ulfalizer/Kconfiglib.
-
-Fixes:
-
- - Unset user values when loading a zero-byte .config. (5e54e2c)
-
- - Ignore indented .config assignments. (f8a7510)
-
- - Do not require $srctree to be set for non-kernel projects. (d56e9c1)
-
- - Allow digits in $-references to symbols. (ecacdd5)
-
- - Add Symbol.is_allnoconfig_y(). (deaa624)
-
- - Fix small output issue with Comments inside Choices.
-
-Also adds Python 3 support and has a lot of internal cleanup and
-optimization.
+These weren't available when gen-manual-lists.py was first written.
 
 Signed-off-by: Ulf Magnusson <ulfalizer@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/kconfiglib.py     | 2225 +++++++++++++++++--------------------
- support/scripts/readme.kconfiglib |    2 +-
- 2 files changed, 998 insertions(+), 1229 deletions(-)
+ support/scripts/gen-manual-lists.py |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+index 2acac2c..d45810b 100644
+--- a/support/scripts/gen-manual-lists.py
++++ b/support/scripts/gen-manual-lists.py
+@@ -99,7 +99,7 @@ def get_symbol_parents(item, root=None, enable_choice=False):
+         if parent.is_menu():
+             parents.append(parent.get_title())
+         elif enable_choice and parent.is_choice():
+-            parents.append(parent.prompts[0][0])
++            parents.append(parent.get_prompts()[0])
+         parent = parent.get_parent()
+     if isinstance(root, kconfiglib.Menu) or \
+             (enable_choice and isinstance(root, kconfiglib.Choice)):
+@@ -234,9 +234,9 @@ class Buildroot:
+         """
+         if not symbol.is_symbol():
+             return False
+-        if type == 'real' and not symbol.prompts:
++        if type == 'real' and not symbol.get_prompts():
+             return False
+-        if type == 'virtual' and symbol.prompts:
++        if type == 'virtual' and symbol.get_prompts():
+             return False
+         if not self.re_pkg_prefix.match(symbol.get_name()):
+             return False
+@@ -315,7 +315,7 @@ class Buildroot:
+         :param mark_deprecated: Append a 'deprecated' to the label
+ 
+         """
+-        label = symbol.prompts[0][0]
++        label = symbol.get_prompts()[0]
+         if self._is_deprecated(symbol) and mark_deprecated:
+             label += " *(deprecated)*"
+         return label
+@@ -394,7 +394,7 @@ class Buildroot:
+                     continue
+                 for s in selects:
+                     if s == symbol:
+-                        if sym.prompts:
++                        if sym.get_prompts():
+                             l = self._get_symbol_label(sym,False)
+                             parent_pkg = _get_parent_package(sym)
+                             if parent_pkg is not None:
