@@ -1,134 +1,76 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Thu, 11 Jun 2015 18:51:33 -0400
-Subject: [Buildroot] [PATCH v5 3/3] kyua: new package
-In-Reply-To: <1434063093-14906-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-References: <1434063093-14906-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-Message-ID: <1434063093-14906-4-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 12 Jun 2015 00:53:12 +0200
+Subject: [Buildroot] [PATCH 05/11 v2] package/ktap: use kernel-module
+	helper
+In-Reply-To: <57032a1bba2511167d80bc55424ad32f5f061869.1433964001.git.yann.morin.1998@free.fr>
+References: <cover.1433964001.git.yann.morin.1998@free.fr>
+ <57032a1bba2511167d80bc55424ad32f5f061869.1433964001.git.yann.morin.1998@free.fr>
+Message-ID: <557A1158.5030409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kyua is a testing framework for infrastructure software, originally
-designed to equip BSD-based operating systems with a test suite. This
-means that Kyua is lightweight and simple, and that Kyua integrates
-well with various build systems and continuous integration frameworks.
+On 06/10/15 21:22, Yann E. MORIN wrote:
+> Passing the KERNEL_SRC variable is no longer needed, since it was only
+> used to run commands like:
+>     $(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules
+> 
+> which is basically what the new kernel-module infra is now doing.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-https://github.com/jmmv/kyua
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
----
-Changes v4 -> v5:
-  suggested by Arnout Vandecapelle <arnout@mind.be>:
-  - force the --without-atf option to not build the example tests.
-  - puts the dependencies &&-ed in Config.in on 2 lines
-  - change the comment for dependencies in Config.in
+ Regards,
+ Arnout
 
-Changes v3 -> v4:
-  - rebase
+> 
+> ---
+> Changes v1 -> v2;
+>   - explain why we get rid of a variable  (Thomas)
+> ---
+>  package/ktap/ktap.mk | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
+> index 4a0e51c..966b51c 100644
+> --- a/package/ktap/ktap.mk
+> +++ b/package/ktap/ktap.mk
+> @@ -9,8 +9,6 @@ KTAP_SITE = $(call github,ktap,ktap,$(KTAP_VERSION))
+>  KTAP_LICENSE = GPLv2
+>  KTAP_LICENSE_FILES = LICENSE-GPL
+>  
+> -KTAP_DEPENDENCIES = linux
+> -
+>  ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+>  KTAP_DEPENDENCIES += elfutils
+>  else
+> @@ -19,12 +17,13 @@ endif
+>  
+>  define KTAP_BUILD_CMDS
+>  	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) $(KTAP_FLAGS) ktap
+> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) mod
+>  endef
+>  
+>  define KTAP_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -D -m755 $(@D)/ktap  $(TARGET_DIR)/usr/bin/ktap
+> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) modules_install
+>  endef
+>  
+> +KTAP_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
+> +
+> +$(eval $(kernel-module))
+>  $(eval $(generic-package))
+> 
 
-Changes v2 -> v3:
-  - rebase
 
-Changes v1 -> v2:
-  - don't generate the doxygen doc
-
-  suggested by Arnout Vandecapelle <arnout@mind.be>:
-  - reworks dependencies in Config.in
-  - uses the uploaded archive instead of the github automatic one
-  - changes the hash
-  - removes the useless AUTORECONF
-  - changes the license
-  - fixes a mistake with POST_INSTALL_HOOK
----
- package/Config.in      |  1 +
- package/kyua/Config.in | 20 ++++++++++++++++++++
- package/kyua/kyua.hash |  2 ++
- package/kyua/kyua.mk   | 27 +++++++++++++++++++++++++++
- 4 files changed, 50 insertions(+)
- create mode 100644 package/kyua/Config.in
- create mode 100644 package/kyua/kyua.hash
- create mode 100644 package/kyua/kyua.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index b006211..1d7b7bc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -72,6 +72,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/kexec/Config.in"
- 	source "package/kexec-lite/Config.in"
- 	source "package/ktap/Config.in"
-+	source "package/kyua/Config.in"
- 	source "package/latencytop/Config.in"
- 	source "package/lmbench/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/kyua/Config.in b/package/kyua/Config.in
-new file mode 100644
-index 0000000..e1bcd48
---- /dev/null
-+++ b/package/kyua/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_KYUA
-+	bool "kyua"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER # lutok
-+	depends on !BR2_PACKAGE_LUAJIT # lutok
-+	select BR2_PACKAGE_ATF
-+	select BR2_PACKAGE_LUTOK
-+	select BR2_PACKAGE_SQLITE
-+	help
-+	  Kyua is a testing framework for infrastructure software,
-+	  originally designed to equip BSD-based operating systems
-+	  with a test suite. This means that Kyua is lightweight
-+	  and simple, and that Kyua integrates well with various build
-+	  systems and continuous integration frameworks.
-+
-+	  https://github.com/jmmv/kyua
-+
-+comment "kyua needs a toolchain w/ C++ and full Lua"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-diff --git a/package/kyua/kyua.hash b/package/kyua/kyua.hash
-new file mode 100644
-index 0000000..938e556
---- /dev/null
-+++ b/package/kyua/kyua.hash
-@@ -0,0 +1,2 @@
-+# Locally Calculted
-+sha256 2b8b64a458b642df75086eeb73e8073d105b8d9cff04c9b1a905b68bc8502560 kyua-0.11.tar.gz
-diff --git a/package/kyua/kyua.mk b/package/kyua/kyua.mk
-new file mode 100644
-index 0000000..c75a09f
---- /dev/null
-+++ b/package/kyua/kyua.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# kyua
-+#
-+################################################################################
-+
-+KYUA_VERSION = 0.11
-+KYUA_SITE = https://github.com/jmmv/kyua/releases/download/kyua-$(KYUA_VERSION)
-+KYUA_DEPENDENCIES = host-pkgconf atf lutok sqlite
-+KYUA_CONF_OPTS = --without-doxygen --without-atf
-+KYUA_LICENSE = BSD-3c
-+KYUA_LICENSE_FILES = COPYING
-+KYUA_CONF_ENV = \
-+	kyua_cv_attribute_noreturn=yes \
-+	kyua_cv_getcwd_dyn=yes \
-+	kyua_cv_lchmod_works=no \
-+	kyua_cv_getopt_gnu=yes \
-+	kyua_cv_getopt_optind_reset_value=0 \
-+	kyua_cv_signals_lastno=15
-+
-+define KYUA_INSTALL_CONFIG
-+	$(INSTALL) -D -m 644 $(@D)/examples/kyua.conf $(TARGET_DIR)/etc/kyua/kyua.conf
-+endef
-+
-+KYUA_POST_INSTALL_HOOKS += KYUA_INSTALL_CONFIG
-+
-+$(eval $(autotools-package))
 -- 
-2.4.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
