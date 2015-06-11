@@ -1,95 +1,74 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 11 Jun 2015 22:05:03 +0200
-Subject: [Buildroot] CMake and VERBOSE variable
-In-Reply-To: <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
-References: <9943347198fceae1227501e1d00f818a@openmailbox.org>	<5578B394.1010503@mind.be>
- <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
-Message-ID: <5579E9EF.4070402@mind.be>
+Date: Thu, 11 Jun 2015 22:32:49 +0200
+Subject: [Buildroot] [PATCH] directfb: add an option for debugging
+	support
+In-Reply-To: <339271dfef37197a3b13ecbd8222c28a@openmailbox.org>
+References: <1433882623-15782-1-git-send-email-cedric.marie@openmailbox.org>	<5578AFEC.4020107@mind.be>
+ <339271dfef37197a3b13ecbd8222c28a@openmailbox.org>
+Message-ID: <5579F071.40802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/11/15 09:37, C?dric Marie wrote:
+On 06/11/15 14:58, C?dric Marie wrote:
 > Hi,
 > 
-> Le 2015-06-11 00:00, Arnout Vandecappelle a ?crit :
->>  The reason to export is, is to pass it to sub-makes that make use of the same
->> mechanism, e.g. the kernel.
+> Le 2015-06-10 23:45, Arnout Vandecappelle a ?crit :
+>>  I think the explanation you gave in your first mail would be valuable here.
+> 
+> OK. I didn't want to give too much details in the end, but you're right.
+> 
+> 
+>> Certainly, the fact that the target installation path is suffixed with -pure
+>> should be clarified.
 >>
->>  However, there's something to be said for exporting it only if V=1.
+>>  Do all the packages that depend on directfb still build correctly with this
+>> -pure suffix?
 > 
-> Is it OK to export it when defined? i.e.:
-> 
-> ifndef VERBOSE
->   export VERBOSE = 1
-> endif
-
- Actually, no. It should also be exported if the user had set it like so:
-
-make V=1 VERBOSE=3
-
- Therefore, it should become (with full context otherwise other readers will not
-understand why there's an ifndef)
-
- ifeq ($(KBUILD_VERBOSE),1)
-   quiet =
-   Q =
- ifndef VERBOSE
-   VERBOSE = 1
- endif
-+export VERBOSE
- else
-   quiet = quiet_
-   Q = @
- endif
-
-
- However, on second thought: why do we set VERBOSE at all? It was introduced in
-2007 by Bernhard Reutner-Fischer with the explanation:
-
-set and export VERBOSE if V= was requested
-
- Not much of an explanation...
-
- A quick review of a few typical packages (linux, busybox, uClibc, u-boot,
-autotools-baed) only turns up uClibc that has a not-very-well documented use of
-VERBOSE. So perhaps we should just revert Bernhard's patch and completely remove
-VERBOSE.
-
- Peter?
-
-> 
-> This is the local fix I'm using.
+> The public library is not moved: /usr/lib/libdirectfb.so
+> Only internal libraries are placed in a different directory:
+> /usr/lib/directfb-x.y.z-pure/
+> It contains following directories: gfxdrivers, inputdrivers, interfaces,
+> systems, wm.
+> It makes no difference for applications using DFB.
 > 
 > 
->>> NB: All other variables in that list seems to always be not empty.
-> 
-> Replying to myself: No, most of them are also exported empty, but it is alright.
-> Only VERBOSE will have a special meaning when defined empty.
+> Would you be satisfied with that description below, as a commit message?
 
- Well, there's no way to be sure of that...
-
- In fact, the export of quiet Q KBUILD_VERBOSE comes directly from the kernel
-(another commit from Bernhard, log "adjust infrastructure for new kconfig"). But
-of course, in the kernel the build system has complete control over what will be
-called with this stuff in the environment. For us that's a lot more complicated.
-So I think we should get rid of all these exports, and leave it up to individual
-packages to do that. Only V is something that is really generally used I think.
-
+ Yes, but I was in fact mainly talking about the help text of the new option.
 
  Regards,
  Arnout
 
-
->>  The thing is, the working of CMAKE_NO_VERBOSE is not intuitive either (because
->> it can still be combined with VERBOSE=1).
-> 
-> The different kinds of verbose modes seem to be neither intuitive nor documented...
 > 
 > 
-> Thank you,
+> DirectFB provides two options for debug:
+> * --enable-debug-support (default is yes)
+> * --enable-debug (default is no)
+> The first one provides the functions to print debug information. These
+> functions can be called inside DirectFB, or by an external DirectFB
+> driver in another package.
+> The second one enables verbose mode in DirectFB, using these functions.
+> 
+> Buildroot currently provides an option for the second one only. The
+> first one - which is necessary for the second one - is always enabled,
+> because this is the default value.
+> 
+> The new option (BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT) makes it possible
+> to disable debugging support (--disable-debug-support) in order to
+> build the library with no debug feature at all.
+> 
+> When debugging support is disabled, the target installation path of
+> internal libraries (/usr/lib/directfb-<version>) is suffixed with
+> -pure. The public library (/usr/lib/libdirectfb.so) remains unchanged.
+> 
+> Some external DirectFB drivers will install in
+> /usr/lib/directfb-<version>-pure in release mode. For that reason, it
+> is important that DirectFB can be configured to use this directory.
+> 
+> 
 > 
 
 
