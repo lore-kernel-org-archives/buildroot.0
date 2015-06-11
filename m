@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 12 Jun 2015 01:02:57 +0200
-Subject: [Buildroot] [PATCH 06/11 v2] package/cryptodev-linux: use the
+Date: Fri, 12 Jun 2015 01:04:28 +0200
+Subject: [Buildroot] [PATCH 08/11 v2] package/on2-8170-modules: use
  kernel-module helper
-In-Reply-To: <329d95315f937a0cbd912b8035fb0ccc0e94a9ed.1433964001.git.yann.morin.1998@free.fr>
+In-Reply-To: <a0a6da880beb6b888e98944f68388c3049093797.1433964001.git.yann.morin.1998@free.fr>
 References: <cover.1433964001.git.yann.morin.1998@free.fr>
- <329d95315f937a0cbd912b8035fb0ccc0e94a9ed.1433964001.git.yann.morin.1998@free.fr>
-Message-ID: <557A13A1.2000500@mind.be>
+ <a0a6da880beb6b888e98944f68388c3049093797.1433964001.git.yann.morin.1998@free.fr>
+Message-ID: <557A13FC.3020008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,57 +14,38 @@ To: buildroot@busybox.net
 
 On 06/10/15 21:22, Yann E. MORIN wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> [Doug: add pre-build hook to build version.h]
 
- The version.h thing deserves a slightly more explicit commit message, like:
-
-The cryptodev-linux Makefile defines the following:
-
-build: version.h
-        make ${KERNEL_MAKE_OPTS} modules
-
-modules_install:
-        make -C $(KERNEL_DIR) SUBDIRS=`pwd` modules_install
-        @echo "Installing cryptodev.h in $(PREFIX)/usr/include/crypto ..."
-        @install -D crypto/cryptodev.h $(PREFIX)/usr/include/crypto/cryptodev.h
-
-So when we use the kernel-module infrastructure, we have to explicitly handle
-version.h and cryptodev.h. cryptodev.h was already handled specifically because
-it goes to STAGING_DIR. For version.h, we add a pre-build hook.
-
-
- That said, SUBDIRS= does not behave exactly the same as M=, but I don't know
-what the difference is. So that part should probably be mentioned explicitly in
-the commit message as well.
-
-> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-
-[snip]
-> -define CRYPTODEV_LINUX_INSTALL_TARGET_CMDS
-> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR) \
-> -		PREFIX=$(TARGET_DIR) modules_install
-> -endef
-> +CRYPTODEV_LINUX_MODULE_MAKE_OPTS = \
-> +	KERNEL_DIR=$(LINUX_DIR) \
-> +	PREFIX=$(TARGET_DIR)
-
- PREFIX is only used for installing cryptodev.h, which is now no longer done. So
-we don't need to define it, right? Same for KERNEL_DIR, it's only used by the
-rules we no longer use.
-
- If you remove these, it should of course also be mentioned explicitly in the
-commit message.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
  Regards,
  Arnout
 
+> ---
+>  package/on2-8170-modules/on2-8170-modules.mk | 11 +----------
+>  1 file changed, 1 insertion(+), 10 deletions(-)
+> 
+> diff --git a/package/on2-8170-modules/on2-8170-modules.mk b/package/on2-8170-modules/on2-8170-modules.mk
+> index 209bcb5..b40ed86 100644
+> --- a/package/on2-8170-modules/on2-8170-modules.mk
+> +++ b/package/on2-8170-modules/on2-8170-modules.mk
+> @@ -7,17 +7,8 @@
+>  ON2_8170_MODULES_VERSION = 73b08061d30789178e692bc332b73d1d9922bf39
+>  ON2_8170_MODULES_SITE = $(call github,alexandrebelloni,on2-8170-modules,$(ON2_8170_MODULES_VERSION))
 >  
->  define CRYPTODEV_LINUX_INSTALL_STAGING_CMDS
->  	$(INSTALL) -D -m 644 $(@D)/crypto/cryptodev.h \
->  		$(STAGING_DIR)/usr/include/crypto/cryptodev.h
->  endef
+> -ON2_8170_MODULES_DEPENDENCIES = linux
+> -
+>  ON2_8170_MODULES_LICENSE = GPLv2+
+>  #There is no license file
 >  
+> -define ON2_8170_MODULES_BUILD_CMDS
+> -	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D)
+> -endef
+> -
+> -define ON2_8170_MODULES_INSTALL_TARGET_CMDS
+> -	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) modules_install
+> -endef
+> -
 > +$(eval $(kernel-module))
 >  $(eval $(generic-package))
 > 
