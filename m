@@ -1,120 +1,137 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Thu, 11 Jun 2015 17:00:58 -0400
-Subject: [Buildroot] [PATCH v4 2/3] lutok: new package
-In-Reply-To: <1434056459-24075-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-References: <1434056459-24075-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-Message-ID: <1434056459-24075-3-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 11 Jun 2015 23:06:15 +0200
+Subject: [Buildroot] [PATCH v3 1/3] atf: new package
+In-Reply-To: <5579F2C9.6010107@savoirfairelinux.com>
+References: <1433717727-30214-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>	<1433717727-30214-2-git-send-email-sebastien.bourdelin@savoirfairelinux.com>	<20150611223324.07b59100@free-electrons.com>
+ <5579F2C9.6010107@savoirfairelinux.com>
+Message-ID: <5579F847.5010103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lutok is a lightweight C++ API library for Lua.
+On 06/11/15 22:42, Sebastien Bourdelin wrote:
+> Hi Thomas.
+> 
+> I will leave you that choice :)
+> 
+> Thanks.
+> 
+> On 06/11/2015 04:33 PM, Thomas Petazzoni wrote:
+[snip]
+>> It installs quite a bunch of things to the target filesystem, including
+>> C and C++ source code, which seems a bit useless since we don't support
+>> building/installing a compiler for the target:
 
-https://github.com/jmmv/lutok
+ Sebastien, could you still respond to this question? AFAICS, Thomas is right,
+these tests actually test atf itself so they shouldn't be installed, or they
+should be cleaned up in a POST_TARGET_INSTALL_HOOK. I think the easiest is not
+to install them, by setting
 
-Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
----
-Changes v3 -> v4:
-  - rebase
+ATF_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
 
-Changes v2 -> v3:
-  - rebase
+ This installs only the libraries and the atf-sh program, which I think is all
+that is needed.
 
-  suggested by Arnout Vandecapelle <arnout@mind.be>:
-  - reworks comment in the Config.in for the required lua dependencies
 
-Changes v1 -> v2:
-  suggested by Arnout Vandecapelle <arnout@mind.be>:
-  - reworks lua dependencies, doesn't work with luajit
-  - adds comment in the Config.in for the required lua dependencies
-  - uses the release archive instead of the github automatic one
-  - updates the hash
-  - removes the useless AUTORECONF option
-  - adds optional dependency on atf
-  - don't generate the doxygen doc
-  - changes the license
----
- package/Config.in        |  1 +
- package/lutok/Config.in  | 13 +++++++++++++
- package/lutok/lutok.hash |  2 ++
- package/lutok/lutok.mk   | 26 ++++++++++++++++++++++++++
- 4 files changed, 42 insertions(+)
- create mode 100644 package/lutok/Config.in
- create mode 100644 package/lutok/lutok.hash
- create mode 100644 package/lutok/lutok.mk
+ Regards,
+ Arnout
 
-diff --git a/package/Config.in b/package/Config.in
-index d111a82..b006211 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -456,6 +456,7 @@ endif
- 	source "package/lua/Config.in"
- 	source "package/luainterpreter/Config.in"
- 	source "package/luajit/Config.in"
-+	source "package/lutok/Config.in"
- if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
- # lua modules are dynamically loaded, so not available on static builds
- menu "Lua libraries/modules"
-diff --git a/package/lutok/Config.in b/package/lutok/Config.in
-new file mode 100644
-index 0000000..ef885c8
---- /dev/null
-+++ b/package/lutok/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LUTOK
-+	bool "lutok"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER \
-+		&& !BR2_PACKAGE_LUAJIT
-+	help
-+	  Lutok is a lightweight C++ API library for Lua.
-+
-+	  https://github.com/jmmv/lutok
-+
-+comment "lutok needs a toolchain w/ C++ and full Lua"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-diff --git a/package/lutok/lutok.hash b/package/lutok/lutok.hash
-new file mode 100644
-index 0000000..0ec8988
---- /dev/null
-+++ b/package/lutok/lutok.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 2cec51efa0c8d65ace8b21eaa08384b77abc5087b46e785f78de1c21fb754cd5 lutok-0.4.tar.gz
-diff --git a/package/lutok/lutok.mk b/package/lutok/lutok.mk
-new file mode 100644
-index 0000000..0c78daa
---- /dev/null
-+++ b/package/lutok/lutok.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# lutok
-+#
-+################################################################################
-+
-+LUTOK_VERSION = 0.4
-+LUTOK_SITE = https://github.com/jmmv/lutok/releases/download/lutok-$(LUTOK_VERSION)
-+LUTOK_INSTALL_STAGING = YES
-+LUTOK_DEPENDENCIES = host-pkgconf lua
-+LUTOK_CONF_OPTS = --without-doxygen
-+LUTOK_LICENSE = BSD-3c
-+LUTOK_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_ATF),y)
-+LUTOK_DEPENDENCIES += atf
-+LUTOK_CONF_OPTS += --with-atf
-+else
-+LUTOK_CONF_OPTS += --without-atf
-+endif
-+
-+ifneq ($(BR2_STATIC_LIBS),y)
-+LUTOK_MAKE_OPTS = LIBS=-ldl
-+endif
-+
-+$(eval $(autotools-package))
+>>
+>> ./usr/tests/atf
+>> ./usr/tests/atf/Kyuafile
+>> ./usr/tests/atf/atf-sh
+>> ./usr/tests/atf/atf-sh/tc_test
+>> ./usr/tests/atf/atf-sh/Kyuafile
+>> ./usr/tests/atf/atf-sh/atf-check_test
+>> ./usr/tests/atf/atf-sh/tp_test
+>> ./usr/tests/atf/atf-sh/integration_test
+>> ./usr/tests/atf/atf-sh/misc_helpers
+>> ./usr/tests/atf/atf-sh/normalize_test
+>> ./usr/tests/atf/atf-sh/config_test
+>> ./usr/tests/atf/atf-sh/atf_check_test
+>> ./usr/tests/atf/atf-c
+>> ./usr/tests/atf/atf-c/tc_test
+>> ./usr/tests/atf/atf-c/Kyuafile
+>> ./usr/tests/atf/atf-c/atf_c_test
+>> ./usr/tests/atf/atf-c/macros_test
+>> ./usr/tests/atf/atf-c/tp_test
+>> ./usr/tests/atf/atf-c/build_test
+>> ./usr/tests/atf/atf-c/error_test
+>> ./usr/tests/atf/atf-c/check_test
+>> ./usr/tests/atf/atf-c/utils_test
+>> ./usr/tests/atf/atf-c/pkg_config_test
+>> ./usr/tests/atf/atf-c/macros_h_test.c
+>> ./usr/tests/atf/atf-c/unused_test.c
+>> ./usr/tests/atf/atf-c/detail
+>> ./usr/tests/atf/atf-c/detail/version_helper
+>> ./usr/tests/atf/atf-c/detail/env_test
+>> ./usr/tests/atf/atf-c/detail/Kyuafile
+>> ./usr/tests/atf/atf-c/detail/process_test
+>> ./usr/tests/atf/atf-c/detail/fs_test
+>> ./usr/tests/atf/atf-c/detail/text_test
+>> ./usr/tests/atf/atf-c/detail/dynstr_test
+>> ./usr/tests/atf/atf-c/detail/sanity_test
+>> ./usr/tests/atf/atf-c/detail/list_test
+>> ./usr/tests/atf/atf-c/detail/user_test
+>> ./usr/tests/atf/atf-c/detail/process_helpers
+>> ./usr/tests/atf/atf-c/detail/map_test
+>> ./usr/tests/atf/atf-c++
+>> ./usr/tests/atf/atf-c++/atf_c++_test
+>> ./usr/tests/atf/atf-c++/macros_hpp_test.cpp
+>> ./usr/tests/atf/atf-c++/Kyuafile
+>> ./usr/tests/atf/atf-c++/tests_test
+>> ./usr/tests/atf/atf-c++/macros_test
+>> ./usr/tests/atf/atf-c++/build_test
+>> ./usr/tests/atf/atf-c++/check_test
+>> ./usr/tests/atf/atf-c++/utils_test
+>> ./usr/tests/atf/atf-c++/pkg_config_test
+>> ./usr/tests/atf/atf-c++/unused_test.cpp
+>> ./usr/tests/atf/atf-c++/detail
+>> ./usr/tests/atf/atf-c++/detail/version_helper
+>> ./usr/tests/atf/atf-c++/detail/env_test
+>> ./usr/tests/atf/atf-c++/detail/Kyuafile
+>> ./usr/tests/atf/atf-c++/detail/process_test
+>> ./usr/tests/atf/atf-c++/detail/exceptions_test
+>> ./usr/tests/atf/atf-c++/detail/fs_test
+>> ./usr/tests/atf/atf-c++/detail/application_test
+>> ./usr/tests/atf/atf-c++/detail/text_test
+>> ./usr/tests/atf/atf-c++/detail/auto_array_test
+>> ./usr/tests/atf/test-programs
+>> ./usr/tests/atf/test-programs/srcdir_test
+>> ./usr/tests/atf/test-programs/Kyuafile
+>> ./usr/tests/atf/test-programs/c_helpers
+>> ./usr/tests/atf/test-programs/sh_helpers
+>> ./usr/tests/atf/test-programs/expect_test
+>> ./usr/tests/atf/test-programs/config_test
+>> ./usr/tests/atf/test-programs/meta_data_test
+>> ./usr/tests/atf/test-programs/cpp_helpers
+>> ./usr/tests/atf/test-programs/result_test
+>>
+>> Are all of these files needed on the target?
+>>
+>> Thanks,
+>>
+>> Thomas
+> 
+> 
+>  
+>  
+> ************************************************************************************
+> This footnote confirms that this email message has been scanned by
+> PineApp Mail-SeCure for the presence of malicious code, vandals & computer viruses.
+> ************************************************************************************
+> 
+> 
+> 
+> 
+
+
 -- 
-2.4.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
