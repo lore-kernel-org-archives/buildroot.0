@@ -1,65 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Jun 2015 22:10:21 +0200
-Subject: [Buildroot] [git commit] support: get prompts via official
-	Kconfiglib APIs
-Message-ID: <20150611201229.B1E187FAA2@busybox.osuosl.org>
+Date: Thu, 11 Jun 2015 22:10:07 +0200
+Subject: [Buildroot] [git commit] support: gen-manual-lists.py base
+	directory simplification
+Message-ID: <20150611201229.A7F78817B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b4250efb2f5f4a56f4b073a8679f399fab603586
+commit: http://git.buildroot.net/buildroot/commit/?id=aba6fa137a1b0df876c235e63804ef81f76c5d5b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These weren't available when gen-manual-lists.py was first written.
+Buildroot doesn't use $srctree from what I could tell.
 
 Signed-off-by: Ulf Magnusson <ulfalizer@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/gen-manual-lists.py |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ support/scripts/gen-manual-lists.py |    6 ++----
+ 1 files changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-index 2acac2c..d45810b 100644
+index ec59030..2acac2c 100644
 --- a/support/scripts/gen-manual-lists.py
 +++ b/support/scripts/gen-manual-lists.py
-@@ -99,7 +99,7 @@ def get_symbol_parents(item, root=None, enable_choice=False):
-         if parent.is_menu():
-             parents.append(parent.get_title())
-         elif enable_choice and parent.is_choice():
--            parents.append(parent.prompts[0][0])
-+            parents.append(parent.get_prompts()[0])
-         parent = parent.get_parent()
-     if isinstance(root, kconfiglib.Menu) or \
-             (enable_choice and isinstance(root, kconfiglib.Choice)):
-@@ -234,9 +234,9 @@ class Buildroot:
-         """
-         if not symbol.is_symbol():
-             return False
--        if type == 'real' and not symbol.prompts:
-+        if type == 'real' and not symbol.get_prompts():
-             return False
--        if type == 'virtual' and symbol.prompts:
-+        if type == 'virtual' and symbol.get_prompts():
-             return False
-         if not self.re_pkg_prefix.match(symbol.get_name()):
-             return False
-@@ -315,7 +315,7 @@ class Buildroot:
-         :param mark_deprecated: Append a 'deprecated' to the label
+@@ -193,11 +193,9 @@ class Buildroot:
+         self.base_dir = os.environ.get("TOPDIR")
+         self.output_dir = os.environ.get("O")
+         self.package_dir = os.path.join(self.base_dir, self.package_dirname)
+-        # The kconfiglib requires an environment variable named "srctree" to
+-        # load the configuration, so set it.
+-        os.environ.update({'srctree': self.base_dir})
+         self.config = kconfiglib.Config(os.path.join(self.base_dir,
+-                                                     self.root_config))
++                                                     self.root_config),
++                                        self.base_dir)
+         self._deprecated = self.config.get_symbol(self.deprecated_symbol)
  
-         """
--        label = symbol.prompts[0][0]
-+        label = symbol.get_prompts()[0]
-         if self._is_deprecated(symbol) and mark_deprecated:
-             label += " *(deprecated)*"
-         return label
-@@ -394,7 +394,7 @@ class Buildroot:
-                     continue
-                 for s in selects:
-                     if s == symbol:
--                        if sym.prompts:
-+                        if sym.get_prompts():
-                             l = self._get_symbol_label(sym,False)
-                             parent_pkg = _get_parent_package(sym)
-                             if parent_pkg is not None:
+         self.gen_date = datetime.datetime.utcnow()
