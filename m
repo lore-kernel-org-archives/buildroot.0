@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Jun 2015 22:08:35 +0200
-Subject: [Buildroot] [git commit] gflags: define NO_THREADS if toolchain
-	doesn't support threads
-Message-ID: <20150611200926.83F6580D90@busybox.osuosl.org>
+Date: Thu, 11 Jun 2015 22:09:02 +0200
+Subject: [Buildroot] [git commit] openvmtools: add OPENVMTOOLS_VERSION_MAJOR
+	variable
+Message-ID: <20150611200926.8EEC37FE24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33d1e7cf0faf0f334f9c48c724d97d1051624c8e
+commit: http://git.buildroot.net/buildroot/commit/?id=58a34b3c7fc8aacba937da6f0f306365343b128e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/a42/a4288ed5050ce0d14e589745bf26c0a95acf645e/
-
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gflags/gflags.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/openvmtools/openvmtools.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/gflags/gflags.mk b/package/gflags/gflags.mk
-index 661dad8..9dc4e15 100644
---- a/package/gflags/gflags.mk
-+++ b/package/gflags/gflags.mk
-@@ -11,7 +11,7 @@ GFLAGS_LICENSE = BSD-3c
- GFLAGS_LICENSE_FILES = COPYING.txt
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index ef6544a..92ecd36 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
--GFLAGS_CONF_OPTS = -DBUILD_gflags_LIB=OFF
-+GFLAGS_CONF_OPTS = -DBUILD_gflags_LIB=OFF -DCMAKE_CXX_FLAGS=-DNO_THREADS
- endif
- 
- $(eval $(cmake-package))
+-OPENVMTOOLS_VERSION = 9.10.0-2476743
++OPENVMTOOLS_VERSION_MAJOR = 9.10.0
++OPENVMTOOLS_VERSION = $(OPENVMTOOLS_VERSION_MAJOR)-2476743
+ OPENVMTOOLS_SOURCE = open-vm-tools-$(OPENVMTOOLS_VERSION).tar.gz
+-OPENVMTOOLS_SITE = http://downloads.sourceforge.net/project/open-vm-tools/open-vm-tools/stable-9.10.0
++OPENVMTOOLS_SITE = http://downloads.sourceforge.net/project/open-vm-tools/open-vm-tools/stable-$(OPENVMTOOLS_VERSION_MAJOR)
+ OPENVMTOOLS_LICENSE = LGPLv2.1
+ OPENVMTOOLS_LICENSE_FILES = COPYING
+ # Autoreconf needed or config/missing will run configure again at buildtime
