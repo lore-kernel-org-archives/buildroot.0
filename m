@@ -1,26 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Jun 2015 22:08:43 +0200
-Subject: [Buildroot] [PATCH 1/1] gflags: define NO_THREADS if toolchain
- doesn't support threads
-In-Reply-To: <1434015638-27165-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1434015638-27165-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20150611220843.515b36cd@free-electrons.com>
+Date: Thu, 11 Jun 2015 22:09:18 +0200
+Subject: [Buildroot] [PATCH 1/1] openvmtools: add
+ OPENVMTOOLS_VERSION_MAJOR variable
+In-Reply-To: <1433918670-16552-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1433918670-16552-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20150611220918.7d4ca9fd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rahul Bedarkar,
+Dear Jerzy Grzegorek,
 
-On Thu, 11 Jun 2015 15:10:38 +0530, Rahul Bedarkar wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/a42/a4288ed5050ce0d14e589745bf26c0a95acf645e/
-> 
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+On Wed, 10 Jun 2015 08:44:30 +0200, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 > ---
->  package/gflags/gflags.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/openvmtools/openvmtools.mk | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
