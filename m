@@ -1,57 +1,135 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 12 Jun 2015 00:44:58 +0200
-Subject: [Buildroot] [PATCH 03/11 v2] package/lttng-modules: use
- kernel-module helper
-In-Reply-To: <3df79bd7cb56afe371617a6cf8c028db13cc91e5.1433964001.git.yann.morin.1998@free.fr>
-References: <cover.1433964001.git.yann.morin.1998@free.fr>
- <3df79bd7cb56afe371617a6cf8c028db13cc91e5.1433964001.git.yann.morin.1998@free.fr>
-Message-ID: <557A0F6A.3060109@mind.be>
+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Date: Thu, 11 Jun 2015 18:48:35 -0400
+Subject: [Buildroot] [PATCH v4 3/3] kyua: new package
+In-Reply-To: <557A0827.4050404@mind.be>
+References: <1434056459-24075-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+ <1434056459-24075-4-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+ <557A0827.4050404@mind.be>
+Message-ID: <557A1043.7070205@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/10/15 21:22, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Hi Arnout,
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Thanks for your review, it's really appreciate.
 
+I will send a new patchset soon.
 
- Regards,
- Arnout
+Sebastien.
 
-> ---
->  package/lttng-modules/lttng-modules.mk | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
-> 
-> diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-> index 6833ad2..30c581e 100644
-> --- a/package/lttng-modules/lttng-modules.mk
-> +++ b/package/lttng-modules/lttng-modules.mk
-> @@ -10,14 +10,5 @@ LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
->  LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 for kernel modules; MIT for lib/bitfield.h and lib/prio_heap/*
->  LTTNG_MODULES_LICENSE_FILES = lgpl-2.1.txt gpl-2.0.txt mit-license.txt LICENSE
->  
-> -LTTNG_MODULES_DEPENDENCIES = linux
-> -
-> -define LTTNG_MODULES_BUILD_CMDS
-> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
-> -endef
-> -
-> -define LTTNG_MODULES_INSTALL_TARGET_CMDS
-> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR) modules_install
-> -endef
-> -
-> +$(eval $(kernel-module))
->  $(eval $(generic-package))
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+On 06/11/2015 06:13 PM, Arnout Vandecappelle wrote:
+> On 06/11/15 23:00, Sebastien Bourdelin wrote:
+>> Kyua is a testing framework for infrastructure software, originally
+>> designed to equip BSD-based operating systems with a test suite. This
+>> means that Kyua is lightweight and simple, and that Kyua integrates
+>> well with various build systems and continuous integration frameworks.
+>>
+>> https://github.com/jmmv/kyua
+>>
+>> Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+> [snip]
+>> diff --git a/package/Config.in b/package/Config.in
+>> index b006211..1d7b7bc 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -72,6 +72,7 @@ menu "Debugging, profiling and benchmark"
+>  Before someone makes the remark: unlike atf, this one should _not_ move to
+> Libs->Other, because kyua is not a library.
+>
+>>  	source "package/kexec/Config.in"
+>>  	source "package/kexec-lite/Config.in"
+>>  	source "package/ktap/Config.in"
+>> +	source "package/kyua/Config.in"
+>>  	source "package/latencytop/Config.in"
+>>  	source "package/lmbench/Config.in"
+>>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>> diff --git a/package/kyua/Config.in b/package/kyua/Config.in
+>> new file mode 100644
+>> index 0000000..7489782
+>> --- /dev/null
+>> +++ b/package/kyua/Config.in
+>> @@ -0,0 +1,23 @@
+>> +config BR2_PACKAGE_KYUA
+>> +	bool "kyua"
+>> +	depends on BR2_INSTALL_LIBSTDCPP
+>> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER \
+>> +		&& !BR2_PACKAGE_LUAJIT # lutok
+>  Same comment as for lutok. Repeat the # lutok on both lines.
+>
+>> +	select BR2_PACKAGE_ATF
+>> +	select BR2_PACKAGE_LUTOK
+>> +	select BR2_PACKAGE_SQLITE
+>> +	help
+>> +	  Kyua is a testing framework for infrastructure software,
+>> +	  originally designed to equip BSD-based operating systems
+>> +	  with a test suite. This means that Kyua is lightweight
+>> +	  and simple, and that Kyua integrates well with various build
+>> +	  systems and continuous integration frameworks.
+>> +
+>> +	  https://github.com/jmmv/kyua
+>> +
+>> +comment "kyua needs a toolchain w/ C++"
+>> +	depends on !BR2_INSTALL_LIBSTDCPP
+>> +
+>> +comment "kyua needs a Lua 5.1 interpreter or above"
+>> +	depends on BR2_INSTALL_LIBSTDCPP && \
+>> +		(!BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_PACKAGE_LUAJIT)
+>  This comment should be exactly the same as for lutok:
+>
+> comment "kyua needs a toolchain w/ C++ and full Lua"
+> 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
+> 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+>
+> [snip]
+>> diff --git a/package/kyua/kyua.mk b/package/kyua/kyua.mk
+>> new file mode 100644
+>> index 0000000..783d3db
+>> --- /dev/null
+>> +++ b/package/kyua/kyua.mk
+>> @@ -0,0 +1,27 @@
+>> +################################################################################
+>> +#
+>> +# kyua
+>> +#
+>> +################################################################################
+>> +
+>> +KYUA_VERSION = 0.11
+>> +KYUA_SITE = https://github.com/jmmv/kyua/releases/download/kyua-$(KYUA_VERSION)
+>> +KYUA_DEPENDENCIES = host-pkgconf atf lutok sqlite
+>> +KYUA_CONF_OPTS = --without-doxygen
+>> +KYUA_LICENSE = BSD-3c
+>> +KYUA_LICENSE_FILES = COPYING
+>> +KYUA_CONF_ENV = \
+>> +	kyua_cv_attribute_noreturn=yes \
+>> +	kyua_cv_getcwd_dyn=yes \
+>> +	kyua_cv_lchmod_works=no \
+>> +	kyua_cv_getopt_gnu=yes \
+>> +	kyua_cv_getopt_optind_reset_value=0 \
+>> +	kyua_cv_signals_lastno=15
+>> +
+>> +define KYUA_INSTALL_CONFIG
+>> +	$(INSTALL) -D -m 644 $(@D)/examples/kyua.conf $(TARGET_DIR)/etc/kyua/kyua.conf
+>> +endef
+>> +
+>> +KYUA_POST_INSTALL_HOOKS += KYUA_INSTALL_CONFIG
+>> +
+>> +$(eval $(autotools-package))
+>>
+>  Again, kyua installs a bunch of tests.
+>
+>  But in fact, you don't even need atf to build kyua. Just specifying
+> --without-atf is enough to avoid installing the self-tests.
+>
+>  And the same goes for lutok: you don't need atf to build or run either of them...
+>
+>  So, I'm in favour of configuring lutok and kyua with --without-atf as a way to
+> avoid installing the tests. For atf itself, you still need the install-exec
+> workaround.
+>
+>
+>  Regards,
+>  Arnout
+>
