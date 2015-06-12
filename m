@@ -1,39 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 21:34:19 +0200
-Subject: [Buildroot] [PATCH v5 2/3] lutok: new package
-In-Reply-To: <1434063093-14906-3-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-References: <1434063093-14906-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
- <1434063093-14906-3-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
-Message-ID: <20150612213419.15566320@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 12 Jun 2015 16:44:31 -0300
+Subject: [Buildroot] [PATCH] openssl: bump to version 1.0.2c
+Message-ID: <1434138271-28414-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sebastien Bourdelin,
+Fixes HMAC ABI breakage from 1.0.2b
 
-On Thu, 11 Jun 2015 18:51:32 -0400, Sebastien Bourdelin wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/openssl/openssl.hash | 8 ++++----
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-> +LUTOK_VERSION = 0.4
-> +LUTOK_SITE = https://github.com/jmmv/lutok/releases/download/lutok-$(LUTOK_VERSION)
-> +LUTOK_INSTALL_STAGING = YES
-> +LUTOK_DEPENDENCIES = host-pkgconf lua
-> +LUTOK_CONF_OPTS = --without-doxygen --without-atf
-
-Both the lutok and kyua packages after --without-atf ? Why so ? You add
-the atf package as the first patch, and then it isn't used in follow-up
-patches ?
-
-> +# liblua uses dlopen when dynamically linked
-> +ifneq ($(BR2_STATIC_LIBS),y)
-
-ifeq ($(BR2_STATIC_LIBS),)
-
-maybe?
-
-Thomas
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 673f99f..4b212fb 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.md5
+-# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.sha1
+-md5	7729b259e2dea7d60b32fc3934d6984b	openssl-1.0.2b.tar.gz
+-sha1	9006e53ca56a14d041e3875320eedfa63d82aba7	openssl-1.0.2b.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2c.tar.gz.md5
++# From https://www.openssl.org/source/openssl-1.0.2c.tar.gz.sha1
++md5	8c8d81a9ae7005276e486702edbcd4b6	openssl-1.0.2c.tar.gz
++sha1	6e4a5e91159eb32383296c7c83ac0e59b83a0a44	openssl-1.0.2c.tar.gz
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 8051a9b..fd8904d 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSL_VERSION = 1.0.2b
++OPENSSL_VERSION = 1.0.2c
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.3.6
