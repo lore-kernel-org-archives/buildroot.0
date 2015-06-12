@@ -1,54 +1,76 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Jun 2015 01:04:02 +0200
-Subject: [Buildroot] [PATCH v5 2/3] lutok: new package
-In-Reply-To: <20150612214509.08728a82@free-electrons.com>
-References: <1434063093-14906-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>	<1434063093-14906-3-git-send-email-sebastien.bourdelin@savoirfairelinux.com>	<20150612213419.15566320@free-electrons.com>
- <20150612214509.08728a82@free-electrons.com>
-Message-ID: <557B6562.4050204@mind.be>
+Date: Sat, 13 Jun 2015 01:17:36 +0200
+Subject: [Buildroot] [PATCH v5 3/3] kyua: new package
+In-Reply-To: <20150612220205.5d0aa08b@free-electrons.com>
+References: <1434063093-14906-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>	<1434063093-14906-4-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+ <20150612220205.5d0aa08b@free-electrons.com>
+Message-ID: <557B6890.30006@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/12/15 21:45, Thomas Petazzoni wrote:
-> Hello,
+On 06/12/15 22:02, Thomas Petazzoni wrote:
+> Dear Sebastien Bourdelin,
 > 
-> On Fri, 12 Jun 2015 21:34:19 +0200, Thomas Petazzoni wrote:
-> 
->> Both the lutok and kyua packages after --without-atf ? Why so ? You add
->> the atf package as the first patch, and then it isn't used in follow-up
->> patches ?
-> 
-> Ok, --without-atf is not about ATF support, but about build ATF-based
-> tests. I've added a comment to explain this.
-> 
->>> +# liblua uses dlopen when dynamically linked
->>> +ifneq ($(BR2_STATIC_LIBS),y)
+> On Thu, 11 Jun 2015 18:51:33 -0400, Sebastien Bourdelin wrote:
+>> Kyua is a testing framework for infrastructure software, originally
+>> designed to equip BSD-based operating systems with a test suite. This
+>> means that Kyua is lightweight and simple, and that Kyua integrates
+>> well with various build systems and continuous integration frameworks.
 >>
->> ifeq ($(BR2_STATIC_LIBS),)
+>> https://github.com/jmmv/kyua
+>>
+>> Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+>> ---
+>> Changes v4 -> v5:
+>>   suggested by Arnout Vandecapelle <arnout@mind.be>:
+>>   - force the --without-atf option to not build the example tests.
+>>   - puts the dependencies &&-ed in Config.in on 2 lines
+>>   - change the comment for dependencies in Config.in
 > 
-> Actually, I was able to build without adding -ldl, so I'm not sure why
-> it is needed. We'll see what the autobuilders have to say, unless you
-> have more details about the specific configuration that was causing
-> problems.
+> Applied, thanks. I fixed a minor typo in the hash file.
+> 
+> However, there are a few things that might be worth looking into for
+> follow-up patches:
+> 
+> 1/ Some installed stuff is probably unneeded:
+> 
+> ./usr/share/kyua/store
+> ./usr/share/kyua/store/schema_v3.sql
+> ./usr/share/kyua/store/migrate_v2_v3.sql
+> ./usr/share/kyua/store/migrate_v1_v2.sql
 
- If you build --with-atf, then the linking of the tests will fail, because some
-of them link with liblua and lua's .pc file forgets to add -ldl.
+ I think these are needed to be able to create the report database. Ah, but the
+migrate scripts may indeed be redundant.
 
- See haserl.mk.
+> ./usr/share/kyua/misc
+> ./usr/share/kyua/misc/report.css
+> ./usr/share/kyua/misc/test_result.html
+> ./usr/share/kyua/misc/index.html
+> ./usr/share/kyua/misc/context.html
 
- Since now we build --without-atf, this package doesn't link anything anymore so
-the -ldl is no longer needed - at least not here.
+ I believe these are needed to be able to generate html reports.
+
+> ./usr/share/kyua/examples
+> ./usr/share/kyua/examples/kyua.conf
+> ./usr/share/kyua/examples/Kyuafile.top
+
+ These could indeed be removed.
+
+
+> 
+> 2/ The CFLAGS/LDFLAGS handling seems to go crazy with zillions of
+> duplicates of the same flags. At build time, one can see:
+
+ Yeah, but that's an upstream problem, no? They include LUTOK_CFLAGS several
+times. Correcting that would be a feature patch.
 
  Regards,
  Arnout
 
-> 
-> Thanks,
-> 
-> Thomas
-> 
+[snip ridiculously long command line]
 
 
 -- 
