@@ -1,92 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 23:24:22 +0200
-Subject: [Buildroot] [PATCH 1/4] core/pkg-kconfig: ensure kconfig file
- and fragments exist
-In-Reply-To: <22cb4293142894b08d3103f39ceaa2351b0e357b.1433591404.git.yann.morin.1998@free.fr>
-References: <cover.1433591404.git.yann.morin.1998@free.fr>
- <22cb4293142894b08d3103f39ceaa2351b0e357b.1433591404.git.yann.morin.1998@free.fr>
-Message-ID: <20150612232422.4a12fc2b@free-electrons.com>
+Date: Fri, 12 Jun 2015 23:28:18 +0200
+Subject: [Buildroot] [git commit] package/gdb: Add optional dependencies
+Message-ID: <20150612212901.7451C8184F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+commit: http://git.buildroot.net/buildroot/commit/?id=23413b51b2308225584b65c2fcd800ca8f7c56af
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  6 Jun 2015 13:54:23 +0200, Yann E. MORIN wrote:
-> Because the base kconfig file has a dependency but no rule, make will
-> always try to rebuild targets that depend on it:
-> 
->     https://www.gnu.org/software/make/manual/make.html#Force-Targets
-> 
-> To complexify things yet a little bit more, missing kconfig fragments
-> are properly caught,
+To allow reproducable builds of target gdb add some optional dependencies
 
-What do you mean by "are properly caught" ? Also, I don't see the
-interaction between this and the previous paragraph, and hence the "To
-complexity things yet a little bit more"
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/gdb | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libm.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
+ 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libutil.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libpython2.7.so.1.0]
+ 0x00000001 (NEEDED)                     Shared library: [libexpat.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
 
-> but since they could be bundled in the package,
-> they should depend on it being extracted. And then we'd have the same
-> issue as with the base kconfig file, above.
+[Thomas: explicitly use --{with,without}-{expat,zlib}. There is no
+such option for libiconv, so for libiconv, the code was left as is.]
 
-"then" what ?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gdb/gdb.mk |   17 ++++++++++++++++-
+ 1 files changed, 16 insertions(+), 1 deletions(-)
 
-> Furthermore, merge-config.sh does not check for the existence of the
-> fragments, not even the existence of the base file.
-
-How is this related to the previous paragraph ?
-
-> So, this patch does more than one single thing, but they are clearly all
-> pretty much inter-woven each with the others, and thus are done together:
-> 
->   - make kconfig fragments depend on the package being patched, like the
->     base kconfig file,
-> 
->   - manualy check that the base and fragments do exist.
-
-manually
-
-> -# The config file could be in-tree, so before depending on it the package should
-> -# be extracted (and patched) first
-> -$$($(2)_KCONFIG_FILE): | $(1)-patch
-> +# The config file as well as the fragments could be in-tree, so before
-> +# depending on them the package should be extracted (and patched) first
-> +$$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
-
-This part makes complete sense.
-
->  # The specified source configuration file and any additional configuration file
->  # fragments are merged together to .config, after the package has been patched.
->  # Since the file could be a defconfig file it needs to be expanded to a
->  # full .config first. We use 'make oldconfig' because this can be safely
->  # done even when the package does not support defconfigs.
-> +#
-> +# merge-config.sh does not check for the existence of the fragments, not even
-> +# the existence of the base file, so we do it manually.
-> +#
->  $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
-> +	for f in $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES); do \
-> +		if [ ! -f "$$$${f}" ]; then \
-> +			printf "Kconfig fragment '%s' for '%s' does not exist\n" "$$$${f}" "$(1)"; \
-> +			exit 1; \
-> +		fi; \
-> +	done
-
-And this one as well.
-
-So basically, I understand the code, but absolutely not the commit
-log :-)
-
-And also, I don't understand why those two things are so much
-"inter-woven" that they cannot be done in two separate patches. It's
-actually two very separate things: 1/ support kconfig fragments bundled
-in the package source code (chunk 1) and 2/ check that they exist
-(chunk 2).
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 9818320..4b9a757 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -33,7 +33,8 @@ ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),)
+ GDB_SUBDIR = gdb/gdbserver
+ HOST_GDB_SUBDIR = .
+ else
+-GDB_DEPENDENCIES = ncurses
++GDB_DEPENDENCIES = ncurses \
++	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ endif
+ 
+ # For the host variant, we really want to build with XML support,
+@@ -98,6 +99,20 @@ else
+ GDB_CONF_OPTS += --without-python
+ endif
+ 
++ifeq ($(BR2_PACKAGE_EXPAT),y)
++GDB_CONF_OPTS += --with-expat
++GDB_DEPENDENCIES += expat
++else
++GDB_CONF_OPTS += --without-expat
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++GDB_CONF_OPTS += --with-zlib
++GDB_DEPENDENCIES += zlib
++else
++GDB_CONF_OPTS += --without-zlib
++endif
++
+ # This removes some unneeded Python scripts and XML target description
+ # files that are not useful for a normal usage of the debugger.
+ define GDB_REMOVE_UNNEEDED_FILES
