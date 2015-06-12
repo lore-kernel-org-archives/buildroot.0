@@ -1,42 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 23:30:10 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/gdb: Add optional
- dependencies
-In-Reply-To: <1428838235-1369-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1428838235-1369-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150612233010.2e92fb89@free-electrons.com>
+Date: Fri, 12 Jun 2015 23:33:50 +0200
+Subject: [Buildroot] [PATCH 2/4] core/pkg-kconfig: move the kconfig
+ fixups to a macro
+In-Reply-To: <cdb72fa7204d35b88f2b74e79d4d1117b797712d.1433591404.git.yann.morin.1998@free.fr>
+References: <cover.1433591404.git.yann.morin.1998@free.fr>
+ <cdb72fa7204d35b88f2b74e79d4d1117b797712d.1433591404.git.yann.morin.1998@free.fr>
+Message-ID: <20150612233350.4511dc7c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Yann E. MORIN,
 
-On Sun, 12 Apr 2015 13:30:35 +0200, Bernd Kuhls wrote:
-> To allow reproducable builds of target gdb add some optional dependencies
-> 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/gdb | grep NEEDED
->  0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
->  0x00000001 (NEEDED)                     Shared library: [libz.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libm.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
->  0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libutil.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libpython2.7.so.1.0]
->  0x00000001 (NEEDED)                     Shared library: [libexpat.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libc.so.0]
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: Dependencies are only needed for target gdb (Yann)
+On Sat,  6 Jun 2015 13:54:24 +0200, Yann E. MORIN wrote:
 
-Applied, thanks, after adding --{with,without}-{expat,zlib} to
-explicitly enable/disable the use of these libraries. There was no such
-option for libiconv, so I kept it as it was in your patch.
+>  # In order to get a usable, consistent configuration, some fixup may be needed.
+>  # The exact rules are specified by the package .mk file.
+> -$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
+> +define $(1)_FIXUP_KCONFIG
+>  	$$($(2)_KCONFIG_FIXUP_CMDS)
+>  	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
 
-Thanks!
+We could use $(@D) instead of $$($(2)_DIR) here.
+
+>  		$$($(2)_KCONFIG_OPTS) oldconfig
+> -	$$(Q)touch $$@
+> +	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
+
+and here. But that's indeed not very important, since they are the same.
 
 Thomas
 -- 
