@@ -1,93 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 21:41:41 +0200
-Subject: [Buildroot] [git commit] lutok: new package
-Message-ID: <20150612201536.9C2A980411@busybox.osuosl.org>
+Date: Fri, 12 Jun 2015 21:34:28 +0200
+Subject: [Buildroot] [git commit] atf: new package
+Message-ID: <20150612201536.9171080411@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7c8744a2095a46b86f9b00a6346bba108036fe58
+commit: http://git.buildroot.net/buildroot/commit/?id=1f2a7b54edfcb7c052033c7ffa0ba9dd81d7f218
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Lutok is a lightweight C++ API library for Lua.
+ATF, or Automated Testing Framework, is a collection of libraries to
+write test programs in C, C++ and POSIX shell.
 
-https://github.com/jmmv/lutok
-
-[Thomas:
- - move lutok inclusion in package/Config.in after including the Lua
-   external modules
- - add a comment explaining why we are passing --without-atf
- - remove the logic around -ldl, it seems to build just fine without it.]
+https://github.com/jmmv/atf
 
 Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in        |    1 +
- package/lutok/Config.in  |   13 +++++++++++++
- package/lutok/lutok.hash |    2 ++
- package/lutok/lutok.mk   |   16 ++++++++++++++++
- 4 files changed, 32 insertions(+), 0 deletions(-)
+ package/Config.in     |    1 +
+ package/atf/Config.in |   11 +++++++++++
+ package/atf/atf.hash  |    2 ++
+ package/atf/atf.mk    |   24 ++++++++++++++++++++++++
+ 4 files changed, 38 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index d111a82..0286630 100644
+index a17901f..d111a82 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -499,6 +499,7 @@ menu "Lua libraries/modules"
- 	source "package/xavante/Config.in"
- endmenu
- endif
-+	source "package/lutok/Config.in"
- 	source "package/moarvm/Config.in"
- 	source "package/mono/Config.in"
- 	source "package/nodejs/Config.in"
-diff --git a/package/lutok/Config.in b/package/lutok/Config.in
+@@ -1005,6 +1005,7 @@ menu "Other"
+ 	source "package/apr-util/Config.in"
+ 	source "package/argp-standalone/Config.in"
+ 	source "package/armadillo/Config.in"
++	source "package/atf/Config.in"
+ 	source "package/bdwgc/Config.in"
+ 	source "package/boost/Config.in"
+ 	source "package/clapack/Config.in"
+diff --git a/package/atf/Config.in b/package/atf/Config.in
 new file mode 100644
-index 0000000..d6c87cf
+index 0000000..59712ab
 --- /dev/null
-+++ b/package/lutok/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LUTOK
-+	bool "lutok"
++++ b/package/atf/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_ATF
++	bool "atf"
 +	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	depends on !BR2_PACKAGE_LUAJIT
 +	help
-+	  Lutok is a lightweight C++ API library for Lua.
++	  ATF, or Automated Testing Framework, is a collection of
++	  libraries to write test programs in C, C++ and POSIX shell.
 +
-+	  https://github.com/jmmv/lutok
++	  https://github.com/jmmv/atf
 +
-+comment "lutok needs a toolchain w/ C++ and full Lua"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-diff --git a/package/lutok/lutok.hash b/package/lutok/lutok.hash
++comment "atf needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/atf/atf.hash b/package/atf/atf.hash
 new file mode 100644
-index 0000000..0ec8988
+index 0000000..78cd3c6
 --- /dev/null
-+++ b/package/lutok/lutok.hash
++++ b/package/atf/atf.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 2cec51efa0c8d65ace8b21eaa08384b77abc5087b46e785f78de1c21fb754cd5 lutok-0.4.tar.gz
-diff --git a/package/lutok/lutok.mk b/package/lutok/lutok.mk
++sha256 92bc64180135eea8fe84c91c9f894e678767764f6dbc8482021d4dde09857505 atf-0.21.tar.gz
+diff --git a/package/atf/atf.mk b/package/atf/atf.mk
 new file mode 100644
-index 0000000..6ee198b
+index 0000000..ed2080e
 --- /dev/null
-+++ b/package/lutok/lutok.mk
-@@ -0,0 +1,16 @@
++++ b/package/atf/atf.mk
+@@ -0,0 +1,24 @@
 +################################################################################
 +#
-+# lutok
++# atf
 +#
 +################################################################################
 +
-+LUTOK_VERSION = 0.4
-+LUTOK_SITE = https://github.com/jmmv/lutok/releases/download/lutok-$(LUTOK_VERSION)
-+LUTOK_INSTALL_STAGING = YES
-+LUTOK_DEPENDENCIES = host-pkgconf lua
-+# --without-atf disables the atf-based lutok tests
-+LUTOK_CONF_OPTS = --without-doxygen --without-atf
-+LUTOK_LICENSE = BSD-3c
-+LUTOK_LICENSE_FILES = COPYING
++ATF_VERSION = 0.21
++ATF_SITE = https://github.com/jmmv/atf/releases/download/atf-$(ATF_VERSION)
++ATF_INSTALL_STAGING = YES
++ATF_LICENSE = BSD-2c, BSD-3c
++ATF_LICENSE_FILES = COPYING
++# Ships a beta libtool version hence our patch doesn't apply.
++ATF_AUTORECONF = YES
++# Do not install precompiled tests.
++ATF_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
++
++# ATF_SHELL defaults to the host's bash
++ATF_CONF_ENV = \
++	kyua_cv_getopt_plus=yes \
++	kyua_cv_attribute_noreturn=yes \
++	kyua_cv_getcwd_works=yes \
++	ATF_SHELL=/bin/sh
 +
 +$(eval $(autotools-package))
