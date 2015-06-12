@@ -1,82 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Jun 2015 19:55:10 +0200
-Subject: [Buildroot] [PATCH 09/11 v2] package/owl-linux: use
- kernel-module helper
-In-Reply-To: <557A1606.1030402@mind.be>
-References: <cover.1433964001.git.yann.morin.1998@free.fr>
- <e63af963671131bf2d33fd2ab2eaa351bcc51150.1433964001.git.yann.morin.1998@free.fr>
- <557A1606.1030402@mind.be>
-Message-ID: <20150612175510.GC3583@free.fr>
+From: Patricia Holden <patholdn@gmail.com>
+Date: Fri, 12 Jun 2015 14:20:59 -0400
+Subject: [Buildroot] Building bootable usb drive for target board with ext2
+Message-ID: <CANKYLME21pAifC-tb+HC=tRhy5k9ka0W-gywZCPrOdpq1aOTMA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+I'm following examples of how to create a bootable usb for a target board
+i'm doing some work for.  I am stuck at setting up grub for booting.  I
+can't seem to get buildroot to put the bzImage into /boot directory for
+grub to load.  My target ends up hanging.
 
-On 2015-06-12 01:13 +0200, Arnout Vandecappelle spake thusly:
-> On 06/10/15 21:22, Yann E. MORIN wrote:
-> > Git rid of first patch, no longer needed; rename remaining patch.
+I'm using latest buildroot via git and just ran "git pull" and rebuilt the
+package last night.
 
-s/Git/Get/  Damn... :-]
+Any ideas?
 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > 
-> [snip]
-> > diff --git a/package/owl-linux/owl-linux.mk b/package/owl-linux/owl-linux.mk
-> > index 371cc02..844b11e 100644
-> > --- a/package/owl-linux/owl-linux.mk
-> > +++ b/package/owl-linux/owl-linux.mk
-> > @@ -10,14 +10,11 @@ OWL_LINUX_LICENSE = PROPRIETARY
-> >  OWL_LINUX_LICENSE_FILES = LICENSE
-> >  OWL_LINUX_REDISTRIBUTE = NO
-> >  
-> > -OWL_LINUX_DEPENDENCIES = linux
-> > -
-> > -define OWL_LINUX_BUILD_CMDS
-> > -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
-> > -endef
-> > -
-> > -define OWL_LINUX_INSTALL_TARGET_CMDS
-> > -	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M="$(@D)" modules_install
-> > -endef
-> > +# owl-linux wants to use $(PWD) to find its includes, however $(PWD) is not
-> > +# the top of the package's source tree, but the top of Buildroot source tree
-> 
->  Unless I'm very much mistaken, PWD will be $(LINUX_DIR) when the Makefile is
-> included.
+I've attached the .config & boot/grub/menu.lst I'm using.  Perhaps I set
+something up incorrectly.
 
-I think you are very much mistaken, indeed! ;-)
+Thanks!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150612/ea210229/attachment.html>
+-------------- next part --------------
+default		0
+timeout		10
 
-What happens is that all commands we run are run from Buildroot's
-$(TOPDIR). So $(PWD) is set to that location.
+# Used when no splashimage is used
+color 		cyan/blue white/blue
 
-So, this command, which we run from our Makefile:
+# Gets enabled/disabled depending on Grub support for splashimage
 
-    make -C $(LINUX_DIR) M=$(@D) foo-bar
+# Used when a splashimage is enabled
+foreground 	000000
+background 	cccccc
 
-would get its $(PWD) make-variable set from whatever value it had in the
-shell that called make, which happens to itself be called by Buildroot's
-Makefile, which runs from $(TOPDIR), always (even for out-of-tree builds).
-
-Then, the Linux buildsystem does *not* chdir() when it builds modules,
-it just includes $(M)/Kbuild (or if it does not exist, $(M)/Makefile ),
-so $(PWD) as used in those will still be Buildroot's $(TOPDIR).
-
->  With that small thing fixed:
-> 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Still valid with that small thing *not* fixed? ;-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+title Buildroot
+	root (hd0,0)
+	kernel /boot/bzImage rw root=/dev/sda1
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: config
+Type: application/octet-stream
+Size: 50455 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150612/ea210229/attachment.obj>
