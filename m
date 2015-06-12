@@ -1,85 +1,803 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 12 Jun 2015 08:35:59 -0300
-Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.2b
-Message-ID: <1434108959-18972-1-git-send-email-gustavo@zacarias.com.ar>
+From: grepper <grepper@gmail.com>
+Date: Fri, 12 Jun 2015 08:44:34 -0400
+Subject: [Buildroot] [PATCH v2 1/1] Bump bc version to 1.06.95
+Message-ID: <1434113074-18525-1-git-send-email-grepper@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2015-1790 - PKCS7 crash with missing EnvelopedContent
-CVE-2015-1789 - Exploitable out-of-bounds read in X509_cmp_time
-CVE-2015-1788 - Malformed ECParameters causes infinite loop
-CVE-2015-1792 - CMS verify infinite loop with unknown hash function
-CVE-2015-1791 - Race condition handling NewSessionTicket
+From: Robert Sohn <grepper@gmail.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The current version of bc being used (1.06) is from the year 2000. As
+well it has a serious bug when the math library is used (segfault).
+Even the 1.06.95 version is 9 years old.
+
+Though the source for the buildroot package is downloaded from
+http://alpha.gnu.org/gnu/bc, I have included several patches from the
+Debian bc package in Jessie, version 1.06.95-9. It was downloaded from:
+https://packages.debian.org/jessie/bc.
+The first patch is self-explanatory, it fixes a small bug in
+initializing an array. The patch author is Phil Nelson.
+The second patch 02_notice_read_write_errors is described by
+its author Ian Jackson (iwj at ubuntu.com):
+"Make dc notice read and write errors on its input and output".
+So better error checking and error messages.
+
+Signed-off-by: Robert Sohn <grepper@gmail.com>
 ---
- ...-match-commands-starting-with-minus-inste.patch | 27 ----------------------
- package/openssl/openssl.hash                       |  8 +++----
- package/openssl/openssl.mk                         |  2 +-
- 3 files changed, 5 insertions(+), 32 deletions(-)
- delete mode 100644 package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
+ package/bc/01_array_initialize.patch         |  20 +
+ package/bc/02_notice_read_write_errors.patch | 708 +++++++++++++++++++++++++++
+ package/bc/bc.hash                           |   2 +-
+ package/bc/bc.mk                             |   5 +-
+ 4 files changed, 732 insertions(+), 3 deletions(-)
+ create mode 100644 package/bc/01_array_initialize.patch
+ create mode 100644 package/bc/02_notice_read_write_errors.patch
 
-diff --git a/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch b/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
-deleted file mode 100644
-index 5db95d6..0000000
---- a/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 079cae9d7628f16b9efdf5723d2bfae5bdc2ba4e Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Tue, 27 Jan 2015 18:27:32 -0300
--Subject: [PATCH] Make c_rehash match commands starting with - (minus) instead
-- of minus in any starting position, otherwise a directory named a-b breaks it
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- tools/c_rehash.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/tools/c_rehash.in b/tools/c_rehash.in
--index 887e927..1df2fab 100644
----- a/tools/c_rehash.in
--+++ b/tools/c_rehash.in
--@@ -15,7 +15,7 @@ my $symlink_exists=eval {symlink("",""); 1};
-- my $removelinks = 1;
-- 
-- ##  Parse flags.
---while ( $ARGV[0] =~ '-.*' ) {
--+while ( $ARGV[0] =~ '^-.*' ) {
--     my $flag = shift @ARGV;
--     last if ( $flag eq '--');
--     if ( $flag =~ /-old/) {
---- 
--2.0.5
--
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index c9987fc..673f99f 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,4 +1,4 @@
--# From https://www.openssl.org/source/openssl-1.0.2a.tar.gz.md5
--# From https://www.openssl.org/source/openssl-1.0.2a.tar.gz.sha1
--md5	a06c547dac9044161a477211049f60ef	openssl-1.0.2a.tar.gz
--sha1	46ecd325b8e587fa491f6bb02ad4a9fb9f382f5f	openssl-1.0.2a.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.md5
-+# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.sha1
-+md5	7729b259e2dea7d60b32fc3934d6984b	openssl-1.0.2b.tar.gz
-+sha1	9006e53ca56a14d041e3875320eedfa63d82aba7	openssl-1.0.2b.tar.gz
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index f90c811..8051a9b 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/bc/01_array_initialize.patch b/package/bc/01_array_initialize.patch
+new file mode 100644
+index 0000000..9520d82
+--- /dev/null
++++ b/package/bc/01_array_initialize.patch
+@@ -0,0 +1,20 @@
++Description: Fix array initialization bug
++Author: Phil Nelson
++Origin: upstream
++Bug-Debian: http://bugs.debian.org/586969
++Bug-Debian: http://bugs.debian.org/671513
++---
++This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
++Index: bc/bc/storage.c
++===================================================================
++--- bc.orig/bc/storage.c	2013-06-02 20:34:09.401273864 -0400
+++++ bc/bc/storage.c	2013-06-02 20:34:11.000000000 -0400
++@@ -179,7 +179,7 @@
++ 
++ 
++   /* Initialize the new elements. */
++-  for (; indx < v_count; indx++)
+++  for (; indx < a_count; indx++)
++     arrays[indx] = NULL;
++ 
++   /* Free the old elements. */
+diff --git a/package/bc/02_notice_read_write_errors.patch b/package/bc/02_notice_read_write_errors.patch
+new file mode 100644
+index 0000000..73e6ec9
+--- /dev/null
++++ b/package/bc/02_notice_read_write_errors.patch
+@@ -0,0 +1,708 @@
++Description: notice read and write errors on input and output
++ Quoting from the bug report:
++    +bc (1.06-19ubuntu1) dapper; urgency=low
++    +
++    +  * Make dc notice read and write errors on its input and output.
++    +    I grepped for mentions of the strings `putc', `print', `getc', `FILE',
++    +    `stdin', `stdout' and `stderr' and added calls to new error-checking
++    +    functions unless it was clear from the immediately-surrounding code
++    +    that the program was exiting nonzero, or would exit nonzero if the
++    +    call failed.  I ignored hits in lib/getopt*, which seems to
++    +    pervasively ignore write errors when printing usage messages, in the
++    +    hope that these were correct.  I _think_ I got them all.  -iwj.
++    +
++    + -- Ian Jackson <iwj@ubuntu.com>  Tue,  4 Apr 2006 17:21:02 +0100
++Author: Ian Jackson <iwj@ubuntu.com>
++Origin: other
++Bug-Debian: http://bugs.debian.org/488735
++---
++This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
++diff --git a/bc/execute.c b/bc/execute.c
++index e4e8ef7..8787048 100644
++--- a/bc/execute.c
+++++ b/bc/execute.c
++@@ -108,6 +108,7 @@ execute ()
++ 	      }
++ 	    out_char ('\n');
++ 	  }
+++	checkferror_output(stdout);
++       }
++ #endif
++ 
++@@ -222,6 +223,7 @@ execute ()
++ 		}
++ 	    }
++ 	fflush (stdout);
+++	checkferror_output(stdout);
++ 	break;
++ 
++       case 'R' : /* Return from function */
++@@ -257,6 +259,7 @@ execute ()
++ 	if (inst == 'W') out_char ('\n');
++ 	store_var (4);  /* Special variable "last". */
++ 	fflush (stdout);
+++	checkferror_output(stdout);
++ 	pop ();
++ 	break;
++ 
++@@ -338,6 +341,7 @@ execute ()
++       case 'w' : /* Write a string to the output. */
++ 	while ((ch = byte(&pc)) != '"') out_schar (ch);
++ 	fflush (stdout);
+++	checkferror_output(stdout);
++ 	break;
++ 		   
++       case 'x' : /* Exchange Top of Stack with the one under the tos. */
++@@ -545,7 +549,10 @@ execute ()
++     {
++       signal (SIGINT, use_quit);
++       if (had_sigint)
++-	printf ("\ninterrupted execution.\n");
+++	{
+++	  printf ("\ninterrupted execution.\n");
+++	  checkferror_output(stdout);
+++	}
++     }
++ }
++ 
++@@ -580,6 +587,7 @@ input_char ()
++ 	  out_col = 0;  /* Saw a new line */
++ 	}
++     }
+++  checkferror_input(stdin);
++ 
++   /* Classify and preprocess the input character. */
++   if (isdigit(in_ch))
++diff --git a/bc/load.c b/bc/load.c
++index 1035198..4039e86 100644
++--- a/bc/load.c
+++++ b/bc/load.c
++@@ -217,6 +217,7 @@ load_code (code)
++ 		if (label_no > 65535L)
++ 		  {  /* Better message? */
++ 		    fprintf (stderr,"Program too big.\n");
+++		    checkferror_output(stderr);
++ 		    exit(1);
++ 		  }
++ 		addbyte ( (char) (label_no & 0xFF));
++diff --git a/bc/main.c b/bc/main.c
++index 9a2461e..3ae427d 100644
++--- a/bc/main.c
+++++ b/bc/main.c
++@@ -358,6 +358,9 @@ use_quit (sig)
++   errno = save;
++ #else
++   write (1, "\n(interrupt) Exiting bc.\n", 26);
+++#ifdef READLINE
+++  rl_initialize (); /* Clear readline buffer */
+++#endif
++ #if defined(LIBEDIT)
++   if (edit != NULL)
++     el_end(edit);
++diff --git a/bc/sbc.y b/bc/sbc.y
++index 0ded29e..6fcc1fa 100644
++--- a/bc/sbc.y
+++++ b/bc/sbc.y
++@@ -86,7 +86,9 @@ program			: /* empty */
++ 			      if (interactive && !quiet)
++ 				{
++ 				  show_bc_version ();
+++				  checkferror_output(stdout);
++ 				  welcome ();
+++				  checkferror_output(stdout);
++ 				}
++ 			    }
++ 			| program input_item
++diff --git a/bc/scan.c b/bc/scan.c
++index 1f78ec2..2b5eeb4 100644
++--- a/bc/scan.c
+++++ b/bc/scan.c
++@@ -799,6 +799,7 @@ bcel_input (buf, result, max)
++       if (bcel_len != 0)
++ 	history (hist, &histev, H_ENTER, bcel_line); 
++       fflush (stdout);
+++      checkferror_output(stdout);
++     }
++ 
++   if (bcel_len <= max)
++@@ -874,6 +875,7 @@ rl_input (buf, result, max)
++ 	add_history (rl_line); 
++       rl_line[rl_len-1] = '\n';
++       fflush (stdout);
+++      checkferror_output(stdout);
++     }
++ 
++   if (rl_len <= max)
++diff --git a/bc/scan.l b/bc/scan.l
++index 841c3df..16cd62e 100644
++--- a/bc/scan.l
+++++ b/bc/scan.l
++@@ -111,6 +111,7 @@ bcel_input (buf, result, max)
++       if (bcel_len != 0)
++ 	history (hist, &histev, H_ENTER, bcel_line); 
++       fflush (stdout);
+++      checkferror_output(stdout);
++     }
++ 
++   if (bcel_len <= max)
++@@ -186,6 +187,7 @@ rl_input (buf, result, max)
++ 	add_history (rl_line); 
++       rl_line[rl_len-1] = '\n';
++       fflush (stdout);
+++      checkferror_output(stdout);
++     }
++ 
++   if (rl_len <= max)
++@@ -310,6 +312,7 @@ limits return(Limits);
++ 	    if (c == EOF)
++ 	      {
++ 		fprintf (stderr,"EOF encountered in a comment.\n");
+++                checkferror_output(stderr);
++ 		break;
++ 	      }
++ 	  }
++diff --git a/bc/storage.c b/bc/storage.c
++index 699729a..37b4c6c 100644
++--- a/bc/storage.c
+++++ b/bc/storage.c
++@@ -99,6 +99,7 @@ more_functions (VOID)
++     {
++       f = &functions[indx];
++       f->f_defined = FALSE;
+++      f->f_void = FALSE;
++       f->f_body = (char *) bc_malloc (BC_START_SIZE);
++       f->f_body_size = BC_START_SIZE;
++       f->f_code_size = 0;
++diff --git a/bc/util.c b/bc/util.c
++index 30beaf9..669235f 100644
++--- a/bc/util.c
+++++ b/bc/util.c
++@@ -260,9 +260,10 @@ init_gen ()
++   continue_label = 0;
++   next_label  = 1;
++   out_count = 2;
++-  if (compile_only) 
+++  if (compile_only) {
++     printf ("@i");
++-  else
+++    checkferror_output(stdout);
+++  } else
++     init_load ();
++   had_error = FALSE;
++   did_gen = FALSE;
++@@ -286,6 +287,7 @@ generate (str)
++ 	  printf ("\n");
++ 	  out_count = 0;
++ 	}
+++      checkferror_output(stdout);
++     }
++   else
++     load_code (str);
++@@ -303,6 +305,7 @@ run_code()
++       if (compile_only)
++ 	{
++ 	  printf ("@r\n"); 
+++	  checkferror_output(stdout);
++ 	  out_count = 0;
++ 	}
++       else
++@@ -341,6 +344,7 @@ out_char (ch)
++ 	}
++       putchar (ch);
++     }
+++  checkferror_output(stdout);
++ }
++ 
++ /* Output routines: Write a character CH to the standard output.
++@@ -371,6 +375,7 @@ out_schar (ch)
++ 	}
++       putchar (ch);
++     }
+++  checkferror_output(stdout);
++ }
++ 
++ 
++@@ -657,6 +662,7 @@ limits()
++ #ifdef OLD_EQ_OP
++   printf ("Old assignment operatiors are valid. (=-, =+, ...)\n");
++ #endif 
+++  checkferror_output(stdout);
++ }
++ 
++ /* bc_malloc will check the return value so all other places do not
++@@ -721,6 +727,7 @@ yyerror (str, va_alist)
++   fprintf (stderr,"%s %d: ",name,line_no);
++   vfprintf (stderr, str, args);
++   fprintf (stderr, "\n");
+++  checkferror_output(stderr);
++   had_error = TRUE;
++   va_end (args);
++ }
++@@ -761,6 +768,7 @@ warn (mesg, va_alist)
++       fprintf (stderr,"%s %d: Error: ",name,line_no);
++       vfprintf (stderr, mesg, args);
++       fprintf (stderr, "\n");
+++      checkferror_output(stderr);
++       had_error = TRUE;
++     }
++   else
++@@ -773,6 +781,7 @@ warn (mesg, va_alist)
++ 	fprintf (stderr,"%s %d: (Warning) ",name,line_no);
++ 	vfprintf (stderr, mesg, args);
++ 	fprintf (stderr, "\n");
+++	checkferror_output(stderr);
++       }
++   va_end (args);
++ }
++@@ -807,6 +816,7 @@ rt_error (mesg, va_alist)
++   va_end (args);
++   
++   fprintf (stderr, "\n");
+++  checkferror_output(stderr);
++   runtime_error = TRUE;
++ }
++ 
++@@ -843,4 +853,5 @@ rt_warn (mesg, va_alist)
++   va_end (args);
++ 
++   fprintf (stderr, "\n");
+++  checkferror_output(stderr);
++ }
++diff --git a/dc/dc.c b/dc/dc.c
++index e03f094..0faf03a 100644
++--- a/dc/dc.c
+++++ b/dc/dc.c
++@@ -61,6 +61,7 @@ static void
++ bug_report_info DC_DECLVOID()
++ {
++ 	printf("Email bug reports to:  bug-dc at gnu.org .\n");
+++	checkferror_output(stdout);
++ }
++ 
++ static void
++@@ -71,6 +72,7 @@ show_version DC_DECLVOID()
++ This is free software; see the source for copying conditions.  There is NO\n\
++ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE,\n\
++ to the extent permitted by law.\n", DC_COPYRIGHT);
+++	checkferror_output(stdout);
++ }
++ 
++ /* your generic usage function */
++@@ -87,6 +89,7 @@ Usage: %s [OPTION] [file ...]\n\
++ \n\
++ ", progname);
++ 	bug_report_info();
+++	checkferror_output(f);
++ }
++ 
++ /* returns a pointer to one past the last occurance of c in s,
++diff --git a/dc/eval.c b/dc/eval.c
++index 4af7200..153d331 100644
++--- a/dc/eval.c
+++++ b/dc/eval.c
++@@ -94,12 +94,15 @@ static int input_pushback;
++ static int
++ input_fil DC_DECLVOID()
++ {
+++        int c;
++ 	if (input_pushback != EOF){
++-		int c = input_pushback;
+++		c = input_pushback;
++ 		input_pushback = EOF;
++ 		return c;
++ 	}
++-	return getc(input_fil_fp);
+++	c = getc(input_fil_fp);
+++	checkferror_input(input_fil_fp);
+++	return c;
++ }
++ 
++ /* passed as an argument to dc_getnum */
++@@ -298,11 +301,13 @@ dc_func DC_DECLARG((c, peekc, negcmp))
++ 				tmpint = dc_num2int(datum.v.number, DC_TOSS);
++ 			if (2 <= tmpint  &&  tmpint <= DC_IBASE_MAX)
++ 				dc_ibase = tmpint;
++-			else
+++			else {
++ 				fprintf(stderr,
++ 						"%s: input base must be a number \
++ between 2 and %d (inclusive)\n",
++ 						progname, DC_IBASE_MAX);
+++				checkferror_output(stderr);
+++			}
++ 		}
++ 		break;
++ 	case 'k':	/* set scale to value on top of stack */
++@@ -310,11 +315,12 @@ between 2 and %d (inclusive)\n",
++ 			tmpint = -1;
++ 			if (datum.dc_type == DC_NUMBER)
++ 				tmpint = dc_num2int(datum.v.number, DC_TOSS);
++-			if ( ! (tmpint >= 0) )
+++			if ( ! (tmpint >= 0) ) {
++ 				fprintf(stderr,
++ 						"%s: scale must be a nonnegative number\n",
++ 						progname);
++-			else
+++				checkferror_output(stderr);
+++			} else
++ 				dc_scale = tmpint;
++ 		}
++ 		break;
++@@ -338,11 +344,12 @@ between 2 and %d (inclusive)\n",
++ 			tmpint = 0;
++ 			if (datum.dc_type == DC_NUMBER)
++ 				tmpint = dc_num2int(datum.v.number, DC_TOSS);
++-			if ( ! (tmpint > 1) )
+++			if ( ! (tmpint > 1) ) {
++ 				fprintf(stderr,
++ 						"%s: output base must be a number greater than 1\n",
++ 						progname);
++-			else
+++				checkferror_output(stderr);
+++			} else
++ 				dc_obase = tmpint;
++ 		}
++ 		break;
++@@ -383,6 +390,7 @@ between 2 and %d (inclusive)\n",
++ 				fprintf(stderr,
++ 						"%s: square root of nonnumeric attempted\n",
++ 						progname);
+++				checkferror_output(stderr);
++ 			}else if (dc_sqrt(datum.v.number, dc_scale, &tmpnum) == DC_SUCCESS){
++ 				dc_free_num(&datum.v.number);
++ 				datum.v.number = tmpnum;
++@@ -444,6 +452,7 @@ between 2 and %d (inclusive)\n",
++ 			fprintf(stderr,
++ 					"%s: Q command requires a number >= 1\n",
++ 					progname);
+++			checkferror_output(stderr);
++ 		}
++ 		break;
++ #if 0
++@@ -489,11 +498,12 @@ between 2 and %d (inclusive)\n",
++ 			if (datum.dc_type == DC_NUMBER)
++ 				tmpint = dc_num2int(datum.v.number, DC_TOSS);
++ 			if (dc_pop(&datum) == DC_SUCCESS){
++-				if (tmpint < 0)
+++				if (tmpint < 0) {
++ 					fprintf(stderr,
++ 							"%s: array index must be a nonnegative integer\n",
++ 							progname);
++-				else
+++					checkferror_output(stderr);
+++				} else
++ 					dc_array_set(peekc, tmpint, datum);
++ 			}
++ 		}
++@@ -505,17 +515,19 @@ between 2 and %d (inclusive)\n",
++ 			tmpint = -1;
++ 			if (datum.dc_type == DC_NUMBER)
++ 				tmpint = dc_num2int(datum.v.number, DC_TOSS);
++-			if (tmpint < 0)
+++			if (tmpint < 0) {
++ 				fprintf(stderr,
++ 						"%s: array index must be a nonnegative integer\n",
++ 						progname);
++-			else
+++				checkferror_output(stderr);
+++			} else
++ 				dc_push(dc_array_get(peekc, tmpint));
++ 		}
++ 		return DC_EATONE;
++ 
++ 	default:	/* What did that user mean? */
++ 		fprintf(stderr, "%s: ", progname);
+++		checkferror_output(stderr);
++ 		dc_show_id(stdout, c, " unimplemented\n");
++ 		break;
++ 	}
++@@ -544,6 +556,7 @@ dc_evalstr DC_DECLARG((string))
++ 		fprintf(stderr,
++ 				"%s: eval called with non-string argument\n",
++ 				progname);
+++		checkferror_output(stderr);
++ 		return DC_OKAY;
++ 	}
++ 	interrupt_seen = 0;
++@@ -640,6 +653,7 @@ dc_evalstr DC_DECLARG((string))
++ 				return DC_FAIL;
++ 			}
++ 			fprintf(stderr, "%s: unexpected EOS\n", progname);
+++			checkferror_output(stderr);
++ 			return DC_OKAY;
++ 		}
++ 	}
++@@ -665,6 +679,7 @@ dc_evalfile DC_DECLARG((fp))
++ 	stdin_lookahead = EOF;
++ 	for (c=getc(fp); c!=EOF; c=peekc){
++ 		peekc = getc(fp);
+++		checkferror_input(stdin);
++ 		/*
++ 		 * The following if() is the only place where ``stdin_lookahead''
++ 		 * might be set to other than EOF:
++@@ -716,6 +731,7 @@ dc_evalfile DC_DECLARG((fp))
++ 							return DC_SUCCESS;
++ 						fprintf(stderr, "%s: Q command argument exceeded \
++ string execution depth\n", progname);
+++						checkferror_output(stderr);
++ 					}
++ 				}else{
++ 					dc_garbage("at top of stack", -1);
++@@ -728,8 +744,11 @@ string execution depth\n", progname);
++ 			fprintf(stderr,
++ 					"%s: Q command argument exceeded string execution depth\n",
++ 					progname);
++-			if (stdin_lookahead != peekc  &&  fp == stdin)
+++			checkferror_output(stderr);
+++			if (stdin_lookahead != peekc  &&  fp == stdin) {
++ 				peekc = getc(fp);
+++				checkferror_input(stdin);
+++			}
++ 			break;
++ 
++ 		case DC_INT:
++@@ -771,6 +790,7 @@ string execution depth\n", progname);
++ 			if (ferror(fp))
++ 				goto error_fail;
++ 			fprintf(stderr, "%s: unexpected EOF\n", progname);
+++			checkferror_output(stderr);
++ 			return DC_FAIL;
++ 		}
++ 	}
++diff --git a/dc/misc.c b/dc/misc.c
++index f2388b0..1be56fe 100644
++--- a/dc/misc.c
+++++ b/dc/misc.c
++@@ -91,6 +91,7 @@ dc_show_id DC_DECLARG((fp, id, suffix))
++ 		fprintf(fp, "'%c' (%#o)%s", (unsigned int) id, id, suffix);
++ 	else
++ 		fprintf(fp, "%#o%s", (unsigned int) id, suffix);
+++	checkferror_output(fp);
++ }
++ 
++ 
++diff --git a/dc/numeric.c b/dc/numeric.c
++index 8e5e70f..c875eba 100644
++--- a/dc/numeric.c
+++++ b/dc/numeric.c
++@@ -134,6 +134,7 @@ dc_div DC_DECLARG((a, b, kscale, result))
++ 	bc_init_num(CastNumPtr(result));
++ 	if (bc_divide(CastNum(a), CastNum(b), CastNumPtr(result), kscale)){
++ 		fprintf(stderr, "%s: divide by zero\n", progname);
+++		checkferror_output(stderr);
++ 		return DC_DOMAIN_ERROR;
++ 	}
++ 	return DC_SUCCESS;
++@@ -156,6 +157,7 @@ dc_divrem DC_DECLARG((a, b, kscale, quotient, remainder))
++ 	if (bc_divmod(CastNum(a), CastNum(b),
++ 						CastNumPtr(quotient), CastNumPtr(remainder), kscale)){
++ 		fprintf(stderr, "%s: divide by zero\n", progname);
+++		checkferror_output(stderr);
++ 		return DC_DOMAIN_ERROR;
++ 	}
++ 	return DC_SUCCESS;
++@@ -174,6 +176,7 @@ dc_rem DC_DECLARG((a, b, kscale, result))
++ 	bc_init_num(CastNumPtr(result));
++ 	if (bc_modulo(CastNum(a), CastNum(b), CastNumPtr(result), kscale)){
++ 		fprintf(stderr, "%s: remainder by zero\n", progname);
+++		checkferror_output(stderr);
++ 		return DC_DOMAIN_ERROR;
++ 	}
++ 	return DC_SUCCESS;
++@@ -226,6 +229,7 @@ dc_sqrt DC_DECLARG((value, kscale, result))
++ 	tmp = bc_copy_num(CastNum(value));
++ 	if (!bc_sqrt(&tmp, kscale)){
++ 		fprintf(stderr, "%s: square root of negative number\n", progname);
+++		checkferror_output(stderr);
++ 		bc_free_num(&tmp);
++ 		return DC_DOMAIN_ERROR;
++ 	}
++@@ -429,8 +433,10 @@ dc_out_num DC_DECLARG((value, obase, newline_p, discard_p))
++ {
++ 	out_char('\0'); /* clear the column counter */
++ 	bc_out_num(CastNum(value), obase, out_char, 0);
++-	if (newline_p == DC_WITHNL)
+++	if (newline_p == DC_WITHNL) {
++ 		putchar ('\n');
+++		checkferror_output(stdout);
+++	}
++ 	if (discard_p == DC_TOSS)
++ 		dc_free_num(&value);
++ }
++@@ -475,6 +481,7 @@ dc_dump_num DC_DECLARG((dcvalue, discard_p))
++ 
++ 	for (cur=top_of_stack; cur; cur=next) {
++ 		putchar(cur->digit);
+++		checkferror_output(stdout);
++ 		next = cur->link;
++ 		free(cur);
++ 	}
++@@ -592,6 +599,7 @@ out_char (ch)
++ 			out_col = 1;
++ 		}
++ 		putchar(ch);
+++		checkferror_output(stderr);
++ 	}
++ }
++ 
++@@ -631,6 +639,7 @@ rt_error (mesg, va_alist)
++ 	vfprintf (stderr, mesg, args);
++ 	va_end (args);
++ 	fprintf (stderr, "\n");
+++	checkferror_output(stderr);
++ }
++ 
++ 
++@@ -664,6 +673,7 @@ rt_warn (mesg, va_alist)
++ 	vfprintf (stderr, mesg, args);
++ 	va_end (args);
++ 	fprintf (stderr, "\n");
+++	checkferror_output(stderr);
++ }
++ 
++ 
++diff --git a/dc/stack.c b/dc/stack.c
++index 0730e9c..5db3975 100644
++--- a/dc/stack.c
+++++ b/dc/stack.c
++@@ -38,7 +38,10 @@
++ #include "dc-regdef.h"
++ 
++ /* an oft-used error message: */
++-#define Empty_Stack	fprintf(stderr, "%s: stack empty\n", progname)
+++#define Empty_Stack do{					\
+++    fprintf(stderr, "%s: stack empty\n", progname);	\
+++    checkferror_output(stderr);				\
+++  }while(0)
++ 
++ 
++ /* simple linked-list implementation suffices: */
++@@ -94,6 +97,7 @@ dc_binop DC_DECLARG((op, kscale))
++ 	if (dc_stack->value.dc_type!=DC_NUMBER
++ 			|| dc_stack->link->value.dc_type!=DC_NUMBER){
++ 		fprintf(stderr, "%s: non-numeric value\n", progname);
+++		checkferror_output(stderr);
++ 		return;
++ 	}
++ 	(void)dc_pop(&b);
++@@ -134,6 +138,7 @@ dc_binop2 DC_DECLARG((op, kscale))
++ 	if (dc_stack->value.dc_type!=DC_NUMBER
++ 			|| dc_stack->link->value.dc_type!=DC_NUMBER){
++ 		fprintf(stderr, "%s: non-numeric value\n", progname);
+++		checkferror_output(stderr);
++ 		return;
++ 	}
++ 	(void)dc_pop(&b);
++@@ -172,6 +177,7 @@ dc_cmpop DC_DECLVOID()
++ 	if (dc_stack->value.dc_type!=DC_NUMBER
++ 			|| dc_stack->link->value.dc_type!=DC_NUMBER){
++ 		fprintf(stderr, "%s: non-numeric value\n", progname);
+++		checkferror_output(stderr);
++ 		return 0;
++ 	}
++ 	(void)dc_pop(&b);
++@@ -209,6 +215,7 @@ dc_triop DC_DECLARG((op, kscale))
++ 			|| dc_stack->link->value.dc_type!=DC_NUMBER
++ 			|| dc_stack->link->link->value.dc_type!=DC_NUMBER){
++ 		fprintf(stderr, "%s: non-numeric value\n", progname);
+++		checkferror_output(stderr);
++ 		return;
++ 	}
++ 	(void)dc_pop(&c);
++@@ -327,6 +334,7 @@ dc_register_get DC_DECLARG((regid, result))
++ 	r = dc_register[regid];
++ 	if (r==NULL || r->value.dc_type==DC_UNINITIALIZED){
++ 		fprintf(stderr, "%s: register ", progname);
+++		checkferror_output(stderr);
++ 		dc_show_id(stderr, regid, " is empty\n");
++ 		return DC_FAIL;
++ 	}
++@@ -401,6 +409,7 @@ dc_register_pop DC_DECLARG((stackid, result))
++ 	r = dc_register[stackid];
++ 	if (r == NULL){
++ 		fprintf(stderr, "%s: stack register ", progname);
+++		checkferror_output(stderr);
++ 		dc_show_id(stderr, stackid, " is empty\n");
++ 		return DC_FAIL;
++ 	}
++diff --git a/dc/string.c b/dc/string.c
++index ff1e7f1..e24092d 100644
++--- a/dc/string.c
+++++ b/dc/string.c
++@@ -101,6 +101,7 @@ dc_out_str DC_DECLARG((value, newline, discard_flag))
++ 	fwrite(value->s_ptr, value->s_len, sizeof *value->s_ptr, stdout);
++ 	if (newline == DC_WITHNL)
++ 		putchar('\n');
+++	checkferror_output(stdout);
++ 	if (discard_flag == DC_TOSS)
++ 		dc_free_str(&value);
++ }
++@@ -176,6 +177,7 @@ dc_readstring DC_DECLARG((fp, ldelim, rdelim))
++ 		}
++ 		*p++ = c;
++ 	}
+++	checkferror_input(fp);
++ 	return dc_makestring(line_buf, (size_t)(p-line_buf));
++ }
++ 
++diff --git a/h/number.h b/h/number.h
++index 9b034b6..3a00a92 100644
++--- a/h/number.h
+++++ b/h/number.h
++@@ -150,4 +150,7 @@ _PROTOTYPE(int bc_sqrt, (bc_num *num, int scale));
++ _PROTOTYPE(void bc_out_num, (bc_num num, int o_base, void (* out_char)(int),
++ 			     int leading_zero));
++ 
+++_PROTOTYPE(void checkferror_input, (FILE*));
+++_PROTOTYPE(void checkferror_output, (FILE*));
+++
++ #endif
++diff --git a/lib/number.c b/lib/number.c
++index e211840..4d3ce46 100644
++--- a/lib/number.c
+++++ b/lib/number.c
++@@ -1776,6 +1776,7 @@ static void
++ out_char (int c)
++ {
++   putchar(c);
+++  checkferror_output(stdout);
++ }
++ 
++ 
++@@ -1785,6 +1786,7 @@ pn (num)
++ {
++   bc_out_num (num, 10, out_char, 0);
++   out_char ('\n');
+++  checkferror_output(stdout);
++ }
++ 
++ 
++@@ -1799,6 +1801,28 @@ pv (name, num, len)
++   printf ("%s=", name);
++   for (i=0; i<len; i++) printf ("%c",BCD_CHAR(num[i]));
++   printf ("\n");
+++  checkferror_output(stdout);
++ }
++ 
++ #endif
+++
+++/* check ferror() status and if so die */
+++void
+++checkferror_input (fp)
+++	FILE *fp;
+++{
+++	if (ferror(fp)) {
+++		perror("dc: could not read input file");
+++		exit(EXIT_FAILURE);
+++	}
+++}
+++
+++void
+++checkferror_output (fp)
+++	FILE *fp;
+++{
+++	if (ferror(fp)) {
+++		perror("dc: could not write output file");
+++		exit(EXIT_FAILURE);
+++	}
+++}
+diff --git a/package/bc/bc.hash b/package/bc/bc.hash
+index 241e9a2..c9c786a 100644
+--- a/package/bc/bc.hash
++++ b/package/bc/bc.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	4ef6d9f17c3c0d92d8798e35666175ecd3d8efac4009d6457b5c99cea72c0e33  bc-1.06.tar.gz
++sha256  7ee4abbcfac03d8a6e1a8a3440558a3d239d6b858585063e745c760957725ecc  bc-1.06.95.tar.bz2
+diff --git a/package/bc/bc.mk b/package/bc/bc.mk
+index 60530bd..63948a0 100644
+--- a/package/bc/bc.mk
++++ b/package/bc/bc.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--OPENSSL_VERSION = 1.0.2a
-+OPENSSL_VERSION = 1.0.2b
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+-BC_VERSION = 1.06
+-BC_SITE = $(BR2_GNU_MIRROR)/bc
++BC_VERSION = 1.06.95
++BC_SITE = http://alpha.gnu.org/gnu/bc
++BC_SOURCE    = bc-$(BC_VERSION).tar.bz2
+ BC_DEPENDENCIES = host-flex
+ BC_LICENSE = GPLv2+ LGPLv2.1+
+ BC_LICENSE_FILES = COPYING COPYING.LIB
 -- 
-2.3.6
+2.1.4
