@@ -1,84 +1,85 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 12 Jun 2015 22:26:38 +0200
-Subject: [Buildroot] [PATCH v2 0/4] openpowerlink2
-In-Reply-To: <1431360854-18305-1-git-send-email-romain.naour@openwide.fr>
-References: <1431360854-18305-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <557B407E.6010902@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 12 Jun 2015 22:48:12 +0200
+Subject: [Buildroot] [PATCH 06/11 v2] package/cryptodev-linux: use the
+ kernel-module helper
+In-Reply-To: <557A13A1.2000500@mind.be>
+References: <cover.1433964001.git.yann.morin.1998@free.fr>
+ <329d95315f937a0cbd912b8035fb0ccc0e94a9ed.1433964001.git.yann.morin.1998@free.fr>
+ <557A13A1.2000500@mind.be>
+Message-ID: <20150612204812.GF3583@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Arnout, All,
 
-Le 11/05/2015 18:14, Romain Naour a ?crit :
-> From doc/openpowerlink.md:
-> "The openPOWERLINK release V2.X is an evolution of the openPOWERLINK V1 stack.
-> Running the kernel and user layers of openPOWERLINK on different processors in
-> a multi-processor/multi-platform architecture, required fundamental changes in
-> the Communication Abstraction Layer. Additionally, the existing code base was
-> greatly improved so that it is easier to understand and maintain. Due to these
-> reasons a new major release was started."
+On 2015-06-12 01:02 +0200, Arnout Vandecappelle spake thusly:
+> On 06/10/15 21:22, Yann E. MORIN wrote:
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > [Doug: add pre-build hook to build version.h]
 > 
-> The openpowerlink2 package archive contains several cmake projects,
-> and each of them must be packaged separately in Buildroot.
+>  The version.h thing deserves a slightly more explicit commit message, like:
 > 
-> "With version 2.0, the source code has been cleanly split into an
-> application-oriented user library and a time-critical stack driver."
+> The cryptodev-linux Makefile defines the following:
 > 
-> This complicates the packaging but it helps to refine the dependencies
-> compared to openpowerlink v1 build system.
-> (openpowerlink v1 requires C++ only for the qt demo)
+> build: version.h
+>         make ${KERNEL_MAKE_OPTS} modules
 > 
-> The openpowerlink2 package provide all patches which should be used by
-> other openpowerlink2-* packages by using an patch hook.
-> Doing this avoids patches duplication over all sub-packages.
-> 
-> All patches fix several issues with the cmake build system and will be
-> submitted upstream.
-> 
-> There is one project for the EPL (Ethernet PowerLink) stack
-> libraries wich provides:
->  * an user space EPL stack to be linked into application
->  * an user space EPL stack pcap daemon
->  * an kernel space EPL library interface
-> 
-> There are two projects for the EPL network driver:
->  * pcap daemon driver
->  * kernel module driver.
-> 
-> Note: On x86/x86_64 only few EPL ethernet driver are available for
-> the EPL kernel stack implementation:
->  * Intel 82573
->  * Intel 8255x
->  * Intel I210
->  * Realtek RTL-8111/8168 (new since V2.1.0)
->  * Realtek RTL-8139
-> 
-> There is one project for each demo application:
->  * demo_cn_embedded
->  * demo_mn_embedded
->  * demo_cn_console
->  * demo_mn_console
->  * demo_mn_qt
-> 
-> Only demo_mn_console will be packaged in Buildroot for now.
-> 
-> [1] http://sourceforge.net/p/openpowerlink/discussion/newbie/thread/3f13af65/
-> 
-> Romain Naour (4):
->   package/openpowerlink2: new package
->   package/openpowerlink2-kernel-drivers: new package
->   package/openpowerlink2-pcap-daemon: new package
->   package/openpowerlink2-apps-demo-mn-console: new package
+> modules_install:
+>         make -C $(KERNEL_DIR) SUBDIRS=`pwd` modules_install
+>         @echo "Installing cryptodev.h in $(PREFIX)/usr/include/crypto ..."
+>         @install -D crypto/cryptodev.h $(PREFIX)/usr/include/crypto/cryptodev.h
 
-I'll mark this series as "Changes Requested" in patchwork since a new release of
-the openpowerlink stack is out (v2.2.0).
+I'm not too fond of quoting that much, so I trimmed it down to what I
+believe is the strict minimum for udnerstanding the change, no more.
 
-http://sourceforge.net/p/openpowerlink/news/2015/06/openpowerlink-v220/
+If you still think that is not enough, you'll have the opportunity to
+say so when I respin. OK? ;-)
 
-I'll resend an updated series soon.
+> So when we use the kernel-module infrastructure, we have to explicitly handle
+> version.h and cryptodev.h. cryptodev.h was already handled specifically because
+> it goes to STAGING_DIR. For version.h, we add a pre-build hook.
+> 
+> 
+>  That said, SUBDIRS= does not behave exactly the same as M=, but I don't know
+> what the difference is. So that part should probably be mentioned explicitly in
+> the commit message as well.
 
-Best regards,
-Romain
+From my understanding, the end result is the same, but using SUBDIRS
+makes the Linux buildsystem it is building in in-tree module, while M
+tells it it is building an out-of-tree module.
+
+> > Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+> 
+> [snip]
+> > -define CRYPTODEV_LINUX_INSTALL_TARGET_CMDS
+> > -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR) \
+> > -		PREFIX=$(TARGET_DIR) modules_install
+> > -endef
+> > +CRYPTODEV_LINUX_MODULE_MAKE_OPTS = \
+> > +	KERNEL_DIR=$(LINUX_DIR) \
+> > +	PREFIX=$(TARGET_DIR)
+> 
+>  PREFIX is only used for installing cryptodev.h, which is now no longer done. So
+> we don't need to define it, right? Same for KERNEL_DIR, it's only used by the
+> rules we no longer use.
+> 
+>  If you remove these, it should of course also be mentioned explicitly in the
+> commit message.
+
+Right, I've dropped both and explained in the commit log.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
