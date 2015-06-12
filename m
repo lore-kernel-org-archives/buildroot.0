@@ -1,39 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 21:45:09 +0200
-Subject: [Buildroot] [PATCH v5 2/3] lutok: new package
-In-Reply-To: <20150612213419.15566320@free-electrons.com>
+Date: Fri, 12 Jun 2015 21:59:31 +0200
+Subject: [Buildroot] [PATCH v5 1/3] atf: new package
+In-Reply-To: <1434063093-14906-2-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
 References: <1434063093-14906-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
- <1434063093-14906-3-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
- <20150612213419.15566320@free-electrons.com>
-Message-ID: <20150612214509.08728a82@free-electrons.com>
+ <1434063093-14906-2-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+Message-ID: <20150612215931.757d5796@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Sebastien Bourdelin,
 
-On Fri, 12 Jun 2015 21:34:19 +0200, Thomas Petazzoni wrote:
-
-> Both the lutok and kyua packages after --without-atf ? Why so ? You add
-> the atf package as the first patch, and then it isn't used in follow-up
-> patches ?
-
-Ok, --without-atf is not about ATF support, but about build ATF-based
-tests. I've added a comment to explain this.
-
-> > +# liblua uses dlopen when dynamically linked
-> > +ifneq ($(BR2_STATIC_LIBS),y)
+On Thu, 11 Jun 2015 18:51:31 -0400, Sebastien Bourdelin wrote:
+> ATF, or Automated Testing Framework, is a collection of libraries to
+> write test programs in C, C++ and POSIX shell.
 > 
-> ifeq ($(BR2_STATIC_LIBS),)
+> https://github.com/jmmv/atf
+> 
+> Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+> ---
+> Changes v4 -> v5:
+>  suggested by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+>  suggested by Arnout Vandecapelle <arnout@mind.be>:
+>  - do not install the precompiled tests.
 
-Actually, I was able to build without adding -ldl, so I'm not sure why
-it is needed. We'll see what the autobuilders have to say, unless you
-have more details about the specific configuration that was causing
-problems.
-
-Thanks,
+Applied, thanks.
 
 Thomas
 -- 
