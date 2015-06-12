@@ -1,102 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 21:28:33 +0200
-Subject: [Buildroot] [git commit] php: security bump to version 5.6.10
-Message-ID: <20150612201536.4B9B680411@busybox.osuosl.org>
+Date: Fri, 12 Jun 2015 21:41:41 +0200
+Subject: [Buildroot] [git commit] lutok: new package
+Message-ID: <20150612201536.9C2A980411@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=039bc77719e14164b9d9907ba669e443760e8029
+commit: http://git.buildroot.net/buildroot/commit/?id=7c8744a2095a46b86f9b00a6346bba108036fe58
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2015-3414, CVE-2015-3415, CVE-2015-3416 (via bundled sqlite
-upgrade).
-CVE-2015-2325, CVE-2015-2326 (via bundled pcre upgrade).
+Lutok is a lightweight C++ API library for Lua.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+https://github.com/jmmv/lutok
+
+[Thomas:
+ - move lutok inclusion in package/Config.in after including the Lua
+   external modules
+ - add a comment explaining why we are passing --without-atf
+ - remove the logic around -ldl, it seems to build just fine without it.]
+
+Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php/0002-no-iconv-search.patch |   22 +++++++++++-----------
- package/php/php.hash                   |    2 +-
- package/php/php.mk                     |    2 +-
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ package/Config.in        |    1 +
+ package/lutok/Config.in  |   13 +++++++++++++
+ package/lutok/lutok.hash |    2 ++
+ package/lutok/lutok.mk   |   16 ++++++++++++++++
+ 4 files changed, 32 insertions(+), 0 deletions(-)
 
-diff --git a/package/php/0002-no-iconv-search.patch b/package/php/0002-no-iconv-search.patch
-index 3223953..32aa7f5 100644
---- a/package/php/0002-no-iconv-search.patch
-+++ b/package/php/0002-no-iconv-search.patch
-@@ -7,11 +7,12 @@ PHP_ICONV_H_PATH which, again, uses test and absolute paths.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- [Gustavo: convert to nice m4 instead of patching configure]
-+[Gustavo: update for 5.6.10]
- 
--diff -Nura php-5.6.8.orig/acinclude.m4 php-5.6.8/acinclude.m4
----- php-5.6.8.orig/acinclude.m4	2015-05-18 20:06:48.557099001 +0200
--+++ php-5.6.8/acinclude.m4	2015-05-18 20:07:33.177099001 +0200
--@@ -2470,7 +2470,7 @@
-+diff -Nura php-5.6.10.orig/acinclude.m4 php-5.6.10/acinclude.m4
-+--- php-5.6.10.orig/acinclude.m4	2015-06-12 16:09:06.274355813 -0300
-++++ php-5.6.10/acinclude.m4	2015-06-12 16:10:10.884544865 -0300
-+@@ -2474,7 +2474,7 @@
-    dnl
-    if test "$found_iconv" = "no"; then
-  
-@@ -20,10 +21,10 @@ diff -Nura php-5.6.8.orig/acinclude.m4 php-5.6.8/acinclude.m4
-        if test -r $i/include/giconv.h; then
-          AC_DEFINE(HAVE_GICONV_H, 1, [ ])
-          ICONV_DIR=$i
--diff -Nura php-5.6.7.orig/ext/iconv/config.m4 php-5.6.7/ext/iconv/config.m4
----- php-5.6.7.orig/ext/iconv/config.m4	2015-04-08 11:08:11.184847544 -0300
--+++ php-5.6.7/ext/iconv/config.m4	2015-04-08 11:39:07.823608030 -0300
--@@ -14,28 +14,8 @@
-+diff -Nura php-5.6.10.orig/ext/iconv/config.m4 php-5.6.10/ext/iconv/config.m4
-+--- php-5.6.10.orig/ext/iconv/config.m4	2015-06-12 16:09:07.792407246 -0300
-++++ php-5.6.10/ext/iconv/config.m4	2015-06-12 16:11:07.752471600 -0300
-+@@ -14,28 +14,6 @@
-    ])
-  
-    if test "$iconv_avail" != "no"; then
-@@ -40,7 +41,7 @@ diff -Nura php-5.6.7.orig/ext/iconv/config.m4 php-5.6.7/ext/iconv/config.m4
- -    else
- -      PHP_ICONV_PREFIX="$ICONV_DIR"
- -    fi
-- 
-+-
- -    CFLAGS="-I$PHP_ICONV_PREFIX/include $CFLAGS"
- -    LDFLAGS="-L$PHP_ICONV_PREFIX/$PHP_LIBDIR $LDFLAGS"
- -
-@@ -48,8 +49,7 @@ diff -Nura php-5.6.7.orig/ext/iconv/config.m4 php-5.6.7/ext/iconv/config.m4
- -      PHP_ICONV_H_PATH="$PHP_ICONV_PREFIX/include/giconv.h"
- -    else
- -      PHP_ICONV_H_PATH="$PHP_ICONV_PREFIX/include/iconv.h"
---    fi 
--+    PHP_ICONV_H_PATH="iconv.h"
-+-	fi
-  
-      AC_MSG_CHECKING([if iconv is glibc's])
-      AC_TRY_LINK([#include <gnu/libc-version.h>],[gnu_get_libc_version();],
-diff --git a/package/php/php.hash b/package/php/php.hash
-index fe938f5..4abf45e 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256	1fac497b596f5e4e87d87a7ca90f8725e39a8ca3f9d7adb500fa83c4bb70a73f	php-5.6.9.tar.xz
-+sha256	1af720c955b0a57aa47606e928616e84c78868aff2a5f269c70601a77d6da8c1	php-5.6.10.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index c9bcfe3..afac950 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PHP_VERSION_MAJOR = 5.6
--PHP_VERSION = $(PHP_VERSION_MAJOR).9
-+PHP_VERSION = $(PHP_VERSION_MAJOR).10
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+diff --git a/package/Config.in b/package/Config.in
+index d111a82..0286630 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -499,6 +499,7 @@ menu "Lua libraries/modules"
+ 	source "package/xavante/Config.in"
+ endmenu
+ endif
++	source "package/lutok/Config.in"
+ 	source "package/moarvm/Config.in"
+ 	source "package/mono/Config.in"
+ 	source "package/nodejs/Config.in"
+diff --git a/package/lutok/Config.in b/package/lutok/Config.in
+new file mode 100644
+index 0000000..d6c87cf
+--- /dev/null
++++ b/package/lutok/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LUTOK
++	bool "lutok"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	depends on !BR2_PACKAGE_LUAJIT
++	help
++	  Lutok is a lightweight C++ API library for Lua.
++
++	  https://github.com/jmmv/lutok
++
++comment "lutok needs a toolchain w/ C++ and full Lua"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+diff --git a/package/lutok/lutok.hash b/package/lutok/lutok.hash
+new file mode 100644
+index 0000000..0ec8988
+--- /dev/null
++++ b/package/lutok/lutok.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 2cec51efa0c8d65ace8b21eaa08384b77abc5087b46e785f78de1c21fb754cd5 lutok-0.4.tar.gz
+diff --git a/package/lutok/lutok.mk b/package/lutok/lutok.mk
+new file mode 100644
+index 0000000..6ee198b
+--- /dev/null
++++ b/package/lutok/lutok.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# lutok
++#
++################################################################################
++
++LUTOK_VERSION = 0.4
++LUTOK_SITE = https://github.com/jmmv/lutok/releases/download/lutok-$(LUTOK_VERSION)
++LUTOK_INSTALL_STAGING = YES
++LUTOK_DEPENDENCIES = host-pkgconf lua
++# --without-atf disables the atf-based lutok tests
++LUTOK_CONF_OPTS = --without-doxygen --without-atf
++LUTOK_LICENSE = BSD-3c
++LUTOK_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
