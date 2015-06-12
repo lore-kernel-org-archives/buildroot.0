@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 12 Jun 2015 16:23:09 -0300
-Subject: [Buildroot] [PATCH 1/3] stunnel: bump to version 5.18
-Message-ID: <1434136991-26950-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 12 Jun 2015 16:23:10 -0300
+Subject: [Buildroot] [PATCH 2/3] file: bump to version 5.23
+In-Reply-To: <1434136991-26950-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1434136991-26950-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1434136991-26950-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/file/file.hash | 2 +-
+ package/file/file.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index e45e691..91b297c 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
+diff --git a/package/file/file.hash b/package/file/file.hash
+index 8441ba6..a061783 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
 @@ -1,2 +1,2 @@
--# From https://www.stunnel.org/pipermail/stunnel-announce/2015-April/000100.html
--sha256	c3e79e582621a0827125e35e1c00450190104fc02dc3c5274cb02b05859fd472	stunnel-5.17.tar.gz
-+# From http://www.stunnel.org/pipermail/stunnel-users/2015-June/005094.html
-+sha256	0532c0a2f8de3da1ab625e384146501ce5936fac63d01561c3a9bf652b692317	stunnel-5.18.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 3f5b9aa..4674694 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+-sha256	c4e3a8e44cb888c5e4b476e738503e37fb9de3b25a38c143e214bfc12109fc0b	file-5.22.tar.gz
++sha256	2c8ab3ff143e2cdfb5ecee381752f80a79e0b4cfe9ca4cc6e1c3e5ec15e6157c	file-5.23.tar.gz
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 4b98cbd..4baa393 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).17
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).18
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+-FILE_VERSION = 5.22
++FILE_VERSION = 5.23
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ FILE_INSTALL_STAGING = YES
 -- 
 2.3.6
