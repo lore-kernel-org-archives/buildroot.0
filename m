@@ -1,58 +1,143 @@
-From: Patricia Holden <patholdn@gmail.com>
-Date: Fri, 12 Jun 2015 18:43:09 -0400
-Subject: [Buildroot] Building bootable usb drive for target board with
-	ext2
-In-Reply-To: <20150612235154.1a723af5@free-electrons.com>
-References: <CANKYLME21pAifC-tb+HC=tRhy5k9ka0W-gywZCPrOdpq1aOTMA@mail.gmail.com>
- <20150612211031.3a684e7d@free-electrons.com>
- <CANKYLMF9crxgDKVuHBZHHkhh=iw=O_o=Sq0cafM_HusVWAPd2w@mail.gmail.com>
- <CANKYLME+Dh85AHMX5yQdwuBU_WbsbMLurUf8d6Hn3pf=Ybpw8A@mail.gmail.com>
- <20150612235154.1a723af5@free-electrons.com>
-Message-ID: <CANKYLMEpujp5YDJRZixuLk7EG7MNVOGWiMgZFWgaCsf5qAOb9g@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 13 Jun 2015 00:52:11 +0200
+Subject: [Buildroot] [PATCH 01/11 v2] package-infra: add helper to build
+	kernel modules
+In-Reply-To: <20150612174620.GA3583@free.fr>
+References: <cover.1433964001.git.yann.morin.1998@free.fr>	<a9355834b4604ad9989556affbddeb9926343abd.1433964001.git.yann.morin.1998@free.fr>	<557A0F36.2060208@mind.be>
+ <20150612174620.GA3583@free.fr>
+Message-ID: <557B629B.7020109@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I copied the boot directory to the USB after extracting it from rootfs.tar,
-copied bzImage to /boot, and  successfully got grub onto the USB device
-following the grub help instructions.  Then I moved the USB to my target
-and powered it up.  The grub prompt came up (yay, one step further!).  I
-tried to boot or reboot but it says my kernel is missing.  Is there
-something else I'm missing in my config file for buildroot?  do I need to
-give grub special kernel instructions?
+On 06/12/15 19:46, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2015-06-12 00:44 +0200, Arnout Vandecappelle spake thusly:
+>> On 06/10/15 21:22, Yann E. MORIN wrote:
+>>> The Linux kernel offers a nice and easy-to-use infra to build
+>>> out-of-tree kernel modules.
+> [--SNIP--]
+>>> diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
+>>> new file mode 100644
+>>> index 0000000..608c9e6
+>>> --- /dev/null
+>>> +++ b/package/pkg-kernel-module.mk
+>>> @@ -0,0 +1,89 @@
+>>> +################################################################################
+>>> +# kernel module infrastructure for building Linux kernel modules
+>>> +#
+>>> +# This file implements an infrastructure that eases development of package
+>>> +# .mk files for out-of-tree Linux kernel modules. It should be used for all
+>>> +# packages that build a Linux kernel module using the kernel's out-of-tree
+>>> +# buildsystem, unless they use a complex custom build-system.
+>>
+>>  buildsystem, build-system. What about consistently choosing "build system"? :-)
+> 
+> I think we've settled for "buildsystem" in other places, so I'll stick
+> to that (and fix here).
 
-On Fri, Jun 12, 2015 at 5:51 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+ OK. I was joking about the "build system".
 
-> Dear Patricia Holden,
->
-> On Fri, 12 Jun 2015 17:49:57 -0400, Patricia Holden wrote:
->
-> > Ok, so I'm still not quite out of the woods.  I copied over the boot
-> > directory from output to my usb drive, copied bzImage to usb drive.  It
-> > hangs on target.  Do I need to edit grub files for the usb?  Do I need to
-> > install grub instead of copying?  Sorry for such mundane questions, but
-> I'm
-> > just getting back into the linux world and my mind is a bit foggy.
->
-> You need to install grub on your USB drive. See the instructions in the
-> grub option help text, also visible at:
->
->   http://git.buildroot.net/buildroot/tree/boot/grub/Config.in#n8
->
-> The instructions are done on a disk image, but it can be done directly
-> on a real drive in a similar way.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150612/8d12a5ca/attachment.html>
+> 
+>>> +# In terms of implementation, this infrastructure relies on another package
+>>> +# infrastructure, and only defines post-build and post-install hooks, so that
+>>> +# packages can both build user-space (with any of the other *-package infra)
+>>> +# and/or build kernel modules.
+>>
+>> # The kernel-module infrastructure requires the packages that use it to also
+>> # include another package infrastructure. kernel-module only defines post-build
+> 
+> s/include/use/ because we're not 'including' pkg infras, we're not even
+> calling them, we're evaluating them. So I'd still word that as 'use' if
+> you don't mind. ;-)
+
+ Yep that's better.
+
+> 
+>> # and post-install hooks. This allows the package to build both kernel modules
+>> # and/or user-space components (with any of the other *-package infra).
+> 
+> Otherwise, OK, it's simpler and more explixit thn what I wrote.
+> 
+>>> +#
+>>> +# As such, it is to be used in conjunction with another *-package infra,
+>>> +# like so:
+>>> +#
+>>> +#   $(eval $(kernel-module))
+>>> +#   $(eval $(generic-package))
+>>> +#
+>>> +# Note: if the caller needs access to the kernel modules (either after they
+>>> +# are built or after they are installed), it will have to define its own
+>>> +# post-build/install hooks after calling kernel-module, but before calling
+>>
+>>  after -> *after*
+> 
+> OK. I guess ditto for: before -> *before* , no?
+
+ Yeah you're right.
+
+> 
+>>> +# the other *-package infra, like so:
+>>> +#
+>>> +#   $(eval $(kernel-module))
+>>> +#   define FOO_MOD_TWEAK
+>>> +#   	# do something
+>>> +#   endef
+>>> +#   FOO_POST_BUILD_HOOKS += FOO_MOD_TWEAK
+>>> +#   $(eval $(generic-package))
+>>> +#
+>>> +# Note: this infra does not check that the kernel is enabled; it is expected
+>>> +# to be enforced at the Kconfig level with proper 'depends on'.
+>>> +################################################################################
+>>> +
+>>> +################################################################################
+>>> +# inner-kernel-module -- generates the make targets needed to support building
+>>> +# a kernel module
+>>> +#
+>>> +#  argument 1 is the lowercase package name
+>>
+>>  Is there any reason to keep this, since it's not used?
+> 
+> Well, I wanted to keep it as much aligned to existing infras as
+> possible, even though we're not using it.
+
+ Yeah, but you did remove the rest of the usual arguments... Anyway, I'm OK with
+keeping the first argument if you want.
+
+
+ Regards,
+ Arnout
+
+> 
+>>> +#  argument 2 is the uppercase package name
+>>> +################################################################################
+>>> +
+>>> +define inner-kernel-module
+>>> +
+>>> +# The kernel must be built first.
+>>> +$(2)_DEPENDENCIES += linux
+>>> +
+>>> +# This is only defined in some infrastructures (e.g. autotools, cmake), but
+>>> +# not in others (generic). So define it if not already defined.
+>>                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>                               So define it here as well.
+> 
+> OK.
+> 
+> Thanks! :-)
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
