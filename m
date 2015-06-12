@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Jun 2015 00:12:56 +0200
-Subject: [Buildroot] [PATCH 1/4] core/pkg-kconfig: ensure kconfig file
- and fragments exist
-In-Reply-To: <20150612232422.4a12fc2b@free-electrons.com>
+Date: Sat, 13 Jun 2015 00:17:58 +0200
+Subject: [Buildroot] [PATCH 2/4] core/pkg-kconfig: move the kconfig
+ fixups to a macro
+In-Reply-To: <20150612233350.4511dc7c@free-electrons.com>
 References: <cover.1433591404.git.yann.morin.1998@free.fr>
- <22cb4293142894b08d3103f39ceaa2351b0e357b.1433591404.git.yann.morin.1998@free.fr>
- <20150612232422.4a12fc2b@free-electrons.com>
-Message-ID: <20150612221256.GG3583@free.fr>
+ <cdb72fa7204d35b88f2b74e79d4d1117b797712d.1433591404.git.yann.morin.1998@free.fr>
+ <20150612233350.4511dc7c@free-electrons.com>
+Message-ID: <20150612221758.GH3583@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,112 +15,42 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2015-06-12 23:24 +0200, Thomas Petazzoni spake thusly:
-> On Sat,  6 Jun 2015 13:54:23 +0200, Yann E. MORIN wrote:
-> > Because the base kconfig file has a dependency but no rule, make will
-> > always try to rebuild targets that depend on it:
-> > 
-> >     https://www.gnu.org/software/make/manual/make.html#Force-Targets
-> > 
-> > To complexify things yet a little bit more, missing kconfig fragments
-> > are properly caught,
+On 2015-06-12 23:33 +0200, Thomas Petazzoni spake thusly:
+> On Sat,  6 Jun 2015 13:54:24 +0200, Yann E. MORIN wrote:
+> >  # In order to get a usable, consistent configuration, some fixup may be needed.
+> >  # The exact rules are specified by the package .mk file.
+> > -$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
+> > +define $(1)_FIXUP_KCONFIG
+> >  	$$($(2)_KCONFIG_FIXUP_CMDS)
+> >  	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
 > 
-> What do you mean by "are properly caught" ?
+> We could use $(@D) instead of $$($(2)_DIR) here.
 
-Just that missing fragments cause a build failure, becasue of that rule:
+Yes, and Arnout suggested the same in another series I sent.
 
-    $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+My reasoning for using $($(2)_DIR) is that we are in the infra, and we
+do have this variable, while $$(@D) only works when there is an actual
+file being generated, which is not always the case.
 
-Contrary to $$($(2)_KCONFIG_FILE), which has a rule to generate it,
-there is no such rule for the fragments. So make itself whines there is
-a missing file for which it has no rule to generate it.
+See for example the followup patch, for which we have to fake @D because
+of those package-provided macros that may need it.
 
-> Also, I don't see the
-> interaction between this and the previous paragraph, and hence the "To
-> complexity things yet a little bit more"
+So, I prefer using $($(2)_DIR) because I /know/ what it is, while $(@D)
+I don;t know beforehand if it would be set.
 
-Well, complexity comes from the fact that a missing base config file or
-a missing fragment do not cause the same behaviour:
-
-  - a missing fragment cause a build error that make reports as a missing
-    file (see above)
-
-  - a missing base file causes no build failure, because merge-config.sh
-    does not check its inputs (and thus produces a garbled .config).
-
-> > but since they could be bundled in the package,
-> > they should depend on it being extracted. And then we'd have the same
-> > issue as with the base kconfig file, above.
+> >  		$$($(2)_KCONFIG_OPTS) oldconfig
+> > -	$$(Q)touch $$@
+> > +	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
 > 
-> "then" what ?
+> and here. But that's indeed not very important, since they are the same.
 
-Then make would not complain, and feed them to merge-config, wich would
-not care at all (but produce a garbled .config).
+Yes, it works with this patch because there is an actual file (and in
+the correct location) as the target of the current rule.
 
-> > Furthermore, merge-config.sh does not check for the existence of the
-> > fragments, not even the existence of the base file.
-> 
-> How is this related to the previous paragraph ?
+It wiull also work with the next patch, because we are faking @D .
 
-Well, it is related because a missing file is not an error for merge-config
-and we'd get a broken .config.
-
-But Ok, that is far from being clear, so I'll rework and split the
-commit in two, as you explained below.
-
-> >   - manualy check that the base and fragments do exist.
-> manually
-
-OK.
-
-> > -# The config file could be in-tree, so before depending on it the package should
-> > -# be extracted (and patched) first
-> > -$$($(2)_KCONFIG_FILE): | $(1)-patch
-> > +# The config file as well as the fragments could be in-tree, so before
-> > +# depending on them the package should be extracted (and patched) first
-> > +$$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
-> 
-> This part makes complete sense.
-
-Ah! :-)
-
-> >  # The specified source configuration file and any additional configuration file
-> >  # fragments are merged together to .config, after the package has been patched.
-> >  # Since the file could be a defconfig file it needs to be expanded to a
-> >  # full .config first. We use 'make oldconfig' because this can be safely
-> >  # done even when the package does not support defconfigs.
-> > +#
-> > +# merge-config.sh does not check for the existence of the fragments, not even
-> > +# the existence of the base file, so we do it manually.
-> > +#
-> >  $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
-> > +	for f in $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES); do \
-> > +		if [ ! -f "$$$${f}" ]; then \
-> > +			printf "Kconfig fragment '%s' for '%s' does not exist\n" "$$$${f}" "$(1)"; \
-> > +			exit 1; \
-> > +		fi; \
-> > +	done
-> 
-> And this one as well.
-
-Yeah!
-
-> So basically, I understand the code, but absolutely not the commit
-> log :-)
-
-OK. It means the problem is badly explained. After the patch is plit, I
-hope it will be easier to explain each part independently.
-
-However, by further splitting those, I'm afraid we'd loose the big
-picture. I'll try to catch that in the cover letter.
-
-> And also, I don't understand why those two things are so much
-> "inter-woven" that they cannot be done in two separate patches. It's
-> actually two very separate things: 1/ support kconfig fragments bundled
-> in the package source code (chunk 1) and 2/ check that they exist
-> (chunk 2).
-
-Right, will do.
+So, I'd prefer we stick with $($(2)_DIR) here, to avoid any issue in the
+future.
 
 Regards,
 Yann E. MORIN.
