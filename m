@@ -1,48 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 22:16:11 +0200
-Subject: [Buildroot] [git commit] openssl: bump to version 1.0.2c
-Message-ID: <20150612210556.A235C81E5C@busybox.osuosl.org>
+Date: Fri, 12 Jun 2015 23:06:01 +0200
+Subject: [Buildroot] [PATCH] openssl: bump to version 1.0.2c
+In-Reply-To: <1434138271-28414-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1434138271-28414-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150612230601.3fe70aff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e4f2d3b12acf9f056d6cbbfab2e60c14f755bb88
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Fixes HMAC ABI breakage from 1.0.2b
+On Fri, 12 Jun 2015 16:44:31 -0300, Gustavo Zacarias wrote:
+> Fixes HMAC ABI breakage from 1.0.2b
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/openssl/openssl.hash | 8 ++++----
+>  package/openssl/openssl.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/openssl/openssl.hash |    8 ++++----
- package/openssl/openssl.mk   |    2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Applied, thanks.
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index 673f99f..4b212fb 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,4 +1,4 @@
--# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.md5
--# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.sha1
--md5	7729b259e2dea7d60b32fc3934d6984b	openssl-1.0.2b.tar.gz
--sha1	9006e53ca56a14d041e3875320eedfa63d82aba7	openssl-1.0.2b.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2c.tar.gz.md5
-+# From https://www.openssl.org/source/openssl-1.0.2c.tar.gz.sha1
-+md5	8c8d81a9ae7005276e486702edbcd4b6	openssl-1.0.2c.tar.gz
-+sha1	6e4a5e91159eb32383296c7c83ac0e59b83a0a44	openssl-1.0.2c.tar.gz
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 8051a9b..fd8904d 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSL_VERSION = 1.0.2b
-+OPENSSL_VERSION = 1.0.2c
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
