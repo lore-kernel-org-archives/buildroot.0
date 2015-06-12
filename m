@@ -1,102 +1,49 @@
-From: Pieter De Gendt <pieter.degendt@gmail.com>
-Date: Fri, 12 Jun 2015 12:05:51 +0200
-Subject: [Buildroot] [PATCH v2 1/1] libmusicbrainz: new package
-Message-ID: <1434103551-11465-1-git-send-email-pieter.degendt@gmail.com>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit@wsystem.com>
+Date: Fri, 12 Jun 2015 12:53:03 +0200
+Subject: [Buildroot] [PATCH] ffmpeg: fix dependencies
+Message-ID: <1434106383-60787-1-git-send-email-benoit@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This library is built for both host and target platform as
-required by cmake. This implies that dependencies are also
-built for the host platform (neon).
+The ffmpeg binary does not require swscale, but ffplay needs it.
 
-Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
+ffserver needs fork().
+
+Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
 ---
-Changes v1 -> v2: (suggested by Thomas Petazzoni)
-  - Added license info
-  - Added comment for clarification
+ package/ffmpeg/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- package/Config.in                        |  1 +
- package/libmusicbrainz/Config.in         | 18 ++++++++++++++++++
- package/libmusicbrainz/libmusicbrainz.mk | 21 +++++++++++++++++++++
- package/neon/neon.mk                     |  1 +
- 4 files changed, 41 insertions(+)
- create mode 100644 package/libmusicbrainz/Config.in
- create mode 100644 package/libmusicbrainz/libmusicbrainz.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index a17901f..3339669 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -681,6 +681,7 @@ menu "Audio/Sound"
- 	source "package/libmodplug/Config.in"
- 	source "package/libmpd/Config.in"
- 	source "package/libmpdclient/Config.in"
-+	source "package/libmusicbrainz/Config.in"
- 	source "package/libreplaygain/Config.in"
- 	source "package/libsamplerate/Config.in"
- 	source "package/libsidplay2/Config.in"
-diff --git a/package/libmusicbrainz/Config.in b/package/libmusicbrainz/Config.in
-new file mode 100644
-index 0000000..51417fe
---- /dev/null
-+++ b/package/libmusicbrainz/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_LIBMUSICBRAINZ
-+	bool "libmusicbrainz"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_NEON
-+	select BR2_PACKAGE_NEON_LIBXML2
-+	help
-+	  The MusicBrainz Client Library (libmusicbrainz), 
-+	  also known as mb_client, is a development library 
-+	  geared towards developers who wish to add MusicBrainz 
-+	  lookup capabilities to their applications. The library 
-+	  supports Windows, Linux and Mac OS X, with packages 
-+	  released for the RedHat and Debian distributions.
-+
-+	  http://musicbrainz.org/doc/libmusicbrainz
-+
-+comment "libmusicbrainz needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libmusicbrainz/libmusicbrainz.mk b/package/libmusicbrainz/libmusicbrainz.mk
-new file mode 100644
-index 0000000..7422259
---- /dev/null
-+++ b/package/libmusicbrainz/libmusicbrainz.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# libmusicbrainz
-+#
-+################################################################################
-+
-+LIBMUSICBRAINZ_VERSION = release-5.1.0
-+LIBMUSICBRAINZ_SITE = $(call github,metabrainz,libmusicbrainz,$(LIBMUSICBRAINZ_VERSION))
-+LIBMUSICBRAINZ_LICENSE = LGPLv2.1
-+LIBMUSICBRAINZ_LICENSE_FILES = COPYING.txt
-+LIBMUSICBRAINZ_INSTALL_STAGING = YES
-+
-+# Cross compilation requires host compilation due to the
-+# automatic generation of the C interface source files (see INSTALL.txt)
-+LIBMUSICBRAINZ_DEPENDENCIES = libxml2 neon host-pkgconf host-libmusicbrainz
-+
-+# Cross compilation variable for cmake to find the host generated files
-+LIBMUSICBRAINZ_CONF_OPTS = -DIMPORT_EXECUTABLES=$(HOST_LIBMUSICBRAINZ_DIR)/ImportExecutables.cmake
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index 0cff1a2..284a98c 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -48,3 +48,4 @@ NEON_CONF_OPTS += --disable-webdav
- endif
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 00163ba..e5981fe 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -25,7 +25,6 @@ config BR2_PACKAGE_FFMPEG_NONFREE
  
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ config BR2_PACKAGE_FFMPEG_FFMPEG
+ 	bool "Build ffmpeg (the command line application)"
+-	select BR2_PACKAGE_FFMPEG_SWSCALE
+ 	default y
+ 	help
+ 	  FFmpeg is a very fast video and audio converter.
+@@ -36,6 +35,7 @@ config BR2_PACKAGE_FFMPEG_FFMPEG
+ 
+ config BR2_PACKAGE_FFMPEG_FFPLAY
+ 	bool "Build ffplay"
++	select BR2_PACKAGE_FFMPEG_SWSCALE
+ 	select BR2_PACKAGE_SDL
+ 	help
+ 	  FFplay is a very simple and portable media player using the
+@@ -44,6 +44,7 @@ config BR2_PACKAGE_FFMPEG_FFPLAY
+ 
+ config BR2_PACKAGE_FFMPEG_FFSERVER
+ 	bool "Build ffserver"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  FFserver is a streaming server for both audio and video.
+ 
 -- 
-2.4.3
+2.1.4
