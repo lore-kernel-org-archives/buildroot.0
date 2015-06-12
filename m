@@ -1,33 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 21:29:39 +0200
-Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.2b
-In-Reply-To: <1434108959-18972-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1434108959-18972-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150612212939.5e0df751@free-electrons.com>
+Date: Fri, 12 Jun 2015 21:30:43 +0200
+Subject: [Buildroot] [PATCH 1/2] python-pyxml: rename the package file
+In-Reply-To: <1434088845-2806-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1434088845-2806-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20150612213043.51a0e64e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Jerzy Grzegorek,
 
-On Fri, 12 Jun 2015 08:35:59 -0300, Gustavo Zacarias wrote:
-> CVE-2015-1790 - PKCS7 crash with missing EnvelopedContent
-> CVE-2015-1789 - Exploitable out-of-bounds read in X509_cmp_time
-> CVE-2015-1788 - Malformed ECParameters causes infinite loop
-> CVE-2015-1792 - CMS verify infinite loop with unknown hash function
-> CVE-2015-1791 - Race condition handling NewSessionTicket
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Fri, 12 Jun 2015 08:00:44 +0200, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 > ---
->  ...-match-commands-starting-with-minus-inste.patch | 27 ----------------------
->  package/openssl/openssl.hash                       |  8 +++----
->  package/openssl/openssl.mk                         |  2 +-
->  3 files changed, 5 insertions(+), 32 deletions(-)
->  delete mode 100644 package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
+>  package/python-pyxml/{python-xml.hash => python-pyxml.hash} | 0
+>  package/python-pyxml/{python-xml.mk => python-pyxml.mk}     | 0
+>  2 files changed, 0 insertions(+), 0 deletions(-)
+>  rename package/python-pyxml/{python-xml.hash => python-pyxml.hash} (100%)
+>  rename package/python-pyxml/{python-xml.mk => python-pyxml.mk} (100%)
 
-Applied, thanks.
+Applied, thanks. This is actually a real bug fix, because until now,
+the hash file was simply ignored.
 
 Thomas
 -- 
