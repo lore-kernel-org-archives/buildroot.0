@@ -1,51 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 21:20:47 +0200
-Subject: [Buildroot] [git commit] ffmpeg: fix dependencies
-Message-ID: <20150612192737.C9FAE7F9C5@busybox.osuosl.org>
+Date: Fri, 12 Jun 2015 21:19:52 +0200
+Subject: [Buildroot] [git commit] support: remove outdated note re. Python 3
+	support
+Message-ID: <20150612192737.C3C3E80410@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=316a0a43a5577c5977984654bb1de3b86260e056
+commit: http://git.buildroot.net/buildroot/commit/?id=954c09ae62374d0917ce65581d60e50df8747191
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ffmpeg binary does not require swscale, but ffplay needs it.
+Kconfiglib now runs as either Python 2 or Python 3.
 
-ffserver needs fork().
-
-Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
+Signed-off-by: Ulf Magnusson <ulfalizer@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/Config.in |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ support/scripts/gen-manual-lists.py |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 00163ba..e5981fe 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -25,7 +25,6 @@ config BR2_PACKAGE_FFMPEG_NONFREE
+diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+index d45810b..1e0e9bb 100644
+--- a/support/scripts/gen-manual-lists.py
++++ b/support/scripts/gen-manual-lists.py
+@@ -24,11 +24,6 @@
+ ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ ##
  
- config BR2_PACKAGE_FFMPEG_FFMPEG
- 	bool "Build ffmpeg (the command line application)"
--	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	default y
- 	help
- 	  FFmpeg is a very fast video and audio converter.
-@@ -36,6 +35,7 @@ config BR2_PACKAGE_FFMPEG_FFMPEG
- 
- config BR2_PACKAGE_FFMPEG_FFPLAY
- 	bool "Build ffplay"
-+	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	select BR2_PACKAGE_SDL
- 	help
- 	  FFplay is a very simple and portable media player using the
-@@ -44,6 +44,7 @@ config BR2_PACKAGE_FFMPEG_FFPLAY
- 
- config BR2_PACKAGE_FFMPEG_FFSERVER
- 	bool "Build ffserver"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  FFserver is a streaming server for both audio and video.
+-## Note about python2.
+-##
+-## This script can currently only be run using python2 interpreter due to
+-## its kconfiglib dependency (which is not yet python3 friendly).
+-
+ from __future__ import print_function
+ from __future__ import unicode_literals
  
