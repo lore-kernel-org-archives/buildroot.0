@@ -1,49 +1,85 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit@wsystem.com>
-Date: Fri, 12 Jun 2015 12:53:03 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: fix dependencies
-Message-ID: <1434106383-60787-1-git-send-email-benoit@wsystem.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 12 Jun 2015 08:35:59 -0300
+Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.2b
+Message-ID: <1434108959-18972-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ffmpeg binary does not require swscale, but ffplay needs it.
+CVE-2015-1790 - PKCS7 crash with missing EnvelopedContent
+CVE-2015-1789 - Exploitable out-of-bounds read in X509_cmp_time
+CVE-2015-1788 - Malformed ECParameters causes infinite loop
+CVE-2015-1792 - CMS verify infinite loop with unknown hash function
+CVE-2015-1791 - Race condition handling NewSessionTicket
 
-ffserver needs fork().
-
-Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ffmpeg/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ ...-match-commands-starting-with-minus-inste.patch | 27 ----------------------
+ package/openssl/openssl.hash                       |  8 +++----
+ package/openssl/openssl.mk                         |  2 +-
+ 3 files changed, 5 insertions(+), 32 deletions(-)
+ delete mode 100644 package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 00163ba..e5981fe 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -25,7 +25,6 @@ config BR2_PACKAGE_FFMPEG_NONFREE
+diff --git a/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch b/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
+deleted file mode 100644
+index 5db95d6..0000000
+--- a/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 079cae9d7628f16b9efdf5723d2bfae5bdc2ba4e Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 27 Jan 2015 18:27:32 -0300
+-Subject: [PATCH] Make c_rehash match commands starting with - (minus) instead
+- of minus in any starting position, otherwise a directory named a-b breaks it
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- tools/c_rehash.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/tools/c_rehash.in b/tools/c_rehash.in
+-index 887e927..1df2fab 100644
+---- a/tools/c_rehash.in
+-+++ b/tools/c_rehash.in
+-@@ -15,7 +15,7 @@ my $symlink_exists=eval {symlink("",""); 1};
+- my $removelinks = 1;
+- 
+- ##  Parse flags.
+--while ( $ARGV[0] =~ '-.*' ) {
+-+while ( $ARGV[0] =~ '^-.*' ) {
+-     my $flag = shift @ARGV;
+-     last if ( $flag eq '--');
+-     if ( $flag =~ /-old/) {
+--- 
+-2.0.5
+-
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index c9987fc..673f99f 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssl.org/source/openssl-1.0.2a.tar.gz.md5
+-# From https://www.openssl.org/source/openssl-1.0.2a.tar.gz.sha1
+-md5	a06c547dac9044161a477211049f60ef	openssl-1.0.2a.tar.gz
+-sha1	46ecd325b8e587fa491f6bb02ad4a9fb9f382f5f	openssl-1.0.2a.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.md5
++# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.sha1
++md5	7729b259e2dea7d60b32fc3934d6984b	openssl-1.0.2b.tar.gz
++sha1	9006e53ca56a14d041e3875320eedfa63d82aba7	openssl-1.0.2b.tar.gz
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index f90c811..8051a9b 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_FFMPEG_FFMPEG
- 	bool "Build ffmpeg (the command line application)"
--	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	default y
- 	help
- 	  FFmpeg is a very fast video and audio converter.
-@@ -36,6 +35,7 @@ config BR2_PACKAGE_FFMPEG_FFMPEG
- 
- config BR2_PACKAGE_FFMPEG_FFPLAY
- 	bool "Build ffplay"
-+	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	select BR2_PACKAGE_SDL
- 	help
- 	  FFplay is a very simple and portable media player using the
-@@ -44,6 +44,7 @@ config BR2_PACKAGE_FFMPEG_FFPLAY
- 
- config BR2_PACKAGE_FFMPEG_FFSERVER
- 	bool "Build ffserver"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  FFserver is a streaming server for both audio and video.
- 
+-OPENSSL_VERSION = 1.0.2a
++OPENSSL_VERSION = 1.0.2b
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
 -- 
-2.1.4
+2.3.6
