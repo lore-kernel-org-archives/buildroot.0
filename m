@@ -1,50 +1,41 @@
-From: Patricia Holden <patholdn@gmail.com>
-Date: Fri, 12 Jun 2015 14:20:59 -0400
-Subject: [Buildroot] Building bootable usb drive for target board with ext2
-Message-ID: <CANKYLME21pAifC-tb+HC=tRhy5k9ka0W-gywZCPrOdpq1aOTMA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 12 Jun 2015 21:10:31 +0200
+Subject: [Buildroot] Building bootable usb drive for target board with
+ ext2
+In-Reply-To: <CANKYLME21pAifC-tb+HC=tRhy5k9ka0W-gywZCPrOdpq1aOTMA@mail.gmail.com>
+References: <CANKYLME21pAifC-tb+HC=tRhy5k9ka0W-gywZCPrOdpq1aOTMA@mail.gmail.com>
+Message-ID: <20150612211031.3a684e7d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm following examples of how to create a bootable usb for a target board
-i'm doing some work for.  I am stuck at setting up grub for booting.  I
-can't seem to get buildroot to put the bzImage into /boot directory for
-grub to load.  My target ends up hanging.
+Dear Patricia Holden,
 
-I'm using latest buildroot via git and just ran "git pull" and rebuilt the
-package last night.
+On Fri, 12 Jun 2015 14:20:59 -0400, Patricia Holden wrote:
 
-Any ideas?
+> I'm following examples of how to create a bootable usb for a target board
+> i'm doing some work for.  I am stuck at setting up grub for booting.  I
+> can't seem to get buildroot to put the bzImage into /boot directory for
+> grub to load.  My target ends up hanging.
 
-I've attached the .config & boot/grub/menu.lst I'm using.  Perhaps I set
-something up incorrectly.
+If all you need is to have bzImage installed in /boot, then make sure
+to enable BR2_LINUX_KERNEL_INSTALL_TARGET.
 
-Thanks!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150612/ea210229/attachment.html>
--------------- next part --------------
-default		0
-timeout		10
+However, you have BR2_TARGET_ROOTFS_INITRAMFS=y, which means your
+rootfs is inside your kernel image. So it is not possible for your
+kernel image to be inside your rootfs!
 
-# Used when no splashimage is used
-color 		cyan/blue white/blue
+So if you want to use a rootfs inside the kernel image (using
+initramfs), then all you have to do it to build yourself a small
+filesystem with just the necessary Grub bits in /boot and the
+bzImage.
 
-# Gets enabled/disabled depending on Grub support for splashimage
+Best regards,
 
-# Used when a splashimage is enabled
-foreground 	000000
-background 	cccccc
-
-title Buildroot
-	root (hd0,0)
-	kernel /boot/bzImage rw root=/dev/sda1
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config
-Type: application/octet-stream
-Size: 50455 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150612/ea210229/attachment.obj>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
