@@ -1,76 +1,124 @@
-From: Vincent =?iso-8859-1?Q?Stehl=E9?= <vincent.stehle@freescale.com>
-Date: Fri, 12 Jun 2015 18:09:59 +0200
-Subject: [Buildroot] [PATCH 2/3] python-robotframework: New package
-In-Reply-To: <1433170569-15031-3-git-send-email-denis.thulin@openwide.fr>
-Message-ID: <20150612160958.GA12107@laptop-vstehle>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 12 Jun 2015 19:46:20 +0200
+Subject: [Buildroot] [PATCH 01/11 v2] package-infra: add helper to build
+ kernel modules
+In-Reply-To: <557A0F36.2060208@mind.be>
+References: <cover.1433964001.git.yann.morin.1998@free.fr>
+ <a9355834b4604ad9989556affbddeb9926343abd.1433964001.git.yann.morin.1998@free.fr>
+ <557A0F36.2060208@mind.be>
+Message-ID: <20150612174620.GA3583@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Denis THULIN wrote:
-> A generic test automation framework written in python.
+Arnout, All,
 
-Hi Denis,
+On 2015-06-12 00:44 +0200, Arnout Vandecappelle spake thusly:
+> On 06/10/15 21:22, Yann E. MORIN wrote:
+> > The Linux kernel offers a nice and easy-to-use infra to build
+> > out-of-tree kernel modules.
+[--SNIP--]
+> > diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
+> > new file mode 100644
+> > index 0000000..608c9e6
+> > --- /dev/null
+> > +++ b/package/pkg-kernel-module.mk
+> > @@ -0,0 +1,89 @@
+> > +################################################################################
+> > +# kernel module infrastructure for building Linux kernel modules
+> > +#
+> > +# This file implements an infrastructure that eases development of package
+> > +# .mk files for out-of-tree Linux kernel modules. It should be used for all
+> > +# packages that build a Linux kernel module using the kernel's out-of-tree
+> > +# buildsystem, unless they use a complex custom build-system.
+> 
+>  buildsystem, build-system. What about consistently choosing "build system"? :-)
 
-Thank you for this robotframework package, here are a few remarks.
+I think we've settled for "buildsystem" in other places, so I'll stick
+to that (and fix here).
 
-..
-> diff --git a/package/python-robotframework/Config.in
-> b/package/python-robotframework/Config.in
-> new file mode 100644
-> index 0000000..a3d5ea8
-> --- /dev/null
-> +++ b/package/python-robotframework/Config.in
->  <at>  <at>  -0,0 +1,9  <at>  <at> 
-> +config BR2_PACKAGE_PYTHON_ROBOTFRAMEWORK
-> +	depends on BR2_PACKAGE_PYTHON
-> +    select BR2_PACKAGE_PYTHON_ZLIB
-> +    select BR2_PACKAGE_PYTHON_PYEXPAT
-   ^^^
+> > +# In terms of implementation, this infrastructure relies on another package
+> > +# infrastructure, and only defines post-build and post-install hooks, so that
+> > +# packages can both build user-space (with any of the other *-package infra)
+> > +# and/or build kernel modules.
+> 
+> # The kernel-module infrastructure requires the packages that use it to also
+> # include another package infrastructure. kernel-module only defines post-build
 
-I think the previous two lines have an indentation issue.
+s/include/use/ because we're not 'including' pkg infras, we're not even
+calling them, we're evaluating them. So I'd still word that as 'use' if
+you don't mind. ;-)
 
-> +	bool "python-robotframework"
-> +	help
-> +	  A generic test automation framework
-> +	  
-> +	  http://robotframework.org
-..
-> diff --git a/package/python-robotframework/python-robotframework.mk
-> b/package/python-robotframework/python-robotframework.mk
-> new file mode 100644
-> index 0000000..6fc7619
-> --- /dev/null
-> +++ b/package/python-robotframework/python-robotframework.mk
->  <at>  <at>  -0,0 +1,14  <at>  <at> 
-> +################################################################################
-> +#
-> +# package/python-robotframework
+> # and post-install hooks. This allows the package to build both kernel modules
+> # and/or user-space components (with any of the other *-package infra).
 
-Shouldn't that rather be just 'python-robotframework', with no
-'package/'?
+Otherwise, OK, it's simpler and more explixit thn what I wrote.
 
-> +#
-> +################################################################################
-> +
-> +PYTHON_ROBOTFRAMEWORK_VERSION = 2.9a1
-> +PYTHON_ROBOTFRAMEWORK_SOURCE =
-> robotframework-$(PYTHON_ROBOTFRAMEWORK_VERSION).tar.gz
-> +PYTHON_ROBOTFRAMEWORK_SITE = https://pypi.python.org/packages/source/r/robotframework/
-> +PYTHON_ROBOTFRAMEWORK_SETUP_TYPE = distutils
-> +PYTHON_ROBOTFRAMEWORK_LICENSE = Apache License 2.0
-> +PYTHON_ROBOTFRAMEWORK_LICEiNSE_FILES = LICENSE.txt
-                             ^
-The 'i' there is a typo, I think.
+> > +#
+> > +# As such, it is to be used in conjunction with another *-package infra,
+> > +# like so:
+> > +#
+> > +#   $(eval $(kernel-module))
+> > +#   $(eval $(generic-package))
+> > +#
+> > +# Note: if the caller needs access to the kernel modules (either after they
+> > +# are built or after they are installed), it will have to define its own
+> > +# post-build/install hooks after calling kernel-module, but before calling
+> 
+>  after -> *after*
 
-> +
-> +$(eval $(python-package))
-> \ No newline at end of file
+OK. I guess ditto for: before -> *before* , no?
 
-Maybe add a newline?
+> > +# the other *-package infra, like so:
+> > +#
+> > +#   $(eval $(kernel-module))
+> > +#   define FOO_MOD_TWEAK
+> > +#   	# do something
+> > +#   endef
+> > +#   FOO_POST_BUILD_HOOKS += FOO_MOD_TWEAK
+> > +#   $(eval $(generic-package))
+> > +#
+> > +# Note: this infra does not check that the kernel is enabled; it is expected
+> > +# to be enforced at the Kconfig level with proper 'depends on'.
+> > +################################################################################
+> > +
+> > +################################################################################
+> > +# inner-kernel-module -- generates the make targets needed to support building
+> > +# a kernel module
+> > +#
+> > +#  argument 1 is the lowercase package name
+> 
+>  Is there any reason to keep this, since it's not used?
 
-Best regards,
+Well, I wanted to keep it as much aligned to existing infras as
+possible, even though we're not using it.
 
-V.
+> > +#  argument 2 is the uppercase package name
+> > +################################################################################
+> > +
+> > +define inner-kernel-module
+> > +
+> > +# The kernel must be built first.
+> > +$(2)_DEPENDENCIES += linux
+> > +
+> > +# This is only defined in some infrastructures (e.g. autotools, cmake), but
+> > +# not in others (generic). So define it if not already defined.
+>                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               So define it here as well.
+
+OK.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
