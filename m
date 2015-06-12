@@ -1,39 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 22:15:57 +0200
-Subject: [Buildroot] [PATCH v2 2/2] glog: new package
-In-Reply-To: <1433915449-15994-3-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1433915449-15994-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1433915449-15994-3-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20150612221557.1c1d8911@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 12 Jun 2015 22:22:15 +0200
+Subject: [Buildroot] [PATCH v1] qt: add font license information
+Message-ID: <1434140535-13792-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rahul Bedarkar,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Not sure about the japanese font and about MIT or MIT-like
+licenses (no exact match of the wording to other MIT licenses).
+---
+ package/qt/qt.mk | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-On Wed, 10 Jun 2015 11:20:49 +0530, Rahul Bedarkar wrote:
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> Reviewed-by: Abhimanyu Vishwakarma <abhimanyu.v@imgtec.com>
-> Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-> ---
-> Changes v1 -> v2:
-> 	no change
-> ---
->  package/Config.in      |  1 +
->  package/glog/Config.in | 11 +++++++++++
->  package/glog/glog.hash |  2 ++
->  package/glog/glog.mk   | 17 +++++++++++++++++
->  4 files changed, 31 insertions(+)
->  create mode 100644 package/glog/Config.in
->  create mode 100644 package/glog/glog.hash
->  create mode 100644 package/glog/glog.mk
-
-Applied, thanks.
-
-Thomas
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index a7bbe5f..3fbb3e1 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -656,6 +656,32 @@ define QT_INSTALL_TARGET_FONTS
+ 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+ 	cp -dpf $(QT_FONTS) $(TARGET_DIR)/usr/lib/fonts
+ endef
++ifeq ($(BR2_PACKAGE_QT_FONT_MICRO),y)
++QT_LICENSE += Public Domain (Micro font)
++# disabled because this file (containing the Public Domain notice) is
++# the font source file too...
++#QT_LICENSE_FILES += src/3rdparty/fonts/micro.bdf
++endif
++ifeq ($(BR2_PACKAGE_QT_FONT_FIXED),y)
++# according to https://launchpad.net/ubuntu/vivid/+source/qtbase-opensource-src/+copyright
++QT_LICENSE += Public Domain (Fixed font)
++endif
++ifeq ($(BR2_PACKAGE_QT_FONT_HELVETICA),y)
++QT_LICENSE += MIT-like (Helvetica fonts)
++QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
++endif
++ifeq ($(BR2_PACKAGE_QT_FONT_JAPANESE),y)
++# according to https://launchpad.net/ubuntu/vivid/+source/qtbase-opensource-src/+copyright
++# Public Domain
++QT_LICENSE += Public Domain (Japanese font)
++# according to lib/fonts/README same as Helvetica fonts?
++#QT_LICENSE += MIT-like (Japanese fonts)
++#QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
++endif
++ifeq ($(BR2_PACKAGE_QT_FONT_UNIFONT),y)
++QT_LICENSE += Freeware (Unifont font)
++QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
++endif
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
+@@ -663,6 +689,10 @@ define QT_INSTALL_TARGET_FONTS_TTF
+ 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+ 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
+ endef
++QT_LICENSE += MIT-like (DejaVu/Vera TrueType fonts)
++QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.DejaVu \
++	src/3rdparty/fonts/README.DejaVu \
++	src/3rdparty/fonts/COPYRIGHT.Vera
+ endif
+ endif # BR2_PACKAGE_QT_EMBEDDED
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
