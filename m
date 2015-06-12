@@ -1,110 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 21:59:03 +0200
-Subject: [Buildroot] [git commit] kyua: new package
-Message-ID: <20150612201536.ACC5280411@busybox.osuosl.org>
+Date: Fri, 12 Jun 2015 21:28:21 +0200
+Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.2b
+Message-ID: <20150612201536.3C3A081E40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=315e92c6920cfb4b19d727f58810aea0cf8072e5
+commit: http://git.buildroot.net/buildroot/commit/?id=53c8d64c08028f0057965a436707c1422c6fd331
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Kyua is a testing framework for infrastructure software, originally
-designed to equip BSD-based operating systems with a test suite. This
-means that Kyua is lightweight and simple, and that Kyua integrates
-well with various build systems and continuous integration frameworks.
+CVE-2015-1790 - PKCS7 crash with missing EnvelopedContent
+CVE-2015-1789 - Exploitable out-of-bounds read in X509_cmp_time
+CVE-2015-1788 - Malformed ECParameters causes infinite loop
+CVE-2015-1792 - CMS verify infinite loop with unknown hash function
+CVE-2015-1791 - Race condition handling NewSessionTicket
 
-https://github.com/jmmv/kyua
-
-[Thomas: fix typo in hash file.]
-
-Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in      |    1 +
- package/kyua/Config.in |   20 ++++++++++++++++++++
- package/kyua/kyua.hash |    2 ++
- package/kyua/kyua.mk   |   27 +++++++++++++++++++++++++++
- 4 files changed, 50 insertions(+), 0 deletions(-)
+ ...-match-commands-starting-with-minus-inste.patch |   27 --------------------
+ package/openssl/openssl.hash                       |    8 +++---
+ package/openssl/openssl.mk                         |    2 +-
+ 3 files changed, 5 insertions(+), 32 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 0286630..6810bd6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -72,6 +72,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/kexec/Config.in"
- 	source "package/kexec-lite/Config.in"
- 	source "package/ktap/Config.in"
-+	source "package/kyua/Config.in"
- 	source "package/latencytop/Config.in"
- 	source "package/lmbench/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/kyua/Config.in b/package/kyua/Config.in
-new file mode 100644
-index 0000000..e1bcd48
---- /dev/null
-+++ b/package/kyua/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_KYUA
-+	bool "kyua"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER # lutok
-+	depends on !BR2_PACKAGE_LUAJIT # lutok
-+	select BR2_PACKAGE_ATF
-+	select BR2_PACKAGE_LUTOK
-+	select BR2_PACKAGE_SQLITE
-+	help
-+	  Kyua is a testing framework for infrastructure software,
-+	  originally designed to equip BSD-based operating systems
-+	  with a test suite. This means that Kyua is lightweight
-+	  and simple, and that Kyua integrates well with various build
-+	  systems and continuous integration frameworks.
-+
-+	  https://github.com/jmmv/kyua
-+
-+comment "kyua needs a toolchain w/ C++ and full Lua"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-diff --git a/package/kyua/kyua.hash b/package/kyua/kyua.hash
-new file mode 100644
-index 0000000..298d0d8
---- /dev/null
-+++ b/package/kyua/kyua.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 2b8b64a458b642df75086eeb73e8073d105b8d9cff04c9b1a905b68bc8502560 kyua-0.11.tar.gz
-diff --git a/package/kyua/kyua.mk b/package/kyua/kyua.mk
-new file mode 100644
-index 0000000..c75a09f
---- /dev/null
-+++ b/package/kyua/kyua.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# kyua
-+#
-+################################################################################
-+
-+KYUA_VERSION = 0.11
-+KYUA_SITE = https://github.com/jmmv/kyua/releases/download/kyua-$(KYUA_VERSION)
-+KYUA_DEPENDENCIES = host-pkgconf atf lutok sqlite
-+KYUA_CONF_OPTS = --without-doxygen --without-atf
-+KYUA_LICENSE = BSD-3c
-+KYUA_LICENSE_FILES = COPYING
-+KYUA_CONF_ENV = \
-+	kyua_cv_attribute_noreturn=yes \
-+	kyua_cv_getcwd_dyn=yes \
-+	kyua_cv_lchmod_works=no \
-+	kyua_cv_getopt_gnu=yes \
-+	kyua_cv_getopt_optind_reset_value=0 \
-+	kyua_cv_signals_lastno=15
-+
-+define KYUA_INSTALL_CONFIG
-+	$(INSTALL) -D -m 644 $(@D)/examples/kyua.conf $(TARGET_DIR)/etc/kyua/kyua.conf
-+endef
-+
-+KYUA_POST_INSTALL_HOOKS += KYUA_INSTALL_CONFIG
-+
-+$(eval $(autotools-package))
+diff --git a/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch b/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
+deleted file mode 100644
+index 5db95d6..0000000
+--- a/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 079cae9d7628f16b9efdf5723d2bfae5bdc2ba4e Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 27 Jan 2015 18:27:32 -0300
+-Subject: [PATCH] Make c_rehash match commands starting with - (minus) instead
+- of minus in any starting position, otherwise a directory named a-b breaks it
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- tools/c_rehash.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/tools/c_rehash.in b/tools/c_rehash.in
+-index 887e927..1df2fab 100644
+---- a/tools/c_rehash.in
+-+++ b/tools/c_rehash.in
+-@@ -15,7 +15,7 @@ my $symlink_exists=eval {symlink("",""); 1};
+- my $removelinks = 1;
+- 
+- ##  Parse flags.
+--while ( $ARGV[0] =~ '-.*' ) {
+-+while ( $ARGV[0] =~ '^-.*' ) {
+-     my $flag = shift @ARGV;
+-     last if ( $flag eq '--');
+-     if ( $flag =~ /-old/) {
+--- 
+-2.0.5
+-
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index c9987fc..673f99f 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssl.org/source/openssl-1.0.2a.tar.gz.md5
+-# From https://www.openssl.org/source/openssl-1.0.2a.tar.gz.sha1
+-md5	a06c547dac9044161a477211049f60ef	openssl-1.0.2a.tar.gz
+-sha1	46ecd325b8e587fa491f6bb02ad4a9fb9f382f5f	openssl-1.0.2a.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.md5
++# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.sha1
++md5	7729b259e2dea7d60b32fc3934d6984b	openssl-1.0.2b.tar.gz
++sha1	9006e53ca56a14d041e3875320eedfa63d82aba7	openssl-1.0.2b.tar.gz
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index f90c811..8051a9b 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSL_VERSION = 1.0.2a
++OPENSSL_VERSION = 1.0.2b
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
