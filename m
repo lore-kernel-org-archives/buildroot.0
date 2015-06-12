@@ -1,76 +1,91 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Jun 2015 01:17:36 +0200
-Subject: [Buildroot] [PATCH v5 3/3] kyua: new package
-In-Reply-To: <20150612220205.5d0aa08b@free-electrons.com>
-References: <1434063093-14906-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>	<1434063093-14906-4-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
- <20150612220205.5d0aa08b@free-electrons.com>
-Message-ID: <557B6890.30006@mind.be>
+Date: Sat, 13 Jun 2015 01:19:18 +0200
+Subject: [Buildroot] [PATCH 09/11 v2] package/owl-linux: use
+ kernel-module helper
+In-Reply-To: <20150612175510.GC3583@free.fr>
+References: <cover.1433964001.git.yann.morin.1998@free.fr>	<e63af963671131bf2d33fd2ab2eaa351bcc51150.1433964001.git.yann.morin.1998@free.fr>	<557A1606.1030402@mind.be>
+ <20150612175510.GC3583@free.fr>
+Message-ID: <557B68F6.2040907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/12/15 22:02, Thomas Petazzoni wrote:
-> Dear Sebastien Bourdelin,
+On 06/12/15 19:55, Yann E. MORIN wrote:
+> Arnout, All,
 > 
-> On Thu, 11 Jun 2015 18:51:33 -0400, Sebastien Bourdelin wrote:
->> Kyua is a testing framework for infrastructure software, originally
->> designed to equip BSD-based operating systems with a test suite. This
->> means that Kyua is lightweight and simple, and that Kyua integrates
->> well with various build systems and continuous integration frameworks.
+> On 2015-06-12 01:13 +0200, Arnout Vandecappelle spake thusly:
+>> On 06/10/15 21:22, Yann E. MORIN wrote:
+>>> Git rid of first patch, no longer needed; rename remaining patch.
+> 
+> s/Git/Get/  Damn... :-]
+> 
+>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>>
+>> [snip]
+>>> diff --git a/package/owl-linux/owl-linux.mk b/package/owl-linux/owl-linux.mk
+>>> index 371cc02..844b11e 100644
+>>> --- a/package/owl-linux/owl-linux.mk
+>>> +++ b/package/owl-linux/owl-linux.mk
+>>> @@ -10,14 +10,11 @@ OWL_LINUX_LICENSE = PROPRIETARY
+>>>  OWL_LINUX_LICENSE_FILES = LICENSE
+>>>  OWL_LINUX_REDISTRIBUTE = NO
+>>>  
+>>> -OWL_LINUX_DEPENDENCIES = linux
+>>> -
+>>> -define OWL_LINUX_BUILD_CMDS
+>>> -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
+>>> -endef
+>>> -
+>>> -define OWL_LINUX_INSTALL_TARGET_CMDS
+>>> -	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M="$(@D)" modules_install
+>>> -endef
+>>> +# owl-linux wants to use $(PWD) to find its includes, however $(PWD) is not
+>>> +# the top of the package's source tree, but the top of Buildroot source tree
 >>
->> https://github.com/jmmv/kyua
+>>  Unless I'm very much mistaken, PWD will be $(LINUX_DIR) when the Makefile is
+>> included.
+> 
+> I think you are very much mistaken, indeed! ;-)
+> 
+> What happens is that all commands we run are run from Buildroot's
+> $(TOPDIR). So $(PWD) is set to that location.
+> 
+> So, this command, which we run from our Makefile:
+> 
+>     make -C $(LINUX_DIR) M=$(@D) foo-bar
+> 
+> would get its $(PWD) make-variable set from whatever value it had in the
+> shell that called make, which happens to itself be called by Buildroot's
+> Makefile, which runs from $(TOPDIR), always (even for out-of-tree builds).
+
+ Oh yes indeed, I missed the fact that the PWD := $(shell pwd) is only included
+when it's *not* the kbuild call...
+
+ Crazy Makefile...
+
+> 
+> Then, the Linux buildsystem does *not* chdir() when it builds modules,
+> it just includes $(M)/Kbuild (or if it does not exist, $(M)/Makefile ),
+> so $(PWD) as used in those will still be Buildroot's $(TOPDIR).
+> 
+>>  With that small thing fixed:
 >>
->> Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
->> ---
->> Changes v4 -> v5:
->>   suggested by Arnout Vandecapelle <arnout@mind.be>:
->>   - force the --without-atf option to not build the example tests.
->>   - puts the dependencies &&-ed in Config.in on 2 lines
->>   - change the comment for dependencies in Config.in
+>> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
-> Applied, thanks. I fixed a minor typo in the hash file.
-> 
-> However, there are a few things that might be worth looking into for
-> follow-up patches:
-> 
-> 1/ Some installed stuff is probably unneeded:
-> 
-> ./usr/share/kyua/store
-> ./usr/share/kyua/store/schema_v3.sql
-> ./usr/share/kyua/store/migrate_v2_v3.sql
-> ./usr/share/kyua/store/migrate_v1_v2.sql
+> Still valid with that small thing *not* fixed? ;-)
 
- I think these are needed to be able to create the report database. Ah, but the
-migrate scripts may indeed be redundant.
+ Yep!
 
-> ./usr/share/kyua/misc
-> ./usr/share/kyua/misc/report.css
-> ./usr/share/kyua/misc/test_result.html
-> ./usr/share/kyua/misc/index.html
-> ./usr/share/kyua/misc/context.html
-
- I believe these are needed to be able to generate html reports.
-
-> ./usr/share/kyua/examples
-> ./usr/share/kyua/examples/kyua.conf
-> ./usr/share/kyua/examples/Kyuafile.top
-
- These could indeed be removed.
-
-
-> 
-> 2/ The CFLAGS/LDFLAGS handling seems to go crazy with zillions of
-> duplicates of the same flags. At build time, one can see:
-
- Yeah, but that's an upstream problem, no? They include LUTOK_CFLAGS several
-times. Correcting that would be a feature patch.
 
  Regards,
  Arnout
 
-[snip ridiculously long command line]
+> 
+> Regards,
+> Yann E. MORIN.
+> 
 
 
 -- 
