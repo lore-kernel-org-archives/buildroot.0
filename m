@@ -1,46 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 12 Jun 2015 16:44:31 -0300
-Subject: [Buildroot] [PATCH] openssl: bump to version 1.0.2c
-Message-ID: <1434138271-28414-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 12 Jun 2015 21:45:09 +0200
+Subject: [Buildroot] [PATCH v5 2/3] lutok: new package
+In-Reply-To: <20150612213419.15566320@free-electrons.com>
+References: <1434063093-14906-1-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+ <1434063093-14906-3-git-send-email-sebastien.bourdelin@savoirfairelinux.com>
+ <20150612213419.15566320@free-electrons.com>
+Message-ID: <20150612214509.08728a82@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes HMAC ABI breakage from 1.0.2b
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/openssl/openssl.hash | 8 ++++----
- package/openssl/openssl.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Fri, 12 Jun 2015 21:34:19 +0200, Thomas Petazzoni wrote:
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index 673f99f..4b212fb 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,4 +1,4 @@
--# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.md5
--# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.sha1
--md5	7729b259e2dea7d60b32fc3934d6984b	openssl-1.0.2b.tar.gz
--sha1	9006e53ca56a14d041e3875320eedfa63d82aba7	openssl-1.0.2b.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2c.tar.gz.md5
-+# From https://www.openssl.org/source/openssl-1.0.2c.tar.gz.sha1
-+md5	8c8d81a9ae7005276e486702edbcd4b6	openssl-1.0.2c.tar.gz
-+sha1	6e4a5e91159eb32383296c7c83ac0e59b83a0a44	openssl-1.0.2c.tar.gz
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 8051a9b..fd8904d 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSL_VERSION = 1.0.2b
-+OPENSSL_VERSION = 1.0.2c
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+> Both the lutok and kyua packages after --without-atf ? Why so ? You add
+> the atf package as the first patch, and then it isn't used in follow-up
+> patches ?
+
+Ok, --without-atf is not about ATF support, but about build ATF-based
+tests. I've added a comment to explain this.
+
+> > +# liblua uses dlopen when dynamically linked
+> > +ifneq ($(BR2_STATIC_LIBS),y)
+> 
+> ifeq ($(BR2_STATIC_LIBS),)
+
+Actually, I was able to build without adding -ldl, so I'm not sure why
+it is needed. We'll see what the autobuilders have to say, unless you
+have more details about the specific configuration that was causing
+problems.
+
+Thanks,
+
+Thomas
 -- 
-2.3.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
