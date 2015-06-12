@@ -1,85 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Jun 2015 22:48:12 +0200
-Subject: [Buildroot] [PATCH 06/11 v2] package/cryptodev-linux: use the
- kernel-module helper
-In-Reply-To: <557A13A1.2000500@mind.be>
-References: <cover.1433964001.git.yann.morin.1998@free.fr>
- <329d95315f937a0cbd912b8035fb0ccc0e94a9ed.1433964001.git.yann.morin.1998@free.fr>
- <557A13A1.2000500@mind.be>
-Message-ID: <20150612204812.GF3583@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 12 Jun 2015 22:16:11 +0200
+Subject: [Buildroot] [git commit] openssl: bump to version 1.0.2c
+Message-ID: <20150612210556.A235C81E5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=e4f2d3b12acf9f056d6cbbfab2e60c14f755bb88
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-06-12 01:02 +0200, Arnout Vandecappelle spake thusly:
-> On 06/10/15 21:22, Yann E. MORIN wrote:
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > [Doug: add pre-build hook to build version.h]
-> 
->  The version.h thing deserves a slightly more explicit commit message, like:
-> 
-> The cryptodev-linux Makefile defines the following:
-> 
-> build: version.h
->         make ${KERNEL_MAKE_OPTS} modules
-> 
-> modules_install:
->         make -C $(KERNEL_DIR) SUBDIRS=`pwd` modules_install
->         @echo "Installing cryptodev.h in $(PREFIX)/usr/include/crypto ..."
->         @install -D crypto/cryptodev.h $(PREFIX)/usr/include/crypto/cryptodev.h
+Fixes HMAC ABI breakage from 1.0.2b
 
-I'm not too fond of quoting that much, so I trimmed it down to what I
-believe is the strict minimum for udnerstanding the change, no more.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openssl/openssl.hash |    8 ++++----
+ package/openssl/openssl.mk   |    2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-If you still think that is not enough, you'll have the opportunity to
-say so when I respin. OK? ;-)
-
-> So when we use the kernel-module infrastructure, we have to explicitly handle
-> version.h and cryptodev.h. cryptodev.h was already handled specifically because
-> it goes to STAGING_DIR. For version.h, we add a pre-build hook.
-> 
-> 
->  That said, SUBDIRS= does not behave exactly the same as M=, but I don't know
-> what the difference is. So that part should probably be mentioned explicitly in
-> the commit message as well.
-
-From my understanding, the end result is the same, but using SUBDIRS
-makes the Linux buildsystem it is building in in-tree module, while M
-tells it it is building an out-of-tree module.
-
-> > Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-> 
-> [snip]
-> > -define CRYPTODEV_LINUX_INSTALL_TARGET_CMDS
-> > -	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR) \
-> > -		PREFIX=$(TARGET_DIR) modules_install
-> > -endef
-> > +CRYPTODEV_LINUX_MODULE_MAKE_OPTS = \
-> > +	KERNEL_DIR=$(LINUX_DIR) \
-> > +	PREFIX=$(TARGET_DIR)
-> 
->  PREFIX is only used for installing cryptodev.h, which is now no longer done. So
-> we don't need to define it, right? Same for KERNEL_DIR, it's only used by the
-> rules we no longer use.
-> 
->  If you remove these, it should of course also be mentioned explicitly in the
-> commit message.
-
-Right, I've dropped both and explained in the commit log.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 673f99f..4b212fb 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.md5
+-# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.sha1
+-md5	7729b259e2dea7d60b32fc3934d6984b	openssl-1.0.2b.tar.gz
+-sha1	9006e53ca56a14d041e3875320eedfa63d82aba7	openssl-1.0.2b.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2c.tar.gz.md5
++# From https://www.openssl.org/source/openssl-1.0.2c.tar.gz.sha1
++md5	8c8d81a9ae7005276e486702edbcd4b6	openssl-1.0.2c.tar.gz
++sha1	6e4a5e91159eb32383296c7c83ac0e59b83a0a44	openssl-1.0.2c.tar.gz
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 8051a9b..fd8904d 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSL_VERSION = 1.0.2b
++OPENSSL_VERSION = 1.0.2c
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
