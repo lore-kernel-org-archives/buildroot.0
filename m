@@ -1,33 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 21:31:19 +0200
-Subject: [Buildroot] [git commit] python-pyxml: add PYTHON_PYXML_VERSION
-	variable to url address
-Message-ID: <20150612201536.82C8F80411@busybox.osuosl.org>
+Date: Fri, 12 Jun 2015 21:28:48 +0200
+Subject: [Buildroot] [git commit] sysstat: bump to version 11.0.5
+Message-ID: <20150612201536.6B3DB81E6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=efb58de1804b3dcc42cb963590ff9da54db65f0e
+commit: http://git.buildroot.net/buildroot/commit/?id=4321bc464f660db4ea83cbd7e23ec3f46425572f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pyxml/python-pyxml.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sysstat/sysstat.hash |    2 +-
+ package/sysstat/sysstat.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pyxml/python-pyxml.mk b/package/python-pyxml/python-pyxml.mk
-index 77863f5..40435f4 100644
---- a/package/python-pyxml/python-pyxml.mk
-+++ b/package/python-pyxml/python-pyxml.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
+index 226ff06..a170f81 100644
+--- a/package/sysstat/sysstat.hash
++++ b/package/sysstat/sysstat.hash
+@@ -1,2 +1,2 @@
+ # From http://sebastien.godard.pagesperso-orange.fr/download.html
+-md5	df1ed75656eb06320088d54247f0e803	sysstat-11.0.4.tar.xz
++md5	4d8e6e72d057189a1660462a678d9ada	sysstat-11.0.5.tar.xz
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index 6bdd3b8..b28c029 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- PYTHON_PYXML_VERSION = 0.8.4
- PYTHON_PYXML_SOURCE = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
--PYTHON_PYXML_SITE = http://downloads.sourceforge.net/project/pyxml/pyxml/0.8.4/
-+PYTHON_PYXML_SITE = http://downloads.sourceforge.net/project/pyxml/pyxml/$(PYTHON_PYXML_VERSION)/
- PYTHON_PYXML_LICENSE = BSD-3c
- PYTHON_PYXML_LICENSE_FILES = LICENCE
- PYTHON_PYXML_SETUP_TYPE = distutils
+-SYSSTAT_VERSION = 11.0.4
++SYSSTAT_VERSION = 11.0.5
+ SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
+ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
+ SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
