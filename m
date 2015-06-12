@@ -1,38 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 21:19:52 +0200
-Subject: [Buildroot] [git commit] support: remove outdated note re. Python 3
-	support
-Message-ID: <20150612192737.C3C3E80410@busybox.osuosl.org>
+Date: Fri, 12 Jun 2015 21:28:03 +0200
+Subject: [Buildroot] [PATCH] ffmpeg: fix dependencies
+In-Reply-To: <1434106383-60787-1-git-send-email-benoit@wsystem.com>
+References: <1434106383-60787-1-git-send-email-benoit@wsystem.com>
+Message-ID: <20150612212803.26674877@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=954c09ae62374d0917ce65581d60e50df8747191
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Beno?t Th?baudeau,
 
-Kconfiglib now runs as either Python 2 or Python 3.
+On Fri, 12 Jun 2015 12:53:03 +0200, Beno?t Th?baudeau wrote:
+> The ffmpeg binary does not require swscale, but ffplay needs it.
+> 
+> ffserver needs fork().
+> 
+> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+> ---
+>  package/ffmpeg/Config.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Signed-off-by: Ulf Magnusson <ulfalizer@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/scripts/gen-manual-lists.py |    5 -----
- 1 files changed, 0 insertions(+), 5 deletions(-)
+Applied, thanks.
 
-diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-index d45810b..1e0e9bb 100644
---- a/support/scripts/gen-manual-lists.py
-+++ b/support/scripts/gen-manual-lists.py
-@@ -24,11 +24,6 @@
- ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- ##
- 
--## Note about python2.
--##
--## This script can currently only be run using python2 interpreter due to
--## its kconfiglib dependency (which is not yet python3 friendly).
--
- from __future__ import print_function
- from __future__ import unicode_literals
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
