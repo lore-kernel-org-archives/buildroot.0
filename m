@@ -1,28 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Jun 2015 23:06:19 +0200
-Subject: [Buildroot] [git commit] package/xfont_font-winitzki-cyrillic: add
-	hash file
-Message-ID: <20150612210719.16F0481E5C@busybox.osuosl.org>
+Date: Fri, 12 Jun 2015 23:07:25 +0200
+Subject: [Buildroot] [PATCH 1/6] package/libpthread-stubs: add hash file
+In-Reply-To: <1434139585-19742-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1434139585-19742-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20150612230725.2b588820@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ba3fdfcbbdf0901f4b537e35d725861656ef0bb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Fabio Porcedda,
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../xfont_font-winitzki-cyrillic.hash              |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Fri, 12 Jun 2015 22:06:20 +0200, Fabio Porcedda wrote:
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> ---
+>  package/libpthread-stubs/libpthread-stubs.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/libpthread-stubs/libpthread-stubs.hash
 
-diff --git a/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.hash b/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.hash
-new file mode 100644
-index 0000000..89fbda9
---- /dev/null
-+++ b/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.hash
-@@ -0,0 +1,2 @@
-+# From http://www.x.org/archive/current/src/everything/CHECKSUMS
-+sha256 abd13b63d02fcaec488686c23683e5cf640b43bd32f8ca22eeae6f84df0a36a0 font-winitzki-cyrillic-1.0.3.tar.bz2
+Series applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
