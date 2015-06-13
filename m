@@ -1,86 +1,70 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 14 Jun 2015 22:07:38 +0300
-Subject: [Buildroot] [PATCH] libxmlrpc: fix static build
-In-Reply-To: <20150612231307.690e22d0@free-electrons.com>
-References: <5425b32256128e928f8ad22c596f91ab7ac5f9e8.1433859609.git.baruch@tkos.co.il>
- <20150612231307.690e22d0@free-electrons.com>
-Message-ID: <20150614190738.GE8165@tarshish>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 13 Jun 2015 18:25:13 +0200
+Subject: [Buildroot] [PATCH 3/4] core/pkg-kconfig: run the kconfig
+ fixups after exiting configurators
+In-Reply-To: <20150612233618.56f1e4dd@free-electrons.com>
+References: <cover.1433591404.git.yann.morin.1998@free.fr>	<c011926dc0817e5b5685bc5519ae5cbd57b21888.1433591404.git.yann.morin.1998@free.fr>
+ <20150612233618.56f1e4dd@free-electrons.com>
+Message-ID: <557C5969.7020703@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On Fri, Jun 12, 2015 at 11:13:07PM +0200, Thomas Petazzoni wrote:
-> On Tue,  9 Jun 2015 17:20:09 +0300, Baruch Siach wrote:
-> > Fixes:
-> > http://autobuild.buildroot.net/results/16d/16de14ace7b4e089f56b9cb173542e487cae3a9d/
-> > 
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> >  package/libxmlrpc/libxmlrpc.mk | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> > 
-> > diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
-> > index c3788d6c3f36..a6137e07b828 100644
-> > --- a/package/libxmlrpc/libxmlrpc.mk
-> > +++ b/package/libxmlrpc/libxmlrpc.mk
-> > @@ -35,4 +35,14 @@ LIBXMLRPC_MAKE_ENV = \
-> >  	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
-> >  	LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)"
-> >  
-> > +ifeq ($(BR2_STATIC_LIBS),y)
-> > +LIBXMLRPC_STATIC_OPTS = SHARED_LIB_TYPE=NONE MUST_BUILD_SHLIB=N
-> > +endif
-> > +
-> > +LIBXMLRPC_MAKE_OPTS = $(LIBXMLRPC_STATIC_OPTS)
-> > +LIBXMLRPC_INSTALL_STAGING_OPTS = $(LIBXMLRPC_STATIC_OPTS) \
-> > +	DESTDIR=$(STAGING_DIR) install
-> > +LIBXMLRPC_INSTALL_TARGET_OPTS = $(LIBXMLRPC_STATIC_OPTS) \
-> > +	DESTDIR=$(TARGET_DIR) install
-> > +
-> >  $(eval $(autotools-package))
+On 06/12/15 23:36, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
 > 
-> Can you try instead something like:
+> On Sat,  6 Jun 2015 13:54:25 +0200, Yann E. MORIN wrote:
+
+[snip]
+
+>> +# Because commands in $(1)_FIXUP_KCONFIG are probably using $(@D), we
+>> +# fake it for the configurators (otherwise it is set to just '.', i.e.
+>> +# the current directory where make is run, which happens to be in
+>> +# $(TOPDIR), because the target of the rule is not an actual file, so
+>> +# does not have any path component).
+>> +#
+>> +$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): @D=$$($(2)_DIR)
+>>  $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>>  	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+>>  		$$($(2)_KCONFIG_OPTS) $$(subst $(1)-,,$$@)
+>>  	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
+>>  	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
+>> +	$$(call $(1)_FIXUP_KCONFIG)
 > 
-> ifeq ($(BR2_STATIC_LIBS),y)
-> LIBXMLRPC_MAKE_ENV += SHARED_LIB_TYPE=NONE MUST_BUILD_SHLIB=N
-> endif
+> I find a bit sad that we don't manage to use make dependencies to
+> schedule the kconfig-fixup -> configurator -> kconfig-fixup thing
+> logic, and that we have to manually recall $(1)_FIXUP_CONFIG. I've put
+> a bit of thought into it, but I indeed don't see a simple way of
+> achieving that in a different way that the one you're proposing. The
+> hack on @D is particularly tricky.
 
-Unfortunately, these make variables are set explicitly in common.mk. So 
-passing them in make environment has no effect.
+How about:
 
-> The advantage is that LIBXMLRPC_MAKE_ENV is passed to the build,
-> install staging and install target steps.
+$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/%
 
-Now that I think about it, why don't we have a similar thing for MAKE_OPTS, 
-say, $(PKG)_MAKE_VARS. Something like (untested, host packages missing):
+$$($(2)_DIR)/%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+        $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+                $$($(2)_KCONFIG_OPTS) $$*
+	...
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 1d694f0618fc..27ff16235f27 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -154,10 +154,10 @@ endif
- $(2)_CONF_ENV			?=
- $(2)_CONF_OPTS			?=
- $(2)_MAKE_ENV			?=
--$(2)_MAKE_OPTS			?=
--$(2)_INSTALL_OPTS                ?= install
--$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
--$(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR)  install
-+$(2)_MAKE_OPTS			?= $$($(2)_MAKE_VARS)
-+$(2)_INSTALL_OPTS		?= $$($(2)_MAKE_VARS) install
-+$(2)_INSTALL_STAGING_OPTS	?= $$($(2)_MAKE_VARS) DESTDIR=$$(STAGING_DIR) install
-+$(2)_INSTALL_TARGET_OPTS	?= $$($(2)_MAKE_VARS) DESTDIR=$$(TARGET_DIR) install
- 
- # This must be repeated from inner-generic-package, otherwise we get an empty
- # _DEPENDENCIES if _AUTORECONF is YES.  Also filter the result of _AUTORECONF
+Note that there's no need to actually create $$($(2)_DIR)/%, so it should
+probably be declared PHONY too:
 
-baruch
+.PHONY: $$(addprefix $$($(2)_DIR)/,$$($(2)_KCONFIG_EDITORS))
 
+
+ Of course, you will still need to call FIXUP_CONFIG twice, but really in make
+there is no way to do things twice except by repeating them - make tries very
+hard to do things only once.
+
+ Regards,
+ Arnout
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
