@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Jun 2015 14:53:14 +0200
-Subject: [Buildroot] [PATCH] atf: needs mmu
-In-Reply-To: <1434197379-23486-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1434197379-23486-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150613145314.59eca5fa@free-electrons.com>
+Date: Sat, 13 Jun 2015 14:53:20 +0200
+Subject: [Buildroot] [PATCH] bc: patch makeinfo logic
+In-Reply-To: <1434199488-11466-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1434199488-11466-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150613145320.300ba9c1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,43 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Sat, 13 Jun 2015 09:09:39 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/950/95069436dd5b2004e59851b8c731d534b86062a5/
+On Sat, 13 Jun 2015 09:44:48 -0300, Gustavo Zacarias wrote:
+> It uses a hardcoded "makeinfo" command invocation instead of the usual
+> MAKEINFO variable with the missing logic for docs. Fixes:
+> http://autobuild.buildroot.net/results/b0b/b0b9dced0014a5a8026fa972f95085e8bd16a07b/
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/atf/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/bc/03_use_appropiate_makeinfo.patch | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>  create mode 100644 package/bc/03_use_appropiate_makeinfo.patch
+> 
+> diff --git a/package/bc/03_use_appropiate_makeinfo.patch b/package/bc/03_use_appropiate_makeinfo.patch
+> new file mode 100644
+> index 0000000..e6f9262
+> --- /dev/null
+> +++ b/package/bc/03_use_appropiate_makeinfo.patch
+> @@ -0,0 +1,17 @@
+> +Use the appropiate MAKEINFO variable rather than the hardcoded makeinfo
+> +command directly, otherwise missing logic never works.
+> +
+> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +
+> +diff -Nura bc-1.06.95.orig/doc/Makefile.in bc-1.06.95/doc/Makefile.in
+> +--- bc-1.06.95.orig/doc/Makefile.in	2015-06-13 09:39:46.946620294 -0300
+> ++++ bc-1.06.95/doc/Makefile.in	2015-06-13 09:40:10.019407630 -0300
+> +@@ -96,7 +96,7 @@
+> + LIBOBJS = @LIBOBJS@
+> + LIBS = @LIBS@
+> + LTLIBOBJS = @LTLIBOBJS@
+> +-MAKEINFO = makeinfo --no-split
+> ++MAKEINFO = @MAKEINFO@ --no-split
+> + OBJEXT = @OBJEXT@
+> + PACKAGE = @PACKAGE@
+> + PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 
-Applied, thanks.
 
-Thomas
+
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
