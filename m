@@ -1,82 +1,52 @@
-From: Patricia Holden <patholdn@gmail.com>
-Date: Fri, 12 Jun 2015 23:31:18 -0400
-Subject: [Buildroot] Building bootable usb drive for target board with
-	ext2
-In-Reply-To: <CANKYLMGNgcH-uiuHYELR9Rcct5QjHBQa9u83zouRipB06+X-8A@mail.gmail.com>
-References: <CANKYLME21pAifC-tb+HC=tRhy5k9ka0W-gywZCPrOdpq1aOTMA@mail.gmail.com>
- <20150612211031.3a684e7d@free-electrons.com>
- <CANKYLMF9crxgDKVuHBZHHkhh=iw=O_o=Sq0cafM_HusVWAPd2w@mail.gmail.com>
- <CANKYLME+Dh85AHMX5yQdwuBU_WbsbMLurUf8d6Hn3pf=Ybpw8A@mail.gmail.com>
- <20150612235154.1a723af5@free-electrons.com>
- <CANKYLMEpujp5YDJRZixuLk7EG7MNVOGWiMgZFWgaCsf5qAOb9g@mail.gmail.com>
- <CANKYLMGNgcH-uiuHYELR9Rcct5QjHBQa9u83zouRipB06+X-8A@mail.gmail.com>
-Message-ID: <CANKYLMHeCiQBCqCDgmm4LAy1MfBC9U+Xg2zpGTCjxJ-TTD1LFw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 13 Jun 2015 08:30:12 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-06-12
+Message-ID: <20150613063012.95FD6100F19@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Good news!  I got it booting bzImage using extlinux following the recipe in
-the following site (if anyone else would like to use this method):
+Build statistics for 2015-06-12
+===============================
 
-https://agentoss.wordpress.com/2011/02/28/how-to-create-a-bootable-linux-usb-drive-using-extlinux/
+        success : 203
+       failures : 13 
+       timeouts : 1  
+          TOTAL : 217
 
-I've got to tweak a few things, but looking good finally.
+Classification of failures by reason
+====================================
 
-Thanks for pointing me in the right direction!
+                openssl-1.0.2b | 5 
+                    qemu-2.3.0 | 2 
+             lttng-tools-2.6.0 | 1 
+       host-erlang-rebar-2.5.1 | 1 
+pulseview-198f9bc74d6c955a7... | 1 
+                 qt5base-5.4.1 | 1 
+                     php-5.6.9 | 1 
+                   zmqpp-3.2.0 | 1 
+           host-openssl-1.0.2b | 1 
 
-On Fri, Jun 12, 2015 at 9:26 PM, Patricia Holden <patholdn@gmail.com> wrote:
+Detail of failures
+===================
 
-> I'm getting nowhere fast.  I try running kernel command once on the target
-> but bzImage fails with "Error 17: Cannot mount seected partition".  Guess
-> I'm back to square run trying to get this thing working.
->
-> On Fri, Jun 12, 2015 at 6:43 PM, Patricia Holden <patholdn@gmail.com>
-> wrote:
->
->> I copied the boot directory to the USB after extracting it from
->> rootfs.tar, copied bzImage to /boot, and  successfully got grub onto the
->> USB device following the grub help instructions.  Then I moved the USB to
->> my target and powered it up.  The grub prompt came up (yay, one step
->> further!).  I tried to boot or reboot but it says my kernel is missing.  Is
->> there something else I'm missing in my config file for buildroot?  do I
->> need to give grub special kernel instructions?
->>
->> On Fri, Jun 12, 2015 at 5:51 PM, Thomas Petazzoni <
->> thomas.petazzoni at free-electrons.com> wrote:
->>
->>> Dear Patricia Holden,
->>>
->>> On Fri, 12 Jun 2015 17:49:57 -0400, Patricia Holden wrote:
->>>
->>> > Ok, so I'm still not quite out of the woods.  I copied over the boot
->>> > directory from output to my usb drive, copied bzImage to usb drive.  It
->>> > hangs on target.  Do I need to edit grub files for the usb?  Do I need
->>> to
->>> > install grub instead of copying?  Sorry for such mundane questions,
->>> but I'm
->>> > just getting back into the linux world and my mind is a bit foggy.
->>>
->>> You need to install grub on your USB drive. See the instructions in the
->>> grub option help text, also visible at:
->>>
->>>   http://git.buildroot.net/buildroot/tree/boot/grub/Config.in#n8
->>>
->>> The instructions are done on a disk image, but it can be done directly
->>> on a real drive in a similar way.
->>>
->>> Best regards,
->>>
->>> Thomas
->>> --
->>> Thomas Petazzoni, CTO, Free Electrons
->>> Embedded Linux, Kernel and Android engineering
->>> http://free-electrons.com
->>>
->>
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150612/a647cc06/attachment.html>
+         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/89dc306afd0e61a5f9bdbd583ab9f945f2f4c22c/
+    mips64el |            host-openssl-1.0.2b | NOK | http://autobuild.buildroot.net/results/b7ede33cce4e79412039bfda6388257643f8429a/
+         arm |              lttng-tools-2.6.0 | NOK | http://autobuild.buildroot.net/results/b07a96759f74dd0884e66eabb90c8b2bbca37550/
+      x86_64 |                 openssl-1.0.2b | NOK | http://autobuild.buildroot.net/results/d01ae63948fef03f398f20b3dabf00209319fa68/
+         arm |                 openssl-1.0.2b | NOK | http://autobuild.buildroot.net/results/a0cd0b82cba533e78e207f78ef3237178b74ee0c/
+    mips64el |                 openssl-1.0.2b | NOK | http://autobuild.buildroot.net/results/f1b74de4955c2286e753b768350e224b72749803/
+         arm |                 openssl-1.0.2b | NOK | http://autobuild.buildroot.net/results/c2e447bcf1199a827733c35b316c48f0ee2e86b3/
+         arm |                 openssl-1.0.2b | NOK | http://autobuild.buildroot.net/results/7b95d9aa97946acafe9d757f252bb6d3026f590b/
+        bfin |                      php-5.6.9 | NOK | http://autobuild.buildroot.net/results/1a227bfe4ca81daab697cc37274a84cb941c94de/
+    mips64el | pulseview-198f9bc74d6c955a7... | NOK | http://autobuild.buildroot.net/results/7f7026796e50710d73f8100f048b1ed40e9deedf/
+        i686 |                     qemu-2.3.0 | NOK | http://autobuild.buildroot.net/results/db04c03f3c9c1356ef733273d1fa189b22cce576/
+        i686 |                     qemu-2.3.0 | NOK | http://autobuild.buildroot.net/results/c3cd0a870fd36dd4e9f333b365ae76df242d2e0b/
+    mips64el |                  qt5base-5.4.1 | NOK | http://autobuild.buildroot.net/results/de0c43eb9b0f6fbc32ea0c83ad54979ec3d2f0b0/
+     powerpc |                    zmqpp-3.2.0 | NOK | http://autobuild.buildroot.net/results/b7bbced19ba775306f87b53124799d782bf633d0/
+
+
+-- 
+http://autobuild.buildroot.net
