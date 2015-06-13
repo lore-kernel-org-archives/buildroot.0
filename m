@@ -1,66 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Jun 2015 18:25:13 +0200
-Subject: [Buildroot] [PATCH 3/4] core/pkg-kconfig: run the kconfig
- fixups after exiting configurators
-In-Reply-To: <20150612233618.56f1e4dd@free-electrons.com>
-References: <cover.1433591404.git.yann.morin.1998@free.fr>	<c011926dc0817e5b5685bc5519ae5cbd57b21888.1433591404.git.yann.morin.1998@free.fr>
- <20150612233618.56f1e4dd@free-electrons.com>
-Message-ID: <557C5969.7020703@mind.be>
+Date: Sat, 13 Jun 2015 18:41:14 +0200
+Subject: [Buildroot] [PATCH 2/4] core/pkg-kconfig: move the kconfig
+ fixups to a macro
+In-Reply-To: <20150612221758.GH3583@free.fr>
+References: <cover.1433591404.git.yann.morin.1998@free.fr>	<cdb72fa7204d35b88f2b74e79d4d1117b797712d.1433591404.git.yann.morin.1998@free.fr>	<20150612233350.4511dc7c@free-electrons.com>
+ <20150612221758.GH3583@free.fr>
+Message-ID: <557C5D2A.6020705@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/12/15 23:36, Thomas Petazzoni wrote:
-> Dear Yann E. MORIN,
+On 06/13/15 00:17, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> On Sat,  6 Jun 2015 13:54:25 +0200, Yann E. MORIN wrote:
-
-[snip]
-
->> +# Because commands in $(1)_FIXUP_KCONFIG are probably using $(@D), we
->> +# fake it for the configurators (otherwise it is set to just '.', i.e.
->> +# the current directory where make is run, which happens to be in
->> +# $(TOPDIR), because the target of the rule is not an actual file, so
->> +# does not have any path component).
->> +#
->> +$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): @D=$$($(2)_DIR)
->>  $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_done
->>  	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
->>  		$$($(2)_KCONFIG_OPTS) $$(subst $(1)-,,$$@)
->>  	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
->>  	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
->> +	$$(call $(1)_FIXUP_KCONFIG)
+> On 2015-06-12 23:33 +0200, Thomas Petazzoni spake thusly:
+>> On Sat,  6 Jun 2015 13:54:24 +0200, Yann E. MORIN wrote:
+>>>  # In order to get a usable, consistent configuration, some fixup may be needed.
+>>>  # The exact rules are specified by the package .mk file.
+>>> -$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
+>>> +define $(1)_FIXUP_KCONFIG
+>>>  	$$($(2)_KCONFIG_FIXUP_CMDS)
+>>>  	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+>>
+>> We could use $(@D) instead of $$($(2)_DIR) here.
 > 
-> I find a bit sad that we don't manage to use make dependencies to
-> schedule the kconfig-fixup -> configurator -> kconfig-fixup thing
-> logic, and that we have to manually recall $(1)_FIXUP_CONFIG. I've put
-> a bit of thought into it, but I indeed don't see a simple way of
-> achieving that in a different way that the one you're proposing. The
-> hack on @D is particularly tricky.
+> Yes, and Arnout suggested the same in another series I sent.
+> 
+> My reasoning for using $($(2)_DIR) is that we are in the infra, and we
+> do have this variable, while $$(@D) only works when there is an actual
+> file being generated, which is not always the case.
+> 
+> See for example the followup patch, for which we have to fake @D because
+> of those package-provided macros that may need it.
+> 
+> So, I prefer using $($(2)_DIR) because I /know/ what it is, while $(@D)
+> I don;t know beforehand if it would be set.
 
-How about:
-
-$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/%
-
-$$($(2)_DIR)/%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
-        $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-                $$($(2)_KCONFIG_OPTS) $$*
-	...
-
-Note that there's no need to actually create $$($(2)_DIR)/%, so it should
-probably be declared PHONY too:
-
-.PHONY: $$(addprefix $$($(2)_DIR)/,$$($(2)_KCONFIG_EDITORS))
-
-
- Of course, you will still need to call FIXUP_CONFIG twice, but really in make
-there is no way to do things twice except by repeating them - make tries very
-hard to do things only once.
+ I was going to stick to my guns and say it has to be @D (cfr. the workaround I
+proposed on the following patch). However, what you say makes complete sense, so
+let's keep it at $(2)_DIR. It's also more readable anyway.
 
  Regards,
  Arnout
+
+[snip]
+
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
