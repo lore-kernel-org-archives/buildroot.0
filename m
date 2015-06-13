@@ -1,99 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Jun 2015 18:46:34 +0200
-Subject: [Buildroot] [PATCH 2/5 v2] core/pkg-kconfig: ensure kconfig base
-	and fragment files exist
+Date: Sat, 13 Jun 2015 18:46:35 +0200
+Subject: [Buildroot] [PATCH 3/5 v2] core/pkg-kconfig: move the kconfig
+	fixups to a macro
 In-Reply-To: <cover.1434213146.git.yann.morin.1998@free.fr>
 References: <cover.1434213146.git.yann.morin.1998@free.fr>
-Message-ID: <c62cd258d1a61c26c6f04c70ed17be453c67c15c.1434213146.git.yann.morin.1998@free.fr>
+Message-ID: <c86b27feb418b05e7d2d4970016adbf6dddd7ea6.1434213146.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Even though we do have a dependency chain back to each of the kconfig
-base and fragment files:
-
-    $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
-
-we can't rely on it to ensure they are all present, because they all have
-this rule:
-
-    $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
-
-but since this rule has no prerequisite (only build-order, but that does
-not count in this case) and no recipe, make will believe each missing
-file to be a PHONY target, and will always run targets that depend on
-it:
-    https://www.gnu.org/software/make/manual/make.html#Force-Targets
-
-So, that means a missing kconfig base or fragment file would always
-cause the rule to generate .config to be run at each invocation, which
-in turn would cause a rebuild of the kernel, which is clearly not what
-we want.
-
-Since this is expected make behaviour, we can well end up with a missing
-Kconfig base or fragment. To avoid continuously rebuilding the kernel in
-that case, we must check those files exist by ourselves, and error out
-if any one of them is missing.
-
-One would expect we check for them right in their dependency rule, like
-so:
-
-    $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
-        [ -f $(@) ] || {echo Missing $(@) >&2; exit 1; }
-
-but that does not work, as only the first target is tested for. That
-check msut be turned into a loop explicitly testing all files, like so:
-
-    $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
-        for f in $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES); do \
-            [ -f $(@) ] || {echo Missing $$$${f} >&2; exit 1; }; \
-        done
+The same fixups will have to be done after leaving the configurators,
+so we want to commonalise that code.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Floris Bos <bos@je-eigen-domein.nl>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 ---
 Changes v1 -> v2:
-  - split dependency and check in two patches  (Thomas)
-  - check right after the package has been extracted+patched, not at
-    the moment we want to build .config
+  - rename the macro
+  - use the uppercase package name when defining the macro
 ---
- package/pkg-kconfig.mk | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ package/pkg-kconfig.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index e65c6f9..e441548 100644
+index e441548..d27b819 100644
 --- a/package/pkg-kconfig.mk
 +++ b/package/pkg-kconfig.mk
-@@ -38,8 +38,24 @@ $(2)_KCONFIG_FIXUP_CMDS ?=
- $(2)_KCONFIG_FRAGMENT_FILES ?=
+@@ -70,11 +70,15 @@ $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
  
- # The config file as well as the fragments could be in-tree, so before
--# depending on them the package should be extracted (and patched) first
-+# depending on them the package should be extracted (and patched) first.
-+#
-+# Since those files only have a order-only dependency, make would treat
-+# any missing one as a "force" target:
-+#   https://www.gnu.org/software/make/manual/make.html#Force-Targets
-+# and would forcibly any rule that depend on those files, causing a
-+# rebuild of the kernel each time make is called.
-+#
-+# So, we provide a recipe that checks all of those files exist, to
-+# overcome that standard make behaviour.
-+#
- $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
-+	for f in $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES); do \
-+		if [ ! -f "$$$${f}" ]; then \
-+			printf "Kconfig fragment '%s' for '%s' does not exist\n" "$$$${f}" "$(1)"; \
-+			exit 1; \
-+		fi; \
-+	done
+ # In order to get a usable, consistent configuration, some fixup may be needed.
+ # The exact rules are specified by the package .mk file.
+-$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
++define $(2)_FIXUP_DOT_CONFIG
+ 	$$($(2)_KCONFIG_FIXUP_CMDS)
+ 	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+ 		$$($(2)_KCONFIG_OPTS) oldconfig
+-	$$(Q)touch $$@
++	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
++endef
++
++$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
++	$$(call $(2)_FIXUP_DOT_CONFIG)
  
- # The specified source configuration file and any additional configuration file
- # fragments are merged together to .config, after the package has been patched.
+ # Before running configure, the configuration file should be present and fixed
+ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
 -- 
 1.9.1
