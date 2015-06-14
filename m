@@ -1,57 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Jun 2015 18:41:14 +0200
-Subject: [Buildroot] [PATCH 2/4] core/pkg-kconfig: move the kconfig
- fixups to a macro
-In-Reply-To: <20150612221758.GH3583@free.fr>
-References: <cover.1433591404.git.yann.morin.1998@free.fr>	<cdb72fa7204d35b88f2b74e79d4d1117b797712d.1433591404.git.yann.morin.1998@free.fr>	<20150612233350.4511dc7c@free-electrons.com>
- <20150612221758.GH3583@free.fr>
-Message-ID: <557C5D2A.6020705@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 Jun 2015 22:33:47 +0200
+Subject: [Buildroot] [PATCH 2/6] uclibc: add libgcc_s_resume fix
+In-Reply-To: <20150614162409.GC8165@tarshish>
+References: <1434292411-5003-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1434292411-5003-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150614162409.GC8165@tarshish>
+Message-ID: <20150614223347.3f0525b4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/13/15 00:17, Yann E. MORIN wrote:
-> Thomas, All,
-> 
-> On 2015-06-12 23:33 +0200, Thomas Petazzoni spake thusly:
->> On Sat,  6 Jun 2015 13:54:24 +0200, Yann E. MORIN wrote:
->>>  # In order to get a usable, consistent configuration, some fixup may be needed.
->>>  # The exact rules are specified by the package .mk file.
->>> -$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
->>> +define $(1)_FIXUP_KCONFIG
->>>  	$$($(2)_KCONFIG_FIXUP_CMDS)
->>>  	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
->>
->> We could use $(@D) instead of $$($(2)_DIR) here.
-> 
-> Yes, and Arnout suggested the same in another series I sent.
-> 
-> My reasoning for using $($(2)_DIR) is that we are in the infra, and we
-> do have this variable, while $$(@D) only works when there is an actual
-> file being generated, which is not always the case.
-> 
-> See for example the followup patch, for which we have to fake @D because
-> of those package-provided macros that may need it.
-> 
-> So, I prefer using $($(2)_DIR) because I /know/ what it is, while $(@D)
-> I don;t know beforehand if it would be set.
+Dear Baruch Siach,
 
- I was going to stick to my guns and say it has to be @D (cfr. the workaround I
-proposed on the following patch). However, what you say makes complete sense, so
-let's keep it at $(2)_DIR. It's also more readable anyway.
+On Sun, 14 Jun 2015 19:24:09 +0300, Baruch Siach wrote:
 
- Regards,
- Arnout
+> > +When built with gcc 5.1, uClibc-ng fails to build with the following
+> > +issue:
+> 
+> This patch is for uClibc.
 
-[snip]
+Bad copy/paste, indeed.
 
+> > +   librt/librt_so.a(rt-unwind-resume.oS): In function `_Unwind_Resume':
+> > +   rt-unwind-resume.c:(.text+0x3c): undefined reference to
+> 
+> Is that the full error message? I have that strange feeling that something is 
+> missing. Same goes for the uClibc-ng patch.
 
+Gah, again a copy/paste issue (though different than the previous one).
+The full error message is:
+
+  LD librt-0.9.33.2.so
+librt/librt_so.a(rt-unwind-resume.oS): In function `_Unwind_Resume':
+rt-unwind-resume.c:(.text+0x3c): undefined reference to `libgcc_s_resume'
+collect2: error: ld returned 1 exit status
+make[2]: *** [lib/librt.so] Error 1
+
+I'll update the commit log accordingly.
+
+Thanks for the review!
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
