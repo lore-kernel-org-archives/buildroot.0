@@ -1,133 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 23:21:27 +0200
-Subject: [Buildroot] [git commit] fs/iso9660: introduce bootloader choice
-Message-ID: <20150614212542.700757FC90@busybox.osuosl.org>
+Date: Sun, 14 Jun 2015 23:24:52 +0200
+Subject: [Buildroot] [git commit] fs/iso9660: add hybrid image support
+Message-ID: <20150614212542.9075A81D35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a399f5ebbe990899c51beea95b1764047d435d22
+commit: http://git.buildroot.net/buildroot/commit/?id=5bac06e8810eb86e7bddc771fda68f0c59a3c3fa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In preparation to the introduction for the support of other
-bootloaders than Grub, this commit adds a "choice ... endchoice" block
-with just the Grub option, and adds some conditionals in the
-iso9660.mk code for the Grub specific parts.
-
-Of course, for now those conditionals are a bit useless with just this
-commit, but they become useful with the followup commits.
+This commit adds a new option, which allows, when isolinux is used as
+the bootloader, to generate an "hybrid" ISO image. Such images can
+either be booted from CD-ROM or from USB keys. It simply uses the
+isohybrid tool provided by syslinux.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- fs/iso9660/Config.in  |   14 +++++++++++---
- fs/iso9660/iso9660.mk |   20 +++++++++++++++-----
- 2 files changed, 26 insertions(+), 8 deletions(-)
+ fs/iso9660/Config.in  |    9 +++++++++
+ fs/iso9660/iso9660.mk |    8 ++++++++
+ 2 files changed, 17 insertions(+), 0 deletions(-)
 
 diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-index e300fdb..f5e5f32 100644
+index 97925b9..6f057ea 100644
 --- a/fs/iso9660/Config.in
 +++ b/fs/iso9660/Config.in
-@@ -4,8 +4,6 @@ config BR2_TARGET_ROOTFS_ISO9660
- 	depends on BR2_LINUX_KERNEL
- 	select BR2_LINUX_KERNEL_INSTALL_TARGET \
- 	       if (!BR2_TARGET_ROOTFS_ISO9660_INITRD && !BR2_TARGET_ROOTFS_INITRAMFS)
--	select BR2_TARGET_GRUB
--	select BR2_TARGET_GRUB_FS_ISO9660
- 	help
- 	  Build a bootable ISO9660 image. By default, the root
- 	  filesystem is directly packed as the ISO9660 filesystem,
-@@ -22,9 +20,19 @@ config BR2_TARGET_ROOTFS_ISO9660
+@@ -58,6 +58,15 @@ config BR2_TARGET_ROOTFS_ISO9660_INITRD
+ 	  contain a kernel image, an initrd image (unless an initramfs
+ 	  linked into the kernel is used) and the bootloader.
  
- if BR2_TARGET_ROOTFS_ISO9660
++config BR2_TARGET_ROOTFS_ISO9660_HYBRID
++	bool "Build hybrid image"
++	depends on BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
++	help
++	  Enable this option to build an hybrid image, i.e an image
++	  which can either be booted from a CD-ROM or from a device
++	  which BIOS considers a hard disk or ZIP disk, e.g. a USB key
++	  or similar.
++
+ endif
  
-+choice
-+	prompt "Bootloader"
-+
-+config BR2_TARGET_ROOTFS_ISO9660_GRUB
-+	bool "grub"
-+	select BR2_TARGET_GRUB
-+	select BR2_TARGET_GRUB_FS_ISO9660
-+
-+endchoice
-+
- config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
- 	string "Boot menu.lst file"
--	default "fs/iso9660/menu.lst"
-+	default "fs/iso9660/menu.lst" if BR2_TARGET_ROOTFS_ISO9660_GRUB
- 	help
- 	  Use this option to provide a custom Grub menu.lst file. Note
- 	  that the strings __KERNEL_PATH__ and __INITRD_PATH__ will
+ comment "iso image needs a Linux kernel and one of grub or isolinux to be built"
 diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 2e695b0..6a1b214 100644
+index 588e07b..4f4abea 100644
 --- a/fs/iso9660/iso9660.mk
 +++ b/fs/iso9660/iso9660.mk
-@@ -24,7 +24,7 @@
+@@ -140,4 +140,12 @@ define ROOTFS_ISO9660_CMD
+ 		-o $@ $(ROOTFS_ISO9660_TARGET_DIR)
+ endef
  
- ROOTFS_ISO9660_BOOT_MENU = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
- 
--ROOTFS_ISO9660_DEPENDENCIES = grub host-cdrkit host-fakeroot linux
-+ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit host-fakeroot linux
- 
- ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
- ROOTFS_ISO9660_USE_INITRD = YES
-@@ -44,28 +44,36 @@ else
- ROOTFS_ISO9660_TARGET_DIR = $(TARGET_DIR)
- endif
- 
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB),y)
-+ROOTFS_ISO9660_DEPENDENCIES += grub
- ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
- 	$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
- ROOTFS_ISO9660_BOOT_IMAGE = boot/grub/stage2_eltorito
--
--define ROOTFS_ISO9660_PREPARATION
-+define ROOTFS_ISO9660_INSTALL_BOOTLOADER
- 	$(INSTALL) -D -m 0644 $(GRUB_DIR)/stage2/stage2_eltorito \
- 		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/stage2_eltorito
++ifeq ($(BR2_TARGET_ROOTFS_ISO9660_HYBRID),y)
++define ROOTFS_ISO9660_GEN_HYBRID
++	$(HOST_DIR)/usr/bin/isohybrid -t 0x96 $@
 +endef
++
++ROOTFS_ISO9660_POST_GEN_HOOKS += ROOTFS_ISO9660_GEN_HYBRID
 +endif
 +
-+define ROOTFS_ISO9660_PREPARATION
- 	$(INSTALL) -D -m 0644 $(ROOTFS_ISO9660_BOOT_MENU) \
- 		$(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
- 	$(SED) "s%__KERNEL_PATH__%/boot/$(LINUX_IMAGE_NAME)%" \
- 		$(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
-+	$(ROOTFS_ISO9660_INSTALL_BOOTLOADER)
- endef
- 
- ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_PREPARATION
- 
--# Splash screen disabling
-+# Grub splash screen disabling
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB),y)
- ifeq ($(BR2_TARGET_GRUB_SPLASH),)
- define ROOTFS_ISO9660_DISABLE_SPLASHSCREEN
- 	$(SED) '/^splashimage/d' $(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
- endef
- ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_DISABLE_SPLASHSCREEN
- endif
-+endif
- 
- define ROOTFS_ISO9660_DISABLE_EXTERNAL_INITRD
- 	$(SED) '/__INITRD_PATH__/d'  $(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
-@@ -73,7 +81,8 @@ endef
- 
- ifeq ($(ROOTFS_ISO9660_USE_INITRD),YES)
- 
--# Copy splashscreen to temporary filesystem
-+# Copy Grub splashscreen to temporary filesystem
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB),y)
- ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
- define ROOTFS_ISO9660_INSTALL_SPLASHSCREEN
- 	$(INSTALL) -D -m 0644 $(TARGET_DIR)/boot/grub/splash.xpm.gz \
-@@ -81,6 +90,7 @@ define ROOTFS_ISO9660_INSTALL_SPLASHSCREEN
- endef
- ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_INSTALL_SPLASHSCREEN
- endif
-+endif
- 
- # Copy the kernel to temporary filesystem
- define ROOTFS_ISO9660_COPY_KERNEL
+ $(eval $(call ROOTFS_TARGET,iso9660))
