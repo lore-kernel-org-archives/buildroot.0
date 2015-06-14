@@ -1,58 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 23:21:34 +0200
-Subject: [Buildroot] [git commit] fs/iso9660: use 'depends on' instead of
-	'select' for bootloader
-Message-ID: <20150614212542.7C5C27FC90@busybox.osuosl.org>
+Date: Sun, 14 Jun 2015 23:18:46 +0200
+Subject: [Buildroot] [git commit] fs/iso9660: get grub splash from
+	$(TARGET_DIR)
+Message-ID: <20150614212542.0C8E281957@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd256e96c07c31b3804e079dd498fe4a4012b64e
+commit: http://git.buildroot.net/buildroot/commit/?id=3736b9a7c1c03ce7bab6d902db579fbead909047
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In preparation to the introduction of the support for other
-bootloaders than Grub, this commit switches from having the iso9660
-support "select" the necessary bootloader to using a "depends on".
+Instead of using directly the splash image from the Buildroot source
+directory boot/grub, this commit changes the iso9660 logic to use the
+splash image installed in $(TARGET_DIR)/boot/grub.
 
-The main motivation is that the isolinux bootloader support will
-really need to do a "depends on", due to the need of having a certain
-option enabled, but this option being a kconfig "choice".
+This effectively allows a user to use a custom splash image by
+installing it to $(TARGET_DIR) through a rootfs overlay or using a
+post-build script.
 
+Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- fs/iso9660/Config.in |    7 ++++---
- 1 files changed, 4 insertions(+), 3 deletions(-)
+ fs/iso9660/iso9660.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-index f5e5f32..cd7b175 100644
---- a/fs/iso9660/Config.in
-+++ b/fs/iso9660/Config.in
-@@ -2,6 +2,7 @@ config BR2_TARGET_ROOTFS_ISO9660
- 	bool "iso image"
- 	depends on (BR2_i386 || BR2_x86_64)
- 	depends on BR2_LINUX_KERNEL
-+	depends on BR2_TARGET_GRUB
- 	select BR2_LINUX_KERNEL_INSTALL_TARGET \
- 	       if (!BR2_TARGET_ROOTFS_ISO9660_INITRD && !BR2_TARGET_ROOTFS_INITRAMFS)
- 	help
-@@ -25,7 +26,7 @@ choice
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index b3e6b9d..b313c65 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -11,7 +11,7 @@ ROOTFS_ISO9660_DEPENDENCIES = grub host-cdrkit host-fakeroot linux rootfs-cpio
  
- config BR2_TARGET_ROOTFS_ISO9660_GRUB
- 	bool "grub"
--	select BR2_TARGET_GRUB
-+	depends on BR2_TARGET_GRUB
- 	select BR2_TARGET_GRUB_FS_ISO9660
- 
- endchoice
-@@ -52,6 +53,6 @@ config BR2_TARGET_ROOTFS_ISO9660_INITRD
- 
- endif
- 
--comment "iso image needs a Linux kernel to be built"
-+comment "iso image needs a Linux kernel and grub to be built"
- 	depends on BR2_i386 || BR2_x86_64
--	depends on !BR2_LINUX_KERNEL
-+	depends on !BR2_LINUX_KERNEL || !BR2_TARGET_GRUB
+ ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
+ define ROOTFS_ISO9660_SPLASHSCREEN
+-	$(INSTALL) -D -m 0644 boot/grub/splash.xpm.gz \
++	$(INSTALL) -D -m 0644 $(TARGET_DIR)/boot/grub/splash.xpm.gz \
+ 		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/splash.xpm.gz
+ endef
+ else
