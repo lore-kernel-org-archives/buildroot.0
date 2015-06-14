@@ -1,98 +1,27 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Jun 2015 19:11:12 +0200
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_2/2=5D_package/libgpg-error=3A_Fix?=
-	=?utf-8?q?_compilation_with_gcc5?=
-In-Reply-To: <1434301872-30351-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1434301872-30351-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1434301872-30351-2-git-send-email-bernd.kuhls@t-online.de>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 14 Jun 2015 21:03:48 +0200
+Subject: [Buildroot] [PATCH 1/6] uclibc: bump uClibc-ng to 1.0.3
+In-Reply-To: <1434292411-5003-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1434292411-5003-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1434292411-5003-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150614190348.GP21686@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../0001-avoid-breakage-with-gcc-5.patch           |   56 ++++++++++++++++++++
- package/libgpg-error/libgpg-error.mk               |    3 ++
- 2 files changed, 59 insertions(+)
- create mode 100644 package/libgpg-error/0001-avoid-breakage-with-gcc-5.patch
+> This commit bumps uClibc-ng to the latest version, and drops the two
+> patches that have been merged upstream.
 
-diff --git a/package/libgpg-error/0001-avoid-breakage-with-gcc-5.patch b/package/libgpg-error/0001-avoid-breakage-with-gcc-5.patch
-new file mode 100644
-index 0000000..96dc569
---- /dev/null
-+++ b/package/libgpg-error/0001-avoid-breakage-with-gcc-5.patch
-@@ -0,0 +1,56 @@
-+Patch ported from Debian
-+http://anonscm.debian.org/cgit/pkg-gnupg/libgpg-error.git/diff/?id=c3d7571
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+
-+From 91da4f5dbbc9d93975ef9753652a4e71719f9f27 Mon Sep 17 00:00:00 2001
-+From: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
-+Date: Mon, 16 Mar 2015 13:26:00 -0400
-+Subject: [LIBGPG-ERROR PATCH] avoid breakage with gcc 5
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+ * src/Makefile.am: add -P to the C preprocessor when building
-+   mkerrcodes.h, to avoid a noisy intermediate pipeline.
-+
-+--
-+
-+With gcc 5 without this patch, we see many errors like the following:
-+
-+gcc -I. -I. -o mkerrcodes ./mkerrcodes.c
-+In file included from ./mkerrcodes.c:26:0:
-+./mkerrcodes.h:9:5: error: expected expression before ?,? token
-+   { , "GPG_ERR_E2BIG" },
-+     ^
-+./mkerrcodes.h:10:5: error: expected expression before ?,? token
-+   { , "GPG_ERR_EACCES" },
-+     ^
-+
-+This patch cleans up the generated mkerrcodes.h by making the
-+intermediate stage clean for all the versions of gcc i tested (4.x and
-+5).
-+
-+Debian-Bug-Id: 777374
-+Signed-Off-By: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
-+---
-+ src/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 99c2c53..f847a80 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -213,7 +213,7 @@ code-to-errno.h: Makefile mkerrnos.awk errnos.in
-+ # It is correct to use $(CPP).  We want the host's idea of the error codes.
-+ mkerrcodes.h: Makefile mkerrcodes.awk $(gpg_extra_headers)
-+ 	$(AWK) -f $(srcdir)/mkerrcodes1.awk $(srcdir)/errnos.in >_$@
-+-	$(CPP) $(CPPFLAGS) $(extra_cppflags) _$@ | grep GPG_ERR_ | \
-++	$(CPP) $(CPPFLAGS) $(extra_cppflags) -P _$@ | grep GPG_ERR_ | \
-+                $(AWK) -f $(srcdir)/mkerrcodes.awk >$@
-+ 	-rm _$@
-+ 
-+-- 
-+2.1.4
-+
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index 9f5f6c2..52b7058 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
-@@ -10,5 +10,8 @@ LIBGPG_ERROR_LICENSE = LGPLv2.1+
- LIBGPG_ERROR_LICENSE_FILES = COPYING.LIB
- LIBGPG_ERROR_INSTALL_STAGING = YES
- LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
-+# we patch src/Makefile.am
-+LIBGPG_ERROR_AUTORECONF = YES
-+LIBGPG_ERROR_GETTEXTIZE = YES
- 
- $(eval $(autotools-package))
--- 
-1.7.10.4
+Have you seen the new uclibcng-testrunner.sh? It can be used on a
+target without GNU make. I tested it already with busybox hush.
+This might be used on no-MMU targets.
+
+You need to generate a file while cross-compiling with "gen" target.
+
+best regards
+ Waldemar
