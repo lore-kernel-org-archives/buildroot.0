@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 23:17:25 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] package/libtirpc: does not build
- with musl libc
-In-Reply-To: <a13a154a08aa3fd09400a2b1ae3571544a86f3db.1434292018.git.yann.morin.1998@free.fr>
-References: <cover.1434292018.git.yann.morin.1998@free.fr>
- <a13a154a08aa3fd09400a2b1ae3571544a86f3db.1434292018.git.yann.morin.1998@free.fr>
-Message-ID: <20150614231725.6865e1a3@free-electrons.com>
+Date: Sun, 14 Jun 2015 23:20:58 +0200
+Subject: [Buildroot] [PATCHv2 08/15] fs/iso9660: support building a real
+ iso9660 filesystem
+In-Reply-To: <20150614151740.GF3615@free.fr>
+References: <1433802108-14351-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1433802108-14351-9-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150614151740.GF3615@free.fr>
+Message-ID: <20150614232058.7fe8d702@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +15,24 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Sun, 14 Jun 2015 16:29:06 +0200, Yann E. MORIN wrote:
-> Previously-packaged libtirpc version, 0.2.4, did not build with musl on
-> ARM (see build failures, below) because of missing header sys/cdefs.h
-> 
-> Newly-packaged version, 0.3.1, does not build on musl, on ARM for the
-> same reason as 0.2.4, and on whatever the architecture (ARM included)
-> because of the extra-missing header sys/queue.h .
+On Sun, 14 Jun 2015 17:17:40 +0200, Yann E. MORIN wrote:
 
-At
-http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=libtirpc-musl-fix,
-I have a patch that makes libtirpc 0.2.4 build fine with musl.
-Unfortunately, it breaks glibc build :)
+> I have to admit I was not very confortable reviewing this patch, because
+> the splashscreen settign are split in two locations, and checking all
+> possible code paths (not that many, but still) to ensure splashscreen
+> was either properly copied or disabled, was not trivial.
 
-I think the patch set can be simplified on top of libtirpc 0.3.1,
-because:
+Yes, the splashscreen handling is split because:
 
- * the cdefs.h issue is fixed upstream already:
-   http://git.linux-nfs.org/?p=cel/libtirpc.git;a=commit;h=7228a9482b92ff0305f7e7ccd0276c638bee1884
+ * We want to remove the splashscreen related line in menu.lst if Grub
+   hasn't been built with splashscreen support, and this in both
+   iso9660 as the real root filesystem *and* iso9660 using
+   initrd/initramfs.
 
- * the IPPORT_RESERVED issue is also fixed upstream:
-   http://git.linux-nfs.org/?p=cel/libtirpc.git;a=commit;h=4d3263ca3b64de8acdcaf71d36bfb0eda06b8710
-
-So maybe that leaves only the sys/queue.h issue, for which my patch
-contains a proposal.
+ * We want to copy the splashscreen image to the temporary target dir
+   only if we're doing iso9660 using initrd/initramfs (not needed if
+   iso9660 is the real root filesystem, since the splashscreen has
+   already been installed by grub.mk).
 
 Thanks,
 
