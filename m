@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Jun 2015 16:36:33 +0200
-Subject: [Buildroot] [PATCH/RFC v2 34/44] package/kodi-audiodecoder-stsound:
-	new package
+Date: Sun, 14 Jun 2015 16:36:41 +0200
+Subject: [Buildroot] [PATCH/RFC v2 42/44] package/kodi-screensaver-pyro: new
+	package
 In-Reply-To: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1434292603-12052-35-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1434292603-12052-43-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audiodecoder-stsound/Config.in           |    7 +++++++
- .../kodi-audiodecoder-stsound.mk                      |   17 +++++++++++++++++
+ package/kodi-screensaver-pyro/Config.in               |    6 ++++++
+ .../kodi-screensaver-pyro/kodi-screensaver-pyro.mk    |   17 +++++++++++++++++
  package/kodi/Config.in                                |    1 +
- 3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-audiodecoder-stsound/Config.in
- create mode 100644 package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/kodi-screensaver-pyro/Config.in
+ create mode 100644 package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
 
-diff --git a/package/kodi-audiodecoder-stsound/Config.in b/package/kodi-audiodecoder-stsound/Config.in
+diff --git a/package/kodi-screensaver-pyro/Config.in b/package/kodi-screensaver-pyro/Config.in
 new file mode 100644
-index 0000000..6be216a
+index 0000000..eaed84e
 --- /dev/null
-+++ b/package/kodi-audiodecoder-stsound/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_AUDIODECODER_STSOUND
-+	bool "kodi-audiodecoder-stsound"
-+	select BR2_PACKAGE_KODI_PLATFORM
++++ b/package/kodi-screensaver-pyro/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_KODI_SCREENSAVER_PYRO
++	bool "kodi-screensaver-pyro"
 +	help
-+	  YM decoder addon for Kodi
++	  Pyro screensaver for Kodi
 +
-+	  https://github.com/notspiff/audiodecoder.stsound
-diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
++	  https://github.com/notspiff/screensaver.pyro
+diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
 new file mode 100644
-index 0000000..2898311
+index 0000000..97d63f4
 --- /dev/null
-+++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
++++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-audiodecoder-stsound
++# kodi-screensaver-pyro
 +#
 +################################################################################
 +
-+KODI_AUDIODECODER_STSOUND_VERSION = f6fbae94818fedd09e2f55c6cd1cb283bfdab6f4
-+KODI_AUDIODECODER_STSOUND_SITE = $(call github,notspiff,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
-+KODI_AUDIODECODER_STSOUND_LICENSE = GPLv2+
-+KODI_AUDIODECODER_STSOUND_LICENSE_FILES = src/YMCodec.cpp
++KODI_SCREENSAVER_PYRO_VERSION = 7551f3f4b6414c40c1c4170c750b9f45dd995261
++KODI_SCREENSAVER_PYRO_SITE = $(call github,notspiff,screensaver.pyro,$(KODI_SCREENSAVER_PYRO_VERSION))
++KODI_SCREENSAVER_PYRO_LICENSE = GPLv2+
++KODI_SCREENSAVER_PYRO_LICENSE_FILES = src/Pyro.cpp
 +
-+KODI_AUDIODECODER_STSOUND_DEPENDENCIES = kodi-platform
++KODI_SCREENSAVER_PYRO_DEPENDENCIES = kodi
 +
-+KODI_AUDIODECODER_STSOUND_CONF_OPTS += \
++KODI_SCREENSAVER_PYRO_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 728ed5a..d411fee 100644
+index 4ce965f..d2ec088 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -276,6 +276,7 @@ menu "Audio decoder addons"
- 	source "package/kodi-audiodecoder-nosefart/Config.in"
- 	source "package/kodi-audiodecoder-sidplay/Config.in"
- 	source "package/kodi-audiodecoder-snesapu/Config.in"
-+	source "package/kodi-audiodecoder-stsound/Config.in"
+@@ -294,6 +294,7 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-crystalmorph/Config.in"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
+ 	source "package/kodi-screensaver-pingpong/Config.in"
++	source "package/kodi-screensaver-pyro/Config.in"
  endmenu
  
- menu "Audio encoder addons"
+ endif # BR2_PACKAGE_KODI
 -- 
 1.7.10.4
