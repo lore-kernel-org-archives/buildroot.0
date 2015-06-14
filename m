@@ -1,45 +1,59 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 14 Jun 2015 19:24:09 +0300
-Subject: [Buildroot] [PATCH 2/6] uclibc: add libgcc_s_resume fix
-In-Reply-To: <1434292411-5003-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1434292411-5003-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1434292411-5003-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150614162409.GC8165@tarshish>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 14 Jun 2015 19:11:11 +0200
+Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: Fix x86 compilation with
+	gcc5
+Message-ID: <1434301872-30351-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+In file included from libavcodec/cabac_functions.h:46:0,
+                 from libavcodec/h264_cabac.c:37:
+libavcodec/h264_cabac.c: In function 'ff_h264_decode_mb_cabac':
+libavcodec/x86/cabac.h:192:5: error: 'asm' operand has impossible constraints
+     __asm__ volatile(
 
-On Sun, Jun 14, 2015 at 04:33:27PM +0200, Thomas Petazzoni wrote:
-> diff --git a/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch b/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch
-> new file mode 100644
-> index 0000000..8a165f3
-> --- /dev/null
-> +++ b/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch
-> @@ -0,0 +1,53 @@
-> +From 7ed8bacef45a2537646e7235092bd2e5408cd0b5 Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +Date: Sun, 14 Jun 2015 15:14:22 +0200
-> +Subject: [PATCH] Fix libgcc_s_resume issue
-> +
-> +When built with gcc 5.1, uClibc-ng fails to build with the following
-> +issue:
+To reproduce the bug use this defconfig:
 
-This patch is for uClibc.
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_BINUTILS_VERSION_2_25=y
+BR2_GCC_VERSION_5_1_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_FFMPEG=y
+BR2_PACKAGE_FFMPEG_GPL=y
+BR2_PACKAGE_FFMPEG_FFMPEG=y
+BR2_PACKAGE_FFMPEG_POSTPROC=y
+BR2_PACKAGE_FFMPEG_SWSCALE=y
+BR2_PACKAGE_FFMPEG_ENCODERS="all"
+BR2_PACKAGE_FFMPEG_DECODERS="all"
+BR2_PACKAGE_FFMPEG_MUXERS="all"
+BR2_PACKAGE_FFMPEG_DEMUXERS="all"
+BR2_PACKAGE_FFMPEG_PARSERS="all"
+BR2_PACKAGE_FFMPEG_BSFS="all"
+BR2_PACKAGE_FFMPEG_PROTOCOLS="all"
+BR2_PACKAGE_FFMPEG_FILTERS="all"
+BR2_PACKAGE_FFMPEG_INDEVS=y
+BR2_PACKAGE_FFMPEG_OUTDEVS=y
+BR2_PACKAGE_FFMPEG_EXTRACONF=""
 
-> +
-> +   librt/librt_so.a(rt-unwind-resume.oS): In function `_Unwind_Resume':
-> +   rt-unwind-resume.c:(.text+0x3c): undefined reference to
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-Is that the full error message? I have that strange feeling that something is 
-missing. Same goes for the uClibc-ng patch.
-
-baruch
-
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 41ac616..479625c 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -261,6 +261,7 @@ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ FFMPEG_CONF_OPTS += --enable-yasm
+ FFMPEG_DEPENDENCIES += host-yasm
+ else
++FFMPEG_CONF_OPTS += --disable-asm
+ FFMPEG_CONF_OPTS += --disable-yasm
+ FFMPEG_CONF_OPTS += --disable-mmx
+ endif
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.7.10.4
