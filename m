@@ -1,76 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Jun 2015 15:37:42 +0200
-Subject: [Buildroot] $(SED) not defined if 'make menuconfig
- savedefconfig'
-In-Reply-To: <CAM+bi4tjaJB2bJuQ40_cap55ZrEmOYg4Ssz+TMM_zg5Cb0yo6A@mail.gmail.com>
-References: <CAM+bi4tjaJB2bJuQ40_cap55ZrEmOYg4Ssz+TMM_zg5Cb0yo6A@mail.gmail.com>
-Message-ID: <20150615153742.02ebdb85@free-electrons.com>
+Date: Sun, 14 Jun 2015 23:40:36 +0200
+Subject: [Buildroot] [git commit] boot/at91bootstrap3: add license
+	information
+Message-ID: <20150615141619.B0B9B81DD7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alvaro Gamez,
+commit: http://git.buildroot.net/buildroot/commit/?id=5c4d325db46c98df9f06d4bce6cd1a35ab6ae00d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 15 Jun 2015 12:26:02 +0200, Alvaro Gamez wrote:
+This patch adds licensing informations to at91bootstrap3
 
-> While using buildroot-submodule (
-> https://github.com/Openwide-Ingenierie/buildroot-submodule) I've noticed
-> this happens since commit f71a621d91ec27f175fc84012962f88b1107305f was
-> introduced into buildroot.
-> 
-> $ make menuconfig savedefconfig
-> [Do whatever, or nothing at all and exit, there's no need to save anything]
-> *** End of the configuration.
-> *** Execute 'make' to start the build or try 'make help'.
-> 
-> make: /BR2_DEFCONFIG=/d: Command not found
-> Makefile:777: recipe for target 'savedefconfig' failed
-> make: *** [savedefconfig] Error 127
-> 
-> However,
-> $ make menuconfig
-> $ make savedefconfig
-> 
-> does not end with that error. I've just tracked it down to the fact that
-> $(SED) is not defined when menuconfig savedefconfig are used in a single
-> make call, whereas it equals to '/bin/sed -i -e'
-> 
-> Simply replacing that @$(SED) by /bin/sed -i -e on line 777 of Makefile
-> makes it work again, but I don't think that solution is desirable. I'm
-> sorry I can't provide a full patch, the motive of this bug is beyond my
-> knowledge.
+[Thomas:
+ - change from "BSD-2c with endorsement clause" to "Atmel License",
+   because the license of AT91Bootstrap is neither a BSD-2c nor a
+   BSD-3c: it does not carry the second clause of the BSD-2c or BSD-3c
+   licenses giving the condition of redistribution of the binary form.]
 
-Hum, right. Can you try the below patch:
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/at91bootstrap3/at91bootstrap3.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index d3f80c4..67eb50c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -272,6 +272,7 @@ HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
- HOSTNM := $(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
- HOSTOBJCOPY := $(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
- HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
-+SED := $(shell which sed || type -p sed) -i -e
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index ff49e14..3ca210f 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -6,6 +6,8 @@
  
- export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
- export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
-diff --git a/package/Makefile.in b/package/Makefile.in
-index c02d31f..f256b05 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -217,7 +217,6 @@ endif
- INSTALL := $(shell which install || type -p install)
- FLEX := $(shell which flex || type -p flex)
- BISON := $(shell which bison || type -p bison)
--SED := $(shell which sed || type -p sed) -i -e
- UNZIP := $(shell which unzip || type -p unzip) -q
+ AT91BOOTSTRAP3_VERSION = v3.7.1
+ AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
++AT91BOOTSTRAP3_LICENSE = Atmel License
++AT91BOOTSTRAP3_LICENSE_FILES = main.c
  
- APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(QUIET),-s)
-
-
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ AT91BOOTSTRAP3_INSTALL_IMAGES = YES
+ AT91BOOTSTRAP3_INSTALL_TARGET = NO
