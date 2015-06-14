@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 23:26:04 +0200
-Subject: [Buildroot] [PATCHv2 15/15] fs/iso9660: add support for grub2
-In-Reply-To: <20150614155643.GN3615@free.fr>
-References: <1433802108-14351-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1433802108-14351-16-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150614155643.GN3615@free.fr>
-Message-ID: <20150614232604.353463fb@free-electrons.com>
+Date: Sun, 14 Jun 2015 23:29:37 +0200
+Subject: [Buildroot] [PATCH 1/1] fs/romfs: add U-Boot image support
+In-Reply-To: <1433782196-17824-1-git-send-email-hoang.tran@vnoss.org>
+References: <1433782196-17824-1-git-send-email-hoang.tran@vnoss.org>
+Message-ID: <20150614232937.6805b496@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Hoang Tran,
 
-On Sun, 14 Jun 2015 17:56:43 +0200, Yann E. MORIN wrote:
-
-> > @@ -0,0 +1,7 @@
-> > +set default="0"
-> > +set timeout="5"
+On Mon,  8 Jun 2015 09:49:56 -0700, Hoang Tran wrote:
+> Adds U-Boot image support for romfs root filesystems. This allows you to
+> use the bootm command in U-Boot to load the rootfs.
 > 
-> For grub, the timeout is 10s. I don't mind which value we use, I don't
-> even really mind they differ, but do we maybe want some consistency? ;-)
+> Signed-off-by: Hoang Tran <hoang.tran@vnoss.org>
+> ---
+>  fs/romfs/Config.in | 13 +++++++++++++
+>  fs/romfs/romfs.mk  | 10 +++++++++-
+>  2 files changed, 22 insertions(+), 1 deletion(-)
 
-I've switched to a 10 seconds timeout before committing.
+Considering the absence of reaction to Arnout's comment about your
+patch, I've marked it as 'Rejected' in our patch tracking system. Of
+course, if you believe the patch is still useful despite Arnout
+comment, do not hesitate to resend an updated version with an extended
+justification.
 
-Thanks for the review!
+Thanks,
 
 Thomas
 -- 
