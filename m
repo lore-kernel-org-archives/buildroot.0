@@ -1,25 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 23:10:14 +0200
-Subject: [Buildroot] [PATCH 1/2] package/tzdata: bump version to 2015e
-In-Reply-To: <1434290896-17390-1-git-send-email-martin@barkynet.com>
-References: <1434290896-17390-1-git-send-email-martin@barkynet.com>
-Message-ID: <20150614231014.102d30b6@free-electrons.com>
+Date: Sun, 14 Jun 2015 23:11:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libuv: bump to version 1.6.1
+In-Reply-To: <1434286448-4319-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1434286448-4319-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150614231100.30d5ac91@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+Dear J?rg Krause,
 
-On Sun, 14 Jun 2015 15:08:15 +0100, Martin Bark wrote:
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+On Sun, 14 Jun 2015 14:54:08 +0200, J?rg Krause wrote:
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
->  package/tzdata/tzdata.hash | 4 ++--
->  package/tzdata/tzdata.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libuv/libuv.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Both patches applied, thanks.
+Applied, thanks.
 
 Thomas
 -- 
