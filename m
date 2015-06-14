@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Jun 2015 16:36:39 +0200
-Subject: [Buildroot] [PATCH/RFC v2 40/44]
-	package/kodi-screensaver-greynetic: new package
+Date: Sun, 14 Jun 2015 16:36:42 +0200
+Subject: [Buildroot] [PATCH/RFC v2 43/44] package/kodi-screensaver-stars:
+	new package
 In-Reply-To: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1434292603-12052-41-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1434292603-12052-44-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,57 +13,57 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-greynetic/Config.in          |    6 ++++++
- .../kodi-screensaver-greynetic.mk                     |   17 +++++++++++++++++
+ package/kodi-screensaver-stars/Config.in              |    6 ++++++
+ .../kodi-screensaver-stars/kodi-screensaver-stars.mk  |   17 +++++++++++++++++
  package/kodi/Config.in                                |    1 +
  3 files changed, 24 insertions(+)
- create mode 100644 package/kodi-screensaver-greynetic/Config.in
- create mode 100644 package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
+ create mode 100644 package/kodi-screensaver-stars/Config.in
+ create mode 100644 package/kodi-screensaver-stars/kodi-screensaver-stars.mk
 
-diff --git a/package/kodi-screensaver-greynetic/Config.in b/package/kodi-screensaver-greynetic/Config.in
+diff --git a/package/kodi-screensaver-stars/Config.in b/package/kodi-screensaver-stars/Config.in
 new file mode 100644
-index 0000000..fd83295
+index 0000000..e8f7862
 --- /dev/null
-+++ b/package/kodi-screensaver-greynetic/Config.in
++++ b/package/kodi-screensaver-stars/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KODI_SCREENSAVER_GREYNETIC
-+	bool "kodi-screensaver-greynetic"
++config BR2_PACKAGE_KODI_SCREENSAVER_STARS
++	bool "kodi-screensaver-stars"
 +	help
-+	  Greynetic screensaver for Kodi
++	  Starfield screensaver for Kodi
 +
-+	  https://github.com/notspiff/screensaver.greynetic
-diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
++	  https://github.com/notspiff/screensaver.stars
+diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
 new file mode 100644
-index 0000000..fb72b70
+index 0000000..bc86bd9
 --- /dev/null
-+++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
++++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-screensaver-greynetic
++# kodi-screensaver-stars
 +#
 +################################################################################
 +
-+KODI_SCREENSAVER_GREYNETIC_VERSION = 5f370b0f1a51e57719f605344e94824105316c17
-+KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,notspiff,screensaver.greynetic,$(KODI_SCREENSAVER_GREYNETIC_VERSION))
-+KODI_SCREENSAVER_GREYNETIC_LICENSE = GPLv2+
-+KODI_SCREENSAVER_GREYNETIC_LICENSE_FILES = src/GreyNetic.cpp
++KODI_SCREENSAVER_STARS_VERSION = 91b59f687ceb52488763aca4ba67d50a92f01731
++KODI_SCREENSAVER_STARS_SITE = $(call github,notspiff,screensaver.stars,$(KODI_SCREENSAVER_STARS_VERSION))
++KODI_SCREENSAVER_STARS_LICENSE = GPLv2+
++KODI_SCREENSAVER_STARS_LICENSE_FILES = src/StarField.cpp
 +
-+KODI_SCREENSAVER_GREYNETIC_DEPENDENCIES = kodi
++KODI_SCREENSAVER_STARS_DEPENDENCIES = kodi
 +
-+KODI_SCREENSAVER_GREYNETIC_CONF_OPTS += \
++KODI_SCREENSAVER_STARS_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index b6ed801..4e9451e 100644
+index d2ec088..b7516c0 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -292,6 +292,7 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-asteroids/Config.in"
- 	source "package/kodi-screensaver-biogenesis/Config.in"
- 	source "package/kodi-screensaver-crystalmorph/Config.in"
-+	source "package/kodi-screensaver-greynetic/Config.in"
+@@ -295,6 +295,7 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
+ 	source "package/kodi-screensaver-pingpong/Config.in"
+ 	source "package/kodi-screensaver-pyro/Config.in"
++	source "package/kodi-screensaver-stars/Config.in"
  endmenu
  
  endif # BR2_PACKAGE_KODI
