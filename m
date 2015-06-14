@@ -1,88 +1,205 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 08:30:17 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-06-13
-Message-ID: <20150614063017.D281F101558@stock.ovh.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 14 Jun 2015 11:10:30 +0200
+Subject: [Buildroot] [PATCH 1/4] package/kodi: Move all kodi packages to
+	subdirectories of package/kodi/
+Message-ID: <1434273033-31723-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2015-06-13
-===============================
+Kodi 15.0 Isengard will contain new support for binary addons.
+To prevent adding all those new packages to the root level of package/
+introduce a new main hierarchy starting from package/kodi/.
 
-        success : 177
-       failures : 41 
-       timeouts : 0  
-          TOTAL : 218
+This patch moves the current Kodi 14.2 Helix packages to this new
+directory in preparation for the upcoming version bump.
 
-Classification of failures by reason
-====================================
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/Config.in                                          |    2 +-
+ package/{ => kodi}/kodi-addon-xvdr/0001-xbmc-rebrand.patch |    0
+ package/{ => kodi}/kodi-addon-xvdr/Config.in               |    0
+ package/{ => kodi}/kodi-addon-xvdr/kodi-addon-xvdr.mk      |    0
+ package/{ => kodi}/kodi-audioencoder-flac/Config.in        |    0
+ .../kodi-audioencoder-flac/kodi-audioencoder-flac.mk       |    0
+ package/{ => kodi}/kodi-audioencoder-lame/Config.in        |    0
+ .../kodi-audioencoder-lame/kodi-audioencoder-lame.mk       |    0
+ package/{ => kodi}/kodi-audioencoder-vorbis/Config.in      |    0
+ .../kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk   |    0
+ package/{ => kodi}/kodi-audioencoder-wav/Config.in         |    0
+ .../kodi-audioencoder-wav/kodi-audioencoder-wav.mk         |    0
+ package/{ => kodi}/kodi-pvr-addons/Config.in               |    0
+ package/{ => kodi}/kodi-pvr-addons/kodi-pvr-addons.mk      |    0
+ package/kodi/{ => }/kodi/0001-Fixup-include-path.patch     |    0
+ package/kodi/{ => }/kodi/Config.in                         |   12 ++++++------
+ package/kodi/{ => }/kodi/S50kodi                           |    0
+ package/kodi/{ => }/kodi/br-kodi                           |    0
+ package/kodi/{ => }/kodi/kodi.mk                           |    6 +++---
+ package/kodi/{ => }/kodi/kodi.service                      |    0
+ 20 files changed, 10 insertions(+), 10 deletions(-)
+ rename package/{ => kodi}/kodi-addon-xvdr/0001-xbmc-rebrand.patch (100%)
+ rename package/{ => kodi}/kodi-addon-xvdr/Config.in (100%)
+ rename package/{ => kodi}/kodi-addon-xvdr/kodi-addon-xvdr.mk (100%)
+ rename package/{ => kodi}/kodi-audioencoder-flac/Config.in (100%)
+ rename package/{ => kodi}/kodi-audioencoder-flac/kodi-audioencoder-flac.mk (100%)
+ rename package/{ => kodi}/kodi-audioencoder-lame/Config.in (100%)
+ rename package/{ => kodi}/kodi-audioencoder-lame/kodi-audioencoder-lame.mk (100%)
+ rename package/{ => kodi}/kodi-audioencoder-vorbis/Config.in (100%)
+ rename package/{ => kodi}/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk (100%)
+ rename package/{ => kodi}/kodi-audioencoder-wav/Config.in (100%)
+ rename package/{ => kodi}/kodi-audioencoder-wav/kodi-audioencoder-wav.mk (100%)
+ rename package/{ => kodi}/kodi-pvr-addons/Config.in (100%)
+ rename package/{ => kodi}/kodi-pvr-addons/kodi-pvr-addons.mk (100%)
+ rename package/kodi/{ => }/kodi/0001-Fixup-include-path.patch (100%)
+ rename package/kodi/{ => }/kodi/Config.in (95%)
+ rename package/kodi/{ => }/kodi/S50kodi (100%)
+ rename package/kodi/{ => }/kodi/br-kodi (100%)
+ rename package/kodi/{ => }/kodi/kodi.mk (98%)
+ rename package/kodi/{ => }/kodi/kodi.service (100%)
 
-                sysstat-11.0.5 | 19
-              lbreakout2-2.6.4 | 2 
-                    bc-1.06.95 | 2 
-                libtirpc-0.2.4 | 2 
-                openssl-1.0.2c | 2 
-                      atf-0.21 | 2 
-                      nbd-3.11 | 1 
-                   glog-v0.3.4 | 1 
-                    qemu-2.3.0 | 1 
-                    php-5.6.10 | 1 
-filemq-482797b8aa30fcc9ea13... | 1 
-               harfbuzz-0.9.40 | 1 
-                     lutok-0.4 | 1 
-pulseview-198f9bc74d6c955a7... | 1 
-                elfutils-0.161 | 1 
-            host-mtools-4.0.18 | 1 
-                 libepoxy-v1.2 | 1 
-                     lxc-1.1.2 | 1 
-
-Detail of failures
-===================
-
-        bfin |                       atf-0.21 | NOK | http://autobuild.buildroot.net/results/95069436dd5b2004e59851b8c731d534b86062a5/
-        bfin |                       atf-0.21 | NOK | http://autobuild.buildroot.net/results/9e19e815da3bea8094a68e787e04493477ef909d/
-         sh4 |                     bc-1.06.95 | NOK | http://autobuild.buildroot.net/results/f0593dc856b6d9e95d3e429dae57ba2e63b46222/
-         arm |                     bc-1.06.95 | NOK | http://autobuild.buildroot.net/results/b0b9dced0014a5a8026fa972f95085e8bd16a07b/
-         arm |                 elfutils-0.161 | NOK | http://autobuild.buildroot.net/results/eb5e60e1fe606979b949a1ce30ccee2ce16e1a30/
-         arc | filemq-482797b8aa30fcc9ea13... | NOK | http://autobuild.buildroot.net/results/15dd34cf5dbcd39706f8e864847652ee3fe668c7/
-        bfin |                    glog-v0.3.4 | NOK | http://autobuild.buildroot.net/results/54cc876458b4aeb96384e3096fd5f384af09feef/
-         arm |                harfbuzz-0.9.40 | NOK | http://autobuild.buildroot.net/results/852337d2c72595db644ba2a6e1ce8baf891c067f/
-microblazeel |             host-mtools-4.0.18 | NOK | http://autobuild.buildroot.net/results/6b2610e92133c579ff00424e732440f015ccb82f/
-        bfin |               lbreakout2-2.6.4 | NOK | http://autobuild.buildroot.net/results/31d480e5abf7d13414e9b59060f86bae9d65efa7/
-        bfin |               lbreakout2-2.6.4 | NOK | http://autobuild.buildroot.net/results/7c17414048fd6376422858d1327b50a9609c0de4/
-         arm |                  libepoxy-v1.2 | NOK | http://autobuild.buildroot.net/results/c50c9bd1de9e10aec13ad69ed3665653a3ffdaeb/
-         arm |                 libtirpc-0.2.4 | NOK | http://autobuild.buildroot.net/results/d30993a7cfb4874159eab83c73e360d518471bf2/
-         arm |                 libtirpc-0.2.4 | NOK | http://autobuild.buildroot.net/results/331c84b322c6a0205c15f9c5237047f0e2a63ef8/
-         arm |                      lutok-0.4 | NOK | http://autobuild.buildroot.net/results/1a0d7764a98e64b6c2ffccef6feaf3e0ac045789/
-         sh4 |                      lxc-1.1.2 | NOK | http://autobuild.buildroot.net/results/bc9e99bb4b33c52e7fd2df305dc3eedbf2b3e6cc/
-         arc |                       nbd-3.11 | NOK | http://autobuild.buildroot.net/results/e5bd05623dd6c57bb0338592ecd21a5ba0cbe95a/
-         arm |                 openssl-1.0.2c | NOK | http://autobuild.buildroot.net/results/4cb165163bcba032887e122ea00f759d3cce7d73/
-      xtensa |                 openssl-1.0.2c | NOK | http://autobuild.buildroot.net/results/7797f94874d4b24aea6c57efe685c5ede4a46db8/
-      x86_64 |                     php-5.6.10 | NOK | http://autobuild.buildroot.net/results/ab57c58a01dfcb5270122daf70a83fd40afe3fd9/
-         arm | pulseview-198f9bc74d6c955a7... | NOK | http://autobuild.buildroot.net/results/49f305296e0a8f161c9d3f6caee87ab9023592d0/
-        i686 |                     qemu-2.3.0 | NOK | http://autobuild.buildroot.net/results/dcbeae960f2ed0e8c82111a69668bd15c804e548/
-        i686 |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/df41896f7a1d1680019ad81cab56b665ab34642c/
-    mips64el |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/6613d97c40f40a48267b06bb48d547e4425a07b7/
-        i686 |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/c0177fb2607228734164965b61959976a6a878c1/
-        i686 |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/1c9be8a113cb286c73554cb6b1f2436ef9ffe91b/
-        mips |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/57bbd42f1874635ab553560dcf03bd285afa45ee/
-      xtensa |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/9ae07695eaf0b5375e2f5e26b2c24aa976465c5e/
-        i686 |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/c16db4ce3e0d13c6dbf28061caa9c7cbcf182c3a/
-         arm |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/c11e0e4318968610547c22bdd976976702409218/
-      x86_64 |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/5a39e2551155e96bf603c310a5dd2d5e6e4a865d/
-      x86_64 |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/52b7d813964f1069ad34835528a3c592ef8471a6/
-        i686 |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/5945858957bdaf9aeeea29be2aa4b6debb694ed6/
-         arm |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/ce1f65c629feded7138325e03228b13e3527c582/
-         arm |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/a836b22c6caf767d85ae75babc2b17726fb5e6b2/
-     powerpc |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/398dc7ee30e16a633062b17a0f2131e71082eff6/
-      mipsel |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/581e52770416dd4331c13f965ec3c5c5988fc47a/
-      xtensa |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/4267f431c0bb39642ff702ab6d22543e75fb024a/
-        i686 |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/eae2baf2db08d90ad55d3842242707cfd788df9b/
-      xtensa |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/bdce55b88a4aaff82ce0a492a0a4f49ab5b9031b/
-     powerpc |                 sysstat-11.0.5 | NOK | http://autobuild.buildroot.net/results/fca7a563456c41f5a1996ed7fc02987fa695bb13/
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 6dbc32d..15a19f6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -16,7 +16,7 @@ menu "Audio and video applications"
+ 	source "package/gstreamer/Config.in"
+ 	source "package/gstreamer1/Config.in"
+ 	source "package/jack2/Config.in"
+-	source "package/kodi/Config.in"
++	source "package/kodi/kodi/Config.in"
+ 	source "package/lame/Config.in"
+ 	source "package/libvpx/Config.in"
+ 	source "package/madplay/Config.in"
+diff --git a/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch b/package/kodi/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+similarity index 100%
+rename from package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+rename to package/kodi/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+diff --git a/package/kodi-addon-xvdr/Config.in b/package/kodi/kodi-addon-xvdr/Config.in
+similarity index 100%
+rename from package/kodi-addon-xvdr/Config.in
+rename to package/kodi/kodi-addon-xvdr/Config.in
+diff --git a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk b/package/kodi/kodi-addon-xvdr/kodi-addon-xvdr.mk
+similarity index 100%
+rename from package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+rename to package/kodi/kodi-addon-xvdr/kodi-addon-xvdr.mk
+diff --git a/package/kodi-audioencoder-flac/Config.in b/package/kodi/kodi-audioencoder-flac/Config.in
+similarity index 100%
+rename from package/kodi-audioencoder-flac/Config.in
+rename to package/kodi/kodi-audioencoder-flac/Config.in
+diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+similarity index 100%
+rename from package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+rename to package/kodi/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+diff --git a/package/kodi-audioencoder-lame/Config.in b/package/kodi/kodi-audioencoder-lame/Config.in
+similarity index 100%
+rename from package/kodi-audioencoder-lame/Config.in
+rename to package/kodi/kodi-audioencoder-lame/Config.in
+diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+similarity index 100%
+rename from package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+rename to package/kodi/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+diff --git a/package/kodi-audioencoder-vorbis/Config.in b/package/kodi/kodi-audioencoder-vorbis/Config.in
+similarity index 100%
+rename from package/kodi-audioencoder-vorbis/Config.in
+rename to package/kodi/kodi-audioencoder-vorbis/Config.in
+diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+similarity index 100%
+rename from package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+rename to package/kodi/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+diff --git a/package/kodi-audioencoder-wav/Config.in b/package/kodi/kodi-audioencoder-wav/Config.in
+similarity index 100%
+rename from package/kodi-audioencoder-wav/Config.in
+rename to package/kodi/kodi-audioencoder-wav/Config.in
+diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk b/package/kodi/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+similarity index 100%
+rename from package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+rename to package/kodi/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+diff --git a/package/kodi-pvr-addons/Config.in b/package/kodi/kodi-pvr-addons/Config.in
+similarity index 100%
+rename from package/kodi-pvr-addons/Config.in
+rename to package/kodi/kodi-pvr-addons/Config.in
+diff --git a/package/kodi-pvr-addons/kodi-pvr-addons.mk b/package/kodi/kodi-pvr-addons/kodi-pvr-addons.mk
+similarity index 100%
+rename from package/kodi-pvr-addons/kodi-pvr-addons.mk
+rename to package/kodi/kodi-pvr-addons/kodi-pvr-addons.mk
+diff --git a/package/kodi/0001-Fixup-include-path.patch b/package/kodi/kodi/0001-Fixup-include-path.patch
+similarity index 100%
+rename from package/kodi/0001-Fixup-include-path.patch
+rename to package/kodi/kodi/0001-Fixup-include-path.patch
+diff --git a/package/kodi/Config.in b/package/kodi/kodi/Config.in
+similarity index 95%
+rename from package/kodi/Config.in
+rename to package/kodi/kodi/Config.in
+index ea4b449..d9a068c 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/kodi/Config.in
+@@ -254,16 +254,16 @@ if BR2_PACKAGE_KODI_OPTICALDRIVE
+ 
+ comment "Kodi audioencoder addons"
+ 
+-source "package/kodi-audioencoder-flac/Config.in"
+-source "package/kodi-audioencoder-lame/Config.in"
+-source "package/kodi-audioencoder-vorbis/Config.in"
+-source "package/kodi-audioencoder-wav/Config.in"
++source "package/kodi/kodi-audioencoder-flac/Config.in"
++source "package/kodi/kodi-audioencoder-lame/Config.in"
++source "package/kodi/kodi-audioencoder-vorbis/Config.in"
++source "package/kodi/kodi-audioencoder-wav/Config.in"
+ 
+ endif # BR2_PACKAGE_KODI_OPTICALDRIVE
+ 
+ comment "Kodi PVR addons"
+ 
+-source "package/kodi-addon-xvdr/Config.in"
+-source "package/kodi-pvr-addons/Config.in"
++source "package/kodi/kodi-addon-xvdr/Config.in"
++source "package/kodi/kodi-pvr-addons/Config.in"
+ 
+ endif # BR2_PACKAGE_KODI
+diff --git a/package/kodi/S50kodi b/package/kodi/kodi/S50kodi
+similarity index 100%
+rename from package/kodi/S50kodi
+rename to package/kodi/kodi/S50kodi
+diff --git a/package/kodi/br-kodi b/package/kodi/kodi/br-kodi
+similarity index 100%
+rename from package/kodi/br-kodi
+rename to package/kodi/kodi/br-kodi
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi/kodi.mk
+similarity index 98%
+rename from package/kodi/kodi.mk
+rename to package/kodi/kodi/kodi.mk
+index 8712b12..26a5fe1 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi/kodi.mk
+@@ -231,7 +231,7 @@ endef
+ KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_CONFLUENCE_SKIN
+ 
+ define KODI_INSTALL_BR_WRAPPER
+-	$(INSTALL) -D -m 0755 package/kodi/br-kodi \
++	$(INSTALL) -D -m 0755 package/kodi/kodi/br-kodi \
+ 		$(TARGET_DIR)/usr/bin/br-kodi
+ endef
+ KODI_POST_INSTALL_TARGET_HOOKS += KODI_INSTALL_BR_WRAPPER
+@@ -250,12 +250,12 @@ endef
+ KODI_POST_INSTALL_TARGET_HOOKS += KODI_INSTALL_CONFIG_DIR
+ 
+ define KODI_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 755 package/kodi/S50kodi \
++	$(INSTALL) -D -m 755 package/kodi/kodi/S50kodi \
+ 		$(TARGET_DIR)/etc/init.d/S50kodi
+ endef
+ 
+ define KODI_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/kodi/kodi.service \
++	$(INSTALL) -D -m 644 package/kodi/kodi/kodi.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/kodi.service
+ 
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+diff --git a/package/kodi/kodi.service b/package/kodi/kodi/kodi.service
+similarity index 100%
+rename from package/kodi/kodi.service
+rename to package/kodi/kodi/kodi.service
 -- 
-http://autobuild.buildroot.net
+1.7.10.4
