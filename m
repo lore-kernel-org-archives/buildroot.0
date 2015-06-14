@@ -1,56 +1,73 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 14 Jun 2015 15:18:05 +0200
-Subject: [Buildroot] [PATCH v3 1/2] boot/uboot: add support for the
- kconfig infrastructure
-In-Reply-To: <20150614144621.45e7c13b@free-electrons.com>
-References: <1434283558-9663-1-git-send-email-joerg.krause@embedded.rocks>
- <20150614144621.45e7c13b@free-electrons.com>
-Message-ID: <1434287885.20201.3.camel@embedded.rocks>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 14 Jun 2015 16:05:05 +0200
+Subject: [Buildroot] [PATCH v5 03/13] package/opencv: bump to version 3.0
+In-Reply-To: <20150607120316.GD3545@free.fr>
+References: <1433672799-21387-1-git-send-email-s.martin49@gmail.com>
+ <1433672799-21387-4-git-send-email-s.martin49@gmail.com>
+ <20150607120316.GD3545@free.fr>
+Message-ID: <CAHXCMMJXUMg=FnoFd0vnEZeyTQOT0yXtHm212ei=LLRW6C3RGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Yann, all,
 
-On So, 2015-06-14 at 14:46 +0200, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
-> 
-> On Sun, 14 Jun 2015 14:05:57 +0200, J?rg Krause wrote:
-> > With the patchset "kconfig: turnaround into single .config"
-> > [http://lists.denx.de/pipermail/u-boot/2015-February/205490.html]
-> > U-Boot switched to a single .config file for board configuration. 
-> > This allows
-> > us to use the kconfig-package infrastructure.
-> > 
-> > For providing backward compatibility with older U-Boot version a 
-> > user choice
-> > between the new Kconfig and the legacy build system is introduced. 
-> > Kconfig
-> > is chosen as default build system.
-> 
-> This will break plenty of existing configuration that use older
-> Buildroot versions. Since the legacy configure/build commands also 
-> work
-> with newer U-Boot, I think we should rather have the legacy build 
-> logic
-> used by default.
+On Sun, Jun 7, 2015 at 2:03 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[...]
+>>  # OpenCV module selection
+>> +# - contrib modules are disabled.
+>
+> 'disabled' or 'no longer exist' ?
+Sorry for the confusion, I mean:
+opencv contrib modules from [1] are not available because we don't set
+the OPENCV_EXTRA_MODULES_PATH CMake configure option.
 
-Sorry, I forgot to discard this sentence from the commit log. Indeed,
-Kconfig is _not_ chosen as default.
+I'll make the comment less cryptic in the next revision ;-).
 
-> > This patch supersedes "boot/uboot: Add support for Kbuild & Kconfig 
-> > build
-> > system" [http://patchwork.ozlabs.org/patch/436498/]
-> 
-> Please mark your patches as Superseded yourself in patchwork :-)
+>
+>>  OPENCV_CONF_OPTS += \
+>>       -DBUILD_opencv_androidcamera=OFF \
+>>       -DBUILD_opencv_apps=OFF \
+>>       -DBUILD_opencv_calib3d=$(if $(BR2_PACKAGE_OPENCV_LIB_CALIB3D),ON,OFF) \
+>> -     -DBUILD_opencv_contrib=$(if $(BR2_PACKAGE_OPENCV_LIB_CONTRIB),ON,OFF) \
+>>       -DBUILD_opencv_core=ON \
+>> -     -DBUILD_opencv_dynamicuda=OFF \
+>>       -DBUILD_opencv_features2d=$(if $(BR2_PACKAGE_OPENCV_LIB_FEATURES2D),ON,OFF) \
+>>       -DBUILD_opencv_flann=$(if $(BR2_PACKAGE_OPENCV_LIB_FLANN),ON,OFF) \
+>> -     -DBUILD_opencv_gpu=$(if $(BR2_PACKAGE_OPENCV_LIB_GPU),ON,OFF) \
+>> +     -DBUILD_opencv_hal=ON \
+>>       -DBUILD_opencv_highgui=$(if $(BR2_PACKAGE_OPENCV_LIB_HIGHGUI),ON,OFF) \
+>> +     -DBUILD_opencv_imgcodecs=$(if $(BR2_PACKAGE_OPENCV_LIB_IMGCODECS),ON,OFF) \
+>>       -DBUILD_opencv_imgproc=$(if $(BR2_PACKAGE_OPENCV_LIB_IMGPROC),ON,OFF) \
+>>       -DBUILD_opencv_java=OFF \
+>> -     -DBUILD_opencv_legacy=$(if $(BR2_PACKAGE_OPENCV_LIB_LEGACY),ON,OFF) \
+>>       -DBUILD_opencv_ml=$(if $(BR2_PACKAGE_OPENCV_LIB_ML),ON,OFF) \
+>> -     -DBUILD_opencv_nonfree=$(if $(BR2_PACKAGE_OPENCV_LIB_NONFREE),ON,OFF) \
+>>       -DBUILD_opencv_objdetect=$(if $(BR2_PACKAGE_OPENCV_LIB_OBJDETECT),ON,OFF) \
+>> -     -DBUILD_opencv_ocl=OFF \
+>>       -DBUILD_opencv_photo=$(if $(BR2_PACKAGE_OPENCV_LIB_PHOTO),ON,OFF) \
+>> -     -DBUILD_opencv_python=OFF \
+>> +     -DBUILD_opencv_python2=OFF \
+>> +     -DBUILD_opencv_python3=OFF \
+>> +     -DBUILD_opencv_shape=$(if $(BR2_PACKAGE_OPENCV_LIB_SHAPE),ON,OFF) \
+>>       -DBUILD_opencv_stitching=$(if $(BR2_PACKAGE_OPENCV_LIB_STITCHING),ON,OFF) \
+>>       -DBUILD_opencv_superres=$(if $(BR2_PACKAGE_OPENCV_LIB_SUPERRES),ON,OFF) \
+>>       -DBUILD_opencv_ts=$(if $(BR2_PACKAGE_OPENCV_LIB_TS),ON,OFF) \
+>>       -DBUILD_opencv_video=$(if $(BR2_PACKAGE_OPENCV_LIB_VIDEO),ON,OFF) \
+>> +     -DBUILD_opencv_videoio=$(if $(BR2_PACKAGE_OPENCV_LIB_VIDEOIO),ON,OFF) \
+>>       -DBUILD_opencv_videostab=$(if $(BR2_PACKAGE_OPENCV_LIB_VIDEOSTAB),ON,OFF) \
+>> +     -DBUILD_opencv_viz=OFF \
+>
+> Any reason not to add a Config.in option for viz?
 
-Done :-)
+Yes, it needs VTK. I'll add a comment about it as well in the next
+revision of the patch.
 
-> No need to indicate that in the commit log.
+Regards,
 
-Okay.
+[1] https://github.com/itseez/opencv_contrib
 
-Best regards
-J?rg Krause
+-- 
+Samuel
