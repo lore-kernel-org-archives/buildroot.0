@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Jun 2015 16:36:06 +0200
-Subject: [Buildroot] [PATCH/RFC v2 07/44] package/kodi-audioencoder-flac:
-	bump version
+Date: Sun, 14 Jun 2015 16:36:14 +0200
+Subject: [Buildroot] [PATCH/RFC v2 15/44] package/kodi-pvr-dvblink: new
+	package
 In-Reply-To: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1434292603-12052-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1434292603-12052-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,61 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/kodi-pvr-dvblink/Config.in           |    8 ++++++++
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk |   17 +++++++++++++++++
+ package/kodi/Config.in                       |    1 +
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/kodi-pvr-dvblink/Config.in
+ create mode 100644 package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
 
-diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-index 2ccc1b7..154e39c 100644
---- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-+++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi-pvr-dvblink/Config.in b/package/kodi-pvr-dvblink/Config.in
+new file mode 100644
+index 0000000..57f1127
+--- /dev/null
++++ b/package/kodi-pvr-dvblink/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_PVR_DVBLINK
++	bool "kodi-pvr-dvblink"
++	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_TINYXML2
++	help
++	  Kodi's DVBLink client addon
++
++	  https://github.com/kodi-pvr/pvr.dvblink
+diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
+new file mode 100644
+index 0000000..a7c7d1e
+--- /dev/null
++++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# kodi-pvr-dvblink
++#
++################################################################################
++
++KODI_PVR_DVBLINK_VERSION = 7f515436a30472f85f4994d0f4bfe0f3569e4631
++KODI_PVR_DVBLINK_SITE = $(call github,kodi-pvr,pvr.dvblink,$(KODI_PVR_DVBLINK_VERSION))
++KODI_PVR_DVBLINK_LICENSE = GPLv2+
++KODI_PVR_DVBLINK_LICENSE_FILES = src/client.cpp
++
++KODI_PVR_DVBLINK_DEPENDENCIES = kodi-platform tinyxml2
++
++KODI_PVR_DVBLINK_CONF_OPTS += \
++	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index bb9e3fc..b21530b 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -254,6 +254,7 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
+ menu "PVR addons"
+ 	source "package/kodi-addon-xvdr/Config.in"
+ 	source "package/kodi-pvr-argustv/Config.in"
++	source "package/kodi-pvr-dvblink/Config.in"
+ endmenu
  
--KODI_AUDIOENCODER_FLAC_VERSION = 84acb14101b9114472cd20f6a0f8fdefbb376113
-+KODI_AUDIOENCODER_FLAC_VERSION = a5e2d1262de3b2de567cf0a8207636ebaacb8775
- KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
- KODI_AUDIOENCODER_FLAC_LICENSE = GPLv2+
- KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
+ menu "Audio encoder addons"
 -- 
 1.7.10.4
