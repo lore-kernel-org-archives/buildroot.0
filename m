@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2015 17:40:41 +0200
-Subject: [Buildroot] [PATCHv2 11/15] fs/iso9660: use 'depends on'
- instead of 'select' for bootloader
-In-Reply-To: <1433802108-14351-12-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 Jun 2015 17:47:54 +0200
+Subject: [Buildroot] [PATCHv2 12/15] fs/iso9660: add isolinux support
+In-Reply-To: <1433802108-14351-13-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1433802108-14351-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1433802108-14351-12-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150614154041.GI3615@free.fr>
+ <1433802108-14351-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150614154754.GJ3615@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,55 +14,66 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-06-09 00:21 +0200, Thomas Petazzoni spake thusly:
-> In preparation to the introduction of the support for other
-> bootloaders than Grub, this commit switches from having the iso9660
-> support "select" the necessary bootloader to using a "depends on".
-> 
-> The main motivation is that the isolinux bootloader support will
-> really need to do a "depends on", due to the need of having a certain
-> option enabled, but this option being a kconfig "choice".
+> After all the preparation commits, this commit finally adds the
+> iso9660 support itself. Besides adding a new Config.in entry, a little
+> bit of .mk code and the isolinux.cfg default configuration, not much
+> is needed.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Yet, see a little comment below...
+
+[--SNIP--]
+> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+> index 6a1b214..588e07b 100644
+> --- a/fs/iso9660/iso9660.mk
+> +++ b/fs/iso9660/iso9660.mk
+> @@ -53,6 +53,17 @@ define ROOTFS_ISO9660_INSTALL_BOOTLOADER
+>  	$(INSTALL) -D -m 0644 $(GRUB_DIR)/stage2/stage2_eltorito \
+>  		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/stage2_eltorito
+>  endef
+> +else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
+> +ROOTFS_ISO9660_DEPENDENCIES += syslinux
+> +ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
+> +	$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.cfg
+> +ROOTFS_ISO9660_BOOT_IMAGE = isolinux/isolinux.bin
+> +define ROOTFS_ISO9660_INSTALL_BOOTLOADER
+> +	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/isolinux.bin \
+> +		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.bin
+> +	$(INSTALL) -D -m 0644 $(HOST_DIR)/usr/share/syslinux/ldlinux.c32 \
+> +		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/ldlinux.c32
+
+In my previous review, I suggested we always install ldlinux.c32 from
+the syslinux package, and into $(BINARIES_DIR)/syslinux, to which you
+seemed to agree.
+
+However, it looks like you overlooked that part. ;-)
+
+Still, this patch is good as-is, and can be refined with further
+patching later on, hence my reviewed-by tag.
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  fs/iso9660/Config.in | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-> index f5e5f32..cd7b175 100644
-> --- a/fs/iso9660/Config.in
-> +++ b/fs/iso9660/Config.in
-> @@ -2,6 +2,7 @@ config BR2_TARGET_ROOTFS_ISO9660
->  	bool "iso image"
->  	depends on (BR2_i386 || BR2_x86_64)
->  	depends on BR2_LINUX_KERNEL
-> +	depends on BR2_TARGET_GRUB
->  	select BR2_LINUX_KERNEL_INSTALL_TARGET \
->  	       if (!BR2_TARGET_ROOTFS_ISO9660_INITRD && !BR2_TARGET_ROOTFS_INITRAMFS)
->  	help
-> @@ -25,7 +26,7 @@ choice
->  
->  config BR2_TARGET_ROOTFS_ISO9660_GRUB
->  	bool "grub"
-> -	select BR2_TARGET_GRUB
-> +	depends on BR2_TARGET_GRUB
->  	select BR2_TARGET_GRUB_FS_ISO9660
->  
->  endchoice
-> @@ -52,6 +53,6 @@ config BR2_TARGET_ROOTFS_ISO9660_INITRD
->  
+> +endef
 >  endif
 >  
-> -comment "iso image needs a Linux kernel to be built"
-> +comment "iso image needs a Linux kernel and grub to be built"
->  	depends on BR2_i386 || BR2_x86_64
-> -	depends on !BR2_LINUX_KERNEL
-> +	depends on !BR2_LINUX_KERNEL || !BR2_TARGET_GRUB
+>  define ROOTFS_ISO9660_PREPARATION
+> diff --git a/fs/iso9660/isolinux.cfg b/fs/iso9660/isolinux.cfg
+> new file mode 100644
+> index 0000000..28be4fa
+> --- /dev/null
+> +++ b/fs/iso9660/isolinux.cfg
+> @@ -0,0 +1,5 @@
+> +default 1
+> +label 1
+> +      kernel __KERNEL_PATH__
+> +      initrd __INITRD_PATH__
+> +      append root=/dev/sr0
 > -- 
 > 2.1.0
 > 
