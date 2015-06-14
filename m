@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Jun 2015 16:36:43 +0200
-Subject: [Buildroot] [PATCH/RFC v2 44/44]
-	package/kodi-visualisation-shadertoy: new package
+Date: Sun, 14 Jun 2015 16:36:36 +0200
+Subject: [Buildroot] [PATCH/RFC v2 37/44]
+	package/kodi-screensaver-asteroids: new package
 In-Reply-To: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1434292603-12052-45-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1434292603-12052-38-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,58 +13,58 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-visualisation-shadertoy/Config.in        |    6 ++++++
- .../kodi-visualisation-shadertoy.mk                   |   17 +++++++++++++++++
+ package/kodi-screensaver-asteroids/Config.in          |    6 ++++++
+ .../kodi-screensaver-asteroids.mk                     |   17 +++++++++++++++++
  package/kodi/Config.in                                |    4 ++++
  3 files changed, 27 insertions(+)
- create mode 100644 package/kodi-visualisation-shadertoy/Config.in
- create mode 100644 package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+ create mode 100644 package/kodi-screensaver-asteroids/Config.in
+ create mode 100644 package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
 
-diff --git a/package/kodi-visualisation-shadertoy/Config.in b/package/kodi-visualisation-shadertoy/Config.in
+diff --git a/package/kodi-screensaver-asteroids/Config.in b/package/kodi-screensaver-asteroids/Config.in
 new file mode 100644
-index 0000000..10a6e55
+index 0000000..b1a1d20
 --- /dev/null
-+++ b/package/kodi-visualisation-shadertoy/Config.in
++++ b/package/kodi-screensaver-asteroids/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY
-+	bool "kodi-visualisation-shadertoy"
++config BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS
++	bool "kodi-screensaver-asteroids"
 +	help
-+	  Shadertoy visualiser for Kodi
++	  Asteroids screensaver for Kodi
 +
-+	  https://github.com/notspiff/visualization.shadertoy
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
++	  https://github.com/notspiff/screensaver.asteroids
+diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
 new file mode 100644
-index 0000000..72493c1
+index 0000000..cc25e40
 --- /dev/null
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
++++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-visualisation-shadertoy
++# kodi-screensaver-asteroids
 +#
 +################################################################################
 +
-+KODI_VISUALISATION_SHADERTOY_VERSION = a4eaaad4ab7204a30224f2c6952f7a7035ca1c38
-+KODI_VISUALISATION_SHADERTOY_SITE = $(call github,notspiff,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
-+KODI_VISUALISATION_SHADERTOY_LICENSE = GPLv2+
-+KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = src/main.cpp
++KODI_SCREENSAVER_ASTEROIDS_VERSION = d4c2e3b499544ef55be364b34e5569d9c31c9615
++KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,notspiff,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
++KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPLv2+
++KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = src/main.cpp
 +
-+KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = kodi
++KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = kodi
 +
-+KODI_VISUALISATION_SHADERTOY_CONF_OPTS += \
++KODI_SCREENSAVER_ASTEROIDS_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index b7516c0..e9156cf 100644
+index c2e2d4e..64aefe7 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -298,4 +298,8 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-stars/Config.in"
+@@ -288,4 +288,8 @@ menu "Audio encoder addons"
+ 	source "package/kodi-audioencoder-wav/Config.in"
  endmenu
  
-+menu "Visualisations"
-+	source "package/kodi-visualisation-shadertoy/Config.in"
++menu "Screensavers"
++	source "package/kodi-screensaver-asteroids/Config.in"
 +endmenu
 +
  endif # BR2_PACKAGE_KODI
