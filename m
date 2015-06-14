@@ -1,29 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 22:53:09 +0200
-Subject: [Buildroot] [PATCH 1/4] package/nodejs: Update to allow
- selecting node.js version
-In-Reply-To: <1434298376-31893-1-git-send-email-martin@barkynet.com>
-References: <1434298376-31893-1-git-send-email-martin@barkynet.com>
-Message-ID: <20150614225309.07f354ed@free-electrons.com>
+Date: Sun, 14 Jun 2015 22:56:20 +0200
+Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: Fix x86 compilation
+ with gcc5
+In-Reply-To: <1434301872-30351-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1434301872-30351-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150614225620.02eafcbc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+Dear Bernd Kuhls,
 
-On Sun, 14 Jun 2015 17:12:53 +0100, Martin Bark wrote:
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+On Sun, 14 Jun 2015 19:11:11 +0200, Bernd Kuhls wrote:
 
-What is the motivation for supporting more than one version of NodeJS
-at a time?
+> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+> index 41ac616..479625c 100644
+> --- a/package/ffmpeg/ffmpeg.mk
+> +++ b/package/ffmpeg/ffmpeg.mk
+> @@ -261,6 +261,7 @@ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+>  FFMPEG_CONF_OPTS += --enable-yasm
+>  FFMPEG_DEPENDENCIES += host-yasm
+>  else
+> +FFMPEG_CONF_OPTS += --disable-asm
 
-We generally try to avoid supporting multiple versions of a given
-component, unless there are some really good reasons to do so (like
-python2 vs. python3, or qt4 vs. qt5).
-
-Thanks,
+This will actually disable *all* ASM based optimizations, in all cases
+(except on x86 with MMX). So it will potentially cause some severe
+performance degradation, even if you're not using gcc 5.1. Shouldn't we
+instead report the bug to upstream ffmpeg ?
 
 Thomas
 -- 
