@@ -1,52 +1,45 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sun, 14 Jun 2015 17:12:56 +0100
-Subject: [Buildroot] [PATCH 4/4] package/nodejs: Define NPM command for
-	other packages to use
-In-Reply-To: <1434298376-31893-1-git-send-email-martin@barkynet.com>
-References: <1434298376-31893-1-git-send-email-martin@barkynet.com>
-Message-ID: <1434298376-31893-4-git-send-email-martin@barkynet.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 14 Jun 2015 19:24:09 +0300
+Subject: [Buildroot] [PATCH 2/6] uclibc: add libgcc_s_resume fix
+In-Reply-To: <1434292411-5003-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1434292411-5003-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1434292411-5003-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150614162409.GC8165@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/nodejs/nodejs.mk | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+Hi Thomas,
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 5d95f77..8cd4fd3 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -95,6 +95,13 @@ NODEJS_MODULES_LIST= $(call qstrip,\
- 	$(if $(BR2_PACKAGE_NODEJS_MODULES_COFFEESCRIPT),coffee-script) \
- 	$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL))
- 
-+# Define NPM for other packages to use
-+NPM = $(TARGET_CONFIGURE_OPTS) \
-+	LD="$(TARGET_CXX)" \
-+	npm_config_arch=$(NODEJS_CPU) \
-+	npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
-+	$(HOST_DIR)/usr/bin/npm
-+
- #
- # We can only call NPM if there's something to install.
- #
-@@ -104,12 +111,7 @@ define NODEJS_INSTALL_MODULES
- 	# npm install call below and setting npm_config_rollback=false can both
- 	# help in diagnosing the problem.
- 	(cd $(TARGET_DIR)/usr/lib && mkdir -p node_modules && \
--		$(TARGET_CONFIGURE_OPTS) \
--		LD="$(TARGET_CXX)" \
--		npm_config_arch=$(NODEJS_CPU) \
--		npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
--		$(HOST_DIR)/usr/bin/npm install \
--		$(NODEJS_MODULES_LIST) \
-+		$(NPM) install $(NODEJS_MODULES_LIST) \
- 	)
- 
- 	# Add global node_modules to PATH
+On Sun, Jun 14, 2015 at 04:33:27PM +0200, Thomas Petazzoni wrote:
+> diff --git a/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch b/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch
+> new file mode 100644
+> index 0000000..8a165f3
+> --- /dev/null
+> +++ b/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch
+> @@ -0,0 +1,53 @@
+> +From 7ed8bacef45a2537646e7235092bd2e5408cd0b5 Mon Sep 17 00:00:00 2001
+> +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +Date: Sun, 14 Jun 2015 15:14:22 +0200
+> +Subject: [PATCH] Fix libgcc_s_resume issue
+> +
+> +When built with gcc 5.1, uClibc-ng fails to build with the following
+> +issue:
+
+This patch is for uClibc.
+
+> +
+> +   librt/librt_so.a(rt-unwind-resume.oS): In function `_Unwind_Resume':
+> +   rt-unwind-resume.c:(.text+0x3c): undefined reference to
+
+Is that the full error message? I have that strange feeling that something is 
+missing. Same goes for the uClibc-ng patch.
+
+baruch
+
 -- 
-2.1.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
