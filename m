@@ -1,32 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 23:10:32 +0200
-Subject: [Buildroot] [git commit] package/libuv: bump to version 1.6.1
-Message-ID: <20150614212541.AB4EF81957@busybox.osuosl.org>
+Date: Sun, 14 Jun 2015 23:10:44 +0200
+Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 0.11.0
+Message-ID: <20150614212541.C8BD07FFFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=30f238c9ce6300d91992ca854b6874dba63d9e35
+commit: http://git.buildroot.net/buildroot/commit/?id=1b601a2f3db80521c87a841ca74e609183e3428a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+upmpdcli 0.11.0 requires libupnpp 0.11.0 and does not build with the previous
+version 0.8.6 of libupnpp.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libuv/libuv.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/upmpdcli/upmpdcli.hash |    4 ++--
+ package/upmpdcli/upmpdcli.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 0ce8420..505c8d8 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index b3a793b..549945e 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,2 +1,2 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.8.6.tar.gz.sha256
+-sha256 118d30d7c8ca9f9e94cebdec5cf8c7c619b71252a0dbac2afe30d5c9ff5bda87  upmpdcli-0.8.6.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.11.0.tar.gz.sha256
++sha256 0f064b7fe498ee56879e606f48b7bafa42381d25fda6b91ef2cb3677effc85b9  upmpdcli-0.11.0.tar.gz
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index a5c6370..5e4d6a8 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUV_VERSION = v1.5.0
-+LIBUV_VERSION = v1.6.1
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+-UPMPDCLI_VERSION = 0.8.6
++UPMPDCLI_VERSION = 0.11.0
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPLv2+
+ UPMPDCLI_LICENSE_FILES = COPYING
