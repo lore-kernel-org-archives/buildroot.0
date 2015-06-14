@@ -1,51 +1,77 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Jun 2015 16:19:17 +0200
-Subject: [Buildroot] [PATCH/RFC 01/27] package/libsquish: New package
-References: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
- <1427913380-14808-2-git-send-email-bernd.kuhls@t-online.de>
- <20150405213109.GJ4134@free.fr>
-Message-ID: <XnsA4B9A60A38B78berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Jun 2015 16:29:02 +0200
+Subject: [Buildroot] [PATCH 0/2 v2] package/libtirpc: bump and add new
+	dependencies (branch yem/libtirpc)
+Message-ID: <cover.1434292018.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello All!
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:20150405213109.GJ4134 at free.fr:
+This sseries bumps libtirpc to the latest release.
 
->> +       https://code.google.com/p/libsquish
-> 
-> Don;t we have a better homepage for libsquish? Google code is slated for
-> retirement later this year (or early next year). It would be a pity to
-> have a dangling URL especially as we already know about that.
+Besides, libtirpc does not build on musl, because musl is lacking two
+headers:
+  - sys/cdefs.h on ARM,
+  - sys/queue.h on all architectures.
 
-the project moved to sourceforge and released version 1.13 while Kodi still 
-contains a fork of 1.10. I updated my patch kodi beta2 series to use upstream 
-1.10 with a kodi-specific patch. The next release of my patch series 
-following kodi beta2 will contain libsquish 1.13 as it includes cmake support 
-now.
+So, libtirpc is disabled on musl. That dependency is propagated to all
+packages that depend on libtirpc.
 
->> +LIBSQUISH_SITE = http://sources.openelec.tv/devel
-> 
-> I'm a bit uneasy at pointing to Google code as the homepage, and at the
-> same time using a third-party to get the archive from, especially since
-> it looks like this version has been modified by OpenELEC.
 
-Partly done, kodi beta2 gets the source from code.google.com.
+Changes v1 -> v2:
+  - add dependency patch
 
->> +LIBSQUISH_INSTALL_STAGING = YES
->> +LIBSQUISH_LICENSE = MIT
->> +LIBSQUISH_LICENSE_FILES = README
-> 
-> You do not provide build commands. Is that on purpose, or did you
-> forget? ;-)
 
-I forgot them but the package got build anyway ;) I will change libsquish to 
-cmake when bumping to 1.13.
+Regards,
+Yann E. MORIN.
 
-Thanks for the review!
 
-Regards, Bernd
+The following changes since commit d6d237c8c2313829b6f7b4f06d55a5a4c89a870b:
+
+  uclibc: remove Xtensa specific version (2015-06-14 14:51:06 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/libtirpc
+
+for you to fetch changes up to a13a154a08aa3fd09400a2b1ae3571544a86f3db:
+
+  package/libtirpc: does not build with musl libc (2015-06-14 16:21:57 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/libtirpc: bump version
+      package/libtirpc: does not build with musl libc
+
+ package/argus/Config.in                            |  5 +-
+ package/conntrack-tools/Config.in                  |  5 +-
+ ...able-parts-of-TIRPC-requiring-NIS-support.patch | 66 ++++------------------
+ ...out-RPC-support-does-not-install-rpcent.h.patch | 18 +++---
+ ...dd-rpcgen-program-from-nfs-utils-sources.patch} | 19 ++++---
+ ...y-generate-XDR-header-files-from-.x-sour.patch} | 53 ++++++++---------
+ ...-files-needed-to-build-rpcbind-on-top-of.patch} | 27 +++++----
+ ...g-config-needs-pthread-as-private-library.patch | 36 ------------
+ package/libtirpc/Config.in                         |  5 +-
+ package/libtirpc/libtirpc.hash                     |  4 +-
+ package/libtirpc/libtirpc.mk                       |  2 +-
+ package/lmbench/Config.in                          |  6 +-
+ package/nfs-utils/Config.in                        |  6 +-
+ package/quota/Config.in                            |  6 +-
+ package/rpcbind/Config.in                          |  5 +-
+ 15 files changed, 101 insertions(+), 162 deletions(-)
+ rename package/libtirpc/{0004-Add-rpcgen-program-from-nfs-utils-sources.patch => 0003-Add-rpcgen-program-from-nfs-utils-sources.patch} (99%)
+ rename package/libtirpc/{0005-Automatically-generate-XDR-header-files-from-.x-sour.patch => 0004-Automatically-generate-XDR-header-files-from-.x-sour.patch} (97%)
+ rename package/libtirpc/{0006-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch => 0005-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch} (98%)
+ delete mode 100644 package/libtirpc/0007-pkg-config-needs-pthread-as-private-library.patch
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
