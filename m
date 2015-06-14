@@ -1,30 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 22:40:22 +0200
-Subject: [Buildroot] [PATCH 1/6] uclibc: bump uClibc-ng to 1.0.3
-In-Reply-To: <20150614190348.GP21686@waldemar-brodkorb.de>
-References: <1434292411-5003-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1434292411-5003-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150614190348.GP21686@waldemar-brodkorb.de>
-Message-ID: <20150614224022.16c6019d@free-electrons.com>
+Date: Sun, 14 Jun 2015 22:43:06 +0200
+Subject: [Buildroot] [PATCH/RFC v2 03/44] package/libcec: bump to
+ version 3.0.0
+In-Reply-To: <1434292603-12052-4-git-send-email-bernd.kuhls@t-online.de>
+References: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
+ <1434292603-12052-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150614224306.3b1d44b4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar,
+Dear Bernd Kuhls,
 
-On Sun, 14 Jun 2015 21:03:48 +0200, Waldemar Brodkorb wrote:
+On Sun, 14 Jun 2015 16:36:02 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/kodi/Config.in                     |    2 ++
+>  package/libcec/0001-remove-Wno-psabi.patch |   21 ---------------------
+>  package/libcec/Config.in                   |    4 ++++
+>  package/libcec/libcec.mk                   |   23 +++++++++++++++--------
+>  4 files changed, 21 insertions(+), 29 deletions(-)
+>  delete mode 100644 package/libcec/0001-remove-Wno-psabi.patch
 
-> > This commit bumps uClibc-ng to the latest version, and drops the two
-> > patches that have been merged upstream.
-> 
-> Have you seen the new uclibcng-testrunner.sh? It can be used on a
-> target without GNU make. I tested it already with busybox hush.
-> This might be used on no-MMU targets.
+You really need to add more verbose commit logs:
 
-Yes, I've seen it, but so far I haven't used it. We could add support
-for it later on.
+ - explanation about the gcc 4.5 dependency
+ - indicate that we're switch from autotools-package to cmake-package
+
+etc.
+
+A commit log limited to "<pkg>: bump to version <version>" is only OK
+if really only the version and hashes are changed.
+
+Thanks,
 
 Thomas
 -- 
