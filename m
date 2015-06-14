@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 22:48:54 +0200
-Subject: [Buildroot] [PATCH/RFC v2 01/44] package/libsquish: New package
-In-Reply-To: <1434292603-12052-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 14 Jun 2015 22:49:28 +0200
+Subject: [Buildroot] [PATCH/RFC v2 00/44] package/kodi: bump version to
+ 15.0 Beta2 Isengard
+In-Reply-To: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
- <1434292603-12052-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150614224854.7604869a@free-electrons.com>
+Message-ID: <20150614224928.09fbe545@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,53 +13,18 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sun, 14 Jun 2015 16:36:00 +0200, Bernd Kuhls wrote:
+On Sun, 14 Jun 2015 16:35:59 +0200, Bernd Kuhls wrote:
 
-> diff --git a/package/libsquish/0001-kodi.patch b/package/libsquish/0001-kodi.patch
-> new file mode 100644
-> index 0000000..1bab6a6
-> --- /dev/null
-> +++ b/package/libsquish/0001-kodi.patch
-> @@ -0,0 +1,1504 @@
-> +Add Kodi-specific patch
-> +
-> +Kodi 15.0 contains an updated version of libsquish:
-> +https://github.com/xbmc/xbmc/tree/master/tools/depends/native/libsquish-native
-> +
-> +The OpenElec project provides a separate tarball including the Kodi-
-> +specific patches:
-> +http://sources.openelec.tv/devel/libsquish-1.10-openelec.tar.gz
-> +
-> +This patch is the diff between upstream libsquish 1.10 and the OpenElec
-> +tarball without the vs7/ directory.
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> The Kodi project is preparing its next release 15.0, called Isengard.
+> This patch series introduces two new dependencies, libsquish and libplatform.
+> The pvr-addons were split into seperate repositories, so the current
+> package kodi-pvr-addons is removed.
+> Also audio codecs, which are not part of ffmpeg, were removed from Kodi
+> and are now provided as seperate addons.
 
-Is there some hope of getting this patch merged upstream?
-
-> +LIBSQUISH_VERSION = 1.10
-> +LIBSQUISH_SOURCE = squish-$(LIBSQUISH_VERSION).tar.gz
-> +LIBSQUISH_SITE = https://libsquish.googlecode.com/files
-
-googlecode.com is going to disappear, is the project planning to move
-to some other location.
-
-> +LIBSQUISH_INSTALL_STAGING = YES
-> +LIBSQUISH_LICENSE = MIT
-> +LIBSQUISH_LICENSE_FILES = README
-> +
-> +define LIBSQUISH_INSTALL_STAGING_CMDS
-> +	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig/
-> +	CXX=$(TARGET_CXX) CXXFLAGS="$(TARGET_CXXFLAGS)" \
-> +	$(MAKE) -C $(@D) install PREFIX=/usr INSTALL_DIR=$(STAGING_DIR)/usr
-
-Please intend with an additional the second line of continuation lines.
-Also, can you use:
-
-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
-		PREFIX=/usr INSTALL_DIR=$(STAGING_DIR)/usr
-
-instead?
+When is the final 15.0 release expected? I.e, should we consider these
+patches for Buildroot 2015.08 (if Kodi 15.0 gets released before), or
+not?
 
 Thanks,
 
