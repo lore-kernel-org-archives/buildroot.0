@@ -1,69 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2015 23:42:44 +0200
-Subject: [Buildroot] [PATCH 3/4] core/pkg-kconfig: run the kconfig
- fixups after exiting configurators
-In-Reply-To: <557C5969.7020703@mind.be>
-References: <cover.1433591404.git.yann.morin.1998@free.fr>
- <c011926dc0817e5b5685bc5519ae5cbd57b21888.1433591404.git.yann.morin.1998@free.fr>
- <20150612233618.56f1e4dd@free-electrons.com>
- <557C5969.7020703@mind.be>
-Message-ID: <20150614214244.GO3615@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 14 Jun 2015 23:48:13 +0200
+Subject: [Buildroot] [PATCH] libxmlrpc: fix static build
+In-Reply-To: <20150614230049.6ab5e979@free-electrons.com>
+References: <5425b32256128e928f8ad22c596f91ab7ac5f9e8.1433859609.git.baruch@tkos.co.il>	<20150612231307.690e22d0@free-electrons.com>	<20150614190738.GE8165@tarshish>
+ <20150614230049.6ab5e979@free-electrons.com>
+Message-ID: <557DF69D.2060903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
-
-On 2015-06-13 18:25 +0200, Arnout Vandecappelle spake thusly:
-> On 06/12/15 23:36, Thomas Petazzoni wrote:
-> > On Sat,  6 Jun 2015 13:54:25 +0200, Yann E. MORIN wrote:
-[--SNIP--]
-> >> +$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): @D=$$($(2)_DIR)
-[--SNIP--]
-> > The
-> > hack on @D is particularly tricky.
+On 06/14/15 23:00, Thomas Petazzoni wrote:
+> Dear Baruch Siach,
 > 
-> How about:
+> On Sun, 14 Jun 2015 22:07:38 +0300, Baruch Siach wrote:
 > 
-> $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/%
+>> Unfortunately, these make variables are set explicitly in common.mk. So 
+>> passing them in make environment has no effect.
 > 
-> $$($(2)_DIR)/%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
->         $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
->                 $$($(2)_KCONFIG_OPTS) $$*
-> 	...
-
-Yup, that would work. I was tempted to do so, but this is starting to
-get pretty advanced Makefile syntax.
-
-I'm not too comfortable with that syntax. Although I fully understand
-what it means, I had to double-check the manual to be sure.
-
-I'd have a slight preference for twiddling with @D...
-
-> Note that there's no need to actually create $$($(2)_DIR)/%, so it should
-> probably be declared PHONY too:
+> Argh, ok.
 > 
-> .PHONY: $$(addprefix $$($(2)_DIR)/,$$($(2)_KCONFIG_EDITORS))
+>> Now that I think about it, why don't we have a similar thing for MAKE_OPTS, 
+>> say, $(PKG)_MAKE_VARS. Something like (untested, host packages missing):
+>>
+>> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+>> index 1d694f0618fc..27ff16235f27 100644
+>> --- a/package/pkg-autotools.mk
+>> +++ b/package/pkg-autotools.mk
+>> @@ -154,10 +154,10 @@ endif
+>>  $(2)_CONF_ENV			?=
+>>  $(2)_CONF_OPTS			?=
+>>  $(2)_MAKE_ENV			?=
+>> -$(2)_MAKE_OPTS			?=
+>> -$(2)_INSTALL_OPTS                ?= install
+>> -$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
+>> -$(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR)  install
+>> +$(2)_MAKE_OPTS			?= $$($(2)_MAKE_VARS)
+>> +$(2)_INSTALL_OPTS		?= $$($(2)_MAKE_VARS) install
+>> +$(2)_INSTALL_STAGING_OPTS	?= $$($(2)_MAKE_VARS) DESTDIR=$$(STAGING_DIR) install
+>> +$(2)_INSTALL_TARGET_OPTS	?= $$($(2)_MAKE_VARS) DESTDIR=$$(TARGET_DIR) install
+> 
+> Why not. Though I'd be more convinced if there is some evidence that it
+> would also be useful for other packages.
+> 
+> Or maybe we simply need to make $(2)_MAKE_OPTS used for both the build
+> and install steps?
 
-Yes, it would need to be PHONY.
+ Well, MAKE_OPTS includes the target that has to be built, so it can't just be
+reused as is for _INSTALL. So Baruch's proposal makes more sense to me.
 
->  Of course, you will still need to call FIXUP_CONFIG twice, but really in make
-> there is no way to do things twice except by repeating them - make tries very
-> hard to do things only once.
+ Regards,
+ Arnout
 
-Yup...
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
