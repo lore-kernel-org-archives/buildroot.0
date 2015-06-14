@@ -1,42 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 23:08:59 +0200
-Subject: [Buildroot] [git commit] package/zic: bump version to 2015e
-Message-ID: <20150614211000.F23848079F@busybox.osuosl.org>
+From: bruce bushby <bruce.bushby@gmail.com>
+Date: Sun, 14 Jun 2015 22:10:03 +0100
+Subject: [Buildroot] strange issue with gcc 4.9.2
+In-Reply-To: <20150613195458.19a66470@free-electrons.com>
+References: <CAHvj1qa+QLFcJ6==FJEyWhYFgQXd9-ZQcB9tQv5=waiaPsvC1g@mail.gmail.com>
+ <20150613195458.19a66470@free-electrons.com>
+Message-ID: <CAHvj1qYbXDuov3JWw-Nt7OBpWd0E3xR0c2-UPes2zqsX3D+mmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee871967b644ac4a65fb6a95ad11afb069e524ca
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/zic/zic.hash |    4 ++--
- package/zic/zic.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+It appears I inadvertently sent a somewhat mistake ridden "half email" to
+the list while meaning to delete it :)
 
-diff --git a/package/zic/zic.hash b/package/zic/zic.hash
-index 6f7911a..3ddd6f8 100644
---- a/package/zic/zic.hash
-+++ b/package/zic/zic.hash
-@@ -1,2 +1,2 @@
--# Locally computed
--sha256  7feeb1a60dff8b179c884f6e3aa7684606f4eaeb7f7ecc61a6bb81e3e38af42e  tzcode2015c.tar.gz
-+# From 2015e release anouncement.  See http://mm.icann.org/pipermail/tz-announce/2015-June/000032.html
-+sha512  fdc568a68f4876b967b39e21fa53f063dc5756e886e2a273cc046d5a014eb517e9c91eb6e03d18c94a89ce48578868aed710790415c500188fce4e4add0ce7ca  tzcode2015e.tar.gz
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index 5e84567..a768ac6 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZIC_VERSION = 2015c
-+ZIC_VERSION = 2015e
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
- ZIC_SITE = ftp://ftp.iana.org/tz/releases
- ZIC_LICENSE = Public domain
+Today I went through everything and prepared some simple examples
+demonstrating the problem and while doing so appear to have resolved the
+issue.
+
+I switched boards from an AllWinner A20 to an A13 .... and like an idiot I
+never thought to update the defconfig:
+BR2_cortex_a7=y  (AllWinner A20)   to   BR2_cortex_a8=y (AllWinner A13)
+
+The issue was obscured by the fact that "buildroot-2014.08" produced a
+working "u-boot-sunxi-with-spl.bin" and everything else ....even with the
+incorrect "BR2_cortex_a7=y" defconfig  ... however from 2014.11 onwards,
+the resulting u-boot, although compiled as normal, would not execute on the
+A13 processor .....correcting "BR2_cortex_a7" fixes the issue.
+
+So far today, buildroot-2015.05 is behaving as expected, including
+systemd....although systemd resets the board unless I disable
+networking....but thats a topic for another time.
+
+Thanks for the quick response btw, much appreciated.
+
+
+
+
+On Sat, Jun 13, 2015 at 6:54 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Hello,
+>
+> On Sat, 13 Jun 2015 15:52:10 +0100, bruce bushby wrote:
+>
+> > I'm struggling with an strange problem when building with any of the
+> last 3
+> > versions of buildroot and more specifically gcc 4.9.2
+> >
+> > Perhaps this doesn't have anything to do with buildroot, but I thought I
+> > would mention in case other are having the a similar issue.
+> >
+> > I'm running on an AllWinner A13 processor.
+> >
+> > When I use buildroot 2014.08 (gcc 4.9.1) ....everything is 100%, I am
+> able
+> > to compile my uboot and the resulting "u-boot-sunxi-with-spl.bin"
+> executes
+> > without any problems.
+> >
+> > However, from buildroot 2014.11 (gcc 4.9.2) onwards, the uboot appears to
+> > compile cleanly and is even the same size ...but it will not boot, after
+> > powering on the board I don't see anything, nothing written to the
+> console
+> > etc. My builds are all scripted using the exact same defconfig, but any
+> > spl-uboot compiled with gcc4.9.2 cd ou
+>
+> Weird. Can you provide the u-boot-sunxi-with-spl and
+> u-boot-sunxi-with-spl.bin files for both situations (i.e working and
+> non-working) ?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150614/15f16451/attachment.html>
