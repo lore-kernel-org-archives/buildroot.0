@@ -1,40 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 14:50:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/musl: bump to version 1.1.10
-In-Reply-To: <1434286024-8268-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1434286024-8268-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150614145016.6bae0782@free-electrons.com>
+Date: Sun, 14 Jun 2015 14:50:07 +0200
+Subject: [Buildroot] [git commit] uclibc: use uClibc-ng by default
+Message-ID: <20150614125125.B6D5E807EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=68d4a3b5a6a6d03d67418e0b637628ecf9cbf192
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 14 Jun 2015 14:47:04 +0200, J?rg Krause wrote:
-> A new regression in uselocale made it into this release. As suggested [1] by the
-> musl maintainers add a patch from upstream [2] to avoid breaking programs that
-> call uselocale.
-> 
-> [1]
-> http://www.musl-libc.org/download.html
-> 
-> [2]
-> http://git.musl-libc.org/cgit/musl/patch/?id=63f4b9f18f3674124d8bcb119739fec85e6da005
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/musl/0001-fix-uselocale.patch | 30 ++++++++++++++++++++++++++++++
->  package/musl/musl.hash                |  2 +-
->  package/musl/musl.mk                  |  2 +-
->  3 files changed, 32 insertions(+), 2 deletions(-)
->  create mode 100644 package/musl/0001-fix-uselocale.patch
+Since the uClibc project is not making any release since about 3
+years, and the uClibc-ng project is now alive and delivering regular
+releases based on uClibc master plus a number of fixes, let's make
+uClibc-ng the default uClibc version used by Buildroot.
 
-Applied, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/uclibc/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index dd23853..9b29ae5 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -18,7 +18,7 @@ config BR2_UCLIBC_VERSION_SUPPORTS_NPTL
+ 
+ choice
+ 	prompt "uClibc C library Version"
+-	default BR2_UCLIBC_VERSION_0_9_33
++	default BR2_UCLIBC_VERSION_NG
+ 	help
+ 	  Select the version of uClibc you wish to use.
+ 
