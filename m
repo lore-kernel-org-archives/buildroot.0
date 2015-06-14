@@ -1,32 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 23:08:08 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libgpg-error: Fix compilation
- with gcc5
-In-Reply-To: <1434301872-30351-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1434301872-30351-1-git-send-email-bernd.kuhls@t-online.de>
- <1434301872-30351-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150614230808.301b47c2@free-electrons.com>
+Date: Sun, 14 Jun 2015 23:08:29 +0200
+Subject: [Buildroot] [git commit] package/tzdata: bump version to 2015e
+Message-ID: <20150614211000.493D88079F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=fb69379a9ca9567d029837e68790aa4fbe30f315
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 14 Jun 2015 19:11:12 +0200, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../0001-avoid-breakage-with-gcc-5.patch           |   56 ++++++++++++++++++++
->  package/libgpg-error/libgpg-error.mk               |    3 ++
->  2 files changed, 59 insertions(+)
->  create mode 100644 package/libgpg-error/0001-avoid-breakage-with-gcc-5.patch
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tzdata/tzdata.hash |    4 ++--
+ package/tzdata/tzdata.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index d02829a..091f57c 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,2 +1,2 @@
+-# Locally computed
+-sha256  860fac5f5f57f7a2dfc1ba682dbd1f5c0f0b597f761571277b6ed6561e22365a  tzdata2015c.tar.gz
++# From 2015e release anouncement.  See http://mm.icann.org/pipermail/tz-announce/2015-June/000032.html
++sha512  86498190a20c5c67827aa75f7e9c6aa6c19d58a88a70425ce70d5ae7cea42dc7386eb2867fa455fcfcdedc6a105ad70fbbdc7c27c7a58a51bd21d76a135983ce  tzdata2015e.tar.gz
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index d8512a3..eb6da6c 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TZDATA_VERSION = 2015c
++TZDATA_VERSION = 2015e
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = ftp://ftp.iana.org/tz/releases
+ TZDATA_DEPENDENCIES = host-tzdata
