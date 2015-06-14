@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Jun 2015 16:36:28 +0200
-Subject: [Buildroot] [PATCH/RFC v2 29/44] package/kodi-pvr-wmc: new package
+Date: Sun, 14 Jun 2015 16:36:34 +0200
+Subject: [Buildroot] [PATCH/RFC v2 35/44]
+	package/kodi-audiodecoder-timidity: new package
 In-Reply-To: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1434292603-12052-30-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1434292603-12052-36-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,58 +13,58 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-wmc/Config.in       |    7 +++++++
- package/kodi-pvr-wmc/kodi-pvr-wmc.mk |   17 +++++++++++++++++
- package/kodi/Config.in               |    1 +
+ package/kodi-audiodecoder-timidity/Config.in          |    7 +++++++
+ .../kodi-audiodecoder-timidity.mk                     |   17 +++++++++++++++++
+ package/kodi/Config.in                                |    1 +
  3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-pvr-wmc/Config.in
- create mode 100644 package/kodi-pvr-wmc/kodi-pvr-wmc.mk
+ create mode 100644 package/kodi-audiodecoder-timidity/Config.in
+ create mode 100644 package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
 
-diff --git a/package/kodi-pvr-wmc/Config.in b/package/kodi-pvr-wmc/Config.in
+diff --git a/package/kodi-audiodecoder-timidity/Config.in b/package/kodi-audiodecoder-timidity/Config.in
 new file mode 100644
-index 0000000..2672c83
+index 0000000..8f604ad
 --- /dev/null
-+++ b/package/kodi-pvr-wmc/Config.in
++++ b/package/kodi-audiodecoder-timidity/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_WMC
-+	bool "kodi-pvr-wmc"
++config BR2_PACKAGE_KODI_AUDIODECODER_TIMIDITY
++	bool "kodi-audiodecoder-timidity"
 +	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  Kodi's Windows Media Center client addon
++	  Timidity decoder addon for Kodi
 +
-+	  https://github.com/kodi-pvr/pvr.wmc
-diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
++	  https://github.com/notspiff/audiodecoder.timidity
+diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
 new file mode 100644
-index 0000000..3c43e91
+index 0000000..70672c4
 --- /dev/null
-+++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
++++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-pvr-wmc
++# kodi-audiodecoder-timidity
 +#
 +################################################################################
 +
-+KODI_PVR_WMC_VERSION = 42fb669dc724e890f48c3a5497a4508ded3b8380
-+KODI_PVR_WMC_SITE = $(call github,kodi-pvr,pvr.wmc,$(KODI_PVR_WMC_VERSION))
-+KODI_PVR_WMC_LICENSE = GPLv2+
-+KODI_PVR_WMC_LICENSE_FILES = src/client.cpp
++KODI_AUDIODECODER_TIMIDITY_VERSION = da5eb9ac6557fc1ea0f48cc044cfd16f4f2a1e0b
++KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,notspiff,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
++KODI_AUDIODECODER_TIMIDITY_LICENSE = GPLv2+
++KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = src/TimidityCodec.cpp
 +
-+KODI_PVR_WMC_DEPENDENCIES = kodi-platform
++KODI_AUDIODECODER_TIMIDITY_DEPENDENCIES = kodi-platform
 +
-+KODI_PVR_WMC_CONF_OPTS += \
++KODI_AUDIODECODER_TIMIDITY_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 8209200..c13716c 100644
+index d411fee..9fc6942 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -268,6 +268,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-vbox/Config.in"
- 	source "package/kodi-pvr-vdr/Config.in"
- 	source "package/kodi-pvr-vuplus/Config.in"
-+	source "package/kodi-pvr-wmc/Config.in"
+@@ -277,6 +277,7 @@ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-sidplay/Config.in"
+ 	source "package/kodi-audiodecoder-snesapu/Config.in"
+ 	source "package/kodi-audiodecoder-stsound/Config.in"
++	source "package/kodi-audiodecoder-timidity/Config.in"
  endmenu
  
  menu "Audio encoder addons"
