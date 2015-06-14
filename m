@@ -1,111 +1,108 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 23:25:18 +0200
-Subject: [Buildroot] [git commit] fs/iso9660: add support for grub2
-Message-ID: <20150614212542.A257D7FFFD@busybox.osuosl.org>
+Date: Sun, 14 Jun 2015 23:24:45 +0200
+Subject: [Buildroot] [git commit] fs/iso9660: add isolinux support
+Message-ID: <20150614212542.86B407FFFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=795df97093a0cb027bc0c844f06778c936084abe
+commit: http://git.buildroot.net/buildroot/commit/?id=f9ac784ee68057715ce2f61ad8156228b4e0ddf4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-After having extended the iso9660 support to allow isolinux as an
-alternative to grub, this commit adds grub2 as a third
-alternative. With the previous work done to support isolinux, adding
-support for grub2 is fairly trivial.
-
-[Thomas: set timeout to 10 seconds and not 5 seconds, in order to
-match the configuration used for grub.]
+After all the preparation commits, this commit finally adds the
+iso9660 support itself. Besides adding a new Config.in entry, a little
+bit of .mk code and the isolinux.cfg default configuration, not much
+is needed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- fs/iso9660/Config.in  |   18 +++++++++++++++---
- fs/iso9660/grub.cfg   |    7 +++++++
- fs/iso9660/iso9660.mk |    9 +++++++++
- 3 files changed, 31 insertions(+), 3 deletions(-)
+ fs/iso9660/Config.in    |   20 ++++++++++++++------
+ fs/iso9660/iso9660.mk   |   11 +++++++++++
+ fs/iso9660/isolinux.cfg |    5 +++++
+ 3 files changed, 30 insertions(+), 6 deletions(-)
 
 diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-index 6f057ea..7e1ddd6 100644
+index cd7b175..97925b9 100644
 --- a/fs/iso9660/Config.in
 +++ b/fs/iso9660/Config.in
-@@ -2,7 +2,9 @@ config BR2_TARGET_ROOTFS_ISO9660
+@@ -2,7 +2,7 @@ config BR2_TARGET_ROOTFS_ISO9660
  	bool "iso image"
  	depends on (BR2_i386 || BR2_x86_64)
  	depends on BR2_LINUX_KERNEL
--	depends on BR2_TARGET_GRUB || BR2_TARGET_SYSLINUX_ISOLINUX
-+	depends on BR2_TARGET_GRUB || \
-+		BR2_TARGET_GRUB2 || \
-+		BR2_TARGET_SYSLINUX_ISOLINUX
+-	depends on BR2_TARGET_GRUB
++	depends on BR2_TARGET_GRUB || BR2_TARGET_SYSLINUX_ISOLINUX
  	select BR2_LINUX_KERNEL_INSTALL_TARGET \
  	       if (!BR2_TARGET_ROOTFS_ISO9660_INITRD && !BR2_TARGET_ROOTFS_INITRAMFS)
  	help
-@@ -29,6 +31,15 @@ config BR2_TARGET_ROOTFS_ISO9660_GRUB
+@@ -29,15 +29,22 @@ config BR2_TARGET_ROOTFS_ISO9660_GRUB
  	depends on BR2_TARGET_GRUB
  	select BR2_TARGET_GRUB_FS_ISO9660
  
-+config BR2_TARGET_ROOTFS_ISO9660_GRUB2
-+	bool "grub2"
-+	depends on BR2_TARGET_GRUB2
-+	help
-+	  Use Grub 2 as the bootloader for the ISO9660 image. Make
-+	  sure to enable the 'iso9660' module in
-+	  BR2_TARGET_GRUB2_BUILTIN_MODULES and to use 'cd' as the boot
-+	  partition in BR2_TARGET_GRUB2_BOOT_PARTITION=.
++config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
++	bool "isolinux"
++	depends on BR2_TARGET_SYSLINUX_ISOLINUX
 +
- config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
- 	bool "isolinux"
- 	depends on BR2_TARGET_SYSLINUX_ISOLINUX
-@@ -38,6 +49,7 @@ endchoice
+ endchoice
+ 
  config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
  	string "Boot menu.lst file"
  	default "fs/iso9660/menu.lst" if BR2_TARGET_ROOTFS_ISO9660_GRUB
-+	default "fs/iso9660/grub.cfg" if BR2_TARGET_ROOTFS_ISO9660_GRUB2
- 	default "fs/iso9660/isolinux.cfg" if BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
++	default "fs/iso9660/isolinux.cfg" if BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
  	help
- 	  Use this option to provide a custom bootloader configuration
-@@ -69,7 +81,7 @@ config BR2_TARGET_ROOTFS_ISO9660_HYBRID
+-	  Use this option to provide a custom Grub menu.lst file. Note
+-	  that the strings __KERNEL_PATH__ and __INITRD_PATH__ will
+-	  automatically be replaced by the path to the kernel and
++	  Use this option to provide a custom bootloader configuration
++	  file (menu.lst for Grub, isolinux.cfg for isolinux).
++
++	  Note that the strings __KERNEL_PATH__ and __INITRD_PATH__
++	  will automatically be replaced by the path to the kernel and
+ 	  initrd images respectively.
+ 
+ config BR2_TARGET_ROOTFS_ISO9660_INITRD
+@@ -53,6 +60,7 @@ config BR2_TARGET_ROOTFS_ISO9660_INITRD
  
  endif
  
--comment "iso image needs a Linux kernel and one of grub or isolinux to be built"
-+comment "iso image needs a Linux kernel and one of grub, grub2 or isolinux to be built"
+-comment "iso image needs a Linux kernel and grub to be built"
++comment "iso image needs a Linux kernel and one of grub or isolinux to be built"
  	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_LINUX_KERNEL || \
--		!(BR2_TARGET_GRUB || BR2_TARGET_SYSLINUX_ISOLINUX)
-+		!(BR2_TARGET_GRUB || BR2_TARGET_GRUB2 || BR2_TARGET_SYSLINUX_ISOLINUX)
-diff --git a/fs/iso9660/grub.cfg b/fs/iso9660/grub.cfg
-new file mode 100644
-index 0000000..5a74b23
---- /dev/null
-+++ b/fs/iso9660/grub.cfg
-@@ -0,0 +1,7 @@
-+set default="0"
-+set timeout="10"
-+
-+menuentry "Buildroot" {
-+	linux __KERNEL_PATH__ root=/dev/sr0
-+	initrd __INITRD_PATH__
-+}
+-	depends on !BR2_LINUX_KERNEL || !BR2_TARGET_GRUB
++	depends on !BR2_LINUX_KERNEL || \
++		!(BR2_TARGET_GRUB || BR2_TARGET_SYSLINUX_ISOLINUX)
 diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 4f4abea..6ed979c 100644
+index 6a1b214..588e07b 100644
 --- a/fs/iso9660/iso9660.mk
 +++ b/fs/iso9660/iso9660.mk
-@@ -53,6 +53,15 @@ define ROOTFS_ISO9660_INSTALL_BOOTLOADER
+@@ -53,6 +53,17 @@ define ROOTFS_ISO9660_INSTALL_BOOTLOADER
  	$(INSTALL) -D -m 0644 $(GRUB_DIR)/stage2/stage2_eltorito \
  		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/stage2_eltorito
  endef
-+else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2),y)
-+ROOTFS_ISO9660_DEPENDENCIES += grub2
++else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
++ROOTFS_ISO9660_DEPENDENCIES += syslinux
 +ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
-+	$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/grub.cfg
-+ROOTFS_ISO9660_BOOT_IMAGE = boot/grub/grub-eltorito.img
++	$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.cfg
++ROOTFS_ISO9660_BOOT_IMAGE = isolinux/isolinux.bin
 +define ROOTFS_ISO9660_INSTALL_BOOTLOADER
-+	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/grub-eltorito.img \
-+		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/grub-eltorito.img
++	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/isolinux.bin \
++		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.bin
++	$(INSTALL) -D -m 0644 $(HOST_DIR)/usr/share/syslinux/ldlinux.c32 \
++		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/ldlinux.c32
 +endef
- else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
- ROOTFS_ISO9660_DEPENDENCIES += syslinux
- ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
+ endif
+ 
+ define ROOTFS_ISO9660_PREPARATION
+diff --git a/fs/iso9660/isolinux.cfg b/fs/iso9660/isolinux.cfg
+new file mode 100644
+index 0000000..28be4fa
+--- /dev/null
++++ b/fs/iso9660/isolinux.cfg
+@@ -0,0 +1,5 @@
++default 1
++label 1
++      kernel __KERNEL_PATH__
++      initrd __INITRD_PATH__
++      append root=/dev/sr0
