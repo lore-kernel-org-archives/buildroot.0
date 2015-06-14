@@ -1,34 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 22:56:20 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: Fix x86 compilation
- with gcc5
-In-Reply-To: <1434301872-30351-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1434301872-30351-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150614225620.02eafcbc@free-electrons.com>
+Date: Sun, 14 Jun 2015 23:00:49 +0200
+Subject: [Buildroot] [PATCH] libxmlrpc: fix static build
+In-Reply-To: <20150614190738.GE8165@tarshish>
+References: <5425b32256128e928f8ad22c596f91ab7ac5f9e8.1433859609.git.baruch@tkos.co.il>
+ <20150612231307.690e22d0@free-electrons.com>
+ <20150614190738.GE8165@tarshish>
+Message-ID: <20150614230049.6ab5e979@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Baruch Siach,
 
-On Sun, 14 Jun 2015 19:11:11 +0200, Bernd Kuhls wrote:
+On Sun, 14 Jun 2015 22:07:38 +0300, Baruch Siach wrote:
 
-> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-> index 41ac616..479625c 100644
-> --- a/package/ffmpeg/ffmpeg.mk
-> +++ b/package/ffmpeg/ffmpeg.mk
-> @@ -261,6 +261,7 @@ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
->  FFMPEG_CONF_OPTS += --enable-yasm
->  FFMPEG_DEPENDENCIES += host-yasm
->  else
-> +FFMPEG_CONF_OPTS += --disable-asm
+> Unfortunately, these make variables are set explicitly in common.mk. So 
+> passing them in make environment has no effect.
 
-This will actually disable *all* ASM based optimizations, in all cases
-(except on x86 with MMX). So it will potentially cause some severe
-performance degradation, even if you're not using gcc 5.1. Shouldn't we
-instead report the bug to upstream ffmpeg ?
+Argh, ok.
+
+> Now that I think about it, why don't we have a similar thing for MAKE_OPTS, 
+> say, $(PKG)_MAKE_VARS. Something like (untested, host packages missing):
+> 
+> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> index 1d694f0618fc..27ff16235f27 100644
+> --- a/package/pkg-autotools.mk
+> +++ b/package/pkg-autotools.mk
+> @@ -154,10 +154,10 @@ endif
+>  $(2)_CONF_ENV			?=
+>  $(2)_CONF_OPTS			?=
+>  $(2)_MAKE_ENV			?=
+> -$(2)_MAKE_OPTS			?=
+> -$(2)_INSTALL_OPTS                ?= install
+> -$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
+> -$(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR)  install
+> +$(2)_MAKE_OPTS			?= $$($(2)_MAKE_VARS)
+> +$(2)_INSTALL_OPTS		?= $$($(2)_MAKE_VARS) install
+> +$(2)_INSTALL_STAGING_OPTS	?= $$($(2)_MAKE_VARS) DESTDIR=$$(STAGING_DIR) install
+> +$(2)_INSTALL_TARGET_OPTS	?= $$($(2)_MAKE_VARS) DESTDIR=$$(TARGET_DIR) install
+
+Why not. Though I'd be more convinced if there is some evidence that it
+would also be useful for other packages.
+
+Or maybe we simply need to make $(2)_MAKE_OPTS used for both the build
+and install steps?
+
+Best regards,
 
 Thomas
 -- 
