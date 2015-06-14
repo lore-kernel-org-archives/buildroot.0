@@ -1,144 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 16:33:27 +0200
-Subject: [Buildroot] [PATCH 2/6] uclibc: add libgcc_s_resume fix
-In-Reply-To: <1434292411-5003-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1434292411-5003-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1434292411-5003-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 Jun 2015 16:33:25 +0200
+Subject: [Buildroot] [PATCH 0/6] Internal toolchain backend updates
+Message-ID: <1434292411-5003-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a fix for building uClibc 0.9.33.2 and uClibc-ng
-1.0.3 with gcc 5.1 on ARM, since we're about to add support for gcc
-5.1.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch  | 53 ++++++++++++++++++++++
- .../1.0.3/0001-Fix-libgcc_s_resume-issue.patch     | 53 ++++++++++++++++++++++
- 2 files changed, 106 insertions(+)
+Here is a set of updates to the internal toolchain backend, bumping
+uClibc-ng, adding support for gcc 5.1, bumping gdb 7.9 and
+deprecating support for eglibc.
+
+Also available at:
+
+  git at git.free-electrons.com:users/thomas-petazzoni/buildroot
+
+branch internal-toolchain-updates.
+
+Best regards,
+
+Thomas
+
+Thomas Petazzoni (6):
+  uclibc: bump uClibc-ng to 1.0.3
+  uclibc: add libgcc_s_resume fix
+  gcc: add support for gcc 5.1
+  gcc: switch to gcc 4.9 as the default version
+  gdb: bump 7.9 series to 7.9.1
+  toolchain-buildroot: mark eglibc as deprecated
+
+ package/gcc/5.1.0/100-uclibc-conf.patch            |  15 +
+ .../5.1.0/200-gcc-poison-system-directories.patch  | 207 +++++++++++++
+ .../5.1.0/201-libgcc-remove-unistd-header.patch    |  14 +
+ package/gcc/5.1.0/301-missing-execinfo_h.patch     |  13 +
+ package/gcc/5.1.0/810-arm-softfloat-libgcc.patch   |  30 ++
+ package/gcc/5.1.0/830-arm_unbreak_armv4t.patch     |  15 +
+ .../840-microblaze-enable-dwarf-eh-support.patch   | 166 +++++++++++
+ package/gcc/5.1.0/850-libstdcxx-uclibc-c99.patch   | 273 ++++++++++++++++++
+ package/gcc/5.1.0/860-cilk-wchar.patch             |  56 ++++
+ .../5.1.0/900-libitm-fixes-for-musl-support.patch  |  65 +++++
+ .../901-fixincludes-update-for-musl-support.patch  |  32 ++
+ package/gcc/5.1.0/902-unwind-fix-for-musl.patch    |  36 +++
+ ...dc++-libgfortran-gthr-workaround-for-musl.patch |  80 +++++
+ package/gcc/5.1.0/904-musl-libc-config.patch       | 321 +++++++++++++++++++++
+ .../gcc/5.1.0/905-add-musl-support-to-gcc.patch    | 130 +++++++++
+ package/gcc/5.1.0/906-mips-musl-support.patch      |  37 +++
+ package/gcc/5.1.0/907-x86-musl-support.patch       |  45 +++
+ package/gcc/5.1.0/908-arm-musl-support.patch       |  45 +++
+ package/gcc/5.1.0/909-aarch64-musl-support.patch   |  33 +++
+ package/gcc/Config.in.host                         |  11 +-
+ package/gcc/gcc.hash                               |   2 +
+ .../0001-gdbserver-fix-uClibc-whithout-MMU.patch   |   0
+ ...gdbserver-xtensa-drop-xtensa_usrregs_info.patch |   0
+ ...erver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch |   0
+ package/gdb/Config.in.host                         |   2 +-
+ package/gdb/gdb.hash                               |   2 +-
+ .../0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch  |  53 ++++
+ .../0001-fix-static-linking-of-pthread-apps.patch  |  72 -----
+ ...ert-Do-not-define-unimplemented-functions.patch | 118 --------
+ .../1.0.3/0001-Fix-libgcc_s_resume-issue.patch     |  53 ++++
+ package/uclibc/Config.in                           |   2 +-
+ package/uclibc/uclibc.hash                         |   2 +-
+ toolchain/toolchain-buildroot/Config.in            |   1 +
+ 33 files changed, 1735 insertions(+), 196 deletions(-)
+ create mode 100644 package/gcc/5.1.0/100-uclibc-conf.patch
+ create mode 100644 package/gcc/5.1.0/200-gcc-poison-system-directories.patch
+ create mode 100644 package/gcc/5.1.0/201-libgcc-remove-unistd-header.patch
+ create mode 100644 package/gcc/5.1.0/301-missing-execinfo_h.patch
+ create mode 100644 package/gcc/5.1.0/810-arm-softfloat-libgcc.patch
+ create mode 100644 package/gcc/5.1.0/830-arm_unbreak_armv4t.patch
+ create mode 100644 package/gcc/5.1.0/840-microblaze-enable-dwarf-eh-support.patch
+ create mode 100644 package/gcc/5.1.0/850-libstdcxx-uclibc-c99.patch
+ create mode 100644 package/gcc/5.1.0/860-cilk-wchar.patch
+ create mode 100644 package/gcc/5.1.0/900-libitm-fixes-for-musl-support.patch
+ create mode 100644 package/gcc/5.1.0/901-fixincludes-update-for-musl-support.patch
+ create mode 100644 package/gcc/5.1.0/902-unwind-fix-for-musl.patch
+ create mode 100644 package/gcc/5.1.0/903-libstdc++-libgfortran-gthr-workaround-for-musl.patch
+ create mode 100644 package/gcc/5.1.0/904-musl-libc-config.patch
+ create mode 100644 package/gcc/5.1.0/905-add-musl-support-to-gcc.patch
+ create mode 100644 package/gcc/5.1.0/906-mips-musl-support.patch
+ create mode 100644 package/gcc/5.1.0/907-x86-musl-support.patch
+ create mode 100644 package/gcc/5.1.0/908-arm-musl-support.patch
+ create mode 100644 package/gcc/5.1.0/909-aarch64-musl-support.patch
+ rename package/gdb/{7.9 => 7.9.1}/0001-gdbserver-fix-uClibc-whithout-MMU.patch (100%)
+ rename package/gdb/{7.9 => 7.9.1}/0002-gdbserver-xtensa-drop-xtensa_usrregs_info.patch (100%)
+ rename package/gdb/{7.9 => 7.9.1}/0003-gdbserver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch (100%)
  create mode 100644 package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch
+ delete mode 100644 package/uclibc/1.0.2/0001-fix-static-linking-of-pthread-apps.patch
+ delete mode 100644 package/uclibc/1.0.2/0002-Revert-Do-not-define-unimplemented-functions.patch
  create mode 100644 package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch
 
-diff --git a/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch b/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch
-new file mode 100644
-index 0000000..8a165f3
---- /dev/null
-+++ b/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch
-@@ -0,0 +1,53 @@
-+From 7ed8bacef45a2537646e7235092bd2e5408cd0b5 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 14 Jun 2015 15:14:22 +0200
-+Subject: [PATCH] Fix libgcc_s_resume issue
-+
-+When built with gcc 5.1, uClibc-ng fails to build with the following
-+issue:
-+
-+   librt/librt_so.a(rt-unwind-resume.oS): In function `_Unwind_Resume':
-+   rt-unwind-resume.c:(.text+0x3c): undefined reference to
-+
-+This commit fixes the code in a way similar to what was done in glibc
-+in commit:
-+
-+   https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=175cef4163dd60f95106cfd5f593b8a4e09d02c9
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c | 3 ++-
-+ libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c       | 3 ++-
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
-+index f4d6f41..a6a0515 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
-+@@ -27,7 +27,8 @@
-+ #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
-+ 
-+ static void *libgcc_s_handle;
-+-static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
-++static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
-++  __attribute_used__;
-+ static _Unwind_Reason_Code (*libgcc_s_personality)
-+   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
-+ static _Unwind_Reason_Code (*libgcc_s_forcedunwind)
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
-+index f9a4ffb..e2e2e0b 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
-+@@ -25,7 +25,8 @@
-+ #define __libc_dlclose          dlclose
-+ #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
-+ 
-+-static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
-++static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
-++  __attribute_used__;
-+ static _Unwind_Reason_Code (*libgcc_s_personality)
-+   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
-+ 
-+-- 
-+2.1.0
-+
-diff --git a/package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch b/package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch
-new file mode 100644
-index 0000000..a3cf0d7
---- /dev/null
-+++ b/package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch
-@@ -0,0 +1,53 @@
-+From 8f3bfd31864c28bf5901fc92e0405c729c2204c9 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 14 Jun 2015 13:19:43 +0200
-+Subject: [PATCH] Fix libgcc_s_resume issue
-+
-+When built with gcc 5.1, uClibc-ng fails to build with the following
-+issue:
-+
-+   librt/librt_so.a(rt-unwind-resume.oS): In function `_Unwind_Resume':
-+   rt-unwind-resume.c:(.text+0x3c): undefined reference to
-+
-+This commit fixes the code in a way similar to what was done in glibc
-+in commit:
-+
-+   https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=175cef4163dd60f95106cfd5f593b8a4e09d02c9
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c | 3 ++-
-+ libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c       | 3 ++-
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
-+index f4d6f41..a6a0515 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
-+@@ -27,7 +27,8 @@
-+ #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
-+ 
-+ static void *libgcc_s_handle;
-+-static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
-++static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
-++  __attribute_used__;
-+ static _Unwind_Reason_Code (*libgcc_s_personality)
-+   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
-+ static _Unwind_Reason_Code (*libgcc_s_forcedunwind)
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
-+index f9a4ffb..e2e2e0b 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
-+@@ -25,7 +25,8 @@
-+ #define __libc_dlclose          dlclose
-+ #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
-+ 
-+-static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
-++static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
-++  __attribute_used__;
-+ static _Unwind_Reason_Code (*libgcc_s_personality)
-+   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
-+ 
-+-- 
-+2.1.0
-+
 -- 
 2.1.0
