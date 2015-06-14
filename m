@@ -1,59 +1,98 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Jun 2015 19:11:11 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: Fix x86 compilation with
-	gcc5
-Message-ID: <1434301872-30351-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 14 Jun 2015 19:11:12 +0200
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_2/2=5D_package/libgpg-error=3A_Fix?=
+	=?utf-8?q?_compilation_with_gcc5?=
+In-Reply-To: <1434301872-30351-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1434301872-30351-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1434301872-30351-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In file included from libavcodec/cabac_functions.h:46:0,
-                 from libavcodec/h264_cabac.c:37:
-libavcodec/h264_cabac.c: In function 'ff_h264_decode_mb_cabac':
-libavcodec/x86/cabac.h:192:5: error: 'asm' operand has impossible constraints
-     __asm__ volatile(
-
-To reproduce the bug use this defconfig:
-
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_BINUTILS_VERSION_2_25=y
-BR2_GCC_VERSION_5_1_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_FFMPEG=y
-BR2_PACKAGE_FFMPEG_GPL=y
-BR2_PACKAGE_FFMPEG_FFMPEG=y
-BR2_PACKAGE_FFMPEG_POSTPROC=y
-BR2_PACKAGE_FFMPEG_SWSCALE=y
-BR2_PACKAGE_FFMPEG_ENCODERS="all"
-BR2_PACKAGE_FFMPEG_DECODERS="all"
-BR2_PACKAGE_FFMPEG_MUXERS="all"
-BR2_PACKAGE_FFMPEG_DEMUXERS="all"
-BR2_PACKAGE_FFMPEG_PARSERS="all"
-BR2_PACKAGE_FFMPEG_BSFS="all"
-BR2_PACKAGE_FFMPEG_PROTOCOLS="all"
-BR2_PACKAGE_FFMPEG_FILTERS="all"
-BR2_PACKAGE_FFMPEG_INDEVS=y
-BR2_PACKAGE_FFMPEG_OUTDEVS=y
-BR2_PACKAGE_FFMPEG_EXTRACONF=""
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ffmpeg/ffmpeg.mk |    1 +
- 1 file changed, 1 insertion(+)
+ .../0001-avoid-breakage-with-gcc-5.patch           |   56 ++++++++++++++++++++
+ package/libgpg-error/libgpg-error.mk               |    3 ++
+ 2 files changed, 59 insertions(+)
+ create mode 100644 package/libgpg-error/0001-avoid-breakage-with-gcc-5.patch
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 41ac616..479625c 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -261,6 +261,7 @@ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
- FFMPEG_CONF_OPTS += --enable-yasm
- FFMPEG_DEPENDENCIES += host-yasm
- else
-+FFMPEG_CONF_OPTS += --disable-asm
- FFMPEG_CONF_OPTS += --disable-yasm
- FFMPEG_CONF_OPTS += --disable-mmx
- endif
+diff --git a/package/libgpg-error/0001-avoid-breakage-with-gcc-5.patch b/package/libgpg-error/0001-avoid-breakage-with-gcc-5.patch
+new file mode 100644
+index 0000000..96dc569
+--- /dev/null
++++ b/package/libgpg-error/0001-avoid-breakage-with-gcc-5.patch
+@@ -0,0 +1,56 @@
++Patch ported from Debian
++http://anonscm.debian.org/cgit/pkg-gnupg/libgpg-error.git/diff/?id=c3d7571
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++
++From 91da4f5dbbc9d93975ef9753652a4e71719f9f27 Mon Sep 17 00:00:00 2001
++From: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
++Date: Mon, 16 Mar 2015 13:26:00 -0400
++Subject: [LIBGPG-ERROR PATCH] avoid breakage with gcc 5
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++ * src/Makefile.am: add -P to the C preprocessor when building
++   mkerrcodes.h, to avoid a noisy intermediate pipeline.
++
++--
++
++With gcc 5 without this patch, we see many errors like the following:
++
++gcc -I. -I. -o mkerrcodes ./mkerrcodes.c
++In file included from ./mkerrcodes.c:26:0:
++./mkerrcodes.h:9:5: error: expected expression before ?,? token
++   { , "GPG_ERR_E2BIG" },
++     ^
++./mkerrcodes.h:10:5: error: expected expression before ?,? token
++   { , "GPG_ERR_EACCES" },
++     ^
++
++This patch cleans up the generated mkerrcodes.h by making the
++intermediate stage clean for all the versions of gcc i tested (4.x and
++5).
++
++Debian-Bug-Id: 777374
++Signed-Off-By: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
++---
++ src/Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/Makefile.am b/src/Makefile.am
++index 99c2c53..f847a80 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -213,7 +213,7 @@ code-to-errno.h: Makefile mkerrnos.awk errnos.in
++ # It is correct to use $(CPP).  We want the host's idea of the error codes.
++ mkerrcodes.h: Makefile mkerrcodes.awk $(gpg_extra_headers)
++ 	$(AWK) -f $(srcdir)/mkerrcodes1.awk $(srcdir)/errnos.in >_$@
++-	$(CPP) $(CPPFLAGS) $(extra_cppflags) _$@ | grep GPG_ERR_ | \
+++	$(CPP) $(CPPFLAGS) $(extra_cppflags) -P _$@ | grep GPG_ERR_ | \
++                $(AWK) -f $(srcdir)/mkerrcodes.awk >$@
++ 	-rm _$@
++ 
++-- 
++2.1.4
++
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 9f5f6c2..52b7058 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -10,5 +10,8 @@ LIBGPG_ERROR_LICENSE = LGPLv2.1+
+ LIBGPG_ERROR_LICENSE_FILES = COPYING.LIB
+ LIBGPG_ERROR_INSTALL_STAGING = YES
+ LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
++# we patch src/Makefile.am
++LIBGPG_ERROR_AUTORECONF = YES
++LIBGPG_ERROR_GETTEXTIZE = YES
+ 
+ $(eval $(autotools-package))
 -- 
 1.7.10.4
