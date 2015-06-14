@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Jun 2015 22:43:06 +0200
-Subject: [Buildroot] [PATCH/RFC v2 03/44] package/libcec: bump to
- version 3.0.0
-In-Reply-To: <1434292603-12052-4-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 14 Jun 2015 22:44:31 +0200
+Subject: [Buildroot] [PATCH/RFC v2 02/44] package/libplatform: new
+ package
+In-Reply-To: <1434292603-12052-3-git-send-email-bernd.kuhls@t-online.de>
 References: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
- <1434292603-12052-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150614224306.3b1d44b4@free-electrons.com>
+ <1434292603-12052-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150614224431.00c71b0f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,20 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sun, 14 Jun 2015 16:36:02 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi/Config.in                     |    2 ++
->  package/libcec/0001-remove-Wno-psabi.patch |   21 ---------------------
->  package/libcec/Config.in                   |    4 ++++
->  package/libcec/libcec.mk                   |   23 +++++++++++++++--------
->  4 files changed, 21 insertions(+), 29 deletions(-)
->  delete mode 100644 package/libcec/0001-remove-Wno-psabi.patch
+On Sun, 14 Jun 2015 16:36:01 +0200, Bernd Kuhls wrote:
 
-You really need to add more verbose commit logs:
+> diff --git a/package/libplatform/Config.in b/package/libplatform/Config.in
+> new file mode 100644
+> index 0000000..7d275b1
+> --- /dev/null
+> +++ b/package/libplatform/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_LIBPLATFORM
+> +	bool
 
- - explanation about the gcc 4.5 dependency
- - indicate that we're switch from autotools-package to cmake-package
+Any reason to not have a prompt?
 
-etc.
-
-A commit log limited to "<pkg>: bump to version <version>" is only OK
-if really only the version and hashes are changed.
+Also, it probably needs C++ and threads support.
 
 Thanks,
 
