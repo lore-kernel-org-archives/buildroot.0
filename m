@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Jun 2015 16:36:35 +0200
-Subject: [Buildroot] [PATCH/RFC v2 36/44]
-	package/kodi-audiodecoder-vgmstream: new package
+Date: Sun, 14 Jun 2015 16:36:40 +0200
+Subject: [Buildroot] [PATCH/RFC v2 41/44] package/kodi-screensaver-pingpong:
+	new package
 In-Reply-To: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1434292603-12052-37-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1434292603-12052-42-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audiodecoder-vgmstream/Config.in         |    7 +++++++
- .../kodi-audiodecoder-vgmstream.mk                    |   17 +++++++++++++++++
+ package/kodi-screensaver-pingpong/Config.in           |    6 ++++++
+ .../kodi-screensaver-pingpong.mk                      |   17 +++++++++++++++++
  package/kodi/Config.in                                |    1 +
- 3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-audiodecoder-vgmstream/Config.in
- create mode 100644 package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/kodi-screensaver-pingpong/Config.in
+ create mode 100644 package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
 
-diff --git a/package/kodi-audiodecoder-vgmstream/Config.in b/package/kodi-audiodecoder-vgmstream/Config.in
+diff --git a/package/kodi-screensaver-pingpong/Config.in b/package/kodi-screensaver-pingpong/Config.in
 new file mode 100644
-index 0000000..ebf83df
+index 0000000..916b8c2
 --- /dev/null
-+++ b/package/kodi-audiodecoder-vgmstream/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_AUDIODECODER_VGMSTREAM
-+	bool "kodi-audiodecoder-vgmstream"
-+	select BR2_PACKAGE_KODI_PLATFORM
++++ b/package/kodi-screensaver-pingpong/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_KODI_SCREENSAVER_PINGPONG
++	bool "kodi-screensaver-pingpong"
 +	help
-+	  VGM decoder addon for Kodi
++	  Ping-pong screensaver for Kodi
 +
-+	  https://github.com/notspiff/audiodecoder.vgmstream
-diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
++	  https://github.com/notspiff/screensaver.pingpong
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
 new file mode 100644
-index 0000000..a888e9f
+index 0000000..57bcc92
 --- /dev/null
-+++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-audiodecoder-vgmstream
++# kodi-screensaver-pingpong
 +#
 +################################################################################
 +
-+KODI_AUDIODECODER_VGMSTREAM_VERSION = 7723f9130957f4684eac5788ccbc2f45c39590ad
-+KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,notspiff,audiodecoder.vgmstream,$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
-+KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPLv2+
-+KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = src/VGMCodec.cpp
++KODI_SCREENSAVER_PINGPONG_VERSION = 00fd2a7c70d581ada1bc89829c6870530b4c65b9
++KODI_SCREENSAVER_PINGPONG_SITE = $(call github,notspiff,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
++KODI_SCREENSAVER_PINGPONG_LICENSE = GPLv2+
++KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = src/readme.txt
 +
-+KODI_AUDIODECODER_VGMSTREAM_DEPENDENCIES = kodi-platform
++KODI_SCREENSAVER_PINGPONG_DEPENDENCIES = kodi
 +
-+KODI_AUDIODECODER_VGMSTREAM_CONF_OPTS += \
++KODI_SCREENSAVER_PINGPONG_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 9fc6942..c2e2d4e 100644
+index 4e9451e..4ce965f 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -278,6 +278,7 @@ menu "Audio decoder addons"
- 	source "package/kodi-audiodecoder-snesapu/Config.in"
- 	source "package/kodi-audiodecoder-stsound/Config.in"
- 	source "package/kodi-audiodecoder-timidity/Config.in"
-+	source "package/kodi-audiodecoder-vgmstream/Config.in"
+@@ -293,6 +293,7 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-biogenesis/Config.in"
+ 	source "package/kodi-screensaver-crystalmorph/Config.in"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
++	source "package/kodi-screensaver-pingpong/Config.in"
  endmenu
  
- menu "Audio encoder addons"
+ endif # BR2_PACKAGE_KODI
 -- 
 1.7.10.4
