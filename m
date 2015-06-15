@@ -1,60 +1,76 @@
-From: =?UTF-8?Q?Guillaume_s=C3=A9tan?= <setan.buildroot@gmail.com>
-Date: Mon, 15 Jun 2015 15:00:38 +0200
-Subject: [Buildroot] Fwd:  Problem with package efl 1.14.1
-In-Reply-To: <CALW-xeoh40gFPTU_zWeeOF+ZQLxE5-aN8KC1OiR_2ZsmVDXmsQ@mail.gmail.com>
-References: <CALW-xeoh40gFPTU_zWeeOF+ZQLxE5-aN8KC1OiR_2ZsmVDXmsQ@mail.gmail.com>
-Message-ID: <CALW-xer+x9R=LU4Z7i=OtQtmR=YhR8mPiXxzjTuGCFzuznW7Sw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 Jun 2015 15:37:42 +0200
+Subject: [Buildroot] $(SED) not defined if 'make menuconfig
+ savedefconfig'
+In-Reply-To: <CAM+bi4tjaJB2bJuQ40_cap55ZrEmOYg4Ssz+TMM_zg5Cb0yo6A@mail.gmail.com>
+References: <CAM+bi4tjaJB2bJuQ40_cap55ZrEmOYg4Ssz+TMM_zg5Cb0yo6A@mail.gmail.com>
+Message-ID: <20150615153742.02ebdb85@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Alvaro Gamez,
 
-I try to use the package EFL.1.14.1 with builbroot because I must use a
-touch screen with a target arm (ZC706 EvaluationKIt  -- Zynq-7000Soc).
+On Mon, 15 Jun 2015 12:26:02 +0200, Alvaro Gamez wrote:
+
+> While using buildroot-submodule (
+> https://github.com/Openwide-Ingenierie/buildroot-submodule) I've noticed
+> this happens since commit f71a621d91ec27f175fc84012962f88b1107305f was
+> introduced into buildroot.
+> 
+> $ make menuconfig savedefconfig
+> [Do whatever, or nothing at all and exit, there's no need to save anything]
+> *** End of the configuration.
+> *** Execute 'make' to start the build or try 'make help'.
+> 
+> make: /BR2_DEFCONFIG=/d: Command not found
+> Makefile:777: recipe for target 'savedefconfig' failed
+> make: *** [savedefconfig] Error 127
+> 
+> However,
+> $ make menuconfig
+> $ make savedefconfig
+> 
+> does not end with that error. I've just tracked it down to the fact that
+> $(SED) is not defined when menuconfig savedefconfig are used in a single
+> make call, whereas it equals to '/bin/sed -i -e'
+> 
+> Simply replacing that @$(SED) by /bin/sed -i -e on line 777 of Makefile
+> makes it work again, but I don't think that solution is desirable. I'm
+> sorry I can't provide a full patch, the motive of this bug is beyond my
+> knowledge.
+
+Hum, right. Can you try the below patch:
+
+diff --git a/Makefile b/Makefile
+index d3f80c4..67eb50c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -272,6 +272,7 @@ HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
+ HOSTNM := $(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
+ HOSTOBJCOPY := $(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
+ HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
++SED := $(shell which sed || type -p sed) -i -e
+ 
+ export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
+ export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+diff --git a/package/Makefile.in b/package/Makefile.in
+index c02d31f..f256b05 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -217,7 +217,6 @@ endif
+ INSTALL := $(shell which install || type -p install)
+ FLEX := $(shell which flex || type -p flex)
+ BISON := $(shell which bison || type -p bison)
+-SED := $(shell which sed || type -p sed) -i -e
+ UNZIP := $(shell which unzip || type -p unzip) -q
+ 
+ APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(QUIET),-s)
 
 
-So, I find this version of buildroot make by Romain Naour (
-https://github.com/RomainNaour/buildroot). But I haven't managed to run
-this version with my settings, I spoke with Romain and even its settings
-didn't work on my computer.
-
-Please, can you explain me what tools are needed to compile buildroot ?
-
-I try on virtual machine with Ubuntu and other computer with CentOs 7.
-
-
-Sincerely,
-
-Guillaume S?tan
-
-
--------------------------------------------------------------------------------------------------------------------------------------------------
-Here are my settings :
-
----- Buildroot -------
-
-Target : ZC706 EvaluationKit
-  Zynq-7000Soc
-
-Target arch : ARM (Little endian)
-         Variant : Cortex - A9
-Tollchain type : External toolchain
-Tollchain : Sourcery Code Bench Arm 2014.05
-Init System : Busy Box
-
---- Linux -----
-To launch Buildroot
-Linux 3.13.0-53 Ubuntu
------------------------------------------------------------------------------------------------------------------------------
-
-Link to my mistakes :
-http://code.bulix.org/h4r426-88552
-
-Link to my settings:
-http://code.bulix.org/se58te-88553
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150615/27b55d4a/attachment.html>
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
