@@ -1,61 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jun 2015 23:41:02 +0200
-Subject: [Buildroot] [git commit] eudev: add enable/disable hwdb option
-Message-ID: <20150615214401.937C9807EA@busybox.osuosl.org>
+Date: Mon, 15 Jun 2015 23:42:28 +0200
+Subject: [Buildroot] [git commit] package/modem-manager: bump to version
+	1.4.8
+Message-ID: <20150615214401.A5C75807EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b56265f447881ecf96edd76a635c3abc2b604eb4
+commit: http://git.buildroot.net/buildroot/commit/?id=f57ac06c6590b40a2862ebbe560fab116998b14d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This option enables/disables installation of the eudev hardware database,
-which provides various extra properties for known devices.
-Enabling this option adds ~5MB to the rootfs size.
-
-The option is enabled by default in order to preserve old behavior.
-
-[Peter: extend commit message]
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/eudev/Config.in |    6 ++++++
- package/eudev/eudev.mk  |    6 ++++++
- 2 files changed, 12 insertions(+), 0 deletions(-)
+ package/modem-manager/modem-manager.hash |    2 +-
+ package/modem-manager/modem-manager.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index 6d4139f..76df409 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -27,6 +27,12 @@ config BR2_PACKAGE_EUDEV_RULES_GEN
- 	help
- 	  Enable persistent rules generator
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index 7ee5dc8..5935cba 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  0cedabf46310f8c56630b116944f54ee64369c76c2f35f5f460ca19a8bb5a5cd  ModemManager-1.4.6.tar.xz
++sha256  d951eaffbe513bcde54f90602c6c423a49593f656d6485ba95f6fcb4bc1e8003  ModemManager-1.4.8.tar.xz
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 3eeb475..9cd630c 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_EUDEV_ENABLE_HWDB
-+	bool "enable hwdb installation"
-+	default y
-+	help
-+	  Enables hardware database installation to /etc/udev/hwdb.d
-+
- endif
- 
- comment "eudev needs eudev /dev management"
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 101d510..a97154c 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -31,6 +31,12 @@ ifeq ($(BR2_PACKAGE_EUDEV_RULES_GEN),y)
- EUDEV_CONF_OPTS += --enable-rule_generator
- endif
- 
-+ifeq ($(BR2_PACKAGE_EUDEV_ENABLE_HWDB),y)
-+EUDEV_CONF_OPTS += --enable-hwdb
-+else
-+EUDEV_CONF_OPTS += --disable-hwdb
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
- EUDEV_CONF_OPTS += --enable-gudev
- EUDEV_DEPENDENCIES += libglib2
+-MODEM_MANAGER_VERSION = 1.4.6
++MODEM_MANAGER_VERSION = 1.4.8
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
