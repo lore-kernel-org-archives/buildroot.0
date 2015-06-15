@@ -1,10 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 15 Jun 2015 20:46:00 +0200
-Subject: [Buildroot] [PATCH 1/5] sunxi-board: bump to version
-	a6a4e94066f4ec6b26fc7060dc453a6bcf26a504
+Date: Mon, 15 Jun 2015 20:46:01 +0200
+Subject: [Buildroot] [PATCH 2/5] a10disp: bump to version v0.6.1
 In-Reply-To: <1434393964-20355-1-git-send-email-francois.perrad@gadz.org>
 References: <1434393964-20355-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1434393964-20355-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1434393964-20355-3-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/sunxi-boards/sunxi-boards.mk | 2 +-
+ package/a10disp/a10disp.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sunxi-boards/sunxi-boards.mk b/package/sunxi-boards/sunxi-boards.mk
-index cacf824..83b3842 100644
---- a/package/sunxi-boards/sunxi-boards.mk
-+++ b/package/sunxi-boards/sunxi-boards.mk
+diff --git a/package/a10disp/a10disp.mk b/package/a10disp/a10disp.mk
+index 066e988..7353ede 100644
+--- a/package/a10disp/a10disp.mk
++++ b/package/a10disp/a10disp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUNXI_BOARDS_VERSION = 68acb3b1610a44b9402560623f7e35b7882585e9
-+SUNXI_BOARDS_VERSION = a6a4e94066f4ec6b26fc7060dc453a6bcf26a504
- SUNXI_BOARDS_SITE = $(call github,linux-sunxi,sunxi-boards,$(SUNXI_BOARDS_VERSION))
- SUNXI_BOARDS_DEPENDENCIES = host-sunxi-tools
- SUNXI_BOARDS_INSTALL_IMAGES = YES
+-A10DISP_VERSION = a899cc6dcf909360aac00482ede5369f3656f226
++A10DISP_VERSION = v0.6.1
+ A10DISP_SITE = $(call github,hglm,a10disp,$(A10DISP_VERSION))
+ A10DISP_LICENSE = MIT
+ 
 -- 
 2.1.4
