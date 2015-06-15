@@ -1,41 +1,55 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 15 Jun 2015 21:28:54 +0200
-Subject: [Buildroot] [PATCH] linux-firmware: bump version
-Message-ID: <1434396534-23810-1-git-send-email-yegorslists@googlemail.com>
+Date: Mon, 15 Jun 2015 21:53:34 +0200
+Subject: [Buildroot] [PATCH] eudev: add enable/disable hwdb option
+Message-ID: <1434398014-3621-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove wl18xx-conf.bin as it was already removed from
-upstream repository.
+This option enables/disables hardware database installation. This
+option is enabled by default in order to preserve old behavior.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/linux-firmware/linux-firmware.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/eudev/Config.in | 6 ++++++
+ package/eudev/eudev.mk  | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 9acfc53..25a942a 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+index 6d4139f..76df409 100644
+--- a/package/eudev/Config.in
++++ b/package/eudev/Config.in
+@@ -27,6 +27,12 @@ config BR2_PACKAGE_EUDEV_RULES_GEN
+ 	help
+ 	  Enable persistent rules generator
  
--LINUX_FIRMWARE_VERSION = f66291398181d24856fd2d19454d246199abd5ea
-+LINUX_FIRMWARE_VERSION = 3161bfa479d5e9ed4f46b57df9bcecbbc4f8eb3c
- LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
++config BR2_PACKAGE_EUDEV_ENABLE_HWDB
++	bool "enable hwdb installation"
++	default y
++	help
++	  Enables hardware database installation to /etc/udev/hwdb.d
++
+ endif
  
-@@ -175,7 +175,6 @@ endif
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX),y)
- LINUX_FIRMWARE_FILES += \
- 	ti-connectivity/wl18xx-fw.bin \
--	ti-connectivity/wl18xx-conf.bin \
- 	ti-connectivity/wl18xx-fw-2.bin \
- 	ti-connectivity/wl18xx-fw-3.bin \
- 	ti-connectivity/wl18xx-fw-4.bin \
+ comment "eudev needs eudev /dev management"
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index 101d510..a97154c 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -31,6 +31,12 @@ ifeq ($(BR2_PACKAGE_EUDEV_RULES_GEN),y)
+ EUDEV_CONF_OPTS += --enable-rule_generator
+ endif
+ 
++ifeq ($(BR2_PACKAGE_EUDEV_ENABLE_HWDB),y)
++EUDEV_CONF_OPTS += --enable-hwdb
++else
++EUDEV_CONF_OPTS += --disable-hwdb
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+ EUDEV_CONF_OPTS += --enable-gudev
+ EUDEV_DEPENDENCIES += libglib2
 -- 
 2.1.4
