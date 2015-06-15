@@ -1,31 +1,23 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 15 Jun 2015 23:33:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gpm: add hash file,
-	change archive to lzma
-Message-ID: <1434404019-13860-1-git-send-email-petr.vorel@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 Jun 2015 23:41:28 +0200
+Subject: [Buildroot] [PATCH] eudev: add enable/disable hwdb option
+In-Reply-To: <1434398014-3621-1-git-send-email-yegorslists@googlemail.com>
+ (Yegor Yefremov's message of "Mon, 15 Jun 2015 21:53:34 +0200")
+References: <1434398014-3621-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87616od4zb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/gpm/gpm.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-diff --git a/package/gpm/gpm.mk b/package/gpm/gpm.mk
-index dee6208..6d3b5d2 100644
---- a/package/gpm/gpm.mk
-+++ b/package/gpm/gpm.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GPM_VERSION = 1.20.7
--GPM_SOURCE = gpm-$(GPM_VERSION).tar.bz2
-+GPM_SOURCE = gpm-$(GPM_VERSION).tar.lzma
- GPM_SITE = http://www.nico.schottelius.org/software/gpm/archives
- GPM_LICENSE = GPLv2+
- GPM_LICENSE_FILES = COPYING
+ > This option enables/disables hardware database installation. This
+ > option is enabled by default in order to preserve old behavior.
+
+Committed with the commit message extended to explain what the hwdb is
+used for, thanks.
+
 -- 
-1.8.0
+Bye, Peter Korsgaard
