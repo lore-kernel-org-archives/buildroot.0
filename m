@@ -1,50 +1,105 @@
-From: Karoly Kasza <kaszak@gmail.com>
-Date: Mon, 15 Jun 2015 08:56:26 +0200
-Subject: [Buildroot] [PATCH] package/openvmtools: move to GitHub
-Message-ID: <1434351386-2515-1-git-send-email-kaszak@gmail.com>
+From: Pieter De Gendt <pieter.degendt@gmail.com>
+Date: Mon, 15 Jun 2015 09:05:32 +0200
+Subject: [Buildroot] [PATCH v3 1/1] libmusicbrainz: new package
+Message-ID: <1434351932-24023-1-git-send-email-pieter.degendt@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Open-vm-tools project is moved to GitHub.
-Hash file removed.
-Major version adjusted according to GitHub tags.
+This library is built for both host and target platform as
+required by cmake. This implies that dependencies are also
+built for the host platform (neon).
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
 ---
- package/openvmtools/openvmtools.hash | 3 ---
- package/openvmtools/openvmtools.mk   | 7 +++----
- 2 files changed, 3 insertions(+), 7 deletions(-)
- delete mode 100644 package/openvmtools/openvmtools.hash
+Changes v2 -> v3:
+  - Corrected host dependencies
+Changes v1 -> v2: (suggested by Thomas Petazzoni)
+  - Added license info
+  - Added comment for clarification
+  
+ package/Config.in                        |  1 +
+ package/libmusicbrainz/Config.in         | 18 ++++++++++++++++++
+ package/libmusicbrainz/libmusicbrainz.mk | 22 ++++++++++++++++++++++
+ package/neon/neon.mk                     |  1 +
+ 4 files changed, 42 insertions(+)
+ create mode 100644 package/libmusicbrainz/Config.in
+ create mode 100644 package/libmusicbrainz/libmusicbrainz.mk
 
-diff --git a/package/openvmtools/openvmtools.hash b/package/openvmtools/openvmtools.hash
-deleted file mode 100644
-index 80eb99f..0000000
---- a/package/openvmtools/openvmtools.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# From http://sourceforge.net/projects/open-vm-tools/files/open-vm-tools/stable-9.10.0/
--md5	d19439b499f0cbc7001e0cc65aa1a5a7	open-vm-tools-9.10.0-2476743.tar.gz
--sha1	5954c2a3eb66f7ffe4be1861f3bf6b43a2b3c6fc	open-vm-tools-9.10.0-2476743.tar.gz
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index 92ecd36..26e41bb 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -4,10 +4,9 @@
- #
- ################################################################################
+diff --git a/package/Config.in b/package/Config.in
+index 6dbc32d..4f42e94 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -683,6 +683,7 @@ menu "Audio/Sound"
+ 	source "package/libmodplug/Config.in"
+ 	source "package/libmpd/Config.in"
+ 	source "package/libmpdclient/Config.in"
++	source "package/libmusicbrainz/Config.in"
+ 	source "package/libreplaygain/Config.in"
+ 	source "package/libsamplerate/Config.in"
+ 	source "package/libsidplay2/Config.in"
+diff --git a/package/libmusicbrainz/Config.in b/package/libmusicbrainz/Config.in
+new file mode 100644
+index 0000000..51417fe
+--- /dev/null
++++ b/package/libmusicbrainz/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LIBMUSICBRAINZ
++	bool "libmusicbrainz"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_NEON
++	select BR2_PACKAGE_NEON_LIBXML2
++	help
++	  The MusicBrainz Client Library (libmusicbrainz), 
++	  also known as mb_client, is a development library 
++	  geared towards developers who wish to add MusicBrainz 
++	  lookup capabilities to their applications. The library 
++	  supports Windows, Linux and Mac OS X, with packages 
++	  released for the RedHat and Debian distributions.
++
++	  http://musicbrainz.org/doc/libmusicbrainz
++
++comment "libmusicbrainz needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/libmusicbrainz/libmusicbrainz.mk b/package/libmusicbrainz/libmusicbrainz.mk
+new file mode 100644
+index 0000000..f01a823
+--- /dev/null
++++ b/package/libmusicbrainz/libmusicbrainz.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# libmusicbrainz
++#
++################################################################################
++
++LIBMUSICBRAINZ_VERSION = release-5.1.0
++LIBMUSICBRAINZ_SITE = $(call github,metabrainz,libmusicbrainz,$(LIBMUSICBRAINZ_VERSION))
++LIBMUSICBRAINZ_LICENSE = LGPLv2.1
++LIBMUSICBRAINZ_LICENSE_FILES = COPYING.txt
++LIBMUSICBRAINZ_INSTALL_STAGING = YES
++
++# Cross compilation requires host compilation due to the
++# automatic generation of the C interface source files (see INSTALL.txt)
++HOST_LIBMUSICBRAINZ_DEPENDENCIES = host-libxml2 host-neon host-pkgconf
++LIBMUSICBRAINZ_DEPENDENCIES = libxml2 neon host-pkgconf host-libmusicbrainz
++
++# Cross compilation variable for cmake to find the host generated files
++LIBMUSICBRAINZ_CONF_OPTS = -DIMPORT_EXECUTABLES=$(HOST_LIBMUSICBRAINZ_DIR)/ImportExecutables.cmake
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
+diff --git a/package/neon/neon.mk b/package/neon/neon.mk
+index 0cff1a2..284a98c 100644
+--- a/package/neon/neon.mk
++++ b/package/neon/neon.mk
+@@ -48,3 +48,4 @@ NEON_CONF_OPTS += --disable-webdav
+ endif
  
--OPENVMTOOLS_VERSION_MAJOR = 9.10.0
--OPENVMTOOLS_VERSION = $(OPENVMTOOLS_VERSION_MAJOR)-2476743
--OPENVMTOOLS_SOURCE = open-vm-tools-$(OPENVMTOOLS_VERSION).tar.gz
--OPENVMTOOLS_SITE = http://downloads.sourceforge.net/project/open-vm-tools/open-vm-tools/stable-$(OPENVMTOOLS_VERSION_MAJOR)
-+OPENVMTOOLS_VERSION_MAJOR = stable-9.10
-+OPENVMTOOLS_VERSION = $(OPENVMTOOLS_VERSION_MAJOR).0
-+OPENVMTOOLS_SITE = $(call github,vmware,open-vm-tools,$(OPENVMTOOLS_VERSION))
- OPENVMTOOLS_LICENSE = LGPLv2.1
- OPENVMTOOLS_LICENSE_FILES = COPYING
- # Autoreconf needed or config/missing will run configure again at buildtime
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-2.1.4
+2.4.3
