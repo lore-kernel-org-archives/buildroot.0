@@ -1,67 +1,193 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 15 Jun 2015 20:46:03 +0200
-Subject: [Buildroot] [PATCH 4/5] cubieboard: rename script to mksunxicard.sh
+Date: Mon, 15 Jun 2015 20:46:02 +0200
+Subject: [Buildroot] [PATCH 3/5] A20-OLinuXino-Lime: new board (mainline)
 In-Reply-To: <1434393964-20355-1-git-send-email-francois.perrad@gadz.org>
 References: <1434393964-20355-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1434393964-20355-5-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1434393964-20355-4-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-in order to reuse it for A20-OLinuXino
+config device tree / mainline (4.0.5)
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- board/cubietech/cubieboard/{mkcubiecard.sh => mksunxicard.sh} | 4 ++--
- board/cubietech/cubieboard/readme.txt                         | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
- rename board/cubietech/cubieboard/{mkcubiecard.sh => mksunxicard.sh} (97%)
+ board/olimex/a20_olinuxino_lime/boot.cmd      |  5 ++
+ board/olimex/a20_olinuxino_lime/post-build.sh | 12 ++++
+ board/olimex/a20_olinuxino_lime/readme.txt    | 89 +++++++++++++++++++++++++++
+ configs/olimex_a20_olinuxino_defconfig        | 35 +++++++++++
+ 4 files changed, 141 insertions(+)
+ create mode 100644 board/olimex/a20_olinuxino_lime/boot.cmd
+ create mode 100755 board/olimex/a20_olinuxino_lime/post-build.sh
+ create mode 100644 board/olimex/a20_olinuxino_lime/readme.txt
+ create mode 100644 configs/olimex_a20_olinuxino_defconfig
 
-diff --git a/board/cubietech/cubieboard/mkcubiecard.sh b/board/cubietech/cubieboard/mksunxicard.sh
-similarity index 97%
-rename from board/cubietech/cubieboard/mkcubiecard.sh
-rename to board/cubietech/cubieboard/mksunxicard.sh
-index f1d5a9f..97e04b5 100755
---- a/board/cubietech/cubieboard/mkcubiecard.sh
-+++ b/board/cubietech/cubieboard/mksunxicard.sh
-@@ -82,12 +82,12 @@ fi
- if [ -b ${DRIVE}2 ]; then
- 	D2=${DRIVE}2
- 	umount ${DRIVE}2
--	mkfs.ext4 -L "Cubie" ${DRIVE}2
-+	mkfs.ext4 -L "SUNXI" ${DRIVE}2
- else
- 	if [ -b ${DRIVE}p2 ]; then
- 		D2=${DRIVE}p2
- 		umount ${DRIVE}p2
--		mkfs.ext4 -L "Cubie" ${DRIVE}p2
-+		mkfs.ext4 -L "SUNXI" ${DRIVE}p2
- 	else
- 		echo "Cant find rootfs partition in /dev"
- 		exit 1
-diff --git a/board/cubietech/cubieboard/readme.txt b/board/cubietech/cubieboard/readme.txt
-index 81cc5e4..3b542c7 100644
---- a/board/cubietech/cubieboard/readme.txt
-+++ b/board/cubietech/cubieboard/readme.txt
-@@ -41,7 +41,7 @@ How setting up the SD card
- --------------------------
- 
- Depending on the rootfs size, you might want to use a 2GB or larger SD-card.
--The script mkcubiecard.sh will take care of partitioning and formatting
-+The script mksunxicard.sh will take care of partitioning and formatting
- the SD-card.
- 
- BEWARE! This process will erase your SD card.
-@@ -49,7 +49,7 @@ BEWARE! This process will erase your SD card.
- Use dmesg to find out where the SD card is attached in the /dev tree
- (<device>) and then:
- 
--# sudo ./mkcubiecard.sh <images_dir> <device>
-+# sudo ./mksunxicard.sh <images_dir> <device>
- 
- where:
-  - <images_dir> is the directory containing the generated files (usually
+diff --git a/board/olimex/a20_olinuxino_lime/boot.cmd b/board/olimex/a20_olinuxino_lime/boot.cmd
+new file mode 100644
+index 0000000..f3554ed
+--- /dev/null
++++ b/board/olimex/a20_olinuxino_lime/boot.cmd
+@@ -0,0 +1,5 @@
++setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
++ext2load mmc 0 0x49000000 boot/dtb/sun7i-a20-olinuxino-lime.dtb
++ext2load mmc 0 0x46000000 boot/zImage
++env set fdt_high ffffffff
++bootz 0x46000000 - 0x49000000
+diff --git a/board/olimex/a20_olinuxino_lime/post-build.sh b/board/olimex/a20_olinuxino_lime/post-build.sh
+new file mode 100755
+index 0000000..d8d8fa4
+--- /dev/null
++++ b/board/olimex/a20_olinuxino_lime/post-build.sh
+@@ -0,0 +1,12 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++BOOT_DIR=$TARGET_DIR/boot
++MKIMAGE=$HOST_DIR/usr/bin/mkimage
++
++rm -rf $BOOT_DIR
++mkdir $BOOT_DIR
++mkdir $BOOT_DIR/dtb
++cp $BINARIES_DIR/sun7i-a20-olinuxino-lime.dtb $BOOT_DIR/dtb/sun7i-a20-olinuxino-lime.dtb
++$MKIMAGE -A arm -O linux -T script -C none -d $BOARD_DIR/boot.cmd $BOOT_DIR/boot.scr
++cp $BINARIES_DIR/zImage $BOOT_DIR/zImage
+diff --git a/board/olimex/a20_olinuxino_lime/readme.txt b/board/olimex/a20_olinuxino_lime/readme.txt
+new file mode 100644
+index 0000000..32148b7
+--- /dev/null
++++ b/board/olimex/a20_olinuxino_lime/readme.txt
+@@ -0,0 +1,89 @@
++A20-OLinuXino-LIME
++
++Intro
++=====
++
++This is a open hardware board,
++see https://www.olimex.com/Products/OLinuXino/open-source-hardware
++
++See https://linux-sunxi.org/Linux_Kernel, for choosing between
++the legacy linux-sunxi kernel and the device tree / mainline kernel.
++
++
++How to build it
++===============
++
++    $ make olimex_a20_olinuxino_defconfig
++
++Compile all and build rootfs image:
++
++    $ make
++
++Result of the build
++-------------------
++
++After building, you should get a tree like this:
++
++    output/images/
++    +-- rootfs.ext2
++    +-- sun7i-a20-olinuxino-lime.dtb
++    +-- u-boot.bin
++    +-- u-boot-sunxi-with-spl.bin
++    `-- zImage
++
++
++How setting up the SD card
++==========================
++
++
++Prepare the SD card
++-------------------
++
++Erase existing stuff, and create an unique Linux partition with `fdisk`.
++
++    # fdisk /dev/sdX
++    Command (m for help): o
++    Building a new DOS disklabel with disk identifier 0xf9e1616a.
++    Changes will remain in memory only, until you decide to write them.
++    After that, of course, the previous content won't be recoverable.
++
++    Command (m for help): n
++    Partition type:
++        p   primary (0 primary, 0 extended, 4 free)
++        e   extended
++    Select (default p): p
++    Partition number (1-4, default 1): 1
++    First sector (2048-7626751, default 2048): 2048
++    Last sector, +sectors or +size{K,M,G} (2048-7626751, default 7626751): 
++    Using default value 7626751
++
++    Command (m for help): p
++
++    Disk /dev/sdX: 3904 MB, 3904897024 bytes
++    4 heads, 16 sectors/track, 119168 cylinders, total 7626752 sectors
++    Units = sectors of 1 * 512 = 512 bytes
++    Sector size (logical/physical): 512 bytes / 512 bytes
++    I/O size (minimum/optimal): 512 bytes / 512 bytes
++    Disk identifier: 0xf9e1616a
++
++            Device Boot      Start         End      Blocks   Id  System
++    /dev/sdX1                 2048     7626751     3812352   83  Linux
++
++    Command (m for help): w
++    The partition table has been altered!
++
++    Calling ioctl() to re-read partition table.
++    Syncing disks.
++
++Copy images on the SD card
++--------------------------
++
++    # dd if=output/images/rootfs.ext2 of=/dev/sdX1 bs=512
++    # dd if=output/images/u-boot-sunxi-with-spl.bin of=/dev/sdX bs=1024 seek=8
++
++
++Finish
++======
++
++Eject the SD card, insert it in the A20-OLinuXino-LIME board, and power it up.
++
+diff --git a/configs/olimex_a20_olinuxino_defconfig b/configs/olimex_a20_olinuxino_defconfig
+new file mode 100644
+index 0000000..ce9435c
+--- /dev/null
++++ b/configs/olimex_a20_olinuxino_defconfig
+@@ -0,0 +1,35 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a7=y
++
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
++BR2_TARGET_GENERIC_ISSUE="Welcome to use OLinuXino!"
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino_lime/post-build.sh"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0.5"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-lime"
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_VERSION="2015.04"
++BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++
++# Additional tools
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
 2.1.4
