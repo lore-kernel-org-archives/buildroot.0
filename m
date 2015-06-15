@@ -1,58 +1,31 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 15 Jun 2015 16:20:26 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix umask settings for non-bash shells for
-	root user
-Message-ID: <1434378026-15007-1-git-send-email-vorel@jablocom.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 Jun 2015 16:21:35 +0200
+Subject: [Buildroot] [PATCH v2] package/openvmtools: move to GitHub
+In-Reply-To: <1434358068-1537-1-git-send-email-kaszak@gmail.com>
+References: <1434358068-1537-1-git-send-email-kaszak@gmail.com>
+Message-ID: <20150615162135.3cac4c2f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Petr Vorel <petr.vorel@gmail.com>
+Dear Karoly Kasza,
 
-.bash_profile is not readed by some shells (e.g. busybox), so move umask into
-.profile. Here it's also loaded .bashrc, when presented and shell is
-bash.
+On Mon, 15 Jun 2015 10:47:48 +0200, Karoly Kasza wrote:
+> The Open-vm-tools project is moved to GitHub.
+> Hash file removed.
+> Major version variable removed.
+> 
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - Major version variable removed instead of modifying.
 
-CREDITS: inspired by Debian skeleton files.
+Applied, thanks.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- system/skeleton/root/.bash_profile |  7 -------
- system/skeleton/root/.profile      | 10 ++++++++++
- 2 files changed, 10 insertions(+), 7 deletions(-)
- delete mode 100644 system/skeleton/root/.bash_profile
- create mode 100644 system/skeleton/root/.profile
-
-diff --git a/system/skeleton/root/.bash_profile b/system/skeleton/root/.bash_profile
-deleted file mode 100644
-index 0ee04a3..0000000
---- a/system/skeleton/root/.bash_profile
-+++ /dev/null
-@@ -1,7 +0,0 @@
--# .bash_profile
--
--umask 022
--
--if [ -f ~/.bashrc ]; then
--    source ~/.bashrc
--fi
-diff --git a/system/skeleton/root/.profile b/system/skeleton/root/.profile
-new file mode 100644
-index 0000000..452ae20
---- /dev/null
-+++ b/system/skeleton/root/.profile
-@@ -0,0 +1,10 @@
-+# ~/.profile: executed by the command interpreter for login shells.
-+# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
-+# exists.
-+umask 022
-+
-+if [ -n "$BASH_VERSION" ]; then
-+    if [ -f ~/.bashrc ]; then
-+        source ~/.bashrc
-+    fi
-+fi
+Thomas
 -- 
-1.8.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
