@@ -1,43 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jun 2015 23:41:56 +0200
-Subject: [Buildroot] [git commit] package/network-manager: bump to version
-	1.0.2
-Message-ID: <20150615214401.9954381943@busybox.osuosl.org>
+Date: Mon, 15 Jun 2015 23:14:26 +0200
+Subject: [Buildroot] [git commit] linux-firmware: bump version
+Message-ID: <20150615214401.8CC577FC97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bf9388563add3df498403743e143fa5cbce52c7d
+commit: http://git.buildroot.net/buildroot/commit/?id=c7a016950898571d5d5200bd91b0a3ea8714706d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Remove wl18xx-conf.bin as it was already removed from
+upstream repository.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/network-manager/network-manager.hash |    4 ++--
- package/network-manager/network-manager.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/linux-firmware/linux-firmware.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index 401108e..f47e053 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.0.sha256sum
--sha256  3a66afec670c975edd9832e620b725a5f16ed267a1b9e1b2d51ef27250d85947  NetworkManager-1.0.0.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.2.sha256sum
-+sha256  359385707494bedbb48cfe0992ccfbcc4ac147dae1f7a47055c71e96439508ff  NetworkManager-1.0.2.tar.xz
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index c37c9ea..c118a92 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 9acfc53..25a942a 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NETWORK_MANAGER_VERSION_MAJOR = 1.0
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
+-LINUX_FIRMWARE_VERSION = f66291398181d24856fd2d19454d246199abd5ea
++LINUX_FIRMWARE_VERSION = 3161bfa479d5e9ed4f46b57df9bcecbbc4f8eb3c
+ LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
+ 
+@@ -175,7 +175,6 @@ endif
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX),y)
+ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl18xx-fw.bin \
+-	ti-connectivity/wl18xx-conf.bin \
+ 	ti-connectivity/wl18xx-fw-2.bin \
+ 	ti-connectivity/wl18xx-fw-3.bin \
+ 	ti-connectivity/wl18xx-fw-4.bin \
