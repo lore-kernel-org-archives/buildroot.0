@@ -1,58 +1,52 @@
-From: =?UTF-8?Q?Guillaume_s=C3=A9tan?= <setan.buildroot@gmail.com>
-Date: Mon, 15 Jun 2015 11:54:20 +0200
-Subject: [Buildroot]  Problem with package efl 1.14.1
-Message-ID: <CALW-xeoh40gFPTU_zWeeOF+ZQLxE5-aN8KC1OiR_2ZsmVDXmsQ@mail.gmail.com>
+From: Denis THULIN <denis.thulin@openwide.fr>
+Date: Mon, 15 Jun 2015 12:06:02 +0200
+Subject: [Buildroot] [PATCH 0/3] [RFC] python-package-generator
+Message-ID: <1434362765-1074-1-git-send-email-denis.thulin@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This patch series:
+* Add utility scanpypi.py
+* Add package python-robotframework
+* Add package python-magic
 
-I try to use the package EFL.1.14.1 with builbroot because I must use a
-touch screen with a target arm (ZC706 EvaluationKIt  -- Zynq-7000Soc).
+scanpypi.py is an utility intended to automatically generatepython packages 
+for buildroot using metadata provided by the python package index 
+(https://pypi.python.org).
 
+python-robotframework and python magic are packages generated using
+scanpypi.py
 
-So, I find this version of buildroot make by Romain Naour (
-https://github.com/RomainNaour/buildroot). But I haven't managed to run
-this version with my settings, I spoke with Romain and even its settings
-didn't work on my computer.
+v0: original patch
 
-Please, can you explain me what tools are needed to compile buildroot ?
+v0 -> v1: modification done according to Thomas Petazzoni and 
+          Arnout Vandecappelle's comments
 
-I try on virtual machine with Ubuntu and other computer with CentOs 7.
+Denis THULIN (3):
+  scanpypi.py: new utility
+  python-robotframework: New package
+  python-magic: new package
 
+ docs/manual/adding-packages-python.txt             |  36 ++
+ package/Config.in                                  |   2 +
+ package/python-magic/Config.in                     |   7 +
+ package/python-magic/python-magic.hash             |   2 +
+ package/python-magic/python-magic.mk               |  14 +
+ package/python-robotframework/Config.in            |   9 +
+ .../python-robotframework.hash                     |   2 +
+ .../python-robotframework/python-robotframework.mk |  14 +
+ support/scripts/scanpypi.py                        | 607 +++++++++++++++++++++
+ 9 files changed, 693 insertions(+)
+ create mode 100644 package/python-magic/Config.in
+ create mode 100644 package/python-magic/python-magic.hash
+ create mode 100644 package/python-magic/python-magic.mk
+ create mode 100644 package/python-robotframework/Config.in
+ create mode 100644 package/python-robotframework/python-robotframework.hash
+ create mode 100644 package/python-robotframework/python-robotframework.mk
+ create mode 100755 support/scripts/scanpypi.py
 
-Sincerely,
-
-Guillaume S?tan
-
-
--------------------------------------------------------------------------------------------------------------------------------------------------
-Here are my settings :
-
----- Buildroot -------
-
-Target : ZC706 EvaluationKit
-  Zynq-7000Soc
-
-Target arch : ARM (Little endian)
-         Variant : Cortex - A9
-Tollchain type : External toolchain
-Tollchain : Sourcery Code Bench Arm 2014.05
-Init System : Busy Box
-
---- Linux -----
-To launch Buildroot
-Linux 3.13.0-53 Ubuntu
------------------------------------------------------------------------------------------------------------------------------
-
-Link to my mistakes :
-http://code.bulix.org/h4r426-88552
-
-Link to my settings:
-http://code.bulix.org/se58te-88553
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150615/a1a02f10/attachment.html>
+-- 
+2.4.3
