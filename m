@@ -1,47 +1,40 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 15 Jun 2015 16:29:28 +0200
-Subject: [Buildroot] [PATCH v2 3/3] boot/at91bootstrap3: download via
- custom git url
-In-Reply-To: <20150615161828.63441a90@free-electrons.com>
-References: <1433234780-21084-1-git-send-email-angelo.compagnucci@gmail.com>
- <1433234780-21084-4-git-send-email-angelo.compagnucci@gmail.com>
- <20150615161828.63441a90@free-electrons.com>
-Message-ID: <CA+TH9V=twZTuO+8LUspcb1DNCPYCGuM=vAoaoUNHAaSBM=5t1w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 Jun 2015 16:51:25 +0200
+Subject: [Buildroot] [PATCH 1/1] fs/romfs: add U-Boot image support
+In-Reply-To: <CAEiL7jJV6kaRnfi1HnSJEzrfaO_bQ4_dF+bX0p15wewC0QqOkw@mail.gmail.com>
+References: <1433782196-17824-1-git-send-email-hoang.tran@vnoss.org>
+ <20150614232937.6805b496@free-electrons.com>
+ <CAEiL7jJV6kaRnfi1HnSJEzrfaO_bQ4_dF+bX0p15wewC0QqOkw@mail.gmail.com>
+Message-ID: <20150615165125.43be39d5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Dear Hoang Tran,
 
-2015-06-15 16:18 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Angelo Compagnucci,
->
-> On Tue,  2 Jun 2015 10:46:20 +0200, Angelo Compagnucci wrote:
->> This patch adds the option to download at91bootstrap3 from
->> a custom git URL. This is a requirement for all that boards
->> that use a custom at91bootstrap3 version.
->>
->> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->> ---
->> Changes v1 -> v2:
->>  - Adding error handling for BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL and
->>    BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION
->
-> Applied, thanks.
+On Mon, 15 Jun 2015 10:46:08 -0400, Hoang Tran wrote:
 
-A really big and appreciated thank you!
+> Sorry I did not response because of the problem of my email client.
+> But anyway I agree with Arnout.
+> My rootfs is in romfs and I intended to make a uRamdisk for quick testing.
+> But we could use cpio Ramdisk instead.
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+a "uRamdisk" can be in cpio format. Basically the "u" is just a
+container for a ramdisk, and the ramdisk itself can use the cpio
+format, or ext2, or whatever filesystem you want. However, by using
+cpio, you leverage the initramfs mechanism of the kernel, which is much
+better than initrd in terms of memory consumption.
 
+See:
 
+  https://www.kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt
 
+Best regards,
+
+Thomas
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
