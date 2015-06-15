@@ -1,26 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jun 2015 23:43:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gpm: add hash file,
-	change archive to lzma
-In-Reply-To: <1434404019-13860-1-git-send-email-petr.vorel@gmail.com> (Petr
- Vorel's message of "Mon, 15 Jun 2015 23:33:39 +0200")
-References: <1434404019-13860-1-git-send-email-petr.vorel@gmail.com>
-Message-ID: <87si9sbqbj.fsf@dell.be.48ers.dk>
+Date: Mon, 15 Jun 2015 23:41:56 +0200
+Subject: [Buildroot] [git commit] package/network-manager: bump to version
+	1.0.2
+Message-ID: <20150615214401.9954381943@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=bf9388563add3df498403743e143fa5cbce52c7d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
- > ---
- >  package/gpm/gpm.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/network-manager/network-manager.hash |    4 ++--
+ package/network-manager/network-manager.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-It seems like you forgot to git add the .hash file. Care to send a fixed
-patch?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 401108e..f47e053 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.0.sha256sum
+-sha256  3a66afec670c975edd9832e620b725a5f16ed267a1b9e1b2d51ef27250d85947  NetworkManager-1.0.0.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.2.sha256sum
++sha256  359385707494bedbb48cfe0992ccfbcc4ac147dae1f7a47055c71e96439508ff  NetworkManager-1.0.2.tar.xz
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index c37c9ea..c118a92 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NETWORK_MANAGER_VERSION_MAJOR = 1.0
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
