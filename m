@@ -1,46 +1,60 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Mon, 15 Jun 2015 12:26:02 +0200
-Subject: [Buildroot] $(SED) not defined if 'make menuconfig savedefconfig'
-Message-ID: <CAM+bi4tjaJB2bJuQ40_cap55ZrEmOYg4Ssz+TMM_zg5Cb0yo6A@mail.gmail.com>
+From: =?UTF-8?Q?Guillaume_s=C3=A9tan?= <setan.buildroot@gmail.com>
+Date: Mon, 15 Jun 2015 15:00:38 +0200
+Subject: [Buildroot] Fwd:  Problem with package efl 1.14.1
+In-Reply-To: <CALW-xeoh40gFPTU_zWeeOF+ZQLxE5-aN8KC1OiR_2ZsmVDXmsQ@mail.gmail.com>
+References: <CALW-xeoh40gFPTU_zWeeOF+ZQLxE5-aN8KC1OiR_2ZsmVDXmsQ@mail.gmail.com>
+Message-ID: <CALW-xer+x9R=LU4Z7i=OtQtmR=YhR8mPiXxzjTuGCFzuznW7Sw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hello,
 
-While using buildroot-submodule (
-https://github.com/Openwide-Ingenierie/buildroot-submodule) I've noticed
-this happens since commit f71a621d91ec27f175fc84012962f88b1107305f was
-introduced into buildroot.
+I try to use the package EFL.1.14.1 with builbroot because I must use a
+touch screen with a target arm (ZC706 EvaluationKIt  -- Zynq-7000Soc).
 
-$ make menuconfig savedefconfig
-[Do whatever, or nothing at all and exit, there's no need to save anything]
-*** End of the configuration.
-*** Execute 'make' to start the build or try 'make help'.
 
-make: /BR2_DEFCONFIG=/d: Command not found
-Makefile:777: recipe for target 'savedefconfig' failed
-make: *** [savedefconfig] Error 127
+So, I find this version of buildroot make by Romain Naour (
+https://github.com/RomainNaour/buildroot). But I haven't managed to run
+this version with my settings, I spoke with Romain and even its settings
+didn't work on my computer.
 
-However,
-$ make menuconfig
-$ make savedefconfig
+Please, can you explain me what tools are needed to compile buildroot ?
 
-does not end with that error. I've just tracked it down to the fact that
-$(SED) is not defined when menuconfig savedefconfig are used in a single
-make call, whereas it equals to '/bin/sed -i -e'
+I try on virtual machine with Ubuntu and other computer with CentOs 7.
 
-Simply replacing that @$(SED) by /bin/sed -i -e on line 777 of Makefile
-makes it work again, but I don't think that solution is desirable. I'm
-sorry I can't provide a full patch, the motive of this bug is beyond my
-knowledge.
 
-Best regards
+Sincerely,
 
--- 
-?lvaro G?mez Machado
+Guillaume S?tan
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Here are my settings :
+
+---- Buildroot -------
+
+Target : ZC706 EvaluationKit
+  Zynq-7000Soc
+
+Target arch : ARM (Little endian)
+         Variant : Cortex - A9
+Tollchain type : External toolchain
+Tollchain : Sourcery Code Bench Arm 2014.05
+Init System : Busy Box
+
+--- Linux -----
+To launch Buildroot
+Linux 3.13.0-53 Ubuntu
+-----------------------------------------------------------------------------------------------------------------------------
+
+Link to my mistakes :
+http://code.bulix.org/h4r426-88552
+
+Link to my settings:
+http://code.bulix.org/se58te-88553
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150615/e5bb3d96/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150615/27b55d4a/attachment.html>
