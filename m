@@ -1,55 +1,88 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 15 Jun 2015 21:53:34 +0200
-Subject: [Buildroot] [PATCH] eudev: add enable/disable hwdb option
-Message-ID: <1434398014-3621-1-git-send-email-yegorslists@googlemail.com>
+From: =?UTF-8?q?C=C3=A9dric=20Marie?= <cedric.marie@openmailbox.org>
+Date: Mon, 15 Jun 2015 22:02:45 +0200
+Subject: [Buildroot] [PATCH] directfb: add an option for debugging support
+Message-ID: <1434398565-3061-1-git-send-email-cedric.marie@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This option enables/disables hardware database installation. This
-option is enabled by default in order to preserve old behavior.
+DirectFB provides two options for debug:
+* --enable-debug-support (default is yes)
+* --enable-debug (default is no)
+The first one provides the functions to print debug information. These
+functions can be called inside DirectFB, or by an external DirectFB
+driver in another package.
+The second one enables verbose mode in DirectFB, using these functions.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Buildroot currently provides an option for the second one only. The
+first one - which is necessary for the second one - is always enabled,
+because this is the default value.
+
+The new option (BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT) makes it possible
+to disable debugging support (--disable-debug-support) in order to
+build the library with no debug feature at all.
+
+When debugging support is disabled, the target installation path of
+drivers (/usr/lib/directfb-<version>) is suffixed with -pure. The
+public library (/usr/lib/libdirectfb.so) remains unchanged.
+
+Some external DirectFB drivers will install into
+/usr/lib/directfb-<version>-pure in release mode. For that reason, it
+is important that DirectFB can be configured to use this directory.
+
+Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
 ---
- package/eudev/Config.in | 6 ++++++
- package/eudev/eudev.mk  | 6 ++++++
- 2 files changed, 12 insertions(+)
+ package/directfb/Config.in   | 14 ++++++++++++++
+ package/directfb/directfb.mk |  5 +++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index 6d4139f..76df409 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -27,6 +27,12 @@ config BR2_PACKAGE_EUDEV_RULES_GEN
- 	help
- 	  Enable persistent rules generator
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 7759f8f..2b0d5c7 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -20,8 +20,22 @@ config BR2_PACKAGE_DIRECTFB_MULTI
+ comment "directfb multi application needs a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL
  
-+config BR2_PACKAGE_EUDEV_ENABLE_HWDB
-+	bool "enable hwdb installation"
++config BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT
++	bool "directfb debugging support"
 +	default y
 +	help
-+	  Enables hardware database installation to /etc/udev/hwdb.d
++	  Compile DirectFB with debugging support. It provides
++	  functions to print debug information, for DirectFB as well as
++	  external DirectFB drivers.
 +
++	  When disabled, DirectFB does not print any debug information.
++	  The drivers will be installed to and loaded from
++	  /usr/lib/directfb-<version>-pure instead of
++	  /usr/lib/directfb-<version>.
++
+ config BR2_PACKAGE_DIRECTFB_DEBUG
+ 	bool "directfb debugging"
++	depends on BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT
+ 	help
+ 	  Compile DirectFB with lots of debug output
+ 
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index e3dc506..ad1dd18 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -39,9 +39,14 @@ DIRECTFB_CONF_OPTS += --enable-multi --enable-fusion
+ DIRECTFB_DEPENDENCIES += linux-fusion
  endif
  
- comment "eudev needs eudev /dev management"
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 101d510..a97154c 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -31,6 +31,12 @@ ifeq ($(BR2_PACKAGE_EUDEV_RULES_GEN),y)
- EUDEV_CONF_OPTS += --enable-rule_generator
++ifeq ($(BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT),y)
++DIRECTFB_CONF_OPTS += --enable-debug-support
+ ifeq ($(BR2_PACKAGE_DIRECTFB_DEBUG),y)
+ DIRECTFB_CONF_OPTS += --enable-debug
  endif
- 
-+ifeq ($(BR2_PACKAGE_EUDEV_ENABLE_HWDB),y)
-+EUDEV_CONF_OPTS += --enable-hwdb
 +else
-+EUDEV_CONF_OPTS += --disable-hwdb
++DIRECTFB_CONF_OPTS += --disable-debug-support
 +endif
-+
- ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
- EUDEV_CONF_OPTS += --enable-gudev
- EUDEV_DEPENDENCIES += libglib2
+ 
+ ifeq ($(BR2_PACKAGE_DIRECTFB_TRACE),y)
+ DIRECTFB_CONF_OPTS += --enable-trace
 -- 
 2.1.4
