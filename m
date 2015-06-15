@@ -1,37 +1,38 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 15 Jun 2015 10:22:50 +0300
-Subject: [Buildroot] [PATCH] package/openvmtools: move to GitHub
-In-Reply-To: <1434351386-2515-1-git-send-email-kaszak@gmail.com>
-References: <1434351386-2515-1-git-send-email-kaszak@gmail.com>
-Message-ID: <20150615072250.GI8165@tarshish>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 15 Jun 2015 09:38:06 +0200
+Subject: [Buildroot] [PATCH 1/4] package/nodejs: Update to allow
+ selecting node.js version
+In-Reply-To: <20150614225309.07f354ed@free-electrons.com>
+References: <1434298376-31893-1-git-send-email-martin@barkynet.com>
+ <20150614225309.07f354ed@free-electrons.com>
+Message-ID: <1434353886.5045.4.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Karoly,
+Dear Thomas,
 
-On Mon, Jun 15, 2015 at 08:56:26AM +0200, Karoly Kasza wrote:
-> -OPENVMTOOLS_VERSION_MAJOR = 9.10.0
-> -OPENVMTOOLS_VERSION = $(OPENVMTOOLS_VERSION_MAJOR)-2476743
-> -OPENVMTOOLS_SOURCE = open-vm-tools-$(OPENVMTOOLS_VERSION).tar.gz
-> -OPENVMTOOLS_SITE = http://downloads.sourceforge.net/project/open-vm-tools/open-vm-tools/stable-$(OPENVMTOOLS_VERSION_MAJOR)
-> +OPENVMTOOLS_VERSION_MAJOR = stable-9.10
+On So, 2015-06-14 at 22:53 +0200, Thomas Petazzoni wrote:
+> Dear Martin Bark,
+> 
+> On Sun, 14 Jun 2015 17:12:53 +0100, Martin Bark wrote:
+> > Signed-off-by: Martin Bark <martin@barkynet.com>
+> 
+> What is the motivation for supporting more than one version of NodeJS
+> at a time?
 
-VERSION_MAJOR is only needed when it's used for something other than 
-constructing VERSION, like in the URL above. Now that the URL is gone you can 
-just remove VERSION_MAJOR, and set VERSION directly instead.
+Nodejs 0.10 and 0.12 use different versions of the V8 engine. The V8
+version used in 0.12 unfortunatly dropped support for the ARMv5
+architecture.
 
-> +OPENVMTOOLS_VERSION = $(OPENVMTOOLS_VERSION_MAJOR).0
-> +OPENVMTOOLS_SITE = $(call github,vmware,open-vm-tools,$(OPENVMTOOLS_VERSION))
->  OPENVMTOOLS_LICENSE = LGPLv2.1
->  OPENVMTOOLS_LICENSE_FILES = COPYING
->  # Autoreconf needed or config/missing will run configure again at buildtime
+> We generally try to avoid supporting multiple versions of a given
+> component, unless there are some really good reasons to do so (like
+> python2 vs. python3, or qt4 vs. qt5).
 
-baruch
+Nodejs 0.10 is still maintaned and new versions will follow. I would
+suggest to support both version until maintenance is dropped.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Best regards
+J?rg Krause
