@@ -1,40 +1,38 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Jun 2015 23:14:50 +0200
-Subject: [Buildroot] [PATCH] mxml: add hash file
-In-Reply-To: <f9e34cbf0944f4f66858c0ec4b4e3d0aa56548eb.1434341549.git.baruch@tkos.co.il>
-References: <f9e34cbf0944f4f66858c0ec4b4e3d0aa56548eb.1434341549.git.baruch@tkos.co.il>
-Message-ID: <558091CA.3000803@mind.be>
+Date: Tue, 16 Jun 2015 23:15:48 +0200
+Subject: [Buildroot] [PATCH] directfb: add an option for debugging
+	support
+In-Reply-To: <204a974adc4b86ce39264ea4c376f7c9@openmailbox.org>
+References: <1434315067-19958-1-git-send-email-cedric.marie@openmailbox.org>
+ <557DFB3B.6060701@mind.be> <204a974adc4b86ce39264ea4c376f7c9@openmailbox.org>
+Message-ID: <55809204.9040708@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/15/15 06:12, Baruch Siach wrote:
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On 06/15/15 08:33, C?dric Marie wrote:
+> Le 2015-06-15 00:07, Arnout Vandecappelle a ?crit :
+>>  There should be a --enable-debug-support somewhere around here,
+> 
+> You're right, that would be safer. In case they change the default value.
+> I will add it.
+> 
+> But I can't see any clear rule for that...
+> --enable-multi, --enable-fusion, --enable-debug, --enable-trace have no disable
+> counterpart.
+> --enable-x11, --enable-unique, --enable-gif do have a --disable counterpart.
+> 
+> Moreover, there is a --disable-multi for host-directfb, while it is assumed to
+> be the default for directfb (--enable-multi with no counterpart).
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Checked hashes and checked URL.
+ Historical accident. Nowadays we try to enforce enable/disable pairs during review.
+
 
  Regards,
  Arnout
-
-> ---
->  package/mxml/mxml.hash | 4 ++++
->  1 file changed, 4 insertions(+)
->  create mode 100644 package/mxml/mxml.hash
-> 
-> diff --git a/package/mxml/mxml.hash b/package/mxml/mxml.hash
-> new file mode 100644
-> index 000000000000..310e2cae0ad5
-> --- /dev/null
-> +++ b/package/mxml/mxml.hash
-> @@ -0,0 +1,4 @@
-> +# From http://www.msweet.org/downloads.php?L+Z3
-> +md5 e21cad0f7aacd18f942aa0568a8dee19 mxml-2.9.tar.gz
-> +# Locally computed
-> +sha256 cded54653c584b24c4a78a7fa1b3b4377d49ac4f451ddf170ebbc8161d85ff92 mxml-2.9.tar.gz
 
 
 -- 
