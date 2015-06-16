@@ -1,43 +1,44 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 16 Jun 2015 15:23:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/feh: bump to version 2.13.1,
-	add hash file
-Message-ID: <1434461034-14880-1-git-send-email-vorel@jablocom.com>
+From: Anthony Viallard <viallard@syscom-instruments.com>
+Date: Tue, 16 Jun 2015 15:21:28 +0200
+Subject: [Buildroot] [PATCH 1/1] Force rebuild of local site packages and
+	theirs local dependencies
+Message-ID: <1434460888-30770-1-git-send-email-viallard@syscom-instruments.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Petr Vorel <petr.vorel@gmail.com>
+The purpose of this patch is to rebuild local site packages and theirs
+local dependencies if the source has changed. Therefore, if the source
+of a package has changed, it will be rebuild if you type make or
+make <pkg>. Likewise, if a package has a library dependency which is
+local site package too and you type make <pkg>, the library will be
+rebuild if the source has been modified.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+This behavior is pretty useful if you use buildroot with many of your
+own packages. Especially if you share these packages with a developer
+team through a version control system like git.
+
+Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
 ---
- package/feh/feh.hash | 2 ++
- package/feh/feh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/feh/feh.hash
+ package/pkg-generic.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/feh/feh.hash b/package/feh/feh.hash
-new file mode 100644
-index 0000000..2ba2b01
---- /dev/null
-+++ b/package/feh/feh.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  865088d0481f6862d79d7c08d7b6cf1d25058a74a5784e511a1422fea8aba980  feh-2.13.1.tar.bz2
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 0c4c164..1fcec20 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index d5b29f0..929a31c 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -509,6 +509,10 @@ ifeq ($$(filter $(1),$$(DEPENDENCIES_HOST_PREREQ)),)
+ $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
+ endif
  
--FEH_VERSION = 2.12.1
-+FEH_VERSION = 2.13.1
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org
- FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
++ifeq ($$($(2)_SITE_METHOD),local)
++$$($(2)_TARGET_RSYNC): $(1)-clean-for-rebuild
++endif
++
+ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+ # In the normal case (no package override), the sequence of steps is
+ #  source, by downloading
 -- 
-1.8.0
+2.1.4
