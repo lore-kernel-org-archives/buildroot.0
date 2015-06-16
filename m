@@ -1,71 +1,56 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Tue, 16 Jun 2015 09:58:14 +0200
-Subject: [Buildroot] $(SED) not defined if 'make menuconfig
-	savedefconfig'
-In-Reply-To: <20150615142011.GA16458@dkarchlinux64.currentcomm.com>
-References: <CAM+bi4tjaJB2bJuQ40_cap55ZrEmOYg4Ssz+TMM_zg5Cb0yo6A@mail.gmail.com>
- <20150615153742.02ebdb85@free-electrons.com>
- <20150615142011.GA16458@dkarchlinux64.currentcomm.com>
-Message-ID: <CAM+bi4vL3aa+RO30s7ScAti=yykL+woGXpA=KaQMMgAd3HEd-g@mail.gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 16 Jun 2015 10:56:51 +0100
+Subject: [Buildroot] [PATCH 1/4] package/nodejs: Update to allow
+ selecting node.js version
+In-Reply-To: <1434353886.5045.4.camel@embedded.rocks>
+References: <1434298376-31893-1-git-send-email-martin@barkynet.com>
+ <20150614225309.07f354ed@free-electrons.com>
+ <1434353886.5045.4.camel@embedded.rocks>
+Message-ID: <CAFGQKxcSLVYn6Xz5bZzA4A6JosVEeyCs_WRVNUOjK+bTBi8=uw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Thomas, Doug,
+Dear Thomas & J?rg,
 
-2015-06-15 16:20 GMT+02:00 <rdkehn@yahoo.com>:
-
-> > diff --git a/Makefile b/Makefile
-> > index d3f80c4..67eb50c 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -272,6 +272,7 @@ HOSTLN := $(shell which $(HOSTLN) || type -p
-> $(HOSTLN) || echo ln)
-> >  HOSTNM := $(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
-> >  HOSTOBJCOPY := $(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY)
-> || echo objcopy)
-> >  HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) ||
-> echo ranlib)
-> > +SED := $(shell which sed || type -p sed) -i -e
-> >
-> >  export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
-> >  export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
-> > diff --git a/package/Makefile.in b/package/Makefile.in
-> > index c02d31f..f256b05 100644
-> > --- a/package/Makefile.in
-> > +++ b/package/Makefile.in
-> > @@ -217,7 +217,6 @@ endif
-> >  INSTALL := $(shell which install || type -p install)
-> >  FLEX := $(shell which flex || type -p flex)
-> >  BISON := $(shell which bison || type -p bison)
-> > -SED := $(shell which sed || type -p sed) -i -e
-> >  UNZIP := $(shell which unzip || type -p unzip) -q
-> >
-> >  APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(QUIET),-s)
-> >
-> >
+On 15 June 2015 at 08:38, J?rg Krause <joerg.krause@embedded.rocks> wrote:
+> Dear Thomas,
 >
-> I reproduced Alvaro's observation and your patch does resolve the
-> issue.
+> On So, 2015-06-14 at 22:53 +0200, Thomas Petazzoni wrote:
+>> Dear Martin Bark,
+>>
+>> What is the motivation for supporting more than one version of NodeJS
+>> at a time?
 >
-> Tested-by: Doug Kehn <rdkehn@yahoo.com>
+> Nodejs 0.10 and 0.12 use different versions of the V8 engine. The V8
+> version used in 0.12 unfortunatly dropped support for the ARMv5
+> architecture.
+
+Yes and now i think about it i probably should have added something like
+
+    depends on !BR2_ARM_CPU_ARMV5
+
+for node.js v0.12.4.  V8 after version 3.18 increased the minimum to
+ARMv6 with VFPv2.  See
+https://groups.google.com/forum/#!topic/v8-users/aSOFbaAQvMk.  To
+confirm I just ran a test and the qemu_arm_versatile_defconfig will
+build node.js v0.12.4 but it fails to run. qemu_arm_vexpress_defconfig
+will build and run node v0.12.4.
+
 >
-> Regards,
-> ...doug
+>> We generally try to avoid supporting multiple versions of a given
+>> component, unless there are some really good reasons to do so (like
+>> python2 vs. python3, or qt4 vs. qt5).
 >
+> Nodejs 0.10 is still maintaned and new versions will follow. I would
+> suggest to support both version until maintenance is dropped.
 >
-I've just tested it too and can confirm that this fixes the problem and my
-particular use case with buildroot-submodule.
 
-Tested-by: Alvaro G. M. <alvaro.gamez@hazent.com>
+That was my thought too.  There are some details on the upcoming
+0.10.39 release here https://github.com/joyent/node/milestones/0.10.39
 
-Thanks a lot
+Thanks
 
-
--- 
-?lvaro G?mez Machado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150616/193bdcfa/attachment.html>
+Martin
