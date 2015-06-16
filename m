@@ -1,48 +1,46 @@
-From: Matthew Starr <mstarr@hedonline.com>
-Date: Tue, 16 Jun 2015 15:42:28 -0500
-Subject: [Buildroot] [PATCH 1/1] system: make /bin/sh symlink use relative
-	path
-Message-ID: <64CA5C49A43E314D9F7DAE05370E2F7B05F54E71@hed-dc01.hed.local>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 16 Jun 2015 23:14:50 +0200
+Subject: [Buildroot] [PATCH] mxml: add hash file
+In-Reply-To: <f9e34cbf0944f4f66858c0ec4b4e3d0aa56548eb.1434341549.git.baruch@tkos.co.il>
+References: <f9e34cbf0944f4f66858c0ec4b4e3d0aa56548eb.1434341549.git.baruch@tkos.co.il>
+Message-ID: <558091CA.3000803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The symlink created by buildroot for /bin/sh is the full path to
-a shell.  This does not match what busybox and other Linux
-distributions do with using relative path symlinks. When handling
-files on the host system this will point to the host system's shell
-if present and not the target shell.
+On 06/15/15 06:12, Baruch Siach wrote:
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-This is fixed by changing the /bin/sh symlink to use relative a path
-since both files are in the same directory.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-This was reported as Bug #8161 at bugs.busybox.net
+ Checked hashes and checked URL.
 
-Signed-off-by: Matthew Starr <mstarr@hedonline.com>
----
- system/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/system/Config.in b/system/Config.in
-index 84cde94..15f0515 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -236,10 +236,10 @@ endchoice # /bin/sh
- 
- config BR2_SYSTEM_BIN_SH
- 	string
--	default "/bin/busybox" if BR2_SYSTEM_BIN_SH_BUSYBOX
--	default "/bin/bash"    if BR2_SYSTEM_BIN_SH_BASH
--	default "/bin/dash"    if BR2_SYSTEM_BIN_SH_DASH
--	default "/bin/zsh"     if BR2_SYSTEM_BIN_SH_ZSH
-+	default "busybox" if BR2_SYSTEM_BIN_SH_BUSYBOX
-+	default "bash"    if BR2_SYSTEM_BIN_SH_BASH
-+	default "dash"    if BR2_SYSTEM_BIN_SH_DASH
-+	default "zsh"     if BR2_SYSTEM_BIN_SH_ZSH
- 
- config BR2_TARGET_GENERIC_GETTY
- 	bool "Run a getty (login prompt) after boot"
+> ---
+>  package/mxml/mxml.hash | 4 ++++
+>  1 file changed, 4 insertions(+)
+>  create mode 100644 package/mxml/mxml.hash
+> 
+> diff --git a/package/mxml/mxml.hash b/package/mxml/mxml.hash
+> new file mode 100644
+> index 000000000000..310e2cae0ad5
+> --- /dev/null
+> +++ b/package/mxml/mxml.hash
+> @@ -0,0 +1,4 @@
+> +# From http://www.msweet.org/downloads.php?L+Z3
+> +md5 e21cad0f7aacd18f942aa0568a8dee19 mxml-2.9.tar.gz
+> +# Locally computed
+> +sha256 cded54653c584b24c4a78a7fa1b3b4377d49ac4f451ddf170ebbc8161d85ff92 mxml-2.9.tar.gz
+
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
