@@ -1,44 +1,83 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Jun 2015 23:15:48 +0200
-Subject: [Buildroot] [PATCH] directfb: add an option for debugging
-	support
-In-Reply-To: <204a974adc4b86ce39264ea4c376f7c9@openmailbox.org>
-References: <1434315067-19958-1-git-send-email-cedric.marie@openmailbox.org>
- <557DFB3B.6060701@mind.be> <204a974adc4b86ce39264ea4c376f7c9@openmailbox.org>
-Message-ID: <55809204.9040708@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 16 Jun 2015 23:28:06 +0200
+Subject: [Buildroot] [PATCH 1/1] system: make /bin/sh symlink use
+	relative path
+In-Reply-To: <64CA5C49A43E314D9F7DAE05370E2F7B05F54E71@hed-dc01.hed.local>
+References: <64CA5C49A43E314D9F7DAE05370E2F7B05F54E71@hed-dc01.hed.local>
+Message-ID: <20150616212806.GB3643@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/15/15 08:33, C?dric Marie wrote:
-> Le 2015-06-15 00:07, Arnout Vandecappelle a ?crit :
->>  There should be a --enable-debug-support somewhere around here,
+Matthew, All,
+
+On 2015-06-16 15:42 -0500, Matthew Starr spake thusly:
+> The symlink created by buildroot for /bin/sh is the full path to
+> a shell.  This does not match what busybox and other Linux
+> distributions do with using relative path symlinks. When handling
+> files on the host system this will point to the host system's shell
+> if present and not the target shell.
 > 
-> You're right, that would be safer. In case they change the default value.
-> I will add it.
+> This is fixed by changing the /bin/sh symlink to use relative a path
+
+...a relative path.
+
+> since both files are in the same directory.
+
+Relative paths can be made even for t=files not in the same directory,
+so I don;t think there's much need for that end of the sentence
+(starting with 'since').
+
+> This was reported as Bug #8161 at bugs.busybox.net
+
+We usually state that with something like;
+
+    Fixes #8161
+
+since the maintainer greps for that pattern when doing the announcement
+mail (to credit bug fixers).
+
+> Signed-off-by: Matthew Starr <mstarr@hedonline.com>
+
+Otherwise:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  system/Config.in | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> But I can't see any clear rule for that...
-> --enable-multi, --enable-fusion, --enable-debug, --enable-trace have no disable
-> counterpart.
-> --enable-x11, --enable-unique, --enable-gif do have a --disable counterpart.
-> 
-> Moreover, there is a --disable-multi for host-directfb, while it is assumed to
-> be the default for directfb (--enable-multi with no counterpart).
-
-
- Historical accident. Nowadays we try to enforce enable/disable pairs during review.
-
-
- Regards,
- Arnout
-
+> diff --git a/system/Config.in b/system/Config.in
+> index 84cde94..15f0515 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -236,10 +236,10 @@ endchoice # /bin/sh
+>  
+>  config BR2_SYSTEM_BIN_SH
+>  	string
+> -	default "/bin/busybox" if BR2_SYSTEM_BIN_SH_BUSYBOX
+> -	default "/bin/bash"    if BR2_SYSTEM_BIN_SH_BASH
+> -	default "/bin/dash"    if BR2_SYSTEM_BIN_SH_DASH
+> -	default "/bin/zsh"     if BR2_SYSTEM_BIN_SH_ZSH
+> +	default "busybox" if BR2_SYSTEM_BIN_SH_BUSYBOX
+> +	default "bash"    if BR2_SYSTEM_BIN_SH_BASH
+> +	default "dash"    if BR2_SYSTEM_BIN_SH_DASH
+> +	default "zsh"     if BR2_SYSTEM_BIN_SH_ZSH
+>  
+>  config BR2_TARGET_GENERIC_GETTY
+>  	bool "Run a getty (login prompt) after boot"
+> -- 
+> 2.1.4
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
