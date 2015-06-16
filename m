@@ -1,64 +1,44 @@
-From: grepper <grepper@gmail.com>
-Date: Tue, 16 Jun 2015 14:27:23 -0400
-Subject: [Buildroot] [PATCH 1/1] Allow imagemagick to find ghostscript
- fonts.
-In-Reply-To: <20150616033946.GY8165@tarshish>
-References: <1434420746-20199-1-git-send-email-grepper@gmail.com>
- <20150616033946.GY8165@tarshish>
-Message-ID: <55806A8B.5090302@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 16 Jun 2015 21:18:23 +0200
+Subject: [Buildroot] [PATCH 2/2] package/x11r7/xdriver_xf86-video-vesa: bump
+	to version 2.3.4
+In-Reply-To: <1434482303-10091-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1434482303-10091-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1434482303-10091-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/06/15 11:39 PM, Baruch Siach wrote:
-> Hi Robert,
-> 
-> On Mon, Jun 15, 2015 at 10:12:26PM -0400, grepper wrote:
->> From: Robert Sohn <grepper@gmail.com>
->>
->> It appears that Imagemagick needs to be configured with
->>  --with-gs-font-dir=/usr/share/fonts/gs else it will not find
->> the ghostscript fonts and /etc/ImageMagick-6/type-ghostscript.xml
->> will contain the wrong font paths. You end up with messages like:
->> Magick: unable to read font `(null)' @ error/annotate.c/RenderFreetype/1153
->> They are non-fatal but could get annoying fast if you are using 'convert'
->> on a lot of files.
->>
->> Signed-off-by: Robert Sohn <grepper@gmail.com>
->> ---
->>  package/imagemagick/imagemagick.mk | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
->> index 298d0a8..1abb2a8 100644
->> --- a/package/imagemagick/imagemagick.mk
->> +++ b/package/imagemagick/imagemagick.mk
->> @@ -33,7 +33,8 @@ IMAGEMAGICK_CONF_OPTS = \
->>  	--without-dps \
->>  	--without-gslib \
->>  	--without-fpx \
->> -	--without-x
->> +	--without-x \
->> +	--with-gs-font-dir=/usr/share/fonts/gs
-> 
-> These fonts are only available when the ghostscript-fonts is built, isn't it? 
-> If so, then this should be
-> 
-> ifeq ($(BR2_PACKAGE_GHOSTSCRIPT_FONTS),y)
-> IMAGEMAGICK_CONF_OPTS += --with-gs-font-dir=/usr/share/fonts/gs
-> endif
-> 
-> Or maybe we should use $(GHOSTSCRIPT_FONTS_TARGET_DIR) here, instead of 
-> duplicating it?
-> 
-> baruch
-> 
 
-Hm, the problem is that the issue will remain if ghostscript-fonts are
-not installed. I don't know the solution to that. It seems strange that
-imagemagick can not find a default font when 'convert -list font' shows
-many, ttf and otherwise.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash |    4 ++--
+ package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Robert
+diff --git a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash
+index bc400d5..84c0b08 100644
+--- a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash
++++ b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-September/002319.html
+-sha256	ce8b75e5a40e9dae76f2ac9e2880f7f73a848653ca2eed5880f52dc2c0d3aef8	xf86-video-vesa-2.3.3.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-June/002615.html
++sha256	7bddf4d879dd6f67088ecb203a31e12334aab980174bd0909930a21f32e251c1	xf86-video-vesa-2.3.4.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
+index 05d15dd..1184821 100644
+--- a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
++++ b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_VESA_VERSION = 2.3.3
++XDRIVER_XF86_VIDEO_VESA_VERSION = 2.3.4
+ XDRIVER_XF86_VIDEO_VESA_SOURCE = xf86-video-vesa-$(XDRIVER_XF86_VIDEO_VESA_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_VESA_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_VESA_LICENSE = MIT
+-- 
+1.7.10.4
