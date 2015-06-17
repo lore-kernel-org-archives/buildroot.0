@@ -1,13 +1,16 @@
-From: Karoly Kasza <kaszak@gmail.com>
-Date: Wed, 17 Jun 2015 10:22:08 +0200
-Subject: [Buildroot] [PATCH] package/openvmtools: introduce SUBDIR variable
-	and update patches
-Message-ID: <1434529328-115195-1-git-send-email-kaszak@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Jun 2015 12:10:13 +0200
+Subject: [Buildroot] [git commit] package/openvmtools: introduce SUBDIR
+	variable and update patches
+Message-ID: <20150617101019.DB6507F940@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: http://git.buildroot.net/buildroot/commit/?id=ab71dff0dd8d5207c27d5cbe923cea8c5f06e541
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The Open-vm-tools package is now distributed from GitHub and a new
 subdirectory was introduced, which breaks the Buildroot process.
@@ -20,12 +23,13 @@ Fixes:
 http://autobuild.buildroot.net/results/bfd10c8d454a2686ebb1c4afdb49c55e39a9dd67/
 
 Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openvmtools/0001-has_bsd_printf.patch       |  4 ++--
- package/openvmtools/0002-no_cflags_werror.patch     | 11 ++++++-----
- package/openvmtools/0003-dont-force-cppflags.patch  |  5 ++---
- package/openvmtools/0004-uclibc_secure_getenv.patch |  4 ++--
- package/openvmtools/openvmtools.mk                  |  1 +
+ package/openvmtools/0001-has_bsd_printf.patch      |    4 ++--
+ package/openvmtools/0002-no_cflags_werror.patch    |   11 ++++++-----
+ package/openvmtools/0003-dont-force-cppflags.patch |    5 ++---
+ .../openvmtools/0004-uclibc_secure_getenv.patch    |    4 ++--
+ package/openvmtools/openvmtools.mk                 |    1 +
  5 files changed, 13 insertions(+), 12 deletions(-)
 
 diff --git a/package/openvmtools/0001-has_bsd_printf.patch b/package/openvmtools/0001-has_bsd_printf.patch
@@ -111,5 +115,3 @@ index 822bbf1..9819640 100644
  OPENVMTOOLS_CONF_OPTS = --with-dnet \
  	--without-icu --without-x --without-gtk2 \
  	--without-gtkmm --without-kernel-modules \
--- 
-2.1.4
