@@ -1,48 +1,40 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Wed, 17 Jun 2015 08:52:55 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-06-16
-In-Reply-To: <20150617063013.89DD7101A45@stock.ovh.net>
-References: <20150617063013.89DD7101A45@stock.ovh.net>
-Message-ID: <CABbD_XAA2LLjjPXCOfHR_3FSdc34uKKakMxMy3hO5ZeUiebJ8Q@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 17 Jun 2015 09:15:19 +0200
+Subject: [Buildroot] [PATCH] mxml: add hash file
+In-Reply-To: <20150617030722.GC8165@tarshish>
+References: <f9e34cbf0944f4f66858c0ec4b4e3d0aa56548eb.1434341549.git.baruch@tkos.co.il>
+ <558091CA.3000803@mind.be> <20150617030722.GC8165@tarshish>
+Message-ID: <55811E87.1080307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+On 06/17/15 05:07, Baruch Siach wrote:
+> Hi Arnout,
+> 
+> On Tue, Jun 16, 2015 at 11:14:50PM +0200, Arnout Vandecappelle wrote:
+>> On 06/15/15 06:12, Baruch Siach wrote:
+>>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>>
+>> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>>
+>>  Checked hashes and checked URL.
+> 
+> Thanks, but Thomas applied it already (706f051cfb8ade).
 
-     openvmtools-stable-9.10.0 | 9
->
- ...
+ Yes, I noticed that afterwards. He forgot to send the 'Applied, thanks' mail,
+that's why I missed it.
 
->       x86_64 |      openvmtools-stable-9.10.0 | NOK |
-> http://autobuild.buildroot.net/results/bfd10c8d454a2686ebb1c4afdb49c55e39a9dd67/
->         i686 |      openvmtools-stable-9.10.0 | NOK |
-> http://autobuild.buildroot.net/results/40dd552190852337bc3e8345bb3c6983fb982b40/
->       x86_64 |      openvmtools-stable-9.10.0 | NOK |
-> http://autobuild.buildroot.net/results/824f44053f5d850af388fa53f9d36971c67f235a/
->       x86_64 |      openvmtools-stable-9.10.0 | NOK |
-> http://autobuild.buildroot.net/results/4fdbc8e553fd25f01081dc1134b0fd498c4012bf/
->         i686 |      openvmtools-stable-9.10.0 | NOK |
-> http://autobuild.buildroot.net/results/68e3e31a289fea36fc5913e882e70b04cb57b45d/
->       x86_64 |      openvmtools-stable-9.10.0 | NOK |
-> http://autobuild.buildroot.net/results/94084c0e49b7fc5781fe271cbc9f10807a312dc8/
->         i686 |      openvmtools-stable-9.10.0 | NOK |
-> http://autobuild.buildroot.net/results/ca8f2ea8d32a5fd0d3f7cf4923f694ed12268a79/
->         i686 |      openvmtools-stable-9.10.0 | NOK |
-> http://autobuild.buildroot.net/results/7ff990866582d9e33ff42c467d5b45a7c6740225/
->       x86_64 |      openvmtools-stable-9.10.0 | NOK |
-> http://autobuild.buildroot.net/results/94796956d262fcae35d662feedb3da52700d476b/
+ Regards,
+ Arnout
 
 
-These failed because VMware decided to add another subdirectory in the repo
-when moving to GitHub. I update the patches in BR right now, will send in
-the fix today.
-
-BR
-Karoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150617/1a5e8c3b/attachment.html>
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
