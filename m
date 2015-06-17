@@ -1,100 +1,82 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 17 Jun 2015 19:12:10 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/network-manager: fix build with
-	older kernel headers
-Message-ID: <1434561130-31199-1-git-send-email-petr.vorel@gmail.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Wed, 17 Jun 2015 13:03:32 -0500
+Subject: [Buildroot] [PATCH] package/i2c-tools: bump to version 3.1.2
+In-Reply-To: <1434556678-32346-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1434556678-32346-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <CAMQcK5++K7vekrD6ajX0UTE1azTqK23mkeqcUMWfLVBDZM++2Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-Changes v2: rewrited patch 0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
----
- ...anager-fix-build-with-Linux-3.2.0-headers.patch | 28 ++++++++++++++++
- ...d-dhcp-fix-build-with-Linux-3.2.0-headers.patch | 37 ++++++++++++++++++++++
- 2 files changed, 65 insertions(+)
- create mode 100644 package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
- create mode 100644 package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
+Hi Angelo,
 
-diff --git a/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch b/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
-new file mode 100644
-index 0000000..fdda4a2
---- /dev/null
-+++ b/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
-@@ -0,0 +1,28 @@
-+From 22b99e3bbb2ca33963e839f12ab95314ab8d9ba9 Mon Sep 17 00:00:00 2001
-+From: Lubomir Rintel <lkundrak@v3.sk>
-+Date: Fri, 15 May 2015 16:37:20 +0200
-+Subject: [PATCH] ppp-manager: fix build with Linux 3.2.0 headers
-+
-+Fixes build with Ubuntu 12.04.
-+
-+In file included from ppp-manager/nm-ppp-manager.c:42:0:
-+/usr/include/linux/if_ppp.h:103:16: error: field 'b' has incomplete type
-+/usr/include/linux/if_ppp.h:108:21: error: field 'b' has incomplete type
-+---
-+ src/ppp-manager/nm-ppp-manager.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/ppp-manager/nm-ppp-manager.c b/src/ppp-manager/nm-ppp-manager.c
-+index e27c82b..d410ebf 100644
-+--- a/src/ppp-manager/nm-ppp-manager.c
-++++ b/src/ppp-manager/nm-ppp-manager.c
-+@@ -39,6 +39,7 @@
-+ #ifndef aligned_u64
-+ #define aligned_u64 unsigned long long __attribute__((aligned(8)))
-+ #endif
-++#include <linux/if.h>
-+ #include <linux/if_ppp.h>
-+
-+ #include "NetworkManagerUtils.h"
-+--
-+2.1.4
-diff --git a/package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch b/package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
-new file mode 100644
-index 0000000..a9bdb0e
---- /dev/null
-+++ b/package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
-@@ -0,0 +1,37 @@
-+From ae4fc67ae6f14c57a4162731089d69d80a7c7d6d Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <petr.vorel@gmail.com>
-+Date: Wed, 17 Jun 2015 18:56:13 +0200
-+Subject: [PATCH] systemd-dhcp: fix build with Linux 3.2.0 headers
-+
-+Fixes build on Ubuntu 12.04.
-+
-+systemd/src/libsystemd-network/dhcp-network.c: In function '_bind_raw_socket':
-+systemd/src/libsystemd-network/dhcp-network.c:75:17: error: 'BPF_XOR' undeclared (first use in this function)
-+systemd/src/libsystemd-network/dhcp-network.c:75:17: note: each undeclared identifier is reported only once for each function it appears in
-+make[4]: *** [libsystemd_nm_la-dhcp-network.lo] Error 1
-+
-+Inspired by http://cgit.freedesktop.org/NetworkManager/NetworkManager/commit/?id=3811a683
-+
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+---
-+ src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h b/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h
-+index 6d500f4..f8856a1 100644
-+--- a/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h
-++++ b/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h
-+@@ -38,6 +38,11 @@
-+
-+ #include "nm-logging.h"
-+
-++/* Missing in Linux 3.2.0, in Ubuntu 12.04 */
-++#ifndef BPF_XOR
-++#define BPF_XOR 0xa0
-++#endif
-++
-+ static inline guint32
-+ _slog_level_to_nm (int slevel)
-+ {
-+--
-+2.1.4
+On Wed, Jun 17, 2015 at 10:57 AM, Angelo Compagnucci
+<angelo.compagnucci@gmail.com> wrote:
+> This patch bumps version to 3.1.2 and adds support for the recently
+> introduced python3 support for py-smbus.
+>
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+>  package/i2c-tools/i2c-tools.hash |  2 +-
+>  package/i2c-tools/i2c-tools.mk   | 13 ++++++++++---
+>  2 files changed, 11 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
+> index a6c376f..c12ffe8 100644
+> --- a/package/i2c-tools/i2c-tools.hash
+> +++ b/package/i2c-tools/i2c-tools.hash
+> @@ -1,2 +1,2 @@
+>  # locally computed hash
+> -sha256 14d4d7d60d1c12e43f2befe239c682a5c44c27682f153d4b58c1e392d2db1700  i2c-tools-3.1.1.tar.bz2
+> +sha256 db5e69f2e2a6e3aa2ecdfe6a5f490b149c504468770f58921c8c5b8a7860a441  i2c-tools-3.1.2.tar.bz2
+> diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+> index 6c156ca..5fe4a6f 100644
+> --- a/package/i2c-tools/i2c-tools.mk
+> +++ b/package/i2c-tools/i2c-tools.mk
+> @@ -4,16 +4,23 @@
+>  #
+>  ################################################################################
+>
+> -I2C_TOOLS_VERSION = 3.1.1
+> +I2C_TOOLS_VERSION = 3.1.2
+>  I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+>  I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
+>  I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
+>  I2C_TOOLS_LICENSE_FILES = COPYING
+>
+> -# Build/install steps mirror the distutil python package type in the python package
+> -# infrastructure
+>  ifeq ($(BR2_PACKAGE_PYTHON),y)
+>  I2C_TOOLS_DEPENDENCIES += python
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> +I2C_TOOLS_DEPENDENCIES += python3
+> +endif
+> +
+> +# Build/install steps mirror the distutil python package type in the python package
+> +# infrastructure
+> +ifneq ($(filter y,$(BR2_PACKAGE_PYTHON) $(BR2_PACKAGE_PYTHON3)),)
+
+Usually we would want to use 'ifeq' in this case. The usual syntax for
+this would be:
+
+ifeq ($(BR2_PACKAGE_PYTHON) $(BR2_PACKAGE_PYTHON3),y)
+
+This works because python and python3 can't be selected at the same time.
+
+>  # BASE_ENV taken from PKG_PYTHON_DISTUTILS_ENV in package/pkg-python.mk
+>  I2C_TOOLS_PYTHON_BASE_ENV = \
+>         $(PKG_PYTHON_DISTUTILS_ENV) \
+
+Thanks,
+-Ryan
+
 -- 
-1.8.0
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
