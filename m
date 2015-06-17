@@ -1,37 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jun 2015 09:44:48 +0200
+From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
+Date: Wed, 17 Jun 2015 09:47:37 +0200
 Subject: [Buildroot] [PATCH] package/openvmtools: move files up from
- unnecessary subdirectory
-In-Reply-To: <1434526416-62466-1-git-send-email-kaszak@gmail.com>
+	unnecessary subdirectory
+In-Reply-To: <20150617094448.01ac6010@free-electrons.com>
 References: <1434526416-62466-1-git-send-email-kaszak@gmail.com>
-Message-ID: <20150617094448.01ac6010@free-electrons.com>
+ <20150617094448.01ac6010@free-electrons.com>
+Message-ID: <CABbD_XBn6opGYeqxsjah05c5CbNGo6u+BJZVKnAeSSy0gFdQrw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Karoly Kasza,
+Hi Thomas,
 
-On Wed, 17 Jun 2015 09:33:36 +0200, Karoly Kasza wrote:
-> The Open-vm-tools package is now distributed from GitHub and a new
-> subdirectory was introduced, which breaks the Buildroot process.
-> 
-> This patch moves everything up from the new subdirectory after
-> extraction, making Buildroot once again able to run.
-> 
-> Fixes:
-> 
-> http://autobuild.buildroot.net/results/bfd10c8d454a2686ebb1c4afdb49c55e39a9dd67/
-> 
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 
-Or you could use:
+> Or you could use:
+>
+> OPENVMTOOLS_SUBDIR = open-vm-tools
+>
+>
+I did not know there is such an option.
+Which one solution does the BR community prefer?
 
-OPENVMTOOLS_SUBDIR = open-vm-tools
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> BR
+Karoly
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150617/fd5ca523/attachment.html>
