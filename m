@@ -1,54 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Jun 2015 16:41:34 +0200
-Subject: [Buildroot] Busybox build fails on raspberrypi defconfig
-In-Reply-To: <CAJtjsKa9Osr3VjF6jBysCFPEKhh4c8HAHVP7FfVj07_N_B1FMQ@mail.gmail.com>
-References: <CAJtjsKZ9zeYzwSkMKiAvUz50e_7L9HKbNLY8WWwz5e59=AHGSw@mail.gmail.com>
- <CAJtjsKa9Osr3VjF6jBysCFPEKhh4c8HAHVP7FfVj07_N_B1FMQ@mail.gmail.com>
-Message-ID: <20150617164134.01411faf@free-electrons.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 17 Jun 2015 17:57:58 +0200
+Subject: [Buildroot] [PATCH] package/i2c-tools: bump to version 3.1.2
+Message-ID: <1434556678-32346-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Johan Oudinet,
+This patch bumps version to 3.1.2 and adds support for the recently
+introduced python3 support for py-smbus.
 
-On Wed, 17 Jun 2015 16:02:10 +0200, Johan Oudinet wrote:
-> On Wed, Jun 17, 2015 at 3:27 PM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
-> > And busybox build fails with the following error:
-> > include/libbb.h:87:19: fatal error: utmp.h: No such file or directory
-> >  # include <utmp.h>
-> >                    ^
-> 
-> Reverting from uClibc-ng to uClibc-0.9.33 fixes this error.
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/i2c-tools/i2c-tools.hash |  2 +-
+ package/i2c-tools/i2c-tools.mk   | 13 ++++++++++---
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-This seems weird, since UTMP is enabled in our uClibc-ng configuration:
-
-$ grep UTMP *.config
-uClibc-0.9.33.config:UCLIBC_HAS_UTMPX=y
-uClibc-ng.config:UCLIBC_HAS_UTMP=y
-uClibc-ng.config:UCLIBC_HAS_UTMPX=y
-uClibc-snapshot.config:UCLIBC_HAS_UTMP=y
-uClibc-snapshot.config:UCLIBC_HAS_UTMPX=y
-
-And it's really UCLIBC_HAS_UTMP that controls whether utmp.h is
-installed or not:
-
-HEADERS_RM-$(UCLIBC_HAS_UTMP)               += bits/utmp.h utmp.h
-HEADERS_RM-$(UCLIBC_HAS_UTMPX)               += bits/utmpx.h utmpx.h
-
-Are you sure you did a full rebuild from scratch, and you didn't select
-uClibc-ng but using package/uclibc/uClibc-0.9.33.config as the
-configuration file ? That could explain the problem, because the
-UCLIBC_HAS_UTMP option didn't exist in uClibc-0.9.33.config, so if you
-use that config file with uClibc-ng, UTMP support will be disabled.
-
-Can you double check this?
-
-Thanks,
-
-Thomas
+diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
+index a6c376f..c12ffe8 100644
+--- a/package/i2c-tools/i2c-tools.hash
++++ b/package/i2c-tools/i2c-tools.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256	14d4d7d60d1c12e43f2befe239c682a5c44c27682f153d4b58c1e392d2db1700  i2c-tools-3.1.1.tar.bz2
++sha256	db5e69f2e2a6e3aa2ecdfe6a5f490b149c504468770f58921c8c5b8a7860a441  i2c-tools-3.1.2.tar.bz2
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index 6c156ca..5fe4a6f 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -4,16 +4,23 @@
+ #
+ ################################################################################
+ 
+-I2C_TOOLS_VERSION = 3.1.1
++I2C_TOOLS_VERSION = 3.1.2
+ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+ I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
+ I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
+ I2C_TOOLS_LICENSE_FILES = COPYING
+ 
+-# Build/install steps mirror the distutil python package type in the python package
+-# infrastructure
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ I2C_TOOLS_DEPENDENCIES += python
++endif
++
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++I2C_TOOLS_DEPENDENCIES += python3
++endif
++
++# Build/install steps mirror the distutil python package type in the python package
++# infrastructure
++ifneq ($(filter y,$(BR2_PACKAGE_PYTHON) $(BR2_PACKAGE_PYTHON3)),)
+ # BASE_ENV taken from PKG_PYTHON_DISTUTILS_ENV in package/pkg-python.mk
+ I2C_TOOLS_PYTHON_BASE_ENV = \
+ 	$(PKG_PYTHON_DISTUTILS_ENV) \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
