@@ -1,82 +1,104 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Wed, 17 Jun 2015 13:03:32 -0500
-Subject: [Buildroot] [PATCH] package/i2c-tools: bump to version 3.1.2
-In-Reply-To: <1434556678-32346-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1434556678-32346-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <CAMQcK5++K7vekrD6ajX0UTE1azTqK23mkeqcUMWfLVBDZM++2Q@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 17 Jun 2015 20:41:25 +0200
+Subject: [Buildroot] [PATCH] lua: bump to version 5.3.1
+Message-ID: <1434566485-709-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Angelo,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/lua/{5.3.0 => 5.3.1}/0001-root-path.patch           | 2 +-
+ package/lua/{5.3.0 => 5.3.1}/0002-shared-libs-for-lua.patch | 0
+ package/lua/{5.3.0 => 5.3.1}/0004-lua-pc.patch              | 0
+ package/lua/{5.3.0 => 5.3.1}/0011-linenoise.patch           | 8 ++++----
+ package/lua/lua.hash                                        | 4 ++--
+ package/lua/lua.mk                                          | 2 +-
+ 6 files changed, 8 insertions(+), 8 deletions(-)
+ rename package/lua/{5.3.0 => 5.3.1}/0001-root-path.patch (95%)
+ rename package/lua/{5.3.0 => 5.3.1}/0002-shared-libs-for-lua.patch (100%)
+ rename package/lua/{5.3.0 => 5.3.1}/0004-lua-pc.patch (100%)
+ rename package/lua/{5.3.0 => 5.3.1}/0011-linenoise.patch (88%)
 
-On Wed, Jun 17, 2015 at 10:57 AM, Angelo Compagnucci
-<angelo.compagnucci@gmail.com> wrote:
-> This patch bumps version to 3.1.2 and adds support for the recently
-> introduced python3 support for py-smbus.
->
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  package/i2c-tools/i2c-tools.hash |  2 +-
->  package/i2c-tools/i2c-tools.mk   | 13 ++++++++++---
->  2 files changed, 11 insertions(+), 4 deletions(-)
->
-> diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
-> index a6c376f..c12ffe8 100644
-> --- a/package/i2c-tools/i2c-tools.hash
-> +++ b/package/i2c-tools/i2c-tools.hash
-> @@ -1,2 +1,2 @@
->  # locally computed hash
-> -sha256 14d4d7d60d1c12e43f2befe239c682a5c44c27682f153d4b58c1e392d2db1700  i2c-tools-3.1.1.tar.bz2
-> +sha256 db5e69f2e2a6e3aa2ecdfe6a5f490b149c504468770f58921c8c5b8a7860a441  i2c-tools-3.1.2.tar.bz2
-> diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-> index 6c156ca..5fe4a6f 100644
-> --- a/package/i2c-tools/i2c-tools.mk
-> +++ b/package/i2c-tools/i2c-tools.mk
-> @@ -4,16 +4,23 @@
->  #
->  ################################################################################
->
-> -I2C_TOOLS_VERSION = 3.1.1
-> +I2C_TOOLS_VERSION = 3.1.2
->  I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
->  I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
->  I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
->  I2C_TOOLS_LICENSE_FILES = COPYING
->
-> -# Build/install steps mirror the distutil python package type in the python package
-> -# infrastructure
->  ifeq ($(BR2_PACKAGE_PYTHON),y)
->  I2C_TOOLS_DEPENDENCIES += python
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> +I2C_TOOLS_DEPENDENCIES += python3
-> +endif
-> +
-> +# Build/install steps mirror the distutil python package type in the python package
-> +# infrastructure
-> +ifneq ($(filter y,$(BR2_PACKAGE_PYTHON) $(BR2_PACKAGE_PYTHON3)),)
-
-Usually we would want to use 'ifeq' in this case. The usual syntax for
-this would be:
-
-ifeq ($(BR2_PACKAGE_PYTHON) $(BR2_PACKAGE_PYTHON3),y)
-
-This works because python and python3 can't be selected at the same time.
-
->  # BASE_ENV taken from PKG_PYTHON_DISTUTILS_ENV in package/pkg-python.mk
->  I2C_TOOLS_PYTHON_BASE_ENV = \
->         $(PKG_PYTHON_DISTUTILS_ENV) \
-
-Thanks,
--Ryan
-
+diff --git a/package/lua/5.3.0/0001-root-path.patch b/package/lua/5.3.1/0001-root-path.patch
+similarity index 95%
+rename from package/lua/5.3.0/0001-root-path.patch
+rename to package/lua/5.3.1/0001-root-path.patch
+index 660bc15..d8ef8d0 100644
+--- a/package/lua/5.3.0/0001-root-path.patch
++++ b/package/lua/5.3.1/0001-root-path.patch
+@@ -6,7 +6,7 @@ Index: b/src/luaconf.h
+ ===================================================================
+ --- a/src/luaconf.h
+ +++ b/src/luaconf.h
+-@@ -175,7 +175,7 @@
++@@ -188,7 +188,7 @@
+ 
+  #else			/* }{ */
+ 
+diff --git a/package/lua/5.3.0/0002-shared-libs-for-lua.patch b/package/lua/5.3.1/0002-shared-libs-for-lua.patch
+similarity index 100%
+rename from package/lua/5.3.0/0002-shared-libs-for-lua.patch
+rename to package/lua/5.3.1/0002-shared-libs-for-lua.patch
+diff --git a/package/lua/5.3.0/0004-lua-pc.patch b/package/lua/5.3.1/0004-lua-pc.patch
+similarity index 100%
+rename from package/lua/5.3.0/0004-lua-pc.patch
+rename to package/lua/5.3.1/0004-lua-pc.patch
+diff --git a/package/lua/5.3.0/0011-linenoise.patch b/package/lua/5.3.1/0011-linenoise.patch
+similarity index 88%
+rename from package/lua/5.3.0/0011-linenoise.patch
+rename to package/lua/5.3.1/0011-linenoise.patch
+index b2e5695..ccdd3fd 100644
+--- a/package/lua/5.3.0/0011-linenoise.patch
++++ b/package/lua/5.3.1/0011-linenoise.patch
+@@ -8,10 +8,10 @@ Index: b/src/lua.c
+ ===================================================================
+ --- a/src/lua.c
+ +++ b/src/lua.c
+-@@ -85,6 +85,15 @@
+-           add_history(lua_tostring(L, idx));  /* add it to history */
++@@ -83,6 +83,15 @@
++ #define lua_saveline(L,line)	((void)L, add_history(line))
+  #define lua_freeline(L,b)	((void)L, free(b))
+-
++ 
+ +#elif defined(LUA_USE_LINENOISE)
+ +
+ +#include <linenoise.h>
+@@ -22,5 +22,5 @@ Index: b/src/lua.c
+ +#define lua_freeline(L,b)	((void)L, free(b))
+ +
+  #else				/* }{ */
+-
++ 
+  #define lua_readline(L,b,p) \
+diff --git a/package/lua/lua.hash b/package/lua/lua.hash
+index fe36dcd..f0fa87d 100644
+--- a/package/lua/lua.hash
++++ b/package/lua/lua.hash
+@@ -1,6 +1,6 @@
+ # Hashes from: http://www.lua.org/ftp/
+-md5 a1b0a7e92d0c85bbff7a8d27bf29f8af           lua-5.3.0.tar.gz
+-sha1 1c46d1c78c44039939e820126b86a6ae12dadfba  lua-5.3.0.tar.gz
++md5 797adacada8d85761c079390ff1d9961           lua-5.3.1.tar.gz
++sha1 1676c6a041d90b6982db8cef1e5fb26000ab6dee  lua-5.3.1.tar.gz
+ 
+ md5 913fdb32207046b273fdb17aad70be13           lua-5.2.4.tar.gz
+ sha1 ef15259421197e3d85b7d6e4871b8c26fd82c1cf  lua-5.2.4.tar.gz
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index cdcf47b..1279b76 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+-LUA_VERSION = 5.3.0
++LUA_VERSION = 5.3.1
+ else
+ ifeq ($(BR2_PACKAGE_LUA_5_2),y)
+ LUA_VERSION = 5.2.4
 -- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+2.1.4
