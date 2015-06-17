@@ -1,45 +1,45 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 17 Jun 2015 21:28:23 +0200
-Subject: [Buildroot] [PATCH 3/3] python-pyinotify: bump to 0.9.6
+Date: Wed, 17 Jun 2015 21:28:22 +0200
+Subject: [Buildroot] [PATCH 2/3] python-tornado: bump to 4.2
 In-Reply-To: <1434569303-2383-1-git-send-email-yegorslists@googlemail.com>
 References: <1434569303-2383-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1434569303-2383-3-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1434569303-2383-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove hash file as the project doesn't provide manual tarballs
-on GitHub.
+Add md5 from pypi.python.org.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-pyinotify/python-pyinotify.hash | 2 --
- package/python-pyinotify/python-pyinotify.mk   | 2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
- delete mode 100644 package/python-pyinotify/python-pyinotify.hash
+ package/python-tornado/python-tornado.hash | 5 +++--
+ package/python-tornado/python-tornado.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pyinotify/python-pyinotify.hash b/package/python-pyinotify/python-pyinotify.hash
-deleted file mode 100644
-index a51718d..0000000
---- a/package/python-pyinotify/python-pyinotify.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
+diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
+index 72748ab..88e3956 100644
+--- a/package/python-tornado/python-tornado.hash
++++ b/package/python-tornado/python-tornado.hash
+@@ -1,2 +1,3 @@
 -# Locally computed:
--sha256  d22d94e5f1dfd19ff2f98b9bb9b31a869892652389b8f5c0a27c7de77550b1e4  python-pyinotify-0.9.5.tar.gz
-diff --git a/package/python-pyinotify/python-pyinotify.mk b/package/python-pyinotify/python-pyinotify.mk
-index e43dcd0..b4ea662 100644
---- a/package/python-pyinotify/python-pyinotify.mk
-+++ b/package/python-pyinotify/python-pyinotify.mk
+-sha256  99abd3aede45c93739346ee7384e710120121c3744da155d5cff1c0101702228  tornado-4.1.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c548d7b77a11d523c3d7255bd7fd6df8, sha256 locally computed
++md5     c548d7b77a11d523c3d7255bd7fd6df8 tornado-4.2.tar.gz
++sha256  e8b1207da67dbdceebfb291292b4ef1b547d6171525bec1b366853f923456a5f  tornado-4.2.tar.gz
+diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
+index 2300579..a8d1f94 100644
+--- a/package/python-tornado/python-tornado.mk
++++ b/package/python-tornado/python-tornado.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYINOTIFY_VERSION = 0.9.5
-+PYTHON_PYINOTIFY_VERSION = 0.9.6
- PYTHON_PYINOTIFY_SITE = $(call github,seb-m,pyinotify,$(PYTHON_PYINOTIFY_VERSION))
- PYTHON_PYINOTIFY_SETUP_TYPE = setuptools
- PYTHON_PYINOTIFY_LICENSE = MIT
+-PYTHON_TORNADO_VERSION = 4.1
++PYTHON_TORNADO_VERSION = 4.2
+ PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
+ PYTHON_TORNADO_SITE = https://pypi.python.org/packages/source/t/tornado
+ PYTHON_TORNADO_LICENSE = Apache-2.0
 -- 
 2.1.4
