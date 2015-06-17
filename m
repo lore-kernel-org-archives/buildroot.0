@@ -1,75 +1,58 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Wed, 17 Jun 2015 14:01:07 +0200
-Subject: [Buildroot] [PATCH 1/2] ltrace: update to current master
-In-Reply-To: <55814DD8.1040200@imgtec.com>
-References: <1432565559-60249-1-git-send-email-Vincent.Riera@imgtec.com>
- <7882478.jq8kHfg8lW@sagittea> <55814DD8.1040200@imgtec.com>
-Message-ID: <1635366.Gf85uioWz5@sagittea>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Wed, 17 Jun 2015 15:27:51 +0200
+Subject: [Buildroot] Busybox build fails on raspberrypi defconfig
+Message-ID: <CAJtjsKZ9zeYzwSkMKiAvUz50e_7L9HKbNLY8WWwz5e59=AHGSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vicente,
+Hi,
+I've just updated my master branch to origin/master (ebe2968 with no
+extra commit) and did the following commands:
+$ make clean
+$ make raspberrypi_defconfig
+$ make
 
-On Wednesday 17 June 2015 12:37:12 Vicente Olivert Riera wrote:
-> Dear J?r?me Pouiller,
-> 
-> any progress on this?
-We are waiting for upstream:
-   http://lists.alioth.debian.org/pipermail/ltrace-devel/2015-June/001328.html
+And busybox build fails with the following error:
+----------8<----------8<----------8<----------8<----------8<----------8<----------
+>>> linux-headers 3.12.28 Installing to target
+>>> busybox 1.23.2 Building
+PATH="/home/johan/Documents/buildroot/output/host/bin:/home/johan/Documents/buildroot/output/host/sbin:/home/johan/Documents/buildroot/output/host/usr/bin:/home/johan/Documents/buildroot/output/host/usr/sbin:/home/johan/cov-analysis-linux64-6.6.1/bin:/home/johan/bin:/home/johan/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64   -Os " CFLAGS_busybox="" /usr/bin/make -j9
+CC="/home/johan/Documents/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc"
+ARCH=arm PREFIX="/home/johan/Documents/buildroot/output/target"
+EXTRA_LDFLAGS=""
+CROSS_COMPILE="/home/johan/Documents/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-"
+CONFIG_PREFIX="/home/johan/Documents/buildroot/output/target"
+SKIP_STRIP=y -C
+/home/johan/Documents/buildroot/output/build/busybox-1.23.2
+make[1]: Entering directory
+'/home/johan/Documents/buildroot/output/build/busybox-1.23.2'
+  CC      applets/applets.o
+In file included from include/busybox.h:8:0,
+                 from applets/applets.c:9:
+include/libbb.h:87:19: fatal error: utmp.h: No such file or directory
+ # include <utmp.h>
+                   ^
+compilation terminated.
+scripts/Makefile.build:197: recipe for target 'applets/applets.o' failed
+make[2]: *** [applets/applets.o] Error 1
+Makefile:372: recipe for target 'applets_dir' failed
+make[1]: *** [applets_dir] Error 2
+make[1]: Leaving directory
+'/home/johan/Documents/buildroot/output/build/busybox-1.23.2'
+package/pkg-generic.mk:156: recipe for target
+'/home/johan/Documents/buildroot/output/build/busybox-1.23.2/.stamp_built'
+failed
+make: *** [/home/johan/Documents/buildroot/output/build/busybox-1.23.2/.stamp_built]
+Error 2
+----------8<----------8<----------8<----------8<----------8<----------8<----------
 
-I think Buildroot should provide this patch until upstream responds.
+Any idea how to solve this error?
 
-> 
-> Regards,
-> --
-> vincent
-> 
-> On 05/06/15 01:13, J?r?me Pouiller wrote:
-> > Hello Vicente,
-> >
-> > On Monday 25 May 2015 15:52:38 Vicente Olivert Riera wrote:
-> >> Lots of fixes have been made to ltrace, including the ones for fixing a
-> >> build failure for MIPS architecture. Updating to current master will
-> >> allow us to re-enable this package for MIPS and also remove some
-> >> upstreamed patches.
-> >>
-> >> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> >> ---
-> >>   .../{0002-arm-plt.patch => 0001-arm-plt.patch}     |    0
-> >>   package/ltrace/0001-events.patch                   |   47 -
-> >>   package/ltrace/0003-PPC-fix-PPC32-build.patch      |   31 -
-> >>   .../ltrace/0004-xtensa-add-xtensa-support.patch    | 1612 --------------------
-> >>   package/ltrace/ltrace.mk                           |    2 +-
-> >>   5 files changed, 1 insertions(+), 1691 deletions(-)
-> >>   rename package/ltrace/{0002-arm-plt.patch => 0001-arm-plt.patch} (100%)
-> >>   delete mode 100644 package/ltrace/0001-events.patch
-> >>   delete mode 100644 package/ltrace/0003-PPC-fix-PPC32-build.patch
-> >>   delete mode 100644 package/ltrace/0004-xtensa-add-xtensa-support.patch
-> > [..]
-> >> diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
-> >> index 7f00ce3..8a78a2a 100644
-> >> --- a/package/ltrace/ltrace.mk
-> >> +++ b/package/ltrace/ltrace.mk
-> >> @@ -4,7 +4,7 @@
-> >>   #
-> >>   ################################################################################
-> >>
-> >> -LTRACE_VERSION = 0896ce554f80afdcba81d9754f6104f863dea803
-> >> +LTRACE_VERSION = be0c6870e08a3be43b3a0d210fb8dc7614b1e82f
-> > It seems this version has a bug introduced by 5ba9e10 ("Split type definitions
-> > from the bundled configs into their own files").
-> >
-> > Two new configuration files are not installed. Therefore, ltrace fail with
-> > messages like :
-> > /usr/share/ltrace/libm.so.conf:333: error: unknown type around 'ldouble erfl(ldouble);
-> >
-> > I have just sent a patch to upstream.
-> >
-
+Best regards,
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Johan
