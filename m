@@ -1,104 +1,94 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 17 Jun 2015 20:41:25 +0200
-Subject: [Buildroot] [PATCH] lua: bump to version 5.3.1
-Message-ID: <1434566485-709-1-git-send-email-francois.perrad@gadz.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 17 Jun 2015 21:28:21 +0200
+Subject: [Buildroot] [PATCH 1/3] tmux: bump to 2.0
+Message-ID: <1434569303-2383-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua/{5.3.0 => 5.3.1}/0001-root-path.patch           | 2 +-
- package/lua/{5.3.0 => 5.3.1}/0002-shared-libs-for-lua.patch | 0
- package/lua/{5.3.0 => 5.3.1}/0004-lua-pc.patch              | 0
- package/lua/{5.3.0 => 5.3.1}/0011-linenoise.patch           | 8 ++++----
- package/lua/lua.hash                                        | 4 ++--
- package/lua/lua.mk                                          | 2 +-
- 6 files changed, 8 insertions(+), 8 deletions(-)
- rename package/lua/{5.3.0 => 5.3.1}/0001-root-path.patch (95%)
- rename package/lua/{5.3.0 => 5.3.1}/0002-shared-libs-for-lua.patch (100%)
- rename package/lua/{5.3.0 => 5.3.1}/0004-lua-pc.patch (100%)
- rename package/lua/{5.3.0 => 5.3.1}/0011-linenoise.patch (88%)
+Add new location as tmux moved to GitHub.
 
-diff --git a/package/lua/5.3.0/0001-root-path.patch b/package/lua/5.3.1/0001-root-path.patch
-similarity index 95%
-rename from package/lua/5.3.0/0001-root-path.patch
-rename to package/lua/5.3.1/0001-root-path.patch
-index 660bc15..d8ef8d0 100644
---- a/package/lua/5.3.0/0001-root-path.patch
-+++ b/package/lua/5.3.1/0001-root-path.patch
-@@ -6,7 +6,7 @@ Index: b/src/luaconf.h
- ===================================================================
- --- a/src/luaconf.h
- +++ b/src/luaconf.h
--@@ -175,7 +175,7 @@
-+@@ -188,7 +188,7 @@
- 
-  #else			/* }{ */
- 
-diff --git a/package/lua/5.3.0/0002-shared-libs-for-lua.patch b/package/lua/5.3.1/0002-shared-libs-for-lua.patch
-similarity index 100%
-rename from package/lua/5.3.0/0002-shared-libs-for-lua.patch
-rename to package/lua/5.3.1/0002-shared-libs-for-lua.patch
-diff --git a/package/lua/5.3.0/0004-lua-pc.patch b/package/lua/5.3.1/0004-lua-pc.patch
-similarity index 100%
-rename from package/lua/5.3.0/0004-lua-pc.patch
-rename to package/lua/5.3.1/0004-lua-pc.patch
-diff --git a/package/lua/5.3.0/0011-linenoise.patch b/package/lua/5.3.1/0011-linenoise.patch
-similarity index 88%
-rename from package/lua/5.3.0/0011-linenoise.patch
-rename to package/lua/5.3.1/0011-linenoise.patch
-index b2e5695..ccdd3fd 100644
---- a/package/lua/5.3.0/0011-linenoise.patch
-+++ b/package/lua/5.3.1/0011-linenoise.patch
-@@ -8,10 +8,10 @@ Index: b/src/lua.c
- ===================================================================
- --- a/src/lua.c
- +++ b/src/lua.c
--@@ -85,6 +85,15 @@
--           add_history(lua_tostring(L, idx));  /* add it to history */
-+@@ -83,6 +83,15 @@
-+ #define lua_saveline(L,line)	((void)L, add_history(line))
-  #define lua_freeline(L,b)	((void)L, free(b))
+Remove the patch as it was already merged upstream.
+Remove related AUTORECONF as well.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ ...01-Makefile.am-remove-unsafe-headers-path.patch | 35 ----------------------
+ package/tmux/tmux.hash                             |  2 +-
+ package/tmux/tmux.mk                               |  7 ++---
+ 3 files changed, 3 insertions(+), 41 deletions(-)
+ delete mode 100644 package/tmux/0001-Makefile.am-remove-unsafe-headers-path.patch
+
+diff --git a/package/tmux/0001-Makefile.am-remove-unsafe-headers-path.patch b/package/tmux/0001-Makefile.am-remove-unsafe-headers-path.patch
+deleted file mode 100644
+index 4a20945..0000000
+--- a/package/tmux/0001-Makefile.am-remove-unsafe-headers-path.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 4095ee95141063ff3f91153e84bd029b019b8dad Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Fri, 26 Dec 2014 17:44:15 +0100
+-Subject: [PATCH] Makefile.am: remove unsafe headers path
 -
-+ 
- +#elif defined(LUA_USE_LINENOISE)
- +
- +#include <linenoise.h>
-@@ -22,5 +22,5 @@ Index: b/src/lua.c
- +#define lua_freeline(L,b)	((void)L, free(b))
- +
-  #else				/* }{ */
+-/usr/local/include is probably not needed and it's unsafe for
+-cross-compilation.
 -
-+ 
-  #define lua_readline(L,b,p) \
-diff --git a/package/lua/lua.hash b/package/lua/lua.hash
-index fe36dcd..f0fa87d 100644
---- a/package/lua/lua.hash
-+++ b/package/lua/lua.hash
-@@ -1,6 +1,6 @@
- # Hashes from: http://www.lua.org/ftp/
--md5 a1b0a7e92d0c85bbff7a8d27bf29f8af           lua-5.3.0.tar.gz
--sha1 1c46d1c78c44039939e820126b86a6ae12dadfba  lua-5.3.0.tar.gz
-+md5 797adacada8d85761c079390ff1d9961           lua-5.3.1.tar.gz
-+sha1 1676c6a041d90b6982db8cef1e5fb26000ab6dee  lua-5.3.1.tar.gz
- 
- md5 913fdb32207046b273fdb17aad70be13           lua-5.2.4.tar.gz
- sha1 ef15259421197e3d85b7d6e4871b8c26fd82c1cf  lua-5.2.4.tar.gz
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index cdcf47b..1279b76 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -5,7 +5,7 @@
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- Makefile.am | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index a9ad5b9..0109e5d 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -38,12 +38,12 @@ else
+- CFLAGS += -O2
+- endif
+- if IS_GCC4
+--CPPFLAGS += -iquote. -I/usr/local/include
+-+CPPFLAGS += -iquote.
+- if IS_DEBUG
+- CFLAGS += -Wno-pointer-sign
+- endif
+- else
+--CPPFLAGS += -I. -I- -I/usr/local/include
+-+CPPFLAGS += -I. -I-
+- endif
+- endif
+- 
+--- 
+-1.9.3
+-
+diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
+index eb9f4fd..ab7c4d3 100644
+--- a/package/tmux/tmux.hash
++++ b/package/tmux/tmux.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  c5e3b22b901cf109b20dab54a4a651f0471abd1f79f6039d79b250d21c2733f5  tmux-1.9a.tar.gz
++sha256  795f4b4446b0ea968b9201c25e8c1ef8a6ade710ebca4657dd879c35916ad362  tmux-2.0.tar.gz
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index 9c8921e..c9abbf7 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -4,13 +4,10 @@
+ #
  ################################################################################
  
- ifeq ($(BR2_PACKAGE_LUA_5_3),y)
--LUA_VERSION = 5.3.0
-+LUA_VERSION = 5.3.1
- else
- ifeq ($(BR2_PACKAGE_LUA_5_2),y)
- LUA_VERSION = 5.2.4
+-TMUX_VERSION = 1.9a
+-TMUX_SITE = http://downloads.sourceforge.net/tmux
++TMUX_VERSION = 2.0
++TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = README
+ TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
+ 
+-# we patch Makefile.am
+-TMUX_AUTORECONF = YES
+-
+ $(eval $(autotools-package))
 -- 
 2.1.4
