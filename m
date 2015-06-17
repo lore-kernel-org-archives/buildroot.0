@@ -1,62 +1,42 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 17 Jun 2015 12:37:12 +0200
-Subject: [Buildroot] [PATCH 1/2] ltrace: update to current master
-In-Reply-To: <7882478.jq8kHfg8lW@sagittea>
-References: <1432565559-60249-1-git-send-email-Vincent.Riera@imgtec.com>
- <7882478.jq8kHfg8lW@sagittea>
-Message-ID: <55814DD8.1040200@imgtec.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 17 Jun 2015 14:00:29 +0200
+Subject: [Buildroot] [PATCH 1/2] snmppp: bump to 3.3.5
+Message-ID: <1434542430-23039-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Also add a hash file.
 
-any progress on this?
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/snmppp/snmppp.hash | 2 ++
+ package/snmppp/snmppp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/snmppp/snmppp.hash
 
-Regards,
---
-vincent
-
-On 05/06/15 01:13, J?r?me Pouiller wrote:
-> Hello Vicente,
->
-> On Monday 25 May 2015 15:52:38 Vicente Olivert Riera wrote:
->> Lots of fixes have been made to ltrace, including the ones for fixing a
->> build failure for MIPS architecture. Updating to current master will
->> allow us to re-enable this package for MIPS and also remove some
->> upstreamed patches.
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
->>   .../{0002-arm-plt.patch => 0001-arm-plt.patch}     |    0
->>   package/ltrace/0001-events.patch                   |   47 -
->>   package/ltrace/0003-PPC-fix-PPC32-build.patch      |   31 -
->>   .../ltrace/0004-xtensa-add-xtensa-support.patch    | 1612 --------------------
->>   package/ltrace/ltrace.mk                           |    2 +-
->>   5 files changed, 1 insertions(+), 1691 deletions(-)
->>   rename package/ltrace/{0002-arm-plt.patch => 0001-arm-plt.patch} (100%)
->>   delete mode 100644 package/ltrace/0001-events.patch
->>   delete mode 100644 package/ltrace/0003-PPC-fix-PPC32-build.patch
->>   delete mode 100644 package/ltrace/0004-xtensa-add-xtensa-support.patch
-> [..]
->> diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
->> index 7f00ce3..8a78a2a 100644
->> --- a/package/ltrace/ltrace.mk
->> +++ b/package/ltrace/ltrace.mk
->> @@ -4,7 +4,7 @@
->>   #
->>   ################################################################################
->>
->> -LTRACE_VERSION = 0896ce554f80afdcba81d9754f6104f863dea803
->> +LTRACE_VERSION = be0c6870e08a3be43b3a0d210fb8dc7614b1e82f
-> It seems this version has a bug introduced by 5ba9e10 ("Split type definitions
-> from the bundled configs into their own files").
->
-> Two new configuration files are not installed. Therefore, ltrace fail with
-> messages like :
-> /usr/share/ltrace/libm.so.conf:333: error: unknown type around 'ldouble erfl(ldouble);
->
-> I have just sent a patch to upstream.
->
+diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
+new file mode 100644
+index 0000000..a278ebf
+--- /dev/null
++++ b/package/snmppp/snmppp.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 65d8bef3fb0e28892b7768e4027c2873b5556fc89c5440008508bf8ec91764cd snmp++-3.3.5.tar.gz
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 147af60..29b1d99 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SNMPPP_VERSION = 3.3.4
++SNMPPP_VERSION = 3.3.5
+ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+ SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
+-- 
+1.9.1
