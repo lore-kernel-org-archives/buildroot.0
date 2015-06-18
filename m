@@ -1,7 +1,7 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Thu, 18 Jun 2015 15:29:48 -0300
+Date: Thu, 18 Jun 2015 15:26:43 -0300
 Subject: [Buildroot] [PATCH] kvmtool: add new package
-Message-ID: <1434652188-30662-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1434652003-30617-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
