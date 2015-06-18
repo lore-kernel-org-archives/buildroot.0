@@ -1,79 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jun 2015 23:18:16 +0200
-Subject: [Buildroot] [PATCH 2/2] zedboard: Upgrade to U-Boot 2015.07
-In-Reply-To: <1434644878-595-2-git-send-email-xvikto03@stud.fit.vutbr.cz>
-References: <1434644878-595-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
- <1434644878-595-2-git-send-email-xvikto03@stud.fit.vutbr.cz>
-Message-ID: <20150618231816.513316f9@free-electrons.com>
+Date: Thu, 18 Jun 2015 23:18:44 +0200
+Subject: [Buildroot] [git commit] tmux: bump to 2.0
+Message-ID: <20150618212332.A426681E3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jan Viktorin,
+commit: http://git.buildroot.net/buildroot/commit/?id=3e7904ac7232c8daf241052c56078b8d7a49b389
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 18 Jun 2015 18:27:58 +0200, Jan Viktorin wrote:
-> From: Jan Viktorin <viktorin@rehivetech.com>
-> 
-> Until recently, generation of a bootloader for the Avnet
-> Zedboard (and in general all Xilinx Zynq based boards)
-> has required to use the development tools by Xilinx
-> (Vivado, XSDK) and to walk through a quite painful
-> procedure to generate the First Stage Boot Loader
-> (FSBL) and the bootable BOOT.BIN image.
-> 
-> This commit makes Buildroot independent on the Xilinx
-> flow by utilizing U-Boot SPL and booting the Zynq's
-> PL by U-Boot.
-> 
-> The FSBL generation is not a problem anymore with U-Boot
-> 2015.07 where a generic ps7_init.c file is included and
-> used to build the U-Boot SPL for various boards including
-> Zedboard. The ps7_init.c file has been released under
-> GNU/GPL license for this purpose. For details, see
-> 
->  http://lists.denx.de/pipermail/u-boot/2015-April/210664.html
-> 
-> To create the BOOT.BIN automatically, there is a script
-> zynq-boot-bin.py in the Xilinx github repository. This
-> script is not included in the upstream of U-Boot so
-> I attach it as a series of patchs (0001-0003) generated
-> against U-Boot 2015.07.
+Add new location as tmux moved to GitHub.
 
-It is a bit annoying to have this script as patches. Will it be merged
-in the upstream U-Boot at some point? If yes, then having it as patches
-is OK. Otherwise, I'd prefer to have a separate host-zync-boot-script
-package, which simply downloads and installs this script in
-$(HOST_DIR), and then only the patch changing the U-Boot Makefile to
-call this script.
+Remove the patch as it was already merged upstream.
+Remove related AUTORECONF as well.
 
-> There is a little catch, the U-Boot 2015.07 is not released
-> yet, so this commit is based on 2015.07-rc2. However, as
-> soon as it is out, the download site of U-Boot can be
-> redirected to the release archive instead of fetching it
-> by git.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...01-Makefile.am-remove-unsafe-headers-path.patch |   35 --------------------
+ package/tmux/tmux.hash                             |    2 +-
+ package/tmux/tmux.mk                               |    7 +---
+ 3 files changed, 3 insertions(+), 41 deletions(-)
 
-Yes, this is OK.
-
-> Steps to create a working Buildroot for Zedboard:
-> 
-> a) use U-Boot 2015.07 (done by this commit)
-> b) patch it to use zynq-boot-bin.py (done by this commit)
-> --------------------------
-> 1) make zedboard_defconfig
-> 2) make UBOOT_BIN=u-boot-dtb.img
-> 3) copy files boot.bin, u-boot-dtb.img, rootfs.cpio.uboot,
-> 	uImage, zynq-zed.dtb into your SD card
-> 4) boot your Zedboard
-
-This should just go to board/avnet/zedboard/readme.txt, no need to have
-it in the commit log if you're updating that readme file.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tmux/0001-Makefile.am-remove-unsafe-headers-path.patch b/package/tmux/0001-Makefile.am-remove-unsafe-headers-path.patch
+deleted file mode 100644
+index 4a20945..0000000
+--- a/package/tmux/0001-Makefile.am-remove-unsafe-headers-path.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 4095ee95141063ff3f91153e84bd029b019b8dad Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Fri, 26 Dec 2014 17:44:15 +0100
+-Subject: [PATCH] Makefile.am: remove unsafe headers path
+-
+-/usr/local/include is probably not needed and it's unsafe for
+-cross-compilation.
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- Makefile.am | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index a9ad5b9..0109e5d 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -38,12 +38,12 @@ else
+- CFLAGS += -O2
+- endif
+- if IS_GCC4
+--CPPFLAGS += -iquote. -I/usr/local/include
+-+CPPFLAGS += -iquote.
+- if IS_DEBUG
+- CFLAGS += -Wno-pointer-sign
+- endif
+- else
+--CPPFLAGS += -I. -I- -I/usr/local/include
+-+CPPFLAGS += -I. -I-
+- endif
+- endif
+- 
+--- 
+-1.9.3
+-
+diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
+index eb9f4fd..ab7c4d3 100644
+--- a/package/tmux/tmux.hash
++++ b/package/tmux/tmux.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  c5e3b22b901cf109b20dab54a4a651f0471abd1f79f6039d79b250d21c2733f5  tmux-1.9a.tar.gz
++sha256  795f4b4446b0ea968b9201c25e8c1ef8a6ade710ebca4657dd879c35916ad362  tmux-2.0.tar.gz
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index 9c8921e..c9abbf7 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -4,13 +4,10 @@
+ #
+ ################################################################################
+ 
+-TMUX_VERSION = 1.9a
+-TMUX_SITE = http://downloads.sourceforge.net/tmux
++TMUX_VERSION = 2.0
++TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = README
+ TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
+ 
+-# we patch Makefile.am
+-TMUX_AUTORECONF = YES
+-
+ $(eval $(autotools-package))
