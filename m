@@ -1,44 +1,44 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 18 Jun 2015 18:44:25 +0200
-Subject: [Buildroot] [PATCH 02/10] lftp: bump to version 4.6.3a
+Date: Thu, 18 Jun 2015 18:44:26 +0200
+Subject: [Buildroot] [PATCH 03/10] libcurl: bump to version 7.43.0
 In-Reply-To: <1434645873-26849-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1434645873-26849-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1434645873-26849-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1434645873-26849-3-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump to version 4.6.3a
+- Bump to version 7.43.0
 - Update hash file
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/lftp/lftp.hash | 2 +-
- package/lftp/lftp.mk   | 2 +-
+ package/libcurl/libcurl.hash | 2 +-
+ package/libcurl/libcurl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lftp/lftp.hash b/package/lftp/lftp.hash
-index a832087..f1e45bc 100644
---- a/package/lftp/lftp.hash
-+++ b/package/lftp/lftp.hash
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 59a458e..ee68922 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256  1e61d5c94b06c333309185e86cfce0729e45e3f69f7496c58d61093b135c8bb9  lftp-4.6.2.tar.xz
-+sha256  8c3a12a1f9ec288132b245bdd7d14d88ade1aa5cb1c14bb68c8fab3b68793840  lftp-4.6.3a.tar.xz
-diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
-index 362ad28..b69e2d6 100644
---- a/package/lftp/lftp.mk
-+++ b/package/lftp/lftp.mk
+ # Locally calculated after checking pgp signature
+-sha256	e2905973391ec2dfd7743a8034ad10eeb58dab8b3a297e7892a41a7999cac887	curl-7.42.1.tar.bz2
++sha256  baa654a1122530483ccc1c58cc112fec3724a82c11c6a389f1e6a37dc8858df9  curl-7.43.0.tar.bz2
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 0ce2dfd..29a888c 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LFTP_VERSION = 4.6.2
-+LFTP_VERSION = 4.6.3a
- LFTP_SOURCE = lftp-$(LFTP_VERSION).tar.xz
- LFTP_SITE = http://lftp.yar.ru/ftp
- LFTP_LICENSE = GPLv3+
+-LIBCURL_VERSION = 7.42.1
++LIBCURL_VERSION = 7.43.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = http://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
 2.3.6
