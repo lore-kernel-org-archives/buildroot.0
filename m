@@ -1,82 +1,67 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 18 Jun 2015 14:15:24 +0200
-Subject: [Buildroot] [PATCH 1/2] ltrace: update to current master
-In-Reply-To: <1635366.Gf85uioWz5@sagittea>
-References: <1432565559-60249-1-git-send-email-Vincent.Riera@imgtec.com>
- <7882478.jq8kHfg8lW@sagittea> <55814DD8.1040200@imgtec.com>
- <1635366.Gf85uioWz5@sagittea>
-Message-ID: <5582B65C.2060705@imgtec.com>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Thu, 18 Jun 2015 18:32:35 +0530
+Subject: [Buildroot] [PATCH] glog: disable on blackfin
+Message-ID: <1434632555-10004-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+glog fails to build on blackfin for following reasons,
 
-On 17/06/15 14:01, J?r?me Pouiller wrote:
-> Hello Vicente,
->
-> On Wednesday 17 June 2015 12:37:12 Vicente Olivert Riera wrote:
->> Dear J?r?me Pouiller,
->>
->> any progress on this?
-> We are waiting for upstream:
->     http://lists.alioth.debian.org/pipermail/ltrace-devel/2015-June/001328.html
->
-> I think Buildroot should provide this patch until upstream responds.
+1. http://autobuild.buildroot.net/results/c70/c704c70ae2f066f85dd6a5fa6a73789bc358d368/
 
-I agree. Do you want to write a Buildroot patch to do the version bump 
-plus adding that patch?
+when when BR2_BINFMT_FDPIC=y
 
-Regards,
---
-vincent
+../usr/include/bits/elf-fdpic.h: In function 'void* __reloc_pointer(void*, const elf32_fdpic_loadmap*)':
+../usr/bfin-buildroot-linux-uclibc/sysroot/usr/include/bits/elf-fdpic.h:95: error: invalid use of 'void'
 
->>
->> Regards,
->> --
->> vincent
->>
->> On 05/06/15 01:13, J?r?me Pouiller wrote:
->>> Hello Vicente,
->>>
->>> On Monday 25 May 2015 15:52:38 Vicente Olivert Riera wrote:
->>>> Lots of fixes have been made to ltrace, including the ones for fixing a
->>>> build failure for MIPS architecture. Updating to current master will
->>>> allow us to re-enable this package for MIPS and also remove some
->>>> upstreamed patches.
->>>>
->>>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->>>> ---
->>>>    .../{0002-arm-plt.patch => 0001-arm-plt.patch}     |    0
->>>>    package/ltrace/0001-events.patch                   |   47 -
->>>>    package/ltrace/0003-PPC-fix-PPC32-build.patch      |   31 -
->>>>    .../ltrace/0004-xtensa-add-xtensa-support.patch    | 1612 --------------------
->>>>    package/ltrace/ltrace.mk                           |    2 +-
->>>>    5 files changed, 1 insertions(+), 1691 deletions(-)
->>>>    rename package/ltrace/{0002-arm-plt.patch => 0001-arm-plt.patch} (100%)
->>>>    delete mode 100644 package/ltrace/0001-events.patch
->>>>    delete mode 100644 package/ltrace/0003-PPC-fix-PPC32-build.patch
->>>>    delete mode 100644 package/ltrace/0004-xtensa-add-xtensa-support.patch
->>> [..]
->>>> diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
->>>> index 7f00ce3..8a78a2a 100644
->>>> --- a/package/ltrace/ltrace.mk
->>>> +++ b/package/ltrace/ltrace.mk
->>>> @@ -4,7 +4,7 @@
->>>>    #
->>>>    ################################################################################
->>>>
->>>> -LTRACE_VERSION = 0896ce554f80afdcba81d9754f6104f863dea803
->>>> +LTRACE_VERSION = be0c6870e08a3be43b3a0d210fb8dc7614b1e82f
->>> It seems this version has a bug introduced by 5ba9e10 ("Split type definitions
->>> from the bundled configs into their own files").
->>>
->>> Two new configuration files are not installed. Therefore, ltrace fail with
->>> messages like :
->>> /usr/share/ltrace/libm.so.conf:333: error: unknown type around 'ldouble erfl(ldouble);
->>>
->>> I have just sent a patch to upstream.
->>>
->
+code snippet at line 95 in elf-fdpic.h
+-------------------------------------------------------
+unsigned long offset = p - (void*)map->segs[c].p_vaddr;
+-------------------------------------------------------
+
+void pointer addition and subtraction is not allowed in C++ as it has undetermined size,
+however in C with language extension it is possible because sizeof void is treated
+as one byte.
+
+2. http://autobuild.buildroot.net/results/75d/75d17ceb764c2c1136047c089a0c554770ca98a4/
+
+when BR2_BINFMT_FLAT=y
+
+src/symbolize.cc:110:19: error: dlfcn.h: No such file or directory
+
+with flat binary, programming interface to dynamic linker loader is not available even though
+BR2_BINFMT_FLAT_SHARED is selected.
+
+As arch doesn't support MMU and thus available file formats are FDPIC and FLAT. With either of these
+selected above failure occurs. For failure 1, issue is in toolchain and for 2, arch support is not
+available. So disable glog for blackfin.
+
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+ package/glog/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/glog/Config.in b/package/glog/Config.in
+index aed0a3e..350afe2 100644
+--- a/package/glog/Config.in
++++ b/package/glog/Config.in
+@@ -2,10 +2,14 @@ config BR2_PACKAGE_GLOG
+ 	bool "glog"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# build issues with C++ compiler with elf-fdpic and
++	# can't use libdl with flat target binary file format
++	depends on !BR2_bfin
+ 	help
+ 	  C++ implementation of the Google logging module
+ 
+ 	  https://github.com/google/glog
+ 
+ comment "glog needs a toolchain w/ C++, threads"
++	depends on !BR2_bfin
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+1.9.1
