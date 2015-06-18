@@ -1,43 +1,33 @@
-From: nimaim at gmail.com <nimaim@gmail.com>
-Date: Thu, 18 Jun 2015 12:24:15 -0400
-Subject: [Buildroot] [PATCH 1/1] Modified libarchive.mk to enable support
-	for xz/lzma
-Message-ID: <5582f0b5.a25c8c0a.014c.ffff8c3b@mx.google.com>
+From: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
+Date: Thu, 18 Jun 2015 18:27:57 +0200
+Subject: [Buildroot] [PATCH 1/2] zedboard: Upgrade to Linux xilinx-v2015.1
+	(3.18)
+Message-ID: <1434644878-595-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nimai <nimai@nimai-vm.com>
+From: Jan Viktorin <viktorin@rehivetech.com>
 
-Signed-off-by: Nimai <nimai@nimai-vm.com>
+Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 ---
- package/libarchive/libarchive.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ configs/zedboard_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 61528d9..18fa8b7 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -9,7 +9,6 @@ LIBARCHIVE_SITE = http://www.libarchive.org/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2c, BSD-3c
- LIBARCHIVE_LICENSE_FILES = COPYING
--LIBARCHIVE_CONF_OPTS = --without-lzma
- 
- ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
- ifeq ($(BR2_STATIC_LIBS),y)
-@@ -86,4 +85,10 @@ else
- LIBARCHIVE_CONF_OPTS += --without-zlib
- endif
- 
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+LIBARCHIVE_DEPENDENCIES += xz
-+else
-+LIBARCHIVE_CONF_OPTS += --without-lzma
-+endif
-+
- $(eval $(autotools-package))
+diff --git a/configs/zedboard_defconfig b/configs/zedboard_defconfig
+index e0e7760..76688e9 100644
+--- a/configs/zedboard_defconfig
++++ b/configs/zedboard_defconfig
+@@ -8,7 +8,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2014.1"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 -- 
-1.9.1
+2.4.3
