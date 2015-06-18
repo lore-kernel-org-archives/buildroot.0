@@ -1,22 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jun 2015 22:37:39 +0200
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{12,18}.x series
-In-Reply-To: <1434652427-31496-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1434652427-31496-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150618223739.5393c0b9@free-electrons.com>
+Date: Thu, 18 Jun 2015 22:37:59 +0200
+Subject: [Buildroot] [PATCH] hdparm: bump to 9.48
+In-Reply-To: <1434646212-1897-1-git-send-email-yegorslists@googlemail.com>
+References: <1434646212-1897-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20150618223759.01ed9be6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Yegor Yefremov,
 
-On Thu, 18 Jun 2015 15:33:47 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Thu, 18 Jun 2015 18:50:12 +0200, Yegor Yefremov wrote:
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/linux-headers/Config.in.host | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/hdparm/hdparm.hash | 4 ++--
+>  package/hdparm/hdparm.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied, thanks.
 
