@@ -1,43 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jun 2015 22:40:04 +0200
-Subject: [Buildroot] [git commit] fluxbox: fix build against xlib_libXpm
-Message-ID: <20150618204120.524A081E57@busybox.osuosl.org>
+Date: Thu, 18 Jun 2015 22:38:13 +0200
+Subject: [Buildroot] [git commit] python-netifaces: add hash file
+Message-ID: <20150618204120.4739D81E2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3f1ddefda19f2883ddc9e1fe35d7ce347ea1ee72
+commit: http://git.buildroot.net/buildroot/commit/?id=af8d0a6399807a91564530a9e0376162bf6d40d5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Explicitly configure XPM support based on the library selection provided
-(BR2_PACKAGE_XLIB_LIBXPM). It has been observed on different hosts that
-XPM support may or may not be included based off the state of the host's
-system. One can validate XPM support is included in Fluxbox by using the
-command `fluxbox -info`.
-
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fluxbox/fluxbox.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/python-netifaces/python-netifaces.hash |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-index c8e4289..d2e8c89 100644
---- a/package/fluxbox/fluxbox.mk
-+++ b/package/fluxbox/fluxbox.mk
-@@ -22,6 +22,13 @@ else
- FLUXBOX_CONF_OPTS += --disable-imlib2
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXPM),y)
-+FLUXBOX_CONF_OPTS += --enable-xpm --with-xpm-prefix=$(STAGING_DIR)/usr
-+FLUXBOX_DEPENDENCIES += xlib_libXpm
-+else
-+FLUXBOX_CONF_OPTS += --disable-xpm
-+endif
-+
- define FLUXBOX_INSTALL_XSESSION_FILE
- 	$(INSTALL) -m 0755 -D package/fluxbox/xsession \
- 		$(TARGET_DIR)/root/.xsession
+diff --git a/package/python-netifaces/python-netifaces.hash b/package/python-netifaces/python-netifaces.hash
+new file mode 100644
+index 0000000..aebfdf6
+--- /dev/null
++++ b/package/python-netifaces/python-netifaces.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=36da76e2cfadd24cc7510c2c0012eb1e, sha256 locally computed
++md5     36da76e2cfadd24cc7510c2c0012eb1e                                  netifaces-0.10.4.tar.gz
++sha256  9656a169cb83da34d732b0eb72b39373d48774aee009a3d1272b7ea2ce109cde  netifaces-0.10.4.tar.gz
