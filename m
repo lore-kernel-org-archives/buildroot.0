@@ -1,28 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Jun 2015 23:15:03 +0200
-Subject: [Buildroot] [PATCH v2] package/i2c-tools: bump to version 3.1.2
-In-Reply-To: <1434615148-29568-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1434615148-29568-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150618231503.48a6d5c7@free-electrons.com>
+Date: Thu, 18 Jun 2015 23:15:17 +0200
+Subject: [Buildroot] [git commit] zedboard: Upgrade to Linux xilinx-v2015.1
+	(3.18)
+Message-ID: <20150618211524.6F69F81E42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+commit: http://git.buildroot.net/buildroot/commit/?id=fc0345a9a24e92d86b212c54aae0e7670307c831
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 18 Jun 2015 10:12:28 +0200, Angelo Compagnucci wrote:
-> This patch bumps version to 3.1.2 and adds support for the recently
-> introduced python3 support for py-smbus.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/zedboard_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I had applied this patch locally, but unfortunately, the lm-sensors
-website is dead, so I can't download the new version of i2c-tools.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/zedboard_defconfig b/configs/zedboard_defconfig
+index e0e7760..76688e9 100644
+--- a/configs/zedboard_defconfig
++++ b/configs/zedboard_defconfig
+@@ -8,7 +8,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2014.1"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
