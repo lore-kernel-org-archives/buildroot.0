@@ -1,71 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 18 Jun 2015 17:58:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package: indentation cleanup
-In-Reply-To: <1434607821-10560-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1434607821-10560-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <5582EAAA.2050902@mind.be>
+Date: Thu, 18 Jun 2015 18:08:13 +0200
+Subject: [Buildroot] Busybox build fails on raspberrypi defconfig
+In-Reply-To: <20150618110211.2bc21e04@free-electrons.com>
+References: <CAJtjsKZ9zeYzwSkMKiAvUz50e_7L9HKbNLY8WWwz5e59=AHGSw@mail.gmail.com>
+ <CAJtjsKa9Osr3VjF6jBysCFPEKhh4c8HAHVP7FfVj07_N_B1FMQ@mail.gmail.com>
+ <20150617164134.01411faf@free-electrons.com>
+ <CAJtjsKaR=yJDgzzC0JupB7DJYvuxvOwvU2Ziv_6eU1-a8fhyFg@mail.gmail.com>
+ <20150618110211.2bc21e04@free-electrons.com>
+Message-ID: <5582ECED.8030205@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/18/15 08:10, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+On 06/18/15 11:02, Thomas Petazzoni wrote:
+[snip]
+> I told you in my previous e-mail, but maybe it wasn't clear. It's due
+> to a kconfig limitation/bug. Basically, here is the scenario:
+> 
+>  * You start from a fresh configuration.
+> 
+>  * You select uClibc 0.9.33, and exit menuconfig.
+> 
+>  * Automatically, the file package/uclibc/uClibc-0.9.33.config is used
+>    as the uclibc configuration file (option BR2_UCLIBC_CONFIG)
+> 
+>  * Now, you go back to menuconfig, and you decide to switch to
+>    uClibc-ng.
+> 
+> -> And now, instead of automatically switching to
+> package/uclibc/uClibc-ng.config, package/uclibc/uClibc-0.9.33.config is
+> kept as the value of BR2_UCLIBC_CONFIG. This is the limitation of
+> kconfig I'm talking about above.
+[snip]
+> One way we could get around this problem is by making the
+> BR2_UCLIBC_CONFIG option visible only if the user selects another
+> option like "Use a custom uClibc configuration file".
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Or let the default be empty, and choose a default from the .mk file when it's
+empty. But we've discussed that before and some people didn't like it.
 
- Verified that it's whitespace-only and that the fixes are correct.
+ Note: this applies for all string options for which we have multiple defaults:
+BR2_TARGET_GRUB2_BUILTIN_MODULES, BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU.
 
  Regards,
  Arnout
-
-> ---
->  package/ejabberd/ejabberd.mk   | 2 +-
->  package/libxmlrpc/libxmlrpc.mk | 2 +-
->  package/odhcp6c/odhcp6c.mk     | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
-> index 07ce78e..650dc0e 100644
-> --- a/package/ejabberd/ejabberd.mk
-> +++ b/package/ejabberd/ejabberd.mk
-> @@ -40,7 +40,7 @@ endef
->  EJABBERD_POST_INSTALL_TARGET_HOOKS += EJABBERD_FIX_EJABBERDCTL
->  
->  define EJABBERD_USERS
-> -ejabberd -1 ejabberd -1 * /var/lib/ejabberd /bin/sh - ejabberd daemon
-> +	ejabberd -1 ejabberd -1 * /var/lib/ejabberd /bin/sh - ejabberd daemon
->  endef
->  
->  define EJABBERD_INSTALL_INIT_SYSV
-> diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
-> index c3788d6..7d11205 100644
-> --- a/package/libxmlrpc/libxmlrpc.mk
-> +++ b/package/libxmlrpc/libxmlrpc.mk
-> @@ -16,7 +16,7 @@ LIBXMLRPC_MAKE = $(MAKE1)
->  
->  # Using autoconf, not automake, so we cannot use AUTORECONF = YES.
->  define LIBXMLRPC_RUN_AUTOCONF
-> -       cd $(@D); $(HOST_DIR)/usr/bin/autoconf
-> +	cd $(@D); $(HOST_DIR)/usr/bin/autoconf
->  endef
->  
->  LIBXMLRPC_PRE_CONFIGURE_HOOKS += LIBXMLRPC_RUN_AUTOCONF
-> diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
-> index 8102c26..47944f1 100644
-> --- a/package/odhcp6c/odhcp6c.mk
-> +++ b/package/odhcp6c/odhcp6c.mk
-> @@ -10,7 +10,7 @@ ODHCP6C_LICENSE = GPLv2
->  ODHCP6C_LICENSE_FILES = COPYING
->  
->  define ODHCP6C_INSTALL_SCRIPT
-> -        $(INSTALL) -m 0755 -D $(@D)/odhcp6c-example-script.sh \
-> +	$(INSTALL) -m 0755 -D $(@D)/odhcp6c-example-script.sh \
->  		$(TARGET_DIR)/usr/sbin/odhcp6c-update
->  endef
->  
-> 
 
 
 -- 
