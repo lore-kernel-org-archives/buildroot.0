@@ -1,41 +1,37 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Thu, 18 Jun 2015 13:42:56 -0400
-Subject: [Buildroot] [PATCH 1/1] fluxbox: fix build against xlib_libXpm
-Message-ID: <1434649376-8012-1-git-send-email-james.knight@rockwellcollins.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 18 Jun 2015 15:33:47 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{12,18}.x series
+Message-ID: <1434652427-31496-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Explicitly configure XPM support based on the library selection provided
-(BR2_PACKAGE_XLIB_LIBXPM). It has been observed on different hosts that
-XPM support may or may not be included based off the state of the host's
-system. One can validate XPM support is included in Fluxbox by using the
-command `fluxbox -info`.
-
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/fluxbox/fluxbox.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-index c8e4289..d2e8c89 100644
---- a/package/fluxbox/fluxbox.mk
-+++ b/package/fluxbox/fluxbox.mk
-@@ -22,6 +22,13 @@ else
- FLUXBOX_CONF_OPTS += --disable-imlib2
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXPM),y)
-+FLUXBOX_CONF_OPTS += --enable-xpm --with-xpm-prefix=$(STAGING_DIR)/usr
-+FLUXBOX_DEPENDENCIES += xlib_libXpm
-+else
-+FLUXBOX_CONF_OPTS += --disable-xpm
-+endif
-+
- define FLUXBOX_INSTALL_XSESSION_FILE
- 	$(INSTALL) -m 0755 -D package/fluxbox/xsession \
- 		$(TARGET_DIR)/root/.xsession
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 043a3c7..28b8929 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -203,13 +203,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.80"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.43"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.44"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+ 	default "3.14.44"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.14"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.15"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.5"		if BR2_KERNEL_HEADERS_4_0
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-1.9.5.msysgit.1
+2.3.6
