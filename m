@@ -1,64 +1,60 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 18 Jun 2015 10:12:28 +0200
-Subject: [Buildroot] [PATCH v2] package/i2c-tools: bump to version 3.1.2
-Message-ID: <1434615148-29568-1-git-send-email-angelo.compagnucci@gmail.com>
+From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
+Date: Thu, 18 Jun 2015 10:29:21 +0200
+Subject: [Buildroot] CMake and VERBOSE variable
+In-Reply-To: <5579E9EF.4070402@mind.be>
+References: <9943347198fceae1227501e1d00f818a@openmailbox.org>
+ <5578B394.1010503@mind.be>
+ <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
+ <5579E9EF.4070402@mind.be>
+Message-ID: <0d88f0bd848eeb62c868dc2d5dffe496@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps version to 3.1.2 and adds support for the recently
-introduced python3 support for py-smbus.
+Hi,
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
-Changes:
+Le 2015-06-11 22:05, Arnout Vandecappelle a ?crit?:
+>  A quick review of a few typical packages (linux, busybox, uClibc, 
+> u-boot,
+> autotools-baed) only turns up uClibc that has a not-very-well 
+> documented use of
+> VERBOSE. So perhaps we should just revert Bernhard's patch and 
+> completely remove
+> VERBOSE.
+> 
+>  Peter?
+> 
+>  In fact, the export of quiet Q KBUILD_VERBOSE comes directly from the 
+> kernel
+> (another commit from Bernhard, log "adjust infrastructure for new 
+> kconfig"). But
+> of course, in the kernel the build system has complete control over 
+> what will be
+> called with this stuff in the environment. For us that's a lot more 
+> complicated.
+> So I think we should get rid of all these exports, and leave it up to 
+> individual
+> packages to do that. Only V is something that is really generally used 
+> I think.
 
-v1->v2: changed ifeq construct to a more appropriate one.
 
- package/i2c-tools/i2c-tools.hash |  2 +-
- package/i2c-tools/i2c-tools.mk   | 13 ++++++++++---
- 2 files changed, 11 insertions(+), 4 deletions(-)
+Indeed, all these settings are done the same way in the root Makefile of 
+the kernel.
+Since KBUILD_VERBOSE doesn't seem to be used anywhere else in Buildroot 
+(not even in support/kconfig), I also tend to think that this could be 
+removed.
 
-diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
-index a6c376f..c12ffe8 100644
---- a/package/i2c-tools/i2c-tools.hash
-+++ b/package/i2c-tools/i2c-tools.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256	14d4d7d60d1c12e43f2befe239c682a5c44c27682f153d4b58c1e392d2db1700  i2c-tools-3.1.1.tar.bz2
-+sha256	db5e69f2e2a6e3aa2ecdfe6a5f490b149c504468770f58921c8c5b8a7860a441  i2c-tools-3.1.2.tar.bz2
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 6c156ca..187bd09 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -4,16 +4,23 @@
- #
- ################################################################################
- 
--I2C_TOOLS_VERSION = 3.1.1
-+I2C_TOOLS_VERSION = 3.1.2
- I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
- I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
- I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
- I2C_TOOLS_LICENSE_FILES = COPYING
- 
--# Build/install steps mirror the distutil python package type in the python package
--# infrastructure
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- I2C_TOOLS_DEPENDENCIES += python
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+I2C_TOOLS_DEPENDENCIES += python3
-+endif
-+
-+# Build/install steps mirror the distutil python package type in the python package
-+# infrastructure
-+ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
- # BASE_ENV taken from PKG_PYTHON_DISTUTILS_ENV in package/pkg-python.mk
- I2C_TOOLS_PYTHON_BASE_ENV = \
- 	$(PKG_PYTHON_DISTUTILS_ENV) \
+What should we do next?
+I'm not familiar enough with all these verbose settings, and also with 
+the kernel, to be able to check that we're not breaking anything when 
+removing them.
+Should I first send a patch that moves the export in the right place 
+that you have suggested?
+Or wait for a cleaning of all these exports?
+
+Regards,
+
 -- 
-1.9.1
+C?dric
