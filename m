@@ -1,37 +1,131 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 18 Jun 2015 15:33:47 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{12,18}.x series
-Message-ID: <1434652427-31496-1-git-send-email-gustavo@zacarias.com.ar>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Thu, 18 Jun 2015 15:29:48 -0300
+Subject: [Buildroot] [PATCH] kvmtool: add new package
+Message-ID: <1434652188-30662-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 043a3c7..28b8929 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -203,13 +203,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.80"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.43"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.44"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
- 	default "3.14.44"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.14"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.15"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.5"		if BR2_KERNEL_HEADERS_4_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ package/Config.in          |  1 +
+ package/kvmtool/Config.in  | 32 ++++++++++++++++++++++++++++
+ package/kvmtool/kvmtool.mk | 52 ++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 85 insertions(+)
+ create mode 100644 package/kvmtool/Config.in
+ create mode 100644 package/kvmtool/kvmtool.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 6dbc32d..19310ba 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -366,6 +366,7 @@ endif
+ 	source "package/irda-utils/Config.in"
+ 	source "package/iucode-tool/Config.in"
+ 	source "package/kbd/Config.in"
++	source "pacakge/kvmtool/Config.in"
+ 	source "package/lcdproc/Config.in"
+ 	source "package/lirc-tools/Config.in"
+ 	source "package/lm-sensors/Config.in"
+diff --git a/package/kvmtool/Config.in b/package/kvmtool/Config.in
+new file mode 100644
+index 0000000..3497789
+--- /dev/null
++++ b/package/kvmtool/Config.in
+@@ -0,0 +1,32 @@
++config BR2_PACKAGE_KVMTOOL
++	bool "kvmtool"
++	depends on BR2_USE_MMU # guest simple init fork()
++	# No MADV_HUGEPAGE define in uClibc(-ng)
++	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++	# Only mips(64) big-endian seems to be supported (build breaks)
++	# Should work on powerpc64 but the build breaks with missing types
++	depends on \
++		BR2_aarch64 || BR2_arm       || BR2_armeb || BR2_i386 || \
++		BR2_mips    || BR2_x86_64
++	# libfdt is only required for DT architectures...
++	# ...but it's not able to build for static targets
++	depends on !(BR2_STATIC_LIBS && (BR2_aarch64 || BR2_arm || BR2_armeb))
++	select BR2_PACKAGE_DTC if BR2_aarch64 || BR2_arm || BR2_armeb
++	help
++	  kvmtool is a lightweight tool for hosting KVM guests.
++	  As a pure virtualization tool it only supports guests using
++	  the same architecture, though it supports running 32-bit guests
++	  on those 64-bit architectures that allow this.
++
++	  https://git.kernel.org/cgit/linux/kernel/git/will/kvmtool.git/tree/README
++
++comment "kvmtool needs a (e)glibc or musl toolchain"
++	depends on BR2_USE_MMU
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++	depends on !(BR2_aarch64 || BR2_arm || BR2_armeb)
++
++comment "kvmtool needs a (e)glibc or musl toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++        depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
++		BR2_STATIC_LIBS
++	depends on (BR2_aarch64 || BR2_arm || BR2_armeb)
+diff --git a/package/kvmtool/kvmtool.mk b/package/kvmtool/kvmtool.mk
+new file mode 100644
+index 0000000..200b77e
+--- /dev/null
++++ b/package/kvmtool/kvmtool.mk
+@@ -0,0 +1,52 @@
++################################################################################
++#
++# kvmtool
++#
++################################################################################
++
++#KVMTOOL_VERSION = 0fc7018d0be707c3f48fe78ef6276636d7eae65a
++KVMTOOL_VERSION = 372f583d359a5bdcbbe7268809c8d1dc179c64d2
++KVMTOOL_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/will/kvmtool.git
++KVMTOOL_SITE_METHOD = git
++KVMTOOL_DEPENDENCIES = dtc \
++	$(if $(BR2_PACKAGE_BINUTILS),binutils) \
++	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
++	$(if $(BR2_PACKAGE_LIBVNCSERVER),libvncserver) \
++	$(if $(BR2_PACKAGE_SDL),sdl) \
++	$(if $(BR2_PACKAGE_ZLIB),zlib)
++KVMTOOL_LICENSE = GPLv2
++KVMTOOL_LICENSE_FILES = COPYING
++
++# This is required to convert a static binary (init helper) back into
++# object-file format, and in multilib toolchains like CS 2012.09 for x86
++# the default is i386, hence when building for x86_64 things break since
++# LD doesn't autodetect the input file format.
++# GCC-as-linker can't accomplish this feat easily either since it's mixing
++# static content (guest_init.o) with dynamic one (lkvm) making
++# a relocatable output file.
++# The purpose of this trick is to embed the init helper into the main
++# binary to help users in guest system startup, which would otherwise
++# require more complex guest images.
++# This needs revisiting if/when X32 ABI support is added.
++#
++# If more packages need this (unlikely) an ld wrapper might be a better
++# solution, using gcc -dumpspecs information.
++KVMTOOL_EXTRA_LDFLAGS = \
++	$(if $(BR2_x86_64),-m elf_x86_64)
++
++# Disable -Werror, otherwise musl is not happy
++KVMTOOL_MAKE_OPTS = \
++	CROSS_COMPILE="$(TARGET_CROSS)" \
++	LDFLAGS="$(TARGET_LDFLAGS) $(KVMTOOL_EXTRA_LDFLAGS)" \
++	WERROR=0
++
++define KVMTOOL_BUILD_CMDS
++	ARCH=$(KERNEL_ARCH) $(MAKE) -C $(@D) $(KVMTOOL_MAKE_OPTS)
++endef
++
++define KVMTOOL_INSTALL_TARGET_CMDS
++	ARCH=$(KERNEL_ARCH) $(MAKE) -C $(@D) $(KVMTOOL_MAKE_OPTS) install \
++		DESTDIR=$(TARGET_DIR) prefix=/usr
++endef
++
++$(eval $(generic-package))
 -- 
-2.3.6
+2.1.4
