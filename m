@@ -1,84 +1,25 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 19 Jun 2015 23:07:01 +0200
-Subject: [Buildroot] [PATCH 1/2] rpi-firmware: allow disabling
- installation of binary DTBs
-In-Reply-To: <558480FF.409@je-eigen-domein.nl>
-References: <1430579415-22802-1-git-send-email-bos@je-eigen-domein.nl>
- <20150619203006.GC3638@free.fr> <558480FF.409@je-eigen-domein.nl>
-Message-ID: <20150619210701.GD3638@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 19 Jun 2015 23:19:57 +0200
+Subject: [Buildroot] [PATCH 04/10] lvm2: bump to version 2.02.121
+In-Reply-To: <1434645873-26849-4-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Thu, 18 Jun 2015 18:44:27 +0200")
+References: <1434645873-26849-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1434645873-26849-4-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <874mm3bdky.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Floris, All,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On 2015-06-19 22:52 +0200, Floris Bos spake thusly:
-> On 06/19/2015 10:30 PM, Yann E. MORIN wrote:
-> >+config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
-> >+	bool "Install Device Tree Blobs (DTBs)"
-> >+	default "y"
-> >+	help
-> >+	  Say 'y' here if you want to install the binary DTB files which
-> >+	  are suitable for a rpi-3.18.y branch Linux kernel.
-> >+
-> >+	  Say 'n' here if you intend to compile the device tree files
-> >+	  from kernel source instead.
-> >I would rephrase that as:
-> >
-> >     If you are using a Linux kernel <= 3.18, you should say 'y' here.
-> >
-> >     If you are using a Linux kernel >= 3.19, you should say 'n' here,
-> >     and enable BR2_LINUX_KERNEL_DTS_SUPPORT to let the kernel build
-> >     the DTB.
-> 
-> Rephrashing is fine with me.
+ > - Bump to version 2.02.121
+ > - Update hash file
 
-OK, thanks.
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-> >  endif # BR2_PACKAGE_RPI_FIRMWARE
-> >diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> >index cbcf790..9cccb38 100644
-> >--- a/package/rpi-firmware/rpi-firmware.mk
-> >+++ b/package/rpi-firmware/rpi-firmware.mk
-> >@@ -13,6 +13,7 @@ RPI_FIRMWARE_INSTALL_IMAGES = YES
-> >  RPI_FIRMWARE_DEPENDENCIES += host-rpi-firmware
-> >+ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
-> >  define RPI_FIRMWARE_INSTALL_DTB
-> >  	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
-> >  	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
-> >@@ -21,6 +22,7 @@ define RPI_FIRMWARE_INSTALL_DTB
-> >  		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
-> >  	done
-> >  endef
-> >+endif
-> >I'd put the overlays out of the conditional block, because they are
-> >*not* built by the Linux kernel.
-> 
-> They do seem to be part of the rpi Linux source tree:
-> https://github.com/raspberrypi/linux/tree/rpi-3.18.y/arch/arm/boot/dts/overlays
-
-Ah, indeed. I was mislead by looking at the rpi-4.0.y branch, which does
-not have that sub-directory. But looking further, the overlays are all
-along side the standard DTS, not in a sub-directory.
-
-I'll see what I can do with that.
-
-> Isn't it a matter of adding overlay/name-of-overlay to
-> BR2_LINUX_KERNEL_INTREE_DTS_NAME if someone wants an overlay build?
-
-It would seem so. I'll test that.
-
-Thanks for the tips! :-)
-
-Regards,
-Yann E. MORIN.
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
