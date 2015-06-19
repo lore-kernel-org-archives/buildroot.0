@@ -1,44 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Jun 2015 20:19:43 +0200
-Subject: [Buildroot] [git commit] lftp: bump to version 4.6.3a
-Message-ID: <20150619190635.5DB1880E3C@busybox.osuosl.org>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 19 Jun 2015 21:13:20 +0200
+Subject: [Buildroot] [V2 0/4] A20-OLinuXino-Lime: new board
+Message-ID: <1434741204-3988-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62afb7c4d158d48a0724c032afdc8fa0a348a963
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This set adds the board A20-OLinuXino-Lime, with 2 flavors:
+    - kernel mainline + uboot mainline
+    - linux-sunxi (3.4.x) + uboot-sunxi
 
-- Bump to version 4.6.3a
-- Update hash file
+And also updates two sunxi related packages (sunxi-board & a10disp).
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lftp/lftp.hash |    2 +-
- package/lftp/lftp.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes V1 -> V2: review/comments by Arnout Vandecappelle
+  - mainline:
+    - set BR2_KERNEL_HEADERS_4_0=y
+    - set BR2_LINUX_KERNEL_INSTALL_TARGET=y
+    - set BR2_TARGET_ROOTFS_EXT2_4=y
+    - refactor post-build with arguments from BR2_ROOTFS_POST_SCRIPT_ARGS
+  - rename of board/cubietech/cubieboard/mkcubiecard.sh
+    - patch removed
+  - legacy renamed to mali:
+    - refactor post-build with arguments from BR2_ROOTFS_POST_SCRIPT_ARGS
+    - readme-mali.txt:
+      - include text from https://linux-sunxi.org/Linux_Kernel
+      - fix a typo
 
-diff --git a/package/lftp/lftp.hash b/package/lftp/lftp.hash
-index a832087..f1e45bc 100644
---- a/package/lftp/lftp.hash
-+++ b/package/lftp/lftp.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  1e61d5c94b06c333309185e86cfce0729e45e3f69f7496c58d61093b135c8bb9  lftp-4.6.2.tar.xz
-+sha256  8c3a12a1f9ec288132b245bdd7d14d88ade1aa5cb1c14bb68c8fab3b68793840  lftp-4.6.3a.tar.xz
-diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
-index 362ad28..b69e2d6 100644
---- a/package/lftp/lftp.mk
-+++ b/package/lftp/lftp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LFTP_VERSION = 4.6.2
-+LFTP_VERSION = 4.6.3a
- LFTP_SOURCE = lftp-$(LFTP_VERSION).tar.xz
- LFTP_SITE = http://lftp.yar.ru/ftp
- LFTP_LICENSE = GPLv3+
+
+Francois Perrad (4):
+  sunxi-board: bump to version a6a4e94066f4ec6b26fc7060dc453a6bcf26a504
+  a10disp: bump to version v0.6.1
+  A20-OLinuXino-Lime: new board (mainline)
+  A20-OLinuXino-Lime: new board (mali)
+
+ board/olimex/a20_olinuxino_lime/boot-mali.cmd   |  4 ++
+ board/olimex/a20_olinuxino_lime/boot.cmd        |  5 ++
+ board/olimex/a20_olinuxino_lime/mksunxicard.sh  |  1 +
+ board/olimex/a20_olinuxino_lime/post-build.sh   |  8 +++
+ board/olimex/a20_olinuxino_lime/readme-mali.txt | 65 +++++++++++++++++++
+ board/olimex/a20_olinuxino_lime/readme.txt      | 86 +++++++++++++++++++++++++
+ configs/olimex_a20_olinuxino_defconfig          | 41 ++++++++++++
+ configs/olimex_a20_olinuxino_mali_defconfig     | 44 +++++++++++++
+ package/a10disp/a10disp.mk                      |  2 +-
+ package/sunxi-boards/sunxi-boards.mk            |  2 +-
+ 10 files changed, 256 insertions(+), 2 deletions(-)
+ create mode 100644 board/olimex/a20_olinuxino_lime/boot-mali.cmd
+ create mode 100644 board/olimex/a20_olinuxino_lime/boot.cmd
+ create mode 120000 board/olimex/a20_olinuxino_lime/mksunxicard.sh
+ create mode 100755 board/olimex/a20_olinuxino_lime/post-build.sh
+ create mode 100644 board/olimex/a20_olinuxino_lime/readme-mali.txt
+ create mode 100644 board/olimex/a20_olinuxino_lime/readme.txt
+ create mode 100644 configs/olimex_a20_olinuxino_defconfig
+ create mode 100644 configs/olimex_a20_olinuxino_mali_defconfig
+
+-- 
+2.1.4
