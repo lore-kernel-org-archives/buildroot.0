@@ -1,9 +1,10 @@
 From: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
-Date: Fri, 19 Jun 2015 15:40:18 +0200
-Subject: [Buildroot] [PATCH v1 1/2] host-zynq-boot-bin: new package
-In-Reply-To: <20150618231816.513316f9@free-electrons.com>
+Date: Fri, 19 Jun 2015 15:40:19 +0200
+Subject: [Buildroot] [PATCH v1 2/2] zedboard: Upgrade to U-Boot 2015.07
+In-Reply-To: <1434721219-5824-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
 References: <20150618231816.513316f9@free-electrons.com>
-Message-ID: <1434721219-5824-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
+ <1434721219-5824-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
+Message-ID: <1434721219-5824-2-git-send-email-xvikto03@stud.fit.vutbr.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,65 +13,282 @@ To: buildroot@busybox.net
 
 From: Jan Viktorin <viktorin@rehivetech.com>
 
-The purpose of this package is to provide a small
-Python script zynq-boot-bin.py to Buildroot. The
-script creates a BOOT.BIN file from U-Boot's SPL
-to boot Xilinx Zynq without needing the Xilinx FSBL.
+Until recently, generation of a bootloader for the Avnet
+Zedboard (and in general all Xilinx Zynq based boards)
+has required to use the development tools by Xilinx
+(Vivado, XSDK) and to walk through a quite painful
+procedure to generate the First Stage Boot Loader
+(FSBL) and the bootable BOOT.BIN image.
+
+This commit makes Buildroot independent on the Xilinx
+flow by utilizing U-Boot SPL and booting the Zynq's
+PL by U-Boot.
+
+The FSBL generation is not a problem anymore with U-Boot
+2015.07 where a generic ps7_init.c file is included and
+used to build the U-Boot SPL for various boards including
+Zedboard. The ps7_init.c file has been released under
+GNU/GPL license for this purpose. For details, see
+
+ http://lists.denx.de/pipermail/u-boot/2015-April/210664.html
+
+To create the BOOT.BIN automatically, there is a script
+zynq-boot-bin.py in the Xilinx github repository. This
+script is installed by host-zynq-boot-bin package.
+The attached patch (0001) fixes U-Boot environment to use it.
+
+There is a little catch, the U-Boot 2015.07 is not released
+yet, so this commit is based on 2015.07-rc2. However, as
+soon as it is out, the download site of U-Boot can be
+redirected to the release archive instead of fetching it
+by git.
+
+The last patch (0002) creates a Zedboard+Buildroot specific
+U-Boot environment to boot smoothly from SD card. It tries
+to load a file system.bit into the Zynq's PL (only if it
+exists). It is also possible to alter the booting by an
+uEnv.txt file located on your SD card. The uEnv.txt is
+a plain text file with <key>=<value> pairs one per line.
 
 Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 ---
- package/Config.in.host                 |  1 +
- package/zynq-boot-bin/Config.in.host   |  7 +++++++
- package/zynq-boot-bin/zynq-boot-bin.mk | 16 ++++++++++++++++
- 3 files changed, 24 insertions(+)
- create mode 100644 package/zynq-boot-bin/Config.in.host
- create mode 100644 package/zynq-boot-bin/zynq-boot-bin.mk
+ board/avnet/zedboard/readme.txt                    | 95 ++++++++++------------
+ ...oot.bin-automatically-by-zynq-boot-bin.py.patch | 38 +++++++++
+ ...eate-zedboard-specific-U-Boot-environment.patch | 46 +++++++++++
+ configs/zedboard_defconfig                         |  6 +-
+ 4 files changed, 132 insertions(+), 53 deletions(-)
+ create mode 100644 board/avnet/zedboard/uboot-2015.07/0001-Generate-boot.bin-automatically-by-zynq-boot-bin.py.patch
+ create mode 100644 board/avnet/zedboard/uboot-2015.07/0002-zynq-Create-zedboard-specific-U-Boot-environment.patch
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 1e047aa..030c91f 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -27,5 +27,6 @@ menu "Host utilities"
- 	source "package/sunxi-tools/Config.in.host"
- 	source "package/uboot-tools/Config.in.host"
- 	source "package/util-linux/Config.in.host"
-+	source "package/zynq-boot-bin/Config.in.host"
+diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
+index a3f1f3e..b2dfe4b 100644
+--- a/board/avnet/zedboard/readme.txt
++++ b/board/avnet/zedboard/readme.txt
+@@ -5,68 +5,61 @@ System-On-Chip.
+ Zedboard information including schematics, reference designs, and manuals are
+ available from http://www.zedboard.org .
  
- endmenu
-diff --git a/package/zynq-boot-bin/Config.in.host b/package/zynq-boot-bin/Config.in.host
+-The U-Boot firmware for the Xilinx Zynq All Programmable SoC depends
+-on some proprietary code. This dependency consists of a pair of
+-files are available from the Xilinx SDK installation.
+-
+-You will need these files from Xilinx SDK installation to generate
+-the U-Boot firmware:
+-	ps7_init.c
+-	ps7_init.h
+-
+-Buildroot will create the following files and place them in the
+-<output>/images directory.
+-	zynq-zed.dtb
+-	rootfs.cpio.uboot
+-	uImage
+-	u-boot.img
+-	boot.bin
+-
+-
+-uboot.bin  -- U-Boot SPL w/ Xilinx boot.bin wrapper
+----------------------------------------------------
+-
+-Due to licensing issues, the files ps7_init.c/h are not able to be
+-distributed with the U-Boot source code.  These files are required to make a
+-boot.bin file.
+-
+-If you already have the Xilinx tools installed, the following sequence will
+-unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
+-
+-make zedboard_defconfig
+-make uboot-patch
+-cp ${XILINX}/ISE_DS/EDK/sw/lib/hwplatform_templates/zed_hw_platform/ps7_init.{c,h} \
+-output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
+-
+-After copying these files into the U-Boot source tree, you can
+-continue the build with:
+-
+-make
+-
+-*Notice*
+-While the build will successfully complete without the ps7_init.*
+-files,  the uboot.bin file generated by this configuration will not
+-function properly on the Zedboard.  Therefore, it is imperative that
+-the ps7_init.* files be copied into the U-Boot source tree any time
+-the clean, or uboot-dirclean targets are made.
+-
++Steps to create a working Buildroot for Zedboard:
++
++a) use U-Boot 2015.07 (is set by zedboard_defconfig)
++b) install host-zynq-boot-bin (done automatically by dependency system)
++--------------------------
++1) make zedboard_defconfig
++2) make UBOOT_BIN=u-boot-dtb.img
++3) copy files boot.bin, u-boot-dtb.img, rootfs.cpio.uboot,
++	uImage, zynq-zed.dtb into your SD card
++4) boot your Zedboard
++
++Note that I redefine variable UBOOT_BIN to u-boot-dtb.img
++(instead of u-boot.img) to be installed in to the images/
++directory. This binary works for the generated SPL:
++
++ U-Boot SPL 2015.07-rc2 (Jun 18 2015 - 16:42:58)
++ mmc boot
++ reading system.dtb
++ spl_load_image_fat_os: error reading image system.dtb, err - -1
++ reading u-boot-dtb.img
++ reading u-boot-dtb.img
++
++ U-Boot 2015.07-rc2 (Jun 18 2015 - 16:42:58 +0200)
++
++ Model: Zynq ZED Board
++ I2C:   ready
++ DRAM:  ECC disabled 512 MiB
++ MMC:   zynq_sdhci: 0
++ Using default environment
++ ...
+ 
+ Resulting system
+ ----------------
+ A FAT32 partition should be created at the beginning of the SD Card
+ and the following files should be installed:
+ 	/boot.bin
+-	/devicetree.dtb
++	/zynq-zed.dtb
+ 	/uImage
+-	/uramdisk.image.gz
+-	/u-boot.img
++	/rootfs-cpio.uboot
++	/u-boot-dtb.img
+ 
+ 
+ All needed files can be taken from output/images/
+ 
+-boot.bin, uImage and u-boot.img are direct copies of the same files
++boot.bin, uImage and u-boot-dtb.img are direct copies of the same files
+ available on output/images/
+ 
+-devicetree.dtb is just zynq-zed.dtb renamed.
++The attachedpatchs of U-Boot enables to create boot.bin file
++automatically without the need of Xilinx tools. The U-Boot's
++environment is redefined there to work with Buildroot out-of-the-box.
++
++You can alter the booting procedure by creating a file uEnv.txt
++in the root of the SD card. It is a plain text file in format
++<key>=<value> one per line:
+ 
+-uramdisk.image.gz is rootfs.cpio.uboot renamed
++kernel_image=myimage
++modeboot=myboot
++myboot=...
+diff --git a/board/avnet/zedboard/uboot-2015.07/0001-Generate-boot.bin-automatically-by-zynq-boot-bin.py.patch b/board/avnet/zedboard/uboot-2015.07/0001-Generate-boot.bin-automatically-by-zynq-boot-bin.py.patch
 new file mode 100644
-index 0000000..7342981
+index 0000000..9a62d1e
 --- /dev/null
-+++ b/package/zynq-boot-bin/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_ZYNQ_BOOT_BIN
-+	bool "host zynq-boot-bin"
-+	help
-+	  This is a simple Python script that creates BOOT.BIN file
-+	  to boot Xilinx Zynq based from U-Boot's SPL.
++++ b/board/avnet/zedboard/uboot-2015.07/0001-Generate-boot.bin-automatically-by-zynq-boot-bin.py.patch
+@@ -0,0 +1,38 @@
++From b983c0c89267913dfae30eb80ce3a1ef375d7c60 Mon Sep 17 00:00:00 2001
++From: Jan Viktorin <viktorin@rehivetech.com>
++Date: Fri, 19 Jun 2015 14:54:48 +0200
++Subject: [PATCH 1/2] Generate boot.bin automatically by zynq-boot-bin.py
 +
-+	  https://github.com/Xilinx/u-boot-xlnx
-diff --git a/package/zynq-boot-bin/zynq-boot-bin.mk b/package/zynq-boot-bin/zynq-boot-bin.mk
++The script is expected to be present in PATH.
++---
++ Makefile | 7 +++++++
++ 1 file changed, 7 insertions(+)
++
++diff --git a/Makefile b/Makefile
++index 0a674bf..aca286e 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -772,6 +772,10 @@ ifneq ($(CONFIG_BUILD_TARGET),)
++ ALL-y += $(CONFIG_BUILD_TARGET:"%"=%)
++ endif
++ 
+++ifneq ($(CONFIG_ARCH_ZYNQ),)
+++ALL-y += boot.bin
+++endif
+++
++ LDFLAGS_u-boot += $(LDFLAGS_FINAL)
++ ifneq ($(CONFIG_SYS_TEXT_BASE),)
++ LDFLAGS_u-boot += -Ttext $(CONFIG_SYS_TEXT_BASE)
++@@ -1098,6 +1102,9 @@ OBJCOPYFLAGS_u-boot-with-spl-pbl.bin = -I binary -O binary --pad-to=$(CONFIG_SPL
++ u-boot-with-spl-pbl.bin: spl/u-boot-spl.pbl $(UBOOT_BINLOAD) FORCE
++ 	$(call if_changed,pad_cat)
++ 
+++boot.bin: spl/u-boot-spl.bin
+++	zynq-boot-bin.py -o boot.bin -u spl/u-boot-spl.bin
+++
++ # PPC4xx needs the SPL at the end of the image, since the reset vector
++ # is located at 0xfffffffc. So we can't use the "u-boot-img.bin" target
++ # and need to introduce a new build target with the full blown U-Boot
++-- 
++2.4.3
++
+diff --git a/board/avnet/zedboard/uboot-2015.07/0002-zynq-Create-zedboard-specific-U-Boot-environment.patch b/board/avnet/zedboard/uboot-2015.07/0002-zynq-Create-zedboard-specific-U-Boot-environment.patch
 new file mode 100644
-index 0000000..8123f01
+index 0000000..9e21aa1
 --- /dev/null
-+++ b/package/zynq-boot-bin/zynq-boot-bin.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# zynq-boot-bin
-+#
-+################################################################################
++++ b/board/avnet/zedboard/uboot-2015.07/0002-zynq-Create-zedboard-specific-U-Boot-environment.patch
+@@ -0,0 +1,46 @@
++From a4c0058967a551385da5e16d2787d9f704cab225 Mon Sep 17 00:00:00 2001
++From: Jan Viktorin <viktorin@rehivetech.com>
++Date: Thu, 18 Jun 2015 16:26:02 +0200
++Subject: [PATCH 2/2] zynq: Create zedboard-specific U-Boot environment
 +
-+ZYNQ_BOOT_BIN_VERSION = xilinx-v2015.1
-+ZYNQ_BOOT_BIN_SOURCE = $(ZYNQ_BOOT_BIN_VERSION).tar.gz
-+ZYNQ_BOOT_BIN_SITE = https://github.com/Xilinx/u-boot-xlnx/archive
++---
++ include/configs/zynq_zed.h | 25 +++++++++++++++++++++++++
++ 1 file changed, 25 insertions(+)
 +
-+define HOST_ZYNQ_BOOT_BIN_INSTALL_CMDS
-+	cp $(@D)/tools/zynq-boot-bin.py $(HOST_DIR)/usr/bin/zynq-boot-bin.py
-+	chmod u+x $(HOST_DIR)/usr/bin/zynq-boot-bin.py
-+endef
++diff --git a/include/configs/zynq_zed.h b/include/configs/zynq_zed.h
++index 946de95..2400a88 100644
++--- a/include/configs/zynq_zed.h
+++++ b/include/configs/zynq_zed.h
++@@ -24,4 +24,29 @@
++ 
++ #include <configs/zynq-common.h>
++ 
+++#undef CONFIG_EXTRA_ENV_SETTINGS
+++#define CONFIG_EXTRA_ENV_SETTINGS \
+++	"envload=mmc info && if fatload mmc 0 0x1000 uEnv.txt;"\
+++	" then echo Importing uEnv.txt; env import -t 0x1000"  \
+++	" $filesize; fi;\0"                                    \
+++	"bootcmd=run $modeboot\0"                              \
+++	"modeboot=sdboot\0"                                    \
+++	"baudrate=115200\0"                                    \
+++	"bootenv=uEnv.txt\0"                                   \
+++	"devicetree_image=zynq-zed.dtb\0"                      \
+++	"kernel_image=uImage\0"                                \
+++	"ramdisk_image=rootfs.cpio.uboot\0"                    \
+++	"fpga_image=system.bit\0"                              \
+++	"sdboot=echo Booting from SD...;"                      \
+++	" run envload; run fpgaboot;"                          \
+++	" fatload mmc 0 0x1000000 ${kernel_image}"             \
+++	" && fatload mmc 0 0x2000000 ${ramdisk_image}"         \
+++        " && fatload mmc 0 0x3000000 ${devicetree_image}"      \
+++	" && bootm 0x1000000 0x2000000 0x3000000\0"            \
+++	"fpgaboot=if fatload mmc 0 0x1000000 ${fpga_image};"   \
+++	" then echo Booting FPGA from ${fpga_image};"          \
+++	" fpga info 0 && fpga loadb 0 0x1000000 $filesize;"    \
+++	" else echo FPGA image ${fpga_image} was not found,"   \
+++	" skipping...; fi;\0"
+++
++ #endif /* __CONFIG_ZYNQ_ZED_H */
++-- 
++2.4.3
 +
-+$(eval $(host-generic-package))
+diff --git a/configs/zedboard_defconfig b/configs/zedboard_defconfig
+index 76688e9..deafb3f 100644
+--- a/configs/zedboard_defconfig
++++ b/configs/zedboard_defconfig
+@@ -19,8 +19,10 @@ BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="zynq_zed"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2014.1"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.denx.de/u-boot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2015.07-rc2"
++BR2_TARGET_UBOOT_PATCH="$(TOPDIR)/boards/avnet/zedboard/uboot-2015.07"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="boot.bin"
++BR2_PACKAGE_HOST_ZYNQ_BOOT_BIN=y
 -- 
 2.4.3
