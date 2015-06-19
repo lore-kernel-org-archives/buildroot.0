@@ -1,103 +1,65 @@
 From: James Knight <james.knight@rockwellcollins.com>
-Date: Fri, 19 Jun 2015 13:17:45 -0400
-Subject: [Buildroot] [PATCH 1/1] fluxbox: explicitly configure optional
-	dependencies
-Message-ID: <1434734265-10216-1-git-send-email-james.knight@rockwellcollins.com>
+Date: Fri, 19 Jun 2015 13:19:12 -0400
+Subject: [Buildroot] [PATCH 1/1] sudo: enable pam support
+Message-ID: <1434734352-6500-1-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following commit explicitly configures optional dependencies based
-off the respective package selections for a given configuration.
-
-In addition, this commit also cleans up some obsolete/incorrect
-arguments. With the introduction of (at least) Fluxbox 1.3.7, the
-'--with-imlib2-prefix' argument no longer exists. The argument
-'--with-xpm-prefix' has never existed; it was accidentally committed
-mimicking the configuration used to provide imlib2.
+Configure the sudo utility to support PAM if the framework is enabled.
 
 Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 ---
- package/fluxbox/fluxbox.mk | 53 ++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 51 insertions(+), 2 deletions(-)
+ package/sudo/sudo.mk  | 13 ++++++++++++-
+ package/sudo/sudo.pam | 12 ++++++++++++
+ 2 files changed, 24 insertions(+), 1 deletion(-)
+ create mode 100644 package/sudo/sudo.pam
 
-diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-index d2e8c89..305dd9a 100644
---- a/package/fluxbox/fluxbox.mk
-+++ b/package/fluxbox/fluxbox.mk
-@@ -15,20 +15,69 @@ FLUXBOX_CONF_OPTS = \
- 	--x-libraries=$(STAGING_DIR)/usr/lib
- FLUXBOX_DEPENDENCIES = xlib_libX11 $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index a1a8328..9fa1cd6 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -16,9 +16,20 @@ SUDO_CONF_OPTS = \
+ 	--without-umask \
+ 	--with-logging=syslog \
+ 	--without-interfaces \
+-	--without-pam \
+ 	--with-env-editor
  
-+ifeq ($(BR2_PACKAGE_FREETYPE),y)
-+FLUXBOX_CONF_OPTS += --enable-freetype2
-+FLUXBOX_DEPENDENCIES += freetype
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++define SUDO_INSTALL_PAM_CONF
++	$(INSTALL) -m 0644 package/sudo/sudo.pam $(TARGET_DIR)/etc/pam.d/sudo
++endef
++
++SUDO_DEPENDENCIES += linux-pam
++SUDO_CONF_OPTS += --with-pam
++SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_INSTALL_PAM_CONF
 +else
-+FLUXBOX_CONF_OPTS += --disable-freetype2
++SUDO_CONF_OPTS += --without-pam
 +endif
 +
- ifeq ($(BR2_PACKAGE_IMLIB2_X),y)
--FLUXBOX_CONF_OPTS += --enable-imlib2 --with-imlib2-prefix=$(STAGING_DIR)/usr
-+FLUXBOX_CONF_OPTS += --enable-imlib2
- FLUXBOX_DEPENDENCIES += imlib2
- else
- FLUXBOX_CONF_OPTS += --disable-imlib2
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBFRIBIDI),y)
-+FLUXBOX_CONF_OPTS += --enable-fribidi
-+FLUXBOX_DEPENDENCIES += libfribidi
-+else
-+FLUXBOX_CONF_OPTS += --disable-fribidi
-+endif
+ # mksigname/mksiglist needs to run on build host to generate source files
+ define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+ 	$(MAKE) $(HOST_CONFIGURE_OPTS) \
+diff --git a/package/sudo/sudo.pam b/package/sudo/sudo.pam
+new file mode 100644
+index 0000000..c6e6f20
+--- /dev/null
++++ b/package/sudo/sudo.pam
+@@ -0,0 +1,12 @@
++auth        sufficient   pam_rootok.so
++auth        required     pam_wheel.so use_uid
++auth        required     pam_env.so
++auth        required     pam_unix.so nullok
 +
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
-+FLUXBOX_CONF_OPTS += --enable-xft
-+FLUXBOX_DEPENDENCIES += xlib_libXft
-+else
-+FLUXBOX_CONF_OPTS += --disable-xft
-+endif
++account     required     pam_unix.so
 +
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
-+FLUXBOX_CONF_OPTS += --enable-xrender
-+FLUXBOX_DEPENDENCIES += xlib_libXrender
-+else
-+FLUXBOX_CONF_OPTS += --disable-xrender
-+endif
++password    required     pam_unix.so nullok
 +
- ifeq ($(BR2_PACKAGE_XLIB_LIBXPM),y)
--FLUXBOX_CONF_OPTS += --enable-xpm --with-xpm-prefix=$(STAGING_DIR)/usr
-+FLUXBOX_CONF_OPTS += --enable-xpm
- FLUXBOX_DEPENDENCIES += xlib_libXpm
- else
- FLUXBOX_CONF_OPTS += --disable-xpm
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
-+FLUXBOX_CONF_OPTS += --enable-xinerama
-+FLUXBOX_DEPENDENCIES += xlib_libXinerama
-+else
-+FLUXBOX_CONF_OPTS += --disable-xinerama
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
-+FLUXBOX_CONF_OPTS += --enable-xext
-+FLUXBOX_DEPENDENCIES += xlib_libXext
-+else
-+FLUXBOX_CONF_OPTS += --disable-xext
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
-+FLUXBOX_CONF_OPTS += --enable-xrandr
-+FLUXBOX_DEPENDENCIES += xlib_libXrandr
-+else
-+FLUXBOX_CONF_OPTS += --disable-xrandr
-+endif
-+
- define FLUXBOX_INSTALL_XSESSION_FILE
- 	$(INSTALL) -m 0755 -D package/fluxbox/xsession \
- 		$(TARGET_DIR)/root/.xsession
++session     required     pam_limits.so
++session     required     pam_env.so
++session     required     pam_unix.so
 -- 
 1.9.5.msysgit.1
