@@ -1,93 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 19 Jun 2015 19:20:17 +0200
-Subject: [Buildroot] [PATCH 4/4] firmware file for wifi
-In-Reply-To: <1434727794-9419-4-git-send-email-lambertarthur22@gmail.com>
-References: <1434727794-9419-1-git-send-email-lambertarthur22@gmail.com>
- <1434727794-9419-4-git-send-email-lambertarthur22@gmail.com>
-Message-ID: <20150619172017.GA3638@free.fr>
+Date: Fri, 19 Jun 2015 19:47:06 +0200
+Subject: [Buildroot] [[updated v2] 1/1] package/linux-firmware: add
+ iwlwifi 6000g2a firmware
+In-Reply-To: <1432051679-27223-1-git-send-email-colleen@skycatch.com>
+References: <1432051679-27223-1-git-send-email-colleen@skycatch.com>
+Message-ID: <20150619174706.GB3638@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arthur, All,
+Colleen, All,
 
-On 2015-06-19 17:29 +0200, Arthur LAMBERT spake thusly:
-> Signed-off-by: Arthur LAMBERT <lambertarthur22@gmail.com>
-> ---
->  .../lib/firmware/brcm/brcmfmac4330-sdio.bin        | Bin 0 -> 222126 bytes
->  .../lib/firmware/brcm/brcmfmac4330-sdio.txt        |  40 +++++++++++++++++++++
->  2 files changed, 40 insertions(+)
->  create mode 100644 board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.bin
->  create mode 100644 board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+On 2015-05-19 16:07 +0000, Colleen Twitty spake thusly:
 > 
-> diff --git a/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.bin b/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.bin
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..e3bc355467de633b9717ba1c2a7411ac4c4a8b6c
+> Signed-off-by: Colleen Twitty <colleen@skycatch.com>
 
-This firmware file is available in linux-firmware, and it is installed
-if you choose BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX.
-
-> diff --git a/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt b/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-> new file mode 100644
-> index 0000000..9546246
-> --- /dev/null
-> +++ b/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-
-What is the purpose of this file?
-
-Is it really specific to the warpboard, or can it be used on other
-boards? I mean, why do we need this file specifically on the warpboard?
-
-How is this file used by the firmware?
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> @@ -0,0 +1,40 @@
-> +# bcm94330wlsdgb.txt
-> +manfid=0x2d0
-> +prodid=0x0552
-> +vendid=0x14e4
-> +devid=0x4360
-> +boardtype=0x0552
-> +boardrev=0x11
-> +# this design has 2.4GHz SP3T switch
-> +boardflags=0x00080200
-> +nocrc=1
-> +xtalfreq=37400
-> +boardnum=22
-> +macaddr=00:90:4c:c5:12:38
-> +ag0=255
-> +aa2g=1
-> +ccode=CN
-> +pa0b0=0x14d0
-> +pa0b1=0xfd98
-> +pa0b2=0xff78
-> +rssismf2g=0xa
-> +rssismc2g=0x3
-> +rssisav2g=0x7
-> +maxp2ga0=0x50
-> +sromrev=3
-> +il0macaddr=00:90:4c:c5:12:38
-> +wl0id=0x431b
-> +cckPwrOffset=5
-> +ofdm2gpo=0x66666666
-> +mcs2gpo0=0x6666
-> +mcs2gpo1=0x6666
-> +swctrlmap_2g=0x04040404,0x02020202,0x02020404,0x10202,0x1ff
-> +swctrlmap_5g=0x00100010,0x00280020,0x00200010,0x14202,0x2f8
-> +rfreg033=0x19
-> +rfreg033_cck=0x1f
-> +dacrate2g=160
-> +txalpfbyp2g=1
-> +bphyscale=17
-> +cckPwrIdxCorr=-15
-> +pacalidx2g=45
-> +txgaintbl=1
+> ---
+>  package/linux-firmware/Config.in         |    6 ++++++
+>  package/linux-firmware/linux-firmware.mk |    5 +++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+> index 7265990..2e4c205 100644
+> --- a/package/linux-firmware/Config.in
+> +++ b/package/linux-firmware/Config.in
+> @@ -81,6 +81,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000
+>  	  Firmware files for the Intel Wifi 5000 devices supported by
+>  	  the iwlwifi kernel driver.
+>  
+> +config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A
+> +	bool "Intel iwlwifi 6000G2A"
+> +	help
+> +	  Firmware files for the Intel Wifi 6000G2A devices supported by
+> +	  the iwlwifi kernel driver.
+> +
+>  config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260
+>  	bool "Intel iwlwifi 7260"
+>  	select BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_NEED_REV
+> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+> index 9acfc53..7a31bad 100644
+> --- a/package/linux-firmware/linux-firmware.mk
+> +++ b/package/linux-firmware/linux-firmware.mk
+> @@ -197,6 +197,11 @@ LINUX_FIRMWARE_FILES += iwlwifi-5000-5.ucode
+>  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A),y)
+> +LINUX_FIRMWARE_FILES += iwlwifi-6000g2a-6.ucode
+> +LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260),y)
+>  LINUX_FIRMWARE_FILES += iwlwifi-7260-$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV).ucode
+>  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
 > -- 
-> 1.9.1
+> 1.7.9.5
 > 
 > _______________________________________________
 > buildroot mailing list
