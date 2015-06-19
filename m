@@ -1,62 +1,57 @@
-From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-Date: Fri, 19 Jun 2015 16:45:25 +0200
-Subject: [Buildroot] dependence on bash and coreutils
-Message-ID: <55842B05.8050004@green-communications.fr>
+From: Arthur LAMBERT <lambertarthur22@gmail.com>
+Date: Fri, 19 Jun 2015 17:29:51 +0200
+Subject: [Buildroot] [PATCH 1/4] defconfig for warpboard
+Message-ID: <1434727794-9419-1-git-send-email-lambertarthur22@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+This is a set of patch to add support for warpboard (Freescale board based on imx6sl)
 
-Hi,
+Signed-off-by: Arthur LAMBERT <lambertarthur22@gmail.com>
+---
+ configs/warpboard_defconfig | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 configs/warpboard_defconfig
 
-A script packaged into mariadb galera cluster and necessary for
-running a cluster require bash to be run. I was wondering if such a
-dependency should be a "select" or a "depends on". What do you think?
-
-Also, the same script calls "sleep" several times with non integer
-arguments. The busybox version of sleep will not take such arguments.
-There are a few options:
-
-a) patch the script to only pass integer arguments, i.e. replace
-"sleep 0.5" with "sleep 1" and "sleep 0.2" also with "sleep 1". I
-strongly dislike this alternative.
-
-or
-
-b) make mariadb depend on coreutils, which provides a version of sleep
-that takes non floating point arguments.
-
-or
-
-c) somehow patch the busybox package to make available the option to
-build sleep with support for floating point arguments and make mariadb
-depend on this option.
-
-What do you think is best?
-
-cheers,
-
-- -- 
-Sylvain Raybaud
-www.green-communications.fr
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQIcBAEBAgAGBQJVhCsFAAoJEEkkwl4JtJ9yO5EP/jArtDimtgBikZCv5nPWCq3B
-NjwPWwadx5zJCcvfaCYz2IC2TRX44cPSSPIAKD2zTGprQDAiir9Fm26AWD3h7MSV
-TF5r0ZcPvgH0HMr9ZU5kNh0wA8c1WpZUKrxInEVVmpSe30dkxGwcXId30vYwEoWf
-R2AMGUdMfGG11OBmC1rJ8mKQFXMewFPKZ6IR3bP4ECyIvNqA0Lnx5XpnVv9r2LyB
-QM33hdLSjTjjD9gOdAQQc2+ZvlkBszsR51SwFHYuGbQz30kgfz6VIW3XgesduKjy
-DluVaoi2QhEhQdPM/0IIccj7Ow6jf/WhZ5SAg+OjMMxObwF/t66/6g9JMSN8vRlY
-1fQMGzbVoTBBnH0OsY6rXXmzyAre5Zp8d/wfwsb6vTgTpsc76oitEPwcD7CbK4KS
-f/0Gzh+ltUK3Hp8j0xLcNiWHbyM1mBpDYcHxwQEQZoQyXc/36jRNCQMMVi9qX8UV
-2N7bp6z2e4FwxvIfk21KHa6dInogZJglQYaSI+PUmdhxp9DQ888AftoZs5BuPmrK
-3afTuXIfND2X9QuLioY75VmomTAvErDR6cyV7W7c0A4nVUyrLJIjcFfmkiWGCO4a
-n0FXKAclukVPY9A4gfQw80AIBt3i8/lkIVZNwn8NaEi5RIuZmHCzWAVOL8ezuBum
-rJ2+bpE18Z02z7GjF6gW
-=qPmS
------END PGP SIGNATURE-----
+diff --git a/configs/warpboard_defconfig b/configs/warpboard_defconfig
+new file mode 100644
+index 0000000..188ea4d
+--- /dev/null
++++ b/configs/warpboard_defconfig
+@@ -0,0 +1,31 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a9=y
++
++# system
++BR2_TARGET_GENERIC_HOSTNAME="warpboard"
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git at github.com:Freescale/linux-fslc.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="patches-4.0"
++BR2_LINUX_KERNEL_PATCH="board/freescale/warpboard/linux/"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/warpboard/linux-4.0.config"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-warp"
++
++# rootfs
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_TAR_BZIP2=y
++BR2_ROOTFS_OVERLAY="board/freescale/warpboard/rootfs_overlay"
++
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_VERSION="2015.04"
++BR2_TARGET_UBOOT_BOARDNAME="warp"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
+-- 
+1.9.1
