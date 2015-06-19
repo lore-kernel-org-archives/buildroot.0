@@ -1,27 +1,82 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 20 Jun 2015 00:00:54 +0200
-Subject: [Buildroot] [PATCH 1/4] defconfig for warpboard
-In-Reply-To: <55848E49.1030304@mind.be>
-References: <1434727794-9419-1-git-send-email-lambertarthur22@gmail.com>
- <55848E49.1030304@mind.be>
-Message-ID: <55849116.2030306@mind.be>
+Date: Sat, 20 Jun 2015 00:38:49 +0200
+Subject: [Buildroot] dependence on bash and coreutils
+In-Reply-To: <55842B05.8050004@green-communications.fr>
+References: <55842B05.8050004@green-communications.fr>
+Message-ID: <558499F9.9000006@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/19/15 23:48, Arnout Vandecappelle wrote:
->> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->> > +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/warpboard/linux-4.0.config"
->  You forgot to include this file in the patch. Please make sure that it's a
-> defconfig, not a full config.
+On 06/19/15 16:45, Sylvain Raybaud wrote:
+> Hi,
 > 
+> A script packaged into mariadb galera cluster and necessary for
+> running a cluster require bash to be run. I was wondering if such a
+> dependency should be a "select" or a "depends on". What do you think?
 
- Actually, is there a reason not to use the mxs_defconfig?
+ select. Also add a comment # runtime dependency only
+
+ And make sure to check that the scripts really put /bin/bash as their shebang
+and not /bin/sh.
+
+ Also, don't forget to select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS.
+
+
+> Also, the same script calls "sleep" several times with non integer
+> arguments. The busybox version of sleep will not take such arguments.
+> There are a few options:
+> 
+> a) patch the script to only pass integer arguments, i.e. replace
+> "sleep 0.5" with "sleep 1" and "sleep 0.2" also with "sleep 1". I
+> strongly dislike this alternative.
+
+ I tend to agree.
+
+> 
+> or
+> 
+> b) make mariadb depend on coreutils, which provides a version of sleep
+> that takes non floating point arguments.
+
+ That's definitely an option.
+
+> 
+> or
+> 
+> c) somehow patch the busybox package to make available the option to
+> build sleep with support for floating point arguments and make mariadb
+> depend on this option.
+
+ You could indeed add a patch that seelcts CONFIG_FEATURE_FANCY_SLEEP and
+CONFIG_FEATURE_FLOAT_SLEEP in busybox.config. I just checked, it adds 600 bytes
+to the 480K of busybox in an arm thumb2 build. So for me, it's a go.
 
  Regards,
  Arnout
+
+> 
+> What do you think is best?
+> 
+> cheers,
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+>  
+>  
+> ************************************************************************************
+> This footnote confirms that this email message has been scanned by
+> PineApp Mail-SeCure for the presence of malicious code, vandals & computer viruses.
+> ************************************************************************************
+> 
+> 
+> 
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
