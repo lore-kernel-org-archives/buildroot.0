@@ -1,59 +1,27 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 19 Jun 2015 23:55:03 +0200
-Subject: [Buildroot] [V2 4/4] A20-OLinuXino-Lime: new board (mali)
-In-Reply-To: <1434741204-3988-5-git-send-email-francois.perrad@gadz.org>
-References: <1434741204-3988-1-git-send-email-francois.perrad@gadz.org>
- <1434741204-3988-5-git-send-email-francois.perrad@gadz.org>
-Message-ID: <55848FB7.6060207@mind.be>
+Date: Sat, 20 Jun 2015 00:00:54 +0200
+Subject: [Buildroot] [PATCH 1/4] defconfig for warpboard
+In-Reply-To: <55848E49.1030304@mind.be>
+References: <1434727794-9419-1-git-send-email-lambertarthur22@gmail.com>
+ <55848E49.1030304@mind.be>
+Message-ID: <55849116.2030306@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/19/15 21:13, Francois Perrad wrote:
-[snip]
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_VERSION="sunxi-3.4"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux-sunxi/linux-sunxi.git"
-> +# based on Linux version 3.4.103
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9a1cd034181af628d4145202289e1993c1687db6"
+On 06/19/15 23:48, Arnout Vandecappelle wrote:
+>> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>> > +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/warpboard/linux-4.0.config"
+>  You forgot to include this file in the patch. Please make sure that it's a
+> defconfig, not a full config.
+> 
 
- Hey, why did you drop my suggestion to use a github tarball rather than a full
-git clone?
-
-
-> +BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-> +BR2_LINUX_KERNEL_DEFCONFIG="sun7i"
-> +
-> +# sunxi packages
-> +BR2_PACKAGE_SUNXI_TOOLS=y
-> +BR2_PACKAGE_SUNXI_BOARDS=y
-> +BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
-> +
-> +# Bootloaders
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
-> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> +BR2_TARGET_UBOOT_VERSION="sunxi"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux-sunxi/u-boot-sunxi.git"
-> +# based on U-Boot 2014.04
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="ea1ac32bf76eb60baef474c2516fc431b381d952"
-
- Here as well.
-
+ Actually, is there a reason not to use the mxs_defconfig?
 
  Regards,
  Arnout
-
-> +BR2_TARGET_UBOOT_FORMAT_BIN=y
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-> +
-> +# Additional tools
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> 
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
