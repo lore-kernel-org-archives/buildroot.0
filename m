@@ -1,17 +1,21 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 20 Jun 2015 09:56:16 -0300
-Subject: [Buildroot] [PATCH] dnsmasq: bump to version 2.73
-Message-ID: <1434804976-8637-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Jun 2015 15:59:28 +0200
+Subject: [Buildroot] [git commit] dnsmasq: bump to version 2.73
+Message-ID: <20150620135939.13EFF7F906@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=333002cffa66b85dcf3ba192234157caa8a4c137
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dnsmasq/dnsmasq.hash | 2 +-
- package/dnsmasq/dnsmasq.mk   | 2 +-
+ package/dnsmasq/dnsmasq.hash |    2 +-
+ package/dnsmasq/dnsmasq.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
@@ -35,5 +39,3 @@ index 4b0999b..13352a9 100644
  DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
  DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
  DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
--- 
-2.3.6
