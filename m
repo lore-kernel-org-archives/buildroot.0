@@ -1,46 +1,190 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Jun 2015 00:47:12 +0200
-Subject: [Buildroot] [PATCH 1/2] rpi-firmware: allow disabling
- installation of binary DTBs
-In-Reply-To: <20150619210701.GD3638@free.fr>
-References: <1430579415-22802-1-git-send-email-bos@je-eigen-domein.nl>
- <20150619203006.GC3638@free.fr> <558480FF.409@je-eigen-domein.nl>
- <20150619210701.GD3638@free.fr>
-Message-ID: <20150619224712.GF3638@free.fr>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sat, 20 Jun 2015 07:28:01 +0200
+Subject: [Buildroot] [V2 4/4] A20-OLinuXino-Lime: new board (mali)
+In-Reply-To: <20150619200859.GH11732@lukather>
+References: <1434741204-3988-1-git-send-email-francois.perrad@gadz.org>
+ <1434741204-3988-5-git-send-email-francois.perrad@gadz.org>
+ <20150619200859.GH11732@lukather>
+Message-ID: <CAB0FRsvzKgP23+-fuwawaqyrJfzY39BLns+jkd1rBwgfdCoMsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Floris, All,
+2015-06-19 22:08 GMT+02:00 Maxime Ripard <maxime.ripard@free-electrons.com>:
+> On Fri, Jun 19, 2015 at 09:13:24PM +0200, Francois Perrad wrote:
+>> config mali / sunxi like Cubieboard2
+>>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  board/olimex/a20_olinuxino_lime/boot-mali.cmd   |  4 ++
+>>  board/olimex/a20_olinuxino_lime/mksunxicard.sh  |  1 +
+>>  board/olimex/a20_olinuxino_lime/readme-mali.txt | 65 +++++++++++++++++++++++++
+>>  configs/olimex_a20_olinuxino_mali_defconfig     | 44 +++++++++++++++++
+>>  4 files changed, 114 insertions(+)
+>>  create mode 100644 board/olimex/a20_olinuxino_lime/boot-mali.cmd
+>>  create mode 120000 board/olimex/a20_olinuxino_lime/mksunxicard.sh
+>>  create mode 100644 board/olimex/a20_olinuxino_lime/readme-mali.txt
+>>  create mode 100644 configs/olimex_a20_olinuxino_mali_defconfig
+>>
+>> diff --git a/board/olimex/a20_olinuxino_lime/boot-mali.cmd b/board/olimex/a20_olinuxino_lime/boot-mali.cmd
+>> new file mode 100644
+>> index 0000000..849ed00
+>> --- /dev/null
+>> +++ b/board/olimex/a20_olinuxino_lime/boot-mali.cmd
+>> @@ -0,0 +1,4 @@
+>> +setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p2 rootwait panic=10 ${extra}
+>> +fatload mmc 0 0x43000000 script.bin
+>> +fatload mmc 0 0x48000000 uImage
+>> +bootm 0x48000000
+>> diff --git a/board/olimex/a20_olinuxino_lime/mksunxicard.sh b/board/olimex/a20_olinuxino_lime/mksunxicard.sh
+>> new file mode 120000
+>> index 0000000..f0fcd02
+>> --- /dev/null
+>> +++ b/board/olimex/a20_olinuxino_lime/mksunxicard.sh
+>> @@ -0,0 +1 @@
+>> +../../cubietech/cubieboard/mkcubiecard.sh
+>> \ No newline at end of file
+>> diff --git a/board/olimex/a20_olinuxino_lime/readme-mali.txt b/board/olimex/a20_olinuxino_lime/readme-mali.txt
+>> new file mode 100644
+>> index 0000000..51e8a1c
+>> --- /dev/null
+>> +++ b/board/olimex/a20_olinuxino_lime/readme-mali.txt
+>> @@ -0,0 +1,65 @@
+>> +A20-OLinuXino-LIME
+>> +
+>> +Intro
+>> +=====
+>> +
+>> +This is a open hardware board,
+>> +see https://www.olimex.com/Products/OLinuXino/open-source-hardware
+>> +
+>> +The legacy linux-sunxi kernels are based on the vendor code drops.
+>> +It is only useful when accelerated 3D graphics and multimedia support
+>> +is strictly necessary.
+>> +
+>> +The Mainline Kernel is already a much better choice for a headless server.
+>> +And also the mainline kernel works fine even for a basic Linux desktop
+>> +system running on top of a simple framebuffer, which may be good enough for
+>> +the users who do not need fancy 3D graphics or video playback acceleration.
+>> +
+>> +How to build it
+>> +===============
+>> +
+>> +    $ make olimex_a20_olinuxino_mali_defconfig
+>> +
+>> +Compile all and build rootfs image:
+>> +
+>> +    $ make
+>> +
+>> +Result of the build
+>> +-------------------
+>> +
+>> +After building, you should get a tree like this:
+>> +
+>> +    output/images/
+>> +    +-- boot.scr
+>> +    +-- rootfs.tar
+>> +    +-- script.bin
+>> +    +-- u-boot-sunxi-with-spl.bin
+>> +    +-- u-boot.bin
+>> +    `-- uImage
+>> +
+>> +
+>> +How setting up the SD card
+>> +==========================
+>> +
+>> +Depending on the rootfs size, you might want to use a 2GB or larger SD-card.
+>> +The script `mksunxicard.sh` will take care of partitioning and formatting
+>> +the SD-card.
+>> +
+>> +BEWARE! This process will erase your SD card.
+>> +
+>> +Use `dmesg` to find out where the SD card is attached in the /dev tree
+>> +(<device>) and then:
+>> +
+>> +    # ./mksunxicard.sh <images_dir> <device>
+>> +
+>> +where:
+>> +    - <images_dir> is the directory containing the generated files (usually
+>> +    output/images)
+>> +    - <device> is the device file of the SD card (usually /dev/sdX)
+>> +
+>> +
+>> +Finish
+>> +======
+>> +
+>> +Eject the SD card, insert it in the A20-OLinuXino-LIME board, and power it up.
+>> +
+>> diff --git a/configs/olimex_a20_olinuxino_mali_defconfig b/configs/olimex_a20_olinuxino_mali_defconfig
+>> new file mode 100644
+>> index 0000000..2af885d
+>> --- /dev/null
+>> +++ b/configs/olimex_a20_olinuxino_mali_defconfig
+>> @@ -0,0 +1,44 @@
+>> +# Architecture
+>> +BR2_arm=y
+>> +BR2_cortex_a7=y
+>> +
+>> +# Kernel headers
+>> +BR2_KERNEL_HEADERS_3_4=y
+>> +
+>> +# System configuration
+>> +BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+>> +BR2_TARGET_GENERIC_ISSUE="Welcome to use OLinuXino!"
+>> +BR2_TARGET_GENERIC_GETTY=y
+>> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+>> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino_lime/post-build.sh"
+>> +BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino_lime/boot-mali.cmd $(BINARIES_DIR)"
+>> +
+>> +# Kernel
+>> +BR2_LINUX_KERNEL=y
+>> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>> +BR2_LINUX_KERNEL_VERSION="sunxi-3.4"
+>> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux-sunxi/linux-sunxi.git"
+>> +# based on Linux version 3.4.103
+>> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9a1cd034181af628d4145202289e1993c1687db6"
+>> +BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+>> +BR2_LINUX_KERNEL_DEFCONFIG="sun7i"
+>> +
+>> +# sunxi packages
+>> +BR2_PACKAGE_SUNXI_TOOLS=y
+>> +BR2_PACKAGE_SUNXI_BOARDS=y
+>> +BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
+>> +
+>> +# Bootloaders
+>> +BR2_TARGET_UBOOT=y
+>> +BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
+>> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+>> +BR2_TARGET_UBOOT_VERSION="sunxi"
+>> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux-sunxi/u-boot-sunxi.git"
+>> +# based on U-Boot 2014.04
+>> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="ea1ac32bf76eb60baef474c2516fc431b381d952"
+>> +BR2_TARGET_UBOOT_FORMAT_BIN=y
+>> +BR2_TARGET_UBOOT_SPL=y
+>> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+>
+> U-boot sunxi is unmaintained and deprecated, you probably don't wnat
+> to use that.
+>
 
-On 2015-06-19 23:07 +0200, Yann E. MORIN spake thusly:
-> On 2015-06-19 22:52 +0200, Floris Bos spake thusly:
-> > On 06/19/2015 10:30 PM, Yann E. MORIN wrote:
-[--SNIP--]
-> > >I'd put the overlays out of the conditional block, because they are
-> > >*not* built by the Linux kernel.
-> > 
-> > They do seem to be part of the rpi Linux source tree:
-> > https://github.com/raspberrypi/linux/tree/rpi-3.18.y/arch/arm/boot/dts/overlays
-> 
-> Ah, indeed. I was mislead by looking at the rpi-4.0.y branch, which does
-> not have that sub-directory. But looking further, the overlays are all
-> along side the standard DTS, not in a sub-directory.
+When I try to use the mainline U-Boot (which works well with a
+mainline kernel), I cannot start the linux-sunxi kernel.
+I think that it is problem with bootargs, but I haven't found the good
+'magic' value.
+So, I stay with U-boot sunxi.
 
-OK, so I was a bit mislead. I was looking at the rpi-3.19.y branch,
-which has all the overlays alongside the standard dts. the rpi-3.18.y
-and rpi4.0.y branches indeed have them in a specific sub-dir, as you
-pointed out.
+Fran?ois
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> Maxime
+>
+> --
+> Maxime Ripard, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
