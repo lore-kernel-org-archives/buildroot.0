@@ -1,150 +1,48 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 20 Jun 2015 07:28:01 +0200
+Date: Sat, 20 Jun 2015 07:33:53 +0200
 Subject: [Buildroot] [V2 4/4] A20-OLinuXino-Lime: new board (mali)
-In-Reply-To: <20150619200859.GH11732@lukather>
+In-Reply-To: <55848FB7.6060207@mind.be>
 References: <1434741204-3988-1-git-send-email-francois.perrad@gadz.org>
  <1434741204-3988-5-git-send-email-francois.perrad@gadz.org>
- <20150619200859.GH11732@lukather>
-Message-ID: <CAB0FRsvzKgP23+-fuwawaqyrJfzY39BLns+jkd1rBwgfdCoMsQ@mail.gmail.com>
+ <55848FB7.6060207@mind.be>
+Message-ID: <CAB0FRss5yMY7gnsQU+-t2MZ_Fcxn7ZZ3eocTyqKS4_EyZfcmqQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-06-19 22:08 GMT+02:00 Maxime Ripard <maxime.ripard@free-electrons.com>:
-> On Fri, Jun 19, 2015 at 09:13:24PM +0200, Francois Perrad wrote:
->> config mali / sunxi like Cubieboard2
->>
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>  board/olimex/a20_olinuxino_lime/boot-mali.cmd   |  4 ++
->>  board/olimex/a20_olinuxino_lime/mksunxicard.sh  |  1 +
->>  board/olimex/a20_olinuxino_lime/readme-mali.txt | 65 +++++++++++++++++++++++++
->>  configs/olimex_a20_olinuxino_mali_defconfig     | 44 +++++++++++++++++
->>  4 files changed, 114 insertions(+)
->>  create mode 100644 board/olimex/a20_olinuxino_lime/boot-mali.cmd
->>  create mode 120000 board/olimex/a20_olinuxino_lime/mksunxicard.sh
->>  create mode 100644 board/olimex/a20_olinuxino_lime/readme-mali.txt
->>  create mode 100644 configs/olimex_a20_olinuxino_mali_defconfig
->>
->> diff --git a/board/olimex/a20_olinuxino_lime/boot-mali.cmd b/board/olimex/a20_olinuxino_lime/boot-mali.cmd
->> new file mode 100644
->> index 0000000..849ed00
->> --- /dev/null
->> +++ b/board/olimex/a20_olinuxino_lime/boot-mali.cmd
->> @@ -0,0 +1,4 @@
->> +setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p2 rootwait panic=10 ${extra}
->> +fatload mmc 0 0x43000000 script.bin
->> +fatload mmc 0 0x48000000 uImage
->> +bootm 0x48000000
->> diff --git a/board/olimex/a20_olinuxino_lime/mksunxicard.sh b/board/olimex/a20_olinuxino_lime/mksunxicard.sh
->> new file mode 120000
->> index 0000000..f0fcd02
->> --- /dev/null
->> +++ b/board/olimex/a20_olinuxino_lime/mksunxicard.sh
->> @@ -0,0 +1 @@
->> +../../cubietech/cubieboard/mkcubiecard.sh
->> \ No newline at end of file
->> diff --git a/board/olimex/a20_olinuxino_lime/readme-mali.txt b/board/olimex/a20_olinuxino_lime/readme-mali.txt
->> new file mode 100644
->> index 0000000..51e8a1c
->> --- /dev/null
->> +++ b/board/olimex/a20_olinuxino_lime/readme-mali.txt
->> @@ -0,0 +1,65 @@
->> +A20-OLinuXino-LIME
->> +
->> +Intro
->> +=====
->> +
->> +This is a open hardware board,
->> +see https://www.olimex.com/Products/OLinuXino/open-source-hardware
->> +
->> +The legacy linux-sunxi kernels are based on the vendor code drops.
->> +It is only useful when accelerated 3D graphics and multimedia support
->> +is strictly necessary.
->> +
->> +The Mainline Kernel is already a much better choice for a headless server.
->> +And also the mainline kernel works fine even for a basic Linux desktop
->> +system running on top of a simple framebuffer, which may be good enough for
->> +the users who do not need fancy 3D graphics or video playback acceleration.
->> +
->> +How to build it
->> +===============
->> +
->> +    $ make olimex_a20_olinuxino_mali_defconfig
->> +
->> +Compile all and build rootfs image:
->> +
->> +    $ make
->> +
->> +Result of the build
->> +-------------------
->> +
->> +After building, you should get a tree like this:
->> +
->> +    output/images/
->> +    +-- boot.scr
->> +    +-- rootfs.tar
->> +    +-- script.bin
->> +    +-- u-boot-sunxi-with-spl.bin
->> +    +-- u-boot.bin
->> +    `-- uImage
->> +
->> +
->> +How setting up the SD card
->> +==========================
->> +
->> +Depending on the rootfs size, you might want to use a 2GB or larger SD-card.
->> +The script `mksunxicard.sh` will take care of partitioning and formatting
->> +the SD-card.
->> +
->> +BEWARE! This process will erase your SD card.
->> +
->> +Use `dmesg` to find out where the SD card is attached in the /dev tree
->> +(<device>) and then:
->> +
->> +    # ./mksunxicard.sh <images_dir> <device>
->> +
->> +where:
->> +    - <images_dir> is the directory containing the generated files (usually
->> +    output/images)
->> +    - <device> is the device file of the SD card (usually /dev/sdX)
->> +
->> +
->> +Finish
->> +======
->> +
->> +Eject the SD card, insert it in the A20-OLinuXino-LIME board, and power it up.
->> +
->> diff --git a/configs/olimex_a20_olinuxino_mali_defconfig b/configs/olimex_a20_olinuxino_mali_defconfig
->> new file mode 100644
->> index 0000000..2af885d
->> --- /dev/null
->> +++ b/configs/olimex_a20_olinuxino_mali_defconfig
->> @@ -0,0 +1,44 @@
->> +# Architecture
->> +BR2_arm=y
->> +BR2_cortex_a7=y
->> +
->> +# Kernel headers
->> +BR2_KERNEL_HEADERS_3_4=y
->> +
->> +# System configuration
->> +BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
->> +BR2_TARGET_GENERIC_ISSUE="Welcome to use OLinuXino!"
->> +BR2_TARGET_GENERIC_GETTY=y
->> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
->> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino_lime/post-build.sh"
->> +BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino_lime/boot-mali.cmd $(BINARIES_DIR)"
->> +
->> +# Kernel
->> +BR2_LINUX_KERNEL=y
+2015-06-19 23:55 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+> On 06/19/15 21:13, Francois Perrad wrote:
+> [snip]
 >> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
 >> +BR2_LINUX_KERNEL_VERSION="sunxi-3.4"
 >> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux-sunxi/linux-sunxi.git"
 >> +# based on Linux version 3.4.103
 >> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9a1cd034181af628d4145202289e1993c1687db6"
+>
+>  Hey, why did you drop my suggestion to use a github tarball rather than a full
+> git clone?
+>
+
+I try without success:
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux-sunxi/linux-sunxi.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9a1cd034181af628d4145202289e1993c1687db6"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call
+github,linux-sunxi,linux-sunxi,9a1cd034181af628d4145202289e1993c1687db6)"
+
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux-sunxi/u-boot-sunxi.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="ea1ac32bf76eb60baef474c2516fc431b381d952"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call
+github,linux-sunxi,u-boot-sunxi,ea1ac32bf76eb60baef474c2516fc431b381d952)"
+
+May be, I misunderstood somethings.
+
+Fran?ois
+
+>
 >> +BR2_LINUX_KERNEL_USE_DEFCONFIG=y
 >> +BR2_LINUX_KERNEL_DEFCONFIG="sun7i"
 >> +
@@ -161,29 +59,29 @@ To: buildroot@busybox.net
 >> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux-sunxi/u-boot-sunxi.git"
 >> +# based on U-Boot 2014.04
 >> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="ea1ac32bf76eb60baef474c2516fc431b381d952"
+>
+>  Here as well.
+>
+>
+>  Regards,
+>  Arnout
+>
 >> +BR2_TARGET_UBOOT_FORMAT_BIN=y
 >> +BR2_TARGET_UBOOT_SPL=y
 >> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+>> +
+>> +# Additional tools
+>> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+>>
 >
-> U-boot sunxi is unmaintained and deprecated, you probably don't wnat
-> to use that.
->
-
-When I try to use the mainline U-Boot (which works well with a
-mainline kernel), I cannot start the linux-sunxi kernel.
-I think that it is problem with bootargs, but I haven't found the good
-'magic' value.
-So, I stay with U-boot sunxi.
-
-Fran?ois
-
-> Maxime
 >
 > --
-> Maxime Ripard, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
