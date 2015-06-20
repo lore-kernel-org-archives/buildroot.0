@@ -1,11 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 20 Jun 2015 18:13:18 +0200
-Subject: [Buildroot] [PATCH v7 07/22] busybox: applets as individual
-	binaries
-In-Reply-To: <1433251718-3167-8-git-send-email-clayton.shotwell@rockwellcollins.com>
+Date: Sat, 20 Jun 2015 18:23:28 +0200
+Subject: [Buildroot] [PATCH v7 08/22] busybox: selinux support
+In-Reply-To: <1433251718-3167-9-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1433251718-3167-8-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <CAHXCMMLjS2-TXnV7qDqzH5shegB4znd-APyZvLMgX-E83h8FTQ@mail.gmail.com>
+ <1433251718-3167-9-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <CAHXCMMJkfEGqWFtW02iKWL3KEy7xFU=MLa=trcEkfMaL_WLk3g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,23 +17,34 @@ On Tue, Jun 2, 2015 at 3:28 PM, Clayton Shotwell
 <clayton.shotwell@rockwellcollins.com> wrote:
 [...]
 > diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-> index 6847a60..feed560 100644
+> index feed560..e345d66 100644
 > --- a/package/busybox/Config.in
 > +++ b/package/busybox/Config.in
-> @@ -32,6 +32,15 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->           Show packages in menuconfig that are potentially also provided
->           by busybox.
+> @@ -41,6 +41,23 @@ comment "Busybox individual binaries depends on dynamic libraries"
+>         depends on BR2_STATIC_LIBS
+>         depends on BR2_bfin
 >
-> +config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
-> +       bool "Individual binaries"
+> +config BR2_PACKAGE_BUSYBOX_SELINUX
+> +       select BR2_PACKAGE_LIBSELINUX
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
 > +       depends on !BR2_STATIC_LIBS
-> +       depends on !BR2_bfin # libbusybox.so link issue
+> +       bool "Enable SELinux support"
+> +       help
+> +         Enable SELinux support in BusyBox. Please note that depending on
+> +         you BusyBox config and the SELinux policy implementation, you may
+s/you BusyBox/your BusyBox/
+s/ config / configuration /
+
+> +         want to also enable BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES.
 > +
-> +comment "Busybox individual binaries depends on dynamic libraries"
-> +       depends on BR2_STATIC_LIBS
-> +       depends on BR2_bfin
-s/on BR2_bfin/on !BR2_bfin/
-(because this is an architecture dependency)
+> +         For instance, if your BusyBox configuration only uses a couple of
+> +         minor BusyBox features, such as simple command line utilities, the
+> +         symlinked version of BusyBox can be used to save space. If BusyBox
+> +         provides more features, such as crond, then individual binaries
+> +         have to be enabled for the SELinux type transitions to occur properly.
+> +
+> +
+nitpicking: one blank line is enough... ;-)
 
 Otherwise, it looks good.
 
