@@ -1,58 +1,30 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Jun 2015 13:32:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
-Message-ID: <1434799972-23267-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 20 Jun 2015 09:29:12 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.4.x series
+Message-ID: <1434803352-10602-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-gettext is needed since
-https://github.com/tvheadend/tvheadend/commit/bad281a9f5bbb8e7f968d400f8096908dfd798b9#diff-e2d5a00791bce9a01f99bc6fd613a39d
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/tvheadend/0001-no-check_config.patch |    4 ++--
- package/tvheadend/tvheadend.mk               |    8 ++++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tvheadend/0001-no-check_config.patch b/package/tvheadend/0001-no-check_config.patch
-index b55cbfc..bc724db 100644
---- a/package/tvheadend/0001-no-check_config.patch
-+++ b/package/tvheadend/0001-no-check_config.patch
-@@ -16,8 +16,8 @@ diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile tvhe
-  	$(ROOTDIR)/configure $(CONFIGURE_ARGS)
-  
-  # Binary
---${PROG}: check_config $(OBJS) $(ALLDEPS)
--+${PROG}: $(OBJS) $(ALLDEPS)
-+-${PROG}: check_config make_webui $(MO-FILES) $(OBJS)
-++${PROG}: make_webui $(MO-FILES) $(OBJS)
-  	$(CC) -o $@ $(OBJS) $(CFLAGS) $(LDFLAGS)
-  
-  # Object
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 2a0019e..7ad725b 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,11 +4,15 @@
- #
- ################################################################################
- 
--TVHEADEND_VERSION = 14f03b8efbc40b840eda8e203a6002d6c3f24250
-+TVHEADEND_VERSION = 8d561f11d6e3678f801803d7c69cf32d5b915ec2
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
--TVHEADEND_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python) openssl
-+TVHEADEND_DEPENDENCIES = \
-+	host-gettext \
-+	host-pkgconf \
-+	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python) \
-+	openssl
- 
- ifeq ($(BR2_PACKAGE_AVAHI),y)
- TVHEADEND_DEPENDENCIES += avahi
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 28b8929..9bad7f0 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -200,7 +200,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.108"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.80"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.44"	if BR2_KERNEL_HEADERS_3_12
 -- 
-1.7.10.4
+2.3.6
