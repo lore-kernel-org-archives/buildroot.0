@@ -1,31 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Jun 2015 17:38:43 +0200
-Subject: [Buildroot] [PATCH 3/6] gcc: add support for gcc 5.1
-References: <1434292411-5003-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1434292411-5003-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <XnsA4BFAF16D8B15berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <XnsA4BFB381C7C43berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 20 Jun 2015 18:13:18 +0200
+Subject: [Buildroot] [PATCH v7 07/22] busybox: applets as individual
+	binaries
+In-Reply-To: <1433251718-3167-8-git-send-email-clayton.shotwell@rockwellcollins.com>
+References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <1433251718-3167-8-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <CAHXCMMLjS2-TXnV7qDqzH5shegB4znd-APyZvLMgX-E83h8FTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote in 
-news:XnsA4BFAF16D8B15berndkuhlsPkbjNfxxIA at bernd-kuhls.de:
+Hi Clayton,
 
-> ../../../libgcc/generic-morestack-thread.c:41:21: fatal error: pthread.h: 
+On Tue, Jun 2, 2015 at 3:28 PM, Clayton Shotwell
+<clayton.shotwell@rockwellcollins.com> wrote:
+[...]
+> diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+> index 6847a60..feed560 100644
+> --- a/package/busybox/Config.in
+> +++ b/package/busybox/Config.in
+> @@ -32,6 +32,15 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>           Show packages in menuconfig that are potentially also provided
+>           by busybox.
+>
+> +config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
+> +       bool "Individual binaries"
+> +       depends on !BR2_STATIC_LIBS
+> +       depends on !BR2_bfin # libbusybox.so link issue
+> +
+> +comment "Busybox individual binaries depends on dynamic libraries"
+> +       depends on BR2_STATIC_LIBS
+> +       depends on BR2_bfin
+s/on BR2_bfin/on !BR2_bfin/
+(because this is an architecture dependency)
 
-Hi,
+Otherwise, it looks good.
 
-the problem seems to be the uclibc-ng, choosing it and i386 as target limits 
-the choice "Thread library implementation" to "None", changing back to uclibc 
-provides also "linuxthreads" and "linuxthreads (stable/old)".
+Regards,
 
-It is caused by 
-http://git.buildroot.net/buildroot/tree/package/uclibc/Config.in#n40 and the 
-following lines which differ to those for BR2_UCLIBC_VERSION_0_9_33.
-
-Is this the intended behaviour?
-
-Regards, Bernd
+-- 
+Samuel
