@@ -1,54 +1,95 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Sat, 20 Jun 2015 09:29:49 +0200
-Subject: [Buildroot] [V2 4/4] A20-OLinuXino-Lime: new board (mali)
-In-Reply-To: <CAB0FRsvzKgP23+-fuwawaqyrJfzY39BLns+jkd1rBwgfdCoMsQ@mail.gmail.com>
-References: <1434741204-3988-1-git-send-email-francois.perrad@gadz.org>
- <1434741204-3988-5-git-send-email-francois.perrad@gadz.org>
- <20150619200859.GH11732@lukather>
- <CAB0FRsvzKgP23+-fuwawaqyrJfzY39BLns+jkd1rBwgfdCoMsQ@mail.gmail.com>
-Message-ID: <20150620072949.GI11732@lukather>
+From: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
+Date: Sat, 20 Jun 2015 10:26:42 +0200
+Subject: [Buildroot] [PATCH v1 0/2] Make Buildroot for Zedboard
+ independent on Xilinx tools
+In-Reply-To: <5584749E.2010302@mind.be>
+References: <20150618231816.513316f9@free-electrons.com>
+ <1434721125-5688-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
+ <5584749E.2010302@mind.be>
+Message-ID: <20150620102642.2d88adfb@jvn>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jun 20, 2015 at 07:28:01AM +0200, Fran?ois Perrad wrote:
-> >> +# Bootloaders
-> >> +BR2_TARGET_UBOOT=y
-> >> +BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
-> >> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> >> +BR2_TARGET_UBOOT_VERSION="sunxi"
-> >> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux-sunxi/u-boot-sunxi.git"
-> >> +# based on U-Boot 2014.04
-> >> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="ea1ac32bf76eb60baef474c2516fc431b381d952"
-> >> +BR2_TARGET_UBOOT_FORMAT_BIN=y
-> >> +BR2_TARGET_UBOOT_SPL=y
-> >> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-> >
-> > U-boot sunxi is unmaintained and deprecated, you probably don't wnat
-> > to use that.
-> >
+On Fri, 19 Jun 2015 21:59:26 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
+
+> On 06/19/15 15:38, Jan Viktorin wrote:
+> > From: Jan Viktorin <viktorin@rehivetech.com>
+> > 
+> > Dear Thomas,
+> > 
+> > thank you for the review. I've made the changes accordingly.
+> > 
+> > I've created host-zynq-boot-bin package to cover the small
+> > python script. It downloads U-Boot xilinx-v2015.1 from Xilinx
+> > github for this purpose (quite an overkill, isn't it...).
+> > 
+> > There are now just 2 patches of U-Boot 2015.07. 0001 adds
+> > calling of the zynq-boot-bin.py and 0002 fixes the default
+> > U-Boot environment to boot out-of-the-box from SD card.
+> > 
+> > There is still one thing to solve (I wasn't sure how).
+> > There is no dependency specified between U-Boot and the
+> > host-zynq-boot-bin package. It should be probably conditional
+> > but what kind of condition to write there? Should we use
+> > it for every Zynq architecture? (Is it possible to detect
+> > it by Buildroot?)
 > 
-> When I try to use the mainline U-Boot (which works well with a
-> mainline kernel), I cannot start the linux-sunxi kernel.
-> I think that it is problem with bootargs, but I haven't found the good
-> 'magic' value.
-> So, I stay with U-boot sunxi.
+>  You can revert the two packages: make host-zynq-boot-bin depend on
+> uboot, and move the call to the python script to the
+> host-zynq-boot-bin package. One less patch for uboot :-)
 
-I'm not sure this is a valid argument for such a patch. Have you read
-https://linux-sunxi.org/Mainline_U-boot#Boot ?
+So, you mean to drop the patch 0001 and call the zynq-boot-bin.py from
+BUILD/INSTALL (?) stage of this package? (I expect the dependency on
+uboot will guarantee, it is called after uboot.) The package will get
+the path to the uboot's build dir as UBOOT_DIR, is it right?
 
-Maxime
+So host-zynq-boot-bin should depend on uboot and it is up to the user
+to select this package to create the boot.bin file automatically
+or not. Is that OK?
+
+Regards
+Jan Viktorin
+
+> 
+>  Regards,
+>  Arnout
+> 
+> 
+> > 
+> > Regards
+> > Jan Viktorin
+> > 
+> > 
+> > Jan Viktorin (2):
+> >   host-zynq-boot-bin: new package
+> >   zedboard: Upgrade to U-Boot 2015.07
+> > 
+> >  board/avnet/zedboard/readme.txt                    | 95
+> > ++++++++++------------ ...oot.bin-automatically-by-zynq-boot-bin.py.patch
+> > | 38 +++++++++ ...eate-zedboard-specific-U-Boot-environment.patch |
+> > 46 +++++++++++ configs/zedboard_defconfig
+> > |  6 +- package/Config.in.host                             |  1 +
+> >  package/zynq-boot-bin/Config.in.host               |  7 ++
+> >  package/zynq-boot-bin/zynq-boot-bin.mk             | 16 ++++
+> >  7 files changed, 156 insertions(+), 53 deletions(-)
+> >  create mode 100644
+> > board/avnet/zedboard/uboot-2015.07/0001-Generate-boot.bin-automatically-by-zynq-boot-bin.py.patch
+> > create mode 100644
+> > board/avnet/zedboard/uboot-2015.07/0002-zynq-Create-zedboard-specific-U-Boot-environment.patch
+> > create mode 100644 package/zynq-boot-bin/Config.in.host create mode
+> > 100644 package/zynq-boot-bin/zynq-boot-bin.mk
+> > 
+> 
+> 
+
+
 
 -- 
-Maxime Ripard, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150620/39cab939/attachment.asc>
+  Jan Viktorin, PhD student   E-mail: iviktorin at fit.vutbr.cz
+  DCS FIT VUT Brno, L310      Web: http://www.fit.vutbr.cz/~iviktorin
+  Bozetechova 1, 612 66       Phone: +420 54114-1357
+  Brno, Czech Republic
