@@ -1,70 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 20 Jun 2015 11:44:53 +0200
-Subject: [Buildroot] [PATCH 1/4] defconfig for warpboard
-In-Reply-To: <55848E49.1030304@mind.be>
-References: <1434727794-9419-1-git-send-email-lambertarthur22@gmail.com>
- <55848E49.1030304@mind.be>
-Message-ID: <55853615.5080107@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 20 Jun 2015 13:32:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
+Message-ID: <1434799972-23267-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/19/15 23:48, Arnout Vandecappelle wrote:
-> On 06/19/15 17:29, Arthur LAMBERT wrote:
->> > This is a set of patch to add support for warpboard (Freescale board based on imx6sl)
->> > 
->> > Signed-off-by: Arthur LAMBERT <lambertarthur22@gmail.com>
->> > ---
->> >  configs/warpboard_defconfig | 31 +++++++++++++++++++++++++++++++
->> >  1 file changed, 31 insertions(+)
->> >  create mode 100644 configs/warpboard_defconfig
->> > 
->> > diff --git a/configs/warpboard_defconfig b/configs/warpboard_defconfig
->> > new file mode 100644
->> > index 0000000..188ea4d
->> > --- /dev/null
->> > +++ b/configs/warpboard_defconfig
->> > @@ -0,0 +1,31 @@
->> > +# architecture
->> > +BR2_arm=y
->> > +BR2_cortex_a9=y
->  Please also fix the kernel headers to a specific version. Pretty soon 4.1 will
-> be the default, and they may be incompatible with the kernel you build.
-> 
-> 
->> > +
->> > +# system
->> > +BR2_TARGET_GENERIC_HOSTNAME="warpboard"
->> > +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
->> > +
->> > +# kernel
->> > +BR2_LINUX_KERNEL=y
->> > +BR2_LINUX_KERNEL_CUSTOM_GIT=y
->> > +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git at github.com:Freescale/linux-fslc.git"
->  For github, we prefer to use a wget download rather than a a git download,
-> since it's a lot faster. So:
-> 
-> BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION=$(call
-> github,Freescale,linux-fscl,38ec11d74b0fbe110b658a6e1a86eeac7e5a383e)
+host-gettext is needed since
+https://github.com/tvheadend/tvheadend/commit/bad281a9f5bbb8e7f968d400f8096908dfd798b9#diff-e2d5a00791bce9a01f99bc6fd613a39d
 
- As noticed by Francois, the source part of the URL should also be included, so:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tvheadend/0001-no-check_config.patch |    4 ++--
+ package/tvheadend/tvheadend.mk               |    8 ++++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Freescale,linux-fscl,38ec11d74b0fbe110b658a6e1a86eeac7e5a383e)/38ec11d74b0fbe110b658a6e1a86eeac7e5a383e.tar.gz"
-
-
- Regards,
- Arnout
-
-[snip]
-
-
+diff --git a/package/tvheadend/0001-no-check_config.patch b/package/tvheadend/0001-no-check_config.patch
+index b55cbfc..bc724db 100644
+--- a/package/tvheadend/0001-no-check_config.patch
++++ b/package/tvheadend/0001-no-check_config.patch
+@@ -16,8 +16,8 @@ diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile tvhe
+  	$(ROOTDIR)/configure $(CONFIGURE_ARGS)
+  
+  # Binary
+--${PROG}: check_config $(OBJS) $(ALLDEPS)
+-+${PROG}: $(OBJS) $(ALLDEPS)
++-${PROG}: check_config make_webui $(MO-FILES) $(OBJS)
+++${PROG}: make_webui $(MO-FILES) $(OBJS)
+  	$(CC) -o $@ $(OBJS) $(CFLAGS) $(LDFLAGS)
+  
+  # Object
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 2a0019e..7ad725b 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,11 +4,15 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 14f03b8efbc40b840eda8e203a6002d6c3f24250
++TVHEADEND_VERSION = 8d561f11d6e3678f801803d7c69cf32d5b915ec2
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
+-TVHEADEND_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python) openssl
++TVHEADEND_DEPENDENCIES = \
++	host-gettext \
++	host-pkgconf \
++	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python) \
++	openssl
+ 
+ ifeq ($(BR2_PACKAGE_AVAHI),y)
+ TVHEADEND_DEPENDENCIES += avahi
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
