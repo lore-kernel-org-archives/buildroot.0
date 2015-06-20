@@ -1,95 +1,66 @@
-From: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
-Date: Sat, 20 Jun 2015 10:26:42 +0200
-Subject: [Buildroot] [PATCH v1 0/2] Make Buildroot for Zedboard
- independent on Xilinx tools
-In-Reply-To: <5584749E.2010302@mind.be>
-References: <20150618231816.513316f9@free-electrons.com>
- <1434721125-5688-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
- <5584749E.2010302@mind.be>
-Message-ID: <20150620102642.2d88adfb@jvn>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 20 Jun 2015 11:26:26 +0200
+Subject: [Buildroot] [V2 4/4] A20-OLinuXino-Lime: new board (mali)
+In-Reply-To: <CAB0FRss5yMY7gnsQU+-t2MZ_Fcxn7ZZ3eocTyqKS4_EyZfcmqQ@mail.gmail.com>
+References: <1434741204-3988-1-git-send-email-francois.perrad@gadz.org>
+ <1434741204-3988-5-git-send-email-francois.perrad@gadz.org>
+ <55848FB7.6060207@mind.be>
+ <CAB0FRss5yMY7gnsQU+-t2MZ_Fcxn7ZZ3eocTyqKS4_EyZfcmqQ@mail.gmail.com>
+Message-ID: <558531C2.4040803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 19 Jun 2015 21:59:26 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
-
-> On 06/19/15 15:38, Jan Viktorin wrote:
-> > From: Jan Viktorin <viktorin@rehivetech.com>
-> > 
-> > Dear Thomas,
-> > 
-> > thank you for the review. I've made the changes accordingly.
-> > 
-> > I've created host-zynq-boot-bin package to cover the small
-> > python script. It downloads U-Boot xilinx-v2015.1 from Xilinx
-> > github for this purpose (quite an overkill, isn't it...).
-> > 
-> > There are now just 2 patches of U-Boot 2015.07. 0001 adds
-> > calling of the zynq-boot-bin.py and 0002 fixes the default
-> > U-Boot environment to boot out-of-the-box from SD card.
-> > 
-> > There is still one thing to solve (I wasn't sure how).
-> > There is no dependency specified between U-Boot and the
-> > host-zynq-boot-bin package. It should be probably conditional
-> > but what kind of condition to write there? Should we use
-> > it for every Zynq architecture? (Is it possible to detect
-> > it by Buildroot?)
+On 06/20/15 07:33, Fran?ois Perrad wrote:
+> 2015-06-19 23:55 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+>> On 06/19/15 21:13, Francois Perrad wrote:
+>> [snip]
+>>> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>>> +BR2_LINUX_KERNEL_VERSION="sunxi-3.4"
+>>> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux-sunxi/linux-sunxi.git"
+>>> +# based on Linux version 3.4.103
+>>> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9a1cd034181af628d4145202289e1993c1687db6"
+>>
+>>  Hey, why did you drop my suggestion to use a github tarball rather than a full
+>> git clone?
+>>
 > 
->  You can revert the two packages: make host-zynq-boot-bin depend on
-> uboot, and move the call to the python script to the
-> host-zynq-boot-bin package. One less patch for uboot :-)
+> I try without success:
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux-sunxi/linux-sunxi.git"
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9a1cd034181af628d4145202289e1993c1687db6"
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call
+> github,linux-sunxi,linux-sunxi,9a1cd034181af628d4145202289e1993c1687db6)"
 
-So, you mean to drop the patch 0001 and call the zynq-boot-bin.py from
-BUILD/INSTALL (?) stage of this package? (I expect the dependency on
-uboot will guarantee, it is called after uboot.) The package will get
-the path to the uboot's build dir as UBOOT_DIR, is it right?
+ Ah, sorry, you have to add the source part as well:
 
-So host-zynq-boot-bin should depend on uboot and it is up to the user
-to select this package to create the boot.bin file automatically
-or not. Is that OK?
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux-sunxi,linux-sunxi,9a1cd034181af628d4145202289e1993c1687db6)/9a1cd034181af628d4145202289e1993c1687db6.tar.gz"
 
-Regards
-Jan Viktorin
+
+ BTW looks like this commit is tagged so you can use sunxi-v3.4.104-r0 instead 
+of the commit hash.
+
+
+ Regards,
+ Arnout
 
 > 
->  Regards,
->  Arnout
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux-sunxi/u-boot-sunxi.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="ea1ac32bf76eb60baef474c2516fc431b381d952"
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call
+> github,linux-sunxi,u-boot-sunxi,ea1ac32bf76eb60baef474c2516fc431b381d952)"
 > 
+> May be, I misunderstood somethings.
 > 
-> > 
-> > Regards
-> > Jan Viktorin
-> > 
-> > 
-> > Jan Viktorin (2):
-> >   host-zynq-boot-bin: new package
-> >   zedboard: Upgrade to U-Boot 2015.07
-> > 
-> >  board/avnet/zedboard/readme.txt                    | 95
-> > ++++++++++------------ ...oot.bin-automatically-by-zynq-boot-bin.py.patch
-> > | 38 +++++++++ ...eate-zedboard-specific-U-Boot-environment.patch |
-> > 46 +++++++++++ configs/zedboard_defconfig
-> > |  6 +- package/Config.in.host                             |  1 +
-> >  package/zynq-boot-bin/Config.in.host               |  7 ++
-> >  package/zynq-boot-bin/zynq-boot-bin.mk             | 16 ++++
-> >  7 files changed, 156 insertions(+), 53 deletions(-)
-> >  create mode 100644
-> > board/avnet/zedboard/uboot-2015.07/0001-Generate-boot.bin-automatically-by-zynq-boot-bin.py.patch
-> > create mode 100644
-> > board/avnet/zedboard/uboot-2015.07/0002-zynq-Create-zedboard-specific-U-Boot-environment.patch
-> > create mode 100644 package/zynq-boot-bin/Config.in.host create mode
-> > 100644 package/zynq-boot-bin/zynq-boot-bin.mk
-> > 
-> 
-> 
-
-
-
+> Fran?ois
+[snip]
 -- 
-  Jan Viktorin, PhD student   E-mail: iviktorin at fit.vutbr.cz
-  DCS FIT VUT Brno, L310      Web: http://www.fit.vutbr.cz/~iviktorin
-  Bozetechova 1, 612 66       Phone: +420 54114-1357
-  Brno, Czech Republic
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
