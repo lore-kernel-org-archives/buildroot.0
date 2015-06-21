@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Jun 2015 14:44:52 +0200
+Date: Sun, 21 Jun 2015 14:48:28 +0200
 Subject: [Buildroot] [PATCH 2/3] python-robotframework: New package
 In-Reply-To: <1434362765-1074-3-git-send-email-denis.thulin@openwide.fr>
 References: <1434362765-1074-1-git-send-email-denis.thulin@openwide.fr>
  <1434362765-1074-3-git-send-email-denis.thulin@openwide.fr>
-Message-ID: <5586B1C4.3020901@mind.be>
+Message-ID: <5586B29C.6080207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,51 +12,13 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 06/15/15 12:06, Denis THULIN wrote:
-> A generic test automation framework written in python.
-> 
-> Signed-off-by: Denis THULIN <denis.thulin@openwide.fr>
-[snip]
-> diff --git a/package/python-robotframework/python-robotframework.hash b/package/python-robotframework/python-robotframework.hash
-> new file mode 100644
-> index 0000000..7d9ec46
-> --- /dev/null
-> +++ b/package/python-robotframework/python-robotframework.hash
-> @@ -0,0 +1,2 @@
-> +# sha356 calculated by scanpypi
-> +sha356	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  robotframework-2.9a2.tar.gz
-
- Doesn't this give an error? I couldn't check for myself since the file has
-vanished from pypi...
-
-> diff --git a/package/python-robotframework/python-robotframework.mk b/package/python-robotframework/python-robotframework.mk
-> new file mode 100644
-> index 0000000..437d5f4
-> --- /dev/null
-> +++ b/package/python-robotframework/python-robotframework.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-robotframework
-> +#
-> +################################################################################
-> +
-> +PYTHON_ROBOTFRAMEWORK_VERSION = 2.9a2
-> +PYTHON_ROBOTFRAMEWORK_SOURCE = robotframework-$(PYTHON_ROBOTFRAMEWORK_VERSION).tar.gz
 > +PYTHON_ROBOTFRAMEWORK_SITE = https://pypi.python.org/packages/source/r/robotframework/
-> +PYTHON_ROBOTFRAMEWORK_SETUP_TYPE = distutils
-> +PYTHON_ROBOTFRAMEWORK_LICENSE = Apache License 2.0
 
- Apache-2.0
-
+ There shouldn't be a trailing / here, so something must be done about that in
+the scanpypi script.
 
  Regards,
  Arnout
-
-> +PYTHON_ROBOTFRAMEWORK_LICENSE_FILES = LICENSE.txt
-> +
-> +$(eval $(python-package))
-> 
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
