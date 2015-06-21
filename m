@@ -1,31 +1,181 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Jun 2015 06:34:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
-In-Reply-To: <1434799972-23267-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1434799972-23267-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150621063446.2c5011f8@free-electrons.com>
+Date: Sun, 21 Jun 2015 06:35:42 +0200
+Subject: [Buildroot] [git commit] gnuradio: add processing blocks
+Message-ID: <20150621043553.8A7638073E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=accaa7f4879c0868bc6b9c975444758e47ddb68e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 20 Jun 2015 13:32:52 +0200, Bernd Kuhls wrote:
-> host-gettext is needed since
-> https://github.com/tvheadend/tvheadend/commit/bad281a9f5bbb8e7f968d400f8096908dfd798b9#diff-e2d5a00791bce9a01f99bc6fd613a39d
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/tvheadend/0001-no-check_config.patch |    4 ++--
->  package/tvheadend/tvheadend.mk               |    8 ++++++--
->  2 files changed, 8 insertions(+), 4 deletions(-)
+GNURadio provides a set of processing blocks like analog or digital
+communication, filters, ...
 
-Applied, thanks.
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[build-tested only]
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gnuradio/Config.in   |   60 ++++++++++++++++++++++++++++++++++++++++++
+ package/gnuradio/gnuradio.mk |   55 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 115 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 574eab4..e264a21 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -37,6 +37,12 @@ config BR2_PACKAGE_GNURADIO_BLOCKS
+ 	help
+ 	  GNU Radio basic block library
+ 
++config BR2_PACKAGE_GNURADIO_FEC
++	bool "gr-fec support"
++	select BR2_PACKAGE_GNURADIO_BLOCKS
++	help
++	  FEC signal processing blocks
++
+ config BR2_PACKAGE_GNURADIO_PYTHON
+ 	bool "python support"
+ 	select BR2_PACKAGE_BOOST_PYTHON
+@@ -44,4 +50,58 @@ config BR2_PACKAGE_GNURADIO_PYTHON
+ 	help
+ 	  Enable python component
+ 
++config BR2_PACKAGE_GNURADIO_UTILS
++	bool "gr-utils support"
++	select BR2_PACKAGE_GNURADIO_PYTHON
++	help
++	  Misc python utilities
++
++comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager depends fftw's single precision"
++	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
++
++if BR2_PACKAGE_FFTW_PRECISION_SINGLE
++
++config BR2_PACKAGE_GNURADIO_ANALOG
++	bool "gr-analog support"
++	select BR2_PACKAGE_GNURADIO_FILTER
++	help
++	  Analog communications blocks
++
++config BR2_PACKAGE_GNURADIO_CHANNELS
++	bool "gr-channels support"
++	select BR2_PACKAGE_GNURADIO_ANALOG
++	help
++	  Channel model blocks
++
++config BR2_PACKAGE_GNURADIO_DIGITAL
++	bool "gr-digital support"
++	select BR2_PACKAGE_GNURADIO_ANALOG
++	help
++	  Digital communications blocks
++
++config BR2_PACKAGE_GNURADIO_FFT
++	bool "gr-fft support"
++	select BR2_PACKAGE_GNURADIO_BLOCKS
++	help
++	  FFT signal processing blocks
++
++config BR2_PACKAGE_GNURADIO_FILTER
++	bool "gr-filter support"
++	select BR2_PACKAGE_GNURADIO_FFT
++	help
++	  Filter signal processing blocks
++
++config BR2_PACKAGE_GNURADIO_PAGER
++	bool "gr-flex support"
++	select BR2_PACKAGE_GNURADIO_ANALOG
++	help
++	  FLEX pager decoder implementation blocks
++
++config BR2_PACKAGE_GNURADIO_TRELLIS
++	bool "gr-trellis support"
++	select BR2_PACKAGE_GNURADIO_DIGITAL
++	help
++	  Trellis coded modulation blocks
++
++endif
+ endif
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index e58c7dc..fc5cd1f 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -42,12 +42,49 @@ ifeq ($(BR2_ARM_CPU_HAS_NEON),)
+ GNURADIO_CONF_OPTS += -Dhave_mfpu_neon=0
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GNURADIO_ANALOG),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_ANALOG=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_ANALOG=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_GNURADIO_BLOCKS),y)
+ GNURADIO_CONF_OPTS += -DENABLE_GR_BLOCKS=ON
+ else
+ GNURADIO_CONF_OPTS += -DENABLE_GR_BLOCKS=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GNURADIO_CHANNELS),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_CHANNELS=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_CHANNELS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GNURADIO_DIGITAL),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_DIGITAL=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_DIGITAL=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GNURADIO_FEC),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_FEC=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_FEC=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GNURADIO_FFT),y)
++GNURADIO_DEPENDENCIES += fftw
++GNURADIO_CONF_OPTS += -DENABLE_GR_FFT=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_FFT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GNURADIO_FILTER),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_FILTER=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_FILTER=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
+ GNURADIO_DEPENDENCIES += python
+ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
+@@ -55,4 +92,22 @@ else
+ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GNURADIO_PAGER),y)
++GNURADIO_CONF_OPTS += -DENABLE_PAGER=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_PAGER=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GNURADIO_TRELLIS),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GNURADIO_UTILS),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_UTILS=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_UTILS=OFF
++endif
++
+ $(eval $(cmake-package))
