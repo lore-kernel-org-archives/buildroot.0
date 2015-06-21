@@ -1,51 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Jun 2015 14:34:51 +0200
-Subject: [Buildroot] [PATCH 1/2] openssl: support building the binary
- without MMU
-In-Reply-To: <20150621064540.534ebebc@free-electrons.com>
-References: <1434711274-49716-1-git-send-email-benoit@wsystem.com>
- <20150621064540.534ebebc@free-electrons.com>
-Message-ID: <5586AF6B.6020304@mind.be>
+Date: Sun, 21 Jun 2015 14:44:52 +0200
+Subject: [Buildroot] [PATCH 2/3] python-robotframework: New package
+In-Reply-To: <1434362765-1074-3-git-send-email-denis.thulin@openwide.fr>
+References: <1434362765-1074-1-git-send-email-denis.thulin@openwide.fr>
+ <1434362765-1074-3-git-send-email-denis.thulin@openwide.fr>
+Message-ID: <5586B1C4.3020901@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/21/15 06:45, Thomas Petazzoni wrote:
-> Dear Beno?t Th?baudeau,
+On 06/15/15 12:06, Denis THULIN wrote:
+> A generic test automation framework written in python.
 > 
-> On Fri, 19 Jun 2015 12:54:33 +0200, Beno?t Th?baudeau wrote:
->> The commit 720893b62510438237b9923d744dd079ddb4f67d "openssl: disable
->> apps for NOMMU" prevented the openssl binary from being built without
->> MMU in order to fix a build failure without fork(). However, openssl is
->> designed to support the lack of fork() with -DHAVE_FORK=0, so allow the
->> openssl binary to be enabled without MMU thanks to this option.
->>
->> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
-> 
-> Hum. But then it means that we have propagated the MMU dependency to
-> all reverse dependencies of openssl (i.e packages that depend on
-> openssl), but they may no longer need this dependency anymore.
+> Signed-off-by: Denis THULIN <denis.thulin@openwide.fr>
+[snip]
+> diff --git a/package/python-robotframework/python-robotframework.hash b/package/python-robotframework/python-robotframework.hash
+> new file mode 100644
+> index 0000000..7d9ec46
+> --- /dev/null
+> +++ b/package/python-robotframework/python-robotframework.hash
+> @@ -0,0 +1,2 @@
+> +# sha356 calculated by scanpypi
+> +sha356	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  robotframework-2.9a2.tar.gz
 
- This is only about BR2_PACKAGE_OPENSSL_BIN, which is not selected by any package.
+ Doesn't this give an error? I couldn't check for myself since the file has
+vanished from pypi...
+
+> diff --git a/package/python-robotframework/python-robotframework.mk b/package/python-robotframework/python-robotframework.mk
+> new file mode 100644
+> index 0000000..437d5f4
+> --- /dev/null
+> +++ b/package/python-robotframework/python-robotframework.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-robotframework
+> +#
+> +################################################################################
+> +
+> +PYTHON_ROBOTFRAMEWORK_VERSION = 2.9a2
+> +PYTHON_ROBOTFRAMEWORK_SOURCE = robotframework-$(PYTHON_ROBOTFRAMEWORK_VERSION).tar.gz
+> +PYTHON_ROBOTFRAMEWORK_SITE = https://pypi.python.org/packages/source/r/robotframework/
+> +PYTHON_ROBOTFRAMEWORK_SETUP_TYPE = distutils
+> +PYTHON_ROBOTFRAMEWORK_LICENSE = Apache License 2.0
+
+ Apache-2.0
 
 
  Regards,
  Arnout
 
-> 
-> There is a fairly huge list of packages that "select
-> BR2_PACKAGE_OPENSSL". How can we find out which ones will now build
-> fine without MMU support ?
-> 
-> By the way, do you have a specific need for openssl on no-MMU
-> platforms? If so, on which platform? We don't have many no-MMU users,
-> so it's good when they speak up :-)
-> 
-> Thanks,
-> 
-> Thomas
+> +PYTHON_ROBOTFRAMEWORK_LICENSE_FILES = LICENSE.txt
+> +
+> +$(eval $(python-package))
 > 
 
 
