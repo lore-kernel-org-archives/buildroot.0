@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Jun 2015 14:48:28 +0200
-Subject: [Buildroot] [PATCH 2/3] python-robotframework: New package
-In-Reply-To: <1434362765-1074-3-git-send-email-denis.thulin@openwide.fr>
+Date: Sun, 21 Jun 2015 14:52:02 +0200
+Subject: [Buildroot] [PATCH 3/3] python-magic: new package
+In-Reply-To: <1434362765-1074-4-git-send-email-denis.thulin@openwide.fr>
 References: <1434362765-1074-1-git-send-email-denis.thulin@openwide.fr>
- <1434362765-1074-3-git-send-email-denis.thulin@openwide.fr>
-Message-ID: <5586B29C.6080207@mind.be>
+ <1434362765-1074-4-git-send-email-denis.thulin@openwide.fr>
+Message-ID: <5586B372.10300@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,10 +12,10 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 06/15/15 12:06, Denis THULIN wrote:
-> +PYTHON_ROBOTFRAMEWORK_SITE = https://pypi.python.org/packages/source/r/robotframework/
+> +PYTHON_MAGIC_LICENSE = PSF
 
- There shouldn't be a trailing / here, so something must be done about that in
-the scanpypi script.
+ Up to now, we've always used it in full: Python software foundation license but
+perhaps it's indeed better to abbreviate it.
 
  Regards,
  Arnout
