@@ -1,24 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Jun 2015 14:52:02 +0200
-Subject: [Buildroot] [PATCH 3/3] python-magic: new package
-In-Reply-To: <1434362765-1074-4-git-send-email-denis.thulin@openwide.fr>
-References: <1434362765-1074-1-git-send-email-denis.thulin@openwide.fr>
- <1434362765-1074-4-git-send-email-denis.thulin@openwide.fr>
-Message-ID: <5586B372.10300@mind.be>
+Date: Sun, 21 Jun 2015 14:58:02 +0200
+Subject: [Buildroot] [PATCH] kvmtool: add new package
+In-Reply-To: <558691E8.5020001@free-electrons.com>
+References: <1434652188-30662-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <5585D3D3.4060708@mind.be> <558691E8.5020001@free-electrons.com>
+Message-ID: <5586B4DA.40609@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/15/15 12:06, Denis THULIN wrote:
-> +PYTHON_MAGIC_LICENSE = PSF
+On 06/21/15 12:28, Gustavo Zacarias wrote:
+> On 20/06/15 17:57, Arnout Vandecappelle wrote:
+> 
+>>   Could you add a hash file?
+> 
+> I didn't know we were adding hashes to git sources, it's bad for a couple of
+> reasons.
 
- Up to now, we've always used it in full: Python software foundation license but
-perhaps it's indeed better to abbreviate it.
+ Argh, silly me.
+
+[snip]
+>>> +    # No MADV_HUGEPAGE define in uClibc(-ng)
+>>
+>>   That's weird, it comes from kernel headers and I do see it in
+>> asm-generic/mman-common.h. But that is not included by sys/mman.h, so you need
+>> to include asm/mman.h...
+> 
+> I don't think that's correct, it may work, but the madvise manpages says that
+> only sys/mman.h is required.
+> The MADV_ defines in uclibc are in bits/mman.h, like on glibc and musl, so
+> basically they're incomplete/old and a patch to uclibc would be the correct way
+> to fix this.
+
+ OK.
+
 
  Regards,
  Arnout
+
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
