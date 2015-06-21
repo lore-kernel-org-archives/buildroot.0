@@ -1,57 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Jun 2015 10:01:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 10.6.0
-In-Reply-To: <1434393117-14293-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1434393117-14293-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150621100118.7f16c492@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 21 Jun 2015 12:16:02 +0200
+Subject: [Buildroot] [PATCH 4/4] firmware file for wifi
+In-Reply-To: <20150621004956.GB23827@arthur-debian>
+References: <1434727794-9419-1-git-send-email-lambertarthur22@gmail.com>
+ <1434727794-9419-4-git-send-email-lambertarthur22@gmail.com>
+ <20150619172017.GA3638@free.fr>
+ <20150621004956.GB23827@arthur-debian>
+Message-ID: <20150621101602.GA3625@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Arthur, All,
 
-On Mon, 15 Jun 2015 20:31:57 +0200, Bernd Kuhls wrote:
-> Mesa3d 10.6 adds optional support for SHA-1:
-> http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?id=a24bdce46f95cbe9efd3b26f157d1eb36584861f
+On 2015-06-21 02:49 +0200, Arthur LAMBERT spake thusly:
+> Le Friday 19 Jun 2015 ?? 19:20:17 (+0200), Yann E. MORIN a ?crit :
+> > On 2015-06-19 17:29 +0200, Arthur LAMBERT spake thusly:
+> > > diff --git a/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt b/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+> > > new file mode 100644
+> > > index 0000000..9546246
+> > > --- /dev/null
+> > > +++ b/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+> >
+> > What is the purpose of this file?
+> >
+> > Is it really specific to the warpboard, or can it be used on other
+> > boards? I mean, why do we need this file specifically on the warpboard?
+> >
+> > How is this file used by the firmware?
+> >
 > 
-> Adding "--without-sha1" will cause this failure during configure:
-> 
-> configure: error: Illegal value for --with-sha1: no
-> 
-> so I did not add the else-clause when no SHA-1 provider is enabled.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mesa3d-headers/mesa3d-headers.mk |    2 +-
->  package/mesa3d/mesa3d.hash               |    4 ++--
->  package/mesa3d/mesa3d.mk                 |   12 +++++++++++-
->  3 files changed, 14 insertions(+), 4 deletions(-)
+> This file is requested by the brcmfmac driver. It is not specific to warpboard, but specific to brcm4330.
+> This txt file is also present in BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX so I can also remove it from the patch
 
-Applied after simplifying the else ifeq test. Instead of:
+No, this file is not present in linux-firmware, and is not installed by
+Buildroot in any way.
 
-ifeq ...
-....
-else
-ifeq ...
-...
-endif
-endif
+Also, I had a look at the driver, and indeed it requests this file
+unconditionally. I wonder what would be the best solution to provide
+this file, since it is not installed by linux-firmware.
 
-You can do:
+I'm a bit wary to provide a generic one, since I can see it contains:
+  - vendor/product/etc.. IDs, not too problematic
+  - macaddr, not too problematic; still...
+  - a lot of magic numbers in platform-specific variables.
 
-ifeq ...
-...
-else ifeq ...
-... 
-endif
+So, I think the best solution for now would be to keep that file in the
+board directory, like you have for now.
 
-Thanks!
+Regards,
+Yann E. MORIN.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
