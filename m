@@ -1,46 +1,37 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Jun 2015 14:58:02 +0200
-Subject: [Buildroot] [PATCH] kvmtool: add new package
-In-Reply-To: <558691E8.5020001@free-electrons.com>
-References: <1434652188-30662-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <5585D3D3.4060708@mind.be> <558691E8.5020001@free-electrons.com>
-Message-ID: <5586B4DA.40609@mind.be>
+Date: Sun, 21 Jun 2015 15:26:59 +0200
+Subject: [Buildroot] [PATCH 1/4] defconfig for warpboard
+In-Reply-To: <20150621010007.GD23827@arthur-debian>
+References: <1434727794-9419-1-git-send-email-lambertarthur22@gmail.com>
+ <55848E49.1030304@mind.be> <55849116.2030306@mind.be>
+ <20150621010007.GD23827@arthur-debian>
+Message-ID: <5586BBA3.1020509@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/21/15 12:28, Gustavo Zacarias wrote:
-> On 20/06/15 17:57, Arnout Vandecappelle wrote:
-> 
->>   Could you add a hash file?
-> 
-> I didn't know we were adding hashes to git sources, it's bad for a couple of
-> reasons.
-
- Argh, silly me.
-
-[snip]
->>> +    # No MADV_HUGEPAGE define in uClibc(-ng)
+On 06/21/15 03:00, Arthur LAMBERT wrote:
+> Le Saturday 20 Jun 2015 ?? 00:00:54 (+0200), Arnout Vandecappelle a ?crit :
+>> On 06/19/15 23:48, Arnout Vandecappelle wrote:
+>>>> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>>>>> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/warpboard/linux-4.0.config"
+>>>  You forgot to include this file in the patch. Please make sure that it's a
+>>> defconfig, not a full config.
+>>>
 >>
->>   That's weird, it comes from kernel headers and I do see it in
->> asm-generic/mman-common.h. But that is not included by sys/mman.h, so you need
->> to include asm/mman.h...
+>>  Actually, is there a reason not to use the mxs_defconfig?
+>>
 > 
-> I don't think that's correct, it may work, but the madvise manpages says that
-> only sys/mman.h is required.
-> The MADV_ defines in uclibc are in bits/mman.h, like on glibc and musl, so
-> basically they're incomplete/old and a patch to uclibc would be the correct way
-> to fix this.
+> I have a reason but I don't know if it is a good reason. mxs_defconfig does not provide configuration for bluetooth/wifi.
+> Is it enough to use a custom kernel config or do you prefer to keep the mxs defconfig for kernel tree ?
 
- OK.
-
+ That's a good enough reason. Mention it in the commit message though.
 
  Regards,
  Arnout
 
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
