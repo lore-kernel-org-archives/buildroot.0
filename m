@@ -1,116 +1,133 @@
 From: Arthur LAMBERT <lambertarthur22@gmail.com>
-Date: Sun, 21 Jun 2015 02:49:56 +0200
-Subject: [Buildroot] [PATCH 4/4] firmware file for wifi
-In-Reply-To: <20150619172017.GA3638@free.fr>
+Date: Sun, 21 Jun 2015 02:56:19 +0200
+Subject: [Buildroot] [PATCH 1/4] defconfig for warpboard
+In-Reply-To: <55848E49.1030304@mind.be>
 References: <1434727794-9419-1-git-send-email-lambertarthur22@gmail.com>
- <1434727794-9419-4-git-send-email-lambertarthur22@gmail.com>
- <20150619172017.GA3638@free.fr>
-Message-ID: <20150621004956.GB23827@arthur-debian>
+ <55848E49.1030304@mind.be>
+Message-ID: <20150621005619.GC23827@arthur-debian>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Friday 19 Jun 2015 ?? 19:20:17 (+0200), Yann E. MORIN a ??crit :
-> Arthur, All,
->
-> On 2015-06-19 17:29 +0200, Arthur LAMBERT spake thusly:
+Le Friday 19 Jun 2015 ?? 23:48:57 (+0200), Arnout Vandecappelle a ??crit :
+> On 06/19/15 17:29, Arthur LAMBERT wrote:
+> > This is a set of patch to add support for warpboard (Freescale board based on imx6sl)
+> >
 > > Signed-off-by: Arthur LAMBERT <lambertarthur22@gmail.com>
 > > ---
-> >  .../lib/firmware/brcm/brcmfmac4330-sdio.bin        | Bin 0 -> 222126 bytes
-> >  .../lib/firmware/brcm/brcmfmac4330-sdio.txt        |  40 +++++++++++++++++++++
-> >  2 files changed, 40 insertions(+)
-> >  create mode 100644 board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.bin
-> >  create mode 100644 board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+> >  configs/warpboard_defconfig | 31 +++++++++++++++++++++++++++++++
+> >  1 file changed, 31 insertions(+)
+> >  create mode 100644 configs/warpboard_defconfig
 > >
-> > diff --git a/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.bin b/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.bin
+> > diff --git a/configs/warpboard_defconfig b/configs/warpboard_defconfig
 > > new file mode 100644
-> > index 0000000000000000000000000000000000000000..e3bc355467de633b9717ba1c2a7411ac4c4a8b6c
->
-> This firmware file is available in linux-firmware, and it is installed
-> if you choose BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX.
-
-Ok I will add this package to defconfig and will remove txt/bin firmware file from patch
-
->
-> > diff --git a/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt b/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-> > new file mode 100644
-> > index 0000000..9546246
+> > index 0000000..188ea4d
 > > --- /dev/null
-> > +++ b/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+> > +++ b/configs/warpboard_defconfig
+> > @@ -0,0 +1,31 @@
+> > +# architecture
+> > +BR2_arm=y
+> > +BR2_cortex_a9=y
 >
-> What is the purpose of this file?
->
-> Is it really specific to the warpboard, or can it be used on other
-> boards? I mean, why do we need this file specifically on the warpboard?
->
-> How is this file used by the firmware?
+>  Please also fix the kernel headers to a specific version. Pretty soon 4.1 will
+> be the default, and they may be incompatible with the kernel you build.
 >
 
-This file is requested by the brcmfmac driver. It is not specific to warpboard, but specific to brcm4330.
-This txt file is also present in BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX so I can also remove it from the patch
+Ok my bad.
 
-> Regards,
-> Yann E. MORIN.
+>
+> > +
+> > +# system
+> > +BR2_TARGET_GENERIC_HOSTNAME="warpboard"
+> > +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+> > +
+> > +# kernel
+> > +BR2_LINUX_KERNEL=y
+> > +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> > +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git at github.com:Freescale/linux-fslc.git"
+>
+>  For github, we prefer to use a wget download rather than a a git download,
+> since it's a lot faster. So:
+>
+> BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION=$(call
+> github,Freescale,linux-fscl,38ec11d74b0fbe110b658a6e1a86eeac7e5a383e)
+>
+> > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="patches-4.0"
+>
+>  This is a branch, not a tag, so it's a moving target. Since there don't seem to
+> be tags in this repository, you'll have to specify a commit sha instead (as I've
+> shown above).
+>
+
+Ok I will also fix that.
+
+>
+> > +BR2_LINUX_KERNEL_PATCH="board/freescale/warpboard/linux/"
+> > +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> > +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/warpboard/linux-4.0.config"
+>
+>  You forgot to include this file in the patch. Please make sure that it's a
+> defconfig, not a full config.
+>
+
+This file is present later in a different email.
+git send email command send a mail per commit. Do I use the good process to provide my patch ? Do you prefer to put all the patch in the same email ?
+
+
+> > +BR2_LINUX_KERNEL_ZIMAGE=y
+> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-warp"
+> > +
+> > +# rootfs
+> > +BR2_TARGET_ROOTFS_EXT2=y
+> > +BR2_TARGET_ROOTFS_EXT2_4=y
+> > +BR2_TARGET_ROOTFS_TAR_BZIP2=y
+>
+>  We generally don't make a tarball at all, since the ext4 is enough.
+>
+> > +BR2_ROOTFS_OVERLAY="board/freescale/warpboard/rootfs_overlay"
+>
+>  Also this is missing. Why is an overlay needed to begin with?
+>
+> > +
+> > +# bootloader
+> > +BR2_TARGET_UBOOT=y
+> > +BR2_TARGET_UBOOT_VERSION="2015.04"
+>
+>  This can't be right, BR2_TARGET_UBOOT_VERSION is a hidden symbol. It should be:
+>
+> BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.04"
+>
+> > +BR2_TARGET_UBOOT_BOARDNAME="warp"
+> > +BR2_TARGET_UBOOT_FORMAT_IMX=y
+>
+
+I will fix that
+
+>
+>  We also usually add a readme.txt file with an explanation of how to put
+> everything on an SD card.
+>
+
+There is no sdcard port available on warpboard. The only way to flash it is to used dfu/imx_usb_loader.
+But you right, I will add in a README a process to flash the board.
+
+>  Regards,
+>  Arnout
 >
 
 Regards,
 Arthur.
 
-> > @@ -0,0 +1,40 @@
-> > +# bcm94330wlsdgb.txt
-> > +manfid=0x2d0
-> > +prodid=0x0552
-> > +vendid=0x14e4
-> > +devid=0x4360
-> > +boardtype=0x0552
-> > +boardrev=0x11
-> > +# this design has 2.4GHz SP3T switch
-> > +boardflags=0x00080200
-> > +nocrc=1
-> > +xtalfreq=37400
-> > +boardnum=22
-> > +macaddr=00:90:4c:c5:12:38
-> > +ag0=255
-> > +aa2g=1
-> > +ccode=CN
-> > +pa0b0=0x14d0
-> > +pa0b1=0xfd98
-> > +pa0b2=0xff78
-> > +rssismf2g=0xa
-> > +rssismc2g=0x3
-> > +rssisav2g=0x7
-> > +maxp2ga0=0x50
-> > +sromrev=3
-> > +il0macaddr=00:90:4c:c5:12:38
-> > +wl0id=0x431b
-> > +cckPwrOffset=5
-> > +ofdm2gpo=0x66666666
-> > +mcs2gpo0=0x6666
-> > +mcs2gpo1=0x6666
-> > +swctrlmap_2g=0x04040404,0x02020202,0x02020404,0x10202,0x1ff
-> > +swctrlmap_5g=0x00100010,0x00280020,0x00200010,0x14202,0x2f8
-> > +rfreg033=0x19
-> > +rfreg033_cck=0x1f
-> > +dacrate2g=160
-> > +txalpfbyp2g=1
-> > +bphyscale=17
-> > +cckPwrIdxCorr=-15
-> > +pacalidx2g=45
-> > +txgaintbl=1
-> > --
-> > 1.9.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
 >
 > --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
