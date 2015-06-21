@@ -1,39 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Jun 2015 09:49:25 +0200
-Subject: [Buildroot] [PATCH v3 2/2] package/gpm: add hash file,
- change archive to lzma
-In-Reply-To: <1434409042-17117-2-git-send-email-petr.vorel@gmail.com>
-References: <1434409042-17117-1-git-send-email-petr.vorel@gmail.com>
- <1434409042-17117-2-git-send-email-petr.vorel@gmail.com>
-Message-ID: <20150621094925.5907411a@free-electrons.com>
+Date: Sun, 21 Jun 2015 09:50:00 +0200
+Subject: [Buildroot] [git commit] package/gdb: gdb+expat build fix
+Message-ID: <20150621075005.E46467FA69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Petr Vorel,
+commit: http://git.buildroot.net/buildroot/commit/?id=76e176a0752965410ab84598625cee48bd97d9cf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 16 Jun 2015 00:57:22 +0200, Petr Vorel wrote:
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Changes v3:
-> - use lzma, mainly as proof of concept of previous patch "pkg-generic:
->   support for lzma archives"
-> Changes v2:
-> - added missing hash file
-> - keep tar.bz2
-> ---
->  package/gpm/gpm.hash | 2 ++
->  package/gpm/gpm.mk   | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->  create mode 100644 package/gpm/gpm.hash
+Commit 23413b51b2308225584b65c2fcd800ca8f7c56af added --with-expat
+configure option and expat dependency when BR2_PACKAGE_EXPAT is
+configured.  When cross-compiling, gdb configure fails because the host
+system libexpat is referenced.
 
-Applied after adjusting the commit since a hash file for gpm has been
-added in the mean time. Thanks!
+Configuring gdb with
+	--with-libexpat-prefix=$(STAGING_DIR)/usr
+fixes the reference and allows gdb to build successfully.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Tested with arm-buildroot-linux-gnueabihf toolchain.
+
+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gdb/gdb.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 4b9a757..338de20 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -101,6 +101,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_EXPAT),y)
+ GDB_CONF_OPTS += --with-expat
++GDB_CONF_OPTS += --with-libexpat-prefix=$(STAGING_DIR)/usr
+ GDB_DEPENDENCIES += expat
+ else
+ GDB_CONF_OPTS += --without-expat
