@@ -1,37 +1,57 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Jun 2015 15:26:59 +0200
+Date: Sun, 21 Jun 2015 15:32:36 +0200
 Subject: [Buildroot] [PATCH 1/4] defconfig for warpboard
-In-Reply-To: <20150621010007.GD23827@arthur-debian>
+In-Reply-To: <20150621005619.GC23827@arthur-debian>
 References: <1434727794-9419-1-git-send-email-lambertarthur22@gmail.com>
- <55848E49.1030304@mind.be> <55849116.2030306@mind.be>
- <20150621010007.GD23827@arthur-debian>
-Message-ID: <5586BBA3.1020509@mind.be>
+ <55848E49.1030304@mind.be> <20150621005619.GC23827@arthur-debian>
+Message-ID: <5586BCF4.4070405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/21/15 03:00, Arthur LAMBERT wrote:
-> Le Saturday 20 Jun 2015 ?? 00:00:54 (+0200), Arnout Vandecappelle a ?crit :
->> On 06/19/15 23:48, Arnout Vandecappelle wrote:
->>>> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->>>>> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/warpboard/linux-4.0.config"
->>>  You forgot to include this file in the patch. Please make sure that it's a
->>> defconfig, not a full config.
->>>
+On 06/21/15 02:56, Arthur LAMBERT wrote:
+> Le Friday 19 Jun 2015 ?? 23:48:57 (+0200), Arnout Vandecappelle a ?crit :
+>> On 06/19/15 17:29, Arthur LAMBERT wrote:
+[snip]
+>>> +BR2_LINUX_KERNEL_PATCH="board/freescale/warpboard/linux/"
+>>> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>>> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/warpboard/linux-4.0.config"
 >>
->>  Actually, is there a reason not to use the mxs_defconfig?
+>>  You forgot to include this file in the patch. Please make sure that it's a
+>> defconfig, not a full config.
 >>
 > 
-> I have a reason but I don't know if it is a good reason. mxs_defconfig does not provide configuration for bluetooth/wifi.
-> Is it enough to use a custom kernel config or do you prefer to keep the mxs defconfig for kernel tree ?
+> This file is present later in a different email.
+> git send email command send a mail per commit. Do I use the good process to provide my patch ? Do you prefer to put all the patch in the same email ?
 
- That's a good enough reason. Mention it in the commit message though.
+ Yes, you should use 'git rebase -i origin/master' to rebase your changes on top
+of the buildroot master, and then squash everything into a single commit. For
+this case, I don't see a reason to split it into separate commits.
+
+ Remember to add a changelog to the commit message, like so:
+
+...
+Signed-off-by: ...
+---
+Changes v2: ....
+
+
+[snip]
+
+>>  We also usually add a readme.txt file with an explanation of how to put
+>> everything on an SD card.
+>>
+> 
+> There is no sdcard port available on warpboard. The only way to flash it is to used dfu/imx_usb_loader.
+> But you right, I will add in a README a process to flash the board.
+
+ In that case, it's definitely important to have a readme file. And you probably
+also want to add BR2_PACKAGE_HOST_IMX_USB_LOADER=y to the defconfig.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
