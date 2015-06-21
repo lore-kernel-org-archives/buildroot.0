@@ -1,29 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Jun 2015 06:41:14 +0200
-Subject: [Buildroot] [PATCH 09/10] weston: bump to version 1.8.0
-In-Reply-To: <1434645970-31995-4-git-send-email-Vincent.Riera@imgtec.com>
-References: <1434645970-31995-1-git-send-email-Vincent.Riera@imgtec.com>
- <1434645970-31995-4-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150621064114.32d9c759@free-electrons.com>
+Date: Sun, 21 Jun 2015 06:42:33 +0200
+Subject: [Buildroot] [V2 1/4] sunxi-board: bump to version
+ a6a4e94066f4ec6b26fc7060dc453a6bcf26a504
+In-Reply-To: <1434741204-3988-2-git-send-email-francois.perrad@gadz.org>
+References: <1434741204-3988-1-git-send-email-francois.perrad@gadz.org>
+ <1434741204-3988-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150621064233.12109e02@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Francois Perrad,
 
-On Thu, 18 Jun 2015 18:46:09 +0200, Vicente Olivert Riera wrote:
-> - Bump to version 1.8.0
-> - Update hash file
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Fri, 19 Jun 2015 21:13:21 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/weston/weston.hash | 4 ++--
->  package/weston/weston.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/sunxi-boards/sunxi-boards.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks.
+Applied, thanks. I fixed the commit title so that the package name is
+correct: it's sunxi-boards, not sunxi-board.
+
+Thanks!
 
 Thomas
 -- 
