@@ -1,53 +1,67 @@
-From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
-Date: Sun, 21 Jun 2015 16:07:59 +0200
-Subject: [Buildroot] [PATCH 1/2] openssl: support building the binary
- without MMU
-In-Reply-To: <5586AF6B.6020304@mind.be>
-References: <1434711274-49716-1-git-send-email-benoit@wsystem.com>
- <20150621064540.534ebebc@free-electrons.com> <5586AF6B.6020304@mind.be>
-Message-ID: <CA+sos799wxw7gBHq9GsFVRNTq8YhsQnJQE94Eth8711vDu9DKQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 21 Jun 2015 21:23:27 +0200
+Subject: [Buildroot] CMake and VERBOSE variable
+In-Reply-To: <0d88f0bd848eeb62c868dc2d5dffe496@openmailbox.org>
+References: <9943347198fceae1227501e1d00f818a@openmailbox.org>
+ <5578B394.1010503@mind.be> <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
+ <5579E9EF.4070402@mind.be> <0d88f0bd848eeb62c868dc2d5dffe496@openmailbox.org>
+Message-ID: <55870F2F.4080700@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle, Thomas Petazzoni,
-
-On Sun, Jun 21, 2015 at 2:34 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 06/21/15 06:45, Thomas Petazzoni wrote:
->> Dear Beno?t Th?baudeau,
+On 06/18/15 10:29, C?dric Marie wrote:
+> Hi,
+> 
+> Le 2015-06-11 22:05, Arnout Vandecappelle a ?crit :
+>>  A quick review of a few typical packages (linux, busybox, uClibc, u-boot,
+>> autotools-baed) only turns up uClibc that has a not-very-well documented use of
+>> VERBOSE. So perhaps we should just revert Bernhard's patch and completely remove
+>> VERBOSE.
 >>
->> On Fri, 19 Jun 2015 12:54:33 +0200, Beno?t Th?baudeau wrote:
->>> The commit 720893b62510438237b9923d744dd079ddb4f67d "openssl: disable
->>> apps for NOMMU" prevented the openssl binary from being built without
->>> MMU in order to fix a build failure without fork(). However, openssl is
->>> designed to support the lack of fork() with -DHAVE_FORK=0, so allow the
->>> openssl binary to be enabled without MMU thanks to this option.
->>>
->>> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+>>  Peter?
 >>
->> Hum. But then it means that we have propagated the MMU dependency to
->> all reverse dependencies of openssl (i.e packages that depend on
->> openssl), but they may no longer need this dependency anymore.
->
->  This is only about BR2_PACKAGE_OPENSSL_BIN, which is not selected by any package.
+>>  In fact, the export of quiet Q KBUILD_VERBOSE comes directly from the kernel
+>> (another commit from Bernhard, log "adjust infrastructure for new kconfig"). But
+>> of course, in the kernel the build system has complete control over what will be
+>> called with this stuff in the environment. For us that's a lot more complicated.
+>> So I think we should get rid of all these exports, and leave it up to individual
+>> packages to do that. Only V is something that is really generally used I think.
+> 
+> 
+> Indeed, all these settings are done the same way in the root Makefile of the
+> kernel.
+> Since KBUILD_VERBOSE doesn't seem to be used anywhere else in Buildroot (not
+> even in support/kconfig), I also tend to think that this could be removed.
+> 
+> What should we do next?
+> I'm not familiar enough with all these verbose settings, and also with the
+> kernel, to be able to check that we're not breaking anything when removing them.
+> Should I first send a patch that moves the export in the right place that you
+> have suggested?
+> Or wait for a cleaning of all these exports?
 
-It's indeed only about the binary, not about the library.
 
->> There is a fairly huge list of packages that "select
->> BR2_PACKAGE_OPENSSL". How can we find out which ones will now build
->> fine without MMU support ?
->>
->> By the way, do you have a specific need for openssl on no-MMU
->> platforms? If so, on which platform? We don't have many no-MMU users,
->> so it's good when they speak up :-)
+ I propose to do it in two patches:
 
-Actually, no. To make the full story short, I was comparing Buildroot
-2011.08 to the current master, and I noticed that openssl.cnf and some
-other files had disappeared in the built target files (see 2/2), and
-the investigation led me to the commit
-720893b62510438237b9923d744dd079ddb4f67d, which led to 1/2 here.
+- a first patch that removes the export of VERBOSE, with the commit log
+explaining how it breaks cmake projects;
 
-Best regards,
-Beno?t
+- a second patch that removes the export of all the rest, with the commit log
+explaining that there is no reason to export it and that it was just inherited
+from Kbuild.
+
+ Can you do that?
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
