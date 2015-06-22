@@ -1,60 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Jun 2015 18:19:50 +0200
-Subject: [Buildroot] [git commit] linux-headers: add 4.1.x series
-Message-ID: <20150622162014.549B1800FE@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 22 Jun 2015 18:22:06 +0200
+Subject: [Buildroot] [PATCH v3] package/i2c-tools: bump to version 3.1.2
+Message-ID: <1434990126-2630-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3f8bd6be9f63ff415da67646dd858faef4a92fe0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This patch bumps version to 3.1.2 and adds support for the recently
+introduced python3 support for py-smbus.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/linux-headers/Config.in.host |   11 ++++++++++-
- 1 files changed, 10 insertions(+), 1 deletions(-)
+Changes:
+ * v1->v2: changed ifeq construct to a more appropriate one.
+ * v2->v3: updated I2C_TOOLS_SOURCE to a more reliable ulr.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 9bad7f0..059075c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -5,7 +5,7 @@ comment "Kernel Header Options"
+ package/i2c-tools/i2c-tools.hash |  2 +-
+ package/i2c-tools/i2c-tools.mk   | 15 +++++++++++----
+ 2 files changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
+index a6c376f..c12ffe8 100644
+--- a/package/i2c-tools/i2c-tools.hash
++++ b/package/i2c-tools/i2c-tools.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256	14d4d7d60d1c12e43f2befe239c682a5c44c27682f153d4b58c1e392d2db1700  i2c-tools-3.1.1.tar.bz2
++sha256	db5e69f2e2a6e3aa2ecdfe6a5f490b149c504468770f58921c8c5b8a7860a441  i2c-tools-3.1.2.tar.bz2
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index 6c156ca..762169a 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -4,16 +4,23 @@
+ #
+ ################################################################################
  
- choice
- 	prompt "Kernel Headers"
--	default BR2_KERNEL_HEADERS_4_0
-+	default BR2_KERNEL_HEADERS_4_1
- 	help
- 	  Select the version of kernel header files you wish to use.
- 	  You must select the correct set of header files to match
-@@ -86,6 +86,10 @@ choice
- 		bool "Linux 4.0.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+-I2C_TOOLS_VERSION = 3.1.1
++I2C_TOOLS_VERSION = 3.1.2
+ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+-I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
++I2C_TOOLS_SITE = http://jdelvare.nerim.net/mirror/i2c-tools/
+ I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
+ I2C_TOOLS_LICENSE_FILES = COPYING
  
-+	config BR2_KERNEL_HEADERS_4_1
-+		bool "Linux 4.1.x kernel headers"
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
+-# Build/install steps mirror the distutil python package type in the python package
+-# infrastructure
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ I2C_TOOLS_DEPENDENCIES += python
++endif
 +
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
- endchoice
-@@ -107,6 +111,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1
-+	bool "4.1.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++I2C_TOOLS_DEPENDENCIES += python3
++endif
 +
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0
- 	bool "4.0.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-@@ -212,4 +220,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.18.15"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.5"		if BR2_KERNEL_HEADERS_4_0
-+	default "4.1"		if BR2_KERNEL_HEADERS_4_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
++# Build/install steps mirror the distutil python package type in the python package
++# infrastructure
++ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
+ # BASE_ENV taken from PKG_PYTHON_DISTUTILS_ENV in package/pkg-python.mk
+ I2C_TOOLS_PYTHON_BASE_ENV = \
+ 	$(PKG_PYTHON_DISTUTILS_ENV) \
+-- 
+1.9.1
