@@ -1,54 +1,51 @@
-From: George Redivo <george.redivo@datacom.ind.br>
-Date: Mon, 22 Jun 2015 14:58:59 -0300
-Subject: [Buildroot] [PATCH 1/1] protobuf: bump version to 2.6.1
-Message-ID: <1434995939-8236-1-git-send-email-george.redivo@datacom.ind.br>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 22 Jun 2015 20:59:31 +0200
+Subject: [Buildroot] [PATCH] package/pinentry: fix build with Qt4
+Message-ID: <1434999571-763-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Adds powerpc architecture support
+Help configure find the correct moc, as the comment in m4/qt.m4 states:
 
-Signed-off-by: George Redivo <george.redivo@datacom.ind.br>
+    #configure tried to run $ac_cv_path_moc and the test didn't
+    #succeed. If configure shouldn't have tried this one, set
+    #the environment variable MOC to the right one before running
+    #configure.
+
+Fixes:
+    http://autobuild.buildroot.org/results/06c/06c5c2762ec22271fec20a6d15548011e40875d1
+    http://autobuild.buildroot.org/results/0d7/0d78a2ff8c952cd104794f5049b07216978fdf11
+    http://autobuild.buildroot.org/results/af8/af8f7f588dfa64d82c98a4b42ec78fd17dde137c
+
+Also fixes using the host moc:
+    http://autobuild.buildroot.org/results/836/836962f23dcad77b145fcdfeffb40e38e64d6971
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+
 ---
- package/protobuf/Config.in   | 5 ++---
- package/protobuf/protobuf.mk | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+Peter, your autobuilder gcc10 has a host moc installed, which is making
+the build 836962f above configure fine, but break at build time (because
+it is a different version?).
+---
+ package/pinentry/pinentry.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index bbb927f..d112d4e 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -3,8 +3,7 @@ config BR2_PACKAGE_PROTOBUF
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# See src/google/protobuf/stubs/platform_macros.h for supported archs.
--	# PowerPC doesn't actually work.
--	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-+	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 || BR2_powerpc
- 	# host-protobuf only builds on certain architectures
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	help
-@@ -15,5 +14,5 @@ config BR2_PACKAGE_PROTOBUF
- 
- comment "protobuf needs a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-+	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 || BR2_powerpc
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 0426fce..144e5fb 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROTOBUF_VERSION = v2.5.0
-+PROTOBUF_VERSION = v2.6.1
- PROTOBUF_SITE = $(call github,google,protobuf,$(PROTOBUF_VERSION))
- PROTOBUF_LICENSE = BSD-3c
- PROTOBUF_LICENSE_FILES = COPYING.txt
+diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
+index e8db342..d3e6b7a 100644
+--- a/package/pinentry/pinentry.mk
++++ b/package/pinentry/pinentry.mk
+@@ -39,7 +39,7 @@ endif
+ ifeq ($(BR2_PACKAGE_PINENTRY_QT4),y)
+ # -pthread needs to be passed for certain toolchains
+ # http://autobuild.buildroot.net/results/6be/6be109ccedec603a67cebdb31b55865dcce0e128/
+-PINENTRY_CONF_OPTS += LIBS=-pthread
++PINENTRY_CONF_OPTS += LIBS=-pthread MOC=$(HOST_DIR)/usr/bin/moc
+ PINENTRY_CONF_OPTS += --enable-pinentry-qt4
+ PINENTRY_DEPENDENCIES += qt
+ else
 -- 
 1.9.1
