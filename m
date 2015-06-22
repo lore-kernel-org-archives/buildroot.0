@@ -1,32 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Jun 2015 15:56:44 +0200
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 22 Jun 2015 16:03:32 +0200
 Subject: [Buildroot] [PATCH] openvmtools: fix legal info
-In-Reply-To: <1434885903-22713-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <5586A95F.4010501@zacarias.com.ar>
 References: <1434885903-22713-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150622155644.36d5a310@free-electrons.com>
+ <CABbD_XDeC4jX6bS7wtjRpXoSNv6VSLTywhyJEx5K+gQw7-XSUg@mail.gmail.com>
+ <5586A95F.4010501@zacarias.com.ar>
+Message-ID: <558815B4.5010208@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Gustavo,
 
-On Sun, 21 Jun 2015 08:25:03 -0300, Gustavo Zacarias wrote:
-> In ab71dff0 it was moved to SUBDIR, but this was never reflected for the
-> legal-info files, update this to fix:
-> http://autobuild.buildroot.net/results/836/8363943cc9c967713f585209408ea087a052a12d/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/openvmtools/openvmtools.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Gustavo Zacarias wrote:
+>
+>
+> On 21/06/15 09:05, K?roly Kasza wrote:
+>
+>> Hi Gustavo, all,
+>>
+>> sorry, I missed this one.
+>
+> Hi all.
+> I wonder if it wouldn't be better to just use subdir in the legal info,
 
-Applied after adjusting the variable order, as suggested by Yann.
-Thanks!
+Looks like a good idea, but...
 
-Thomas
+> i don't think there's any package using/needing to fetch the files
+> outside of it.
+
+...we have them! :( Here's a couple examples:
+
+$ git grep -E '_(LICENSE_FILES|SUBDIR) =' -- package/samba 
+package/berkeleydb/
+package/berkeleydb/berkeleydb.mk:BERKELEYDB_SUBDIR = build_unix
+package/berkeleydb/berkeleydb.mk:BERKELEYDB_LICENSE_FILES = LICENSE
+package/samba/samba.mk:SAMBA_SUBDIR = source3
+package/samba/samba.mk:SAMBA_LICENSE_FILES = COPYING
+$
+
+Setting SAMBA_LICENSE_FILES to ../COPYING does not look very nice to me.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Luca
