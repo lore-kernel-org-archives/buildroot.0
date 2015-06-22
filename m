@@ -1,43 +1,47 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 22 Jun 2015 16:21:13 -0500
-Subject: [Buildroot] [PATCH 1/1] protobuf: bump version to 2.6.1
-In-Reply-To: <1434995939-8236-1-git-send-email-george.redivo@datacom.ind.br>
-References: <1434995939-8236-1-git-send-email-george.redivo@datacom.ind.br>
-Message-ID: <CANQCQpYy-kuZLfMjO0YrX8Kfa25eLUa09U-NUyOSQjxE0vq5WA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 22 Jun 2015 23:22:53 +0200
+Subject: [Buildroot] [V2 3/4] A20-OLinuXino-Lime: new board (mainline)
+In-Reply-To: <5587FE59.8070607@lucaceresoli.net>
+References: <1434741204-3988-1-git-send-email-francois.perrad@gadz.org>
+ <1434741204-3988-4-git-send-email-francois.perrad@gadz.org>
+ <55848050.8010904@mind.be> <5587FE59.8070607@lucaceresoli.net>
+Message-ID: <55887CAD.20808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-George,
+On 06/22/15 14:23, Luca Ceresoli wrote:
+> Dear Arnout,
+> 
+> Arnout Vandecappelle wrote:
+>> On 06/19/15 21:13, Francois Perrad wrote:
+>>> config device tree / mainline (4.0.5)
+>>>
+>>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>>
+>>   Just some minor documentation fixes... With that:
+>>
+>>    Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> Looks like your tag has not been picked up by patchwork (ART=0/0/1).
+> Maybe leading spaces are not taken into account?
 
-On Mon, Jun 22, 2015 at 12:58 PM, George Redivo <
-george.redivo@datacom.ind.br> wrote:
+ Indeed. That's intentional, because I didn't want to add the tag to the patch
+as is, but I wanted to signal to Francois that he can add the tag after making
+the requested changes.
 
-> * Adds powerpc architecture support
->
+ Regards,
+ Arnout
 
-FYI, there is an old email thread related to a previous attempt at bumping
-where any compiler older then GCC4.7 has build issues with atomics.
-http://lists.busybox.net/pipermail/buildroot/2014-October/110418.html
+[snip]
 
-There was also some discussion at one of the previous Buildroot developer
-meetings about the direction suggested  for handling this case.  I was
-leaning towards just restricting based on toolchain version.....
-
-Thanks,
 
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure
-Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted Third
-Party Intellectual Property (TPIP) content must be encrypted and sent to
-matthew.weber at corp.rockwellcollins.com.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150622/376f0f4c/attachment.html>
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
