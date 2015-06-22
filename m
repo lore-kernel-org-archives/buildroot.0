@@ -1,141 +1,737 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 22 Jun 2015 16:39:12 +0200
-Subject: [Buildroot] [V3 2/2] A20-OLinuXino-Lime: new board (mali)
-In-Reply-To: <1434983952-7662-1-git-send-email-francois.perrad@gadz.org>
-References: <1434983952-7662-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1434983952-7662-3-git-send-email-francois.perrad@gadz.org>
+From: Arthur LAMBERT <lambertarthur22@gmail.com>
+Date: Mon, 22 Jun 2015 17:46:58 +0200
+Subject: [Buildroot] [PATCH v2 1/1] board: add support for Warpboard
+Message-ID: <1434988018-16391-1-git-send-email-lambertarthur22@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-config mali / sunxi
+This is a set of patch to add support for warpboard (Freescale board based on imx6sl)
+The patch contains :
+  - defconfig for warpboard
+  - kernel defconfig due to specific need for bluetooth/wifi
+  - linux patch from Fabio Estevam to fix device tree due to last change on warpboard schematics (rev 1.12)
+  - specific firmware file for warpboard bluetooth (nvram : brcmfmac4330-sdio.txt)
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Changes v1 -> v2:
+  - add specific kernel headers
+  - use wget download rather than git download for kernel
+  - fix version symbol for uboot
+  - add imx_usb_loader host utility
+  - remove bin firmware file and enable linux-firmware package instead
+  - fix command to enable bluetooth and fix protocol for hci in custom kernel config
+
+Signed-off-by: Arthur LAMBERT <lambertarthur22@gmail.com>
 ---
- board/olimex/a20_olinuxino_lime/boot-mali.cmd    |  5 +++
- board/olimex/a20_olinuxino_lime/post-build.sh    |  4 ++
- board/olimex/a20_olinuxino_lime/readme.txt       | 16 +++++++-
- configs/olimex_a20_olinuxino_lime_mali_defconfig | 47 ++++++++++++++++++++++++
- 4 files changed, 71 insertions(+), 1 deletion(-)
- create mode 100644 board/olimex/a20_olinuxino_lime/boot-mali.cmd
- create mode 100644 configs/olimex_a20_olinuxino_lime_mali_defconfig
+ board/freescale/warpboard/README                   |  50 ++++
+ board/freescale/warpboard/linux-4.0.config         | 278 +++++++++++++++++++++
+ .../linux/linux-001-add-sdm-firmware.patch         | 145 +++++++++++
+ .../linux/linux-002-replace-uart2-by-uart5.patch   | 103 ++++++++
+ .../lib/firmware/brcm/brcmfmac4330-sdio.txt        |  40 +++
+ configs/warpboard_defconfig                        |  42 ++++
+ 6 files changed, 658 insertions(+)
+ create mode 100644 board/freescale/warpboard/README
+ create mode 100644 board/freescale/warpboard/linux-4.0.config
+ create mode 100644 board/freescale/warpboard/linux/linux-001-add-sdm-firmware.patch
+ create mode 100644 board/freescale/warpboard/linux/linux-002-replace-uart2-by-uart5.patch
+ create mode 100644 board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+ create mode 100644 configs/warpboard_defconfig
 
-diff --git a/board/olimex/a20_olinuxino_lime/boot-mali.cmd b/board/olimex/a20_olinuxino_lime/boot-mali.cmd
+diff --git a/board/freescale/warpboard/README b/board/freescale/warpboard/README
 new file mode 100644
-index 0000000..4e3cdc7
+index 0000000..d21ab48
 --- /dev/null
-+++ b/board/olimex/a20_olinuxino_lime/boot-mali.cmd
-@@ -0,0 +1,5 @@
-+setenv bootm_boot_mode sec
-+setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
-+ext4load mmc 0 0x43000000 /boot/script.bin
-+ext4load mmc 0 0x48000000 /boot/zImage
-+bootz 0x48000000
-diff --git a/board/olimex/a20_olinuxino_lime/post-build.sh b/board/olimex/a20_olinuxino_lime/post-build.sh
-index 4e6fbec..ac8d4df 100755
---- a/board/olimex/a20_olinuxino_lime/post-build.sh
-+++ b/board/olimex/a20_olinuxino_lime/post-build.sh
-@@ -6,3 +6,7 @@
- MKIMAGE=$HOST_DIR/usr/bin/mkimage
- 
- $MKIMAGE -A arm -O linux -T script -C none -d $2 $3/boot.scr
++++ b/board/freescale/warpboard/README
+@@ -0,0 +1,50 @@
++Build
++=====
 +
-+if [ -e $BINARIES_DIR/script.bin ]; then
-+	cp $BINARIES_DIR/script.bin $3/script.bin
-+fi
-diff --git a/board/olimex/a20_olinuxino_lime/readme.txt b/board/olimex/a20_olinuxino_lime/readme.txt
-index 3fc9c02..92ee24a 100644
---- a/board/olimex/a20_olinuxino_lime/readme.txt
-+++ b/board/olimex/a20_olinuxino_lime/readme.txt
-@@ -6,11 +6,24 @@ Intro
- This is a open hardware board,
- see https://www.olimex.com/Products/OLinuXino/open-source-hardware
- 
-+The legacy linux-sunxi kernels are based on the vendor code drops.
-+It is only useful when accelerated 3D graphics and multimedia support
-+is strictly necessary.
++First, configure Buildroot for your WarpBoard.
++  make warpboard_defconfig
 +
-+The Mainline Kernel is already a much better choice for a headless server.
-+And also the mainline kernel works fine even for a basic Linux desktop
-+system running on top of a simple framebuffer, which may be good enough for
-+the users who do not need fancy 3D graphics or video playback acceleration.
++Build all components:
++  make
 +
- How to build it
- ===============
- 
-     $ make olimex_a20_olinuxino_lime_defconfig
- 
-+or
++You will find in ./output/images/ the following files:
++  - imx6sl-warp.dtb
++  - rootfs.ext2
++  - rootfs.tar
++  - u-boot.imx
++  - zImage
 +
-+    $ make olimex_a20_olinuxino_lime_mali_defconfig
++Update uboot
++============
 +
- Compile everything and build the rootfs image:
- 
-     $ make
-@@ -23,7 +36,8 @@ After building, you should get a tree like this:
-     output/images/
-     +-- rootfs.ext2
-     +-- rootfs.ext4 -> rootfs.ext2
--    +-- sun7i-a20-olinuxino-lime.dtb
-+    +-- script.bin (mali)
-+    +-- sun7i-a20-olinuxino-lime.dtb (mainline)
-     +-- u-boot.bin
-     +-- u-boot-sunxi-with-spl.bin
-     `-- zImage
-diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
++You will find a process written by by Fabio Estevam available in freescale repository on github :
++https://raw.githubusercontent.com/Freescale/u-boot-fslc/patches-2015.04/board/warp/README by Fabio Estevam
++
++Update linux & rootfs
++=====================
++
++Use ums command from uboot prompt to mount emmc as mass storage and update zImage, device tree and rootfs file
++=> ums 0 mmc 0
++
++Fast way to update kernel image
++===============================
++
++- Get new zImage and dtb file on the board by using scp through usb0
++-  Copy zImage, device tree file in boot partition :
++  mkdir kernel
++  mount -t vfat /dev/mmcblk0p1 kernel
++  cp zImage  kernel/.
++  cp imx6sl-warp.dtb  kernel/.
++  sync
++  umount kernel
++  rm -r kernel
++
++Enable bluetooth
++================
++hciattach /dev/ttymxc4 any
++hciconfig hci0 up
++
++Enable Wifi
++==========
++modprobe brcmfmac
++ifconfig wlan0 up
+diff --git a/board/freescale/warpboard/linux-4.0.config b/board/freescale/warpboard/linux-4.0.config
 new file mode 100644
-index 0000000..a515ded
+index 0000000..d5919af
 --- /dev/null
-+++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-@@ -0,0 +1,47 @@
-+# Architecture
++++ b/board/freescale/warpboard/linux-4.0.config
+@@ -0,0 +1,278 @@
++CONFIG_KERNEL_LZO=y
++CONFIG_SYSVIPC=y
++CONFIG_FHANDLE=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_RCU_FANOUT=32
++CONFIG_LOG_BUF_SHIFT=18
++CONFIG_CGROUPS=y
++CONFIG_RELAY=y
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_EXPERT=y
++# CONFIG_SGETMASK_SYSCALL is not set
++# CONFIG_SLUB_DEBUG is not set
++# CONFIG_COMPAT_BRK is not set
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODVERSIONS=y
++CONFIG_MODULE_SRCVERSION_ALL=y
++# CONFIG_BLK_DEV_BSG is not set
++CONFIG_SMP=y
++CONFIG_NR_CPUS=4
++# CONFIG_SCHED_MC is not set
++CONFIG_PREEMPT_VOLUNTARY=y
++CONFIG_CMA=y
++# CONFIG_SECCOMP is not set
++CONFIG_HZ_100=y
++CONFIG_PM_DEBUG=y
++CONFIG_PM_TEST_SUSPEND=y
++CONFIG_CPU_FREQ=y
++CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
++CONFIG_PCIEPORTBUS=y
++CONFIG_BINFMT_MISC=m
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_LRO is not set
++CONFIG_IPV6=y
++CONFIG_NETFILTER=y
++CONFIG_CAN=y
++CONFIG_BT=y
++CONFIG_BT_RFCOMM=y
++CONFIG_BT_HCIUART=y
++CONFIG_BT_HCIUART_H4=y
++CONFIG_CFG80211=y
++CONFIG_MAC80211=y
++CONFIG_RFKILL=y
++CONFIG_RFKILL_INPUT=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++# CONFIG_STANDALONE is not set
++CONFIG_DMA_CMA=y
++CONFIG_CMA_SIZE_MBYTES=16
++CONFIG_CONNECTOR=y
++CONFIG_MTD=y
++CONFIG_MTD_CMDLINE_PARTS=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_CFI=y
++CONFIG_MTD_JEDECPROBE=y
++CONFIG_MTD_CFI_INTELEXT=y
++CONFIG_MTD_CFI_AMDSTD=y
++CONFIG_MTD_CFI_STAA=y
++CONFIG_MTD_DATAFLASH=y
++CONFIG_MTD_M25P80=y
++CONFIG_MTD_SST25L=y
++CONFIG_MTD_NAND=y
++CONFIG_MTD_SPI_NOR=y
++CONFIG_MTD_UBI=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_SIZE=65536
++CONFIG_SRAM=y
++CONFIG_EEPROM_AT24=y
++CONFIG_EEPROM_AT25=y
++# CONFIG_SCSI_PROC_FS is not set
++CONFIG_BLK_DEV_SD=y
++CONFIG_SCSI_CONSTANTS=y
++CONFIG_SCSI_LOGGING=y
++CONFIG_SCSI_SCAN_ASYNC=y
++# CONFIG_SCSI_LOWLEVEL is not set
++CONFIG_ATA=y
++CONFIG_SATA_AHCI_PLATFORM=y
++CONFIG_NETDEVICES=y
++# CONFIG_NET_VENDOR_BROADCOM is not set
++# CONFIG_NET_VENDOR_INTEL is not set
++# CONFIG_NET_VENDOR_MARVELL is not set
++# CONFIG_NET_VENDOR_MICREL is not set
++# CONFIG_NET_VENDOR_MICROCHIP is not set
++# CONFIG_NET_VENDOR_NATSEMI is not set
++# CONFIG_NET_VENDOR_SEEQ is not set
++CONFIG_SMSC911X=y
++# CONFIG_NET_VENDOR_STMICRO is not set
++CONFIG_AT803X_PHY=y
++CONFIG_USB_PEGASUS=m
++CONFIG_USB_RTL8150=m
++CONFIG_USB_RTL8152=m
++CONFIG_USB_USBNET=m
++CONFIG_USB_NET_CDC_EEM=m
++CONFIG_BRCMFMAC=m
++CONFIG_INPUT_MATRIXKMAP=y
++# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
++CONFIG_INPUT_EVDEV=y
++CONFIG_INPUT_EVBUG=m
++CONFIG_KEYBOARD_GPIO=y
++CONFIG_MOUSE_PS2=m
++CONFIG_MOUSE_PS2_ELANTECH=y
++CONFIG_INPUT_TOUCHSCREEN=y
++CONFIG_TOUCHSCREEN_MC13783=y
++CONFIG_TOUCHSCREEN_TSC2007=y
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_MMA8450=y
++CONFIG_SERIO_SERPORT=m
++# CONFIG_LEGACY_PTYS is not set
++# CONFIG_DEVKMEM is not set
++CONFIG_SERIAL_FSL_LPUART=y
++CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
++CONFIG_HW_RANDOM=y
++# CONFIG_I2C_COMPAT is not set
++CONFIG_I2C_CHARDEV=y
++# CONFIG_I2C_HELPER_AUTO is not set
++CONFIG_I2C_ALGOPCF=m
++CONFIG_I2C_ALGOPCA=m
++CONFIG_SPI=y
++CONFIG_SPI_BITBANG=y
++CONFIG_SPI_SPIDEV=y
++CONFIG_PTP_1588_CLOCK=y
++CONFIG_GPIOLIB=y
++CONFIG_GPIO_SYSFS=y
++CONFIG_POWER_RESET=y
++CONFIG_SENSORS_GPIO_FAN=y
++CONFIG_WATCHDOG=y
++CONFIG_WATCHDOG_CORE=y
++CONFIG_MFD_DA9052_I2C=y
++CONFIG_MFD_MC13XXX_SPI=y
++CONFIG_MFD_MC13XXX_I2C=y
++CONFIG_MFD_SYSCON=y
++CONFIG_REGULATOR=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_REGULATOR_ANATOP=y
++CONFIG_REGULATOR_DA9052=y
++CONFIG_REGULATOR_GPIO=y
++CONFIG_REGULATOR_MC13783=y
++CONFIG_REGULATOR_MC13892=y
++CONFIG_REGULATOR_PFUZE100=y
++CONFIG_MEDIA_SUPPORT=y
++CONFIG_MEDIA_CAMERA_SUPPORT=y
++CONFIG_MEDIA_RC_SUPPORT=y
++CONFIG_RC_DEVICES=y
++CONFIG_IR_GPIO_CIR=y
++CONFIG_MEDIA_USB_SUPPORT=y
++CONFIG_USB_VIDEO_CLASS=m
++CONFIG_V4L_PLATFORM_DRIVERS=y
++CONFIG_SOC_CAMERA=y
++CONFIG_V4L_MEM2MEM_DRIVERS=y
++CONFIG_SOC_CAMERA_OV2640=y
++CONFIG_DRM=y
++CONFIG_FB=y
++CONFIG_FB_MODE_HELPERS=y
++CONFIG_BACKLIGHT_LCD_SUPPORT=y
++CONFIG_LCD_CLASS_DEVICE=y
++CONFIG_LCD_L4F00242T03=y
++CONFIG_LCD_PLATFORM=y
++CONFIG_BACKLIGHT_CLASS_DEVICE=y
++CONFIG_BACKLIGHT_PWM=y
++CONFIG_BACKLIGHT_GPIO=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
++CONFIG_LOGO=y
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_USB_AUDIO=m
++CONFIG_SND_SOC=y
++CONFIG_SND_SOC_FSL_SAI=y
++CONFIG_SND_SOC_FSL_SSI=y
++CONFIG_SND_SOC_FSL_SPDIF=y
++CONFIG_SND_SOC_IMX_AUDMUX=y
++CONFIG_SND_SOC_SGTL5000=y
++CONFIG_SND_SOC_TLV320AIC23_I2C=y
++CONFIG_SND_SOC_TLV320AIC3X=y
++CONFIG_SND_SOC_WM8962=y
++CONFIG_SND_SIMPLE_CARD=y
++CONFIG_USB=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_CHIPIDEA=y
++CONFIG_USB_CHIPIDEA_UDC=y
++CONFIG_USB_CHIPIDEA_HOST=y
++CONFIG_USB_SERIAL=m
++CONFIG_USB_SERIAL_GENERIC=y
++CONFIG_USB_SERIAL_FTDI_SIO=m
++CONFIG_USB_SERIAL_OPTION=m
++CONFIG_USB_EHSET_TEST_FIXTURE=m
++CONFIG_NOP_USB_XCEIV=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_ETH=y
++CONFIG_MMC=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_PLTFM=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGERS=y
++CONFIG_LEDS_TRIGGER_TIMER=y
++CONFIG_LEDS_TRIGGER_ONESHOT=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_LEDS_TRIGGER_BACKLIGHT=y
++CONFIG_LEDS_TRIGGER_GPIO=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_INTF_DEV_UIE_EMUL=y
++CONFIG_RTC_DRV_DS1307=y
++CONFIG_RTC_DRV_ISL1208=y
++CONFIG_RTC_DRV_PCF8563=y
++# CONFIG_RTC_DRV_CMOS is not set
++CONFIG_RTC_DRV_MC13XXX=y
++CONFIG_DMADEVICES=y
++CONFIG_STAGING=y
++# CONFIG_IOMMU_SUPPORT is not set
++CONFIG_PWM=y
++CONFIG_RESET_CONTROLLER=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT2_FS_XATTR=y
++CONFIG_EXT2_FS_POSIX_ACL=y
++CONFIG_EXT2_FS_SECURITY=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++CONFIG_EXT3_FS_SECURITY=y
++CONFIG_EXT4_FS=y
++CONFIG_EXT4_FS_POSIX_ACL=y
++CONFIG_EXT4_FS_SECURITY=y
++CONFIG_QUOTA=y
++CONFIG_QUOTA_NETLINK_INTERFACE=y
++# CONFIG_PRINT_QUOTA_WARNING is not set
++CONFIG_AUTOFS4_FS=y
++CONFIG_FUSE_FS=y
++CONFIG_ISO9660_FS=m
++CONFIG_JOLIET=y
++CONFIG_ZISOFS=y
++CONFIG_UDF_FS=m
++CONFIG_MSDOS_FS=m
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS=y
++CONFIG_JFFS2_FS=y
++CONFIG_UBIFS_FS=y
++CONFIG_NFS_FS=y
++CONFIG_NFS_V3_ACL=y
++CONFIG_NFS_V4=y
++CONFIG_ROOT_NFS=y
++CONFIG_NLS_DEFAULT="cp437"
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ASCII=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_NLS_ISO8859_15=m
++CONFIG_NLS_UTF8=y
++CONFIG_PRINTK_TIME=y
++CONFIG_FRAME_WARN=1024
++# CONFIG_UNUSED_SYMBOLS is not set
++CONFIG_DEBUG_FS=y
++CONFIG_MAGIC_SYSRQ=y
++# CONFIG_SCHED_DEBUG is not set
++CONFIG_PROVE_LOCKING=y
++# CONFIG_DEBUG_BUGVERBOSE is not set
++# CONFIG_FTRACE is not set
++CONFIG_SECURITYFS=y
++# CONFIG_CRYPTO_ANSI_CPRNG is not set
++# CONFIG_CRYPTO_HW is not set
++# CONFIG_VIRTUALIZATION is not set
++CONFIG_CRC_CCITT=m
++CONFIG_CRC_T10DIF=y
++CONFIG_CRC7=m
++CONFIG_LIBCRC32C=m
++CONFIG_FONTS=y
++CONFIG_FONT_8x8=y
++CONFIG_FONT_8x16=y
+diff --git a/board/freescale/warpboard/linux/linux-001-add-sdm-firmware.patch b/board/freescale/warpboard/linux/linux-001-add-sdm-firmware.patch
+new file mode 100644
+index 0000000..d9706c1
+--- /dev/null
++++ b/board/freescale/warpboard/linux/linux-001-add-sdm-firmware.patch
+@@ -0,0 +1,145 @@
++diff -Naur linux-patches-4.0.old/firmware/imx/sdma/sdma-imx6q.bin.ihex linux-patches-4.0/firmware/imx/sdma/sdma-imx6q.bin.ihex
++--- linux-patches-4.0.old/firmware/imx/sdma/sdma-imx6q.bin.ihex	1970-01-01 01:00:00.000000000 +0100
+++++ linux-patches-4.0/firmware/imx/sdma/sdma-imx6q.bin.ihex	2015-04-07 11:25:07.315668667 +0200
++@@ -0,0 +1,130 @@
+++:1000000053444D4103000000010000001C000000AB
+++:1000100029000000C0000000480700008202000024
+++:10002000FFFFFFFF00000000FFFFFFFFFFFFFFFFDC
+++:10003000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD0
+++:10004000FFFFFFFFFFFFFFFFFA1900004B04000056
+++:10005000EB020000A8180000FFFFFFFF581A000085
+++:10006000FFFFFFFFC0030000FFFFFFFFFFFFFFFFD9
+++:10007000FFFFFFFFAB020000FFFFFFFF7B0300005D
+++:10008000FFFFFFFFFFFFFFFF4C0400006E040000B6
+++:10009000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF70
+++:1000A00000000000001800004F180000A619000012
+++:1000B000071B0000A21A00003E1B000000180000F1
+++:1000C000E3C1DB57F352016AFB52D36AFB521C1A9D
+++:1000D000C36AE8621102FF3A3008D002337C8F0015
+++:1000E000D500017D8D00A005EB5D7804037D7904CA
+++:1000F0001C7D207C7904157CEE566006057D096523
+++:10010000287E0A62267E28980A62237E0965217E5F
+++:1001100012051205AD02C86A1C7F03200048ED7C61
+++:10012000409802780962C86A3F98150002780A620E
+++:10013000C86A3F981500150002780B62C86A097CEE
+++:10014000DF6D077F0000EB55004D077DFAC1DB57DF
+++:1001500006980700CC680C6813C20AC20198D9C17E
+++:10016000E3C1DB57E35FE357F352216A8F00D50009
+++:10017000017D8D00A005EB5DFB567804037D7904BD
+++:100180002A7D317C7904207C700B1103EB53000F26
+++:100190006003057D0965377E0A62357E73980A62C1
+++:1001A000327E0965307E12051205AD026007027CC1
+++:1001B000065A7B98265A277F011F03200048E87CB7
+++:1001C000700B110313539C98150004780962065AAA
+++:1001D0000962265A9B981500150004780A62065A8F
+++:1001E0000A62265A9B9815001500150004780B62C8
+++:1001F000065A0B62265A077C0000EB55004D067D1F
+++:10020000FAC1E357569807000C6813C20AC2539804
+++:10021000700B110313536C07017CD9C1FB5E8A0676
+++:100220006B07017CD9C1F35EDB59D3588F011001F4
+++:100230000F398B003CC12B7DC05AC85B4EC1277C57
+++:1002400088038906E35CFF0D1105FF1DBC053E0711
+++:10025000004D187D700811007E07097D7D07027D25
+++:100260002852D398F852DB54BC02CC02097C7C079C
+++:10027000027D2852DC98F852D354BC02CC02097D8E
+++:100280000004CA988B00C052C85359C1D67D0002E1
+++:10029000BA98FF08BF007F07157D8804D500017D4F
+++:1002A0008D00A005EB5D8F0212021202FF3ADA0503
+++:1002B000027C3E070599A402DD02027D3E070599F6
+++:1002C0005E070599EB559805EB5DF352FB546A0701
+++:1002D000267D6C07017D42996B07577C6907047D79
+++:1002E0006807027D010E1C999358D600017D8E008F
+++:1002F0009355A005935DA00602780255045D1D7C10
+++:10030000004E087C6907037D0255177E2999045D1C
+++:10031000147F890693500048017D14998D9915002A
+++:1003200006780255045D4F070255245D2F07017CB6
+++:100330008D9917006F07017C012093559D000700E0
+++:1003400094D9E298D36C6907047D6807027D010E99
+++:1003500051999358D600017D8E009355A005935D69
+++:10036000A00602780255C86D0F7C004E087C690714
+++:10037000037D0255097E5E99C86D067F89069350FC
+++:100380000048017D49998D998799C36A6907047D61
+++:100390006807027D010E74999358D600017D8E0086
+++:1003A0009355A005935DA0060278C865045D0F7C97
+++:1003B000004E087C6907037DC865097E8199045D4C
+++:1003C000067F890693500048017D6C998D9993555D
+++:1003D0009D000700FF6C94D9E2980000E354EB55B0
+++:1003E000004D017CE298CA98E354EB55FF0A1102D4
+++:1003F000FF1A7F07027CA005A1999D008C05BA0514
+++:10040000A0051002BA04AD0454040600D9C1E3C12A
+++:10041000DB57F352056A8F00D500017D8D00A005E2
+++:10042000FB567804037D7904297D1F7C79042E7C9A
+++:10043000E35D700D1105ED55000F6007027D06525A
+++:10044000C2992652337E6005027D10021202096AAB
+++:100450002D7F1202096A2A7F1202096A277F011F73
+++:1004600003200048EA7CE355ED99150015001500BE
+++:10047000047806520B6A26520B6AEC991500150097
+++:10048000047806520A6A26520A6AEC991500047822
+++:100490000652096A2652096A097C286A077F000009
+++:1004A000DB57004D057DFAC1DB57AB9977C2540489
+++:1004B0000AC2A899E3C1DB57F352056AFB568E02C4
+++:1004C000941AC36AC8626902267D941EC36ED36EF5
+++:1004D000C8624802C86A9426981EC36EC8629826ED
+++:1004E000C36E60020E7D981EC36EC8626C02037DEF
+++:1004F0009826C36E3B9A4C02D36EC86A9826C36E88
+++:100500004B9AC8626E02017C459A096A1A7F0125DE
+++:10051000004D217D0C9AE36E8F00D805017D8D0082
+++:10052000C8626E02127D096A0C7F01250120F87CE9
+++:10053000DB57004D107D286A047F0000FAC1DB57AD
+++:10054000FE99070004620C6A489A286AFA7F0462DE
+++:100550007AC258045404FF081100FF18BC00CD00F3
+++:10056000017C3B9A286AED7F04627AC20AC2FB9939
+++:10057000D9C1E3C1DB57F352056AFB568E02941AC8
+++:10058000025269021D7D941E06524802065A9426A4
+++:10059000981E06524C02065A9826981E0652600271
+++:1005A0000A7C982606526E02237D096A1D7F01256A
+++:1005B000004D247D6D9A286A177F04627AC29E9A44
+++:1005C0008F00D805017D8D00A00506526E02107DBA
+++:1005D000096A0A7F0120F97C286A067F0000004D25
+++:1005E0000D7DFAC1DB575D9A070004620C6A9B9A85
+++:1005F000286AFA7F04627AC258045404286AF47F95
+++:100600000AC25A9AE6DADB57F352056AC7698F00C5
+++:10061000D500017D8D00A0057804037D79041C7D43
+++:10062000157C79041E7CEE56C862287E6006027D29
+++:1006300010021202096A227F1202096A1F7F120247
+++:10064000096A1C7F03200048EF7CD59A150015002D
+++:100650000278C8620B6AD49A15000278C8620A6AE6
+++:10066000D49A0278C862096A097C286A077F004D1B
+++:10067000077DD352010802580004A69A77C2540499
+++:10068000D352010802580104FEDAA39A700B110339
+++:100690001353DB5F0A07D3588B00FB5E3CC1157D0B
+++:1006A000C05AC85B4EC1117C8803F05DFF0D110577
+++:1006B000FF1DBC05004D047DFD9A0807DB5F0A079E
+++:1006C0008B00C352CB5359C1EC7D0002EE9A016EF0
+++:1006D0000B612F7E0B622D7E0B632B7E0C0D17049E
+++:1006E000170417049D04081DCC05017C0C0DD16A6C
+++:1006F000000F4207C86FDD6F1C7F8E009D000168F0
+++:100700000B67177ED56B04080278C86F1207117C3F
+++:100710000B670F7E04080278C86F12070A7CDD6F32
+++:10072000087FD169010FC86FDD6F037F01010004ED
+++:10073000139B0700FF680C680002139B83DBDB57E9
+++:10074000F352056AFB52C76A8F00D500017D8D0008
+++:10075000A0057804037D79041C7D157C79041E7C3A
+++:10076000EE56C862287E6006027D10021202096AF7
+++:10077000227F1202096A1F7F1202096A1C7F03206E
+++:100780000048EF7C729B150015000278C8620B6A66
+++:10079000719B15000278C8620A6A719B0278C86270
+++:1007A000096A097C286A077F004D077DD35201083A
+++:1007B00002580004429B77C25404D35201080258E5
+++:1007C00001049BDB3F9B700B11031353DB5F0A0794
+++:1007D000D3588B00FB5E3CC1157DC05AC85B4EC12F
+++:1007E000117C8803F05DFF0D1105FF1DBC05004D58
+++:1007F000047D9A9B0807DB5F0A078B00C352CB532B
+++:0808000059C1EC7D00028B9B45
+++:00000001FF
++diff -Naur linux-patches-4.0.old/firmware/Makefile linux-patches-4.0/firmware/Makefile
++--- linux-patches-4.0.old/firmware/Makefile	2015-04-07 11:20:57.243679386 +0200
+++++ linux-patches-4.0/firmware/Makefile	2015-04-07 11:24:04.655671353 +0200
++@@ -61,6 +61,7 @@
++ 				   radeon/RV770_pfp.bin radeon/RV770_me.bin \
++ 				   radeon/RV730_pfp.bin radeon/RV730_me.bin \
++ 				   radeon/RV710_pfp.bin radeon/RV710_me.bin
+++fw-shipped-$(CONFIG_IMX_SDMA) += imx/sdma/sdma-imx6q.bin
++ fw-shipped-$(CONFIG_DVB_AV7110) += av7110/bootcode.bin
++ fw-shipped-$(CONFIG_DVB_TTUSB_BUDGET) += ttusb-budget/dspbootcode.bin
++ fw-shipped-$(CONFIG_E100) += e100/d101m_ucode.bin e100/d101s_ucode.bin \
+diff --git a/board/freescale/warpboard/linux/linux-002-replace-uart2-by-uart5.patch b/board/freescale/warpboard/linux/linux-002-replace-uart2-by-uart5.patch
+new file mode 100644
+index 0000000..d742c24
+--- /dev/null
++++ b/board/freescale/warpboard/linux/linux-002-replace-uart2-by-uart5.patch
+@@ -0,0 +1,103 @@
++From: Fabio Estevam <fabio.estevam@freescale.com>
++Date: Fri, 29 May 2015 16:19:39 -0300
++Subject: [PATCH] ARM: dts: imx6sl-warp: Add changes for rev1.12
++
++Signed-off-by: Fabio Estevam <fabio.estevam@freescale.com>
++---
++ arch/arm/boot/dts/imx6sl-warp.dts | 32 +++++++++++++++++++-------------
++ 1 file changed, 19 insertions(+), 13 deletions(-)
++
++diff --git a/arch/arm/boot/dts/imx6sl-warp.dts b/arch/arm/boot/dts/imx6sl-warp.dts
++index 0da906b..bdfa82b 100644
++--- a/arch/arm/boot/dts/imx6sl-warp.dts
+++++ b/arch/arm/boot/dts/imx6sl-warp.dts
++@@ -61,7 +61,9 @@
++ 	usdhc3_pwrseq: usdhc3_pwrseq {
++ 		compatible = "mmc-pwrseq-simple";
++ 		reset-gpios = <&gpio4 5 GPIO_ACTIVE_LOW>, 	/* WL_REG_ON */
+++			      <&gpio4 7 GPIO_ACTIVE_LOW>, 	/* WL_HOSTWAKE */
++ 			      <&gpio3 25 GPIO_ACTIVE_LOW>, 	/* BT_REG_ON */
+++			      <&gpio3 27 GPIO_ACTIVE_LOW>,	/* BT_HOSTWAKE */
++ 			      <&gpio4 4 GPIO_ACTIVE_LOW>, 	/* BT_WAKE */
++ 			      <&gpio4 6 GPIO_ACTIVE_LOW>; 	/* BT_RST_N */
++ 	};
++@@ -73,16 +75,16 @@
++ 	status = "okay";
++ };
++ 
++-&uart2 {
+++&uart3 {
++ 	pinctrl-names = "default";
++-	pinctrl-0 = <&pinctrl_uart2>;
++-	fsl,uart-has-rtscts;
+++	pinctrl-0 = <&pinctrl_uart3>;
++ 	status = "okay";
++ };
++ 
++-&uart3 {
+++&uart5 {
++ 	pinctrl-names = "default";
++-	pinctrl-0 = <&pinctrl_uart3>;
+++	pinctrl-0 = <&pinctrl_uart5>;
+++	fsl,uart-has-rtscts;
++ 	status = "okay";
++ };
++ 
++@@ -130,14 +132,6 @@
++ 			>;
++ 		};
++ 
++-		pinctrl_uart2: uart2grp {
++-			fsl,pins = <
++-				MX6SL_PAD_EPDC_D12__UART2_RX_DATA	0x41b0b1
++-				MX6SL_PAD_EPDC_D13__UART2_TX_DATA	0x41b0b1
++-				MX6SL_PAD_EPDC_D14__UART2_RTS_B		0x4130B1
++-				MX6SL_PAD_EPDC_D15__UART2_CTS_B		0x4130B1
++-			>;
++-		};
++ 
++ 		pinctrl_uart3: uart3grp {
++ 			fsl,pins = <
++@@ -146,6 +140,15 @@
++ 			>;
++ 		};
++ 
+++		pinctrl_uart5: uart5grp {
+++			fsl,pins = <
+++				MX6SL_PAD_ECSPI1_SCLK__UART5_RX_DATA	0x41b0b1
+++				MX6SL_PAD_ECSPI1_MOSI__UART5_TX_DATA	0x41b0b1
+++				MX6SL_PAD_ECSPI1_MISO__UART5_RTS_B	0x4130b1
+++				MX6SL_PAD_ECSPI1_SS0__UART5_CTS_B	0x4130b1
+++			>;
+++		};
+++
++ 		pinctrl_usdhc2: usdhc2grp {
++ 			fsl,pins = <
++ 				MX6SL_PAD_SD2_CMD__SD2_CMD		0x417059
++@@ -158,6 +161,7 @@
++ 				MX6SL_PAD_SD2_DAT5__SD2_DATA5		0x417059
++ 				MX6SL_PAD_SD2_DAT6__SD2_DATA6		0x417059
++ 				MX6SL_PAD_SD2_DAT7__SD2_DATA7		0x417059
+++				MX6SL_PAD_SD2_RST__SD2_RESET		0x417059
++ 			>;
++ 		};
++ 
++@@ -173,6 +177,7 @@
++ 				MX6SL_PAD_SD2_DAT5__SD2_DATA5		0x4170b9
++ 				MX6SL_PAD_SD2_DAT6__SD2_DATA6		0x4170b9
++ 				MX6SL_PAD_SD2_DAT7__SD2_DATA7		0x4170b9
+++				MX6SL_PAD_SD2_RST__SD2_RESET		0x4170b9
++ 			>;
++ 		};
++ 
++@@ -188,6 +193,7 @@
++ 				MX6SL_PAD_SD2_DAT5__SD2_DATA5		0x4170f9
++ 				MX6SL_PAD_SD2_DAT6__SD2_DATA6		0x4170f9
++ 				MX6SL_PAD_SD2_DAT7__SD2_DATA7		0x4170f9
+++				MX6SL_PAD_SD2_RST__SD2_RESET		0x4170f9
++ 			>;
++ 		};
++ 
++-- 
++1.9.1
++
+diff --git a/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt b/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+new file mode 100644
+index 0000000..9546246
+--- /dev/null
++++ b/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+@@ -0,0 +1,40 @@
++# bcm94330wlsdgb.txt
++manfid=0x2d0
++prodid=0x0552
++vendid=0x14e4
++devid=0x4360
++boardtype=0x0552
++boardrev=0x11
++# this design has 2.4GHz SP3T switch
++boardflags=0x00080200
++nocrc=1
++xtalfreq=37400
++boardnum=22
++macaddr=00:90:4c:c5:12:38
++ag0=255
++aa2g=1
++ccode=CN
++pa0b0=0x14d0
++pa0b1=0xfd98
++pa0b2=0xff78
++rssismf2g=0xa
++rssismc2g=0x3
++rssisav2g=0x7
++maxp2ga0=0x50
++sromrev=3
++il0macaddr=00:90:4c:c5:12:38
++wl0id=0x431b
++cckPwrOffset=5
++ofdm2gpo=0x66666666
++mcs2gpo0=0x6666
++mcs2gpo1=0x6666
++swctrlmap_2g=0x04040404,0x02020202,0x02020404,0x10202,0x1ff
++swctrlmap_5g=0x00100010,0x00280020,0x00200010,0x14202,0x2f8
++rfreg033=0x19
++rfreg033_cck=0x1f
++dacrate2g=160
++txalpfbyp2g=1
++bphyscale=17
++cckPwrIdxCorr=-15
++pacalidx2g=45
++txgaintbl=1
+diff --git a/configs/warpboard_defconfig b/configs/warpboard_defconfig
+new file mode 100644
+index 0000000..a8afa2c
+--- /dev/null
++++ b/configs/warpboard_defconfig
+@@ -0,0 +1,42 @@
++# architecture
 +BR2_arm=y
-+BR2_cortex_a7=y
++BR2_cortex_a9=y
 +
-+# Kernel headers
-+BR2_KERNEL_HEADERS_3_4=y
++# system
++BR2_TARGET_GENERIC_HOSTNAME="warpboard"
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
 +
-+# System configuration
-+BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino_lime/post-build.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino_lime/boot-mali.cmd $(TARGET_DIR)/boot"
-+
-+# Kernel
++# kernel
 +BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_VERSION="sunxi-3.4"
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux-sunxi,linux-sunxi,sunxi-v3.4.103-r1)/sunxi-v3.4.103-r1.tar.gz"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="sun7i"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://github.com/Freescale/linux-fslc/tarball/38ec11d/linux-fslc-38ec11d.tar.gz"
++BR2_LINUX_KERNEL_PATCH="board/freescale/warpboard/linux/"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/warpboard/linux-4.0.config"
 +BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-warp"
 +
-+# sunxi packages
-+BR2_PACKAGE_SUNXI_TOOLS=y
-+BR2_PACKAGE_SUNXI_BOARDS=y
-+BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
++# lock to 4.0 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.0"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
 +
-+# Filesystem
++# wifi firmware for brcm4330
++BR2_PACKAGE_LINUX_FIRMWARE=y
++BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
++
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="warp"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.04"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++
++# host utility to flash warpboard
++BR2_PACKAGE_HOST_IMX_USB_LOADER=y
++
++# rootfs
++BR2_ROOTFS_OVERLAY="board/freescale/warpboard/rootfs_overlay"
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Bootloaders
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
-+BR2_TARGET_UBOOT_FORMAT_BIN=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+
-+# Additional tools
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
-2.1.4
+1.9.1
