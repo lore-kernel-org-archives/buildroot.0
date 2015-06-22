@@ -1,46 +1,43 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 22 Jun 2015 14:23:53 +0200
-Subject: [Buildroot] [V2 3/4] A20-OLinuXino-Lime: new board (mainline)
-In-Reply-To: <55848050.8010904@mind.be>
-References: <1434741204-3988-1-git-send-email-francois.perrad@gadz.org>
- <1434741204-3988-4-git-send-email-francois.perrad@gadz.org>
- <55848050.8010904@mind.be>
-Message-ID: <5587FE59.8070607@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Jun 2015 15:04:15 +0200
+Subject: [Buildroot] [PATCH v2] package/i2c-tools: bump to version 3.1.2
+In-Reply-To: <CA+TH9VkyzXr5w2kWz7NPs_PUC5293ucOLg6sH+h55s49vnyfXw@mail.gmail.com>
+References: <1434615148-29568-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20150618231503.48a6d5c7@free-electrons.com>
+ <CA+TH9VmmBT5PZRWKj2Wo_A1qqpz15K7E+UN_iufNi0p_xFYAmQ@mail.gmail.com>
+ <CA+TH9VkyzXr5w2kWz7NPs_PUC5293ucOLg6sH+h55s49vnyfXw@mail.gmail.com>
+Message-ID: <20150622150415.340883a1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout,
+Dear Angelo Compagnucci,
 
-Arnout Vandecappelle wrote:
-> On 06/19/15 21:13, Francois Perrad wrote:
->> config device tree / mainline (4.0.5)
->>
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->
->   Just some minor documentation fixes... With that:
->
->    Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Mon, 22 Jun 2015 13:51:54 +0200, Angelo Compagnucci wrote:
 
-Looks like your tag has not been picked up by patchwork (ART=0/0/1).
-Maybe leading spaces are not taken into account?
+> JD: No, I tried to contact the admin via LinkedIn but no reply so far.
+> JD: If you need to download the latest i2c-tools, I have a mirror on my home
+> JD: page:
+> JD: http://jdelvare.nerim.net/mirror/i2c-tools/
+> 
+> AC: No problem for me, I submitted a patch to buildroot and cannot be
+> AC: tested cause main download site failure. Do you think your mirror is
+> AC: more stable than the official one? Probably I could switch to use your
+> AC: mirror!
+> 
+> JD: It's the first time since many years that lm-sensors.org is down,
+> JD: usually it's quite reliable. My mirror is hosted by my ISP and is
+> JD: certainly very reliable... Up to you.
+> ***
+> 
+> I'm thinking switching to Jean's mirror if you agree. What do you think?
 
-[...]
->> +Copy images on the SD card
->> +--------------------------
->> +
->> +    # dd if=output/images/rootfs.ext2 of=/dev/sdX1
->
->   rootfs.ext4
->
->   Also, I personally prefer to use cat rather than dd, it's generally faster.
+Fine with me.
 
-Interesting! I don't think there is any noticeable lag copying <7 MB to
-an SD card... But since defconfigs are supposed to be used as a starting
-point for real, and possibly large, projects, I'm fine with your
-suggestion.
-
+Thomas
 -- 
-Luca
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
