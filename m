@@ -1,38 +1,24 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Jun 2015 23:00:12 +0200
-Subject: [Buildroot] [PATCH] package/perl: Fix typos in HOSTCC
- specification
-In-Reply-To: <87si9j8nxg.fsf@dell.be.48ers.dk>
-References: <CAN101LgEJQFSKO7+k=QW4HdJKLPw5v8axtAKUWD12hygV4yqBQ@mail.gmail.com>
- <87si9j8nxg.fsf@dell.be.48ers.dk>
-Message-ID: <20150622210012.GC7547@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 22 Jun 2015 23:03:49 +0200
+Subject: [Buildroot] [PATCH] qemu/configs: update to latest kernel
+In-Reply-To: <1435004180-27193-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 22 Jun 2015 17:16:20 -0300")
+References: <1435004180-27193-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87k2uv8ngq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Albert, All,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On 2015-06-22 22:53 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Albert" == Albert Lee <trisk@omniti.com> writes:
->  > This is pretty self-explanatory.
-> 
-> Thanks, indeed! Could you please resend with a signed-off-by: line?
+ > Update most of the configs to the latest kernel version (4.1) except for
+ > arm-nuri which is stuck.
 
-And please do not send the patch as attachment, but in the body itself.
-Using 'git send-email' will do it automatically and surely for you.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Having patches as attachment makes it is more difficult to review
-(although I concur that this patch is pretty much obvious and correct).
-
-Regards,
-Yann E. MORIN.
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
