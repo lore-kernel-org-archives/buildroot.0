@@ -1,58 +1,62 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 22 Jun 2015 13:51:54 +0200
-Subject: [Buildroot] [PATCH v2] package/i2c-tools: bump to version 3.1.2
-In-Reply-To: <CA+TH9VmmBT5PZRWKj2Wo_A1qqpz15K7E+UN_iufNi0p_xFYAmQ@mail.gmail.com>
-References: <1434615148-29568-1-git-send-email-angelo.compagnucci@gmail.com>
- <20150618231503.48a6d5c7@free-electrons.com>
- <CA+TH9VmmBT5PZRWKj2Wo_A1qqpz15K7E+UN_iufNi0p_xFYAmQ@mail.gmail.com>
-Message-ID: <CA+TH9VkyzXr5w2kWz7NPs_PUC5293ucOLg6sH+h55s49vnyfXw@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 22 Jun 2015 13:57:32 +0200
+Subject: [Buildroot] CMake and VERBOSE variable
+In-Reply-To: <7f746aa9c68a301002cdca28b6cb3f51@openmailbox.org>
+References: <9943347198fceae1227501e1d00f818a@openmailbox.org>
+ <5578B394.1010503@mind.be> <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
+ <5579E9EF.4070402@mind.be> <0d88f0bd848eeb62c868dc2d5dffe496@openmailbox.org>
+ <55870F2F.4080700@mind.be> <4fd6c4c54bc90972d20b6f04b62b227e@openmailbox.org>
+ <CAHXCMMJWjiKVCi-vjWftDgAxq7JDN+You3Go-NCvQVS81AC1Cw@mail.gmail.com>
+ <7f746aa9c68a301002cdca28b6cb3f51@openmailbox.org>
+Message-ID: <CAHXCMM+-eyJRSa5c8WAtqptC0MTbJNBb4bZdhBBaY3yxYvAauw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+All,
 
-2015-06-19 8:55 GMT+02:00 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
-> Dear Thomas Petazzoni,
+On Mon, Jun 22, 2015 at 1:26 PM, C?dric Marie
+<cedric.marie@openmailbox.org> wrote:
+> Le 2015-06-22 12:50, Samuel Martin a ?crit :
+>>>>
+>>>> - a first patch that removes the export of VERBOSE, with the commit log
+>>>> explaining how it breaks cmake projects;
+>>
+>>
+>> Does this mean that the VERBOSE env. var. should now be handled by the
+>> cmake-infra?
 >
-> 2015-06-18 23:15 GMT+02:00 Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com>:
->> Dear Angelo Compagnucci,
->>
->> On Thu, 18 Jun 2015 10:12:28 +0200, Angelo Compagnucci wrote:
->>> This patch bumps version to 3.1.2 and adds support for the recently
->>> introduced python3 support for py-smbus.
->>>
->>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->>
->> I had applied this patch locally, but unfortunately, the lm-sensors
->> website is dead, so I can't download the new version of i2c-tools.
+>
+> No, you can still build with "make VERBOSE=1" and CMake will take it into
+> account.
 
-Following a conversation I had with Jean Delvare, i2c-tools maintainer:
+Not really convenient :(
+AFAICS, VERBOSE is not an official env. var. altering Buildroot's
+behavior, unlike V [1].
 
-***
-AC:  "It's not just you! http://www.lm-sensor.org looks down from here.
+If VERBOSE should only be set for cmake-based package, in addition to
+globally unexport it, I'd prefer:
+- either fix the cmake infra to keep the same behavior from the user
+point of view;
+- or update the doc.
 
-JD: I've noticed it too. Hopefully the admin (Axel Thimm) has noticed as
-JD: well and is already looking at the problem.
+I prefer the 1st option.
 
-AC: The website is still down, any news on when it will be up again?
+> There is nothing to change in cmake-infra.
+>
+> The patch only prevents from systematically exporting VERBOSE when empty,
+> which has a specific meaning for CMake - intentional or not, I don't know.
 
-JD: No, I tried to contact the admin via LinkedIn but no reply so far.
-JD: If you need to download the latest i2c-tools, I have a mirror on my home
-JD: page:
-JD: http://jdelvare.nerim.net/mirror/i2c-tools/
+I think it is intentional (given [2] and the number of occurences of
+"\<VERBOSE\>" in the cmake code base ;-]).
 
-AC: No problem for me, I submitted a patch to buildroot and cannot be
-AC: tested cause main download site failure. Do you think your mirror is
-AC: more stable than the official one? Probably I could switch to use your
-AC: mirror!
 
-JD: It's the first time since many years that lm-sensors.org is down,
-JD: usually it's quite reliable. My mirror is hosted by my ISP and is
-JD: certainly very reliable... Up to you.
-***
+[1] http://nightly.buildroot.org/#make-tips
+[2] http://www.cmake.org/Wiki/CMake_FAQ#Is_there_an_option_to_produce_more_.27verbose.27_compiling.3F
 
-I'm thinking switching to Jean's mirror if you agree. What do you think?
+Regards,
+
+-- 
+Samuel
