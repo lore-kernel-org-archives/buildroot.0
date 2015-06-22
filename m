@@ -1,43 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Jun 2015 00:27:19 +0200
-Subject: [Buildroot] [PATCH 3/6] gcc: add support for gcc 5.1
-In-Reply-To: <XnsA4BFB381C7C43berndkuhlsPkbjNfxxIA@bernd-kuhls.de> (Bernd
- Kuhls's message of "Sat, 20 Jun 2015 17:38:43 +0200")
-References: <1434292411-5003-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1434292411-5003-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <XnsA4BFAF16D8B15berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <XnsA4BFB381C7C43berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <87h9pz7514.fsf@dell.be.48ers.dk>
+Date: Tue, 23 Jun 2015 00:23:52 +0200
+Subject: [Buildroot] [git commit] gdb: bump 7.9 series to 7.9.1
+Message-ID: <20150622222746.0C0B27FAFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=69f43ebf132b2bf7d83967a787212284ff61c8c4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Bernd Kuhls <bernd.kuhls@t-online.de> wrote in 
- > news:XnsA4BFAF16D8B15berndkuhlsPkbjNfxxIA at bernd-kuhls.de:
+Note that both gdb 7.9 and 7.9.1 fail to build in a chroot without
+texinfo, due to the infamous makeinfo issue. This should be fixed
+separately.
 
- >> ../../../libgcc/generic-morestack-thread.c:41:21: fatal error: pthread.h: 
+[Peter: fixup white space]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-gdbserver-fix-uClibc-whithout-MMU.patch   |    0
+ ...gdbserver-xtensa-drop-xtensa_usrregs_info.patch |    0
+ ...erver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch |    0
+ package/gdb/Config.in.host                         |    2 +-
+ package/gdb/gdb.hash                               |    2 +-
+ 5 files changed, 2 insertions(+), 2 deletions(-)
 
- > Hi,
-
- > the problem seems to be the uclibc-ng, choosing it and i386 as target limits 
- > the choice "Thread library implementation" to "None", changing back to uclibc 
- > provides also "linuxthreads" and "linuxthreads (stable/old)".
-
- > It is caused by 
- > http://git.buildroot.net/buildroot/tree/package/uclibc/Config.in#n40 and the 
- > following lines which differ to those for BR2_UCLIBC_VERSION_0_9_33.
-
- > Is this the intended behaviour?
-
-I believe so as NTPL uses atomic instructions not available on
-i386. Perhaps we should simply deprecate the i386 variant, it is after
-all 26 years since the i486 was released and I doubt anybody still uses
-i386'es.
-
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gdb/7.9/0001-gdbserver-fix-uClibc-whithout-MMU.patch b/package/gdb/7.9.1/0001-gdbserver-fix-uClibc-whithout-MMU.patch
+similarity index 100%
+rename from package/gdb/7.9/0001-gdbserver-fix-uClibc-whithout-MMU.patch
+rename to package/gdb/7.9.1/0001-gdbserver-fix-uClibc-whithout-MMU.patch
+diff --git a/package/gdb/7.9/0002-gdbserver-xtensa-drop-xtensa_usrregs_info.patch b/package/gdb/7.9.1/0002-gdbserver-xtensa-drop-xtensa_usrregs_info.patch
+similarity index 100%
+rename from package/gdb/7.9/0002-gdbserver-xtensa-drop-xtensa_usrregs_info.patch
+rename to package/gdb/7.9.1/0002-gdbserver-xtensa-drop-xtensa_usrregs_info.patch
+diff --git a/package/gdb/7.9/0003-gdbserver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch b/package/gdb/7.9.1/0003-gdbserver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch
+similarity index 100%
+rename from package/gdb/7.9/0003-gdbserver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch
+rename to package/gdb/7.9.1/0003-gdbserver-xtensa-fix-typo-in-XCHAL_HAVE_LOOPS.patch
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 6b0ca9b..e2f8c27 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -53,4 +53,4 @@ config BR2_GDB_VERSION
+ 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+ 	default "7.7.1"    if BR2_GDB_VERSION_7_7
+ 	default "7.8.2"	   if BR2_GDB_VERSION_7_8 || !BR2_PACKAGE_HOST_GDB
+-	default "7.9"      if BR2_GDB_VERSION_7_9
++	default "7.9.1"    if BR2_GDB_VERSION_7_9
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index f489f64..0130935 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -1,7 +1,7 @@
+ # From ftp://gcc.gnu.org/pub/gdb/releases/sha512.sum
+ sha512	887b9b726dae8f6e3e5e41574460a67e4f9002b0d47bc985dcf63bdf3518397a90b6a208cb5b19e5ed2341715ad75cfeed4df4fb423f39f74218e36bc87f1cab	gdb-7.7.1.tar.bz2
+ sha512	face5bf1b4ce144fc8604fc84620beed956177a11fd632b4e41906fc7f632910b2b43a50e6cfdfd6cbd876ee527c813bddab8df29dc560a6c36694cdb8edc4e4	gdb-7.8.2.tar.xz
+-sha512	850202a477b486a75dc8196efead79c95bc675e348064a5eefee2a50215d40f62e9e052e9b8df29f997f91430f6e7454883652c701f5b1e688d9e2c575876c83	gdb-7.9.tar.xz
++sha512	eebdf88b24e52e792b8a4b89ea85790de72b462a7810b44975fdf4232c068f353b15506071f450102a9d4bcecdde8e93dc3748a10699b7f73f3e04fb2d9d8414	gdb-7.9.1.tar.xz
+ # No hash for the ARC & microblaze variants, comes from the github-helper:
+ none	xxx	gdb-arc-2014.12-gdb.tar.gz
+ none	xxx	gdb-6be65fb56ea6694a9260733a536a023a1e2d4d57.tar.gz
