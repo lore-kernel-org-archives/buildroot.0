@@ -1,43 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Jun 2015 15:04:15 +0200
-Subject: [Buildroot] [PATCH v2] package/i2c-tools: bump to version 3.1.2
-In-Reply-To: <CA+TH9VkyzXr5w2kWz7NPs_PUC5293ucOLg6sH+h55s49vnyfXw@mail.gmail.com>
-References: <1434615148-29568-1-git-send-email-angelo.compagnucci@gmail.com>
- <20150618231503.48a6d5c7@free-electrons.com>
- <CA+TH9VmmBT5PZRWKj2Wo_A1qqpz15K7E+UN_iufNi0p_xFYAmQ@mail.gmail.com>
- <CA+TH9VkyzXr5w2kWz7NPs_PUC5293ucOLg6sH+h55s49vnyfXw@mail.gmail.com>
-Message-ID: <20150622150415.340883a1@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 22 Jun 2015 10:11:03 -0300
+Subject: [Buildroot] [PATCH 1/3] toolchain: add 4.1.x choice for headers
+Message-ID: <1434978665-26536-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/toolchain-common.in          | 5 +++++
+ toolchain/toolchain-external/Config.in | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-On Mon, 22 Jun 2015 13:51:54 +0200, Angelo Compagnucci wrote:
-
-> JD: No, I tried to contact the admin via LinkedIn but no reply so far.
-> JD: If you need to download the latest i2c-tools, I have a mirror on my home
-> JD: page:
-> JD: http://jdelvare.nerim.net/mirror/i2c-tools/
-> 
-> AC: No problem for me, I submitted a patch to buildroot and cannot be
-> AC: tested cause main download site failure. Do you think your mirror is
-> AC: more stable than the official one? Probably I could switch to use your
-> AC: mirror!
-> 
-> JD: It's the first time since many years that lm-sensors.org is down,
-> JD: usually it's quite reliable. My mirror is hosted by my ISP and is
-> JD: certainly very reliable... Up to you.
-> ***
-> 
-> I'm thinking switching to Jean's mirror if you agree. What do you think?
-
-Fine with me.
-
-Thomas
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 4f411c3..b7a11a4 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -223,10 +223,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
+ 
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
+ 	default "4.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+ 	default "3.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
+ 	default "3.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 017e913..e70989e 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -981,6 +981,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1
++	bool "4.1.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_0
+ 	bool "4.0.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.3.6
