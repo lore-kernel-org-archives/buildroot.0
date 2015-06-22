@@ -1,58 +1,134 @@
-From: Viallard Anthony <viallard@syscom-instruments.com>
-Date: Mon, 22 Jun 2015 12:15:14 +0200
-Subject: [Buildroot] [PATCH 1/1] Force rebuild of local site packages
- and theirs local dependencies
-In-Reply-To: <20150616215022.6eb61f22@free-electrons.com>
-References: <1434460888-30770-1-git-send-email-viallard@syscom-instruments.com>
- <20150616215022.6eb61f22@free-electrons.com>
-Message-ID: <5587E032.8030506@syscom-instruments.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 22 Jun 2015 12:43:50 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/network-manager: add patches to
+	build with kernel headers 3.2
+Message-ID: <1434969830-31251-1-git-send-email-vorel@jablocom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/16/2015 09:50 PM, Thomas Petazzoni wrote:
-> Dear Anthony Viallard,
->
-> On Tue, 16 Jun 2015 15:21:28 +0200, Anthony Viallard wrote:
->
->> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->> index d5b29f0..929a31c 100644
->> --- a/package/pkg-generic.mk
->> +++ b/package/pkg-generic.mk
->> @@ -509,6 +509,10 @@ ifeq ($$(filter $(1),$$(DEPENDENCIES_HOST_PREREQ)),)
->>   $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
->>   endif
->>
->> +ifeq ($$($(2)_SITE_METHOD),local)
->> +$$($(2)_TARGET_RSYNC): $(1)-clean-for-rebuild
->> +endif
->
-> Why don't you use "make <pkg>-rebuild" or "make <pkg>-reconfigure" ?
->
-> The problem with your proposal is that you have arbitrarily decided to
-> make it always restart from the build step. What if some people want to
-> restart from the install step, or the configure step ?
->
-> Thanks,
->
-> Thomas
->
+From: Petr Vorel <petr.vorel@gmail.com>
 
-Hi Thomas,
++ lower kernel headers dependency
 
-The main thing is this not convenient. I have about 30 packages and we 
-are a team. I don't want to check after each git pull the packages which 
-have been modified and call make <pkg>-rebuild for each of them (and be 
-aware about dependencies, for example calling libraries rebuild before 
-because the <pkg>-rebuild target doesn't rebuild the dependencies).
+According to upstream [1], there is no known minimal kernel-version, nor
+minimal required feature-set.
 
-My patch is a quick workaround to do my needs. Moreover, like doug 
-claims, the patch doesn't work. There is an issue. I will try to find why.
+Experimentally tested, that 1.0.2 is works with 3.2 kernel headers, even
+some features will be missing [2].
 
-If there was a "make rebuild" target and if the "make <pkg>-rebuild" was 
-able to rebuild all the dependencies too, it will satisfy my needs.
+[1] https://mail.gnome.org/archives/networkmanager-list/2015-April/msg00039.html
+[2] https://mail.gnome.org/archives/networkmanager-list/2015-April/msg00041.html
 
-Regards,
-Anthony.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+Changes v3:
+ - Lower kernel headers dependency to 3.2
+ - Preserved original author of
+   0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
+ - Added Signed-off-by inside both patches.
+Changes v2: rewrited patch 0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
+---
+ ...anager-fix-build-with-Linux-3.2.0-headers.patch | 30 ++++++++++++++++++
+ ...d-dhcp-fix-build-with-Linux-3.2.0-headers.patch | 37 ++++++++++++++++++++++
+ package/network-manager/Config.in                  |  2 +-
+ 3 files changed, 68 insertions(+), 1 deletion(-)
+ create mode 100644 package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
+ create mode 100644 package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
+
+diff --git a/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch b/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
+new file mode 100644
+index 0000000..49c1996
+--- /dev/null
++++ b/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
+@@ -0,0 +1,30 @@
++From 22b99e3bbb2ca33963e839f12ab95314ab8d9ba9 Mon Sep 17 00:00:00 2001
++From: Lubomir Rintel <lkundrak@v3.sk>
++Date: Fri, 15 May 2015 16:37:20 +0200
++Subject: [PATCH] ppp-manager: fix build with Linux 3.2.0 headers
++
++Fixes build with Ubuntu 12.04.
++
++In file included from ppp-manager/nm-ppp-manager.c:42:0:
++/usr/include/linux/if_ppp.h:103:16: error: field 'b' has incomplete type
++/usr/include/linux/if_ppp.h:108:21: error: field 'b' has incomplete type
++
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++---
++ src/ppp-manager/nm-ppp-manager.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/ppp-manager/nm-ppp-manager.c b/src/ppp-manager/nm-ppp-manager.c
++index e27c82b..d410ebf 100644
++--- a/src/ppp-manager/nm-ppp-manager.c
+++++ b/src/ppp-manager/nm-ppp-manager.c
++@@ -39,6 +39,7 @@
++ #ifndef aligned_u64
++ #define aligned_u64 unsigned long long __attribute__((aligned(8)))
++ #endif
+++#include <linux/if.h>
++ #include <linux/if_ppp.h>
++
++ #include "NetworkManagerUtils.h"
++--
++2.1.4
+diff --git a/package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch b/package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
+new file mode 100644
+index 0000000..01eefec
+--- /dev/null
++++ b/package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
+@@ -0,0 +1,37 @@
++From 7f84150e9f6aa7e900d70178e0fc0acc6cfba651 Mon Sep 17 00:00:00 2001
++From: Lubomir Rintel <lkundrak@v3.sk>
++Date: Fri, 15 May 2015 16:38:10 +0200
++Subject: [PATCH] systemd-dhcp: fix build with Linux 3.2.0 headers
++
++Fixes build on Ubuntu 12.04.
++
++systemd/src/libsystemd-network/dhcp-network.c: In function '_bind_raw_socket':
++systemd/src/libsystemd-network/dhcp-network.c:75:17: error: 'BPF_XOR' undeclared (first use in this function)
++systemd/src/libsystemd-network/dhcp-network.c:75:17: note: each undeclared identifier is reported only once for each function it appears in
++make[4]: *** [libsystemd_nm_la-dhcp-network.lo] Error 1
++
++(cherry picked from commit 3811a68389b9277533f2eee8372927ca6238653e)
++
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++---
++ src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h b/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h
++index 6d500f4..f8856a1 100644
++--- a/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h
+++++ b/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h
++@@ -38,6 +38,11 @@
++
++ #include "nm-logging.h"
++
+++/* Missing in Linux 3.2.0, in Ubuntu 12.04 */
+++#ifndef BPF_XOR
+++#define BPF_XOR 0xa0
+++#endif
+++
++ static inline guint32
++ _slog_level_to_nm (int slevel)
++ {
++--
++2.1.4
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index f6d8564..ae0eb70 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	bool "networkmanager"
+ 	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_PACKAGE_HAS_UDEV
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # CLOCK_BOOTTIME, IPTOS_CLASS_*
+ 	select BR2_PACKAGE_DHCPCD if !BR2_PACKAGE_DHCP_CLIENT
+ 	select BR2_PACKAGE_DBUS
+-- 
+1.8.0
