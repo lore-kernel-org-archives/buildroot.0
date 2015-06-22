@@ -1,132 +1,47 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 22 Jun 2015 10:23:18 -0300
-Subject: [Buildroot] [PATCH v2] kvmtool: new package
-Message-ID: <1434979398-30311-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Jun 2015 15:53:22 +0200
+Subject: [Buildroot] [git commit] openvmtools: fix legal info
+Message-ID: <20150622135356.81178807BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=260d4461479f99baaeff802867ee6977e48a95ef
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+In ab71dff0 it was moved to SUBDIR, but this was never reflected for the
+legal-info files, update this to fix:
+http://autobuild.buildroot.net/results/836/8363943cc9c967713f585209408ea087a052a12d/
+
+[Thomas: put OPENVMTOOLS_SUBDIR before OPENVMTOOLS_LICENSE_FILES, as
+suggested by Yann.]
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Karoly Kasza <kaszak@gmail.com>
+Tested-by: Karoly Kasza <kaszak@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in          |  1 +
- package/kvmtool/Config.in  | 32 ++++++++++++++++++++++++++++
- package/kvmtool/kvmtool.mk | 53 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 86 insertions(+)
- create mode 100644 package/kvmtool/Config.in
- create mode 100644 package/kvmtool/kvmtool.mk
+ package/openvmtools/openvmtools.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 6dbc32d..2c0d029 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1398,6 +1398,7 @@ endif
- 	source "package/irqbalance/Config.in"
- 	source "package/keyutils/Config.in"
- 	source "package/kmod/Config.in"
-+	source "package/kvmtool/Config.in"
- 	source "package/lxc/Config.in"
- 	source "package/monit/Config.in"
- 	source "package/ncdu/Config.in"
-diff --git a/package/kvmtool/Config.in b/package/kvmtool/Config.in
-new file mode 100644
-index 0000000..ce24d40
---- /dev/null
-+++ b/package/kvmtool/Config.in
-@@ -0,0 +1,32 @@
-+config BR2_PACKAGE_KVMTOOL
-+	bool "kvmtool"
-+	depends on BR2_USE_MMU # guest simple init fork()
-+	# No MADV_HUGEPAGE define in uClibc(-ng)
-+	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+	# Only mips big-endian seems to be supported (build breaks)
-+	# Should work on powerpc64 but the build breaks with missing types
-+	depends on \
-+		BR2_aarch64 || BR2_arm       || BR2_armeb || BR2_i386 || \
-+		BR2_mips    || BR2_x86_64
-+	# libfdt is only required for DT architectures...
-+	# ...but it's not able to build for static targets
-+	depends on !(BR2_STATIC_LIBS && (BR2_aarch64 || BR2_arm || BR2_armeb))
-+	select BR2_PACKAGE_DTC if BR2_aarch64 || BR2_arm || BR2_armeb
-+	help
-+	  kvmtool is a lightweight tool for hosting KVM guests.
-+	  As a pure virtualization tool it only supports guests using
-+	  the same architecture, though it supports running 32-bit guests
-+	  on those 64-bit architectures that allow this.
-+
-+	  https://git.kernel.org/cgit/linux/kernel/git/will/kvmtool.git/tree/README
-+
-+comment "kvmtool needs a (e)glibc or musl toolchain"
-+	depends on BR2_USE_MMU
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+	depends on BR2_i386 || BR2_mips || BR2_x86_64
-+
-+comment "kvmtool needs a (e)glibc or musl toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+        depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
-+		BR2_STATIC_LIBS
-+	depends on BR2_aarch64 || BR2_arm || BR2_armeb
-diff --git a/package/kvmtool/kvmtool.mk b/package/kvmtool/kvmtool.mk
-new file mode 100644
-index 0000000..7f682db
---- /dev/null
-+++ b/package/kvmtool/kvmtool.mk
-@@ -0,0 +1,53 @@
-+################################################################################
-+#
-+# kvmtool
-+#
-+################################################################################
-+
-+KVMTOOL_VERSION = 372f583d359a5bdcbbe7268809c8d1dc179c64d2
-+KVMTOOL_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/will/kvmtool.git
-+KVMTOOL_SITE_METHOD = git
-+KVMTOOL_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_BINUTILS),binutils) \
-+	$(if $(BR2_PACKAGE_DTC),dtc) \
-+	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
-+	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3) \
-+	$(if $(BR2_PACKAGE_LIBVNCSERVER),libvncserver) \
-+	$(if $(BR2_PACKAGE_SDL),sdl) \
-+	$(if $(BR2_PACKAGE_ZLIB),zlib)
-+KVMTOOL_LICENSE = GPLv2
-+KVMTOOL_LICENSE_FILES = COPYING
-+
-+# This is required to convert a static binary (init helper) back into
-+# object-file format, and in multilib toolchains like CS 2012.09 for x86
-+# the default is i386, hence when building for x86_64 things break since
-+# LD doesn't autodetect the input file format.
-+# GCC-as-linker can't accomplish this feat easily either since it's mixing
-+# static content (guest_init.o) with dynamic one (lkvm) making
-+# a relocatable output file.
-+# The purpose of this trick is to embed the init helper into the main
-+# binary to help users in guest system startup, which would otherwise
-+# require more complex guest images.
-+# This needs revisiting if/when X32 ABI support is added.
-+#
-+# If more packages need this (unlikely) an ld wrapper might be a better
-+# solution, using gcc -dumpspecs information.
-+KVMTOOL_EXTRA_LDFLAGS = \
-+	$(if $(BR2_x86_64),-m elf_x86_64)
-+
-+# Disable -Werror, otherwise musl is not happy
-+KVMTOOL_MAKE_OPTS = \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS) $(KVMTOOL_EXTRA_LDFLAGS)" \
-+	WERROR=0
-+
-+define KVMTOOL_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) ARCH=$(KERNEL_ARCH) $(MAKE) -C $(@D) $(KVMTOOL_MAKE_OPTS)
-+endef
-+
-+define KVMTOOL_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) ARCH=$(KERNEL_ARCH) $(MAKE) -C $(@D) \
-+		$(KVMTOOL_MAKE_OPTS) install DESTDIR=$(TARGET_DIR) prefix=/usr
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.1.4
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 9819640..57271c8 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -6,11 +6,11 @@
+ 
+ OPENVMTOOLS_VERSION = stable-9.10.0
+ OPENVMTOOLS_SITE = $(call github,vmware,open-vm-tools,$(OPENVMTOOLS_VERSION))
++OPENVMTOOLS_SUBDIR = open-vm-tools
+ OPENVMTOOLS_LICENSE = LGPLv2.1
+-OPENVMTOOLS_LICENSE_FILES = COPYING
++OPENVMTOOLS_LICENSE_FILES = $(OPENVMTOOLS_SUBDIR)/COPYING
+ # Autoreconf needed or config/missing will run configure again at buildtime
+ OPENVMTOOLS_AUTORECONF = YES
+-OPENVMTOOLS_SUBDIR = open-vm-tools
+ OPENVMTOOLS_CONF_OPTS = --with-dnet \
+ 	--without-icu --without-x --without-gtk2 \
+ 	--without-gtkmm --without-kernel-modules \
