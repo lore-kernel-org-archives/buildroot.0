@@ -1,29 +1,46 @@
-From: Viallard Anthony <viallard@syscom-instruments.com>
-Date: Mon, 22 Jun 2015 14:07:14 +0200
-Subject: [Buildroot] [PATCH 1/1] Force rebuild of local site packages
- and theirs local dependencies
-In-Reply-To: <5587E032.8030506@syscom-instruments.com>
-References: <1434460888-30770-1-git-send-email-viallard@syscom-instruments.com>
- <20150616215022.6eb61f22@free-electrons.com>
- <5587E032.8030506@syscom-instruments.com>
-Message-ID: <5587FA72.8050902@syscom-instruments.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 22 Jun 2015 14:23:53 +0200
+Subject: [Buildroot] [V2 3/4] A20-OLinuXino-Lime: new board (mainline)
+In-Reply-To: <55848050.8010904@mind.be>
+References: <1434741204-3988-1-git-send-email-francois.perrad@gadz.org>
+ <1434741204-3988-4-git-send-email-francois.perrad@gadz.org>
+ <55848050.8010904@mind.be>
+Message-ID: <5587FE59.8070607@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/22/2015 12:15 PM, Viallard Anthony wrote:
-> If there was a "make rebuild" target and if the "make <pkg>-rebuild" was
-> able to rebuild all the dependencies too, it will satisfy my needs.
->
-> Regards,
-> Anthony.
->
+Dear Arnout,
 
-An important thing is we don't increase the version of the package after 
-a change. But it's not very convenient to increase the version after 
-each small changes...
+Arnout Vandecappelle wrote:
+> On 06/19/15 21:13, Francois Perrad wrote:
+>> config device tree / mainline (4.0.5)
+>>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+>   Just some minor documentation fixes... With that:
+>
+>    Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Regards,
-Anthony.
+Looks like your tag has not been picked up by patchwork (ART=0/0/1).
+Maybe leading spaces are not taken into account?
+
+[...]
+>> +Copy images on the SD card
+>> +--------------------------
+>> +
+>> +    # dd if=output/images/rootfs.ext2 of=/dev/sdX1
+>
+>   rootfs.ext4
+>
+>   Also, I personally prefer to use cat rather than dd, it's generally faster.
+
+Interesting! I don't think there is any noticeable lag copying <7 MB to
+an SD card... But since defconfigs are supposed to be used as a starting
+point for real, and possibly large, projects, I'm fine with your
+suggestion.
+
+-- 
+Luca
