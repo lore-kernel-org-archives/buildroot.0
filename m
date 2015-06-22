@@ -1,84 +1,120 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 22 Jun 2015 18:10:48 +0200
-Subject: [Buildroot] [V3 1/2] A20-OLinuXino-Lime: new board (mainline)
-In-Reply-To: <1434983952-7662-2-git-send-email-francois.perrad@gadz.org>
-References: <1434983952-7662-1-git-send-email-francois.perrad@gadz.org>
- <1434983952-7662-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <55883388.8070604@lucaceresoli.net>
+From: rdkehn at yahoo.com <rdkehn@yahoo.com>
+Date: Mon, 22 Jun 2015 11:13:02 -0500
+Subject: [Buildroot] [PATCH 1/1] Force rebuild of local site packages
+ and theirs local dependencies
+In-Reply-To: <5587E032.8030506@syscom-instruments.com>
+References: <1434460888-30770-1-git-send-email-viallard@syscom-instruments.com>
+ <20150616215022.6eb61f22@free-electrons.com>
+ <5587E032.8030506@syscom-instruments.com>
+Message-ID: <20150622161302.GA32191@dkarchlinux64.currentcomm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois,
+Hi Antony,
 
-Francois Perrad wrote:
-> config device tree / mainline (4.0.5)
->
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->   board/olimex/a20_olinuxino_lime/boot.cmd      |  5 ++
->   board/olimex/a20_olinuxino_lime/post-build.sh |  8 +++
->   board/olimex/a20_olinuxino_lime/readme.txt    | 86 +++++++++++++++++++++++++++
->   configs/olimex_a20_olinuxino_lime_defconfig   | 42 +++++++++++++
->   4 files changed, 141 insertions(+)
->   create mode 100644 board/olimex/a20_olinuxino_lime/boot.cmd
->   create mode 100755 board/olimex/a20_olinuxino_lime/post-build.sh
->   create mode 100644 board/olimex/a20_olinuxino_lime/readme.txt
->   create mode 100644 configs/olimex_a20_olinuxino_lime_defconfig
->
-> diff --git a/board/olimex/a20_olinuxino_lime/boot.cmd b/board/olimex/a20_olinuxino_lime/boot.cmd
-> new file mode 100644
-> index 0000000..1714f20
-> --- /dev/null
-> +++ b/board/olimex/a20_olinuxino_lime/boot.cmd
-> @@ -0,0 +1,5 @@
-> +setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
-> +ext4load mmc 0 0x49000000 /boot/sun7i-a20-olinuxino-lime.dtb
-> +ext4load mmc 0 0x46000000 /boot/zImage
-> +env set fdt_high ffffffff
-> +bootz 0x46000000 - 0x49000000
-> diff --git a/board/olimex/a20_olinuxino_lime/post-build.sh b/board/olimex/a20_olinuxino_lime/post-build.sh
-> new file mode 100755
-> index 0000000..4e6fbec
-> --- /dev/null
-> +++ b/board/olimex/a20_olinuxino_lime/post-build.sh
-> @@ -0,0 +1,8 @@
-> +#!/bin/sh
-> +# args from BR2_ROOTFS_POST_SCRIPT_ARGS
-> +# $2    path of boot.cmd
-> +# $3    output directory for boot.scr
-> +
-> +MKIMAGE=$HOST_DIR/usr/bin/mkimage
-> +
-> +$MKIMAGE -A arm -O linux -T script -C none -d $2 $3/boot.scr
-> diff --git a/board/olimex/a20_olinuxino_lime/readme.txt b/board/olimex/a20_olinuxino_lime/readme.txt
-> new file mode 100644
-> index 0000000..3fc9c02
-> --- /dev/null
-> +++ b/board/olimex/a20_olinuxino_lime/readme.txt
-> @@ -0,0 +1,86 @@
-> +A20-OLinuXino-LIME
-> +
-> +Intro
-> +=====
-> +
-> +This is a open hardware board,
-> +see https://www.olimex.com/Products/OLinuXino/open-source-hardware
+On Mon, Jun 22, 2015 at 12:15:14PM +0200, Viallard Anthony wrote:
+> On 06/16/2015 09:50 PM, Thomas Petazzoni wrote:
+> >Dear Anthony Viallard,
+> >
+> >On Tue, 16 Jun 2015 15:21:28 +0200, Anthony Viallard wrote:
+> >
+> >>diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> >>index d5b29f0..929a31c 100644
+> >>--- a/package/pkg-generic.mk
+> >>+++ b/package/pkg-generic.mk
+> >>@@ -509,6 +509,10 @@ ifeq ($$(filter $(1),$$(DEPENDENCIES_HOST_PREREQ)),)
+> >>  $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
+> >>  endif
+> >>
+> >>+ifeq ($$($(2)_SITE_METHOD),local)
+> >>+$$($(2)_TARGET_RSYNC): $(1)-clean-for-rebuild
+> >>+endif
+> >
+> >Why don't you use "make <pkg>-rebuild" or "make <pkg>-reconfigure" ?
+> >
+> >The problem with your proposal is that you have arbitrarily decided to
+> >make it always restart from the build step. What if some people want to
+> >restart from the install step, or the configure step ?
+> >
+> >Thanks,
+> >
+> >Thomas
+> >
+> 
+> Hi Thomas,
+> 
+> The main thing is this not convenient. I have about 30 packages and we are a
+> team. I don't want to check after each git pull the packages which have been
+> modified and call make <pkg>-rebuild for each of them (and be aware about
+> dependencies, for example calling libraries rebuild before because the
+> <pkg>-rebuild target doesn't rebuild the dependencies).
+> 
+> My patch is a quick workaround to do my needs. Moreover, like doug claims,
+> the patch doesn't work. There is an issue. I will try to find why.
+> 
+> If there was a "make rebuild" target and if the "make <pkg>-rebuild" was
+> able to rebuild all the dependencies too, it will satisfy my needs.
+> 
 
-No comment about the suggestion I made in the v2 review? Here it is
-again:
+Here is what I have done to support the workflow, I believe, you
+want.  I don't think... this is something that Buildroot needs to
+support natively; but, maybe it could/should be documented
+somewhere.
 
-| Why not a link to the board page itself as well?
-| It's https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-LIME/
+I create a custom directory structure, let's call it 'mycustom',
+that mimics Buildroot's.  The mycustom directory contains
+proprietary bits to be incorporated into the Buildroot environment
+while keeping them separate from Buildroot.  I set
+BR2_EXTERNAL=mycustom when executing the initial make to create the
+output directory and specify the default configuration.
 
-For the rest it looks good. I hope to grab a Lime board in a few days
-to run-time test it... but for the time being:
+<Buildroot>/mycustom/Config.in contains:
+        comment "MyCustom"
 
-[Build test only]
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+        menu "Libraries"
+        source "$BR2_EXTERNAL/package/libmycustom/Config.in"
+        endmenu
 
--- 
-Luca
+        menu "Applications"
+        source "$BR2_EXTERNAL/package/mycustomapp/Config.in"
+        endmenu
+
+In <Buildroot>/mycustom/external.mk, I add a mycustom-rebuild target
+to rebuild all of my custom packages.
+
+        mycustom-rebuild:
+            @ sed -e '1,/#.MyCustom/d' \
+                  -ne 's/^BR2_PACKAGE_\(.*\)=y/\1/p' \
+                  $(BR2_CONFIG) | \
+                    tr '[:upper:]' '[:lower:]' | \
+                    sed -e 's/_/-/' | \
+                    while read t; do \
+                            $(MAKE1) -C $(BASE_DIR) O=$(O) \
+                                    $${t}-dirclean $${t}-rebuild || exit 1; \
+                    done
+            $(MAKE) -C $(BASE_DIR) O=$(O) target-post-image
+
+Presently, Buildroot puts all user provided options at the end of
+BR2_CONFIG so it's sufficient to extract all BR2_PACKAGE_*
+definitions after the the Config.in comment "# MyCustom".  Each
+extracted BR2_CONFIG definition becomes the make target to execute
+after BR2_PACKAGE_ is stripped from the entry, it is changed to
+lower case, and '_' is changed to '-'.  For example,
+BR2_PACKAGE_LIBMYCUSTOM is transformed to libmycustom.  libmycustom
+is then used to create the libmycustom-dirclean and
+libmycustom-rebuild targets.  Lastly, the target-post-image target
+is executed to regenerate the root file system(s).
+
+With this in place, after a 'git pull', I can simply execute 'make
+mycustom-rebuild' to only rebuild all of my custom stuff.
+
+As you can see there are clearly some personal preferences in the
+mycustom-rebuild target that others may not want.  This is why I
+don't think this is something Buildroot needs to support natively.
+Anyway, maybe this will help you implement the function you want.
+
+Regards,
+...doug
