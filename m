@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Jun 2015 00:17:24 +0200
-Subject: [Buildroot] [PATCH 1/6] uclibc: bump uClibc-ng to 1.0.3
-In-Reply-To: <1434292411-5003-2-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 14 Jun 2015 16:33:26 +0200")
+Date: Tue, 23 Jun 2015 00:18:53 +0200
+Subject: [Buildroot] [PATCH 3/6] gcc: add support for gcc 5.1
+In-Reply-To: <1434292411-5003-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 14 Jun 2015 16:33:28 +0200")
 References: <1434292411-5003-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1434292411-5003-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87381j8k23.fsf@dell.be.48ers.dk>
+ <1434292411-5003-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87y4jb75f6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > This commit bumps uClibc-ng to the latest version, and drops the two
- > patches that have been merged upstream.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > This commit adds support for gcc 5.1 in Buildroot. In terms of gcc
+ > patches, compared to gcc 4.9.x:
 
 Committed, thanks.
 
