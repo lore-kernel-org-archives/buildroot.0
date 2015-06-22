@@ -1,72 +1,40 @@
-From: Gergely Imreh <imrehg@gmail.com>
-Date: Mon, 22 Jun 2015 08:28:09 +0000
-Subject: [Buildroot] [PATCH 1/1] pinentry: add patch to fix ncursesw include
-	path
-Message-ID: <1434961679-15594-1-git-send-email-imrehg@gmail.com>
+From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
+Date: Mon, 22 Jun 2015 11:47:41 +0200
+Subject: [Buildroot] CMake and VERBOSE variable
+In-Reply-To: <55870F2F.4080700@mind.be>
+References: <9943347198fceae1227501e1d00f818a@openmailbox.org>
+ <5578B394.1010503@mind.be>
+ <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
+ <5579E9EF.4070402@mind.be>
+ <0d88f0bd848eeb62c868dc2d5dffe496@openmailbox.org>
+ <55870F2F.4080700@mind.be>
+Message-ID: <4fd6c4c54bc90972d20b6f04b62b227e@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream pinentry seems to assume a fixed include path for ncursesw,
-while still using pkg-config to check what that path should be.
-This results in detecting the library during config failing to include
-it correctly during build.
+Hi,
 
-Fixes:
-  http://autobuild.buildroot.org/results/d8d/d8d33efd16cc94dc9d9d4b2d7615a0abb5752ee4/
-  http://autobuild.buildroot.org/results/c48/c4805785077e955c61f246d0e4d8416d8dbd10b1/
-  http://autobuild.buildroot.org/results/144/14483d35ab5009e854c7ce86e26942fdefd5c1f0
-and bunch of others.
+Le 2015-06-21 21:23, Arnout Vandecappelle a ?crit?:
+>  I propose to do it in two patches:
+> 
+> - a first patch that removes the export of VERBOSE, with the commit log
+> explaining how it breaks cmake projects;
+> 
+> - a second patch that removes the export of all the rest, with the 
+> commit log
+> explaining that there is no reason to export it and that it was just 
+> inherited
+> from Kbuild.
+> 
+>  Can you do that?
 
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
----
-Feedback's very welcome, as I haven't had a patch yet, that itself
-includes a patch. Modeled this on some other commits/patches I've
-found here.
----
- ...1-remove-hard-wired-ncursesw-include-path.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
 
-diff --git a/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch b/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
-new file mode 100644
-index 0000000..c9903c4
---- /dev/null
-+++ b/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
-@@ -0,0 +1,32 @@
-+From cf84bf3ef505059d42184b22cf38f89336bec43d Mon Sep 17 00:00:00 2001
-+From: Gergely Imreh <imrehg@gmail.com>
-+Date: Mon, 22 Jun 2015 07:51:17 +0000
-+Subject: [PATCH 1/1] remove hard-wired ncursesw include path
-+
-+Don't assume that the ncursesw headers are in ../usr/include/ncursesw/..,
-+and pkg-config finds the correct include path anyways.
-+
-+Signed-off-by: Gergely Imreh <imrehg@gmail.com>
-+---
-+ pinentry/pinentry-curses.c | 4 ----
-+ 1 file changed, 4 deletions(-)
-+
-+diff --git a/pinentry/pinentry-curses.c b/pinentry/pinentry-curses.c
-+index 235435a..bdcd0f4 100644
-+--- a/pinentry/pinentry-curses.c
-++++ b/pinentry/pinentry-curses.c
-+@@ -22,11 +22,7 @@
-+ #include <config.h>
-+ #endif
-+ #include <assert.h>
-+-#ifdef HAVE_NCURSESW
-+-#include <ncursesw/curses.h>
-+-#else
-+ #include <curses.h>
-+-#endif
-+ #include <signal.h>
-+ #include <fcntl.h>
-+ #include <unistd.h>
-+-- 
-+1.9.1
-+
+OK, I will do that.
+
+Regards,
+
 -- 
-1.9.1
+C?dric
