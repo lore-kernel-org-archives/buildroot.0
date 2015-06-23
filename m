@@ -1,66 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Jun 2015 22:59:23 +0200
-Subject: [Buildroot] [git commit] gpsd: fix build with musl
-Message-ID: <20150623205959.265D68007B@busybox.osuosl.org>
+From: =?UTF-8?q?C=C3=A9dric=20Marie?= <cedric.marie@openmailbox.org>
+Date: Tue, 23 Jun 2015 23:36:06 +0200
+Subject: [Buildroot] [PATCH] Don't export VERBOSE unless V=1 (for CMake)
+Message-ID: <1435095367-4223-1-git-send-email-cedric.marie@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74954aed627bcf15e7b75a53b62d7b7f016b3aef
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+CMake verbose mode is based on VERBOSE environment variable.
+* If VERBOSE is exported but empty, only "Dependee ... is newer than
+depender ..." messages are shown.
+* If VERBOSE is exported and set (whatever the value), all compilation
+commands are shown.
 
-Add a patch adding missing include.
+VERBOSE is currently systematically exported by Buildroot, even if it
+is empty, in the root Makefile, which implies that the "light" verbose
+mode - with "Dependee ... is newer than depender ..." messages - is
+always enabled.
 
-Fixes:
-http://autobuild.buildroot.net/results/493/493ddaf63f41918d718b5c26e2db258c67dba0a6/
+VERBOSE should only be exported when V=1, which is the standard way to
+enable verbose mode in Buildroot.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
 ---
- .../gpsd/0001-Fix-build-against-musl-libc.patch    |   36 ++++++++++++++++++++
- 1 files changed, 36 insertions(+), 0 deletions(-)
+ Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/gpsd/0001-Fix-build-against-musl-libc.patch b/package/gpsd/0001-Fix-build-against-musl-libc.patch
-new file mode 100644
-index 0000000..c7c5b23
---- /dev/null
-+++ b/package/gpsd/0001-Fix-build-against-musl-libc.patch
-@@ -0,0 +1,36 @@
-+From 2f1b033094df266008d9c4070cd7be33e93a4e12 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 19 Jun 2015 08:08:32 +0300
-+Subject: [PATCH] Fix build against musl libc
-+
-+musl does not include sys/ttydefaults.h from sys/termios.h. Include it
-+explicitly.
-+
-+Fixes build failures like:
-+
-+gpsmon.o: In function `main':
-+gpsmon.c:(.text.startup+0x8f4): undefined reference to `CTRL'
-+
-+Upstream status: sent
-+(http://lists.nongnu.org/archive/html/gpsd-dev/2015-06/msg00031.html)
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ gpsmon.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gpsmon.c b/gpsmon.c
-+index c3001c865821..0ccf74110b5a 100644
-+--- a/gpsmon.c
-++++ b/gpsmon.c
-+@@ -20,6 +20,7 @@
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ #include <sys/select.h>
-++#include <sys/ttydefaults.h>
-+ #include <fcntl.h>
-+ #include <unistd.h>
-+ 
-+-- 
-+2.1.4
-+
+diff --git a/Makefile b/Makefile
+index d3f80c4..8eb21d4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -215,6 +215,7 @@ ifeq ($(KBUILD_VERBOSE),1)
+ ifndef VERBOSE
+   VERBOSE = 1
+ endif
++export VERBOSE
+ else
+   quiet = quiet_
+   Q = @
+@@ -228,7 +229,7 @@ SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
+ # kconfig uses CONFIG_SHELL
+ CONFIG_SHELL := $(SHELL)
+ 
+-export SHELL CONFIG_SHELL quiet Q KBUILD_VERBOSE VERBOSE
++export SHELL CONFIG_SHELL quiet Q KBUILD_VERBOSE
+ 
+ ifndef HOSTAR
+ HOSTAR := ar
+-- 
+2.1.4
