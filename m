@@ -1,70 +1,152 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Jun 2015 18:59:05 +0200
-Subject: [Buildroot] [git commit] pinentry: add patch to fix ncursesw
-	include path
-Message-ID: <20150623165926.7441C807D7@busybox.osuosl.org>
+Date: Tue, 23 Jun 2015 19:04:58 +0200
+Subject: [Buildroot] [PATCHv2] uclibc: add libgcc_s_resume fix
+Message-ID: <1435079098-8424-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d10204ba5880b1fd3900908af15461f51f9f066
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This commit adds a fix for building uClibc 0.9.33.2 and uClibc-ng
+1.0.3 with gcc 5.1 on ARM, since we're about to add support for gcc
+5.1.
 
-Upstream pinentry seems to assume a fixed include path for ncursesw,
-while still using pkg-config to check what that path should be.
-This results in detecting the library during config failing to include
-it correctly during build.
-
-Fixes:
-  http://autobuild.buildroot.org/results/d8d/d8d33efd16cc94dc9d9d4b2d7615a0abb5752ee4/
-  http://autobuild.buildroot.org/results/c48/c4805785077e955c61f246d0e4d8416d8dbd10b1/
-  http://autobuild.buildroot.org/results/144/14483d35ab5009e854c7ce86e26942fdefd5c1f0
-and bunch of others.
-
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...1-remove-hard-wired-ncursesw-include-path.patch |   32 ++++++++++++++++++++
- 1 files changed, 32 insertions(+), 0 deletions(-)
 
-diff --git a/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch b/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
+---
+Changes since v1:
+ - Fix commit log issues
+---
+ .../0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch  | 56 ++++++++++++++++++++++
+ .../1.0.3/0001-Fix-libgcc_s_resume-issue.patch     | 56 ++++++++++++++++++++++
+ 2 files changed, 112 insertions(+)
+ create mode 100644 package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch
+ create mode 100644 package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch
+
+diff --git a/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch b/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch
 new file mode 100644
-index 0000000..c9903c4
+index 0000000..287405d
 --- /dev/null
-+++ b/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
-@@ -0,0 +1,32 @@
-+From cf84bf3ef505059d42184b22cf38f89336bec43d Mon Sep 17 00:00:00 2001
-+From: Gergely Imreh <imrehg@gmail.com>
-+Date: Mon, 22 Jun 2015 07:51:17 +0000
-+Subject: [PATCH 1/1] remove hard-wired ncursesw include path
++++ b/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch
+@@ -0,0 +1,56 @@
++From 7ed8bacef45a2537646e7235092bd2e5408cd0b5 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 14 Jun 2015 15:14:22 +0200
++Subject: [PATCH] Fix libgcc_s_resume issue
 +
-+Don't assume that the ncursesw headers are in ../usr/include/ncursesw/..,
-+and pkg-config finds the correct include path anyways.
++When built with gcc 5.1, uClibc fails to build with the following
++issue:
 +
-+Signed-off-by: Gergely Imreh <imrehg@gmail.com>
++    LD librt-0.9.33.2.so
++  librt/librt_so.a(rt-unwind-resume.oS): In function `_Unwind_Resume':
++  rt-unwind-resume.c:(.text+0x3c): undefined reference to `libgcc_s_resume'
++  collect2: error: ld returned 1 exit status
++  make[2]: *** [lib/librt.so] Error 1
++
++This commit fixes the code in a way similar to what was done in glibc
++in commit:
++
++   https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=175cef4163dd60f95106cfd5f593b8a4e09d02c9
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ pinentry/pinentry-curses.c | 4 ----
-+ 1 file changed, 4 deletions(-)
++ libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c | 3 ++-
++ libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c       | 3 ++-
++ 2 files changed, 4 insertions(+), 2 deletions(-)
 +
-+diff --git a/pinentry/pinentry-curses.c b/pinentry/pinentry-curses.c
-+index 235435a..bdcd0f4 100644
-+--- a/pinentry/pinentry-curses.c
-++++ b/pinentry/pinentry-curses.c
-+@@ -22,11 +22,7 @@
-+ #include <config.h>
-+ #endif
-+ #include <assert.h>
-+-#ifdef HAVE_NCURSESW
-+-#include <ncursesw/curses.h>
-+-#else
-+ #include <curses.h>
-+-#endif
-+ #include <signal.h>
-+ #include <fcntl.h>
-+ #include <unistd.h>
++diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
++index f4d6f41..a6a0515 100644
++--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
+++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
++@@ -27,7 +27,8 @@
++ #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
++ 
++ static void *libgcc_s_handle;
++-static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
+++static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
+++  __attribute_used__;
++ static _Unwind_Reason_Code (*libgcc_s_personality)
++   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
++ static _Unwind_Reason_Code (*libgcc_s_forcedunwind)
++diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
++index f9a4ffb..e2e2e0b 100644
++--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
+++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
++@@ -25,7 +25,8 @@
++ #define __libc_dlclose          dlclose
++ #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
++ 
++-static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
+++static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
+++  __attribute_used__;
++ static _Unwind_Reason_Code (*libgcc_s_personality)
++   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
++ 
 +-- 
-+1.9.1
++2.1.0
 +
+diff --git a/package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch b/package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch
+new file mode 100644
+index 0000000..2d64b98
+--- /dev/null
++++ b/package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch
+@@ -0,0 +1,56 @@
++From 8f3bfd31864c28bf5901fc92e0405c729c2204c9 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 14 Jun 2015 13:19:43 +0200
++Subject: [PATCH] Fix libgcc_s_resume issue
++
++When built with gcc 5.1, uClibc-ng fails to build with the following
++issue:
++
++    LD librt-0.9.33.2.so
++  librt/librt_so.a(rt-unwind-resume.oS): In function `_Unwind_Resume':
++  rt-unwind-resume.c:(.text+0x3c): undefined reference to `libgcc_s_resume'
++  collect2: error: ld returned 1 exit status
++  make[2]: *** [lib/librt.so] Error 1
++
++This commit fixes the code in a way similar to what was done in glibc
++in commit:
++
++   https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=175cef4163dd60f95106cfd5f593b8a4e09d02c9
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c | 3 ++-
++ libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c       | 3 ++-
++ 2 files changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
++index f4d6f41..a6a0515 100644
++--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
+++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
++@@ -27,7 +27,8 @@
++ #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
++ 
++ static void *libgcc_s_handle;
++-static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
+++static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
+++  __attribute_used__;
++ static _Unwind_Reason_Code (*libgcc_s_personality)
++   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
++ static _Unwind_Reason_Code (*libgcc_s_forcedunwind)
++diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
++index f9a4ffb..e2e2e0b 100644
++--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
+++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
++@@ -25,7 +25,8 @@
++ #define __libc_dlclose          dlclose
++ #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
++ 
++-static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
+++static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
+++  __attribute_used__;
++ static _Unwind_Reason_Code (*libgcc_s_personality)
++   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
++ 
++-- 
++2.1.0
++
+-- 
+2.1.0
