@@ -1,35 +1,42 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Tue, 23 Jun 2015 09:56:14 +0200
-Subject: [Buildroot] [PATCH 1/1] Force rebuild of local site packages
-	and theirs local dependencies
-In-Reply-To: <5587E032.8030506@syscom-instruments.com>
-References: <1434460888-30770-1-git-send-email-viallard@syscom-instruments.com>
- <20150616215022.6eb61f22@free-electrons.com>
- <5587E032.8030506@syscom-instruments.com>
-Message-ID: <2854682.pCSB3Zb5Zv@sagittea>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 23 Jun 2015 07:38:17 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{10,
+	14}.x and 4.0.x series
+Message-ID: <1435055897-1752-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Anthony,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On Monday 22 June 2015 12:15:14 Viallard Anthony wrote:
-[..]
-> The main thing is this not convenient. I have about 30 packages and we 
-> are a team. I don't want to check after each git pull the packages which 
-> have been modified and call make <pkg>-rebuild for each of them (and be 
-> aware about dependencies, for example calling libraries rebuild before 
-> because the <pkg>-rebuild target doesn't rebuild the dependencies).
-
-Does this process would work?
-
-  rm build/*/.stamp_built
-  make
-
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 059075c..ace00d7 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -209,16 +209,16 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.108"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.80"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.81"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.44"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.44"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.45"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.15"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+-	default "4.0.5"		if BR2_KERNEL_HEADERS_4_0
++	default "4.0.6"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1"		if BR2_KERNEL_HEADERS_4_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+2.3.6
