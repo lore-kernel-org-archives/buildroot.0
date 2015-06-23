@@ -1,87 +1,117 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Jun 2015 09:48:26 +0200
-Subject: [Buildroot] [PATCH 1/1] pinentry: add patch to fix ncursesw
- include path
-In-Reply-To: <1434961679-15594-1-git-send-email-imrehg@gmail.com>
-References: <1434961679-15594-1-git-send-email-imrehg@gmail.com>
-Message-ID: <55890F4A.8050902@mind.be>
+Date: Tue, 23 Jun 2015 09:58:08 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/network-manager: add patches
+ to build with kernel headers 3.2
+In-Reply-To: <1434969830-31251-1-git-send-email-vorel@jablocom.com>
+References: <1434969830-31251-1-git-send-email-vorel@jablocom.com>
+Message-ID: <55891190.7080800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/22/15 10:28, Gergely Imreh wrote:
-> Upstream pinentry seems to assume a fixed include path for ncursesw,
-> while still using pkg-config to check what that path should be.
-> This results in detecting the library during config failing to include
-> it correctly during build.
+On 06/22/15 12:43, Petr Vorel wrote:
+> From: Petr Vorel <petr.vorel@gmail.com>
 > 
-> Fixes:
->   http://autobuild.buildroot.org/results/d8d/d8d33efd16cc94dc9d9d4b2d7615a0abb5752ee4/
->   http://autobuild.buildroot.org/results/c48/c4805785077e955c61f246d0e4d8416d8dbd10b1/
->   http://autobuild.buildroot.org/results/144/14483d35ab5009e854c7ce86e26942fdefd5c1f0
-> and bunch of others.
+> + lower kernel headers dependency
 > 
-> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
+> According to upstream [1], there is no known minimal kernel-version, nor
+> minimal required feature-set.
+> 
+> Experimentally tested, that 1.0.2 is works with 3.2 kernel headers, even
+> some features will be missing [2].
+
+ "works" as in run-time tested?
+
+> 
+> [1] https://mail.gnome.org/archives/networkmanager-list/2015-April/msg00039.html
+> [2] https://mail.gnome.org/archives/networkmanager-list/2015-April/msg00041.html
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Please also submit the patch upstream, so hopefully we can drop the patch in
-the future. Or they may have an explanation why they need this, in which case it
-may be necessary to modify the patch.
+ Some questions below though.
 
+> ---
+> Changes v3:
+>  - Lower kernel headers dependency to 3.2
+>  - Preserved original author of
+>    0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
+>  - Added Signed-off-by inside both patches.
+> Changes v2: rewrited patch 0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
+> ---
+>  ...anager-fix-build-with-Linux-3.2.0-headers.patch | 30 ++++++++++++++++++
+>  ...d-dhcp-fix-build-with-Linux-3.2.0-headers.patch | 37 ++++++++++++++++++++++
+>  package/network-manager/Config.in                  |  2 +-
+>  3 files changed, 68 insertions(+), 1 deletion(-)
+>  create mode 100644 package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
+>  create mode 100644 package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
+> 
+> diff --git a/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch b/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
+> new file mode 100644
+> index 0000000..49c1996
+> --- /dev/null
+> +++ b/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
+> @@ -0,0 +1,30 @@
+> +From 22b99e3bbb2ca33963e839f12ab95314ab8d9ba9 Mon Sep 17 00:00:00 2001
+> +From: Lubomir Rintel <lkundrak@v3.sk>
+> +Date: Fri, 15 May 2015 16:37:20 +0200
+> +Subject: [PATCH] ppp-manager: fix build with Linux 3.2.0 headers
+> +
+> +Fixes build with Ubuntu 12.04.
+> +
+> +In file included from ppp-manager/nm-ppp-manager.c:42:0:
+> +/usr/include/linux/if_ppp.h:103:16: error: field 'b' has incomplete type
+> +/usr/include/linux/if_ppp.h:108:21: error: field 'b' has incomplete type
+> +
+> +Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+
+ Upstream status?
+
+> +---
+> + src/ppp-manager/nm-ppp-manager.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/src/ppp-manager/nm-ppp-manager.c b/src/ppp-manager/nm-ppp-manager.c
+> +index e27c82b..d410ebf 100644
+> +--- a/src/ppp-manager/nm-ppp-manager.c
+> ++++ b/src/ppp-manager/nm-ppp-manager.c
+> +@@ -39,6 +39,7 @@
+> + #ifndef aligned_u64
+> + #define aligned_u64 unsigned long long __attribute__((aligned(8)))
+> + #endif
+> ++#include <linux/if.h>
+> + #include <linux/if_ppp.h>
+> +
+> + #include "NetworkManagerUtils.h"
+> +--
+> +2.1.4
+[snip]
+> diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+> index f6d8564..ae0eb70 100644
+> --- a/package/network-manager/Config.in
+> +++ b/package/network-manager/Config.in
+> @@ -2,7 +2,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+>  	bool "networkmanager"
+>  	depends on BR2_USE_MMU # dbus
+>  	depends on BR2_PACKAGE_HAS_UDEV
+> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+
+ Basically it _may_ also work with lower kernel headers but hasn't been tested,
+right? Ideally, it would be nice to do a (build-)test with 2.6.34-ish. Or else,
+you could add a comment saying that it could work with lower headers. The
+minimal headers version was anyway only introduced to fix an autobuild failure.
 
  Regards,
  Arnout
 
-> ---
-> Feedback's very welcome, as I haven't had a patch yet, that itself
-> includes a patch. Modeled this on some other commits/patches I've
-> found here.
-> ---
->  ...1-remove-hard-wired-ncursesw-include-path.patch | 32 ++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
-> 
-> diff --git a/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch b/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
-> new file mode 100644
-> index 0000000..c9903c4
-> --- /dev/null
-> +++ b/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
-> @@ -0,0 +1,32 @@
-> +From cf84bf3ef505059d42184b22cf38f89336bec43d Mon Sep 17 00:00:00 2001
-> +From: Gergely Imreh <imrehg@gmail.com>
-> +Date: Mon, 22 Jun 2015 07:51:17 +0000
-> +Subject: [PATCH 1/1] remove hard-wired ncursesw include path
-> +
-> +Don't assume that the ncursesw headers are in ../usr/include/ncursesw/..,
-> +and pkg-config finds the correct include path anyways.
-> +
-> +Signed-off-by: Gergely Imreh <imrehg@gmail.com>
-> +---
-> + pinentry/pinentry-curses.c | 4 ----
-> + 1 file changed, 4 deletions(-)
-> +
-> +diff --git a/pinentry/pinentry-curses.c b/pinentry/pinentry-curses.c
-> +index 235435a..bdcd0f4 100644
-> +--- a/pinentry/pinentry-curses.c
-> ++++ b/pinentry/pinentry-curses.c
-> +@@ -22,11 +22,7 @@
-> + #include <config.h>
-> + #endif
-> + #include <assert.h>
-> +-#ifdef HAVE_NCURSESW
-> +-#include <ncursesw/curses.h>
-> +-#else
-> + #include <curses.h>
-> +-#endif
-> + #include <signal.h>
-> + #include <fcntl.h>
-> + #include <unistd.h>
-> +-- 
-> +1.9.1
-> +
+
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC # CLOCK_BOOTTIME, IPTOS_CLASS_*
+>  	select BR2_PACKAGE_DHCPCD if !BR2_PACKAGE_DHCP_CLIENT
+>  	select BR2_PACKAGE_DBUS
 > 
 
 
