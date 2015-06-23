@@ -1,92 +1,70 @@
-From: Denis Thulin <denis.thulin@openwide.fr>
-Date: Tue, 23 Jun 2015 18:14:35 +0200 (CEST)
-Subject: [Buildroot] [PATCH 2/3] python-robotframework: New package
-In-Reply-To: <5586B1C4.3020901@mind.be>
-Message-ID: <605803345.2006607.1435076075482.JavaMail.root@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Jun 2015 18:59:05 +0200
+Subject: [Buildroot] [git commit] pinentry: add patch to fix ncursesw
+	include path
+Message-ID: <20150623165926.7441C807D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+commit: http://git.buildroot.net/buildroot/commit/?id=8d10204ba5880b1fd3900908af15461f51f9f066
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 06/21/15 14:44, Arnout Vandecappelle wrote:
-> On 06/15/15 12:06, Denis THULIN wrote:
-> > A generic test automation framework written in python.
-> > 
-> > Signed-off-by: Denis THULIN <denis.thulin@openwide.fr>
-> [snip]
-> > diff --git
-> > a/package/python-robotframework/python-robotframework.hash
-> > b/package/python-robotframework/python-robotframework.hash
-> > new file mode 100644
-> > index 0000000..7d9ec46
-> > --- /dev/null
-> > +++ b/package/python-robotframework/python-robotframework.hash
-> > @@ -0,0 +1,2 @@
-> > +# sha356 calculated by scanpypi
-> > +sha356
-> > 	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-> >  robotframework-2.9a2.tar.gz
-> 
->  Doesn't this give an error? I couldn't check for myself since the
->  file has
-> vanished from pypi...
+Upstream pinentry seems to assume a fixed include path for ncursesw,
+while still using pkg-config to check what that path should be.
+This results in detecting the library during config failing to include
+it correctly during build.
 
-The file is still on pypi : 
-https://pypi.python.org/packages/source/r/robotframework/robotframework-2.9a2.tar.gz
-But sha356 does not exist as far as I know and the sha256 was wrong anyway
-because I accidently deleted a line from scanpypi.py
+Fixes:
+  http://autobuild.buildroot.org/results/d8d/d8d33efd16cc94dc9d9d4b2d7615a0abb5752ee4/
+  http://autobuild.buildroot.org/results/c48/c4805785077e955c61f246d0e4d8416d8dbd10b1/
+  http://autobuild.buildroot.org/results/144/14483d35ab5009e854c7ce86e26942fdefd5c1f0
+and bunch of others.
 
-> 
-> > diff --git a/package/python-robotframework/python-robotframework.mk
-> > b/package/python-robotframework/python-robotframework.mk
-> > new file mode 100644
-> > index 0000000..437d5f4
-> > --- /dev/null
-> > +++ b/package/python-robotframework/python-robotframework.mk
-> > @@ -0,0 +1,14 @@
-> > +################################################################################
-> > +#
-> > +# python-robotframework
-> > +#
-> > +################################################################################
-> > +
-> > +PYTHON_ROBOTFRAMEWORK_VERSION = 2.9a2
-> > +PYTHON_ROBOTFRAMEWORK_SOURCE =
-> > robotframework-$(PYTHON_ROBOTFRAMEWORK_VERSION).tar.gz
-> > +PYTHON_ROBOTFRAMEWORK_SITE =
-> > https://pypi.python.org/packages/source/r/robotframework/
-> > +PYTHON_ROBOTFRAMEWORK_SETUP_TYPE = distutils
-> > +PYTHON_ROBOTFRAMEWORK_LICENSE = Apache License 2.0
-> 
->  Apache-2.0
->
+Signed-off-by: Gergely Imreh <imrehg@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...1-remove-hard-wired-ncursesw-include-path.patch |   32 ++++++++++++++++++++
+ 1 files changed, 32 insertions(+), 0 deletions(-)
 
-I will correct that.
-
-
-Regards,
-
-Denis
- 
-> 
->  Regards,
->  Arnout
-> 
-> > +PYTHON_ROBOTFRAMEWORK_LICENSE_FILES = LICENSE.txt
-> > +
-> > +$(eval $(python-package))
-> > 
-> 
-> 
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR
-> Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> 
+diff --git a/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch b/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
+new file mode 100644
+index 0000000..c9903c4
+--- /dev/null
++++ b/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
+@@ -0,0 +1,32 @@
++From cf84bf3ef505059d42184b22cf38f89336bec43d Mon Sep 17 00:00:00 2001
++From: Gergely Imreh <imrehg@gmail.com>
++Date: Mon, 22 Jun 2015 07:51:17 +0000
++Subject: [PATCH 1/1] remove hard-wired ncursesw include path
++
++Don't assume that the ncursesw headers are in ../usr/include/ncursesw/..,
++and pkg-config finds the correct include path anyways.
++
++Signed-off-by: Gergely Imreh <imrehg@gmail.com>
++---
++ pinentry/pinentry-curses.c | 4 ----
++ 1 file changed, 4 deletions(-)
++
++diff --git a/pinentry/pinentry-curses.c b/pinentry/pinentry-curses.c
++index 235435a..bdcd0f4 100644
++--- a/pinentry/pinentry-curses.c
+++++ b/pinentry/pinentry-curses.c
++@@ -22,11 +22,7 @@
++ #include <config.h>
++ #endif
++ #include <assert.h>
++-#ifdef HAVE_NCURSESW
++-#include <ncursesw/curses.h>
++-#else
++ #include <curses.h>
++-#endif
++ #include <signal.h>
++ #include <fcntl.h>
++ #include <unistd.h>
++-- 
++1.9.1
++
