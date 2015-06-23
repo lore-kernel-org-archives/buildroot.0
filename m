@@ -1,164 +1,87 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Jun 2015 14:15:36 +0200
-Subject: [Buildroot] [PATCH v2] kvmtool: new package
-In-Reply-To: <1434979398-30311-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1434979398-30311-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <55894DE8.8060706@mind.be>
+Date: Tue, 23 Jun 2015 09:48:26 +0200
+Subject: [Buildroot] [PATCH 1/1] pinentry: add patch to fix ncursesw
+ include path
+In-Reply-To: <1434961679-15594-1-git-send-email-imrehg@gmail.com>
+References: <1434961679-15594-1-git-send-email-imrehg@gmail.com>
+Message-ID: <55890F4A.8050902@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/22/15 15:23, gustavo.zacarias at free-electrons.com wrote:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+On 06/22/15 10:28, Gergely Imreh wrote:
+> Upstream pinentry seems to assume a fixed include path for ncursesw,
+> while still using pkg-config to check what that path should be.
+> This results in detecting the library during config failing to include
+> it correctly during build.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-
- Some minor whitespace questions below, but basically
+> Fixes:
+>   http://autobuild.buildroot.org/results/d8d/d8d33efd16cc94dc9d9d4b2d7615a0abb5752ee4/
+>   http://autobuild.buildroot.org/results/c48/c4805785077e955c61f246d0e4d8416d8dbd10b1/
+>   http://autobuild.buildroot.org/results/144/14483d35ab5009e854c7ce86e26942fdefd5c1f0
+> and bunch of others.
+> 
+> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> ---
->  package/Config.in          |  1 +
->  package/kvmtool/Config.in  | 32 ++++++++++++++++++++++++++++
->  package/kvmtool/kvmtool.mk | 53 ++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 86 insertions(+)
->  create mode 100644 package/kvmtool/Config.in
->  create mode 100644 package/kvmtool/kvmtool.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 6dbc32d..2c0d029 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1398,6 +1398,7 @@ endif
->  	source "package/irqbalance/Config.in"
->  	source "package/keyutils/Config.in"
->  	source "package/kmod/Config.in"
-> +	source "package/kvmtool/Config.in"
->  	source "package/lxc/Config.in"
->  	source "package/monit/Config.in"
->  	source "package/ncdu/Config.in"
-> diff --git a/package/kvmtool/Config.in b/package/kvmtool/Config.in
-> new file mode 100644
-> index 0000000..ce24d40
-> --- /dev/null
-> +++ b/package/kvmtool/Config.in
-> @@ -0,0 +1,32 @@
-> +config BR2_PACKAGE_KVMTOOL
-> +	bool "kvmtool"
-> +	depends on BR2_USE_MMU # guest simple init fork()
-> +	# No MADV_HUGEPAGE define in uClibc(-ng)
-> +	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-> +	# Only mips big-endian seems to be supported (build breaks)
-> +	# Should work on powerpc64 but the build breaks with missing types
-> +	depends on \
-> +		BR2_aarch64 || BR2_arm       || BR2_armeb || BR2_i386 || \
-> +		BR2_mips    || BR2_x86_64
+ Please also submit the patch upstream, so hopefully we can drop the patch in
+the future. Or they may have an explanation why they need this, in which case it
+may be necessary to modify the patch.
 
- Line splitting, whitespace and ordering is a bit weird I think, why not
-
-	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_mips || \
-		BR2_i386 || BR2_x86_64
-
-> +	# libfdt is only required for DT architectures...
-> +	# ...but it's not able to build for static targets
-> +	depends on !(BR2_STATIC_LIBS && (BR2_aarch64 || BR2_arm || BR2_armeb))
-> +	select BR2_PACKAGE_DTC if BR2_aarch64 || BR2_arm || BR2_armeb
-> +	help
-> +	  kvmtool is a lightweight tool for hosting KVM guests.
-> +	  As a pure virtualization tool it only supports guests using
-> +	  the same architecture, though it supports running 32-bit guests
-> +	  on those 64-bit architectures that allow this.
-> +
-> +	  https://git.kernel.org/cgit/linux/kernel/git/will/kvmtool.git/tree/README
-> +
-> +comment "kvmtool needs a (e)glibc or musl toolchain"
-> +	depends on BR2_USE_MMU
-> +	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-> +	depends on BR2_i386 || BR2_mips || BR2_x86_64
-
- It makes more sense to put the arch-depends together, so the arches just after MMU.
-
-> +
-> +comment "kvmtool needs a (e)glibc or musl toolchain w/ dynamic library"
-> +	depends on BR2_USE_MMU
-> +        depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
-   ^^^^^^^^ spaces iso. tab.
-
- Also, glibc can't be static, but probably the way you have it here is clearer.
-
-> +		BR2_STATIC_LIBS
-> +	depends on BR2_aarch64 || BR2_arm || BR2_armeb
-
- Same here: arches just after MMU.
-
-> diff --git a/package/kvmtool/kvmtool.mk b/package/kvmtool/kvmtool.mk
-> new file mode 100644
-> index 0000000..7f682db
-> --- /dev/null
-> +++ b/package/kvmtool/kvmtool.mk
-> @@ -0,0 +1,53 @@
-> +################################################################################
-> +#
-> +# kvmtool
-> +#
-> +################################################################################
-> +
-> +KVMTOOL_VERSION = 372f583d359a5bdcbbe7268809c8d1dc179c64d2
-> +KVMTOOL_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/will/kvmtool.git
-> +KVMTOOL_SITE_METHOD = git
-> +KVMTOOL_DEPENDENCIES = \
-> +	$(if $(BR2_PACKAGE_BINUTILS),binutils) \
-> +	$(if $(BR2_PACKAGE_DTC),dtc) \
-> +	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
-> +	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3) \
-> +	$(if $(BR2_PACKAGE_LIBVNCSERVER),libvncserver) \
-> +	$(if $(BR2_PACKAGE_SDL),sdl) \
-> +	$(if $(BR2_PACKAGE_ZLIB),zlib)
-> +KVMTOOL_LICENSE = GPLv2
-> +KVMTOOL_LICENSE_FILES = COPYING
-> +
-> +# This is required to convert a static binary (init helper) back into
-> +# object-file format, and in multilib toolchains like CS 2012.09 for x86
-> +# the default is i386, hence when building for x86_64 things break since
-> +# LD doesn't autodetect the input file format.
-> +# GCC-as-linker can't accomplish this feat easily either since it's mixing
-> +# static content (guest_init.o) with dynamic one (lkvm) making
-> +# a relocatable output file.
-> +# The purpose of this trick is to embed the init helper into the main
-> +# binary to help users in guest system startup, which would otherwise
-> +# require more complex guest images.
-> +# This needs revisiting if/when X32 ABI support is added.
-> +#
-> +# If more packages need this (unlikely) an ld wrapper might be a better
-> +# solution, using gcc -dumpspecs information.
-> +KVMTOOL_EXTRA_LDFLAGS = \
-> +	$(if $(BR2_x86_64),-m elf_x86_64)
-> +
-> +# Disable -Werror, otherwise musl is not happy
-> +KVMTOOL_MAKE_OPTS = \
-> +	CROSS_COMPILE="$(TARGET_CROSS)" \
-> +	LDFLAGS="$(TARGET_LDFLAGS) $(KVMTOOL_EXTRA_LDFLAGS)" \
-> +	WERROR=0
-
- Shouldn't we pass TARGET_CFLAGS and friends as well? Perhaps put
-TARGET_CONFIGURE_OPTS in the environment?
 
  Regards,
  Arnout
 
+> ---
+> Feedback's very welcome, as I haven't had a patch yet, that itself
+> includes a patch. Modeled this on some other commits/patches I've
+> found here.
+> ---
+>  ...1-remove-hard-wired-ncursesw-include-path.patch | 32 ++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
+> 
+> diff --git a/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch b/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
+> new file mode 100644
+> index 0000000..c9903c4
+> --- /dev/null
+> +++ b/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
+> @@ -0,0 +1,32 @@
+> +From cf84bf3ef505059d42184b22cf38f89336bec43d Mon Sep 17 00:00:00 2001
+> +From: Gergely Imreh <imrehg@gmail.com>
+> +Date: Mon, 22 Jun 2015 07:51:17 +0000
+> +Subject: [PATCH 1/1] remove hard-wired ncursesw include path
 > +
-> +define KVMTOOL_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) ARCH=$(KERNEL_ARCH) $(MAKE) -C $(@D) $(KVMTOOL_MAKE_OPTS)
-> +endef
+> +Don't assume that the ncursesw headers are in ../usr/include/ncursesw/..,
+> +and pkg-config finds the correct include path anyways.
 > +
-> +define KVMTOOL_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) ARCH=$(KERNEL_ARCH) $(MAKE) -C $(@D) \
-> +		$(KVMTOOL_MAKE_OPTS) install DESTDIR=$(TARGET_DIR) prefix=/usr
-> +endef
+> +Signed-off-by: Gergely Imreh <imrehg@gmail.com>
+> +---
+> + pinentry/pinentry-curses.c | 4 ----
+> + 1 file changed, 4 deletions(-)
 > +
-> +$(eval $(generic-package))
+> +diff --git a/pinentry/pinentry-curses.c b/pinentry/pinentry-curses.c
+> +index 235435a..bdcd0f4 100644
+> +--- a/pinentry/pinentry-curses.c
+> ++++ b/pinentry/pinentry-curses.c
+> +@@ -22,11 +22,7 @@
+> + #include <config.h>
+> + #endif
+> + #include <assert.h>
+> +-#ifdef HAVE_NCURSESW
+> +-#include <ncursesw/curses.h>
+> +-#else
+> + #include <curses.h>
+> +-#endif
+> + #include <signal.h>
+> + #include <fcntl.h>
+> + #include <unistd.h>
+> +-- 
+> +1.9.1
+> +
 > 
 
 
