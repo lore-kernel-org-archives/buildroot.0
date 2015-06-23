@@ -1,65 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 23 Jun 2015 20:21:20 +0300
-Subject: [Buildroot] [PATCH] gpsd: fix build with musl
-Message-ID: <07e6ebc91a63c508bf4caeb2594def8164556281.1435080080.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 23 Jun 2015 21:28:02 +0200
+Subject: [Buildroot] [git commit] gcc: switch to gcc 4.9 as the default
+	version
+In-Reply-To: <20150623180202.34e83978@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 23 Jun 2015 18:02:02 +0200")
+References: <20150622222746.025B07FAFF@busybox.osuosl.org>
+ <55890EC2.2040505@mind.be>
+ <20150623180202.34e83978@free-electrons.com>
+Message-ID: <87egl25inx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch adding missing include.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/493/493ddaf63f41918d718b5c26e2db258c67dba0a6/
+Hi,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../gpsd/0001-Fix-build-against-musl-libc.patch    | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/gpsd/0001-Fix-build-against-musl-libc.patch
+ > These are always using the default gcc version. However, it is true
+ > that all the other Buildroot toolchain configuration use pre-built
+ > external toolchains, that are stuck to whatever was the default back
+ > when 2015.05, except the following toolchains that already use gcc 4.9:
 
-diff --git a/package/gpsd/0001-Fix-build-against-musl-libc.patch b/package/gpsd/0001-Fix-build-against-musl-libc.patch
-new file mode 100644
-index 000000000000..c7c5b2333c8f
---- /dev/null
-+++ b/package/gpsd/0001-Fix-build-against-musl-libc.patch
-@@ -0,0 +1,36 @@
-+From 2f1b033094df266008d9c4070cd7be33e93a4e12 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 19 Jun 2015 08:08:32 +0300
-+Subject: [PATCH] Fix build against musl libc
-+
-+musl does not include sys/ttydefaults.h from sys/termios.h. Include it
-+explicitly.
-+
-+Fixes build failures like:
-+
-+gpsmon.o: In function `main':
-+gpsmon.c:(.text.startup+0x8f4): undefined reference to `CTRL'
-+
-+Upstream status: sent
-+(http://lists.nongnu.org/archive/html/gpsd-dev/2015-06/msg00031.html)
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ gpsmon.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gpsmon.c b/gpsmon.c
-+index c3001c865821..0ccf74110b5a 100644
-+--- a/gpsmon.c
-++++ b/gpsmon.c
-+@@ -20,6 +20,7 @@
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ #include <sys/select.h>
-++#include <sys/ttydefaults.h>
-+ #include <fcntl.h>
-+ #include <unistd.h>
-+ 
-+-- 
-+2.1.4
-+
+ > br-aarch64-glibc.config:BR2_GCC_VERSION_4_9_X=y
+ > br-arm-cortex-a9-glibc.config:BR2_GCC_VERSION_4_9_X=y
+ > br-arm-cortex-a9-musl.config:BR2_GCC_VERSION_4_9_X=y
+
+ > But I can certainly trigger a rebuild of the toolchains with the most
+ > recent Buildroot, using gcc 4.9 as the default, and having one
+ > toolchain using gcc 5.1 to catch issues. Should I do this?
+
+I think it would be interesting to do so, yes.
+
+Thanks!
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
