@@ -1,39 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Jun 2015 21:28:02 +0200
-Subject: [Buildroot] [git commit] gcc: switch to gcc 4.9 as the default
-	version
-In-Reply-To: <20150623180202.34e83978@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 23 Jun 2015 18:02:02 +0200")
-References: <20150622222746.025B07FAFF@busybox.osuosl.org>
- <55890EC2.2040505@mind.be>
- <20150623180202.34e83978@free-electrons.com>
-Message-ID: <87egl25inx.fsf@dell.be.48ers.dk>
+Date: Tue, 23 Jun 2015 22:56:46 +0200
+Subject: [Buildroot] [PATCH 1/1] sudo: enable pam support
+In-Reply-To: <1434734352-6500-1-git-send-email-james.knight@rockwellcollins.com>
+ (James Knight's message of "Fri, 19 Jun 2015 13:19:12 -0400")
+References: <1434734352-6500-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <87616e5ek1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "James" == James Knight <james.knight@rockwellcollins.com> writes:
 
-Hi,
+ > Configure the sudo utility to support PAM if the framework is enabled.
+ > Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+ > ---
+ >  package/sudo/sudo.mk  | 13 ++++++++++++-
+ >  package/sudo/sudo.pam | 12 ++++++++++++
+ >  2 files changed, 24 insertions(+), 1 deletion(-)
+ >  create mode 100644 package/sudo/sudo.pam
 
- > These are always using the default gcc version. However, it is true
- > that all the other Buildroot toolchain configuration use pre-built
- > external toolchains, that are stuck to whatever was the default back
- > when 2015.05, except the following toolchains that already use gcc 4.9:
+ > diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+ > index a1a8328..9fa1cd6 100644
+ > --- a/package/sudo/sudo.mk
+ > +++ b/package/sudo/sudo.mk
+ > @@ -16,9 +16,20 @@ SUDO_CONF_OPTS = \
+ >  	--without-umask \
+ >  	--with-logging=syslog \
+ >  	--without-interfaces \
+ > -	--without-pam \
+ >  	--with-env-editor
+ 
+ > +ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ > +define SUDO_INSTALL_PAM_CONF
+ > +	$(INSTALL) -m 0644 package/sudo/sudo.pam $(TARGET_DIR)/etc/pam.d/sudo
 
- > br-aarch64-glibc.config:BR2_GCC_VERSION_4_9_X=y
- > br-arm-cortex-a9-glibc.config:BR2_GCC_VERSION_4_9_X=y
- > br-arm-cortex-a9-musl.config:BR2_GCC_VERSION_4_9_X=y
-
- > But I can certainly trigger a rebuild of the toolchains with the most
- > recent Buildroot, using gcc 4.9 as the default, and having one
- > toolchain using gcc 5.1 to catch issues. Should I do this?
-
-I think it would be interesting to do so, yes.
-
-Thanks!
+This should use the -D option to ensure the destination directories gets
+created. Committed with that fixed, thanks!
 
 -- 
 Bye, Peter Korsgaard
