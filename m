@@ -1,132 +1,72 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Wed, 24 Jun 2015 15:44:11 -0300
-Subject: [Buildroot] [PATCH v3] kvmtool: new package
-Message-ID: <1435171451-19539-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: George Redivo <george.redivo@datacom.ind.br>
+Date: Wed, 24 Jun 2015 15:51:54 -0300 (BRT)
+Subject: [Buildroot] [PATCH 1/1] protobuf: bump version to 2.6.1
+In-Reply-To: <CANQCQpYy-kuZLfMjO0YrX8Kfa25eLUa09U-NUyOSQjxE0vq5WA@mail.gmail.com>
+References: <1434995939-8236-1-git-send-email-george.redivo@datacom.ind.br>
+ <CANQCQpYy-kuZLfMjO0YrX8Kfa25eLUa09U-NUyOSQjxE0vq5WA@mail.gmail.com>
+Message-ID: <1313674444.2327407.1435171914537.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Hi, Peter. 
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/Config.in          |  1 +
- package/kvmtool/Config.in  | 31 +++++++++++++++++++++++++++
- package/kvmtool/kvmtool.mk | 53 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 85 insertions(+)
- create mode 100644 package/kvmtool/Config.in
- create mode 100644 package/kvmtool/kvmtool.mk
+I looked to the ola's Config.in file and there is no powerpc dependency declared in there. 
+So I'm not sure if it's valid to try to make a build to powerpc arch including this package. Is it? 
 
-diff --git a/package/Config.in b/package/Config.in
-index fac632f..6522618 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1403,6 +1403,7 @@ endif
- 	source "package/irqbalance/Config.in"
- 	source "package/keyutils/Config.in"
- 	source "package/kmod/Config.in"
-+	source "package/kvmtool/Config.in"
- 	source "package/lxc/Config.in"
- 	source "package/monit/Config.in"
- 	source "package/ncdu/Config.in"
-diff --git a/package/kvmtool/Config.in b/package/kvmtool/Config.in
-new file mode 100644
-index 0000000..f047c75
---- /dev/null
-+++ b/package/kvmtool/Config.in
-@@ -0,0 +1,31 @@
-+config BR2_PACKAGE_KVMTOOL
-+	bool "kvmtool"
-+	depends on BR2_USE_MMU # guest simple init fork()
-+	# No MADV_HUGEPAGE define in uClibc(-ng)
-+	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+	# Only mips big-endian seems to be supported (build breaks)
-+	# Should work on powerpc64 but the build breaks with missing types
-+	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
-+		BR2_mips || BR2_x86_64
-+	# libfdt is only required for DT architectures...
-+	# ...but it's not able to build for static targets
-+	depends on !(BR2_STATIC_LIBS && (BR2_aarch64 || BR2_arm || BR2_armeb))
-+	select BR2_PACKAGE_DTC if BR2_aarch64 || BR2_arm || BR2_armeb
-+	help
-+	  kvmtool is a lightweight tool for hosting KVM guests.
-+	  As a pure virtualization tool it only supports guests using
-+	  the same architecture, though it supports running 32-bit guests
-+	  on those 64-bit architectures that allow this.
-+
-+	  https://git.kernel.org/cgit/linux/kernel/git/will/kvmtool.git/tree/README
-+
-+comment "kvmtool needs a (e)glibc or musl toolchain"
-+	depends on BR2_USE_MMU
-+	depends on BR2_i386 || BR2_mips || BR2_x86_64
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+
-+comment "kvmtool needs a (e)glibc or musl toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_aarch64 || BR2_arm || BR2_armeb
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
-+		BR2_STATIC_LIBS
-diff --git a/package/kvmtool/kvmtool.mk b/package/kvmtool/kvmtool.mk
-new file mode 100644
-index 0000000..7f682db
---- /dev/null
-+++ b/package/kvmtool/kvmtool.mk
-@@ -0,0 +1,53 @@
-+################################################################################
-+#
-+# kvmtool
-+#
-+################################################################################
-+
-+KVMTOOL_VERSION = 372f583d359a5bdcbbe7268809c8d1dc179c64d2
-+KVMTOOL_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/will/kvmtool.git
-+KVMTOOL_SITE_METHOD = git
-+KVMTOOL_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_BINUTILS),binutils) \
-+	$(if $(BR2_PACKAGE_DTC),dtc) \
-+	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
-+	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3) \
-+	$(if $(BR2_PACKAGE_LIBVNCSERVER),libvncserver) \
-+	$(if $(BR2_PACKAGE_SDL),sdl) \
-+	$(if $(BR2_PACKAGE_ZLIB),zlib)
-+KVMTOOL_LICENSE = GPLv2
-+KVMTOOL_LICENSE_FILES = COPYING
-+
-+# This is required to convert a static binary (init helper) back into
-+# object-file format, and in multilib toolchains like CS 2012.09 for x86
-+# the default is i386, hence when building for x86_64 things break since
-+# LD doesn't autodetect the input file format.
-+# GCC-as-linker can't accomplish this feat easily either since it's mixing
-+# static content (guest_init.o) with dynamic one (lkvm) making
-+# a relocatable output file.
-+# The purpose of this trick is to embed the init helper into the main
-+# binary to help users in guest system startup, which would otherwise
-+# require more complex guest images.
-+# This needs revisiting if/when X32 ABI support is added.
-+#
-+# If more packages need this (unlikely) an ld wrapper might be a better
-+# solution, using gcc -dumpspecs information.
-+KVMTOOL_EXTRA_LDFLAGS = \
-+	$(if $(BR2_x86_64),-m elf_x86_64)
-+
-+# Disable -Werror, otherwise musl is not happy
-+KVMTOOL_MAKE_OPTS = \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS) $(KVMTOOL_EXTRA_LDFLAGS)" \
-+	WERROR=0
-+
-+define KVMTOOL_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) ARCH=$(KERNEL_ARCH) $(MAKE) -C $(@D) $(KVMTOOL_MAKE_OPTS)
-+endef
-+
-+define KVMTOOL_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) ARCH=$(KERNEL_ARCH) $(MAKE) -C $(@D) \
-+		$(KVMTOOL_MAKE_OPTS) install DESTDIR=$(TARGET_DIR) prefix=/usr
-+endef
-+
-+$(eval $(generic-package))
+Anyway, I tried to reproduce the reported error by adding those flags in my .config file. 
+In addition, I removed BR2_powerpc_8548=y, that was declared. 
+
+I ran make olddefconfig and the .config changed. 
+The BR2_PACKAGE_OLA flag simply dropped out from the .config file. 
+
+May you send me your entire .config after running make olddefconfig please? 
+
+Thanks for your attention. 
+
+George Redivo 
+DATACOM 
+Ethernet Switches 
+Rua Am?rica, 1000 - Eldorado do Sul, RS 
+Ramal: 3444 
+george.redivo at datacom.ind.br 
+www.datacom.ind.br 
+
+
+
+De: "Matthew Weber" <matthew.weber@rockwellcollins.com> 
+Para: "DATACOM" <george.redivo@datacom.ind.br> 
+Cc: "buildroot" <buildroot@buildroot.org> 
+Enviadas: Segunda-feira, 22 de junho de 2015 18:21:13 
+Assunto: Re: [Buildroot] [PATCH 1/1] protobuf: bump version to 2.6.1 
+
+George, 
+
+On Mon, Jun 22, 2015 at 12:58 PM, George Redivo < george.redivo@datacom.ind.br > wrote: 
+
+
+* Adds powerpc architecture support 
+
+
+
+FYI, there is an old email thread related to a previous attempt at bumping where any compiler older then GCC4.7 has build issues with atomics. 
+http://lists.busybox.net/pipermail/buildroot/2014-October/110418.html 
+
+There was also some discussion at one of the previous Buildroot developer meetings about the direction suggested for handling this case. I was leaning towards just restricting based on toolchain version..... 
+
+Thanks, 
+
 -- 
-2.1.4
+Matthew L Weber / Pr Software Engineer 
+Airborne Information Systems / Security Systems and Software / Secure Platforms 
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA 
+www.rockwellcollins.com 
+
+Note: Any Export License Required Information and License Restricted Third Party Intellectual Property (TPIP) content must be encrypted and sent to matthew.weber at corp.rockwellcollins.com . 
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150624/07b923c2/attachment.html>
