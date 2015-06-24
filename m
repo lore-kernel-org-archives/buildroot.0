@@ -1,66 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Jun 2015 00:50:05 +0200
-Subject: [Buildroot] [git commit] ulogd: bump to version 2.0.5
-Message-ID: <20150624225746.3CACF7FB8A@busybox.osuosl.org>
+Date: Thu, 25 Jun 2015 00:51:20 +0200
+Subject: [Buildroot] [git commit] x264: bump to version 20150223-2245-stable
+Message-ID: <20150624225746.40E5E80F45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=77d7cfdc91a5f535d5f6de613dabb8a0558c33ef
+commit: http://git.buildroot.net/buildroot/commit/?id=149af56707c1b4f562bea772ad9e82ddb8299738
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove kernel headers check since it now implements local definitions to
-keep working with newer versions.
+Use the Git repository instead of the snapshots,
+since they are not generated anymore.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: David du Colombier <0intro@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ulogd/Config.in  |    3 ---
- package/ulogd/ulogd.hash |    6 +++---
- package/ulogd/ulogd.mk   |    2 +-
- 3 files changed, 4 insertions(+), 7 deletions(-)
+ .../0001-arm-do-not-append-CFLAGS-to-ASFLAGS.patch |   34 --------------------
+ package/x264/x264.mk                               |    5 +--
+ 2 files changed, 2 insertions(+), 37 deletions(-)
 
-diff --git a/package/ulogd/Config.in b/package/ulogd/Config.in
-index bcd7d0d..dc36c0b 100644
---- a/package/ulogd/Config.in
-+++ b/package/ulogd/Config.in
-@@ -2,8 +2,6 @@ config BR2_PACKAGE_ULOGD
- 	bool "ulogd"
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
--	# ulog support removed for kernels >= 3.17
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
- 	select BR2_PACKAGE_LIBMNL
- 	select BR2_PACKAGE_LIBNETFILTER_ACCT
- 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
-@@ -17,4 +15,3 @@ config BR2_PACKAGE_ULOGD
- comment "ulogd needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-diff --git a/package/ulogd/ulogd.hash b/package/ulogd/ulogd.hash
-index 0e050e4..16186c1 100644
---- a/package/ulogd/ulogd.hash
-+++ b/package/ulogd/ulogd.hash
-@@ -1,3 +1,3 @@
--# From ftp://ftp.netfilter.org/pub/ulogd/ulogd-2.0.4.tar.bz2.{md5sum,sha1sum}
--md5	7c71ec460dfea5287eba27472c521ebc	ulogd-2.0.4.tar.bz2
--sha1	f5e09d9e9a6c7ab8966d22ed8d6e90196aab3fb3	ulogd-2.0.4.tar.bz2
-+# From ftp://ftp.netfilter.org/pub/ulogd/ulogd-2.0.5.tar.bz2.{md5sum,sha1sum}
-+md5	f0f8fe1371fa28b5e06cb16aaa0111dd	ulogd-2.0.5.tar.bz2
-+sha1	828db7849d6788674ecf36b178f107c20e9ac1f0	ulogd-2.0.5.tar.bz2
-diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
-index 8f763fa..7ff5b73 100644
---- a/package/ulogd/ulogd.mk
-+++ b/package/ulogd/ulogd.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x264/0001-arm-do-not-append-CFLAGS-to-ASFLAGS.patch b/package/x264/0001-arm-do-not-append-CFLAGS-to-ASFLAGS.patch
+deleted file mode 100644
+index 3d40507..0000000
+--- a/package/x264/0001-arm-do-not-append-CFLAGS-to-ASFLAGS.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 716ee56d0b35e512e8e0ae1a3e71f26e65e86be3 Mon Sep 17 00:00:00 2001
+-From: Janne Grunau <janne-x264@jannau.net>
+-Date: Sun, 20 Jul 2014 12:55:53 +0200
+-Subject: [PATCH 01/24] arm: do not append CFLAGS to ASFLAGS
+-
+----
+- configure | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure b/configure
+-index 0a4cb94..a50f8d5 100755
+---- a/configure
+-+++ b/configure
+-@@ -296,7 +296,7 @@ opencl="yes"
+- CFLAGS="$CFLAGS -Wall -I. -I\$(SRCPATH)"
+- LDFLAGS="$LDFLAGS"
+- LDFLAGSCLI="$LDFLAGSCLI"
+--ASFLAGS="$ASFLAGS"
+-+ASFLAGS="$ASFLAGS -I. -I\$(SRCPATH)"
+- RCFLAGS="$RCFLAGS"
+- HAVE_GETOPT_LONG=1
+- cross_prefix=""
+-@@ -752,7 +752,7 @@ if [ $asm = auto -a $ARCH = ARM ] ; then
+-     if  cc_check '' '' '__asm__("rev ip, ip");' ; then      define HAVE_ARMV6
+-         cc_check '' '' '__asm__("movt r0, #0");'         && define HAVE_ARMV6T2
+-         cc_check '' '' '__asm__("vadd.i16 q0, q0, q0");' && define HAVE_NEON
+--        ASFLAGS="$ASFLAGS $CFLAGS -c"
+-+        ASFLAGS="$ASFLAGS -c"
+-     else
+-         echo "You specified a pre-ARMv6 or Thumb-1 CPU in your CFLAGS."
+-         echo "If you really want to run on such a CPU, configure with --disable-asm."
+--- 
+-1.8.3.1
+-
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index 9968fbe..ace7f43 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--ULOGD_VERSION = 2.0.4
-+ULOGD_VERSION = 2.0.5
- ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
- ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
- ULOGD_CONF_OPTS = --with-dbi=no --with-pgsql=no
+-X264_VERSION = 20140930-2245-stable
+-X264_SOURCE = x264-snapshot-$(X264_VERSION).tar.bz2
+-X264_SITE = ftp://ftp.videolan.org/pub/videolan/x264/snapshots
++X264_VERSION = c8a773ebfca148ef04f5a60d42cbd7336af0baf6
++X264_SITE = git://git.videolan.org/x264.git
+ X264_LICENSE = GPLv2+
+ X264_DEPENDENCIES = host-pkgconf
+ X264_LICENSE_FILES = COPYING
