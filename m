@@ -1,34 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Jun 2015 00:49:40 +0200
-Subject: [Buildroot] [PATCH] Don't export VERBOSE unless V=1 (for CMake)
-In-Reply-To: <1435095367-4223-1-git-send-email-cedric.marie@openmailbox.org>
- (=?utf-8?Q?=22C=C3=A9dric?= Marie"'s message of "Tue, 23 Jun 2015 23:36:06
- +0200")
-References: <1435095367-4223-1-git-send-email-cedric.marie@openmailbox.org>
-Message-ID: <87fv5g4t8b.fsf@dell.be.48ers.dk>
+Date: Thu, 25 Jun 2015 00:50:23 +0200
+Subject: [Buildroot] [PATCH] ulogd: bump to version 2.0.5
+In-Reply-To: <1435171159-5880-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 24 Jun 2015 15:39:19 -0300")
+References: <1435171159-5880-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87bng44t74.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "C?dric" == C?dric Marie <cedric.marie@openmailbox.org> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > CMake verbose mode is based on VERBOSE environment variable.
- > * If VERBOSE is exported but empty, only "Dependee ... is newer than
- > depender ..." messages are shown.
- > * If VERBOSE is exported and set (whatever the value), all compilation
- > commands are shown.
+ > Remove kernel headers check since it now implements local definitions to
+ > keep working with newer versions.
 
- > VERBOSE is currently systematically exported by Buildroot, even if it
- > is empty, in the root Makefile, which implies that the "light" verbose
- > mode - with "Dependee ... is newer than depender ..." messages - is
- > always enabled.
-
- > VERBOSE should only be exported when V=1, which is the standard way to
- > enable verbose mode in Buildroot.
-
- > Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
