@@ -1,55 +1,31 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Jun 2015 23:18:05 +0200
-Subject: [Buildroot] Problem with Touchscreen on ARM
-In-Reply-To: <CALW-xeqpfVVYeff9+RPfhOhEEW3mohbqXEweXP7YQJuoYX1Erg@mail.gmail.com>
-References: <CALW-xeqpfVVYeff9+RPfhOhEEW3mohbqXEweXP7YQJuoYX1Erg@mail.gmail.com>
-Message-ID: <558B1E8D.9010106@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 24 Jun 2015 23:46:16 +0200
+Subject: [Buildroot] [PATCH v2 1/1] board: add support for Warpboard
+In-Reply-To: <20150624093254.GA8462@arthur-dreem>
+References: <1434988018-16391-1-git-send-email-lambertarthur22@gmail.com>
+ <20150624093254.GA8462@arthur-dreem>
+Message-ID: <20150624214616.GA4604@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/24/15 16:23, Guillaume s?tan wrote:
-> Hello,
-> 
-> I try to use a Touchscreen (multitouch) with my target (Arm Little endian -
-> Cortex - A9 ).
-> I tried to use EFL, directfb and fb but I haven't managed to run the multitouch
-> on my target.
+Albert, All,
 
- fb is just a framebuffer driver so doesn't have a relation with input events.
+On 2015-06-24 11:32 +0200, Arthur LAMBERT spake thusly:
+> Can I submit V3 or it is better to wait the review of the fix done in V2 ?
+> I was able to remove custom config, and external sdma firmware.
 
- directfb doesn't yet support multitouch AFAIK.
+Yes, please post the v3.
 
- EFL should support multitouch. But I guess you have to configure it to listen
-to the right input device.
-
-> 
-> Please can you explain me what packages are needed to use multitouch ?
-> Or have you ever used a touch screen on a target Arm ?
-
- You could try tslib (which converts multitouch to single touch so probably not
-really what you want). Qt5 also has support for multitouch.
-
-> 
-> Regards,
-> 
-> Guillaumme 
-> 
-> 
-> PS : I see frames on my target (arm ) when I touch my screen with application mtdev.
-
- What do you mean with 'frames'?
-
-
- Regards,
- Arnout
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
