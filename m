@@ -1,62 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Jun 2015 23:05:26 +0200
-Subject: [Buildroot] B3+external kernel: not quite sure how to make
- these pieces fit ...
-In-Reply-To: <066601d0aeb0$e445c840$acd158c0$@novadsp.com>
-References: <066601d0aeb0$e445c840$acd158c0$@novadsp.com>
-Message-ID: <558B1B96.8070701@mind.be>
+Date: Wed, 24 Jun 2015 23:18:05 +0200
+Subject: [Buildroot] Problem with Touchscreen on ARM
+In-Reply-To: <CALW-xeqpfVVYeff9+RPfhOhEEW3mohbqXEweXP7YQJuoYX1Erg@mail.gmail.com>
+References: <CALW-xeqpfVVYeff9+RPfhOhEEW3mohbqXEweXP7YQJuoYX1Erg@mail.gmail.com>
+Message-ID: <558B1E8D.9010106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/24/15 21:06, g4 at novadsp.com wrote:
-> Want to automate building kernel and filesystem for Beaglebones.
+On 06/24/15 16:23, Guillaume s?tan wrote:
+> Hello,
 > 
->  
-> 
-> The kernel itself is the mainline 4.x with a set of patches applied from Robert
-> Nelson?s (RCN) GIT repo.
-> 
->  
-> 
-> Problem is that there is no mechanism for file system construction/ packaging.
-> Obviously Buildroot to the rescue here.
-> 
->  
-> 
-> I thought I?d start by trying to get BR to use the existing external toolchain ?
-> specifying ?toolchain path? as
-> ?~/rcn/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux?
-> 
->  
-> 
-> But this fails with ?External toolchain uses the unsuported OABI?. There is an
-> old reference to this here:
-> http://git.buildroot.net/buildroot/commit/?id=b2e88073dbf05faa47475bf96d5ccf8a45906a3c
+> I try to use a Touchscreen (multitouch) with my target (Arm Little endian -
+> Cortex - A9 ).
+> I tried to use EFL, directfb and fb but I haven't managed to run the multitouch
+> on my target.
 
- Looks like your external toolchain is not installed correctly. Can you run
-~/rcn/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-gcc
--v
+ fb is just a framebuffer driver so doesn't have a relation with input events.
 
- Or to be safe, just select the Linaro 2014.09 toolchain as to be downloaded and
-installed.
+ directfb doesn't yet support multitouch AFAIK.
 
+ EFL should support multitouch. But I guess you have to configure it to listen
+to the right input device.
 
-> I don?t see any conflict with the target settings. Is there a solution or is
-> this a more fundamental/complex issue?
 > 
->  
+> Please can you explain me what packages are needed to use multitouch ?
+> Or have you ever used a touch screen on a target Arm ?
+
+ You could try tslib (which converts multitouch to single touch so probably not
+really what you want). Qt5 also has support for multitouch.
+
 > 
-> This obviously begs the question of how the externally built kernel gets into
-> the BR mix but I?ll leave that for next time.
+> Regards,
+> 
+> Guillaumme 
+> 
+> 
+> PS : I see frames on my target (arm ) when I touch my screen with application mtdev.
 
- You'll have to run 'make -C <linux_dir> INSTALL_MOD_PATH=$1 modules_install'
-from a post-build script. Or else, install the modules in some staging directory
-and copy them to the target directory in the post-build script.
-
- Or alternatively, just build it in buildroot with BR2_LINUX_KERNEL_CUSTOM_LOCAL=y.
+ What do you mean with 'frames'?
 
 
  Regards,
