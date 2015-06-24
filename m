@@ -1,72 +1,74 @@
-From: George Redivo <george.redivo@datacom.ind.br>
-Date: Wed, 24 Jun 2015 15:51:54 -0300 (BRT)
-Subject: [Buildroot] [PATCH 1/1] protobuf: bump version to 2.6.1
-In-Reply-To: <CANQCQpYy-kuZLfMjO0YrX8Kfa25eLUa09U-NUyOSQjxE0vq5WA@mail.gmail.com>
-References: <1434995939-8236-1-git-send-email-george.redivo@datacom.ind.br>
- <CANQCQpYy-kuZLfMjO0YrX8Kfa25eLUa09U-NUyOSQjxE0vq5WA@mail.gmail.com>
-Message-ID: <1313674444.2327407.1435171914537.JavaMail.zimbra@datacom.ind.br>
+From: g4 at novadsp.com <g4@novadsp.com>
+Date: Wed, 24 Jun 2015 20:06:35 +0100
+Subject: [Buildroot] B3+external kernel: not quite sure how to make these
+	pieces fit ...
+Message-ID: <066601d0aeb0$e445c840$acd158c0$@novadsp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Peter. 
+Want to automate building kernel and filesystem for Beaglebones. 
 
-I looked to the ola's Config.in file and there is no powerpc dependency declared in there. 
-So I'm not sure if it's valid to try to make a build to powerpc arch including this package. Is it? 
+ 
 
-Anyway, I tried to reproduce the reported error by adding those flags in my .config file. 
-In addition, I removed BR2_powerpc_8548=y, that was declared. 
+The kernel itself is the mainline 4.x with a set of patches applied from
+Robert Nelson's (RCN) GIT repo. 
 
-I ran make olddefconfig and the .config changed. 
-The BR2_PACKAGE_OLA flag simply dropped out from the .config file. 
+ 
 
-May you send me your entire .config after running make olddefconfig please? 
+Problem is that there is no mechanism for file system construction/
+packaging. Obviously Buildroot to the rescue here. 
 
-Thanks for your attention. 
+ 
 
-George Redivo 
-DATACOM 
-Ethernet Switches 
-Rua Am?rica, 1000 - Eldorado do Sul, RS 
-Ramal: 3444 
-george.redivo at datacom.ind.br 
-www.datacom.ind.br 
+I thought I'd start by trying to get BR to use the existing external
+toolchain - specifying 'toolchain path' as
+'~/rcn/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux'
 
+ 
 
+But this fails with 'External toolchain uses the unsuported OABI'. There is
+an old reference to this here:
+http://git.buildroot.net/buildroot/commit/?id=b2e88073dbf05faa47475bf96d5ccf
+8a45906a3c
 
-De: "Matthew Weber" <matthew.weber@rockwellcollins.com> 
-Para: "DATACOM" <george.redivo@datacom.ind.br> 
-Cc: "buildroot" <buildroot@buildroot.org> 
-Enviadas: Segunda-feira, 22 de junho de 2015 18:21:13 
-Assunto: Re: [Buildroot] [PATCH 1/1] protobuf: bump version to 2.6.1 
+ 
 
-George, 
+I don't see any conflict with the target settings. Is there a solution or is
+this a more fundamental/complex issue? 
 
-On Mon, Jun 22, 2015 at 12:58 PM, George Redivo < george.redivo@datacom.ind.br > wrote: 
+ 
 
+This obviously begs the question of how the externally built kernel gets
+into the BR mix but I'll leave that for next time.
 
-* Adds powerpc architecture support 
+ 
 
+Thx++
 
+ 
 
-FYI, there is an old email thread related to a previous attempt at bumping where any compiler older then GCC4.7 has build issues with atomics. 
-http://lists.busybox.net/pipermail/buildroot/2014-October/110418.html 
+--------------------snip--------------------
 
-There was also some discussion at one of the previous Buildroot developer meetings about the direction suggested for handling this case. I was leaning towards just restricting based on toolchain version..... 
+Target Architecture (ARM (little endian))  --->
+x x   
 
-Thanks, 
+  x x                Target Binary Format (ELF)  --->
+x x   
 
--- 
-Matthew L Weber / Pr Software Engineer 
-Airborne Information Systems / Security Systems and Software / Secure Platforms 
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA 
-www.rockwellcollins.com 
+  x x                Target Architecture Variant (cortex-A8)  --->
+x x   
 
-Note: Any Export License Required Information and License Restricted Third Party Intellectual Property (TPIP) content must be encrypted and sent to matthew.weber at corp.rockwellcollins.com . 
+  x x                Target ABI (EABIhf)  --->
+x x   
 
+  x x                Floating point strategy (VFPv3-D16)  --->
+x x   
+
+  x x                ARM instruction set (ARM)  --->             
 
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150624/07b923c2/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150624/2eadb813/attachment.html>
