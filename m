@@ -1,64 +1,132 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 24 Jun 2015 15:39:19 -0300
-Subject: [Buildroot] [PATCH] ulogd: bump to version 2.0.5
-Message-ID: <1435171159-5880-1-git-send-email-gustavo@zacarias.com.ar>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Wed, 24 Jun 2015 15:44:11 -0300
+Subject: [Buildroot] [PATCH v3] kvmtool: new package
+Message-ID: <1435171451-19539-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove kernel headers check since it now implements local definitions to
-keep working with newer versions.
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/ulogd/Config.in  | 3 ---
- package/ulogd/ulogd.hash | 6 +++---
- package/ulogd/ulogd.mk   | 2 +-
- 3 files changed, 4 insertions(+), 7 deletions(-)
+ package/Config.in          |  1 +
+ package/kvmtool/Config.in  | 31 +++++++++++++++++++++++++++
+ package/kvmtool/kvmtool.mk | 53 ++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 85 insertions(+)
+ create mode 100644 package/kvmtool/Config.in
+ create mode 100644 package/kvmtool/kvmtool.mk
 
-diff --git a/package/ulogd/Config.in b/package/ulogd/Config.in
-index bcd7d0d..dc36c0b 100644
---- a/package/ulogd/Config.in
-+++ b/package/ulogd/Config.in
-@@ -2,8 +2,6 @@ config BR2_PACKAGE_ULOGD
- 	bool "ulogd"
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
--	# ulog support removed for kernels >= 3.17
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
- 	select BR2_PACKAGE_LIBMNL
- 	select BR2_PACKAGE_LIBNETFILTER_ACCT
- 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
-@@ -17,4 +15,3 @@ config BR2_PACKAGE_ULOGD
- comment "ulogd needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-diff --git a/package/ulogd/ulogd.hash b/package/ulogd/ulogd.hash
-index 0e050e4..16186c1 100644
---- a/package/ulogd/ulogd.hash
-+++ b/package/ulogd/ulogd.hash
-@@ -1,3 +1,3 @@
--# From ftp://ftp.netfilter.org/pub/ulogd/ulogd-2.0.4.tar.bz2.{md5sum,sha1sum}
--md5	7c71ec460dfea5287eba27472c521ebc	ulogd-2.0.4.tar.bz2
--sha1	f5e09d9e9a6c7ab8966d22ed8d6e90196aab3fb3	ulogd-2.0.4.tar.bz2
-+# From ftp://ftp.netfilter.org/pub/ulogd/ulogd-2.0.5.tar.bz2.{md5sum,sha1sum}
-+md5	f0f8fe1371fa28b5e06cb16aaa0111dd	ulogd-2.0.5.tar.bz2
-+sha1	828db7849d6788674ecf36b178f107c20e9ac1f0	ulogd-2.0.5.tar.bz2
-diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
-index 8f763fa..7ff5b73 100644
---- a/package/ulogd/ulogd.mk
-+++ b/package/ulogd/ulogd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ULOGD_VERSION = 2.0.4
-+ULOGD_VERSION = 2.0.5
- ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
- ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
- ULOGD_CONF_OPTS = --with-dbi=no --with-pgsql=no
+diff --git a/package/Config.in b/package/Config.in
+index fac632f..6522618 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1403,6 +1403,7 @@ endif
+ 	source "package/irqbalance/Config.in"
+ 	source "package/keyutils/Config.in"
+ 	source "package/kmod/Config.in"
++	source "package/kvmtool/Config.in"
+ 	source "package/lxc/Config.in"
+ 	source "package/monit/Config.in"
+ 	source "package/ncdu/Config.in"
+diff --git a/package/kvmtool/Config.in b/package/kvmtool/Config.in
+new file mode 100644
+index 0000000..f047c75
+--- /dev/null
++++ b/package/kvmtool/Config.in
+@@ -0,0 +1,31 @@
++config BR2_PACKAGE_KVMTOOL
++	bool "kvmtool"
++	depends on BR2_USE_MMU # guest simple init fork()
++	# No MADV_HUGEPAGE define in uClibc(-ng)
++	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++	# Only mips big-endian seems to be supported (build breaks)
++	# Should work on powerpc64 but the build breaks with missing types
++	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
++		BR2_mips || BR2_x86_64
++	# libfdt is only required for DT architectures...
++	# ...but it's not able to build for static targets
++	depends on !(BR2_STATIC_LIBS && (BR2_aarch64 || BR2_arm || BR2_armeb))
++	select BR2_PACKAGE_DTC if BR2_aarch64 || BR2_arm || BR2_armeb
++	help
++	  kvmtool is a lightweight tool for hosting KVM guests.
++	  As a pure virtualization tool it only supports guests using
++	  the same architecture, though it supports running 32-bit guests
++	  on those 64-bit architectures that allow this.
++
++	  https://git.kernel.org/cgit/linux/kernel/git/will/kvmtool.git/tree/README
++
++comment "kvmtool needs a (e)glibc or musl toolchain"
++	depends on BR2_USE_MMU
++	depends on BR2_i386 || BR2_mips || BR2_x86_64
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++
++comment "kvmtool needs a (e)glibc or musl toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_aarch64 || BR2_arm || BR2_armeb
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
++		BR2_STATIC_LIBS
+diff --git a/package/kvmtool/kvmtool.mk b/package/kvmtool/kvmtool.mk
+new file mode 100644
+index 0000000..7f682db
+--- /dev/null
++++ b/package/kvmtool/kvmtool.mk
+@@ -0,0 +1,53 @@
++################################################################################
++#
++# kvmtool
++#
++################################################################################
++
++KVMTOOL_VERSION = 372f583d359a5bdcbbe7268809c8d1dc179c64d2
++KVMTOOL_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/will/kvmtool.git
++KVMTOOL_SITE_METHOD = git
++KVMTOOL_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_BINUTILS),binutils) \
++	$(if $(BR2_PACKAGE_DTC),dtc) \
++	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
++	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3) \
++	$(if $(BR2_PACKAGE_LIBVNCSERVER),libvncserver) \
++	$(if $(BR2_PACKAGE_SDL),sdl) \
++	$(if $(BR2_PACKAGE_ZLIB),zlib)
++KVMTOOL_LICENSE = GPLv2
++KVMTOOL_LICENSE_FILES = COPYING
++
++# This is required to convert a static binary (init helper) back into
++# object-file format, and in multilib toolchains like CS 2012.09 for x86
++# the default is i386, hence when building for x86_64 things break since
++# LD doesn't autodetect the input file format.
++# GCC-as-linker can't accomplish this feat easily either since it's mixing
++# static content (guest_init.o) with dynamic one (lkvm) making
++# a relocatable output file.
++# The purpose of this trick is to embed the init helper into the main
++# binary to help users in guest system startup, which would otherwise
++# require more complex guest images.
++# This needs revisiting if/when X32 ABI support is added.
++#
++# If more packages need this (unlikely) an ld wrapper might be a better
++# solution, using gcc -dumpspecs information.
++KVMTOOL_EXTRA_LDFLAGS = \
++	$(if $(BR2_x86_64),-m elf_x86_64)
++
++# Disable -Werror, otherwise musl is not happy
++KVMTOOL_MAKE_OPTS = \
++	CROSS_COMPILE="$(TARGET_CROSS)" \
++	LDFLAGS="$(TARGET_LDFLAGS) $(KVMTOOL_EXTRA_LDFLAGS)" \
++	WERROR=0
++
++define KVMTOOL_BUILD_CMDS
++	$(TARGET_MAKE_ENV) ARCH=$(KERNEL_ARCH) $(MAKE) -C $(@D) $(KVMTOOL_MAKE_OPTS)
++endef
++
++define KVMTOOL_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) ARCH=$(KERNEL_ARCH) $(MAKE) -C $(@D) \
++		$(KVMTOOL_MAKE_OPTS) install DESTDIR=$(TARGET_DIR) prefix=/usr
++endef
++
++$(eval $(generic-package))
 -- 
-2.3.6
+2.1.4
