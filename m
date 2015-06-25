@@ -1,72 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 26 Jun 2015 00:38:23 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 26 Jun 2015 00:41:28 +0200
 Subject: [Buildroot] [PATCH v2 1/1] board: add support for Warpboard
-In-Reply-To: <558C800F.5030702@mind.be>
+In-Reply-To: <20150625120747.GA8014@arthur-dreem>
 References: <1434988018-16391-1-git-send-email-lambertarthur22@gmail.com>
- <558B254C.2090606@mind.be> <20150625085428.GA3400@arthur-dreem>
- <558C800F.5030702@mind.be>
-Message-ID: <20150625223823.GI4178@free.fr>
+ <558B254C.2090606@mind.be> <20150625120747.GA8014@arthur-dreem>
+Message-ID: <558C8398.3040102@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Arthur, All,
-
-On 2015-06-26 00:26 +0200, Arnout Vandecappelle spake thusly:
-> On 06/25/15 10:54, Arthur LAMBERT wrote:
-> > Arnout, All,
-> > 
-> > Le Wednesday 24 Jun 2015 ? 23:46:52 (+0200), Arnout Vandecappelle a ?crit :
-> >>> +
-> >>> +Enable bluetooth
-> >>> +================
-> >>> +hciattach /dev/ttymxc4 any
-> >>> +hciconfig hci0 up
-> >>> +
-> >>> +Enable Wifi
-> >>> +==========
-> >>> +modprobe brcmfmac
-> >>> +ifconfig wlan0 up
-> >>
-> >>  To do something useful, you'll also need a wpa-supplicant I guess...
-> >>
-> >>  Since you anyway have a rootfs overlay, you could add init scripts to start
-> >> wifi and bluetooth. We don't usually do that, but I think it would be a good idea.
-> > 
-> > In fact I need bluez-util (to be able to run hciattach command also). And yes I also need wpa_supplicant for wifi.
-> > So ok I will enable these two packages and add init script
+On 06/25/15 14:07, Arthur LAMBERT wrote:
+> Le Wednesday 24 Jun 2015 ? 23:46:52 (+0200), Arnout Vandecappelle a ?crit :
+>>> new file mode 100644
+>>> index 0000000..d9706c1
+>>> --- /dev/null
+>>> +++ b/board/freescale/warpboard/linux/linux-001-add-sdm-firmware.patch
+>>> @@ -0,0 +1,145 @@
+>>
+>>  Patches should have a description and Signed-off-by.
+>>
+>>  But better yet, download it with BR2_LINUX_KERNEL_PATCH="http://... http://..."
+>> instead of including it in buildroot.
+>>
+>> [snip]
 > 
->  Question for the other BR developers (especially Peter): do you agree it's a
-> good idea to make a non-minimal defconfig that includes bluez and wpa_supplicant?
+> I don't understand this suggestion. How can I download the patch instead if including it
+> in buildroot since this patch does not exist anywhere. Theses patch are not commit in any git
+> right now.
 
-Our board defconfig files are ususally just enough to bring up the board
-and get a shell in there. If network is wired, then a dhcp client is OK
-(usually udhcpc from busybox).
+ OK sorry I didn't know that, your commit message "linux patch from Fabio
+Estevam" suggested that you downloaded it from somewhere.
 
-Everything (bluez and wpa-supplicant included) else is out of scope for
-a defconfig, IMHO.
 
-One case where I'd be inclined to accept more than the above is a
-full-wireless device (like the soon-to-come-I-hope 96boards stuff).
-But since wpa-supplicant needs configuration that we can't provide
-(SSID and key), I don't see the point of adding it to the defconfig.
+> Also you suggest me to include imx_usb_loader in warpoard_defconfig. I tried to
+> flash my uboot by using the imx usb loader from buildroot but is does not work :
 
-However, we've decided to accept "demo" defconfigs, which can be packed
-with more features than a simple board defconfig. We haven't had any
-single such demo defconfig submitted so far.
+ Clearly that's not good :-)
 
-Still, even if we accept demo defconfigs, I stil think we should have a
-small board defconfig file before we get a demo.
+[snip]
+> I tried to update imx_usb_loader on last sha1 commit but same result.
+> 
+> To make it work I have to use an imx_usb_loader from github/warpboard which is different :
+> https://github.com/warpboard/imx_usb_loader/commits/warp/master
+> 
+> How can I integrate it ? Do I need to add a patch on imx_usb_loader package to use custom git ?
 
-Regards,
-Yann E. MORIN.
+ As far as I can see, only commit af78476b6, so you could download that as
+board/freescale/warpboard/patches/imx-usb-loader/0001-...
+
+ I don't think there's a need to support downloading custom patches in the
+package itself.
+
+ Regards,
+ Arnout
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
