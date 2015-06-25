@@ -1,60 +1,94 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 26 Jun 2015 00:41:28 +0200
-Subject: [Buildroot] [PATCH v2 1/1] board: add support for Warpboard
-In-Reply-To: <20150625120747.GA8014@arthur-dreem>
-References: <1434988018-16391-1-git-send-email-lambertarthur22@gmail.com>
- <558B254C.2090606@mind.be> <20150625120747.GA8014@arthur-dreem>
-Message-ID: <558C8398.3040102@mind.be>
+Date: Fri, 26 Jun 2015 01:06:10 +0200
+Subject: [Buildroot] B3+external kernel: not quite sure how to make
+ these pieces fit ...
+In-Reply-To: <07f701d0af37$5492bff0$fdb83fd0$@novadsp.com>
+References: <066601d0aeb0$e445c840$acd158c0$@novadsp.com>
+ <558B1B96.8070701@mind.be> <07f701d0af37$5492bff0$fdb83fd0$@novadsp.com>
+Message-ID: <558C8962.9080003@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/25/15 14:07, Arthur LAMBERT wrote:
-> Le Wednesday 24 Jun 2015 ? 23:46:52 (+0200), Arnout Vandecappelle a ?crit :
->>> new file mode 100644
->>> index 0000000..d9706c1
->>> --- /dev/null
->>> +++ b/board/freescale/warpboard/linux/linux-001-add-sdm-firmware.patch
->>> @@ -0,0 +1,145 @@
->>
->>  Patches should have a description and Signed-off-by.
->>
->>  But better yet, download it with BR2_LINUX_KERNEL_PATCH="http://... http://..."
->> instead of including it in buildroot.
->>
->> [snip]
+On 06/25/15 13:08, g4 at novadsp.com wrote:
+> Arnout, apologies. Outlook simply replied to you and not the list.
 > 
-> I don't understand this suggestion. How can I download the patch instead if including it
-> in buildroot since this patch does not exist anywhere. Theses patch are not commit in any git
-> right now.
+>>  Looks like your external toolchain is not installed correctly. Can 
+>> you run
+>> ~/rcn/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-
+>> gnueabihf-gcc  -v
+> 
+> I will bow to superior knowledge here but it does produce a booting,
+> running, kernel.
 
- OK sorry I didn't know that, your commit message "linux patch from Fabio
-Estevam" suggested that you downloaded it from somewhere.
+ I asked because the error you reported is based on this piece of code:
 
-
-> Also you suggest me to include imx_usb_loader in warpoard_defconfig. I tried to
-> flash my uboot by using the imx usb loader from buildroot but is does not work :
-
- Clearly that's not good :-)
+EXT_TOOLCHAIN_TARGET=`LANG=C $${__CROSS_CC} -v 2>&1 | grep ^Target | cut -f2 -d
+' '` ; \
+if ! echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
+        echo "External toolchain uses the unsuported OABI" ; \
+        exit 1 ; \
+fi ; \
 
 [snip]
-> I tried to update imx_usb_loader on last sha1 commit but same result.
-> 
-> To make it work I have to use an imx_usb_loader from github/warpboard which is different :
-> https://github.com/warpboard/imx_usb_loader/commits/warp/master
-> 
-> How can I integrate it ? Do I need to add a patch on imx_usb_loader package to use custom git ?
+> Target: arm-linux-gnueabihf
 
- As far as I can see, only commit af78476b6, so you could download that as
-board/freescale/warpboard/patches/imx-usb-loader/0001-...
+ ... but it does end in eabihf, so why doesn't this condition match?
 
- I don't think there's a need to support downloading custom patches in the
-package itself.
+ Could you modify toolchain/helpers.mk to echo the value of EXT_TOOLCHAIN_TARGET
+in the command above?
+
+
+[snip]
+>>  Or to be safe, just select the Linaro 2014.09 toolchain as to be 
+>> downloaded and installed.
+> 
+> Yes but working kernel trumps all ...
+
+ It is not required to build the kernel with the same toolchain as userspace.
+
+
+>>  You'll have to run 'make -C <linux_dir> INSTALL_MOD_PATH=$1 
+>> modules_install'
+>> from a post-build script. Or else, install the modules in some staging 
+>> directory and copy them to the target directory in the post-build script.
+>>
+>>  Or alternatively, just build it in buildroot with 
+>> BR2_LINUX_KERNEL_CUSTOM_LOCAL=y.
+> 
+> This last is promising. So you suggest cloning kernel repo in the buildroot
+> tree? 
+
+ No, I suggest letting buildroot build the kernel using the checked-out kernel
+source code you have in another directory. _CUSTOM_LOCAL refers to a source tree.
+
 
  Regards,
  Arnout
+
+> 
+> Someone else must have had this problem? 
+> 
+> Thank you.
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+>  
+>  
+> ************************************************************************************
+> This footnote confirms that this email message has been scanned by
+> PineApp Mail-SeCure for the presence of malicious code, vandals & computer viruses.
+> ************************************************************************************
+> 
+> 
+> 
+> 
 
 
 -- 
