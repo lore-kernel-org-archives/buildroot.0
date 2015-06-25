@@ -1,33 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 26 Jun 2015 00:27:17 +0200
-Subject: [Buildroot] [PATCH] libconfig: bump to 1.5
-In-Reply-To: <20150625215836.GF4178@free.fr>
-References: <1435261934-11054-1-git-send-email-yegorslists@googlemail.com>
- <20150625215836.GF4178@free.fr>
-Message-ID: <20150625222717.GH4178@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 25 Jun 2015 19:35:06 -0300
+Subject: [Buildroot] [PATCH 1/2] mpd: bump to version 0.19.10
+Message-ID: <1435271707-12012-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2015-06-25 23:58 +0200, Yann E. MORIN spake thusly:
-> Gustavo, All,
-
-Hmm.. Sorry, I was so used to type "Gustavo" in the previous reviews I
-did just before, that this has become a reflex...
-
-Thanks Yegor for your patch! ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 9f26f61..56d30f2 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	47851423053cd38cfad65be5985b41b7cd5bdbe8d0d13378e11748a28b19f26f	mpd-0.19.9.tar.xz
++sha256	c386eb3d22f98dc993b5ae3c272f969aa7763713483c6800040ebf1791b15851	mpd-0.19.10.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index b5adafd..7bbef03 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).9
++MPD_VERSION = $(MPD_VERSION_MAJOR).10
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.3.6
