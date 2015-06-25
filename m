@@ -1,85 +1,34 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed, 24 Jun 2015 23:23:48 -0400
-Subject: [Buildroot] [PATCH 1/1] libpng: rebase ignore-symbol-prefix patch
-	to apply cleanly
-Message-ID: <1435202628-2728-1-git-send-email-danomimanchego123@gmail.com>
+Date: Wed, 24 Jun 2015 23:32:49 -0400
+Subject: [Buildroot] [PATCH] nginx: fix nginx.old clean-up
+Message-ID: <1435203169-3930-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The bin path for nginx is configured for /usr/sbin, so deleting
+the nginx.old back-up from /usr/bin never works.  Fix path, and
+also use "$(RM)" instead of "-$(RM)", as "rm -f" never fails.
+
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-
 ---
+ package/nginx/nginx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The original patch appears to have been submitted by Sonic Zhang
-<sonic.zhang@analog.com> in commit 46912f15c0cf4ceda1db6c2e390962707748296b.
-There was no Signed-off-by, so I simply cited his name in the description,
-to distinguish his original text from my addition.
----
- package/libpng/0002-ignore-symbol-prefix.patch |   38 +++++++++++++++++++-----
- 1 file changed, 30 insertions(+), 8 deletions(-)
-
-diff --git a/package/libpng/0002-ignore-symbol-prefix.patch b/package/libpng/0002-ignore-symbol-prefix.patch
-index 7f2cfff..5a8ede5 100644
---- a/package/libpng/0002-ignore-symbol-prefix.patch
-+++ b/package/libpng/0002-ignore-symbol-prefix.patch
-@@ -1,10 +1,27 @@
-+From dbfea83a7436cbac34cc883ab2b7befacaf02c40 Mon Sep 17 00:00:00 2001
-+From: Danomi Manchego <danomimanchego123@gmail.com>
-+Date: Tue, 23 Jun 2015 13:54:42 -0400
-+Subject: libpng: don't append prefix to symbol names in version script
-+
- Even if Blackfin GNU toolchain add prefix '_' to all symbols,
- symbol prefix is not accepted in the link flag --version-script.
- Don't append prefix in the symbols in the version script file.
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 90ebbcc..502bc44 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -222,7 +222,7 @@ endef
  
----- libpng-1.6.8/Makefile.am	2013-12-30 18:23:08.261797417 +0800
--+++ libpng-1.6.8.bak/Makefile.am	2013-12-30 18:22:15.565795726 +0800
--@@ -225,7 +225,7 @@
-+Original patch by: Sonic Zhang <sonic.zhang@analog.com>
-+
-+Rebase to apply cleanly.
-+
-+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-+---
-+ Makefile.am |    2 +-
-+ Makefile.in |    2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index dcc5439..e543c81 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -231,7 +231,7 @@ contrib/tools/pngfix.o: pnglibconf.h
-  # interfering with the symbol file format.
-  SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0'\
-  		-DPNGLIB_VERSION='@PNGLIB_VERSION@'\
-@@ -13,14 +30,19 @@ Don't append prefix in the symbols in the version script file.
-  		-DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE
-  
-  if DO_PNG_PREFIX
----- libpng-1.6.8/Makefile.in	2013-12-30 18:23:08.261797417 +0800
--+++ libpng-1.6.8.bak/Makefile.in	2013-12-30 18:22:09.853794547 +0800
--@@ -698,7 +698,7 @@
-+diff --git a/Makefile.in b/Makefile.in
-+index 975f931..a3e0552 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -747,7 +747,7 @@ SUFFIXES = .chk .out
-  # interfering with the symbol file format.
-  SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0' \
-  	-DPNGLIB_VERSION='@PNGLIB_VERSION@' \
- -	-DSYMBOL_PREFIX='$(SYMBOL_PREFIX)' -DPNG_NO_USE_READ_MACROS \
- +	-DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS \
-  	-DPNG_BUILDING_SYMBOL_TABLE $(am__append_5)
-- all: $(BUILT_SOURCES) config.h
-- 	$(MAKE) $(AM_MAKEFLAGS) all-am
-+ 
-+ # EXT_LIST is a list of the possibly library directory extensions, this exists
-+-- 
-+1.7.9.5
-+
+ define NGINX_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+-	-$(RM) $(TARGET_DIR)/usr/bin/nginx.old
++	$(RM) $(TARGET_DIR)/usr/sbin/nginx.old
+ 	$(INSTALL) -D -m 0664 package/nginx/nginx.logrotate \
+ 		$(TARGET_DIR)/etc/logrotate.d/nginx
+ endef
 -- 
-1.7.9.5
+1.9.1
