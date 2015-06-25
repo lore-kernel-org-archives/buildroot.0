@@ -1,19 +1,19 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 25 Jun 2015 21:59:55 +0200
-Subject: [Buildroot] [PATCH v6 14/16] package/opencv: add gtk3 support
+Date: Thu, 25 Jun 2015 21:59:57 +0200
+Subject: [Buildroot] [PATCH v6 16/16] package/vlc: add opencv support
 In-Reply-To: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
 References: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1435262397-888-15-git-send-email-s.martin49@gmail.com>
+Message-ID: <1435262397-888-17-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fully rework the GTK support in OpenCV because it now supports gtk-2 and
-gtk-3 (but only one at the time).
-Note that, in the build-system, the gtk support is only available when
-Qt support is disabled; so make sure the menuconfig reflects this.
+This change adds 2 patches (backported from upstream) to vlc fixing the
+build against opencv2 APIs.
+This allows to select the minimal set of opencv modules when opencv
+support is enabled.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -21,89 +21,134 @@ Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 changes v5->v6:
 - update a/r/t tags
-- remove unneeded "default ..." (Yann)
+- add backport url (Yann)
 
 changes v4->v5:
 - new patch
 ---
- package/opencv/Config.in | 22 +++++++++++++++++++---
- package/opencv/opencv.mk |  9 +++++++--
- 2 files changed, 26 insertions(+), 5 deletions(-)
+ ...opencv_wrapper-use-opencv2-style-includes.patch | 36 ++++++++++++++++++++++
+ ...cv_example-add-missing-include-statements.patch | 29 +++++++++++++++++
+ package/vlc/Config.in                              |  2 ++
+ package/vlc/vlc.mk                                 |  8 ++++-
+ 4 files changed, 74 insertions(+), 1 deletion(-)
+ create mode 100644 package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
+ create mode 100644 package/vlc/0009-opencv_example-add-missing-include-statements.patch
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index ac0443a..b738f71 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -215,6 +215,7 @@ choice
- 	  OpenCV GUI toolkit preference (from the most to the least):
- 	  - Qt5
- 	  - Qt4
-+	  - gtk-3
- 	  - gtk-2
- 
- config BR2_PACKAGE_OPENCV_GUI_NONE
-@@ -222,12 +223,12 @@ config BR2_PACKAGE_OPENCV_GUI_NONE
- 
- config BR2_PACKAGE_OPENCV_WITH_GTK
- 	bool "gtk2"
--	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
-+	depends on BR2_USE_MMU # libgtk2 -> libglib2
- 	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_MMU # libgtk2 -> glib2
--	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
-+	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_LIBGTK2
- 
- comment "gtk2 depends on X.org and needs a toolchain w/ wchar, threads, C++"
-@@ -238,6 +239,21 @@ comment "gtk2 depends on X.org and needs a toolchain w/ wchar, threads, C++"
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_INSTALL_LIBSTDCPP
- 
-+config BR2_PACKAGE_OPENCV_WITH_GTK3
-+	bool "gtk3"
-+	depends on BR2_ARCH_HAS_ATOMICS # libgtk3 -> cairo
-+	depends on BR2_USE_MMU # libgtk3 -> libglib2
-+	depends on BR2_USE_WCHAR # libgtk3 -> libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk3 -> libglib2
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_LIBGTK3
+diff --git a/package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch b/package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
+new file mode 100644
+index 0000000..0ce0206
+--- /dev/null
++++ b/package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
+@@ -0,0 +1,36 @@
++Backport from: https://git.videolan.org/?p=vlc.git;a=commit;h=cc236e4652255902f2c2cee3b18f83367f35a8c7
 +
-+comment "gtk3 needs a toolchain w/ wchar, threads, C++"
-+	depends on BR2_USE_MMU # libgtk3 -> glib2
-+	depends on BR2_ARCH_HAS_ATOMICS # libgtk3 -> cairo
-+	depends on !(BR2_USE_WCHAR || BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_INSTALL_LIBSTDCPP)
++From cc236e4652255902f2c2cee3b18f83367f35a8c7 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Sun, 24 May 2015 14:30:09 +0200
++Subject: [PATCH 8/9] opencv_wrapper: use opencv2-style includes
 +
- config BR2_PACKAGE_OPENCV_WITH_QT
- 	bool "qt4"
- 	depends on BR2_INSTALL_LIBSTDCPP
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 602b59a..986e7b4 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -236,13 +236,18 @@ OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON -DWITH_GSTREAMER_0_10=OFF
- OPENCV_DEPENDENCIES += gstreamer1 gst1-plugins-base
++If old opencv1-style legacy include directory is available, this change
++becomes purely cosmetic (maybe will compile a bit faster).
++It becomes an FTBFS fix when opencv1-style include directory is missing
++(i.e. from opencv-3.0).
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++Signed-off-by: Jean-Baptiste Kempf <jb@videolan.org>
++---
++ modules/video_filter/opencv_wrapper.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/modules/video_filter/opencv_wrapper.c b/modules/video_filter/opencv_wrapper.c
++index e36e1a5..5d74241 100644
++--- a/modules/video_filter/opencv_wrapper.c
+++++ b/modules/video_filter/opencv_wrapper.c
++@@ -39,8 +39,8 @@
++ #include <vlc_image.h>
++ #include "filter_picture.h"
++ 
++-#include <cxcore.h>
++-#include <cv.h>
+++#include <opencv2/core/core_c.h>
+++#include <opencv2/core/types_c.h>
++ 
++ /*****************************************************************************
++  * Local prototypes
++-- 
++2.4.2
++
+diff --git a/package/vlc/0009-opencv_example-add-missing-include-statements.patch b/package/vlc/0009-opencv_example-add-missing-include-statements.patch
+new file mode 100644
+index 0000000..7b7f727
+--- /dev/null
++++ b/package/vlc/0009-opencv_example-add-missing-include-statements.patch
+@@ -0,0 +1,29 @@
++Backport from: https://git.videolan.org/?p=vlc.git;a=commit;h=b82416d7000a993b33e903095a590fe32212a85e
++
++From b82416d7000a993b33e903095a590fe32212a85e Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Sun, 24 May 2015 14:30:10 +0200
++Subject: [PATCH 9/9] opencv_example: add missing #include statements
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++Signed-off-by: Jean-Baptiste Kempf <jb@videolan.org>
++---
++ modules/video_filter/opencv_example.cpp | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/modules/video_filter/opencv_example.cpp b/modules/video_filter/opencv_example.cpp
++index ae3af05..998f286 100644
++--- a/modules/video_filter/opencv_example.cpp
+++++ b/modules/video_filter/opencv_example.cpp
++@@ -41,6 +41,8 @@
++ 
++ #include <opencv2/core/core_c.h>
++ #include <opencv2/core/core.hpp>
+++#include <opencv2/imgproc/imgproc_c.h>
+++#include <opencv2/imgproc/imgproc.hpp>
++ #include <opencv2/objdetect/objdetect.hpp>
++ 
++ /*****************************************************************************
++-- 
++2.4.2
++
+diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+index b030a56..471f4a7 100644
+--- a/package/vlc/Config.in
++++ b/package/vlc/Config.in
+@@ -11,6 +11,8 @@ config BR2_PACKAGE_VLC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+ 	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC if BR2_PACKAGE_OPENCV
++	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT if BR2_PACKAGE_OPENCV
+ 	help
+ 	  VLC is a free and open source cross-platform multimedia player
+ 	  and framework that plays most multimedia files as well as DVD,
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index acd67ee..f609041 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -41,7 +41,6 @@ VLC_CONF_OPTS += \
+ 	--disable-projectm \
+ 	--disable-vsxu \
+ 	--disable-mtp \
+-	--disable-opencv \
+ 	--disable-mmal-codec \
+ 	--disable-mmal-vout \
+ 	--disable-dvdnav \
+@@ -145,6 +144,13 @@ else
+ VLC_CONF_OPTS += --disable-gles2
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK)$(BR2_PACKAGE_OPENCV_WITH_GTK3),)
-+OPENCV_CONF_OPTS += -DWITH_GTK=OFF -DWITH_GTK_2_X=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK),y)
- OPENCV_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=ON
- OPENCV_DEPENDENCIES += libgtk2
--else
--OPENCV_CONF_OPTS += -DWITH_GTK=OFF
++ifeq ($(BR2_PACKAGE_OPENCV),y)
++VLC_CONF_OPTS += --enable-opencv
++VLC_DEPENDENCIES += opencv
++else
++VLC_CONF_OPTS += --disable-opencv
 +endif
 +
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK3),y)
-+OPENCV_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=OFF
-+OPENCV_DEPENDENCIES += libgtk3
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_JASPER),y)
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ VLC_CONF_OPTS += --enable-opus
+ VLC_DEPENDENCIES += libvorbis opus
 -- 
 2.4.4
