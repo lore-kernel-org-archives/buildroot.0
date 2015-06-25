@@ -1,56 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Jun 2015 20:02:35 +0200
-Subject: [Buildroot] Buildroot runtime test infrastructure prototype
-Message-ID: <20150625200235.083eaf34@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 25 Jun 2015 15:52:08 -0300
+Subject: [Buildroot] [PATCH] dosfstools: bump to version 3.0.28
+Message-ID: <1435258328-13738-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Change to new homepage since maintainer changed as well.
+Add hash file based on tarball signature file.
 
-Our http://autobuild.buildroot.org tests are great, but they are only
-build-time tests, and they only test random configurations of packages.
-Things like bootloader packages, filesystem images, kernel build are
-never tested in an automated way, and no runtime testing is done. I
-also want to be able to build small test programs exercising specific
-features and run them on the target.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dosfstools/Config.in       | 2 +-
+ package/dosfstools/dosfstools.hash | 2 ++
+ package/dosfstools/dosfstools.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 3 deletions(-)
+ create mode 100644 package/dosfstools/dosfstools.hash
 
-Since a while, I wanted to setup a small infrastructure to be able to
-describe specific test cases: a Buildroot configuration to build, with
-the ability to boot some of those configurations automatically in Qemu.
-
-So I finally went ahead and create such a small infrastructure. It's
-very basic and minimal right now, and should be considered as an
-experiment. It's available at:
-
-   https://github.com/tpetazzoni/buildroot-runtime-test
-
-It's based on the Python unittest mechanism, and allows to describe
-test cases that consist in a Buildroot defconfig, plus a Python
-function that can do some checks on the resulting build, boot the
-system under Qemu, run some commands inside the Qemu system and check
-their results.
-
-I've written a few tests to show how it could work: simple tests for
-Dropbear and Python (on the package side) and several tests for
-filesystem images: ext2/3/4, squashfs, jffs2, ubi, iso9660, yaffs2 (all
-of them are boot tested, except yaffs2).
-
-For now, it's very crude and basic. The README file explains how it
-works, and gives a TODO listing some of the things that for sure need
-to be improved.
-
-Currently, this runtime test infrastructure is not set up to be
-executed every day on the latest Git, but it is obviously the goal.
-
-Contributions, comments and suggestions are welcome.
-
-Best regards,
-
-Thomas
+diff --git a/package/dosfstools/Config.in b/package/dosfstools/Config.in
+index 7f3481c..33c64b3 100644
+--- a/package/dosfstools/Config.in
++++ b/package/dosfstools/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_DOSFSTOOLS
+ 	help
+ 	  Tools for creating and checking DOS FAT filesystems.
+ 
+-	  http://www.daniel-baumann.ch/software/dosfstools/
++	  https://github.com/dosfstools/dosfstools
+ 
+ if BR2_PACKAGE_DOSFSTOOLS
+ 
+diff --git a/package/dosfstools/dosfstools.hash b/package/dosfstools/dosfstools.hash
+new file mode 100644
+index 0000000..f852195
+--- /dev/null
++++ b/package/dosfstools/dosfstools.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	ee95913044ecf2719b63ea11212917649709a6e53209a72d622135aaa8517ee2	dosfstools-3.0.28.tar.xz
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index 88c4fe8..b7f7d96 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-DOSFSTOOLS_VERSION = 3.0.26
++DOSFSTOOLS_VERSION = 3.0.28
+ DOSFSTOOLS_SOURCE = dosfstools-$(DOSFSTOOLS_VERSION).tar.xz
+-DOSFSTOOLS_SITE = http://daniel-baumann.ch/files/software/dosfstools
++DOSFSTOOLS_SITE = https://github.com/dosfstools/dosfstools/releases/download/v$(DOSFSTOOLS_VERSION)
+ DOSFSTOOLS_LICENSE = GPLv3+
+ DOSFSTOOLS_LICENSE_FILES = COPYING
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.3.6
