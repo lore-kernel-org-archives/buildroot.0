@@ -1,60 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 25 Jun 2015 15:52:08 -0300
-Subject: [Buildroot] [PATCH] dosfstools: bump to version 3.0.28
-Message-ID: <1435258328-13738-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 25 Jun 2015 15:52:37 -0300
+Subject: [Buildroot] [PATCH] openswan: bump to version 2.6.43
+Message-ID: <1435258357-13784-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change to new homepage since maintainer changed as well.
-Add hash file based on tarball signature file.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/dosfstools/Config.in       | 2 +-
- package/dosfstools/dosfstools.hash | 2 ++
- package/dosfstools/dosfstools.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 3 deletions(-)
- create mode 100644 package/dosfstools/dosfstools.hash
+ package/openswan/openswan.hash | 2 +-
+ package/openswan/openswan.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dosfstools/Config.in b/package/dosfstools/Config.in
-index 7f3481c..33c64b3 100644
---- a/package/dosfstools/Config.in
-+++ b/package/dosfstools/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_DOSFSTOOLS
- 	help
- 	  Tools for creating and checking DOS FAT filesystems.
- 
--	  http://www.daniel-baumann.ch/software/dosfstools/
-+	  https://github.com/dosfstools/dosfstools
- 
- if BR2_PACKAGE_DOSFSTOOLS
- 
-diff --git a/package/dosfstools/dosfstools.hash b/package/dosfstools/dosfstools.hash
-new file mode 100644
-index 0000000..f852195
---- /dev/null
-+++ b/package/dosfstools/dosfstools.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	ee95913044ecf2719b63ea11212917649709a6e53209a72d622135aaa8517ee2	dosfstools-3.0.28.tar.xz
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index 88c4fe8..b7f7d96 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/openswan/openswan.hash b/package/openswan/openswan.hash
+index 724a935..4853b3f 100644
+--- a/package/openswan/openswan.hash
++++ b/package/openswan/openswan.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	1be58b684dedd4bf00946ac5c7c6e9fbf8ac5db849feea2360c42c5e87cb565a	openswan-2.6.42.tar.gz
++sha256	ac7ef1d78766801f23c458cc7c3b080ca6e20c5144a1979598c319bc3bc7c88b	openswan-2.6.43.tar.gz
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+index 335a72a..6c6a8a7 100644
+--- a/package/openswan/openswan.mk
++++ b/package/openswan/openswan.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOSFSTOOLS_VERSION = 3.0.26
-+DOSFSTOOLS_VERSION = 3.0.28
- DOSFSTOOLS_SOURCE = dosfstools-$(DOSFSTOOLS_VERSION).tar.xz
--DOSFSTOOLS_SITE = http://daniel-baumann.ch/files/software/dosfstools
-+DOSFSTOOLS_SITE = https://github.com/dosfstools/dosfstools/releases/download/v$(DOSFSTOOLS_VERSION)
- DOSFSTOOLS_LICENSE = GPLv3+
- DOSFSTOOLS_LICENSE_FILES = COPYING
- 
+-OPENSWAN_VERSION = 2.6.42
++OPENSWAN_VERSION = 2.6.43
+ OPENSWAN_SITE = http://download.openswan.org/openswan
+ OPENSWAN_LICENSE = GPLv2+, BSD-3c
+ OPENSWAN_LICENSE_FILES = COPYING LICENSE
 -- 
 2.3.6
