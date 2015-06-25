@@ -1,68 +1,52 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Thu, 25 Jun 2015 19:13:24 +0530
-Subject: [Buildroot] [PATCH 2/2] glog: disable on blackfin external
-	toolchains
-In-Reply-To: <1435239804-17119-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1435239804-17119-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <1435239804-17119-2-git-send-email-rahul.bedarkar@imgtec.com>
+From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
+Date: Thu, 25 Jun 2015 15:46:28 +0200
+Subject: [Buildroot] version of ps
+Message-ID: <558C0634.8060001@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With following blackfin toolchains
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
-BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
-BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+Hi,
 
-when BR2_BINFMT_FDPIC=y
+I need to run ps with an option (-p) which is not supported by the
+default busybox version. I see in busybox.config that many options for
+ps aren't enabled:
 
-../usr/include/bits/elf-fdpic.h: In function 'void* __reloc_pointer(void*, const elf32_fdpic_loadmap*)':
-../usr/include/bits/elf-fdpic.h:95: error: invalid use of 'void'
+# CONFIG_FEATURE_PS_WIDE is not set
+# CONFIG_FEATURE_PS_LONG is not set
+# CONFIG_FEATURE_PS_TIME is not set
+# CONFIG_FEATURE_PS_ADDITIONAL_COLUMNS is not set
+# CONFIG_FEATURE_PS_UNUSUAL_SYSTEMS is not set
 
-code snippet at line 95 in elf-fdpic.h
--------------------------------------------------------
-unsigned long offset = p - (void*)map->segs[c].p_vaddr;
--------------------------------------------------------
+One of these options probably does the thing (I've not really check
+yet). If this is the case, I can either propose a patch to enable it
+or add a runtime dependency to PROCPS_NG in my package. What do you
+think is best?
 
-void pointer addition and subtraction is not allowed in C++ as it has undetermined size,
-however in C with language extension it is possible because sizeof void is treated
-as one byte.
+cheers,
 
-This is toolchain-specific issue. So disable package on these external toolchains.
+- -- 
+Sylvain Raybaud
+www.green-communications.fr
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
-fixes:
-http://autobuild.buildroot.net/results/c70/c704c70ae2f066f85dd6a5fa6a73789bc358d368/
-
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
----
- package/glog/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/package/glog/Config.in b/package/glog/Config.in
-index 534997a..3f54020 100644
---- a/package/glog/Config.in
-+++ b/package/glog/Config.in
-@@ -3,11 +3,18 @@ config BR2_PACKAGE_GLOG
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
-+	# build issues with these external toolchains
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	help
- 	  C++ implementation of the Google logging module
- 
- 	  https://github.com/google/glog
- 
- comment "glog needs a toolchain w/ C++, threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS
--- 
-1.9.1
+iQIcBAEBAgAGBQJVjAY0AAoJEEkkwl4JtJ9ycgoP/A4tG8PkCjpwZA2WGdTOW6IR
+0IeETtMumMcfov9y6pOvaOzyarL+fJGo6mmToRpCR+O3guHnRx5Dadftu7RNay+X
+4SekoGoX/B2nJUVG7lEczTjQXoufJLieDm1aDnTonG3v3nFAbCR7xyaAd9DhANkQ
+ymg+T9t+yUGvx+ZGT8CP/xzlXYZMmb4Je7+DcVxRa/XwBkW7dW8ztMr1CKwR6mum
++2xyw0eiiXX2cNbNNapZDsfVod8wU1vh0nUs+7QBhiIziJ7QngiobjqoTiW+E2Vo
+F4lKaR3BATFCUzEAgkS4Eq8iScXC2pX4BjsB4hL2Z0u3c6ouDaZUL8/0X+FTdBhN
+8CbJ/ev3++7epENL+ZoWhJf2Q4zPCzBL+btIuTKs0FqcfebSvOLiXrxd82IjNwhP
+GfFDDqhbNH4s3q0ChfXcJXZanMyNtlq6orQJd7EKbFNciz9LwEPezY6L7IM9lFOL
+USoi1ritnIxWJOzploBEhHCRLvDkT4PNI9sIu3PaXWA9DVZHNca3F/aJVJuoGJW/
+Cf4PtuoF6hRQ1vG7qxK8+lJ3OixOhpVDubSabnpse9f1CPxAuvTV9ITY+QezihAc
+rTdwaa3EP5hgGqD0Cuh0D6VOO785DMJKbJqAQxkIAkdHZAbUhWtAvGLgp6KcJdkz
+RPE3fv+MojOnm5kpgSaW
+=MIVb
+-----END PGP SIGNATURE-----
