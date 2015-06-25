@@ -1,66 +1,53 @@
-From: Arthur LAMBERT <lambertarthur22@gmail.com>
-Date: Thu, 25 Jun 2015 14:07:47 +0200
-Subject: [Buildroot] [PATCH v2 1/1] board: add support for Warpboard
-In-Reply-To: <558B254C.2090606@mind.be>
-References: <1434988018-16391-1-git-send-email-lambertarthur22@gmail.com>
- <558B254C.2090606@mind.be>
-Message-ID: <20150625120747.GA8014@arthur-dreem>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 25 Jun 2015 15:28:06 +0200
+Subject: [Buildroot] [git commit] system/device_table.txt: drop unused
+	ifupdown post-up.d / pre-down.d directories
+Message-ID: <20150625133256.6323E805F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wednesday 24 Jun 2015 ? 23:46:52 (+0200), Arnout Vandecappelle a ?crit :
-> > new file mode 100644
-> > index 0000000..d9706c1
-> > --- /dev/null
-> > +++ b/board/freescale/warpboard/linux/linux-001-add-sdm-firmware.patch
-> > @@ -0,0 +1,145 @@
-> 
->  Patches should have a description and Signed-off-by.
-> 
->  But better yet, download it with BR2_LINUX_KERNEL_PATCH="http://... http://..."
-> instead of including it in buildroot.
-> 
-> [snip]
+commit: http://git.buildroot.net/buildroot/commit/?id=cb80683cb2dd4881c4580ecd19dc3c0f45e32d2d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I don't understand this suggestion. How can I download the patch instead if including it
-in buildroot since this patch does not exist anywhere. Theses patch are not commit in any git
-right now.
+These are not used by the busybox or Debian ifupdown implementation. Instead
+if-up.d is run after the per-interface up tasks (E.G. post-up) and
+if-down.d is run before the per-interface down tasks (E.G. pre-down).
 
-Also you suggest me to include imx_usb_loader in warpoard_defconfig. I tried to
-flash my uboot by using the imx usb loader from buildroot but is does not work :
+So drop them as they only cause confusion.
 
-[arthur warpboard_v5] sudo dfu-util -D output/images/u-boot.imx -a boot
-dfu-util 0.8
+grep execute_all output/build/busybox-1.23.2/networking/ifupdown.c
+static int execute_all(struct interface_defn_t *ifd, const char *opt)
+        if (!execute_all(iface, "pre-up")) return 0;
+        if (!execute_all(iface, "up")) return 0;
+        if (!execute_all(iface, "down")) return 0;
+        if (!execute_all(iface, "post-down")) return 0;
 
-Copyright 2005-2009 Weston Schmidt, Harald Welte and OpenMoko Inc.
-Copyright 2010-2014 Tormod Volden and Stefan Schmidt
-This program is Free Software and has ABSOLUTELY NO WARRANTY
-Please report bugs to dfu-util at lists.gnumonks.org
+grep execute_script output/build/ifupdown-0.7.49/execute.c
+int execute_scripts(interface_defn * ifd, execfn * exec, char *opt)
+    if (!execute_scripts(iface, doit, "pre-up"))
+    if (!execute_scripts(iface, doit, "up"))
+    if (!execute_scripts(iface, doit, "down"))
+    if (!execute_scripts(iface, doit, "post-down"))
 
-dfu-util: Invalid DFU suffix signature
-dfu-util: A valid DFU suffix will be required in a future dfu-util release!!!
-Opening DFU capable USB device...
-ID 0525:a4a5
-Run-time device DFU version 0110
-Claiming USB DFU Interface...
-Setting Alternate Setting #0 ...
-Determining device status: state = dfuIDLE, status = 0
-dfuIDLE, continuing
-DFU mode device DFU version 0110
-Device returned transfer size 4096
-Copying data from PC to DFU device
-Download	 [                         ]   0%            0 bytes failed!
-state(10) = dfuERROR, status(14) = Something went wrong, but the device does not know what it was
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ system/device_table.txt |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-I tried to update imx_usb_loader on last sha1 commit but same result.
-
-To make it work I have to use an imx_usb_loader from github/warpboard which is different :
-https://github.com/warpboard/imx_usb_loader/commits/warp/master
-
-How can I integrate it ? Do I need to add a patch on imx_usb_loader package to use custom git ?
-
-Thanks,
-Arthur.
+diff --git a/system/device_table.txt b/system/device_table.txt
+index 8e7dbd2..f018e63 100644
+--- a/system/device_table.txt
++++ b/system/device_table.txt
+@@ -16,9 +16,7 @@
+ /etc/passwd				f	644	0	0	-	-	-	-	-
+ /etc/network/if-up.d			d	755	0	0	-	-	-	-	-
+ /etc/network/if-pre-up.d		d	755	0	0	-	-	-	-	-
+-/etc/network/if-post-up.d		d	755	0	0	-	-	-	-	-
+ /etc/network/if-down.d			d	755	0	0	-	-	-	-	-
+-/etc/network/if-pre-down.d		d	755	0	0	-	-	-	-	-
+ /etc/network/if-post-down.d		d	755	0	0	-	-	-	-	-
+ # uncomment this to allow starting x as non-root
+ #/usr/X11R6/bin/Xfbdev		     	f	4755	0	0	-	-	-	-	-
