@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Jun 2015 23:57:03 +0200
-Subject: [Buildroot] [PATCH] openswan: bump to version 2.6.43
-In-Reply-To: <1435258357-13784-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1435258357-13784-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150625215703.GE4178@free.fr>
+Date: Thu, 25 Jun 2015 23:58:36 +0200
+Subject: [Buildroot] [PATCH] libconfig: bump to 1.5
+In-Reply-To: <1435261934-11054-1-git-send-email-yegorslists@googlemail.com>
+References: <1435261934-11054-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20150625215836.GF4178@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,8 +12,10 @@ To: buildroot@busybox.net
 
 Gustavo, All,
 
-On 2015-06-25 15:52 -0300, Gustavo Zacarias spake thusly:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On 2015-06-25 21:52 +0200, Yegor Yefremov spake thusly:
+> Add hash file.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -24,33 +26,34 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/openswan/openswan.hash | 2 +-
->  package/openswan/openswan.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/libconfig/libconfig.hash | 2 ++
+>  package/libconfig/libconfig.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>  create mode 100644 package/libconfig/libconfig.hash
 > 
-> diff --git a/package/openswan/openswan.hash b/package/openswan/openswan.hash
-> index 724a935..4853b3f 100644
-> --- a/package/openswan/openswan.hash
-> +++ b/package/openswan/openswan.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated after checking pgp signature
-> -sha256	1be58b684dedd4bf00946ac5c7c6e9fbf8ac5db849feea2360c42c5e87cb565a	openswan-2.6.42.tar.gz
-> +sha256	ac7ef1d78766801f23c458cc7c3b080ca6e20c5144a1979598c319bc3bc7c88b	openswan-2.6.43.tar.gz
-> diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
-> index 335a72a..6c6a8a7 100644
-> --- a/package/openswan/openswan.mk
-> +++ b/package/openswan/openswan.mk
+> diff --git a/package/libconfig/libconfig.hash b/package/libconfig/libconfig.hash
+> new file mode 100644
+> index 0000000..30110cb
+> --- /dev/null
+> +++ b/package/libconfig/libconfig.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed:
+> +sha256  e31daa390d8e4461c8830512fe2e13ba1a3d6a02a2305a02429eec61e68703f6  libconfig-1.5.tar.gz
+> diff --git a/package/libconfig/libconfig.mk b/package/libconfig/libconfig.mk
+> index a70ff94..f11937c 100644
+> --- a/package/libconfig/libconfig.mk
+> +++ b/package/libconfig/libconfig.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -OPENSWAN_VERSION = 2.6.42
-> +OPENSWAN_VERSION = 2.6.43
->  OPENSWAN_SITE = http://download.openswan.org/openswan
->  OPENSWAN_LICENSE = GPLv2+, BSD-3c
->  OPENSWAN_LICENSE_FILES = COPYING LICENSE
+> -LIBCONFIG_VERSION = 1.4.9
+> +LIBCONFIG_VERSION = 1.5
+>  LIBCONFIG_SITE = http://www.hyperrealm.com/libconfig
+>  LIBCONFIG_LICENSE = LGPLv2.1+
+>  LIBCONFIG_LICENSE_FILES = COPYING.LIB
 > -- 
-> 2.3.6
+> 2.1.0
 > 
 > _______________________________________________
 > buildroot mailing list
@@ -70,4 +73,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 819 bytes
 Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150625/6ebd8862/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150625/7d065692/attachment.asc>
