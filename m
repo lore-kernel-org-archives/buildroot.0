@@ -1,25 +1,22 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 25 Jun 2015 21:59:47 +0200
-Subject: [Buildroot] [PATCH v6 06/16] package/opencv: reduce modules on by
+Date: Thu, 25 Jun 2015 21:59:48 +0200
+Subject: [Buildroot] [PATCH v6 07/16] package/opencv: disable all modules by
 	default
 In-Reply-To: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
 References: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1435262397-888-7-git-send-email-s.martin49@gmail.com>
+Message-ID: <1435262397-888-8-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since its integration into Buildroot, OpenCV always enables all modules
-by default because the inter-module denpedency were not supported.
+This change allows to reduce the size of the default OpenCV package, so
+the final root filesystem.
 
-Now that OpenCV inter-module dependencies are correctly set at the
-Buildroot configuration level, it is possible to reduce the enabled
-module list to its minimal set, letting kconfig enable the other
-modules.
-
-This change will not change anything WRT a defconfig build with opencv.
+However, this will break any existing defconfig enabling OpenCV. Indeed,
+a minimal OpenCV  package will be built, whereas, prior to applying this
+patches, a full-featured one would have been built instead.
 
 Cc: "Yann E. Morin" <yann.morin.1998@free.fr>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
@@ -28,97 +25,52 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 changes v5->v6:
 - new patch
 ---
- package/opencv/Config.in | 11 -----------
- 1 file changed, 11 deletions(-)
+ package/opencv/Config.in | 5 -----
+ 1 file changed, 5 deletions(-)
 
 diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 4f29ffd..ce67f0c 100644
+index ce67f0c..3c00525 100644
 --- a/package/opencv/Config.in
 +++ b/package/opencv/Config.in
-@@ -20,7 +20,6 @@ comment "OpenCV modules"
+@@ -93,7 +93,6 @@ comment "opencv_python module requires numpy which is not yet available."
  
- config BR2_PACKAGE_OPENCV_LIB_CALIB3D
- 	bool "calib3d"
+ config BR2_PACKAGE_OPENCV_LIB_SHAPE
+ 	bool "shape"
 -	default y
+ 	# opencv_core dependency is already enabled
+ 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+ 	select BR2_PACKAGE_OPENCV_LIB_VIDEO
+@@ -103,7 +102,6 @@ config BR2_PACKAGE_OPENCV_LIB_SHAPE
+ 
+ config BR2_PACKAGE_OPENCV_LIB_STITCHING
+ 	bool "stitching"
+-	default y
+ 	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
  	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
  	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
-@@ -31,7 +30,6 @@ config BR2_PACKAGE_OPENCV_LIB_CALIB3D
+@@ -113,7 +111,6 @@ config BR2_PACKAGE_OPENCV_LIB_STITCHING
  
- config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	bool "features2d"
+ config BR2_PACKAGE_OPENCV_LIB_SUPERRES
+ 	bool "superres"
 -	default y
- 	select BR2_PACKAGE_OPENCV_LIB_FLANN
  	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	select BR2_PACKAGE_OPENCV_LIB_ML
-@@ -41,7 +39,6 @@ config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
+ 	select BR2_PACKAGE_OPENCV_LIB_VIDEO
+ 	help
+@@ -121,7 +118,6 @@ config BR2_PACKAGE_OPENCV_LIB_SUPERRES
  
- config BR2_PACKAGE_OPENCV_LIB_FLANN
- 	bool "flann"
+ config BR2_PACKAGE_OPENCV_LIB_TS
+ 	bool "ts"
 -	default y
  	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_flann (clustering and search in multi-dimensional spaces)
-@@ -52,7 +49,6 @@ config BR2_PACKAGE_OPENCV_LIB_FLANN
- 
- config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	bool "highgui"
--	default y
+ 	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
  	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
+@@ -145,7 +141,6 @@ config BR2_PACKAGE_OPENCV_LIB_VIDEO
+ 
+ config BR2_PACKAGE_OPENCV_LIB_VIDEOSTAB
+ 	bool "videostab"
+-	default y
+ 	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
+ 	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
  	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	select BR2_PACKAGE_OPENCV_LIB_VIDEOIO
-@@ -62,28 +58,24 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 
- config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
- 	bool "imgcodecs"
--	default y
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_imgcodecs (image codecs) module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	bool "imgproc"
--	default y
- 	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_imgproc (image processing) module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_ML
- 	bool "ml"
--	default y
- 	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_ml (machine learning) module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 	bool "objdetect"
--	default y
- 	# opencv_core dependency is already enabled
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	select BR2_PACKAGE_OPENCV_LIB_ML
-@@ -92,7 +84,6 @@ config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 
- config BR2_PACKAGE_OPENCV_LIB_PHOTO
- 	bool "photo"
--	default y
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_photo (computational photography) module into the OpenCV
-@@ -141,7 +132,6 @@ config BR2_PACKAGE_OPENCV_LIB_TS
- 
- config BR2_PACKAGE_OPENCV_LIB_VIDEOIO
- 	bool "videoio"
--	default y
- 	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
-@@ -149,7 +139,6 @@ config BR2_PACKAGE_OPENCV_LIB_VIDEOIO
- 
- config BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	bool "video"
--	default y
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_video (video analysis) module into the OpenCV build.
 -- 
 2.4.4
