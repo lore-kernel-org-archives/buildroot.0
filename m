@@ -1,95 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 26 Jun 2015 01:06:10 +0200
-Subject: [Buildroot] B3+external kernel: not quite sure how to make
- these pieces fit ...
-In-Reply-To: <07f701d0af37$5492bff0$fdb83fd0$@novadsp.com>
-References: <066601d0aeb0$e445c840$acd158c0$@novadsp.com>
- <558B1B96.8070701@mind.be> <07f701d0af37$5492bff0$fdb83fd0$@novadsp.com>
-Message-ID: <558C8962.9080003@mind.be>
+Date: Fri, 26 Jun 2015 01:08:27 +0200
+Subject: [Buildroot] Problem with Touchscreen on ARM
+In-Reply-To: <CALW-xeo1AEKxyX2u98w5qe7adphyj+MZ7Z4gezWYv1wtvjk4sg@mail.gmail.com>
+References: <CALW-xeqpfVVYeff9+RPfhOhEEW3mohbqXEweXP7YQJuoYX1Erg@mail.gmail.com>
+ <558B1E8D.9010106@mind.be>
+ <CALW-xeo1AEKxyX2u98w5qe7adphyj+MZ7Z4gezWYv1wtvjk4sg@mail.gmail.com>
+Message-ID: <558C89EB.8070807@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/25/15 13:08, g4 at novadsp.com wrote:
-> Arnout, apologies. Outlook simply replied to you and not the list.
+On 06/25/15 10:04, Guillaume s?tan wrote:
 > 
->>  Looks like your external toolchain is not installed correctly. Can 
->> you run
->> ~/rcn/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-
->> gnueabihf-gcc  -v
 > 
-> I will bow to superior knowledge here but it does produce a booting,
-> running, kernel.
-
- I asked because the error you reported is based on this piece of code:
-
-EXT_TOOLCHAIN_TARGET=`LANG=C $${__CROSS_CC} -v 2>&1 | grep ^Target | cut -f2 -d
-' '` ; \
-if ! echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
-        echo "External toolchain uses the unsuported OABI" ; \
-        exit 1 ; \
-fi ; \
-
-[snip]
-> Target: arm-linux-gnueabihf
-
- ... but it does end in eabihf, so why doesn't this condition match?
-
- Could you modify toolchain/helpers.mk to echo the value of EXT_TOOLCHAIN_TARGET
-in the command above?
-
-
-[snip]
->>  Or to be safe, just select the Linaro 2014.09 toolchain as to be 
->> downloaded and installed.
+> 2015-06-24 23:18 GMT+02:00 Arnout Vandecappelle <arnout@mind.be
+> <mailto:arnout@mind.be>>:
 > 
-> Yes but working kernel trumps all ...
-
- It is not required to build the kernel with the same toolchain as userspace.
-
-
->>  You'll have to run 'make -C <linux_dir> INSTALL_MOD_PATH=$1 
->> modules_install'
->> from a post-build script. Or else, install the modules in some staging 
->> directory and copy them to the target directory in the post-build script.
->>
->>  Or alternatively, just build it in buildroot with 
->> BR2_LINUX_KERNEL_CUSTOM_LOCAL=y.
+> On 06/24/15 16:23, Guillaume s?tan wrote:
 > 
-> This last is promising. So you suggest cloning kernel repo in the buildroot
-> tree? 
+>>> Hello,
+> 
+>>>
+> 
+>> >I try to use a Touchscreen (multitouch) with my target (Arm Little endian -
+> 
+>>> Cortex - A9 ).
+> 
+>> >I tried to use EFL, directfb and fb but I haven't managed to run the multitouch
+> 
+>>> on my target.
+> 
+> 
+>  >fb is just a framebuffer driver so doesn't have a relation with input events.
+> 
+> 
+>  >directfb doesn't yet support multitouch AFAIK.
+> 
+> 
+>  >EFL should support multitouch. But I guess you have to configure it to listen
+>>to the right input device.
+>  
+>    How I can do that ? 
 
- No, I suggest letting buildroot build the kernel using the checked-out kernel
-source code you have in another directory. _CUSTOM_LOCAL refers to a source tree.
+ I don't know, I never used enlightenment, but I expect they have some
+documentation, no?
 
 
  Regards,
  Arnout
 
-> 
-> Someone else must have had this problem? 
-> 
-> Thank you.
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
->  
->  
-> ************************************************************************************
-> This footnote confirms that this email message has been scanned by
-> PineApp Mail-SeCure for the presence of malicious code, vandals & computer viruses.
-> ************************************************************************************
-> 
-> 
-> 
-> 
 
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
