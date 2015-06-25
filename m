@@ -1,42 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 25 Jun 2015 14:57:42 -0300
-Subject: [Buildroot] [PATCH] ipset: bump to version 6.25.1
-Message-ID: <1435255062-29672-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Jun 2015 20:02:35 +0200
+Subject: [Buildroot] Buildroot runtime test infrastructure prototype
+Message-ID: <20150625200235.083eaf34@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ipset/ipset.hash | 6 ++++--
- package/ipset/ipset.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index 9a79180..e0f11d9 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,2 +1,4 @@
--# From ftp://ftp.netfilter.org/pub/ipset/ipset-6.24.tar.bz2.md5sum.txt
--md5	8831b8f01458bf2abacc222884195a62	ipset-6.24.tar.bz2
-+# From ftp://ftp.netfilter.org/pub/ipset/ipset-6.25.1.tar.bz2.md5sum.txt
-+md5	e58262af2d53bda271f43883eebc8d54	ipset-6.25.1.tar.bz2
-+# Calculated based on the hash above
-+sha256	658e15d0d0d6a7160137ef1c2bc2c8669cfee996eb9e049df8d7313e34795e7b	ipset-6.25.1.tar.bz2
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index be327ec..e5e9218 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPSET_VERSION = 6.24
-+IPSET_VERSION = 6.25.1
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
+Our http://autobuild.buildroot.org tests are great, but they are only
+build-time tests, and they only test random configurations of packages.
+Things like bootloader packages, filesystem images, kernel build are
+never tested in an automated way, and no runtime testing is done. I
+also want to be able to build small test programs exercising specific
+features and run them on the target.
+
+Since a while, I wanted to setup a small infrastructure to be able to
+describe specific test cases: a Buildroot configuration to build, with
+the ability to boot some of those configurations automatically in Qemu.
+
+So I finally went ahead and create such a small infrastructure. It's
+very basic and minimal right now, and should be considered as an
+experiment. It's available at:
+
+   https://github.com/tpetazzoni/buildroot-runtime-test
+
+It's based on the Python unittest mechanism, and allows to describe
+test cases that consist in a Buildroot defconfig, plus a Python
+function that can do some checks on the resulting build, boot the
+system under Qemu, run some commands inside the Qemu system and check
+their results.
+
+I've written a few tests to show how it could work: simple tests for
+Dropbear and Python (on the package side) and several tests for
+filesystem images: ext2/3/4, squashfs, jffs2, ubi, iso9660, yaffs2 (all
+of them are boot tested, except yaffs2).
+
+For now, it's very crude and basic. The README file explains how it
+works, and gives a TODO listing some of the things that for sure need
+to be improved.
+
+Currently, this runtime test infrastructure is not set up to be
+executed every day on the latest Git, but it is obviously the goal.
+
+Contributions, comments and suggestions are welcome.
+
+Best regards,
+
+Thomas
 -- 
-2.3.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
