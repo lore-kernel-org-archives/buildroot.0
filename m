@@ -1,42 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Jun 2015 20:47:15 +0200
-Subject: [Buildroot] [PATCH v6 00/16] OpenCV bump
-In-Reply-To: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
-References: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150626204715.1043dbfb@free-electrons.com>
+Date: Fri, 26 Jun 2015 21:26:47 +0200
+Subject: [Buildroot] [git commit] libarchive: add hash and enable lzma
+	support
+Message-ID: <20150626192715.2C83B80DAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+commit: http://git.buildroot.net/buildroot/commit/?id=eab1756c19c786480ff79a4a9df616c6b635ec8f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 25 Jun 2015 21:59:41 +0200, Samuel Martin wrote:
+Add libarchive hash. Enable lzma support.
+Both xz and lzma support are provided by the xz library.
 
->   package/opencv: alphabetically sorted each _CONF_OPTS group
->   package/opencv: bump to version 3.0
->   package/gstreamer1/gst1-plugins-bad: disable opencv plugin with
->     opencv-3
->   package/opencv: define modules inter-dependencies
->   package/opencv: reword modules' prompt and help text
->   package/opencv: reduce modules on by default
->   package/opencv: disable all modules by default
->   package/opencv: add python support
+[Thomas: explicitly pass --with-lzma when xz is available.]
 
-Applied.
+Signed-off-by: Nimai Mahajan <nimaim@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libarchive/libarchive.hash |    2 ++
+ package/libarchive/libarchive.mk   |    8 +++++++-
+ 2 files changed, 9 insertions(+), 1 deletions(-)
 
->   package/opencv: add openmp support
-
-Applied.
-
-For the other patches, I'm waiting for some more review (and some of
-the patches have comments from Yann).
-
-Thanks a lot for working on OpenCV!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+new file mode 100644
+index 0000000..5f96211
+--- /dev/null
++++ b/package/libarchive/libarchive.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  eb87eacd8fe49e8d90c8fdc189813023ccc319c5e752b01fb6ad0cc7b2c53d5e  libarchive-3.1.2.tar.gz
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 61528d9..206de3f 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -9,7 +9,6 @@ LIBARCHIVE_SITE = http://www.libarchive.org/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
+ LIBARCHIVE_LICENSE = BSD-2c, BSD-3c
+ LIBARCHIVE_LICENSE_FILES = COPYING
+-LIBARCHIVE_CONF_OPTS = --without-lzma
+ 
+ ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
+ ifeq ($(BR2_STATIC_LIBS),y)
+@@ -86,4 +85,11 @@ else
+ LIBARCHIVE_CONF_OPTS += --without-zlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XZ),y)
++LIBARCHIVE_DEPENDENCIES += xz
++LIBARCHIVE_CONF_OPTS += --with-lzma
++else
++LIBARCHIVE_CONF_OPTS += --without-lzma
++endif
++
+ $(eval $(autotools-package))
