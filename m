@@ -1,61 +1,68 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 26 Jun 2015 05:58:53 +0200
-Subject: [Buildroot] [PATCH v4 1/2] packages: fix and improve support for
-	top-level parallel makefile
+Date: Fri, 26 Jun 2015 05:58:54 +0200
+Subject: [Buildroot] [PATCH v4 2/2] pkg-luarocks: fix top-level parallel
+	makefile support
 In-Reply-To: <1435291134-6780-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1435291134-6780-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1435291134-6780-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1435291134-6780-3-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To fix packages that fail to build when PARALLEL_JOBS is empty instead
-of using an empty PARALLEL_JOBS just avoid to using it in
-the MAKE variable.
+In the *-install-target phase the manifest file is being updated, if multiply packages try to update it they fail.
 
-Check the MAKEFLAGS variable to know automatically if the -j option is
-being used, but use the "=" operator instead of the ":=" operator
-because it can be checked only in a "recursively expanded variable".
-Use "override" because otherwise it's impossible to change the
-automatic variable "MAKE".
+To avoid multiple access to the manifest file use flock to sync
+multiple luarocks packages.
+
+e.g. installing three luarocks packages:
+make lua-cjson-build lua-coat-build lua-coatpersistent-build
+make lua-cjson lua-coat lua-coatpersistent -j
+
+Fix error:
+Updating manifest for /home/tetsuya/buildroot/br2/output/target/usr/lib/luarocks/rocks
+No existing manifest. Attempting to rebuild...
+
+Error: rock_manifest file not found for lua-coat 0.9.1-1 - not a LuaRocks 2 tree?
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Makefile            | 4 ++--
- package/Makefile.in | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/luarocks/luarocks.mk | 6 ++++--
+ package/pkg-luarocks.mk      | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 8eb21d4..b1bcf78 100644
---- a/Makefile
-+++ b/Makefile
-@@ -58,8 +58,8 @@ export HOSTARCH := $(shell uname -m | \
- #
- # Taking into account the above considerations, if you still want to execute
- # this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
--# build using the following command:
--#	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
-+# use the -j<jobs> option when building, e.g:
-+#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
- .NOTPARALLEL:
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 2b6c975..413e23d 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -53,8 +53,10 @@ endef
  
- # absolute path
-diff --git a/package/Makefile.in b/package/Makefile.in
-index c02d31f..2ed7cf7 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -18,7 +18,8 @@ PARALLEL_JOBS := $(BR2_JLEVEL)
+ $(eval $(host-generic-package))
+ 
+-LUAROCKS_RUN = LUA_PATH="$(HOST_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua" \
+-	$(LUA_RUN) $(HOST_DIR)/usr/bin/luarocks
++LUAROCKS_RUN_ENV = LUA_PATH="$(HOST_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua"
++LUAROCKS_RUN_CMD = $(LUA_RUN) $(HOST_DIR)/usr/bin/luarocks
++
++LUAROCKS_RUN = $(LUAROCKS_RUN_ENV) $(LUAROCKS_RUN_CMD)
+ 
+ define LUAROCKS_FINALIZE_TARGET
+ 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
+diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+index 83f338e..0a7ba47 100644
+--- a/package/pkg-luarocks.mk
++++ b/package/pkg-luarocks.mk
+@@ -58,8 +58,8 @@ endif
+ #
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+-	cd $$($(2)_SRCDIR) && \
+-		$$(LUAROCKS_RUN) make --keep $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPTS)
++	cd $$($(2)_SRCDIR) && $$(LUAROCKS_RUN_ENV) flock $$(TARGET_DIR) \
++		$$(LUAROCKS_RUN_CMD) make --keep $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPTS)
+ endef
  endif
  
- MAKE1 := $(HOSTMAKE) -j1
--MAKE := $(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
-+override MAKE = $(HOSTMAKE) \
-+	$(if $(findstring j,$(filter-out --%,$(MAKEFLAGS))),,-j$(PARALLEL_JOBS))
- 
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
 -- 
 2.4.3
