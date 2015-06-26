@@ -1,121 +1,107 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Jun 2015 20:43:25 +0200
-Subject: [Buildroot] [git commit] package/opencv: reduce modules on by
-	default
-Message-ID: <20150626184435.8DD3480E18@busybox.osuosl.org>
+Date: Fri, 26 Jun 2015 20:44:29 +0200
+Subject: [Buildroot] [git commit] package/opencv: add python support
+Message-ID: <20150626184435.B352980E18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f45342b7555dccb9aa4890b846a9e45f8a1f7560
+commit: http://git.buildroot.net/buildroot/commit/?id=c96fb31aa1fa1cd0ee7e4546c11d0a18a3bca044
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since its integration into Buildroot, OpenCV always enables all modules
-by default because the inter-module denpedency were not supported.
+opencv_python module needs python-numpy because it uses some numpy
+headers in this wrapper.
 
-Now that OpenCV inter-module dependencies are correctly set at the
-Buildroot configuration level, it is possible to reduce the enabled
-module list to its minimal set, letting kconfig enable the other
-modules.
+From its 2.4 release, OpenCV offers python bindings, but they required
+most of the OpenCV modules to be enabled.
 
-This change will not change anything WRT a defconfig build with opencv.
+Since OpenCV-3.0.0, python bindings have been reworked:
+- it now supports both python2 and python3
+- only built modules supporting wrapped in python will be included in
+  the bindings.
 
-Cc: "Yann E. Morin" <yann.morin.1998@free.fr>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/opencv/Config.in |   11 -----------
- 1 files changed, 0 insertions(+), 11 deletions(-)
+ package/opencv/Config.in |   12 +++++++++++-
+ package/opencv/opencv.mk |   33 +++++++++++++++++++++++++++++++--
+ 2 files changed, 42 insertions(+), 3 deletions(-)
 
 diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index a651d9e..6f99ecb 100644
+index 877ddda..576f667 100644
 --- a/package/opencv/Config.in
 +++ b/package/opencv/Config.in
-@@ -21,7 +21,6 @@ comment "OpenCV modules"
- 
- config BR2_PACKAGE_OPENCV_LIB_CALIB3D
- 	bool "calib3d"
--	default y
- 	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
-@@ -30,7 +29,6 @@ config BR2_PACKAGE_OPENCV_LIB_CALIB3D
- 
- config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	bool "features2d"
--	default y
- 	select BR2_PACKAGE_OPENCV_LIB_FLANN
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	select BR2_PACKAGE_OPENCV_LIB_ML
-@@ -40,7 +38,6 @@ config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 
- config BR2_PACKAGE_OPENCV_LIB_FLANN
- 	bool "flann"
--	default y
- 	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_flann (clustering and search in multi-dimensional spaces)
-@@ -48,7 +45,6 @@ config BR2_PACKAGE_OPENCV_LIB_FLANN
- 
- config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	bool "highgui"
--	default y
- 	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	select BR2_PACKAGE_OPENCV_LIB_VIDEOIO
-@@ -58,28 +54,24 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 
- config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
- 	bool "imgcodecs"
--	default y
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_imgcodecs (image codecs) module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	bool "imgproc"
--	default y
- 	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_imgproc (image processing) module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_ML
- 	bool "ml"
--	default y
- 	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_ml (machine learning) module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 	bool "objdetect"
--	default y
- 	# opencv_core dependency is already enabled
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	select BR2_PACKAGE_OPENCV_LIB_ML
-@@ -88,7 +80,6 @@ config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 
- config BR2_PACKAGE_OPENCV_LIB_PHOTO
- 	bool "photo"
--	default y
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
+@@ -85,7 +85,17 @@ config BR2_PACKAGE_OPENCV_LIB_PHOTO
  	  Include opencv_photo (computational photography) module into the OpenCV
-@@ -137,7 +128,6 @@ config BR2_PACKAGE_OPENCV_LIB_TS
+ 	  build.
  
- config BR2_PACKAGE_OPENCV_LIB_VIDEOIO
- 	bool "videoio"
--	default y
- 	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
-@@ -145,7 +135,6 @@ config BR2_PACKAGE_OPENCV_LIB_VIDEOIO
+-comment "opencv_python module requires numpy which is not yet available."
++config BR2_PACKAGE_OPENCV_LIB_PYTHON
++	bool "python"
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
++	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
++		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
++		|| BR2_sh || BR2_x86_64 # python-numpy
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64 # python-numpy
++	select BR2_PACKAGE_PYTHON_NUMPY
++	help
++	  Include opencv_python module into the OpenCV build.
++	  No python example is installed.
  
- config BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	bool "video"
--	default y
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_video (video analysis) module into the OpenCV build.
+ config BR2_PACKAGE_OPENCV_LIB_SHAPE
+ 	bool "shape"
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 7211c18..a43de0c 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -78,8 +78,6 @@ OPENCV_CONF_OPTS += \
+ 	-DBUILD_opencv_ml=$(if $(BR2_PACKAGE_OPENCV_LIB_ML),ON,OFF) \
+ 	-DBUILD_opencv_objdetect=$(if $(BR2_PACKAGE_OPENCV_LIB_OBJDETECT),ON,OFF) \
+ 	-DBUILD_opencv_photo=$(if $(BR2_PACKAGE_OPENCV_LIB_PHOTO),ON,OFF) \
+-	-DBUILD_opencv_python2=OFF \
+-	-DBUILD_opencv_python3=OFF \
+ 	-DBUILD_opencv_shape=$(if $(BR2_PACKAGE_OPENCV_LIB_SHAPE),ON,OFF) \
+ 	-DBUILD_opencv_stitching=$(if $(BR2_PACKAGE_OPENCV_LIB_STITCHING),ON,OFF) \
+ 	-DBUILD_opencv_superres=$(if $(BR2_PACKAGE_OPENCV_LIB_SUPERRES),ON,OFF) \
+@@ -282,6 +280,37 @@ else
+ OPENCV_CONF_OPTS += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENCV_LIB_PYTHON),y)
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++OPENCV_CONF_OPTS += \
++	-DBUILD_opencv_python2=ON \
++	-DBUILD_opencv_python3=OFF \
++	-DPYTHON2_EXECUTABLE=$(HOST_DIR)/usr/bin/python2 \
++	-DPYTHON2_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
++	-DPYTHON2_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR).so \
++	-DPYTHON2_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/numpy/core/include \
++	-DPYTHON2_PACKAGES_PATH=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++	-DPYTHON2_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
++OPENCV_DEPENDENCIES += python
++else
++OPENCV_CONF_OPTS += \
++	-DBUILD_opencv_python2=OFF \
++	-DBUILD_opencv_python3=ON \
++	-DPYTHON3_EXECUTABLE=$(HOST_DIR)/usr/bin/python3 \
++	-DPYTHON3_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m \
++	-DPYTHON3_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)m.so \
++	-DPYTHON3_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/include \
++	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
++	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
++OPENCV_DEPENDENCIES += python3
++endif
++OPENCV_DEPENDENCIES += python-numpy
++else
++OPENCV_CONF_OPTS += \
++	-DBUILD_opencv_python2=OFF \
++	-DBUILD_opencv_python3=OFF
++endif
++
+ # Installation hooks:
+ define OPENCV_CLEAN_INSTALL_DOC
+ 	$(RM) -fr $(TARGET_DIR)/usr/share/OpenCV/doc
