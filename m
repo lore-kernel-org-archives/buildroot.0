@@ -1,53 +1,121 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Jun 2015 20:34:49 +0200
-Subject: [Buildroot] [PATCH 1/1] libucl: new package
-In-Reply-To: <1435328383-24851-1-git-send-email-nimaim@gmail.com>
-References: <1435328383-24851-1-git-send-email-nimaim@gmail.com>
-Message-ID: <20150626203449.240aac79@free-electrons.com>
+Date: Fri, 26 Jun 2015 20:35:06 +0200
+Subject: [Buildroot] [git commit] package/opencv: alphabetically sorted each
+	_CONF_OPTS group
+Message-ID: <20150626183513.43C8181814@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nimai Mahajan,
+commit: http://git.buildroot.net/buildroot/commit/?id=bf00b5a9ea1ab4189fe5c7dea05f40d0bbbf2082
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 26 Jun 2015 10:19:43 -0400, Nimai Mahajan wrote:
-> From: Nimai Mahajan <nimaim@gmail.com>
-> 
-> Libucl is a high performance and flexible JSON/YAML/etc. parser for C.
-> 
-> https://github.com/vstakhov/libucl
-> 
-> Signed-off-by: Nimai Mahajan <nimaim@gmail.com>
-> ---
->  package/Config.in          |  1 +
->  package/libucl/Config.in   | 16 ++++++++++++++++
->  package/libucl/libucl.hash |  2 ++
->  package/libucl/libucl.mk   | 14 ++++++++++++++
->  4 files changed, 33 insertions(+)
->  create mode 100644 package/libucl/Config.in
->  create mode 100644 package/libucl/libucl.hash
->  create mode 100644 package/libucl/libucl.mk
+No new option added nor removed.
 
-I've applied your patch, after doing a good number of changes:
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/opencv/opencv.mk |   30 +++++++++++++++---------------
+ 1 files changed, 15 insertions(+), 15 deletions(-)
 
-    [Thomas:
-      - remove hash file, should not be used for github downloads
-      - rewrap Config.in help text
-      - remove trailing white space in Config.in.
-      - add missing host-pkgconf dependency, without which the package
-        doesn't autoreconf properly.
-      - fix license: it is BSD-2c, not just BSD.]
-
-Also, it would be good to add explicit support for the optional
-dependencies of libucl. See the configure.ac script to find which
-dependencies libucl can use.
-
-Thanks for your contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 9967abc..ee11220 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -12,9 +12,9 @@ OPENCV_LICENSE_FILES = LICENSE
+ 
+ # OpenCV component options
+ OPENCV_CONF_OPTS += \
+-	-DBUILD_WITH_DEBUG_INFO=OFF \
+ 	-DBUILD_PERF_TESTS=$(if $(BR2_PACKAGE_OPENCV_BUILD_PERF_TESTS),ON,OFF) \
+-	-DBUILD_TESTS=$(if $(BR2_PACKAGE_OPENCV_BUILD_TESTS),ON,OFF)
++	-DBUILD_TESTS=$(if $(BR2_PACKAGE_OPENCV_BUILD_TESTS),ON,OFF) \
++	-DBUILD_WITH_DEBUG_INFO=OFF
+ 
+ # OpenCV build options
+ OPENCV_CONF_OPTS += \
+@@ -71,14 +71,14 @@ OPENCV_CONF_OPTS += \
+ # * PowerPC support is turned off since its only effect is altering CFLAGS,
+ #   adding '-mcpu=G3 -mtune=G5' to them, which is already handled by Buildroot.
+ OPENCV_CONF_OPTS += \
++	-DENABLE_AVX=$(if $(BR2_X86_CPU_HAS_AVX),ON,OFF) \
++	-DENABLE_AVX2=$(if $(BR2_X86_CPU_HAS_AVX2),ON,OFF) \
+ 	-DENABLE_POWERPC=OFF \
+ 	-DENABLE_SSE=$(if $(BR2_X86_CPU_HAS_SSE),ON,OFF) \
+ 	-DENABLE_SSE2=$(if $(BR2_X86_CPU_HAS_SSE2),ON,OFF) \
+ 	-DENABLE_SSE3=$(if $(BR2_X86_CPU_HAS_SSE3),ON,OFF) \
+ 	-DENABLE_SSE41=$(if $(BR2_X86_CPU_HAS_SSE4),ON,OFF) \
+ 	-DENABLE_SSE42=$(if $(BR2_X86_CPU_HAS_SSE42),ON,OFF) \
+-	-DENABLE_AVX=$(if $(BR2_X86_CPU_HAS_AVX),ON,OFF) \
+-	-DENABLE_AVX2=$(if $(BR2_X86_CPU_HAS_AVX2),ON,OFF) \
+ 	-DENABLE_SSSE3=$(if $(BR2_X86_CPU_HAS_SSSE3),ON,OFF)
+ 
+ # Cuda stuff
+@@ -92,8 +92,8 @@ OPENCV_CONF_OPTS += -DWITH_NVCUVID=OFF
+ 
+ # AMD stuff
+ OPENCV_CONF_OPTS += \
+-	-DWITH_OPENCLAMDFFT=OFF \
+-	-DWITH_OPENCLAMDBLAS=OFF
++	-DWITH_OPENCLAMDBLAS=OFF \
++	-DWITH_OPENCLAMDFFT=OFF
+ 
+ # Intel stuff
+ OPENCV_CONF_OPTS += \
+@@ -112,12 +112,12 @@ OPENCV_CONF_OPTS += -DWITH_XIMEA=OFF
+ 
+ # Non-Linux support (Android options) must remain OFF:
+ OPENCV_CONF_OPTS += \
+-	-DWITH_ANDROID_CAMERA=OFF \
+ 	-DBUILD_ANDROID_CAMERA_WRAPPER=OFF \
+ 	-DBUILD_ANDROID_EXAMPLES=OFF \
+-	-DINSTALL_ANDROID_EXAMPLES=OFF \
+ 	-DBUILD_FAT_JAVA_LIB=OFF \
+-	-DBUILD_JAVA_SUPPORT=OFF
++	-DBUILD_JAVA_SUPPORT=OFF \
++	-DINSTALL_ANDROID_EXAMPLES=OFF \
++	-DWITH_ANDROID_CAMERA=OFF
+ 
+ # Non-Linux support (Mac OSX options) must remain OFF:
+ OPENCV_CONF_OPTS += \
+@@ -127,22 +127,22 @@ OPENCV_CONF_OPTS += \
+ 
+ # Non-Linux support (Windows options) must remain OFF:
+ OPENCV_CONF_OPTS += \
+-	-DWITH_VFW=OFF \
+-	-DWITH_WIN32UI=OFF \
+ 	-DWITH_CSTRIPES=OFF \
+ 	-DWITH_DSHOW=OFF \
+ 	-DWITH_MSMF=OFF \
+-	-DWITH_VIDEOINPUT=OFF
++	-DWITH_VFW=OFF \
++	-DWITH_VIDEOINPUT=OFF \
++	-DWITH_WIN32UI=OFF
+ 
+ # Software/3rd-party support options.
+ OPENCV_CONF_OPTS += \
+ 	-DBUILD_JASPER=OFF \
+ 	-DBUILD_JPEG=OFF \
++	-DBUILD_NEW_PYTHON_SUPPORT=OFF \
+ 	-DBUILD_OPENEXR=OFF \
+ 	-DBUILD_PNG=OFF \
+ 	-DBUILD_TIFF=OFF \
+ 	-DBUILD_ZLIB=OFF \
+-	-DBUILD_NEW_PYTHON_SUPPORT=OFF \
+ 	-DINSTALL_C_EXAMPLES=OFF \
+ 	-DINSTALL_PYTHON_EXAMPLES=OFF \
+ 	-DINSTALL_TO_MANGLED_PATHS=OFF
+@@ -221,8 +221,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_V4L),y)
+ OPENCV_CONF_OPTS += \
+-	-DWITH_V4L=ON \
+-	-DWITH_LIBV4L=$(if $(BR2_PACKAGE_LIBV4L),ON,OFF)
++	-DWITH_LIBV4L=$(if $(BR2_PACKAGE_LIBV4L),ON,OFF) \
++	-DWITH_V4L=ON
+ OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBV4L),libv4l)
+ else
+ OPENCV_CONF_OPTS += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
