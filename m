@@ -1,117 +1,81 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 26 Jun 2015 20:11:22 +0200
-Subject: [Buildroot] [PATCH v6 09/16] package/opencv: add a choice for
- selecting gstreamer support
-In-Reply-To: <1435262397-888-10-git-send-email-s.martin49@gmail.com>
-References: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
- <1435262397-888-10-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150626181122.GC12470@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 26 Jun 2015 20:12:35 +0200
+Subject: [Buildroot] Buildroot runtime test infrastructure prototype
+In-Reply-To: <20150625200235.083eaf34@free-electrons.com>
+References: <20150625200235.083eaf34@free-electrons.com>
+Message-ID: <CAAXf6LUW3rc14Eb+3GjxCUXB8DJv2sCqC5KSdEbmf6+uFsVhBQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Hi Thomas,
 
-On 2015-06-25 21:59 +0200, Samuel Martin spake thusly:
-> OpenCV 3.0 support both gstreamer-0.10 and gstreamer-1.x, but only one
-> is used at the time.
-> 
-> This patch turns the gstreamer support into a choice, in order to prepare
-> adding the support for gstreamer-1 in a following patch.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v5->v6:
-> - new patch
-> ---
->  package/opencv/Config.in | 23 ++++++++++++++++-------
->  1 file changed, 16 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-> index 8ed505e..4b571e0 100644
-> --- a/package/opencv/Config.in
-> +++ b/package/opencv/Config.in
-> @@ -177,18 +177,27 @@ config BR2_PACKAGE_OPENCV_WITH_FFMPEG
->  	help
->  	  Use ffmpeg from the target system.
->  
-> +comment "gstreamer support needs a toolchain w/ wchar, threads"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+On Thu, Jun 25, 2015 at 8:02 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> Our http://autobuild.buildroot.org tests are great, but they are only
+> build-time tests, and they only test random configurations of packages.
+> Things like bootloader packages, filesystem images, kernel build are
+> never tested in an automated way, and no runtime testing is done. I
+> also want to be able to build small test programs exercising specific
+> features and run them on the target.
+>
+> Since a while, I wanted to setup a small infrastructure to be able to
+> describe specific test cases: a Buildroot configuration to build, with
+> the ability to boot some of those configurations automatically in Qemu.
+>
+> So I finally went ahead and create such a small infrastructure. It's
+> very basic and minimal right now, and should be considered as an
+> experiment. It's available at:
+>
+>    https://github.com/tpetazzoni/buildroot-runtime-test
+>
+> It's based on the Python unittest mechanism, and allows to describe
+> test cases that consist in a Buildroot defconfig, plus a Python
+> function that can do some checks on the resulting build, boot the
+> system under Qemu, run some commands inside the Qemu system and check
+> their results.
+>
+> I've written a few tests to show how it could work: simple tests for
+> Dropbear and Python (on the package side) and several tests for
+> filesystem images: ext2/3/4, squashfs, jffs2, ubi, iso9660, yaffs2 (all
+> of them are boot tested, except yaffs2).
+>
+> For now, it's very crude and basic. The README file explains how it
+> works, and gives a TODO listing some of the things that for sure need
+> to be improved.
+>
+> Currently, this runtime test infrastructure is not set up to be
+> executed every day on the latest Git, but it is obviously the goal.
+>
+> Contributions, comments and suggestions are welcome.
 
-Although I don't like it much, we usually have the comment in the choice
-itself, see for example the external toolchain choice.
+A while ago I learned about pyTest, an alternative test suite over unittest.
+The website http://pytest.org/latest/ contains good documentation, but
+some benefits:
 
-> +choice
-> +	prompt "gstreamer support"
-> +	depends on BR2_USE_MMU # libglib2
-> +	depends on BR2_USE_WCHAR # libglib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+- intelligent asserts: you can just write 'assert <expression>' where
+expression can be any Python expression. For example, 'assert x == 3'
+or 'assert "Login:" in output'. You don't need special 'assertEqual',
+'assertNotEqual', 'assertIn', etc. Pytest will analyze these assert
+statements and do the right thing. Also, the error reporting in case
+the assert is not met is quite intelligent and much better than
+standard output of unittest.
+(http://pytest.org/latest/assert.html#assert-with-the-assert-statement)
 
-So, this means the choice will not be visible when gstreamer is missing
-its dependencies.
+- parametrization of tests: it is very easy to run the same test with
+different parameters. Say that you want to repeat the JFFS2 test, but
+with a slightly different config.
+(http://pytest.org/latest/parametrize.html#parametrized-test-functions)
 
-Instead, I'd do something like is done (in a later patch) for the GUI
-toolkits, that is always show the choice, but hide whatever entries are
-not available:
+To convert the existing code you have to use pytest isn't much work, really.
+In fact, you can already run the existing unittests through pytest
+without changes. You would just call
+py.test. (after installing it with 'pip install pytest'; you may like
+'pip install pytest-sugar' too.
 
-    choice
-        bool "gstreamer support"
-
-    config BR2_PKG_OCV_GST_NONE
-        bool "none"
-
-    config BR2_PKG_OCV_GST_0_10
-        bool "gstreamer 0.10"
-        depends on BR2_USE_MMU # gst-0.10
-        depends on BR2_USE_WCHAR # gst-0.10
-        depends on BR2_TOOLCHAIN_HAS_THREADS # gst-0.10
-
-    comment "gst-0.10 support needs a toolchain w/ wxhar, threads"
-        depends on BR2_USE_MMU
-        depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-
-    endchoice
-
-Regards,
-Yann E. MORIN.
-
-> +config BR2_PACKAGE_OPENCV_WITHOUT_GSTREAMER
-> +	bool "none"
-> +
->  config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
-> -	bool "gstreamer support"
-> -	depends on BR2_USE_MMU # gstreamer -> libglib2
-> -	depends on BR2_USE_WCHAR # gstreamer -> libglib2
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
-> +	bool "gstreamer-0.10"
->  	select BR2_PACKAGE_GSTREAMER
->  	select BR2_PACKAGE_GST_PLUGINS_BASE
->  	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
->  
-> -comment "gstreamer support needs a toolchain w/ wchar, threads"
-> -	depends on BR2_USE_MMU
-> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +endchoice
->  
->  config BR2_PACKAGE_OPENCV_WITH_GTK
->  	bool "gtk support"
-> -- 
-> 2.4.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards,
+Thomas
