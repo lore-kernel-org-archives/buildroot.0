@@ -1,67 +1,67 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 26 Jun 2015 21:39:43 +0200
-Subject: [Buildroot] [PATCH v4 1/2] packages: fix and improve support
- for top-level parallel makefile
-In-Reply-To: <20150626200949.64342552@free-electrons.com>
-References: <1435291134-6780-1-git-send-email-fabio.porcedda@gmail.com>
- <1435291134-6780-2-git-send-email-fabio.porcedda@gmail.com>
- <20150626200949.64342552@free-electrons.com>
-Message-ID: <CAHkwnC_QGOUJHBVr1pYk+wEfaV0u+Vdsbhe_9mhzEaRREyVV1w@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 26 Jun 2015 22:01:01 +0200
+Subject: [Buildroot] [PATCH v6 10/16] package/opencv: add gstreamer-1.x
+	support
+In-Reply-To: <1435262397-888-11-git-send-email-s.martin49@gmail.com>
+References: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
+ <1435262397-888-11-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150626200101.GE12470@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 26, 2015 at 8:09 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Fri, 26 Jun 2015 05:58:53 +0200, Fabio Porcedda wrote:
->> To fix packages that fail to build when PARALLEL_JOBS is empty instead
->
-> Which packages specifically?
+Samuel, All,
 
-At least the boost and jack2 packages fail.
+On 2015-06-25 21:59 +0200, Samuel Martin spake thusly:
+> Starting with the 2.4.10 release, OpenCV supports both Gstreamer-0.10
+> and Gstreamer-1, but only one can be enabled at the same time (OpenCV
+> chooses Gstreamer-1 over Gstreamer-0.10 when both are available).
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[--SNIP--]
+> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+> index a43de0c..d249400 100644
+> --- a/package/opencv/opencv.mk
+> +++ b/package/opencv/opencv.mk
+> @@ -222,11 +222,20 @@ else
+>  OPENCV_CONF_OPTS += -DWITH_FFMPEG=OFF
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER)$(BR2_PACKAGE_OPENCV_WITH_GSTREAMER1),)
+> +OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=OFF
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER),y)
+> -OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON -DWITH_GSTREAMER_0_10=ON
+> +OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=ON
+>  OPENCV_DEPENDENCIES += gstreamer gst-plugins-base
+> -else
+> -OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER1),y)
+> +OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON -DWITH_GSTREAMER_0_10=OFF
+> +OPENCV_DEPENDENCIES += gstreamer1 gst1-plugins-base
+> +endif
+> +
+>  endif
 
->> of using an empty PARALLEL_JOBS just avoid to using it in
->
-> s/avoid to/avoid/
->
->>  MAKE1 := $(HOSTMAKE) -j1
->> -MAKE := $(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
->> +override MAKE = $(HOSTMAKE) \
->> +     $(if $(findstring j,$(filter-out --%,$(MAKEFLAGS))),,-j$(PARALLEL_JOBS))
->
-> Why should we force to not use make -j for each individual package when
-> top-level parallel build is used ? Maybe for some scenarios it is better
-> to have 2 top-level jobs, and then 2 jobs per package ?
+Bug...
 
-The good thing about GNU Make jobs is that the number of jobs
-available are shared between each instance of make so if you want to
-increase the number of jobs you just need to increase the <jobs> value
-in  the top make -j<jobs> command.
+    $ make -C /home/ymorin/dev/buildroot/buildroot O=/home/ymorin/dev/buildroot/O/. distclean
+    package/opencv/opencv.mk:239: *** extraneous `endif'.  Stop.
+    make: *** [_all] Error 2
 
-e.g. 2 in top-level and 2 in each package, the actual cpu utilization
-start from 1 to 4.
-Using 4 in top-level and let make share the jobs for each packages the
-cpu utilization start from 1 to 4 but you have a higher chance to use
-4 processor because in this case you can have:
+Regards,
+Yann E. MORIN.
 
-- 4 packages that use make1
-or
-- 1 package that use make but it actually use 4 processor himself
-or
-- 3 extract operation and 1 package that use make1
-
-
-Another example, you have 8 cores, you use top-make -j8 and sub-make -j8.
-This time the number of processes goes up to 64 that it's not good,
-too much process take more time to be completed.
-In my tests on a cpu with 8 cores -j16 is slower than -j9.
-
-So I think it's better to let gnu make handle the jobs distribution.
-
-BR
 -- 
-Fabio Porcedda
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
