@@ -1,171 +1,132 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 26 Jun 2015 16:51:14 +0200
-Subject: [Buildroot] [PATCH v6 02/16] package/opencv: bump to version 3.0
-In-Reply-To: <1435262397-888-3-git-send-email-s.martin49@gmail.com>
-References: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
- <1435262397-888-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150626145114.GA17113@free.fr>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Fri, 26 Jun 2015 14:52:11 +0000
+Subject: [Buildroot] [PATCH v2] qt/qt5webchannel: new package
+Message-ID: <09c38a96-80a6-4b7c-b389-033a4838b440@MAIL-SINTERS-01.sinters-int.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+---
+Changes v1 -> v2:
+  - add missing qt5websockets dependency
 
-On 2015-06-25 21:59 +0200, Samuel Martin spake thusly:
-> This major version bump is in fact a bump from 2.4.10 to 2.4.11, then to
-> 3.0.
-> 
-> OpenCV-2.4.11 improves a lot the Buildroot integration, including a
-> couple of patches that are no longer needed:
-> - x86 PIC code compilation fix in core module [1];
-> - return type fix in superes module [2];
-> - opencv.pc generation [3].
-> 
-> It also improves the gstreamer-0.10/1.x detection [4], that will be
-> needed in a follow-up patch.
-> 
-> OpenCV-3.0 still requires 2 patches (backported from upstream fixing
-> pthread support [5,6].
-> 
-> The OpenCV-3.0 does some major changes, for which a transition guide
-> has been published [7].
-> 
-> Among these changes coming with OpenCV-3.0, some new modules have been
-> introduced and others got removed; leading to a bunch of configure
-> option updates (to keep as much as possible an iso-functional-perimeter)
-> and the legacy menu has been updated too.
-> The worth noticing removals being:
-> - the opencv_legacy and opencv_nonfree modules no longer exist;
-> - the opencv_contrib module has moved out of the opencv base tree and
->   now has its own repository [8].
->   There is currently no plan to support it.
-> 
-> Some 3rd-party supports have been improved or added; their integrations
-> in Buildroot will be addressed in follow-up patches.
-> 
-> [1] https://github.com/Itseez/opencv/commit/ea50be0529c248961e1b66293f8a9e4b807294a6
-> [2] https://github.com/Itseez/opencv/commit/2e393ab83362743ba1825ad4b31d4a2925c606b4
-> [3] https://github.com/Itseez/opencv/commit/eceada586bbf18fc267e437522ec4f1f23ddc656
-> [4] https://github.com/Itseez/opencv/commit/38bb0db9dbec08666c8a64b3e4ead8fadf15c980
-> [5] https://github.com/Itseez/opencv/commit/1f983ec39c97298b0c8ce409a1cc229ecf14e55c
-> [6] https://github.com/Itseez/opencv/commit/a482dcce464acbd5368fb93c6c3d52ba8401776a
-> [7] http://docs.opencv.org/master/db/dfa/tutorial_transition_guide.html
-> [8] https://github.com/itseez/opencv_contrib
+ package/qt5/Config.in                        |  1 +
+ package/qt5/qt5webchannel/Config.in          | 11 +++++
+ package/qt5/qt5webchannel/qt5webchannel.hash |  4 ++
+ package/qt5/qt5webchannel/qt5webchannel.mk   | 61 ++++++++++++++++++++++++++++
+ 4 files changed, 77 insertions(+)
+ create mode 100644 package/qt5/qt5webchannel/Config.in
+ create mode 100644 package/qt5/qt5webchannel/qt5webchannel.hash
+ create mode 100644 package/qt5/qt5webchannel/qt5webchannel.mk
 
-Great list of pointers! :-)
-
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[--SNIP--]
-> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-> index e40437f..95e1e13 100644
-> --- a/package/opencv/Config.in
-> +++ b/package/opencv/Config.in
-> @@ -4,10 +4,14 @@ menuconfig BR2_PACKAGE_OPENCV
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_USE_WCHAR
-> +	depends on !BR2_STATIC_LIBS # include dlfcn.h
->  	help
->  	  OpenCV (Open Source Computer Vision) is a library of programming
->  	  functions for real time computer vision.
->  
-> +	  Note that the opencv_core module and the opencv_hal library are
-> +	  automatically enabled.
-
-"automatically enabled" suggests that we do have (Kconfig) options to
-enable them, which is not the case. What about:
-
-    Note that the opencv_core module and the opencv_hal library are
-    always built and installed, not matter which other modules are
-    enabled below.
-
->  	  http://opencv.org/
->  
->  if BR2_PACKAGE_OPENCV
-> @@ -20,11 +24,7 @@ config BR2_PACKAGE_OPENCV_LIB_CALIB3D
->  	help
->  	  Include opencv_calib3d module into the OpenCV build.
->  
-> -config BR2_PACKAGE_OPENCV_LIB_CONTRIB
-> -	bool "contrib"
-> -	default y
-> -	help
-> -	  Include opencv_contrib module into the OpenCV build.
-> +# opencv_core module is automatically enabled when OpenCV package is selected
-
-I would not add this comment, since it's already been explicitly stated
-so in the help entry.
-
->  config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
->  	bool "features2d"
-> @@ -38,10 +38,8 @@ config BR2_PACKAGE_OPENCV_LIB_FLANN
->  	help
->  	  Include opencv_flann module into the OpenCV build.
->  
-> -config BR2_PACKAGE_OPENCV_LIB_GPU
-> -	bool "gpu"
-> -	help
-> -	  Include opencv_gpu module into the OpenCV build.
-> +# opencv_hal (hardware acceleration layer (hal) module is required by
-> +# opencv_core, so it is automatically enabled
-
-Ditto.
-
->  config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
->  	bool "highgui"
-> @@ -49,17 +47,17 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
->  	help
->  	  Include opencv_highgui module into the OpenCV build.
->  
-> -config BR2_PACKAGE_OPENCV_LIB_IMGPROC
-> -	bool "imgproc"
-> +config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
-> +	bool "imgcodecs (image codecs)"
-
-I forgot to say so in my previous review, but we ususally do not add
-such explications in the prompt, but in the help text. Besides, since
-you do not update the existing prompts accordingly, it makes the whole
-menu inconsistent, because some prompts have explanations, some don't.
-
-(Note that this comment is valid for all entries; I won't repeat it.)
-
->  	default y
->  	help
-> -	  Include opencv_imgproc module into the OpenCV build.
-> +	  Include opencv_imgcodecs module into the OpenCV build.
-
-Furthermore, the proposed help text is not very helpful. A help text,
-when present, should have some explanations that go further than just
-repeating the promopt with syntaxic sugar. What about (adapt list, of
-course):
-
-    config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
-        bool "imgcodecs"
-        help
-            Include opencv_imgcodecs module, to provide image codecs,
-            like jpeg, png, gif...
-
-(Ditto, comment valid for all following entries.)
-
-But others may disagree, of course. ;-)
-
-Otherwise:
-
-    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-    Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Build-tested only, on i586.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index e8ec7d9..c31342a 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -42,6 +42,7 @@ source "package/qt5/qt5script/Config.in"
+ source "package/qt5/qt5sensors/Config.in"
+ source "package/qt5/qt5serialport/Config.in"
+ source "package/qt5/qt5svg/Config.in"
++source "package/qt5/qt5webchannel/Config.in"
+ source "package/qt5/qt5webkit/Config.in"
+ source "package/qt5/qt5webkit-examples/Config.in"
+ source "package/qt5/qt5websockets/Config.in"
+diff --git a/package/qt5/qt5webchannel/Config.in b/package/qt5/qt5webchannel/Config.in
+new file mode 100644
+index 0000000..218629a
+--- /dev/null
++++ b/package/qt5/qt5webchannel/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_QT5WEBCHANNEL
++	bool "qt5webchannel"
++	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5WEBSOCKETS
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  This package corresponds to the qt5webchannel module.
++
++	  http://qt.io
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.hash b/package/qt5/qt5webchannel/qt5webchannel.hash
+new file mode 100644
+index 0000000..e390d1e
+--- /dev/null
++++ b/package/qt5/qt5webchannel/qt5webchannel.hash
+@@ -0,0 +1,4 @@
++# Hashes from: http://download.qt.io/official_releases/qt/5.4/5.4.1/submodules/qtwebchannel-opensource-src-5.4.1.tar.xz.mirrorlist
++sha256 c4acb9ec9886fca6d0c2adc5b45970347ae1b3e4b5e0055ab370540faef7b251 qtwebchannel-opensource-src-5.4.1.tar.xz
++sha1   7a27eac0bead6e60b5faaf360a6236dd96013c12                         qtwebchannel-opensource-src-5.4.1.tar.xz
++md5    bb914134c164c6758a0074748cc678ff                                 qtwebchannel-opensource-src-5.4.1.tar.xz
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.mk b/package/qt5/qt5webchannel/qt5webchannel.mk
+new file mode 100644
+index 0000000..cfb6da9
+--- /dev/null
++++ b/package/qt5/qt5webchannel/qt5webchannel.mk
+@@ -0,0 +1,61 @@
++################################################################################
++#
++# qt5webchannel
++#
++################################################################################
++
++QT5WEBCHANNEL_VERSION = $(QT5_VERSION)
++QT5WEBCHANNEL_SITE = $(QT5_SITE)
++QT5WEBCHANNEL_SOURCE = qtwebchannel-opensource-src-$(QT5WEBCHANNEL_VERSION).tar.xz
++QT5WEBCHANNEL_DEPENDENCIES = qt5base qt5websockets
++QT5WEBCHANNEL_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
++QT5WEBCHANNEL_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
++QT5WEBCHANNEL_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LGPL_EXCEPTION.txt LICENSE.GPLv2
++else
++QT5WEBCHANNEL_LICENSE = Commercial license
++QT5WEBCHANNEL_REDISTRIBUTE = NO
++endif
++
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
++QT5WEBCHANNEL_DEPENDENCIES += qt5declarative
++endif
++
++define QT5WEBCHANNEL_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
++endef
++
++define QT5WEBCHANNEL_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT5WEBCHANNEL_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(QT5_LA_PRL_FILES_FIXUP)
++endef
++
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
++define QT5WEBCHANNEL_INSTALL_TARGET_QMLS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebChannel $(TARGET_DIR)/usr/qml/
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++define QT5WEBCHANNEL_INSTALL_TARGET_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/webchannel $(TARGET_DIR)/usr/lib/qt/examples/
++endef
++endif
++
++ifneq ($(BR2_STATIC_LIBS),y)
++define QT5WEBCHANNEL_INSTALL_TARGET_LIBS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebChannel.so.* $(TARGET_DIR)/usr/lib
++endef
++endif
++
++define QT5WEBCHANNEL_INSTALL_TARGET_CMDS
++	$(QT5WEBCHANNEL_INSTALL_TARGET_LIBS)
++	$(QT5WEBCHANNEL_INSTALL_TARGET_QMLS)
++endef
++
++$(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.0
