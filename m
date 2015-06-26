@@ -1,145 +1,81 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 26 Jun 2015 12:06:57 +0200
-Subject: [Buildroot] [V4 2/2] A20-OLinuXino-Lime: new board (mali)
-In-Reply-To: <1435313217-12871-1-git-send-email-francois.perrad@gadz.org>
-References: <1435313217-12871-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1435313217-12871-3-git-send-email-francois.perrad@gadz.org>
+From: Arthur LAMBERT <lambertarthur22@gmail.com>
+Date: Fri, 26 Jun 2015 14:24:08 +0200
+Subject: [Buildroot] [PATCH v2 1/1] board: add support for Warpboard
+In-Reply-To: <20150625223823.GI4178@free.fr>
+References: <1434988018-16391-1-git-send-email-lambertarthur22@gmail.com>
+ <558B254C.2090606@mind.be> <20150625085428.GA3400@arthur-dreem>
+ <558C800F.5030702@mind.be> <20150625223823.GI4178@free.fr>
+Message-ID: <20150626122408.GA20530@arthur-dreem>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-config mali / sunxi
+Le Friday 26 Jun 2015 ? 00:38:23 (+0200), Yann E. MORIN a ?crit :
+> Arnout, Arthur, All,
+> 
+> On 2015-06-26 00:26 +0200, Arnout Vandecappelle spake thusly:
+> > On 06/25/15 10:54, Arthur LAMBERT wrote:
+> > > Arnout, All,
+> > > 
+> > > Le Wednesday 24 Jun 2015 ? 23:46:52 (+0200), Arnout Vandecappelle a ?crit :
+> > >>> +
+> > >>> +Enable bluetooth
+> > >>> +================
+> > >>> +hciattach /dev/ttymxc4 any
+> > >>> +hciconfig hci0 up
+> > >>> +
+> > >>> +Enable Wifi
+> > >>> +==========
+> > >>> +modprobe brcmfmac
+> > >>> +ifconfig wlan0 up
+> > >>
+> > >>  To do something useful, you'll also need a wpa-supplicant I guess...
+> > >>
+> > >>  Since you anyway have a rootfs overlay, you could add init scripts to start
+> > >> wifi and bluetooth. We don't usually do that, but I think it would be a good idea.
+> > > 
+> > > In fact I need bluez-util (to be able to run hciattach command also). And yes I also need wpa_supplicant for wifi.
+> > > So ok I will enable these two packages and add init script
+> > 
+> >  Question for the other BR developers (especially Peter): do you agree it's a
+> > good idea to make a non-minimal defconfig that includes bluez and wpa_supplicant?
+> 
+> Our board defconfig files are ususally just enough to bring up the board
+> and get a shell in there. If network is wired, then a dhcp client is OK
+> (usually udhcpc from busybox).
+> 
+> Everything (bluez and wpa-supplicant included) else is out of scope for
+> a defconfig, IMHO.
+> 
+> One case where I'd be inclined to accept more than the above is a
+> full-wireless device (like the soon-to-come-I-hope 96boards stuff).
+> But since wpa-supplicant needs configuration that we can't provide
+> (SSID and key), I don't see the point of adding it to the defconfig.
+> 
+> However, we've decided to accept "demo" defconfigs, which can be packed
+> with more features than a simple board defconfig. We haven't had any
+> single such demo defconfig submitted so far.
+> 
+> Still, even if we accept demo defconfigs, I stil think we should have a
+> small board defconfig file before we get a demo.
+> 
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- board/olimex/a20_olinuxino_lime/boot-mali.cmd    |  5 +++
- board/olimex/a20_olinuxino_lime/post-build.sh    |  4 ++
- board/olimex/a20_olinuxino_lime/readme.txt       | 16 +++++++-
- configs/olimex_a20_olinuxino_lime_mali_defconfig | 50 ++++++++++++++++++++++++
- 4 files changed, 74 insertions(+), 1 deletion(-)
- create mode 100644 board/olimex/a20_olinuxino_lime/boot-mali.cmd
- create mode 100644 configs/olimex_a20_olinuxino_lime_mali_defconfig
+Ok I will no keep init script for bluetooth and wifi and will remove wpa/bluez stuff.
 
-diff --git a/board/olimex/a20_olinuxino_lime/boot-mali.cmd b/board/olimex/a20_olinuxino_lime/boot-mali.cmd
-new file mode 100644
-index 0000000..9fa5d65
---- /dev/null
-+++ b/board/olimex/a20_olinuxino_lime/boot-mali.cmd
-@@ -0,0 +1,5 @@
-+setenv bootm_boot_mode sec
-+setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 sunxi_ve_mem_reserve=0 sunxi_g2d_mem_reserve=0 sunxi_no_mali_mem_reserve sunxi_fb_mem_reserve=16 consoleblank=0 ${extra}
-+ext4load mmc 0 0x43000000 /boot/script.bin
-+ext4load mmc 0 0x48000000 /boot/zImage
-+bootz 0x48000000
-diff --git a/board/olimex/a20_olinuxino_lime/post-build.sh b/board/olimex/a20_olinuxino_lime/post-build.sh
-index 4e6fbec..ac8d4df 100755
---- a/board/olimex/a20_olinuxino_lime/post-build.sh
-+++ b/board/olimex/a20_olinuxino_lime/post-build.sh
-@@ -6,3 +6,7 @@
- MKIMAGE=$HOST_DIR/usr/bin/mkimage
- 
- $MKIMAGE -A arm -O linux -T script -C none -d $2 $3/boot.scr
-+
-+if [ -e $BINARIES_DIR/script.bin ]; then
-+	cp $BINARIES_DIR/script.bin $3/script.bin
-+fi
-diff --git a/board/olimex/a20_olinuxino_lime/readme.txt b/board/olimex/a20_olinuxino_lime/readme.txt
-index 3fc9c02..92ee24a 100644
---- a/board/olimex/a20_olinuxino_lime/readme.txt
-+++ b/board/olimex/a20_olinuxino_lime/readme.txt
-@@ -6,11 +6,24 @@ Intro
- This is a open hardware board,
- see https://www.olimex.com/Products/OLinuXino/open-source-hardware
- 
-+The legacy linux-sunxi kernels are based on the vendor code drops.
-+It is only useful when accelerated 3D graphics and multimedia support
-+is strictly necessary.
-+
-+The Mainline Kernel is already a much better choice for a headless server.
-+And also the mainline kernel works fine even for a basic Linux desktop
-+system running on top of a simple framebuffer, which may be good enough for
-+the users who do not need fancy 3D graphics or video playback acceleration.
-+
- How to build it
- ===============
- 
-     $ make olimex_a20_olinuxino_lime_defconfig
- 
-+or
-+
-+    $ make olimex_a20_olinuxino_lime_mali_defconfig
-+
- Compile everything and build the rootfs image:
- 
-     $ make
-@@ -23,7 +36,8 @@ After building, you should get a tree like this:
-     output/images/
-     +-- rootfs.ext2
-     +-- rootfs.ext4 -> rootfs.ext2
--    +-- sun7i-a20-olinuxino-lime.dtb
-+    +-- script.bin (mali)
-+    +-- sun7i-a20-olinuxino-lime.dtb (mainline)
-     +-- u-boot.bin
-     +-- u-boot-sunxi-with-spl.bin
-     `-- zImage
-diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-new file mode 100644
-index 0000000..dde39ad
---- /dev/null
-+++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-@@ -0,0 +1,50 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_EABIHF=y
-+
-+# Lock to 3.4 headers as the sunxi kernel is based off the 3.4 branch
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.4.108"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_4=y
-+
-+# System configuration
-+BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino_lime/post-build.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino_lime/boot-mali.cmd $(TARGET_DIR)/boot"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux-sunxi,linux-sunxi,sunxi-v3.4.103-r1)/sunxi-v3.4.103-r1.tar.gz"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="sun7i"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# sunxi packages
-+BR2_PACKAGE_SUNXI_TOOLS=y
-+BR2_PACKAGE_SUNXI_BOARDS=y
-+BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
-+BR2_PACKAGE_SUNXI_MALI=y
-+BR2_PACKAGE_SUNXI_MALI_DBG=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Bootloaders
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
-+BR2_TARGET_UBOOT_FORMAT_BIN=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+
-+# Additional tools
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--- 
-2.1.4
+
+> Regards,
+> Yann E. MORIN.
+
+Regards,
+Arthur.
+
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
