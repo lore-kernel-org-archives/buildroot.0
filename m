@@ -1,79 +1,216 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 26 Jun 2015 17:06:43 +0200
-Subject: [Buildroot] [PATCH v2 1/1] board: add support for Warpboard
-In-Reply-To: <CAMQcK5JBCq4Dro8o-6n2O=YKeSzvv3Eb07FT+=iKfvsv-sB3zg@mail.gmail.com>
-References: <1434988018-16391-1-git-send-email-lambertarthur22@gmail.com>
- <558B254C.2090606@mind.be> <20150625085428.GA3400@arthur-dreem>
- <558C800F.5030702@mind.be> <20150625223823.GI4178@free.fr>
- <CAMQcK5JBCq4Dro8o-6n2O=YKeSzvv3Eb07FT+=iKfvsv-sB3zg@mail.gmail.com>
-Message-ID: <20150626150643.GB17113@free.fr>
+Date: Fri, 26 Jun 2015 17:20:55 +0200
+Subject: [Buildroot] [PATCH v6 04/16] package/opencv: define modules
+ inter-dependencies
+In-Reply-To: <1435262397-888-5-git-send-email-s.martin49@gmail.com>
+References: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
+ <1435262397-888-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150626152055.GC17113@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan, All,
+Samuel, All,
 
-On 2015-06-26 08:23 -0500, Ryan Barnett spake thusly:
-> On Thu, Jun 25, 2015 at 5:38 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Arnout, Arthur, All,
-> >
-> > One case where I'd be inclined to accept more than the above is a
-> > full-wireless device (like the soon-to-come-I-hope 96boards stuff).
-> > But since wpa-supplicant needs configuration that we can't provide
-> > (SSID and key), I don't see the point of adding it to the defconfig.
-> >
-> > However, we've decided to accept "demo" defconfigs, which can be packed
-> > with more features than a simple board defconfig. We haven't had any
-> > single such demo defconfig submitted so far.
-> >
-> > Still, even if we accept demo defconfigs, I stil think we should have a
-> > small board defconfig file before we get a demo.
+On 2015-06-25 21:59 +0200, Samuel Martin spake thusly:
+> OpenCV allows to enable/disable the selection of modules (a.k.a.
+> opencv libraries). These modules depend one on the others; these
+> dependencies are already handled by the build-system (CMake).
 > 
-> For the SELinux patchset, we are submitting a demo configuration
-> because of the complexities of enabling SELinux packages.
+> However, the way we handled them in Buildroot was not really clean.
+> For each opencv module, there is a kconfig option, but we forced the
+> corresponding CMake config option without checking for the modules'
+> dependencies.
 > 
-> http://patchwork.ozlabs.org/patch/479484/
+> This patch replicates the modules' dependency relations in the
+> Config.in, so that the selection of the user will actually be built.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Yeah, I haven't had time to look at your SElinuxpatchset so far (sorry,
-I really intend to look at it, but I'm way under the water...).
-
-Still, I had a quick look at that patch you reference above.
-
-First, I have no objection that we do have "demo" defconfig files.
-That's something we said we would accept.
-
-Second, I see that this patch changes the existing qemu/x86 defconfig. I
-beliefve this is wrong for a demo defconfig.
-
-Here's my position:
-
-  - basic defconfig files should provide the bare minimum for booting up
-    a board up to the login prompt (possibly with a dhcp client on wired
-    ethernet being OK). This is useful to check the board is booting
-    fine, and can serve as a basis for further customisations for one's
-    project.
-
-  - demo defconfig files should be a different defconfig, possibly
-    copied from the basic one, above, but should not replace it. This is
-    usefull for quickly showing off the possibilities offered by
-    Buildroot, like *big* stuff (Kodi, SELinux, whatever is *biggish*).
-
-Adding more non-essential stuff in basic defconfig files is a barrieir
-to entry, first in terms of build-time (we want to show we can be fast),
-second because more stuff means more complexity and more causes for
-failures in one's own environment.
-
-Again, I'm *not* against adding demo defconfig files, I am OK with that.
-What I'd like is we keep basic defconfig files for all boards, and that
-a demo defconfig should be a second defconfig, not  replacement for a
-basic defconfig file.
-
-(Ditto the Linux defconfig file, btw...)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+> changes v5->v6:
+> - rebase
+> 
+> changes v4->v5:
+> - rebase
+> - remove Reviewed-by tag form Yann (because of the changes introduced
+>   with the version bump)
+> 
+> changes v3->v4:
+> - rebase
+> - update ts module dependencies
+> 
+> changes v2->v3:
+> - rebase
+> - fix typo in commit log (Yann)
+> - update A/R/T tags
+> 
+> changes v1->v2:
+> - rebase
+> ---
+>  package/opencv/Config.in | 39 ++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 38 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+> index 95e1e13..87f4bf5 100644
+> --- a/package/opencv/Config.in
+> +++ b/package/opencv/Config.in
+> @@ -21,6 +21,8 @@ comment "OpenCV modules"
+>  config BR2_PACKAGE_OPENCV_LIB_CALIB3D
+>  	bool "calib3d"
+>  	default y
+> +	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+>  	help
+>  	  Include opencv_calib3d module into the OpenCV build.
+>  
+> @@ -29,12 +31,16 @@ config BR2_PACKAGE_OPENCV_LIB_CALIB3D
+>  config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
+>  	bool "features2d"
+>  	default y
+> +	select BR2_PACKAGE_OPENCV_LIB_FLANN
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+> +	select BR2_PACKAGE_OPENCV_LIB_ML
+>  	help
+>  	  Include opencv_features2d module into the OpenCV build.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_FLANN
+>  	bool "flann"
+>  	default y
+> +	# opencv_core dependency is already enabled
+>  	help
+>  	  Include opencv_flann module into the OpenCV build.
+>  
+> @@ -44,36 +50,46 @@ config BR2_PACKAGE_OPENCV_LIB_FLANN
+>  config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+>  	bool "highgui"
+>  	default y
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+> +	select BR2_PACKAGE_OPENCV_LIB_VIDEOIO
+>  	help
+>  	  Include opencv_highgui module into the OpenCV build.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
+>  	bool "imgcodecs (image codecs)"
+>  	default y
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+>  	help
+>  	  Include opencv_imgcodecs module into the OpenCV build.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_IMGPROC
+>  	bool "imgproc (image processing)"
+>  	default y
+> +	# opencv_core dependency is already enabled
+>  	help
+>  	  Include opencv_imgproc module into the OpenCV build.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_ML
+>  	bool "ml (machine learning)"
+>  	default y
+> +	# opencv_core dependency is already enabled
+>  	help
+>  	  Include opencv_ml module into the OpenCV build.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
+>  	bool "objdetect"
+>  	default y
+> +	# opencv_core dependency is already enabled
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+> +	select BR2_PACKAGE_OPENCV_LIB_ML
+>  	help
+>  	  Include opencv_objdetect module into the OpenCV build.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_PHOTO
+>  	bool "photo"
+>  	default y
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+>  	help
+>  	  Include opencv_photo module into the OpenCV build.
+>  
+> @@ -82,44 +98,65 @@ comment "opencv_python module requires numpy which is not yet available."
+>  config BR2_PACKAGE_OPENCV_LIB_SHAPE
+>  	bool "shape (shape descriptors and matchers)"
+>  	default y
+> +	# opencv_core dependency is already enabled
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+> +	select BR2_PACKAGE_OPENCV_LIB_VIDEO
+>  	help
+>  	  Include opencv_shape module into the OpenCV build.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_STITCHING
+>  	bool "stitching"
+>  	default y
+> +	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
+> +	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+> +	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
+>  	help
+>  	  Include opencv_stitching module into the OpenCV build.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_SUPERRES
+>  	bool "superres"
+>  	default y
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+> +	select BR2_PACKAGE_OPENCV_LIB_VIDEO
+>  	help
+>  	  Include opencv_superres "super resolution" - module into the OpenCV
+>  	  build.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_TS
+>  	bool "ts (touchscreen)"
+> -	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+>  	default y
+> +	# opencv_core dependency is already enabled
+> +	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+> +	select BR2_PACKAGE_OPENCV_LIB_VIDEOIO
+>  	help
+>  	  Include opencv_ts module into the OpenCV build.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_VIDEOIO
+>  	bool "videoio (media i/o)"
+>  	default y
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+>  	help
+>  	  Include opencv_videoio module into the OpenCV build.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_VIDEO
+>  	bool "video"
+>  	default y
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+>  	help
+>  	  Include opencv_video module into the OpenCV build.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_VIDEOSTAB
+>  	bool "videostab"
+>  	default y
+> +	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
+> +	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
+> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+> +	select BR2_PACKAGE_OPENCV_LIB_PHOTO
+> +	select BR2_PACKAGE_OPENCV_LIB_VIDEO
+>  	help
+>  	  Include opencv_videostab module into the OpenCV build.
+>  
+> -- 
+> 2.4.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
