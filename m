@@ -1,162 +1,105 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 26 Jun 2015 12:06:56 +0200
-Subject: [Buildroot] [V4 1/2] A20-OLinuXino-Lime: new board (mainline)
+Date: Fri, 26 Jun 2015 12:06:57 +0200
+Subject: [Buildroot] [V4 2/2] A20-OLinuXino-Lime: new board (mali)
 In-Reply-To: <1435313217-12871-1-git-send-email-francois.perrad@gadz.org>
 References: <1435313217-12871-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1435313217-12871-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1435313217-12871-3-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-config device tree / mainline (4.0.5)
+config mali / sunxi
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- board/olimex/a20_olinuxino_lime/boot.cmd      |  5 ++
- board/olimex/a20_olinuxino_lime/post-build.sh |  8 +++
- board/olimex/a20_olinuxino_lime/readme.txt    | 86 +++++++++++++++++++++++++++
- configs/olimex_a20_olinuxino_lime_defconfig   | 45 ++++++++++++++
- 4 files changed, 144 insertions(+)
- create mode 100644 board/olimex/a20_olinuxino_lime/boot.cmd
- create mode 100755 board/olimex/a20_olinuxino_lime/post-build.sh
- create mode 100644 board/olimex/a20_olinuxino_lime/readme.txt
- create mode 100644 configs/olimex_a20_olinuxino_lime_defconfig
+ board/olimex/a20_olinuxino_lime/boot-mali.cmd    |  5 +++
+ board/olimex/a20_olinuxino_lime/post-build.sh    |  4 ++
+ board/olimex/a20_olinuxino_lime/readme.txt       | 16 +++++++-
+ configs/olimex_a20_olinuxino_lime_mali_defconfig | 50 ++++++++++++++++++++++++
+ 4 files changed, 74 insertions(+), 1 deletion(-)
+ create mode 100644 board/olimex/a20_olinuxino_lime/boot-mali.cmd
+ create mode 100644 configs/olimex_a20_olinuxino_lime_mali_defconfig
 
-diff --git a/board/olimex/a20_olinuxino_lime/boot.cmd b/board/olimex/a20_olinuxino_lime/boot.cmd
+diff --git a/board/olimex/a20_olinuxino_lime/boot-mali.cmd b/board/olimex/a20_olinuxino_lime/boot-mali.cmd
 new file mode 100644
-index 0000000..44d9239
+index 0000000..9fa5d65
 --- /dev/null
-+++ b/board/olimex/a20_olinuxino_lime/boot.cmd
++++ b/board/olimex/a20_olinuxino_lime/boot-mali.cmd
 @@ -0,0 +1,5 @@
-+setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
-+ext4load mmc 0 0x49000000 /boot/${fdtfile}
-+ext4load mmc 0 0x46000000 /boot/zImage
-+env set fdt_high ffffffff
-+bootz 0x46000000 - 0x49000000
++setenv bootm_boot_mode sec
++setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 sunxi_ve_mem_reserve=0 sunxi_g2d_mem_reserve=0 sunxi_no_mali_mem_reserve sunxi_fb_mem_reserve=16 consoleblank=0 ${extra}
++ext4load mmc 0 0x43000000 /boot/script.bin
++ext4load mmc 0 0x48000000 /boot/zImage
++bootz 0x48000000
 diff --git a/board/olimex/a20_olinuxino_lime/post-build.sh b/board/olimex/a20_olinuxino_lime/post-build.sh
-new file mode 100755
-index 0000000..4e6fbec
---- /dev/null
+index 4e6fbec..ac8d4df 100755
+--- a/board/olimex/a20_olinuxino_lime/post-build.sh
 +++ b/board/olimex/a20_olinuxino_lime/post-build.sh
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+# args from BR2_ROOTFS_POST_SCRIPT_ARGS
-+# $2    path of boot.cmd
-+# $3    output directory for boot.scr
+@@ -6,3 +6,7 @@
+ MKIMAGE=$HOST_DIR/usr/bin/mkimage
+ 
+ $MKIMAGE -A arm -O linux -T script -C none -d $2 $3/boot.scr
 +
-+MKIMAGE=$HOST_DIR/usr/bin/mkimage
-+
-+$MKIMAGE -A arm -O linux -T script -C none -d $2 $3/boot.scr
++if [ -e $BINARIES_DIR/script.bin ]; then
++	cp $BINARIES_DIR/script.bin $3/script.bin
++fi
 diff --git a/board/olimex/a20_olinuxino_lime/readme.txt b/board/olimex/a20_olinuxino_lime/readme.txt
-new file mode 100644
-index 0000000..3fc9c02
---- /dev/null
+index 3fc9c02..92ee24a 100644
+--- a/board/olimex/a20_olinuxino_lime/readme.txt
 +++ b/board/olimex/a20_olinuxino_lime/readme.txt
-@@ -0,0 +1,86 @@
-+A20-OLinuXino-LIME
+@@ -6,11 +6,24 @@ Intro
+ This is a open hardware board,
+ see https://www.olimex.com/Products/OLinuXino/open-source-hardware
+ 
++The legacy linux-sunxi kernels are based on the vendor code drops.
++It is only useful when accelerated 3D graphics and multimedia support
++is strictly necessary.
 +
-+Intro
-+=====
++The Mainline Kernel is already a much better choice for a headless server.
++And also the mainline kernel works fine even for a basic Linux desktop
++system running on top of a simple framebuffer, which may be good enough for
++the users who do not need fancy 3D graphics or video playback acceleration.
 +
-+This is a open hardware board,
-+see https://www.olimex.com/Products/OLinuXino/open-source-hardware
+ How to build it
+ ===============
+ 
+     $ make olimex_a20_olinuxino_lime_defconfig
+ 
++or
 +
-+How to build it
-+===============
++    $ make olimex_a20_olinuxino_lime_mali_defconfig
 +
-+    $ make olimex_a20_olinuxino_lime_defconfig
-+
-+Compile everything and build the rootfs image:
-+
-+    $ make
-+
-+Result of the build
-+-------------------
-+
-+After building, you should get a tree like this:
-+
-+    output/images/
-+    +-- rootfs.ext2
-+    +-- rootfs.ext4 -> rootfs.ext2
-+    +-- sun7i-a20-olinuxino-lime.dtb
-+    +-- u-boot.bin
-+    +-- u-boot-sunxi-with-spl.bin
-+    `-- zImage
-+
-+
-+How to write the SD card
-+========================
-+
-+
-+Prepare the SD card
-+-------------------
-+
-+Erase existing stuff, and create an unique Linux partition with `fdisk`.
-+
-+    # fdisk /dev/sdX
-+    Command (m for help): o
-+    Building a new DOS disklabel with disk identifier 0xf9e1616a.
-+    Changes will remain in memory only, until you decide to write them.
-+    After that, of course, the previous content won't be recoverable.
-+
-+    Command (m for help): n
-+    Partition type:
-+        p   primary (0 primary, 0 extended, 4 free)
-+        e   extended
-+    Select (default p): p
-+    Partition number (1-4, default 1): 1
-+    First sector (2048-7626751, default 2048): 2048
-+    Last sector, +sectors or +size{K,M,G} (2048-7626751, default 7626751): 
-+    Using default value 7626751
-+
-+    Command (m for help): p
-+
-+    Disk /dev/sdX: 3904 MB, 3904897024 bytes
-+    4 heads, 16 sectors/track, 119168 cylinders, total 7626752 sectors
-+    Units = sectors of 1 * 512 = 512 bytes
-+    Sector size (logical/physical): 512 bytes / 512 bytes
-+    I/O size (minimum/optimal): 512 bytes / 512 bytes
-+    Disk identifier: 0xf9e1616a
-+
-+            Device Boot      Start         End      Blocks   Id  System
-+    /dev/sdX1                 2048     7626751     3812352   83  Linux
-+
-+    Command (m for help): w
-+    The partition table has been altered!
-+
-+    Calling ioctl() to re-read partition table.
-+    Syncing disks.
-+
-+Copy images on the SD card
-+--------------------------
-+
-+    # dd if=output/images/rootfs.ext2 of=/dev/sdX1
-+    # dd if=output/images/u-boot-sunxi-with-spl.bin of=/dev/sdX bs=1024 seek=8
-+
-+
-+Finish
-+======
-+
-+Eject the SD card, insert it in the A20-OLinuXino-LIME board, and power it up.
-+
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+ Compile everything and build the rootfs image:
+ 
+     $ make
+@@ -23,7 +36,8 @@ After building, you should get a tree like this:
+     output/images/
+     +-- rootfs.ext2
+     +-- rootfs.ext4 -> rootfs.ext2
+-    +-- sun7i-a20-olinuxino-lime.dtb
++    +-- script.bin (mali)
++    +-- sun7i-a20-olinuxino-lime.dtb (mainline)
+     +-- u-boot.bin
+     +-- u-boot-sunxi-with-spl.bin
+     `-- zImage
+diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
 new file mode 100644
-index 0000000..62f0a4c
+index 0000000..dde39ad
 --- /dev/null
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -0,0 +1,45 @@
++++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+@@ -0,0 +1,50 @@
 +# Architecture
 +BR2_arm=y
 +BR2_cortex_a7=y
 +BR2_ARM_EABIHF=y
 +
-+# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 3.4 headers as the sunxi kernel is based off the 3.4 branch
 +BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="4.0.5"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="3.4.108"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_4=y
 +
 +# System configuration
 +BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
@@ -164,18 +107,23 @@ index 0000000..62f0a4c
 +BR2_TARGET_GENERIC_GETTY=y
 +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
 +BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino_lime/post-build.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino_lime/boot.cmd $(TARGET_DIR)/boot"
++BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino_lime/boot-mali.cmd $(TARGET_DIR)/boot"
 +
 +# Kernel
 +BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0.5"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux-sunxi,linux-sunxi,sunxi-v3.4.103-r1)/sunxi-v3.4.103-r1.tar.gz"
 +BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DEFCONFIG="sun7i"
 +BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-lime"
 +BR2_LINUX_KERNEL_INSTALL_TARGET=y
++
++# sunxi packages
++BR2_PACKAGE_SUNXI_TOOLS=y
++BR2_PACKAGE_SUNXI_BOARDS=y
++BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
++BR2_PACKAGE_SUNXI_MALI=y
++BR2_PACKAGE_SUNXI_MALI_DBG=y
 +
 +# Filesystem
 +BR2_TARGET_ROOTFS_EXT2=y
@@ -186,7 +134,7 @@ index 0000000..62f0a4c
 +BR2_TARGET_UBOOT=y
 +BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
 +BR2_TARGET_UBOOT_FORMAT_BIN=y
 +BR2_TARGET_UBOOT_SPL=y
 +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
