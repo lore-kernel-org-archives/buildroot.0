@@ -1,177 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Jun 2015 20:42:04 +0200
-Subject: [Buildroot] [git commit] package/opencv: define modules
-	inter-dependencies
-Message-ID: <20150626184435.6C04280E18@busybox.osuosl.org>
+Date: Fri, 26 Jun 2015 20:41:44 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-bad:
+	disable opencv plugin with opencv-3
+Message-ID: <20150626184435.5D3D880E18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a49f97b007aee8f4c6b90ce105d96e10484368c
+commit: http://git.buildroot.net/buildroot/commit/?id=5e238a87eacf2a0c62736c4123961651afb1ba87
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-OpenCV allows to enable/disable the selection of modules (a.k.a.
-opencv libraries). These modules depend one on the others; these
-dependencies are already handled by the build-system (CMake).
+The opencv plugin uses stuff from the now removed opencv's legacy module.
+Note that the configure script already correctly check the opencv version
+and disable the opencv plugin with opencv-3.x.
 
-However, the way we handled them in Buildroot was not really clean.
-For each opencv module, there is a kconfig option, but we forced the
-corresponding CMake config option without checking for the modules'
-dependencies.
-
-This patch replicates the modules' dependency relations in the
-Config.in, so that the selection of the user will actually be built.
+Also remove 'select ...' to prevent kconfig from complaining about
+recursive dependencies.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/opencv/Config.in |   39 ++++++++++++++++++++++++++++++++++++++-
- 1 files changed, 38 insertions(+), 1 deletions(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in |   14 +-------------
+ 1 files changed, 1 insertions(+), 13 deletions(-)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index b327864..6b1ffcf 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -22,54 +22,70 @@ comment "OpenCV modules"
- config BR2_PACKAGE_OPENCV_LIB_CALIB3D
- 	bool "calib3d"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 76a601a..bc99527 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -559,19 +559,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
+ 	bool "opencv"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	select BR2_PACKAGE_OPENCV
+-	# Remove the following opencv modules when gstreamer fixes the
+-	# problem of including the old "cv.h" header
+-	# bug: https://bugzilla.gnome.org/show_bug.cgi?id=725163
+-	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
+-	select BR2_PACKAGE_OPENCV_LIB_CONTRIB
+-	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
+-	select BR2_PACKAGE_OPENCV_LIB_FLANN
+-	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+-	select BR2_PACKAGE_OPENCV_LIB_LEGACY
+-	select BR2_PACKAGE_OPENCV_LIB_ML
+-	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
+-	select BR2_PACKAGE_OPENCV_LIB_VIDEO
++	depends on BROKEN # gst1-plugin-opencv does not (yet) support opencv >=3.x
  	help
- 	  Include opencv_calib3d module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	bool "features2d"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_FLANN
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_ML
- 	help
- 	  Include opencv_features2d module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_FLANN
- 	bool "flann"
- 	default y
-+	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_flann module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	bool "highgui"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEOIO
- 	help
- 	  Include opencv_highgui module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
- 	bool "imgcodecs"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_imgcodecs module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	bool "imgproc"
- 	default y
-+	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_imgproc module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_ML
- 	bool "ml"
- 	default y
-+	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_ml module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 	bool "objdetect"
- 	default y
-+	# opencv_core dependency is already enabled
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_ML
- 	help
- 	  Include opencv_objdetect module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_PHOTO
- 	bool "photo"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_photo module into the OpenCV build.
- 
-@@ -78,44 +94,65 @@ comment "opencv_python module requires numpy which is not yet available."
- config BR2_PACKAGE_OPENCV_LIB_SHAPE
- 	bool "shape (shape descriptors and matchers)"
- 	default y
-+	# opencv_core dependency is already enabled
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_shape module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_STITCHING
- 	bool "stitching"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 	help
- 	  Include opencv_stitching module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_SUPERRES
- 	bool "superres"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_superres "super resolution" - module into the OpenCV
- 	  build.
- 
- config BR2_PACKAGE_OPENCV_LIB_TS
- 	bool "ts (touchscreen)"
--	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	default y
-+	# opencv_core dependency is already enabled
-+	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-+	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEOIO
- 	help
- 	  Include opencv_ts module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_VIDEOIO
- 	bool "videoio (media i/o)"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_videoio module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	bool "video"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_video module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_VIDEOSTAB
- 	bool "videostab"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_PHOTO
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_videostab module into the OpenCV build.
+ 	  GStreamer OpenCV Plugins
  
