@@ -1,99 +1,177 @@
-From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
-Date: Fri, 26 Jun 2015 14:33:22 -0300
-Subject: [Buildroot] [PATCH 4/4] toolchain-external: add OSELAS 2014.12.0
-	Cortex-M3 toolchain
-In-Reply-To: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
-References: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <1435340002-20396-5-git-send-email-guido@vanguardiasur.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 26 Jun 2015 19:51:07 +0200
+Subject: [Buildroot] [PATCH v6 08/16] package/opencv: add python support
+In-Reply-To: <1435262397-888-9-git-send-email-s.martin49@gmail.com>
+References: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
+ <1435262397-888-9-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150626175107.GA12470@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Binary toolchain based on uClibc for Cortex-M3 processor based on GCC
-4.9.2.
+Samuel, All,
 
-This toolchain has no resolver support, thus, we don't select
-BR2_HAS_RESOLVER_SUPPORT.
+On 2015-06-25 21:59 +0200, Samuel Martin spake thusly:
+> opencv_python module needs python-numpy because it uses some numpy
+> headers in this wrapper.
+> 
+> From its 2.4 release, OpenCV offers python bindings, but they required
+> most of the OpenCV modules to be enabled.
+> 
+> Since OpenCV-3.0.0, python bindings have been reworked:
+> - it now supports both python2 and python3
+> - only built modules supporting wrapped in python will be included in
+>   the bindings.
 
-Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
----
- toolchain/toolchain-external/Config.in               | 13 +++++++++++++
- toolchain/toolchain-external/toolchain-external.hash |  4 ++++
- toolchain/toolchain-external/toolchain-external.mk   | 10 ++++++++++
- 3 files changed, 27 insertions(+)
+With Python2 enabled, I still see this in the configure log:
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index ec2d1a5..6980b1e 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -195,6 +195,18 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
- 
- 	  This toolchain uses software-floating point.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412
-+	bool "OSELAS ARM Cortex-M3 2014.12"
-+	depends on BR2_arm
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
-+	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	select BR2_LARGEFILE
-+	select BR2_INET_IPV6
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	help
-+	  OSELAS binary toolchain for Cortex-M3.
-+
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
- 	bool "Sourcery CodeBench MIPS 2015.05"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-@@ -941,6 +953,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201405
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
-+	default "arm-cortexm3-uclinuxeabi" if BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 3980c62..342ce21 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -74,3 +74,7 @@ sha256 79a1a4be93e2a63acb137170e98bdfbf744bd9ca7b15b76ab512d1e0dfec834e  crossx8
- sha256 aec4d560dc601e397fc86a9759166005afba22ad666d1a48019b5102c534ccc1  crossx86-sh4eb-linux-musl-1.1.6.tar.xz
- sha256 68eda0795aacd4371b45a6c58c5c75e86c0c2fdf7ebc2c0b7d3752462c848260  crossx86-x86_64-linux-musl-1.1.6.tar.xz
- sha256 6bef5ee2cdb9fa35e49ce0a270f6d7c48f3268c6f6345ad5ca0b8137982b4690  crossx86-x86_64-x32-linux-musl-1.1.6.tar.xz
-+
-+# Oselas Cortex-M3 toolchain
-+# Locally calculated
-+sha1	75e7ae45b514b10ad64ff5588770434cea755496	oselas.toolchain-2014.12.0-arm-cortexm3-uclinuxeabi-gcc-4.9.2-uclibc-0.9.33.2-binutils-2.24-kernel-3.16-sanitized_2014.12.0_i386.deb
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 22f8118..e9514c1 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -293,6 +293,9 @@ TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.11-22-mips-linux-gnu-i686-pc-linux-gnu.tar
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2015.05-18-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://debian.pengutronix.de/debian/pool/main/o/oselas.toolchain/
-+TOOLCHAIN_EXTERNAL_SOURCE = oselas.toolchain-2014.12.0-arm-cortexm3-uclinuxeabi-gcc-4.9.2-uclibc-0.9.33.2-binutils-2.24-kernel-3.16-sanitized_2014.12.0_i386.deb
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
-@@ -421,6 +424,13 @@ define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
- 	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS) | \
- 		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
- endef
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412),y)
-+# Special handling for OSELAS toolchains
-+define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
-+	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
-+	ar fp $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) data.tar.xz | $(XZCAT) | \
-+		$(TAR) $(TAR_STRIP_COMPONENTS)=5 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-+endef
- else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
- # Normal handling of toolchain tarball extraction.
- define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
+    --   Python 2:
+    --     Interpreter:     /home/ymorin/dev/buildroot/O/host/usr/bin/python2 (ver 2.7.10)
+    --     Libraries:       /home/ymorin/dev/buildroot/O/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib32/libpython2.7.so (ver 2.7.10)
+    --     numpy:           /home/ymorin/dev/buildroot/O/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib/python2.7/site-packages/numpy/core/include
+           (ver undefined - cannot be probed because of the cross-compilation)
+    --     packages path:   /usr/lib/python2.7/site-packages
+    --
+    --   Python 3:
+    --     Interpreter:     /usr/bin/python3.4 (ver 3.4)
+    --
+
+Should we force the configure step to find python3 as something like
+/bin/false to avoid any potential issue, even if we already pass
+-DBUILD_opencv_python3=OFF
+
+(Similarly with python2 when python3 is enabled, of course.)
+
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+(reviewed tag still valid)
+
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Build-tested only, for i586.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> changes v5->v6:
+> - rebase
+> 
+> changes v4->v5:
+> - rebase
+> - update a/r/t tags
+> - update commit log
+> - fix python-numpy selection
+> - add python3 support
+> 
+> changes v3->v4:
+> - rebase
+> - rename _OPT -> _OPTS
+> - remove python/numpy patch (merged upstream since opencv bump)
+> 
+> changes v2->v3:
+> - rebase
+> - add fetch uri in the opencv's patch (Yann)
+> - move pyhton module knob under the multi-line if block about python deps
+>   (Yann)
+> 
+> changes v1->v2:
+> - rebase
+> - use patch merged upstream
+> ---
+>  package/opencv/Config.in | 12 +++++++++++-
+>  package/opencv/opencv.mk | 33 +++++++++++++++++++++++++++++++--
+>  2 files changed, 42 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+> index 3c00525..8ed505e 100644
+> --- a/package/opencv/Config.in
+> +++ b/package/opencv/Config.in
+> @@ -89,7 +89,17 @@ config BR2_PACKAGE_OPENCV_LIB_PHOTO
+>  	  Include opencv_photo (computational photography) module into the OpenCV
+>  	  build.
+>  
+> -comment "opencv_python module requires numpy which is not yet available."
+> +config BR2_PACKAGE_OPENCV_LIB_PYTHON
+> +	bool "python"
+> +	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+> +	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+> +		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
+> +		|| BR2_sh || BR2_x86_64 # python-numpy
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64 # python-numpy
+> +	select BR2_PACKAGE_PYTHON_NUMPY
+> +	help
+> +	  Include opencv_python module into the OpenCV build.
+> +	  No python example is installed.
+>  
+>  config BR2_PACKAGE_OPENCV_LIB_SHAPE
+>  	bool "shape"
+> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+> index 7211c18..a43de0c 100644
+> --- a/package/opencv/opencv.mk
+> +++ b/package/opencv/opencv.mk
+> @@ -78,8 +78,6 @@ OPENCV_CONF_OPTS += \
+>  	-DBUILD_opencv_ml=$(if $(BR2_PACKAGE_OPENCV_LIB_ML),ON,OFF) \
+>  	-DBUILD_opencv_objdetect=$(if $(BR2_PACKAGE_OPENCV_LIB_OBJDETECT),ON,OFF) \
+>  	-DBUILD_opencv_photo=$(if $(BR2_PACKAGE_OPENCV_LIB_PHOTO),ON,OFF) \
+> -	-DBUILD_opencv_python2=OFF \
+> -	-DBUILD_opencv_python3=OFF \
+>  	-DBUILD_opencv_shape=$(if $(BR2_PACKAGE_OPENCV_LIB_SHAPE),ON,OFF) \
+>  	-DBUILD_opencv_stitching=$(if $(BR2_PACKAGE_OPENCV_LIB_STITCHING),ON,OFF) \
+>  	-DBUILD_opencv_superres=$(if $(BR2_PACKAGE_OPENCV_LIB_SUPERRES),ON,OFF) \
+> @@ -282,6 +280,37 @@ else
+>  OPENCV_CONF_OPTS += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_OPENCV_LIB_PYTHON),y)
+> +ifeq ($(BR2_PACKAGE_PYTHON),y)
+> +OPENCV_CONF_OPTS += \
+> +	-DBUILD_opencv_python2=ON \
+> +	-DBUILD_opencv_python3=OFF \
+> +	-DPYTHON2_EXECUTABLE=$(HOST_DIR)/usr/bin/python2 \
+> +	-DPYTHON2_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
+> +	-DPYTHON2_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR).so \
+> +	-DPYTHON2_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/numpy/core/include \
+> +	-DPYTHON2_PACKAGES_PATH=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+> +	-DPYTHON2_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
+> +OPENCV_DEPENDENCIES += python
+> +else
+> +OPENCV_CONF_OPTS += \
+> +	-DBUILD_opencv_python2=OFF \
+> +	-DBUILD_opencv_python3=ON \
+> +	-DPYTHON3_EXECUTABLE=$(HOST_DIR)/usr/bin/python3 \
+> +	-DPYTHON3_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m \
+> +	-DPYTHON3_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)m.so \
+> +	-DPYTHON3_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/include \
+> +	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+> +	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
+> +OPENCV_DEPENDENCIES += python3
+> +endif
+> +OPENCV_DEPENDENCIES += python-numpy
+> +else
+> +OPENCV_CONF_OPTS += \
+> +	-DBUILD_opencv_python2=OFF \
+> +	-DBUILD_opencv_python3=OFF
+> +endif
+> +
+>  # Installation hooks:
+>  define OPENCV_CLEAN_INSTALL_DOC
+>  	$(RM) -fr $(TARGET_DIR)/usr/share/OpenCV/doc
+> -- 
+> 2.4.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
