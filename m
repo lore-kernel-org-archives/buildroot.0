@@ -1,293 +1,99 @@
 From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
-Date: Fri, 26 Jun 2015 14:33:21 -0300
-Subject: [Buildroot] [PATCH 3/4] toolchain: introduce
-	BR2_TOOLCHAIN_HAS_RESOLVER
+Date: Fri, 26 Jun 2015 14:33:22 -0300
+Subject: [Buildroot] [PATCH 4/4] toolchain-external: add OSELAS 2014.12.0
+	Cortex-M3 toolchain
 In-Reply-To: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
 References: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <1435340002-20396-4-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <1435340002-20396-5-git-send-email-guido@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a Kconfig option specifying if the toolchain supports name resolving
-(or at least has stubs for it) so we can disable packages that depend on
-that (or they would fail to link). For now, only disable the 'nslookup'
-tool from BusyBox if there's no resolver support.
+Binary toolchain based on uClibc for Cortex-M3 processor based on GCC
+4.9.2.
 
-For now, every toolchain supports name resolving.
+This toolchain has no resolver support, thus, we don't select
+BR2_HAS_RESOLVER_SUPPORT.
 
 Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
 ---
- package/busybox/busybox.mk             |  3 +++
- toolchain/Config.in                    |  3 +++
- toolchain/toolchain-external/Config.in | 29 +++++++++++++++++++++++++++++
- 3 files changed, 35 insertions(+)
+ toolchain/toolchain-external/Config.in               | 13 +++++++++++++
+ toolchain/toolchain-external/toolchain-external.hash |  4 ++++
+ toolchain/toolchain-external/toolchain-external.mk   | 10 ++++++++++
+ 3 files changed, 27 insertions(+)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 090e174..f4e086e 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -156,6 +156,9 @@ endif
- # full-blown versions of apps installed by other packages with sym/hard links.
- define BUSYBOX_NOCLOBBER_INSTALL
- 	$(SED) 's/^noclobber="0"$$/noclobber="1"/' $(@D)/applets/install.sh
-+	$(if $(BR2_TOOLCHAIN_HAS_RESOLVER),,
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_NSLOOKUP,$(@D)/.config)
-+	)
- endef
- 
- define BUSYBOX_KCONFIG_FIXUP_CMDS
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index a851ce4..7e66de0 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -20,6 +20,9 @@ config BR2_TOOLCHAIN_USES_GLIBC
- config BR2_TOOLCHAIN_USES_UCLIBC
- 	bool
- 
-+config BR2_TOOLCHAIN_HAS_RESOLVER
-+	bool
-+
- config BR2_TOOLCHAIN_USES_MUSL
- 	bool
- 	select BR2_USE_WCHAR
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index e70989e..ec2d1a5 100644
+index ec2d1a5..6980b1e 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -18,6 +18,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
- 	  GCC 2014.09 (based on gcc 4.9), Linaro GDB 2013.10 (based on
-@@ -44,6 +45,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Linaro toolchain for the ARM big endian architecture. It
- 	  uses Linaro GCC 2014.09 (based on gcc 4.9), Linaro GDB
-@@ -69,6 +71,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201405
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
- 	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
-@@ -98,6 +101,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
- 	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
-@@ -126,6 +130,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
- 	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
-@@ -159,6 +164,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	# kernel headers: 2.6.31
- 	help
- 	  Texas Instruments Arago 2011.09 toolchain, with gcc 4.5.3,
-@@ -181,6 +187,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	# kernel headers: 2.6.31
- 	help
- 	  Texas Instruments Arago ARMv5 2011.09 toolchain, with gcc
-@@ -199,6 +206,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
- 	  Mentor Graphics. It uses gcc 4.9.2, binutils 2.24.51, glibc
-@@ -284,6 +292,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
- 	  Mentor Graphics. It uses gcc 4.9.1, binutils 2.24.51, glibc
-@@ -369,6 +378,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
- 	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
-@@ -457,6 +467,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the Nios-II architecture,
- 	  from Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51,
-@@ -472,6 +483,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the Nios-II architecture,
- 	  from Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52,
-@@ -488,6 +500,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201203
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the PowerPC architecture,
- 	  from Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53,
-@@ -504,6 +517,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	# kernel headers: 2.6.38
- 	help
- 	  Sourcery CodeBench toolchain for the PowerPC architecture,
-@@ -536,6 +550,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	# kernel headers: 2.6.35
- 	help
- 	  Sourcery CodeBench toolchain for the PowerPC architecture,
-@@ -569,6 +584,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the SuperH architecture,
- 	  from Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51,
-@@ -592,6 +608,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the SuperH architecture,
- 	  from Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53,
-@@ -616,6 +633,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	# kernel headers: 2.6.38
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the SuperH architecture,
- 	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
-@@ -641,6 +659,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the amd64 (x86_64)
- 	  architectures, from Mentor Graphics. It uses gcc 4.8.3,
-@@ -665,6 +684,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the x86/x86_64
- 	  architectures, from Mentor Graphics. It uses gcc 4.7.2,
-@@ -692,6 +712,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the x86/x86_64
- 	  architectures, from Mentor Graphics. It uses gcc 4.6.3,
-@@ -720,6 +741,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the x86/x86_64
- 	  architectures, from Mentor Graphics. It uses gcc 4.6.1,
-@@ -748,6 +770,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Toolchain for the Blackfin architecture, from
- 	  http://blackfin.uclinux.org.
-@@ -764,6 +787,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Toolchain for the Blackfin architecture, from
- 	  http://blackfin.uclinux.org.
-@@ -780,6 +804,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Toolchain for the Blackfin architecture, from
- 	  http://blackfin.uclinux.org.
-@@ -794,6 +819,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Toolchain for the AArch64 architecture, from
- 	  http://www.linaro.org/engineering/armv8/
-@@ -808,6 +834,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Sourcery CodeBench toolchain for the AArch64 architecture,
- 	  from Mentor Graphics. It uses gcc 4.8.3, binutils 2.24,
-@@ -823,6 +850,7 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Toolchain based on the Musl C library, provided by the
- 	  musl-cross project. It uses gcc 4.9.2, binutils 2.25 and
-@@ -849,6 +877,7 @@ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+	select BR2_TOOLCHAIN_HAS_RESOLVER
- 	help
- 	  Toolchain for the ARC cores, from
- 	  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
+@@ -195,6 +195,18 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+ 
+ 	  This toolchain uses software-floating point.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412
++	bool "OSELAS ARM Cortex-M3 2014.12"
++	depends on BR2_arm
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	select BR2_LARGEFILE
++	select BR2_INET_IPV6
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	help
++	  OSELAS binary toolchain for Cortex-M3.
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
+ 	bool "Sourcery CodeBench MIPS 2015.05"
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+@@ -941,6 +953,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201405
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
++	default "arm-cortexm3-uclinuxeabi" if BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+index 3980c62..342ce21 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -74,3 +74,7 @@ sha256 79a1a4be93e2a63acb137170e98bdfbf744bd9ca7b15b76ab512d1e0dfec834e  crossx8
+ sha256 aec4d560dc601e397fc86a9759166005afba22ad666d1a48019b5102c534ccc1  crossx86-sh4eb-linux-musl-1.1.6.tar.xz
+ sha256 68eda0795aacd4371b45a6c58c5c75e86c0c2fdf7ebc2c0b7d3752462c848260  crossx86-x86_64-linux-musl-1.1.6.tar.xz
+ sha256 6bef5ee2cdb9fa35e49ce0a270f6d7c48f3268c6f6345ad5ca0b8137982b4690  crossx86-x86_64-x32-linux-musl-1.1.6.tar.xz
++
++# Oselas Cortex-M3 toolchain
++# Locally calculated
++sha1	75e7ae45b514b10ad64ff5588770434cea755496	oselas.toolchain-2014.12.0-arm-cortexm3-uclinuxeabi-gcc-4.9.2-uclibc-0.9.33.2-binutils-2.24-kernel-3.16-sanitized_2014.12.0_i386.deb
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 22f8118..e9514c1 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -293,6 +293,9 @@ TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.11-22-mips-linux-gnu-i686-pc-linux-gnu.tar
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = mips-2015.05-18-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412),y)
++TOOLCHAIN_EXTERNAL_SITE = http://debian.pengutronix.de/debian/pool/main/o/oselas.toolchain/
++TOOLCHAIN_EXTERNAL_SOURCE = oselas.toolchain-2014.12.0-arm-cortexm3-uclinuxeabi-gcc-4.9.2-uclibc-0.9.33.2-binutils-2.24-kernel-3.16-sanitized_2014.12.0_i386.deb
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+@@ -421,6 +424,13 @@ define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
+ 	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS) | \
+ 		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
+ endef
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412),y)
++# Special handling for OSELAS toolchains
++define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
++	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
++	ar fp $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) data.tar.xz | $(XZCAT) | \
++		$(TAR) $(TAR_STRIP_COMPONENTS)=5 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
++endef
+ else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
+ # Normal handling of toolchain tarball extraction.
+ define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
 -- 
 2.1.4
