@@ -1,100 +1,91 @@
-From: Julien CORJON <corjon.j@ecagroup.com>
-Date: Fri, 26 Jun 2015 15:37:36 +0000
-Subject: [Buildroot] [PATCH 1/1] monkey: new package
-Message-ID: <db63e621-3318-439a-9bbe-6bbc26980f84@MAIL-SINTERS-01.sinters-int.fr>
+From: Andreas Naumann <dev@andin.de>
+Date: Fri, 26 Jun 2015 17:48:45 +0200
+Subject: [Buildroot] Buildroot runtime test infrastructure prototype
+In-Reply-To: <20150625200235.083eaf34@free-electrons.com>
+References: <20150625200235.083eaf34@free-electrons.com>
+Message-ID: <558D745D.6010606@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Morgan Delestre <m.delestre@sinters.fr>
+Dear Thomas,
 
-Signed-off-by: Morgan Delestre <m.delestre@sinters.fr>
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
----
- package/Config.in                                   |  1 +
- package/monkey/0001-Configure-accept-all-conf.patch | 13 +++++++++++++
- package/monkey/Config.in                            | 11 +++++++++++
- package/monkey/monkey.mk                            | 20 ++++++++++++++++++++
- 4 files changed, 45 insertions(+)
- create mode 100644 package/monkey/0001-Configure-accept-all-conf.patch
- create mode 100644 package/monkey/Config.in
- create mode 100644 package/monkey/monkey.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index fac632f..3f5d853 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1224,6 +1224,7 @@ endif
- 	source "package/modem-manager/Config.in"
- 	source "package/mongoose/Config.in"
- 	source "package/mongrel2/Config.in"
-+	source "package/monkey/Config.in"
- 	source "package/mosquitto/Config.in"
- 	source "package/mrouted/Config.in"
- 	source "package/mtr/Config.in"
-diff --git a/package/monkey/0001-Configure-accept-all-conf.patch b/package/monkey/0001-Configure-accept-all-conf.patch
-new file mode 100644
-index 0000000..471e25b
---- /dev/null
-+++ b/package/monkey/0001-Configure-accept-all-conf.patch
-@@ -0,0 +1,13 @@
-+Index: monkey-1.5.6/configure
-+===================================================================
-+--- monkey-1.5.6.orig/configure
-++++ monkey-1.5.6/configure
-+@@ -1204,7 +1204,7 @@ for arg in $*; do
-+			;;
-+		--with-libtool-sysroot*)
-+			;;
-+-		*)
-++		--help)
-+			echo "Usage: ./configure [OPTION]... [VAR=VALUE]..."
-+			echo
-+			echo -e $bldwht"Optional Commands:" $txtrst
-diff --git a/package/monkey/Config.in b/package/monkey/Config.in
-new file mode 100644
-index 0000000..519fd65
---- /dev/null
-+++ b/package/monkey/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_MONKEY
-+        bool "monkey"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+        help
-+          Money Server is a fast and lightweight web server for Linux platforms.
-+
-+          http://monkey-project.com/
-+
-+comment "monkey needs an (e)glibc toolchain w/ threads, headers >= 2.6"
-+        depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
-new file mode 100644
-index 0000000..20ce048
---- /dev/null
-+++ b/package/monkey/monkey.mk
-@@ -0,0 +1,20 @@
-+#############################################################
-+#
-+# monkey
-+#
-+#############################################################
-+MONKEY_VERSION_MAJOR = 1
-+MONKEY_VERSION_MINOR = 5
-+MONKEY_VERSION_PATCH = 6
-+MONKEY_VERSION = $(MONKEY_VERSION_MAJOR).$(MONKEY_VERSION_MINOR).$(MONKEY_VERSION_PATCH)
-+MONKEY_SOURCE = monkey-$(MONKEY_VERSION).tar.gz
-+MONKEY_SITE = http://monkey-project.com/releases/$(MONKEY_VERSION_MAJOR).$(MONKEY_VERSION_MINOR)/
-+MONKEY_INSTALL_STAGING = YES
-+MONKEY_INSTALL_TARGET = YES
-+
-+# Monkey default memory allocator should be jemalloc
-+# but monkey configure script does not handle
-+# cross-compilation in a good way
-+MONKEY_CONF_OPTS =--malloc-libc
-+
-+$(eval $(call autotools-package))
--- 
-2.1.0
+Am 25.06.2015 um 20:02 schrieb Thomas Petazzoni:
+> Hello,
+>
+> Our http://autobuild.buildroot.org tests are great, but they are only
+> build-time tests, and they only test random configurations of packages.
+> Things like bootloader packages, filesystem images, kernel build are
+> never tested in an automated way, and no runtime testing is done. I
+> also want to be able to build small test programs exercising specific
+> features and run them on the target.
+
+this is something I have been looking into for a while. Our goal was to
+have some kind of acceptance test for our BSPs. I started testing
+internals with qemu, but soon the focus shifted to physical boards and
+real IO, so the qemu target is hardly maintained any more.
+Anyway, in the beginning I took a similar approach to the JUnit
+framework, writing the testcases in Python using the TAP (test anything
+protocol) for output and creating a number of actor objects to control
+the input/output of the DUT (UART, RS485, telnet, ssh, powerswitch, CAN
+transceiver, ...).
+While this worked well for the developers, it became apparent that
+understanding what was tested and how was rather difficult for people
+that dont do this 100% of the time. In addition, documentation, test
+reports, reusability of test-steps was less than ideal. We then toyed a
+little with a self invented test language, but discarded all those
+efforts once we discovered the Python based 'Robot Framework'.
+Their keyword-driven approach fits our needs very well because of the
+resulting abstraction and readability of testcases, the configurability,
+the many available libraries (most important for us ssh and telnet, easy
+extensible with Python modules), the testcase editor RIDE, Jenkins
+plugin, xUnit output if needed ...
+
+Maybe it's too high level for the buildroot project and I'm not an
+expert in the xUnit world so I cant really compare. But anyway Robot
+provides functionality and structure that matches the need of embedded
+testing quite well, so you may want to give their Quickstart a try.
+
+
+best regards,
+Andreas
+
+
+>
+> Since a while, I wanted to setup a small infrastructure to be able to
+> describe specific test cases: a Buildroot configuration to build, with
+> the ability to boot some of those configurations automatically in Qemu.
+>
+> So I finally went ahead and create such a small infrastructure. It's
+> very basic and minimal right now, and should be considered as an
+> experiment. It's available at:
+>
+>     https://github.com/tpetazzoni/buildroot-runtime-test
+>
+> It's based on the Python unittest mechanism, and allows to describe
+> test cases that consist in a Buildroot defconfig, plus a Python
+> function that can do some checks on the resulting build, boot the
+> system under Qemu, run some commands inside the Qemu system and check
+> their results.
+>
+> I've written a few tests to show how it could work: simple tests for
+> Dropbear and Python (on the package side) and several tests for
+> filesystem images: ext2/3/4, squashfs, jffs2, ubi, iso9660, yaffs2 (all
+> of them are boot tested, except yaffs2).
+>
+> For now, it's very crude and basic. The README file explains how it
+> works, and gives a TODO listing some of the things that for sure need
+> to be improved.
+>
+> Currently, this runtime test infrastructure is not set up to be
+> executed every day on the latest Git, but it is obviously the goal.
+>
+> Contributions, comments and suggestions are welcome.
+>
+> Best regards,
+>
+> Thomas
+>
