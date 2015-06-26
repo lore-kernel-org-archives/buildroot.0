@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Jun 2015 09:45:31 +0200
+Date: Fri, 26 Jun 2015 09:47:53 +0200
 Subject: [Buildroot] [PATCH] heimdal: bump to version 1.6rc2
 In-Reply-To: <1435252182-26100-1-git-send-email-gustavo@zacarias.com.ar>
  (Gustavo Zacarias's message of "Thu, 25 Jun 2015 14:09:42 -0300")
 References: <1435252182-26100-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87a8vm29r8.fsf@dell.be.48ers.dk>
+Message-ID: <87616a29na.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,8 +22,20 @@ To: buildroot@busybox.net
  > though i've added them anyway for correctness).
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+ > -HEIMDAL_VERSION = 1.5.3
+ > +HEIMDAL_VERSION = 1.6rc2
+ >  HEIMDAL_SITE = http://www.h5l.org/dist/src
+ >  HEIMDAL_DEPENDENCIES = host-e2fsprogs host-pkgconf
+ >  HEIMDAL_INSTALL_STAGING = YES
+ >  # static because of -fPIC issues with e2fsprogs on x86_64 host
+ > -HOST_HEIMDAL_CONF_OPTS = --with-x=no --disable-shared --enable-static
+ > +HOST_HEIMDAL_CONF_OPTS = \
+ > +	--disable-shared \
+ > +	--enable-static \
 
-Committed, thanks.
+Hmm, why are you hardcoding these? We already pass the correct
+enable/disable lines in the autotools infrastructure.
 
 -- 
 Bye, Peter Korsgaard
