@@ -1,132 +1,56 @@
-From: Julien CORJON <corjon.j@ecagroup.com>
-Date: Fri, 26 Jun 2015 14:52:11 +0000
-Subject: [Buildroot] [PATCH v2] qt/qt5webchannel: new package
-Message-ID: <09c38a96-80a6-4b7c-b389-033a4838b440@MAIL-SINTERS-01.sinters-int.fr>
+From: Nimai Mahajan <nimaim@gmail.com>
+Date: Fri, 26 Jun 2015 11:01:58 -0400
+Subject: [Buildroot] [PATCH 1/1] libarchive: add hash and enable lzma support
+Message-ID: <1435330918-25695-1-git-send-email-nimaim@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+From: Nimai Mahajan <nimaim@gmail.com>
+
+Add libarchive hash. Enable lzma support.
+Both xz and lzma support are provided by the xz library.
+This maintains consistency with how the other CONF_OPTS are defined.
+
+Signed-off-by: Nimai Mahajan <nimaim@gmail.com>
 ---
-Changes v1 -> v2:
-  - add missing qt5websockets dependency
+ package/libarchive/libarchive.hash | 2 ++
+ package/libarchive/libarchive.mk   | 7 ++++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+ create mode 100644 package/libarchive/libarchive.hash
 
- package/qt5/Config.in                        |  1 +
- package/qt5/qt5webchannel/Config.in          | 11 +++++
- package/qt5/qt5webchannel/qt5webchannel.hash |  4 ++
- package/qt5/qt5webchannel/qt5webchannel.mk   | 61 ++++++++++++++++++++++++++++
- 4 files changed, 77 insertions(+)
- create mode 100644 package/qt5/qt5webchannel/Config.in
- create mode 100644 package/qt5/qt5webchannel/qt5webchannel.hash
- create mode 100644 package/qt5/qt5webchannel/qt5webchannel.mk
-
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index e8ec7d9..c31342a 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -42,6 +42,7 @@ source "package/qt5/qt5script/Config.in"
- source "package/qt5/qt5sensors/Config.in"
- source "package/qt5/qt5serialport/Config.in"
- source "package/qt5/qt5svg/Config.in"
-+source "package/qt5/qt5webchannel/Config.in"
- source "package/qt5/qt5webkit/Config.in"
- source "package/qt5/qt5webkit-examples/Config.in"
- source "package/qt5/qt5websockets/Config.in"
-diff --git a/package/qt5/qt5webchannel/Config.in b/package/qt5/qt5webchannel/Config.in
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
 new file mode 100644
-index 0000000..218629a
+index 0000000..5f96211
 --- /dev/null
-+++ b/package/qt5/qt5webchannel/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_QT5WEBCHANNEL
-+	bool "qt5webchannel"
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5WEBSOCKETS
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  This package corresponds to the qt5webchannel module.
-+
-+	  http://qt.io
-diff --git a/package/qt5/qt5webchannel/qt5webchannel.hash b/package/qt5/qt5webchannel/qt5webchannel.hash
-new file mode 100644
-index 0000000..e390d1e
---- /dev/null
-+++ b/package/qt5/qt5webchannel/qt5webchannel.hash
-@@ -0,0 +1,4 @@
-+# Hashes from: http://download.qt.io/official_releases/qt/5.4/5.4.1/submodules/qtwebchannel-opensource-src-5.4.1.tar.xz.mirrorlist
-+sha256 c4acb9ec9886fca6d0c2adc5b45970347ae1b3e4b5e0055ab370540faef7b251 qtwebchannel-opensource-src-5.4.1.tar.xz
-+sha1   7a27eac0bead6e60b5faaf360a6236dd96013c12                         qtwebchannel-opensource-src-5.4.1.tar.xz
-+md5    bb914134c164c6758a0074748cc678ff                                 qtwebchannel-opensource-src-5.4.1.tar.xz
-diff --git a/package/qt5/qt5webchannel/qt5webchannel.mk b/package/qt5/qt5webchannel/qt5webchannel.mk
-new file mode 100644
-index 0000000..cfb6da9
---- /dev/null
-+++ b/package/qt5/qt5webchannel/qt5webchannel.mk
-@@ -0,0 +1,61 @@
-+################################################################################
-+#
-+# qt5webchannel
-+#
-+################################################################################
-+
-+QT5WEBCHANNEL_VERSION = $(QT5_VERSION)
-+QT5WEBCHANNEL_SITE = $(QT5_SITE)
-+QT5WEBCHANNEL_SOURCE = qtwebchannel-opensource-src-$(QT5WEBCHANNEL_VERSION).tar.xz
-+QT5WEBCHANNEL_DEPENDENCIES = qt5base qt5websockets
-+QT5WEBCHANNEL_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5WEBCHANNEL_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-+QT5WEBCHANNEL_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LGPL_EXCEPTION.txt LICENSE.GPLv2
++++ b/package/libarchive/libarchive.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  eb87eacd8fe49e8d90c8fdc189813023ccc319c5e752b01fb6ad0cc7b2c53d5e  libarchive-3.1.2.tar.gz
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 61528d9..18fa8b7 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -9,7 +9,6 @@ LIBARCHIVE_SITE = http://www.libarchive.org/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
+ LIBARCHIVE_LICENSE = BSD-2c, BSD-3c
+ LIBARCHIVE_LICENSE_FILES = COPYING
+-LIBARCHIVE_CONF_OPTS = --without-lzma
+ 
+ ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
+ ifeq ($(BR2_STATIC_LIBS),y)
+@@ -86,4 +85,10 @@ else
+ LIBARCHIVE_CONF_OPTS += --without-zlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XZ),y)
++LIBARCHIVE_DEPENDENCIES += xz
 +else
-+QT5WEBCHANNEL_LICENSE = Commercial license
-+QT5WEBCHANNEL_REDISTRIBUTE = NO
++LIBARCHIVE_CONF_OPTS += --without-lzma
 +endif
 +
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
-+QT5WEBCHANNEL_DEPENDENCIES += qt5declarative
-+endif
-+
-+define QT5WEBCHANNEL_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
-+endef
-+
-+define QT5WEBCHANNEL_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT5WEBCHANNEL_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
-+define QT5WEBCHANNEL_INSTALL_TARGET_QMLS
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebChannel $(TARGET_DIR)/usr/qml/
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-+define QT5WEBCHANNEL_INSTALL_TARGET_EXAMPLES
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/webchannel $(TARGET_DIR)/usr/lib/qt/examples/
-+endef
-+endif
-+
-+ifneq ($(BR2_STATIC_LIBS),y)
-+define QT5WEBCHANNEL_INSTALL_TARGET_LIBS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebChannel.so.* $(TARGET_DIR)/usr/lib
-+endef
-+endif
-+
-+define QT5WEBCHANNEL_INSTALL_TARGET_CMDS
-+	$(QT5WEBCHANNEL_INSTALL_TARGET_LIBS)
-+	$(QT5WEBCHANNEL_INSTALL_TARGET_QMLS)
-+endef
-+
-+$(eval $(generic-package))
+ $(eval $(autotools-package))
 -- 
-2.1.0
+1.9.1
