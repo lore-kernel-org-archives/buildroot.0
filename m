@@ -1,50 +1,41 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 26 Jun 2015 10:13:37 +0200
-Subject: [Buildroot] [PATCH 2/2] sunxi-mali: bump version
-In-Reply-To: <1435306417-12448-1-git-send-email-francois.perrad@gadz.org>
-References: <1435306417-12448-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1435306417-12448-2-git-send-email-francois.perrad@gadz.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 26 Jun 2015 10:14:12 +0200
+Subject: [Buildroot] [git commit] orc: bump version
+Message-ID: <20150626081429.0B840801FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/sunxi-mali/Config.in     | 1 +
- package/sunxi-mali/sunxi-mali.mk | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=f5aaf53de7a7cc9cf6d11bdb4709345632a39ce1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/sunxi-mali/Config.in b/package/sunxi-mali/Config.in
-index 95f91ab..f0c1b35 100644
---- a/package/sunxi-mali/Config.in
-+++ b/package/sunxi-mali/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_SUNXI_MALI
- 	bool "sunxi-mali"
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_LIBUMP
- 	# The egl/gles mali libraries are provided as a git submodule of the
- 	# sunxi-mali repo and are downloaded by the sunxi-mali-prop package.
- 	select BR2_PACKAGE_SUNXI_MALI_PROP
-diff --git a/package/sunxi-mali/sunxi-mali.mk b/package/sunxi-mali/sunxi-mali.mk
-index c6900c8..3e5443b 100644
---- a/package/sunxi-mali/sunxi-mali.mk
-+++ b/package/sunxi-mali/sunxi-mali.mk
-@@ -4,11 +4,11 @@
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/orc/orc.hash |    4 ++--
+ package/orc/orc.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/orc/orc.hash b/package/orc/orc.hash
+index ce720cb..100f194 100644
+--- a/package/orc/orc.hash
++++ b/package/orc/orc.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/gstreamer-devel/2014-December/050855.html
+-sha256	767eaebce2941737b43368225ec54598b3055ca78b4dc50c4092f5fcdc0bdfe7  orc-0.4.23.tar.xz
++# From http://lists.freedesktop.org/archives/gstreamer-devel/2015-June/053346.html
++sha256	338cd493b5247300149821c6312bdf7422a3593ae98691fc75d7e4fe727bd39b  orc-0.4.24.tar.xz
+diff --git a/package/orc/orc.mk b/package/orc/orc.mk
+index 0d9e78c..5d84bd0 100644
+--- a/package/orc/orc.mk
++++ b/package/orc/orc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUNXI_MALI_VERSION = c2491fe952354ba44538064e534ed7c731cedb1e
-+SUNXI_MALI_VERSION = d343311efc8db166d8371b28494f0f27b6a58724
- SUNXI_MALI_SITE = $(call github,linux-sunxi,sunxi-mali,$(SUNXI_MALI_VERSION))
- 
- SUNXI_MALI_INSTALL_STAGING = YES
--SUNXI_MALI_DEPENDENCIES = sunxi-mali-prop
-+SUNXI_MALI_DEPENDENCIES = libump sunxi-mali-prop
- SUNXI_MALI_PROVIDES = libegl libgles
- 
- # The options below must be provided in the environment.  Providing these
--- 
-2.1.4
+-ORC_VERSION = 0.4.23
++ORC_VERSION = 0.4.24
+ ORC_SOURCE = orc-$(ORC_VERSION).tar.xz
+ ORC_SITE = http://gstreamer.freedesktop.org/data/src/orc
+ ORC_LICENSE = BSD-2c, BSD-3c
