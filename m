@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 26 Jun 2015 17:20:55 +0200
-Subject: [Buildroot] [PATCH v6 04/16] package/opencv: define modules
- inter-dependencies
-In-Reply-To: <1435262397-888-5-git-send-email-s.martin49@gmail.com>
+Date: Fri, 26 Jun 2015 17:22:46 +0200
+Subject: [Buildroot] [PATCH v6 02/16] package/opencv: bump to version 3.0
+In-Reply-To: <20150626145114.GA17113@free.fr>
 References: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
- <1435262397-888-5-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150626152055.GC17113@free.fr>
+ <1435262397-888-3-git-send-email-s.martin49@gmail.com>
+ <20150626145114.GA17113@free.fr>
+Message-ID: <20150626152245.GD17113@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,203 +14,32 @@ To: buildroot@busybox.net
 
 Samuel, All,
 
-On 2015-06-25 21:59 +0200, Samuel Martin spake thusly:
-> OpenCV allows to enable/disable the selection of modules (a.k.a.
-> opencv libraries). These modules depend one on the others; these
-> dependencies are already handled by the build-system (CMake).
+On 2015-06-26 16:51 +0200, Yann E. MORIN spake thusly:
+> On 2015-06-25 21:59 +0200, Samuel Martin spake thusly:
+> > This major version bump is in fact a bump from 2.4.10 to 2.4.11, then to
+> > 3.0.
+[--SNIP--]
+> > @@ -49,17 +47,17 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+> >  	help
+> >  	  Include opencv_highgui module into the OpenCV build.
+> >  
+> > -config BR2_PACKAGE_OPENCV_LIB_IMGPROC
+> > -	bool "imgproc"
+> > +config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
+> > +	bool "imgcodecs (image codecs)"
 > 
-> However, the way we handled them in Buildroot was not really clean.
-> For each opencv module, there is a kconfig option, but we forced the
-> corresponding CMake config option without checking for the modules'
-> dependencies.
-> 
-> This patch replicates the modules' dependency relations in the
-> Config.in, so that the selection of the user will actually be built.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> I forgot to say so in my previous review, but we ususally do not add
+> such explications in the prompt, but in the help text.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+OK, there is a patch later on that deals with prompt and help texts.
+Let's see that...
+
+However, I find it dubious that you add those texts in this patch, to
+later remove them in a following patch. Why not just omit them to begin
+with?
 
 Regards,
 Yann E. MORIN.
-
-> ---
-> changes v5->v6:
-> - rebase
-> 
-> changes v4->v5:
-> - rebase
-> - remove Reviewed-by tag form Yann (because of the changes introduced
->   with the version bump)
-> 
-> changes v3->v4:
-> - rebase
-> - update ts module dependencies
-> 
-> changes v2->v3:
-> - rebase
-> - fix typo in commit log (Yann)
-> - update A/R/T tags
-> 
-> changes v1->v2:
-> - rebase
-> ---
->  package/opencv/Config.in | 39 ++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 38 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-> index 95e1e13..87f4bf5 100644
-> --- a/package/opencv/Config.in
-> +++ b/package/opencv/Config.in
-> @@ -21,6 +21,8 @@ comment "OpenCV modules"
->  config BR2_PACKAGE_OPENCV_LIB_CALIB3D
->  	bool "calib3d"
->  	default y
-> +	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
->  	help
->  	  Include opencv_calib3d module into the OpenCV build.
->  
-> @@ -29,12 +31,16 @@ config BR2_PACKAGE_OPENCV_LIB_CALIB3D
->  config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
->  	bool "features2d"
->  	default y
-> +	select BR2_PACKAGE_OPENCV_LIB_FLANN
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-> +	select BR2_PACKAGE_OPENCV_LIB_ML
->  	help
->  	  Include opencv_features2d module into the OpenCV build.
->  
->  config BR2_PACKAGE_OPENCV_LIB_FLANN
->  	bool "flann"
->  	default y
-> +	# opencv_core dependency is already enabled
->  	help
->  	  Include opencv_flann module into the OpenCV build.
->  
-> @@ -44,36 +50,46 @@ config BR2_PACKAGE_OPENCV_LIB_FLANN
->  config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
->  	bool "highgui"
->  	default y
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-> +	select BR2_PACKAGE_OPENCV_LIB_VIDEOIO
->  	help
->  	  Include opencv_highgui module into the OpenCV build.
->  
->  config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
->  	bool "imgcodecs (image codecs)"
->  	default y
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
->  	help
->  	  Include opencv_imgcodecs module into the OpenCV build.
->  
->  config BR2_PACKAGE_OPENCV_LIB_IMGPROC
->  	bool "imgproc (image processing)"
->  	default y
-> +	# opencv_core dependency is already enabled
->  	help
->  	  Include opencv_imgproc module into the OpenCV build.
->  
->  config BR2_PACKAGE_OPENCV_LIB_ML
->  	bool "ml (machine learning)"
->  	default y
-> +	# opencv_core dependency is already enabled
->  	help
->  	  Include opencv_ml module into the OpenCV build.
->  
->  config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
->  	bool "objdetect"
->  	default y
-> +	# opencv_core dependency is already enabled
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-> +	select BR2_PACKAGE_OPENCV_LIB_ML
->  	help
->  	  Include opencv_objdetect module into the OpenCV build.
->  
->  config BR2_PACKAGE_OPENCV_LIB_PHOTO
->  	bool "photo"
->  	default y
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
->  	help
->  	  Include opencv_photo module into the OpenCV build.
->  
-> @@ -82,44 +98,65 @@ comment "opencv_python module requires numpy which is not yet available."
->  config BR2_PACKAGE_OPENCV_LIB_SHAPE
->  	bool "shape (shape descriptors and matchers)"
->  	default y
-> +	# opencv_core dependency is already enabled
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-> +	select BR2_PACKAGE_OPENCV_LIB_VIDEO
->  	help
->  	  Include opencv_shape module into the OpenCV build.
->  
->  config BR2_PACKAGE_OPENCV_LIB_STITCHING
->  	bool "stitching"
->  	default y
-> +	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-> +	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-> +	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
->  	help
->  	  Include opencv_stitching module into the OpenCV build.
->  
->  config BR2_PACKAGE_OPENCV_LIB_SUPERRES
->  	bool "superres"
->  	default y
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-> +	select BR2_PACKAGE_OPENCV_LIB_VIDEO
->  	help
->  	  Include opencv_superres "super resolution" - module into the OpenCV
->  	  build.
->  
->  config BR2_PACKAGE_OPENCV_LIB_TS
->  	bool "ts (touchscreen)"
-> -	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
->  	default y
-> +	# opencv_core dependency is already enabled
-> +	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-> +	select BR2_PACKAGE_OPENCV_LIB_VIDEOIO
->  	help
->  	  Include opencv_ts module into the OpenCV build.
->  
->  config BR2_PACKAGE_OPENCV_LIB_VIDEOIO
->  	bool "videoio (media i/o)"
->  	default y
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
->  	help
->  	  Include opencv_videoio module into the OpenCV build.
->  
->  config BR2_PACKAGE_OPENCV_LIB_VIDEO
->  	bool "video"
->  	default y
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
->  	help
->  	  Include opencv_video module into the OpenCV build.
->  
->  config BR2_PACKAGE_OPENCV_LIB_VIDEOSTAB
->  	bool "videostab"
->  	default y
-> +	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-> +	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-> +	select BR2_PACKAGE_OPENCV_LIB_PHOTO
-> +	select BR2_PACKAGE_OPENCV_LIB_VIDEO
->  	help
->  	  Include opencv_videostab module into the OpenCV build.
->  
-> -- 
-> 2.4.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
