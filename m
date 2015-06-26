@@ -1,41 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Jun 2015 09:39:52 +0200
-Subject: [Buildroot] [git commit] mpd: bump to version 0.19.10
-Message-ID: <20150626075003.3F7A38074F@busybox.osuosl.org>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 26 Jun 2015 10:13:36 +0200
+Subject: [Buildroot] [PATCH 1/2] libump: new package
+Message-ID: <1435306417-12448-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1f50198a4417ce22eebf846004a35f0df17a1692
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+previously, this library was a part of sunxi-mali
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/mpd/mpd.hash |    2 +-
- package/mpd/mpd.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in        |  1 +
+ package/libump/Config.in |  9 +++++++++
+ package/libump/libump.mk | 13 +++++++++++++
+ 3 files changed, 23 insertions(+)
+ create mode 100644 package/libump/Config.in
+ create mode 100644 package/libump/libump.mk
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 9f26f61..56d30f2 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	47851423053cd38cfad65be5985b41b7cd5bdbe8d0d13378e11748a28b19f26f	mpd-0.19.9.tar.xz
-+sha256	c386eb3d22f98dc993b5ae3c272f969aa7763713483c6800040ebf1791b15851	mpd-0.19.10.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index b5adafd..7bbef03 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.19
--MPD_VERSION = $(MPD_VERSION_MAJOR).9
-+MPD_VERSION = $(MPD_VERSION_MAJOR).10
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost libglib2
+diff --git a/package/Config.in b/package/Config.in
+index fac632f..025b4e2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -367,6 +367,7 @@ endif
+ 	source "package/iucode-tool/Config.in"
+ 	source "package/kbd/Config.in"
+ 	source "package/lcdproc/Config.in"
++	source "package/libump/Config.in"
+ 	source "package/lirc-tools/Config.in"
+ 	source "package/lm-sensors/Config.in"
+ 	source "package/lshw/Config.in"
+diff --git a/package/libump/Config.in b/package/libump/Config.in
+new file mode 100644
+index 0000000..859caa6
+--- /dev/null
++++ b/package/libump/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBUMP
++	bool "libump"
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_arm
++	help
++	  The ARMs Universal Memory Provider userspace library.
++	  This library is a requirement for ARMs binary Mali driver.
++
++	  http://github.com/linux-sunxi/libump
+diff --git a/package/libump/libump.mk b/package/libump/libump.mk
+new file mode 100644
+index 0000000..65012ff
+--- /dev/null
++++ b/package/libump/libump.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# libump
++#
++################################################################################
++
++LIBUMP_VERSION = ec0680628744f30b8fac35e41a7bd8e23e59c39f
++LIBUMP_SITE = $(call github,linux-sunxi,libump,$(LIBUMP_VERSION))
++LIBUMP_LICENSE = Apache-2.0
++LIBUMP_AUTORECONF = YES
++LIBUMP_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+-- 
+2.1.4
