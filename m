@@ -1,45 +1,91 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Fri, 26 Jun 2015 08:23:49 -0500
-Subject: [Buildroot] [PATCH v2 1/1] board: add support for Warpboard
-In-Reply-To: <20150625223823.GI4178@free.fr>
-References: <1434988018-16391-1-git-send-email-lambertarthur22@gmail.com>
- <558B254C.2090606@mind.be> <20150625085428.GA3400@arthur-dreem>
- <558C800F.5030702@mind.be> <20150625223823.GI4178@free.fr>
-Message-ID: <CAMQcK5JBCq4Dro8o-6n2O=YKeSzvv3Eb07FT+=iKfvsv-sB3zg@mail.gmail.com>
+From: Nimai Mahajan <nimaim@gmail.com>
+Date: Fri, 26 Jun 2015 10:19:43 -0400
+Subject: [Buildroot] [PATCH 1/1] libucl: new package
+Message-ID: <1435328383-24851-1-git-send-email-nimaim@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+From: Nimai Mahajan <nimaim@gmail.com>
 
-On Thu, Jun 25, 2015 at 5:38 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Arnout, Arthur, All,
->
-> One case where I'd be inclined to accept more than the above is a
-> full-wireless device (like the soon-to-come-I-hope 96boards stuff).
-> But since wpa-supplicant needs configuration that we can't provide
-> (SSID and key), I don't see the point of adding it to the defconfig.
->
-> However, we've decided to accept "demo" defconfigs, which can be packed
-> with more features than a simple board defconfig. We haven't had any
-> single such demo defconfig submitted so far.
->
-> Still, even if we accept demo defconfigs, I stil think we should have a
-> small board defconfig file before we get a demo.
+Libucl is a high performance and flexible JSON/YAML/etc. parser for C.
 
-For the SELinux patchset, we are submitting a demo configuration
-because of the complexities of enabling SELinux packages.
+https://github.com/vstakhov/libucl
 
-http://patchwork.ozlabs.org/patch/479484/
+Signed-off-by: Nimai Mahajan <nimaim@gmail.com>
+---
+ package/Config.in          |  1 +
+ package/libucl/Config.in   | 16 ++++++++++++++++
+ package/libucl/libucl.hash |  2 ++
+ package/libucl/libucl.mk   | 14 ++++++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 package/libucl/Config.in
+ create mode 100644 package/libucl/libucl.hash
+ create mode 100644 package/libucl/libucl.mk
 
-Thanks,
--Ryan
-
+diff --git a/package/Config.in b/package/Config.in
+index fac632f..9dbc98f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -881,6 +881,7 @@ menu "JSON/XML"
+ 	source "package/jsoncpp/Config.in"
+ 	source "package/libjson/Config.in"
+ 	source "package/libroxml/Config.in"
++	source "package/libucl/Config.in"
+ 	source "package/libxml2/Config.in"
+ 	source "package/libxmlpp/Config.in"
+ 	source "package/libxmlrpc/Config.in"
+diff --git a/package/libucl/Config.in b/package/libucl/Config.in
+new file mode 100644
+index 0000000..0775ce0
+--- /dev/null
++++ b/package/libucl/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_LIBUCL
++	bool "libucl"
++	help
++	  Universal configuration library parser
++
++	  Libucl is a parser and C API to parse and generate ucl
++	  objects. Libucl consist of several groups of functions:
++	  parser, emitting, conversion, generation, iteration,
++	  validation, and utility. These functions can be used to
++	  work with several formats: JSON, compact JSON, configuration 
++	  (nginx like), and YAML. Libucl has clear design that should 
++	  be very convenient for reading and writing and makes for an
++	  ideal parser with high performance. 
++
++	  https://github.com/vstakhov/libucl
++	  
+diff --git a/package/libucl/libucl.hash b/package/libucl/libucl.hash
+new file mode 100644
+index 0000000..daa2f1e
+--- /dev/null
++++ b/package/libucl/libucl.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  2f69995c7f8320350f56c1183c395cc4a2a958331f22d60b7839a117c9c601e1  libucl-0.7.3.tar.gz
+diff --git a/package/libucl/libucl.mk b/package/libucl/libucl.mk
+new file mode 100644
+index 0000000..638821f
+--- /dev/null
++++ b/package/libucl/libucl.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# libucl
++#
++################################################################################
++
++LIBUCL_VERSION = 0.7.3
++LIBUCL_SITE = $(call github,vstakhov,libucl,$(LIBUCL_VERSION))
++LIBUCL_INSTALL_STAGING = YES
++LIBUCL_AUTORECONF = YES
++LIBUCL_LICENSE = BSD
++LIBUCL_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+1.9.1
