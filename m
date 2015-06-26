@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 26 Jun 2015 17:30:50 +0200
+Date: Fri, 26 Jun 2015 17:34:04 +0200
 Subject: [Buildroot] [PATCH v6 06/16] package/opencv: reduce modules on
 	by default
 In-Reply-To: <1435262397-888-7-git-send-email-s.martin49@gmail.com>
 References: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
  <1435262397-888-7-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150626153050.GB27480@free.fr>
+Message-ID: <20150626153404.GC27480@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -28,7 +28,13 @@ On 2015-06-25 21:59 +0200, Samuel Martin spake thusly:
 > Cc: "Yann E. Morin" <yann.morin.1998@free.fr>
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Although I'm usually not opposed to getting the smallest possible config
+as a default, as you say this one breaks existing defconfigs.
+
+OTOH, do we really care?
+
+Anyway, I won't ack this one, but I am not ooposed to it being merged
+either.
 
 Regards,
 Yann E. MORIN.
