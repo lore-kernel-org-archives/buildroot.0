@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Jun 2015 00:34:59 +0200
-Subject: [Buildroot] [v2 3/6] package/nodejs: Add node.js v0.12.5 and
- set as the default version
-In-Reply-To: <1435370498-25473-3-git-send-email-martin@barkynet.com>
+Date: Sun, 28 Jun 2015 00:44:30 +0200
+Subject: [Buildroot] [v2 4/6] package/nodejs: Add
+ /usr/lib/node_modules/.bin to PATH
+In-Reply-To: <1435370498-25473-4-git-send-email-martin@barkynet.com>
 References: <1435370498-25473-1-git-send-email-martin@barkynet.com>
- <1435370498-25473-3-git-send-email-martin@barkynet.com>
-Message-ID: <20150627223459.GD30876@free.fr>
+ <1435370498-25473-4-git-send-email-martin@barkynet.com>
+Message-ID: <20150627224430.GE30876@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,179 +15,56 @@ To: buildroot@busybox.net
 Martin, All,
 
 On 2015-06-27 03:01 +0100, Martin Bark spake thusly:
+> This patch adds /usr/lib/node_modules/.bin to PATH so that global
+> node_modules are accessible from the command line
+> 
 > Signed-off-by: Martin Bark <martin@barkynet.com>
-[--SNIP--]
-> diff --git a/package/nodejs/0.12.5/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/0.12.5/0001-Remove-dependency-on-Python-bz2-module.patch
-> new file mode 100644
-> index 0000000..d2cb0b7
-> --- /dev/null
-> +++ b/package/nodejs/0.12.5/0001-Remove-dependency-on-Python-bz2-module.patch
-> @@ -0,0 +1,38 @@
-> +From 2f57d17b8b1a8cb78bd9cff874a006adba3afd4a Mon Sep 17 00:00:00 2001
-> +From: Martin Bark <martin@barkynet.com>
-> +Date: Thu, 11 Jun 2015 20:05:11 +0100
-> +Subject: [PATCH 1/4] Remove dependency on Python bz2 module
+> 
+> ---
+> Changes v1 -> v2
+>  - Improved commit message
+> 
+> Signed-off-by: Martin Bark <martin@barkynet.com>
+> ---
+>  package/nodejs/nodejs.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> index 59e03b0..5d95f77 100644
+> --- a/package/nodejs/nodejs.mk
+> +++ b/package/nodejs/nodejs.mk
+> @@ -111,6 +111,11 @@ define NODEJS_INSTALL_MODULES
+>  		$(HOST_DIR)/usr/bin/npm install \
+>  		$(NODEJS_MODULES_LIST) \
+>  	)
 > +
-> +The Python bz2 module is only needed in certain cases, so only import
-> +it when needed. In the normal nodejs build, this allows to remove the
-> +dependency on this module.
-> +
-> +Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +Signed-off-by: Martin Bark <martin@barkynet.com>
+> +	# Add global node_modules to PATH
+> +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/profile.d
+> +	printf "export PATH=\x24PATH:/usr/lib/node_modules/.bin\n" \
 
-Since you're taking the original patch from 0.10 by Thomas, and adapt
-it to 0.12, you should have kept the attribution and add yourself to the
-list, like so:
+Nice trick, but what about the slightly-more readable;
 
-    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-    [Martin: adapt to 0.12.5]
-    Signed-off-by: Martin Bark <martin@barkynet.com>
+    printf 'PATH="$${PATH}:/usr/lib/node_modules/.bin"\n' \
+        >$(TARGET_DIR)/etc/profile.d/node_modules.sh
 
-[--SNIP--]
-> diff --git a/package/nodejs/0.12.5/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/0.12.5/0002-gyp-force-link-command-to-use-CXX.patch
-> new file mode 100644
-> index 0000000..ef86e5f
-> --- /dev/null
-> +++ b/package/nodejs/0.12.5/0002-gyp-force-link-command-to-use-CXX.patch
-> @@ -0,0 +1,27 @@
-> +From 04bda7143f7ea6c6e6b659b73547b463f7e28c65 Mon Sep 17 00:00:00 2001
-> +From: Martin Bark <martin@barkynet.com>
-> +Date: Thu, 11 Jun 2015 19:27:46 +0100
-> +Subject: [PATCH 2/4] gyp: force link command to use CXX
-> +
-> +Cc: Samuel Martin <s.martin49@gmail.com>
-> +Signed-off-by: Martin Bark <martin@barkynet.com>
+  - because this is in a Makefile, so we need to $-escape the $.
 
-Ditto, but this time the patch is (AFAICS) exactly the same as the patch
-for 0.10, so you should have kept attribution and add yourself to the
-list, too:
+  - because we do not want that $ to be interpreted by the shell (at build
+    time!), we single-quote it.
 
-    Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-    Signed-off-by: Martin Bark <martin@barkynet.com>
+  - because whoever knows what PATH is made of would be a fool (and
+    because the world is cruel), we double-quote it (at runtime!)
 
-[--SNIP--]
-> diff --git a/package/nodejs/0.12.5/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch b/package/nodejs/0.12.5/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-> new file mode 100644
-> index 0000000..0a21a61
-> --- /dev/null
-> +++ b/package/nodejs/0.12.5/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-> @@ -0,0 +1,62 @@
-> +From d6cc10f0765c97c402b1c1be0968f9d9eb112da9 Mon Sep 17 00:00:00 2001
-> +From: Martin Bark <martin@barkynet.com>
-> +Date: Thu, 11 Jun 2015 19:25:09 +0100
-> +Subject: [PATCH 3/4] Use a python variable instead of hardcoding Python
-> +
-> +The nodejs build system uses python in a number of locations. However,
-> +there are some locations where it hardcodes 'python' as the Python
-> +interpreter. However, this causes problems when we need to use python2
-> +instead of just python.
-> +
-> +This patch fixes that by using the python variable already in place in
-> +the nodejs build system.
-> +
-> +Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +Signed-off-by: Martin Bark <martin@barkynet.com>
-
-Ditto:
-
-    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-    [Martin: adapt to 0.12.5]
-    Signed-off-by: Martin Bark <martin@barkynet.com>
-
-[--SNIP--]
-> diff --git a/package/nodejs/0.12.5/0004-fix-build-error-without-OpenSSL-support.patch b/package/nodejs/0.12.5/0004-fix-build-error-without-OpenSSL-support.patch
-> new file mode 100644
-> index 0000000..aab6a31
-> --- /dev/null
-> +++ b/package/nodejs/0.12.5/0004-fix-build-error-without-OpenSSL-support.patch
-> @@ -0,0 +1,45 @@
-> +From ce288a677d89c72c2f4cd832dc4afb2e21ae060e Mon Sep 17 00:00:00 2001
-> +From: Martin Bark <martin@barkynet.com>
-> +Date: Thu, 11 Jun 2015 19:57:40 +0100
-> +Subject: [PATCH 4/4] fix build error without OpenSSL support
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Cc: J?rg Krause <jkrause@posteo.de>
-> +Signed-off-by: Martin Bark <martin@barkynet.com>
-
-Ditto:
-
-    Signed-off-by: J?rg Krause <jkrause@posteo.de>
-    [Martin: adapt to 0.12.5]
-    Signed-off-by: Martin Bark <martin@barkynet.com>
-
-[--SNIP--]
-> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-> index 61419fd..8a8de94 100644
-> --- a/package/nodejs/Config.in
-> +++ b/package/nodejs/Config.in
-> @@ -24,18 +24,24 @@ if BR2_PACKAGE_NODEJS
->  
->  choice
->  	prompt "Node.js Version"
-> -	default BR2_BR2_PACKAGE_NODEJS_0_10_39
-> +	default BR2_BR2_PACKAGE_NODEJS_0_12_5
-
-Actually, that's semantically incorrect, even though it's technically
-working. OK, I'll explain! ;-) :
-
-You should keep both defaults
-
-    default BR2_BR2_PACKAGE_NODEJS_0_10_39 if BR2_ARM_CPU_ARMV5
-    default BR2_BR2_PACKAGE_NODEJS_0_12_5
-
-Kconfig will stop at the first default that matches its conditions, so
-in case you have an armv5, 0.10.39 will be the default; otherwise the
-default will be 0.12.5.
-
-(note that we don't care about armv4 because nodejs as a whole depends
-on !armv4.
-
-So, even though 0.12.5 is hidden for armv5, and thus can't be sledted,
-it feels wrong to have as an unconditional default (what does it mean to
-default to something that is not available?).
-
->  	help
->  	  Select the version of Node.js you wish to use.
->  
->  	config BR2_BR2_PACKAGE_NODEJS_0_10_39
->  		bool "v0.10.39"
->  
-> +	config BR2_BR2_PACKAGE_NODEJS_0_12_5
-> +		# Needs minimum of ARMv6 with VFPv2
-> +		depends on !BR2_ARM_CPU_ARMV5
-> +		bool "v0.12.5"
->  endchoice
->  
->  config BR2_PACKAGE_NODEJS_VERSION_STRING
->  	string
->  	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_39
-> +	default "0.12.5"	if BR2_BR2_PACKAGE_NODEJS_0_12_5
-> +
-
-Oh, look! An empty line! Hehe! ;-)
-
->  menu "Module Selection"
->  
->  config BR2_PACKAGE_NODEJS_NPM
-> diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-> index bc1f15f..816d602 100644
-> --- a/package/nodejs/nodejs.hash
-> +++ b/package/nodejs/nodejs.hash
-> @@ -1,2 +1,5 @@
->  # From upstream URL: http://nodejs.org/dist/v0.10.39/SHASUMS256.txt
->  sha256	68f8d8f9515c4e77e2a06034b742e19e9848c1fee5bcadedc1d68f3e4302df37  node-v0.10.39.tar.gz
-> +
-> +# From upstream URL: http://nodejs.org/dist/v0.12.5/SHASUMS256.txt
-> +sha256	4bc1e25f4c62ac65324d3cf4aa9de2d801cd708757c3567b6ad2ced7df30cdd2  node-v0.12.5.tar.gz
-
-Hash correct.
+Otherwise, what is the reason to have nodejs modules available as
+commands from a login (!) shell? (Note: nodejs-noob speaking!)
 
 Regards,
 Yann E. MORIN.
 
+> +		>$(TARGET_DIR)/etc/profile.d/node_modules.sh
+>  endef
+>  endif
+>  
 > -- 
 > 2.1.4
 > 
@@ -203,10 +80,3 @@ Yann E. MORIN.
 | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 '------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150628/f4bf6d90/attachment.asc>
