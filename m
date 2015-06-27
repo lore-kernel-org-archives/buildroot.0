@@ -1,74 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Jun 2015 12:28:04 +0200
-Subject: [Buildroot] [PATCH 2/4] toolchain: allow for stupid toolchains
-In-Reply-To: <1435340002-20396-3-git-send-email-guido@vanguardiasur.com.ar>
-References: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
- <1435340002-20396-3-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <20150627102804.GC3565@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 27 Jun 2015 07:30:34 -0300
+Subject: [Buildroot] [PATCH] iproute2: bump to version 4.1.0
+Message-ID: <1435401034-1531-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Guido, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...c-make-build-conditional-on-having-libmnl.patch | 30 ++++++++++++++++++++++
+ package/iproute2/iproute2.hash                     |  2 +-
+ package/iproute2/iproute2.mk                       |  2 +-
+ 3 files changed, 32 insertions(+), 2 deletions(-)
+ create mode 100644 package/iproute2/0001-tipc-make-build-conditional-on-having-libmnl.patch
 
-On 2015-06-26 14:33 -0300, Guido Mart?nez spake thusly:
-> check_arm_abi builds a test C file to check that the toolchain is
-> working correctly, with the output redirected to /dev/null.
-> 
-> However, some toolchains (OSELAS 2014.12.0, for instance) foolishly
-> append ".gdb" to the output filename for an intermediate file, causing
-> an attempt to write to /dev/null.gdb, which obviously fails.
-> 
-> Fix this by adding changing the output to a temporary file, which is
-> later removed along with any other "suffixed" files.
-> 
-> Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  toolchain/helpers.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 30eb065..0dc1864 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -308,12 +308,14 @@ check_arm_abi = \
->  		echo "External toolchain uses the unsuported OABI" ; \
->  		exit 1 ; \
->  	fi ; \
-> -	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o /dev/null - ; then \
-> +	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o $(BUILD_DIR)/.br-toolchain-test.tmp - ; then \
-> +		rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*; \
->  		abistr_$(BR2_ARM_EABI)='EABI'; \
->  		abistr_$(BR2_ARM_EABIHF)='EABIhf'; \
->  		echo "Incorrect ABI setting: $${abistr_y} selected, but toolchain is incompatible"; \
->  		exit 1 ; \
-> -	fi
-> +	fi ; \
-> +	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
->  
->  #
->  # Check that the external toolchain supports C++
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/iproute2/0001-tipc-make-build-conditional-on-having-libmnl.patch b/package/iproute2/0001-tipc-make-build-conditional-on-having-libmnl.patch
+new file mode 100644
+index 0000000..b03c8fb
+--- /dev/null
++++ b/package/iproute2/0001-tipc-make-build-conditional-on-having-libmnl.patch
+@@ -0,0 +1,30 @@
++From e06edc4c74569fe6bfce9f5113a780bdc1ab11ad Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Sat, 27 Jun 2015 07:24:03 -0300
++Subject: [PATCH iproute2] tipc: make build conditional on having libmnl
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ Makefile | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 67176be..8153445 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -41,7 +41,11 @@ WFLAGS += -Wmissing-declarations -Wold-style-definition -Wformat=2
++ CFLAGS := $(WFLAGS) $(CCOPTS) -I../include $(DEFINES) $(CFLAGS)
++ YACCFLAGS = -d -t -v
++ 
++-SUBDIRS=lib ip tc bridge misc netem genl tipc man
+++SUBDIRS=lib ip tc bridge misc netem genl man
+++
+++ifeq ($(HAVE_MNL),y)
+++SUBDIRS += tipc
+++endif
++ 
++ LIBNETLINK=../lib/libnetlink.a ../lib/libutil.a
++ LDLIBS += $(LIBNETLINK)
++-- 
++2.3.6
++
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 336d6b6..659e275 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,2 +1,2 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	5cd06eb1050b858b308b65705725042bb566fd261135e35a73dafb48cd632618	iproute2-4.0.0.tar.xz
++sha256	d1326696c6a8f81ba66aaf48d858005cf280c81d3284d8d2c99748e3d0746146	iproute2-4.1.0.tar.xz
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index a8f4400..023b7bf 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 4.0.0
++IPROUTE2_VERSION = 4.1.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.3.6
