@@ -1,9 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Jun 2015 00:07:51 +0200
-Subject: [Buildroot] [v2 1/6] package/nodejs: Bump version to 0.10.39
-In-Reply-To: <1435370498-25473-1-git-send-email-martin@barkynet.com>
+Date: Sun, 28 Jun 2015 00:11:12 +0200
+Subject: [Buildroot] [v2 2/6] package/nodejs: Update to allow selecting
+ node.js version
+In-Reply-To: <1435370498-25473-2-git-send-email-martin@barkynet.com>
 References: <1435370498-25473-1-git-send-email-martin@barkynet.com>
-Message-ID: <20150627220751.GB30876@free.fr>
+ <1435370498-25473-2-git-send-email-martin@barkynet.com>
+Message-ID: <20150627221112.GC30876@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,43 +16,53 @@ Martin, All,
 
 On 2015-06-27 03:01 +0100, Martin Bark spake thusly:
 > Signed-off-by: Martin Bark <martin@barkynet.com>
+[--SNIP--]
+> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+> index 3140683..61419fd 100644
+> --- a/package/nodejs/Config.in
+> +++ b/package/nodejs/Config.in
+> @@ -22,6 +22,20 @@ comment "nodejs needs a toolchain w/ C++, threads"
+>  
+>  if BR2_PACKAGE_NODEJS
+>  
+> +choice
+> +	prompt "Node.js Version"
+> +	default BR2_BR2_PACKAGE_NODEJS_0_10_39
+> +	help
+> +	  Select the version of Node.js you wish to use.
+> +
+> +	config BR2_BR2_PACKAGE_NODEJS_0_10_39
+> +		bool "v0.10.39"
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+We normally do not indent the config options in a choice block.
 
-Hash checked by Buildroot.
+> +endchoice
+> +
+> +config BR2_PACKAGE_NODEJS_VERSION_STRING
+> +	string
+> +	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_39
+>  menu "Module Selection"
+
+Missinge empty line before the menu definition.
+
+Otherwise, looks good; when you fix the above, you can add my:
+
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> Changed v1 -> v2
->   - No changes, added in v2
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> ---
->  package/nodejs/nodejs.hash | 4 ++--
->  package/nodejs/nodejs.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-> index 792ebc1..bc1f15f 100644
-> --- a/package/nodejs/nodejs.hash
-> +++ b/package/nodejs/nodejs.hash
-> @@ -1,2 +1,2 @@
-> -# From upstream URL: http://nodejs.org/dist/v0.10.38/SHASUMS256.txt
-> -sha256	513da8ed5e48abefdfab664f1cabc160238d314a0481148804aff8fc6552b78b  node-v0.10.38.tar.gz
-> +# From upstream URL: http://nodejs.org/dist/v0.10.39/SHASUMS256.txt
-> +sha256	68f8d8f9515c4e77e2a06034b742e19e9848c1fee5bcadedc1d68f3e4302df37  node-v0.10.39.tar.gz
+>  config BR2_PACKAGE_NODEJS_NPM
 > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index 5ee7714..4293c70 100644
+> index 4293c70..59e03b0 100644
 > --- a/package/nodejs/nodejs.mk
 > +++ b/package/nodejs/nodejs.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -NODEJS_VERSION = 0.10.38
-> +NODEJS_VERSION = 0.10.39
+> -NODEJS_VERSION = 0.10.39
+> +NODEJS_VERSION = $(call qstrip,$(BR2_PACKAGE_NODEJS_VERSION_STRING))
 >  NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
 >  NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
 >  NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
@@ -69,10 +81,3 @@ Yann E. MORIN.
 | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 '------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150628/b62e8c01/attachment.asc>
