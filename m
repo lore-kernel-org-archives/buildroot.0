@@ -1,73 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Jun 2015 16:10:01 +0200
-Subject: [Buildroot] [PATCH v4 1/2] packages: fix and improve support
- for top-level parallel makefile
-In-Reply-To: <CAHkwnC_QGOUJHBVr1pYk+wEfaV0u+Vdsbhe_9mhzEaRREyVV1w@mail.gmail.com>
-References: <1435291134-6780-1-git-send-email-fabio.porcedda@gmail.com>
- <1435291134-6780-2-git-send-email-fabio.porcedda@gmail.com>
- <20150626200949.64342552@free-electrons.com>
- <CAHkwnC_QGOUJHBVr1pYk+wEfaV0u+Vdsbhe_9mhzEaRREyVV1w@mail.gmail.com>
-Message-ID: <20150627161001.02b0fb43@free-electrons.com>
+Date: Sat, 27 Jun 2015 16:12:02 +0200
+Subject: [Buildroot] [PATCH 1/1] libarchive: add hash and enable lzma
+ support
+In-Reply-To: <CALoSW65dVmXMRYcbmLDutTv1ropaYg15i2Vjd1DmGpabs39ABA@mail.gmail.com>
+References: <1435330918-25695-1-git-send-email-nimaim@gmail.com>
+ <20150626212800.60e62745@free-electrons.com>
+ <CALoSW65dVmXMRYcbmLDutTv1ropaYg15i2Vjd1DmGpabs39ABA@mail.gmail.com>
+Message-ID: <20150627161202.7d65ae10@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabio,
+Dear Nimai Mahajan,
 
-On Fri, 26 Jun 2015 21:39:43 +0200, Fabio Porcedda wrote:
+On Fri, 26 Jun 2015 15:32:52 -0400, Nimai Mahajan wrote:
 
-> > On Fri, 26 Jun 2015 05:58:53 +0200, Fabio Porcedda wrote:
-> >> To fix packages that fail to build when PARALLEL_JOBS is empty instead
-> >
-> > Which packages specifically?
+> > In his review, Arnout asked you to pass --with-lzma in this case, but
+> > you forgot to do it. So I've that and applied. Thanks!
 > 
-> At least the boost and jack2 packages fail.
+> Thanks, I had seen that actually but I was trying to be consistent with the
+> other options there, which specified the package dependency (i.e. zlib)
+> followed by the configure options if it wasnt selected (i.e. without-zlib).
+> But point taken.
 
-Ok, this should probably been indicated in the commit log, in order to
-make it more specific than "To fix 'packages'".
+In general, when Arnout makes a suggestion, he is right :-)
 
+In this specific case, the rest of libarchive.mk is in fact not good,
+and should be changed to explicitly pass --with-<foo>.
 
-> The good thing about GNU Make jobs is that the number of jobs
-> available are shared between each instance of make so if you want to
-> increase the number of jobs you just need to increase the <jobs> value
-> in  the top make -j<jobs> command.
-> 
-> e.g. 2 in top-level and 2 in each package, the actual cpu utilization
-> start from 1 to 4.
-> Using 4 in top-level and let make share the jobs for each packages the
-> cpu utilization start from 1 to 4 but you have a higher chance to use
-> 4 processor because in this case you can have:
-> 
-> - 4 packages that use make1
-> or
-> - 1 package that use make but it actually use 4 processor himself
-> or
-> - 3 extract operation and 1 package that use make1
-> 
-> 
-> Another example, you have 8 cores, you use top-make -j8 and sub-make -j8.
-> This time the number of processes goes up to 64 that it's not good,
-> too much process take more time to be completed.
-> In my tests on a cpu with 8 cores -j16 is slower than -j9.
-> 
-> So I think it's better to let gnu make handle the jobs distribution.
-
-Ah, I didn't know this. This is a very good explanation! Why isn't it
-part of the commit log? It very clearly explains why we want to not
-pass any -j option to the sub-makes used to build the packages.
-
-However, I don't see how it properly fixes the packages that are
-directly using PARALLEL_JOBS. Yes, now, PARALLEL_JOBS is no longer
-empty. But it's going to be number of CPU + 1, which is not good when
-we're doing top-level parallel job, as you explained very well. So why
-would all make-based packages be built with "make", and packages using
-special build systems (midori, qt, qt5, jack2, cmake, boost) would
-still use a PARALLEL_JOBS number higher than 1. What is your plan to
-solve this problem?
-
-Thanks a lot!
+Best regards,
 
 Thomas
 -- 
