@@ -1,54 +1,68 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 27 Jun 2015 11:21:11 +0200
-Subject: [Buildroot] [PATCH] ARC: switch to RC1 of upcoming arc-2015.06
- tools
-In-Reply-To: <1435346840-9677-1-git-send-email-abrodkin@synopsys.com>
-References: <1435346840-9677-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150627092110.GI31780@waldemar-brodkorb.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Jun 2015 12:24:10 +0200
+Subject: [Buildroot] [PATCH 1/4] arm: update processor types
+In-Reply-To: <1435340002-20396-2-git-send-email-guido@vanguardiasur.com.ar>
+References: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1435340002-20396-2-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <20150627102410.GB3565@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexey,
-Alexey Brodkin wrote,
+Guido, All,
 
-> Even though this is only RC1 it's been heavily used internally so it should
-> not be any worse than existing arc-2014.12.
+On 2015-06-26 14:33 -0300, Guido Mart?nez spake thusly:
+> Add the Cortex M3 variant. These microcontrollers don't support regular
+> ARM instructions and don't have an MMU.
 > 
-> Moreover this relase (and so its RC1) finally delivers support of NPTL
-> for ARC in uClibc.
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index 15a590f..32c356a 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -33,6 +33,7 @@ choice
->  		bool "uClibc Git ARC"
->  		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
->  		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
-> +		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL
->  		depends on BR2_arc
->  
->  	config BR2_UCLIBC_VERSION_NG
-> @@ -41,7 +42,7 @@ choice
->  		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
->  		       if BR2_m68k || BR2_arm || BR2_armeb
->  		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
-> -		       if !BR2_arc && !BR2_m68k && !BR2_x86_i386
-> +		       if !BR2_m68k && !BR2_x86_i386
->  
->  	config BR2_UCLIBC_VERSION_SNAPSHOT
->  		bool "daily snapshot"
-> @@ -63,7 +64,7 @@ config BR2_USE_UCLIBC_SNAPSHOT
->  config BR2_UCLIBC_VERSION_STRING
->  	string
->  	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
-> -	default "arc-2014.12" if BR2_UCLIBC_VERSION_ARC_GIT
-> +	default "arc-2015.06-rc1" if BR2_UCLIBC_VERSION_ARC_GIT
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
 
-Is there any reason uClibc-ng 1.0.3 can not be used as default?
-Do you have pending patches for ARC?
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-best regards
- Waldemar
+Regards,
+Yann E. MORIN.
+
+> ---
+>  arch/Config.in.arm | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+> index a2f00d2..9aa23a3 100644
+> --- a/arch/Config.in.arm
+> +++ b/arch/Config.in.arm
+> @@ -146,6 +146,10 @@ config BR2_cortex_a15
+>  	select BR2_ARM_CPU_HAS_THUMB2
+>  	select BR2_ARM_CPU_ARMV7A
+>  	select BR2_ARCH_HAS_MMU_OPTIONAL
+> +config BR2_cortex_m3
+> +	bool "cortex-M3"
+> +	select BR2_ARM_CPU_HAS_THUMB
+> +	select BR2_ARM_CPU_HAS_THUMB2
+>  config BR2_fa526
+>  	bool "fa526/626"
+>  	select BR2_ARM_CPU_HAS_ARM
+> @@ -408,6 +412,7 @@ config BR2_GCC_TARGET_CPU
+>  	default "cortex-a9"	if BR2_cortex_a9
+>  	default "cortex-a12"	if BR2_cortex_a12
+>  	default "cortex-a15"	if BR2_cortex_a15
+> +	default "cortex-m3"	if BR2_cortex_m3
+>  	default "fa526"		if BR2_fa526
+>  	default "marvell-pj4"	if BR2_pj4
+>  	default "strongarm"	if BR2_strongarm
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
