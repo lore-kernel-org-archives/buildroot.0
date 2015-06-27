@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Jun 2015 12:24:10 +0200
-Subject: [Buildroot] [PATCH 1/4] arm: update processor types
-In-Reply-To: <1435340002-20396-2-git-send-email-guido@vanguardiasur.com.ar>
+Date: Sat, 27 Jun 2015 12:28:04 +0200
+Subject: [Buildroot] [PATCH 2/4] toolchain: allow for stupid toolchains
+In-Reply-To: <1435340002-20396-3-git-send-email-guido@vanguardiasur.com.ar>
 References: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
- <1435340002-20396-2-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <20150627102410.GB3565@free.fr>
+ <1435340002-20396-3-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <20150627102804.GC3565@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,9 +14,17 @@ To: buildroot@busybox.net
 Guido, All,
 
 On 2015-06-26 14:33 -0300, Guido Mart?nez spake thusly:
-> Add the Cortex M3 variant. These microcontrollers don't support regular
-> ARM instructions and don't have an MMU.
+> check_arm_abi builds a test C file to check that the toolchain is
+> working correctly, with the output redirected to /dev/null.
 > 
+> However, some toolchains (OSELAS 2014.12.0, for instance) foolishly
+> append ".gdb" to the output filename for an intermediate file, causing
+> an attempt to write to /dev/null.gdb, which obviously fails.
+> 
+> Fix this by adding changing the output to a temporary file, which is
+> later removed along with any other "suffixed" files.
+> 
+> Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -25,32 +33,30 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  arch/Config.in.arm | 5 +++++
->  1 file changed, 5 insertions(+)
+>  toolchain/helpers.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index a2f00d2..9aa23a3 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -146,6 +146,10 @@ config BR2_cortex_a15
->  	select BR2_ARM_CPU_HAS_THUMB2
->  	select BR2_ARM_CPU_ARMV7A
->  	select BR2_ARCH_HAS_MMU_OPTIONAL
-> +config BR2_cortex_m3
-> +	bool "cortex-M3"
-> +	select BR2_ARM_CPU_HAS_THUMB
-> +	select BR2_ARM_CPU_HAS_THUMB2
->  config BR2_fa526
->  	bool "fa526/626"
->  	select BR2_ARM_CPU_HAS_ARM
-> @@ -408,6 +412,7 @@ config BR2_GCC_TARGET_CPU
->  	default "cortex-a9"	if BR2_cortex_a9
->  	default "cortex-a12"	if BR2_cortex_a12
->  	default "cortex-a15"	if BR2_cortex_a15
-> +	default "cortex-m3"	if BR2_cortex_m3
->  	default "fa526"		if BR2_fa526
->  	default "marvell-pj4"	if BR2_pj4
->  	default "strongarm"	if BR2_strongarm
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 30eb065..0dc1864 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -308,12 +308,14 @@ check_arm_abi = \
+>  		echo "External toolchain uses the unsuported OABI" ; \
+>  		exit 1 ; \
+>  	fi ; \
+> -	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o /dev/null - ; then \
+> +	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o $(BUILD_DIR)/.br-toolchain-test.tmp - ; then \
+> +		rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*; \
+>  		abistr_$(BR2_ARM_EABI)='EABI'; \
+>  		abistr_$(BR2_ARM_EABIHF)='EABIhf'; \
+>  		echo "Incorrect ABI setting: $${abistr_y} selected, but toolchain is incompatible"; \
+>  		exit 1 ; \
+> -	fi
+> +	fi ; \
+> +	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
+>  
+>  #
+>  # Check that the external toolchain supports C++
 > -- 
 > 2.1.4
 > 
