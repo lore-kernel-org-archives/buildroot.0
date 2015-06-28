@@ -1,34 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Jun 2015 14:26:23 +0200
-Subject: [Buildroot] [PATCH] enlightment: xtensa workaround no longer
- required
-In-Reply-To: <20150626184150.GA26274@waldemar-brodkorb.de>
-References: <20150626184150.GA26274@waldemar-brodkorb.de>
-Message-ID: <20150628142623.0bdee571@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 28 Jun 2015 14:27:29 +0200
+Subject: [Buildroot] [PATCH] core/pkg-generic: sanitise FOO_OVERRIDE_SRCDIR
+Message-ID: <1435494449-12837-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+In case FOO_OVERRIDE_SRCDIR has trailing spaces, like so:
+    FOO_OVERRIDE_SRCDIR = /path/to/sources\x20
 
-On Fri, 26 Jun 2015 20:41:50 +0200, Waldemar Brodkorb wrote:
-> With the update to uClibc-ng 1.0.3, this is no longer needed,
-> as the problem is fixed upstream.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+we would end up with a rsync command like so:
+    rsync -au /path/to/sources / /path/to/build/foo
 
-We have an external Xtensa toolchain in the autobuilders, see
-http://autobuild.buildroot.org/toolchains/configs/br-xtensa-full.config.
-It has been built with Buildroot 2015.05, so I believe it was already
-using uClibc-ng. Can you just confirm that this package builds fine
-with this toolchain?
+which would effectively rsync the whole vfs, eventually filling the
+whole disk... :-(
 
-Best regards,
+So, just qstrip the variable before use.
 
-Thomas
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index d5b29f0..9fe01b8 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -102,7 +102,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+ 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+ 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+ 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+-	rsync -au $(RSYNC_VCS_EXCLUSIONS) $(SRCDIR)/ $(@D)
++	rsync -au $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+ 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
