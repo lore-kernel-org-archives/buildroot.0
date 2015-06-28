@@ -1,67 +1,78 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 28 Jun 2015 09:14:17 +0200
-Subject: [Buildroot] [PATCH] uclibc: deprecate locale support
-Message-ID: <20150628071417.GA13377@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 Jun 2015 11:50:01 +0200
+Subject: [Buildroot] Buildroot runtime test infrastructure prototype
+In-Reply-To: <499323654.2188387.1435335633378.JavaMail.root@openwide.fr>
+References: <558D745D.6010606@andin.de>
+ <499323654.2188387.1435335633378.JavaMail.root@openwide.fr>
+Message-ID: <20150628115001.098430d1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The quality of the locale implementation in uClibc seems
-to be bad. Recently a discussion on the uClibc mailinglist
-showed that the uClibc maintainer has no time to fix
-remaining issues in the locale implementation.
-http://lists.uclibc.org/pipermail/uclibc/2015-June/049000.html
+Jeremy,
 
-Because of the bad state of the code I would like to deprecate
-it. I never used it myself and see no good reason why I would
-need it for an embedded system.
+On Fri, 26 Jun 2015 18:20:33 +0200 (CEST), Jeremy Rosen wrote:
 
-I believe not many people are using it. For good working
-locale support there is still GNU libc and musl.
+> more answers in the mail below, but we have a trainee working on an
+> automated test framework based on "Robot Framework" this summer and
+> we planned to upstream it when we have something to show...
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- Config.in.legacy         |    6 ++++++
- package/uclibc/Config.in |    8 --------
- 2 files changed, 6 insertions(+), 8 deletions(-)
+In fact, when I started working on this runtime test infrastructure, I
+also posted on Google Plus about the available frameworks, and one of
+the answers was Robot Framework. So I had a quick look, and definitely
+could not understand how it can work: you are apparently not writing
+the tests in some real programming language, but in some sort of weird
+"tabular" format. I really don't understand how you can express
+complicated test scenarios with such a limited language.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index d86d585..1814acb 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,12 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.08"
- 
-+config BR2_TOOLCHAIN_BUILDROOT_LOCALE
-+	bool "Toolchain locale/i18n setting removed"
-+	select BR2_LEGACY
-+	help
-+	  uClibc locale support have been removed.
-+
- config BR2_TARGET_UBOOT_NETWORK
- 	bool "U-Boot custom network settings removed"
- 	select BR2_LEGACY
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 15a590f..03d7171 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -100,14 +100,6 @@ config BR2_TOOLCHAIN_BUILDROOT_WCHAR
- 	  wide characters (i.e characters longer than 8 bits, needed
- 	  for locale support).
- 
--config BR2_TOOLCHAIN_BUILDROOT_LOCALE
--	bool "Enable toolchain locale/i18n support"
--	select BR2_TOOLCHAIN_BUILDROOT_WCHAR
--	select BR2_ENABLE_LOCALE
--	help
--	  Enable this option if you want your toolchain to support
--	  localization and internationalization.
--
- choice
- 	prompt "Thread library implementation"
- 	default BR2_PTHREADS_NATIVE if BR2_UCLIBC_VERSION_SUPPORTS_NPTL
+The Python unittest stuff just runs Python code, so you can express
+whatever complicated test logic you want.
+
+> Our approch was mainly to have each package (on the buildroot side
+> have its own RFW scriptlet and have buildroot assemble these 
+> scriptlets at make time to provide a test for the resulting system
+> that would only contain the tests for whatever package was actually
+> compiled in.
+
+At some point I indeed though of having some per-package test cases
+directly in package/<foo>/, for each package. But you also anyway need
+to describe a complete Buildroot configuration for each test, in order
+to have a complete system that actually boots and make sense.
+
+And in fact, testing packages is not the only target of this "runtime
+test infrastructure". I also want to validate core features like rootfs
+overlay, post-build script, users/permission/device table, the myriad
+possibilities of Linux kernel building, global patch directories, etc.
+
+For example, not later than this week, I discovered that if you write:
+
+FOO_OVERRIDE_SRCDIR = /path/to/sources/ 
+
+Buildroot will rsync your *entire* root filesystem in
+output/build/foo-custom/ if you had the crazy idea of leaving a
+trailing space at the end of /path/to/sources.
+
+> At this point it would be possible for us to switch back to any test
+> framework if RFW is not the one the buildroot project wants to use
+> but I personally think that RFW is really a good framework for high
+> level system testing (opposed to single-software unit testing) it
+> is very simple to learn by looking at examples, the keyword approch
+> is very readable and adding our own modules in python is fairly 
+> easy
+
+Do you have examples on what the RFW test cases for Buildroot look like?
+
+I've released my code with the intent that others can have a look and
+get a clear view of what the prototype looks like. Without seeing how
+it looks with RFW, I can't really make up my mind on whether it is a
+good alternate solution or not.
+
+Best regards,
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
