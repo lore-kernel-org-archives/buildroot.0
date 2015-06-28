@@ -1,96 +1,86 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun, 28 Jun 2015 17:51:00 +0200
-Subject: [Buildroot] [RFC v3 00/30] Add per-package staging feature
-In-Reply-To: <55820390.2070708@mind.be>
-References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
- <20150303142901.5998a72c@free-electrons.com> <54F8DD53.3060000@mind.be>
- <CAHkwnC9wQZj6YxexYEt2fuZaeK_GD-S_BTg45wTcr9ZiLyKeKg@mail.gmail.com>
- <55820390.2070708@mind.be>
-Message-ID: <CAHkwnC-nw6rSFLHOx5-A-k-zQS78zxzL9NLFRmhKK5k92RuYvw@mail.gmail.com>
+Date: Sun, 28 Jun 2015 18:26:07 +0200
+Subject: [Buildroot] [PATCH v4 1/2] packages: fix and improve support
+ for top-level parallel makefile
+In-Reply-To: <20150627161001.02b0fb43@free-electrons.com>
+References: <1435291134-6780-1-git-send-email-fabio.porcedda@gmail.com>
+ <1435291134-6780-2-git-send-email-fabio.porcedda@gmail.com>
+ <20150626200949.64342552@free-electrons.com>
+ <CAHkwnC_QGOUJHBVr1pYk+wEfaV0u+Vdsbhe_9mhzEaRREyVV1w@mail.gmail.com>
+ <20150627161001.02b0fb43@free-electrons.com>
+Message-ID: <CAHkwnC8mO6jQJnjMgbV_bYUy4StkkCuL38O9jZu19fRijK426A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 18, 2015 at 1:32 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 03/14/15 17:15, Fabio Porcedda wrote:
->> On Thu, Mar 5, 2015 at 11:48 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> [snip]
->>>  However, I don't like at all the approach of passing the custom -I and -L
->>> flags. I think it's much better to start with something that was suggested
->>> before in the BR developer meeting: use the toolchain wrapper also for the
->>> internal toolchain. Then we can pass the per-package staging dir through the
->>> environment, and use it in the --sysroot argument of the compiler.
->>>
->>>  We'll also have to do something about ccache then - that could be a problem.
->>> Perhaps ccache should be called from within the wrapper as well, that may solve
->>> a bunch of other ccache problems.
+On Sat, Jun 27, 2015 at 4:10 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello Fabio,
+>
+> On Fri, 26 Jun 2015 21:39:43 +0200, Fabio Porcedda wrote:
+>
+>> > On Fri, 26 Jun 2015 05:58:53 +0200, Fabio Porcedda wrote:
+>> >> To fix packages that fail to build when PARALLEL_JOBS is empty instead
+>> >
+>> > Which packages specifically?
 >>
->> Using an internal wrapper we can also pass pass the -I and -L
->> automatically like the --sysroot option?
+>> At least the boost and jack2 packages fail.
 >
->  Yes we can. Of course, the path to the package sysroot has to be passed through
-> the environment.
->
+> Ok, this should probably been indicated in the commit log, in order to
+> make it more specific than "To fix 'packages'".
+
+Ok
+
+>> The good thing about GNU Make jobs is that the number of jobs
+>> available are shared between each instance of make so if you want to
+>> increase the number of jobs you just need to increase the <jobs> value
+>> in  the top make -j<jobs> command.
 >>
->> If we use a per-package sysroot we need to copy the sysroot directory
->> too, because the size of a uclibc sysroot is at least 11MB (if i
->> remember correctly the size of a glibc sysroot is something like
->> 40MB), so if we copy without using hard links, it will take at least
->> 10MB up to 40MB for every package.
+>> e.g. 2 in top-level and 2 in each package, the actual cpu utilization
+>> start from 1 to 4.
+>> Using 4 in top-level and let make share the jobs for each packages the
+>> cpu utilization start from 1 to 4 but you have a higher chance to use
+>> 4 processor because in this case you can have:
 >>
->> The size of the output directory of a defconfig + allyespackageconfig is 11GB.
->> IMHO we have the following choices:
->> a) common sysroot & per-package staging & without hard links
->>   - the -I -L options are passed trough the toolchain wrapper
->>   - output size is 16GB (11GB+5GB)
->
->  Where does the 5GB come from? Experimental evidence from running this series?
-
-If i remember correctly this was calculated from experimental evidence.
-
->>   - no side effects to fear, because hard links are not used
->> b) per-package sysroot & without hard links
->>   - sysroot are passed trough the toolchain wrapper
->>   - output size will be 16GB plus 11MB * 694 = 16GB + 7GB = 23 GB
->>   - no side effects to fear, because hard links are not used
->> c) per-package sysroot & with hard links for toolchain
->>  - sysroot are passed trough the toolchain wrapper
->>   - output size will be 16GB
->>   - side effects to fear for the toolchain files because hard links
->> are used for them
->> d) per-package sysroot & with hard links for all files
->>  - sysroot are passed trough the toolchain wrapper
->>   - output size will be 11GB, so no increased size
->>   - side effects to fear because hard links are used
->
->  Actually I'm not really concerned about the size, even if it's more than
-> doubled by this feature. We use factors less space than yocto so we can afford
-> to double it :-)
->
->  I'm more concerned about the time penalty of copying things around all the
-> time. So in that respect, option a) or d) are more attractive. But even creating
-> all the hardlinks takes a lot of time (probably not that much faster than copying).
-
-I've made some tests about this, i will send those numbers with the
-updated patch set.
-
->  A completely wild alternative is to build and use unionfs-fuse, but that
-> requires fusermount to be properly installed on the host. Can we assume that?
-
-Good question, maybe requiring fusermount is fine, but  I don't know
-unionfs-fuse so i don't how much it is a viable solution.
-
+>> - 4 packages that use make1
+>> or
+>> - 1 package that use make but it actually use 4 processor himself
+>> or
+>> - 3 extract operation and 1 package that use make1
 >>
->> The cheaper one with almost no size and speed penalization is d) but
->> if some file is overwritten other package sysroot could be affected.
->> Maybe we can prevent the overwriting by removing the write permission
->> on staging files?
+>>
+>> Another example, you have 8 cores, you use top-make -j8 and sub-make -j8.
+>> This time the number of processes goes up to 64 that it's not good,
+>> too much process take more time to be completed.
+>> In my tests on a cpu with 8 cores -j16 is slower than -j9.
+>>
+>> So I think it's better to let gnu make handle the jobs distribution.
 >
->  Yep, that's an option. It can actually be done while rsyncing.
+> Ah, I didn't know this. This is a very good explanation! Why isn't it
+> part of the commit log? It very clearly explains why we want to not
+> pass any -j option to the sub-makes used to build the packages.
 
-Right, I've used rsync for creating hard links in my updated patch set.
+Ok i will add it.
+
+> However, I don't see how it properly fixes the packages that are
+> directly using PARALLEL_JOBS. Yes, now, PARALLEL_JOBS is no longer
+> empty. But it's going to be number of CPU + 1, which is not good when
+> we're doing top-level parallel job, as you explained very well. So why
+> would all make-based packages be built with "make", and packages using
+> special build systems (midori, qt, qt5, jack2, cmake, boost) would
+> still use a PARALLEL_JOBS number higher than 1. What is your plan to
+> solve this problem?
+
+The ideal solution is that those special build systems are capable to
+use the jobs server of gnu make, but that is not an easy feat.
+
+IMHO the pragmatical solution is to avoid the worst case, even if
+using CPU+1 is not the optimal solution, it's still better than using
+an inferior number and risking to leave some cpu idling.
+In other words the excessive cpu utilization is less harmful than
+under utilizing cpus.
 
 BR
 -- 
