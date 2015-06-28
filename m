@@ -1,87 +1,52 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun, 28 Jun 2015 18:26:07 +0200
-Subject: [Buildroot] [PATCH v4 1/2] packages: fix and improve support
- for top-level parallel makefile
-In-Reply-To: <20150627161001.02b0fb43@free-electrons.com>
-References: <1435291134-6780-1-git-send-email-fabio.porcedda@gmail.com>
- <1435291134-6780-2-git-send-email-fabio.porcedda@gmail.com>
- <20150626200949.64342552@free-electrons.com>
- <CAHkwnC_QGOUJHBVr1pYk+wEfaV0u+Vdsbhe_9mhzEaRREyVV1w@mail.gmail.com>
- <20150627161001.02b0fb43@free-electrons.com>
-Message-ID: <CAHkwnC8mO6jQJnjMgbV_bYUy4StkkCuL38O9jZu19fRijK426A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 Jun 2015 20:12:30 +0200
+Subject: [Buildroot] [RFC v3 00/30] Add per-package staging feature
+In-Reply-To: <CAHkwnC8YPier_a5Jbn3MVoFROj_TtGmxqsXC7aA2-J0UiAgO5w@mail.gmail.com>
+References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
+ <20150612221456.44a97ad5@free-electrons.com>
+ <CAHkwnC_J+7jXL7RT=7-HDhg3S-0ketM3p4VZs9cC0BUA6_qNpg@mail.gmail.com>
+ <20150615111757.03ec0b48@free-electrons.com>
+ <CAHkwnC8YPier_a5Jbn3MVoFROj_TtGmxqsXC7aA2-J0UiAgO5w@mail.gmail.com>
+Message-ID: <20150628201230.066d6ed2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jun 27, 2015 at 4:10 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello Fabio,
->
-> On Fri, 26 Jun 2015 21:39:43 +0200, Fabio Porcedda wrote:
->
->> > On Fri, 26 Jun 2015 05:58:53 +0200, Fabio Porcedda wrote:
->> >> To fix packages that fail to build when PARALLEL_JOBS is empty instead
->> >
->> > Which packages specifically?
->>
->> At least the boost and jack2 packages fail.
->
-> Ok, this should probably been indicated in the commit log, in order to
-> make it more specific than "To fix 'packages'".
+Hello,
 
-Ok
+On Sun, 28 Jun 2015 17:33:21 +0200, Fabio Porcedda wrote:
 
->> The good thing about GNU Make jobs is that the number of jobs
->> available are shared between each instance of make so if you want to
->> increase the number of jobs you just need to increase the <jobs> value
->> in  the top make -j<jobs> command.
->>
->> e.g. 2 in top-level and 2 in each package, the actual cpu utilization
->> start from 1 to 4.
->> Using 4 in top-level and let make share the jobs for each packages the
->> cpu utilization start from 1 to 4 but you have a higher chance to use
->> 4 processor because in this case you can have:
->>
->> - 4 packages that use make1
->> or
->> - 1 package that use make but it actually use 4 processor himself
->> or
->> - 3 extract operation and 1 package that use make1
->>
->>
->> Another example, you have 8 cores, you use top-make -j8 and sub-make -j8.
->> This time the number of processes goes up to 64 that it's not good,
->> too much process take more time to be completed.
->> In my tests on a cpu with 8 cores -j16 is slower than -j9.
->>
->> So I think it's better to let gnu make handle the jobs distribution.
->
-> Ah, I didn't know this. This is a very good explanation! Why isn't it
-> part of the commit log? It very clearly explains why we want to not
-> pass any -j option to the sub-makes used to build the packages.
+> > Good. We'll see how it looks. So now the per-package sysroot also
+> > contains the C library and kernel headers as well? It's really a
+> > complete sysroot?
+> 
+> Yes, i copy the whole directory ${STAGING_DIR}, e.g.
+> output/host/usr/arm-buildroot-linux-gnueabi/sysroot
 
-Ok i will add it.
+Ok. When you say "whole", you say that you also "package" what the
+toolchain installs, and create a complete sysroot from scratch for each
+package being built, including for the toolchain libs/headers ?
 
-> However, I don't see how it properly fixes the packages that are
-> directly using PARALLEL_JOBS. Yes, now, PARALLEL_JOBS is no longer
-> empty. But it's going to be number of CPU + 1, which is not good when
-> we're doing top-level parallel job, as you explained very well. So why
-> would all make-based packages be built with "make", and packages using
-> special build systems (midori, qt, qt5, jack2, cmake, boost) would
-> still use a PARALLEL_JOBS number higher than 1. What is your plan to
-> solve this problem?
+> > I'm indeed fine with solving this part as a next step, however, I'd
+> > like to at least have some basic ideas of how it will be solved, to see
+> > the big picture and see if solving the big picture is doable.
+> 
+> My idea is to solve it in the same way as the staging directory,
+> copying the whole "output/host" directory expect for the sysroot part
+> if it is a host package.
+> Or maybe there is better way to do it?
 
-The ideal solution is that those special build systems are capable to
-use the jobs server of gnu make, but that is not an easy feat.
+Again, when you say "whole", you also separate in multiple host dirs
+whatever is installed by each package, and then create a custom
+host dir when each package is being built, containing only the
+dependencies that it needs?
 
-IMHO the pragmatical solution is to avoid the worst case, even if
-using CPU+1 is not the optimal solution, it's still better than using
-an inferior number and risking to leave some cpu idling.
-In other words the excessive cpu utilization is less harmful than
-under utilizing cpus.
+Best regards,
 
-BR
+Thomas
 -- 
-Fabio Porcedda
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
