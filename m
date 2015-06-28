@@ -1,91 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Jun 2015 00:25:14 +0200
-Subject: [Buildroot] [pull request] raspberrypi: update packages and
-	defconfigs
-Message-ID: <cover.1435529863.git.yann.morin.1998@free.fr>
+Date: Mon, 29 Jun 2015 00:25:12 +0200
+Subject: [Buildroot] [PATCH 03/11] package/rpi-firmware: add option to
+	install vcdbg
+In-Reply-To: <cover.1435529863.git.yann.morin.1998@free.fr>
+References: <cover.1435529863.git.yann.morin.1998@free.fr>
+Message-ID: <25be3e9b3870c3da9f16aa6bb24eedcfcf1c4892.1435529863.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+vcdbg is a tool to help debug the communication with the GPU.
+It comes as a binary-only, and in two flavours: one for the hard
+floating point ABI, one for the software floating poitn ABI.
 
-This series updates our support for the RaspberryPi line of boards:
-RaspberryPi models A and B, A+ and B+, and model 2 B.
+Unfortunately, we have no source code for that tool, only a binary
+that was dynamically linked with glibc and libraries from rpi-userland.
 
-Patch 1 reinstates the Kconfig knob to install the DTBs, as the ones
-from rpi-firmware are kernel-version specific, and can't be used with
-kernels >= 3.19 (boot hangs because no root device found).
+So, just install that executable, and let's hope there is no symbol
+issue at runtime.
 
-Patch 2 adds an option to intall the DTB overlays. They are bundled in
-source form in thre kernel tree, but Buildroot lacks the infra to build
-DT overlays in the kernel, so we install them from rpi-firmware.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc; Floris Bos <bos@je-eigen-domein.nl>
+Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
+---
+ package/rpi-firmware/Config.in       | 9 +++++++++
+ package/rpi-firmware/rpi-firmware.mk | 7 +++++++
+ 2 files changed, 16 insertions(+)
 
-Patch 3 adds the option to install a utility to diagnmose issues when
-talking to the GPU (useful to debug DT-related issues... when booted!)
-
-Patches 4-5 update our rpi-firmware and rpi-userland packages. Nothing
-tremenduously interesting, though, except the usual fixes and small
-improvement for new hardware support.
-
-Patches 6-10 update our defconfig files and drops the defconfig without
-DT support.
-
-Patch 11 update the board instructions.
-
-Thanks to Floris and Pascal for their initial works! :-)
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 70ad172e6e50d739f723c6000b0714799eff21fe:
-
-  libpng: rebase ignore-symbol-prefix patch to apply cleanly (2015-06-28 23:05:36 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/rpi
-
-for you to fetch changes up to e2dbaf3e7a9135b57d2e90c3e70380bd0ec56187:
-
-  boards/raspberrypi: update instructions (2015-06-28 23:48:12 +0200)
-
-----------------------------------------------------------------
-Floris Bos (1):
-      rpi-firmware: allow disabling installation of binary DTBs
-
-Yann E. MORIN (10):
-      package/rpi-firmware: add option to install DTB overlays
-      package/rpi-firmware: add option to install vcdbg
-      package/rpi-firmware: bump version
-      package/rpi-userland: bump version
-      configs/raspberrypi: update the DT-enabled config
-      configs/raspberrypi_plus: new defconfig
-      configs/raspberrypi2: update our defconfig
-      config/raspberrypi: remove non-DT defconfig
-      config/raspberrypi: rename our defconfig files
-      boards/raspberrypi: update instructions
-
- board/raspberrypi/linux-3.18-rpi-dt.defconfig | 204 --------------------------
- board/raspberrypi/readme.txt                  |  48 +++---
- configs/raspberrypi2_defconfig                |  16 +-
- configs/raspberrypi_defconfig                 |  26 ++--
- configs/raspberrypi_dt_defconfig              |  20 ---
- configs/raspberrypi_plus_defconfig            |  27 ++++
- package/rpi-firmware/Config.in                |  29 ++++
- package/rpi-firmware/rpi-firmware.mk          |  17 ++-
- package/rpi-userland/rpi-userland.mk          |   2 +-
- 9 files changed, 124 insertions(+), 265 deletions(-)
- delete mode 100644 board/raspberrypi/linux-3.18-rpi-dt.defconfig
- delete mode 100644 configs/raspberrypi_dt_defconfig
- create mode 100644 configs/raspberrypi_plus_defconfig
-
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index a060b4e..d1856f0 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -65,4 +65,13 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 	  Say 'y' here if you need to load one or more of the DTB overlays,
+ 	  to support HATs (Hardware Attached on Top, add-on modules).
+ 
++config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
++	bool "vcdbg"
++	depends on BR2_PACKAGE_RPI_USERLAND
++	help
++	  Install vcdbg, to help debug communication with the GPU.
++
++comment "vcdbg needs rpi-userland"
++	depends on !BR2_PACKAGE_RPI_USERLAND
++
+ endif # BR2_PACKAGE_RPI_FIRMWARE
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 0533588..65ee6fb 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -29,6 +29,13 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
++define RPI_FIRMWARE_INSTALL_TARGET_CMDS
++	$(INSTALL) -d -m 0700 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/bin/vcdbg \
++		$(TARGET_DIR)/usr/sbin/vcdbg
++endef
++endif # INSTRALL_VCDBG
++
+ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
