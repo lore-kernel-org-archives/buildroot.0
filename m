@@ -1,108 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Jun 2015 22:34:41 +0200
-Subject: [Buildroot] [RFC v4 00/16]  Add per-package staging feature
-In-Reply-To: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150628223441.306836e7@free-electrons.com>
+Date: Sun, 28 Jun 2015 22:39:29 +0200
+Subject: [Buildroot] [PATCH 3/3] python-magic: new package
+In-Reply-To: <1434362765-1074-4-git-send-email-denis.thulin@openwide.fr>
+References: <1434362765-1074-1-git-send-email-denis.thulin@openwide.fr>
+ <1434362765-1074-4-git-send-email-denis.thulin@openwide.fr>
+Message-ID: <20150628223929.1c9bbf68@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Denis,
 
-I haven't looked at the implementation yet, so I'll just comment on the
-results.
+On Mon, 15 Jun 2015 12:06:05 +0200, Denis THULIN wrote:
 
-On Sun, 28 Jun 2015 21:42:34 +0200, Fabio Porcedda wrote:
+> diff --git a/package/python-magic/Config.in b/package/python-magic/Config.in
+> new file mode 100644
+> index 0000000..e6c06b9
+> --- /dev/null
+> +++ b/package/python-magic/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_MAGIC
+> +	depends on BR2_PACKAGE_PYTHON
 
-> To improve performance and reduce space utilization hard links are used.
-> 
-> To evaluate performance and space utilization I've done some tests.
-> 
-> HW-MED:
-> CPU: Intel i7-4790K (4x2 @4GHz) = 8 threads
-> RAM: 16GB
-> SSD: 512GB
-> 
-> HW-HIGH:
-> CPU: 2 x Xeon 2620v3 (6x2 @2.40Ghz) = 24 threads
-> RAM: 32GB
-> SATA: RAID0 2x2TB 3.5" 7200rpm
-> 
-> 
-> defconfig-small, long chain dependency, unfavorable  scenario for parallelization:
-> 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_XSERVER_XORG_SERVER=y
-> BR2_PACKAGE_LIBGTK3=y
-> 
-> defconfig-full:
->   BR2_arm=y
->   BR2_TOOLCHAIN_EXTERNAL=y
-> make allyespackageconfig
-> Also i removed few packages that do not built on my system.
-> make show-targets | wc -w
-> 1366
-> 
-> Test about output using hard links or note using the "defconfig-full"
-> on HW-MED:
-> 
-> |  35GB |  99m | master branch
-> |  37GB | 100m | patch set             
-> | 153GB | 105m | patch set using hard links only for the toolchain sysroot
-> | 225GB | 106m | patch set not using hardlinks at all
+According to https://pypi.python.org/pypi/python-magic and my own
+tests, it seems that python-magic works with Python 3, so this
+dependency is not needed.
 
-So clearly hardlinks are great, as they limit a lot the increase of
-disk usage. Going from 35 GB to 37 GB for a full defconfig is quite
-reasonable IMO, especially considering the additional safety wrt
-optional dependencies that per-package staging gives (even without
-considering the top-level parallel build feature).
+However, you're missing the runtime dependency on libmagic, which is
+provided in Buildroot with the file package. Indeed python-magic is
+just a small wrapper around the libmagic C library: all what
+python-magic does is open/use libmagic through the ctypes module.
 
-Also, I guess you are keeping all the temporary per-package staging
-directories, right? We could probably save even more disk-space by
-getting rid of the per-package staging areas after each package is
-built (but that would be this per-package staging area would have to be
-re-created every time you do "make <pkg>-rebuild", which isn't nice).
+So, you need something like:
 
-> Test about performances of this patch set vs master branch:
-> | 199m | HW-MED | defconfig-full | master branch | no top-level make |
-> |  99m | HW-MED | defconfig-full | master branch | top-level make    | 
-> | 100m | HW-MED | defconfig-full | patch set     | top-level make    |
-> 
-> | 350m | HW-HIGH | defconfig-full | master branch | no top-level make |
-> |  73m | HW-HIGH | defconfig-full | master branch | top-level make    | 
-> |  77m | HW-HIGH | defconfig-full | patch set     | top-level make    |
+> +	bool "python-magic"
 
-So your high-end hardware in fact needs more time than the medium-end
-hardware to build with top-level parallel, probably because the I/Os
-come from HDDs instead of SSD. However, with top-level parallel build,
-you high-end hardware performs better.
+	# libmagic is needed at runtime
+	select BR2_PACKAGE_FILE
 
-> | 10m | HW-MED | defconfig-small | master branch | no top-level make |
-> |  5m | HW-MED | defconfig-small | master branch | top-level make    | 
-> |  5m | HW-MED | defconfig-samll | patch set     | top-level make    |
-> 
-> | 21m18s | HW-HIGH | defconfig-small | master branch | no top-level make |
-> |  7m53s | HW-HIGH | defconfig-small | master branch | top-level make    | 
-> |  7m54s | HW-HIGH | defconfig-samll | patch set     | top-level make    |
+However, even with that, python-magic unfortunately does not work: it
+uses ctypes.util.find_library() to find libmagic, and this function
+doesn't seem to behave properly in a cross-compilation context (it
+tries to use gcc/objdump on the target, which are obviously not
+available). So maybe patching Python is needed here.
 
-So all in all, top-level parallel build makes the build from twice
-faster to three times faster (or even more for defconfig-full on
-HW-HIGH). And the time impact of the per-package staging feature is
-minimal.
+> diff --git a/package/python-magic/python-magic.hash b/package/python-magic/python-magic.hash
+> new file mode 100644
+> index 0000000..36ffd02
+> --- /dev/null
+> +++ b/package/python-magic/python-magic.hash
+> @@ -0,0 +1,2 @@
+> +# sha356 calculated by scanpypi
+> +sha356	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  python-magic-0.4.6.tar.gz
 
-So to me, this is very encouraging, and clearly shows that it is worth
-diving into your implementation and see how we can progressively merge
-that.
+This hash didn't work for me. And Pypi provides a md5. So your .hash
+file should be:
 
-Can I ask a last test to be done: what happens if you apply your patch
-set, but do not use top-level parallel make ? Just to see if there
-would be a significant impact to people not enabling top-level parallel
-make.
+# md5 from https://pypi.python.org/pypi/python-magic
+md5 07e7a0fea78dd81ed609414c3484df58 python-magic-0.4.6.tar.gz
+# sha256 calculated by scanpypi
+sha256 903d3d3c676e2b1244892954e2bbbe27871a633385a9bfe81f1a81a7032df2fe python-magic-0.4.6.tar.gz
+
+> diff --git a/package/python-magic/python-magic.mk b/package/python-magic/python-magic.mk
+> new file mode 100644
+> index 0000000..fad3056
+> --- /dev/null
+> +++ b/package/python-magic/python-magic.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-magic
+> +#
+> +################################################################################
+> +
+> +PYTHON_MAGIC_VERSION = 0.4.6
+> +PYTHON_MAGIC_SOURCE = python-magic-$(PYTHON_MAGIC_VERSION).tar.gz
+> +PYTHON_MAGIC_SITE = https://pypi.python.org/packages/source/p/python-magic/
+> +PYTHON_MAGIC_SETUP_TYPE = setuptools
+> +PYTHON_MAGIC_LICENSE = PSF
+> +PYTHON_MAGIC_LICENSE_FILES =
+
+Empty variables are quite useless, so you get rid of
+PYTHON_MAGIC_LICENSE_FILES entirely.
+
+I'll mark your patch as Changes Requested in patchwork, so could you
+resend an updated version with the above issues fixed?
 
 Thanks a lot!
 
