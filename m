@@ -1,79 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Jun 2015 00:25:10 +0200
-Subject: [Buildroot] [PATCH 01/11] rpi-firmware: allow disabling
-	installation of binary DTBs
+Date: Mon, 29 Jun 2015 00:25:16 +0200
+Subject: [Buildroot] [PATCH 07/11] configs/raspberrypi_plus: new defconfig
 In-Reply-To: <cover.1435529863.git.yann.morin.1998@free.fr>
 References: <cover.1435529863.git.yann.morin.1998@free.fr>
-Message-ID: <6bde3f744f9f627a0d81924bc5565a299d5a9b68.1435529863.git.yann.morin.1998@free.fr>
+Message-ID: <a6dd7680c12291b10caa513ea6934ae64fad72e6.1435529863.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Floris Bos <bos@je-eigen-domein.nl>
+Same defconfig as the one just submitted, but with the DTB for the Plus
+variants A+ and B+.
 
-The binary .dtb files are not suitable for everyone as they are
-kernel-version specific.
-
-Reintroduce BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS option.
-
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-[yann.morin.1998 at free.fr: don't install DTBs if kernel builds
- its own; fix default; rephrase help text]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Floris Bos <bos@je-eigen-domein.nl>
 Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
-
 ---
-Changes v1 -> v2:
-  - hide if kernel installs a DTB
-  - fix default for bool
-  - rephrasing
----
- package/rpi-firmware/Config.in       | 12 ++++++++++++
- package/rpi-firmware/rpi-firmware.mk |  2 ++
- 2 files changed, 14 insertions(+)
+ configs/raspberrypi_plus_dt_defconfig | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 configs/raspberrypi_plus_dt_defconfig
 
-diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
-index cd45be4..179fb47 100644
---- a/package/rpi-firmware/Config.in
-+++ b/package/rpi-firmware/Config.in
-@@ -45,4 +45,16 @@ config BR2_PACKAGE_RPI_FIRMWARE_BOOT
- 	default "_x"    if BR2_PACKAGE_RPI_FIRMWARE_X
- 	default "_cd"   if BR2_PACKAGE_RPI_FIRMWARE_CD
- 
-+config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
-+	bool "Install Device Tree Blobs (DTBs)"
-+	depends on !BR2_LINUX_KERNEL_DTS_SUPPORT
-+	default y
-+	help
-+	  If you are using a Linux kernel <= 3.18, you should say 'y' here.
+diff --git a/configs/raspberrypi_plus_dt_defconfig b/configs/raspberrypi_plus_dt_defconfig
+new file mode 100644
+index 0000000..2587f58
+--- /dev/null
++++ b/configs/raspberrypi_plus_dt_defconfig
+@@ -0,0 +1,27 @@
++BR2_arm=y
++BR2_arm1176jzf_s=y
 +
-+	  If you are using a Linux kernel >= 3.19, you should say 'n' here,
-+	  and enable BR2_LINUX_KERNEL_DTS_SUPPORT to let the kernel build
-+	  the DTB.
++BR2_TARGET_GENERIC_GETTY_PORT="tty1"
 +
++# Lock to 4.0 headers as the RPi kernel stable tree is
++# based off the 4.0 branch
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.0.6"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
 +
- endif # BR2_PACKAGE_RPI_FIRMWARE
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index cbcf790..9cccb38 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -13,6 +13,7 @@ RPI_FIRMWARE_INSTALL_IMAGES = YES
- 
- RPI_FIRMWARE_DEPENDENCIES += host-rpi-firmware
- 
-+ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
- define RPI_FIRMWARE_INSTALL_DTB
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
-@@ -21,6 +22,7 @@ define RPI_FIRMWARE_INSTALL_DTB
- 		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
- 	done
- endef
-+endif
- 
- define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9ef19eae373337b18759152fd9ca94788c8fe11c"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
++BR2_LINUX_KERNEL_ZIMAGE=y
++
++# Build the DTB from the kernel sources
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-b-plus"
++
++BR2_PACKAGE_RPI_FIRMWARE=y
++# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
 -- 
 1.9.1
