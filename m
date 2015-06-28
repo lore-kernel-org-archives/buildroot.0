@@ -1,43 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Jun 2015 22:49:12 +0200
-Subject: [Buildroot] [RFC v4 00/16]  Add per-package staging feature
-In-Reply-To: <20150628204622.GE3950@free.fr>
-References: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
- <20150628204622.GE3950@free.fr>
-Message-ID: <20150628204912.GF3950@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 Jun 2015 22:48:27 +0200
+Subject: [Buildroot] [git commit] busybox: added linux-pam support
+Message-ID: <20150628205327.F049480DE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=f21b2558a097d07b53b6f20a47770468e9e4f7ed
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-06-28 22:46 +0200, Yann E. MORIN spake thusly:
-> On 2015-06-28 21:42 +0200, Fabio Porcedda spake thusly:
-[--SNIP--]
-> > |  35GB |  99m | master branch
-> > |  37GB | 100m | patch set             
-> > | 153GB | 105m | patch set using hard links only for the toolchain sysroot
-> > | 225GB | 106m | patch set not using hardlinks at all
-[--SNIP--]
->   - the size overhead is huge, a factor 4.4 with hardlinks, 6.5 without
->     hardlinks
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/busybox/busybox.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-Oh wait, I read the wrong line...
-
-OK, disregard my comments about the size overhead. It's only 2GiB, i.e.
-roughly 5%.
-
-Sorry for the confusion...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 090e174..34eb1f3 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -152,6 +152,13 @@ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++define BUSYBOX_LINUX_PAM
++	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
++endef
++BUSYBOX_DEPENDENCIES += linux-pam
++endif
++
+ # Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
+ # full-blown versions of apps installed by other packages with sym/hard links.
+ define BUSYBOX_NOCLOBBER_INSTALL
+@@ -165,6 +172,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_PREFER_STATIC)
+ 	$(BUSYBOX_SET_MDEV)
+ 	$(BUSYBOX_SET_CRYPT_SHA)
++	$(BUSYBOX_LINUX_PAM)
+ 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
