@@ -1,310 +1,340 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun, 28 Jun 2015 21:42:46 +0200
-Subject: [Buildroot] [RFC v4 12/16] pacakge/luarocks: add GCC_SYSROOT
-	environment variable to support pps
+Date: Sun, 28 Jun 2015 21:42:47 +0200
+Subject: [Buildroot] [RFC v4 13/16] package/pkgconf: use GCC_SYSROOT to
+	support pps feature
 In-Reply-To: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1435520570-20332-13-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1435520570-20332-14-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to support the per-package staging feature, add the GCC_SYSROOT
-environment variable and use it for building luarocks pacakges.
+In order to support the per-package staging feature, use the GCC_SYSROOT
+environment variable to find *.pc files in the per-package staging
+directory.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- ...ctions-to-the-global-environment-of-the-c.patch | 54 +++++++++++++++
- package/luarocks/0002-fixed-typo.patch             | 27 ++++++++
- ...e-environment-table-for-the-system-config.patch | 76 ++++++++++++++++++++++
- ...is-not-being-integrated-bug-introduced-in.patch | 62 ++++++++++++++++++
- package/luarocks/luarocks.mk                       | 11 ++--
- 5 files changed, 226 insertions(+), 4 deletions(-)
- create mode 100644 package/luarocks/0001-added-2-functions-to-the-global-environment-of-the-c.patch
- create mode 100644 package/luarocks/0002-fixed-typo.patch
- create mode 100644 package/luarocks/0003-fix-use-same-environment-table-for-the-system-config.patch
- create mode 100644 package/luarocks/0004-config.lua-is-not-being-integrated-bug-introduced-in.patch
+ package/aiccu/aiccu.mk                 |  2 +-
+ package/fbv/fbv.mk                     |  2 +-
+ package/gdk-pixbuf/gdk-pixbuf.mk       |  2 +-
+ package/libmicrohttpd/libmicrohttpd.mk |  2 +-
+ package/libupnpp/libupnpp.mk           |  2 +-
+ package/lmbench/lmbench.mk             |  4 ++--
+ package/logrotate/logrotate.mk         |  2 +-
+ package/madplay/madplay.mk             |  2 +-
+ package/mpg123/mpg123.mk               |  2 +-
+ package/neardal/neardal.mk             |  2 +-
+ package/nmap/nmap.mk                   |  2 +-
+ package/openldap/openldap.mk           |  2 +-
+ package/php/php.mk                     |  4 ++--
+ package/pkgconf/pkg-config.in          |  4 +++-
+ package/pkgconf/pkgconf.mk             |  5 ++---
+ package/poppler/poppler.mk             |  2 +-
+ package/qt/qt.mk                       | 12 ++++++------
+ package/ti-utils/ti-utils.mk           |  4 ++--
+ package/upmpdcli/upmpdcli.mk           |  2 +-
+ package/vsftpd/vsftpd.mk               |  2 +-
+ 20 files changed, 31 insertions(+), 30 deletions(-)
 
-diff --git a/package/luarocks/0001-added-2-functions-to-the-global-environment-of-the-c.patch b/package/luarocks/0001-added-2-functions-to-the-global-environment-of-the-c.patch
-new file mode 100644
-index 0000000..f83c139
---- /dev/null
-+++ b/package/luarocks/0001-added-2-functions-to-the-global-environment-of-the-c.patch
-@@ -0,0 +1,54 @@
-+From b3ea8783a4d73d437a27befc1d8ab47ef69d4ba1 Mon Sep 17 00:00:00 2001
-+From: Thijs Schreijer <thijs@thijsschreijer.nl>
-+Date: Tue, 16 Jun 2015 19:31:01 +0200
-+Subject: [PATCH 1/4] added 2 functions to the global environment of the
-+ config-file loader sandbox; `os_getenv()` and `__dump_env()`
-+
-+(Upstream patch taken from master branch)
-+(cherry picked from commit e1dd6375822d800984e1d3d821899a315bc1b222)
-+---
-+ src/luarocks/cfg.lua | 17 ++++++++++++++++-
-+ 1 file changed, 16 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/luarocks/cfg.lua b/src/luarocks/cfg.lua
-+index 99b4077..cf0c0d3 100644
-+--- a/src/luarocks/cfg.lua
-++++ b/src/luarocks/cfg.lua
-+@@ -145,6 +145,14 @@ end
-+ cfg.variables = {}
-+ cfg.rocks_trees = {}
-+ 
-++-- some extras for the global enviornment in the config files;
-++cfg.os_getenv = os.getenv
-++cfg.__dump_env = function()
-++  -- debug function, calling it from a config file will show all 
-++  -- available globals to that config file
-++  print(util.show_table(cfg, "global environment"))
-++end
-++
-+ sys_config_file = site_config.LUAROCKS_SYSCONFIG or sys_config_dir.."/config-"..cfg.lua_version..".lua"
-+ local err, errcode
-+ sys_config_ok, err, errcode = persist.load_into_table(sys_config_file, cfg)
-+@@ -158,11 +166,18 @@ if (not sys_config_ok) and errcode ~= "open" then -- either "load" or "run"; bad
-+    os.exit(cfg.errorcodes.CONFIGFILE)
-+ end
-+ 
-+-local env_for_config_file = {
-++local env_for_config_file
-++env_for_config_file = {
-+    home = cfg.home,
-+    lua_version = cfg.lua_version,
-+    platform = util.make_shallow_copy(detected),
-+    processor = proc,
-++   os_getenv = os.getenv, 
-++   __dump_env = function()
-++     -- debug function, calling it from a config file will show all 
-++     -- available globals to that config file
-++     print(util.show_table(env_for_config_file, "global environment"))
-++   end,
-+ }
-+ 
-+ if not site_config.LUAROCKS_FORCE_CONFIG then
-+-- 
-+2.4.3
-+
-diff --git a/package/luarocks/0002-fixed-typo.patch b/package/luarocks/0002-fixed-typo.patch
-new file mode 100644
-index 0000000..f4defef
---- /dev/null
-+++ b/package/luarocks/0002-fixed-typo.patch
-@@ -0,0 +1,27 @@
-+From 53c9599371b3e0815d62d3d34b1f1aef2b2877db Mon Sep 17 00:00:00 2001
-+From: Thijs Schreijer <thijs@thijsschreijer.nl>
-+Date: Wed, 17 Jun 2015 11:01:48 +0200
-+Subject: [PATCH 2/4] fixed typo
-+
-+(Upstream patch taken from master branch)
-+(cherry picked from commit 4792618d8882eb36c9e9d05efac8b1ae336f00cb)
-+---
-+ src/luarocks/cfg.lua | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/luarocks/cfg.lua b/src/luarocks/cfg.lua
-+index cf0c0d3..278be4a 100644
-+--- a/src/luarocks/cfg.lua
-++++ b/src/luarocks/cfg.lua
-+@@ -145,7 +145,7 @@ end
-+ cfg.variables = {}
-+ cfg.rocks_trees = {}
-+ 
-+--- some extras for the global enviornment in the config files;
-++-- some extras for the global environment in the config files;
-+ cfg.os_getenv = os.getenv
-+ cfg.__dump_env = function()
-+   -- debug function, calling it from a config file will show all 
-+-- 
-+2.4.3
-+
-diff --git a/package/luarocks/0003-fix-use-same-environment-table-for-the-system-config.patch b/package/luarocks/0003-fix-use-same-environment-table-for-the-system-config.patch
-new file mode 100644
-index 0000000..05e6a5e
---- /dev/null
-+++ b/package/luarocks/0003-fix-use-same-environment-table-for-the-system-config.patch
-@@ -0,0 +1,76 @@
-+From a51259a3308aef9ce61f611144324b998ad67710 Mon Sep 17 00:00:00 2001
-+From: Thijs Schreijer <thijs@thijsschreijer.nl>
-+Date: Thu, 18 Jun 2015 18:01:19 +0200
-+Subject: [PATCH 3/4] fix: use same environment table for the system config
-+ file as well.
-+
-+(Upstream patch taken from master branch)
-+(cherry picked from commit 998d012a7228099990a88454150e843559074e0c)
-+---
-+ src/luarocks/cfg.lua | 37 +++++++++++++++----------------------
-+ 1 file changed, 15 insertions(+), 22 deletions(-)
-+
-+diff --git a/src/luarocks/cfg.lua b/src/luarocks/cfg.lua
-+index 278be4a..5dcd59c 100644
-+--- a/src/luarocks/cfg.lua
-++++ b/src/luarocks/cfg.lua
-+@@ -145,27 +145,7 @@ end
-+ cfg.variables = {}
-+ cfg.rocks_trees = {}
-+ 
-+--- some extras for the global environment in the config files;
-+-cfg.os_getenv = os.getenv
-+-cfg.__dump_env = function()
-+-  -- debug function, calling it from a config file will show all 
-+-  -- available globals to that config file
-+-  print(util.show_table(cfg, "global environment"))
-+-end
-+-
-+-sys_config_file = site_config.LUAROCKS_SYSCONFIG or sys_config_dir.."/config-"..cfg.lua_version..".lua"
-+-local err, errcode
-+-sys_config_ok, err, errcode = persist.load_into_table(sys_config_file, cfg)
-+-
-+-if (not sys_config_ok) and errcode == "open" then -- file not found, so try alternate file
-+-   sys_config_file = sys_config_dir.."/config.lua"
-+-   sys_config_ok, err, errcode = persist.load_into_table(sys_config_file, cfg)
-+-end
-+-if (not sys_config_ok) and errcode ~= "open" then -- either "load" or "run"; bad config file, bail out with error
-+-   io.stderr:write(err.."\n")
-+-   os.exit(cfg.errorcodes.CONFIGFILE)
-+-end
-+-
-++-- The global environment in the config files;
-+ local env_for_config_file
-+ env_for_config_file = {
-+    home = cfg.home,
-+@@ -173,13 +153,26 @@ env_for_config_file = {
-+    platform = util.make_shallow_copy(detected),
-+    processor = proc,
-+    os_getenv = os.getenv, 
-+-   __dump_env = function()
-++   dump_env = function()
-+      -- debug function, calling it from a config file will show all 
-+      -- available globals to that config file
-+      print(util.show_table(env_for_config_file, "global environment"))
-+    end,
-+ }
-+ 
-++sys_config_file = site_config.LUAROCKS_SYSCONFIG or sys_config_dir.."/config-"..cfg.lua_version..".lua"
-++local err, errcode
-++   sys_config_ok, err, errcode = persist.load_into_table(sys_config_file, env_for_config_file)
-++
-++if (not sys_config_ok) and errcode == "open" then -- file not found, so try alternate file
-++   sys_config_file = sys_config_dir.."/config.lua"
-++      sys_config_ok, err, errcode = persist.load_into_table(sys_config_file, env_for_config_file)
-++end
-++if (not sys_config_ok) and errcode ~= "open" then -- either "load" or "run"; bad config file, bail out with error
-++   io.stderr:write(err.."\n")
-++   os.exit(cfg.errorcodes.CONFIGFILE)
-++end
-++
-+ if not site_config.LUAROCKS_FORCE_CONFIG then
-+ 
-+    local home_overrides, err, errcode
-+-- 
-+2.4.3
-+
-diff --git a/package/luarocks/0004-config.lua-is-not-being-integrated-bug-introduced-in.patch b/package/luarocks/0004-config.lua-is-not-being-integrated-bug-introduced-in.patch
-new file mode 100644
-index 0000000..af702eb
---- /dev/null
-+++ b/package/luarocks/0004-config.lua-is-not-being-integrated-bug-introduced-in.patch
-@@ -0,0 +1,62 @@
-+From 3cd403fd0979328f9c6f711a3983c64c250ce7df Mon Sep 17 00:00:00 2001
-+From: Thijs Schreijer <thijs@thijsschreijer.nl>
-+Date: Thu, 25 Jun 2015 00:14:50 +0200
-+Subject: [PATCH 4/4] config.lua is not being integrated, bug introduced in
-+ #385
-+
-+(Upstream patch taken from master branch)
-+(cherry picked from commit f6974b40735b9300f7b529da6e602459d0db9c49)
-+---
-+ src/luarocks/cfg.lua | 19 ++++++++++++-------
-+ 1 file changed, 12 insertions(+), 7 deletions(-)
-+ mode change 100644 => 100755 src/luarocks/cfg.lua
-+
-+diff --git a/src/luarocks/cfg.lua b/src/luarocks/cfg.lua
-+old mode 100644
-+new mode 100755
-+index 5dcd59c..3cf0565
-+--- a/src/luarocks/cfg.lua
-++++ b/src/luarocks/cfg.lua
-+@@ -159,6 +159,16 @@ env_for_config_file = {
-+      print(util.show_table(env_for_config_file, "global environment"))
-+    end,
-+ }
-++-- Merge values from config files read into the `cfg` table
-++local merge_overrides = function(overrides)
-++   if overrides.rocks_trees then
-++      cfg.rocks_trees = nil
-++   end
-++   if overrides.rocks_servers then
-++      cfg.rocks_servers = nil
-++   end
-++   util.deep_merge(cfg, overrides)
-++end
-+ 
-+ sys_config_file = site_config.LUAROCKS_SYSCONFIG or sys_config_dir.."/config-"..cfg.lua_version..".lua"
-+ local err, errcode
-+@@ -172,6 +182,7 @@ if (not sys_config_ok) and errcode ~= "open" then -- either "load" or "run"; bad
-+    io.stderr:write(err.."\n")
-+    os.exit(cfg.errorcodes.CONFIGFILE)
-+ end
-++   merge_overrides(sys_config_ok)
-+ 
-+ if not site_config.LUAROCKS_FORCE_CONFIG then
-+ 
-+@@ -189,13 +200,7 @@ if not site_config.LUAROCKS_FORCE_CONFIG then
-+    end
-+    if home_overrides then
-+       home_config_ok = true
-+-      if home_overrides.rocks_trees then
-+-         cfg.rocks_trees = nil
-+-      end
-+-      if home_overrides.rocks_servers then
-+-         cfg.rocks_servers = nil
-+-      end
-+-      util.deep_merge(cfg, home_overrides)
-++      merge_overrides(home_overrides)
-+    else
-+       home_config_ok = home_overrides
-+       if errcode ~= "open" then
-+-- 
-+2.4.4
-+
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 413e23d..042019f 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -35,16 +35,17 @@ define HOST_LUAROCKS_INSTALL_CMDS
- 	rm -f $(LUAROCKS_CONFIG_FILE)
- 	$(MAKE1) -C $(@D) install \
- 		PREFIX=$(HOST_DIR)/usr
-+	echo "gcc_sysroot = os_getenv([[GCC_SYSROOT]])"         >> $(LUAROCKS_CONFIG_FILE)
- 	echo "-- BR cross-compilation"                          >> $(LUAROCKS_CONFIG_FILE)
- 	echo "variables = {"                                    >> $(LUAROCKS_CONFIG_FILE)
--	echo "   LUA_INCDIR = [[$(STAGING_DIR)/usr/include]],"  >> $(LUAROCKS_CONFIG_FILE)
--	echo "   LUA_LIBDIR = [[$(STAGING_DIR)/usr/lib]],"      >> $(LUAROCKS_CONFIG_FILE)
-+	echo "   LUA_INCDIR = gcc_sysroot..[[/usr/include]],"   >> $(LUAROCKS_CONFIG_FILE)
-+	echo "   LUA_LIBDIR = gcc_sysroot..[[/usr/lib]],"       >> $(LUAROCKS_CONFIG_FILE)
- 	echo "   CC = [[$(TARGET_CC)]],"                        >> $(LUAROCKS_CONFIG_FILE)
- 	echo "   LD = [[$(TARGET_CC)]],"                        >> $(LUAROCKS_CONFIG_FILE)
- 	echo "   CFLAGS = [[$(LUAROCKS_CFLAGS)]],"              >> $(LUAROCKS_CONFIG_FILE)
- 	echo "   LIBFLAG = [[-shared $(TARGET_LDFLAGS)]],"      >> $(LUAROCKS_CONFIG_FILE)
- 	echo "}"                                                >> $(LUAROCKS_CONFIG_FILE)
--	echo "external_deps_dirs = { [[$(STAGING_DIR)/usr]] }"  >> $(LUAROCKS_CONFIG_FILE)
-+	echo 'external_deps_dirs = { gcc_sysroot..[[/usr]] }'   >> $(LUAROCKS_CONFIG_FILE)
- 	echo "gcc_rpath = false"                                >> $(LUAROCKS_CONFIG_FILE)
- 	echo "rocks_trees = { [[$(TARGET_DIR)/usr]] }"          >> $(LUAROCKS_CONFIG_FILE)
- 	echo "wrap_bin_scripts = false"                         >> $(LUAROCKS_CONFIG_FILE)
-@@ -53,7 +54,9 @@ endef
+diff --git a/package/aiccu/aiccu.mk b/package/aiccu/aiccu.mk
+index f2cd3de..b906b63 100644
+--- a/package/aiccu/aiccu.mk
++++ b/package/aiccu/aiccu.mk
+@@ -16,7 +16,7 @@ AICCU_LFDLAGS = $(TARGET_LDFLAGS)
+ # aiccu forgets to link with gnutls' dependencies breaking the build when
+ # linking statically
+ ifeq ($(BR2_STATIC_LIBS),y)
+-AICCU_LDFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --static --libs gnutls)
++AICCU_LDFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --static --libs gnutls)
+ endif
  
- $(eval $(host-generic-package))
+ # dummy RPM_OPT_FLAGS to disable stripping
+diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
+index 8788b0e..993125d 100644
+--- a/package/fbv/fbv.mk
++++ b/package/fbv/fbv.mk
+@@ -18,7 +18,7 @@ FBV_DEPENDENCIES += libpng
  
--LUAROCKS_RUN_ENV = LUA_PATH="$(HOST_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua"
-+LUAROCKS_RUN_ENV = \
-+	GCC_SYSROOT="$(STAGING_DIR)" \
-+	LUA_PATH="$(HOST_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua"
- LUAROCKS_RUN_CMD = $(LUA_RUN) $(HOST_DIR)/usr/bin/luarocks
+ # libpng in turn depends on other libraries
+ ifeq ($(BR2_STATIC_LIBS),y)
+-FBV_CONFIGURE_OPTS += "--libs=$(shell $(PKG_CONFIG_HOST_BINARY) --libs libpng --static)"
++FBV_CONFIGURE_OPTS += "--libs=$(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs libpng --static)"
+ endif
  
- LUAROCKS_RUN = $(LUAROCKS_RUN_ENV) $(LUAROCKS_RUN_CMD)
+ else
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index eb30215..c408170 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -35,7 +35,7 @@ GDK_PIXBUF_CONF_OPTS += --without-libtiff
+ else
+ GDK_PIXBUF_DEPENDENCIES += tiff host-pkgconf
+ GDK_PIXBUF_CONF_ENV += \
+-	LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs libtiff-4)'
++	LIBS='$(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs libtiff-4)'
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index a6662a7..ebaf248 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -13,7 +13,7 @@ LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-spdy --disable-examples
+ ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
+ LIBMICROHTTPD_LICENSE = LGPLv2.1+
+ LIBMICROHTTPD_DEPENDENCIES += host-pkgconf gnutls libgcrypt
+-LIBMICROHTTPD_CONF_ENV += LIBS="$(shell $(PKG_CONFIG_HOST_BINARY) --libs gnutls)"
++LIBMICROHTTPD_CONF_ENV += LIBS="$(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs gnutls)"
+ LIBMICROHTTPD_CONF_OPTS += --enable-https --with-gnutls=$(STAGING_DIR)/usr \
+ 	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
+ else
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index defc16a..3960c2b 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -16,7 +16,7 @@ LIBUPNPP_DEPENDENCIES = expat libcurl libupnp
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBUPNPP_DEPENDENCIES += host-pkgconf
+ LIBUPNPP_CONF_ENV += \
+-	LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs libupnp libcurl)'
++	LIBS='$(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs libupnp libcurl)'
+ endif
+ 
+ $(eval $(autotools-package))
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index d4be8d4..92ea257 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -14,8 +14,8 @@ LMBENCH_CFLAGS = $(TARGET_CFLAGS)
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ LMBENCH_DEPENDENCIES += host-pkgconf libtirpc
+-LMBENCH_CFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --cflags libtirpc)
+-LMBENCH_LDLIBS = $(shell $(PKG_CONFIG_HOST_BINARY) --libs libtirpc)
++LMBENCH_CFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --cflags libtirpc)
++LMBENCH_LDLIBS = $(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs libtirpc)
+ endif
+ 
+ define LMBENCH_CONFIGURE_CMDS
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index 0af7f4a..7cfb7a1 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -11,7 +11,7 @@ LOGROTATE_LICENSE_FILES = COPYING
+ LOGROTATE_DEPENDENCIES = popt host-pkgconf
+ # tarball does not have a generated configure script
+ LOGROTATE_AUTORECONF = YES
+-LOGROTATE_CONF_ENV = LIBS="$(shell $(PKG_CONFIG_HOST_BINARY) --libs popt)"
++LOGROTATE_CONF_ENV = LIBS="$(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs popt)"
+ LOGROTATE_CONF_OPTS = --without-selinux
+ 
+ ifeq ($(BR2_PACKAGE_ACL),y)
+diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
+index ff12aa1..c39d0e8 100644
+--- a/package/madplay/madplay.mk
++++ b/package/madplay/madplay.mk
+@@ -16,7 +16,7 @@ MADPLAY_DEPENDENCIES = libmad libid3tag $(if $(BR2_PACKAGE_GETTEXT),gettext)
+ ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
+ MADPLAY_CONF_OPTS += --with-alsa
+ MADPLAY_DEPENDENCIES += host-pkgconf alsa-lib
+-MADPLAY_CONF_ENV += LIBS="$(shell $(PKG_CONFIG_HOST_BINARY) --libs alsa)"
++MADPLAY_CONF_ENV += LIBS="$(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs alsa)"
+ endif
+ 
+ $(eval $(autotools-package))
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index a16e400..f02ba9c 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -54,7 +54,7 @@ MPG123_CONF_OPTS += --with-default-audio=portaudio
+ MPG123_DEPENDENCIES += portaudio
+ # configure script does NOT use pkg-config to figure out how to link
+ # with portaudio, breaking static linking as portaudio uses pthreads
+-MPG123_CONF_ENV += LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs portaudio-2.0)'
++MPG123_CONF_ENV += LIBS='$(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs portaudio-2.0)'
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SDL),y)
+diff --git a/package/neardal/neardal.mk b/package/neardal/neardal.mk
+index ddaecbe..1a7ec7f 100644
+--- a/package/neardal/neardal.mk
++++ b/package/neardal/neardal.mk
+@@ -25,7 +25,7 @@ endif
+ # forgets to take that into account, causing the detection to fail
+ # when linking statically
+ ifeq ($(BR2_STATIC_LIBS),y)
+-NEARDAL_CONF_ENV += LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs ncurses)'
++NEARDAL_CONF_ENV += LIBS='$(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs ncurses)'
+ endif
+ 
+ define NEARDAL_INSTALL_NCL
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index d46d58b..35c6a82 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -30,7 +30,7 @@ NMAP_POST_PATCH_HOOKS += NMAP_WRAPPER_EXEC
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ NMAP_CONF_OPTS += --with-openssl="$(STAGING_DIR)/usr"
+ NMAP_DEPENDENCIES += host-pkgconf openssl
+-NMAP_LIBS_FOR_STATIC_LINK += $(shell $(PKG_CONFIG_HOST_BINARY) --libs --static openssl)
++NMAP_LIBS_FOR_STATIC_LINK += $(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs --static openssl)
+ else
+ NMAP_CONF_OPTS += --without-openssl
+ endif
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 68464ab..93facb4 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -31,7 +31,7 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OPENLDAP_MP = bignum
+ OPENLDAP_DEPENDENCIES += openssl
+-OPENLDAP_CONF_ENV = LIBS="$(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto)"
++OPENLDAP_CONF_ENV = LIBS="$(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs libssl libcrypto)"
+ else ifeq ($(BR2_PACKAGE_GMP),y)
+ OPENLDAP_MP = gmp
+ OPENLDAP_DEPENDENCIES += gmp
+diff --git a/package/php/php.mk b/package/php/php.mk
+index c9bcfe3..f7c064c 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -116,7 +116,7 @@ PHP_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
+ PHP_DEPENDENCIES += openssl
+ # openssl needs zlib, but the configure script forgets to link against
+ # it causing detection failures with static linking
+-PHP_STATIC_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs --static openssl)
++PHP_STATIC_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs --static openssl)
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PHP_EXT_LIBXML2),y)
+@@ -187,7 +187,7 @@ endif
+ ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
+ PHP_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
+ PHP_DEPENDENCIES += sqlite
+-PHP_STATIC_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs --static sqlite3)
++PHP_STATIC_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs --static sqlite3)
+ endif
+ 
+ ### PDO
+diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+index 4dec487..9e5408f 100644
+--- a/package/pkgconf/pkg-config.in
++++ b/package/pkgconf/pkg-config.in
+@@ -1,2 +1,4 @@
+ #!/bin/sh
+-PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:- at PKG_CONFIG_LIBDIR@} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} $(dirname $0)/pkgconf @STATIC@ $@
++PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-$GCC_SYSROOT/usr/lib/pkgconfig:$GCC_SYSROOT/usr/share/pkgconfig} \
++    PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-$GCC_SYSROOT} \
++    $(dirname $0)/pkgconf @STATIC@ $@
+diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+index 3c93fd5..0c496be 100644
+--- a/package/pkgconf/pkgconf.mk
++++ b/package/pkgconf/pkgconf.mk
+@@ -11,6 +11,8 @@ PKGCONF_LICENSE = pkgconf license
+ PKGCONF_LICENSE_FILES = COPYING
+ 
+ PKG_CONFIG_HOST_BINARY = $(HOST_DIR)/usr/bin/pkg-config
++PKG_CONFIG_HOST_BINARY_GCC_SYSROOT = \
++	GCC_SYSROOT=$(STAGING_DIR) $(HOST_DIR)/usr/bin/pkg-config
+ 
+ define PKGCONF_LINK_PKGCONFIG
+ 	ln -sf pkgconf $(TARGET_DIR)/usr/bin/pkg-config
+@@ -19,9 +21,6 @@ endef
+ define HOST_PKGCONF_INSTALL_WRAPPER
+ 	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
+ 		$(HOST_DIR)/usr/bin/pkg-config
+-	$(SED) 's, at PKG_CONFIG_LIBDIR@,$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig,' \
+-		-e 's, at STAGING_DIR@,$(STAGING_DIR),' \
+-		$(HOST_DIR)/usr/bin/pkg-config
+ endef
+ 
+ define HOST_PKGCONF_STATIC
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 234b7cc..c5ff161 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -24,7 +24,7 @@ ifeq ($(BR2_PACKAGE_TIFF),y)
+ POPPLER_CONF_OPTS += --enable-libtiff
+ # Help poppler to find libtiff in static linking scenarios
+ POPPLER_CONF_ENV += \
+-	LIBTIFF_LIBS="$(shell $(PKG_CONFIG_HOST_BINARY) --libs libtiff-4)"
++	LIBTIFF_LIBS="$(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs libtiff-4)"
+ POPPLER_DEPENDENCIES += tiff
+ else
+ POPPLER_CONF_OPTS += --disable-libtiff
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 0644fbe..3a9eda6 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -230,9 +230,9 @@ QT_DEPENDENCIES += fontconfig xlib_libXi xlib_libX11 xlib_libXrender \
+                 xlib_libXcursor xlib_libXrandr xlib_libXext xlib_libXv
+ # Using pkg-config avoids us some logic to redefine and sed again mkspecs files
+ # to add X11 include path and link options
+-QT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags x11`
+-QT_CXXFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags x11`
+-QT_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --libs x11 xext`
++QT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --cflags x11`
++QT_CXXFLAGS += `$(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --cflags x11`
++QT_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs x11 xext`
+ QT_CONFIGURE_OPTS += -arch $(QT_EMB_PLATFORM) \
+ 		-xplatform qws/linux-$(QT_EMB_PLATFORM)-g++ -x11 -no-gtkstyle -no-sm \
+ 		-no-openvg
+@@ -329,9 +329,9 @@ endif
+ ifeq ($(BR2_PACKAGE_QT_OPENGL_ES),y)
+ QT_CONFIGURE_OPTS += -opengl es2 -egl
+ QT_DEPENDENCIES += libgles libegl
+-QT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
+-QT_CXXFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
+-QT_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --libs egl`
++QT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --cflags egl`
++QT_CXXFLAGS += `$(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --cflags egl`
++QT_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs egl`
+ else
+ QT_CONFIGURE_OPTS += -no-opengl
+ endif
+diff --git a/package/ti-utils/ti-utils.mk b/package/ti-utils/ti-utils.mk
+index 35ecc19..19d53fd 100644
+--- a/package/ti-utils/ti-utils.mk
++++ b/package/ti-utils/ti-utils.mk
+@@ -10,8 +10,8 @@ TI_UTILS_DEPENDENCIES = libnl host-pkgconf
+ TI_UTILS_LICENSE = BSD-3c
+ TI_UTILS_LICENSE_FILES = COPYING
+ 
+-TI_UTILS_CFLAGS = $(shell $(PKG_CONFIG_HOST_BINARY) --cflags libnl-genl-3.0)
+-TI_UTILS_LIBS = $(shell $(PKG_CONFIG_HOST_BINARY) --libs libnl-genl-3.0)
++TI_UTILS_CFLAGS = $(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --cflags libnl-genl-3.0)
++TI_UTILS_LIBS = $(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs libnl-genl-3.0)
+ 
+ define TI_UTILS_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) NFSROOT="$(STAGING_DIR)" \
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index a5c6370..1587a85 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -19,7 +19,7 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ # manually pass it to make.
+ UPMPDCLI_DEPENDENCIES += host-pkgconf
+ UPMPDCLI_MAKE_OPTS = \
+-	LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs expat libcurl libupnp)'
++	LIBS='$(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs expat libcurl libupnp)'
+ endif
+ 
+ # Upmpdcli only runs if user upmpdcli exists
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index db85015..b6517d4 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -24,7 +24,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ VSFTPD_DEPENDENCIES += openssl host-pkgconf
+-VSFTPD_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto)
++VSFTPD_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY_GCC_SYSROOT) --libs libssl libcrypto)
+ VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_ENABLE_SSL
+ endif
+ 
 -- 
 2.4.3
