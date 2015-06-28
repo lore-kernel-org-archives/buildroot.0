@@ -1,34 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Jun 2015 15:33:28 +0200
-Subject: [Buildroot] [V4 0/2] A20-OLinuXino-Lime: new board
-In-Reply-To: <1435313217-12871-1-git-send-email-francois.perrad@gadz.org>
-References: <1435313217-12871-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20150628153328.3d084d5d@free-electrons.com>
+Date: Sun, 28 Jun 2015 15:33:51 +0200
+Subject: [Buildroot] [git commit] glog: add dependency on dynamic library
+Message-ID: <20150628133404.587F980DB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=d980db91dfd15385e1e25c88f14da67a88fef82a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 26 Jun 2015 12:06:55 +0200, Francois Perrad wrote:
+when BR2_STATIC_LIBS=y
 
-> Francois Perrad (2):
->   A20-OLinuXino-Lime: new board (mainline)
->   A20-OLinuXino-Lime: new board (mali)
+src/symbolize.cc:110:19: error: dlfcn.h: No such file or directory
 
-Thanks, I've applied both patches after slightly tweaking the commit
-log.
+glog requires dlfcn.h header. So add dependency on dynamic library
 
-Luca, don't hesitate to send follow-up patches once you have the Micro
-board working, and you want to rework Fran?ois defconfig to share some
-stuff between the Lime and Micro boards.
+fixes:
+http://autobuild.buildroot.net/results/75d/75d17ceb764c2c1136047c089a0c554770ca98a4/
 
-Thanks!
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glog/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/glog/Config.in b/package/glog/Config.in
+index aed0a3e..534997a 100644
+--- a/package/glog/Config.in
++++ b/package/glog/Config.in
+@@ -2,10 +2,12 @@ config BR2_PACKAGE_GLOG
+ 	bool "glog"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  C++ implementation of the Google logging module
+ 
+ 	  https://github.com/google/glog
+ 
+-comment "glog needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "glog needs a toolchain w/ C++, threads, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
