@@ -1,28 +1,51 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 Jun 2015 13:22:25 +0200
-Subject: [Buildroot] [PATCH] package/vlc: install vlc libraries in
-	staging
-References: <1435489228-7010-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <XnsA4C7880E46222berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 Jun 2015 14:01:53 +0200
+Subject: [Buildroot] [PATCH] uclibc: deprecate locale support
+In-Reply-To: <20150628071417.GA13377@waldemar-brodkorb.de>
+References: <20150628071417.GA13377@waldemar-brodkorb.de>
+Message-ID: <20150628140153.4a657fdd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain Naour <romain.naour@openwide.fr> wrote in 
-news:1435489228-7010-1-git-send-email-romain.naour at openwide.fr:
+Dear Waldemar Brodkorb,
 
-> Although no package seems to link against vlc libraries right now, these
-> libraries will be necessary for upcoming new efl emotion-generic-players
-> package.
+On Sun, 28 Jun 2015 09:14:17 +0200, Waldemar Brodkorb wrote:
+> The quality of the locale implementation in uClibc seems
+> to be bad. Recently a discussion on the uClibc mailinglist
+> showed that the uClibc maintainer has no time to fix
+> remaining issues in the locale implementation.
+> http://lists.uclibc.org/pipermail/uclibc/2015-June/049000.html
 > 
-> Signed-off-by: Romain Naour <romain.naour-oid7hba3+
-9NWj0EZb7rXcA@public.gmane.org>
+> Because of the bad state of the code I would like to deprecate
+> it. I never used it myself and see no good reason why I would
+> need it for an embedded system.
+> 
+> I believe not many people are using it. For good working
+> locale support there is still GNU libc and musl.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Can you assess the impact on the packages we currently have in
+Buildroot ? I.e, which packages can only work with locale support?
 
-Part of my upcoming freeswitch package will be mod_vlc which links against 
-libvlc.so, so I also have this patch in my local queue.
+If we remove BR2_TOOLCHAIN_BUILDROOT_LOCALE, then there's a lot of
+possible further cleanup: BR2_ENABLE_LOCALE should be removed, all
+packages doing select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE should
+be changed, etc.
 
-Regards, Bernd
+Also, do you have an idea of what is the state of the locale support in
+musl ? Does musl provide the functions provided by libiconv ?
+
+It would be good to take this opportunity to make sure the locale
+support is OK.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
