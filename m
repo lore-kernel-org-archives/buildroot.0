@@ -1,42 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Jun 2015 14:34:54 +0200
-Subject: [Buildroot] [PATCH v3 0/4] Add ARM Cortex-M3 support
-In-Reply-To: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
-References: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <20150628143454.2b895956@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 28 Jun 2015 14:49:27 +0200
+Subject: [Buildroot] [PATCH 4/4] package/kodi/kodi: Remove hyperflous
+ option --disable-dvdcss
+In-Reply-To: <1434273033-31723-4-git-send-email-bernd.kuhls@t-online.de>
+References: <1434273033-31723-1-git-send-email-bernd.kuhls@t-online.de>
+ <1434273033-31723-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150628124927.GB3950@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Guido Mart?nez,
+Bernd, All,
 
-On Fri, 26 Jun 2015 14:33:18 -0300, Guido Mart?nez wrote:
+On 2015-06-14 11:10 +0200, Bernd Kuhls spake thusly:
+> The option is controlled later on inside this if-clause
+> 
+> ifeq ($(BR2_PACKAGE_KODI_OPTICALDRIVE),y)
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/kodi/kodi/kodi.mk |    1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/package/kodi/kodi/kodi.mk b/package/kodi/kodi/kodi.mk
+> index cecc41f..2b21e1f 100644
+> --- a/package/kodi/kodi/kodi.mk
+> +++ b/package/kodi/kodi/kodi.mk
 
-> Guido Mart?nez (4):
->   arm: update processor types
->   toolchain: allow for stupid toolchains
+This is not the correct layout we currently have in master.
 
-Both of these applied.
+Otherwise:
 
->   toolchain: introduce BR2_TOOLCHAIN_HAS_RESOLVER
->   toolchain-external: add OSELAS 2014.12.0 Cortex-M3 toolchain
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-There have been some comments from Yann on these patches, so I've
-marked them as "Changes Requested" in patchwork. Could you rework them
-as suggested by Yann, and resend updated versions?
+Regards,
+Yann E. MORIN.
 
-Also, now that there is Cortex-M3 support listed, please make sure it
-works fine with the internal toolchain backend, and if it doesn't work,
-add the appropriate exceptions (for example, glibc and musl cannot be
-built for Cortex-M3, as far as I know). Can you send a follow-up patch
-for this?
+> @@ -34,7 +34,6 @@ KODI_CONF_ENV = \
+>  KODI_CONF_OPTS +=  \
+>  	--with-ffmpeg=shared \
+>  	--disable-crystalhd \
+> -	--disable-dvdcss \
+>  	--disable-hal \
+>  	--disable-joystick \
+>  	--disable-openmax \
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
