@@ -1,97 +1,96 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Jun 2015 22:39:29 +0200
-Subject: [Buildroot] [PATCH 3/3] python-magic: new package
-In-Reply-To: <1434362765-1074-4-git-send-email-denis.thulin@openwide.fr>
-References: <1434362765-1074-1-git-send-email-denis.thulin@openwide.fr>
- <1434362765-1074-4-git-send-email-denis.thulin@openwide.fr>
-Message-ID: <20150628223929.1c9bbf68@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 28 Jun 2015 22:46:22 +0200
+Subject: [Buildroot] [RFC v4 00/16]  Add per-package staging feature
+In-Reply-To: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20150628204622.GE3950@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Denis,
+Fabio, All,
 
-On Mon, 15 Jun 2015 12:06:05 +0200, Denis THULIN wrote:
+On 2015-06-28 21:42 +0200, Fabio Porcedda spake thusly:
+> this patch set aims to improve build reproducibility by using a
+> per-package staging directory.
+> Also this feature aims to enable the top-level parallel make.
 
-> diff --git a/package/python-magic/Config.in b/package/python-magic/Config.in
-> new file mode 100644
-> index 0000000..e6c06b9
-> --- /dev/null
-> +++ b/package/python-magic/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_MAGIC
-> +	depends on BR2_PACKAGE_PYTHON
+I haven't yet had time to look in the different patches, but I have a
+preliminary comment about your benchmarks:
 
-According to https://pypi.python.org/pypi/python-magic and my own
-tests, it seems that python-magic works with Python 3, so this
-dependency is not needed.
+[--SNIP--]
+> HW-MED:
+> CPU: Intel i7-4790K (4x2 @4GHz) = 8 threads
+> RAM: 16GB
+> SSD: 512GB
+> 
+> HW-HIGH:
+> CPU: 2 x Xeon 2620v3 (6x2 @2.40Ghz) = 24 threads
+> RAM: 32GB
+> SATA: RAID0 2x2TB 3.5" 7200rpm
+> 1366
+> 
+> Test about output using hard links or note using the "defconfig-full"
+> on HW-MED:
+> 
+> |  35GB |  99m | master branch
+> |  37GB | 100m | patch set             
+> | 153GB | 105m | patch set using hard links only for the toolchain sysroot
+> | 225GB | 106m | patch set not using hardlinks at all
+> 
+> Test about performances of this patch set vs master branch:
+> | 199m | HW-MED | defconfig-full | master branch | no top-level make |
+> |  99m | HW-MED | defconfig-full | master branch | top-level make    | 
+> | 100m | HW-MED | defconfig-full | patch set     | top-level make    |
+> 
+> | 350m | HW-HIGH | defconfig-full | master branch | no top-level make |
+> |  73m | HW-HIGH | defconfig-full | master branch | top-level make    | 
+> |  77m | HW-HIGH | defconfig-full | patch set     | top-level make    |
+> 
+> | 10m | HW-MED | defconfig-small | master branch | no top-level make |
+> |  5m | HW-MED | defconfig-small | master branch | top-level make    | 
+> |  5m | HW-MED | defconfig-samll | patch set     | top-level make    |
+> 
+> | 21m18s | HW-HIGH | defconfig-small | master branch | no top-level make |
+> |  7m53s | HW-HIGH | defconfig-small | master branch | top-level make    | 
+> |  7m54s | HW-HIGH | defconfig-samll | patch set     | top-level make    |
 
-However, you're missing the runtime dependency on libmagic, which is
-provided in Buildroot with the file package. Indeed python-magic is
-just a small wrapper around the libmagic C library: all what
-python-magic does is open/use libmagic through the ctypes module.
+OK, so those benchmarks show that:
 
-So, you need something like:
+  - HDD are terribly slow when compared to SSDs
 
-> +	bool "python-magic"
+  - the build-time sppedup of parallel builds is huge, up to 4.5 on
+    HW-HIGH, but mostly around 2 when HDDs do not play in the equation
+    (i.e. on SSDs, or with all cached in RAM (small config)).
 
-	# libmagic is needed at runtime
-	select BR2_PACKAGE_FILE
+  - the build-time overhead is low, 5% in the worst case (73min -> 77min)
 
-However, even with that, python-magic unfortunately does not work: it
-uses ctypes.util.find_library() to find libmagic, and this function
-doesn't seem to behave properly in a cross-compilation context (it
-tries to use gcc/objdump on the target, which are obviously not
-available). So maybe patching Python is needed here.
+  - the size overhead is huge, a factor 4.4 with hardlinks, 6.5 without
+    hardlinks
 
-> diff --git a/package/python-magic/python-magic.hash b/package/python-magic/python-magic.hash
-> new file mode 100644
-> index 0000000..36ffd02
-> --- /dev/null
-> +++ b/package/python-magic/python-magic.hash
-> @@ -0,0 +1,2 @@
-> +# sha356 calculated by scanpypi
-> +sha356	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  python-magic-0.4.6.tar.gz
+  - we're missing the benchmarks for this patchset without top-level
+    parallel make (especially for the size overhead). Unless it no
+    longer makes sense?
 
-This hash didn't work for me. And Pypi provides a md5. So your .hash
-file should be:
+So, I'm really a bit skeptical. About five time the size for only about
+twice the speedup, is it worth it? Sure some people will easily favour
+speed over anything else, still the size overhead is really huge.
 
-# md5 from https://pypi.python.org/pypi/python-magic
-md5 07e7a0fea78dd81ed609414c3484df58 python-magic-0.4.6.tar.gz
-# sha256 calculated by scanpypi
-sha256 903d3d3c676e2b1244892954e2bbbe27871a633385a9bfe81f1a81a7032df2fe python-magic-0.4.6.tar.gz
+But I still think the idea is worth investigating.
 
-> diff --git a/package/python-magic/python-magic.mk b/package/python-magic/python-magic.mk
-> new file mode 100644
-> index 0000000..fad3056
-> --- /dev/null
-> +++ b/package/python-magic/python-magic.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-magic
-> +#
-> +################################################################################
-> +
-> +PYTHON_MAGIC_VERSION = 0.4.6
-> +PYTHON_MAGIC_SOURCE = python-magic-$(PYTHON_MAGIC_VERSION).tar.gz
-> +PYTHON_MAGIC_SITE = https://pypi.python.org/packages/source/p/python-magic/
-> +PYTHON_MAGIC_SETUP_TYPE = setuptools
-> +PYTHON_MAGIC_LICENSE = PSF
-> +PYTHON_MAGIC_LICENSE_FILES =
+Otherwise, I have a 2x4 core Xeon @3.4GHz with three SSDs in RAID0 which
+might be better as a HW_HIGH system. I can spin a test-build with this
+patchset on this machine to see what we get...
 
-Empty variables are quite useless, so you get rid of
-PYTHON_MAGIC_LICENSE_FILES entirely.
+Regards,
+Yann E. MORIN.
 
-I'll mark your patch as Changes Requested in patchwork, so could you
-resend an updated version with the above issues fixed?
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
