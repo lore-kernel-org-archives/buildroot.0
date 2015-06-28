@@ -1,46 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Jun 2015 22:56:14 +0200
-Subject: [Buildroot] [git commit] package/vlc: Add libsidplay2 as optional
-	dependency
-Message-ID: <20150628205632.69EC780DE0@busybox.osuosl.org>
+Date: Sun, 28 Jun 2015 22:57:56 +0200
+Subject: [Buildroot] [RFC v4 00/16]  Add per-package staging feature
+In-Reply-To: <20150628204912.GF3950@free.fr>
+References: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
+ <20150628204622.GE3950@free.fr> <20150628204912.GF3950@free.fr>
+Message-ID: <20150628225756.4523f4cd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b59567b38ece8de4c23fb04f55ab7c6d086b1fc5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-vlc has a sid plugin:
+On Sun, 28 Jun 2015 22:49:12 +0200, Yann E. MORIN wrote:
 
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a
-  output/target/usr/lib/vlc/plugins/demux/libsid_plugin.so |
-  grep NEEDED | grep sid
- 0x00000001 (NEEDED)     Shared library: [libsidplay2.so.1]
- 0x00000001 (NEEDED)     Shared library: [libresid-builder.so.0]
+> On 2015-06-28 22:46 +0200, Yann E. MORIN spake thusly:
+> > On 2015-06-28 21:42 +0200, Fabio Porcedda spake thusly:
+> [--SNIP--]
+> > > |  35GB |  99m | master branch
+> > > |  37GB | 100m | patch set             
+> > > | 153GB | 105m | patch set using hard links only for the toolchain sysroot
+> > > | 225GB | 106m | patch set not using hardlinks at all
+> [--SNIP--]
+> >   - the size overhead is huge, a factor 4.4 with hardlinks, 6.5 without
+> >     hardlinks
+> 
+> Oh wait, I read the wrong line...
+> 
+> OK, disregard my comments about the size overhead. It's only 2GiB, i.e.
+> roughly 5%.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vlc/vlc.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+Yes, the size overhead is IMO very reasonable. So do you reconsider the
+general opinion you gave in your previous e-mail?
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index bc2966e..4ef69aa 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -206,6 +206,13 @@ else
- VLC_CONF_OPTS += --disable-svg --disable-svgdec
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBSIDPLAY2),y)
-+VLC_CONF_OPTS += --enable-sid
-+VLC_DEPENDENCIES += libsidplay2
-+else
-+VLC_CONF_OPTS += --disable-sid
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBTHEORA),y)
- VLC_CONF_OPTS += --enable-theora
- VLC_DEPENDENCIES += libtheora
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
