@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Jun 2015 23:01:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: Add libsidplay2 as
- optional dependency
-In-Reply-To: <1434658781-3455-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1434658781-3455-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150628230103.035fd351@free-electrons.com>
+Date: Sun, 28 Jun 2015 23:00:57 +0200
+Subject: [Buildroot] [git commit] nginx: fix nginx.old clean-up
+Message-ID: <20150628210113.2383C80E15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=f6d1d1518c192b4e33b736528a68d4d1f20b10e8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 18 Jun 2015 22:19:41 +0200, Bernd Kuhls wrote:
-> vlc has a sid plugin:
-> 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a
->   output/target/usr/lib/vlc/plugins/demux/libsid_plugin.so |
->   grep NEEDED | grep sid
->  0x00000001 (NEEDED)     Shared library: [libsidplay2.so.1]
->  0x00000001 (NEEDED)     Shared library: [libresid-builder.so.0]
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/vlc/vlc.mk |    7 +++++++
->  1 file changed, 7 insertions(+)
+The bin path for nginx is configured for /usr/sbin, so deleting
+the nginx.old back-up from /usr/bin never works.  Fix path, and
+also use "$(RM)" instead of "-$(RM)", as "rm -f" never fails.
 
-Applied, thanks.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nginx/nginx.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 90ebbcc..502bc44 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -222,7 +222,7 @@ endef
+ 
+ define NGINX_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+-	-$(RM) $(TARGET_DIR)/usr/bin/nginx.old
++	$(RM) $(TARGET_DIR)/usr/sbin/nginx.old
+ 	$(INSTALL) -D -m 0664 package/nginx/nginx.logrotate \
+ 		$(TARGET_DIR)/etc/logrotate.d/nginx
+ endef
