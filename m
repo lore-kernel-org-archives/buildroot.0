@@ -1,28 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Jun 2015 21:59:48 +0200
-Subject: [Buildroot] [PATCH 1/1] live555: bump to version 2015.06.25
-In-Reply-To: <1435557669-3194-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1435557669-3194-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20150629215948.0fc4a709@free-electrons.com>
+Date: Mon, 29 Jun 2015 21:59:57 +0200
+Subject: [Buildroot] [git commit] perl-cross: bump to version 0.9.7
+Message-ID: <20150629200001.AD3848046C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+commit: http://git.buildroot.net/buildroot/commit/?id=7d6ec109e77494351eac8121eafbb8e06b9d48dd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 29 Jun 2015 08:01:09 +0200, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/live555/live555.hash | 4 ++--
->  package/live555/live555.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+fix some build failures,
+see https://github.com/arsv/perl-cross/issues/17
 
-Applied, thanks.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perl/perl.hash |    2 +-
+ package/perl/perl.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index d28b5fd..0ee587e 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -4,4 +4,4 @@ sha1   63126c683b4c79c35008a47d56f7beae876c569f                         perl-5.2
+ sha256 e5a4713bc65e1da98ebd833dce425c000768bfe84d17ec5183ec5ca249db71ab perl-5.20.2.tar.bz2
+ 
+ # No upstream hashes for the following
+-sha256 e25c5d9289b98db8f9d6a27bda9de12028ffc37eeede2d2fbfb10590d36fbf8f perl-5.20.2-cross-0.9.6.tar.gz
++sha256 36cabbc937cc66e59c8ae414d7753190d54a022cae0012c09ee5bbee78bc0aa0 perl-5.20.2-cross-0.9.7.tar.gz
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index c3569a9..6794eef 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -12,7 +12,7 @@ PERL_LICENSE = Artistic or GPLv1+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 0.9.6
++PERL_CROSS_VERSION = 0.9.7
+ PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).2
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = http://raw.github.com/arsv/perl-cross/releases
