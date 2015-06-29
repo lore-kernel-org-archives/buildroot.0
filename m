@@ -1,38 +1,51 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 29 Jun 2015 11:13:34 -0300
-Subject: [Buildroot] [PATCH] qemu: enable for aarch64
-Message-ID: <1435587214-10000-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Jun 2015 16:29:06 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gcc: fix ARC failure to build
+ in 2 phases.
+In-Reply-To: <1435582227-26345-1-git-send-email-talz@ezchip.com>
+References: <1435582227-26345-1-git-send-email-talz@ezchip.com>
+Message-ID: <20150629162906.415e456f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Dear Tal Zilcer,
 
-Enable the target qemu for aarch64 since it works just fine.
-Only tested using userland CPU emulation (no HYP) with a
-qemu_aarch64_virt_defconfig image inside a qemu_aarch64_virt_defconfig
-instance.
+On Mon, 29 Jun 2015 15:50:26 +0300, Tal Zilcer wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
----
- package/qemu/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+> index 0fa2353..6b747d0 100644
+> --- a/package/gcc/gcc-initial/gcc-initial.mk
+> +++ b/package/gcc/gcc-initial/gcc-initial.mk
+> @@ -33,7 +33,11 @@ define HOST_GCC_INITIAL_DISABLE_LIBGMON
+>  	$(SED) 's/crtbeginS.o libgmon.a crtg.o/crtbeginS.o crtg.o/' \
+>  		$(@D)/libgcc/config.host
+>  endef
+> +ifeq ($(HOST_GCC_INITIAL_OVERRIDE_SRCDIR),)
+>  HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
+> +else
+> +HOST_GCC_INITIAL_POST_RSYNC_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
+> +endif
+>  endif
+>  
+>  HOST_GCC_INITIAL_CONF_OPTS = \
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 25936e2..082b5ee 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
- 	bool
- 	# Only tested on these architectures
--	default y if BR2_i386 || BR2_mips || BR2_mipsel || BR2_x86_64
-+	default y if BR2_aarch64 || BR2_i386 || BR2_mips || BR2_mipsel \
-+		|| BR2_x86_64
- 
- comment "QEMU requires a toolchain with wchar, threads"
- 	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
+If you're using <pkg>_OVERRIDE_SRCDIR, then the assumption is that your
+source tree is patched with whatever change is needed for the package
+to build fine without applying any of the Buildroot patches.
+
+In any case, I don't think it's worth the effort making that
+conditional, just register the post-rsync hook unconditionally.
+
+BTW, this problem should have been sorted out by the ARC developers,
+maybe you should ping them about this?
+
+Thanks,
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
