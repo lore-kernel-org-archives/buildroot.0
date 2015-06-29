@@ -1,140 +1,78 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 30 Jun 2015 00:05:23 +0200
-Subject: [Buildroot] [PATCH 4/4] configs/olimex_a20_olinuxino_micro: new
-	board
-In-Reply-To: <1435615523-21039-1-git-send-email-luca@lucaceresoli.net>
-References: <1435615523-21039-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1435615523-21039-4-git-send-email-luca@lucaceresoli.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 30 Jun 2015 00:07:41 +0200
+Subject: [Buildroot] [PATCH 0/6 v2] raspberrypi: update packages and
+	defconfigs (branch yem/rpi)
+Message-ID: <cover.1435615426.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a defconfig for the Olimex A20-OLinuXino-Micro board, reusing most
-of the A20-OLinuXino-Lime files.
+Hello All!
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- board/olimex/a20_olinuxino/readme.txt        | 31 +++++++++++++------
- configs/olimex_a20_olinuxino_micro_defconfig | 46 ++++++++++++++++++++++++++++
- 2 files changed, 67 insertions(+), 10 deletions(-)
- create mode 100644 configs/olimex_a20_olinuxino_micro_defconfig
+This series updates our support for the RaspberryPi line of boards:
+RaspberryPi models A and B, A+ and B+, and model 2 B.
 
-diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
-index 6b8391484b92..101adcf6abbd 100644
---- a/board/olimex/a20_olinuxino/readme.txt
-+++ b/board/olimex/a20_olinuxino/readme.txt
-@@ -1,10 +1,22 @@
--A20-OLinuXino-LIME
-+A20-OLinuXino-LIME and A20-OLinuXino-MICRO
- 
- Intro
- =====
- 
--This is a open hardware board,
--see https://www.olimex.com/Products/OLinuXino/open-source-hardware
-+These are open hardware boards, both based an the AllWinners A20 SoC.
-+
-+for more details about the boards see the following pages:
-+ - https://www.olimex.com/Products/OLinuXino/open-source-hardware
-+ - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-MICRO/
-+ - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-LIME/
-+
-+The following defconfigs are available:
-+ - olimex_a20_olinuxino_micro_defconfig
-+   for the A20-OLinuXino-MICRO board using mainline kernel and U-Boot
-+ - olimex_a20_olinuxino_lime_defconfig
-+   for the A20-OLinuXino-LIME board using mainline kernel and U-Boot
-+ - olimex_a20_olinuxino_lime_mali_defconfig
-+   for the A20-OLinuXino-LIME board using legacy linux-sunxi kernel and U-Boot
- 
- The legacy linux-sunxi kernels are based on the vendor code drops.
- They are only useful when accelerated 3D graphics and multimedia support
-@@ -20,11 +32,9 @@ the users who do not need fancy 3D graphics or video playback acceleration.
- How to build it
- ===============
- 
--    $ make olimex_a20_olinuxino_lime_defconfig
--
--or
-+Configure Buildroot:
- 
--    $ make olimex_a20_olinuxino_lime_mali_defconfig
-+    $ make <board>_defconfig
- 
- Compile everything and build the rootfs image:
- 
-@@ -38,8 +48,9 @@ After building, you should get a tree like this:
-     output/images/
-     +-- rootfs.ext2
-     +-- rootfs.ext4 -> rootfs.ext2
--    +-- script.bin (mali)
--    +-- sun7i-a20-olinuxino-lime.dtb (mainline)
-+    +-- script.bin (lime_mali)
-+    +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
-+    +-- sun7i-a20-olinuxino-micro.dtb (micro, mainline)
-     +-- u-boot.bin
-     +-- u-boot-sunxi-with-spl.bin
-     `-- zImage
-@@ -98,5 +109,5 @@ Copy images on the SD card
- Finish
- ======
- 
--Eject the SD card, insert it in the A20-OLinuXino-LIME board, and power it up.
-+Eject the SD card, insert it in the A20-OLinuXino board, and power it up.
- 
-diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
-new file mode 100644
-index 000000000000..23dd0f0fbc74
---- /dev/null
-+++ b/configs/olimex_a20_olinuxino_micro_defconfig
-@@ -0,0 +1,46 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_EABIHF=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+
-+# Lock to 4.0 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="4.0.5"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
-+
-+# System configuration
-+BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0.5"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-micro"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Bootloaders
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino_MICRO"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.04"
-+BR2_TARGET_UBOOT_FORMAT_BIN=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+
-+# Additional tools
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+Patch 1 adds the option to install a utility to diagnmose issues when
+talking to the GPU (useful to debug DT-related issues... when booted!)
+
+Patches 2-5 update our defconfig files and drops the defconfig without
+DT support.
+
+Patch 6 updates the board instructions according to the previous
+patches.
+
+Thanks to Floris and Pascal for their initial works! :-)
+
+
+Changes v1 -> v2:
+  - vcdbg selects rpi-userland  (Baruch, Thomas)
+  - merge defconfig files for A/B and A+/B+  (Thomas)
+  - further bump the kernel version
+  - update board readme after defconfig merge
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 41282cbdd62dd1299be50428e436e96c45f916eb:
+
+  package/rpi-userland: bump version (2015-06-29 22:16:45 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/rpi
+
+for you to fetch changes up to ce3d41536398919a5aa02211e7a85c82771a4e52:
+
+  boards/raspberrypi: update instructions (2015-06-30 00:01:09 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (6):
+      package/rpi-firmware: add option to install vcdbg
+      configs/raspberrypi: update the DT-enabled config
+      configs/raspberrypi2: update our defconfig
+      config/raspberrypi: remove non-DT defconfig
+      config/raspberrypi: rename our non-DT defconfig file
+      boards/raspberrypi: update instructions
+
+ board/raspberrypi/linux-3.18-rpi-dt.defconfig | 204 --------------------------
+ board/raspberrypi/readme.txt                  |  48 +++---
+ configs/raspberrypi2_defconfig                |  16 +-
+ configs/raspberrypi_defconfig                 |  26 ++--
+ configs/raspberrypi_dt_defconfig              |  20 ---
+ package/rpi-firmware/Config.in                |  13 ++
+ package/rpi-firmware/rpi-firmware.mk          |   7 +
+ 7 files changed, 69 insertions(+), 265 deletions(-)
+ delete mode 100644 board/raspberrypi/linux-3.18-rpi-dt.defconfig
+ delete mode 100644 configs/raspberrypi_dt_defconfig
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
