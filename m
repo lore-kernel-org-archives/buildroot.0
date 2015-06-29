@@ -1,36 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 29 Jun 2015 06:19:48 +0300
-Subject: [Buildroot] [PATCH 03/11] package/rpi-firmware: add option to
- install vcdbg
-In-Reply-To: <25be3e9b3870c3da9f16aa6bb24eedcfcf1c4892.1435529863.git.yann.morin.1998@free.fr>
-References: <cover.1435529863.git.yann.morin.1998@free.fr>
- <25be3e9b3870c3da9f16aa6bb24eedcfcf1c4892.1435529863.git.yann.morin.1998@free.fr>
-Message-ID: <20150629031948.GS3250@tarshish>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Mon, 29 Jun 2015 08:01:09 +0200
+Subject: [Buildroot] [PATCH 1/1] live555: bump to version 2015.06.25
+Message-ID: <1435557669-3194-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/live555/live555.hash | 4 ++--
+ package/live555/live555.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Mon, Jun 29, 2015 at 12:25:12AM +0200, Yann E. MORIN wrote:
-> +config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
-> +	bool "vcdbg"
-> +	depends on BR2_PACKAGE_RPI_USERLAND
-
-There must be a good reason for doing 'depends' instead of 'select' here. Can 
-you add a comment explaining that?
-
-> +	help
-> +	  Install vcdbg, to help debug communication with the GPU.
-> +
-> +comment "vcdbg needs rpi-userland"
-> +	depends on !BR2_PACKAGE_RPI_USERLAND
-
-baruch
-
+diff --git a/package/live555/live555.hash b/package/live555/live555.hash
+index d05b18b..e6d9f53 100644
+--- a/package/live555/live555.hash
++++ b/package/live555/live555.hash
+@@ -1,4 +1,4 @@
+ # From http://live555.com/liveMedia/public/live555-latest-md5.txt
+-md5	61ec3927fdff01fdaa831238a857b660	live.2014.11.01.tar.gz
++md5 7c13d58c020efa42369b5f23a839be0c live.2015.06.25.tar.gz
+ # Locally generated
+-sha256	0896b3b787771496436fd0fad4a6a6905c46d4df50088a412216bf360975ca99	live.2014.11.01.tar.gz
++sha256 c769542f930840ac246155558e163cd94b119f4f6b9e102b6b5b063f9f055875 live.2015.06.25.tar.gz
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index f90d5a4..ab80fb1 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIVE555_VERSION = 2014.11.01
++LIVE555_VERSION = 2015.06.25
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+ LIVE555_SITE = http://www.live555.com/liveMedia/public
+ LIVE555_LICENSE = LGPLv2.1+
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.9.1
