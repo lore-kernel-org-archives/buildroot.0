@@ -1,215 +1,198 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Mon, 29 Jun 2015 09:44:22 +0100
-Subject: [Buildroot] [v2 3/6] package/nodejs: Add node.js v0.12.5 and
- set as the default version
-In-Reply-To: <20150627223459.GD30876@free.fr>
-References: <1435370498-25473-1-git-send-email-martin@barkynet.com>
- <1435370498-25473-3-git-send-email-martin@barkynet.com>
- <20150627223459.GD30876@free.fr>
-Message-ID: <CAFGQKxdE39R7DYpUMnupXPrJfpeP+_o-oHrXsKKTHt-91EqwJg@mail.gmail.com>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Mon, 29 Jun 2015 09:02:43 +0000
+Subject: [Buildroot] [PATCH v2] monkey: new package
+Message-ID: <570c4a99-dc8a-4605-9c7e-0f08da3ae412@MAIL-SINTERS-01.sinters-int.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+From: Morgan Delestre <m.delestre@sinters.fr>
 
-Thanks for the feedback and explanation, I'll get an updated patch set
-send out soon.
+Monkey is a small, fast and lightweight open source Web Server for GNU/Linux. 
+It has been designed with focus in embedded devices, therefore its scalable by 
+nature having a low memory and CPU consumption and an excellent performance.
 
-Thanks,
-Martin
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+---
+Changes v1 -> v2:
+  - Fix typo (suggested by Alexandre)
+  - Change autotools for generic-package (suggested by Thomas)
+  - Add hash file
+  - Add licence
+  - Add uClib & musl support
+  - Add shared library option
 
-On 27 June 2015 at 23:34, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Martin, All,
->
-> On 2015-06-27 03:01 +0100, Martin Bark spake thusly:
->> Signed-off-by: Martin Bark <martin@barkynet.com>
-> [--SNIP--]
->> diff --git a/package/nodejs/0.12.5/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/0.12.5/0001-Remove-dependency-on-Python-bz2-module.patch
->> new file mode 100644
->> index 0000000..d2cb0b7
->> --- /dev/null
->> +++ b/package/nodejs/0.12.5/0001-Remove-dependency-on-Python-bz2-module.patch
->> @@ -0,0 +1,38 @@
->> +From 2f57d17b8b1a8cb78bd9cff874a006adba3afd4a Mon Sep 17 00:00:00 2001
->> +From: Martin Bark <martin@barkynet.com>
->> +Date: Thu, 11 Jun 2015 20:05:11 +0100
->> +Subject: [PATCH 1/4] Remove dependency on Python bz2 module
->> +
->> +The Python bz2 module is only needed in certain cases, so only import
->> +it when needed. In the normal nodejs build, this allows to remove the
->> +dependency on this module.
->> +
->> +Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> +Signed-off-by: Martin Bark <martin@barkynet.com>
->
-> Since you're taking the original patch from 0.10 by Thomas, and adapt
-> it to 0.12, you should have kept the attribution and add yourself to the
-> list, like so:
->
->     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->     [Martin: adapt to 0.12.5]
->     Signed-off-by: Martin Bark <martin@barkynet.com>
->
-> [--SNIP--]
->> diff --git a/package/nodejs/0.12.5/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/0.12.5/0002-gyp-force-link-command-to-use-CXX.patch
->> new file mode 100644
->> index 0000000..ef86e5f
->> --- /dev/null
->> +++ b/package/nodejs/0.12.5/0002-gyp-force-link-command-to-use-CXX.patch
->> @@ -0,0 +1,27 @@
->> +From 04bda7143f7ea6c6e6b659b73547b463f7e28c65 Mon Sep 17 00:00:00 2001
->> +From: Martin Bark <martin@barkynet.com>
->> +Date: Thu, 11 Jun 2015 19:27:46 +0100
->> +Subject: [PATCH 2/4] gyp: force link command to use CXX
->> +
->> +Cc: Samuel Martin <s.martin49@gmail.com>
->> +Signed-off-by: Martin Bark <martin@barkynet.com>
->
-> Ditto, but this time the patch is (AFAICS) exactly the same as the patch
-> for 0.10, so you should have kept attribution and add yourself to the
-> list, too:
->
->     Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->     Signed-off-by: Martin Bark <martin@barkynet.com>
->
-> [--SNIP--]
->> diff --git a/package/nodejs/0.12.5/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch b/package/nodejs/0.12.5/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
->> new file mode 100644
->> index 0000000..0a21a61
->> --- /dev/null
->> +++ b/package/nodejs/0.12.5/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
->> @@ -0,0 +1,62 @@
->> +From d6cc10f0765c97c402b1c1be0968f9d9eb112da9 Mon Sep 17 00:00:00 2001
->> +From: Martin Bark <martin@barkynet.com>
->> +Date: Thu, 11 Jun 2015 19:25:09 +0100
->> +Subject: [PATCH 3/4] Use a python variable instead of hardcoding Python
->> +
->> +The nodejs build system uses python in a number of locations. However,
->> +there are some locations where it hardcodes 'python' as the Python
->> +interpreter. However, this causes problems when we need to use python2
->> +instead of just python.
->> +
->> +This patch fixes that by using the python variable already in place in
->> +the nodejs build system.
->> +
->> +Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> +Signed-off-by: Martin Bark <martin@barkynet.com>
->
-> Ditto:
->
->     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->     [Martin: adapt to 0.12.5]
->     Signed-off-by: Martin Bark <martin@barkynet.com>
->
-> [--SNIP--]
->> diff --git a/package/nodejs/0.12.5/0004-fix-build-error-without-OpenSSL-support.patch b/package/nodejs/0.12.5/0004-fix-build-error-without-OpenSSL-support.patch
->> new file mode 100644
->> index 0000000..aab6a31
->> --- /dev/null
->> +++ b/package/nodejs/0.12.5/0004-fix-build-error-without-OpenSSL-support.patch
->> @@ -0,0 +1,45 @@
->> +From ce288a677d89c72c2f4cd832dc4afb2e21ae060e Mon Sep 17 00:00:00 2001
->> +From: Martin Bark <martin@barkynet.com>
->> +Date: Thu, 11 Jun 2015 19:57:40 +0100
->> +Subject: [PATCH 4/4] fix build error without OpenSSL support
->> +MIME-Version: 1.0
->> +Content-Type: text/plain; charset=UTF-8
->> +Content-Transfer-Encoding: 8bit
->> +
->> +Cc: J?rg Krause <jkrause@posteo.de>
->> +Signed-off-by: Martin Bark <martin@barkynet.com>
->
-> Ditto:
->
->     Signed-off-by: J?rg Krause <jkrause@posteo.de>
->     [Martin: adapt to 0.12.5]
->     Signed-off-by: Martin Bark <martin@barkynet.com>
->
-> [--SNIP--]
->> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
->> index 61419fd..8a8de94 100644
->> --- a/package/nodejs/Config.in
->> +++ b/package/nodejs/Config.in
->> @@ -24,18 +24,24 @@ if BR2_PACKAGE_NODEJS
->>
->>  choice
->>       prompt "Node.js Version"
->> -     default BR2_BR2_PACKAGE_NODEJS_0_10_39
->> +     default BR2_BR2_PACKAGE_NODEJS_0_12_5
->
-> Actually, that's semantically incorrect, even though it's technically
-> working. OK, I'll explain! ;-) :
->
-> You should keep both defaults
->
->     default BR2_BR2_PACKAGE_NODEJS_0_10_39 if BR2_ARM_CPU_ARMV5
->     default BR2_BR2_PACKAGE_NODEJS_0_12_5
->
-> Kconfig will stop at the first default that matches its conditions, so
-> in case you have an armv5, 0.10.39 will be the default; otherwise the
-> default will be 0.12.5.
->
-> (note that we don't care about armv4 because nodejs as a whole depends
-> on !armv4.
->
-> So, even though 0.12.5 is hidden for armv5, and thus can't be sledted,
-> it feels wrong to have as an unconditional default (what does it mean to
-> default to something that is not available?).
->
->>       help
->>         Select the version of Node.js you wish to use.
->>
->>       config BR2_BR2_PACKAGE_NODEJS_0_10_39
->>               bool "v0.10.39"
->>
->> +     config BR2_BR2_PACKAGE_NODEJS_0_12_5
->> +             # Needs minimum of ARMv6 with VFPv2
->> +             depends on !BR2_ARM_CPU_ARMV5
->> +             bool "v0.12.5"
->>  endchoice
->>
->>  config BR2_PACKAGE_NODEJS_VERSION_STRING
->>       string
->>       default "0.10.39"       if BR2_BR2_PACKAGE_NODEJS_0_10_39
->> +     default "0.12.5"        if BR2_BR2_PACKAGE_NODEJS_0_12_5
->> +
->
-> Oh, look! An empty line! Hehe! ;-)
->
->>  menu "Module Selection"
->>
->>  config BR2_PACKAGE_NODEJS_NPM
->> diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
->> index bc1f15f..816d602 100644
->> --- a/package/nodejs/nodejs.hash
->> +++ b/package/nodejs/nodejs.hash
->> @@ -1,2 +1,5 @@
->>  # From upstream URL: http://nodejs.org/dist/v0.10.39/SHASUMS256.txt
->>  sha256       68f8d8f9515c4e77e2a06034b742e19e9848c1fee5bcadedc1d68f3e4302df37  node-v0.10.39.tar.gz
->> +
->> +# From upstream URL: http://nodejs.org/dist/v0.12.5/SHASUMS256.txt
->> +sha256       4bc1e25f4c62ac65324d3cf4aa9de2d801cd708757c3567b6ad2ced7df30cdd2  node-v0.12.5.tar.gz
->
-> Hash correct.
->
-> Regards,
-> Yann E. MORIN.
->
->> --
->> 2.1.4
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+ package/Config.in          |   1 +
+ package/monkey/Config.in   |  19 ++++++++
+ package/monkey/monkey.hash |   3 ++
+ package/monkey/monkey.mk   | 109 +++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 132 insertions(+)
+ create mode 100644 package/monkey/Config.in
+ create mode 100644 package/monkey/monkey.hash
+ create mode 100644 package/monkey/monkey.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index c2f6524..477cc47 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1226,6 +1226,7 @@ endif
+ 	source "package/modem-manager/Config.in"
+ 	source "package/mongoose/Config.in"
+ 	source "package/mongrel2/Config.in"
++	source "package/monkey/Config.in"
+ 	source "package/mosquitto/Config.in"
+ 	source "package/mrouted/Config.in"
+ 	source "package/mtr/Config.in"
+diff --git a/package/monkey/Config.in b/package/monkey/Config.in
+new file mode 100644
+index 0000000..5be2284
+--- /dev/null
++++ b/package/monkey/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_MONKEY
++	bool "monkey"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Monkey Server is a fast and lightweight web server for Linux platforms.
++
++	  http://monkey-project.com/
++
++if BR2_PACKAGE_MONKEY
++
++config BR2_PACKAGE_MONKEY_SHARED
++	bool "shared library in addition to stand-alone server"
++	help
++	  Build Monkey as a shared library in addition to stand-alone server
++
++endif
++
++comment "monkey needs an toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/monkey/monkey.hash b/package/monkey/monkey.hash
+new file mode 100644
+index 0000000..6c7eada
+--- /dev/null
++++ b/package/monkey/monkey.hash
+@@ -0,0 +1,3 @@
++# md5 from http://monkey-project.com/releases/1.5/monkey-1.5.6.tar.gz.md5, sha256 locally computed:
++md5    9699e4c9ea6ce6b989907c252ae80254 				monkey-1.5.6.tar.gz
++sha256 7c3d845306aa74ee6effd7ab6169d16ac4e6450e564954d0d0baa2d1e9be1a22	monkey-1.5.6.tar.gz
+diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
+new file mode 100644
+index 0000000..b73d0bb
+--- /dev/null
++++ b/package/monkey/monkey.mk
+@@ -0,0 +1,109 @@
++################################################################################
++#
++# monkey
++#
++################################################################################
++MONKEY_VERSION_MAJOR = 1.5
++MONKEY_VERSION = $(MONKEY_VERSION_MAJOR).6
++MONKEY_SOURCE = monkey-$(MONKEY_VERSION).tar.gz
++MONKEY_SITE = http://monkey-project.com/releases/$(MONKEY_VERSION_MAJOR)/
++MONKEY_LICENCE = Apache-2.0
++MONKEY_LICENCE_FILE = LICENSE
++
++MONKEY_SYSCONF_DIR = /etc/monkey
++MONKEY_DATA_DIR = /usr/local/monkey
++MONKEY_LOG_DIR = /var/log
++MONKEY_PLUGIN_DIR = /usr/lib/monkey
++
++MONKEY_CONF_OPTS = \
++	--prefix=/usr \
++	--sysconfdir=$(MONKEY_SYSCONF_DIR) \
++	--datadir=$(MONKEY_DATA_DIR) \
++	--mandir=/usr/share/man \
++	--logdir=$(MONKEY_LOG_DIR) \
++	--pidfile=/var/run \
++	--plugdir=$(MONKEY_PLUGIN_DIR)
++
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++MONLEY_CONF_OPTS += --uclib-mode
++endif
++
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++MONKEY_CONF_OPTS += --musl-mode
++endif
++
++ifeq ($(BR2_PACKAGE_MONKEY_SHARED),y)
++MONKEY_CONF_OPTS += --enable-shared
++MONKEY_INSTALL_STAGING = YES
++endif
++
++ifeq ($(BR2_ENABLE_DEBUG),y)
++MONKEY_CONF_OPT += --debug
++endif
++
++define MONKEY_CONFIGURE_CMDS
++	(cd $(@D); ./configure $(MONKEY_CONF_OPTS))
++endef
++
++define MONKEY_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define MONKEY_INSTALL_STAGING_CMDS
++       $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
++endef
++
++define MONKEY_INSTALL_TARGET_BIN
++	$(INSTALL) -d $(TARGET_DIR)/usr/bin
++	$(INSTALL) -m 755 $(@D)/bin/* $(TARGET_DIR)/usr/bin/
++endef
++
++define MONKEY_INSTALL_TARGET_LIBRARY
++	$(INSTALL) -m 644 $(@D)/src/libmonkey.so.$(MONKEY_VERSION_MAJOR) $(TARGET_DIR)/usr/lib
++	-ln -sf libmonkey.$(MONKEY_VERSION_MAJOR) $(TARGET_DIR)/usr/lib/libmonkey.so
++endef
++
++define MONKEY_INSTALL_TARGET_CONFIGURATION
++	$(INSTALL) -d $(TARGET_DIR)$(MONKEY_SYSCONF_DIR)
++	$(INSTALL) -d $(TARGET_DIR)${MONKEY_SYSCONF_DIR}/plugins
++	$(INSTALL) -d $(TARGET_DIR)${MONKEY_SYSCONF_DIR}/sites
++	$(INSTALL) -m 644 $(@D)/conf/*.* $(TARGET_DIR)$(MONKEY_SYSCONF_DIR)
++	cp -r $(@D)/conf/plugins/* $(TARGET_DIR)${MONKEY_SYSCONF_DIR}/plugins/
++endef
++
++define MONKEY_INSTALL_TARGET_PLUGINS
++	$(INSTALL) -d $(TARGET_DIR)${MONKEY_PLUGIN_DIR}
++	$(INSTALL) -m 644 $(@D)/plugins/*/*.so $(TARGET_DIR)${MONKEY_PLUGIN_DIR}/
++endef
++
++define MONKEY_INSTALL_TARGET_DATA
++	$(INSTALL) -d $(TARGET_DIR)${MONKEY_DATA_DIR}
++	$(INSTALL) -d $(TARGET_DIR)$(MONKEY_DATA_DIR)/imgs
++	$(INSTALL) -d $(TARGET_DIR)$(MONKEY_DATA_DIR)/css
++	$(INSTALL) -m 644 $(@D)/htdocs/index.html $(TARGET_DIR)$(MONKEY_DATA_DIR)
++	$(INSTALL) -m 644 $(@D)/htdocs/404.html $(TARGET_DIR)$(MONKEY_DATA_DIR)
++	$(INSTALL) -m 644 $(@D)/htdocs/favicon.ico $(TARGET_DIR)$(MONKEY_DATA_DIR)
++	$(INSTALL) -m 644 $(@D)/htdocs/imgs/monkey_logo.png $(TARGET_DIR)$(MONKEY_DATA_DIR)/imgs
++	$(INSTALL) -m 644 $(@D)/htdocs/imgs/info_pic.jpg $(TARGET_DIR)$(MONKEY_DATA_DIR)/imgs
++	$(INSTALL) -m 644 $(@D)/htdocs/css/bootstrap.min.css $(TARGET_DIR)$(MONKEY_DATA_DIR)/css
++	$(INSTALL) -d $(TARGET_DIR)${MONKEY_LOG_DIR}
++endef
++
++ifeq ($(BR2_PACKAGE_MONKEY_SHARED),y)
++define MONKEY_INSTALL_TARGET_CMDS
++	$(MONKEY_INSTALL_TARGET_BIN)
++	$(MONKEY_INSTALL_TARGET_LIBRARY)
++	$(MONKEY_INSTALL_TARGET_CONFIGURATION)
++	$(MONKEY_INSTALL_TARGET_PLUGINS)
++	$(MONKEY_INSTALL_TARGET_DATA)
++endef
++else
++define MONKEY_INSTALL_TARGET_CMDS
++        $(MONKEY_INSTALL_TARGET_BIN)
++        $(MONKEY_INSTALL_TARGET_CONFIGURATION)
++        $(MONKEY_INSTALL_TARGET_PLUGINS)
++        $(MONKEY_INSTALL_TARGET_DATA)
++endef
++endif
++
++$(eval $(generic-package))
+-- 
+2.1.0
