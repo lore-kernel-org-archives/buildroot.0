@@ -1,37 +1,50 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 29 Jun 2015 12:36:57 +0000
-Subject: [Buildroot] [PATCH] ARC: switch to RC1 of upcoming arc-2015.06
- tools
-In-Reply-To: <20150627092110.GI31780@waldemar-brodkorb.de>
-References: <1435346840-9677-1-git-send-email-abrodkin@synopsys.com>
- <20150627092110.GI31780@waldemar-brodkorb.de>
-Message-ID: <1435581416.30996.19.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Jun 2015 14:41:54 +0200
+Subject: [Buildroot] [PATCH 2/3] python-robotframework: New package
+In-Reply-To: <945373162.2243254.1435567764904.JavaMail.root@openwide.fr>
+References: <20150628161433.3b075437@free-electrons.com>
+ <945373162.2243254.1435567764904.JavaMail.root@openwide.fr>
+Message-ID: <20150629144154.4616ef60@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Denis,
 
-On Sat, 2015-06-27 at 11:21 +0200, Waldemar Brodkorb wrote:
-> Is there any reason uClibc-ng 1.0.3 can not be used as default?
-> Do you have pending patches for ARC?
+On Mon, 29 Jun 2015 10:49:24 +0200 (CEST), Denis Thulin wrote:
 
-Even thought there's no strong preference for us between uClibc and
-uClibc-ng the point is we've been using our GitHub uClibc repo (which
-is now a "mirror" of uClibc's git with a bit of a lag in updates - we
-do it manually from time to time) for all builds, i.e. we run
-regression tests and use for building everything uClibc but not uClibc
--ng. And so we're pretty sure uClibc works for us.
+> > So it only works with Python 2. What about using
+> > https://pypi.python.org/pypi/robotframework-python3 instead, which
+> > seems to support both Python 2 and Python 3 ? Or maybe this is not an
+> > "official" version ?
+> 
+> According to the Robot Framework install instructions, the Python 3 port is an
+> unofficial one.
+> see: https://github.com/robotframework/robotframework/blob/master/INSTALL.rst#introduction
+> 
+> It is also not up to date as the python 3 port is 3 versions late.
 
-I'm not saying that uClibc-ng is any worse, no. But for current release
-cycle we'll claim support of "vanilla" uClibc.
+Ok. Can you indicate this maybe in the Config.in help text?
 
-But I believe it's a good time now to discuss a possibility to switch
-to uClibc-ng for our following releases.
+> I could make a different package for it though.
 
-I'm explicitly adding Vineet in Cc who is our uClibc maintainer so he
-may add his 2 cents in that discussion.
+No, no need to do it if you don't have the need for it.
 
--Alexey
+> > I'll mark your patch as Changes Requested in patchwork. Can you
+> > resend
+> > an updated version that takes into account the comments from Arnout?
+> 
+> I'm working on it, but as it is my test package for scanpypi, I might not submit
+> it before the end of the week.
+
+No problem.
+
+Thanks a lot for working on this scanpypi script!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
