@@ -1,54 +1,31 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 30 Jun 2015 00:07:44 +0200
-Subject: [Buildroot] [PATCH 4/6 v2] config/raspberrypi: remove non-DT
-	defconfig
+Date: Tue, 30 Jun 2015 00:07:45 +0200
+Subject: [Buildroot] [PATCH 5/6 v2] config/raspberrypi: rename our non-DT
+	defconfig file
 In-Reply-To: <cover.1435615426.git.yann.morin.1998@free.fr>
 References: <cover.1435615426.git.yann.morin.1998@free.fr>
-Message-ID: <75404d10c4bb1ce58fc560b438696a38d2c5df67.1435615426.git.yann.morin.1998@free.fr>
+Message-ID: <756b7274bebd602204a45dee1899a5fccc814b65.1435615426.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The RPi is slowly but surely dropping support for booting without a DTB,
-so just ditch our old defconfig now that we have up-to-date DT-enabled
-defconfigs for all RPi models (save for the compute module).
+Since we no longer have a non-DT defconfig, and we no longer want to
+advertise such a possibility (non-DT is being phased out), just rename
+the DT-enabled defconfig file.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Floris Bos <bos@je-eigen-domein.nl>
 Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
 ---
- configs/raspberrypi_defconfig | 21 ---------------------
- 1 file changed, 21 deletions(-)
- delete mode 100644 configs/raspberrypi_defconfig
+ configs/{raspberrypi_dt_defconfig => raspberrypi_defconfig} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename configs/{raspberrypi_dt_defconfig => raspberrypi_defconfig} (100%)
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-deleted file mode 100644
-index f9b8a1c..0000000
---- a/configs/raspberrypi_defconfig
-+++ /dev/null
-@@ -1,21 +0,0 @@
--BR2_arm=y
--BR2_arm1176jzf_s=y
--
--BR2_TOOLCHAIN_BUILDROOT_CXX=y
--
--BR2_TARGET_GENERIC_GETTY_PORT="tty1"
--
--BR2_PACKAGE_RPI_FIRMWARE=y
--
--# Lock to 3.12 headers as the RPi kernel is based off the 3.12 branch
--BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.28"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
--
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="c256eb9968c8997dce47350d2075e42f1b3991d3"
--BR2_LINUX_KERNEL_USE_DEFCONFIG=y
--BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
--BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/raspberrypi_dt_defconfig b/configs/raspberrypi_defconfig
+similarity index 100%
+rename from configs/raspberrypi_dt_defconfig
+rename to configs/raspberrypi_defconfig
 -- 
 1.9.1
