@@ -1,51 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Jun 2015 19:20:33 +0200
-Subject: [Buildroot] [v2 4/6] package/nodejs: Add
- /usr/lib/node_modules/.bin to PATH
-In-Reply-To: <CAFGQKxcrYMsVW+D2Kzwb0A7F529TctGU0KEWGtGXAsx-ATxSqg@mail.gmail.com>
-References: <1435370498-25473-1-git-send-email-martin@barkynet.com>
- <1435370498-25473-4-git-send-email-martin@barkynet.com>
- <20150627224430.GE30876@free.fr>
- <CAFGQKxcrYMsVW+D2Kzwb0A7F529TctGU0KEWGtGXAsx-ATxSqg@mail.gmail.com>
-Message-ID: <20150629172033.GC3669@free.fr>
+Date: Mon, 29 Jun 2015 19:27:20 +0200
+Subject: [Buildroot] [RFC v4 00/16] Add per-package staging feature
+In-Reply-To: <CAHkwnC9Jk+xBu4VHgSZKueMPd0jJP2=3cWOvT0rcofd2ggDogw@mail.gmail.com>
+References: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
+ <20150628204622.GE3950@free.fr>
+ <20150628230002.608893c0@free-electrons.com>
+ <20150628212522.GH3950@free.fr>
+ <CAHkwnC9Jk+xBu4VHgSZKueMPd0jJP2=3cWOvT0rcofd2ggDogw@mail.gmail.com>
+Message-ID: <20150629172720.GD3669@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin, All,
+Fabio, All,
 
-On 2015-06-29 10:13 +0100, Martin Bark spake thusly:
-> Yes I agree your way is easier to read, I'll update my patch and resubmit it.
-
-Great, thanls! :-)
-
-> The reason this is useful is because there lots of node.js packages
-> that are normal command line apps designed to be installed globally.
-> For example, if you install http-server
-> (https://github.com/indexzero/http-server) then you simple need to cd
-> into any directory, type ./http-server and it will server that
-
-You mean, http-server must be in the directory you want to serve? Or did
-you mean that you just run /path/to/http-server and it will serve the
-current directory?  (I guess the latter.)
-
-> directory up for you.  Another example might be vtop
-> (https://github.com/MrRio/vtop), a graphical version of top.
+On 2015-06-29 10:35 +0200, Fabio Porcedda spake thusly:
+> On Sun, Jun 28, 2015 at 11:25 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > Fabio, if you could share your two defconfig (or .config) files, that'd
+> > be great!
 > 
-> If you install these apps globally then all the executables will be in
-> the /usr/lib/node_modules/.bin directory.  So this patch simply saves
-> you typing the full path, the same as for your desktop.
+> Configs:
+> https://www.dropbox.com/s/tmdzhluxv69fdib/arm_external_longchaindep_defconfig?dl=0
+> https://www.dropbox.com/s/9ntz73wo5ua80k9/arm_external_allyespackageconfig_defconfig?dl=0
+> 
+> Branch with this patch set:
+>    https://github.com/fabio-porcedda/buildroot/tree/pps-v4
+> 
+> Branch without this patch set, on which this patch set was applied, it
+> has already all the patches for using top-level-parallel make:
+>    https://github.com/fabio-porcedda/buildroot/tree/pps-v4-base
 
-OK, so why not make symlinks (or hadlinks) for each of them in /usr/bin
-instead? Something like (untested):
-
-    cd $(TARGET_DIR)/usr/bin; \
-    for f in ../../usr/lib/node_modules/.bin/*; do \
-        [ -f "$${f}" -a -x "$${f}" ] || continue; \
-        ln -sf "$${f}" "$${f##*/}" || exit 1; \
-    done
+OK, thanks! :-)  I'll spawn a test build later tonight (UTC+2) so it
+crunches during the night.
 
 Regards,
 Yann E. MORIN.
