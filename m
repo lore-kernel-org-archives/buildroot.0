@@ -1,47 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 29 Jun 2015 09:45:54 -0300
-Subject: [Buildroot] [PATCH] iproute2: tipc support needs 3.18+ headers
-Message-ID: <1435581954-16197-1-git-send-email-gustavo@zacarias.com.ar>
+From: Tal Zilcer <talz@ezchip.com>
+Date: Mon, 29 Jun 2015 15:50:27 +0300
+Subject: [Buildroot] [PATCH 2/2] package/pkg-kconfig: define
+	KCONFIG_EDITORS_MAKE_ENV
+In-Reply-To: <1435582227-26345-1-git-send-email-talz@ezchip.com>
+References: <1435582227-26345-1-git-send-email-talz@ezchip.com>
+Message-ID: <1435582227-26345-2-git-send-email-talz@ezchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/173/173c9dbed6422a3cc4f9d1f998bc25ce2e9538c7/
+From: Tal Zilcer <talz@ezchip.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+When building a configuration editor we assume its for the HOST.
+However some packages might define MAKE_ENV as TARGET_MAKE_NEV.
+Using this variable adds to beginning of $(PATH),
+the directory $(HOST_DIR)/usr/bin.
+
+This cause us to not use pkg-config from our host machine but the one
+from $(HOST_DIR)/usr/bin. This pkg-config does not support QT.
+Now when we try to run for example linux-xconfig we fail since QT is not found.
+
+To overcome this we defined a dedicated variable for the configuration editors
+
+Signed-off-by: Tal Zilcer <talz@ezchip.com>
 ---
- package/iproute2/iproute2.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/pkg-kconfig.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index dabc8b4..b2627ec 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -17,8 +17,13 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- IPROUTE2_DEPENDENCIES += busybox
- endif
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 7a00fff..a066381 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -76,7 +76,7 @@ endif
  
--ifeq ($(BR2_PACKAGE_LIBMNL),y)
-+# tipc support needs 3.18+ headers and libmnl
-+ifeq ($(BR2_PACKAGE_LIBMNL)$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18),yy)
- IPROUTE2_DEPENDENCIES += libmnl
-+else
-+define IPROUTE2_DISABLE_TIPC
-+	$(SED) '/HAVE_MNL/d' $(@D)/Config
-+endef
- endif
- 
- # If we've got iptables enable xtables support for tc
-@@ -57,6 +62,7 @@ define IPROUTE2_CONFIGURE_CMDS
- 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
- 	$(IPROUTE2_DISABLE_ARPD)
- 	$(IPROUTE2_WITH_IPTABLES)
-+	$(IPROUTE2_DISABLE_TIPC)
- endef
- 
- define IPROUTE2_BUILD_CMDS
+ # Configuration editors (menuconfig, ...)
+ $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_done
+-	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
++	$$($(2)_KCONFIG_EDITORS_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+ 		$$($(2)_KCONFIG_OPTS) $$(subst $(1)-,,$$@)
+ 	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
+ 	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
 -- 
-2.3.6
+1.7.1
