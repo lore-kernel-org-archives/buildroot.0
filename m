@@ -1,124 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 30 Jun 2015 00:07:46 +0200
-Subject: [Buildroot] [PATCH 6/6 v2] boards/raspberrypi: update instructions
-In-Reply-To: <cover.1435615426.git.yann.morin.1998@free.fr>
-References: <cover.1435615426.git.yann.morin.1998@free.fr>
-Message-ID: <ce3d41536398919a5aa02211e7a85c82771a4e52.1435615426.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 Jun 2015 00:08:51 +0200
+Subject: [Buildroot] [PATCH] configs/acmesystems_aria_g25: new config
+In-Reply-To: <5591BA72.2040903@zacarias.com.ar>
+References: <1435595496-8627-1-git-send-email-gustavo@zacarias.com.ar>
+ <20150629221332.30296de3@free-electrons.com>
+ <5591BA72.2040903@zacarias.com.ar>
+Message-ID: <20150630000851.66e6e502@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we have a sanitised set of defconfig files, and we no longer
-support non-DT setups, update and simplify the board readme file.
+Dear Gustavo Zacarias,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Floris Bos <bos@je-eigen-domein.nl>
-Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
+On Mon, 29 Jun 2015 18:36:50 -0300, Gustavo Zacarias wrote:
 
----
-Changes v1 -> v2:
-  - update after merge of A/B and A+/B+  (Thomas)
----
- board/raspberrypi/readme.txt | 48 ++++++++++++++++++++------------------------
- 1 file changed, 22 insertions(+), 26 deletions(-)
+> Ouch, i'll send V2 with two configs (got 256MB hardware here, with the 
+> 128MB config the memory is reduced as expected).
 
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 4ead046..cf95879 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -22,17 +22,14 @@ How to build it
- Configure Buildroot
- -------------------
- 
--The raspberrypi_defconfig configuration is a minimal configuration with
--all that is required to bring the Raspberry Pi up. You should base your
--work on this defconfig:
-+There are two RaspberryPi defconfig files in Buildroot, one for each
-+major variant, which you should base your work on:
- 
--  $ make raspberrypi_defconfig
--
--Alternatively, if you want to test support for the Device Tree:
-+For models A, B, A+ or B+:
- 
--  $ make raspberrypi_dt_defconfig
-+  $ make raspberrypi_defconfig
- 
--For Raspberry Pi 2 use a different defconfig:
-+And for model 2 B:
- 
-   $ make raspberrypi2_defconfig
- 
-@@ -64,20 +61,23 @@ Result of the build
- After building, you should obtain this tree:
- 
-     output/images/
--    +-- rootfs.tar                              [0]
-+    +-- rootfs.tar                  [0]
-     +-- rpi-firmware/
--    |   +-- bcm2708-rpi-b.dtb
--    |   +-- bcm2708-rpi-b-plus.dtb
--    |   +-- bcm2709-rpi-2-b.dtb
-     |   +-- bootcode.bin
-     |   +-- config.txt
-     |   +-- fixup.dat
-     |   `-- start.elf
-+    +-- bcm2708-rpi-b.dtb           [1]
-+    +-- bcm2708-rpi-b-plus.dtb      [1]
-+    +-- bcm2709-rpi-2-b.dtb         [1]
-     `-- zImage
- 
- [0] Note for Volatile: rootfs.tar will only be there if you kept
-     "tar the root filesystem" option selected in "Filesystem images".
- 
-+[1] Not all of them will be present, depending on the RaspberryPi
-+    model you are using.
-+
- Prepare you SDCard
- ==================
- 
-@@ -105,30 +105,26 @@ Install the binaries to the SDCard
- At the root of the boot partition, the Raspberry Pi must find the following
- files:
- 
--    * bcm2708-rpi-b.dtb         [1]
--    * bcm2708-rpi-b-plus.dtb    [2]
--    * bcm2709-rpi-2-b.dtb       [3]
-+    * bcm2708-rpi-b.dtb         [2]
-+    * bcm2708-rpi-b-plus.dtb    [3]
-+    * bcm2709-rpi-2-b.dtb       [4]
-     * bootcode.bin
-     * config.txt
-     * fixup.dat
-     * start.elf
-     * zImage
- 
--[1] For models A and B
--[2] For models A+ and B+
--[3] For model 2
-+[2] For models A and B
-+[3] For models A+ and B+
-+[4] For model 2
- 
- For example:
- 
-- $ cp output/images/rpi-firmware/* /mnt/mountpointboot
--
--If your kernel does *not* have support for the Device Tree, then install
--it with:
--
-- $ cp output/images/zImage /mnt/mountpointboot
-+  $ cp output/images/rpi-firmware/* /mnt/mountpointboot
-+  $ cp output/images/*.dtb /mnt/mountpointboot
- 
--If your kernel *does* have support for the Device Tree, then install it
--with:
-+The kernel image must be marked with a special header so that the
-+bootloader of the RaspberryPi knows it supports Device Tree:
- 
-   $ ./output/host/usr/bin/mkknlimg output/images/zImage /mnt/mountpointboot/zImage
- 
+One thing that was bothering me in the contribution from Angelo was
+specifically the need for two defconfigs. I guess there's no way to
+runtime detect the memory size, and therefore build a single
+at91bootstrap3 for both board configurations?
+
+> > Also, could you review the patch from Angelo adding support for another
+> > board from ACME:
+> >
+> >    http://patchwork.ozlabs.org/patch/485319/
+> 
+> The Arietta is a stripped down Aria, i'll take a look but i have no way 
+> of testing it since i don't have one.
+
+I really only asked for patch review, not testing. So not having the HW
+is not a good excuse :-)
+
+Thanks!
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
