@@ -1,30 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Jun 2015 14:42:25 +0200
-Subject: [Buildroot] [PATCH 1/3] scanpypi.py: new utility
-In-Reply-To: <1434362765-1074-2-git-send-email-denis.thulin@openwide.fr>
-References: <1434362765-1074-1-git-send-email-denis.thulin@openwide.fr>
- <1434362765-1074-2-git-send-email-denis.thulin@openwide.fr>
-Message-ID: <20150629144225.70dc78f4@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 29 Jun 2015 09:45:54 -0300
+Subject: [Buildroot] [PATCH] iproute2: tipc support needs 3.18+ headers
+Message-ID: <1435581954-16197-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Denis,
+Fixes:
+http://autobuild.buildroot.net/results/173/173c9dbed6422a3cc4f9d1f998bc25ce2e9538c7/
 
-On Mon, 15 Jun 2015 12:06:03 +0200, Denis THULIN wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/iproute2/iproute2.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
->  docs/manual/adding-packages-python.txt |  36 ++
->  support/scripts/scanpypi.py            | 607 +++++++++++++++++++++++++++++++++
-
-Minor nit: please call the script just scanpypi, without extension.
-Like scancpan.
-
-Thanks,
-
-Thomas
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index dabc8b4..b2627ec 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -17,8 +17,13 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ IPROUTE2_DEPENDENCIES += busybox
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBMNL),y)
++# tipc support needs 3.18+ headers and libmnl
++ifeq ($(BR2_PACKAGE_LIBMNL)$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18),yy)
+ IPROUTE2_DEPENDENCIES += libmnl
++else
++define IPROUTE2_DISABLE_TIPC
++	$(SED) '/HAVE_MNL/d' $(@D)/Config
++endef
+ endif
+ 
+ # If we've got iptables enable xtables support for tc
+@@ -57,6 +62,7 @@ define IPROUTE2_CONFIGURE_CMDS
+ 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
+ 	$(IPROUTE2_DISABLE_ARPD)
+ 	$(IPROUTE2_WITH_IPTABLES)
++	$(IPROUTE2_DISABLE_TIPC)
+ endef
+ 
+ define IPROUTE2_BUILD_CMDS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.3.6
