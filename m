@@ -1,41 +1,77 @@
-From: Tal Zilcer <talz@ezchip.com>
-Date: Mon, 29 Jun 2015 15:50:26 +0300
-Subject: [Buildroot] [PATCH 1/2] package/gcc: fix ARC failure to build in 2
-	phases.
-Message-ID: <1435582227-26345-1-git-send-email-talz@ezchip.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 29 Jun 2015 15:14:43 +0200
+Subject: [Buildroot] [PATCH] systemd: bump to version 221
+Message-ID: <1435583683-6642-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Tal Zilcer <talz@ezchip.com>
+- Bump to version 221
+- Update hash file
 
-When working with GCC initial at override source dir mode the
-HOST_GCC_INITIAL_POST_PATCH_HOOKS is not called and compilation failes.
-The solution is to use HOST_GCC_INITIAL_POST_RSYNC_HOOKS since this hook
-is being called at override source dir mode.
+- Add --disable-gnuefi to configure options to avoid a failure like this
+  one:
 
-Signed-off-by: Tal Zilcer <talz@ezchip.com>
+  checking for /usr/lib/gnuefi/elf_ia32_efi.lds... configure: error:
+  cannot check for file existence when cross compiling
+
+- Remove gudev logic since it has been removed from the systemd tree and
+  it is now an external project.
+
+Announcement URL:
+
+  http://lists.freedesktop.org/archives/systemd-devel/2015-June/033170.html
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/gcc/gcc-initial/gcc-initial.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/systemd/systemd.hash |  2 +-
+ package/systemd/systemd.mk   | 10 ++--------
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 0fa2353..6b747d0 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -33,7 +33,11 @@ define HOST_GCC_INITIAL_DISABLE_LIBGMON
- 	$(SED) 's/crtbeginS.o libgmon.a crtg.o/crtbeginS.o crtg.o/' \
- 		$(@D)/libgcc/config.host
- endef
-+ifeq ($(HOST_GCC_INITIAL_OVERRIDE_SRCDIR),)
- HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
-+else
-+HOST_GCC_INITIAL_POST_RSYNC_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
-+endif
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index d2ac740..f746051 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  5c57113454e37c040d0cb481bd960ae7cf3a3fe0a231ff4945259bc74503f2d9  systemd-219.tar.xz
++sha256  085e088650afbfc688ccb13459aedb1fbc7c8810358605b076301f472d51cc4f  systemd-221.tar.xz
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 98bda02..ee17bc8 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSTEMD_VERSION = 219
++SYSTEMD_VERSION = 221
+ SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
+ SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
+ SYSTEMD_LICENSE = LGPLv2.1+; GPLv2+ for udev; MIT-like license for few source files listed in README
+@@ -39,6 +39,7 @@ SYSTEMD_CONF_OPTS += \
+ 	--with-dbussystemservicedir=/usr/share/dbus-1/system-services \
+ 	--enable-split-usr \
+ 	--disable-efi \
++	--disable-gnuefi \
+ 	--disable-tests \
+ 	--disable-dbus \
+ 	--without-python
+@@ -63,13 +64,6 @@ else
+ SYSTEMD_CONF_OPTS += --disable-acl
  endif
  
- HOST_GCC_INITIAL_CONF_OPTS = \
+-ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+-SYSTEMD_CONF_OPTS += --enable-gudev
+-SYSTEMD_DEPENDENCIES += libglib2
+-else
+-SYSTEMD_CONF_OPTS += --disable-gudev
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ SYSTEMD_CONF_OPTS += --enable-seccomp
+ SYSTEMD_DEPENDENCIES += libseccomp
 -- 
-1.7.1
+2.3.6
