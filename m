@@ -1,81 +1,140 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 30 Jun 2015 00:05:22 +0200
-Subject: [Buildroot] [PATCH 3/4] olimex_a20_olinuxino_lime: rename board dir
-	to remove _lime suffix
+Date: Tue, 30 Jun 2015 00:05:23 +0200
+Subject: [Buildroot] [PATCH 4/4] configs/olimex_a20_olinuxino_micro: new
+	board
 In-Reply-To: <1435615523-21039-1-git-send-email-luca@lucaceresoli.net>
 References: <1435615523-21039-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1435615523-21039-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1435615523-21039-4-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The files in board/olimex/a20_olinuxino_lime/ work with minimal or no
-modifications for the Olimex A20-OLinuXino-Micro board, whose support is
-going to be added in a later commit.
-
-Rename the directory to clarify it's not restricted to the Lime anymore.
+Add a defconfig for the Olimex A20-OLinuXino-Micro board, reusing most
+of the A20-OLinuXino-Lime files.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- board/olimex/{a20_olinuxino_lime => a20_olinuxino}/boot-mali.cmd | 0
- board/olimex/{a20_olinuxino_lime => a20_olinuxino}/boot.cmd      | 0
- board/olimex/{a20_olinuxino_lime => a20_olinuxino}/post-build.sh | 0
- board/olimex/{a20_olinuxino_lime => a20_olinuxino}/readme.txt    | 0
- configs/olimex_a20_olinuxino_lime_defconfig                      | 4 ++--
- configs/olimex_a20_olinuxino_lime_mali_defconfig                 | 4 ++--
- 6 files changed, 4 insertions(+), 4 deletions(-)
- rename board/olimex/{a20_olinuxino_lime => a20_olinuxino}/boot-mali.cmd (100%)
- rename board/olimex/{a20_olinuxino_lime => a20_olinuxino}/boot.cmd (100%)
- rename board/olimex/{a20_olinuxino_lime => a20_olinuxino}/post-build.sh (100%)
- rename board/olimex/{a20_olinuxino_lime => a20_olinuxino}/readme.txt (100%)
+ board/olimex/a20_olinuxino/readme.txt        | 31 +++++++++++++------
+ configs/olimex_a20_olinuxino_micro_defconfig | 46 ++++++++++++++++++++++++++++
+ 2 files changed, 67 insertions(+), 10 deletions(-)
+ create mode 100644 configs/olimex_a20_olinuxino_micro_defconfig
 
-diff --git a/board/olimex/a20_olinuxino_lime/boot-mali.cmd b/board/olimex/a20_olinuxino/boot-mali.cmd
-similarity index 100%
-rename from board/olimex/a20_olinuxino_lime/boot-mali.cmd
-rename to board/olimex/a20_olinuxino/boot-mali.cmd
-diff --git a/board/olimex/a20_olinuxino_lime/boot.cmd b/board/olimex/a20_olinuxino/boot.cmd
-similarity index 100%
-rename from board/olimex/a20_olinuxino_lime/boot.cmd
-rename to board/olimex/a20_olinuxino/boot.cmd
-diff --git a/board/olimex/a20_olinuxino_lime/post-build.sh b/board/olimex/a20_olinuxino/post-build.sh
-similarity index 100%
-rename from board/olimex/a20_olinuxino_lime/post-build.sh
-rename to board/olimex/a20_olinuxino/post-build.sh
-diff --git a/board/olimex/a20_olinuxino_lime/readme.txt b/board/olimex/a20_olinuxino/readme.txt
-similarity index 100%
-rename from board/olimex/a20_olinuxino_lime/readme.txt
-rename to board/olimex/a20_olinuxino/readme.txt
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 62f0a4cfc797..33bc10eacce4 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -13,8 +13,8 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
- BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino_lime/post-build.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino_lime/boot.cmd $(TARGET_DIR)/boot"
+diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
+index 6b8391484b92..101adcf6abbd 100644
+--- a/board/olimex/a20_olinuxino/readme.txt
++++ b/board/olimex/a20_olinuxino/readme.txt
+@@ -1,10 +1,22 @@
+-A20-OLinuXino-LIME
++A20-OLinuXino-LIME and A20-OLinuXino-MICRO
+ 
+ Intro
+ =====
+ 
+-This is a open hardware board,
+-see https://www.olimex.com/Products/OLinuXino/open-source-hardware
++These are open hardware boards, both based an the AllWinners A20 SoC.
++
++for more details about the boards see the following pages:
++ - https://www.olimex.com/Products/OLinuXino/open-source-hardware
++ - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-MICRO/
++ - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-LIME/
++
++The following defconfigs are available:
++ - olimex_a20_olinuxino_micro_defconfig
++   for the A20-OLinuXino-MICRO board using mainline kernel and U-Boot
++ - olimex_a20_olinuxino_lime_defconfig
++   for the A20-OLinuXino-LIME board using mainline kernel and U-Boot
++ - olimex_a20_olinuxino_lime_mali_defconfig
++   for the A20-OLinuXino-LIME board using legacy linux-sunxi kernel and U-Boot
+ 
+ The legacy linux-sunxi kernels are based on the vendor code drops.
+ They are only useful when accelerated 3D graphics and multimedia support
+@@ -20,11 +32,9 @@ the users who do not need fancy 3D graphics or video playback acceleration.
+ How to build it
+ ===============
+ 
+-    $ make olimex_a20_olinuxino_lime_defconfig
+-
+-or
++Configure Buildroot:
+ 
+-    $ make olimex_a20_olinuxino_lime_mali_defconfig
++    $ make <board>_defconfig
+ 
+ Compile everything and build the rootfs image:
+ 
+@@ -38,8 +48,9 @@ After building, you should get a tree like this:
+     output/images/
+     +-- rootfs.ext2
+     +-- rootfs.ext4 -> rootfs.ext2
+-    +-- script.bin (mali)
+-    +-- sun7i-a20-olinuxino-lime.dtb (mainline)
++    +-- script.bin (lime_mali)
++    +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
++    +-- sun7i-a20-olinuxino-micro.dtb (micro, mainline)
+     +-- u-boot.bin
+     +-- u-boot-sunxi-with-spl.bin
+     `-- zImage
+@@ -98,5 +109,5 @@ Copy images on the SD card
+ Finish
+ ======
+ 
+-Eject the SD card, insert it in the A20-OLinuXino-LIME board, and power it up.
++Eject the SD card, insert it in the A20-OLinuXino board, and power it up.
+ 
+diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
+new file mode 100644
+index 000000000000..23dd0f0fbc74
+--- /dev/null
++++ b/configs/olimex_a20_olinuxino_micro_defconfig
+@@ -0,0 +1,46 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_EABIHF=y
++BR2_ARM_FPU_NEON_VFPV4=y
++
++# Lock to 4.0 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.0.5"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
++BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
 +BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
 +BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
-diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-index dde39ad07472..2a9fa2bf59b8 100644
---- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-@@ -13,8 +13,8 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
- BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino_lime/post-build.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino_lime/boot-mali.cmd $(TARGET_DIR)/boot"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot-mali.cmd $(TARGET_DIR)/boot"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0.5"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-micro"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino_MICRO"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.04"
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++
++# Additional tools
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
 1.9.1
