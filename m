@@ -1,42 +1,31 @@
-From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
-Date: Mon, 29 Jun 2015 12:01:51 -0300
-Subject: [Buildroot] [PATCH v3 0/4] Add ARM Cortex-M3 support
-In-Reply-To: <20150628143454.2b895956@free-electrons.com>
-References: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
- <20150628143454.2b895956@free-electrons.com>
-Message-ID: <20150629150151.GA10554@fox>
+From: Tal Zilcer <talz@ezchip.com>
+Date: Mon, 29 Jun 2015 15:39:12 +0000
+Subject: [Buildroot] [PATCH 1/2] package/gcc: fix ARC failure to build
+ in 2 phases.
+In-Reply-To: <20150629162906.415e456f@free-electrons.com>
+References: <1435582227-26345-1-git-send-email-talz@ezchip.com>
+ <20150629162906.415e456f@free-electrons.com>
+Message-ID: <AM3PR02MB11407402CE0DA7E56F56AAE6BBAA0@AM3PR02MB1140.eurprd02.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
+Sent: Monday, June 29, 2015 5:29 PM
 
-On Sun, Jun 28, 2015 at 02:34:54PM +0200, Thomas Petazzoni wrote:
-> Dear Guido Mart?nez,
-> 
-> On Fri, 26 Jun 2015 14:33:18 -0300, Guido Mart?nez wrote:
-> >   toolchain: introduce BR2_TOOLCHAIN_HAS_RESOLVER
-> >   toolchain-external: add OSELAS 2014.12.0 Cortex-M3 toolchain
-> 
-> There have been some comments from Yann on these patches, so I've
-> marked them as "Changes Requested" in patchwork. Could you rework them
-> as suggested by Yann, and resend updated versions?
-Yes, will do! I agree with Yann in removing nslookup from the default
-busybox config. I think that's easier for everyone.
+> If you're using <pkg>_OVERRIDE_SRCDIR, then the assumption is that your source tree is patched with whatever change is needed for the package to build fine without applying any of the Buildroot patches.
+We have one source tree for both build phases of GCC.
+First phase must have this patch while second phase must NOT have it.
+it doesn't seems reasonable to have two GCC source trees because of this patch.
 
-> Also, now that there is Cortex-M3 support listed, please make sure it
-> works fine with the internal toolchain backend, and if it doesn't work,
-> add the appropriate exceptions (for example, glibc and musl cannot be
-> built for Cortex-M3, as far as I know). Can you send a follow-up patch
-> for this?
-Right, it doesn't work right now since there are a few places that force
-the selection of ARM instructions where Thumb is not available, and that
-won't work on M3. I'll try to fix it and get back.
+> In any case, I don't think it's worth the effort making that conditional, just register the post-rsync hook unconditionally.
+It is only to explain our intentions, do you prefer a comment or just to add the RSYNC hook?
 
-Thanks!
+> BTW, this problem should have been sorted out by the ARC developers, maybe you should ping them about this?
+Adding Alexey to this correspondence
 
--- 
-Guido Mart?nez, VanguardiaSur
-www.vanguardiasur.com.ar
+Thanks,
+
+Tal
