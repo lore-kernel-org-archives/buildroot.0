@@ -1,47 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Jun 2015 19:27:20 +0200
-Subject: [Buildroot] [RFC v4 00/16] Add per-package staging feature
-In-Reply-To: <CAHkwnC9Jk+xBu4VHgSZKueMPd0jJP2=3cWOvT0rcofd2ggDogw@mail.gmail.com>
-References: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
- <20150628204622.GE3950@free.fr>
- <20150628230002.608893c0@free-electrons.com>
- <20150628212522.GH3950@free.fr>
- <CAHkwnC9Jk+xBu4VHgSZKueMPd0jJP2=3cWOvT0rcofd2ggDogw@mail.gmail.com>
-Message-ID: <20150629172720.GD3669@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 29 Jun 2015 19:47:37 +0200
+Subject: [Buildroot] [PATCH] uclibc: deprecate locale support
+In-Reply-To: <20150628150822.46f6861e@free-electrons.com>
+References: <20150628071417.GA13377@waldemar-brodkorb.de>
+ <20150628140153.4a657fdd@free-electrons.com>
+ <20150628125837.GX31780@waldemar-brodkorb.de>
+ <20150628150822.46f6861e@free-electrons.com>
+Message-ID: <20150629174736.GE2778@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+Hi,
+Thomas Petazzoni wrote,
 
-On 2015-06-29 10:35 +0200, Fabio Porcedda spake thusly:
-> On Sun, Jun 28, 2015 at 11:25 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Fabio, if you could share your two defconfig (or .config) files, that'd
-> > be great!
+> Hello,
 > 
-> Configs:
-> https://www.dropbox.com/s/tmdzhluxv69fdib/arm_external_longchaindep_defconfig?dl=0
-> https://www.dropbox.com/s/9ntz73wo5ua80k9/arm_external_allyespackageconfig_defconfig?dl=0
+> On Sun, 28 Jun 2015 14:58:37 +0200, Waldemar Brodkorb wrote:
 > 
-> Branch with this patch set:
->    https://github.com/fabio-porcedda/buildroot/tree/pps-v4
+> > I think no package really needs locale support in the C library.
+> > 
+> > May be there is some misunderstanding about the locale stuff.
+> > Here is how I understand the stuff.
+> > 
+> > I think we have mixed up two different things here:
+> > - iconv: perform character set conversion, needed for a lot of
+> >   packages, f.e. Kodi. Is included in Glibc and Musl. Libiconv can
+> >   be used with uClibc-ng/uClibc.
+> > - locale: defines the user's language, country, ..
+> >   If you want f.e. german error messages on your embedded system
+> >   you would need locale support and locale data.
+> >   env LC_ALL=de_DE ls foo
 > 
-> Branch without this patch set, on which this patch set was applied, it
-> has already all the patches for using top-level-parallel make:
->    https://github.com/fabio-porcedda/buildroot/tree/pps-v4-base
+> Fully agreed here. But in uClibc, enabling locale support actually
+> gives both: the iconv functions *and* the locale support itself.
 
-OK, thanks! :-)  I'll spawn a test build later tonight (UTC+2) so it
-crunches during the night.
+Yeah, unfortunately both is coupled together as another research has
+proofed.
+ 
+So the best option for 1.0.x to fix the build issue.
+I tracked it down to a parallel build issue. When number of jobs
+is set to 1, the error does not happen.
+I thought using the make target pregen instead of header would 
+be a good workaround, but the problem still exist in Xtensa builds.
+The ARM builds work after this change.
 
-Regards,
-Yann E. MORIN.
+Any parallel make gurus available?
+It only happens hen LOCALE support is activated.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+best regards
+ Waldemar
