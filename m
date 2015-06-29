@@ -1,77 +1,38 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 29 Jun 2015 15:14:43 +0200
-Subject: [Buildroot] [PATCH] systemd: bump to version 221
-Message-ID: <1435583683-6642-1-git-send-email-Vincent.Riera@imgtec.com>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Mon, 29 Jun 2015 11:13:34 -0300
+Subject: [Buildroot] [PATCH] qemu: enable for aarch64
+Message-ID: <1435587214-10000-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump to version 221
-- Update hash file
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-- Add --disable-gnuefi to configure options to avoid a failure like this
-  one:
+Enable the target qemu for aarch64 since it works just fine.
+Only tested using userland CPU emulation (no HYP) with a
+qemu_aarch64_virt_defconfig image inside a qemu_aarch64_virt_defconfig
+instance.
 
-  checking for /usr/lib/gnuefi/elf_ia32_efi.lds... configure: error:
-  cannot check for file existence when cross compiling
-
-- Remove gudev logic since it has been removed from the systemd tree and
-  it is now an external project.
-
-Announcement URL:
-
-  http://lists.freedesktop.org/archives/systemd-devel/2015-June/033170.html
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/systemd/systemd.hash |  2 +-
- package/systemd/systemd.mk   | 10 ++--------
- 2 files changed, 3 insertions(+), 9 deletions(-)
+ package/qemu/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index d2ac740..f746051 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  5c57113454e37c040d0cb481bd960ae7cf3a3fe0a231ff4945259bc74503f2d9  systemd-219.tar.xz
-+sha256  085e088650afbfc688ccb13459aedb1fbc7c8810358605b076301f472d51cc4f  systemd-221.tar.xz
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 98bda02..ee17bc8 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 25936e2..082b5ee 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
+ 	bool
+ 	# Only tested on these architectures
+-	default y if BR2_i386 || BR2_mips || BR2_mipsel || BR2_x86_64
++	default y if BR2_aarch64 || BR2_i386 || BR2_mips || BR2_mipsel \
++		|| BR2_x86_64
  
--SYSTEMD_VERSION = 219
-+SYSTEMD_VERSION = 221
- SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
- SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
- SYSTEMD_LICENSE = LGPLv2.1+; GPLv2+ for udev; MIT-like license for few source files listed in README
-@@ -39,6 +39,7 @@ SYSTEMD_CONF_OPTS += \
- 	--with-dbussystemservicedir=/usr/share/dbus-1/system-services \
- 	--enable-split-usr \
- 	--disable-efi \
-+	--disable-gnuefi \
- 	--disable-tests \
- 	--disable-dbus \
- 	--without-python
-@@ -63,13 +64,6 @@ else
- SYSTEMD_CONF_OPTS += --disable-acl
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
--SYSTEMD_CONF_OPTS += --enable-gudev
--SYSTEMD_DEPENDENCIES += libglib2
--else
--SYSTEMD_CONF_OPTS += --disable-gudev
--endif
--
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- SYSTEMD_CONF_OPTS += --enable-seccomp
- SYSTEMD_DEPENDENCIES += libseccomp
+ comment "QEMU requires a toolchain with wchar, threads"
+ 	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
 -- 
-2.3.6
+2.1.4
