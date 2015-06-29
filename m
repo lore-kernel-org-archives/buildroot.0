@@ -1,78 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Tue, 30 Jun 2015 00:07:41 +0200
-Subject: [Buildroot] [PATCH 0/6 v2] raspberrypi: update packages and
-	defconfigs (branch yem/rpi)
-Message-ID: <cover.1435615426.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 1/6 v2] package/rpi-firmware: add option to
+	install vcdbg
+In-Reply-To: <cover.1435615426.git.yann.morin.1998@free.fr>
+References: <cover.1435615426.git.yann.morin.1998@free.fr>
+Message-ID: <87e637df89d62f2944e64f10d4807616435c6c3c.1435615426.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+vcdbg is a tool to help debug the communication with the GPU.
+It comes as a binary-only, and in two flavours: one for the hard
+floating point ABI, one for the software floating poitn ABI.
 
-This series updates our support for the RaspberryPi line of boards:
-RaspberryPi models A and B, A+ and B+, and model 2 B.
+Unfortunately, we have no source code for that tool, only a binary that
+was dynamically linked with glibc and libraries from rpi-userland.
 
-Patch 1 adds the option to install a utility to diagnmose issues when
-talking to the GPU (useful to debug DT-related issues... when booted!)
+So, just install that executable, and let's hope there is no symbol
+issue at runtime.
 
-Patches 2-5 update our defconfig files and drops the defconfig without
-DT support.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc; Floris Bos <bos@je-eigen-domein.nl>
+Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Patch 6 updates the board instructions according to the previous
-patches.
-
-Thanks to Floris and Pascal for their initial works! :-)
-
-
+---
 Changes v1 -> v2:
-  - vcdbg selects rpi-userland  (Baruch, Thomas)
-  - merge defconfig files for A/B and A+/B+  (Thomas)
-  - further bump the kernel version
-  - update board readme after defconfig merge
+  - select rpi-userland  (Baruch, Thomas)
+---
+ package/rpi-firmware/Config.in       | 13 +++++++++++++
+ package/rpi-firmware/rpi-firmware.mk |  7 +++++++
+ 2 files changed, 20 insertions(+)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 41282cbdd62dd1299be50428e436e96c45f916eb:
-
-  package/rpi-userland: bump version (2015-06-29 22:16:45 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/rpi
-
-for you to fetch changes up to ce3d41536398919a5aa02211e7a85c82771a4e52:
-
-  boards/raspberrypi: update instructions (2015-06-30 00:01:09 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (6):
-      package/rpi-firmware: add option to install vcdbg
-      configs/raspberrypi: update the DT-enabled config
-      configs/raspberrypi2: update our defconfig
-      config/raspberrypi: remove non-DT defconfig
-      config/raspberrypi: rename our non-DT defconfig file
-      boards/raspberrypi: update instructions
-
- board/raspberrypi/linux-3.18-rpi-dt.defconfig | 204 --------------------------
- board/raspberrypi/readme.txt                  |  48 +++---
- configs/raspberrypi2_defconfig                |  16 +-
- configs/raspberrypi_defconfig                 |  26 ++--
- configs/raspberrypi_dt_defconfig              |  20 ---
- package/rpi-firmware/Config.in                |  13 ++
- package/rpi-firmware/rpi-firmware.mk          |   7 +
- 7 files changed, 69 insertions(+), 265 deletions(-)
- delete mode 100644 board/raspberrypi/linux-3.18-rpi-dt.defconfig
- delete mode 100644 configs/raspberrypi_dt_defconfig
-
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index a060b4e..7e8ab19 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -65,4 +65,17 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 	  Say 'y' here if you need to load one or more of the DTB overlays,
+ 	  to support HATs (Hardware Attached on Top, add-on modules).
+ 
++config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
++	bool "vcdbg"
++	depends on BR2_INSTALL_LIBSTDCPP # rpi-userland
++	depends on BR2_TOOLCHAIN_HAS_THREADS # rpi-userland
++	depends on !BR2_STATIC_LIBS # rpi-userland
++	select BR2_PACKAGE_RPI_USERLAND
++	help
++	  Install vcdbg, to help debug communication with the GPU.
++
++comment "vcdbg needs a toolchain w/ C++, threads, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| BR2_STATIC_LIBS
++
+ endif # BR2_PACKAGE_RPI_FIRMWARE
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 56d6925..6299b04 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -29,6 +29,13 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
++define RPI_FIRMWARE_INSTALL_TARGET_CMDS
++	$(INSTALL) -d -m 0700 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/bin/vcdbg \
++		$(TARGET_DIR)/usr/sbin/vcdbg
++endef
++endif # INSTRALL_VCDBG
++
+ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
