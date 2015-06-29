@@ -1,44 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Jun 2015 22:13:32 +0200
-Subject: [Buildroot] [PATCH] configs/acmesystems_aria_g25: new config
-In-Reply-To: <1435595496-8627-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1435595496-8627-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150629221332.30296de3@free-electrons.com>
+Date: Mon, 29 Jun 2015 22:16:13 +0200
+Subject: [Buildroot] [PATCH 03/11] package/rpi-firmware: add option to
+ install vcdbg
+In-Reply-To: <20150629165240.GA3669@free.fr>
+References: <cover.1435529863.git.yann.morin.1998@free.fr>
+ <25be3e9b3870c3da9f16aa6bb24eedcfcf1c4892.1435529863.git.yann.morin.1998@free.fr>
+ <20150629031948.GS3250@tarshish> <20150629165240.GA3669@free.fr>
+Message-ID: <20150629221613.44f8b6be@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Yann E. MORIN,
 
-On Mon, 29 Jun 2015 13:31:36 -0300, Gustavo Zacarias wrote:
+On Mon, 29 Jun 2015 18:52:40 +0200, Yann E. MORIN wrote:
 
-> diff --git a/board/acmesystems/aria-g25/at91bootstrap_aria_g25.config b/board/acmesystems/aria-g25/at91bootstrap_aria_g25.config
-> new file mode 100644
-> index 0000000..f4c12a7
-> --- /dev/null
-> +++ b/board/acmesystems/aria-g25/at91bootstrap_aria_g25.config
-> @@ -0,0 +1,9 @@
-> +CONFIG_AT91SAM9X5_ARIA=y
-> +CONFIG_BUS_SPEED_100MHZ=y
-> +CONFIG_RAM_128MB=y
+> On 2015-06-29 06:19 +0300, Baruch Siach spake thusly:
+> > On Mon, Jun 29, 2015 at 12:25:12AM +0200, Yann E. MORIN wrote:
+> > > +config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
+> > > +	bool "vcdbg"
+> > > +	depends on BR2_PACKAGE_RPI_USERLAND
+> > 
+> > There must be a good reason for doing 'depends' instead of 'select' here. Can 
+> > you add a comment explaining that?
+> 
+> OK, I can add a comment.
+> 
+> Here's the reason: vcdbg is a debug utility, and I don't see selecting
+> the whole of rpi-userland just for the one or two libraries that vcdbg
+> xfr.org/requires.
 
-So, 128 MB ?
-
-> +CONFIG_SDCARD=y
-> +CONFIG_LOAD_LINUX=y
-> +CONFIG_LINUX_ZIMAGE=y
-> +CONFIG_LINUX_KERNEL_ARG_STRING="mem=256M console=ttyS0,115200 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait"
-
-Or 256 MB ?
-
-Also, could you review the patch from Angelo adding support for another
-board from ACME:
-
-  http://patchwork.ozlabs.org/patch/485319/
-
-Thanks,
+Well, still, I believe a 'select' is more appropriate here. I don't
+think we generally introduce a "depends on" because the dependency is a
+little big. We really only do it when the dependency is quite obvious:
+X.org, Python, etc.
 
 Thomas
 -- 
