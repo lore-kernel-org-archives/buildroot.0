@@ -1,211 +1,174 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 30 Jun 2015 12:21:58 +0200
-Subject: [Buildroot] [PATCH v2] configs/acmesystems_aria_g25: new configs
-In-Reply-To: <1435613937-20746-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1435613937-20746-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <CA+TH9Vkn625DJy8xzD-WCSZMpbPF_jE2C_eZ_jnVSfNFRv7NcA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 Jun 2015 12:13:47 +0200
+Subject: [Buildroot] [git commit] monkey: new package
+Message-ID: <20150630102332.ADD8281790@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+commit: http://git.buildroot.net/buildroot/commit/?id=372113ff935ca0fba607c5455dbadd5f410efa24
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-2015-06-29 23:38 GMT+02:00 Gustavo Zacarias <gustavo@zacarias.com.ar>:
-> Add new basic configurations for ACME Systems ARIA G25 SOM.
-> There are two different variants, a 128MB and a 256MB RAM model.
->
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  .../aria-g25/at91bootstrap_aria_g25_128mb.config   |  9 ++++
->  .../aria-g25/at91bootstrap_aria_g25_256mb.config   |  9 ++++
->  board/acmesystems/aria-g25/readme.txt              | 48 ++++++++++++++++++++++
->  configs/acmesystems_aria_g25_128mb_defconfig       | 24 +++++++++++
->  configs/acmesystems_aria_g25_256mb_defconfig       | 24 +++++++++++
->  5 files changed, 114 insertions(+)
->  create mode 100644 board/acmesystems/aria-g25/at91bootstrap_aria_g25_128mb.config
->  create mode 100644 board/acmesystems/aria-g25/at91bootstrap_aria_g25_256mb.config
->  create mode 100644 board/acmesystems/aria-g25/readme.txt
->  create mode 100644 configs/acmesystems_aria_g25_128mb_defconfig
->  create mode 100644 configs/acmesystems_aria_g25_256mb_defconfig
+Monkey is a small, fast and lightweight open source Web Server for
+GNU/Linux.  It has been designed with focus in embedded devices,
+therefore its scalable by nature having a low memory and CPU
+consumption and an excellent performance.
 
-Can we agree on the configs name format? Sergio usually uses the
-format "acme-BOARD-MEMORY", I used acme-arietta-128m_defconfig for
-example. I really prefer to have a standard name format!
+[Thomas:
+  - Add missing dependency on !BR2_STATIC_LIBS (the source code uses
+    dlopen) and BR2_USE_MMU (the source code uses fork)
+  - Slightly adjust/reword the description of the
+    BR2_PACKAGE_MONKEY_SHARED option.
+  - Remove all the complicated installation logic for the target, and
+    just use "make install" instead.
+  - Pass --no-backtrace when uClibc is used, otherwise the build fails
+    because <execinfo.h> is not available in uClibc.
+  - Pass $(TARGET_CONFIGURE_OPTS) in the environment of the configure
+    script., otherwise monkey gets built for the host and not for the
+    target.
+  - Add a post install target hook to remove a broken symlink
+    libmonkey.so installed by Monkey's Makefile when the shared
+    library is not enabled.
+  - Use TARGET_MAKE_ENV when calling make, just because we should.
+  - Pass --malloc-libc so that the libc malloc() is used instead of
+    the builtin jemalloc allocator, which requires more work to
+    cross-compile properly.
+  - Add missing empty line after the .mk header and before the first
+    variable definition.]
 
-> diff --git a/board/acmesystems/aria-g25/at91bootstrap_aria_g25_128mb.config b/board/acmesystems/aria-g25/at91bootstrap_aria_g25_128mb.config
-> new file mode 100644
-> index 0000000..9be0545
-> --- /dev/null
-> +++ b/board/acmesystems/aria-g25/at91bootstrap_aria_g25_128mb.config
-> @@ -0,0 +1,9 @@
-> +CONFIG_AT91SAM9X5_ARIA=y
-> +CONFIG_BUS_SPEED_100MHZ=y
-> +CONFIG_RAM_128MB=y
-> +CONFIG_SDCARD=y
-> +CONFIG_LOAD_LINUX=y
-> +CONFIG_LINUX_ZIMAGE=y
-> +CONFIG_LINUX_KERNEL_ARG_STRING="mem=128M console=ttyS0,115200 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait"
-> +CONFIG_DEBUG=y
-> +CONFIG_THUMB=y
-> diff --git a/board/acmesystems/aria-g25/at91bootstrap_aria_g25_256mb.config b/board/acmesystems/aria-g25/at91bootstrap_aria_g25_256mb.config
-> new file mode 100644
-> index 0000000..546c62c
-> --- /dev/null
-> +++ b/board/acmesystems/aria-g25/at91bootstrap_aria_g25_256mb.config
-> @@ -0,0 +1,9 @@
-> +CONFIG_AT91SAM9X5_ARIA=y
-> +CONFIG_BUS_SPEED_100MHZ=y
-> +CONFIG_RAM_256MB=y
-> +CONFIG_SDCARD=y
-> +CONFIG_LOAD_LINUX=y
-> +CONFIG_LINUX_ZIMAGE=y
-> +CONFIG_LINUX_KERNEL_ARG_STRING="mem=256M console=ttyS0,115200 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait"
-> +CONFIG_DEBUG=y
-> +CONFIG_THUMB=y
-> diff --git a/board/acmesystems/aria-g25/readme.txt b/board/acmesystems/aria-g25/readme.txt
-> new file mode 100644
-> index 0000000..374cf1c
-> --- /dev/null
-> +++ b/board/acmesystems/aria-g25/readme.txt
-> @@ -0,0 +1,48 @@
-> +Build instructions
-> +==================
-> +
-> +As a regular user configure and then build:
-> +
-> +$ make acmesystems_aria_g25_defconfig
-> +$ make
-> +
-> +Writing to the MicroSD card
-> +===========================
-> +
-> +Assuming your Aria G25 baseboard has a MicroSD socket, for example with
-> +the Terra baseboard, you'll need a blank MicroSD (obviously) initialized
-> +in a particular way to be able to boot from it.
-> +
-> +Assuming the card is seen as /dev/sdb in your PC/laptop/other device
-> +you'll need to run the following commands as root or via sudo.
-> +
-> +Make sure all of the card partitions are unmounted before starting.
-> +
-> +First we'll need to create two partitions:
-> +
-> +# sfdisk -uM /dev/sdb <<EOF
-> +,32,6
-> +;
-> +EOF
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in          |    1 +
+ package/monkey/Config.in   |   23 ++++++++++++++
+ package/monkey/monkey.hash |    3 ++
+ package/monkey/monkey.mk   |   69 ++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 96 insertions(+), 0 deletions(-)
 
-This is better:
-
-echo ',32,6\n;' | sfdisk -uM /dev/sdX
-
-> +
-> +Then we'll need to create the empty filesystems:
-> +
-> +# mkdosfs -n SD_BOOT /dev/sdb1
-> +# mkfs.ext4 -L SD_ROOT /dev/sdb2
-> +
-> +We'll populate the first partition (boot) with the relevant files:
-> +
-> +# mount /dev/sdb1 /mnt
-> +# cp output/images/at91bootstrap.bin /mnt/BOOT.BIN
-> +# cp output/images/zImage /mnt
-> +# cp output/images/at91-ariag25.dtb /mnt
-> +# umount /mnt
-> +
-> +And the root filesystem afterwards:
-> +
-> +# mount /dev/sdb2 /mnt
-> +# tar -C /mnt output/images/rootfs.tar
-> +# umount /mnt
-> +
-> +You're done, insert the MicroSD card in the slot and enjoy.
-> +
-> diff --git a/configs/acmesystems_aria_g25_128mb_defconfig b/configs/acmesystems_aria_g25_128mb_defconfig
-> new file mode 100644
-> index 0000000..76ccbe1
-> --- /dev/null
-> +++ b/configs/acmesystems_aria_g25_128mb_defconfig
-> @@ -0,0 +1,24 @@
-> +# Architecture
-> +BR2_arm=y
-> +
-> +# Toolchain
-> +BR2_KERNEL_HEADERS_VERSION=y
-> +BR2_DEFAULT_KERNEL_VERSION="4.1"
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-> +
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
-> +BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
-> +BR2_LINUX_KERNEL_ZIMAGE=y
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
-> +
-> +# Bootloader
-> +BR2_TARGET_AT91BOOTSTRAP3=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="git://github.com/tanzilli/at91bootstrap.git"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="3f957cec253abc80fd10c733e5e596f46e1aef56"
-> +BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE="board/acmesystems/aria-g25/at91bootstrap_aria_g25_128mb.config"
-
-Config files for at91bootstrap are not really needed cause Sergio
-shipped them in it's own at91bootstrap fork, so you should simply use
-something like this in your bootstrap defconfig:
-
-BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-128m"
-
-> diff --git a/configs/acmesystems_aria_g25_256mb_defconfig b/configs/acmesystems_aria_g25_256mb_defconfig
-> new file mode 100644
-> index 0000000..320abc3
-> --- /dev/null
-> +++ b/configs/acmesystems_aria_g25_256mb_defconfig
-> @@ -0,0 +1,24 @@
-> +# Architecture
-> +BR2_arm=y
-> +
-> +# Toolchain
-> +BR2_KERNEL_HEADERS_VERSION=y
-> +BR2_DEFAULT_KERNEL_VERSION="4.1"
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-> +
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
-> +BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
-> +BR2_LINUX_KERNEL_ZIMAGE=y
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
-> +
-> +# Bootloader
-> +BR2_TARGET_AT91BOOTSTRAP3=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="git://github.com/tanzilli/at91bootstrap.git"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="3f957cec253abc80fd10c733e5e596f46e1aef56"
-> +BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE="board/acmesystems/aria-g25/at91bootstrap_aria_g25_256mb.config"
-
-No need for custom config, should be:
-
-BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-256m"
-
-Sincerely, Angelo
-
-> --
-> 2.3.6
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+diff --git a/package/Config.in b/package/Config.in
+index c2f6524..477cc47 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1226,6 +1226,7 @@ endif
+ 	source "package/modem-manager/Config.in"
+ 	source "package/mongoose/Config.in"
+ 	source "package/mongrel2/Config.in"
++	source "package/monkey/Config.in"
+ 	source "package/mosquitto/Config.in"
+ 	source "package/mrouted/Config.in"
+ 	source "package/mtr/Config.in"
+diff --git a/package/monkey/Config.in b/package/monkey/Config.in
+new file mode 100644
+index 0000000..001c415
+--- /dev/null
++++ b/package/monkey/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_MONKEY
++	bool "monkey"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS # dlopen()
++	depends on BR2_USE_MMU # fork()
++	help
++	  Monkey Server is a fast and lightweight web server for Linux platforms.
++
++	  http://monkey-project.com/
++
++if BR2_PACKAGE_MONKEY
++
++config BR2_PACKAGE_MONKEY_SHARED
++	bool "install shared library"
++	help
++	  Build Monkey as a shared library in addition to stand-alone
++	  server
++
++endif
++
++comment "monkey needs an toolchain w/ threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/monkey/monkey.hash b/package/monkey/monkey.hash
+new file mode 100644
+index 0000000..6c7eada
+--- /dev/null
++++ b/package/monkey/monkey.hash
+@@ -0,0 +1,3 @@
++# md5 from http://monkey-project.com/releases/1.5/monkey-1.5.6.tar.gz.md5, sha256 locally computed:
++md5    9699e4c9ea6ce6b989907c252ae80254 				monkey-1.5.6.tar.gz
++sha256 7c3d845306aa74ee6effd7ab6169d16ac4e6450e564954d0d0baa2d1e9be1a22	monkey-1.5.6.tar.gz
+diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
+new file mode 100644
+index 0000000..2344f8c
+--- /dev/null
++++ b/package/monkey/monkey.mk
+@@ -0,0 +1,69 @@
++################################################################################
++#
++# monkey
++#
++################################################################################
++
++MONKEY_VERSION_MAJOR = 1.5
++MONKEY_VERSION = $(MONKEY_VERSION_MAJOR).6
++MONKEY_SOURCE = monkey-$(MONKEY_VERSION).tar.gz
++MONKEY_SITE = http://monkey-project.com/releases/$(MONKEY_VERSION_MAJOR)/
++MONKEY_LICENCE = Apache-2.0
++MONKEY_LICENCE_FILE = LICENSE
++
++# This package has a configure script, but it's not using
++# autoconf/automake, so we're using the generic-package
++# infrastructure.
++
++MONKEY_CONF_OPTS = \
++	--prefix=/usr \
++	--sysconfdir=/etc/monkey \
++	--datadir=/var/www \
++	--mandir=/usr/share/man \
++	--logdir=/var/log \
++	--pidfile=/var/run \
++	--plugdir=/usr/lib/monkey \
++	--malloc-libc
++
++# --uclib-mode is not a typo
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++MONKEY_CONF_OPTS += --uclib-mode --no-backtrace
++endif
++
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++MONKEY_CONF_OPTS += --musl-mode
++endif
++
++ifeq ($(BR2_PACKAGE_MONKEY_SHARED),y)
++MONKEY_CONF_OPTS += --enable-shared
++MONKEY_INSTALL_STAGING = YES
++else
++# Even without --enable-shared, the monkey build system leaves a
++# broken libmonkey.so symbolic link.
++define MONKEY_REMOVE_DANGLING_SYMLINK
++	$(RM) -f $(TARGET_DIR)/usr/lib/libmonkey.so
++endef
++MONKEY_POST_INSTALL_TARGET_HOOKS += MONKEY_REMOVE_DANGLING_SYMLINK
++endif
++
++ifeq ($(BR2_ENABLE_DEBUG),y)
++MONKEY_CONF_OPT += --debug
++endif
++
++define MONKEY_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(MONKEY_CONF_OPTS))
++endef
++
++define MONKEY_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define MONKEY_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
++endef
++
++define MONKEY_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
