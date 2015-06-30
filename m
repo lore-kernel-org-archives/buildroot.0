@@ -1,62 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 16:44:12 +0200
-Subject: [Buildroot] [git commit] openssl: support building the binary
-	without MMU
-Message-ID: <20150630144415.7383281789@busybox.osuosl.org>
+Date: Tue, 30 Jun 2015 16:44:46 +0200
+Subject: [Buildroot] [PATCH 1/2] openssl: support building the binary
+ without MMU
+In-Reply-To: <5586AF6B.6020304@mind.be>
+References: <1434711274-49716-1-git-send-email-benoit@wsystem.com>
+ <20150621064540.534ebebc@free-electrons.com>
+ <5586AF6B.6020304@mind.be>
+Message-ID: <20150630164446.19340dc8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c8937ade4bc29fd8a502b8e9cd0b392a7e76fa30
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Arnout,
 
-The commit 720893b62510438237b9923d744dd079ddb4f67d "openssl: disable
-apps for NOMMU" prevented the openssl binary from being built without
-MMU in order to fix a build failure without fork(). However, openssl is
-designed to support the lack of fork() with -DHAVE_FORK=0, so allow the
-openssl binary to be enabled without MMU thanks to this option.
+On Sun, 21 Jun 2015 14:34:51 +0200, Arnout Vandecappelle wrote:
 
-Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/openssl/Config.in  |    3 ---
- package/openssl/openssl.mk |    4 ++++
- 2 files changed, 4 insertions(+), 3 deletions(-)
+> > Hum. But then it means that we have propagated the MMU dependency to
+> > all reverse dependencies of openssl (i.e packages that depend on
+> > openssl), but they may no longer need this dependency anymore.
+> 
+>  This is only about BR2_PACKAGE_OPENSSL_BIN, which is not selected by any package.
 
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index 07859ca..d147c07 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -13,15 +13,12 @@ if BR2_PACKAGE_OPENSSL
- 
- config BR2_PACKAGE_OPENSSL_BIN
- 	bool "openssl binary"
--	# uses fork()
--	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	help
- 	  Install the openssl binary to the target file system. This is a
- 	  command line tool for doing various crypthographic stuff.
- 
- comment "openssl binary needs a toolchain w/ dynamic library"
--	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_OPENSSL_ENGINES
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index fd8904d..34a9830 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -22,6 +22,10 @@ endef
- OPENSSL_PRE_CONFIGURE_HOOKS += OPENSSL_DISABLE_APPS
- endif
- 
-+ifeq ($(BR2_USE_MMU),)
-+OPENSSL_CFLAGS += -DHAVE_FORK=0
-+endif
-+
- ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
- OPENSSL_CFLAGS += -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
- OPENSSL_DEPENDENCIES += cryptodev-linux
+I obviously missed that. Thanks for noticing.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
