@@ -1,72 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 30 Jun 2015 19:48:03 +0200
-Subject: [Buildroot] [v3 2/4] package/nodejs: symlink
- /usr/lib/node_modules/.bin/* to /usr/bin
-In-Reply-To: <1435660966-11347-2-git-send-email-martin@barkynet.com>
-References: <1435660966-11347-1-git-send-email-martin@barkynet.com>
- <1435660966-11347-2-git-send-email-martin@barkynet.com>
-Message-ID: <20150630174803.GB3900@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 30 Jun 2015 19:45:42 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-06-29
+References: <20150630063014.44429100A75@stock.ovh.net>
+ <20150630140738.526d72b8@free-electrons.com>
+Message-ID: <XnsA4C9C90811402berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin, All,
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20150630140738.526d72b8 at free-electrons.com: 
 
-On 2015-06-30 11:42 +0100, Martin Bark spake thusly:
-> This patch symlinks all executables in /usr/lib/node_modules/.bin
-> to /usr/bin so that node.js modules installed using
-> BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL are accessible from the command line.
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+>>          arm |                      exim-4.85 | NOK |
+>>          http://autobuild.buildroot.net/results/52ff76838e504e2fd472dbad
+>>          755220952e19e007/ 
+> /home/buildroot/build/instance-0/output/host/usr/bin/arm-linux-gcc -o
+> exim_dbmbuild 
+> /home/buildroot/build/instance-0/output/host/opt/ext-toolchain/bin/../lib
+> /gcc/arm-buildroot-linux-musleabihf/4.9.2/../../../../arm-buildroot-linux
+> -musleabihf/bin/ld: cannot find -lnsl collect2: error: ld returned 1
+> exit status make[2]: *** [exim_dbmbuild] Error 1
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Musl does not provide a libnsl stub it seems. Luca, as our exim guy,
+> can you have a look?
 
-Regards,
-Yann E. MORIN.
+Hi,
 
-> ---
-> Changes v2 -> v3
->  - Create symlinks instead of setting PATH (Suggested by Yann E. MORIN)
-> 
-> Changes v1 -> v2
->  - Improved commit message
-> ---
->  package/nodejs/nodejs.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index 59e03b0..0b3f8a5 100644
-> --- a/package/nodejs/nodejs.mk
-> +++ b/package/nodejs/nodejs.mk
-> @@ -111,6 +111,14 @@ define NODEJS_INSTALL_MODULES
->  		$(HOST_DIR)/usr/bin/npm install \
->  		$(NODEJS_MODULES_LIST) \
->  	)
-> +
-> +	# Symlink all executables in $(TARGET_DIR)/usr/lib/node_modules/.bin to
-> +	# $(TARGET_DIR)/usr/bin so they are accessible from the command line
-> +	cd $(TARGET_DIR)/usr/bin; \
-> +	for f in ../../usr/lib/node_modules/.bin/*; do \
-> +		[ -f "$${f}" -a -x "$${f}" ] || continue; \
-> +		ln -sf "$${f}" "$${f##*/}" || exit 1; \
-> +	done
->  endef
->  endif
->  
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+fixed by http://patchwork.ozlabs.org/patch/460495/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Regards, Bernd
