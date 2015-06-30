@@ -1,37 +1,59 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 30 Jun 2015 06:35:18 +0300
-Subject: [Buildroot] [PATCH 1/6 v2] package/rpi-firmware: add option to
-	install vcdbg
-In-Reply-To: <87e637df89d62f2944e64f10d4807616435c6c3c.1435615426.git.yann.morin.1998@free.fr>
-References: <cover.1435615426.git.yann.morin.1998@free.fr>
- <87e637df89d62f2944e64f10d4807616435c6c3c.1435615426.git.yann.morin.1998@free.fr>
-Message-ID: <20150630033518.GW3250@tarshish>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Mon, 29 Jun 2015 23:36:08 -0400
+Subject: [Buildroot] [PATCH 1/1] util-linux: allow programs to be disabled
+	by default
+Message-ID: <1435635368-26928-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+When even a single extra util-linux utility is enabled, the
+default build and install will install many more programs,
+including many that overlap with those offered by busybox.
+Finer control of util-linux can be realized by disabling
+everything by default (with --disable-all-programs) and then
+overriding the default with specific enables (--enable-<name>).
+This patch adds a config switch to disable everything by default.
 
-On Tue, Jun 30, 2015 at 12:07:41AM +0200, Yann E. MORIN wrote:
-> vcdbg is a tool to help debug the communication with the GPU.
-> It comes as a binary-only, and in two flavours: one for the hard
-> floating point ABI, one for the software floating poitn ABI.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/util-linux/Config.in     | 6 ++++++
+ package/util-linux/util-linux.mk | 4 ++++
+ 2 files changed, 10 insertions(+)
 
-s/poitn/point/
-
-> Unfortunately, we have no source code for that tool, only a binary that
-> was dynamically linked with glibc and libraries from rpi-userland.
-
-Shouldn't it depend on glibc them? Does it run with uClibc*/musl?
-
-> So, just install that executable, and let's hope there is no symbol
-> issue at runtime.
-
-baruch
-
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 39df11c..9981889 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -47,6 +47,12 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
+ 
+ if BR2_PACKAGE_UTIL_LINUX_BINARIES
+ 
++config BR2_PACKAGE_UTIL_LINUX_DISABLE_BY_DEFAULT
++	bool "Disable programs by default"
++	help
++	  Disable programs by default; only explicitly enabled utilities
++	  and libraries will be built.
++
+ config BR2_PACKAGE_UTIL_LINUX_AGETTY
+ 	bool "agetty"
+ 	help
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 3ca147a..3749a71 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -25,6 +25,10 @@ UTIL_LINUX_CONF_OPTS += \
+ 	--disable-rpath \
+ 	--disable-makeinstall-chown \
+ 	--without-python
++ 
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_DISABLE_BY_DEFAULT),y)
++UTIL_LINUX_CONF_OPTS += --disable-all-programs
++endif
+ 
+ ifeq ($(BR2_PACKAGE_BASH),)
+ UTIL_LINUX_CONF_OPTS += \
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.9.1
