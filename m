@@ -1,29 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 23:35:24 +0200
-Subject: [Buildroot] [PATCH v2] package/i2c-tools: bump to version 3.1.2
-In-Reply-To: <1434615148-29568-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1434615148-29568-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150630233524.0d1fcf1e@free-electrons.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue, 30 Jun 2015 23:58:10 +0200
+Subject: [Buildroot] [PATCH 1/2] wmctrl: add hash file
+Message-ID: <1435701491-17232-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/wmctrl/wmctrl.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/wmctrl/wmctrl.hash
 
-On Thu, 18 Jun 2015 10:12:28 +0200, Angelo Compagnucci wrote:
-> This patch bumps version to 3.1.2 and adds support for the recently
-> introduced python3 support for py-smbus.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
-> Changes:
-
-Applied, thanks.
-
-Thomas
+diff --git a/package/wmctrl/wmctrl.hash b/package/wmctrl/wmctrl.hash
+new file mode 100644
+index 0000000..a08c0e9
+--- /dev/null
++++ b/package/wmctrl/wmctrl.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 d78a1efdb62f18674298ad039c5cbdb1edb6e8e149bb3a8e3a01a4750aa3cca9 wmctrl-1.07.tar.gz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
