@@ -1,59 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 10:46:38 +0200
-Subject: [Buildroot] Buildroot runtime test infrastructure prototype
-In-Reply-To: <1581556904.2327180.1435653528950.JavaMail.root@openwide.fr>
-References: <20150630093903.4fd27ca5@free-electrons.com>
- <1581556904.2327180.1435653528950.JavaMail.root@openwide.fr>
-Message-ID: <20150630104638.532e16f4@free-electrons.com>
+Date: Tue, 30 Jun 2015 11:13:35 +0200
+Subject: [Buildroot] [PATCH 4/4] configs/olimex_a20_olinuxino_micro: new
+ board
+In-Reply-To: <5592413B.6090508@lucaceresoli.net>
+References: <1435615523-21039-1-git-send-email-luca@lucaceresoli.net>
+ <1435615523-21039-4-git-send-email-luca@lucaceresoli.net>
+ <CAB0FRssX3DheAt5K6GHq-jHr7=8FFw6SOirT59v5EcikjEDcZA@mail.gmail.com>
+ <5592413B.6090508@lucaceresoli.net>
+Message-ID: <20150630111335.47cbacba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jeremy,
+Dear Luca Ceresoli,
 
-On Tue, 30 Jun 2015 10:38:49 +0200 (CEST), Jeremy Rosen wrote:
+On Tue, 30 Jun 2015 09:11:55 +0200, Luca Ceresoli wrote:
 
-> We are in the process of reimplementing your examples in RFW to provide
-> some food for thought, stay tuned...
-
-Ok, good. Will be interesting to see.
-
-> pretty good, RFW can report in an xunit-compatible xml which can be
-> easily parsed by whatever tool you prefer. I have been autogenerating
-> reports with it for quite some time
+> >> +The following defconfigs are available:
+> >> + - olimex_a20_olinuxino_micro_defconfig
+> >> +   for the A20-OLinuXino-MICRO board using mainline kernel and U-Boot
+> >> + - olimex_a20_olinuxino_lime_defconfig
+> >> +   for the A20-OLinuXino-LIME board using mainline kernel and U-Boot
+> >> + - olimex_a20_olinuxino_lime_mali_defconfig
+> >> +   for the A20-OLinuXino-LIME board using legacy linux-sunxi kernel and U-Boot
+> >>
+> >
+> > The reference to U-Boot seems useless.
 > 
-> RFW also generates some HTML pages ready to be pushed on a server,
-> but that's less usefull for the buildroot use-case.
-> 
-> An exemple of generated HTML can be found here:
-> 
-> http://robotframework.org/robotframework/latest/images/log_passed.html
+> You're right. Will fix and resend, thanks.
 
-Ok.
+If that's the only fix, no need to resend, I'll fixup when applying.
 
-> > Can it run tests in parallel?
-> 
-> no, RFW core has no parallel testing capabilities by itself. There 
-> are plugins to do that, though...
-
-This is a very problematic thing. We will have lots of tests, and they
-will be long. Not being able to run them in parallel is a big issue.
-
-> > Can we
-> > easily integrate the tests with Jenkins to have them run everyday?
-> 
-> RFW has its own jenkins plugin to harness test results. integration
-> is very easy
-> 
-> the plugin is available here :
-> 
-> https://wiki.jenkins-ci.org/display/JENKINS/Robot+Framework+Plugin
-
-This is good, however.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
