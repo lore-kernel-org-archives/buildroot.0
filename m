@@ -1,62 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 23:29:57 +0200
-Subject: [Buildroot] [git commit] package/i2c-tools: bump to version 3.1.2
-Message-ID: <20150630213515.7DCF3816A5@busybox.osuosl.org>
+Date: Tue, 30 Jun 2015 23:35:24 +0200
+Subject: [Buildroot] [PATCH v2] package/i2c-tools: bump to version 3.1.2
+In-Reply-To: <1434615148-29568-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1434615148-29568-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20150630233524.0d1fcf1e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=140d66a80fb422e83e7c8d67ce8cb31dc8d1ee4b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Angelo Compagnucci,
 
-This patch bumps version to 3.1.2 and adds support for the recently
-introduced python3 support for py-smbus.
+On Thu, 18 Jun 2015 10:12:28 +0200, Angelo Compagnucci wrote:
+> This patch bumps version to 3.1.2 and adds support for the recently
+> introduced python3 support for py-smbus.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+> Changes:
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/i2c-tools/i2c-tools.hash |    2 +-
- package/i2c-tools/i2c-tools.mk   |   13 ++++++++++---
- 2 files changed, 11 insertions(+), 4 deletions(-)
+Applied, thanks.
 
-diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
-index a6c376f..c12ffe8 100644
---- a/package/i2c-tools/i2c-tools.hash
-+++ b/package/i2c-tools/i2c-tools.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256	14d4d7d60d1c12e43f2befe239c682a5c44c27682f153d4b58c1e392d2db1700  i2c-tools-3.1.1.tar.bz2
-+sha256	db5e69f2e2a6e3aa2ecdfe6a5f490b149c504468770f58921c8c5b8a7860a441  i2c-tools-3.1.2.tar.bz2
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 6c156ca..187bd09 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -4,16 +4,23 @@
- #
- ################################################################################
- 
--I2C_TOOLS_VERSION = 3.1.1
-+I2C_TOOLS_VERSION = 3.1.2
- I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
- I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
- I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
- I2C_TOOLS_LICENSE_FILES = COPYING
- 
--# Build/install steps mirror the distutil python package type in the python package
--# infrastructure
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- I2C_TOOLS_DEPENDENCIES += python
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+I2C_TOOLS_DEPENDENCIES += python3
-+endif
-+
-+# Build/install steps mirror the distutil python package type in the python package
-+# infrastructure
-+ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
- # BASE_ENV taken from PKG_PYTHON_DISTUTILS_ENV in package/pkg-python.mk
- I2C_TOOLS_PYTHON_BASE_ENV = \
- 	$(PKG_PYTHON_DISTUTILS_ENV) \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
