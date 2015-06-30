@@ -1,57 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 14:54:48 +0200
-Subject: [Buildroot] [git commit] configs: rename atmel_xplained_defconfig
-Message-ID: <20150630130117.07A5D7FC98@busybox.osuosl.org>
+Date: Tue, 30 Jun 2015 15:26:27 +0200
+Subject: [Buildroot] [PATCH v3 0/9] configs: defconfigs for Atmel boards
+In-Reply-To: <1432045308-16825-1-git-send-email-alexandre.belloni@free-electrons.com>
+References: <1432045308-16825-1-git-send-email-alexandre.belloni@free-electrons.com>
+Message-ID: <20150630152627.660fe84d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb7628b30c124bcc93a32bd6798913a30678b6fc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Alexandre Belloni,
 
-For consistency, rename atmel_xplained_defconfig to
-atmel_sama5d3_xplained_mmc_defconfig as this configuration supports
-booting the sama5d3 Xplained with an MMC card (as opposed to the NAND
-flash).
+On Tue, 19 May 2015 16:21:39 +0200, Alexandre Belloni wrote:
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/atmel/xplained/readme.txt                    |    8 ++++----
- ...config => atmel_sama5d3_xplained_mmc_defconfig} |    0
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Alexandre Belloni (9):
+>   configs: update at91sam9g45m10ek defconfig
+>   configs: add defconfig for Atmel at91sam9rlek
+>   configs: add defconfig for Atmel at91sam9x5ek
+>   configs: add defconfig for Atmel sama5d3xek
+>   configs: add defconfig for Atmel sama5d4ek
+>   configs: add defconfig for Atmel sama5d4 Xplained Ultra
+>   configs: add defconfig for Atmel sama5d3 Xplained
+>   atmel: add a flashing helper and documentation
+>   configs: rename atmel_xplained_defconfig
 
-diff --git a/board/atmel/xplained/readme.txt b/board/atmel/xplained/readme.txt
-index 63744dd..7919c60 100644
---- a/board/atmel/xplained/readme.txt
-+++ b/board/atmel/xplained/readme.txt
-@@ -10,19 +10,19 @@ web site.
- Note that the default Buildroot configuration is prepared to boot from
- an SD card: the first stage bootloader, second stage bootloader,
- kernel image and root filesystem are all located on the SD card. Some
--adjustements in the bootloader configuration will be needed to boot
--from NAND flash.
-+adjustments in the bootloader configuration will be needed to boot
-+from NAND flash, see board/atmel/nandflash.txt
- 
- Configuring and building Buildroot
- ----------------------------------
- 
--  make atmel_xplained_defconfig
-+  make atmel_sama5d3_xplained_mmc_defconfig
-   make
- 
- Preparing the SD card
- ---------------------
- 
--The SD card must be partitionned with at least two partitions: one
-+The SD card must be partitioned with at least two partitions: one
- FAT16 partition for the bootloaders, kernel image and Device Tree
- blob, and one ext4 partition for the root filesystem. To partition the
- SD card:
-diff --git a/configs/atmel_xplained_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
-similarity index 100%
-rename from configs/atmel_xplained_defconfig
-rename to configs/atmel_sama5d3_xplained_mmc_defconfig
+All applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
