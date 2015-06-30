@@ -1,61 +1,56 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 30 Jun 2015 17:33:12 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-06-29
-In-Reply-To: <176867931.2355075.1435671554783.JavaMail.root@openwide.fr>
-References: <176867931.2355075.1435671554783.JavaMail.root@openwide.fr>
-Message-ID: <1435685592.3000.52.camel@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 30 Jun 2015 19:46:08 +0200
+Subject: [Buildroot] [v3 1/4] package/nodejs: Add node.js v0.12.5 and
+ set as the default version
+In-Reply-To: <1435660966-11347-1-git-send-email-martin@barkynet.com>
+References: <1435660966-11347-1-git-send-email-martin@barkynet.com>
+Message-ID: <20150630174607.GA3900@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+Martin, all,
 
-On Tue, 2015-06-30 at 15:39 +0200, Romain Naour wrote:
-> Hi Thomas,
+On 2015-06-30 11:42 +0100, Martin Bark spake thusly:
+> The version of the V8 JavaScript engine used by node.js v0.12.5 requires
+> at least an ARMv6 architecture with VFPv2.  For this reason v0.10.39
+> remains the default for ARMv5 targets, all other targets now default to
+> v0.12.5.
 > 
-> ----- Mail original -----
-> > De: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> > ?: buildroot at uclibc.org, "Gustavo Zacarias" <
-> > gustavo.zacarias at free-electrons.com>, "Luca Ceresoli"
-> > <luca@lucaceresoli.net>, "Romain Naour" <romain.naour@openwide.fr>, 
-> > "Yann E. MORIN" <yann.morin.1998@free.fr>,
-> > "Alexey Brodkin" <Alexey.Brodkin@synopsys.com>, "Bartosz 
-> > Golaszewski" <bgolaszewski@baylibre.com>, "Vicente Olivert
-> > Riera" <Vincent.Riera@imgtec.com>, "Francois Perrad" <
-> > fperrad at gmail.com>, "J?rg Krause" <jkrause@posteo.de>
-> > Envoy?: Mardi 30 Juin 2015 14:07:38
-> > Objet: Re: [Buildroot] [autobuild.buildroot.net] Build results for 
-> > 2015-06-29
-> > 
-> > 
-> > >          arc |   host-gdb-arc-2015.06-rc1-gdb | NOK |
-> > >          http://autobuild.buildroot.net/results/2b27a4a64c0b225ae
-> > > 479ecfccf7a97f5ea95598c/
-> > 
-> > The infamous static/shared issue when building gdb. Romain, I 
-> > thought
-> > we had fixed this problem. Did we miss a patch?
-> > 
-> No, the problem was fixed but for arc-2014.11 wich was the only arc 
-> version at
-> that time.
-> I think we need to add the PR56780 fix for arc-2015.06.
-> http://git.buildroot.net/buildroot/commit/?id=0c12f72775b332fe7e3f758
-> 9ec4d08534b8ec64e
-> 
-> Alexey can you do that ?
+> Signed-off-by: Martin Bark <martin@barkynet.com>
 
-Sure let me send a patch for that.
-Actually I just understood that when sending my patch for switching to
-arc-2015.06-rc1 I completely forget to rename folders with patches in
-binutils, gcc, gdb.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Please pardon my stupidity - I hope on next RCs and on release I'll be
-more careful.
+[--SNIP--]
+> diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+> index bc1f15f..816d602 100644
+> --- a/package/nodejs/nodejs.hash
+> +++ b/package/nodejs/nodejs.hash
+> @@ -1,2 +1,5 @@
+>  # From upstream URL: http://nodejs.org/dist/v0.10.39/SHASUMS256.txt
+>  sha256	68f8d8f9515c4e77e2a06034b742e19e9848c1fee5bcadedc1d68f3e4302df37  node-v0.10.39.tar.gz
+> +
+> +# From upstream URL: http://nodejs.org/dist/v0.12.5/SHASUMS256.txt
+> +sha256	4bc1e25f4c62ac65324d3cf4aa9de2d801cd708757c3567b6ad2ced7df30cdd2  node-v0.12.5.tar.gz
 
-Patch is on its way.
+Hash manually checked, OK.
 
--Alexey
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150630/fc550419/attachment.asc>
