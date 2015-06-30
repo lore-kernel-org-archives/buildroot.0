@@ -1,45 +1,33 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 30 Jun 2015 06:23:26 +0300
-Subject: [Buildroot] [PATCH v2] configs/acmesystems_aria_g25: new configs
-In-Reply-To: <1435613937-20746-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1435613937-20746-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150630032326.GV3250@tarshish>
+Date: Tue, 30 Jun 2015 06:35:18 +0300
+Subject: [Buildroot] [PATCH 1/6 v2] package/rpi-firmware: add option to
+	install vcdbg
+In-Reply-To: <87e637df89d62f2944e64f10d4807616435c6c3c.1435615426.git.yann.morin.1998@free.fr>
+References: <cover.1435615426.git.yann.morin.1998@free.fr>
+ <87e637df89d62f2944e64f10d4807616435c6c3c.1435615426.git.yann.morin.1998@free.fr>
+Message-ID: <20150630033518.GW3250@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+Hi Yann,
 
-On Mon, Jun 29, 2015 at 06:38:57PM -0300, Gustavo Zacarias wrote:
-> Add new basic configurations for ACME Systems ARIA G25 SOM.
-> There are two different variants, a 128MB and a 256MB RAM model.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  .../aria-g25/at91bootstrap_aria_g25_128mb.config   |  9 ++++
->  .../aria-g25/at91bootstrap_aria_g25_256mb.config   |  9 ++++
->  board/acmesystems/aria-g25/readme.txt              | 48 ++++++++++++++++++++++
->  configs/acmesystems_aria_g25_128mb_defconfig       | 24 +++++++++++
->  configs/acmesystems_aria_g25_256mb_defconfig       | 24 +++++++++++
->  5 files changed, 114 insertions(+)
->  create mode 100644 board/acmesystems/aria-g25/at91bootstrap_aria_g25_128mb.config
->  create mode 100644 board/acmesystems/aria-g25/at91bootstrap_aria_g25_256mb.config
->  create mode 100644 board/acmesystems/aria-g25/readme.txt
->  create mode 100644 configs/acmesystems_aria_g25_128mb_defconfig
->  create mode 100644 configs/acmesystems_aria_g25_256mb_defconfig
+On Tue, Jun 30, 2015 at 12:07:41AM +0200, Yann E. MORIN wrote:
+> vcdbg is a tool to help debug the communication with the GPU.
+> It comes as a binary-only, and in two flavours: one for the hard
+> floating point ABI, one for the software floating poitn ABI.
 
-[snip]
+s/poitn/point/
 
-> +Build instructions
-> +==================
-> +
-> +As a regular user configure and then build:
-> +
-> +$ make acmesystems_aria_g25_defconfig
+> Unfortunately, we have no source code for that tool, only a binary that
+> was dynamically linked with glibc and libraries from rpi-userland.
 
-No such defconfig anymore.
+Shouldn't it depend on glibc them? Does it run with uClibc*/musl?
+
+> So, just install that executable, and let's hope there is no symbol
+> issue at runtime.
 
 baruch
 
