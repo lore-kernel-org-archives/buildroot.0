@@ -1,50 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 14:25:15 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-06-29
-In-Reply-To: <559288ED.3010704@free-electrons.com>
-References: <20150630063014.44429100A75@stock.ovh.net>
- <20150630140738.526d72b8@free-electrons.com>
- <559288ED.3010704@free-electrons.com>
-Message-ID: <20150630142515.636aa6f9@free-electrons.com>
+Date: Tue, 30 Jun 2015 14:26:49 +0200
+Subject: [Buildroot] [git commit] monkey: fix building with debugging symbols
+Message-ID: <20150630122721.796877FAED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=75689d2ab250720a4d3e165a4d4380daebdbeac9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 30 Jun 2015 09:17:49 -0300, Gustavo Zacarias wrote:
+Fix a typo in the monkey package - should be MONKEY_CONF_OPTS
+instead of MONKEY_CONF_OPT.
 
-> > I don't know. Gustavo, you are the most active contributor on collectd.
-> > Can you have a look?
-> 
-> It's a parallel build issue, i'll look into it.
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/monkey/monkey.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Great, thanks.
-
-> > All fixed by
-> > http://git.buildroot.net/buildroot/commit/?id=84f6eb9fe3467abbd94a6b481ae5106679d61e24.
-> 
-> I should have emailed about this earlier, i didn't miss the hash, in 
-> fact it's perfectly fine, look at 
-> http://download.pureftpd.org/pub/pure-ftpd/releases/distinfo
-> The md5 hash stated there matches my previous tarball and my previous 
-> tarabll sha256, and the file timestamp predates the tarball... so 
-> upstream pulled a switcharoo.
-> I'm ok with the revised hash since it matches the signature, but it 
-> wasn't my fault :)
-
-Yes, I also suspected that upstream changed the tarball. I didn't meant
-to be offensive in any way about your work here, really just wanted to
-fix the problem, nothing more. I definitely trust you that the hash was
-correct at the time you sent the patch, and that upstream did crap.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
+index 2344f8c..419750e 100644
+--- a/package/monkey/monkey.mk
++++ b/package/monkey/monkey.mk
+@@ -47,7 +47,7 @@ MONKEY_POST_INSTALL_TARGET_HOOKS += MONKEY_REMOVE_DANGLING_SYMLINK
+ endif
+ 
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+-MONKEY_CONF_OPT += --debug
++MONKEY_CONF_OPTS += --debug
+ endif
+ 
+ define MONKEY_CONFIGURE_CMDS
