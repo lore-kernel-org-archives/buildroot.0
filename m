@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 30 Jun 2015 19:52:08 +0200
-Subject: [Buildroot] [v3 4/4] package/nodejs: Define NPM command for
- other packages to use
-In-Reply-To: <1435660966-11347-4-git-send-email-martin@barkynet.com>
+Date: Tue, 30 Jun 2015 20:01:06 +0200
+Subject: [Buildroot] [v3 3/4] package/nodejs: Add npm_config_target_arch
+ to npm command
+In-Reply-To: <1435660966-11347-3-git-send-email-martin@barkynet.com>
 References: <1435660966-11347-1-git-send-email-martin@barkynet.com>
- <1435660966-11347-4-git-send-email-martin@barkynet.com>
-Message-ID: <20150630175208.GC3900@free.fr>
+ <1435660966-11347-3-git-send-email-martin@barkynet.com>
+Message-ID: <20150630180106.GD3900@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,68 +15,72 @@ To: buildroot@busybox.net
 Martin, All,
 
 On 2015-06-30 11:42 +0100, Martin Bark spake thusly:
-> Other nodejs-related packages will need to call npm with the same set of
-> arguments as is currently used by the nodejs package itself.
-> 
-> To avoid duplicating this code, set the NPM variable so those packages can
-> re-use it.
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+> Many packages use node-pre-gpy as a way of deploying precompiled binary
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+node-pre-gpy or node-pre-gyp ? ;-)
+
+> dependencies with fall back to compilation for other targets.  node-gyp
+> uses the option --arch to determine its target architecture (which is
+> already set correctly), however, node-pre-gyp uses --target-arch.  Without
+> this set node.js packages that uses node-pre-gyp will pick the wrong target
+> architecture.
+
+So if I understand correctly, we can fall in a case where the package
+claims to already have a pre-compiled binary for this target-arch, and
+install that instead of building it from source, right?
+
+I don't think this is good, for three reasons;
+
+  1) there's no way we can ensure it matches the bundled sources;
+     think malware sneaking into there... :-(
+
+  2) it makes complying with the licenses almost impossible (e.g a
+     module is GPLv2, we install the pre-built binary, we're not sure
+     the sources we have are the actual sources used to build the binary
+     we ship)
+
+  3) the architecture is not enough: what about optimisation (speed,
+     size...), the ABI (hardfloat vs. softfloat...) and a lot of other
+     compilation-related specifities?...
+
+Can we disable this check, and *always* and *unconditionnally* build
+from source, even if the module believes it has a pre-compiled binary
+for the current target architecture?
+
+Otherwise, I won't review nor ack this patch, I'm not too versed in
+NodeJS to fully appreciate the problem and the proposed solution...
+Sorry...
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> Note: currently, this is only used in the nodejs package itself. I
-> plan on sending new nodejs-related packages that will use this, like
-> a pm2 (https://github.com/Unitech/pm2) package which I have tested
-> successfully using this $(NPM).
+> This patch sets npm_config_target_arch to solve this issue.  I have tested
+> this using the node.js package serialport.
 > 
+> Signed-off-by: Martin Bark <martin@barkynet.com>
+> 
+> ---
 > Changes v2 -> v3
->  - Improved commit message (Suggested by Yann E. MORIN)
+>  - Adjusted patch order so this is before the new definition of $(NPM)
 > 
 > Changes v1 -> v2
->  - No changes
+>  - No changes, new in v2
 > ---
->  package/nodejs/nodejs.mk | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
+>  package/nodejs/nodejs.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index 78db49d..ea8ec0f5 100644
+> index 0b3f8a5..78db49d 100644
 > --- a/package/nodejs/nodejs.mk
 > +++ b/package/nodejs/nodejs.mk
-> @@ -95,6 +95,14 @@ NODEJS_MODULES_LIST= $(call qstrip,\
->  	$(if $(BR2_PACKAGE_NODEJS_MODULES_COFFEESCRIPT),coffee-script) \
->  	$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL))
->  
-> +# Define NPM for other packages to use
-> +NPM = $(TARGET_CONFIGURE_OPTS) \
-> +	LD="$(TARGET_CXX)" \
-> +	npm_config_arch=$(NODEJS_CPU) \
-> +	npm_config_target_arch=$(NODEJS_CPU) \
-> +	npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
-> +	$(HOST_DIR)/usr/bin/npm
-> +
->  #
->  # We can only call NPM if there's something to install.
->  #
-> @@ -104,13 +112,7 @@ define NODEJS_INSTALL_MODULES
->  	# npm install call below and setting npm_config_rollback=false can both
->  	# help in diagnosing the problem.
->  	(cd $(TARGET_DIR)/usr/lib && mkdir -p node_modules && \
-> -		$(TARGET_CONFIGURE_OPTS) \
-> -		LD="$(TARGET_CXX)" \
-> -		npm_config_arch=$(NODEJS_CPU) \
-> -		npm_config_target_arch=$(NODEJS_CPU) \
-> -		npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
-> -		$(HOST_DIR)/usr/bin/npm install \
-> -		$(NODEJS_MODULES_LIST) \
-> +		$(NPM) install $(NODEJS_MODULES_LIST) \
->  	)
->  
->  	# Symlink all executables in $(TARGET_DIR)/usr/lib/node_modules/.bin to
+> @@ -107,6 +107,7 @@ define NODEJS_INSTALL_MODULES
+>  		$(TARGET_CONFIGURE_OPTS) \
+>  		LD="$(TARGET_CXX)" \
+>  		npm_config_arch=$(NODEJS_CPU) \
+> +		npm_config_target_arch=$(NODEJS_CPU) \
+>  		npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
+>  		$(HOST_DIR)/usr/bin/npm install \
+>  		$(NODEJS_MODULES_LIST) \
 > -- 
 > 2.1.4
 > 
