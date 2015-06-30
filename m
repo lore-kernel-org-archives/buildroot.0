@@ -1,53 +1,93 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 30 Jun 2015 06:33:36 +0200
-Subject: [Buildroot] [PATCH v2] uclibc-ng: fix parallel build issue for
- arm/xtensa when LOCALE support is enabled
-Message-ID: <20150630043336.GA7128@waldemar-brodkorb.de>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 30 Jun 2015 07:12:33 +0200
+Subject: [Buildroot] [PATCH 4/4] configs/olimex_a20_olinuxino_micro: new
+	board
+In-Reply-To: <1435615523-21039-4-git-send-email-luca@lucaceresoli.net>
+References: <1435615523-21039-1-git-send-email-luca@lucaceresoli.net>
+ <1435615523-21039-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <CAB0FRssX3DheAt5K6GHq-jHr7=8FFw6SOirT59v5EcikjEDcZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch should fix any parallel build issues found
-by autobuilder lately, f.e.:
-http://autobuild.buildroot.net/results/43dd5c5da0d003b654fd252c989d49c2e5872827/
-http://autobuild.buildroot.net/results/cfb438f933ff7385d612d65798b0b8ed833a6476/
-and many more.
-Will be committed upstream, if autobuilders are working.
+2015-06-30 0:05 GMT+02:00 Luca Ceresoli <luca@lucaceresoli.net>:
+> Add a defconfig for the Olimex A20-OLinuXino-Micro board, reusing most
+> of the A20-OLinuXino-Lime files.
+>
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+>  board/olimex/a20_olinuxino/readme.txt        | 31 +++++++++++++------
+>  configs/olimex_a20_olinuxino_micro_defconfig | 46 ++++++++++++++++++++++++++++
+>  2 files changed, 67 insertions(+), 10 deletions(-)
+>  create mode 100644 configs/olimex_a20_olinuxino_micro_defconfig
+>
+> diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
+> index 6b8391484b92..101adcf6abbd 100644
+> --- a/board/olimex/a20_olinuxino/readme.txt
+> +++ b/board/olimex/a20_olinuxino/readme.txt
+> @@ -1,10 +1,22 @@
+> -A20-OLinuXino-LIME
+> +A20-OLinuXino-LIME and A20-OLinuXino-MICRO
+>
+>  Intro
+>  =====
+>
+> -This is a open hardware board,
+> -see https://www.olimex.com/Products/OLinuXino/open-source-hardware
+> +These are open hardware boards, both based an the AllWinners A20 SoC.
+> +
+> +for more details about the boards see the following pages:
+> + - https://www.olimex.com/Products/OLinuXino/open-source-hardware
+> + - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-MICRO/
+> + - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-LIME/
+> +
+> +The following defconfigs are available:
+> + - olimex_a20_olinuxino_micro_defconfig
+> +   for the A20-OLinuXino-MICRO board using mainline kernel and U-Boot
+> + - olimex_a20_olinuxino_lime_defconfig
+> +   for the A20-OLinuXino-LIME board using mainline kernel and U-Boot
+> + - olimex_a20_olinuxino_lime_mali_defconfig
+> +   for the A20-OLinuXino-LIME board using legacy linux-sunxi kernel and U-Boot
+>
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/uclibc/1.0.3/0002-fix-parallel-build.patch |   21 ++++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 package/uclibc/1.0.3/0002-fix-parallel-build.patch
+The reference to U-Boot seems useless.
 
-diff --git a/package/uclibc/1.0.3/0002-fix-parallel-build.patch b/package/uclibc/1.0.3/0002-fix-parallel-build.patch
-new file mode 100644
-index 0000000..d7c3091
---- /dev/null
-+++ b/package/uclibc/1.0.3/0002-fix-parallel-build.patch
-@@ -0,0 +1,21 @@
-+fix parallel build if UCLIBC_HAS_LOCALE is enabled for arm/xtensa
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+ 
-+diff -Nur uClibc-ng-1.0.3.orig/Makefile.in uClibc-ng-1.0.3/Makefile.in
-+--- uClibc-ng-1.0.3.orig/Makefile.in	2015-06-13 20:26:56.000000000 +0200
-++++ uClibc-ng-1.0.3/Makefile.in	2015-06-29 20:23:26.000000000 +0200
-+@@ -183,11 +183,12 @@
-+ headers-y += $(target-headers-sysdep)
-+ 
-+ headers: $(top_builddir)include/bits/uClibc_config.h | subdirs
-++	$(Q)$(if $(UCLIBC_HAS_LOCALE),$(MAKE) -C extra/locale locale_headers)
-++
-+ subdirs: $(addprefix $(top_builddir),$(subdirs))
-+ 
-+ $(pregen-headers-y): $(headers_dep)
-+ pregen: headers $(pregen-headers-y) $(headers_dep)
-+-	$(Q)$(if $(UCLIBC_HAS_LOCALE),$(MAKE) -C extra/locale locale_headers)
-+ 
-+ $(top_builddir)include/bits/sysnum.h: $(top_srcdir)extra/scripts/gen_bits_syscall_h.sh | $(top_builddir)include/bits
-+ 	@$(disp_gen)
--- 
-1.7.10.4
+Fran?ois
+
+>  The legacy linux-sunxi kernels are based on the vendor code drops.
+>  They are only useful when accelerated 3D graphics and multimedia support
+> @@ -20,11 +32,9 @@ the users who do not need fancy 3D graphics or video playback acceleration.
+>  How to build it
+>  ===============
+>
+> -    $ make olimex_a20_olinuxino_lime_defconfig
+> -
+> -or
+> +Configure Buildroot:
+>
+> -    $ make olimex_a20_olinuxino_lime_mali_defconfig
+> +    $ make <board>_defconfig
+>
+>  Compile everything and build the rootfs image:
+>
+> @@ -38,8 +48,9 @@ After building, you should get a tree like this:
+>      output/images/
+>      +-- rootfs.ext2
+>      +-- rootfs.ext4 -> rootfs.ext2
+> -    +-- script.bin (mali)
+> -    +-- sun7i-a20-olinuxino-lime.dtb (mainline)
+> +    +-- script.bin (lime_mali)
+> +    +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
+> +    +-- sun7i-a20-olinuxino-micro.dtb (micro, mainline)
+>      +-- u-boot.bin
+>      +-- u-boot-sunxi-with-spl.bin
+>      `-- zImage
+> @@ -98,5 +109,5 @@ Copy images on the SD card
+>  Finish
+>  ======
+>
+> -Eject the SD card, insert it in the A20-OLinuXino-LIME board, and power it up.
+> +Eject the SD card, insert it in the A20-OLinuXino board, and power it up.
+>
