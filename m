@@ -1,47 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 22:47:56 +0200
-Subject: [Buildroot] [PATCH] systemd: fix license according to README
- file
-In-Reply-To: <1435696938-19587-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1435696938-19587-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150630224756.47788250@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 30 Jun 2015 22:52:30 +0200
+Subject: [Buildroot] [PATCH v2] systemd: fix license according to README file
+Message-ID: <1435697550-19921-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente,
+Fixes:
+  http://autobuild.buildroot.org/results/6e3/6e3dace5892a589225a93c896917833ebc8028f3
 
-On Tue, 30 Jun 2015 22:42:18 +0200, Vicente Olivert Riera wrote:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+v1 -> v2: patch amended according to Thomas review
 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index ee17bc8..7094b98 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -7,8 +7,8 @@
->  SYSTEMD_VERSION = 221
->  SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
->  SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
-> -SYSTEMD_LICENSE = LGPLv2.1+; GPLv2+ for udev; MIT-like license for few source files listed in README
-> -SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 LICENSE.MIT
-> +SYSTEMD_LICENSE = LGPLv2.1+; GPLv2 and GPLv2+ for udev; Public Domain license for few source files listed in README
+ package/systemd/systemd.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Why specify both GPLv2 and GPLv2+ for udev?
-
-Also, this string really doesn't look like what we usually do, it
-should rather be:
-
-	LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
-
-and since the README is important to licensing apparently, it should be mentioned in:
-
-> +SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
-
-Thanks,
-
-Thomas
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index ee17bc8..0a1f00f 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -7,8 +7,8 @@
+ SYSTEMD_VERSION = 221
+ SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
+ SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
+-SYSTEMD_LICENSE = LGPLv2.1+; GPLv2+ for udev; MIT-like license for few source files listed in README
+-SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 LICENSE.MIT
++SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
++SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+ SYSTEMD_INSTALL_STAGING = YES
+ SYSTEMD_DEPENDENCIES = \
+ 	host-intltool \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.3.6
