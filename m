@@ -1,35 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 16:43:50 +0200
-Subject: [Buildroot] [PATCH] package/x11r7/xdiver_xf86-input-tslib:
- update download url
-In-Reply-To: <1434294122-4664-1-git-send-email-romain.naour@openwide.fr>
-References: <1434294122-4664-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150630164350.2a6ecf9f@free-electrons.com>
+Date: Tue, 30 Jun 2015 16:44:12 +0200
+Subject: [Buildroot] [git commit] openssl: support building the binary
+	without MMU
+Message-ID: <20150630144415.7383281789@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=c8937ade4bc29fd8a502b8e9cd0b392a7e76fa30
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 14 Jun 2015 17:02:02 +0200, Romain Naour wrote:
-> The old url fallback to http://www.pengutronix.de/software/ptxdist/ instead
-> of http://www.pengutronix.de/software/xf86-input-tslib/download/ breaking
-> the download.
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+The commit 720893b62510438237b9923d744dd079ddb4f67d "openssl: disable
+apps for NOMMU" prevented the openssl binary from being built without
+MMU in order to fix a build failure without fork(). However, openssl is
+designed to support the lack of fork() with -DHAVE_FORK=0, so allow the
+openssl binary to be enabled without MMU thanks to this option.
 
-Applied, thanks. I've amended the commit to add a hash file, which
-should help avoid such issues in the future.
+Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openssl/Config.in  |    3 ---
+ package/openssl/openssl.mk |    4 ++++
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/openssl/Config.in b/package/openssl/Config.in
+index 07859ca..d147c07 100644
+--- a/package/openssl/Config.in
++++ b/package/openssl/Config.in
+@@ -13,15 +13,12 @@ if BR2_PACKAGE_OPENSSL
+ 
+ config BR2_PACKAGE_OPENSSL_BIN
+ 	bool "openssl binary"
+-	# uses fork()
+-	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Install the openssl binary to the target file system. This is a
+ 	  command line tool for doing various crypthographic stuff.
+ 
+ comment "openssl binary needs a toolchain w/ dynamic library"
+-	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_OPENSSL_ENGINES
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index fd8904d..34a9830 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -22,6 +22,10 @@ endef
+ OPENSSL_PRE_CONFIGURE_HOOKS += OPENSSL_DISABLE_APPS
+ endif
+ 
++ifeq ($(BR2_USE_MMU),)
++OPENSSL_CFLAGS += -DHAVE_FORK=0
++endif
++
+ ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
+ OPENSSL_CFLAGS += -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
+ OPENSSL_DEPENDENCIES += cryptodev-linux
