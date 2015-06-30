@@ -1,38 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 23:01:55 +0200
-Subject: [Buildroot] [git commit] systemd: fix license according to README
-	file
-Message-ID: <20150630210400.0B51D817BC@busybox.osuosl.org>
+Date: Tue, 30 Jun 2015 23:07:15 +0200
+Subject: [Buildroot] [git commit] package/exim: use libnsl only with glibc
+Message-ID: <20150630210754.B3D18803C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4ee0ef4ab576e59fcb741fbbf1a419af76599177
+commit: http://git.buildroot.net/buildroot/commit/?id=00e98e69b4a0134823bcc4b626eafb16e77ae4b1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-  http://autobuild.buildroot.org/results/6e3/6e3dace5892a589225a93c896917833ebc8028f3
+Only (e)glibc provides libnsl, uclibc provides only a stub, and musl
+doesn't implement it at all.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Fixes compilation using this defconfig
+
+    BR2_arm=y
+    BR2_cortex_a7=y
+    BR2_STATIC_LIBS=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_PACKAGE_OPENSSL=y
+    BR2_PACKAGE_EXIM=y
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/systemd/systemd.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/exim/exim.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index ee17bc8..0a1f00f 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -7,8 +7,8 @@
- SYSTEMD_VERSION = 221
- SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
- SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
--SYSTEMD_LICENSE = LGPLv2.1+; GPLv2+ for udev; MIT-like license for few source files listed in README
--SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 LICENSE.MIT
-+SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
-+SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
- SYSTEMD_INSTALL_STAGING = YES
- SYSTEMD_DEPENDENCIES = \
- 	host-intltool \
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index b852793..8ad0328 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -72,6 +72,14 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
+ endef
+ endif
+ 
++# only (e)glibc provides libnsl, remove -lnsl for all other toolchains
++# http://bugs.exim.org/show_bug.cgi?id=1564
++ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
++define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
++	$(SED) 's/-lnsl//g' $(@D)/OS/Makefile-Linux
++endef
++endif
++
+ define EXIM_CONFIGURE_TOOLCHAIN
+ 	$(call exim-config-add,CC,$(TARGET_CC))
+ 	$(call exim-config-add,CFLAGS,$(TARGET_CFLAGS))
