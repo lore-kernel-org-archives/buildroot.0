@@ -1,55 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 14:30:34 +0200
-Subject: [Buildroot] [git commit] configs/raspberrypi2: update our defconfig
-Message-ID: <20150630123122.AE9C98179A@busybox.osuosl.org>
+Date: Tue, 30 Jun 2015 14:30:45 +0200
+Subject: [Buildroot] [git commit] config/raspberrypi: remove non-DT defconfig
+Message-ID: <20150630123122.B980781796@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7d37754113e9c689b2a617ceb227dbd3a0135726
+commit: http://git.buildroot.net/buildroot/commit/?id=8f49a5069ab541ce8ec43765fe7e7b99d7ad8438
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update to the latest stable kernel version (4.0.y); build an in-tree DTB.
+The RPi is slowly but surely dropping support for booting without a DTB,
+so just ditch our old defconfig now that we have up-to-date DT-enabled
+defconfigs for all RPi models (save for the compute module).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Floris Bos <bos@je-eigen-domein.nl>
 Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/raspberrypi2_defconfig |   16 +++++++++++-----
- 1 files changed, 11 insertions(+), 5 deletions(-)
+ configs/raspberrypi_defconfig |   21 ---------------------
+ 1 files changed, 0 insertions(+), 21 deletions(-)
 
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index 5859749..7b12040 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -7,16 +7,22 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- 
--# Lock to 3.18 headers as the RPi2 kernel is based off the 3.18 branch
-+# Lock to 4.0 headers as the RPi kernel stable tree is
-+# based off the 4.0 branch
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+BR2_DEFAULT_KERNEL_VERSION="4.0.6"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="2747cc0bde4ca441691260fae1e34c9ef954ccae"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f90f981770e3ac8506dc84c9cd01471faaa0b0c2"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+deleted file mode 100644
+index f9b8a1c..0000000
+--- a/configs/raspberrypi_defconfig
++++ /dev/null
+@@ -1,21 +0,0 @@
+-BR2_arm=y
+-BR2_arm1176jzf_s=y
+-
+-BR2_TOOLCHAIN_BUILDROOT_CXX=y
+-
+-BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+-
+-BR2_PACKAGE_RPI_FIRMWARE=y
+-
+-# Lock to 3.12 headers as the RPi kernel is based off the 3.12 branch
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.28"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
+-
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="c256eb9968c8997dce47350d2075e42f1b3991d3"
+-BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+-BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
 -BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_ZIMAGE=yo
-+
-+# Build the DTB from the kernel sources
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2709-rpi-2-b"
- 
- BR2_PACKAGE_RPI_FIRMWARE=y
-+# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
