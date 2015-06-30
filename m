@@ -1,36 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 14:53:07 +0200
-Subject: [Buildroot] [git commit] configs: add defconfig for Atmel sama5d3xek
-Message-ID: <20150630130116.D09B87FC98@busybox.osuosl.org>
+Date: Tue, 30 Jun 2015 14:54:34 +0200
+Subject: [Buildroot] [git commit] configs: add defconfig for Atmel sama5d3
+	Xplained
+Message-ID: <20150630130116.F0CC57FC98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ef85f464323cdc03f0753e5e3a33a2df3fa20d9e
+commit: http://git.buildroot.net/buildroot/commit/?id=4c25ec85e3388d93782e3de69bca25e7fb0ef239
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This supports:
- - sama5d31ek
- - sama5d33ek
- - sama5d34ek
- - sama5d35ek
- - sama5d36ek
-
-with or without the PDA4 or PDA7 screens.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/atmel_sama5d3xek_defconfig |   29 +++++++++++++++++++++++++++++
+ configs/atmel_sama5d3_xplained_defconfig |   29 +++++++++++++++++++++++++++++
  1 files changed, 29 insertions(+), 0 deletions(-)
 
-diff --git a/configs/atmel_sama5d3xek_defconfig b/configs/atmel_sama5d3xek_defconfig
+diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
 new file mode 100644
-index 0000000..cc34bf9
+index 0000000..b8674ad
 --- /dev/null
-+++ b/configs/atmel_sama5d3xek_defconfig
++++ b/configs/atmel_sama5d3_xplained_defconfig
 @@ -0,0 +1,29 @@
 +BR2_arm=y
 +BR2_cortex_a5=y
@@ -47,15 +39,15 @@ index 0000000..cc34bf9
 +BR2_LINUX_KERNEL_DEFCONFIG="sama5"
 +BR2_LINUX_KERNEL_ZIMAGE=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sama5d31ek sama5d31ek_pda4 sama5d31ek_pda7 sama5d31ek_revc sama5d31ek_revc_pda4 sama5d31ek_revc_pda7 sama5d33ek sama5d33ek_pda4 sama5d33ek_pda7 sama5d33ek_revc sama5d33ek_revc_pda4 sama5d33ek_revc_pda7 sama5d34ek sama5d34ek_pda4 sama5d34ek_pda7 sama5d34ek_revc sama5d34ek_revc_pda4 sama5d34ek_revc_pda7 sama5d35ek sama5d35ek_revc sama5d36ek sama5d36ek_pda4 sama5d36ek_pda7 sama5d36ek_revc sama5d36ek_revc_pda4 sama5d36ek_revc_pda7"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7"
 +BR2_TARGET_ROOTFS_UBIFS=y
 +BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
 +BR2_TARGET_ROOTFS_UBI=y
 +BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
 +BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3xeknf_uboot"
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
 +BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="sama5d3xek_nandflash"
++BR2_TARGET_UBOOT_BOARDNAME="sama5d3_xplained_nandflash"
 +BR2_TARGET_UBOOT_CUSTOM_GIT=y
 +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
 +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
