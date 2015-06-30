@@ -1,10 +1,11 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 30 Jun 2015 08:24:41 -0300
-Subject: [Buildroot] [PATCH v2] configs/acmesystems_aria_g25: new configs
-In-Reply-To: <CA+TH9Vkn625DJy8xzD-WCSZMpbPF_jE2C_eZ_jnVSfNFRv7NcA@mail.gmail.com>
-References: <1435613937-20746-1-git-send-email-gustavo@zacarias.com.ar>
- <CA+TH9Vkn625DJy8xzD-WCSZMpbPF_jE2C_eZ_jnVSfNFRv7NcA@mail.gmail.com>
-Message-ID: <55927C79.1080700@zacarias.com.ar>
+Date: Tue, 30 Jun 2015 08:24:39 -0300
+Subject: [Buildroot] [PATCH] board/acmesystems/arietta: new board
+In-Reply-To: <CA+TH9VktP3joMNWevTZ8rTU3X3FckhZL=0SkApSyxQCMDF13zg@mail.gmail.com>
+References: <1434537135-32177-1-git-send-email-angelo.compagnucci@gmail.com>
+ <5591C5EB.2010700@zacarias.com.ar>
+ <CA+TH9VktP3joMNWevTZ8rTU3X3FckhZL=0SkApSyxQCMDF13zg@mail.gmail.com>
+Message-ID: <55927C77.5090609@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +14,25 @@ To: buildroot@busybox.net
 
 
 
-On 30/06/15 07:21, Angelo Compagnucci wrote:
+On 30/06/15 07:05, Angelo Compagnucci wrote:
 
 > Hi Gustavo,
 
 Hi Angelo.
 
->>   create mode 100644 board/acmesystems/aria-g25/at91bootstrap_aria_g25_128mb.config
->>   create mode 100644 board/acmesystems/aria-g25/at91bootstrap_aria_g25_256mb.config
->>   create mode 100644 board/acmesystems/aria-g25/readme.txt
->>   create mode 100644 configs/acmesystems_aria_g25_128mb_defconfig
->>   create mode 100644 configs/acmesystems_aria_g25_256mb_defconfig
+>> Any particular reason you need a custom config instead of being able to use
+>> at91_dt (like on the Aria sample i sent)?
+>> I know the Arietta lacks an ethernet PHY, but the DTS should take care of
+>> that.
 >
-> Can we agree on the configs name format? Sergio usually uses the
-> format "acme-BOARD-MEMORY", I used acme-arietta-128m_defconfig for
-> example. I really prefer to have a standard name format!
+> That configuration is really bloated, it compiles several unneeded
+> modules and it's not really optimized for arietta.
 
-Of course, though i don't know who Sergio is :)
-But you must follow the rule as well, is it acme (configs/) or 
-acmesystems (board/) ?
-It's not consistent for them to differ.
-
-> This is better:
->
-> echo ',32,6\n;' | sfdisk -uM /dev/sdX
-
-I've used the xplained readme as basis.
-Ideally we should script this thing up, probably making a somewhat 
-generic one that takes parameters from an image file defined in the BR 
-config.
-
-> Config files for at91bootstrap are not really needed cause Sergio
-> shipped them in it's own at91bootstrap fork, so you should simply use
-> something like this in your bootstrap defconfig:
->
-> BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-128m"
-
-I've missed the fact that the kernel command line is specified in the 
-dts, so yes it seems reasonable.
-
+We normally don't try to be too "smart ass" with the config files and 
+try to use the ones shipped with the kernel if they work - after all you 
+can't cover every use scenario out there and we just expect the boards 
+to boot properly (which the default config will probably do).
+Also since the arietta has at least 128MB RAM and boots from SD (plenty 
+of flash) the bloat scenario isn't severe (many kernel options are built 
+as modules).
 Regards.
