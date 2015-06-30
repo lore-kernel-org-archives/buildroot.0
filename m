@@ -1,59 +1,53 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 29 Jun 2015 23:36:08 -0400
-Subject: [Buildroot] [PATCH 1/1] util-linux: allow programs to be disabled
-	by default
-Message-ID: <1435635368-26928-1-git-send-email-danomimanchego123@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 30 Jun 2015 05:39:18 +0200
+Subject: [Buildroot] [PATCH] uclibc-ng: fix parallel build issue for
+ arm/xtensa when LOCALE support is enabled
+Message-ID: <20150630033918.GA7376@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When even a single extra util-linux utility is enabled, the
-default build and install will install many more programs,
-including many that overlap with those offered by busybox.
-Finer control of util-linux can be realized by disabling
-everything by default (with --disable-all-programs) and then
-overriding the default with specific enables (--enable-<name>).
-This patch adds a config switch to disable everything by default.
+This patch should fix any parallel build issues found
+by autobuilder lately, f.e.:
+http://autobuild.buildroot.net/results/43dd5c5da0d003b654fd252c989d49c2e5872827/
+http://autobuild.buildroot.net/results/cfb438f933ff7385d612d65798b0b8ed833a6476/
+and many more.
+Will be committed upstream, if autobuilders are working.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/util-linux/Config.in     | 6 ++++++
- package/util-linux/util-linux.mk | 4 ++++
- 2 files changed, 10 insertions(+)
+Locale/iconv support will be reworked in uClibc-ng 1.1.x.
+---
+ package/uclibc/1.0.3/0002-fix-parallel-build.patch |   19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 package/uclibc/1.0.3/0002-fix-parallel-build.patch
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 39df11c..9981889 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -47,6 +47,12 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
- 
- if BR2_PACKAGE_UTIL_LINUX_BINARIES
- 
-+config BR2_PACKAGE_UTIL_LINUX_DISABLE_BY_DEFAULT
-+	bool "Disable programs by default"
-+	help
-+	  Disable programs by default; only explicitly enabled utilities
-+	  and libraries will be built.
-+
- config BR2_PACKAGE_UTIL_LINUX_AGETTY
- 	bool "agetty"
- 	help
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 3ca147a..3749a71 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -25,6 +25,10 @@ UTIL_LINUX_CONF_OPTS += \
- 	--disable-rpath \
- 	--disable-makeinstall-chown \
- 	--without-python
+diff --git a/package/uclibc/1.0.3/0002-fix-parallel-build.patch b/package/uclibc/1.0.3/0002-fix-parallel-build.patch
+new file mode 100644
+index 0000000..f99a1e4
+--- /dev/null
++++ b/package/uclibc/1.0.3/0002-fix-parallel-build.patch
+@@ -0,0 +1,19 @@
++fix parallel build if UCLIBC_HAS_LOCALE is enabled for arm/xtensa
 + 
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_DISABLE_BY_DEFAULT),y)
-+UTIL_LINUX_CONF_OPTS += --disable-all-programs
-+endif
- 
- ifeq ($(BR2_PACKAGE_BASH),)
- UTIL_LINUX_CONF_OPTS += \
++diff -Nur uClibc-ng-1.0.3.orig/Makefile.in uClibc-ng-1.0.3/Makefile.in
++--- uClibc-ng-1.0.3.orig/Makefile.in	2015-06-13 20:26:56.000000000 +0200
+++++ uClibc-ng-1.0.3/Makefile.in	2015-06-29 20:23:26.000000000 +0200
++@@ -183,11 +183,12 @@
++ headers-y += $(target-headers-sysdep)
++ 
++ headers: $(top_builddir)include/bits/uClibc_config.h | subdirs
+++	$(Q)$(if $(UCLIBC_HAS_LOCALE),$(MAKE) -C extra/locale locale_headers)
+++
++ subdirs: $(addprefix $(top_builddir),$(subdirs))
++ 
++ $(pregen-headers-y): $(headers_dep)
++ pregen: headers $(pregen-headers-y) $(headers_dep)
++-	$(Q)$(if $(UCLIBC_HAS_LOCALE),$(MAKE) -C extra/locale locale_headers)
++ 
++ $(top_builddir)include/bits/sysnum.h: $(top_srcdir)extra/scripts/gen_bits_syscall_h.sh | $(top_builddir)include/bits
++ 	@$(disp_gen)
 -- 
-1.9.1
+1.7.10.4
