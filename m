@@ -1,37 +1,40 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 30 Jun 2015 22:52:30 +0200
-Subject: [Buildroot] [PATCH v2] systemd: fix license according to README file
-Message-ID: <1435697550-19921-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 Jun 2015 22:59:15 +0200
+Subject: [Buildroot] [PATCH 1/1] util-linux: allow programs to be
+ disabled by default
+In-Reply-To: <1435635368-26928-1-git-send-email-danomimanchego123@gmail.com>
+References: <1435635368-26928-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20150630225915.6838f4f2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.org/results/6e3/6e3dace5892a589225a93c896917833ebc8028f3
+Dear Danomi Manchego,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-v1 -> v2: patch amended according to Thomas review
+On Mon, 29 Jun 2015 23:36:08 -0400, Danomi Manchego wrote:
 
- package/systemd/systemd.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_DISABLE_BY_DEFAULT),y)
+> +UTIL_LINUX_CONF_OPTS += --disable-all-programs
+> +endif
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index ee17bc8..0a1f00f 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -7,8 +7,8 @@
- SYSTEMD_VERSION = 221
- SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
- SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
--SYSTEMD_LICENSE = LGPLv2.1+; GPLv2+ for udev; MIT-like license for few source files listed in README
--SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 LICENSE.MIT
-+SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
-+SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
- SYSTEMD_INSTALL_STAGING = YES
- SYSTEMD_DEPENDENCIES = \
- 	host-intltool \
+I understand the idea, but it's a bit weird to have an option to enable
+to say that you want to disable everything.
+
+Also, we are already passing --disable-all-programs when
+BR2_PACKAGE_UTIL_LINUX_BINARIES is not enabled. Maybe we should instead
+pass --disable-all-programs unconditionally. However this would change
+the visible behavior for users, since programs that used to be built
+would no longer be built. But it seems the most correct solution
+nonetheless.
+
+Any opinions from other Buildroot developers?
+
+Thanks,
+
+Thomas
 -- 
-2.3.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
