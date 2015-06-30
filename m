@@ -1,70 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 23:29:41 +0200
-Subject: [Buildroot] [PATCH v3 1/1] board: add support for WarPboard
-In-Reply-To: <1435324405-26828-1-git-send-email-lambertarthur22@gmail.com>
-References: <1435324405-26828-1-git-send-email-lambertarthur22@gmail.com>
-Message-ID: <20150630232941.5a2a1b2e@free-electrons.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 30 Jun 2015 17:35:04 -0400
+Subject: [Buildroot] [PATCH 1/1] util-linux: allow programs to be
+ disabled by default
+In-Reply-To: <20150630225915.6838f4f2@free-electrons.com>
+References: <1435635368-26928-1-git-send-email-danomimanchego123@gmail.com>
+ <20150630225915.6838f4f2@free-electrons.com>
+Message-ID: <CANxTyt49pXMfZpaH9G6esm1esVM5KWimxp7TcgWDKw4kAmTUQw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arthur LAMBERT,
+Thomas,
 
-On Fri, 26 Jun 2015 15:13:25 +0200, Arthur LAMBERT wrote:
-> This is a set of patch to add support for warpboard (Freescale board based on imx6sl)
-> 
-> The patch contains :
->   - defconfig for warpboard
->   - linux patches from Fabio Estevam to fix device tree due to last change on warpboard schematics (rev 1.12)
->   and to fix kernel imx_v6_v7 defconfig which use incorrect hci protocol
->   - specific firmware file for warpboard bluetooth (nvram : brcmfmac4330-sdio.txt)
+On Tue, Jun 30, 2015 at 4:59 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Danomi Manchego,
+>
+> On Mon, 29 Jun 2015 23:36:08 -0400, Danomi Manchego wrote:
+>
+>> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_DISABLE_BY_DEFAULT),y)
+>> +UTIL_LINUX_CONF_OPTS += --disable-all-programs
+>> +endif
+>
+> I understand the idea, but it's a bit weird to have an option to enable
+> to say that you want to disable everything.
+>
+> Also, we are already passing --disable-all-programs when
+> BR2_PACKAGE_UTIL_LINUX_BINARIES is not enabled. Maybe we should instead
+> pass --disable-all-programs unconditionally. However this would change
+> the visible behavior for users, since programs that used to be built
+> would no longer be built. But it seems the most correct solution
+> nonetheless.
+>
+> Any opinions from other Buildroot developers?
 
-That's a detail, but the commit log should be wrapped to 80 columns.
+I use util-linux only as a last resort for when busybox does not have
+what I need - so I'm totally on-board with that idea, as my interest
+is for minimal impact on the target.  The only reason that I didn't do
+that is for precisely what you said - that it would change the current
+behavior.  Also, I supposed that we would still need an option to
+*not* set --disable-all-programs anyway, to support enabling all the
+programs that are currently enabled by default (and don't have
+existing buildroot switches), to be able to get back to the previous
+behavior.  (For those who need it.)
 
+An alternative might be to add --enable/--disable switches for all the
+apps that are enabled by default.  But that's a lot of new switches,
+and a maintenance hassle on package upgrades, so I was afraid that
+this option might not be well received by the community.  (I'm willing
+to give that a go if that seems like a good idea.)
 
-
-> +- transfer uboot into flash by running this command in host side:
-> + $ sudo dfu-util -D output/images/u-boot.imx -a boot
-
-So maybe you should build the host-dfu-util package of Buildroot by
-selecting it in the Buildroot defconfig, and use it here?
-
-> +- remove power and put warpboard into normal boot mode by opening the jumper.
-> +
-> +Update linux & rootfs
-> +=====================
-> +
-> +Use ums command from uboot prompt to mount emmc as mass storage and update zImage, device tree and rootfs file
-
-Which rootfs file? The tarball or the ext2 one?
-
-> +Enable bluetooth (need to enable bluez-util)
-> +================
-> +hciattach /dev/ttymxc4 any
-> +hciconfig hci0 up
-
-Maybe:
-
-Using Bluetooth
-===============
-
-Enable the bluez_utils package, and then:
-
-$ hciattach /dev/ttymxc4 any
-$ hciconfig hci0 up
-
-Of course, make sure you're really talking about bluez_utils or
-bluez_utils5, we have two separate packages in Buildroot.
-
-Could you take into account those minor comments, and send an updated
-version?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Danomi -
