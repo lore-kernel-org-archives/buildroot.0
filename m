@@ -1,59 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 14:53:50 +0200
-Subject: [Buildroot] [git commit] configs: add defconfig for Atmel sama5d4
-	Xplained Ultra
-Message-ID: <20150630130116.E74E17FC98@busybox.osuosl.org>
+Date: Tue, 30 Jun 2015 14:54:48 +0200
+Subject: [Buildroot] [git commit] configs: rename atmel_xplained_defconfig
+Message-ID: <20150630130117.07A5D7FC98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=00273c54bed995ac8551978bedf8d980b26830af
+commit: http://git.buildroot.net/buildroot/commit/?id=bb7628b30c124bcc93a32bd6798913a30678b6fc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+For consistency, rename atmel_xplained_defconfig to
+atmel_sama5d3_xplained_mmc_defconfig as this configuration supports
+booting the sama5d3 Xplained with an MMC card (as opposed to the NAND
+flash).
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/atmel_sama5d4_xplained_defconfig |   33 ++++++++++++++++++++++++++++++
- 1 files changed, 33 insertions(+), 0 deletions(-)
+ board/atmel/xplained/readme.txt                    |    8 ++++----
+ ...config => atmel_sama5d3_xplained_mmc_defconfig} |    0
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
-new file mode 100644
-index 0000000..84b6518
---- /dev/null
-+++ b/configs/atmel_sama5d4_xplained_defconfig
-@@ -0,0 +1,33 @@
-+BR2_arm=y
-+BR2_cortex_a5=y
-+BR2_ARM_EABIHF=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_FPU_VFPV4D16=y
-+BR2_ARM_INSTRUCTIONS_THUMB2=y
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
-+BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained"
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x3e000
-+BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1000
-+BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2082
-+BR2_TARGET_ROOTFS_UBI=y
-+BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
-+BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="sama5d4_xplained_nandflash"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/board/atmel/xplained/readme.txt b/board/atmel/xplained/readme.txt
+index 63744dd..7919c60 100644
+--- a/board/atmel/xplained/readme.txt
++++ b/board/atmel/xplained/readme.txt
+@@ -10,19 +10,19 @@ web site.
+ Note that the default Buildroot configuration is prepared to boot from
+ an SD card: the first stage bootloader, second stage bootloader,
+ kernel image and root filesystem are all located on the SD card. Some
+-adjustements in the bootloader configuration will be needed to boot
+-from NAND flash.
++adjustments in the bootloader configuration will be needed to boot
++from NAND flash, see board/atmel/nandflash.txt
+ 
+ Configuring and building Buildroot
+ ----------------------------------
+ 
+-  make atmel_xplained_defconfig
++  make atmel_sama5d3_xplained_mmc_defconfig
+   make
+ 
+ Preparing the SD card
+ ---------------------
+ 
+-The SD card must be partitionned with at least two partitions: one
++The SD card must be partitioned with at least two partitions: one
+ FAT16 partition for the bootloaders, kernel image and Device Tree
+ blob, and one ext4 partition for the root filesystem. To partition the
+ SD card:
+diff --git a/configs/atmel_xplained_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
+similarity index 100%
+rename from configs/atmel_xplained_defconfig
+rename to configs/atmel_sama5d3_xplained_mmc_defconfig
