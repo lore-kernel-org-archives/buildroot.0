@@ -1,33 +1,35 @@
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Tue, 30 Jun 2015 12:41:12 +0200
-Subject: [Buildroot] [PATCH 0/2] pulseview: fix build failures
-Message-ID: <1435660874-14116-1-git-send-email-bgolaszewski@baylibre.com>
+Date: Tue, 30 Jun 2015 12:41:14 +0200
+Subject: [Buildroot] [PATCH 2/2] pulseview: bump commit hash
+In-Reply-To: <1435660874-14116-1-git-send-email-bgolaszewski@baylibre.com>
+References: <1435660874-14116-1-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <1435660874-14116-3-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Autobuilders frequently report the following issue with pulseview:
-  http://autobuild.buildroot.net/results/993/993622312239fe56946fdde4d3dfec73786393e5/build-end.log
+Include commit ec6cc07f which fixes an issue causing build failures
+on several architectures.
 
-It's caused by passing a nullptr as argument where
-boost::optional<std::pair<(...)> > is expected. Commit ec6cc07f
-fixed the issue in PulseView and the second patch makes buildroot
-use it when building PV. The first patch is needed too due to some
-API changes in libsigrokcxx.
-
-NOTE: this builds fine on x86 and actually also used to build
-properly on other architectures at commit edbeeef. Something must
-have changed along the way that exposed the bug.
-
-Bartosz Golaszewski (2):
-  libsigrok: bump commit hash
-  pulseview: bump commit hash
-
- package/libsigrok/libsigrok.mk | 2 +-
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+---
  package/pulseview/pulseview.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/pulseview/pulseview.mk b/package/pulseview/pulseview.mk
+index 1c0e819..67f293f 100644
+--- a/package/pulseview/pulseview.mk
++++ b/package/pulseview/pulseview.mk
+@@ -8,7 +8,7 @@
+ 
+ # No https access on upstream git
+ PULSEVIEW_SITE = git://sigrok.org/pulseview
+-PULSEVIEW_VERSION = 198f9bc74d6c955a72e3e3282c2b0ba16ef39a62
++PULSEVIEW_VERSION = ec6cc07fed12f5070eee6b8cb11343e83d42533c
+ PULSEVIEW_LICENSE = GPLv3+
+ PULSEVIEW_LICENSE_FILES = COPYING
+ PULSEVIEW_DEPENDENCIES = libsigrok qt5base qt5svg boost
 -- 
 2.1.4
