@@ -1,101 +1,125 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Jul 2015 00:20:04 +0200
-Subject: [Buildroot] [v3 1/4] package/nodejs: Add node.js v0.12.5 and
- set as the default version
-In-Reply-To: <1435660966-11347-1-git-send-email-martin@barkynet.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Wed, 1 Jul 2015 00:32:36 +0100
+Subject: [Buildroot] [v3 3/4] package/nodejs: Add npm_config_target_arch
+ to npm command
+In-Reply-To: <20150630180106.GD3900@free.fr>
 References: <1435660966-11347-1-git-send-email-martin@barkynet.com>
-Message-ID: <20150630222004.GB21499@free.fr>
+ <1435660966-11347-3-git-send-email-martin@barkynet.com>
+ <20150630180106.GD3900@free.fr>
+Message-ID: <CAFGQKxcmjz9Owc+q-Yci5N5_YW8rsf=AbPgJ_iERmkkoty0OBA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin, All,
+Yann,
 
-On 2015-06-30 11:42 +0100, Martin Bark spake thusly:
-> The version of the V8 JavaScript engine used by node.js v0.12.5 requires
-> at least an ARMv6 architecture with VFPv2.  For this reason v0.10.39
-> remains the default for ARMv5 targets, all other targets now default to
-> v0.12.5.
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+On 30 June 2015 at 19:01, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Martin, All,
+>
+> On 2015-06-30 11:42 +0100, Martin Bark spake thusly:
+>> Many packages use node-pre-gpy as a way of deploying precompiled binary
+>
+> node-pre-gpy or node-pre-gyp ? ;-)
+>
+>> dependencies with fall back to compilation for other targets.  node-gyp
+>> uses the option --arch to determine its target architecture (which is
+>> already set correctly), however, node-pre-gyp uses --target-arch.  Without
+>> this set node.js packages that uses node-pre-gyp will pick the wrong target
+>> architecture.
+>
+> So if I understand correctly, we can fall in a case where the package
+> claims to already have a pre-compiled binary for this target-arch, and
+> install that instead of building it from source, right?
+>
+> I don't think this is good, for three reasons;
+>
+>   1) there's no way we can ensure it matches the bundled sources;
+>      think malware sneaking into there... :-(
+>
+>   2) it makes complying with the licenses almost impossible (e.g a
+>      module is GPLv2, we install the pre-built binary, we're not sure
+>      the sources we have are the actual sources used to build the binary
+>      we ship)
+>
+>   3) the architecture is not enough: what about optimisation (speed,
+>      size...), the ABI (hardfloat vs. softfloat...) and a lot of other
+>      compilation-related specifities?...
 
-In fact, I missed something, which Thomas did notice...
+I agree, I'm no fan of node-pre-gyp but unfortunately quite a few
+packages use it.
 
-[--SNIP--]
-> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-> index 9a39385..1e0681b 100644
-> --- a/package/nodejs/Config.in
-> +++ b/package/nodejs/Config.in
-> @@ -24,18 +24,23 @@ if BR2_PACKAGE_NODEJS
->  
->  choice
->  	prompt "Node.js version"
-> -	default BR2_BR2_PACKAGE_NODEJS_0_10_39
-> +	default BR2_BR2_PACKAGE_NODEJS_0_10_39 if BR2_ARM_CPU_ARMV5
-> +	default BR2_BR2_PACKAGE_NODEJS_0_12_5
+Just to be clear, this patch is a bug fix, if does not enable
+node-pre-gyp.  node-pre-gyp is a node module like any other and some
+people have chosen to use it as a dependency in they node module.
+Without this fix packages like serialport that use node-pre-gyp will
+not build and/or run correctly.
 
-This is OK and must be kept, however...
+>
+> Can we disable this check, and *always* and *unconditionnally* build
+> from source, even if the module believes it has a pre-compiled binary
+> for the current target architecture?
 
->  	help
->  	  Select the version of Node.js you wish to use.
->  
->  config BR2_BR2_PACKAGE_NODEJS_0_10_39
->  	bool "v0.10.39"
->  
-> +config BR2_BR2_PACKAGE_NODEJS_0_12_5
-> +	bool "v0.12.5"
+I think this is a good idea.  Looking at node-pre-gyp i can see it has
+the option --build-from-source to force building the C++ code.  I ran
+a quick test and passing npm_config_build_from_source=true into npm
+seems to work, the C++ code is built even if the binary version is
+available.
 
-... why did you drop the dependency on !BR2_ARM_CPU_ARMV5 here?
+I'll run some more tests and submit an updated patch
 
-My comment about reworking the choice was only about the default of the
-choice, to have defaults that are coherent with the dependencies of the
-options.
+Thanks
 
-We still need to hide 0.12.5 for armv5.
+Martin
 
-Note: we put the dependencies after the prompt, like so:
-
-    # 0.12.5 uses VP8 which requires armv6 or above
-    config BR2_BR2_PACKAGE_NODEJS_0_12_5
-        bool "0.12.5"
-        depends on !BR2_ARM_CPU_ARMV5
-
-Regards,
-Yann E. MORIN.
-
->  endchoice
->  
->  config BR2_PACKAGE_NODEJS_VERSION_STRING
->  	string
->  	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_39
-> +	default "0.12.5"	if BR2_BR2_PACKAGE_NODEJS_0_12_5
->  
->  menu "Module Selection"
->  
-> diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-> index bc1f15f..816d602 100644
-> --- a/package/nodejs/nodejs.hash
-> +++ b/package/nodejs/nodejs.hash
-> @@ -1,2 +1,5 @@
->  # From upstream URL: http://nodejs.org/dist/v0.10.39/SHASUMS256.txt
->  sha256	68f8d8f9515c4e77e2a06034b742e19e9848c1fee5bcadedc1d68f3e4302df37  node-v0.10.39.tar.gz
-> +
-> +# From upstream URL: http://nodejs.org/dist/v0.12.5/SHASUMS256.txt
-> +sha256	4bc1e25f4c62ac65324d3cf4aa9de2d801cd708757c3567b6ad2ced7df30cdd2  node-v0.12.5.tar.gz
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> Otherwise, I won't review nor ack this patch, I'm not too versed in
+> NodeJS to fully appreciate the problem and the proposed solution...
+> Sorry...
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> This patch sets npm_config_target_arch to solve this issue.  I have tested
+>> this using the node.js package serialport.
+>>
+>> Signed-off-by: Martin Bark <martin@barkynet.com>
+>>
+>> ---
+>> Changes v2 -> v3
+>>  - Adjusted patch order so this is before the new definition of $(NPM)
+>>
+>> Changes v1 -> v2
+>>  - No changes, new in v2
+>> ---
+>>  package/nodejs/nodejs.mk | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+>> index 0b3f8a5..78db49d 100644
+>> --- a/package/nodejs/nodejs.mk
+>> +++ b/package/nodejs/nodejs.mk
+>> @@ -107,6 +107,7 @@ define NODEJS_INSTALL_MODULES
+>>               $(TARGET_CONFIGURE_OPTS) \
+>>               LD="$(TARGET_CXX)" \
+>>               npm_config_arch=$(NODEJS_CPU) \
+>> +             npm_config_target_arch=$(NODEJS_CPU) \
+>>               npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
+>>               $(HOST_DIR)/usr/bin/npm install \
+>>               $(NODEJS_MODULES_LIST) \
+>> --
+>> 2.1.4
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
