@@ -1,281 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Jun 2015 14:30:23 +0200
-Subject: [Buildroot] [git commit] configs/raspberrypi: update the DT-enabled
-	config
-Message-ID: <20150630123122.A3DD981796@busybox.osuosl.org>
+Date: Tue, 30 Jun 2015 14:41:10 +0200
+Subject: [Buildroot] [PATCH 0/6 v2] raspberrypi: update packages and
+ defconfigs (branch yem/rpi)
+In-Reply-To: <cover.1435615426.git.yann.morin.1998@free.fr>
+References: <cover.1435615426.git.yann.morin.1998@free.fr>
+Message-ID: <20150630144110.5d84d333@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8649ca8747f4faad6c36b71ef333d1e8d3212fb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Update to the latest stable kernel version; build an in-tree DTB; use
-a in-tree defconfig; enable C++ (to match what we have in the non-DT
-variant); do not install DTB overlays (this minimalist config does not
-make use of them).
+On Tue, 30 Jun 2015 00:07:41 +0200, Yann E. MORIN wrote:
 
-Generate the DTBs for both the "original" variant (A and B) and the
-"Plus" variant (A+ and B+).
+> Yann E. MORIN (6):
+>       package/rpi-firmware: add option to install vcdbg
 
-Drop our custom linux defconfig file now we use an in-tree one.
+There are still some pending questions on that one.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Floris Bos <bos@je-eigen-domein.nl>
-Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/raspberrypi/linux-3.18-rpi-dt.defconfig |  204 -------------------------
- configs/raspberrypi_dt_defconfig              |   21 ++-
- 2 files changed, 14 insertions(+), 211 deletions(-)
+>       configs/raspberrypi: update the DT-enabled config
+>       configs/raspberrypi2: update our defconfig
+>       config/raspberrypi: remove non-DT defconfig
+>       config/raspberrypi: rename our non-DT defconfig file
+>       boards/raspberrypi: update instructions
 
-diff --git a/board/raspberrypi/linux-3.18-rpi-dt.defconfig b/board/raspberrypi/linux-3.18-rpi-dt.defconfig
-deleted file mode 100644
-index 69c0fa3..0000000
---- a/board/raspberrypi/linux-3.18-rpi-dt.defconfig
-+++ /dev/null
-@@ -1,204 +0,0 @@
--# CONFIG_LOCALVERSION_AUTO is not set
--CONFIG_KERNEL_XZ=y
--# CONFIG_SWAP is not set
--CONFIG_SYSVIPC=y
--CONFIG_POSIX_MQUEUE=y
--CONFIG_FHANDLE=y
--CONFIG_NO_HZ_IDLE=y
--CONFIG_HIGH_RES_TIMERS=y
--CONFIG_IKCONFIG=m
--CONFIG_IKCONFIG_PROC=y
--CONFIG_LOG_BUF_SHIFT=21
--# CONFIG_UTS_NS is not set
--# CONFIG_IPC_NS is not set
--# CONFIG_PID_NS is not set
--# CONFIG_NET_NS is not set
--CONFIG_RELAY=y
--# CONFIG_COMPAT_BRK is not set
--CONFIG_JUMP_LABEL=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--# CONFIG_BLK_DEV_BSG is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--# CONFIG_IOSCHED_CFQ is not set
--CONFIG_ARCH_BCM2708=y
--CONFIG_BCM2708_DT=y
--CONFIG_PREEMPT=y
--CONFIG_AEABI=y
--CONFIG_KSM=y
--CONFIG_UACCESS_WITH_MEMCPY=y
--# CONFIG_ATAGS is not set
--CONFIG_KEXEC=y
--CONFIG_AUTO_ZRELADDR=y
--CONFIG_CPU_FREQ=y
--CONFIG_CPU_FREQ_STAT=m
--CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE=y
--CONFIG_CPU_FREQ_GOV_POWERSAVE=m
--CONFIG_CPU_FREQ_GOV_USERSPACE=m
--CONFIG_CPU_FREQ_GOV_ONDEMAND=m
--CONFIG_VFP=y
--CONFIG_BINFMT_MISC=m
--# CONFIG_SUSPEND is not set
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_PACKET_DIAG=m
--CONFIG_UNIX=y
--CONFIG_UNIX_DIAG=m
--CONFIG_INET=y
--CONFIG_SYN_COOKIES=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_INET_LRO is not set
--CONFIG_INET_DIAG=m
--CONFIG_INET_UDP_DIAG=m
--# CONFIG_IPV6 is not set
--CONFIG_NETLINK_DIAG=y
--CONFIG_BPF_JIT=y
--# CONFIG_WIRELESS is not set
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--# CONFIG_FIRMWARE_IN_KERNEL is not set
--CONFIG_CONNECTOR=y
--CONFIG_BLK_DEV_LOOP=m
--CONFIG_BLK_DEV_RAM=m
--CONFIG_SCSI=m
--# CONFIG_SCSI_PROC_FS is not set
--CONFIG_BLK_DEV_SD=m
--# CONFIG_SCSI_LOWLEVEL is not set
--CONFIG_NETDEVICES=y
--CONFIG_DUMMY=m
--# CONFIG_ETHERNET is not set
--CONFIG_USB_USBNET=m
--# CONFIG_USB_NET_AX8817X is not set
--# CONFIG_USB_NET_AX88179_178A is not set
--# CONFIG_USB_NET_CDCETHER is not set
--# CONFIG_USB_NET_CDC_NCM is not set
--CONFIG_USB_NET_SMSC95XX=m
--# CONFIG_USB_NET_NET1080 is not set
--# CONFIG_USB_NET_CDC_SUBSET is not set
--# CONFIG_USB_NET_ZAURUS is not set
--# CONFIG_WLAN is not set
--CONFIG_INPUT_SPARSEKMAP=m
--CONFIG_INPUT_EVDEV=m
--# CONFIG_INPUT_KEYBOARD is not set
--# CONFIG_INPUT_MOUSE is not set
--# CONFIG_SERIO is not set
--# CONFIG_LEGACY_PTYS is not set
--# CONFIG_DEVKMEM is not set
--CONFIG_SERIAL_AMBA_PL011=y
--CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
--CONFIG_HW_RANDOM_BCM2708=m
--CONFIG_I2C=m
--CONFIG_I2C_CHARDEV=m
--CONFIG_I2C_BCM2835=m
--CONFIG_I2C_BCM2708=m
--CONFIG_SPI=y
--CONFIG_SPI_BCM2835=m
--CONFIG_SPI_BCM2708=m
--CONFIG_SPI_BITBANG=m
--CONFIG_GPIO_SYSFS=y
--CONFIG_GPIO_GENERIC_PLATFORM=y
--# CONFIG_HWMON is not set
--CONFIG_THERMAL=y
--CONFIG_THERMAL_BCM2835=y
--CONFIG_WATCHDOG=y
--CONFIG_SOFT_WATCHDOG=m
--CONFIG_BCM2708_WDT=m
--CONFIG_REGULATOR=y
--CONFIG_REGULATOR_FIXED_VOLTAGE=m
--CONFIG_REGULATOR_USERSPACE_CONSUMER=m
--CONFIG_FB=y
--CONFIG_FIRMWARE_EDID=y
--CONFIG_FB_MODE_HELPERS=y
--CONFIG_FB_BCM2708=y
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_LOGO=y
--# CONFIG_LOGO_LINUX_MONO is not set
--# CONFIG_LOGO_LINUX_VGA16 is not set
--CONFIG_SOUND=m
--CONFIG_SND=m
--CONFIG_SND_SEQUENCER=m
--CONFIG_SND_SEQ_DUMMY=m
--CONFIG_SND_MIXER_OSS=m
--CONFIG_SND_PCM_OSS=m
--CONFIG_SND_SEQUENCER_OSS=y
--CONFIG_SND_HRTIMER=m
--# CONFIG_SND_SUPPORT_OLD_API is not set
--CONFIG_SND_DUMMY=m
--CONFIG_SND_BCM2835=m
--# CONFIG_SND_SPI is not set
--CONFIG_SND_USB_AUDIO=m
--CONFIG_HIDRAW=y
--CONFIG_UHID=y
--CONFIG_HID_PID=y
--CONFIG_USB_HIDDEV=y
--CONFIG_USB=y
--CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
--CONFIG_USB_DYNAMIC_MINORS=y
--CONFIG_USB_DWCOTG=y
--CONFIG_USB_STORAGE=m
--CONFIG_USB_STORAGE_REALTEK=m
--CONFIG_USB_STORAGE_DATAFAB=m
--CONFIG_USB_STORAGE_FREECOM=m
--CONFIG_USB_STORAGE_ISD200=m
--CONFIG_USB_STORAGE_USBAT=m
--CONFIG_USB_STORAGE_SDDR09=m
--CONFIG_USB_STORAGE_SDDR55=m
--CONFIG_USB_STORAGE_JUMPSHOT=m
--CONFIG_USB_STORAGE_ALAUDA=m
--CONFIG_USB_STORAGE_ONETOUCH=m
--CONFIG_USB_STORAGE_KARMA=m
--CONFIG_USB_STORAGE_CYPRESS_ATACB=m
--CONFIG_USB_STORAGE_ENE_UB6250=m
--CONFIG_MMC=y
--CONFIG_MMC_SDHCI=y
--CONFIG_MMC_SDHCI_PLTFM=y
--CONFIG_MMC_BCM2835=y
--CONFIG_MMC_BCM2835_DMA=y
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
--CONFIG_LEDS_GPIO=m
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=m
--CONFIG_LEDS_TRIGGER_ONESHOT=m
--CONFIG_LEDS_TRIGGER_HEARTBEAT=m
--CONFIG_LEDS_TRIGGER_BACKLIGHT=m
--CONFIG_LEDS_TRIGGER_CPU=y
--CONFIG_LEDS_TRIGGER_GPIO=m
--CONFIG_LEDS_TRIGGER_DEFAULT_ON=m
--CONFIG_LEDS_TRIGGER_TRANSIENT=m
--CONFIG_LEDS_TRIGGER_CAMERA=m
--# CONFIG_IOMMU_SUPPORT is not set
--CONFIG_EXT2_FS=m
--CONFIG_EXT3_FS=m
--# CONFIG_EXT3_FS_XATTR is not set
--CONFIG_EXT4_FS=y
--CONFIG_FANOTIFY=y
--CONFIG_MSDOS_FS=m
--CONFIG_VFAT_FS=m
--CONFIG_FAT_DEFAULT_CODEPAGE=850
--CONFIG_FAT_DEFAULT_IOCHARSET="utf8"
--CONFIG_TMPFS=y
--CONFIG_TMPFS_POSIX_ACL=y
--CONFIG_CONFIGFS_FS=m
--# CONFIG_MISC_FILESYSTEMS is not set
--# CONFIG_NETWORK_FILESYSTEMS is not set
--CONFIG_NLS_DEFAULT="utf8"
--CONFIG_NLS_CODEPAGE_437=m
--CONFIG_NLS_CODEPAGE_850=m
--CONFIG_NLS_ASCII=m
--CONFIG_NLS_ISO8859_1=m
--CONFIG_NLS_ISO8859_15=m
--CONFIG_NLS_UTF8=m
--CONFIG_PRINTK_TIME=y
--CONFIG_STRIP_ASM_SYMS=y
--CONFIG_PANIC_ON_OOPS=y
--# CONFIG_RCU_CPU_STALL_VERBOSE is not set
--CONFIG_STRICT_DEVMEM=y
--CONFIG_DEBUG_USER=y
--CONFIG_CRYPTO_MANAGER=m
--# CONFIG_CRYPTO_MANAGER_DISABLE_TESTS is not set
--CONFIG_CRYPTO_NULL=m
--# CONFIG_CRYPTO_ANSI_CPRNG is not set
--# CONFIG_CRYPTO_HW is not set
-diff --git a/configs/raspberrypi_dt_defconfig b/configs/raspberrypi_dt_defconfig
-index 991460e..61487a4 100644
---- a/configs/raspberrypi_dt_defconfig
-+++ b/configs/raspberrypi_dt_defconfig
-@@ -3,18 +3,25 @@ BR2_arm1176jzf_s=y
- 
- BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- 
--# Lock to 3.18 headers as the RPi kernel with
--# DT support is based off the 3.18 branch
-+# Lock to 4.0 headers as the RPi kernel stable tree is
-+# based off the 4.0 branch
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+BR2_DEFAULT_KERNEL_VERSION="4.0.6"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
-+
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="2747cc0bde4ca441691260fae1e34c9ef954ccae"
--BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.18-rpi-dt.defconfig"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f90f981770e3ac8506dc84c9cd01471faaa0b0c2"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_ZIMAGE=y
- 
-+# Build the DTBs for A/B and A+/B+ from the kernel sources
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-b bcm2708-rpi-b-plus"
-+
- BR2_PACKAGE_RPI_FIRMWARE=y
-+# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
+All these ones applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
