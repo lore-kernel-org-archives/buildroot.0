@@ -1,7 +1,9 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue, 30 Jun 2015 23:58:10 +0200
-Subject: [Buildroot] [PATCH 1/2] wmctrl: add hash file
-Message-ID: <1435701491-17232-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Tue, 30 Jun 2015 23:58:11 +0200
+Subject: [Buildroot] [PATCH 2/2] wmctrl: update URL address
+In-Reply-To: <1435701491-17232-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1435701491-17232-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <1435701491-17232-2-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,17 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/wmctrl/wmctrl.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/wmctrl/wmctrl.hash
+ package/wmctrl/wmctrl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wmctrl/wmctrl.hash b/package/wmctrl/wmctrl.hash
-new file mode 100644
-index 0000000..a08c0e9
---- /dev/null
-+++ b/package/wmctrl/wmctrl.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 d78a1efdb62f18674298ad039c5cbdb1edb6e8e149bb3a8e3a01a4750aa3cca9 wmctrl-1.07.tar.gz
+diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
+index a4e0d8e..f26b23e 100644
+--- a/package/wmctrl/wmctrl.mk
++++ b/package/wmctrl/wmctrl.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ WMCTRL_VERSION = 1.07
+-WMCTRL_SITE = http://tomas.styblo.name/wmctrl/dist
++WMCTRL_SITE = https://sites.google.com/site/tstyblo/wmctrl
+ WMCTRL_LICENSE = GPLv2+
+ WMCTRL_LICENSE_FILES = COPYING
+ 
 -- 
 1.9.1
