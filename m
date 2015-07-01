@@ -1,36 +1,41 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 01 Jul 2015 12:39:14 +0200
-Subject: [Buildroot] [PATCH 1/4] a20_olinuxino_lime/readme.txt: fix a
- typo
-In-Reply-To: <20150630230854.6328a222@free-electrons.com>
-References: <1435615523-21039-1-git-send-email-luca@lucaceresoli.net>
- <20150630230854.6328a222@free-electrons.com>
-Message-ID: <5593C352.7090003@lucaceresoli.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  1 Jul 2015 07:44:32 -0300
+Subject: [Buildroot] [PATCH] openssh: bump to version 6.9p1
+Message-ID: <1435747472-5687-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/openssh/openssh.hash | 4 ++--
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas Petazzoni wrote:
-> Dear Luca Ceresoli,
->
-> On Tue, 30 Jun 2015 00:05:20 +0200, Luca Ceresoli wrote:
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> ---
->>   board/olimex/a20_olinuxino_lime/readme.txt | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> Patches 1, 2 and 3 applied. Patch 4 was no longer in patchwork, so I
-> suppose that you intend to resend a new version.
-
-I've been too zealous :) and marked it as "Changes requested" on
-patchwork just after Fran?ois's suggestion not to mention U-Boot,
-before you proposed to take care.
-
-No problem, I'm sending v2.
-
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 3af72ff..76d0be8 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-# Also from http://www.openssh.com/txt/release-6.8 (sha256 is base64 encoded)
+-sha256	3ff64ce73ee124480b5bf767b9830d7d3c03bbcb6abe716b78f0192c37ce160e	openssh-6.8p1.tar.gz
++# Also from http://www.openssh.com/txt/release-6.9 (sha256 is base64 encoded)
++sha256	6e074df538f357d440be6cf93dc581a21f22d39e236f217fcd8eacbb6c896cfe	openssh-6.9p1.tar.gz
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 24af079..11a844e 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSH_VERSION = 6.8p1
++OPENSSH_VERSION = 6.9p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
 -- 
-Luca
+2.3.6
