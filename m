@@ -1,9 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 1 Jul 2015 13:39:35 +0200
-Subject: [Buildroot] [PATCH 2/3] lvm2: bump to version 2.02.123
+Date: Wed, 1 Jul 2015 13:39:36 +0200
+Subject: [Buildroot] [PATCH 3/3] openldap: bump to version 2.4.41
 In-Reply-To: <1435750776-3364-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1435750776-3364-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1435750776-3364-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1435750776-3364-3-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openldap/openldap.hash | 6 ++----
+ package/openldap/openldap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 6137108..e6047bb 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/md5.sum
--md5  702c61bf07a8fc6dc0db6e9d323d9f6d  LVM2.2.02.121.tgz
-+md5  5ae469f1a021729d3db9d269077ad4fe  LVM2.2.02.123.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index a2db504..bae0d54 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index ff79a8a..353c7d9 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,4 +1,2 @@
+-# From:  ftp://mirror.switch.ch/mirror/OpenLDAP/openldap-release/openldap-2.4.40.sha1
+-sha1  0cfac3b024b99de2e2456cc7254481b6644e0b96  openldap-2.4.40.tgz
+-# Locally computed:
+-sha256  d12611a5c25b6499293c2bb7b435dc2b174db73e83f5a8cb7e34f2ce5fa6dadb  openldap-2.4.40.tgz
++# Locally computed
++sha256  27856bb4a8b44feca2b326c309000e16a9dadd52362c8ab6eec6c67a43737f6e  openldap-2.4.41.tgz
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 68464ab..ecb1bce 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LVM2_VERSION = 2.02.121
-+LVM2_VERSION = 2.02.123
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+-OPENLDAP_VERSION = 2.4.40
++OPENLDAP_VERSION = 2.4.41
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
 -- 
 2.3.6
