@@ -1,31 +1,38 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Wed, 1 Jul 2015 10:53:15 +0200 (CEST)
-Subject: [Buildroot] Buildroot runtime test infrastructure prototype
-In-Reply-To: <5592FB74.3010608@andin.de>
-Message-ID: <1195692444.2391852.1435740795287.JavaMail.root@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Jul 2015 10:19:11 +0200
+Subject: [Buildroot] [git commit] vim: selinux support
+Message-ID: <20150701085622.9AB2D817F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=cdc18ae10c0a026946a02a5cd6dad307baac285a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> 
-> I'd be interested, how is that different from the report.html that
-> you
-> mention below? What tools are you using?
-> 
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/vim/vim.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-RFW can generate multiple outputs 
-
-* html reports for human viewers
-* output.xml which is a very complete XML report, but in a RFW specific
-  format. That is the one I used to autogenerate my weekly reports
-  and corresponding slides. I genereate some libreoffice files from
-  parsing that data
-* xunit.xml which contains very little information but is compatible
-  with the standard. This is usefull to integrate with other tools
-  that already know that format.
-
-Overall, output.xml is the usefull output if you want to automatically
-analyze test results. Since that was what I was doing, I used that file
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index da84d14..518afaf 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -28,6 +28,13 @@ VIM_CONF_OPTS = --with-tlib=ncurses --enable-gui=no --without-x
+ VIM_LICENSE = Charityware
+ VIM_LICENSE_FILES = README.txt
+ 
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++VIM_CONF_OPTS += --enable-selinux
++VIM_DEPENDENCIES += libselinux
++else
++VIM_CONF_OPTS += --disable-selinux
++endif
++
+ define VIM_INSTALL_TARGET_CMDS
+ 	cd $(@D)/src; \
+ 		$(MAKE) DESTDIR=$(TARGET_DIR) installvimbin; \
