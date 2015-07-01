@@ -1,82 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  1 Jul 2015 19:40:28 +0200
-Subject: [Buildroot] [PATCHv3] package/rpi-firmware: add option to install
-	vcdbg
-Message-ID: <1435772428-24182-1-git-send-email-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  1 Jul 2015 21:54:53 +0200
+Subject: [Buildroot] [PATCH 1/4] package/{mesa3d,
+	mesa3d-headers}: bump version to 10.6.1
+Message-ID: <1435780496-31814-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-vcdbg is a tool to help debug the communication with the GPU.
-It comes as a binary-only, and in two flavours: one for the hard
-floating point ABI, one for the software floating point ABI.
 
-Unfortunately, we have no source code for that tool, only a binary that
-was dynamically linked with glibc and libraries from rpi-userland.
-
-So, just install that executable, and let's hope there is no symbol
-issue at runtime.
-
-Note: vcdbg needs glibc, threads and !static. Since glibc already
-implies threads and !static, we only need to depend on glibc.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc; Floris Bos <bos@je-eigen-domein.nl>
-Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v2 -> v3;
-  - depends on an (eg)libc toolchain  (Baruch)
-  - fix typo  (Baruch)
+ package/mesa3d-headers/mesa3d-headers.mk |    2 +-
+ package/mesa3d/mesa3d.hash               |    4 ++--
+ package/mesa3d/mesa3d.mk                 |    2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-Changes v1 -> v2:
-  - select rpi-userland  (Baruch, Thomas)
----
- package/rpi-firmware/Config.in       | 11 +++++++++++
- package/rpi-firmware/rpi-firmware.mk |  7 +++++++
- 2 files changed, 18 insertions(+)
-
-diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
-index a060b4e..405674f 100644
---- a/package/rpi-firmware/Config.in
-+++ b/package/rpi-firmware/Config.in
-@@ -65,4 +65,15 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
- 	  Say 'y' here if you need to load one or more of the DTB overlays,
- 	  to support HATs (Hardware Attached on Top, add-on modules).
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 07340f7..c5f2dba 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
-+config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
-+	bool "vcdbg"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_INSTALL_LIBSTDCPP # rpi-userland
-+	select BR2_PACKAGE_RPI_USERLAND
-+	help
-+	  Install vcdbg, to help debug communication with the GPU.
-+
-+comment "vcdbg needs an (e)glibc toolchain w/ C++"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
-+
- endif # BR2_PACKAGE_RPI_FIRMWARE
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 56d6925..6299b04 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -29,6 +29,13 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
- endef
- endif
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 10.6.0
++MESA3D_HEADERS_VERSION = 10.6.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 456348f..5c34a9e 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/mesa-announce/2015-June/000158.html
+-sha256	f37e2633978deed02ff0522abc36c709586e2b555fd439a82ab71dce2c866c76	mesa-10.6.0.tar.xz
++# From http://lists.freedesktop.org/archives/mesa-announce/2015-June/000161.html
++sha256	6c80a2b647e57c85dc36e609d9aed17f878f0d8e0cf9ace86d14cf604101e1eb	mesa-10.6.1.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 486a665..051aac7 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
-+define RPI_FIRMWARE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -d -m 0700 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/bin/vcdbg \
-+		$(TARGET_DIR)/usr/sbin/vcdbg
-+endef
-+endif # INSTRALL_VCDBG
-+
- define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
- 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 10.6.0
++MESA3D_VERSION = 10.6.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-1.9.1
+1.7.10.4
