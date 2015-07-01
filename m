@@ -1,152 +1,82 @@
-From: Arthur LAMBERT <lambertarthur22@gmail.com>
-Date: Wed, 1 Jul 2015 15:51:51 +0200
-Subject: [Buildroot] [PATCH v4 1/1] board: add support for WarPboard
-In-Reply-To: <20150701153004.6fc35912@free-electrons.com>
-References: <1435742562-31718-1-git-send-email-lambertarthur22@gmail.com>
- <20150701153004.6fc35912@free-electrons.com>
-Message-ID: <20150701135151.GA1837@arthur-dreem>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  1 Jul 2015 19:40:28 +0200
+Subject: [Buildroot] [PATCHv3] package/rpi-firmware: add option to install
+	vcdbg
+Message-ID: <1435772428-24182-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wednesday 01 Jul 2015 ? 15:30:04 (+0200), Thomas Petazzoni a ?crit :
-> Arthur,
-> 
-> On Wed,  1 Jul 2015 11:22:42 +0200, Arthur LAMBERT wrote:
-> 
-> > +- Put warpboard in USB download mode
-> > +  closing the jumper j2  on daugther board
-> > +- Load u-boot.imx in warpboard by using imx usb loader from host utility
-> > +  $ ./imx_usb output/images/u-boot.imx
-> 
-> Can you confirm that:
-> 
-> $ output/host/usr/bin/imx_usb output/images/u-boot.imx
+vcdbg is a tool to help debug the communication with the GPU.
+It comes as a binary-only, and in two flavours: one for the hard
+floating point ABI, one for the software floating point ABI.
 
-Just need to add -c + configuration directory :
-$ output/host/usr/bin/imx_usb -c output/host/etc/imx-loader.d/ output/images/u-boot.imx
+Unfortunately, we have no source code for that tool, only a binary that
+was dynamically linked with glibc and libraries from rpi-userland.
 
-During my test I was testing the process from :
-output/build/host-imx-usb-loader-f96aee286ea17c832b7ec922dd76842deb5ce299
-In this directory you can find binary and configuration file. In you use a
-relative path, you have to add and extra option to give configuration directory
-path.
+So, just install that executable, and let's hope there is no symbol
+issue at runtime.
 
-> 
-> > +- Uboot will appear in minicom
-> > +- Use the default environment variables:
-> > + => env default -f -a
-> > + => saveenv
-> > +- run the DFU command in uboot prompt:
-> > + => dfu 0 mmc 0
-> > +- transfer uboot into flash by running this command in host side:
-> 
-> and:
-> 
-> > + $ sudo dfu-util -D output/images/u-boot.imx -a boot
-> 
-> $ sudo output/host/usr/bin/dfu-util -D output/images/u-boot.imx -a boot
-> 
-> is OK ?
-> 
-> This makes it clear which dfu_util and imx_usb programs should be
-> executed.
-> 
+Note: vcdbg needs glibc, threads and !static. Since glibc already
+implies threads and !static, we only need to depend on glibc.
 
-It's OK !
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc; Floris Bos <bos@je-eigen-domein.nl>
+Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> > +Use ums command from uboot prompt to mount emmc as mass storage and update
-> > +zImage, device tree (imx6sl-warp.dtb) and rootfs file (rootfs.tar)
-> > +=> ums 0 mmc 0
-> > +
-> > +Put zimage and dtb file in warp-vfat and extract rootfs.tar in warp-rootfs
-> > +partition.
-> 
-> Maybe indicate it should be extracted as root.
-> 
+---
+Changes v2 -> v3;
+  - depends on an (eg)libc toolchain  (Baruch)
+  - fix typo  (Baruch)
 
-Ok.
+Changes v1 -> v2:
+  - select rpi-userland  (Baruch, Thomas)
+---
+ package/rpi-firmware/Config.in       | 11 +++++++++++
+ package/rpi-firmware/rpi-firmware.mk |  7 +++++++
+ 2 files changed, 18 insertions(+)
 
-> > diff --git a/configs/warpboard_defconfig b/configs/warpboard_defconfig
-> > new file mode 100644
-> > index 0000000..13e90cd
-> > --- /dev/null
-> > +++ b/configs/warpboard_defconfig
-> > @@ -0,0 +1,42 @@
-> > +# architecture
-> > +BR2_arm=y
-> > +BR2_cortex_a9=y
-> > +
-> > +# patches
-> > +BR2_GLOBAL_PATCH_DIR="board/freescale/warpboard/patches/"
-> > +
-> > +# lock to 4.0 headers to avoid breaking with newer kernels
-> > +BR2_KERNEL_HEADERS_VERSION=y
-> > +BR2_DEFAULT_KERNEL_VERSION="4.0"
-> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
-> > +
-> > +# system
-> > +BR2_TARGET_GENERIC_HOSTNAME="warpboard"
-> > +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-> > +
-> > +# rootfs overlay
-> > +BR2_ROOTFS_OVERLAY="board/freescale/warpboard/rootfs_overlay"
-> > +
-> > +# kernel
-> > +BR2_LINUX_KERNEL=y
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://github.com/Freescale/linux-fslc/tarball/38ec11d/linux-fslc-38ec11d.tar.gz"
-> > +BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-> > +BR2_LINUX_KERNEL_ZIMAGE=y
-> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-warp"
-> > +
-> > +# wifi firmware for brcm4330
-> > +BR2_PACKAGE_LINUX_FIRMWARE=y
-> > +BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
-> > +
-> > +# uboot
-> > +BR2_TARGET_UBOOT=y
-> > +BR2_TARGET_UBOOT_BOARDNAME="warp"
-> > +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07-rc2"
-> > +BR2_TARGET_UBOOT_FORMAT_IMX=y
-> > +
-> > +# host utility
-> > +BR2_PACKAGE_HOST_DFU_UTIL=y
-> > +BR2_PACKAGE_HOST_IMX_USB_LOADER=y
-> 
-> You're not enabling an ext2 filesystem (which is good since you don't
-> use it). But you still mention it in your document:
-> 
-> +You will find in ./output/images/ the following files:
-> +  - imx6sl-warp.dtb
-> +  - rootfs.ext2
-> +  - rootfs.tar
-> +  - u-boot.imx
-> +  - zImage
-> 
-
-So yes we can remove rootfs.ext2 from the document. We don't use it during the
-flash process.
-
-> No need to resend just for that, just confirm me that my proposals are
-> OK, and I'll fix when applying.
-> 
-
-Thanks for that. So yes all your proposals are good. Just need to add the
-configuration directory path for the first proposal.
-
-> Thanks,
-> 
-> Thomas
-> -- 
-
-Thanks,
-Arthur.
-
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index a060b4e..405674f 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -65,4 +65,15 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 	  Say 'y' here if you need to load one or more of the DTB overlays,
+ 	  to support HATs (Hardware Attached on Top, add-on modules).
+ 
++config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
++	bool "vcdbg"
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_INSTALL_LIBSTDCPP # rpi-userland
++	select BR2_PACKAGE_RPI_USERLAND
++	help
++	  Install vcdbg, to help debug communication with the GPU.
++
++comment "vcdbg needs an (e)glibc toolchain w/ C++"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
++
+ endif # BR2_PACKAGE_RPI_FIRMWARE
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 56d6925..6299b04 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -29,6 +29,13 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
++define RPI_FIRMWARE_INSTALL_TARGET_CMDS
++	$(INSTALL) -d -m 0700 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/bin/vcdbg \
++		$(TARGET_DIR)/usr/sbin/vcdbg
++endef
++endif # INSTRALL_VCDBG
++
+ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
+-- 
+1.9.1
