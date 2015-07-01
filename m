@@ -1,192 +1,160 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 01 May 2015 01:20:08 +0200
-Subject: [Buildroot] [PATCH] php: fpm sapi: install startup script
-In-Reply-To: <5542A99C.5060409@je-eigen-domein.nl>
-References: <1430422567-14903-1-git-send-email-bos@je-eigen-domein.nl>
- <5542901D.30403@mind.be> <5542A99C.5060409@je-eigen-domein.nl>
-Message-ID: <5542B8A8.20100@mind.be>
+From: James Knight <james.d.knight@live.com>
+Date: Tue, 30 Jun 2015 23:17:54 -0400
+Subject: [Buildroot] [PATCH v2 1/1] google-material-design-icons: new package
+In-Reply-To: <20150628232431.3d1ea7af@free-electrons.com.>
+References: <20150628232431.3d1ea7af@free-electrons.com.>
+Message-ID: <BLU437-SMTP141B2B324B33F6E9C3B2F8A0A80@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/01/15 00:15, Floris Bos wrote:
-> Hi,
-> 
-> On 04/30/2015 10:27 PM, Arnout Vandecappelle wrote:
->> On 04/30/15 21:36, Floris Bos wrote:
->>> When PHP's FastCGI Process Manager SAPI is selected:
->>>
->>> - install a startup script.
->>> - install a simple configuration, using the ondemand process manager
->>>   that only starts children when the website is actually being used.
->>  Correct me if I'm wrong, but what is still missing is the configuration of the
->> webserver to actually use this, right? You still have to update your webserver
->> configuration to point to /var/run/php-fpm.sock to handle php scripts, right?
-> 
-> Correct.
-> Although I am thinking about submitting a subsequent patch that adds an option
-> to enable it in the webserver configuration.
-> 
-> I know that may go against the "tradition" that buildroot only does the
-> compiling, and the user has to do his own configuration.
+Signed-off-by: James Knight <james.d.knight@live.com>
+---
+ package/Config.in                                  |  1 +
+ package/google-material-design-icons/Config.in     | 40 ++++++++++++++
+ .../google-material-design-icons.hash              |  2 +
+ .../google-material-design-icons.mk                | 63 ++++++++++++++++++++++
+ 4 files changed, 106 insertions(+)
+ create mode 100644 package/google-material-design-icons/Config.in
+ create mode 100644 package/google-material-design-icons/google-material-design-icons.hash
+ create mode 100644 package/google-material-design-icons/google-material-design-icons.mk
 
- No, the tradition is that as much as possible it works out of the box, but in
-the most simple way. As long as it is easy to customize in post-build and/or
-overlay.
-
-> But things like enabling PHP in a webserver configuration is one of those
-> annoying repetitive tasks that I really like to see handled by ticking a box.
-
- I fully agree.
-
-> 
->>  If so, perhaps that could be explained in the help text in php/Config.in.
->>
->>
->>  It may also be good to explain in the commit log why you don't use the provided
->> default config file
-> 
-> The stock php-fpm config is good for illustrative purposes only.
-> It is unfit for multi-user systems, as it listens to a TCP socket with no
-> authentication, allowing any local user that knows how to connect to
-> 127.0.0.1:9000 to elevate privileges and execute arbitrary code as the php user.
-> And it uses a pm that keeps a minimum number of PHP children resident at all
-> times, making it not the best choice for embedded systems either.
-
- I fully agree, just thought it should be mentioned in the commit message.
-
-> 
->>> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
->>> ---
->>>  package/php/php-fpm.conf | 14 ++++++++++++++
->>>  package/php/php.mk       | 15 +++++++++++++++
->>>  2 files changed, 29 insertions(+)
->>>  create mode 100644 package/php/php-fpm.conf
->>>
->>> diff --git a/package/php/php-fpm.conf b/package/php/php-fpm.conf
->>> new file mode 100644
->>> index 0000000..2ffe595
->>> --- /dev/null
->>> +++ b/package/php/php-fpm.conf
->>> @@ -0,0 +1,14 @@
->>> +[www]
->>> +# Only start children when there are requests to be processed
->>> +pm = ondemand
->>> +# Terminate them again after there haven't been any for 2 minutes
->>> +pm.process_idle_timeout = 120s
->>> +# Maximum number of children processing PHP requests concurrently
->>> +pm.max_children = 32
->>  Isn't that a bit high? Typically embedded web servers will not have the power
->> to handle that many parallel requests efficiently.
-> 
-> Some of the web applications we use feature an AJAX web interface that uses a
-> form of "long polling" to poll for certain events.
-
- I thought long polling was exactly the opposite: close the connection and poll
-again later. But I don't know about these things :-)
-
-> That essentially ties up a PHP process per logged-in user, so I like the number
-> a bit higher than usual.
-> Doesn't consume much resources (at least not cpu), but does block for 29 seconds
-> if no events come in.
-> Also scripts that query data from external servers can block as well.
-> 
-> The number could be made a little lower, as not everybody does stuff like that.
-> But it doesn't really harm others either, as extra children are only started if
-> all the existing ones are occupied. Not by default.
-
- However, in a memory-constrained system (which still is one of buildroot's core
-targets), it will trigger OOM when there actually are so many children.
-
-
-> 
-> 
->>
->>> +
->>> +listen = /var/run/php-fpm.sock
->>> +listen.owner = www-data
->>> +listen.group = www-data
->>> +user = www-data
->>> +group = www-data
->>> +
->>> diff --git a/package/php/php.mk b/package/php/php.mk
->>> index e4331f2..6c42aba 100644
->>> --- a/package/php/php.mk
->>> +++ b/package/php/php.mk
->>> @@ -251,6 +251,21 @@ PHP_CONF_OPTS += \
->>>  PHP_DEPENDENCIES += jpeg libpng freetype
->>>  endif
->>>  
->>> +ifeq ($(BR2_PACKAGE_PHP_FPM),y)
->>> +define PHP_INSTALL_INIT_SYSV
->>> +	$(INSTALL) -D -m 0755 $(@D)/sapi/fpm/init.d.php-fpm \
->>> +		$(TARGET_DIR)/etc/init.d/S49php-fpm
->>> +endef
->>  There's also a php-fpm.service that you can install for systemd.
-> 
-> Yes, I noticed that before submitting the patch.
-> But I never had much luck with systemd on buildroot.
-> 
-> The .service file generated by the PHP build did not work as-is when I tried it
-> this morning.
-> 
-> ==
-> Konsole output [Unit]
-> Description=The PHP FastCGI Process Manager
-> After=syslog.target network.target
-> 
-> [Service]
-> Type=simple
-> PIDFile=/var/run/php-fpm.pid
-> ExecStart=${exec_prefix}/sbin/php-fpm --nodaemonize --fpm-config /etc/php-fpm.conf
-> ExecReload=/bin/kill -USR2 $MAINPID
-> 
-> [Install]
-> WantedBy=multi-user.target
-> ==
-> 
-> First problem was that systemd didn't like the ${exec_prefix}
-
- That should probably have been substituted away by the conf.in -> conf
-conversion...
-
-> And I am not sure if we have the syslog.target either.
-
- I believe journald provides that.
-
-> 
-> But another thing I noticed was that my webserver and my other custom
-> applications were not starting properly with systemd anymore.
-> Seems for some reason /tmp is not world-writable anymore.
-> So if your application does not run as root, and wants to create a file in say
-> /var/log (that links to /tmp) it fails.
-
- I guess whoever uses systemd will deal with that.
-
-
- Personally, I think it's worthwhile to install the service file even if it is
-not working. If nobody actually uses it, there's no harm done. If someone does
-use it, they're no worse off than if there was not service file. And they may
-give us a patch that fixes the problem.
-
- Regards,
- Arnout
-
-> Haven't yet figured out what is up with that.
-> 
-> 
-> Yours sincerely,
-> 
-> Floris Bos
-> 
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 477cc47..13a7e74 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -188,6 +188,7 @@ comment "Fonts"
+ 
+ comment "Icons"
+ 	source "package/adwaita-icon-theme/Config.in"
++	source "package/google-material-design-icons/Config.in"
+ 	source "package/hicolor-icon-theme/Config.in"
+ 
+ comment "Sounds"
+diff --git a/package/google-material-design-icons/Config.in b/package/google-material-design-icons/Config.in
+new file mode 100644
+index 0000000..a200429
+--- /dev/null
++++ b/package/google-material-design-icons/Config.in
+@@ -0,0 +1,40 @@
++config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS
++	bool "google-material-design-icons"
++	help
++	  Material design icons are the official icon set from Google that
++	  are designed under the material design guidelines.
++
++	  https://github.com/google/material-design-icons
++
++if BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS
++
++config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_PNG
++	bool "Install PNG icons"
++	help
++	  Use PNG icon types.
++
++	  The default. Traditional format; simplicity and compatibility.
++
++config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_SVG
++	bool "Install SVG icons"
++	help
++	  Use SVG icon types.
++
++	  Vector format that is limitlessly scalable.
++
++config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_FONT
++	bool "Install TrueType font"
++	help
++	  Install the Material TrueType font (ttf) on the target system.
++
++config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_SPRITES_CSS
++	bool "Install CSS sprites"
++	help
++	  Install CSS (PNG) spritesheets.
++
++config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_SPRITES_SVG
++	bool "Install SVG sprites"
++	help
++	  Install SVG spritesheets.
++
++endif
+diff --git a/package/google-material-design-icons/google-material-design-icons.hash b/package/google-material-design-icons/google-material-design-icons.hash
+new file mode 100644
+index 0000000..7bcfcb5
+--- /dev/null
++++ b/package/google-material-design-icons/google-material-design-icons.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  87d7c8515207edecd3438a96bdf5129df91e0b29261d5f8c52f672957c11af65  2.0.0.tar.gz
+diff --git a/package/google-material-design-icons/google-material-design-icons.mk b/package/google-material-design-icons/google-material-design-icons.mk
+new file mode 100644
+index 0000000..b1f9cd5
+--- /dev/null
++++ b/package/google-material-design-icons/google-material-design-icons.mk
+@@ -0,0 +1,63 @@
++################################################################################
++#
++# google-material-design-icons
++#
++################################################################################
++
++GOOGLE_MATERIAL_DESIGN_ICONS_VERSION = 2.0.0
++GOOGLE_MATERIAL_DESIGN_ICONS_SOURCE = \
++	$(GOOGLE_MATERIAL_DESIGN_ICONS_VERSION).tar.gz
++GOOGLE_MATERIAL_DESIGN_ICONS_SITE = \
++	https://github.com/google/material-design-icons/archive
++GOOGLE_MATERIAL_DESIGN_ICONS_LICENSE = CC-BY-4.0
++GOOGLE_MATERIAL_DESIGN_ICONS_LICENSE_FILES = LICENSE
++
++GOOGLE_MATERIAL_DESIGN_ICONS_LIST = \
++	action alert av communication content device editor file \
++	hardware image maps navigation notification social toggle
++
++ifneq (,$(filter \
++		$(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_PNG) \
++		$(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_SVG),y))
++define GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_IMAGES
++	$(foreach family,$(GOOGLE_MATERIAL_DESIGN_ICONS_LIST),\
++		$(INSTALL) -d $(TARGET_DIR)/usr/share/google-material/$(family) \
++			|| exit 1; \
++		$(if $(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_PNG), \
++			$(INSTALL) -D -m 0644 $(@D)/$(family)/1x_web/*.png \
++				$(TARGET_DIR)/usr/share/google-material/$(family) || exit 1;) \
++		$(if $(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_SVG), \
++			$(INSTALL) -D -m 0644 $(@D)/$(family)/svg/production/*.svg \
++				$(TARGET_DIR)/usr/share/google-material/$(family) || exit 1;) \
++	)
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_FONT),y)
++define GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_FONT
++	$(INSTALL) -D -m 0644 $(@D)/iconfont/MaterialIcons-Regular.ttf \
++		$(TARGET_DIR)/usr/share/fonts/google-material/MaterialIcons-Regular.ttf \
++		|| exit 1
++endef
++endif
++
++define GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_SPRITES
++	$(if $(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_SPRITES_CSS), \
++		$(INSTALL) -d $(TARGET_DIR)/usr/share/google-material/css-sprite \
++			|| exit 1; \
++		$(INSTALL) -D -m 0644 $(@D)/sprites/css-sprite/* \
++			$(TARGET_DIR)/usr/share/google-material/css-sprite || exit 1)
++	$(if $(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_SPRITES_SVG), \
++		$(INSTALL) -d $(TARGET_DIR)/usr/share/google-material/svg-sprite \
++			|| exit 1; \
++		$(INSTALL) -D -m 0644 $(@D)/sprites/svg-sprite/* \
++			$(TARGET_DIR)/usr/share/google-material/svg-sprite || exit 1)
++endef
++
++define GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_TARGET_CMDS
++	$(GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_FONT)
++	$(GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_IMAGES)
++	$(GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_SPRITES)
++endef
++
++$(eval $(generic-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.5.msysgit.1
