@@ -1,132 +1,119 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Wed, 1 Jul 2015 09:30:21 +0200
-Subject: [Buildroot] Buildroot runtime test infrastructure prototype
-In-Reply-To: <1591189778.2367426.1435680365451.JavaMail.root@openwide.fr>
-References: <1591189778.2367426.1435680365451.JavaMail.root@openwide.fr>
-Message-ID: <5593970D.3000707@andin.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Jul 2015 09:48:25 +0200
+Subject: [Buildroot] [PATCH v2] monkey: new package
+In-Reply-To: <e5183b9f-515b-4477-a183-b32c8eb232a1@MAIL-SINTERS-01.sinters-int.fr>
+References: <570c4a99-dc8a-4605-9c7e-0f08da3ae412@MAIL-SINTERS-01.sinters-int.fr>
+ <20150630121932.5e3bfbb2@free-electrons.com>
+ <e5183b9f-515b-4477-a183-b32c8eb232a1@MAIL-SINTERS-01.sinters-int.fr>
+Message-ID: <20150701094825.11137cb7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jeremy,
+Hello,
 
-Am 30.06.2015 um 18:06 schrieb Jeremy Rosen:
+On Wed, 1 Jul 2015 07:27:40 +0000, Julien CORJON wrote:
 
->>> Our approch was mainly to have each package (on the buildroot side
->>> have its own RFW scriptlet and have buildroot assemble these
->>> scriptlets at make time to provide a test for the resulting system
->>> that would only contain the tests for whatever package was actually
->>> compiled in.
->>
->> At some point I indeed though of having some per-package test cases
->> directly in package/<foo>/, for each package. But you also anyway
->> need
->> to describe a complete Buildroot configuration for each test, in
->> order
->> to have a complete system that actually boots and make sense.
->>
->
-> yes and no... your approch is targeting the autobuild system, I was more
-> thinking of providing tests for a user's own configuration or a
-> semi-randomly generated config. Easily testing on real hardware was
-> also part of the idea.
->
-> If we want to combine the two, there would be a need for a base, bootable
-> config (for example based on qemu) with a randomized overlay.
->
-> The per-package part would help mainly with the randomly added packages.
-> That would not prevent to also have a package independant base of test
-> for the most basic functionalities. Per-Package also has the advantage
-> that the tests will be maintained with the packages, thus by the people
-> with the knowhow of what is being tested.
->
-> overall I don't really see a reason not to have both approch. they are
-> not really exclusive...
->
-> now, one of the big difference is that you have host tests and target
-> tests intermixed. That is a bit problematic if one wants to use your
-> framework on a real board since the part responsible for starting
-> the card and login is intermixed with the test. Again, my use-case is
-> slightly different from yours. Having host-side tests is interesting
-> and something we hadn't thought of. It should not be very hard to add
-> with a RFW approch if we go in that direction
+> You're right, with the autotool -> generic-packages rework I just 
+> checked the compilation and didn't notice that x86 GCC was used. It 
+> won't happen again, next time I will fully test patches after each rework.
 
-I agree with most things above and indeed, what to test is not exactly 
-that same in our approach and buildroots. But I think it's very possible 
-and beneficial to combine the efforts.
-E.g. the deploy routines for our boards differ quite a bit. We solved 
-this by implementing the same keyword in different (target-specific) 
-resources, so the testcases using it doesnt need to change. When running 
-the tests, we supply a DUT-specific variable file which then takes care 
-of importing the correct resources with the applicable deploy step (and 
-setting HW capabilities, and so on).
+Ah, ok, I understand. Indeed when using the autotools-package infra,
+TARGET_CONFIGURE_OPTS is automatically passed in the environment of
+configure. But as discussed previously, this package is not using
+autoconf/automake, so it doesn't make a lot of sense to use the
+autotools-package infrastructure for it.
 
->
-> separating the target and host test (whatever approch is taken) seems
-> like a good idea to me, a way to override/disable the boot/login part
-> would allow users to run your tests on real hardware. That seems like
-> a good idea independantly of the framework used.
+> >      [Thomas:
+> >        - Add missing dependency on !BR2_STATIC_LIBS (the source code uses
+> >          dlopen) and BR2_USE_MMU (the source code uses fork)
+> 
+> Do you have a documentation on "BR dependencies versus functions" to 
+> learn about that?
 
-This is something that can easily be done via tags and then just run 
---include host* or --include target*
+No, not really. And it's not necessarily a 1:1 mapping. For example,
+usage of dlopen() is an indication that you should depend
+on !BR2_STATIC_LIBS. But there are also other situations where you need
+to depend on !BR2_STATIC_LIBS: when the package tries to build a shared
+library unconditionally.
 
+Seeing fork() being called is a good indication that you need a depends
+on BR2_USE_MMU.
 
->> I've released my code with the intent that others can have a look and
->> get a clear view of what the prototype looks like. Without seeing how
->> it looks with RFW, I can't really make up my mind on whether it is a
->> good alternate solution or not.
->>
->
-> Denis reimplemented an infrastructure to redo your tests. The complete
-> infrastructure can be found here :
->
-> https://github.com/etkaDT/Rfw-buildroot-tests
->
-> Note that this is still a quick and dirty job that is not integrated
-> into buildroot, but it can start the custom qemu to test things on
-> the target. A better integration could lead to easier keywords etc.
->
-> Denis also included the output of running the python package test in
-> the output/ subdirectory. The RFW specific XML is quite interesting
-> because it contains the complete decomposition of keywords and how
-> they failed (there is a failed test in the example)
->
-> (Denis is the Open Wide trainee working on buildroot this summer,
-> he is the one pushing the scanpypy patch and the related
-> robotframework package)
->
-> We hope this helps with the overall debate.
+For the other dependencies like BR2_TOOLCHAIN_HAS_THREADS, you can grep
+for pthread functions.
 
-Well, great to have another RFW implementation to look at and learn! 
-Remarkable also that you guys implemented the qemu part while I did the 
-building part without even talking about it :)
-One obvious difference is that you create a large number of small almost 
-atomic testcases while my testcase contain more of the steps that you 
-probably would put into the prepare step. But I like the much more 
-detailed report this approach leads to. Since RFW provides only for one 
-keyword in the prepare step, this probably leads to having one 
-prepare-keyword for almost every suite.
-So far I'm using a global keyword 'Connect And Login' in all my suites, 
-but it may be helpful to change that.
+For wide-char/locales, it's a bit more complicated.
 
-Btw, what Editor did you use for the creation?
+But it's not too dramatic if you don't get these correct, as the
+autobuilders will catch such problems.
 
+> >        - Slightly adjust/reword the description of the
+> >          BR2_PACKAGE_MONKEY_SHARED option.
+> >        - Remove all the complicated installation logic for the target, and
+> >          just use "make install" instead.
+> 
+> I didn't know that BR remove all headers from the target image at the 
+> end of the compilation. Is it the same for the man files?
 
-regards,
-Andreas
+Yes. Look at what the target-finalize target is doing at
+http://git.buildroot.net/buildroot/tree/Makefile#n547. This is executed
+at the end of the build: after all packages have been built/installed,
+but before the root filesystem images are generated.
 
+> >        - Pass --no-backtrace when uClibc is used, otherwise the build fails
+> >          because <execinfo.h> is not available in uClibc.
+> 
+> As I daily use a linaro toolchain, I did not test the uClib and Musl 
+> configure options. In this case (for future patches), should I include a 
+> case I cannot test or disable it with depend?
 
+No, we really prefer when the uClibc situation has been at least built
+tested: uClibc is still our default C library, so it's a bit weird to
+make a package depends on !BR2_TOOLCHAIN_USES_UCLIBC, if it really can
+be used with uClibc.
 
->
->
->> Best regards,
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Free Electrons
->> Embedded Linux, Kernel and Android engineering
->> http://free-electrons.com
->>
->
+Especially since your package had some specific conditionals for uClibc
+and Musl handling.
+
+But to be honest, I did not built the musl case. The autobuilders will
+take care of that.
+
+Remember that you have pre-built uClibc toolchains available at
+http://autobuild.buildroot.org/toolchains/tarballs/, which allows you
+do quickly build test a package with uClibc.
+
+Here I have a script called br-init-conf, which does:
+
+#!/bin/sh
+wget -O .config http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config
+cat /home/thomas/projets/br/minimal.defconfig >> .config
+
+With minimal.defconfig being:
+
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+
+This allows to initialize a minimal Buildroot configuration that uses a
+pre-built uClibc toolchain. Excellent to do a quick test build.
+
+> > Also, if you could post a follow-up patch adding an init script that
+> > starts Monkey at boot time, it would be great.
+> 
+> I notice there is an systemd start script debian/monkey.init but my 
+> knowledge of init daemons is so limited that I didn't try to 
+> include/modify this file in BR package declaration.
+
+Ok, no problem.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
