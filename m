@@ -1,96 +1,68 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed,  1 Jul 2015 10:10:46 +0200
-Subject: [Buildroot] [PATCH v5 1/2] packages: fix and improve support for
-	top-level parallel make
+Date: Wed,  1 Jul 2015 10:10:47 +0200
+Subject: [Buildroot] [PATCH v5 2/2] pkg-luarocks: fix top-level parallel
+	makefile support
 In-Reply-To: <1435738247-9015-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1435738247-9015-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1435738247-9015-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1435738247-9015-3-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The boost and jack2 packages fail to build when PARALLEL_JOBS is empty
-so instead of using an empty PARALLEL_JOBS don't use it in the MAKE
-variable when top-level parallel make is being used.
+In the *-install-target phase the manifest file is being updated, if multiply packages try to update it they fail.
 
-To simplify the use of top-level parallel make, check the MAKEFLAGS
-variable to know automatically if the -j option is being used, also use
-the "=" operator instead of the ":=" operator because the MAKEFLAGS
-variable can be checked only in a "recursively expanded variable".
-The "override" keyword must be used in order to change the automatic
-variable "MAKE".
+To avoid multiple access to the manifest file use flock to sync
+multiple luarocks packages.
 
-When the top-parallel make is being used the sub-make are called without
-specifying the "-j" option in order to let GNU make share the job slots
-specified in the top make. This is done because GNU make is able
-to share the job slots available between each instance of make so if you
-want to increase the number of jobs you just need to increase the <jobs>
-value in the top make -j<jobs> command.
+e.g. installing three luarocks packages:
+make lua-cjson-build lua-coat-build lua-coatpersistent-build
+make lua-cjson lua-coat lua-coatpersistent -j
 
-If we specify the -j<jobs> option in each instance of make, it is less
-efficient, e.g. in a processor with 8 cores we specify -j9 in each instance:
-the number of processes goes up to 81 because each sub-make can execute
-9 processes. The excessive number of processes is not a good thing
-because in my tests even -j16 is slower than -j9.
-Instead if we don't specify the -j<jobs> option in the sub-make, the top
-make share the job slots automatically between each instance, so the
-number of process in this examples goes up to 9 that is faster than
-using up to 81 processes.
+Fix error:
+Updating manifest for /home/tetsuya/buildroot/br2/output/target/usr/lib/luarocks/rocks
+No existing manifest. Attempting to rebuild...
 
-e.g. when the -j3 option is specified only in the top make:
-
-possible state n. 1:
-process 1 - <packagea>-build
-process 2 - <packagea>-build
-process 3 - <packagea>-build
-
-possible state n. 2:
-process 1 - <packagea>-extract
-process 2 - <packageb>-configure
-process 3 - <packagec>-build
-
-possible state n. 3:
-process 1 - <packagea>-build make -j1
-process 2 - <packageb>-build make -j1
-process 3 - <packagec>-build make -j1
+Error: rock_manifest file not found for lua-coat 0.9.1-1 - not a LuaRocks 2 tree?
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Makefile            | 4 ++--
- package/Makefile.in | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/luarocks/luarocks.mk | 6 ++++--
+ package/pkg-luarocks.mk      | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 8eb21d4..b1bcf78 100644
---- a/Makefile
-+++ b/Makefile
-@@ -58,8 +58,8 @@ export HOSTARCH := $(shell uname -m | \
- #
- # Taking into account the above considerations, if you still want to execute
- # this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
--# build using the following command:
--#	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
-+# use the -j<jobs> option when building, e.g:
-+#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
- .NOTPARALLEL:
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 2b6c975..413e23d 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -53,8 +53,10 @@ endef
  
- # absolute path
-diff --git a/package/Makefile.in b/package/Makefile.in
-index c02d31f..2ed7cf7 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -18,7 +18,8 @@ PARALLEL_JOBS := $(BR2_JLEVEL)
+ $(eval $(host-generic-package))
+ 
+-LUAROCKS_RUN = LUA_PATH="$(HOST_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua" \
+-	$(LUA_RUN) $(HOST_DIR)/usr/bin/luarocks
++LUAROCKS_RUN_ENV = LUA_PATH="$(HOST_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua"
++LUAROCKS_RUN_CMD = $(LUA_RUN) $(HOST_DIR)/usr/bin/luarocks
++
++LUAROCKS_RUN = $(LUAROCKS_RUN_ENV) $(LUAROCKS_RUN_CMD)
+ 
+ define LUAROCKS_FINALIZE_TARGET
+ 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
+diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+index 83f338e..0a7ba47 100644
+--- a/package/pkg-luarocks.mk
++++ b/package/pkg-luarocks.mk
+@@ -58,8 +58,8 @@ endif
+ #
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+-	cd $$($(2)_SRCDIR) && \
+-		$$(LUAROCKS_RUN) make --keep $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPTS)
++	cd $$($(2)_SRCDIR) && $$(LUAROCKS_RUN_ENV) flock $$(TARGET_DIR) \
++		$$(LUAROCKS_RUN_CMD) make --keep $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPTS)
+ endef
  endif
  
- MAKE1 := $(HOSTMAKE) -j1
--MAKE := $(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
-+override MAKE = $(HOSTMAKE) \
-+	$(if $(findstring j,$(filter-out --%,$(MAKEFLAGS))),,-j$(PARALLEL_JOBS))
- 
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
 -- 
 2.4.3
