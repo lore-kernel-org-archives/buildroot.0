@@ -1,87 +1,32 @@
-From: Arthur LAMBERT <lambertarthur22@gmail.com>
-Date: Wed, 1 Jul 2015 09:55:34 +0200
-Subject: [Buildroot] [PATCH v3 1/1] board: add support for WarPboard
-In-Reply-To: <20150630232941.5a2a1b2e@free-electrons.com>
-References: <1435324405-26828-1-git-send-email-lambertarthur22@gmail.com>
- <20150630232941.5a2a1b2e@free-electrons.com>
-Message-ID: <20150701075534.GA16185@arthur-dreem>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Jul 2015 09:55:45 +0200
+Subject: [Buildroot] [git commit] wmctrl: update URL address
+Message-ID: <20150701075618.D001F7F932@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tuesday 30 Jun 2015 ? 23:29:41 (+0200), Thomas Petazzoni a ?crit :
-> Dear Arthur LAMBERT,
-> 
-> On Fri, 26 Jun 2015 15:13:25 +0200, Arthur LAMBERT wrote:
-> > This is a set of patch to add support for warpboard (Freescale board based on imx6sl)
-> > 
-> > The patch contains :
-> >   - defconfig for warpboard
-> >   - linux patches from Fabio Estevam to fix device tree due to last change on warpboard schematics (rev 1.12)
-> >   and to fix kernel imx_v6_v7 defconfig which use incorrect hci protocol
-> >   - specific firmware file for warpboard bluetooth (nvram : brcmfmac4330-sdio.txt)
-> 
-> That's a detail, but the commit log should be wrapped to 80 columns.
-> 
-> 
-> 
+commit: http://git.buildroot.net/buildroot/commit/?id=41ecab0279131608fc8703c5f5ded92c19eca1d3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I will fix that
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wmctrl/wmctrl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> > +- transfer uboot into flash by running this command in host side:
-> > + $ sudo dfu-util -D output/images/u-boot.imx -a boot
-> 
-> So maybe you should build the host-dfu-util package of Buildroot by
-> selecting it in the Buildroot defconfig, and use it here?
-> 
-
-Very legit request.
-
-> > +- remove power and put warpboard into normal boot mode by opening the jumper.
-> > +
-> > +Update linux & rootfs
-> > +=====================
-> > +
-> > +Use ums command from uboot prompt to mount emmc as mass storage and update zImage, device tree and rootfs file
-> 
-> Which rootfs file? The tarball or the ext2 one?
-
-I will add more detail in this section
-
-> 
-> > +Enable bluetooth (need to enable bluez-util)
-> > +================
-> > +hciattach /dev/ttymxc4 any
-> > +hciconfig hci0 up
-> 
-> Maybe:
-> 
-> Using Bluetooth
-> ===============
-> 
-> Enable the bluez_utils package, and then:
-> 
-> $ hciattach /dev/ttymxc4 any
-> $ hciconfig hci0 up
-> 
-> Of course, make sure you're really talking about bluez_utils or
-> bluez_utils5, we have two separate packages in Buildroot.
-> 
-
-Both version are working great.
-
-> Could you take into account those minor comments, and send an updated
-> version?
-> 
-
-No problem, V4 is coming !
-
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
+index a4e0d8e..f26b23e 100644
+--- a/package/wmctrl/wmctrl.mk
++++ b/package/wmctrl/wmctrl.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ WMCTRL_VERSION = 1.07
+-WMCTRL_SITE = http://tomas.styblo.name/wmctrl/dist
++WMCTRL_SITE = https://sites.google.com/site/tstyblo/wmctrl
+ WMCTRL_LICENSE = GPLv2+
+ WMCTRL_LICENSE_FILES = COPYING
+ 
