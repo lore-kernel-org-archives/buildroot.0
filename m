@@ -1,35 +1,30 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Wed, 01 Jul 2015 10:24:57 +0200
-Subject: [Buildroot] [PATCH 2/2] wmctrl: update URL address
-In-Reply-To: <20150701095629.72cce765@free-electrons.com>
-References: <1435701491-17232-1-git-send-email-jerzy.grzegorek@trzebnica.net>	<1435701491-17232-2-git-send-email-jerzy.grzegorek@trzebnica.net>
- <20150701095629.72cce765@free-electrons.com>
-Message-ID: <5593A3D9.7080608@trzebnica.net>
+Date: Wed,  1 Jul 2015 10:33:57 +0200
+Subject: [Buildroot] [PATCH 1/1] wmctrl/Config.in: update site URL
+Message-ID: <1435739637-22816-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/wmctrl/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Dear Jerzy Grzegorek,
->
-> On Tue, 30 Jun 2015 23:58:11 +0200, Jerzy Grzegorek wrote:
->> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
->> ---
->>   package/wmctrl/wmctrl.mk | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
-> Applied, thanks. However, you probably also want to update the
-> Config.in file.
-
-The site URL in the Config.in file is automaticaly redirected to 
-https://sites.google.com/site/tstyblo//wmctrl/ but I can also to update it.
-
-Regards,
-Jerzy
-
->
-> Thanks,
->
-> Thomas
+diff --git a/package/wmctrl/Config.in b/package/wmctrl/Config.in
+index e0342b7..bc09431 100644
+--- a/package/wmctrl/Config.in
++++ b/package/wmctrl/Config.in
+@@ -16,7 +16,7 @@ config BR2_PACKAGE_WMCTRL
+ 	  always-above or sticky, and to activate, close, move,
+ 	  resize, maximize and minimize them.
+ 
+-	  http://tomas.styblo.name/wmctrl/
++	  https://sites.google.com/site/tstyblo/wmctrl/
+ 
+ comment "wmctrl needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+-- 
+1.9.1
