@@ -1,59 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Jul 2015 09:55:17 +0200
-Subject: [Buildroot] [PATCH] ARC: update folders with patches for
- arc-2015.06-rc1 release
-In-Reply-To: <1435733364-4979-1-git-send-email-abrodkin@synopsys.com>
-References: <1435733364-4979-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150701095517.388546a4@free-electrons.com>
+From: Arthur LAMBERT <lambertarthur22@gmail.com>
+Date: Wed, 1 Jul 2015 09:55:34 +0200
+Subject: [Buildroot] [PATCH v3 1/1] board: add support for WarPboard
+In-Reply-To: <20150630232941.5a2a1b2e@free-electrons.com>
+References: <1435324405-26828-1-git-send-email-lambertarthur22@gmail.com>
+ <20150630232941.5a2a1b2e@free-electrons.com>
+Message-ID: <20150701075534.GA16185@arthur-dreem>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Le Tuesday 30 Jun 2015 ? 23:29:41 (+0200), Thomas Petazzoni a ?crit :
+> Dear Arthur LAMBERT,
+> 
+> On Fri, 26 Jun 2015 15:13:25 +0200, Arthur LAMBERT wrote:
+> > This is a set of patch to add support for warpboard (Freescale board based on imx6sl)
+> > 
+> > The patch contains :
+> >   - defconfig for warpboard
+> >   - linux patches from Fabio Estevam to fix device tree due to last change on warpboard schematics (rev 1.12)
+> >   and to fix kernel imx_v6_v7 defconfig which use incorrect hci protocol
+> >   - specific firmware file for warpboard bluetooth (nvram : brcmfmac4330-sdio.txt)
+> 
+> That's a detail, but the commit log should be wrapped to 80 columns.
+> 
+> 
+> 
 
-On Wed,  1 Jul 2015 09:49:24 +0300, Alexey Brodkin wrote:
-> In buildroot we maintain a couple off-the-tree patches.
-> In particular for binutils and gcc packages.
-> 
-> Because we have many versions of mentioned packages patches for each
-> particular version reside in a folder which name matches full version
-> name of the package.
-> 
-> For example we used to have patches for binutils distributed as part of
-> arc-2014.12 tools in folder ""package/binutils/arc-2014.12". Now with
-> bump of ARC tools version we need to rename folder with patches to
-> "arc-2015.06-rc1".
-> 
-> The same applies to gcc.
-> 
-> Should fix http://autobuild.buildroot.net/results/2b2/2b27a4a64c0b225ae479ecfccf7a97f5ea95598c/
-> As discussed before it's not possible to reproduce reported problem on recent
-> Fedora 21/22 distros (at least we know about them) but I may confirm that
-> patches were applied fine and everything was built well. Hopefully reported
-> build failure goes away now.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Romain Naour <romain.naour@openwide.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  .../binutils/{arc-2014.12 => arc-2015.06-rc1}/0001-PR-other-56780.patch   | 0
->  .../{arc-2014.12 => arc-2015.06-rc1}/600-poison-system-directories.patch  | 0
->  .../gcc/{arc-2014.12 => arc-2015.06-rc1}/100-libstdcxx-uclibc-c99.patch   | 0
->  package/gcc/{arc-2014.12 => arc-2015.06-rc1}/851-PR-other-56780.patch     | 0
->  .../910-gcc-poison-system-directories.patch                               | 0
->  5 files changed, 0 insertions(+), 0 deletions(-)
->  rename package/binutils/{arc-2014.12 => arc-2015.06-rc1}/0001-PR-other-56780.patch (100%)
->  rename package/binutils/{arc-2014.12 => arc-2015.06-rc1}/600-poison-system-directories.patch (100%)
->  rename package/gcc/{arc-2014.12 => arc-2015.06-rc1}/100-libstdcxx-uclibc-c99.patch (100%)
->  rename package/gcc/{arc-2014.12 => arc-2015.06-rc1}/851-PR-other-56780.patch (100%)
->  rename package/gcc/{arc-2014.12 => arc-2015.06-rc1}/910-gcc-poison-system-directories.patch (100%)
+I will fix that
 
-Applied, thanks.
+> > +- transfer uboot into flash by running this command in host side:
+> > + $ sudo dfu-util -D output/images/u-boot.imx -a boot
+> 
+> So maybe you should build the host-dfu-util package of Buildroot by
+> selecting it in the Buildroot defconfig, and use it here?
+> 
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Very legit request.
+
+> > +- remove power and put warpboard into normal boot mode by opening the jumper.
+> > +
+> > +Update linux & rootfs
+> > +=====================
+> > +
+> > +Use ums command from uboot prompt to mount emmc as mass storage and update zImage, device tree and rootfs file
+> 
+> Which rootfs file? The tarball or the ext2 one?
+
+I will add more detail in this section
+
+> 
+> > +Enable bluetooth (need to enable bluez-util)
+> > +================
+> > +hciattach /dev/ttymxc4 any
+> > +hciconfig hci0 up
+> 
+> Maybe:
+> 
+> Using Bluetooth
+> ===============
+> 
+> Enable the bluez_utils package, and then:
+> 
+> $ hciattach /dev/ttymxc4 any
+> $ hciconfig hci0 up
+> 
+> Of course, make sure you're really talking about bluez_utils or
+> bluez_utils5, we have two separate packages in Buildroot.
+> 
+
+Both version are working great.
+
+> Could you take into account those minor comments, and send an updated
+> version?
+> 
+
+No problem, V4 is coming !
+
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
