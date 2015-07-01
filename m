@@ -1,9 +1,9 @@
 From: James Knight <james.d.knight@live.com>
-Date: Tue, 30 Jun 2015 23:17:54 -0400
+Date: Tue, 30 Jun 2015 23:22:59 -0400
 Subject: [Buildroot] [PATCH v2 1/1] google-material-design-icons: new package
-In-Reply-To: <20150628232431.3d1ea7af@free-electrons.com.>
-References: <20150628232431.3d1ea7af@free-electrons.com.>
-Message-ID: <BLU437-SMTP141B2B324B33F6E9C3B2F8A0A80@phx.gbl>
+In-Reply-To: <BLU437-SMTP141B2B324B33F6E9C3B2F8A0A80@phx.gbl>
+References: <BLU437-SMTP141B2B324B33F6E9C3B2F8A0A80@phx.gbl>
+Message-ID: <BLU436-SMTP888BA5090A489AF5DB13E5A0A80@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,6 +11,16 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: James Knight <james.d.knight@live.com>
+---
+Changes v2 -> v3:
+  - Adding missing change log.
+  
+Changes v1 -> v2:
+  - Simplified and cleaned up the configuration items*
+  - Refactored icon installation loop*
+  - Removed unnecessary install for Material icon font installation*
+  
+* suggested by Thomas Petazzoni
 ---
  package/Config.in                                  |  1 +
  package/google-material-design-icons/Config.in     | 40 ++++++++++++++
