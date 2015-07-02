@@ -1,54 +1,50 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  2 Jul 2015 16:18:44 +0300
-Subject: [Buildroot] [PATCH] cryptsetup: remove e2fsprogs dependency
-Message-ID: <7f547c8d1d6955c19526f5dfbf98ea12b2850e7c.1435843124.git.baruch@tkos.co.il>
+From: Andreas Naumann <dev@andin.de>
+Date: Thu, 2 Jul 2015 15:57:17 +0200
+Subject: [Buildroot] Buildroot runtime test infrastructure prototype
+In-Reply-To: <1090488407.2399576.1435746536696.JavaMail.root@openwide.fr>
+References: <1090488407.2399576.1435746536696.JavaMail.root@openwide.fr>
+Message-ID: <5595433D.50705@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cryptsetup does not actually depend on e2fsprogs, but on libuuid that is a
-dependency of e2fsprogs. Remove the e2fsprogs dependency, and add a direct
-dependency on util-linux (libuuid provider).
+Hi Denis,
 
-Cc: Martin Hicks <mort@bork.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/cryptsetup/Config.in     | 5 +++--
- package/cryptsetup/cryptsetup.mk | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Am 01.07.2015 um 12:28 schrieb Denis Thulin:
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 13b0184cffd6..d7ccd379e6df 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -2,10 +2,11 @@ config BR2_PACKAGE_CRYPTSETUP
- 	bool "cryptsetup"
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_LVM2
--	select BR2_PACKAGE_E2FSPROGS
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
--	depends on BR2_USE_MMU # lvm2, e2fsprogs
-+	depends on BR2_USE_MMU # lvm2
- 	depends on !BR2_STATIC_LIBS # lvm2
- 	depends on BR2_USE_WCHAR # util-linux
- 	# Triggers the _gp link issue
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 754bea575592..3655d5dfbd58 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -8,7 +8,7 @@ CRYPTSETUP_VERSION_MAJOR = 1.6
- CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).7
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
--CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs host-pkgconf \
-+CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
- 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- CRYPTSETUP_LICENSE = GPLv2+ (programs), LGPLv2.1+ (library)
- CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
--- 
-2.1.4
+>
+> Well, I like having tests as atomic as possible and since the log
+> file gives a detailed report of everything including setups and
+> teardowns you can find easily why it failed.
+
+Ok, i can see the benefit of having a more detailed report and simpler 
+testcases.
+
+
+>>
+>> Btw, what Editor did you use for the creation?
+>>
+>
+> I used Vim with the robotframework plugin.
+> Unfortunately, the plugin only does syntax highlighting.
+
+I see. Our vim geek tried that too but finally converted to using RIDE :)
+
+>
+> I noticed you used the Operating System library's keyword
+> "Run And Return Rc" but I read in the Process Library's documentation
+> that using Operating System for running programs was no longer
+> recommanded and that functionnality would most likely become
+> deprecated. It seems like using Process was the correct way to go.
+> See:
+> http://robotframework.org/robotframework/latest/libraries/OperatingSystem.html
+> and
+> http://robotframework.org/robotframework/latest/libraries/Process.html
+
+Thanks for pointing that out, I will check and adjust my keywords.
+
+
+regards,
+Andreas
