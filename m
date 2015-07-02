@@ -1,41 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 2 Jul 2015 23:46:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix building if GCC's C
- standard is not gnu99
-In-Reply-To: <20150702231241.69ef0bea@gmx.net>
-References: <1435860302-16176-1-git-send-email-bernd.kuhls@t-online.de>
- <20150702231241.69ef0bea@gmx.net>
-Message-ID: <5595B12E.1070705@mind.be>
+Date: Thu, 2 Jul 2015 23:47:40 +0200
+Subject: [Buildroot] [PATCH] valgrind: install to staging
+In-Reply-To: <1435852333-19317-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1435852333-19317-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <5595B17C.2070704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/02/15 23:12, Peter Seiderer wrote:
-[snip]
-> From build/libv4l-1.6.2/config.log:
+On 07/02/15 17:52, Vicente Olivert Riera wrote:
+> This is necessary for some packages depending on valgrind, such as
+> libdrm which will fail with an error like this one:
 > 
-> configure:4709: checking for .../host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc option to accept ISO C99
-> configure:4858: .../host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
-> conftest.c:54:9: error: unknown type name 'wchar_t'
->    const wchar_t *name;
+> checking for VALGRIND... no
+> checking whether to enable Valgrind support... configure: error:
+> Valgrind support required but not present
+> package/pkg-generic.mk:146: recipe for target
+> '/br/output/build/libdrm-2.4.62/.stamp_configured' failed
 > 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/valgrind/valgrind.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> The C99 detection problem seems more related to missing wchar_t type support than the compiler option?
+> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+> index cfce8da..f8f205e 100644
+> --- a/package/valgrind/valgrind.mk
+> +++ b/package/valgrind/valgrind.mk
+> @@ -11,6 +11,7 @@ VALGRIND_LICENSE = GPLv2 GFDLv1.2
+>  VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
+>  VALGRIND_CONF_OPTS = --disable-tls
+>  VALGRIND_AUTORECONF = YES
+> +VALGRIND_INSTALL_STAGING = YES
 
- Good catch!
-
-[Adding Waldemar for uClibc input]
-
- The configure script does include wchar.h, but it seems that wchar_t doesn't
-get defined after all... Waldemar, any idea?
+ I wonder, are there going to be a lot of packages that will autodetect valgrind
+presence and will now start linking with it?
 
 
  Regards,
  Arnout
 
-[snip]
+>  
+>  # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
+>  # host tuple to determine whether it's being built for ARMv7 or
+> 
 
 
 -- 
