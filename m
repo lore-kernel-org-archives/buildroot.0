@@ -1,31 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jul 2015 11:03:20 +0200
-Subject: [Buildroot] [PATCH 1/4] package/{mesa3d,
- mesa3d-headers}: bump version to 10.6.1
-In-Reply-To: <1435780496-31814-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1435780496-31814-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150702110320.3e4178a2@free-electrons.com>
+Date: Thu, 2 Jul 2015 11:00:29 +0200
+Subject: [Buildroot] [git commit] git: bump to version 2.4.5
+Message-ID: <20150702090455.A1CB9818E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=614c287a6cd58b5ce7bfba3dba4fa396cb9b301c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  1 Jul 2015 21:54:53 +0200, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mesa3d-headers/mesa3d-headers.mk |    2 +-
->  package/mesa3d/mesa3d.hash               |    4 ++--
->  package/mesa3d/mesa3d.mk                 |    2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/git/git.hash |    2 +-
+ package/git/git.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-All four patches applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/git/git.hash b/package/git/git.hash
+index cb4ce13..81caf39 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  f873b15d42281474fcba5921295d01e48a3cd3cddcbeb3d60176bf30f5f30260  git-2.4.4.tar.xz
++sha256  c31a5f5f72e025f8fe26845032a06683c7e5c1a73236c2353b5606ddd22e0494  git-2.4.5.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 50e5d7b..e2d04aa 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.4.4
++GIT_VERSION = 2.4.5
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
