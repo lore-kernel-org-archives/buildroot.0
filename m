@@ -1,89 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 2 Jul 2015 23:54:02 +0200
-Subject: [Buildroot] [v4 3/4] package/nodejs: Fixes for node-pre-gyp
-In-Reply-To: <1435830207-16664-3-git-send-email-martin@barkynet.com>
-References: <1435830207-16664-1-git-send-email-martin@barkynet.com>
- <1435830207-16664-3-git-send-email-martin@barkynet.com>
-Message-ID: <20150702215402.GJ3838@free.fr>
+Date: Fri, 3 Jul 2015 00:05:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix building if GCC's C
+ standard is not gnu99
+In-Reply-To: <5595B12E.1070705@mind.be>
+References: <1435860302-16176-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150702231241.69ef0bea@gmx.net> <5595B12E.1070705@mind.be>
+Message-ID: <20150702220533.GK3838@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin, All,
+Arnout, All,
 
-On 2015-07-02 10:43 +0100, Martin Bark spake thusly:
-> Many packages use node-pre-gyp as a way of deploying precompiled binary
-> dependencies with fall back to compilation for other targets.  Currently
-> installing node modules that use node-pre-gyp can fail to use the correct
-> binary for the target.  This patch fixes this issue by correctly
-> configuring node-pre-gyp.
+On 2015-07-02 23:46 +0200, Arnout Vandecappelle spake thusly:
+> On 07/02/15 23:12, Peter Seiderer wrote:
+> [snip]
+> > From build/libv4l-1.6.2/config.log:
+> > 
+> > configure:4709: checking for .../host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc option to accept ISO C99
+> > configure:4858: .../host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
+> > conftest.c:54:9: error: unknown type name 'wchar_t'
+> >    const wchar_t *name;
+> > 
+> > 
+> > The C99 detection problem seems more related to missing wchar_t type support than the compiler option?
 > 
-> Firstly, node-gyp uses the option --arch to determine its target
-> architecture (which is already set correctly), however, node-pre-gyp uses
-> --target-arch.  Without this set node.js packages that uses node-pre-gyp
-> will pick the wrong target architecture.
+>  Good catch!
 > 
-> Secondly, the use of precompiled binary packages is not desirable due to
-> potential security and licensing issues.  To solve this we use the
-> --build-from-source option to force node-pre-gyp to always build the C++
-> code.
+> [Adding Waldemar for uClibc input]
 > 
-> This patch passes npm_config_target_arch and npm_config_build_from_source
-> to npm which causes --target-arch and --build-from-source to be passed to
-> node-pre-gyp.
-> 
-> I have tested this using the node.js package serialport which now
-> successfully builds and runs.
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+>  The configure script does include wchar.h, but it seems that wchar_t doesn't
+> get defined after all... Waldemar, any idea?
 
-I'm not much of a nodejs guy, so I'd like some feedback from other
-nodejs users. J?rg, maybe?
+No wchar support in the toolchain, maybe?
 
-Otherwise, the build-form-source chunk looks way better, thanks! :-)
+Peter, can you confirm your toolchain is missing wchar (BR2_USE_WCHAR)?
 
-[really only a code review]
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Note: I am *not* saying those packages should depend on whar, just that
+this would explain the failing (and broken!) autoconf test.
 
 Regards,
 Yann E. MORIN.
-
-> ---
-> Changes v3 -> v4
->  - Force always building from source (Suggested by Yann E. MORIN)
->  - Improved commit message
-> 
-> Changes v2 -> v3
->  - Adjusted patch order so this is before the new definition of $(NPM)
-> 
-> Changes v1 -> v2
->  - No changes, new in v2
-> ---
->  package/nodejs/nodejs.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index 0b3f8a5..156b151 100644
-> --- a/package/nodejs/nodejs.mk
-> +++ b/package/nodejs/nodejs.mk
-> @@ -107,6 +107,8 @@ define NODEJS_INSTALL_MODULES
->  		$(TARGET_CONFIGURE_OPTS) \
->  		LD="$(TARGET_CXX)" \
->  		npm_config_arch=$(NODEJS_CPU) \
-> +		npm_config_target_arch=$(NODEJS_CPU) \
-> +		npm_config_build_from_source=true \
->  		npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
->  		$(HOST_DIR)/usr/bin/npm install \
->  		$(NODEJS_MODULES_LIST) \
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
