@@ -1,44 +1,36 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  2 Jul 2015 20:05:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix building if GCC's C
-	standard is not gnu99
-Message-ID: <1435860302-16176-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu,  2 Jul 2015 20:50:53 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] package/kodi: Remove hyperflous option
+	--disable-dvdcss
+Message-ID: <1435863053-23943-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-checking for /home/fli4l/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc option to accept ISO C99... unsupported
-configure: error: Building libdrm requires C99 enabled compiler
+The option is controlled later on inside this if-clause
 
-using this defconfig
-BR2_KERNEL_HEADERS_4_0=y
-BR2_BINUTILS_VERSION_2_25=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_LIBDRM=y
-
-Patch inspired by
-http://git.buildroot.net/buildroot/commit/?id=5cf5b390385fb6325485e37dc9d38e1e3ac1f091
+ifeq ($(BR2_PACKAGE_KODI_OPTICALDRIVE),y)
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libdrm/libdrm.mk |    2 ++
- 1 file changed, 2 insertions(+)
+v2: Rebased local repo against upstream (Yann)
 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 4cca645..1768214 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -19,6 +19,8 @@ LIBDRM_CONF_OPTS = \
- 	--disable-cairo-tests \
- 	--disable-manpages
- 
-+LIBDRM_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-+
- ifeq ($(BR2_PACKAGE_LIBDRM_INTEL),y)
- LIBDRM_CONF_OPTS += --enable-intel
- LIBDRM_DEPENDENCIES += libatomic_ops libpciaccess
+ package/kodi/kodi.mk |    1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 28fece7..cc42df4 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -34,7 +34,6 @@ KODI_CONF_ENV = \
+ KODI_CONF_OPTS +=  \
+ 	--with-ffmpeg=shared \
+ 	--disable-crystalhd \
+-	--disable-dvdcss \
+ 	--disable-hal \
+ 	--disable-joystick \
+ 	--disable-openmax \
 -- 
 1.7.10.4
