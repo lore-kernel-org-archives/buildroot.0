@@ -1,59 +1,54 @@
-From: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
-Date: Thu, 2 Jul 2015 14:40:38 +0200
-Subject: [Buildroot] [PATCH v3 0/2] Make Buildroot for Zedboard
- independent on Xilinx tools
-In-Reply-To: <1435063751-27344-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
-References: <1434971728-16094-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
- <1435063751-27344-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
-Message-ID: <20150702144038.6485ec47@pcviktorin.fit.vutbr.cz>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  2 Jul 2015 16:18:44 +0300
+Subject: [Buildroot] [PATCH] cryptsetup: remove e2fsprogs dependency
+Message-ID: <7f547c8d1d6955c19526f5dfbf98ea12b2850e7c.1435843124.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+cryptsetup does not actually depend on e2fsprogs, but on libuuid that is a
+dependency of e2fsprogs. Remove the e2fsprogs dependency, and add a direct
+dependency on util-linux (libuuid provider).
 
-will be the proposed patchs applied in the near future?
+Cc: Martin Hicks <mort@bork.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/cryptsetup/Config.in     | 5 +++--
+ package/cryptsetup/cryptsetup.mk | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Regards
-Jan
-
-On Tue, 23 Jun 2015 14:49:09 +0200
-Jan Viktorin <xvikto03@stud.fit.vutbr.cz> wrote:
-
-> From: Jan Viktorin <viktorin@rehivetech.com>
-> 
-> Hello,
-> 
-> thanks to Baruch and Arnout for comments. I think this the final
-> version. The host-zynq-boot-bin now downloads just the python script
-> (thank you for this tip, I was looking for such solution).
-> 
-> The second commit is unchanged.
-> 
-> Regards
-> Jan Viktorin
-> 
-> 
-> Jan Viktorin (2):
->   host-zynq-boot-bin: new package
->   zedboard: Upgrade to U-Boot 2015.07
-> 
->  board/avnet/zedboard/readme.txt        | 95 ++++++++++++++++------------------
->  configs/zedboard_defconfig             |  7 +--
->  package/Config.in.host                 |  1 +
->  package/zynq-boot-bin/Config.in.host   |  8 +++
->  package/zynq-boot-bin/zynq-boot-bin.mk | 24 +++++++++
->  5 files changed, 81 insertions(+), 54 deletions(-)
->  create mode 100644 package/zynq-boot-bin/Config.in.host
->  create mode 100644 package/zynq-boot-bin/zynq-boot-bin.mk
-> 
-
-
-
+diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+index 13b0184cffd6..d7ccd379e6df 100644
+--- a/package/cryptsetup/Config.in
++++ b/package/cryptsetup/Config.in
+@@ -2,10 +2,11 @@ config BR2_PACKAGE_CRYPTSETUP
+ 	bool "cryptsetup"
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_LVM2
+-	select BR2_PACKAGE_E2FSPROGS
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+-	depends on BR2_USE_MMU # lvm2, e2fsprogs
++	depends on BR2_USE_MMU # lvm2
+ 	depends on !BR2_STATIC_LIBS # lvm2
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	# Triggers the _gp link issue
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 754bea575592..3655d5dfbd58 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -8,7 +8,7 @@ CRYPTSETUP_VERSION_MAJOR = 1.6
+ CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).7
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+-CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs host-pkgconf \
++CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
+ 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ CRYPTSETUP_LICENSE = GPLv2+ (programs), LGPLv2.1+ (library)
+ CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
 -- 
-  Jan Viktorin, PhD student   E-mail: iviktorin at fit.vutbr.cz
-  DCS FIT VUT Brno, L310      Web: http://www.fit.vutbr.cz/~iviktorin
-  Bozetechova 1, 612 66       Phone: +420 54114-1357
-  Brno, Czech Republic
+2.1.4
