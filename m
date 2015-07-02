@@ -1,62 +1,57 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 2 Jul 2015 17:19:08 +0200
-Subject: [Buildroot] [PATCH] Disable gcc-4.8.x + binutils-2.25 + MIPS
-	combination
-Message-ID: <1435850348-19416-1-git-send-email-Vincent.Riera@imgtec.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Thu, 02 Jul 2015 17:32:55 +0200
+Subject: [Buildroot] [PATCH 1/1] Force rebuild of local site packages
+	and theirs local dependencies
+In-Reply-To: <5594FE06.5030900@syscom-instruments.com>
+References: <1434460888-30770-1-git-send-email-viallard@syscom-instruments.com>
+ <2854682.pCSB3Zb5Zv@sagittea> <5594FE06.5030900@syscom-instruments.com>
+Message-ID: <1909260.QcAQmjlMXM@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This combination causes a compilation failure of the host-gcc-final
-recipe like this one:
+On Thursday 02 July 2015 11:01:58 Viallard Anthony wrote:
+> On 06/23/2015 09:56 AM, J?r?me Pouiller wrote:
+> > Does this process would work?
+> >
+> >    rm build/*/.stamp_built
+> >    make
+> >
+> >
+> 
+> Hi J?rome,
+> 
+> Yes. It can be a solution. I already did this way to rebuild package in 
+> the old time when there wasn't the *-rebuild target command:
+> 
+> rm -rf output/build/clearsilver-0.10.5/.stamp_built && rm -rf 
+> output/build/clearsilver-0.10.5/.stamp_configured
+> 
+> But I prefer an integrated mechanism in the makefile which make the 
+> think more reliable and transparent :)
 
-/br/output/host/usr/mips-buildroot-linux-gnu/bin/ld:
-.libs/gload.o: relocation R_MIPS_HI16 against `__gnu_local_gp' can not
-be used when making a shared object; recompile with -fPIC
+When I need very specific action for a project (generally 'run', 'check', 
+'flash', etc...), I write a fragment of Makefile and a declare it in 
+BR2_PACKAGE_OVERRIDE_FILE.
 
-The problem is the file 'libatomic/gload.c' is compiled without -fPIC
-when using binutils-2.25. All gcc (with libatomic) versions below 4.9.3
-are affected by this issue.
+Therefore, you may add a local.mk file with:
 
-Here is a summary of affected/unaffected versions in Buildroot:
+local-rebuild:
+	rm build/*/.stamp_built
 
-4.7.x: unaffected (doesn't have libatomic)
-4.8.x: affected
-4.9.x: unaffected (we have 4.9.3 which is fixed)
-5.1.x: unaffected
+...and maybe (not tested):
 
-The fix can be found here:
+$(PACKAGES): local-rebuild
 
-  https://github.com/gcc-mirror/gcc/commit/57f5c0954f95cb37f995d60167ddde06c7d6e697
 
-However, given the following reasons...
 
-- Upstream gcc 4.8 branch is closed.
-- The fix is very hard to backport from 4.9 to 4.8.
-- This stuff is insanely sensitive and not working at all could be
-  better than looking like it works but not quite.
+(Someday, I will post a patch to be able to display those local targets in 
+'make help' output)
 
-...I think the best choice is to disable that combination in Buildroot.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/gcc/Config.in.host | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 1fc0b83..4501b32 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -60,6 +60,8 @@ choice
- 		depends on !BR2_cortex_a12
- 		# Broken or unsupported PPC cores
- 		depends on !BR2_powerpc_power8
-+		# gcc-4.8.x + binutils-2.25 is broken for MIPS
-+		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && BR2_BINUTILS_VERSION_2_25)
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
- 
 -- 
-2.3.6
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
