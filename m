@@ -1,69 +1,97 @@
-From: Anthony Viallard <viallard@syscom-instruments.com>
-Date: Thu,  2 Jul 2015 11:15:15 +0200
-Subject: [Buildroot] [PATCH 1/1] force rsync of local package and try to
-	rebuild it with its dependencies
-Message-ID: <1435828515-16620-1-git-send-email-viallard@syscom-instruments.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Jul 2015 11:32:18 +0200
+Subject: [Buildroot] [git commit] package/modem-manager: init script for
+	systemV-like init systems
+Message-ID: <20150702093241.D2266818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The purpose of this patch is to force rsync of local site packages and
-rebuild them if their source code has changed. Therefore, if the source
-of a package has changed, it will be rebuild if you type make or
-make <pkg>. Likewise, if a package has a library dependency which is
-local site package too and you type make <pkg>, the library will be
-rebuild if the source has been modified.
+commit: http://git.buildroot.net/buildroot/commit/?id=7f1def693647b2158aab38d86a11609454e72dab
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This behavior is pretty useful if you use buildroot with many of your
-own packages. Especially if you share these packages with a developer
-team through a version control system like git.
+ModemManager get started by NetworkManager, in case of systemd init
+system. In case of other systems it needs to be started by init script.
 
-Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
+Debian [1] solved it by detection in code. For Buildroot it's IMHO
+enough to install init script for systemV-like init systems.
+
+[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=770871
+
+[Thomas:
+ - slightly simplify the script by removing the MODEMMANAGER_BIN
+   variable which was used at only one place, and use directly $?
+   instead of an intermediate $ret variable.
+ - split the too long line added in the .mk file.]
+
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ package/modem-manager/S44modem-manager |   42 ++++++++++++++++++++++++++++++++
+ package/modem-manager/modem-manager.mk |    5 ++++
+ 2 files changed, 47 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index d5b29f0..d31ebc2 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -102,7 +102,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
- 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
- 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
--	rsync -au $(RSYNC_VCS_EXCLUSIONS) $(SRCDIR)/ $(@D)
-+	rsync -au $(RSYNC_VCS_EXCLUSIONS) --include core $(SRCDIR)/ $(@D)
- 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
+diff --git a/package/modem-manager/S44modem-manager b/package/modem-manager/S44modem-manager
+new file mode 100755
+index 0000000..10e58e7
+--- /dev/null
++++ b/package/modem-manager/S44modem-manager
+@@ -0,0 +1,42 @@
++#!/bin/sh
++#
++# Starts ModemManager
++#
++
++PIDFILE=/var/run/ModemManager.pid
++
++[ -x $MODEMMANAGER_BIN ] || exit 0
++
++start() {
++	echo -n "Starting ModemManager: "
++	umask 077
++	start-stop-daemon -S -q -b -m -p $PIDFILE \
++		--exec /usr/sbin/ModemManager
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++stop() {
++	echo -n "Stopping ModemManager: "
++	start-stop-daemon -K -q -p $PIDFILE
++	[ $? = 0 ] && { echo "OK"; rm -f $PIDFILE; } || echo "FAIL"
++}
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart|reload)
++		restart
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++esac
++
++exit $ret
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 9cd630c..97dddfe 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -26,4 +26,9 @@ else
+ MODEM_MANAGER_CONF_OPTS += --without-mbim
+ endif
  
-@@ -458,7 +458,11 @@ $(2)_PRE_LEGAL_INFO_HOOKS       ?=
- $(2)_POST_LEGAL_INFO_HOOKS      ?=
- 
- # human-friendly targets and target sequencing
-+ifeq ($$($(2)_SITE_METHOD),local)
-+$(1):			$(1)-clean-for-rebuild $(1)-install
-+else
- $(1):			$(1)-install
-+endif
- 
- ifeq ($$($(2)_TYPE),host)
- $(1)-install:	        $(1)-install-host
-@@ -604,12 +608,12 @@ $(1)-reinstall:		$(1)-clean-for-reinstall $(1)
- $(1)-clean-for-rebuild: $(1)-clean-for-reinstall
- 			rm -f $$($(2)_TARGET_BUILD)
- 
--$(1)-rebuild:		$(1)-clean-for-rebuild $(1)
-+$(1)-rebuild:		$(1)-clean-for-rebuild $(1)-install
- 
- $(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
- 			rm -f $$($(2)_TARGET_CONFIGURE)
- 
--$(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
-+$(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)-install
- 
- # define the PKG variable for all targets, containing the
- # uppercase package variable prefix
--- 
-2.1.4
++define MODEM_MANAGER_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/modem-manager/S44modem-manager \
++		$(TARGET_DIR)/etc/init.d/S44modem-manager
++endef
++
+ $(eval $(autotools-package))
