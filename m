@@ -1,7 +1,10 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed,  1 Jul 2015 22:59:11 -0400
-Subject: [Buildroot] [PATCH 1/2] rapidjson: bump to version 1.0.2
-Message-ID: <1435805952-2512-1-git-send-email-danomimanchego123@gmail.com>
+Date: Wed,  1 Jul 2015 22:59:12 -0400
+Subject: [Buildroot] [PATCH 2/2] rapidjson: update site URL in package
+	description
+In-Reply-To: <1435805952-2512-1-git-send-email-danomimanchego123@gmail.com>
+References: <1435805952-2512-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <1435805952-2512-2-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +13,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/rapidjson/rapidjson.mk |    2 +-
+ package/rapidjson/Config.in |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rapidjson/rapidjson.mk b/package/rapidjson/rapidjson.mk
-index 6658da2..1ad9314 100644
---- a/package/rapidjson/rapidjson.mk
-+++ b/package/rapidjson/rapidjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rapidjson/Config.in b/package/rapidjson/Config.in
+index d442797..b8c8bcf 100644
+--- a/package/rapidjson/Config.in
++++ b/package/rapidjson/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_RAPIDJSON
+ 	help
+ 	  A fast JSON parser/generator for C++ with both SAX/DOM style API.
  
--RAPIDJSON_VERSION = 39f5eeb764c6d1e1cbff1717410d9710bf943009
-+RAPIDJSON_VERSION = v1.0.2
- RAPIDJSON_SITE = $(call github,miloyip,rapidjson,$(RAPIDJSON_VERSION))
- RAPIDJSON_LICENSE = MIT
- RAPIDJSON_LICENSE_FILES = license.txt
+-	  https://code.google.com/p/rapidjson/
++	  http://rapidjson.org/
 -- 
 1.7.9.5
