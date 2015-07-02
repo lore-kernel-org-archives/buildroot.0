@@ -1,57 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jul 2015 12:29:29 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/modem-manager: init script
- for systemV-like init systems
-In-Reply-To: <1435781472-13078-1-git-send-email-petr.vorel@gmail.com>
-References: <1435781472-13078-1-git-send-email-petr.vorel@gmail.com>
-Message-ID: <20150702122929.5798abc8@free-electrons.com>
+Date: Thu, 2 Jul 2015 12:35:28 +0200
+Subject: [Buildroot] [PATCH 1/1] force rsync of local package and try to
+ rebuild it with its dependencies
+In-Reply-To: <1435828515-16620-1-git-send-email-viallard@syscom-instruments.com>
+References: <1435828515-16620-1-git-send-email-viallard@syscom-instruments.com>
+Message-ID: <20150702123528.1d32089a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr,
+Dear Anthony Viallard,
 
-On Wed,  1 Jul 2015 22:11:12 +0200, Petr Vorel wrote:
+On Thu,  2 Jul 2015 11:15:15 +0200, Anthony Viallard wrote:
+> The purpose of this patch is to force rsync of local site packages and
+> rebuild them if their source code has changed. Therefore, if the source
+> of a package has changed, it will be rebuild if you type make or
+> make <pkg>. Likewise, if a package has a library dependency which is
+> local site package too and you type make <pkg>, the library will be
+> rebuild if the source has been modified.
+> 
+> This behavior is pretty useful if you use buildroot with many of your
+> own packages. Especially if you share these packages with a developer
+> team through a version control system like git.
 
-> +MODEMMANAGER_BIN=/usr/sbin/ModemManager
+Again, I don't think we want this change in Buildroot. I don't think we
+want *all* local packages to systematically be rsync'ed and rebuilt, at
+every "make" invocation.
 
-This variable was not needed, it's only used once, so I've just used
-directly the path to ModemManager.
+Maybe we want a separate "make rebuild-local" target (not sure of the
+name), which would trigger this special action. Local packages could be
+all registered in a global LOCAL_PACKAGES variable, and make
+rebuild-local would rebuild them all.
 
-> +PIDFILE=/var/run/ModemManager.pid
-> +
-> +[ -x $MODEMMANAGER_BIN ] || exit 0
-> +
-> +start() {
-> +	echo -n "Starting ModemManager: "
-> +	umask 077
-> +	start-stop-daemon -S -q -b -m -p $PIDFILE \
-> +		--exec $MODEMMANAGER_BIN
-> +	ret=$?
-> +	[ $ret = 0 ] && echo "OK" || echo "FAIL"
+Note that you could also solve this problem by adding something like
+that in your external.mk (provided you're using BR2_EXTERNAL):
 
-ret variable not really needed.
+# Needs to be filled in with your complete list of packages
+CUSTOM_PACKAGES = foo1 foo2 foo3
 
-> +}
-> +stop() {
-> +	echo -n "Stopping ModemManager: "
-> +	start-stop-daemon -K -q -p $PIDFILE
-> +	ret=$?
-> +	[ $ret = 0 ] && { echo "OK"; rm -f $PIDFILE; } || echo "FAIL"
+rebuild-custom: $(foreach p,$(CUSTOM_PACKAGES),$(p))
 
-Ditto.
+> -	rsync -au $(RSYNC_VCS_EXCLUSIONS) $(SRCDIR)/ $(@D)
+> +	rsync -au $(RSYNC_VCS_EXCLUSIONS) --include core $(SRCDIR)/ $(@D)
 
+This change is unrelated to the patch I believe.
 
-> +define MODEM_MANAGER_INSTALL_INIT_SYSV
-> +	$(INSTALL) -m 0755 -D package/modem-manager/S44modem-manager $(TARGET_DIR)/etc/init.d/S44modem-manager
-
-Line slightly too long, so I've broken it up with a \
-
-Applied with those minor nits fixed!
-
-Thanks a lot!
+Best regards,
 
 Thomas
 -- 
