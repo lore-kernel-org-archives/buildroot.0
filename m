@@ -1,68 +1,59 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 2 Jul 2015 07:56:19 +0000
-Subject: [Buildroot] [PATCH 2/2] package/pkg-kconfig: define
-	KCONFIG_EDITORS_MAKE_ENV
-In-Reply-To: <20150702095217.6813b8c5@free-electrons.com>
-References: <1435582227-26345-1-git-send-email-talz@ezchip.com>
- <1435582227-26345-2-git-send-email-talz@ezchip.com>
- <1435823045.2966.23.camel@synopsys.com>
- <20150702095217.6813b8c5@free-electrons.com>
-Message-ID: <1435823779.2966.31.camel@synopsys.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  2 Jul 2015 08:04:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 8191] New: Request update support for the
+	cubieboard series
+Message-ID: <bug-8191-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=8191
 
-On Thu, 2015-07-02 at 09:52 +0200, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Thu, 2 Jul 2015 07:44:05 +0000, Alexey Brodkin wrote:
-> 
-> > I'm wondering why did you put 2 patches in one series?
-> >  [1] https://patchwork.ozlabs.org/patch/489307/
-> >  [2] https://patchwork.ozlabs.org/patch/489306/
-> > 
-> > I'd say these 2 patches solve completely different problems and so
-> > should be posted as 2 separate patches compared to your [PATCH 
-> > 1/2],
-> > [PATCH 2/2].
-> 
-> I agree they are not related.
-> 
-> > The problem with series patches within series could not be applied
-> > separately, that means chances are you may not get either applied
-> > because:
-> 
-> That's not really true. I tend to try to apply all patches I can from 
-> a
-> series, even if certain other patches of the series cannot be 
-> applied.
-> Look at the SELinux series for example. I have not applied some of 
-> the
-> first patches of the series, but already applied some patches later 
-> in
-> the series.
-> 
-> So while I agree it's a bit weird to mix completely independent stuff 
-> in
-> one single patch series, it's not actually that problematic.
+           Summary: Request update support for the cubieboard series
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: fancp2007 at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Makes sense.
 
-What about mentioned problem with patch rebase that is only required
-because of line number changes?
+Created attachment 6086
+  --> https://bugs.busybox.net/attachment.cgi?id=6086
+Patch for the latest cb1/2/3 support
 
-In this particular case a few more lines were added in the file and so
-"git am" fails while "patch" succeeds with message about offset like
-that:
------------------>8-----------------
-patching file package/pkg-kconfig.mk
-Hunk #1 succeeded at 109 with fuzz 2 (offset 33 lines).
------------------>8-----------------
+The official Buildroot support for cubieboard1 and cubieboard2 is very
+outdated.
 
-Is my proposal for resend is valid or you may handle it yourself?
+The 'legacy' sunxi branch of U-Boot is unmaintained now, see
+[http://linux-sunxi.org/U-Boot].
 
--Alexey
+The current U-Boot release (v2015.04) fully supports major functions (except
+NAND) on all the older Allwinner SoCs (A10/A10s/A13/A20/A23/A31/A31s).
+see [http://linux-sunxi.org/Mainline_U-Boot]
+
+Linux kernel for the sunxi series (linux-sunxi) also need bump to the latest
+stage/sunxi-3.4 branch to match the latest U-Boot.
+
+The third generation of the famous Cubieboard, named Cubietruck, had released
+at October 2013, but lacking the official buildroot support yet.
+see [http://linux-sunxi.org/Cubietech_Cubietruck]
+
+Attached patch provide the latest update support for cubieboard1 and
+cubieboard2, also new defconfig for cubietruck.
+
+You can also get this patch from the next url:
+https://github.com/vancepym/buildroot/commit/61317cfc4cde93e1795634c0a85c6357e9948fe7.patch
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
