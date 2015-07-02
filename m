@@ -1,33 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jul 2015 11:00:20 +0200
-Subject: [Buildroot] [PATCH v2] configs/olimex_a20_olinuxino_micro: new
- board
-In-Reply-To: <1435747687-7412-1-git-send-email-luca@lucaceresoli.net>
-References: <1435747687-7412-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20150702110020.1de0621e@free-electrons.com>
+Date: Thu, 2 Jul 2015 11:00:56 +0200
+Subject: [Buildroot] [PATCH 1/3] git: bump to version 2.4.5
+In-Reply-To: <1435750776-3364-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1435750776-3364-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150702110056.4df6abed@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+Dear Vicente Olivert Riera,
 
-On Wed,  1 Jul 2015 12:48:07 +0200, Luca Ceresoli wrote:
-> Add a defconfig for the Olimex A20-OLinuXino-Micro board, reusing most
-> of the A20-OLinuXino-Lime files.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> 
+On Wed, 1 Jul 2015 13:39:34 +0200, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
-> Changed v1 -> v2:
->  - remove useless reference to U-Boot in the defconfig list (suggested by
->    Fran?ois Perrad)
-> ---
->  board/olimex/a20_olinuxino/readme.txt        | 31 +++++++++++++------
->  configs/olimex_a20_olinuxino_micro_defconfig | 46 ++++++++++++++++++++++++++++
->  2 files changed, 67 insertions(+), 10 deletions(-)
->  create mode 100644 configs/olimex_a20_olinuxino_micro_defconfig
+>  package/git/git.hash | 2 +-
+>  package/git/git.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
