@@ -1,30 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jul 2015 23:44:04 +0200
-Subject: [Buildroot] [git commit] rapidjson: update site URL in package
-	description
-Message-ID: <20150702214407.ABC9980E1F@busybox.osuosl.org>
+Date: Thu, 2 Jul 2015 23:44:43 +0200
+Subject: [Buildroot] [PATCH 1/2] rapidjson: bump to version 1.0.2
+In-Reply-To: <1435805952-2512-1-git-send-email-danomimanchego123@gmail.com>
+References: <1435805952-2512-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20150702234443.4a6d579d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bfce76a22123c8a8a789b85c5c14a348d5a919dd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Danomi Manchego,
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rapidjson/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Wed,  1 Jul 2015 22:59:11 -0400, Danomi Manchego wrote:
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> ---
+>  package/rapidjson/rapidjson.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rapidjson/Config.in b/package/rapidjson/Config.in
-index d442797..b8c8bcf 100644
---- a/package/rapidjson/Config.in
-+++ b/package/rapidjson/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_RAPIDJSON
- 	help
- 	  A fast JSON parser/generator for C++ with both SAX/DOM style API.
- 
--	  https://code.google.com/p/rapidjson/
-+	  http://rapidjson.org/
+Both applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
