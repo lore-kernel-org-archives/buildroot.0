@@ -1,48 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jul 2015 23:22:28 +0200
-Subject: [Buildroot] [PATCH 2/2] openssl: always build apps
-In-Reply-To: <5595A520.6090903@mind.be>
-References: <1434711274-49716-1-git-send-email-benoit@wsystem.com>
- <1434711274-49716-2-git-send-email-benoit@wsystem.com>
- <20150701111411.1dab82cc@free-electrons.com>
- <55950B29.9090200@wsystem.com>
- <20150702120402.4e4e3b9d@free-electrons.com>
- <5595A520.6090903@mind.be>
-Message-ID: <20150702232228.0ad1a03b@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 2 Jul 2015 23:22:30 +0200
+Subject: [Buildroot] [PATCH 1/1] force rsync of local package and try to
+ rebuild it with its dependencies
+In-Reply-To: <20150702123528.1d32089a@free-electrons.com>
+References: <1435828515-16620-1-git-send-email-viallard@syscom-instruments.com>
+ <20150702123528.1d32089a@free-electrons.com>
+Message-ID: <5595AB96.7020401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
-
-On Thu, 2 Jul 2015 22:54:56 +0200, Arnout Vandecappelle wrote:
-
-> > We generally try to not clutter menuconfig with too many
-> > comments/options: we can't make visible in menuconfig every little
-> > possible dependency. That's why we use a lot of "automatic optional
-> > dependencies": a package automatically uses another package if it is
-> > available, without having this dependency visible from a
-> > menuconfig/Config.in point of view.
+On 07/02/15 12:35, Thomas Petazzoni wrote:
+> Dear Anthony Viallard,
 > 
->  We (or at least, I) do like to have such a thing mentioned in the help text,
-> however. The help text does not clutter the menus so there is no reason to be
-> terse there.
+> On Thu,  2 Jul 2015 11:15:15 +0200, Anthony Viallard wrote:
+>> The purpose of this patch is to force rsync of local site packages and
+>> rebuild them if their source code has changed. Therefore, if the source
+>> of a package has changed, it will be rebuild if you type make or
+>> make <pkg>. Likewise, if a package has a library dependency which is
+>> local site package too and you type make <pkg>, the library will be
+>> rebuild if the source has been modified.
+>>
+>> This behavior is pretty useful if you use buildroot with many of your
+>> own packages. Especially if you share these packages with a developer
+>> team through a version control system like git.
+> 
+> Again, I don't think we want this change in Buildroot. I don't think we
+> want *all* local packages to systematically be rsync'ed and rebuilt, at
+> every "make" invocation.
 
-I am perfectly fine with having more details in the Config.in help text.
+ Actually, why not? Ideally, we would like to rebuild everything every time -
+but that just takes too long. However, we can assume that there aren't so many
+local packages, so their rebuild does not necessarily take too long.
 
-However, do we really want to explicitly list all automatic optional
-dependencies in the Config.in help text? I believe it would definitely
-be hard to maintain. So the Config.in help text should probably be
-mostly used for things that aren't clearly visible by reading the .mk
-file. And automatic optional dependencies are usually pretty explicit
-by looking at the .mk file.
+ So I went and did an experiment on my laptop (HDD, 8GB RAM, so relatively
+slow): when nothing actually has to be rebuilt, 'make linux-rebuild' takes 40s
+longer than 'make linux'. (I'm taking linux because that's the one where we can
+expect the most overhead from rebuilding.)  That is the same amount of time as
+building a small package like xz.
 
-Best regards,
+ Conclusion: indeed, we shouldn't do rebuilding of local packages by default.
 
-Thomas
+> 
+> Maybe we want a separate "make rebuild-local" target (not sure of the
+> name), which would trigger this special action. Local packages could be
+> all registered in a global LOCAL_PACKAGES variable, and make
+> rebuild-local would rebuild them all.
+> 
+> Note that you could also solve this problem by adding something like
+> that in your external.mk (provided you're using BR2_EXTERNAL):
+
+ Or in your local.mk (BR2_PACKAGE_OVERRIDE_FILE), where you put these overrides.
+
+> 
+> # Needs to be filled in with your complete list of packages
+> CUSTOM_PACKAGES = foo1 foo2 foo3
+> 
+> rebuild-custom: $(foreach p,$(CUSTOM_PACKAGES),$(p))
+
+ Or if you don't want to call a specific target:
+
+world: $(foreach p,$(CUSTOM_PACKAGES),$(p))
+
+That way, you can just type 'make' and it will rebuild your custom packages.
+
+
+> 
+>> -	rsync -au $(RSYNC_VCS_EXCLUSIONS) $(SRCDIR)/ $(@D)
+>> +	rsync -au $(RSYNC_VCS_EXCLUSIONS) --include core $(SRCDIR)/ $(@D)
+> 
+> This change is unrelated to the patch I believe.
+
+ And it should be added to RSYNC_VCS_EXCLUSIONS instead.
+
+ However, why is this even needed? RSYNC_VCS_EXCLUSIONS doesn't exclude any
+pattern that matches 'core'.
+
+
+ Regards,
+ Arnout
+
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
