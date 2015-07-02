@@ -1,67 +1,60 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 2 Jul 2015 07:44:05 +0000
-Subject: [Buildroot] [PATCH 2/2] package/pkg-kconfig: define
-	KCONFIG_EDITORS_MAKE_ENV
-In-Reply-To: <1435582227-26345-2-git-send-email-talz@ezchip.com>
+Date: Thu, 2 Jul 2015 07:46:12 +0000
+Subject: [Buildroot] [PATCH 1/2] package/gcc: fix ARC failure to build
+ in 2 phases.
+In-Reply-To: <20150629174920.10f52a00@free-electrons.com>
 References: <1435582227-26345-1-git-send-email-talz@ezchip.com>
- <1435582227-26345-2-git-send-email-talz@ezchip.com>
-Message-ID: <1435823045.2966.23.camel@synopsys.com>
+ <20150629162906.415e456f@free-electrons.com>
+ <AM3PR02MB11407402CE0DA7E56F56AAE6BBAA0@AM3PR02MB1140.eurprd02.prod.outlook.com>
+ <20150629174920.10f52a00@free-electrons.com>
+Message-ID: <1435823172.2966.25.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Tal,
+Hi Thomas, Tal,
 
-On Mon, 2015-06-29 at 15:50 +0300, Tal Zilcer wrote:
-> From: Tal Zilcer <talz@ezchip.com>, 
+On Mon, 2015-06-29 at 17:49 +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> When building a configuration editor we assume its for the HOST.
-> However some packages might define MAKE_ENV as TARGET_MAKE_NEV.
-> Using this variable adds to beginning of $(PATH),
-> the directory $(HOST_DIR)/usr/bin.
+> On Mon, 29 Jun 2015 15:39:12 +0000, Tal Zilcer wrote:
 > 
-> This cause us to not use pkg-config from our host machine but the one
-> from $(HOST_DIR)/usr/bin. This pkg-config does not support QT.
-> Now when we try to run for example linux-xconfig we fail since QT is 
-> not found.
+> > We have one source tree for both build phases of GCC.
+> > First phase must have this patch while second phase must NOT have 
+> > it.
+> > it doesn't seems reasonable to have two GCC source trees because of 
+> > this patch.
 > 
-> To overcome this we defined a dedicated variable for the 
-> configuration editors
+> Ah right. I think there's probably a way to write the change so that 
+> it
+> does not try to use these object files during the initial gcc build.
+> This is really what the real fix is.
 > 
-> Signed-off-by: Tal Zilcer <talz@ezchip.com>
-> ---
+> > > In any case, I don't think it's worth the effort making that 
+> > > conditional, just register the post-rsync hook unconditionally.
+> > It is only to explain our intentions, do you prefer a comment or 
+> > just to add the RSYNC hook?
+> 
+> For now, we can just add the rsync hook, but...
+> 
+> > > BTW, this problem should have been sorted out by the ARC 
+> > > developers, maybe you should ping them about this?
+> > Adding Alexey to this correspondence
+> 
+> ... I'd like to hear from Alexey about this, since I reported this
+> issue a while ago now.
 
-I'm wondering why did you put 2 patches in one series?
- [1] https://patchwork.ozlabs.org/patch/489307/
- [2] https://patchwork.ozlabs.org/patch/489306/
+Please pardon my late reply was super busy with internal activities.
 
-I'd say these 2 patches solve completely different problems and so
-should be posted as 2 separate patches compared to your [PATCH 1/2],
-[PATCH 2/2].
+As for known problem of gmon that includes libc headers unfortunately
+nothing has been done on that front. That's because we have a
+workaround with disabling libgmon in Buildroot.
 
-The problem with series patches within series could not be applied
-separately, that means chances are you may not get either applied
-because:
- a) At least one patch could not be accepted by maintainer
- b) At least one patch required rework
+I'll ping our gcc guy but I don't think things will change soon here
+again because it doesn't look as a blocker.
 
-So in case of (a) you'll need to resend appropriate patch separately
-and in case of (b) you'll need to resend all patches in the series even
-if only one patch was modified.
-
-As for this one I really like it. IMHO problem and solution are very
-valid.
-
-The only note this patch won't apply clean on current master due to
-recent changes in "package/pkg-kconfig.mk". I.e. rebase is required
-now.
-
-Please rebase this patch on top of the current master and resend this
-patch (preferably separately from another patch of the current series).
-
-Feel free to add:
-Reviewed-by: Alexey Brodkin <abrodkin@synopsys.com>
+So probably rsync hook is a way to go for now.
 
 -Alexey
