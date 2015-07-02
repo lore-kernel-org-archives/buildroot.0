@@ -1,32 +1,59 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  2 Jul 2015 14:50:54 +0300
-Subject: [Buildroot] [PATCH 2/2] cryptsetup: update homepage link
-In-Reply-To: <ebe4bbc5879916055ba594a8db7a47c19f21e80a.1435837854.git.baruch@tkos.co.il>
-References: <ebe4bbc5879916055ba594a8db7a47c19f21e80a.1435837854.git.baruch@tkos.co.il>
-Message-ID: <2bb0b248c2bad9e95e98695a4f7571db3418840d.1435837854.git.baruch@tkos.co.il>
+From: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
+Date: Thu, 2 Jul 2015 14:40:38 +0200
+Subject: [Buildroot] [PATCH v3 0/2] Make Buildroot for Zedboard
+ independent on Xilinx tools
+In-Reply-To: <1435063751-27344-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
+References: <1434971728-16094-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
+ <1435063751-27344-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
+Message-ID: <20150702144038.6485ec47@pcviktorin.fit.vutbr.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/cryptsetup/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello,
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 3d3c47d40c69..13b0184cffd6 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -15,7 +15,7 @@ config BR2_PACKAGE_CRYPTSETUP
- 	  This tool helps manipulate dm-crypt and luks partitions for
- 	  on-disk encryption.
- 
--	  https://code.google.com/p/cryptsetup/
-+	  https://gitlab.com/cryptsetup/cryptsetup
- 
- comment "cryptsetup needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
+will be the proposed patchs applied in the near future?
+
+Regards
+Jan
+
+On Tue, 23 Jun 2015 14:49:09 +0200
+Jan Viktorin <xvikto03@stud.fit.vutbr.cz> wrote:
+
+> From: Jan Viktorin <viktorin@rehivetech.com>
+> 
+> Hello,
+> 
+> thanks to Baruch and Arnout for comments. I think this the final
+> version. The host-zynq-boot-bin now downloads just the python script
+> (thank you for this tip, I was looking for such solution).
+> 
+> The second commit is unchanged.
+> 
+> Regards
+> Jan Viktorin
+> 
+> 
+> Jan Viktorin (2):
+>   host-zynq-boot-bin: new package
+>   zedboard: Upgrade to U-Boot 2015.07
+> 
+>  board/avnet/zedboard/readme.txt        | 95 ++++++++++++++++------------------
+>  configs/zedboard_defconfig             |  7 +--
+>  package/Config.in.host                 |  1 +
+>  package/zynq-boot-bin/Config.in.host   |  8 +++
+>  package/zynq-boot-bin/zynq-boot-bin.mk | 24 +++++++++
+>  5 files changed, 81 insertions(+), 54 deletions(-)
+>  create mode 100644 package/zynq-boot-bin/Config.in.host
+>  create mode 100644 package/zynq-boot-bin/zynq-boot-bin.mk
+> 
+
+
+
 -- 
-2.1.4
+  Jan Viktorin, PhD student   E-mail: iviktorin at fit.vutbr.cz
+  DCS FIT VUT Brno, L310      Web: http://www.fit.vutbr.cz/~iviktorin
+  Bozetechova 1, 612 66       Phone: +420 54114-1357
+  Brno, Czech Republic
