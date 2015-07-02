@@ -1,51 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jul 2015 12:04:02 +0200
-Subject: [Buildroot] [PATCH 2/2] openssl: always build apps
-In-Reply-To: <55950B29.9090200@wsystem.com>
-References: <1434711274-49716-1-git-send-email-benoit@wsystem.com>
- <1434711274-49716-2-git-send-email-benoit@wsystem.com>
- <20150701111411.1dab82cc@free-electrons.com>
- <55950B29.9090200@wsystem.com>
-Message-ID: <20150702120402.4e4e3b9d@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu,  2 Jul 2015 13:14:15 +0300
+Subject: [Buildroot] [PATCH] tor: fix building if GCC's C standard is not
+	gnu99
+Message-ID: <1435832055-11204-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Beno?t Th?baudeau,
+Up to date tor (at least starting from 0.2.6) requires compiler with C99
+plus some extensions support.
 
-On Thu, 2 Jul 2015 11:58:01 +0200, Beno?t Th?baudeau wrote:
+If default GCC's C standard < c99 (that's the case@least for ARC)
+you'll see this on attempt to build tor:
+----------------------->8--------------------
+src/common/address.c: In function ''tor_addr_parse_PTR_name':
+src/common/address.c:502:5: error: 'for' loop initial declarations are only allowed in C99 mode
+     for (int i = 0; i < 16; ++i) {
+     ^
+src/common/address.c:502:5: note: use option -std=c99 or -std=gnu99 to compile your code
+----------------------->8--------------------
 
-> Yes. My intent was to keep the rules minimal, but I agree that it is better as
-> you suggest. I will send a v2.
+Once you follow compiler advice and enable c99 support with "-std=c99"
+you'll pass that failure but will see tons of other errors, see
+https://www.mail-archive.com/tor-dev at lists.torproject.org/msg06273.html
 
-Great, thanks.
+And only g99 resolves all problems at once.
 
-> I have a question about the management of the scripts depending on Perl, though.
-> Doing as you suggest hides this behavior in the .mk, so the users won't know
-> that they have a choice just by looking at the configuration. Do you think that
-> it does not really matter, or that a comment or a depends on / select should be
-> added to the Config.in?
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/tor/tor.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-We generally try to not clutter menuconfig with too many
-comments/options: we can't make visible in menuconfig every little
-possible dependency. That's why we use a lot of "automatic optional
-dependencies": a package automatically uses another package if it is
-available, without having this dependency visible from a
-menuconfig/Config.in point of view.
-
-I think it's a bit the same here. If you know you need that specific
-Perl script from OpenSSL, then we assume that you are smart enough to
-realize that you might need to enable a Perl interpreter for your
-target.
-
-Yes: we do believe our users are smart! :-)
-
-Thanks,
-
-Thomas
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 9cca011..f6d3b7f 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -32,4 +32,6 @@ else
+ TOR_CONF_OPTS += --disable-seccomp
+ endif
+ 
++TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.3
