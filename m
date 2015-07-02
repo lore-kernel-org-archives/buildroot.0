@@ -1,59 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jul 2015 23:46:17 +0200
-Subject: [Buildroot] [PATCH] Disable gcc-4.8.x + binutils-2.25 + MIPS
- combination
-In-Reply-To: <1435850348-19416-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1435850348-19416-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150702234617.4d33bb5f@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 2 Jul 2015 23:46:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix building if GCC's C
+ standard is not gnu99
+In-Reply-To: <20150702231241.69ef0bea@gmx.net>
+References: <1435860302-16176-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150702231241.69ef0bea@gmx.net>
+Message-ID: <5595B12E.1070705@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+On 07/02/15 23:12, Peter Seiderer wrote:
+[snip]
+> From build/libv4l-1.6.2/config.log:
+> 
+> configure:4709: checking for .../host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc option to accept ISO C99
+> configure:4858: .../host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
+> conftest.c:54:9: error: unknown type name 'wchar_t'
+>    const wchar_t *name;
+> 
+> 
+> The C99 detection problem seems more related to missing wchar_t type support than the compiler option?
 
-On Thu, 2 Jul 2015 17:19:08 +0200, Vicente Olivert Riera wrote:
-> This combination causes a compilation failure of the host-gcc-final
-> recipe like this one:
-> 
-> /br/output/host/usr/mips-buildroot-linux-gnu/bin/ld:
-> .libs/gload.o: relocation R_MIPS_HI16 against `__gnu_local_gp' can not
-> be used when making a shared object; recompile with -fPIC
-> 
-> The problem is the file 'libatomic/gload.c' is compiled without -fPIC
-> when using binutils-2.25. All gcc (with libatomic) versions below 4.9.3
-> are affected by this issue.
-> 
-> Here is a summary of affected/unaffected versions in Buildroot:
-> 
-> 4.7.x: unaffected (doesn't have libatomic)
-> 4.8.x: affected
-> 4.9.x: unaffected (we have 4.9.3 which is fixed)
-> 5.1.x: unaffected
-> 
-> The fix can be found here:
-> 
->   https://github.com/gcc-mirror/gcc/commit/57f5c0954f95cb37f995d60167ddde06c7d6e697
-> 
-> However, given the following reasons...
-> 
-> - Upstream gcc 4.8 branch is closed.
-> - The fix is very hard to backport from 4.9 to 4.8.
-> - This stuff is insanely sensitive and not working at all could be
->   better than looking like it works but not quite.
-> 
-> ...I think the best choice is to disable that combination in Buildroot.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/gcc/Config.in.host | 2 ++
->  1 file changed, 2 insertions(+)
+ Good catch!
 
-Applied, thanks.
+[Adding Waldemar for uClibc input]
 
-Thomas
+ The configure script does include wchar.h, but it seems that wchar_t doesn't
+get defined after all... Waldemar, any idea?
+
+
+ Regards,
+ Arnout
+
+[snip]
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
