@@ -1,57 +1,43 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Thu, 02 Jul 2015 17:32:55 +0200
-Subject: [Buildroot] [PATCH 1/1] Force rebuild of local site packages
-	and theirs local dependencies
-In-Reply-To: <5594FE06.5030900@syscom-instruments.com>
-References: <1434460888-30770-1-git-send-email-viallard@syscom-instruments.com>
- <2854682.pCSB3Zb5Zv@sagittea> <5594FE06.5030900@syscom-instruments.com>
-Message-ID: <1909260.QcAQmjlMXM@sagittea>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 02 Jul 2015 17:38:33 +0200
+Subject: [Buildroot] [PATCH] tor: fix building if GCC's C standard is
+	not gnu99
+In-Reply-To: <1435832055-11204-1-git-send-email-abrodkin@synopsys.com> (Alexey
+ Brodkin's message of "Thu, 2 Jul 2015 13:14:15 +0300")
+References: <1435832055-11204-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <87twtmy3gm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 02 July 2015 11:01:58 Viallard Anthony wrote:
-> On 06/23/2015 09:56 AM, J?r?me Pouiller wrote:
-> > Does this process would work?
-> >
-> >    rm build/*/.stamp_built
-> >    make
-> >
-> >
-> 
-> Hi J?rome,
-> 
-> Yes. It can be a solution. I already did this way to rebuild package in 
-> the old time when there wasn't the *-rebuild target command:
-> 
-> rm -rf output/build/clearsilver-0.10.5/.stamp_built && rm -rf 
-> output/build/clearsilver-0.10.5/.stamp_configured
-> 
-> But I prefer an integrated mechanism in the makefile which make the 
-> think more reliable and transparent :)
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-When I need very specific action for a project (generally 'run', 'check', 
-'flash', etc...), I write a fragment of Makefile and a declare it in 
-BR2_PACKAGE_OVERRIDE_FILE.
+ > Up to date tor (at least starting from 0.2.6) requires compiler with C99
+ > plus some extensions support.
 
-Therefore, you may add a local.mk file with:
+ > If default GCC's C standard < c99 (that's the case@least for ARC)
+ > you'll see this on attempt to build tor:
+ -----------------------> 8--------------------
+ > src/common/address.c: In function ''tor_addr_parse_PTR_name':
+ > src/common/address.c:502:5: error: 'for' loop initial declarations are only allowed in C99 mode
+ >      for (int i = 0; i < 16; ++i) {
+ >      ^
+ > src/common/address.c:502:5: note: use option -std=c99 or -std=gnu99 to compile your code
+ -----------------------> 8--------------------
 
-local-rebuild:
-	rm build/*/.stamp_built
+ > Once you follow compiler advice and enable c99 support with "-std=c99"
+ > you'll pass that failure but will see tons of other errors, see
+ > https://www.mail-archive.com/tor-dev at lists.torproject.org/msg06273.html
 
-...and maybe (not tested):
+ > And only g99 resolves all problems at once.
 
-$(PACKAGES): local-rebuild
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-
-
-(Someday, I will post a patch to be able to display those local targets in 
-'make help' output)
-
+Committed, thanks.
 
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Bye, Peter Korsgaard
