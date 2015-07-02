@@ -1,77 +1,44 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 02 Jul 2015 18:09:28 +0200
-Subject: [Buildroot] [PATCH 2/2] package/exim: Fix compilation error
- with musl
-In-Reply-To: <1428848507-2117-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1428848507-2117-1-git-send-email-bernd.kuhls@t-online.de>
- <1428848507-2117-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <55956238.8040902@lucaceresoli.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  2 Jul 2015 20:05:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix building if GCC's C
+	standard is not gnu99
+Message-ID: <1435860302-16176-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd,
+Fixes
+checking for /home/fli4l/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc option to accept ISO C99... unsupported
+configure: error: Building libdrm requires C99 enabled compiler
 
-Bernd Kuhls wrote:
-> Fixes
-> smtp_in.c: In function ?smtp_start_session?:
-> smtp_in.c:1976:36: error: invalid application of ?sizeof? to incomplete type ?struct options?
->       EXIM_SOCKLEN_T optlen = sizeof(struct ip_options) + MAX_IPOPTLEN;
->
-> smtp_in.c misdetects the needed style for ip_options, only OPTSTYLE == 2 works.
-> Since musl does not provide any macro[1] to detect it we need to pretend to be
-> darwin in order to fix the compile bug.
->
-> In order to do so we need the generated os.h before building start, therefore
-> add some make subtargets to the configure step.
->
+using this defconfig
+BR2_KERNEL_HEADERS_4_0=y
+BR2_BINUTILS_VERSION_2_25=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_LIBDRM=y
 
-I confirm the bug, but I would prefer a slightly cleaner fix, see below.
+Patch inspired by
+http://git.buildroot.net/buildroot/commit/?id=5cf5b390385fb6325485e37dc9d38e1e3ac1f091
 
-> [1] http://wiki.musl-libc.org/wiki/FAQ#Q:_why_is_there_no_MUSL_macro_.3F
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->   package/exim/exim.mk |   10 ++++++++++
->   1 file changed, 10 insertions(+)
->
-> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-> index fcf2be5..d7c61db 100644
-> --- a/package/exim/exim.mk
-> +++ b/package/exim/exim.mk
-> @@ -89,6 +89,13 @@ define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
->   endef
->   endif
->
-> +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-> +define EXIM_PRETEND_TO_BE_DARWIN_TO_FIX_IP_OPTIONS
-> +	echo "#undef GLIBC_IP_OPTIONS" >> $(@D)/build-br/os.h
-> +	echo "#define DARWIN_IP_OPTIONS" >> $(@D)/build-br/os.h
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libdrm/libdrm.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-I'd rename to EXIM_TWEAK_IP_OPTIONS or similar, and use sed instead of
-the two echos, but it's a matter of taste:
-
-   $(SED) 's/#define GLIBC_IP_OPTIONS/#define DARWIN_IP_OPTIONS/' \
-          $(@D)/OS/os.h-Linux
-
-> +endef
-> +endif
-> +
->   define EXIM_CONFIGURE_TOOLCHAIN
->   	$(call exim-config-add,CC,$(TARGET_CC))
->   	$(call exim-config-add,CFLAGS,$(TARGET_CFLAGS))
-> @@ -97,6 +104,9 @@ define EXIM_CONFIGURE_TOOLCHAIN
->   	$(call exim-config-add,HOSTCC,$(HOSTCC))
->   	$(call exim-config-add,HOSTCFLAGS,$(HOSTCFLAGS))
->   	$(EXIM_REMOVE_LIBNSL_FROM_MAKEFILE)
-> +	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) configure
-> +	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D)/build-br config
-> +	$(EXIM_PRETEND_TO_BE_DARWIN_TO_FIX_IP_OPTIONS)
-
-Just patch $(@D)/OS/os.h-Linux, and you can remove the two $(MAKE1)
-invocations.
-
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 4cca645..1768214 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -19,6 +19,8 @@ LIBDRM_CONF_OPTS = \
+ 	--disable-cairo-tests \
+ 	--disable-manpages
+ 
++LIBDRM_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
++
+ ifeq ($(BR2_PACKAGE_LIBDRM_INTEL),y)
+ LIBDRM_CONF_OPTS += --enable-intel
+ LIBDRM_DEPENDENCIES += libatomic_ops libpciaccess
 -- 
-Luca
+1.7.10.4
