@@ -1,97 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jul 2015 11:32:18 +0200
-Subject: [Buildroot] [git commit] package/modem-manager: init script for
-	systemV-like init systems
-Message-ID: <20150702093241.D2266818CF@busybox.osuosl.org>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu,  2 Jul 2015 10:43:27 +0100
+Subject: [Buildroot] [v4 4/4] package/nodejs: Define NPM command for other
+	packages to use
+In-Reply-To: <1435830207-16664-1-git-send-email-martin@barkynet.com>
+References: <1435830207-16664-1-git-send-email-martin@barkynet.com>
+Message-ID: <1435830207-16664-4-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f1def693647b2158aab38d86a11609454e72dab
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Other nodejs-related packages will need to call npm with the same set of
+arguments as is currently used by the nodejs package itself.
 
-ModemManager get started by NetworkManager, in case of systemd init
-system. In case of other systems it needs to be started by init script.
+To avoid duplicating this code, set the NPM variable so those packages can
+re-use it.
 
-Debian [1] solved it by detection in code. For Buildroot it's IMHO
-enough to install init script for systemV-like init systems.
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=770871
-
-[Thomas:
- - slightly simplify the script by removing the MODEMMANAGER_BIN
-   variable which was used at only one place, and use directly $?
-   instead of an intermediate $ret variable.
- - split the too long line added in the .mk file.]
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/modem-manager/S44modem-manager |   42 ++++++++++++++++++++++++++++++++
- package/modem-manager/modem-manager.mk |    5 ++++
- 2 files changed, 47 insertions(+), 0 deletions(-)
+Note: currently, this is only used in the nodejs package itself. I
+plan on sending new nodejs-related packages that will use this, like
+a pm2 (https://github.com/Unitech/pm2) package which I have tested
+successfully using this $(NPM).
 
-diff --git a/package/modem-manager/S44modem-manager b/package/modem-manager/S44modem-manager
-new file mode 100755
-index 0000000..10e58e7
---- /dev/null
-+++ b/package/modem-manager/S44modem-manager
-@@ -0,0 +1,42 @@
-+#!/bin/sh
-+#
-+# Starts ModemManager
-+#
-+
-+PIDFILE=/var/run/ModemManager.pid
-+
-+[ -x $MODEMMANAGER_BIN ] || exit 0
-+
-+start() {
-+	echo -n "Starting ModemManager: "
-+	umask 077
-+	start-stop-daemon -S -q -b -m -p $PIDFILE \
-+		--exec /usr/sbin/ModemManager
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+stop() {
-+	echo -n "Stopping ModemManager: "
-+	start-stop-daemon -K -q -p $PIDFILE
-+	[ $? = 0 ] && { echo "OK"; rm -f $PIDFILE; } || echo "FAIL"
-+}
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+	start)
-+		start
-+		;;
-+	stop)
-+		stop
-+		;;
-+	restart|reload)
-+		restart
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		exit 1
-+esac
-+
-+exit $ret
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 9cd630c..97dddfe 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -26,4 +26,9 @@ else
- MODEM_MANAGER_CONF_OPTS += --without-mbim
- endif
+Changes v3 -> v4
+ - Merged in npm_config_build_from_source=true added by previous patch
+ - Added Acked-by: Yann E. MORIN
+
+Changes v2 -> v3
+ - Improved commit message (Suggested by Yann E. MORIN)
+
+Changes v1 -> v2
+ - No changes
+---
+ package/nodejs/nodejs.mk | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 156b151..414f3f3 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -95,6 +95,15 @@ NODEJS_MODULES_LIST= $(call qstrip,\
+ 	$(if $(BR2_PACKAGE_NODEJS_MODULES_COFFEESCRIPT),coffee-script) \
+ 	$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL))
  
-+define MODEM_MANAGER_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/modem-manager/S44modem-manager \
-+		$(TARGET_DIR)/etc/init.d/S44modem-manager
-+endef
++# Define NPM for other packages to use
++NPM = $(TARGET_CONFIGURE_OPTS) \
++	LD="$(TARGET_CXX)" \
++	npm_config_arch=$(NODEJS_CPU) \
++	npm_config_target_arch=$(NODEJS_CPU) \
++	npm_config_build_from_source=true \
++	npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
++	$(HOST_DIR)/usr/bin/npm
 +
- $(eval $(autotools-package))
+ #
+ # We can only call NPM if there's something to install.
+ #
+@@ -104,14 +113,7 @@ define NODEJS_INSTALL_MODULES
+ 	# npm install call below and setting npm_config_rollback=false can both
+ 	# help in diagnosing the problem.
+ 	(cd $(TARGET_DIR)/usr/lib && mkdir -p node_modules && \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		LD="$(TARGET_CXX)" \
+-		npm_config_arch=$(NODEJS_CPU) \
+-		npm_config_target_arch=$(NODEJS_CPU) \
+-		npm_config_build_from_source=true \
+-		npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
+-		$(HOST_DIR)/usr/bin/npm install \
+-		$(NODEJS_MODULES_LIST) \
++		$(NPM) install $(NODEJS_MODULES_LIST) \
+ 	)
+ 
+ 	# Symlink all executables in $(TARGET_DIR)/usr/lib/node_modules/.bin to
+-- 
+2.1.4
