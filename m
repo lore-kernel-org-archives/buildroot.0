@@ -1,112 +1,133 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 2 Jul 2015 09:22:06 +0100
-Subject: [Buildroot] [v3 1/4] package/nodejs: Add node.js v0.12.5 and
- set as the default version
-In-Reply-To: <20150630222004.GB21499@free.fr>
-References: <1435660966-11347-1-git-send-email-martin@barkynet.com>
- <20150630222004.GB21499@free.fr>
-Message-ID: <CAFGQKxdey7==9-UJnnh=Gg=CkONB37KVOPXYoihY1t4068w6Fw@mail.gmail.com>
+From: Viallard Anthony <viallard@syscom-instruments.com>
+Date: Thu, 02 Jul 2015 10:56:49 +0200
+Subject: [Buildroot] [PATCH 1/1] Force rebuild of local site packages
+ and theirs local dependencies
+In-Reply-To: <20150622161302.GA32191@dkarchlinux64.currentcomm.com>
+References: <1434460888-30770-1-git-send-email-viallard@syscom-instruments.com>
+ <20150616215022.6eb61f22@free-electrons.com>
+ <5587E032.8030506@syscom-instruments.com>
+ <20150622161302.GA32191@dkarchlinux64.currentcomm.com>
+Message-ID: <5594FCD1.5000101@syscom-instruments.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
-
-On 30 June 2015 at 23:20, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Martin, All,
+On 06/22/2015 06:13 PM, rdkehn at yahoo.com wrote:
+> Hi Antony,
 >
-> On 2015-06-30 11:42 +0100, Martin Bark spake thusly:
->> The version of the V8 JavaScript engine used by node.js v0.12.5 requires
->> at least an ARMv6 architecture with VFPv2.  For this reason v0.10.39
->> remains the default for ARMv5 targets, all other targets now default to
->> v0.12.5.
+> On Mon, Jun 22, 2015 at 12:15:14PM +0200, Viallard Anthony wrote:
+>> On 06/16/2015 09:50 PM, Thomas Petazzoni wrote:
+>>> Dear Anthony Viallard,
+>>>
+>>> On Tue, 16 Jun 2015 15:21:28 +0200, Anthony Viallard wrote:
+>>>
+>>>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>>>> index d5b29f0..929a31c 100644
+>>>> --- a/package/pkg-generic.mk
+>>>> +++ b/package/pkg-generic.mk
+>>>> @@ -509,6 +509,10 @@ ifeq ($$(filter $(1),$$(DEPENDENCIES_HOST_PREREQ)),)
+>>>>   $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
+>>>>   endif
+>>>>
+>>>> +ifeq ($$($(2)_SITE_METHOD),local)
+>>>> +$$($(2)_TARGET_RSYNC): $(1)-clean-for-rebuild
+>>>> +endif
+>>>
+>>> Why don't you use "make <pkg>-rebuild" or "make <pkg>-reconfigure" ?
+>>>
+>>> The problem with your proposal is that you have arbitrarily decided to
+>>> make it always restart from the build step. What if some people want to
+>>> restart from the install step, or the configure step ?
+>>>
+>>> Thanks,
+>>>
+>>> Thomas
+>>>
 >>
->> Signed-off-by: Martin Bark <martin@barkynet.com>
->
-> In fact, I missed something, which Thomas did notice...
->
-> [--SNIP--]
->> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
->> index 9a39385..1e0681b 100644
->> --- a/package/nodejs/Config.in
->> +++ b/package/nodejs/Config.in
->> @@ -24,18 +24,23 @@ if BR2_PACKAGE_NODEJS
+>> Hi Thomas,
 >>
->>  choice
->>       prompt "Node.js version"
->> -     default BR2_BR2_PACKAGE_NODEJS_0_10_39
->> +     default BR2_BR2_PACKAGE_NODEJS_0_10_39 if BR2_ARM_CPU_ARMV5
->> +     default BR2_BR2_PACKAGE_NODEJS_0_12_5
->
-> This is OK and must be kept, however...
->
->>       help
->>         Select the version of Node.js you wish to use.
+>> The main thing is this not convenient. I have about 30 packages and we are a
+>> team. I don't want to check after each git pull the packages which have been
+>> modified and call make <pkg>-rebuild for each of them (and be aware about
+>> dependencies, for example calling libraries rebuild before because the
+>> <pkg>-rebuild target doesn't rebuild the dependencies).
 >>
->>  config BR2_BR2_PACKAGE_NODEJS_0_10_39
->>       bool "v0.10.39"
+>> My patch is a quick workaround to do my needs. Moreover, like doug claims,
+>> the patch doesn't work. There is an issue. I will try to find why.
 >>
->> +config BR2_BR2_PACKAGE_NODEJS_0_12_5
->> +     bool "v0.12.5"
+>> If there was a "make rebuild" target and if the "make <pkg>-rebuild" was
+>> able to rebuild all the dependencies too, it will satisfy my needs.
+>>
 >
-> ... why did you drop the dependency on !BR2_ARM_CPU_ARMV5 here?
+> Here is what I have done to support the workflow, I believe, you
+> want.  I don't think... this is something that Buildroot needs to
+> support natively; but, maybe it could/should be documented
+> somewhere.
 >
-> My comment about reworking the choice was only about the default of the
-> choice, to have defaults that are coherent with the dependencies of the
-> options.
+> I create a custom directory structure, let's call it 'mycustom',
+> that mimics Buildroot's.  The mycustom directory contains
+> proprietary bits to be incorporated into the Buildroot environment
+> while keeping them separate from Buildroot.  I set
+> BR2_EXTERNAL=mycustom when executing the initial make to create the
+> output directory and specify the default configuration.
 >
-> We still need to hide 0.12.5 for armv5.
+> <Buildroot>/mycustom/Config.in contains:
+>          comment "MyCustom"
 >
-> Note: we put the dependencies after the prompt, like so:
+>          menu "Libraries"
+>          source "$BR2_EXTERNAL/package/libmycustom/Config.in"
+>          endmenu
 >
->     # 0.12.5 uses VP8 which requires armv6 or above
->     config BR2_BR2_PACKAGE_NODEJS_0_12_5
->         bool "0.12.5"
->         depends on !BR2_ARM_CPU_ARMV5
-
-Woops, well spotted, my mistake.  I'll fix that in a v4 patch set.
-
-Thanks
-
-Martin
-
+>          menu "Applications"
+>          source "$BR2_EXTERNAL/package/mycustomapp/Config.in"
+>          endmenu
+>
+> In <Buildroot>/mycustom/external.mk, I add a mycustom-rebuild target
+> to rebuild all of my custom packages.
+>
+>          mycustom-rebuild:
+>              @ sed -e '1,/#.MyCustom/d' \
+>                    -ne 's/^BR2_PACKAGE_\(.*\)=y/\1/p' \
+>                    $(BR2_CONFIG) | \
+>                      tr '[:upper:]' '[:lower:]' | \
+>                      sed -e 's/_/-/' | \
+>                      while read t; do \
+>                              $(MAKE1) -C $(BASE_DIR) O=$(O) \
+>                                      $${t}-dirclean $${t}-rebuild || exit 1; \
+>                      done
+>              $(MAKE) -C $(BASE_DIR) O=$(O) target-post-image
+>
+> Presently, Buildroot puts all user provided options at the end of
+> BR2_CONFIG so it's sufficient to extract all BR2_PACKAGE_*
+> definitions after the the Config.in comment "# MyCustom".  Each
+> extracted BR2_CONFIG definition becomes the make target to execute
+> after BR2_PACKAGE_ is stripped from the entry, it is changed to
+> lower case, and '_' is changed to '-'.  For example,
+> BR2_PACKAGE_LIBMYCUSTOM is transformed to libmycustom.  libmycustom
+> is then used to create the libmycustom-dirclean and
+> libmycustom-rebuild targets.  Lastly, the target-post-image target
+> is executed to regenerate the root file system(s).
+>
+> With this in place, after a 'git pull', I can simply execute 'make
+> mycustom-rebuild' to only rebuild all of my custom stuff.
+>
+> As you can see there are clearly some personal preferences in the
+> mycustom-rebuild target that others may not want.  This is why I
+> don't think this is something Buildroot needs to support natively.
+> Anyway, maybe this will help you implement the function you want.
 >
 > Regards,
-> Yann E. MORIN.
+> ...doug
 >
->>  endchoice
->>
->>  config BR2_PACKAGE_NODEJS_VERSION_STRING
->>       string
->>       default "0.10.39"       if BR2_BR2_PACKAGE_NODEJS_0_10_39
->> +     default "0.12.5"        if BR2_BR2_PACKAGE_NODEJS_0_12_5
->>
->>  menu "Module Selection"
->>
->> diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
->> index bc1f15f..816d602 100644
->> --- a/package/nodejs/nodejs.hash
->> +++ b/package/nodejs/nodejs.hash
->> @@ -1,2 +1,5 @@
->>  # From upstream URL: http://nodejs.org/dist/v0.10.39/SHASUMS256.txt
->>  sha256       68f8d8f9515c4e77e2a06034b742e19e9848c1fee5bcadedc1d68f3e4302df37  node-v0.10.39.tar.gz
->> +
->> +# From upstream URL: http://nodejs.org/dist/v0.12.5/SHASUMS256.txt
->> +sha256       4bc1e25f4c62ac65324d3cf4aa9de2d801cd708757c3567b6ad2ced7df30cdd2  node-v0.12.5.tar.gz
->> --
->> 2.1.4
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+
+Hi doug,
+
+Thanks for the hint. I will try to do the same thing on my side. But I 
+think the recipe will be different for me. I don't want to rebuild all 
+the packages each time but rebuild only if there is a change in the 
+source code.
+
+Regards,
+Anthony.
