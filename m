@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 2 Jul 2015 22:51:32 +0200
-Subject: [Buildroot] [PATCH] valgrind: install to staging
-In-Reply-To: <1435852333-19317-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1435852333-19317-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150702205131.GE3838@free.fr>
+Date: Thu, 2 Jul 2015 22:55:23 +0200
+Subject: [Buildroot] [PATCH] Disable gcc-4.8.x + binutils-2.25 + MIPS
+ combination
+In-Reply-To: <1435850348-19416-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1435850348-19416-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150702205523.GF3838@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +13,64 @@ To: buildroot@busybox.net
 
 Vicente, All,
 
-On 2015-07-02 17:52 +0200, Vicente Olivert Riera spake thusly:
-> This is necessary for some packages depending on valgrind, such as
-> libdrm which will fail with an error like this one:
+On 2015-07-02 17:19 +0200, Vicente Olivert Riera spake thusly:
+> This combination causes a compilation failure of the host-gcc-final
+> recipe like this one:
 > 
-> checking for VALGRIND... no
-> checking whether to enable Valgrind support... configure: error:
-> Valgrind support required but not present
-> package/pkg-generic.mk:146: recipe for target
-> '/br/output/build/libdrm-2.4.62/.stamp_configured' failed
+> /br/output/host/usr/mips-buildroot-linux-gnu/bin/ld:
+> .libs/gload.o: relocation R_MIPS_HI16 against `__gnu_local_gp' can not
+> be used when making a shared object; recompile with -fPIC
 > 
+> The problem is the file 'libatomic/gload.c' is compiled without -fPIC
+> when using binutils-2.25. All gcc (with libatomic) versions below 4.9.3
+> are affected by this issue.
+> 
+> Here is a summary of affected/unaffected versions in Buildroot:
+> 
+> 4.7.x: unaffected (doesn't have libatomic)
+> 4.8.x: affected
+> 4.9.x: unaffected (we have 4.9.3 which is fixed)
+> 5.1.x: unaffected
+> 
+> The fix can be found here:
+> 
+>   https://github.com/gcc-mirror/gcc/commit/57f5c0954f95cb37f995d60167ddde06c7d6e697
+> 
+> However, given the following reasons...
+> 
+> - Upstream gcc 4.8 branch is closed.
+> - The fix is very hard to backport from 4.9 to 4.8.
+> - This stuff is insanely sensitive and not working at all could be
+>   better than looking like it works but not quite.
+> 
+> ...I think the best choice is to disable that combination in Buildroot.
+
+So do I.
+
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/valgrind/valgrind.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/gcc/Config.in.host | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-> index cfce8da..f8f205e 100644
-> --- a/package/valgrind/valgrind.mk
-> +++ b/package/valgrind/valgrind.mk
-> @@ -11,6 +11,7 @@ VALGRIND_LICENSE = GPLv2 GFDLv1.2
->  VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
->  VALGRIND_CONF_OPTS = --disable-tls
->  VALGRIND_AUTORECONF = YES
-> +VALGRIND_INSTALL_STAGING = YES
+> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+> index 1fc0b83..4501b32 100644
+> --- a/package/gcc/Config.in.host
+> +++ b/package/gcc/Config.in.host
+> @@ -60,6 +60,8 @@ choice
+>  		depends on !BR2_cortex_a12
+>  		# Broken or unsupported PPC cores
+>  		depends on !BR2_powerpc_power8
+> +		# gcc-4.8.x + binutils-2.25 is broken for MIPS
+> +		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && BR2_BINUTILS_VERSION_2_25)
+>  		select BR2_GCC_NEEDS_MPC
+>  		select BR2_GCC_SUPPORTS_GRAPHITE
 >  
->  # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
->  # host tuple to determine whether it's being built for ARMv7 or
 > -- 
 > 2.3.6
 > 
