@@ -1,38 +1,35 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 2 Jul 2015 17:52:13 +0200
-Subject: [Buildroot] [PATCH] valgrind: install to staging
-Message-ID: <1435852333-19317-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Jul 2015 17:59:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-kconfig: define
+ KCONFIG_EDITORS_MAKE_ENV
+In-Reply-To: <1435848100-5762-1-git-send-email-talz@ezchip.com>
+References: <1435848100-5762-1-git-send-email-talz@ezchip.com>
+Message-ID: <20150702175937.4733d060@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is necessary for some packages depending on valgrind, such as
-libdrm which will fail with an error like this one:
+Dear Tal Zilcer,
 
-checking for VALGRIND... no
-checking whether to enable Valgrind support... configure: error:
-Valgrind support required but not present
-package/pkg-generic.mk:146: recipe for target
-'/br/output/build/libdrm-2.4.62/.stamp_configured' failed
+On Thu, 2 Jul 2015 17:41:40 +0300, Tal Zilcer wrote:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/valgrind/valgrind.mk | 1 +
- 1 file changed, 1 insertion(+)
+>  $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): @D=$$($(2)_DIR)
+>  $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_done
+> -	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+> +	$$($(2)_KCONFIG_EDITORS_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
 
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index cfce8da..f8f205e 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -11,6 +11,7 @@ VALGRIND_LICENSE = GPLv2 GFDLv1.2
- VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
- VALGRIND_CONF_OPTS = --disable-tls
- VALGRIND_AUTORECONF = YES
-+VALGRIND_INSTALL_STAGING = YES
- 
- # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
- # host tuple to determine whether it's being built for ARMv7 or
+I actually don't think adding a KCONFIG_EDITORS_MAKE_ENV variable is
+really useful here. Since it's a bunch of host tools, maybe we should
+just:
+
+	$$(HOST_MAKE_ENV) $$(MAKE) -C ...
+
+Best regards,
+
+Thomas
 -- 
-2.3.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
