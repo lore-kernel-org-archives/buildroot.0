@@ -1,59 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jul 2015 11:03:13 +0200
-Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.62
-Message-ID: <20150702090456.0B55C818D7@busybox.osuosl.org>
+Date: Thu, 2 Jul 2015 11:01:55 +0200
+Subject: [Buildroot] [git commit] package/rpi-firmware: add option to
+	install vcdbg
+Message-ID: <20150702090455.D8181818D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da3805186a582fc42ec1b935da0ef87529284c6a
+commit: http://git.buildroot.net/buildroot/commit/?id=d16b32a40164f6bb2a9334ad7dcb6ab8ba95e172
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added support for newly added optional valgrind support:
-http://cgit.freedesktop.org/mesa/drm/commit/?id=47a2de27a0f087908e3063fdd6dfdececd2db75b
+vcdbg is a tool to help debug the communication with the GPU.
+It comes as a binary-only, and in two flavours: one for the hard
+floating point ABI, one for the software floating point ABI.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Unfortunately, we have no source code for that tool, only a binary that
+was dynamically linked with glibc and libraries from rpi-userland.
+
+So, just install that executable, and let's hope there is no symbol
+issue at runtime.
+
+Note: vcdbg needs glibc, threads and !static. Since glibc already
+implies threads and !static, we only need to depend on glibc.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc; Floris Bos <bos@je-eigen-domein.nl>
+Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libdrm/libdrm.hash |    4 ++--
- package/libdrm/libdrm.mk   |    9 ++++++++-
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ package/rpi-firmware/Config.in       |   11 +++++++++++
+ package/rpi-firmware/rpi-firmware.mk |    7 +++++++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 99889ea..05944c5 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/dri-devel/2015-May/082348.html
--sha256	8b549092c8961a393a7e1d9a1bccddcea8e2af67c0d7d7c67babb9fc3b47699c	libdrm-2.4.61.tar.bz2
-+# From http://lists.freedesktop.org/archives/dri-devel/2015-June/085375.html
-+sha256	906c294bdbe1c94c3ca084305d61a6e5a8367f3b4986e6cc13b1e9b3f75931dc	libdrm-2.4.62.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 3c3de1d..4cca645 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index a060b4e..405674f 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -65,4 +65,15 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 	  Say 'y' here if you need to load one or more of the DTB overlays,
+ 	  to support HATs (Hardware Attached on Top, add-on modules).
  
--LIBDRM_VERSION = 2.4.61
-+LIBDRM_VERSION = 2.4.62
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
-@@ -69,6 +69,13 @@ else
- LIBDRM_CONF_OPTS += --disable-udev
- endif
- 
-+ifeq ($(BR2_PACKAGE_VALGRIND),y)
-+LIBDRM_CONF_OPTS += --enable-valgrind
-+LIBDRM_DEPENDENCIES += valgrind
-+else
-+LIBDRM_CONF_OPTS += --disable-valgrind
-+endif
++config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
++	bool "vcdbg"
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_INSTALL_LIBSTDCPP # rpi-userland
++	select BR2_PACKAGE_RPI_USERLAND
++	help
++	  Install vcdbg, to help debug communication with the GPU.
 +
- ifeq ($(BR2_PACKAGE_LIBDRM_INSTALL_TESTS),y)
- LIBDRM_CONF_OPTS += --enable-install-test-programs
++comment "vcdbg needs an (e)glibc toolchain w/ C++"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
++
+ endif # BR2_PACKAGE_RPI_FIRMWARE
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 56d6925..1ef15aa 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -29,6 +29,13 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ endef
  endif
+ 
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
++define RPI_FIRMWARE_INSTALL_TARGET_CMDS
++	$(INSTALL) -d -m 0700 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/bin/vcdbg \
++		$(TARGET_DIR)/usr/sbin/vcdbg
++endef
++endif # INSTALL_VCDBG
++
+ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
