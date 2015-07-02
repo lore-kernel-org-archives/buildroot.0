@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jul 2015 23:43:16 +0200
-Subject: [Buildroot] [git commit] cryptsetup: update homepage link
-Message-ID: <20150702214322.D8B9380084@busybox.osuosl.org>
+Date: Thu, 2 Jul 2015 23:43:29 +0200
+Subject: [Buildroot] [PATCH 1/2] cryptsetup: bump to version 1.6.7
+In-Reply-To: <ebe4bbc5879916055ba594a8db7a47c19f21e80a.1435837854.git.baruch@tkos.co.il>
+References: <ebe4bbc5879916055ba594a8db7a47c19f21e80a.1435837854.git.baruch@tkos.co.il>
+Message-ID: <20150702234329.0d09d496@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e3e0217c1f03e867355e35822251d628247af630
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Baruch Siach,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cryptsetup/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Thu,  2 Jul 2015 14:50:53 +0300, Baruch Siach wrote:
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/cryptsetup/cryptsetup.hash | 2 +-
+>  package/cryptsetup/cryptsetup.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 3d3c47d..13b0184 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -15,7 +15,7 @@ config BR2_PACKAGE_CRYPTSETUP
- 	  This tool helps manipulate dm-crypt and luks partitions for
- 	  on-disk encryption.
- 
--	  https://code.google.com/p/cryptsetup/
-+	  https://gitlab.com/cryptsetup/cryptsetup
- 
- comment "cryptsetup needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
+Both applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
