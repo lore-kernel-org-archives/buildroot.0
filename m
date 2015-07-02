@@ -1,69 +1,76 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  2 Jul 2015 23:26:32 +0200
-Subject: [Buildroot] [PATCH v1] libv4l: fix uclibc-ng configure/compile
-In-Reply-To: <1435872392-21648-1-git-send-email-ps.report@gmx.net>
-References: <1435872392-21648-1-git-send-email-ps.report@gmx.net>
-Message-ID: <1435872392-21648-2-git-send-email-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 2 Jul 2015 23:38:34 +0200
+Subject: [Buildroot] [PATCH 2/2] openssl: always build apps
+In-Reply-To: <20150702232228.0ad1a03b@free-electrons.com>
+References: <1434711274-49716-1-git-send-email-benoit@wsystem.com>
+ <1434711274-49716-2-git-send-email-benoit@wsystem.com>
+ <20150701111411.1dab82cc@free-electrons.com> <55950B29.9090200@wsystem.com>
+ <20150702120402.4e4e3b9d@free-electrons.com> <5595A520.6090903@mind.be>
+ <20150702232228.0ad1a03b@free-electrons.com>
+Message-ID: <5595AF5A.9010500@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With raspberrypi_defconfig:
+On 07/02/15 23:22, Thomas Petazzoni wrote:
+> Arnout,
+> 
+> On Thu, 2 Jul 2015 22:54:56 +0200, Arnout Vandecappelle wrote:
+> 
+>>> We generally try to not clutter menuconfig with too many
+>>> comments/options: we can't make visible in menuconfig every little
+>>> possible dependency. That's why we use a lot of "automatic optional
+>>> dependencies": a package automatically uses another package if it is
+>>> available, without having this dependency visible from a
+>>> menuconfig/Config.in point of view.
+>>
+>>  We (or at least, I) do like to have such a thing mentioned in the help text,
+>> however. The help text does not clutter the menus so there is no reason to be
+>> terse there.
+> 
+> I am perfectly fine with having more details in the Config.in help text.
+> 
+> However, do we really want to explicitly list all automatic optional
+> dependencies in the Config.in help text? I believe it would definitely
+> be hard to maintain. 
 
-  libv4l2rds.c:256:2: error: 'for' loop initial declarations are only allowed in C99 or C11 mode
-    for (int i = 0; i < tuning->station_cnt; i++) {
-    ^
-  libv4l2rds.c:256:2: note: use option -std=c99, -std=gnu99, -std=c11 or -std=gnu11 to compile your code
+ Why is it hard to maintain? When you add an automatic dependency to the .mk
+file, add it to the Config.in as well. No biggie.
 
-From build/libv4l-1.6.2/config.log:
+ That said, I didn't mean that it should necessarily be added for everything.
+But certainly for things that are not immediately obvious. E.g. python support
+obviously requires python, openssl support is also pretty obvious. Although even
+there I wouldn't mind mentioning it in the help text.
 
-configure:4709: checking for .../host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc option to accept ISO C99
-configure:4858: .../host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
-conftest.c:54:9: error: unknown type name 'wchar_t'
-   const wchar_t *name;
+ In this case, on the other hand, it's a tool called 'tsget' that needs perl -
+not so obvious.
 
-The C99 detection problem seems more related to missing wchar_t type support than the compiler option?
+> So the Config.in help text should probably be
+> mostly used for things that aren't clearly visible by reading the .mk
+> file. And automatic optional dependencies are usually pretty explicit
+> by looking at the .mk file.
 
-Adding LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=c99' gives a lot of compile errors like:
+ Ugh, I wouldn't like it if we expect from our users that they not only read all
+the .mk files of the packages they want to use, but also understand what it all
+means.
 
-libv4lconvert.c: In function 'dev_ioctl':
-processing/../libv4lsyscall-priv.h:85:10: error: 'SYS_ioctl' undeclared (first use in this function)
-  syscall(SYS_ioctl, (int)(fd), (unsigned long)(cmd), (void *)(arg))
-          ^
-libv4lconvert.c:43:9: note: in expansion of macro 'SYS_IOCTL'
-  return SYS_IOCTL(fd, cmd, arg);
-         ^
-processing/../libv4lsyscall-priv.h:85:10: note: each undeclared identifier is reported only once for each function it appears in
-  syscall(SYS_ioctl, (int)(fd), (unsigned long)(cmd), (void *)(arg))
-          ^
-libv4lconvert.c:43:9: note: in expansion of macro 'SYS_IOCTL'
-  return SYS_IOCTL(fd, cmd, arg);
-         ^
 
-Adding LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99' solves all configure/compile errors.
+ Regards,
+ Arnout
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Would vote for not applying this patch, maybe theres a better solution...
----
- package/libv4l/libv4l.mk | 3 +++
- 1 file changed, 3 insertions(+)
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index b1c783d..edb2a36 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -11,6 +11,9 @@ LIBV4L_INSTALL_STAGING = YES
- LIBV4L_DEPENDENCIES = host-pkgconf
- LIBV4L_CONF_OPTS = --disable-doxygen-doc
- 
-+# fix uclibc-ng configure/compile
-+LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-+
- # v4l-utils components have different licences, see v4l-utils.spec for details
- LIBV4L_LICENSE = GPLv2+ (utilities), LGPLv2.1+ (libraries)
- LIBV4L_LICENSE_FILES = COPYING COPYING.libv4l lib/libv4l1/libv4l1-kernelcode-license.txt
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
