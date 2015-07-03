@@ -1,43 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 3 Jul 2015 22:24:12 +0200
-Subject: [Buildroot] [PATCH v7 1/1] Added linux drivers backports project
-In-Reply-To: <1435791533-25991-1-git-send-email-petr.vorel@gmail.com>
-References: <1435791533-25991-1-git-send-email-petr.vorel@gmail.com>
-Message-ID: <5596EF6C.1020905@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 3 Jul 2015 22:42:14 +0200
+Subject: [Buildroot] [PATCH] pkg-kconfig: .config target needs to take into
+	account package dependencies
+Message-ID: <1435956134-9543-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/02/15 00:58, Petr Vorel wrote:
-> https://backports.wiki.kernel.org
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
-> TODO: still don't know how to handle dependency on linux .config.
+It is possible that the package's kconfig system needs one of its
+dependencies to be built before. This is for example the case for the
+linux-backports project, which needs a reference to the linux kernel
+configuration.
 
- It took me some time, but I finally understand what the issue is here...
+Therefore, the dependencies of $$($(2)_TARGET_CONFIGURE) should be
+copied as $(2)_DIR/.config's dependencies. The dependency on _PATCH was
+already there (implicitly, through $$($(2)_KCONFIG_FILE)), only the
+dependency on $$($(2)_DEPENDENCIES) should be added.
 
- It's a bug in the kconfig infra. The rule for generating the .config is kind of
-spliced into the the usual configure step of a package. It already has a
-dependency on the patch step, but it's still missing a dependency on the
-dependencies.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/pkg-kconfig.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- I'll cook an untested patch, could you take that up in your series? It will
-allow you to get rid of the _PATCH_DEPENDENCIES.
-
- Regards,
- Arnout
-
-
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index c86c340..6018b25 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -57,6 +57,11 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+ 		fi; \
+ 	done
+ 
++# Generating the .config file is part of the configure step of the package
++# infrastructure, so it should be ordered like it. IOW, it should take over
++# its dependencies.
++$$($(2)_DIR)/.config: | $$($(2)_FINAL_DEPENDENCIES)
++
+ # The specified source configuration file and any additional configuration file
+ # fragments are merged together to .config, after the package has been patched.
+ # Since the file could be a defconfig file it needs to be expanded to a
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.1.4
