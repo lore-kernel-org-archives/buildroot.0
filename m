@@ -1,260 +1,181 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 4 Jul 2015 00:33:40 +0200
-Subject: [Buildroot] [PATCH v7 1/1] Added linux drivers backports project
-In-Reply-To: <1435791533-25991-1-git-send-email-petr.vorel@gmail.com>
-References: <1435791533-25991-1-git-send-email-petr.vorel@gmail.com>
-Message-ID: <20150703223340.GK3652@free.fr>
+From: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
+Date: Sat, 4 Jul 2015 01:44:32 +0200
+Subject: [Buildroot] [PATCH v3 1/2] host-zynq-boot-bin: new package
+In-Reply-To: <20150703215104.GH3652@free.fr>
+References: <1434971728-16094-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
+ <1435063751-27344-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
+ <1435063751-27344-2-git-send-email-xvikto03@stud.fit.vutbr.cz>
+ <20150703173306.GA3652@free.fr> <5596E9E3.2020909@mind.be>
+ <20150703215104.GH3652@free.fr>
+Message-ID: <20150704014432.6f8541ff@jvn>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, All,
+Hello Arnout, Yann,
 
-On 2015-07-02 00:58 +0200, Petr Vorel spake thusly:
-> https://backports.wiki.kernel.org
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I am glad you are interested in this little feature. My original
+goal was to deliver a simple out-of-the-box mechanism to easily
+create a bootable system for Zedboard without any additional
+steps and with the ability to turn it off easily if necessary.
 
-Here's a quick and definitely not thourough review of this patch.
+I do not understand, how should this script be treated as
+a bootloader stuff. I see it just as a helper host tool like the
+uboot-tools are (a common host package). However, uboot-tools
+is integrated quite deeply, it creates uImage (done by Kernel
+build-system) and especially root file-system (done by Buildroot).
+I would expect that zynq-boot-bin.py works in a similar way.
 
-[--SNIP--]
-> diff --git a/package/linux-backports/0001-backports-add-missing-include-for-vfree.patch b/package/linux-backports/0001-backports-add-missing-include-for-vfree.patch
-> new file mode 100644
-> index 0000000..3aee980
-> --- /dev/null
-> +++ b/package/linux-backports/0001-backports-add-missing-include-for-vfree.patch
-> @@ -0,0 +1,26 @@
-> +From e9dadfe5f446c9b2b1563ad50daf3a50b4497726 Mon Sep 17 00:00:00 2001
-> +From: Jonathan Liu <net147@gmail.com>
-> +Date: Fri, 5 Jun 2015 23:06:53 +1000
-> +Subject: [PATCH] backports: add missing include for vfree
+I have no clue about the TARGET_FINALIZE_HOOKS but it sounds
+promising.
 
-Has this patch been pushed upstream?
+What I find quite a good idea is to use a post-<something>
+script. But for that purpose, I thinks a working script in
+the boards/avnet/zedboard exactly for this purpose should be
+provided together with a preset inside the zedboard_defconfig
+to use it as default. This creates an out-of-the-box working
+configuration that is easily customizable. But what about other
+Zynq-based boards (well, there is no one there at the moment,
+but...)? Could they share the same script?
 
-[--SNIP--]
-> diff --git a/package/linux-backports/Config.in b/package/linux-backports/Config.in
-> new file mode 100644
-> index 0000000..4d793b2
-> --- /dev/null
-> +++ b/package/linux-backports/Config.in
-> @@ -0,0 +1,48 @@
-> +comment "linux-backports needs a Linux kernel to be built"
-> +	depends on !BR2_LINUX_KERNEL
-> +
-> +config BR2_PACKAGE_LINUX_BACKPORTS
-> +	bool "linux-backports"
-> +	depends on BR2_LINUX_KERNEL
-> +	help
-> +          The linux-backports package includes many Linux drivers from
-> +          recent kernels, backported to older ones.
-> +
-> +          This version of linux-backports supports kernels starting from 3.0.
-> +
-> +	  https://backports.wiki.kernel.org
-> +
-> +if BR2_PACKAGE_LINUX_BACKPORTS
-> +
-> +choice
-> +	prompt "Linux kernel driver backports configuration"
-> +	default BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
-> +
-> +config BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
-> +	bool "Using a defconfig"
-> +
-> +config BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG
-> +	bool "Using a custom config file"
+Another point that was omitted here (but it is described in the
+readme.txt) is that the SPL searchs for uboot-dtb.img while booting.
+This file is however not installed in the images directory. Instead,
+user gets the u-boot.img that does not work together with the SPL
+(at least for me). This is confusing... First, I do not get the working
+SPL automatically, second, I do not get the right U-Boot image. From
+this point of view, I'd like the original patch-based implementation :).
+Is this also an issue for other boards?
 
-I'm a bit confused. Do you meant to differentiate between a defconfig
-that is bundled in linux-backports, vs. a full .config that is providd
-by the user? Is that all that is supported?
+I am about to:
 
-I would have expected that the user may either:
-  - use a bundled defconfig (or even full .config), or
-  - provide his own defconfig (or full .config),
+* remove the _INSTALL_STAGING, _INSTALL_IMAGES settings,
+* specify the license,
+* put there the EXTRACT_CMDS to avoid failure when trying to extract
+  the zynq-boot-bin.py as an tar archive (is this correct assumption?)
+* put there the INSTALL_CMDS to install the zynq-boot-bin.py into
+  HOST_DIR
 
-like we do for other kconfig packages.
+The last step is not clear to me. I also found a kind of inspiration in
+fs/cpio:
 
-So, the prompts would be:
+ 34 $(BINARIES_DIR)/rootfs.cpio.uboot: $(BINARIES_DIR)/rootfs.cpio host-uboot-tools
+ 35         $(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
+ 36                 -C none -d $<$(ROOTFS_CPIO_COMPRESS_EXT) $@
 
-    choice
-        bool "Linux backports configuration"
+Would it be possible to define similar rules in uboot.mk?
 
-    config BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
-        bool "Using an in-tree defconfig file"
-
-    config BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG
-        bool "Using a custom (def)config file"
-
-    endchoice
-
-Note: this is similar to the variable names in linux/Config.in which are
-probably a bit mis-named, but that's historical. What is important is
-how we use them.
-
-> +endchoice
-> +
-> +config BR2_PACKAGE_LINUX_BACKPORTS_CONFIG_FRAGMENT_FILES
-> +	string "Additional linux-backports configuration fragment files"
-> +	help
-> +	  A space-separated list of configuration fragment files,
-> +	  that will be merged to the main linux-backports configuration file.
-
-Please, put the option for the fragments list after the base files,
-below:
-
-> +config BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG
-> +	string "Defconfig name"
-> +	depends on BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
-> +	help
-> +          Name of the backports defconfig file to use. The defconfig is
-> +          located in defconfigs/ directory in the backports tree.
-> +
-> +config BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE
-> +	string "Configuration file path"
-> +	depends on BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG
-> +	help
-> +	  Path to the backports configuration file
-
-... here.
-
-> +endif
-
-[--SNIP--]
-> diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-> new file mode 100644
-> index 0000000..d45166a
-> --- /dev/null
-> +++ b/package/linux-backports/linux-backports.mk
-> @@ -0,0 +1,64 @@
-> +################################################################################
-> +#
-> +# linux-backports
-> +#
-> +################################################################################
-> +
-> +LINUX_BACKPORTS_VERSION_MAJOR = 4.0.1
-> +LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
-> +LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
-> +LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
-> +
-> +LINUX_BACKPORTS_DEPENDENCIES = linux
-> +# FIXME: does linux extracting, patching, but we need also linux to be configured.
-> +LINUX_BACKPORTS_PATCH_DEPENDENCIES = linux
-
-You can drop the 'FIXME:' and just state:
-
-    # We need linux to be extracted and patch first before we are patched,
-    # but we also need it to be built before we are configured, hence we do
-    # need both dependencies:
-    LINUX_BACKPORTS_PATCH_DEPENDENCIES = linux
-    LINUX_BACKPORTS_DEPENDENCIES = linux
-
-> +LINUX_BACKPORTS_MAKE_OPTS = \
-> +	$(LINUX_MAKE_FLAGS) \
-> +	KLIB_BUILD=$(LINUX_DIR) \
-> +	KLIB=$(TARGET_DIR)
-> +
-> +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
-> +LINUX_BACKPORTS_SOURCE_CONFIG = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
-
-Do not use $(LINUX_BACKPORTS_DIR) but use $(@D) instead.
-
-> +else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
-> +LINUX_BACKPORTS_SOURCE_CONFIG = $(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)
-
-You need to qstrip that one as well.
-
-> +endif
-> +
-> +# backports configure needs a configured kernel
-> +# FIXME: not used as we'd need to assign LINUX_BACKPORTS_SOURCE_CONFIG with :=,
-> +# but then we don't get $(LINUX_BACKPORTS_DIR) evaluated.
-
-Would using $(@D) like I suggest above solve this issue?
-
-> +$(LINUX_BACKPORTS_SOURCE_CONFIG): linux
-> +
-> +define LINUX_BACKPORTS_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) -C $(@D)
-
-Would it work if you were to write (note the added trailing 'modules'):
-
-    $(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
-        -C $(@D) modules
-
-I ask, because I have a pending series that provides an infra for
-building kernel modules:
-    http://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/kernel-modules
-
-and it looks like that would probably help you quite a lot here...
-
-Also, you probably want to use $(LINUX_MAKE_ENV) instead of just
-$(TARGET_MAKE_ENV).
-
-> +endef
-> +
-> +define LINUX_BACKPORTS_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
-
-Ditto $(LINUX_MAKE_ENV).
-
-> +		-C $(LINUX_DIR) M=$(@D) \
-> +		INSTALL_MOD_DIR=backports \
-> +		modules_install
-> +endef
-> +
-> +LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_SOURCE_CONFIG)
-
-Why don't you directly assign to LINUX_BACKPORTS_KCONFIG_FILE without
-using the intermediate LINUX_BACKPORTS_SOURCE_CONFIG ?
-
-> +LINUX_BACKPORTS_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CONFIG_FRAGMENT_FILES))
-> +LINUX_BACKPORTS_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
-> +LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
-> +
-> +$(eval $(kconfig-package))
-> +
-> +# Checks to give errors that the user can understand
-> +ifeq ($(filter source,$(MAKECMDGOALS)),)
-
-We now have a variable that explicitly states whether we are building or
-not:
-
-    ifeq ($(BR_BUILDING),y)
-
-> +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
-> +ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG)),)
-> +$(error No linux-backports defconfig name specified, check your BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG setting)
-> +endif
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
-> +ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)),)
-> +$(error No linux-backports configuration file specified, check your BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE setting)
-> +endif
-> +endif
-> +
-> +endif
-
-When nesting ifeq-blocks, we like having the endif statements remind to
-which ifeq they apply, like so:
-
-    endif # BR_BUILDING
-
-so the file stays readable.
+ $(BINARIES_DIR)/boot.bin: host-zynq-boot-bin
+     python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
+         -u $(@D)/spl/u-boot-spl.bin -o $@
 
 Regards,
-Yann E. MORIN.
+Jan
+
+On Fri, 3 Jul 2015 23:51:04 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+
+> Arnout, Jan, All,
+> 
+> On 2015-07-03 22:00 +0200, Arnout Vandecappelle spake thusly:
+> > On 07/03/15 19:33, Yann E. MORIN wrote:
+> > > On 2015-06-23 14:49 +0200, Jan Viktorin spake thusly:
+> [--SNIP--]
+> > > Since this is a host-only package, you need not specify either;
+> > >   - install_staging already defaults to no,
+> > >   - both are anyway only valid for target packages.
+> > 
+> >  But actually, it's not a host package, it's a target package. Took
+> > me some time to realize that however :-) See below.
+> 
+> Still, I am not sure, see below. ;-)
+> 
+> [--SNIP--]
+> > > That mught be an indication that it should depend on host-python,
+> > > no?
+> > 
+> >  Actually, no, we actually require a system-python to exist. I
+> > think it also needs to be python2 though we don't check for that.
+> > And to be honest, I have no idea why we require it...
+> 
+> I don't know why we require it for packages, but we at least need it
+> for the manual.
+> 
+> I was added way back in 2010 byy Thomas P. to fix #1531.
+> 
+> >  But I certainly wouldn't like to have to build a host-python just
+> > to be able to build the boot loader... So I'm glad there's no
+> > dependency on host-python.
+> 
+> Agreed.
+> 
+> > > Here's what I think should be done:
+> [--SNIP--]
+> 
+> >  That's what Jan originally had, but I told him to do it this
+> > way :-)
+> > 
+> >  You can view zynq-boot-bin as something which really should be
+> > part of uboot. The only point of this "program" is to create the
+> > bootloader. It will never be applied on anything except the
+> > bootloader. It doesn't need any additional configuration or command
+> > line arguments. So it would be quite pointless to burde the user
+> > with writing that stuff in a post-build script.
+> > 
+> >  Perhaps, however, it should go into the boot/ directory instead of
+> > packages. It is, after all, a pre-bootloader, like at91bootstrap.
+> 
+> Right, that would be a better location.
+> 
+> Still, I believe we should handle this tool as a host tool, to support
+> users that build their bootloader outside of Buildroot (we already
+> install similar tools for this reason).
+> 
+> > > Note: that's what we do for the Raspberry Pi, for example, where
+> > > we install the 'mkknlimg' utility in $(HOST_DIR) and tell the
+> > > user how to use it in the board readme file:
+> > 
+> >  I think the same approach could be taken there.
+> 
+> I respectfully disagree. ;-)
+> 
+> rpi-firmware installs a utility to add a header (really, a trailler)
+> to the kernel image. Since the user can build his kernel outside
+> Buildroot, we still want to leave him/her the possibility to tag the
+> kernel properly; hence we install this utility in $(HOST_DIR), either
+> when doing the SDcard manually, or from a post-image script.
+> 
+> I believe we are here in a similar situation with host-zynq-boot-bin.
+> 
+> However, we might be a bit more helpful here, so we have a way to
+> automatically run those commands in a sane, generic way, like we have
+> with TARGET_FINALIZE_HOOKS for target-finalize, but this time for
+> images.
+> 
+> Note: we might _technically_ be able tore-use TARGET_FINALIZE_HOOKS,
+> but I'm a bit uneasy to hijack it to deal with images, when it was
+> meant to deal with the content of $(TARGET_DIR).
+> 
+> > Though I can't say I understand
+> > much of all the hoops you have to jump through to boot an RPi.
+> 
+> Well, it's pretty similar to the zedboard case (from what I see in the
+> zedboard readme):
+>   - a first partition, FAT16 or FAT32, with a bunch of files in there:
+>     - the GPU blob, its config file, the CPU init blob
+>     - the kernel, its command line (in a text file)
+>   - a second partition with the rootfs
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+  Jan Viktorin, PhD student   E-mail: iviktorin at fit.vutbr.cz
+  DCS FIT VUT Brno, L310      Web: http://www.fit.vutbr.cz/~iviktorin
+  Bozetechova 1, 612 66       Phone: +420 54114-1357
+  Brno, Czech Republic
