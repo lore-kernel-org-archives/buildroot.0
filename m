@@ -1,89 +1,70 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 3 Jul 2015 18:47:09 +0200
-Subject: [Buildroot] [PATCH 3/3] qt5quick1, qt5script,
- qt5webkit: tag as deprecated
-In-Reply-To: <563d2a2d-458d-48eb-a9ce-93ff15f4b978@MAIL-SINTERS-01.sinters-int.fr>
-References: <1435908049-11930-1-git-send-email-corjon.j@ecagroup.com>
- <4fef60e5-fbfb-4595-8c48-646c3d00a3d0@MAIL-SINTERS-01.sinters-int.fr>
- <20150703094304.663cee42@free-electrons.com>
- <563d2a2d-458d-48eb-a9ce-93ff15f4b978@MAIL-SINTERS-01.sinters-int.fr>
-Message-ID: <5596BC8D.4020104@mind.be>
+Date: Fri, 3 Jul 2015 19:02:13 +0200
+Subject: [Buildroot] Failed to build gdb on host side
+In-Reply-To: <5596640E.8080604@syscom-instruments.com>
+References: <5596640E.8080604@syscom-instruments.com>
+Message-ID: <5596C015.9070201@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/03/15 10:55, Julien CORJON wrote:
+On 07/03/15 12:29, Viallard Anthony wrote:
+> Hi,
 > 
-> Thomas,
+> I have a problem when I enabled gdb compilation on host side:
 > 
-> Le 03/07/2015 09:43, Thomas Petazzoni a ?crit :
-[snip]
->> However, I'm wondering if we should not simply make them depend on
->> BR2_DEPRECATED_SINCE_2015_08. But that will make them disappear
->> completely by default, unless the user enables BR2_DEPRECATED.
->>
->> Actually, our deprecation/removal process is a bit weird: deprecated
->> should be a smoother thing than removal. But in practice, when we
->> deprecate something by making it 'depends on
->> BR2_DEPRECATED_SINCE_YYYY_MM', it gets automatically removed from your
->> configuration without any notification (unless you enable manually
->> BR2_DEPRECATED, of course). While if we remove it entirely, we add it
->> to Config.in.legacy, and the users upgrading get a clear notification.
->>
->> So users are better notified of removals than deprecations.
->>
->> Arnout, what do you think about this?
+> ----
+> /bin/bash ./libtool --tag=CC   --mode=link
+> /home/avd/wksp/dev/output/host/usr/bin/ccache /usr/bin/gcc -W -Wall
+> -Wstrict-prototypes -Wmissing-prototypes -Wshadow -O2
+> -I/home/avd/wksp/dev/output/host/usr/include  -release `cat libtool-soversion` 
+> -static-libstdc++ -static-libgcc -L/home/avd/wksp/dev/output/host/lib
+> -L/home/avd/wksp/dev/output/host/usr/lib
+> -Wl,-rpath,/home/avd/wksp/dev/output/host/usr/lib -o libbfd.la -rpath
+> /home/avd/wksp/dev/output/host/usr/x86_64-unknown-linux-gnu/arm-buildroot-linux-uclibcgnueabi/lib
+> archive.lo archures.lo bfd.lo bfdio.lo bfdwin.lo cache.lo coff-bfd.lo
+> compress.lo corefile.lo format.lo hash.lo init.lo libbfd.lo linker.lo merge.lo
+> opncls.lo reloc.lo section.lo simple.lo stab-syms.lo stabs.lo syms.lo targets.lo
+> binary.lo ihex.lo srec.lo tekhex.lo verilog.lo `cat ofiles`
+> -L/home/avd/wksp/dev/output/build/host-gdb-7.9/bfd/../libiberty/pic -liberty
 
- Good point indeed. But I don't see a simple solution. We could use the same
-approach as for legacy (selecting a symbol and printing a big fat warning
-comment), but then it's easy for a user to accidentally select one of the
-deprecated options, and that's exactly what we want to avoid.
+ This is where libiberty should be found...
 
- So we'd have to look for things like temporarily enabling
-BR2_DEPRECATED_SINCE_* through the environment when 'make oldconfig' is run, or
-when one of the deprecated packages was selected before you do 'make
-menuconfig', but not when you do 'make menuconfig' from the beginning. It
-quickly becomes pretty dirty... Something for Yann, perhaps :-)
+> -Wl,-lc,--as-needed,-lm,--no-as-needed -ldl -lz -ldl
+> libtool: link: /home/avd/wksp/dev/output/host/usr/bin/ccache /usr/bin/gcc
+> -shared  -fPIC -DPIC  .libs/archive.o .libs/archures.o .libs/bfd.o .libs/bfdio.o
+> .libs/bfdwin.o .libs/cache.o .libs/coff-bfd.o .libs/compress.o .libs/corefile.o
+> .libs/format.o .libs/hash.o .libs/init.o .libs/libbfd.o .libs/linker.o
+> .libs/merge.o .libs/opncls.o .libs/reloc.o .libs/section.o .libs/simple.o
+> .libs/stab-syms.o .libs/stabs.o .libs/syms.o .libs/targets.o .libs/binary.o
+> .libs/ihex.o .libs/srec.o .libs/tekhex.o .libs/verilog.o .libs/elf32-arm.o
+> .libs/elf32.o .libs/elf-nacl.o .libs/elf-vxworks.o .libs/elf.o .libs/elflink.o
+> .libs/elf-attrs.o .libs/elf-strtab.o .libs/elf-eh-frame.o .libs/dwarf1.o
+> .libs/dwarf2.o .libs/elf32-gen.o .libs/plugin.o .libs/cpu-arm.o
+> .libs/cpu-plugin.o .libs/archive64.o -L/home/avd/wksp/dev/output/host/lib
+> -L/home/avd/wksp/dev/output/host/usr/lib
+> -L/home/avd/wksp/dev/output/build/host-gdb-7.9/bfd/../libiberty/pic -liberty -lz
+> -ldl  -Wl,-rpath -Wl,/home/avd/wksp/dev/output/host/usr/lib -Wl,-lc
+> -Wl,--as-needed -Wl,-lm -Wl,--no-as-needed   -Wl,-soname -Wl,libbfd-2.25.51.so
+> -o .libs/libbfd-2.25.51.so
+> /usr/bin/ld: /home/avd/wksp/dev/output/host/usr/lib/libiberty.a(cplus-dem.o):
 
-> 
-> For now Qt tag these 3 modules as deprecated but they did not reach the 
-> end of life.
-> 
-> In my opinion, users who start a new design should be informed that in 
-> the near future these modules will not be supported anymore when user 
-> who need to bump Qt for they existing design (as we do) should be able 
-> to do that without loosing they already existing configuration.
+ ... but instead, it is found in host/usr/lib.
 
- +1 to that. In fact, qt5quick1 and qt5script are both compatibility layers for
-qt4 legacy, just like BR2_PACKAGE_QT_QT3SUPPORT. So they were 'deprecated' from
-the beginning. So instead of (deprecated), perhaps (legacy compatibility) is a
-better tag.
+ That's pretty bad, libiberty should not be installed in the host dir. I also
+can't find any code that does that (nothing passes --enable-install-libiberty
+except the target binutils).
 
- But that doesn't really fit with our rule of thumb that menu entries should be
-just the package name. Therefore, I'm more in favour of moving this stuff in a
-separate area with a comment delimiter as Julien originally proposed. But then
-without the (deprecated) tag.
+ So can you trace back which step of the build installed libiberty in the host
+dir? Perhaps share your defconfig?
 
 
  Regards,
  Arnout
 
-> 
-> For these reasons I don't think we should use 
-> BR2_DEPRECATED_SINC_YYYY_MM neither add them to Config.in.legacy since 
-> this is not a Buildroot issue but a Qt one.
-> 
-> At the end, when Qt will stop provide these module, we should add them 
-> to Config.in.legacy.
-> 
->>
->> Thomas
->>
-> 
-
-
+[snip]
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
