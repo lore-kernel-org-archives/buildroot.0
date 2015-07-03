@@ -1,10 +1,10 @@
 From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-Date: Fri,  3 Jul 2015 15:11:23 +0200
-Subject: [Buildroot] [PATCH 4/7] Add PKG_CONFIG_* variables to help cmake
-	find host-packages
+Date: Fri,  3 Jul 2015 15:11:25 +0200
+Subject: [Buildroot] [PATCH 6/7] Move mysql patches to version specific
+	subdirectory
 In-Reply-To: <1435929086-21205-1-git-send-email-sylvain.raybaud@green-communications.fr>
 References: <1435929086-21205-1-git-send-email-sylvain.raybaud@green-communications.fr>
-Message-ID: <1435929086-21205-5-git-send-email-sylvain.raybaud@green-communications.fr>
+Message-ID: <1435929086-21205-7-git-send-email-sylvain.raybaud@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,49 @@ To: buildroot@busybox.net
 
 Signed-off-by: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
 ---
- package/pkg-cmake.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mysql/{ => 5.1}/0000-ac_cache_check.patch                    | 0
+ package/mysql/{ => 5.1}/0001-configure-ps-cache-check.patch          | 0
+ package/mysql/{ => 5.1}/0002-use-new-readline-iface.patch            | 0
+ package/mysql/{ => 5.1}/0003-ac_stack_direction-is-unset.patch       | 0
+ package/mysql/{ => 5.1}/0004-Fix-gen_lex_hash-execution.patch        | 0
+ package/mysql/{ => 5.1}/0005-bison_3_breaks_mysql_server_build.patch | 0
+ package/mysql/{ => 5.1}/0006-no-force-static-build.patch             | 0
+ 7 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/mysql/{ => 5.1}/0000-ac_cache_check.patch (100%)
+ rename package/mysql/{ => 5.1}/0001-configure-ps-cache-check.patch (100%)
+ rename package/mysql/{ => 5.1}/0002-use-new-readline-iface.patch (100%)
+ rename package/mysql/{ => 5.1}/0003-ac_stack_direction-is-unset.patch (100%)
+ rename package/mysql/{ => 5.1}/0004-Fix-gen_lex_hash-execution.patch (100%)
+ rename package/mysql/{ => 5.1}/0005-bison_3_breaks_mysql_server_build.patch (100%)
+ rename package/mysql/{ => 5.1}/0006-no-force-static-build.patch (100%)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index f17a883..a757a2b 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -111,6 +111,8 @@ define $(2)_CONFIGURE_CMDS
- 	cd $$($$(PKG)_BUILDDIR) && \
- 	rm -f CMakeCache.txt && \
- 	PATH=$$(BR_PATH) \
-+	PKG_CONFIG_PATH='$$(HOST_DIR)/usr/lib/pkgconfig' \
-+	PKG_CONFIG_SYSROOT_DIR='$$(HOST_DIR)' \
- 	$$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
- 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
- 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
+diff --git a/package/mysql/0000-ac_cache_check.patch b/package/mysql/5.1/0000-ac_cache_check.patch
+similarity index 100%
+rename from package/mysql/0000-ac_cache_check.patch
+rename to package/mysql/5.1/0000-ac_cache_check.patch
+diff --git a/package/mysql/0001-configure-ps-cache-check.patch b/package/mysql/5.1/0001-configure-ps-cache-check.patch
+similarity index 100%
+rename from package/mysql/0001-configure-ps-cache-check.patch
+rename to package/mysql/5.1/0001-configure-ps-cache-check.patch
+diff --git a/package/mysql/0002-use-new-readline-iface.patch b/package/mysql/5.1/0002-use-new-readline-iface.patch
+similarity index 100%
+rename from package/mysql/0002-use-new-readline-iface.patch
+rename to package/mysql/5.1/0002-use-new-readline-iface.patch
+diff --git a/package/mysql/0003-ac_stack_direction-is-unset.patch b/package/mysql/5.1/0003-ac_stack_direction-is-unset.patch
+similarity index 100%
+rename from package/mysql/0003-ac_stack_direction-is-unset.patch
+rename to package/mysql/5.1/0003-ac_stack_direction-is-unset.patch
+diff --git a/package/mysql/0004-Fix-gen_lex_hash-execution.patch b/package/mysql/5.1/0004-Fix-gen_lex_hash-execution.patch
+similarity index 100%
+rename from package/mysql/0004-Fix-gen_lex_hash-execution.patch
+rename to package/mysql/5.1/0004-Fix-gen_lex_hash-execution.patch
+diff --git a/package/mysql/0005-bison_3_breaks_mysql_server_build.patch b/package/mysql/5.1/0005-bison_3_breaks_mysql_server_build.patch
+similarity index 100%
+rename from package/mysql/0005-bison_3_breaks_mysql_server_build.patch
+rename to package/mysql/5.1/0005-bison_3_breaks_mysql_server_build.patch
+diff --git a/package/mysql/0006-no-force-static-build.patch b/package/mysql/5.1/0006-no-force-static-build.patch
+similarity index 100%
+rename from package/mysql/0006-no-force-static-build.patch
+rename to package/mysql/5.1/0006-no-force-static-build.patch
 -- 
 1.9.1
