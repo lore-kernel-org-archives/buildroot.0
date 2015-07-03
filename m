@@ -1,69 +1,102 @@
-From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-Date: Fri,  3 Jul 2015 15:11:19 +0200
-Subject: [Buildroot] [PATCH 0/7] Set of patches to add MariaDB galera cluster
-Message-ID: <1435929086-21205-1-git-send-email-sylvain.raybaud@green-communications.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 03 Jul 2015 15:45:19 +0200
+Subject: [Buildroot] [PATCH 1/1] yad: new package
+In-Reply-To: <20150703094910.750481b4@free-electrons.com> (Thomas Petazzoni's
+ message of "Fri, 3 Jul 2015 09:49:10 +0200")
+References: <1435874967-6416-1-git-send-email-james.knight@rockwellcollins.com>
+ <20150703053105.GL2391@tarshish>
+ <20150703094910.750481b4@free-electrons.com>
+Message-ID: <871tgpxsls.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add MariaDB Galera Cluster as an alternative implementation of MySQL, inside package/mysql.
-Also add galera which is needed for running a cluster and check on which galera depends.
-Introduce a few other minor modifications to busybox.config and libaio.mk necessary to make this work.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Sylvain Raybaud (7):
-  Add package check: unit test library
-  Add rule to build host-libaio
-  Add package galera: wsrep provider for mysql and mariadb
-  Add PKG_CONFIG_* variables to help cmake find host-packages
-  Add fancy options to busybox sleep, like float arguments
-  Move mysql patches to version specific subdirectory
-  Propose mariadb galera cluster as an alternative to standard mysql
-    implementation, inside msyql package
+Hi,
 
- package/Config.in                                  |   2 +
- package/busybox/busybox.config                     |   4 +-
- package/check/Config.in                            |   7 +
- package/check/check.hash                           |   2 +
- package/check/check.mk                             |  20 ++
- package/galera/Config.in                           |   9 +
- ...lera-01-fix_sconstruct_for-crosscompiling.patch |  52 +++++
- package/galera/galera.hash                         |   2 +
- package/galera/galera.mk                           |  63 ++++++
- package/libaio/libaio.mk                           |   1 +
- .../mariadb-galera-01-fix_xtradb_cmakelist.patch   |  27 +++
- .../mariadb-galera-02-fix_innodb_cmakelist.patch   | 251 +++++++++++++++++++++
- package/mysql/{ => 5.1}/0000-ac_cache_check.patch  |   0
- .../{ => 5.1}/0001-configure-ps-cache-check.patch  |   0
- .../{ => 5.1}/0002-use-new-readline-iface.patch    |   0
- .../0003-ac_stack_direction-is-unset.patch         |   0
- .../0004-Fix-gen_lex_hash-execution.patch          |   0
- .../0005-bison_3_breaks_mysql_server_build.patch   |   0
- .../{ => 5.1}/0006-no-force-static-build.patch     |   0
- package/mysql/Config.in                            |  43 +++-
- package/mysql/mariadb-galera-cluster.cnf           | 204 +++++++++++++++++
- package/mysql/mysql.hash                           |   2 +
- package/mysql/mysql.mk                             | 216 +++++++++++++++---
- package/pkg-cmake.mk                               |   2 +
- 24 files changed, 869 insertions(+), 38 deletions(-)
- create mode 100644 package/check/Config.in
- create mode 100644 package/check/check.hash
- create mode 100644 package/check/check.mk
- create mode 100644 package/galera/Config.in
- create mode 100644 package/galera/galera-01-fix_sconstruct_for-crosscompiling.patch
- create mode 100644 package/galera/galera.hash
- create mode 100644 package/galera/galera.mk
- create mode 100644 package/mysql/10.0.17/mariadb-galera-01-fix_xtradb_cmakelist.patch
- create mode 100644 package/mysql/10.0.17/mariadb-galera-02-fix_innodb_cmakelist.patch
- rename package/mysql/{ => 5.1}/0000-ac_cache_check.patch (100%)
- rename package/mysql/{ => 5.1}/0001-configure-ps-cache-check.patch (100%)
- rename package/mysql/{ => 5.1}/0002-use-new-readline-iface.patch (100%)
- rename package/mysql/{ => 5.1}/0003-ac_stack_direction-is-unset.patch (100%)
- rename package/mysql/{ => 5.1}/0004-Fix-gen_lex_hash-execution.patch (100%)
- rename package/mysql/{ => 5.1}/0005-bison_3_breaks_mysql_server_build.patch (100%)
- rename package/mysql/{ => 5.1}/0006-no-force-static-build.patch (100%)
- create mode 100644 package/mysql/mariadb-galera-cluster.cnf
+ >> > +
+ >> > +if BR2_PACKAGE_YAD
+ >> > +
+ >> > +config BR2_PACKAGE_YAD_FORCE_LIBGTK2
+ >> > +	bool "Force libgtk2"
+ >> > +	depends on BR2_PACKAGE_LIBGTK2 && BR2_PACKAGE_LIBGTK3
+ >> 
+ >> You need both gtk2 and gtk3?
+
+ > No, I think James idea here is that if the user has gtk2 *or* gtk3
+ > enabled, then we don't need anything special: we'll use either of them.
+
+ > However, if the user has enabled *both* gtk2 and gtk3, then we need to
+ > know which one the user wants to use. This option therefore appears in
+ > such a situation, and allows the user to either opt for gtk3 (option
+ > disabled) or gtk2 (option enabled).
+
+Ok, but that really a common enough situation to add such an option?
+E.G. how often do people have a config where:
+
+- They have enabled BOTH gtk2 and gtk3
+- They are not happy with yad using gtk3
+
+E.G. the Debian package simply uses the gtk3 backend.
+
+If we really want to do it then I think it would be clearer to have
+a choice option, E.G.:
+
+choice
+        prompt "backend to use" if BR2_PACKAGE_LIBGTK2 && BR2_PACKAGE_LIBGTK3
+
+config BR2_PACKAGE_YAD_GTK3
+       depends on BR2_PACKAGE_LIBGTK3
+       prompt "gtk3"
+
+config BR2_PACKAGE_YAD_GTK2
+       depends on BR2_PACKAGE_LIBGTK2
+       prompt "gtk2"
+
+endchoice
+
+ >> > +ifeq ($(BR2_PACKAGE_LIBGTK3)$(BR2_PACKAGE_YAD_FORCE_LIBGTK2),y)
+ >> 
+ >> This condition is true if either gtk3 or gtk2 are selected...
+
+ > No, this condition is true if gtk3 is there *and*
+ > BR2_PACKAGE_YAD_FORCE_LIBGTK2 is disabled, which means that we want to
+ > use gtk3, because we are in one of the two possible situations:
+
+ >  * only gtk3 is enabled -> we want to use it
+
+ >  * both gtk3 and gtk2 are enabled, but since
+ >    BR2_PACKAGE_YAD_FORCE_LIBGTK2 is enabled, it means the user wants to
+ >    use gtk3
+
+For those situations where we want to check for A and !B we often stick
+a dummy character like 'x' in between to make it clearer - E.G.
+
+ifeq ($(BR2_PACKAGE_LIBGTK3)x$(BR2_PACKAGE_YAD_FORCE_LIBGTK2),yx)
+
+git grep ,yx
+package/cairo/cairo.mk:ifeq ($(BR2_PACKAGE_DIRECTFB)x$(BR2_PACKAGE_DIRECTFB_SVG),yx)
+package/ffmpeg/ffmpeg.mk:ifeq ($(BR2_PACKAGE_FFMPEG_GPL)x$(BR2_PACKAGE_FFMPEG_NONFREE),yx)
+package/ipmiutil/ipmiutil.mk:ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
+package/iproute2/iproute2.mk:ifeq ($(BR2_PACKAGE_IPTABLES)x$(BR2_STATIC_LIBS),yx)
+package/libsrtp/libsrtp.mk:ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
+
+A comment explaining this would also be good.
+
+
+ > and then use gtk3 if available, otherwise gtk2 if available. Thanks to
+ > the select, you're sure at least one of the two will be available. The
+ > only thing you give up is that the user cannot select to use gtk2 if he
+ > has both gtk2 and gtk3 in the same system. But:
+
+ > 	1/ situations with both gtk2 and gtk3 are pretty unlikely
+
+ > 	2/ if you have both, why would you *not* want to use gtk3 ?
+
+Indeed.
 
 -- 
-1.9.1
+Bye, Peter Korsgaard
