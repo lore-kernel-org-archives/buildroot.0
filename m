@@ -1,49 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 3 Jul 2015 19:40:05 +0200
-Subject: [Buildroot] [PATCH v3 0/2] Make Buildroot for Zedboard
- independent on Xilinx tools
-In-Reply-To: <20150702144038.6485ec47@pcviktorin.fit.vutbr.cz>
-References: <1434971728-16094-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
- <1435063751-27344-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
- <20150702144038.6485ec47@pcviktorin.fit.vutbr.cz>
-Message-ID: <20150703174005.GB3652@free.fr>
+Date: Fri, 3 Jul 2015 19:56:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtool: disable makeinfo
+In-Reply-To: <e64f1903478b53f185f3bf114f86c46948a31311.1435886073.git.sam.bobroff@au1.ibm.com>
+References: <e64f1903478b53f185f3bf114f86c46948a31311.1435886073.git.sam.bobroff@au1.ibm.com>
+Message-ID: <20150703175603.GC3652@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jan, All,
+Sam, All,
 
-On 2015-07-02 14:40 +0200, Jan Viktorin spake thusly:
-> will be the proposed patchs applied in the near future?
+On 2015-07-03 11:14 +1000, Sam Bobroff spake thusly:
+> host-libtool can fail to build if the host is missing makeinfo, so
+> disable it.
+> 
+> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
 
-Well, we need to review and test them...
-
-We currently have 401 patches pending in our patch queue:
-    https://patchwork.ozlabs.org/project/buildroot/list/
-
-Since there's not many of us doing reviews/tests, it takes time.
-
-If you want to increase the likelyhood your patches are reviewed soon
-(and I've already started), you can help reduce the patch queue:
-
-  - get a patch (not yours), apply it to your Buildroot tree, build a
-    configuration with that patch and test it (as much as you can, at
-    least build-test in various target configurations: arm, mips...
-    LE/BE, glibc/uClibc/musl, internal/external toolchain...) and report
-    your findings to the list
-
-  - get a patch (not yours), look at it, and see if it fits in the
-    Buildroot 'spirit' (code style, mandatory information, licensing...)
-    and report to hte list.
-
-See:
-    http://buildroot.net/downloads/manual/manual.html#_contributing_to_buildroot
-    http://buildroot.net/downloads/manual/manual.html#_reviewing_and_testing_patches
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+> Without this patch, buildroot fails to build host-libtool on my Debian
+> 8 system, as it doesn't have the texinfo package installed.
+> 
+>  package/libtool/libtool.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+> index 28786d2..8688f8b 100644
+> --- a/package/libtool/libtool.mk
+> +++ b/package/libtool/libtool.mk
+> @@ -13,6 +13,7 @@ LIBTOOL_DEPENDENCIES = host-m4
+>  LIBTOOL_LICENSE = GPLv2+
+>  LIBTOOL_LICENSE_FILES = COPYING
+>  
+> +HOST_LIBTOOL_CONF_ENV = MAKEINFO=true
+>  HOST_LIBTOOL_LIBTOOL_PATCH = NO
+>  
+>  # We have a patch that affects libtool.m4, which triggers an autoreconf
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
