@@ -1,65 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jul 2015 10:32:41 +0200
-Subject: [Buildroot] [git commit] Disable gcc-4.8.x + binutils-2.25 + MIPS
-	combination
-Message-ID: <20150703083252.B2AD481908@busybox.osuosl.org>
+Date: Fri, 3 Jul 2015 10:33:06 +0200
+Subject: [Buildroot] [git commit] powerpc: disable binutils 2.24 for little
+	endian
+Message-ID: <20150703083422.4A4AD81859@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2fda0dd7d491e6e926ace1cd09ad2fb241356232
+commit: http://git.buildroot.net/buildroot/commit/?id=e2b99fa1904988e0eeaccd4c98a8e5ec782952f3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This combination causes a compilation failure of the host-gcc-final
-recipe like this one:
+Binutils 2.24 produces broken code when compiling the kernel for
+ppc64le, so prevent this combination. See:
 
-/br/output/host/usr/mips-buildroot-linux-gnu/bin/ld:
-.libs/gload.o: relocation R_MIPS_HI16 against `__gnu_local_gp' can not
-be used when making a shared object; recompile with -fPIC
+https://sourceware.org/ml/binutils/2013-12/msg00200.html
 
-The problem is the file 'libatomic/gload.c' is compiled without -fPIC
-when using binutils-2.25. All gcc (with libatomic) versions below 4.9.3
-are affected by this issue.
+The problem manifests early in the boot process with "Kernel access of
+bad area, sig: 11" in arch_match_cpu_phys_id().
 
-Here is a summary of affected/unaffected versions in Buildroot:
+The fix has been merged upstream as commit
+57fa7b8c7e59e35bced580f9bcb9668af43fdbce, which is available since
+Binutils 2.25.
 
-4.7.x: unaffected (doesn't have libatomic)
-4.8.x: affected
-4.9.x: unaffected (we have 4.9.3 which is fixed)
-5.1.x: unaffected
-
-The fix can be found here:
-
-  https://github.com/gcc-mirror/gcc/commit/57f5c0954f95cb37f995d60167ddde06c7d6e697
-
-However, given the following reasons...
-
-- Upstream gcc 4.8 branch is closed.
-- The fix is very hard to backport from 4.9 to 4.8.
-- This stuff is insanely sensitive and not working at all could be
-  better than looking like it works but not quite.
-
-...I think the best choice is to disable that combination in Buildroot.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/Config.in.host |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/binutils/Config.in.host |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 1fc0b83..4501b32 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -60,6 +60,8 @@ choice
- 		depends on !BR2_cortex_a12
- 		# Broken or unsupported PPC cores
- 		depends on !BR2_powerpc_power8
-+		# gcc-4.8.x + binutils-2.25 is broken for MIPS
-+		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && BR2_BINUTILS_VERSION_2_25)
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 926b3d2..3fe65e0 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -18,7 +18,8 @@ choice
+ 		bool "binutils 2.23.2"
  
+ 	config BR2_BINUTILS_VERSION_2_24
+-		depends on !BR2_nios2 # supported, but broken on Nios-II
++		# supported, but broken on Nios-II and powerpc64le
++		depends on !BR2_nios2 && !BR2_powerpc64le
+ 		bool "binutils 2.24"
+ 
+ 	config BR2_BINUTILS_VERSION_2_25
