@@ -1,70 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 3 Jul 2015 09:26:24 +0200
-Subject: [Buildroot] [PATCH] valgrind: install to staging
-In-Reply-To: <87lhexyatr.fsf@dell.be.48ers.dk>
-References: <1435852333-19317-1-git-send-email-Vincent.Riera@imgtec.com>
- <5595B17C.2070704@mind.be> <87lhexyatr.fsf@dell.be.48ers.dk>
-Message-ID: <55963920.8090909@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 Jul 2015 09:32:39 +0200
+Subject: [Buildroot] [PATCH 2/2] openssl: always build apps
+In-Reply-To: <5595AF5A.9010500@mind.be>
+References: <1434711274-49716-1-git-send-email-benoit@wsystem.com>
+ <1434711274-49716-2-git-send-email-benoit@wsystem.com>
+ <20150701111411.1dab82cc@free-electrons.com>
+ <55950B29.9090200@wsystem.com>
+ <20150702120402.4e4e3b9d@free-electrons.com>
+ <5595A520.6090903@mind.be>
+ <20150702232228.0ad1a03b@free-electrons.com>
+ <5595AF5A.9010500@mind.be>
+Message-ID: <20150703093239.60ff2be3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/03/15 09:11, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Arnout,
+
+On Thu, 2 Jul 2015 23:38:34 +0200, Arnout Vandecappelle wrote:
+
+> > However, do we really want to explicitly list all automatic optional
+> > dependencies in the Config.in help text? I believe it would definitely
+> > be hard to maintain. 
 > 
-> Hi,
+>  Why is it hard to maintain? When you add an automatic dependency to the .mk
+> file, add it to the Config.in as well. No biggie.
+
+Well, just another thing to keep in sync. If we were to do that, then we
+could just as well not do any automatic optional dependency, and always
+have a Config.in sub-option to enable the dependency.
+
+>  That said, I didn't mean that it should necessarily be added for everything.
+> But certainly for things that are not immediately obvious. E.g. python support
+> obviously requires python, openssl support is also pretty obvious. Although even
+> there I wouldn't mind mentioning it in the help text.
 > 
->>> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
->  >> index cfce8da..f8f205e 100644
->  >> --- a/package/valgrind/valgrind.mk
->  >> +++ b/package/valgrind/valgrind.mk
->  >> @@ -11,6 +11,7 @@ VALGRIND_LICENSE = GPLv2 GFDLv1.2
->  >> VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
->  >> VALGRIND_CONF_OPTS = --disable-tls
->  >> VALGRIND_AUTORECONF = YES
->  >> +VALGRIND_INSTALL_STAGING = YES
+>  In this case, on the other hand, it's a tool called 'tsget' that needs perl -
+> not so obvious.
+
+True.
+
+> > So the Config.in help text should probably be
+> > mostly used for things that aren't clearly visible by reading the .mk
+> > file. And automatic optional dependencies are usually pretty explicit
+> > by looking at the .mk file.
 > 
->  >  I wonder, are there going to be a lot of packages that will autodetect valgrind
->  > presence and will now start linking with it?
-> 
-> Do programs need to link against valgrind? I thought it only provided a
-> header with some magic macros that somehow would direct valgrind to
-> behave differently, but didn't do anything when not running through
-> valgrind?
+>  Ugh, I wouldn't like it if we expect from our users that they not only read all
+> the .mk files of the packages they want to use, but also understand what it all
+> means.
 
- I'm not altogether sure, but I thought there were extra functions you could
-call when running through valgrind (these functions are in fact inline and
-detect whether you're running under valgrind or not). But you can only use these
-functions when valgrind headers are available, so a program that wants to use
-them will be slightly different when valgrind headers are available.
+But in practice, it's very much the case today, due to these automatic
+optional dependency handling that we use.
 
- The problem I'm worried about is reproducible builds, of course. When valgrind
-happens to be built earlier than your program, it will be different than when
-the program is built first.
+Best regards,
 
- Of course, Fabio's per-package staging patch series (which I really should
-review...) will fix all that!
-
-> In any case, if the user has enabled valgrind, then he/she presumably
-> wants to enable valgrind support in all applicable packages, but we
-> indeed will need to add valgrind as an optional dependency of those.
-> 
-> I don't know how common it is to have explicit valgrind support though,
-> I guess only a few packages have it.
-
- Probably, yes. But one or two, or a few dozen? That's a big difference...
-Perhaps someone who has all packages extracted could grep for valgrind in them?
-
- Regards,
- Arnout
-
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
