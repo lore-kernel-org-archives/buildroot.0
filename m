@@ -1,63 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jul 2015 09:43:04 +0200
-Subject: [Buildroot] [PATCH 3/3] qt5quick1, qt5script,
- qt5webkit: tag as deprecated
-In-Reply-To: <4fef60e5-fbfb-4595-8c48-646c3d00a3d0@MAIL-SINTERS-01.sinters-int.fr>
-References: <1435908049-11930-1-git-send-email-corjon.j@ecagroup.com>
- <4fef60e5-fbfb-4595-8c48-646c3d00a3d0@MAIL-SINTERS-01.sinters-int.fr>
-Message-ID: <20150703094304.663cee42@free-electrons.com>
+Date: Fri, 3 Jul 2015 09:49:10 +0200
+Subject: [Buildroot] [PATCH 1/1] yad: new package
+In-Reply-To: <20150703053105.GL2391@tarshish>
+References: <1435874967-6416-1-git-send-email-james.knight@rockwellcollins.com>
+ <20150703053105.GL2391@tarshish>
+Message-ID: <20150703094910.750481b4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien,
+Dear Baruch Siach,
 
-On Fri, 3 Jul 2015 07:20:54 +0000, Julien CORJON wrote:
+On Fri, 3 Jul 2015 08:31:05 +0300, Baruch Siach wrote:
 
-> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-> index e8ec7d9..49e3450 100644
-> --- a/package/qt5/Config.in
-> +++ b/package/qt5/Config.in
-> @@ -36,15 +36,16 @@ source "package/qt5/qt5enginio/Config.in"
->  source "package/qt5/qt5graphicaleffects/Config.in"
->  source "package/qt5/qt5imageformats/Config.in"
->  source "package/qt5/qt5multimedia/Config.in"
-> -source "package/qt5/qt5quick1/Config.in"
->  source "package/qt5/qt5quickcontrols/Config.in"
-> -source "package/qt5/qt5script/Config.in"
->  source "package/qt5/qt5sensors/Config.in"
->  source "package/qt5/qt5serialport/Config.in"
->  source "package/qt5/qt5svg/Config.in"
-> -source "package/qt5/qt5webkit/Config.in"
-> -source "package/qt5/qt5webkit-examples/Config.in"
->  source "package/qt5/qt5websockets/Config.in"
->  source "package/qt5/qt5x11extras/Config.in"
->  source "package/qt5/qt5xmlpatterns/Config.in"
-> +comment "Depracated Qt modules"
+> > +
+> > +if BR2_PACKAGE_YAD
+> > +
+> > +config BR2_PACKAGE_YAD_FORCE_LIBGTK2
+> > +	bool "Force libgtk2"
+> > +	depends on BR2_PACKAGE_LIBGTK2 && BR2_PACKAGE_LIBGTK3
+> 
+> You need both gtk2 and gtk3?
 
-Deprecated
+No, I think James idea here is that if the user has gtk2 *or* gtk3
+enabled, then we don't need anything special: we'll use either of them.
 
-but I don't think it's really worth to have them in a separate part of
-the menu, since all of them already have a "(deprecated)" indication in
-their prompt.
+However, if the user has enabled *both* gtk2 and gtk3, then we need to
+know which one the user wants to use. This option therefore appears in
+such a situation, and allows the user to either opt for gtk3 (option
+disabled) or gtk2 (option enabled).
 
-However, I'm wondering if we should not simply make them depend on
-BR2_DEPRECATED_SINCE_2015_08. But that will make them disappear
-completely by default, unless the user enables BR2_DEPRECATED.
+> > diff --git a/package/yad/yad.hash b/package/yad/yad.hash
+> > new file mode 100644
+> > index 0000000..b86b815
+> > --- /dev/null
+> > +++ b/package/yad/yad.hash
+> > @@ -0,0 +1,2 @@
+> > +# Locally computed
+> > +sha256 c7b79ff8189222a642e90052590e3ceb6c3d70623346096c1987f695ebf694b1 yad-0.28.1.tar.xz
+> > diff --git a/package/yad/yad.mk b/package/yad/yad.mk
+> > new file mode 100644
+> > index 0000000..630d3b3
+> > --- /dev/null
+> > +++ b/package/yad/yad.mk
+> > @@ -0,0 +1,24 @@
+> > +################################################################################
+> > +#
+> > +# yad
+> > +#
+> > +################################################################################
+> > +
+> > +YAD_VERSION = 0.28.1
+> > +YAD_SOURCE = yad-$(YAD_VERSION).tar.xz
+> > +YAD_SITE = http://sourceforge.net/projects/yad-dialog/files
+> > +YAD_LICENSE = GPLv3
+> > +YAD_LICENSE_FILES = COPYING
+> > +YAD_DEPENDENCIES = host-intltool host-pkgconf libglib2
+> > +
+> > +YAD_CONF_OPTS = --enable-html=no
+> > +
+> > +ifeq ($(BR2_PACKAGE_LIBGTK3)$(BR2_PACKAGE_YAD_FORCE_LIBGTK2),y)
+> 
+> This condition is true if either gtk3 or gtk2 are selected...
 
-Actually, our deprecation/removal process is a bit weird: deprecated
-should be a smoother thing than removal. But in practice, when we
-deprecate something by making it 'depends on
-BR2_DEPRECATED_SINCE_YYYY_MM', it gets automatically removed from your
-configuration without any notification (unless you enable manually
-BR2_DEPRECATED, of course). While if we remove it entirely, we add it
-to Config.in.legacy, and the users upgrading get a clear notification.
+No, this condition is true if gtk3 is there *and*
+BR2_PACKAGE_YAD_FORCE_LIBGTK2 is disabled, which means that we want to
+use gtk3, because we are in one of the two possible situations:
 
-So users are better notified of removals than deprecations.
+ * only gtk3 is enabled -> we want to use it
 
-Arnout, what do you think about this?
+ * both gtk3 and gtk2 are enabled, but since
+   BR2_PACKAGE_YAD_FORCE_LIBGTK2 is enabled, it means the user wants to
+   use gtk3
+
+Since there is no way for BR2_PACKAGE_YAD_FORCE_LIBGTK2 to be true
+without BR2_PACKAGE_LIBGTK3 being true, it works fine.
+
+But I agree it's a bit tricky. James, what do you think instead to have
+a simpler (though admittedly somewhat less flexible) solution, as
+proposed by Baruch:
+
+	select BR2_PACKAGE_LIBGTK3 if !BR2_PACKAGE_LIBGTK2
+
+and then use gtk3 if available, otherwise gtk2 if available. Thanks to
+the select, you're sure at least one of the two will be available. The
+only thing you give up is that the user cannot select to use gtk2 if he
+has both gtk2 and gtk3 in the same system. But:
+
+	1/ situations with both gtk2 and gtk3 are pretty unlikely
+
+	2/ if you have both, why would you *not* want to use gtk3 ?
+
+Thanks,
 
 Thomas
 -- 
