@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Jul 2015 11:12:39 +0200
-Subject: [Buildroot] [PATCH 5/7] Add fancy options to busybox sleep,
- like float arguments
-In-Reply-To: <1435929086-21205-6-git-send-email-sylvain.raybaud@green-communications.fr>
+Date: Sat, 4 Jul 2015 11:16:51 +0200
+Subject: [Buildroot] [PATCH 0/7] Set of patches to add MariaDB galera
+ cluster
+In-Reply-To: <1435929086-21205-1-git-send-email-sylvain.raybaud@green-communications.fr>
 References: <1435929086-21205-1-git-send-email-sylvain.raybaud@green-communications.fr>
- <1435929086-21205-6-git-send-email-sylvain.raybaud@green-communications.fr>
-Message-ID: <20150704111239.7de95201@free-electrons.com>
+Message-ID: <20150704111651.3a50f30d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +13,33 @@ To: buildroot@busybox.net
 
 Dear Sylvain Raybaud,
 
-On Fri,  3 Jul 2015 15:11:24 +0200, Sylvain Raybaud wrote:
-> Signed-off-by: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-> ---
->  package/busybox/busybox.config | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-> index 9d930d1..8d1d80a 100644
-> --- a/package/busybox/busybox.config
-> +++ b/package/busybox/busybox.config
-> @@ -273,8 +273,8 @@ CONFIG_SHA256SUM=y
->  CONFIG_SHA512SUM=y
->  CONFIG_SHA3SUM=y
->  CONFIG_SLEEP=y
-> -# CONFIG_FEATURE_FANCY_SLEEP is not set
-> -# CONFIG_FEATURE_FLOAT_SLEEP is not set
-> +CONFIG_FEATURE_FANCY_SLEEP=y
-> +CONFIG_FEATURE_FLOAT_SLEEP=y
->  CONFIG_SORT=y
->  CONFIG_FEATURE_SORT_BIG=y
->  # CONFIG_SPLIT is not set
+On Fri,  3 Jul 2015 15:11:19 +0200, Sylvain Raybaud wrote:
 
-Can you include in the commit information about the size different of
-the resulting Busybox binary before/after this patch?
+> Sylvain Raybaud (7):
+>   Add package check: unit test library
+>   Add rule to build host-libaio
+>   Add package galera: wsrep provider for mysql and mariadb
+>   Add PKG_CONFIG_* variables to help cmake find host-packages
+>   Add fancy options to busybox sleep, like float arguments
+>   Move mysql patches to version specific subdirectory
+>   Propose mariadb galera cluster as an alternative to standard mysql
+>     implementation, inside msyql package
 
-Thanks a lot!
+For the commit title, we try to follow a convention of using:
+
+	<package>: <what happens>
+
+So your commit titles should rather be something like:
+
+	check: new package
+	libaio: add host variant
+	galera: new package
+	pkg-cmake: add PKG_CONFIG_* variables to help cmake find host packages
+	busybox: adjust configuration to add fancy options to the sleep applet
+	mysql: move patches into a version-specific subdirectory
+	mysql: add mariadb variant
+
+Thanks,
 
 Thomas
 -- 
