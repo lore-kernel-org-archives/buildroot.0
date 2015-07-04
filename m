@@ -1,64 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Jul 2015 16:07:16 +0200
-Subject: [Buildroot] [PATCH v3 1/2] host-zynq-boot-bin: new package
-In-Reply-To: <1435063751-27344-2-git-send-email-xvikto03@stud.fit.vutbr.cz>
-References: <1434971728-16094-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
- <1435063751-27344-1-git-send-email-xvikto03@stud.fit.vutbr.cz>
- <1435063751-27344-2-git-send-email-xvikto03@stud.fit.vutbr.cz>
-Message-ID: <20150704160716.347e3e35@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat,  4 Jul 2015 11:12:44 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{10,14}.x series
+Message-ID: <1436019164-11414-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jan Viktorin,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, 23 Jun 2015 14:49:10 +0200, Jan Viktorin wrote:
-> From: Jan Viktorin <viktorin@rehivetech.com>
-> 
-> The package creates file images/boot.bin to boot
-> Xilinx Zynq based boards. It might not work with
-> U-Boot older then 2015.07.
-> 
-> The script zynq-boot-bin.py is contained in the
-> Xilinx repository of U-Boot (it is not in upstream).
-> 
-> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
-
-After reading the discussion with Arnout and Yann, here is what I'd
-personally prefer to see for this:
-
- * A host-zynq-boot-bin package, which only downloads and installs the
-   Python script to $(HOST_DIR)/usr/bin. If the script is Python 2 only
-   then you must make it depend on host-python, because the system
-   Python can be either Python 2 or 3. If however, the script is Python
-   2 and Python 3 compatible, there is no need to add a host-python
-   dependency, because we can use the system provided Python
-   interpreter.
-
- * One of the two following solutions:
-
-   - An extension of the U-Boot Config.in + uboot.mk to optionally
-     generated a Zynq image. It would add host-zynq-boot-bin in the
-     dependencies of U-Boot, and call the Python script at the right
-     time. Something along the lines of:
-
-ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
-define UBOOT_GENERATE_ZYNQ_IMAGE
-	$(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-..py -o $(BINARIES_DIR)/...
-endef
-UBOOT_DEPENDENCIES += host-zynq-boot-bin
-UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_GENERATE_ZYNQ_IMAGE
-endif
-
-   - Just not do anything special in U-Boot, and add an entry in
-     menuconfig to enable the host-zynq-boot-bin package, and in your
-     board configuration, write a post-build script that generates the
-     final image.
-
-Thomas
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index eee3876..9846f37 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -209,11 +209,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.108"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.82"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.83"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.44"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.46"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.47"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.3.6
