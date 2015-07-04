@@ -1,46 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Jul 2015 14:58:49 +0200
-Subject: [Buildroot] [git commit] polarssl: security bump to version 1.2.14
-Message-ID: <20150704125859.2A8E8800C2@busybox.osuosl.org>
+Date: Sat, 4 Jul 2015 14:58:36 +0200
+Subject: [Buildroot] [git commit] harfbuzz: bump to version 0.9.41
+Message-ID: <20150704125859.19FBD80796@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f162e9661d90facc07f9778fd23f0aa7e7275925
+commit: http://git.buildroot.net/buildroot/commit/?id=ed10829e3336420608232b10b8021c735f37be74
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes one remotely-triggerable issue that was found by the Codenomicon
-Defensics tool, one potential remote crash and countermeasures against
-the "Lucky 13 strikes back" cache-based attack.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/polarssl/polarssl.hash |    4 ++--
- package/polarssl/polarssl.mk   |    2 +-
+ package/harfbuzz/harfbuzz.hash |    4 ++--
+ package/harfbuzz/harfbuzz.mk   |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/polarssl/polarssl.hash b/package/polarssl/polarssl.hash
-index d68185b..e7883fd 100644
---- a/package/polarssl/polarssl.hash
-+++ b/package/polarssl/polarssl.hash
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 131e8d3..26f4688 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
 @@ -1,2 +1,2 @@
--# From https://polarssl.org/tech-updates/releases/polarssl-1.2.13-released
--sha256	62f44f2a9f39b5cefb229e5dd2644ca20ead477cb1843d6ff30671624315b021	polarssl-1.2.13-gpl.tgz
-+# From https://polarssl.org/tech-updates/releases/polarssl-1.2.14-released
-+sha256	d7cbd8314aa3a5441f6282d13d07df610f49b4bc678088b04188adf093d17d37	polarssl-1.2.14-gpl.tgz
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-index ebd0651..289a28d 100644
---- a/package/polarssl/polarssl.mk
-+++ b/package/polarssl/polarssl.mk
-@@ -5,7 +5,7 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-0.9.40.tar.bz2.sha256
+-sha256	1771d53583be6d91ca961854b2a24fb239ef0545eed221ae3349abae0ab8321f	harfbuzz-0.9.40.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-0.9.41.tar.bz2.sha256
++sha256	d81aa53d0c02b437beeaac159d7fc16394d676bbce0860fb6f6a10b587dc057c	harfbuzz-0.9.41.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 9cfd613..0adfb53 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- POLARSSL_SITE = https://tls.mbed.org/code/releases
--POLARSSL_VERSION = 1.2.13
-+POLARSSL_VERSION = 1.2.14
- POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
- POLARSSL_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_POLARSSL_PROGRAMS),ON,OFF)
+-HARFBUZZ_VERSION = 0.9.40
++HARFBUZZ_VERSION = 0.9.41
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
