@@ -1,12 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 4 Jul 2015 20:25:10 +0200
-Subject: [Buildroot] [PATCH 1/7] Add package check: unit test library
-In-Reply-To: <20150704110832.739ea438@free-electrons.com>
-References: <1435929086-21205-1-git-send-email-sylvain.raybaud@green-communications.fr>
- <1435929086-21205-2-git-send-email-sylvain.raybaud@green-communications.fr>
- <20150703183433.GD3652@free.fr>
- <20150704110832.739ea438@free-electrons.com>
-Message-ID: <20150704182510.GA3634@free.fr>
+Date: Sat, 4 Jul 2015 20:26:06 +0200
+Subject: [Buildroot] [PATCH] system: allow/disallow root login,
+ accept encoded passwords
+In-Reply-To: <20150704140819.207a544f@free-electrons.com>
+References: <1435867205-27764-1-git-send-email-yann.morin.1998@free.fr>
+ <20150704140819.207a544f@free-electrons.com>
+Message-ID: <20150704182605.GB3634@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,27 +14,25 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2015-07-04 11:08 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 3 Jul 2015 20:34:34 +0200, Yann E. MORIN wrote:
-> > > --- /dev/null
-> > > +++ b/package/check/Config.in
-> > > @@ -0,0 +1,7 @@
-> > > +config BR2_PACKAGE_HOST_CHECK
-> > > +	bool "host check"
+On 2015-07-04 14:08 +0200, Thomas Petazzoni spake thusly:
+> On Thu,  2 Jul 2015 22:00:05 +0200, Yann E. MORIN wrote:
+> > From: Lorenzo Catucci <lorenzo@sancho.ccd.uniroma2.it>
 > > 
-> > No, this is not 'host check', this is just 'check'.
+> > Currently, there are only two possibilities regarding the root account:
+> >   - it is enabled with no password (the default)
+> >   - it is enabled, using a clear-text, user-provided password
 > > 
-> > This location is not about the host packages, but about the target
-> > packages.
+> > This is deemed insufficient in many cases, especially when the .config
+> > file has to be published (e.g. for the GPL compliance, or any other
+> > reason.).
 > > 
-> > Besides, nothing in your series depends on host-check.
-> 
-> See PATCH 3: there is check in GALERA_DEPENDENCIES, and there is a
-> host-galera package with no explicit HOST_GALERA_DEPENDENCIES. So
-> host-check is automatically part of HOST_GALERA_DEPENDENCIES.
+> > Fix that in two ways:
+[--SNIP--]
+> Applied, thanks. This is typically the kind of patch for which if we
+> had a test infrastructure in place, I would request to have some
+> additional tests in the test infra.
 
-Ah, right. I saw the dependency on check, but did not think about the
-automatically-inherited host dependency.
+Yes, sure.
 
 Regards,
 Yann E. MORIN.
