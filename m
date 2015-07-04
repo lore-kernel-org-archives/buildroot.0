@@ -1,33 +1,42 @@
-From: Mike <mikez@OpenPlayer.org>
-Date: Sat, 4 Jul 2015 14:01:42 -0500
-Subject: [Buildroot] Hash checking infrastructure
-Message-ID: <20150704140142.3aa5c982@core2quad.morethan.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat,  4 Jul 2015 21:06:54 +0200
+Subject: [Buildroot] [PATCH v7 0/7] OpenCV bump
+Message-ID: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A small nit about how the hash checking is
-working (or in special cases, not working):
+Hi all,
 
-Use case:
+Here is yet another (and hopefully the last) iteration for the bump of
+OpenCV package, and related features/packages.
 
-When using a package source directory override,
-the usual version number field is replaced with
-the string 'custom'.
+Patches 1 and 2 update gstreamer support.
+Patches 3 to 6 update GUI toolkit support.
+Patch 7 fixes reverse dependency (vlc).
 
-If the package being over-ridden has a hash file
-in its Buildroot configuration directory,
-the hash checker attempts to check the:
-<package name>-custom-<archive type> in the 
-download directory.
+Regards,
 
-Reference section 8.11.6:
-"... will no longer attempt to download, extract 
-and patch the package."
+Samuel Martin (7):
+  package/opencv: add a choice for selecting gstreamer support
+  package/opencv: add gstreamer-1.x support
+  package/opencv: add a choice for selecting the gui toolkit
+  package/opencv: add qt5 support
+  package/opencv: add gtk3 support
+  package/opencv: add opengl support
+  package/vlc: add opencv support
 
-I think the behavior should also include skipping
-the hash check.
+ package/opencv/Config.in                           | 162 +++++++++++++++++----
+ package/opencv/opencv.mk                           |  42 +++++-
+ ...opencv_wrapper-use-opencv2-style-includes.patch |  36 +++++
+ ...cv_example-add-missing-include-statements.patch |  29 ++++
+ package/vlc/Config.in                              |   2 +
+ package/vlc/vlc.mk                                 |   8 +-
+ 6 files changed, 244 insertions(+), 35 deletions(-)
+ create mode 100644 package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
+ create mode 100644 package/vlc/0009-opencv_example-add-missing-include-statements.patch
 
-Mike
+--
+2.4.5
