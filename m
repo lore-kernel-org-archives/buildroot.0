@@ -1,145 +1,96 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  4 Jul 2015 21:06:58 +0200
-Subject: [Buildroot] [PATCH v7 4/7] package/opencv: add qt5 support
+Date: Sat,  4 Jul 2015 21:06:59 +0200
+Subject: [Buildroot] [PATCH v7 5/7] package/opencv: add gtk3 support
 In-Reply-To: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
 References: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1436036821-10073-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <1436036821-10073-6-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Starting with the 2.4.6 release, OpenCV supports both Qt4 and Qt5 as GUI
-toolkit, but only one can be enabled at the same time.
-
-Since Buildroot does not support Qt4/Qt5 co-existence, we make the Qt4
-knob depend on BR2_PACKAGE_QT5.
-
-Note that we usually use 'select ...' to express the dependencies
-between packages, but in this case, we cannot since the Qt4/Qt5
-co-existence exclusion is not handled by a simple choice, but by some
-extra dependencies in the choice entries. This makes impossible using
-'select ...' for the Qt support knob without triggering a circular
-dependency at the kconfig level.
-
-Besides, we already use 'depends on ...' to express the dependencies
-with some "big" packages (like xorg or libgtk2). qt or qt5* packages
-are fairly big. So, I don't think it will hurt that much to use a
-'depends on ...' statement in this case.
+Fully rework the GTK support in OpenCV because it now supports gtk-2 and
+gtk-3 (but only one at the time).
+Note that, in the build-system, the gtk support is only available when
+Qt support is disabled; so make sure the menuconfig reflects this.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
 changes v6->v7:
-- fix depends on statements and comments (Yann)
+- update A/R/T tags
+- rebase
 
 changes v5->v6:
-- bury BR2_avr32 remains (Yann)
-- move knob in a choice (Yann)
-- reword commit log
+- update a/r/t tags
+- remove unneeded "default ..." (Yann)
 
 changes v4->v5:
-- rebase
-
-changes v3->v4:
-- rebase
-- rename _OPT -> _OPTS options
-- rework qt backend selection (Yann)
-
-changes v2->v3:
-- rebase
-- remove duplicate qt/qt5 dependencies (Yann)
-- add missing 'depends on' to the comment about qt4
-
-changes v1->v2:
-- rebase
-- update threads support dependency for qt5
+- new patch
 ---
- package/opencv/Config.in | 31 +++++++++++++++++++++++++------
+ package/opencv/Config.in | 16 ++++++++++++++++
  package/opencv/opencv.mk | 11 +++++++++--
- 2 files changed, 34 insertions(+), 8 deletions(-)
+ 2 files changed, 25 insertions(+), 2 deletions(-)
 
 diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 9479b35..7bd11cf 100644
+index 7bd11cf..e54d436 100644
 --- a/package/opencv/Config.in
 +++ b/package/opencv/Config.in
-@@ -60,6 +60,7 @@ choice
- 
- 	  The best toolkit to work with OpenCV are, in decreasing order of
+@@ -62,6 +62,7 @@ choice
  	  preference by the OpenCV build system):
-+	  - Qt5
+ 	  - Qt5
  	  - Qt4
++	  - gtk3
  	  - gtk2
  
-@@ -90,18 +91,36 @@ comment "gtk2 needs X.org and a toolchain w/ wchar, threads, C++"
+ 	  Note that, whatever you choose here will be used by OpenCV, even
+@@ -89,6 +90,21 @@ comment "gtk2 needs X.org and a toolchain w/ wchar, threads, C++"
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_INSTALL_LIBSTDCPP
  
++config BR2_PACKAGE_OPENCV_WITH_GTK3
++	bool "gtk3"
++	depends on BR2_ARCH_HAS_ATOMICS # libgtk3 -> cairo
++	depends on BR2_USE_MMU # libgtk3 -> libglib2
++	depends on BR2_USE_WCHAR # libgtk3 -> libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk3 -> libglib2
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_LIBGTK3
++
++comment "gtk3 needs a toolchain w/ wchar, threads, C++"
++	depends on BR2_USE_MMU # libgtk3 -> glib2
++	depends on BR2_ARCH_HAS_ATOMICS # libgtk3 -> cairo
++	depends on !(BR2_USE_WCHAR || BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_INSTALL_LIBSTDCPP)
++
  config BR2_PACKAGE_OPENCV_WITH_QT
  	bool "qt4"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_MMU # qt
--	select BR2_PACKAGE_QT
-+	depends on BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT_STL
- 	select BR2_PACKAGE_QT_GUI_MODULE
- 	select BR2_PACKAGE_QT_TEST
- 	help
--	  Use Qt with QtTest module and STL support
-+	  Use Qt4 with QtTest and QtGui modules and STL support, as GUI toolkit.
-+
-+# no need for a comment about qt availability WRT the toolchain dependencies
-+# because they are included in the opencv's ones, so already met.
- 
--comment "qt4 needs a toolchain w/ C++"
-+comment "qt4 support needs qt"
- 	depends on BR2_USE_MMU # qt
--	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
-+
-+config BR2_PACKAGE_OPENCV_WITH_QT5
-+	bool "qt5"
-+	depends on BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_CONCURRENT
-+	select BR2_PACKAGE_QT5BASE_GUI
-+	select BR2_PACKAGE_QT5BASE_WIDGETS
-+	help
-+	  Use Qt5 with base, concurrent, test, gui and widgets components, as GUI
-+	  toolkit.
-+
-+# no need for a comment about qt5 availability WRT the toolchain dependencies
-+# because they are included in the opencv's ones, so already met.
-+
-+comment "qt5 support needs qt5"
-+	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
- 
- endchoice
- 
+ 	depends on BR2_PACKAGE_QT
 diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 6b1a139..79cf110 100644
+index 79cf110..986e7b4 100644
 --- a/package/opencv/opencv.mk
 +++ b/package/opencv/opencv.mk
-@@ -266,11 +266,18 @@ else
- OPENCV_CONF_OPTS += -DWITH_PNG=OFF
+@@ -236,11 +236,18 @@ OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON -DWITH_GSTREAMER_0_10=OFF
+ OPENCV_DEPENDENCIES += gstreamer1 gst1-plugins-base
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT)$(BR2_PACKAGE_OPENCV_WITH_QT5),)
-+OPENCV_CONF_OPTS += -DWITH_QT=OFF
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK)$(BR2_PACKAGE_OPENCV_WITH_GTK3),)
++OPENCV_CONF_OPTS += -DWITH_GTK=OFF -DWITH_GTK_2_X=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT),y)
- OPENCV_CONF_OPTS += -DWITH_QT=4
- OPENCV_DEPENDENCIES += qt
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK),y)
+ OPENCV_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=ON
+ OPENCV_DEPENDENCIES += libgtk2
 -else
--OPENCV_CONF_OPTS += -DWITH_QT=OFF
+-OPENCV_CONF_OPTS += -DWITH_GTK=OFF
 +endif
 +
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT5),y)
-+OPENCV_CONF_OPTS += -DWITH_QT=5
-+OPENCV_DEPENDENCIES += qt5base
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK3),y)
++OPENCV_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=OFF
++OPENCV_DEPENDENCIES += libgtk3
  endif
  
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_TIFF),y)
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_JASPER),y)
 -- 
 2.4.5
