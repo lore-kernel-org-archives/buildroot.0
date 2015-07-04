@@ -1,76 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Jul 2015 15:12:16 +0200
-Subject: [Buildroot] [PATCH v5 1/2] packages: fix and improve support
- for top-level parallel make
-In-Reply-To: <1435738247-9015-2-git-send-email-fabio.porcedda@gmail.com>
-References: <1435738247-9015-1-git-send-email-fabio.porcedda@gmail.com>
- <1435738247-9015-2-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150704151216.6b1ba10d@free-electrons.com>
+Date: Sat, 4 Jul 2015 15:21:33 +0200
+Subject: [Buildroot] [git commit] pkg-luarocks: fix top-level parallel
+	makefile support
+Message-ID: <20150704132150.68C4B80762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+commit: http://git.buildroot.net/buildroot/commit/?id=22b327fc743b48a33aec0a9190bd67118641b294
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  1 Jul 2015 10:10:46 +0200, Fabio Porcedda wrote:
-> The boost and jack2 packages fail to build when PARALLEL_JOBS is empty
-> so instead of using an empty PARALLEL_JOBS don't use it in the MAKE
-> variable when top-level parallel make is being used.
-> 
-> To simplify the use of top-level parallel make, check the MAKEFLAGS
-> variable to know automatically if the -j option is being used, also use
-> the "=" operator instead of the ":=" operator because the MAKEFLAGS
-> variable can be checked only in a "recursively expanded variable".
-> The "override" keyword must be used in order to change the automatic
-> variable "MAKE".
-> 
-> When the top-parallel make is being used the sub-make are called without
-> specifying the "-j" option in order to let GNU make share the job slots
-> specified in the top make. This is done because GNU make is able
-> to share the job slots available between each instance of make so if you
-> want to increase the number of jobs you just need to increase the <jobs>
-> value in the top make -j<jobs> command.
-> 
-> If we specify the -j<jobs> option in each instance of make, it is less
-> efficient, e.g. in a processor with 8 cores we specify -j9 in each instance:
-> the number of processes goes up to 81 because each sub-make can execute
-> 9 processes. The excessive number of processes is not a good thing
-> because in my tests even -j16 is slower than -j9.
-> Instead if we don't specify the -j<jobs> option in the sub-make, the top
-> make share the job slots automatically between each instance, so the
-> number of process in this examples goes up to 9 that is faster than
-> using up to 81 processes.
-> 
-> e.g. when the -j3 option is specified only in the top make:
-> 
-> possible state n. 1:
-> process 1 - <packagea>-build
-> process 2 - <packagea>-build
-> process 3 - <packagea>-build
-> 
-> possible state n. 2:
-> process 1 - <packagea>-extract
-> process 2 - <packageb>-configure
-> process 3 - <packagec>-build
-> 
-> possible state n. 3:
-> process 1 - <packagea>-build make -j1
-> process 2 - <packageb>-build make -j1
-> process 3 - <packagec>-build make -j1
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  Makefile            | 4 ++--
->  package/Makefile.in | 3 ++-
->  2 files changed, 4 insertions(+), 3 deletions(-)
+In the *-install-target phase the manifest file is being updated, if multiply packages try to update it they fail.
 
-Applied, thanks.
+To avoid multiple access to the manifest file use flock to sync
+multiple luarocks packages.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+e.g. installing three luarocks packages:
+make lua-cjson-build lua-coat-build lua-coatpersistent-build
+make lua-cjson lua-coat lua-coatpersistent -j
+
+Fix error:
+Updating manifest for /home/tetsuya/buildroot/br2/output/target/usr/lib/luarocks/rocks
+No existing manifest. Attempting to rebuild...
+
+Error: rock_manifest file not found for lua-coat 0.9.1-1 - not a LuaRocks 2 tree?
+
+[Thomas: get rid of LUAROCKS_RUN, and use LUAROCKS_RUN_ENV +
+LUAROCKS_RUN_CMD everywhere.]
+
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/luarocks/luarocks.mk |    4 ++--
+ package/pkg-luarocks.mk      |    6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 2b6c975..ccbaaf7 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -53,8 +53,8 @@ endef
+ 
+ $(eval $(host-generic-package))
+ 
+-LUAROCKS_RUN = LUA_PATH="$(HOST_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua" \
+-	$(LUA_RUN) $(HOST_DIR)/usr/bin/luarocks
++LUAROCKS_RUN_ENV = LUA_PATH="$(HOST_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua"
++LUAROCKS_RUN_CMD = $(LUA_RUN) $(HOST_DIR)/usr/bin/luarocks
+ 
+ define LUAROCKS_FINALIZE_TARGET
+ 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
+diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+index 83f338e..da5c912 100644
+--- a/package/pkg-luarocks.mk
++++ b/package/pkg-luarocks.mk
+@@ -49,7 +49,7 @@ $(2)_DEPENDENCIES	+= host-luarocks luainterpreter
+ ifndef $(2)_EXTRACT_CMDS
+ define $(2)_EXTRACT_CMDS
+ 	cd $$($(2)_DIR)/.. && \
+-		$$(LUAROCKS_RUN) unpack --force $$(DL_DIR)/$$($(2)_SOURCE)
++		$$(LUAROCKS_RUN_ENV) $$(LUAROCKS_RUN_CMD) unpack --force $$(DL_DIR)/$$($(2)_SOURCE)
+ endef
+ endif
+ 
+@@ -58,8 +58,8 @@ endif
+ #
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+-	cd $$($(2)_SRCDIR) && \
+-		$$(LUAROCKS_RUN) make --keep $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPTS)
++	cd $$($(2)_SRCDIR) && $$(LUAROCKS_RUN_ENV) flock $$(TARGET_DIR) \
++		$$(LUAROCKS_RUN_CMD) make --keep $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPTS)
+ endef
+ endif
+ 
