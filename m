@@ -1,48 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Jul 2015 11:16:51 +0200
-Subject: [Buildroot] [PATCH 0/7] Set of patches to add MariaDB galera
- cluster
-In-Reply-To: <1435929086-21205-1-git-send-email-sylvain.raybaud@green-communications.fr>
-References: <1435929086-21205-1-git-send-email-sylvain.raybaud@green-communications.fr>
-Message-ID: <20150704111651.3a50f30d@free-electrons.com>
+Date: Sat, 4 Jul 2015 12:35:16 +0200
+Subject: [Buildroot] [git commit] libv4l: bump version to 1.6.3
+Message-ID: <20150704103554.8ACFD80DB6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sylvain Raybaud,
+commit: http://git.buildroot.net/buildroot/commit/?id=948cbd345db1b0d995810d8acee32f21972717ad
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  3 Jul 2015 15:11:19 +0200, Sylvain Raybaud wrote:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libv4l/libv4l.hash |    2 +-
+ package/libv4l/libv4l.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Sylvain Raybaud (7):
->   Add package check: unit test library
->   Add rule to build host-libaio
->   Add package galera: wsrep provider for mysql and mariadb
->   Add PKG_CONFIG_* variables to help cmake find host-packages
->   Add fancy options to busybox sleep, like float arguments
->   Move mysql patches to version specific subdirectory
->   Propose mariadb galera cluster as an alternative to standard mysql
->     implementation, inside msyql package
-
-For the commit title, we try to follow a convention of using:
-
-	<package>: <what happens>
-
-So your commit titles should rather be something like:
-
-	check: new package
-	libaio: add host variant
-	galera: new package
-	pkg-cmake: add PKG_CONFIG_* variables to help cmake find host packages
-	busybox: adjust configuration to add fancy options to the sleep applet
-	mysql: move patches into a version-specific subdirectory
-	mysql: add mariadb variant
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
+index 609cfbc..3371d34 100644
+--- a/package/libv4l/libv4l.hash
++++ b/package/libv4l/libv4l.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 d3d6eb1f0204fb11f3d318bfca35d5f73cc077f88fac7665a47856a16496be7d  v4l-utils-1.6.2.tar.bz2
++sha256 164abf5c1befcd27e8e6ef824a82d4015bdfb5d99ae82daa00e77d895ff9864c  v4l-utils-1.6.3.tar.bz2
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 94c7031..b1c783d 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBV4L_VERSION = 1.6.2
++LIBV4L_VERSION = 1.6.3
+ LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
+ LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils
+ LIBV4L_INSTALL_STAGING = YES
