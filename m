@@ -1,154 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Jul 2015 12:46:43 +0200
-Subject: [Buildroot] [git commit] system: allow/disallow root login,
-	accept encoded passwords
-Message-ID: <20150704120235.F242480008@busybox.osuosl.org>
+Date: Sat, 4 Jul 2015 14:08:19 +0200
+Subject: [Buildroot] [PATCH] system: allow/disallow root login,
+ accept encoded passwords
+In-Reply-To: <1435867205-27764-1-git-send-email-yann.morin.1998@free.fr>
+References: <1435867205-27764-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150704140819.207a544f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=18fa4a32a67372aa8f3949b5273d7b43dd4ad4f9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Currently, there are only two possibilities regarding the root account:
-  - it is enabled with no password (the default)
-  - it is enabled, using a clear-text, user-provided password
+On Thu,  2 Jul 2015 22:00:05 +0200, Yann E. MORIN wrote:
+> From: Lorenzo Catucci <lorenzo@sancho.ccd.uniroma2.it>
+> 
+> Currently, there are only two possibilities regarding the root account:
+>   - it is enabled with no password (the default)
+>   - it is enabled, using a clear-text, user-provided password
+> 
+> This is deemed insufficient in many cases, especially when the .config
+> file has to be published (e.g. for the GPL compliance, or any other
+> reason.).
+> 
+> Fix that in two ways:
+> 
+>   - add a boolean option that allows/disallows root login altogether,
+>     which defaults to 'y' to keep backward compatibility;
+> 
+>   - accept already-encoded passwords, which we recognise as starting
+>     with either of $1$, $5$ or $6$ (resp. for md5, sha256 or sha512).
+> 
+> Signed-off-by: Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
+> [yann.morin.1998 at free.fr:
+>   - don't add a choice to select between clear-text/encoded password,
+>     use a single prompt;
+>   - differentiate in the password hook itself;
+>   - rewrite parts of the help entry;
+>   - rewrite and expand the commit log
+> ]
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Tested-by: "Lorenzo M. Catucci" <lorenzo@sancho.ccd.uniroma2.it>
+> Acked-by: "Lorenzo M. Catucci" <lorenzo@sancho.ccd.uniroma2.it>
+> Tested-by: Gergely Imreh <imrehg@gmail.com>
+> 
+> ---
+> Changes v6 -> v7:
+>   - expand help entry, clarify prompt  (Arnout, Lorenzo)
+>   - only depend on host-mkpasswd when needed  (Arnout, Lorenzo)
 
-This is deemed insufficient in many cases, especially when the .config
-file has to be published (e.g. for the GPL compliance, or any other
-reason.).
+Applied, thanks. This is typically the kind of patch for which if we
+had a test infrastructure in place, I would request to have some
+additional tests in the test infra.
 
-Fix that in two ways:
-
-  - add a boolean option that allows/disallows root login altogether,
-    which defaults to 'y' to keep backward compatibility;
-
-  - accept already-encoded passwords, which we recognise as starting
-    with either of $1$, $5$ or $6$ (resp. for md5, sha256 or sha512).
-
-Signed-off-by: Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
-[yann.morin.1998 at free.fr:
-  - don't add a choice to select between clear-text/encoded password,
-    use a single prompt;
-  - differentiate in the password hook itself;
-  - rewrite parts of the help entry;
-  - rewrite and expand the commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: "Lorenzo M. Catucci" <lorenzo@sancho.ccd.uniroma2.it>
-Acked-by: "Lorenzo M. Catucci" <lorenzo@sancho.ccd.uniroma2.it>
-Tested-by: Gergely Imreh <imrehg@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- system/Config.in |   35 ++++++++++++++++++++++++++---------
- system/system.mk |   27 ++++++++++++++++++---------
- 2 files changed, 44 insertions(+), 18 deletions(-)
-
-diff --git a/system/Config.in b/system/Config.in
-index 15f0515..b72aa17 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -176,26 +176,43 @@ endif
- 
- if BR2_ROOTFS_SKELETON_DEFAULT
- 
-+config BR2_TARGET_ENABLE_ROOT_LOGIN
-+	bool "Enable root login with password"
-+	default y
-+	help
-+	  Allow root to log in with a password.
-+
-+	  If not enabled, root will not be able to log in with a password.
-+	  However, if you have an ssh server and you add an ssh key, you
-+	  can still allow root to log in. Alternatively, you can use sudo
-+	  to become root.
-+
- config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	string "Root password"
- 	default ""
-+	depends on BR2_TARGET_ENABLE_ROOT_LOGIN
- 	help
--	  Set the initial root password (in clear). It will be md5-encrypted.
-+	  Set the initial root password.
- 
- 	  If set to empty (the default), then no root password will be set,
- 	  and root will need no password to log in.
- 
--	  WARNING! WARNING!
--	  Although pretty strong, MD5 is now an old hash function, and
--	  suffers from some weaknesses, which makes it susceptible to attacks.
--	  It is showing its age, so this root password should not be trusted
--	  to properly secure any product that can be shipped to the wide,
--	  hostile world.
-+	  If the password starts with any of $1$, $5$ or $6$, it is considered
-+	  to be already crypt-encoded with respectively md5, sha256 or sha512.
-+	  Any other value is taken to be a clear-text value, and is crypt-encoded
-+	  as per the "Passwords encoding" scheme, above.
-+
-+	  Note: "$" signs in the hashed password must be doubled. For example,
-+	  if the hashed password is "$1$longsalt$v35DIIeMo4yUfI23yditq0",
-+	  then you must enter it as "$$1$$longsalt$$v35DIIeMo4yUfI23yditq0"
-+	  (this is necessary otherwise make would attempt to interpret the $
-+	  as a variable expansion).
- 
- 	  WARNING! WARNING!
--	  The password appears in clear in the .config file, and may appear
-+	  The password appears as-is in the .config file, and may appear
- 	  in the build log! Avoid using a valuable password if either the
--	  .config file or the build log may be distributed!
-+	  .config file or the build log may be distributed, or at the
-+	  very least use a strong cryptographic hash for your password!
- 
- choice
- 	bool "/bin/sh"
-diff --git a/system/system.mk b/system/system.mk
-index c95e436..2794667 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -34,10 +34,6 @@ endef
- TARGET_FINALIZE_HOOKS += SYSTEM_ISSUE
- endif
- 
--ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
--PACKAGES += host-mkpasswd
--endif
--
- define SET_NETWORK_LOCALHOST
- 	( \
- 		echo "# interface file auto-generated by buildroot"; \
-@@ -69,12 +65,25 @@ TARGET_FINALIZE_HOOKS += SET_NETWORK
- 
- ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
- 
--define SYSTEM_ROOT_PASSWD
--	[ -n "$(TARGET_GENERIC_ROOT_PASSWD)" ] && \
--		TARGET_GENERIC_ROOT_PASSWD_HASH=$$($(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)"); \
--	$(SED) "s,^root:[^:]*:,root:$$TARGET_GENERIC_ROOT_PASSWD_HASH:," $(TARGET_DIR)/etc/shadow
-+ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
-+ifeq ($(TARGET_GENERIC_ROOT_PASSWD),)
-+SYSTEM_ROOT_PASSWORD =
-+else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(TARGET_GENERIC_ROOT_PASSWD)),)
-+SYSTEM_ROOT_PASSWORD = $(TARGET_GENERIC_ROOT_PASSWD)
-+else
-+PACKAGES += host-mkpasswd
-+# This variable will only be evaluated in the finalize stage, so we can
-+# be sure that host-mkpasswd will have already been built by that time.
-+SYSTEM_ROOT_PASSWORD = $(shell $(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)")
-+endif
-+else # !BR2_TARGET_ENABLE_ROOT_LOGIN
-+SYSTEM_ROOT_PASSWORD = *
-+endif
-+
-+define SYSTEM_SET_ROOT_PASSWD
-+	$(SED) 's,^root:[^:]*:,root:$(SYSTEM_ROOT_PASSWORD):,' $(TARGET_DIR)/etc/shadow
- endef
--TARGET_FINALIZE_HOOKS += SYSTEM_ROOT_PASSWD
-+TARGET_FINALIZE_HOOKS += SYSTEM_SET_ROOT_PASSWD
- 
- ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
- define SYSTEM_BIN_SH
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
