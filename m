@@ -1,154 +1,77 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  4 Jul 2015 21:07:01 +0200
-Subject: [Buildroot] [PATCH v7 7/7] package/vlc: add opencv support
-In-Reply-To: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
-References: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1436036821-10073-8-git-send-email-s.martin49@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 4 Jul 2015 23:47:34 +0200
+Subject: [Buildroot] Hash checking infrastructure
+In-Reply-To: <20150704140142.3aa5c982@core2quad.morethan.org>
+References: <20150704140142.3aa5c982@core2quad.morethan.org>
+Message-ID: <20150704214734.GC3634@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change adds 2 patches (backported from upstream) to vlc fixing the
-build against opencv2 APIs.
-This allows to select the minimal set of opencv modules when opencv
-support is enabled.
+Mike, All,
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 2015-07-04 14:01 -0500, Mike spake thusly:
+> A small nit about how the hash checking is
+> working (or in special cases, not working):
+> 
+> Use case:
+> 
+> When using a package source directory override,
+> the usual version number field is replaced with
+> the string 'custom'.
+> 
+> If the package being over-ridden has a hash file
+> in its Buildroot configuration directory,
+> the hash checker attempts to check the:
+> <package name>-custom-<archive type> in the 
+> download directory.
 
----
-changes v5->v6:
-- update a/r/t tags
-- add backport url (Yann)
+I'm a bit surprised of this result. I just tried here with an override
+srcdir or busybox, and I don't see anything related to checking a hash,
+with this defconfig:
 
-changes v4->v5:
-- new patch
----
- ...opencv_wrapper-use-opencv2-style-includes.patch | 36 ++++++++++++++++++++++
- ...cv_example-add-missing-include-statements.patch | 29 +++++++++++++++++
- package/vlc/Config.in                              |  2 ++
- package/vlc/vlc.mk                                 |  8 ++++-
- 4 files changed, 74 insertions(+), 1 deletion(-)
- create mode 100644 package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
- create mode 100644 package/vlc/0009-opencv_example-add-missing-include-statements.patch
+    BR2_x86_i686=y
+    BR2_TOOLCHAIN_EXTERNAL=y
 
-diff --git a/package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch b/package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
-new file mode 100644
-index 0000000..0ce0206
---- /dev/null
-+++ b/package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
-@@ -0,0 +1,36 @@
-+Backport from: https://git.videolan.org/?p=vlc.git;a=commit;h=cc236e4652255902f2c2cee3b18f83367f35a8c7
-+
-+From cc236e4652255902f2c2cee3b18f83367f35a8c7 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Sun, 24 May 2015 14:30:09 +0200
-+Subject: [PATCH 8/9] opencv_wrapper: use opencv2-style includes
-+
-+If old opencv1-style legacy include directory is available, this change
-+becomes purely cosmetic (maybe will compile a bit faster).
-+It becomes an FTBFS fix when opencv1-style include directory is missing
-+(i.e. from opencv-3.0).
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+Signed-off-by: Jean-Baptiste Kempf <jb@videolan.org>
-+---
-+ modules/video_filter/opencv_wrapper.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/modules/video_filter/opencv_wrapper.c b/modules/video_filter/opencv_wrapper.c
-+index e36e1a5..5d74241 100644
-+--- a/modules/video_filter/opencv_wrapper.c
-++++ b/modules/video_filter/opencv_wrapper.c
-+@@ -39,8 +39,8 @@
-+ #include <vlc_image.h>
-+ #include "filter_picture.h"
-+ 
-+-#include <cxcore.h>
-+-#include <cv.h>
-++#include <opencv2/core/core_c.h>
-++#include <opencv2/core/types_c.h>
-+ 
-+ /*****************************************************************************
-+  * Local prototypes
-+-- 
-+2.4.2
-+
-diff --git a/package/vlc/0009-opencv_example-add-missing-include-statements.patch b/package/vlc/0009-opencv_example-add-missing-include-statements.patch
-new file mode 100644
-index 0000000..7b7f727
---- /dev/null
-+++ b/package/vlc/0009-opencv_example-add-missing-include-statements.patch
-@@ -0,0 +1,29 @@
-+Backport from: https://git.videolan.org/?p=vlc.git;a=commit;h=b82416d7000a993b33e903095a590fe32212a85e
-+
-+From b82416d7000a993b33e903095a590fe32212a85e Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Sun, 24 May 2015 14:30:10 +0200
-+Subject: [PATCH 9/9] opencv_example: add missing #include statements
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+Signed-off-by: Jean-Baptiste Kempf <jb@videolan.org>
-+---
-+ modules/video_filter/opencv_example.cpp | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/modules/video_filter/opencv_example.cpp b/modules/video_filter/opencv_example.cpp
-+index ae3af05..998f286 100644
-+--- a/modules/video_filter/opencv_example.cpp
-++++ b/modules/video_filter/opencv_example.cpp
-+@@ -41,6 +41,8 @@
-+ 
-+ #include <opencv2/core/core_c.h>
-+ #include <opencv2/core/core.hpp>
-++#include <opencv2/imgproc/imgproc_c.h>
-++#include <opencv2/imgproc/imgproc.hpp>
-+ #include <opencv2/objdetect/objdetect.hpp>
-+ 
-+ /*****************************************************************************
-+-- 
-+2.4.2
-+
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index b030a56..471f4a7 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -11,6 +11,8 @@ config BR2_PACKAGE_VLC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
- 	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC if BR2_PACKAGE_OPENCV
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT if BR2_PACKAGE_OPENCV
- 	help
- 	  VLC is a free and open source cross-platform multimedia player
- 	  and framework that plays most multimedia files as well as DVD,
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 4ef69aa..a553648 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -44,7 +44,6 @@ VLC_CONF_OPTS += \
- 	--disable-projectm \
- 	--disable-vsxu \
- 	--disable-mtp \
--	--disable-opencv \
- 	--disable-mmal-codec \
- 	--disable-mmal-vout \
- 	--disable-dvdnav \
-@@ -148,6 +147,13 @@ else
- VLC_CONF_OPTS += --disable-gles2
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENCV),y)
-+VLC_CONF_OPTS += --enable-opencv
-+VLC_DEPENDENCIES += opencv
-+else
-+VLC_CONF_OPTS += --disable-opencv
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPUS),y)
- VLC_CONF_OPTS += --enable-opus
- VLC_DEPENDENCIES += libvorbis opus
+and this local.mk:
+
+    BUSYBOX_OVERRIDE_SRCDIR=/home/ymorin/dev/buildroot/foo/busybox
+
+and here's the output of 'make busybox':
+
+    >>> busybox custom Syncing from source dir /home/ymorin/dev/buildroot/foo/busybox
+    rsync -au --exclude .svn --exclude .git --exclude .hg --exclude .bzr
+    --exclude CVS /home/ymorin/dev/buildroot/foo/busybox/
+    /home/ymorin/dev/buildroot/O/build/busybox-custom
+
+So, no, there's no message about checking any hash...
+
+In fact, I can't even see how we could check a hash in such a case, as
+checking the hash is directly done by our download wrapper, in
+support/download/dl-wrapper, which does not get called for packages that
+are overriden.
+
+Can you provide a .config and a local.mk that exhibit this behaviour?
+
+> Reference section 8.11.6:
+> "... will no longer attempt to download, extract 
+> and patch the package."
+> 
+> I think the behavior should also include skipping
+> the hash check.
+
+As far as I can see, that's already the case. Maybe we can add that in
+the manual if that's what you're worried about. Care to send a patch?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.4.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
