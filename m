@@ -1,41 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Jul 2015 14:56:14 +0200
-Subject: [Buildroot] [v4 1/4] package/nodejs: Add node.js v0.12.5 and
- set as the default version
-In-Reply-To: <1435830207-16664-1-git-send-email-martin@barkynet.com>
-References: <1435830207-16664-1-git-send-email-martin@barkynet.com>
-Message-ID: <20150704145614.4a4626ac@free-electrons.com>
+Date: Sat, 4 Jul 2015 14:57:17 +0200
+Subject: [Buildroot] [git commit] isl: bump to version 0.14.1
+Message-ID: <20150704125726.D9ABD7FE00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+commit: http://git.buildroot.net/buildroot/commit/?id=6b50da9ac44d89e751f9da6ff4317adf12be2fe7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  2 Jul 2015 10:43:24 +0100, Martin Bark wrote:
-> The version of the V8 JavaScript engine used by node.js v0.12.5 requires
-> at least an ARMv6 architecture with VFPv2.  For this reason v0.10.39
-> remains the default for ARMv5 targets, all other targets now default to
-> v0.12.5.
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> 
-> ---
-> Changes v3 -> v4
->  - Added back depends on !BR2_ARM_CPU_ARMV5 that was removed by mistake
->    (Suggested by Yann E. MORIN)
+Also add hash file.
 
-All four patches applied, thanks!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/isl/isl.hash |    2 ++
+ package/isl/isl.mk   |    6 +++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-For reference, I've tested by adding the "learnyournode" module, which
-thanks to your patch 2/4 now installs the command in /usr/bin, which
-allows to run it transparently.
-
-Thanks to Yann for the review/comments!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/isl/isl.hash b/package/isl/isl.hash
+new file mode 100644
+index 0000000..e2c14ad
+--- /dev/null
++++ b/package/isl/isl.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	8882c9e36549fc757efa267706a9af733bb8d7fe3905cbfde43e17a89eea4675	isl-0.14.1.tar.xz
+diff --git a/package/isl/isl.mk b/package/isl/isl.mk
+index 55cff9d..bb79039 100644
+--- a/package/isl/isl.mk
++++ b/package/isl/isl.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-# The latest 0.13 version is not yet compatible with cloog 0.18.2, so
++# The latest 0.15 version is not yet compatible with cloog 0.18.3, so
+ # bumping isl is not possible until a new version of cloog is
+ # published.
+-ISL_VERSION = 0.12.2
+-ISL_SOURCE = isl-$(ISL_VERSION).tar.bz2
++ISL_VERSION = 0.14.1
++ISL_SOURCE = isl-$(ISL_VERSION).tar.xz
+ ISL_SITE = http://isl.gforge.inria.fr
+ ISL_LICENSE = MIT
+ ISL_LICENSE_FILES = LICENSE
