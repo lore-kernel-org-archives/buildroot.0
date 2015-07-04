@@ -1,72 +1,93 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  4 Jul 2015 21:06:55 +0200
-Subject: [Buildroot] [PATCH v7 1/7] package/opencv: add a choice for
-	selecting gstreamer support
+Date: Sat,  4 Jul 2015 21:06:56 +0200
+Subject: [Buildroot] [PATCH v7 2/7] package/opencv: add gstreamer-1.x support
 In-Reply-To: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
 References: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1436036821-10073-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <1436036821-10073-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OpenCV 3.0 support both gstreamer-0.10 and gstreamer-1.x, but only one
-is used at the time.
-
-This patch turns the gstreamer support into a choice, in order to prepare
-adding the support for gstreamer-1 in a following patch.
+Starting with the 2.4.10 release, OpenCV supports both Gstreamer-0.10
+and Gstreamer-1, but only one can be enabled at the same time (OpenCV
+chooses Gstreamer-1 over Gstreamer-0.10 when both are available).
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
 changes v6->v7:
-- move gstreamer comment inside the choice (Yann)
+- move gstreamer1 comment inside the choice (Yann)
+- remove extra endif in opencv.mk (catched by Yann)
 
 changes v5->v6:
+- rebase
+- use a choice
+
+changes v4->v5:
+- rebase
+- update a/r/t tags
+- rework gst-X backend selection (use similar structure for qt)
+- remove patch merged upstream
+
+changes v3->v4:
 - new patch
 ---
- package/opencv/Config.in | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+ package/opencv/Config.in | 13 +++++++++++++
+ package/opencv/opencv.mk | 13 ++++++++++---
+ 2 files changed, 23 insertions(+), 3 deletions(-)
 
 diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 576f667..c3b7535 100644
+index c3b7535..92a1306 100644
 --- a/package/opencv/Config.in
 +++ b/package/opencv/Config.in
-@@ -173,19 +173,29 @@ config BR2_PACKAGE_OPENCV_WITH_FFMPEG
- 	help
- 	  Use ffmpeg from the target system.
- 
-+choice
-+	prompt "gstreamer support"
-+	help
-+	  OpenCV prefers gstreamer-1 over gstreamer-0.10.
-+
-+config BR2_PACKAGE_OPENCV_WITHOUT_GSTREAMER
-+	bool "none"
-+
- config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
--	bool "gstreamer support"
--	depends on BR2_USE_MMU # gstreamer -> libglib2
--	depends on BR2_USE_WCHAR # gstreamer -> libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
-+	bool "gstreamer-0.10"
-+	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	select BR2_PACKAGE_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
- 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
- 
--comment "gstreamer support needs a toolchain w/ wchar, threads"
-+comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
+@@ -194,6 +194,19 @@ comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
  	depends on BR2_USE_MMU
  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
  
-+endchoice
++config BR2_PACKAGE_OPENCV_WITH_GSTREAMER1
++	bool "gstreamer-1.x"
++	depends on BR2_USE_MMU # libglib2
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	select BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
 +
++comment "gstreamer-1.x support needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
+ endchoice
+ 
  config BR2_PACKAGE_OPENCV_WITH_GTK
- 	bool "gtk support"
- 	depends on BR2_PACKAGE_XORG7
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 633c2bf..6b1a139 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -222,11 +222,18 @@ else
+ OPENCV_CONF_OPTS += -DWITH_FFMPEG=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER)$(BR2_PACKAGE_OPENCV_WITH_GSTREAMER1),)
++OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER),y)
+-OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON -DWITH_GSTREAMER_0_10=ON
++OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=ON
+ OPENCV_DEPENDENCIES += gstreamer gst-plugins-base
+-else
+-OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER1),y)
++OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON -DWITH_GSTREAMER_0_10=OFF
++OPENCV_DEPENDENCIES += gstreamer1 gst1-plugins-base
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK),y)
 -- 
 2.4.5
