@@ -1,99 +1,154 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  4 Jul 2015 21:07:00 +0200
-Subject: [Buildroot] [PATCH v7 6/7] package/opencv: add opengl support
+Date: Sat,  4 Jul 2015 21:07:01 +0200
+Subject: [Buildroot] [PATCH v7 7/7] package/vlc: add opencv support
 In-Reply-To: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
 References: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1436036821-10073-7-git-send-email-s.martin49@gmail.com>
+Message-ID: <1436036821-10073-8-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In OpenCV, OpenGL is only used by highgui module.
-
-OpenGL support is done using extensions from 3rd party framework: either
-Qt5OpenGL with Qt5 (with GL support only, not GLES); or gtkglext (which
-is not available in Buildroot) with gtk2
-
-So, make OpenGL knob a sub-option of the Qt5 support option.
+This change adds 2 patches (backported from upstream) to vlc fixing the
+build against opencv2 APIs.
+This allows to select the minimal set of opencv modules when opencv
+support is enabled.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
-changes v6->v7:
-- rework comment as sugessted by Yann
-- move opengl option close to the gui toolkit choice
-
 changes v5->v6:
-- update comments (Yann)
+- update a/r/t tags
+- add backport url (Yann)
 
 changes v4->v5:
 - new patch
 ---
- package/opencv/Config.in | 22 +++++++++++++++++++++-
- package/opencv/opencv.mk |  7 +++++++
- 2 files changed, 28 insertions(+), 1 deletion(-)
+ ...opencv_wrapper-use-opencv2-style-includes.patch | 36 ++++++++++++++++++++++
+ ...cv_example-add-missing-include-statements.patch | 29 +++++++++++++++++
+ package/vlc/Config.in                              |  2 ++
+ package/vlc/vlc.mk                                 |  8 ++++-
+ 4 files changed, 74 insertions(+), 1 deletion(-)
+ create mode 100644 package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
+ create mode 100644 package/vlc/0009-opencv_example-add-missing-include-statements.patch
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index e54d436..7912a1a 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -52,9 +52,10 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	  Include opencv_highgui (high-level gui and media i/o) module into the
- 	  OpenCV build.
- 
-+if BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+diff --git a/package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch b/package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
+new file mode 100644
+index 0000000..0ce0206
+--- /dev/null
++++ b/package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
+@@ -0,0 +1,36 @@
++Backport from: https://git.videolan.org/?p=vlc.git;a=commit;h=cc236e4652255902f2c2cee3b18f83367f35a8c7
 +
- choice
- 	prompt "gui toolkit"
--	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
++From cc236e4652255902f2c2cee3b18f83367f35a8c7 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Sun, 24 May 2015 14:30:09 +0200
++Subject: [PATCH 8/9] opencv_wrapper: use opencv2-style includes
++
++If old opencv1-style legacy include directory is available, this change
++becomes purely cosmetic (maybe will compile a bit faster).
++It becomes an FTBFS fix when opencv1-style include directory is missing
++(i.e. from opencv-3.0).
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++Signed-off-by: Jean-Baptiste Kempf <jb@videolan.org>
++---
++ modules/video_filter/opencv_wrapper.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/modules/video_filter/opencv_wrapper.c b/modules/video_filter/opencv_wrapper.c
++index e36e1a5..5d74241 100644
++--- a/modules/video_filter/opencv_wrapper.c
+++++ b/modules/video_filter/opencv_wrapper.c
++@@ -39,8 +39,8 @@
++ #include <vlc_image.h>
++ #include "filter_picture.h"
++ 
++-#include <cxcore.h>
++-#include <cv.h>
+++#include <opencv2/core/core_c.h>
+++#include <opencv2/core/types_c.h>
++ 
++ /*****************************************************************************
++  * Local prototypes
++-- 
++2.4.2
++
+diff --git a/package/vlc/0009-opencv_example-add-missing-include-statements.patch b/package/vlc/0009-opencv_example-add-missing-include-statements.patch
+new file mode 100644
+index 0000000..7b7f727
+--- /dev/null
++++ b/package/vlc/0009-opencv_example-add-missing-include-statements.patch
+@@ -0,0 +1,29 @@
++Backport from: https://git.videolan.org/?p=vlc.git;a=commit;h=b82416d7000a993b33e903095a590fe32212a85e
++
++From b82416d7000a993b33e903095a590fe32212a85e Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Sun, 24 May 2015 14:30:10 +0200
++Subject: [PATCH 9/9] opencv_example: add missing #include statements
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++Signed-off-by: Jean-Baptiste Kempf <jb@videolan.org>
++---
++ modules/video_filter/opencv_example.cpp | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/modules/video_filter/opencv_example.cpp b/modules/video_filter/opencv_example.cpp
++index ae3af05..998f286 100644
++--- a/modules/video_filter/opencv_example.cpp
+++++ b/modules/video_filter/opencv_example.cpp
++@@ -41,6 +41,8 @@
++ 
++ #include <opencv2/core/core_c.h>
++ #include <opencv2/core/core.hpp>
+++#include <opencv2/imgproc/imgproc_c.h>
+++#include <opencv2/imgproc/imgproc.hpp>
++ #include <opencv2/objdetect/objdetect.hpp>
++ 
++ /*****************************************************************************
++-- 
++2.4.2
++
+diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+index b030a56..471f4a7 100644
+--- a/package/vlc/Config.in
++++ b/package/vlc/Config.in
+@@ -11,6 +11,8 @@ config BR2_PACKAGE_VLC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+ 	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC if BR2_PACKAGE_OPENCV
++	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT if BR2_PACKAGE_OPENCV
  	help
- 	  GUI toolkit for opencv_highgui module.
- 
-@@ -140,6 +141,25 @@ comment "qt5 support needs qt5"
- 
- endchoice
- 
-+config BR2_PACKAGE_OPENCV_WITH_OPENGL
-+	bool "opengl support"
-+	# OpenGL support done using Qt5OpenGL, so depends on WITH_QT5
-+	depends on BR2_PACKAGE_OPENCV_WITH_QT5
-+	# OpenGL support requires Qt5OpenGL with GL support, not GLES
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_QT5BASE_OPENGL
-+	help
-+	  Enable OpenGL for UI.
-+
-+comment "opengl support needs an OpenGL provider"
-+	depends on BR2_PACKAGE_OPENCV_WITH_QT5
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || \
-+		!BR2_PACKAGE_HAS_LIBGL
-+
-+endif # BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-+
-+
- config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
- 	bool "imgcodecs"
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 986e7b4..61a3ccd 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -264,6 +264,13 @@ else
- OPENCV_CONF_OPTS += -DWITH_JPEG=OFF
+ 	  VLC is a free and open source cross-platform multimedia player
+ 	  and framework that plays most multimedia files as well as DVD,
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 4ef69aa..a553648 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -44,7 +44,6 @@ VLC_CONF_OPTS += \
+ 	--disable-projectm \
+ 	--disable-vsxu \
+ 	--disable-mtp \
+-	--disable-opencv \
+ 	--disable-mmal-codec \
+ 	--disable-mmal-vout \
+ 	--disable-dvdnav \
+@@ -148,6 +147,13 @@ else
+ VLC_CONF_OPTS += --disable-gles2
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_OPENGL),y)
-+OPENCV_CONF_OPTS += -DWITH_OPENGL=ON
-+OPENCV_DEPENDENCIES += libgl qt5base
++ifeq ($(BR2_PACKAGE_OPENCV),y)
++VLC_CONF_OPTS += --enable-opencv
++VLC_DEPENDENCIES += opencv
 +else
-+OPENCV_CONF_OPTS += -DWITH_OPENGL=OFF
++VLC_CONF_OPTS += --disable-opencv
 +endif
 +
- OPENCV_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
- 
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_PNG),y)
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ VLC_CONF_OPTS += --enable-opus
+ VLC_DEPENDENCIES += libvorbis opus
 -- 
 2.4.5
