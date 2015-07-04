@@ -1,96 +1,99 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  4 Jul 2015 21:06:59 +0200
-Subject: [Buildroot] [PATCH v7 5/7] package/opencv: add gtk3 support
+Date: Sat,  4 Jul 2015 21:07:00 +0200
+Subject: [Buildroot] [PATCH v7 6/7] package/opencv: add opengl support
 In-Reply-To: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
 References: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1436036821-10073-6-git-send-email-s.martin49@gmail.com>
+Message-ID: <1436036821-10073-7-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fully rework the GTK support in OpenCV because it now supports gtk-2 and
-gtk-3 (but only one at the time).
-Note that, in the build-system, the gtk support is only available when
-Qt support is disabled; so make sure the menuconfig reflects this.
+In OpenCV, OpenGL is only used by highgui module.
+
+OpenGL support is done using extensions from 3rd party framework: either
+Qt5OpenGL with Qt5 (with GL support only, not GLES); or gtkglext (which
+is not available in Buildroot) with gtk2
+
+So, make OpenGL knob a sub-option of the Qt5 support option.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 changes v6->v7:
-- update A/R/T tags
-- rebase
+- rework comment as sugessted by Yann
+- move opengl option close to the gui toolkit choice
 
 changes v5->v6:
-- update a/r/t tags
-- remove unneeded "default ..." (Yann)
+- update comments (Yann)
 
 changes v4->v5:
 - new patch
 ---
- package/opencv/Config.in | 16 ++++++++++++++++
- package/opencv/opencv.mk | 11 +++++++++--
- 2 files changed, 25 insertions(+), 2 deletions(-)
+ package/opencv/Config.in | 22 +++++++++++++++++++++-
+ package/opencv/opencv.mk |  7 +++++++
+ 2 files changed, 28 insertions(+), 1 deletion(-)
 
 diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 7bd11cf..e54d436 100644
+index e54d436..7912a1a 100644
 --- a/package/opencv/Config.in
 +++ b/package/opencv/Config.in
-@@ -62,6 +62,7 @@ choice
- 	  preference by the OpenCV build system):
- 	  - Qt5
- 	  - Qt4
-+	  - gtk3
- 	  - gtk2
+@@ -52,9 +52,10 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+ 	  Include opencv_highgui (high-level gui and media i/o) module into the
+ 	  OpenCV build.
  
- 	  Note that, whatever you choose here will be used by OpenCV, even
-@@ -89,6 +90,21 @@ comment "gtk2 needs X.org and a toolchain w/ wchar, threads, C++"
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_INSTALL_LIBSTDCPP
++if BR2_PACKAGE_OPENCV_LIB_HIGHGUI
++
+ choice
+ 	prompt "gui toolkit"
+-	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+ 	help
+ 	  GUI toolkit for opencv_highgui module.
  
-+config BR2_PACKAGE_OPENCV_WITH_GTK3
-+	bool "gtk3"
-+	depends on BR2_ARCH_HAS_ATOMICS # libgtk3 -> cairo
-+	depends on BR2_USE_MMU # libgtk3 -> libglib2
-+	depends on BR2_USE_WCHAR # libgtk3 -> libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk3 -> libglib2
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_LIBGTK3
+@@ -140,6 +141,25 @@ comment "qt5 support needs qt5"
+ 
+ endchoice
+ 
++config BR2_PACKAGE_OPENCV_WITH_OPENGL
++	bool "opengl support"
++	# OpenGL support done using Qt5OpenGL, so depends on WITH_QT5
++	depends on BR2_PACKAGE_OPENCV_WITH_QT5
++	# OpenGL support requires Qt5OpenGL with GL support, not GLES
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
++	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_QT5BASE_OPENGL
++	help
++	  Enable OpenGL for UI.
 +
-+comment "gtk3 needs a toolchain w/ wchar, threads, C++"
-+	depends on BR2_USE_MMU # libgtk3 -> glib2
-+	depends on BR2_ARCH_HAS_ATOMICS # libgtk3 -> cairo
-+	depends on !(BR2_USE_WCHAR || BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_INSTALL_LIBSTDCPP)
++comment "opengl support needs an OpenGL provider"
++	depends on BR2_PACKAGE_OPENCV_WITH_QT5
++	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || \
++		!BR2_PACKAGE_HAS_LIBGL
 +
- config BR2_PACKAGE_OPENCV_WITH_QT
- 	bool "qt4"
- 	depends on BR2_PACKAGE_QT
++endif # BR2_PACKAGE_OPENCV_LIB_HIGHGUI
++
++
+ config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
+ 	bool "imgcodecs"
+ 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
 diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 79cf110..986e7b4 100644
+index 986e7b4..61a3ccd 100644
 --- a/package/opencv/opencv.mk
 +++ b/package/opencv/opencv.mk
-@@ -236,11 +236,18 @@ OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON -DWITH_GSTREAMER_0_10=OFF
- OPENCV_DEPENDENCIES += gstreamer1 gst1-plugins-base
+@@ -264,6 +264,13 @@ else
+ OPENCV_CONF_OPTS += -DWITH_JPEG=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK)$(BR2_PACKAGE_OPENCV_WITH_GTK3),)
-+OPENCV_CONF_OPTS += -DWITH_GTK=OFF -DWITH_GTK_2_X=OFF
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_OPENGL),y)
++OPENCV_CONF_OPTS += -DWITH_OPENGL=ON
++OPENCV_DEPENDENCIES += libgl qt5base
++else
++OPENCV_CONF_OPTS += -DWITH_OPENGL=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK),y)
- OPENCV_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=ON
- OPENCV_DEPENDENCIES += libgtk2
--else
--OPENCV_CONF_OPTS += -DWITH_GTK=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK3),y)
-+OPENCV_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=OFF
-+OPENCV_DEPENDENCIES += libgtk3
- endif
+ OPENCV_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
  
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_JASPER),y)
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_PNG),y)
 -- 
 2.4.5
