@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jul 2015 10:35:32 +0200
-Subject: [Buildroot] [PATCH v7 1/7] package/opencv: add a choice for
- selecting gstreamer support
-In-Reply-To: <1436036821-10073-2-git-send-email-s.martin49@gmail.com>
+Date: Sun, 5 Jul 2015 10:45:38 +0200
+Subject: [Buildroot] [PATCH v7 2/7] package/opencv: add gstreamer-1.x
+	support
+In-Reply-To: <1436036821-10073-3-git-send-email-s.martin49@gmail.com>
 References: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
- <1436036821-10073-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150705083532.GA3647@free.fr>
+ <1436036821-10073-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150705084538.GB3647@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,85 +15,90 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2015-07-04 21:06 +0200, Samuel Martin spake thusly:
-> OpenCV 3.0 support both gstreamer-0.10 and gstreamer-1.x, but only one
-> is used at the time.
-> 
-> This patch turns the gstreamer support into a choice, in order to prepare
-> adding the support for gstreamer-1 in a following patch.
+> Starting with the 2.4.10 release, OpenCV supports both Gstreamer-0.10
+> and Gstreamer-1, but only one can be enabled at the same time (OpenCV
+> chooses Gstreamer-1 over Gstreamer-0.10 when both are available).
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v6->v7:
-> - move gstreamer comment inside the choice (Yann)
-> 
-> changes v5->v6:
-> - new patch
-> ---
->  package/opencv/Config.in | 20 +++++++++++++++-----
->  1 file changed, 15 insertions(+), 5 deletions(-)
-> 
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+[--SNIP--]
 > diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-> index 576f667..c3b7535 100644
+> index c3b7535..92a1306 100644
 > --- a/package/opencv/Config.in
 > +++ b/package/opencv/Config.in
-> @@ -173,19 +173,29 @@ config BR2_PACKAGE_OPENCV_WITH_FFMPEG
->  	help
->  	  Use ffmpeg from the target system.
+> @@ -194,6 +194,19 @@ comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 >  
-> +choice
-> +	prompt "gstreamer support"
-> +	help
-> +	  OpenCV prefers gstreamer-1 over gstreamer-0.10.
-
-This comment does not belong in this commit, but should have been part
-of the following commit, where you effectively add support for gst-1.
-
-> +config BR2_PACKAGE_OPENCV_WITHOUT_GSTREAMER
-> +	bool "none"
-> +
->  config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
-> -	bool "gstreamer support"
-> -	depends on BR2_USE_MMU # gstreamer -> libglib2
-> -	depends on BR2_USE_WCHAR # gstreamer -> libglib2
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
-> +	bool "gstreamer-0.10"
+> +config BR2_PACKAGE_OPENCV_WITH_GSTREAMER1
+> +	bool "gstreamer-1.x"
 > +	depends on BR2_USE_MMU # libglib2
 > +	depends on BR2_USE_WCHAR # libglib2
 > +	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
 
-I would have changed the comment about the dependencies, and if so, I
-would have kept the gst part, not the glib part (because we're not
-selecting glib, so it is not so obvious why we need those deps).
+I would have used the "gst -> libglib2" trail in the comment because,
+again, we're not selecting libglib2, but gst-1, so it's weid to see the
+dependency being explained because of libglib2...
 
-Otherwise:
+[--SNIP--]
+> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+> index 633c2bf..6b1a139 100644
+> --- a/package/opencv/opencv.mk
+> +++ b/package/opencv/opencv.mk
+> @@ -222,11 +222,18 @@ else
+>  OPENCV_CONF_OPTS += -DWITH_FFMPEG=OFF
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER)$(BR2_PACKAGE_OPENCV_WITH_GSTREAMER1),)
+> +OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=OFF
+> +endif
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Why do you split this out, rather than have each be defined in the else
+clause of each if-block?
+
+AFAICS, GST and GST_0_10 are mutually exclusive (i.e. when one is ON,
+the other is OFF) :
+
+>  ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER),y)
+> -OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON -DWITH_GSTREAMER_0_10=ON
+> +OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=ON
+
+... here: GST=OFFF and GST_0_10=ON ...
+
+>  OPENCV_DEPENDENCIES += gstreamer gst-plugins-base
+> -else
+> -OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER1),y)
+> +OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON -DWITH_GSTREAMER_0_10=OFF
+
+... and here GST=ON and GST_0_10=OFF
+
+> +OPENCV_DEPENDENCIES += gstreamer1 gst1-plugins-base
+>  endif
+
+So, I'd have written something like:
+
+    ifeq ($(BR2_PKG_OCV_GST_0_10),y)
+    OCV_CONF_OPTS += -DWITH_GST_0_10=ON
+    OVC_DEPS += gst gst-plugins-base
+    else
+    OCV_CONF_OPTS += -DWITH_GST_0_10=OFF
+    endif
+
+    ifeq ($(BR2_PKG_OCV_GST),y)
+    OCV_CONF_OPTS += -DWITH_GST=ON
+    OVC_DEPS += gst-1 gst-1-plugins-base
+    else
+    OCV_CONF_OPTS += -DWITH_GST=OFF
+    endif
+
+(Sorry, I forgot to say so in my previous review... :-( )
 
 Regards,
 Yann E. MORIN.
-
->  	select BR2_PACKAGE_GSTREAMER
->  	select BR2_PACKAGE_GST_PLUGINS_BASE
->  	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
->  
-> -comment "gstreamer support needs a toolchain w/ wchar, threads"
-> +comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
->  	depends on BR2_USE_MMU
->  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
->  
-> +endchoice
-> +
->  config BR2_PACKAGE_OPENCV_WITH_GTK
->  	bool "gtk support"
->  	depends on BR2_PACKAGE_XORG7
-> -- 
-> 2.4.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
