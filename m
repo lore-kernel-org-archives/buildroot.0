@@ -1,92 +1,128 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Jul 2015 11:10:07 +0200
-Subject: [Buildroot] Hash checking infrastructure
-In-Reply-To: <20150705000050.7c2be969@core2quad.morethan.org>
-References: <20150704140142.3aa5c982@core2quad.morethan.org>
- <20150704214734.GC3634@free.fr>
- <20150704213628.21ff7e6e@core2quad.morethan.org>
- <20150705000050.7c2be969@core2quad.morethan.org>
-Message-ID: <20150705111007.63ff239b@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 5 Jul 2015 11:10:49 +0200
+Subject: [Buildroot] [PATCH v7 2/7] package/opencv: add gstreamer-1.x
+	support
+In-Reply-To: <20150705084538.GB3647@free.fr>
+References: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
+ <1436036821-10073-3-git-send-email-s.martin49@gmail.com>
+ <20150705084538.GB3647@free.fr>
+Message-ID: <CAHXCMML-zo0nzcxdyu_c1DS19hKkQbG9z-ij6x45taAkjFzy8w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mike,
+Yann,
 
-On Sun, 5 Jul 2015 00:00:50 -0500, Mike wrote:
+On Sun, Jul 5, 2015 at 10:45 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Samuel, All,
+>
+> On 2015-07-04 21:06 +0200, Samuel Martin spake thusly:
+>> Starting with the 2.4.10 release, OpenCV supports both Gstreamer-0.10
+>> and Gstreamer-1, but only one can be enabled at the same time (OpenCV
+>> chooses Gstreamer-1 over Gstreamer-0.10 when both are available).
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> [--SNIP--]
+>> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+>> index c3b7535..92a1306 100644
+>> --- a/package/opencv/Config.in
+>> +++ b/package/opencv/Config.in
+>> @@ -194,6 +194,19 @@ comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
+>>       depends on BR2_USE_MMU
+>>       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+>>
+>> +config BR2_PACKAGE_OPENCV_WITH_GSTREAMER1
+>> +     bool "gstreamer-1.x"
+>> +     depends on BR2_USE_MMU # libglib2
+>> +     depends on BR2_USE_WCHAR # libglib2
+>> +     depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+>
+> I would have used the "gst -> libglib2" trail in the comment because,
+> again, we're not selecting libglib2, but gst-1, so it's weid to see the
+> dependency being explained because of libglib2...
 
-> Meanwhile, the package I had specified as external was
-> LuaJIT.
-> And that package may be a **very special** case.
+done.
 
-I've tried with LuaJIT and out of tree build, and it works just fine
-for me:
+>
+> [--SNIP--]
+>> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+>> index 633c2bf..6b1a139 100644
+>> --- a/package/opencv/opencv.mk
+>> +++ b/package/opencv/opencv.mk
+>> @@ -222,11 +222,18 @@ else
+>>  OPENCV_CONF_OPTS += -DWITH_FFMPEG=OFF
+>>  endif
+>>
+>> +ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER)$(BR2_PACKAGE_OPENCV_WITH_GSTREAMER1),)
+>> +OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=OFF
+>> +endif
+>
+> Why do you split this out, rather than have each be defined in the else
+> clause of each if-block?
+>
+> AFAICS, GST and GST_0_10 are mutually exclusive (i.e. when one is ON,
+> the other is OFF) :
+>
+>>  ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER),y)
+>> -OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON -DWITH_GSTREAMER_0_10=ON
+>> +OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=ON
+>
+> ... here: GST=OFFF and GST_0_10=ON ...
+>
+>>  OPENCV_DEPENDENCIES += gstreamer gst-plugins-base
+>> -else
+>> -OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF -DWITH_GSTREAMER_0_10=OFF
+>> +endif
+>> +
+>> +ifeq ($(BR2_PACKAGE_OPENCV_WITH_GSTREAMER1),y)
+>> +OPENCV_CONF_OPTS += -DWITH_GSTREAMER=ON -DWITH_GSTREAMER_0_10=OFF
+>
+> ... and here GST=ON and GST_0_10=OFF
 
- */ I have the LuaJIT Git repository cloned in
-    $(HOME)/projets/luajit-2.0
+You're right! Just letf-over stuff from previous bump in which, to get
+gst-0.10 support, one has to do GST=ON and GST_0_10=ON.
+I'm fixing this.
 
- */ I have my Buildroot source code in $(HOME)/projets/buildroot
+>
+>> +OPENCV_DEPENDENCIES += gstreamer1 gst1-plugins-base
+>>  endif
+>
+> So, I'd have written something like:
+>
+>     ifeq ($(BR2_PKG_OCV_GST_0_10),y)
+>     OCV_CONF_OPTS += -DWITH_GST_0_10=ON
+>     OVC_DEPS += gst gst-plugins-base
+>     else
+>     OCV_CONF_OPTS += -DWITH_GST_0_10=OFF
+>     endif
+>
+>     ifeq ($(BR2_PKG_OCV_GST),y)
+>     OCV_CONF_OPTS += -DWITH_GST=ON
+>     OVC_DEPS += gst-1 gst-1-plugins-base
+>     else
+>     OCV_CONF_OPTS += -DWITH_GST=OFF
+>     endif
+>
+> (Sorry, I forgot to say so in my previous review... :-( )
+no pb ;)
 
- */ I create my out of tree build directory in /tmp/luajit-build/
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 
-Here is what I do:
+Thanks,
 
-$ cat > .config
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.05.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_0=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_LUAJIT=y
-# BR2_TARGET_ROOTFS_TAR is not set
-$ make olddefconfig
-$ cat > local.mk
-LUAJIT_OVERRIDE_SRCDIR = $(HOME)/projets/luajit-2.0/
-
-And what happens:
-
-$ make
-[...]
->>> luajit custom Syncing from source dir /home/thomas/projets/luajit-2.0/
-rsync -au --exclude .svn --exclude .git --exclude .hg --exclude .bzr --exclude CVS /home/thomas/projets/luajit-2.0// /tmp/luajit-build/build/luajit-custom
->>> luajit custom Configuring
->>> luajit custom Building
-/usr/bin/make -j5 PREFIX="/usr" STATIC_CC="/tmp/luajit-build/host/usr/bin/arm-linux-gcc" DYNAMIC_CC="/tmp/luajit-build/host/usr/bin/arm-linux-gcc -fPIC" TARGET_LD="/tmp/luajit-build/host/usr/bin/arm-linux-gcc" TARGET_AR="/tmp/luajit-build/host/usr/bin/arm-linux-ar rcus" TARGET_STRIP=true TARGET_CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os " TARGET_LDFLAGS="" HOST_CC="/usr/bin/gcc -m32" HOST_CFLAGS="-O2 -I/tmp/luajit-build/host/usr/include" HOST_LDFLAGS="-L/tmp/luajit-build/host/lib -L/tmp/luajit-build/host/usr/lib -Wl,-rpath,/tmp/luajit-build/host/usr/lib" BUILDMODE=dynamic -C /tmp/luajit-build/build/luajit-custom amalg
-Building LuaJIT 2.0.4
-/usr/bin/make -C src amalg
-+--------------------------------------------------------------------------+
-| WARNING: Compiling the amalgamation needs a lot of virtual memory        |
-| (around 300 MB with GCC 4.x)! If you don't have enough physical memory   |
-| your machine will start swapping to disk and the compile will not finish |
-| within a reasonable amount of time.                                      |
-| So either compile on a bigger machine or use the non-amalgamated build.  |
-+--------------------------------------------------------------------------+
-/usr/bin/make all "LJCORE_O=ljamalg.o"
-HOSTCC    host/minilua.o
-HOSTCC    host/buildvm_asm.o
-HOSTCC    host/buildvm_peobj.o
-HOSTCC    host/buildvm_lib.o
-[...]
-
-I.e, it works perfectly fine.
-
-So there is something else you are doing, or that is special in your
-setup.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
