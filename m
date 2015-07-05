@@ -1,167 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jul 2015 21:56:23 +0200
-Subject: [Buildroot] [PATCH v9 1/4] package/opencv: add a choice for
- selecting the gui toolkit
-In-Reply-To: <1436106540-3466-2-git-send-email-s.martin49@gmail.com>
-References: <1436106540-3466-1-git-send-email-s.martin49@gmail.com>
- <1436106540-3466-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150705195623.GT3647@free.fr>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sun,  5 Jul 2015 16:52:25 -0400
+Subject: [Buildroot] [PATCH 1/1] ntp: drop uselss patch fixup which
+	sometimes breaks rebuild
+Message-ID: <1436129545-3540-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Drop sed line which no longer changes anything.  Worse, it bumps each
+ntpd/*.c file's modification time, which sometimes triggers a strange
+dependency path causing the makefile to attempt to run the ntpd keyword-gen
+app, which fails, because it's been cross-compiled.
 
-On 2015-07-05 16:28 +0200, Samuel Martin spake thusly:
-> This patch moves the existing Qt4 and gtk2 options in that choice right
-> after the highgui knob.
-> In OpenCV, only one GUI toolkik will be actually used at the time by the
-> highgui module, given priority to Qt4.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-I guess that woud be better phrased as;
+---
 
-    package/opencv: add a choice for selecting the gui toolkit
+The deleted sed line is the reason why the keyword-gen source dependency
+was being unexpectedly triggered, which prompted my initial patch back
+in July 2014, which Thomas P. did not really like as the real reason
+for why the initial ntp rebuild works, but the second fails, was not
+understood.  (See http://patchwork.ozlabs.org/patch/371305/).
 
-    In OpenCV, only one GUI toolkit may be used, so group the two
-    existing options into a choice.
+While its true that this patch still does not explore why things sometimes
+work differently in subsequent ntp rebuilds, the whole issue can be avoided
+by not touching the source unnecessarily.
 
-    This will also be useful when we add support for Qt5 and gtk3.
+Interestingly, someone on one of the ntp mailing lists also encountered
+this same issue.  (See http://lists.ntp.org/pipermail/questions/2009-October/024669.html)
+It doesn't appear that anything came of it.  In fact, the fellow
+who answered said that if you don't change the source file, then
+the derived file delivered with the tarball should be up to date.
 
-    sob-and-other-tags...
+So lets not touch the source unless we have to, especially if we're
+not even changing anything.
+---
+ package/ntp/ntp.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-If you don't mind, I'll grab the patches and fix such minor issues, to
-avoid you going nuts with all the rounds of this series.
-
-Regards,
-Yann E. MORIN.
-
-> Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> ---
-> changes v8->v9:
-> - update help text (ThomasP)
-> 
-> changes v7->v8:
-> - update a/r/t tags
-> 
-> changes v6->v7:
-> - move choice right after highgui knob (Yann)
-> - reword help text and comment (Yann)
-> 
-> changes v5->v6:
-> - new patch
-> ---
->  package/opencv/Config.in | 67 +++++++++++++++++++++++++++++++-----------------
->  1 file changed, 44 insertions(+), 23 deletions(-)
-> 
-> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-> index 079730e..c3542c4 100644
-> --- a/package/opencv/Config.in
-> +++ b/package/opencv/Config.in
-> @@ -52,6 +52,50 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
->  	  Include opencv_highgui (high-level gui and media i/o) module into the
->  	  OpenCV build.
->  
-> +choice
-> +	prompt "gui toolkit"
-> +	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-> +	help
-> +	  GUI toolkit to be used by the opencv_highgui module.
-> +
-> +config BR2_PACKAGE_OPENCV_GUI_NONE
-> +	bool "none"
-> +
-> +config BR2_PACKAGE_OPENCV_WITH_GTK
-> +	bool "gtk2"
-> +	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
-> +	depends on BR2_USE_MMU # libgtk2 -> libglib2
-> +	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_LIBGTK2
-> +
-> +comment "gtk2 needs X.org and a toolchain w/ wchar, threads, C++"
-> +	depends on BR2_USE_MMU # libgtk2 -> glib2
-> +	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
-> +	depends on !BR2_PACKAGE_XORG7 || \
-> +		!BR2_USE_WCHAR || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_INSTALL_LIBSTDCPP
-> +
-> +config BR2_PACKAGE_OPENCV_WITH_QT
-> +	bool "qt4"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_USE_MMU # qt
-> +	select BR2_PACKAGE_QT
-> +	select BR2_PACKAGE_QT_STL
-> +	select BR2_PACKAGE_QT_GUI_MODULE
-> +	select BR2_PACKAGE_QT_TEST
-> +	help
-> +	  Use Qt with QtTest module and STL support
-> +
-> +comment "qt4 needs a toolchain w/ C++"
-> +	depends on BR2_USE_MMU # qt
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> +
-> +endchoice
-> +
->  config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
->  	bool "imgcodecs"
->  	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-> @@ -209,17 +253,6 @@ comment "gstreamer-1.x support needs a toolchain w/ wchar, threads"
->  
->  endchoice
->  
-> -config BR2_PACKAGE_OPENCV_WITH_GTK
-> -	bool "gtk support"
-> -	depends on BR2_PACKAGE_XORG7
-> -	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
-> -	depends on BR2_INSTALL_LIBSTDCPP
-> -	depends on BR2_USE_MMU # libgtk2 -> glib2
-> -	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
-> -	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-> -	select BR2_PACKAGE_LIBGTK2
-> -
->  config BR2_PACKAGE_OPENCV_WITH_JASPER
->  	bool "jpeg2000 support"
->  	select BR2_PACKAGE_JASPER
-> @@ -242,18 +275,6 @@ config BR2_PACKAGE_OPENCV_WITH_PNG
->  	help
->  	  Use shared libpng from the target system.
->  
-> -config BR2_PACKAGE_OPENCV_WITH_QT
-> -	bool "qt backend support"
-> -	depends on BR2_INSTALL_LIBSTDCPP
-> -	depends on BR2_USE_MMU # qt
-> -	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-> -	select BR2_PACKAGE_QT
-> -	select BR2_PACKAGE_QT_STL
-> -	select BR2_PACKAGE_QT_GUI_MODULE
-> -	select BR2_PACKAGE_QT_TEST
-> -	help
-> -	  Use Qt with QtTest module and STL support
-> -
->  config BR2_PACKAGE_OPENCV_WITH_TIFF
->  	bool "tiff support"
->  	select BR2_PACKAGE_TIFF
-> -- 
-> 2.4.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 5f05508..93cefa1 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -42,7 +42,6 @@ endif
+ 
+ define NTP_PATCH_FIXUPS
+ 	$(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
+-	$(SED) '/[[:space:](]rindex[[:space:]]*(/s/[[:space:]]*rindex[[:space:]]*(/ strrchr(/g' $(@D)/ntpd/*.c
+ endef
+ 
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_KEYGEN) += util/ntp-keygen
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
