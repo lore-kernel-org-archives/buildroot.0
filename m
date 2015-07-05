@@ -1,88 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jul 2015 11:39:14 +0200
-Subject: [Buildroot] [PATCH v7 7/7] package/vlc: add opencv support
-In-Reply-To: <1436036821-10073-8-git-send-email-s.martin49@gmail.com>
-References: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
- <1436036821-10073-8-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150705093914.GG3647@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun,  5 Jul 2015 11:40:22 +0200
+Subject: [Buildroot] [PATCH v8 0/7] OpenCV bump
+Message-ID: <1436089229-21103-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, all,
+Hi all,
 
-On 2015-07-04 21:07 +0200, Samuel Martin spake thusly:
-> This change adds 2 patches (backported from upstream) to vlc fixing the
-> build against opencv2 APIs.
-> This allows to select the minimal set of opencv modules when opencv
-> support is enabled.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Another round for the bump of OpenCV package, and related
+features/packages, with still the same patches...
 
-This reviewd tag stands, still I have a question:
-
-> diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-> index b030a56..471f4a7 100644
-> --- a/package/vlc/Config.in
-> +++ b/package/vlc/Config.in
-> @@ -11,6 +11,8 @@ config BR2_PACKAGE_VLC
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
->  	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
-> +	select BR2_PACKAGE_OPENCV_LIB_IMGPROC if BR2_PACKAGE_OPENCV
-> +	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT if BR2_PACKAGE_OPENCV
-
-objdetect already selects imgproc. So, does vlc w/ opencv really need
-imgproc by itself? If so, the select is OK, otherwise, it is
-superfluous.
+Patches 1 and 2 update gstreamer support.
+Patches 3 to 6 update GUI toolkit support.
+Patch 7 fixes reverse dependency (vlc).
 
 Regards,
-Yann E. MORIN.
 
->  	help
->  	  VLC is a free and open source cross-platform multimedia player
->  	  and framework that plays most multimedia files as well as DVD,
-> diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-> index 4ef69aa..a553648 100644
-> --- a/package/vlc/vlc.mk
-> +++ b/package/vlc/vlc.mk
-> @@ -44,7 +44,6 @@ VLC_CONF_OPTS += \
->  	--disable-projectm \
->  	--disable-vsxu \
->  	--disable-mtp \
-> -	--disable-opencv \
->  	--disable-mmal-codec \
->  	--disable-mmal-vout \
->  	--disable-dvdnav \
-> @@ -148,6 +147,13 @@ else
->  VLC_CONF_OPTS += --disable-gles2
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_OPENCV),y)
-> +VLC_CONF_OPTS += --enable-opencv
-> +VLC_DEPENDENCIES += opencv
-> +else
-> +VLC_CONF_OPTS += --disable-opencv
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_OPUS),y)
->  VLC_CONF_OPTS += --enable-opus
->  VLC_DEPENDENCIES += libvorbis opus
-> -- 
-> 2.4.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel Martin (7):
+  package/opencv: add a choice for selecting gstreamer support
+  package/opencv: add gstreamer-1.x support
+  package/opencv: add a choice for selecting the gui toolkit
+  package/opencv: add qt5 support
+  package/opencv: add gtk3 support
+  package/opencv: add opengl support
+  package/vlc: add opencv support
+
+ package/opencv/Config.in                           | 156 +++++++++++++++++----
+ package/opencv/opencv.mk                           |  40 +++++-
+ ...opencv_wrapper-use-opencv2-style-includes.patch |  36 +++++
+ ...cv_example-add-missing-include-statements.patch |  29 ++++
+ package/vlc/Config.in                              |   2 +
+ package/vlc/vlc.mk                                 |   8 +-
+ 6 files changed, 240 insertions(+), 31 deletions(-)
+ create mode 100644 package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
+ create mode 100644 package/vlc/0009-opencv_example-add-missing-include-statements.patch
+
+--
+2.4.5
