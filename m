@@ -1,102 +1,82 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Jul 2015 23:54:48 +0200
-Subject: [Buildroot] [PATCH 5/5 v10] package/opencv: add opengl support
-In-Reply-To: <cover.1436132995.git.yann.morin.1998@free.fr>
-References: <cover.1436132995.git.yann.morin.1998@free.fr>
-Message-ID: <582a50073ade12575a280f6aea96095597f61759.1436132995.git.yann.morin.1998@free.fr>
+Date: Mon, 6 Jul 2015 00:08:54 +0200
+Subject: [Buildroot] [PATCH 1/1] ntp: drop uselss patch fixup which
+ sometimes breaks rebuild
+In-Reply-To: <1436129545-3540-1-git-send-email-danomimanchego123@gmail.com>
+References: <1436129545-3540-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20150705220854.GU3647@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Samuel Martin <s.martin49@gmail.com>
+Danomi, All,
 
-In OpenCV, OpenGL is only used by highgui module.
+On 2015-07-05 16:52 -0400, Danomi Manchego spake thusly:
+> Drop sed line which no longer changes anything.  Worse, it bumps each
+> ntpd/*.c file's modification time, which sometimes triggers a strange
+> dependency path causing the makefile to attempt to run the ntpd keyword-gen
+> app, which fails, because it's been cross-compiled.
+> 
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> 
+> ---
+> 
+> The deleted sed line is the reason why the keyword-gen source dependency
+> was being unexpectedly triggered, which prompted my initial patch back
+> in July 2014, which Thomas P. did not really like as the real reason
+> for why the initial ntp rebuild works, but the second fails, was not
+> understood.  (See http://patchwork.ozlabs.org/patch/371305/).
+> 
+> While its true that this patch still does not explore why things sometimes
+> work differently in subsequent ntp rebuilds, the whole issue can be avoided
+> by not touching the source unnecessarily.
+> 
+> Interestingly, someone on one of the ntp mailing lists also encountered
+> this same issue.  (See http://lists.ntp.org/pipermail/questions/2009-October/024669.html)
+> It doesn't appear that anything came of it.  In fact, the fellow
+> who answered said that if you don't change the source file, then
+> the derived file delivered with the tarball should be up to date.
+> 
+> So lets not touch the source unless we have to, especially if we're
+> not even changing anything.
+> ---
+>  package/ntp/ntp.mk | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+> index 5f05508..93cefa1 100644
+> --- a/package/ntp/ntp.mk
+> +++ b/package/ntp/ntp.mk
+> @@ -42,7 +42,6 @@ endif
+>  
+>  define NTP_PATCH_FIXUPS
+>  	$(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
 
-OpenGL support is done using extensions from 3rd party framework: either
-Qt5OpenGL with Qt5 (with GL support only, not GLES); or gtkglext (which
-is not available in Buildroot) with gtk2
+As far as I could see, that one line does not do anything either.
 
-So, make OpenGL knob a sub-option of the Qt5 support option.
+> -	$(SED) '/[[:space:](]rindex[[:space:]]*(/s/[[:space:]]*rindex[[:space:]]*(/ strrchr(/g' $(@D)/ntpd/*.c
+>  endef
 
-Note: we enclose both the GUI toolkit choice and the GL option in an
-if-block, so that the GL option gets properly indented; having it
-depend on WITH_QT5 is not enough, because it does not directly follow
-it, so kconfig would not consider it for indenting.
+Indeed, this line does not change anything in the source files...
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[yann.morin.1998 at free.fr: tweak commit log about the if-block]
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Regards,
+Yann E. MORIN.
 
----
-Changes v9 -> v10:
-  - slightly expand commit log  (Yann)
----
- package/opencv/Config.in | 22 +++++++++++++++++++++-
- package/opencv/opencv.mk |  7 +++++++
- 2 files changed, 28 insertions(+), 1 deletion(-)
+>  NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_KEYGEN) += util/ntp-keygen
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 6ae74b4..0b5d1ac 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -52,9 +52,10 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	  Include opencv_highgui (high-level gui and media i/o) module into the
- 	  OpenCV build.
- 
-+if BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-+
- choice
- 	prompt "gui toolkit"
--	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	help
- 	  GUI toolkit to be used by the opencv_highgui module.
- 
-@@ -108,6 +109,25 @@ comment "qt5 support needs qt5"
- 
- endchoice
- 
-+config BR2_PACKAGE_OPENCV_WITH_OPENGL
-+	bool "opengl support"
-+	# OpenGL support done using Qt5OpenGL, so depends on WITH_QT5
-+	depends on BR2_PACKAGE_OPENCV_WITH_QT5
-+	# OpenGL support requires Qt5OpenGL with GL support, not GLES
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_QT5BASE_OPENGL
-+	help
-+	  Enable OpenGL for UI.
-+
-+comment "opengl support needs an OpenGL provider"
-+	depends on BR2_PACKAGE_OPENCV_WITH_QT5
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || \
-+		!BR2_PACKAGE_HAS_LIBGL
-+
-+endif # BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-+
-+
- config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
- 	bool "imgcodecs"
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index c788aeb..bb1bcd8 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -264,6 +264,13 @@ else
- OPENCV_CONF_OPTS += -DWITH_JPEG=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_OPENGL),y)
-+OPENCV_CONF_OPTS += -DWITH_OPENGL=ON
-+OPENCV_DEPENDENCIES += libgl
-+else
-+OPENCV_CONF_OPTS += -DWITH_OPENGL=OFF
-+endif
-+
- OPENCV_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
- 
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_PNG),y)
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
