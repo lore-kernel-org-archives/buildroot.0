@@ -1,54 +1,50 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jul 2015 18:49:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: Fix SSE support with gcc5
-Message-ID: <1436114954-5766-1-git-send-email-bernd.kuhls@t-online.de>
+From: Mike <mikez@OpenPlayer.org>
+Date: Sun, 5 Jul 2015 11:56:17 -0500
+Subject: [Buildroot] host-luarocks include path does not match
+ installation of host-luajit
+In-Reply-To: <20150705150335.GQ3647@free.fr>
+References: <20150704140142.3aa5c982@core2quad.morethan.org>
+ <20150704214734.GC3634@free.fr>
+ <20150704213628.21ff7e6e@core2quad.morethan.org>
+ <20150705000050.7c2be969@core2quad.morethan.org>
+ <20150705111007.63ff239b@free-electrons.com>
+ <20150705083253.1bfaefa5@core2quad.morethan.org>
+ <20150705142725.GN3647@free.fr>
+ <20150705095425.174bde89@core2quad.morethan.org>
+ <20150705150335.GQ3647@free.fr>
+Message-ID: <20150705115617.76d410a2@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Compile fails
+On Sun, 5 Jul 2015 17:03:35 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-make[4]: Entering directory `/home/fli4l/br6_freeswitch/output/build/vlc-2.2.1/modules'
-  CC       video_chroma/libi420_yuy2_sse2_plugin_la-i420_yuy2.lo
-In file included from video_chroma/i420_yuy2.c:35:0:
-video_chroma/i420_yuy2.c: In function 'I420_UYVY_Filter':
-video_chroma/i420_yuy2.c:194:23: error: calling 'I420_UYVY.isra.2' with SSE caling convention without SSE/SSE2 enabled
- VIDEO_FILTER_WRAPPER( I420_UYVY )
-                       ^
-../include/vlc_filter.h:266:13: note: in definition of macro 'VIDEO_FILTER_WRAPPER'
-             name( p_filter, p_pic, p_outpic );                          \
+> > >>> host-luarocks 2.2.2 Extracting  
+> > gzip -d -c /var1/arm/buildroot.git/dl/luarocks-2.2.2.tar.gz | tar
+> > --strip-components=1
+> > -C /var1/arm/new-i386/build/host-luarocks-2.2.2  -xf -  
+> > >>> host-luarocks 2.2.2 Patching
+> > >>> host-luarocks 2.2.2 Configuring  
 
-using this defconfig
+That is the luarocks package that is reporting that it can not
+find 'lua.h'.
 
-BR2_x86_pentium2=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_GCC_VERSION_5_1_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_VLC=y
+Only LuaJIT is in an external source directory, and it installed
+just fine, with your proposed patch.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/vlc/vlc.mk |    6 ++++++
- 1 file changed, 6 insertions(+)
+There is just a mis-match between where host-luajit was installed
+and where host-luarocks is expecting them.
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 2a28eee..7030acc 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -67,6 +67,12 @@ else
- VLC_CONF_OPTS += --disable-altivec
- endif
- 
-+ifeq ($(BR2_X86_CPU_HAS_SSE),y)
-+VLC_CONF_OPTS += --enable-sse
-+else
-+VLC_CONF_OPTS += --disable-sse
-+endif
-+
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- VLC_CONF_OPTS += --enable-alsa
- VLC_DEPENDENCIES += alsa-lib
--- 
-1.7.10.4
+- - - - -
+
+Translation: One problem fixed, now exposes another one.
+
+Hah! 
+And someone commented on how the title of this thread does
+not strictly apply.
+So I changed the title, but kept the same threading.
+
+Mike
