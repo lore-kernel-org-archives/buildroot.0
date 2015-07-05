@@ -1,56 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Jul 2015 14:43:16 +0200
-Subject: [Buildroot] [git commit] package/ffmpeg: Fix i586 compilation with
-	gcc5
-Message-ID: <20150705124338.6ADB280166@busybox.osuosl.org>
+Date: Sun, 5 Jul 2015 14:44:34 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/ffmpeg: Fix i586 compilation
+ with gcc5
+In-Reply-To: <1434829495-16711-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1434829495-16711-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150705144434.3108aaa3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bfb8df2ad9b164b421d25294c6882c8b61dc59a5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-In file included from libavcodec/cabac_functions.h:46:0,
-                 from libavcodec/h264_cabac.c:37:
-libavcodec/h264_cabac.c: In function 'ff_h264_decode_mb_cabac':
-libavcodec/x86/cabac.h:192:5: error: 'asm' operand has impossible constraints
-     __asm__ volatile(
+On Sat, 20 Jun 2015 21:44:55 +0200, Bernd Kuhls wrote:
+> In file included from libavcodec/cabac_functions.h:46:0,
+>                  from libavcodec/h264_cabac.c:37:
+> libavcodec/h264_cabac.c: In function 'ff_h264_decode_mb_cabac':
+> libavcodec/x86/cabac.h:192:5: error: 'asm' operand has impossible constraints
+>      __asm__ volatile(
+> 
+> To reproduce the bug use this defconfig:
+> 
+> BR2_GCC_VERSION_5_1_X=y
+> BR2_PACKAGE_FFMPEG=y
+> BR2_PACKAGE_FFMPEG_GPL=y
+> BR2_PACKAGE_FFMPEG_NONFREE=y
+> BR2_PACKAGE_FFMPEG_FFPLAY=y
+> BR2_PACKAGE_FFMPEG_FFSERVER=y
+> BR2_PACKAGE_FFMPEG_FFPROBE=y
+> BR2_PACKAGE_FFMPEG_AVRESAMPLE=y
+> BR2_PACKAGE_FFMPEG_POSTPROC=y
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: bug only occurs with a i586 target cpu
 
-To reproduce the bug use this defconfig:
+Applied, thanks. Did you submit a bug report to ffmpeg upstream?
 
-BR2_GCC_VERSION_5_1_X=y
-BR2_PACKAGE_FFMPEG=y
-BR2_PACKAGE_FFMPEG_GPL=y
-BR2_PACKAGE_FFMPEG_NONFREE=y
-BR2_PACKAGE_FFMPEG_FFPLAY=y
-BR2_PACKAGE_FFMPEG_FFSERVER=y
-BR2_PACKAGE_FFMPEG_FFPROBE=y
-BR2_PACKAGE_FFMPEG_AVRESAMPLE=y
-BR2_PACKAGE_FFMPEG_POSTPROC=y
+Thanks,
 
-[Thomas: add a comment in the code.]
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ffmpeg/ffmpeg.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
-
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 787dbb1..94aec4b 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -261,6 +261,11 @@ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
- FFMPEG_CONF_OPTS += --enable-yasm
- FFMPEG_DEPENDENCIES += host-yasm
- else
-+ifeq ($(BR2_x86_i586),y)
-+# Needed to work around a bug with gcc 5.x:
-+# error: 'asm' operand has impossible constraints
-+FFMPEG_CONF_OPTS += --disable-inline-asm
-+endif
- FFMPEG_CONF_OPTS += --disable-yasm
- FFMPEG_CONF_OPTS += --disable-mmx
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
