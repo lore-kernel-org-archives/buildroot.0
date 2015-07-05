@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Jul 2015 23:54:44 +0200
-Subject: [Buildroot] [PATCH 1/5 v10] package/opencv: add a choice for
-	selecting the gui toolkit
+Date: Sun,  5 Jul 2015 23:54:45 +0200
+Subject: [Buildroot] [PATCH 2/5 v10] package/opencv: depends on GUI toolkits,
+	rather than select them
 In-Reply-To: <cover.1436132995.git.yann.morin.1998@free.fr>
 References: <cover.1436132995.git.yann.morin.1998@free.fr>
-Message-ID: <c9fe50ca592ae0b80eaa037bede9b2e03c31da50.1436132995.git.yann.morin.1998@free.fr>
+Message-ID: <0f2520d1ba8b23ee37d5822807d268c52617f408.1436132995.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,114 +13,96 @@ To: buildroot@busybox.net
 
 From: Samuel Martin <s.martin49@gmail.com>
 
-In OpenCV, only one GUI toolkit may be used at any one time, so group
-the two existing options into a choice to make this situation explicit.
+Currently, we only support either Qt4 or gtk2, but OpenCV also
+additionally supports Qt5 or gtk3, making for a choice of four
+toolkits, one of: Qt4, Qt5, gtk3, gtk2 (and obviously, none).
 
-This will also be useful when we later add support for Qt5 and gtk3.
+Since Buildroot does not support coexistence of Qt4 and Qt5, we
+can no longer select one and depend on the other, like so:
 
-Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+    config BR2_PKG_OCV_WITH_QT4
+        bool "Qt4"
+        depends on !BR2_PKG_QT5
+        select BR2_PKG_QT
+
+    config BR2_PKG_OCV_WITH_QT5
+        bool "Qt5"
+        depends on !BR2_PKG_QT
+        select BR2_PKG_QT5
+
+otherwise, we'd get a circular dependency chain in Kconfig, which would
+complain with:
+
+  package/opencv/Config.in:57:error: recursive dependency detected!
+  package/opencv/Config.in:57:    choice <choice> contains symbol BR2_PKG_OCV_WITH_QT5
+  package/opencv/Config.in:111:   symbol BR2_PKG_OCV_WITH_QT5 depends on BR2_PKG_QT
+  package/qt/Config.in:5: symbol BR2_PKG_QT is selected by BR2_PKG_OCV_WITH_QT
+  package/opencv/Config.in:98:    symbol BR2_PKG_OCV_WITH_QT is part of choice <choice>
+
+Instead, we need to depend on either Qt version.
+
+So, to have a consistent choice, we make all support for GUI toolkits
+actually depend on the toolkit, rather than select it.
+
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[yann.morin.1998 at free.fr: tweak commit log]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: split-out the switch-selects-to-depends hunk
+ from the add-qt5 hunk]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
 Changes v9 -> v10:
-  - tweak commit log  (Yann)
+  - split this hunk out of next patch  (Yann)
 ---
- package/opencv/Config.in | 67 +++++++++++++++++++++++++++++++-----------------
- 1 file changed, 44 insertions(+), 23 deletions(-)
+ package/opencv/Config.in | 25 +++++++------------------
+ 1 file changed, 7 insertions(+), 18 deletions(-)
 
 diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 079730e..c3542c4 100644
+index c3542c4..5dd39ca 100644
 --- a/package/opencv/Config.in
 +++ b/package/opencv/Config.in
-@@ -52,6 +52,50 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	  Include opencv_highgui (high-level gui and media i/o) module into the
- 	  OpenCV build.
+@@ -63,36 +63,25 @@ config BR2_PACKAGE_OPENCV_GUI_NONE
  
-+choice
-+	prompt "gui toolkit"
-+	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-+	help
-+	  GUI toolkit to be used by the opencv_highgui module.
-+
-+config BR2_PACKAGE_OPENCV_GUI_NONE
-+	bool "none"
-+
-+config BR2_PACKAGE_OPENCV_WITH_GTK
-+	bool "gtk2"
-+	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
-+	depends on BR2_USE_MMU # libgtk2 -> libglib2
-+	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBGTK2
-+
-+comment "gtk2 needs X.org and a toolchain w/ wchar, threads, C++"
-+	depends on BR2_USE_MMU # libgtk2 -> glib2
-+	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
-+	depends on !BR2_PACKAGE_XORG7 || \
-+		!BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_OPENCV_WITH_QT
-+	bool "qt4"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # qt
-+	select BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT_STL
-+	select BR2_PACKAGE_QT_GUI_MODULE
-+	select BR2_PACKAGE_QT_TEST
-+	help
-+	  Use Qt with QtTest module and STL support
-+
-+comment "qt4 needs a toolchain w/ C++"
-+	depends on BR2_USE_MMU # qt
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+endchoice
-+
- config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
- 	bool "imgcodecs"
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-@@ -209,17 +253,6 @@ comment "gstreamer-1.x support needs a toolchain w/ wchar, threads"
- 
- endchoice
- 
--config BR2_PACKAGE_OPENCV_WITH_GTK
--	bool "gtk support"
--	depends on BR2_PACKAGE_XORG7
+ config BR2_PACKAGE_OPENCV_WITH_GTK
+ 	bool "gtk2"
+-	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
+-	depends on BR2_USE_MMU # libgtk2 -> libglib2
 -	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
 -	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
 -	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_MMU # libgtk2 -> glib2
--	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
--	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+-	depends on BR2_PACKAGE_XORG7
 -	select BR2_PACKAGE_LIBGTK2
--
- config BR2_PACKAGE_OPENCV_WITH_JASPER
- 	bool "jpeg2000 support"
- 	select BR2_PACKAGE_JASPER
-@@ -242,18 +275,6 @@ config BR2_PACKAGE_OPENCV_WITH_PNG
- 	help
- 	  Use shared libpng from the target system.
++	depends on BR2_PACKAGE_LIBGTK2
  
--config BR2_PACKAGE_OPENCV_WITH_QT
--	bool "qt backend support"
+-comment "gtk2 needs X.org and a toolchain w/ wchar, threads, C++"
++comment "gtk2 support needs libgtk2"
+ 	depends on BR2_USE_MMU # libgtk2 -> glib2
+ 	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
+-	depends on !BR2_PACKAGE_XORG7 || \
+-		!BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_PACKAGE_LIBGTK2
+ 
+ config BR2_PACKAGE_OPENCV_WITH_QT
+ 	bool "qt4"
 -	depends on BR2_INSTALL_LIBSTDCPP
 -	depends on BR2_USE_MMU # qt
--	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
 -	select BR2_PACKAGE_QT
--	select BR2_PACKAGE_QT_STL
--	select BR2_PACKAGE_QT_GUI_MODULE
--	select BR2_PACKAGE_QT_TEST
--	help
++	depends on BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT_STL
+ 	select BR2_PACKAGE_QT_GUI_MODULE
+ 	select BR2_PACKAGE_QT_TEST
+ 	help
 -	  Use Qt with QtTest module and STL support
--
- config BR2_PACKAGE_OPENCV_WITH_TIFF
- 	bool "tiff support"
- 	select BR2_PACKAGE_TIFF
++	  Use Qt4 with QtTest and QtGui modules and STL support, as GUI toolkit.
+ 
+-comment "qt4 needs a toolchain w/ C++"
++comment "qt4 support needs qt"
+ 	depends on BR2_USE_MMU # qt
+-	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_PACKAGE_QT
+ 
+ endchoice
+ 
 -- 
 1.9.1
