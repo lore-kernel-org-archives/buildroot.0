@@ -1,46 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Jul 2015 15:33:22 +0200
-Subject: [Buildroot] [PATCH v8 4/7] package/opencv: add qt5 support
-In-Reply-To: <CAHXCMML=1J6=y1MFGetN19GAC_jMUEprzedFsJhn-Tp46B5V0Q@mail.gmail.com>
-References: <1436089229-21103-1-git-send-email-s.martin49@gmail.com>
- <1436089229-21103-5-git-send-email-s.martin49@gmail.com>
- <20150705145759.50e1409f@free-electrons.com>
- <CAHXCMML=1J6=y1MFGetN19GAC_jMUEprzedFsJhn-Tp46B5V0Q@mail.gmail.com>
-Message-ID: <20150705153322.4fd06f32@free-electrons.com>
+Date: Sun, 5 Jul 2015 16:05:29 +0200
+Subject: [Buildroot] [git commit] upmpdcli: systemd support
+Message-ID: <20150705140616.4F5828175F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+commit: http://git.buildroot.net/buildroot/commit/?id=2154063a38cffbcf189af3bb7fec2288cdc6fe82
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 5 Jul 2015 15:01:40 +0200, Samuel Martin wrote:
+Usable .service file is provided in the package.
 
-> >> -comment "qt4 needs a toolchain w/ C++"
-> >> +comment "qt4 support needs qt"
-> >>       depends on BR2_USE_MMU # qt
-> >> -     depends on !BR2_INSTALL_LIBSTDCPP
-> >> +     depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
-> >
-> > Why !qt && !qt5 ?
-> >
-> > Just do depends on !qt. Remember, you are inside a choice, so anyway the
-> > user can only select *either* qt4 *or* qt5.
-> 
-> Because in BR, we don't support both qt4 and qt5 enabled at the same time.
-> So if Qt5 is already enabled in the package selection, this comment
-> should not be visible; hence the !qt5
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/upmpdcli/upmpdcli.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-Hum, ok. One could say that we could use just "depends on !qt", and
-then have the user be smart enough to realize that if he wants to
-enable qt, he has to disable qt5.
-
-But ok, fair enough. What about the other comments I made on the same
-patch?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 5e4d6a8..69a0ab3 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -31,6 +31,14 @@ define UPMPDCLI_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/upmpdcli/S99upmpdcli $(TARGET_DIR)/etc/init.d/S99upmpdcli
+ endef
+ 
++define UPMPDCLI_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 $(@D)/systemd/upmpdcli.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/upmpdcli.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf /usr/lib/systemd/system/upmpdcli.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/upmpdcli.service
++endef
++
+ define UPMPDCLI_INSTALL_CONF_FILE
+ 	$(INSTALL) -D -m 0755 $(@D)/src/upmpdcli.conf $(TARGET_DIR)/etc/upmpdcli.conf
+ endef
