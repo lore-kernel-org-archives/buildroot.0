@@ -1,71 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Jul 2015 17:16:40 +0200
-Subject: [Buildroot] [git commit] wine: fix sane related build failure
-Message-ID: <20150705151649.C631480826@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  5 Jul 2015 15:18:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 8201] Important security upgrades for node.js
+In-Reply-To: <bug-8201-163@https.bugs.busybox.net/>
+References: <bug-8201-163@https.bugs.busybox.net/>
+Message-ID: <20150705151814.5BC2B7F8DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff89e1eb0cdb8ebe9cbd2cf944f43ed132afcb17
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=8201
 
-If sane is installed system-wide on the build machine, then the
-sane-config binary found is the one of the system, which returns
-incorrect library paths for cross-compilation.
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-07-05 15:18:13 UTC ---
+Yann: we did a mistake when merging the alternate version stuff for NodeJS. The
+naming of the option should not be 0_12_5, but just 0_12. Otherwise, everytime
+we upgrade the minor version of NodeJS, we would need to change the Config.in
+option name, which isn't good. I did not notice that when applying the patches.
 
-To fix this, this commit adds a patch to wine to make it support a
-SANE_CONFIG environment variable, and then adjusts wine.mk to
-explicitly pass the path to $(STAGING_DIR)/usr/bin/sane-config.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/8bd/8bdc1eed55075313403aa8a6c9af6a427bce198e/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/wine/0003-sane-config-fix.patch |   21 +++++++++++++++++++++
- package/wine/wine.mk                    |    1 +
- 2 files changed, 22 insertions(+), 0 deletions(-)
-
-diff --git a/package/wine/0003-sane-config-fix.patch b/package/wine/0003-sane-config-fix.patch
-new file mode 100644
-index 0000000..d53843a
---- /dev/null
-+++ b/package/wine/0003-sane-config-fix.patch
-@@ -0,0 +1,21 @@
-+Add support for SANE_CONFIG variable
-+
-+Instead of using directly the sane-config command, allow to pass a
-+SANE_CONFIG environment variable to override where to find the
-+sane-config tool.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/configure.ac
-+===================================================================
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1375,7 +1375,7 @@
-+ if test "x$with_sane" != "xno"
-+ then
-+     ac_save_CPPFLAGS="$CPPFLAGS"
-+-    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`sane-config --cflags 2>/dev/null`],[`sane-config --ldflags 2>/dev/null`])
-++    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`${SANE_CONFIG:-sane-config} --cflags 2>/dev/null`],[`${SANE_CONFIG:-sane-config} --ldflags 2>/dev/null`])
-+     AC_CHECK_HEADER(sane/sane.h,
-+         [WINE_CHECK_SONAME(sane,sane_init,,[SANE_CFLAGS=""],[$SANE_LIBS])],
-+         [SANE_CFLAGS=""])
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 1ae038e..d6fb9c6 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -174,6 +174,7 @@ endif
- ifeq ($(BR2_PACKAGE_SANE_BACKENDS),y)
- WINE_CONF_OPTS += --with-sane
- WINE_DEPENDENCIES += sane-backends
-+WINE_CONF_ENV += SANE_CONFIG=$(STAGING_DIR)/usr/bin/sane-config
- else
- WINE_CONF_OPTS += --without-sane
- endif
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
