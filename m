@@ -1,106 +1,69 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun, 5 Jul 2015 11:26:27 +0200
-Subject: [Buildroot] [RFC v4 00/16] Add per-package staging feature
-In-Reply-To: <20150705110141.17803801@free-electrons.com>
-References: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
- <CAHkwnC8yDfpiXyKLFxZHUOA-TT+4xtoHLW32NM03WAb2Yyjq6g@mail.gmail.com>
- <20150705110141.17803801@free-electrons.com>
-Message-ID: <CAHkwnC8rFVs8f2Kc5bGYatvt8n9bxuHUod=3JhJftkacEucgNQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 5 Jul 2015 11:27:19 +0200
+Subject: [Buildroot] [PATCH v7 6/7] package/opencv: add opengl support
+In-Reply-To: <1436036821-10073-7-git-send-email-s.martin49@gmail.com>
+References: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
+ <1436036821-10073-7-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150705092718.GF3647@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 5, 2015 at 11:01 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Sun, 5 Jul 2015 10:51:56 +0200, Fabio Porcedda wrote:
->
->> I've redone all the tests including the case of the patch set without
->> using top-level make.
->>
->> I've repeated the the test at least two times and taken the minimum value.
->
-> How much variation did you had between the test builds for a given
-> scenario? Taking the minimal value is a somewhat strange choice :)
+Samuel, All,
 
-Not very much, it was done because in some cases every time a repeat
-the build the time was reduced,  i will show you the full data, build
-times are sorted by their value, usually the lowest value is the last
-value taken:
+On 2015-07-04 21:07 +0200, Samuel Martin spake thusly:
+> In OpenCV, OpenGL is only used by highgui module.
+> 
+> OpenGL support is done using extensions from 3rd party framework: either
+> Qt5OpenGL with Qt5 (with GL support only, not GLES); or gtkglext (which
+> is not available in Buildroot) with gtk2
+> 
+> So, make OpenGL knob a sub-option of the Qt5 support option.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+[--SNIP--]
+> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+> index 986e7b4..61a3ccd 100644
+> --- a/package/opencv/opencv.mk
+> +++ b/package/opencv/opencv.mk
+> @@ -264,6 +264,13 @@ else
+>  OPENCV_CONF_OPTS += -DWITH_JPEG=OFF
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_OPENCV_WITH_OPENGL),y)
+> +OPENCV_CONF_OPTS += -DWITH_OPENGL=ON
+> +OPENCV_DEPENDENCIES += libgl qt5base
 
-defconfig-small, HW-MED:
-| top-level make | patch set | build time
-|----------------------| ---------------|
---------------------------------------------------
-| no                  | no            | 10m13s 10m16s 10m16s 10m17s
-| no                  | yes          |  10m17s 10m18s 10m20s 11m23s
-| yes                 | no           |   5m25s 5m27s 5m28s 5m31s
-| yes                 | yes         |  5m22s 5m23s 5m24s 5m26s
+No need for qt5base here, since gl is already conditional to Qt5.
 
-defconfig-small, HW-HIGH:
-| top-level make | patch set | build time
-|----------------------| ---------------|
---------------------------------------------------
-| no                  | no            | 21m17s 21m20s 21m42s
-| no                  | yes          |  21m24s 21m25s 21m28s
-| yes                 | no           |  7m57s 7m57s 7m58s 7m58s
-| yes                 | yes         |   7m48s 7m50s 7m50s 7m55s 7m57s 7m58s
+With that fixed:
 
-defconfig-full, HW-MED:
-| top-level make | patch set | build time
-|----------------------| ---------------|
---------------------------------------------------
-| no                  | no            |  199m 199m
-| no                  | yes          |   200m 200m
-| yes                 | no           |  99m 101m
-| yes                 | yes         |  99m 100m
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+Regards,
+Yann E. MORIN.
 
-defconfig-full, HW-HIGH:
-| top-level make | patch set | build time
-|----------------------| ---------------|
---------------------------------------------------
-| no                  | no            | 350m 351m
-| no                  | yes          | 355m 358m
-| yes                 | no           | 74m 75m
-| yes                 | yes         | 76m 76m 76m
+> +else
+> +OPENCV_CONF_OPTS += -DWITH_OPENGL=OFF
+> +endif
+> +
+>  OPENCV_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
+>  
+>  ifeq ($(BR2_PACKAGE_OPENCV_WITH_PNG),y)
+> -- 
+> 2.4.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
->> defconfig-small:
->> | HW-HIGH | HW-MED | top-level make | patch set |
->> |----------------|----------------|-----------------------|---------------|
->> | 21m17s    | 10m13s   | no                  | no           |
->> | 21m24s    | 10m17s   | no                  | yes         |
->> |   7m57s    |  5m25s   | yes                 | no           |
->> |   7m48s    |  5m22s   | yes                 | yes         |
->>
->> defconfig-full:
->> | HW-HIGH | HW-MED | top-level make | patch set |
->> |----------------|----------------|-----------------------|---------------|
->> | 350m       | 199m       | no                  | no           |
->> | 355m       | 200m       | no                  | yes         |
->> |   74m       |  99m        | yes                 | no           |
->> |   76m       |  99m        | yes                 | yes         |
->>
->> In these tests the penalty of using pps is 0%-3%.
->> Also the reduction of build time using top-level make is 50%-78%
->>
->> I think they are nice numbers :)
->
-> Yes, they are very good. I guess that if we implement per-package host
-> dir there will be a small additional impact, but clearly the benefits
-> of top-level parallel largely outweighs the impact of per-package
-> staging/host directories.
->
-> Thanks a lot for having done those additional tests, it clearly means
-> we should progressively merge your work on this topic!
-
-Great!
-
-I work now to use the toolchain wrapper even for the internal toolchain.
-
-Best regards
 -- 
-Fabio Porcedda
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
