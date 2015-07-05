@@ -1,75 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Jul 2015 17:16:22 +0200
-Subject: [Buildroot] [PATCH 00/38] systemd support for various packages
-In-Reply-To: <20150524021840.GA13994@vostro>
-References: <cover.1432332802.git.alex.suykov@gmail.com>
- <7cec.556127b6.37b1a@xdna.net> <20150524021840.GA13994@vostro>
-Message-ID: <20150705171622.1b2b98dd@free-electrons.com>
+Date: Sun, 5 Jul 2015 17:16:40 +0200
+Subject: [Buildroot] [git commit] wine: fix sane related build failure
+Message-ID: <20150705151649.C631480826@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alex, Cam,
+commit: http://git.buildroot.net/buildroot/commit/?id=ff89e1eb0cdb8ebe9cbd2cf944f43ed132afcb17
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Could you reach to an agreement on this point? I am not a systemd
-expert, and from a quick reading of Lucas Nussbaum blog post, there
-does not seem to be a perfect solution (besides changing the service
-source code itself to make it more systemd aware).
+If sane is installed system-wide on the build machine, then the
+sane-config binary found is the one of the system, which returns
+incorrect library paths for cross-compilation.
 
-It would be great to be able to move forward with this patch series.
+To fix this, this commit adds a patch to wine to make it support a
+SANE_CONFIG environment variable, and then adjusts wine.mk to
+explicitly pass the path to $(STAGING_DIR)/usr/bin/sane-config.
 
-Thanks for your help,
+Fixes:
 
-Thomas
+  http://autobuild.buildroot.org/results/8bd/8bdc1eed55075313403aa8a6c9af6a427bce198e/
 
-On Sun, 24 May 2015 05:18:40 +0300, Alex Suykov wrote:
-> Sun, May 24, 2015 at 01:21:58AM -0000, Cam Hutchison wrote:
-> 
-> > Type=simple is not necessarily the best way to do this. Handling errors
-> > is done differently by systemd with Type=simple vs Type=forking.
-> 
-> The difference in error handling is actually why I consider non-forking
-> services to be the only valid kind of services for anything more capable
-> that sysv initscripts.
-> 
-> > A recent blog post by Lucas Nussbaum has more details:
-> > http://www.lucas-nussbaum.net/blog/?p=877
-> > 
-> > With Type=simple, systemd considers the service started right after
-> > executing it. It will not flag errors on startup if the process exits
-> > soon after due to a config error, etc. With Type=forking, systemd will
-> > only consider the service started after the parent exits. As many
-> > daemons will check config files and command line args before forking,
-> > these errors will be detected and propagated to systemd.
-> 
-> Non-forking services signal initial configuration errors as well as any
-> errors past initial configuration phase by exiting with non-zero status.
-> Which systemd can take immediate action on, like restarting the service
-> or marking it as failed. It's mentioned in the blog post.
-> 
-> Forking daemons gain marginally better *initial* error reporting by losing
-> the ability to report errors at later stages. Detecting the state of a forked
-> daemon (as in running or dead), or killing it, is non-trivial and generally
-> involves time of check time of use race condition. With non-forking services,
-> both operations are trivial and reliable.
-> 
-> Does knowing the fine distiction between initial and non-initial failure
-> is worth the loss of control over the child process? I don't think so.
-> 
-> Reporting initial config status via parent process exit() is a specific
-> case of startup notification, the post mentions that too.
-> Any reliance on any kind of startup notification inherently results in
-> time of check time of use race conditon.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/wine/0003-sane-config-fix.patch |   21 +++++++++++++++++++++
+ package/wine/wine.mk                    |    1 +
+ 2 files changed, 22 insertions(+), 0 deletions(-)
 
-
-
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wine/0003-sane-config-fix.patch b/package/wine/0003-sane-config-fix.patch
+new file mode 100644
+index 0000000..d53843a
+--- /dev/null
++++ b/package/wine/0003-sane-config-fix.patch
+@@ -0,0 +1,21 @@
++Add support for SANE_CONFIG variable
++
++Instead of using directly the sane-config command, allow to pass a
++SANE_CONFIG environment variable to override where to find the
++sane-config tool.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/configure.ac
++===================================================================
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1375,7 +1375,7 @@
++ if test "x$with_sane" != "xno"
++ then
++     ac_save_CPPFLAGS="$CPPFLAGS"
++-    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`sane-config --cflags 2>/dev/null`],[`sane-config --ldflags 2>/dev/null`])
+++    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`${SANE_CONFIG:-sane-config} --cflags 2>/dev/null`],[`${SANE_CONFIG:-sane-config} --ldflags 2>/dev/null`])
++     AC_CHECK_HEADER(sane/sane.h,
++         [WINE_CHECK_SONAME(sane,sane_init,,[SANE_CFLAGS=""],[$SANE_LIBS])],
++         [SANE_CFLAGS=""])
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 1ae038e..d6fb9c6 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -174,6 +174,7 @@ endif
+ ifeq ($(BR2_PACKAGE_SANE_BACKENDS),y)
+ WINE_CONF_OPTS += --with-sane
+ WINE_DEPENDENCIES += sane-backends
++WINE_CONF_ENV += SANE_CONFIG=$(STAGING_DIR)/usr/bin/sane-config
+ else
+ WINE_CONF_OPTS += --without-sane
+ endif
