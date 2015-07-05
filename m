@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Jul 2015 23:54:47 +0200
-Subject: [Buildroot] [PATCH 4/5 v10] package/opencv: add gtk3 support
+Date: Sun,  5 Jul 2015 23:54:48 +0200
+Subject: [Buildroot] [PATCH 5/5 v10] package/opencv: add opengl support
 In-Reply-To: <cover.1436132995.git.yann.morin.1998@free.fr>
 References: <cover.1436132995.git.yann.morin.1998@free.fr>
-Message-ID: <627f3ded592bc7b605f5a807278db5c86f39ee64.1436132995.git.yann.morin.1998@free.fr>
+Message-ID: <582a50073ade12575a280f6aea96095597f61759.1436132995.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,69 +12,91 @@ To: buildroot@busybox.net
 
 From: Samuel Martin <s.martin49@gmail.com>
 
-OpenCV now also supports gtk3 as a GUI toolkit, in addition to gtk2,
-but only one may be enabled at a time.
+In OpenCV, OpenGL is only used by highgui module.
 
-So, add gtk3 in the choice to select the GUI toolkit.
+OpenGL support is done using extensions from 3rd party framework: either
+Qt5OpenGL with Qt5 (with GL support only, not GLES); or gtkglext (which
+is not available in Buildroot) with gtk2
+
+So, make OpenGL knob a sub-option of the Qt5 support option.
+
+Note: we enclose both the GUI toolkit choice and the GL option in an
+if-block, so that the GL option gets properly indented; having it
+depend on WITH_QT5 is not enough, because it does not directly follow
+it, so kconfig would not consider it for indenting.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[yann.morin.1998 at free.fr: drop the superfluous depends-on for the
- kconfig symbol, since they're no longer needed now we depend-on rather
- than select]
+[yann.morin.1998 at free.fr: tweak commit log about the if-block]
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 ---
-Chanmge v9 -> v10;
-  - drop superfluous depends-on  (Yann)
+Changes v9 -> v10:
+  - slightly expand commit log  (Yann)
 ---
- package/opencv/Config.in |  9 +++++++++
- package/opencv/opencv.mk | 11 +++++++++--
- 2 files changed, 18 insertions(+), 2 deletions(-)
+ package/opencv/Config.in | 22 +++++++++++++++++++++-
+ package/opencv/opencv.mk |  7 +++++++
+ 2 files changed, 28 insertions(+), 1 deletion(-)
 
 diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 5e8f189..6ae74b4 100644
+index 6ae74b4..0b5d1ac 100644
 --- a/package/opencv/Config.in
 +++ b/package/opencv/Config.in
-@@ -70,6 +70,15 @@ comment "gtk2 support needs libgtk2"
- 	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
- 	depends on !BR2_PACKAGE_LIBGTK2
+@@ -52,9 +52,10 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+ 	  Include opencv_highgui (high-level gui and media i/o) module into the
+ 	  OpenCV build.
  
-+config BR2_PACKAGE_OPENCV_WITH_GTK3
-+	bool "gtk3"
-+	depends on BR2_PACKAGE_LIBGTK3
++if BR2_PACKAGE_OPENCV_LIB_HIGHGUI
 +
-+comment "gtk3 support needs libgtk3"
-+	depends on BR2_USE_MMU # libgtk3 -> glib2
-+	depends on BR2_ARCH_HAS_ATOMICS # libgtk3 -> cairo
-+	depends on !BR2_PACKAGE_LIBGTK3
+ choice
+ 	prompt "gui toolkit"
+-	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+ 	help
+ 	  GUI toolkit to be used by the opencv_highgui module.
+ 
+@@ -108,6 +109,25 @@ comment "qt5 support needs qt5"
+ 
+ endchoice
+ 
++config BR2_PACKAGE_OPENCV_WITH_OPENGL
++	bool "opengl support"
++	# OpenGL support done using Qt5OpenGL, so depends on WITH_QT5
++	depends on BR2_PACKAGE_OPENCV_WITH_QT5
++	# OpenGL support requires Qt5OpenGL with GL support, not GLES
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
++	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_QT5BASE_OPENGL
++	help
++	  Enable OpenGL for UI.
 +
- config BR2_PACKAGE_OPENCV_WITH_QT
- 	bool "qt4"
- 	depends on BR2_PACKAGE_QT
++comment "opengl support needs an OpenGL provider"
++	depends on BR2_PACKAGE_OPENCV_WITH_QT5
++	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || \
++		!BR2_PACKAGE_HAS_LIBGL
++
++endif # BR2_PACKAGE_OPENCV_LIB_HIGHGUI
++
++
+ config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
+ 	bool "imgcodecs"
+ 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
 diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 98e1614..c788aeb 100644
+index c788aeb..bb1bcd8 100644
 --- a/package/opencv/opencv.mk
 +++ b/package/opencv/opencv.mk
-@@ -236,11 +236,18 @@ else
- OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF
+@@ -264,6 +264,13 @@ else
+ OPENCV_CONF_OPTS += -DWITH_JPEG=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK)$(BR2_PACKAGE_OPENCV_WITH_GTK3),)
-+OPENCV_CONF_OPTS += -DWITH_GTK=OFF -DWITH_GTK_2_X=OFF
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_OPENGL),y)
++OPENCV_CONF_OPTS += -DWITH_OPENGL=ON
++OPENCV_DEPENDENCIES += libgl
++else
++OPENCV_CONF_OPTS += -DWITH_OPENGL=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK),y)
- OPENCV_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=ON
- OPENCV_DEPENDENCIES += libgtk2
--else
--OPENCV_CONF_OPTS += -DWITH_GTK=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK3),y)
-+OPENCV_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=OFF
-+OPENCV_DEPENDENCIES += libgtk3
- endif
+ OPENCV_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
  
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_JASPER),y)
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_PNG),y)
 -- 
 1.9.1
