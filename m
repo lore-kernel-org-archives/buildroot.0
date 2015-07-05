@@ -1,157 +1,104 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jul 2015 10:49:44 +0200
-Subject: [Buildroot] [PATCH v7 3/7] package/opencv: add a choice for
- selecting the gui toolkit
-In-Reply-To: <1436036821-10073-4-git-send-email-s.martin49@gmail.com>
-References: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
- <1436036821-10073-4-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150705084944.GC3647@free.fr>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sun, 5 Jul 2015 10:51:56 +0200
+Subject: [Buildroot] [RFC v4 00/16] Add per-package staging feature
+In-Reply-To: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <CAHkwnC8yDfpiXyKLFxZHUOA-TT+4xtoHLW32NM03WAb2Yyjq6g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+On Sun, Jun 28, 2015 at 9:42 PM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
 
-On 2015-07-04 21:06 +0200, Samuel Martin spake thusly:
-> This patch moves the existing Qt4 and gtk2 options in that choice right
-> after the highgui knob.
-> In OpenCV, only one GUI toolkik will be actually used at the time by the
-> highgui module, given priority to Qt4.
-> 
-> Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+[snip]
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> To improve performance and reduce space utilization hard links are used.
+>
+> To evaluate performance and space utilization I've done some tests.
+>
+> HW-MED:
+> CPU: Intel i7-4790K (4x2 @4GHz) = 8 threads
+> RAM: 16GB
+> SSD: 512GB
+>
+> HW-HIGH:
+> CPU: 2 x Xeon 2620v3 (6x2 @2.40Ghz) = 24 threads
+> RAM: 32GB
+> SATA: RAID0 2x2TB 3.5" 7200rpm
+>
+>
+> defconfig-small, long chain dependency, unfavorable  scenario for parallelization:
+>
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_PACKAGE_XORG7=y
+> BR2_PACKAGE_XSERVER_XORG_SERVER=y
+> BR2_PACKAGE_LIBGTK3=y
+>
+> defconfig-full:
+>   BR2_arm=y
+>   BR2_TOOLCHAIN_EXTERNAL=y
+> make allyespackageconfig
+> Also i removed few packages that do not built on my system.
+> make show-targets | wc -w
+> 1366
+>
+> Test about output using hard links or note using the "defconfig-full"
+> on HW-MED:
+>
+> |  35GB |  99m | master branch
+> |  37GB | 100m | patch set
+> | 153GB | 105m | patch set using hard links only for the toolchain sysroot
+> | 225GB | 106m | patch set not using hardlinks at all
+>
+> Test about performances of this patch set vs master branch:
+> | 199m | HW-MED | defconfig-full | master branch | no top-level make |
+> |  99m | HW-MED | defconfig-full | master branch | top-level make    |
+> | 100m | HW-MED | defconfig-full | patch set     | top-level make    |
+>
+> | 350m | HW-HIGH | defconfig-full | master branch | no top-level make |
+> |  73m | HW-HIGH | defconfig-full | master branch | top-level make    |
+> |  77m | HW-HIGH | defconfig-full | patch set     | top-level make    |
+>
+> | 10m | HW-MED | defconfig-small | master branch | no top-level make |
+> |  5m | HW-MED | defconfig-small | master branch | top-level make    |
+> |  5m | HW-MED | defconfig-samll | patch set     | top-level make    |
+>
+> | 21m18s | HW-HIGH | defconfig-small | master branch | no top-level make |
+> |  7m53s | HW-HIGH | defconfig-small | master branch | top-level make    |
+> |  7m54s | HW-HIGH | defconfig-samll | patch set     | top-level make    |
 
-Regards,
-Yann E. MORIN.
+[snip]
 
-> ---
-> changes v6->v7:
-> - move choice right after highgui knob (Yann)
-> - reword help text and comment (Yann)
-> 
-> changes v5->v6:
-> - new patch
-> ---
->  package/opencv/Config.in | 76 +++++++++++++++++++++++++++++++++---------------
->  1 file changed, 53 insertions(+), 23 deletions(-)
-> 
-> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-> index 92a1306..9479b35 100644
-> --- a/package/opencv/Config.in
-> +++ b/package/opencv/Config.in
-> @@ -52,6 +52,59 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
->  	  Include opencv_highgui (high-level gui and media i/o) module into the
->  	  OpenCV build.
->  
-> +choice
-> +	prompt "gui toolkit"
-> +	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-> +	help
-> +	  GUI toolkit for opencv_highgui module.
-> +
-> +	  The best toolkit to work with OpenCV are, in decreasing order of
-> +	  preference by the OpenCV build system):
-> +	  - Qt4
-> +	  - gtk2
-> +
-> +	  Note that, whatever you choose here will be used by OpenCV, even
-> +	  if you also enabled a more preferred toolkit in your Buildroot
-> +	  configuration.
-> +
-> +config BR2_PACKAGE_OPENCV_GUI_NONE
-> +	bool "none"
-> +
-> +config BR2_PACKAGE_OPENCV_WITH_GTK
-> +	bool "gtk2"
-> +	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
-> +	depends on BR2_USE_MMU # libgtk2 -> libglib2
-> +	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_LIBGTK2
-> +
-> +comment "gtk2 needs X.org and a toolchain w/ wchar, threads, C++"
-> +	depends on BR2_USE_MMU # libgtk2 -> glib2
-> +	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
-> +	depends on !BR2_PACKAGE_XORG7 || \
-> +		!BR2_USE_WCHAR || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_INSTALL_LIBSTDCPP
-> +
-> +config BR2_PACKAGE_OPENCV_WITH_QT
-> +	bool "qt4"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_USE_MMU # qt
-> +	select BR2_PACKAGE_QT
-> +	select BR2_PACKAGE_QT_STL
-> +	select BR2_PACKAGE_QT_GUI_MODULE
-> +	select BR2_PACKAGE_QT_TEST
-> +	help
-> +	  Use Qt with QtTest module and STL support
-> +
-> +comment "qt4 needs a toolchain w/ C++"
-> +	depends on BR2_USE_MMU # qt
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> +
-> +endchoice
-> +
->  config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
->  	bool "imgcodecs"
->  	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-> @@ -209,17 +262,6 @@ comment "gstreamer-1.x support needs a toolchain w/ wchar, threads"
->  
->  endchoice
->  
-> -config BR2_PACKAGE_OPENCV_WITH_GTK
-> -	bool "gtk support"
-> -	depends on BR2_PACKAGE_XORG7
-> -	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
-> -	depends on BR2_INSTALL_LIBSTDCPP
-> -	depends on BR2_USE_MMU # libgtk2 -> glib2
-> -	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
-> -	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-> -	select BR2_PACKAGE_LIBGTK2
-> -
->  config BR2_PACKAGE_OPENCV_WITH_JASPER
->  	bool "jpeg2000 support"
->  	select BR2_PACKAGE_JASPER
-> @@ -242,18 +284,6 @@ config BR2_PACKAGE_OPENCV_WITH_PNG
->  	help
->  	  Use shared libpng from the target system.
->  
-> -config BR2_PACKAGE_OPENCV_WITH_QT
-> -	bool "qt backend support"
-> -	depends on BR2_INSTALL_LIBSTDCPP
-> -	depends on BR2_USE_MMU # qt
-> -	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-> -	select BR2_PACKAGE_QT
-> -	select BR2_PACKAGE_QT_STL
-> -	select BR2_PACKAGE_QT_GUI_MODULE
-> -	select BR2_PACKAGE_QT_TEST
-> -	help
-> -	  Use Qt with QtTest module and STL support
-> -
->  config BR2_PACKAGE_OPENCV_WITH_TIFF
->  	bool "tiff support"
->  	select BR2_PACKAGE_TIFF
-> -- 
-> 2.4.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I've redone all the tests including the case of the patch set without
+using top-level make.
 
+I've repeated the the test at least two times and taken the minimum value.
+
+defconfig-small:
+| HW-HIGH | HW-MED | top-level make | patch set |
+|----------------|----------------|-----------------------|---------------|
+| 21m17s    | 10m13s   | no                  | no           |
+| 21m24s    | 10m17s   | no                  | yes         |
+|   7m57s    |  5m25s   | yes                 | no           |
+|   7m48s    |  5m22s   | yes                 | yes         |
+
+defconfig-full:
+| HW-HIGH | HW-MED | top-level make | patch set |
+|----------------|----------------|-----------------------|---------------|
+| 350m       | 199m       | no                  | no           |
+| 355m       | 200m       | no                  | yes         |
+|   74m       |  99m        | yes                 | no           |
+|   76m       |  99m        | yes                 | yes         |
+
+In these tests the penalty of using pps is 0%-3%.
+Also the reduction of build time using top-level make is 50%-78%
+
+I think they are nice numbers :)
+
+Best regards
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Fabio Porcedda
