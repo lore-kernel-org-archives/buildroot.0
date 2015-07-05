@@ -1,74 +1,76 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jul 2015 17:03:35 +0200
-Subject: [Buildroot] Hash checking infrastructure
-In-Reply-To: <20150705095425.174bde89@core2quad.morethan.org>
-References: <20150704140142.3aa5c982@core2quad.morethan.org>
- <20150704214734.GC3634@free.fr>
- <20150704213628.21ff7e6e@core2quad.morethan.org>
- <20150705000050.7c2be969@core2quad.morethan.org>
- <20150705111007.63ff239b@free-electrons.com>
- <20150705083253.1bfaefa5@core2quad.morethan.org>
- <20150705142725.GN3647@free.fr>
- <20150705095425.174bde89@core2quad.morethan.org>
-Message-ID: <20150705150335.GQ3647@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  5 Jul 2015 17:12:51 +0200
+Subject: [Buildroot] [PATCH] inadyn: fix init script and default config file
+Message-ID: <1436109171-30701-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mike, all,
+This commit does a number of fixes to the inadyn package to make it
+work properly "out of the box":
 
-[Please, keep the list in Cc]
+ * inadyn is installed in /usr/sbin, not /usr/bin, so we fix the path
+   in the init script
 
-On 2015-07-05 09:54 -0500, Mike spake thusly:
-> On Sun, 5 Jul 2015 16:27:27 +0200
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> 
-> > And infact, I already reproduced *that* error and already sent a
-> > patch: https://patchwork.ozlabs.org/patch/491307/
-> 
-> Tested, same set-up as previous, with this result:
-> 
-> ==== Successfully installed LuaJIT 2.0.4 to /usr ====
-> make[1]: Leaving directory `/var1/arm/new-i386/build/host-luajit-custom'
-> >>> host-luainterpreter virtual Extracting
-> >>> host-luainterpreter virtual Patching
-> >>> host-luainterpreter virtual Configuring
-> >>> host-luainterpreter virtual Building
-> >>> host-luainterpreter virtual Installing to host directory
-> WARNING: no hash file for luarocks-2.2.2.tar.gz
-> >>> host-luarocks 2.2.2 Extracting
-> gzip -d -c /var1/arm/buildroot.git/dl/luarocks-2.2.2.tar.gz | tar --strip-components=1 -C /var1/arm/new-i386/build/host-luarocks-2.2.2  -xf -
-> >>> host-luarocks 2.2.2 Patching
-> >>> host-luarocks 2.2.2 Configuring
-> cd /var1/arm/new-i386/build/host-luarocks-2.2.2 && ./configure --prefix=/var1/arm/new-i386/host/usr --sysconfdir=/var1/arm/new-i386/host/usr/etc/luarocks --with-lua=/var1/arm/new-i386/host/usr --lua-suffix=jit
-> Checking Lua interpreter... luajit found in /var1/arm/new-i386/host/usr/bin
-> Checking Lua includes... lua.h not found (looked in /var1/arm/new-i386/host/usr/include, /var1/arm/new-i386/host/usr/include/lua/5.1, /var1/arm/new-i386/host/usr/include/lua5.1)
-> You may want to use the flag --with-lua or --with-lua-include. See --help.
-> 
-> configure failed.
-> 
-> make: *** [/var1/arm/new-i386/build/host-luarocks-2.2.2/.stamp_configured] Error 1
-> make: Leaving directory `/var1/arm/buildroot.git'
+ * Use "echo -n" for the Starting and Stopping messages, so that the
+   OK / FAIL stay on the same line.
 
-This is expected behaviour, because the patches fronm Buildroot are
-*not* applied when using an override-srcdir. This is done on-purpose, on
-the assumption that the content of override-srcdir is entirely managed
-by the user, and because there is *no* way for Buildroot to know if the
-patches we have would still apply.
+ * There is no need to pass the inadyn binary path during the stop
+   sequence, as long as we pass the appropriate -p option with the
+   path to the PID file created by inadyn, so we do this.
 
-So, the new "error" you reported is totally expected.
+ * Pass the -q option to the start sequence, since it's passed in the
+   stop sequence.
 
-Thanks for testing! :-)
+ * Fix the configuration file to use an existing dyndns_system and
+   avoid a failure at startup.
 
-Regards,
-Yann E. MORIN.
+Cc: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/inadyn/S70inadyn   | 10 +++++-----
+ package/inadyn/inadyn.conf |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/package/inadyn/S70inadyn b/package/inadyn/S70inadyn
+index b20048c..b2aaa0a 100644
+--- a/package/inadyn/S70inadyn
++++ b/package/inadyn/S70inadyn
+@@ -14,15 +14,15 @@ VR_INADYN=/var/run/inadyn
+ 
+ case "$1" in
+ 	start)
+-		echo "Starting inadyn: "
+-		start-stop-daemon -S -x /usr/bin/inadyn
++		echo -n "Starting inadyn: "
++		start-stop-daemon -q -S -p ${VR_INADYN}/inadyn.pid -x /usr/sbin/inadyn
+ 		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	stop)
+-		echo  "Stopping inadyn: "
+-		start-stop-daemon -q -K -x /usr/bin/inadyn
++		echo -n "Stopping inadyn: "
++		start-stop-daemon -q -K -p ${VR_INADYN}/inadyn.pid
+ 		[ $? = 0 ] && echo "OK" || echo "FAIL"
+-		rm -f /var/run/inadyn/inadyn.pid
++		rm -f ${VR_INADYN}/inadyn.pid
+ 		;;
+ 	restart)
+ 		"$0" stop
+diff --git a/package/inadyn/inadyn.conf b/package/inadyn/inadyn.conf
+index b5877f7..93ad0b5 100644
+--- a/package/inadyn/inadyn.conf
++++ b/package/inadyn/inadyn.conf
+@@ -5,7 +5,7 @@ background
+ update_period_sec 600 # Check for a new IP every 600 seconds
+ username test		# replace 'test' with your username
+ password test		# replace 'test' with your password
+-dyndns_system dyndns at dyndns.org   # replace w/ your provider
++dyndns_system default at dyndns.org   # replace w/ your provider
+ 
+ #  uncomment the alias statement below to test it on your system
+ alias test.homeip.net
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.4.5
