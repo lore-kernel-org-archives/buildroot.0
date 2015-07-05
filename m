@@ -1,142 +1,61 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sun,  5 Jul 2015 16:53:48 -0400
-Subject: [Buildroot] [PATCH 1/1] pkg-autotools: fix patching libtool for
-	version 2.4
-Message-ID: <1436129628-3636-1-git-send-email-danomimanchego123@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  5 Jul 2015 23:54:39 +0200
+Subject: [Buildroot] [PATCH 0/5 v10] OpenCV bump (branch yem/smartin/opencv)
+Message-ID: <cover.1436132995.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the libtool used by the package is 2.4 (i.e. with no patchlevel), we
-end up with error messages like this one, seen when building ntp-4.2.8p3:
+Hello All!
 
-    /bin/sh: line 0: test: 2.4: integer expression expected
+Yet another round for the bump of OpenCV package from Samuel, with the
+remaining patches touching the GUI toolkit support.
 
-That's because the current sed expression "[0-9].[0-9]." only deletes content
-like "2.4.", so it leaves "2.4" (no patch level *and* no second period) intact,
-resulting in an ltmain_patchlevel of "2.4", not empty, and not "0".  Then the
-shell line goes bad, because the built in shell test -gt operates on integers
-only, and fails on floating point numbers (like "2.4").
+Patches 1 and 2 preapres for addign more GUI tookits.
+Patches 3 and 4 adds new tookits.
+Patch 5 adds OpenGL support.
 
-Additionally, the existing sed lines are problematic in other ways, because the
-current expression "[0-9].[0-9]" will match "234" as well as "2.4", as an unescaped
-period matches any character, not just a period.  Also, the lack of an asterisk
-after the first character may be a problem in the future, if a two digit initial
-number is used.
 
-So, this patch changes the sed regex as follows:
+Changes v9 -> v10:
+  - split a patch in two
+  - tweak some commit logs
+  - fix extra dependencies
 
-* Match a string of digits when searching for a number.  I.e. "[0-9]*"
-* Match specifically a period in between two numbers.  I.e. "\."
-* When searching for a patch level, make the second period optional.  I.e. "\.*"
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Regards,
+Yann E. MORIN.
 
----
 
-For more detail, add "set -x" before the for-loop in pkg-autotools.mk, and
-rebuild ntp, which currently will patch three libtool setups - "2.4", then
-"2.4.2", then another "2.4".
+The following changes since commit ff89e1eb0cdb8ebe9cbd2cf944f43ed132afcb17:
 
-First two loops, before fix - first loop results in the shell warning:
+  wine: fix sane related build failure (2015-07-05 17:16:40 +0200)
 
-++ find /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/ -name ltmain.sh
-+ for i in '`find /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/ -name ltmain.sh`'
-++ sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/ltmain.sh
-++ sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'
-+ ltmain_version=2.4
-++ sed -n '/^[     ]*VERSION=/{s/^[        ]*VERSION=//;p;q;}' /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/ltmain.sh
-++ sed -e 's/\([0-9].[0-9].\)\([0-9]*\).*/\2/' -e 's/\"//'
-+ ltmain_patchlevel=2.4
-+ test 2.4 = 1.5
-+ test 2.4 = 2.2
-+ test 2.4 = 2.4
-+ test 2.4 -gt 2
-/bin/sh: line 0: test: 2.4: integer expression expected
-+ support/scripts/apply-patches.sh /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3 support/libtool buildroot-libtool-v2.4.patch
+are available in the git repository at:
 
-Applying buildroot-libtool-v2.4.patch using patch:
-patching file ltmain.sh
-Hunk #1 succeeded at 1416 (offset -1 lines).
-Hunk #2 succeeded at 2962 (offset -1 lines).
-Hunk #3 succeeded at 5167 (offset -12 lines).
-Hunk #4 succeeded at 5177 (offset -12 lines).
-Hunk #5 succeeded at 5459 (offset -12 lines).
-Hunk #6 succeeded at 5740 (offset -13 lines).
-Hunk #7 succeeded at 6682 (offset -14 lines).
-Hunk #8 succeeded at 9256 (offset -18 lines).
-+ for i in '`find /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/ -name ltmain.sh`'
-++ sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/sntp/libevent/build-aux/ltmain.sh
-++ sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'
-+ ltmain_version=2.4
-++ sed -n '/^[     ]*VERSION=/{s/^[        ]*VERSION=//;p;q;}' /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/sntp/libevent/build-aux/ltmain.sh
-++ sed -e 's/\([0-9].[0-9].\)\([0-9]*\).*/\2/' -e 's/\"//'
-+ ltmain_patchlevel=2
-+ test 2.4 = 1.5
-+ test 2.4 = 2.2
-+ test 2.4 = 2.4
-+ test 2 -gt 2
-+ support/scripts/apply-patches.sh /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/sntp/libevent/build-aux support/libtool buildroot-libtool-v2.4.patch
+  git://git.busybox.net/~ymorin/git/buildroot yem/smartin/opencv
 
-After fix:
+for you to fetch changes up to 582a50073ade12575a280f6aea96095597f61759:
 
-++ find /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/ -name ltmain.sh
-+ for i in '`find /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/ -name ltmain.sh`'
-++ sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/ltmain.sh
-++ sed -e 's/\([0-9]*\.[0-9]*\).*/\1/' -e 's/\"//'
-+ ltmain_version=2.4
-++ sed -n '/^[     ]*VERSION=/{s/^[        ]*VERSION=//;p;q;}' /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/ltmain.sh
-++ sed -e 's/\([0-9]*\.[0-9]*\.*\)\([0-9]*\).*/\2/' -e 's/\"//'
-+ ltmain_patchlevel=
-+ test 2.4 = 1.5
-+ test 2.4 = 2.2
-+ test 2.4 = 2.4
-+ test 0 -gt 2
-+ support/scripts/apply-patches.sh /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3 support/libtool buildroot-libtool-v2.4.patch
+  package/opencv: add opengl support (2015-07-05 23:49:16 +0200)
 
-Applying buildroot-libtool-v2.4.patch using patch:
-patching file ltmain.sh
-Hunk #1 succeeded at 1416 (offset -1 lines).
-Hunk #2 succeeded at 2962 (offset -1 lines).
-Hunk #3 succeeded at 5167 (offset -12 lines).
-Hunk #4 succeeded at 5177 (offset -12 lines).
-Hunk #5 succeeded at 5459 (offset -12 lines).
-Hunk #6 succeeded at 5740 (offset -13 lines).
-Hunk #7 succeeded at 6682 (offset -14 lines).
-Hunk #8 succeeded at 9256 (offset -18 lines).
-+ for i in '`find /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/ -name ltmain.sh`'
-++ sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/sntp/libevent/build-aux/ltmain.sh
-++ sed -e 's/\([0-9]*\.[0-9]*\).*/\1/' -e 's/\"//'
-+ ltmain_version=2.4
-++ sed -n '/^[     ]*VERSION=/{s/^[        ]*VERSION=//;p;q;}' /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/sntp/libevent/build-aux/ltmain.sh
-++ sed -e 's/\([0-9]*\.[0-9]*\.*\)\([0-9]*\).*/\2/' -e 's/\"//'
-+ ltmain_patchlevel=2
-+ test 2.4 = 1.5
-+ test 2.4 = 2.2
-+ test 2.4 = 2.4
-+ test 2 -gt 2
-+ support/scripts/apply-patches.sh /home/bob/p4_workspace/linux_sw/build_systems/buildroot/buildroot-git/output/build/ntp-4.2.8p3/sntp/libevent/build-aux support/libtool buildroot-libtool-v2.4.patch
----
- package/pkg-autotools.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+----------------------------------------------------------------
+Samuel Martin (5):
+      package/opencv: add a choice for selecting the gui toolkit
+      package/opencv: depends on GUI toolkits, rather than select them
+      package/opencv: add qt5 support
+      package/opencv: add gtk3 support
+      package/opencv: add opengl support
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 1d694f0..54f5dcd 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -61,9 +61,9 @@ define LIBTOOL_PATCH_HOOK
- 	@$(call MESSAGE,"Patching libtool")
- 	$(Q)for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
- 		ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
--		sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
-+		sed -e 's/\([0-9]*\.[0-9]*\).*/\1/' -e 's/\"//'`; \
- 		ltmain_patchlevel=`sed -n '/^[     ]*VERSION=/{s/^[        ]*VERSION=//;p;q;}' $$i | \
--		sed -e 's/\([0-9].[0-9].\)\([0-9]*\).*/\2/' -e 's/\"//'`; \
-+		sed -e 's/\([0-9]*\.[0-9]*\.*\)\([0-9]*\).*/\2/' -e 's/\"//'`; \
- 		if test $${ltmain_version} = '1.5'; then \
- 			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
- 		elif test $${ltmain_version} = "2.2"; then\
+ package/opencv/Config.in | 99 +++++++++++++++++++++++++++++++++++++-----------
+ package/opencv/opencv.mk | 29 ++++++++++++--
+ 2 files changed, 101 insertions(+), 27 deletions(-)
+
 -- 
-1.7.9.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
