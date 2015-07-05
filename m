@@ -1,54 +1,35 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun,  5 Jul 2015 11:59:09 +0200
-Subject: [Buildroot] [PATCH] barebox: bump to version 2015.07.0
-Message-ID: <1436090349-4285-1-git-send-email-fabio.porcedda@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  5 Jul 2015 11:09:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 8201] New: Important security upgrades for node.js
+Message-ID: <bug-8201-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 7 +++----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=8201
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index ffac979..f6f8f15 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2015.05.0"
-+	bool "2015.07.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2015.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2015.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index aa0f12e..ee09f8d 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,6 +1,5 @@
--
--# http://www.barebox.org/download/barebox-2015.05.0.tar.bz2.md5
--md5 3b4f2c72ec3b7cc2f1f294fd2baf0c4d barebox-2015.05.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2015.07.0.tar.bz2.md5
-+md5 8747cb02b607c2a92280f4c7db820828 barebox-2015.07.0.tar.bz2
- 
- # Locally calculated
--sha256 f650e15c7a6da8cb779bb1787829fa4184b3189baf604c8af3af4e0deefa5e8e barebox-2015.05.0.tar.bz2
-+sha256 0971be9a328b5e6b26912e3fa29ededdc061d4c3cf16d327e24d83cd5ca06695 barebox-2015.07.0.tar.bz2
+           Summary: Important security upgrades for node.js
+           Product: buildroot
+           Version: unspecified
+          Platform: All
+        OS/Version: All
+            Status: NEW
+          Severity: critical
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: goabonga at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+version 0.10.5 is impacted and should be upgraded to 0.10.6.
+
+https://medium.com/@iojs/important-security-upgrades-for-node-js-and-io-js-8ac14ece5852
+
 -- 
-2.4.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
