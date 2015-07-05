@@ -1,56 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Jul 2015 13:15:37 +0200
-Subject: [Buildroot] [git commit] barebox: bump to version 2015.07.0
-Message-ID: <20150705111545.76F3A8081A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  5 Jul 2015 13:56:57 +0200
+Subject: [Buildroot] [PATCH] core/pkg-generic: host variants inherits
+	target's override-srcdir
+Message-ID: <1436097417-1809-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7314eaa01709b148214994e7e15cd870b41f8d16
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When a package has both a target and a host variants, and there is an
+override-srcdir set for the target variant, the host variant should
+inherit the target's override-srcdir, unless explicitly set, like we do
+for all other target-variant properties.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reported-by: Mike <mikez@OpenPlayer.org>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/barebox/Config.in    |    4 ++--
- boot/barebox/barebox.hash |    7 +++----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/pkg-generic.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index ffac979..f6f8f15 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 9fe01b8..926d594 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -310,6 +310,12 @@ else
+   $(2)_VERSION := $$(call sanitize,$$($(2)_VERSION))
+ endif
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2015.05.0"
-+	bool "2015.07.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2015.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2015.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index aa0f12e..ee09f8d 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,6 +1,5 @@
--
--# http://www.barebox.org/download/barebox-2015.05.0.tar.bz2.md5
--md5 3b4f2c72ec3b7cc2f1f294fd2baf0c4d barebox-2015.05.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2015.07.0.tar.bz2.md5
-+md5 8747cb02b607c2a92280f4c7db820828 barebox-2015.07.0.tar.bz2
- 
- # Locally calculated
--sha256 f650e15c7a6da8cb779bb1787829fa4184b3189baf604c8af3af4e0deefa5e8e barebox-2015.05.0.tar.bz2
-+sha256 0971be9a328b5e6b26912e3fa29ededdc061d4c3cf16d327e24d83cd5ca06695 barebox-2015.07.0.tar.bz2
++ifndef $(2)_OVERRIDE_SRCDIR
++  ifdef $(3)_OVERRIDE_SRCDIR
++    $(2)_OVERRIDE_SRCDIR = $$($(3)_OVERRIDE_SRCDIR)
++  endif
++endif
++
+ $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
+ $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
+ $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+-- 
+1.9.1
