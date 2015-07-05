@@ -1,85 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Jul 2015 19:43:23 +0200
-Subject: [Buildroot] [PATCH 2/2] package/nodejs: security bump
-In-Reply-To: <cover.1436118128.git.yann.morin.1998@free.fr>
-References: <cover.1436118128.git.yann.morin.1998@free.fr>
-Message-ID: <7521a4379f6888a5f5269441914ecd71fc5b1560.1436118128.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 5 Jul 2015 20:21:33 +0200
+Subject: [Buildroot] [PATCH V4] sdl2: new package
+In-Reply-To: <1435824981-6312-1-git-send-email-guillaume.gardet@oliseo.fr>
+References: <20150629222241.GF3669@free.fr>
+ <1435824981-6312-1-git-send-email-guillaume.gardet@oliseo.fr>
+Message-ID: <559975AD.9030004@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Critical security flaw:
-    https://medium.com/@iojs/important-security-upgrades-for-node-js-and-io-js-8ac14ece5852
+Hi Guillaume,
 
-Fixes #8201.
+Le 02/07/2015 10:16, Guillaume GARDET a ?crit :
+> Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Romain Naour <romain.naour@openwide.fr>
+> Cc: Yann E. Morin <yann.morin.1998@free.fr>
+> 
+> ---
+> 
+> Changes in V4:
+> * Fix comments places in Config.in
+> 
+> Changes in V3:
+> * Add dependenies comments for DirectFB and X11 options
+> * Fix license filename
+> * Add explicit enable/disable options for libudev
+> * Fix typo: s/succesful/successful/
+> * Add more X11 dependencies: x11-xcursor, x11-xinerama, x11-xinput, x11-scrnsaver
+> * Disbale opengl/opengles video diver explicitly
+> * Use --disable-rpath option option instead of manual fix
+> 
+> Changes in V2:
+> * Fix SDL2 case: s/SDL2/sdl2/
+> * Add dependency on toolchain with dynamic library
+> * Remove unneeded 'SDL2' in sub-options names
+> * Remove unneeded space after comma in if statement
+> * Add explicit enable/disable options for tslib and alsa
+> * Remove Mesa3D optional part
+> * Move unconditionnal SDL2_CONF_OPTS upper
+> * Remove host build
+> 
+> 
+>  package/Config.in      |  1 +
+>  package/sdl2/Config.in | 32 ++++++++++++++++++++++++
+>  package/sdl2/sdl2.mk   | 68 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 101 insertions(+)
+>  create mode 100644 package/sdl2/Config.in
+>  create mode 100644 package/sdl2/sdl2.mk
+> 
 
-Reported-by: Chris Becker <goabonga@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-Remove-dependency-on-Python-bz2-module.patch                 | 0
- .../{0.12.5 => 0.12.6}/0002-gyp-force-link-command-to-use-CXX.patch   | 0
- .../0003-Use-a-python-variable-instead-of-hardcoding-Python.patch     | 0
- .../0004-fix-build-error-without-OpenSSL-support.patch                | 0
- package/nodejs/Config.in                                              | 4 ++--
- package/nodejs/nodejs.hash                                            | 4 ++--
- 6 files changed, 4 insertions(+), 4 deletions(-)
- rename package/nodejs/{0.12.5 => 0.12.6}/0001-Remove-dependency-on-Python-bz2-module.patch (100%)
- rename package/nodejs/{0.12.5 => 0.12.6}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
- rename package/nodejs/{0.12.5 => 0.12.6}/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch (100%)
- rename package/nodejs/{0.12.5 => 0.12.6}/0004-fix-build-error-without-OpenSSL-support.patch (100%)
+[snip]
 
-diff --git a/package/nodejs/0.12.5/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/0.12.6/0001-Remove-dependency-on-Python-bz2-module.patch
-similarity index 100%
-rename from package/nodejs/0.12.5/0001-Remove-dependency-on-Python-bz2-module.patch
-rename to package/nodejs/0.12.6/0001-Remove-dependency-on-Python-bz2-module.patch
-diff --git a/package/nodejs/0.12.5/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/0.12.6/0002-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/0.12.5/0002-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/0.12.6/0002-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/0.12.5/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch b/package/nodejs/0.12.6/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-similarity index 100%
-rename from package/nodejs/0.12.5/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-rename to package/nodejs/0.12.6/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-diff --git a/package/nodejs/0.12.5/0004-fix-build-error-without-OpenSSL-support.patch b/package/nodejs/0.12.6/0004-fix-build-error-without-OpenSSL-support.patch
-similarity index 100%
-rename from package/nodejs/0.12.5/0004-fix-build-error-without-OpenSSL-support.patch
-rename to package/nodejs/0.12.6/0004-fix-build-error-without-OpenSSL-support.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 5b871ea..ff7f56c 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -34,7 +34,7 @@ config BR2_BR2_PACKAGE_NODEJS_0_10_X
- 
- # V8 included with v0.12.5 requires at least ARMv6
- config BR2_BR2_PACKAGE_NODEJS_0_12_X
--	bool "v0.12.5"
-+	bool "v0.12.6"
- 	depends on !BR2_ARM_CPU_ARMV5
- 
- endchoice
-@@ -42,7 +42,7 @@ endchoice
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
- 	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
--	default "0.12.5"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
-+	default "0.12.6"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
- 
- menu "Module Selection"
- 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 816d602..f3b2831 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.39/SHASUMS256.txt
- sha256	68f8d8f9515c4e77e2a06034b742e19e9848c1fee5bcadedc1d68f3e4302df37  node-v0.10.39.tar.gz
- 
--# From upstream URL: http://nodejs.org/dist/v0.12.5/SHASUMS256.txt
--sha256	4bc1e25f4c62ac65324d3cf4aa9de2d801cd708757c3567b6ad2ced7df30cdd2  node-v0.12.5.tar.gz
-+# From upstream URL: http://nodejs.org/dist/v0.12.6/SHASUMS256.txt
-+sha256	7a3b5ac351973a9dee8edbf0684bc8d0dea44b231e42274ffb008141ffa19ad2  node-v0.12.6.tar.gz
--- 
-1.9.1
+> +SDL2_DEPENDENCIES += \
+> +	xlib_libX11 xlib_libXext \
+> +	$(if $(BR2_PACKAGE_XLIB_LIBXRENDER),xlib_libXrender) \
+> +	$(if $(BR2_PACKAGE_XLIB_LIBXRANDR),xlib_libXrandr) \
+> +	$(if $(BR2_PACKAGE_XLIB_LIBXCURSOR,xlib_libXcursor) \
+> +	$(if $(BR2_PACKAGE_XLIB_LIBXINERAMA,xlib_libXinerama) \
+> +	$(if $(BR2_PACKAGE_XPROTO_INPUTPROTO,xproto_inputproto) \
+> +	$(if $(BR2_PACKAGE_XPROTO_SCRNSAVERPROTO,xproto_scrnsaverproto)
+
+There are missing ',' and ')' here.
+
+This part should look like:
+
+SDL2_DEPENDENCIES += \
+	xlib_libX11 xlib_libXext \
+	$(if $(BR2_PACKAGE_XLIB_LIBXRENDER),xlib_libXrender,) \
+	$(if $(BR2_PACKAGE_XLIB_LIBXRANDR),xlib_libXrandr,) \
+	$(if $(BR2_PACKAGE_XLIB_LIBXCURSOR),xlib_libXcursor,) \
+	$(if $(BR2_PACKAGE_XLIB_LIBXINERAMA),xlib_libXinerama,) \
+	$(if $(BR2_PACKAGE_XPROTO_INPUTPROTO),xproto_inputproto,) \
+	$(if $(BR2_PACKAGE_XPROTO_SCRNSAVERPROTO),xproto_scrnsaverproto,)
+
+sdl2 is seems complicated package, I think it would be easier to review if you
+add it progressively by using a patch series:
+
+PATCH1: sdl2 new package (all mandatory dependencies enabled)
+PATCH2: sdl2 add X11 support
+PATCH3: sdl2 add directfb support
+...
+
+I'll review your patch latter new week end.
+
+Best regards,
+Romain
