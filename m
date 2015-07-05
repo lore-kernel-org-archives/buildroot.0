@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Jul 2015 23:54:46 +0200
-Subject: [Buildroot] [PATCH 3/5 v10] package/opencv: add qt5 support
+Date: Sun,  5 Jul 2015 23:54:47 +0200
+Subject: [Buildroot] [PATCH 4/5 v10] package/opencv: add gtk3 support
 In-Reply-To: <cover.1436132995.git.yann.morin.1998@free.fr>
 References: <cover.1436132995.git.yann.morin.1998@free.fr>
-Message-ID: <5155a3b6c47fd098de012cc0620e53e1bc2d046d.1436132995.git.yann.morin.1998@free.fr>
+Message-ID: <627f3ded592bc7b605f5a807278db5c86f39ee64.1436132995.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,85 +12,69 @@ To: buildroot@busybox.net
 
 From: Samuel Martin <s.martin49@gmail.com>
 
-Starting with the 2.4.6 release, OpenCV supports either Qt4 or Qt5 as GUI
-toolkit, so add Qt5 in the GUI toolkit choice.
+OpenCV now also supports gtk3 as a GUI toolkit, in addition to gtk2,
+but only one may be enabled at a time.
 
-When Qt4 is enabled (and thus Qt5 is hidden and disabled), no need to
-show a comment stating "Qt5 support needs Qt5", because Qt5 is not
-selectable.
-
-Conversely, when Qt5 is enabled and Qt4 is not, then no need to show a
-comment stating "Qt4 support needs Qt4", because enabling Qt4 would
-disable Qt5.
-
-So, we only show the comments when neither toolkit is enabled.
+So, add gtk3 in the choice to select the GUI toolkit.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[yann.morin.1998 at free.fr: split-out the Qt5 hunk from the
- switch-selects-to-depends hunk]
+[yann.morin.1998 at free.fr: drop the superfluous depends-on for the
+ kconfig symbol, since they're no longer needed now we depend-on rather
+ than select]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 ---
-Changes v9 -> v10;
-  - split this patch in two, one to switch depends->select (previous
-    patch) and one to add Qt5 (this patch)  (Yann)
+Chanmge v9 -> v10;
+  - drop superfluous depends-on  (Yann)
 ---
- package/opencv/Config.in | 16 +++++++++++++++-
+ package/opencv/Config.in |  9 +++++++++
  package/opencv/opencv.mk | 11 +++++++++--
- 2 files changed, 24 insertions(+), 3 deletions(-)
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
 diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 5dd39ca..5e8f189 100644
+index 5e8f189..6ae74b4 100644
 --- a/package/opencv/Config.in
 +++ b/package/opencv/Config.in
-@@ -81,7 +81,21 @@ config BR2_PACKAGE_OPENCV_WITH_QT
+@@ -70,6 +70,15 @@ comment "gtk2 support needs libgtk2"
+ 	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
+ 	depends on !BR2_PACKAGE_LIBGTK2
  
- comment "qt4 support needs qt"
- 	depends on BR2_USE_MMU # qt
--	depends on !BR2_PACKAGE_QT
-+	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
++config BR2_PACKAGE_OPENCV_WITH_GTK3
++	bool "gtk3"
++	depends on BR2_PACKAGE_LIBGTK3
 +
-+config BR2_PACKAGE_OPENCV_WITH_QT5
-+	bool "qt5"
-+	depends on BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_CONCURRENT
-+	select BR2_PACKAGE_QT5BASE_GUI
-+	select BR2_PACKAGE_QT5BASE_WIDGETS
-+	help
-+	  Use Qt5 with base, concurrent, test, gui and widgets components, as GUI
-+	  toolkit.
++comment "gtk3 support needs libgtk3"
++	depends on BR2_USE_MMU # libgtk3 -> glib2
++	depends on BR2_ARCH_HAS_ATOMICS # libgtk3 -> cairo
++	depends on !BR2_PACKAGE_LIBGTK3
 +
-+comment "qt5 support needs qt5"
-+	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
- 
- endchoice
- 
+ config BR2_PACKAGE_OPENCV_WITH_QT
+ 	bool "qt4"
+ 	depends on BR2_PACKAGE_QT
 diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 0e5cf77..98e1614 100644
+index 98e1614..c788aeb 100644
 --- a/package/opencv/opencv.mk
 +++ b/package/opencv/opencv.mk
-@@ -266,11 +266,18 @@ else
- OPENCV_CONF_OPTS += -DWITH_PNG=OFF
+@@ -236,11 +236,18 @@ else
+ OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT)$(BR2_PACKAGE_OPENCV_WITH_QT5),)
-+OPENCV_CONF_OPTS += -DWITH_QT=OFF
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK)$(BR2_PACKAGE_OPENCV_WITH_GTK3),)
++OPENCV_CONF_OPTS += -DWITH_GTK=OFF -DWITH_GTK_2_X=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT),y)
- OPENCV_CONF_OPTS += -DWITH_QT=4
- OPENCV_DEPENDENCIES += qt
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK),y)
+ OPENCV_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=ON
+ OPENCV_DEPENDENCIES += libgtk2
 -else
--OPENCV_CONF_OPTS += -DWITH_QT=OFF
+-OPENCV_CONF_OPTS += -DWITH_GTK=OFF
 +endif
 +
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT5),y)
-+OPENCV_CONF_OPTS += -DWITH_QT=5
-+OPENCV_DEPENDENCIES += qt5base
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK3),y)
++OPENCV_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=OFF
++OPENCV_DEPENDENCIES += libgtk3
  endif
  
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_TIFF),y)
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_JASPER),y)
 -- 
 1.9.1
