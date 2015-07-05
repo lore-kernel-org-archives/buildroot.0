@@ -1,51 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Jul 2015 16:10:00 +0200
-Subject: [Buildroot] [PATCH 28/38] squid: systemd support
-In-Reply-To: <46428a55d4456ed7558735aafeb331bc37cef9ea.1432332802.git.alex.suykov@gmail.com>
-References: <cover.1432332802.git.alex.suykov@gmail.com>
- <46428a55d4456ed7558735aafeb331bc37cef9ea.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <20150705161000.19dc36c3@free-electrons.com>
+Date: Sun, 5 Jul 2015 16:10:52 +0200
+Subject: [Buildroot] [git commit] samba4: install systemd files
+Message-ID: <20150705141115.18D31800D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+commit: http://git.buildroot.net/buildroot/commit/?id=ae0d54ab77a1dcb4af3b5515d3e3a99203e100f2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 23 May 2015 13:07:42 +0300, Alex Suykov wrote:
-> squid comes with a .service file, but does not install it.
-> 
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/squid/squid.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-> index 745c9ad..5a9fbb7 100644
-> --- a/package/squid/squid.mk
-> +++ b/package/squid/squid.mk
-> @@ -81,4 +81,12 @@ define SQUID_INSTALL_INIT_SYSV
->  		$(TARGET_DIR)/etc/init.d/S97squid
->  endef
->  
-> +define SQUID_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -D -m 0644 $(@D)/tools/squid.service \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/squid.service
-> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +	ln -sf /usr/lib/systemd/system/squid.service \
-> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/squid.service
+The package comes with usable .service files for smbd, nmbd and
+winbind, but does not install them.
 
-We prefer to use a relative path for the symlink, so that the symlink
-appears to be valid when looking at $(TARGET_DIR) on the build machine.
+[Thomas: use relative paths for the symbolic links.]
 
-I've fixed that up before committing, and also fixed it on the upmpdcli
-package, which I forgot to do when merging your patch on this package.
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/samba4/samba4.mk |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index d7d5299..7d10a0c 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -155,4 +155,20 @@ define SAMBA4_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S91smb
+ endef
+ 
++define SAMBA4_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/nmb.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/nmb.service
++	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/smb.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/smb.service
++	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/winbind.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/winbind.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/nmb.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nmb.service
++	ln -sf ../../../../usr/lib/systemd/system/smb.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/smb.service
++	ln -sf ../../../../usr/lib/systemd/system/winbind.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/winbind.service
++endef
++
+ $(eval $(generic-package))
