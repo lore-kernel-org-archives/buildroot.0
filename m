@@ -1,54 +1,54 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 5 Jul 2015 11:49:52 +0200
-Subject: [Buildroot] [PATCH v7 7/7] package/vlc: add opencv support
-In-Reply-To: <20150705093914.GG3647@free.fr>
-References: <1436036821-10073-1-git-send-email-s.martin49@gmail.com>
- <1436036821-10073-8-git-send-email-s.martin49@gmail.com>
- <20150705093914.GG3647@free.fr>
-Message-ID: <CAHXCMMLoJK8zEF-O_bNA9ZU8X0AVTdo4yzPq3br2AbF3aaWABA@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sun,  5 Jul 2015 11:59:09 +0200
+Subject: [Buildroot] [PATCH] barebox: bump to version 2015.07.0
+Message-ID: <1436090349-4285-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 7 +++----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-On Sun, Jul 5, 2015 at 11:39 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Samuel, all,
->
-> On 2015-07-04 21:07 +0200, Samuel Martin spake thusly:
->> This change adds 2 patches (backported from upstream) to vlc fixing the
->> build against opencv2 APIs.
->> This allows to select the minimal set of opencv modules when opencv
->> support is enabled.
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> This reviewd tag stands, still I have a question:
->
->> diff --git a/package/vlc/Config.in b/package/vlc/Config.in
->> index b030a56..471f4a7 100644
->> --- a/package/vlc/Config.in
->> +++ b/package/vlc/Config.in
->> @@ -11,6 +11,8 @@ config BR2_PACKAGE_VLC
->>       depends on BR2_TOOLCHAIN_HAS_THREADS
->>       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
->>       select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
->> +     select BR2_PACKAGE_OPENCV_LIB_IMGPROC if BR2_PACKAGE_OPENCV
->> +     select BR2_PACKAGE_OPENCV_LIB_OBJDETECT if BR2_PACKAGE_OPENCV
->
-> objdetect already selects imgproc. So, does vlc w/ opencv really need
-> imgproc by itself? If so, the select is OK, otherwise, it is
-> superfluous.
-
-I select all opencv's modules used in the vlc code-base [1].
-
-[1] http://git.videolan.org/gitweb.cgi/vlc.git/?p=vlc.git;a=blob;f=modules/video_filter/opencv_example.cpp;h=998f286ba2269fdf1680b375c1f849d24598742d;hb=HEAD#l42
-
-
-Regards,
-
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index ffac979..f6f8f15 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2015.05.0"
++	bool "2015.07.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2015.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2015.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index aa0f12e..ee09f8d 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,6 +1,5 @@
+-
+-# http://www.barebox.org/download/barebox-2015.05.0.tar.bz2.md5
+-md5 3b4f2c72ec3b7cc2f1f294fd2baf0c4d barebox-2015.05.0.tar.bz2
++# http://www.barebox.org/download/barebox-2015.07.0.tar.bz2.md5
++md5 8747cb02b607c2a92280f4c7db820828 barebox-2015.07.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 f650e15c7a6da8cb779bb1787829fa4184b3189baf604c8af3af4e0deefa5e8e barebox-2015.05.0.tar.bz2
++sha256 0971be9a328b5e6b26912e3fa29ededdc061d4c3cf16d327e24d83cd5ca06695 barebox-2015.07.0.tar.bz2
 -- 
-Samuel
+2.4.3
