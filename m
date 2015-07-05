@@ -1,61 +1,126 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Jul 2015 23:54:39 +0200
-Subject: [Buildroot] [PATCH 0/5 v10] OpenCV bump (branch yem/smartin/opencv)
-Message-ID: <cover.1436132995.git.yann.morin.1998@free.fr>
+Date: Sun,  5 Jul 2015 23:54:44 +0200
+Subject: [Buildroot] [PATCH 1/5 v10] package/opencv: add a choice for
+	selecting the gui toolkit
+In-Reply-To: <cover.1436132995.git.yann.morin.1998@free.fr>
+References: <cover.1436132995.git.yann.morin.1998@free.fr>
+Message-ID: <c9fe50ca592ae0b80eaa037bede9b2e03c31da50.1436132995.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Samuel Martin <s.martin49@gmail.com>
 
-Yet another round for the bump of OpenCV package from Samuel, with the
-remaining patches touching the GUI toolkit support.
+In OpenCV, only one GUI toolkit may be used at any one time, so group
+the two existing options into a choice to make this situation explicit.
 
-Patches 1 and 2 preapres for addign more GUI tookits.
-Patches 3 and 4 adds new tookits.
-Patch 5 adds OpenGL support.
+This will also be useful when we later add support for Qt5 and gtk3.
 
+Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+[yann.morin.1998 at free.fr: tweak commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
+---
 Changes v9 -> v10:
-  - split a patch in two
-  - tweak some commit logs
-  - fix extra dependencies
+  - tweak commit log  (Yann)
+---
+ package/opencv/Config.in | 67 +++++++++++++++++++++++++++++++-----------------
+ 1 file changed, 44 insertions(+), 23 deletions(-)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit ff89e1eb0cdb8ebe9cbd2cf944f43ed132afcb17:
-
-  wine: fix sane related build failure (2015-07-05 17:16:40 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/smartin/opencv
-
-for you to fetch changes up to 582a50073ade12575a280f6aea96095597f61759:
-
-  package/opencv: add opengl support (2015-07-05 23:49:16 +0200)
-
-----------------------------------------------------------------
-Samuel Martin (5):
-      package/opencv: add a choice for selecting the gui toolkit
-      package/opencv: depends on GUI toolkits, rather than select them
-      package/opencv: add qt5 support
-      package/opencv: add gtk3 support
-      package/opencv: add opengl support
-
- package/opencv/Config.in | 99 +++++++++++++++++++++++++++++++++++++-----------
- package/opencv/opencv.mk | 29 ++++++++++++--
- 2 files changed, 101 insertions(+), 27 deletions(-)
-
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 079730e..c3542c4 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -52,6 +52,50 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+ 	  Include opencv_highgui (high-level gui and media i/o) module into the
+ 	  OpenCV build.
+ 
++choice
++	prompt "gui toolkit"
++	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
++	help
++	  GUI toolkit to be used by the opencv_highgui module.
++
++config BR2_PACKAGE_OPENCV_GUI_NONE
++	bool "none"
++
++config BR2_PACKAGE_OPENCV_WITH_GTK
++	bool "gtk2"
++	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
++	depends on BR2_USE_MMU # libgtk2 -> libglib2
++	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBGTK2
++
++comment "gtk2 needs X.org and a toolchain w/ wchar, threads, C++"
++	depends on BR2_USE_MMU # libgtk2 -> glib2
++	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
++	depends on !BR2_PACKAGE_XORG7 || \
++		!BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INSTALL_LIBSTDCPP
++
++config BR2_PACKAGE_OPENCV_WITH_QT
++	bool "qt4"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # qt
++	select BR2_PACKAGE_QT
++	select BR2_PACKAGE_QT_STL
++	select BR2_PACKAGE_QT_GUI_MODULE
++	select BR2_PACKAGE_QT_TEST
++	help
++	  Use Qt with QtTest module and STL support
++
++comment "qt4 needs a toolchain w/ C++"
++	depends on BR2_USE_MMU # qt
++	depends on !BR2_INSTALL_LIBSTDCPP
++
++endchoice
++
+ config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
+ 	bool "imgcodecs"
+ 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+@@ -209,17 +253,6 @@ comment "gstreamer-1.x support needs a toolchain w/ wchar, threads"
+ 
+ endchoice
+ 
+-config BR2_PACKAGE_OPENCV_WITH_GTK
+-	bool "gtk support"
+-	depends on BR2_PACKAGE_XORG7
+-	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_MMU # libgtk2 -> glib2
+-	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
+-	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+-	select BR2_PACKAGE_LIBGTK2
+-
+ config BR2_PACKAGE_OPENCV_WITH_JASPER
+ 	bool "jpeg2000 support"
+ 	select BR2_PACKAGE_JASPER
+@@ -242,18 +275,6 @@ config BR2_PACKAGE_OPENCV_WITH_PNG
+ 	help
+ 	  Use shared libpng from the target system.
+ 
+-config BR2_PACKAGE_OPENCV_WITH_QT
+-	bool "qt backend support"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_MMU # qt
+-	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+-	select BR2_PACKAGE_QT
+-	select BR2_PACKAGE_QT_STL
+-	select BR2_PACKAGE_QT_GUI_MODULE
+-	select BR2_PACKAGE_QT_TEST
+-	help
+-	  Use Qt with QtTest module and STL support
+-
+ config BR2_PACKAGE_OPENCV_WITH_TIFF
+ 	bool "tiff support"
+ 	select BR2_PACKAGE_TIFF
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
