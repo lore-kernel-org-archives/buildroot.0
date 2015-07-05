@@ -1,68 +1,157 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jul 2015 21:50:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: Fix SSE support with gcc5
-In-Reply-To: <1436114954-5766-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1436114954-5766-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150705195015.GS3647@free.fr>
+Date: Sun, 5 Jul 2015 21:56:23 +0200
+Subject: [Buildroot] [PATCH v9 1/4] package/opencv: add a choice for
+ selecting the gui toolkit
+In-Reply-To: <1436106540-3466-2-git-send-email-s.martin49@gmail.com>
+References: <1436106540-3466-1-git-send-email-s.martin49@gmail.com>
+ <1436106540-3466-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150705195623.GT3647@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Samuel, All,
 
-On 2015-07-05 18:49 +0200, Bernd Kuhls spake thusly:
-> Compile fails
-> 
-> make[4]: Entering directory `/home/fli4l/br6_freeswitch/output/build/vlc-2.2.1/modules'
->   CC       video_chroma/libi420_yuy2_sse2_plugin_la-i420_yuy2.lo
-> In file included from video_chroma/i420_yuy2.c:35:0:
-> video_chroma/i420_yuy2.c: In function 'I420_UYVY_Filter':
-> video_chroma/i420_yuy2.c:194:23: error: calling 'I420_UYVY.isra.2' with SSE caling convention without SSE/SSE2 enabled
->  VIDEO_FILTER_WRAPPER( I420_UYVY )
->                        ^
-> ../include/vlc_filter.h:266:13: note: in definition of macro 'VIDEO_FILTER_WRAPPER'
->              name( p_filter, p_pic, p_outpic );                          \
-> 
-> using this defconfig
-> 
-> BR2_x86_pentium2=y
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_GCC_VERSION_5_1_X=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_VLC=y
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On 2015-07-05 16:28 +0200, Samuel Martin spake thusly:
+> This patch moves the existing Qt4 and gtk2 options in that choice right
+> after the highgui knob.
+> In OpenCV, only one GUI toolkik will be actually used at the time by the
+> highgui module, given priority to Qt4.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I guess that woud be better phrased as;
+
+    package/opencv: add a choice for selecting the gui toolkit
+
+    In OpenCV, only one GUI toolkit may be used, so group the two
+    existing options into a choice.
+
+    This will also be useful when we add support for Qt5 and gtk3.
+
+    sob-and-other-tags...
+
+If you don't mind, I'll grab the patches and fix such minor issues, to
+avoid you going nuts with all the rounds of this series.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/vlc/vlc.mk |    6 ++++++
->  1 file changed, 6 insertions(+)
+> Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-> index 2a28eee..7030acc 100644
-> --- a/package/vlc/vlc.mk
-> +++ b/package/vlc/vlc.mk
-> @@ -67,6 +67,12 @@ else
->  VLC_CONF_OPTS += --disable-altivec
->  endif
+> ---
+> changes v8->v9:
+> - update help text (ThomasP)
+> 
+> changes v7->v8:
+> - update a/r/t tags
+> 
+> changes v6->v7:
+> - move choice right after highgui knob (Yann)
+> - reword help text and comment (Yann)
+> 
+> changes v5->v6:
+> - new patch
+> ---
+>  package/opencv/Config.in | 67 +++++++++++++++++++++++++++++++-----------------
+>  1 file changed, 44 insertions(+), 23 deletions(-)
+> 
+> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+> index 079730e..c3542c4 100644
+> --- a/package/opencv/Config.in
+> +++ b/package/opencv/Config.in
+> @@ -52,6 +52,50 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+>  	  Include opencv_highgui (high-level gui and media i/o) module into the
+>  	  OpenCV build.
 >  
-> +ifeq ($(BR2_X86_CPU_HAS_SSE),y)
-> +VLC_CONF_OPTS += --enable-sse
-> +else
-> +VLC_CONF_OPTS += --disable-sse
-> +endif
+> +choice
+> +	prompt "gui toolkit"
+> +	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+> +	help
+> +	  GUI toolkit to be used by the opencv_highgui module.
 > +
->  ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
->  VLC_CONF_OPTS += --enable-alsa
->  VLC_DEPENDENCIES += alsa-lib
+> +config BR2_PACKAGE_OPENCV_GUI_NONE
+> +	bool "none"
+> +
+> +config BR2_PACKAGE_OPENCV_WITH_GTK
+> +	bool "gtk2"
+> +	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
+> +	depends on BR2_USE_MMU # libgtk2 -> libglib2
+> +	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_LIBGTK2
+> +
+> +comment "gtk2 needs X.org and a toolchain w/ wchar, threads, C++"
+> +	depends on BR2_USE_MMU # libgtk2 -> glib2
+> +	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
+> +	depends on !BR2_PACKAGE_XORG7 || \
+> +		!BR2_USE_WCHAR || \
+> +		!BR2_TOOLCHAIN_HAS_THREADS || \
+> +		!BR2_INSTALL_LIBSTDCPP
+> +
+> +config BR2_PACKAGE_OPENCV_WITH_QT
+> +	bool "qt4"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_USE_MMU # qt
+> +	select BR2_PACKAGE_QT
+> +	select BR2_PACKAGE_QT_STL
+> +	select BR2_PACKAGE_QT_GUI_MODULE
+> +	select BR2_PACKAGE_QT_TEST
+> +	help
+> +	  Use Qt with QtTest module and STL support
+> +
+> +comment "qt4 needs a toolchain w/ C++"
+> +	depends on BR2_USE_MMU # qt
+> +	depends on !BR2_INSTALL_LIBSTDCPP
+> +
+> +endchoice
+> +
+>  config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
+>  	bool "imgcodecs"
+>  	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+> @@ -209,17 +253,6 @@ comment "gstreamer-1.x support needs a toolchain w/ wchar, threads"
+>  
+>  endchoice
+>  
+> -config BR2_PACKAGE_OPENCV_WITH_GTK
+> -	bool "gtk support"
+> -	depends on BR2_PACKAGE_XORG7
+> -	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
+> -	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_USE_MMU # libgtk2 -> glib2
+> -	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
+> -	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+> -	select BR2_PACKAGE_LIBGTK2
+> -
+>  config BR2_PACKAGE_OPENCV_WITH_JASPER
+>  	bool "jpeg2000 support"
+>  	select BR2_PACKAGE_JASPER
+> @@ -242,18 +275,6 @@ config BR2_PACKAGE_OPENCV_WITH_PNG
+>  	help
+>  	  Use shared libpng from the target system.
+>  
+> -config BR2_PACKAGE_OPENCV_WITH_QT
+> -	bool "qt backend support"
+> -	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_USE_MMU # qt
+> -	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+> -	select BR2_PACKAGE_QT
+> -	select BR2_PACKAGE_QT_STL
+> -	select BR2_PACKAGE_QT_GUI_MODULE
+> -	select BR2_PACKAGE_QT_TEST
+> -	help
+> -	  Use Qt with QtTest module and STL support
+> -
+>  config BR2_PACKAGE_OPENCV_WITH_TIFF
+>  	bool "tiff support"
+>  	select BR2_PACKAGE_TIFF
 > -- 
-> 1.7.10.4
+> 2.4.5
 > 
 > _______________________________________________
 > buildroot mailing list
