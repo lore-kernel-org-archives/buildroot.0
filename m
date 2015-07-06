@@ -1,106 +1,97 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit@wsystem.com>
-Date: Mon,  6 Jul 2015 15:06:08 +0200
-Subject: [Buildroot] [PATCH v2] openssl: always build apps
-Message-ID: <1436187968-84565-1-git-send-email-benoit@wsystem.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon,  6 Jul 2015 15:09:34 +0200
+Subject: [Buildroot] [PATCH 1/2] system: allow using mdev for firmware
+	loading only
+Message-ID: <1436188175-7912-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that building the openssl binary without MMU is supported, the only
-reason left for not building apps if the openssl binary is disabled is
-to save build time. Moreover, the commit
-720893b62510438237b9923d744dd079ddb4f67d "openssl: disable apps for
-NOMMU", which added this behavior, had a side effect: the scripts from
-apps (CA.pl, CA.sh and tsget) and the default configuration file
-(openssl.cnf) were no longer installed, which is not advertized by the
-BR2_PACKAGE_OPENSSL_BIN option. CA.pl and CA.sh use the openssl binary,
-so not installing them without the latter makes sense. But tsget does
-not use the openssl binary, and openssl.cnf can be used by libcrypto, so
-it is preferable to handle BR2_PACKAGE_OPENSSL_BIN like before the
-commit mentioned above, i.e. to always build and install apps and to
-just remove the openssl binary afterwards if needed.
+Busybox's mdev nicely provides the ability to load a firmware requested by
+the kernel.
 
-This is what the current commit does, but installing only the helper
-scripts having their dependencies (perl or the openssl binary)
-satisfied. The help text is updated accordingly.
+However, when using a static /dev management, mdev is not installed as a
+hotplug helper (i.e. S10mdev is not installed) and
+CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not enabled in the busybox
+configuration.
 
-Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+Provide a knob for static /dev users to easily enable mdev for firmware
+loading.
 
+This is just a matter of extending the ifeq condition around the S10mdev
+installation and kconfig fixups that enable the needed configuration in
+busybox. But leave mdev.conf installation under the old condition, it's
+not needed for firmware loading.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
-Changes v1 -> v2:
- - Install helper scripts according to perl/binary dependencies.
- - Update the help text (fixing a typo by the way).
----
- package/openssl/Config.in  |  7 +++++--
- package/openssl/openssl.mk | 23 +++++++++++++++--------
- 2 files changed, 20 insertions(+), 10 deletions(-)
+ package/busybox/busybox.mk | 16 ++++++++++------
+ system/Config.in           | 13 +++++++++++++
+ 2 files changed, 23 insertions(+), 6 deletions(-)
 
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index d147c07..0785253 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -9,14 +9,17 @@ config BR2_PACKAGE_OPENSSL
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 51b35bc..73a6d61 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -55,16 +55,13 @@ define BUSYBOX_PERMISSIONS
+ 	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
+ endef
  
- 	  http://www.openssl.org/
- 
-+	  Note: Some helper scripts need perl.
-+
- if BR2_PACKAGE_OPENSSL
- 
- config BR2_PACKAGE_OPENSSL_BIN
- 	bool "openssl binary"
- 	depends on !BR2_STATIC_LIBS
- 	help
--	  Install the openssl binary to the target file system. This is a
--	  command line tool for doing various crypthographic stuff.
-+	  Install the openssl binary and the associated helper scripts to the
-+	  target file system. This is a command line tool for doing various
-+	  cryptographic stuff.
- 
- comment "openssl binary needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 34a9830..4068cf1 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -14,14 +14,6 @@ HOST_OPENSSL_DEPENDENCIES = host-zlib
- OPENSSL_TARGET_ARCH = generic32
- OPENSSL_CFLAGS = $(TARGET_CFLAGS)
- 
--ifeq ($(BR2_PACKAGE_OPENSSL_BIN),)
--define OPENSSL_DISABLE_APPS
--	$(SED) '/^build_apps/! s/build_apps//' $(@D)/Makefile.org
--	$(SED) '/^DIRS=/ s/apps//' $(@D)/Makefile.org
+-# If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
+-ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
++# If mdev will be used for device creation, or at least for firmware loading,
++# enable it and copy S10mdev to /etc/init.d
++ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV)$(BR2_ROOTFS_MDEV_FIRMWARE_LOADING),y)
+ define BUSYBOX_INSTALL_MDEV_SCRIPT
+ 	$(INSTALL) -D -m 0755 package/busybox/S10mdev \
+ 		$(TARGET_DIR)/etc/init.d/S10mdev
+ endef
+-define BUSYBOX_INSTALL_MDEV_CONF
+-	$(INSTALL) -D -m 0644 package/busybox/mdev.conf \
+-		$(TARGET_DIR)/etc/mdev.conf
 -endef
--OPENSSL_PRE_CONFIGURE_HOOKS += OPENSSL_DISABLE_APPS
--endif
--
- ifeq ($(BR2_USE_MMU),)
- OPENSSL_CFLAGS += -DHAVE_FORK=0
- endif
-@@ -140,6 +132,21 @@ endef
- OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_INSTALL_FIXUPS_SHARED
+ define BUSYBOX_SET_MDEV
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_MDEV,$(BUSYBOX_BUILD_CONFIG))
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MDEV_CONF,$(BUSYBOX_BUILD_CONFIG))
+@@ -73,6 +70,13 @@ define BUSYBOX_SET_MDEV
+ endef
  endif
  
-+ifeq ($(BR2_PACKAGE_PERL),)
-+define OPENSSL_REMOVE_PERL_SCRIPTS
-+	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.pl,tsget}
++ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
++define BUSYBOX_INSTALL_MDEV_CONF
++	$(INSTALL) -D -m 0644 package/busybox/mdev.conf \
++		$(TARGET_DIR)/etc/mdev.conf
 +endef
-+OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_PERL_SCRIPTS
 +endif
 +
-+ifeq ($(BR2_PACKAGE_OPENSSL_BIN),)
-+define OPENSSL_REMOVE_BIN
-+	$(RM) -f $(TARGET_DIR)/usr/bin/openssl
-+	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.*,c_*}
-+endef
-+OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_BIN
-+endif
+ # sha passwords need USE_BB_CRYPT_SHA
+ ifeq ($(BR2_TARGET_GENERIC_PASSWD_SHA256)$(BR2_TARGET_GENERIC_PASSWD_SHA512),y)
+ define BUSYBOX_SET_CRYPT_SHA
+diff --git a/system/Config.in b/system/Config.in
+index b72aa17..da2376e 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -127,6 +127,19 @@ endchoice
+ comment "/dev management using udev (from systemd)"
+ 	depends on BR2_INIT_SYSTEMD
+ 
++config BR2_ROOTFS_MDEV_FIRMWARE_LOADING
++	bool "Use mdev for firmware loading"
++	depends on BR2_ROOTFS_DEVICE_CREATION_STATIC
++	help
++	  Some devices need to load firmware before they can be usable.
++	  The kernel will ask the (userspace) hotplug helper to provide
++	  a firmware.
 +
- ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
- define OPENSSL_REMOVE_OPENSSL_ENGINES
- 	rm -rf $(TARGET_DIR)/usr/lib/engines
++	  Even if you do not need mdev for device creation, say Y if you
++	  want to install it as a hotplug helper so it takes care of
++	  firmware loading. Otherwise you need to setup a different
++	  mechanism for your firmwares to be loaded.
++
+ config BR2_ROOTFS_DEVICE_TABLE
+ 	string "Path to the permission tables"
+ 	default "system/device_table.txt"
 -- 
-2.1.4
+1.9.1
