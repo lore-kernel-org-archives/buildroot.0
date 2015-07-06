@@ -1,64 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 6 Jul 2015 11:50:00 +0200
-Subject: [Buildroot] [git commit] package/nodejs: drop minor version in
-	Config.in
-Message-ID: <20150706095005.82C028180C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opencv: add qt5 support
+Message-ID: <20150706095005.B87B57FC2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eb6254a5aa2e0bf539b74279828c64be6693593b
+commit: http://git.buildroot.net/buildroot/commit/?id=a2afd565947b22e36046026f2334da3d6af42b66
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop the minor version from the Kconfig symbol, so we can seamlessly
-update the versions without having to handle legacy stuff.
+Starting with the 2.4.6 release, OpenCV supports either Qt4 or Qt5 as GUI
+toolkit, so add Qt5 in the GUI toolkit choice.
 
-Note: not adding legacy handling, as we haven't had any release with
-those symbols yet.
+When Qt4 is enabled (and thus Qt5 is hidden and disabled), no need to
+show a comment stating "Qt5 support needs Qt5", because Qt5 is not
+selectable.
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Chris Becker <goabonga@gmail.com>
+Conversely, when Qt5 is enabled and Qt4 is not, then no need to show a
+comment stating "Qt4 support needs Qt4", because enabling Qt4 would
+disable Qt5.
+
+So, we only show the comments when neither toolkit is enabled.
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: split-out the Qt5 hunk from the
+ switch-selects-to-depends hunk]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nodejs/Config.in |   12 ++++++------
- 1 files changed, 6 insertions(+), 6 deletions(-)
+ package/opencv/Config.in |   16 +++++++++++++++-
+ package/opencv/opencv.mk |   11 +++++++++--
+ 2 files changed, 24 insertions(+), 3 deletions(-)
 
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 580d9a2..5b871ea 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -24,16 +24,16 @@ if BR2_PACKAGE_NODEJS
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 5dd39ca..5e8f189 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -81,7 +81,21 @@ config BR2_PACKAGE_OPENCV_WITH_QT
  
- choice
- 	prompt "Node.js version"
--	default BR2_BR2_PACKAGE_NODEJS_0_10_39 if BR2_ARM_CPU_ARMV5
--	default BR2_BR2_PACKAGE_NODEJS_0_12_5
-+	default BR2_BR2_PACKAGE_NODEJS_0_10_X if BR2_ARM_CPU_ARMV5
-+	default BR2_BR2_PACKAGE_NODEJS_0_12_X
- 	help
- 	  Select the version of Node.js you wish to use.
+ comment "qt4 support needs qt"
+ 	depends on BR2_USE_MMU # qt
+-	depends on !BR2_PACKAGE_QT
++	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
++
++config BR2_PACKAGE_OPENCV_WITH_QT5
++	bool "qt5"
++	depends on BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_CONCURRENT
++	select BR2_PACKAGE_QT5BASE_GUI
++	select BR2_PACKAGE_QT5BASE_WIDGETS
++	help
++	  Use Qt5 with base, concurrent, test, gui and widgets components, as GUI
++	  toolkit.
++
++comment "qt5 support needs qt5"
++	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
  
--config BR2_BR2_PACKAGE_NODEJS_0_10_39
-+config BR2_BR2_PACKAGE_NODEJS_0_10_X
- 	bool "v0.10.39"
+ endchoice
  
- # V8 included with v0.12.5 requires at least ARMv6
--config BR2_BR2_PACKAGE_NODEJS_0_12_5
-+config BR2_BR2_PACKAGE_NODEJS_0_12_X
- 	bool "v0.12.5"
- 	depends on !BR2_ARM_CPU_ARMV5
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 0e5cf77..98e1614 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -266,11 +266,18 @@ else
+ OPENCV_CONF_OPTS += -DWITH_PNG=OFF
+ endif
  
-@@ -41,8 +41,8 @@ endchoice
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT)$(BR2_PACKAGE_OPENCV_WITH_QT5),)
++OPENCV_CONF_OPTS += -DWITH_QT=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT),y)
+ OPENCV_CONF_OPTS += -DWITH_QT=4
+ OPENCV_DEPENDENCIES += qt
+-else
+-OPENCV_CONF_OPTS += -DWITH_QT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT5),y)
++OPENCV_CONF_OPTS += -DWITH_QT=5
++OPENCV_DEPENDENCIES += qt5base
+ endif
  
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_39
--	default "0.12.5"	if BR2_BR2_PACKAGE_NODEJS_0_12_5
-+	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
-+	default "0.12.5"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
- 
- menu "Module Selection"
- 
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_TIFF),y)
