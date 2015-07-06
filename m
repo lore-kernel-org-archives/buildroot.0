@@ -1,41 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Jul 2015 11:42:56 +0200
-Subject: [Buildroot] [git commit] imagemagick: bump to version 6.9.1-7
-Message-ID: <20150706094502.5633A80797@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Jul 2015 11:47:08 +0200
+Subject: [Buildroot] [PATCH 3/5 v10] package/opencv: add qt5 support
+In-Reply-To: <5155a3b6c47fd098de012cc0620e53e1bc2d046d.1436132995.git.yann.morin.1998@free.fr>
+References: <cover.1436132995.git.yann.morin.1998@free.fr>
+ <5155a3b6c47fd098de012cc0620e53e1bc2d046d.1436132995.git.yann.morin.1998@free.fr>
+Message-ID: <20150706114708.797867fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82da9aa8308a0f8e27053d83045aa2986ee0ffe5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/imagemagick/imagemagick.hash |    2 +-
- package/imagemagick/imagemagick.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun,  5 Jul 2015 23:54:46 +0200, Yann E. MORIN wrote:
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index a9803a0..92cceb0 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
--sha256	8d83934df129833f9e8696017182d8bbca8189842bbd2705c24729fed8db3358	ImageMagick-6.9.1-6.tar.xz
-+sha256 b610e5261c01664e19c91e513e21b3c2d76d583b497ee3c7cf2f20876d742328 ImageMagick-6.9.1-7.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index a1860df..33f12e5 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 6.9.1-6
-+IMAGEMAGICK_VERSION = 6.9.1-7
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+> index 0e5cf77..98e1614 100644
+> --- a/package/opencv/opencv.mk
+> +++ b/package/opencv/opencv.mk
+> @@ -266,11 +266,18 @@ else
+>  OPENCV_CONF_OPTS += -DWITH_PNG=OFF
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT)$(BR2_PACKAGE_OPENCV_WITH_QT5),)
+> +OPENCV_CONF_OPTS += -DWITH_QT=OFF
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT),y)
+>  OPENCV_CONF_OPTS += -DWITH_QT=4
+>  OPENCV_DEPENDENCIES += qt
+> -else
+> -OPENCV_CONF_OPTS += -DWITH_QT=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT5),y)
+> +OPENCV_CONF_OPTS += -DWITH_QT=5
+> +OPENCV_DEPENDENCIES += qt5base
+>  endif
+
+I think something like:
+
+ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT),y)
+OPENCV_CONF_OPTS += -DWITH_QT=4
+OPENCV_DEPENDENCIES += qt
+else ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT5),y)
+OPENCV_CONF_OPTS += -DWITH_QT=5
+OPENCV_DEPENDENCIES += qt5base
+else
+OPENCV_CONF_OPTS += -DWITH_QT=OFF
+endif
+
+Would probably have been more logical. But oh well, we're already at
+the 10th iteration, so I'll commit as is, and such improvements can be
+done as follow-up patches.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
