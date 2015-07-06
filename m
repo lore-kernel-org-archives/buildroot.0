@@ -1,39 +1,54 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Mon,  6 Jul 2015 08:58:51 +0200
-Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.9.1-7
-Message-ID: <1436165931-6814-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+Date: Mon,  6 Jul 2015 09:25:24 +0200
+Subject: [Buildroot] [PATCH 1/1] btrfs-progs: drop dependency on acl and attr
+Message-ID: <1436167524-21170-1-git-send-email-cvubrugier@fastmail.fm>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+btrfs-progs does not depend on libacl since version v4.0.1:
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index a9803a0..92cceb0 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
--sha256	8d83934df129833f9e8696017182d8bbca8189842bbd2705c24729fed8db3358	ImageMagick-6.9.1-6.tar.xz
-+sha256 b610e5261c01664e19c91e513e21b3c2d76d583b497ee3c7cf2f20876d742328 ImageMagick-6.9.1-7.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index a1860df..33f12e5 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 6.9.1-6
-+IMAGEMAGICK_VERSION = 6.9.1-7
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+  ab5984f btrfs-progs: convert: drop dependency on sys/acl.h
+  https://git.kernel.org/cgit/linux/kernel/git/kdave/btrfs-progs.git/commit/?id=ab5984ff6cce6f12063720b6dafc1afcd6606853
+
+Moreover, btrfs-progs does not depend on attr since version v3.14:
+
+  b5fe148 btrfs-progs: include <sys/xattr.h> instead of <attr/xattr.h>
+  https://git.kernel.org/cgit/linux/kernel/git/kdave/btrfs-progs.git/commit/?id=b5fe148715ea295e2b951ec6c90409b9d81978d8
+
+Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+---
+ package/btrfs-progs/Config.in      | 2 --
+ package/btrfs-progs/btrfs-progs.mk | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/package/btrfs-progs/Config.in b/package/btrfs-progs/Config.in
+index 9a2bd6c..dc0fa81 100644
+--- a/package/btrfs-progs/Config.in
++++ b/package/btrfs-progs/Config.in
+@@ -3,8 +3,6 @@ config BR2_PACKAGE_BTRFS_PROGS
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	depends on BR2_USE_MMU # util-linux
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_ACL
+-	select BR2_PACKAGE_ATTR
+ 	select BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_LZO
+ 	select BR2_PACKAGE_UTIL_LINUX
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 0190baa..b8833a7 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -7,7 +7,7 @@
+ BTRFS_PROGS_VERSION = 4.1
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+-BTRFS_PROGS_DEPENDENCIES = host-pkgconf acl attr e2fsprogs lzo util-linux zlib
++BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
+ BTRFS_PROGS_CONF_OPTS = --disable-backtrace
+ BTRFS_PROGS_LICENSE = GPLv2
+ BTRFS_PROGS_LICENSE_FILES = COPYING
 -- 
-1.9.1
+2.1.4
