@@ -1,8 +1,11 @@
-From: Goe <sombradecrisantemo@gmail.com>
-Date: Mon, 6 Jul 2015 14:46:21 +0200
-Subject: [Buildroot] Error when opencv is included in compilation,
- 'i586-buildroot-linux-g++' file is missed
-Message-ID: <CACiBgcej-aEteA67kBPy9HXm20QQQHOnCVbrQqWKfhN2Ne0xiQ@mail.gmail.com>
+From: =?windows-1252?Q?Guillaume_GARDET_-_Olis=E9o?= <guillaume.gardet@oliseo.fr>
+Date: Mon, 06 Jul 2015 14:17:11 +0200
+Subject: [Buildroot] [PATCH V4] sdl2: new package
+In-Reply-To: <559975AD.9030004@openwide.fr>
+References: <20150629222241.GF3669@free.fr>
+ <1435824981-6312-1-git-send-email-guillaume.gardet@oliseo.fr>
+ <559975AD.9030004@openwide.fr>
+Message-ID: <559A71C7.6080804@oliseo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,64 +14,96 @@ To: buildroot@busybox.net
 
 Hi,
 
-I am trying to compile a buildroot instance with opencv included using a
-machine with Ubuntu 14.04. The first compilation (before include opencv) is
-correct, but it fails when I try to compile again including opencv in the
-configuration.
+Le 05/07/2015 20:21, Romain Naour a ?crit :
+> Hi Guillaume,
+>
+> Le 02/07/2015 10:16, Guillaume GARDET a ?crit :
+>> Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> Cc: Romain Naour <romain.naour@openwide.fr>
+>> Cc: Yann E. Morin <yann.morin.1998@free.fr>
+>>
+>> ---
+>>
+>> Changes in V4:
+>> * Fix comments places in Config.in
+>>
+>> Changes in V3:
+>> * Add dependenies comments for DirectFB and X11 options
+>> * Fix license filename
+>> * Add explicit enable/disable options for libudev
+>> * Fix typo: s/succesful/successful/
+>> * Add more X11 dependencies: x11-xcursor, x11-xinerama, x11-xinput, x11-scrnsaver
+>> * Disbale opengl/opengles video diver explicitly
+>> * Use --disable-rpath option option instead of manual fix
+>>
+>> Changes in V2:
+>> * Fix SDL2 case: s/SDL2/sdl2/
+>> * Add dependency on toolchain with dynamic library
+>> * Remove unneeded 'SDL2' in sub-options names
+>> * Remove unneeded space after comma in if statement
+>> * Add explicit enable/disable options for tslib and alsa
+>> * Remove Mesa3D optional part
+>> * Move unconditionnal SDL2_CONF_OPTS upper
+>> * Remove host build
+>>
+>>
+>>   package/Config.in      |  1 +
+>>   package/sdl2/Config.in | 32 ++++++++++++++++++++++++
+>>   package/sdl2/sdl2.mk   | 68 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 101 insertions(+)
+>>   create mode 100644 package/sdl2/Config.in
+>>   create mode 100644 package/sdl2/sdl2.mk
+>>
+> [snip]
+>
+>> +SDL2_DEPENDENCIES += \
+>> +	xlib_libX11 xlib_libXext \
+>> +	$(if $(BR2_PACKAGE_XLIB_LIBXRENDER),xlib_libXrender) \
+>> +	$(if $(BR2_PACKAGE_XLIB_LIBXRANDR),xlib_libXrandr) \
+>> +	$(if $(BR2_PACKAGE_XLIB_LIBXCURSOR,xlib_libXcursor) \
+>> +	$(if $(BR2_PACKAGE_XLIB_LIBXINERAMA,xlib_libXinerama) \
+>> +	$(if $(BR2_PACKAGE_XPROTO_INPUTPROTO,xproto_inputproto) \
+>> +	$(if $(BR2_PACKAGE_XPROTO_SCRNSAVERPROTO,xproto_scrnsaverproto)
+> There are missing ',' and ')' here.
 
-The strangest thing is that the same steps work correctly in other machines
-with Ubuntu 12.04 and Debian 8 (I do not have another Ubuntu 14.04 machine).
+Ok for ')', it is clearly a typo, but why do you want to add an extra comma? It is not the case for other packages.
 
-The followed steps are:
-* make clean
-* make (compilation finished without errors)
-* make nconfig (Include WCHAR, C++ support and OpenCV)
-* make
+>
+> This part should look like:
+>
+> SDL2_DEPENDENCIES += \
+> 	xlib_libX11 xlib_libXext \
+> 	$(if $(BR2_PACKAGE_XLIB_LIBXRENDER),xlib_libXrender,) \
+> 	$(if $(BR2_PACKAGE_XLIB_LIBXRANDR),xlib_libXrandr,) \
+> 	$(if $(BR2_PACKAGE_XLIB_LIBXCURSOR),xlib_libXcursor,) \
+> 	$(if $(BR2_PACKAGE_XLIB_LIBXINERAMA),xlib_libXinerama,) \
+> 	$(if $(BR2_PACKAGE_XPROTO_INPUTPROTO),xproto_inputproto,) \
+> 	$(if $(BR2_PACKAGE_XPROTO_SCRNSAVERPROTO),xproto_scrnsaverproto,)
+>
+> sdl2 is seems complicated package, I think it would be easier to review if you
+> add it progressively by using a patch series:
+>
+> PATCH1: sdl2 new package (all mandatory dependencies enabled)
+> PATCH2: sdl2 add X11 support
+> PATCH3: sdl2 add directfb support
 
-Then, the compilation of OpenCV crashes with this error:
+No, I won't. It is extra work for nothing. I think it is not so complicated to review only 2 files to add a new package. Splitting packages for u-boot or Linux kernel make sense most of the time, but, here, clearly no.
+Buildroot maintainers/reviewers should send their comments from the 1st version, not 1 guy comments on V1, someone else on V2 etc., again the first guy for V3 on another part of the patch which was not commented the 1st time.
 
-//*************************************************//
-CMake Error at CMakeLists.txt:56 (project):
-  The CMAKE_CXX_COMPILER:
-
-
-/home/VICOMTECH/jgoenetxea/Workspace/BuildRoot/buildroot-2015.05/output/host/usr/bin/i586-buildroot-linux-uclibc-g++
-
-  is not a full path to an existing compiler tool.
-
-  Tell CMake where to find the compiler by setting either the environment
-  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full
-path
-  to the compiler, or to the compiler name if it is in the PATH.
+I contribute to lots of open source / free software and contributing to Buildroot is really painful compared to other projects. So please, all send your comments at the same time.
+For SDL2, please send your comments this week, and I will send a V5 next week fixing the remaining bits and if it does not fit to another guy again, I will stop sending patches to Buildroot.
+Now, I understand better why some people are maintaining a buildroot fork instead of upstreaming their patches. So, please improve your patch submission/review process.
 
 
--- Check for working C compiler:
-/home/VICOMTECH/jgoenetxea/Workspace/BuildRoot/buildroot-2015.05/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc
--- Check for working C compiler:
-/home/VICOMTECH/jgoenetxea/Workspace/BuildRoot/buildroot-2015.05/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc
--- works
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Detecting C compile features
--- Detecting C compile features - done
--- Configuring incomplete, errors occurred!
-//*************************************************//
+Guillaume
 
-I have checked the file 'i586-buildroot-linux-uclibc-g++' and it is not in
-that location (../output/host/usr/bin/) in the problematic machine, but it
-is there in the other machines (not Ubuntu 14.04).
 
-I have tried some solutions like this: '
-http://lists.busybox.net/pipermail/buildroot/2014-May/097050.html' but I
-can not find the solution.
-
-Any help would be appreciated.
-
-Thanks in advance,
-Jon.
-
-** I include attached the compilation output logs:
-https://www.dropbox.com/sh/ust82qdfnlipz5r/AAD3I6HrdoCZSVPpGjInxd2da?dl=0
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150706/2f4305f7/attachment.html>
+> ...
+>
+> I'll review your patch latter new week end.
+>
+> Best regards,
+> Romain
+>
+>
