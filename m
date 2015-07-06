@@ -1,50 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Jul 2015 09:54:51 +0200
-Subject: [Buildroot] [git commit] ntpd: drop unneeded uClibc workaround for
-	refclock_pcf.c
-Message-ID: <20150706080825.BCE3E7FBCC@busybox.osuosl.org>
+Date: Mon, 06 Jul 2015 11:43:04 +0200
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.9.1-7
+In-Reply-To: <1436165931-6814-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ (Jerzy Grzegorek's message of "Mon, 6 Jul 2015 08:58:51 +0200")
+References: <1436165931-6814-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <87fv51sjtj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0cbe4bc52d5f1cea7d2c085e40f948a5a78183b9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
 
-refclock_pcf.c contains code using the tm_gmtoff member of struct tm, which
-is only available on uClibc if it is built with __UCLIBC_HAS_TM_EXTENSIONS__.
+ > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
-This change date back to:
+Committed, thanks.
 
-commit 7129da009cc72575a84a30c4587bd99f745c49d4
-Author: Eric Andersen <andersen@codepoet.org>
-Date:   Sat Jan 18 21:27:22 2003 +0000
-
-    Merge a bunch of stuff over from the tuxscreen buildroot, with
-    many updates to make things be more consistant.
-     -Erik
-
-But nowadays our uClibc configs DO enable __UCLIBC_HAS_TM_EXTENSIONS__, so
-it is no longer needed and can be dropped.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ntp/ntp.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
-
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 93cefa1..110eaf8 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -40,10 +40,6 @@ else
- NTP_CONF_OPTS += --disable-ATOM
- endif
- 
--define NTP_PATCH_FIXUPS
--	$(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
--endef
--
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_KEYGEN) += util/ntp-keygen
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_WAIT) += scripts/ntp-wait/ntp-wait
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDATE) += ntpdate/ntpdate
+-- 
+Bye, Peter Korsgaard
