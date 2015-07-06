@@ -1,38 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Jul 2015 09:53:38 +0200
-Subject: [Buildroot] [git commit] ntp: drop uselss patch fixup which
-	sometimes breaks rebuild
-Message-ID: <20150706080825.BAAFF8164D@busybox.osuosl.org>
+Date: Mon, 6 Jul 2015 09:54:51 +0200
+Subject: [Buildroot] [git commit] ntpd: drop unneeded uClibc workaround for
+	refclock_pcf.c
+Message-ID: <20150706080825.BCE3E7FBCC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7917152f1353d670f5ada4a2f68397c339106d2c
+commit: http://git.buildroot.net/buildroot/commit/?id=0cbe4bc52d5f1cea7d2c085e40f948a5a78183b9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop sed line which no longer changes anything as upstream has changed to
-use strrchr.  Worse, it bumps each ntpd/*.c file's modification time, which
-sometimes triggers a strange dependency path causing the makefile to attempt
-to run the ntpd keyword-gen app, which fails, because it's been
-cross-compiled.
+refclock_pcf.c contains code using the tm_gmtoff member of struct tm, which
+is only available on uClibc if it is built with __UCLIBC_HAS_TM_EXTENSIONS__.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+This change date back to:
+
+commit 7129da009cc72575a84a30c4587bd99f745c49d4
+Author: Eric Andersen <andersen@codepoet.org>
+Date:   Sat Jan 18 21:27:22 2003 +0000
+
+    Merge a bunch of stuff over from the tuxscreen buildroot, with
+    many updates to make things be more consistant.
+     -Erik
+
+But nowadays our uClibc configs DO enable __UCLIBC_HAS_TM_EXTENSIONS__, so
+it is no longer needed and can be dropped.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ntp/ntp.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/ntp/ntp.mk |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
 diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 5f05508..93cefa1 100644
+index 93cefa1..110eaf8 100644
 --- a/package/ntp/ntp.mk
 +++ b/package/ntp/ntp.mk
-@@ -42,7 +42,6 @@ endif
+@@ -40,10 +40,6 @@ else
+ NTP_CONF_OPTS += --disable-ATOM
+ endif
  
- define NTP_PATCH_FIXUPS
- 	$(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
--	$(SED) '/[[:space:](]rindex[[:space:]]*(/s/[[:space:]]*rindex[[:space:]]*(/ strrchr(/g' $(@D)/ntpd/*.c
- endef
- 
+-define NTP_PATCH_FIXUPS
+-	$(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
+-endef
+-
  NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_KEYGEN) += util/ntp-keygen
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_WAIT) += scripts/ntp-wait/ntp-wait
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDATE) += ntpdate/ntpdate
