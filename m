@@ -1,80 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Jul 2015 14:30:40 +0200
-Subject: [Buildroot] [git commit] package:sysdig: bump to version 0.1.100
-Message-ID: <20150706123050.F01AC7FB05@busybox.osuosl.org>
+From: Goe <sombradecrisantemo@gmail.com>
+Date: Mon, 6 Jul 2015 14:46:21 +0200
+Subject: [Buildroot] Error when opencv is included in compilation,
+ 'i586-buildroot-linux-g++' file is missed
+Message-ID: <CACiBgcej-aEteA67kBPy9HXm20QQQHOnCVbrQqWKfhN2Ne0xiQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3ec8172152352ad30ca6beacce9da89c4fd0807
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-This patch bumps to version 0.1.100, removes the no more
-neded upstream included patch and adds the ENABLE_DKMS=OFF
-configure option.
+I am trying to compile a buildroot instance with opencv included using a
+machine with Ubuntu 14.04. The first compilation (before include opencv) is
+correct, but it fails when I try to compile again including opencv in the
+configuration.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../sysdig/0001-remove-dkms-module-updater.patch   |   31 --------------------
- package/sysdig/sysdig.mk                           |    4 +-
- 2 files changed, 2 insertions(+), 33 deletions(-)
+The strangest thing is that the same steps work correctly in other machines
+with Ubuntu 12.04 and Debian 8 (I do not have another Ubuntu 14.04 machine).
 
-diff --git a/package/sysdig/0001-remove-dkms-module-updater.patch b/package/sysdig/0001-remove-dkms-module-updater.patch
-deleted file mode 100644
-index 8d5c99d..0000000
---- a/package/sysdig/0001-remove-dkms-module-updater.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--Remove DKMS module updater
--
--This patch disables the in target installation of DKMS module updater
--mechanism unneeded in buildroot.
--
--Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
--
----- a/driver/CMakeLists.txt
--+++ b/driver/CMakeLists.txt
--@@ -39,21 +39,3 @@ add_custom_target(install_driver
-- 	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-- 	VERBATIM)
-- 
---install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Makefile.dkms
---	RENAME Makefile
---	DESTINATION "src/sysdig-${SYSDIG_VERSION}")
---
---install(FILES
---	${CMAKE_CURRENT_BINARY_DIR}/dkms.conf
---	dynamic_params_table.c
---	event_table.c
---	flags_table.c
---	main.c
---	ppm.h
---	ppm_events.c
---	ppm_events.h
---	ppm_events_public.h
---	ppm_fillers.c
---	ppm_ringbuffer.h
---	syscall_table.c
---	DESTINATION "src/sysdig-${SYSDIG_VERSION}")
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-index fb348ff..d07d467 100644
---- a/package/sysdig/sysdig.mk
-+++ b/package/sysdig/sysdig.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--SYSDIG_VERSION = 0.1.99
-+SYSDIG_VERSION = 0.1.100
- SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
- SYSDIG_LICENSE = GPLv2
- SYSDIG_LICENSE_FILES = COPYING
- SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF \
--	-DUSE_BUNDLED_JSONCPP=OFF
-+	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF
- SYSDIG_DEPENDENCIES = zlib luajit jsoncpp linux
- SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
- 
+The followed steps are:
+* make clean
+* make (compilation finished without errors)
+* make nconfig (Include WCHAR, C++ support and OpenCV)
+* make
+
+Then, the compilation of OpenCV crashes with this error:
+
+//*************************************************//
+CMake Error at CMakeLists.txt:56 (project):
+  The CMAKE_CXX_COMPILER:
+
+
+/home/VICOMTECH/jgoenetxea/Workspace/BuildRoot/buildroot-2015.05/output/host/usr/bin/i586-buildroot-linux-uclibc-g++
+
+  is not a full path to an existing compiler tool.
+
+  Tell CMake where to find the compiler by setting either the environment
+  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full
+path
+  to the compiler, or to the compiler name if it is in the PATH.
+
+
+-- Check for working C compiler:
+/home/VICOMTECH/jgoenetxea/Workspace/BuildRoot/buildroot-2015.05/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc
+-- Check for working C compiler:
+/home/VICOMTECH/jgoenetxea/Workspace/BuildRoot/buildroot-2015.05/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc
+-- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Configuring incomplete, errors occurred!
+//*************************************************//
+
+I have checked the file 'i586-buildroot-linux-uclibc-g++' and it is not in
+that location (../output/host/usr/bin/) in the problematic machine, but it
+is there in the other machines (not Ubuntu 14.04).
+
+I have tried some solutions like this: '
+http://lists.busybox.net/pipermail/buildroot/2014-May/097050.html' but I
+can not find the solution.
+
+Any help would be appreciated.
+
+Thanks in advance,
+Jon.
+
+** I include attached the compilation output logs:
+https://www.dropbox.com/sh/ust82qdfnlipz5r/AAD3I6HrdoCZSVPpGjInxd2da?dl=0
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150706/2f4305f7/attachment.html>
