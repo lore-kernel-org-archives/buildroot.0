@@ -1,65 +1,61 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  6 Jul 2015 10:12:23 -0300
-Subject: [Buildroot] [PATCH] collectd: fix parallel build issues
-Message-ID: <1436188343-11234-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Jul 2015 15:17:50 +0200
+Subject: [Buildroot] [PATCH 2/2] rtl8188eu: new package
+In-Reply-To: <1436188175-7912-2-git-send-email-luca@lucaceresoli.net>
+References: <1436188175-7912-1-git-send-email-luca@lucaceresoli.net>
+ <1436188175-7912-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20150706151750.456bbb6c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For version 5.5.x a reorganization was made and some common funtionality
-was moved to libraries, however proper dependency accounting isn't
-handled in the Makefile thus causing build breakage on some parallel
-builds. Fixes:
-http://autobuild.buildroot.net/results/a5e/a5e6891e9ea66ac8216d3302da3702770ef7247b/
+Luca,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...-libavltree-libcommon-libheap-dependencies.patch | 21 +++++++++++++++++++++
- package/collectd/collectd.mk                        |  2 ++
- 2 files changed, 23 insertions(+)
- create mode 100644 package/collectd/0001-build-add-libavltree-libcommon-libheap-dependencies.patch
+On Mon,  6 Jul 2015 15:09:35 +0200, Luca Ceresoli wrote:
 
-diff --git a/package/collectd/0001-build-add-libavltree-libcommon-libheap-dependencies.patch b/package/collectd/0001-build-add-libavltree-libcommon-libheap-dependencies.patch
-new file mode 100644
-index 0000000..1ee1e7c
---- /dev/null
-+++ b/package/collectd/0001-build-add-libavltree-libcommon-libheap-dependencies.patch
-@@ -0,0 +1,21 @@
-+build: add libavltree, libcommon & libheap dependencies
-+
-+Otherwise it can break on very parallel builds since collectd link time
-+arrives before one or more of these were built.
-+
-+Status: requested github pull (patch slightly different for newer rev).
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura collectd-5.5.0.orig/src/daemon/Makefile.am collectd-5.5.0/src/daemon/Makefile.am
-+--- collectd-5.5.0.orig/src/daemon/Makefile.am	2015-07-06 10:01:17.820506239 -0300
-++++ collectd-5.5.0/src/daemon/Makefile.am	2015-07-06 10:02:03.364054763 -0300
-+@@ -49,7 +49,7 @@
-+ collectd_CFLAGS = $(AM_CFLAGS)
-+ collectd_LDFLAGS = -export-dynamic
-+ collectd_LDADD = libavltree.la libcommon.la libheap.la -lm
-+-collectd_DEPENDENCIES =
-++collectd_DEPENDENCIES = libavltree.la libcommon.la libheap.la
-+ 
-+ # Link to these libraries..
-+ if BUILD_WITH_LIBRT
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 7649f72..6e1ea5c 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -11,6 +11,8 @@ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
- COLLECTD_INSTALL_STAGING = YES
- COLLECTD_LICENSE = GPLv2 LGPLv2.1
- COLLECTD_LICENSE_FILES = COPYING
-+# For 0001-build-add-libavltree-libcommon-libheap-dependencies.patch
-+COLLECTD_AUTORECONF = YES
- 
- # These require unmet dependencies, are fringe, pointless or deprecated
- COLLECTD_PLUGINS_DISABLE = \
+> diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
+> new file mode 100644
+> index 0000000..3228c67
+> --- /dev/null
+> +++ b/package/rtl8188eu/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_RTL8188EU
+> +	bool "rtl8188eu"
+> +	depends on BR2_LINUX_KERNEL && !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS
+
+Even though my understanding of firmware loading is not very deep, I
+believe this is wrong. Since quite some time, the kernel has been able
+to load firmware by itself, without the help of a userspace helper
+program.
+
+See
+http://lxr.free-electrons.com/source/drivers/base/firmware_class.c#L1089.
+It first tries to load the firmware through a userspace helper. But if
+that doesn't work, it falls back to fw_get_filesystem_firmware(), which
+makes the kernel directly load the firmware itself.
+
+See also:
+
+config FW_LOADER_USER_HELPER_FALLBACK
+        bool "Fallback user-helper invocation for firmware loading"
+        depends on FW_LOADER
+        select FW_LOADER_USER_HELPER
+        help
+          This option enables / disables the invocation of user-helper
+          (e.g. udev) for loading firmware files as a fallback after the
+          direct file loading in kernel fails.  The user-mode helper is
+          no longer required unless you have a special firmware file that
+          resides in a non-standard path. Moreover, the udev support has
+          been deprecated upstream.
+
+          If you are unsure about this, say N here.
+
+Best regards,
+
+Thomas
 -- 
-2.3.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
