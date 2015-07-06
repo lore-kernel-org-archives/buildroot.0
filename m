@@ -1,44 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Jul 2015 15:49:59 +0200
-Subject: [Buildroot] [PATCH 1/2] system: allow using mdev for firmware
- loading only
-In-Reply-To: <1436188175-7912-1-git-send-email-luca@lucaceresoli.net>
-References: <1436188175-7912-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20150706154959.4ac7d085@free-electrons.com>
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Date: Mon, 06 Jul 2015 10:56:00 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-06-29
+In-Reply-To: <20150630140738.526d72b8@free-electrons.com>
+References: <20150630063014.44429100A75@stock.ovh.net>
+ <20150630140738.526d72b8@free-electrons.com>
+Message-ID: <559A88F0.20106@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca,
+On 30/06/15 09:07, Thomas Petazzoni wrote:
 
-On Mon,  6 Jul 2015 15:09:34 +0200, Luca Ceresoli wrote:
-> Busybox's mdev nicely provides the ability to load a firmware requested by
-> the kernel.
-> 
-> However, when using a static /dev management, mdev is not installed as a
-> hotplug helper (i.e. S10mdev is not installed) and
-> CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not enabled in the busybox
-> configuration.
-> 
-> Provide a knob for static /dev users to easily enable mdev for firmware
-> loading.
-> 
-> This is just a matter of extending the ifeq condition around the S10mdev
-> installation and kconfig fixups that enable the needed configuration in
-> busybox. But leave mdev.conf installation under the old condition, it's
-> not needed for firmware loading.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>>       powerpc |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/9147a478f8a2c77461c72a40af5c3f3779bfbe56/
+>
+> sigsegv.h:118:9: error: unknown type name 'ucontext_t'
+>   typedef ucontext_t *stackoverflow_context_t;
+>
+> Some PowerPC person to have a look?
 
-Are you really a poor soul stuck with a pre-2.6.32 kernel preventing
-you from using devtmpfs ?
+This one boils down to uclibc for powerpc not supporting ucontext 
+functions (sigsegv.h includes ucontext.h which includes conditional on 
+__UCLIBC_HAS_CONTEXT_FUNCS__ sys/ucontext.h which defines ucontext_t).
 
-Best regards,
+Since libsigsegv isn't used in general by any package i think excluding 
+the combination would be best. I'll send a patch.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards.
