@@ -1,61 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Jul 2015 00:36:43 +0200
-Subject: [Buildroot] [PATCH] core/pkg-generic: host variants inherits
- target's override-srcdir
-In-Reply-To: <1436097417-1809-1-git-send-email-yann.morin.1998@free.fr>
-References: <1436097417-1809-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <559B02FB.8010803@mind.be>
+Date: Tue, 7 Jul 2015 01:04:15 +0200
+Subject: [Buildroot] [PATCH] pkg-kconfig: .config target needs to take
+ into account package dependencies
+In-Reply-To: <20150705153034.74fd2b66@free-electrons.com>
+References: <1435956134-9543-1-git-send-email-arnout@mind.be>
+ <20150703220237.GI3652@free.fr> <20150705153034.74fd2b66@free-electrons.com>
+Message-ID: <559B096F.80607@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/05/15 13:56, Yann E. MORIN wrote:
-> When a package has both a target and a host variants, and there is an
-> override-srcdir set for the target variant, the host variant should
-> inherit the target's override-srcdir, unless explicitly set, like we do
-> for all other target-variant properties.
+On 07/05/15 15:30, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Reported-by: Mike <mikez@OpenPlayer.org>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/pkg-generic.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+> On Sat, 4 Jul 2015 00:02:37 +0200, Yann E. MORIN wrote:
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 9fe01b8..926d594 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -310,6 +310,12 @@ else
->    $(2)_VERSION := $$(call sanitize,$$($(2)_VERSION))
->  endif
->  
-> +ifndef $(2)_OVERRIDE_SRCDIR
-> +  ifdef $(3)_OVERRIDE_SRCDIR
-> +    $(2)_OVERRIDE_SRCDIR = $$($(3)_OVERRIDE_SRCDIR)
-> +  endif
-> +endif
+>>> +# Generating the .config file is part of the configure step of the package
+>>> +# infrastructure, so it should be ordered like it. IOW, it should take over
+>>> +# its dependencies.
+>>> +$$($(2)_DIR)/.config: | $$($(2)_FINAL_DEPENDENCIES)
+>>
+>> OK, I see the point.
+>>
+>> However, when Thomas DS. and I did the infra, we explicitly avoided this
+>> dependency, for a simple reason: we did not want to have to build the
+>> dependencies of a package just to 'menuconfig' it, like so:
+>>
+>>     make menuconfig   <- enable kernel
+>>     make linux-menuconfig
+>>
+>> Currently, all we need at that moment is that linux be downloaded,
+>> extracted and patched, then we can show the menuconfig.
+>>
+>> With your proposed patch, it means all the Linux dependencies
+>> (host-kmod, lzop...) will have to be built before we can show the
+>> menuconfig. This was the situation we were in before we had the
+>> kconfig-package infra, and it is *very* frustrating... :-(
+> 
+> I agree that having to build all dependencies of linux just to run
+> "make linux-menuconfig" is a bit annoying. So finding a solution to
+> keep this behavior would be nice.
 
- IMHO this should be
+ OK, fair enough, marked as rejected.
 
-ifdef $(3)_OVERRIDE_SRCDIR)
-  $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
-endif
-
-i.e. don't set the override if it has been explicitly set to empty. Note that
-the ifdef is still needed, otherwise the target override will always be set.
-
+ This does warrant a comment in pkg-kconfig.mk to avoid rehashing this in the
+future.
 
  Regards,
  Arnout
-
-> +
->  $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
->  $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
->  $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
-> 
 
 
 -- 
