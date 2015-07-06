@@ -1,32 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Jul 2015 15:48:55 +0200
-Subject: [Buildroot] [PATCH] collectd: fix parallel build issues
-In-Reply-To: <1436188343-11234-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1436188343-11234-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150706154855.28a56f19@free-electrons.com>
+Date: Mon, 6 Jul 2015 15:49:59 +0200
+Subject: [Buildroot] [PATCH 1/2] system: allow using mdev for firmware
+ loading only
+In-Reply-To: <1436188175-7912-1-git-send-email-luca@lucaceresoli.net>
+References: <1436188175-7912-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20150706154959.4ac7d085@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Luca,
 
-On Mon,  6 Jul 2015 10:12:23 -0300, Gustavo Zacarias wrote:
-> For version 5.5.x a reorganization was made and some common funtionality
-> was moved to libraries, however proper dependency accounting isn't
-> handled in the Makefile thus causing build breakage on some parallel
-> builds. Fixes:
-> http://autobuild.buildroot.net/results/a5e/a5e6891e9ea66ac8216d3302da3702770ef7247b/
+On Mon,  6 Jul 2015 15:09:34 +0200, Luca Ceresoli wrote:
+> Busybox's mdev nicely provides the ability to load a firmware requested by
+> the kernel.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ...-libavltree-libcommon-libheap-dependencies.patch | 21 +++++++++++++++++++++
->  package/collectd/collectd.mk                        |  2 ++
->  2 files changed, 23 insertions(+)
->  create mode 100644 package/collectd/0001-build-add-libavltree-libcommon-libheap-dependencies.patch
+> However, when using a static /dev management, mdev is not installed as a
+> hotplug helper (i.e. S10mdev is not installed) and
+> CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not enabled in the busybox
+> configuration.
+> 
+> Provide a knob for static /dev users to easily enable mdev for firmware
+> loading.
+> 
+> This is just a matter of extending the ifeq condition around the S10mdev
+> installation and kconfig fixups that enable the needed configuration in
+> busybox. But leave mdev.conf installation under the old condition, it's
+> not needed for firmware loading.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-Applied, thanks.
+Are you really a poor soul stuck with a pre-2.6.32 kernel preventing
+you from using devtmpfs ?
+
+Best regards,
 
 Thomas
 -- 
