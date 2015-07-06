@@ -1,47 +1,47 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  6 Jul 2015 15:06:38 -0300
-Subject: [Buildroot] [PATCH] xtables-addons: bump to version 2.7
-Message-ID: <1436205998-6710-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  6 Jul 2015 20:45:56 +0200
+Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.4.3
+Message-ID: <1436208356-28462-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes build issues with kernels 4.1+
+From [1]:
+- tools: widen frequency resolution to ?s in the DPI tool
+- tools: complain about devices that don't have abs x/y axes in the edge detector
+- include: update to 4.1 header
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[1] http://lists.freedesktop.org/archives/input-tools/2015-June/001171.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/xtables-addons/xtables-addons.hash | 6 +++---
- package/xtables-addons/xtables-addons.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libevdev/libevdev.hash | 4 ++--
+ package/libevdev/libevdev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
-index d742aed..02e646f 100644
---- a/package/xtables-addons/xtables-addons.hash
-+++ b/package/xtables-addons/xtables-addons.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.6/
--md5	087835ba7e564481b6fd398692268340	xtables-addons-2.6.tar.xz
--sha1	10586961a70fd4fe4f972cb3f31962c6766b359c	xtables-addons-2.6.tar.xz
-+# From http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.7/
-+md5	81bd7ba82e5f7bfd1458fc97ddf72e1d	xtables-addons-2.7.tar.xz
-+sha1	82c13237ef2a62e57832b160832f4b9c4fb8c7c5	xtables-addons-2.7.tar.xz
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index dcfbd5e..75e2a5a 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 535490b..1b7897d 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,2 +1,2 @@
+-# Hash from http://lists.freedesktop.org/archives/input-tools/2015-April/001167.html
+-sha256 7c77b213f075706d428a2af54b66bf86b03a68e9fb390e7ec48cf55065970643 libevdev-1.4.2.tar.xz
++# Hash from http://lists.freedesktop.org/archives/input-tools/2015-June/001171.html
++sha256 1c418b26fd78b0e9900872be2f77fb5311c877b34ec5c75efd1b670ed627969b libevdev-1.4.3.tar.xz
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index 3ed7ba0..082a7cc 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XTABLES_ADDONS_VERSION = 2.6
-+XTABLES_ADDONS_VERSION = 2.7
- XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
--XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons/$(XTABLES_ADDONS_VERSION)
-+XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
- XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
- XTABLES_ADDONS_LICENSE = GPLv2+
- XTABLES_ADDONS_LICENSE_FILES = LICENSE
+-LIBEVDEV_VERSION = 1.4.2
++LIBEVDEV_VERSION = 1.4.3
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
 -- 
-2.3.6
+2.1.4
