@@ -1,47 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Jul 2015 00:03:58 +0200
-Subject: [Buildroot] [PATCH v5 2/2] pkg-luarocks: fix top-level parallel
- makefile support
-In-Reply-To: <20150704152639.1c1cc720@free-electrons.com>
-References: <1435738247-9015-1-git-send-email-fabio.porcedda@gmail.com>
- <1435738247-9015-3-git-send-email-fabio.porcedda@gmail.com>
- <20150704152639.1c1cc720@free-electrons.com>
-Message-ID: <559AFB4E.9090101@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  6 Jul 2015 22:08:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 8201] Important security upgrades for node.js
+In-Reply-To: <bug-8201-163@https.bugs.busybox.net/>
+References: <bug-8201-163@https.bugs.busybox.net/>
+Message-ID: <20150706220853.16A858050C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/04/15 15:26, Thomas Petazzoni wrote:
-> However, won't we see some similar issues with other packages? Should
-> we preventively do a flock on HOST_DIR/STAGING_DIR/TARGET_DIR when
-> installing to host/staging/target respectively, so that we are sure
-> that at any given time, we don't have two packages installing at the
-> same time in one of the directories? Theoretically, this shouldn't be
-> needed if all packages install their own files, or if they have the
-> proper dependencies when they are overwriting files from another
-> package.
+https://bugs.busybox.net/show_bug.cgi?id=8201
 
- There aren't many packages that would have this problem, but indeed a few. E.g.
-packages installing kernel modules will typically call depmod. So yes, it would
-be a good idea to do that in general.
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
- However, how are you going to do that in practice? flock works like fakeroot,
-you have to run the commands from within the process. But all our INSTALL_*_CMDS
-are supposed to be called as separate shell scripts.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
 
- So we'd have to use something like dotlockfile, but I don't think we can assume
-that's installed everywhere, can we? Or else we have to devise something similar
-around flock.
+--- Comment #7 from Yann E. MORIN <yann.morin.1998@free.fr> 2015-07-06 22:08:52 UTC ---
+Chris,
 
- Regards,
- Arnout
+We believe this has been fixed with:
+    781529b package/nodejs: security bump
+   
+http://git.buildroot.org/buildroot/commit/?id=781529b159313c04903791c6f9e437e697f0e3a9
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
