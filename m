@@ -1,37 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  6 Jul 2015 11:01:51 -0300
-Subject: [Buildroot] [PATCH] libsigsegv: unavailable for powerpc with uclibc
-Message-ID: <1436191311-23939-1-git-send-email-gustavo@zacarias.com.ar>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 06 Jul 2015 16:08:11 +0200
+Subject: [Buildroot] [PATCH 1/2] system: allow using mdev for firmware
+ loading only
+In-Reply-To: <20150706154959.4ac7d085@free-electrons.com>
+References: <1436188175-7912-1-git-send-email-luca@lucaceresoli.net>
+ <20150706154959.4ac7d085@free-electrons.com>
+Message-ID: <559A8BCB.1020409@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/c5f/c5fef9a89f99e13de9cabe52c2ac1602d85974fe/
+Dear Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libsigsegv/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+Thomas Petazzoni wrote:
+> Luca,
+>
+> On Mon,  6 Jul 2015 15:09:34 +0200, Luca Ceresoli wrote:
+>> Busybox's mdev nicely provides the ability to load a firmware requested by
+>> the kernel.
+>>
+>> However, when using a static /dev management, mdev is not installed as a
+>> hotplug helper (i.e. S10mdev is not installed) and
+>> CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not enabled in the busybox
+>> configuration.
+>>
+>> Provide a knob for static /dev users to easily enable mdev for firmware
+>> loading.
+>>
+>> This is just a matter of extending the ifeq condition around the S10mdev
+>> installation and kconfig fixups that enable the needed configuration in
+>> busybox. But leave mdev.conf installation under the old condition, it's
+>> not needed for firmware loading.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>
+> Are you really a poor soul stuck with a pre-2.6.32 kernel preventing
+> you from using devtmpfs ?
 
-diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
-index 2ca9a28..35f6d67 100644
---- a/package/libsigsegv/Config.in
-+++ b/package/libsigsegv/Config.in
-@@ -3,7 +3,12 @@ config BR2_PACKAGE_LIBSIGSEGV
- 	depends on !BR2_xtensa
- 	depends on !BR2_arc # no ucontext_i.sym file
- 	depends on !BR2_microblaze
-+	# No ucontext support in uclibc for powerpc
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
- 	help
- 	  Library for handling page faults in user mode.
- 
- 	  http://libsigsegv.sourceforge.net/
-+
-+comment "libsigsegv needs an (e)glibc toolchain"
-+	depends on BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC
+"You, poor souls condemned to the Circle of Jurassic Kernel Users, shall
+be using 2.6.30.10... for eternity! Abandon all devtmpfs hope, ye who
+enter here!"
+
+Yes, I am doomed! :.(...
+
 -- 
-2.3.6
+Luca
