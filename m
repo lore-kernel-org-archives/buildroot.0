@@ -1,41 +1,78 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 6 Jul 2015 10:02:03 +0200
-Subject: [Buildroot] [PATCH 2/4] nano: bump to version 2.4.2
+Date: Mon, 6 Jul 2015 10:02:04 +0200
+Subject: [Buildroot] [PATCH 3/4] squid: bump to version 3.5.6
 In-Reply-To: <1436169725-26108-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1436169725-26108-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1436169725-26108-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1436169725-26108-3-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- Bump to version 3.5.6
+- Update hash file
+- Change configure options according to release notes
+
+Release notes:
+
+  http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.6-RELEASENOTES.html
+
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/squid/squid.hash | 6 +++---
+ package/squid/squid.mk   | 7 +++----
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index cb5d5b8..8ad1497 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	6a0ceb5e1b9b9bea72d5d1f46488ace4782b1f198ea6ba558480a86d994f29d2	nano-2.4.1.tar.gz
-+sha256  c8cd7f18fcf5696d9df3364ee2a840e0ab7b6bdbd22abf850bbdc951db7f65b9  nano-2.4.2.tar.gz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 4d47fdb..b030818 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 64d2fac..d5738c7 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.5.tar.xz.asc
+-md5	9a323a97753143ddd935aed58a0193ae	squid-3.5.5.tar.xz
+-sha1	2c168e8b13251ed8050d9e780127c4de016dcb61	squid-3.5.5.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.6.tar.xz.asc
++md5  93e18bd257857e35bb634ddb8a348563  squid-3.5.6.tar.xz
++sha1  c5f3ab47e61a08fa6a8767d45befeffd7d26fd9f  squid-3.5.6.tar.xz
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index adc09e5..469fb1b 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--NANO_VERSION = 2.4.1
-+NANO_VERSION = 2.4.2
- NANO_SITE = $(BR2_GNU_MIRROR)/nano
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).5
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).6
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
+@@ -29,7 +29,7 @@ SQUID_CONF_OPTS = \
+ 	--enable-removal-policies="lru,heap" \
+ 	--with-filedescriptors=1024 \
+ 	--disable-ident-lookups \
+-	--with-krb5-config=no \
++	--without-mit-krb5 \
+ 	--enable-auth-basic="fake getpwnam" \
+ 	--enable-auth-digest="file" \
+ 	--enable-auth-negotiate="wrapper" \
+@@ -39,7 +39,6 @@ SQUID_CONF_OPTS = \
+ 	--with-logdir=/var/log/squid/ \
+ 	--with-pidfile=/var/run/squid.pid \
+ 	--with-swapdir=/var/cache/squid/ \
+-	--enable-icap-client \
+ 	--with-default-user=squid
+ 
+ # Atomics in Squid use __sync_add_and_fetch_8, i.e a 64 bits atomic
+@@ -59,7 +58,7 @@ SQUID_CONF_ENV += ac_cv_search_shm_open="-lrt -lpthread"
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-SQUID_CONF_OPTS += --enable-ssl
++SQUID_CONF_OPTS += --with-openssl
+ SQUID_DEPENDENCIES += openssl
+ endif
+ 
 -- 
 2.3.6
