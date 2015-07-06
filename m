@@ -1,97 +1,59 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  6 Jul 2015 16:15:52 +0000 (UTC)
-Subject: [Buildroot] [Bug 8206] New: mplayer uses host xorg development files
-Message-ID: <bug-8206-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 6 Jul 2015 18:12:55 +0200
+Subject: [Buildroot] [git commit] pkg-autotools: fix patching libtool for
+	version 2.4
+Message-ID: <20150706162130.5B2B27FFEE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8206
+commit: http://git.buildroot.net/buildroot/commit/?id=9917e48d7eb5bc7fbbb0188872a32c11b4b67010
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           Summary: mplayer uses host xorg development files
-           Product: buildroot
-           Version: 2015.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: glscantlen at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+If the libtool used by the package is 2.4 (i.e. with no patchlevel), we
+end up with error messages like this one, seen when building ntp-4.2.8p3:
 
+    /bin/sh: line 0: test: 2.4: integer expression expected
 
-I am using buildroot-2015.05
-Installed on a fresh Ubuntu 14.04 host, with only basic build requirements ie
-"apt-get install build-essential git ccache"
+That's because the current sed expression "[0-9].[0-9]." only deletes content
+like "2.4.", so it leaves "2.4" (no patch level *and* no second period) intact,
+resulting in an ltmain_patchlevel of "2.4", not empty, and not "0".  Then the
+shell line goes bad, because the built in shell test -gt operates on integers
+only, and fails on floating point numbers (like "2.4").
 
-I have configured BuildRoot for basic Xorg with mplayer. (I'll attach
-defconfig)
-The "make" passes without error and everything works on target H/W except
-mplayer.
-Mplayer acts as-if there is no xorg.
-I have discovered, if I "apt-get install xorg-dev" to the host and rebuild
-mplayer it will then work.
-Why is mplayer's configure using the host's xorg-development files? I would
-expect it must use the BuildRoot tree's development files.
+Additionally, the existing sed lines are problematic in other ways, because the
+current expression "[0-9].[0-9]" will match "234" as well as "2.4", as an unescaped
+period matches any character, not just a period.  Also, the lack of an asterisk
+after the first character may be a problem in the future, if a two digit initial
+number is used.
 
-sorry I can not attach a simple text file... DAH!
-So I'll just paste here:
+So, this patch changes the sed regex as follows:
 
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_ARM_EABIHF=y
-BR2_DEFCONFIG="$(CONFIG_DIR)/defconfig"
-BR2_CCACHE=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_PATH="$(HOME)/xu3_mplayer/linaro-4.9"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="arm-linux-gnueabihf"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_ROOTFS_POST_BUILD_SCRIPT="support/scripts/config_eth"
-BR2_PACKAGE_ALSA_UTILS=y
-BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
-BR2_PACKAGE_FFMPEG=y
-BR2_PACKAGE_MPLAYER=y
-BR2_PACKAGE_MESA3D_DEMOS=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
-BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX=y
-BR2_PACKAGE_XAPP_TWM=y
-BR2_PACKAGE_XAPP_XCLOCK=y
-BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV=y
-BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD=y
-BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_ARMSOC=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV=y
-BR2_PACKAGE_XTERM=y
-BR2_PACKAGE_PYTHON=y
-BR2_PACKAGE_PYTHON_BZIP2=y
-BR2_PACKAGE_PYTHON_READLINE=y
-BR2_PACKAGE_PYTHON_SSL=y
-BR2_PACKAGE_PYTHON_PYEXPAT=y
-BR2_PACKAGE_PYTHON_ZLIB=y
-BR2_PACKAGE_LIBDRI2=y
-BR2_PACKAGE_LIBDRM_EXYNOS=y
-BR2_PACKAGE_LIBGLEW=y
-BR2_PACKAGE_LIBGLU=y
-BR2_PACKAGE_WAYLAND=y
-BR2_PACKAGE_OPENSSH=y
-BR2_PACKAGE_RSYNC=y
+* Match a string of digits when searching for a number.  I.e. "[0-9]*"
+* Match specifically a period in between two numbers.  I.e. "\."
+* When searching for a patch level, make the second period optional.  I.e. "\.*"
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-autotools.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 1d694f0..54f5dcd 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -61,9 +61,9 @@ define LIBTOOL_PATCH_HOOK
+ 	@$(call MESSAGE,"Patching libtool")
+ 	$(Q)for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
+ 		ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
+-		sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
++		sed -e 's/\([0-9]*\.[0-9]*\).*/\1/' -e 's/\"//'`; \
+ 		ltmain_patchlevel=`sed -n '/^[     ]*VERSION=/{s/^[        ]*VERSION=//;p;q;}' $$i | \
+-		sed -e 's/\([0-9].[0-9].\)\([0-9]*\).*/\2/' -e 's/\"//'`; \
++		sed -e 's/\([0-9]*\.[0-9]*\.*\)\([0-9]*\).*/\2/' -e 's/\"//'`; \
+ 		if test $${ltmain_version} = '1.5'; then \
+ 			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+ 		elif test $${ltmain_version} = "2.2"; then\
