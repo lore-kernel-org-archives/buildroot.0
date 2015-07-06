@@ -1,57 +1,58 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 6 Jul 2015 07:37:44 -0400
-Subject: [Buildroot] [git commit] ntpd: drop unneeded uClibc workaround
- for refclock_pcf.c
-In-Reply-To: <20150706080825.BCE3E7FBCC@busybox.osuosl.org>
-References: <20150706080825.BCE3E7FBCC@busybox.osuosl.org>
-Message-ID: <CANxTyt5E9GdPNWOz=8bngGQKcW0a7ZWrX-cy5N7MgFMf=KgbbQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Jul 2015 14:02:30 +0200
+Subject: [Buildroot] [git commit] btrfs-progs: drop dependency on acl and
+	attr
+Message-ID: <20150706120241.2E17081784@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+commit: http://git.buildroot.net/buildroot/commit/?id=16339adfcc1274df41772f0764f0a6471112a721
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Jul 6, 2015 at 3:54 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=0cbe4bc52d5f1cea7d2c085e40f948a5a78183b9
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> refclock_pcf.c contains code using the tm_gmtoff member of struct tm, which
-> is only available on uClibc if it is built with __UCLIBC_HAS_TM_EXTENSIONS__.
->
-> This change date back to:
->
-> commit 7129da009cc72575a84a30c4587bd99f745c49d4
-> Author: Eric Andersen <andersen@codepoet.org>
-> Date:   Sat Jan 18 21:27:22 2003 +0000
->
->     Merge a bunch of stuff over from the tuxscreen buildroot, with
->     many updates to make things be more consistant.
->      -Erik
->
-> But nowadays our uClibc configs DO enable __UCLIBC_HAS_TM_EXTENSIONS__, so
-> it is no longer needed and can be dropped.
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/ntp/ntp.mk |    4 ----
->  1 files changed, 0 insertions(+), 4 deletions(-)
->
-> diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-> index 93cefa1..110eaf8 100644
-> --- a/package/ntp/ntp.mk
-> +++ b/package/ntp/ntp.mk
-> @@ -40,10 +40,6 @@ else
->  NTP_CONF_OPTS += --disable-ATOM
->  endif
->
-> -define NTP_PATCH_FIXUPS
-> -       $(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
-> -endef
+btrfs-progs does not depend on libacl since version v4.0.1:
 
-So then - you can also drop this line too, I think:
+  ab5984f btrfs-progs: convert: drop dependency on sys/acl.h
+  https://git.kernel.org/cgit/linux/kernel/git/kdave/btrfs-progs.git/commit/?id=ab5984ff6cce6f12063720b6dafc1afcd6606853
 
-NTP_POST_PATCH_HOOKS += NTP_PATCH_FIXUPS
+Moreover, btrfs-progs does not depend on attr since version v3.14:
 
-Danomi -
+  b5fe148 btrfs-progs: include <sys/xattr.h> instead of <attr/xattr.h>
+  https://git.kernel.org/cgit/linux/kernel/git/kdave/btrfs-progs.git/commit/?id=b5fe148715ea295e2b951ec6c90409b9d81978d8
+
+Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/btrfs-progs/Config.in      |    2 --
+ package/btrfs-progs/btrfs-progs.mk |    2 +-
+ 2 files changed, 1 insertions(+), 3 deletions(-)
+
+diff --git a/package/btrfs-progs/Config.in b/package/btrfs-progs/Config.in
+index 9a2bd6c..dc0fa81 100644
+--- a/package/btrfs-progs/Config.in
++++ b/package/btrfs-progs/Config.in
+@@ -3,8 +3,6 @@ config BR2_PACKAGE_BTRFS_PROGS
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	depends on BR2_USE_MMU # util-linux
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_ACL
+-	select BR2_PACKAGE_ATTR
+ 	select BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_LZO
+ 	select BR2_PACKAGE_UTIL_LINUX
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 0190baa..b8833a7 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -7,7 +7,7 @@
+ BTRFS_PROGS_VERSION = 4.1
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+-BTRFS_PROGS_DEPENDENCIES = host-pkgconf acl attr e2fsprogs lzo util-linux zlib
++BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
+ BTRFS_PROGS_CONF_OPTS = --disable-backtrace
+ BTRFS_PROGS_LICENSE = GPLv2
+ BTRFS_PROGS_LICENSE_FILES = COPYING
