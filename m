@@ -1,49 +1,56 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 06 Jul 2015 16:08:11 +0200
-Subject: [Buildroot] [PATCH 1/2] system: allow using mdev for firmware
- loading only
-In-Reply-To: <20150706154959.4ac7d085@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Jul 2015 16:36:06 +0200
+Subject: [Buildroot] [PATCH 2/2] rtl8188eu: new package
+In-Reply-To: <559A89D7.5010400@lucaceresoli.net>
 References: <1436188175-7912-1-git-send-email-luca@lucaceresoli.net>
- <20150706154959.4ac7d085@free-electrons.com>
-Message-ID: <559A8BCB.1020409@lucaceresoli.net>
+ <1436188175-7912-2-git-send-email-luca@lucaceresoli.net>
+ <20150706151750.456bbb6c@free-electrons.com>
+ <559A89D7.5010400@lucaceresoli.net>
+Message-ID: <20150706163606.796f37e4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Dear Luca Ceresoli,
 
-Thomas Petazzoni wrote:
-> Luca,
->
-> On Mon,  6 Jul 2015 15:09:34 +0200, Luca Ceresoli wrote:
->> Busybox's mdev nicely provides the ability to load a firmware requested by
->> the kernel.
->>
->> However, when using a static /dev management, mdev is not installed as a
->> hotplug helper (i.e. S10mdev is not installed) and
->> CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not enabled in the busybox
->> configuration.
->>
->> Provide a knob for static /dev users to easily enable mdev for firmware
->> loading.
->>
->> This is just a matter of extending the ifeq condition around the S10mdev
->> installation and kconfig fixups that enable the needed configuration in
->> busybox. But leave mdev.conf installation under the old condition, it's
->> not needed for firmware loading.
->>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->
-> Are you really a poor soul stuck with a pre-2.6.32 kernel preventing
-> you from using devtmpfs ?
+On Mon, 06 Jul 2015 15:59:51 +0200, Luca Ceresoli wrote:
 
-"You, poor souls condemned to the Circle of Jurassic Kernel Users, shall
-be using 2.6.30.10... for eternity! Abandon all devtmpfs hope, ye who
-enter here!"
+> Unless I'm wrong, this feature is only available since 3.7
+> (abb139e75c2: "firmware: teach the kernel to load firmware files
+> directly from the filesystem").
 
-Yes, I am doomed! :.(...
+Right, it's been there for a "while" :-)
 
+> So I should drop the dependency on
+> !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS and clearly point out in
+> the help text that you must set up some firmware loading mechanism, and
+> let users discover on their own how they should achieve that.
+
+Correct. In the linux-firmware package for example, we don't have
+anything that enforces having a firmware loading mechanism available.
+
+> Overall, the available choices for firmware loading are:
+>   - the kernel-only mechanism (3.7+ only)
+>   - /dev management by mdev ot udev
+>   - static /dev management + BR2_ROOTFS_MDEV_FIRMWARE_LOADING (patch 1
+>     of this series).
+> 
+> Should we add a section to the manual about this? We have a few words 
+> under "/dev management", but they do not encompass the kernel-only
+> loading.
+
+Yes, that might be great.
+
+> BTW, my use case here is a 2.6.30 kernel, which has no devtmpfs and no
+> kernel-only firmware loading. So I must use static /dev management, and
+> still install mdev as a hotplug helper for firmware loading.
+
+Poor soul :-)
+
+Thomas
 -- 
-Luca
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
