@@ -1,36 +1,30 @@
-From: =?UTF-8?Q?Beno=c3=aet_Th=c3=a9baudeau?= <benoit@wsystem.com>
-Date: Tue, 7 Jul 2015 10:42:07 +0200
-Subject: [Buildroot] [PATCH v2] openssl: always build apps
-In-Reply-To: <20150707103129.454a1426@free-electrons.com>
-References: <1436187968-84565-1-git-send-email-benoit@wsystem.com>
- <20150707103129.454a1426@free-electrons.com>
-Message-ID: <559B90DF.4080906@wsystem.com>
+From: shravan.mishra at gmail.com <shravan.mishra@gmail.com>
+Date: Mon, 06 Jul 2015 06:08:51 -0500
+Subject: [Buildroot] You have a new notification from
+	shravan.mishra@gmail.com. View??
+Message-ID: <0.0.54.696.1D0B7DB2E48009C.2FCF@mail7.flipmailer.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Hi,
 
-On 7 Jul 2015 10:31, Thomas Petazzoni wrote:
-> On Mon,  6 Jul 2015 15:06:08 +0200, Beno?t Th?baudeau wrote:
-> This patch is causing some build failures:
-> 
->   http://autobuild.buildroot.org/results/cbb/cbb35f2582f1cfeb3d11cb4952a80784ff660baf/build-end.log
-> 
-> Now, applications are being built on noMMU systems. But when using
-> Blackfin FLAT, libdl is not available. And generally speaking libdl is
-> not available for static only builds.
-> 
-> According to the PROBLEMS file in openssl source code, passing no-dso
-> (which we are doing) is not sufficient, and the Makefile need to be
-> hand-edited to remove the -ldl flag. Could you try that and submit a
-> patch fixing this build issue?
-> 
-> Thanks!
+shravan.mishra at gmail.com wants to follow you.
 
-Yes, I'll look into it.
+****** Is shravan.mishra at gmail.com you friend? ******
+If Yes please follow the link below:
+http://invites.flipmailer.com/signup_e.html?fullname=&amp;email=buildroot at uclibc.org&amp;invitername=Shravan&amp;inviterid=38267636&amp;userid=37100377&amp;token=343a5b25247dbefa7b840c367cab51c4&amp;ts=1435615164658&amp;emailmasterid=e23e397f-9d59-4e21-a6bd-13efb14237aa&amp;from=shravan.mishra at gmail.com&amp;template=invite_reminder_a&amp;test=AA&src=txt_yes
 
-Best regards,
-Beno?t
+If No please follow the link below:
+http://invites.flipmailer.com/signup_e.html?fullname=&amp;email=buildroot at uclibc.org&amp;invitername=Shravan&amp;inviterid=38267636&amp;userid=37100377&amp;token=343a5b25247dbefa7b840c367cab51c4&amp;ts=1435615164658&amp;emailmasterid=e23e397f-9d59-4e21-a6bd-13efb14237aa&amp;from=shravan.mishra at gmail.com&amp;template=invite_reminder_a&amp;test=AA&src=txt_no
+
+
+Follow the link below to remove yourself from all such emails
+http://invites.flipmailer.com/uns_inviter.jsp?email=buildroot at uclibc.org&amp;iid=e23e397f-9d59-4e21-a6bd-13efb14237aa&amp;from=shravan.mishra at gmail.com
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150706/d5429534/attachment.html>
