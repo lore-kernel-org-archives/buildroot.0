@@ -1,25 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Jul 2015 11:49:33 +0200
-Subject: [Buildroot] [PATCH 0/2] package/nodejs: security bump (branch
- yem/nodejs)
-In-Reply-To: <cover.1436118128.git.yann.morin.1998@free.fr>
-References: <cover.1436118128.git.yann.morin.1998@free.fr>
-Message-ID: <20150706114933.20805d7e@free-electrons.com>
+Date: Mon, 6 Jul 2015 11:49:37 +0200
+Subject: [Buildroot] [PATCH] ola: Bump to version 0.9.6
+In-Reply-To: <1436139045-27052-1-git-send-email-simon.marchi@polymtl.ca>
+References: <1436139045-27052-1-git-send-email-simon.marchi@polymtl.ca>
+Message-ID: <20150706114937.149e96da@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Simon Marchi,
 
-On Sun,  5 Jul 2015 19:43:16 +0200, Yann E. MORIN wrote:
+On Sun,  5 Jul 2015 19:30:45 -0400, Simon Marchi wrote:
+> We can delete the patch, as it was integrated upstream.
+> 
+> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+> ---
+>  ...ng-ola_protoc_plugin-when-cross-compiling.patch | 94 ----------------------
+>  package/ola/ola.mk                                 |  2 +-
+>  2 files changed, 1 insertion(+), 95 deletions(-)
+>  delete mode 100644 package/ola/0001-Fix-finding-ola_protoc_plugin-when-cross-compiling.patch
 
-> Yann E. MORIN (2):
->       package/nodejs: drop minor version in Config.in
->       package/nodejs: security bump
-
-Applied, thanks!
+Applied, thanks.
 
 Thomas
 -- 
