@@ -1,35 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 6 Jul 2015 23:37:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtool: disable makeinfo
-In-Reply-To: <20150704124513.77ae2841@free-electrons.com>
-References: <e64f1903478b53f185f3bf114f86c46948a31311.1435886073.git.sam.bobroff@au1.ibm.com>
- <20150704124513.77ae2841@free-electrons.com>
-Message-ID: <559AF52D.5090106@mind.be>
+Date: Tue, 7 Jul 2015 00:03:58 +0200
+Subject: [Buildroot] [PATCH v5 2/2] pkg-luarocks: fix top-level parallel
+ makefile support
+In-Reply-To: <20150704152639.1c1cc720@free-electrons.com>
+References: <1435738247-9015-1-git-send-email-fabio.porcedda@gmail.com>
+ <1435738247-9015-3-git-send-email-fabio.porcedda@gmail.com>
+ <20150704152639.1c1cc720@free-electrons.com>
+Message-ID: <559AFB4E.9090101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/04/15 12:45, Thomas Petazzoni wrote:
-> Dear Sam Bobroff,
-> 
-> On Fri,  3 Jul 2015 11:14:38 +1000, Sam Bobroff wrote:
->> host-libtool can fail to build if the host is missing makeinfo, so
->> disable it.
->>
->> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
->> ---
->> Without this patch, buildroot fails to build host-libtool on my Debian
->> 8 system, as it doesn't have the texinfo package installed.
-> 
-> Applied, thanks.
-> 
-> Thomas
-> 
+On 07/04/15 15:26, Thomas Petazzoni wrote:
+> However, won't we see some similar issues with other packages? Should
+> we preventively do a flock on HOST_DIR/STAGING_DIR/TARGET_DIR when
+> installing to host/staging/target respectively, so that we are sure
+> that at any given time, we don't have two packages installing at the
+> same time in one of the directories? Theoretically, this shouldn't be
+> needed if all packages install their own files, or if they have the
+> proper dependencies when they are overwriting files from another
+> package.
 
- BTW, Thomas, any idea why the autobuilders didn't catch this? Do the chroots
-have texinfo installed?
+ There aren't many packages that would have this problem, but indeed a few. E.g.
+packages installing kernel modules will typically call depmod. So yes, it would
+be a good idea to do that in general.
+
+ However, how are you going to do that in practice? flock works like fakeroot,
+you have to run the commands from within the process. But all our INSTALL_*_CMDS
+are supposed to be called as separate shell scripts.
+
+ So we'd have to use something like dotlockfile, but I don't think we can assume
+that's installed everywhere, can we? Or else we have to devise something similar
+around flock.
 
  Regards,
  Arnout
