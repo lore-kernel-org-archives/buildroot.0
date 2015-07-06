@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 06 Jul 2015 14:21:41 +0200
-Subject: [Buildroot] [git commit] ntpd: drop unneeded uClibc workaround
-	for refclock_pcf.c
-In-Reply-To: <CANxTyt5E9GdPNWOz=8bngGQKcW0a7ZWrX-cy5N7MgFMf=KgbbQ@mail.gmail.com>
- (Danomi Manchego's message of "Mon, 6 Jul 2015 07:37:44 -0400")
-References: <20150706080825.BCE3E7FBCC@busybox.osuosl.org>
- <CANxTyt5E9GdPNWOz=8bngGQKcW0a7ZWrX-cy5N7MgFMf=KgbbQ@mail.gmail.com>
-Message-ID: <87io9xpjca.fsf@dell.be.48ers.dk>
+Date: Mon, 6 Jul 2015 14:20:30 +0200
+Subject: [Buildroot] [git commit] ntp: drop unused POST_PATCH_HOOKS handling
+Message-ID: <20150706122157.6D00180E4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1f2bb5504fdf6fb61823463271a0efcf783a5866
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Now that NTP_PATCH_FIXUPS is gone.
 
->> -define NTP_PATCH_FIXUPS
- >> -       $(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
- >> -endef
+Reported-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ntp/ntp.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
- > So then - you can also drop this line too, I think:
-
- > NTP_POST_PATCH_HOOKS += NTP_PATCH_FIXUPS
-
-Crap, thanks for noticing!
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 110eaf8..5997247 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -69,6 +69,4 @@ define NTP_INSTALL_INIT_SYSTEMD
+ endef
+ endif
+ 
+-NTP_POST_PATCH_HOOKS += NTP_PATCH_FIXUPS
+-
+ $(eval $(autotools-package))
