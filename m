@@ -1,47 +1,37 @@
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Date: Mon, 06 Jul 2015 16:33:29 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-06-29
-In-Reply-To: <20150630140738.526d72b8@free-electrons.com>
-References: <20150630063014.44429100A75@stock.ovh.net>
- <20150630140738.526d72b8@free-electrons.com>
-Message-ID: <559AD809.4050305@free-electrons.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Mon, 6 Jul 2015 16:19:27 -0400
+Subject: [Buildroot] [PATCH 1/1] pkg-autotools: fix patching libtool for
+	version 2.4
+In-Reply-To: <87egklp8jc.fsf@dell.be.48ers.dk>
+References: <1436129628-3636-1-git-send-email-danomimanchego123@gmail.com>
+ <87egklp8jc.fsf@dell.be.48ers.dk>
+Message-ID: <CANxTyt54RMbDNfxKG1VrAseed5tznAo+UAsy=8Nn+hPE4+RQ-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Peter,
 
+> Thanks for the detailed description!
 
-On 30/06/15 09:07, Thomas Petazzoni wrote:
+Your welcome!
 
->>           arm | f2fs-tools-fd32210229d4ad7d... | NOK | http://autobuild.buildroot.net/results/f5c2b5177ca187ec598a07b2e4254d6161177452/
->
-> <command-line>:0:0: note: this is the location of the previous definition
-> f2fs_io_parse.c:16:23: fatal error: sys/queue.h: No such file or directory
->   #include <sys/queue.h>
->
-> Another musl issue. Gustavo, can you have a look?
+Actually, I think I've found another problem with those sed lines.
+The first sed for ltmain_version attempts to match whitespace before
+VERSION (is there ever any?) with [ space_character tab_character ],
+times two.  But it looks like the sed line use to make
+ltmain_patchlevel has only space characters.  I imagine that
+somebody's smart editor automatically converted the tab to 4 spaces on
+a paste op.
 
->>           arm |              transmission-2.84 | NOK | http://autobuild.buildroot.net/results/4564fdb2ca8618336ab015ca92071d4f842ab70a/
->
-> musl build problem:
->
-> In file included from upnpcommands.h:10:0,
->                   from miniupnpc.c:90:
-> upnpreplyparse.h:14:23: fatal error: sys/queue.h: No such file or directory
->   #include <sys/queue.h>
+I'm thinking that the fix is to use "[ \t]" (space followed by escaped
+'t', to match space characters or tab characters), or one of the POSIX
+character classes, '[[:blank:]]' or maybe '[[:space:]]'.  Any
+preferences?
 
-These two boil down to musl not shipping sys/queue.h
-See:
-http://wiki.musl-libc.org/wiki/FAQ#Q:_why_is_sys.2Fqueue.h_not_included_.3F
-http://www.openwall.com/lists/musl/2013/06/28/9
+I could probably spin a follow-on patch when I get home tonight, if
+nobody does it first.
 
-For transmission this can be worked around easily by defining 
-NO_SYS_QUEUE_H and using a bundled version - however that's not enough 
-for it to build with musl.
-In the f2fs-tools case it's not that simple since sys/queue.h is BSD-3c 
-licensed and couldn't be easily included in a GPL-only source i think.
-Maybe we should just disable it for musl for now?
-Regards.
+Danomi -
