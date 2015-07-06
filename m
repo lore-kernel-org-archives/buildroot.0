@@ -1,119 +1,47 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Tue,  7 Jul 2015 00:56:04 +0800
-Subject: [Buildroot] [PATCH 2/2] libgudev: New package
-Message-ID: <1436201764-23614-1-git-send-email-nroach44@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  6 Jul 2015 15:06:38 -0300
+Subject: [Buildroot] [PATCH] xtables-addons: bump to version 2.7
+Message-ID: <1436205998-6710-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As libgudev recently was split from the main systemd/udev source,
-	this library is now required to build NetworkManager.
+Fixes build issues with kernels 4.1+
 
-Add the package; add it as a dependency to NetworkManager; and
-	tweak systemd's Config.in message accordingly.
-
-Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                          |  1 +
- package/libgudev/Config.in                 | 11 +++++++++++
- package/libgudev/libgudev.mk               | 16 ++++++++++++++++
- package/network-manager/Config.in          |  1 +
- package/network-manager/network-manager.mk |  3 ++-
- package/systemd/Config.in                  |  1 -
- 6 files changed, 31 insertions(+), 2 deletions(-)
- create mode 100644 package/libgudev/Config.in
- create mode 100644 package/libgudev/libgudev.mk
+ package/xtables-addons/xtables-addons.hash | 6 +++---
+ package/xtables-addons/xtables-addons.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 23858ca..4a23dfc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -368,6 +368,7 @@ endif
- 	source "package/iucode-tool/Config.in"
- 	source "package/kbd/Config.in"
- 	source "package/lcdproc/Config.in"
-+	source "package/libgudev/Config.in"
- 	source "package/libump/Config.in"
- 	source "package/lirc-tools/Config.in"
- 	source "package/lm-sensors/Config.in"
-diff --git a/package/libgudev/Config.in b/package/libgudev/Config.in
-new file mode 100644
-index 0000000..09a82a0
---- /dev/null
-+++ b/package/libgudev/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBGUDEV
-+	bool "libgudev"
-+	depends on BR2_INIT_SYSTEMD
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  This library provides GObject bindings for libudev.
-+	  It was originally part of udev-extras, then udev, then systemd.
-+	  It's now a project on its own.
-+	  Required for building NetworkManager.
-+	  
-+	  https://wiki.gnome.org/Projects/libgudev
-diff --git a/package/libgudev/libgudev.mk b/package/libgudev/libgudev.mk
-new file mode 100644
-index 0000000..2769b48
---- /dev/null
-+++ b/package/libgudev/libgudev.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# libgudev
-+#
-+################################################################################
-+
-+LIBGUDEV_VERSION = 230
-+LIBGUDEV_SOURCE = libgudev-$(LIBGUDEV_VERSION).tar.xz
-+LIBGUDEV_SITE = http://ftp.gnome.org/pub/GNOME/sources/libgudev/$(LIBGUDEV_VERSION)
-+LIBGUDEV_INSTALL_STAGING = YES
-+
-+LIBGUDEV_DEPENDENCIES = host-pkgconf udev libglib2
-+
-+LIBGUDEV_LICENSE = GPLv2
-+
-+$(eval $(autotools-package))
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index bcf8f90..8b4607c 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
- 	select BR2_PACKAGE_GNUTLS
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBNL
-+	select BR2_PACKAGE_LIBGUDEV
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_WIRELESS_TOOLS
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index c118a92..36eb352 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -10,7 +10,8 @@ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
- NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
--	libgcrypt wireless_tools util-linux host-intltool readline libndp
-+	libgcrypt wireless_tools util-linux host-intltool readline libndp \
-+	libgudev
- NETWORK_MANAGER_LICENSE = GPLv2+ (app), LGPLv2+ (libnm-util)
- NETWORK_MANAGER_LICENSE_FILES = COPYING libnm-util/COPYING
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+index d742aed..02e646f 100644
+--- a/package/xtables-addons/xtables-addons.hash
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.6/
+-md5	087835ba7e564481b6fd398692268340	xtables-addons-2.6.tar.xz
+-sha1	10586961a70fd4fe4f972cb3f31962c6766b359c	xtables-addons-2.6.tar.xz
++# From http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.7/
++md5	81bd7ba82e5f7bfd1458fc97ddf72e1d	xtables-addons-2.7.tar.xz
++sha1	82c13237ef2a62e57832b160832f4b9c4fb8c7c5	xtables-addons-2.7.tar.xz
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index dcfbd5e..75e2a5a 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 38353d0..1c32052 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -52,7 +52,6 @@ config BR2_PACKAGE_SYSTEMD
- 
- 	  The selection of other packages will enable some features:
- 
--	  - libglib2 package will add support for gudev.
- 	  - acl package will add support for multi-seat.
- 
- 	  http://freedesktop.org/wiki/Software/systemd
+-XTABLES_ADDONS_VERSION = 2.6
++XTABLES_ADDONS_VERSION = 2.7
+ XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
+-XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons/$(XTABLES_ADDONS_VERSION)
++XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
+ XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
+ XTABLES_ADDONS_LICENSE = GPLv2+
+ XTABLES_ADDONS_LICENSE_FILES = LICENSE
 -- 
-2.1.4
+2.3.6
