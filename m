@@ -1,33 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Jul 2015 17:57:37 +0200
-Subject: [Buildroot] [git commit] squid: explicitly disable openssl support
-	when BR2_PACKAGE_OPENSSL != y
-Message-ID: <20150706155747.5D7928188C@busybox.osuosl.org>
+Date: Mon, 6 Jul 2015 17:57:46 +0200
+Subject: [Buildroot] [PATCH] squid: explicitly disable openssl support
+ when BR2_PACKAGE_OPENSSL != y
+In-Reply-To: <1436198015-7934-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1436198015-7934-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150706175746.2e880b97@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=057dad9c5ff04ff1ea322e049276951d549bf898
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Vicente Olivert Riera,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/squid/squid.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Mon, 6 Jul 2015 17:53:35 +0200, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/squid/squid.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 80235a4..e201673 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -60,6 +60,8 @@ endif
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SQUID_CONF_OPTS += --with-openssl
- SQUID_DEPENDENCIES += openssl
-+else
-+SQUID_CONF_OPTS += --without-openssl
- endif
- 
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
