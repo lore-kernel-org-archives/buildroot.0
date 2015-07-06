@@ -1,39 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Jul 2015 14:02:45 +0200
-Subject: [Buildroot] [PATCH 1/1] btrfs-progs: drop dependency on acl and
- attr
-In-Reply-To: <1436167524-21170-1-git-send-email-cvubrugier@fastmail.fm>
-References: <1436167524-21170-1-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <20150706140245.3af838f8@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 06 Jul 2015 14:21:41 +0200
+Subject: [Buildroot] [git commit] ntpd: drop unneeded uClibc workaround
+	for refclock_pcf.c
+In-Reply-To: <CANxTyt5E9GdPNWOz=8bngGQKcW0a7ZWrX-cy5N7MgFMf=KgbbQ@mail.gmail.com>
+ (Danomi Manchego's message of "Mon, 6 Jul 2015 07:37:44 -0400")
+References: <20150706080825.BCE3E7FBCC@busybox.osuosl.org>
+ <CANxTyt5E9GdPNWOz=8bngGQKcW0a7ZWrX-cy5N7MgFMf=KgbbQ@mail.gmail.com>
+Message-ID: <87io9xpjca.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christophe Vu-Brugier,
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
-On Mon,  6 Jul 2015 09:25:24 +0200, Christophe Vu-Brugier wrote:
-> btrfs-progs does not depend on libacl since version v4.0.1:
-> 
->   ab5984f btrfs-progs: convert: drop dependency on sys/acl.h
->   https://git.kernel.org/cgit/linux/kernel/git/kdave/btrfs-progs.git/commit/?id=ab5984ff6cce6f12063720b6dafc1afcd6606853
-> 
-> Moreover, btrfs-progs does not depend on attr since version v3.14:
-> 
->   b5fe148 btrfs-progs: include <sys/xattr.h> instead of <attr/xattr.h>
->   https://git.kernel.org/cgit/linux/kernel/git/kdave/btrfs-progs.git/commit/?id=b5fe148715ea295e2b951ec6c90409b9d81978d8
-> 
-> Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-> ---
->  package/btrfs-progs/Config.in      | 2 --
->  package/btrfs-progs/btrfs-progs.mk | 2 +-
->  2 files changed, 1 insertion(+), 3 deletions(-)
+Hi,
 
-Applied, thanks.
+>> -define NTP_PATCH_FIXUPS
+ >> -       $(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
+ >> -endef
 
-Thomas
+ > So then - you can also drop this line too, I think:
+
+ > NTP_POST_PATCH_HOOKS += NTP_PATCH_FIXUPS
+
+Crap, thanks for noticing!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
