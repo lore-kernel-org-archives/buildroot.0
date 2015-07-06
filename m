@@ -1,56 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Jul 2015 15:17:50 +0200
-Subject: [Buildroot] [PATCH 2/2] rtl8188eu: new package
-In-Reply-To: <1436188175-7912-2-git-send-email-luca@lucaceresoli.net>
-References: <1436188175-7912-1-git-send-email-luca@lucaceresoli.net>
- <1436188175-7912-2-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20150706151750.456bbb6c@free-electrons.com>
+Date: Mon, 6 Jul 2015 15:22:50 +0200
+Subject: [Buildroot] [PATCH] collectd: fix parallel build issues
+In-Reply-To: <1436188343-11234-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1436188343-11234-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150706152250.54ec1b86@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca,
+Dear Gustavo Zacarias,
 
-On Mon,  6 Jul 2015 15:09:35 +0200, Luca Ceresoli wrote:
+On Mon,  6 Jul 2015 10:12:23 -0300, Gustavo Zacarias wrote:
 
-> diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
-> new file mode 100644
-> index 0000000..3228c67
-> --- /dev/null
-> +++ b/package/rtl8188eu/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_RTL8188EU
-> +	bool "rtl8188eu"
-> +	depends on BR2_LINUX_KERNEL && !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS
+> +diff -Nura collectd-5.5.0.orig/src/daemon/Makefile.am collectd-5.5.0/src/daemon/Makefile.am
+> +--- collectd-5.5.0.orig/src/daemon/Makefile.am	2015-07-06 10:01:17.820506239 -0300
+> ++++ collectd-5.5.0/src/daemon/Makefile.am	2015-07-06 10:02:03.364054763 -0300
+> +@@ -49,7 +49,7 @@
+> + collectd_CFLAGS = $(AM_CFLAGS)
+> + collectd_LDFLAGS = -export-dynamic
+> + collectd_LDADD = libavltree.la libcommon.la libheap.la -lm
+> +-collectd_DEPENDENCIES =
+> ++collectd_DEPENDENCIES = libavltree.la libcommon.la libheap.la
 
-Even though my understanding of firmware loading is not very deep, I
-believe this is wrong. Since quite some time, the kernel has been able
-to load firmware by itself, without the help of a userspace helper
-program.
+Can you try instead to get rid of the empty collectd_DEPENDENCIES
+definition? Because when undefined foo_DEPENDENCIES automatically
+contains the contents of foo_LDADD.
 
-See
-http://lxr.free-electrons.com/source/drivers/base/firmware_class.c#L1089.
-It first tries to load the firmware through a userspace helper. But if
-that doesn't work, it falls back to fw_get_filesystem_firmware(), which
-makes the kernel directly load the firmware itself.
+From
+http://www.gnu.org/software/automake/manual/html_node/Program-and-Library-Variables.html:
 
-See also:
-
-config FW_LOADER_USER_HELPER_FALLBACK
-        bool "Fallback user-helper invocation for firmware loading"
-        depends on FW_LOADER
-        select FW_LOADER_USER_HELPER
-        help
-          This option enables / disables the invocation of user-helper
-          (e.g. udev) for loading firmware files as a fallback after the
-          direct file loading in kernel fails.  The user-mode helper is
-          no longer required unless you have a special firmware file that
-          resides in a non-standard path. Moreover, the udev support has
-          been deprecated upstream.
-
-          If you are unsure about this, say N here.
+"""
+If _DEPENDENCIES is not supplied, it is computed by Automake. The
+automatically-assigned value is the contents of _LDADD or _LIBADD, with
+most configure substitutions, -l, -L, -dlopen and -dlpreopen options
+removed. The configure substitutions that are left in are only
+?$(LIBOBJS)? and ?$(ALLOCA)?; these are left because it is known that
+they will not cause an invalid value for _DEPENDENCIES to be generated.
+"""
 
 Best regards,
 
