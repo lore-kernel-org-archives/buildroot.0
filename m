@@ -1,54 +1,54 @@
-From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Date: Mon,  6 Jul 2015 09:25:24 +0200
-Subject: [Buildroot] [PATCH 1/1] btrfs-progs: drop dependency on acl and attr
-Message-ID: <1436167524-21170-1-git-send-email-cvubrugier@fastmail.fm>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 06 Jul 2015 09:51:18 +0200
+Subject: [Buildroot] [PATCH 1/1] ntp: drop uselss patch fixup which
+	sometimes breaks rebuild
+In-Reply-To: <20150705220854.GU3647@free.fr> (Yann E. MORIN's message of "Mon, 
+ 6 Jul 2015 00:08:54 +0200")
+References: <1436129545-3540-1-git-send-email-danomimanchego123@gmail.com>
+ <20150705220854.GU3647@free.fr>
+Message-ID: <87oajpsozt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-btrfs-progs does not depend on libacl since version v4.0.1:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-  ab5984f btrfs-progs: convert: drop dependency on sys/acl.h
-  https://git.kernel.org/cgit/linux/kernel/git/kdave/btrfs-progs.git/commit/?id=ab5984ff6cce6f12063720b6dafc1afcd6606853
+Hi,
 
-Moreover, btrfs-progs does not depend on attr since version v3.14:
+>> package/ntp/ntp.mk | 1 -
+ >> 1 file changed, 1 deletion(-)
+ >> 
+ >> diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+ >> index 5f05508..93cefa1 100644
+ >> --- a/package/ntp/ntp.mk
+ >> +++ b/package/ntp/ntp.mk
+ >> @@ -42,7 +42,6 @@ endif
+ >> 
+ >> define NTP_PATCH_FIXUPS
+ >> $(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
 
-  b5fe148 btrfs-progs: include <sys/xattr.h> instead of <attr/xattr.h>
-  https://git.kernel.org/cgit/linux/kernel/git/kdave/btrfs-progs.git/commit/?id=b5fe148715ea295e2b951ec6c90409b9d81978d8
+ > As far as I could see, that one line does not do anything either.
 
-Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
----
- package/btrfs-progs/Config.in      | 2 --
- package/btrfs-progs/btrfs-progs.mk | 2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
+Well, it protects the code in ntpd/refclock_pcf.c (which is for an
+obscure reference clock kit for the parallel port) which uses the
+tm_gmtoff member of struct tm - And that one is only available on uClibc
+if it is built with __UCLIBC_HAS_TM_EXTENSIONS__, so I guess it's a very
+old build fix for uClibc.
 
-diff --git a/package/btrfs-progs/Config.in b/package/btrfs-progs/Config.in
-index 9a2bd6c..dc0fa81 100644
---- a/package/btrfs-progs/Config.in
-+++ b/package/btrfs-progs/Config.in
-@@ -3,8 +3,6 @@ config BR2_PACKAGE_BTRFS_PROGS
- 	depends on BR2_USE_WCHAR # util-linux
- 	depends on BR2_USE_MMU # util-linux
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_ACL
--	select BR2_PACKAGE_ATTR
- 	select BR2_PACKAGE_E2FSPROGS
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_UTIL_LINUX
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 0190baa..b8833a7 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -7,7 +7,7 @@
- BTRFS_PROGS_VERSION = 4.1
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
--BTRFS_PROGS_DEPENDENCIES = host-pkgconf acl attr e2fsprogs lzo util-linux zlib
-+BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
- BTRFS_PROGS_CONF_OPTS = --disable-backtrace
- BTRFS_PROGS_LICENSE = GPLv2
- BTRFS_PROGS_LICENSE_FILES = COPYING
+Looking at the git history confirms that, as it comes from:
+
+commit 7129da009cc72575a84a30c4587bd99f745c49d4
+Author: Eric Andersen <andersen@codepoet.org>
+Date:   Sat Jan 18 21:27:22 2003 +0000
+
+    Merge a bunch of stuff over from the tuxscreen buildroot, with
+    many updates to make things be more consistant.
+     -Erik
+
+With that said, our uClibc configs DO enable
+__UCLIBC_HAS_TM_EXTENSIONS__, so we can indeed drop it. I'll do so now.
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
