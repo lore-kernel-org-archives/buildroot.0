@@ -1,51 +1,106 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Jul 2015 14:59:44 +0200
-Subject: [Buildroot] Error when opencv is included in compilation,
- 'i586-buildroot-linux-g++' file is missed
-In-Reply-To: <CACiBgcej-aEteA67kBPy9HXm20QQQHOnCVbrQqWKfhN2Ne0xiQ@mail.gmail.com>
-References: <CACiBgcej-aEteA67kBPy9HXm20QQQHOnCVbrQqWKfhN2Ne0xiQ@mail.gmail.com>
-Message-ID: <20150706145944.34253727@free-electrons.com>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit@wsystem.com>
+Date: Mon,  6 Jul 2015 15:06:08 +0200
+Subject: [Buildroot] [PATCH v2] openssl: always build apps
+Message-ID: <1436187968-84565-1-git-send-email-benoit@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Now that building the openssl binary without MMU is supported, the only
+reason left for not building apps if the openssl binary is disabled is
+to save build time. Moreover, the commit
+720893b62510438237b9923d744dd079ddb4f67d "openssl: disable apps for
+NOMMU", which added this behavior, had a side effect: the scripts from
+apps (CA.pl, CA.sh and tsget) and the default configuration file
+(openssl.cnf) were no longer installed, which is not advertized by the
+BR2_PACKAGE_OPENSSL_BIN option. CA.pl and CA.sh use the openssl binary,
+so not installing them without the latter makes sense. But tsget does
+not use the openssl binary, and openssl.cnf can be used by libcrypto, so
+it is preferable to handle BR2_PACKAGE_OPENSSL_BIN like before the
+commit mentioned above, i.e. to always build and install apps and to
+just remove the openssl binary afterwards if needed.
 
-On Mon, 6 Jul 2015 14:46:21 +0200, Goe wrote:
+This is what the current commit does, but installing only the helper
+scripts having their dependencies (perl or the openssl binary)
+satisfied. The help text is updated accordingly.
 
-> I am trying to compile a buildroot instance with opencv included using a
-> machine with Ubuntu 14.04. The first compilation (before include opencv) is
-> correct, but it fails when I try to compile again including opencv in the
-> configuration.
-> 
-> The strangest thing is that the same steps work correctly in other machines
-> with Ubuntu 12.04 and Debian 8 (I do not have another Ubuntu 14.04 machine).
-> 
-> The followed steps are:
-> * make clean
-> * make (compilation finished without errors)
-> * make nconfig (Include WCHAR, C++ support and OpenCV)
-> * make
+Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
 
-That's your problem. Since you enabled WCHAR and C++, you need to do a
-full rebuild, i.e "make clean all".
+---
+Changes v1 -> v2:
+ - Install helper scripts according to perl/binary dependencies.
+ - Update the help text (fixing a typo by the way).
+---
+ package/openssl/Config.in  |  7 +++++--
+ package/openssl/openssl.mk | 23 +++++++++++++++--------
+ 2 files changed, 20 insertions(+), 10 deletions(-)
 
-See http://buildroot.org/downloads/manual/manual.html#full-rebuild:
-
-"""
-When the toolchain configuration is changed, a complete rebuild
-generally is needed. Changing the toolchain configuration often
-involves changing the compiler version, the type of C library or its
-configuration, or some other fundamental configuration item, and these
-changes have an impact on the entire system.
-"""
-
-Best regards,
-
-Thomas
+diff --git a/package/openssl/Config.in b/package/openssl/Config.in
+index d147c07..0785253 100644
+--- a/package/openssl/Config.in
++++ b/package/openssl/Config.in
+@@ -9,14 +9,17 @@ config BR2_PACKAGE_OPENSSL
+ 
+ 	  http://www.openssl.org/
+ 
++	  Note: Some helper scripts need perl.
++
+ if BR2_PACKAGE_OPENSSL
+ 
+ config BR2_PACKAGE_OPENSSL_BIN
+ 	bool "openssl binary"
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+-	  Install the openssl binary to the target file system. This is a
+-	  command line tool for doing various crypthographic stuff.
++	  Install the openssl binary and the associated helper scripts to the
++	  target file system. This is a command line tool for doing various
++	  cryptographic stuff.
+ 
+ comment "openssl binary needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 34a9830..4068cf1 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -14,14 +14,6 @@ HOST_OPENSSL_DEPENDENCIES = host-zlib
+ OPENSSL_TARGET_ARCH = generic32
+ OPENSSL_CFLAGS = $(TARGET_CFLAGS)
+ 
+-ifeq ($(BR2_PACKAGE_OPENSSL_BIN),)
+-define OPENSSL_DISABLE_APPS
+-	$(SED) '/^build_apps/! s/build_apps//' $(@D)/Makefile.org
+-	$(SED) '/^DIRS=/ s/apps//' $(@D)/Makefile.org
+-endef
+-OPENSSL_PRE_CONFIGURE_HOOKS += OPENSSL_DISABLE_APPS
+-endif
+-
+ ifeq ($(BR2_USE_MMU),)
+ OPENSSL_CFLAGS += -DHAVE_FORK=0
+ endif
+@@ -140,6 +132,21 @@ endef
+ OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_INSTALL_FIXUPS_SHARED
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PERL),)
++define OPENSSL_REMOVE_PERL_SCRIPTS
++	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.pl,tsget}
++endef
++OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_PERL_SCRIPTS
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL_BIN),)
++define OPENSSL_REMOVE_BIN
++	$(RM) -f $(TARGET_DIR)/usr/bin/openssl
++	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.*,c_*}
++endef
++OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_BIN
++endif
++
+ ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
+ define OPENSSL_REMOVE_OPENSSL_ENGINES
+ 	rm -rf $(TARGET_DIR)/usr/lib/engines
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
