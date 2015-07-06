@@ -1,47 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  6 Jul 2015 20:45:56 +0200
-Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.4.3
-Message-ID: <1436208356-28462-1-git-send-email-ps.report@gmx.net>
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Date: Mon, 06 Jul 2015 16:33:29 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-06-29
+In-Reply-To: <20150630140738.526d72b8@free-electrons.com>
+References: <20150630063014.44429100A75@stock.ovh.net>
+ <20150630140738.526d72b8@free-electrons.com>
+Message-ID: <559AD809.4050305@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From [1]:
-- tools: widen frequency resolution to ?s in the DPI tool
-- tools: complain about devices that don't have abs x/y axes in the edge detector
-- include: update to 4.1 header
 
-[1] http://lists.freedesktop.org/archives/input-tools/2015-June/001171.html
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/libevdev/libevdev.hash | 4 ++--
- package/libevdev/libevdev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 30/06/15 09:07, Thomas Petazzoni wrote:
 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index 535490b..1b7897d 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
-@@ -1,2 +1,2 @@
--# Hash from http://lists.freedesktop.org/archives/input-tools/2015-April/001167.html
--sha256 7c77b213f075706d428a2af54b66bf86b03a68e9fb390e7ec48cf55065970643 libevdev-1.4.2.tar.xz
-+# Hash from http://lists.freedesktop.org/archives/input-tools/2015-June/001171.html
-+sha256 1c418b26fd78b0e9900872be2f77fb5311c877b34ec5c75efd1b670ed627969b libevdev-1.4.3.tar.xz
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index 3ed7ba0..082a7cc 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEVDEV_VERSION = 1.4.2
-+LIBEVDEV_VERSION = 1.4.3
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
--- 
-2.1.4
+>>           arm | f2fs-tools-fd32210229d4ad7d... | NOK | http://autobuild.buildroot.net/results/f5c2b5177ca187ec598a07b2e4254d6161177452/
+>
+> <command-line>:0:0: note: this is the location of the previous definition
+> f2fs_io_parse.c:16:23: fatal error: sys/queue.h: No such file or directory
+>   #include <sys/queue.h>
+>
+> Another musl issue. Gustavo, can you have a look?
+
+>>           arm |              transmission-2.84 | NOK | http://autobuild.buildroot.net/results/4564fdb2ca8618336ab015ca92071d4f842ab70a/
+>
+> musl build problem:
+>
+> In file included from upnpcommands.h:10:0,
+>                   from miniupnpc.c:90:
+> upnpreplyparse.h:14:23: fatal error: sys/queue.h: No such file or directory
+>   #include <sys/queue.h>
+
+These two boil down to musl not shipping sys/queue.h
+See:
+http://wiki.musl-libc.org/wiki/FAQ#Q:_why_is_sys.2Fqueue.h_not_included_.3F
+http://www.openwall.com/lists/musl/2013/06/28/9
+
+For transmission this can be worked around easily by defining 
+NO_SYS_QUEUE_H and using a bundled version - however that's not enough 
+for it to build with musl.
+In the f2fs-tools case it's not that simple since sys/queue.h is BSD-3c 
+licensed and couldn't be easily included in a GPL-only source i think.
+Maybe we should just disable it for musl for now?
+Regards.
