@@ -1,54 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Jul 2015 00:19:49 +0200
-Subject: [Buildroot] [PATCH v6 07/16] package/opencv: disable all
- modules by default
-In-Reply-To: <20150626153646.GE27480@free.fr>
-References: <1435262397-888-1-git-send-email-s.martin49@gmail.com>
- <1435262397-888-8-git-send-email-s.martin49@gmail.com>
- <20150626153646.GE27480@free.fr>
-Message-ID: <559AFF05.30604@mind.be>
+Date: Tue, 7 Jul 2015 00:36:43 +0200
+Subject: [Buildroot] [PATCH] core/pkg-generic: host variants inherits
+ target's override-srcdir
+In-Reply-To: <1436097417-1809-1-git-send-email-yann.morin.1998@free.fr>
+References: <1436097417-1809-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <559B02FB.8010803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/26/15 17:36, Yann E. MORIN wrote:
-> Samuel, All,
+On 07/05/15 13:56, Yann E. MORIN wrote:
+> When a package has both a target and a host variants, and there is an
+> override-srcdir set for the target variant, the host variant should
+> inherit the target's override-srcdir, unless explicitly set, like we do
+> for all other target-variant properties.
 > 
-> On 2015-06-25 21:59 +0200, Samuel Martin spake thusly:
->> This change allows to reduce the size of the default OpenCV package, so
->> the final root filesystem.
->>
->> However, this will break any existing defconfig enabling OpenCV. Indeed,
->> a minimal OpenCV  package will be built, whereas, prior to applying this
->> patches, a full-featured one would have been built instead.
->>
->> Cc: "Yann E. Morin" <yann.morin.1998@free.fr>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Reported-by: Mike <mikez@OpenPlayer.org>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/pkg-generic.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> Although I'm usually not opposed to getting the smallest possible config
-> as a default, however as you say this one breaks existing defconfigs.
-> 
-> OTOH, do we really care?
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 9fe01b8..926d594 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -310,6 +310,12 @@ else
+>    $(2)_VERSION := $$(call sanitize,$$($(2)_VERSION))
+>  endif
+>  
+> +ifndef $(2)_OVERRIDE_SRCDIR
+> +  ifdef $(3)_OVERRIDE_SRCDIR
+> +    $(2)_OVERRIDE_SRCDIR = $$($(3)_OVERRIDE_SRCDIR)
+> +  endif
+> +endif
 
- I think we break defconfigs (as in, the result of 'make savedefconfig') fairly
-often without really noticing. An obvious example is the kernel headers version.
-But also for example with the ARM ABI rework (I'm not 100% sure but I think
-there are defconfigs that would have changed).
+ IMHO this should be
 
- So I think breaking defconfigs is OK. To update to a new buildroot version you
-should start from a full .config, not a defconfig.
+ifdef $(3)_OVERRIDE_SRCDIR)
+  $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
+endif
+
+i.e. don't set the override if it has been explicitly set to empty. Note that
+the ifdef is still needed, otherwise the target override will always be set.
+
 
  Regards,
  Arnout
 
-
+> +
+>  $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
+>  $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
+>  $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
 > 
-> Anyway, I won't ack this one, but I am not opposed to it being merged
-> either.
-
-[snip]
 
 
 -- 
