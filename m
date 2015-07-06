@@ -1,31 +1,62 @@
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Date: Mon, 06 Jul 2015 10:56:00 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-06-29
-In-Reply-To: <20150630140738.526d72b8@free-electrons.com>
-References: <20150630063014.44429100A75@stock.ovh.net>
- <20150630140738.526d72b8@free-electrons.com>
-Message-ID: <559A88F0.20106@free-electrons.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 06 Jul 2015 15:59:51 +0200
+Subject: [Buildroot] [PATCH 2/2] rtl8188eu: new package
+In-Reply-To: <20150706151750.456bbb6c@free-electrons.com>
+References: <1436188175-7912-1-git-send-email-luca@lucaceresoli.net>	<1436188175-7912-2-git-send-email-luca@lucaceresoli.net>
+ <20150706151750.456bbb6c@free-electrons.com>
+Message-ID: <559A89D7.5010400@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30/06/15 09:07, Thomas Petazzoni wrote:
+Dear Thomas,
 
->>       powerpc |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/9147a478f8a2c77461c72a40af5c3f3779bfbe56/
+Thomas Petazzoni wrote:
+> Luca,
 >
-> sigsegv.h:118:9: error: unknown type name 'ucontext_t'
->   typedef ucontext_t *stackoverflow_context_t;
+> On Mon,  6 Jul 2015 15:09:35 +0200, Luca Ceresoli wrote:
 >
-> Some PowerPC person to have a look?
+>> diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
+>> new file mode 100644
+>> index 0000000..3228c67
+>> --- /dev/null
+>> +++ b/package/rtl8188eu/Config.in
+>> @@ -0,0 +1,18 @@
+>> +config BR2_PACKAGE_RTL8188EU
+>> +	bool "rtl8188eu"
+>> +	depends on BR2_LINUX_KERNEL && !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS
+>
+> Even though my understanding of firmware loading is not very deep, I
+> believe this is wrong. Since quite some time, the kernel has been able
+> to load firmware by itself, without the help of a userspace helper
+> program.
 
-This one boils down to uclibc for powerpc not supporting ucontext 
-functions (sigsegv.h includes ucontext.h which includes conditional on 
-__UCLIBC_HAS_CONTEXT_FUNCS__ sys/ucontext.h which defines ucontext_t).
+Unless I'm wrong, this feature is only available since 3.7
+(abb139e75c2: "firmware: teach the kernel to load firmware files
+directly from the filesystem").
 
-Since libsigsegv isn't used in general by any package i think excluding 
-the combination would be best. I'll send a patch.
+But your suggestion is applicable for versions 3.7 to 3.11.
 
-Regards.
+So I should drop the dependency on
+!BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS and clearly point out in
+the help text that you must set up some firmware loading mechanism, and
+let users discover on their own how they should achieve that.
+
+Overall, the available choices for firmware loading are:
+  - the kernel-only mechanism (3.7+ only)
+  - /dev management by mdev ot udev
+  - static /dev management + BR2_ROOTFS_MDEV_FIRMWARE_LOADING (patch 1
+    of this series).
+
+Should we add a section to the manual about this? We have a few words 
+under "/dev management", but they do not encompass the kernel-only
+loading.
+
+BTW, my use case here is a 2.6.30 kernel, which has no devtmpfs and no
+kernel-only firmware loading. So I must use static /dev management, and
+still install mdev as a hotplug helper for firmware loading.
+
+-- 
+Luca
