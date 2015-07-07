@@ -1,39 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jul 2015 09:22:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtool: disable makeinfo
-In-Reply-To: <559AF52D.5090106@mind.be>
-References: <e64f1903478b53f185f3bf114f86c46948a31311.1435886073.git.sam.bobroff@au1.ibm.com>
- <20150704124513.77ae2841@free-electrons.com>
- <559AF52D.5090106@mind.be>
-Message-ID: <20150707092214.30d13879@free-electrons.com>
+Date: Tue, 7 Jul 2015 10:31:29 +0200
+Subject: [Buildroot] [PATCH v2] openssl: always build apps
+In-Reply-To: <1436187968-84565-1-git-send-email-benoit@wsystem.com>
+References: <1436187968-84565-1-git-send-email-benoit@wsystem.com>
+Message-ID: <20150707103129.454a1426@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Dear Beno?t Th?baudeau,
 
-On Mon, 6 Jul 2015 23:37:49 +0200, Arnout Vandecappelle wrote:
+On Mon,  6 Jul 2015 15:06:08 +0200, Beno?t Th?baudeau wrote:
+> Now that building the openssl binary without MMU is supported, the only
+> reason left for not building apps if the openssl binary is disabled is
+> to save build time. Moreover, the commit
+> 720893b62510438237b9923d744dd079ddb4f67d "openssl: disable apps for
+> NOMMU", which added this behavior, had a side effect: the scripts from
+> apps (CA.pl, CA.sh and tsget) and the default configuration file
+> (openssl.cnf) were no longer installed, which is not advertized by the
+> BR2_PACKAGE_OPENSSL_BIN option. CA.pl and CA.sh use the openssl binary,
+> so not installing them without the latter makes sense. But tsget does
+> not use the openssl binary, and openssl.cnf can be used by libcrypto, so
+> it is preferable to handle BR2_PACKAGE_OPENSSL_BIN like before the
+> commit mentioned above, i.e. to always build and install apps and to
+> just remove the openssl binary afterwards if needed.
+> 
+> This is what the current commit does, but installing only the helper
+> scripts having their dependencies (perl or the openssl binary)
+> satisfied. The help text is updated accordingly.
+> 
+> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
 
->  BTW, Thomas, any idea why the autobuilders didn't catch this? Do the chroots
-> have texinfo installed?
+This patch is causing some build failures:
 
-My chroot does not have texinfo installed:
+  http://autobuild.buildroot.org/results/cbb/cbb35f2582f1cfeb3d11cb4952a80784ff660baf/build-end.log
 
-test at build:~$ dpkg -l | grep texinfo
-test at build:~$ which makeinfo
-test at build:~$ 
+Now, applications are being built on noMMU systems. But when using
+Blackfin FLAT, libdl is not available. And generally speaking libdl is
+not available for static only builds.
 
-This makeinfo thing is very mysterious to me. Sometimes it complains
-it's missing, sometimes not. I've never been able to really understand
-what happens.
+According to the PROBLEMS file in openssl source code, passing no-dso
+(which we are doing) is not sufficient, and the Makefile need to be
+hand-edited to remove the -ldl flag. Could you try that and submit a
+patch fixing this build issue?
 
-I am wondering if some packages don't bundle the pre-generated
-documentation in their tarball, but sometimes have the pre-generated
-files with an older date than the source files, which causes the
-documentation to be generated once again. But that's really just a
-guess.
+Thanks!
 
 Thomas
 -- 
