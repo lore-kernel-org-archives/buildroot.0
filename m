@@ -1,55 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jul 2015 10:31:29 +0200
-Subject: [Buildroot] [PATCH v2] openssl: always build apps
-In-Reply-To: <1436187968-84565-1-git-send-email-benoit@wsystem.com>
-References: <1436187968-84565-1-git-send-email-benoit@wsystem.com>
-Message-ID: <20150707103129.454a1426@free-electrons.com>
+Date: Tue, 7 Jul 2015 10:35:39 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: If udev is not present,
+	sysfs is used as a replacement
+Message-ID: <20150707083655.268BE818E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Beno?t Th?baudeau,
+commit: http://git.buildroot.net/buildroot/commit/?id=f5fbb12da0f0f1dbf23cdd603f41103da41e4f68
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  6 Jul 2015 15:06:08 +0200, Beno?t Th?baudeau wrote:
-> Now that building the openssl binary without MMU is supported, the only
-> reason left for not building apps if the openssl binary is disabled is
-> to save build time. Moreover, the commit
-> 720893b62510438237b9923d744dd079ddb4f67d "openssl: disable apps for
-> NOMMU", which added this behavior, had a side effect: the scripts from
-> apps (CA.pl, CA.sh and tsget) and the default configuration file
-> (openssl.cnf) were no longer installed, which is not advertized by the
-> BR2_PACKAGE_OPENSSL_BIN option. CA.pl and CA.sh use the openssl binary,
-> so not installing them without the latter makes sense. But tsget does
-> not use the openssl binary, and openssl.cnf can be used by libcrypto, so
-> it is preferable to handle BR2_PACKAGE_OPENSSL_BIN like before the
-> commit mentioned above, i.e. to always build and install apps and to
-> just remove the openssl binary afterwards if needed.
-> 
-> This is what the current commit does, but installing only the helper
-> scripts having their dependencies (perl or the openssl binary)
-> satisfied. The help text is updated accordingly.
-> 
-> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+Support for sysfs as a replacement for udev was added 2014/05/30:
+http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?id=85b6f36ca5238dd3fec7c5fcacb8b7074ce53c8e
 
-This patch is causing some build failures:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mesa3d/Config.in |   10 ++--------
+ package/mesa3d/mesa3d.mk |    9 +++++++--
+ 2 files changed, 9 insertions(+), 10 deletions(-)
 
-  http://autobuild.buildroot.org/results/cbb/cbb35f2582f1cfeb3d11cb4952a80784ff660baf/build-end.log
-
-Now, applications are being built on noMMU systems. But when using
-Blackfin FLAT, libdl is not available. And generally speaking libdl is
-not available for static only builds.
-
-According to the PROBLEMS file in openssl source code, passing no-dso
-(which we are doing) is not sufficient, and the Makefile need to be
-hand-edited to remove the -ldl flag. Could you try that and submit a
-patch fixing this build issue?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 2d19d69..c702d0d 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -9,7 +9,6 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
+-	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	help
+@@ -118,12 +117,8 @@ if BR2_PACKAGE_MESA3D_DRIVER
+ 
+ comment "Additional API Support"
+ 
+-comment "OpenGL EGL needs udev /dev management"
+-	depends on !BR2_PACKAGE_HAS_UDEV
+-
+ config BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	bool "OpenGL EGL"
+-	depends on BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	help
+ 	  Use the Khronos EGL APIs. EGL is a window manager for OpenGL applications
+@@ -146,6 +141,5 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
+ 
+ endif # BR2_PACKAGE_MESA3D
+ 
+-comment "mesa3d needs udev /dev management and a toolchain w/ C++, NPTL"
+-	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_HAS_UDEV
++comment "mesa3d needs a toolchain w/ C++, NPTL"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 051aac7..e8844f0 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -28,6 +28,13 @@ MESA3D_DEPENDENCIES += libgcrypt
+ MESA3D_CONF_OPTS += --with-sha1=libgcrypt
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HAS_LIBUDEV),y)
++MESA3D_DEPENDENCIES += udev
++MESA3D_CONF_OPTS += --disable-sysfs
++else
++MESA3D_CONF_OPTS += --enable-sysfs
++endif
++
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_DEPENDENCIES += \
+ 	xproto_xf86driproto \
+@@ -108,8 +115,6 @@ MESA3D_CONF_OPTS += --enable-opengl
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+ MESA3D_PROVIDES += libegl
+-# egl depends on gbm, gbm depends on udev
+-MESA3D_DEPENDENCIES += udev
+ MESA3D_EGL_PLATFORMS = drm
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ MESA3D_DEPENDENCIES += wayland
