@@ -1,46 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jul 2015 23:28:12 +0200
-Subject: [Buildroot] Autobuilder toolchain updates
-Message-ID: <20150707232812.603af01f@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 7 Jul 2015 23:32:33 +0200
+Subject: [Buildroot] [PATCH 1/1] util-linux: allow programs to be
+ disabled by default
+In-Reply-To: <CANxTyt49pXMfZpaH9G6esm1esVM5KWimxp7TcgWDKw4kAmTUQw@mail.gmail.com>
+References: <1435635368-26928-1-git-send-email-danomimanchego123@gmail.com>
+ <20150630225915.6838f4f2@free-electrons.com>
+ <CANxTyt49pXMfZpaH9G6esm1esVM5KWimxp7TcgWDKw4kAmTUQw@mail.gmail.com>
+Message-ID: <559C4571.2020001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 06/30/15 23:35, Danomi Manchego wrote:
+> Thomas,
+> 
+> On Tue, Jun 30, 2015 at 4:59 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Danomi Manchego,
+>>
+>> On Mon, 29 Jun 2015 23:36:08 -0400, Danomi Manchego wrote:
+>>
+>>> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_DISABLE_BY_DEFAULT),y)
+>>> +UTIL_LINUX_CONF_OPTS += --disable-all-programs
+>>> +endif
+>>
+>> I understand the idea, but it's a bit weird to have an option to enable
+>> to say that you want to disable everything.
+>>
+>> Also, we are already passing --disable-all-programs when
+>> BR2_PACKAGE_UTIL_LINUX_BINARIES is not enabled. Maybe we should instead
+>> pass --disable-all-programs unconditionally. However this would change
+>> the visible behavior for users, since programs that used to be built
+>> would no longer be built. But it seems the most correct solution
+>> nonetheless.
+>>
+>> Any opinions from other Buildroot developers?
+> 
+> I use util-linux only as a last resort for when busybox does not have
+> what I need - so I'm totally on-board with that idea, as my interest
+> is for minimal impact on the target.  The only reason that I didn't do
+> that is for precisely what you said - that it would change the current
+> behavior.  Also, I supposed that we would still need an option to
+> *not* set --disable-all-programs anyway, to support enabling all the
+> programs that are currently enabled by default (and don't have
+> existing buildroot switches), to be able to get back to the previous
+> behavior.  (For those who need it.)
 
-I've done some updates to the toolchains in the autobuilders:
+ I think it should be --disable-all-programs by default, and a new
+BR2_PACKAGE_UTIL_LINUX_ALL_BINARIES that does --enable-all-programs and that
+hides all the individual tool options.
 
- * All Buildroot external toolchains have been rebuilt with today's
-   master (commit 85945aa). This means that the default compiler
-   version used is gcc 4.9.x. Only toolchain,
-   br-arm-cortex-a9-glibc-2015.05-496-g85945aa.tar.bz2, is using gcc
-   5.1.x, so that we have at least one toolchain testing this new
-   compiler version. One toolchain, the NIOS II, could not be rebuilt
-   with the current master as the build fails (it was working on
-   2015.05).
+ As to changing the default, I'm not too worried about it, since only the pg
+tool is "new".
 
- * In my previous autobuilder toolchain updates, I announced that a
-   number of new toolchain had been added. But in fact, due to a
-   mistake on my side, the tarballs were indeed available, but the
-   toolchains were not actually used by the autobuilders. This is now
-   fixed, and means that the following new toolchains will be used by
-   the autobuilders:
+> An alternative might be to add --enable/--disable switches for all the
+> apps that are enabled by default.  But that's a lot of new switches,
+> and a maintenance hassle on package upgrades, so I was afraid that
+> this option might not be well received by the community.  (I'm willing
+> to give that a go if that seems like a good idea.)
 
-     br-aarch64-glibc.config
-     br-arm-basic.config
-     br-arm-full-static.config
-     br-mip64-n64-glibc.config
-     br-nios2-glibc.config
-     br-powerpc-603e-basic-cpp
-     br-sparc-glibc.config
-     br-x86-64-musl.config
+ Indeed, too much hassle.
 
-Best regards,
+ However, unless I'm mistaken, pg is the only one missing at the moment... So it
+doesn't seem to be *that* much hassle.
 
-Thomas
+
+ Regards,
+ Arnout
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
