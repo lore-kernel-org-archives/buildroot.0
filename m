@@ -1,85 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Jul 2015 08:42:32 +0200
-Subject: [Buildroot] [PATCH 2/2] libgudev: New package
-In-Reply-To: <1436201764-23614-1-git-send-email-nroach44@gmail.com> (Nathaniel
- Roach's message of "Tue, 7 Jul 2015 00:56:04 +0800")
-References: <1436201764-23614-1-git-send-email-nroach44@gmail.com>
-Message-ID: <87oajoo4dj.fsf@dell.be.48ers.dk>
+From: Goe <sombradecrisantemo@gmail.com>
+Date: Tue, 7 Jul 2015 08:45:31 +0200
+Subject: [Buildroot] Error when opencv is included in compilation,
+ 'i586-buildroot-linux-g++' file is missed
+In-Reply-To: <20150706145944.34253727@free-electrons.com>
+References: <CACiBgcej-aEteA67kBPy9HXm20QQQHOnCVbrQqWKfhN2Ne0xiQ@mail.gmail.com>
+ <20150706145944.34253727@free-electrons.com>
+Message-ID: <CACiBgcenjFfyMCtTt8MiMjY1oj2qEZSSe=BHzK+jNPfntriU0Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nathaniel" == Nathaniel Roach <nroach44@gmail.com> writes:
+You are right. I have tried this morning, and the compilation finishes
+without errors.
+Thank you very much.
 
- > As libgudev recently was split from the main systemd/udev source,
- > 	this library is now required to build NetworkManager.
+On Mon, Jul 6, 2015 at 2:59 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
- > Add the package; add it as a dependency to NetworkManager; and
- > 	tweak systemd's Config.in message accordingly.
+> Hello,
+>
+> On Mon, 6 Jul 2015 14:46:21 +0200, Goe wrote:
+>
+> > I am trying to compile a buildroot instance with opencv included using a
+> > machine with Ubuntu 14.04. The first compilation (before include opencv)
+> is
+> > correct, but it fails when I try to compile again including opencv in the
+> > configuration.
+> >
+> > The strangest thing is that the same steps work correctly in other
+> machines
+> > with Ubuntu 12.04 and Debian 8 (I do not have another Ubuntu 14.04
+> machine).
+> >
+> > The followed steps are:
+> > * make clean
+> > * make (compilation finished without errors)
+> > * make nconfig (Include WCHAR, C++ support and OpenCV)
+> > * make
+>
+> That's your problem. Since you enabled WCHAR and C++, you need to do a
+> full rebuild, i.e "make clean all".
+>
+> See http://buildroot.org/downloads/manual/manual.html#full-rebuild:
+>
+> """
+> When the toolchain configuration is changed, a complete rebuild
+> generally is needed. Changing the toolchain configuration often
+> involves changing the compiler version, the type of C library or its
+> configuration, or some other fundamental configuration item, and these
+> changes have an impact on the entire system.
+> """
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
 
- > Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
 
-> +++ b/package/libgudev/Config.in
- > @@ -0,0 +1,11 @@
- > +config BR2_PACKAGE_LIBGUDEV
- > +	bool "libgudev"
- > +	depends on BR2_INIT_SYSTEMD
-
-What about eudev? If it works with eudev as well then you should depend
-on BR2_PACKAGE_HAS_UDEV instead.
-
-> +	select BR2_PACKAGE_LIBGLIB2
-
-I know the systemd dependency implies this, but for consistency (and in
-case the dependency is dropped in the future) it would be good to copy
-the toolchain dependencies of libglib2 (and the comment).
-
-> +	help
- > +	  This library provides GObject bindings for libudev.
- > +	  It was originally part of udev-extras, then udev, then systemd.
- > +	  It's now a project on its own.
- > +	  Required for building NetworkManager.
-
-gudev is probably useful for a bunch of other stuff, so I would drop the
-NM reference here.
-
-> +################################################################################
- > +#
- > +# libgudev
- > +#
- > +################################################################################
- > +
- > +LIBGUDEV_VERSION = 230
- > +LIBGUDEV_SOURCE = libgudev-$(LIBGUDEV_VERSION).tar.xz
- > +LIBGUDEV_SITE = http://ftp.gnome.org/pub/GNOME/sources/libgudev/$(LIBGUDEV_VERSION)
- > +LIBGUDEV_INSTALL_STAGING = YES
- > +
- > +LIBGUDEV_DEPENDENCIES = host-pkgconf udev libglib2
- > +
- > +LIBGUDEV_LICENSE = GPLv2
-
-No _LICENSE_FILES ? There seems to be a COPYING file in the repo. A
-bunch of files also have the 'or (at your option) any later version'
-text so it should be GPLv2+.
-
-> +
- > +$(eval $(autotools-package))
- > diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
- > index bcf8f90..8b4607c 100644
- > --- a/package/network-manager/Config.in
- > +++ b/package/network-manager/Config.in
- > @@ -11,6 +11,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
- >  	select BR2_PACKAGE_GNUTLS
- >  	select BR2_PACKAGE_LIBGCRYPT
- >  	select BR2_PACKAGE_LIBNL
- > +	select BR2_PACKAGE_LIBGUDEV
-
-Does that mean that NM doesn't build today?
-
-NM doesn't require systemd (and shouldn't), so you cannot just select
-gudev here.
 
 -- 
-Bye, Peter Korsgaard
+A menudo encontramos nuestro destino por los caminos que tomamos para
+evitarlo.
+Jean de la Fontaine (1621-1695) Escritor y poeta franc?s.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150707/4d44150a/attachment.html>
