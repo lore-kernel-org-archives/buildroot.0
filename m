@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  7 Jul 2015 19:52:54 +0000 (UTC)
+Date: Tue,  7 Jul 2015 19:54:57 +0000 (UTC)
 Subject: [Buildroot] [Bug 8171] glamor missing
 In-Reply-To: <bug-8171-163@https.bugs.busybox.net/>
 References: <bug-8171-163@https.bugs.busybox.net/>
-Message-ID: <20150707195254.7B38C8175F@busybox.osuosl.org>
+Message-ID: <20150707195457.3555680193@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,8 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=8171
 
-Bernd Kuhls <bernd.kuhls@t-online.de> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc |bernd.kuhls at t-online.de
-                   |.org                        |
+--- Comment #1 from Bernd Kuhls <bernd.kuhls@t-online.de> 2015-07-07 19:54:57 UTC ---
+Which buildroot release are you using?
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
