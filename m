@@ -1,39 +1,94 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jul 2015 16:53:15 +0200
-Subject: [Buildroot] [PATCH 4/4] popt: add hash file
-In-Reply-To: <559BE37B.7090708@zacarias.com.ar>
-References: <1436273552-2877-1-git-send-email-gustavo@zacarias.com.ar>
- <1436273552-2877-4-git-send-email-gustavo@zacarias.com.ar>
- <20150707141712.GA12326@tarshish>
- <559BDFF4.4010003@zacarias.com.ar>
- <20150707142731.GB12326@tarshish>
- <559BE37B.7090708@zacarias.com.ar>
-Message-ID: <20150707165315.120c39d6@free-electrons.com>
+From: George Redivo <george.redivo@datacom.ind.br>
+Date: Tue, 7 Jul 2015 12:06:21 -0300 (BRT)
+Subject: [Buildroot] [PATCH 1/1] protobuf: bump version to 2.6.1
+In-Reply-To: <20150630164814.3d7c2bdc@free-electrons.com>
+References: <1434995939-8236-1-git-send-email-george.redivo@datacom.ind.br>
+ <CANQCQpYy-kuZLfMjO0YrX8Kfa25eLUa09U-NUyOSQjxE0vq5WA@mail.gmail.com>
+ <1313674444.2327407.1435171914537.JavaMail.zimbra@datacom.ind.br>
+ <20150630164814.3d7c2bdc@free-electrons.com>
+Message-ID: <384071235.534705.1436281581599.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hi, Thomas.
 
-On Tue, 07 Jul 2015 11:34:35 -0300, Gustavo Zacarias wrote:
+I could not reproduce this error.
+I inserted these flags in .config and followed exactly what you sad, but it worked fine.
 
-> Yes, very subjective though.
-> Right now we're fetching from a mirror and that's where the md5 comes from.
-> Proper upstream is back but never provided a md5 or sig for the latest 
-> releases, so that md5 isn't "original".
-> I based my calculation on a locally cached popt tarball that predates 
-> the source change BTW.
-> And to be honest hashes that aren't backed by announcements (archived on 
-> mailing lists that are on separate infra, hence harder to tamper with) 
-> are worth almost nothing.
+I looked the code and I found 2 interesting things:
 
-Though our policy so far is to have the upstream hash when available,
-and if it's too weak complement it with a locally calculated stronger
-hash.
+1) There is a syntax error in a protobuf's header file. The code that should generate an error message is broke and generates a compilation error itself.
 
-Thanks,
+2) Anyway, at this point it has to generate an error (at least it was the intention). This error is trigged by compiler version. It looks that it is exacltly the your problem.
+
+
+So to the problem (1), I fixed the wrong syntax and I've done a pull request on Google Protobuf. I have a patch for this.
+May I include it in this Buildroot patch?
+
+And to the problem (2), maybe the problem is your compiler version. Would you let me know your compiler version?
+If this problem is really this, I'll try to do the protobuf dependent to GCC version.
+
+Thanks
+
+
+George Redivo 
+DATACOM 
+Ethernet Switches 
+Rua Am?rica, 1000 - Eldorado do Sul, RS 
+Ramal: 3444 
+george.redivo at datacom.ind.br 
+www.datacom.ind.br
+
+----- Mensagem original -----
+De: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+Para: "DATACOM" <george.redivo@datacom.ind.br>
+Cc: "Peter Korsgaard" <jacmet@gmail.com>, "buildroot" <buildroot@buildroot.org>
+Enviadas: Ter?a-feira, 30 de junho de 2015 11:48:14
+Assunto: Re: [Buildroot] [PATCH 1/1] protobuf: bump version to 2.6.1
+
+Dear George Redivo,
+
+On Wed, 24 Jun 2015 15:51:54 -0300 (BRT), George Redivo wrote:
+
+> I looked to the ola's Config.in file and there is no powerpc dependency declared in there. 
+> So I'm not sure if it's valid to try to make a build to powerpc arch including this package. Is it? 
+
+I think Peter added || BR2_powerpc in ola/Config.in. The ola package
+itself does not have any architecture dependency, it only has such
+dependencies because it selects protobuf. So if protobuf now supports
+PowerPC, then it should also be possible to build Ola.
+
+And anyway, the error reported by Peter occurred during the build of
+protobuf itself, so Ola is not relevant here.
+
+> Anyway, I tried to reproduce the reported error by adding those flags in my .config file. 
+> In addition, I removed BR2_powerpc_8548=y, that was declared. 
+> 
+> I ran make olddefconfig and the .config changed. 
+> The BR2_PACKAGE_OLA flag simply dropped out from the .config file. 
+> 
+> May you send me your entire .config after running make olddefconfig please? 
+
+Just do:
+
+$ cat > .config <<EOF
+BR2_powerpc=y
+BR2_powerpc_603e=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_OLA=y
+EOF
+
+and then:
+
+$ make olddefconfig
+$ make
+
+As explained by Peter.
+
+Thanks!
 
 Thomas
 -- 
