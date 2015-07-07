@@ -1,30 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  7 Jul 2015 15:47:15 +0000 (UTC)
-Subject: [Buildroot] [Bug 8161] default /bin/sh symlink to busybox is full
- path and not relative
-In-Reply-To: <bug-8161-163@https.bugs.busybox.net/>
-References: <bug-8161-163@https.bugs.busybox.net/>
-Message-ID: <20150707154715.E224380831@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Jul 2015 17:48:13 +0200
+Subject: [Buildroot] X.org related bugs
+Message-ID: <20150707174813.18657f39@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8161
+Hello Bernd,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+If you have some time, could you have a look at the following two bug
+reports, related to X.org issues:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+  https://bugs.busybox.net/show_bug.cgi?id=8171
+  https://bugs.busybox.net/show_bug.cgi?id=8206
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-07-07 15:47:15 UTC ---
-This was fixed in
-http://git.buildroot.net/buildroot/commit/system?id=e26ec6e45cb4246353bb4b88fbe718212fc89c61/
+Thanks a lot!
 
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
