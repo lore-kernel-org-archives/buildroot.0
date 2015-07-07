@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jul 2015 19:57:00 +0200
-Subject: [Buildroot] Buildroot hackaton this WE
-Message-ID: <20150707195700.1b951619@free-electrons.com>
+Date: Tue, 7 Jul 2015 20:08:29 +0200
+Subject: [Buildroot] Next Buildroot developer meeting: October 3-4 in Dublin,
+	Ireland
+Message-ID: <20150707200829.0828cf75@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +11,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-Six Buildroot developers will be gathering this WE for a hackaton, from
-Friday evening (July 10) to Wednesday morning (July 15), which means 4
-full days of work on Buildroot.
+The next Buildroot developer meeting will take place on October 3-4 in
+Dublin, Ireland. These dates have been chosen to be right before the
+Embedded Linux Conference Europe, which takes place in the same city.
 
-The participants will be Samuel Martin, Arnout Vandecappelle, Yann E.
-Morin, Maxime Hadjinlian, Romain Naour and myself. We will be meeting
-in my place, near Toulouse, France.
+If you are a Buildroot contributor, I would strongly recommend you to
+attend this Buildroot developer meeting at least once. It is really
+great to meet the other Buildroot developers, and take the opportunity
+of a WE to make progress on various Buildroot topics. The previous
+meetings have been very productive and entertaining.
 
-Even if you're not attending the event physically, all of us will be
-around on IRC. If you want to have the opportunity to discuss with us,
-make progress on some topics / patch series, it will be a great moment
-to do it: since many developers will be there, we should hopefully be
-able to take decisions on what to do with certain patches, and quickly
-review patch series.
+If you are working in the embedded Linux space, you should convince
+your manager to send you to the Embedded Linux Conference Europe, which
+would allow you to attend the Buildroot meeting for only a very small
+additional cost.
 
-We don't have very specific topics defined for now, except look at some
-of the pending patch series, and maybe working on some new topics.
+For more details about the upcoming meeting:
 
-Do not hesitate to point us to things that have been waiting for a
-while, and we'll try to make progress on them. If you can be around
-during the hackaton to reply to comments and post updated versions of
-your patches, you will increase the chances for such patches to get
-merged.
+   http://elinux.org/Buildroot:DeveloperDaysELCE2015
 
-So don't hesitate to join us on IRC during this event!
+For more details about the Embedded Linux Conference Europe:
+
+   http://events.linuxfoundation.org/events/embedded-linux-conference-europe
+
+If you are part of a company who would like to sponsor this event,
+please contact me. Sponsoring such an event is very cheap (250 EUR to
+500 EUR) and we offer some visibility on the Buildroot website and in
+the Buildroot release e-mails.
 
 Best regards,
 
