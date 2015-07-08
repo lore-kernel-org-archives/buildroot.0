@@ -1,41 +1,39 @@
-From: salorob <r.salomons@ropesolutions.nl>
-Date: Tue, 7 Jul 2015 23:28:00 -0700 (PDT)
-Subject: [Buildroot] Buildroot Mono Compile fails on mscorlib
-Message-ID: <1436336880640-104945.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Jul 2015 09:31:36 +0200
+Subject: [Buildroot] [git commit] package/libtirpc: remove host-pkgconf
+	dependency
+Message-ID: <20150708073152.04A908181F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys,
+commit: http://git.buildroot.net/buildroot/commit/?id=aee57627b09d0955270a562b8adaa0ff88ef523b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'm struggling to get mono build in Buildroot. I 'took' the mono and the
-moonlight packages in https://github.com/maximeh.
+configure.ac does not contain PKG_CHECK_MODULES anymore.
 
-I already tried a million different things. (different gcc version,
-different gettext, trying to build on ubuntu/debian) but it all comes down
-to this error after a while:
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libtirpc/libtirpc.mk |    8 --------
+ 1 files changed, 0 insertions(+), 8 deletions(-)
 
-
-What can i do to get to the bottom of this ?
-
-If i go into the build/mono directory manually, and issue a .configure and
-make there, it compiles without errors.
-
-Is there something in the config not right ?
-
-*package/mono/mono.mk:*
-
-
-
-*uname -r and gcc -v:*
-
-
-Kind regard, many thanks!
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Buildroot-Mono-Compile-fails-on-mscorlib-tp104945.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+index f1ad395..494650c 100644
+--- a/package/libtirpc/libtirpc.mk
++++ b/package/libtirpc/libtirpc.mk
+@@ -18,12 +18,4 @@ LIBTIRPC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DGQ"
+ 
+ LIBTIRPC_CONF_OPTS = --disable-gssapi
+ 
+-# We need host-pkgconf because the configure.ac contains a
+-# PKG_CHECK_MODULES macro call, and since we're autoreconfiguring this
+-# package, we need the source for this PKG_CHECK_MODULES macro, which
+-# comes from host-pkgconf. Other than that, pkgconf is only used to
+-# find if there is a gss implementation somewhere, which we don't
+-# support in Buildroot yet.
+-LIBTIRPC_DEPENDENCIES = host-pkgconf
+-
+ $(eval $(autotools-package))
