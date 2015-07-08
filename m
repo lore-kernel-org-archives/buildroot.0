@@ -1,30 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jul 2015 10:18:19 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libtirpc: remove host-pkgconf
- dependency
-In-Reply-To: <1430843074-30355-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1430843074-30355-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150708101819.78756fa4@free-electrons.com>
+From: shravan.mishra at gmail.com <shravan.mishra@gmail.com>
+Date: Wed, 08 Jul 2015 03:38:37 -0500
+Subject: [Buildroot] You have a new notification from
+	shravan.mishra@gmail.com. View?
+Message-ID: <0.0.1C.2CD.1D0B958860120CE.2FB5@mail11.infoaxe.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Hi,
 
-On Tue,  5 May 2015 18:24:33 +0200, J?rg Krause wrote:
-> configure.ac does not contain PKG_CHECK_MODULES anymore.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/libtirpc/libtirpc.mk | 8 --------
->  1 file changed, 8 deletions(-)
+shravan.mishra at gmail.com wants to follow you.
 
-Applied, thanks.
+****** Is shravan.mishra at gmail.com you friend? ******
+If Yes please follow the link below:
+http://invites.infoaxe.net/signup_e.html?fullname=&amp;email=buildroot at uclibc.org&amp;invitername=Shravan&amp;inviterid=38267636&amp;userid=37100377&amp;token=343a5b25247dbefa7b840c367cab51c4&amp;ts=1435615164658&amp;emailmasterid=5f164568-b844-4d57-b798-f33cdb280a13&amp;from=shravan.mishra at gmail.com&amp;template=invite_reminder_2_a&amp;test=AA&src=txt_yes
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+If No please follow the link below:
+http://invites.infoaxe.net/signup_e.html?fullname=&amp;email=buildroot at uclibc.org&amp;invitername=Shravan&amp;inviterid=38267636&amp;userid=37100377&amp;token=343a5b25247dbefa7b840c367cab51c4&amp;ts=1435615164658&amp;emailmasterid=5f164568-b844-4d57-b798-f33cdb280a13&amp;from=shravan.mishra at gmail.com&amp;template=invite_reminder_2_a&amp;test=AA&src=txt_no
+
+
+Follow the link below to remove yourself from all such emails
+http://invites.infoaxe.net/uns_inviter.jsp?email=buildroot at uclibc.org&amp;iid=5f164568-b844-4d57-b798-f33cdb280a13&amp;from=shravan.mishra at gmail.com
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150708/4269906c/attachment.html>
