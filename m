@@ -1,41 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Jul 2015 23:51:38 +0200
-Subject: [Buildroot] [git commit] usb_modeswitch: bump to version 2.2.3
-Message-ID: <20150708215408.7396281913@busybox.osuosl.org>
+Date: Wed, 8 Jul 2015 23:48:13 +0200
+Subject: [Buildroot] [git commit] stm32flash: new package
+Message-ID: <20150708215408.6626581913@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b4ec5baec7ac9c50ac08038239710bccf4078928
+commit: http://git.buildroot.net/buildroot/commit/?id=d503a13a7c4ec8e61f17610cc0768090fef079f7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Frank Hunleth <fhunleth@troodon-software.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/usb_modeswitch/usb_modeswitch.hash |    2 +-
- package/usb_modeswitch/usb_modeswitch.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in                |    1 +
+ package/stm32flash/Config.in     |    8 ++++++++
+ package/stm32flash/stm32flash.mk |   21 +++++++++++++++++++++
+ 3 files changed, 30 insertions(+), 0 deletions(-)
 
-diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
-index bfe1f59..1e8df22 100644
---- a/package/usb_modeswitch/usb_modeswitch.hash
-+++ b/package/usb_modeswitch/usb_modeswitch.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	37d926a0b6b6d490173c57e260a69aca49feb774875fc8f2001c1d0f5e8011cb	usb-modeswitch-2.2.1.tar.bz2
-+sha256	d1a0d9a9e7411f07796611881a8f264daa946e2a28418abed34639b3583d7593	usb-modeswitch-2.2.3.tar.bz2
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index 9c16416..0a2b8db 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--USB_MODESWITCH_VERSION = 2.2.1
-+USB_MODESWITCH_VERSION = 2.2.3
- USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
- USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DEPENDENCIES = libusb
+diff --git a/package/Config.in b/package/Config.in
+index 23858ca..d9b0794 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -411,6 +411,7 @@ endif
+ 	source "package/snowball-hdmiservice/Config.in"
+ 	source "package/sredird/Config.in"
+ 	source "package/statserial/Config.in"
++	source "package/stm32flash/Config.in"
+ 	source "package/sunxi-cedarx/Config.in"
+ 	source "package/sunxi-mali/Config.in"
+ 	source "package/sunxi-mali-prop/Config.in"
+diff --git a/package/stm32flash/Config.in b/package/stm32flash/Config.in
+new file mode 100644
+index 0000000..cb6f480
+--- /dev/null
++++ b/package/stm32flash/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_STM32FLASH
++	bool "stm32flash"
++	help
++	  Open source cross platform flash program for the STM32 ARM
++	  microcontrollers using the built-in ST serial bootloader over UART
++	  or I2C.
++
++	  http://sourceforge.net/projects/stm32flash/
+diff --git a/package/stm32flash/stm32flash.mk b/package/stm32flash/stm32flash.mk
+new file mode 100644
+index 0000000..2c0fa56
+--- /dev/null
++++ b/package/stm32flash/stm32flash.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# stm32flash
++#
++################################################################################
++
++STM32FLASH_VERSION = 4ac0566f188f39eace0223d966d349cd2f2c5895
++STM32FLASH_SITE = git://git.code.sf.net/p/stm32flash/code
++STM32FLASH_LICENSE = GPLv2+
++STM32FLASH_LICENSE_FILES = gpl-2.0.txt
++
++define STM32FLASH_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define STM32FLASH_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" PREFIX="/usr" \
++		-C $(@D) install
++endef
++
++$(eval $(generic-package))
