@@ -1,32 +1,32 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Wed,  8 Jul 2015 11:54:23 +0200
-Subject: [Buildroot] [PATCH 10/11] erlang-p1-sip: bump to version fd3e461
-In-Reply-To: <1436349264-11797-1-git-send-email-johan.oudinet@gmail.com>
-References: <1436349264-11797-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1436349264-11797-11-git-send-email-johan.oudinet@gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed,  8 Jul 2015 12:36:13 +0200
+Subject: [Buildroot] [PATCH] snmppp: autoreconf is not needed anymore
+Message-ID: <1436351773-13436-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
----
- package/erlang-p1-sip/erlang-p1-sip.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Tarballs of recent versions ship a configure script.
 
-diff --git a/package/erlang-p1-sip/erlang-p1-sip.mk b/package/erlang-p1-sip/erlang-p1-sip.mk
-index b895f59..d017a92 100644
---- a/package/erlang-p1-sip/erlang-p1-sip.mk
-+++ b/package/erlang-p1-sip/erlang-p1-sip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ERLANG_P1_SIP_VERSION = bba4459
-+ERLANG_P1_SIP_VERSION = fd3e461
- ERLANG_P1_SIP_SITE = $(call github,processone,p1_sip,$(ERLANG_P1_SIP_VERSION))
- ERLANG_P1_SIP_LICENSE = GPLv2 with OpenSSL exception
- ERLANG_P1_SIP_LICENSE_FILES = COPYING
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/snmppp/snmppp.mk | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 29b1d99..026fe6e 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -9,8 +9,6 @@ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+ SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
+ SNMPPP_INSTALL_STAGING = YES
+-# no configure script in tarball
+-SNMPPP_AUTORECONF = YES
+ SNMPPP_CONF_OPTS = $(if $(BR2_PACKAGE_SNMPPP_LOGGING),--enable-logging,--disable-logging)
+ SNMPPP_LICENSE = SNMP++
+ SNMPPP_LICENSE_FILES = src/v3.cpp
 -- 
-2.1.4
+1.9.1
