@@ -1,47 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Jul 2015 23:46:06 +0200
-Subject: [Buildroot] [git commit] bind: security bump to version 9.9.7-P1
-Message-ID: <20150708214801.6EB587FF0C@busybox.osuosl.org>
+Date: Wed, 8 Jul 2015 23:47:35 +0200
+Subject: [Buildroot] [git commit] lvm2: bump to version 2.02.125
+Message-ID: <20150708214801.74364818B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f70f45a43c486d04bc9aeb5a82f1ce778cf607bc
+commit: http://git.buildroot.net/buildroot/commit/?id=f64f18938877a8b4cdbbf22874ce2da9917e69e6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2015-4620 - On servers configured to perform DNSSEC validation an
-assertion failure could be triggered on answers from a specially
-configured server.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash |    4 ++--
- package/bind/bind.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lvm2/lvm2.hash |    2 +-
+ package/lvm2/lvm2.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 6bbd00f..e74c773 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 982cfc7..eda465d 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
 @@ -1,2 +1,2 @@
--# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7/bind-9.9.7.tar.gz.sha256.asc
--sha256	3f23e7fcb363a2594ed1f065868c2c1080a93636a4fcb4c47f9e164e2cd74c66	bind-9.9.7.tar.gz
-+# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7-P1/bind-9.9.7-P1.tar.gz.sha256.asc
-+sha256	bd086ff58afaf03cfb8dc695c79b6bd6d0217ef56750a78ff0668b2b3acda34d	bind-9.9.7-P1.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 9a08461..98a19ea 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
+ # From ftp://sources.redhat.com/pub/lvm2/md5.sum
+-md5  da8d81a6a2ea235025795d9e001a6ae3  LVM2.2.02.124.tgz
++md5  2d24ba982c8a85e8c837210f087a6a51  LVM2.2.02.125.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index c112b97..0930a10 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.9.7
-+BIND_VERSION = 9.9.7-P1
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
- BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
+-LVM2_VERSION = 2.02.124
++LVM2_VERSION = 2.02.125
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
