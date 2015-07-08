@@ -1,65 +1,39 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Wed, 08 Jul 2015 06:54:31 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] package/libtirpc: does not build
- with musl libc
-In-Reply-To: <20150614231725.6865e1a3@free-electrons.com>
-References: <cover.1434292018.git.yann.morin.1998@free.fr>
- <a13a154a08aa3fd09400a2b1ae3571544a86f3db.1434292018.git.yann.morin.1998@free.fr>
- <20150614231725.6865e1a3@free-electrons.com>
-Message-ID: <1436331271.3691.4.camel@embedded.rocks>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed,  8 Jul 2015 08:24:11 +0300
+Subject: [Buildroot] [PATCH 1/2] system/skeleton: remove random-seed
+Message-ID: <314559b27c9c888a8939941b1b4ba500f20b4294.1436333052.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas, Yann,
+Seeding the entropy pool with a known seed makes more harm than good. This is
+especially bad for when /etc is not on a persistent writable storage, so the
+entropy pool is seeded with the same value on every boot. Just drop it.
 
-On So, 2015-06-14 at 23:17 +0200, Thomas Petazzoni wrote:
-> Dear Yann E. MORIN,
-> 
-> On Sun, 14 Jun 2015 16:29:06 +0200, Yann E. MORIN wrote:
-> > Previously-packaged libtirpc version, 0.2.4, did not build with 
-> > musl on
-> > ARM (see build failures, below) because of missing header 
-> > sys/cdefs.h
-> > 
-> > Newly-packaged version, 0.3.1, does not build on musl, on ARM for 
-> > the
-> > same reason as 0.2.4, and on whatever the architecture (ARM 
-> > included)
-> > because of the extra-missing header sys/queue.h .
-> 
-> At
-> http://git.free-electrons.com/users/thomas
-> -petazzoni/buildroot/log/?h=libtirpc-musl-fix,
-> I have a patch that makes libtirpc 0.2.4 build fine with musl.
-> Unfortunately, it breaks glibc build :)
-> 
-> I think the patch set can be simplified on top of libtirpc 0.3.1,
-> because:
-> 
->  * the cdefs.h issue is fixed upstream already:
->    http://git.linux
-> -nfs.org/?p=cel/libtirpc.git;a=commit;h=7228a9482b92ff0305f7e7ccd0276
-> c638bee1884
-> 
->  * the IPPORT_RESERVED issue is also fixed upstream:
->    http://git.linux
-> -nfs.org/?p=cel/libtirpc.git;a=commit;h=4d3263ca3b64de8acdcaf71d36bfb
-> 0eda06b8710
-> 
-> So maybe that leaves only the sys/queue.h issue, for which my patch
-> contains a proposal.
-> 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ system/skeleton/etc/random-seed | Bin 512 -> 0 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 system/skeleton/etc/random-seed
 
-I submitted a patchset for libtirpc 0.2.4 too:
-http://patchwork.ozlabs.org/patch/468161/
+diff --git a/system/skeleton/etc/random-seed b/system/skeleton/etc/random-seed
+deleted file mode 100644
+index f26038adc5d057a0b9d6ce5d3cda02ccb4a4d12e..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
 
-I tested this patchset with eglibc and uClibc.
+literal 512
+zcmV+b0{{Iq0UOB42;n<rZ7)sf8Kr=fg87_s+y&vLYgGJP-sY`OWMEj0aQ&I{*g5$)
+zH?Zu5*rX8>4xpAvJIL$H4mg*!B4&9jh)7+B2j-fX7o at K*bzj;pJ$FwoQzl&MuZ^Wy
+zrYS)x9vq<)#e~&1uB|_ITW-fntEg1^KXs3>vvgL7?_kg!+6=fg{S7mwkr$#pm<zB(
+zu)oAUWFK-u-)cWcuSL*8$Q<cmC?ll~NEK@l5k|75(YzZ_p!I6FJ}YI_3>PZ13liCc
+zi|M+im&71p*p+Z|7f(m-aedNFtEezFN<xKEd-wQ71%XuGfKr+6VcDycMQ(v6+Z0G|
+z-MPjg@JHu%y(|h1cTa=a4(m?GyU)ZD-T+-vLXX}cCXyn}vCXC3Hn1ft`zDTL(};Rr
+z?3wX?Eh5%n+AXAeDtXvl!o>-nZHytAhV~}?OM$-f$(%cG(ioV{==Ub4mfZP}OaJJ7
+z25tvCcku=>;L?}O-dvK9`}<^gmg@IrnfQm#P>RRF|C9c;GDgEg_bw26{dkIVt1`{`
+z3#ol{Q_FL91TBD~{uZn<gw?^=VUuSaIf)=p`07n=>RRZ(Otf!KXM&;q)8B<Q8(T)k
+z?Z}a{1Jyf~bQPL{qVQk6jFNfBr)0;57HwN`o6Kw{wdPGHUWrfsJ}0VmW|Tr22whlO
+C+W_DI
 
-Note there is also another patch for libtirpc in the queue:
-http://patchwork.ozlabs.org/patch/468160/
-
-Best regards
-J?rg Krause
+-- 
+2.1.4
