@@ -1,41 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Jul 2015 23:47:35 +0200
-Subject: [Buildroot] [git commit] lvm2: bump to version 2.02.125
-Message-ID: <20150708214801.74364818B2@busybox.osuosl.org>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Wed,  8 Jul 2015 16:51:00 -0500
+Subject: [Buildroot] [PATCH v2 1/1] e2fsprogs: remove busybox tune2fs when
+	installing full version
+Message-ID: <1436392260-55786-1-git-send-email-ryan.barnett@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f64f18938877a8b4cdbbf22874ce2da9917e69e6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Currently, busybox installs a version of tune2fs in /sbin/ while
+e2fsprogs installs at /usr/sbin/. This causes issues if a user is
+expecting the to use the full version from a prompt via 'tune2fs'
+since busybox's tune2fs will be found first from the default path
+search.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fix this by removing the busybox version of tune2fs when a user has
+selected the option to install tune2fs from e2fsprogs.
+
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 ---
- package/lvm2/lvm2.hash |    2 +-
- package/lvm2/lvm2.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes v1 -> v2:
+  - add condition depenencies on busybox (suggested by Baruch)
+---
+ package/e2fsprogs/e2fsprogs.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 982cfc7..eda465d 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/md5.sum
--md5  da8d81a6a2ea235025795d9e001a6ae3  LVM2.2.02.124.tgz
-+md5  2d24ba982c8a85e8c837210f087a6a51  LVM2.2.02.125.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index c112b97..0930a10 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index e0c4ee2..e6a5027 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -36,7 +36,8 @@ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ E2FSPROGS_CONF_ENV += LIBS=-lintl
+ endif
  
--LVM2_VERSION = 2.02.124
-+LVM2_VERSION = 2.02.125
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+-E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
++E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux \
++	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ 
+ E2FSPROGS_MAKE_OPTS = \
+ 	LDCONFIG=true
+@@ -102,7 +103,11 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_E2FSCK),y)
+ E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_E2FSCK_SYMLINKS
+ endif
+ 
++# Remove busybox tune2fs and e2label since that will take precedence full version
+ define E2FSPROGS_TARGET_TUNE2FS_SYMLINK
++	$(if $(BR2_PACKAGE_BUSYBOX), \
++		rm -f $(TARGET_DIR)/sbin/tune2fs; \
++		rm -f $(TARGET_DIR)/sbin/e2label;)
+ 	ln -sf e2label $(TARGET_DIR)/usr/sbin/tune2fs
+ endef
+ 
+-- 
+1.9.1
