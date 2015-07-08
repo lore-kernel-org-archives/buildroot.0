@@ -1,30 +1,39 @@
-From: shravan.mishra at gmail.com <shravan.mishra@gmail.com>
-Date: Wed, 08 Jul 2015 03:38:37 -0500
-Subject: [Buildroot] You have a new notification from
-	shravan.mishra@gmail.com. View?
-Message-ID: <0.0.1C.2CD.1D0B958860120CE.2FB5@mail11.infoaxe.net>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 8 Jul 2015 10:51:51 +0200
+Subject: [Buildroot] [PATCH] lvm2: bump to version 2.02.125
+Message-ID: <1436345511-7449-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-shravan.mishra at gmail.com wants to follow you.
-
-****** Is shravan.mishra at gmail.com you friend? ******
-If Yes please follow the link below:
-http://invites.infoaxe.net/signup_e.html?fullname=&amp;email=buildroot at uclibc.org&amp;invitername=Shravan&amp;inviterid=38267636&amp;userid=37100377&amp;token=343a5b25247dbefa7b840c367cab51c4&amp;ts=1435615164658&amp;emailmasterid=5f164568-b844-4d57-b798-f33cdb280a13&amp;from=shravan.mishra at gmail.com&amp;template=invite_reminder_2_a&amp;test=AA&src=txt_yes
-
-If No please follow the link below:
-http://invites.infoaxe.net/signup_e.html?fullname=&amp;email=buildroot at uclibc.org&amp;invitername=Shravan&amp;inviterid=38267636&amp;userid=37100377&amp;token=343a5b25247dbefa7b840c367cab51c4&amp;ts=1435615164658&amp;emailmasterid=5f164568-b844-4d57-b798-f33cdb280a13&amp;from=shravan.mishra at gmail.com&amp;template=invite_reminder_2_a&amp;test=AA&src=txt_no
-
-
-Follow the link below to remove yourself from all such emails
-http://invites.infoaxe.net/uns_inviter.jsp?email=buildroot at uclibc.org&amp;iid=5f164568-b844-4d57-b798-f33cdb280a13&amp;from=shravan.mishra at gmail.com
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150708/4269906c/attachment.html>
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 982cfc7..eda465d 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/md5.sum
+-md5  da8d81a6a2ea235025795d9e001a6ae3  LVM2.2.02.124.tgz
++md5  2d24ba982c8a85e8c837210f087a6a51  LVM2.2.02.125.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index c112b97..0930a10 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.124
++LVM2_VERSION = 2.02.125
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
+-- 
+2.3.6
