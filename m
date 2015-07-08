@@ -1,21 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Jul 2015 23:51:00 +0200
-Subject: [Buildroot] [PATCH] stm32flash: new package
-In-Reply-To: <1436343302-9727-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Wed, 8 Jul 2015 10:15:02 +0200")
-References: <1436343302-9727-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87fv4ymi7v.fsf@dell.be.48ers.dk>
+Date: Wed, 08 Jul 2015 23:52:02 +0200
+Subject: [Buildroot] [PATCH 1/2] usb_modeswitch: bump to version 2.2.3
+In-Reply-To: <1436277239-10479-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 7 Jul 2015 10:53:58 -0300")
+References: <1436277239-10479-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87bnfmmi65.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
