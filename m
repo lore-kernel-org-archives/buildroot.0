@@ -1,75 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Jul 2015 23:48:13 +0200
-Subject: [Buildroot] [git commit] stm32flash: new package
-Message-ID: <20150708215408.6626581913@busybox.osuosl.org>
+Date: Wed, 8 Jul 2015 23:51:45 +0200
+Subject: [Buildroot] [git commit] usb_modeswitch_data: bump to version
+	20150627
+Message-ID: <20150708215408.7E8A481913@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d503a13a7c4ec8e61f17610cc0768090fef079f7
+commit: http://git.buildroot.net/buildroot/commit/?id=ba67b27350c8e9c7e4264196bb02bf311b69544b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                |    1 +
- package/stm32flash/Config.in     |    8 ++++++++
- package/stm32flash/stm32flash.mk |   21 +++++++++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
+ .../usb_modeswitch_data/usb_modeswitch_data.hash   |    2 +-
+ package/usb_modeswitch_data/usb_modeswitch_data.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 23858ca..d9b0794 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -411,6 +411,7 @@ endif
- 	source "package/snowball-hdmiservice/Config.in"
- 	source "package/sredird/Config.in"
- 	source "package/statserial/Config.in"
-+	source "package/stm32flash/Config.in"
- 	source "package/sunxi-cedarx/Config.in"
- 	source "package/sunxi-mali/Config.in"
- 	source "package/sunxi-mali-prop/Config.in"
-diff --git a/package/stm32flash/Config.in b/package/stm32flash/Config.in
-new file mode 100644
-index 0000000..cb6f480
---- /dev/null
-+++ b/package/stm32flash/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_STM32FLASH
-+	bool "stm32flash"
-+	help
-+	  Open source cross platform flash program for the STM32 ARM
-+	  microcontrollers using the built-in ST serial bootloader over UART
-+	  or I2C.
-+
-+	  http://sourceforge.net/projects/stm32flash/
-diff --git a/package/stm32flash/stm32flash.mk b/package/stm32flash/stm32flash.mk
-new file mode 100644
-index 0000000..2c0fa56
---- /dev/null
-+++ b/package/stm32flash/stm32flash.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# stm32flash
-+#
-+################################################################################
-+
-+STM32FLASH_VERSION = 4ac0566f188f39eace0223d966d349cd2f2c5895
-+STM32FLASH_SITE = git://git.code.sf.net/p/stm32flash/code
-+STM32FLASH_LICENSE = GPLv2+
-+STM32FLASH_LICENSE_FILES = gpl-2.0.txt
-+
-+define STM32FLASH_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define STM32FLASH_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" PREFIX="/usr" \
-+		-C $(@D) install
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.hash b/package/usb_modeswitch_data/usb_modeswitch_data.hash
+index 2ccb3fc..ea36839 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data.hash
++++ b/package/usb_modeswitch_data/usb_modeswitch_data.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	90549f589835a68279369c3dc0d47eb7338ee3bad09d737e7b85e1ab15bd2d8b	usb-modeswitch-data-20150115.tar.bz2
++sha256	826096cb35a487c6e924b1318074988457220b5e72812e5393597950dd9eefc2	usb-modeswitch-data-20150627.tar.bz2
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+index 01b0614..1b397cb 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
++++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USB_MODESWITCH_DATA_VERSION = 20150115
++USB_MODESWITCH_DATA_VERSION = 20150627
+ USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
+ USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
