@@ -1,87 +1,45 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 8 Jul 2015 10:58:46 -0400
-Subject: [Buildroot] [PATCH] stm32flash: new package
-In-Reply-To: <1436343302-9727-1-git-send-email-luca@lucaceresoli.net>
-References: <1436343302-9727-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <CA+-urNTKakmED+XEFbsJC0Ohnh0mEBhZpTRL9TNZJRSXVO+iAQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  8 Jul 2015 13:52:15 -0300
+Subject: [Buildroot] [PATCH] bind: security bump to version 9.9.7-P1
+Message-ID: <1436374335-28647-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Luca,
+Fixes:
+CVE-2015-4620 - On servers configured to perform DNSSEC validation an
+assertion failure could be triggered on answers from a specially
+configured server.
 
-On Wed, Jul 8, 2015 at 4:15 AM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->  package/Config.in                |  1 +
->  package/stm32flash/Config.in     |  8 ++++++++
->  package/stm32flash/stm32flash.mk | 21 +++++++++++++++++++++
->  3 files changed, 30 insertions(+)
->  create mode 100644 package/stm32flash/Config.in
->  create mode 100644 package/stm32flash/stm32flash.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 23858ca..d9b0794 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -411,6 +411,7 @@ endif
->         source "package/snowball-hdmiservice/Config.in"
->         source "package/sredird/Config.in"
->         source "package/statserial/Config.in"
-> +       source "package/stm32flash/Config.in"
->         source "package/sunxi-cedarx/Config.in"
->         source "package/sunxi-mali/Config.in"
->         source "package/sunxi-mali-prop/Config.in"
-> diff --git a/package/stm32flash/Config.in b/package/stm32flash/Config.in
-> new file mode 100644
-> index 0000000..cb6f480
-> --- /dev/null
-> +++ b/package/stm32flash/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_STM32FLASH
-> +       bool "stm32flash"
-> +       help
-> +         Open source cross platform flash program for the STM32 ARM
-> +         microcontrollers using the built-in ST serial bootloader over UART
-> +         or I2C.
-> +
-> +         http://sourceforge.net/projects/stm32flash/
-> diff --git a/package/stm32flash/stm32flash.mk b/package/stm32flash/stm32flash.mk
-> new file mode 100644
-> index 0000000..2c0fa56
-> --- /dev/null
-> +++ b/package/stm32flash/stm32flash.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# stm32flash
-> +#
-> +################################################################################
-> +
-> +STM32FLASH_VERSION = 4ac0566f188f39eace0223d966d349cd2f2c5895
-> +STM32FLASH_SITE = git://git.code.sf.net/p/stm32flash/code
-> +STM32FLASH_LICENSE = GPLv2+
-> +STM32FLASH_LICENSE_FILES = gpl-2.0.txt
-> +
-> +define STM32FLASH_BUILD_CMDS
-> +       $(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> +endef
-> +
-> +define STM32FLASH_INSTALL_TARGET_CMDS
-> +       $(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" PREFIX="/usr" \
-> +               -C $(@D) install
-> +endef
-> +
-> +$(eval $(generic-package))
-> --
-> 1.9.1
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Great timing! I had just started adding this package locally when I
-saw your email to the list.
-
-Tested-by: Frank Hunleth <fhunleth@troodon-software.com>
-
-Thanks,
-Frank
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 6bbd00f..e74c773 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,2 @@
+-# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7/bind-9.9.7.tar.gz.sha256.asc
+-sha256	3f23e7fcb363a2594ed1f065868c2c1080a93636a4fcb4c47f9e164e2cd74c66	bind-9.9.7.tar.gz
++# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7-P1/bind-9.9.7-P1.tar.gz.sha256.asc
++sha256	bd086ff58afaf03cfb8dc695c79b6bd6d0217ef56750a78ff0668b2b3acda34d	bind-9.9.7-P1.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 9a08461..98a19ea 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.9.7
++BIND_VERSION = 9.9.7-P1
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
+ BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
+-- 
+2.3.6
