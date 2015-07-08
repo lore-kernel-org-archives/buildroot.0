@@ -1,65 +1,87 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 8 Jul 2015 14:48:06 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2015-06-28
-In-Reply-To: <20150708163639.44ba74d5@free-electrons.com>
-References: <20150629063017.4326F10013E@stock.ovh.net>
- <1436194278.3246.42.camel@synopsys.com>
- <20150706174356.6d6471c9@free-electrons.com>
- <1436357726.3043.10.camel@synopsys.com>
- <20150708142953.7c615412@free-electrons.com>
- <1436366016.3043.22.camel@synopsys.com>
- <20150708163639.44ba74d5@free-electrons.com>
-Message-ID: <1436366885.3043.31.camel@synopsys.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 8 Jul 2015 10:58:46 -0400
+Subject: [Buildroot] [PATCH] stm32flash: new package
+In-Reply-To: <1436343302-9727-1-git-send-email-luca@lucaceresoli.net>
+References: <1436343302-9727-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <CA+-urNTKakmED+XEFbsJC0Ohnh0mEBhZpTRL9TNZJRSXVO+iAQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Luca,
 
-On Wed, 2015-07-08 at 16:36 +0200, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Wed, 8 Jul 2015 14:33:36 +0000, Alexey Brodkin wrote:
-> 
-> > Ok I now see the difference.
-> > 
-> > [1] Toolchain that builds "empty" successfully is based on uClibc-0.9.33.2
-> > which simply doesn't have "uClibc_posix_opt.h" where _POSIX_SEMAPHORES
-> > is undefed in more recent versions of uClibc be it uClibc-ng or up to date uClibc
-> > (tip of upstream uClibc's master branch in case of ARC).
-> > 
-> > See commit that happened 1 month after 0.9.33.2 was cut:
-> > http://git.uclibc.org/uClibc/commit/libc/sysdeps/linux/common/bits/uClibc_posix_opt.h?id=2389017f787dd51e11e697c4480
-> > 71ec
-> > dd217169a
-> > 
-> > In that commit "uClibc_posix_opt.h" was introduced and since then "empty"
-> > won't built without threads.
-> > 
-> > Mystery solved? :)
-> 
-> Thanks for the investigation!
-> 
-> To conclude, I think marking the empty package as not available when
-> thread support is not there is probably the easiest/simplest solution.
-> What do you think?
+On Wed, Jul 8, 2015 at 4:15 AM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+>  package/Config.in                |  1 +
+>  package/stm32flash/Config.in     |  8 ++++++++
+>  package/stm32flash/stm32flash.mk | 21 +++++++++++++++++++++
+>  3 files changed, 30 insertions(+)
+>  create mode 100644 package/stm32flash/Config.in
+>  create mode 100644 package/stm32flash/stm32flash.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 23858ca..d9b0794 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -411,6 +411,7 @@ endif
+>         source "package/snowball-hdmiservice/Config.in"
+>         source "package/sredird/Config.in"
+>         source "package/statserial/Config.in"
+> +       source "package/stm32flash/Config.in"
+>         source "package/sunxi-cedarx/Config.in"
+>         source "package/sunxi-mali/Config.in"
+>         source "package/sunxi-mali-prop/Config.in"
+> diff --git a/package/stm32flash/Config.in b/package/stm32flash/Config.in
+> new file mode 100644
+> index 0000000..cb6f480
+> --- /dev/null
+> +++ b/package/stm32flash/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_STM32FLASH
+> +       bool "stm32flash"
+> +       help
+> +         Open source cross platform flash program for the STM32 ARM
+> +         microcontrollers using the built-in ST serial bootloader over UART
+> +         or I2C.
+> +
+> +         http://sourceforge.net/projects/stm32flash/
+> diff --git a/package/stm32flash/stm32flash.mk b/package/stm32flash/stm32flash.mk
+> new file mode 100644
+> index 0000000..2c0fa56
+> --- /dev/null
+> +++ b/package/stm32flash/stm32flash.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# stm32flash
+> +#
+> +################################################################################
+> +
+> +STM32FLASH_VERSION = 4ac0566f188f39eace0223d966d349cd2f2c5895
+> +STM32FLASH_SITE = git://git.code.sf.net/p/stm32flash/code
+> +STM32FLASH_LICENSE = GPLv2+
+> +STM32FLASH_LICENSE_FILES = gpl-2.0.txt
+> +
+> +define STM32FLASH_BUILD_CMDS
+> +       $(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+> +endef
+> +
+> +define STM32FLASH_INSTALL_TARGET_CMDS
+> +       $(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" PREFIX="/usr" \
+> +               -C $(@D) install
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 1.9.1
 
-I'd agree with that point, i.e. making "empty" dependent on threads support in toolchain
-is the simplest approach for us.
+Great timing! I had just started adding this package locally when I
+saw your email to the list.
 
-But what bothers me a little bit I am frankly not completely sure if "empty" really needs
-threads. Actually it forks a brand new process instead of creating new (p)thread.
+Tested-by: Frank Hunleth <fhunleth@troodon-software.com>
 
-And then semaphores are used for IPC between processes.
-
-So if uClibc requires pthread library for implementation of semaphores, then "empty"
-is really dependent on threads. And from the first glance I'd say that's the case.
-
-Otherwise we may simply patch "empty".
-
-Adding Waldemar who might comment on that.
-
--Alexey
+Thanks,
+Frank
