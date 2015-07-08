@@ -1,45 +1,80 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  8 Jul 2015 13:52:15 -0300
-Subject: [Buildroot] [PATCH] bind: security bump to version 9.9.7-P1
-Message-ID: <1436374335-28647-1-git-send-email-gustavo@zacarias.com.ar>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Wed, 8 Jul 2015 12:52:23 -0500
+Subject: [Buildroot] [PATCH 1/1] e2fsprogs: remove busybox tune2fs when
+ installing full version
+In-Reply-To: <20150701234851.GB2391@tarshish>
+References: <1435789556-17999-1-git-send-email-ryan.barnett@rockwellcollins.com>
+ <20150701234851.GB2391@tarshish>
+Message-ID: <CAMQcK5+5RqikWua-mac0eFQt4c_XbDqyDza=vmyCcmfiwhdODg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2015-4620 - On servers configured to perform DNSSEC validation an
-assertion failure could be triggered on answers from a specially
-configured server.
+Baruch,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Wed, Jul 1, 2015 at 6:48 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Ryan,
+>
+> On Wed, Jul 01, 2015 at 05:25:56PM -0500, Ryan Barnett wrote:
+>> Currently, busybox installs a version of tune2fs in /sbin/ while
+>> e2fsprogs installs at /usr/sbin/. This causes issues if a user is
+>> expecting the to use the full version from a prompt via 'tune2fs'
+>> since busybox's tune2fs will be found first from the default path
+>> search.
+>>
+>> Fix this by removing the busybox version of tune2fs when a user has
+>> selected the option to install tune2fs from e2fsprogs.
+>>
+>> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+>> ---
+>>  package/e2fsprogs/e2fsprogs.mk | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+>> index e0c4ee2..f6ac648 100644
+>> --- a/package/e2fsprogs/e2fsprogs.mk
+>> +++ b/package/e2fsprogs/e2fsprogs.mk
+>> @@ -36,7 +36,7 @@ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+>>  E2FSPROGS_CONF_ENV += LIBS=-lintl
+>>  endif
+>>
+>> -E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
+>> +E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux busybox
+>
+> Should be
+>
+>         $(if $(BR2_PACKAGE_BUSYBOX),busybox)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 6bbd00f..e74c773 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,2 @@
--# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7/bind-9.9.7.tar.gz.sha256.asc
--sha256	3f23e7fcb363a2594ed1f065868c2c1080a93636a4fcb4c47f9e164e2cd74c66	bind-9.9.7.tar.gz
-+# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7-P1/bind-9.9.7-P1.tar.gz.sha256.asc
-+sha256	bd086ff58afaf03cfb8dc695c79b6bd6d0217ef56750a78ff0668b2b3acda34d	bind-9.9.7-P1.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 9a08461..98a19ea 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.9.7
-+BIND_VERSION = 9.9.7-P1
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
- BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
+Agreed.
+
+>>  E2FSPROGS_MAKE_OPTS = \
+>>       LDCONFIG=true
+>> @@ -102,7 +102,9 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_E2FSCK),y)
+>>  E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_E2FSCK_SYMLINKS
+>>  endif
+>>
+>> +# Remove busybox tune2fs since that will take precedence full version
+>>  define E2FSPROGS_TARGET_TUNE2FS_SYMLINK
+>> +     rm -f $(TARGET_DIR)/sbin/tune2fs
+>
+> This should also depend on BR2_PACKAGE_BUSYBOX, I guess.
+>
+>>       ln -sf e2label $(TARGET_DIR)/usr/sbin/tune2fs
+>
+> Busybox seems to installs e2label in /sbin as well.
+
+Agreed.
+
+Will make the suggested fixes and send a v2 shortly.
+
+Thanks,
+-Ryan
+
 -- 
-2.3.6
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
