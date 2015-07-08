@@ -1,9 +1,10 @@
 From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Wed,  8 Jul 2015 20:35:54 +0200
-Subject: [Buildroot] [PATCH v2 2/3] qt5base: reorder patches
+Date: Wed,  8 Jul 2015 20:35:55 +0200
+Subject: [Buildroot] [PATCH v2 3/3] qt5quick1, qt5script,
+	qt5webkit: tag as legacy compatibility
 In-Reply-To: <1436380555-13657-1-git-send-email-corjon.j@ecagroup.com>
 References: <1436380555-13657-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <1436380555-13657-2-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <1436380555-13657-3-git-send-email-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +13,97 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 ---
- .../qt5/qt5base/{0003-mkspecs-files.patch => 0002-mkspecs-files.patch}    | 0
- .../qt5/qt5base/{0004-xcb-egl-fixes.patch => 0003-xcb-egl-fixes.patch}    | 0
- ...nker-for-host-build.patch => 0004-no-gold-linker-for-host-build.patch} | 0
- ...entfd-for-uclibc.patch => 0005-forkd-disable-eventfd-for-uclibc.patch} | 0
- 4 files changed, 0 insertions(+), 0 deletions(-)
- rename package/qt5/qt5base/{0003-mkspecs-files.patch => 0002-mkspecs-files.patch} (100%)
- rename package/qt5/qt5base/{0004-xcb-egl-fixes.patch => 0003-xcb-egl-fixes.patch} (100%)
- rename package/qt5/qt5base/{0005-no-gold-linker-for-host-build.patch => 0004-no-gold-linker-for-host-build.patch} (100%)
- rename package/qt5/qt5base/{0008-forkd-disable-eventfd-for-uclibc.patch => 0005-forkd-disable-eventfd-for-uclibc.patch} (100%)
+v1 -> v2 :
+  - Rename "deprecated" with "legacy compatibility" (except in help messages)
+     (Suggested by Thomas and confirmed by Arnout)
+  - Remove "(deprecated)" from package name
+     (Suggested by Thomas and confirmed by Arnout)
 
-diff --git a/package/qt5/qt5base/0003-mkspecs-files.patch b/package/qt5/qt5base/0002-mkspecs-files.patch
-similarity index 100%
-rename from package/qt5/qt5base/0003-mkspecs-files.patch
-rename to package/qt5/qt5base/0002-mkspecs-files.patch
-diff --git a/package/qt5/qt5base/0004-xcb-egl-fixes.patch b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
-similarity index 100%
-rename from package/qt5/qt5base/0004-xcb-egl-fixes.patch
-rename to package/qt5/qt5base/0003-xcb-egl-fixes.patch
-diff --git a/package/qt5/qt5base/0005-no-gold-linker-for-host-build.patch b/package/qt5/qt5base/0004-no-gold-linker-for-host-build.patch
-similarity index 100%
-rename from package/qt5/qt5base/0005-no-gold-linker-for-host-build.patch
-rename to package/qt5/qt5base/0004-no-gold-linker-for-host-build.patch
-diff --git a/package/qt5/qt5base/0008-forkd-disable-eventfd-for-uclibc.patch b/package/qt5/qt5base/0005-forkd-disable-eventfd-for-uclibc.patch
-similarity index 100%
-rename from package/qt5/qt5base/0008-forkd-disable-eventfd-for-uclibc.patch
-rename to package/qt5/qt5base/0005-forkd-disable-eventfd-for-uclibc.patch
+ package/qt5/Config.in                    | 9 +++++----
+ package/qt5/qt5quick1/Config.in          | 4 ++++
+ package/qt5/qt5script/Config.in          | 4 ++++
+ package/qt5/qt5webkit-examples/Config.in | 4 ++++
+ package/qt5/qt5webkit/Config.in          | 4 ++++
+ 5 files changed, 21 insertions(+), 4 deletions(-)
+
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index e8ec7d9..737a789 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -36,15 +36,16 @@ source "package/qt5/qt5enginio/Config.in"
+ source "package/qt5/qt5graphicaleffects/Config.in"
+ source "package/qt5/qt5imageformats/Config.in"
+ source "package/qt5/qt5multimedia/Config.in"
+-source "package/qt5/qt5quick1/Config.in"
+ source "package/qt5/qt5quickcontrols/Config.in"
+-source "package/qt5/qt5script/Config.in"
+ source "package/qt5/qt5sensors/Config.in"
+ source "package/qt5/qt5serialport/Config.in"
+ source "package/qt5/qt5svg/Config.in"
+-source "package/qt5/qt5webkit/Config.in"
+-source "package/qt5/qt5webkit-examples/Config.in"
+ source "package/qt5/qt5websockets/Config.in"
+ source "package/qt5/qt5x11extras/Config.in"
+ source "package/qt5/qt5xmlpatterns/Config.in"
++comment "legacy compatibility"
++source "package/qt5/qt5quick1/Config.in"
++source "package/qt5/qt5script/Config.in"
++source "package/qt5/qt5webkit/Config.in"
++source "package/qt5/qt5webkit-examples/Config.in"
+ endif
+diff --git a/package/qt5/qt5quick1/Config.in b/package/qt5/qt5quick1/Config.in
+index 16076eb..345ffae 100644
+--- a/package/qt5/qt5quick1/Config.in
++++ b/package/qt5/qt5quick1/Config.in
+@@ -15,6 +15,10 @@ config BR2_PACKAGE_QT5QUICK1
+ 
+ 	  This package corresponds to the qt5quick1 module.
+ 
++	  This package has been tagged as deprecated since version
++	  5.5.0 and should be replaced by Qt Quick module in new
++	  design.
++
+ 	  http://qt.io
+ 
+ comment "qt5quick1 needs a toolchain w/ dynamic library"
+diff --git a/package/qt5/qt5script/Config.in b/package/qt5/qt5script/Config.in
+index 5313e90..0d15ef2 100644
+--- a/package/qt5/qt5script/Config.in
++++ b/package/qt5/qt5script/Config.in
+@@ -8,4 +8,8 @@ config BR2_PACKAGE_QT5SCRIPT
+ 
+ 	  This package corresponds to the qt5script module.
+ 
++	  This package has been tagged as deprecated since version
++	  5.5.0 and should be replaced by Qt QML module in new
++	  design.
++
+ 	  http://qt.io
+diff --git a/package/qt5/qt5webkit-examples/Config.in b/package/qt5/qt5webkit-examples/Config.in
+index e7610c2..3f9c243 100644
+--- a/package/qt5/qt5webkit-examples/Config.in
++++ b/package/qt5/qt5webkit-examples/Config.in
+@@ -7,4 +7,8 @@ config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
+ 
+ 	  This package contains examples for the qt5webkit module.
+ 
++	  This package has been tagged as deprecated since version
++	  5.5.0 and should be replaced by Qt WebEngine module in
++	  new design.
++
+ 	  http://qt.io
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+index 3507a9d..eee82e8 100644
+--- a/package/qt5/qt5webkit/Config.in
++++ b/package/qt5/qt5webkit/Config.in
+@@ -17,4 +17,8 @@ config BR2_PACKAGE_QT5WEBKIT
+ 
+ 	  This package corresponds to the qt5webkit module.
+ 
++	  This package has been tagged as deprecated since version
++	  5.5.0 and should be replaced by Qt WebEngine module in
++	  new design.
++
+ 	  http://qt.io
 -- 
 2.1.0
