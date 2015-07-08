@@ -1,39 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jul 2015 09:31:36 +0200
-Subject: [Buildroot] [git commit] package/libtirpc: remove host-pkgconf
-	dependency
-Message-ID: <20150708073152.04A908181F@busybox.osuosl.org>
+Date: Wed, 8 Jul 2015 09:31:10 +0200
+Subject: [Buildroot] [PATCH 2/2 v2] package/libtirpc: does not build
+ with musl libc
+In-Reply-To: <1436331271.3691.4.camel@embedded.rocks>
+References: <cover.1434292018.git.yann.morin.1998@free.fr>
+ <a13a154a08aa3fd09400a2b1ae3571544a86f3db.1434292018.git.yann.morin.1998@free.fr>
+ <20150614231725.6865e1a3@free-electrons.com>
+ <1436331271.3691.4.camel@embedded.rocks>
+Message-ID: <20150708093110.0e18e678@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aee57627b09d0955270a562b8adaa0ff88ef523b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear J?rg Krause,
 
-configure.ac does not contain PKG_CHECK_MODULES anymore.
+On Wed, 08 Jul 2015 06:54:31 +0200, J?rg Krause wrote:
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libtirpc/libtirpc.mk |    8 --------
- 1 files changed, 0 insertions(+), 8 deletions(-)
+> I submitted a patchset for libtirpc 0.2.4 too:
+> http://patchwork.ozlabs.org/patch/468161/
+> 
+> I tested this patchset with eglibc and uClibc.
 
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index f1ad395..494650c 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
-@@ -18,12 +18,4 @@ LIBTIRPC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DGQ"
- 
- LIBTIRPC_CONF_OPTS = --disable-gssapi
- 
--# We need host-pkgconf because the configure.ac contains a
--# PKG_CHECK_MODULES macro call, and since we're autoreconfiguring this
--# package, we need the source for this PKG_CHECK_MODULES macro, which
--# comes from host-pkgconf. Other than that, pkgconf is only used to
--# find if there is a gss implementation somewhere, which we don't
--# support in Buildroot yet.
--LIBTIRPC_DEPENDENCIES = host-pkgconf
--
- $(eval $(autotools-package))
+But libtirpc has been bumped to 0.3.1 in the mean time. I'll mark your
+patch as Changes Requested. Can you respin it on top of 0.3.1 ? Less
+patches should be needed, because several libtirpc/musl build issues
+have been fixed upstream. Thanks!
+
+> Note there is also another patch for libtirpc in the queue:
+> http://patchwork.ozlabs.org/patch/468160/
+
+I'll merge.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
