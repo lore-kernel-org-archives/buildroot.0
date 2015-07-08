@@ -1,34 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Jul 2015 23:45:21 +0200
-Subject: [Buildroot] [git commit] snmppp: autoreconf is not needed anymore
-Message-ID: <20150708214801.6A19D8191B@busybox.osuosl.org>
+Date: Wed, 8 Jul 2015 23:46:06 +0200
+Subject: [Buildroot] [git commit] bind: security bump to version 9.9.7-P1
+Message-ID: <20150708214801.6EB587FF0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3bb40c7d8608e1e55c19d00ab142c4fce14bd73e
+commit: http://git.buildroot.net/buildroot/commit/?id=f70f45a43c486d04bc9aeb5a82f1ce778cf607bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tarballs of recent versions ship a configure script.
+Fixes:
+CVE-2015-4620 - On servers configured to perform DNSSEC validation an
+assertion failure could be triggered on answers from a specially
+configured server.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/snmppp/snmppp.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ package/bind/bind.hash |    4 ++--
+ package/bind/bind.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
-index 29b1d99..026fe6e 100644
---- a/package/snmppp/snmppp.mk
-+++ b/package/snmppp/snmppp.mk
-@@ -9,8 +9,6 @@ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
- SNMPPP_SITE = http://www.agentpp.com/download
- SNMPPP_DEPENDENCIES = host-pkgconf
- SNMPPP_INSTALL_STAGING = YES
--# no configure script in tarball
--SNMPPP_AUTORECONF = YES
- SNMPPP_CONF_OPTS = $(if $(BR2_PACKAGE_SNMPPP_LOGGING),--enable-logging,--disable-logging)
- SNMPPP_LICENSE = SNMP++
- SNMPPP_LICENSE_FILES = src/v3.cpp
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 6bbd00f..e74c773 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,2 @@
+-# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7/bind-9.9.7.tar.gz.sha256.asc
+-sha256	3f23e7fcb363a2594ed1f065868c2c1080a93636a4fcb4c47f9e164e2cd74c66	bind-9.9.7.tar.gz
++# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7-P1/bind-9.9.7-P1.tar.gz.sha256.asc
++sha256	bd086ff58afaf03cfb8dc695c79b6bd6d0217ef56750a78ff0668b2b3acda34d	bind-9.9.7-P1.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 9a08461..98a19ea 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.9.7
++BIND_VERSION = 9.9.7-P1
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
+ BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
