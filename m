@@ -1,136 +1,54 @@
-From: salorob <r.salomons@ropesolutions.nl>
-Date: Wed, 8 Jul 2015 06:57:39 -0700 (PDT)
-Subject: [Buildroot] Buildroot Mono Compile fails on mscorlib
-In-Reply-To: <20150708140347.223be2e4@free-electrons.com>
-References: <1436336880640-104945.post@n4.nabble.com>
- <20150708135209.18da05f9@free-electrons.com>
- <D1C2DD1B.197E2%r.salomons@ropesolutions.nl>
- <20150708140347.223be2e4@free-electrons.com>
-Message-ID: <D1C2FD1C.19800%r.salomons@ropesolutions.nl>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 8 Jul 2015 14:33:36 +0000
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
+ results for 2015-06-28
+In-Reply-To: <20150708142953.7c615412@free-electrons.com>
+References: <20150629063017.4326F10013E@stock.ovh.net>
+ <1436194278.3246.42.camel@synopsys.com>
+ <20150706174356.6d6471c9@free-electrons.com>
+ <1436357726.3043.10.camel@synopsys.com>
+ <20150708142953.7c615412@free-electrons.com>
+Message-ID: <1436366016.3043.22.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi There,
+On Wed, 2015-07-08 at 14:29 +0200, Thomas Petazzoni wrote:
+> I have changed
+> http://autobuild.buildroot.org/toolchains/configs/br-arm-full-nothread.config
+> just yesterday. You're using the new version, I was using the previous
+> version. Try again with this defconfig, and you will see the build
+> succeed:
+> 
+> BR2_arm=y
+> BR2_arm1176jzf_s=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm11-full-nothread-2015.05.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_0=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS is not set
+> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_PACKAGE_EMPTY=y
 
-I tried building with the mono and monolite packages from the 2015_08 build root. But that won?t work either.
-I?m using another build root version: 2014_02
+Ok I now see the difference.
 
-I can imaging i can?t just take this and that from different versions, but I thought 2 packages mono might not be so harmfull.
-Probably I?m missing a library, or a config thing, but I don?t know what?
+[1] Toolchain that builds "empty" successfully is based on uClibc-0.9.33.2
+which simply doesn't have "uClibc_posix_opt.h" where _POSIX_SEMAPHORES
+is undefed in more recent versions of uClibc be it uClibc-ng or up to date uClibc
+(tip of upstream uClibc's master branch in case of ARC).
 
-Config file is attached, and here is the error output once again:
+See commit that happened 1 month after 0.9.33.2 was cut:
+http://git.uclibc.org/uClibc/commit/libc/sysdeps/linux/common/bits/uClibc_posix_opt.h?id=2389017f787dd51e11e697c448071ec
+dd217169a
 
-make[3]: Leaving directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/data'
-Making all in runtime
-make[3]: Entering directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/runtime'
-if test -w /home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/mcs; then :; else chmod -R +w /home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/mcs; fi
-cd /home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/mcs && /usr/bin/make --no-print-directory -s NO_DIR_CHECK=1 PROFILES='binary_reference_assemblies net_4_5 xbuild_12 xbuild_14   ' CC='/usr/bin/gcc' all-profiles
-make[7]: mcs: Command not found
-make[7]: *** [build/deps/basic-profile-check.exe] Error 127
-*** The compiler 'mcs' doesn't appear to be usable.
-*** Trying the 'monolite' directory.
-Bootstrap compiler: Mono C# compiler version 4.1.0.0
-MCS     [net_4_5] mscorlib.dll
+In that commit "uClibc_posix_opt.h" was introduced and since then "empty"
+won't built without threads.
 
-Unhandled Exception:
-Nested exception detected.
-Original Exception: at Mono.CSharp.Driver.Main (string[]) <0x00048>
+Mystery solved? :)
 
-Nested exception:at System.Threading.Thread.get_CurrentThread () <0x00025>
-at System.Globalization.NumberFormatInfo.get_CurrentInfo () <0x00008>
-at System.Globalization.NumberFormatInfo.GetInstance (System.IFormatProvider) <0x00069>
-at int.ToString (string,System.IFormatProvider) <0x00026>
-at string.FormatHelper (System.Text.StringBuilder,System.IFormatProvider,string,object[]) <0x0055f>
-at System.Text.StringBuilder.AppendFormat (System.IFormatProvider,string,object[]) <0x0001b>
-at System.Text.StringBuilder.AppendFormat (string,object) <0x00052>
-at System.Exception.AddFrames (System.Text.StringBuilder,string,string,System.Diagnostics.StackTrace) <0x00249>
-at System.Exception.get_StackTrace () <0x0016b>
-at System.Exception.ToString () <0x0010a>
-at System.Exception.ToString () <0x000c4>
-
-
-[ERROR] FATAL UNHANDLED EXCEPTION: Nested exception detected.
-Original Exception: at Mono.CSharp.Driver.Main (string[]) <0x00048>
-
-Nested exception:at System.Threading.Thread.get_CurrentThread () <0x00025>
-at System.Globalization.NumberFormatInfo.get_CurrentInfo () <0x00008>
-at System.Globalization.NumberFormatInfo.GetInstance (System.IFormatProvider) <0x00069>
-at int.ToString (string,System.IFormatProvider) <0x00026>
-at string.FormatHelper (System.Text.StringBuilder,System.IFormatProvider,string,object[]) <0x0055f>
-at System.Text.StringBuilder.AppendFormat (System.IFormatProvider,string,object[]) <0x0001b>
-at System.Text.StringBuilder.AppendFormat (string,object) <0x00052>
-at System.Exception.AddFrames (System.Text.StringBuilder,string,string,System.Diagnostics.StackTrace) <0x00249>
-at System.Exception.get_StackTrace () <0x0016b>
-at System.Exception.ToString () <0x0010a>
-at System.Exception.ToString () <0x000c4>
-
-
-make[9]: *** [../../class/lib/net_4_5/mscorlib.dll] Error 1
-make[8]: *** [do-all] Error 2
-make[7]: *** [all-recursive] Error 1
-make[6]: *** [all-recursive] Error 1
-make[5]: *** [profile-do--net_4_5--all] Error 2
-make[4]: *** [profiles-do--all] Error 2
-make[3]: *** [all-local] Error 2
-make[3]: Leaving directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/runtime'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0'
-make: *** [/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/.stamp_built] Error 2
-
-
-Thanks in advance,
-
-From: "Thomas Petazzoni-2 [via Buildroot ] (busybox)" <ml-node+s2317881n104967h62 at n4.nabble.com<mailto:ml-node+s2317881n104967h62@n4.nabble.com>>
-Date: woensdag 8 juli 2015 13:41
-To: Robert Salomons <r.salomons at ropesolutions.nl<mailto:r.salomons@ropesolutions.nl>>
-Subject: Re: Buildroot Mono Compile fails on mscorlib
-
-Hello,
-
-On Wed, 8 Jul 2015 04:38:06 -0700 (PDT), salorob wrote:
-
-> Well, the post was created online, for some reason it didn't email the bits between the <raw> tags.
->
-> I'll try the packages from the original repository first, and will get back with that.
-
-Yes, please try the official Buildroot, and if you get a build failure,
-make sure to include in your report: 1/ the exact Buildroot version you
-have used and 2/ a minimal Buildroot .config file that exhibits the
-issue so that we can easily reproduce.
-
-Best regards,
-
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
-_______________________________________________
-buildroot mailing list
-[hidden email]</user/SendEmail.jtp?type=node&node=104967&i=0>
-http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-________________________________
-If you reply to this email, your message will be added to the discussion below:
-http://buildroot-busybox.2317881.n4.nabble.com/Buildroot-Mono-Compile-fails-on-mscorlib-tp104945p104967.html
-To unsubscribe from Buildroot Mono Compile fails on mscorlib, click here<http://buildroot-busybox.2317881.n4.nabble.com/template/NamlServlet.jtp?macro=unsubscribe_by_code&node=104945&code=ci5zYWxvbW9uc0Byb3Blc29sdXRpb25zLm5sfDEwNDk0NXwxNzY4ODU2MTA4>.
-NAML<http://buildroot-busybox.2317881.n4.nabble.com/template/NamlServlet.jtp?macro=macro_viewer&id=instant_html%21nabble%3Aemail.naml&base=nabble.naml.namespaces.BasicNamespace-nabble.view.web.template.NabbleNamespace-nabble.view.web.template.NodeNamespace&breadcrumbs=notify_subscribers%21nabble%3Aemail.naml-instant_emails%21nabble%3Aemail.naml-send_instant_email%21nabble%3Aemail.naml>
-
-
-config (53K) <http://buildroot-busybox.2317881.n4.nabble.com/attachment/104976/0/config>
-
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Buildroot-Mono-Compile-fails-on-mscorlib-tp104945p104976.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150708/807d0a39/attachment.html>
+-Alexey
