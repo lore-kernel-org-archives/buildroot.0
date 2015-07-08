@@ -1,21 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Jul 2015 23:47:38 +0200
-Subject: [Buildroot] [PATCH] lvm2: bump to version 2.02.125
-In-Reply-To: <1436345511-7449-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Wed, 8 Jul 2015 10:51:51 +0200")
-References: <1436345511-7449-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87k2uamidh.fsf@dell.be.48ers.dk>
+Date: Wed, 8 Jul 2015 23:45:21 +0200
+Subject: [Buildroot] [git commit] snmppp: autoreconf is not needed anymore
+Message-ID: <20150708214801.6A19D8191B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3bb40c7d8608e1e55c19d00ab142c4fce14bd73e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tarballs of recent versions ship a configure script.
 
-Committed, thanks.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/snmppp/snmppp.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 29b1d99..026fe6e 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -9,8 +9,6 @@ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+ SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
+ SNMPPP_INSTALL_STAGING = YES
+-# no configure script in tarball
+-SNMPPP_AUTORECONF = YES
+ SNMPPP_CONF_OPTS = $(if $(BR2_PACKAGE_SNMPPP_LOGGING),--enable-logging,--disable-logging)
+ SNMPPP_LICENSE = SNMP++
+ SNMPPP_LICENSE_FILES = src/v3.cpp
