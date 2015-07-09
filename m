@@ -1,80 +1,55 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 9 Jul 2015 10:01:26 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2015-07-06
-In-Reply-To: <20150707063015.5F59D100907@stock.ovh.net>
-References: <20150707063015.5F59D100907@stock.ovh.net>
-Message-ID: <1436436085.2860.19.camel@synopsys.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 9 Jul 2015 12:00:04 +0200
+Subject: [Buildroot] [PATCH v2] minidlna: fix static link
+Message-ID: <1436436004-21802-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+minidlna needs to be linked with -lintl when gettext is needed (with
+locales), and also needs to be linked with -lvorbis, -lvorbisenc and
+-lswresample, otherwise it will cause link failures with lots of
+undefined references:
 
-On Tue, 2015-07-07 at 08:30 +0200, Thomas Petazzoni wrote:
-> Those results are limited to the arc architecture.
-> 
-> Build statistics for 2015-07-06
-> ===============================
-> 
->         success : 3  
->        failures : 4  
->        timeouts : 0  
->           TOTAL : 7  
-> 
-> Classification of failures by reason
-> ====================================
-> 
->                   zeromq-4.0.5 | 1 
->               pure-ftpd-1.0.41 | 1 
->               quagga-0.99.24.1 | 1 
->                   boost-1.58.0 | 1 
-> 
-> Detail of failures
-> ===================
-> 
->          arc |                   boost-1.58.0 | NOK | 
-> http://autobuild.buildroot.net/results/239a8faf16d3de5dbb0698d7afe2f2ba09e67596/
+/br/output/build/libexif-0.6.21/libexif/exif-data.c:1197:
+undefined reference to `libintl_dgettext'
 
-This happens clearly because ARC following Linux kernel's UAPI doesn't
-define __NR_eventfd syscall.
-If you look here https://github.com/torvalds/linux/blob/master/include/uapi/asm-generic/unistd.h#L771
-you may notice that "eventfd" syscall with some others resides in
-"#ifdef__ARCH_WANT_SYSCALL_NO_FLAGS".
+/br/output/build/ffmpeg-2.6.2/libavcodec/libvorbisenc.c:311:
+undefined reference to `vorbis_analysis'
 
-And from what I may see only "score" architecture has this
-__ARCH_WANT_SYSCALL_NO_FLAGS defined.
+/br/output/build/ffmpeg-2.6.2/libavcodec/libvorbisenc.c:113:
+undefined reference to `vorbis_encode_ctl'
 
-Most of other arches that don't use unistd.h from "include/uapi/asm-genereic"
-folder have "eventfd" syscall defined. For example it's true for ARM (both
-32 and 64 versions).
+/br/output/build/ffmpeg-2.6.2/libavcodec/opusdec.c:374:
+undefined reference to `swr_is_initialized'
 
-So I'd say it's not the best way to use directly a syscall that's being
-obsoleted in "boost". And so real fix would be to modify boost's
-"eventfd_select_interrupter::open_descriptors()" for example with use of
-really generic "eventfd2" or even better use libc's eventfd() call instead of direct syscall.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+v1 -> v2: remove unnecessary -lexif
 
-Any thoughts?
+ package/minidlna/minidlna.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
->          arc |               pure-ftpd-1.0.41 | NOK | 
-> http://autobuild.buildroot.net/results/57a6180809bc51f7206280533f0b9898ce4cfbb4/
-
-Another problem with PIE on ARC.
-Should be fixed with http://patchwork.ozlabs.org/patch/493346/
-Also this one could be of interest: http://patchwork.ozlabs.org/patch/493350/
-It adds already upstream fix for toolchains that have explicit_bzero().
-
->          arc |               quagga-0.99.24.1 | NOK | 
-> http://autobuild.buildroot.net/results/ca0b1e271f29d7639b6a6e895472a35e2c1d8aba/
-
-Another PIE manifestation.
-Fixed with http://patchwork.ozlabs.org/patch/493358/
-
->          arc |                   zeromq-4.0.5 | NOK | 
-> http://autobuild.buildroot.net/results/8984d725204936f3c2b040fe04fbb888a0d6a75e/
-
-"cfi row mismatc" will be fixed in arc-2015.06-rc2 (patch is in works already).
-
--Alexey
+diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
+index 7adb832..37543d6 100644
+--- a/package/minidlna/minidlna.mk
++++ b/package/minidlna/minidlna.mk
+@@ -17,8 +17,13 @@ MINIDLNA_DEPENDENCIES = \
+ ifeq ($(BR2_STATIC_LIBS),y)
+ # the configure script / Makefile forgets to link with some of the dependent
+ # libraries breaking static linking, so help it along
++ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ MINIDLNA_CONF_ENV = \
+-	LIBS='-lavformat -lavcodec -lavutil -logg -lz -lpthread -lm'
++	LIBS='-lavformat -lavcodec -lavutil -logg -lvorbis -lvorbisenc -lswresample -lz -lpthread -lm -lintl'
++else
++MINIDLNA_CONF_ENV = \
++	LIBS='-lavformat -lavcodec -lavutil -logg -lvorbis -lvorbisenc -lswresample -lz -lpthread -lm'
++endif
+ else
+ MINIDLNA_CONF_OPTS = \
+ 	--disable-static
+-- 
+2.3.6
