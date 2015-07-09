@@ -1,50 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jul 2015 11:29:58 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-07-08
-In-Reply-To: <87lheplrzc.fsf@dell.be.48ers.dk>
-References: <20150709063009.DE905100B0F@stock.ovh.net>
- <87lheplrzc.fsf@dell.be.48ers.dk>
-Message-ID: <20150709112958.43329535@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 9 Jul 2015 11:31:40 +0200
+Subject: [Buildroot] [PATCH] empty: fix compile with toolchain w/o threads
+Message-ID: <20150709093140.GA8600@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+As found via autobuilders and discussed on the list, the
+ifdef is wrong, as empty uses SysV semaphores and not POSIX
+semaphores.
 
-On Thu, 09 Jul 2015 09:17:43 +0200, Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
->  > Build statistics for 2015-07-08
->  > ===============================
-> 
->  >         success : 2  
->  >        failures : 1  
->  >        timeouts : 0  
->  >           TOTAL : 3  
-> 
-> Huh, what happened?
+Tested with glibc/uclibc-ng builds. And with uclibc-ng without
+threads.
 
-Amongst the new toolchain configurations listed in the toolchain CSV
-file, there was one typo: the toolchain config URL was invalid. Due to
-this, the Python script has aborted on all autobuilder slaves.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/empty/0002-fix-non-thread-build.patch |   49 +++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/empty/0002-fix-non-thread-build.patch
 
-I've fixed the typo now
-(http://git.buildroot.net/buildroot-test/commit/?id=00e2fb0d241eb2e2f0e9bac35f24d729b2c0d8a2),
-and restarted the autobuilder slaves on the Free Electrons build
-machine and on gcc75.
-
-Could you please restart your autobuilders? Also same for Richard.
-
-Sorry for the mess :-/ The autobuild-run script should maybe be a bit
-more robust against such kind of problems. Patches welcome!
-
-Best regards,
-
-Thomas
+diff --git a/package/empty/0002-fix-non-thread-build.patch b/package/empty/0002-fix-non-thread-build.patch
+new file mode 100644
+index 0000000..4854d86
+--- /dev/null
++++ b/package/empty/0002-fix-non-thread-build.patch
+@@ -0,0 +1,49 @@
++empty uses SysV semaphores, so the ifdef is wrong here.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++--- empty-0.6.19b.orig/empty.c	2012-09-19 13:24:05.000000000 +0200
+++++ empty-0.6.19b/empty.c	2015-07-09 02:00:09.000000000 +0200
++@@ -179,25 +179,23 @@ int main (int argc, char *argv[]) {
++ 					   2 - unknown */
++ 	
++ /* semaphores */
++-#ifdef _POSIX_SEMAPHORES
++-	#if defined(__linux__) && defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)
++-		/* union semun is defined by including <sys/sem.h> */
++-	#else
++-		union semun {
++-			int val;
++-			struct semid_ds *buf;
++-		#ifdef __SVR4
++-			ushort_t	*array;
++-		#endif
++-		#ifdef __hpux__
++-			ushort		*array;
++-		#endif
++-		#ifdef __linux__
++-			unsigned short *array;
++-			struct seminfo *__buf;		/* buffer for IPC_INFO */
++-		#endif
++-		};
++-  	#endif
+++#if defined(__linux__) && defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)
+++	/* union semun is defined by including <sys/sem.h> */
+++#else
+++	union semun {
+++		int val;
+++		struct semid_ds *buf;
+++	#ifdef __SVR4
+++		ushort_t	*array;
+++	#endif
+++	#ifdef __hpux__
+++		ushort		*array;
+++	#endif
+++	#ifdef __linux__
+++		unsigned short *array;
+++		struct seminfo *__buf;		/* buffer for IPC_INFO */
+++	#endif
+++	};
++ #endif
++ 	union semun semu;
++ 	
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
