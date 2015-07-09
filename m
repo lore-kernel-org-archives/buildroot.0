@@ -1,33 +1,33 @@
 From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-Date: Thu,  9 Jul 2015 18:21:58 +0200
-Subject: [Buildroot] [PATCH 4/7 v2] pkg-cmake: add PKG_CONFIG_* variables to
-	help cmake find host packages
+Date: Thu,  9 Jul 2015 18:21:56 +0200
+Subject: [Buildroot] [PATCH 2/7 v2] libaio: add host variant
 In-Reply-To: <1436458921-4199-1-git-send-email-sylvain.raybaud@green-communications.fr>
 References: <1436458921-4199-1-git-send-email-sylvain.raybaud@green-communications.fr>
-Message-ID: <1436458921-4199-5-git-send-email-sylvain.raybaud@green-communications.fr>
+Message-ID: <1436458921-4199-3-git-send-email-sylvain.raybaud@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+host-libaio is needed to build host-mysql in its mariadb variant which is needed to build the target variant of mariadb.
+
 Signed-off-by: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
 ---
- package/pkg-cmake.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Changes v1 -> v2:
+  Explain why we need to build host-libaio in commit log (suggested by Yann E. Morin)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index f17a883..a757a2b 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -111,6 +111,8 @@ define $(2)_CONFIGURE_CMDS
- 	cd $$($$(PKG)_BUILDDIR) && \
- 	rm -f CMakeCache.txt && \
- 	PATH=$$(BR_PATH) \
-+	PKG_CONFIG_PATH='$$(HOST_DIR)/usr/lib/pkgconfig' \
-+	PKG_CONFIG_SYSROOT_DIR='$$(HOST_DIR)' \
- 	$$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
- 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
- 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
+ package/libaio/libaio.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
+index 53ad7eb..55e2cc7 100644
+--- a/package/libaio/libaio.mk
++++ b/package/libaio/libaio.mk
+@@ -24,3 +24,4 @@ define LIBAIO_INSTALL_TARGET_CMDS
+ endef
+ 
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 1.9.1
