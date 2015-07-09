@@ -1,41 +1,63 @@
 From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-Date: Thu,  9 Jul 2015 18:21:59 +0200
-Subject: [Buildroot] [PATCH 5/7 v2] busybox: adjust configuration to add
-	fancy options to the sleep applet
+Date: Thu,  9 Jul 2015 18:22:00 +0200
+Subject: [Buildroot] [PATCH 6/7 v2] mysql: move patches into a
+	version-specific subdirectory
 In-Reply-To: <1436458921-4199-1-git-send-email-sylvain.raybaud@green-communications.fr>
 References: <1436458921-4199-1-git-send-email-sylvain.raybaud@green-communications.fr>
-Message-ID: <1436458921-4199-6-git-send-email-sylvain.raybaud@green-communications.fr>
+Message-ID: <1436458921-4199-7-git-send-email-sylvain.raybaud@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set CONFIGURE_FEATURE_FANCY_SLEEP and CONFIG_FEATURE_FLOAT_SLEEP so that sleep accept floating point arguments.
-This add 492 bytes to the busybox binary compiled for arm or 2748 bytes when compiled for i386.
+This will make possible to apply a different set of patches for mysql and mariadb variants.
 
 Signed-off-by: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
 ---
-Changes v1 -> v2:
- - Add information about the impact on busybox binary size induced by patching busybox.config (suggested by Thomas Petazzoni)
+ package/mysql/{ => 5.1}/0000-ac_cache_check.patch                    | 0
+ package/mysql/{ => 5.1}/0001-configure-ps-cache-check.patch          | 0
+ package/mysql/{ => 5.1}/0002-use-new-readline-iface.patch            | 0
+ package/mysql/{ => 5.1}/0003-ac_stack_direction-is-unset.patch       | 0
+ package/mysql/{ => 5.1}/0004-Fix-gen_lex_hash-execution.patch        | 0
+ package/mysql/{ => 5.1}/0005-bison_3_breaks_mysql_server_build.patch | 0
+ package/mysql/{ => 5.1}/0006-no-force-static-build.patch             | 0
+ 7 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/mysql/{ => 5.1}/0000-ac_cache_check.patch (100%)
+ rename package/mysql/{ => 5.1}/0001-configure-ps-cache-check.patch (100%)
+ rename package/mysql/{ => 5.1}/0002-use-new-readline-iface.patch (100%)
+ rename package/mysql/{ => 5.1}/0003-ac_stack_direction-is-unset.patch (100%)
+ rename package/mysql/{ => 5.1}/0004-Fix-gen_lex_hash-execution.patch (100%)
+ rename package/mysql/{ => 5.1}/0005-bison_3_breaks_mysql_server_build.patch (100%)
+ rename package/mysql/{ => 5.1}/0006-no-force-static-build.patch (100%)
 
- package/busybox/busybox.config | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index 9d930d1..8d1d80a 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -273,8 +273,8 @@ CONFIG_SHA256SUM=y
- CONFIG_SHA512SUM=y
- CONFIG_SHA3SUM=y
- CONFIG_SLEEP=y
--# CONFIG_FEATURE_FANCY_SLEEP is not set
--# CONFIG_FEATURE_FLOAT_SLEEP is not set
-+CONFIG_FEATURE_FANCY_SLEEP=y
-+CONFIG_FEATURE_FLOAT_SLEEP=y
- CONFIG_SORT=y
- CONFIG_FEATURE_SORT_BIG=y
- # CONFIG_SPLIT is not set
+diff --git a/package/mysql/0000-ac_cache_check.patch b/package/mysql/5.1/0000-ac_cache_check.patch
+similarity index 100%
+rename from package/mysql/0000-ac_cache_check.patch
+rename to package/mysql/5.1/0000-ac_cache_check.patch
+diff --git a/package/mysql/0001-configure-ps-cache-check.patch b/package/mysql/5.1/0001-configure-ps-cache-check.patch
+similarity index 100%
+rename from package/mysql/0001-configure-ps-cache-check.patch
+rename to package/mysql/5.1/0001-configure-ps-cache-check.patch
+diff --git a/package/mysql/0002-use-new-readline-iface.patch b/package/mysql/5.1/0002-use-new-readline-iface.patch
+similarity index 100%
+rename from package/mysql/0002-use-new-readline-iface.patch
+rename to package/mysql/5.1/0002-use-new-readline-iface.patch
+diff --git a/package/mysql/0003-ac_stack_direction-is-unset.patch b/package/mysql/5.1/0003-ac_stack_direction-is-unset.patch
+similarity index 100%
+rename from package/mysql/0003-ac_stack_direction-is-unset.patch
+rename to package/mysql/5.1/0003-ac_stack_direction-is-unset.patch
+diff --git a/package/mysql/0004-Fix-gen_lex_hash-execution.patch b/package/mysql/5.1/0004-Fix-gen_lex_hash-execution.patch
+similarity index 100%
+rename from package/mysql/0004-Fix-gen_lex_hash-execution.patch
+rename to package/mysql/5.1/0004-Fix-gen_lex_hash-execution.patch
+diff --git a/package/mysql/0005-bison_3_breaks_mysql_server_build.patch b/package/mysql/5.1/0005-bison_3_breaks_mysql_server_build.patch
+similarity index 100%
+rename from package/mysql/0005-bison_3_breaks_mysql_server_build.patch
+rename to package/mysql/5.1/0005-bison_3_breaks_mysql_server_build.patch
+diff --git a/package/mysql/0006-no-force-static-build.patch b/package/mysql/5.1/0006-no-force-static-build.patch
+similarity index 100%
+rename from package/mysql/0006-no-force-static-build.patch
+rename to package/mysql/5.1/0006-no-force-static-build.patch
 -- 
 1.9.1
