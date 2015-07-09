@@ -1,42 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Jul 2015 08:55:16 +0200
-Subject: [Buildroot] [git commit] openssl: drop !static dependency from
-	OPENSSL_BIN option
-Message-ID: <20150709065651.44B3F7FFA8@busybox.osuosl.org>
+Date: Thu, 09 Jul 2015 08:57:47 +0200
+Subject: [Buildroot] Buildroot hackaton this WE
+In-Reply-To: <20150707195700.1b951619@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 7 Jul 2015 19:57:00 +0200")
+References: <20150707195700.1b951619@free-electrons.com>
+Message-ID: <87pp41lswk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ecd8e9b238fdac958a9174984c8e64e79c866ebe
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-The dependency doesn't make sense now that the option only controls if the
-built binary gets installed into the target or not, so drop it.
+ > Hello,
+ > Six Buildroot developers will be gathering this WE for a hackaton, from
+ > Friday evening (July 10) to Wednesday morning (July 15), which means 4
+ > full days of work on Buildroot.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openssl/Config.in |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ > The participants will be Samuel Martin, Arnout Vandecappelle, Yann E.
+ > Morin, Maxime Hadjinlian, Romain Naour and myself. We will be meeting
+ > in my place, near Toulouse, France.
 
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index 0785253..e08b648 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -15,15 +15,11 @@ if BR2_PACKAGE_OPENSSL
- 
- config BR2_PACKAGE_OPENSSL_BIN
- 	bool "openssl binary"
--	depends on !BR2_STATIC_LIBS
- 	help
- 	  Install the openssl binary and the associated helper scripts to the
- 	  target file system. This is a command line tool for doing various
- 	  cryptographic stuff.
- 
--comment "openssl binary needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
--
- config BR2_PACKAGE_OPENSSL_ENGINES
- 	bool "openssl additional engines"
- 	help
+Enjoy and thanks for arranging this! Its a pity that I cannot make it.
+
+-- 
+Bye, Peter Korsgaard
