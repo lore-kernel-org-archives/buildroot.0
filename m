@@ -1,19 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  9 Jul 2015 15:45:13 -0300
-Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.2d
-Message-ID: <1436467513-27739-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Jul 2015 22:03:05 +0200
+Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.2d
+Message-ID: <20150709200311.44B6E81951@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=d4e547438cf3add7ad7c816e8fbcb8dd205cac20
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixes CVE-2015-1793 - Alternative chains certificate forgery.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openssl/openssl.hash | 6 ++----
- package/openssl/openssl.mk   | 2 +-
+ package/openssl/openssl.hash |    6 ++----
+ package/openssl/openssl.mk   |    2 +-
  2 files changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
@@ -40,5 +44,3 @@ index 37c640d..3d87919 100644
  OPENSSL_SITE = http://www.openssl.org/source
  OPENSSL_LICENSE = OpenSSL or SSLeay
  OPENSSL_LICENSE_FILES = LICENSE
--- 
-2.3.6
