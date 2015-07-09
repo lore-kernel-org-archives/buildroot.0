@@ -1,68 +1,103 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 9 Jul 2015 06:14:32 +0300
-Subject: [Buildroot] [PATCH v2 1/1] e2fsprogs: remove busybox tune2fs
- when installing full version
-In-Reply-To: <1436392260-55786-1-git-send-email-ryan.barnett@rockwellcollins.com>
-References: <1436392260-55786-1-git-send-email-ryan.barnett@rockwellcollins.com>
-Message-ID: <20150709031432.GG12326@tarshish>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Thu,  9 Jul 2015 05:17:05 +0200
+Subject: [Buildroot] [PATCH 1/1] quazip: new package
+Message-ID: <1436411825-25588-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ryan,
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+---
+ package/Config.in          |  1 +
+ package/quazip/Config.in   |  9 +++++++++
+ package/quazip/quazip.hash |  2 ++
+ package/quazip/quazip.mk   | 39 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 51 insertions(+)
+ create mode 100644 package/quazip/Config.in
+ create mode 100644 package/quazip/quazip.hash
+ create mode 100644 package/quazip/quazip.mk
 
-On Wed, Jul 08, 2015 at 04:51:00PM -0500, Ryan Barnett wrote:
-> Currently, busybox installs a version of tune2fs in /sbin/ while
-> e2fsprogs installs at /usr/sbin/. This causes issues if a user is
-> expecting the to use the full version from a prompt via 'tune2fs'
-> since busybox's tune2fs will be found first from the default path
-> search.
-> 
-> Fix this by removing the busybox version of tune2fs when a user has
-> selected the option to install tune2fs from e2fsprogs.
-> 
-> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-
-baruch
-
-> ---
-> Changes v1 -> v2:
->   - add condition depenencies on busybox (suggested by Baruch)
-> ---
->  package/e2fsprogs/e2fsprogs.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-> index e0c4ee2..e6a5027 100644
-> --- a/package/e2fsprogs/e2fsprogs.mk
-> +++ b/package/e2fsprogs/e2fsprogs.mk
-> @@ -36,7 +36,8 @@ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
->  E2FSPROGS_CONF_ENV += LIBS=-lintl
->  endif
->  
-> -E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
-> +E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux \
-> +	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
->  
->  E2FSPROGS_MAKE_OPTS = \
->  	LDCONFIG=true
-> @@ -102,7 +103,11 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_E2FSCK),y)
->  E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_E2FSCK_SYMLINKS
->  endif
->  
-> +# Remove busybox tune2fs and e2label since that will take precedence full version
->  define E2FSPROGS_TARGET_TUNE2FS_SYMLINK
-> +	$(if $(BR2_PACKAGE_BUSYBOX), \
-> +		rm -f $(TARGET_DIR)/sbin/tune2fs; \
-> +		rm -f $(TARGET_DIR)/sbin/e2label;)
->  	ln -sf e2label $(TARGET_DIR)/usr/sbin/tune2fs
->  endef
-
+diff --git a/package/Config.in b/package/Config.in
+index d9b0794..5c383ac 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -263,6 +263,7 @@ comment "QT libraries and helper libraries"
+ 	source "package/qextserialport/Config.in"
+ 	source "package/qjson/Config.in"
+ 	source "package/qtuio/Config.in"
++	source "package/quazip/Config.in"
+ 	source "package/qwt/Config.in"
+ endif
+ 	source "package/weston/Config.in"
+diff --git a/package/quazip/Config.in b/package/quazip/Config.in
+new file mode 100644
+index 0000000..8c41478
+--- /dev/null
++++ b/package/quazip/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_QUAZIP
++	bool "quazip"
++	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
++    select BR2_PACKAGE_ZLIB
++	help
++	  QuaZIP is a simple C++ wrapper over Gilles Vollant's ZIP/UNZIP package
++	  that can be used to access ZIP archives. It uses the Qt toolkit.
++
++	  http://quazip.sourceforge.net
+diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
+new file mode 100644
+index 0000000..84b56c7
+--- /dev/null
++++ b/package/quazip/quazip.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 78c984103555c51e6f7ef52e3a2128e2beb9896871b2cc4d4dbd4d64bff132de quazip-0.7.1.tar.gz
+diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
+new file mode 100644
+index 0000000..ff3f4eb
+--- /dev/null
++++ b/package/quazip/quazip.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# quazip
++#
++################################################################################
++
++QUAZIP_VERSION = 0.7.1
++QUAZIP_SITE = http://sourceforge.net/projects/quazip/files/quazip/$(QUAZIP_VERSION)/
++QUAZIP_SOURCE=quazip-$(QUAZIP_VERSION).tar.gz
++QUAZIP_INSTALL_STAGING = YES
++QUAZIP_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_QT),qt) \
++	$(if $(BR2_PACKAGE_QT5),qt5base)
++QUAZIP_LICENSE = LGPLv2.1
++QUAZIP_LICENSE_FILES = COPYING.lib
++
++ifeq ($(BR2_PACKAGE_QT5),y)
++QUAZIP_QMAKE=$(QT5_QMAKE)
++else
++QUAZIP_QMAKE=$(QT_QMAKE)
++endif
++
++define QUAZIP_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(QUAZIP_QMAKE) PREFIX=/usr)
++endef
++
++define QUAZIP_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QUAZIP_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
++endef
++
++define QUAZIP_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
++endef
++
++$(eval $(generic-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.4
