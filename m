@@ -1,165 +1,28 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 9 Jul 2015 09:07:35 +0200
-Subject: [Buildroot] Buildroot Mono Compile fails on mscorlib
-In-Reply-To: <D1C2FD1C.19800%r.salomons@ropesolutions.nl>
-References: <1436336880640-104945.post@n4.nabble.com>
- <20150708135209.18da05f9@free-electrons.com>
- <D1C2DD1B.197E2%r.salomons@ropesolutions.nl>
- <20150708140347.223be2e4@free-electrons.com>
- <D1C2FD1C.19800%r.salomons@ropesolutions.nl>
-Message-ID: <CA+TH9VnkybC+gOHCDA5tXfOEsAV-YGuxih=d190XnQqT8RavEA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 09 Jul 2015 09:17:43 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-07-08
+In-Reply-To: <20150709063009.DE905100B0F@stock.ovh.net> (Thomas Petazzoni's
+ message of "Thu, 9 Jul 2015 08:30:09 +0200 (CEST)")
+References: <20150709063009.DE905100B0F@stock.ovh.net>
+Message-ID: <87lheplrzc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+ > Build statistics for 2015-07-08
+ > ===============================
 
-2015-07-08 15:57 GMT+02:00 salorob <r.salomons@ropesolutions.nl>:
->
-> Hi There,
->
-> I tried building with the mono and monolite packages from the 2015_08 build root. But that won?t work either.
-> I?m using another build root version: 2014_02
+ >         success : 2  
+ >        failures : 1  
+ >        timeouts : 0  
+ >           TOTAL : 3  
 
-
-As suggested by Thomas, please download and the latest official
-version of buildroot here:
-
-http://buildroot.org/downloads/buildroot-2015.05.tar.gz
-
-Then, try to compile mono and if you find some errors, please attach
-your config and the error log.
-
->
->
-> I can imaging i can?t just take this and that from different versions, but I thought 2 packages mono might not be so harmfull.
-> Probably I?m missing a library, or a config thing, but I don?t know what?
-
-
-Mono was not included in 2014.02 for sure, so potentially you
-introduced a bug trying to backport mono to an older version.
-
-Sincerely, Angelo
-
->
->
-> Config file is attached, and here is the error output once again:
->
-> make[3]: Leaving directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/data'
-> Making all in runtime
-> make[3]: Entering directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/runtime'
-> if test -w /home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/mcs; then :; else chmod -R +w /home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/mcs; fi
-> cd /home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/mcs && /usr/bin/make --no-print-directory -s NO_DIR_CHECK=1 PROFILES='binary_reference_assemblies net_4_5 xbuild_12 xbuild_14   ' CC='/usr/bin/gcc' all-profiles
-> make[7]: mcs: Command not found
-> make[7]: *** [build/deps/basic-profile-check.exe] Error 127
-> *** The compiler 'mcs' doesn't appear to be usable.
-> *** Trying the 'monolite' directory.
-> Bootstrap compiler: Mono C# compiler version 4.1.0.0
-> MCS     [net_4_5] mscorlib.dll
->
-> Unhandled Exception:
-> Nested exception detected.
-> Original Exception: at Mono.CSharp.Driver.Main (string[]) <0x00048>
->
-> Nested exception:at System.Threading.Thread.get_CurrentThread () <0x00025>
-> at System.Globalization.NumberFormatInfo.get_CurrentInfo () <0x00008>
-> at System.Globalization.NumberFormatInfo.GetInstance (System.IFormatProvider) <0x00069>
-> at int.ToString (string,System.IFormatProvider) <0x00026>
-> at string.FormatHelper (System.Text.StringBuilder,System.IFormatProvider,string,object[]) <0x0055f>
-> at System.Text.StringBuilder.AppendFormat (System.IFormatProvider,string,object[]) <0x0001b>
-> at System.Text.StringBuilder.AppendFormat (string,object) <0x00052>
-> at System.Exception.AddFrames (System.Text.StringBuilder,string,string,System.Diagnostics.StackTrace) <0x00249>
-> at System.Exception.get_StackTrace () <0x0016b>
-> at System.Exception.ToString () <0x0010a>
-> at System.Exception.ToString () <0x000c4>
->
->
-> [ERROR] FATAL UNHANDLED EXCEPTION: Nested exception detected.
-> Original Exception: at Mono.CSharp.Driver.Main (string[]) <0x00048>
->
-> Nested exception:at System.Threading.Thread.get_CurrentThread () <0x00025>
-> at System.Globalization.NumberFormatInfo.get_CurrentInfo () <0x00008>
-> at System.Globalization.NumberFormatInfo.GetInstance (System.IFormatProvider) <0x00069>
-> at int.ToString (string,System.IFormatProvider) <0x00026>
-> at string.FormatHelper (System.Text.StringBuilder,System.IFormatProvider,string,object[]) <0x0055f>
-> at System.Text.StringBuilder.AppendFormat (System.IFormatProvider,string,object[]) <0x0001b>
-> at System.Text.StringBuilder.AppendFormat (string,object) <0x00052>
-> at System.Exception.AddFrames (System.Text.StringBuilder,string,string,System.Diagnostics.StackTrace) <0x00249>
-> at System.Exception.get_StackTrace () <0x0016b>
-> at System.Exception.ToString () <0x0010a>
-> at System.Exception.ToString () <0x000c4>
->
->
-> make[9]: *** [../../class/lib/net_4_5/mscorlib.dll] Error 1
-> make[8]: *** [do-all] Error 2
-> make[7]: *** [all-recursive] Error 1
-> make[6]: *** [all-recursive] Error 1
-> make[5]: *** [profile-do--net_4_5--all] Error 2
-> make[4]: *** [profiles-do--all] Error 2
-> make[3]: *** [all-local] Error 2
-> make[3]: Leaving directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/runtime'
-> make[2]: *** [all-recursive] Error 1
-> make[2]: Leaving directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0'
-> make[1]: *** [all] Error 2
-> make[1]: Leaving directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0'
-> make: *** [/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/.stamp_built] Error 2
->
->
-> Thanks in advance,
->
-> From: "Thomas Petazzoni-2 [via Buildroot ] (busybox)" <[hidden email]>
-> Date: woensdag 8 juli 2015 13:41
-> To: Robert Salomons <[hidden email]>
-> Subject: Re: Buildroot Mono Compile fails on mscorlib
->
-> Hello,
->
-> On Wed, 8 Jul 2015 04:38:06 -0700 (PDT), salorob wrote:
->
-> > Well, the post was created online, for some reason it didn't email the bits between the <raw> tags.
-> >
-> > I'll try the packages from the original repository first, and will get back with that.
->
-> Yes, please try the official Buildroot, and if you get a build failure,
-> make sure to include in your report: 1/ the exact Buildroot version you
-> have used and 2/ a minimal Buildroot .config file that exhibits the
-> issue so that we can easily reproduce.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> [hidden email]
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
-> ________________________________
-> If you reply to this email, your message will be added to the discussion below:
-> http://buildroot-busybox.2317881.n4.nabble.com/Buildroot-Mono-Compile-fails-on-mscorlib-tp104945p104967.html
-> To unsubscribe from Buildroot Mono Compile fails on mscorlib, click here.
-> NAML
->
-> config (53K) Download Attachment
->
-> ________________________________
-> View this message in context: Re: Buildroot Mono Compile fails on mscorlib
-> Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+Huh, what happened?
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Bye, Peter Korsgaard
