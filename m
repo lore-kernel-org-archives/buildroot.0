@@ -1,107 +1,202 @@
-From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-Date: Thu, 09 Jul 2015 12:42:07 +0200
-Subject: [Buildroot] [PATCH 0/7] Set of patches to add MariaDB galera
-	cluster
-In-Reply-To: <1435929086-21205-1-git-send-email-sylvain.raybaud@green-communications.fr>
-References: <1435929086-21205-1-git-send-email-sylvain.raybaud@green-communications.fr>
-Message-ID: <559E4FFF.4090002@green-communications.fr>
+From: salorob <r.salomons@ropesolutions.nl>
+Date: Thu, 9 Jul 2015 04:34:08 -0700 (PDT)
+Subject: [Buildroot] Buildroot Mono Compile fails on mscorlib
+In-Reply-To: <CA+TH9VnkybC+gOHCDA5tXfOEsAV-YGuxih=d190XnQqT8RavEA@mail.gmail.com>
+References: <1436336880640-104945.post@n4.nabble.com>
+ <20150708135209.18da05f9@free-electrons.com>
+ <D1C2DD1B.197E2%r.salomons@ropesolutions.nl>
+ <20150708140347.223be2e4@free-electrons.com>
+ <D1C2FD1C.19800%r.salomons@ropesolutions.nl>
+ <CA+TH9VnkybC+gOHCDA5tXfOEsAV-YGuxih=d190XnQqT8RavEA@mail.gmail.com>
+Message-ID: <D1C42D62.19876%r.salomons@ropesolutions.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+OK. I have to admit, taking a random config in 2015_08 build root works as expected.
 
-Hi
+However, I cannot ?just? update my build root, as the supplier of the cpu has not updated build root to latest version. I will consult him too.
 
-Thanks for your feedback. I'm working now on v2.
+What would you suggest I try when I do want to run Mono on my machine?
 
-Cheers,
+Kind regards,
 
-Sylvain
+Robert
 
-On 03/07/2015 15:11, Sylvain Raybaud wrote:
-> Add MariaDB Galera Cluster as an alternative implementation of
-> MySQL, inside package/mysql. Also add galera which is needed for
-> running a cluster and check on which galera depends. Introduce a
-> few other minor modifications to busybox.config and libaio.mk
-> necessary to make this work.
-> 
-> Sylvain Raybaud (7): Add package check: unit test library Add rule
-> to build host-libaio Add package galera: wsrep provider for mysql
-> and mariadb Add PKG_CONFIG_* variables to help cmake find
-> host-packages Add fancy options to busybox sleep, like float
-> arguments Move mysql patches to version specific subdirectory 
-> Propose mariadb galera cluster as an alternative to standard mysql 
-> implementation, inside msyql package
-> 
-> package/Config.in                                  |   2 + 
-> package/busybox/busybox.config                     |   4 +- 
-> package/check/Config.in                            |   7 + 
-> package/check/check.hash                           |   2 + 
-> package/check/check.mk                             |  20 ++ 
-> package/galera/Config.in                           |   9 + 
-> ...lera-01-fix_sconstruct_for-crosscompiling.patch |  52 +++++ 
-> package/galera/galera.hash                         |   2 + 
-> package/galera/galera.mk                           |  63 ++++++ 
-> package/libaio/libaio.mk                           |   1 + 
-> .../mariadb-galera-01-fix_xtradb_cmakelist.patch   |  27 +++ 
-> .../mariadb-galera-02-fix_innodb_cmakelist.patch   | 251
-> +++++++++++++++++++++ package/mysql/{ =>
-> 5.1}/0000-ac_cache_check.patch  |   0 .../{ =>
-> 5.1}/0001-configure-ps-cache-check.patch  |   0 .../{ =>
-> 5.1}/0002-use-new-readline-iface.patch    |   0 
-> .../0003-ac_stack_direction-is-unset.patch         |   0 
-> .../0004-Fix-gen_lex_hash-execution.patch          |   0 
-> .../0005-bison_3_breaks_mysql_server_build.patch   |   0 .../{ =>
-> 5.1}/0006-no-force-static-build.patch     |   0 
-> package/mysql/Config.in                            |  43 +++- 
-> package/mysql/mariadb-galera-cluster.cnf           | 204
-> +++++++++++++++++ package/mysql/mysql.hash
-> |   2 + package/mysql/mysql.mk                             | 216
-> +++++++++++++++--- package/pkg-cmake.mk
-> |   2 + 24 files changed, 869 insertions(+), 38 deletions(-) create
-> mode 100644 package/check/Config.in create mode 100644
-> package/check/check.hash create mode 100644 package/check/check.mk 
-> create mode 100644 package/galera/Config.in create mode 100644
-> package/galera/galera-01-fix_sconstruct_for-crosscompiling.patch 
-> create mode 100644 package/galera/galera.hash create mode 100644
-> package/galera/galera.mk create mode 100644
-> package/mysql/10.0.17/mariadb-galera-01-fix_xtradb_cmakelist.patch 
-> create mode 100644
-> package/mysql/10.0.17/mariadb-galera-02-fix_innodb_cmakelist.patch 
-> rename package/mysql/{ => 5.1}/0000-ac_cache_check.patch (100%) 
-> rename package/mysql/{ => 5.1}/0001-configure-ps-cache-check.patch
-> (100%) rename package/mysql/{ =>
-> 5.1}/0002-use-new-readline-iface.patch (100%) rename
-> package/mysql/{ => 5.1}/0003-ac_stack_direction-is-unset.patch
-> (100%) rename package/mysql/{ =>
-> 5.1}/0004-Fix-gen_lex_hash-execution.patch (100%) rename
-> package/mysql/{ =>
-> 5.1}/0005-bison_3_breaks_mysql_server_build.patch (100%) rename
-> package/mysql/{ => 5.1}/0006-no-force-static-build.patch (100%) 
-> create mode 100644 package/mysql/mariadb-galera-cluster.cnf
-> 
 
-- -- 
-Sylvain Raybaud
-www.green-communications.fr
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+From: "Angelo Compagnucci [via Buildroot ] (busybox)" <ml-node+s2317881n105020h5 at n4.nabble.com<mailto:ml-node+s2317881n105020h5@n4.nabble.com>>
+Date: donderdag 9 juli 2015 08:45
+To: Robert Salomons <r.salomons at ropesolutions.nl<mailto:r.salomons@ropesolutions.nl>>
+Subject: Re: Buildroot Mono Compile fails on mscorlib
 
-iQIcBAEBAgAGBQJVnk//AAoJEEkkwl4JtJ9yY6QP/is7LgHwpoAIdASFBJYs+FRg
-e1EVRzB9NDBOitmWpAJCVIH8xmFMBKeq4TNsQTTXT0DE+95z9npwQ2uxmun+G5/I
-SXShmcN1CM4JU9mRNsSJ45O9x6zCIG/YeXplgePKdIutef6pekbYCkGXcIqqD5/t
-/WOHEmFIojuX+LjNuYih0fxKq4VQPrDudhbT/nxz0smFE+B0ci7RA6a4dJOhy4tx
-hAq0VIJhPUoOyeM2xMWcChNHz+6pMGB29CJfccsJ99wcC9FvjDhSHDqwDWs8TuGu
-YBuDLvrEzSsZ5dH8hO88eSN+eadPwHW1pJBTlxw3D6f1naknihdT4m5zf7Jo2Fic
-MV8NOWigxE7+rJSK0k5DmyzZe+5EU6/k+0k72ZV2LfUZX+RgCTYyP5TLULS3lhF5
-YSKtVhHcXVCxN8zd8QyB9H+8lGp9XZL7ml8Q95ahoM3Xt2hfCw2mLJ1RMMOdP5Af
-Ilww0Bas0OGVc6jzRbaKE99HcBBamKCuGISBRSrjmPGSeoGFIEDZMZX0ocLu10zu
-jfengk7WjVPSDCh5laiYggXVkii7zbF9I3ydNgmgw/oY5km1xNhsNWQ2J/oPhw8j
-/xjDTqcTv9SyW1lmE+6nIsYCVN1fXWgYEPt5+OFWhQCHX91ynqHbeDx3WH1Ls4JR
-xDG2zFEXKrbEpVwigMe5
-=so17
------END PGP SIGNATURE-----
+Hello,
+
+
+2015-07-08 15:57 GMT+02:00 salorob <[hidden email]</user/SendEmail.jtp?type=node&node=105020&i=0>>:
+>
+> Hi There,
+>
+> I tried building with the mono and monolite packages from the 2015_08 build root. But that won?t work either.
+> I?m using another build root version: 2014_02
+
+
+As suggested by Thomas, please download and the latest official
+version of buildroot here:
+
+http://buildroot.org/downloads/buildroot-2015.05.tar.gz
+
+Then, try to compile mono and if you find some errors, please attach
+your config and the error log.
+
+>
+>
+> I can imaging i can?t just take this and that from different versions, but I thought 2 packages mono might not be so harmfull.
+> Probably I?m missing a library, or a config thing, but I don?t know what?
+
+
+Mono was not included in 2014.02 for sure, so potentially you
+introduced a bug trying to backport mono to an older version.
+
+Sincerely, Angelo
+
+>
+>
+> Config file is attached, and here is the error output once again:
+>
+> make[3]: Leaving directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/data'
+> Making all in runtime
+> make[3]: Entering directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/runtime'
+> if test -w /home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/mcs; then :; else chmod -R +w /home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/mcs; fi
+> cd /home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/mcs && /usr/bin/make --no-print-directory -s NO_DIR_CHECK=1 PROFILES='binary_reference_assemblies net_4_5 xbuild_12 xbuild_14   ' CC='/usr/bin/gcc' all-profiles
+> make[7]: mcs: Command not found
+> make[7]: *** [build/deps/basic-profile-check.exe] Error 127
+> *** The compiler 'mcs' doesn't appear to be usable.
+> *** Trying the 'monolite' directory.
+> Bootstrap compiler: Mono C# compiler version 4.1.0.0
+> MCS     [net_4_5] mscorlib.dll
+>
+> Unhandled Exception:
+> Nested exception detected.
+> Original Exception: at Mono.CSharp.Driver.Main (string[]) <0x00048>
+>
+> Nested exception:at System.Threading.Thread.get_CurrentThread () <0x00025>
+> at System.Globalization.NumberFormatInfo.get_CurrentInfo () <0x00008>
+> at System.Globalization.NumberFormatInfo.GetInstance (System.IFormatProvider) <0x00069>
+> at int.ToString (string,System.IFormatProvider) <0x00026>
+> at string.FormatHelper (System.Text.StringBuilder,System.IFormatProvider,string,object[]) <0x0055f>
+> at System.Text.StringBuilder.AppendFormat (System.IFormatProvider,string,object[]) <0x0001b>
+> at System.Text.StringBuilder.AppendFormat (string,object) <0x00052>
+> at System.Exception.AddFrames (System.Text.StringBuilder,string,string,System.Diagnostics.StackTrace) <0x00249>
+> at System.Exception.get_StackTrace () <0x0016b>
+> at System.Exception.ToString () <0x0010a>
+> at System.Exception.ToString () <0x000c4>
+>
+>
+> [ERROR] FATAL UNHANDLED EXCEPTION: Nested exception detected.
+> Original Exception: at Mono.CSharp.Driver.Main (string[]) <0x00048>
+>
+> Nested exception:at System.Threading.Thread.get_CurrentThread () <0x00025>
+> at System.Globalization.NumberFormatInfo.get_CurrentInfo () <0x00008>
+> at System.Globalization.NumberFormatInfo.GetInstance (System.IFormatProvider) <0x00069>
+> at int.ToString (string,System.IFormatProvider) <0x00026>
+> at string.FormatHelper (System.Text.StringBuilder,System.IFormatProvider,string,object[]) <0x0055f>
+> at System.Text.StringBuilder.AppendFormat (System.IFormatProvider,string,object[]) <0x0001b>
+> at System.Text.StringBuilder.AppendFormat (string,object) <0x00052>
+> at System.Exception.AddFrames (System.Text.StringBuilder,string,string,System.Diagnostics.StackTrace) <0x00249>
+> at System.Exception.get_StackTrace () <0x0016b>
+> at System.Exception.ToString () <0x0010a>
+> at System.Exception.ToString () <0x000c4>
+>
+>
+> make[9]: *** [../../class/lib/net_4_5/mscorlib.dll] Error 1
+> make[8]: *** [do-all] Error 2
+> make[7]: *** [all-recursive] Error 1
+> make[6]: *** [all-recursive] Error 1
+> make[5]: *** [profile-do--net_4_5--all] Error 2
+> make[4]: *** [profiles-do--all] Error 2
+> make[3]: *** [all-local] Error 2
+> make[3]: Leaving directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/runtime'
+> make[2]: *** [all-recursive] Error 1
+> make[2]: Leaving directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0'
+> make[1]: *** [all] Error 2
+> make[1]: Leaving directory `/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0'
+> make: *** [/home/parallels/ICnova_2014_02/output/build/host-mono-4.0.0/.stamp_built] Error 2
+>
+>
+> Thanks in advance,
+>
+> From: "Thomas Petazzoni-2 [via Buildroot ] (busybox)" <[hidden email]>
+> Date: woensdag 8 juli 2015 13:41
+> To: Robert Salomons <[hidden email]>
+> Subject: Re: Buildroot Mono Compile fails on mscorlib
+>
+> Hello,
+>
+> On Wed, 8 Jul 2015 04:38:06 -0700 (PDT), salorob wrote:
+>
+> > Well, the post was created online, for some reason it didn't email the bits between the <raw> tags.
+> >
+> > I'll try the packages from the original repository first, and will get back with that.
+>
+> Yes, please try the official Buildroot, and if you get a build failure,
+> make sure to include in your report: 1/ the exact Buildroot version you
+> have used and 2/ a minimal Buildroot .config file that exhibits the
+> issue so that we can easily reproduce.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> [hidden email]
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+> ________________________________
+> If you reply to this email, your message will be added to the discussion below:
+> http://buildroot-busybox.2317881.n4.nabble.com/Buildroot-Mono-Compile-fails-on-mscorlib-tp104945p104967.html
+> To unsubscribe from Buildroot Mono Compile fails on mscorlib, click here.
+> NAML
+>
+> config (53K) Download Attachment
+>
+> ________________________________
+> View this message in context: Re: Buildroot Mono Compile fails on mscorlib
+> Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+>
+> _______________________________________________
+> buildroot mailing list
+> [hidden email]</user/SendEmail.jtp?type=node&node=105020&i=1>
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+
+--
+Profile: http://it.linkedin.com/in/compagnucciangelo
+_______________________________________________
+buildroot mailing list
+[hidden email]</user/SendEmail.jtp?type=node&node=105020&i=2>
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+________________________________
+If you reply to this email, your message will be added to the discussion below:
+http://buildroot-busybox.2317881.n4.nabble.com/Buildroot-Mono-Compile-fails-on-mscorlib-tp104945p105020.html
+To unsubscribe from Buildroot Mono Compile fails on mscorlib, click here<http://buildroot-busybox.2317881.n4.nabble.com/template/NamlServlet.jtp?macro=unsubscribe_by_code&node=104945&code=ci5zYWxvbW9uc0Byb3Blc29sdXRpb25zLm5sfDEwNDk0NXwxNzY4ODU2MTA4>.
+NAML<http://buildroot-busybox.2317881.n4.nabble.com/template/NamlServlet.jtp?macro=macro_viewer&id=instant_html%21nabble%3Aemail.naml&base=nabble.naml.namespaces.BasicNamespace-nabble.view.web.template.NabbleNamespace-nabble.view.web.template.NodeNamespace&breadcrumbs=notify_subscribers%21nabble%3Aemail.naml-instant_emails%21nabble%3Aemail.naml-send_instant_email%21nabble%3Aemail.naml>
+
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Buildroot-Mono-Compile-fails-on-mscorlib-tp104945p105033.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150709/55718324/attachment.html>
