@@ -1,37 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jul 2015 09:31:42 +0200
-Subject: [Buildroot] Autobuilder toolchain updates
-In-Reply-To: <87zj36mj6a.fsf@dell.be.48ers.dk>
-References: <20150707232812.603af01f@free-electrons.com>
- <87zj36mj6a.fsf@dell.be.48ers.dk>
-Message-ID: <20150709093142.177044e2@free-electrons.com>
+Date: Thu, 9 Jul 2015 11:29:58 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-07-08
+In-Reply-To: <87lheplrzc.fsf@dell.be.48ers.dk>
+References: <20150709063009.DE905100B0F@stock.ovh.net>
+ <87lheplrzc.fsf@dell.be.48ers.dk>
+Message-ID: <20150709112958.43329535@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Peter, All,
 
-On Wed, 08 Jul 2015 23:30:21 +0200, Peter Korsgaard wrote:
-
->  >  * All Buildroot external toolchains have been rebuilt with today's
->  >    master (commit 85945aa). This means that the default compiler
->  >    version used is gcc 4.9.x. Only toolchain,
->  >    br-arm-cortex-a9-glibc-2015.05-496-g85945aa.tar.bz2, is using gcc
->  >    5.1.x, so that we have at least one toolchain testing this new
->  >    compiler version. One toolchain, the NIOS II, could not be rebuilt
->  >    with the current master as the build fails (it was working on
->  >    2015.05).
+On Thu, 09 Jul 2015 09:17:43 +0200, Peter Korsgaard wrote:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 > 
-> Great, thanks! Does the nios issue look fixable?
+>  > Build statistics for 2015-07-08
+>  > ===============================
+> 
+>  >         success : 2  
+>  >        failures : 1  
+>  >        timeouts : 0  
+>  >           TOTAL : 3  
+> 
+> Huh, what happened?
 
-It is apparently the bump from gcc 4.9.2 to 4.9.3 that caused the
-problem. At least, that's the conclusion of a git bisect done by Yann.
+Amongst the new toolchain configurations listed in the toolchain CSV
+file, there was one typo: the toolchain config URL was invalid. Due to
+this, the Python script has aborted on all autobuilder slaves.
 
-The failure is that some NIOS II specific linux-atomic.c file tries to
-include <asm/unistd.h>, but that file doesn't exist. More investigation
-is needed.
+I've fixed the typo now
+(http://git.buildroot.net/buildroot-test/commit/?id=00e2fb0d241eb2e2f0e9bac35f24d729b2c0d8a2),
+and restarted the autobuilder slaves on the Free Electrons build
+machine and on gcc75.
+
+Could you please restart your autobuilders? Also same for Richard.
+
+Sorry for the mess :-/ The autobuild-run script should maybe be a bit
+more robust against such kind of problems. Patches welcome!
 
 Best regards,
 
