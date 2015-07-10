@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Fri, 10 Jul 2015 18:27:55 -0500
-Subject: [Buildroot] [PATCH v8 09/16] openssh: selinux and pam support
+Date: Fri, 10 Jul 2015 18:27:57 -0500
+Subject: [Buildroot] [PATCH v8 11/16] rsyslog: fix config file comment style
 In-Reply-To: <1436570882-56442-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1436570882-56442-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1436570882-56442-10-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1436570882-56442-12-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,54 +12,70 @@ To: buildroot@busybox.net
 
 From: Matt Weber <matthew.weber@rockwellcollins.com>
 
+The upstream versions of rsyslog (v8 and higher) have this commit to fix
+the config file comment issue. Carry this patch here until the version
+is bumped.
+
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
 ---
 Changes v7 -> v8:
-  - Fixed sed calls to use macro (Suggested by Samuel)
+  - Reverted change to make file in favor of using upstream patch
+    (Suggested by Samuel)
 
 Changes v6 -> v7:
   - No changes
 
 Changes v5 -> v6:
   - No changes
-
-Changes v4 -> v5:
-  - New patch
-  - Added without assignments (Matt W.)
-  - Moved install pam define in conditional (Matt W.)
 ---
- package/openssh/openssh.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ .../rsyslog/0001-fix-config-file-comments.patch    | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/rsyslog/0001-fix-config-file-comments.patch
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 11a844e..a4f4c94 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -30,8 +30,24 @@ endif
- OPENSSH_DEPENDENCIES = zlib openssl
- 
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+define OPENSSH_INSTALL_PAM_CONF
-+	$(INSTALL) -D -m 644 $(@D)/contrib/sshd.pam.generic $(TARGET_DIR)/etc/pam.d/sshd
-+	$(SED) '/password   required     \/lib\/security\/pam_cracklib.so/d' $(TARGET_DIR)/etc/pam.d/sshd
-+	$(SED) 's/\#UsePAM no/UsePAM yes/' $(TARGET_DIR)/etc/ssh/sshd_config
-+endef
+diff --git a/package/rsyslog/0001-fix-config-file-comments.patch b/package/rsyslog/0001-fix-config-file-comments.patch
+new file mode 100644
+index 0000000..bc5448d
+--- /dev/null
++++ b/package/rsyslog/0001-fix-config-file-comments.patch
+@@ -0,0 +1,37 @@
++From fe01c9ec4979c78b6a7caf045cab17ba52d4ad08 Mon Sep 17 00:00:00 2001
++From: Brad Barden <brad+github@mifflinet.net>
++Date: Sun, 11 Jan 2015 17:52:11 -0600
++Subject: [PATCH] bugfix header in platform/redhat/rsyslog.conf
 +
- OPENSSH_DEPENDENCIES += linux-pam
- OPENSSH_CONF_OPTS += --with-pam
-+OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_PAM_CONF
-+else
-+OPENSSH_CONF_OPTS += --without-pam
-+endif
++the "For more information" doc path includes the string "*/", breaking c-style comment format. fixes #202.
++---
++ platform/redhat/rsyslog.conf | 19 +++++++++----------
++ 1 file changed, 9 insertions(+), 10 deletions(-)
 +
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+OPENSSH_DEPENDENCIES += libselinux
-+OPENSSH_CONF_OPTS += --with-selinux
-+else
-+OPENSSH_CONF_OPTS += --without-selinux
- endif
- 
- define OPENSSH_INSTALL_INIT_SYSTEMD
++diff --git a/platform/redhat/rsyslog.conf b/platform/redhat/rsyslog.conf
++index 340874d..3df6c7e 100644
++--- a/platform/redhat/rsyslog.conf
+++++ b/platform/redhat/rsyslog.conf
++@@ -1,13 +1,12 @@
++-/* rsyslog configuration file (for Red Hat-based systems)
++- * note that most of this config file uses old-style format,
++- * because it is well-known AND quite suitable for simple cases
++- * like we have with the default config. For more advanced 
++- * things, RainerScript configuration is suggested.
++- *
++- * For more information see /usr/share/doc/rsyslog-*/rsyslog_conf.html
++- * or latest version online at http://www.rsyslog.com/doc/rsyslog_conf.html 
++- * If you experience problems, see http://www.rsyslog.com/doc/troubleshoot.html
++- */
+++# rsyslog configuration file (for Red Hat-based systems)
+++# note that most of this config file uses old-style format,
+++# because it is well-known AND quite suitable for simple cases
+++# like we have with the default config. For more advanced 
+++# things, RainerScript configuration is suggested.
+++#
+++# For more information see /usr/share/doc/rsyslog-*/rsyslog_conf.html
+++# or latest version online at http://www.rsyslog.com/doc/rsyslog_conf.html 
+++# If you experience problems, see http://www.rsyslog.com/doc/troubleshoot.html
++ 
++ #### MODULES ####
++ 
 -- 
 1.9.1
