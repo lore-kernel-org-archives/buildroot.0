@@ -1,50 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jul 2015 11:09:40 +0200
-Subject: [Buildroot] [git commit] expect: bump to version 5.45.3
-Message-ID: <20150710091809.47D3A819A4@busybox.osuosl.org>
+Date: Fri, 10 Jul 2015 11:18:40 +0200
+Subject: [Buildroot] [PATCH v3 0/3] Use a date for cvs and bump expect
+In-Reply-To: <1430914670-14882-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1430914670-14882-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20150710111840.212e0407@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7859f892e52d9c88c8bee67447132130f78790a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Fabio Porcedda,
 
-Download it from the cvs repository because it is not availabe as a
-downloadable file. Also because a tag isn't available use the date.
+On Wed,  6 May 2015 14:17:47 +0200, Fabio Porcedda wrote:
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/expect/expect.hash |    2 --
- package/expect/expect.mk   |    6 +++---
- 2 files changed, 3 insertions(+), 5 deletions(-)
+> Fabio Porcedda (3):
+>   support/download/cvs: add support to use a date instead of a tag
+>   manual: cvs: document that a branch or a date can be used
+>   expect: bump to version 5.45.3
 
-diff --git a/package/expect/expect.hash b/package/expect/expect.hash
-deleted file mode 100644
-index 09e68e7..0000000
---- a/package/expect/expect.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed:
--sha256  b28dca90428a3b30e650525cdc16255d76bb6ccd65d448be53e620d95d5cc040  expect5.45.tar.gz
-diff --git a/package/expect/expect.mk b/package/expect/expect.mk
-index 8ef7e90..d78ff6c 100644
---- a/package/expect/expect.mk
-+++ b/package/expect/expect.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--EXPECT_VERSION = 5.45
--EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
--EXPECT_SITE = http://downloads.sourceforge.net/project/expect/Expect/$(EXPECT_VERSION)
-+# Version 5.45.3
-+EXPECT_VERSION = 2014-05-02
-+EXPECT_SITE = cvs://expect.cvs.sourceforge.net:/cvsroot/expect
- EXPECT_LICENSE = Public domain
- EXPECT_LICENSE_FILES = README
- 
+Patches applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
