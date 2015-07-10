@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 10 Jul 2015 14:40:06 -0300
-Subject: [Buildroot] [PATCH 1/4] libidn: bump to version 1.31
-Message-ID: <1436550009-30590-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 10 Jul 2015 14:40:07 -0300
+Subject: [Buildroot] [PATCH 2/4] libunistring: bump to version 0.9.6
+In-Reply-To: <1436550009-30590-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1436550009-30590-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1436550009-30590-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libidn/libidn.hash | 4 ++--
- package/libidn/libidn.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libunistring/libunistring.hash | 2 +-
+ package/libunistring/libunistring.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
-index d41443e..6425d55 100644
---- a/package/libidn/libidn.hash
-+++ b/package/libidn/libidn.hash
+diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+index e272997..ba4b642 100644
+--- a/package/libunistring/libunistring.hash
++++ b/package/libunistring/libunistring.hash
 @@ -1,2 +1,2 @@
--# From http://lists.gnu.org/archive/html/help-libidn/2015-03/msg00001.html
--sha1	557e1e37f0978e975b21bcdc243c198cb708bb75	libidn-1.30.tar.gz
-+# From http://lists.gnu.org/archive/html/help-libidn/2015-07/msg00011.html
-+sha1	0bb34003a0fe05a91e60d346803401f16c82a1fb	libidn-1.31.tar.gz
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index 13436e9..e10fb6e 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
+ # Locally calculated after checking pgp signature
+-sha256	0b3f4dbea5124f56639a701376ed78e5f595e7b720cfbb0cf1f81f375894c77b	libunistring-0.9.5.tar.xz
++sha256	2df42eae46743e3f91201bf5c100041540a7704e8b9abfd57c972b2d544de41b	libunistring-0.9.6.tar.xz
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+index 0060518..bb1641e 100644
+--- a/package/libunistring/libunistring.mk
++++ b/package/libunistring/libunistring.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBIDN_VERSION = 1.30
-+LIBIDN_VERSION = 1.31
- LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN_INSTALL_STAGING = YES
- LIBIDN_CONF_ENV = EMACS="no"
+-LIBUNISTRING_VERSION = 0.9.5
++LIBUNISTRING_VERSION = 0.9.6
+ LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
+ LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
+ LIBUNISTRING_INSTALL_STAGING = YES
 -- 
 2.3.6
