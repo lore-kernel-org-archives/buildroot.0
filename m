@@ -1,48 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 10 Jul 2015 08:22:04 -0300
-Subject: [Buildroot] [PATCH] php: security bump to version 5.6.11
-Message-ID: <1436527324-25864-1-git-send-email-gustavo@zacarias.com.ar>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 10 Jul 2015 11:28:32 +0000
+Subject: [Buildroot] [PATCH] quagga: disable PIE on ARC
+In-Reply-To: <559F99A1.8060501@mind.be>
+References: <1436436011-8126-1-git-send-email-abrodkin@synopsys.com>
+ <559EE7E6.401@mind.be> <20150710084455.3462000c@free-electrons.com>
+ <1436515926.2800.26.camel@synopsys.com> <559F99A1.8060501@mind.be>
+Message-ID: <1436527712.2800.46.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2015-3152 - mysqlnd is vulnerable to BACKRONYM
+Hi Arnout,
 
-And other security bugs with no CVE assigned yet:
-Bug #69972 - Use-after-free vulnerability in
-sqlite3SafetyCheckSickOrOk()
-Bug # 69970 - Use-after-free vulnerability in
-spl_recursive_it_move_forward_ex()
+On Fri, 2015-07-10 at 12:08 +0200, Arnout Vandecappelle wrote:
+> On 07/10/15 10:12, Alexey Brodkin wrote:
+> [snip]
+> 
+>  Thanks for the detailed explanation!
+> 
+> > In other words if we disable PIE in Buildroot's toolchain there will be
+> > no way to build U-Boot for ARC. And that's not what we want.
+> 
+>  It's probably getting complicated, but we could add either another option or an
+> environment variable to enable PIE again. E.g. if it's an envrionment variable,
+> then we can do for packages that we know do *not* break with ARC-PIE:
+> 
+> ifneq ($(BR2_arc),)
+> UBOOT_MAKE_ENV += GCC_REALLY_SUPPORT_PIE=1
+> endif
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+We may add that new definition but the question is how it is supposed to work?
+My understanding is once we have gcc built with PIE support it [gcc] will happily
+accept "-pie" flag in command-line and will generate output accordingly.
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 4abf45e..ea12138 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256	1af720c955b0a57aa47606e928616e84c78868aff2a5f269c70601a77d6da8c1	php-5.6.10.tar.xz
-+sha256	3f97dbb1c646b90e1ef638defabe429ef036f903b5baa1c34769d3de4fe62bd4	php-5.6.11.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index afac950..53aaecf 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PHP_VERSION_MAJOR = 5.6
--PHP_VERSION = $(PHP_VERSION_MAJOR).10
-+PHP_VERSION = $(PHP_VERSION_MAJOR).11
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
--- 
-2.3.6
+And we don't know which software packages use PIE or may use (depending on autoconf
+detection).
+
+So the only real solution is to make sure GCC doesn't even accept "-pie" option.
+I assume it's possible to do while we're building GCC itself. But if we do this
+we'll a toolchain that cannot generate PIE executables and there will be no way to
+build U-Boot any longer.
+
+Probably I'm missing something here and you guys may correct me.
+
+>  Question is: is that more complicated that the current per-package workarounds
+> or not?
+
+I really don't like that approach with fixing every package that may use PIE
+but since I don't see any other solution (until PIE gets fixed in both ARc GCC
+and runtime software) I have to go that way.
+
+-Alexey
