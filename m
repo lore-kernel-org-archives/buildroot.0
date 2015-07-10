@@ -1,64 +1,121 @@
-From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-Date: Sat, 11 Jul 2015 01:06:15 +0200
-Subject: [Buildroot] [PATCH 5/7 v2] busybox: adjust configuration to add
- fancy options to the sleep applet
-In-Reply-To: <20150711005826.77335517@free-electrons.com>
-References: <1436458921-4199-1-git-send-email-sylvain.raybaud@green-communications.fr>	<1436458921-4199-6-git-send-email-sylvain.raybaud@green-communications.fr>
- <20150711005826.77335517@free-electrons.com>
-Message-ID: <55A04FE7.10009@green-communications.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 11 Jul 2015 01:06:16 +0200
+Subject: [Buildroot] [PATCH 1/7 v2] check: new package
+In-Reply-To: <1436458921-4199-2-git-send-email-sylvain.raybaud@green-communications.fr>
+References: <1436458921-4199-1-git-send-email-sylvain.raybaud@green-communications.fr>
+ <1436458921-4199-2-git-send-email-sylvain.raybaud@green-communications.fr>
+Message-ID: <20150710230616.GF5469@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Sylvain, All,
 
-Thomas, Samuel, All,
-
-On 11/07/2015 00:58, Thomas Petazzoni wrote:
-> Dear Sylvain Raybaud,
+On 2015-07-09 18:21 +0200, Sylvain Raybaud spake thusly:
+> Add package check: a unit test library.
 > 
-> On Thu,  9 Jul 2015 18:21:59 +0200, Sylvain Raybaud wrote:
->> Set CONFIGURE_FEATURE_FANCY_SLEEP and CONFIG_FEATURE_FLOAT_SLEEP
->> so that sleep accept floating point arguments. This add 492 bytes
->> to the busybox binary compiled for arm or 2748 bytes when
->> compiled for i386.
->> 
->> Signed-off-by: Sylvain Raybaud
->> <sylvain.raybaud@green-communications.fr> --- Changes v1 -> v2: -
->> Add information about the impact on busybox binary size induced
->> by patching busybox.config (suggested by Thomas Petazzoni)
+> Signed-off-by: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
+> ---
 > 
-> Applied, thanks.
+> Changes v1 -> v2:
+>  - Fixed Config.in (suggested by Yann E. Morin)
+>  - Fixed hash file (suggested by Yann E. Morin)
+>  - Changed dependency from pgkconf to host-pkgconf (suggested by Yann E. Morin)
+>  - Fixed license (suggested by Yann E. Morin)
+>  - Leave CHECK_INSTALL_STAGING and CHECK_INSTALL_TARGET to their default values (suggested by Yann E. Morin)
+
+No, you should have kept staging, because it installs a library.
+
+The rule is:
+  - only executable: keep the defaults (target=Y, staging=N)
+  - only installs static libs: target=N, staging=Y
+  - install shared libs: target=Y, staging=Y
+
+So, in your case, you want to keep the default for target, but also
+instal in staging.
+
+Regards,
+Yann E. MORIN.
+
+>  package/Config.in        |  1 +
+>  package/check/Config.in  |  7 +++++++
+>  package/check/check.hash |  2 ++
+>  package/check/check.mk   | 17 +++++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/check/Config.in
+>  create mode 100644 package/check/check.hash
+>  create mode 100644 package/check/check.mk
 > 
-> Next time, can you remember to wrap your commit log to ~72
-> columns?
+> diff --git a/package/Config.in b/package/Config.in
+> index 13a7e74..72ec372 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1014,6 +1014,7 @@ menu "Other"
+>  	source "package/atf/Config.in"
+>  	source "package/bdwgc/Config.in"
+>  	source "package/boost/Config.in"
+> +	source "package/check/Config.in"
+>  	source "package/clapack/Config.in"
+>  	source "package/classpath/Config.in"
+>  	source "package/cppcms/Config.in"
+> diff --git a/package/check/Config.in b/package/check/Config.in
+> new file mode 100644
+> index 0000000..4bdb4c8
+> --- /dev/null
+> +++ b/package/check/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_CHECK
+> +	bool "check"
+> +	select BR2_PACKAGE_LIBTOOL
+> +	select BR2_PACKAGE_PKGCONF
+> +	help
+> +	  Unit testing framework for C
+> +	  http://check.sourceforge.net/
+> diff --git a/package/check/check.hash b/package/check/check.hash
+> new file mode 100644
+> index 0000000..8ade191
+> --- /dev/null
+> +++ b/package/check/check.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed:
+> +sha1	4b79e2d485d014ddb438e322b64235347d57b0ff	check-0.9.14.tar.gz
+> diff --git a/package/check/check.mk b/package/check/check.mk
+> new file mode 100644
+> index 0000000..83fd4fb
+> --- /dev/null
+> +++ b/package/check/check.mk
+> @@ -0,0 +1,17 @@
+> +################################################################################
+> +#
+> +# check
+> +#
+> +################################################################################
+> +
+> +CHECK_VERSION = 0.9.14
+> +CHECK_SOURCE = check-$(CHECK_VERSION).tar.gz
+> +CHECK_SITE = http://downloads.sourceforge.net/project/check/check/$(CHECK_VERSION)/
+> +
+> +CHECK_DEPENDENCIES = libtool host-pkgconf
+> +
+> +CHECK_LICENSE =  LGPLv2.1+
+> +CHECK_LICENSE_FILES = COPYING.LESSER
+> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> -- 
+> 1.9.1
 > 
-> Thanks!
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Sure thing. Thanks! Working on your other feedback now.
-
-Cheers,
-
-- -- 
-Sylvain Raybaud
-www.green-communications.fr
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQIcBAEBAgAGBQJVoE/nAAoJEEkkwl4JtJ9yVagP/iyHKdM1OVj2tfbsnV4j/CjA
-qyD1H+79pZuv7apDfudpVJum52qrSX6pSj08SAFfe7uerBaXp/rDYy3cj1zeSn3c
-a+OTHW2/Fw4P5PNruA23QzXWdzEKXvIsURYH248OCTsZRWI+oA94EW9c3Ni/Qz3M
-6hExosZprx0/FJqRZQerCj6qDoXSea45Q58CIgdnNOPyE84jdCmJ944jhSUDhsFv
-U1t1m7FUzDuB0vXP5IP9jSyTuXafO0b30UijKlLKzghC9zZLaXVE30BlrMvJo8zL
-+SP5aNo5MI5kMlW4AchxMgrir5siFnxPD+LR51Zj7cm+QYnnVD8RCJMORCkoc/es
-16OpQzOY61cZnlcrvThzGptJQ3a10HcFD4yo68JMVpebp1hP0BjSupgCw4aWyr1T
-WVy/QK/VimyOxkgrcPDVeLQCdzypCoPtRarb+eiaiCDIJ245IIWvwi9wNq2YHNbS
-a27r1CaBdl31HN4a8a8QNqgGrJ+uvHDaeBS7Gyd0oUG2can1dh6Ht6+GeTKnhgdF
-rLFW9DYSehvxTEvNwldYQ/wUUKJCvCzQd0K7K1S1dhG0p1h/XM5J+Lt7Y3LQoinc
-k7kEHV+TvWGKUi9LLLMPtXtnWKqWqTk8bik1cwg4vdz21GLULwXzt/U2KtUsocmb
-75D4p5oKYZm/swI0WrK7
-=ig9O
------END PGP SIGNATURE-----
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
