@@ -1,53 +1,32 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 10 Jul 2015 18:19:06 +0200
-Subject: [Buildroot] [PATCH 2/2] heimdal: disable parallel build
-In-Reply-To: <559FF0AF.8020502@zacarias.com.ar>
-References: <1436544308-22652-1-git-send-email-Vincent.Riera@imgtec.com>
- <1436544308-22652-2-git-send-email-Vincent.Riera@imgtec.com>
- <559FF0AF.8020502@zacarias.com.ar>
-Message-ID: <559FF07A.2010801@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 10 Jul 2015 13:50:08 -0300
+Subject: [Buildroot] [PATCH] ruby: enable parallel build
+Message-ID: <1436547008-31236-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sure, no problem.
+Re-enable parallel builds, it doesn't seem to be affected by the issue
+worked around in 9332a1ad4 any more.
 
-On 10/07/15 18:19, Gustavo Zacarias wrote:
->
->
-> On 10/07/15 13:05, Vicente Olivert Riera wrote:
->
->> The commit 2fc8be39edd610623d322c71e42a06b535cbadb7 enabled parallel
->> build, but this is causing build failures like this one:
->>
->> Making all in kadm5
->> make[3]: Entering directory
->> `/home/test/autobuild/instance-0/output/build/host-heimdal-1.6rc2/lib/kadm5'
->>
->> compile_et kadm5_err.et
->> compile_et kadm5_err.et
->>    CC       ad.lo
->>      CC       chpass_c.lo
->>      In file included from chpass_c.c:34:
->>      kadm5_locl.h:78:23: error: kadm5_err.h: No such file or directory
->>
->> The file 'kadm5_err.h' is a generated header which is being requested
->> before being generated.
->>
->> Fixes:
->>
->>
->> http://autobuild.buildroot.net/results/3a4/3a42c5b294a9a8602844ed1127ec5eadb60a6bed/
->>
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->
-> Hi Vicente.
-> That's harsh, specially since it seems to be a tiny breakage that's
-> already fixed upstream via:
-> http://repo.or.cz/w/heimdal.git/commitdiff/6affa4c
-> Care to redo it in a "fixing" way? :)
-> Regards.
->
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ruby/ruby.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 552da07..2fa6b4e 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -12,7 +12,6 @@ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+ HOST_RUBY_DEPENDENCIES = host-pkgconf
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+-RUBY_MAKE = $(MAKE1)
+ RUBY_CONF_OPTS = --disable-install-doc --disable-rpath --disable-rubygems
+ HOST_RUBY_CONF_OPTS = \
+ 	--disable-install-doc \
+-- 
+2.3.6
