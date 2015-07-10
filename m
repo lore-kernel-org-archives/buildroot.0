@@ -1,62 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jul 2015 19:09:05 +0200
-Subject: [Buildroot] [PATCH V3 4/5] c-icap: new package
-In-Reply-To: <1416322487-14247-5-git-send-email-guillaume.gardet@oliseo.fr>
-References: <1415808993-2394-1-git-send-email-guillaume.gardet@oliseo.fr>
- <1416322487-14247-1-git-send-email-guillaume.gardet@oliseo.fr>
- <1416322487-14247-5-git-send-email-guillaume.gardet@oliseo.fr>
-Message-ID: <20150710190905.0aa3bc3a@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 10 Jul 2015 19:02:25 +0200
+Subject: [Buildroot] [PATCH v3 2/2] zeromq: depend on libsodium if
+ available
+In-Reply-To: <1432036871-3244-2-git-send-email-fhunleth@troodon-software.com>
+References: <1432036871-3244-1-git-send-email-fhunleth@troodon-software.com>
+ <1432036871-3244-2-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <559FFAA1.6040400@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Guillaume GARDET,
+Hi Frank,
 
-On Tue, 18 Nov 2014 15:54:46 +0100, Guillaume GARDET wrote:
-> Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+Le 19/05/2015 14:01, Frank Hunleth a ?crit :
+> ZeroMQ doesn't require libsodium, but will enable CURVE security if it's
+> available. This patch adds the optional dependency.
 > 
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+
+Best regards,
+Romain Naour
+
 > ---
->  package/Config.in        |  1 +
->  package/c-icap/Config.in | 15 ++++++++++++
->  package/c-icap/S96cicap  | 35 ++++++++++++++++++++++++++
->  package/c-icap/c-icap.mk | 64 ++++++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 115 insertions(+)
->  create mode 100644 package/c-icap/Config.in
->  create mode 100644 package/c-icap/S96cicap
->  create mode 100644 package/c-icap/c-icap.mk
-
-I've applied, but a lot of changes were needed to make the patch
-correct. In fact, with the patch you posted, the c-icap daemon was not
-even starting properly at boot time because the c-icap.conf file
-contained invalid paths.
-
-Here are the changes I made before committing:
-
-    [Thomas:
-     - Remove trailing whitespace everywhere
-     - Rewrap the Config.in help text
-     - Fix Config.in comment, the proper text for BR2_PREFER_STATIC_LIB is
-       "dynamic library", not "libdl library"
-     - Use a PID file in the init script
-     - Show OK / FAIL when stopping the service
-     - Remove the largefile/IPv6 handling in c-icap.mk, since they are now
-       mandatory. We therefore pass --enable-large-files and --enable-ipv6
-       unconditionally.
-     - Remove the reference to a non-existing
-       C_ICAP_INSTALL_TARGET_CONFIGS install target hook.
-     - Install the init script unconditionally.
-     - Remove unneeded example configuration files (*.default) from /etc,
-       and fixup the c-icap.conf so that the default values work with
-       Buildroot
-     - Properly handle the *-config scripts installed by c-icap.
-     - Add hash file.]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Changes v1 -> v2:
+>   - added patch to series
+> Changes v2 -> v3:
+>   - no changes
+> 
+>  package/zeromq/zeromq.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+> index 7e9ed19..a876d5e 100644
+> --- a/package/zeromq/zeromq.mk
+> +++ b/package/zeromq/zeromq.mk
+> @@ -34,4 +34,10 @@ ZEROMQ_DEPENDENCIES += host-pkgconf openpgm
+>  ZEROMQ_CONF_OPTS += --with-system-pgm
+>  endif
+> 
+> +# ZeroMQ uses libsodium if it's available.
+> +ifeq ($(BR2_PACKAGE_LIBSODIUM), y)
+> +ZEROMQ_DEPENDENCIES += libsodium
+> +ZEROMQ_CONF_OPTS += --with-libsodium="$(STAGING_DIR)/usr"
+> +endif
+> +
+>  $(eval $(autotools-package))
+> --
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
