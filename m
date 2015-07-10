@@ -1,83 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Jul 2015 01:01:09 +0200
-Subject: [Buildroot] [PATCH 2/7 v2] libaio: add host variant
-In-Reply-To: <20150710223012.GD5469@free.fr>
-References: <1436458921-4199-1-git-send-email-sylvain.raybaud@green-communications.fr>
- <1436458921-4199-3-git-send-email-sylvain.raybaud@green-communications.fr>
- <20150710223012.GD5469@free.fr>
-Message-ID: <20150710230109.GE5469@free.fr>
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Date: Fri, 10 Jul 2015 18:01:19 -0500
+Subject: [Buildroot] [PATCH v7 13/22] openssh: selinux and pam support
+In-Reply-To: <CAHXCMML3=hbmcTV7p9ycJdohW4PCm_PoVaFmnGr3=ABZAKC3fQ@mail.gmail.com>
+References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <1433251718-3167-14-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <CAHXCMML3=hbmcTV7p9ycJdohW4PCm_PoVaFmnGr3=ABZAKC3fQ@mail.gmail.com>
+Message-ID: <CANn-YGR0YOea+262aXCsdqHzCmO+LfE+iZ4rc2nvmjysLkEhzw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sylvain, All,
+Samuel,
 
-On 2015-07-11 00:30 +0200, Yann E. MORIN spake thusly:
-> On 2015-07-09 18:21 +0200, Sylvain Raybaud spake thusly:
-> > host-libaio is needed to build host-mysql in its mariadb variant which is needed to build the target variant of mariadb.
-> 
-> Commit logs should be limited to ~80 chars. Otherwise:
-> 
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-He, hold on...
+>> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+>> index 24af079..00cdf6c 100644
+>> --- a/package/openssh/openssh.mk
+>> +++ b/package/openssh/openssh.mk
+>> @@ -30,8 +30,24 @@ endif
+>>  OPENSSH_DEPENDENCIES = zlib openssl
+>>
+>>  ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+>> +define OPENSSH_INSTALL_PAM_CONF
+>> +       $(INSTALL) -D -m 644 $(@D)/contrib/sshd.pam.generic $(TARGET_DIR)/etc/pam.d/sshd
+>> +       sed -i '/password   required     \/lib\/security\/pam_cracklib.so/d' $(TARGET_DIR)/etc/pam.d/sshd
+>> +       sed -i -e 's/\#UsePAM no/UsePAM yes/' $(TARGET_DIR)/etc/ssh/sshd_config
+> nit: you could $(SED) here ;-)
 
-Thomas just made me see the light: this is a generic package, so you
-need to provide the _{CONFIGURE,BUILD,INSTALL}_CMDS !
+Fixed.
 
-Otherwise, nothing happens...
+Thanks,
+Clayton
 
-Sorry for the confusion... :-(
-
-Regards,
-Yann E. MORIN.
-
-> Regards,
-> Yann E. MORIN.
-> 
-> > Signed-off-by: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-> > ---
-> > Changes v1 -> v2:
-> >   Explain why we need to build host-libaio in commit log (suggested by Yann E. Morin)
-> > 
-> >  package/libaio/libaio.mk | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
-> > index 53ad7eb..55e2cc7 100644
-> > --- a/package/libaio/libaio.mk
-> > +++ b/package/libaio/libaio.mk
-> > @@ -24,3 +24,4 @@ define LIBAIO_INSTALL_TARGET_CMDS
-> >  endef
-> >  
-> >  $(eval $(generic-package))
-> > +$(eval $(host-generic-package))
-> > -- 
-> > 1.9.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Clayton Shotwell
+Senior Software Engineer, Rockwell Collins
+clayton.shotwell at rockwellcollins.com
