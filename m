@@ -1,28 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jul 2015 20:27:25 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10, 14,
- 18}.x and 4.{0, 1}.x series
-In-Reply-To: <1436551805-32402-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1436551805-32402-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150710202725.65522482@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 10 Jul 2015 20:30:19 +0200
+Subject: [Buildroot] [PATCH v7 11/22] sysvinit: added libselinux
+	dependency
+In-Reply-To: <1433251718-3167-12-git-send-email-clayton.shotwell@rockwellcollins.com>
+References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <1433251718-3167-12-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <CAHXCMMKigboRfGo-6mcXoR4cr4y8+tWHU_N85RSpiUOn02gM3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On Tue, Jun 2, 2015 at 3:28 PM, Clayton Shotwell
+<clayton.shotwell@rockwellcollins.com> wrote:
+> From: Matt Weber <matthew.weber@rockwellcollins.com>
+>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-On Fri, 10 Jul 2015 15:10:04 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/linux-headers/Config.in.host | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-Both patches applied, thanks.
+Regards,
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
