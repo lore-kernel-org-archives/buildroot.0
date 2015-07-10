@@ -1,63 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 10 Jul 2015 12:08:33 +0200
-Subject: [Buildroot] [PATCH] quagga: disable PIE on ARC
-In-Reply-To: <1436515926.2800.26.camel@synopsys.com>
-References: <1436436011-8126-1-git-send-email-abrodkin@synopsys.com>
- <559EE7E6.401@mind.be> <20150710084455.3462000c@free-electrons.com>
- <1436515926.2800.26.camel@synopsys.com>
-Message-ID: <559F99A1.8060501@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 10 Jul 2015 08:22:04 -0300
+Subject: [Buildroot] [PATCH] php: security bump to version 5.6.11
+Message-ID: <1436527324-25864-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/10/15 10:12, Alexey Brodkin wrote:
-[snip]
+Fixes:
+CVE-2015-3152 - mysqlnd is vulnerable to BACKRONYM
 
- Thanks for the detailed explanation!
+And other security bugs with no CVE assigned yet:
+Bug #69972 - Use-after-free vulnerability in
+sqlite3SafetyCheckSickOrOk()
+Bug # 69970 - Use-after-free vulnerability in
+spl_recursive_it_move_forward_ex()
 
-> In other words if we disable PIE in Buildroot's toolchain there will be
-> no way to build U-Boot for ARC. And that's not what we want.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- It's probably getting complicated, but we could add either another option or an
-environment variable to enable PIE again. E.g. if it's an envrionment variable,
-then we can do for packages that we know do *not* break with ARC-PIE:
-
-ifneq ($(BR2_arc),)
-UBOOT_MAKE_ENV += GCC_REALLY_SUPPORT_PIE=1
-endif
-
-(and of course make sure that UBOOT_MAKE_ENV is used, which is currently not the
-case in uboot.mk).
-
-
- Question is: is that more complicated that the current per-package workarounds
-or not?
-
- Regards,
- Arnout
-
-> 
-> Note that U-Boot needs PIE not only on ARC but on x86, ARM and MIPS.
-> So that's not unique "feature" or ARC. Some arches still use PIC in
-> U-Boot but that causes problems here and there, requiring to patch
-> offsets manually in each and every driver etc instead of using gcc,
-> grep for CONFIG_NEEDS_MANUAL_RELOC if of any interest :)
-> 
-> Hopefully my explanation makes some sense.
-> 
-> If you guys have any thought on how to solve that problem better please
-> shout.
-> 
-> -Alexey
-> 
-
-
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 4abf45e..ea12138 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-sha256	1af720c955b0a57aa47606e928616e84c78868aff2a5f269c70601a77d6da8c1	php-5.6.10.tar.xz
++sha256	3f97dbb1c646b90e1ef638defabe429ef036f903b5baa1c34769d3de4fe62bd4	php-5.6.11.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index afac950..53aaecf 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PHP_VERSION_MAJOR = 5.6
+-PHP_VERSION = $(PHP_VERSION_MAJOR).10
++PHP_VERSION = $(PHP_VERSION_MAJOR).11
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.3.6
