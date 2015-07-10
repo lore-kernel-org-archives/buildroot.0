@@ -1,42 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jul 2015 20:24:52 +0200
-Subject: [Buildroot] [git commit] libidn: bump to version 1.31
-Message-ID: <20150710183153.BB3F58198B@busybox.osuosl.org>
+Date: Fri, 10 Jul 2015 20:31:47 +0200
+Subject: [Buildroot] [git commit] enlightment: xtensa workaround no longer
+	required
+Message-ID: <20150710183153.F37977FF1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=43860b868c41aaf84229317fc8d0c0525a2024fa
+commit: http://git.buildroot.net/buildroot/commit/?id=0b056944f5878304f51af3e9edb6d596f24fc370
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+With the update to uClibc-ng 1.0.3, this is no longer needed,
+as the problem is fixed upstream.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libidn/libidn.hash |    4 ++--
- package/libidn/libidn.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/enlightenment/enlightenment.mk |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
 
-diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
-index d41443e..6425d55 100644
---- a/package/libidn/libidn.hash
-+++ b/package/libidn/libidn.hash
-@@ -1,2 +1,2 @@
--# From http://lists.gnu.org/archive/html/help-libidn/2015-03/msg00001.html
--sha1	557e1e37f0978e975b21bcdc243c198cb708bb75	libidn-1.30.tar.gz
-+# From http://lists.gnu.org/archive/html/help-libidn/2015-07/msg00011.html
-+sha1	0bb34003a0fe05a91e60d346803401f16c82a1fb	libidn-1.31.tar.gz
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index 13436e9..e10fb6e 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index ac15642..ddebe06 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -34,11 +34,6 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_powerpc)$(BR2_sparc),yy)
+ ENLIGHTENMENT_CONF_ENV += ac_cv_header_sys_ptrace_h=no
+ endif
  
--LIBIDN_VERSION = 1.30
-+LIBIDN_VERSION = 1.31
- LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN_INSTALL_STAGING = YES
- LIBIDN_CONF_ENV = EMACS="no"
+-# uClibc-ng has an old incomplete sys/ptrace.h for xtensa
+-ifeq ($(BR2_UCLIBC_VERSION_NG)$(BR2_xtensa),yy)
+-ENLIGHTENMENT_CONF_ENV += ac_cv_header_sys_ptrace_h=no
+-endif
+-
+ # alsa backend needs mixer support
+ ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
+ ENLIGHTENMENT_DEPENDENCIES += alsa-lib
