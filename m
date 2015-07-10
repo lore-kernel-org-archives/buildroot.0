@@ -1,30 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jul 2015 00:57:19 +0200
-Subject: [Buildroot] [PATCH] bootutils: update website URL
-In-Reply-To: <958e161f6db21f2f5c374079f23860e969e9eb46.1436522099.git.baruch@tkos.co.il>
-References: <958e161f6db21f2f5c374079f23860e969e9eb46.1436522099.git.baruch@tkos.co.il>
-Message-ID: <20150711005719.4c0b099f@free-electrons.com>
+Date: Sat, 11 Jul 2015 00:57:51 +0200
+Subject: [Buildroot] [git commit] busybox: adjust configuration to add fancy
+	options to the sleep applet
+Message-ID: <20150710225757.094C481973@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=aa1362f220e733689fe4210b0bb2433f6d595e6b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 10 Jul 2015 12:54:59 +0300, Baruch Siach wrote:
-> The original homepage seems to be down. Use the sourceforge intro page
-> instead.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/bootutils/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Set CONFIGURE_FEATURE_FANCY_SLEEP and CONFIG_FEATURE_FLOAT_SLEEP so that sleep accept floating point arguments.
+This add 492 bytes to the busybox binary compiled for arm or 2748 bytes when compiled for i386.
 
-Applied, thanks.
+Signed-off-by: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/busybox/busybox.config |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index 9d930d1..8d1d80a 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
+@@ -273,8 +273,8 @@ CONFIG_SHA256SUM=y
+ CONFIG_SHA512SUM=y
+ CONFIG_SHA3SUM=y
+ CONFIG_SLEEP=y
+-# CONFIG_FEATURE_FANCY_SLEEP is not set
+-# CONFIG_FEATURE_FLOAT_SLEEP is not set
++CONFIG_FEATURE_FANCY_SLEEP=y
++CONFIG_FEATURE_FLOAT_SLEEP=y
+ CONFIG_SORT=y
+ CONFIG_FEATURE_SORT_BIG=y
+ # CONFIG_SPLIT is not set
