@@ -1,46 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jul 2015 20:25:11 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{10, 14,
-	18}.x and 4.{0, 1}.x series
-Message-ID: <20150710183153.E1A027FF1B@busybox.osuosl.org>
+Date: Fri, 10 Jul 2015 20:25:01 +0200
+Subject: [Buildroot] [git commit] file: bump to version 5.24
+Message-ID: <20150710183153.CD2987FF1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e2a27499207b2e6d073ad198417ea0ffe890e642
+commit: http://git.buildroot.net/buildroot/commit/?id=4a35ee875f92dfbf8a9e81d28969dc5e9c9968b8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ package/file/file.hash |    2 +-
+ package/file/file.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 9846f37..ec6e64d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -209,16 +209,16 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.108"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.83"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.84"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.44"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.47"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.48"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.17"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.18"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
--	default "4.0.7"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.1"		if BR2_KERNEL_HEADERS_4_1
-+	default "4.0.8"		if BR2_KERNEL_HEADERS_4_0
-+	default "4.1.2"		if BR2_KERNEL_HEADERS_4_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/file/file.hash b/package/file/file.hash
+index a061783..28f071d 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	2c8ab3ff143e2cdfb5ecee381752f80a79e0b4cfe9ca4cc6e1c3e5ec15e6157c	file-5.23.tar.gz
++sha256	802cb3de2e49e88ef97cdcb52cd507a0f25458112752e398445cea102bc750ce	file-5.24.tar.gz
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 4baa393..f3b09ec 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FILE_VERSION = 5.23
++FILE_VERSION = 5.24
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ FILE_INSTALL_STAGING = YES
