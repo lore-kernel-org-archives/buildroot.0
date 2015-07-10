@@ -1,44 +1,36 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Fri, 10 Jul 2015 12:32:31 -0300
-Subject: [Buildroot] [PATCH] icu: update icudata generator URL
-Message-ID: <1436542351-12063-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 10 Jul 2015 18:05:07 +0200
+Subject: [Buildroot] [PATCH 1/2] heimdal: needs host-ncurses
+Message-ID: <1436544308-22652-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Otherwise it will fail with an error like this one:
 
-It was pointing to version 51.x which wouldn't work well with 55.x.
+checking for tgetent in -lcurses... no
+checking for tgetent in -lncurses... no
+configure: error: libcurses or libncurses are required!
 
-Point it to the latest version that matches the current buildroot
-version (55). When a new ICU major version is released a link for the
-"old" 55 version will be available below as is it currently for
-previous versions such as 54, 53 and so on.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/icu/Config.in | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/heimdal/heimdal.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/icu/Config.in b/package/icu/Config.in
-index d7bf2fe..4d47c32 100644
---- a/package/icu/Config.in
-+++ b/package/icu/Config.in
-@@ -19,9 +19,10 @@ config BR2_PACKAGE_ICU_CUSTOM_DATA_PATH
- 	string "Path to custom data library file"
- 	help
- 	  This option allows to define the path to a custom data
--	  library generated with
--	  http://apps.icu-project.org/datacustom/ICUData51.html. Leave
--	  empty to not use this functionality.
-+	  library generated with http://apps.icu-project.org/datacustom/
-+	  Make sure you select the appropiate version to match the one
-+	  provided by buildroot.
-+	  Leave empty to not use this functionality.
+diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
+index 6260f8c..19bca5e 100644
+--- a/package/heimdal/heimdal.mk
++++ b/package/heimdal/heimdal.mk
+@@ -6,7 +6,7 @@
  
- endif
- 
+ HEIMDAL_VERSION = 1.6rc2
+ HEIMDAL_SITE = http://www.h5l.org/dist/src
+-HEIMDAL_DEPENDENCIES = host-e2fsprogs host-pkgconf
++HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
+ HEIMDAL_INSTALL_STAGING = YES
+ # static because of -fPIC issues with e2fsprogs on x86_64 host
+ HOST_HEIMDAL_CONF_OPTS = \
 -- 
 2.3.6
