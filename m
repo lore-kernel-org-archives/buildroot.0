@@ -1,85 +1,54 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Fri, 10 Jul 2015 18:27:56 -0500
-Subject: [Buildroot] [PATCH v8 10/16] util-linux: selinux, audit,
-	and pam support
+Date: Fri, 10 Jul 2015 18:28:00 -0500
+Subject: [Buildroot] [PATCH v8 14/16] squashfs: Add xattr support
 In-Reply-To: <1436570882-56442-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1436570882-56442-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1436570882-56442-11-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1436570882-56442-15-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Matt Weber <matthew.weber@rockwellcollins.com>
+Adding extended attribute support for the squashfs tools when the attr
+package is selected. This is needed for SELinux support.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
 ---
 Changes v7 -> v8:
-  - No changes
+  - Reverted changes to the host build options to leave xattr support
+    disabled due to too many host system dependencies issues.
+  - Cleaned up the target xattr options and added a dependency on attr
+    to ensure it is built before squashfs (Suggested by Thomas P.)
 
 Changes v6 -> v7:
   - No changes
 
 Changes v5 -> v6:
   - No changes
-
-Changes v4 -> v5:
-  - New patch
-  - Added pam file tweaks for selinux support (Clayton S.)
 ---
- package/util-linux/util-linux.mk | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ package/squashfs/squashfs.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 3ca147a..259334f 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -59,6 +59,20 @@ ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
- UTIL_LINUX_DEPENDENCIES += libcap-ng
- endif
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index 8ca9e2e..3204d05 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -10,8 +10,12 @@ SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squas
+ SQUASHFS_LICENSE = GPLv2+
+ SQUASHFS_LICENSE_FILES = COPYING
  
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+UTIL_LINUX_DEPENDENCIES += libselinux
-+UTIL_LINUX_CONF_OPTS += --with-selinux
+-# no libattr in BR
+-SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=0
++ifeq ($(BR2_PACKAGE_ATTR),y)
++SQUASHFS_DEPENDENCIES += attr
++SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=1
 +else
-+UTIL_LINUX_CONF_OPTS += --without-selinux
++SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=0
 +endif
-+
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+UTIL_LINUX_DEPENDENCIES += audit
-+UTIL_LINUX_CONF_OPTS += --with-audit
-+else
-+UTIL_LINUX_CONF_OPTS += --without-audit
-+endif
-+
- # Used by cramfs utils
- UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
  
-@@ -146,9 +160,22 @@ define UTIL_LINUX_INSTALL_PAMFILES
- 	$(INSTALL) -m 0644 package/util-linux/su.pam \
- 		$(TARGET_DIR)/etc/pam.d/su-l
- endef
-+
-+# Add the required hooks to the pam files if SELinux is enabled
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+define UTIL_LINUX_FIXUP_PAMFILES
-+	for file in login su su-l ; do \
-+		$(SED) '/selinux/d' $(TARGET_DIR)/etc/pam.d/$${file}; \
-+		$(SED) '0,/session/s/session/session		required	pam_selinux.so close\nsession/' $(TARGET_DIR)/etc/pam.d/$${file}; \
-+		echo "session		required	pam_selinux.so open" >> $(TARGET_DIR)/etc/pam.d/$${file}; \
-+	done
-+endef
-+endif
-+
- endif
- 
- UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
-+UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_FIXUP_PAMFILES
- 
- # Install agetty->getty symlink to avoid breakage when there's no busybox
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_AGETTY),y)
+ ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
+ SQUASHFS_DEPENDENCIES += lz4
 -- 
 1.9.1
