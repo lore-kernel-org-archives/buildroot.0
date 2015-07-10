@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jul 2015 19:35:08 +0200
-Subject: [Buildroot] [PATCH 08/16] package/e2fsprogs: make /sbin/fsck
- available
-In-Reply-To: <1421684056-5266-9-git-send-email-maxtram95@gmail.com>
-References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
- <1421684056-5266-9-git-send-email-maxtram95@gmail.com>
-Message-ID: <20150710193508.68c31691@free-electrons.com>
+Date: Fri, 10 Jul 2015 19:35:27 +0200
+Subject: [Buildroot] [git commit] ruby: enable parallel build
+Message-ID: <20150710173532.818078195F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxim Mikityanskiy,
+commit: http://git.buildroot.net/buildroot/commit/?id=08138dd13060563733f4c7bd9daebcfdb458840e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 19 Jan 2015 18:14:08 +0200, Maxim Mikityanskiy wrote:
-> systemd looks for fsck in /sbin, so make symlink:
-> /sbin/fsck -> /usr/sbin/fsck
-> 
-> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-> ---
->  package/e2fsprogs/e2fsprogs.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
+Re-enable parallel builds, it doesn't seem to be affected by the issue
+worked around in 9332a1ad4 any more.
 
-Applied, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ruby/ruby.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 552da07..2fa6b4e 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -12,7 +12,6 @@ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+ HOST_RUBY_DEPENDENCIES = host-pkgconf
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+-RUBY_MAKE = $(MAKE1)
+ RUBY_CONF_OPTS = --disable-install-doc --disable-rpath --disable-rubygems
+ HOST_RUBY_CONF_OPTS = \
+ 	--disable-install-doc \
