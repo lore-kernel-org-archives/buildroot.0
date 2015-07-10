@@ -1,59 +1,63 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 10 Jul 2015 19:02:25 +0200
-Subject: [Buildroot] [PATCH v3 2/2] zeromq: depend on libsodium if
- available
-In-Reply-To: <1432036871-3244-2-git-send-email-fhunleth@troodon-software.com>
-References: <1432036871-3244-1-git-send-email-fhunleth@troodon-software.com>
- <1432036871-3244-2-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <559FFAA1.6040400@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Jul 2015 19:15:40 +0200
+Subject: [Buildroot] [git commit] docs/manual/beyond-buildroot: building and
+	testing live-CDs
+Message-ID: <20150710171600.F3BDA8190F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Frank,
+commit: http://git.buildroot.net/buildroot/commit/?id=618346836ede2f6945899209744aafbd38a84c82
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 19/05/2015 14:01, Frank Hunleth a ?crit :
-> ZeroMQ doesn't require libsodium, but will enable CURVE security if it's
-> available. This patch adds the optional dependency.
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+[Thomas: reworked a bit the phrasing, plus mention that Grub 2 is
+supported.]
 
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: No?? Rubinstein <nrubinstein@aldebaran.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/beyond-buildroot.txt |   29 +++++++++++++++++++++++++++++
+ 1 files changed, 29 insertions(+), 0 deletions(-)
 
-Best regards,
-Romain Naour
-
-> ---
-> Changes v1 -> v2:
->   - added patch to series
-> Changes v2 -> v3:
->   - no changes
-> 
->  package/zeromq/zeromq.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-> index 7e9ed19..a876d5e 100644
-> --- a/package/zeromq/zeromq.mk
-> +++ b/package/zeromq/zeromq.mk
-> @@ -34,4 +34,10 @@ ZEROMQ_DEPENDENCIES += host-pkgconf openpgm
->  ZEROMQ_CONF_OPTS += --with-system-pgm
->  endif
-> 
-> +# ZeroMQ uses libsodium if it's available.
-> +ifeq ($(BR2_PACKAGE_LIBSODIUM), y)
-> +ZEROMQ_DEPENDENCIES += libsodium
-> +ZEROMQ_CONF_OPTS += --with-libsodium="$(STAGING_DIR)/usr"
-> +endif
-> +
->  $(eval $(autotools-package))
-> --
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/docs/manual/beyond-buildroot.txt b/docs/manual/beyond-buildroot.txt
+index b8b1973..63b0c1f 100644
+--- a/docs/manual/beyond-buildroot.txt
++++ b/docs/manual/beyond-buildroot.txt
+@@ -21,6 +21,35 @@ Remember to add this path to +/etc/exports+.
+ 
+ Then, you can execute a NFS-boot from your target.
+ 
++==== Live CD
++
++To build a live CD image, enable the _iso image_ option in the
++_Filesystem images_ menu. Note that this option is only available on
++the x86 and x86-64 architectures, and if you are building your kernel
++with Buildroot.
++
++You can build a live CD image with either IsoLinux, Grub or Grub 2 as
++a bootloader, but only Isolinux supports making this image usable both
++as a live CD and live USB (through the _Build hybrid image_ option).
++
++You can test your live CD image using QEMU:
++
++-------------------
++qemu-system-i386 -cdrom output/images/rootfs.iso9660
++-------------------
++
++Or use it as a hard-drive image if it is an hybrid ISO:
++
++-------------------
++qemu-system-i386 -hda output/images/rootfs.iso9660
++-------------------
++
++It can be easily flashed to an USB drive with +dd+:
++
++-------------------
++dd if=output/images/rootfs.iso9660 of=/dev/sdb
++-------------------
++
+ === Chroot
+ 
+ If you want to chroot in a generated image, then there are few thing
