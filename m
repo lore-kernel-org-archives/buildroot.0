@@ -1,70 +1,86 @@
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Fri, 10 Jul 2015 17:18:07 -0500
-Subject: [Buildroot] [PATCH v7 22/22] cpio: new package
-In-Reply-To: <20150711001618.44eb6d3c@free-electrons.com>
-References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1433251718-3167-23-git-send-email-clayton.shotwell@rockwellcollins.com>
- <20150706123840.61ff3672@free-electrons.com>
- <CANn-YGTt5AoiV=5ht_4krY6EvVNTih=tiYqDoty6WmykeqkFug@mail.gmail.com>
- <20150711001618.44eb6d3c@free-electrons.com>
-Message-ID: <CANn-YGT4NRRbEzSxJ7ny+LDSxYm5nvMUtJXREdcObqrQnJefug@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 11 Jul 2015 00:24:50 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/mesa3d: Remove libGL
+ headers/pkgconfig when OpenGL is disabled
+In-Reply-To: <1433711482-32265-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1433711482-32265-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150710222450.GC5469@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Bernd, All,
 
-On Fri, Jul 10, 2015 at 5:16 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Clayton,
->
-> On Fri, 10 Jul 2015 16:02:41 -0500, Clayton Shotwell wrote:
->
->> > What is the motivation to have a host variant of cpio? cpio is already
->> > part of the mandatory programs that Buildroot checks for at the
->> > beginning of every build: it must be installed on the host system prior
->> > to running Buildroot.
->>
->> Well I am not using it for anything in particular, I really just need
->> the target variant. I can remove the host option without any impact to
->> anything.
->
-> Well, if you don't use it, then I'd prefer to not support the host
-> build, especially since cpio is already a mandatory dependency of
-> Buildroot.
->
-> We do have cases (like tar) where we support building a host option
-> even if it's a mandatory dependency, because some platforms have a too
-> old tar for Buildroot.
+On 2015-06-07 23:11 +0200, Bernd Kuhls spake thusly:
+> mesa3d defaults to --enable-opengl due to its weird configure.ac:
+> http://git.buildroot.net/buildroot/commit/package/mesa3d/mesa3d.mk?id=384d601d4ea2c41bb7928f756bfe88af4d38b38b
+> 
+> This leads to include/GL/*.h and lib/pkgconfig/gl.pc being installed to
+> STAGING_DIR. These files are enough for other packages to wrongly assume
+> that libGL.so is present, like vlc.
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/e63/e639dabfb260006acb8a204851b96f9275ce53a7/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-I will drop the host build option then to keep things simpler. It
-would be very simple for someone to add it back in the future if the
-need arises.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
->>
->> > If the ArchLinux patches apply without any adaptation, have you
->> > considered using:
->> >
->> > CPIO_PATCH = \
->> >         https://projects.archlinux.org/svntogit/packages.git/plain/trunk/cpio-2.11-stdio.in.patch?h=packages/cpio \
->> >         ...
->> >
->> > instead ?
->>
->> I always forget that is an option because I cannot freely download
->> stuff behind our firewall. I'll look at changing the patches to links
->> to make things simpler but I may have issues testing that all the
->> links work properly.
->
-> I can test before committing, no problem with that.
+Regards,
+Yann E. MORIN.
 
-Sounds good.
+> ---
+> v2: Instead of fixing vlc?s libGL detection let?s remove the superfluous
+>     files installed by mesa3d (Yann)
+> 
+>  package/mesa3d/mesa3d.mk |   10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 4a419de..669eada 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -77,9 +77,16 @@ MESA3D_CONF_OPTS += \
+>  	--with-gallium-drivers=$(subst $(space),$(comma),$(MESA3D_GALLIUM_DRIVERS-y))
+>  endif
+>  
+> +define MESA3D_REMOVE_OPENGL_PC
+> +	rm -f $(STAGING_DIR)/usr/lib/pkgconfig/dri.pc
+> +	rm -f $(STAGING_DIR)/usr/lib/pkgconfig/gl.pc
+> +	rm -rf $(STAGING_DIR)/usr/include/GL/
+> +endef
+> +
+>  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+>  MESA3D_CONF_OPTS += \
+>  	--without-dri-drivers --without-dri --disable-dri3
+> +MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_PC
+>  else
+>  ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
+>  MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
+> @@ -102,7 +109,8 @@ endif
+>  
+>  # Always enable OpenGL:
+>  #   - it is needed for GLES (mesa3d's ./configure is a bit weird)
+> -#   - but if no DRI driver is enabled, then libgl is not built
+> +#   - but if no DRI driver is enabled, then libgl is not built,
+> +#     remove dri.pc and gl.pc in this case (MESA3D_REMOVE_OPENGL_PC)
+>  MESA3D_CONF_OPTS += --enable-opengl
+>  
+>  ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thanks,
-Clayton
-
-Clayton Shotwell
-Senior Software Engineer, Rockwell Collins
-clayton.shotwell at rockwellcollins.com
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
