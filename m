@@ -1,95 +1,166 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 10 Jul 2015 08:12:06 +0000
-Subject: [Buildroot] [PATCH] quagga: disable PIE on ARC
-In-Reply-To: <20150710084455.3462000c@free-electrons.com>
-References: <1436436011-8126-1-git-send-email-abrodkin@synopsys.com>
- <559EE7E6.401@mind.be> <20150710084455.3462000c@free-electrons.com>
-Message-ID: <1436515926.2800.26.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Jul 2015 10:19:23 +0200
+Subject: [Buildroot] Buildroot for STM32F4 with Nuttx kernel
+In-Reply-To: <CAOudHSXE+XrCKsi=bT+XjfTUhU3W9YiW=MjjJN2t9KEX8nzh-Q@mail.gmail.com>
+References: <CAOudHSXE+XrCKsi=bT+XjfTUhU3W9YiW=MjjJN2t9KEX8nzh-Q@mail.gmail.com>
+Message-ID: <20150710101923.67e70822@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Arnout,
+Hello,
 
-On Fri, 2015-07-10 at 08:44 +0200, Thomas Petazzoni wrote:
-> Arnout, Alexey,
+On Thu, 9 Jul 2015 17:40:10 -0400, Cjw X wrote:
+
+> I modified buildroot to create a distribution for the STM32F4 processor.
+> (It should be fairly portable to different Cortex-M processors though, the
+> STM32F4 is the only one I've tested so far).
 > 
-> On Thu, 9 Jul 2015 23:30:14 +0200, Arnout Vandecappelle wrote:
-> > On 07/09/15 12:00, Alexey Brodkin wrote:
-> > > Even though ARC gcc understands "-pie" option and attempts to generate
-> > > PIE binaries as of today PIE is not really supported for user-space
-> > > applications.
-> > 
-> >  Wouldn't it be better then if we would patch gcc to remove the -pie option?
-> > That removes all these special cases in one fell swoop, and is much easier to
-> > un-disable once PIE _is_ supported for ARC gcc.
+> So far it:
+> Builds the toolchain
+> Builds a modified Nuttx RTOS
+> Builds the icsp tools for programming and debugging (openocd/gdb)
+> It also integrates the filesystem buildroot generates into the Nuttx kernel
+> so it shows up in Nuttx's filesystem.
 > 
-> It would indeed be a lot better.
+> It still has a ways to go, but right now it builds everything and works on
+> my hardware.
+> So far I've tested it on hardware I built, and on the STM32F407 discovery
+> board with the attached baseboard.
+> 
+> You can find instructions here http://www.vxmdesign.com/STM32.html
+> The git repo is https://github.com/vxmdesign/prjpluto.git and
+> vdsc_defconfig is the config for the discovery board.
 
-I would agree with that proposal but... TL;DR below :)
+Thanks for posting this! I had a look at the github repository, and I'm
+actually nicely surprised to see that the changes are not that big to
+make things work. Of course, there are some crude things here and there
+that would need to be addressed, but overall it doesn't seem
+completely crazy.
 
-Actually at the moment the only real "user" of PIE (in case of ARC)
-is U-Boot. U-Boot (by its generic design which is architecture independent)
-does "self-relocation" on early boot.
+I think the biggest question for me is whether it makes sense to have
+all this in Buildroot. On the one hand, I do understand the benefit of
+using Buildroot: all the toolchain logic is there, the logic to build
+packages is there, the menuconfig infrastructure makes things easy, etc.
 
-Scenario is simple.
+On the other hand, the biggest value of Buildroot is really in the
+"Target packages", and here none of them are usable because they are
+all Linux-specific.
 
-We assume that U-Boot executable is located in ROM after power-up
-and what's more important has access to very limited amount of RAM.
+Do you think it would be possible to re-organize your patches into
+cleaner patches, at least having one patch for each "topic" rather than
+seeing all the history of your attempts/fixes, etc? It would make the
+review easier.
 
-For example on Intel machines U-Boot uses locked cache as pre-relocation RAM.
-Other examples could be on-chip RAM etc.
+A few comments/questions:
 
-So what happens U-Boot does very-very basic initialization including say DDR
-init and then U-Boot copies itself in DDR (in the very end of available
-memory so it may then load something useful in the beginning of DDR for
-example Linux kernel or other executable).
+ * I'm not a big fan of the BR2_ROOTFS_SKELETON_TINY thing, at least in
+   the way it's implemented with a separate $(BUILD_DIR)/.tiny target.
 
-But to have an ability to execute relocated/moved code and access data
-that was also moved it's required to fixup locations of functions and data
-units that are accessed directly (i.e. by its address compared to relative
-offset from current location).
+ * Adding TARGETS to the os-release file seems a bit
+   unnecessary/unrelated to the change.
 
-Note that U-Boot copies all sections be it .data, .text,
-.rel etc. except .bss which is supposed to be used only after relocation
-and so its area just gets zeroed during "relocation".
+ * Can you explain why you need this new TARGETS_POST thing? Is it
+   something that needs to be called *after* the images have been
+   generated? Can you explain a bit what is happening in the nuttx
+   package at this stage?
 
-And what happens U-Boot is linked with "-pae" which leads to a fact
-that executable contains a special section called usually .rel or .rela
-where resides information about all directly addressed units.
+ * If there is a filesystem, is there a way of building certain
+   third-party applications? If so, which ones?
 
-During relocation U-Boot once all required sections were copied from
-flash/ROM to DDR reads data from .rel/.rela updates all directly used
-addresses (by simple addition of offset between address in flash/ROM and
-new location in DDR).
+ * The pluto_defconfig should be re-generated using savedefconfig, to
+   make the patch smaller.
 
-What is important PIC (Position-Independent Code) is not enough here
-because it only cares about code but not data. While PIE
-(Position-Independent Executable) cares about both code and data.
+ * In fs/common.mk, any reason to not call makedevs? You could for
+   example use an empty device table, that would probably be more
+   logical.
 
-Now we have U-Boot for ARC and it could be built from any recent upstream
-U-Boot release. And we want people to have ability to build U-Boot with
-Buildroot.
+ * I like how Linux and NuttX are seen as two distinct operating
+   systems.
 
-But as we know Buildroot builds only one toolchain for all purposes.
-Even for building Linux kernel or U-Boot while those are bare-metal
-executables compared to user-space apps that are normally built by
-*libc-toolchain.
+ * Make sure to remove trailing whitespace everywhere.
 
-In other words if we disable PIE in Buildroot's toolchain there will be
-no way to build U-Boot for ARC. And that's not what we want.
+ * Add the usual comment header in nuttx.mk.
 
-Note that U-Boot needs PIE not only on ARC but on x86, ARM and MIPS.
-So that's not unique "feature" or ARC. Some arches still use PIC in
-U-Boot but that causes problems here and there, requiring to patch
-offsets manually in each and every driver etc instead of using gcc,
-grep for CONFIG_NEEDS_MANUAL_RELOC if of any interest :)
+ * Don't put host-gcc-final in NUTTX_DEPENDENCIES, this is not needed.
+   nuttx is a target package, so it automatically depends on the
+   'toolchain' package, which depends on 'toolchain-buildroot', which
+   depends on 'host-gcc-final'.
 
-Hopefully my explanation makes some sense.
+ * Remove unneeded empty lines.
 
-If you guys have any thought on how to solve that problem better please
-shout.
+ * Use $(INSTALL) -D -m 0644 to install the nuttx image.
 
--Alexey
+ * Put the nuttx image installation in NUTTX_INSTALL_IMAGES_CMDS and
+   not NUTTX_INSTALL_TARGET_CMDS. You will have to set
+   NUTTX_INSTALL_IMAGES = YES to make this work.
+
+ * The nuttx_install_image thing in TARGETS_POST is a bit annoying. I
+   think we need to understand this a bit better to see how to
+   implement this nicely.
+
+ * Why do you need genromfs in menuconfig?
+
+ * In package/Makefile.in, I don't think you need to have a special
+   GNU_TARGET_NAME = $(ARCH)-$(TARGET_OS)-$(ABI) for newlib.
+   $(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI) should would
+   work fine, as long as LIBC is empty, no?
+
+ * In binutils.mk, removing the --disable-sim and --disable-gdb options
+   will require some other solution. Why are you doing this in the
+   first place?
+
+ * Enabling --enable-interwork when newlib is enabled does not make
+   sense, it needs to be related to some other option. Also, isn't
+   interwork only to make ARM and Thumb code cohabit? So on ARMv7 which
+   uses Thumb-2, this should be unnecessary. Why are you using this?
+
+ * In gcc-final.mk, according the -mthumb -march=armv7-m flags
+   definitely won't work in a generic way.
+
+ * Why do you need --disable-libstdcxx-pch ? This also needs to be made
+   conditional on something.
+
+ * Ditto gcc.mk: some explanation about the different changes are
+   needed, and they need to be reworked to be generic (i.e continue to
+   work with something else than your use case).
+
+ * newlib.mk should be using autotools-package instead of
+   generic-package.
+
+ * NEWLIB_APPLY_PATCHES is unneeded, applying patches is done
+   automatically by Buildroot. See
+   http://buildroot.org/downloads/manual/manual.html#patch-policy.
+
+ * Remove commented code in newlib.mk.
+
+ * The newlib patches should be named 0001-....patch and 0002-...patch,
+   carry a description and Signed-off-by.
+
+ * The OpenOCD bump to 0.8.0 has been merged in Buildroot, so if you
+   rebase your patch on top of the latest Buildroot, you won't have to
+   carry these changes.
+
+ * How is uClibc++ used compared to libstdc++ from gcc? Does it simply
+   overwrites the libstdc++ library installed by gcc? Is it only usable
+   with newlib?
+
+ * We should make sure that the user cannot enable Linux-only packages
+   when NuttX is selected.
+
+All in all, I think if we want to start merging that we should start by
+merging the support for building a newlib based toolchain, that's quite
+certainly the first step.
+
+Are you interested in pushing this up to the point where it becomes
+clean enough to be merged in the official Buildroot?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
