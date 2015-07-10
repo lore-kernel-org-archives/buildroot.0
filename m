@@ -1,41 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jul 2015 11:19:52 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/x11r7/libepoxy: Fix OpenGL /
- EGL dependencies
-In-Reply-To: <1430943308-13319-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1430943308-13319-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150710111952.5787d499@free-electrons.com>
+Date: Fri, 10 Jul 2015 11:20:35 +0200
+Subject: [Buildroot] [git commit] popt: add hash file
+Message-ID: <20150710092040.91AD081950@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=9c9598e023bd78de9a7a6acd154db0da4c8a86dc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  6 May 2015 22:15:08 +0200, Bernd Kuhls wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/popt/popt.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-> diff --git a/package/x11r7/libepoxy/Config.in b/package/x11r7/libepoxy/Config.in
-> index c4f5794..1b1ca3f 100644
-> --- a/package/x11r7/libepoxy/Config.in
-> +++ b/package/x11r7/libepoxy/Config.in
-> @@ -1,7 +1,13 @@
->  config BR2_PACKAGE_LIBEPOXY
->  	bool "epoxy"
-> -	depends on BR2_PACKAGE_MESA3D
-> +	depends on BR2_PACKAGE_HAS_LIBEGL
-> +	select BR2_PACKAGE_XLIB_LIBX11
-> +	select BR2_PACKAGE_XUTIL_UTIL_MACROS
-
-This doesn't make a lot of sense to me. Either you use EGL and you
-don't X, or you have X and you don't EGL.
-
-Can you explain a bit more what's going on here?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/popt/popt.hash b/package/popt/popt.hash
+new file mode 100644
+index 0000000..4d93e47
+--- /dev/null
++++ b/package/popt/popt.hash
+@@ -0,0 +1,2 @@
++# Locally calculated based on http://anduin.linuxfromscratch.org/sources/BLFS/svn/p/popt-1.16.tar.gz.md5sum
++sha256	e728ed296fe9f069a0e005003c3d6b2dde3d9cad453422a10d6558616d304cc8	popt-1.16.tar.gz
