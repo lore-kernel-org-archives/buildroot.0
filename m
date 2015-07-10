@@ -1,121 +1,111 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Jul 2015 01:06:16 +0200
-Subject: [Buildroot] [PATCH 1/7 v2] check: new package
-In-Reply-To: <1436458921-4199-2-git-send-email-sylvain.raybaud@green-communications.fr>
-References: <1436458921-4199-1-git-send-email-sylvain.raybaud@green-communications.fr>
- <1436458921-4199-2-git-send-email-sylvain.raybaud@green-communications.fr>
-Message-ID: <20150710230616.GF5469@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 11 Jul 2015 01:07:23 +0200
+Subject: [Buildroot] Adding package that builds Kernel Module (*.ko) to
+ Buildroot environment
+In-Reply-To: <CAGiqocXLc13enqMF9dZhtMVx0Q=3dp4620aGKG3TrvQXvcuK-A@mail.gmail.com>
+References: <CAGiqocXLc13enqMF9dZhtMVx0Q=3dp4620aGKG3TrvQXvcuK-A@mail.gmail.com>
+Message-ID: <55A0502B.3050001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sylvain, All,
+ Hi Ron,
 
-On 2015-07-09 18:21 +0200, Sylvain Raybaud spake thusly:
-> Add package check: a unit test library.
+ Please use text-only messages on this list, it looks much cleaner.
+
+On 07/10/15 01:05, Ron Schmitt wrote:
 > 
-> Signed-off-by: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-> ---
+>   Hello,
 > 
-> Changes v1 -> v2:
->  - Fixed Config.in (suggested by Yann E. Morin)
->  - Fixed hash file (suggested by Yann E. Morin)
->  - Changed dependency from pgkconf to host-pkgconf (suggested by Yann E. Morin)
->  - Fixed license (suggested by Yann E. Morin)
->  - Leave CHECK_INSTALL_STAGING and CHECK_INSTALL_TARGET to their default values (suggested by Yann E. Morin)
+> I am embarking on my first embedded driver development project.
+> 
+> 
+>   Could someone possibly give the explicit commands for how to do this, i..e.
+>   how to add a package that builds Kernel Module (*.ko) to Buildroot environment
+> 
+> 
+>   Let's assume the following:
+> 
+> - I have installed buildroot at   
+> 
+>     /path/buildroot
+> 
+> - I have executed "make menuconfig" and set up my build.  
+> - I have not yet run the build, i.e. I have not executed "make"
+> - I have copied your "/hello world" kernel module /c file to   
+> 
+>     /path/buildroot/mykmod.c
+> 
+> - I have copied your patch file to   
+> 
+>     /path/buildroot/kmod-example.patch
 
-No, you should have kept staging, because it installs a library.
+ This example is much too old to still be applicable with current buildroot,
+though the changes are not that dramatic.
 
-The rule is:
-  - only executable: keep the defaults (target=Y, staging=N)
-  - only installs static libs: target=N, staging=Y
-  - install shared libs: target=Y, staging=Y
+ With current buildroot, you should create a new directory outside of buildroot,
+which contains a Config.in and external.mk file and a directory mykmod that
+contains the files Config.in and mykmod.mk. See [1]
 
-So, in your case, you want to keep the default for target, but also
-instal in staging.
+ For your convencience, I've created that structure in [2]. You can just clone
+it and start from there.
+
+
+ The next step is to go to the buildroot directory and run:
+
+BR2_EXTERNAL=<path_to_buildroot-mykmod> make menuconfig
+
+You will now see an additional menu entry at the bottom: User-provided options.
+In this menu, select the mykmod package. Now run 'make' and it will be built.
+
+ Please consult the buildroot manual to understand what is going on here [3].
+For your real kernel module, you'll also want to replace the _SOURCE and _SITE
+variables with a reference to your VCS.
+
+
+ Note that very soon now, a new infrastructure will be merged to simplify the
+building of external linux kernel modules. With that infrastructure, mykmod.mk
+will become:
+
+###############################################################################
+#
+# mykmod
+#
+###############################################################################
+
+MYKMOD_VERSION = 1.0
+MYKMOD_SOURCE = mykmod-$(MYKMOD_VERSION).tar.bz2
+MYKMOD_SITE = file://$(BR2_EXTERNAL)
+
+$(eval $(kernel-module))
+$(eval $(generic-package))
+
+
 
 Regards,
-Yann E. MORIN.
+Arnout
 
->  package/Config.in        |  1 +
->  package/check/Config.in  |  7 +++++++
->  package/check/check.hash |  2 ++
->  package/check/check.mk   | 17 +++++++++++++++++
->  4 files changed, 27 insertions(+)
->  create mode 100644 package/check/Config.in
->  create mode 100644 package/check/check.hash
->  create mode 100644 package/check/check.mk
+[1] http://nightly.buildroot.org/manual.html#outside-br-custom
+[2] http://gitlab.com/arnout/buildroot-mykmod.git
+[3] http://nightly.buildroot.org/manual.html#adding-packages
+
+
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index 13a7e74..72ec372 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1014,6 +1014,7 @@ menu "Other"
->  	source "package/atf/Config.in"
->  	source "package/bdwgc/Config.in"
->  	source "package/boost/Config.in"
-> +	source "package/check/Config.in"
->  	source "package/clapack/Config.in"
->  	source "package/classpath/Config.in"
->  	source "package/cppcms/Config.in"
-> diff --git a/package/check/Config.in b/package/check/Config.in
-> new file mode 100644
-> index 0000000..4bdb4c8
-> --- /dev/null
-> +++ b/package/check/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_CHECK
-> +	bool "check"
-> +	select BR2_PACKAGE_LIBTOOL
-> +	select BR2_PACKAGE_PKGCONF
-> +	help
-> +	  Unit testing framework for C
-> +	  http://check.sourceforge.net/
-> diff --git a/package/check/check.hash b/package/check/check.hash
-> new file mode 100644
-> index 0000000..8ade191
-> --- /dev/null
-> +++ b/package/check/check.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha1	4b79e2d485d014ddb438e322b64235347d57b0ff	check-0.9.14.tar.gz
-> diff --git a/package/check/check.mk b/package/check/check.mk
-> new file mode 100644
-> index 0000000..83fd4fb
-> --- /dev/null
-> +++ b/package/check/check.mk
-> @@ -0,0 +1,17 @@
-> +################################################################################
-> +#
-> +# check
-> +#
-> +################################################################################
-> +
-> +CHECK_VERSION = 0.9.14
-> +CHECK_SOURCE = check-$(CHECK_VERSION).tar.gz
-> +CHECK_SITE = http://downloads.sourceforge.net/project/check/check/$(CHECK_VERSION)/
-> +
-> +CHECK_DEPENDENCIES = libtool host-pkgconf
-> +
-> +CHECK_LICENSE =  LGPLv2.1+
-> +CHECK_LICENSE_FILES = COPYING.LESSER
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> -- 
-> 1.9.1
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Thank you very much for your time and assistance.
+> 
+> 
+>   Ron
+[snip]
+
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
