@@ -1,96 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jul 2015 00:04:30 +0200
-Subject: [Buildroot] [git commit] zeromq: depend on libsodium if available
-Message-ID: <20150710220506.A2280819AB@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 11 Jul 2015 00:05:30 +0200
+Subject: [Buildroot] [PATCH] quagga: disable PIE on ARC
+In-Reply-To: <20150710150831.3ff095c8@free-electrons.com>
+References: <1436436011-8126-1-git-send-email-abrodkin@synopsys.com>
+ <559EE7E6.401@mind.be> <20150710084455.3462000c@free-electrons.com>
+ <1436515926.2800.26.camel@synopsys.com> <559F99A1.8060501@mind.be>
+ <1436527712.2800.46.camel@synopsys.com> <559FB8AE.7020302@mind.be>
+ <20150710150831.3ff095c8@free-electrons.com>
+Message-ID: <55A041AA.10608@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6272583956ebd659f40cd5e7ef89367abaa83539
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 07/10/15 15:08, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
+> 
+> On Fri, 10 Jul 2015 14:21:02 +0200, Arnout Vandecappelle wrote:
+> 
+>>  What I mean is that we patch gcc and only support the pie option if that magic
+>> environment variable is set.
+>>
+>>  But looking at the source, that's not going to be easy since the whole command
+>> line parsing is abstracted in a way that makes it difficult to hack something
+>> like that.
+>>
+>>  Perhaps another solution is that we disable -pie in the spec file, and pass an
+>> alternative spec file which does have pie support in U-Boot:
+>>
+>> UBOOT_MAKE_OPTS += \
+>> 	CC="$(TARGET_CC) -specs=path-to-specfile-with-pie"
+> 
+> In the end, this seems quite complicated. Not that many packages try to
+> build their executables as PIE, so maybe handling that on a per-package
+> basis is easier / less hacky.
 
-ZeroMQ doesn't require libsodium, but will enable CURVE security if it's
-available. This patch adds the optional dependency.
+ Less hacky for sure.
 
-[Thomas: pass --without-libsodium explicitly when libsodium is not
-enabled, and to achieve this, backport a patch from upstream zeromq.]
+ And at this point probably also easier, since probably most of them have
+already been handled.
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/zeromq/0004-allow-without-libsodium.patch |   38 +++++++++++++++++++++
- package/zeromq/zeromq.mk                          |    9 +++++
- 2 files changed, 47 insertions(+), 0 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/package/zeromq/0004-allow-without-libsodium.patch b/package/zeromq/0004-allow-without-libsodium.patch
-new file mode 100644
-index 0000000..19850ba
---- /dev/null
-+++ b/package/zeromq/0004-allow-without-libsodium.patch
-@@ -0,0 +1,38 @@
-+From c561766ab4ee4b3420b72e33fac4a75fb9194430 Mon Sep 17 00:00:00 2001
-+From: Min RK <benjaminrk@gmail.com>
-+Date: Mon, 16 Feb 2015 14:59:54 -0800
-+Subject: [PATCH] allow `--without-libsodium`
-+
-+and `--with-libsodium=no` to disable linking against libsodium.
-+
-+Without this patch, it is not possible to disable linking with libsodium present on the default path.
-+
-+Backport from upstream commit
-+faaf4550263395b84e6a80d3f9d7ba8816cdd714.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ configure.ac | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 194fcb2..3d5f6d6 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -257,7 +257,12 @@ esac
-+ # Checks for libraries
-+ AC_CHECK_LIB([pthread], [pthread_create])
-+ AC_CHECK_LIB([rt], [clock_gettime])
-+-AC_CHECK_LIB([sodium], [sodium_init],,AC_MSG_WARN(libsodium is needed for CURVE security))
-++
-++if test "x$with_libsodium" != "xno"; then
-++    AC_CHECK_LIB([sodium], [sodium_init],,AC_MSG_WARN(libsodium is needed for CURVE security))
-++else
-++    AC_MSG_WARN(libsodium is needed for CURVE security)
-++fi
-+ 
-+ #
-+ # Check if the compiler supports -fvisibility=hidden flag. MinGW32 uses __declspec
-+-- 
-+2.4.5
-+
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 7e9ed19..623a12e 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -12,6 +12,7 @@ ZEROMQ_LICENSE = LGPLv3+ with exceptions
- ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
- # For 0001-tests-disable-test_fork-if-fork-is-not-available.patch
- # and 0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
-+# and 0004-allow-without-libsodium.patch
- ZEROMQ_AUTORECONF = YES
- 
- # Assume these flags are always available. It is true, at least for
-@@ -34,4 +35,12 @@ ZEROMQ_DEPENDENCIES += host-pkgconf openpgm
- ZEROMQ_CONF_OPTS += --with-system-pgm
- endif
- 
-+# ZeroMQ uses libsodium if it's available.
-+ifeq ($(BR2_PACKAGE_LIBSODIUM), y)
-+ZEROMQ_DEPENDENCIES += libsodium
-+ZEROMQ_CONF_OPTS += --with-libsodium="$(STAGING_DIR)/usr"
-+else
-+ZEROMQ_CONF_OPTS += --without-libsodium
-+endif
-+
- $(eval $(autotools-package))
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
