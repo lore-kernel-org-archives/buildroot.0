@@ -1,54 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Jul 2015 00:05:30 +0200
-Subject: [Buildroot] [PATCH] quagga: disable PIE on ARC
-In-Reply-To: <20150710150831.3ff095c8@free-electrons.com>
-References: <1436436011-8126-1-git-send-email-abrodkin@synopsys.com>
- <559EE7E6.401@mind.be> <20150710084455.3462000c@free-electrons.com>
- <1436515926.2800.26.camel@synopsys.com> <559F99A1.8060501@mind.be>
- <1436527712.2800.46.camel@synopsys.com> <559FB8AE.7020302@mind.be>
- <20150710150831.3ff095c8@free-electrons.com>
-Message-ID: <55A041AA.10608@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Jul 2015 00:16:18 +0200
+Subject: [Buildroot] [PATCH v7 22/22] cpio: new package
+In-Reply-To: <CANn-YGTt5AoiV=5ht_4krY6EvVNTih=tiYqDoty6WmykeqkFug@mail.gmail.com>
+References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <1433251718-3167-23-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <20150706123840.61ff3672@free-electrons.com>
+ <CANn-YGTt5AoiV=5ht_4krY6EvVNTih=tiYqDoty6WmykeqkFug@mail.gmail.com>
+Message-ID: <20150711001618.44eb6d3c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/10/15 15:08, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
+Clayton, 
+
+On Fri, 10 Jul 2015 16:02:41 -0500, Clayton Shotwell wrote:
+
+> > What is the motivation to have a host variant of cpio? cpio is already
+> > part of the mandatory programs that Buildroot checks for at the
+> > beginning of every build: it must be installed on the host system prior
+> > to running Buildroot.
 > 
-> On Fri, 10 Jul 2015 14:21:02 +0200, Arnout Vandecappelle wrote:
+> Well I am not using it for anything in particular, I really just need
+> the target variant. I can remove the host option without any impact to
+> anything.
+
+Well, if you don't use it, then I'd prefer to not support the host
+build, especially since cpio is already a mandatory dependency of
+Buildroot.
+
+We do have cases (like tar) where we support building a host option
+even if it's a mandatory dependency, because some platforms have a too
+old tar for Buildroot.
+
 > 
->>  What I mean is that we patch gcc and only support the pie option if that magic
->> environment variable is set.
->>
->>  But looking at the source, that's not going to be easy since the whole command
->> line parsing is abstracted in a way that makes it difficult to hack something
->> like that.
->>
->>  Perhaps another solution is that we disable -pie in the spec file, and pass an
->> alternative spec file which does have pie support in U-Boot:
->>
->> UBOOT_MAKE_OPTS += \
->> 	CC="$(TARGET_CC) -specs=path-to-specfile-with-pie"
+> > If the ArchLinux patches apply without any adaptation, have you
+> > considered using:
+> >
+> > CPIO_PATCH = \
+> >         https://projects.archlinux.org/svntogit/packages.git/plain/trunk/cpio-2.11-stdio.in.patch?h=packages/cpio \
+> >         ...
+> >
+> > instead ?
 > 
-> In the end, this seems quite complicated. Not that many packages try to
-> build their executables as PIE, so maybe handling that on a per-package
-> basis is easier / less hacky.
+> I always forget that is an option because I cannot freely download
+> stuff behind our firewall. I'll look at changing the patches to links
+> to make things simpler but I may have issues testing that all the
+> links work properly.
 
- Less hacky for sure.
+I can test before committing, no problem with that.
 
- And at this point probably also easier, since probably most of them have
-already been handled.
+Thanks!
 
- Regards,
- Arnout
-
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
