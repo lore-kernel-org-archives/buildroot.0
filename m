@@ -1,29 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jul 2015 08:44:55 +0200
-Subject: [Buildroot] [PATCH] quagga: disable PIE on ARC
-In-Reply-To: <559EE7E6.401@mind.be>
-References: <1436436011-8126-1-git-send-email-abrodkin@synopsys.com>
- <559EE7E6.401@mind.be>
-Message-ID: <20150710084455.3462000c@free-electrons.com>
+Date: Fri, 10 Jul 2015 09:54:19 +0200
+Subject: [Buildroot] [PATCH 7/7 v2] mysql: add mariadb galera cluster
+ variant
+In-Reply-To: <CAHXCMMKV79jKA9YcA_f6KxWuivKMjP8_zZKjHjAHDU6hgiiXCg@mail.gmail.com>
+References: <1436458921-4199-1-git-send-email-sylvain.raybaud@green-communications.fr>
+ <1436458921-4199-8-git-send-email-sylvain.raybaud@green-communications.fr>
+ <CAHXCMMKV79jKA9YcA_f6KxWuivKMjP8_zZKjHjAHDU6hgiiXCg@mail.gmail.com>
+Message-ID: <20150710095419.1ec6da31@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Alexey,
+Dear Samuel Martin,
 
-On Thu, 9 Jul 2015 23:30:14 +0200, Arnout Vandecappelle wrote:
-> On 07/09/15 12:00, Alexey Brodkin wrote:
-> > Even though ARC gcc understands "-pie" option and attempts to generate
-> > PIE binaries as of today PIE is not really supported for user-space
-> > applications.
+On Thu, 9 Jul 2015 23:56:25 +0200, Samuel Martin wrote:
+
+> Here is a partial review (inlined).
 > 
->  Wouldn't it be better then if we would patch gcc to remove the -pie option?
-> That removes all these special cases in one fell swoop, and is much easier to
-> un-disable once PIE _is_ supported for ARC gcc.
+> But, overall, I feel like this implementation (essentially the *.mk
+> file) does not match the Buildroot way of doing things... :-/
+> Have you look at the virtual package infrastructure [1]?
 
-It would indeed be a lot better.
+Fully agreed. Using the same package for both MySQL and MariaDB would
+make sense if their build system was similar. But it's completely
+different, so it really needs to be two separate packages.
+
+Then, if their client libraries are compatible, so that client
+applications can use either MySQL or MariaDB with no change, then doing
+a virtual package is indeed the right direction.
 
 Best regards,
 
