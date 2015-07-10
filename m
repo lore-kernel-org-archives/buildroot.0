@@ -1,62 +1,44 @@
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Fri, 10 Jul 2015 12:56:38 -0500
-Subject: [Buildroot] [PATCH v7 08/22] busybox: selinux support
-In-Reply-To: <CAHXCMMJkfEGqWFtW02iKWL3KEy7xFU=MLa=trcEkfMaL_WLk3g@mail.gmail.com>
-References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1433251718-3167-9-git-send-email-clayton.shotwell@rockwellcollins.com>
- <CAHXCMMJkfEGqWFtW02iKWL3KEy7xFU=MLa=trcEkfMaL_WLk3g@mail.gmail.com>
-Message-ID: <CANn-YGQ2wx_oOkf1HHpvEbziarsf6hw818t+0er3gCagbCXbPA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 10 Jul 2015 15:10:04 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10, 14,
+	18}.x and 4.{0, 1}.x series
+Message-ID: <1436551805-32402-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-On Sat, Jun 20, 2015 at 11:23 AM, Samuel Martin <s.martin49@gmail.com> wrote:
-> Hi Clayton,
->
-> On Tue, Jun 2, 2015 at 3:28 PM, Clayton Shotwell
-> <clayton.shotwell@rockwellcollins.com> wrote:
-> [...]
->> diff --git a/package/busybox/Config.in b/package/busybox/Config.in
->> index feed560..e345d66 100644
->> --- a/package/busybox/Config.in
->> +++ b/package/busybox/Config.in
->> @@ -41,6 +41,23 @@ comment "Busybox individual binaries depends on dynamic libraries"
->>         depends on BR2_STATIC_LIBS
->>         depends on BR2_bfin
->>
->> +config BR2_PACKAGE_BUSYBOX_SELINUX
->> +       select BR2_PACKAGE_LIBSELINUX
->> +       depends on BR2_TOOLCHAIN_HAS_THREADS
->> +       depends on !BR2_STATIC_LIBS
->> +       bool "Enable SELinux support"
->> +       help
->> +         Enable SELinux support in BusyBox. Please note that depending on
->> +         you BusyBox config and the SELinux policy implementation, you may
-> s/you BusyBox/your BusyBox/
-> s/ config / configuration /
-
-I'll get those fixed.
-
->> +         want to also enable BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES.
->> +
->> +         For instance, if your BusyBox configuration only uses a couple of
->> +         minor BusyBox features, such as simple command line utilities, the
->> +         symlinked version of BusyBox can be used to save space. If BusyBox
->> +         provides more features, such as crond, then individual binaries
->> +         have to be enabled for the SELinux type transitions to occur properly.
->> +
->> +
-> nitpicking: one blank line is enough... ;-)
-
-Good catch. I appreciate the nitpicks.
-
-Thanks,
-Clayton
-
-Clayton Shotwell
-Senior Software Engineer, Rockwell Collins
-clayton.shotwell at rockwellcollins.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 9846f37..ec6e64d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -209,16 +209,16 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.108"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.83"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.84"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.44"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.47"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.48"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.17"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.18"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+-	default "4.0.7"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.1"		if BR2_KERNEL_HEADERS_4_1
++	default "4.0.8"		if BR2_KERNEL_HEADERS_4_0
++	default "4.1.2"		if BR2_KERNEL_HEADERS_4_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+2.3.6
