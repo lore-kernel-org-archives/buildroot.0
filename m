@@ -1,26 +1,41 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 10 Jul 2015 20:30:19 +0200
-Subject: [Buildroot] [PATCH v7 11/22] sysvinit: added libselinux
-	dependency
-In-Reply-To: <1433251718-3167-12-git-send-email-clayton.shotwell@rockwellcollins.com>
-References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1433251718-3167-12-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <CAHXCMMKigboRfGo-6mcXoR4cr4y8+tWHU_N85RSpiUOn02gM3w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Jul 2015 20:24:57 +0200
+Subject: [Buildroot] [git commit] libunistring: bump to version 0.9.6
+Message-ID: <20150710183153.C4B7B7FF1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 2, 2015 at 3:28 PM, Clayton Shotwell
-<clayton.shotwell@rockwellcollins.com> wrote:
-> From: Matt Weber <matthew.weber@rockwellcollins.com>
->
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=72688a00d501f9c6809e6c054562aa7625600d10
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libunistring/libunistring.hash |    2 +-
+ package/libunistring/libunistring.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-
--- 
-Samuel
+diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+index e272997..ba4b642 100644
+--- a/package/libunistring/libunistring.hash
++++ b/package/libunistring/libunistring.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	0b3f4dbea5124f56639a701376ed78e5f595e7b720cfbb0cf1f81f375894c77b	libunistring-0.9.5.tar.xz
++sha256	2df42eae46743e3f91201bf5c100041540a7704e8b9abfd57c972b2d544de41b	libunistring-0.9.6.tar.xz
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+index 0060518..bb1641e 100644
+--- a/package/libunistring/libunistring.mk
++++ b/package/libunistring/libunistring.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUNISTRING_VERSION = 0.9.5
++LIBUNISTRING_VERSION = 0.9.6
+ LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
+ LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
+ LIBUNISTRING_INSTALL_STAGING = YES
