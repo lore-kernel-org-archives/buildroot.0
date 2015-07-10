@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jul 2015 20:25:15 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.1.2
-Message-ID: <20150710183153.EA2E57FF1B@busybox.osuosl.org>
+Date: Fri, 10 Jul 2015 20:24:52 +0200
+Subject: [Buildroot] [git commit] libidn: bump to version 1.31
+Message-ID: <20150710183153.BB3F58198B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e97938286f7fe3129412105cd8533c2197787bab
+commit: http://git.buildroot.net/buildroot/commit/?id=43860b868c41aaf84229317fc8d0c0525a2024fa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/libidn/libidn.hash |    4 ++--
+ package/libidn/libidn.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 74fb435..8c86a1a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
+index d41443e..6425d55 100644
+--- a/package/libidn/libidn.hash
++++ b/package/libidn/libidn.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.gnu.org/archive/html/help-libidn/2015-03/msg00001.html
+-sha1	557e1e37f0978e975b21bcdc243c198cb708bb75	libidn-1.30.tar.gz
++# From http://lists.gnu.org/archive/html/help-libidn/2015-07/msg00011.html
++sha1	0bb34003a0fe05a91e60d346803401f16c82a1fb	libidn-1.31.tar.gz
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index 13436e9..e10fb6e 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "4.1.1"
-+	bool "4.1.2"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.1.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.1.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-LIBIDN_VERSION = 1.30
++LIBIDN_VERSION = 1.31
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no"
