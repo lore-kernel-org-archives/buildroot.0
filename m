@@ -1,676 +1,1032 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Fri, 10 Jul 2015 18:27:47 -0500
-Subject: [Buildroot] [PATCH v8 01/16] policycoreutils: new package
+Date: Fri, 10 Jul 2015 18:27:48 -0500
+Subject: [Buildroot] [PATCH v8 02/16] refpolicy: new package
 In-Reply-To: <1436570882-56442-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1436570882-56442-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1436570882-56442-2-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1436570882-56442-3-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+
 Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
 ---
 Changes v7 -> v8:
-  - Cleaned up indentations in policycoreutils.mk (Suggested by
-    Thomas P.)
-  - Fixed sed separator (Suggested by Thomas P.)
-  - Cleaned up cross compile patches and make options (Suggested by
-    Thomas P.)
-  - Changed dbus-glib dependency to a select and cleaned up the
-    dependencies (Suggested by Thomas P.)
+  - Changes REFPOLICY_MAKE_CMDS to REFPOLICY_MAKE_OPTS (Suggested by
+    Samuel)
+  - Added a help section to the custom git repo to explain why the
+    refpolicy-contrib option is needed (Suggested by Samuel)
+  - Added rsync exclusions to ensure no unneeded files are copied during
+    the refpolicy-contrib sync (Suggested by Samuel)
 
 Changes v6 -> v7:
-  - No changes
+  - Moving the refpolicy patch into a version specific folder to
+    prevent it from being applied to the custom git repos. (Clayton S.)
 
 Changes v5 -> v6:
-  - No changes
+  - Fixed references to GIT in config files (Suggested by Ryan B.)
+  - Removed execute permissions on files (Suggested by Ryan B.)
+  - Fixed spelling error and changed staging install to always install
+    the documentation (Suggested by Samuel)
 
 Changes v4 -> v5:
-  - Updated depends and removed glibc dependency (Matt W.)
-  - Updated site to github (Matt W.)
-  - Added host python 2/3 support (Matt W.)
-  - Removed sandbox and mctrans support (Matt W.)
-  - Removed restorcon init script (Matt W.)
-  - Agree as optional settings were removed so menu isn't needed
-    (Suggested by Ryan B. and Thomas P.)
-  - added Config.in select for LIBCAP_NG (Suggested by Thomas P.)
-  - cleaned up pam/audit ifeq (Suggested by Thomas P.)
-  - fixed CFLAGS to include target_cflags instead of += (Suggested by
-    Thomas P.)
-  - Refactored lists of build/install steps into loops  (Suggested by
-    Thomas P.)
-  - Removed += on first host depends assignment (Suggested by Thomas P.)
-  - Refactored host make opts assignments (Suggested by Thomas P.)
-  - Limited to glibc because of fts.h, some uclibc toolchains have it
-    others don't.  Eventually this would be good to fix with the updated
-    method of file traversal. (Matt W.)
-  - Gettext fixups for uclibc support.  Counter productive as we
-    now limit to glibc only. (Matt W.)
-  - Added musl as possible lib type (Matt W.)
-  - Removed largefile dependency (Clayton S.)
-  - Changed dbus-glib select to a depends on in the Config.in (suggested
-    by Ryan B.)
+  - Removed TODO and dependency on glibc (Matt W.)
+  - Added lib depends to meet policycoreutils limitation on std lib
+    (Matt W.)
+  - Added comment for when an option is not defined (Matt W.)
+  - Removed largefile, locale, and wchar dependencies (Clayton S.)
+  - Remove dependancy on host-python-pyxml (Ryan B.)
+  - Forced package to use $(HOST_DIR)/usr/bin/python2 for python
+    executable (Ryan B.)
+  - Added host-python dependency (Clayton S.)
+  - Removed config menu (suggested by Thomas P.)
+  - Added patch to fix awk issue (Clayton S.)
 
 Changes v3 -> v4:
-  - Add a select for the libselinux Python bindings when debugging
-    is enabled.  This will cause Python to be built for the target
-    (suggested by Thomas P.)
-  - Cleaned up the configure comments (suggested by Thomas).
-  - Added a dependency on BR2_USE_MMU for the debugging option
-    because python requires it (suggested by Thomas P.)
-  - Removed the dependencies on audit and linux-pam. Both packages
-    are now optional dependencies based on whether or not the package
-    has been selected
-  - Moved the dependency on dbus-glib to only the restorecond option
-    where it is used
-  - Added a INSTALL_INIT_SYSV for the restorecond daemon rather than
-    just installing it directly
-  - Adding a dependency on glibc
-  - Removed the clean commands
+  - Added a dependency on host-gawk and correct the awk calls
+    in the makefile to use $(AWK)
+  - Changed the default policy name to br_policy to differentiate
+    the policy generated from refpolicy
+  - Added a install step to create a /.autorelabel file to cause
+    the file system to be relabeled by S12SELinux init script
+  - Adding a default modules.conf file with an option to specify
+    a different one. This will decrease the build time for
+    refpolicy by removing unused policies. (implemented by
+    Thomas P.)
+  - Cleaned up the configure comments (implemented by Thomas).
+  - Added a check to only install the documentation if the
+    Buildroot option is enabled
+  - Removed the build because the install step completes the
+    same process. Also removed the clean step because it is
+    being removed globally from buildroot (implemented by
+    Thomas P.)
+  - Added more error handling to the startup script to print
+    a warning if SELinux fails to install the policy if it
+    exists. This can be caused by the kernel not being configured
+    with SELinux enabled
 
 Changes v2 -> v3:
-  - Added dependencies on BR2_TOOLCHAIN_HAS_THREADS and BR2_LARGEFILE
-    (suggested by Thomas P.)
   - Changes patch naming convention (suggested by Thomas P.)
-  - Added selects for linux-pam and audit
+  - Added dependencies on BR2_TOOLCHAIN_HAS_THREADS and
+    BR2_LARGEFILE (suggested by Thomas P.)
+  - Removed configure option for a specific patch folder
+    (suggested by Thomas P.)
+  - Removed distribution configuration option (suggested by Thomas)
+  - Changed the monolithic configuration option to a modular
+    configuration option (suggested by Thomas P.)
+  - Removed the refpolicy name option (suggested by Thomas P.)
+  - Corrected gramatical and comment errors (suggested by Thomas P.)
+  - Multiple style corrections to the mk file (suggested by Thomas P.)
+  - Added a comment to clairfy the usage of the the host build
+    options for a target build
 
 Changes v1 -> v2:
   - General cleanup to the mk file to conform to the standard format
-  - Fixed the patch naming to avoid using the version number
-  - Cleaned up the patch to include a signed-off-by line
+  - Fixed the patch naming to match the standard 4 digit numbering
   - Changed package dependencies into selects in the config
 ---
- package/Config.in                                  |   1 +
- ...IR-to-all-paths-that-use-an-absolute-path.patch | 258 +++++++++++++++++++++
- .../0002-Allow-CFLAGS-to-be-overwritten.patch      |  57 +++++
- ...licy-python-install-arguments-to-be-a-var.patch |  42 ++++
- package/policycoreutils/Config.in                  |  59 +++++
- package/policycoreutils/policycoreutils.hash       |   2 +
- package/policycoreutils/policycoreutils.mk         | 107 +++++++++
- 7 files changed, 526 insertions(+)
- create mode 100644 package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
- create mode 100644 package/policycoreutils/0002-Allow-CFLAGS-to-be-overwritten.patch
- create mode 100644 package/policycoreutils/0003-Change-sepolicy-python-install-arguments-to-be-a-var.patch
- create mode 100644 package/policycoreutils/Config.in
- create mode 100644 package/policycoreutils/policycoreutils.hash
- create mode 100644 package/policycoreutils/policycoreutils.mk
+ package/Config.in                                  |   2 +
+ package/refpolicy-contrib/Config.in                |  19 +
+ package/refpolicy-contrib/refpolicy-contrib.mk     |  18 +
+ .../0001-Fix-awk-references-to-use-variable.patch  |  42 +++
+ package/refpolicy/Config.in                        |  99 +++++
+ package/refpolicy/S00selinux                       | 136 +++++++
+ package/refpolicy/config                           |   8 +
+ package/refpolicy/modules.conf                     | 406 +++++++++++++++++++++
+ package/refpolicy/refpolicy.hash                   |   2 +
+ package/refpolicy/refpolicy.mk                     | 120 ++++++
+ 10 files changed, 852 insertions(+)
+ create mode 100644 package/refpolicy-contrib/Config.in
+ create mode 100644 package/refpolicy-contrib/refpolicy-contrib.mk
+ create mode 100644 package/refpolicy/2.20130424/0001-Fix-awk-references-to-use-variable.patch
+ create mode 100644 package/refpolicy/Config.in
+ create mode 100644 package/refpolicy/S00selinux
+ create mode 100644 package/refpolicy/config
+ create mode 100644 package/refpolicy/modules.conf
+ create mode 100644 package/refpolicy/refpolicy.hash
+ create mode 100644 package/refpolicy/refpolicy.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d9b0794..8aea808 100644
+index 8aea808..2cc81fa 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1351,6 +1351,7 @@ menu "Real-Time"
- endmenu
+@@ -1352,6 +1352,8 @@ endmenu
  
  menu "Security"
-+	source "package/policycoreutils/Config.in"
+ 	source "package/policycoreutils/Config.in"
++	source "package/refpolicy/Config.in"
++	source "package/refpolicy-contrib/Config.in"
  	source "package/setools/Config.in"
  endmenu
  
-diff --git a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
+diff --git a/package/refpolicy-contrib/Config.in b/package/refpolicy-contrib/Config.in
 new file mode 100644
-index 0000000..016980f
+index 0000000..b518248
 --- /dev/null
-+++ b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-@@ -0,0 +1,258 @@
-+From a8eea90050551e42d4dc81867853f351282f9f90 Mon Sep 17 00:00:00 2001
-+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+Date: Fri, 10 Jul 2015 11:44:08 -0500
-+Subject: [PATCH 1/3] Add DESTDIR to all paths that use an absolute path
++++ b/package/refpolicy-contrib/Config.in
+@@ -0,0 +1,19 @@
++if BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
 +
-+To aid in cross compiling, add the DESTDIR variable to the start of all
-+of the paths used during compilation. Most paths already used DESTDIR.
++comment "A refpolicy contrib repository is required if using a refpolicy repo. (Contrib is a Git submodule of refpolicy)"
 +
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+---
-+ Makefile                |  4 ++--
-+ audit2allow/Makefile    |  2 +-
-+ load_policy/Makefile    |  2 +-
-+ mcstrans/src/Makefile   | 11 +++++++----
-+ mcstrans/utils/Makefile |  9 ++++++---
-+ newrole/Makefile        | 12 ++++++------
-+ restorecond/Makefile    |  6 ++++--
-+ run_init/Makefile       | 12 ++++++------
-+ sepolicy/Makefile       |  2 +-
-+ setfiles/Makefile       |  4 ++--
-+ 10 files changed, 36 insertions(+), 28 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 3980799..0fca022 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1,8 +1,8 @@
-+ SUBDIRS = sepolicy setfiles semanage load_policy newrole run_init sandbox secon audit2allow audit2why sestatus semodule_package semodule semodule_link semodule_expand semodule_deps sepolgen-ifgen setsebool scripts po man gui
-+ 
-+-INOTIFYH = $(shell ls /usr/include/sys/inotify.h 2>/dev/null)
-++INOTIFYH = $(shell ls $(DESTDIR)/usr/include/sys/inotify.h 2>/dev/null)
-+ 
-+-ifeq (${INOTIFYH}, /usr/include/sys/inotify.h)
-++ifeq (${INOTIFYH}, $(DESTDIR)/usr/include/sys/inotify.h)
-+ 	SUBDIRS += restorecond
-+ endif
-+ 
-+diff --git a/audit2allow/Makefile b/audit2allow/Makefile
-+index 88635d4..933e520 100644
-+--- a/audit2allow/Makefile
-++++ b/audit2allow/Makefile
-+@@ -3,7 +3,7 @@ PREFIX ?= $(DESTDIR)/usr
-+ BINDIR ?= $(PREFIX)/bin
-+ LIBDIR ?= $(PREFIX)/lib
-+ MANDIR ?= $(PREFIX)/share/man
-+-LOCALEDIR ?= /usr/share/locale
-++LOCALEDIR ?= $(DESTDIR)/usr/share/locale
-+ 
-+ all: ;
-+ 
-+diff --git a/load_policy/Makefile b/load_policy/Makefile
-+index 7c5bab0..4129d8f 100644
-+--- a/load_policy/Makefile
-++++ b/load_policy/Makefile
-+@@ -3,7 +3,7 @@ PREFIX ?= $(DESTDIR)/usr
-+ SBINDIR ?= $(DESTDIR)/sbin
-+ USRSBINDIR ?= $(PREFIX)/sbin
-+ MANDIR ?= $(PREFIX)/share/man
-+-LOCALEDIR ?= /usr/share/locale
-++LOCALEDIR ?= $(DESTDIR)/usr/share/locale
-+ 
-+ CFLAGS ?= -Werror -Wall -W
-+ override CFLAGS += $(LDFLAGS) -I$(PREFIX)/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
-+diff --git a/mcstrans/src/Makefile b/mcstrans/src/Makefile
-+index fb44490..1982b43 100644
-+--- a/mcstrans/src/Makefile
-++++ b/mcstrans/src/Makefile
-+@@ -1,15 +1,18 @@
-+ ARCH = $(shell uname -i)
-+ ifeq "$(ARCH)" "x86_64"
-+ 	# In case of 64 bit system, use these lines
-+-	LIBDIR=/usr/lib64
-+-else 
-++	LIBDIR=$(DESTDIR)/usr/lib64
-++else
-+ ifeq "$(ARCH)" "i686"
-+ 	# In case of 32 bit system, use these lines
-+-	LIBDIR=/usr/lib
-++	LIBDIR=$(DESTDIR)/usr/lib
-+ else
-+ ifeq "$(ARCH)" "i386"
-+ 	# In case of 32 bit system, use these lines
-+-	LIBDIR=/usr/lib
-++	LIBDIR=$(DESTDIR)/usr/lib
-++else
-++	# Default to these lines if arch is unknown
-++	LIBDIR=$(DESTDIR)/usr/lib
-+ endif
-+ endif
-+ endif
-+diff --git a/mcstrans/utils/Makefile b/mcstrans/utils/Makefile
-+index 1ffb027..dcdc68b 100644
-+--- a/mcstrans/utils/Makefile
-++++ b/mcstrans/utils/Makefile
-+@@ -5,15 +5,18 @@ BINDIR ?= $(PREFIX)/sbin
-+ ARCH = $(shell uname -i)
-+ ifeq "$(ARCH)" "x86_64"
-+         # In case of 64 bit system, use these lines
-+-        LIBDIR=/usr/lib64
-++        LIBDIR=$(DESTDIR)/usr/lib64
-+ else
-+ ifeq "$(ARCH)" "i686"
-+         # In case of 32 bit system, use these lines
-+-        LIBDIR=/usr/lib
-++        LIBDIR=$(DESTDIR)/usr/lib
-+ else
-+ ifeq "$(ARCH)" "i386"
-+         # In case of 32 bit system, use these lines
-+-        LIBDIR=/usr/lib
-++        LIBDIR=$(DESTDIR)/usr/lib
-++else
-++        # Default to these lines if arch is unknown
-++        LIBDIR=$(DESTDIR)/usr/lib
-+ endif
-+ endif
-+ endif
-+diff --git a/newrole/Makefile b/newrole/Makefile
-+index 646cd4d..a876ff3 100644
-+--- a/newrole/Makefile
-++++ b/newrole/Makefile
-+@@ -3,9 +3,9 @@ PREFIX ?= $(DESTDIR)/usr
-+ BINDIR ?= $(PREFIX)/bin
-+ MANDIR ?= $(PREFIX)/share/man
-+ ETCDIR ?= $(DESTDIR)/etc
-+-LOCALEDIR = /usr/share/locale
-+-PAMH = $(shell ls /usr/include/security/pam_appl.h 2>/dev/null)
-+-AUDITH = $(shell ls /usr/include/libaudit.h 2>/dev/null)
-++LOCALEDIR = $(DESTDIR)/usr/share/locale
-++PAMH = $(shell ls $(DESTDIR)/usr/include/security/pam_appl.h 2>/dev/null)
-++AUDITH = $(shell ls $(DESTDIR)/usr/include/libaudit.h 2>/dev/null)
-+ # Enable capabilities to permit newrole to generate audit records.
-+ # This will make newrole a setuid root program.
-+ # The capabilities used are: CAP_AUDIT_WRITE.
-+@@ -24,7 +24,7 @@ CFLAGS ?= -Werror -Wall -W
-+ EXTRA_OBJS =
-+ override CFLAGS += -DVERSION=\"$(VERSION)\" $(LDFLAGS) -I$(PREFIX)/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
-+ LDLIBS += -lselinux -L$(PREFIX)/lib
-+-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
-++ifeq ($(PAMH), $(DESTDIR)/usr/include/security/pam_appl.h)
-+ 	override CFLAGS += -DUSE_PAM
-+ 	EXTRA_OBJS += hashtab.o
-+ 	LDLIBS += -lpam -lpam_misc
-+@@ -32,7 +32,7 @@ else
-+ 	override CFLAGS += -D_XOPEN_SOURCE=500
-+ 	LDLIBS += -lcrypt
-+ endif
-+-ifeq ($(AUDITH), /usr/include/libaudit.h)
-++ifeq ($(AUDITH), $(DESTDIR)/usr/include/libaudit.h)
-+ 	override CFLAGS += -DUSE_AUDIT
-+ 	LDLIBS += -laudit
-+ endif
-+@@ -66,7 +66,7 @@ install: all
-+ 	test -d $(MANDIR)/man1 || install -m 755 -d $(MANDIR)/man1
-+ 	install -m $(MODE) newrole $(BINDIR)
-+ 	install -m 644 newrole.1 $(MANDIR)/man1/
-+-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
-++ifeq ($(PAMH), $(DESTDIR)/usr/include/security/pam_appl.h)
-+ 	test -d $(ETCDIR)/pam.d || install -m 755 -d $(ETCDIR)/pam.d
-+ ifeq ($(LSPP_PRIV),y)
-+ 	install -m 644 newrole-lspp.pamd $(ETCDIR)/pam.d/newrole
-+diff --git a/restorecond/Makefile b/restorecond/Makefile
-+index 3074542..7c40f95 100644
-+--- a/restorecond/Makefile
-++++ b/restorecond/Makefile
-+@@ -10,11 +10,13 @@ autostart_DATA = sealertauto.desktop
-+ INITDIR = $(DESTDIR)/etc/rc.d/init.d
-+ SELINUXDIR = $(DESTDIR)/etc/selinux
-+ 
-+-DBUSFLAGS = -DHAVE_DBUS -I/usr/include/dbus-1.0 -I/usr/lib64/dbus-1.0/include -I/usr/lib/dbus-1.0/include
-++DBUSFLAGS = -DHAVE_DBUS -I$(PREFIX)/include/dbus-1.0 -I$(PREFIX)/lib64/dbus-1.0/include \
-++		-I$(PREFIX)/lib/dbus-1.0/include
-+ DBUSLIB = -ldbus-glib-1 -ldbus-1
-+ 
-+ CFLAGS ?= -g -Werror -Wall -W
-+-override CFLAGS += -I$(PREFIX)/include $(DBUSFLAGS) -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib/glib-2.0/include
-++override CFLAGS += -I$(PREFIX)/include $(DBUSFLAGS) -I$(PREFIX)/include/glib-2.0 \
-++		-I$(PREFIX)/lib64/glib-2.0/include -I$(PREFIX)/lib/glib-2.0/include
-+ 
-+ LDLIBS += -lselinux $(DBUSLIB) -lglib-2.0 -L$(LIBDIR)
-+ 
-+diff --git a/run_init/Makefile b/run_init/Makefile
-+index 12b39b4..3c6f58a 100644
-+--- a/run_init/Makefile
-++++ b/run_init/Makefile
-+@@ -4,21 +4,21 @@ PREFIX ?= $(DESTDIR)/usr
-+ SBINDIR ?= $(PREFIX)/sbin
-+ MANDIR ?= $(PREFIX)/share/man
-+ ETCDIR ?= $(DESTDIR)/etc
-+-LOCALEDIR ?= /usr/share/locale
-+-PAMH = $(shell ls /usr/include/security/pam_appl.h 2>/dev/null)
-+-AUDITH = $(shell ls /usr/include/libaudit.h 2>/dev/null)
-++LOCALEDIR ?= $(DESTDIR)/usr/share/locale
-++PAMH = $(shell ls $(DESTDIR)/usr/include/security/pam_appl.h 2>/dev/null)
-++AUDITH = $(shell ls $(DESTDIR)/usr/include/libaudit.h 2>/dev/null)
-+ 
-+ CFLAGS ?= -Werror -Wall -W
-+ override CFLAGS += -I$(PREFIX)/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
-+ LDLIBS += -lselinux -L$(PREFIX)/lib
-+-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
-++ifeq ($(PAMH), $(DESTDIR)/usr/include/security/pam_appl.h)
-+ 	override CFLAGS += -DUSE_PAM
-+ 	LDLIBS += -lpam -lpam_misc
-+ else
-+ 	override CFLAGS += -D_XOPEN_SOURCE=500
-+ 	LDLIBS += -lcrypt
-+ endif
-+-ifeq ($(AUDITH), /usr/include/libaudit.h)
-++ifeq ($(AUDITH), $(DESTDIR)/usr/include/libaudit.h)
-+ 	override CFLAGS += -DUSE_AUDIT
-+ 	LDLIBS += -laudit
-+ endif
-+@@ -38,7 +38,7 @@ install: all
-+ 	install -m 755 open_init_pty $(SBINDIR)
-+ 	install -m 644 run_init.8 $(MANDIR)/man8/
-+ 	install -m 644 open_init_pty.8 $(MANDIR)/man8/
-+-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
-++ifeq ($(PAMH), $(DESTDIR)/usr/include/security/pam_appl.h)
-+ 	install -m 644 run_init.pamd $(ETCDIR)/pam.d/run_init
-+ endif
-+ 
-+diff --git a/sepolicy/Makefile b/sepolicy/Makefile
-+index 11b534f..1074d26 100644
-+--- a/sepolicy/Makefile
-++++ b/sepolicy/Makefile
-+@@ -5,7 +5,7 @@ LIBDIR ?= $(PREFIX)/lib
-+ BINDIR ?= $(PREFIX)/bin
-+ SBINDIR ?= $(PREFIX)/sbin
-+ MANDIR ?= $(PREFIX)/share/man
-+-LOCALEDIR ?= /usr/share/locale
-++LOCALEDIR ?= $(DESTDIR)/usr/share/locale
-+ PYTHON ?= /usr/bin/python
-+ BASHCOMPLETIONDIR ?= $(DESTDIR)/etc/bash_completion.d/
-+ SHAREDIR ?= $(PREFIX)/share/sandbox
-+diff --git a/setfiles/Makefile b/setfiles/Makefile
-+index 4b44b3c..dc04d9a 100644
-+--- a/setfiles/Makefile
-++++ b/setfiles/Makefile
-+@@ -3,7 +3,7 @@ PREFIX ?= $(DESTDIR)/usr
-+ SBINDIR ?= $(DESTDIR)/sbin
-+ MANDIR = $(PREFIX)/share/man
-+ LIBDIR ?= $(PREFIX)/lib
-+-AUDITH = $(shell ls /usr/include/libaudit.h 2>/dev/null)
-++AUDITH = $(shell ls $(DESTDIR)/usr/include/libaudit.h 2>/dev/null)
-+ 
-+ PROGRESS_STEP=$(shell grep "^\#define STAR_COUNT" restore.h | awk -S '{ print $$3 }')
-+ ABORT_ON_ERRORS=$(shell grep "^\#define ABORT_ON_ERRORS" setfiles.c | awk -S '{ print $$3 }')
-+@@ -12,7 +12,7 @@ CFLAGS = -g -Werror -Wall -W
-+ override CFLAGS += -I$(PREFIX)/include
-+ LDLIBS = -lselinux -lsepol -L$(LIBDIR)
-+ 
-+-ifeq ($(AUDITH), /usr/include/libaudit.h)
-++ifeq ($(AUDITH), $(DESTDIR)/usr/include/libaudit.h)
-+ 	override CFLAGS += -DUSE_AUDIT
-+ 	LDLIBS += -laudit
-+ endif
-+-- 
-+1.9.1
-+
-diff --git a/package/policycoreutils/0002-Allow-CFLAGS-to-be-overwritten.patch b/package/policycoreutils/0002-Allow-CFLAGS-to-be-overwritten.patch
-new file mode 100644
-index 0000000..54aecae
---- /dev/null
-+++ b/package/policycoreutils/0002-Allow-CFLAGS-to-be-overwritten.patch
-@@ -0,0 +1,57 @@
-+From 656740d38ad34cbd5a89e900dab82ec521d0a522 Mon Sep 17 00:00:00 2001
-+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+Date: Fri, 10 Jul 2015 11:47:09 -0500
-+Subject: [PATCH 2/3] Allow CFLAGS to be overwritten
-+
-+Allow all CFLAGS declarations to be overwritten to aid in cross
-+compiling.
-+
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+---
-+ sepolicy/Makefile | 2 +-
-+ sestatus/Makefile | 2 +-
-+ setfiles/Makefile | 2 +-
-+ 3 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/sepolicy/Makefile b/sepolicy/Makefile
-+index 1074d26..9d44ac2 100644
-+--- a/sepolicy/Makefile
-++++ b/sepolicy/Makefile
-+@@ -9,7 +9,7 @@ LOCALEDIR ?= $(DESTDIR)/usr/share/locale
-+ PYTHON ?= /usr/bin/python
-+ BASHCOMPLETIONDIR ?= $(DESTDIR)/etc/bash_completion.d/
-+ SHAREDIR ?= $(PREFIX)/share/sandbox
-+-override CFLAGS = $(LDFLAGS) -I$(PREFIX)/include -DPACKAGE="policycoreutils" -Wall -Werror -Wextra -W  -DSHARED -shared
-++override CFLAGS += $(LDFLAGS) -I$(PREFIX)/include -DPACKAGE="policycoreutils" -Wall -Werror -Wextra -W  -DSHARED -shared
-+ 
-+ BASHCOMPLETIONS=sepolicy-bash-completion.sh 
-+ 
-+diff --git a/sestatus/Makefile b/sestatus/Makefile
-+index c5db7a3..c04ff00 100644
-+--- a/sestatus/Makefile
-++++ b/sestatus/Makefile
-+@@ -5,7 +5,7 @@ MANDIR = $(PREFIX)/share/man
-+ ETCDIR ?= $(DESTDIR)/etc
-+ LIBDIR ?= $(PREFIX)/lib
-+ 
-+-CFLAGS = -Werror -Wall -W
-++CFLAGS ?= -Werror -Wall -W
-+ override CFLAGS += -I$(PREFIX)/include -D_FILE_OFFSET_BITS=64
-+ LDLIBS = -lselinux -L$(LIBDIR)
-+ 
-+diff --git a/setfiles/Makefile b/setfiles/Makefile
-+index dc04d9a..67d9ef0 100644
-+--- a/setfiles/Makefile
-++++ b/setfiles/Makefile
-+@@ -8,7 +8,7 @@ AUDITH = $(shell ls $(DESTDIR)/usr/include/libaudit.h 2>/dev/null)
-+ PROGRESS_STEP=$(shell grep "^\#define STAR_COUNT" restore.h | awk -S '{ print $$3 }')
-+ ABORT_ON_ERRORS=$(shell grep "^\#define ABORT_ON_ERRORS" setfiles.c | awk -S '{ print $$3 }')
-+ 
-+-CFLAGS = -g -Werror -Wall -W
-++CFLAGS ?= -g -Werror -Wall -W
-+ override CFLAGS += -I$(PREFIX)/include
-+ LDLIBS = -lselinux -lsepol -L$(LIBDIR)
-+ 
-+-- 
-+1.9.1
-+
-diff --git a/package/policycoreutils/0003-Change-sepolicy-python-install-arguments-to-be-a-var.patch b/package/policycoreutils/0003-Change-sepolicy-python-install-arguments-to-be-a-var.patch
-new file mode 100644
-index 0000000..4e35d92
---- /dev/null
-+++ b/package/policycoreutils/0003-Change-sepolicy-python-install-arguments-to-be-a-var.patch
-@@ -0,0 +1,42 @@
-+From c8f1022be057cfe28101fbd0d6dedf6f42477ffc Mon Sep 17 00:00:00 2001
-+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+Date: Fri, 10 Jul 2015 11:56:49 -0500
-+Subject: [PATCH 3/3] Change sepolicy python install arguments to be a variable
-+
-+To allow the python install arguments to be overwritten, change the
-+arguments to be a variable. This also cleans up the DESTDIR detection a
-+little bit.
-+
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+---
-+ sepolicy/Makefile | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/sepolicy/Makefile b/sepolicy/Makefile
-+index 9d44ac2..bd8a383 100644
-+--- a/sepolicy/Makefile
-++++ b/sepolicy/Makefile
-+@@ -7,6 +7,11 @@ SBINDIR ?= $(PREFIX)/sbin
-+ MANDIR ?= $(PREFIX)/share/man
-+ LOCALEDIR ?= $(DESTDIR)/usr/share/locale
-+ PYTHON ?= /usr/bin/python
-++ifneq (,$(DESTDIR))
-++PYTHON_INSTALL_ARGS ?= --root $(DESTDIR)
-++else
-++PYTHON_INSTALL_ARGS ?=
-++endif
-+ BASHCOMPLETIONDIR ?= $(DESTDIR)/etc/bash_completion.d/
-+ SHAREDIR ?= $(PREFIX)/share/sandbox
-+ override CFLAGS += $(LDFLAGS) -I$(PREFIX)/include -DPACKAGE="policycoreutils" -Wall -Werror -Wextra -W  -DSHARED -shared
-+@@ -23,7 +28,7 @@ clean:
-+ 	-rm -rf build *~ \#* *pyc .#*
-+ 
-+ install:
-+-	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
-++	$(PYTHON) setup.py install $(PYTHON_INSTALL_ARGS)
-+ 	[ -d $(BINDIR) ] || mkdir -p $(BINDIR)
-+ 	install -m 755 sepolicy.py $(BINDIR)/sepolicy
-+ 	-mkdir -p $(MANDIR)/man8
-+-- 
-+1.9.1
-+
-diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
-new file mode 100644
-index 0000000..1dc01c4
---- /dev/null
-+++ b/package/policycoreutils/Config.in
-@@ -0,0 +1,59 @@
-+config BR2_PACKAGE_POLICYCOREUTILS
-+	bool "policycoreutils"
-+	select BR2_PACKAGE_LIBSEMANAGE
-+	select BR2_PACKAGE_LIBCAP_NG
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # uses fts.h
++config BR2_PACKAGE_REFPOLICY_CONTRIB
++	bool "refpolicy-contrib"
 +	help
-+	  Policycoreutils is a collection of policy utilities (originally
-+	  the "core" set of utilities needed to use SELinux, although it
-+	  has grown a bit over time), which have different dependencies.
-+	  sestatus, secon, run_init, and newrole only use libselinux.
-+	  load_policy and setfiles only use libselinux and libsepol.
-+	  semodule and semanage use libsemanage (and thus bring in
-+	  dependencies on libsepol and libselinux as well). setsebool
-+	  uses libselinux to make non-persistent boolean changes (via
-+	  the kernel interface) and uses libsemanage to make persistent
-+	  boolean changes.
++	  A Git submodule of the refpolicy package.
 +
-+	  The base package will install the following utilities:
-+	      load_policy
-+	      newrole
-+	      restorecond
-+	      run_init
-+	      secon
-+	      semodule
-+	      semodule_deps
-+	      semodule_expand
-+	      semodule_link
-+	      semodule_package
-+	      sepolgen-ifgen
-+	      sestatus
-+	      setfiles
-+	      setsebool
++config BR2_PACKAGE_REFPOLICY_CONTRIB_CUSTOM_REPO_URL
++	string "URL of custom contrib submodule repository"
 +
-+	  http://selinuxproject.org/page/Main_Page
-+
-+comment "policycoreutils needs a glibc or musl toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS  \
-+		|| !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+
-+if BR2_PACKAGE_POLICYCOREUTILS
-+
-+config BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND
-+	bool "restorecond Utility"
-+	select BR2_PACKAGE_DBUS_GLIB
-+	depends on BR2_PACKAGE_DBUS
-+	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	depends on BR2_USE_MMU # glib2
++config BR2_PACKAGE_REFPOLICY_CONTRIB_CUSTOM_REPO_VERSION
++	string "Custom contrib submodule repository version"
 +	help
-+	  Enable restorecond to be built
-+
-+comment "restorecond needs a toolchain w/ wchar, threads, dbus"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_DBUS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	  Revision to use in the typical format used by Git
++	  e.g. a SHA id, a tag, branch, ..
 +
 +endif
-diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
+diff --git a/package/refpolicy-contrib/refpolicy-contrib.mk b/package/refpolicy-contrib/refpolicy-contrib.mk
 new file mode 100644
-index 0000000..575dd25
+index 0000000..3d1c53e
 --- /dev/null
-+++ b/package/policycoreutils/policycoreutils.hash
-@@ -0,0 +1,2 @@
-+# https://github.com/SELinuxProject/selinux/wiki/Releases
-+sha256 b6881741f9f9988346a73bfeccb0299941dc117349753f0ef3f23ee86f06c1b5  policycoreutils-2.1.14.tar.gz
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-new file mode 100644
-index 0000000..2b954b9
---- /dev/null
-+++ b/package/policycoreutils/policycoreutils.mk
-@@ -0,0 +1,107 @@
++++ b/package/refpolicy-contrib/refpolicy-contrib.mk
+@@ -0,0 +1,18 @@
 +################################################################################
 +#
-+# policycoreutils
++# refpolicy-contrib
 +#
 +################################################################################
 +
-+POLICYCOREUTILS_VERSION = 2.1.14
-+POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-+POLICYCOREUTILS_LICENSE = GPLv2
-+POLICYCOREUTILS_LICENSE_FILES = COPYING
++ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)
++REFPOLICY_CONTRIB_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CONTRIB_CUSTOM_REPO_URL))
++REFPOLICY_CONTRIB_VERSION = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CONTRIB_CUSTOM_REPO_VERSION))
++REFPOLICY_CONTRIB_SITE_METHOD = git
 +
-+# gettext for load_policy.c use of libintl_* functions
-+POLICYCOREUTILS_DEPENDENCIES = libsemanage libcap-ng $(if $(BR2_NEEDS_GETTEXT),gettext)
-+
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+POLICYCOREUTILS_DEPENDENCIES += linux-pam
-+POLICYCOREUTILS_MAKE_OPTS += NAMESPACE_PRIV=y
-+define POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS
-+	$(INSTALL) -D -m 0644 $(@D)/newrole/newrole-lspp.pamd $(TARGET_DIR)/etc/pam.d/newrole
-+	$(INSTALL) -D -m 0644 $(@D)/run_init/run_init.pamd $(TARGET_DIR)/etc/pam.d/run_init
-+endef
++# Inherits license from refpolicy as normally this is a submodule
++REFPOLICY_CONTRIB_LICENSE = GPLv2
 +endif
 +
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+POLICYCOREUTILS_DEPENDENCIES += audit
-+POLICYCOREUTILS_MAKE_OPTS += AUDIT_LOG_PRIV=y
-+endif
-+
-+# Enable LSPP_PRIV if both audit and linux pam are enabled
-+ifeq ($(BR2_PACKAGE_LINUX_PAM)$(BR2_PACKAGE_AUDIT),yy)
-+POLICYCOREUTILS_MAKE_OPTS += LSPP_PRIV=y
-+endif
-+
-+# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
-+# large file support.
-+# See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
-+POLICYCOREUTILS_MAKE_OPTS = \
-+	CC="$(TARGET_CC)" \
-+	CFLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS" \
-+	LDFLAGS="$(TARGET_LDFLAGS) $(if $(BR2_NEEDS_GETTEXT),-lintl)"
-+
-+POLICYCOREUTILS_MAKE_DIRS = load_policy newrole run_init \
-+	secon semodule semodule_deps semodule_expand semodule_link \
-+	semodule_package sepolgen-ifgen sestatus setfiles setsebool
-+
-+ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND),y)
-+POLICYCOREUTILS_DEPENDENCIES += dbus-glib
-+POLICYCOREUTILS_MAKE_DIRS += restorecond
-+endif
-+
-+define POLICYCOREUTILS_BUILD_CMDS
-+	for dir in $(POLICYCOREUTILS_MAKE_DIRS) ; do \
-+		$(MAKE) -C $(@D)/$${dir} $(POLICYCOREUTILS_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all || exit 1 ; \
-+	done
-+endef
-+
-+define POLICYCOREUTILS_INSTALL_TARGET_CMDS
-+	for dir in $(POLICYCOREUTILS_MAKE_DIRS) ; do \
-+		$(MAKE) -C $(@D)/$${dir} $(POLICYCOREUTILS_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install || exit 1 ; \
-+	done
-+endef
-+
-+HOST_POLICYCOREUTILS_DEPENDENCIES = host-libsemanage host-dbus-glib host-sepolgen host-setools
-+
-+# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
-+# large file support.
-+# See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
-+HOST_POLICYCOREUTILS_MAKE_OPTS = \
-+	CC="$(HOSTCC)" \
-+	CFLAGS="$(HOST_CFLAGS) -U_FILE_OFFSET_BITS" \
-+	PYTHON="$(HOST_DIR)/usr/bin/python" \
-+	PYTHON_INSTALL_ARGS="$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS)"
-+
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+HOST_POLICYCOREUTILS_DEPENDENCIES += host-python3
-+HOST_POLICYCOREUTILS_MAKE_OPTS += \
-+	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
-+else
-+HOST_POLICYCOREUTILS_DEPENDENCIES += host-python
-+HOST_POLICYCOREUTILS_MAKE_OPTS += \
-+	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
-+endif
-+
-+# Note: We are only building the programs required by the refpolicy build
-+HOST_POLICYCOREUTILS_MAKE_DIRS = load_policy semodule semodule_deps semodule_expand semodule_link \
-+	semodule_package setfiles restorecond audit2allow audit2why scripts semanage sepolicy
-+
-+define HOST_POLICYCOREUTILS_BUILD_CMDS
-+	for dir in $(HOST_POLICYCOREUTILS_MAKE_DIRS) ; do \
-+		$(MAKE) -C $(@D)/$${dir} $(HOST_POLICYCOREUTILS_MAKE_OPTS) DESTDIR=$(HOST_DIR) all || exit 1 ; \
-+	done
-+endef
-+
-+define HOST_POLICYCOREUTILS_INSTALL_CMDS
-+	for dir in $(HOST_POLICYCOREUTILS_MAKE_DIRS) ; do \
-+		$(MAKE) -C $(@D)/$${dir} $(HOST_POLICYCOREUTILS_MAKE_OPTS) DESTDIR=$(HOST_DIR) install || exit 1 ; \
-+	done
-+	# Fix python paths
-+	$(SED) 's%/usr/bin/%$(HOST_DIR)/usr/bin/%g' $(HOST_DIR)/usr/bin/audit2allow
-+	$(SED) 's%/usr/bin/%$(HOST_DIR)/usr/bin/%g' $(HOST_DIR)/usr/bin/audit2why
-+	$(SED) 's%/usr/bin/%$(HOST_DIR)/usr/bin/%g' $(HOST_DIR)/usr/bin/sepolgen-ifgen
-+	$(SED) 's%/usr/bin/%$(HOST_DIR)/usr/bin/%g' $(HOST_DIR)/usr/bin/sepolicy
-+endef
++# If refpolicy is from release archive, this contrib content is part of it.
 +
 +$(eval $(generic-package))
-+$(eval $(host-generic-package))
+diff --git a/package/refpolicy/2.20130424/0001-Fix-awk-references-to-use-variable.patch b/package/refpolicy/2.20130424/0001-Fix-awk-references-to-use-variable.patch
+new file mode 100644
+index 0000000..8236fa2
+--- /dev/null
++++ b/package/refpolicy/2.20130424/0001-Fix-awk-references-to-use-variable.patch
+@@ -0,0 +1,42 @@
++From 1d4c826e8de366bccb93f167cd9be834ab5911c8 Mon Sep 17 00:00:00 2001
++From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
++Date: Fri, 8 May 2015 14:13:00 -0500
++Subject: [PATCH] Fix awk references to use variable
++
++Ensure all awk calls use the variable setup in the makefile rather than
++relying on the system.
++
++Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
++---
++ Makefile | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 85d4cfb..3aa4b51 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -292,9 +292,9 @@ cmdline_mods := $(addsuffix .te,$(APPS_MODS))
++ cmdline_off := $(addsuffix .te,$(APPS_OFF))
++ 
++ # extract settings from modules.conf
++-mod_conf_base := $(addsuffix .te,$(sort $(shell awk '/^[[:blank:]]*[[:alpha:]]/{ if ($$3 == "$(configbase)") print $$1 }' $(mod_conf) 2> /dev/null)))
++-mod_conf_mods := $(addsuffix .te,$(sort $(shell awk '/^[[:blank:]]*[[:alpha:]]/{ if ($$3 == "$(configmod)") print $$1 }' $(mod_conf) 2> /dev/null)))
++-mod_conf_off := $(addsuffix .te,$(sort $(shell awk '/^[[:blank:]]*[[:alpha:]]/{ if ($$3 == "$(configoff)") print $$1 }' $(mod_conf) 2> /dev/null)))
+++mod_conf_base := $(addsuffix .te,$(sort $(shell $(AWK) '/^[[:blank:]]*[[:alpha:]]/{ if ($$3 == "$(configbase)") print $$1 }' $(mod_conf) 2> /dev/null)))
+++mod_conf_mods := $(addsuffix .te,$(sort $(shell $(AWK) '/^[[:blank:]]*[[:alpha:]]/{ if ($$3 == "$(configmod)") print $$1 }' $(mod_conf) 2> /dev/null)))
+++mod_conf_off := $(addsuffix .te,$(sort $(shell $(AWK) '/^[[:blank:]]*[[:alpha:]]/{ if ($$3 == "$(configoff)") print $$1 }' $(mod_conf) 2> /dev/null)))
++ 
++ base_mods := $(cmdline_base)
++ mod_mods := $(cmdline_mods)
++@@ -308,7 +308,7 @@ off_mods += $(filter-out $(cmdline_off) $(cmdline_base) $(cmdline_mods), $(mod_c
++ off_mods += $(filter-out $(base_mods) $(mod_mods) $(off_mods),$(notdir $(detected_mods)))
++ 
++ # filesystems to be used in labeling targets
++-filesystems = $(shell mount | grep -v "context=" | egrep -v '\((|.*,)bind(,.*|)\)' | awk '/(ext[234]|btrfs| xfs| jfs).*rw/{print $$3}';)
+++filesystems = $(shell mount | grep -v "context=" | egrep -v '\((|.*,)bind(,.*|)\)' | $(AWK) '/(ext[234]|btrfs| xfs| jfs).*rw/{print $$3}';)
++ fs_names := "btrfs ext2 ext3 ext4 xfs jfs"
++ 
++ ########################################
++-- 
++1.9.1
++
+diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+new file mode 100644
+index 0000000..b6af100
+--- /dev/null
++++ b/package/refpolicy/Config.in
+@@ -0,0 +1,99 @@
++config BR2_PACKAGE_REFPOLICY
++	bool "refpolicy"
++	select BR2_PACKAGE_POLICYCOREUTILS
++	select BR2_PACKAGE_BUSYBOX_SELINUX if BR2_PACKAGE_BUSYBOX
++	depends on BR2_TOOLCHAIN_HAS_THREADS # policycoreutils
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # policycoreutils
++	help
++	  The SELinux Reference Policy project (refpolicy) is a
++	  complete SELinux policy that can be used as the system
++	  policy for a variety of systems and used as the basis
++	  for creating other policies. Reference Policy was originally
++	  based on the NSA example policy, but aims to accomplish
++	  many additional goals.
++
++	  The current refpolicy does not fully support Buildroot
++	  and needs modifications to work with the default system
++	  file layout.  These changes should be added as patches to
++	  the refpolicy that modify a single SELinux policy.
++
++comment "refpolicy needs a toolchain w/ threads, glibc or musl"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++
++if BR2_PACKAGE_REFPOLICY
++
++choice
++	prompt "SELinux policy type"
++	default BR2_PACKAGE_REFPOLICY_TYPE_STANDARD
++
++	config BR2_PACKAGE_REFPOLICY_TYPE_STANDARD
++		bool "Standard"
++		help
++		  Standard SELinux policy
++
++	config BR2_PACKAGE_REFPOLICY_TYPE_MCS
++		bool "MCS"
++		help
++		  SELinux policy with multi-catagory support
++
++	config BR2_PACKAGE_REFPOLICY_TYPE_MLS
++		bool "MLS"
++		help
++		  SELinux policy with multi-catagory and multi-level support
++endchoice
++
++config BR2_PACKAGE_REFPOLICY_TYPE
++	string
++	default "standard" if BR2_PACKAGE_REFPOLICY_TYPE_STANDARD
++	default "mcs" if BR2_PACKAGE_REFPOLICY_TYPE_MCS
++	default "mls" if BR2_PACKAGE_REFPOLICY_TYPE_MLS
++
++config BR2_PACKAGE_REFPOLICY_MODULES_FILE
++	string "Refpolicy modules configuration"
++	default "package/refpolicy/modules.conf"
++	help
++	  Location of a custom modules.conf file that lists the
++	  SELinux policy modules to be included in the compiled
++	  policy. See policy/modules.conf in the refpolicy sources for
++	  the complete list of available modules.
++	  NOTE: This file is only used if a Custom Git repo is
++	  not specified.
++
++config BR2_PACKAGE_REFPOLICY_MODULAR
++	bool "Build a modular SELinux policy"
++	help
++	  Select Y to build a modular SELinux policy. By default,
++	  a monolithing policy will be built to save space on the
++	  target. A modular policy can also be built if policies
++	  need to be modified without reloading the target.
++
++config BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
++	bool "Custom Git repository"
++	select BR2_PACKAGE_REFPOLICY_CONTRIB
++	help
++	 This option allows Buildroot to get the refpolicy source
++	 code from a Git repository. This option should generally
++	 be used to add custom SELinux policy to the base refpolicy
++	 without having to deal with lots of patches.
++
++	 Please note that with the current configuration of the
++	 mainline refpolicy git repositories, a refpolicy and a
++	 refpolicy-contrib git repo must be specified. These are
++	 linked using a git submodule which does not get initialized
++	 during the Buildroot build.
++
++if BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
++
++config BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL
++	string "URL of custom repository"
++
++config BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION
++	string "Custom repository version"
++	help
++	  Revision to use in the typical format used by Git
++	  e.g. a SHA id, a tag, branch, ..
++
++endif
++
++endif
+diff --git a/package/refpolicy/S00selinux b/package/refpolicy/S00selinux
+new file mode 100644
+index 0000000..f2ac2e6
+--- /dev/null
++++ b/package/refpolicy/S00selinux
+@@ -0,0 +1,136 @@
++#!/bin/sh
++################################################################################
++#
++# This file labels the security contexts of memory based filesystems such as
++# /dev/ and checks for auto relabel request if '/.autorelabel' file exists.
++#
++# This script is a heavily stripped down and modified version of the one used
++# in CentOS 6.2
++#
++################################################################################
++
++failed()
++{
++   echo $1
++   exit 1
++}
++
++# Get SELinux config env vars
++. /etc/selinux/config || failed "Failed to source the SELinux config"
++
++setup_selinux() {
++   # Create required directories
++   mkdir -p /etc/selinux/${SELINUXTYPE}/policy/ ||
++         failed "Failed to create the policy folder"
++   mkdir -p /etc/selinux/${SELINUXTYPE}/modules/active/modules || \
++         failed "Failed to create the modules folder"
++   if [ ! -f /etc/selinux/${SELINUXTYPE}/contexts/files/file_contexts.local ]
++   then
++      touch /etc/selinux/${SELINUXTYPE}/contexts/files/file_contexts.local || \
++            failed "Failed to create the file_contexts.local file"
++   fi
++
++   # Install modules
++   semodule -v -s ${SELINUXTYPE} -b /usr/share/selinux/${SELINUXTYPE}/base.pp \
++         -i $(ls /usr/share/selinux/${SELINUXTYPE}/*.pp | grep -v base) || \
++         failed "Failed to install the base policy"
++
++   # Load the policy to activate it
++   load_policy -i || failed "Failed to load the SELinux policy"
++}
++
++relabel_selinux() {
++   # if /sbin/init is not labeled correctly this process is running in the
++   # wrong context, so a reboot will be required after relabel
++   AUTORELABEL=
++
++   # Switch to Permissive mode
++   echo "0" > /selinux/enforce || failed "Failed to disable enforcing mode"
++
++   echo
++   echo "*** Warning -- SELinux ${SELINUXTYPE} policy relabel is required."
++   echo "*** Relabeling could take a very long time, depending on file"
++   echo "*** system size and speed of hard drives."
++
++   # Relabel mount points
++   restorecon $(awk '!/^#/ && $4 !~ /noauto/ && $2 ~ /^\// { print $2 }' /etc/fstab) \
++         >/dev/null 2>&1 || failed "Failed to relabel the mount points"
++
++   # Relabel file system
++   echo "Relabeling file systems"
++   restorecon -R -F / || failed "Failed to relabel the file system"
++
++   # Remove label
++   rm -f  /.autorelabel || failed "Failed to remove the autorelabel flag"
++
++   # Reboot to activate relabeled file system
++   echo "Automatic reboot in progress."
++   reboot -f
++}
++
++start() {
++   echo -n "Initializing SELinux: "
++
++   # Check to see if the default policy has been installed
++   if [ "`sestatus | grep "SELinux status" | grep enabled`" == "" ]; then
++      if [ ! -f /etc/selinux/${SELINUXTYPE}/policy/policy.* ]
++      then
++         setup_selinux
++      else
++         echo "SELinux policy install failed. Check kernel and init config"
++         exit 1
++      fi
++   fi
++
++   # Check SELinux status
++   SELINUX_STATE=
++   if [ -e "/selinux/enforce" ] && [ "$(cat /proc/self/attr/current)" != "kernel" ]; then
++      if [ -r "/selinux/enforce" ] ; then
++         SELINUX_STATE=$(cat "/selinux/enforce")
++      else
++         # assume enforcing if you can't read it
++         SELINUX_STATE=1
++      fi
++   fi
++
++   # Context Label /dev/
++   if [ -n "$SELINUX_STATE" -a -x /sbin/restorecon ] && fgrep " /dev " /proc/mounts >/dev/null 2>&1 ; then
++      /sbin/restorecon -R -F /dev 2>/dev/null
++   fi
++
++   # Context Label tmpfs mounts
++   if [ -n "$SELINUX_STATE" -a -x /sbin/restorecon ]; then
++      /sbin/restorecon -R -F $(awk '!/^#/ && $4 !~ /noauto/ && $2 ~ /^\// && $3 =="tmpfs" { print $2 }' /etc/fstab) >/dev/null 2>&1
++   fi
++
++   # Clean up SELinux labels
++   if [ -n "$SELINUX_STATE" -a -x /sbin/restorecon ]; then
++      restorecon -F /etc/mtab /etc/ld.so.cache /etc/resolv.conf >/dev/null 2>&1
++   fi
++
++   # Check for filesystem relabel request
++   if [ -f /.autorelabel ] ; then
++      relabel_selinux
++   fi
++
++   echo "OK"
++}
++stop() {
++   # There is nothing to do
++   echo "OK"
++}
++
++case "$1" in
++   start)
++      start
++      ;;
++   stop)
++      stop
++      ;;
++   *)
++      echo "Usage: $0 {start|stop}"
++      exit 1
++      ;;
++esac
++
++exit $?
+diff --git a/package/refpolicy/config b/package/refpolicy/config
+new file mode 100644
+index 0000000..5eee807
+--- /dev/null
++++ b/package/refpolicy/config
+@@ -0,0 +1,8 @@
++# This file controls the state of SELinux on the system.
++# SELINUX= can take one of these three values:
++#     enforcing - SELinux security policy is enforced.
++#     permissive - SELinux prints warnings instead of enforcing.
++#     disabled - No SELinux policy is loaded.
++SELINUX=permissive
++# SELINUXTYPE= name of the selinux policy to use
++SELINUXTYPE=refpolicy
+diff --git a/package/refpolicy/modules.conf b/package/refpolicy/modules.conf
+new file mode 100644
+index 0000000..58282d8
+--- /dev/null
++++ b/package/refpolicy/modules.conf
+@@ -0,0 +1,406 @@
++#
++# This file contains a listing of available modules.
++# To prevent a module from  being used in policy
++# creation, set the module name to "off".
++#
++# For monolithic policies, modules set to "base" and "module"
++# will be built into the policy.
++#
++# For modular policies, modules set to "base" will be
++# included in the base module.  "module" will be compiled
++# as individual loadable modules.
++#
++
++# Layer: kernel
++# Module: corecommands
++# Required in base
++#
++# Core policy for shells, and generic programs
++# in /bin, /sbin, /usr/bin, and /usr/sbin.
++#
++corecommands = base
++
++# Layer: kernel
++# Module: corenetwork
++# Required in base
++#
++# Policy controlling access to network objects
++#
++corenetwork = base
++
++# Layer: kernel
++# Module: devices
++# Required in base
++#
++# Device nodes and interfaces for many basic system devices.
++#
++devices = base
++
++# Layer: kernel
++# Module: domain
++# Required in base
++#
++# Core policy for domains.
++#
++domain = base
++
++# Layer: kernel
++# Module: files
++# Required in base
++#
++# Basic filesystem types and interfaces.
++#
++files = base
++
++# Layer: kernel
++# Module: filesystem
++# Required in base
++#
++# Policy for filesystems.
++#
++filesystem = base
++
++# Layer: kernel
++# Module: kernel
++# Required in base
++#
++# Policy for kernel threads, proc filesystem,
++# and unlabeled processes and objects.
++#
++kernel = base
++
++# Layer: kernel
++# Module: mcs
++# Required in base
++#
++# Multicategory security policy
++#
++mcs = base
++
++# Layer: kernel
++# Module: mls
++# Required in base
++#
++# Multilevel security policy
++#
++mls = base
++
++# Layer: kernel
++# Module: selinux
++# Required in base
++#
++# Policy for kernel security interface, in particular, selinuxfs.
++#
++selinux = base
++
++# Layer: kernel
++# Module: terminal
++# Required in base
++#
++# Policy for terminals.
++#
++terminal = base
++
++# Layer: kernel
++# Module: ubac
++# Required in base
++#
++# User-based access control policy
++#
++ubac = base
++
++# Layer: admin
++# Module: bootloader
++#
++# Policy for the kernel modules, kernel image, and bootloader.
++#
++bootloader = module
++
++# Layer: admin
++# Module: consoletype
++#
++# Determine of the console connected to the controlling terminal.
++#
++consoletype = module
++
++# Layer: admin
++# Module: dmesg
++#
++# Policy for dmesg.
++#
++dmesg = module
++
++# Layer: admin
++# Module: netutils
++#
++# Network analysis utilities
++#
++netutils = module
++
++# Layer: admin
++# Module: su
++#
++# Run shells with substitute user and group
++#
++su = module
++
++# Layer: admin
++# Module: sudo
++#
++# Execute a command with a substitute user
++#
++sudo = module
++
++# Layer: admin
++# Module: usermanage
++#
++# Policy for managing user accounts.
++#
++usermanage = module
++
++# Layer: apps
++# Module: seunshare
++#
++# Filesystem namespacing/polyinstantiation application.
++#
++seunshare = module
++
++# Layer: kernel
++# Module: storage
++#
++# Policy controlling access to storage devices
++#
++storage = module
++
++# Layer: roles
++# Module: auditadm
++#
++# Audit administrator role
++#
++auditadm = module
++
++# Layer: roles
++# Module: logadm
++#
++# Log administrator role
++#
++logadm = module
++
++# Layer: roles
++# Module: secadm
++#
++# Security administrator role
++#
++secadm = module
++
++# Layer: roles
++# Module: staff
++#
++# Administrator's unprivileged user role
++#
++staff = module
++
++# Layer: roles
++# Module: sysadm
++#
++# General system administration role
++#
++sysadm = module
++
++# Layer: roles
++# Module: unprivuser
++#
++# Generic unprivileged user role
++#
++unprivuser = module
++
++# Layer: services
++# Module: postgresql
++#
++# PostgreSQL relational database
++#
++postgresql = module
++
++# Layer: services
++# Module: ssh
++#
++# Secure shell client and server policy.
++#
++ssh = module
++
++# Layer: services
++# Module: xserver
++#
++# X Windows Server
++#
++xserver = module
++
++# Layer: system
++# Module: application
++#
++# Policy for user executable applications.
++#
++application = module
++
++# Layer: system
++# Module: authlogin
++#
++# Common policy for authentication and user login.
++#
++authlogin = module
++
++# Layer: system
++# Module: clock
++#
++# Policy for reading and setting the hardware clock.
++#
++clock = module
++
++# Layer: system
++# Module: fstools
++#
++# Tools for filesystem management, such as mkfs and fsck.
++#
++fstools = module
++
++# Layer: system
++# Module: getty
++#
++# Policy for getty.
++#
++getty = module
++
++# Layer: system
++# Module: hostname
++#
++# Policy for changing the system host name.
++#
++hostname = module
++
++# Layer: system
++# Module: hotplug
++#
++# Policy for hotplug system, for supporting the
++# connection and disconnection of devices at runtime.
++#
++hotplug = module
++
++# Layer: system
++# Module: init
++#
++# System initialization programs (init and init scripts).
++#
++init = module
++
++# Layer: system
++# Module: ipsec
++#
++# TCP/IP encryption
++#
++ipsec = module
++
++# Layer: system
++# Module: iptables
++#
++# Policy for iptables.
++#
++iptables = module
++
++# Layer: system
++# Module: libraries
++#
++# Policy for system libraries.
++#
++libraries = module
++
++# Layer: system
++# Module: locallogin
++#
++# Policy for local logins.
++#
++locallogin = module
++
++# Layer: system
++# Module: logging
++#
++# Policy for the kernel message logger and system logging daemon.
++#
++logging = module
++
++# Layer: system
++# Module: lvm
++#
++# Policy for logical volume management programs.
++#
++lvm = module
++
++# Layer: system
++# Module: miscfiles
++#
++# Miscelaneous files.
++#
++miscfiles = module
++
++# Layer: system
++# Module: modutils
++#
++# Policy for kernel module utilities
++#
++modutils = module
++
++# Layer: system
++# Module: mount
++#
++# Policy for mount.
++#
++mount = module
++
++# Layer: system
++# Module: netlabel
++#
++# NetLabel/CIPSO labeled networking management
++#
++netlabel = module
++
++# Layer: system
++# Module: selinuxutil
++#
++# Policy for SELinux policy and userland applications.
++#
++selinuxutil = module
++
++# Layer: system
++# Module: setrans
++#
++# SELinux MLS/MCS label translation service.
++#
++setrans = module
++
++# Layer: system
++# Module: sysnetwork
++#
++# Policy for network configuration: ifconfig and dhcp client.
++#
++sysnetwork = module
++
++# Layer: system
++# Module: udev
++#
++# Policy for udev.
++#
++udev = module
++
++# Layer: system
++# Module: unconfined
++#
++# The unconfined domain.
++#
++unconfined = module
++
++# Layer: system
++# Module: userdomain
++#
++# Policy for user domains
++#
++userdomain = module
++
+diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
+new file mode 100644
+index 0000000..eca53d7
+--- /dev/null
++++ b/package/refpolicy/refpolicy.hash
+@@ -0,0 +1,2 @@
++#From https://github.com/TresysTechnology/refpolicy/wiki/DownloadRelease
++sha256 6039ba854f244a39dc727cc7db25632f7b933bb271c803772d754d4354f5aef4  refpolicy-2.20130424.tar.bz2
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+new file mode 100644
+index 0000000..dbc662d
+--- /dev/null
++++ b/package/refpolicy/refpolicy.mk
+@@ -0,0 +1,120 @@
++################################################################################
++#
++# refpolicy
++#
++################################################################################
++
++ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)
++REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
++REFPOLICY_VERSION = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION))
++REFPOLICY_SITE_METHOD = git
++REFPOLICY_DEPENDENCIES += refpolicy-contrib
++else
++REFPOLICY_VERSION = 2.20130424
++REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
++REFPOLICY_SITE = http://oss.tresys.com/files/refpolicy/
++endif
++REFPOLICY_LICENSE = GPLv2
++REFPOLICY_LICENSE_FILES = COPYING
++
++# Cannot use multiple threads to build the reference policy
++REFPOLICY_MAKE = $(TARGET_MAKE_ENV) $(MAKE1)
++
++REFPOLICY_DEPENDENCIES += host-m4 host-checkpolicy host-policycoreutils \
++	host-setools host-gawk host-python policycoreutils
++
++REFPOLICY_INSTALL_STAGING = YES
++
++REFPOLICY_POLICY_NAME = br_policy
++
++# To apply board specific customizations, create a refpolicy folder in
++# BR2_GLOBAL_PATCH_DIR.  These patches will be applied after the patches
++# in package/refpolicy
++
++# Passing the HOST_CONFIGURE_OPTS to the target build because all of the
++# build utilities are expected to be on system. This fools the make files
++# into using the host built utilities to compile the SELinux policy for
++# the target.
++#
++# Note, the TEST_TOOLCHAIN option will also set the
++# LD_LIBRARY_PATH at run time.
++REFPOLICY_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) \
++	TEST_TOOLCHAIN="$(HOST_DIR)"
++
++# Build requires python2 to run
++REFPOLICY_MAKE_ENV = \
++	PYTHON="$(HOST_DIR)/usr/bin/python2" \
++	AWK="$(HOST_DIR)/usr/bin/gawk" \
++	M4="$(HOST_DIR)/usr/bin/m4"
++
++
++ifeq ($(BR2_PACKAGE_REFPOLICY_MODULAR),y)
++	REFPOLICY_MONOLITHIC = n
++else
++	REFPOLICY_MONOLITHIC = y
++endif
++
++ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)
++define REFPOLICY_GIT_SUBMODULE_SETUP
++	rsync -ar $(RSYNC_VCS_EXCLUSIONS) $(REFPOLICY_CONTRIB_DIR)/* $(@D)/policy/modules/contrib/
++endef
++else
++REFPOLICY_MODULES_FILE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_MODULES_FILE))
++define REFPOLICY_CUSTOM_MODULES_CONF
++	cp $(REFPOLICY_MODULES_FILE) $(@D)/policy/modules.conf
++endef
++endif
++
++define REFPOLICY_CONFIGURE_CMDS
++	$(REFPOLICY_GIT_SUBMODULE_SETUP)
++	# If an external repo is used to build refpolicy, this preserves the
++	# custom modules.conf which defines the enabled components.
++	if [ -f $(@D)/policy/modules.conf ]; then \
++		mv $(@D)/policy/modules.conf $(@D)/modules.conf.bk ; \
++	fi
++	$(REFPOLICY_MAKE_ENV) $(REFPOLICY_MAKE) -C $(@D) bare \
++		$(REFPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
++	$(SED) "/TYPE/c\TYPE = $(BR2_PACKAGE_REFPOLICY_TYPE)" $(@D)/build.conf
++	$(SED) "/MONOLITHIC/c\MONOLITHIC = $(REFPOLICY_MONOLITHIC)" $(@D)/build.conf
++	$(SED) "/NAME/c\NAME = $(REFPOLICY_POLICY_NAME)" $(@D)/build.conf
++	$(REFPOLICY_MAKE_ENV) $(REFPOLICY_MAKE) -C $(@D) conf \
++		$(REFPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
++	if [ -f $(@D)/modules.conf.bk ]; then \
++		echo "[Preserved modules.conf]" ; \
++		mv $(@D)/modules.conf.bk $(@D)/policy/modules.conf ; \
++	fi
++	$(REFPOLICY_CUSTOM_MODULES_CONF)
++endef
++
++define REFPOLICY_INSTALL_STAGING_CMDS
++	$(REFPOLICY_MAKE_ENV) $(REFPOLICY_MAKE) -C $(@D) install-src install-headers \
++		install-docs $(REFPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
++endef
++
++define REFPOLICY_INSTALL_TARGET_CMDS
++	$(REFPOLICY_MAKE_ENV) $(REFPOLICY_MAKE) -C $(@D) install \
++		$(REFPOLICY_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
++	$(INSTALL) -m 0755 -D package/refpolicy/config $(TARGET_DIR)/etc/selinux/config
++	$(SED) "/^SELINUXTYPE/c\SELINUXTYPE=$(REFPOLICY_POLICY_NAME)" \
++		$(TARGET_DIR)/etc/selinux/config
++	touch $(TARGET_DIR)/.autorelabel
++	$(RM) $(TARGET_DIR)/etc/selinux/$(REFPOLICY_POLICY_NAME)/booleans
++endef
++
++define REFPOLICY_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/refpolicy/S00selinux \
++		$(TARGET_DIR)/etc/init.d/S00selinux
++endef
++
++define REFPOLICY_POLICY_COMPILE
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/selinux/$(REFPOLICY_POLICY_NAME)/policy
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/selinux/$(REFPOLICY_POLICY_NAME)/modules/active/modules
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/selinux/$(REFPOLICY_POLICY_NAME)/contexts/files
++	touch $(TARGET_DIR)/etc/selinux/$(REFPOLICY_POLICY_NAME)/contexts/files/file_contexts.local
++endef
++
++ifeq ($(BR2_PACKAGE_REFPOLICY_MODULAR),y)
++	REFPOLICY_POST_INSTALL_TARGET_HOOKS += REFPOLICY_POLICY_COMPILE
++endif
++
++$(eval $(generic-package))
 -- 
 1.9.1
