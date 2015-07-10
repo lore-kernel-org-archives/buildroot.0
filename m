@@ -1,30 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jul 2015 19:35:42 +0200
-Subject: [Buildroot] [PATCH] ruby: enable parallel build
-In-Reply-To: <1436547008-31236-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1436547008-31236-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150710193542.630b0323@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 10 Jul 2015 14:40:06 -0300
+Subject: [Buildroot] [PATCH 1/4] libidn: bump to version 1.31
+Message-ID: <1436550009-30590-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libidn/libidn.hash | 4 ++--
+ package/libidn/libidn.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Fri, 10 Jul 2015 13:50:08 -0300, Gustavo Zacarias wrote:
-> Re-enable parallel builds, it doesn't seem to be affected by the issue
-> worked around in 9332a1ad4 any more.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/ruby/ruby.mk | 1 -
->  1 file changed, 1 deletion(-)
-
-Applied, thanks.
-
-Thomas
+diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
+index d41443e..6425d55 100644
+--- a/package/libidn/libidn.hash
++++ b/package/libidn/libidn.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.gnu.org/archive/html/help-libidn/2015-03/msg00001.html
+-sha1	557e1e37f0978e975b21bcdc243c198cb708bb75	libidn-1.30.tar.gz
++# From http://lists.gnu.org/archive/html/help-libidn/2015-07/msg00011.html
++sha1	0bb34003a0fe05a91e60d346803401f16c82a1fb	libidn-1.31.tar.gz
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index 13436e9..e10fb6e 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBIDN_VERSION = 1.30
++LIBIDN_VERSION = 1.31
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.3.6
