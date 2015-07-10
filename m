@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jul 2015 20:24:57 +0200
-Subject: [Buildroot] [git commit] libunistring: bump to version 0.9.6
-Message-ID: <20150710183153.C4B7B7FF1B@busybox.osuosl.org>
+Date: Fri, 10 Jul 2015 20:25:15 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.1.2
+Message-ID: <20150710183153.EA2E57FF1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=72688a00d501f9c6809e6c054562aa7625600d10
+commit: http://git.buildroot.net/buildroot/commit/?id=e97938286f7fe3129412105cd8533c2197787bab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libunistring/libunistring.hash |    2 +-
- package/libunistring/libunistring.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
-index e272997..ba4b642 100644
---- a/package/libunistring/libunistring.hash
-+++ b/package/libunistring/libunistring.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	0b3f4dbea5124f56639a701376ed78e5f595e7b720cfbb0cf1f81f375894c77b	libunistring-0.9.5.tar.xz
-+sha256	2df42eae46743e3f91201bf5c100041540a7704e8b9abfd57c972b2d544de41b	libunistring-0.9.6.tar.xz
-diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
-index 0060518..bb1641e 100644
---- a/package/libunistring/libunistring.mk
-+++ b/package/libunistring/libunistring.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 74fb435..8c86a1a 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
--LIBUNISTRING_VERSION = 0.9.5
-+LIBUNISTRING_VERSION = 0.9.6
- LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
- LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
- LIBUNISTRING_INSTALL_STAGING = YES
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "4.1.1"
++	bool "4.1.2"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.1.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.1.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
