@@ -1,37 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jul 2015 20:24:30 +0200
-Subject: [Buildroot] [PATCH 15/16] package/vim: add default vimrc
-In-Reply-To: <1421684056-5266-16-git-send-email-maxtram95@gmail.com>
-References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
- <1421684056-5266-16-git-send-email-maxtram95@gmail.com>
-Message-ID: <20150710202430.3bd69bd9@free-electrons.com>
+Date: Fri, 10 Jul 2015 20:27:13 +0200
+Subject: [Buildroot] [PATCH 1/4] libidn: bump to version 1.31
+In-Reply-To: <1436550009-30590-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1436550009-30590-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150710202713.5a6181c1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxim Mikityanskiy,
+Dear Gustavo Zacarias,
 
-On Mon, 19 Jan 2015 18:14:15 +0200, Maxim Mikityanskiy wrote:
-> Support /etc/vim/vimrc as system-wide vimrc file. Add some default
-> sample vimrc.
-> 
-> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+On Fri, 10 Jul 2015 14:40:06 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/vim/vim.mk | 11 +++++++++++
->  package/vim/vimrc  | 14 ++++++++++++++
->  2 files changed, 25 insertions(+)
->  create mode 100644 package/vim/vimrc
+>  package/libidn/libidn.hash | 4 ++--
+>  package/libidn/libidn.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-I don't think it's really that useful to have a custom vimrc installed
-by default. We do install a default config file for daemons when they
-need it to have some sane default behavior, but for things like text
-editors, I'm not sure it's really worth it.
-
-So I've marked your patch as Rejected in our patch tracking system.
-
-Best regards,
+All four applied, thanks.
 
 Thomas
 -- 
