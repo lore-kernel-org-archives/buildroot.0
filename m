@@ -1,38 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 11 Jul 2015 15:38:21 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Jul 2015 17:39:13 +0200
 Subject: [Buildroot] [Bug 8206] mplayer uses host xorg development files
-In-Reply-To: <bug-8206-163@https.bugs.busybox.net/>
+In-Reply-To: <55A1359C.5020109@mind.be>
 References: <bug-8206-163@https.bugs.busybox.net/>
-Message-ID: <20150711153823.7BD6F7F89F@busybox.osuosl.org>
+ <20150707210059.917A78015E@busybox.osuosl.org>
+ <1436622071664-105281.post@n4.nabble.com>
+ <55A12A5E.4010900@mind.be>
+ <1436625379066-105305.post@n4.nabble.com>
+ <55A1359C.5020109@mind.be>
+Message-ID: <20150711173913.32fbc8a7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8206
+Dear Arnout Vandecappelle,
 
---- Comment #5 from Bernd Kuhls <bernd.kuhls@t-online.de> 2015-07-11 15:38:21 UTC ---
-Quoting
-http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/119274/focus=119720
+On Sat, 11 Jul 2015 17:26:20 +0200, Arnout Vandecappelle wrote:
 
-console_log_bad_mplayer_rebuild.txt
-<http://buildroot-busybox.2317881.n4.nabble.com/file/n105280/console_log_bad_mplayer_rebuild.txt>
+>  So that doesn't solve the issue then?
+> 
+>  Well, looking at the patch, it can't fix the issue because a 'make
+> mplayer-dirclean; make mplayer' run wouldn't change anything that this patch does...
+> 
+>  Back to Bernd :-)
 
-> Checking for X11 headers presence ... no (check if the dev(el) packages are installed)
-> Checking for X11 ... no (check if the dev(el) packages are installed)
+Basically, the mplayer X11 support assumes that the user will enable
+all the relevant X.org libraries to make things work. While probably,
+it should be doing more of "select BR2_PACKAGE_<blah> if
+BR2_PACKAGE_XORG7" so that if X.org has been enabled, mplayer
+automatically enables the necessary libraries.
 
-console_log_good_mplayer_rebuild.txt
-<http://buildroot-busybox.2317881.n4.nabble.com/file/n105280/console_log_good_mplayer_rebuild.txt>
+Best regards,
 
-> Checking for X11 headers presence ... yes 
-> Checking for X11 ... yes 
-
-It is clearly visible that mplayer, without my patch posted in this bug report,
-picked up xorg headers from the host. I could reproduce the behaviour from
-console_log_bad_mplayer_rebuild.txt, which is fixed with my patch.
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
