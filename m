@@ -1,41 +1,24 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Jul 2015 17:26:20 +0200
-Subject: [Buildroot] [Bug 8206] mplayer uses host xorg development files
-In-Reply-To: <1436625379066-105305.post@n4.nabble.com>
-References: <bug-8206-163@https.bugs.busybox.net/>
- <20150707210059.917A78015E@busybox.osuosl.org>
- <1436622071664-105281.post@n4.nabble.com> <55A12A5E.4010900@mind.be>
- <1436625379066-105305.post@n4.nabble.com>
-Message-ID: <55A1359C.5020109@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 11 Jul 2015 17:27:10 +0200
+Subject: [Buildroot] [PATCH/next 1/3]
+	package/x11r7/xdriver_xf86-input-libinput: bump version to 0.10.0
+References: <1432194056-10250-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <XnsA4D4B189D1BF0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/11/15 16:36, glscantlen wrote:
-> Thanks Arnout,
-> 
-> That is essentially what I've done.
-> My initial thinking was the patch got copied into the tree somewhere, then
-> re-build.
-> But that is not the case , as your reply suggests.
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote in 
+news:1432194056-10250-1-git-send-email-bernd.kuhls at t-online.de:
 
- So that doesn't solve the issue then?
+> -XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.9.0
+> +XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.10.0
 
- Well, looking at the patch, it can't fix the issue because a 'make
-mplayer-dirclean; make mplayer' run wouldn't change anything that this patch does...
+Hi,
 
- Back to Bernd :-)
+I marked this patch as superseded in patchwork because 0.11.0 was released 
+along with libinput 0.19.0, currently I am testing the new patches.
 
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Regards, Bernd
