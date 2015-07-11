@@ -1,43 +1,62 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Jul 2015 17:49:59 +0200
-Subject: [Buildroot] [PATCH 1/2] package/x11r7/xdriver_xf86-input-libinput:
-	bump version to 0.11.0
-Message-ID: <1436629800-15097-1-git-send-email-bernd.kuhls@t-online.de>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat, 11 Jul 2015 17:51:05 +0200
+Subject: [Buildroot] [PATCH] busybox: Install udhcpc script only if enabled
+Message-ID: <1436629865-19506-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+It doesn't make sense to install such a scripts if UDHCPC was not
+selected.
+Also remove the entry from BUSYBOX_PERMISSIONS as the install command
+does the same job.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash  |    5 ++---
- .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk    |    2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/busybox/busybox.mk | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-index 9b5219f..05e119e 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-@@ -1,3 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002586.html
--sha1	cfb19cc863bfc0a419df6b14287891ad54bc86a2				xf86-input-libinput-0.9.0.tar.bz2
--sha256	37f623b7869c700156049fa9204bafd6027bf5c3acd9017919e42199bcc666da	xf86-input-libinput-0.9.0.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-June/002610.html
-+sha256	56babf46c13d15fbd15c9d43815e9220e63acd9ed28095e7d68ad03f9148bbda	xf86-input-libinput-0.11.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-index 28371a2..722e700 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 51b35bc..92874cd 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -52,7 +52,6 @@ BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
  
--XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.9.0
-+XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.11.0
- XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+ define BUSYBOX_PERMISSIONS
+ 	/bin/busybox                     f 4755 0  0 - - - - -
+-	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
+ endef
+ 
+ # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
+@@ -127,6 +126,15 @@ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
+ endef
+ endif
+ 
++define BUSYBOX_INSTALL_UDHCPC_SCRIPT
++	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
++		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
++			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
++		$(INSTALL) -m 0755 -d \
++			$(TARGET_DIR)/usr/share/udhcpc/default.script.d; \
++	fi
++endef
++
+ ifeq ($(BR2_INIT_BUSYBOX),y)
+ define BUSYBOX_SET_INIT
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_INIT,$(BUSYBOX_BUILD_CONFIG))
+@@ -189,10 +197,7 @@ endef
+ 
+ define BUSYBOX_INSTALL_TARGET_CMDS
+ 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) install
+-	$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+-		$(TARGET_DIR)/usr/share/udhcpc/default.script
+-	$(INSTALL) -m 0755 -d \
+-		$(TARGET_DIR)/usr/share/udhcpc/default.script.d
++	$(BUSYBOX_INSTALL_UDHCPC_SCRIPT)
+ 	$(BUSYBOX_INSTALL_MDEV_CONF)
+ endef
+ 
 -- 
-1.7.10.4
+2.1.4
