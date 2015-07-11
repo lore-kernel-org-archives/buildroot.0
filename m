@@ -1,73 +1,52 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 11 Jul 2015 17:40:14 +0200
-Subject: [Buildroot] [PATCH v3] pkg-generic: Fix host _DL_VERSION corner case
-In-Reply-To: <1436628092-30192-1-git-send-email-arnout@mind.be>
-References: <1436628092-30192-1-git-send-email-arnout@mind.be>
-Message-ID: <1436629214-32106-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 11 Jul 2015 17:42:42 +0200
+Subject: [Buildroot] [Bug 8206] mplayer uses host xorg development files
+In-Reply-To: <20150711173913.32fbc8a7@free-electrons.com>
+References: <bug-8206-163@https.bugs.busybox.net/>
+ <20150707210059.917A78015E@busybox.osuosl.org>
+ <1436622071664-105281.post@n4.nabble.com> <55A12A5E.4010900@mind.be>
+ <1436625379066-105305.post@n4.nabble.com> <55A1359C.5020109@mind.be>
+ <20150711173913.32fbc8a7@free-electrons.com>
+Message-ID: <55A13972.2060908@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
-In the case when a package has a host version, the package is dependent
-on the host version, and the version contains a '/', the host version
-does not evaluate properly. The host version will contain a '_' instead
-of a '/', resulting in a failed download. To solve this corner case, add
-a check to see if the _DL_VERSION of the package has been defined before
-defining the host _DL_VERSION. If the package _DL_VERSION has not been
-defined yet, then the version string has not been formatted yet and is
-still good to use.
 
-[Arnout: further simplify things by lifting the override over _VERSION
-out of the condition - it is always the same.]
+On 07/11/15 17:39, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
+> 
+> On Sat, 11 Jul 2015 17:26:20 +0200, Arnout Vandecappelle wrote:
+> 
+>>  So that doesn't solve the issue then?
+>>
+>>  Well, looking at the patch, it can't fix the issue because a 'make
+>> mplayer-dirclean; make mplayer' run wouldn't change anything that this patch does...
+>>
+>>  Back to Bernd :-)
+> 
+> Basically, the mplayer X11 support assumes that the user will enable
+> all the relevant X.org libraries to make things work. While probably,
+> it should be doing more of "select BR2_PACKAGE_<blah> if
+> BR2_PACKAGE_XORG7" so that if X.org has been enabled, mplayer
+> automatically enables the necessary libraries.
 
-This error occured on a package in a BR2_EXTERNAL that uses a git repo
-for its remote storage with '/' in the tag names. I do not believe this
-affects any packages in the Buildroot mainline but it could in the
-future.
+ But that doesn't explain why it _works_ when these packages are present _on the
+host_...
 
-[Arnout: rebase on master, fix existing whitespace error in the else
-branch.]
+ I also noticed that Xorg terminates in the bad case - before mplayer is even
+started.
 
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-v3: Re-instate Clayton as author - sorry about that
-v2: rebase, fix whitespace error, lift _VERSION assignment out of condition
----
- package/pkg-generic.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 9fe01b8..5f630e4 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -298,17 +298,17 @@ $(2)_RAWNAME			=  $$(patsubst host-%,%,$(1))
- # Similar for spaces and colons (:) that may appear in date-based revisions for
- # CVS.
- ifndef $(2)_VERSION
-- ifdef $(3)_VERSION
--  $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
--  $(2)_VERSION := $$(call sanitize,$$($(3)_VERSION))
-+ ifdef $(3)_DL_VERSION
-+  $(2)_DL_VERSION := $$($(3)_DL_VERSION)
-+ else ifdef $(3)_VERSION
-+  $(2)_DL_VERSION := $$($(3)_VERSION)
-  else
--  $(2)_VERSION = undefined
-   $(2)_DL_VERSION = undefined
-  endif
- else
--  $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
--  $(2)_VERSION := $$(call sanitize,$$($(2)_VERSION))
-+ $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
- endif
-+$(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))
- 
- $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
- $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
 -- 
-2.1.4
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
