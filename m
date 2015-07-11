@@ -1,43 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jul 2015 15:09:29 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXrandr: bump version
-	to 1.5.0
-Message-ID: <20150711143132.47CB181768@busybox.osuosl.org>
+Date: Sat, 11 Jul 2015 16:32:12 +0200
+Subject: [Buildroot] [PATCH/next 1/7] package/dovecot: bump version to
+ 2.2.18
+In-Reply-To: <1432110398-22791-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1432110398-22791-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150711163212.281ed091@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d82478687590c420039bb80eda3993d9da20780e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xlib_libXrandr/xlib_libXrandr.hash |    4 ++--
- package/x11r7/xlib_libXrandr/xlib_libXrandr.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Wed, 20 May 2015 10:26:32 +0200, Bernd Kuhls wrote:
+> Removed patch applied upstream:
+> http://hg.dovecot.org/dovecot-2.2/rev/e4ad83ed88c9
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/dovecot/0001-zlib.patch |   24 ------------------------
+>  package/dovecot/dovecot.hash    |    2 +-
+>  package/dovecot/dovecot.mk      |    2 +-
+>  3 files changed, 2 insertions(+), 26 deletions(-)
+>  delete mode 100644 package/dovecot/0001-zlib.patch
 
-diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
-index 1f2ce3e..e4b86a0 100644
---- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
-+++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/xorg/2013-September/056011.html
--sha256	caa7b31ac769be51a532343c65376f1d4df3f307afaed58e34fb5e82e8b825ad	libXrandr-1.4.2.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-May/002606.html
-+sha256	6f864959b7fc35db11754b270d71106ef5b5cf363426aa58589cb8ac8266de58	libXrandr-1.5.0.tar.bz2
-diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-index 25c77fe..5abd8b1 100644
---- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-+++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBXRANDR_VERSION = 1.4.2
-+XLIB_LIBXRANDR_VERSION = 1.5.0
- XLIB_LIBXRANDR_SOURCE = libXrandr-$(XLIB_LIBXRANDR_VERSION).tar.bz2
- XLIB_LIBXRANDR_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXRANDR_LICENSE = MIT
+Applied patches 1 to 6. Patch 7 was apparently already applied (at
+least it was no longer in patchwork).
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
