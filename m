@@ -1,56 +1,69 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 12 Jul 2015 00:40:35 +0200
-Subject: [Buildroot] [PATCH 6/7] zic: use <PKG>_STRIP_COMPONENTS
-In-Reply-To: <1436624110-20428-6-git-send-email-luca@lucaceresoli.net>
-References: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
- <1436624110-20428-6-git-send-email-luca@lucaceresoli.net>
-Message-ID: <55A19B63.2090109@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Jul 2015 00:46:55 +0200
+Subject: [Buildroot] [git commit] pkg-generic: Fix host _DL_VERSION corner
+	case
+Message-ID: <20150711225021.38ADA81663@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/11/15 16:15, Luca Ceresoli wrote:
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+commit: http://git.buildroot.net/buildroot/commit/?id=4837354fff8cc56916fa10e5ac5f8da73d0cc405
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+In the case when a package has a host version, the package is dependent
+on the host version, and the version contains a '/', the host version
+does not evaluate properly. The host version will contain a '_' instead
+of a '/', resulting in a failed download. To solve this corner case, add
+a check to see if the _DL_VERSION of the package has been defined before
+defining the host _DL_VERSION. If the package _DL_VERSION has not been
+defined yet, then the version string has not been formatted yet and is
+still good to use.
 
- Regards,
- Arnout
+[Arnout: further simplify things by lifting the override over _VERSION
+out of the condition - it is always the same.]
 
-> ---
->  package/zic/zic.mk | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-> index a768ac6cfd59..03e023ae4ff4 100644
-> --- a/package/zic/zic.mk
-> +++ b/package/zic/zic.mk
-> @@ -7,14 +7,9 @@
->  ZIC_VERSION = 2015e
->  ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
->  ZIC_SITE = ftp://ftp.iana.org/tz/releases
-> +ZIC_STRIP_COMPONENTS = 0
->  ZIC_LICENSE = Public domain
->  
-> -# Don't strip any path components during extraction.
-> -define HOST_ZIC_EXTRACT_CMDS
-> -	gzip -d -c $(DL_DIR)/$(ZIC_SOURCE) \
-> -		| $(TAR) --strip-components=0 -C $(@D) -xf -
-> -endef
-> -
->  define HOST_ZIC_BUILD_CMDS
->  	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) zic
->  endef
-> 
+This error occured on a package in a BR2_EXTERNAL that uses a git repo
+for its remote storage with '/' in the tag names. I do not believe this
+affects any packages in the Buildroot mainline but it could in the
+future.
 
+[Arnout: rebase on master, fix existing whitespace error in the else
+branch.]
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-generic.mk |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 9fe01b8..5f630e4 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -298,17 +298,17 @@ $(2)_RAWNAME			=  $$(patsubst host-%,%,$(1))
+ # Similar for spaces and colons (:) that may appear in date-based revisions for
+ # CVS.
+ ifndef $(2)_VERSION
+- ifdef $(3)_VERSION
+-  $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
+-  $(2)_VERSION := $$(call sanitize,$$($(3)_VERSION))
++ ifdef $(3)_DL_VERSION
++  $(2)_DL_VERSION := $$($(3)_DL_VERSION)
++ else ifdef $(3)_VERSION
++  $(2)_DL_VERSION := $$($(3)_VERSION)
+  else
+-  $(2)_VERSION = undefined
+   $(2)_DL_VERSION = undefined
+  endif
+ else
+-  $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
+-  $(2)_VERSION := $$(call sanitize,$$($(2)_VERSION))
++ $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
+ endif
++$(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))
+ 
+ $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
+ $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
