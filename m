@@ -1,46 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 00:51:19 +0200
-Subject: [Buildroot] [git commit] intel-microcode: use <PKG>_STRIP_COMPONENTS
-Message-ID: <20150711225139.B97BD8081D@busybox.osuosl.org>
+Date: Sun, 12 Jul 2015 00:51:14 +0200
+Subject: [Buildroot] [git commit] docs/manual: document
+	<PKG>_STRIP_COMPONENTS
+Message-ID: <20150711225139.B09C88081D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=570566ddc5c0222d89484e8865ed79ba4d543aad
+commit: http://git.buildroot.net/buildroot/commit/?id=62803be844b19e32c952cfff995354cf263d0f5d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/intel-microcode/intel-microcode.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ docs/manual/adding-packages-generic.txt |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
 
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 4e8ea90..23c4b3e 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -7,17 +7,17 @@
- INTEL_MICROCODE_VERSION = 20150107
- INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
- INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24616/eng
-+INTEL_MICROCODE_STRIP_COMPONENTS = 0
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license.txt
- INTEL_MICROCODE_REDISTRIBUTE = NO
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index bc07667..4c12b42 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -303,6 +303,15 @@ information is (assuming the package name is +libfoo+) :
+      the package source code. Buildroot copies the contents of the
+      source directory into the package's build directory.
  
--# N.B. Don't strip any path components during extraction.
--define INTEL_MICROCODE_EXTRACT_CMDS
--	gzip -d -c $(DL_DIR)/$(INTEL_MICROCODE_SOURCE) | \
--	tar --strip-components=0 -C $(@D) -xf -
-+define INTEL_MICROCODE_EXTRACT_LICENSE
- 	head -n 33 $(@D)/microcode.dat > $(@D)/license.txt
- endef
- 
-+INTEL_MICROCODE_POST_EXTRACT_HOOKS += INTEL_MICROCODE_EXTRACT_LICENSE
++* +LIBFOO_STRIP_COMPONENTS+ is the number of leading components
++  (directories) that tar must strip from file names on extraction.
++  The tarball for most packages has one leading component named
++  "<pkg-name>-<pkg-version>", thus Buildroot passes
++  --strip-components=1 to tar to remove it.
++  For non-standard packages that don't have this component, or
++  that have more than one leading component to strip, set this
++  variable with the value to be passed to tar. Default: 1.
 +
- define INTEL_MICROCODE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/microcode.dat \
- 		$(TARGET_DIR)/usr/share/misc/intel-microcode.dat
+ * +LIBFOO_DEPENDENCIES+ lists the dependencies (in terms of package
+   name) that are required for the current target package to
+   compile. These dependencies are guaranteed to be compiled and
