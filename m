@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jul 2015 09:22:51 +0200
-Subject: [Buildroot] [git commit] nano: work around broken syntax
-	highlighting regexes
-Message-ID: <20150711072314.AB24B7FE11@busybox.osuosl.org>
+Date: Sat, 11 Jul 2015 09:25:43 +0200
+Subject: [Buildroot] [PATCH 1/5] nano: work around broken syntax
+ highlighting regexes
+In-Reply-To: <1432838510-1848-1-git-send-email-pmjdebruijn@pcode.nl>
+References: <1432838510-1848-1-git-send-email-pmjdebruijn@pcode.nl>
+Message-ID: <20150711092543.650825fb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bc16d5444fbb0f2a303e2a4a950ee286e5338056
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Pascal de Bruijn,
 
-[Thomas: use --with-wordbounds instead of fiddling with CFLAGS.]
+On Thu, 28 May 2015 20:41:46 +0200, Pascal de Bruijn wrote:
+> Signed-off-by: Pascal de Bruijn <pmjdebruijn@pcode.nl>
+> ---
+>  package/nano/nano.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+> index 4d47fdb..c6eb29c 100644
+> --- a/package/nano/nano.mk
+> +++ b/package/nano/nano.mk
+> @@ -11,6 +11,9 @@ NANO_LICENSE_FILES = COPYING
+>  NANO_CONF_OPTS = --without-slang
+>  NANO_DEPENDENCIES = ncurses
+>  
+> +# work around broken syntax highlighting regexes
+> +NANO_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DGNU_WORDBOUNDS=1"
+> +
 
-Signed-off-by: Pascal de Bruijn <pmjdebruijn@pcode.nl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nano/nano.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+There was a ./configure option --with-wordbounds to also do this, so I
+use that instead of fiddling with CFLAGS.
 
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index b030818..9b84490 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -8,7 +8,9 @@ NANO_VERSION = 2.4.2
- NANO_SITE = $(BR2_GNU_MIRROR)/nano
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
--NANO_CONF_OPTS = --without-slang
-+NANO_CONF_OPTS = \
-+	--without-slang \
-+	--with-wordbounds
- NANO_DEPENDENCIES = ncurses
- 
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+Committed with that change, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
