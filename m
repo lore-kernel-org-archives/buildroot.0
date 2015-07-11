@@ -1,36 +1,2000 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jul 2015 14:52:52 +0200
-Subject: [Buildroot] [PATCH 1/2] binutils: use binutils 2.24 by default on
-	the target
-Message-ID: <1436619173-17434-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Jul 2015 14:52:53 +0200
+Subject: [Buildroot] [PATCH 2/2] binutils: remove version 2.22
+In-Reply-To: <1436619173-17434-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1436619173-17434-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1436619173-17434-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When binutils is not built for the host, binutils.mk decides of the
-version to be used when building binutils for the target. We're still
-using the old 2.22 binutils version, but it's time to bump up to 2.24,
-which we already use as the default version for the host.
+We already use 2.24 as the default, 2.25 has been around for some
+time, and 2.22 is clearly very old, so let's get rid of it.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/binutils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Config.in.legacy                                   |   7 +
+ package/binutils/2.22/120-sh-conf.patch            |  29 -
+ .../binutils/2.22/300-001_ld_makefile_patch.patch  |  24 -
+ .../2.22/300-012_check_ldrunpath_length.patch      |  21 -
+ package/binutils/2.22/500-sysroot.patch            |  36 -
+ .../2.22/600-poison-system-directories.patch       | 274 -------
+ package/binutils/2.22/900-xtensa-trampolines.patch | 846 ---------------------
+ .../2.22/901-xtensa-gas-first-frag-alignment.patch |  51 --
+ .../902-xtensa-gas-ld-diff-relocation-signed.patch | 133 ----
+ ...ix-ld-segfault-when-linking-linux-modules.patch |  47 --
+ ...-target-out-of-range-xtensa-ld-relaxation.patch |  79 --
+ ...ines-search-code-for-conditional-branches.patch |  90 ---
+ ...localized-symbol-refcounting-with-gc-sect.patch |  57 --
+ ...x-gas-segfault-with-text-section-literals.patch |  56 --
+ package/binutils/2.22/999-ppc-textrels.patch       |  80 --
+ package/binutils/Config.in.host                    |   6 -
+ 16 files changed, 7 insertions(+), 1829 deletions(-)
+ delete mode 100644 package/binutils/2.22/120-sh-conf.patch
+ delete mode 100644 package/binutils/2.22/300-001_ld_makefile_patch.patch
+ delete mode 100644 package/binutils/2.22/300-012_check_ldrunpath_length.patch
+ delete mode 100644 package/binutils/2.22/500-sysroot.patch
+ delete mode 100644 package/binutils/2.22/600-poison-system-directories.patch
+ delete mode 100644 package/binutils/2.22/900-xtensa-trampolines.patch
+ delete mode 100644 package/binutils/2.22/901-xtensa-gas-first-frag-alignment.patch
+ delete mode 100644 package/binutils/2.22/902-xtensa-gas-ld-diff-relocation-signed.patch
+ delete mode 100644 package/binutils/2.22/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch
+ delete mode 100644 package/binutils/2.22/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch
+ delete mode 100644 package/binutils/2.22/905-Fix-trampolines-search-code-for-conditional-branches.patch
+ delete mode 100644 package/binutils/2.22/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
+ delete mode 100644 package/binutils/2.22/912-xtensa-fix-gas-segfault-with-text-section-literals.patch
+ delete mode 100644 package/binutils/2.22/999-ppc-textrels.patch
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 4ce11da..009a900 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -11,7 +11,7 @@ ifeq ($(BINUTILS_VERSION),)
- ifeq ($(BR2_arc),y)
- BINUTILS_VERSION = arc-2015.06-rc1
- else
--BINUTILS_VERSION = 2.22
-+BINUTILS_VERSION = 2.24
- endif
- endif # BINUTILS_VERSION
+diff --git a/Config.in.legacy b/Config.in.legacy
+index edf9912..0a8d0a6 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.08"
  
++config BR2_BINUTILS_VERSION_2_22
++	bool "binutils 2.22 removed"
++	select BR2_LEGACY
++	help
++	  Binutils 2.22 has been removed, using a newer version is
++	  recommended.
++
+ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+ 	bool "gpu-viv-bin-mx6q"
+ 	select BR2_LEGACY
+diff --git a/package/binutils/2.22/120-sh-conf.patch b/package/binutils/2.22/120-sh-conf.patch
+deleted file mode 100644
+index ea3d1b6..0000000
+--- a/package/binutils/2.22/120-sh-conf.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-r10231 | lethal | 2005-05-02 09:58:00 -0400 (Mon, 02 May 2005) | 13 lines
+-
+-Likewise, binutils has no idea about any of these new targets either, so we 
+-fix that up too.. now we're able to actually build a real toolchain for 
+-sh2a_nofpu- and other more ineptly named toolchains (and yes, there are more 
+-inept targets than that one, really. Go look, I promise).
+-
+---- a/configure
+-+++ b/configure
+-@@ -1495,7 +1495,7 @@
+-   mips*-*-*)
+-     noconfigdirs="$noconfigdirs gprof"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${target}" in
+-       sh*-*-elf)
+-          ;;
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -712,7 +712,7 @@
+-   mips*-*-*)
+-     noconfigdirs="$noconfigdirs gprof"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${target}" in
+-       sh*-*-elf)
+-          ;;
+diff --git a/package/binutils/2.22/300-001_ld_makefile_patch.patch b/package/binutils/2.22/300-001_ld_makefile_patch.patch
+deleted file mode 100644
+index 5cb0f61..0000000
+--- a/package/binutils/2.22/300-001_ld_makefile_patch.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
+---- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
+-@@ -18,7 +18,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- 
+- EMUL = @EMUL@
+- EMULATION_OFILES = @EMULATION_OFILES@
+-diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
+---- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
+-@@ -287,7 +287,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- BASEDIR = $(srcdir)/..
+- BFDDIR = $(BASEDIR)/bfd
+- INCDIR = $(BASEDIR)/include
+diff --git a/package/binutils/2.22/300-012_check_ldrunpath_length.patch b/package/binutils/2.22/300-012_check_ldrunpath_length.patch
+deleted file mode 100644
+index df78310..0000000
+--- a/package/binutils/2.22/300-012_check_ldrunpath_length.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-diff -Nura binutils-2.21.orig/ld/emultempl/elf32.em binutils-2.21/ld/emultempl/elf32.em
+---- binutils-2.21.orig/ld/emultempl/elf32.em	2010-10-29 09:10:36.000000000 -0300
+-+++ binutils-2.21/ld/emultempl/elf32.em	2010-12-10 09:26:56.746102724 -0300
+-@@ -1270,6 +1270,8 @@
+- 	      && command_line.rpath == NULL)
+- 	    {
+- 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+-+	      if ((lib_path) && (strlen (lib_path) == 0))
+-+	      	lib_path = NULL;
+- 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
+- 						      force))
+- 		break;
+-@@ -1497,6 +1499,8 @@
+-   rpath = command_line.rpath;
+-   if (rpath == NULL)
+-     rpath = (const char *) getenv ("LD_RUN_PATH");
+-+  if ((rpath) && (strlen (rpath) == 0))
+-+  	rpath = NULL;
+- 
+-   for (abfd = link_info.input_bfds; abfd; abfd = abfd->link_next)
+-     if (bfd_get_flavour (abfd) == bfd_target_elf_flavour)
+diff --git a/package/binutils/2.22/500-sysroot.patch b/package/binutils/2.22/500-sysroot.patch
+deleted file mode 100644
+index d21e4cb..0000000
+--- a/package/binutils/2.22/500-sysroot.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-Signed-off-by: Sven Rebhan <odinshorse@googlemail.com>
+-
+-Always try to prepend the sysroot prefix to absolute filenames first.
+-
+-http://bugs.gentoo.org/275666
+-http://sourceware.org/bugzilla/show_bug.cgi?id=10340
+-
+---- a/ld/ldfile.c
+-+++ b/ld/ldfile.c
+-@@ -308,18 +308,24 @@
+-      directory first.  */
+-   if (! entry->is_archive)
+-     {
+--      if (entry->sysrooted && IS_ABSOLUTE_PATH (entry->filename))
+-+      /* For absolute pathnames, try to always open the file in the
+-+	 sysroot first. If this fails, try to open the file at the
+-+	 given location. */
+-+      entry->sysrooted = is_sysrooted_pathname(entry->filename, FALSE);
+-+      if (IS_ABSOLUTE_PATH (entry->filename) && ld_sysroot && ! entry->sysrooted)
+- 	{
+- 	  char *name = concat (ld_sysroot, entry->filename,
+- 			       (const char *) NULL);
+- 	  if (ldfile_try_open_bfd (name, entry))
+- 	    {
+- 	      entry->filename = name;
+-+	      entry->sysrooted = TRUE;
+- 	      return TRUE;
+- 	    }
+- 	  free (name);
+- 	}
+--      else if (ldfile_try_open_bfd (entry->filename, entry))
+-+
+-+      if (ldfile_try_open_bfd (entry->filename, entry))
+- 	{
+- 	  entry->sysrooted = IS_ABSOLUTE_PATH (entry->filename)
+- 	    && is_sysrooted_pathname (entry->filename, TRUE);
+diff --git a/package/binutils/2.22/600-poison-system-directories.patch b/package/binutils/2.22/600-poison-system-directories.patch
+deleted file mode 100644
+index b9ff8be..0000000
+--- a/package/binutils/2.22/600-poison-system-directories.patch
++++ /dev/null
+@@ -1,274 +0,0 @@
+-Patch adapted to binutils 2.23.2 and extended to use
+-BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Upstream-Status: Inappropriate [distribution: codesourcery]
+-
+-Patch originally created by Mark Hatle, forward-ported to
+-binutils 2.21 by Scott Garman.
+-
+-purpose:  warn for uses of system directories when cross linking
+-
+-Code Merged from Sourcery G++ binutils 2.19 - 4.4-277
+-
+-2008-07-02  Joseph Myers  <joseph@codesourcery.com>
+-
+-    ld/
+-    * ld.h (args_type): Add error_poison_system_directories.
+-    * ld.texinfo (--error-poison-system-directories): Document.
+-    * ldfile.c (ldfile_add_library_path): Check
+-    command_line.error_poison_system_directories.
+-    * ldmain.c (main): Initialize
+-    command_line.error_poison_system_directories.
+-    * lexsup.c (enum option_values): Add
+-    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES.
+-    (ld_options): Add --error-poison-system-directories.
+-    (parse_args): Handle new option.
+-
+-2007-06-13  Joseph Myers  <joseph@codesourcery.com>
+-
+-    ld/
+-    * config.in: Regenerate.
+-    * ld.h (args_type): Add poison_system_directories.
+-    * ld.texinfo (--no-poison-system-directories): Document.
+-    * ldfile.c (ldfile_add_library_path): Check
+-    command_line.poison_system_directories.
+-    * ldmain.c (main): Initialize
+-    command_line.poison_system_directories.
+-    * lexsup.c (enum option_values): Add
+-    OPTION_NO_POISON_SYSTEM_DIRECTORIES.
+-    (ld_options): Add --no-poison-system-directories.
+-    (parse_args): Handle new option.
+-
+-2007-04-20  Joseph Myers  <joseph@codesourcery.com>
+-
+-    Merge from Sourcery G++ binutils 2.17:
+-
+-    2007-03-20  Joseph Myers  <joseph@codesourcery.com>
+-    Based on patch by Mark Hatle <mark.hatle@windriver.com>.
+-    ld/
+-    * configure.in (--enable-poison-system-directories): New option.
+-    * configure, config.in: Regenerate.
+-    * ldfile.c (ldfile_add_library_path): If
+-    ENABLE_POISON_SYSTEM_DIRECTORIES defined, warn for use of /lib,
+-    /usr/lib, /usr/local/lib or /usr/X11R6/lib.
+-
+-Signed-off-by: Mark Hatle <mark.hatle@windriver.com>
+-Signed-off-by: Scott Garman <scott.a.garman@intel.com>
+-
+-Index: b/ld/config.in
+-===================================================================
+---- a/ld/config.in
+-+++ b/ld/config.in
+-@@ -4,6 +4,9 @@
+-    language is requested. */
+- #undef ENABLE_NLS
+- 
+-+/* Define to warn for use of native system library directories */
+-+#undef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+
+- /* Additional extension a shared object might have. */
+- #undef EXTRA_SHLIB_EXTENSION
+- 
+-Index: b/ld/configure
+-===================================================================
+---- a/ld/configure
+-+++ b/ld/configure
+-@@ -773,6 +773,7 @@
+- enable_targets
+- enable_64_bit_bfd
+- with_sysroot
+-+enable_poison_system_directories
+- enable_gold
+- enable_got
+- enable_werror
+-@@ -1427,6 +1428,8 @@
+- 			  (and sometimes confusing) to the casual installer
+-   --enable-targets        alternative target configurations
+-   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
+-+  --enable-poison-system-directories
+-+                          warn for use of native system library directories
+-   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
+-   --enable-got=<type>     GOT handling scheme (target, single, negative,
+-                           multigot)
+-@@ -4336,7 +4339,18 @@
+- fi
+- 
+- 
+-+# Check whether --enable-poison-system-directories was given.
+-+if test "${enable_poison_system_directories+set}" = set; then :
+-+  enableval=$enable_poison_system_directories;
+-+else
+-+  enable_poison_system_directories=no
+-+fi
+-+
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+- 
+-+$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
+-+
+-+fi
+- 
+- # Check whether --enable-got was given.
+- if test "${enable_got+set}" = set; then :
+-Index: b/ld/configure.in
+-===================================================================
+---- a/ld/configure.in
+-+++ b/ld/configure.in
+-@@ -70,6 +70,16 @@
+- AC_SUBST(TARGET_SYSTEM_ROOT)
+- AC_SUBST(TARGET_SYSTEM_ROOT_DEFINE)
+- 
+-+AC_ARG_ENABLE([poison-system-directories],
+-+         AS_HELP_STRING([--enable-poison-system-directories],
+-+                [warn for use of native system library directories]),,
+-+         [enable_poison_system_directories=no])
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
+-+       [1],
+-+       [Define to warn for use of native system library directories])
+-+fi
+-+
+- dnl Use --enable-gold to decide if this linker should be the default.
+- dnl "install_as_default" is set to false if gold is the default linker.
+- dnl "installed_linker" is the installed BFD linker name.
+-Index: b/ld/ldfile.c
+-===================================================================
+---- a/ld/ldfile.c
+-+++ b/ld/ldfile.c
+-@@ -126,6 +126,22 @@
+-       new_dirs->name = xstrdup (name);
+-       new_dirs->sysrooted = is_sysrooted_pathname (name, FALSE);
+-     }
+-+
+-+#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+  if (command_line.poison_system_directories
+-+      && ((!strncmp (name, "/lib", 4))
+-+	  || (!strncmp (name, "/usr/lib", 8))
+-+	  || (!strncmp (name, "/usr/local/lib", 14))
+-+	  || (!strncmp (name, "/usr/X11R6/lib", 14))))
+-+    {
+-+      if (command_line.error_poison_system_directories)
+-+	einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
+-+		 "cross-compilation\n"), name);
+-+      else
+-+	einfo (_("%P: warning: library search path \"%s\" is unsafe for "
+-+		 "cross-compilation\n"), name);
+-+    }
+-+#endif
+- }
+- 
+- /* Try to open a BFD for a lang_input_statement.  */
+-Index: b/ld/ld.h
+-===================================================================
+---- a/ld/ld.h
+-+++ b/ld/ld.h
+-@@ -203,6 +203,14 @@
+-   /* If TRUE we'll just print the default output on stdout.  */
+-   bfd_boolean print_output_format;
+- 
+-+  /* If TRUE (the default) warn for uses of system directories when
+-+     cross linking.  */
+-+  bfd_boolean poison_system_directories;
+-+
+-+  /* If TRUE (default FALSE) give an error for uses of system
+-+     directories when cross linking instead of a warning.  */
+-+  bfd_boolean error_poison_system_directories;
+-+
+-   /* Big or little endian as set on command line.  */
+-   enum endian_enum endian;
+- 
+-Index: b/ld/ldmain.c
+-===================================================================
+---- a/ld/ldmain.c
+-+++ b/ld/ldmain.c
+-@@ -259,6 +259,8 @@
+-   command_line.warn_search_mismatch = TRUE;
+-   command_line.check_section_addresses = -1;
+-   command_line.disable_target_specific_optimizations = -1;
+-+  command_line.poison_system_directories = TRUE;
+-+  command_line.error_poison_system_directories = FALSE;
+- 
+-   /* We initialize DEMANGLING based on the environment variable
+-      COLLECT_NO_DEMANGLE.  The gcc collect2 program will demangle the
+-Index: b/ld/ld.texinfo
+-===================================================================
+---- a/ld/ld.texinfo
+-+++ b/ld/ld.texinfo
+-@@ -2147,6 +2147,18 @@
+- 
+- Passing @code{none} for @var{style} disables the setting from any
+- @code{--build-id} options earlier on the command line.
+-+
+-+ at kindex --no-poison-system-directories
+-+ at item --no-poison-system-directories
+-+Do not warn for @option{-L} options using system directories such as
+-+ at file{/usr/lib} when cross linking.  This option is intended for use
+-+in chroot environments when such directories contain the correct
+-+libraries for the target system rather than the host.
+-+
+-+ at kindex --error-poison-system-directories
+-+ at item --error-poison-system-directories
+-+Give an error instead of a warning for @option{-L} options using
+-+system directories when cross linking.
+- @end table
+- 
+- @c man end
+-Index: b/ld/lexsup.c
+-===================================================================
+---- a/ld/lexsup.c
+-+++ b/ld/lexsup.c
+-@@ -176,6 +176,8 @@
+- #endif /* ENABLE_PLUGINS */
+-   OPTION_DEFAULT_SCRIPT,
+-   OPTION_PRINT_OUTPUT_FORMAT,
+-+  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
+-+  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
+- };
+- 
+- /* The long options.  This structure is used for both the option
+-@@ -612,6 +614,14 @@
+-     TWO_DASHES },
+-   { {"wrap", required_argument, NULL, OPTION_WRAP},
+-     '\0', N_("SYMBOL"), N_("Use wrapper functions for SYMBOL"), TWO_DASHES },
+-+  { {"no-poison-system-directories", no_argument, NULL,
+-+     OPTION_NO_POISON_SYSTEM_DIRECTORIES},
+-+    '\0', NULL, N_("Do not warn for -L options using system directories"),
+-+    TWO_DASHES },
+-+  { {"error-poison-system-directories", no_argument, NULL,
+-+     OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
+-+    '\0', NULL, N_("Give an error for -L options using system directories"),
+-+    TWO_DASHES },
+- };
+- 
+- #define OPTION_COUNT ARRAY_SIZE (ld_options)
+-@@ -624,6 +634,7 @@
+-   int ingroup = 0;
+-   char *default_dirlist = NULL;
+-   char *shortopts;
+-+  char *BR_paranoid_env;
+-   struct option *longopts;
+-   struct option *really_longopts;
+-   int last_optind;
+-@@ -1541,9 +1552,21 @@
+-               einfo (_("%P%X: --hash-size needs a numeric argument\n"));
+-           }
+-           break;
+-+
+-+   case OPTION_NO_POISON_SYSTEM_DIRECTORIES:
+-+     command_line.poison_system_directories = FALSE;
+-+     break;
+-+
+-+   case OPTION_ERROR_POISON_SYSTEM_DIRECTORIES:
+-+     command_line.error_poison_system_directories = TRUE;
+-+     break;
+- 	}
+-     }
+- 
+-+  BR_paranoid_env = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+-+  if (BR_paranoid_env && strlen(BR_paranoid_env) > 0)
+-+    command_line.error_poison_system_directories = TRUE;
+-+
+-   while (ingroup)
+-     {
+-       lang_leave_group ();
+diff --git a/package/binutils/2.22/900-xtensa-trampolines.patch b/package/binutils/2.22/900-xtensa-trampolines.patch
+deleted file mode 100644
+index b5b934f..0000000
+--- a/package/binutils/2.22/900-xtensa-trampolines.patch
++++ /dev/null
+@@ -1,846 +0,0 @@
+-From a82c7d9030b67a6a76a5403d0e1641f9e42141ac Mon Sep 17 00:00:00 2001
+-From: David Weatherford <weath@cadence.com>
+-Date: Fri, 21 Mar 2014 11:53:42 +0000
+-Subject: [PATCH] Add support to the Xtensa target for creating trampolines for
+- out-of-range branches.
+-
+-    * tc-xtensa.c (xtensa_check_frag_count, xtensa_create_trampoline_frag)
+-    (xtensa_maybe_create_trampoline_frag, init_trampoline_frag)
+-    (find_trampoline_seg, search_trampolines, get_best_trampoline)
+-    (check_and_update_trampolines, add_jump_to_trampoline)
+-    (dump_trampolines): New function.
+-    (md_parse_option): Add cases for --[no-]trampolines options.
+-    (md_assemble, finish_vinsn, xtensa_end): Add call to
+-    xtensa_check_frag_count.
+-    (xg_assemble_vliw_tokens): Add call to
+-    xtensa_maybe_create_trampoline_frag.
+-    (xtensa_relax_frag): Relax fragments with RELAX_TRAMPOLINE state.
+-    (relax_frag_immed): Relax jump instructions that cannot reach its
+-    target.
+-    * tc-xtensa.h (xtensa_relax_statesE::RELAX_TRAMPOLINE): New relax
+-    state.
+-
+-    * as.texinfo: Document --[no-]trampolines command-line options.
+-    * c-xtensa.texi: Document trampolines relaxation and command line
+-    options.
+-
+-    * frags.c (get_frag_count, clear_frag_count): New function.
+-    (frag_alloc): Increment totalfrags counter.
+-    * frags.h (get_frag_count, clear_frag_count): New function.
+-
+-    * all.exp: Add test for trampoline relaxation.
+-    * trampoline.d: Trampoline relaxation expected dump.
+-    * trampoline.s: Trampoline relaxation test source.
+----
+-Backported from: a82c7d9030b67a6a76a5403d0e1641f9e42141ac
+-Changes to Changelog files are dropped.
+-
+- gas/config/tc-xtensa.c                | 558 +++++++++++++++++++++++++++++++++-
+- gas/config/tc-xtensa.h                |   5 +
+- gas/frags.c                           |  15 +
+- gas/frags.h                           |   3 +
+- gas/testsuite/gas/xtensa/all.exp      |   1 +
+- gas/testsuite/gas/xtensa/trampoline.d |  26 ++
+- gas/testsuite/gas/xtensa/trampoline.s |  21 ++
+- 11 files changed, 753 insertions(+), 2 deletions(-)
+- create mode 100644 gas/testsuite/gas/xtensa/trampoline.d
+- create mode 100644 gas/testsuite/gas/xtensa/trampoline.s
+-
+-diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index fe8ec0f..ea23c96 100644
+---- a/gas/config/tc-xtensa.c
+-+++ b/gas/config/tc-xtensa.c
+-@@ -468,6 +468,12 @@ static void xtensa_set_frag_assembly_state (fragS *);
+- static void finish_vinsn (vliw_insn *);
+- static bfd_boolean emit_single_op (TInsn *);
+- static int total_frag_text_expansion (fragS *);
+-+static bfd_boolean use_trampolines = TRUE;
+-+static void xtensa_check_frag_count (void);
+-+static void xtensa_create_trampoline_frag (bfd_boolean);
+-+static void xtensa_maybe_create_trampoline_frag (void);
+-+struct trampoline_frag;
+-+static int init_trampoline_frag (struct trampoline_frag *);
+- 
+- /* Alignment Functions.  */
+- 
+-@@ -520,6 +526,7 @@ static void tinsn_from_chars (TInsn *, char *, int);
+- static void tinsn_immed_from_frag (TInsn *, fragS *, int);
+- static int get_num_stack_text_bytes (IStack *);
+- static int get_num_stack_literal_bytes (IStack *);
+-+static bfd_boolean tinsn_to_slotbuf (xtensa_format, int, TInsn *, xtensa_insnbuf);
+- 
+- /* vliw_insn functions.  */
+- 
+-@@ -687,7 +694,10 @@ enum
+-   option_prefer_l32r,
+-   option_prefer_const16,
+- 
+--  option_target_hardware
+-+  option_target_hardware,
+-+
+-+  option_trampolines,
+-+  option_no_trampolines,
+- };
+- 
+- const char *md_shortopts = "";
+-@@ -760,6 +770,9 @@ struct option md_longopts[] =
+- 
+-   { "target-hardware", required_argument, NULL, option_target_hardware },
+- 
+-+  { "trampolines", no_argument, NULL, option_trampolines },
+-+  { "no-trampolines", no_argument, NULL, option_no_trampolines },
+-+
+-   { NULL, no_argument, NULL, 0 }
+- };
+- 
+-@@ -940,6 +953,14 @@ md_parse_option (int c, char *arg)
+-       directive_state[directive_transform] = FALSE;
+-       return 1;
+- 
+-+    case option_trampolines:
+-+      use_trampolines = TRUE;
+-+      return 1;
+-+
+-+    case option_no_trampolines:
+-+      use_trampolines = FALSE;
+-+      return 1;
+-+
+-     default:
+-       return 0;
+-     }
+-@@ -963,7 +984,9 @@ Xtensa options:\n\
+-                           flix bundles\n\
+-   --no-allow-flix         neither allow hand-written nor generate\n\
+-                           flix bundles\n\
+--  --rename-section old=new Rename section 'old' to 'new'\n", stream);
+-+  --rename-section old=new Rename section 'old' to 'new'\n\
+-+  --[no-]trampolines      [Do not] generate trampolines (jumps to jumps)\n\
+-+                          when jumps do not reach their targets\n", stream);
+- }
+- 
+- 
+-@@ -5568,6 +5591,8 @@ md_assemble (char *str)
+- 
+-   /* We've just emitted a new instruction so clear the list of labels.  */
+-   xtensa_clear_insn_labels ();
+-+
+-+  xtensa_check_frag_count ();
+- }
+- 
+- 
+-@@ -6372,6 +6397,8 @@ finish_vinsn (vliw_insn *vinsn)
+-   xg_assemble_vliw_tokens (vinsn);
+- 
+-   xg_clear_vinsn (vinsn);
+-+
+-+  xtensa_check_frag_count ();
+- }
+- 
+- 
+-@@ -7140,6 +7167,7 @@ xg_assemble_vliw_tokens (vliw_insn *vinsn)
+- 		    RELAX_UNREACHABLE,
+- 		    frag_now->fr_symbol, frag_now->fr_offset, NULL);
+- 	  xtensa_set_frag_assembly_state (frag_now);
+-+	  xtensa_maybe_create_trampoline_frag ();
+- 	}
+-       else if (is_branch && do_align_targets ())
+- 	{
+-@@ -7222,9 +7250,164 @@ xtensa_end (void)
+-   xtensa_sanity_check ();
+- 
+-   xtensa_add_config_info ();
+-+
+-+  xtensa_check_frag_count ();
+-+}
+-+
+-+
+-+struct trampoline_frag
+-+{
+-+  struct trampoline_frag *next;
+-+  bfd_boolean needs_jump_around;
+-+  fragS *fragP;
+-+  fixS *fixP;
+-+};
+-+
+-+struct trampoline_seg
+-+{
+-+  struct trampoline_seg *next;
+-+  asection *seg;
+-+  struct trampoline_frag trampoline_list;
+-+};
+-+
+-+static struct trampoline_seg trampoline_seg_list;
+-+#define J_RANGE (128 * 1024)
+-+
+-+static int unreachable_count = 0;
+-+
+-+
+-+static void
+-+xtensa_maybe_create_trampoline_frag (void)
+-+{
+-+  if (!use_trampolines)
+-+    return;
+-+
+-+  /* We create an area for possible trampolines every 10 unreachable frags.
+-+     These are preferred over the ones not preceded by an unreachable frag,
+-+     because we don't have to jump around them. This function is called after
+-+     each RELAX_UNREACHABLE frag is created.  */
+-+
+-+  if (++unreachable_count > 10)
+-+    {
+-+      xtensa_create_trampoline_frag (FALSE);
+-+      clear_frag_count ();
+-+      unreachable_count = 0;
+-+    }
+-+}
+-+
+-+static void
+-+xtensa_check_frag_count (void)
+-+{
+-+  if (!use_trampolines || frag_now->tc_frag_data.is_no_transform)
+-+    return;
+-+
+-+  /* We create an area for possible trampolines every 8000 frags or so. This
+-+     is an estimate based on the max range of a "j" insn (+/-128K) divided
+-+     by a typical frag byte count (16), minus a few for safety. This function
+-+     is called after each source line is processed.  */
+-+
+-+  if (get_frag_count () > 8000)
+-+    {
+-+      xtensa_create_trampoline_frag (TRUE);
+-+      clear_frag_count ();
+-+      unreachable_count = 0;
+-+    }
+-+}
+-+
+-+static xtensa_insnbuf trampoline_buf = NULL;
+-+static xtensa_insnbuf trampoline_slotbuf = NULL;
+-+
+-+#define TRAMPOLINE_FRAG_SIZE 3000
+-+
+-+static void
+-+xtensa_create_trampoline_frag (bfd_boolean needs_jump_around)
+-+{
+-+  /* Emit a frag where we can place intermediate jump instructions,
+-+     in case we need to jump farther than 128K bytes.
+-+     Each jump instruction takes three bytes.
+-+     We allocate enough for 1000 trampolines in each frag.
+-+     If that's not enough, oh well.  */
+-+
+-+  struct trampoline_seg *ts = trampoline_seg_list.next;
+-+  struct trampoline_frag *tf;
+-+  char *varP;
+-+  fragS *fragP;
+-+  int size = TRAMPOLINE_FRAG_SIZE;
+-+
+-+  for ( ; ts; ts = ts->next)
+-+    {
+-+      if (ts->seg == now_seg)
+-+	break;
+-+    }
+-+
+-+  if (ts == NULL)
+-+    {
+-+      ts = (struct trampoline_seg *)xcalloc(sizeof (struct trampoline_seg), 1);
+-+      ts->next = trampoline_seg_list.next;
+-+      trampoline_seg_list.next = ts;
+-+      ts->seg = now_seg;
+-+    }
+-+
+-+  frag_wane (frag_now);
+-+  frag_new (0);
+-+  xtensa_set_frag_assembly_state (frag_now);
+-+  varP = frag_var (rs_machine_dependent, size, size, RELAX_TRAMPOLINE, NULL, 0, NULL);
+-+  fragP = (fragS *)(varP - SIZEOF_STRUCT_FRAG);
+-+  if (trampoline_buf == NULL)
+-+    {
+-+      trampoline_buf = xtensa_insnbuf_alloc (xtensa_default_isa);
+-+      trampoline_slotbuf = xtensa_insnbuf_alloc (xtensa_default_isa);
+-+    }
+-+  tf = (struct trampoline_frag *)xmalloc(sizeof (struct trampoline_frag));
+-+  tf->next = ts->trampoline_list.next;
+-+  ts->trampoline_list.next = tf;
+-+  tf->needs_jump_around = needs_jump_around;
+-+  tf->fragP = fragP;
+-+  tf->fixP = NULL;
+-+}
+-+
+-+
+-+static struct trampoline_seg *
+-+find_trampoline_seg (asection *seg)
+-+{
+-+  struct trampoline_seg *ts = trampoline_seg_list.next;
+-+
+-+  for ( ; ts; ts = ts->next)
+-+    {
+-+      if (ts->seg == seg)
+-+	return ts;
+-+    }
+-+
+-+  return NULL;
+- }
+- 
+- 
+-+void dump_trampolines (void);
+-+
+-+void
+-+dump_trampolines (void)
+-+{
+-+  struct trampoline_seg *ts = trampoline_seg_list.next;
+-+
+-+  for ( ; ts; ts = ts->next)
+-+    {
+-+      asection *seg = ts->seg;
+-+
+-+      if (seg == NULL)
+-+	continue;
+-+      fprintf(stderr, "SECTION %s\n", seg->name);
+-+      struct trampoline_frag *tf = ts->trampoline_list.next;
+-+      for ( ; tf; tf = tf->next)
+-+	{
+-+	  if (tf->fragP == NULL)
+-+	    continue;
+-+	  fprintf(stderr, "   0x%08x: fix=%d, jump_around=%s\n",
+-+		  (int)tf->fragP->fr_address, (int)tf->fragP->fr_fix,
+-+		  tf->needs_jump_around ? "T" : "F");
+-+	}
+-+    }
+-+}
+-+
+- static void
+- xtensa_cleanup_align_frags (void)
+- {
+-@@ -8708,6 +8891,149 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
+- 	new_stretch += relax_frag_for_align (fragP, stretch);
+-       break;
+- 
+-+    case RELAX_TRAMPOLINE:
+-+      if (fragP->tc_frag_data.relax_seen)
+-+        {
+-+          segment_info_type *seginfo = seg_info (now_seg);
+-+          fragS *fP; /* The out-of-range jump.  */
+-+          fixS *fixP;
+-+
+-+          /* Scan for jumps that will not reach.  */
+-+          for (fixP = seginfo->fix_root; fixP ; fixP = fixP->fx_next)
+-+            {
+-+              symbolS *s = fixP->fx_addsy;
+-+	      xtensa_opcode opcode;
+-+              int target;
+-+              int addr;
+-+              int delta;
+-+
+-+              if (fixP->fx_r_type < BFD_RELOC_XTENSA_SLOT0_OP ||
+-+                  fixP->fx_r_type > BFD_RELOC_XTENSA_SLOT14_OP)
+-+                continue;
+-+	      xtensa_insnbuf_from_chars (isa, trampoline_buf,
+-+					 (unsigned char *) fixP->fx_frag->fr_literal + fixP->fx_where,
+-+					 0);
+-+	      fmt = xtensa_format_decode (isa, trampoline_buf);
+-+	      gas_assert (fmt != XTENSA_UNDEFINED);
+-+	      slot = fixP->tc_fix_data.slot;
+-+	      xtensa_format_get_slot (isa, fmt, slot, trampoline_buf, trampoline_slotbuf);
+-+	      opcode = xtensa_opcode_decode (isa, fmt, slot, trampoline_slotbuf);
+-+	      if (opcode != xtensa_j_opcode)
+-+		continue;
+-+              target = S_GET_VALUE (s);
+-+              addr = fixP->fx_frag->fr_address;
+-+              delta = target - addr + stretch;
+-+              if (delta > J_RANGE  || delta < -1 * J_RANGE)
+-+                { /* Found an out-of-range jump; scan the list of trampolines for the best match.  */
+-+		  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+-+		  struct trampoline_frag *tf = ts->trampoline_list.next;
+-+		  struct trampoline_frag *prev = &ts->trampoline_list;
+-+		  int lower = (target < addr) ? target : addr;
+-+		  int upper = (target > addr) ? target : addr;
+-+		  int midpoint = lower + (upper - lower) / 2;
+-+
+-+		  if ((upper - lower) > 2 * J_RANGE)
+-+		    {
+-+		      /* One trampoline won't suffice; we need multiple jumps.
+-+			 Jump to the trampoline that's farthest, but still in
+-+			 range relative to the original "j" instruction.  */
+-+		      for ( ; tf; prev = tf, tf = tf->next )
+-+			{
+-+			  int this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+-+			  int next_addr = (tf->next) ? tf->next->fragP->fr_address + tf->next->fragP->fr_fix : 0 ;
+-+
+-+			  if (addr == lower)
+-+			    {
+-+			      /* Forward jump.  */
+-+			      if (this_addr - addr < J_RANGE)
+-+				break;
+-+			    }
+-+			  else
+-+			    {
+-+			      /* Backward jump.  */
+-+			      if (next_addr == 0 || addr - next_addr > J_RANGE)
+-+				break;
+-+			    }
+-+			}
+-+		    }
+-+		  else
+-+		    {
+-+		      struct trampoline_frag *best_tf = NULL;
+-+		      int best_delta = 0;
+-+
+-+		      for ( ; tf; prev = tf, tf = tf->next )
+-+			{
+-+			  int this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+-+			  int this_delta = abs (this_addr - midpoint);
+-+
+-+			  if (!best_tf || this_delta < best_delta)
+-+			    {
+-+			       best_tf = tf;
+-+			       best_delta = this_delta;
+-+			    }
+-+			}
+-+		      tf = best_tf;
+-+		    }
+-+		  if (tf->fragP == fragP)
+-+		    {
+-+		      int trampaddr = fragP->fr_address + fragP->fr_fix;
+-+
+-+		      if (abs (addr - trampaddr) < J_RANGE)
+-+			{ /* The trampoline is in range of original; fix it!  */
+-+			  fixS *newfixP;
+-+			  int offset;
+-+			  TInsn insn;
+-+			  symbolS *lsym;
+-+
+-+			  new_stretch += init_trampoline_frag (tf);
+-+			  offset = fragP->fr_fix; /* Where to assemble the j insn.  */
+-+			  lsym = fragP->fr_symbol;
+-+			  fP = fixP->fx_frag;
+-+			  /* Assemble a jump to the target label here.  */
+-+			  tinsn_init (&insn);
+-+			  insn.insn_type = ITYPE_INSN;
+-+			  insn.opcode = xtensa_j_opcode;
+-+			  insn.ntok = 1;
+-+			  set_expr_symbol_offset (&insn.tok[0], lsym, offset);
+-+			  fmt = xg_get_single_format (xtensa_j_opcode);
+-+			  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+-+			  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+-+			  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)fragP->fr_literal + offset, 3);
+-+			  fragP->fr_fix += 3;
+-+			  fragP->fr_var -= 3;
+-+			  /* Add a fix-up for the original j insn.  */
+-+			  newfixP = fix_new (fP, fixP->fx_where, fixP->fx_size, lsym, fragP->fr_fix - 3, TRUE, fixP->fx_r_type);
+-+			  newfixP->fx_no_overflow = 1;
+-+			  newfixP->tc_fix_data.X_add_symbol = lsym;
+-+			  newfixP->tc_fix_data.X_add_number = offset;
+-+			  newfixP->tc_fix_data.slot = slot;
+-+			  /* Move the fix-up from the original j insn to this one.  */
+-+			  fixP->fx_frag = fragP;
+-+			  fixP->fx_where = fragP->fr_fix - 3;
+-+			  fixP->tc_fix_data.slot = 0;
+-+			  /* Adjust the jump around this trampoline (if present).  */
+-+			  if (tf->fixP != NULL)
+-+			    {
+-+			      tf->fixP->fx_offset += 3;
+-+			    }
+-+			  new_stretch += 3;
+-+			  fragP->tc_frag_data.relax_seen = FALSE; /* Need another pass.  */
+-+			  /* Do we have room for more?  */
+-+			  if (fragP->fr_var < 3)
+-+			    { /* No, convert to fill.  */
+-+			      frag_wane (fragP);
+-+			      fragP->fr_subtype = 0;
+-+			      /* Remove from the trampoline_list.  */
+-+			      prev->next = tf->next;
+-+			      break;
+-+			    }
+-+			}
+-+		    }
+-+                }
+-+            }
+-+        }
+-+      break;
+-+
+-     default:
+-       as_bad (_("bad relaxation state"));
+-     }
+-@@ -9146,6 +9472,200 @@ bytes_to_stretch (fragS *this_frag,
+- }
+- 
+- 
+-+static struct trampoline_frag *
+-+search_trampolines (TInsn *tinsn, fragS *fragP, bfd_boolean unreachable_only)
+-+{
+-+  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+-+  struct trampoline_frag *tf = (ts) ? ts->trampoline_list.next : NULL;
+-+  struct trampoline_frag *best_tf = NULL;
+-+  int best_delta = 0;
+-+  int best_addr = 0;
+-+  symbolS *sym = tinsn->tok[0].X_add_symbol;
+-+  offsetT target = S_GET_VALUE (sym) + tinsn->tok[0].X_add_number;
+-+  offsetT addr = fragP->fr_address;
+-+  offsetT lower = (addr < target) ? addr : target;
+-+  offsetT upper = (addr > target) ? addr : target;
+-+  int delta = upper - lower;
+-+  offsetT midpoint = lower + delta / 2;
+-+  int this_delta = -1;
+-+  int this_addr = -1;
+-+
+-+  if (delta > 2 * J_RANGE)
+-+    {
+-+      /* One trampoline won't do; we need multiple.
+-+	 Choose the farthest trampoline that's still in range of the original
+-+	 and let a later pass finish the job.  */
+-+      for ( ; tf; tf = tf->next)
+-+	{
+-+	  int next_addr = (tf->next) ? tf->next->fragP->fr_address + tf->next->fragP->fr_fix : 0;
+-+
+-+	  this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+-+	  if (lower == addr)
+-+	    {
+-+	      /* Forward jump.  */
+-+	      if (this_addr - addr < J_RANGE)
+-+		break;
+-+	    }
+-+	  else
+-+	    {
+-+	      /* Backward jump.  */
+-+	      if (next_addr == 0 || addr - next_addr > J_RANGE)
+-+		break;
+-+	    }
+-+	  if (abs (addr - this_addr) < J_RANGE)
+-+	    return tf;
+-+
+-+	  return NULL;
+-+	}
+-+    }
+-+  for ( ; tf; tf = tf->next)
+-+    {
+-+      this_addr = tf->fragP->fr_address + tf->fragP->fr_fix;
+-+      this_delta = abs (this_addr - midpoint);
+-+      if (unreachable_only && tf->needs_jump_around)
+-+	continue;
+-+      if (!best_tf || this_delta < best_delta)
+-+        {
+-+	  best_tf = tf;
+-+	  best_delta = this_delta;
+-+	  best_addr = this_addr;
+-+        }
+-+    }
+-+
+-+  if (best_tf &&
+-+      best_delta < J_RANGE &&
+-+      abs(best_addr - lower) < J_RANGE &&
+-+      abs(best_addr - upper) < J_RANGE)
+-+    return best_tf;
+-+
+-+  return NULL; /* No suitable trampoline found.  */
+-+}
+-+
+-+
+-+static struct trampoline_frag *
+-+get_best_trampoline (TInsn *tinsn, fragS *fragP)
+-+{
+-+  struct trampoline_frag *tf = NULL;
+-+
+-+  tf = search_trampolines (tinsn, fragP, TRUE); /* Try unreachable first.  */
+-+
+-+  if (tf == NULL)
+-+    tf = search_trampolines (tinsn, fragP, FALSE); /* Try ones needing a jump-around, too.  */
+-+
+-+  return tf;
+-+}
+-+
+-+
+-+static void
+-+check_and_update_trampolines (void)
+-+{
+-+  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+-+  struct trampoline_frag *tf = ts->trampoline_list.next;
+-+  struct trampoline_frag *prev = &ts->trampoline_list;
+-+
+-+  for ( ; tf; prev = tf, tf = tf->next)
+-+    {
+-+      if (tf->fragP->fr_var < 3)
+-+	{
+-+	  frag_wane (tf->fragP);
+-+	  prev->next = tf->next;
+-+	  tf->fragP = NULL;
+-+	}
+-+    }
+-+}
+-+
+-+
+-+static int
+-+init_trampoline_frag (struct trampoline_frag *trampP)
+-+{
+-+  fragS *fp = trampP->fragP;
+-+  int growth = 0;
+-+
+-+  if (fp->fr_fix == 0)
+-+    {
+-+      symbolS *lsym;
+-+      char label[10 + 2 * sizeof(fp)];
+-+      sprintf (label, ".L0_TR_%p", fp);
+-+
+-+      lsym = (symbolS *)local_symbol_make (label, now_seg, 0, fp);
+-+      fp->fr_symbol = lsym;
+-+      if (trampP->needs_jump_around)
+-+        {
+-+	  /* Add a jump around this block of jumps, in case
+-+	     control flows into this block.  */
+-+	  fixS *fixP;
+-+	  TInsn insn;
+-+	  xtensa_format fmt;
+-+	  xtensa_isa isa = xtensa_default_isa;
+-+
+-+	  fp->tc_frag_data.is_insn = 1;
+-+	  /* Assemble a jump insn.  */
+-+	  tinsn_init (&insn);
+-+	  insn.insn_type = ITYPE_INSN;
+-+	  insn.opcode = xtensa_j_opcode;
+-+	  insn.ntok = 1;
+-+	  set_expr_symbol_offset (&insn.tok[0], lsym, 3);
+-+	  fmt = xg_get_single_format (xtensa_j_opcode);
+-+	  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+-+	  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+-+	  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)fp->fr_literal, 3);
+-+	  fp->fr_fix += 3;
+-+	  fp->fr_var -= 3;
+-+	  growth = 3;
+-+	  fixP = fix_new (fp, 0, 3, lsym, 3, TRUE, BFD_RELOC_XTENSA_SLOT0_OP);
+-+	  trampP->fixP = fixP;
+-+        }
+-+    }
+-+  return growth;
+-+}
+-+
+-+
+-+static int
+-+add_jump_to_trampoline (struct trampoline_frag *trampP, fragS *origfrag)
+-+{
+-+  fragS *tramp = trampP->fragP;
+-+  fixS *fixP;
+-+  int offset = tramp->fr_fix; /* Where to assemble the j insn.  */
+-+  TInsn insn;
+-+  symbolS *lsym;
+-+  symbolS *tsym;
+-+  int toffset;
+-+  xtensa_format fmt;
+-+  xtensa_isa isa = xtensa_default_isa;
+-+  int growth = 0;
+-+
+-+  lsym = tramp->fr_symbol;
+-+  /* Assemble a jump to the target label in the trampoline frag.  */
+-+  tsym = origfrag->tc_frag_data.slot_symbols[0];
+-+  toffset = origfrag-> tc_frag_data.slot_offsets[0];
+-+  tinsn_init (&insn);
+-+  insn.insn_type = ITYPE_INSN;
+-+  insn.opcode = xtensa_j_opcode;
+-+  insn.ntok = 1;
+-+  set_expr_symbol_offset (&insn.tok[0], tsym, toffset);
+-+  fmt = xg_get_single_format (xtensa_j_opcode);
+-+  tinsn_to_slotbuf (fmt, 0, &insn, trampoline_slotbuf);
+-+  xtensa_format_set_slot (isa, fmt, 0, trampoline_buf, trampoline_slotbuf);
+-+  xtensa_insnbuf_to_chars (isa, trampoline_buf, (unsigned char *)tramp->fr_literal + offset, 3);
+-+  tramp->fr_fix += 3;
+-+  tramp->fr_var -= 3;
+-+  growth = 3;
+-+  /* add a fix-up for the trampoline jump.  */
+-+  fixP = fix_new (tramp, tramp->fr_fix - 3, 3, tsym, toffset, TRUE, BFD_RELOC_XTENSA_SLOT0_OP);
+-+  /* Modify the jump at the start of this trampoline to point past the newly-added jump.  */
+-+  fixP = trampP->fixP;
+-+  if (fixP)
+-+    fixP->fx_offset += 3;
+-+  /* Modify the original j to point here.  */
+-+  origfrag->tc_frag_data.slot_symbols[0] = lsym;
+-+  origfrag->tc_frag_data.slot_offsets[0] = tramp->fr_fix - 3;
+-+  /* If trampoline is full, remove it from the list.  */
+-+  check_and_update_trampolines ();
+-+
+-+  return growth;
+-+}
+-+
+-+
+- static long
+- relax_frag_immed (segT segP,
+- 		  fragS *fragP,
+-@@ -9284,6 +9804,37 @@ relax_frag_immed (segT segP,
+-   if (negatable_branch && istack.ninsn > 1)
+-     update_next_frag_state (fragP);
+- 
+-+  /* If last insn is a jump, and it cannot reach its target, try to find a trampoline.  */
+-+  if (istack.ninsn > 2 &&
+-+      istack.insn[istack.ninsn - 1].insn_type == ITYPE_LABEL &&
+-+      istack.insn[istack.ninsn - 2].insn_type == ITYPE_INSN &&
+-+      istack.insn[istack.ninsn - 2].opcode == xtensa_j_opcode)
+-+    {
+-+      TInsn *jinsn = &istack.insn[istack.ninsn - 2];
+-+
+-+      if (!xg_symbolic_immeds_fit (jinsn, segP, fragP, fragP->fr_offset, total_text_diff))
+-+	{
+-+	  struct trampoline_frag *tf = get_best_trampoline (jinsn, fragP);
+-+
+-+	  if (tf)
+-+	    {
+-+	      this_text_diff += init_trampoline_frag (tf);
+-+	      this_text_diff += add_jump_to_trampoline (tf, fragP);
+-+	    }
+-+	  else
+-+	    {
+-+	      /* If target symbol is undefined, assume it will reach once linked.  */
+-+	      expressionS *exp = &istack.insn[istack.ninsn - 2].tok[0];
+-+
+-+	      if (exp->X_op == O_symbol && S_IS_DEFINED (exp->X_add_symbol))
+-+		{
+-+		  as_bad_where (fragP->fr_file, fragP->fr_line,
+-+		    _("jump target out of range; no usable trampoline found"));
+-+		}
+-+	    }
+-+	}
+-+    }
+-+
+-   return this_text_diff;
+- }
+- 
+-@@ -9404,6 +9955,9 @@ md_convert_frag (bfd *abfd ATTRIBUTE_UNUSED, segT sec, fragS *fragp)
+-       else
+- 	as_bad (_("invalid relaxation fragment result"));
+-       break;
+-+
+-+    case RELAX_TRAMPOLINE:
+-+      break;
+-     }
+- 
+-   fragp->fr_var = 0;
+-diff --git a/gas/config/tc-xtensa.h b/gas/config/tc-xtensa.h
+-index 0bf1240..4672bc6 100644
+---- a/gas/config/tc-xtensa.h
+-+++ b/gas/config/tc-xtensa.h
+-@@ -180,6 +180,11 @@ enum xtensa_relax_statesE
+-      prevent the linker from changing the size of any frag between the
+-      section start and the org frag.  */
+- 
+-+  RELAX_TRAMPOLINE,
+-+  /* Every few thousand frags, we insert one of these, just in case we may
+-+     need some space for a trampoline (jump to a jump) because the function
+-+     has gotten too big. If not needed, it disappears. */
+-+
+-   RELAX_NONE
+- };
+- 
+-diff --git a/gas/frags.c b/gas/frags.c
+-index 5f68480..e14099d 100644
+---- a/gas/frags.c
+-+++ b/gas/frags.c
+-@@ -24,6 +24,20 @@
+- 
+- extern fragS zero_address_frag;
+- extern fragS predefined_address_frag;
+-+
+-+static int totalfrags;
+-+
+-+int
+-+get_frag_count (void)
+-+{
+-+  return totalfrags;
+-+}
+-+
+-+void
+-+clear_frag_count (void)
+-+{
+-+  totalfrags = 0;
+-+}
+- 
+- /* Initialization for frag routines.  */
+- 
+-@@ -70,6 +84,7 @@ frag_alloc (struct obstack *ob)
+-   ptr = (fragS *) obstack_alloc (ob, SIZEOF_STRUCT_FRAG);
+-   obstack_alignment_mask (ob) = oalign;
+-   memset (ptr, 0, SIZEOF_STRUCT_FRAG);
+-+  totalfrags++;
+-   return ptr;
+- }
+- 
+-diff --git a/gas/frags.h b/gas/frags.h
+-index 319898f..2f9e1b5 100644
+---- a/gas/frags.h
+-+++ b/gas/frags.h
+-@@ -155,4 +155,7 @@ char *frag_var (relax_stateT type,
+- 
+- bfd_boolean frag_offset_fixed_p (const fragS *, const fragS *, offsetT *);
+- 
+-+int get_frag_count (void);
+-+void clear_frag_count (void);
+-+
+- #endif /* FRAGS_H */
+-diff --git a/gas/testsuite/gas/xtensa/all.exp b/gas/testsuite/gas/xtensa/all.exp
+-index 2b2c294..3683b78 100644
+---- a/gas/testsuite/gas/xtensa/all.exp
+-+++ b/gas/testsuite/gas/xtensa/all.exp
+-@@ -98,6 +98,7 @@ if [istarget xtensa*-*-*] then {
+-     run_dump_test "pcrel"
+-     run_dump_test "weak-call"
+-     run_dump_test "jlong"
+-+    run_dump_test "trampoline"
+- }
+- 
+- if [info exists errorInfo] then {
+-diff --git a/gas/testsuite/gas/xtensa/trampoline.d b/gas/testsuite/gas/xtensa/trampoline.d
+-new file mode 100644
+-index 0000000..b4f65dc
+---- /dev/null
+-+++ b/gas/testsuite/gas/xtensa/trampoline.d
+-@@ -0,0 +1,26 @@
+-+#as:
+-+#objdump: -d
+-+#name: trampolines relaxation
+-+
+-+.*: +file format .*xtensa.*
+-+#...
+-+.*0:.*j.0x1194c
+-+.*3:.*j.0x1194f
+-+.*6:.*j.0x11952
+-+.*9:.*j.0x1d4e4
+-+#...
+-+.*11949:.*j.0x11955
+-+.*1194c:.*j.0x24a0e
+-+.*1194f:.*j.0x24a0e
+-+.*11952:.*j.0x24a11
+-+#...
+-+.*1d4e1:.*j.0x1d4e7
+-+.*1d4e4:.*j.0x33462
+-+#...
+-+.*24a0e:.*j.0x24a0e
+-+.*24a11:.*j.0x24a11
+-+#...
+-+.*3345f:.*ret
+-+.*33462:.*j.0x49407
+-+#...
+-+.*49407:.*j.0x49407
+-diff --git a/gas/testsuite/gas/xtensa/trampoline.s b/gas/testsuite/gas/xtensa/trampoline.s
+-new file mode 100644
+-index 0000000..259a3bb
+---- /dev/null
+-+++ b/gas/testsuite/gas/xtensa/trampoline.s
+-@@ -0,0 +1,21 @@
+-+	.text
+-+	j	1f
+-+	j	1f
+-+	j	2f
+-+	j	3f
+-+	.rep	25000
+-+99:
+-+	and	a2, a2, a3
+-+	bne	a2, a3, 99b
+-+	.endr
+-+1:
+-+	j	1b
+-+2:
+-+	j	2b
+-+
+-+	.rep	25000
+-+	and	a2, a2, a3
+-+	_ret
+-+	.endr
+-+3:
+-+	j	3b
+--- 
+-1.8.1.4
+-
+diff --git a/package/binutils/2.22/901-xtensa-gas-first-frag-alignment.patch b/package/binutils/2.22/901-xtensa-gas-first-frag-alignment.patch
+deleted file mode 100644
+index e1c2d85..0000000
+--- a/package/binutils/2.22/901-xtensa-gas-first-frag-alignment.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From a35d5e823fdfe8a6e7e05ca8e3fb8bb5697335b1 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Tue, 15 Apr 2014 19:12:46 +0400
+-Subject: [PATCH] Fix alignment for the first section frag on xtensa
+-
+-Linking object files produced by partial linking with link-time
+-relaxation enabled sometimes fails with the following error message:
+-
+-dangerous relocation: call8: misaligned call target: (.text.unlikely+0x63)
+-
+-This happens because no basic block with an XTENSA_PROP_ALIGN flag in the
+-property table is generated for the first basic block, even if the
+-.align directive is present.
+-It was believed that the first frag alignment could be derived from the
+-section alignment, but this was not implemented for the partial linking
+-case: after partial linking first frag of a section may become not
+-first, but no additional alignment frag is inserted before it.
+-Basic block for such frag may be merged with previous basic block into
+-extended basic block during relaxation pass losing its alignment
+-restrictions.
+-
+-Fix this by always recording alignment for the first section frag.
+-
+-2014-04-22  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-gas/
+-    * config/tc-xtensa.c (xtensa_handle_align): record alignment for the
+-    first section frag.
+-
+----
+-Backported from: a35d5e823fdfe8a6e7e05ca8e3fb8bb5697335b1
+-Changes to Changelog files and tests are dropped.
+-
+- gas/config/tc-xtensa.c                      | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index ea23c96..58ace38 100644
+---- a/gas/config/tc-xtensa.c
+-+++ b/gas/config/tc-xtensa.c
+-@@ -5609,7 +5609,6 @@ xtensa_handle_align (fragS *fragP)
+-       && ! fragP->tc_frag_data.is_literal
+-       && (fragP->fr_type == rs_align
+- 	  || fragP->fr_type == rs_align_code)
+--      && fragP->fr_address + fragP->fr_fix > 0
+-       && fragP->fr_offset > 0
+-       && now_seg != bss_section)
+-     {
+--- 
+-1.8.1.4
+-
+diff --git a/package/binutils/2.22/902-xtensa-gas-ld-diff-relocation-signed.patch b/package/binutils/2.22/902-xtensa-gas-ld-diff-relocation-signed.patch
+deleted file mode 100644
+index ba24f4e..0000000
+--- a/package/binutils/2.22/902-xtensa-gas-ld-diff-relocation-signed.patch
++++ /dev/null
+@@ -1,133 +0,0 @@
+-From 6a17eba5358549d0d6d195bb22b34cdbc068def2 Mon Sep 17 00:00:00 2001
+-From: Volodymyr Arbatov <arbatov@cadence.com>
+-Date: Mon, 6 May 2013 09:43:21 -0800
+-Subject: [PATCH] Use signed data type for R_XTENSA_DIFF* relocation offsets.
+-
+-R_XTENSA_DIFF relocation offsets are in fact signed. Treat them as such.
+-Add testcase that examines ld behaviour on R_XTENSA_DIFF relocation
+-changing sign during relaxation.
+-
+-2014-05-02  Volodymyr Arbatov  <arbatov@cadence.com>
+-	    David Weatherford  <weath@cadence.com>
+-	    Max Filippov  <jcmvbkbc@gmail.com>
+-
+-bfd/
+-  * elf32-xtensa.c (relax_section): treat R_XTENSA_DIFF* relocations as
+-  signed.
+-
+-gas/
+-  * config/tc-xtensa.c (md_apply_fix): mark BFD_RELOC_XTENSA_DIFF*
+-  fixups as signed.
+----
+-Backported from: 1058c7532d0b012ac329219264ddad59049fb6e6
+-Changes to Changelog files and tests are dropped.
+-
+- bfd/elf32-xtensa.c                       | 32 ++++++++++++-----------
+- gas/config/tc-xtensa.c                   |  3 +++
+- 2 files changed, 20 insertions(+), 15 deletions(-)
+-
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index edb04b4..8818d67 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -222,11 +222,11 @@ static reloc_howto_type elf_howto_table[] =
+- 	 FALSE, 0, 0, FALSE),
+- 
+-   /* Relocations for supporting difference of symbols.  */
+--  HOWTO (R_XTENSA_DIFF8, 0, 0, 8, FALSE, 0, complain_overflow_bitfield,
+-+  HOWTO (R_XTENSA_DIFF8, 0, 0, 8, FALSE, 0, complain_overflow_signed,
+- 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF8", FALSE, 0, 0xff, FALSE),
+--  HOWTO (R_XTENSA_DIFF16, 0, 1, 16, FALSE, 0, complain_overflow_bitfield,
+-+  HOWTO (R_XTENSA_DIFF16, 0, 1, 16, FALSE, 0, complain_overflow_signed,
+- 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF16", FALSE, 0, 0xffff, FALSE),
+--  HOWTO (R_XTENSA_DIFF32, 0, 2, 32, FALSE, 0, complain_overflow_bitfield,
+-+  HOWTO (R_XTENSA_DIFF32, 0, 2, 32, FALSE, 0, complain_overflow_signed,
+- 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF32", FALSE, 0, 0xffffffff, FALSE),
+- 
+-   /* General immediate operand relocations.  */
+-@@ -9013,7 +9013,8 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		  || r_type == R_XTENSA_DIFF16
+- 		  || r_type == R_XTENSA_DIFF32)
+- 		{
+--		  bfd_vma diff_value = 0, new_end_offset, diff_mask = 0;
+-+		  bfd_signed_vma diff_value = 0;
+-+		  bfd_vma new_end_offset, diff_mask = 0;
+- 
+- 		  if (bfd_get_section_limit (abfd, sec) < old_source_offset)
+- 		    {
+-@@ -9027,15 +9028,15 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		    {
+- 		    case R_XTENSA_DIFF8:
+- 		      diff_value =
+--			bfd_get_8 (abfd, &contents[old_source_offset]);
+-+			bfd_get_signed_8 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF16:
+- 		      diff_value =
+--			bfd_get_16 (abfd, &contents[old_source_offset]);
+-+			bfd_get_signed_16 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF32:
+- 		      diff_value =
+--			bfd_get_32 (abfd, &contents[old_source_offset]);
+-+			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    }
+- 
+-@@ -9047,24 +9048,25 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		  switch (r_type)
+- 		    {
+- 		    case R_XTENSA_DIFF8:
+--		      diff_mask = 0xff;
+--		      bfd_put_8 (abfd, diff_value,
+-+		      diff_mask = 0x7f;
+-+		      bfd_put_signed_8 (abfd, diff_value,
+- 				 &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF16:
+--		      diff_mask = 0xffff;
+--		      bfd_put_16 (abfd, diff_value,
+-+		      diff_mask = 0x7fff;
+-+		      bfd_put_signed_16 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF32:
+--		      diff_mask = 0xffffffff;
+--		      bfd_put_32 (abfd, diff_value,
+-+		      diff_mask = 0x7fffffff;
+-+		      bfd_put_signed_32 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    }
+- 
+--		  /* Check for overflow.  */
+--		  if ((diff_value & ~diff_mask) != 0)
+-+		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+-+		  if ((diff_value & ~diff_mask) != 0 &&
+-+		      (diff_value & ~diff_mask) != (-1 & ~diff_mask))
+- 		    {
+- 		      (*link_info->callbacks->reloc_dangerous)
+- 			(link_info, _("overflow after relaxation"),
+-diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index 58ace38..7547c0a0 100644
+---- a/gas/config/tc-xtensa.c
+-+++ b/gas/config/tc-xtensa.c
+-@@ -5867,12 +5867,15 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg)
+- 	    {
+- 	    case BFD_RELOC_8:
+- 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF8;
+-+	      fixP->fx_signed = 1;
+- 	      break;
+- 	    case BFD_RELOC_16:
+- 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF16;
+-+	      fixP->fx_signed = 1;
+- 	      break;
+- 	    case BFD_RELOC_32:
+- 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF32;
+-+	      fixP->fx_signed = 1;
+- 	      break;
+- 	    default:
+- 	      break;
+--- 
+-1.8.1.4
+-
+diff --git a/package/binutils/2.22/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch b/package/binutils/2.22/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch
+deleted file mode 100644
+index 6a0846e..0000000
+--- a/package/binutils/2.22/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From e7d17e71cdc10a2e81e454ce3b9637f1b2a587f2 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Thu, 10 Jul 2014 01:47:33 +0400
+-Subject: [PATCH] Fix xtensa ld segfault when linking linux modules
+-
+-is_inconsistent_linkonce_section makes an assumption that section name
+-that starts with ".gnu.linkonce.prop." has one more dot in its suffix.
+-However gas generates such section name by insertion of "prop." right
+-after ".gnu.linkonce." part of the name of the original section. So, for
+-section named ".gnu.linkonce.this_module" corresponding property section
+-name does not satisfy the assumption. Such section names are common in
+-linux modules. This bug was exposed by the patch "a35d5e8 Fix alignment
+-for the first section frag on xtensa", that makes gas produce property
+-section for each section that has ".align" directive in it.
+-
+-Use suffix that immediately follows ".gnu.linkonce.prop." when there are
+-no more dots following it.
+-
+-2014-07-10  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-ld/
+-    * emultempl/xtensaelf.em (is_inconsistent_linkonce_section):
+-    correctly handle missing dot in section name after
+-    ".gnu.linkonce.prop.".
+----
+-Backported from: e7d17e71cdc10a2e81e454ce3b9637f1b2a587f2
+-Changes to ld/ChangeLog file are dropped.
+-
+- ld/emultempl/xtensaelf.em | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/ld/emultempl/xtensaelf.em b/ld/emultempl/xtensaelf.em
+-index 151eea4..948d18d 100644
+---- a/ld/emultempl/xtensaelf.em
+-+++ b/ld/emultempl/xtensaelf.em
+-@@ -1310,7 +1310,7 @@ is_inconsistent_linkonce_section (asection *sec)
+-      for Tensilica's XCC compiler.  */
+-   name = sec_name + linkonce_len;
+-   if (CONST_STRNEQ (name, "prop."))
+--    name = strchr (name + 5, '.') + 1;
+-+    name = strchr (name + 5, '.') ? strchr (name + 5, '.') + 1 : name + 5;
+-   else if (name[1] == '.'
+- 	   && (name[0] == 'p' || name[0] == 'e' || name[0] == 'h'))
+-     name += 2;
+--- 
+-1.8.1.4
+-
+diff --git a/package/binutils/2.22/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch b/package/binutils/2.22/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch
+deleted file mode 100644
+index dba7620..0000000
+--- a/package/binutils/2.22/904-Fix-call8-call-target-out-of-range-xtensa-ld-relaxation.patch
++++ /dev/null
+@@ -1,79 +0,0 @@
+-From 7fc39194f8fb48914c995f8ec3826d50086f1ec0 Mon Sep 17 00:00:00 2001
+-From: Sterling Augustine <augustine.sterling@gmail.com>
+-Date: Tue, 25 Jan 2011 13:59:13 -0800
+-Subject: [PATCH] Fix 'call8: call target out of range' xtensa ld relaxation
+- bug
+-
+-During link-time relaxation distance between cross-section call site and
+-its target may grow, producing 'call target out of range' error for
+-relaxed calls. Be more conservative when calculating whether or not a
+-callx can be converted to a straight call.
+-
+-2014-09-23  Sterling Augustine  <augustine.sterling@gmail.com>
+-
+-bfd/
+-    * elf32-xtensa.c (is_resolvable_asm_expansion): for cross-section
+-    call relaxation use furthermost addresses where call source and
+-    destination can be to check whether it's in the range of a direct
+-    call.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- bfd/elf32-xtensa.c | 41 +++++++++++++++++++++++++++++++++++++----
+- 1 file changed, 37 insertions(+), 4 deletions(-)
+-
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index 09862e3..e32496a 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -7124,10 +7124,43 @@ is_resolvable_asm_expansion (bfd *abfd,
+- 	  || is_reloc_sym_weak (abfd, irel)))
+-     return FALSE;
+- 
+--  self_address = (sec->output_section->vma
+--		  + sec->output_offset + irel->r_offset + 3);
+--  dest_address = (target_sec->output_section->vma
+--		  + target_sec->output_offset + target_offset);
+-+  if (target_sec->output_section != sec->output_section)
+-+    {
+-+      /* If the two sections are sufficiently far away that relaxation
+-+	 might take the call out of range, we can't simplify.  For
+-+	 example, a positive displacement call into another memory
+-+	 could get moved to a lower address due to literal removal,
+-+	 but the destination won't move, and so the displacment might
+-+	 get larger.
+-+
+-+	 If the displacement is negative, assume the destination could
+-+	 move as far back as the start of the output section.  The
+-+	 self_address will be at least as far into the output section
+-+	 as it is prior to relaxation.
+-+
+-+	 If the displacement is postive, assume the destination will be in
+-+	 it's pre-relaxed location (because relaxation only makes sections
+-+	 smaller).  The self_address could go all the way to the beginning
+-+	 of the output section.  */
+-+
+-+      dest_address = target_sec->output_section->vma;
+-+      self_address = sec->output_section->vma;
+-+
+-+      if (sec->output_section->vma > target_sec->output_section->vma)
+-+	self_address += sec->output_offset + irel->r_offset + 3;
+-+      else
+-+	dest_address += bfd_get_section_limit (abfd, target_sec->output_section);
+-+      /* Call targets should be four-byte aligned.  */
+-+      dest_address = (dest_address + 3) & ~3;
+-+    }
+-+  else
+-+    {
+-+
+-+      self_address = (sec->output_section->vma
+-+		      + sec->output_offset + irel->r_offset + 3);
+-+      dest_address = (target_sec->output_section->vma
+-+		      + target_sec->output_offset + target_offset);
+-+    }
+-       
+-   *is_reachable_p = pcrel_reloc_fits (direct_call_opcode, 0,
+- 				      self_address, dest_address);
+--- 
+-1.8.1.4
+-
+diff --git a/package/binutils/2.22/905-Fix-trampolines-search-code-for-conditional-branches.patch b/package/binutils/2.22/905-Fix-trampolines-search-code-for-conditional-branches.patch
+deleted file mode 100644
+index 8aeb064..0000000
+--- a/package/binutils/2.22/905-Fix-trampolines-search-code-for-conditional-branches.patch
++++ /dev/null
+@@ -1,90 +0,0 @@
+-From 415480d6471e67aef97c0241d451ef2423a1da9d Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Tue, 25 Nov 2014 21:33:21 +0300
+-Subject: [PATCH] Fix trampolines search code for conditional branches
+-
+-For conditional branches that need more than one trampoline to reach its
+-target assembler couldn't always find suitable trampoline because
+-post-loop condition check was placed inside the loop, resulting in
+-premature loop termination. Move check outside the loop.
+-
+-This fixes the following build errors seen when assembling huge files
+-produced by gcc:
+-    Error: jump target out of range; no usable trampoline found
+-    Error: operand 1 of 'j' has out of range value '307307'
+-
+-2014-11-25  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-gas/
+-	* config/tc-xtensa.c (search_trampolines): Move post-loop
+-	condition check outside the search loop.
+-
+-gas/testsuite/
+-	* gas/xtensa/trampoline.d: Add expected output for branches.
+-	* gas/xtensa/trampoline.s: Add test case for branches.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+-Backported from: d92b6eece424f0ad35d96fdd85bf207295e8c4c3
+-Changes to ChangeLogs are dropped.
+-
+- gas/config/tc-xtensa.c                | 8 ++++----
+- gas/testsuite/gas/xtensa/trampoline.d | 9 +++++++++
+- gas/testsuite/gas/xtensa/trampoline.s | 7 +++++++
+- 3 files changed, 20 insertions(+), 4 deletions(-)
+-
+-diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index d11b0c7..f23ccf8 100644
+---- a/gas/config/tc-xtensa.c
+-+++ b/gas/config/tc-xtensa.c
+-@@ -9514,11 +9514,11 @@ search_trampolines (TInsn *tinsn, fragS *fragP, bfd_boolean unreachable_only)
+- 	      if (next_addr == 0 || addr - next_addr > J_RANGE)
+- 		break;
+- 	    }
+--	  if (abs (addr - this_addr) < J_RANGE)
+--	    return tf;
+--
+--	  return NULL;
+- 	}
+-+      if (abs (addr - this_addr) < J_RANGE)
+-+	return tf;
+-+
+-+      return NULL;
+-     }
+-   for ( ; tf; tf = tf->next)
+-     {
+-diff --git a/gas/testsuite/gas/xtensa/trampoline.d b/gas/testsuite/gas/xtensa/trampoline.d
+-index b4f65dc..5ae32a6 100644
+---- a/gas/testsuite/gas/xtensa/trampoline.d
+-+++ b/gas/testsuite/gas/xtensa/trampoline.d
+-@@ -24,3 +24,12 @@
+- .*33462:.*j.0x49407
+- #...
+- .*49407:.*j.0x49407
+-+.*4940a:.*beqz.n.a2,.0x4940f
+-+.*4940c:.*j.0x693d1
+-+#...
+-+.*693d1:.*j.0x7ddd4
+-+#...
+-+.*7ddd4:.*j.0x927f5
+-+#...
+-+.*927f5:.*j.0x927f5
+-+#...
+-diff --git a/gas/testsuite/gas/xtensa/trampoline.s b/gas/testsuite/gas/xtensa/trampoline.s
+-index 259a3bb..4465786 100644
+---- a/gas/testsuite/gas/xtensa/trampoline.s
+-+++ b/gas/testsuite/gas/xtensa/trampoline.s
+-@@ -19,3 +19,10 @@
+- 	.endr
+- 3:
+- 	j	3b
+-+	bnez	a2, 4f
+-+	.rep	50000
+-+	and	a2, a2, a3
+-+	_ret
+-+	.endr
+-+4:
+-+	j	4b
+--- 
+-1.8.1.4
+-
+diff --git a/package/binutils/2.22/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch b/package/binutils/2.22/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
+deleted file mode 100644
+index 9ad6b3b..0000000
+--- a/package/binutils/2.22/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-From 8ec76b16f62d1bf386fb2c39af5f66c3afddc5cb Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Thu, 14 May 2015 05:22:55 +0300
+-Subject: [PATCH] xtensa: fix localized symbol refcounting with --gc-sections
+-
+-elf_xtensa_gc_sweep_hook doesn't correctly unreference symbols that were
+-made local, that results in link failure with the following message:
+-
+-  BFD (GNU Binutils) 2.24 internal error, aborting at elf32-xtensa.c line
+-  3372 in elf_xtensa_finish_dynamic_sections
+-
+-elf_xtensa_gc_sweep_hook determines symbol reference type (PLT or GOT) by
+-relocation type. Relocation types are not changed when symbol becomes
+-local, but its PLT references are added to GOT references and
+-plt.refcount is set to 0. Such symbol cannot be unreferences in the
+-elf_xtensa_gc_sweep_hook and its extra references make calculated GOT
+-relocations section size not match number of GOT relocations.
+-
+-Fix it by treating PLT reference as GOT reference when plt.refcount is
+-not positive.
+-
+-2015-05-14  Max Filippov  <jcmvbkbc@gmail.com>
+-bfd/
+-	* elf32-xtensa.c (elf_xtensa_gc_sweep_hook): Treat PLT reference
+-	as GOT reference when plt.refcount is not positive.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+-Backported from: e6c9a083ec5ae7a45bd71682b26aae1939849388
+-Changes to ChangeLog are dropped.
+-
+- bfd/elf32-xtensa.c | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index 53af1c6..2523670 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -1360,10 +1360,14 @@ elf_xtensa_gc_sweep_hook (bfd *abfd,
+- 	{
+- 	  if (is_plt)
+- 	    {
+-+	      /* If the symbol has been localized its plt.refcount got moved
+-+	         to got.refcount.  Handle it as GOT.  */
+- 	      if (h->plt.refcount > 0)
+- 		h->plt.refcount--;
+-+	      else
+-+		is_got = TRUE;
+- 	    }
+--	  else if (is_got)
+-+	  if (is_got)
+- 	    {
+- 	      if (h->got.refcount > 0)
+- 		h->got.refcount--;
+--- 
+-1.8.1.4
+-
+diff --git a/package/binutils/2.22/912-xtensa-fix-gas-segfault-with-text-section-literals.patch b/package/binutils/2.22/912-xtensa-fix-gas-segfault-with-text-section-literals.patch
+deleted file mode 100644
+index 4a3de2c..0000000
+--- a/package/binutils/2.22/912-xtensa-fix-gas-segfault-with-text-section-literals.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 2d0522e76e4afeeb2e104e0a4332d94fa0d2fbf6 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Sun, 17 May 2015 06:46:15 +0300
+-Subject: [PATCH] xtensa: fix gas segfault with --text-section-literals
+-
+-When --text-section-literals is used and code in the .init or .fini
+-emits literal in the absence of .literal_position, xtensa_move_literals
+-segfaults.
+-
+-Check that search_frag is non-NULL in the xtensa_move_literals and
+-report error otherwise.
+-
+-2015-05-26  Max Filippov  <jcmvbkbc@gmail.com>
+-gas/
+-	* config/tc-xtensa.c (xtensa_move_literals): Check that
+-	search_frag is non-NULL. Report error if literal frag is not
+-	found.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+-Backported from: 4de0562a4c69fef4952aa7e19d7bda359f02e8b4
+-Changes to ChangeLog are dropped.
+-
+- gas/config/tc-xtensa.c | 10 +++++++++-
+- 1 file changed, 9 insertions(+), 1 deletion(-)
+-
+-diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index 31c0b6b..18307c1 100644
+---- a/gas/config/tc-xtensa.c
+-+++ b/gas/config/tc-xtensa.c
+-@@ -10808,13 +10808,21 @@ xtensa_move_literals (void)
+-       frchain_to = NULL;
+-       frag_splice = &(frchain_from->frch_root);
+- 
+--      while (!search_frag->tc_frag_data.literal_frag)
+-+      while (search_frag && !search_frag->tc_frag_data.literal_frag)
+- 	{
+- 	  gas_assert (search_frag->fr_fix == 0
+- 		  || search_frag->fr_type == rs_align);
+- 	  search_frag = search_frag->fr_next;
+- 	}
+- 
+-+      if (!search_frag)
+-+	{
+-+	  search_frag = frchain_from->frch_root;
+-+	  as_bad_where (search_frag->fr_file, search_frag->fr_line,
+-+			_("literal pool location required for text-section-literals; specify with .literal_position"));
+-+	  continue;
+-+	}
+-+
+-       gas_assert (search_frag->tc_frag_data.literal_frag->fr_subtype
+- 	      == RELAX_LITERAL_POOL_BEGIN);
+-       xtensa_switch_section_emit_state (&state, segment->seg, 0);
+--- 
+-1.8.1.4
+-
+diff --git a/package/binutils/2.22/999-ppc-textrels.patch b/package/binutils/2.22/999-ppc-textrels.patch
+deleted file mode 100644
+index c1efacf..0000000
+--- a/package/binutils/2.22/999-ppc-textrels.patch
++++ /dev/null
+@@ -1,80 +0,0 @@
+-http://bugs.gentoo.org/392645
+-http://sourceware.org/bugzilla/show_bug.cgi?id=13470
+-
+-2011-12-03  Alan Modra  <amodra@gmail.com>
+-
+-	PR ld/13470
+-	* elf32-ppc.c (ppc_elf_copy_indirect_symbol): Revert substantive
+-	change in 2011-07-01 commit.  Comment.
+-	* elf64-ppc.c (ppc64_elf_copy_indirect_symbol): Likewise.
+-
+-===================================================================
+-RCS file: /cvs/src/src/bfd/elf32-ppc.c,v
+-retrieving revision 1.302.2.1
+-retrieving revision 1.302.2.2
+-diff -u -r1.302.2.1 -r1.302.2.2
+---- src/bfd/elf32-ppc.c	2011/11/15 11:36:52	1.302.2.1
+-+++ src/bfd/elf32-ppc.c	2011/12/03 00:58:01	1.302.2.2
+-@@ -2987,10 +2987,6 @@
+-   edir->elf.needs_plt |= eind->elf.needs_plt;
+-   edir->elf.pointer_equality_needed |= eind->elf.pointer_equality_needed;
+- 
+--  /* If we were called to copy over info for a weak sym, that's all.  */
+--  if (eind->elf.root.type != bfd_link_hash_indirect)
+--    return;
+--
+-   if (eind->dyn_relocs != NULL)
+-     {
+-       if (edir->dyn_relocs != NULL)
+-@@ -3022,6 +3018,16 @@
+-       eind->dyn_relocs = NULL;
+-     }
+- 
+-+  /* If we were called to copy over info for a weak sym, that's all.
+-+     You might think dyn_relocs need not be copied over;  After all,
+-+     both syms will be dynamic or both non-dynamic so we're just
+-+     moving reloc accounting around.  However, ELIMINATE_COPY_RELOCS 
+-+     code in ppc_elf_adjust_dynamic_symbol needs to check for
+-+     dyn_relocs in read-only sections, and it does so on what is the
+-+     DIR sym here.  */
+-+  if (eind->elf.root.type != bfd_link_hash_indirect)
+-+    return;
+-+
+-   /* Copy over the GOT refcount entries that we may have already seen to
+-      the symbol which just became indirect.  */
+-   edir->elf.got.refcount += eind->elf.got.refcount;
+-===================================================================
+-RCS file: /cvs/src/src/bfd/elf64-ppc.c,v
+-retrieving revision 1.363.2.4
+-retrieving revision 1.363.2.5
+-diff -u -r1.363.2.4 -r1.363.2.5
+---- src/bfd/elf64-ppc.c	2011/11/08 13:46:36	1.363.2.4
+-+++ src/bfd/elf64-ppc.c	2011/12/03 00:58:02	1.363.2.5
+-@@ -4435,10 +4435,6 @@
+-   edir->elf.ref_regular_nonweak |= eind->elf.ref_regular_nonweak;
+-   edir->elf.needs_plt |= eind->elf.needs_plt;
+- 
+--  /* If we were called to copy over info for a weak sym, that's all.  */
+--  if (eind->elf.root.type != bfd_link_hash_indirect)
+--    return;
+--
+-   /* Copy over any dynamic relocs we may have on the indirect sym.  */
+-   if (eind->dyn_relocs != NULL)
+-     {
+-@@ -4471,6 +4467,16 @@
+-       eind->dyn_relocs = NULL;
+-     }
+- 
+-+  /* If we were called to copy over info for a weak sym, that's all.
+-+     You might think dyn_relocs need not be copied over;  After all,
+-+     both syms will be dynamic or both non-dynamic so we're just
+-+     moving reloc accounting around.  However, ELIMINATE_COPY_RELOCS 
+-+     code in ppc64_elf_adjust_dynamic_symbol needs to check for
+-+     dyn_relocs in read-only sections, and it does so on what is the
+-+     DIR sym here.  */
+-+  if (eind->elf.root.type != bfd_link_hash_indirect)
+-+    return;
+-+
+-   /* Copy over got entries that we may have already seen to the
+-      symbol which just became indirect.  */
+-   if (eind->elf.got.glist != NULL)
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 3fe65e0..76e7e77 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -7,11 +7,6 @@ choice
+ 	help
+ 	  Select the version of binutils you wish to use.
+ 
+-	config BR2_BINUTILS_VERSION_2_22
+-		depends on !BR2_aarch64 && !BR2_microblaze && \
+-			   !BR2_powerpc64le && !BR2_nios2
+-		bool "binutils 2.22"
+-
+ 	config BR2_BINUTILS_VERSION_2_23_2
+ 		depends on !BR2_aarch64 && !BR2_microblaze && \
+ 			   !BR2_powerpc64le && !BR2_nios2
+@@ -30,7 +25,6 @@ endchoice
+ config BR2_BINUTILS_VERSION
+ 	string
+ 	default "arc-2015.06-rc1"	if BR2_arc
+-	default "2.22"		if BR2_BINUTILS_VERSION_2_22
+ 	default "2.23.2"	if BR2_BINUTILS_VERSION_2_23_2
+ 	default "2.24"		if BR2_BINUTILS_VERSION_2_24
+ 	default "2.25"		if BR2_BINUTILS_VERSION_2_25
 -- 
 2.4.5
