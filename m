@@ -1,81 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Jul 2015 18:08:04 +0200
-Subject: [Buildroot] [PATCH] busybox: Install udhcpc script only if
- enabled
-In-Reply-To: <1436629865-19506-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1436629865-19506-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <55A13F64.7060004@mind.be>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sat, 11 Jul 2015 12:12:36 -0500
+Subject: [Buildroot] [PATCH v7 20/22] squashfs: Add xattr support
+In-Reply-To: <20150710222353.637179e9@free-electrons.com>
+References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <1433251718-3167-21-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <20150706121602.402373fc@free-electrons.com>
+ <CANn-YGTqC=bhPjybxvfbH9sVZ2Vfa6xrvKaRkVOAvKTdCV3byA@mail.gmail.com>
+ <20150710222353.637179e9@free-electrons.com>
+Message-ID: <CANQCQpZ=b1oNNCk0viuBpjw9nw9KXMja7q4Z0qGi0Vk3kTj8NA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/11/15 17:51, Maxime Hadjinlian wrote:
-> It doesn't make sense to install such a scripts if UDHCPC was not
-> selected.
-> Also remove the entry from BUSYBOX_PERMISSIONS as the install command
-> does the same job.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Thomas,
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Fri, Jul 10, 2015 at 3:23 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Clayton,
+>
+> On Fri, 10 Jul 2015 14:54:28 -0500, Clayton Shotwell wrote:
+>
+>> I would really like to know what I was thinking when I put this patch
+>> together because you are completely correct on how terrible this is. I
+>> looked back at it and I don't believe the host xattr support should be
+>> enabled at all. There are too many host dependencies, unrelated to the
+>> xattr package, that need to be met for this to work properly (think
+>> extended attributes on the filesystem itself). I am going to drop the
+>> host changes and only enable this for the target (where I am actually
+>> looking to use it).
+>
+> No problem. However, I'm curious to know what is your use case: you are
+> preparing a SquashFS image on your target?
 
-
- Regards,
- Arnout
-
-> ---
->  package/busybox/busybox.mk | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 51b35bc..92874cd 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -52,7 +52,6 @@ BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
->  
->  define BUSYBOX_PERMISSIONS
->  	/bin/busybox                     f 4755 0  0 - - - - -
-> -	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
->  endef
->  
->  # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
-> @@ -127,6 +126,15 @@ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
->  endef
->  endif
->  
-> +define BUSYBOX_INSTALL_UDHCPC_SCRIPT
-> +	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
-> +		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
-> +			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
-> +		$(INSTALL) -m 0755 -d \
-> +			$(TARGET_DIR)/usr/share/udhcpc/default.script.d; \
-> +	fi
-> +endef
-> +
->  ifeq ($(BR2_INIT_BUSYBOX),y)
->  define BUSYBOX_SET_INIT
->  	$(call KCONFIG_ENABLE_OPT,CONFIG_INIT,$(BUSYBOX_BUILD_CONFIG))
-> @@ -189,10 +197,7 @@ endef
->  
->  define BUSYBOX_INSTALL_TARGET_CMDS
->  	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) install
-> -	$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
-> -		$(TARGET_DIR)/usr/share/udhcpc/default.script
-> -	$(INSTALL) -m 0755 -d \
-> -		$(TARGET_DIR)/usr/share/udhcpc/default.script.d
-> +	$(BUSYBOX_INSTALL_UDHCPC_SCRIPT)
->  	$(BUSYBOX_INSTALL_MDEV_CONF)
->  endef
->  
-> 
+We build a x86 SELinux enabled qemu target that repackages our target
+filesystems with pre-labelled security attributes.  Sort of a sandbox
+approach.
 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
