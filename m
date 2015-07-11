@@ -1,24 +1,38 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Jul 2015 17:27:10 +0200
-Subject: [Buildroot] [PATCH/next 1/3]
-	package/x11r7/xdriver_xf86-input-libinput: bump version to 0.10.0
-References: <1432194056-10250-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <XnsA4D4B189D1BF0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 11 Jul 2015 15:38:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 8206] mplayer uses host xorg development files
+In-Reply-To: <bug-8206-163@https.bugs.busybox.net/>
+References: <bug-8206-163@https.bugs.busybox.net/>
+Message-ID: <20150711153823.7BD6F7F89F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote in 
-news:1432194056-10250-1-git-send-email-bernd.kuhls at t-online.de:
+https://bugs.busybox.net/show_bug.cgi?id=8206
 
-> -XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.9.0
-> +XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.10.0
+--- Comment #5 from Bernd Kuhls <bernd.kuhls@t-online.de> 2015-07-11 15:38:21 UTC ---
+Quoting
+http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/119274/focus=119720
 
-Hi,
+console_log_bad_mplayer_rebuild.txt
+<http://buildroot-busybox.2317881.n4.nabble.com/file/n105280/console_log_bad_mplayer_rebuild.txt>
 
-I marked this patch as superseded in patchwork because 0.11.0 was released 
-along with libinput 0.19.0, currently I am testing the new patches.
+> Checking for X11 headers presence ... no (check if the dev(el) packages are installed)
+> Checking for X11 ... no (check if the dev(el) packages are installed)
 
-Regards, Bernd
+console_log_good_mplayer_rebuild.txt
+<http://buildroot-busybox.2317881.n4.nabble.com/file/n105280/console_log_good_mplayer_rebuild.txt>
+
+> Checking for X11 headers presence ... yes 
+> Checking for X11 ... yes 
+
+It is clearly visible that mplayer, without my patch posted in this bug report,
+picked up xorg headers from the host. I could reproduce the behaviour from
+console_log_bad_mplayer_rebuild.txt, which is fixed with my patch.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
