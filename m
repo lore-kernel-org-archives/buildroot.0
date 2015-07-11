@@ -1,44 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 00:52:13 +0200
-Subject: [Buildroot] [PATCH 1/7] Add <PKG>_STRIP_COMPONENTS for packages
- with non-standard tarballs
-In-Reply-To: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
-References: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20150712005213.332ec052@free-electrons.com>
+Date: Sun, 12 Jul 2015 00:52:28 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-libinput:
+	bump version to 0.11.0
+Message-ID: <20150711225437.B719D80762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+commit: http://git.buildroot.net/buildroot/commit/?id=98573709465cd0cf27f31e219cc51f8e5535ff11
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 11 Jul 2015 16:15:04 +0200, Luca Ceresoli wrote:
-> Usually package tarballs contain only a directory named
-> "<pkg-name>-<pkg-version>" which contains the actual source tree. To properly
-> extract the source files in $(BUILD_DIR), Buildroot passes the
-> --strip-components=1 option to tar.
-> 
-> Unfortunately a few packages ship in a non-standard way, with no root
-> directory or with more than one. In Buildroot these packages must be handled by
-> overriding the <PKG>_DOWNLOAD_CMDS.
-> 
-> As the number of such packages is growing, introduce a <PKG>_STRIP_COMPONENTS
-> variable for packages to request a number of components to strip different
-> from 1.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  package/pkg-generic.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../xdriver_xf86-input-libinput.hash               |    5 ++---
+ .../xdriver_xf86-input-libinput.mk                 |    2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-Patches 1 to 6 applied.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+index 9b5219f..05e119e 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+@@ -1,3 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002586.html
+-sha1	cfb19cc863bfc0a419df6b14287891ad54bc86a2				xf86-input-libinput-0.9.0.tar.bz2
+-sha256	37f623b7869c700156049fa9204bafd6027bf5c3acd9017919e42199bcc666da	xf86-input-libinput-0.9.0.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-June/002610.html
++sha256	56babf46c13d15fbd15c9d43815e9220e63acd9ed28095e7d68ad03f9148bbda	xf86-input-libinput-0.11.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index 28371a2..722e700 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.9.0
++XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.11.0
+ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
