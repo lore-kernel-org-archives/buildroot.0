@@ -1,60 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Jul 2015 14:20:43 +0200
-Subject: [Buildroot] [PATCH] linux: adjust fixup logic for ktap
-In-Reply-To: <1424612340-2332-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1424612340-2332-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <55A10A1B.3060800@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Jul 2015 14:30:18 +0200
+Subject: [Buildroot] [git commit] package/lame: Fix compile on 32bit Intel
+Message-ID: <20150711123314.904637FE36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/22/15 14:39, Thomas Petazzoni wrote:
-> The ktap package requires some parts of the kernel tracing
-> infrastructure to be enabled, especially
-> CONFIG_EVENT_TRACING. However, this option is a blind option in the
-> kernel, so enabling it in linux.mk has no effect: we need to enable a
-> non-blind option that selects CONFIG_EVENT_TRACING. We've chosen to
-> select CONFIG_FTRACE.
+commit: http://git.buildroot.net/buildroot/commit/?id=f512b4efdba5d9ed28c64b8980ef817ca295fcf2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- I think it makes more sense to select the smaller ENABLE_DEFAULT_TRACERS, no?
+In file included from xmm_quantize_sub.c:37:0:
+/home/br/br5/output/host/usr/lib/gcc/i586-buildroot-linux-uclibc/4.9.2/include/xmmintrin.h:929:1: error: inlining failed in call to always_inline '_mm_loadu_ps': target specific option mismatch
+ _mm_loadu_ps (float const *__P)
+ ^
+xmm_quantize_sub.c:65:18: error: called from here
+     const __m128 vec_fabs_mask = _mm_loadu_ps(&fabs_mask._float[0]);
+                  ^
 
- Otherwise:
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lame/0003-msse.patch |   24 ++++++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
 
-
- Regards,
- Arnout
-
-> 
-> This fixes the build of ktap.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  linux/linux.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 29f59e8..75f4936 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -198,7 +198,7 @@ define LINUX_CONFIGURE_CMDS
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
->  	$(if $(BR2_PACKAGE_KTAP),
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
-> -		$(call KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_FTRACE,$(@D)/.config)
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
->  	$(if $(BR2_PACKAGE_SYSTEMD),
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/lame/0003-msse.patch b/package/lame/0003-msse.patch
+new file mode 100644
+index 0000000..ca4f65f
+--- /dev/null
++++ b/package/lame/0003-msse.patch
+@@ -0,0 +1,24 @@
++Fix compile on 32bit Intel
++
++Downloaded from
++http://anonscm.debian.org/cgit/pkg-multimedia/lame.git/tree/debian/patches/msse.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++Description: Build xmm_quantize_sub.c with -msse
++Author: Sebastian Ramacher <sramacher@debian.org>
++Bug: http://sourceforge.net/p/lame/bugs/443/
++Bug-Debian: https://bugs.debian.org/760047
++Forwarded: http://sourceforge.net/p/lame/bugs/443/
++Last-Update: 2014-08-31
++
++--- lame-3.99.5+repack1.orig/libmp3lame/vector/Makefile.am
+++++ lame-3.99.5+repack1/libmp3lame/vector/Makefile.am
++@@ -20,6 +20,7 @@ xmm_sources = xmm_quantize_sub.c
++ 
++ if WITH_XMM
++ liblamevectorroutines_la_SOURCES = $(xmm_sources)
+++liblamevectorroutines_la_CFLAGS = -msse
++ endif
++ 
++ noinst_HEADERS = lame_intrin.h
