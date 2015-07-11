@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 12 Jul 2015 00:28:18 +0200
-Subject: [Buildroot] [PATCH 1/7] Add <PKG>_STRIP_COMPONENTS for packages
- with non-standard tarballs
-In-Reply-To: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
+Date: Sun, 12 Jul 2015 00:29:20 +0200
+Subject: [Buildroot] [PATCH 2/7] docs/manual: document
+	<PKG>_STRIP_COMPONENTS
+In-Reply-To: <1436624110-20428-2-git-send-email-luca@lucaceresoli.net>
 References: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <55A19882.6040105@mind.be>
+ <1436624110-20428-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <55A198C0.9000402@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,60 +13,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 07/11/15 16:15, Luca Ceresoli wrote:
-> Usually package tarballs contain only a directory named
-> "<pkg-name>-<pkg-version>" which contains the actual source tree. To properly
-> extract the source files in $(BUILD_DIR), Buildroot passes the
-> --strip-components=1 option to tar.
-> 
-> Unfortunately a few packages ship in a non-standard way, with no root
-> directory or with more than one. In Buildroot these packages must be handled by
-> overriding the <PKG>_DOWNLOAD_CMDS.
-> 
-> As the number of such packages is growing, introduce a <PKG>_STRIP_COMPONENTS
-> variable for packages to request a number of components to strip different
-> from 1.
-> 
 > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+ Although perhaps I shouldn't be doing this at this hour :-)
 
  Regards,
  Arnout
 
 > ---
->  package/pkg-generic.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+>  docs/manual/adding-packages-generic.txt | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 9fe01b8d4d12..8aad1b4acc23 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -322,6 +322,14 @@ ifndef $(2)_SUBDIR
->   endif
->  endif
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index bc07667a01c8..4c12b42da862 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -303,6 +303,15 @@ information is (assuming the package name is +libfoo+) :
+>       the package source code. Buildroot copies the contents of the
+>       source directory into the package's build directory.
 >  
-> +ifndef $(2)_STRIP_COMPONENTS
-> + ifdef $(3)_STRIP_COMPONENTS
-> +  $(2)_STRIP_COMPONENTS = $$($(3)_STRIP_COMPONENTS)
-> + else
-> +  $(2)_STRIP_COMPONENTS ?= 1
-> + endif
-> +endif
+> +* +LIBFOO_STRIP_COMPONENTS+ is the number of leading components
+> +  (directories) that tar must strip from file names on extraction.
+> +  The tarball for most packages has one leading component named
+> +  "<pkg-name>-<pkg-version>", thus Buildroot passes
+> +  --strip-components=1 to tar to remove it.
+> +  For non-standard packages that don't have this component, or
+> +  that have more than one leading component to strip, set this
+> +  variable with the value to be passed to tar. Default: 1.
 > +
->  $(2)_SRCDIR		       = $$($(2)_DIR)/$$($(2)_SUBDIR)
->  $(2)_BUILDDIR		       ?= $$($(2)_SRCDIR)
->  
-> @@ -431,7 +439,7 @@ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
->  # default extract command
->  $(2)_EXTRACT_CMDS ?= \
->  	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$(DL_DIR)/$$($(2)_SOURCE) | \
-> -	$$(TAR) $$(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $$(TAR_OPTIONS) -)
-> +	$$(TAR) $$(TAR_STRIP_COMPONENTS)=$$($(2)_STRIP_COMPONENTS) -C $$($(2)_DIR) $$(TAR_OPTIONS) -)
->  
->  # pre/post-steps hooks
->  $(2)_PRE_DOWNLOAD_HOOKS         ?=
+>  * +LIBFOO_DEPENDENCIES+ lists the dependencies (in terms of package
+>    name) that are required for the current target package to
+>    compile. These dependencies are guaranteed to be compiled and
 > 
 
 
