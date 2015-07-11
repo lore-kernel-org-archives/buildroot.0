@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jul 2015 16:33:42 +0200
-Subject: [Buildroot] [PATCH v3 1/1] libmusicbrainz: new package
-In-Reply-To: <1434351932-24023-1-git-send-email-pieter.degendt@gmail.com>
-References: <1434351932-24023-1-git-send-email-pieter.degendt@gmail.com>
-Message-ID: <20150711163342.1e916def@free-electrons.com>
+Date: Sat, 11 Jul 2015 16:35:17 +0200
+Subject: [Buildroot] [git commit] python-pygame: remove python dependency
+Message-ID: <20150711143742.E50D880E23@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pieter,
+commit: http://git.buildroot.net/buildroot/commit/?id=6874f5bac94c9cefbf09f3ded4cf4bce66c70e25
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 15 Jun 2015 09:05:32 +0200, Pieter De Gendt wrote:
-> This library is built for both host and target platform as
-> required by cmake. This implies that dependencies are also
-> built for the host platform (neon).
-> 
-> Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
+With the dependency on BR2_PACKAGE_PYTHON it was only possible to
+build the package with python2. However, python-pygame works with
+python3 so enable it to be built with it.
 
-Arnout made a detailed review of your patch on June 17, but you didn't
-get back with an updated version (as far as I know).
+Signed-off-by: Peter Bouda <pbouda@cidles.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-pygame/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-So I've marked this patch as Changes Requested in patchwork. Please
-resubmit an updated version if you're interested in getting this merged
-in Buildroot.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-pygame/Config.in b/package/python-pygame/Config.in
+index f72ee31..932b0f1 100644
+--- a/package/python-pygame/Config.in
++++ b/package/python-pygame/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_PYGAME
+ 	bool "python-pygame"
+-	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_SDL
+ 	help
+ 	  Pygame is a cross-platfrom library designed to make it easy to write
