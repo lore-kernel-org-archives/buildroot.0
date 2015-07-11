@@ -1,41 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jul 2015 09:27:38 +0200
-Subject: [Buildroot] [git commit] postgresql: init script: wait till server
-	has started
-Message-ID: <20150711072829.C2743805F4@busybox.osuosl.org>
+Date: Sat, 11 Jul 2015 09:28:24 +0200
+Subject: [Buildroot] [git commit] rsyslog: fix config file comment style
+Message-ID: <20150711072829.CE1A580140@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7d515d00e5d36e1260da3768178d2364db1ef90
+commit: http://git.buildroot.net/buildroot/commit/?id=d42f0f96aa13bc160bdfeb40ca75f53adb7af64e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adds "-w" option to init script to wait till the database server
-has fully started and accepts connections before continuing.
+The upstream versions of rsyslog (v8 and higher) have this commit to fix
+the config file comment issue. Carry this patch here until the version
+is bumped.
 
-Prevents other applications that depend on PostgreSQL from
-failing to start, if the database server is not ready yet.
-Times out after 60 seconds by default.
-
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/postgresql/S50postgresql |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../rsyslog/0001-fix-config-file-comments.patch    |   37 ++++++++++++++++++++
+ 1 files changed, 37 insertions(+), 0 deletions(-)
 
-diff --git a/package/postgresql/S50postgresql b/package/postgresql/S50postgresql
-index 86a8d83..a895bcf 100644
---- a/package/postgresql/S50postgresql
-+++ b/package/postgresql/S50postgresql
-@@ -13,7 +13,7 @@ fi
- 
- start() {
- 	echo -n "Starting postgresql: "
--	su - postgres -c '/usr/bin/pg_ctl start -D /var/lib/pgsql -l logfile'
-+	su - postgres -c '/usr/bin/pg_ctl start -w -D /var/lib/pgsql -l logfile'
- 	echo "OK"
- }
- stop() {
+diff --git a/package/rsyslog/0001-fix-config-file-comments.patch b/package/rsyslog/0001-fix-config-file-comments.patch
+new file mode 100644
+index 0000000..bc5448d
+--- /dev/null
++++ b/package/rsyslog/0001-fix-config-file-comments.patch
+@@ -0,0 +1,37 @@
++From fe01c9ec4979c78b6a7caf045cab17ba52d4ad08 Mon Sep 17 00:00:00 2001
++From: Brad Barden <brad+github@mifflinet.net>
++Date: Sun, 11 Jan 2015 17:52:11 -0600
++Subject: [PATCH] bugfix header in platform/redhat/rsyslog.conf
++
++the "For more information" doc path includes the string "*/", breaking c-style comment format. fixes #202.
++---
++ platform/redhat/rsyslog.conf | 19 +++++++++----------
++ 1 file changed, 9 insertions(+), 10 deletions(-)
++
++diff --git a/platform/redhat/rsyslog.conf b/platform/redhat/rsyslog.conf
++index 340874d..3df6c7e 100644
++--- a/platform/redhat/rsyslog.conf
+++++ b/platform/redhat/rsyslog.conf
++@@ -1,13 +1,12 @@
++-/* rsyslog configuration file (for Red Hat-based systems)
++- * note that most of this config file uses old-style format,
++- * because it is well-known AND quite suitable for simple cases
++- * like we have with the default config. For more advanced 
++- * things, RainerScript configuration is suggested.
++- *
++- * For more information see /usr/share/doc/rsyslog-*/rsyslog_conf.html
++- * or latest version online at http://www.rsyslog.com/doc/rsyslog_conf.html 
++- * If you experience problems, see http://www.rsyslog.com/doc/troubleshoot.html
++- */
+++# rsyslog configuration file (for Red Hat-based systems)
+++# note that most of this config file uses old-style format,
+++# because it is well-known AND quite suitable for simple cases
+++# like we have with the default config. For more advanced 
+++# things, RainerScript configuration is suggested.
+++#
+++# For more information see /usr/share/doc/rsyslog-*/rsyslog_conf.html
+++# or latest version online at http://www.rsyslog.com/doc/rsyslog_conf.html 
+++# If you experience problems, see http://www.rsyslog.com/doc/troubleshoot.html
++ 
++ #### MODULES ####
++ 
