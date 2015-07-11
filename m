@@ -1,176 +1,162 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sat, 11 Jul 2015 16:20:40 +0200
-Subject: [Buildroot] [PATCH 7/7] qpid-proton: new package
-In-Reply-To: <1436624110-20428-7-git-send-email-luca@lucaceresoli.net>
-References: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
- <1436624110-20428-7-git-send-email-luca@lucaceresoli.net>
-Message-ID: <55A12638.3070006@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Jul 2015 16:30:53 +0200
+Subject: [Buildroot] [Bug 8206] mplayer uses host xorg development files
+In-Reply-To: <1436621462286-105280.post@n4.nabble.com>
+References: <bug-8206-163@https.bugs.busybox.net/>
+ <20150707154301.C9535818F0@busybox.osuosl.org>
+ <1436620784516-105279.post@n4.nabble.com>
+ <1436621462286-105280.post@n4.nabble.com>
+Message-ID: <20150711163053.528e23b9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-sorry for having noticed only after sending, but this is a v2.
+You have a Bugzilla account since you report a bug, so please re-open
+https://bugs.busybox.net/show_bug.cgi?id=8206, and fill in those
+details in the bug tracker itself.
 
-The rest of the series is brand new, so I forgot to mark only this patch
-as v2...
+Thanks,
 
-BTW, I just marked the previously-sent patch as Superseded in patchwork.
+Thomas
 
-Luca Ceresoli wrote:
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->   package/Config.in                                  |  1 +
->   ...fix-C-compiler-detection-with-_ARG1-_ARG2.patch | 52 ++++++++++++++++++++++
->   package/qpid-proton/Config.in                      | 17 +++++++
->   package/qpid-proton/qpid-proton.hash               |  2 +
->   package/qpid-proton/qpid-proton.mk                 | 28 ++++++++++++
->   5 files changed, 100 insertions(+)
->   create mode 100644 package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch
->   create mode 100644 package/qpid-proton/Config.in
->   create mode 100644 package/qpid-proton/qpid-proton.hash
->   create mode 100644 package/qpid-proton/qpid-proton.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index d9b07942791a..21ead51b3697 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -995,6 +995,7 @@ menu "Networking"
->   	source "package/openpgm/Config.in"
->   	source "package/ortp/Config.in"
->   	source "package/qdecoder/Config.in"
-> +	source "package/qpid-proton/Config.in"
->   	source "package/rtmpdump/Config.in"
->   	source "package/slirp/Config.in"
->   	source "package/snmppp/Config.in"
-> diff --git a/package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch b/package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch
-> new file mode 100644
-> index 000000000000..16f4aba52102
-> --- /dev/null
-> +++ b/package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch
-> @@ -0,0 +1,52 @@
-> +From f24be9ae9ab01c7507a366e9d5529c444f0b7edd Mon Sep 17 00:00:00 2001
-> +From: Luca Ceresoli <luca@lucaceresoli.net>
-> +Date: Fri, 10 Jul 2015 10:13:47 +0200
-> +Subject: [PATCH] proton-c: fix C compiler detection with _ARG1/_ARG2
-> +
-> +The C compiler commandline in CMake is composed by the concatenation of
-> +CMAKE_C_COMPILER + CMAKE_C_COMPILER_ARG1 + CMAKE_C_COMPILER_ARG2.
-> +
-> +In most use cases the two additional argument variables are empty, thus
-> +CMAKE_C_COMPILER can be used without any noticeable difference.
-> +
-> +The Buildroot embedded Linux build system [0], however, optionally exploits the
-> +CMAKE_C_COMPILER_ARG1 variable to speed up the cross-compilation of CMake-based
-> +packages using ccache. It does so by setting [1]:
-> +
-> +  CMAKE_C_COMPILER      = /path/to/ccache
-> +  CMAKE_C_COMPILER_ARG1 = /path/to/cross-gcc
-> +
-> +This works fine with other CMake-based packages, but proton-c's CMakeLists.txt
-> +calls gcc to extract the compiler version. It does so by calling
-> +"${CMAKE_C_COMPILER} -dumpversion", without honoring the two extra arguments.
-> +Within Buildroot with ccache enabled, this means calling
-> +"/path/to/ccache -dumpversion", which fails with the error:
-> +
-> +  ccache: invalid option -- 'd'
-> +
-> +Fix the compiler check by adding the two arguments.
-> +
-> +[0] http://buildroot.net/
-> +[1] http://git.buildroot.net/buildroot/tree/support/misc/toolchainfile.cmake.in?id=2015.05
-> +
-> +Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> +---
-> + proton-c/CMakeLists.txt | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/proton-c/CMakeLists.txt b/proton-c/CMakeLists.txt
-> +index 93449a9..8c31a89 100644
-> +--- a/proton-c/CMakeLists.txt
-> ++++ b/proton-c/CMakeLists.txt
-> +@@ -218,7 +218,7 @@ if (CMAKE_COMPILER_IS_GNUCC)
-> +     set (COMPILE_LANGUAGE_FLAGS "-std=c99")
-> +     set (COMPILE_PLATFORM_FLAGS "-std=gnu99")
-> +
-> +-    execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION
-> ++    execute_process(COMMAND ${CMAKE_C_COMPILER} ${CMAKE_C_COMPILER_ARG1} ${CMAKE_C_COMPILER_ARG2} -dumpversion OUTPUT_VARIABLE GCC_VERSION
-> +       OUTPUT_STRIP_TRAILING_WHITESPACE)
-> +     if (${GCC_VERSION} VERSION_LESS "4.3.0")
-> +       # Only a concern if contibuting code back.
-> +--
-> +1.9.1
-> +
-> diff --git a/package/qpid-proton/Config.in b/package/qpid-proton/Config.in
-> new file mode 100644
-> index 000000000000..b6a1aa9821a7
-> --- /dev/null
-> +++ b/package/qpid-proton/Config.in
-> @@ -0,0 +1,17 @@
-> +config BR2_PACKAGE_QPID_PROTON
-> +	bool "qpid-proton"
-> +	depends on BR2_USE_WCHAR # util-linux
-> +	select BR2_PACKAGE_UTIL_LINUX
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-> +	help
-> +	  The AMQP messaging toolkit
-> +
-> +	  Qpid Proton is a high-performance, lightweight messaging library.
-> +	  It can be used in the widest range of messaging applications,
-> +	  including brokers, client libraries, routers, bridges, proxies, and
-> +	  more.
-> +
-> +	  https://qpid.apache.org/proton/
-> +
-> +comment "qpid-proton needs a toolchain w/ wchar"
-> +	depends on !BR2_USE_WCHAR
-> diff --git a/package/qpid-proton/qpid-proton.hash b/package/qpid-proton/qpid-proton.hash
-> new file mode 100644
-> index 000000000000..8c2cc4f3503d
-> --- /dev/null
-> +++ b/package/qpid-proton/qpid-proton.hash
-> @@ -0,0 +1,2 @@
-> +# Hash from: http://www.apache.org/dist/qpid/proton/0.9.1/qpid-proton-0.9.1.tar.gz.sha
-> +sha1  98008d90acd0d47cbd7ac1572a2bb50b452338ed  qpid-proton-0.9.1.tar.gz
-> diff --git a/package/qpid-proton/qpid-proton.mk b/package/qpid-proton/qpid-proton.mk
-> new file mode 100644
-> index 000000000000..8ff05a94f3d1
-> --- /dev/null
-> +++ b/package/qpid-proton/qpid-proton.mk
-> @@ -0,0 +1,28 @@
-> +################################################################################
-> +#
-> +# qpid-proton
-> +#
-> +################################################################################
-> +
-> +QPID_PROTON_VERSION_MAJOR = 0.9
-> +QPID_PROTON_VERSION = $(QPID_PROTON_VERSION_MAJOR).1
-> +QPID_PROTON_SITE = http://apache.panu.it/qpid/proton/0.9.1
-> +QPID_PROTON_STRIP_COMPONENTS = 2
-> +QPID_PROTON_LICENSE = Apache-2.0
-> +QPID_PROTON_LICENSE_FILES = LICENSE
-> +QPID_PROTON_INSTALL_STAGING = YES
-> +QPID_PROTON_DEPENDENCIES = \
-> +	util-linux \
-> +	$(if $(BR2_PACKAGE_OPENSSL),openssl,)
-> +QPID_PROTON_CONF_OPTS = \
-> +	-DBUILD_JAVA=OFF \
-> +	-DENABLE_VALGRIND=OFF \
-> +	-DENABLE_WARNING_ERROR=OFF
-> +
-> +define QPID_PROTON_REMOVE_EXAMPLES
-> +	rm -fr $(TARGET_DIR)/usr/share/proton-$(QPID_PROTON_VERSION_MAJOR)/examples
-> +endef
-> +
-> +QPID_PROTON_POST_INSTALL_TARGET_HOOKS += QPID_PROTON_REMOVE_EXAMPLES
-> +
-> +$(eval $(cmake-package))
->
+On Sat, 11 Jul 2015 06:31:02 -0700 (PDT), glscantlen wrote:
+> to:	bugzilla at busybox.net
+> date:	Tue, Jul 7, 2015 at 9:30 PM
+> subject:	Re: [Bug 8206] mplayer uses host xorg development files
+> mailed-by:	gmail.com
+> 
+> Thomas & Bernd,
+> 
+> It is rather easy to reproduce the bad mplayer build.
+> if I remove the xorg-dev packages then make mplayer-dirclean, make
+> mplayer-reinstall
+> I get a bad mplayer. see attached "console_log_bad_mplayer_execute.txt"
+> if I then install xorg-dev packages and make mplayer-dirclean, make
+> mplayer-reinstall
+> I get a good mplayer. see attached "console_log_good_mplayer_rebuild.txt"
+> It appears I am not generating the build log that Thomas was asking for,
+> so I've made console logs of the good and bad builds of mplayer.
+> These logs are also attached:
+> "console_log_good_mplayer_rebuild.txt"
+> "console_log_bad_mplayer_rebuild.txt"
+> 
+> 
+> When I remove xorg-dev these packages are contained in xorg-dev
+> apt-get remove --purge xorg-dev then apt-get autoremove
+> the following packages are removed:
+> Removing libdmx-dev:amd64 (1:1.1.3-1) ...
+> Removing libdmx1:amd64 (1:1.1.3-1) ...
+> Removing xserver-xorg-dev (2:1.17.1-0ubuntu3) ...
+> Removing mesa-common-dev:amd64 (10.5.2-0ubuntu1) ...
+> Removing libdrm-dev:amd64 (2.4.60-2) ...
+> Removing libxft-dev (2.3.2-1) ...
+> Removing libfontconfig1-dev:amd64 (2.11.1-0ubuntu6) ...
+> Removing libexpat1-dev:amd64 (2.1.0-6ubuntu1) ...
+> Removing libxfont-dev (1:1.4.99.901-1ubuntu1) ...
+> Removing libfontenc-dev:amd64 (1:1.1.2-1) ...
+> Removing libfreetype6-dev:amd64 (2.5.2-2ubuntu3) ...
+> Removing libfs-dev:amd64 (2:1.0.6-1) ...
+> Removing libfs6:amd64 (2:1.0.6-1) ...
+> Removing libxaw7-dev:amd64 (2:1.0.12-2) ...
+> Removing libxmu-dev:amd64 (2:1.1.2-1) ...
+> Removing libxt-dev:amd64 (1:1.1.4-1) ...
+> Removing libsm-dev:amd64 (2:1.2.2-1) ...
+> Removing libice-dev:amd64 (2:1.0.9-1) ...
+> Removing libmirclient-dev:amd64 (0.12.1+15.04.20150324-0ubuntu1) ...
+> Removing libmircommon-dev:amd64 (0.12.1+15.04.20150324-0ubuntu1) ...
+> Removing libpciaccess-dev:amd64 (0.13.2-3build1) ...
+> Removing libpixman-1-dev (0.32.6-3) ...
+> Removing libpng12-dev:amd64 (1.2.51-0ubuntu3) ...
+> Removing libprotobuf-dev:amd64 (2.6.1-1) ...
+> Removing libprotobuf-lite9:amd64 (2.6.1-1) ...
+> Removing libxxf86vm-dev:amd64 (1:1.1.3-1) ...
+> Removing libxxf86dga-dev:amd64 (2:1.1.4-1) ...
+> Removing libx11-doc (2:1.6.2-2ubuntu2) ...
+> Removing libxcomposite-dev (1:0.4.4-1) ...
+> Removing libxcursor-dev:amd64 (1:1.1.14-1) ...
+> Removing libxdamage-dev:amd64 (1:1.1.4-2) ...
+> Removing libxvmc-dev:amd64 (2:1.0.8-2ubuntu1) ...
+> Removing libxv-dev:amd64 (2:1.0.10-1) ...
+> Removing libxtst-dev:amd64 (2:1.2.2-1) ...
+> Removing libxi-dev (2:1.7.4-1) ...
+> Removing libxfixes-dev:amd64 (1:5.0.1-2) ...
+> Removing libxinerama-dev:amd64 (2:1.1.3-1) ...
+> Removing libxkbcommon-dev (0.4.3-2) ...
+> Removing libxkbfile-dev:amd64 (1:1.0.8-1) ...
+> Removing libxmuu-dev:amd64 (2:1.1.2-1) ...
+> Removing libxmu-headers (2:1.1.2-1) ...
+> Removing libxpm-dev:amd64 (1:3.5.11-1) ...
+> Removing libxrandr-dev:amd64 (2:1.4.2-1) ...
+> Removing libxrender-dev:amd64 (1:0.9.8-1build1) ...
+> Removing libxres-dev (2:1.0.7-1) ...
+> Removing libxss-dev:amd64 (1:1.2.2-1) ...
+> Removing x11proto-bigreqs-dev (1:1.1.2-1) ...
+> Removing x11proto-composite-dev (1:0.4.2-2) ...
+> Removing x11proto-xf86dga-dev (2.1-3) ...
+> Removing x11proto-xf86bigfont-dev (1.2.0-3) ...
+> Removing x11proto-damage-dev (1:1.2.1-2) ...
+> Removing x11proto-dmx-dev (1:2.3.1-2) ...
+> Removing x11proto-dri2-dev (2.8-2) ...
+> Removing x11proto-dri3-dev (1.0-1) ...
+> Removing x11proto-fixes-dev (1:5.0-2ubuntu2) ...
+> Removing x11proto-fonts-dev (2.1.3-1) ...
+> Removing x11proto-gl-dev (1.4.17-1) ...
+> Removing x11proto-present-dev (1.0-1) ...
+> Removing x11proto-randr-dev (1.4.0+git20120101.is.really.1.4.0-0ubuntu1) ...
+> Removing x11proto-record-dev (1.14.2-1) ...
+> Removing x11proto-render-dev (2:0.11.1-2) ...
+> Removing x11proto-resource-dev (1.2.0-3) ...
+> Removing x11proto-scrnsaver-dev (1.2.2-1) ...
+> Removing x11proto-video-dev (2.3.2-1) ...
+> Removing x11proto-xcmisc-dev (1.2.2-1) ...
+> Removing x11proto-xf86dri-dev (2.1.1-2) ...
+> Removing x11proto-xf86vidmode-dev (2.3.1-2) ...
+> Removing x11proto-xinerama-dev (1.2.1-2) ...
+> Removing zlib1g-dev:amd64 (1:1.2.8.dfsg-2ubuntu1) ...
+> Removing libxext-dev:amd64 (2:1.3.3-1) ...
+> Removing x11proto-xext-dev (7.3.0-1) ...
+> Removing libx11-dev:amd64 (2:1.6.2-2ubuntu2) ...
+> Removing libxcb1-dev:amd64 (1.10-2ubuntu1) ...
+> Removing libpthread-stubs0-dev:amd64 (0.3-4) ...
+> Removing libxau-dev:amd64 (1:1.0.8-1) ...
+> Removing libxdmcp-dev:amd64 (1:1.1.1-1build1) ...
+> Removing x11proto-input-dev (2.3.1-1) ...
+> Removing x11proto-kb-dev (1.0.6-2) ...
+> Removing xtrans-dev (1.3.5-1) ...
+> Removing x11proto-core-dev (7.0.26-1) ...
+> Removing xorg-sgml-doctools (1:1.11-1) ...
+> Processing triggers for man-db (2.7.0.2-5) ...
+> Processing triggers for libc-bin (2.21-0ubuntu4) ...
+> Processing triggers for doc-base (0.10.6) ...
+> Processing 3 removed doc-base files...
+> 
+> console_log_bad_mplayer_execute.txt
+> <http://buildroot-busybox.2317881.n4.nabble.com/file/n105280/console_log_bad_mplayer_execute.txt>  
+> console_log_bad_mplayer_rebuild.txt
+> <http://buildroot-busybox.2317881.n4.nabble.com/file/n105280/console_log_bad_mplayer_rebuild.txt>  
+> console_log_good_mplayer_execute.txt
+> <http://buildroot-busybox.2317881.n4.nabble.com/file/n105280/console_log_good_mplayer_execute.txt>  
+> console_log_good_mplayer_rebuild.txt
+> <http://buildroot-busybox.2317881.n4.nabble.com/file/n105280/console_log_good_mplayer_rebuild.txt>  
+> 
+> 
+> 
+> 
+> --
+> View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Bug-8206-New-mplayer-uses-host-xorg-development-files-tp104861p105280.html
+> Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 
 
 -- 
-Luca
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
