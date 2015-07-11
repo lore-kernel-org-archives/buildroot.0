@@ -1,35 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jul 2015 12:31:31 +0200
-Subject: [Buildroot] [PATCH 03/11] ejabberd: fix package version
-In-Reply-To: <1436349264-11797-4-git-send-email-johan.oudinet@gmail.com>
-References: <1436349264-11797-1-git-send-email-johan.oudinet@gmail.com>
- <1436349264-11797-4-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <20150711123131.24b7a4cf@free-electrons.com>
+Date: Sat, 11 Jul 2015 12:27:03 +0200
+Subject: [Buildroot] [git commit] erlang-p1-cache-tab: bump to version
+	f7ea12b
+Message-ID: <20150711103326.28E61803E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Johan Oudinet,
+commit: http://git.buildroot.net/buildroot/commit/?id=7926943ae56f9dec383aac0b5d1189a5993cba3c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  8 Jul 2015 11:54:16 +0200, Johan Oudinet wrote:
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> + AC_PREREQ(2.53)
-> +-AC_INIT(ejabberd, m4_esyscmd([echo `git describe --tags 2>/dev/null || echo 0.0` | sed 's/-g.*//;s/-/./' | tr -d '\012']), [ejabberd at process-one.net], [ejabberd])
-> ++AC_INIT(ejabberd, [15.06], [ejabberd at process-one.net], [ejabberd])
-> + REQUIRE_ERLANG_MIN="5.9.1 (Erlang/OTP R15B01)"
-> + REQUIRE_ERLANG_MAX="9.0.0 (No Max)"
-
-I've merged this patch, but I'm not too happy with it, because it
-has no chance to be upstreamed as is. Do you think this is a problem
-you could report upstream, so that they can fix it in a way that works
-both for them and for Buildroot?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
+index f651b06..6c5d98a 100644
+--- a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
++++ b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ERLANG_P1_CACHE_TAB_VERSION = 7b89d6a
++ERLANG_P1_CACHE_TAB_VERSION = f7ea12b
+ ERLANG_P1_CACHE_TAB_SITE = $(call github,processone,cache_tab,$(ERLANG_P1_CACHE_TAB_VERSION))
+ ERLANG_P1_CACHE_TAB_LICENSE = GPLv2+
+ ERLANG_P1_CACHE_TAB_LICENSE_FILES = COPYING
