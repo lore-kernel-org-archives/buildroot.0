@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 00:51:14 +0200
-Subject: [Buildroot] [git commit] docs/manual: document
-	<PKG>_STRIP_COMPONENTS
-Message-ID: <20150711225139.B09C88081D@busybox.osuosl.org>
+Date: Sun, 12 Jul 2015 00:51:34 +0200
+Subject: [Buildroot] [git commit] zic: use <PKG>_STRIP_COMPONENTS
+Message-ID: <20150711225139.D597B8081D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62803be844b19e32c952cfff995354cf263d0f5d
+commit: http://git.buildroot.net/buildroot/commit/?id=10a2b798a45ca13099091760a78408172e1164b2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-generic.txt |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ package/zic/zic.mk |    7 +------
+ 1 files changed, 1 insertions(+), 6 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index bc07667..4c12b42 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -303,6 +303,15 @@ information is (assuming the package name is +libfoo+) :
-      the package source code. Buildroot copies the contents of the
-      source directory into the package's build directory.
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index a768ac6..03e023a 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -7,14 +7,9 @@
+ ZIC_VERSION = 2015e
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = ftp://ftp.iana.org/tz/releases
++ZIC_STRIP_COMPONENTS = 0
+ ZIC_LICENSE = Public domain
  
-+* +LIBFOO_STRIP_COMPONENTS+ is the number of leading components
-+  (directories) that tar must strip from file names on extraction.
-+  The tarball for most packages has one leading component named
-+  "<pkg-name>-<pkg-version>", thus Buildroot passes
-+  --strip-components=1 to tar to remove it.
-+  For non-standard packages that don't have this component, or
-+  that have more than one leading component to strip, set this
-+  variable with the value to be passed to tar. Default: 1.
-+
- * +LIBFOO_DEPENDENCIES+ lists the dependencies (in terms of package
-   name) that are required for the current target package to
-   compile. These dependencies are guaranteed to be compiled and
+-# Don't strip any path components during extraction.
+-define HOST_ZIC_EXTRACT_CMDS
+-	gzip -d -c $(DL_DIR)/$(ZIC_SOURCE) \
+-		| $(TAR) --strip-components=0 -C $(@D) -xf -
+-endef
+-
+ define HOST_ZIC_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) zic
+ endef
