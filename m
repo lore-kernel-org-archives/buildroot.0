@@ -1,30 +1,40 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sat, 11 Jul 2015 15:27:35 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: add support for i.MX28 NAND
- format
-In-Reply-To: <55A1152A.6080702@mind.be>
-References: <1427645447-2419-1-git-send-email-joerg.krause@embedded.rocks>
- <20150711141137.23d3de04@free-electrons.com> <55A1152A.6080702@mind.be>
-Message-ID: <1436621255.8289.1.camel@embedded.rocks>
+From: glscantlen <glscantlen@gmail.com>
+Date: Sat, 11 Jul 2015 06:19:44 -0700 (PDT)
+Subject: [Buildroot] [Bug 8206] mplayer uses host xorg development files
+In-Reply-To: <20150707154301.C9535818F0@busybox.osuosl.org>
+References: <bug-8206-163@https.bugs.busybox.net/>
+ <20150707154301.C9535818F0@busybox.osuosl.org>
+Message-ID: <1436620784516-105279.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout, Thomas,
+to:	bugzilla at busybox.net
+date:	Tue, Jul 7, 2015 at 7:11 PM
+subject:	Re: [Bug 8206] mplayer uses host xorg development files
+mailed-by:	gmail.com
 
-On Sa, 2015-07-11 at 15:07 +0200, Arnout Vandecappelle wrote:
-> 
->  Unfortunately, the Sob dropped off because it was below the --- 
-> line.
-> 
->  Joerg, please pay attention in the future that the Sob (and CC and 
-> Reviewed
-> tags etc) is above the --- line.
-> 
 
-Sorry for this! I'll pay more attention the next time.
+Hello Thomas,
 
-Best regards
-J?rg Krause
+I am not familiar with the specific log you are asking for,
+but I searched the entire buildroot dir with:
+buildroot-2015.05$ grep -r ">> mplayer" ./
+I got no hits. Is there a logging configuration I may not have turn on ?
+Beware I am fairly new to BuildRoot ~3mo. experience.
+
+
+  -  What exact errors is "mplayer" giving you?
+
+I'll have to apt-get remove xorg-dev on another system.
+to rebuild a bad mplayer that generates the errors.
+I'll get them to you asap.
+
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Bug-8206-New-mplayer-uses-host-xorg-development-files-tp104861p105279.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
