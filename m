@@ -1,40 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 00:51:24 +0200
-Subject: [Buildroot] [git commit] nanocom: use <PKG>_STRIP_COMPONENTS
-Message-ID: <20150711225139.C26788081D@busybox.osuosl.org>
+Date: Sun, 12 Jul 2015 00:51:08 +0200
+Subject: [Buildroot] [git commit] Add <PKG>_STRIP_COMPONENTS for packages
+	with non-standard tarballs
+Message-ID: <20150711225139.A75F28081D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c0188d7a578ae7294e50f6c19b033ac150e914c
+commit: http://git.buildroot.net/buildroot/commit/?id=73b9a5ee02373df35426e36345ee5fc1eaccac3c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Usually package tarballs contain only a directory named
+"<pkg-name>-<pkg-version>" which contains the actual source tree. To properly
+extract the source files in $(BUILD_DIR), Buildroot passes the
+--strip-components=1 option to tar.
+
+Unfortunately a few packages ship in a non-standard way, with no root
+directory or with more than one. In Buildroot these packages must be handled by
+overriding the <PKG>_DOWNLOAD_CMDS.
+
+As the number of such packages is growing, introduce a <PKG>_STRIP_COMPONENTS
+variable for packages to request a number of components to strip different
+from 1.
+
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nanocom/nanocom.mk |    6 +-----
- 1 files changed, 1 insertions(+), 5 deletions(-)
+ package/pkg-generic.mk |   10 +++++++++-
+ 1 files changed, 9 insertions(+), 1 deletions(-)
 
-diff --git a/package/nanocom/nanocom.mk b/package/nanocom/nanocom.mk
-index f723951..293dd09 100644
---- a/package/nanocom/nanocom.mk
-+++ b/package/nanocom/nanocom.mk
-@@ -7,14 +7,10 @@
- NANOCOM_VERSION = 1.0
- NANOCOM_SOURCE = nanocom.tar.gz
- NANOCOM_SITE = http://downloads.sourceforge.net/project/nanocom/nanocom/v$(NANOCOM_VERSION)
-+NANOCOM_STRIP_COMPONENTS = 0
- NANOCOM_LICENSE = GPLv2+
- NANOCOM_LICENSE_FILES = COPYING
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 5f630e4..7000975 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -322,6 +322,14 @@ ifndef $(2)_SUBDIR
+  endif
+ endif
  
--# N.B. Don't strip any path components during extraction.
--define NANOCOM_EXTRACT_CMDS
--	gzip -d -c $(DL_DIR)/$(NANOCOM_SOURCE) | tar --strip-components=0 -C $(NANOCOM_DIR) -xf -
--endef
--
- define NANOCOM_BUILD_CMDS
- 	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" -C $(@D)
- endef
++ifndef $(2)_STRIP_COMPONENTS
++ ifdef $(3)_STRIP_COMPONENTS
++  $(2)_STRIP_COMPONENTS = $$($(3)_STRIP_COMPONENTS)
++ else
++  $(2)_STRIP_COMPONENTS ?= 1
++ endif
++endif
++
+ $(2)_SRCDIR		       = $$($(2)_DIR)/$$($(2)_SUBDIR)
+ $(2)_BUILDDIR		       ?= $$($(2)_SRCDIR)
+ 
+@@ -431,7 +439,7 @@ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
+ # default extract command
+ $(2)_EXTRACT_CMDS ?= \
+ 	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$(DL_DIR)/$$($(2)_SOURCE) | \
+-	$$(TAR) $$(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $$(TAR_OPTIONS) -)
++	$$(TAR) $$(TAR_STRIP_COMPONENTS)=$$($(2)_STRIP_COMPONENTS) -C $$($(2)_DIR) $$(TAR_OPTIONS) -)
+ 
+ # pre/post-steps hooks
+ $(2)_PRE_DOWNLOAD_HOOKS         ?=
