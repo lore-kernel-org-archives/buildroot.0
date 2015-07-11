@@ -1,32 +1,276 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jul 2015 12:27:17 +0200
-Subject: [Buildroot] [git commit] erlang-p1-stun: bump to version a3dce07
-Message-ID: <20150711103326.54FDD803E5@busybox.osuosl.org>
+Date: Sat, 11 Jul 2015 12:33:13 +0200
+Subject: [Buildroot] [git commit] binutils: fix xtensa gas segfault with
+	--text-section-literals
+Message-ID: <20150711103326.733B0803E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3789597275f7557110b572f492ece3c084932bc8
+commit: http://git.buildroot.net/buildroot/commit/?id=c7e1c58fac893943d7679cc2905dab555f8d4c73
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Building libgcc with TARGET_ABI flags results in assembler segfault on
+xtensa, because code in sections .init and .fini emits literals w/o
+.literal_position directive. This patch turns the segfault into assembly
+error.
+
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang-p1-stun/erlang-p1-stun.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...x-gas-segfault-with-text-section-literals.patch |   56 ++++++++++++++++++++
+ ...x-gas-segfault-with-text-section-literals.patch |   56 ++++++++++++++++++++
+ ...x-gas-segfault-with-text-section-literals.patch |   56 ++++++++++++++++++++
+ ...x-gas-segfault-with-text-section-literals.patch |   56 ++++++++++++++++++++
+ 4 files changed, 224 insertions(+), 0 deletions(-)
 
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.mk b/package/erlang-p1-stun/erlang-p1-stun.mk
-index 7b4b1a9..7920347 100644
---- a/package/erlang-p1-stun/erlang-p1-stun.mk
-+++ b/package/erlang-p1-stun/erlang-p1-stun.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ERLANG_P1_STUN_VERSION = a7c07b6
-+ERLANG_P1_STUN_VERSION = a3dce07
- ERLANG_P1_STUN_SITE = $(call github,processone,stun,$(ERLANG_P1_STUN_VERSION))
- ERLANG_P1_STUN_LICENSE = GPLv2+
- ERLANG_P1_STUN_LICENSE_FILES = COPYING
+diff --git a/package/binutils/2.22/912-xtensa-fix-gas-segfault-with-text-section-literals.patch b/package/binutils/2.22/912-xtensa-fix-gas-segfault-with-text-section-literals.patch
+new file mode 100644
+index 0000000..4a3de2c
+--- /dev/null
++++ b/package/binutils/2.22/912-xtensa-fix-gas-segfault-with-text-section-literals.patch
+@@ -0,0 +1,56 @@
++From 2d0522e76e4afeeb2e104e0a4332d94fa0d2fbf6 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sun, 17 May 2015 06:46:15 +0300
++Subject: [PATCH] xtensa: fix gas segfault with --text-section-literals
++
++When --text-section-literals is used and code in the .init or .fini
++emits literal in the absence of .literal_position, xtensa_move_literals
++segfaults.
++
++Check that search_frag is non-NULL in the xtensa_move_literals and
++report error otherwise.
++
++2015-05-26  Max Filippov  <jcmvbkbc@gmail.com>
++gas/
++	* config/tc-xtensa.c (xtensa_move_literals): Check that
++	search_frag is non-NULL. Report error if literal frag is not
++	found.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: 4de0562a4c69fef4952aa7e19d7bda359f02e8b4
++Changes to ChangeLog are dropped.
++
++ gas/config/tc-xtensa.c | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index 31c0b6b..18307c1 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -10808,13 +10808,21 @@ xtensa_move_literals (void)
++       frchain_to = NULL;
++       frag_splice = &(frchain_from->frch_root);
++ 
++-      while (!search_frag->tc_frag_data.literal_frag)
+++      while (search_frag && !search_frag->tc_frag_data.literal_frag)
++ 	{
++ 	  gas_assert (search_frag->fr_fix == 0
++ 		  || search_frag->fr_type == rs_align);
++ 	  search_frag = search_frag->fr_next;
++ 	}
++ 
+++      if (!search_frag)
+++	{
+++	  search_frag = frchain_from->frch_root;
+++	  as_bad_where (search_frag->fr_file, search_frag->fr_line,
+++			_("literal pool location required for text-section-literals; specify with .literal_position"));
+++	  continue;
+++	}
+++
++       gas_assert (search_frag->tc_frag_data.literal_frag->fr_subtype
++ 	      == RELAX_LITERAL_POOL_BEGIN);
++       xtensa_switch_section_emit_state (&state, segment->seg, 0);
++-- 
++1.8.1.4
++
+diff --git a/package/binutils/2.23.2/912-xtensa-fix-gas-segfault-with-text-section-literals.patch b/package/binutils/2.23.2/912-xtensa-fix-gas-segfault-with-text-section-literals.patch
+new file mode 100644
+index 0000000..4a3de2c
+--- /dev/null
++++ b/package/binutils/2.23.2/912-xtensa-fix-gas-segfault-with-text-section-literals.patch
+@@ -0,0 +1,56 @@
++From 2d0522e76e4afeeb2e104e0a4332d94fa0d2fbf6 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sun, 17 May 2015 06:46:15 +0300
++Subject: [PATCH] xtensa: fix gas segfault with --text-section-literals
++
++When --text-section-literals is used and code in the .init or .fini
++emits literal in the absence of .literal_position, xtensa_move_literals
++segfaults.
++
++Check that search_frag is non-NULL in the xtensa_move_literals and
++report error otherwise.
++
++2015-05-26  Max Filippov  <jcmvbkbc@gmail.com>
++gas/
++	* config/tc-xtensa.c (xtensa_move_literals): Check that
++	search_frag is non-NULL. Report error if literal frag is not
++	found.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: 4de0562a4c69fef4952aa7e19d7bda359f02e8b4
++Changes to ChangeLog are dropped.
++
++ gas/config/tc-xtensa.c | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index 31c0b6b..18307c1 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -10808,13 +10808,21 @@ xtensa_move_literals (void)
++       frchain_to = NULL;
++       frag_splice = &(frchain_from->frch_root);
++ 
++-      while (!search_frag->tc_frag_data.literal_frag)
+++      while (search_frag && !search_frag->tc_frag_data.literal_frag)
++ 	{
++ 	  gas_assert (search_frag->fr_fix == 0
++ 		  || search_frag->fr_type == rs_align);
++ 	  search_frag = search_frag->fr_next;
++ 	}
++ 
+++      if (!search_frag)
+++	{
+++	  search_frag = frchain_from->frch_root;
+++	  as_bad_where (search_frag->fr_file, search_frag->fr_line,
+++			_("literal pool location required for text-section-literals; specify with .literal_position"));
+++	  continue;
+++	}
+++
++       gas_assert (search_frag->tc_frag_data.literal_frag->fr_subtype
++ 	      == RELAX_LITERAL_POOL_BEGIN);
++       xtensa_switch_section_emit_state (&state, segment->seg, 0);
++-- 
++1.8.1.4
++
+diff --git a/package/binutils/2.24/912-xtensa-fix-gas-segfault-with-text-section-literals.patch b/package/binutils/2.24/912-xtensa-fix-gas-segfault-with-text-section-literals.patch
+new file mode 100644
+index 0000000..4a3de2c
+--- /dev/null
++++ b/package/binutils/2.24/912-xtensa-fix-gas-segfault-with-text-section-literals.patch
+@@ -0,0 +1,56 @@
++From 2d0522e76e4afeeb2e104e0a4332d94fa0d2fbf6 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sun, 17 May 2015 06:46:15 +0300
++Subject: [PATCH] xtensa: fix gas segfault with --text-section-literals
++
++When --text-section-literals is used and code in the .init or .fini
++emits literal in the absence of .literal_position, xtensa_move_literals
++segfaults.
++
++Check that search_frag is non-NULL in the xtensa_move_literals and
++report error otherwise.
++
++2015-05-26  Max Filippov  <jcmvbkbc@gmail.com>
++gas/
++	* config/tc-xtensa.c (xtensa_move_literals): Check that
++	search_frag is non-NULL. Report error if literal frag is not
++	found.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: 4de0562a4c69fef4952aa7e19d7bda359f02e8b4
++Changes to ChangeLog are dropped.
++
++ gas/config/tc-xtensa.c | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index 31c0b6b..18307c1 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -10808,13 +10808,21 @@ xtensa_move_literals (void)
++       frchain_to = NULL;
++       frag_splice = &(frchain_from->frch_root);
++ 
++-      while (!search_frag->tc_frag_data.literal_frag)
+++      while (search_frag && !search_frag->tc_frag_data.literal_frag)
++ 	{
++ 	  gas_assert (search_frag->fr_fix == 0
++ 		  || search_frag->fr_type == rs_align);
++ 	  search_frag = search_frag->fr_next;
++ 	}
++ 
+++      if (!search_frag)
+++	{
+++	  search_frag = frchain_from->frch_root;
+++	  as_bad_where (search_frag->fr_file, search_frag->fr_line,
+++			_("literal pool location required for text-section-literals; specify with .literal_position"));
+++	  continue;
+++	}
+++
++       gas_assert (search_frag->tc_frag_data.literal_frag->fr_subtype
++ 	      == RELAX_LITERAL_POOL_BEGIN);
++       xtensa_switch_section_emit_state (&state, segment->seg, 0);
++-- 
++1.8.1.4
++
+diff --git a/package/binutils/2.25/912-xtensa-fix-gas-segfault-with-text-section-literals.patch b/package/binutils/2.25/912-xtensa-fix-gas-segfault-with-text-section-literals.patch
+new file mode 100644
+index 0000000..4a3de2c
+--- /dev/null
++++ b/package/binutils/2.25/912-xtensa-fix-gas-segfault-with-text-section-literals.patch
+@@ -0,0 +1,56 @@
++From 2d0522e76e4afeeb2e104e0a4332d94fa0d2fbf6 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sun, 17 May 2015 06:46:15 +0300
++Subject: [PATCH] xtensa: fix gas segfault with --text-section-literals
++
++When --text-section-literals is used and code in the .init or .fini
++emits literal in the absence of .literal_position, xtensa_move_literals
++segfaults.
++
++Check that search_frag is non-NULL in the xtensa_move_literals and
++report error otherwise.
++
++2015-05-26  Max Filippov  <jcmvbkbc@gmail.com>
++gas/
++	* config/tc-xtensa.c (xtensa_move_literals): Check that
++	search_frag is non-NULL. Report error if literal frag is not
++	found.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: 4de0562a4c69fef4952aa7e19d7bda359f02e8b4
++Changes to ChangeLog are dropped.
++
++ gas/config/tc-xtensa.c | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index 31c0b6b..18307c1 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -10808,13 +10808,21 @@ xtensa_move_literals (void)
++       frchain_to = NULL;
++       frag_splice = &(frchain_from->frch_root);
++ 
++-      while (!search_frag->tc_frag_data.literal_frag)
+++      while (search_frag && !search_frag->tc_frag_data.literal_frag)
++ 	{
++ 	  gas_assert (search_frag->fr_fix == 0
++ 		  || search_frag->fr_type == rs_align);
++ 	  search_frag = search_frag->fr_next;
++ 	}
++ 
+++      if (!search_frag)
+++	{
+++	  search_frag = frchain_from->frch_root;
+++	  as_bad_where (search_frag->fr_file, search_frag->fr_line,
+++			_("literal pool location required for text-section-literals; specify with .literal_position"));
+++	  continue;
+++	}
+++
++       gas_assert (search_frag->tc_frag_data.literal_frag->fr_subtype
++ 	      == RELAX_LITERAL_POOL_BEGIN);
++       xtensa_switch_section_emit_state (&state, segment->seg, 0);
++-- 
++1.8.1.4
++
