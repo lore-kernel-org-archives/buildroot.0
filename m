@@ -1,86 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Jul 2015 09:43:44 +0200
-Subject: [Buildroot] [PATCH v3] dieharder: new package
-In-Reply-To: <55A050E6.6020505@openwide.fr>
-References: <1431848603-30142-1-git-send-email-julien.viarddegalbert@openwide.fr>
- <55A050E6.6020505@openwide.fr>
-Message-ID: <20150711074344.GA7573@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 11 Jul 2015 09:47:54 +0200
+Subject: [Buildroot] [PATCH v2] toolchain-external: fix gdbserver
+ copying for external arc-2014.12 tools
+In-Reply-To: <1427271071-9541-1-git-send-email-abrodkin@synopsys.com>
+References: <1427271071-9541-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <55A0CA2A.1010308@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, Romain, All,
+Hi Alexey,
 
-On 2015-07-11 01:10 +0200, Romain Naour spake thusly:
-> Le 17/05/2015 09:43, julien.viarddegalbert at openwide.fr a ?crit :
-> > From: Julien Viard de Galbert <julien@vdg.name>
-> > 
-> > Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
-[--SNIP--]
-> > diff --git a/package/dieharder/dieharder.mk b/package/dieharder/dieharder.mk
-> > new file mode 100644
-> > index 0000000..2a3d46b
-> > --- /dev/null
-> > +++ b/package/dieharder/dieharder.mk
-> > @@ -0,0 +1,26 @@
-> > +################################################################################
-> > +#
-> > +# dieharder
-> > +#
-> > +################################################################################
-> > +
-> > +DIEHARDER_VERSION = 3.31.1
-> > +DIEHARDER_SITE = http://www.phy.duke.edu/~rgb/General/dieharder/
-> > +DIEHARDER_SOURCE = dieharder-$(DIEHARDER_VERSION).tgz
-> > +DIEHARDER_SUBDIR = dieharder-$(DIEHARDER_VERSION)
-> > +DIEHARDER_LICENSE = GPLv2b
-> > +DIEHARDER_LICENSE_FILES = $(DIEHARDER_SUBDIR)/COPYING
-> > +DIEHARDER_DEPENDENCIES = gsl
-> > +
-> > +DIEHARDER_CONF_OPTS = --includedir=$(STAGING_DIR)/usr/include
-> > +# fix endiannes detection
-> > +ifeq ($(BR2_ENDIAN),"BIG")
-> > +DIEHARDER_CONF_OPTS += ac_cv_c_endian=big
-> > +else
-> > +DIEHARDER_CONF_OPTS += ac_cv_c_endian=little
-> > +endif
+Le 25/03/2015 09:11, Alexey Brodkin a ?crit :
+> Historically in pre-built ARC GNU tools gdbserver is located in
+> top-level "target-bin" folder.
 > 
-> There is a build issue with musl libc due to missing M_PI when _GNU_SOURCE is
-> not defined.
+> Because of that fact if BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is
+> selected Buildroot won't find gdbserver (it looks within
+> SYSROOT/ARCH_SYSROOT folder).
 > 
-> I suggest you add it in CFLAGS by using DIEHARDER_MAKE_OPTS:
-> 
-> DIEHARDER_MAKE_OPTS = CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+> Simplest solution is to use TOOLCHAIN_EXTERNAL_FIXUP_CMDS where copy
+> gdbserver from "target-bin" folder into SYSROOT/usr/bin.
 
-Better yet: patch dieharder to define it in the source, and submit that
-patch upstream.
+Since this patch, the arc 2014.12 prebuild toolchain as been marked as broken
+[1]. This patch is still needed ?
 
-Regards,
-Yann E. MORIN.
+[1]
+http://git.buildroot.net/buildroot/commit/?id=cd3c00fbc01e99496f28276c62182963cada0979
 
-> Don't forget to take into account Thomas's comment for the next version ;-)
-> 
-> Best regards,
-> Romain
-> 
-> > +
-> > +# parallel build fail, disable it
-> > +DIEHARDER_MAKE=$(MAKE1)
-> > +
-> > +$(eval $(autotools-package))
-> > 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Best regards,
+Romain Naour
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> Changes in v2:
+>  [1] "install" command is used instead of "cp"
+>  [2] copy only "gdbserver" instead of everything from "target_bin" to sysroot
+> ---
+>  toolchain/toolchain-external/toolchain-external.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index c0429bb..fe709db 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -396,6 +396,10 @@ else
+>  TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS = be
+>  endif
+>  TOOLCHAIN_EXTERNAL_SOURCE = arc_gnu_2014.12_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_CORE)_linux_install.tar.gz
+> +define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+> +	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
+> +	install -m 0755 -D $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/target-bin/gdbserver $${SYSROOT_DIR}/usr/bin/gdbserver
+> +endef
+>  else
+>  # Custom toolchain
+>  TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+> 
