@@ -1,9 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sat, 11 Jul 2015 16:15:06 +0200
-Subject: [Buildroot] [PATCH 3/7] intel-microcode: use <PKG>_STRIP_COMPONENTS
+Date: Sat, 11 Jul 2015 16:15:07 +0200
+Subject: [Buildroot] [PATCH 4/7] nanocom: use <PKG>_STRIP_COMPONENTS
 In-Reply-To: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
 References: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1436624110-20428-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1436624110-20428-4-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/intel-microcode/intel-microcode.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/nanocom/nanocom.mk | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 4e8ea906c624..23c4b3ebfb47 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -7,17 +7,17 @@
- INTEL_MICROCODE_VERSION = 20150107
- INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
- INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24616/eng
-+INTEL_MICROCODE_STRIP_COMPONENTS = 0
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license.txt
- INTEL_MICROCODE_REDISTRIBUTE = NO
+diff --git a/package/nanocom/nanocom.mk b/package/nanocom/nanocom.mk
+index f723951281f7..293dd091fc9d 100644
+--- a/package/nanocom/nanocom.mk
++++ b/package/nanocom/nanocom.mk
+@@ -7,14 +7,10 @@
+ NANOCOM_VERSION = 1.0
+ NANOCOM_SOURCE = nanocom.tar.gz
+ NANOCOM_SITE = http://downloads.sourceforge.net/project/nanocom/nanocom/v$(NANOCOM_VERSION)
++NANOCOM_STRIP_COMPONENTS = 0
+ NANOCOM_LICENSE = GPLv2+
+ NANOCOM_LICENSE_FILES = COPYING
  
 -# N.B. Don't strip any path components during extraction.
--define INTEL_MICROCODE_EXTRACT_CMDS
--	gzip -d -c $(DL_DIR)/$(INTEL_MICROCODE_SOURCE) | \
--	tar --strip-components=0 -C $(@D) -xf -
-+define INTEL_MICROCODE_EXTRACT_LICENSE
- 	head -n 33 $(@D)/microcode.dat > $(@D)/license.txt
+-define NANOCOM_EXTRACT_CMDS
+-	gzip -d -c $(DL_DIR)/$(NANOCOM_SOURCE) | tar --strip-components=0 -C $(NANOCOM_DIR) -xf -
+-endef
+-
+ define NANOCOM_BUILD_CMDS
+ 	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" -C $(@D)
  endef
- 
-+INTEL_MICROCODE_POST_EXTRACT_HOOKS += INTEL_MICROCODE_EXTRACT_LICENSE
-+
- define INTEL_MICROCODE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/microcode.dat \
- 		$(TARGET_DIR)/usr/share/misc/intel-microcode.dat
 -- 
 1.9.1
