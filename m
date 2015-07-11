@@ -1,90 +1,149 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 11 Jul 2015 13:46:35 +0200
-Subject: [Buildroot] [PATCH v4 2015.08 2/4] support/scripts: add
- size-stats script
-In-Reply-To: <CANn-YGSgXy4fTJtw3mJyFF-4zkWbBh_hg_qWNLcFu5cdjk3XbA@mail.gmail.com>
-References: <1432591007-27689-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1432591007-27689-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <CANn-YGSgXy4fTJtw3mJyFF-4zkWbBh_hg_qWNLcFu5cdjk3XbA@mail.gmail.com>
-Message-ID: <55A1021B.8060200@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Jul 2015 13:48:42 +0200
+Subject: [Buildroot] [git commit] boot/uboot: add support for i.MX28 NAND
+	format
+Message-ID: <20150711115946.0BD6281612@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Clayton, Thomas, all
+commit: http://git.buildroot.net/buildroot/commit/?id=4dd4b9ace58b2606b35b36a784a02283dace42f8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 03/06/2015 17:50, Clayton Shotwell a ?crit :
-> Thomas,
-> 
-> On Mon, May 25, 2015 at 4:56 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> This new script uses the data collected by the step_pkg_size
->> instrumentation hook to generate a pie chart of the size contribution
->> of each package to the target root filesystem, and two CSV files with
->> statistics about the package size and file size. To achieve this, it
->> looks at each file in $(TARGET_DIR), and using the
->> packages-file-list.txt information collected by the step_pkg_size
->> hook, it determines to which package the file belongs. It is therefore
->> able to give the size installed by each package.
->>
->> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> ---
->>  support/scripts/size-stats | 238 +++++++++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 238 insertions(+)
->>  create mode 100755 support/scripts/size-stats
->>
->> diff --git a/support/scripts/size-stats b/support/scripts/size-stats
->> new file mode 100755
->> index 0000000..48a64cd
->> --- /dev/null
->> +++ b/support/scripts/size-stats
-> 
->> +import sys
->> +import os
->> +import os.path
->> +import argparse
->> +import csv
->> +import collections
->> +
->> +try:
-> 
-> Would it be possible to add in the following lines here to ensure the
-> graphing does not try to connect to an X-server?
-> 
-> import matplotlib
-> matplotlib.use('Agg')
-> 
-> I ran into an issue testing this on my setup where I ssh into my build
-> server using screen. I found this solution on stack overflow at the
-> following link.
-> 
-> http://stackoverflow.com/questions/4706451/how-to-save-a-figure-remotely-with-pylab/4706614#4706614
+Allow to generate 'u-boot.nand', Freescale i.MX28 BootStream format (.sb)
+with a header for booting from NAND flash.
 
-With Samuel, we are ok to import matplitlib entirely to ensure that it doesn't
-try to connect to X-server.
-The overhead seems negligible, I not able to see any difference with or without
-import matplotlib.
+There are two possibilities when preparing an image writable to NAND flash:
+1) The NAND was not written at all yet or the BCB (Boot Control Blocks) is
+   broken. In this case, the NAND image 'u-boot.nand' needs to written.
+2) The NAND flash was already written with a good BCB. This applies after
+   'u-boot.nand' was correctly written. There is no need to write the BCB
+   again. In this case, the bootloader can be upgraded by writing 'u-boot.sb'.
 
-Best regards,
-Romain Naour
+To satisfy both cases 'u-boot.nand' as well as the make target 'u-boot.sb' are
+copied to the binaries directory.
 
-> 
->> +    import matplotlib.font_manager as fm
->> +    import matplotlib.pyplot as plt
->> +except ImportError:
->> +    sys.stderr.write("You need python-matplotlib to generate the size graph\n")
->> +    exit(1)
-> 
-> Thanks,
-> Clayton
-> 
-> Clayton Shotwell
-> Senior Software Engineer, Rockwell Collins
-> clayton.shotwell at rockwellcollins.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+mxsboot for NAND images needs all three parameters typed in as integer values
+(hex values do not work). The default values choosen are typical sizes for a
+NAND flash.
+
+For more information see:
+http://www.denx-cs.de/doku/?q=m28evkrunuboot
+
+Commit Note: This patch is based on top of
+"[PATCH v2 1/2] boot/uboot: add support for i.MX28 SD format"
+http://patchwork.ozlabs.org/patch/453116/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/uboot/Config.in |   57 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ boot/uboot/uboot.mk  |   12 ++++++++++
+ 2 files changed, 69 insertions(+), 0 deletions(-)
+
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index e884cc0..fa1741c 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -142,6 +142,63 @@ config BR2_TARGET_UBOOT_FORMAT_SD
+ 
+ 	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
+ 
++config BR2_TARGET_UBOOT_FORMAT_NAND
++	depends on BR2_arm
++	bool "u-boot.nand"
++	help
++	  This is Freescale i.MX28 BootStream format (.sb), with a header
++	  for booting from a NAND flash.
++
++	  U-boot includes an mxsboot tool to generate this format,
++	  starting from 2011.12.
++
++	  There are two possibilities when preparing an image writable to
++	  NAND flash:
++	  1) The NAND was not written at all yet or the BCB (Boot Control
++	  Blocks) is broken. In this case, the NAND image 'u-boot.nand'
++	  needs to written.
++	  2) The NAND flash was already written with a good BCB. This
++	  applies after 'u-boot.nand' was correctly written. There is no
++	  need to write the BCB again. In this case, the bootloader can be
++	  upgraded by writing 'u-boot.sb'.
++
++	  To satisfy both cases, the 'u-boot.nand' image obtained from
++	  mxsboot as well as the U-Boot make target 'u-boot.sb' are copied
++	  to the binaries directory.
++
++	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
++
++if BR2_TARGET_UBOOT_FORMAT_NAND
++
++config BR2_TARGET_UBOOT_FORMAT_NAND_PAGE_SIZE
++	int "NAND page size"
++	default 2048
++	help
++	  The NAND page size of the targets NAND flash in bytes as a
++	  decimal integer value.
++
++	  The value provided here is passed to the -w option of mxsboot.
++
++config BR2_TARGET_UBOOT_FORMAT_NAND_OOB_SIZE
++	int "NAND OOB size"
++	default 64
++	help
++	  The NAND OOB size of the targets NAND flash in bytes as a
++	  decimal integer value.
++
++	  The value provided here is passed to the -o option of mxsboot.
++
++config BR2_TARGET_UBOOT_FORMAT_NAND_ERASE_SIZE
++	int "NAND erase size"
++	default 131072
++	help
++	  The NAND eraseblock size of the targets NAND flash in bytes as
++	  a decimal integer value.
++
++	  The value provided here is passed to the -e option of mxsboot.
++
++endif
++
+ config BR2_TARGET_UBOOT_FORMAT_CUSTOM
+ 	bool "Custom (specify below)"
+ 	help
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 8c10c61..2cfff28 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -58,6 +58,10 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SD),y)
+ UBOOT_BIN = u-boot.sd
+ UBOOT_MAKE_TARGET = u-boot.sb
+ UBOOT_DEPENDENCIES += host-elftosb
++else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND),y)
++UBOOT_BIN = u-boot.nand
++UBOOT_MAKE_TARGET = u-boot.sb
++UBOOT_DEPENDENCIES += host-elftosb
+ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM),y)
+ UBOOT_BIN = $(call qstrip,$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME))
+ else
+@@ -133,6 +137,12 @@ define UBOOT_BUILD_CMDS
+ 		$(UBOOT_MAKE_TARGET)
+ 	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
+ 		$(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
++	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
++		$(@D)/tools/mxsboot \
++			-w $(BR2_TARGET_UBOOT_FORMAT_NAND_PAGE_SIZE)	\
++			-o $(BR2_TARGET_UBOOT_FORMAT_NAND_OOB_SIZE)	\
++			-e $(BR2_TARGET_UBOOT_FORMAT_NAND_ERASE_SIZE)	\
++			nand $(@D)/u-boot.sb $(@D)/u-boot.nand)
+ endef
+ 
+ define UBOOT_BUILD_OMAP_IFT
+@@ -142,6 +152,8 @@ endef
+ 
+ define UBOOT_INSTALL_IMAGES_CMDS
+ 	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
++	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
++		cp -dpf $(@D)/$(UBOOT_MAKE_TARGET) $(BINARIES_DIR))
+ 	$(if $(BR2_TARGET_UBOOT_SPL),
+ 		cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
+ 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
