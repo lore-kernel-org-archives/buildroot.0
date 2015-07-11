@@ -1,45 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 00:51:30 +0200
-Subject: [Buildroot] [git commit] tzdata: use <PKG>_STRIP_COMPONENTS
-Message-ID: <20150711225139.CCA048081D@busybox.osuosl.org>
+Date: Sun, 12 Jul 2015 00:51:19 +0200
+Subject: [Buildroot] [git commit] intel-microcode: use <PKG>_STRIP_COMPONENTS
+Message-ID: <20150711225139.B97BD8081D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8fe6ee1631cc3713247d29d5f45dfe280e176b16
+commit: http://git.buildroot.net/buildroot/commit/?id=570566ddc5c0222d89484e8865ed79ba4d543aad
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tzdata/tzdata.mk |    6 +-----
- 1 files changed, 1 insertions(+), 5 deletions(-)
+ package/intel-microcode/intel-microcode.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index eb6da6c..c38d4fe 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -7,6 +7,7 @@
- TZDATA_VERSION = 2015e
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = ftp://ftp.iana.org/tz/releases
-+TZDATA_STRIP_COMPONENTS = 0
- TZDATA_DEPENDENCIES = host-tzdata
- HOST_TZDATA_DEPENDENCIES = host-zic
- TZDATA_LICENSE = Public domain
-@@ -45,11 +46,6 @@ define TZDATA_INSTALL_TARGET_CMDS
- 	fi
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 4e8ea90..23c4b3e 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -7,17 +7,17 @@
+ INTEL_MICROCODE_VERSION = 20150107
+ INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
+ INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24616/eng
++INTEL_MICROCODE_STRIP_COMPONENTS = 0
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license.txt
+ INTEL_MICROCODE_REDISTRIBUTE = NO
+ 
+-# N.B. Don't strip any path components during extraction.
+-define INTEL_MICROCODE_EXTRACT_CMDS
+-	gzip -d -c $(DL_DIR)/$(INTEL_MICROCODE_SOURCE) | \
+-	tar --strip-components=0 -C $(@D) -xf -
++define INTEL_MICROCODE_EXTRACT_LICENSE
+ 	head -n 33 $(@D)/microcode.dat > $(@D)/license.txt
  endef
  
--define HOST_TZDATA_EXTRACT_CMDS
--	gzip -d -c $(DL_DIR)/$(TZDATA_SOURCE) \
--		| $(TAR) --strip-components=0 -C $(@D) -xf -
--endef
--
- define HOST_TZDATA_BUILD_CMDS
- 	(cd $(@D); \
- 		for zone in $(TZDATA_ZONELIST); do \
++INTEL_MICROCODE_POST_EXTRACT_HOOKS += INTEL_MICROCODE_EXTRACT_LICENSE
++
+ define INTEL_MICROCODE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/microcode.dat \
+ 		$(TARGET_DIR)/usr/share/misc/intel-microcode.dat
