@@ -1,56 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 00:50:51 +0200
-Subject: [Buildroot] [PATCH v3] pkg-generic: Fix host _DL_VERSION corner
- case
-In-Reply-To: <1436629214-32106-1-git-send-email-arnout@mind.be>
-References: <1436628092-30192-1-git-send-email-arnout@mind.be>
- <1436629214-32106-1-git-send-email-arnout@mind.be>
-Message-ID: <20150712005051.528b8bd2@free-electrons.com>
+Date: Sun, 12 Jul 2015 00:51:24 +0200
+Subject: [Buildroot] [git commit] nanocom: use <PKG>_STRIP_COMPONENTS
+Message-ID: <20150711225139.C26788081D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+commit: http://git.buildroot.net/buildroot/commit/?id=6c0188d7a578ae7294e50f6c19b033ac150e914c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 11 Jul 2015 17:40:14 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> 
-> In the case when a package has a host version, the package is dependent
-> on the host version, and the version contains a '/', the host version
-> does not evaluate properly. The host version will contain a '_' instead
-> of a '/', resulting in a failed download. To solve this corner case, add
-> a check to see if the _DL_VERSION of the package has been defined before
-> defining the host _DL_VERSION. If the package _DL_VERSION has not been
-> defined yet, then the version string has not been formatted yet and is
-> still good to use.
-> 
-> [Arnout: further simplify things by lifting the override over _VERSION
-> out of the condition - it is always the same.]
-> 
-> This error occured on a package in a BR2_EXTERNAL that uses a git repo
-> for its remote storage with '/' in the tag names. I do not believe this
-> affects any packages in the Buildroot mainline but it could in the
-> future.
-> 
-> [Arnout: rebase on master, fix existing whitespace error in the else
-> branch.]
-> 
-> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> v3: Re-instate Clayton as author - sorry about that
-> v2: rebase, fix whitespace error, lift _VERSION assignment out of condition
-> ---
->  package/pkg-generic.mk | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nanocom/nanocom.mk |    6 +-----
+ 1 files changed, 1 insertions(+), 5 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nanocom/nanocom.mk b/package/nanocom/nanocom.mk
+index f723951..293dd09 100644
+--- a/package/nanocom/nanocom.mk
++++ b/package/nanocom/nanocom.mk
+@@ -7,14 +7,10 @@
+ NANOCOM_VERSION = 1.0
+ NANOCOM_SOURCE = nanocom.tar.gz
+ NANOCOM_SITE = http://downloads.sourceforge.net/project/nanocom/nanocom/v$(NANOCOM_VERSION)
++NANOCOM_STRIP_COMPONENTS = 0
+ NANOCOM_LICENSE = GPLv2+
+ NANOCOM_LICENSE_FILES = COPYING
+ 
+-# N.B. Don't strip any path components during extraction.
+-define NANOCOM_EXTRACT_CMDS
+-	gzip -d -c $(DL_DIR)/$(NANOCOM_SOURCE) | tar --strip-components=0 -C $(NANOCOM_DIR) -xf -
+-endef
+-
+ define NANOCOM_BUILD_CMDS
+ 	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" -C $(@D)
+ endef
