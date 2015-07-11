@@ -1,30 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jul 2015 09:31:04 +0200
-Subject: [Buildroot] [PATCH v8 14/16] squashfs: Add xattr support
-In-Reply-To: <1436570882-56442-15-git-send-email-clayton.shotwell@rockwellcollins.com>
-References: <1436570882-56442-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1436570882-56442-15-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <20150711093104.71b9c4df@free-electrons.com>
+Date: Sat, 11 Jul 2015 09:31:37 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/linux-firmware: add missing
+ nvs file for the wl18xx firmware
+In-Reply-To: <1436401523-7916-1-git-send-email-mac@vrvana.com>
+References: <1436401523-7916-1-git-send-email-mac@vrvana.com>
+Message-ID: <20150711093137.3b560c94@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Clayton Shotwell,
+Dear Marc-Andre Chenier,
 
-On Fri, 10 Jul 2015 18:28:00 -0500, Clayton Shotwell wrote:
-> Adding extended attribute support for the squashfs tools when the attr
-> package is selected. This is needed for SELinux support.
+On Wed, 8 Jul 2015 20:25:23 -0400, Marc-Andre Chenier wrote:
+> The wl18xx shares the same wlcore as the wl1271 and needs the 
+> wl1271-nvs.bin file.  Also, refactor some comments and list items.
 > 
-> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> 
+> Signed-off-by: Marc-Andre Chenier <mac@vrvana.com>
 > ---
-> Changes v7 -> v8:
->   - Reverted changes to the host build options to leave xattr support
->     disabled due to too many host system dependencies issues.
->   - Cleaned up the target xattr options and added a dependency on attr
->     to ensure it is built before squashfs (Suggested by Thomas P.)
+>  Changes v1 -> v2:
+>    - put symbolic link comment before list (suggested by Yann E. Morin)
+>    - move symbolic link into list (suggested by Yann E. Morin)
 
 Applied, thanks.
 
