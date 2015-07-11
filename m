@@ -1,66 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jul 2015 13:03:47 +0200
-Subject: [Buildroot] [git commit] xdriver_xf86-video-imx-viv: bump to
-	version 3.10.53-1.1.0 GA
-Message-ID: <20150711112619.BA68780831@busybox.osuosl.org>
+Date: Sat, 11 Jul 2015 12:53:39 +0200
+Subject: [Buildroot] [git commit] freescale-imx: bump to 3.10.53-1.1.0 GA
+	release
+Message-ID: <20150711112619.9019E7FC81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=73930a6bb02a2f6a77beba4ffd760096007ed526
+commit: http://git.buildroot.net/buildroot/commit/?id=3b9327f2645374861bcd2560a34cf0e6796d792e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Previous patch for the LoadExtension call isn't needed any more.
+This version now only applies to imx-lib and firmware-imx. All other
+Freescale packages have their own version from now on.
 
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/f0440193ddb3eafa1b00aed294ed6dbd3e4d604d
+https://github.com/Freescale/meta-fsl-arm/commit/80ad0f2e5447c1fef976ff9a494d39f78b0eb6d1
+https://github.com/Freescale/meta-fsl-arm/commit/b12d193092484c02d7ccf2e6d98c4887aa41b408
 
-Switched back to use FREESCALE_IMX_VERSION.
-
-The following xorg.conf was used in order to force the use of the
-vivante module:
-https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
+Those packages have been implicitely tested through gstreamer as the plugins
+rely on them for vpu decoding for instance:
+ # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
+ # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
+ # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+   matroskademux ! imxvpudec ! imxipuvideosink
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Fix-LoadExtenions.patch                   |   15 ---------------
- .../xdriver_xf86-video-imx-viv.mk                  |    2 +-
- 2 files changed, 1 insertions(+), 16 deletions(-)
+ package/freescale-imx/freescale-imx.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch b/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
-deleted file mode 100644
-index 3e2d47c..0000000
---- a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Fix compilation with Xorg xserver 1.16.
--
--Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
--
----- a/EXA/src/vivante_fbdev/vivante_fbdev_driver.c	2014-07-25 15:38:24.000000000 +0200
--+++ b/EXA/src/vivante_fbdev/vivante_fbdev_driver.c	2014-10-02 21:00:58.755409342 +0200
--@@ -261,7 +261,7 @@
--         setupDone = TRUE;
--         xf86AddDriver(&FBDEV, module, HaveDriverFuncs);
--         if(gVivFb)
---            LoadExtension(&VIVExt, FALSE);
--+            LoadExtensionList(&VIVExt, 1, FALSE);
-- 		return (pointer)1;
--     } else {
--         if (errmaj) *errmaj = LDR_ONCEONLY;
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-index fbd7325..f5cb946 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+index 64f3b6b..26c591b 100644
+--- a/package/freescale-imx/freescale-imx.mk
++++ b/package/freescale-imx/freescale-imx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 3.10.17-1.0.1
-+XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = $(FREESCALE_IMX_VERSION)
- XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
- XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
- XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv xserver_xorg-server \
+-FREESCALE_IMX_VERSION = 3.10.17-1.0.0
++FREESCALE_IMX_VERSION = 3.10.53-1.1.0
+ FREESCALE_IMX_SITE = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO
+ 
+ # Helper for self-extracting binaries distributed by Freescale.
