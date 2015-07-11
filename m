@@ -1,68 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jul 2015 12:45:48 +0200
-Subject: [Buildroot] [git commit] gst-fsl-plugins: bump version to 4.0.2
-Message-ID: <20150711112619.6A33E80831@busybox.osuosl.org>
+Date: Sat, 11 Jul 2015 13:04:34 +0200
+Subject: [Buildroot] [git commit] nitrogen6x_defconfig: bump version to
+	3.10.53_1.1.1_ga
+Message-ID: <20150711112619.C6A207FC81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cf448c4fe500b18c4c3315baa134c26f7bf239a6
+commit: http://git.buildroot.net/buildroot/commit/?id=82c76fbfe64f2f18a1722e0c441e2f8b4e3ef26a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/730b7ca5d2f13083f4e44636308a2f55a8d346f2
-
-This package has been tested using the following commands:
- # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
- # gst-launch-0.10  filesrc location=/root/tears_of_steel_1080p.webm ! \
-   matroskademux ! vpudec ! autovideosink
- # gst-launch-0.10  filesrc location=/root/tears_of_steel_1080p.webm ! \
-   matroskademux ! vpudec ! mfw_isink
- # gst-launch-0.10 imxv4l2src ! autovideosink
+Also update the dtb files to be generated.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0002-Fix-bashism-in-configure-script.patch     |    4 +---
- .../gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk   |    2 +-
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ configs/nitrogen6x_defconfig |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch b/package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch
-index 35617cd..471c483 100644
---- a/package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch
-+++ b/package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch
-@@ -25,7 +25,7 @@ index 5968eb6..1a31a06 100755
-  fi
-  AC_SUBST(VPU_LIBS)
-  
--@@ -176,15 +176,15 @@ AC_SUBST(RT_CFLAGS)
-+@@ -176,14 +176,14 @@ AC_SUBST(RT_CFLAGS)
-  AC_SUBST(RT_LIBS)
-  
-  FSL_MM_CORE_CFLAGS=`$PKG_CONFIG --cflags libfslaudiocodec 2>/dev/null`
-@@ -40,10 +40,8 @@ index 5968eb6..1a31a06 100755
-  FSL_MM_CORE_LIBS=`$PKG_CONFIG --libs libfslaudiocodec 2>/dev/null`
- -FSL_MM_CORE_LIBS+=`$PKG_CONFIG --libs libfslvideocodec 2>/dev/null`
- -FSL_MM_CORE_LIBS+=`$PKG_CONFIG --libs libfslparser 2>/dev/null`
---FSL_MM_CORE_LIBS+=`$PKG_CONFIG --libs libfslvpuwrap 2>/dev/null`
- +FSL_MM_CORE_LIBS="$FSL_MM_CORE_LIBS `$PKG_CONFIG --libs libfslvideocodec 2>/dev/null`"
- +FSL_MM_CORE_LIBS="$FSL_MM_CORE_LIBS `$PKG_CONFIG --libs libfslparser 2>/dev/null`"
--+FSL_MM_CORE_LIBS="$FSL_MM_CORE_LIBS `$PKG_CONFIG --libs libfslvpuwrap 2>/dev/null`"
-  AC_SUBST(FSL_MM_CORE_LIBS)
-  
-  EXTRAPLATFORMCFLAGS="-DARM -D_GNUC_"
-diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-index 8d8b8b4..a7dea0f 100644
---- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-+++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index d75f780..d04745d 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -13,7 +13,7 @@ BR2_TARGET_ROOTFS_EXT2_2r1=y
  
--GST_FSL_PLUGINS_VERSION = 3.0.11
-+GST_FSL_PLUGINS_VERSION = 4.0.2
- GST_FSL_PLUGINS_SITE = $(FREESCALE_IMX_SITE)
+ # Lock headers to match kernel
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.17"
++BR2_DEFAULT_KERNEL_VERSION="3.10.53"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
  
- # Most is LGPLv2+, but some sources are copied from upstream and are
+ # bootloader
+@@ -21,15 +21,15 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/f870252/u-boot-f870252.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/21eb4146/u-boot-21eb4146.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-# Last version of branch boundary-imx_3.10.17_1.0.1_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/ea957c5/linux-imx6-ea957c5.tar.gz"
++# Last version of branch boundary-imx_3.10.53_1.1.1_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/98c0fdbe/linux-imx6-98c0fdbe.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_max imx6dl-nitrogen6x imx6q-nitrogen6_max imx6q-nitrogen6x imx6q-sabrelite"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_vm imx6dl-nitrogen6x imx6q-nitrogen6x imx6q-nitrogen6_max imx6q-sabrelite"
