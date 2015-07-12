@@ -1,56 +1,185 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 12 Jul 2015 11:56:18 +0200
-Subject: [Buildroot] [git commit] package/ktap: use kernel-module helper
-Message-ID: <20150712095704.748C68010C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual: add kernel-module
+Message-ID: <20150712095704.564738010C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=84d97e6200f3f0b97485825728e9bdcc644f5830
+commit: http://git.buildroot.net/buildroot/commit/?id=9e8857d05ae7ac8074e90ec690ed080601ca9ae5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Passing the KERNEL_SRC variable is no longer needed, since it was only
-used to run commands like:
-    $(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules
-
-which is basically what the new kernel-module infra is now doing.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Jeremy Rosen <jeremy.rosen@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ktap/ktap.mk |    7 +++----
- 1 files changed, 3 insertions(+), 4 deletions(-)
+ docs/manual/adding-packages-kernel-module.txt |  142 +++++++++++++++++++++++++
+ docs/manual/adding-packages.txt               |    2 +
+ 2 files changed, 144 insertions(+), 0 deletions(-)
 
-diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
-index 4a0e51c..966b51c 100644
---- a/package/ktap/ktap.mk
-+++ b/package/ktap/ktap.mk
-@@ -9,8 +9,6 @@ KTAP_SITE = $(call github,ktap,ktap,$(KTAP_VERSION))
- KTAP_LICENSE = GPLv2
- KTAP_LICENSE_FILES = LICENSE-GPL
- 
--KTAP_DEPENDENCIES = linux
--
- ifeq ($(BR2_PACKAGE_ELFUTILS),y)
- KTAP_DEPENDENCIES += elfutils
- else
-@@ -19,12 +17,13 @@ endif
- 
- define KTAP_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) $(KTAP_FLAGS) ktap
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) mod
- endef
- 
- define KTAP_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m755 $(@D)/ktap  $(TARGET_DIR)/usr/bin/ktap
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) modules_install
- endef
- 
-+KTAP_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
+diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
+new file mode 100644
+index 0000000..39575f7
+--- /dev/null
++++ b/docs/manual/adding-packages-kernel-module.txt
+@@ -0,0 +1,142 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
++=== Infrastructure for packages building kernel modules
++
++Buildroot offers a helper infrastructure to make it easy to write packages that
++build and install Linux kernel modules. Some packages only contain a kernel
++module, other packages contain programs and libraries in addition to kernel
++modules. Buildroot's helper infrastructure supports either case.
++
++[[kernel-module-tutorial]]
++==== +kernel-module+ tutorial
++
++Let's start with an example on how to prepare a simple package that only
++builds a kernel module, and no other component:
++
++----
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06: 
++07: FOO_VERSION = 1.2.3
++08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
++09: FOO_SITE = http://www.foosoftware.org/download
++10: FOO_LICENSE = GPLv2
++11: FOO_LICENSE_FILES = COPYING
++12: 
++13: $(eval $(kernel-module))
++14: $(eval $(generic-package))
++----
++
++Lines 7-11 define the usual meta-data to specify the version, archive name,
++remote URI where to find the package source, licensing information.
++
++On line 13, we invoke the +kernel-module+ helper infrastructure, that
++generates all the appropriate Makefile rules and variables to build
++that kernel module.
++
++Finally, on line 14, we invoke the
++xref:generic-package-tutorial[+generic-package+ infrastructure].
++
++The dependency on +linux+ is automatically added, so it is not needed to
++specify it in +FOO_DEPENDENCIES+.
++
++What you may have noticed is that, unlike other package infrastructures,
++we explicitly invoke a second infrastructure. This allows a package to
++build a kernel module, but also, if needed, use any one of other package
++infrastructures to build normal userland components (libraries,
++executables...). Using the +kernel-module+ infrastructure on its own is
++not sufficient; another package infrastructure *must* be used.
++
++Let's look at a more complex example:
++
++----
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06: 
++07: FOO_VERSION = 1.2.3
++08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
++09: FOO_SITE = http://www.foosoftware.org/download
++10: FOO_LICENSE = GPLv2
++11: FOO_LICENSE_FILES = COPYING
++12: 
++13: FOO_MODULE_SUBDIRS = driver/base
++14: FOO_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
++15: 
++16: ifeq ($(BR2_PACKAGE_LIBBAR),y)
++17: FOO_DEPENDENCIES = libbar
++18: FOO_CONF_OPTS = --enable-bar
++19: FOO_MODULE_SUBDIRS += driver/bar
++20: else
++21: FOO_CONF_OPTS = --disable-bar
++22: endif
++23: 
++24: $(eval $(kernel-module))
++26: $(eval $(autotools-package))
++----
++
++Here, we see that we have an autotools-based package, that also builds
++the kernel module located in sub-directory +driver/base+ and, if libbar
++is enabled, the kernel module located in sub-directory +driver/bar+, and
++defines the variable +KVERSION+ to be passed to the Linux buildsystem
++when building the module(s).
++
++
++[[kernel-module-reference]]
++==== +kernel-module+ reference
++
++The main macro for the  kernel module infrastructure is +kernel-module+.
++Unlike other package infrastructures, it is not stand-alone, and requires
++any of the other +*-package+ macros be called after it.
++
++The +kernel-module+ macro defines post-build and post-target-install
++hooks to build the kernel modules. If the package's +.mk+ needs access
++to the built kernel modules, it should do so in a post-build hook,
++*registered after* the call to +kernel-module+. Similarly, if the
++package's +.mk+ needs access to the kernel module after it has been
++installed, it should do so in a post-install hook, *registered after*
++the call to +kernel-module+. Here's an example:
++
++----
 +$(eval $(kernel-module))
- $(eval $(generic-package))
++
++define FOO_DO_STUFF_WITH_KERNEL_MODULE
++    # Do something with it...
++endef
++FOO_POST_BUILD_HOOKS += FOO_DO_STUFF_WITH_KERNEL_MODULE
++
++$(eval $(generic-package))
++----
++
++Finally, unlike the other package infrastructures, there is no
+++host-kernel-module+ variant to build a host kernel module.
++
++The following additional variables can optionally be defined to further
++configure the build of the kernel module:
++
++* +FOO_MODULE_SUBDIRS+ may be set to one or more sub-directories (relative
++  to the package source top-directory) where the kernel module sources are.
++  If empty or not set, the sources for the kernel module(s) are considered
++  to be located at the top of the package source tree.
++
++* +FOO_MODULE_MAKE_OPTS+ may be set to contain extra variable definitions
++  to pass to the Linux buildsystem.
++
++Yo may also reference (but you may *not* set!) those variables:
++
++ * +LINUX_DIR+ contains the path to where the Linux kernel has been
++   extracted and built.
++
++ * +LINUX_VERSION+ contains the version string as configured by the user.
++
++ * +LINUX_VERSION_PROBED+ contains the real version string of the kernel,
++   retrieved with running `make -C $(LINUX_DIR) kernelrelease`
++
++ * +KERNEL_ARCH+ contains the name of the current architecture, like `arm`,
++   `mips`...
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index b8674f8..721fe39 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -29,6 +29,8 @@ include::adding-packages-kconfig.txt[]
+ 
+ include::adding-packages-rebar.txt[]
+ 
++include::adding-packages-kernel-module.txt[]
++
+ include::adding-packages-asciidoc.txt[]
+ 
+ include::adding-packages-hooks.txt[]
