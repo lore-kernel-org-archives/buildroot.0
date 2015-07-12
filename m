@@ -1,114 +1,98 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 17:07:18 +0200
-Subject: [Buildroot] [git commit] flite: use FLITE_STRIP_COMPONENTS and
-	FLITE_SUBDIR
-Message-ID: <20150712151909.CE854818CF@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 12 Jul 2015 17:25:57 +0200
+Subject: [Buildroot] [PATCH v2] package: Remove shell completion at finalize
+	stage
+Message-ID: <1436714757-20767-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd4bcebd7c43212650cccc2494527dc3d69024d9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Instead of doing a removal of the completion file package per package,
+do it all at the finalize stage so it's done once and for all.
 
-So far, to overcome the buggy way the flite tarball is made, we had to
-override the extract commands in a rather ugly way.
+Note: This fixes an issue with systemd where passing a --bashcompletiondir
+or --zshcompletiondir would be evaluated to '.' by the autotools macro.
+This would create a 'target./' directory.
 
-The newly introduced <PKG>_STRIP_COMPONENTS, along with <PKG>_SUBDIR and a
-little edit to the patches, allow to remove the custom FLITE_EXTRACT_CMDS,
-slightly simplifying the flite.mk code.
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- .../flite/0001-now-honor-DESTDIR-env.-var.patch    |    4 +-
- package/flite/0002-fix-alsa-static.patch           |    4 +-
- package/flite/flite.mk                             |   35 ++++++++-----------
- 3 files changed, 19 insertions(+), 24 deletions(-)
+V1 -> V2: fix inverted path between bash and zsh
+---
+ Makefile                         | 6 ++++++
+ package/kmod/kmod.mk             | 4 ----
+ package/systemd/systemd.mk       | 8 --------
+ package/util-linux/util-linux.mk | 6 ------
+ 4 files changed, 6 insertions(+), 18 deletions(-)
 
-diff --git a/package/flite/0001-now-honor-DESTDIR-env.-var.patch b/package/flite/0001-now-honor-DESTDIR-env.-var.patch
-index 5972f34..2d5fb68 100644
---- a/package/flite/0001-now-honor-DESTDIR-env.-var.patch
-+++ b/package/flite/0001-now-honor-DESTDIR-env.-var.patch
-@@ -13,8 +13,8 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- 
- diff --git a/config/config.in b/config/config.in
- index 914d2bf..43f1a56 100644
----- a/config/config.in
--+++ b/config/config.in
-+--- a/flite-1.4-release/config/config.in
-++++ b/flite-1.4-release/config/config.in
- @@ -49,6 +49,6 @@ include $(TOP)/config/$(langvox).lv
-  prefix        = @prefix@
-  exec_prefix   = @exec_prefix@
-diff --git a/package/flite/0002-fix-alsa-static.patch b/package/flite/0002-fix-alsa-static.patch
-index 7ed4899..12adb9e 100644
---- a/package/flite/0002-fix-alsa-static.patch
-+++ b/package/flite/0002-fix-alsa-static.patch
-@@ -3,8 +3,8 @@ Use pkg-config to determine alsa link flags. This fixes static linking.
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- 
- diff -Nuar flite-1.4-release.orig/configure.in flite-1.4-release/configure.in
----- flite-1.4-release.orig/configure.in	2009-08-14 23:46:38.000000000 +0300
--+++ flite-1.4-release/configure.in	2014-04-30 18:52:33.253297236 +0300
-+--- flite-1.4-release.orig/flite-1.4-release/configure.in	2009-08-14 23:46:38.000000000 +0300
-++++ flite-1.4-release/flite-1.4-release/configure.in	2014-04-30 18:52:33.253297236 +0300
- @@ -275,7 +275,10 @@
-                  #endif],
-                [AUDIODRIVER="alsa"
-diff --git a/package/flite/flite.mk b/package/flite/flite.mk
-index ead73fe..07ec473 100644
---- a/package/flite/flite.mk
-+++ b/package/flite/flite.mk
-@@ -7,18 +7,6 @@
- FLITE_VERSION = 1.4
- FLITE_SOURCE = flite-$(FLITE_VERSION)-release.tar.bz2
- FLITE_SITE = http://www.speech.cs.cmu.edu/flite/packed/flite-$(FLITE_VERSION)
--FLITE_LICENSE = BSD-4c
--FLITE_LICENSE_FILES = COPYING
+diff --git a/Makefile b/Makefile
+index b1bcf78..307f13c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -556,6 +556,12 @@ target-finalize: $(PACKAGES)
+ ifneq ($(BR2_PACKAGE_GDB),y)
+ 	rm -rf $(TARGET_DIR)/usr/share/gdb
+ endif
++ifneq ($(BR2_PACKAGE_BASH),y)
++	rm -rf $(TARGET_DIR)/usr/share/bash-completion
++endif
++ifneq ($(BR2_PACKAGE_ZSH),y)
++	rm -rf $(TARGET_DIR)/usr/share/zsh
++endif
+ 	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/man
+ 	rm -rf $(TARGET_DIR)/usr/info $(TARGET_DIR)/usr/share/info
+ 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 98d9998..ae09330 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -59,10 +59,6 @@ else
+ KMOD_CONF_OPTS += --disable-tools
+ endif
+
+-ifeq ($(BR2_PACKAGE_BASH),)
+-KMOD_CONF_OPTS += --with-bashcompletiondir=
+-endif
 -
--FLITE_INSTALL_STAGING = YES
--# Patching configure.in
--FLITE_AUTORECONF = YES
--FLITE_DEPENDENCIES = host-pkgconf
+ # We only install depmod, since that's the only tool used for the
+ # host.
+ define HOST_KMOD_INSTALL_TOOLS
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 7eb7abe..5c9effa 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -123,14 +123,6 @@ else
+ SYSTEMD_CONF_OPTS += --disable-smack
+ endif
+
+-ifeq ($(BR2_PACKAGE_BASH),)
+-SYSTEMD_CONF_OPTS += --with-bashcompletiondir=
+-endif
 -
--# Sadly, Flite does not support parallel build, especially when building its
--# shared libraries.
--FLITE_MAKE = $(MAKE1)
+-ifeq ($(BR2_PACKAGE_ZSH),)
+-SYSTEMD_CONF_OPTS += --with-zshcompletiondir=
+-endif
 -
- # $ tar tf flite-1.4-release.tar.bz2
- # ...
- # flite-1.4-release//install-sh
-@@ -32,14 +20,21 @@ FLITE_MAKE = $(MAKE1)
- # flite-1.4-release/config/config.in
- # flite-1.4-release/config/system.mak.in
- #
--# So, the strip-component trick does not work at all.
--# Let's redefine the extract command.
--define FLITE_EXTRACT_CMDS
--	$(INFLATE$(suffix $(FLITE_SOURCE))) $(DL_DIR)/$(FLITE_SOURCE) | \
--		$(TAR) -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	rsync -ar $(BUILD_DIR)/$(subst .tar.bz2,,$(FLITE_SOURCE))/* $(FLITE_DIR)/
--	$(RM) -rf $(BUILD_DIR)/$(subst .tar.bz2,,$(FLITE_SOURCE))
--endef
-+# So, we set FLITE_STRIP_COMPONENTS=0 to avoid writing to "/", and then
-+# build in flite-1.4-release/
-+FLITE_STRIP_COMPONENTS = 0
-+FLITE_SUBDIR = flite-$(FLITE_VERSION)-release
-+FLITE_LICENSE = BSD-4c
-+FLITE_LICENSE_FILES = COPYING
-+
-+FLITE_INSTALL_STAGING = YES
-+# Patching configure.in
-+FLITE_AUTORECONF = YES
-+FLITE_DEPENDENCIES = host-pkgconf
-+
-+# Sadly, Flite does not support parallel build, especially when building its
-+# shared libraries.
-+FLITE_MAKE = $(MAKE1)
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- FLITE_DEPENDENCIES += alsa-lib
+ # mq_getattr needs -lrt
+ SYSTEMD_MAKE_OPTS += LIBS=-lrt
+ SYSTEMD_MAKE_OPTS += LDFLAGS+=-ldl
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 3ca147a..a44a45e 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -26,12 +26,6 @@ UTIL_LINUX_CONF_OPTS += \
+ 	--disable-makeinstall-chown \
+ 	--without-python
+
+-ifeq ($(BR2_PACKAGE_BASH),)
+-UTIL_LINUX_CONF_OPTS += \
+-	--disable-bash-completion \
+-	--with-bashcompletiondir=
+-endif
+-
+ # We don't want the host-busybox dependency to be added automatically
+ HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
+
+--
+2.1.4
