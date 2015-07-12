@@ -1,107 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jul 2015 20:40:40 +0200
-Subject: [Buildroot] [PATCH 1/3] linux: add linux-tools infra
-In-Reply-To: <1436719444-9722-1-git-send-email-romain.naour@openwide.fr>
-References: <1436719444-9722-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150712184040.GD4008@free.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 12 Jul 2015 20:44:56 +0200
+Subject: [Buildroot] [PATCH v5 1/3] busybox: Install scripts only when needed
+Message-ID: <1436726698-17776-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Init scripts are only usefull with init system that supports them, it
+means that we don't want init scripts files unless Busybox or SysV has
+been chosen as the init.
 
-On 2015-07-12 18:44 +0200, Romain Naour spake thusly:
-> This commit add an infrastructure to build linux kernel
-> tools available in the kernel sources.
-> 
-> Currently, the only linux kernel tool packaged in Buildroot
-> is perf and it's packaged as a separate generic package.
-> This is a problem for licence information raised in this
-> thread [1].
-> 
-> Since these tools require to build a Linux kernel, we can
-> use some hooks in linux package like we did for linux
-> extensions [2] and remove the perf package.
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2015-May/128783.html
-> [2] http://lists.busybox.net/pipermail/buildroot/2015-March/121835.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+v1 -> v2:
+   - Remove non needed space in ifeq (Thomas Petazzoni)
+---
+ package/busybox/busybox.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-(Needless to say I like this! ;-] )
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  linux/linux.mk | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index eca1450..d483c11 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -325,6 +325,8 @@ define LINUX_INSTALL_TARGET_CMDS
->  	$(LINUX_INSTALL_HOST_TOOLS)
->  endef
->  
-> +# Include all our externsions and tools definitions.
-> +#
->  # Note: our package infrastructure uses the full-path of the last-scanned
->  # Makefile to determine what package we're currently defining, using the
->  # last directory component in the path. As such, including other Makefile,
-> @@ -334,6 +336,7 @@ endef
->  # the current Makefile, we are OK. But this is a hard requirement: files
->  # included here *must* be in the same directory!
->  include $(sort $(wildcard linux/linux-ext-*.mk))
-> +include $(sort $(wildcard linux/linux-tool-*.mk))
->  
->  LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
->  	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
-> @@ -342,6 +345,27 @@ LINUX_PRE_PATCH_HOOKS += $(foreach ext,$(LINUX_EXTENSIONS),\
->  	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),\
->  		$(call UPPERCASE,$(ext))_PREPARE_KERNEL))
->  
-> +# Install Linux kernel tools in staging directory since some tools
-> +# may install shared libraries and headers (e.g. cpupower). The
-> +# kernel image is NOT installed in staging directory.
-> +LINUX_INSTALL_STAGING = $(if $(strip $(LINUX_TOOLS)),YES,NO)
-> +
-> +LINUX_DEPENDENCIES += $(foreach tool,$(LINUX_TOOLS),\
-> +	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-> +		$(LINUX_TOOL_$(call UPPERCASE,$(tool))_DEPENDENCIES)))
-> +
-> +LINUX_POST_BUILD_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-> +	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-> +		LINUX_TOOL_$(call UPPERCASE,$(tool))_BUILD_CMDS))
-> +
-> +LINUX_POST_INSTALL_STAGING_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-> +	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-> +		LINUX_TOOL_$(call UPPERCASE,$(tool))_INSTALL_STAGING_CMDS))
-> +
-> +LINUX_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-> +	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-> +		LINUX_TOOL_$(call UPPERCASE,$(tool))_INSTALL_TARGET_CMDS))
-> +
->  $(eval $(kconfig-package))
->  
->  # Support for rebuilding the kernel after the cpio archive has
-> -- 
-> 2.4.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 92874cd..5602fb1 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -141,17 +141,23 @@ define BUSYBOX_SET_INIT
+ endef
+ endif
+ 
++ifeq ($(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),y)
+ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
+ 			$(TARGET_DIR)/etc/init.d/S01logging; \
+ 	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
+ endef
++endif
+ 
+ ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
+ define BUSYBOX_SET_WATCHDOG
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG,$(BUSYBOX_BUILD_CONFIG))
+ endef
++endif
++
++ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
++ifeq ($(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),y)
+ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
+ 	$(INSTALL) -D -m 0755 package/busybox/S15watchdog \
+ 		$(TARGET_DIR)/etc/init.d/S15watchdog
+@@ -167,6 +173,7 @@ define BUSYBOX_LINUX_PAM
+ endef
+ BUSYBOX_DEPENDENCIES += linux-pam
+ endif
++endif
+ 
+ # Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
+ # full-blown versions of apps installed by other packages with sym/hard links.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.4
