@@ -1,67 +1,50 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 13 Jul 2015 00:55:13 +0200
-Subject: [Buildroot] [PATCH v2] skeleton: apply locale settings in user
-	shells
-In-Reply-To: <1421684056-5266-6-git-send-email-maxtram95@gmail.com>
-References: <1421684056-5266-6-git-send-email-maxtram95@gmail.com>
-Message-ID: <1436741713-27300-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 13 Jul 2015 01:31:10 +0200
+Subject: [Buildroot] [PATCH] spidev_test: use the one from the kernel we
+ build
+In-Reply-To: <1421696137-17377-1-git-send-email-vincent.stehle@freescale.com>
+References: <1421696137-17377-1-git-send-email-vincent.stehle@freescale.com>
+Message-ID: <55A2F8BE.6020508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Maxim Mikityanskiy <maxtram95@gmail.com>
+ Hi Vincent,
 
-Add /etc/profile.d/locale.sh script from Arch Linux to /etc/profile.
-This script looks for locale.conf, sources it, and exports the LANG and
-LC_* variables.
+ We're doing a big patchwork cleanup and finally getting back at your patch.
 
-[Arnout: put in /etc/profile in the skeleton rather than making it
- systemd specific.]
+On 01/19/15 20:35, Vincent Stehl? wrote:
+> Add a configuration option to use the spidev_test.c from the Linux kernel we
+> build. This allows to be perfectly consistent between spidev_test and the
+> kernel in use.
 
-Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-v2 [Arnout]: make the modification to /etc/profile in the skeleton
-rather than something systemd-specific - proposed by Samuel Martin.
----
- system/skeleton/etc/profile | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ The conclusion of the earlier discussion is that spidev_test should really only
+be built together with the kernel, so you could remove the extra config option.
+Note, if you do that, there may be a need for legacy handling otherwise a
+.config which previously had SPIDEV_TEST but no kernel would suddenly loose the
+SPIDEV_TEST.
 
-diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
-index 3812dda..c7438fe 100644
---- a/system/skeleton/etc/profile
-+++ b/system/skeleton/etc/profile
-@@ -35,6 +35,29 @@ if [ "$PS1" ]; then
- 
- fi;
- 
-+if [ -z "$LANG" ]; then
-+  if [ -n $HOME ] && [ -r $HOME/.config/locale.conf ]; then
-+    . "$HOME/.config/locale.conf"
-+  elif [ -r /etc/locale.conf ]; then
-+    . /etc/locale.conf
-+  fi
-+fi
-+
-+LANG=${LANG:-C}
-+export LANG
-+[ -n "$LC_CTYPE" ]          && export LC_CTYPE
-+[ -n "$LC_NUMERIC" ]        && export LC_NUMERIC
-+[ -n "$LC_TIME" ]           && export LC_TIME
-+[ -n "$LC_COLLATE" ]        && export LC_COLLATE
-+[ -n "$LC_MONETARY" ]       && export LC_MONETARY
-+[ -n "$LC_MESSAGES" ]       && export LC_MESSAGES
-+[ -n "$LC_PAPER" ]          && export LC_PAPER
-+[ -n "$LC_NAME" ]           && export LC_NAME
-+[ -n "$LC_ADDRESS" ]        && export LC_ADDRESS
-+[ -n "$LC_TELEPHONE" ]      && export LC_TELEPHONE
-+[ -n "$LC_MEASUREMENT" ]    && export LC_MEASUREMENT
-+[ -n "$LC_IDENTIFICATION" ] && export LC_IDENTIFICATION
-+
- # Source configuration files from /etc/profile.d
- for i in /etc/profile.d/*.sh ; do
-     if [ -r "$i" ]; then
+ However, there is also the new kernel-tools infra proposed by Romain, and this
+change would fit into that approach perfectly. So if you resubmit, consider
+using the kernel-tools infra.
+
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[snip]
+
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
