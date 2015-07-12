@@ -1,31 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 13:43:57 +0200
-Subject: [Buildroot] [PATCH] package/firmware-imx: fix legal-info
-In-Reply-To: <1436700629-5494-1-git-send-email-yann.morin.1998@free.fr>
-References: <1436700629-5494-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150712134357.63df0dcf@free-electrons.com>
+Date: Sun, 12 Jul 2015 13:44:48 +0200
+Subject: [Buildroot] [PATCH 1/7] Add <PKG>_STRIP_COMPONENTS for packages
+ with non-standard tarballs
+In-Reply-To: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
+References: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20150712134448.759340d5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Luca Ceresoli,
 
-On Sun, 12 Jul 2015 13:30:29 +0200, Yann E. MORIN wrote:
-> Part of fimrware-ims were dropped in the new version, so we have less
-> leglal-info to save.
+On Sat, 11 Jul 2015 16:15:04 +0200, Luca Ceresoli wrote:
+> Usually package tarballs contain only a directory named
+> "<pkg-name>-<pkg-version>" which contains the actual source tree. To properly
+> extract the source files in $(BUILD_DIR), Buildroot passes the
+> --strip-components=1 option to tar.
 > 
-> Fixes:
->     http://autobuild.buildroot.org/results/59b/59b09152700a5839af46edb554e53981569f8921
+> Unfortunately a few packages ship in a non-standard way, with no root
+> directory or with more than one. In Buildroot these packages must be handled by
+> overriding the <PKG>_DOWNLOAD_CMDS.
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> As the number of such packages is growing, introduce a <PKG>_STRIP_COMPONENTS
+> variable for packages to request a number of components to strip different
+> from 1.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 > ---
->  package/freescale-imx/firmware-imx/firmware-imx.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/pkg-generic.mk | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 
-Applied, thanks.
+This actually triggered a failure in the build of the tar package:
+
+   http://autobuild.buildroot.org/results/ae2/ae20df67f99f75b1ba5d5b7316ad265d66f3aa66/build-end.log
+
+We have already fixed it, it was quite interesting:
+
+   http://git.buildroot.net/buildroot/commit/?id=ef7cc99c7a432aa3929015183f7c7476b7cd1b68
 
 Thomas
 -- 
