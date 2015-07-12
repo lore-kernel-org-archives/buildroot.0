@@ -1,54 +1,116 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jul 2015 02:21:34 +0200
-Subject: [Buildroot] [PATCH 04/11 v3] package/igh-ethercat: use
-	kernel-module helper
+Date: Sun, 12 Jul 2015 02:21:37 +0200
+Subject: [Buildroot] [PATCH 07/11 v3] package/ocf-linux: use kernel-module
+	helper
 In-Reply-To: <cover.1436660369.git.yann.morin.1998@free.fr>
 References: <cover.1436660369.git.yann.morin.1998@free.fr>
-Message-ID: <a1f684748617ccb0ee8c3d3345a6fcc9362eaac3.1436660369.git.yann.morin.1998@free.fr>
+Message-ID: <705b0a19ad7d7d8ac86054ffe74c4f3467e77bba.1436660369.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-igh-ethercat's Makefile just contains calls to the Linux buildsystem,
-that do exactly what we now do with our kernel-module infra.
+We have a patch that makes ocf-linux' Makefile basically only call to
+the Linux buildsystem, with commands basically like:
+    make -C $(LINUX_DIR) M=$(pwd) modules
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+which is basically what our new kernel-module infra basically does.
+
+Remove our patch since it is basically no longer needed.
+
+Basically-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
 ---
- package/igh-ethercat/igh-ethercat.mk | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+Changs v1 -> v2:
+  - fix spelling of the SUBDIRS variable
+---
+ package/ocf-linux/0001-modules-cross.patch | 42 ------------------------------
+ package/ocf-linux/ocf-linux.mk             | 17 +++++-------
+ 2 files changed, 7 insertions(+), 52 deletions(-)
+ delete mode 100644 package/ocf-linux/0001-modules-cross.patch
 
-diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
-index b5221f8..32c49a3 100644
---- a/package/igh-ethercat/igh-ethercat.mk
-+++ b/package/igh-ethercat/igh-ethercat.mk
-@@ -10,7 +10,6 @@ IGH_ETHERCAT_SOURCE = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
- IGH_ETHERCAT_LICENSE = GPLv2 (IgH EtherCAT master), LGPLv2.1 (libraries)
- IGH_ETHERCAT_LICENSE_FILES = COPYING COPYING.LESSER
+diff --git a/package/ocf-linux/0001-modules-cross.patch b/package/ocf-linux/0001-modules-cross.patch
+deleted file mode 100644
+index f80ef06..0000000
+--- a/package/ocf-linux/0001-modules-cross.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-Remove the OCF linux kernel extension instead opting to build ocf-linux
+-modules out of tree.
+-This is easier for users since no kernel config tweaking is required.
+-On the downside the OCF drivers can't be used, but then all of the
+-kernel crypto drivers are available to users via cryptosoft which is
+-preferred.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura ocf-linux-20120127.orig/ocf/Makefile ocf-linux-20120127/ocf/Makefile
+---- ocf-linux-20120127.orig/ocf/Makefile	2013-04-27 09:27:04.413911866 -0300
+-+++ ocf-linux-20120127/ocf/Makefile	2013-04-27 09:27:31.131775576 -0300
+-@@ -2,6 +2,7 @@
+- -include $(ROOTDIR)/modules/.config
+-
+- OCF_OBJS = crypto.o criov.o
+-+KDIR ?= /lib/modules/$(shell uname -r)/build
+-
+- ifdef CONFIG_OCF_RANDOMHARVEST
+- 	OCF_OBJS += random.o
+-@@ -78,20 +79,13 @@
+- #
+-
+- ocf_make:
+--	make -C /lib/modules/$(shell uname -r)/build M=`pwd` $(OCF_TARGET) CONFIG_OCF_OCF=m
+--	make -C /lib/modules/$(shell uname -r)/build M=`pwd` $(OCF_TARGET) CONFIG_OCF_OCF=m CONFIG_OCF_CRYPTOSOFT=m
+--	-make -C /lib/modules/$(shell uname -r)/build M=`pwd` $(OCF_TARGET) CONFIG_OCF_OCF=m CONFIG_OCF_BENCH=m
+--	-make -C /lib/modules/$(shell uname -r)/build M=`pwd` $(OCF_TARGET) CONFIG_OCF_OCF=m CONFIG_OCF_OCFNULL=m
+--	-make -C /lib/modules/$(shell uname -r)/build M=`pwd` $(OCF_TARGET) CONFIG_OCF_OCF=m CONFIG_OCF_HIFN=m
+-+	make -C $(KDIR) M=`pwd` $(OCF_TARGET) CONFIG_OCF_OCF=m CONFIG_OCF_CRYPTOSOFT=m CONFIG_OCF_BENCH=m CONFIG_OCF_OCFNULL=m
+-
+- ocf_modules:
+- 	$(MAKE) ocf_make OCF_TARGET=modules
+-
+- ocf_install:
+- 	$(MAKE) ocf_make OCF_TARGET="modules modules_install"
+--	depmod
+--	mkdir -p /usr/include/crypto
+--	cp cryptodev.h /usr/include/crypto/.
+-
+- #
+- # generate full kernel patches for 2.4 and 2.6 kernels to make patching
+diff --git a/package/ocf-linux/ocf-linux.mk b/package/ocf-linux/ocf-linux.mk
+index 8ca5578..35968d5 100644
+--- a/package/ocf-linux/ocf-linux.mk
++++ b/package/ocf-linux/ocf-linux.mk
+@@ -6,22 +6,19 @@
  
--IGH_ETHERCAT_DEPENDENCIES = linux
- IGH_ETHERCAT_INSTALL_STAGING = YES
+ OCF_LINUX_VERSION = 20120127
+ OCF_LINUX_SITE = http://downloads.sourceforge.net/project/ocf-linux/ocf-linux/$(OCF_LINUX_VERSION)
+-OCF_LINUX_DEPENDENCIES = linux
+ OCF_LINUX_INSTALL_STAGING = YES
  
- IGH_ETHERCAT_CONF_OPTS = \
-@@ -22,16 +21,5 @@ IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,
- IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e)
- IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
- 
--define IGH_ETHERCAT_BUILD_MODULES
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
+-define OCF_LINUX_BUILD_CMDS
+-	$(MAKE) -C $(@D)/ocf $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) \
+-		ocf_modules
 -endef
 -
--IGH_ETHERCAT_POST_BUILD_HOOKS += IGH_ETHERCAT_BUILD_MODULES
--
--define IGH_ETHERCAT_INSTALL_MODULES
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules_install
+-define OCF_LINUX_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D)/ocf $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) \
+-		ocf_install
 -endef
--
--IGH_ETHERCAT_POST_INSTALL_TARGET_HOOKS += IGH_ETHERCAT_INSTALL_MODULES
--
++OCF_LINUX_MODULE_SUBDIRS = ocf
++OCF_LINUX_MODULE_MAKE_OPTS = \
++	CONFIG_OCF_OCF=m \
++	CONFIG_OCF_CRYPTOSOFT=m \
++	CONFIG_OCF_BENCH=m \
++	CONFIG_OCF_OCFNULL=m
+ 
+ define OCF_LINUX_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D -m 644 $(@D)/ocf/cryptodev.h \
+ 		$(STAGING_DIR)/usr/include/crypto/cryptodev.h
+ endef
+ 
 +$(eval $(kernel-module))
- $(eval $(autotools-package))
+ $(eval $(generic-package))
 -- 
 1.9.1
