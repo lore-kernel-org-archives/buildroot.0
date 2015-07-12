@@ -1,48 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 13:44:48 +0200
-Subject: [Buildroot] [PATCH 1/7] Add <PKG>_STRIP_COMPONENTS for packages
- with non-standard tarballs
-In-Reply-To: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
-References: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20150712134448.759340d5@free-electrons.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 12 Jul 2015 13:48:06 +0200
+Subject: [Buildroot] systemd not working properly?
+In-Reply-To: <CAGduivz1u0fcOcSCZODYETGWS5jPFh51gab0REregRxf003c0w@mail.gmail.com>
+References: <20141019124525.01fe9653@free-electrons.com>
+ <CAGduivx-ZzNLFbvEkTGwEwDyucGKqL0UmLb7s3F5AAxno5_ECQ@mail.gmail.com>
+ <20150707230348.5c7ea316@free-electrons.com>
+ <CAGduivz1u0fcOcSCZODYETGWS5jPFh51gab0REregRxf003c0w@mail.gmail.com>
+Message-ID: <CAGduivzg=YN5taesX6CzUOqqR-2_E_3e=+SpXoYJTZmNeWyrCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+On Tue, Jul 7, 2015 at 11:53 PM, Maxime Hadjinlian
+<maxime.hadjinlian@gmail.com> wrote:
+> On Jul 7, 2015 23:03, "Thomas Petazzoni"
+> <thomas.petazzoni@free-electrons.com> wrote:
+>>
+>> Dear Maxime Hadjinlian,
+> Hi Thomas
+>>
+>> On Mon, 20 Oct 2014 10:45:10 +0200, Maxime Hadjinlian wrote:
+>>
+>> > > Then a *very* long delay because of dev-ttyAMA0.device., that finally
+>> > > ends up with:
+>> > >
+>> > > [ TIME ] Timed out waiting for device dev-ttyAMA0.device.
+>> > > [DEPEND] Dependency failed for Serial Getty on ttyAMA0.
+>> > >
+>> > > And finally, I get no getty at all.
+>> > So this particular issues, is due to the fact that for some reason,
+>> > systemd doesn't like the fact that ttyAMA0 is a serial-link. If you
+>> > delete the link in /etc/systemd/system/multi-user.target.wants/ and
+>> > recreate it to point to getty at .service instead of
+>> > serial-getty at .service, it will boot up fine.
+>> > I am still looking into why it doesn't work. I am exploring some idea.
+>>
+>> I still see this issue today. Can we fix this to have something that
+>> works properly out of the box?
+> Sure things. I'll keep that in my queue for Friday :).
+So after verified and talked to you, here's the definitive answer to that:
 
-On Sat, 11 Jul 2015 16:15:04 +0200, Luca Ceresoli wrote:
-> Usually package tarballs contain only a directory named
-> "<pkg-name>-<pkg-version>" which contains the actual source tree. To properly
-> extract the source files in $(BUILD_DIR), Buildroot passes the
-> --strip-components=1 option to tar.
-> 
-> Unfortunately a few packages ship in a non-standard way, with no root
-> directory or with more than one. In Buildroot these packages must be handled by
-> overriding the <PKG>_DOWNLOAD_CMDS.
-> 
-> As the number of such packages is growing, introduce a <PKG>_STRIP_COMPONENTS
-> variable for packages to request a number of components to strip different
-> from 1.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  package/pkg-generic.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+If you build your kernel through Buildroot, you'll have FHANDLE
+selected if you use systemd as init.
+If you build your kernel any other way and don't select FHANDLE in the
+kernel's configuration, you'll end up with exactly this problem.
 
-This actually triggered a failure in the build of the tar package:
-
-   http://autobuild.buildroot.org/results/ae2/ae20df67f99f75b1ba5d5b7316ad265d66f3aa66/build-end.log
-
-We have already fixed it, it was quite interesting:
-
-   http://git.buildroot.net/buildroot/commit/?id=ef7cc99c7a432aa3929015183f7c7476b7cd1b68
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>>
+>> Thanks,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux, Kernel and Android engineering
+>> http://free-electrons.com
