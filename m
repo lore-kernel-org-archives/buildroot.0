@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jul 2015 14:11:28 +0200
-Subject: [Buildroot] [PATCH 6/7] package/busybox: check for config file
+Date: Sun, 12 Jul 2015 14:11:29 +0200
+Subject: [Buildroot] [PATCH 7/7] package/uclibc: check for config file
 	before calling kconfig-package
 In-Reply-To: <cover.1436702899.git.yann.morin.1998@free.fr>
 References: <cover.1436702899.git.yann.morin.1998@free.fr>
-Message-ID: <1095e66da8428c3c8a08d1c5a6fb2bf90f93c418.1436702899.git.yann.morin.1998@free.fr>
+Message-ID: <62fed5cb399404addb30c60c3dc128f46333c9ec.1436702899.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,21 +20,21 @@ So, only call kconfig-package after we do the check.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/busybox/busybox.mk | 6 ++++++
+ package/uclibc/uclibc.mk | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 92874cd..6b57fd7 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -207,4 +207,10 @@ define BUSYBOX_INSTALL_INIT_SYSV
- 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index ecbfa11..7dee6b3 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -474,4 +474,10 @@ define UCLIBC_INSTALL_STAGING_CMDS
+ 	$(UCLIBC_INSTALL_UTILS_STAGING)
  endef
  
 +# Checks to give errors that the user can understand
 +# Must be before we call to kconfig-package
 +ifeq ($(BR_BUILDING)$(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG)),y)
-+$(error No BusyBox configuration file specified, check your BR2_PACKAGE_BUSYBOX_CONFIG setting)
++$(error No uClibc configuration file specified, check your BR2_UCLIBC_CONFIG setting)
 +endif
 +
  $(eval $(kconfig-package))
