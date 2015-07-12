@@ -1,41 +1,53 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 12 Jul 2015 16:35:27 +0200
-Subject: [Buildroot] [PATCH 2/5] linux: use backtick instead of $(shell ...)
+Date: Sun, 12 Jul 2015 16:35:28 +0200
+Subject: [Buildroot] [PATCH 3/5] boost: use backtick instead of $(shell ...)
 	make function
 In-Reply-To: <1436711730-20599-1-git-send-email-arnout@mind.be>
 References: <1436711730-20599-1-git-send-email-arnout@mind.be>
-Message-ID: <1436711730-20599-2-git-send-email-arnout@mind.be>
+Message-ID: <1436711730-20599-3-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Verified that LINUX_VERSION_PROBED is only used in "-quoted commands
-(actually, usually it's not quoted).
+Also remove the variables TARGET_CC_VERSION and HOST_CC_VERSION which
+lack the BOOST_ prefix and are used only once.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Note: this one is not needed for per-package staging, and for printvars
-it's maybe not such a great idea since we may want to see the actual
-probed value. OTOH, if linux has not been configured yet (or is not
-selected in .config), it still looks pretty bad.
----
- linux/linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/boost/boost.mk | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index eca1450..9deec36 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -76,7 +76,7 @@ LINUX_MAKE_ENV = \
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index dbb5de5..cc3ba9e 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -11,9 +11,6 @@ BOOST_INSTALL_STAGING = YES
+ BOOST_LICENSE = Boost Software License 1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
  
- # Get the real Linux version, which tells us where kernel modules are
- # going to be installed in the target filesystem.
--LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease)
-+LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease`
+-TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
+-HOST_CC_VERSION = $(shell $(HOSTCC) -dumpversion)
+-
+ HOST_BOOST_DEPENDENCIES =
  
- ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
- KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
+ # keep host variant as minimal as possible
+@@ -111,13 +108,13 @@ BOOST_LAYOUT = $(call qstrip, $(BR2_PACKAGE_BOOST_LAYOUT))
+ 
+ define BOOST_CONFIGURE_CMDS
+ 	(cd $(@D) && ./bootstrap.sh $(BOOST_FLAGS))
+-	echo "using gcc : $(TARGET_CC_VERSION) : $(TARGET_CXX) : <cxxflags>\"$(BOOST_TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > $(@D)/user-config.jam
++	echo "using gcc : `$(TARGET_CC) -dumpversion` : $(TARGET_CXX) : <cxxflags>\"$(BOOST_TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > $(@D)/user-config.jam
+ 	echo "" >> $(@D)/user-config.jam
+ endef
+ 
+ define HOST_BOOST_CONFIGURE_CMDS
+ 	(cd $(@D) && ./bootstrap.sh $(HOST_BOOST_FLAGS))
+-	echo "using gcc : $(HOST_CC_VERSION) : $(HOSTCXX) : <cxxflags>\"$(HOST_CXXFLAGS)\" <linkflags>\"$(HOST_LDFLAGS)\" ;" > $(@D)/user-config.jam
++	echo "using gcc : `$(HOST_CC) -dumpversion` : $(HOSTCXX) : <cxxflags>\"$(HOST_CXXFLAGS)\" <linkflags>\"$(HOST_LDFLAGS)\" ;" > $(@D)/user-config.jam
+ 	echo "" >> $(@D)/user-config.jam
+ endef
+ 
 -- 
 2.1.4
