@@ -1,55 +1,131 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 12 Jul 2015 12:35:16 +0200
-Subject: [Buildroot] [PATCHv3] busybox: improve support for telnetd
-In-Reply-To: <20150712080330.GA4008@free.fr>
-References: <1436660410-13431-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150712080330.GA4008@free.fr>
-Message-ID: <55A242E4.1000903@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 12 Jul 2015 12:37:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cpupower: new package
+In-Reply-To: <1432249380-5920-1-git-send-email-james.knight@rockwellcollins.com>
+References: <1432249380-5920-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <55A24356.8000804@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/12/15 10:03, Yann E. MORIN wrote:
-> Thomas, Alexey, All,
+Hi James,
+
+Le 22/05/2015 01:03, James Knight a ?crit :
+> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+> ---
+>  package/Config.in            |  1 +
+>  package/cpupower/Config.in   | 10 ++++++++++
+>  package/cpupower/cpupower.mk | 37 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 48 insertions(+)
+>  create mode 100644 package/cpupower/Config.in
+>  create mode 100644 package/cpupower/cpupower.mk
 > 
-> On 2015-07-12 02:20 +0200, Thomas Petazzoni spake thusly:
->> From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
->>
->> If target has connection to the network it might be pretty useful to
->> have telnet connection to it instead of serial console or even in
->> addition to serial console.
-> [--SNIP--]
->> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
->> index 92874cd..35f1e96 100644
->> --- a/package/busybox/busybox.mk
->> +++ b/package/busybox/busybox.mk
-> [--SNIP--]
->> +define BUSYBOX_ADJUST_TELNET_SECURETTY
->> +	if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y $(@D)/.config; then \
->> +		for i in `seq 0 3` ; do \
->> +			grep -q "pts/$$i" $(TARGET_DIR)/etc/securetty || \
->> +				echo "pts/$$i" >> $(TARGET_DIR)/etc/securetty ; \
+> diff --git a/package/Config.in b/package/Config.in
+> index e0c2e2a..0bd6eb6 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1378,6 +1378,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  	source "package/coreutils/Config.in"
+>  endif
+>  	source "package/cpuload/Config.in"
+> +	source "package/cpupower/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  	source "package/dcron/Config.in"
+>  	source "package/debianutils/Config.in"
+> diff --git a/package/cpupower/Config.in b/package/cpupower/Config.in
+> new file mode 100644
+> index 0000000..745dd2b
+> --- /dev/null
+> +++ b/package/cpupower/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_CPUPOWER
+> +	bool "cpupower"
+> +	depends on BR2_LINUX_KERNEL
+> +	select BR2_PACKAGE_PCIUTILS
+
+pciutils depends on !BR2_bfin, so cpupower shouldn't be selected with bfin target.
+
+> +	help
+> +	  cpupower is a collection of tools to examine and tune power 
+> +	  saving related features of your processor.
+> +
+> +comment "cpupower needs a Linux kernel to be built"
+> +	depends on !BR2_LINUX_KERNEL
+> diff --git a/package/cpupower/cpupower.mk b/package/cpupower/cpupower.mk
+> new file mode 100644
+> index 0000000..cb1f938
+> --- /dev/null
+> +++ b/package/cpupower/cpupower.mk
+> @@ -0,0 +1,37 @@
+> +################################################################################
+> +#
+> +# cpupower
+> +#
+> +################################################################################
+> +
+> +# Source taken from the Linux kernel tree
+> +CPUPOWER_SOURCE =
+> +CPUPOWER_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+> +
+> +CPUPOWER_DEPENDENCIES = linux pciutils
+> +
+> +define CPUPOWER_BUILD_CMDS
+> +	$(Q)if test ! -f $(LINUX_DIR)/tools/power/cpupower/Makefile ; then \
+> +		echo "Your kernel version is too old and does not have the cpupower tool." ; \
+> +		echo "At least kernel 3.4 must be used." ; \
+> +		exit 1 ; \
+> +	fi
+> +	
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+> +		CROSS=$(TARGET_CROSS) \
+> +		CPUFREQ_BENCH=false \
+> +		DEBUG=false \
+> +		cpupower
+> +endef
+> +
+> +define CPUPOWER_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 755 $(LINUX_DIR)/tools/power/cpupower/cpupower \
+> +		$(TARGET_DIR)/usr/bin/cpupower
+> +
+> +	$(INSTALL) -D -m 0755 $(LINUX_DIR)/tools/power/cpupower/libcpupower.so.0.0.0 \
+> +		$(TARGET_DIR)/lib/libcpupower.so.0.0.0
+> +	ln -snf libcpupower.so.0.0.0 $(TARGET_DIR)/lib/libcpupower.so
+> +	ln -snf libcpupower.so.0.0.0 $(TARGET_DIR)/lib/libcpupower.so.0
+> +endef
+
+It would be better to use cpupower_install target available in cpupower's
+Makefile instead:
+
+define CPUPOWER_INSTALL_TARGET_CMDS
+	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+		CROSS=$(TARGET_CROSS) \
+		CPUFREQ_BENCH=false \
+		DEBUG=false \
+		DESTDIR=$(TARGET_DIR) \
+		cpupower_install
+endef
+
+Since cpupower install a shared library, it should be also available in staging.
+So you should also add:
+
+CPUPOWER_INSTALL_STAGING = YES
+
+define CPUPOWER_INSTALL_STAGING_CMDS
+	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+		CROSS=$(TARGET_CROSS) \
+		CPUFREQ_BENCH=false \
+		DEBUG=false \
+		DESTDIR=$(STAGING_DIR) \
+		cpupower_install
+endef
+
+By the way, do you know a tool that can link against libcpupower.so ?
+
+Best regards,
+Romain Naour
+
+> +
+> +$(eval $(generic-package))
 > 
-> Why don't we simply add those four in our securetty, directly in our
-> skeleton?
-
- That renders securetty even more useless than it already is.
-
- Why don't we just remove CONFIG_FEATURE_SECURETTY from our default busybox
-config and get rid of all the securetty hacks?
-
- Regards,
- Arnout
-
-[snip]
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
