@@ -1,57 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 14:57:05 +0200
-Subject: [Buildroot] [git commit] systemd: fix some coding style issues
-Message-ID: <20150712125725.EBEB2818A0@busybox.osuosl.org>
+Date: Sun, 12 Jul 2015 14:57:57 +0200
+Subject: [Buildroot] [PATCH] systemd: Pretty fixes
+In-Reply-To: <1436703273-8690-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1436703273-8690-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20150712145757.7aa9466a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b5c763c490dc1ef42149468910aaaacf4710f049
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxime Hadjinlian,
 
-[Thomas: adjust commit title, some additioanl coding style fixes.]
+On Sun, 12 Jul 2015 14:14:33 +0200, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/systemd/systemd.mk | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/systemd/systemd.mk |   15 +++++++--------
- 1 files changed, 7 insertions(+), 8 deletions(-)
+Applied with a better commit title and some additional coding style
+fixes, thanks.
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 0a1f00f..7eb7abe 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -72,16 +72,14 @@ SYSTEMD_CONF_OPTS += --disable-seccomp
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_ALL_EXTRAS),y)
--SYSTEMD_DEPENDENCIES += \
--	xz 		\
--	libgcrypt
--SYSTEMD_CONF_OPTS += 	\
--	--enable-xz 	\
-+SYSTEMD_DEPENDENCIES += xz libgcrypt
-+SYSTEMD_CONF_OPTS += \
-+	--enable-xz \
- 	--enable-gcrypt	\
- 	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
- else
--SYSTEMD_CONF_OPTS += 	\
--	--disable-xz 	\
-+SYSTEMD_CONF_OPTS += \
-+	--disable-xz \
- 	--disable-gcrypt
- endif
- 
-@@ -143,7 +141,8 @@ define SYSTEMD_INSTALL_INIT_HOOK
- 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/poweroff
- 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/reboot
- 
--	ln -fs ../../../lib/systemd/system/multi-user.target $(TARGET_DIR)/etc/systemd/system/default.target
-+	ln -fs ../../../lib/systemd/system/multi-user.target \
-+		$(TARGET_DIR)/etc/systemd/system/default.target
- endef
- 
- define SYSTEMD_INSTALL_MACHINEID_HOOK
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
