@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jul 2015 14:11:23 +0200
-Subject: [Buildroot] [PATCH 1/7] core/pkg-kconfig: don't enforce check for
-	config file when not building
+Date: Sun, 12 Jul 2015 14:11:24 +0200
+Subject: [Buildroot] [PATCH 2/7] package/linux: don't enforce check for DTS
+	when not building
 In-Reply-To: <cover.1436702899.git.yann.morin.1998@free.fr>
 References: <cover.1436702899.git.yann.morin.1998@free.fr>
-Message-ID: <388470f3f96d8a3eef231a93cc2b961e43c1b415.1436702899.git.yann.morin.1998@free.fr>
+Message-ID: <ff5a9ea519a5c72dd917369e6409674b9d4a340f.1436702899.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,33 @@ Currently, this is triggering the error message:
     make randconfig
     make source
 
-Only limit the check to enforce a config file being set to when we are
-actually building, like is done in the various kconfig-using packages.
+Limit the checks that enforce a DTS is set and at most one DTB is
+appended to when we are actually building, like is done for the
+configuration-file variables.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-kconfig.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ linux/linux.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index c86c340..41c6fd5 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -90,7 +90,7 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
- ifeq ($$($$($(2)_KCONFIG_VAR)),y)
- 
- # FOO_KCONFIG_FILE is required
--ifeq ($$($(2)_KCONFIG_FILE),)
-+ifeq ($(BR_BUILDING)$$($(2)_KCONFIG_FILE),y)
- $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
+diff --git a/linux/linux.mk b/linux/linux.mk
+index eca1450..b2c9481 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -88,12 +88,12 @@ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
+ KERNEL_DTS_NAME = $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
  endif
  
+-ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),y)
++ifeq ($(BR_BUILDING)$(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),yy)
+ $(error No kernel device tree source specified, check your \
+ BR2_LINUX_KERNEL_USE_INTREE_DTS / BR2_LINUX_KERNEL_USE_CUSTOM_DTS settings)
+ endif
+ 
+-ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
++ifeq ($(BR_BUILDING)$(BR2_LINUX_KERNEL_APPENDED_DTB),yy)
+ ifneq ($(words $(KERNEL_DTS_NAME)),1)
+ $(error Kernel with appended device tree needs exactly one DTS source. \
+ 	Check BR2_LINUX_KERNEL_INTREE_DTS_NAME or BR2_LINUX_KERNEL_CUSTOM_DTS_PATH.)
 -- 
 1.9.1
