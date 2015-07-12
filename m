@@ -1,40 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 00:40:28 +0200
-Subject: [Buildroot] [git commit] flite: fix <pkg>_LICENSE_FILES
-Message-ID: <20150712224116.C88F380438@busybox.osuosl.org>
+Date: Mon, 13 Jul 2015 00:45:07 +0200
+Subject: [Buildroot] [git commit] Revert "rsyslog: fix config file comment
+	style"
+Message-ID: <20150712224606.3BF4880425@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c60766a3727a21e90e12d4c86a17d7565302de6e
+commit: http://git.buildroot.net/buildroot/commit/?id=6a9095a39a72926e622285ba21d93dd48d580f0a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Following commit dd4bcebd7c43212650cccc2494527dc3d69024d9 ("flite: use
-FLITE_STRIP_COMPONENTS and FLITE_SUBDIR"), the FLITE_LICENSE_FILES was
-no longer pointing to existing directories, which was breaking
-legal-info.
+This reverts commit d42f0f96aa13bc160bdfeb40ca75f53adb7af64e, which
+breaks the build since the patch being added by this commit is in fact
+already part of the 8.9.0 rsyslog release we are using.
 
-Fixes:
+Indeed, in the rsyslog repository:
 
-  http://autobuild.buildroot.org/results/798/7983ec41a3f136bd997ebbfc110c7fc51ad79717/
+$ git tag --contains fe01c9ec4979c78b6a7caf045cab17ba52d4ad08
+[...]
+v8.10.0
+v8.10.0.ad1
+v8.11.0
+v8.7.0
+v8.8.0
+v8.8.0.ad1
+v8.9.0
+v8.9.0.ad1
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/flite/flite.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../rsyslog/0001-fix-config-file-comments.patch    |   37 --------------------
+ 1 files changed, 0 insertions(+), 37 deletions(-)
 
-diff --git a/package/flite/flite.mk b/package/flite/flite.mk
-index 07ec473..611e334 100644
---- a/package/flite/flite.mk
-+++ b/package/flite/flite.mk
-@@ -25,7 +25,7 @@ FLITE_SITE = http://www.speech.cs.cmu.edu/flite/packed/flite-$(FLITE_VERSION)
- FLITE_STRIP_COMPONENTS = 0
- FLITE_SUBDIR = flite-$(FLITE_VERSION)-release
- FLITE_LICENSE = BSD-4c
--FLITE_LICENSE_FILES = COPYING
-+FLITE_LICENSE_FILES = $(FLITE_SUBDIR)/COPYING
- 
- FLITE_INSTALL_STAGING = YES
- # Patching configure.in
+diff --git a/package/rsyslog/0001-fix-config-file-comments.patch b/package/rsyslog/0001-fix-config-file-comments.patch
+deleted file mode 100644
+index bc5448d..0000000
+--- a/package/rsyslog/0001-fix-config-file-comments.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From fe01c9ec4979c78b6a7caf045cab17ba52d4ad08 Mon Sep 17 00:00:00 2001
+-From: Brad Barden <brad+github@mifflinet.net>
+-Date: Sun, 11 Jan 2015 17:52:11 -0600
+-Subject: [PATCH] bugfix header in platform/redhat/rsyslog.conf
+-
+-the "For more information" doc path includes the string "*/", breaking c-style comment format. fixes #202.
+----
+- platform/redhat/rsyslog.conf | 19 +++++++++----------
+- 1 file changed, 9 insertions(+), 10 deletions(-)
+-
+-diff --git a/platform/redhat/rsyslog.conf b/platform/redhat/rsyslog.conf
+-index 340874d..3df6c7e 100644
+---- a/platform/redhat/rsyslog.conf
+-+++ b/platform/redhat/rsyslog.conf
+-@@ -1,13 +1,12 @@
+--/* rsyslog configuration file (for Red Hat-based systems)
+-- * note that most of this config file uses old-style format,
+-- * because it is well-known AND quite suitable for simple cases
+-- * like we have with the default config. For more advanced 
+-- * things, RainerScript configuration is suggested.
+-- *
+-- * For more information see /usr/share/doc/rsyslog-*/rsyslog_conf.html
+-- * or latest version online at http://www.rsyslog.com/doc/rsyslog_conf.html 
+-- * If you experience problems, see http://www.rsyslog.com/doc/troubleshoot.html
+-- */
+-+# rsyslog configuration file (for Red Hat-based systems)
+-+# note that most of this config file uses old-style format,
+-+# because it is well-known AND quite suitable for simple cases
+-+# like we have with the default config. For more advanced 
+-+# things, RainerScript configuration is suggested.
+-+#
+-+# For more information see /usr/share/doc/rsyslog-*/rsyslog_conf.html
+-+# or latest version online at http://www.rsyslog.com/doc/rsyslog_conf.html 
+-+# If you experience problems, see http://www.rsyslog.com/doc/troubleshoot.html
+- 
+- #### MODULES ####
+- 
