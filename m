@@ -1,76 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 11:57:54 +0200
-Subject: [Buildroot] [git commit] package/nodejs: version bump to 0.12.7
-Message-ID: <20150712095758.7B4FE8181F@busybox.osuosl.org>
+Date: Sun, 12 Jul 2015 12:30:59 +0200
+Subject: [Buildroot] [git commit] c-icap: needs MMU support
+Message-ID: <20150712103129.2116C7FFF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d082f1390c08bad9cc6ceb6c96039fc6aa8dd3d1
+commit: http://git.buildroot.net/buildroot/commit/?id=58f6b79334ef19fd63f9acaa27486fe8a76f14d3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fixes:
+
+  http://autobuild.buildroot.org/results/8c3/8c3e397eeecb2a6a39fbae1d8665bff92ef3e3bb/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...01-Remove-dependency-on-Python-bz2-module.patch |    0
- .../0002-gyp-force-link-command-to-use-CXX.patch   |    0
- ...hon-variable-instead-of-hardcoding-Python.patch |    0
- ...4-fix-build-error-without-OpenSSL-support.patch |    0
- package/nodejs/Config.in                           |    4 ++--
- package/nodejs/nodejs.hash                         |    4 ++--
- 6 files changed, 4 insertions(+), 4 deletions(-)
+ package/c-icap/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/nodejs/0.12.6/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/0.12.7/0001-Remove-dependency-on-Python-bz2-module.patch
-similarity index 100%
-rename from package/nodejs/0.12.6/0001-Remove-dependency-on-Python-bz2-module.patch
-rename to package/nodejs/0.12.7/0001-Remove-dependency-on-Python-bz2-module.patch
-diff --git a/package/nodejs/0.12.6/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/0.12.7/0002-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/0.12.6/0002-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/0.12.7/0002-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/0.12.6/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch b/package/nodejs/0.12.7/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-similarity index 100%
-rename from package/nodejs/0.12.6/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-rename to package/nodejs/0.12.7/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-diff --git a/package/nodejs/0.12.6/0004-fix-build-error-without-OpenSSL-support.patch b/package/nodejs/0.12.7/0004-fix-build-error-without-OpenSSL-support.patch
-similarity index 100%
-rename from package/nodejs/0.12.6/0004-fix-build-error-without-OpenSSL-support.patch
-rename to package/nodejs/0.12.7/0004-fix-build-error-without-OpenSSL-support.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index ff7f56c..0838729 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -34,7 +34,7 @@ config BR2_BR2_PACKAGE_NODEJS_0_10_X
+diff --git a/package/c-icap/Config.in b/package/c-icap/Config.in
+index f949c16..8121a26 100644
+--- a/package/c-icap/Config.in
++++ b/package/c-icap/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_C_ICAP
+ 	bool "c-icap"
+ 	depends on !BR2_PREFER_STATIC_LIB
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  c-icap is an implementation of an ICAP server. It can be
+ 	  used with HTTP proxies that support the ICAP protocol to
+@@ -13,4 +14,5 @@ config BR2_PACKAGE_C_ICAP
+ 	  http://c-icap.sourceforge.net/
  
- # V8 included with v0.12.5 requires at least ARMv6
- config BR2_BR2_PACKAGE_NODEJS_0_12_X
--	bool "v0.12.6"
-+	bool "v0.12.7"
- 	depends on !BR2_ARM_CPU_ARMV5
- 
- endchoice
-@@ -42,7 +42,7 @@ endchoice
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
- 	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
--	default "0.12.6"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
-+	default "0.12.7"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
- 
- menu "Module Selection"
- 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index f3b2831..8cd670e 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.39/SHASUMS256.txt
- sha256	68f8d8f9515c4e77e2a06034b742e19e9848c1fee5bcadedc1d68f3e4302df37  node-v0.10.39.tar.gz
- 
--# From upstream URL: http://nodejs.org/dist/v0.12.6/SHASUMS256.txt
--sha256	7a3b5ac351973a9dee8edbf0684bc8d0dea44b231e42274ffb008141ffa19ad2  node-v0.12.6.tar.gz
-+# From upstream URL: http://nodejs.org/dist/v0.12.7/SHASUMS256.txt
-+sha256	b23d64df051c9c969b0c583f802d5d71de342e53067127a5061415be7e12f39d  node-v0.12.7.tar.gz
+ comment "c-icap needs a toolchain w/ threads and dynamic library"
++	depends on BR2_USE_MMU
+ 	depends on BR2_PREFER_STATIC_LIB  || !BR2_TOOLCHAIN_HAS_THREADS
