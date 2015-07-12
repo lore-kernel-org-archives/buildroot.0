@@ -1,50 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 13 Jul 2015 01:31:10 +0200
-Subject: [Buildroot] [PATCH] spidev_test: use the one from the kernel we
- build
-In-Reply-To: <1421696137-17377-1-git-send-email-vincent.stehle@freescale.com>
-References: <1421696137-17377-1-git-send-email-vincent.stehle@freescale.com>
-Message-ID: <55A2F8BE.6020508@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jul 2015 01:36:43 +0200
+Subject: [Buildroot] [git commit] qt5base: add option for custom qconfig file
+Message-ID: <20150712233718.4CB83818C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Vincent,
+commit: http://git.buildroot.net/buildroot/commit/?id=b5fcf958276fdc92bd041bc07438d6e4a7d2c59a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- We're doing a big patchwork cleanup and finally getting back at your patch.
+Add in support for a custom qconfig file in the same way it is
+already present for the Qt4 package
 
-On 01/19/15 20:35, Vincent Stehl? wrote:
-> Add a configuration option to use the spidev_test.c from the Linux kernel we
-> build. This allows to be perfectly consistent between spidev_test and the
-> kernel in use.
+Signed-off-by: Will Wagner <will_wagner@carallon.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5base/Config.in  |   13 +++++++++++++
+ package/qt5/qt5base/qt5base.mk |   13 +++++++++++++
+ 2 files changed, 26 insertions(+), 0 deletions(-)
 
- The conclusion of the earlier discussion is that spidev_test should really only
-be built together with the kernel, so you could remove the extra config option.
-Note, if you do that, there may be a need for legacy handling otherwise a
-.config which previously had SPIDEV_TEST but no kernel would suddenly loose the
-SPIDEV_TEST.
-
- However, there is also the new kernel-tools infra proposed by Romain, and this
-change would fit into that approach perfectly. So if you resubmit, consider
-using the kernel-tools infra.
-
-
- Regards,
- Arnout
-
-> 
-> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[snip]
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index df1d3dc..106517f 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -28,6 +28,19 @@ config BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
+ 
+ 	  See also http://doc.qt.io/qt-5/licensing.html
+ 
++config BR2_PACKAGE_QT5BASE_CONFIG_FILE
++	string "Config file"
++	help
++	  Configure options allow to set which modules are being
++	  compiled or not in Qt, but Qt also provide a more
++	  fine-grained mechanism to configure which features should be
++	  enabled or disabled, through a header file. Examples of such
++	  header files can be found in src/corelib/global/qconfig-*.h
++	  in the Qt sources.
++
++	  This option allows to set the path of such a configuration
++	  file, which Buildroot will give to Qt at compile time.
++
+ config BR2_PACKAGE_QT5BASE_EXAMPLES
+ 	bool "Compile and install examples (with code)"
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 2eebb5b..31247dd 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -53,6 +53,12 @@ QT5BASE_LICENSE = Commercial license
+ QT5BASE_REDISTRIBUTE = NO
+ endif
+ 
++QT5BASE_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_QT5BASE_CONFIG_FILE))
++
++ifneq ($(QT5BASE_CONFIG_FILE),)
++QT5BASE_CONFIGURE_OPTS += -qconfig buildroot
++endif
++
+ # Qt5 SQL Plugins
+ ifeq ($(BR2_PACKAGE_QT5BASE_SQL),y)
+ ifeq ($(BR2_PACKAGE_QT5BASE_MYSQL),y)
+@@ -168,7 +174,14 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
+ 
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
+ 
++ifneq ($(QT5BASE_CONFIG_FILE),)
++define QT5BASE_CONFIGURE_CONFIG_FILE
++	cp $(QT5BASE_CONFIG_FILE) $(@D)/src/corelib/global/qconfig-buildroot.h
++endef
++endif
++
+ define QT5BASE_CONFIGURE_CMDS
++	$(QT5BASE_CONFIGURE_CONFIG_FILE)
+ 	(cd $(@D); \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
