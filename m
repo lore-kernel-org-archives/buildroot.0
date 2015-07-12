@@ -1,36 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 12:31:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: version bump to 0.12.7
-In-Reply-To: <1436688777-5421-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1436688777-5421-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150712123142.017d2a22@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 12 Jul 2015 12:35:16 +0200
+Subject: [Buildroot] [PATCHv3] busybox: improve support for telnetd
+In-Reply-To: <20150712080330.GA4008@free.fr>
+References: <1436660410-13431-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150712080330.GA4008@free.fr>
+Message-ID: <55A242E4.1000903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+On 07/12/15 10:03, Yann E. MORIN wrote:
+> Thomas, Alexey, All,
+> 
+> On 2015-07-12 02:20 +0200, Thomas Petazzoni spake thusly:
+>> From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+>>
+>> If target has connection to the network it might be pretty useful to
+>> have telnet connection to it instead of serial console or even in
+>> addition to serial console.
+> [--SNIP--]
+>> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+>> index 92874cd..35f1e96 100644
+>> --- a/package/busybox/busybox.mk
+>> +++ b/package/busybox/busybox.mk
+> [--SNIP--]
+>> +define BUSYBOX_ADJUST_TELNET_SECURETTY
+>> +	if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y $(@D)/.config; then \
+>> +		for i in `seq 0 3` ; do \
+>> +			grep -q "pts/$$i" $(TARGET_DIR)/etc/securetty || \
+>> +				echo "pts/$$i" >> $(TARGET_DIR)/etc/securetty ; \
+> 
+> Why don't we simply add those four in our securetty, directly in our
+> skeleton?
 
-On Sun, 12 Jul 2015 10:12:57 +0200, J?rg Krause wrote:
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  .../0001-Remove-dependency-on-Python-bz2-module.patch                 | 0
->  .../{0.12.6 => 0.12.7}/0002-gyp-force-link-command-to-use-CXX.patch   | 0
->  .../0003-Use-a-python-variable-instead-of-hardcoding-Python.patch     | 0
->  .../0004-fix-build-error-without-OpenSSL-support.patch                | 0
->  package/nodejs/Config.in                                              | 4 ++--
->  package/nodejs/nodejs.hash                                            | 4 ++--
->  6 files changed, 4 insertions(+), 4 deletions(-)
->  rename package/nodejs/{0.12.6 => 0.12.7}/0001-Remove-dependency-on-Python-bz2-module.patch (100%)
->  rename package/nodejs/{0.12.6 => 0.12.7}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
->  rename package/nodejs/{0.12.6 => 0.12.7}/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch (100%)
->  rename package/nodejs/{0.12.6 => 0.12.7}/0004-fix-build-error-without-OpenSSL-support.patch (100%)
+ That renders securetty even more useless than it already is.
 
-Applied, thanks.
+ Why don't we just remove CONFIG_FEATURE_SECURETTY from our default busybox
+config and get rid of all the securetty hacks?
 
-Thomas
+ Regards,
+ Arnout
+
+[snip]
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
