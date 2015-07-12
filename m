@@ -1,52 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 13 Jul 2015 01:44:31 +0200
-Subject: [Buildroot] [PATCH 2/7] package/linux: don't enforce check for
- DTS when not building
-In-Reply-To: <20150712200309.GB2451@tarshish>
-References: <cover.1436702899.git.yann.morin.1998@free.fr>
- <ff5a9ea519a5c72dd917369e6409674b9d4a340f.1436702899.git.yann.morin.1998@free.fr>
- <20150712200309.GB2451@tarshish>
-Message-ID: <55A2FBDF.9070808@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jul 2015 01:48:14 +0200
+Subject: [Buildroot] [PATCH 03/16] package/dbus: fix machine-id when
+ using systemd
+In-Reply-To: <1421684056-5266-4-git-send-email-maxtram95@gmail.com>
+References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
+ <1421684056-5266-4-git-send-email-maxtram95@gmail.com>
+Message-ID: <20150713014814.5f8bb1eb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/12/15 22:03, Baruch Siach wrote:
-> Hi Yann,
-> 
-> On Sun, Jul 12, 2015 at 02:11:24PM +0200, Yann E. MORIN wrote:
->> Currently, this is triggering the error message:
->>     make randconfig
->>     make source
->>
->> Limit the checks that enforce a DTS is set and at most one DTB is
->> appended to when we are actually building, like is done for the
->> configuration-file variables.
->>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> [snip]
-> 
->> -ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),y)
->> +ifeq ($(BR_BUILDING)$(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),yy)
-> 
-> yy means that exactly two of these must be 'y'. Is that intended?
+Dear Maxim Mikityanskiy,
 
- Yes it is, because KERNEL_DTS_NAME is a string, not a boolean, so it
-essentially checks that it is empty and DTS_SUPPORT is selected. But admittedly
-it's not very transparent, it would make sense to add delimiters in-between at
-least.
+On Mon, 19 Jan 2015 18:14:03 +0200, Maxim Mikityanskiy wrote:
+> When systemd is used, /var/lib/dbus becomes dangling symlink, because
+> nobody does mkdir /tmp/dbus, so /var/lib/dbus/machine-id could not be
+> written. On SysVinit systems there is init script that creates
+> /tmp/dbus.
+> 
+> This patch preserves old behavior for SysVinit systems, and introduces
+> new one for systemd-booted systems: /var/lib/dbus is a persistent
+> directory, it holds symlink /var/lib/dbus/machine-id -> /etc/machine-id
+> as machine-id(5) suggests, and /etc/machine-id is managed by systemd.
+> 
+> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+> ---
+>  package/dbus/dbus.mk | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
 
- Regards,
- Arnout
+Applied, thanks.
 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
