@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jul 2015 14:11:26 +0200
-Subject: [Buildroot] [PATCH 4/7] boot/barebox: check for config file before
-	calling kconfig-package
+Date: Sun, 12 Jul 2015 14:11:28 +0200
+Subject: [Buildroot] [PATCH 6/7] package/busybox: check for config file
+	before calling kconfig-package
 In-Reply-To: <cover.1436702899.git.yann.morin.1998@free.fr>
 References: <cover.1436702899.git.yann.morin.1998@free.fr>
-Message-ID: <858e5d2f0af94acc6d17e280b40f5d5efece06ff.1436702899.git.yann.morin.1998@free.fr>
+Message-ID: <1095e66da8428c3c8a08d1c5a6fb2bf90f93c418.1436702899.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,27 +20,23 @@ So, only call kconfig-package after we do the check.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- boot/barebox/barebox.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/busybox/busybox.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 7e53037..e45976d 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -109,10 +109,12 @@ define BAREBOX_INSTALL_TARGET_CMDS
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 92874cd..6b57fd7 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -207,4 +207,10 @@ define BUSYBOX_INSTALL_INIT_SYSV
+ 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
  endef
- endif
  
--$(eval $(kconfig-package))
--
 +# Checks to give errors that the user can understand
 +# Must be before we call to kconfig-package
- ifeq ($(BR2_TARGET_BAREBOX)$(BR_BUILDING),yy)
- ifeq ($(BAREBOX_SOURCE_CONFIG),)
- $(error No Barebox config file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE settings)
- endif
- endif
++ifeq ($(BR_BUILDING)$(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG)),y)
++$(error No BusyBox configuration file specified, check your BR2_PACKAGE_BUSYBOX_CONFIG setting)
++endif
 +
-+$(eval $(kconfig-package))
+ $(eval $(kconfig-package))
 -- 
 1.9.1
