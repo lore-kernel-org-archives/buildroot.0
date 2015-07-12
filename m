@@ -1,60 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jul 2015 02:21:35 +0200
-Subject: [Buildroot] [PATCH 05/11 v3] package/ktap: use kernel-module helper
+Date: Sun, 12 Jul 2015 02:21:34 +0200
+Subject: [Buildroot] [PATCH 04/11 v3] package/igh-ethercat: use
+	kernel-module helper
 In-Reply-To: <cover.1436660369.git.yann.morin.1998@free.fr>
 References: <cover.1436660369.git.yann.morin.1998@free.fr>
-Message-ID: <fb4b6ed7812e3a847c65cda08a3fd7046493db9a.1436660369.git.yann.morin.1998@free.fr>
+Message-ID: <a1f684748617ccb0ee8c3d3345a6fcc9362eaac3.1436660369.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Passing the KERNEL_SRC variable is no longer needed, since it was only
-used to run commands like:
-    $(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules
-
-which is basically what the new kernel-module infra is now doing.
+igh-ethercat's Makefile just contains calls to the Linux buildsystem,
+that do exactly what we now do with our kernel-module infra.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 ---
-Changes v1 -> v2;
-  - explain why we get rid of a variable  (Thomas)
----
- package/ktap/ktap.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/igh-ethercat/igh-ethercat.mk | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
-index 4a0e51c..966b51c 100644
---- a/package/ktap/ktap.mk
-+++ b/package/ktap/ktap.mk
-@@ -9,8 +9,6 @@ KTAP_SITE = $(call github,ktap,ktap,$(KTAP_VERSION))
- KTAP_LICENSE = GPLv2
- KTAP_LICENSE_FILES = LICENSE-GPL
+diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
+index b5221f8..32c49a3 100644
+--- a/package/igh-ethercat/igh-ethercat.mk
++++ b/package/igh-ethercat/igh-ethercat.mk
+@@ -10,7 +10,6 @@ IGH_ETHERCAT_SOURCE = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
+ IGH_ETHERCAT_LICENSE = GPLv2 (IgH EtherCAT master), LGPLv2.1 (libraries)
+ IGH_ETHERCAT_LICENSE_FILES = COPYING COPYING.LESSER
  
--KTAP_DEPENDENCIES = linux
+-IGH_ETHERCAT_DEPENDENCIES = linux
+ IGH_ETHERCAT_INSTALL_STAGING = YES
+ 
+ IGH_ETHERCAT_CONF_OPTS = \
+@@ -22,16 +21,5 @@ IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,
+ IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e)
+ IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
+ 
+-define IGH_ETHERCAT_BUILD_MODULES
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
+-endef
 -
- ifeq ($(BR2_PACKAGE_ELFUTILS),y)
- KTAP_DEPENDENCIES += elfutils
- else
-@@ -19,12 +17,13 @@ endif
- 
- define KTAP_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) $(KTAP_FLAGS) ktap
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) mod
- endef
- 
- define KTAP_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m755 $(@D)/ktap  $(TARGET_DIR)/usr/bin/ktap
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) modules_install
- endef
- 
-+KTAP_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
-+
+-IGH_ETHERCAT_POST_BUILD_HOOKS += IGH_ETHERCAT_BUILD_MODULES
+-
+-define IGH_ETHERCAT_INSTALL_MODULES
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules_install
+-endef
+-
+-IGH_ETHERCAT_POST_INSTALL_TARGET_HOOKS += IGH_ETHERCAT_INSTALL_MODULES
+-
 +$(eval $(kernel-module))
- $(eval $(generic-package))
+ $(eval $(autotools-package))
 -- 
 1.9.1
