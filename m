@@ -1,54 +1,90 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 12 Jul 2015 23:06:36 +0300
-Subject: [Buildroot] [PATCH 7/7] package/uclibc: check for config file
- before calling kconfig-package
-In-Reply-To: <62fed5cb399404addb30c60c3dc128f46333c9ec.1436702899.git.yann.morin.1998@free.fr>
-References: <cover.1436702899.git.yann.morin.1998@free.fr>
- <62fed5cb399404addb30c60c3dc128f46333c9ec.1436702899.git.yann.morin.1998@free.fr>
-Message-ID: <20150712200636.GC2451@tarshish>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 12 Jul 2015 22:12:15 +0200
+Subject: [Buildroot] [PATCH] busybox: Add NTP startup script
+Message-ID: <1436731935-25223-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/busybox/S49ntp        | 25 +++++++++++++++++++++++++
+ package/busybox/busybox.mk    | 10 ++++++++++
+ package/busybox/ntpd.etc.conf |  4 ++++
+ 3 files changed, 39 insertions(+)
+ create mode 100644 package/busybox/S49ntp
+ create mode 100644 package/busybox/ntpd.etc.conf
 
-On Sun, Jul 12, 2015 at 02:11:29PM +0200, Yann E. MORIN wrote:
-> If we check that the user provides a config file after we call to the
-> kconfig-package infra, the error message we get is the one for the
-> kconfig-package infra, not the custom error message we want to show to
-> the user.
-> 
-> So, only call kconfig-package after we do the check.
-
-The commit log doesn't match the patch. There was no error message before this 
-patch, AFAICS.
-
-baruch
-
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/uclibc/uclibc.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index ecbfa11..7dee6b3 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -474,4 +474,10 @@ define UCLIBC_INSTALL_STAGING_CMDS
->  	$(UCLIBC_INSTALL_UTILS_STAGING)
->  endef
->  
-> +# Checks to give errors that the user can understand
-> +# Must be before we call to kconfig-package
-> +ifeq ($(BR_BUILDING)$(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG)),y)
-> +$(error No uClibc configuration file specified, check your BR2_UCLIBC_CONFIG setting)
-> +endif
-> +
->  $(eval $(kconfig-package))
-
+diff --git a/package/busybox/S49ntp b/package/busybox/S49ntp
+new file mode 100644
+index 0000000..61dbb92
+--- /dev/null
++++ b/package/busybox/S49ntp
+@@ -0,0 +1,25 @@
++#!/bin/sh
++
++[ -x /usr/sbin/ntpd ] || exit 0
++[ -f /etc/ntpd.conf ] || exit 0
++
++case "$1" in
++	start)
++		echo -n "Starting ntpd: "
++		start-stop-daemon -S -x /usr/sbin/ntpd -- -l
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
++		;;
++	stop)
++		echo -n "Stopping ntpd: "
++		start-stop-daemon -K -q -x /usr/sbin/ntpd
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
++		;;
++	restart)
++		"$0" stop
++		sleep 1
++		"$0" start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		;;
++esac
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index fbbfcbc..4afebc3 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -126,6 +126,15 @@ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
+ endef
+ endif
+ 
++define BUSYBOX_INSTALL_NTP_SCRIPT
++	if grep -q CONFIG_NTPD=y $(@D)/.config; then \
++		$(INSTALL) -m 0755 -D package/busybox/S49ntp \
++			$(TARGET_DIR)/etc/init.d/S49ntp; \
++		$(INSTALL) -m 0755 -D package/busybox/ntpd.etc.conf \
++			$(TARGET_DIR)/etc/ntp.conf; \
++	fi
++endef
++
+ define BUSYBOX_INSTALL_UDHCPC_SCRIPT
+ 	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+@@ -204,6 +213,7 @@ endef
+ define BUSYBOX_INSTALL_TARGET_CMDS
+ 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) install
+ 	$(BUSYBOX_INSTALL_INITTAB)
++	$(BUSYBOX_INSTALL_NTP_SCRIPT)
+ 	$(BUSYBOX_INSTALL_UDHCPC_SCRIPT)
+ 	$(BUSYBOX_INSTALL_MDEV_CONF)
+ endef
+diff --git a/package/busybox/ntpd.etc.conf b/package/busybox/ntpd.etc.conf
+new file mode 100644
+index 0000000..1e8afc5
+--- /dev/null
++++ b/package/busybox/ntpd.etc.conf
+@@ -0,0 +1,4 @@
++server 0.pool.ntp.org
++server 1.pool.ntp.org
++server 3.pool.ntp.org
++server 4.pool.ntp.org
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.4
