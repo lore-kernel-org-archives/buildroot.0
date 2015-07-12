@@ -1,37 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 16:37:16 +0200
-Subject: [Buildroot] [PATCH] icu: update icudata generator URL
-In-Reply-To: <1436542351-12063-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1436542351-12063-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <20150712163716.4f2c8d86@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 12 Jul 2015 16:39:47 +0200
+Subject: [Buildroot] [RFC v4 02/16] packages: for staging stuff use
+ backtick instead of the shell function
+In-Reply-To: <1435520570-20332-3-git-send-email-fabio.porcedda@gmail.com>
+References: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
+ <1435520570-20332-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <55A27C33.50206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear gustavo.zacarias at free-electrons.com,
-
-On Fri, 10 Jul 2015 12:32:31 -0300, gustavo.zacarias at free-electrons.com
-wrote:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+On 06/28/15 21:42, Fabio Porcedda wrote:
+> When the shell function execute the command before the per-package
+> staging directory is created, use the backtick that is executed after
+> the per-package staging directory is created.
 > 
-> It was pointing to version 51.x which wouldn't work well with 55.x.
-> 
-> Point it to the latest version that matches the current buildroot
-> version (55). When a new ICU major version is released a link for the
-> "old" 55 version will be available below as is it currently for
-> previous versions such as 54, 53 and so on.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> ---
->  package/icu/Config.in | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> This commit prevents build failures when the per-package staging feature
+> is added.
 
-Applied, thanks.
+ At first, I was pretty opposed to this change because I like make more than
+shell :-)
 
-Thomas
+ However, it also fixes another issue: make printvars prints a lot of errors in
+addition to the real thing, because it evaluates all those $(shell ...)
+variables while the programs they call or not defined yet.
+
+ But for that, a lot more needs to be changed. So I've taken this over and
+posted a patch series [1] that removes all the $(shell ...) calls.
+
+
+ Regards,
+ Arnout
+
+[1] http://patchwork.ozlabs.org/patch/494127/
+
+> 
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+[snip]
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
