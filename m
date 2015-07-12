@@ -1,66 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 00:09:15 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix npm module cross compilation,
- use up-to-date npm and install modules globally
-In-Reply-To: <1416775178-13738-2-git-send-email-mwei@cs.ucsd.edu>
-References: <1416775178-13738-1-git-send-email-mwei@cs.ucsd.edu>
- <1416775178-13738-2-git-send-email-mwei@cs.ucsd.edu>
-Message-ID: <20150713000915.3df608e2@free-electrons.com>
+Date: Mon, 13 Jul 2015 00:14:05 +0200
+Subject: [Buildroot] [git commit] c-icap-modules: new package
+Message-ID: <20150712222507.0041E7FF9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael, J?rg, Martin,
+commit: http://git.buildroot.net/buildroot/commit/?id=ea443e624ccef4d17f88f52289c7d2154cf59495
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We are currently to clean up the Buildroot patch tracking system and
-found this patch that hasn't been applied so far. It doesn't apply
-anymore, and other NodeJS changes have been done since then.
+[Thomas:
+  - Do not pass custom CFLAGS and remove the hacks on the Makefile:
+    since the c-icap-config script is now fixed, it returns correct
+    values, and the hacks are no longer needed.
+  - Add optional dependency on zlib and berkeleydb.
+  - Explicitly disable clamav support.]
 
-Could you have a look at whether this patch is still needed or not, and
-if it is still needed, resend an updated version with a more detailed
-commit log?
+Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                        |    1 +
+ package/c-icap-modules/Config.in         |    7 ++++++
+ package/c-icap-modules/c-icap-modules.mk |   32 ++++++++++++++++++++++++++++++
+ 3 files changed, 40 insertions(+), 0 deletions(-)
 
-In the mean time, we'll mark the patch as Changes Requested in
-patchwork, which means that we will no longer see it in our list of
-pending patches: if you forget to resend a new version, we will no
-longer remember about it. We are not NodeJS experts/users so your help
-is really needed to improve/maintain this package in Buildroot.
-
-Thanks a lot for your help!
-
-Thomas
-
-On Sun, 23 Nov 2014 12:39:38 -0800, Michael Wei wrote:
-> Signed-off-by: Michael Wei <mwei@cs.ucsd.edu>
-> ---
->  package/nodejs/nodejs.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index 312aaa9..fbcb730 100644
-> --- a/package/nodejs/nodejs.mk
-> +++ b/package/nodejs/nodejs.mk
-> @@ -110,11 +110,13 @@ define NODEJS_INSTALL_MODULES
->  	# npm install call below and setting npm_config_rollback=false can both
->  	# help in diagnosing the problem.
->  	(cd $(TARGET_DIR)/usr/lib && mkdir -p node_modules && \
-> +		$(HOST_DIR)/usr/bin/npm install -g npm --prefix=$(HOST_DIR) && \
->  		$(TARGET_CONFIGURE_OPTS) \
->  		LD="$(TARGET_CXX)" \
->  		npm_config_arch=$(NODEJS_CPU) \
->  		npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
-> -		$(HOST_DIR)/usr/bin/npm install \
-> +		$(HOST_DIR)/usr/bin/npm install -g --target_arch=$(NODEJS_CPU) \
-> +		--prefix=$(TARGET_DIR) \
->  		$(NODEJS_MODULES_LIST) \
->  	)
->  endef
-
-
-
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index e1b81a9..9787521 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1163,6 +1163,7 @@ menu "Networking applications"
+ 	source "package/bridge-utils/Config.in"
+ 	source "package/bwm-ng/Config.in"
+ 	source "package/c-icap/Config.in"
++	source "package/c-icap-modules/Config.in"
+ 	source "package/can-utils/Config.in"
+ 	source "package/chrony/Config.in"
+ 	source "package/civetweb/Config.in"
+diff --git a/package/c-icap-modules/Config.in b/package/c-icap-modules/Config.in
+new file mode 100644
+index 0000000..616456b
+--- /dev/null
++++ b/package/c-icap-modules/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_C_ICAP_MODULES
++	bool "c-icap-modules"
++	depends on BR2_PACKAGE_C_ICAP
++	help
++	  Additionals modules for c-icap server.
++
++	  http://c-icap.sourceforge.net/
+diff --git a/package/c-icap-modules/c-icap-modules.mk b/package/c-icap-modules/c-icap-modules.mk
+new file mode 100644
+index 0000000..27c57e1
+--- /dev/null
++++ b/package/c-icap-modules/c-icap-modules.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# c-icap-modules
++#
++################################################################################
++
++C_ICAP_MODULES_VERSION = 0.3.2
++C_ICAP_MODULES_SOURCE = c_icap_modules-$(C_ICAP_MODULES_VERSION).tar.gz
++C_ICAP_MODULES_SITE = http://downloads.sourceforge.net/c-icap/
++C_ICAP_MODULES_LICENCE = GPLv2+
++C_ICAP_MODULES_LICENCE_FILE = COPYING
++C_ICAP_MODULES_DEPENDENCIES = c-icap
++
++C_ICAP_MODULES_CONF_OPTS = \
++	--with-c-icap=$(STAGING_DIR)/usr/ \
++	--without-clamav
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++C_ICAP_MODULES_CONF_OPTS += --with-zlib
++C_ICAP_MODULES_DEPENDENCIES += zlib
++else
++C_ICAP_MODULES_CONF_OPTS += --without-zlib
++endif
++
++ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
++C_ICAP_MODULES_CONF_OPTS += --with-bdb
++C_ICAP_MODULES_DEPENDENCIES += berkeleydb
++else
++C_ICAP_MODULES_CONF_OPTS += --without-bdb
++endif
++
++$(eval $(autotools-package))
