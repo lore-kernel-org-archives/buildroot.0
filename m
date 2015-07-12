@@ -1,123 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 13:51:59 +0200
-Subject: [Buildroot] [git commit] packages: do not use TAR_STRIP_COMPONENTS,
-	but directly --strip-components
-Message-ID: <20150712115229.AF96C800D2@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Jul 2015 14:11:25 +0200
+Subject: [Buildroot] [PATCH 0/7] core/kconfig: fix display of custom error
+	messages (branch yem/misc)
+Message-ID: <cover.1436702899.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=22ed697d11e033914cab7631fba899ba436a5a5b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gcc/gcc.mk                                 |    2 +-
- package/lsof/lsof.mk                               |    2 +-
- .../nvidia-tegra23-binaries.mk                     |    4 ++--
- .../nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk |    4 ++--
- package/perl/perl.mk                               |    2 +-
- toolchain/toolchain-external/toolchain-external.mk |    6 +++---
- 6 files changed, 10 insertions(+), 10 deletions(-)
+This series fixes the display of our custom error messages when
+defconfig/.config files do not exist, and also adds such messages to
+busybox and uClibc.
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index be242cb..d1693d5 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -53,7 +53,7 @@ endef
- 
- define HOST_GCC_EXTRACT_CMDS
- 	$(call suitable-extractor,$(GCC_SOURCE)) $(DL_DIR)/$(GCC_SOURCE) | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) \
-+		$(TAR) --strip-components=1 -C $(@D) \
- 		--exclude='libjava/*' \
- 		--exclude='libgo/*' \
- 		--exclude='gcc/testsuite/*' \
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index 19b303b..f9b7661 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -34,7 +34,7 @@ endif
- define LSOF_EXTRACT_CMDS
- 	$(call suitable-extractor,$(LSOF_SOURCE)) $(DL_DIR)/$(LSOF_SOURCE) | \
- 		$(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
-+	$(TAR) --strip-components=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
- endef
- 
- define LSOF_CONFIGURE_CMDS
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-index 7b6029e..4f7cdcf 100644
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-+++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-@@ -37,11 +37,11 @@ define NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
- 	$(INSTALL) -d $(@D)/nv_tegra/nvidia_drivers
- 	$(call suitable-extractor,$(@D)/nv_tegra/nvidia_drivers.tbz2) \
- 		$(@D)/nv_tegra/nvidia_drivers.tbz2 | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/nv_tegra/nvidia_drivers/ $(TAR_OPTIONS) -
-+	$(TAR) --strip-components=0 -C $(@D)/nv_tegra/nvidia_drivers/ $(TAR_OPTIONS) -
- 	$(INSTALL) -d $(@D)/nv_tegra/nv_sample_apps/nvgstapps
- 	$(call suitable-extractor,$(@D)/nv_tegra/nv_sample_apps/nvgstapps.tbz2) \
- 		$(@D)/nv_tegra/nv_sample_apps/nvgstapps.tbz2 | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/nv_tegra/nv_sample_apps/nvgstapps/ $(TAR_OPTIONS) -
-+	$(TAR) --strip-components=0 -C $(@D)/nv_tegra/nv_sample_apps/nvgstapps/ $(TAR_OPTIONS) -
- endef
- NVIDIA_TEGRA23_BINARIES_POST_EXTRACT_HOOKS += NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
- 
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-index 18f083d..5514643 100644
---- a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-@@ -16,11 +16,11 @@ define NVIDIA_TEGRA23_CODECS_EXTRACT_CMDS
- 	$(INSTALL) -d $(@D)
- 	$(call suitable-extractor,$(NVIDIA_TEGRA23_CODECS_SOURCE)) \
- 		$(DL_DIR)/$(NVIDIA_TEGRA23_CODECS_SOURCE) | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D) $(TAR_OPTIONS) -
-+	$(TAR) --strip-components=0 -C $(@D) $(TAR_OPTIONS) -
- 	$(INSTALL) -d $(@D)/restricted_codecs
- 	$(call suitable-extractor,$(@D)/restricted_codecs.tbz2) \
- 		$(@D)/restricted_codecs.tbz2 | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
-+	$(TAR) --strip-components=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
- endef
- 
- define NVIDIA_TEGRA23_CODECS_INSTALL_TARGET_CMDS
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 6794eef..091c032 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -28,7 +28,7 @@ PERL_CROSS_NEW_POD = perl$(subst .,,$(PERL_VERSION))delta.pod
- # together with perl
- define PERL_CROSS_EXTRACT
- 	$(call suitable-extractor,$(PERL_CROSS_SOURCE)) $(DL_DIR)/$(PERL_CROSS_SOURCE) | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
-+	$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
- endef
- PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
- 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 22f8118..070f068 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -417,16 +417,16 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_
- define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
- 	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
- 	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-+		$(TAR) --strip-components=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
- 	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS) | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-+		$(TAR) --strip-components=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
- endef
- else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
- # Normal handling of toolchain tarball extraction.
- define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
- 	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
- 	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-+		$(TAR) --strip-components=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
- 	$(TOOLCHAIN_EXTERNAL_FIXUP_CMDS)
- endef
- endif
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 22ed697d11e033914cab7631fba899ba436a5a5b:
+
+  packages: do not use TAR_STRIP_COMPONENTS, but directly --strip-components (2015-07-12 13:51:59 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/misc
+
+for you to fetch changes up to 62fed5cb399404addb30c60c3dc128f46333c9ec:
+
+  package/uclibc: check for config file before calling kconfig-package (2015-07-12 14:02:05 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (7):
+      core/pkg-kconfig: don't enforce check for config file when not building
+      package/linux: don't enforce check for DTS when not building
+      boot/at91boostrap3: check for config file before calling kconfig-package
+      boot/barebox: check for config file before calling kconfig-package
+      package/linux: check for config file before calling kconfig-package
+      package/busybox: check for config file before calling kconfig-package
+      package/uclibc: check for config file before calling kconfig-package
+
+ boot/at91bootstrap3/at91bootstrap3.mk |  7 +++++--
+ boot/barebox/barebox.mk               |  6 ++++--
+ linux/linux.mk                        | 38 ++++++++++++++++++-----------------
+ package/busybox/busybox.mk            |  6 ++++++
+ package/pkg-kconfig.mk                |  2 +-
+ package/uclibc/uclibc.mk              |  6 ++++++
+ 6 files changed, 42 insertions(+), 23 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
