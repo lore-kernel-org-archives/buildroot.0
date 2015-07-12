@@ -1,40 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 12:30:59 +0200
-Subject: [Buildroot] [git commit] c-icap: needs MMU support
-Message-ID: <20150712103129.2116C7FFF7@busybox.osuosl.org>
+Date: Sun, 12 Jul 2015 12:31:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: version bump to 0.12.7
+In-Reply-To: <1436688777-5421-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1436688777-5421-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150712123142.017d2a22@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58f6b79334ef19fd63f9acaa27486fe8a76f14d3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear J?rg Krause,
 
-Fixes:
+On Sun, 12 Jul 2015 10:12:57 +0200, J?rg Krause wrote:
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  .../0001-Remove-dependency-on-Python-bz2-module.patch                 | 0
+>  .../{0.12.6 => 0.12.7}/0002-gyp-force-link-command-to-use-CXX.patch   | 0
+>  .../0003-Use-a-python-variable-instead-of-hardcoding-Python.patch     | 0
+>  .../0004-fix-build-error-without-OpenSSL-support.patch                | 0
+>  package/nodejs/Config.in                                              | 4 ++--
+>  package/nodejs/nodejs.hash                                            | 4 ++--
+>  6 files changed, 4 insertions(+), 4 deletions(-)
+>  rename package/nodejs/{0.12.6 => 0.12.7}/0001-Remove-dependency-on-Python-bz2-module.patch (100%)
+>  rename package/nodejs/{0.12.6 => 0.12.7}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
+>  rename package/nodejs/{0.12.6 => 0.12.7}/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch (100%)
+>  rename package/nodejs/{0.12.6 => 0.12.7}/0004-fix-build-error-without-OpenSSL-support.patch (100%)
 
-  http://autobuild.buildroot.org/results/8c3/8c3e397eeecb2a6a39fbae1d8665bff92ef3e3bb/
+Applied, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/c-icap/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
-
-diff --git a/package/c-icap/Config.in b/package/c-icap/Config.in
-index f949c16..8121a26 100644
---- a/package/c-icap/Config.in
-+++ b/package/c-icap/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_C_ICAP
- 	bool "c-icap"
- 	depends on !BR2_PREFER_STATIC_LIB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  c-icap is an implementation of an ICAP server. It can be
- 	  used with HTTP proxies that support the ICAP protocol to
-@@ -13,4 +14,5 @@ config BR2_PACKAGE_C_ICAP
- 	  http://c-icap.sourceforge.net/
- 
- comment "c-icap needs a toolchain w/ threads and dynamic library"
-+	depends on BR2_USE_MMU
- 	depends on BR2_PREFER_STATIC_LIB  || !BR2_TOOLCHAIN_HAS_THREADS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
