@@ -1,53 +1,35 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 12 Jul 2015 16:35:28 +0200
-Subject: [Buildroot] [PATCH 3/5] boost: use backtick instead of $(shell ...)
-	make function
+Date: Sun, 12 Jul 2015 16:35:29 +0200
+Subject: [Buildroot] [PATCH 4/5] mpg123: replace $(shell ...) call with
+	$(subst ...)
 In-Reply-To: <1436711730-20599-1-git-send-email-arnout@mind.be>
 References: <1436711730-20599-1-git-send-email-arnout@mind.be>
-Message-ID: <1436711730-20599-3-git-send-email-arnout@mind.be>
+Message-ID: <1436711730-20599-4-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also remove the variables TARGET_CC_VERSION and HOST_CC_VERSION which
-lack the BOOST_ prefix and are used only once.
+There's no reason to use a shell here.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/boost/boost.mk | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ package/mpg123/mpg123.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index dbb5de5..cc3ba9e 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -11,9 +11,6 @@ BOOST_INSTALL_STAGING = YES
- BOOST_LICENSE = Boost Software License 1.0
- BOOST_LICENSE_FILES = LICENSE_1_0.txt
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 4c534e2..171cbde 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -69,7 +69,7 @@ MPG123_CONF_OPTS += --with-default-audio=alsa
+ MPG123_DEPENDENCIES += alsa-lib
+ endif
  
--TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
--HOST_CC_VERSION = $(shell $(HOSTCC) -dumpversion)
--
- HOST_BOOST_DEPENDENCIES =
+-MPG123_CONF_OPTS += --with-audio=$(shell echo $(MPG123_AUDIO) | tr ' ' ,)
++MPG123_CONF_OPTS += --with-audio=$(subst $(space),$(comma),$(MPG123_AUDIO))
  
- # keep host variant as minimal as possible
-@@ -111,13 +108,13 @@ BOOST_LAYOUT = $(call qstrip, $(BR2_PACKAGE_BOOST_LAYOUT))
- 
- define BOOST_CONFIGURE_CMDS
- 	(cd $(@D) && ./bootstrap.sh $(BOOST_FLAGS))
--	echo "using gcc : $(TARGET_CC_VERSION) : $(TARGET_CXX) : <cxxflags>\"$(BOOST_TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > $(@D)/user-config.jam
-+	echo "using gcc : `$(TARGET_CC) -dumpversion` : $(TARGET_CXX) : <cxxflags>\"$(BOOST_TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > $(@D)/user-config.jam
- 	echo "" >> $(@D)/user-config.jam
- endef
- 
- define HOST_BOOST_CONFIGURE_CMDS
- 	(cd $(@D) && ./bootstrap.sh $(HOST_BOOST_FLAGS))
--	echo "using gcc : $(HOST_CC_VERSION) : $(HOSTCXX) : <cxxflags>\"$(HOST_CXXFLAGS)\" <linkflags>\"$(HOST_LDFLAGS)\" ;" > $(@D)/user-config.jam
-+	echo "using gcc : `$(HOST_CC) -dumpversion` : $(HOSTCXX) : <cxxflags>\"$(HOST_CXXFLAGS)\" <linkflags>\"$(HOST_LDFLAGS)\" ;" > $(@D)/user-config.jam
- 	echo "" >> $(@D)/user-config.jam
- endef
- 
+ ifeq ($(BR2_PACKAGE_LIBTOOL),y)
+ MPG123_DEPENDENCIES += libtool
 -- 
 2.1.4
