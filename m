@@ -1,70 +1,109 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 11:56:18 +0200
-Subject: [Buildroot] [git commit] package/cryptodev-linux: use the
-	kernel-module helper
-Message-ID: <20150712095704.7F44F8010C@busybox.osuosl.org>
+Date: Sun, 12 Jul 2015 11:56:19 +0200
+Subject: [Buildroot] [git commit] package/ocf-linux: use kernel-module helper
+Message-ID: <20150712095704.892B68010C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be2b20be6e9a7478f3fc2ee162b85e8b75f6d5fe
+commit: http://git.buildroot.net/buildroot/commit/?id=54a42de966706b42aa6b9f9cabac64ebb69d17c0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The kernel module needs the version.h headers at build-time, but the
-Makefile only generates it when the module is built with that Makefile,
-because it has this rule:
+We have a patch that makes ocf-linux' Makefile basically only call to
+the Linux buildsystem, with commands basically like:
+    make -C $(LINUX_DIR) M=$(pwd) modules
 
-    build: version.h
-        make ${KERNEL_MAKE_OPTS} modules
+which is basically what our new kernel-module infra basically does.
 
-So, we must explicitly build this header, which we do in a pre-build hook
-to ensure it comes before the kernel-module's own hooks. This header needs
-not be installed in staging.
+Remove our patch since it is basically no longer needed.
 
-However, the cryptodev.h header still needs to be installed in staging,
-which we still do in a staging-install command.
+Basically-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The KERNEL_DIR and PREFIX variables are no longer needed, because we're
-no longer calling the rules that needed them (build, above, and
-modules_install, both now handled by the kernel-module infra).
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Doug: add pre-build hook to build version.h]
-Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cryptodev-linux/cryptodev-linux.mk |   12 ++++--------
- 1 files changed, 4 insertions(+), 8 deletions(-)
+ package/ocf-linux/0001-modules-cross.patch |   42 ----------------------------
+ package/ocf-linux/ocf-linux.mk             |   17 ++++------
+ 2 files changed, 7 insertions(+), 52 deletions(-)
 
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index 6f41930..6001c71 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
-@@ -6,23 +6,19 @@
+diff --git a/package/ocf-linux/0001-modules-cross.patch b/package/ocf-linux/0001-modules-cross.patch
+deleted file mode 100644
+index f80ef06..0000000
+--- a/package/ocf-linux/0001-modules-cross.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-Remove the OCF linux kernel extension instead opting to build ocf-linux
+-modules out of tree.
+-This is easier for users since no kernel config tweaking is required.
+-On the downside the OCF drivers can't be used, but then all of the
+-kernel crypto drivers are available to users via cryptosoft which is
+-preferred.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura ocf-linux-20120127.orig/ocf/Makefile ocf-linux-20120127/ocf/Makefile
+---- ocf-linux-20120127.orig/ocf/Makefile	2013-04-27 09:27:04.413911866 -0300
+-+++ ocf-linux-20120127/ocf/Makefile	2013-04-27 09:27:31.131775576 -0300
+-@@ -2,6 +2,7 @@
+- -include $(ROOTDIR)/modules/.config
+-
+- OCF_OBJS = crypto.o criov.o
+-+KDIR ?= /lib/modules/$(shell uname -r)/build
+-
+- ifdef CONFIG_OCF_RANDOMHARVEST
+- 	OCF_OBJS += random.o
+-@@ -78,20 +79,13 @@
+- #
+-
+- ocf_make:
+--	make -C /lib/modules/$(shell uname -r)/build M=`pwd` $(OCF_TARGET) CONFIG_OCF_OCF=m
+--	make -C /lib/modules/$(shell uname -r)/build M=`pwd` $(OCF_TARGET) CONFIG_OCF_OCF=m CONFIG_OCF_CRYPTOSOFT=m
+--	-make -C /lib/modules/$(shell uname -r)/build M=`pwd` $(OCF_TARGET) CONFIG_OCF_OCF=m CONFIG_OCF_BENCH=m
+--	-make -C /lib/modules/$(shell uname -r)/build M=`pwd` $(OCF_TARGET) CONFIG_OCF_OCF=m CONFIG_OCF_OCFNULL=m
+--	-make -C /lib/modules/$(shell uname -r)/build M=`pwd` $(OCF_TARGET) CONFIG_OCF_OCF=m CONFIG_OCF_HIFN=m
+-+	make -C $(KDIR) M=`pwd` $(OCF_TARGET) CONFIG_OCF_OCF=m CONFIG_OCF_CRYPTOSOFT=m CONFIG_OCF_BENCH=m CONFIG_OCF_OCFNULL=m
+-
+- ocf_modules:
+- 	$(MAKE) ocf_make OCF_TARGET=modules
+-
+- ocf_install:
+- 	$(MAKE) ocf_make OCF_TARGET="modules modules_install"
+--	depmod
+--	mkdir -p /usr/include/crypto
+--	cp cryptodev.h /usr/include/crypto/.
+-
+- #
+- # generate full kernel patches for 2.4 and 2.6 kernels to make patching
+diff --git a/package/ocf-linux/ocf-linux.mk b/package/ocf-linux/ocf-linux.mk
+index 8ca5578..35968d5 100644
+--- a/package/ocf-linux/ocf-linux.mk
++++ b/package/ocf-linux/ocf-linux.mk
+@@ -6,22 +6,19 @@
  
- CRYPTODEV_LINUX_VERSION = 1.7
- CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
--CRYPTODEV_LINUX_DEPENDENCIES = linux
- CRYPTODEV_LINUX_INSTALL_STAGING = YES
- CRYPTODEV_LINUX_LICENSE = GPLv2+
- CRYPTODEV_LINUX_LICENSE_FILES = COPYING
+ OCF_LINUX_VERSION = 20120127
+ OCF_LINUX_SITE = http://downloads.sourceforge.net/project/ocf-linux/ocf-linux/$(OCF_LINUX_VERSION)
+-OCF_LINUX_DEPENDENCIES = linux
+ OCF_LINUX_INSTALL_STAGING = YES
  
--define CRYPTODEV_LINUX_BUILD_CMDS
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR)
+-define OCF_LINUX_BUILD_CMDS
+-	$(MAKE) -C $(@D)/ocf $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) \
+-		ocf_modules
 -endef
 -
--define CRYPTODEV_LINUX_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR) \
--		PREFIX=$(TARGET_DIR) modules_install
-+define CRYPTODEV_LINUX_MODULE_GEN_VERSION_H
-+	$(MAKE) -C $(@D) version.h
- endef
-+CRYPTODEV_LINUX_PRE_BUILD_HOOKS += CRYPTODEV_LINUX_MODULE_GEN_VERSION_H
+-define OCF_LINUX_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D)/ocf $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) \
+-		ocf_install
+-endef
++OCF_LINUX_MODULE_SUBDIRS = ocf
++OCF_LINUX_MODULE_MAKE_OPTS = \
++	CONFIG_OCF_OCF=m \
++	CONFIG_OCF_CRYPTOSOFT=m \
++	CONFIG_OCF_BENCH=m \
++	CONFIG_OCF_OCFNULL=m
  
- define CRYPTODEV_LINUX_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D -m 644 $(@D)/crypto/cryptodev.h \
+ define OCF_LINUX_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D -m 644 $(@D)/ocf/cryptodev.h \
  		$(STAGING_DIR)/usr/include/crypto/cryptodev.h
  endef
  
