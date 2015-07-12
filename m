@@ -1,51 +1,44 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 12 Jul 2015 18:26:29 +0200
-Subject: [Buildroot] [PATCH 0/6] [NOT-FOR-MERGE] Host-package: RPATH fixup
-Message-ID: <1436718395-10536-1-git-send-email-s.martin49@gmail.com>
+Date: Sun, 12 Jul 2015 18:26:31 +0200
+Subject: [Buildroot] [PATCH 2/6] package/pkg-utils.mk: add get_rpaths helpers
+In-Reply-To: <1436718395-10536-1-git-send-email-s.martin49@gmail.com>
+References: <1436718395-10536-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1436718395-10536-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+This helper computes the value of the RPATH for the given binary.
 
-Here is a short series fixing the RPATH of the host programs.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/pkg-utils.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-This is a first step for a relocatable SDK, that allows to relocate
-the toolchain (and only the toolchain), without any patch in the
-toolchain packages.
-
-This series adds a hook executed after each host-package installation
-step. This hook will scan the HOST_DIR for program, compute and set the
-RPATH to the right value.
-
-
-This make-based implementation is not really intended to be merged,
-just for informationi ;-) and keep some peoples' mental health! :-D
-
-Few comments:
-- The hook is called after each host-package installation, but calling
-  it once, as the target-finalize hook is enough to render the toolchain
-  toolchain (not yet the whole SDK).
-- This hook will be resubmited, using a python script soon.
-
-
-Regards,
-
-Samuel Martin (6):
-  package/pkg-utils.mk: add relative-path utility function
-  package/pkg-utils.mk: add get_rpaths helpers
-  package/pkg-utils.mk: add fix_rpaths helpers
-  package/pkg-utils: add a POST_HOST_INSTALL_FIX_RPATH helper
-  support/dependencies: add host-patchelf to DEPENDENCIES_HOST_PREREQ
-  package/pkg-generic.mk: add POST_HOST_INSTALL_FIX_RPATH to the
-    POST_INSTALL_HOOKS
-
- package/pkg-generic.mk               |  2 ++
- package/pkg-utils.mk                 | 39 ++++++++++++++++++++++++++++++++++++
- support/dependencies/dependencies.mk |  2 ++
- 3 files changed, 43 insertions(+)
-
---
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 442c528..b556525 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -54,6 +54,18 @@ relative-path = $(strip \
+ 	$(__r)$(subst /%,%,$(2))))
+ 
+ 
++# Return the RPATH value starting with XORIGIN instead of $ORIGIN.
++# This helper supports multi-libdirs in RPATH.
++#   $1: base directory, e.g. $(HOST_DIR)
++#   $2: binary path (should start with base directory)
++#   $3: libdirs, a space-separated list of paths (each libdir should
++#       start with base directory)
++get_rpaths = $(eval __rp :=) \
++	$(foreach libdir,$(3),\
++		$(eval __rp := $(__rp):XORIGIN/$(call \
++			relative-path,$(dir $(patsubst $(1)%,%,$(2))),$(patsubst $(1)%,%,$(libdir))))) \
++	$(patsubst :%,%,$(__rp))
++
+ #
+ # Manipulation of .config files based on the Kconfig
+ # infrastructure. Used by the BusyBox package, the Linux kernel
+-- 
 2.4.5
