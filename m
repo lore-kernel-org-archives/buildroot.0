@@ -1,59 +1,107 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 12 Jul 2015 19:27:01 +0200
-Subject: [Buildroot] [PATCH] Fix selection of bootloaders from
-	$(BR2_EXTERNAL)
-In-Reply-To: <1411667269-8347-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1411667269-8347-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1436722021-6478-1-git-send-email-arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Jul 2015 20:40:40 +0200
+Subject: [Buildroot] [PATCH 1/3] linux: add linux-tools infra
+In-Reply-To: <1436719444-9722-1-git-send-email-romain.naour@openwide.fr>
+References: <1436719444-9722-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150712184040.GD4008@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Romain, All,
 
-If a package is based on "generic-package", pkg-generic.mk will compute
-the name of the Kconfig variable to use for checking if this package has
-been selected by the user.
+On 2015-07-12 18:44 +0200, Romain Naour spake thusly:
+> This commit add an infrastructure to build linux kernel
+> tools available in the kernel sources.
+> 
+> Currently, the only linux kernel tool packaged in Buildroot
+> is perf and it's packaged as a separate generic package.
+> This is a problem for licence information raised in this
+> thread [1].
+> 
+> Since these tools require to build a Linux kernel, we can
+> use some hooks in linux package like we did for linux
+> extensions [2] and remove the perf package.
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2015-May/128783.html
+> [2] http://lists.busybox.net/pipermail/buildroot/2015-March/121835.html
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-Unfortunately, this mechanism does not take into account the case where
-a bootloader is declared in a $(BR2_EXTERNAL)/boot directory.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-So, even if the bootloader has been selected, it will not be added to
-$(TARGETS) and will not be built.
+(Needless to say I like this! ;-] )
 
-This patch fixes this issue.
+Regards,
+Yann E. MORIN.
 
-[Arnout: use single filter line, also apply this to toolchain]
+> ---
+>  linux/linux.mk | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index eca1450..d483c11 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -325,6 +325,8 @@ define LINUX_INSTALL_TARGET_CMDS
+>  	$(LINUX_INSTALL_HOST_TOOLS)
+>  endef
+>  
+> +# Include all our externsions and tools definitions.
+> +#
+>  # Note: our package infrastructure uses the full-path of the last-scanned
+>  # Makefile to determine what package we're currently defining, using the
+>  # last directory component in the path. As such, including other Makefile,
+> @@ -334,6 +336,7 @@ endef
+>  # the current Makefile, we are OK. But this is a hard requirement: files
+>  # included here *must* be in the same directory!
+>  include $(sort $(wildcard linux/linux-ext-*.mk))
+> +include $(sort $(wildcard linux/linux-tool-*.mk))
+>  
+>  LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
+>  	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
+> @@ -342,6 +345,27 @@ LINUX_PRE_PATCH_HOOKS += $(foreach ext,$(LINUX_EXTENSIONS),\
+>  	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),\
+>  		$(call UPPERCASE,$(ext))_PREPARE_KERNEL))
+>  
+> +# Install Linux kernel tools in staging directory since some tools
+> +# may install shared libraries and headers (e.g. cpupower). The
+> +# kernel image is NOT installed in staging directory.
+> +LINUX_INSTALL_STAGING = $(if $(strip $(LINUX_TOOLS)),YES,NO)
+> +
+> +LINUX_DEPENDENCIES += $(foreach tool,$(LINUX_TOOLS),\
+> +	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
+> +		$(LINUX_TOOL_$(call UPPERCASE,$(tool))_DEPENDENCIES)))
+> +
+> +LINUX_POST_BUILD_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
+> +	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
+> +		LINUX_TOOL_$(call UPPERCASE,$(tool))_BUILD_CMDS))
+> +
+> +LINUX_POST_INSTALL_STAGING_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
+> +	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
+> +		LINUX_TOOL_$(call UPPERCASE,$(tool))_INSTALL_STAGING_CMDS))
+> +
+> +LINUX_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
+> +	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
+> +		LINUX_TOOL_$(call UPPERCASE,$(tool))_INSTALL_TARGET_CMDS))
+> +
+>  $(eval $(kconfig-package))
+>  
+>  # Support for rebuilding the kernel after the cpio archive has
+> -- 
+> 2.4.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-v2: [Arnout]
-  - Use a single filter line instead of copying it for BR2_EXTERNAL
-    (Suggested by Thomas DS)
-  - Add the same feature to toolchain (Suggested by Thomas DS)
----
- package/pkg-generic.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 7000975..84c76e9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -642,9 +642,9 @@ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
- # kernel case, the bootloaders case, and the normal packages case.
- ifeq ($(1),linux)
- $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
--else ifneq ($$(filter boot/%,$(pkgdir)),)
-+else ifneq ($$(filter boot/% $(BR2_EXTERNAL)/boot/%,$(pkgdir)),)
- $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
--else ifneq ($$(filter toolchain/%,$(pkgdir)),)
-+else ifneq ($$(filter toolchain/% $(BR2_EXTERNAL)/toolchain/%,$(pkgdir)),)
- $(2)_KCONFIG_VAR = BR2_$(2)
- else
- $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
