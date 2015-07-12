@@ -1,53 +1,33 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 12 Jul 2015 15:30:34 +0200
-Subject: [Buildroot] [PATCH 1/7] Add <PKG>_STRIP_COMPONENTS for packages
- with non-standard tarballs
-In-Reply-To: <20150712134448.759340d5@free-electrons.com>
+Date: Sun, 12 Jul 2015 15:34:31 +0200
+Subject: [Buildroot] [PATCH 7/7] qpid-proton: new package
+In-Reply-To: <55A1A553.7030500@mind.be>
 References: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
- <20150712134448.759340d5@free-electrons.com>
-Message-ID: <55A26BFA.10607@lucaceresoli.net>
+ <1436624110-20428-7-git-send-email-luca@lucaceresoli.net>
+ <55A1A553.7030500@mind.be>
+Message-ID: <55A26CE7.7010406@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Dear Arnout, Thomas,
 
-Thomas Petazzoni wrote:
-> Dear Luca Ceresoli,
->
-> On Sat, 11 Jul 2015 16:15:04 +0200, Luca Ceresoli wrote:
->> Usually package tarballs contain only a directory named
->> "<pkg-name>-<pkg-version>" which contains the actual source tree. To properly
->> extract the source files in $(BUILD_DIR), Buildroot passes the
->> --strip-components=1 option to tar.
->>
->> Unfortunately a few packages ship in a non-standard way, with no root
->> directory or with more than one. In Buildroot these packages must be handled by
->> overriding the <PKG>_DOWNLOAD_CMDS.
->>
->> As the number of such packages is growing, introduce a <PKG>_STRIP_COMPONENTS
->> variable for packages to request a number of components to strip different
->> from 1.
->>
+Arnout Vandecappelle wrote:
+> On 07/11/15 16:15, Luca Ceresoli wrote:
 >> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> Cc: Arnout Vandecappelle <arnout@mind.be>
->> ---
->>   package/pkg-generic.mk | 10 +++++++++-
->>   1 file changed, 9 insertions(+), 1 deletion(-)
 >
-> This actually triggered a failure in the build of the tar package:
->
->     http://autobuild.buildroot.org/results/ae2/ae20df67f99f75b1ba5d5b7316ad265d66f3aa66/build-end.log
->
-> We have already fixed it, it was quite interesting:
->
->     http://git.buildroot.net/buildroot/commit/?id=ef7cc99c7a432aa3929015183f7c7476b7cd1b68
+>   What's the upstream status of the patch?
 
-Ouch. O:-)
+It's upstream [0], sorry for not having mentioned it in the patch
+submission.
 
-Thanks for fixing it so quickly!
+The rest of your comments have already been taken into account by Thomas
+while committing. Thanks, Thomas.
+
+[0] 
+https://github.com/apache/qpid-proton/commit/ed8e0144a4fccec6d5270198d2dc3aa3e9b22b4b
 
 -- 
 Luca
