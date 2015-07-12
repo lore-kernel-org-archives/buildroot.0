@@ -1,120 +1,39 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 12 Jul 2015 13:34:13 +0200
-Subject: [Buildroot] [PATCH] Add kernel compression selection.
-Message-ID: <1436700853-25163-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Jul 2015 13:43:01 +0200
+Subject: [Buildroot] [git commit] package/firmware-imx: fix legal-info
+Message-ID: <20150712114318.42436818E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Johan Sagaert <sagaert.johan@proximus.be>
+commit: http://git.buildroot.net/buildroot/commit/?id=5e0ccea25fbced5bfc02eaa519ba40e05687342a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This selection will ensure that the correct host tools
-will be build used for the kernel compression method used.
+Part of fimrware-imx were dropped in the new version, so we have less
+legal-info to save.
 
-[Maxime: Select the compression opts in the kernel config too ]
+Fixes:
+    http://autobuild.buildroot.org/results/59b/59b09152700a5839af46edb554e53981569f8921
 
-Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-V3->V4
-	Add selection menu in the kernel menu section.
-	This ensures only things needed are build.
-V2->V3
-	Unconditionally build lz4.
-	The building overhead is negligible.
-V1->V2
-	Only add the host-lz4 dependency when ARM is selected.
-	Don't touch host-lz4 package.
----
- linux/Config.in | 28 ++++++++++++++++++++++++++++
- linux/linux.mk  | 27 ++++++++++++++++++++++++++-
- 2 files changed, 54 insertions(+), 1 deletion(-)
+ package/freescale-imx/firmware-imx/firmware-imx.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 8c86a1a..73ae0b9 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -254,6 +254,34 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index f5ed353..71e49e6 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -10,7 +10,7 @@ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
  
- endchoice
+ FIRMWARE_IMX_LICENSE = Freescale Semiconductor Software License Agreement, \
+ 	Atheros license (ath6k)
+-FIRMWARE_IMX_LICENSE_FILES = EULA licenses/vpu/EULA licenses/ath6k/AR6102/License.txt
++FIRMWARE_IMX_LICENSE_FILES = EULA licenses/vpu/EULA
+ FIRMWARE_IMX_REDISTRIBUTE = NO
  
-+#
-+# Kernel compression format
-+#
-+
-+choice
-+	prompt "Kernel compression format"
-+	help
-+	  This selection will just ensure that the correct host tools are build.
-+	  The actual compression for the kernel should be selected in the
-+	  kernel configuration menu.
-+
-+config BR2_LINUX_KERNEL_GZIP
-+	bool "gzip compression"
-+
-+config BR2_LINUX_KERNEL_LZ4
-+	bool "lz4 compression"
-+
-+config BR2_LINUX_KERNEL_LZMA
-+	bool "lzma compression"
-+
-+config BR2_LINUX_KERNEL_LZO
-+	bool "lzo compression"
-+
-+config BR2_LINUX_KERNEL_XZ
-+	bool "xz compression"
-+
-+endchoice
-+
- config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
- 	string "Kernel image target name"
- 	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
-diff --git a/linux/linux.mk b/linux/linux.mk
-index eca1450..c710355 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -56,7 +56,27 @@ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
- 
- LINUX_INSTALL_IMAGES = YES
--LINUX_DEPENDENCIES += host-kmod host-lzop
-+LINUX_DEPENDENCIES += host-kmod
-+
-+# host tools needed for kernel compression
-+ifeq ($(BR2_LINUX_KERNEL_LZ4),y)
-+LINUX_DEPENDENCIES += host-lz4
-+LINUX_COMPRESSION_OPTS = CONFIG_KERNEL_LZ4
-+else ifeq ($(BR2_LINUX_KERNEL_LZMA),y)
-+LINUX_DEPENDENCIES += host-lzma
-+LINUX_COMPRESSION_OPTS = CONFIG_KERNEL_LZMA
-+else ifeq ($(BR2_LINUX_KERNEL_LZO),y)
-+LINUX_DEPENDENCIES += host-lzop
-+LINUX_COMPRESSION_OPTS = CONFIG_KERNEL_LZO
-+else ifeq ($(BR2_LINUX_KERNEL_XZ),y)
-+LINUX_DEPENDENCIES += host-xz
-+LINUX_COMPRESSION_OPTS = CONFIG_KERNEL_XZ
-+endif
-+LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_GZIP) = CONFIG_KERNEL_GZIP
-+LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_LZ4) = CONFIG_KERNEL_LZ4
-+LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_LZMA) = CONFIG_KERNEL_LZMA
-+LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_LZO) = CONFIG_KERNEL_LZO
-+LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_XZ) = CONFIG_KERNEL_XZ
- 
- ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
- LINUX_DEPENDENCIES += host-uboot-tools
-@@ -187,6 +207,11 @@ LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
- LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
- 
- define LINUX_KCONFIG_FIXUP_CMDS
-+	$(call KCONFIG_ENABLE_OPT,$(LINUX_COMPRESSION_OPT_y),$(@D)/.config)
-+	$(foreach opt, $(LINUX_COMPRESSION_OPT_),
-+		$(call KCONFIG_DISABLE_OPT,$(opt),$(@D)/.config)
-+	)
-+
- 	$(if $(BR2_arm)$(BR2_armeb),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
- 	$(if $(BR2_TARGET_ROOTFS_CPIO),
--- 
-2.1.4
+ FIRMWARE_IMX_BLOBS = ath6k sdma vpu
