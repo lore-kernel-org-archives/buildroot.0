@@ -1,47 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 14:41:12 +0200
-Subject: [Buildroot] [PATCH 7/7] qpid-proton: new package
-In-Reply-To: <1436624110-20428-7-git-send-email-luca@lucaceresoli.net>
-References: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
- <1436624110-20428-7-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20150712144112.6df1bb94@free-electrons.com>
+Date: Sun, 12 Jul 2015 14:57:05 +0200
+Subject: [Buildroot] [git commit] systemd: fix some coding style issues
+Message-ID: <20150712125725.EBEB2818A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+commit: http://git.buildroot.net/buildroot/commit/?id=b5c763c490dc1ef42149468910aaaacf4710f049
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 11 Jul 2015 16:15:10 +0200, Luca Ceresoli wrote:
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->  package/Config.in                                  |  1 +
->  ...fix-C-compiler-detection-with-_ARG1-_ARG2.patch | 52 ++++++++++++++++++++++
->  package/qpid-proton/Config.in                      | 17 +++++++
->  package/qpid-proton/qpid-proton.hash               |  2 +
->  package/qpid-proton/qpid-proton.mk                 | 28 ++++++++++++
->  5 files changed, 100 insertions(+)
->  create mode 100644 package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch
->  create mode 100644 package/qpid-proton/Config.in
->  create mode 100644 package/qpid-proton/qpid-proton.hash
->  create mode 100644 package/qpid-proton/qpid-proton.mk
+[Thomas: adjust commit title, some additioanl coding style fixes.]
 
-Applied after doing a bunch of fixes:
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/systemd/systemd.mk |   15 +++++++--------
+ 1 files changed, 7 insertions(+), 8 deletions(-)
 
-    [Thomas:
-       - Do not define QPID_PROTON_VERSION_MAJOR, and use proto-* instead,
-         as suggested by Arnout.
-       - Use QPID_PROTO_VERSION in QPID_PROTON_SITE, as suggested by
-         Arnout
-       - Remove useless comma in the openssl test, as suggested by Arnout
-       - Change the post install target hook to remove the
-         /usr/share/proton-*/ directory entirely, and not just the
-         examples, since it only contains some license and documentation
-         files.]
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 0a1f00f..7eb7abe 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -72,16 +72,14 @@ SYSTEMD_CONF_OPTS += --disable-seccomp
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_ALL_EXTRAS),y)
+-SYSTEMD_DEPENDENCIES += \
+-	xz 		\
+-	libgcrypt
+-SYSTEMD_CONF_OPTS += 	\
+-	--enable-xz 	\
++SYSTEMD_DEPENDENCIES += xz libgcrypt
++SYSTEMD_CONF_OPTS += \
++	--enable-xz \
+ 	--enable-gcrypt	\
+ 	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
+ else
+-SYSTEMD_CONF_OPTS += 	\
+-	--disable-xz 	\
++SYSTEMD_CONF_OPTS += \
++	--disable-xz \
+ 	--disable-gcrypt
+ endif
+ 
+@@ -143,7 +141,8 @@ define SYSTEMD_INSTALL_INIT_HOOK
+ 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/poweroff
+ 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/reboot
+ 
+-	ln -fs ../../../lib/systemd/system/multi-user.target $(TARGET_DIR)/etc/systemd/system/default.target
++	ln -fs ../../../lib/systemd/system/multi-user.target \
++		$(TARGET_DIR)/etc/systemd/system/default.target
+ endef
+ 
+ define SYSTEMD_INSTALL_MACHINEID_HOOK
