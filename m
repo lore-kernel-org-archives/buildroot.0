@@ -1,34 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 01:37:40 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5base: add option for custom qconfig
- file
-In-Reply-To: <1422970723-31706-1-git-send-email-will_wagner@carallon.com>
-References: <1422970723-31706-1-git-send-email-will_wagner@carallon.com>
-Message-ID: <20150713013740.58dc20f4@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 13 Jul 2015 01:44:31 +0200
+Subject: [Buildroot] [PATCH 2/7] package/linux: don't enforce check for
+ DTS when not building
+In-Reply-To: <20150712200309.GB2451@tarshish>
+References: <cover.1436702899.git.yann.morin.1998@free.fr>
+ <ff5a9ea519a5c72dd917369e6409674b9d4a340f.1436702899.git.yann.morin.1998@free.fr>
+ <20150712200309.GB2451@tarshish>
+Message-ID: <55A2FBDF.9070808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Will,
-
-On Tue,  3 Feb 2015 13:38:43 +0000, will_wagner at carallon.com wrote:
-> From: Will Wagner <will_wagner@carallon.com>
+On 07/12/15 22:03, Baruch Siach wrote:
+> Hi Yann,
 > 
-> Add in support for a custom qconfig file in the same way it is
-> already present for the Qt4 package
+> On Sun, Jul 12, 2015 at 02:11:24PM +0200, Yann E. MORIN wrote:
+>> Currently, this is triggering the error message:
+>>     make randconfig
+>>     make source
+>>
+>> Limit the checks that enforce a DTS is set and at most one DTB is
+>> appended to when we are actually building, like is done for the
+>> configuration-file variables.
+>>
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> Signed-off-by: Will Wagner <will_wagner@carallon.com>
-> ---
->  package/qt5/qt5base/Config.in  |   13 +++++++++++++
->  package/qt5/qt5base/qt5base.mk |   13 +++++++++++++
->  2 files changed, 26 insertions(+)
+> [snip]
+> 
+>> -ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),y)
+>> +ifeq ($(BR_BUILDING)$(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),yy)
+> 
+> yy means that exactly two of these must be 'y'. Is that intended?
 
-Applied, thanks.
+ Yes it is, because KERNEL_DTS_NAME is a string, not a boolean, so it
+essentially checks that it is empty and DTS_SUPPORT is selected. But admittedly
+it's not very transparent, it would make sense to add delimiters in-between at
+least.
 
-Thomas
+ Regards,
+ Arnout
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
