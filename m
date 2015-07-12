@@ -1,54 +1,159 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 12 Jul 2015 11:56:18 +0200
-Subject: [Buildroot] [git commit] package/igh-ethercat: use kernel-module
-	helper
-Message-ID: <20150712095704.6B7408010C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package-infra: add helper to build kernel
+	modules
+Message-ID: <20150712095704.51AA9818DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=95f52a7b7eac7696a6f627ba0cd68de11b12cfce
+commit: http://git.buildroot.net/buildroot/commit/?id=8b525dc934f18631a42e34d010530b9217d390f3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-igh-ethercat's Makefile just contains calls to the Linux buildsystem,
-that do exactly what we now do with our kernel-module infra.
+The Linux kernel offers a nice and easy-to-use infra to build
+out-of-tree kernel modules.
+
+Currently, we have quite a few packages that build kernel modules, and
+most duplicate (or rewrite) the same code over-and-over again.
+
+Introduce a new infrastructure that provides helpers to build kernel
+modules, so packages do not have to duplicate/rewrite that.
+
+The infrastructure, unlike any other package infra, is not standalone.
+It needs another package infra to be used. This is so that packages that
+provide both userland and kernel modules can be built easily. So, this
+infra only defines post-build and post-install hooks, that will build
+the kernel modules after the rest of the package.
+
+We need to override PWD, because some packages will use it to find their
+own includes (and other helper files). PWD is inherited from the
+environment, so it gets whatever value it had when make was launched,
+which happens to be Buildroot's own top source tree. So, we just force
+PWD to the proper value, rather than cd-ing first.
+
+Also, no host version is provided, since it does not make sense to build
+kernel modules for the host.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/igh-ethercat/igh-ethercat.mk |   14 +-------------
- 1 files changed, 1 insertions(+), 13 deletions(-)
+ package/Makefile.in          |    1 +
+ package/pkg-kernel-module.mk |   96 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 97 insertions(+), 0 deletions(-)
 
-diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
-index b5221f8..32c49a3 100644
---- a/package/igh-ethercat/igh-ethercat.mk
-+++ b/package/igh-ethercat/igh-ethercat.mk
-@@ -10,7 +10,6 @@ IGH_ETHERCAT_SOURCE = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
- IGH_ETHERCAT_LICENSE = GPLv2 (IgH EtherCAT master), LGPLv2.1 (libraries)
- IGH_ETHERCAT_LICENSE_FILES = COPYING COPYING.LESSER
- 
--IGH_ETHERCAT_DEPENDENCIES = linux
- IGH_ETHERCAT_INSTALL_STAGING = YES
- 
- IGH_ETHERCAT_CONF_OPTS = \
-@@ -22,16 +21,5 @@ IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,
- IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e)
- IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
- 
--define IGH_ETHERCAT_BUILD_MODULES
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
--endef
--
--IGH_ETHERCAT_POST_BUILD_HOOKS += IGH_ETHERCAT_BUILD_MODULES
--
--define IGH_ETHERCAT_INSTALL_MODULES
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules_install
--endef
--
--IGH_ETHERCAT_POST_INSTALL_TARGET_HOOKS += IGH_ETHERCAT_INSTALL_MODULES
--
-+$(eval $(kernel-module))
- $(eval $(autotools-package))
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 2ed7cf7..545694f 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -399,3 +399,4 @@ include package/pkg-virtual.mk
+ include package/pkg-generic.mk
+ include package/pkg-kconfig.mk
+ include package/pkg-rebar.mk
++include package/pkg-kernel-module.mk
+diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
+new file mode 100644
+index 0000000..5fb19be
+--- /dev/null
++++ b/package/pkg-kernel-module.mk
+@@ -0,0 +1,96 @@
++################################################################################
++# kernel module infrastructure for building Linux kernel modules
++#
++# This file implements an infrastructure that eases development of package
++# .mk files for out-of-tree Linux kernel modules. It should be used for all
++# packages that build a Linux kernel module using the kernel's out-of-tree
++# buildsystem, unless they use a complex custom buildsystem.
++#
++# The kernel-module infrastructure requires the packages that use it to also
++# use another package infrastructure. kernel-module only defines post-build
++# and post-install hooks. This allows the package to build both kernel
++# modules and/or user-space components (with any of the other *-package
++# infra).
++#
++# As such, it is to be used in conjunction with another *-package infra,
++# like so:
++#
++#   $(eval $(kernel-module))
++#   $(eval $(generic-package))
++#
++# Note: if the caller needs access to the kernel modules (either after they
++# are built or after they are installed), it will have to define its own
++# post-build/install hooks *after* calling kernel-module, but *before*
++# calling the other *-package infra, like so:
++#
++#   $(eval $(kernel-module))
++#   define FOO_MOD_TWEAK
++#   	# do something
++#   endef
++#   FOO_POST_BUILD_HOOKS += FOO_MOD_TWEAK
++#   $(eval $(generic-package))
++#
++# Note: this infra does not check that the kernel is enabled; it is expected
++# to be enforced at the Kconfig level with proper 'depends on'.
++################################################################################
++
++################################################################################
++# inner-kernel-module -- generates the make targets needed to support building
++# a kernel module
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name
++################################################################################
++
++define inner-kernel-module
++
++# The kernel must be built first.
++$(2)_DEPENDENCIES += linux
++
++# This is only defined in some infrastructures (e.g. autotools, cmake),
++# but not in others (e.g. generic). So define it here as well.
++$(2)_MAKE ?= $$(MAKE)
++
++# If not specified, consider the source of the kernel module to be at
++# the root of the package.
++$(2)_MODULE_SUBDIRS ?= .
++
++# Build the kernel module(s)
++# Force PWD for those packages that want to use it to find their
++# includes and other support files (Booo!)
++define $(2)_KERNEL_MODULES_BUILD
++	@$$(call MESSAGE,"Building kernel module(s)")
++	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
++		$$(LINUX_MAKE_ENV) $$($$(PKG)_MAKE) \
++			-C $$(LINUX_DIR) \
++			$$(LINUX_MAKE_FLAGS) \
++			$$($(2)_MODULE_MAKE_OPTS) \
++			PWD=$$(@D)/$$(d) \
++			M=$$(@D)/$$(d) \
++			modules$$(sep))
++endef
++$(2)_POST_BUILD_HOOKS += $(2)_KERNEL_MODULES_BUILD
++
++# Install the kernel module(s)
++# Force PWD for those packages that want to use it to find their
++# includes and other support files (Booo!)
++define $(2)_KERNEL_MODULES_INSTALL
++	@$$(call MESSAGE,"Installing kernel module(s)")
++	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
++		$$(LINUX_MAKE_ENV) $$($$(PKG)_MAKE) \
++			-C $$(LINUX_DIR) \
++			$$(LINUX_MAKE_FLAGS) \
++			$$($(2)_MODULE_MAKE_OPTS) \
++			PWD=$$(@D)/$$(d) \
++			M=$$(@D)/$$(d) \
++			modules_install$$(sep))
++endef
++$(2)_POST_INSTALL_TARGET_HOOKS += $(2)_KERNEL_MODULES_INSTALL
++
++endef
++
++################################################################################
++# kernel-module -- the target generator macro for kernel module packages
++################################################################################
++
++kernel-module = $(call inner-kernel-module,$(pkgname),$(call UPPERCASE,$(pkgname)))
