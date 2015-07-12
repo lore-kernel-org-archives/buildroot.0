@@ -1,60 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jul 2015 19:01:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ntp: increase pool server count
- in default config
-In-Reply-To: <1432093452-18281-1-git-send-email-imrehg@gmail.com>
-References: <1432093452-18281-1-git-send-email-imrehg@gmail.com>
-Message-ID: <20150712170101.GC4008@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Jul 2015 19:25:52 +0200
+Subject: [Buildroot] [PATCH v2] wpa_supplicant: Add NL80211 support
+ option
+In-Reply-To: <1407514672-6231-1-git-send-email-jtheou@adeneo-embedded.us>
+References: <1407514672-6231-1-git-send-email-jtheou@adeneo-embedded.us>
+Message-ID: <20150712192552.23e76408@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gergely, All,
+Dear Jean-Baptiste Theou,
 
-On 2015-05-20 03:44 +0000, Gergely Imreh spake thusly:
-> To protect agains 1 falsticker NTP server, the client needs to connect
-> to at least 4 servers.
+On Fri, 8 Aug 2014 09:17:52 -0700, Jean-Baptiste Theou wrote:
+> When you select wpa_supplicant, having an visual indication about the
+> support or not of NL80211 is important.
 > 
-> Source:
->  http://support.ntp.org/bin/view/Support/SelectingOffsiteNTPServers
->  5.3.3. Upstream Time Server Quantity
-> 
-> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
+> And even if libnl is available, you may want to disable the support of
+> NL80211 inside wpa_supplicant.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+You forgot your Signed-off-by here. But we anyway have more comments
+below.
 
-Regards,
-Yann E. MORIN.
+> +config BR2_PACKAGE_WPA_SUPPLICANT_NL80211
+> +	bool "Enable NL80211"
+> +	default y if BR2_PACKAGE_LIBNL
+> +	select BR2_PACKAGE_LIBNL
+> +	help
+> +	  Enable support for NL80211.
 
-> ---
->  package/ntp/ntpd.etc.conf | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/ntp/ntpd.etc.conf b/package/ntp/ntpd.etc.conf
-> index 543c8ff..c451aa9 100644
-> --- a/package/ntp/ntpd.etc.conf
-> +++ b/package/ntp/ntpd.etc.conf
-> @@ -1,5 +1,7 @@
->  server 0.pool.ntp.org iburst
->  server 1.pool.ntp.org iburst
-> +server 2.pool.ntp.org iburst
-> +server 3.pool.ntp.org iburst
->  
->  # Allow only time queries, at a limited rate, sending KoD when in excess.
->  # Allow all local queries (IPv4, IPv6)
-> -- 
-> 2.1.4
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+In which cases would you want to *not* have NL80211 support if you
+already have libnl enabled? What is the reason/use-case?
 
+If the NL80211 support in wpa_supplicant itself adds a significant
+binary size to the filesystem, then it might be useful to have an
+option such as the one you propose. But in this case, you should
+include some numbers in your commit log.
+
+Also, your patch keeps the automatic dependency handling of libnl, and
+adds explicitly dependency handling on top of it, which doesn't make a
+lot of sense: it should really be either one or the other solution, not
+both.
+
+You can also see slide 146 and following of
+http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf
+for more details about automatic or explicit handling of optional
+dependencies.
+
+In the mean time, we'll mark your patch as Rejected in patchwork. Don't
+hesitate to resubmit a patch with a better explanation, and a cleanup
+of automatic vs. explicit handling of the libnl dependency.
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
