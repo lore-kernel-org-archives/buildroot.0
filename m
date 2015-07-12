@@ -1,63 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 16:24:04 +0200
-Subject: [Buildroot] [git commit] keyutils: add patch to fix musl build
-	failure
-Message-ID: <20150712142444.1732380447@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 12 Jul 2015 16:26:05 +0200
+Subject: [Buildroot] [PATCH 1/7] Add <PKG>_STRIP_COMPONENTS for packages
+ with non-standard tarballs
+In-Reply-To: <55A19F0A.7010002@mind.be>
+References: <1436624110-20428-1-git-send-email-luca@lucaceresoli.net>
+ <55A19F0A.7010002@mind.be>
+Message-ID: <55A278FD.9090306@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e0dee07e9bdaab03db7281232b56100b380ad099
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Arnout,
 
-Fixes:
+Arnout Vandecappelle wrote:
+>   Since the cover letter is missing, I'll reply to this one...
+>
+> On 07/11/15 16:15, Luca Ceresoli wrote:
+>> Usually package tarballs contain only a directory named
+>> "<pkg-name>-<pkg-version>" which contains the actual source tree. To properly
+>> extract the source files in $(BUILD_DIR), Buildroot passes the
+>> --strip-components=1 option to tar.
+>
+>   Great work.
+>
+>   I think the following packages could also be converted:
+>
+> flite
 
-  http://autobuild.buildroot.org/results/253/2536b59735f33709f44fac94c81106e5ddd4fc40/
+I gave it a try. Here it is, http://patchwork.ozlabs.org/patch/494116/
+but I'm not sure it's exactly a lovely patch...
 
-Patch has been submitted upstream.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0005-Add-missing-limits.h-include.patch        |   32 ++++++++++++++++++++
- 1 files changed, 32 insertions(+), 0 deletions(-)
-
-diff --git a/package/keyutils/0005-Add-missing-limits.h-include.patch b/package/keyutils/0005-Add-missing-limits.h-include.patch
-new file mode 100644
-index 0000000..45c8439
---- /dev/null
-+++ b/package/keyutils/0005-Add-missing-limits.h-include.patch
-@@ -0,0 +1,32 @@
-+From b2c6d3744dca029560d0d5e780f16561f8eeed53 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 12 Jul 2015 16:22:14 +0200
-+Subject: [PATCH] Add missing <limits.h> include
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+key.dns_resolver.c uses ???UINT_MAX??? and ???ULONG_MAX???, but forgets to
-+include <limits.h>, which causes build failure with certain C
-+libraries (notably the musl C library).
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ key.dns_resolver.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/key.dns_resolver.c b/key.dns_resolver.c
-+index c2a9fe5..d41e219 100644
-+--- a/key.dns_resolver.c
-++++ b/key.dns_resolver.c
-+@@ -56,6 +56,7 @@
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+ #include <time.h>
-++#include <limits.h>
-+ 
-+ static const char *DNS_PARSE_VERSION = "1.0";
-+ static const char prog[] = "key.dns_resolver";
-+-- 
-+2.4.5
-+
+-- 
+Luca
