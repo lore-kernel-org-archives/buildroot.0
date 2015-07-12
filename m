@@ -1,73 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 11:56:19 +0200
-Subject: [Buildroot] [git commit] package/owl-linux: use kernel-module helper
-Message-ID: <20150712095704.9A8218010C@busybox.osuosl.org>
+Date: Sun, 12 Jul 2015 11:56:18 +0200
+Subject: [Buildroot] [git commit] package/ktap: use kernel-module helper
+Message-ID: <20150712095704.748C68010C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b5c2e658f3c35a6378a02736d1057ed1bef464b
+commit: http://git.buildroot.net/buildroot/commit/?id=84d97e6200f3f0b97485825728e9bdcc644f5830
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The owl-linux' Makefile is only calling the Linux buildsystem, so switch
-do using the new kernel-module infra.
+Passing the KERNEL_SRC variable is no longer needed, since it was only
+used to run commands like:
+    $(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules
 
-Get rid of first patch, no longer needed; rename remaining patch.
+which is basically what the new kernel-module infra is now doing.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-fix-CROSS_COMPILE-usage-in-Makefile.patch |   16 ----------------
- ...-3.3.x.patch => 0001-fix-for-linux-3.3.x.patch} |    0
- package/owl-linux/owl-linux.mk                     |   11 +----------
- 3 files changed, 1 insertions(+), 26 deletions(-)
+ package/ktap/ktap.mk |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/owl-linux/0001-fix-CROSS_COMPILE-usage-in-Makefile.patch b/package/owl-linux/0001-fix-CROSS_COMPILE-usage-in-Makefile.patch
-deleted file mode 100644
-index 14b4631..0000000
---- a/package/owl-linux/0001-fix-CROSS_COMPILE-usage-in-Makefile.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Fix the owl-linux Makefile so that it protects spaces in the CROSS_COMPILE
--variable. For example, this variable will contain spaces if ccache is used.
--
--Signed-off-by: Simon Dawson <spdawson@gmail.com>
--diff -Nurp a/Makefile b/Makefile
----- a/Makefile	2012-06-14 10:51:45.000000000 +0100
--+++ b/Makefile	2012-07-20 10:46:41.636752148 +0100
--@@ -35,7 +35,7 @@ else
-- 	PWD := $(shell pwd)
-- 
-- default:
---	$(MAKE) -C $(KERNELDIR) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) M=$(PWD) MODE=$(MODE) modules
--+	$(MAKE) -C $(KERNELDIR) ARCH=$(ARCH) CROSS_COMPILE="$(CROSS_COMPILE)" M=$(PWD) MODE=$(MODE) modules
-- 
-- clean: 
-- 	-rm -f *.o *.mod.c *.ko modules.order Module.symvers
-diff --git a/package/owl-linux/0002-fix-for-linux-3.3.x.patch b/package/owl-linux/0001-fix-for-linux-3.3.x.patch
-similarity index 100%
-rename from package/owl-linux/0002-fix-for-linux-3.3.x.patch
-rename to package/owl-linux/0001-fix-for-linux-3.3.x.patch
-diff --git a/package/owl-linux/owl-linux.mk b/package/owl-linux/owl-linux.mk
-index 371cc02..1262425 100644
---- a/package/owl-linux/owl-linux.mk
-+++ b/package/owl-linux/owl-linux.mk
-@@ -10,14 +10,5 @@ OWL_LINUX_LICENSE = PROPRIETARY
- OWL_LINUX_LICENSE_FILES = LICENSE
- OWL_LINUX_REDISTRIBUTE = NO
+diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
+index 4a0e51c..966b51c 100644
+--- a/package/ktap/ktap.mk
++++ b/package/ktap/ktap.mk
+@@ -9,8 +9,6 @@ KTAP_SITE = $(call github,ktap,ktap,$(KTAP_VERSION))
+ KTAP_LICENSE = GPLv2
+ KTAP_LICENSE_FILES = LICENSE-GPL
  
--OWL_LINUX_DEPENDENCIES = linux
+-KTAP_DEPENDENCIES = linux
 -
--define OWL_LINUX_BUILD_CMDS
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
--endef
--
--define OWL_LINUX_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M="$(@D)" modules_install
--endef
--
+ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ KTAP_DEPENDENCIES += elfutils
+ else
+@@ -19,12 +17,13 @@ endif
+ 
+ define KTAP_BUILD_CMDS
+ 	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) $(KTAP_FLAGS) ktap
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) mod
+ endef
+ 
+ define KTAP_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m755 $(@D)/ktap  $(TARGET_DIR)/usr/bin/ktap
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=$(LINUX_VERSION_PROBED) modules_install
+ endef
+ 
++KTAP_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
++
 +$(eval $(kernel-module))
  $(eval $(generic-package))
