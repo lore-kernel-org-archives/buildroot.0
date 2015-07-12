@@ -1,57 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jul 2015 12:43:29 +0200
-Subject: [Buildroot] [git commit] c-icap: disable Perl support
-Message-ID: <20150712105115.939E77FCAD@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Jul 2015 13:30:29 +0200
+Subject: [Buildroot] [PATCH] package/firmware-imx: fix legal-info
+Message-ID: <1436700629-5494-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5ec154fa413c991290a5661cc9bfc679ef997440
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The Perl support in c-icap does not build properly, because it queries
-the system-installed Perl for cflags/ldflags, which returns things
-like -I/usr/local/include causing build failures since those are
-invalid paths when cross-compiling.
-
-Since there is no easy way to fix that without changing c-icap
-configure.in, let's disable the Perl support for now, until someone is
-interested enough to fix this up.
+Part of fimrware-ims were dropped in the new version, so we have less
+leglal-info to save.
 
 Fixes:
+    http://autobuild.buildroot.org/results/59b/59b09152700a5839af46edb554e53981569f8921
 
-  http://autobuild.buildroot.org/results/f60/f6011ab8211589fe8e1e8932db9f8be81768d3e6/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/c-icap/c-icap.mk |    8 +-------
- 1 files changed, 1 insertions(+), 7 deletions(-)
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index 51c0f5f..0f42b6c 100644
---- a/package/c-icap/c-icap.mk
-+++ b/package/c-icap/c-icap.mk
-@@ -14,6 +14,7 @@ C_ICAP_CONFIG_SCRIPTS = c-icap-config c-icap-libicapapi-config
- C_ICAP_CONF_OPTS = \
- 	--with-process-mutexes=posix \
- 	--without-ldap \
-+	--without-perl \
- 	--enable-large-files \
- 	--enable-ipv6
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index f5ed353..71e49e6 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -10,7 +10,7 @@ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
  
-@@ -31,13 +32,6 @@ else
- C_ICAP_CONF_OPTS += --without-bzip2
- endif
+ FIRMWARE_IMX_LICENSE = Freescale Semiconductor Software License Agreement, \
+ 	Atheros license (ath6k)
+-FIRMWARE_IMX_LICENSE_FILES = EULA licenses/vpu/EULA licenses/ath6k/AR6102/License.txt
++FIRMWARE_IMX_LICENSE_FILES = EULA licenses/vpu/EULA
+ FIRMWARE_IMX_REDISTRIBUTE = NO
  
--ifeq ($(BR2_PACKAGE_PERL),y)
--C_ICAP_CONF_OPTS += --with-perl
--C_ICAP_DEPENDENCIES += perl
--else
--C_ICAP_CONF_OPTS += --without-perl
--endif
--
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- C_ICAP_CONF_OPTS += --with-zlib
- C_ICAP_DEPENDENCIES += zlib
+ FIRMWARE_IMX_BLOBS = ath6k sdma vpu
+-- 
+1.9.1
