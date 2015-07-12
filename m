@@ -1,43 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 00:26:47 +0200
-Subject: [Buildroot] [PATCH V3 5/5] c-icap-modules: new package
-In-Reply-To: <1416322487-14247-6-git-send-email-guillaume.gardet@oliseo.fr>
-References: <1415808993-2394-1-git-send-email-guillaume.gardet@oliseo.fr>
- <1416322487-14247-1-git-send-email-guillaume.gardet@oliseo.fr>
- <1416322487-14247-6-git-send-email-guillaume.gardet@oliseo.fr>
-Message-ID: <20150713002647.21a464b7@free-electrons.com>
+Date: Mon, 13 Jul 2015 00:27:21 +0200
+Subject: [Buildroot] [git commit] package/systemd: add missing dependencies
+Message-ID: <20150712222728.AD9DF805F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Guillaume GARDET,
+commit: http://git.buildroot.net/buildroot/commit/?id=b746088a6091165960d9494957fd67845f5832c0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 18 Nov 2014 15:54:47 +0100, Guillaume GARDET wrote:
-> Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-> 
-> ---
->  package/Config.in                        |  1 +
->  package/c-icap-modules/Config.in         |  7 +++++++
->  package/c-icap-modules/c-icap-modules.mk | 27 +++++++++++++++++++++++++++
->  3 files changed, 35 insertions(+)
->  create mode 100644 package/c-icap-modules/Config.in
->  create mode 100644 package/c-icap-modules/c-icap-modules.mk
+Systemd depends on mount and nologin from util-linux. Mount from busybox
+is not fine, because its behavior differs from util-linux mount. Busybox
+mount does not handle correctly 'mount / -o remount' (should apply
+options from /etc/fstab). Nologin should be present, because
+systemd-sysusers uses it as shell for newly created system users.
 
-I applied your patch, but did quite a few changes before doing so:
+Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/systemd/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-    [Thomas:
-      - Do not pass custom CFLAGS and remove the hacks on the Makefile:
-        since the c-icap-config script is now fixed, it returns correct
-        values, and the hacks are no longer needed.
-      - Add optional dependency on zlib and berkeleydb.
-      - Explicitly disable clamav support.]
-
-Thanks for your contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 38353d0..303cf22 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -20,6 +20,9 @@ config BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
++	select BR2_PACKAGE_UTIL_LINUX_BINARIES
++	select BR2_PACKAGE_UTIL_LINUX_MOUNT
++	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
+ 	select BR2_PACKAGE_KMOD
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+ 	select BR2_PACKAGE_KMOD_TOOLS
