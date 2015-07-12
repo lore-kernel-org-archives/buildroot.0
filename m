@@ -1,159 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 12 Jul 2015 11:56:18 +0200
-Subject: [Buildroot] [git commit] package-infra: add helper to build kernel
-	modules
-Message-ID: <20150712095704.51AA9818DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lttng-modules: use kernel-module
+	helper
+Message-ID: <20150712095704.61406818E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b525dc934f18631a42e34d010530b9217d390f3
+commit: http://git.buildroot.net/buildroot/commit/?id=57f86ba34101f38c6e491af9c1db837967a0085f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Linux kernel offers a nice and easy-to-use infra to build
-out-of-tree kernel modules.
+lttng-modules' Makefile already uses the Linux buildsystem to build its
+modules, so just switch to using the new kernel-module infra.
 
-Currently, we have quite a few packages that build kernel modules, and
-most duplicate (or rewrite) the same code over-and-over again.
-
-Introduce a new infrastructure that provides helpers to build kernel
-modules, so packages do not have to duplicate/rewrite that.
-
-The infrastructure, unlike any other package infra, is not standalone.
-It needs another package infra to be used. This is so that packages that
-provide both userland and kernel modules can be built easily. So, this
-infra only defines post-build and post-install hooks, that will build
-the kernel modules after the rest of the package.
-
-We need to override PWD, because some packages will use it to find their
-own includes (and other helper files). PWD is inherited from the
-environment, so it gets whatever value it had when make was launched,
-which happens to be Buildroot's own top source tree. So, we just force
-PWD to the proper value, rather than cd-ing first.
-
-Also, no host version is provided, since it does not make sense to build
-kernel modules for the host.
+To be noted: lttng-modules' Makefile uses $(shell pwd) that expects the
+PWD to be the Linux' top build directory, which is not the case for us.
+However, it uses to detect a conflict between a stale static version.h
+and a generated version.h (due to the switch to uapi). This is of no
+consequence to us, because we can't have a Linux build directory with
+such stale files.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in          |    1 +
- package/pkg-kernel-module.mk |   96 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 97 insertions(+), 0 deletions(-)
+ package/lttng-modules/lttng-modules.mk |   11 +----------
+ 1 files changed, 1 insertions(+), 10 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 2ed7cf7..545694f 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -399,3 +399,4 @@ include package/pkg-virtual.mk
- include package/pkg-generic.mk
- include package/pkg-kconfig.mk
- include package/pkg-rebar.mk
-+include package/pkg-kernel-module.mk
-diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
-new file mode 100644
-index 0000000..5fb19be
---- /dev/null
-+++ b/package/pkg-kernel-module.mk
-@@ -0,0 +1,96 @@
-+################################################################################
-+# kernel module infrastructure for building Linux kernel modules
-+#
-+# This file implements an infrastructure that eases development of package
-+# .mk files for out-of-tree Linux kernel modules. It should be used for all
-+# packages that build a Linux kernel module using the kernel's out-of-tree
-+# buildsystem, unless they use a complex custom buildsystem.
-+#
-+# The kernel-module infrastructure requires the packages that use it to also
-+# use another package infrastructure. kernel-module only defines post-build
-+# and post-install hooks. This allows the package to build both kernel
-+# modules and/or user-space components (with any of the other *-package
-+# infra).
-+#
-+# As such, it is to be used in conjunction with another *-package infra,
-+# like so:
-+#
-+#   $(eval $(kernel-module))
-+#   $(eval $(generic-package))
-+#
-+# Note: if the caller needs access to the kernel modules (either after they
-+# are built or after they are installed), it will have to define its own
-+# post-build/install hooks *after* calling kernel-module, but *before*
-+# calling the other *-package infra, like so:
-+#
-+#   $(eval $(kernel-module))
-+#   define FOO_MOD_TWEAK
-+#   	# do something
-+#   endef
-+#   FOO_POST_BUILD_HOOKS += FOO_MOD_TWEAK
-+#   $(eval $(generic-package))
-+#
-+# Note: this infra does not check that the kernel is enabled; it is expected
-+# to be enforced at the Kconfig level with proper 'depends on'.
-+################################################################################
-+
-+################################################################################
-+# inner-kernel-module -- generates the make targets needed to support building
-+# a kernel module
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name
-+################################################################################
-+
-+define inner-kernel-module
-+
-+# The kernel must be built first.
-+$(2)_DEPENDENCIES += linux
-+
-+# This is only defined in some infrastructures (e.g. autotools, cmake),
-+# but not in others (e.g. generic). So define it here as well.
-+$(2)_MAKE ?= $$(MAKE)
-+
-+# If not specified, consider the source of the kernel module to be at
-+# the root of the package.
-+$(2)_MODULE_SUBDIRS ?= .
-+
-+# Build the kernel module(s)
-+# Force PWD for those packages that want to use it to find their
-+# includes and other support files (Booo!)
-+define $(2)_KERNEL_MODULES_BUILD
-+	@$$(call MESSAGE,"Building kernel module(s)")
-+	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
-+		$$(LINUX_MAKE_ENV) $$($$(PKG)_MAKE) \
-+			-C $$(LINUX_DIR) \
-+			$$(LINUX_MAKE_FLAGS) \
-+			$$($(2)_MODULE_MAKE_OPTS) \
-+			PWD=$$(@D)/$$(d) \
-+			M=$$(@D)/$$(d) \
-+			modules$$(sep))
-+endef
-+$(2)_POST_BUILD_HOOKS += $(2)_KERNEL_MODULES_BUILD
-+
-+# Install the kernel module(s)
-+# Force PWD for those packages that want to use it to find their
-+# includes and other support files (Booo!)
-+define $(2)_KERNEL_MODULES_INSTALL
-+	@$$(call MESSAGE,"Installing kernel module(s)")
-+	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
-+		$$(LINUX_MAKE_ENV) $$($$(PKG)_MAKE) \
-+			-C $$(LINUX_DIR) \
-+			$$(LINUX_MAKE_FLAGS) \
-+			$$($(2)_MODULE_MAKE_OPTS) \
-+			PWD=$$(@D)/$$(d) \
-+			M=$$(@D)/$$(d) \
-+			modules_install$$(sep))
-+endef
-+$(2)_POST_INSTALL_TARGET_HOOKS += $(2)_KERNEL_MODULES_INSTALL
-+
-+endef
-+
-+################################################################################
-+# kernel-module -- the target generator macro for kernel module packages
-+################################################################################
-+
-+kernel-module = $(call inner-kernel-module,$(pkgname),$(call UPPERCASE,$(pkgname)))
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index 6833ad2..30c581e 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -10,14 +10,5 @@ LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 for kernel modules; MIT for lib/bitfield.h and lib/prio_heap/*
+ LTTNG_MODULES_LICENSE_FILES = lgpl-2.1.txt gpl-2.0.txt mit-license.txt LICENSE
+ 
+-LTTNG_MODULES_DEPENDENCIES = linux
+-
+-define LTTNG_MODULES_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
+-endef
+-
+-define LTTNG_MODULES_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR) modules_install
+-endef
+-
++$(eval $(kernel-module))
+ $(eval $(generic-package))
