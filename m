@@ -1,69 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jul 2015 02:21:41 +0200
-Subject: [Buildroot] [PATCH 11/11 v3] package/sysdig: use kernel-module
+Date: Sun, 12 Jul 2015 02:21:40 +0200
+Subject: [Buildroot] [PATCH 10/11 v3] package/simicsfs: use kernel-module
 	helper
 In-Reply-To: <cover.1436660369.git.yann.morin.1998@free.fr>
 References: <cover.1436660369.git.yann.morin.1998@free.fr>
-Message-ID: <643b9f65eee71f7f842fcb640af562a9c11d80d8.1436660369.git.yann.morin.1998@free.fr>
+Message-ID: <bf607b6a9eb45c454797b955fd221f6a5c198f85.1436660369.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sysdig's Makefile was already calling the Linux buildsystem to build its
-modules, so switch to using the new kernel-module infra.
-
-This has the benefit of making sysdig actually buildable, otherwise it
-fails because it tries to use the kernel headers from the host:
-
-    make: *** /lib/modules/3.13.0-53-generic/build: No such file or directory.  Stop.
-    make[5]: *** [all] Error 2
-    make[4]: *** [driver/CMakeFiles/driver] Error 2
-    make[3]: *** [driver/CMakeFiles/driver.dir/all] Error 2
+We were already using the Linux buildsystem to build simicsfs' modules,
+so switch to using the kernel-module infra instead.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/sysdig/sysdig.mk | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+ package/simicsfs/simicsfs.mk | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-index d07d467..85d16a4 100644
---- a/package/sysdig/sysdig.mk
-+++ b/package/sysdig/sysdig.mk
-@@ -10,13 +10,27 @@ SYSDIG_LICENSE = GPLv2
- SYSDIG_LICENSE_FILES = COPYING
- SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF \
- 	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF
--SYSDIG_DEPENDENCIES = zlib luajit jsoncpp linux
-+SYSDIG_DEPENDENCIES = zlib luajit jsoncpp
- SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
+diff --git a/package/simicsfs/simicsfs.mk b/package/simicsfs/simicsfs.mk
+index 51987c5..91ed413 100644
+--- a/package/simicsfs/simicsfs.mk
++++ b/package/simicsfs/simicsfs.mk
+@@ -8,14 +8,6 @@ SIMICSFS_VERSION = 1.18
+ SIMICSFS_SITE = http://download.simics.net/pub
+ SIMICSFS_LICENSE = GPLv2+
+ SIMICSFS_LICENSE_FILES = hostfs.h
+-SIMICSFS_DEPENDENCIES = linux
+-
+-define SIMICSFS_BUILD_CMDS
+-	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
+-endef
+-
+-define SIMICSFS_INSTALL_TARGET_CMDS
+-	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) INSTALL_MOD_PATH=$(TARGET_DIR) modules_install
+-endef
  
--define SYSDIG_INSTALL_DRIVER
--	$(MAKE) -C $(SYSDIG_BUILDDIR) $(LINUX_MAKE_FLAGS) KERNELDIR="$(LINUX_DIR)" install_driver
-+# sysdig creates the module Makefile from a template, which contains a
-+# single place-holder, KBUILD_FLAGS, wich is only replaced with two
-+# things:
-+#   - debug flags, which we don't care about here,
-+#   - 'sysdig-feature' flags, which are never set, so always empty
-+# So, just replace the place-holder with the only meaningful value: nothing.
-+define SYSDIG_MODULE_GEN_MAKEFILE
-+	$(INSTALL) -m 0644 $(@D)/driver/Makefile.in $(@D)/driver/Makefile
-+	$(SED) 's/@KBUILD_FLAGS@//;' $(@D)/driver/Makefile
- endef
-+SYSDIG_POST_PATCH_HOOKS += SYSDIG_MODULE_GEN_MAKEFILE
- 
--SYSDIG_POST_INSTALL_TARGET_HOOKS += SYSDIG_INSTALL_DRIVER
-+# Don't build the driver as part of the 'standard' procedure, we'll
-+# build it on our own with the kernel-module infra.
-+SYSDIG_CONF_OPTS += -DBUILD_DRIVER=OFF
- 
-+SYSDIG_MODULE_SUBDIRS = driver
-+SYSDIG_MODULE_MAKE_OPTS = KERNELDIR=$(LINUX_DIR)
-+
 +$(eval $(kernel-module))
- $(eval $(cmake-package))
+ $(eval $(generic-package))
 -- 
 1.9.1
