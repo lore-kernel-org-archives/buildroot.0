@@ -1,77 +1,66 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 13 Jul 2015 20:08:35 +0200
-Subject: [Buildroot] [PATCH 26/38] sunxi-mali: systemd support
-In-Reply-To: <96bc5f669829401ce7c13f49c31f47a0fc6c2c95.1432332802.git.alex.suykov@gmail.com>
-References: <cover.1432332802.git.alex.suykov@gmail.com>
- <96bc5f669829401ce7c13f49c31f47a0fc6c2c95.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <CAGduivymvy5ph653=QgJokF5rRAvCbaF7ms-rjLQjkaCSxz9bg@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 13 Jul 2015 20:11:00 +0200
+Subject: [Buildroot] [lua V5] lua-iconv: new package
+Message-ID: <1436811060-5751-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alex, all
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/Config.in              |  1 +
+ package/lua-iconv/Config.in    |  7 +++++++
+ package/lua-iconv/lua-iconv.mk | 14 ++++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/lua-iconv/Config.in
+ create mode 100644 package/lua-iconv/lua-iconv.mk
 
-On Sat, May 23, 2015 at 12:07 PM, Alex Suykov <alex.suykov@gmail.com> wrote:
-> The startup script too complex to embed it completely into
-> the .service file, so it is left as a standalone script.
->
-> Since there is really nothing sysv-specific there,
-> the actual initscript is used without any changes.
->
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/sunxi-mali/mali.service  | 11 +++++++++++
->  package/sunxi-mali/sunxi-mali.mk | 10 ++++++++++
->  2 files changed, 21 insertions(+)
->  create mode 100644 package/sunxi-mali/mali.service
->
-> diff --git a/package/sunxi-mali/mali.service b/package/sunxi-mali/mali.service
-> new file mode 100644
-> index 0000000..807989c
-> --- /dev/null
-> +++ b/package/sunxi-mali/mali.service
-> @@ -0,0 +1,11 @@
-> +[Unit]
-> +Description=Mali graphics driver
-> +
-> +[Service]
-> +Type=oneshot
-> +ExecStart=/usr/lib/systemd/scripts/mali start
-> +ExecStop=/usr/lib/systemd/scripts/mali stop
-> +RemainAfterExit=yes
-> +
-> +[Install]
-> +WantedBy=multi-user.target
-> diff --git a/package/sunxi-mali/sunxi-mali.mk b/package/sunxi-mali/sunxi-mali.mk
-> index c6900c8..a529e2d 100644
-> --- a/package/sunxi-mali/sunxi-mali.mk
-> +++ b/package/sunxi-mali/sunxi-mali.mk
-> @@ -80,4 +80,14 @@ define SUNXI_MALI_INSTALL_INIT_SYSV
->                 $(TARGET_DIR)/etc/init.d/S80mali
->  endef
->
-> +define SUNXI_MALI_INSTALL_INIT_SYSTEMD
-> +       $(INSTALL) -D -m 755 package/sunxi-mali/S80mali \
-> +               $(TARGET_DIR)/usr/lib/systemd/scripts/mali
-I'm not very fond of placing a binary in '/usr/lib/...'.
-I think it would be better to install into '/usr/sbin'
-
-You patch will be marked as "Changes Requested" in patchwork.
-
-> +       $(INSTALL) -D -m 644 package/sunxi-mali/mali.service \
-> +               $(TARGET_DIR)/usr/lib/systemd/system/mali.service
-> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +       ln -sf /usr/lib/systemd/system/mali.service \
-> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mali.service
-> +endef
-> +
->  $(eval $(generic-package))
-> --
-> 2.0.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/Config.in b/package/Config.in
+index c5769d6..9dbb284 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -481,6 +481,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-coatpersistent/Config.in"
+ 	source "package/lua-csnappy/Config.in"
+ 	source "package/lua-ev/Config.in"
++	source "package/lua-iconv/Config.in"
+ 	source "package/lua-messagepack/Config.in"
+ 	source "package/lua-msgpack-native/Config.in"
+ 	source "package/lua-periphery/Config.in"
+diff --git a/package/lua-iconv/Config.in b/package/lua-iconv/Config.in
+new file mode 100644
+index 0000000..e76019d
+--- /dev/null
++++ b/package/lua-iconv/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LUA_ICONV
++	bool "lua-iconv"
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++	help
++	  Lua binding to the POSIX 'iconv' library
++
++	  http://ittner.github.io/lua-iconv/
+diff --git a/package/lua-iconv/lua-iconv.mk b/package/lua-iconv/lua-iconv.mk
+new file mode 100644
+index 0000000..f0afa2b
+--- /dev/null
++++ b/package/lua-iconv/lua-iconv.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# lua-iconv
++#
++################################################################################
++
++LUA_ICONV_VERSION_UPSTREAM = 7
++LUA_ICONV_VERSION = $(LUA_ICONV_VERSION_UPSTREAM)-1
++LUA_ICONV_SUBDIR  = lua-iconv-$(LUA_ICONV_VERSION_UPSTREAM)
++LUA_ICONV_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++LUA_ICONV_LICENSE = MIT
++LUA_ICONV_LICENSE_FILES = $(LUA_ICONV_SUBDIR)/COPYING
++
++$(eval $(luarocks-package))
+-- 
+2.1.4
