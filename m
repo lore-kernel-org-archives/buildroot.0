@@ -1,70 +1,57 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 13 Jul 2015 17:34:44 +0200
-Subject: [Buildroot] [PATCH 01/38] at: systemd support
-In-Reply-To: <f3aa3efc49568ce60fa774f02c3f031ccbf40da2.1432332802.git.alex.suykov@gmail.com>
-References: <cover.1432332802.git.alex.suykov@gmail.com>
- <f3aa3efc49568ce60fa774f02c3f031ccbf40da2.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <CAGduivzrtdTGoHgZKZJJ0ELTcw89uePTUC0S8xEh13-EYHukow@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jul 2015 17:35:20 +0200
+Subject: [Buildroot] [git commit] systemd: add option to enable kdbus support
+Message-ID: <20150713153603.E1151818C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alex, all
+commit: http://git.buildroot.net/buildroot/commit/?id=93ee95b4f0d392ad395acc1a2329bb26d4612992
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, May 23, 2015 at 12:02 PM, Alex Suykov <alex.suykov@gmail.com> wrote:
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/at/at.mk       |  8 ++++++++
->  package/at/atd.service | 11 +++++++++++
->  2 files changed, 19 insertions(+)
->  create mode 100644 package/at/atd.service
->
-> diff --git a/package/at/at.mk b/package/at/at.mk
-> index 1504e32..be4c0b2 100644
-> --- a/package/at/at.mk
-> +++ b/package/at/at.mk
-> @@ -25,4 +25,12 @@ define AT_INSTALL_INIT_SYSV
->         $(INSTALL) -m 0755 -D package/at/S99at $(TARGET_DIR)/etc/init.d/S99at
->  endef
->
-> +define AT_INSTALL_INIT_SYSTEMD
-> +       $(INSTALL) -D -m 644 package/at/atd.service \
-> +               $(TARGET_DIR)/usr/lib/systemd/system/atd.service
-> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +       ln -sf /usr/lib/systemd/system/atd.service \
-> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/atd.service
-> +endef
-> +
->  $(eval $(autotools-package))
-> diff --git a/package/at/atd.service b/package/at/atd.service
-> new file mode 100644
-> index 0000000..543cbc3
-> --- /dev/null
-> +++ b/package/at/atd.service
-> @@ -0,0 +1,11 @@
-> +[Unit]
-> +Description=Run jobs queued for later execution
-> +After=syslog.target
-> +
-> +[Service]
-> +UMask=077
-> +ExecStart=/usr/sbin/atd -f
-> +Restart=always
-If I look at the service file from Arch Linux, which is a pretty long
-time systemd users, they don't have the UMask directive (I don't know
-why you would need it).
+In the future when the kernel offically supports kdbus, this option
+should automatically enable the kernel kdbus config option(s).
 
-Also they use "Type=forking" and without the -f so systemd will take
-care of the daemon itself.
-> +
-> +[Install]
-> +WantedBy=multi-user.target
-> --
-> 2.0.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Tested-by: Mike Williams <mike@mikebwilliams.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/systemd/Config.in  |    5 +++++
+ package/systemd/systemd.mk |    6 ++++++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
+
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 303cf22..510badd 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -73,6 +73,11 @@ config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
+ 	  Enable extra features for Systemd: journal compression and
+ 	  signing.
+ 
++config BR2_PACKAGE_SYSTEMD_KDBUS
++	bool "enable kdbus support"
++	help
++	  Enable kdbus support for Systemd.
++
+ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+ 	bool "HTTP server for journal events"
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 5c9effa..b62fc08 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -71,6 +71,12 @@ else
+ SYSTEMD_CONF_OPTS += --disable-seccomp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_KDBUS),y)
++SYSTEMD_CONF_OPTS += --enable-kdbus
++else
++SYSTEMD_CONF_OPTS += --disable-kdbus
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_ALL_EXTRAS),y)
+ SYSTEMD_DEPENDENCIES += xz libgcrypt
+ SYSTEMD_CONF_OPTS += \
