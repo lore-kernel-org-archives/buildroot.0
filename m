@@ -1,36 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 01:33:12 +0200
-Subject: [Buildroot] NFS Server on Buildroot Target
-In-Reply-To: <CAJJ6jxuV-JAUr+xtHtAkQ49XnOZ7kLDzo98S6-3=yKwxj=BaoQ@mail.gmail.com>
-References: <CAMQcK5+eTg508+qHvP+_J_uB5L8vXHCKORvU=PmDpBXcZJ4swg@mail.gmail.com>
- <CAJJ6jxuV-JAUr+xtHtAkQ49XnOZ7kLDzo98S6-3=yKwxj=BaoQ@mail.gmail.com>
-Message-ID: <20150714013312.772e5bf6@free-electrons.com>
+Date: Tue, 14 Jul 2015 01:33:24 +0200
+Subject: [Buildroot] [PATCH] purge-locales: skip /usr/man and
+ /usr/share/man
+In-Reply-To: <1436821234-31713-1-git-send-email-arnout@mind.be>
+References: <1436821234-31713-1-git-send-email-arnout@mind.be>
+Message-ID: <20150714013324.2552137e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Calfee,
+Dear Arnout Vandecappelle (Essensium/Mind),
 
-On Mon, 13 Jul 2015 16:21:48 -0700, Steve Calfee wrote:
-
-> I finally got the nfs server working maybe 2 years ago. Search for a
-> patch email (later withdrawn) titled:"Fix nfs server for a read only
-> rootfs"
+On Mon, 13 Jul 2015 23:00:34 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> These directories are going to be removed anyway, so no point purging
+> their locales.
 > 
-> Long story short, nfs requires your rootfs to be mounted r/w or the
-> temp paths must be fixed to be writable.
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-We finally took some time to fix that up and the latest Buildroot
-master should work fine thanks to:
-
-  http://git.buildroot.net/buildroot/commit/package/nfs-utils?id=aec5af98caf65b8ad08db4f372527a0503bb381c
-  http://git.buildroot.net/buildroot/commit/package/nfs-utils?id=a23d336fbdba575321cfddadf7d671810559b056
-
-Do not hesitate to test it and report back your results.
-
-Thanks!
+Applied, thanks.
 
 Thomas
 -- 
