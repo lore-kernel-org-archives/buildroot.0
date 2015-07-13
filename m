@@ -1,87 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 12:57:18 +0200
-Subject: [Buildroot] [PATCH v4] nfs-utils: Bump version
-In-Reply-To: <1436779028-3290-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1436779028-3290-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150713125718.04b9d515@free-electrons.com>
+Date: Mon, 13 Jul 2015 12:57:58 +0200
+Subject: [Buildroot] [git commit] Makefile: don't depend on the umask
+Message-ID: <20150713105928.337D5807AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+commit: http://git.buildroot.net/buildroot/commit/?id=bee5745ccc20be6dbba243b1f8af0d5c522923e8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 13 Jul 2015 11:17:08 +0200, Maxime Hadjinlian wrote:
-> Refresh the patches (Thanks to Thomas Petazzoni's work)
-> 
-> Patches removed:
-> 0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch
-> 0004-fix-build-with-uClibc.patch
-> 0004-fix-build-with-uClibc.patch
-> 0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
-> 0007-sockaddr-h-needs-stddef-h-for-NULL.patch
-> 0008-tirpc-with-pkgconfig.patch
-> 
-> Patches modified:
-> 0002-Patch-taken-from-Gentoo.patch
-> 0003-Switch-legacy-index-in-favour-of-strchr.patch
-> 0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
-> 
-> Also, change source of the package to git repository (and remove the hash,
-> sourceforce is clearly not a platform which can be trusted nowadays)
-> 
-> Rework the startup script to accomodate new rpc.statd
-> The startup scripts now uses rcp.statd -F for a startup in foreground,
-> also we avoid starting it twice, it makes rcp.statd crash the whole
-> script.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
-> v3 -> v4:
->     - Fix commit log
-> v2 -> v3:
->     - Fix SITE used
-> v1 -> v2:
->     - Change commit log format
->     - Specify patches removed/added
->     - Using git format-patch -M
->     - Using tarball sources and thus adding sha256 from the source
->     - Explain the -F for rpc.stad in the commit log
-> ---
->  ...oo.patch => 0001-Patch-taken-from-Gentoo.patch} |  52 +++--------
->  ...d-AM_CONDITIONAL-in-conditional-execution.patch |  57 ------------
->  ...-Switch-legacy-index-in-favour-of-strchr.patch} |  29 +++---
->  ...figure-script-find-getrpcbynumber-in-libt.patch |  46 ++++++++++
->  package/nfs-utils/0004-fix-build-with-uClibc.patch |  31 -------
->  ...-of-getrpcbynumber-when-getrpcbynumber_r-.patch |  70 --------------
->  ...figure-script-find-getrpcbynumber-in-libt.patch |  38 --------
->  .../0007-sockaddr-h-needs-stddef-h-for-NULL.patch  |  19 ----
->  package/nfs-utils/0008-tirpc-with-pkgconfig.patch  | 102 ---------------------
->  package/nfs-utils/S60nfs                           |   3 +-
->  package/nfs-utils/nfs-utils.hash                   |   4 +-
->  package/nfs-utils/nfs-utils.mk                     |   6 +-
->  12 files changed, 80 insertions(+), 377 deletions(-)
->  rename package/nfs-utils/{0002-Patch-taken-from-Gentoo.patch => 0001-Patch-taken-from-Gentoo.patch} (62%)
->  delete mode 100644 package/nfs-utils/0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch
->  rename package/nfs-utils/{0003-Switch-legacy-index-in-favour-of-strchr.patch => 0002-Switch-legacy-index-in-favour-of-strchr.patch} (87%)
->  create mode 100644 package/nfs-utils/0003-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
->  delete mode 100644 package/nfs-utils/0004-fix-build-with-uClibc.patch
->  delete mode 100644 package/nfs-utils/0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
->  delete mode 100644 package/nfs-utils/0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
->  delete mode 100644 package/nfs-utils/0007-sockaddr-h-needs-stddef-h-for-NULL.patch
->  delete mode 100644 package/nfs-utils/0008-tirpc-with-pkgconfig.patch
+Some packages and BR itself create files and directories on the target
+with cp/mkdir/etc which depend on the umask at the time of building.
 
-Applied after doing some additional changes:
+To fix this, use a trick inside the Makefile which wraps all rules when
+the umask is not 0022. This sets the umask at the top level, and then
+the building process continues as usual.
 
-    [Thomas: add patch to fix rpc.statd foreground/daemon mode
-    backported from upstream, and fix the S60nfs init script to not use
-    the -F option of rpc.statd.]
+[Thomas: add --no-print-directory, as suggested by Arnout.]
 
-Thanks!
+Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/Makefile b/Makefile
+index daf692e..55b1d45 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,6 +24,19 @@
+ # You shouldn't need to mess with anything beyond this point...
+ #--------------------------------------------------------------
+ 
++# Trick for always running with a fixed umask
++UMASK=0022
++ifneq ($(shell umask),$(UMASK))
++.PHONY: all $(MAKECMDGOALS)
++
++all:
++	@umask $(UMASK) && $(MAKE) --no-print-directory
++
++$(MAKECMDGOALS):
++	@umask $(UMASK) && $(MAKE) --no-print-directory $@
++
++else # umask
++
+ # This is our default rule, so must come first
+ all:
+ 
+@@ -937,3 +950,5 @@ include docs/manual/manual.mk
+ -include $(BR2_EXTERNAL)/docs/*/*.mk
+ 
+ .PHONY: $(noconfig_targets)
++
++endif #umask
