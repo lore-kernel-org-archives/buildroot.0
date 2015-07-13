@@ -1,48 +1,39 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 13 Jul 2015 12:17:56 +0200
-Subject: [Buildroot] [PATCH v3 3/4] Makefile: add TARGET_CLEAR_RPATH_HOOK to
-	TARGET_FINALIZE_HOOKS
+Date: Mon, 13 Jul 2015 12:17:57 +0200
+Subject: [Buildroot] [PATCH v3 4/4] Makefile: staging symlink uses a
+	relative path
 In-Reply-To: <1436782677-12557-1-git-send-email-s.martin49@gmail.com>
 References: <1436782677-12557-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1436782677-12557-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <1436782677-12557-4-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch introduces the TARGET_CLEAR_RPATH_HOOK hook fixing the ELF
-files' RPATH of the host tree (excluding the sysroot).
-
-After running this hook, the RPATH from any target ELF files is empty.
+A step forward toward a relocatable SDK.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
-changes v2->v3:
-- move hook in Makefile (Baruch)
+changes v2-v3:
+- no change
 ---
- Makefile | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index ac387ea..9ae9afb 100644
+index 9ae9afb..2ca0ef2 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -556,6 +556,14 @@ endef
+@@ -447,7 +447,7 @@ $(STAGING_DIR):
+ 	@ln -snf lib $(STAGING_DIR)/usr/$(LIB_SYMLINK)
+ 	@mkdir -p $(STAGING_DIR)/usr/include
+ 	@mkdir -p $(STAGING_DIR)/usr/bin
+-	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
++	@ln -snf $(subst $(BASE_DIR)/,,$(STAGING_DIR)) $(BASE_DIR)/staging
  
- TARGET_FINALIZE_HOOKS += HOST_FIX_RPATH_HOOK
- 
-+define TARGET_CLEAR_RPATH_HOOK
-+	$(TOPDIR)/support/scripts/fix_rpaths \
-+		clear $(TARGET_DIR) \
-+		--patchelf-program $(HOST_DIR)/usr/bin/patchelf
-+endef
-+
-+TARGET_FINALIZE_HOOKS += TARGET_CLEAR_RPATH_HOOK
-+
- target-finalize: $(PACKAGES)
- 	@$(call MESSAGE,"Finalizing target directory")
- 	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
+ ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
+ TARGET_SKELETON = $(BR2_ROOTFS_SKELETON_CUSTOM_PATH)
 -- 
 2.4.5
