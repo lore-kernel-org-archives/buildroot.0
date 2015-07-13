@@ -1,52 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 13 Jul 2015 17:07:26 +0200
-Subject: [Buildroot] [PATCH v4 3/9] toolchain/helpers.mk: use --chmod on
-	rsync
-In-Reply-To: <1416586748-12936-4-git-send-email-guido@vanguardiasur.com.ar>
-References: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
- <1416586748-12936-4-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <55A3D42E.6080007@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jul 2015 17:08:03 +0200
+Subject: [Buildroot] [git commit] gnutls: bump to version 3.3.16
+Message-ID: <20150713150811.8942981955@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/21/14 17:19, Guido Mart?nez wrote:
-> This makes sure we don't have any weird permissions on the staging dir,
-> which could affect the target.
-> 
-> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+commit: http://git.buildroot.net/buildroot/commit/?id=adddac455894545fd0152d37669910ac51b38c2b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gnutls/gnutls.hash |    2 +-
+ package/gnutls/gnutls.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Regards,
- Arnout
-
-> ---
->  toolchain/helpers.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 3121da4..46f5f22 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -139,7 +139,7 @@ copy_toolchain_sysroot = \
->  	SUPPORT_LIB_DIR="$(strip $5)" ; \
->  	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
->  		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
-> -			rsync -au --chmod=Du+w --exclude 'usr/lib/locale' \
-> +			rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
->  				--exclude lib --exclude lib32 --exclude lib64 \
->  				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
->  		fi ; \
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 3009478..620caae 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	8961227852911a1974e15bc017ddbcd4779876c867226d199f06648d8b27ba4b	gnutls-3.3.15.tar.xz
++sha256	80a471c723572a43ddbe75d7825a3275f640650cc99eae42963ab39b9d0b7552	gnutls-3.3.16.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 9ccc23e..4593034 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.3
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).15
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
