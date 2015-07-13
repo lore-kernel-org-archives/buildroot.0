@@ -1,43 +1,50 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 13 Jul 2015 23:55:11 +0200
-Subject: [Buildroot] [PATCH v5 5/5] package/speex: remove no longer needed
-	hook
-In-Reply-To: <1436824511-1601-1-git-send-email-s.martin49@gmail.com>
-References: <1436824511-1601-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1436824511-1601-5-git-send-email-s.martin49@gmail.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Mon, 13 Jul 2015 17:03:34 -0500
+Subject: [Buildroot] NFS Server on Buildroot Target
+Message-ID: <CAMQcK5+eTg508+qHvP+_J_uB5L8vXHCKORvU=PmDpBXcZJ4swg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the LIBTOOL_FIXUP hook since RPATH are now sanitized in
-target-finalize hooks.
+Hello,
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Today I attempted to get an NFS working on a embedded target and
+struggled with getting the 'nfs-utils' package to work to provided NFS
+server functionality. By selecting the 'nfs-utils' package, the NFS
+server functionally does NOT work by default. Before I even attempted
+this, I had the kernel configuration options selected for NFSD. It
+turned out that I needed to have the rpcbind package selected in order
+to make it work, however, this was after a couple hours of trying to
+debug this.
 
----
-changes v4->v5:
-- new patch (suggested by Baruch)
----
- package/speex/speex.mk | 5 -----
- 1 file changed, 5 deletions(-)
+I have a few questions that I would like feedback on as I would like
+to propose a patch that will allow the nfs-util package to work by
+default.
 
-diff --git a/package/speex/speex.mk b/package/speex/speex.mk
-index a34bfac..24782ec 100644
---- a/package/speex/speex.mk
-+++ b/package/speex/speex.mk
-@@ -24,11 +24,6 @@ ifeq ($(BR2_PACKAGE_SPEEX_ARM5E),y)
- SPEEX_CONF_OPTS += --enable-arm5e-asm
- endif
- 
--define SPEEX_LIBTOOL_FIXUP
--	$(SED) 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $(@D)/libtool
--	$(SED) 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $(@D)/libtool
--endef
--
- SPEEX_POST_CONFIGURE_HOOKS += SPEEX_LIBTOOL_FIXUP
- 
- define SPEEX_BUILD_CMDS
+First, should the nfs-util package automatically 'select' on the
+kernel configuration options for NFSD?
+
+Other package do this so I would argue that it should.
+
+Second, in order to make the default startup configuration work,
+rpcbind is required. Should this be an added dependency since the goal
+of a package is to have it work by default?
+
+Any suggestion or feedback would be appreciated.
+
+Thanks,
+-Ryan
+
+[Extra] Looks like someone posted something similar to the mailing
+list in January of 2013
+
+http://lists.busybox.net/pipermail/buildroot/2013-January/065498.html
+
 -- 
-2.4.5
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
