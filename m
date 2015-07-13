@@ -1,38 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 19:04:57 +0200
-Subject: [Buildroot] [PATCH/next 3/3] package/dovecot: Add optional
- support for icu
-In-Reply-To: <1432194056-10250-3-git-send-email-bernd.kuhls@t-online.de>
-References: <1432194056-10250-1-git-send-email-bernd.kuhls@t-online.de>
- <1432194056-10250-3-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150713190457.5b405c24@free-electrons.com>
+Date: Mon, 13 Jul 2015 19:05:23 +0200
+Subject: [Buildroot] [git commit] exim: systemd support
+Message-ID: <20150713170529.7D63C80E23@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=b52d96ab4ed5e3ea8e993283a14cd2999aea10ad
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 21 May 2015 09:40:56 +0200, Bernd Kuhls wrote:
-> Optional dependency added to fts plugin since Dovecot 2.2.17:
-> http://hg.dovecot.org/dovecot-2.2/diff/b179bbd226e5/configure.ac
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/dovecot/dovecot.mk |    7 +++++++
->  1 file changed, 7 insertions(+)
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/exim/exim.mk      |    8 ++++++++
+ package/exim/exim.service |   10 ++++++++++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-It's a bit weird to have it handled as an automatic optional dependency
-when several other dovecot dependencies have an explicit sub-option
-(zlib, bzip2, etc.). But libcap support was already in this order.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 8ad0328..d8f41b0 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -133,4 +133,12 @@ define EXIM_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S86exim
+ endef
+ 
++define EXIM_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/exim/exim.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/exim.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf /usr/lib/systemd/system/exim.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/exim.service
++endef
++
+ $(eval $(generic-package))
+diff --git a/package/exim/exim.service b/package/exim/exim.service
+new file mode 100644
+index 0000000..26daabc
+--- /dev/null
++++ b/package/exim/exim.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Exim MTA
++After=syslog.target network.target
++
++[Service]
++ExecStart=/usr/bin/exim -bdf
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
