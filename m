@@ -1,35 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 17:03:49 +0200
-Subject: [Buildroot] [PATCH] CHANGES: add release note for the
- permissions
-In-Reply-To: <1436787388-24414-1-git-send-email-arnout@mind.be>
-References: <1416586748-12936-3-git-send-email-guido@vanguardiasur.com.ar>
- <1436787388-24414-1-git-send-email-arnout@mind.be>
-Message-ID: <20150713170349.441b0ab8@free-electrons.com>
+Date: Mon, 13 Jul 2015 17:04:04 +0200
+Subject: [Buildroot] [git commit] nmap: add hash file
+Message-ID: <20150713150417.409C980DF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+commit: http://git.buildroot.net/buildroot/commit/?id=d46fefb0801af2f062581dbca8d134bf02b6002e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 13 Jul 2015 13:36:28 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Since the rsync of skeleton or rootfs now changes the permissions of
-> the copied files and directories, this may break existing setups that
-> rely on these permissions being kept. So add a release not explaining
-> how it should be done.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  CHANGES | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nmap/nmap.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-I've fixed the commit log as suggested by Baruch and applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
+new file mode 100644
+index 0000000..8c8da00
+--- /dev/null
++++ b/package/nmap/nmap.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256 8fa11e9e203ce2d81a207db5ca4f110a525f6c01c1dd0018325a7112a51aa591 nmap-6.47.tar.bz2
