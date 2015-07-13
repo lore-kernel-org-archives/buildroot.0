@@ -1,30 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 19:05:42 +0200
-Subject: [Buildroot] [PATCH 07/38] exim: systemd support
-In-Reply-To: <2bc7b8864f7f664c36ceb90062d39aee6e29345d.1432332802.git.alex.suykov@gmail.com>
-References: <cover.1432332802.git.alex.suykov@gmail.com>
- <2bc7b8864f7f664c36ceb90062d39aee6e29345d.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <20150713190542.32b43283@free-electrons.com>
+Date: Mon, 13 Jul 2015 19:16:26 +0200
+Subject: [Buildroot] [git commit] inadyn: systemd support
+Message-ID: <20150713171631.A6F7C81908@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+commit: http://git.buildroot.net/buildroot/commit/?id=0719dd240f35c44967ea63f8ffd60734dfefb56a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 23 May 2015 13:03:27 +0300, Alex Suykov wrote:
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/exim/exim.mk      |  8 ++++++++
->  package/exim/exim.service | 10 ++++++++++
->  2 files changed, 18 insertions(+)
->  create mode 100644 package/exim/exim.service
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/inadyn/inadyn.mk      |    8 ++++++++
+ package/inadyn/inadyn.service |   10 ++++++++++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index b002f94..5c3b0e3 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -30,4 +30,12 @@ define INADYN_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S70inadyn
+ endef
+ 
++define INADYN_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/inadyn/inadyn.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/inadyn.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf /usr/lib/systemd/system/inadyn.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/inadyn.service
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/inadyn/inadyn.service b/package/inadyn/inadyn.service
+new file mode 100644
+index 0000000..abc0a1e
+--- /dev/null
++++ b/package/inadyn/inadyn.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=DDNS client
++After=syslog.target network.target
++
++[Service]
++ExecStart=/usr/bin/inadyn
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
