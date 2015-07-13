@@ -1,67 +1,159 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 14 Jul 2015 01:45:28 +0200
-Subject: [Buildroot] [PATCH v3 2/2] purge-locales: fix handling of X11
-	locale.dir
-In-Reply-To: <1436831128-19423-1-git-send-email-arnout@mind.be>
-References: <1436831128-19423-1-git-send-email-arnout@mind.be>
-Message-ID: <1436831128-19423-2-git-send-email-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Jul 2015 01:51:52 +0200
+Subject: [Buildroot] [git commit] initscripts: new package
+Message-ID: <20150713235506.9DBB381983@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Valentine Barshak <gvaxon@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=89d39fc7a392530be043bac541ade0bef746edb6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The /usr/share/X11/locale/locale.dir file is needed by libX11.
-Removing it breaks locale support in X11. However, make removes
-not only directories but also all files, which are not listed
-in the BR2_ENABLE_LOCALE_WHITELIST.
+The folder init.d is currently installed by default since it's part of
+our skeleton.
+This patch creates a package out of it and make busybox/sysvinit depends
+on it.
 
-This re-creates locale.dir database file where needed.
+This way, if you chose another init, you don't end up with a useless
+init.d folder.
 
-Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Arnout: use a separate loop, and add some explanatory comments]
+[Thomas:
+  - make the initscripts package selectable via a hidden bool
+  - remove some unneeded changes in sysvinit.mk.]
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v3: No change
-v2: [Arnout]: use a separate loop, add explanatory comments
----
- Makefile | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ package/Config.in                                  |    1 +
+ package/busybox/busybox.mk                         |    7 +++++++
+ {system/skeleton/etc => package/busybox}/inittab   |    0
+ package/initscripts/Config.in                      |    4 ++++
+ .../etc => package/initscripts}/init.d/S20urandom  |    0
+ .../etc => package/initscripts}/init.d/S40network  |    0
+ .../etc => package/initscripts}/init.d/rcK         |    0
+ .../etc => package/initscripts}/init.d/rcS         |    0
+ package/initscripts/initscripts.mk                 |   15 +++++++++++++++
+ package/sysvinit/sysvinit.mk                       |    2 --
+ system/Config.in                                   |    2 ++
+ 11 files changed, 29 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index f764ae5..8eb8c6d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -540,6 +540,11 @@ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
- LOCALE_WHITELIST = $(BUILD_DIR)/locales.nopurge
- LOCALE_NOPURGE = $(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
- 
-+# This piece of junk does the following:
-+# First collect the whitelist in a file.
-+# Then go over all the locale dirs and for each subdir, check if it exists
-+# in the whitelist file. If it doesn't, kill it.
-+# Finally, specifically for X11, regenerate locale.dir from the whitelist.
- define PURGE_LOCALES
- 	rm -f $(LOCALE_WHITELIST)
- 	for i in $(LOCALE_NOPURGE) locale-archive; do echo $$i >> $(LOCALE_WHITELIST); done
-@@ -551,6 +556,16 @@ define PURGE_LOCALES
- 			grep -qx $${langdir##*/} $(LOCALE_WHITELIST) || rm -rf $$langdir; \
- 		done; \
- 	done
-+	if [ -d $(TARGET_DIR)/usr/share/X11/locale ]; \
-+	then \
-+		for lang in $(LOCALE_NOPURGE); \
-+		do \
-+			if [ -f $(TARGET_DIR)/usr/share/X11/locale/$$lang/XLC_LOCALE ]; \
-+			then \
-+				echo "$$lang/XLC_LOCALE: $$lang"; \
-+			fi \
-+		done > $(TARGET_DIR)/usr/share/X11/locale/locale.dir; \
-+	fi
+diff --git a/package/Config.in b/package/Config.in
+index 9dbb284..0288cb0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1414,6 +1414,7 @@ endif
+ 	source "package/ftop/Config.in"
+ 	source "package/getent/Config.in"
+ 	source "package/htop/Config.in"
++	source "package/initscripts/Config.in"
+ 	source "package/iotop/Config.in"
+ 	source "package/iprutils/Config.in"
+ 	source "package/irqbalance/Config.in"
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 9289e0a..aab7f5d 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -148,6 +148,12 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
  endef
- TARGET_FINALIZE_HOOKS += PURGE_LOCALES
- endif
--- 
-2.1.4
+ 
++ifeq ($(BR2_INIT_BUSYBOX),y)
++define BUSYBOX_INSTALL_INITTAB
++	$(INSTALL) -D -m 0644 package/busybox/inittab $(TARGET_DIR)/etc/inittab
++endef
++endif
++
+ ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
+ define BUSYBOX_SET_WATCHDOG
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG,$(BUSYBOX_BUILD_CONFIG))
+@@ -205,6 +211,7 @@ endef
+ 
+ define BUSYBOX_INSTALL_TARGET_CMDS
+ 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) install
++	$(BUSYBOX_INSTALL_INITTAB)
+ 	$(BUSYBOX_INSTALL_UDHCPC_SCRIPT)
+ 	$(BUSYBOX_INSTALL_MDEV_CONF)
+ endef
+diff --git a/system/skeleton/etc/inittab b/package/busybox/inittab
+similarity index 100%
+rename from system/skeleton/etc/inittab
+rename to package/busybox/inittab
+diff --git a/package/initscripts/Config.in b/package/initscripts/Config.in
+new file mode 100644
+index 0000000..82cbd5c
+--- /dev/null
++++ b/package/initscripts/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_INITSCRIPTS
++	bool
++	help
++	  The basics startup scripts for both SysV and Busybox
+diff --git a/system/skeleton/etc/init.d/S20urandom b/package/initscripts/init.d/S20urandom
+similarity index 100%
+rename from system/skeleton/etc/init.d/S20urandom
+rename to package/initscripts/init.d/S20urandom
+diff --git a/system/skeleton/etc/init.d/S40network b/package/initscripts/init.d/S40network
+similarity index 100%
+rename from system/skeleton/etc/init.d/S40network
+rename to package/initscripts/init.d/S40network
+diff --git a/system/skeleton/etc/init.d/rcK b/package/initscripts/init.d/rcK
+similarity index 100%
+rename from system/skeleton/etc/init.d/rcK
+rename to package/initscripts/init.d/rcK
+diff --git a/system/skeleton/etc/init.d/rcS b/package/initscripts/init.d/rcS
+similarity index 100%
+rename from system/skeleton/etc/init.d/rcS
+rename to package/initscripts/init.d/rcS
+diff --git a/package/initscripts/initscripts.mk b/package/initscripts/initscripts.mk
+new file mode 100644
+index 0000000..a5d8db7
+--- /dev/null
++++ b/package/initscripts/initscripts.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# initscripts
++#
++################################################################################
++
++# source included in buildroot
++INITSCRIPTS_SOURCE =
++
++define INITSCRIPTS_INSTALL_TARGET_CMDS
++	mkdir -p  $(TARGET_DIR)/etc/init.d
++	$(INSTALL) -D -m 0755 package/initscripts/init.d/* $(TARGET_DIR)/etc/init.d/
++endef
++
++$(eval $(generic-package))
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index 53640a4..2460dd9 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -34,8 +34,6 @@ define SYSVINIT_INSTALL_TARGET_CMDS
+ 	for x in halt init shutdown killall5; do \
+ 		$(INSTALL) -D -m 0755 $(@D)/src/$$x $(TARGET_DIR)/sbin/$$x || exit 1; \
+ 	done
+-	# Override BusyBox's inittab with an inittab compatible with
+-	# sysvinit
+ 	$(INSTALL) -D -m 0644 package/sysvinit/inittab $(TARGET_DIR)/etc/inittab
+ 	ln -sf /sbin/halt $(TARGET_DIR)/sbin/reboot
+ 	ln -sf /sbin/halt $(TARGET_DIR)/sbin/poweroff
+diff --git a/system/Config.in b/system/Config.in
+index b72aa17..fad829d 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -70,10 +70,12 @@ choice
+ config BR2_INIT_BUSYBOX
+ 	bool "BusyBox"
+ 	select BR2_PACKAGE_BUSYBOX
++	select BR2_PACKAGE_INITSCRIPTS
+ 
+ config BR2_INIT_SYSV
+ 	bool "systemV"
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
++	select BR2_PACKAGE_INITSCRIPTS
+ 	select BR2_PACKAGE_SYSVINIT
+ 
+ config BR2_INIT_SYSTEMD
