@@ -1,28 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 17:08:05 +0200
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.3.16
-In-Reply-To: <1436798265-4868-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1436798265-4868-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150713170805.66b4e13d@free-electrons.com>
+Date: Mon, 13 Jul 2015 17:08:23 +0200
+Subject: [Buildroot] [git commit] docs/manual: fix typo
+Message-ID: <20150713150826.DDB6081955@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=7701e2bf754c773a9d6ef89923316413d09d5287
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 13 Jul 2015 11:37:45 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gnutls/gnutls.hash | 2 +-
->  package/gnutls/gnutls.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/adding-packages-kernel-module.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
+index 39575f7..0a5ec5b 100644
+--- a/docs/manual/adding-packages-kernel-module.txt
++++ b/docs/manual/adding-packages-kernel-module.txt
+@@ -128,7 +128,7 @@ configure the build of the kernel module:
+ * +FOO_MODULE_MAKE_OPTS+ may be set to contain extra variable definitions
+   to pass to the Linux buildsystem.
+ 
+-Yo may also reference (but you may *not* set!) those variables:
++You may also reference (but you may *not* set!) those variables:
+ 
+  * +LINUX_DIR+ contains the path to where the Linux kernel has been
+    extracted and built.
