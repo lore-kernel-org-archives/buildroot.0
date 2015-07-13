@@ -1,56 +1,80 @@
-From: =?UTF-8?q?Aur=C3=A9lien=20Chabot?= <aurelien@chabot.fr>
-Date: Mon, 13 Jul 2015 20:26:20 +0200
-Subject: [Buildroot] [PATCH] gptfdisk: bump version 1.0.0
-Message-ID: <1436811980-17812-1-git-send-email-aurelien@chabot.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 13 Jul 2015 20:29:36 +0200
+Subject: [Buildroot] [PATCH 29/38] tftpd: systemd support
+In-Reply-To: <23834175280549825307d0d73e7684efe024ccc3.1432332802.git.alex.suykov@gmail.com>
+References: <cover.1432332802.git.alex.suykov@gmail.com>
+ <23834175280549825307d0d73e7684efe024ccc3.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <CAGduivzH6-EGcXJrS+HW6B8y5nGtifG7nXHn8E0RxvgCOhS3NQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Aur?lien Chabot <aurelien@chabot.fr>
----
- package/gptfdisk/0001-ldlibs.patch | 2 +-
- package/gptfdisk/gptfdisk.hash     | 6 +++---
- package/gptfdisk/gptfdisk.mk       | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+Hi Alex, all
 
-diff --git a/package/gptfdisk/0001-ldlibs.patch b/package/gptfdisk/0001-ldlibs.patch
-index ca1d7fb..280dfc9 100644
---- a/package/gptfdisk/0001-ldlibs.patch
-+++ b/package/gptfdisk/0001-ldlibs.patch
-@@ -15,7 +15,7 @@ diff -Nura gptfdisk-0.8.10.orig/Makefile gptfdisk-0.8.10/Makefile
-  
-  cgdisk: $(LIB_OBJS) cgdisk.o gptcurses.o
- -	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncursesw -o cgdisk
--+	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncursesw $(LDLIBS) -o cgdisk
-++	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncurses $(LDLIBS) -o cgdisk
-  #	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -licuio -licuuc -luuid -lncurses -o cgdisk
-  
-  sgdisk: $(LIB_OBJS) sgdisk.o gptcl.o
-diff --git a/package/gptfdisk/gptfdisk.hash b/package/gptfdisk/gptfdisk.hash
-index 93f7b36..0a72e0d 100644
---- a/package/gptfdisk/gptfdisk.hash
-+++ b/package/gptfdisk/gptfdisk.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/0.8.10/
--md5	9cf4246c181c324bdbd553fe9b348373	gptfdisk-0.8.10.tar.gz
--sha1	1708e232220236b6bdf299b315e9bc2205c01ba5	gptfdisk-0.8.10.tar.gz
-+# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.0/
-+md5	2061f917af084215898d4fea04d8388f	gptfdisk-1.0.0.tar.gz
-+sha1	97f25db2def1c1939ed3954520bfd9948806d95a	gptfdisk-1.0.0.tar.gz
-diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
-index f812376..abfddfb 100644
---- a/package/gptfdisk/gptfdisk.mk
-+++ b/package/gptfdisk/gptfdisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GPTFDISK_VERSION = 0.8.10
-+GPTFDISK_VERSION = 1.0.0
- GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
- GPTFDISK_LICENSE = GPLv2+
- GPTFDISK_LICENSE_FILES = COPYING
--- 
-2.4.5
+On Sat, May 23, 2015 at 12:13 PM, Alex Suykov <alex.suykov@gmail.com> wrote:
+> The code below assumes sysv initscript is correct.
+> Which I have doubts about.
+And you are rights, the scripts is broken, it's using in.tftpd while
+we install tftp and tftpd.
+It would be nice if you could take this and send a patch to rework the
+init script as well.
+>
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> ---
+>  package/tftpd/tftpd.mk      |  8 ++++++++
+>  package/tftpd/tftpd.service | 10 ++++++++++
+>  2 files changed, 18 insertions(+)
+>  create mode 100644 package/tftpd/tftpd.service
+>
+> diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
+> index 78df835..0d6a2ed 100644
+> --- a/package/tftpd/tftpd.mk
+> +++ b/package/tftpd/tftpd.mk
+> @@ -23,4 +23,12 @@ define TFTPD_INSTALL_INIT_SYSV
+>         $(INSTALL) -D -m 0755 package/tftpd/S80tftpd-hpa $(TARGET_DIR)/etc/init.d/S80tftpd-hpa
+>  endef
+>
+> +define TFTPD_INSTALL_INIT_SYSTEMD
+> +       $(INSTALL) -D -m 644 package/tftpd/tftpd.service \
+> +               $(TARGET_DIR)/usr/lib/systemd/system/tftpd.service
+> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +       ln -sf /usr/lib/systemd/system/tftpd.service \
+> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/tftpd.service
+> +endef
+> +
+>  $(eval $(autotools-package))
+> diff --git a/package/tftpd/tftpd.service b/package/tftpd/tftpd.service
+> new file mode 100644
+> index 0000000..b7a29a3
+> --- /dev/null
+> +++ b/package/tftpd/tftpd.service
+> @@ -0,0 +1,10 @@
+> +[Unit]
+> +Description=TFTP daemon
+> +After=syslog.target network.target
+> +
+> +[Service]
+> +ExecStart=/usr/sbin/tftpd -L -c -s /var/lib/tftpboot
+You need to make sure /var/lib/tftpboot exists, specially with a read
+only filesystems.
+See some recent dropbear patch sent by Yann E. Morin for a way to do
+that. Maybe you should uses tmpfiles.d for a better way to do that.
+
+Or maybe install a configuration file for tftpd which points to
+/tmp/tftpd so it's generic enough that it would  work in all cases.
+
+Your patch will be marked as "Changes Requested" in patchwork waiting
+on your input for this one.
+> +Restart=always
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> --
+> 2.0.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
