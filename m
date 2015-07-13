@@ -1,30 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 20:04:29 +0200
-Subject: [Buildroot] [PATCH 11/38] input-event-daemon: systemd support
-In-Reply-To: <73247e1067366656f155dfb11120c83b7a26c470.1432332802.git.alex.suykov@gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 13 Jul 2015 20:08:35 +0200
+Subject: [Buildroot] [PATCH 26/38] sunxi-mali: systemd support
+In-Reply-To: <96bc5f669829401ce7c13f49c31f47a0fc6c2c95.1432332802.git.alex.suykov@gmail.com>
 References: <cover.1432332802.git.alex.suykov@gmail.com>
- <73247e1067366656f155dfb11120c83b7a26c470.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <20150713200429.15d067b2@free-electrons.com>
+ <96bc5f669829401ce7c13f49c31f47a0fc6c2c95.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <CAGduivymvy5ph653=QgJokF5rRAvCbaF7ms-rjLQjkaCSxz9bg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+Hi Alex, all
 
-On Sat, 23 May 2015 13:04:42 +0300, Alex Suykov wrote:
+On Sat, May 23, 2015 at 12:07 PM, Alex Suykov <alex.suykov@gmail.com> wrote:
+> The startup script too complex to embed it completely into
+> the .service file, so it is left as a standalone script.
+>
+> Since there is really nothing sysv-specific there,
+> the actual initscript is used without any changes.
+>
 > Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 > ---
->  package/input-event-daemon/input-event-daemon.mk      | 8 ++++++++
->  package/input-event-daemon/input-event-daemon.service | 9 +++++++++
->  2 files changed, 17 insertions(+)
->  create mode 100644 package/input-event-daemon/input-event-daemon.service
+>  package/sunxi-mali/mali.service  | 11 +++++++++++
+>  package/sunxi-mali/sunxi-mali.mk | 10 ++++++++++
+>  2 files changed, 21 insertions(+)
+>  create mode 100644 package/sunxi-mali/mali.service
+>
+> diff --git a/package/sunxi-mali/mali.service b/package/sunxi-mali/mali.service
+> new file mode 100644
+> index 0000000..807989c
+> --- /dev/null
+> +++ b/package/sunxi-mali/mali.service
+> @@ -0,0 +1,11 @@
+> +[Unit]
+> +Description=Mali graphics driver
+> +
+> +[Service]
+> +Type=oneshot
+> +ExecStart=/usr/lib/systemd/scripts/mali start
+> +ExecStop=/usr/lib/systemd/scripts/mali stop
+> +RemainAfterExit=yes
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> diff --git a/package/sunxi-mali/sunxi-mali.mk b/package/sunxi-mali/sunxi-mali.mk
+> index c6900c8..a529e2d 100644
+> --- a/package/sunxi-mali/sunxi-mali.mk
+> +++ b/package/sunxi-mali/sunxi-mali.mk
+> @@ -80,4 +80,14 @@ define SUNXI_MALI_INSTALL_INIT_SYSV
+>                 $(TARGET_DIR)/etc/init.d/S80mali
+>  endef
+>
+> +define SUNXI_MALI_INSTALL_INIT_SYSTEMD
+> +       $(INSTALL) -D -m 755 package/sunxi-mali/S80mali \
+> +               $(TARGET_DIR)/usr/lib/systemd/scripts/mali
+I'm not very fond of placing a binary in '/usr/lib/...'.
+I think it would be better to install into '/usr/sbin'
 
-Applied, thanks.
+You patch will be marked as "Changes Requested" in patchwork.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> +       $(INSTALL) -D -m 644 package/sunxi-mali/mali.service \
+> +               $(TARGET_DIR)/usr/lib/systemd/system/mali.service
+> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +       ln -sf /usr/lib/systemd/system/mali.service \
+> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mali.service
+> +endef
+> +
+>  $(eval $(generic-package))
+> --
+> 2.0.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
