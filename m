@@ -1,124 +1,118 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jul 2015 11:05:35 +0200
-Subject: [Buildroot] [PATCH 1/2 v4] core/skeleton: drop /etc/securetty
+Date: Mon, 13 Jul 2015 11:05:36 +0200
+Subject: [Buildroot] [PATCH 2/2 v4] busybox: improve support for telnetd
 In-Reply-To: <cover.1436778228.git.yann.morin.1998@free.fr>
 References: <cover.1436778228.git.yann.morin.1998@free.fr>
-Message-ID: <51509ea07660728b4f5aa519d67b6577bd4c9dd4.1436778228.git.yann.morin.1998@free.fr>
+Message-ID: <7d67670ffb919ed240b7fb157e44c8219375cff0.1436778228.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-securetty is supposed to restrict the terminals root is allowed to
-login from. As it happens, login from busybox (w/ securetty support)
-is actually enforcing use of securetty, while login from util-linux
-is completely ignoring securetty altogether.
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
 
-Remove securetty from our skeleton altogether and stop worrying about
-it.
+If target has connection to the network it might be pretty useful to
+have telnet connection to it instead of serial console or even in
+addition to serial console.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+This changes makes the busybox package automatically install an init
+script, and tune the securetty file to make telnetd work when
+CONFIG_FEATURE_TELNETD_STANDALONE is enabled in the Busybox
+configuration.
+
+[Thomas:
+  - don't create a new Buildroot Config.in option, just test if
+    CONFIG_FEATURE_TELNETD_STANDALONE is enabled or not in the Busybox
+    configuration
+  - move the securetty tuning in busybox.mk instead of system.mk
+  - use start-stop-daemon in the init script, in order to properly
+    implement the stop and restart actions
+  - misc other minor improvements in the init script.]
+[yann.morin.1998 at free.fr:
+  - don't use securetty
+  - drop stray variable BUSYBOX_SET_STANDALONE_TELNETD]
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/util-linux/login.pam  |  1 -
- system/skeleton/etc/securetty | 57 -------------------------------------------
- system/system.mk              |  8 ------
- 3 files changed, 66 deletions(-)
- delete mode 100644 system/skeleton/etc/securetty
+ package/busybox/S50telnet  | 36 ++++++++++++++++++++++++++++++++++++
+ package/busybox/busybox.mk |  9 +++++++++
+ 2 files changed, 45 insertions(+)
+ create mode 100755 package/busybox/S50telnet
 
-diff --git a/package/util-linux/login.pam b/package/util-linux/login.pam
-index 1d9cd70..01f5632 100644
---- a/package/util-linux/login.pam
-+++ b/package/util-linux/login.pam
-@@ -1,4 +1,3 @@
--auth		required	pam_securetty.so
- auth		required	pam_unix.so nullok
+diff --git a/package/busybox/S50telnet b/package/busybox/S50telnet
+new file mode 100755
+index 0000000..463a772
+--- /dev/null
++++ b/package/busybox/S50telnet
+@@ -0,0 +1,36 @@
++#!/bin/sh
++#
++# Start telnet....
++#
++
++start() {
++      echo -n "Starting telnetd: "
++      start-stop-daemon -S -q -m -b -p /var/run/telnetd.pid \
++			-x /usr/sbin/telnetd -- -F
++      [ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++
++stop() {
++	echo -n "Stopping telnetd: "
++	start-stop-daemon -K -q -p /var/run/telnetd.pid \
++			  -x /usr/sbin/telnetd
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++
++case "$1" in
++    start)
++	start
++	;;
++    stop)
++	stop
++	;;
++    restart|reload)
++	stop
++	start
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 92874cd..9289e0a 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -168,6 +168,14 @@ endef
+ BUSYBOX_DEPENDENCIES += linux-pam
+ endif
  
- account		required	pam_unix.so
-diff --git a/system/skeleton/etc/securetty b/system/skeleton/etc/securetty
-deleted file mode 100644
-index 0722677..0000000
---- a/system/skeleton/etc/securetty
-+++ /dev/null
-@@ -1,57 +0,0 @@
--tty1
--tty2
--tty3
--tty4
--tty5
--tty6
--tty7
--tty8
--ttyS0
--ttyS1
--ttyS2
--ttyS3
--ttyAMA0
--ttyAMA1
--ttyAMA2
--ttyAMA3
--ttySAC0
--ttySAC1
--ttySAC2
--ttySAC3
--ttyUL0
--ttyUL1
--ttyUL2
--ttyUL3
--ttyPS0
--ttyPS1
--ttyPSC0
--ttyPSC1
--ttyPSC2
--ttyPSC3
--ttyCPM0
--ttyCPM1
--ttyCPM2
--ttyCPM3
--ttymxc0
--ttymxc1
--ttymxc2
--ttyO0
--ttyO1
--ttyO2
--ttyO3
--ttyAM0
--ttyAM1
--ttyAM2
--ttySC0
--ttySC1
--ttySC2
--ttySC3
--ttySC4
--ttySC5
--ttySC6
--ttySC7
--ttyGS0
--hvc0
--hvc1
--hvc2
--hvc3
-diff --git a/system/system.mk b/system/system.mk
-index 2794667..fd94e03 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -8,14 +8,6 @@ TARGET_GENERIC_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRAT
- TARGET_GENERIC_GETTY_TERM = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
- TARGET_GENERIC_GETTY_OPTIONS = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_OPTIONS))
++# Telnet support
++define BUSYBOX_INSTALL_TELNET_SCRIPT
++	if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y $(@D)/.config; then \
++		$(INSTALL) -m 0755 -D package/busybox/S50telnet \
++			$(TARGET_DIR)/etc/init.d/S50telnet ; \
++	fi
++endef
++
+ # Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
+ # full-blown versions of apps installed by other packages with sym/hard links.
+ define BUSYBOX_NOCLOBBER_INSTALL
+@@ -205,6 +213,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
+ 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+ 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
++	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
+ endef
  
--ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
--define SYSTEM_SECURETTY
--	grep -q '^$(TARGET_GENERIC_GETTY_PORT)$$' $(TARGET_DIR)/etc/securetty || \
--		echo '$(TARGET_GENERIC_GETTY_PORT)' >> $(TARGET_DIR)/etc/securetty
--endef
--TARGET_FINALIZE_HOOKS += SYSTEM_SECURETTY
--endif
--
- ifneq ($(TARGET_GENERIC_HOSTNAME),)
- define SYSTEM_HOSTNAME
- 	mkdir -p $(TARGET_DIR)/etc
+ $(eval $(kconfig-package))
 -- 
 1.9.1
