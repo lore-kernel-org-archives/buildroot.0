@@ -1,26 +1,29 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 13 Jul 2015 17:55:47 +0300
-Subject: [Buildroot] [PATCH] nmap: add hash file
-Message-ID: <d2bed1bec25ab102868c298de7be84fd4cee7a2e.1436799347.git.baruch@tkos.co.il>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 13 Jul 2015 16:57:12 +0200
+Subject: [Buildroot] [PATCH] nfs-utils: Create missing directory sm.bak
+Message-ID: <1436799432-24354-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/nmap/nmap.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/nmap/nmap.hash
+ package/nfs-utils/S60nfs | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-new file mode 100644
-index 000000000000..8c8da0075848
---- /dev/null
-+++ b/package/nmap/nmap.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256 8fa11e9e203ce2d81a207db5ca4f110a525f6c01c1dd0018325a7112a51aa591 nmap-6.47.tar.bz2
+diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
+index 5e2a2c9..e163d80 100755
+--- a/package/nfs-utils/S60nfs
++++ b/package/nfs-utils/S60nfs
+@@ -10,6 +10,7 @@
+ 
+ mkdir -p /var/lock/subsys
+ mkdir -p /run/nfs/sm
++mkdir -p /run/nfs/sm.bak
+ touch /run/nfs/rmtab
+ 
+ start() {
 -- 
 2.1.4
