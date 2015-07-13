@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jul 2015 12:32:00 +0200
-Subject: [Buildroot] [PATCH 3/7 v2] package/linux: check for config file
-	before calling kconfig-package
+Date: Mon, 13 Jul 2015 12:32:01 +0200
+Subject: [Buildroot] [PATCH 4/7 v2] boot/at91boostrap3: check for config
+	file before calling kconfig-package
 In-Reply-To: <cover.1436783490.git.yann.morin.1998@free.fr>
 References: <cover.1436783490.git.yann.morin.1998@free.fr>
-Message-ID: <ebc17080f0f4a4054e28619845885dc9e7acd77a.1436783490.git.yann.morin.1998@free.fr>
+Message-ID: <5c7b3dfc4219a64ad4acf47dce7e83a82f0c120a.1436783490.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,60 +16,37 @@ kconfig-package infra, the error message we get is the one for the
 kconfig-package infra, not the custom error message we want to show to
 the user.
 
-So, only call kconfig-package after we do the check. Move the check with
-the existing checks for the DTS, for consistency.
+So, only call kconfig-package after we do the check.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
 ---
-Changes v1 -> v2:
-  - move the check together with the DTS checks
----
- linux/linux.mk | 28 ++++++++++++----------------
- 1 file changed, 12 insertions(+), 16 deletions(-)
+ boot/at91bootstrap3/at91bootstrap3.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 24bca7d..96573ad 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -90,6 +90,18 @@ endif
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 1c68094..fa67ea6 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -49,10 +49,11 @@ endif
+ AT91BOOTSTRAP3_KCONFIG_FILE = $(AT91BOOTSTRAP3_SOURCE_CONFIG)
+ AT91BOOTSTRAP3_KCONFIG_EDITORS = menuconfig xconfig gconfig
+ AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
+-$(eval $(kconfig-package))
  
+ # Checks to give errors that the user can understand
++# Must be before we call to kconfig-package
  ifeq ($(BR_BUILDING),y)
++
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG)),)
+ $(error No at91bootstrap3 defconfig name specified, check your BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG setting)
+@@ -74,4 +75,6 @@ $(error No custom at91bootstrap3 repository version specified. Check your BR2_TA
+ endif
+ endif
  
-+ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
-+ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG)),)
-+$(error No kernel defconfig name specified, check your BR2_LINUX_KERNEL_DEFCONFIG setting)
-+endif
-+endif
+-endif
++endif # BR_BUILDING
 +
-+ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
-+ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)),)
-+$(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE setting)
-+endif
-+endif
-+
- ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),y)
- $(error No kernel device tree source specified, check your \
- BR2_LINUX_KERNEL_USE_INTREE_DTS / BR2_LINUX_KERNEL_USE_CUSTOM_DTS settings)
-@@ -364,19 +376,3 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
- # The initramfs building code must make sure this target gets called
- # after it generated the initramfs list of files.
- linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
--
--# Checks to give errors that the user can understand
--ifeq ($(BR_BUILDING),y)
--ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
--ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG)),)
--$(error No kernel defconfig name specified, check your BR2_LINUX_KERNEL_DEFCONFIG setting)
--endif
--endif
--
--ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
--ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)),)
--$(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE setting)
--endif
--endif
--
--endif
++$(eval $(kconfig-package))
 -- 
 1.9.1
