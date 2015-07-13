@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 17:04:04 +0200
-Subject: [Buildroot] [git commit] nmap: add hash file
-Message-ID: <20150713150417.409C980DF3@busybox.osuosl.org>
+Date: Mon, 13 Jul 2015 17:05:21 +0200
+Subject: [Buildroot] [PATCH] nmap: add hash file
+In-Reply-To: <d2bed1bec25ab102868c298de7be84fd4cee7a2e.1436799347.git.baruch@tkos.co.il>
+References: <d2bed1bec25ab102868c298de7be84fd4cee7a2e.1436799347.git.baruch@tkos.co.il>
+Message-ID: <20150713170521.41e94344@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d46fefb0801af2f062581dbca8d134bf02b6002e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Baruch Siach,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nmap/nmap.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Mon, 13 Jul 2015 17:55:47 +0300, Baruch Siach wrote:
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/nmap/nmap.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/nmap/nmap.hash
 
-diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-new file mode 100644
-index 0000000..8c8da00
---- /dev/null
-+++ b/package/nmap/nmap.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256 8fa11e9e203ce2d81a207db5ca4f110a525f6c01c1dd0018325a7112a51aa591 nmap-6.47.tar.bz2
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
