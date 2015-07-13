@@ -1,35 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jul 2015 17:18:58 +0200
-Subject: [Buildroot] [PATCH] package/dropbear: fix generatign keys on RO
- file systems
-In-Reply-To: <20150713150147.GU2451@tarshish>
-References: <1436798945-6869-1-git-send-email-yann.morin.1998@free.fr>
- <20150713150147.GU2451@tarshish>
-Message-ID: <20150713151858.GK4008@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jul 2015 17:19:08 +0200
+Subject: [Buildroot] [PATCH v4 4/9] pkg-generic.mk: don't depend on
+ external package permissions
+In-Reply-To: <1416586748-12936-5-git-send-email-guido@vanguardiasur.com.ar>
+References: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1416586748-12936-5-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <20150713171908.75b05534@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Dear Guido Mart?nez,
 
-On 2015-07-13 18:01 +0300, Baruch Siach spake thusly:
-> On Mon, Jul 13, 2015 at 04:49:05PM +0200, Yann E. MORIN wrote:
-> > +	if ! [ -d /etc/dropbear ]; then
-> > +		if ! rm -f /etc/dropbear; then
+On Fri, 21 Nov 2014 13:19:03 -0300, Guido Mart?nez wrote:
+> Reset permissions for rsynced packages (when using OVERRIDE_SRCDIR) to
+> 755/644. We do this under the assumption that source files shouldn't
+> care about their permissions, except possibly for the exec bit.
 > 
-> 'rm -f' always succeeds.
+> This guarantees that if a package uses 'rsync -a' or 'cp -p' to copy
+> a file from its build dir to the target, it'll end up with the same
+> permissions on the target every time.
+> 
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> ---
+>  package/pkg-generic.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-No, it does not succeeds if the filesystem is readonly.
+Applied, thanks.
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
