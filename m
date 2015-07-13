@@ -1,110 +1,104 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Jul 2015 00:44:01 +0200
-Subject: [Buildroot] [PATCHv2] package/dropbear: fix generating keys on RO
-	file systems
-Message-ID: <1436827441-29183-1-git-send-email-yann.morin.1998@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 14 Jul 2015 00:48:10 +0200
+Subject: [Buildroot] [PATCH v2 1/4] linux: add linux-tools infra
+In-Reply-To: <1436822225-29591-2-git-send-email-romain.naour@openwide.fr>
+References: <1436822225-29591-1-git-send-email-romain.naour@openwide.fr>
+ <1436822225-29591-2-git-send-email-romain.naour@openwide.fr>
+Message-ID: <CAHXCMM+QuXYJzE81v0L_nPdLeOHfjcuupZq_PnkLWh+QCyOpog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dropbear generates its keys at the first connection, and wants to save
-them in /etc/dropbear (not configurable).
+Romain, all,
 
-Currently, our /etc/dropbear is a directory.
+On Mon, Jul 13, 2015 at 11:17 PM, Romain Naour <romain.naour@openwide.fr> wrote:
+> This commit add an infrastructure to build linux kernel
+> tools available in the kernel sources.
+>
+> Currently, the only linux kernel tool packaged in Buildroot
+> is perf and it's packaged as a separate generic package.
+> This is a problem for licence information raised in this
+> thread [1].
+>
+> Since these tools require to build a Linux kernel, we can
+> use some hooks in linux package like we did for linux
+> extensions [2] and remove the perf package.
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2015-May/128783.html
+> [2] http://lists.busybox.net/pipermail/buildroot/2015-March/121835.html
+>
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+> v2: remove LINUX_TOOL prefix
+> ---
+>  linux/linux.mk | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index b602a04..19dcec3 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -325,6 +325,8 @@ define LINUX_INSTALL_TARGET_CMDS
+>         $(LINUX_INSTALL_HOST_TOOLS)
+>  endef
+>
+> +# Include all our externsions and tools definitions.
+> +#
+>  # Note: our package infrastructure uses the full-path of the last-scanned
+>  # Makefile to determine what package we're currently defining, using the
+>  # last directory component in the path. As such, including other Makefile,
+> @@ -334,6 +336,7 @@ endef
+>  # the current Makefile, we are OK. But this is a hard requirement: files
+>  # included here *must* be in the same directory!
+>  include $(sort $(wildcard linux/linux-ext-*.mk))
+> +include $(sort $(wildcard linux/linux-tool-*.mk))
+>
+>  LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
+>         $(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
+> @@ -342,6 +345,27 @@ LINUX_PRE_PATCH_HOOKS += $(foreach ext,$(LINUX_EXTENSIONS),\
+>         $(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),\
+>                 $(call UPPERCASE,$(ext))_PREPARE_KERNEL))
+>
+> +# Install Linux kernel tools in staging directory since some tools
+> +# may install shared libraries and headers (e.g. cpupower). The
+> +# kernel image is NOT installed in staging directory.
+> +LINUX_INSTALL_STAGING = $(if $(strip $(LINUX_TOOLS)),YES,NO)
+As soon as the patch 2/4 (add cpupower) is merged, LINUX_TOOLS is no
+longer empty, so LINUX_INSTALL_STAGING is always YES.
+How about to unconditionally set it to YES?
 
-When the filesystem is read-only, dropbear can't save its keys, so
-refuses all connections.
+> +
+> +LINUX_DEPENDENCIES += $(foreach tool,$(LINUX_TOOLS),\
+> +       $(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
+> +               $($(call UPPERCASE,$(tool))_DEPENDENCIES)))
+> +
+> +LINUX_POST_BUILD_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
+> +       $(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
+> +               $(call UPPERCASE,$(tool))_BUILD_CMDS))
+> +
+> +LINUX_POST_INSTALL_STAGING_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
+> +       $(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
+> +               $(call UPPERCASE,$(tool))_INSTALL_STAGING_CMDS))
+> +
+> +LINUX_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
+> +       $(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
+> +               $(call UPPERCASE,$(tool))_INSTALL_TARGET_CMDS))
+> +
+>  $(eval $(kconfig-package))
+>
+>  # Support for rebuilding the kernel after the cpio archive has
+> --
+> 2.4.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Fix that with:
+Regards,
 
-  - at build time, create /etc/dropbear as a symlink to
-    /var/run/dropbear
-
-  - at runtime, if the filesystem is RW (we can rm /etc/dropbear),
-    we replace the symlink with an actual directory; otherwise,
-    when the filesystem is RO (we can't rm /etc/dropbear), we create
-    /var/run/dropbear so the symlink points to an existing directory
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
----
-Changes v1 -> v2:
-  - fix indentation  (Arnout)
-  - also change the systemd unit file  (Maxime)
-  - fix logic  (Maxime)
-  - fix subject
----
- package/dropbear/S50dropbear      | 14 ++++++++++++++
- package/dropbear/dropbear.mk      |  2 +-
- package/dropbear/dropbear.service | 13 +++++++++++++
- 3 files changed, 28 insertions(+), 1 deletion(-)
-
-diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
-index 2694931..af50ccf 100644
---- a/package/dropbear/S50dropbear
-+++ b/package/dropbear/S50dropbear
-@@ -11,6 +11,20 @@ start() {
- 
- 	echo -n "Starting dropbear sshd: "
- 	umask 077
-+
-+	# If /etc/dropbear is not a directory, and
-+	#   - the filesystem is RO (i.e. we can not rm the symlink),
-+	#     create the directory pointed to by the symlink.
-+	#   - the filesystem is RW (i.e. we can rm the symlink),
-+	#     replace the symlink with an actual directory
-+	if ! [ -d /etc/dropbear ]; then
-+		if rm -f /etc/dropbear; then
-+			mkdir -p /etc/dropbear
-+		else
-+			mkdir -p $(readlink /etc/dropbear)
-+		fi
-+	fi
-+
- 	start-stop-daemon -S -q -p /var/run/dropbear.pid \
- 		--exec /usr/sbin/dropbear -- $DROPBEAR_ARGS
- 	[ $? = 0 ] && echo "OK" || echo "FAIL"
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index bc65d69..5bbe864 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -93,7 +93,7 @@ define DROPBEAR_INSTALL_TARGET_CMDS
- 	for f in $(DROPBEAR_TARGET_BINS); do \
- 		ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/$$f ; \
- 	done
--	mkdir -p $(TARGET_DIR)/etc/dropbear
-+	ln -snf ../var/run/dropbear $(TARGET_DIR)/etc/dropbear
- endef
- 
- $(eval $(autotools-package))
-diff --git a/package/dropbear/dropbear.service b/package/dropbear/dropbear.service
-index 4e6c879..0e2cf54 100644
---- a/package/dropbear/dropbear.service
-+++ b/package/dropbear/dropbear.service
-@@ -3,6 +3,19 @@ Description=Dropbear SSH daemon
- After=syslog.target network.target auditd.service
- 
- [Service]
-+# If /etc/dropbear is not a directory, and
-+#   - the filesystem is RO (i.e. we can not rm the symlink),
-+#     create the directory pointed to by the symlink.
-+#   - the filesystem is RW (i.e. we can rm the symlink),
-+#     replace the symlink with an actual directory
-+ExecStartPre=/bin/sh -c '\
-+if ! [ -d /etc/dropbear ]; then \
-+    if rm -f /etc/dropbear; then \
-+        mkdir -p /etc/dropbear; \
-+    else \
-+        mkdir -p $(readlink /etc/dropbear); \
-+    fi; \
-+fi'
- ExecStart=/usr/sbin/dropbear -F -R
- ExecReload=/bin/kill -HUP $MAINPID
- 
 -- 
-1.9.1
+Samuel
