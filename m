@@ -1,90 +1,34 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 13 Jul 2015 17:44:03 +0200
-Subject: [Buildroot] [PATCH v3 2/2] powerpc-utils: optionally use librtas
-In-Reply-To: <9a73202315e0a236b78d9644905c20b79572f93d.1432015191.git.sam.bobroff@au1.ibm.com>
-References: <cover.1432015191.git.sam.bobroff@au1.ibm.com>
- <9a73202315e0a236b78d9644905c20b79572f93d.1432015191.git.sam.bobroff@au1.ibm.com>
-Message-ID: <55A3DCC3.7060202@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jul 2015 18:18:21 +0200
+Subject: [Buildroot] [PATCH 02/38] chrony: systemd support
+In-Reply-To: <34254cc0f199ed486318f4274d9276e7149a93bd.1432332802.git.alex.suykov@gmail.com>
+References: <cover.1432332802.git.alex.suykov@gmail.com>
+ <34254cc0f199ed486318f4274d9276e7149a93bd.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <20150713181821.1b157e8f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 19/05/2015 07:59, Sam Bobroff a ?crit :
-> Now that librtas is available, optionally use it with powerpc-utils to
-> enable it's RTAS dependant functionality.  It is used by default, as
-> most distros do, but made optional because it adds several new programs
-> and significantly increases the size of the installed package.
+Dear Alex Suykov,
+
+On Sat, 23 May 2015 13:02:24 +0300, Alex Suykov wrote:
+> systemd has its own NTP daemon, which must be disabled before
+> starting chrony. Possible (but unlikely) conflict with openntpd
+> is not marked in either package.
 > 
-> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 > ---
-> v3:
-> 
-> Group "with" and "without" clauses.
-> 
-> v2:
-> 
-> Make librtas support in powerpc-utils optional due to size concerns.
-> 
->  package/powerpc-utils/Config.in        |   18 ++++++++++++++++++
->  package/powerpc-utils/powerpc-utils.mk |    8 +++++++-
->  2 files changed, 25 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
-> index eded41e..8b3e3d1 100644
-> --- a/package/powerpc-utils/Config.in
-> +++ b/package/powerpc-utils/Config.in
-> @@ -6,3 +6,21 @@ config BR2_PACKAGE_POWERPC_UTILS
->  	  System utilities for PowerPC machines.
->  
->  	  http://sourceforge.net/projects/powerpc-utils/
-> +
-> +if BR2_PACKAGE_POWERPC_UTILS
-> +
-> +config BR2_PACKAGE_POWERPC_UTILS_RTAS
-> +	bool "RTAS support"
-> +	select BR2_PACKAGE_LIBRTAS
+>  package/chrony/chrony.mk      |  8 ++++++++
+>  package/chrony/chrony.service | 11 +++++++++++
+>  2 files changed, 19 insertions(+)
+>  create mode 100644 package/chrony/chrony.service
 
-The librtas reverse dependencies should be added here (glibc toolchain only and
-!static build)
+Applied, thanks.
 
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-
-Best regards,
-Romain Naour
-
-
-> +	default y
-> +	help
-> +	  Enable support for functions that require RTAS.
-> +
-> +	  This adds a dependency on librtas and provides the following
-> +	  additional features at the cost of increasing the installed package
-> +	  size from about 0.5MB to about 2MB:
-> +	  ppc64_cpu --run-mode, uesensor, set_poweron_time, drmgr, lsslot,
-> +	  activate_firmware, rtas_ibm_get_vpd, serv_config,
-> +	  rtas_event_decode, sys_ident.
-> +
-> +endif
-> diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
-> index 3b30458..ae4d662 100644
-> --- a/package/powerpc-utils/powerpc-utils.mk
-> +++ b/package/powerpc-utils/powerpc-utils.mk
-> @@ -10,8 +10,14 @@ POWERPC_UTILS_DEPENDENCIES = zlib
->  POWERPC_UTILS_LICENSE = Common Public License Version 1.0
->  POWERPC_UTILS_LICENSE_FILES = COPYRIGHT
->  
-> -POWERPC_UTILS_CONF_OPTS = --without-librtas
->  POWERPC_UTILS_CONF_ENV = \
->  	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
->  
-> +ifeq ($(BR2_PACKAGE_POWERPC_UTILS_RTAS),y)
-> +POWERPC_UTILS_DEPENDENCIES += librtas
-> +POWERPC_UTILS_CONF_OPTS = --with-librtas
-> +else
-> +POWERPC_UTILS_CONF_OPTS = --without-librtas
-> +endif
-> +
->  $(eval $(autotools-package))
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
