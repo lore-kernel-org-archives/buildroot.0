@@ -1,63 +1,46 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 14 Jul 2015 00:15:37 +0200
-Subject: [Buildroot] [PATCH v2 2/2] Makefile: Fix target-purgelocales
-In-Reply-To: <1436825737-6264-1-git-send-email-arnout@mind.be>
-References: <1436825737-6264-1-git-send-email-arnout@mind.be>
-Message-ID: <1436825737-6264-2-git-send-email-arnout@mind.be>
+Date: Tue, 14 Jul 2015 00:15:36 +0200
+Subject: [Buildroot] [PATCH v2 1/2] purge-locales: skip /usr/man and
+	/usr/share/man
+Message-ID: <1436825737-6264-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Valentine Barshak <gvaxon@gmail.com>
+These directories are going to be removed anyway, so no point purging
+their locales.
 
-The /usr/share/X11/locale/locale.dir file is needed by libX11.
-Removing it breaks locale support in X11. However, make removes
-not only directories but also all files, which are not listed
-in the BR2_ENABLE_LOCALE_WHITELIST.
+This also allows us to simplify the loop a bit.
 
-This re-creates locale.dir database file where needed.
-
-Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Arnout: use a separate loop, and add some explanatory comments]
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+v2: remove the grep -v man as well, which allows us to use $dir/*
+    instead of the funky ls construct.
+---
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index a26f87d..bfc2e17 100644
+index 4b6360b..a26f87d 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -540,6 +540,11 @@ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
- LOCALE_WHITELIST = $(BUILD_DIR)/locales.nopurge
- LOCALE_NOPURGE = $(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
- 
-+# This piece of junk does the following:
-+# First collect the whitelist in a file.
-+# Then go over all the locale dirs and for each subdir, check if it exists
-+# in the whitelist file. If it doesn't, kill it.
-+# Finally, specifically for X11, regenerate locale.dir from the whitelist.
- define PURGE_LOCALES
+@@ -544,11 +544,11 @@ define PURGE_LOCALES
  	rm -f $(LOCALE_WHITELIST)
  	for i in $(LOCALE_NOPURGE) locale-archive; do echo $$i >> $(LOCALE_WHITELIST); done
-@@ -551,6 +556,16 @@ define PURGE_LOCALES
- 			grep -qx $${langdir##*/} $(LOCALE_WHITELIST) || rm -rf $$langdir; \
+ 
+-	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/man /usr/share/man /usr/lib/locale)); \
++	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/lib/locale)); \
+ 	do \
+-		for lang in $$(cd $$dir; ls .|grep -v man); \
++		for langdir in $$dir/*; \
+ 		do \
+-			grep -qx $$lang $(LOCALE_WHITELIST) || rm -rf $$dir/$$lang; \
++			grep -qx $${langdir##*/} $(LOCALE_WHITELIST) || rm -rf $$langdir; \
  		done; \
  	done
-+	if [ -d $(TARGET_DIR)/usr/share/X11/locale ]; \
-+	then \
-+		for lang in $(LOCALE_NOPURGE); \
-+		do \
-+			if [ -f $(TARGET_DIR)/usr/share/X11/locale/$$lang/XLC_LOCALE ]; \
-+			then \
-+				echo "$$lang/XLC_LOCALE: $$lang"; \
-+			fi \
-+		done > $(TARGET_DIR)/usr/share/X11/locale/locale.dir; \
-+	fi
  endef
- TARGET_FINALIZE_HOOKS += PURGE_LOCALES
- endif
 -- 
 2.1.4
