@@ -1,53 +1,52 @@
-From: Zhangjian (Bamvor) <bamvor.zhangjian@huawei.com>
-Date: Mon, 13 Jul 2015 10:21:42 +0800
-Subject: [Buildroot] [RFC PATCH v2 0/5] Add ILP32 support in aarch64
-In-Reply-To: <20150712184559.581d42c0@free-electrons.com>
-References: <1426672192-21041-1-git-send-email-bamvor.zhangjian@huawei.com>
- <20150712184559.581d42c0@free-electrons.com>
-Message-ID: <55A320B6.9070708@huawei.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 13 Jul 2015 06:37:18 +0300
+Subject: [Buildroot] [PATCH 2/7] package/linux: don't enforce check for
+ DTS when not building
+In-Reply-To: <55A2FBDF.9070808@mind.be>
+References: <cover.1436702899.git.yann.morin.1998@free.fr>
+ <ff5a9ea519a5c72dd917369e6409674b9d4a340f.1436702899.git.yann.morin.1998@free.fr>
+ <20150712200309.GB2451@tarshish> <55A2FBDF.9070808@mind.be>
+Message-ID: <20150713033718.GE2451@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Arnout,
 
-On 2015/7/13 0:45, Thomas Petazzoni wrote:
-> Dear Zhang Jian(Bamvor),
->
-> On Wed, 18 Mar 2015 17:49:47 +0800, Zhang Jian(Bamvor) wrote:
->
->> Zhang Jian(Bamvor) (5):
->>    aarch64: add big endian(aarch64_be) support
->
-> I've now applied this patch. However it is not complete enough: you
-> need to audit all the places where BR2_aarch64 is used in Buildroot,
-> and see whether adding BR2_aarch64_be is needed. For example, in
-> package/binutils/Config.in.host:
->
->          config BR2_BINUTILS_VERSION_2_23_2
->                  depends on !BR2_aarch64 && !BR2_microblaze && \
->                             !BR2_powerpc64le && !BR2_nios2
->                  bool "binutils 2.23.2"
->
-> You quite probably want to add !BR2_aarch64_be here as well.
->
->>    aarch64: ilp32: handle special file name
->>    aarch64: ilp32: add ilp32 compiler and linker flags
->>    aarch64: ilp32: add ilp32 build config
->>    aarch64: ilp32 defconfig examples
->
-> For those patches, you had some comments. A while ago, when I sent you
-> a reminder about those patches, you said you would resend an updated
-> version, but this didn't happen. For now, we marked those patches as
-> "Changes Requested" in patchwork. Do not hesitate to resend a new
-> version.
-Sorry for not sending the updated patches. I will do it in this week.
+On Mon, Jul 13, 2015 at 01:44:31AM +0200, Arnout Vandecappelle wrote:
+> On 07/12/15 22:03, Baruch Siach wrote:
+> > On Sun, Jul 12, 2015 at 02:11:24PM +0200, Yann E. MORIN wrote:
+> >> Currently, this is triggering the error message:
+> >>     make randconfig
+> >>     make source
+> >>
+> >> Limit the checks that enforce a DTS is set and at most one DTB is
+> >> appended to when we are actually building, like is done for the
+> >> configuration-file variables.
+> >>
+> >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > [snip]
+> > 
+> >> -ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),y)
+> >> +ifeq ($(BR_BUILDING)$(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),yy)
+> > 
+> > yy means that exactly two of these must be 'y'. Is that intended?
+> 
+>  Yes it is, because KERNEL_DTS_NAME is a string, not a boolean, so it
+> essentially checks that it is empty and DTS_SUPPORT is selected. But admittedly
+> it's not very transparent, it would make sense to add delimiters in-between at
+> least.
 
-bamvor
->
-> Thanks a lot!
->
-> Thomas
->
+Thanks for the explanation. A comment would be helpful here, I guess.
+
+Shouldn't we protect the code against someone naming a DTS just 'y'?
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
