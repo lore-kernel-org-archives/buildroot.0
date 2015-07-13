@@ -1,86 +1,51 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 13 Jul 2015 23:17:02 +0200
-Subject: [Buildroot] [PATCH v2 1/4] linux: add linux-tools infra
-In-Reply-To: <1436822225-29591-1-git-send-email-romain.naour@openwide.fr>
-References: <1436822225-29591-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1436822225-29591-2-git-send-email-romain.naour@openwide.fr>
+Date: Mon, 13 Jul 2015 23:17:01 +0200
+Subject: [Buildroot] [PATCH v2 0/4] Linux kernel specific infrastructure
+Message-ID: <1436822225-29591-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit add an infrastructure to build linux kernel
-tools available in the kernel sources.
+This patches series introduces a new infrastructure to build Linux tools
+available in the kernel tree.
 
-Currently, the only linux kernel tool packaged in Buildroot
-is perf and it's packaged as a separate generic package.
-This is a problem for licence information raised in this
-thread [1].
+- The first patch add the Linux tools core infra.
+- Add a new Linux tool: cpupower.
+- migrate the perf package to the new Linux tool infra.
+- Add the documentation about Linux tool infra and Linux extensions.
 
-Since these tools require to build a Linux kernel, we can
-use some hooks in linux package like we did for linux
-extensions [2] and remove the perf package.
+Thanks Yann and Arnout for your help and review.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2015-May/128783.html
-[2] http://lists.busybox.net/pipermail/buildroot/2015-March/121835.html
+Best regards,
+Romain Naour
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
-v2: remove LINUX_TOOL prefix
----
- linux/linux.mk | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Romain Naour (4):
+  linux: add linux-tools infra
+  linux-tools: add cpupower
+  package/perf: migrate perf to use the new linux-tools infrastructure
+  docs/manual: add documentation for linux-ext and linux-tools.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index b602a04..19dcec3 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -325,6 +325,8 @@ define LINUX_INSTALL_TARGET_CMDS
- 	$(LINUX_INSTALL_HOST_TOOLS)
- endef
- 
-+# Include all our externsions and tools definitions.
-+#
- # Note: our package infrastructure uses the full-path of the last-scanned
- # Makefile to determine what package we're currently defining, using the
- # last directory component in the path. As such, including other Makefile,
-@@ -334,6 +336,7 @@ endef
- # the current Makefile, we are OK. But this is a hard requirement: files
- # included here *must* be in the same directory!
- include $(sort $(wildcard linux/linux-ext-*.mk))
-+include $(sort $(wildcard linux/linux-tool-*.mk))
- 
- LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
- 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
-@@ -342,6 +345,27 @@ LINUX_PRE_PATCH_HOOKS += $(foreach ext,$(LINUX_EXTENSIONS),\
- 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),\
- 		$(call UPPERCASE,$(ext))_PREPARE_KERNEL))
- 
-+# Install Linux kernel tools in staging directory since some tools
-+# may install shared libraries and headers (e.g. cpupower). The
-+# kernel image is NOT installed in staging directory.
-+LINUX_INSTALL_STAGING = $(if $(strip $(LINUX_TOOLS)),YES,NO)
-+
-+LINUX_DEPENDENCIES += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-+		$($(call UPPERCASE,$(tool))_DEPENDENCIES)))
-+
-+LINUX_POST_BUILD_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-+		$(call UPPERCASE,$(tool))_BUILD_CMDS))
-+
-+LINUX_POST_INSTALL_STAGING_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-+		$(call UPPERCASE,$(tool))_INSTALL_STAGING_CMDS))
-+
-+LINUX_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-+		$(call UPPERCASE,$(tool))_INSTALL_TARGET_CMDS))
-+
- $(eval $(kconfig-package))
- 
- # Support for rebuilding the kernel after the cpio archive has
+ Config.in.legacy                                   |   7 ++
+ docs/manual/adding-packages-kernel-module.txt      |   1 +
+ .../adding-packages-linux-kernel-spec-infra.txt    | 140 +++++++++++++++++++++
+ docs/manual/adding-packages.txt                    |   2 +
+ linux/Config.in                                    |   3 +
+ linux/Config.tools.in                              |  29 +++++
+ linux/linux-tool-cpupower.mk                       |  41 ++++++
+ linux/linux-tool-perf.mk                           |  63 ++++++++++
+ linux/linux.mk                                     |  24 ++++
+ package/Config.in                                  |   1 -
+ package/perf/Config.in                             |  21 ----
+ package/perf/perf.mk                               |  68 ----------
+ 12 files changed, 310 insertions(+), 90 deletions(-)
+ create mode 100644 docs/manual/adding-packages-linux-kernel-spec-infra.txt
+ create mode 100644 linux/Config.tools.in
+ create mode 100644 linux/linux-tool-cpupower.mk
+ create mode 100644 linux/linux-tool-perf.mk
+ delete mode 100644 package/perf/Config.in
+ delete mode 100644 package/perf/perf.mk
+
 -- 
 2.4.3
