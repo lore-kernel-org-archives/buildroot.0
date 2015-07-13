@@ -1,10 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 14 Jul 2015 00:48:10 +0200
-Subject: [Buildroot] [PATCH v2 1/4] linux: add linux-tools infra
-In-Reply-To: <1436822225-29591-2-git-send-email-romain.naour@openwide.fr>
+Date: Tue, 14 Jul 2015 00:51:19 +0200
+Subject: [Buildroot] [PATCH v2 2/4] linux-tools: add cpupower
+In-Reply-To: <1436822225-29591-3-git-send-email-romain.naour@openwide.fr>
 References: <1436822225-29591-1-git-send-email-romain.naour@openwide.fr>
- <1436822225-29591-2-git-send-email-romain.naour@openwide.fr>
-Message-ID: <CAHXCMM+QuXYJzE81v0L_nPdLeOHfjcuupZq_PnkLWh+QCyOpog@mail.gmail.com>
+ <1436822225-29591-3-git-send-email-romain.naour@openwide.fr>
+Message-ID: <CAHXCMMK_YLZLifoz3U4x7B82H0jseWbEg0Xb19dHsU7zQOX0Bg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,82 +14,68 @@ To: buildroot@busybox.net
 Romain, all,
 
 On Mon, Jul 13, 2015 at 11:17 PM, Romain Naour <romain.naour@openwide.fr> wrote:
-> This commit add an infrastructure to build linux kernel
-> tools available in the kernel sources.
->
-> Currently, the only linux kernel tool packaged in Buildroot
-> is perf and it's packaged as a separate generic package.
-> This is a problem for licence information raised in this
-> thread [1].
->
-> Since these tools require to build a Linux kernel, we can
-> use some hooks in linux package like we did for linux
-> extensions [2] and remove the perf package.
->
-> [1] http://lists.busybox.net/pipermail/buildroot/2015-May/128783.html
-> [2] http://lists.busybox.net/pipermail/buildroot/2015-March/121835.html
+> This patch is based on the patch send by James Knight:
+> http://lists.busybox.net/pipermail/buildroot/2015-May/128754.html
 >
 > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Cc: James Knight <james.knight@rockwellcollins.com>
 > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
 > v2: remove LINUX_TOOL prefix
+>     use $(D) instead of $(LINUX_DIR)
+>     fix title style
 > ---
->  linux/linux.mk | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
->
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index b602a04..19dcec3 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -325,6 +325,8 @@ define LINUX_INSTALL_TARGET_CMDS
->         $(LINUX_INSTALL_HOST_TOOLS)
->  endef
->
-> +# Include all our externsions and tools definitions.
+[...]
+> diff --git a/linux/linux-tool-cpupower.mk b/linux/linux-tool-cpupower.mk
+> new file mode 100644
+> index 0000000..5c04905
+> --- /dev/null
+> +++ b/linux/linux-tool-cpupower.mk
+> @@ -0,0 +1,41 @@
+> +################################################################################
 > +#
->  # Note: our package infrastructure uses the full-path of the last-scanned
->  # Makefile to determine what package we're currently defining, using the
->  # last directory component in the path. As such, including other Makefile,
-> @@ -334,6 +336,7 @@ endef
->  # the current Makefile, we are OK. But this is a hard requirement: files
->  # included here *must* be in the same directory!
->  include $(sort $(wildcard linux/linux-ext-*.mk))
-> +include $(sort $(wildcard linux/linux-tool-*.mk))
->
->  LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
->         $(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
-> @@ -342,6 +345,27 @@ LINUX_PRE_PATCH_HOOKS += $(foreach ext,$(LINUX_EXTENSIONS),\
->         $(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),\
->                 $(call UPPERCASE,$(ext))_PREPARE_KERNEL))
->
-> +# Install Linux kernel tools in staging directory since some tools
-> +# may install shared libraries and headers (e.g. cpupower). The
-> +# kernel image is NOT installed in staging directory.
-> +LINUX_INSTALL_STAGING = $(if $(strip $(LINUX_TOOLS)),YES,NO)
-As soon as the patch 2/4 (add cpupower) is merged, LINUX_TOOLS is no
-longer empty, so LINUX_INSTALL_STAGING is always YES.
-How about to unconditionally set it to YES?
+> +# cpupower
+> +#
+> +################################################################################
+> +
+> +LINUX_TOOLS += cpupower
+> +
+> +CPUPOWER_DEPENDENCIES = pciutils
+> +
+> +define CPUPOWER_BUILD_CMDS
+> +       $(Q)if test ! -f $(@D)/tools/power/cpupower/Makefile ; then \
+> +               echo "Your kernel version is too old and does not have the cpupower tool." ; \
+> +               echo "At least kernel 3.4 must be used." ; \
+> +               exit 1 ; \
+> +       fi
+> +
+> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
+> +               CROSS=$(TARGET_CROSS) \
+> +               CPUFREQ_BENCH=false \
+> +               DEBUG=false \
+You could store these 3 options in a CPUPOWER_MAKE_OPTS variable, then
+use it here and in the others commands below.
 
+> +               cpupower
+> +endef
 > +
-> +LINUX_DEPENDENCIES += $(foreach tool,$(LINUX_TOOLS),\
-> +       $(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-> +               $($(call UPPERCASE,$(tool))_DEPENDENCIES)))
+> +define CPUPOWER_INSTALL_STAGING_CMDS
+> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
+> +               CROSS=$(TARGET_CROSS) \
+> +               CPUFREQ_BENCH=false \
+> +               DEBUG=false \
+> +               DESTDIR=$(STAGING_DIR) \
+> +               cpupower_install
+> +endef
 > +
-> +LINUX_POST_BUILD_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-> +       $(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-> +               $(call UPPERCASE,$(tool))_BUILD_CMDS))
-> +
-> +LINUX_POST_INSTALL_STAGING_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-> +       $(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-> +               $(call UPPERCASE,$(tool))_INSTALL_STAGING_CMDS))
-> +
-> +LINUX_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-> +       $(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-> +               $(call UPPERCASE,$(tool))_INSTALL_TARGET_CMDS))
-> +
->  $(eval $(kconfig-package))
->
->  # Support for rebuilding the kernel after the cpio archive has
+> +define CPUPOWER_INSTALL_TARGET_CMDS
+> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
+> +               CROSS=$(TARGET_CROSS) \
+> +               CPUFREQ_BENCH=false \
+> +               DEBUG=false \
+> +               DESTDIR=$(TARGET_DIR) \
+> +               cpupower_install
+> +endef
 > --
 > 2.4.3
 >
