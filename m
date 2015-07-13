@@ -1,37 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 13 Jul 2015 13:24:07 +0300
-Subject: [Buildroot] [PATCH v3 1/4] support/scripts: add fix_rpaths
-In-Reply-To: <1436782677-12557-1-git-send-email-s.martin49@gmail.com>
-References: <1436782677-12557-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150713102407.GM2451@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jul 2015 12:28:02 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/libical: bump version to
+ v1.0.1 and switch to cmake
+In-Reply-To: <1430558104-32357-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1430558104-32357-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150713122802.4ad315fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Samuel,
+Dear Bernd Kuhls,
 
-On Mon, Jul 13, 2015 at 12:17:54PM +0200, Samuel Martin wrote:
-> This pyhton script leverages patchelf program to fix the RPATH of binaries.
+On Sat,  2 May 2015 11:15:04 +0200, Bernd Kuhls wrote:
+> Project moved to github according to http://sourceforge.net/projects/freeassociation
 > 
-> It offers 2 actions:
-> - clear the RPATH;
-> - set the RPATH using relative paths between every single binary and the
->   libraries directories.
+> "As of 2014-06-14, this project may now be found at http://github.com/libical."
 > 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> changes v2->v3:
-> - no change
+> v2: use _SITE instead of github helper (Thomas)
+>     add C++ dependency
 
-Have you seen my comments on v2 at 
-http://lists.busybox.net/pipermail/buildroot/2015-July/132446.html?
+Applied after doing the following change:
 
-baruch
+    [Thomas: propagate the C++ dependency to bluez5_utils OBEX support,
+    which selects libical.]
 
+Thanks!
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
