@@ -1,34 +1,38 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 13 Jul 2015 23:00:34 +0200
-Subject: [Buildroot] [PATCH] purge-locales: skip /usr/man and /usr/share/man
-Message-ID: <1436821234-31713-1-git-send-email-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jul 2015 23:18:34 +0200
+Subject: [Buildroot] [git commit] avahi: fix systemd service file install
+	path
+Message-ID: <20150713211849.30D3781974@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These directories are going to be removed anyway, so no point purging
-their locales.
+commit: http://git.buildroot.net/buildroot/commit/?id=ea63dc42cdea4640fa427e838a7056248a1b0ce2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Thomas: fix indentation.]
+
+Signed-off-by: Aur??lien Chabot <aurelien@chabot.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/avahi/avahi.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 4b6360b..60bb006 100644
---- a/Makefile
-+++ b/Makefile
-@@ -544,7 +544,7 @@ define PURGE_LOCALES
- 	rm -f $(LOCALE_WHITELIST)
- 	for i in $(LOCALE_NOPURGE) locale-archive; do echo $$i >> $(LOCALE_WHITELIST); done
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 24967f4..9c6b609 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -90,7 +90,10 @@ AVAHI_DEPENDENCIES = \
  
--	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/man /usr/share/man /usr/lib/locale)); \
-+	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/lib/locale)); \
- 	do \
- 		for lang in $$(cd $$dir; ls .|grep -v man); \
- 		do \
--- 
-2.1.4
+ AVAHI_CFLAGS = $(TARGET_CFLAGS)
+ 
+-ifeq ($(BR2_PACKAGE_SYSTEMD),)
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++AVAHI_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
++else
++AVAHI_CONF_OPTS += --with-systemdsystemunitdir=no
+ AVAHI_CFLAGS += -DDISABLE_SYSTEMD
+ endif
+ 
