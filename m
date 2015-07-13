@@ -1,78 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jul 2015 16:49:05 +0200
-Subject: [Buildroot] [PATCH] package/dropbear: fix generatign keys on RO
-	file systems
-Message-ID: <1436798945-6869-1-git-send-email-yann.morin.1998@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 13 Jul 2015 17:53:38 +0300
+Subject: [Buildroot] [PATCH] libpcap: bump to version 1.7.4
+Message-ID: <fec6981b51d4de3b973462eaa37cbec61207d735.1436799218.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dropbear generates its keys at the first connection, and wants to save
-them in /etc/dropbear (not configurable).
-
-Currently, our /etc/dropbear is a directory.
-
-When the filesystem is read-only, dropbear can't save its keys, so
-refuses all connections.
-
-Fix that with:
-
-  - at build time, create /etc/dropbear as a symlink to
-    /var/run/dropbear
-
-  - at runtime, if the filesystem is RW (we can rm /etc/dropbear),
-    we replace the symlink with an actual directory; otherwise,
-    when the filesystem is RO (we can't rm /etc/dropbear), we create
-    /var/run/dropbear so the symlink points to an existing directory
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/dropbear/S50dropbear | 14 ++++++++++++++
- package/dropbear/dropbear.mk |  2 +-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ package/libpcap/libpcap.hash | 2 +-
+ package/libpcap/libpcap.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
-index 2694931..790d95a 100644
---- a/package/dropbear/S50dropbear
-+++ b/package/dropbear/S50dropbear
-@@ -11,6 +11,20 @@ start() {
+diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
+index eea87d955c99..5ce53673b803 100644
+--- a/package/libpcap/libpcap.hash
++++ b/package/libpcap/libpcap.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	dd9f85213dc8e948068405b55dd20f8b32e3083e9e0e186f833bd0372e559e2f	libpcap-1.7.3.tar.gz
++sha256	7ad3112187e88328b85e46dce7a9b949632af18ee74d97ffc3f2b41fe7f448b0	libpcap-1.7.4.tar.gz
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index eb64641e5163..eb21fa97979d 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	echo -n "Starting dropbear sshd: "
- 	umask 077
-+
-+    # If /etc/dropbear is not a directory, and
-+    #   - the filesystem is RO (i.e. we can not rm the symlink),
-+    #     create the directory pointed to by the symlink.
-+    #   - the filesystem is RW (i.e. we can rm the symlink),
-+    #     replace the symlink with an actual directory
-+	if ! [ -d /etc/dropbear ]; then
-+		if ! rm -f /etc/dropbear; then
-+			mkdir -p /etc/dropbear
-+		else
-+			mkdir -p $(readlink -f /etc/dropbear)
-+		fi
-+	fi
-+
- 	start-stop-daemon -S -q -p /var/run/dropbear.pid \
- 		--exec /usr/sbin/dropbear -- $DROPBEAR_ARGS
- 	[ $? = 0 ] && echo "OK" || echo "FAIL"
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index bc65d69..5bbe864 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -93,7 +93,7 @@ define DROPBEAR_INSTALL_TARGET_CMDS
- 	for f in $(DROPBEAR_TARGET_BINS); do \
- 		ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/$$f ; \
- 	done
--	mkdir -p $(TARGET_DIR)/etc/dropbear
-+	ln -snf ../var/run/dropbear $(TARGET_DIR)/etc/dropbear
- endef
- 
- $(eval $(autotools-package))
+-LIBPCAP_VERSION = 1.7.3
++LIBPCAP_VERSION = 1.7.4
+ LIBPCAP_SITE = http://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3c
+ LIBPCAP_LICENSE_FILES = LICENSE
 -- 
-1.9.1
+2.1.4
