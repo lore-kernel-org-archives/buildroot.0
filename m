@@ -1,58 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 10:03:36 +0200
-Subject: [Buildroot] libfslcodecs libraries installation location
-In-Reply-To: <CAAMH-yuiKwzK1_q0hwxC3SigU+veYQA3wQTiZRdGYO0j=K=Z5g@mail.gmail.com>
-References: <20150712215125.4675bd5f@free-electrons.com>
- <CAAMH-yuiKwzK1_q0hwxC3SigU+veYQA3wQTiZRdGYO0j=K=Z5g@mail.gmail.com>
-Message-ID: <20150713100336.0de992c5@free-electrons.com>
+Date: Mon, 13 Jul 2015 10:10:52 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xproto_kbproto: bump version
+	to 1.0.7
+Message-ID: <20150713081424.E111181958@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary Bisson,
+commit: http://git.buildroot.net/buildroot/commit/?id=2b28994d8586e0a079bc034ff0c32a8c8256a4af
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 13 Jul 2015 09:58:50 +0200, Gary Bisson wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xproto_kbproto/xproto_kbproto.hash |    4 ++--
+ package/x11r7/xproto_kbproto/xproto_kbproto.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> > How it is possible that the glibc dynamic linker finds such libraries?
-> 
-> I remember discussions about it and I didn't get the issue at first for
-> some reason. Then I reproduced it and used ld.so.conf to add imx-mm folder.
-
-Ah, so you confirm that back then you used ld.so.conf, but not recently?
-
-> > We have a very old patch at http://patchwork.ozlabs.org/patch/409684/
-> > that was moving around the libraries installed in imx-mm to make them
-> > appear in /usr/lib rather than /usr/lib/imx-mm. The same problem was
-> > also reported in 2014 by J?r?me Pouiller:
-> >
-> http://buildroot-busybox.2317881.n4.nabble.com/PATCH-1-2-skeleton-ld-so-conf-include-ld-so-conf-d-conf-td81900.html
-> .
-> >
-> > Can you confirm that you tested that the GStreamer plugin was working ?
-> > Did you validate that the video is really decoded using the Freescale
-> > stuff and not decoded by the CPU ?
-> 
-> Yes, I'm using the 1080p video to make sure it strikes me if not using the
-> VPU as the CPU can't handle it well. However I hope I didn't use the
-> ld.so.conf.
-
-But it seems that not all codecs use those libraries. Arnout was saying
-that maybe some codecs such as H.264 are decoded by real
-dedicated hardware, while some others (like the MP3 example are gave)
-require a firmware to be pushed to a DSP. And in this last case, a
-library in imx-mm would be needed.
-
-Can you try playing a MP3 file for example?
-
-> I'm on vacation for two weeks so I'll only be able to do some testing
-> starting on the 27th.
-
-Yes, sure, no problem. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xproto_kbproto/xproto_kbproto.hash b/package/x11r7/xproto_kbproto/xproto_kbproto.hash
+index 07a9b3c..c98e595 100644
+--- a/package/x11r7/xproto_kbproto/xproto_kbproto.hash
++++ b/package/x11r7/xproto_kbproto/xproto_kbproto.hash
+@@ -1,2 +1,2 @@
+-# From http://www.x.org/archive/current/src/everything/CHECKSUMS
+-sha256	037cac0aeb80c4fccf44bf736d791fccb2ff7fd34c558ef8f03ac60b61085479	kbproto-1.0.6.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-April/002595.html
++sha256	f882210b76376e3fa006b11dbd890e56ec0942bc56e65d1249ff4af86f90b857	kbproto-1.0.7.tar.bz2
+diff --git a/package/x11r7/xproto_kbproto/xproto_kbproto.mk b/package/x11r7/xproto_kbproto/xproto_kbproto.mk
+index 868e518..b6c818f 100644
+--- a/package/x11r7/xproto_kbproto/xproto_kbproto.mk
++++ b/package/x11r7/xproto_kbproto/xproto_kbproto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XPROTO_KBPROTO_VERSION = 1.0.6
++XPROTO_KBPROTO_VERSION = 1.0.7
+ XPROTO_KBPROTO_SOURCE = kbproto-$(XPROTO_KBPROTO_VERSION).tar.bz2
+ XPROTO_KBPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
+ XPROTO_KBPROTO_LICENSE = MIT
