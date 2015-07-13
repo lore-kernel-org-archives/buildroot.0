@@ -1,66 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 20:42:35 +0200
-Subject: [Buildroot] [git commit] lua-iconv: new package
-Message-ID: <20150713185847.25BD0817DE@busybox.osuosl.org>
+Date: Mon, 13 Jul 2015 20:58:50 +0200
+Subject: [Buildroot] [lua V5] lua-iconv: new package
+In-Reply-To: <1436811060-5751-1-git-send-email-francois.perrad@gadz.org>
+References: <1436811060-5751-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150713205850.34ae8b20@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=07f92eeb108d94a7018740c109093838e67f15ac
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Francois Perrad,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in              |    1 +
- package/lua-iconv/Config.in    |    7 +++++++
- package/lua-iconv/lua-iconv.mk |   14 ++++++++++++++
- 3 files changed, 22 insertions(+), 0 deletions(-)
+On Mon, 13 Jul 2015 20:11:00 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/Config.in              |  1 +
+>  package/lua-iconv/Config.in    |  7 +++++++
+>  package/lua-iconv/lua-iconv.mk | 14 ++++++++++++++
+>  3 files changed, 22 insertions(+)
+>  create mode 100644 package/lua-iconv/Config.in
+>  create mode 100644 package/lua-iconv/lua-iconv.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index c5769d6..9dbb284 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -481,6 +481,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-coatpersistent/Config.in"
- 	source "package/lua-csnappy/Config.in"
- 	source "package/lua-ev/Config.in"
-+	source "package/lua-iconv/Config.in"
- 	source "package/lua-messagepack/Config.in"
- 	source "package/lua-msgpack-native/Config.in"
- 	source "package/lua-periphery/Config.in"
-diff --git a/package/lua-iconv/Config.in b/package/lua-iconv/Config.in
-new file mode 100644
-index 0000000..e76019d
---- /dev/null
-+++ b/package/lua-iconv/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LUA_ICONV
-+	bool "lua-iconv"
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	help
-+	  Lua binding to the POSIX 'iconv' library
-+
-+	  http://ittner.github.io/lua-iconv/
-diff --git a/package/lua-iconv/lua-iconv.mk b/package/lua-iconv/lua-iconv.mk
-new file mode 100644
-index 0000000..f0afa2b
---- /dev/null
-+++ b/package/lua-iconv/lua-iconv.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# lua-iconv
-+#
-+################################################################################
-+
-+LUA_ICONV_VERSION_UPSTREAM = 7
-+LUA_ICONV_VERSION = $(LUA_ICONV_VERSION_UPSTREAM)-1
-+LUA_ICONV_SUBDIR  = lua-iconv-$(LUA_ICONV_VERSION_UPSTREAM)
-+LUA_ICONV_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+LUA_ICONV_LICENSE = MIT
-+LUA_ICONV_LICENSE_FILES = $(LUA_ICONV_SUBDIR)/COPYING
-+
-+$(eval $(luarocks-package))
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
