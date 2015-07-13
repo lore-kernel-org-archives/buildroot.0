@@ -1,39 +1,47 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 13 Jul 2015 11:37:45 -0300
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.3.16
-Message-ID: <1436798265-4868-1-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 13 Jul 2015 16:48:00 +0200
+Subject: [Buildroot] [PATCH v4 3/4] Makefile: add
+ TARGET_CLEAR_RPATH_HOOK to TARGET_FINALIZE_HOOKS
+In-Reply-To: <20150713134420.GT2451@tarshish>
+References: <1436784870-17417-1-git-send-email-s.martin49@gmail.com>
+ <1436784870-17417-3-git-send-email-s.martin49@gmail.com>
+ <20150713134420.GT2451@tarshish>
+Message-ID: <CAHXCMMJet12qsX--xCDesj2s+RrOVNBcgLGnnG6tgNJs=cez4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, Jul 13, 2015 at 3:44 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Samuel,
+>
+> On Mon, Jul 13, 2015 at 12:54:29PM +0200, Samuel Martin wrote:
+>> This patch introduces the TARGET_CLEAR_RPATH_HOOK hook fixing the ELF
+>> files' RPATH of the host tree (excluding the sysroot).
+>>
+>> After running this hook, the RPATH from any target ELF files is empty.
+>
+> There are legitimate uses for RPATH. The ebtable package sets the ebtables
+> executable RPATH to /lib/ebtables to load its libeb*.so extensions. The sudo
+> package add RPATH to /usr/libexec/sudo in visudo. There may be more. How
+> should we handle these cases? Maybe add a per-package, per-executable RPATH
+> setting?
+Indeed, this is valid uses of RPATH.
+I can rework/extend the script to sanitize RPATH, i.e. remove the
+paths referring to the build tree.
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 3009478..620caae 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	8961227852911a1974e15bc017ddbcd4779876c867226d199f06648d8b27ba4b	gnutls-3.3.15.tar.xz
-+sha256	80a471c723572a43ddbe75d7825a3275f640650cc99eae42963ab39b9d0b7552	gnutls-3.3.16.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 9ccc23e..4593034 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.3
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).15
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+Any thoughts about this?
+
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+
+Regards,
+
 -- 
-2.3.6
+Samuel
