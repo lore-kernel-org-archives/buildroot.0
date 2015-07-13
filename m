@@ -1,7 +1,7 @@
 From: Scott Fan <fancp2007@gmail.com>
-Date: Mon, 13 Jul 2015 21:23:53 +0800
+Date: Mon, 13 Jul 2015 21:28:39 +0800
 Subject: [Buildroot] [PATCH 1/3] freerdp: Add support for tz package
-Message-ID: <1436793835-8372-1-git-send-email-fancp2007@gmail.com>
+Message-ID: <1436794121-8484-1-git-send-email-fancp2007@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
