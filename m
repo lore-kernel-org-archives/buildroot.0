@@ -1,35 +1,33 @@
-From: =?UTF-8?q?Aur=C3=A9lien=20Chabot?= <aurelien@chabot.fr>
-Date: Mon, 13 Jul 2015 20:38:44 +0200
-Subject: [Buildroot] [PATCH] minidlna: fix systemd service activation symlink
-Message-ID: <1436812724-30857-1-git-send-email-aurelien@chabot.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jul 2015 20:39:01 +0200
+Subject: [Buildroot] [git commit] lighttpd: fix systemd service activation
+	symlink
+Message-ID: <20150713183938.24E53818E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Aur?lien Chabot <aurelien@chabot.fr>
----
- package/minidlna/minidlna.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=c0ce66ea6f97e2d190d8b949f43dca0fc66092d9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index 7adb832..3a9ad41 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
-@@ -37,11 +37,11 @@ endef
- 
- define MINIDLNA_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0755 package/minidlna/minidlnad.service \
--		$(TARGET_DIR)/lib/systemd/system/minidlnad.service
-+		$(TARGET_DIR)/usr/lib/systemd/system/minidlnad.service
+Signed-off-by: Aur??lien Chabot <aurelien@chabot.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lighttpd/lighttpd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 626cd69..d602556 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -88,7 +88,7 @@ define LIGHTTPD_INSTALL_INIT_SYSTEMD
  
  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
  
--	ln -fs ../minidlnad.service \
-+	ln -fs  ../../../../usr/lib/systemd/system/minidlnad.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/minidlnad.service
+-	ln -fs ../../../../usr/lib/systemd/lighttpd.service \
++	ln -fs ../../../../usr/lib/systemd/system/lighttpd.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/lighttpd.service
  endef
  
--- 
-2.4.5
