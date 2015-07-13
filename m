@@ -1,36 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 01:34:08 +0200
-Subject: [Buildroot] [PATCH] fs/iso9660: change the name of the tmp dir
- to be consistent
-In-Reply-To: <1436820748-30551-1-git-send-email-arnout@mind.be>
-References: <1436820748-30551-1-git-send-email-arnout@mind.be>
-Message-ID: <20150714013408.5cc99bda@free-electrons.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Mon, 13 Jul 2015 18:34:23 -0500
+Subject: [Buildroot] [PATCH v2 1/1] linux: add server options for NFSD
+Message-ID: <1436830463-90993-1-git-send-email-ryan.barnett@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+When nfs-utils packages is selected, automatically enable the kernel
+options for NFSD. This will allow for an NFS server to work by only
+adding /etc/exports to the filesystem.
 
-On Mon, 13 Jul 2015 22:52:28 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Currently, the generated rootfs will be called rootfs.iso9660, but the
-> temporary directory we create while building it is called
-> rootfs-iso9660.tmp. They are in different directories so it's not so
-> obvious, but still to be consistent it's better to call the temp dir
-> rootfs.iso9660.tmp.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  fs/iso9660/iso9660.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+---
+Test with qemu_x86_defconfig
 
-Applied, thanks.
+Changes v1 -> v2:
+  - Only enable CONFIG_NFSD (suggested by Arnout)
+---
+ linux/linux.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thomas
+diff --git a/linux/linux.mk b/linux/linux.mk
+index b602a04..90396e6 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -229,6 +229,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 	$(if $(BR2_PACKAGE_XTABLES_ADDONS),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
++	$(if $(BR2_PACKAGE_NFS_UTILS),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFSD,$(@D)/.config))
+ 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
+ endef
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
