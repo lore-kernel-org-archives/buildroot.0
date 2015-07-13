@@ -1,75 +1,40 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 13 Jul 2015 18:44:32 +0200
-Subject: [Buildroot] [PATCH 05/38] dnsmasq: systemd support
-In-Reply-To: <143b50f3978ba45e465e255cf12ceb04e82fdb53.1432332802.git.alex.suykov@gmail.com>
-References: <cover.1432332802.git.alex.suykov@gmail.com>
- <143b50f3978ba45e465e255cf12ceb04e82fdb53.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <CAGduivyTUJuTXtKACGMb+cCC=Krtjpp+t0kc8LQY=XaWNcLT1g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jul 2015 18:44:45 +0200
+Subject: [Buildroot] [git commit] package/ntp: increase pool server count in
+	default config
+Message-ID: <20150713164456.258DA80425@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alex, all
+commit: http://git.buildroot.net/buildroot/commit/?id=d057715d5856b5c0d017db8e55a33424cf97953e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, May 23, 2015 at 12:03 PM, Alex Suykov <alex.suykov@gmail.com> wrote:
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/dnsmasq/dnsmasq.mk      |  8 ++++++++
->  package/dnsmasq/dnsmasq.service | 10 ++++++++++
->  2 files changed, 18 insertions(+)
->  create mode 100644 package/dnsmasq/dnsmasq.service
->
-> diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-> index 4b0999b..87daabe 100644
-> --- a/package/dnsmasq/dnsmasq.mk
-> +++ b/package/dnsmasq/dnsmasq.mk
-> @@ -111,4 +111,12 @@ define DNSMASQ_INSTALL_INIT_SYSV
->                 $(TARGET_DIR)/etc/init.d/S80dnsmasq
->  endef
->
-> +define DNSMASQ_INSTALL_INIT_SYSTEMD
-> +       $(INSTALL) -D -m 644 package/dnsmasq/dnsmasq.service \
-> +               $(TARGET_DIR)/usr/lib/systemd/system/dnsmasq.service
-> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +       ln -sf /usr/lib/systemd/system/dnsmasq.service \
-> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dnsmasq.service
-> +endef
-> +
->  $(eval $(generic-package))
-> diff --git a/package/dnsmasq/dnsmasq.service b/package/dnsmasq/dnsmasq.service
-> new file mode 100644
-> index 0000000..7038b22
-> --- /dev/null
-> +++ b/package/dnsmasq/dnsmasq.service
-> @@ -0,0 +1,10 @@
-> +[Unit]
-> +Description=DNS cacher and DHCP server
-> +After=syslog.target network.target
-> +
-> +[Service]
-> +ExecStart=/usr/sbin/dnsmasq -k
-> +Restart=always
-With systemd, we will have dbus enabled and thus dnsmasq will be build
-with dbus support.
-So your service file should be something like:
+To protect agains 1 falsticker NTP server, the client needs to connect
+to at least 4 servers.
 
-Type=dbus
-BusName=uk.org.thekelleys.dnsmasq
-ExecStartPre=/usr/bin/dnsmasq --test
-ExecStart=/usr/bin/dnsmasq -k --enable-dbus --pid-file
-ExecReload=/bin/kill -HUP $MAINPID
-Restart=always
+Source:
+ http://support.ntp.org/bin/view/Support/SelectingOffsiteNTPServers
+ 5.3.3. Upstream Time Server Quantity
 
+Signed-off-by: Gergely Imreh <imrehg@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ntp/ntpd.etc.conf |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-> +
-> +[Install]
-> +WantedBy=multi-user.target
-> --
-> 2.0.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/ntp/ntpd.etc.conf b/package/ntp/ntpd.etc.conf
+index 543c8ff..c451aa9 100644
+--- a/package/ntp/ntpd.etc.conf
++++ b/package/ntp/ntpd.etc.conf
+@@ -1,5 +1,7 @@
+ server 0.pool.ntp.org iburst
+ server 1.pool.ntp.org iburst
++server 2.pool.ntp.org iburst
++server 3.pool.ntp.org iburst
+ 
+ # Allow only time queries, at a limited rate, sending KoD when in excess.
+ # Allow all local queries (IPv4, IPv6)
