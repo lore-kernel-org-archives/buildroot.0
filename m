@@ -1,62 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 22:35:59 +0200
-Subject: [Buildroot] [git commit] skeleton: apply locale settings in user
-	shells
-Message-ID: <20150713204046.9C9A481923@busybox.osuosl.org>
+Date: Mon, 13 Jul 2015 22:38:47 +0200
+Subject: [Buildroot] [git commit] ntfs-3g: fix incorrect comment dependency
+Message-ID: <20150713204046.A59A47F95F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3c8da4dd4a0094f7ffd337a1d874d3deae77693
+commit: http://git.buildroot.net/buildroot/commit/?id=01d389191f461dc170b2dff7538520f83e33923d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add /etc/profile.d/locale.sh script from Arch Linux to /etc/profile.
-This script looks for locale.conf, sources it, and exports the LANG and
-LC_* variables.
+The comment for ntfs-3g displays even when the package has met its
+necessary dependencies.
 
-[Arnout: put in /etc/profile in the skeleton rather than making it
- systemd specific.]
-
-Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- system/skeleton/etc/profile |   23 +++++++++++++++++++++++
- 1 files changed, 23 insertions(+), 0 deletions(-)
+ package/ntfs-3g/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
-index 3812dda..c7438fe 100644
---- a/system/skeleton/etc/profile
-+++ b/system/skeleton/etc/profile
-@@ -35,6 +35,29 @@ if [ "$PS1" ]; then
+diff --git a/package/ntfs-3g/Config.in b/package/ntfs-3g/Config.in
+index a860498..d6d1481 100644
+--- a/package/ntfs-3g/Config.in
++++ b/package/ntfs-3g/Config.in
+@@ -32,4 +32,4 @@ endif
  
- fi;
- 
-+if [ -z "$LANG" ]; then
-+  if [ -n $HOME ] && [ -r $HOME/.config/locale.conf ]; then
-+    . "$HOME/.config/locale.conf"
-+  elif [ -r /etc/locale.conf ]; then
-+    . /etc/locale.conf
-+  fi
-+fi
-+
-+LANG=${LANG:-C}
-+export LANG
-+[ -n "$LC_CTYPE" ]          && export LC_CTYPE
-+[ -n "$LC_NUMERIC" ]        && export LC_NUMERIC
-+[ -n "$LC_TIME" ]           && export LC_TIME
-+[ -n "$LC_COLLATE" ]        && export LC_COLLATE
-+[ -n "$LC_MONETARY" ]       && export LC_MONETARY
-+[ -n "$LC_MESSAGES" ]       && export LC_MESSAGES
-+[ -n "$LC_PAPER" ]          && export LC_PAPER
-+[ -n "$LC_NAME" ]           && export LC_NAME
-+[ -n "$LC_ADDRESS" ]        && export LC_ADDRESS
-+[ -n "$LC_TELEPHONE" ]      && export LC_TELEPHONE
-+[ -n "$LC_MEASUREMENT" ]    && export LC_MEASUREMENT
-+[ -n "$LC_IDENTIFICATION" ] && export LC_IDENTIFICATION
-+
- # Source configuration files from /etc/profile.d
- for i in /etc/profile.d/*.sh ; do
-     if [ -r "$i" ]; then
+ comment "ntfs-3g needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && BR2_STATIC_LIBS)
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
