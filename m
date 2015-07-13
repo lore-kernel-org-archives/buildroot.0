@@ -1,29 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 18:43:36 +0200
-Subject: [Buildroot] [PATCH 1/1] ti-wl12xx_target_scripts: new package
-In-Reply-To: <55A3E37A.4080503@adeneo-embedded.us>
-References: <1407445843-24031-1-git-send-email-jtheou@adeneo-embedded.us>
- <20150712185712.6f0b6e90@free-electrons.com>
- <55A3E37A.4080503@adeneo-embedded.us>
-Message-ID: <20150713184336.2dabf9bd@free-electrons.com>
+Date: Mon, 13 Jul 2015 18:44:18 +0200
+Subject: [Buildroot] [PATCH v3 2/2] powerpc-utils: optionally use librtas
+In-Reply-To: <9a73202315e0a236b78d9644905c20b79572f93d.1432015191.git.sam.bobroff@au1.ibm.com>
+References: <cover.1432015191.git.sam.bobroff@au1.ibm.com>
+ <9a73202315e0a236b78d9644905c20b79572f93d.1432015191.git.sam.bobroff@au1.ibm.com>
+Message-ID: <20150713184418.66c0298b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jean-Baptiste Theou,
+Dear Sam Bobroff,
 
-On Mon, 13 Jul 2015 09:12:42 -0700, Jean-Baptiste Theou wrote:
+On Tue, 19 May 2015 15:59:56 +1000, Sam Bobroff wrote:
+> Now that librtas is available, optionally use it with powerpc-utils to
+> enable it's RTAS dependant functionality.  It is used by default, as
+> most distros do, but made optional because it adds several new programs
+> and significantly increases the size of the installed package.
+> 
+> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> ---
+> v3:
 
-> I am not actively working on this driver, and I don't have the HW to 
-> test it properly.
-> So please drop this patch.
-
-Thanks for the feedback. We already marked the patch as "Changes
-Requested", which means the patch is no longer in the list of pending
-patches. So unless someone resends a new version, we will simply not
-take care of it anymore.
+Applied after propagating the glibc dependency of librtas, as noted by
+Romain Naour.
 
 Thanks!
 
