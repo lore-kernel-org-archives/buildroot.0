@@ -1,44 +1,70 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 13 Jul 2015 20:54:11 +0300
-Subject: [Buildroot] [PATCH] libv4l: needs dynamic library support
-Message-ID: <98716efabf8bc5fffbf065d5df8ef129b9a4bcd1.1436810051.git.baruch@tkos.co.il>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 13 Jul 2015 20:01:29 +0200
+Subject: [Buildroot] [PATCH 15/38] neard: systemd support
+In-Reply-To: <fa0bed763359b6b38358e16ee82ef281878ec8c1.1432332802.git.alex.suykov@gmail.com>
+References: <cover.1432332802.git.alex.suykov@gmail.com>
+ <fa0bed763359b6b38358e16ee82ef281878ec8c1.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <CAGduivwv5+eMxpHGc5jZHwBzLHH=tU3eXoN7ZZ=7gti7EhAZfw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/752/752cda64e3a4a73adfd9b383d5f42b61e4a1e641/
-http://autobuild.buildroot.net/results/042/0423132222f8a8030f703bb8d755f3e9a4ee73d8/
-http://autobuild.buildroot.net/results/908/9087769da17e2092c3ad2eb901ff87c1d6437e6a/
+Hi Alex, all
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libv4l/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On Sat, May 23, 2015 at 12:05 PM, Alex Suykov <alex.suykov@gmail.com> wrote:
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> ---
+>  package/neard/neard.mk      |  8 ++++++++
+>  package/neard/neard.service | 10 ++++++++++
+>  2 files changed, 18 insertions(+)
+>  create mode 100644 package/neard/neard.service
+>
+> diff --git a/package/neard/neard.mk b/package/neard/neard.mk
+> index fc92421..dd18b0a 100644
+> --- a/package/neard/neard.mk
+> +++ b/package/neard/neard.mk
+> @@ -23,4 +23,12 @@ define NEARD_INSTALL_INIT_SYSV
+>                 $(TARGET_DIR)/etc/init.d/S53neard
+>  endef
+>
+> +define NEARD_INSTALL_INIT_SYSTEMD
+> +       $(INSTALL) -D -m 644 package/neard/neard.service \
+> +               $(TARGET_DIR)/usr/lib/systemd/system/neard.service
+> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +       ln -sf /usr/lib/systemd/system/neard.service \
+> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/neard.service
+> +endef
+> +
+>  $(eval $(autotools-package))
+> diff --git a/package/neard/neard.service b/package/neard/neard.service
+> new file mode 100644
+> index 0000000..978163d
+> --- /dev/null
+> +++ b/package/neard/neard.service
+> @@ -0,0 +1,10 @@
+> +[Unit]
+> +Description=Near-field communication daemon
+> +After=syslog.target
+> +
+> +[Service]
+> +ExecStart=/usr/libexec/nfc/neard -d '*'
+> +Restart=always
+If you use neard like that, it will fork, so you need to tell systemd
+with a Type=forking and specify the PID through PIDFile=
 
-diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
-index a5455cb5eb06..0437ba1872b7 100644
---- a/package/libv4l/Config.in
-+++ b/package/libv4l/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBV4L
- 	bool "libv4l"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # dlopen()
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # media headers
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
-@@ -28,7 +29,7 @@ config BR2_PACKAGE_LIBV4L_UTILS
- 
- endif
- 
--comment "libv4l needs a toolchain w/ threads and C++, headers >= 3.0"
-+comment "libv4l needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS \
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
- 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
--- 
-2.1.4
+What would be more coherent with what we currently have is simply by
+passing -n (--nodaemon)
+
+You patch will be marked as "ChangesRequested" in patchwork
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> --
+> 2.0.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
