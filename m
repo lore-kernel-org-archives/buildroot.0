@@ -1,50 +1,63 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Mon, 13 Jul 2015 17:03:34 -0500
-Subject: [Buildroot] NFS Server on Buildroot Target
-Message-ID: <CAMQcK5+eTg508+qHvP+_J_uB5L8vXHCKORvU=PmDpBXcZJ4swg@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 14 Jul 2015 00:15:37 +0200
+Subject: [Buildroot] [PATCH v2 2/2] Makefile: Fix target-purgelocales
+In-Reply-To: <1436825737-6264-1-git-send-email-arnout@mind.be>
+References: <1436825737-6264-1-git-send-email-arnout@mind.be>
+Message-ID: <1436825737-6264-2-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Valentine Barshak <gvaxon@gmail.com>
 
-Today I attempted to get an NFS working on a embedded target and
-struggled with getting the 'nfs-utils' package to work to provided NFS
-server functionality. By selecting the 'nfs-utils' package, the NFS
-server functionally does NOT work by default. Before I even attempted
-this, I had the kernel configuration options selected for NFSD. It
-turned out that I needed to have the rpcbind package selected in order
-to make it work, however, this was after a couple hours of trying to
-debug this.
+The /usr/share/X11/locale/locale.dir file is needed by libX11.
+Removing it breaks locale support in X11. However, make removes
+not only directories but also all files, which are not listed
+in the BR2_ENABLE_LOCALE_WHITELIST.
 
-I have a few questions that I would like feedback on as I would like
-to propose a patch that will allow the nfs-util package to work by
-default.
+This re-creates locale.dir database file where needed.
 
-First, should the nfs-util package automatically 'select' on the
-kernel configuration options for NFSD?
+Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Arnout: use a separate loop, and add some explanatory comments]
+---
+ Makefile | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Other package do this so I would argue that it should.
-
-Second, in order to make the default startup configuration work,
-rpcbind is required. Should this be an added dependency since the goal
-of a package is to have it work by default?
-
-Any suggestion or feedback would be appreciated.
-
-Thanks,
--Ryan
-
-[Extra] Looks like someone posted something similar to the mailing
-list in January of 2013
-
-http://lists.busybox.net/pipermail/buildroot/2013-January/065498.html
-
+diff --git a/Makefile b/Makefile
+index a26f87d..bfc2e17 100644
+--- a/Makefile
++++ b/Makefile
+@@ -540,6 +540,11 @@ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+ LOCALE_WHITELIST = $(BUILD_DIR)/locales.nopurge
+ LOCALE_NOPURGE = $(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
+ 
++# This piece of junk does the following:
++# First collect the whitelist in a file.
++# Then go over all the locale dirs and for each subdir, check if it exists
++# in the whitelist file. If it doesn't, kill it.
++# Finally, specifically for X11, regenerate locale.dir from the whitelist.
+ define PURGE_LOCALES
+ 	rm -f $(LOCALE_WHITELIST)
+ 	for i in $(LOCALE_NOPURGE) locale-archive; do echo $$i >> $(LOCALE_WHITELIST); done
+@@ -551,6 +556,16 @@ define PURGE_LOCALES
+ 			grep -qx $${langdir##*/} $(LOCALE_WHITELIST) || rm -rf $$langdir; \
+ 		done; \
+ 	done
++	if [ -d $(TARGET_DIR)/usr/share/X11/locale ]; \
++	then \
++		for lang in $(LOCALE_NOPURGE); \
++		do \
++			if [ -f $(TARGET_DIR)/usr/share/X11/locale/$$lang/XLC_LOCALE ]; \
++			then \
++				echo "$$lang/XLC_LOCALE: $$lang"; \
++			fi \
++		done > $(TARGET_DIR)/usr/share/X11/locale/locale.dir; \
++	fi
+ endef
+ TARGET_FINALIZE_HOOKS += PURGE_LOCALES
+ endif
 -- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+2.1.4
