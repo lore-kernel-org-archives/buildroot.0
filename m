@@ -1,68 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jul 2015 09:18:58 +0200
-Subject: [Buildroot] [PATCH 2/7] package/linux: don't enforce check for
- DTS when not building
-In-Reply-To: <20150713033718.GE2451@tarshish>
-References: <cover.1436702899.git.yann.morin.1998@free.fr>
- <ff5a9ea519a5c72dd917369e6409674b9d4a340f.1436702899.git.yann.morin.1998@free.fr>
- <20150712200309.GB2451@tarshish> <55A2FBDF.9070808@mind.be>
- <20150713033718.GE2451@tarshish>
-Message-ID: <20150713071858.GG4008@free.fr>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 13 Jul 2015 09:58:50 +0200
+Subject: [Buildroot] libfslcodecs libraries installation location
+In-Reply-To: <20150712215125.4675bd5f@free-electrons.com>
+References: <20150712215125.4675bd5f@free-electrons.com>
+Message-ID: <CAAMH-yuiKwzK1_q0hwxC3SigU+veYQA3wQTiZRdGYO0j=K=Z5g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Hi Thomas,
 
-On 2015-07-13 06:37 +0300, Baruch Siach spake thusly:
-> On Mon, Jul 13, 2015 at 01:44:31AM +0200, Arnout Vandecappelle wrote:
-> > On 07/12/15 22:03, Baruch Siach wrote:
-> > > On Sun, Jul 12, 2015 at 02:11:24PM +0200, Yann E. MORIN wrote:
-> > >> Currently, this is triggering the error message:
-> > >>     make randconfig
-> > >>     make source
-> > >>
-> > >> Limit the checks that enforce a DTS is set and at most one DTB is
-> > >> appended to when we are actually building, like is done for the
-> > >> configuration-file variables.
-> > >>
-> > >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > > 
-> > > [snip]
-> > > 
-> > >> -ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),y)
-> > >> +ifeq ($(BR_BUILDING)$(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),yy)
-> > > 
-> > > yy means that exactly two of these must be 'y'. Is that intended?
-> > 
-> >  Yes it is, because KERNEL_DTS_NAME is a string, not a boolean, so it
-> > essentially checks that it is empty and DTS_SUPPORT is selected. But admittedly
-> > it's not very transparent, it would make sense to add delimiters in-between at
-> > least.
-> 
-> Thanks for the explanation. A comment would be helpful here, I guess.
-> 
-> Shouldn't we protect the code against someone naming a DTS just 'y'?
+On Jul 12, 2015 9:51 PM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
+>
+> Hello Gary,
+>
+> You recently updated the libfslcodecs package, and said it was working
+> for you with the Freescale GStreamer 0.10 plugin.
+>
+> However, what seems weird is that many of the libraries installed by
+> libfslcodecs are not in /lib or /usr/lib, but in the
+> custom /usr/lib/imx-mm/ directory:
+>
+> $ find output/target/usr/lib/imx-mm/
+> output/target/usr/lib/imx-mm/
+> output/target/usr/lib/imx-mm/video-codec
+> output/target/usr/lib/imx-mm/video-codec/lib_jpeg_dec_arm11_elinux.so
+> output/target/usr/lib/imx-mm/video-codec/lib_jpeg_dec_arm9_elinux.so
+> output/target/usr/lib/imx-mm/video-codec/lib_H264_dec_arm11_elinux.so.2
+> output/target/usr/lib/imx-mm/video-codec/lib_png_dec_arm11_elinux.so.1
+> output/target/usr/lib/imx-mm/video-codec/lib_deinterlace_arm11_elinux.so
+> [...]
+>
+> And the GStreamer plugins are linked against those libraries (i.e they
+> are not loaded using dlopen) :
+>
+> $ LANG=C readelf -d
+output/target/usr/lib/gstreamer-0.10/libmfw_gst_mp3enc.so | grep lib_mp3
+>  0x00000001 (NEEDED)                     Shared library:
+[lib_mp3_enc_arm12_elinux.so.2]
+>
+> How it is possible that the glibc dynamic linker finds such libraries?
 
-Yeah, we already discussed that with Thomas (live, we're in the same
-place for a few days), and we've come to the conclusion that this
-construct is indeed too tricky, and that we need a simpler code.
+I remember discussions about it and I didn't get the issue at first for
+some reason. Then I reproduced it and used ld.so.conf to add imx-mm folder.
 
-Your comments are now confirming this. ;-)
+> We have a very old patch at http://patchwork.ozlabs.org/patch/409684/
+> that was moving around the libraries installed in imx-mm to make them
+> appear in /usr/lib rather than /usr/lib/imx-mm. The same problem was
+> also reported in 2014 by J?r?me Pouiller:
+>
+http://buildroot-busybox.2317881.n4.nabble.com/PATCH-1-2-skeleton-ld-so-conf-include-ld-so-conf-d-conf-td81900.html
+.
+>
+> Can you confirm that you tested that the GStreamer plugin was working ?
+> Did you validate that the video is really decoded using the Freescale
+> stuff and not decoded by the CPU ?
 
-I'll rework the series shortly.
+Yes, I'm using the 1080p video to make sure it strikes me if not using the
+VPU as the CPU can't handle it well. However I hope I didn't use the
+ld.so.conf.
+I'm on vacation for two weeks so I'll only be able to do some testing
+starting on the 27th.
 
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks,
+Gary
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150713/d85889ba/attachment.html>
