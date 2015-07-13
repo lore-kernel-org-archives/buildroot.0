@@ -1,73 +1,382 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 13 Jul 2015 23:49:21 +0200
-Subject: [Buildroot] [PATCH 18/38] netsnmp: systemd support
-In-Reply-To: <3163c13927d94a844be0b4a1b3a5f2123f09aec1.1432332802.git.alex.suykov@gmail.com>
-References: <cover.1432332802.git.alex.suykov@gmail.com>
- <3163c13927d94a844be0b4a1b3a5f2123f09aec1.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <CAGduivwL3SM11qgbVMWBzVjRxfVid822fbi4-RdGn7sMPo-wqQ@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 13 Jul 2015 23:55:07 +0200
+Subject: [Buildroot] [PATCH v5 1/5] support/scripts: add fix_rpaths
+Message-ID: <1436824511-1601-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alex, all
+This pyhton script leverages patchelf program to fix the RPATH of binaries.
 
-On Sat, May 23, 2015 at 12:06 PM, Alex Suykov <alex.suykov@gmail.com> wrote:
-> The service file follows sysv startup script with 127.0.0.1
-> and the rest of the options hardcoded.
->
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/netsnmp/netsnmp.mk    |  7 +++++++
->  package/netsnmp/snmpd.service | 10 ++++++++++
->  2 files changed, 17 insertions(+)
->  create mode 100644 package/netsnmp/snmpd.service
->
-> diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-> index 6eff5e3..b364c5c 100644
-> --- a/package/netsnmp/netsnmp.mk
-> +++ b/package/netsnmp/netsnmp.mk
-> @@ -94,6 +94,13 @@ define NETSNMP_INSTALL_INIT_SYSV
->         $(INSTALL) -D -m 0755 package/netsnmp/S59snmpd \
->                 $(TARGET_DIR)/etc/init.d/S59snmpd
->  endef
-> +define NETSNMP_INSTALL_INIT_SYSTEMD
-> +       $(INSTALL) -D -m 644 package/netsnmp/snmpd.service \
-> +               $(TARGET_DIR)/usr/lib/systemd/system/snmpd.service
-> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +       ln -sf /usr/lib/systemd/system/snmpd.service \
-> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/snmpd.service
-> +endef
-The snmp server is not mandatory, you need to check before installing
-the service file.
->  endif
->
->  define NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
-> diff --git a/package/netsnmp/snmpd.service b/package/netsnmp/snmpd.service
-> new file mode 100644
-> index 0000000..6926b9b
-> --- /dev/null
-> +++ b/package/netsnmp/snmpd.service
-> @@ -0,0 +1,10 @@
-> +[Unit]
-> +Description=SNMP daemon
-> +After=syslog.target network.target
-> +
-> +[Service]
-> +ExecStart=/usr/sbin/snmpd -f -M /usr/share/snmp/mibs -Lsd 127.0.0.1
-> +Restart=always
-> +
-> +[Install]
-> +WantedBy=multi-user.target
-Maybe add the support of snmptrapd ?
+It offers 3 actions:
+- clear the RPATH;
+- set the RPATH using relative paths between every single binary and the
+  libraries directories;
+- sanitize the RPATH, removing sysroot and build locations.
 
-In the meantime, your patch will be marked as "changes requested" in
-the patchwork.
-> --
-> 2.0.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+
+---
+changes v4->v5:
+- add verbose support
+- rename shrink_rpath -> clear_rpath
+- add sanitize_rpath function
+
+changes v3->v4:
+- fix typos and license (Baruch)
+
+changes v2->v3:
+- no change
+---
+ support/scripts/fix_rpaths | 338 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 338 insertions(+)
+ create mode 100755 support/scripts/fix_rpaths
+
+diff --git a/support/scripts/fix_rpaths b/support/scripts/fix_rpaths
+new file mode 100755
+index 0000000..86f0d53
+--- /dev/null
++++ b/support/scripts/fix_rpaths
+@@ -0,0 +1,338 @@
++#!/usr/bin/env python
++##
++## Author(s):
++##  - Samuel Martin <s.martin49@gmail.com>
++##
++## Copyright (C) 2013 Samuel Martin
++##
++## This program is free software; you can redistribute it and/or modify
++## it under the terms of the GNU General Public License as published by
++## the Free Software Foundation; either version 2 of the License, or
++## (at your option) any later version.
++##
++## This program is distributed in the hope that it will be useful,
++## but WITHOUT ANY WARRANTY; without even the implied warranty of
++## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++## GNU General Public License for more details.
++##
++""" This script scans a direcotry for ELF files and fix their RPATH, making
++them relative.
++"""
++
++from __future__ import print_function, with_statement
++import os
++import stat
++import subprocess
++import sys
++import re
++
++PATCHELF_BIN = "patchelf"
++
++
++# pylint: disable=too-few-public-methods
++class PreservedTime(object):
++    """ With-class ensuring the file's times are preserved
++
++    :param path: File path
++    """
++    # pylint: disable=redefined-outer-name
++    def __init__(self, path):
++        self.path = path
++        self.times = None
++
++    # pylint: disable=invalid-name
++    def __enter__(self):
++        st = os.lstat(self.path)
++        self.times = (st.st_atime, st.st_mtime)
++        return self.path
++
++    # pylint: disable=redefined-builtin
++    def __exit__(self, type, value, traceback):
++        os.utime(self.path, self.times)
++
++
++# pylint: disable=redefined-outer-name
++def is_elf_binary(path):
++    """ Return True if path points to a valid ELF file.
++
++    :param path: File path
++    """
++    if not stat.S_ISREG(os.lstat(path).st_mode):
++        return False
++    with PreservedTime(path):
++        # pylint: disable=invalid-name
++        with open(path, "rb") as fp:
++            data = fp.read(4)
++    return data == b"\x7fELF"
++
++
++def has_rpath(elf_file, patchelf_bin=PATCHELF_BIN):
++    """ Return True if the given ELF file accept a RPATH.
++
++    :param elf_file: ELF file path
++    :param patchelf_bin: patchelf program path
++    """
++    cmd = [patchelf_bin, "--print-rpath", elf_file]
++    with PreservedTime(elf_file):
++        try:
++            subprocess.check_call(cmd, stdout=subprocess.PIPE,
++                                  stderr=subprocess.PIPE)
++            elf_with_rpath = True
++        except subprocess.CalledProcessError as _:
++            elf_with_rpath = False
++    return elf_with_rpath
++
++
++def compute_rpath(binary, libdirs):
++    """ Return the RPATH value (with relative paths to the given libdirs).
++
++    :param binary: ELF binary path
++    :param libdirs: List of library directory paths
++    """
++    bindir = os.path.dirname(binary)
++    relpaths = [os.path.relpath(libdir, bindir) for libdir in libdirs]
++    # reduce the list, but keep its original order
++    # pylint: disable=unnecessary-lambda
++    sorted(set(relpaths), key=lambda x: relpaths.index(x))
++    rpaths = [os.path.join("$ORIGIN", relpath) for relpath in relpaths]
++    rpath = ":".join(rpaths)
++    return rpath
++
++
++def set_rpath(elf_file, rpath, patchelf_bin=PATCHELF_BIN, verbose=False):
++    """ Fix the ELF file RPATH.
++
++    :param elf_file: ELF file patch
++    :param rpath: New RPATH value
++    :param patchelf_bin: patchelf program path
++    """
++    cmd = [patchelf_bin, "--set-rpath", rpath, elf_file]
++    with PreservedTime(elf_file):
++        subprocess.check_call(cmd, stdout=subprocess.PIPE,
++                              stderr=subprocess.PIPE)
++    if verbose:
++        print("FILE: %s" % elf_file)
++        print("RPATH set to: '%s'" % dump_rpath(elf_file, patchelf_bin))
++
++
++def clear_rpath(elf_file, patchelf_bin=PATCHELF_BIN, verbose=False):
++    """ Shrink the ELF file's RPATH.
++
++    :param elf_file: ELF file patch
++    :param patchelf_bin: patchelf program path
++    """
++    set_rpath(elf_file, "", patchelf_bin=patchelf_bin, verbose=False)
++    if verbose:
++        print("FILE: %s\nRPATH cleared" % elf_file)
++
++
++def dump_rpath(elf_file, patchelf_bin=PATCHELF_BIN):
++    """ Return the ELF file's RPATH.
++
++    :param elf_file: ELF file patch
++    :param patchelf_bin: patchelf program path
++    """
++    cmd = [patchelf_bin, "--print-rpath", elf_file]
++    with PreservedTime(elf_file):
++        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
++                                stderr=subprocess.PIPE)
++        proc.wait()
++        rpath = proc.communicate()[0].strip()
++    if sys.version_info.major >= 3:
++        def _decode(txt):
++            """ Decode function """
++            return txt.decode()
++    else:
++        def _decode(txt):
++            """ Decode function """
++            return txt
++    return _decode(rpath)
++
++
++def update_rpath(elf_file, libdirs, patchelf_bin=PATCHELF_BIN, verbose=False):
++    """ Set the ELF file's RPATH with relative paths to the libdirs.
++
++    :param elf_file: ELF file patch
++    :param libdirs: List of library directory paths
++    :param patchelf_bin: patchelf program path
++    """
++    rpath = compute_rpath(elf_file, libdirs)
++    set_rpath(elf_file, rpath, patchelf_bin=patchelf_bin, verbose=verbose)
++
++
++def sanitize_rpath(elf_file, matcher, patchelf_bin=PATCHELF_BIN, verbose=False):
++    """ Remove all paths matching patterns in the ELF file's RPATH.
++
++    :param elf_file: ELF file patch
++    :param matcher: Regex objects matching the paths to be removed
++    :param patchelf_bin: patchelf program path
++    """
++    rpath = dump_rpath(elf_file, patchelf_bin=PATCHELF_BIN)
++    rpath = [path for path in rpath.split(":") if not matcher.match(path)]
++    if rpath:
++        set_rpath(elf_file, ":".join(rpath), patchelf_bin=patchelf_bin,
++                verbose=verbose)
++    else:
++        clear_rpath(elf_file, patchelf_bin=patchelf_bin, verbose=verbose)
++
++
++def find_files(root, file_filter_func=None, exclude_dirs=None):
++    """ Generator returning files from the root location.
++
++    :param root: Root path to be scan
++    :param file_filter_func: Filter function returning a boolean whether the
++                             file path should be yielded or not
++    :param exclude_dirs: List of directories to be prune from the scan
++    """
++    def dummy_filter(_):
++        """ Dummy filter function. Always return True.
++        """
++        return True
++    if not file_filter_func:
++        file_filter_func = dummy_filter
++    for parent, dirs, files in os.walk(root):
++        for xdir in exclude_dirs:
++            if xdir in dirs:
++                del dirs[dirs.index(xdir)]
++                continue
++            for idx, a_dir in enumerate(dirs):
++                if os.path.join(parent, a_dir).endswith(xdir):
++                    del dirs[idx]
++                    continue
++        for a_file in files:
++            full_path = os.path.join(parent, a_file)
++            if not file_filter_func(full_path):
++                continue
++            yield full_path
++
++
++def scan_and_apply(root, rpath_func, exclude_dirs=None,
++                   patchelf_bin=PATCHELF_BIN, verbose=False):
++    """ Scan and update RPATH on ELF files under the root location.
++
++    The new RPATH value is computed from the binaries's and the libraries
++    directories.
++
++    :param root: Root path to be scan
++    :param libdirs: List of library directory paths
++    :param patchelf_bin: patchelf program path
++    """
++    def file_filter(path):
++        """ Return True if the path points to a valid ELF file accepting RPATH.
++        """
++        # check for valid file (discard non-ELF files and broken symlinks)
++        if not is_elf_binary(path):
++            return False
++        return has_rpath(path)
++    exclude_dirs = exclude_dirs if exclude_dirs else list()
++    for filepath in find_files(root, file_filter_func=file_filter,
++                               exclude_dirs=exclude_dirs):
++        rpath_func(filepath, patchelf_bin=patchelf_bin, verbose=verbose)
++
++
++def main():
++    """ Main function
++    """
++    import argparse
++    parser = argparse.ArgumentParser(description="""\
++            Update the RPATH in all ELF files in ROOT.
++
++            It can perform 3 types of actions on the ELF files, preserving
++            their times:
++            1) 'set' the RPATH, with relative paths between ELF files and
++              the library directories;
++            2) or 'sanitize' the RPATH by removing any path matching some
++              given patterns;
++            3) or 'clear' the RPATH.
++
++            """)
++    parser.add_argument("action", choices=["set", "clear", "sanitize"],
++                        help="""\
++            Action processed on RPATH.
++            'set' updates the RPATH with relative path between each binary and
++                library directories passed via the required --libdirs option.
++            'sanitize' strips path matching patterns passed via the required
++                --patterns option.
++            'clear' empties the RPATH of the binaries.
++            """)
++    parser.add_argument("rootdir", metavar="ROOT",
++                        help="Root path to scan for RPATH fixup")
++    parser.add_argument("--libdirs", nargs="+", default=list(),
++                        help="""\
++            List of library directory paths (must be sub-location of ROOT)""")
++    parser.add_argument("--patterns", nargs="+", default=list(),
++                        help="""\
++            List of path patterns to be remove from RPATH""")
++    parser.add_argument("--exclude-dirs", nargs="+", default=list(),
++                        help="List of directories skipped for RPATH update")
++    parser.add_argument("--patchelf-program", dest="patchelf_bin",
++                        default=PATCHELF_BIN,
++                        help="Path to patchelf program to be used")
++    parser.add_argument("-v", "--verbose", action="store_true", default=False,
++                        help="Turn on verbose outputs")
++    args = parser.parse_args()
++    # sanitizing arguments
++    action = args.action
++    root = os.path.abspath(args.rootdir)
++    libdirs = [os.path.abspath(l) for l in args.libdirs if os.path.isdir(l)]
++    patterns = [x for x in args.patterns]
++    exclude_dirs = [x for x in args.exclude_dirs]
++    patchelf_bin = os.path.abspath(args.patchelf_bin)
++    # sanity checks
++    if action == "set" and not libdirs:
++        msg = "\nERROR: Setting RPATH requires non-empty --libdirs option\n\n"
++        msg += parser.format_help()
++        raise Exception(msg)
++    if action == "sanitize" and not patterns:
++        msg = "\nERROR: Sanitizing RPATH requires non-empty --patterns option\n\n"
++        msg += parser.format_help()
++        raise Exception(msg)
++    if not os.path.exists(root):
++        msg = "\nERROR: ROOT must be an existing path.\n"
++        msg += "\troot: %s\n\n" % root
++        msg += parser.format_help()
++        raise Exception(msg)
++    for libdir in libdirs:
++        if not libdir.startswith(root):
++            msg = "\nERROR: each libdirs must be under the root location.\n"
++            msg += "\troot: %s\n" % root
++            msg += "\tfaulty libdir: %s\n\n" % libdir
++            msg += parser.format_help()
++            raise Exception(msg)
++    if not os.path.exists(patchelf_bin):
++        patchelf_found = False
++        for path in os.environ.get("PATH", "").split(":"):
++            if not path:
++                continue
++            if PATCHELF_BIN in os.listdir(path):
++                patchelf_found = True
++                break
++        if not patchelf_found:
++            msg = "\nERROR: no '%s' program found on the host system.\n\n" % \
++                    PATCHELF_BIN
++            msg += parser.format_help()
++            raise Exception(msg)
++    if action == "set":
++        def _update_rpath(elf_file, patchelf_bin, verbose):
++            """ Update RPATH
++            """
++            return update_rpath(elf_file, libdirs, patchelf_bin=patchelf_bin,
++                                verbose=verbose)
++        action = _update_rpath
++    elif action == "clear":
++        action = clear_rpath
++    elif action == "sanitize":
++        regex = r"(" + "|".join(patterns) + ")"
++        matcher = re.compile(regex)
++        def _sanitize_rpath(elf_file, patchelf_bin, verbose):
++            """ Sanitize RPATH
++            """
++            return sanitize_rpath(elf_file, matcher, patchelf_bin=patchelf_bin,
++                                  verbose=verbose)
++        action = _sanitize_rpath
++    scan_and_apply(root, action, exclude_dirs=exclude_dirs,
++                   patchelf_bin=args.patchelf_bin, verbose=args.verbose)
++
++
++if __name__ == "__main__":
++    main()
+-- 
+2.4.5
