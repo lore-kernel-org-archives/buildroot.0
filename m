@@ -1,28 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 17:05:40 +0200
-Subject: [Buildroot] [PATCH] libpcap: bump to version 1.7.4
-In-Reply-To: <fec6981b51d4de3b973462eaa37cbec61207d735.1436799218.git.baruch@tkos.co.il>
-References: <fec6981b51d4de3b973462eaa37cbec61207d735.1436799218.git.baruch@tkos.co.il>
-Message-ID: <20150713170540.2343dbe7@free-electrons.com>
+Date: Mon, 13 Jul 2015 17:07:35 +0200
+Subject: [Buildroot] [git commit] nfs-utils: Create missing directory sm.bak
+Message-ID: <20150713150740.BB6EC81955@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=a23d336fbdba575321cfddadf7d671810559b056
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 13 Jul 2015 17:53:38 +0300, Baruch Siach wrote:
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libpcap/libpcap.hash | 2 +-
->  package/libpcap/libpcap.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nfs-utils/S60nfs |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
+index 5e2a2c9..e163d80 100755
+--- a/package/nfs-utils/S60nfs
++++ b/package/nfs-utils/S60nfs
+@@ -10,6 +10,7 @@
+ 
+ mkdir -p /var/lock/subsys
+ mkdir -p /run/nfs/sm
++mkdir -p /run/nfs/sm.bak
+ touch /run/nfs/rmtab
+ 
+ start() {
