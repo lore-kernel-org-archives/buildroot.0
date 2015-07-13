@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 10:10:52 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xproto_kbproto: bump version
-	to 1.0.7
-Message-ID: <20150713081424.E111181958@busybox.osuosl.org>
+Date: Mon, 13 Jul 2015 10:11:29 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xvinfo: bump version to
+	1.1.3
+Message-ID: <20150713081425.13D668195C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b28994d8586e0a079bc034ff0c32a8c8256a4af
+commit: http://git.buildroot.net/buildroot/commit/?id=0a8c627f726fd0a1ff623a079c6e1d5158fb8918
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xproto_kbproto/xproto_kbproto.hash |    4 ++--
- package/x11r7/xproto_kbproto/xproto_kbproto.mk   |    2 +-
+ package/x11r7/xapp_xvinfo/xapp_xvinfo.hash |    4 ++--
+ package/x11r7/xapp_xvinfo/xapp_xvinfo.mk   |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xproto_kbproto/xproto_kbproto.hash b/package/x11r7/xproto_kbproto/xproto_kbproto.hash
-index 07a9b3c..c98e595 100644
---- a/package/x11r7/xproto_kbproto/xproto_kbproto.hash
-+++ b/package/x11r7/xproto_kbproto/xproto_kbproto.hash
+diff --git a/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash b/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash
+index 05e1a74..2077730 100644
+--- a/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash
++++ b/package/x11r7/xapp_xvinfo/xapp_xvinfo.hash
 @@ -1,2 +1,2 @@
--# From http://www.x.org/archive/current/src/everything/CHECKSUMS
--sha256	037cac0aeb80c4fccf44bf736d791fccb2ff7fd34c558ef8f03ac60b61085479	kbproto-1.0.6.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-April/002595.html
-+sha256	f882210b76376e3fa006b11dbd890e56ec0942bc56e65d1249ff4af86f90b857	kbproto-1.0.7.tar.bz2
-diff --git a/package/x11r7/xproto_kbproto/xproto_kbproto.mk b/package/x11r7/xproto_kbproto/xproto_kbproto.mk
-index 868e518..b6c818f 100644
---- a/package/x11r7/xproto_kbproto/xproto_kbproto.mk
-+++ b/package/x11r7/xproto_kbproto/xproto_kbproto.mk
+-# From http://lists.x.org/archives/xorg-announce/2013-February/002165.html
+-sha256	eed3d90ffd788ef728c4a5e7aa4bd86dc6bbcebac929caf7a0479cf8b53b50e3	xvinfo-1.1.2.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-April/002596.html
++sha256	9fba8b68daf53863e66d5004fa9c703fcecf69db4d151ea2d3d885d621e6e5eb	xvinfo-1.1.3.tar.bz2
+diff --git a/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk b/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
+index 0446ed3..5b05a63 100644
+--- a/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
++++ b/package/x11r7/xapp_xvinfo/xapp_xvinfo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XPROTO_KBPROTO_VERSION = 1.0.6
-+XPROTO_KBPROTO_VERSION = 1.0.7
- XPROTO_KBPROTO_SOURCE = kbproto-$(XPROTO_KBPROTO_VERSION).tar.bz2
- XPROTO_KBPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
- XPROTO_KBPROTO_LICENSE = MIT
+-XAPP_XVINFO_VERSION = 1.1.2
++XAPP_XVINFO_VERSION = 1.1.3
+ XAPP_XVINFO_SOURCE = xvinfo-$(XAPP_XVINFO_VERSION).tar.bz2
+ XAPP_XVINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XVINFO_LICENSE = MIT
