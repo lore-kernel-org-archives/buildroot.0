@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 18:44:18 +0200
-Subject: [Buildroot] [PATCH v3 2/2] powerpc-utils: optionally use librtas
-In-Reply-To: <9a73202315e0a236b78d9644905c20b79572f93d.1432015191.git.sam.bobroff@au1.ibm.com>
-References: <cover.1432015191.git.sam.bobroff@au1.ibm.com>
- <9a73202315e0a236b78d9644905c20b79572f93d.1432015191.git.sam.bobroff@au1.ibm.com>
-Message-ID: <20150713184418.66c0298b@free-electrons.com>
+Date: Mon, 13 Jul 2015 18:44:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ntp: increase pool server count
+ in default config
+In-Reply-To: <1432093452-18281-1-git-send-email-imrehg@gmail.com>
+References: <1432093452-18281-1-git-send-email-imrehg@gmail.com>
+Message-ID: <20150713184450.69f7a58c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sam Bobroff,
+Dear Gergely Imreh,
 
-On Tue, 19 May 2015 15:59:56 +1000, Sam Bobroff wrote:
-> Now that librtas is available, optionally use it with powerpc-utils to
-> enable it's RTAS dependant functionality.  It is used by default, as
-> most distros do, but made optional because it adds several new programs
-> and significantly increases the size of the installed package.
+On Wed, 20 May 2015 03:44:17 +0000, Gergely Imreh wrote:
+> To protect agains 1 falsticker NTP server, the client needs to connect
+> to at least 4 servers.
 > 
-> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> Source:
+>  http://support.ntp.org/bin/view/Support/SelectingOffsiteNTPServers
+>  5.3.3. Upstream Time Server Quantity
+> 
+> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
 > ---
-> v3:
+>  package/ntp/ntpd.etc.conf | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Applied after propagating the glibc dependency of librtas, as noted by
-Romain Naour.
-
-Thanks!
+Applied, thanks.
 
 Thomas
 -- 
