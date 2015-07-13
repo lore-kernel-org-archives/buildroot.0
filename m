@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 18:37:47 +0200
-Subject: [Buildroot] [PATCH v3 1/2] librtas: new package
-In-Reply-To: <671713efe39467f10b56db5074d472dc45ceeec9.1432015191.git.sam.bobroff@au1.ibm.com>
-References: <cover.1432015191.git.sam.bobroff@au1.ibm.com>
- <671713efe39467f10b56db5074d472dc45ceeec9.1432015191.git.sam.bobroff@au1.ibm.com>
-Message-ID: <20150713183747.738a5fc9@free-electrons.com>
+Date: Mon, 13 Jul 2015 18:43:36 +0200
+Subject: [Buildroot] [PATCH 1/1] ti-wl12xx_target_scripts: new package
+In-Reply-To: <55A3E37A.4080503@adeneo-embedded.us>
+References: <1407445843-24031-1-git-send-email-jtheou@adeneo-embedded.us>
+ <20150712185712.6f0b6e90@free-electrons.com>
+ <55A3E37A.4080503@adeneo-embedded.us>
+Message-ID: <20150713184336.2dabf9bd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sam Bobroff,
+Dear Jean-Baptiste Theou,
 
-On Tue, 19 May 2015 15:59:55 +1000, Sam Bobroff wrote:
-> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-> ---
-> v2:
+On Mon, 13 Jul 2015 09:12:42 -0700, Jean-Baptiste Theou wrote:
 
-Applied after the following changes:
+> I am not actively working on this driver, and I don't have the HW to 
+> test it properly.
+> So please drop this patch.
 
-    [Thomas:
-      - make the package depend on glibc, since it needs execinfo.h
-      - use TARGET_CONFIGURE_OPTS instead of defining manually CC and LD
-      - add hash file
-      - remove useless empty newline.
-      Thanks to Romain Naour for the review!]
+Thanks for the feedback. We already marked the patch as "Changes
+Requested", which means the patch is no longer in the list of pending
+patches. So unless someone resends a new version, we will simply not
+take care of it anymore.
 
-Thanks for the contribution!
+Thanks!
 
 Thomas
 -- 
