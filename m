@@ -1,45 +1,43 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Mon, 13 Jul 2015 15:35:32 -0500
-Subject: [Buildroot] [PATCH 1/1] ntfs-3g: fix incorrect comment
-	dependency
-In-Reply-To: <20150713223221.0693722c@free-electrons.com>
-References: <1436819277-48747-1-git-send-email-ryan.barnett@rockwellcollins.com>
- <20150713223221.0693722c@free-electrons.com>
-Message-ID: <CAMQcK5KfKK9wOV+wG5NU7=HtP6bUH02yAE6V53W2M0i741+TFw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jul 2015 22:36:38 +0200
+Subject: [Buildroot] [PATCH v2] skeleton: apply locale settings in user
+ shells
+In-Reply-To: <1436741713-27300-1-git-send-email-arnout@mind.be>
+References: <1421684056-5266-6-git-send-email-maxtram95@gmail.com>
+ <1436741713-27300-1-git-send-email-arnout@mind.be>
+Message-ID: <20150713223638.73d6deaa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Dear Arnout Vandecappelle (Essensium/Mind),
 
-On Mon, Jul 13, 2015 at 3:32 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Ryan Barnett,
->>
->>  comment "ntfs-3g needs a toolchain w/ wchar, threads, dynamic library"
->>       depends on BR2_USE_MMU
->> -     depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && BR2_STATIC_LIBS)
->> +     depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && !BR2_STATIC_LIBS)
->
-> I personally prefer:
->
->         depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
->
-> I think we do that for most packages, and it's somewhat easier to understand.
+On Mon, 13 Jul 2015 00:55:13 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> From: Maxim Mikityanskiy <maxtram95@gmail.com>
+> 
+> Add /etc/profile.d/locale.sh script from Arch Linux to /etc/profile.
+> This script looks for locale.conf, sources it, and exports the LANG and
+> LC_* variables.
+> 
+> [Arnout: put in /etc/profile in the skeleton rather than making it
+>  systemd specific.]
+> 
+> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> v2 [Arnout]: make the modification to /etc/profile in the skeleton
+> rather than something systemd-specific - proposed by Samuel Martin.
+> ---
+>  system/skeleton/etc/profile | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 
-OK - I really don't have a preference but I agree for consistency
-across buildroot it would be better to change to what you suggested.
+Applied, thanks.
 
-I will submit a v2 here.
-
-Thanks,
--Ryan
-
+Thomas
 -- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
