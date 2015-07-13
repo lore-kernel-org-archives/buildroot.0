@@ -1,102 +1,40 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 14 Jul 2015 01:10:02 +0200
-Subject: [Buildroot] [PATCH v2 3/4] package/perf: migrate perf to use
- the new linux-tools infrastructure
-In-Reply-To: <1436822225-29591-4-git-send-email-romain.naour@openwide.fr>
-References: <1436822225-29591-1-git-send-email-romain.naour@openwide.fr>
- <1436822225-29591-4-git-send-email-romain.naour@openwide.fr>
-Message-ID: <CAHXCMMKpWZZaxDfrK33cExJAex_kipXtuRMejeKuMsVxO9U9=A@mail.gmail.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Mon, 13 Jul 2015 18:13:09 -0500
+Subject: [Buildroot] [PATCH 1/1] linux: add server options for NFSD
+Message-ID: <1436829189-90663-1-git-send-email-ryan.barnett@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, all,
+When nfs-utils packages is selected, automatically enable the kernel
+options for NFSD. This will allow for an NFS server to work by only
+adding /etc/exports to the filesystem.
 
-On Mon, Jul 13, 2015 at 11:17 PM, Romain Naour <romain.naour@openwide.fr> wrote:
-> Remove perf package and add legacy handling.
->
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
-> v2: remove LINUX_TOOL prefix
->     use $(D) instead of $(LINUX_DIR)
->     fix title style
->     remove useless O=$(@D)
-> ---
->  Config.in.legacy         |  7 +++++
->  linux/Config.tools.in    | 18 +++++++++++++
->  linux/linux-tool-perf.mk | 63 ++++++++++++++++++++++++++++++++++++++++++++
->  package/Config.in        |  1 -
->  package/perf/Config.in   | 21 ---------------
->  package/perf/perf.mk     | 68 ------------------------------------------------
->  6 files changed, 88 insertions(+), 90 deletions(-)
->  create mode 100644 linux/linux-tool-perf.mk
->  delete mode 100644 package/perf/Config.in
->  delete mode 100644 package/perf/perf.mk
-Tips:
-  git format-patch -M ...
-or (persistent settings):
-  git config --global diff.renames copy
-  git config --global diff.renameLimit 5000
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+---
 
->
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 0a8d0a6..c0f3a10 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -107,6 +107,13 @@ endif
->  ###############################################################################
->  comment "Legacy options removed in 2015.08"
->
-> +config BR2_PACKAGE_PERF
-> +       bool "perf"
-Extend the prompt telling what has changed, e.g.:
-  bool "perf option has been renamed"
+Test with qemu_x86_defconfig
 
-> +       select BR2_LEGACY
-> +       select BR2_LINUX_KERNEL_TOOL_PERF
-> +       help
-> +         Perf package has been moved to linux tools package.
-> +
->  config BR2_BINUTILS_VERSION_2_22
->         bool "binutils 2.22 removed"
->         select BR2_LEGACY
-> diff --git a/linux/Config.tools.in b/linux/Config.tools.in
-> index 008e68c..0c94d55 100644
-> --- a/linux/Config.tools.in
-> +++ b/linux/Config.tools.in
-> @@ -8,4 +8,22 @@ config BR2_LINUX_KERNEL_TOOL_CPUPOWER
->           cpupower is a collection of tools to examine and tune power
->           saving related features of your processor.
->
-> +config BR2_LINUX_KERNEL_TOOL_PERF
-> +       bool "perf"
-> +       help
-> +         perf (sometimes "Perf Events" or perf tools, originally
-> +         "Performance Counters for Linux") - is a performance
-> +         analyzing tool in Linux, available from kernel version
-> +         2.6.31. User-space controlling utility, called 'perf' has
-> +         git-like interface with subcommands. It is capable of
-> +         statistical profiling of entire system (both kernel and user
-> +         code), single CPU or severals threads.
-> +
-> +         This package builds and install the userspace 'perf'
-s/This package/This will/
-s/install/installs/
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+---
+ linux/linux.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> +         command. It is up to the user to ensure that the kernel
-> +         configuration has all the suitable options enabled to allow a
-> +         proper operation of 'perf'.
-> +
-> +         https://perf.wiki.kernel.org/
-> +
->  endmenu
-[...]
-
-Regards,
-
-
+diff --git a/linux/linux.mk b/linux/linux.mk
+index b602a04..ef876c4 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -229,6 +229,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 	$(if $(BR2_PACKAGE_XTABLES_ADDONS),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
++	$(if $(BR2_PACKAGE_NFS_UTILS),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFSD,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFSD_V4,$(@D)/.config))
+ 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
+ endef
 -- 
-Samuel
+1.9.1
