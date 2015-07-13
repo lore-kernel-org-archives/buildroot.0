@@ -1,58 +1,41 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Mon, 13 Jul 2015 18:30:05 -0500
-Subject: [Buildroot] [PATCH 1/1] linux: add server options for NFSD
-In-Reply-To: <55A44820.3080406@mind.be>
-References: <1436829189-90663-1-git-send-email-ryan.barnett@rockwellcollins.com>
- <55A44820.3080406@mind.be>
-Message-ID: <CAMQcK5K5HTDzfSkcifjsKSdxjsWBE4uvosPTrObkAC3abcyFTg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Jul 2015 01:31:07 +0200
+Subject: [Buildroot] [git commit] fs/iso9660: change the name of the tmp dir
+	to be consistent
+Message-ID: <20150713233111.60BD78198B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+commit: http://git.buildroot.net/buildroot/commit/?id=4d1a9d8cd8f4722ecb059552ebb837eef53f7a95
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Jul 13, 2015 at 6:22 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 07/14/15 01:13, Ryan Barnett wrote:
->> When nfs-utils packages is selected, automatically enable the kernel
->> options for NFSD. This will allow for an NFS server to work by only
->> adding /etc/exports to the filesystem.
->>
->> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
->> ---
->>
->> Test with qemu_x86_defconfig
->>
->> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
->> ---
->>  linux/linux.mk | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/linux/linux.mk b/linux/linux.mk
->> index b602a04..ef876c4 100644
->> --- a/linux/linux.mk
->> +++ b/linux/linux.mk
->> @@ -229,6 +229,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
->>       $(if $(BR2_PACKAGE_XTABLES_ADDONS),
->>               $(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
->>               $(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
->> +     $(if $(BR2_PACKAGE_NFS_UTILS),
->> +             $(call KCONFIG_ENABLE_OPT,CONFIG_NFSD,$(@D)/.config)
->> +             $(call KCONFIG_ENABLE_OPT,CONFIG_NFSD_V4,$(@D)/.config))
->
->  Since v4 is currently disabled in nfs-utils, this isn't useful at the moment,
-> right?
+Currently, the generated rootfs will be called rootfs.iso9660, but the
+temporary directory we create while building it is called
+rootfs-iso9660.tmp. They are in different directories so it's not so
+obvious, but still to be consistent it's better to call the temp dir
+rootfs.iso9660.tmp.
 
-Hmm - good catch I just assumed that it had the support enabled. I
-will send an update to just support CONFIG_NFSD.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/iso9660/iso9660.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks,
--Ryan
-
--- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 6ed979c..d836194 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -35,7 +35,7 @@ ROOTFS_ISO9660_USE_INITRD = YES
+ endif
+ 
+ ifeq ($(ROOTFS_ISO9660_USE_INITRD),YES)
+-ROOTFS_ISO9660_TARGET_DIR = $(BUILD_DIR)/rootfs-iso9660.tmp
++ROOTFS_ISO9660_TARGET_DIR = $(BUILD_DIR)/rootfs.iso9660.tmp
+ define ROOTFS_ISO9660_CREATE_TEMPDIR
+ 	$(RM) -rf $(ROOTFS_ISO9660_TARGET_DIR)
+ 	mkdir -p $(ROOTFS_ISO9660_TARGET_DIR)
