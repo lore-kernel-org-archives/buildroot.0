@@ -1,46 +1,74 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 14 Jul 2015 00:15:36 +0200
-Subject: [Buildroot] [PATCH v2 1/2] purge-locales: skip /usr/man and
-	/usr/share/man
-Message-ID: <1436825737-6264-1-git-send-email-arnout@mind.be>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Tue, 14 Jul 2015 00:20:27 +0200
+Subject: [Buildroot] NFS Server on Buildroot Target
+In-Reply-To: <CAMQcK5+eTg508+qHvP+_J_uB5L8vXHCKORvU=PmDpBXcZJ4swg@mail.gmail.com>
+References: <CAMQcK5+eTg508+qHvP+_J_uB5L8vXHCKORvU=PmDpBXcZJ4swg@mail.gmail.com>
+Message-ID: <CAGduivypjBF2P_8yqRi3JwzuCxyWUQgx9nfL-Td+-G+jSSFZYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These directories are going to be removed anyway, so no point purging
-their locales.
+Hi Ryan,
+On Tue, Jul 14, 2015 at 12:03 AM, Ryan Barnett
+<ryan.barnett@rockwellcollins.com> wrote:
+> Hello,
+>
+> Today I attempted to get an NFS working on a embedded target and
+> struggled with getting the 'nfs-utils' package to work to provided NFS
+> server functionality. By selecting the 'nfs-utils' package, the NFS
+> server functionally does NOT work by default. Before I even attempted
+> this, I had the kernel configuration options selected for NFSD. It
+> turned out that I needed to have the rpcbind package selected in order
+> to make it work, however, this was after a couple hours of trying to
+> debug this.
+I submitted some patches for nfs-utils, which selects rcpbind and fix
+the startup scripts.
+I was able to start it and after creating an /etc/exports file was
+successfull in mounting it.
 
-This also allows us to simplify the loop a bit.
+Note that when you mount from your client, you may need to specify the
+version of the protocol (2/3 as we don't build nfsv4).
+If you need nfsv4, feel free to send patches, I did not do it as I
+never had any real use of nfsv4 specifically.
+>
+> I have a few questions that I would like feedback on as I would like
+> to propose a patch that will allow the nfs-util package to work by
+> default.
+>
+> First, should the nfs-util package automatically 'select' on the
+> kernel configuration options for NFSD?
+It's a good idea, don't forget that people may build their kernel
+externally from Buildroot and then nfsd won't work.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-v2: remove the grep -v man as well, which allows us to use $dir/*
-    instead of the funky ls construct.
----
- Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 4b6360b..a26f87d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -544,11 +544,11 @@ define PURGE_LOCALES
- 	rm -f $(LOCALE_WHITELIST)
- 	for i in $(LOCALE_NOPURGE) locale-archive; do echo $$i >> $(LOCALE_WHITELIST); done
- 
--	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/man /usr/share/man /usr/lib/locale)); \
-+	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/lib/locale)); \
- 	do \
--		for lang in $$(cd $$dir; ls .|grep -v man); \
-+		for langdir in $$dir/*; \
- 		do \
--			grep -qx $$lang $(LOCALE_WHITELIST) || rm -rf $$dir/$$lang; \
-+			grep -qx $${langdir##*/} $(LOCALE_WHITELIST) || rm -rf $$langdir; \
- 		done; \
- 	done
- endef
--- 
-2.1.4
+Do you want to work on that ?
+>
+> Other package do this so I would argue that it should.
+>
+> Second, in order to make the default startup configuration work,
+> rpcbind is required. Should this be an added dependency since the goal
+> of a package is to have it work by default?
+Thas was done with the patches I sent previously, the current master
+should work.
+>
+> Any suggestion or feedback would be appreciated.
+>
+> Thanks,
+> -Ryan
+>
+> [Extra] Looks like someone posted something similar to the mailing
+> list in January of 2013
+>
+> http://lists.busybox.net/pipermail/buildroot/2013-January/065498.html
+>
+> --
+> Ryan Barnett / Sr Software Engineer
+> Airborne Information Systems / Security Systems and Software
+> MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+> ryan.barnett at rockwellcollins.com
+> www.rockwellcollins.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
