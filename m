@@ -1,47 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 17:01:29 +0200
-Subject: [Buildroot] [PATCH] busybox: Add NTP startup script
-In-Reply-To: <1436731935-25223-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1436731935-25223-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150713170129.3732523a@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 13 Jul 2015 18:01:47 +0300
+Subject: [Buildroot] [PATCH] package/dropbear: fix generatign keys on RO
+ file systems
+In-Reply-To: <1436798945-6869-1-git-send-email-yann.morin.1998@free.fr>
+References: <1436798945-6869-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150713150147.GU2451@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Hi Yann,
 
-On Sun, 12 Jul 2015 22:12:15 +0200, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/busybox/S49ntp        | 25 +++++++++++++++++++++++++
->  package/busybox/busybox.mk    | 10 ++++++++++
->  package/busybox/ntpd.etc.conf |  4 ++++
->  3 files changed, 39 insertions(+)
->  create mode 100644 package/busybox/S49ntp
->  create mode 100644 package/busybox/ntpd.etc.conf
+On Mon, Jul 13, 2015 at 04:49:05PM +0200, Yann E. MORIN wrote:
+> +	if ! [ -d /etc/dropbear ]; then
+> +		if ! rm -f /etc/dropbear; then
 
-I wanted to apply this, but unfortunately, ntpd doesn't work here
-because it really wants my kernel to have IPv6 support.
+'rm -f' always succeeds.
 
-But other than that, I had done some other changes to your patch, see
-the attached patch for the latest version I had.
+> +			mkdir -p /etc/dropbear
+> +		else
+> +			mkdir -p $(readlink -f /etc/dropbear)
+> +		fi
+> +	fi
 
-Can you look into this IPv6 related issue and see if it can be solved,
-or at least a bug report filed with the Busybox people.
+baruch
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-busybox-Add-NTP-startup-script.patch
-Type: text/x-patch
-Size: 2797 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150713/3280081d/attachment.bin>
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
