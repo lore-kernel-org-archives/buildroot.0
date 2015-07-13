@@ -1,36 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 17:19:56 +0200
-Subject: [Buildroot] [git commit] scripts: mkmakefile: set umask before
-	calling BR's makefile
-Message-ID: <20150713152050.DE5028194A@busybox.osuosl.org>
+Date: Mon, 13 Jul 2015 17:20:58 +0200
+Subject: [Buildroot] [PATCH v4 6/9] scripts: mkmakefile: set umask
+ before calling BR's makefile
+In-Reply-To: <1416586748-12936-7-git-send-email-guido@vanguardiasur.com.ar>
+References: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1416586748-12936-7-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <20150713172058.48fdd71e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd13247a22884880fd759796dfdfad728590d5d4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Guido Mart?nez,
 
-Small optimization so we don't have another 'make' level (caused by the
-umask fix) when running the generated makefile.
+On Fri, 21 Nov 2014 13:19:05 -0300, Guido Mart?nez wrote:
+> Small optimization so we don't have another 'make' level (caused by the
+> umask fix) when running the generated makefile.
+> 
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> ---
+>  support/scripts/mkmakefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/scripts/mkmakefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
-index 27b1507..974e2c0 100755
---- a/support/scripts/mkmakefile
-+++ b/support/scripts/mkmakefile
-@@ -35,7 +35,7 @@ MAKEFLAGS += --no-print-directory
- all	:= \$(filter-out Makefile,\$(MAKECMDGOALS))
- 
- _all:
--	\$(MAKE) \$(MAKEARGS) \$(all)
-+	umask 0022 && \$(MAKE) \$(MAKEARGS) \$(all)
- 
- Makefile:;
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
