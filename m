@@ -1,48 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 22:32:21 +0200
-Subject: [Buildroot] [PATCH 1/1] ntfs-3g: fix incorrect comment
- dependency
-In-Reply-To: <1436819277-48747-1-git-send-email-ryan.barnett@rockwellcollins.com>
-References: <1436819277-48747-1-git-send-email-ryan.barnett@rockwellcollins.com>
-Message-ID: <20150713223221.0693722c@free-electrons.com>
+Date: Mon, 13 Jul 2015 22:33:24 +0200
+Subject: [Buildroot] [git commit] atftp: fix build with gcc5
+Message-ID: <20150713203329.E229981933@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+commit: http://git.buildroot.net/buildroot/commit/?id=aac3f315d9f4ec08728778e08a633f3b193522ed
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 13 Jul 2015 15:27:57 -0500, Ryan Barnett wrote:
-> The comment for ntfs-3g displays even when the package has met its
-> necessary dependencies.
-> 
-> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-> ---
->  package/ntfs-3g/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/ntfs-3g/Config.in b/package/ntfs-3g/Config.in
-> index a860498..054e5b6 100644
-> --- a/package/ntfs-3g/Config.in
-> +++ b/package/ntfs-3g/Config.in
-> @@ -32,4 +32,4 @@ endif
->  
->  comment "ntfs-3g needs a toolchain w/ wchar, threads, dynamic library"
->  	depends on BR2_USE_MMU
-> -	depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && BR2_STATIC_LIBS)
-> +	depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && !BR2_STATIC_LIBS)
+gcc5 defaults to -std=gnu11 which changes the inline semantics. This leads to
+multiple definition error with 'extern inline'. See
+https://gcc.gnu.org/gcc-5/porting_to.html for the details.
 
-I personally prefer:
+Fixes:
+http://autobuild.buildroot.net/results/762/762bce2bbc1f994cc796f0442bfa73b7ad64e272/
+http://autobuild.buildroot.net/results/28b/28bf6018dcf91ddacfb76f54a92313da8bf182e1/
+http://autobuild.buildroot.net/results/fde/fdee23ecd0c5c66fda1ed38efe43048ce934b733/
 
-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/atftp/atftp.mk |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
-I think we do that for most packages, and it's somewhat easier to understand.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/atftp/atftp.mk b/package/atftp/atftp.mk
+index 4d9a71b..615b6ea 100644
+--- a/package/atftp/atftp.mk
++++ b/package/atftp/atftp.mk
+@@ -11,7 +11,12 @@ ATFTP_LICENSE_FILES = LICENSE
+ ATFTP_CONF_OPTS = --disable-libwrap --disable-mtftp
+ # For static we need to explicitly link against libpthread
+ ATFTP_LIBS = -lpthread
+-ATFTP_CONF_ENV = LIBS="$(ATFTP_LIBS)"
++# We use CPPFLAGS for -fgnu89-inline even though it's a compiler flag
++# because atftp discards configure environment CFLAGS. -fgnu89-inline
++# is needed to avoid multiple definition error with gcc 5. See
++# https://gcc.gnu.org/gcc-5/porting_to.html.
++ATFTP_CONF_ENV = LIBS="$(ATFTP_LIBS)" \
++	CPPFLAGS="$(TARGET_CPPFLAGS) -fgnu89-inline"
+ 
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ ATFTP_DEPENDENCIES += readline
