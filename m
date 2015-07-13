@@ -1,30 +1,35 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Mon, 13 Jul 2015 15:27:57 -0500
-Subject: [Buildroot] [PATCH 1/1] ntfs-3g: fix incorrect comment dependency
-Message-ID: <1436819277-48747-1-git-send-email-ryan.barnett@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jul 2015 22:28:09 +0200
+Subject: [Buildroot] [git commit] nginx: activate the systemd service
+Message-ID: <20150713202813.1F51581973@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The comment for ntfs-3g displays even when the package has met its
-necessary dependencies.
+commit: http://git.buildroot.net/buildroot/commit/?id=112ab5f40467f8d8b89cdba99d864f33a7618054
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Signed-off-by: Aur??lien Chabot <aurelien@chabot.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ntfs-3g/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/nginx/nginx.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/ntfs-3g/Config.in b/package/ntfs-3g/Config.in
-index a860498..054e5b6 100644
---- a/package/ntfs-3g/Config.in
-+++ b/package/ntfs-3g/Config.in
-@@ -32,4 +32,4 @@ endif
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index c617f68..32a337c 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -230,6 +230,11 @@ endef
+ define NGINX_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 package/nginx/nginx.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/nginx.service
++
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++
++	ln -fs ../../../../usr/lib/systemd/system/nginx.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nginx.service
+ endef
  
- comment "ntfs-3g needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && BR2_STATIC_LIBS)
-+	depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && !BR2_STATIC_LIBS)
--- 
-1.9.1
+ define NGINX_INSTALL_INIT_SYSV
