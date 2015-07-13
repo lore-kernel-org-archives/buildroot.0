@@ -1,106 +1,80 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Mon, 13 Jul 2015 02:38:09 +0200
-Subject: [Buildroot] [PATCH v2] quazip: new package
-Message-ID: <1436747889-23748-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+From: Matthew Weber <matt@thewebers.ws>
+Date: Sun, 12 Jul 2015 20:20:08 -0500
+Subject: [Buildroot] [PATCH v2] busybox: udhcpc create leases file
+In-Reply-To: <1432609857-26391-1-git-send-email-matt@thewebers.ws>
+References: <1432609857-26391-1-git-send-email-matt@thewebers.ws>
+Message-ID: <CAFt09wOaZVpkbkC+9_QVmO6gfeOzu8NiPiJ2GM3Gh6K1f_2b6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
----
-Changes v1 -> v2:
-    - correct license file name
+All,
 
- package/Config.in          |  1 +
- package/quazip/Config.in   |  9 +++++++++
- package/quazip/quazip.hash |  2 ++
- package/quazip/quazip.mk   | 39 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 51 insertions(+)
- create mode 100644 package/quazip/Config.in
- create mode 100644 package/quazip/quazip.hash
- create mode 100644 package/quazip/quazip.mk
+On Mon, May 25, 2015 at 10:10 PM, Matt Weber <matt@thewebers.ws> wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index ffa0aec..fb2069e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -264,6 +264,7 @@ comment "QT libraries and helper libraries"
- 	source "package/qextserialport/Config.in"
- 	source "package/qjson/Config.in"
- 	source "package/qtuio/Config.in"
-+	source "package/quazip/Config.in"
- 	source "package/qwt/Config.in"
- endif
- 	source "package/weston/Config.in"
-diff --git a/package/quazip/Config.in b/package/quazip/Config.in
-new file mode 100644
-index 0000000..8c41478
---- /dev/null
-+++ b/package/quazip/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_QUAZIP
-+	bool "quazip"
-+	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
-+    select BR2_PACKAGE_ZLIB
-+	help
-+	  QuaZIP is a simple C++ wrapper over Gilles Vollant's ZIP/UNZIP package
-+	  that can be used to access ZIP archives. It uses the Qt toolkit.
-+
-+	  http://quazip.sourceforge.net
-diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
-new file mode 100644
-index 0000000..84b56c7
---- /dev/null
-+++ b/package/quazip/quazip.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 78c984103555c51e6f7ef52e3a2128e2beb9896871b2cc4d4dbd4d64bff132de quazip-0.7.1.tar.gz
-diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
-new file mode 100644
-index 0000000..ce36a9b
---- /dev/null
-+++ b/package/quazip/quazip.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# quazip
-+#
-+################################################################################
-+
-+QUAZIP_VERSION = 0.7.1
-+QUAZIP_SITE = http://sourceforge.net/projects/quazip/files/quazip/$(QUAZIP_VERSION)/
-+QUAZIP_SOURCE=quazip-$(QUAZIP_VERSION).tar.gz
-+QUAZIP_INSTALL_STAGING = YES
-+QUAZIP_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_QT),qt) \
-+	$(if $(BR2_PACKAGE_QT5),qt5base)
-+QUAZIP_LICENSE = LGPLv2.1
-+QUAZIP_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_QT5),y)
-+QUAZIP_QMAKE=$(QT5_QMAKE)
-+else
-+QUAZIP_QMAKE=$(QT_QMAKE)
-+endif
-+
-+define QUAZIP_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(QUAZIP_QMAKE) PREFIX=/usr)
-+endef
-+
-+define QUAZIP_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QUAZIP_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
-+endef
-+
-+define QUAZIP_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
-+endef
-+
-+$(eval $(generic-package))
+> Capture the lease information for use by applications
+> after a lease is aquired.
+>
+> Signed-off-by: Matt Weber <matthew.l.weber@gmail.com>
+> ---
+>
+> Changes v1 -> v2
+>  - Changed from appending to keeping just the last lease
+>  - Adjusted format to pure shell variables instead of
+>    dhclient format.
+>  - Moved location to /var/run instead of /var/lib/misc
+> ---
+>  package/busybox/udhcpc.script | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>
+> diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+> index 50c52e6..e913111 100755
+> --- a/package/busybox/udhcpc.script
+> +++ b/package/busybox/udhcpc.script
+> @@ -61,6 +61,27 @@ case "$1" in
+>                         echo adding dns $i
+>                         echo "nameserver $i # $interface" >> $RESOLV_CONF
+>                 done
+> +
+> +               # Record last lease
+> +               {
+> +                   echo "IFACE=$interface"
+> +                   echo "IP=$ip"
+> +                   [ -n "$subnet" ]    && echo "MASK=$subnet"
+> +                   [ -n "$router" ]    && echo "ROUTER=$router"
+> +                   [ -n "$dns" ]       && echo "DNS=\"$dns\""
+> +                   [ -n "$domain" ]    && echo "DOMAIN=$domain"
+> +                   [ -n "$boot_file" ] && echo "BOOT_FILE=$boot_file"
+> +                   echo "DHCP_LEASE_TIME=$lease"
+> +                   echo "DHCP_MSG_TYPE=$dhcptype"
+> +                   echo "DHCP_SERVER_ID=${siaddr:-$serverid}"
+> +                   d=$(expr "$(date "+%Y.%m.%d-%H:%M:%S")" : "\(.*\):")
+> +                   t=$(date -d "$d:$(expr $lease / 2)" "+%w %Y/%m/%d
+> %H:%M:%S" 2>/dev/null)
+> +                   [ -n "$t" ] && echo "DHCP_RENEW=\"$t\""
+> +                   t=$(date -d "$d:$(expr 7 '*' $lease / 8)" "+%w
+> %Y/%m/%d %H:%M:%S" 2>/dev/null)
+> +                   [ -n "$t" ] && echo "DHCP_REBIND=\"$t\""
+> +                   t=$(date -d "$d:$lease" "+%w %Y/%m/%d %H:%M:%S"
+> 2>/dev/null)
+> +                   [ -n "$t" ] && echo "DHCP_EXPIRE=\"$t\""
+> +               } > /var/run/udhcpc.$interface.leases
+>                 ;;
+>  esac
+>
+> --
+> 1.9.1
+>
+>
+Since the hook scripts where added for the udhcpc.script, is the preference
+to use a hook for something like a record of the last lease?
+
+
 -- 
-2.1.4
+Thanks,
+Matt
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150712/132de537/attachment.html>
