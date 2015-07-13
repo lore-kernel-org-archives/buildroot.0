@@ -1,46 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jul 2015 12:32:02 +0200
-Subject: [Buildroot] [PATCH 5/7 v2] boot/barebox: check for config file
-	before calling kconfig-package
+Date: Mon, 13 Jul 2015 12:32:03 +0200
+Subject: [Buildroot] [PATCH 6/7 v2] package/busybox: check for config file
 In-Reply-To: <cover.1436783490.git.yann.morin.1998@free.fr>
 References: <cover.1436783490.git.yann.morin.1998@free.fr>
-Message-ID: <fd6209a0c16ec96ed62abcc7d532784efb1205b0.1436783490.git.yann.morin.1998@free.fr>
+Message-ID: <daa164c4ba8e5c04a66ea25c21d1109d2120bf96.1436783490.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If we check that the user provides a config file after we call to the
-kconfig-package infra, the error message we get is the one for the
-kconfig-package infra, not the custom error message we want to show to
-the user.
-
-So, only call kconfig-package after we do the check.
+Add a check (before we call kconfig-package) that ensures the user has
+set a kconfig-file.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- boot/barebox/barebox.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 7e53037..e45976d 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -109,10 +109,12 @@ define BAREBOX_INSTALL_TARGET_CMDS
+---
+Changes v1 -> v2:
+  - use BR_BUILDING in its own ifeq, do not coalesce with the existing
+    ifeq
+  - fix commit log
+---
+ package/busybox/busybox.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 92874cd..1b20429 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -207,4 +207,12 @@ define BUSYBOX_INSTALL_INIT_SYSV
+ 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
  endef
- endif
  
--$(eval $(kconfig-package))
--
 +# Checks to give errors that the user can understand
 +# Must be before we call to kconfig-package
- ifeq ($(BR2_TARGET_BAREBOX)$(BR_BUILDING),yy)
- ifeq ($(BAREBOX_SOURCE_CONFIG),)
- $(error No Barebox config file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE settings)
- endif
- endif
++ifeq ($(BR_BUILDING),y)
++ifeq ($(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG)),)
++$(error No BusyBox configuration file specified, check your BR2_PACKAGE_BUSYBOX_CONFIG setting)
++endif
++endif
 +
-+$(eval $(kconfig-package))
+ $(eval $(kconfig-package))
 -- 
 1.9.1
