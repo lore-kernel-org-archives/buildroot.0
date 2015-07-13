@@ -1,62 +1,72 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 13 Jul 2015 14:34:44 +0300
-Subject: [Buildroot] [git commit] nfs-utils: Bump version
-In-Reply-To: <20150713132727.36186916@free-electrons.com>
-References: <20150713105646.ABAB581942@busybox.osuosl.org>
- <20150713111001.GQ2451@tarshish>
- <20150713132727.36186916@free-electrons.com>
-Message-ID: <20150713113444.GR2451@tarshish>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 13 Jul 2015 13:35:53 +0200
+Subject: [Buildroot] [PATCH v4 2/9] Makefile: don't depend on current
+ skeleton/overlay permissions
+In-Reply-To: <1416586748-12936-3-git-send-email-guido@vanguardiasur.com.ar>
+References: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1416586748-12936-3-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <55A3A299.4070206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On 11/21/14 17:19, Guido Mart?nez wrote:
+> We use 'rsync -a' to copy the skeleton and overlays, so the target ends
+> up with the exact same permissions as on the repo. The problem is we
+> don't track these permissions, since Git doesn't allow for that (except
+> for the exec bit). This means users with different umasks at the time of
+> cloning could end up with different target permissions.
+> 
+> Fix this by using --chmod on rsync calls so we don't depend on the
+> current permission set for the skeleton and overlays. We do depend on
+> the exec bit, but that's fine since that one is tracked by Git.
+> 
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
 
-On Mon, Jul 13, 2015 at 01:27:27PM +0200, Thomas Petazzoni wrote:
-> On Mon, 13 Jul 2015 14:10:01 +0300, Baruch Siach wrote:
-> > On Mon, Jul 13, 2015 at 12:54:42PM +0200, Thomas Petazzoni wrote:
-> > > [Thomas: add patch to fix rpc.statd foreground/daemon mode backported
-> > > from upstream, and fix the S60nfs init script to not use the -F option
-> > > of rpc.statd.]
-> > 
-> > [snip]
-> > 
-> > > diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
-> > > index 91410ee..5e2a2c9 100755
-> > > --- a/package/nfs-utils/S60nfs
-> > > +++ b/package/nfs-utils/S60nfs
-> > > @@ -21,7 +21,6 @@ start() {
-> > >  
-> > >  	echo -n "Starting NFS services: "
-> > >  	/usr/sbin/exportfs -r
-> > > -	rpc.statd
-> > 
-> > rpc.statd invocation removed entirely. Is this intended?
-> 
-> Wow, this puzzled me for a bit. But here is what happened. Before the
-> patch, the code looked like this:
-> 
-> 	echo -n "Starting NFS statd: "
-> 	rpc.statd
-> 	touch /var/lock/subsys/nfslock
-> 	echo "done"
-> 
-> 	echo -n "Starting NFS services: "
-> 	/usr/sbin/exportfs -r
-> 	rpc.statd
-> 	echo "done"
-> 
-> So the first invocation to rpc.statd is kept, but not the second one.
-> So rpc.statd is still started, but only once.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-OK. Having that in the commit log might have been nice, I guess. Too late for 
-that though.
+ It may break existings setup that rely on these permissions to be kept, but
+since that's anyway not a good idea, let's keep it this way. However, I'll
+follow up with a release not that explains the issue.
 
-baruch
+ Regards,
+ Arnout
+
+> ---
+>  Makefile | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index eeb1412..5880bbb 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -489,7 +489,7 @@ RSYNC_VCS_EXCLUSIONS = \
+>  $(BUILD_DIR)/.root:
+>  	mkdir -p $(TARGET_DIR)
+>  	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+> -		--chmod=Du+w --exclude .empty --exclude '*~' \
+> +		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+>  		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+>  	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+>  	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+> @@ -625,7 +625,7 @@ endif
+>  	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+>  		$(call MESSAGE,"Copying overlay $(d)"); \
+>  		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+> -			--chmod=Du+w --exclude .empty --exclude '*~' \
+> +			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+>  			$(d)/ $(TARGET_DIR)$(sep))
+>  
+>  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+> 
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
