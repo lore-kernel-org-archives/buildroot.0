@@ -1,83 +1,64 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 13 Jul 2015 11:47:10 +0300
-Subject: [Buildroot] [PATCH v3] nfs-utils: Bump version
-In-Reply-To: <1436775857-32224-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1436775857-32224-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150713084710.GJ2451@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Jul 2015 11:05:31 +0200
+Subject: [Buildroot] [PATCH 0/2 v4] busybox: improve support for telnetd
+	(branch yem/pw)
+Message-ID: <cover.1436778228.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
+Hello All!
 
-On Mon, Jul 13, 2015 at 10:24:17AM +0200, Maxime Hadjinlian wrote:
-> Refresh the patches (Thanks to Thomas Petazzoni's work)
-> 
-> Patches removed:
-> 0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch
-> 0004-fix-build-with-uClibc.patch
-> 0004-fix-build-with-uClibc.patch
-> 0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
-> 0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
+This series improves upon the previous iterations to auto-start telnetd
+on the target.
 
-The diffstat below indicates that this patch was not removed actually.
+It now removes handling of securetty altogether, since we've concluded
+it is not used by util-linux' login utility, and can also be ignored by
+busybox' login even with our current busybox defconfig.
 
-baruch
 
-> 0007-sockaddr-h-needs-stddef-h-for-NULL.patch
-> 0008-tirpc-with-pkgconfig.patch
-> 
-> Patches modified:
-> 0002-Patch-taken-from-Gentoo.patch
-> 0003-Switch-legacy-index-in-favour-of-strchr.patch
-> 
-> Also, change source of the package to git repository (and remove the hash,
-> sourceforce is clearly not a platform which can be trusted nowadays)
-> 
-> Rework the startup script to accomodate new rpc.statd
-> The startup scripts now uses rcp.statd -F for a startup in foreground,
-> also we avoid starting it twice, it makes rcp.statd crash the whole
-> script.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
-> v2 -> v3:
->     - Fix SITE used
-> v1 -> v2:
->     - Change commit log format
->     - Specify patches removed/added
->     - Using git format-patch -M
->     - Using tarball sources and thus adding sha256 from the source
->     - Explain the -F for rpc.stad in the commit log
-> ---
->  ...oo.patch => 0001-Patch-taken-from-Gentoo.patch} |  52 +++--------
->  ...d-AM_CONDITIONAL-in-conditional-execution.patch |  57 ------------
->  ...-Switch-legacy-index-in-favour-of-strchr.patch} |  29 +++---
->  ...figure-script-find-getrpcbynumber-in-libt.patch |  46 ++++++++++
->  package/nfs-utils/0004-fix-build-with-uClibc.patch |  31 -------
->  ...-of-getrpcbynumber-when-getrpcbynumber_r-.patch |  70 --------------
->  ...figure-script-find-getrpcbynumber-in-libt.patch |  38 --------
->  .../0007-sockaddr-h-needs-stddef-h-for-NULL.patch  |  19 ----
->  package/nfs-utils/0008-tirpc-with-pkgconfig.patch  | 102 ---------------------
->  package/nfs-utils/S60nfs                           |   3 +-
->  package/nfs-utils/nfs-utils.hash                   |   4 +-
->  package/nfs-utils/nfs-utils.mk                     |   6 +-
->  12 files changed, 80 insertions(+), 377 deletions(-)
->  rename package/nfs-utils/{0002-Patch-taken-from-Gentoo.patch => 0001-Patch-taken-from-Gentoo.patch} (62%)
->  delete mode 100644 package/nfs-utils/0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch
->  rename package/nfs-utils/{0003-Switch-legacy-index-in-favour-of-strchr.patch => 0002-Switch-legacy-index-in-favour-of-strchr.patch} (87%)
->  create mode 100644 package/nfs-utils/0003-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
->  delete mode 100644 package/nfs-utils/0004-fix-build-with-uClibc.patch
->  delete mode 100644 package/nfs-utils/0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
->  delete mode 100644 package/nfs-utils/0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
->  delete mode 100644 package/nfs-utils/0007-sockaddr-h-needs-stddef-h-for-NULL.patch
->  delete mode 100644 package/nfs-utils/0008-tirpc-with-pkgconfig.patch
+Changes v3 -> v4:
+  - drop support for securetty altogether
 
-baruch
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit b40509c7d80d6610b3f54e6da0dc1265bf6e9e22:
+
+  package/x11r7/xdriver_xf86-video-r128: bump version to 6.10.0 (2015-07-13 10:16:13 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/pw
+
+for you to fetch changes up to 7d67670ffb919ed240b7fb157e44c8219375cff0:
+
+  busybox: improve support for telnetd (2015-07-13 11:00:30 +0200)
+
+----------------------------------------------------------------
+Alexey Brodkin (1):
+      busybox: improve support for telnetd
+
+Yann E. MORIN (1):
+      core/skeleton: drop /etc/securetty
+
+ package/busybox/S50telnet     | 36 +++++++++++++++++++++++++++
+ package/busybox/busybox.mk    |  9 +++++++
+ package/util-linux/login.pam  |  1 -
+ system/skeleton/etc/securetty | 57 -------------------------------------------
+ system/system.mk              |  8 ------
+ 5 files changed, 45 insertions(+), 66 deletions(-)
+ create mode 100755 package/busybox/S50telnet
+ delete mode 100644 system/skeleton/etc/securetty
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
