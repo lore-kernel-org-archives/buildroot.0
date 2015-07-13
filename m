@@ -1,65 +1,44 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 13 Jul 2015 19:33:32 +0200
-Subject: [Buildroot] [PATCH 13/38] lirc-tools: systemd support
-In-Reply-To: <bf18460f473cb1531b92812c8f93b387d6a8939c.1432332802.git.alex.suykov@gmail.com>
-References: <cover.1432332802.git.alex.suykov@gmail.com>
- <bf18460f473cb1531b92812c8f93b387d6a8939c.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <CAGduivx=vLMsHu=P4Tnv9W9S3wvWvNsrJyfLkRHk92S5ZP-gFg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 13 Jul 2015 20:54:11 +0300
+Subject: [Buildroot] [PATCH] libv4l: needs dynamic library support
+Message-ID: <98716efabf8bc5fffbf065d5df8ef129b9a4bcd1.1436810051.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alex, all
+Fixes:
+http://autobuild.buildroot.net/results/752/752cda64e3a4a73adfd9b383d5f42b61e4a1e641/
+http://autobuild.buildroot.net/results/042/0423132222f8a8030f703bb8d755f3e9a4ee73d8/
+http://autobuild.buildroot.net/results/908/9087769da17e2092c3ad2eb901ff87c1d6437e6a/
 
-On Sat, May 23, 2015 at 12:04 PM, Alex Suykov <alex.suykov@gmail.com> wrote:
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/lirc-tools/lirc-tools.mk |  8 ++++++++
->  package/lirc-tools/lircd.service | 10 ++++++++++
->  2 files changed, 18 insertions(+)
->  create mode 100644 package/lirc-tools/lircd.service
->
-> diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-> index 6837042..a9edf2b 100644
-> --- a/package/lirc-tools/lirc-tools.mk
-> +++ b/package/lirc-tools/lirc-tools.mk
-> @@ -21,4 +21,12 @@ define LIRC_TOOLS_INSTALL_INIT_SYSV
->                 $(TARGET_DIR)/etc/init.d/S25lircd
->  endef
->
-> +define LIRC_TOOLS_INSTALL_INIT_SYSTEMD
-> +       $(INSTALL) -D -m 644 package/lirc-tools/lircd.service \
-> +               $(TARGET_DIR)/usr/lib/systemd/system/lircd.service
-> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +       ln -sf /usr/lib/systemd/system/lircd.service \
-> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/lircd.service
-> +endef
-> +
->  $(eval $(autotools-package))
-> diff --git a/package/lirc-tools/lircd.service b/package/lirc-tools/lircd.service
-> new file mode 100644
-> index 0000000..f16ebc8
-> --- /dev/null
-> +++ b/package/lirc-tools/lircd.service
-> @@ -0,0 +1,10 @@
-> +[Unit]
-> +Description=Linux infrared remote control daemon
-> +After=syslog.target
-> +
-> +[Service]
-> +ExecStart=/usr/sbin/lircd -n -O /etc/lirc/lirc_options.conf
-> +Restart=always
-> +
-> +[Install]
-> +WantedBy=multi-user.target
-There's a systemd support from lirc, better to install upstream files.
-Your patch will be marked as "Changes requested" in patchwork.
-> --
-> 2.0.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libv4l/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+index a5455cb5eb06..0437ba1872b7 100644
+--- a/package/libv4l/Config.in
++++ b/package/libv4l/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBV4L
+ 	bool "libv4l"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS # dlopen()
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # media headers
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
+@@ -28,7 +29,7 @@ config BR2_PACKAGE_LIBV4L_UTILS
+ 
+ endif
+ 
+-comment "libv4l needs a toolchain w/ threads and C++, headers >= 3.0"
++comment "libv4l needs a toolchain w/ threads, dynamic library, C++ and headers >= 3.0"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS \
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+ 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+-- 
+2.1.4
