@@ -1,79 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 18:40:08 +0200
-Subject: [Buildroot] [git commit] powerpc-utils: optionally use librtas
-Message-ID: <20150713164456.152288082B@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 13 Jul 2015 18:49:01 +0200
+Subject: [Buildroot] [PATCH 06/38] ejabberd: systemd support
+In-Reply-To: <06a1c8291627eaa04e8454148a478a758c5464a6.1432332802.git.alex.suykov@gmail.com>
+References: <cover.1432332802.git.alex.suykov@gmail.com>
+ <06a1c8291627eaa04e8454148a478a758c5464a6.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <CAGduivxt30vZickYtTqFwLvac42D=sa9-Wm2TG2qUuDre95ihQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=80a34ce7f1a2ab1128140c497322a2d894dd7af0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Alex, all
 
-Now that librtas is available, optionally use it with powerpc-utils to
-enable it's RTAS dependant functionality.  It is used by default, as
-most distros do, but made optional because it adds several new programs
-and significantly increases the size of the installed package.
+On Sat, May 23, 2015 at 12:03 PM, Alex Suykov <alex.suykov@gmail.com> wrote:
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> ---
+>  package/ejabberd/ejabberd.mk      |  8 ++++++++
+>  package/ejabberd/ejabberd.service | 10 ++++++++++
+>  2 files changed, 18 insertions(+)
+>  create mode 100644 package/ejabberd/ejabberd.service
+>
+> diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
+> index 07ce78e..d8a931f 100644
+> --- a/package/ejabberd/ejabberd.mk
+> +++ b/package/ejabberd/ejabberd.mk
+> @@ -48,4 +48,12 @@ define EJABBERD_INSTALL_INIT_SYSV
+>                 $(TARGET_DIR)/etc/init.d/S50ejabberd
+>  endef
+>
+> +define EJABBERD_INSTALL_INIT_SYSTEMD
+> +       $(INSTALL) -D -m 644 package/ejabberd/ejabberd.service \
+> +               $(TARGET_DIR)/usr/lib/systemd/system/ejabberd.service
+> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +       ln -sf /usr/lib/systemd/system/ejabberd.service \
+> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ejabberd.service
+> +endef
+> +
+>  $(eval $(rebar-package))
+> diff --git a/package/ejabberd/ejabberd.service b/package/ejabberd/ejabberd.service
+> new file mode 100644
+> index 0000000..830fdd6
+> --- /dev/null
+> +++ b/package/ejabberd/ejabberd.service
+> @@ -0,0 +1,10 @@
+> +[Unit]
+> +Description=Erlang Jabber daemon
+> +After=network.target
+> +
+> +[Service]
+> +ExecStart=/usr/bin/ejabberd
+> +Restart=always
+We install a ejabberd user with the package, may as well use it.
+This is the startup scripts taken from Arch Linux:
 
-[Thomas: propagate the glibc dependency from the librtas package, as
-suggested by Romain Naour.]
+[Service]
+Type=forking
+User=ejabberd
+LimitNOFILE=16000
+RestartSec=5
+ExecStart=/usr/bin/ejabberdctl start
+ExecStop=/usr/bin/ejabberdctl stop
 
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/powerpc-utils/Config.in        |   22 ++++++++++++++++++++++
- package/powerpc-utils/powerpc-utils.mk |    8 +++++++-
- 2 files changed, 29 insertions(+), 1 deletions(-)
-
-diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
-index eded41e..8e02e76 100644
---- a/package/powerpc-utils/Config.in
-+++ b/package/powerpc-utils/Config.in
-@@ -6,3 +6,25 @@ config BR2_PACKAGE_POWERPC_UTILS
- 	  System utilities for PowerPC machines.
- 
- 	  http://sourceforge.net/projects/powerpc-utils/
-+
-+if BR2_PACKAGE_POWERPC_UTILS
-+
-+config BR2_PACKAGE_POWERPC_UTILS_RTAS
-+	bool "RTAS support"
-+	select BR2_PACKAGE_LIBRTAS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	default y
-+	help
-+	  Enable support for functions that require RTAS.
-+
-+	  This adds a dependency on librtas and provides the following
-+	  additional features at the cost of increasing the installed
-+	  package size from about 0.5MB to about 2MB:
-+	  ppc64_cpu --run-mode, uesensor, set_poweron_time, drmgr,
-+	  lsslot, activate_firmware, rtas_ibm_get_vpd, serv_config,
-+	  rtas_event_decode, sys_ident.
-+
-+comment "RTAS support needs an (e)glibc toolchain"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+
-+endif
-diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
-index 3b30458..ae4d662 100644
---- a/package/powerpc-utils/powerpc-utils.mk
-+++ b/package/powerpc-utils/powerpc-utils.mk
-@@ -10,8 +10,14 @@ POWERPC_UTILS_DEPENDENCIES = zlib
- POWERPC_UTILS_LICENSE = Common Public License Version 1.0
- POWERPC_UTILS_LICENSE_FILES = COPYRIGHT
- 
--POWERPC_UTILS_CONF_OPTS = --without-librtas
- POWERPC_UTILS_CONF_ENV = \
- 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
- 
-+ifeq ($(BR2_PACKAGE_POWERPC_UTILS_RTAS),y)
-+POWERPC_UTILS_DEPENDENCIES += librtas
-+POWERPC_UTILS_CONF_OPTS = --with-librtas
-+else
-+POWERPC_UTILS_CONF_OPTS = --without-librtas
-+endif
-+
- $(eval $(autotools-package))
+After reading the readme of ejabberd, it seems best to use ejaberdctl
+since it's the "administration script"
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> --
+> 2.0.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
