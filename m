@@ -1,71 +1,64 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 13 Jul 2015 13:28:21 +0300
-Subject: [Buildroot] [PATCH v3 2/4] Makefile: add HOST_FIX_RPATH_HOOK to
- TARGET_FINALIZE_HOOKS
-In-Reply-To: <1436782677-12557-2-git-send-email-s.martin49@gmail.com>
-References: <1436782677-12557-1-git-send-email-s.martin49@gmail.com>
- <1436782677-12557-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150713102821.GN2451@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Jul 2015 12:32:00 +0200
+Subject: [Buildroot] [PATCH 0/7 v2] core/kconfig: fix display of custom
+	error messages (branch yem/misc)
+Message-ID: <cover.1436783490.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Samuel,
+Hello All!
 
-On Mon, Jul 13, 2015 at 12:17:55PM +0200, Samuel Martin wrote:
-> This patch adds host-patchelf as a target-finalize dependency, and
-> introduces the HOST_FIX_RPATH_HOOK hook fixing the ELF files' RPATH of
-> the host tree (excluding the sysroot).
-> 
-> After running this hook, the RPATH from any host ELF files is relative to
-> the binary location itself.
-> 
-> Note that, we avoid to fix RPATH in the sysroot, and in the external
-> toolcahin installation location.
-> 
-> As a first step toward a fully relocatable SDK, this change allows to get
-> the toolchain relocatable, but not yet the whole SDK.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v2->v3:
-> - move hook in Makefile (Baruch)
-> ---
->  Makefile | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index daf692e..ac387ea 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -544,6 +544,18 @@ endif
->  
->  $(TARGETS_ROOTFS): target-finalize
->  
-> +target-finalize: host-patchelf
+This series fixes the display of our custom error messages when
+defconfig/.config files do not exist, and also adds such messages to
+busybox and uClibc.
 
-Instead of duplicating the target-finalize target, why not add host-patchelf 
-to $(PACKAGES) like we already do for host-localedef?
 
-> +
-> +define HOST_FIX_RPATH_HOOK
-> +	$(TOPDIR)/support/scripts/fix_rpaths \
-> +		set $(HOST_DIR) \
-> +		--patchelf-program $(HOST_DIR)/usr/bin/patchelf \
-> +		--libdirs $(HOST_DIR)/usr/lib \
-> +		--exclude-dirs sysroot opt/ext-toolchain
-> +endef
-> +
-> +TARGET_FINALIZE_HOOKS += HOST_FIX_RPATH_HOOK
-> +
->  target-finalize: $(PACKAGES)
->  	@$(call MESSAGE,"Finalizing target directory")
->  	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
+Changes v1 -> v2:
+  - check BR_BUILDING in its own ifeq() in new tests
+  - fix commit logs
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 5284dcf7de769e8612da3d4f1c4d12b4582870d5:
+
+  Document the 72 char limit on package description. (2015-07-13 12:16:45 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/misc
+
+for you to fetch changes up to a3dfb23b0341c6a442dfe5f06aef393d2a0f4ecc:
+
+  package/uclibc: check for config file (2015-07-13 12:22:59 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (7):
+      core/pkg-kconfig: don't enforce check for config file when not building
+      package/linux: don't enforce check for DTS when not building
+      package/linux: check for config file before calling kconfig-package
+      boot/at91boostrap3: check for config file before calling kconfig-package
+      boot/barebox: check for config file before calling kconfig-package
+      package/busybox: check for config file
+      package/uclibc: check for config file
+
+ boot/at91bootstrap3/at91bootstrap3.mk |  7 +++++--
+ boot/barebox/barebox.mk               |  6 ++++--
+ linux/linux.mk                        | 32 ++++++++++++++++----------------
+ package/busybox/busybox.mk            |  8 ++++++++
+ package/pkg-kconfig.mk                |  2 ++
+ package/uclibc/uclibc.mk              |  8 ++++++++
+ 6 files changed, 43 insertions(+), 20 deletions(-)
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
