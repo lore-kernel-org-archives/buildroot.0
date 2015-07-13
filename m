@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 17:19:08 +0200
-Subject: [Buildroot] [PATCH v4 4/9] pkg-generic.mk: don't depend on
- external package permissions
-In-Reply-To: <1416586748-12936-5-git-send-email-guido@vanguardiasur.com.ar>
-References: <1416586748-12936-1-git-send-email-guido@vanguardiasur.com.ar>
- <1416586748-12936-5-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <20150713171908.75b05534@free-electrons.com>
+Date: Mon, 13 Jul 2015 17:19:56 +0200
+Subject: [Buildroot] [git commit] scripts: mkmakefile: set umask before
+	calling BR's makefile
+Message-ID: <20150713152050.DE5028194A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Guido Mart?nez,
+commit: http://git.buildroot.net/buildroot/commit/?id=fd13247a22884880fd759796dfdfad728590d5d4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 21 Nov 2014 13:19:03 -0300, Guido Mart?nez wrote:
-> Reset permissions for rsynced packages (when using OVERRIDE_SRCDIR) to
-> 755/644. We do this under the assumption that source files shouldn't
-> care about their permissions, except possibly for the exec bit.
-> 
-> This guarantees that if a package uses 'rsync -a' or 'cp -p' to copy
-> a file from its build dir to the target, it'll end up with the same
-> permissions on the target every time.
-> 
-> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
-> ---
->  package/pkg-generic.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Small optimization so we don't have another 'make' level (caused by the
+umask fix) when running the generated makefile.
 
-Applied, thanks.
+Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/mkmakefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
+index 27b1507..974e2c0 100755
+--- a/support/scripts/mkmakefile
++++ b/support/scripts/mkmakefile
+@@ -35,7 +35,7 @@ MAKEFLAGS += --no-print-directory
+ all	:= \$(filter-out Makefile,\$(MAKECMDGOALS))
+ 
+ _all:
+-	\$(MAKE) \$(MAKEARGS) \$(all)
++	umask 0022 && \$(MAKE) \$(MAKEARGS) \$(all)
+ 
+ Makefile:;
+ 
