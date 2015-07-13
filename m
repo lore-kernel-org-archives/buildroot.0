@@ -1,41 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jul 2015 17:08:03 +0200
-Subject: [Buildroot] [git commit] gnutls: bump to version 3.3.16
-Message-ID: <20150713150811.8942981955@busybox.osuosl.org>
+Date: Mon, 13 Jul 2015 17:08:05 +0200
+Subject: [Buildroot] [PATCH] gnutls: bump to version 3.3.16
+In-Reply-To: <1436798265-4868-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1436798265-4868-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150713170805.66b4e13d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=adddac455894545fd0152d37669910ac51b38c2b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gnutls/gnutls.hash |    2 +-
- package/gnutls/gnutls.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 13 Jul 2015 11:37:45 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/gnutls/gnutls.hash | 2 +-
+>  package/gnutls/gnutls.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 3009478..620caae 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	8961227852911a1974e15bc017ddbcd4779876c867226d199f06648d8b27ba4b	gnutls-3.3.15.tar.xz
-+sha256	80a471c723572a43ddbe75d7825a3275f640650cc99eae42963ab39b9d0b7552	gnutls-3.3.16.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 9ccc23e..4593034 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.3
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).15
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
