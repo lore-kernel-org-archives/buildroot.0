@@ -1,158 +1,57 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 13 Jul 2015 14:33:57 +0200
-Subject: [Buildroot] [PATCH v2 1/1] linux: Add support for FIT image
-In-Reply-To: <1432927972-6571-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1432927972-6571-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <55A3B035.9000305@openwide.fr>
+From: Scott Fan <fancp2007@gmail.com>
+Date: Mon, 13 Jul 2015 21:23:53 +0800
+Subject: [Buildroot] [PATCH 1/3] freerdp: Add support for tz package
+Message-ID: <1436793835-8372-1-git-send-email-fancp2007@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
+Fixes error message while freerdp connected the remote desktop:
+Unable to detect time zone
 
-Le 29/05/2015 21:32, J?rg Krause a ?crit :
-> The FIT (Flattened Image Tree) image format is a much more advanced and
-> flexible format compared to regular uImage, let alone zImage.
-> 
-> The FIT image format allows for storing multiple kernel images, multiple
-> device tree blobs and even multiple configurations for their combinations
-> in a single image.
-> 
-> Furthermore, it enhances integrity protection of images with sha1, sha256
-> and md5 checksums as well as signature verification against a public key.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
-> Changes in v2:
->   - build the device tree blob prior to the FIT image
->   - add error message if file path is missing
-> ---
->  linux/Config.in | 13 +++++++++++++
->  linux/linux.mk  | 21 ++++++++++++++++++++-
->  2 files changed, 33 insertions(+), 1 deletion(-)
-> 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 457ada6..03ce8cf 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -174,6 +174,13 @@ config BR2_LINUX_KERNEL_UBOOT_IMAGE
->  choice
->  	prompt "Kernel binary format"
->  
-> +config BR2_LINUX_KERNEL_FITIMAGE
-> +	bool "fitImage"
-> +	depends on BR2_arc || BR2_arm || BR2_armeb || BR2_bfin || \
-> +		   BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64 || \
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+---
+ .../freerdp/0004-add-support-for-tz-package.patch  | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/freerdp/0004-add-support-for-tz-package.patch
 
-avr32 support has been removed since 2015.05 Buildroot release.
-
-> +		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-
-I don't know much about FIT image format, is it really architecture dependent ?
-There is an example in uboot documentation for booting an x86 (32bit) system
-with a FIT image format.
-
-http://git.denx.de/?p=u-boot.git;a=blob;f=doc/uImage.FIT/x86-fit-boot.txt
-
-> +	select BR2_LINUX_KERNEL_UBOOT_IMAGE
-> +
->  config BR2_LINUX_KERNEL_UIMAGE
->  	bool "uImage"
->  	depends on BR2_arc || BR2_arm || BR2_armeb || BR2_bfin || \
-> @@ -248,6 +255,12 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
->  
->  endchoice
->  
-> +config BR2_LINUX_KERNEL_FITIMAGE_ITS_FILE
-> +	string "FIT image device tree descriptor file path"
-> +	depends on BR2_LINUX_KERNEL_FITIMAGE
-> +	help
-> +	  Path to the FIT image device tree descriptor.
-
-Maybe say that a FIT image device tree descriptor is an *.its file ?
-
-> +
->  config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
->  	string "Kernel image target name"
->  	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index c765954..a4fbe47 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -108,6 +108,9 @@ LINUX_TARGET_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
->  ifeq ($(LINUX_IMAGE_NAME),)
->  LINUX_IMAGE_NAME = $(LINUX_TARGET_NAME)
->  endif
-> +else ifeq ($(BR2_LINUX_KERNEL_FITIMAGE),y)
-> +LINUX_IMAGE_NAME = fitImage
-> +LINUX_TARGET_NAME = zImage
->  else
->  ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
->  LINUX_IMAGE_NAME = uImage
-> @@ -155,7 +158,9 @@ else
->  KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/$(KERNEL_ARCH)
->  endif
->  
-> -ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
-> +ifeq ($(BR2_LINUX_KERNEL_FITIMAGE),y)
-> +LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
-> +else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
->  LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
-
-This can be factorized with:
-ifeq ($(BR2_LINUX_KERNEL_VMLINUX)$(BR2_LINUX_KERNEL_FITIMAGE),y)
-LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
-
->  else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
->  LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
-> @@ -277,6 +282,13 @@ LINUX_APPEND_DTB += $(sep) MKIMAGE_ARGS=`$(MKIMAGE) -l $(LINUX_IMAGE_PATH) |\
->  endif
->  endif
->  
-
-For consistency with the coding style, define LINUX_BUILD_FITIMAGE only when
-BR2_LINUX_KERNEL_FITIMAGE is selected:
-
-ifeq ($(BR2_LINUX_KERNEL_FITIMAGE),y)
-> +define LINUX_BUILD_FITIMAGE
-> +	$(LINUX_INSTALL_HOST_TOOLS)
-> +	cp $(call qstrip,$(BR2_LINUX_KERNEL_FITIMAGE_ITS_FILE)) $(@D)/fit-image.its
-> +	$(TARGET_MAKE_ENV) $(MKIMAGE) -f $(@D)/fit-image.its $(@D)/$(LINUX_IMAGE_NAME)
-> +	rm $(@D)/fit-image.its
-> +endef
-
-endif
-
-> +
->  # Compilation. We make sure the kernel gets rebuilt when the
->  # configuration has changed.
->  define LINUX_BUILD_CMDS
-> @@ -288,6 +300,7 @@ define LINUX_BUILD_CMDS
->  	fi
->  	$(LINUX_BUILD_DTB)
->  	$(LINUX_APPEND_DTB)
-> +	$(if $(BR2_LINUX_KERNEL_FITIMAGE), $(LINUX_BUILD_FITIMAGE))
-
-Then simply use:
-	$(LINUX_BUILD_FITIMAGE)
->  endef
->  
-
-Best regards,
-Romain Naour
-
->  
-> @@ -374,4 +387,10 @@ $(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUST
->  endif
->  endif
->  
-> +ifeq ($(BR2_LINUX_KERNEL_FITIMAGE),y)
-> +ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_FITIMAGE_ITS_FILE)),)
-> +$(error No FIT image device tree descriptor file specified, check your BR2_LINUX_KERNEL_FITIMAGE_ITS_FILE setting)
-> +endif
-> +endif
-> +
->  endif
-> 
+diff --git a/package/freerdp/0004-add-support-for-tz-package.patch b/package/freerdp/0004-add-support-for-tz-package.patch
+new file mode 100644
+index 0000000..93e4afd
+--- /dev/null
++++ b/package/freerdp/0004-add-support-for-tz-package.patch
+@@ -0,0 +1,30 @@
++From 605d0a85183d2f9d5b0da5629cbadf01173bbb2f Mon Sep 17 00:00:00 2001
++From: Scott Fan <fancp2007@gmail.com>
++Date: Mon, 13 Jul 2015 15:01:17 +0800
++Subject: [PATCH] Add support for tz package
++
++Fixes error message while freerdp connected the remote desktop:
++Unable to detect time zone
++
++Signed-off-by: Scott Fan <fancp2007@gmail.com>
++---
++ libfreerdp/locale/timezone.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/libfreerdp/locale/timezone.c b/libfreerdp/locale/timezone.c
++index 3070f1f..4a06786 100644
++--- a/libfreerdp/locale/timezone.c
+++++ b/libfreerdp/locale/timezone.c
++@@ -1539,7 +1539,8 @@ char* freerdp_get_unix_timezone_identifier()
++ 	 * America/Montreal for example.
++ 	 */
++ 	
++-	if ((len = readlink("/etc/localtime", buf, sizeof(buf) - 1)) != -1)
+++	if ((len = readlink("/etc/localtime", buf, sizeof(buf) - 1)) != -1 ||
+++	    (len = readlink("/etc/TZ", buf, sizeof(buf) - 1)) != -1)
++ 	{
++ 		int num = 0;
++ 		int pos = len;
++-- 
++2.4.5
++
+-- 
+2.4.5
