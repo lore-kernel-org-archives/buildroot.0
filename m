@@ -1,285 +1,356 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 13 Jul 2015 22:25:20 +0200
-Subject: [Buildroot] [PATCHv3 for next 2/2] toolchain: create symlink to
-	'lib' from ARCH_LIB_DIR iso fixed lib32/lib64
-In-Reply-To: <CAAXf6LUOT3AgLYE5ZFO1jXwMfjKc9uK7LPVvfQkcd2tSbTvEaw@mail.gmail.com>
-References: <1424259375-20288-1-git-send-email-patrickdepinguin@gmail.com>
- <1424259375-20288-3-git-send-email-patrickdepinguin@gmail.com>
- <55A3EDEA.7040308@mind.be>
- <CAAXf6LUOT3AgLYE5ZFO1jXwMfjKc9uK7LPVvfQkcd2tSbTvEaw@mail.gmail.com>
-Message-ID: <3E9B0BEE-8255-44AB-924E-846410251385@gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 13 Jul 2015 22:16:00 +0200
+Subject: [Buildroot] [PATCH] Adding owfs support
+In-Reply-To: <d62e31d07a79e984bf6925b0f54e4dbe@www.startit.hu>
+References: <d62e31d07a79e984bf6925b0f54e4dbe@www.startit.hu>
+Message-ID: <55A41C80.4070809@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On July 13, 2015 10:19:58 PM CEST, Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
->On Mon, Jul 13, 2015 at 6:57 PM, Arnout Vandecappelle <arnout@mind.be>
->wrote:
->>  Hi Thomas,
->>
->>  Sorry that it is taking so long to make progress on this, but the
->external
->> toolchain stuff is, as you know, horribly demotivating... We've spent
->quite a
->> bit of time to understand what this patch does and how it could be
->done better...
->>
->> On 02/18/15 12:36, Thomas De Schampheleire wrote:
->>> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->>>
->>> Currently, following symbolic links are created in both target and
->>> staging directories:
->>> - lib(32|64) --> lib
->>> - usr/lib(32|64) --> lib
->>>
->>> The decision for lib32 or lib64 is based on the target architecture
->>> configuration in buildroot (BR2_ARCH_IS_64).
->>>
->>> In at least one case this is not correct: when building for a Cavium
->Octeon
->>> III processor using the toolchain from the Cavium Networks SDK, and
->>> specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, libraries are
->expected
->>> in directory 'lib32-fp' rather than 'lib32' (likewise for lib64-fp).
->>>
->>> More generally, for external toolchains, the correct symbolic link
->is
->>> from (usr/)${ARCH_LIB_DIR} to lib. For internal toolchains, current
->>> toolchains always use either lib32 or lib64.
->>>
->>> Fix the problem as follows:
->>> - create symlink creation helpers in toolchain/helpers.mk
->>> - for external toolchains, call these helpers based on ARCH_LIB_DIR
->>> - for internal toolchains, call these helpers based on the existing
->>>   fixed lib32/lib64 logic, moved from Makefile
->>> - to fix build order problems, add the correct dependency on
->>>   $(BUILD_DIR) from $(BUILD_DIR)/.root
->>
->>  It's not clear to us which build order problems are solved by this,
->and
->> especially how these build order problems are introduced by this
->patch... Could
->> you explain that a little?
->
->As you may imagine, my memory of these issues is not so crisp anymore,
->but IIRC without these build-order changes it would not build
->correctly. I guess I was using 'make clean toolchain' and it would
->fail, but I would need to retest explicitly to be sure.
->
->>
->>>
->>> Signed-off-by: Thomas De Schampheleire
-><thomas.de.schampheleire@gmail.com>
->>>
->>> ---
->>> v3:
->>> - update commit message wrapping
->>> - change dependency on $(BUILD_DIR) to a order-only dependency
->>> v2:
->>> - fix 'lib32-fp' leftover in toolchain-buildroot
->>> - silence commands creating symlink with $(Q)
->>> - fix case where ARCH_LIB_DIR is 'lib'
->>>
->>> Note: the handling in the internal toolchain is a bit awkward
->because it
->>> explicitly adds a new target, but I don't see a much better way: it
->must
->>> be done _before_ the toolchain is being built. The entire logic
->cannot
->>> be done in Makefile as ARCH_LIB_DIR is not available there.
->>> ---
->>>  Makefile                                             | 14
->+-------------
->>>  toolchain/helpers.mk                                 | 16
->++++++++++++++++
->>>  toolchain/toolchain-buildroot/toolchain-buildroot.mk | 11
->+++++++++++
->>>  toolchain/toolchain-external/toolchain-external.mk   | 12
->++++++++++++
->>>  4 files changed, 40 insertions(+), 13 deletions(-)
->>>
->>> diff --git a/Makefile b/Makefile
->>> index 338c992..de202b0 100644
->>> --- a/Makefile
->>> +++ b/Makefile
->>> @@ -449,20 +449,10 @@ world: target-post-image
->>>  $(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR)
->$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
->>>       @mkdir -p $@
->>>
->>> -# We make a symlink lib32->lib or lib64->lib as appropriate
->>> -# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
->>> -ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
->>> -LIB_SYMLINK = lib64
->>> -else
->>> -LIB_SYMLINK = lib32
->>> -endif
->>
->>  Yeah, it's good to see this disappear from top-level Makefile!
->>
->>> -
->>>  $(STAGING_DIR):
->>>       @mkdir -p $(STAGING_DIR)/bin
->>>       @mkdir -p $(STAGING_DIR)/lib
->>> -     @ln -snf lib $(STAGING_DIR)/$(LIB_SYMLINK)
->>>       @mkdir -p $(STAGING_DIR)/usr/lib
->>> -     @ln -snf lib $(STAGING_DIR)/usr/$(LIB_SYMLINK)
->>>       @mkdir -p $(STAGING_DIR)/usr/include
->>>       @mkdir -p $(STAGING_DIR)/usr/bin
->>>       @ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
->>> @@ -475,15 +465,13 @@ RSYNC_VCS_EXCLUSIONS = \
->>>       --exclude .svn --exclude .git --exclude .hg --exclude .bzr \
->>>       --exclude CVS
->>>
->>> -$(BUILD_DIR)/.root:
->>> +$(BUILD_DIR)/.root: | $(BUILD_DIR)
->>>       mkdir -p $(TARGET_DIR)
->>>       rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
->>>               --chmod=Du+w --exclude .empty --exclude '*~' \
->>>               $(TARGET_SKELETON)/ $(TARGET_DIR)/
->>>       $(INSTALL) -m 0644 support/misc/target-dir-warning.txt
->$(TARGET_DIR_WARNING_FILE)
->>> -     @ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
->>>       @mkdir -p $(TARGET_DIR)/usr
->>> -     @ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
->>>       touch $@
->>>
->>>  $(TARGET_DIR): $(BUILD_DIR)/.root
->>> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
->>> index 3121da4..b4879e0 100644
->>> --- a/toolchain/helpers.mk
->>> +++ b/toolchain/helpers.mk
->>> @@ -1,5 +1,21 @@
->>>  # This Makefile fragment declares toolchain related helper
->functions.
->>>
->>> +# Create the necessary symlink from (usr/)lib32|lib64|lib32-fp|...
->to lib
->>> +# In general, for external toolchains, the correct link name is
->$ARCH_LIB_DIR.
->>> +create_staging_lib_symlink = \
->>> +     LIB_SYMLINK="$(strip $1)" ; \
->>> +     if [ "$${LIB_SYMLINK}" != "lib" ]; then \
->>> +             ln -snf lib $(STAGING_DIR)/$${LIB_SYMLINK} ; \
->>> +             ln -snf lib $(STAGING_DIR)/usr/$${LIB_SYMLINK} ; \
->>> +     fi
->>> +
->>> +create_target_lib_symlink = \
->>> +     LIB_SYMLINK="$(strip $1)" ; \
->>> +     if [ "$${LIB_SYMLINK}" != "lib" ]; then \
->>> +         ln -snf lib $(TARGET_DIR)/$${LIB_SYMLINK} ; \
->>> +         ln -snf lib $(TARGET_DIR)/usr/$${LIB_SYMLINK} ; \
->>> +     fi
->>
->>  These two functions are identical except for the target dir, so
->create just one
->> function with the directory as a second parameter.
->
->OK
->
->>
->>> +
->>>  # The copy_toolchain_lib_root function copies a toolchain library
->and
->>>  # its symbolic links from the sysroot directory to the target
->>>  # directory. Note that this function is used both by the external
->>> diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
->b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
->>> index b30cc33..3ccb030 100644
->>> --- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
->>> +++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
->>> @@ -12,6 +12,17 @@ BR_LIBC = $(call
->qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
->>>
->>>  TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-gcc-final
->>>
->>> +ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
->>
->>  The comment about MIPS64/n32 should have been retained here.
->
->True.
->
->>
->>> +LIB_SYMLINK = lib64
->>> +else
->>> +LIB_SYMLINK = lib32
->>> +endif
->>
->>  Since now it is something specific to this .mk file, perhaps it
->should be
->> prefixed with TOOLCHAIN_BUILDROOT_
->
->OK.
->
->>
->>> +
->>> +host-gcc-final: create-lib-symlinks
->>
->>  This is not just awkward, it also breaks top-level parallel build.
->At least, if
->> host-gcc-final really does need this to be done. In top-level
->parallel build,
->> the order between the dependencies is not set, so it's possible that
->the
->> symlinks are only created after the build of gcc has already started.
->
->Here I don't follow: the line above expresses that host-gcc-final
->needs create-lib-symlinks. So even with top-level parallel build,
->_first_ create-lib-symlinks is executed, and only then host-gcc-final.
->
->Your statement seems to refer to cases like:
->
->foo: bar baz
->
->Where bar and baz can indeed be executed in parallel.
->Or I'm misunderstanding you or the situation.
->
->
->> Of course,
->> it's vanishingly unlikely that it will not yet have finished by the
->time the gcc
->> install step starts... Actually, we wonder if it is really needed
->before
->> gcc-final, or even before the libc? Because the way that make
->evaluates things
->> in the non-parallel case, this step would have been done before
->anything else,
->> even before host-binutils...
->
->For external toolchains the links are created after extraction, when
->installing the toolchain in target and staging.
->For internal toolchain I don't remember if it needs to be done before
->host-gcc-final, or if it's enough that it is done after host-gcc-final
->but I couldn't find a better way to achieve that because
->host-gcc-final is the target used for toolchain/toolchain-buildroot,
->so there wasn't a lot of hooking possibility without changing a lot of
->code. I would need to retest to be sure.
->
->>
->>  If it really should be done before host-gcc-final, the full solution
->would be
->> to add this as a post-install hook to the libc. You could do
->something like this:
->>
->> $(call uppercase,$(BR_LIBC))_POST_INSTALL_STAGING_HOOKS += \
->>         $(call create_staging_lib_symlink,$(LIB_SYMLINK))
->>
->> Isn't that beautiful :-) This also has the advantage of splitting the
->staging
->> and target installs into their appropriate locations.
->>
->>  Alternatively, you could add a tiny package without source that does
->this and
->> add that as a dependency to host-gcc-final.
->>
->>
->>
->>  Do you still have the energy to make some changes and resubmit?
->
->I'll see if I can look at some of this tomorrow but I can't make any
->promises. But if you happen to be in the heat of the moment tonight
->and can't resist reworking some of this then be my guest :-)
+Hi Istv?n,
 
-'if you happen to be in the zone tonight' would probably qualify as better use of English expressions, but I'm sure you got the idea :-)
+Le 13/07/2015 21:30, Pongr?cz Istv?n a ?crit :
+>  
+> Hi Romain,
+> 
+> Thank you very much for your feedback and detailed explanation of the necessary modifications.
+> 
+> As I am not a master of buildroot, I will need more time to check and modify the package.
+> 
+> Anyway, as I wrote, I just borrowed this package from an other source and modified to be able to compile. The original source (url) should be there.
+> 
+> In the other hand, I will need to learn buildroot better, because I would like to compile "heavy" application and its dependencies. That will be fun (and annoying, too :)
+> 
+> Thank you again for your feedback and support.
+
+You're welcome.
+Ok, we'll wait for your updated patch :)
+
+Please, next time keep the list in Cc.
+
+Best regards,
+Romain Naour
+
+> 
+> Cheers,
+> Istv?n (Steve)
+> 
+> 
+> 
+> ----------------eredeti ?zenet-----------------
+> Felad?: "Romain Naour" romain.naour at openwide.fr 
+> C?mzett: "root" 
+> , buildroot at buildroot.org 
+> D?tum: Mon, 13 Jul 2015 13:03:42 +0200
+> -------------------------------------------------
+>  
+>  
+>> Hi Istvan,
+>>
+>> Le 21/05/2015 15:02, root a ?crit :
+>>> ---
+>>> package/Config.in | 1 +
+>>> .../0001-fix-owshell-libusb-for-owfs-3.1p0.patch | 127 
+>>> +++++++++++++++++++++
+>>> package/owfs/Config.in | 33 ++++++
+>>> package/owfs/owfs.mk | 20 ++++
+>>> 4 files changed, 181 insertions(+)
+>>> create mode 100644 
+>>> package/owfs/0001-fix-owshell-libusb-for-owfs-3.1p0.patch
+>>> create mode 100644 package/owfs/Config.in
+>>> create mode 100644 package/owfs/owfs.mk
+>>>
+>>> diff --git a/package/Config.in b/package/Config.in
+>>> index e0c2e2a..bbc20a8 100644
+>>> --- a/package/Config.in
+>>> +++ b/package/Config.in
+>>> @@ -846,6 +846,7 @@ menu "Hardware handling"
+>>> 	source "package/mtdev/Config.in"
+>>> 	source "package/ne10/Config.in"
+>>> 	source "package/neardal/Config.in"
+>>> + source "package/owfs/Config.in"
+>>> 	source "package/pcsc-lite/Config.in"
+>>> 	source "package/tslib/Config.in"
+>>> 	source "package/urg/Config.in"
+>>> diff --git 
+>>> a/package/owfs/0001-fix-owshell-libusb-for-owfs-3.1p0.patch 
+>>> b/package/owfs/0001-fix-owshell-libusb-for-owfs-3.1p0.patch
+>>> new file mode 100644
+>>> index 0000000..cdaa39d
+>>> --- /dev/null
+>>> +++ b/package/owfs/0001-fix-owshell-libusb-for-owfs-3.1p0.patch
+>>
+>> You need to add your Sob line and a description about the change.
+>>
+>>> @@ -0,0 +1,127 @@
+>>> +diff -Nur owfs-3.1p0/module/owshell/src/c/Makefile.am 
+>>> owfs-3.1p0-patched/module/owshell/src/c/Makefile.am
+>>> +--- a/module/owshell/src/c/Makefile.am	2015-01-11 
+>>> 02:31:32.000000000 +0100
+>>> ++++ b/module/owshell/src/c/Makefile.am	2015-05-02 
+>>> 19:13:00.000000000 +0200
+>>> +@@ -41,7 +41,9 @@
+>>> + 	-Wcast-align \
+>>> + 	-Wstrict-prototypes \
+>>> + 	-Wredundant-decls \
+>>> +-	${EXTRACFLAGS}
+>>> ++ ${EXTRACFLAGS} \
+>>> ++ ${LIBUSB_CFLAGS} \
+>>> ++ ${PTHREAD_CFLAGS}
+>>
+>> I don't think this is the right fix with the PATH overwrite in owfs.mk. If you
+>> have a link issue with libusb, you can try to use pkg-config to retrieve the
+>> necessary CFLAGS. To be investigated...
+>>
+>>> + 
+>>> +-LDADD = ${LD_EXTRALIBS} ${OSLIBS}
+>>> ++LDADD = ${LIBUSB_LIBS} ${PTHREAD_LIBS} ${LD_EXTRALIBS} ${OSLIBS}
+>>> + 
+>>> +diff -Nur owfs-3.1p0/module/owshell/src/c/Makefile.in 
+>>> owfs-3.1p0-patched/module/owshell/src/c/Makefile.in
+>>> +--- a/module/owshell/src/c/Makefile.in	2015-03-15 
+>>> 02:38:32.000000000 +0100
+>>> ++++ b/module/owshell/src/c/Makefile.in	2015-05-02 
+>>> 19:12:00.000000000 +0200
+>>
+>> Since the package is autoreconfed, you doesn't need to patch Makefile.in.
+>>
+>>> +@@ -1,7 +1,7 @@
+>>> +-# Makefile.in generated by automake 1.14.1 from Makefile.am.
+>>> ++# Makefile.in generated by automake 1.15 from Makefile.am.
+>>> + # @configure_input@
+>>> + 
+>>> +-# Copyright (C) 1994-2013 Free Software Foundation, Inc.
+>>> ++# Copyright (C) 1994-2014 Free Software Foundation, Inc.
+>>> + 
+>>> + # This Makefile.in is free software; the Free Software Foundation
+>>> + # gives unlimited permission to copy and/or distribute it,
+>>> +@@ -15,7 +15,17 @@
+>>> + @SET_MAKE@
+>>> + 
+>>> + VPATH = @srcdir@
+>>> +-am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
+>>> ++am__is_gnu_make = { \
+>>> ++ if test -z '$(MAKELEVEL)'; then \
+>>> ++ false; \
+>>> ++ elif test -n '$(MAKE_HOST)'; then \
+>>> ++ true; \
+>>> ++ elif test -n '$(MAKE_VERSION)' && test -n '$(CURDIR)'; then \
+>>> ++ true; \
+>>> ++ else \
+>>> ++ false; \
+>>> ++ fi; \
+>>> ++}
+>>> + am__make_running_with_option = \
+>>> + case $${target_option-} in \
+>>> + ?) ;; \
+>>> +@@ -82,16 +92,8 @@
+>>> + bin_PROGRAMS = owget$(EXEEXT) owdir$(EXEEXT) owread$(EXEEXT) \
+>>> + 	owwrite$(EXEEXT) owpresent$(EXEEXT) owexist$(EXEEXT)
+>>> + subdir = module/owshell/src/c
+>>> +-DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
+>>> +-	$(top_srcdir)/src/scripts/install/mkinstalldirs \
+>>> +-	$(top_srcdir)/src/scripts/install/depcomp
+>>> + ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+>>> +-am__aclocal_m4_deps = $(top_srcdir)/src/scripts/m4/libtool.m4 \
+>>> +-	$(top_srcdir)/src/scripts/m4/ltoptions.m4 \
+>>> +-	$(top_srcdir)/src/scripts/m4/ltsugar.m4 \
+>>> +-	$(top_srcdir)/src/scripts/m4/ltversion.m4 \
+>>> +-	$(top_srcdir)/src/scripts/m4/lt~obsolete.m4 \
+>>> +-	$(top_srcdir)/acinclude.m4 \
+>>> ++am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
+>>> + 	$(top_srcdir)/src/scripts/m4/acx_pthread.m4 \
+>>> + 	$(top_srcdir)/module/swig/perl5/perl5.m4 \
+>>> + 	$(top_srcdir)/module/swig/php/php.m4 \
+>>> +@@ -99,6 +101,7 @@
+>>> + 	$(top_srcdir)/module/owtcl/tcl.m4 $(top_srcdir)/configure.ac
+>>> + am__configure_deps = $(am__aclocal_m4_deps) 
+>>> $(CONFIGURE_DEPENDENCIES) \
+>>> + 	$(ACLOCAL_M4)
+>>> ++DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
+>>> + mkinstalldirs = $(SHELL) \
+>>> + 	$(top_srcdir)/src/scripts/install/mkinstalldirs
+>>> + CONFIG_HEADER = $(top_builddir)/src/include/config.h
+>>> +@@ -201,6 +204,9 @@
+>>> + done | $(am__uniquify_input)`
+>>> + ETAGS = etags
+>>> + CTAGS = ctags
+>>> ++am__DIST_COMMON = $(srcdir)/Makefile.in \
+>>> ++	$(top_srcdir)/src/scripts/install/depcomp \
+>>> ++	$(top_srcdir)/src/scripts/install/mkinstalldirs
+>>> + DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+>>> + ACLOCAL = @ACLOCAL@
+>>> + AMTAR = @AMTAR@
+>>> +@@ -295,6 +301,7 @@
+>>> + LT_CURRENT = @LT_CURRENT@
+>>> + LT_RELEASE = @LT_RELEASE@
+>>> + LT_REVISION = @LT_REVISION@
+>>> ++LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
+>>> + MAKEINFO = @MAKEINFO@
+>>> + MANIFEST_TOOL = @MANIFEST_TOOL@
+>>> + MKDIR_P = @MKDIR_P@
+>>> +@@ -498,9 +505,11 @@
+>>> + 	-Wcast-align \
+>>> + 	-Wstrict-prototypes \
+>>> + 	-Wredundant-decls \
+>>> +-	${EXTRACFLAGS}
+>>> ++	${EXTRACFLAGS} \
+>>> ++ ${LIBUSB_CFLAGS} \
+>>> ++ ${PTHREAD_CFLAGS}
+>>> + 
+>>> +-LDADD = ${LD_EXTRALIBS} ${OSLIBS}
+>>> ++LDADD = ${LIBUSB_LIBS} ${PTHREAD_LIBS} ${LD_EXTRALIBS} ${OSLIBS}
+>>> + all: all-am
+>>> + 
+>>> + .SUFFIXES:
+>>> +@@ -514,10 +523,9 @@
+>>> + 	 exit 1;; \
+>>> + 	 esac; \
+>>> + 	done; \
+>>> +-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign 
+>>> module/owshell/src/c/Makefile'; \
+>>> ++	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu 
+>>> module/owshell/src/c/Makefile'; \
+>>> + 	$(am__cd) $(top_srcdir) && \
+>>> +-	 $(AUTOMAKE) --foreign module/owshell/src/c/Makefile
+>>> +-.PRECIOUS: Makefile
+>>> ++	 $(AUTOMAKE) --gnu module/owshell/src/c/Makefile
+>>> + Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
+>>> + 	@case '$?' in \
+>>> + 	 *config.status*) \
+>>> +@@ -865,6 +873,8 @@
+>>> + 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+>>> + 	tags tags-am uninstall uninstall-am uninstall-binPROGRAMS
+>>> + 
+>>> ++.PRECIOUS: Makefile
+>>> ++
+>>> + 
+>>> + # Tell versions [3.59,3.63) of GNU make to not export all variables.
+>>> + # Otherwise a system limit (for SysV at least) may be exceeded.
+>>> diff --git a/package/owfs/Config.in b/package/owfs/Config.in
+>>> new file mode 100644
+>>> index 0000000..7633e3e
+>>> --- /dev/null
+>>> +++ b/package/owfs/Config.in
+>>> @@ -0,0 +1,33 @@
+>>> +config BR2_PACKAGE_OWFS
+>>> + bool "owfs"
+>>> + select BR2_PACKAGE_LIBFUSE
+>>> + help
+>>> + OWFS is an easy way to use the powerful 1-wire system of
+>>> + Dallas/Maxim.
+>>> + http://owfs.org/
+>>> + Original owfs patch comes from here:
+>>> + https://github.com/davygravy/owfsplug
+>>> + by Dave Purdy davygravy
+>>> + 
+>>
+>> There are some trailing space
+>>
+>>> + Notes:
+>>> + - uClibc: librpc must be enabled
+>>> + - FUSE must be enabled in the kernel (module or built-in)
+>>> + 
+>>
+>> ditto
+>>
+>>> + Tested on 2015.2 and master git, uclibc and glibc.
+>>> + This package based on owfs version 3.1p0 from sourceforge:
+>>> + http://sourceforge.net/projects/owfs/files/owfs/
+>>> +
+>>> + Usage:
+>>> + Create a mountpoint, where you will use owfs, for example:
+>>> + mkdir /mnt/1wire
+>>> + 
+>>
+>> ditto
+>>
+>>> + Issue the following command, where the ttySx is your owfs port:
+>>> + owfs /dev/ttySx /mnt/1wire
+>>> + Enjoy :)
+>>> +
+>>> + Summarized by Istvan Pongracz (pongraczi on github)
+>>> + 16th of May, 2015
+>>> +
+>>> + 
+>>> +
+>>> +
+>>
+>> ditto + empty new lines.
+>>
+>> I like that you add an usage example here :)
+>>
+>>> diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
+>>> new file mode 100644
+>>> index 0000000..7ba784d
+>>> --- /dev/null
+>>> +++ b/package/owfs/owfs.mk
+>>> @@ -0,0 +1,20 @@
+>>>
+>>> +#################################################################
+>>> ##############
+>>> +#
+>>> +# owfs
+>>> +#
+>>>
+>>> +#################################################################
+>>> ##############
+>>
+>> Usually we add a new line here
+>>
+>>> +OWFS_VERSION = 3.1p0
+>>
+>>> +OWFS_SOURCE = owfs-$(OWFS_VERSION).tar.gz
+>>
+>> This is not needed since tar.gz extension is the default.
+>>
+>>> +OWFS_SITE = 
+>>> http://downloads.sourceforge.net/project/owfs/owfs/$(OWFS_VERSION)
+>>>
+>>
+>>> +OWFS_INSTALL_STAGING = YES
+>>
+>> Why this is needed ?
+>>
+>>> +OWFS_INSTALL_TARGET = YES
+>>
+>> This is not needed since target packages are installed to target by default.
+>>
+>>> +OWFS_CONF_ENV = PATH=$(STAGING_DIR)/usr/bin:$(BR_PATH)
+>>
+>>> +OWFS_CONF_OPTS = --enable-owshell --enable-owhttpd --enable-owftpd \
+>>> +--enable-owserver --enable-ownet --enable-ownetlib --enable-owtap \
+>>> +--enable-owmon --enable-owcapi --enable-usb 
+>>
+>> There is a trailing space here.
+>>
+>>> +OWFS_DEPENDENCIES = libfuse libusb libusb-compat
+>>
+>> In the Config.in you select only the libfuse package, you must also select
+>> libusb and libusb-compat.
+>>
+>>> +OWFS_AUTORECONF = YES
+>>
+>> You need to add a comment to say why the package needs to be autoreconfed.
+>> Just add the patch's name:
+>> # 0001-fix-owshell-libusb-for-owfs-3.1p0.patch
+>> OWFS_AUTORECONF = YES
+>>
+>>> +
+>>> +$(eval $(autotools-package))
+>>
+>>> +$(eval $(host-autotools-package))
+>>> +
+>>>
+>> Why a host package is needed ?
+>>
+>> Can you resend an updated version of your patch ?
+>>
+>> Best regards,
+>> Romain Naour
+>>
+> 
+> 
