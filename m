@@ -1,47 +1,78 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 13 Jul 2015 16:48:00 +0200
-Subject: [Buildroot] [PATCH v4 3/4] Makefile: add
- TARGET_CLEAR_RPATH_HOOK to TARGET_FINALIZE_HOOKS
-In-Reply-To: <20150713134420.GT2451@tarshish>
-References: <1436784870-17417-1-git-send-email-s.martin49@gmail.com>
- <1436784870-17417-3-git-send-email-s.martin49@gmail.com>
- <20150713134420.GT2451@tarshish>
-Message-ID: <CAHXCMMJet12qsX--xCDesj2s+RrOVNBcgLGnnG6tgNJs=cez4A@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Jul 2015 16:49:05 +0200
+Subject: [Buildroot] [PATCH] package/dropbear: fix generatign keys on RO
+	file systems
+Message-ID: <1436798945-6869-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 13, 2015 at 3:44 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Samuel,
->
-> On Mon, Jul 13, 2015 at 12:54:29PM +0200, Samuel Martin wrote:
->> This patch introduces the TARGET_CLEAR_RPATH_HOOK hook fixing the ELF
->> files' RPATH of the host tree (excluding the sysroot).
->>
->> After running this hook, the RPATH from any target ELF files is empty.
->
-> There are legitimate uses for RPATH. The ebtable package sets the ebtables
-> executable RPATH to /lib/ebtables to load its libeb*.so extensions. The sudo
-> package add RPATH to /usr/libexec/sudo in visudo. There may be more. How
-> should we handle these cases? Maybe add a per-package, per-executable RPATH
-> setting?
-Indeed, this is valid uses of RPATH.
-I can rework/extend the script to sanitize RPATH, i.e. remove the
-paths referring to the build tree.
+dropbear generates its keys at the first connection, and wants to save
+them in /etc/dropbear (not configurable).
 
-Any thoughts about this?
+Currently, our /etc/dropbear is a directory.
 
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+When the filesystem is read-only, dropbear can't save its keys, so
+refuses all connections.
 
-Regards,
+Fix that with:
 
+  - at build time, create /etc/dropbear as a symlink to
+    /var/run/dropbear
+
+  - at runtime, if the filesystem is RW (we can rm /etc/dropbear),
+    we replace the symlink with an actual directory; otherwise,
+    when the filesystem is RO (we can't rm /etc/dropbear), we create
+    /var/run/dropbear so the symlink points to an existing directory
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/dropbear/S50dropbear | 14 ++++++++++++++
+ package/dropbear/dropbear.mk |  2 +-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
+index 2694931..790d95a 100644
+--- a/package/dropbear/S50dropbear
++++ b/package/dropbear/S50dropbear
+@@ -11,6 +11,20 @@ start() {
+ 
+ 	echo -n "Starting dropbear sshd: "
+ 	umask 077
++
++    # If /etc/dropbear is not a directory, and
++    #   - the filesystem is RO (i.e. we can not rm the symlink),
++    #     create the directory pointed to by the symlink.
++    #   - the filesystem is RW (i.e. we can rm the symlink),
++    #     replace the symlink with an actual directory
++	if ! [ -d /etc/dropbear ]; then
++		if ! rm -f /etc/dropbear; then
++			mkdir -p /etc/dropbear
++		else
++			mkdir -p $(readlink -f /etc/dropbear)
++		fi
++	fi
++
+ 	start-stop-daemon -S -q -p /var/run/dropbear.pid \
+ 		--exec /usr/sbin/dropbear -- $DROPBEAR_ARGS
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index bc65d69..5bbe864 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -93,7 +93,7 @@ define DROPBEAR_INSTALL_TARGET_CMDS
+ 	for f in $(DROPBEAR_TARGET_BINS); do \
+ 		ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/$$f ; \
+ 	done
+-	mkdir -p $(TARGET_DIR)/etc/dropbear
++	ln -snf ../var/run/dropbear $(TARGET_DIR)/etc/dropbear
+ endef
+ 
+ $(eval $(autotools-package))
 -- 
-Samuel
+1.9.1
