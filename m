@@ -1,110 +1,202 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 14 Jul 2015 13:31:15 +0200
-Subject: [Buildroot] [PATCH v4 2/5] linux-tools: add cpupower
+Date: Tue, 14 Jul 2015 13:31:18 +0200
+Subject: [Buildroot] [PATCH v4 5/5] docs/manual: add documentation for
+	linux-ext and linux-tools.
 In-Reply-To: <1436873478-13533-1-git-send-email-romain.naour@openwide.fr>
 References: <1436873478-13533-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1436873478-13533-3-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1436873478-13533-6-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is based on the patch send by James Knight:
-http://lists.busybox.net/pipermail/buildroot/2015-May/128754.html
-
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: James Knight <james.knight@rockwellcollins.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 v4: no change
-v3: Use CPUPOWER_MAKE_OPTS to factorize commun options
-v2: remove LINUX_TOOL prefix
-    use $(D) instead of $(LINUX_DIR)
-    fix title style
+v3: complete the linux kernel extention manual about the
+    moment where are applied the PREPARE_KERNEL.
+v2: new patch
 ---
- linux/Config.in              |  3 +++
- linux/Config.tools.in        | 11 +++++++++++
- linux/linux-tool-cpupower.mk | 39 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 53 insertions(+)
- create mode 100644 linux/Config.tools.in
- create mode 100644 linux/linux-tool-cpupower.mk
+ docs/manual/adding-packages-kernel-module.txt      |   1 +
+ .../adding-packages-linux-kernel-spec-infra.txt    | 141 +++++++++++++++++++++
+ docs/manual/adding-packages.txt                    |   2 +
+ 3 files changed, 144 insertions(+)
+ create mode 100644 docs/manual/adding-packages-linux-kernel-spec-infra.txt
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 8c86a1a..097cde5 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -364,6 +364,9 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
- # Linux extensions
- source "linux/Config.ext.in"
+diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
+index 0a5ec5b..ffeeef5 100644
+--- a/docs/manual/adding-packages-kernel-module.txt
++++ b/docs/manual/adding-packages-kernel-module.txt
+@@ -128,6 +128,7 @@ configure the build of the kernel module:
+ * +FOO_MODULE_MAKE_OPTS+ may be set to contain extra variable definitions
+   to pass to the Linux buildsystem.
  
-+# Linux tools
-+source "linux/Config.tools.in"
-+
- endif # BR2_LINUX_KERNEL
++[[kernel-variables]]
+ You may also reference (but you may *not* set!) those variables:
  
- endmenu
-diff --git a/linux/Config.tools.in b/linux/Config.tools.in
+  * +LINUX_DIR+ contains the path to where the Linux kernel has been
+diff --git a/docs/manual/adding-packages-linux-kernel-spec-infra.txt b/docs/manual/adding-packages-linux-kernel-spec-infra.txt
 new file mode 100644
-index 0000000..008e68c
+index 0000000..4d3959e
 --- /dev/null
-+++ b/linux/Config.tools.in
-@@ -0,0 +1,11 @@
-+menu "Linux Kernel Tools"
++++ b/docs/manual/adding-packages-linux-kernel-spec-infra.txt
+@@ -0,0 +1,141 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+config BR2_LINUX_KERNEL_TOOL_CPUPOWER
-+	bool "cpupower"
-+	depends on !BR2_bfin # pciutils
-+	select BR2_PACKAGE_PCIUTILS
-+	help
-+	  cpupower is a collection of tools to examine and tune power
-+	  saving related features of your processor.
++[[linux-kernel-specific-infra]]
++=== Specific infrastructure for the Linux kernel package
 +
-+endmenu
-diff --git a/linux/linux-tool-cpupower.mk b/linux/linux-tool-cpupower.mk
-new file mode 100644
-index 0000000..4551cda
---- /dev/null
-+++ b/linux/linux-tool-cpupower.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# cpupower
-+#
-+################################################################################
++The Linux kernel package can use some specific infrastructure based on package
++hooks for building Linux kernel tools or/and adding Linux kernel extensions.
 +
-+LINUX_TOOLS += cpupower
++[[linux-kernel-tools]]
++==== linux-kernel-tools
 +
-+CPUPOWER_DEPENDENCIES = pciutils
++Buildroot offers a helper infrastructure to build some tools available inside
++the Linux kernel sources. Those tools always require a kernel to be built by
++Buildroot, so it's not easy to package them as usual packages. There is a
++simplified packaging based on generic package which builds each of those tools
++right after the kernel.
 +
-+CPUPOWER_MAKE_OPTS = CROSS=$(TARGET_CROSS) \
-+	CPUFREQ_BENCH=false \
-+	DEBUG=false
++Let's look at an example of how to add a new Linux tool. For a new Linux tool
++named +foo+, create a new menu entry in the existing +linux/Config.tools.in+.
++This file will contain the option descriptions related to each kernel tool
++that will be used and displayed in the configuration tool. It would basically
++look like:
 +
-+define CPUPOWER_BUILD_CMDS
-+	$(Q)if test ! -f $(@D)/tools/power/cpupower/Makefile ; then \
-+		echo "Your kernel version is too old and does not have the cpupower tool." ; \
-+		echo "At least kernel 3.4 must be used." ; \
-+		exit 1 ; \
-+	fi
++------------------------------
++01: config BR2_LINUX_KERNEL_TOOL_FOO
++02: 	bool "foo"
++03: 	help
++04: 	  This is a comment that explains what foo kernel tool is.
++05:
++06: 	  http://foosoftware.org/foo/
++------------------------------
 +
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
-+		$(CPUPOWER_MAKE_OPTS) \
-+		cpupower
-+endef
++The name of the option starts with the prefix +BR2_LINUX_KERNEL_TOOL_+,
++followed by the uppercase name of the tool (like is done for packages).
 +
-+define CPUPOWER_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
-+		$(CPUPOWER_MAKE_OPTS) \
-+		DESTDIR=$(STAGING_DIR) \
-+		cpupower_install
-+endef
++Then for each linux tool, add a new +.mk+ file named +linux/linux-tool-foo.mk+.
++It would basically look like:
 +
-+define CPUPOWER_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
-+		$(CPUPOWER_MAKE_OPTS) \
-+		DESTDIR=$(TARGET_DIR) \
-+		cpupower_install
-+endef
++------------------------------
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06:
++07: LINUX_TOOLS += foo
++08:
++09: FOO_DEPENDENCIES = libbbb
++10:
++11: define FOO_BUILD_CMDS
++12:	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools foo
++13: endef
++14:
++15: define FOO_INSTALL_STAGING_CMDS
++16:	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
++17:		DESTDIR=$(STAGING_DIR) \
++18:		foo_install
++19: endef
++20:
++21: define FOO_INSTALL_TARGET_CMDS
++22:	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
++23:		DESTDIR=$(@D) \
++24:		foo_install
++25: endef
++--------------------------------
++
++On line 7, we register the Linux tool +foo+ to the list of available
++Linux tools.
++
++On line 9, we specify the list of dependencies this tool relies on. These
++dependencies are added to the Linux package dependencies list only when the
+++foo+ tool is selected.
++
++The rest of the Makefile, lines 11-25 defines what should be done at the
++different steps of the Linux tool like for a
++xref:generic-package-tutorial[+generic package+]. They will actually be
++used only when the +foo+ tool is selected. The only supported commands are
+++_BUILD_CMDS+, +_INSTALL_STAGING_CMDS+ and +_INSTALL_TARGET_CMDS+.
++
++.Note
++One *must not* call +$(eval $(generic-package))+ or any other
++package infrastructure ! Linux tools are not packages by themselves,
++they are part of the linux package.
++
++[[linux-kernel-ext]]
++==== linux-kernel-extensions
++
++Some packages provide new features that require the Linux kernel tree to
++be modified. This can be in the form of patches to be applied on the
++kernel tree, or in the form of new files to be added to the tree. The
++Buildroot's Linux kernel extensions infrastructure provides a simple
++solution to automatically do this, just after the kernel sources are
++extracted and before the kernel patches are applied.
++
++Let's look at an example on how to add a new Linux extension +foo+.
++
++First, create the package +foo+ that provides the extension: this package
++is a standard package; see the previous chapters on how to create such a
++package.
++
++Then create the 'Linux extension' proper: create a new menu entry in the
++existing +linux/Config.ext.in+. This file contains the option descriptions
++related to each kernel extension that will be used and displayed in the
++configuration tool. It would basically look like:
++
++------------------------------
++01: config BR2_LINUX_KERNEL_EXT_FOO
++02: 	bool "foo"
++03: 	help
++04: 	  This is a comment that explains what foo kernel extension is.
++05:
++06: 	  http://foosoftware.org/foo/
++------------------------------
++
++Then for each linux extension, add a new +.mk+ file named
+++linux/linux-ext-foo.mk+. It should basically contain:
++
++------------------------------
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06:
++07: LINUX_EXTENSIONS += foo
++08:
++09: define FOO_PREPARE_KERNEL
++10:		$(FOO_DIR)/prepare-kernel-tree.sh --linux-dir=$(@D)
++11: endef
++--------------------------------
++
++On line 7, we add the Linux extension +foo+ to the list of available
++Linux extensions.
++
++On line 9-11, we define what should be done by the extension to modify
++the Linux kernel tree; this is specific to the linux extension and can
++use the variables defined by the +foo+ package, like: +$(FOO_DIR)+ or
+++$(FOO_VERSION)+... as well as all the Linux variables, like:
+++$(LINUX_VERSION)+ or +$(LINUX_VERSION_PROBED)+, +$(KERNEL_ARCH)+...
++See the xref:kernel-variables[definition of those kernel variables].
+\ No newline at end of file
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index 721fe39..a17d651 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -35,6 +35,8 @@ include::adding-packages-asciidoc.txt[]
+ 
+ include::adding-packages-hooks.txt[]
+ 
++include::adding-packages-linux-kernel-spec-infra.txt[]
++
+ include::adding-packages-gettext.txt[]
+ 
+ include::adding-packages-tips.txt[]
 -- 
 2.4.3
