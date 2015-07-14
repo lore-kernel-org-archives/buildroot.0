@@ -1,41 +1,50 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 14 Jul 2015 12:15:55 +0200
-Subject: [Buildroot] [PATCH] olsr: bump version
-Message-ID: <1436868955-27408-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Jul 2015 12:20:49 +0200
+Subject: [Buildroot] [git commit] package: fix fallout from checking kconfig
+	config files
+Message-ID: <20150714102059.236518181F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/olsr/olsr.hash | 2 +-
- package/olsr/olsr.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=cdcd83f31ded1dbf6d13d16b4aafdf594b964d94
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/olsr/olsr.hash b/package/olsr/olsr.hash
-index 5b8abc7..83c48e0 100644
---- a/package/olsr/olsr.hash
-+++ b/package/olsr/olsr.hash
-@@ -1,2 +1,2 @@
- # From http://www.olsr.org/releases/0.6/SHA256SUM-0.6.8
--sha256	692de2eb144f0be2e1dfc5dc5275b6c61b80af080e8f733e0b26b6a860442d27	olsrd-0.6.8.tar.bz2
-+sha256	cc464b29c7740354d815d5faa753fd27c0677d71e8eb42e78abc382996892845 olsrd-0.9.0.2.tar.bz2
-diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-index 7e28b1e..78af6b7 100644
---- a/package/olsr/olsr.mk
-+++ b/package/olsr/olsr.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+Those checks should only be done when the package is actually enabled.
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/busybox/busybox.mk |    2 +-
+ package/uclibc/uclibc.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index d8c8bad..6b2abca 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -225,7 +225,7 @@ endef
  
--OLSR_VERSION_MAJOR = 0.6
--OLSR_VERSION = $(OLSR_VERSION_MAJOR).8
-+OLSR_VERSION_MAJOR = 0.9
-+OLSR_VERSION = $(OLSR_VERSION_MAJOR).0.2
- OLSR_SOURCE = olsrd-$(OLSR_VERSION).tar.bz2
- OLSR_SITE = http://www.olsr.org/releases/$(OLSR_VERSION_MAJOR)
- OLSR_PLUGINS = arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo jsoninfo \
--- 
-2.1.4
+ # Checks to give errors that the user can understand
+ # Must be before we call to kconfig-package
+-ifeq ($(BR_BUILDING),y)
++ifeq ($(BR2_PACKAGE_BUSYBOX)$(BR_BUILDING),yy)
+ ifeq ($(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG)),)
+ $(error No BusyBox configuration file specified, check your BR2_PACKAGE_BUSYBOX_CONFIG setting)
+ endif
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 3aceae3..9dfafad 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -476,7 +476,7 @@ endef
+ 
+ # Checks to give errors that the user can understand
+ # Must be before we call to kconfig-package
+-ifeq ($(BR_BUILDING),y)
++ifeq ($(BR2_PACKAGE_UCLIBC)$(BR_BUILDING),yy)
+ ifeq ($(call qstrip,$(BR2_UCLIBC_CONFIG)),)
+ $(error No uClibc configuration file specified, check your BR2_UCLIBC_CONFIG setting)
+ endif
