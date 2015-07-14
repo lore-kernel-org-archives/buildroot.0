@@ -1,177 +1,201 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 14 Jul 2015 02:10:01 +0200
-Subject: [Buildroot] [PATCH v3 3/4] package/perf: migrate perf to use the
-	new linux-tools infrastructure
+Date: Tue, 14 Jul 2015 02:10:02 +0200
+Subject: [Buildroot] [PATCH v3 4/4] docs/manual: add documentation for
+	linux-ext and linux-tools.
 In-Reply-To: <1436832602-25682-1-git-send-email-romain.naour@openwide.fr>
 References: <1436832602-25682-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1436832602-25682-4-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1436832602-25682-5-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove perf package and add legacy handling.
-
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v3: remove last LINUX_TOOL prefix
-v2: remove LINUX_TOOL prefix
-    use $(D) instead of $(LINUX_DIR)
-    fix title style
-    remove useless O=$(@D)
+v3: complete the linux kernel extention manual about the
+    moment where are applied the PREPARE_KERNEL.
+v2: new patch
 ---
- Config.in.legacy                                 |  7 +++++++
- linux/Config.tools.in                            | 18 ++++++++++++++++++
- package/perf/perf.mk => linux/linux-tool-perf.mk | 21 ++++++++-------------
- package/Config.in                                |  1 -
- package/perf/Config.in                           | 21 ---------------------
- 5 files changed, 33 insertions(+), 35 deletions(-)
- rename package/perf/perf.mk => linux/linux-tool-perf.mk (72%)
- delete mode 100644 package/perf/Config.in
+ docs/manual/adding-packages-kernel-module.txt      |   1 +
+ .../adding-packages-linux-kernel-spec-infra.txt    | 141 +++++++++++++++++++++
+ docs/manual/adding-packages.txt                    |   2 +
+ 3 files changed, 144 insertions(+)
+ create mode 100644 docs/manual/adding-packages-linux-kernel-spec-infra.txt
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 0a8d0a6..c0f3a10 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.08"
+diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
+index 0a5ec5b..ffeeef5 100644
+--- a/docs/manual/adding-packages-kernel-module.txt
++++ b/docs/manual/adding-packages-kernel-module.txt
+@@ -128,6 +128,7 @@ configure the build of the kernel module:
+ * +FOO_MODULE_MAKE_OPTS+ may be set to contain extra variable definitions
+   to pass to the Linux buildsystem.
  
-+config BR2_PACKAGE_PERF
-+	bool "perf"
-+	select BR2_LEGACY
-+	select BR2_LINUX_KERNEL_TOOL_PERF
-+	help
-+	  Perf package has been moved to linux tools package.
++[[kernel-variables]]
+ You may also reference (but you may *not* set!) those variables:
+ 
+  * +LINUX_DIR+ contains the path to where the Linux kernel has been
+diff --git a/docs/manual/adding-packages-linux-kernel-spec-infra.txt b/docs/manual/adding-packages-linux-kernel-spec-infra.txt
+new file mode 100644
+index 0000000..4d3959e
+--- /dev/null
++++ b/docs/manual/adding-packages-linux-kernel-spec-infra.txt
+@@ -0,0 +1,141 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
- config BR2_BINUTILS_VERSION_2_22
- 	bool "binutils 2.22 removed"
- 	select BR2_LEGACY
-diff --git a/linux/Config.tools.in b/linux/Config.tools.in
-index 008e68c..24ef8cd 100644
---- a/linux/Config.tools.in
-+++ b/linux/Config.tools.in
-@@ -8,4 +8,22 @@ config BR2_LINUX_KERNEL_TOOL_CPUPOWER
- 	  cpupower is a collection of tools to examine and tune power
- 	  saving related features of your processor.
- 
-+config BR2_LINUX_KERNEL_TOOL_PERF
-+	bool "perf"
-+	help
-+	  perf (sometimes "Perf Events" or perf tools, originally
-+	  "Performance Counters for Linux") - is a performance
-+	  analyzing tool in Linux, available from kernel version
-+	  2.6.31. User-space controlling utility, called 'perf' has
-+	  git-like interface with subcommands. It is capable of
-+	  statistical profiling of entire system (both kernel and user
-+	  code), single CPU or severals threads.
++[[linux-kernel-specific-infra]]
++=== Specific infrastructure for the Linux kernel package
 +
-+	  This will build and install the userspace 'perf'
-+	  command. It is up to the user to ensure that the kernel
-+	  configuration has all the suitable options enabled to allow a
-+	  proper operation of 'perf'.
++The Linux kernel package can use some specific infrastructure based on package
++hooks for building Linux kernel tools or/and adding Linux kernel extensions.
 +
-+	  https://perf.wiki.kernel.org/
++[[linux-kernel-tools]]
++==== linux-kernel-tools
 +
- endmenu
-diff --git a/package/perf/perf.mk b/linux/linux-tool-perf.mk
-similarity index 72%
-rename from package/perf/perf.mk
-rename to linux/linux-tool-perf.mk
-index 36989fc..bacddcd 100644
---- a/package/perf/perf.mk
-+++ b/linux/linux-tool-perf.mk
-@@ -4,11 +4,9 @@
- #
- ################################################################################
++Buildroot offers a helper infrastructure to build some tools available inside
++the Linux kernel sources. Those tools always require a kernel to be built by
++Buildroot, so it's not easy to package them as usual packages. There is a
++simplified packaging based on generic package which builds each of those tools
++right after the kernel.
++
++Let's look at an example of how to add a new Linux tool. For a new Linux tool
++named +foo+, create a new menu entry in the existing +linux/Config.tools.in+.
++This file will contain the option descriptions related to each kernel tool
++that will be used and displayed in the configuration tool. It would basically
++look like:
++
++------------------------------
++01: config BR2_LINUX_KERNEL_TOOL_FOO
++02: 	bool "foo"
++03: 	help
++04: 	  This is a comment that explains what foo kernel tool is.
++05:
++06: 	  http://foosoftware.org/foo/
++------------------------------
++
++The name of the option starts with the prefix +BR2_LINUX_KERNEL_TOOL_+,
++followed by the uppercase name of the tool (like is done for packages).
++
++Then for each linux tool, add a new +.mk+ file named +linux/linux-tool-foo.mk+.
++It would basically look like:
++
++------------------------------
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06:
++07: LINUX_TOOLS += foo
++08:
++09: FOO_DEPENDENCIES = libbbb
++10:
++11: define FOO_BUILD_CMDS
++12:	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools foo
++13: endef
++14:
++15: define FOO_INSTALL_STAGING_CMDS
++16:	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
++17:		DESTDIR=$(STAGING_DIR) \
++18:		foo_install
++19: endef
++20:
++21: define FOO_INSTALL_TARGET_CMDS
++22:	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
++23:		DESTDIR=$(@D) \
++24:		foo_install
++25: endef
++--------------------------------
++
++On line 7, we register the Linux tool +foo+ to the list of available
++Linux tools.
++
++On line 9, we specify the list of dependencies this tool relies on. These
++dependencies are added to the Linux package dependencies list only when the
+++foo+ tool is selected.
++
++The rest of the Makefile, lines 11-25 defines what should be done at the
++different steps of the Linux tool like for a
++xref:generic-package-tutorial[+generic package+]. They will actually be
++used only when the +foo+ tool is selected. The only supported commands are
+++_BUILD_CMDS+, +_INSTALL_STAGING_CMDS+ and +_INSTALL_TARGET_CMDS+.
++
++.Note
++One *must not* call +$(eval $(generic-package))+ or any other
++package infrastructure ! Linux tools are not packages by themselves,
++they are part of the linux package.
++
++[[linux-kernel-ext]]
++==== linux-kernel-extensions
++
++Some packages provide new features that require the Linux kernel tree to
++be modified. This can be in the form of patches to be applied on the
++kernel tree, or in the form of new files to be added to the tree. The
++Buildroot's Linux kernel extensions infrastructure provides a simple
++solution to automatically do this, just after the kernel sources are
++extracted and before the kernel patches are applied.
++
++Let's look at an example on how to add a new Linux extension +foo+.
++
++First, create the package +foo+ that provides the extension: this package
++is a standard package; see the previous chapters on how to create such a
++package.
++
++Then create the 'Linux extension' proper: create a new menu entry in the
++existing +linux/Config.ext.in+. This file contains the option descriptions
++related to each kernel extension that will be used and displayed in the
++configuration tool. It would basically look like:
++
++------------------------------
++01: config BR2_LINUX_KERNEL_EXT_FOO
++02: 	bool "foo"
++03: 	help
++04: 	  This is a comment that explains what foo kernel extension is.
++05:
++06: 	  http://foosoftware.org/foo/
++------------------------------
++
++Then for each linux extension, add a new +.mk+ file named
+++linux/linux-ext-foo.mk+. It should basically contain:
++
++------------------------------
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06:
++07: LINUX_EXTENSIONS += foo
++08:
++09: define FOO_PREPARE_KERNEL
++10:		$(FOO_DIR)/prepare-kernel-tree.sh --linux-dir=$(@D)
++11: endef
++--------------------------------
++
++On line 7, we add the Linux extension +foo+ to the list of available
++Linux extensions.
++
++On line 9-11, we define what should be done by the extension to modify
++the Linux kernel tree; this is specific to the linux extension and can
++use the variables defined by the +foo+ package, like: +$(FOO_DIR)+ or
+++$(FOO_VERSION)+... as well as all the Linux variables, like:
+++$(LINUX_VERSION)+ or +$(LINUX_VERSION_PROBED)+, +$(KERNEL_ARCH)+...
++See the xref:kernel-variables[definition of those kernel variables].
+\ No newline at end of file
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index 721fe39..a17d651 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -35,6 +35,8 @@ include::adding-packages-asciidoc.txt[]
  
--# Source taken from the Linux kernel tree
--PERF_SOURCE =
--PERF_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-+LINUX_TOOLS += perf
+ include::adding-packages-hooks.txt[]
  
--PERF_DEPENDENCIES = linux host-flex host-bison
-+PERF_DEPENDENCIES = host-flex host-bison
++include::adding-packages-linux-kernel-spec-infra.txt[]
++
+ include::adding-packages-gettext.txt[]
  
- PERF_MAKE_FLAGS = \
- 	$(LINUX_MAKE_FLAGS) \
-@@ -39,30 +37,27 @@ PERF_MAKE_FLAGS += NO_LIBELF=1 NO_DWARF=1
- endif
- 
- define PERF_BUILD_CMDS
--	$(Q)if test ! -f $(LINUX_DIR)/tools/perf/Makefile ; then \
-+	$(Q)if test ! -f $(@D)/tools/perf/Makefile ; then \
- 		echo "Your kernel version is too old and does not have the perf tool." ; \
- 		echo "At least kernel 2.6.31 must be used." ; \
- 		exit 1 ; \
- 	fi
- 	$(Q)if test "$(BR2_PACKAGE_ELFUTILS)" = "" ; then \
--		if ! grep -q NO_LIBELF $(LINUX_DIR)/tools/perf/Makefile* ; then \
--			if ! test -r $(LINUX_DIR)/tools/perf/config/Makefile ; then \
-+		if ! grep -q NO_LIBELF $(@D)/tools/perf/Makefile* ; then \
-+			if ! test -r $(@D)/tools/perf/config/Makefile ; then \
- 				echo "The perf tool in your kernel cannot be built without libelf." ; \
- 				echo "Either upgrade your kernel to >= 3.7, or enable the elfutils package." ; \
- 				exit 1 ; \
- 			fi \
- 		fi \
- 	fi
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(LINUX_DIR)/tools/perf \
--		$(PERF_MAKE_FLAGS) O=$(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE1) $(PERF_MAKE_FLAGS) -C $(@D)/tools/perf
- endef
- 
- # After installation, we remove the Perl and Python scripts from the
- # target.
- define PERF_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(LINUX_DIR)/tools/perf \
--		$(PERF_MAKE_FLAGS) O=$(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE1) $(PERF_MAKE_FLAGS) \
-+		-C $(@D)/tools/perf install
- 	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
- endef
--
--$(eval $(generic-package))
-diff --git a/package/Config.in b/package/Config.in
-index 9dbb284..a3e3283 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -88,7 +88,6 @@ endif
- 	source "package/netperf/Config.in"
- 	source "package/oprofile/Config.in"
- 	source "package/pax-utils/Config.in"
--	source "package/perf/Config.in"
- 	source "package/pv/Config.in"
- 	source "package/racehound/Config.in"
- 	source "package/ramsmp/Config.in"
-diff --git a/package/perf/Config.in b/package/perf/Config.in
-deleted file mode 100644
-index 05c9870..0000000
---- a/package/perf/Config.in
-+++ /dev/null
-@@ -1,21 +0,0 @@
--config BR2_PACKAGE_PERF
--	bool "perf"
--	depends on BR2_LINUX_KERNEL
--	help
--	  perf (sometimes "Perf Events" or perf tools, originally
--	  "Performance Counters for Linux") - is a performance
--	  analyzing tool in Linux, available from kernel version
--	  2.6.31. User-space controlling utility, called 'perf' has
--	  git-like interface with subcommands. It is capable of
--	  statistical profiling of entire system (both kernel and user
--	  code), single CPU or severals threads.
--
--	  This package builds and install the userspace 'perf'
--	  command. It is up to the user to ensure that the kernel
--	  configuration has all the suitable options enabled to allow a
--	  proper operation of 'perf'.
--
--	  https://perf.wiki.kernel.org/
--
--comment "perf needs a Linux kernel to be built"
--	depends on !BR2_LINUX_KERNEL
+ include::adding-packages-tips.txt[]
 -- 
 2.4.3
