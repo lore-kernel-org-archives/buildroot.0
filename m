@@ -1,36 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jul 2015 00:42:01 +0200
-Subject: [Buildroot] [git commit] linux: use backtick instead of $(shell
+Date: Wed, 15 Jul 2015 00:43:39 +0200
+Subject: [Buildroot] [git commit] skeleton: use backtick instead of $(shell
 	...) make function
-Message-ID: <20150714225134.6577C7FDF7@busybox.osuosl.org>
+Message-ID: <20150714225134.CFB967FDF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28f57bb863ba48df054cec0057c844bf23d5969f
+commit: http://git.buildroot.net/buildroot/commit/?id=0291f7c22015a1c04bbddeaf71c75bad38b5e317
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Verified that LINUX_VERSION_PROBED is only used in "-quoted commands
-(actually, usually it's not quoted).
+Only the instance for setting the root password is changed. The
+instance in SYSTEM_GETTY is harmless since it just uses echo and tail.
+
+If SKELETON_TARGET_GENERIC_ROOT_PASSWD is passed as a hashed password
+by the user, it contains $, so the '-quotes are needed. If it is not,
+we need the backtick to be expanded so "-quotes are needed. Therefore,
+the quoting is moved to the definition of SYSTEM_ROOT_PASSWORD.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/skeleton/skeleton.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 3ea564f..375a9e1 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -76,7 +76,7 @@ LINUX_MAKE_ENV = \
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 70d1258..48e7085 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -95,19 +95,19 @@ ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
+ ifeq ($(SKELETON_TARGET_GENERIC_ROOT_PASSWD),)
+ SYSTEM_ROOT_PASSWORD =
+ else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)),)
+-SYSTEM_ROOT_PASSWORD = $(SKELETON_TARGET_GENERIC_ROOT_PASSWD)
++SYSTEM_ROOT_PASSWORD = '$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)'
+ else
+ SKELETON_DEPENDENCIES += host-mkpasswd
+ # This variable will only be evaluated in the finalize stage, so we can
+ # be sure that host-mkpasswd will have already been built by that time.
+-SYSTEM_ROOT_PASSWORD = $(shell $(MKPASSWD) -m "$(SKELETON_TARGET_GENERIC_PASSWD_METHOD)" "$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)")
++SYSTEM_ROOT_PASSWORD = "`$(MKPASSWD) -m "$(SKELETON_TARGET_GENERIC_PASSWD_METHOD)" "$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)"`"
+ endif
+ else # !BR2_TARGET_ENABLE_ROOT_LOGIN
+-SYSTEM_ROOT_PASSWORD = *
++SYSTEM_ROOT_PASSWORD = "*"
+ endif
  
- # Get the real Linux version, which tells us where kernel modules are
- # going to be installed in the target filesystem.
--LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease)
-+LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease`
+ define SKELETON_SYSTEM_SET_ROOT_PASSWD
+-	$(SED) 's,^root:[^:]*:,root:$(SYSTEM_ROOT_PASSWORD):,' $(TARGET_DIR)/etc/shadow
++	$(SED) s,^root:[^:]*:,root:$(SYSTEM_ROOT_PASSWORD):, $(TARGET_DIR)/etc/shadow
+ endef
+ TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_SET_ROOT_PASSWD
  
- ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
- KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
