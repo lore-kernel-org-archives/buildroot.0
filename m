@@ -1,63 +1,40 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Tue, 14 Jul 2015 08:29:08 -0500
-Subject: [Buildroot] [PATCH v2 1/1] linux: add server options for NFSD
-In-Reply-To: <1436830463-90993-1-git-send-email-ryan.barnett@rockwellcollins.com>
-References: <1436830463-90993-1-git-send-email-ryan.barnett@rockwellcollins.com>
-Message-ID: <CAMQcK5LasX0hcDX4dQ4Skhmfbgcmw-KrkXCxBeUpDwn93xLr4g@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 14 Jul 2015 10:35:29 -0300
+Subject: [Buildroot] [PATCH] dejavu: bump to version 2.35
+Message-ID: <1436880929-23961-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dejavu/dejavu.hash | 3 +--
+ package/dejavu/dejavu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-On Mon, Jul 13, 2015 at 6:34 PM, Ryan Barnett
-<ryan.barnett@rockwellcollins.com> wrote:
-> When nfs-utils packages is selected, automatically enable the kernel
-> options for NFSD. This will allow for an NFS server to work by only
-> adding /etc/exports to the filesystem.
->
-> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-> ---
-> Test with qemu_x86_defconfig
->
-> Changes v1 -> v2:
->   - Only enable CONFIG_NFSD (suggested by Arnout)
-> ---
->  linux/linux.mk | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index b602a04..90396e6 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -229,6 +229,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
->         $(if $(BR2_PACKAGE_XTABLES_ADDONS),
->                 $(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
->                 $(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
-> +       $(if $(BR2_PACKAGE_NFS_UTILS),
-> +               $(call KCONFIG_ENABLE_OPT,CONFIG_NFSD,$(@D)/.config))
-
-I need to add to add the following line:
-
-$(call KCONFIG_ENABLE_OPT,CONFIG_NFSD_V3,$(@D)/.config))
-
-In my hesitation to test yesterday - I didn't do a clean build and was
-caught by having a kernel already having the correct option enabled.
-
-I will be sending a v3 here shortly.
-
->         $(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
->                 $(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
->  endef
-
-Thanks,
--Ryan
-
+diff --git a/package/dejavu/dejavu.hash b/package/dejavu/dejavu.hash
+index df851d7..37868c1 100644
+--- a/package/dejavu/dejavu.hash
++++ b/package/dejavu/dejavu.hash
+@@ -1,3 +1,2 @@
+ # From http://dejavu-fonts.org/wiki/Download
+-md5 161462de16e2ca79873bc2b0d2e6c74c dejavu-fonts-ttf-2.34.tar.bz2
+-sha256 d0a72c3ae99f5b8d7470daf091ec43f78dc942795aed5c996ab1aa678702eb5d dejavu-fonts-ttf-2.34.tar.bz2
++sha256	f6d7965586101ff3a8a5c3ec503e082bb6a9604ff53413e10702e5917c194d88	dejavu-fonts-ttf-2.35.tar.bz2
+diff --git a/package/dejavu/dejavu.mk b/package/dejavu/dejavu.mk
+index 65659c3..3dbcc94 100644
+--- a/package/dejavu/dejavu.mk
++++ b/package/dejavu/dejavu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DEJAVU_VERSION = 2.34
++DEJAVU_VERSION = 2.35
+ DEJAVU_SITE = http://sourceforge.net/projects/dejavu/files/dejavu/$(DEJAVU_VERSION)
+ DEJAVU_SOURCE = dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2
+ DEJAVU_LICENSE_FILES = LICENSE
 -- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+2.3.6
