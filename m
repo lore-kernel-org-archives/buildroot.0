@@ -1,70 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Jul 2015 13:38:14 +0200
-Subject: [Buildroot] [PATCH] package/qpid-proton: needs host-python2
-Message-ID: <1436873894-1080-1-git-send-email-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue, 14 Jul 2015 13:31:13 +0200
+Subject: [Buildroot] [PATCH v4 0/5] Linux kernel specific infrastructure
+Message-ID: <1436873478-13533-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qpid-proton is using constructs that are not valid in python3.
-qpid-proton is hardcoding calls to /usr/bin/python, which can be
-whatever version.
+This patches series introduces a new infrastructure to build Linux tools
+available in the kernel tree.
 
-So, fix the scripts to use '/usr/bin/env python' so it finds it in the
-PATH, and add a dependency to host-python.
+- The first patch add the Linux tools core infra.
+- Add a new Linux tool: cpupower.
+- Migrate the perf package to the new Linux tool infra.
+- Fix the build for x86_64 kernels.
+- Add the documentation about Linux tool infra and Linux extensions.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Baruch Siach <baruch@tkos.co.il>
----
- package/qpid-proton/0002-fix-python.patch | 22 ++++++++++++++++++++++
- package/qpid-proton/qpid-proton.mk        |  2 ++
- 2 files changed, 24 insertions(+)
- create mode 100644 package/qpid-proton/0002-fix-python.patch
+Thanks Yann and Arnout for your help and review.
 
-diff --git a/package/qpid-proton/0002-fix-python.patch b/package/qpid-proton/0002-fix-python.patch
-new file mode 100644
-index 0000000..c6f57e8
---- /dev/null
-+++ b/package/qpid-proton/0002-fix-python.patch
-@@ -0,0 +1,22 @@
-+Those scripts are not pytrhon3-compliant, use python2
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN qpid-proton-0.9.1.orig/proton-c/src/codec/encodings.h.py qpid-proton-0.9.1/proton-c/src/codec/encodings.h.py
-+--- qpid-proton-0.9.1.orig/proton-c/src/codec/encodings.h.py	2015-04-29 21:17:49.000000000 +0200
-++++ qpid-proton-0.9.1/proton-c/src/codec/encodings.h.py	2015-07-14 13:20:40.798356160 +0200
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/python
-++#!/usr/bin/env python2
-+ #
-+ # Licensed to the Apache Software Foundation (ASF) under one
-+ # or more contributor license agreements.  See the NOTICE file
-+diff -durN qpid-proton-0.9.1.orig/proton-c/src/protocol.h.py qpid-proton-0.9.1/proton-c/src/protocol.h.py
-+--- qpid-proton-0.9.1.orig/proton-c/src/protocol.h.py	2015-04-29 21:17:49.000000000 +0200
-++++ qpid-proton-0.9.1/proton-c/src/protocol.h.py	2015-07-14 13:21:19.750824925 +0200
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/python
-++#!/usr/bin/env python2
-+ #
-+ # Licensed to the Apache Software Foundation (ASF) under one
-+ # or more contributor license agreements.  See the NOTICE file
-diff --git a/package/qpid-proton/qpid-proton.mk b/package/qpid-proton/qpid-proton.mk
-index eae4589..cb06d97 100644
---- a/package/qpid-proton/qpid-proton.mk
-+++ b/package/qpid-proton/qpid-proton.mk
-@@ -11,8 +11,10 @@ QPID_PROTON_LICENSE = Apache-2.0
- QPID_PROTON_LICENSE_FILES = LICENSE
- QPID_PROTON_INSTALL_STAGING = YES
- QPID_PROTON_DEPENDENCIES = \
-+	host-python \
- 	util-linux \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl)
-+
- QPID_PROTON_CONF_OPTS = \
- 	-DBUILD_JAVA=OFF \
- 	-DENABLE_VALGRIND=OFF \
+Best regards,
+Romain Naour
+
+Romain Naour (5):
+  linux: add linux-tools infra
+  linux-tools: add cpupower
+  package/perf: migrate perf to use the new linux-tools infrastructure
+  linux/perf: use correct definition of ARCH on x86_64
+  docs/manual: add documentation for linux-ext and linux-tools.
+
+ Config.in.legacy                                   |   7 +
+ docs/manual/adding-packages-kernel-module.txt      |   1 +
+ .../adding-packages-linux-kernel-spec-infra.txt    | 141 +++++++++++++++++++++
+ docs/manual/adding-packages.txt                    |   2 +
+ linux/Config.in                                    |   3 +
+ package/perf/Config.in => linux/Config.tools.in    |  18 ++-
+ linux/linux-tool-cpupower.mk                       |  39 ++++++
+ package/perf/perf.mk => linux/linux-tool-perf.mk   |  31 +++--
+ linux/linux.mk                                     |  24 ++++
+ package/Config.in                                  |   1 -
+ 10 files changed, 248 insertions(+), 19 deletions(-)
+ create mode 100644 docs/manual/adding-packages-linux-kernel-spec-infra.txt
+ rename package/perf/Config.in => linux/Config.tools.in (63%)
+ create mode 100644 linux/linux-tool-cpupower.mk
+ rename package/perf/perf.mk => linux/linux-tool-perf.mk (71%)
+
 -- 
-1.9.1
+2.4.3
