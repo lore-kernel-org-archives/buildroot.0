@@ -1,39 +1,33 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 14 Jul 2015 11:44:08 +0200
-Subject: [Buildroot] [PATCH 1/1] Makefile: create $(BUILD_DIR) before
-	attempting to touch .root
-Message-ID: <1436867048-6333-1-git-send-email-patrickdepinguin@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Jul 2015 11:44:25 +0200
+Subject: [Buildroot] [PATCH 0/7 v2] core/kconfig: fix display of custom
+ error messages (branch yem/misc)
+In-Reply-To: <cover.1436783490.git.yann.morin.1998@free.fr>
+References: <cover.1436783490.git.yann.morin.1998@free.fr>
+Message-ID: <20150714114425.0a41e86d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Dear Yann E. MORIN,
 
-The target $(BUILD_DIR)/.root does not have a direct dependency on
-$(BUILD_DIR), meaning that cases could exist where the target is executed
-without $(BUILD_DIR) being present.
-Instead of hoping on a specific order, and instead of adding new make
-dependencies, just make sure the directory is created.
+On Mon, 13 Jul 2015 12:32:00 +0200, Yann E. MORIN wrote:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Yann E. MORIN (7):
+>       core/pkg-kconfig: don't enforce check for config file when not building
+>       package/linux: don't enforce check for DTS when not building
+>       package/linux: check for config file before calling kconfig-package
+>       boot/at91boostrap3: check for config file before calling kconfig-package
+>       boot/barebox: check for config file before calling kconfig-package
+>       package/busybox: check for config file
+>       package/uclibc: check for config file
 
-diff --git a/Makefile b/Makefile
-index 8eb8c6d..ee65417 100644
---- a/Makefile
-+++ b/Makefile
-@@ -471,7 +471,7 @@ RSYNC_VCS_EXCLUSIONS = \
- 	--exclude CVS
- 
- $(BUILD_DIR)/.root:
--	mkdir -p $(TARGET_DIR)
-+	mkdir -p $(TARGET_DIR) $(BUILD_DIR)
- 	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
- 		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
- 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+All applied, thanks.
+
+Thomas
 -- 
-1.9.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
