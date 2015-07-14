@@ -1,39 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 13:56:37 +0200
-Subject: [Buildroot] [PATCH] snappy: disable tests
-In-Reply-To: <1436873471-25780-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1436873471-25780-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150714135637.3f63604c@free-electrons.com>
+Date: Tue, 14 Jul 2015 14:00:04 +0200
+Subject: [Buildroot] [git commit] mongoose: systemd support
+Message-ID: <20150714120016.979EC81D3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=de2dd8f473d5502c61e162594a6a6c3273270a9a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Jul 2015 13:31:11 +0200, Vicente Olivert Riera wrote:
-> This will also fix an unsafe header path problem:
-> 
-> /br/output/host/usr/bin/mips-linux-gnu-g++ -DHAVE_CONFIG_H -I.
-> -I/usr/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64   -Os  -c -o snappy_unittest-snappy-test.o `test
-> -f 'snappy-test.cc' || echo './'`snappy-test.cc
-> mips-linux-gnu-g++: ERROR: unsafe header/library path used in
-> cross-compilation: '/usr/include'
-> Makefile:730: recipe for target 'snappy_unittest-snappy_unittest.o'
-> failed
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/snappy/snappy.mk | 3 +++
->  1 file changed, 3 insertions(+)
+[Thomas: use relative symbolic link.]
 
-Applied, thanks.
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mongoose/mongoose.mk      |    8 ++++++++
+ package/mongoose/mongoose.service |   10 ++++++++++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 6797e58..14f2aae 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -36,6 +36,14 @@ define MONGOOSE_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S85mongoose
+ endef
+ 
++define MONGOOSE_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/mongoose/mongoose.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/mongoose.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/mongoose.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mongoose.service
++endef
++
+ define MONGOOSE_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D -m 644 $(@D)/libmongoose.a \
+ 		$(STAGING_DIR)/usr/lib/libmongoose.a
+diff --git a/package/mongoose/mongoose.service b/package/mongoose/mongoose.service
+new file mode 100644
+index 0000000..12a731c
+--- /dev/null
++++ b/package/mongoose/mongoose.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Mongoose HTTP server
++After=network.target
++
++[Service]
++ExecStart=/usr/sbin/mongoose -document_root /var/www -listening_port 80
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
