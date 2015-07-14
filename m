@@ -1,55 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 11:53:44 +0200
-Subject: [Buildroot] [git commit] olsr: systemd support
-Message-ID: <20150714095410.1B7C07FE93@busybox.osuosl.org>
+Date: Tue, 14 Jul 2015 11:54:44 +0200
+Subject: [Buildroot] [PATCH 19/38] olsr: systemd support
+In-Reply-To: <ac31cdd39a0dbb6b172575dc356a93e81389e080.1432332802.git.alex.suykov@gmail.com>
+References: <cover.1432332802.git.alex.suykov@gmail.com>
+ <ac31cdd39a0dbb6b172575dc356a93e81389e080.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <20150714115444.3326834b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b39faff8c5d425fe5f9fa64baf4b9ceb77b432f0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Alex Suykov,
 
-[Thomas: use relative symlink instead of absolute symlink]
+On Sat, 23 May 2015 13:06:09 +0300, Alex Suykov wrote:
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> ---
+>  package/olsr/olsr.mk      |  8 ++++++++
+>  package/olsr/olsr.service | 10 ++++++++++
+>  2 files changed, 18 insertions(+)
+>  create mode 100644 package/olsr/olsr.service
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/olsr/olsr.mk      |    8 ++++++++
- package/olsr/olsr.service |   10 ++++++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+Applied after changing to use a relative path for the symbolic
+link. Thanks!
 
-diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-index 7e28b1e..0dec8dc 100644
---- a/package/olsr/olsr.mk
-+++ b/package/olsr/olsr.mk
-@@ -40,4 +40,12 @@ define OLSR_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S50olsr
- endef
- 
-+define OLSR_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/olsr/olsr.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/olsr.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/olsr.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/olsr.service
-+endef
-+
- $(eval $(generic-package))
-diff --git a/package/olsr/olsr.service b/package/olsr/olsr.service
-new file mode 100644
-index 0000000..9ec8930
---- /dev/null
-+++ b/package/olsr/olsr.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Ad-hoc wireless mesh routing daemon
-+After=network.target
-+
-+[Service]
-+ExecStart=/usr/sbin/olsrd -nofork
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
