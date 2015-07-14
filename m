@@ -1,55 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 14:03:03 +0200
-Subject: [Buildroot] [git commit] tinyhttpd: systemd support
-Message-ID: <20150714120327.7E21F81D3D@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 14 Jul 2015 15:03:25 +0300
+Subject: [Buildroot] [PATCH] package/qpid-proton: needs host-python2
+In-Reply-To: <20150714135627.26cf899a@free-electrons.com>
+References: <1436873894-1080-1-git-send-email-yann.morin.1998@free.fr>
+ <20150714114803.GA2332@tarshish>
+ <20150714135627.26cf899a@free-electrons.com>
+Message-ID: <20150714120325.GB2332@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b7afea9500de01a9b41c32045de6ec72c209d59e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-[Thomas: use relative symlink.]
+On Tue, Jul 14, 2015 at 01:56:27PM +0200, Thomas Petazzoni wrote:
+> On Tue, 14 Jul 2015 14:48:04 +0300, Baruch Siach wrote:
+> > My interpretation of the cmake log is that cmake uses the python 
+> > interpreter it detects to run the scripts. In the failed cases cmake 
+> > detected host-python3 because host-python3 happened to build before 
+> > qpid-proton. cmake did not use the distro installed host python even 
+> > though it's python2 (most likely). So I'm not sure patching the scripts is 
+> > necessary.
+> 
+> It is necessary if your host machine has a Python 3 interpreter and not
+> a Python 2 interpreter. In this case the scripts will
+> run /usr/bin/python (because it's hardcoded in their source code), and
+> this will run Python 3.
+> 
+> So Yann's solution looks good. Am I missing something?
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tinyhttpd/tinyhttpd.mk      |    8 ++++++++
- package/tinyhttpd/tinyhttpd.service |   10 ++++++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+My point is that in the failed cases /usr/bin/python was not used, otherwise 
+the build would have succeeded. It seems that cmake uses the python 
+interpreter it detects to run the scripts. So patching the scripts doesn't 
+change anything by itself, IIUC.
 
-diff --git a/package/tinyhttpd/tinyhttpd.mk b/package/tinyhttpd/tinyhttpd.mk
-index 0934b71..194249b 100644
---- a/package/tinyhttpd/tinyhttpd.mk
-+++ b/package/tinyhttpd/tinyhttpd.mk
-@@ -24,4 +24,12 @@ define TINYHTTPD_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S85tinyhttpd
- endef
- 
-+define TINYHTTPD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/tinyhttpd/tinyhttpd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/tinyhttpd.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/tinyhttpd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/tinyhttpd.service
-+endef
-+
- $(eval $(generic-package))
-diff --git a/package/tinyhttpd/tinyhttpd.service b/package/tinyhttpd/tinyhttpd.service
-new file mode 100644
-index 0000000..0ae5bac
---- /dev/null
-+++ b/package/tinyhttpd/tinyhttpd.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Tiny HTTP daemon
-+After=network.target
-+
-+[Service]
-+ExecStart=/usr/sbin/tinyhttpd
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
+Related to this, what do you thing about changing the host python requirement 
+in the manual?
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
