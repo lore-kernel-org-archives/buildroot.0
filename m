@@ -1,65 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 10:13:18 +0200
-Subject: [Buildroot] [git commit] system: fix BR2_INIT_NONE /
-	BR2_INIT_SYSTEMD build
-Message-ID: <20150714081749.9DC1A80E2A@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 14 Jul 2015 10:28:10 +0200
+Subject: [Buildroot] [PATCH v5 3/5] Makefile: add
+ TARGET_SANITIZE_RPATH_HOOK to TARGET_FINALIZE_HOOKS
+In-Reply-To: <20150714053758.GX2451@tarshish>
+References: <1436824511-1601-1-git-send-email-s.martin49@gmail.com>
+ <1436824511-1601-3-git-send-email-s.martin49@gmail.com>
+ <20150714053758.GX2451@tarshish>
+Message-ID: <CAHXCMML1KJSL3EqHfm0kY7JGyd6+JPLdXFs2faG+0sE9Fsgp_Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ddc63be5294af5418207564ffb5ab1ecc3f9b055
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Baruch,
 
-Following the introduction of the initscripts package in commit
-89d39fc7a392530be043bac541ade0bef746edb6 ("initscripts: new package"),
-the /etc/inittab file is no longer part of the skeleton, and therefore
-is not always installed.
+On Tue, Jul 14, 2015 at 7:37 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Samuel,
+>
+> On Mon, Jul 13, 2015 at 11:55:09PM +0200, Samuel Martin wrote:
+>> This patch introduces the TARGET_SANITIZE_RPATH_HOOK hook fixing the ELF
+>> files' RPATH of the TARGET_DIR (excluding the sysroot).
+>
+> Are you sure sysroot is excluded?
+Yes, via $(STAGING_DIR).
 
-However, system/system.mk tweaks the inittab for getty and filesystem
-remount as rw, without taking the precautions of whether the init
-system is Busybox or SysV. This commit fixes that by adding the
-necessary conditions around the code adjusting the inittab file.
+During my tests, I only saw /path/to/sysroot/usr/lib in the RPATH.
+So, I only remove paths similar to this (i.e. standard libdirs from
+the sysroot) in RPATH.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- system/system.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+>
+>> After running this hook, the RPATH from any target ELF files won't
+>> contain any occurence of the sysroot or some build locations.
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>
+> Tested-by: Baruch Siach <baruch@tkos.co.il>
+>
+> [ Build test only: verified that /sbin/ebtables preserves its RPATH
+>   (/lib/ebtables), and that /usr/sbin/visudo also preserves its target RPATH
+>   (/usr/libexec/sudo), while dropping the staging part ($(@D)/lib/util/.libs)
+>   ]
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
 
-diff --git a/system/system.mk b/system/system.mk
-index fd94e03..e44f64c 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -89,14 +89,14 @@ endif
- TARGET_FINALIZE_HOOKS += SYSTEM_BIN_SH
- 
- ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
--ifeq ($(BR2_PACKAGE_SYSVINIT),y)
-+ifeq ($(BR2_INIT_SYSV),y)
- # In sysvinit inittab, the "id" must not be longer than 4 bytes, so we
- # skip the "tty" part and keep only the remaining.
- define SYSTEM_GETTY
- 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY_PORT) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_OPTIONS) $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
- 		$(TARGET_DIR)/etc/inittab
- endef
--else
-+else ifeq ($(BR2_INIT_BUSYBOX),y)
- # Add getty to busybox inittab
- define SYSTEM_GETTY
- 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY_PORT)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_OPTIONS) $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
-@@ -106,6 +106,7 @@ endif
- TARGET_FINALIZE_HOOKS += SYSTEM_GETTY
- endif
- 
-+ifeq ($(BR2_INIT_BUSYBOX)$(BR2_INIT_SYSV),y)
- ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
- # Find commented line, if any, and remove leading '#'s
- define SYSTEM_REMOUNT_RW
-@@ -118,5 +119,6 @@ define SYSTEM_REMOUNT_RW
- endef
- endif
- TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_RW
-+endif
- 
- endif # BR2_ROOTFS_SKELETON_DEFAULT
+Thanks a lot for your careful review. :-)
+
+Regards,
+
+-- 
+Samuel
