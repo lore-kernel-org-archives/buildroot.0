@@ -1,11 +1,11 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Jul 2015 07:28:54 +0300
-Subject: [Buildroot] [PATCH v5 5/5] package/speex: remove no longer
- needed hook
-In-Reply-To: <1436824511-1601-5-git-send-email-s.martin49@gmail.com>
+Date: Tue, 14 Jul 2015 08:37:58 +0300
+Subject: [Buildroot] [PATCH v5 3/5] Makefile: add
+ TARGET_SANITIZE_RPATH_HOOK to TARGET_FINALIZE_HOOKS
+In-Reply-To: <1436824511-1601-3-git-send-email-s.martin49@gmail.com>
 References: <1436824511-1601-1-git-send-email-s.martin49@gmail.com>
- <1436824511-1601-5-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150714042853.GW2451@tarshish>
+ <1436824511-1601-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150714053758.GX2451@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +14,25 @@ To: buildroot@busybox.net
 
 Hi Samuel,
 
-On Mon, Jul 13, 2015 at 11:55:11PM +0200, Samuel Martin wrote:
-> Remove the LIBTOOL_FIXUP hook since RPATH are now sanitized in
-> target-finalize hooks.
+On Mon, Jul 13, 2015 at 11:55:09PM +0200, Samuel Martin wrote:
+> This patch introduces the TARGET_SANITIZE_RPATH_HOOK hook fixing the ELF
+> files' RPATH of the TARGET_DIR (excluding the sysroot).
+
+Are you sure sysroot is excluded?
+
+> After running this hook, the RPATH from any target ELF files won't
+> contain any occurence of the sysroot or some build locations.
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
-> changes v4->v5:
-> - new patch (suggested by Baruch)
-> ---
->  package/speex/speex.mk | 5 -----
->  1 file changed, 5 deletions(-)
-> 
-> diff --git a/package/speex/speex.mk b/package/speex/speex.mk
-> index a34bfac..24782ec 100644
-> --- a/package/speex/speex.mk
-> +++ b/package/speex/speex.mk
-> @@ -24,11 +24,6 @@ ifeq ($(BR2_PACKAGE_SPEEX_ARM5E),y)
->  SPEEX_CONF_OPTS += --enable-arm5e-asm
->  endif
->  
-> -define SPEEX_LIBTOOL_FIXUP
-> -	$(SED) 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $(@D)/libtool
-> -	$(SED) 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $(@D)/libtool
-> -endef
-> -
->  SPEEX_POST_CONFIGURE_HOOKS += SPEEX_LIBTOOL_FIXUP
 
-You can remove this line as well.
+Tested-by: Baruch Siach <baruch@tkos.co.il>
+
+[ Build test only: verified that /sbin/ebtables preserves its RPATH 
+  (/lib/ebtables), and that /usr/sbin/visudo also preserves its target RPATH 
+  (/usr/libexec/sudo), while dropping the staging part ($(@D)/lib/util/.libs) 
+  ]
 
 baruch
-
->  define SPEEX_BUILD_CMDS
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
