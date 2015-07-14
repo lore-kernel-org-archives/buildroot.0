@@ -1,34 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jul 2015 00:09:33 +0200
-Subject: [Buildroot] [PATCH v4 3/7] boot/uboot: Add support for dtb.img
- format
-In-Reply-To: <20150714171401.117b8fec@pcviktorin.fit.vutbr.cz>
-References: <20150714171214.706e9e4d@pcviktorin.fit.vutbr.cz>
- <20150714171401.117b8fec@pcviktorin.fit.vutbr.cz>
-Message-ID: <20150715000933.02bf02d7@free-electrons.com>
+Date: Wed, 15 Jul 2015 00:10:52 +0200
+Subject: [Buildroot] [git commit] pulseaudio: systemd support
+Message-ID: <20150714221115.8308681D42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jan Viktorin,
+commit: http://git.buildroot.net/buildroot/commit/?id=c42f6907fa5f1cafcb5aedafe4fc9865d0b3fb4a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Jul 2015 17:14:01 +0200, Jan Viktorin wrote:
-> Allow to generate u-boot-dtb.img. This is the same format
-> as u-boot.img, however, it contains a built-in device-tree.
-> This file is being loaded by the U-Boot SPL.
-> 
-> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
-> ---
->  boot/uboot/Config.in | 3 +++
->  boot/uboot/uboot.mk  | 2 ++
->  2 files changed, 5 insertions(+)
+[Thomas:
+ - use relative path for the service symlink
+ - slightly adjust the service description]
 
-Applied, thanks.
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pulseaudio/pulseaudio.mk      |    8 ++++++++
+ package/pulseaudio/pulseaudio.service |   11 +++++++++++
+ 2 files changed, 19 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index e68ca68..0fcfe38 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -123,6 +123,14 @@ define PULSEAUDIO_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S50pulseaudio
+ endef
+ 
++define PULSEAUDIO_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/pulseaudio/pulseaudio.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/pulseaudio.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/pulseaudio.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/pulseaudio.service
++endef
++
+ endif
+ 
+ $(eval $(autotools-package))
+diff --git a/package/pulseaudio/pulseaudio.service b/package/pulseaudio/pulseaudio.service
+new file mode 100644
+index 0000000..fc82f03
+--- /dev/null
++++ b/package/pulseaudio/pulseaudio.service
+@@ -0,0 +1,11 @@
++[Unit]
++Description=PulseAudio Sound System
++After=syslog.target
++
++[Service]
++UMask=077
++ExecStart=/usr/bin/pulseaudio --system --daemonize=no
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
