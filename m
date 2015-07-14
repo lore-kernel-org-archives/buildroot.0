@@ -1,227 +1,148 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Tue, 14 Jul 2015 15:20:25 -0500
-Subject: [Buildroot] [PATCH v9 13/15] qemu x86 selinux: base br defconfig
+Date: Tue, 14 Jul 2015 15:20:26 -0500
+Subject: [Buildroot] [PATCH v9 14/15] cpio: new package
 In-Reply-To: <1436905227-26937-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1436905227-26937-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1436905227-26937-14-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1436905227-26937-15-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will build a base SELinux system that boots with SELinux
-in permissive mode. Also adding documentation on how to use it.
+Adding the cpio archive utility for the target and host. Patches have
+been pulled from ArchLinux and Gentoo to fix CVE issues and compile
+issues.
 
 Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 ---
 Changes v8 -> v9:
-  - No changes
+  - Fixed commit message to say patches came from Gentoo and not Debian
+    (Suggested by Samuel)
 
 Changes v7 -> v8:
-  - No changes
+  - Corrected the license to be GPLv3+ (Suggested by Thomas P.)
+  - Changed all of the patches to pull from the various source locations
+    since they were not being modified at all (Suggested by Thomas P.)
 
 Changes v6 -> v7:
-  - No changes
+  - Added dependency on argp-standalone package for uclibc toolchains
+    to fix build error (Clayton S.)
+  - Added hash file (Clayton S.)
 
 Changes v5 -> v6:
   - No changes
-
-Changes v4 -> v5:
-  - Update the qemu_x86_defconfig to the 4.0 kernel series (Clayton S.)
-
-Changes v1 -> v4:
-  - Did not exist
 ---
- board/qemu/x86/linux-4.0-selinux.config | 77 +++++++++++++++++++++++++++++++++
- board/qemu/x86/readme.txt               | 17 ++++++++
- configs/qemu_x86_selinux_defconfig      | 67 ++++++++++++++++++++++++++++
- 3 files changed, 161 insertions(+)
- create mode 100644 board/qemu/x86/linux-4.0-selinux.config
- create mode 100644 configs/qemu_x86_selinux_defconfig
+ package/Config.in           |  1 +
+ package/Config.in.host      |  1 +
+ package/cpio/Config.in      |  8 ++++++++
+ package/cpio/Config.in.host |  6 ++++++
+ package/cpio/cpio.hash      |  9 +++++++++
+ package/cpio/cpio.mk        | 27 +++++++++++++++++++++++++++
+ 6 files changed, 52 insertions(+)
+ create mode 100644 package/cpio/Config.in
+ create mode 100644 package/cpio/Config.in.host
+ create mode 100644 package/cpio/cpio.hash
+ create mode 100644 package/cpio/cpio.mk
 
-diff --git a/board/qemu/x86/linux-4.0-selinux.config b/board/qemu/x86/linux-4.0-selinux.config
-new file mode 100644
-index 0000000..89ab0dc
---- /dev/null
-+++ b/board/qemu/x86/linux-4.0-selinux.config
-@@ -0,0 +1,77 @@
-+# CONFIG_LOCALVERSION_AUTO is not set
-+# CONFIG_SWAP is not set
-+CONFIG_AUDIT=y
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_MODULES=y
-+# CONFIG_BLK_DEV_BSG is not set
-+# CONFIG_IOSCHED_DEADLINE is not set
-+# CONFIG_IOSCHED_CFQ is not set
-+# CONFIG_X86_EXTENDED_PLATFORM is not set
-+# CONFIG_SCHED_OMIT_FRAME_POINTER is not set
-+# CONFIG_MTRR_SANITIZER is not set
-+# CONFIG_SECCOMP is not set
-+# CONFIG_RELOCATABLE is not set
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-+# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-+# CONFIG_INET_XFRM_MODE_BEET is not set
-+# CONFIG_INET_LRO is not set
-+# CONFIG_INET_DIAG is not set
-+# CONFIG_IPV6 is not set
-+# CONFIG_WIRELESS is not set
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+# CONFIG_PREVENT_FIRMWARE_BUILD is not set
-+# CONFIG_FIRMWARE_IN_KERNEL is not set
-+# CONFIG_BLK_DEV is not set
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_ATA=y
-+CONFIG_ATA_PIIX=y
-+CONFIG_NETDEVICES=y
-+CONFIG_NE2K_PCI=y
-+CONFIG_8139CP=y
-+# CONFIG_WLAN is not set
-+# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO_SERPORT is not set
-+# CONFIG_LEGACY_PTYS is not set
-+# CONFIG_DEVKMEM is not set
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+CONFIG_SND_HDA_INTEL=y
-+# CONFIG_USB_SUPPORT is not set
-+# CONFIG_X86_PLATFORM_DEVICES is not set
-+# CONFIG_DMIID is not set
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT2_FS_XATTR=y
-+CONFIG_EXT2_FS_POSIX_ACL=y
-+CONFIG_EXT2_FS_SECURITY=y
-+CONFIG_EXT3_FS=y
-+CONFIG_EXT3_FS_POSIX_ACL=y
-+CONFIG_EXT3_FS_SECURITY=y
-+# CONFIG_DNOTIFY is not set
-+# CONFIG_INOTIFY_USER is not set
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NFS_FS=y
-+CONFIG_ROOT_NFS=y
-+# CONFIG_ENABLE_WARN_DEPRECATED is not set
-+# CONFIG_ENABLE_MUST_CHECK is not set
-+# CONFIG_UNUSED_SYMBOLS is not set
-+# CONFIG_FRAME_POINTER is not set
-+# CONFIG_X86_VERBOSE_BOOTUP is not set
-+CONFIG_SECURITY=y
-+CONFIG_SECURITY_NETWORK=y
-+CONFIG_SECURITY_SELINUX=y
-+CONFIG_SECURITY_SELINUX_BOOTPARAM=y
-+CONFIG_CRYPTO_ANSI_CPRNG=y
-+# CONFIG_VIRTUALIZATION is not set
-diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
-index 85d5c60..032d714 100644
---- a/board/qemu/x86/readme.txt
-+++ b/board/qemu/x86/readme.txt
-@@ -5,3 +5,20 @@ Run the emulation with:
- The login prompt will appear in the graphical window.
+diff --git a/package/Config.in b/package/Config.in
+index 1fe7850..ed40064 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -151,6 +151,7 @@ endmenu
+ menu "Filesystem and flash utilities"
+ 	source "package/btrfs-progs/Config.in"
+ 	source "package/cifs-utils/Config.in"
++	source "package/cpio/Config.in"
+ 	source "package/cramfs/Config.in"
+ 	source "package/curlftpfs/Config.in"
+ 	source "package/dosfstools/Config.in"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 1e047aa..9a4f176 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,6 +1,7 @@
+ menu "Host utilities"
  
- Tested with QEMU 2.2.1
-+
-+-------------------------------------------------------------------
-+
-+Run the SElinux target emulation with:
-+
-+  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append "root=/dev/sda rw console=ttyS0 selinux=1" -net nic,model=rtl8139 -net user -display none -serial stdio
-+
-+The emulation should reboot once the first time for relabeling and
-+then provide a login prompt. The login is username root and password
-+root because PAM requires a password in this secure configuration. To
-+enable SELinux enforcing at boot, login and edit the
-+/etc/selinux/config and set SELINUX to enforcing. Save and make sure
-+to "sync" before restarting the emulation as the ext2 fs would
-+otherwise corrupt when the emulation exits. After enforcing is
-+default, the selinux= provided as part of the qemu "append" above can
-+be used to turn enforcing on/off. This configuration would be tailored
-+as part of a targets refpolicy customization.
-diff --git a/configs/qemu_x86_selinux_defconfig b/configs/qemu_x86_selinux_defconfig
+ 	source "package/checkpolicy/Config.in.host"
++	source "package/cpio/Config.in.host"
+ 	source "package/cramfs/Config.in.host"
+ 	source "package/dfu-util/Config.in.host"
+ 	source "package/dos2unix/Config.in.host"
+diff --git a/package/cpio/Config.in b/package/cpio/Config.in
 new file mode 100644
-index 0000000..feb4534
+index 0000000..1787f39
 --- /dev/null
-+++ b/configs/qemu_x86_selinux_defconfig
-@@ -0,0 +1,67 @@
-+# Architecture
-+BR2_x86_pentiumpro=y
++++ b/package/cpio/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CPIO
++	bool "cpio"
++	# Need argp.h support
++	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
++	help
++	  cpio archive utility for creation and extraction.
 +
-+# Default to the latest Code Sourcery
-+BR2_TOOLCHAIN_EXTERNAL=y
++	  https://www.gnu.org/software/cpio/
+diff --git a/package/cpio/Config.in.host b/package/cpio/Config.in.host
+new file mode 100644
+index 0000000..e927952
+--- /dev/null
++++ b/package/cpio/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_CPIO
++	bool "host cpio"
++	help
++	  cpio archive utility for creation and extraction.
 +
-+# Select SYSV init to provide selinux enabled init
-+BR2_INIT_SYSV=y
++	  https://www.gnu.org/software/cpio/
+diff --git a/package/cpio/cpio.hash b/package/cpio/cpio.hash
+new file mode 100644
+index 0000000..c52e86a
+--- /dev/null
++++ b/package/cpio/cpio.hash
+@@ -0,0 +1,9 @@
++# Locally calculated after checking pgp signature
++sha256	601b1d774cd6e4cd39416203c91ec59dbd65dd27d79d75e1a9b89497ea643978	cpio-2.11.tar.gz
 +
-+# Default password to allow PAM login
-+BR2_TARGET_GENERIC_ROOT_PASSWD="root"
++# Locally calculated
++sha256 903fb87e00813daf257be5d1680ad93770d320c707ab2ec345486958b2e8a21f cpio-2.11-stdio.in.patch
++sha256 6b6505a97dda75d24627d9ba461b45ab9ea4764e1a2788d6986eb2978434f25d cpio-2.11-CVE-2014-9112.patch
++sha256 0cf7c9749f1c1610aaf46e17eacd6614c5ef8c2114236bcdd08d53e929020ae5 cpio-2.11-testsuite-CVE-2014-9112.patch
++sha256 f1f587f70a38363691cbd4dfe89f962c8c57266277f0fbc781910c6a7065be7e cpio-2.11-check_for_symlinks-CVE-2015-1197.patch
++sha256 b3d317e3c5705d7f9e503f56540baf3cb6dd1d0e9be0261151a5b08378c2d98c cpio-2.11-stat.patch
+diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
+new file mode 100644
+index 0000000..67871e2
+--- /dev/null
++++ b/package/cpio/cpio.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# cpio
++#
++################################################################################
 +
-+# Default the shell to bash, sh symlinks to busybox which
-+# is not compatible with refpolicy
-+BR2_SYSTEM_BIN_SH_BASH=y
++CPIO_VERSION = 2.11
++CPIO_SITE = http://ftp.gnu.org/gnu/cpio
++CPIO_LICENSE = GPLv3+
++CPIO_LICENSE_FILES = COPYING
++CPIO_PATCH = \
++	https://projects.archlinux.org/svntogit/packages.git/plain/cpio/trunk/cpio-2.11-stdio.in.patch \
++	https://projects.archlinux.org/svntogit/packages.git/plain/cpio/trunk/cpio-2.11-CVE-2014-9112.patch \
++	https://projects.archlinux.org/svntogit/packages.git/plain/cpio/trunk/cpio-2.11-testsuite-CVE-2014-9112.patch \
++	https://projects.archlinux.org/svntogit/packages.git/plain/cpio/trunk/cpio-2.11-check_for_symlinks-CVE-2015-1197.patch \
++	https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-arch/cpio/files/cpio-2.11-stat.patch
 +
-+# Pull in SELinux specific file overlay to allow login
-+# in enforcing mode.
-+BR2_ROOTFS_DEVICE_TABLE="system/device_table.txt board/common_selinux/skeleton_permissions.txt"
-+BR2_ROOTFS_OVERLAY="board/common_selinux/skeleton"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/common_selinux/post_build.sh"
++# cpio uses argp.h which is not provided by uclibc by default.
++# Use the argp-standalone package to provide this but make sure
++# the host package does not try to use the host version.
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++CPIO_DEPENDENCIES += argp-standalone
++HOST_CPIO_DEPENDENCIES =
++endif
 +
-+# Lock to a kernel that's been tested against selinux libs
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-4.0-selinux.config"
-+
-+# Customized busybox config providing a tailored
-+# balance of applets vs full apps
-+BR2_PACKAGE_BUSYBOX_CONFIG="board/common_selinux/busybox-selinux.config"
-+
-+# Ensure busybox is built as individual binaries for the
-+# SELinux refpolicy to work correctly
-+BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES=y
-+
-+# Audit service
-+BR2_PACKAGE_AUDIT=y
-+
-+# Enhanced authentication with selinux hooks
-+BR2_PACKAGE_LINUX_PAM=y
-+
-+# Full version of login with SELinux support
-+BR2_PACKAGE_UTIL_LINUX=y
-+BR2_PACKAGE_UTIL_LINUX_BINARIES=y
-+BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS=y
-+
-+# SSH daemon for secure login
-+BR2_PACKAGE_OPENSSH=y
-+
-+# Provides tools for fs security context relabeling
-+BR2_PACKAGE_POLICYCOREUTILS=y
-+
-+# SELinux policy config/definition
-+BR2_PACKAGE_REFPOLICY=y
-+
-+# Logging daemon
-+BR2_PACKAGE_RSYSLOG=y
-+
-+#rootfs with spare space for fs relabel activity
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_RESBLKS=5
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Offline tools for policy analysis/building
-+BR2_PACKAGE_HOST_CHECKPOLICY=y
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 1.9.1
