@@ -1,57 +1,43 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 14 Jul 2015 10:28:10 +0200
-Subject: [Buildroot] [PATCH v5 3/5] Makefile: add
- TARGET_SANITIZE_RPATH_HOOK to TARGET_FINALIZE_HOOKS
-In-Reply-To: <20150714053758.GX2451@tarshish>
-References: <1436824511-1601-1-git-send-email-s.martin49@gmail.com>
- <1436824511-1601-3-git-send-email-s.martin49@gmail.com>
- <20150714053758.GX2451@tarshish>
-Message-ID: <CAHXCMML1KJSL3EqHfm0kY7JGyd6+JPLdXFs2faG+0sE9Fsgp_Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Jul 2015 10:24:10 +0200
+Subject: [Buildroot] [git commit] core/pkg-kconfig: don't enforce check for
+	config file when not building
+Message-ID: <20150714083402.CCA03819C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+commit: http://git.buildroot.net/buildroot/commit/?id=61ca162f5bf052f70c6ac356358120329e4b1c6d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Jul 14, 2015 at 7:37 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Samuel,
->
-> On Mon, Jul 13, 2015 at 11:55:09PM +0200, Samuel Martin wrote:
->> This patch introduces the TARGET_SANITIZE_RPATH_HOOK hook fixing the ELF
->> files' RPATH of the TARGET_DIR (excluding the sysroot).
->
-> Are you sure sysroot is excluded?
-Yes, via $(STAGING_DIR).
+Currently, this is triggering the error message:
+    make randconfig
+    make source
 
-During my tests, I only saw /path/to/sysroot/usr/lib in the RPATH.
-So, I only remove paths similar to this (i.e. standard libdirs from
-the sysroot) in RPATH.
+Only limit the check to enforce a config file being set to when we are
+actually building, like is done in the various kconfig-using packages.
 
->
->> After running this hook, the RPATH from any target ELF files won't
->> contain any occurence of the sysroot or some build locations.
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->
-> Tested-by: Baruch Siach <baruch@tkos.co.il>
->
-> [ Build test only: verified that /sbin/ebtables preserves its RPATH
->   (/lib/ebtables), and that /usr/sbin/visudo also preserves its target RPATH
->   (/usr/libexec/sudo), while dropping the staging part ($(@D)/lib/util/.libs)
->   ]
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-kconfig.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Thanks a lot for your careful review. :-)
-
-Regards,
-
--- 
-Samuel
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index c86c340..f708875 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -90,9 +90,11 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+ 
+ # FOO_KCONFIG_FILE is required
++ifeq ($$(BR_BUILDING),y)
+ ifeq ($$($(2)_KCONFIG_FILE),)
+ $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
+ endif
++endif
+ 
+ # Configuration editors (menuconfig, ...)
+ #
