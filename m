@@ -1,201 +1,48 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 14 Jul 2015 12:09:34 +0200
-Subject: [Buildroot] [PATCH v2 1/1] gmock: new package
-In-Reply-To: <1431713119-2821-1-git-send-email-casantos@datacom.ind.br>
-References: <1425304883-4332-2-git-send-email-casantos@datacom.ind.br>
- <1431713119-2821-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <CAHXCMML+4JgBr1msNmu8Z4Ja0FjmR1TficJq4d5nfnPXaXTg6A@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 Jul 2015 12:13:21 +0200
+Subject: [Buildroot] [PATCH] package: fix fallout from checking kconfig
+	config files
+Message-ID: <1436868801-14596-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, all,
+Those checks should only be dione when the package is actually enabled.
 
-On Fri, May 15, 2015 at 8:05 PM, Carlos Santos <casantos@datacom.ind.br> wrote:
-> Inspired by jMock, EasyMock, and Hamcrest, and designed with C++'s
-> specifics in mind, Google C++ Mocking Framework (or Google Mock for
-> short) is a library for writing and using C++ mock classes.
->
-> Google Mock:
->
->   * lets you create mock classes trivially using simple macros,
->   * supports a rich set of matchers and actions,
->   * handles unordered, partially ordered, or completely ordered
->     expectations,
->   * is extensible by users, and
->   * works on Linux, Mac OS X, Windows, Windows Mobile, minGW, and
->     Symbian.
->
->   http://code.google.com/p/googlemock/
->
-> There are both host and target packages. The target one has include
-> files required to compile the tests and the static libraries required
-> to link/run them. The host package installs gmock_gen, a Python script
-> used to generate code mocks.
->
-> Signed-off-by: Marcelo Barbosa <marcelo.barbosa@datacom.ind.br>
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  package/Config.in        |  1 +
->  package/gmock/Config.in  | 31 +++++++++++++++++++++++++++++
->  package/gmock/gmock.hash |  2 ++
->  package/gmock/gmock.mk   | 52 ++++++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 86 insertions(+)
->  create mode 100644 package/gmock/Config.in
->  create mode 100644 package/gmock/gmock.hash
->  create mode 100644 package/gmock/gmock.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index af4d2b7..3190bf8 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1014,6 +1014,7 @@ menu "Other"
->         source "package/flann/Config.in"
->         source "package/glibmm/Config.in"
->         source "package/glm/Config.in"
-> +       source "package/gmock/Config.in"
->         source "package/gmp/Config.in"
->         source "package/gsl/Config.in"
->         source "package/gtest/Config.in"
-> diff --git a/package/gmock/Config.in b/package/gmock/Config.in
-> new file mode 100644
-> index 0000000..8a18c29
-> --- /dev/null
-> +++ b/package/gmock/Config.in
-> @@ -0,0 +1,31 @@
-> +config BR2_PACKAGE_GMOCK
-> +       bool "gmock"
-> +       depends on BR2_USE_WCHAR
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_USE_MMU # fork()
-> +       help
-> +         Inspired by jMock, EasyMock, and Hamcrest, and designed with C++'s
-> +         specifics in mind, Google C++ Mocking Framework (or Google Mock for
-> +         short) is a library for writing and using C++ mock classes.
-> +
-> +         Google Mock:
-> +
-> +           * lets you create mock classes trivially using simple macros,
-> +           * supports a rich set of matchers and actions,
-> +           * handles unordered, partially ordered, or completely ordered
-> +             expectations,
-> +           * is extensible by users, and
-> +           * works on Linux, Mac OS X, Windows, Windows Mobile, minGW, and
-> +             Symbian.
-> +
-> +           http://code.google.com/p/googlemock/
-> +
-> +         There are both host and target packages. The target one has include
-> +         files required to compile the tests and the static libraries required
-> +         to link/run them. The host package installs gmock_gen, a Python script
-> +         used to generate code mocks.
-> +
-> +comment "gmock needs a toolchain w/ C++, wchar, threads"
-> +       depends on BR2_USE_MMU
-> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/gmock/gmock.hash b/package/gmock/gmock.hash
-> new file mode 100644
-> index 0000000..2b71739
-> --- /dev/null
-> +++ b/package/gmock/gmock.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256 26fcbb5925b74ad5fc8c26b0495dfc96353f4d553492eb97e85a8a6d2f43095b  gmock-1.7.0.zip
-> diff --git a/package/gmock/gmock.mk b/package/gmock/gmock.mk
-> new file mode 100644
-> index 0000000..3a7173e
-> --- /dev/null
-> +++ b/package/gmock/gmock.mk
-> @@ -0,0 +1,52 @@
-> +################################################################################
-> +#
-> +# gmock
-> +#
-> +################################################################################
-> +
-> +GMOCK_VERSION = 1.7.0
-According to [1], gmock version must be the same as the gtest's one,
-so maybe we should do:
-GMOCK_VERSION = $(GTEST_VERSION)
-(but, taking care of the *.mk inclusion to get GTEST_VERSION defined
-before including gmock.mk).
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/busybox/busybox.mk | 2 +-
+ package/uclibc/uclibc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> +GMOCK_SOURCE = gmock-$(GMOCK_VERSION).zip
-> +GMOCK_SITE = http://googlemock.googlecode.com/files
-> +GMOCK_INSTALL_STAGING = YES
-> +GMOCK_INSTALL_TARGET = NO
-> +GMOCK_LICENSE = BSD-3c
-> +GMOCK_LICENSE_FILES = LICENSE
-> +GMOCK_DEPENDENCIES = gtest
-> +HOST_GMOCK_DEPENDENCIES = host-python
-Does this require python2? or can it work with python3?
-
-> +
-> +GMOCK_CONF_OPTS = --enable-static --disable-shared
-Why do you always force the static lib to be built? is it for the same
-reason as gtest [2]?
-
-> +
-> +define GMOCK_EXTRACT_CMDS
-> +       $(UNZIP) $(DL_DIR)/$(GMOCK_SOURCE) -d $(BUILD_DIR)
-> +endef
-> +
-> +# We can't use the default rule for autotools-package staging because it fails
-> +# because it tries to rebuild/install gtest stuff and fails after this error:
-> +#    "'make install' is dangerous and not supported. Instead, see README for
-> +#      how to integrate Google Test into your build system."
-> +define GMOCK_INSTALL_STAGING_CMDS
-> +       $(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgmock.a $(STAGING_DIR)/usr/lib/libgmock.a
-> +       $(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgmock_main.a $(STAGING_DIR)/usr/lib/libgmock_main.a
-> +       $(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gmock/
-> +       cp -rp $(@D)/include/gmock/* $(STAGING_DIR)/usr/include/gmock/
-> +endef
-> +
-> +# Unzipping inside $(@D) and moving everything from the created subdirectory is
-> +# required because unzipping directly in $(BUILD_DIR) would cause host-gmock to
-> +# overwrite the gmock subdir instead of unzipping in a host-gmock subdir.
-> +define HOST_GMOCK_EXTRACT_CMDS
-> +       $(UNZIP) $(DL_DIR)/$(GMOCK_SOURCE) -d $(@D)
-> +       mv $(@D)/gmock-$(GMOCK_VERSION)/* $(@D)
-> +       rmdir $(@D)/gmock-$(GMOCK_VERSION)
-> +endef
-> +
-> +define HOST_GMOCK_INSTALL_CMDS
-> +       $(INSTALL) -D -m 0755 $(@D)/scripts/generator/gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen.py
-> +       ln -sf gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen
-> +       cp -rp $(@D)/scripts/generator/cpp $(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-> +endef
-> +
-> +$(eval $(autotools-package))
-> +# The host package does not build anything, just installs gmock_gen stuff, so
-> +# it does not need to be a host-autotools-package.
-> +$(eval $(host-generic-package))
-
-AFAI understand, host-gmock only install tools needed when building a
-package depending on gmock (target package).
-Since host-gmock is not a dependency of gmock, a package using gmock
-will have to depend on both gmock and host-gmock at buildtime.
-Maybe, it would be good to make gmock depends on host-gmock to ensure
-that all needed tools will be available when building a package
-depending on gmock, but without the explicitly dependency on
-host-gmock.
-Thoughts?
-
-
-Please, take into account these comments and submit a new version of
-this patch if you are still interested in having it in the official
-Buildroot tree, meanwhile it'll be marked as "Change Requested" in
-patchwork.
-
-
-[1] https://code.google.com/p/googlemock/source/browse/trunk/README#43
-[2] http://git.buildroot.net/buildroot/tree/package/gtest/gtest.mk#n15
-
-
-Regards,
-
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index d8c8bad..6b2abca 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -225,7 +225,7 @@ endef
+ 
+ # Checks to give errors that the user can understand
+ # Must be before we call to kconfig-package
+-ifeq ($(BR_BUILDING),y)
++ifeq ($(BR2_PACKAGE_BUSYBOX)$(BR_BUILDING),yy)
+ ifeq ($(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG)),)
+ $(error No BusyBox configuration file specified, check your BR2_PACKAGE_BUSYBOX_CONFIG setting)
+ endif
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 3aceae3..9dfafad 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -476,7 +476,7 @@ endef
+ 
+ # Checks to give errors that the user can understand
+ # Must be before we call to kconfig-package
+-ifeq ($(BR_BUILDING),y)
++ifeq ($(BR2_PACKAGE_UCLIBC)$(BR_BUILDING),yy)
+ ifeq ($(call qstrip,$(BR2_UCLIBC_CONFIG)),)
+ $(error No uClibc configuration file specified, check your BR2_UCLIBC_CONFIG setting)
+ endif
 -- 
-Samuel
+1.9.1
