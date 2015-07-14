@@ -1,37 +1,52 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 14 Jul 2015 12:02:07 +0200
-Subject: [Buildroot] [PATCH 03/11] ejabberd: fix package version
-In-Reply-To: <20150711123131.24b7a4cf@free-electrons.com>
-References: <1436349264-11797-1-git-send-email-johan.oudinet@gmail.com>
- <1436349264-11797-4-git-send-email-johan.oudinet@gmail.com>
- <20150711123131.24b7a4cf@free-electrons.com>
-Message-ID: <CAJtjsKbWZL+WjmDr=bh5N6WCi2Rp0Uu3Q=i4T7GQwi-XenNPoA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Jul 2015 12:05:53 +0200
+Subject: [Buildroot] [PATCH 21/38] ptpd: systemd support
+In-Reply-To: <e1e71965d966c70bec5fb685569364e52d90b1c8.1432332802.git.alex.suykov@gmail.com>
+References: <cover.1432332802.git.alex.suykov@gmail.com>
+ <e1e71965d966c70bec5fb685569364e52d90b1c8.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <20150714120553.0efea297@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Alex Suykov,
 
-On Sat, Jul 11, 2015 at 12:31 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> On Wed,  8 Jul 2015 11:54:16 +0200, Johan Oudinet wrote:
->
->> + AC_PREREQ(2.53)
->> +-AC_INIT(ejabberd, m4_esyscmd([echo `git describe --tags 2>/dev/null || echo 0.0` | sed 's/-g.*//;s/-/./' | tr -d '\012']), [ejabberd at process-one.net], [ejabberd])
->> ++AC_INIT(ejabberd, [15.06], [ejabberd at process-one.net], [ejabberd])
->> + REQUIRE_ERLANG_MIN="5.9.1 (Erlang/OTP R15B01)"
->> + REQUIRE_ERLANG_MAX="9.0.0 (No Max)"
->
-> I've merged this patch, but I'm not too happy with it, because it
-> has no chance to be upstreamed as is. Do you think this is a problem
-> you could report upstream, so that they can fix it in a way that works
-> both for them and for Buildroot?
+On Sat, 23 May 2015 13:06:21 +0300, Alex Suykov wrote:
 
-I've just asked them:
-https://github.com/processone/ejabberd/issues/658
+> +define PTPD_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -D -m 644 package/ptpd/ptpd.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/ptpd.service
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +	ln -sf /usr/lib/systemd/system/ptpd.service \
 
+A relative path should be used here.
+
+> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ptpd.service
+> +endef
+> +
+>  $(eval $(generic-package))
+> diff --git a/package/ptpd/ptpd.service b/package/ptpd/ptpd.service
+> new file mode 100644
+> index 0000000..580ca51
+> --- /dev/null
+> +++ b/package/ptpd/ptpd.service
+> @@ -0,0 +1,10 @@
+> +[Unit]
+> +Description=Precision Time Protocol daemon
+> +After=syslog.target network.target
+> +
+> +[Service]
+> +ExecStart=/usr/sbin/ptpd -c -S
+
+And according to Maxime Hadjinlian, this -S is not needed, since
+redirecting stdout is already taken care of by systemd.
+
+Applied with those two fixes. Thanks!
+
+Thomas
 -- 
-Johan
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
