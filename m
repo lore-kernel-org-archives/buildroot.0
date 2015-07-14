@@ -1,33 +1,47 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 13 Jul 2015 22:57:08 -0400
-Subject: [Buildroot] [PATCH v3 3/3] util-linux: put package options in a
-	sub-menu
-In-Reply-To: <1436842628-29469-1-git-send-email-danomimanchego123@gmail.com>
-References: <1436842628-29469-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <1436842628-29469-3-git-send-email-danomimanchego123@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 14 Jul 2015 06:46:11 +0300
+Subject: [Buildroot] [PATCH 3/4] skeleton: New package
+In-Reply-To: <1436821211-4446-3-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1436821211-4446-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1436821211-4446-3-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20150714034611.GV2451@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hide all the util-linux options in a menuconfig, as the option
-list is quite long.
+Hi Maxime,
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/util-linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Jul 13, 2015 at 11:00:10PM +0200, Maxime Hadjinlian wrote:
+> The generic, autotools and cmake infra are modified to filter skeleton
+> and host-skeleton. Also, in the pkg-generic we add skeleton as a
+> dependency to every package.
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 042cae0..c8d16d2 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_UTIL_LINUX
-+menuconfig BR2_PACKAGE_UTIL_LINUX
- 	bool "util-linux"
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+[snip]
+
+> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+> new file mode 100644
+> index 0000000..be3347e
+> --- /dev/null
+> +++ b/package/skeleton/skeleton.mk
+> @@ -0,0 +1,100 @@
+> +################################################################################
+> +#
+> +# skeleton
+> +#
+> +################################################################################
+
+[snip]
+
+> +$(eval $(generic-package))
+
+There is no host-generic-package here. What would host-skeleton be used for 
+anyway?
+
+baruch
+
 -- 
-1.9.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
