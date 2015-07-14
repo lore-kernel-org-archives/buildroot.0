@@ -1,31 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 15:53:52 +0200
-Subject: [Buildroot] [PATCH 25/38] rpi-userland: systemd support
-In-Reply-To: <be47e4f10ee527a05bf4ac9831ef3db640d9d257.1432332802.git.alex.suykov@gmail.com>
-References: <cover.1432332802.git.alex.suykov@gmail.com>
- <be47e4f10ee527a05bf4ac9831ef3db640d9d257.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <20150714155352.1f4e729f@free-electrons.com>
+Date: Tue, 14 Jul 2015 15:54:27 +0200
+Subject: [Buildroot] [git commit] rpi-userland: add Restart=always to
+	vcfiled.service
+Message-ID: <20150714135519.DF64C81D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+commit: http://git.buildroot.net/buildroot/commit/?id=bc395dd0b5b2fd9852b937a4ee54b6d8caff6812
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 23 May 2015 13:07:07 +0300, Alex Suykov wrote:
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/rpi-userland/rpi-userland.mk | 7 +++++++
->  package/rpi-userland/vcfiled.service | 8 ++++++++
->  2 files changed, 15 insertions(+)
->  create mode 100644 package/rpi-userland/vcfiled.service
+As suggested by Maxime Hadjinlian, add Restart=always to
+vcfiled.service so that this service gets restarted if it ever exits
+for some reason.
 
-Applied after fixing the patch to use a relative path for the symbolic
-link, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rpi-userland/vcfiled.service |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/rpi-userland/vcfiled.service b/package/rpi-userland/vcfiled.service
+index 2b8f1dc..b09aa62 100644
+--- a/package/rpi-userland/vcfiled.service
++++ b/package/rpi-userland/vcfiled.service
+@@ -3,6 +3,7 @@ Description=VideoCore file server daemon
+ 
+ [Service]
+ ExecStart=/usr/sbin/vcfiled --foreground
++Restart=always
+ 
+ [Install]
+ WantedBy=multi-user.target
