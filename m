@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 09:44:50 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix npm module cross compilation,
- use up-to-date npm and install modules globally
-In-Reply-To: <1436858924.2564.14.camel@posteo.de>
-References: <1416775178-13738-1-git-send-email-mwei@cs.ucsd.edu>
- <1416775178-13738-2-git-send-email-mwei@cs.ucsd.edu>
- <20150713000915.3df608e2@free-electrons.com>
- <1436858924.2564.14.camel@posteo.de>
-Message-ID: <20150714094450.49189293@free-electrons.com>
+Date: Tue, 14 Jul 2015 02:28:05 +0200
+Subject: [Buildroot] [git commit] rpcbind: add missing dependency on
+	host-pkgconf
+Message-ID: <20150714074707.25E1081D34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=31b7e36418bde33b1a5ec81c5cccad739035dfb4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Jul 2015 09:28:44 +0200, J?rg Krause wrote:
+rpcbind depends on libtirpc, which used to depend on
+host-pkgconf. However, since commit
+aee57627b09d0955270a562b8adaa0ff88ef523b, the dependency of libtirpc
+on host-pkgconf has been removed, because libtirpc no longer uses
+PKG_CHECK_MODULES().
 
-> I replied to the patch on 15 Dec 2014 [1], but the mail was not added
-> to the thread.
-> 
-> In short: The patch does not work as intended.
-> 
-> There was indeed an issue with cross-compilation for certain modules
-> (eg serialport) which was fixed by Martin Bark [1].
-> 
-> I would suggest to mark this patch as Rejected.
+However, rpcbind does use PKG_CHECK_MODULES(). It used to work because
+host-pkgconf was brought into the build by the dependency on libtirpc,
+but that's no longer the case. Bottom line: we need to make rpcbind
+depend on host-pkgconf, which is exactly what this commit does.
 
-Thanks a lot for the feedback! We already marked the patch as Changes
-Requested, which makes it no longer visible to us in the list of
-pending patches, so that's good enough.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rpcbind/rpcbind.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Again, thanks for the feedback.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index 7bfb1e2..b85d88e 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -12,7 +12,7 @@ RPCBIND_LICENSE_FILES = COPYING
+ 
+ RPCBIND_CONF_ENV += \
+ 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/tirpc/"
+-RPCBIND_DEPENDENCIES += libtirpc
++RPCBIND_DEPENDENCIES += libtirpc host-pkgconf
+ RPCBIND_CONF_OPTS += --with-rpcuser=root
+ 
+ define RPCBIND_INSTALL_INIT_SYSV
