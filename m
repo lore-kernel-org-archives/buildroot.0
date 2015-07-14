@@ -1,28 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jul 2015 00:27:18 +0200
-Subject: [Buildroot] [PATCH v5 4/6] vala: bump to version 0.28.0
-In-Reply-To: <55A58952.20505@zacarias.com.ar>
-References: <1436902975-5004-1-git-send-email-gustavo@zacarias.com.ar>
- <1436902975-5004-5-git-send-email-gustavo@zacarias.com.ar>
- <20150714235457.25e274b9@free-electrons.com>
- <55A58952.20505@zacarias.com.ar>
-Message-ID: <20150715002718.16c934d5@free-electrons.com>
+Date: Wed, 15 Jul 2015 00:34:03 +0200
+Subject: [Buildroot] [PATCH 27/38] ti-gfx: systemd support
+In-Reply-To: <3afa99779c3b299f255ea8e1330c124f31b02fd6.1432332802.git.alex.suykov@gmail.com>
+References: <cover.1432332802.git.alex.suykov@gmail.com>
+ <3afa99779c3b299f255ea8e1330c124f31b02fd6.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <20150715003403.21f6709b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Alex Suykov,
 
-On Tue, 14 Jul 2015 19:12:34 -0300, Gustavo Zacarias wrote:
+On Sat, 23 May 2015 13:07:32 +0300, Alex Suykov wrote:
+> The startup script too complex to embed it completely into
+> the .service file, so it is left as a standalone script.
+> 
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> ---
+>  package/ti-gfx/ti-gfx.mk      | 10 ++++++++++
+>  package/ti-gfx/ti-gfx.service | 11 +++++++++++
+>  2 files changed, 21 insertions(+)
+>  create mode 100644 package/ti-gfx/ti-gfx.service
 
-> I haven't tested but this may break current midori, so revert in case it 
-> does (it even breaks 0.5.9 without patching).
-> gmpc is not affected though.
+Applied with some minor changes:
 
-Argh, hum, ok. We'll see. It should boost us to apply your webkit and
-midori patches.
+    [Thomas:
+     - use relative path for the symbolic link
+     - slightly tweak the service Description string]
+
+Thanks!
 
 Thomas
 -- 
