@@ -1,56 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jul 2015 00:43:39 +0200
-Subject: [Buildroot] [git commit] skeleton: use backtick instead of $(shell
+Date: Wed, 15 Jul 2015 00:42:01 +0200
+Subject: [Buildroot] [git commit] boost: use backtick instead of $(shell
 	...) make function
-Message-ID: <20150714225134.CFB967FDF7@busybox.osuosl.org>
+Message-ID: <20150714225134.A7A1981D56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0291f7c22015a1c04bbddeaf71c75bad38b5e317
+commit: http://git.buildroot.net/buildroot/commit/?id=e77354d28f8087fed75b2fe66fbd50799e68eca7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Only the instance for setting the root password is changed. The
-instance in SYSTEM_GETTY is harmless since it just uses echo and tail.
-
-If SKELETON_TARGET_GENERIC_ROOT_PASSWD is passed as a hashed password
-by the user, it contains $, so the '-quotes are needed. If it is not,
-we need the backtick to be expanded so "-quotes are needed. Therefore,
-the quoting is moved to the definition of SYSTEM_ROOT_PASSWORD.
+Also remove the variables TARGET_CC_VERSION and HOST_CC_VERSION which
+lack the BOOST_ prefix and are used only once.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/skeleton/skeleton.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/boost/boost.mk |    7 ++-----
+ 1 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 70d1258..48e7085 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -95,19 +95,19 @@ ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
- ifeq ($(SKELETON_TARGET_GENERIC_ROOT_PASSWD),)
- SYSTEM_ROOT_PASSWORD =
- else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)),)
--SYSTEM_ROOT_PASSWORD = $(SKELETON_TARGET_GENERIC_ROOT_PASSWD)
-+SYSTEM_ROOT_PASSWORD = '$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)'
- else
- SKELETON_DEPENDENCIES += host-mkpasswd
- # This variable will only be evaluated in the finalize stage, so we can
- # be sure that host-mkpasswd will have already been built by that time.
--SYSTEM_ROOT_PASSWORD = $(shell $(MKPASSWD) -m "$(SKELETON_TARGET_GENERIC_PASSWD_METHOD)" "$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)")
-+SYSTEM_ROOT_PASSWORD = "`$(MKPASSWD) -m "$(SKELETON_TARGET_GENERIC_PASSWD_METHOD)" "$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)"`"
- endif
- else # !BR2_TARGET_ENABLE_ROOT_LOGIN
--SYSTEM_ROOT_PASSWORD = *
-+SYSTEM_ROOT_PASSWORD = "*"
- endif
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index dbb5de5..cc3ba9e 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -11,9 +11,6 @@ BOOST_INSTALL_STAGING = YES
+ BOOST_LICENSE = Boost Software License 1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
  
- define SKELETON_SYSTEM_SET_ROOT_PASSWD
--	$(SED) 's,^root:[^:]*:,root:$(SYSTEM_ROOT_PASSWORD):,' $(TARGET_DIR)/etc/shadow
-+	$(SED) s,^root:[^:]*:,root:$(SYSTEM_ROOT_PASSWORD):, $(TARGET_DIR)/etc/shadow
+-TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
+-HOST_CC_VERSION = $(shell $(HOSTCC) -dumpversion)
+-
+ HOST_BOOST_DEPENDENCIES =
+ 
+ # keep host variant as minimal as possible
+@@ -111,13 +108,13 @@ BOOST_LAYOUT = $(call qstrip, $(BR2_PACKAGE_BOOST_LAYOUT))
+ 
+ define BOOST_CONFIGURE_CMDS
+ 	(cd $(@D) && ./bootstrap.sh $(BOOST_FLAGS))
+-	echo "using gcc : $(TARGET_CC_VERSION) : $(TARGET_CXX) : <cxxflags>\"$(BOOST_TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > $(@D)/user-config.jam
++	echo "using gcc : `$(TARGET_CC) -dumpversion` : $(TARGET_CXX) : <cxxflags>\"$(BOOST_TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > $(@D)/user-config.jam
+ 	echo "" >> $(@D)/user-config.jam
  endef
- TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_SET_ROOT_PASSWD
+ 
+ define HOST_BOOST_CONFIGURE_CMDS
+ 	(cd $(@D) && ./bootstrap.sh $(HOST_BOOST_FLAGS))
+-	echo "using gcc : $(HOST_CC_VERSION) : $(HOSTCXX) : <cxxflags>\"$(HOST_CXXFLAGS)\" <linkflags>\"$(HOST_LDFLAGS)\" ;" > $(@D)/user-config.jam
++	echo "using gcc : `$(HOST_CC) -dumpversion` : $(HOSTCXX) : <cxxflags>\"$(HOST_CXXFLAGS)\" <linkflags>\"$(HOST_LDFLAGS)\" ;" > $(@D)/user-config.jam
+ 	echo "" >> $(@D)/user-config.jam
+ endef
  
