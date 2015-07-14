@@ -1,41 +1,125 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 16:00:24 +0200
-Subject: [Buildroot] [git commit] samba4: bump to version 4.2.3
-Message-ID: <20150714140031.B584E81D43@busybox.osuosl.org>
+From: =?UTF-8?q?Aur=C3=A9lien=20Chabot?= <aurelien@chabot.fr>
+Date: Tue, 14 Jul 2015 15:51:06 +0200
+Subject: [Buildroot] [PATCHv2] transmission: improve systemd support
+In-Reply-To: <1421684056-5266-11-git-send-email-maxtram95@gmail.com>
+References: <1421684056-5266-11-git-send-email-maxtram95@gmail.com>
+Message-ID: <1436881866-2168-1-git-send-email-aurelien@chabot.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=23269765c8d99251157a5b90ebf59dcb51a26c1f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Maxim Mikityanskiy <maxtram95@gmail.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Support running transmission-daemon in system-wide mode using systemd:
+
+1. Pass --with-systemd-daemon to configure script if systemd is enabled.
+
+2. Install sysctl.d config file to increase send and receive buffer
+sizes.
+
+3. Install sysusers.d config file to create transmission user when using
+systemd. Create transmission user when not using systemd.
+
+4. Install transmission-daemon.service for systemd.
+
+[Aur?lien : Fix symlink relative path, use upstream service file,
+no need for config path, and use transmission user in sysv script]
+
+Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+Signed-off-by: Aur?lien Chabot <aurelien@chabot.fr>
 ---
- package/samba4/samba4.hash |    2 +-
- package/samba4/samba4.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/transmission/S92transmission            |  4 +--
+ package/transmission/transmission.mk            | 37 +++++++++++++++++++++++++
+ package/transmission/transmission_sysctl.conf   |  2 ++
+ package/transmission/transmission_sysusers.conf |  1 +
+ 4 files changed, 41 insertions(+), 3 deletions(-)
+ create mode 100644 package/transmission/transmission_sysctl.conf
+ create mode 100644 package/transmission/transmission_sysusers.conf
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 11c15b7..e2b3969 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	27d6c69dc3afee38fd28051001d2d4bdae38c567612a9ec6477bb5567e2abc1e	samba-4.2.2.tar.gz
-+sha256	b6dfa5ae4818d891ee2fcff04a5912f4a4fb2394b4f5e66a2a15b428da094c7c	samba-4.2.3.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 7d10a0c..c88cc9f 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
+index 1870522..e5976b0 100644
+--- a/package/transmission/S92transmission
++++ b/package/transmission/S92transmission
+@@ -24,9 +24,7 @@
+ # by default, this is set to 'transmission'.
+ # For the sake of security you shouldn't set a password
+ # on this user
+-#USERNAME=transmission
+-USERNAME=default
+-
++USERNAME=transmission
  
--SAMBA4_VERSION = 4.2.2
-+SAMBA4_VERSION = 4.2.3
- SAMBA4_SITE = http://ftp.samba.org/pub/samba
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ 
+ # ----- *ADVANCED* CONFIGURATION -----
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index bbc32bf..81dd110 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -36,11 +36,48 @@ endif
+ ifeq ($(BR2_PACKAGE_TRANSMISSION_DAEMON),y)
+ TRANSMISSION_CONF_OPTS += --enable-daemon
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++TRANSMISSION_DEPENDENCIES += systemd
++TRANSMISSION_CONF_OPTS += --with-systemd-daemon
++else
++TRANSMISSION_CONF_OPTS += --without-systemd-daemon
++endif
++
++ifeq ($(BR2_INIT_SYSTEMD),)
++define TRANSMISSION_USERS
++	transmission -1 transmission -1 * /var/lib/transmission - transmission Transmission Daemon
++endef
++endif
++
+ define TRANSMISSION_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/transmission/S92transmission \
+ 		$(TARGET_DIR)/etc/init.d/S92transmission
+ endef
+ 
++define TRANSMISSION_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0755 $(@D)/daemon/transmission-daemon.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/transmission-daemon.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/transmission-daemon.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/transmission-daemon.service
++endef
++
++define TRANSMISSION_INSTALL_SYSCTL_HOOK
++	$(INSTALL) -D -m 644 package/transmission/transmission_sysctl.conf \
++		$(TARGET_DIR)/usr/lib/sysctl.d/20-transmission.conf
++endef
++
++TRANSMISSION_POST_INSTALL_TARGET_HOOKS += \
++	TRANSMISSION_INSTALL_SYSCTL_HOOK
++
++define TRANSMISSION_INSTALL_SYSUSERS_HOOK
++	$(INSTALL) -D -m 644 package/transmission/transmission_sysusers.conf \
++		$(TARGET_DIR)/usr/lib/sysusers.d/transmission.conf
++endef
++
++TRANSMISSION_POST_INSTALL_TARGET_HOOKS += \
++	TRANSMISSION_INSTALL_SYSUSERS_HOOK
++
+ else
+ TRANSMISSION_CONF_OPTS += --disable-daemon
+ endif
+diff --git a/package/transmission/transmission_sysctl.conf b/package/transmission/transmission_sysctl.conf
+new file mode 100644
+index 0000000..7862332
+--- /dev/null
++++ b/package/transmission/transmission_sysctl.conf
+@@ -0,0 +1,2 @@
++net.core.wmem_max = 1048576
++net.core.rmem_max = 4194304
+diff --git a/package/transmission/transmission_sysusers.conf b/package/transmission/transmission_sysusers.conf
+new file mode 100644
+index 0000000..09396d4
+--- /dev/null
++++ b/package/transmission/transmission_sysusers.conf
+@@ -0,0 +1 @@
++u transmission - "Transmission daemon" /var/lib/transmission
+-- 
+2.4.5
