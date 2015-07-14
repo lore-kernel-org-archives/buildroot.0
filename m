@@ -1,39 +1,29 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Jul 2015 14:13:58 +0300
-Subject: [Buildroot] [PATCH] qpid-proton: needs host python 2
-Message-ID: <8442e9d6be96eb9a8c4165024e98ce38e7de1a6f.1436872438.git.baruch@tkos.co.il>
+Date: Tue, 14 Jul 2015 14:17:52 +0300
+Subject: [Buildroot] [PATCH] olsr: update hash source comment
+Message-ID: <28034039c3387104b8a19230eb131a043f9b96a8.1436872672.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qpid-proton uses Python as part of its build system. Only Python 2 is
-currently supported.
+Commit ec9e34c9bb7c (olsr: bump version, 2015-07-14) update the hash but left
+the old source comment. Fix this.
 
-Fixes:
-http://autobuild.buildroot.net/results/bdf/bdf94981b52dc3a04fd21ff770a0a20d883bb1c3/
-http://autobuild.buildroot.net/results/669/66964a00e44502ae00d5348a5ca2b632c729a417/
-http://autobuild.buildroot.net/results/30d/30d2fed1149857b11375f2801f522a84f441fc1e/
-
-and more.
-
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/qpid-proton/qpid-proton.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/olsr/olsr.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qpid-proton/qpid-proton.mk b/package/qpid-proton/qpid-proton.mk
-index eae4589bf538..d21609d29776 100644
---- a/package/qpid-proton/qpid-proton.mk
-+++ b/package/qpid-proton/qpid-proton.mk
-@@ -12,6 +12,7 @@ QPID_PROTON_LICENSE_FILES = LICENSE
- QPID_PROTON_INSTALL_STAGING = YES
- QPID_PROTON_DEPENDENCIES = \
- 	util-linux \
-+	host-python \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl)
- QPID_PROTON_CONF_OPTS = \
- 	-DBUILD_JAVA=OFF \
+diff --git a/package/olsr/olsr.hash b/package/olsr/olsr.hash
+index 83c48e021de6..e14d52cd9ea2 100644
+--- a/package/olsr/olsr.hash
++++ b/package/olsr/olsr.hash
+@@ -1,2 +1,2 @@
+-# From http://www.olsr.org/releases/0.6/SHA256SUM-0.6.8
++# From http://www.olsr.org/releases/0.9/SHA256SUM-0.9.0.2
+ sha256	cc464b29c7740354d815d5faa753fd27c0677d71e8eb42e78abc382996892845 olsrd-0.9.0.2.tar.bz2
 -- 
 2.1.4
