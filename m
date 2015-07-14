@@ -1,24 +1,39 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 14 Jul 2015 17:24:06 +0200
-Subject: [Buildroot] [PATCH v8 09/16] openssh: selinux and pam support
-In-Reply-To: <1436570882-56442-10-git-send-email-clayton.shotwell@rockwellcollins.com>
-References: <1436570882-56442-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1436570882-56442-10-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <CAHXCMMJisGpwDGHx=E0ZDgtj0fU0PCxJFRB+5xe6L0oBCPqoXw@mail.gmail.com>
+From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
+Date: Tue, 14 Jul 2015 12:11:02 -0300
+Subject: [Buildroot] [PATCH v4 1/3] busybox: disable nslookup applet
+In-Reply-To: <1436886664-3206-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1436886664-3206-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <1436886664-3206-2-git-send-email-guido@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jul 11, 2015 at 1:27 AM, Clayton Shotwell
-<clayton.shotwell@rockwellcollins.com> wrote:
-> From: Matt Weber <matthew.weber@rockwellcollins.com>
->
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Some toolchains have no resolver support (res_* family), so they fail to
+build this applet (which is the only user of those functions). Instead
+of selectively disabling it on such limited toolchains, just drop it
+from the default config, since (to the best of my knowledge) is not
+widely used.
 
-Regards,
+Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+---
+ package/busybox/busybox.config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index 8d1d80a..91c3006 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
+@@ -838,7 +838,7 @@ CONFIG_IPRULE=y
+ CONFIG_NETSTAT=y
+ # CONFIG_FEATURE_NETSTAT_WIDE is not set
+ # CONFIG_FEATURE_NETSTAT_PRG is not set
+-CONFIG_NSLOOKUP=y
++# CONFIG_NSLOOKUP is not set
+ # CONFIG_NTPD is not set
+ # CONFIG_FEATURE_NTPD_SERVER is not set
+ # CONFIG_FEATURE_NTPD_CONF is not set
 -- 
-Samuel
+2.1.4
