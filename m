@@ -1,76 +1,63 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 14 Jul 2015 14:20:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: version bump to 0.10.40
-Message-ID: <1436880003-9098-1-git-send-email-martin@barkynet.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Tue, 14 Jul 2015 08:29:08 -0500
+Subject: [Buildroot] [PATCH v2 1/1] linux: add server options for NFSD
+In-Reply-To: <1436830463-90993-1-git-send-email-ryan.barnett@rockwellcollins.com>
+References: <1436830463-90993-1-git-send-email-ryan.barnett@rockwellcollins.com>
+Message-ID: <CAMQcK5LasX0hcDX4dQ4Skhmfbgcmw-KrkXCxBeUpDwn93xLr4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- .../{0.10.39 => 0.10.40}/0001-remove-python-bz2-dependency.patch      | 0
- .../{0.10.39 => 0.10.40}/0002-gyp-force-link-command-to-use-CXX.patch | 0
- package/nodejs/{0.10.39 => 0.10.40}/0003-use-python-variable.patch    | 0
- .../0004-fix-build-error-without-OpenSSL-support.patch                | 0
- package/nodejs/Config.in                                              | 4 ++--
- package/nodejs/nodejs.hash                                            | 4 ++--
- 6 files changed, 4 insertions(+), 4 deletions(-)
- rename package/nodejs/{0.10.39 => 0.10.40}/0001-remove-python-bz2-dependency.patch (100%)
- rename package/nodejs/{0.10.39 => 0.10.40}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
- rename package/nodejs/{0.10.39 => 0.10.40}/0003-use-python-variable.patch (100%)
- rename package/nodejs/{0.10.39 => 0.10.40}/0004-fix-build-error-without-OpenSSL-support.patch (100%)
+All,
 
-diff --git a/package/nodejs/0.10.39/0001-remove-python-bz2-dependency.patch b/package/nodejs/0.10.40/0001-remove-python-bz2-dependency.patch
-similarity index 100%
-rename from package/nodejs/0.10.39/0001-remove-python-bz2-dependency.patch
-rename to package/nodejs/0.10.40/0001-remove-python-bz2-dependency.patch
-diff --git a/package/nodejs/0.10.39/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/0.10.40/0002-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/0.10.39/0002-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/0.10.40/0002-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/0.10.39/0003-use-python-variable.patch b/package/nodejs/0.10.40/0003-use-python-variable.patch
-similarity index 100%
-rename from package/nodejs/0.10.39/0003-use-python-variable.patch
-rename to package/nodejs/0.10.40/0003-use-python-variable.patch
-diff --git a/package/nodejs/0.10.39/0004-fix-build-error-without-OpenSSL-support.patch b/package/nodejs/0.10.40/0004-fix-build-error-without-OpenSSL-support.patch
-similarity index 100%
-rename from package/nodejs/0.10.39/0004-fix-build-error-without-OpenSSL-support.patch
-rename to package/nodejs/0.10.40/0004-fix-build-error-without-OpenSSL-support.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 0838729..c5ec792 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -30,7 +30,7 @@ choice
- 	  Select the version of Node.js you wish to use.
- 
- config BR2_BR2_PACKAGE_NODEJS_0_10_X
--	bool "v0.10.39"
-+	bool "v0.10.40"
- 
- # V8 included with v0.12.5 requires at least ARMv6
- config BR2_BR2_PACKAGE_NODEJS_0_12_X
-@@ -41,7 +41,7 @@ endchoice
- 
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
-+	default "0.10.40"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
- 	default "0.12.7"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
- 
- menu "Module Selection"
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 8cd670e..9be2806 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From upstream URL: http://nodejs.org/dist/v0.10.39/SHASUMS256.txt
--sha256	68f8d8f9515c4e77e2a06034b742e19e9848c1fee5bcadedc1d68f3e4302df37  node-v0.10.39.tar.gz
-+# From upstream URL: http://nodejs.org/dist/v0.10.40/SHASUMS256.txt
-+sha256	bae79c2fd959aebe1629af36077bebbb760128db753da226d2344cd91499149f  node-v0.10.40.tar.gz
- 
- # From upstream URL: http://nodejs.org/dist/v0.12.7/SHASUMS256.txt
- sha256	b23d64df051c9c969b0c583f802d5d71de342e53067127a5061415be7e12f39d  node-v0.12.7.tar.gz
+On Mon, Jul 13, 2015 at 6:34 PM, Ryan Barnett
+<ryan.barnett@rockwellcollins.com> wrote:
+> When nfs-utils packages is selected, automatically enable the kernel
+> options for NFSD. This will allow for an NFS server to work by only
+> adding /etc/exports to the filesystem.
+>
+> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+> ---
+> Test with qemu_x86_defconfig
+>
+> Changes v1 -> v2:
+>   - Only enable CONFIG_NFSD (suggested by Arnout)
+> ---
+>  linux/linux.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index b602a04..90396e6 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -229,6 +229,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
+>         $(if $(BR2_PACKAGE_XTABLES_ADDONS),
+>                 $(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
+>                 $(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
+> +       $(if $(BR2_PACKAGE_NFS_UTILS),
+> +               $(call KCONFIG_ENABLE_OPT,CONFIG_NFSD,$(@D)/.config))
+
+I need to add to add the following line:
+
+$(call KCONFIG_ENABLE_OPT,CONFIG_NFSD_V3,$(@D)/.config))
+
+In my hesitation to test yesterday - I didn't do a clean build and was
+caught by having a kernel already having the correct option enabled.
+
+I will be sending a v3 here shortly.
+
+>         $(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
+>                 $(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
+>  endef
+
+Thanks,
+-Ryan
+
 -- 
-2.1.4
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
