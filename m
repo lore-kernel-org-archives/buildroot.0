@@ -1,50 +1,205 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 23:17:25 +0200
-Subject: [Buildroot] [git commit] package/perf: use correct definition of
-	ARCH on x86_64
-Message-ID: <20150714213615.5778681D5C@busybox.osuosl.org>
+Date: Tue, 14 Jul 2015 23:35:58 +0200
+Subject: [Buildroot] [git commit] docs/manual: add documentation for
+	linux-ext and linux-tools.
+Message-ID: <20150714213615.8A81D81938@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1b787822fbf3cda83eb7ef28c1187af6f6247781
+commit: http://git.buildroot.net/buildroot/commit/?id=509a8368c332ce73af24544d970974deb1a13778
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LINUX_MAKE_FLAGS defines ARCH=$(KERNEL_ARCH), and KERNEL_ARCH is x86_64 on
-a 64-bit x86 kernel build. The perf Makefiles expect that the ARCH will be
-"x86" on both 32-bit x86 and 64-bit x86.
+[Thomas: misc improvements.]
 
-I didn't experience issues with the Linux 3.14.x version of perf, but this
-issue cropped up once I started building 3.19.x.
-
-Signed-off-by: Steven Noonan <steven@uplinklabs.net>
-[Romain:
-  - fix coding style]
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perf/perf.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-kernel-module.txt      |    1 +
+ .../adding-packages-linux-kernel-spec-infra.txt    |  149 ++++++++++++++++++++
+ docs/manual/adding-packages.txt                    |    2 +
+ 3 files changed, 152 insertions(+), 0 deletions(-)
 
-diff --git a/package/perf/perf.mk b/package/perf/perf.mk
-index 42fbe24..2bdd555 100644
---- a/package/perf/perf.mk
-+++ b/package/perf/perf.mk
-@@ -10,8 +10,15 @@ PERF_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
+index 0a5ec5b..ffeeef5 100644
+--- a/docs/manual/adding-packages-kernel-module.txt
++++ b/docs/manual/adding-packages-kernel-module.txt
+@@ -128,6 +128,7 @@ configure the build of the kernel module:
+ * +FOO_MODULE_MAKE_OPTS+ may be set to contain extra variable definitions
+   to pass to the Linux buildsystem.
  
- PERF_DEPENDENCIES = linux host-flex host-bison
++[[kernel-variables]]
+ You may also reference (but you may *not* set!) those variables:
  
-+ifeq ($(KERNEL_ARCH),x86_64)
-+PERF_ARCH=x86
-+else
-+PERF_ARCH=$(KERNEL_ARCH)
-+endif
+  * +LINUX_DIR+ contains the path to where the Linux kernel has been
+diff --git a/docs/manual/adding-packages-linux-kernel-spec-infra.txt b/docs/manual/adding-packages-linux-kernel-spec-infra.txt
+new file mode 100644
+index 0000000..d394ae6
+--- /dev/null
++++ b/docs/manual/adding-packages-linux-kernel-spec-infra.txt
+@@ -0,0 +1,149 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
- PERF_MAKE_FLAGS = \
- 	$(LINUX_MAKE_FLAGS) \
-+	ARCH=$(PERF_ARCH) \
- 	NO_LIBAUDIT=1 \
- 	NO_NEWT=1 \
- 	NO_GTK2=1 \
++[[linux-kernel-specific-infra]]
++=== Infrastructure specific to the Linux kernel package
++
++The Linux kernel package can use some specific infrastructures based on package
++hooks for building Linux kernel tools or/and building Linux kernel extensions.
++
++[[linux-kernel-tools]]
++==== linux-kernel-tools
++
++Buildroot offers a helper infrastructure to build some userspace tools
++for the target available within the Linux kernel sources. Since their
++source code is part of the kernel source code, it is not very
++practical to use separate packages for them as they often need to be
++built with the same kernel version as the kernel being used on the
++target. The small Linux kernel tools infrastructure is a simplified
++packaging mechanism based on the generic package infrastructure to
++help building those tools.
++
++Let's look at an example of a Linux tool. For a new Linux tool named
+++foo+, create a new menu entry in the existing
+++linux/Config.tools.in+.  This file will contain the option
++descriptions related to each kernel tool that will be used and
++displayed in the configuration tool. It would basically look like:
++
++------------------------------
++01: config BR2_LINUX_KERNEL_TOOL_FOO
++02: 	bool "foo"
++03: 	help
++04: 	  This is a comment that explains what foo kernel tool is.
++05:
++06: 	  http://foosoftware.org/foo/
++------------------------------
++
++The name of the option starts with the prefix +BR2_LINUX_KERNEL_TOOL_+,
++followed by the uppercase name of the tool (like is done for packages).
++
++Then for each linux tool, add a new +.mk+ file named +linux/linux-tool-foo.mk+.
++It would basically look like:
++
++------------------------------
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06:
++07: LINUX_TOOLS += foo
++08:
++09: FOO_DEPENDENCIES = libbbb
++10:
++11: define FOO_BUILD_CMDS
++12:	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools foo
++13: endef
++14:
++15: define FOO_INSTALL_STAGING_CMDS
++16:	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
++17:		DESTDIR=$(STAGING_DIR) \
++18:		foo_install
++19: endef
++20:
++21: define FOO_INSTALL_TARGET_CMDS
++22:	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
++23:		DESTDIR=$(@D) \
++24:		foo_install
++25: endef
++--------------------------------
++
++On line 7, we register the Linux tool +foo+ to the list of available
++Linux tools.
++
++On line 9, we specify the list of dependencies this tool relies on. These
++dependencies are added to the Linux package dependencies list only when the
+++foo+ tool is selected.
++
++The rest of the Makefile, lines 11-25 defines what should be done at the
++different steps of the Linux tool build process like for a
++xref:generic-package-tutorial[+generic package+]. They will actually be
++used only when the +foo+ tool is selected. The only supported commands are
+++_BUILD_CMDS+, +_INSTALL_STAGING_CMDS+ and +_INSTALL_TARGET_CMDS+.
++
++.Note
++One *must not* call +$(eval $(generic-package))+ or any other
++package infrastructure! Linux tools are not packages by themselves,
++they are part of the +linux+ package.
++
++[[linux-kernel-ext]]
++==== linux-kernel-extensions
++
++Some packages provide new features that require the Linux kernel tree
++to be modified. This can be in the form of patches to be applied on
++the kernel tree, or in the form of new files to be added to the
++tree. The Buildroot's Linux kernel extensions infrastructure provides
++a simple solution to automatically do this, just after the kernel
++sources are extracted and before the kernel patches are
++applied. Examples of extensions packaged using this mechanism are the
++real-time extensions Xenomai and RTAI, as well as the set of
++out-of-tree LCD screens drivers +fbtft+.
++
++Let's look at an example on how to add a new Linux extension +foo+.
++
++First, create the package +foo+ that provides the extension: this
++package is a standard package; see the previous chapters on how to
++create such a package. This package is in charge of downloading the
++sources archive, checking the hash, defining the licence informations
++and building user space tools if any.
++
++Then create the 'Linux extension' proper: create a new menu entry in
++the existing +linux/Config.ext.in+. This file contains the option
++descriptions related to each kernel extension that will be used and
++displayed in the configuration tool. It would basically look like:
++
++------------------------------
++01: config BR2_LINUX_KERNEL_EXT_FOO
++02: 	bool "foo"
++03: 	help
++04: 	  This is a comment that explains what foo kernel extension is.
++05:
++06: 	  http://foosoftware.org/foo/
++------------------------------
++
++Then for each linux extension, add a new +.mk+ file named
+++linux/linux-ext-foo.mk+. It should basically contain:
++
++------------------------------
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06:
++07: LINUX_EXTENSIONS += foo
++08:
++09: define FOO_PREPARE_KERNEL
++10:	$(FOO_DIR)/prepare-kernel-tree.sh --linux-dir=$(@D)
++11: endef
++--------------------------------
++
++On line 7, we add the Linux extension +foo+ to the list of available
++Linux extensions.
++
++On line 9-11, we define what should be done by the extension to modify
++the Linux kernel tree; this is specific to the linux extension and can
++use the variables defined by the +foo+ package, like: +$(FOO_DIR)+ or
+++$(FOO_VERSION)+... as well as all the Linux variables, like:
+++$(LINUX_VERSION)+ or +$(LINUX_VERSION_PROBED)+, +$(KERNEL_ARCH)+...
++See the xref:kernel-variables[definition of those kernel variables].
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index 721fe39..76f90c9 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -33,6 +33,8 @@ include::adding-packages-kernel-module.txt[]
+ 
+ include::adding-packages-asciidoc.txt[]
+ 
++include::adding-packages-linux-kernel-spec-infra.txt[]
++
+ include::adding-packages-hooks.txt[]
+ 
+ include::adding-packages-gettext.txt[]
