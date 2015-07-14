@@ -1,36 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jul 2015 00:11:39 +0200
-Subject: [Buildroot] [PATCH 23/38] pulseaudio: systemd support
-In-Reply-To: <1dba7a22215e2848dd0bb10a11387c5ef8a3caa0.1432332802.git.alex.suykov@gmail.com>
-References: <cover.1432332802.git.alex.suykov@gmail.com>
- <1dba7a22215e2848dd0bb10a11387c5ef8a3caa0.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <20150715001139.53b866e3@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 14 Jul 2015 19:12:34 -0300
+Subject: [Buildroot] [PATCH v5 4/6] vala: bump to version 0.28.0
+In-Reply-To: <20150714235457.25e274b9@free-electrons.com>
+References: <1436902975-5004-1-git-send-email-gustavo@zacarias.com.ar>	<1436902975-5004-5-git-send-email-gustavo@zacarias.com.ar>
+ <20150714235457.25e274b9@free-electrons.com>
+Message-ID: <55A58952.20505@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+On 14/07/15 18:54, Thomas Petazzoni wrote:
 
-On Sat, 23 May 2015 13:06:55 +0300, Alex Suykov wrote:
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/pulseaudio/pulseaudio.mk      |  8 ++++++++
->  package/pulseaudio/pulseaudio.service | 11 +++++++++++
->  2 files changed, 19 insertions(+)
->  create mode 100644 package/pulseaudio/pulseaudio.service
+> Dear Gustavo Zacarias,
+>
+> On Tue, 14 Jul 2015 16:42:53 -0300, Gustavo Zacarias wrote:
+>> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>> ---
+>>   package/vala/vala.hash | 4 ++--
+>>   package/vala/vala.mk   | 4 ++--
+>>   2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> Applied, thanks.
 
-Applied after doing some minor changes:
-
-    [Thomas:
-     - use relative path for the service symlink
-     - slightly adjust the service description]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I haven't tested but this may break current midori, so revert in case it 
+does (it even breaks 0.5.9 without patching).
+gmpc is not affected though.
+Regards.
