@@ -1,54 +1,39 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 14 Jul 2015 13:11:19 +0200
-Subject: [Buildroot] [PATCH 3/4] skeleton: New package
-In-Reply-To: <20150714034611.GV2451@tarshish>
-References: <1436821211-4446-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1436821211-4446-3-git-send-email-maxime.hadjinlian@gmail.com>
- <20150714034611.GV2451@tarshish>
-Message-ID: <CAGduivyCPk3o6+oGxgTtJG5tj-1kogAnjV072N992zEz8s4KJw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 14 Jul 2015 14:13:58 +0300
+Subject: [Buildroot] [PATCH] qpid-proton: needs host python 2
+Message-ID: <8442e9d6be96eb9a8c4165024e98ce38e7de1a6f.1436872438.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+qpid-proton uses Python as part of its build system. Only Python 2 is
+currently supported.
 
-On Tue, Jul 14, 2015 at 5:46 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Maxime,
->
-> On Mon, Jul 13, 2015 at 11:00:10PM +0200, Maxime Hadjinlian wrote:
->> The generic, autotools and cmake infra are modified to filter skeleton
->> and host-skeleton. Also, in the pkg-generic we add skeleton as a
->> dependency to every package.
->
-> [snip]
->
->> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
->> new file mode 100644
->> index 0000000..be3347e
->> --- /dev/null
->> +++ b/package/skeleton/skeleton.mk
->> @@ -0,0 +1,100 @@
->> +################################################################################
->> +#
->> +# skeleton
->> +#
->> +################################################################################
->
-> [snip]
->
->> +$(eval $(generic-package))
->
-> There is no host-generic-package here. What would host-skeleton be used for
-> anyway?
->
-We need to filter host-skeleton because the infra derive the
-host-dependencies from the depencies of the packages and preprend
-'host-'  to its name
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Fixes:
+http://autobuild.buildroot.net/results/bdf/bdf94981b52dc3a04fd21ff770a0a20d883bb1c3/
+http://autobuild.buildroot.net/results/669/66964a00e44502ae00d5348a5ca2b632c729a417/
+http://autobuild.buildroot.net/results/30d/30d2fed1149857b11375f2801f522a84f441fc1e/
+
+and more.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/qpid-proton/qpid-proton.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qpid-proton/qpid-proton.mk b/package/qpid-proton/qpid-proton.mk
+index eae4589bf538..d21609d29776 100644
+--- a/package/qpid-proton/qpid-proton.mk
++++ b/package/qpid-proton/qpid-proton.mk
+@@ -12,6 +12,7 @@ QPID_PROTON_LICENSE_FILES = LICENSE
+ QPID_PROTON_INSTALL_STAGING = YES
+ QPID_PROTON_DEPENDENCIES = \
+ 	util-linux \
++	host-python \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl)
+ QPID_PROTON_CONF_OPTS = \
+ 	-DBUILD_JAVA=OFF \
+-- 
+2.1.4
