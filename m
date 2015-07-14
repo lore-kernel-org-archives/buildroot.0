@@ -1,22 +1,52 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 14 Jul 2015 11:49:50 +0200
-Subject: [Buildroot] [PATCH 1/1] Makefile: create $(BUILD_DIR) before
- attempting to touch .root
-In-Reply-To: <55A4DA8C.1030104@mind.be>
-References: <1436867048-6333-1-git-send-email-patrickdepinguin@gmail.com>
- <55A4DA8C.1030104@mind.be>
-Message-ID: <CAAXf6LXdavM=CW10T60ApsfpWNXktKQ-tnnTPYPpm71XwHV79A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Jul 2015 11:52:18 +0200
+Subject: [Buildroot] [PATCH] package/mono-gtksharp3: new package
+In-Reply-To: <1425562382-9625-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1425562382-9625-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20150714115218.25acce3f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 14, 2015 at 11:46 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 07/14/15 11:44, Thomas De Schampheleire wrote:
->> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
+Dear Angelo Compagnucci,
 
-Clearly, this will need to be ported to the skeleton-package patch...
+On Thu,  5 Mar 2015 14:33:02 +0100, Angelo Compagnucci wrote:
+> This patch adds gtksharp3 package for mono.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+
+The patch looks good, but it unfortunately doesn't build here:
+
+checking for gmcs... no
+configure: error: No C# compiler found. You need to install either mono (>=2.8) or .Net
+package/pkg-generic.mk:146: recipe for target '/home/thomas/buildroot/output/build/mono-gtksharp3-2.99.3/.stamp_configured' failed
+make: *** [/home/thomas/buildroot/output/build/mono-gtksharp3-2.99.3/.stamp_configured] Error 1
+
+I'm building the following defconfig:
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.05-496-g85945aa.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_MONO=y
+BR2_PACKAGE_MONO_GTKSHARP3=y
+BR2_PACKAGE_LIBGTK3=y
+
+Can you have a look? In the mean time, I'll mark the patch as Changes
+Requested in patchwork, so can you resend a new version after fixing
+this problem? Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
