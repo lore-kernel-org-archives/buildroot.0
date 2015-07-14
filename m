@@ -1,46 +1,30 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Jul 2015 15:03:25 +0300
-Subject: [Buildroot] [PATCH] package/qpid-proton: needs host-python2
-In-Reply-To: <20150714135627.26cf899a@free-electrons.com>
-References: <1436873894-1080-1-git-send-email-yann.morin.1998@free.fr>
- <20150714114803.GA2332@tarshish>
- <20150714135627.26cf899a@free-electrons.com>
-Message-ID: <20150714120325.GB2332@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Jul 2015 14:04:00 +0200
+Subject: [Buildroot] [PATCH 30/38] tinyhttpd: systemd support
+In-Reply-To: <4de07aed2aa8ff5ece608548b6eed6d357f14a3f.1432332802.git.alex.suykov@gmail.com>
+References: <cover.1432332802.git.alex.suykov@gmail.com>
+ <4de07aed2aa8ff5ece608548b6eed6d357f14a3f.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <20150714140400.3e134702@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Alex Suykov,
 
-On Tue, Jul 14, 2015 at 01:56:27PM +0200, Thomas Petazzoni wrote:
-> On Tue, 14 Jul 2015 14:48:04 +0300, Baruch Siach wrote:
-> > My interpretation of the cmake log is that cmake uses the python 
-> > interpreter it detects to run the scripts. In the failed cases cmake 
-> > detected host-python3 because host-python3 happened to build before 
-> > qpid-proton. cmake did not use the distro installed host python even 
-> > though it's python2 (most likely). So I'm not sure patching the scripts is 
-> > necessary.
-> 
-> It is necessary if your host machine has a Python 3 interpreter and not
-> a Python 2 interpreter. In this case the scripts will
-> run /usr/bin/python (because it's hardcoded in their source code), and
-> this will run Python 3.
-> 
-> So Yann's solution looks good. Am I missing something?
+On Sat, 23 May 2015 13:08:37 +0300, Alex Suykov wrote:
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> ---
+>  package/tinyhttpd/tinyhttpd.mk      |  8 ++++++++
+>  package/tinyhttpd/tinyhttpd.service | 10 ++++++++++
+>  2 files changed, 18 insertions(+)
+>  create mode 100644 package/tinyhttpd/tinyhttpd.service
 
-My point is that in the failed cases /usr/bin/python was not used, otherwise 
-the build would have succeeded. It seems that cmake uses the python 
-interpreter it detects to run the scripts. So patching the scripts doesn't 
-change anything by itself, IIUC.
+Applied after changing the link to use a relative path, thanks.
 
-Related to this, what do you thing about changing the host python requirement 
-in the manual?
-
-baruch
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
