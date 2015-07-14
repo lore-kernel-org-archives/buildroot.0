@@ -1,50 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 15:57:26 +0200
-Subject: [Buildroot] [PATCH v5] dtc: add host build
-In-Reply-To: <1427140478-31535-1-git-send-email-ps.report@gmx.net>
-References: <1427140478-31535-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20150714155726.6beef843@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 Jul 2015 15:59:58 +0200
+Subject: [Buildroot] [PATCH] package/qpid-proton: needs host-python2
+In-Reply-To: <20150714120325.GB2332@tarshish>
+References: <1436873894-1080-1-git-send-email-yann.morin.1998@free.fr>
+ <20150714114803.GA2332@tarshish>
+ <20150714135627.26cf899a@free-electrons.com>
+ <20150714120325.GB2332@tarshish>
+Message-ID: <20150714135958.GC26192@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Baruch, All,
 
-On Mon, 23 Mar 2015 20:54:38 +0100, Peter Seiderer wrote:
-> - add dtc host build support
+On 2015-07-14 15:03 +0300, Baruch Siach spake thusly:
+> On Tue, Jul 14, 2015 at 01:56:27PM +0200, Thomas Petazzoni wrote:
+> > On Tue, 14 Jul 2015 14:48:04 +0300, Baruch Siach wrote:
+> > > My interpretation of the cmake log is that cmake uses the python 
+> > > interpreter it detects to run the scripts. In the failed cases cmake 
+> > > detected host-python3 because host-python3 happened to build before 
+> > > qpid-proton. cmake did not use the distro installed host python even 
+> > > though it's python2 (most likely). So I'm not sure patching the scripts is 
+> > > necessary.
+> > 
+> > It is necessary if your host machine has a Python 3 interpreter and not
+> > a Python 2 interpreter. In this case the scripts will
+> > run /usr/bin/python (because it's hardcoded in their source code), and
+> > this will run Python 3.
+> > 
+> > So Yann's solution looks good. Am I missing something?
 > 
-> - install linux kernel package provided dtc only in case package
->   host dtc is not selected (suggested by Matthew Weber (see [1])
->   to avoid double installation of host dtc).
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2015-January/117121.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
-> Changes v4 -> v5:
->   - added Reviewed-by/Tested-by
->   - squashed with 'linux: install dtc only in case package host dtc is not
->     selected' and fixed variable parenthesis (as suggested by Yann E. MORIN)
->     and reworded commit message
+> My point is that in the failed cases /usr/bin/python was not used, otherwise 
+> the build would have succeeded. It seems that cmake uses the python 
+> interpreter it detects to run the scripts. So patching the scripts doesn't 
+> change anything by itself, IIUC.
 
-We still don't really understand the motivation for doing this package.
-The kernel already has its own copy of dtc, which it builds when
-needed. And your commit log does not explain *why* we would want a host
-version of dtc as a package.
+OK, so you were right and wrong at the same time! ;-)
 
-For now, we'll mark this patch as Rejected in patchwork. If you don't
-agree, please resend an updated version with a much more descriptive
-commit log which explains the use cases and motivation for having a
-host dtc package.
+In fact, if we just add host-python as a dependency, and we do not have
+a target python3 package, then we have no $(HOST_DIR)/usr/bin/python ,
+only $(HOST_DIR)/usr/bin/python2 so cmake won't find it, and will
+fallback to using the host's python, and we're back to square-one.
 
-Thanks!
+So, we have to tell cmake what python to use, with something like
+  -DPYTHON_EXECUTABLE=$(HOST_DIR)/usr/bin/python2
 
-Thomas
+And now, it works! :-)   (patch incoming shortly)
+
+Thanks for directing me in the right direction! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
