@@ -1,63 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Jul 2015 15:59:58 +0200
-Subject: [Buildroot] [PATCH] package/qpid-proton: needs host-python2
-In-Reply-To: <20150714120325.GB2332@tarshish>
-References: <1436873894-1080-1-git-send-email-yann.morin.1998@free.fr>
- <20150714114803.GA2332@tarshish>
- <20150714135627.26cf899a@free-electrons.com>
- <20150714120325.GB2332@tarshish>
-Message-ID: <20150714135958.GC26192@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Jul 2015 16:00:24 +0200
+Subject: [Buildroot] [git commit] samba4: bump to version 4.2.3
+Message-ID: <20150714140031.B584E81D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=23269765c8d99251157a5b90ebf59dcb51a26c1f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-07-14 15:03 +0300, Baruch Siach spake thusly:
-> On Tue, Jul 14, 2015 at 01:56:27PM +0200, Thomas Petazzoni wrote:
-> > On Tue, 14 Jul 2015 14:48:04 +0300, Baruch Siach wrote:
-> > > My interpretation of the cmake log is that cmake uses the python 
-> > > interpreter it detects to run the scripts. In the failed cases cmake 
-> > > detected host-python3 because host-python3 happened to build before 
-> > > qpid-proton. cmake did not use the distro installed host python even 
-> > > though it's python2 (most likely). So I'm not sure patching the scripts is 
-> > > necessary.
-> > 
-> > It is necessary if your host machine has a Python 3 interpreter and not
-> > a Python 2 interpreter. In this case the scripts will
-> > run /usr/bin/python (because it's hardcoded in their source code), and
-> > this will run Python 3.
-> > 
-> > So Yann's solution looks good. Am I missing something?
-> 
-> My point is that in the failed cases /usr/bin/python was not used, otherwise 
-> the build would have succeeded. It seems that cmake uses the python 
-> interpreter it detects to run the scripts. So patching the scripts doesn't 
-> change anything by itself, IIUC.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/samba4/samba4.hash |    2 +-
+ package/samba4/samba4.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-OK, so you were right and wrong at the same time! ;-)
-
-In fact, if we just add host-python as a dependency, and we do not have
-a target python3 package, then we have no $(HOST_DIR)/usr/bin/python ,
-only $(HOST_DIR)/usr/bin/python2 so cmake won't find it, and will
-fallback to using the host's python, and we're back to square-one.
-
-So, we have to tell cmake what python to use, with something like
-  -DPYTHON_EXECUTABLE=$(HOST_DIR)/usr/bin/python2
-
-And now, it works! :-)   (patch incoming shortly)
-
-Thanks for directing me in the right direction! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 11c15b7..e2b3969 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	27d6c69dc3afee38fd28051001d2d4bdae38c567612a9ec6477bb5567e2abc1e	samba-4.2.2.tar.gz
++sha256	b6dfa5ae4818d891ee2fcff04a5912f4a4fb2394b4f5e66a2a15b428da094c7c	samba-4.2.3.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 7d10a0c..c88cc9f 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.2.2
++SAMBA4_VERSION = 4.2.3
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
