@@ -1,72 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 14 Jul 2015 11:06:20 -0300
-Subject: [Buildroot] [PATCH 2/2] libnl: remove patch to fix bmon breakage
-In-Reply-To: <1436882780-5141-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1436882780-5141-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1436882780-5141-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Jul 2015 16:04:19 +0200
+Subject: [Buildroot] [git commit] libglib2: bump to version 2.44.1
+Message-ID: <20150714140658.BD39781817@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream decided that programs should be fixed, so so be it.
+commit: http://git.buildroot.net/buildroot/commit/?id=865e46ffcaadc2ba5936076e6c830d6935ad0676
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...remove-unnecessary-include-of-private-lin.patch | 44 ----------------------
- 1 file changed, 44 deletions(-)
- delete mode 100644 package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch
+ package/libglib2/libglib2.hash |    4 ++--
+ package/libglib2/libglib2.mk   |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch b/package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch
-deleted file mode 100644
-index 3520899..0000000
---- a/package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 61310ce3f2b6c5c21be8c788848f083e4c58d138 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Fri, 17 Apr 2015 07:20:48 -0300
--Subject: [PATCH] Revert "route: remove unnecessary include of private
-- linux/if.h"
--
--It breaks rtnl_link_get_flags() checks against IFF_* defines that aren't
--defined.
--
--This reverts commit 50a76998ac36ace3716d3c979b352fac73cfc80a.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- include/netlink/route/link.h | 1 +
-- src/nl-link-set.c            | 1 -
-- 2 files changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/include/netlink/route/link.h b/include/netlink/route/link.h
--index 8f74f42..a7aa88b 100644
----- a/include/netlink/route/link.h
--+++ b/include/netlink/route/link.h
--@@ -15,6 +15,7 @@
-- #include <netlink/netlink.h>
-- #include <netlink/cache.h>
-- #include <netlink/addr.h>
--+#include <linux/if.h>
-- #include <sys/types.h>
-- 
-- #ifdef __cplusplus
--diff --git a/src/nl-link-set.c b/src/nl-link-set.c
--index 6a6bac8..bbb60f9 100644
----- a/src/nl-link-set.c
--+++ b/src/nl-link-set.c
--@@ -9,7 +9,6 @@
--  * Copyright (c) 2003-2010 Thomas Graf <tgraf@suug.ch>
--  */
-- 
---#include <linux/if.h>
-- #include <netlink/cli/utils.h>
-- #include <netlink/cli/link.h>
-- 
---- 
--2.0.5
--
--- 
-2.3.6
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 37517c6..f3c4a66 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,2 +1,2 @@
+-# https://download.gnome.org/sources/glib/2.42/glib-2.42.2.sha256sum
+-sha256  a3cc1ebd2bd310a9fdf42ae4293ee713cdf1764bd29f552febf3bf44cadae7db  glib-2.42.2.tar.xz
++# https://download.gnome.org/sources/glib/2.44/glib-2.44.1.sha256sum
++sha256  8811deacaf8a503d0a9b701777ea079ca6a4277be10e3d730d2112735d5eca07  glib-2.44.1.tar.xz
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 5ef1174..516f5fa 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBGLIB2_VERSION_MAJOR = 2.42
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
++LIBGLIB2_VERSION_MAJOR = 2.44
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPLv2+
