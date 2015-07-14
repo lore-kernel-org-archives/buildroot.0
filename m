@@ -1,43 +1,55 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Tue, 14 Jul 2015 10:02:56 -0500
-Subject: [Buildroot] [PATCH v3 1/1] linux: add config options for nfs-utils
-Message-ID: <1436886176-118956-1-git-send-email-ryan.barnett@rockwellcollins.com>
+From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
+Date: Tue, 14 Jul 2015 12:11:01 -0300
+Subject: [Buildroot] [PATCH v4 0/3] Add ARM Cortex-M3 support
+In-Reply-To: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <1436886664-3206-1-git-send-email-guido@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When nfs-utils packages is selected, automatically enable the kernel
-options for NFSD. This will allow for an NFS server to work by only
-adding /etc/exports to the filesystem.
+Hi all,
 
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
----
-Test with qemu_x86_defconfig
+this patchset introduces support for the M3 processors. These processors
+don't have an MMU and they don't support the regular ARM mode (only
+Thumb and Thumb2).
 
-Changes v2 -> v3:
-  - Add CONFIG_NFSD_V3 option as well to really support only v3 of NFS
+The OSELAS 2014.12.0 toolchain is added, in 32-bit and 64-bit variants.
 
-Changes v1 -> v2:
-  - Only enable CONFIG_NFSD (suggested by Arnout)
----
- linux/linux.mk | 3 +++
- 1 file changed, 3 insertions(+)
+I'm planning to send a defconfig for the CIAA board[1] once it's
+mainlined in Linux. But, for now, this config can generate a proper
+rootfs:
+  BR2_arm=y
+  BR2_cortex_m3=y
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 8c535f3..31e1f01 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -217,6 +217,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 	$(if $(BR2_PACKAGE_XTABLES_ADDONS),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
-+	$(if $(BR2_PACKAGE_NFS_UTILS),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFSD,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFSD_V3,$(@D)/.config))
- 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
- endef
+The changes from v3 are:
+  * Patches 1 and 2 were committed, so dropped.
+
+  * Add x86 and x86_64 versions of the toolchain, as suggested by Yann.
+
+  * Drop the HAS_RESOLVER patch and just disable nslookup from the
+    default busybox config.
+
+  * Disable the internal toolchain for Cortex-M3. It won't work for now
+    since ARM instructions are used as a fall back in some cases.
+
+Any comments and testing welcome!
+
+[1] http://www.proyecto-ciaa.com.ar/
+
+Guido Mart?nez (3):
+  busybox: disable nslookup applet
+  toolchain-external: add OSELAS 2014.12.0 Cortex-M3 toolchain
+  toolchain: disable internal for blackfin
+
+ package/busybox/busybox.config                       |  2 +-
+ toolchain/Config.in                                  |  1 +
+ toolchain/toolchain-external/Config.in               | 12 ++++++++++++
+ toolchain/toolchain-external/toolchain-external.hash |  6 ++++++
+ toolchain/toolchain-external/toolchain-external.mk   | 14 ++++++++++++++
+ 5 files changed, 34 insertions(+), 1 deletion(-)
+
 -- 
-1.9.1
+2.1.4
