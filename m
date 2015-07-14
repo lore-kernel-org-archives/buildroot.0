@@ -1,33 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 13:05:02 +0200
-Subject: [Buildroot] [PATCH] package/openswan: fix parralel build
-In-Reply-To: <1436871222-22173-1-git-send-email-yann.morin.1998@free.fr>
-References: <1436871222-22173-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150714130502.1b35ee29@free-electrons.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Tue, 14 Jul 2015 13:11:19 +0200
+Subject: [Buildroot] [PATCH 3/4] skeleton: New package
+In-Reply-To: <20150714034611.GV2451@tarshish>
+References: <1436821211-4446-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1436821211-4446-3-git-send-email-maxime.hadjinlian@gmail.com>
+ <20150714034611.GV2451@tarshish>
+Message-ID: <CAGduivyCPk3o6+oGxgTtJG5tj-1kogAnjV072N992zEz8s4KJw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hi Baruch,
 
-On Tue, 14 Jul 2015 12:53:42 +0200, Yann E. MORIN wrote:
-> Fixes:
->     http://autobuild.buildroot.org/results/2ec/2ecb098b01bd44d75182b15f98c1fd2a8c927438/
->     http://autobuild.buildroot.org/results/18f/18f0166f3fa831f321818e286d9c2e9037f8c8d0/
->     ...
-> 
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/openswan/openswan.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-
-Applied after fixing the commit title, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On Tue, Jul 14, 2015 at 5:46 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Maxime,
+>
+> On Mon, Jul 13, 2015 at 11:00:10PM +0200, Maxime Hadjinlian wrote:
+>> The generic, autotools and cmake infra are modified to filter skeleton
+>> and host-skeleton. Also, in the pkg-generic we add skeleton as a
+>> dependency to every package.
+>
+> [snip]
+>
+>> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+>> new file mode 100644
+>> index 0000000..be3347e
+>> --- /dev/null
+>> +++ b/package/skeleton/skeleton.mk
+>> @@ -0,0 +1,100 @@
+>> +################################################################################
+>> +#
+>> +# skeleton
+>> +#
+>> +################################################################################
+>
+> [snip]
+>
+>> +$(eval $(generic-package))
+>
+> There is no host-generic-package here. What would host-skeleton be used for
+> anyway?
+>
+We need to filter host-skeleton because the infra derive the
+host-dependencies from the depencies of the packages and preprend
+'host-'  to its name
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
