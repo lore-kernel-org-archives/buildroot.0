@@ -1,41 +1,70 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 14 Jul 2015 13:31:11 +0200
-Subject: [Buildroot] [PATCH] snappy: disable tests
-Message-ID: <1436873471-25780-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 Jul 2015 13:33:55 +0200
+Subject: [Buildroot] [PATCH] qpid-proton: needs host python 2
+In-Reply-To: <8442e9d6be96eb9a8c4165024e98ce38e7de1a6f.1436872438.git.baruch@tkos.co.il>
+References: <8442e9d6be96eb9a8c4165024e98ce38e7de1a6f.1436872438.git.baruch@tkos.co.il>
+Message-ID: <20150714113355.GA26192@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will also fix an unsafe header path problem:
+Baruch, All,
 
-/br/output/host/usr/bin/mips-linux-gnu-g++ -DHAVE_CONFIG_H -I.
--I/usr/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64   -Os  -c -o snappy_unittest-snappy-test.o `test
--f 'snappy-test.cc' || echo './'`snappy-test.cc
-mips-linux-gnu-g++: ERROR: unsafe header/library path used in
-cross-compilation: '/usr/include'
-Makefile:730: recipe for target 'snappy_unittest-snappy_unittest.o'
-failed
+On 2015-07-14 14:13 +0300, Baruch Siach spake thusly:
+> qpid-proton uses Python as part of its build system. Only Python 2 is
+> currently supported.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/bdf/bdf94981b52dc3a04fd21ff770a0a20d883bb1c3/
+> http://autobuild.buildroot.net/results/669/66964a00e44502ae00d5348a5ca2b632c729a417/
+> http://autobuild.buildroot.net/results/30d/30d2fed1149857b11375f2801f522a84f441fc1e/
+> 
+> and more.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/qpid-proton/qpid-proton.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/qpid-proton/qpid-proton.mk b/package/qpid-proton/qpid-proton.mk
+> index eae4589bf538..d21609d29776 100644
+> --- a/package/qpid-proton/qpid-proton.mk
+> +++ b/package/qpid-proton/qpid-proton.mk
+> @@ -12,6 +12,7 @@ QPID_PROTON_LICENSE_FILES = LICENSE
+>  QPID_PROTON_INSTALL_STAGING = YES
+>  QPID_PROTON_DEPENDENCIES = \
+>  	util-linux \
+> +	host-python \
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/snappy/snappy.mk | 3 +++
- 1 file changed, 3 insertions(+)
+This simply can't work, because the offending .py scripts are using a
+hard-coded sha-bang:
+    #!/usr/bin/python
 
-diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
-index 6bda7ce..b00dddf 100644
---- a/package/snappy/snappy.mk
-+++ b/package/snappy/snappy.mk
-@@ -13,4 +13,7 @@ SNAPPY_AUTORECONF = YES
- SNAPPY_DEPENDENCIES = host-pkgconf
- SNAPPY_INSTALL_STAGING = YES
- 
-+# Disable tests
-+SNAPPY_CONF_OPTS = --disable-gtest
-+
- $(eval $(autotools-package))
+So, even though we'd now have $(HOST_DIR)/usr/bin/python that is a
+python2, the scripts would still be calling the host's python, not ours.
+
+I'm already working on fixing all of those...
+
+Regards,
+Yann E. MORIN.
+
+>  	$(if $(BR2_PACKAGE_OPENSSL),openssl)
+>  QPID_PROTON_CONF_OPTS = \
+>  	-DBUILD_JAVA=OFF \
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.3.6
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
