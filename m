@@ -1,33 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 17:43:43 +0200
-Subject: [Buildroot] [PATCH] package/qpid-proton: needs host-python2
-In-Reply-To: <20150714120325.GB2332@tarshish>
-References: <1436873894-1080-1-git-send-email-yann.morin.1998@free.fr>
- <20150714114803.GA2332@tarshish>
- <20150714135627.26cf899a@free-electrons.com>
- <20150714120325.GB2332@tarshish>
-Message-ID: <20150714174343.398e8385@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 14 Jul 2015 18:49:18 +0300
+Subject: [Buildroot] [PATCH] docs/manual: relax python version requirement
+Message-ID: <380d3364a889b4c7b3af710576c53e0100fe31b7.1436888958.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Buildroot should now work with host installed python version 3. Update the
+manual accordingly.
 
-On Tue, 14 Jul 2015 15:03:25 +0300, Baruch Siach wrote:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ docs/manual/prerequisite.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Related to this, what do you thing about changing the host python requirement 
-> in the manual?
-
-Yes, sounds good. Samuel is using Buildroot with both Python 2 and
-Python 3 installed on his machine, but Python 3 being the default one.
-However, I don't know if anyone has tested with a pure Python 3
-installation. But it _should_ work. If not that's a bug that we should
-fix.
-
-Thomas
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index 6ee01b4a747e..7edad1f6db3e 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -32,7 +32,7 @@ between distributions).
+ ** +perl+ (version 5.8.7 or any later)
+ ** +tar+
+ ** +cpio+
+-** +python+ (version 2.6 or 2.7)
++** +python+ (version 2.6 or any later)
+ ** +unzip+
+ ** +rsync+
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
