@@ -1,135 +1,111 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Tue, 14 Jul 2015 15:20:27 -0500
-Subject: [Buildroot] [PATCH v9 15/15] audit: Add startup script
+Date: Tue, 14 Jul 2015 15:20:20 -0500
+Subject: [Buildroot] [PATCH v9 08/15] sysvinit: added libselinux dependency
 In-Reply-To: <1436905227-26937-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1436905227-26937-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1436905227-26937-16-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1436905227-26937-9-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The startup script for the audit package did not meet the buildroot
-standards when the package was initially merged. Adding a compliant
-startup script for starting the audit daemon along with rotating the
-logs and other features.
+From: Matt Weber <matthew.weber@rockwellcollins.com>
 
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 Changes v8 -> v9:
-  - Added in missing directory installation
+  - No changes
 
 Changes v7 -> v8:
-  - New patch
----
- package/audit/S01auditd | 80 +++++++++++++++++++++++++++++++++++++++++++++++++
- package/audit/audit.mk  |  5 ++++
- 2 files changed, 85 insertions(+)
- create mode 100644 package/audit/S01auditd
+  - No changes
 
-diff --git a/package/audit/S01auditd b/package/audit/S01auditd
+Changes v6 -> v7:
+  - No changes
+
+Changes v5 -> v6:
+  - No changes
+
+Changes v4 -> v5:
+  - Removed unnecessary += when adding buysbox dependency (Ryan B.)
+  - Removed duplicate assignment of OPTS (Matt W.)
+  - Added description to patch and signed off line (Clayton S.)
+
+Changes v1 -> v4:
+  - Did not exist
+---
+ ...1-Fix-SELinux-compile-flags-and-libraries.patch | 44 ++++++++++++++++++++++
+ package/sysvinit/sysvinit.mk                       |  5 +++
+ 2 files changed, 49 insertions(+)
+ create mode 100644 package/sysvinit/0001-Fix-SELinux-compile-flags-and-libraries.patch
+
+diff --git a/package/sysvinit/0001-Fix-SELinux-compile-flags-and-libraries.patch b/package/sysvinit/0001-Fix-SELinux-compile-flags-and-libraries.patch
 new file mode 100644
-index 0000000..1cbfc20
+index 0000000..f857e07
 --- /dev/null
-+++ b/package/audit/S01auditd
-@@ -0,0 +1,80 @@
-+#!/bin/sh
-+#
-+# auditd       This starts and stops auditd
-+#
-+# description: This starts the Linux Auditing System Daemon,
-+#              which collects security related events in a dedicated
-+#              audit log. If this daemon is turned off, audit events
-+#              will be sent to syslog.
-+#
++++ b/package/sysvinit/0001-Fix-SELinux-compile-flags-and-libraries.patch
+@@ -0,0 +1,44 @@
++From e7dc523c1850534d98ab90dd02e07ee214e21f24 Mon Sep 17 00:00:00 2001
++From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
++Date: Fri, 1 May 2015 10:58:47 -0500
++Subject: [PATCH] Fix SELinux compile flags and libraries
 +
-+NAME=auditd
-+DAEMON=/usr/sbin/${NAME}
-+CONFIG=/etc/audit/auditd.conf
-+PIDFILE=/var/run/${NAME}.pid
++The SELinux flags, added as CPPFLAGS, end up getting dropped by the
++Makefile. Also ensuring sulogin is linked against libsepol which is
++required.
 +
-+start(){
-+	echo -n "Starting ${NAME}: "
++Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
++---
++ src/Makefile | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
 +
-+	# Create dir to store log files in if one doesn't exist. Create
-+	# the directory with SELinux permissions if possible
-+	command -v matchpathcon >/dev/null 2>&1
-+	if [ $? = 0 ]; then
-+		mkdir -p /var/log/audit -Z `matchpathcon -n /var/log/audit`
-+	else
-+		mkdir -p /var/log/audit
-+	fi
++diff --git a/src/Makefile b/src/Makefile
++index e2b8028..bf1ae81 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -104,7 +104,7 @@ utmpdump:	utmpdump.o
++ 
++ runlevel:	runlevel.o
++ 
++-sulogin:	LDLIBS += $(SULOGINLIBS) $(STATIC)
+++sulogin:	LDLIBS += $(SULOGINLIBS) $(INITLIBS) $(STATIC)
++ sulogin:	sulogin.o
++ 
++ wall:		dowall.o wall.o
++@@ -114,10 +114,10 @@ shutdown:	dowall.o shutdown.o utmp.o reboot.h
++ bootlogd:	LDLIBS += -lutil
++ bootlogd:	bootlogd.o
++ 
++-sulogin.o:	CPPFLAGS += $(SELINUX_DEF)
++-sulogin.o:	sulogin.c 
+++sulogin.o:	CFLAGS += $(SELINUX_DEF)
+++sulogin.o:	sulogin.c
++ 
++-init.o:		CPPFLAGS += $(SELINUX_DEF)
+++init.o:		CFLAGS += $(SELINUX_DEF)
++ init.o:		init.c init.h set.h reboot.h initreq.h
++ 
++ utmp.o:		utmp.c init.h
++-- 
++1.9.1
 +
-+	# Run audit daemon executable
-+	start-stop-daemon -S -q -p ${PIDFILE} --exec ${DAEMON}
-+
-+	if [ $? = 0 ]; then
-+		# Load the default rules
-+		test -f /etc/audit/rules.d/audit.rules && /usr/sbin/auditctl -R /etc/audit/rules.d/audit.rules >/dev/null
-+		echo "OK"
-+	else
-+		echo "Failed"
-+	fi
-+}
-+
-+stop(){
-+	echo -n "Stopping ${NAME}: "
-+
-+	start-stop-daemon -K -q -p ${PIDFILE}
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+reload(){
-+	echo -n "Reloading ${NAME} configuration: "
-+	start-stop-daemon --stop -s 1 -p ${PIDFILE} 1>/dev/null
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+rotate(){
-+	echo -n "Rotating ${NAME} logs: "
-+	start-stop-daemon --stop -s 10 -p ${PIDFILE} 1>/dev/null
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+case "$1" in
-+	start)
-+		start
-+		;;
-+	stop)
-+		stop
-+		;;
-+	restart)
-+		stop
-+		start
-+		;;
-+	reload)
-+		reload
-+		;;
-+	rotate)
-+		rotate
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload|rotate}"
-+		exit 1
-+		;;
-+esac
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index ab3e087..dabd21f 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -34,6 +34,11 @@ ifeq ($(BR2_aarch64),y)
- AUDIT_CONF_OPTS += --with-aarch64
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index 2460dd9..2b39ee6 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -16,6 +16,11 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ SYSVINIT_DEPENDENCIES = busybox
  endif
  
-+define AUDIT_INSTALL_INIT_SYSV
-+	$(INSTALL) -d $(TARGET_DIR)/etc/init.d
-+	$(INSTALL) -m 755 package/audit/S01auditd $(TARGET_DIR)/etc/init.d/
-+endef
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++SYSVINIT_DEPENDENCIES += libselinux
++TARGET_CONFIGURE_OPTS += WITH_SELINUX="yes" ROOT="$(TARGET_DIR)"
++endif
 +
- define AUDIT_INSTALL_CLEANUP
- 	$(RM) -rf $(TARGET_DIR)/etc/rc.d
- 	$(RM) -rf $(TARGET_DIR)/etc/sysconfig
+ define SYSVINIT_DEBIAN_PATCHES
+ 	if [ -d $(@D)/debian/patches ]; then \
+ 		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
 -- 
 1.9.1
