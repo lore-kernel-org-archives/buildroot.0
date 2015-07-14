@@ -1,28 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 23:49:12 +0200
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.1.2
-In-Reply-To: <1436900784-25975-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1436900784-25975-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150714234912.61a868d2@free-electrons.com>
+Date: Tue, 14 Jul 2015 23:53:21 +0200
+Subject: [Buildroot] [git commit] Makefile: save MAKE_VERSION
+Message-ID: <20150714215404.4AA5580163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=2ac7da07991bbe26119a8cf932a4c955f0c78ece
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Jul 2015 16:06:24 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/btrfs-progs/btrfs-progs.hash | 2 +-
->  package/btrfs-progs/btrfs-progs.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Save MAKE_VERSION as RUNNING_MAKE_VERSION since this is later clobbered
+by the make package.
 
-Applied, thanks.
+It will be used by the webkitgtk24 package to check for older make
+versions which have a bug building it with parallel jobs (it hangs).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 9a18853..531ac5d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -43,10 +43,13 @@ all:
+ # Set and export the version string
+ export BR2_VERSION := 2015.08-git
+ 
++# Save running make version since it's clobbered by the make package
++RUNNING_MAKE_VERSION := $(MAKE_VERSION)
++
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION = 3.81
+-ifneq ($(firstword $(sort $(MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MIN_MAKE_VERSION))
+-$(error You have make '$(MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
++ifneq ($(firstword $(sort $(RUNNING_MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MIN_MAKE_VERSION))
++$(error You have make '$(RUNNING_MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
+ endif
+ 
+ export HOSTARCH := $(shell uname -m | \
