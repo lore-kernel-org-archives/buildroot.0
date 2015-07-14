@@ -1,36 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 23:56:35 +0200
-Subject: [Buildroot] [git commit] docs/manual: relax python version
-	requirement
-Message-ID: <20150714215703.A7BFB80E16@busybox.osuosl.org>
+Date: Tue, 14 Jul 2015 23:57:09 +0200
+Subject: [Buildroot] [PATCH v4 1/7] docs/manual: Fix trivial typo
+In-Reply-To: <20150714171720.5e057e07@pcviktorin.fit.vutbr.cz>
+References: <20150714171214.706e9e4d@pcviktorin.fit.vutbr.cz>
+ <20150714171720.5e057e07@pcviktorin.fit.vutbr.cz>
+Message-ID: <20150714235709.2b6eedf9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fe3f30d9a7c989194ab58a99d04eed785fb9eef4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Jan Viktorin,
 
-Buildroot should now work with host installed python version 3. Update the
-manual accordingly.
+On Tue, 14 Jul 2015 17:17:20 +0200, Jan Viktorin wrote:
+> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+> ---
+>  docs/manual/adding-packages-python.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/prerequisite.txt |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
-index 6ee01b4..7edad1f 100644
---- a/docs/manual/prerequisite.txt
-+++ b/docs/manual/prerequisite.txt
-@@ -32,7 +32,7 @@ between distributions).
- ** +perl+ (version 5.8.7 or any later)
- ** +tar+
- ** +cpio+
--** +python+ (version 2.6 or 2.7)
-+** +python+ (version 2.6 or any later)
- ** +unzip+
- ** +rsync+
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
