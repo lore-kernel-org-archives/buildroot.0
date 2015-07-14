@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 23:17:02 +0200
-Subject: [Buildroot] [git commit] package/perf: if libunwind is enabled,
+Date: Tue, 14 Jul 2015 23:16:44 +0200
+Subject: [Buildroot] [git commit] package/perf: if slang is enabled,
 	depend on it
-Message-ID: <20150714213615.4DEB281D5B@busybox.osuosl.org>
+Message-ID: <20150714213615.3E7CC81938@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=71e5ff61eeab0ba7cdeb2eae9fa566110d7ed212
+commit: http://git.buildroot.net/buildroot/commit/?id=15f2cc5f81ea4ee9e6e219426d469f50d49b98d5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Steven Noonan <steven@uplinklabs.net>
@@ -22,17 +22,17 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  1 files changed, 4 insertions(+), 0 deletions(-)
 
 diff --git a/package/perf/perf.mk b/package/perf/perf.mk
-index 9fdce95..42fbe24 100644
+index 36989fc..dee05c3 100644
 --- a/package/perf/perf.mk
 +++ b/package/perf/perf.mk
-@@ -36,6 +36,10 @@ ifeq ($(BR2_PACKAGE_SLANG),y)
- PERF_DEPENDENCIES += slang
+@@ -32,6 +32,10 @@ ifeq ($(BR2_arc),y)
+ PERF_MAKE_FLAGS += NO_BACKTRACE=1
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
-+PERF_DEPENDENCIES += libunwind
++ifeq ($(BR2_PACKAGE_SLANG),y)
++PERF_DEPENDENCIES += slang
 +endif
 +
- ifeq ($(BR2_PACKAGE_NUMACTL),y)
- PERF_DEPENDENCIES += numactl
- endif
+ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ PERF_DEPENDENCIES += elfutils
+ else
