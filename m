@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Tue, 14 Jul 2015 15:20:22 -0500
-Subject: [Buildroot] [PATCH v9 10/15] openssh: selinux and pam support
+Date: Tue, 14 Jul 2015 15:20:21 -0500
+Subject: [Buildroot] [PATCH v9 09/15] dbus: selinux file context support
 In-Reply-To: <1436905227-26937-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1436905227-26937-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1436905227-26937-11-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1436905227-26937-10-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,7 +20,7 @@ Changes v8 -> v9:
   - No changes
 
 Changes v7 -> v8:
-  - Fixed sed calls to use macro (Suggested by Samuel)
+  - No changes
 
 Changes v6 -> v7:
   - No changes
@@ -28,42 +28,58 @@ Changes v6 -> v7:
 Changes v5 -> v6:
   - No changes
 
-Changes v4 -> v5:
-  - New patch
-  - Added without assignments (Matt W.)
-  - Moved install pam define in conditional (Matt W.)
----
- package/openssh/openssh.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Changes v4 -> v5
+  - No changes
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 11a844e..a4f4c94 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -30,8 +30,24 @@ endif
- OPENSSH_DEPENDENCIES = zlib openssl
+Changes v1 -> v4:
+  - Did not exist
+---
+ package/dbus/S30dbus |  4 ++++
+ package/dbus/dbus.mk | 14 ++++++++++++++
+ 2 files changed, 18 insertions(+)
+ mode change 100755 => 100644 package/dbus/S30dbus
+
+diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
+old mode 100755
+new mode 100644
+index 0d15c73..be51807
+--- a/package/dbus/S30dbus
++++ b/package/dbus/S30dbus
+@@ -17,6 +17,10 @@
+ [ -d /var/run/dbus ] || mkdir -p /var/run/dbus
+ [ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
+ [ -d /tmp/dbus ] || mkdir -p /tmp/dbus
++[ -d /var/lib/dbus ] || mkdir -p /var/lib/dbus
++if [ -e /sbin/restorecon ]; then
++   restorecon -R /var/run/dbus /var/lock/subsys /tmp/dbus /var/lib/dbus
++fi
  
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+define OPENSSH_INSTALL_PAM_CONF
-+	$(INSTALL) -D -m 644 $(@D)/contrib/sshd.pam.generic $(TARGET_DIR)/etc/pam.d/sshd
-+	$(SED) '/password   required     \/lib\/security\/pam_cracklib.so/d' $(TARGET_DIR)/etc/pam.d/sshd
-+	$(SED) 's/\#UsePAM no/UsePAM yes/' $(TARGET_DIR)/etc/ssh/sshd_config
-+endef
-+
- OPENSSH_DEPENDENCIES += linux-pam
- OPENSSH_CONF_OPTS += --with-pam
-+OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_PAM_CONF
-+else
-+OPENSSH_CONF_OPTS += --without-pam
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+OPENSSH_DEPENDENCIES += libselinux
-+OPENSSH_CONF_OPTS += --with-selinux
-+else
-+OPENSSH_CONF_OPTS += --without-selinux
+ RETVAL=0
+ 
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 7deae11..e9c9aaf 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -44,6 +44,20 @@ ifeq ($(BR2_microblaze),y)
+ DBUS_CONF_OPTS += --disable-inotify
  endif
  
- define OPENSSH_INSTALL_INIT_SYSTEMD
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++DBUS_CONF_OPTS += --enable-selinux
++DBUS_DEPENDENCIES += libselinux
++else
++DBUS_CONF_OPTS += --disable-selinux
++endif
++
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++DBUS_CONF_OPTS += --enable-libaudit
++DBUS_DEPENDENCIES += audit libcap-ng
++else
++DBUS_CONF_OPTS += --disable-libaudit
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+ DBUS_CONF_OPTS += --with-x
+ DBUS_DEPENDENCIES += xlib_libX11
 -- 
 1.9.1
