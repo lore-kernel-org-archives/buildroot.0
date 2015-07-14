@@ -1,56 +1,36 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 14 Jul 2015 17:45:38 +0200
-Subject: [Buildroot] [PATCH 1/7] package/perf: if slang is enabled,
- depend on it
-In-Reply-To: <1426714983-24803-1-git-send-email-steven@uplinklabs.net>
-References: <1426714983-24803-1-git-send-email-steven@uplinklabs.net>
-Message-ID: <55A52EA2.4020000@openwide.fr>
+From: Guido =?iso-8859-1?Q?Mart=EDnez?= <guido@vanguardiasur.com.ar>
+Date: Tue, 14 Jul 2015 12:57:21 -0300
+Subject: [Buildroot] [PATCH v4 2/3] toolchain-external: add OSELAS
+ 2014.12.0 Cortex-M3 toolchain
+In-Reply-To: <20150714154230.GC2332@tarshish>
+References: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1436886664-3206-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1436886664-3206-3-git-send-email-guido@vanguardiasur.com.ar>
+ <20150714154230.GC2332@tarshish>
+Message-ID: <20150714155721.GA8327@fox>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Steven,
-
-Le 18/03/2015 22:42, Steven Noonan a ?crit :
-> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
-> ---
->  package/perf/perf.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+On Tue, Jul 14, 2015 at 06:42:30PM +0300, Baruch Siach wrote:
+> Hi Guido,
 > 
-> diff --git a/package/perf/perf.mk b/package/perf/perf.mk
-> index f6591a6..2b0702c 100644
-> --- a/package/perf/perf.mk
-> +++ b/package/perf/perf.mk
-> @@ -34,6 +34,10 @@ ifeq ($(BR2_arc),y)
->  	PERF_MAKE_FLAGS += NO_BACKTRACE=1
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_SLANG),y)
-> +	PERF_DEPENDENCIES += slang
-> +endif
-> +
-
-The slang support can't be enabled simply by adding the slang package
-dependency, because newt support is disabled in PERF_MAKE_FLAGS:
-
-PERF_MAKE_FLAGS = NO_NEWT=1
-
-In tools/perl/config/Makefile, the slang support is disabled here (kernel 4.2-rc2):
-
-ifdef NO_NEWT
-  NO_SLANG=1
-endif
-
-So, you need to enable newt before.
-
-Can you rework this patch and resubmit ?
-
-Best regards,
-Romain Naour
-
->  ifeq ($(BR2_PACKAGE_ELFUTILS),y)
->  	PERF_DEPENDENCIES += elfutils
->  else
+> On Tue, Jul 14, 2015 at 12:11:03PM -0300, Guido Mart?nez wrote:
+> > +config BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412
+> > +	bool "OSELAS ARM Cortex-M3 2014.12"
+> > +	depends on BR2_cortex_m3
+> > +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> > +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
+> > +	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> > +	select BR2_LARGEFILE
+> > +	select BR2_INET_IPV6
 > 
+> These two symbols were removed recently. All toolchains should now support LFS 
+> and IPv6.
+Ah, OK I missed that! Will remove those two.
+
+-- 
+Guido Mart?nez, VanguardiaSur
+www.vanguardiasur.com.ar
