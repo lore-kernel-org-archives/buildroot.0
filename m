@@ -1,45 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Jul 2015 09:42:40 +0200
-Subject: [Buildroot] [PATCH] core: fix download menu
-Message-ID: <1436859760-18506-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Jul 2015 09:44:50 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix npm module cross compilation,
+ use up-to-date npm and install modules globally
+In-Reply-To: <1436858924.2564.14.camel@posteo.de>
+References: <1416775178-13738-1-git-send-email-mwei@cs.ucsd.edu>
+ <1416775178-13738-2-git-send-email-mwei@cs.ucsd.edu>
+ <20150713000915.3df608e2@free-electrons.com>
+ <1436858924.2564.14.camel@posteo.de>
+Message-ID: <20150714094450.49189293@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, when one enables the "Only allow downloads from primary"
-option, all the other mirror options are hiddent (expected!) but the
-LuaRocks and CPAN mirrors (bad!).
+Dear J?rg Krause,
 
-Fix that.
+On Tue, 14 Jul 2015 09:28:44 +0200, J?rg Krause wrote:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> I replied to the patch on 15 Dec 2014 [1], but the mail was not added
+> to the thread.
+> 
+> In short: The patch does not work as intended.
+> 
+> There was indeed an issue with cross-compilation for certain modules
+> (eg serialport) which was fixed by Martin Bark [1].
+> 
+> I would suggest to mark this patch as Rejected.
 
-diff --git a/Config.in b/Config.in
-index e10427f..8b1bd8d 100644
---- a/Config.in
-+++ b/Config.in
-@@ -218,8 +218,6 @@ config BR2_GNU_MIRROR
- 	     http://ftp.gnu.org/pub/gnu
- 	     http://mirror.aarnet.edu.au/pub/gnu
- 
--endif
--
- config BR2_LUAROCKS_MIRROR
- 	string "LuaRocks mirror"
- 	default "http://rocks.moonscript.org"
-@@ -239,6 +237,8 @@ config BR2_CPAN_MIRROR
- 	  The list of mirrors is available at:
- 	  http://search.cpan.org/mirror
- 
-+endif
-+
- endmenu
- 
- config BR2_JLEVEL
+Thanks a lot for the feedback! We already marked the patch as Changes
+Requested, which makes it no longer visible to us in the list of
+pending patches, so that's good enough.
+
+Again, thanks for the feedback.
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
