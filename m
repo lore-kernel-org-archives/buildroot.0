@@ -1,39 +1,25 @@
-From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
-Date: Tue, 14 Jul 2015 12:11:04 -0300
-Subject: [Buildroot] [PATCH v4 3/3] toolchain: disable internal for blackfin
-In-Reply-To: <1436886664-3206-1-git-send-email-guido@vanguardiasur.com.ar>
-References: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
- <1436886664-3206-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <1436886664-3206-4-git-send-email-guido@vanguardiasur.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 14 Jul 2015 17:12:41 +0200
+Subject: [Buildroot] [PATCH v8 05/16] linux-pam: selinux support
+In-Reply-To: <1436570882-56442-6-git-send-email-clayton.shotwell@rockwellcollins.com>
+References: <1436570882-56442-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <1436570882-56442-6-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <CAHXCMMJ6_cZi=vtCAe5i+q2AoC7bAAK7R3Fsd2HJ9_Gpzte6-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The internal toolchain won't work with Cortex-M3, mostly because of the
-fact that some packages (notably: uclibc and glibc) fall back to regular
-ARM instructions in some situations, and Cortex-M3 has no support for
-those kind of instructions.
+On Sat, Jul 11, 2015 at 1:27 AM, Clayton Shotwell
+<clayton.shotwell@rockwellcollins.com> wrote:
+> From: Matt Weber <matthew.weber@rockwellcollins.com>
+>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-So, just disable it for now and rely on the external toolchain.
+Regards,
 
-Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
----
- toolchain/Config.in | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index a851ce4..399d25b 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -40,6 +40,7 @@ choice
- config BR2_TOOLCHAIN_BUILDROOT
- 	bool "Buildroot toolchain"
- 	depends on !BR2_bfin
-+	depends on !BR2_cortex_m3
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 
- config BR2_TOOLCHAIN_EXTERNAL
 -- 
-2.1.4
+Samuel
