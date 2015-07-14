@@ -1,48 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jul 2015 00:53:28 +0200
-Subject: [Buildroot] [PATCH 1/5] packages: use backtick instead of
- $(shell ...) make function
-In-Reply-To: <1436711730-20599-1-git-send-email-arnout@mind.be>
-References: <1436711730-20599-1-git-send-email-arnout@mind.be>
-Message-ID: <20150715005328.7c9c6117@free-electrons.com>
+Date: Wed, 15 Jul 2015 00:52:02 +0200
+Subject: [Buildroot] [git commit] package/libmemcached: disable documentation
+Message-ID: <20150714225337.53E4B81D42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+commit: http://git.buildroot.net/buildroot/commit/?id=5eb5f2710c2451d7e35dd600e6ced835efb9dda5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 12 Jul 2015 16:35:26 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> It is often difficult to know exactly when make will expand the
-> variable, and usually it can only be expanded after the dependencies
-> have been built (e.g. pkg-config or the .pc file). Using a backtick
-> instead makes it very clear that it will be expanded only while
-> executing the command.
-> 
-> This change is useful for two cases:
-> 
-> 1. The per-package staging (and host) directory will be created as part
->    of the configure step, so any $(shell ...) variable that is used in
->    the configure step will fail because the directory doesn't exist
->    yet.
-> 
-> 2. 'make printvars' evaluates the variables it prints. It will therefore
->    trigger a lot of errors from missing .pc files and others. The
->    backticks, on the other hand, are not expanded, so with this change
->    the output of 'make printvars' becomes clean again.
+libmemcached fail to build the documentation/man due to
+an python sphinx error.
 
-I've applied the entire series. For the last patch, I had to adapt it
-due to the change from system/system.mk to
-package/skeleton/skeleton.mk. It seems to work fine from the quick
-tests I've done, but doing an additional review of what I committed
-would be useful.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../libmemcached/0004-disable-doc-and-man.patch    |   37 ++++++++++++++++++++
+ 1 files changed, 37 insertions(+), 0 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libmemcached/0004-disable-doc-and-man.patch b/package/libmemcached/0004-disable-doc-and-man.patch
+new file mode 100644
+index 0000000..9605095
+--- /dev/null
++++ b/package/libmemcached/0004-disable-doc-and-man.patch
+@@ -0,0 +1,37 @@
++From 6c01bd3562cc18fbafdf950bbeb73a399c1adcdd Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Tue, 12 May 2015 00:00:02 +0200
++Subject: [PATCH] disable doc and man
++
++WARNING: master file /home/naourr/git/buildroot/test/libmemcached-bfin/build/libmemcached-1.0.18/docs/index.rst not found
++
++Exception occurred:
++  File "/usr/lib/python2.7/site-packages/sphinx/environment.py", line 1213, in get_doctree
++    f = open(doctree_filename, 'rb')
++IOError: [Errno 2] No such file or directory: '/home/naourr/buildroot-test/test/libmemcached-bfin/build/libmemcached-1.0.18/man/.doctrees/hashkit_create.doctree'
++The full traceback has been saved in /tmp/sphinx-err-JCIsnB.log, if you want to report the issue to the developers.
++Please also report this if it was a user error, so that a better error message can be provided next time.
++Either send bugs to the mailing list at <http://groups.google.com/group/sphinx-dev/>,
++or report them in the tracker at <http://bitbucket.org/birkenfeld/sphinx/issues/>. Thanks!
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ Makefile.am | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 7f44102..cb7d058 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -55,8 +55,6 @@ endif
++ include libmemcachedutil-1.0/include.am
++ 
++ include clients/include.am
++-include docs/include.am
++-include man/include.am
++ 
++ if BUILD_LIBMEMCACHED_PROTOCOL
++ include example/include.am
++-- 
++1.9.3
++
