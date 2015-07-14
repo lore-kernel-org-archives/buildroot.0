@@ -1,58 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 11:58:28 +0200
-Subject: [Buildroot] [git commit] ptpd: systemd support
-Message-ID: <20150714101513.CE75581D34@busybox.osuosl.org>
+Date: Tue, 14 Jul 2015 12:13:41 +0200
+Subject: [Buildroot] [git commit] ptpd2: systemd support
+Message-ID: <20150714101513.D914581D34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9ad7b47c5ee1a69dc3540f1da75dce8b07f2c234
+commit: http://git.buildroot.net/buildroot/commit/?id=6e060b9c83228e81ce61a8f326970e064982fa50
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Following package and sysv initscript naming scheme,
+the service is "ptpd2" instead of just "ptpd" version 2.
+
 [Thomas:
-   - use relative symbolic link instead of absolute one
-   - remove the -S option, since redirecting stdout is not needed,
-     it's already taken care of by systemd. Suggested by Maxime
-     Hadjinlian.]
+  - use relative symlink instead of an absolute symlink
+  - remove the -s option, which redirects stdout, since systemd will
+    take care of it
+  - add the -g option, to be consistent with what the init script is
+    using.]
 
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ptpd/ptpd.mk      |    8 ++++++++
- package/ptpd/ptpd.service |   10 ++++++++++
+ package/ptpd2/ptpd2.mk      |    8 ++++++++
+ package/ptpd2/ptpd2.service |   10 ++++++++++
  2 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/ptpd/ptpd.mk b/package/ptpd/ptpd.mk
-index ac9ab98..dad8ccf 100644
---- a/package/ptpd/ptpd.mk
-+++ b/package/ptpd/ptpd.mk
-@@ -22,4 +22,12 @@ define PTPD_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S65ptpd
+diff --git a/package/ptpd2/ptpd2.mk b/package/ptpd2/ptpd2.mk
+index e1d4f27..6b2e6bc 100644
+--- a/package/ptpd2/ptpd2.mk
++++ b/package/ptpd2/ptpd2.mk
+@@ -29,4 +29,12 @@ define PTPD2_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S65ptpd2
  endef
  
-+define PTPD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/ptpd/ptpd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/ptpd.service
++define PTPD2_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/ptpd2/ptpd2.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/ptpd2.service
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/ptpd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ptpd.service
++	ln -sf ../../../../usr/lib/systemd/system/ptpd2.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ptpd2.service
 +endef
 +
- $(eval $(generic-package))
-diff --git a/package/ptpd/ptpd.service b/package/ptpd/ptpd.service
+ $(eval $(autotools-package))
+diff --git a/package/ptpd2/ptpd2.service b/package/ptpd2/ptpd2.service
 new file mode 100644
-index 0000000..c9da3f4
+index 0000000..66e71ce
 --- /dev/null
-+++ b/package/ptpd/ptpd.service
++++ b/package/ptpd2/ptpd2.service
 @@ -0,0 +1,10 @@
 +[Unit]
 +Description=Precision Time Protocol daemon
 +After=syslog.target network.target
 +
 +[Service]
-+ExecStart=/usr/sbin/ptpd -c
++ExecStart=/usr/sbin/ptpd2 -C -g
 +Restart=always
 +
 +[Install]
