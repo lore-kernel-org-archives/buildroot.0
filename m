@@ -1,1035 +1,270 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Tue, 14 Jul 2015 15:20:15 -0500
-Subject: [Buildroot] [PATCH v9 03/15] refpolicy: new package
+Date: Tue, 14 Jul 2015 15:20:16 -0500
+Subject: [Buildroot] [PATCH v9 04/15] busybox: applets as individual binaries
 In-Reply-To: <1436905227-26937-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1436905227-26937-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1436905227-26937-4-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1436905227-26937-5-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The individual binaries option of busybox allows for the applets
+that would usually be symlinks to be built as individual applications
+that link against a shared library.
+
+This feature is needed for SELinux to allow the applications to run
+under the correct SELinux context.
+
+The patch being added allows the individual applications to be
+installed and will be upstreamed to the busybox developers.
+
+The initial work for this change was done by Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>.
+
 Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 Changes v8 -> v9:
-  - Minor nit picks on spacing (Suggested by Samuel)
+  - No changes
 
 Changes v7 -> v8:
-  - Changes REFPOLICY_MAKE_CMDS to REFPOLICY_MAKE_OPTS (Suggested by
+  - Changed individual binaries comment to be !BR2_bfin (Suggested by
     Samuel)
-  - Added a help section to the custom git repo to explain why the
-    refpolicy-contrib option is needed (Suggested by Samuel)
-  - Added rsync exclusions to ensure no unneeded files are copied during
-    the refpolicy-contrib sync (Suggested by Samuel)
 
 Changes v6 -> v7:
-  - Moving the refpolicy patch into a version specific folder to
-    prevent it from being applied to the custom git repos. (Clayton S.)
+  - No changes
 
 Changes v5 -> v6:
-  - Fixed references to GIT in config files (Suggested by Ryan B.)
-  - Removed execute permissions on files (Suggested by Ryan B.)
-  - Fixed spelling error and changed staging install to always install
-    the documentation (Suggested by Samuel)
+  - No changes
 
 Changes v4 -> v5:
-  - Removed TODO and dependency on glibc (Matt W.)
-  - Added lib depends to meet policycoreutils limitation on std lib
-    (Matt W.)
-  - Added comment for when an option is not defined (Matt W.)
-  - Removed largefile, locale, and wchar dependencies (Clayton S.)
-  - Remove dependancy on host-python-pyxml (Ryan B.)
-  - Forced package to use $(HOST_DIR)/usr/bin/python2 for python
-    executable (Ryan B.)
-  - Added host-python dependency (Clayton S.)
-  - Removed config menu (suggested by Thomas P.)
-  - Added patch to fix awk issue (Clayton S.)
+  - Renamed to follow latest patch naming convention (Matt W.)
+  - Updated to use BR2_STATIC_LIBS instead of old PREFERRED (Matt W.)
+  - Added depends to make sure bfin can't build shared lib
+    busybox lib for individual binary use.  Looks like shared
+    lib creation doesn't error out but the objects don't get
+    placed into the elf.  Then the trylink fails on linking
+    the first individual applet. (Matt W.)
+  - Made suid permissions setting dynamic for applets actually being
+    installed (Clayton S.)
 
-Changes v3 -> v4:
-  - Added a dependency on host-gawk and correct the awk calls
-    in the makefile to use $(AWK)
-  - Changed the default policy name to br_policy to differentiate
-    the policy generated from refpolicy
-  - Added a install step to create a /.autorelabel file to cause
-    the file system to be relabeled by S12SELinux init script
-  - Adding a default modules.conf file with an option to specify
-    a different one. This will decrease the build time for
-    refpolicy by removing unused policies. (implemented by
-    Thomas P.)
-  - Cleaned up the configure comments (implemented by Thomas).
-  - Added a check to only install the documentation if the
-    Buildroot option is enabled
-  - Removed the build because the install step completes the
-    same process. Also removed the clean step because it is
-    being removed globally from buildroot (implemented by
-    Thomas P.)
-  - Added more error handling to the startup script to print
-    a warning if SELinux fails to install the policy if it
-    exists. This can be caused by the kernel not being configured
-    with SELinux enabled
-
-Changes v2 -> v3:
-  - Changes patch naming convention (suggested by Thomas P.)
-  - Added dependencies on BR2_TOOLCHAIN_HAS_THREADS and
-    BR2_LARGEFILE (suggested by Thomas P.)
-  - Removed configure option for a specific patch folder
-    (suggested by Thomas P.)
-  - Removed distribution configuration option (suggested by Thomas)
-  - Changed the monolithic configuration option to a modular
-    configuration option (suggested by Thomas P.)
-  - Removed the refpolicy name option (suggested by Thomas P.)
-  - Corrected gramatical and comment errors (suggested by Thomas P.)
-  - Multiple style corrections to the mk file (suggested by Thomas P.)
-  - Added a comment to clairfy the usage of the the host build
-    options for a target build
-
-Changes v1 -> v2:
-  - General cleanup to the mk file to conform to the standard format
-  - Fixed the patch naming to match the standard 4 digit numbering
-  - Changed package dependencies into selects in the config
+Changes v1 -> v4:
+  - Did not exist
 ---
- package/Config.in                                  |   2 +
- package/refpolicy-contrib/Config.in                |  19 +
- package/refpolicy-contrib/refpolicy-contrib.mk     |  18 +
- .../0001-Fix-awk-references-to-use-variable.patch  |  42 +++
- package/refpolicy/Config.in                        |  99 +++++
- package/refpolicy/S00selinux                       | 136 +++++++
- package/refpolicy/config                           |   8 +
- package/refpolicy/modules.conf                     | 406 +++++++++++++++++++++
- package/refpolicy/refpolicy.hash                   |   2 +
- package/refpolicy/refpolicy.mk                     | 121 ++++++
- 10 files changed, 853 insertions(+)
- create mode 100644 package/refpolicy-contrib/Config.in
- create mode 100644 package/refpolicy-contrib/refpolicy-contrib.mk
- create mode 100644 package/refpolicy/2.20130424/0001-Fix-awk-references-to-use-variable.patch
- create mode 100644 package/refpolicy/Config.in
- create mode 100644 package/refpolicy/S00selinux
- create mode 100644 package/refpolicy/config
- create mode 100644 package/refpolicy/modules.conf
- create mode 100644 package/refpolicy/refpolicy.hash
- create mode 100644 package/refpolicy/refpolicy.mk
+ ...s-Add-installation-of-individual-binaries.patch | 103 +++++++++++++++++++++
+ package/busybox/Config.in                          |   9 ++
+ package/busybox/busybox.mk                         |  41 ++++++++
+ 3 files changed, 153 insertions(+)
+ create mode 100644 package/busybox/0002-applets-Add-installation-of-individual-binaries.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 514c1e5..1fe7850 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1364,6 +1364,8 @@ endmenu
- 
- menu "Security"
- 	source "package/policycoreutils/Config.in"
-+	source "package/refpolicy/Config.in"
-+	source "package/refpolicy-contrib/Config.in"
- 	source "package/setools/Config.in"
- endmenu
- 
-diff --git a/package/refpolicy-contrib/Config.in b/package/refpolicy-contrib/Config.in
+diff --git a/package/busybox/0002-applets-Add-installation-of-individual-binaries.patch b/package/busybox/0002-applets-Add-installation-of-individual-binaries.patch
 new file mode 100644
-index 0000000..b518248
+index 0000000..ae0e654
 --- /dev/null
-+++ b/package/refpolicy-contrib/Config.in
-@@ -0,0 +1,19 @@
-+if BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
++++ b/package/busybox/0002-applets-Add-installation-of-individual-binaries.patch
+@@ -0,0 +1,103 @@
++From 3451b55054a6fe2073a21301938802a27dec835d Mon Sep 17 00:00:00 2001
++From: Clayton Shotwell <clshotwe@rockwellcollins.com>
++Date: Mon, 16 Dec 2013 14:45:33 -0600
++Subject: [PATCH 5/5] applets: Add installation of individual binaries
 +
-+comment "A refpolicy contrib repository is required if using a refpolicy repo. (Contrib is a Git submodule of refpolicy)"
++Adding support to install individual binaries if the option is
++enabled. This also installs the shared libbusybox.so.* library.
 +
-+config BR2_PACKAGE_REFPOLICY_CONTRIB
-+	bool "refpolicy-contrib"
-+	help
-+	  A Git submodule of the refpolicy package.
-+
-+config BR2_PACKAGE_REFPOLICY_CONTRIB_CUSTOM_REPO_URL
-+	string "URL of custom contrib submodule repository"
-+
-+config BR2_PACKAGE_REFPOLICY_CONTRIB_CUSTOM_REPO_VERSION
-+	string "Custom contrib submodule repository version"
-+	help
-+	  Revision to use in the typical format used by Git
-+	  e.g. a SHA id, a tag, branch, ..
-+
-+endif
-diff --git a/package/refpolicy-contrib/refpolicy-contrib.mk b/package/refpolicy-contrib/refpolicy-contrib.mk
-new file mode 100644
-index 0000000..3d1c53e
---- /dev/null
-+++ b/package/refpolicy-contrib/refpolicy-contrib.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# refpolicy-contrib
-+#
-+################################################################################
-+
-+ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)
-+REFPOLICY_CONTRIB_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CONTRIB_CUSTOM_REPO_URL))
-+REFPOLICY_CONTRIB_VERSION = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CONTRIB_CUSTOM_REPO_VERSION))
-+REFPOLICY_CONTRIB_SITE_METHOD = git
-+
-+# Inherits license from refpolicy as normally this is a submodule
-+REFPOLICY_CONTRIB_LICENSE = GPLv2
-+endif
-+
-+# If refpolicy is from release archive, this contrib content is part of it.
-+
-+$(eval $(generic-package))
-diff --git a/package/refpolicy/2.20130424/0001-Fix-awk-references-to-use-variable.patch b/package/refpolicy/2.20130424/0001-Fix-awk-references-to-use-variable.patch
-new file mode 100644
-index 0000000..8236fa2
---- /dev/null
-+++ b/package/refpolicy/2.20130424/0001-Fix-awk-references-to-use-variable.patch
-@@ -0,0 +1,42 @@
-+From 1d4c826e8de366bccb93f167cd9be834ab5911c8 Mon Sep 17 00:00:00 2001
-+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+Date: Fri, 8 May 2015 14:13:00 -0500
-+Subject: [PATCH] Fix awk references to use variable
-+
-+Ensure all awk calls use the variable setup in the makefile rather than
-+relying on the system.
-+
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
++Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 +---
-+ Makefile | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
++ Makefile.custom    |    4 ++++
++ applets/install.sh |   26 ++++++++++++++++++++++++--
++ 2 files changed, 28 insertions(+), 2 deletions(-)
 +
-+diff --git a/Makefile b/Makefile
-+index 85d4cfb..3aa4b51 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -292,9 +292,9 @@ cmdline_mods := $(addsuffix .te,$(APPS_MODS))
-+ cmdline_off := $(addsuffix .te,$(APPS_OFF))
++diff --git a/Makefile.custom b/Makefile.custom
++index 6da79e6..e4dc4dc 100644
++--- a/Makefile.custom
+++++ b/Makefile.custom
++@@ -23,6 +23,10 @@ ifeq ($(CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER),y)
++ INSTALL_OPTS:= --scriptwrapper
++ endif
++ endif
+++ifeq ($(CONFIG_FEATURE_INDIVIDUAL),y)
+++INSTALL_OPTS:= --binaries
+++LIBBUSYBOX_SONAME:= 0_lib/libbusybox.so.$(BB_VER)
+++endif
++ install: $(srctree)/applets/install.sh busybox busybox.links
++ 	$(Q)DO_INSTALL_LIBS="$(strip $(LIBBUSYBOX_SONAME) $(DO_INSTALL_LIBS))" \
++ 		$(SHELL) $< $(CONFIG_PREFIX) $(INSTALL_OPTS)
++diff --git a/applets/install.sh b/applets/install.sh
++index 95b4719..d01c98d 100755
++--- a/applets/install.sh
+++++ b/applets/install.sh
++@@ -5,19 +5,26 @@ export LC_CTYPE=POSIX
 + 
-+ # extract settings from modules.conf
-+-mod_conf_base := $(addsuffix .te,$(sort $(shell awk '/^[[:blank:]]*[[:alpha:]]/{ if ($$3 == "$(configbase)") print $$1 }' $(mod_conf) 2> /dev/null)))
-+-mod_conf_mods := $(addsuffix .te,$(sort $(shell awk '/^[[:blank:]]*[[:alpha:]]/{ if ($$3 == "$(configmod)") print $$1 }' $(mod_conf) 2> /dev/null)))
-+-mod_conf_off := $(addsuffix .te,$(sort $(shell awk '/^[[:blank:]]*[[:alpha:]]/{ if ($$3 == "$(configoff)") print $$1 }' $(mod_conf) 2> /dev/null)))
-++mod_conf_base := $(addsuffix .te,$(sort $(shell $(AWK) '/^[[:blank:]]*[[:alpha:]]/{ if ($$3 == "$(configbase)") print $$1 }' $(mod_conf) 2> /dev/null)))
-++mod_conf_mods := $(addsuffix .te,$(sort $(shell $(AWK) '/^[[:blank:]]*[[:alpha:]]/{ if ($$3 == "$(configmod)") print $$1 }' $(mod_conf) 2> /dev/null)))
-++mod_conf_off := $(addsuffix .te,$(sort $(shell $(AWK) '/^[[:blank:]]*[[:alpha:]]/{ if ($$3 == "$(configoff)") print $$1 }' $(mod_conf) 2> /dev/null)))
++ prefix=$1
++ if [ -z "$prefix" ]; then
++-	echo "usage: applets/install.sh DESTINATION [--symlinks/--hardlinks/--scriptwrapper]"
+++	echo "usage: applets/install.sh DESTINATION [--symlinks/--hardlinks/--binaries/--scriptwrapper]"
++ 	exit 1
++ fi
 + 
-+ base_mods := $(cmdline_base)
-+ mod_mods := $(cmdline_mods)
-+@@ -308,7 +308,7 @@ off_mods += $(filter-out $(cmdline_off) $(cmdline_base) $(cmdline_mods), $(mod_c
-+ off_mods += $(filter-out $(base_mods) $(mod_mods) $(off_mods),$(notdir $(detected_mods)))
+++# Source the configuration
+++. ./.config
+++
++ h=`sort busybox.links | uniq`
 + 
-+ # filesystems to be used in labeling targets
-+-filesystems = $(shell mount | grep -v "context=" | egrep -v '\((|.*,)bind(,.*|)\)' | awk '/(ext[234]|btrfs| xfs| jfs).*rw/{print $$3}';)
-++filesystems = $(shell mount | grep -v "context=" | egrep -v '\((|.*,)bind(,.*|)\)' | $(AWK) '/(ext[234]|btrfs| xfs| jfs).*rw/{print $$3}';)
-+ fs_names := "btrfs ext2 ext3 ext4 xfs jfs"
+++sharedlib_dir="0_lib"
+++
++ linkopts=""
++ scriptwrapper="n"
+++binaries="n"
++ cleanup="0"
++ noclobber="0"
++ case "$2" in
++ 	--hardlinks)     linkopts="-f";;
++ 	--symlinks)      linkopts="-fs";;
+++	--binaries)      binaries="y";;
++ 	--scriptwrapper) scriptwrapper="y";swrapall="y";;
++ 	--sw-sh-hard)    scriptwrapper="y";linkopts="-f";;
++ 	--sw-sh-sym)     scriptwrapper="y";linkopts="-fs";;
++@@ -40,8 +47,9 @@ if [ -n "$DO_INSTALL_LIBS" ] && [ "$DO_INSTALL_LIBS" != "n" ]; then
++ 	for i in $DO_INSTALL_LIBS; do
++ 		rm -f "$prefix/$libdir/$i" || exit 1
++ 		if [ -f "$i" ]; then
+++			echo "   Installing $i to the target@$prefix/$libdir/"
++ 			cp -pPR "$i" "$prefix/$libdir/" || exit 1
++-			chmod 0644 "$prefix/$libdir/$i" || exit 1
+++			chmod 0644 "$prefix/$libdir/`basename $i`" || exit 1
++ 		fi
++ 	done
++ fi
++@@ -68,6 +76,7 @@ install -m 755 busybox "$prefix/bin/busybox" || exit 1
 + 
-+ ########################################
++ for i in $h; do
++ 	appdir=`dirname "$i"`
+++	app=`basename "$i"`
++ 	mkdir -p "$prefix/$appdir" || exit 1
++ 	if [ "$scriptwrapper" = "y" ]; then
++ 		if [ "$swrapall" != "y" ] && [ "$i" = "/bin/sh" ]; then
++@@ -78,6 +87,19 @@ for i in $h; do
++ 			chmod +x "$prefix/$i"
++ 		fi
++ 		echo "	$prefix/$i"
+++	elif [ "$binaries" = "y" ]; then
+++		# Copy the binary over rather
+++		if [ -e $sharedlib_dir/$app ]; then
+++			if [ "$noclobber" = "0" ] || [ ! -e "$prefix/$i" ]; then
+++				echo "   Copying $sharedlib_dir/$app to $prefix/$i"
+++				cp -pPR $sharedlib_dir/$app $prefix/$i || exit 1
+++			else
+++				echo "  $prefix/$i already exists"
+++			fi
+++		else
+++			echo "Error: Could not find $sharedlib_dir/$app"
+++			exit 1
+++		fi
++ 	else
++ 		if [ "$2" = "--hardlinks" ]; then
++ 			bb_path="$prefix/bin/busybox"
 +-- 
-+1.9.1
-+
-diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
-new file mode 100644
-index 0000000..e2314de
---- /dev/null
-+++ b/package/refpolicy/Config.in
-@@ -0,0 +1,99 @@
-+config BR2_PACKAGE_REFPOLICY
-+	bool "refpolicy"
-+	select BR2_PACKAGE_POLICYCOREUTILS
-+	select BR2_PACKAGE_BUSYBOX_SELINUX if BR2_PACKAGE_BUSYBOX
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # policycoreutils
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # policycoreutils
-+	help
-+	  The SELinux Reference Policy project (refpolicy) is a
-+	  complete SELinux policy that can be used as the system
-+	  policy for a variety of systems and used as the basis
-+	  for creating other policies. Reference Policy was originally
-+	  based on the NSA example policy, but aims to accomplish
-+	  many additional goals.
-+
-+	  The current refpolicy does not fully support Buildroot
-+	  and needs modifications to work with the default system
-+	  file layout. These changes should be added as patches to
-+	  the refpolicy that modify a single SELinux policy.
-+
-+comment "refpolicy needs a toolchain w/ threads, glibc or musl"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+
-+if BR2_PACKAGE_REFPOLICY
-+
-+choice
-+	prompt "SELinux policy type"
-+	default BR2_PACKAGE_REFPOLICY_TYPE_STANDARD
-+
-+	config BR2_PACKAGE_REFPOLICY_TYPE_STANDARD
-+		bool "Standard"
-+		help
-+		  Standard SELinux policy
-+
-+	config BR2_PACKAGE_REFPOLICY_TYPE_MCS
-+		bool "MCS"
-+		help
-+		  SELinux policy with multi-catagory support
-+
-+	config BR2_PACKAGE_REFPOLICY_TYPE_MLS
-+		bool "MLS"
-+		help
-+		  SELinux policy with multi-catagory and multi-level support
-+endchoice
-+
-+config BR2_PACKAGE_REFPOLICY_TYPE
-+	string
-+	default "standard" if BR2_PACKAGE_REFPOLICY_TYPE_STANDARD
-+	default "mcs" if BR2_PACKAGE_REFPOLICY_TYPE_MCS
-+	default "mls" if BR2_PACKAGE_REFPOLICY_TYPE_MLS
-+
-+config BR2_PACKAGE_REFPOLICY_MODULES_FILE
-+	string "Refpolicy modules configuration"
-+	default "package/refpolicy/modules.conf"
-+	help
-+	  Location of a custom modules.conf file that lists the
-+	  SELinux policy modules to be included in the compiled
-+	  policy. See policy/modules.conf in the refpolicy sources for
-+	  the complete list of available modules.
-+	  NOTE: This file is only used if a Custom Git repo is
-+	  not specified.
-+
-+config BR2_PACKAGE_REFPOLICY_MODULAR
-+	bool "Build a modular SELinux policy"
-+	help
-+	  Select Y to build a modular SELinux policy. By default,
-+	  a monolithing policy will be built to save space on the
-+	  target. A modular policy can also be built if policies
-+	  need to be modified without reloading the target.
-+
-+config BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
-+	bool "Custom Git repository"
-+	select BR2_PACKAGE_REFPOLICY_CONTRIB
-+	help
-+	 This option allows Buildroot to get the refpolicy source
-+	 code from a Git repository. This option should generally
-+	 be used to add custom SELinux policy to the base refpolicy
-+	 without having to deal with lots of patches.
-+
-+	 Please note that with the current configuration of the
-+	 mainline refpolicy git repositories, a refpolicy and a
-+	 refpolicy-contrib git repo must be specified. These are
-+	 linked using a git submodule which does not get initialized
-+	 during the Buildroot build.
-+
-+if BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
-+
-+config BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL
-+	string "URL of custom repository"
-+
-+config BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION
-+	string "Custom repository version"
-+	help
-+	  Revision to use in the typical format used by Git
-+	  e.g. a SHA id, a tag, branch, ..
-+
-+endif
-+
-+endif
-diff --git a/package/refpolicy/S00selinux b/package/refpolicy/S00selinux
-new file mode 100644
-index 0000000..f2ac2e6
---- /dev/null
-+++ b/package/refpolicy/S00selinux
-@@ -0,0 +1,136 @@
-+#!/bin/sh
-+################################################################################
-+#
-+# This file labels the security contexts of memory based filesystems such as
-+# /dev/ and checks for auto relabel request if '/.autorelabel' file exists.
-+#
-+# This script is a heavily stripped down and modified version of the one used
-+# in CentOS 6.2
-+#
-+################################################################################
-+
-+failed()
-+{
-+   echo $1
-+   exit 1
-+}
-+
-+# Get SELinux config env vars
-+. /etc/selinux/config || failed "Failed to source the SELinux config"
-+
-+setup_selinux() {
-+   # Create required directories
-+   mkdir -p /etc/selinux/${SELINUXTYPE}/policy/ ||
-+         failed "Failed to create the policy folder"
-+   mkdir -p /etc/selinux/${SELINUXTYPE}/modules/active/modules || \
-+         failed "Failed to create the modules folder"
-+   if [ ! -f /etc/selinux/${SELINUXTYPE}/contexts/files/file_contexts.local ]
-+   then
-+      touch /etc/selinux/${SELINUXTYPE}/contexts/files/file_contexts.local || \
-+            failed "Failed to create the file_contexts.local file"
-+   fi
-+
-+   # Install modules
-+   semodule -v -s ${SELINUXTYPE} -b /usr/share/selinux/${SELINUXTYPE}/base.pp \
-+         -i $(ls /usr/share/selinux/${SELINUXTYPE}/*.pp | grep -v base) || \
-+         failed "Failed to install the base policy"
-+
-+   # Load the policy to activate it
-+   load_policy -i || failed "Failed to load the SELinux policy"
-+}
-+
-+relabel_selinux() {
-+   # if /sbin/init is not labeled correctly this process is running in the
-+   # wrong context, so a reboot will be required after relabel
-+   AUTORELABEL=
-+
-+   # Switch to Permissive mode
-+   echo "0" > /selinux/enforce || failed "Failed to disable enforcing mode"
-+
-+   echo
-+   echo "*** Warning -- SELinux ${SELINUXTYPE} policy relabel is required."
-+   echo "*** Relabeling could take a very long time, depending on file"
-+   echo "*** system size and speed of hard drives."
-+
-+   # Relabel mount points
-+   restorecon $(awk '!/^#/ && $4 !~ /noauto/ && $2 ~ /^\// { print $2 }' /etc/fstab) \
-+         >/dev/null 2>&1 || failed "Failed to relabel the mount points"
-+
-+   # Relabel file system
-+   echo "Relabeling file systems"
-+   restorecon -R -F / || failed "Failed to relabel the file system"
-+
-+   # Remove label
-+   rm -f  /.autorelabel || failed "Failed to remove the autorelabel flag"
-+
-+   # Reboot to activate relabeled file system
-+   echo "Automatic reboot in progress."
-+   reboot -f
-+}
-+
-+start() {
-+   echo -n "Initializing SELinux: "
-+
-+   # Check to see if the default policy has been installed
-+   if [ "`sestatus | grep "SELinux status" | grep enabled`" == "" ]; then
-+      if [ ! -f /etc/selinux/${SELINUXTYPE}/policy/policy.* ]
-+      then
-+         setup_selinux
-+      else
-+         echo "SELinux policy install failed. Check kernel and init config"
-+         exit 1
-+      fi
-+   fi
-+
-+   # Check SELinux status
-+   SELINUX_STATE=
-+   if [ -e "/selinux/enforce" ] && [ "$(cat /proc/self/attr/current)" != "kernel" ]; then
-+      if [ -r "/selinux/enforce" ] ; then
-+         SELINUX_STATE=$(cat "/selinux/enforce")
-+      else
-+         # assume enforcing if you can't read it
-+         SELINUX_STATE=1
-+      fi
-+   fi
-+
-+   # Context Label /dev/
-+   if [ -n "$SELINUX_STATE" -a -x /sbin/restorecon ] && fgrep " /dev " /proc/mounts >/dev/null 2>&1 ; then
-+      /sbin/restorecon -R -F /dev 2>/dev/null
-+   fi
-+
-+   # Context Label tmpfs mounts
-+   if [ -n "$SELINUX_STATE" -a -x /sbin/restorecon ]; then
-+      /sbin/restorecon -R -F $(awk '!/^#/ && $4 !~ /noauto/ && $2 ~ /^\// && $3 =="tmpfs" { print $2 }' /etc/fstab) >/dev/null 2>&1
-+   fi
-+
-+   # Clean up SELinux labels
-+   if [ -n "$SELINUX_STATE" -a -x /sbin/restorecon ]; then
-+      restorecon -F /etc/mtab /etc/ld.so.cache /etc/resolv.conf >/dev/null 2>&1
-+   fi
-+
-+   # Check for filesystem relabel request
-+   if [ -f /.autorelabel ] ; then
-+      relabel_selinux
-+   fi
-+
-+   echo "OK"
-+}
-+stop() {
-+   # There is nothing to do
-+   echo "OK"
-+}
-+
-+case "$1" in
-+   start)
-+      start
-+      ;;
-+   stop)
-+      stop
-+      ;;
-+   *)
-+      echo "Usage: $0 {start|stop}"
-+      exit 1
-+      ;;
-+esac
-+
-+exit $?
-diff --git a/package/refpolicy/config b/package/refpolicy/config
-new file mode 100644
-index 0000000..5eee807
---- /dev/null
-+++ b/package/refpolicy/config
-@@ -0,0 +1,8 @@
-+# This file controls the state of SELinux on the system.
-+# SELINUX= can take one of these three values:
-+#     enforcing - SELinux security policy is enforced.
-+#     permissive - SELinux prints warnings instead of enforcing.
-+#     disabled - No SELinux policy is loaded.
-+SELINUX=permissive
-+# SELINUXTYPE= name of the selinux policy to use
-+SELINUXTYPE=refpolicy
-diff --git a/package/refpolicy/modules.conf b/package/refpolicy/modules.conf
-new file mode 100644
-index 0000000..58282d8
---- /dev/null
-+++ b/package/refpolicy/modules.conf
-@@ -0,0 +1,406 @@
-+#
-+# This file contains a listing of available modules.
-+# To prevent a module from  being used in policy
-+# creation, set the module name to "off".
-+#
-+# For monolithic policies, modules set to "base" and "module"
-+# will be built into the policy.
-+#
-+# For modular policies, modules set to "base" will be
-+# included in the base module.  "module" will be compiled
-+# as individual loadable modules.
-+#
-+
-+# Layer: kernel
-+# Module: corecommands
-+# Required in base
-+#
-+# Core policy for shells, and generic programs
-+# in /bin, /sbin, /usr/bin, and /usr/sbin.
-+#
-+corecommands = base
-+
-+# Layer: kernel
-+# Module: corenetwork
-+# Required in base
-+#
-+# Policy controlling access to network objects
-+#
-+corenetwork = base
-+
-+# Layer: kernel
-+# Module: devices
-+# Required in base
-+#
-+# Device nodes and interfaces for many basic system devices.
-+#
-+devices = base
-+
-+# Layer: kernel
-+# Module: domain
-+# Required in base
-+#
-+# Core policy for domains.
-+#
-+domain = base
-+
-+# Layer: kernel
-+# Module: files
-+# Required in base
-+#
-+# Basic filesystem types and interfaces.
-+#
-+files = base
-+
-+# Layer: kernel
-+# Module: filesystem
-+# Required in base
-+#
-+# Policy for filesystems.
-+#
-+filesystem = base
-+
-+# Layer: kernel
-+# Module: kernel
-+# Required in base
-+#
-+# Policy for kernel threads, proc filesystem,
-+# and unlabeled processes and objects.
-+#
-+kernel = base
-+
-+# Layer: kernel
-+# Module: mcs
-+# Required in base
-+#
-+# Multicategory security policy
-+#
-+mcs = base
-+
-+# Layer: kernel
-+# Module: mls
-+# Required in base
-+#
-+# Multilevel security policy
-+#
-+mls = base
-+
-+# Layer: kernel
-+# Module: selinux
-+# Required in base
-+#
-+# Policy for kernel security interface, in particular, selinuxfs.
-+#
-+selinux = base
-+
-+# Layer: kernel
-+# Module: terminal
-+# Required in base
-+#
-+# Policy for terminals.
-+#
-+terminal = base
-+
-+# Layer: kernel
-+# Module: ubac
-+# Required in base
-+#
-+# User-based access control policy
-+#
-+ubac = base
-+
-+# Layer: admin
-+# Module: bootloader
-+#
-+# Policy for the kernel modules, kernel image, and bootloader.
-+#
-+bootloader = module
-+
-+# Layer: admin
-+# Module: consoletype
-+#
-+# Determine of the console connected to the controlling terminal.
-+#
-+consoletype = module
-+
-+# Layer: admin
-+# Module: dmesg
-+#
-+# Policy for dmesg.
-+#
-+dmesg = module
-+
-+# Layer: admin
-+# Module: netutils
-+#
-+# Network analysis utilities
-+#
-+netutils = module
-+
-+# Layer: admin
-+# Module: su
-+#
-+# Run shells with substitute user and group
-+#
-+su = module
-+
-+# Layer: admin
-+# Module: sudo
-+#
-+# Execute a command with a substitute user
-+#
-+sudo = module
-+
-+# Layer: admin
-+# Module: usermanage
-+#
-+# Policy for managing user accounts.
-+#
-+usermanage = module
-+
-+# Layer: apps
-+# Module: seunshare
-+#
-+# Filesystem namespacing/polyinstantiation application.
-+#
-+seunshare = module
-+
-+# Layer: kernel
-+# Module: storage
-+#
-+# Policy controlling access to storage devices
-+#
-+storage = module
-+
-+# Layer: roles
-+# Module: auditadm
-+#
-+# Audit administrator role
-+#
-+auditadm = module
-+
-+# Layer: roles
-+# Module: logadm
-+#
-+# Log administrator role
-+#
-+logadm = module
-+
-+# Layer: roles
-+# Module: secadm
-+#
-+# Security administrator role
-+#
-+secadm = module
-+
-+# Layer: roles
-+# Module: staff
-+#
-+# Administrator's unprivileged user role
-+#
-+staff = module
-+
-+# Layer: roles
-+# Module: sysadm
-+#
-+# General system administration role
-+#
-+sysadm = module
-+
-+# Layer: roles
-+# Module: unprivuser
-+#
-+# Generic unprivileged user role
-+#
-+unprivuser = module
-+
-+# Layer: services
-+# Module: postgresql
-+#
-+# PostgreSQL relational database
-+#
-+postgresql = module
-+
-+# Layer: services
-+# Module: ssh
-+#
-+# Secure shell client and server policy.
-+#
-+ssh = module
-+
-+# Layer: services
-+# Module: xserver
-+#
-+# X Windows Server
-+#
-+xserver = module
-+
-+# Layer: system
-+# Module: application
-+#
-+# Policy for user executable applications.
-+#
-+application = module
-+
-+# Layer: system
-+# Module: authlogin
-+#
-+# Common policy for authentication and user login.
-+#
-+authlogin = module
-+
-+# Layer: system
-+# Module: clock
-+#
-+# Policy for reading and setting the hardware clock.
-+#
-+clock = module
-+
-+# Layer: system
-+# Module: fstools
-+#
-+# Tools for filesystem management, such as mkfs and fsck.
-+#
-+fstools = module
-+
-+# Layer: system
-+# Module: getty
-+#
-+# Policy for getty.
-+#
-+getty = module
-+
-+# Layer: system
-+# Module: hostname
-+#
-+# Policy for changing the system host name.
-+#
-+hostname = module
-+
-+# Layer: system
-+# Module: hotplug
-+#
-+# Policy for hotplug system, for supporting the
-+# connection and disconnection of devices at runtime.
-+#
-+hotplug = module
-+
-+# Layer: system
-+# Module: init
-+#
-+# System initialization programs (init and init scripts).
-+#
-+init = module
-+
-+# Layer: system
-+# Module: ipsec
-+#
-+# TCP/IP encryption
-+#
-+ipsec = module
-+
-+# Layer: system
-+# Module: iptables
-+#
-+# Policy for iptables.
-+#
-+iptables = module
-+
-+# Layer: system
-+# Module: libraries
-+#
-+# Policy for system libraries.
-+#
-+libraries = module
-+
-+# Layer: system
-+# Module: locallogin
-+#
-+# Policy for local logins.
-+#
-+locallogin = module
-+
-+# Layer: system
-+# Module: logging
-+#
-+# Policy for the kernel message logger and system logging daemon.
-+#
-+logging = module
-+
-+# Layer: system
-+# Module: lvm
-+#
-+# Policy for logical volume management programs.
-+#
-+lvm = module
-+
-+# Layer: system
-+# Module: miscfiles
-+#
-+# Miscelaneous files.
-+#
-+miscfiles = module
-+
-+# Layer: system
-+# Module: modutils
-+#
-+# Policy for kernel module utilities
-+#
-+modutils = module
-+
-+# Layer: system
-+# Module: mount
-+#
-+# Policy for mount.
-+#
-+mount = module
-+
-+# Layer: system
-+# Module: netlabel
-+#
-+# NetLabel/CIPSO labeled networking management
-+#
-+netlabel = module
-+
-+# Layer: system
-+# Module: selinuxutil
-+#
-+# Policy for SELinux policy and userland applications.
-+#
-+selinuxutil = module
-+
-+# Layer: system
-+# Module: setrans
-+#
-+# SELinux MLS/MCS label translation service.
-+#
-+setrans = module
-+
-+# Layer: system
-+# Module: sysnetwork
-+#
-+# Policy for network configuration: ifconfig and dhcp client.
-+#
-+sysnetwork = module
-+
-+# Layer: system
-+# Module: udev
-+#
-+# Policy for udev.
-+#
-+udev = module
-+
-+# Layer: system
-+# Module: unconfined
-+#
-+# The unconfined domain.
-+#
-+unconfined = module
-+
-+# Layer: system
-+# Module: userdomain
-+#
-+# Policy for user domains
-+#
-+userdomain = module
-+
-diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
-new file mode 100644
-index 0000000..eca53d7
---- /dev/null
-+++ b/package/refpolicy/refpolicy.hash
-@@ -0,0 +1,2 @@
-+#From https://github.com/TresysTechnology/refpolicy/wiki/DownloadRelease
-+sha256 6039ba854f244a39dc727cc7db25632f7b933bb271c803772d754d4354f5aef4  refpolicy-2.20130424.tar.bz2
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-new file mode 100644
-index 0000000..d367c09
---- /dev/null
-+++ b/package/refpolicy/refpolicy.mk
-@@ -0,0 +1,121 @@
-+################################################################################
-+#
-+# refpolicy
-+#
-+################################################################################
-+
-+ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)
-+REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
-+REFPOLICY_VERSION = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION))
-+REFPOLICY_SITE_METHOD = git
-+REFPOLICY_DEPENDENCIES += refpolicy-contrib
++1.7.1
++
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 6847a60..b3303c0 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -32,6 +32,15 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	  Show packages in menuconfig that are potentially also provided
+ 	  by busybox.
+ 
++config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
++	bool "Individual binaries"
++	depends on !BR2_STATIC_LIBS
++	depends on !BR2_bfin # libbusybox.so link issue
++
++comment "Busybox individual binaries depends on dynamic libraries"
++	depends on BR2_STATIC_LIBS
++	depends on !BR2_bfin
++
+ config BR2_PACKAGE_BUSYBOX_WATCHDOG
+ 	bool "Install the watchdog daemon startup script"
+ 	help
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 6b2abca..4942e75 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -50,9 +50,37 @@ BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAG
+ BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
+ BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
+ 
++ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
++define BUSYBOX_PERMISSIONS
++	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
++endef
++
++# Set permissions on all applets with BB_SUID_REQUIRE and BB_SUID_MAYBE. The
++# permissions are pulled from the applets.h file that is generated during
++# the build and used to determine all of the possible applets. The permissions
++# file is generated and added to the list of device tables used by makedevs to
++# set file permissions.
++define BUSYBOX_MAKEDEV_PERMISSIONS
++	if [ -f $(@D)/.buildroot_permissions ]; then \
++		rm $(@D)/.buildroot_permissions; \
++	fi; \
++	touch $(@D)/.buildroot_permissions; \
++	for app in `grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" $(@D)/include/applets.h \
++			| sed -e 's/,.*//' -e 's/.*(//'`; \
++	do \
++		temp=`grep -w $${app} $(@D)/busybox.links`; \
++		if [ -n "$${temp}" ]; then \
++			echo "$${temp} f 4755 0  0 - - - - -" >> $(@D)/.buildroot_permissions; \
++		fi; \
++	done
++endef
++BUSYBOX_POST_INSTALL_TARGET_HOOKS += BUSYBOX_MAKEDEV_PERMISSIONS
++BR2_ROOTFS_DEVICE_TABLE += $(BUSYBOX_DIR)/.buildroot_permissions
 +else
-+REFPOLICY_VERSION = 2.20130424
-+REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
-+REFPOLICY_SITE = http://oss.tresys.com/files/refpolicy/
+ define BUSYBOX_PERMISSIONS
+ 	/bin/busybox                     f 4755 0  0 - - - - -
+ endef
 +endif
-+REFPOLICY_LICENSE = GPLv2
-+REFPOLICY_LICENSE_FILES = COPYING
-+
-+# Cannot use multiple threads to build the reference policy
-+REFPOLICY_MAKE = $(TARGET_MAKE_ENV) $(MAKE1)
-+
-+REFPOLICY_DEPENDENCIES += host-m4 host-checkpolicy host-policycoreutils \
-+	host-setools host-gawk host-python policycoreutils
-+
-+REFPOLICY_INSTALL_STAGING = YES
-+
-+REFPOLICY_POLICY_NAME = br_policy
-+
-+# To apply board specific customizations, create a refpolicy folder in
-+# BR2_GLOBAL_PATCH_DIR.  These patches will be applied after the patches
-+# in package/refpolicy
-+
-+# Passing the HOST_CONFIGURE_OPTS to the target build because all of the
-+# build utilities are expected to be on system. This fools the make files
-+# into using the host built utilities to compile the SELinux policy for
-+# the target.
-+#
-+# Note, the TEST_TOOLCHAIN option will also set the
-+# LD_LIBRARY_PATH at run time.
-+REFPOLICY_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) \
-+	TEST_TOOLCHAIN="$(HOST_DIR)"
-+
-+# Build requires python2 to run
-+REFPOLICY_MAKE_ENV = \
-+	PYTHON="$(HOST_DIR)/usr/bin/python2" \
-+	AWK="$(HOST_DIR)/usr/bin/gawk" \
-+	M4="$(HOST_DIR)/usr/bin/m4"
-+
-+
-+ifeq ($(BR2_PACKAGE_REFPOLICY_MODULAR),y)
-+	REFPOLICY_MONOLITHIC = n
-+else
-+	REFPOLICY_MONOLITHIC = y
-+endif
-+
-+ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)
-+define REFPOLICY_GIT_SUBMODULE_SETUP
-+	rsync -ar $(RSYNC_VCS_EXCLUSIONS) $(REFPOLICY_CONTRIB_DIR)/* \
-+		$(@D)/policy/modules/contrib/
+ 
+ # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
+ ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
+@@ -141,6 +169,17 @@ define BUSYBOX_SET_INIT
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
++define BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_INDIVIDUAL,$(BUSYBOX_BUILD_CONFIG))
 +endef
-+else
-+REFPOLICY_MODULES_FILE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_MODULES_FILE))
-+define REFPOLICY_CUSTOM_MODULES_CONF
-+	cp $(REFPOLICY_MODULES_FILE) $(@D)/policy/modules.conf
++
++define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
++	rm -f $(TARGET_DIR)/bin/busybox
 +endef
 +endif
 +
-+define REFPOLICY_CONFIGURE_CMDS
-+	$(REFPOLICY_GIT_SUBMODULE_SETUP)
-+	# If an external repo is used to build refpolicy, this preserves the
-+	# custom modules.conf which defines the enabled components.
-+	if [ -f $(@D)/policy/modules.conf ]; then \
-+		mv $(@D)/policy/modules.conf $(@D)/modules.conf.bk ; \
-+	fi
-+	$(REFPOLICY_MAKE_ENV) $(REFPOLICY_MAKE) -C $(@D) bare \
-+		$(REFPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
-+	$(SED) "/TYPE/c\TYPE = $(BR2_PACKAGE_REFPOLICY_TYPE)" $(@D)/build.conf
-+	$(SED) "/MONOLITHIC/c\MONOLITHIC = $(REFPOLICY_MONOLITHIC)" $(@D)/build.conf
-+	$(SED) "/NAME/c\NAME = $(REFPOLICY_POLICY_NAME)" $(@D)/build.conf
-+	$(REFPOLICY_MAKE_ENV) $(REFPOLICY_MAKE) -C $(@D) conf \
-+		$(REFPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
-+	if [ -f $(@D)/modules.conf.bk ]; then \
-+		echo "[Preserved modules.conf]" ; \
-+		mv $(@D)/modules.conf.bk $(@D)/policy/modules.conf ; \
-+	fi
-+	$(REFPOLICY_CUSTOM_MODULES_CONF)
-+endef
-+
-+define REFPOLICY_INSTALL_STAGING_CMDS
-+	$(REFPOLICY_MAKE_ENV) $(REFPOLICY_MAKE) -C $(@D) install-src install-headers \
-+		install-docs $(REFPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
-+endef
-+
-+define REFPOLICY_INSTALL_TARGET_CMDS
-+	$(REFPOLICY_MAKE_ENV) $(REFPOLICY_MAKE) -C $(@D) install \
-+		$(REFPOLICY_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
-+	$(INSTALL) -m 0755 -D package/refpolicy/config $(TARGET_DIR)/etc/selinux/config
-+	$(SED) "/^SELINUXTYPE/c\SELINUXTYPE=$(REFPOLICY_POLICY_NAME)" \
-+		$(TARGET_DIR)/etc/selinux/config
-+	touch $(TARGET_DIR)/.autorelabel
-+	$(RM) $(TARGET_DIR)/etc/selinux/$(REFPOLICY_POLICY_NAME)/booleans
-+endef
-+
-+define REFPOLICY_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/refpolicy/S00selinux \
-+		$(TARGET_DIR)/etc/init.d/S00selinux
-+endef
-+
-+define REFPOLICY_POLICY_COMPILE
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/selinux/$(REFPOLICY_POLICY_NAME)/policy
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/selinux/$(REFPOLICY_POLICY_NAME)/modules/active/modules
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/selinux/$(REFPOLICY_POLICY_NAME)/contexts/files
-+	touch $(TARGET_DIR)/etc/selinux/$(REFPOLICY_POLICY_NAME)/contexts/files/file_contexts.local
-+endef
-+
-+ifeq ($(BR2_PACKAGE_REFPOLICY_MODULAR),y)
-+	REFPOLICY_POST_INSTALL_TARGET_HOOKS += REFPOLICY_POLICY_COMPILE
-+endif
-+
-+$(eval $(generic-package))
+ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
+@@ -199,6 +238,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
++	$(BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES)
+ endef
+ 
+ define BUSYBOX_CONFIGURE_CMDS
+@@ -221,6 +261,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+ 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
+ 	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
++	$(BUSYBOX_INSTALL_INDIVIDUAL_BINARIES)
+ endef
+ 
+ # Checks to give errors that the user can understand
 -- 
 1.9.1
