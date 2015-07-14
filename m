@@ -1,43 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 02:28:05 +0200
-Subject: [Buildroot] [git commit] rpcbind: add missing dependency on
-	host-pkgconf
-Message-ID: <20150714074707.25E1081D34@busybox.osuosl.org>
+Date: Tue, 14 Jul 2015 09:46:51 +0200
+Subject: [Buildroot] [git commit] core: fix download menu
+Message-ID: <20150714074707.29B3F7FD45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=31b7e36418bde33b1a5ec81c5cccad739035dfb4
+commit: http://git.buildroot.net/buildroot/commit/?id=3318a5a798a37bd2b55feb619f8d0a90b9c7ddd2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-rpcbind depends on libtirpc, which used to depend on
-host-pkgconf. However, since commit
-aee57627b09d0955270a562b8adaa0ff88ef523b, the dependency of libtirpc
-on host-pkgconf has been removed, because libtirpc no longer uses
-PKG_CHECK_MODULES().
+Currently, when one enables the "Only allow downloads from primary"
+option, all the other mirror options are hidden (expected!) but the
+LuaRocks and CPAN mirrors (bad!).
 
-However, rpcbind does use PKG_CHECK_MODULES(). It used to work because
-host-pkgconf was brought into the build by the dependency on libtirpc,
-but that's no longer the case. Bottom line: we need to make rpcbind
-depend on host-pkgconf, which is exactly what this commit does.
+Fix that.
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rpcbind/rpcbind.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
-index 7bfb1e2..b85d88e 100644
---- a/package/rpcbind/rpcbind.mk
-+++ b/package/rpcbind/rpcbind.mk
-@@ -12,7 +12,7 @@ RPCBIND_LICENSE_FILES = COPYING
+diff --git a/Config.in b/Config.in
+index e10427f..8b1bd8d 100644
+--- a/Config.in
++++ b/Config.in
+@@ -218,8 +218,6 @@ config BR2_GNU_MIRROR
+ 	     http://ftp.gnu.org/pub/gnu
+ 	     http://mirror.aarnet.edu.au/pub/gnu
  
- RPCBIND_CONF_ENV += \
- 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/tirpc/"
--RPCBIND_DEPENDENCIES += libtirpc
-+RPCBIND_DEPENDENCIES += libtirpc host-pkgconf
- RPCBIND_CONF_OPTS += --with-rpcuser=root
+-endif
+-
+ config BR2_LUAROCKS_MIRROR
+ 	string "LuaRocks mirror"
+ 	default "http://rocks.moonscript.org"
+@@ -239,6 +237,8 @@ config BR2_CPAN_MIRROR
+ 	  The list of mirrors is available at:
+ 	  http://search.cpan.org/mirror
  
- define RPCBIND_INSTALL_INIT_SYSV
++endif
++
+ endmenu
+ 
+ config BR2_JLEVEL
