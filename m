@@ -1,18 +1,20 @@
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Tue, 14 Jul 2015 15:20:19 -0500
-Subject: [Buildroot] [PATCH v9 07/15] busybox: added linux-pam support
+Date: Tue, 14 Jul 2015 15:20:23 -0500
+Subject: [Buildroot] [PATCH v9 11/15] util-linux: selinux, audit,
+	and pam support
 In-Reply-To: <1436905227-26937-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 References: <1436905227-26937-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <1436905227-26937-8-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <1436905227-26937-12-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Matt Weber <Matthew.Weber@rockwellcollins.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
@@ -29,31 +31,59 @@ Changes v5 -> v6:
   - No changes
 
 Changes v4 -> v5:
-  - No changes
-
-Changes v1 -> v4:
-  - Did not exist
+  - New patch
+  - Added pam file tweaks for selinux support (Clayton S.)
 ---
- package/busybox/busybox.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/util-linux/util-linux.mk | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 94f3b47..8ef31ff 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -180,6 +180,13 @@ define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
- endef
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index a44a45e..5ce3af5 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -53,6 +53,20 @@ ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
+ UTIL_LINUX_DEPENDENCIES += libcap-ng
  endif
  
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+define BUSYBOX_LINUX_PAM
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+BUSYBOX_DEPENDENCIES += linux-pam
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++UTIL_LINUX_DEPENDENCIES += libselinux
++UTIL_LINUX_CONF_OPTS += --with-selinux
++else
++UTIL_LINUX_CONF_OPTS += --without-selinux
 +endif
 +
- ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
- BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
- define BUSYBOX_SET_SELINUX
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++UTIL_LINUX_DEPENDENCIES += audit
++UTIL_LINUX_CONF_OPTS += --with-audit
++else
++UTIL_LINUX_CONF_OPTS += --without-audit
++endif
++
+ # Used by cramfs utils
+ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
+ 
+@@ -140,9 +154,22 @@ define UTIL_LINUX_INSTALL_PAMFILES
+ 	$(INSTALL) -m 0644 package/util-linux/su.pam \
+ 		$(TARGET_DIR)/etc/pam.d/su-l
+ endef
++
++# Add the required hooks to the pam files if SELinux is enabled
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++define UTIL_LINUX_FIXUP_PAMFILES
++	for file in login su su-l ; do \
++		$(SED) '/selinux/d' $(TARGET_DIR)/etc/pam.d/$${file}; \
++		$(SED) '0,/session/s/session/session		required	pam_selinux.so close\nsession/' $(TARGET_DIR)/etc/pam.d/$${file}; \
++		echo "session		required	pam_selinux.so open" >> $(TARGET_DIR)/etc/pam.d/$${file}; \
++	done
++endef
++endif
++
+ endif
+ 
+ UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
++UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_FIXUP_PAMFILES
+ 
+ # Install agetty->getty symlink to avoid breakage when there's no busybox
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_AGETTY),y)
 -- 
 1.9.1
