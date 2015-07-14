@@ -1,57 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 14:00:04 +0200
-Subject: [Buildroot] [git commit] mongoose: systemd support
-Message-ID: <20150714120016.979EC81D3D@busybox.osuosl.org>
+Date: Tue, 14 Jul 2015 14:01:10 +0200
+Subject: [Buildroot] [PATCH 14/38] mongoose: systemd support
+In-Reply-To: <fa462132229bb0c222bd9d3598cd0c8c9e741f8c.1432332802.git.alex.suykov@gmail.com>
+References: <cover.1432332802.git.alex.suykov@gmail.com>
+ <fa462132229bb0c222bd9d3598cd0c8c9e741f8c.1432332802.git.alex.suykov@gmail.com>
+Message-ID: <20150714140110.0c800b30@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=de2dd8f473d5502c61e162594a6a6c3273270a9a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Alex Suykov,
 
-[Thomas: use relative symbolic link.]
+On Sat, 23 May 2015 13:05:13 +0300, Alex Suykov wrote:
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> ---
+>  package/mongoose/mongoose.mk      |  8 ++++++++
+>  package/mongoose/mongoose.service | 10 ++++++++++
+>  2 files changed, 18 insertions(+)
+>  create mode 100644 package/mongoose/mongoose.service
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mongoose/mongoose.mk      |    8 ++++++++
- package/mongoose/mongoose.service |   10 ++++++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+Applied after changing to use a relative path for the symlink, thanks.
 
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 6797e58..14f2aae 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -36,6 +36,14 @@ define MONGOOSE_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S85mongoose
- endef
- 
-+define MONGOOSE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/mongoose/mongoose.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/mongoose.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/mongoose.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mongoose.service
-+endef
-+
- define MONGOOSE_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D -m 644 $(@D)/libmongoose.a \
- 		$(STAGING_DIR)/usr/lib/libmongoose.a
-diff --git a/package/mongoose/mongoose.service b/package/mongoose/mongoose.service
-new file mode 100644
-index 0000000..12a731c
---- /dev/null
-+++ b/package/mongoose/mongoose.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Mongoose HTTP server
-+After=network.target
-+
-+[Service]
-+ExecStart=/usr/sbin/mongoose -document_root /var/www -listening_port 80
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
