@@ -1,184 +1,88 @@
 From: Christian Stewart <christian@paral.in>
-Date: Tue, 14 Jul 2015 11:42:00 -0700
-Subject: [Buildroot] [PATCH 1/3] golang: new package
-Message-ID: <1436899322-19731-1-git-send-email-christian@paral.in>
+Date: Tue, 14 Jul 2015 11:42:01 -0700
+Subject: [Buildroot] [PATCH 2/3] aufs-util: new package
+In-Reply-To: <1436899322-19731-1-git-send-email-christian@paral.in>
+References: <1436899322-19731-1-git-send-email-christian@paral.in>
+Message-ID: <1436899322-19731-2-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch introduces golang as a host and target package, allowing for cross-platform go builds.
+This compiles aufs-util, built for recent kernels.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in                                  |  1 +
- package/Config.in.host                             |  1 +
- package/golang/0001-add-no-march-option-gccp.patch | 19 ++++++++++
- .../0002-remove-unnecessary-march-ld-flag.patch    | 29 ++++++++++++++++
- package/golang/Config.in                           |  6 ++++
- package/golang/Config.in.host                      |  6 ++++
- package/golang/golang.mk                           | 40 ++++++++++++++++++++++
- 7 files changed, 102 insertions(+)
- create mode 100644 package/golang/0001-add-no-march-option-gccp.patch
- create mode 100644 package/golang/0002-remove-unnecessary-march-ld-flag.patch
- create mode 100644 package/golang/Config.in
- create mode 100644 package/golang/Config.in.host
- create mode 100644 package/golang/golang.mk
+ package/Config.in              |  1 +
+ package/aufs-util/Config.in    |  6 ++++++
+ package/aufs-util/aufs-util.mk | 33 +++++++++++++++++++++++++++++++++
+ 3 files changed, 40 insertions(+)
+ create mode 100644 package/aufs-util/Config.in
+ create mode 100644 package/aufs-util/aufs-util.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 5beb450..b49c94f 100644
+index b49c94f..5500564 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -455,6 +455,7 @@ menu "Erlang libraries/modules"
- 	source "package/erlang-p1-zlib/Config.in"
+@@ -149,6 +149,7 @@ endif
  endmenu
- endif
-+	source "package/golang/Config.in"
- 	source "package/guile/Config.in"
- 	source "package/haserl/Config.in"
- 	source "package/jamvm/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 1e047aa..e36afee 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -11,6 +11,7 @@ menu "Host utilities"
- 	source "package/genext2fs/Config.in.host"
- 	source "package/genimage/Config.in.host"
- 	source "package/genpart/Config.in.host"
-+	source "package/golang/Config.in.host"
- 	source "package/imx-usb-loader/Config.in.host"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/mke2img/Config.in.host"
-diff --git a/package/golang/0001-add-no-march-option-gccp.patch b/package/golang/0001-add-no-march-option-gccp.patch
+ 
+ menu "Filesystem and flash utilities"
++	source "package/aufs-util/Config.in"
+ 	source "package/btrfs-progs/Config.in"
+ 	source "package/cifs-utils/Config.in"
+ 	source "package/cramfs/Config.in"
+diff --git a/package/aufs-util/Config.in b/package/aufs-util/Config.in
 new file mode 100644
-index 0000000..87231aa
+index 0000000..1afb79b
 --- /dev/null
-+++ b/package/golang/0001-add-no-march-option-gccp.patch
-@@ -0,0 +1,19 @@
-+Adds an option to not add the problematic -m parameter to GCC.
-+
-+Signed-off-by: Christian Stewart <christian@paral.in>
-+
-+diff -Nau golang.orig/src/cmd/cgo/gcc.go golang/src/cmd/cgo/gcc.go
-+--- golang.orig/src/cmd/cgo/gcc.go.orig	2015-07-09 15:53:55.720794139 -0700
-++++ golang/src/cmd/cgo/gcc.go	2015-07-09 17:46:43.664496374 -0700
-+@@ -736,6 +736,11 @@
-+ 
-+ // gccMachine returns the gcc -m flag to use, either "-m32", "-m64" or "-marm".
-+ func (p *Package) gccMachine() []string {
-++
-++	if os.Getenv("CGO_NO_EMULATION") == "1" {
-++		return nil
-++	}
-++
-+ 	switch goarch {
-+ 	case "amd64":
-+ 		return []string{"-m64"}
-diff --git a/package/golang/0002-remove-unnecessary-march-ld-flag.patch b/package/golang/0002-remove-unnecessary-march-ld-flag.patch
-new file mode 100644
-index 0000000..7cc20f4
---- /dev/null
-+++ b/package/golang/0002-remove-unnecessary-march-ld-flag.patch
-@@ -0,0 +1,29 @@
-+Removes defining -m parameter to LD, which is unnecessary in buildroot.
-+
-+Signed-off-by: Christian Stewart <christian@paral.in>
-+
-+diff -Nau golang.orig/src/cmd/ld/lib.c golang/src/cmd/ld/lib.c
-+--- golang.orig/src/cmd/ld/lib.c.orig	2015-07-09 18:38:44.192359082 -0700
-++++ golang/src/cmd/ld/lib.c	2015-07-09 18:39:02.108358294 -0700
-+@@ -589,20 +589,7 @@
-+ 	if(extld == nil)
-+ 		extld = "gcc";
-+ 	argv[argc++] = extld;
-+-	switch(thechar){
-+-	case '8':
-+-		argv[argc++] = "-m32";
-+-		break;
-+-	case '6':
-+-		argv[argc++] = "-m64";
-+-		break;
-+-	case '5':
-+-		argv[argc++] = "-marm";
-+-		break;
-+-	}
-+-	if(!debug['s'] && !debug_s) {
-+-		argv[argc++] = "-gdwarf-2"; 
-+-	} else {
-++	if(debug['s'] || debug_s) {
-+ 		argv[argc++] = "-s";
-+ 	}
-+ 	if(HEADTYPE == Hdarwin)
-diff --git a/package/golang/Config.in b/package/golang/Config.in
-new file mode 100644
-index 0000000..5f058c6
---- /dev/null
-+++ b/package/golang/Config.in
++++ b/package/aufs-util/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_GOLANG
-+	bool "golang"
++config BR2_PACKAGE_AUFS_UTIL
++	bool "aufs-util"
 +	help
-+	  Go compiler and cli tool.
++	  Aufs command line utilities.
 +
-+	  http://golang.org/
-diff --git a/package/golang/Config.in.host b/package/golang/Config.in.host
++	  http://sourceforge.net/p/aufs/aufs-util/
+diff --git a/package/aufs-util/aufs-util.mk b/package/aufs-util/aufs-util.mk
 new file mode 100644
-index 0000000..5d556bb
+index 0000000..81e7efb
 --- /dev/null
-+++ b/package/golang/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_GOLANG
-+	bool "host golang"
-+	help
-+	  Go compiler for the host system.
-+
-+	  http://golang.org/
-diff --git a/package/golang/golang.mk b/package/golang/golang.mk
-new file mode 100644
-index 0000000..4893bcc
---- /dev/null
-+++ b/package/golang/golang.mk
-@@ -0,0 +1,40 @@
++++ b/package/aufs-util/aufs-util.mk
+@@ -0,0 +1,33 @@
 +################################################################################
 +#
-+# GOLANG
++# aufs-util
 +#
 +################################################################################
 +
-+GOLANG_VERSION = 883bc6ed0ea815293fe6309d66f967ea60630e87
-+GOLANG_SITE = $(call github,golang,go,$(GOLANG_VERSION))
-+GOLANG_LICENSE_FILES = LICENSE
-+GOLANG_INSTALL_STAGING = NO
-+GOLANG_INSTALL_TARGET = YES
 +
-+HOST_GOLANG_DEPENDENCIES =
-+GOLANG_DEPENDENCIES =
++# Version depends on the kernel version.
++# todo: find an effective way of detecting the right version to use
++AUFS_UTIL_VERSION = a25c0d434889cab53df62fc0a6f9e9d679470990
++AUFS_UTIL_DEPENDENCIES = linux linux-headers
++AUFS_UTIL_SITE = $(call github,morfoh,aufs-util,$(AUFS_UTIL_VERSION))
++AUFS_UTIL_LICENSE = GNU
++AUFS_UTIL_INSTALL_STAGING = NO
++AUFS_UTIL_INSTALL_TARGET = YES
 +
-+GOLANG = $(HOST_DIR)/usr/bin/go
-+GOLANGFMT = $(HOST_DIR)/usr/bin/gofmt
-+
-+define GOLANG_BUILD_CMDS
-+	cd $(@D)/src/ && CC_FOR_TARGET="$(TARGET_CC)" LD_FOR_TARGET="$(TARGET_LD)" GOOS=linux GOARCH=$(ARCH) GOROOT_FINAL="/usr/src/go" ./make.bash
++# Slight hack for a bug with aufsmvdown
++# Remove user setting from install command
++define AUFS_UTIL_CONFIGURE_CMDS
++	$(SED) 's/\.a\[/\.stbr\[/g' $(@D)/aumvdown.c
++	$(SED) 's/\-o root \-g root //g' $(@D)/Makefile
 +endef
 +
-+define GOLANG_INSTALL_TARGET_CMDS
-+	cp $(@D)/bin/linux_$(ARCH)/* $(TARGET_DIR)/usr/bin/
-+	mkdir -p $(TARGET_DIR)/usr/src/go/
-+	cp -r $(@D)/* $(TARGET_DIR)/usr/src/go/
++define AUFS_UTIL_BUILD_CMDS
++	$(MAKE) -C $(LINUX_BUILDDIR) headers_install
++	$(MAKE) -C $(@D) CPPFLAGS="-I $(LINUX_BUILDDIR)/usr/include/" HOSTCC="$(CC)" HOSTLD="$(LD)" INSTALL="$(INSTALL)" all
 +endef
 +
-+define HOST_GOLANG_BUILD_CMDS
-+	cd $(@D)/src/ && CC_FOR_TARGET="$(TARGET_CC)" GOOS=linux GOARCH=$(ARCH) GOROOT_FINAL=$(HOST_DIR)/usr/src/go/ bash ./make.bash
++define AUFS_UTIL_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) INSTALL="$(INSTALL)" DESTDIR="$(TARGET_DIR)" install
 +endef
 +
-+define HOST_GOLANG_INSTALL_CMDS
-+	cp $(@D)/bin/go $(@D)/bin/gofmt $(HOST_DIR)/usr/bin/
-+	mkdir -p $(HOST_DIR)/usr/src/go/
-+	cp -r $(@D)/* $(HOST_DIR)/usr/src/go/
-+endef
-+
-+$(eval $(host-generic-package))
 +$(eval $(generic-package))
 -- 
 2.1.4
