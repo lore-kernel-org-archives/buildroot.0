@@ -1,35 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 15:54:27 +0200
-Subject: [Buildroot] [git commit] rpi-userland: add Restart=always to
-	vcfiled.service
-Message-ID: <20150714135519.DF64C81D43@busybox.osuosl.org>
+Date: Tue, 14 Jul 2015 15:57:26 +0200
+Subject: [Buildroot] [PATCH v5] dtc: add host build
+In-Reply-To: <1427140478-31535-1-git-send-email-ps.report@gmx.net>
+References: <1427140478-31535-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20150714155726.6beef843@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bc395dd0b5b2fd9852b937a4ee54b6d8caff6812
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Seiderer,
 
-As suggested by Maxime Hadjinlian, add Restart=always to
-vcfiled.service so that this service gets restarted if it ever exits
-for some reason.
+On Mon, 23 Mar 2015 20:54:38 +0100, Peter Seiderer wrote:
+> - add dtc host build support
+> 
+> - install linux kernel package provided dtc only in case package
+>   host dtc is not selected (suggested by Matthew Weber (see [1])
+>   to avoid double installation of host dtc).
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2015-January/117121.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+> Changes v4 -> v5:
+>   - added Reviewed-by/Tested-by
+>   - squashed with 'linux: install dtc only in case package host dtc is not
+>     selected' and fixed variable parenthesis (as suggested by Yann E. MORIN)
+>     and reworded commit message
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rpi-userland/vcfiled.service |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+We still don't really understand the motivation for doing this package.
+The kernel already has its own copy of dtc, which it builds when
+needed. And your commit log does not explain *why* we would want a host
+version of dtc as a package.
 
-diff --git a/package/rpi-userland/vcfiled.service b/package/rpi-userland/vcfiled.service
-index 2b8f1dc..b09aa62 100644
---- a/package/rpi-userland/vcfiled.service
-+++ b/package/rpi-userland/vcfiled.service
-@@ -3,6 +3,7 @@ Description=VideoCore file server daemon
- 
- [Service]
- ExecStart=/usr/sbin/vcfiled --foreground
-+Restart=always
- 
- [Install]
- WantedBy=multi-user.target
+For now, we'll mark this patch as Rejected in patchwork. If you don't
+agree, please resend an updated version with a much more descriptive
+commit log which explains the use cases and motivation for having a
+host dtc package.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
