@@ -1,44 +1,50 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 14 Jul 2015 16:42:53 -0300
-Subject: [Buildroot] [PATCH v5 4/6] vala: bump to version 0.28.0
+Date: Tue, 14 Jul 2015 16:42:54 -0300
+Subject: [Buildroot] [PATCH v5 5/6] webkit: mark as deprecated
 In-Reply-To: <1436902975-5004-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1436902975-5004-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1436902975-5004-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1436902975-5004-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Mark webkit as deprecated now that midori has been updated to use
+webkitgtk24.
+It has multiple CVEs under it's belt and is no longer maintained
+upstream.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/vala/vala.hash | 4 ++--
- package/vala/vala.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/webkit/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index fcaa0e1..063ec21 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
-@@ -1,2 +1,2 @@
--# From https://download.gnome.org/sources/vala/0.26/vala-0.26.2.sha256sum
--sha256	37f13f430c56a93b6dac85239084681fd8f31c407d386809c43bc2f2836e03c4	vala-0.26.2.tar.xz
-+# From https://download.gnome.org/sources/vala/0.28/vala-0.28.0.sha256sum
-+sha256	0d9e3bd3f82145664875f7c29b2f544ba92d2814f75412948f774c0727fc977f	vala-0.28.0.tar.xz
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 573e1e4..9dedd8f 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index 2f0b90d..7f0d1e4 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -5,11 +5,13 @@ config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+ 	default y if BR2_i386 || BR2_mips || BR2_mipsel || \
+ 		BR2_sparc || BR2_x86_64
+ 	depends on BR2_USE_MMU # libgail -> pango -> libglib2
++	depends on BR2_DEPRECATED_SINCE_2015_08
  
--VALA_VERSION_MAJOR = 0.26
--VALA_VERSION = $(VALA_VERSION_MAJOR).2
-+VALA_VERSION_MAJOR = 0.28
-+VALA_VERSION = $(VALA_VERSION_MAJOR).0
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPLv2.1+
+ # disabled on powerpc due to bug https://bugs.webkit.org/show_bug.cgi?id=113638
+ 
+ config BR2_PACKAGE_WEBKIT
+ 	bool "webkit"
++	depends on BR2_DEPRECATED_SINCE_2015_08
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # enchant -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # enchant -> libglib2; icu
+@@ -43,6 +45,7 @@ config BR2_PACKAGE_WEBKIT
+ 	  http://webkit.org/
+ 
+ comment "webkit needs libgtk2 and a toolchain w/ C++, wchar, threads"
++	depends on BR2_DEPRECATED_SINCE_2015_08
+ 	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+ 	depends on BR2_ARCH_HAS_ATOMICS # cairo
+ 	depends on !BR2_PACKAGE_LIBGTK2 || !BR2_INSTALL_LIBSTDCPP || \
 -- 
 2.3.6
