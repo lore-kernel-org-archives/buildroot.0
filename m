@@ -1,34 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jul 2015 00:34:03 +0200
-Subject: [Buildroot] [PATCH 27/38] ti-gfx: systemd support
-In-Reply-To: <3afa99779c3b299f255ea8e1330c124f31b02fd6.1432332802.git.alex.suykov@gmail.com>
-References: <cover.1432332802.git.alex.suykov@gmail.com>
- <3afa99779c3b299f255ea8e1330c124f31b02fd6.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <20150715003403.21f6709b@free-electrons.com>
+Date: Wed, 15 Jul 2015 00:39:49 +0200
+Subject: [Buildroot] [PATCH 1/2] pkg-download: add optional destination
+ filename
+In-Reply-To: <1429462679-4769-1-git-send-email-fhunleth@troodon-software.com>
+References: <1429462679-4769-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20150715003949.7506a433@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+Dear Frank Hunleth,
 
-On Sat, 23 May 2015 13:07:32 +0300, Alex Suykov wrote:
-> The startup script too complex to embed it completely into
-> the .service file, so it is left as a standalone script.
+On Sun, 19 Apr 2015 12:57:58 -0400, Frank Hunleth wrote:
+> This adds an optional parameter to the DOWNLOAD macro so that it's
+> possible to specify a destination filename that's different from one
+> being downloaded.
 > 
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 > ---
->  package/ti-gfx/ti-gfx.mk      | 10 ++++++++++
->  package/ti-gfx/ti-gfx.service | 11 +++++++++++
->  2 files changed, 21 insertions(+)
->  create mode 100644 package/ti-gfx/ti-gfx.service
+>  package/pkg-download.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Applied with some minor changes:
+This patch is still pending in patchwork, but the discussion in PATCH
+2/2 didn't really reached a conclusion other than the fact that you had
+a very specific case of a patch being updated by upstream without being
+renamed, and that you were going to talk with upstream about this. We
+haven't heard from you about this specific problem since end of April,
+and anyway the proposed implementation wasn't matching our requirements.
 
-    [Thomas:
-     - use relative path for the symbolic link
-     - slightly tweak the service Description string]
+So I've marked this patch as Rejected in patchwork. Of course, if you
+still have the issue, let's reopen the discussion and work on a proper
+solution for the problem.
 
 Thanks!
 
