@@ -1,70 +1,536 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Jul 2015 13:33:55 +0200
-Subject: [Buildroot] [PATCH] qpid-proton: needs host python 2
-In-Reply-To: <8442e9d6be96eb9a8c4165024e98ce38e7de1a6f.1436872438.git.baruch@tkos.co.il>
-References: <8442e9d6be96eb9a8c4165024e98ce38e7de1a6f.1436872438.git.baruch@tkos.co.il>
-Message-ID: <20150714113355.GA26192@free.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Tue, 14 Jul 2015 13:36:25 +0200
+Subject: [Buildroot] [PATCH v5 1/2] skeleton: New package
+Message-ID: <1436873786-9005-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Create a proper package for the skeleton.
 
-On 2015-07-14 14:13 +0300, Baruch Siach spake thusly:
-> qpid-proton uses Python as part of its build system. Only Python 2 is
-> currently supported.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/bdf/bdf94981b52dc3a04fd21ff770a0a20d883bb1c3/
-> http://autobuild.buildroot.net/results/669/66964a00e44502ae00d5348a5ca2b632c729a417/
-> http://autobuild.buildroot.net/results/30d/30d2fed1149857b11375f2801f522a84f441fc1e/
-> 
-> and more.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/qpid-proton/qpid-proton.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/qpid-proton/qpid-proton.mk b/package/qpid-proton/qpid-proton.mk
-> index eae4589bf538..d21609d29776 100644
-> --- a/package/qpid-proton/qpid-proton.mk
-> +++ b/package/qpid-proton/qpid-proton.mk
-> @@ -12,6 +12,7 @@ QPID_PROTON_LICENSE_FILES = LICENSE
->  QPID_PROTON_INSTALL_STAGING = YES
->  QPID_PROTON_DEPENDENCIES = \
->  	util-linux \
-> +	host-python \
+The main Makefile is modified to remove the skeleton support.
+The 'dirs' target, will create the $(TARGET_DIR).
+The file 'output/target/.root' doesn't exists anymore, as there's no
+Make rule to statisfy.
 
-This simply can't work, because the offending .py scripts are using a
-hard-coded sha-bang:
-    #!/usr/bin/python
+The infrastructure are modified to filter host-skeleton.
+It's needed becauses the host-dependencies are derived from the
+dependencies of the target package where 'host-' is preprended to the
+depedency name.
 
-So, even though we'd now have $(HOST_DIR)/usr/bin/python that is a
-python2, the scripts would still be calling the host's python, not ours.
+In the pkg-generic we add skeleton as a dependency to every package.
 
-I'm already working on fixing all of those...
+The whole system/system.mk is now removed at the profit of
+package/skeleton/skeleton.mk
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+v4 -> v5:
+    - Remove include system/system.mk from the main Makefile, the file
+      doesn't exists anymore.
+    - Filter out host-skeleton also from pkg-python and pkg-virtual
+v3 -> v4:
+    - Rework commit log
+    - Modify if/else constructs for SKELETON_PATH
+    - The 'dirs' target stays as it was
+    - Empty system.mk into skeleton.mk, in the near future, we will want
+      skeleton.mk to do everything on the default skeleton, even the
+      getty stuff.
+v2 -> v3:
+   - Add patch from Thomas De Schampheleire so we create $(BUILD_DIR)
+     before create $(BUILD_DIR)
+v1 -> v2:
+   - Huge overall rework
+   - Filter-out host-skeleton in missing infra
+   - Finally, keep skeleton's file in /system/
+   - Keep the TARGET_DIR creation in the main Makefile
+---
+ Makefile                     |  22 +-----
+ package/pkg-autotools.mk     |   2 +-
+ package/pkg-cmake.mk         |   3 +-
+ package/pkg-generic.mk       |   5 +-
+ package/pkg-python.mk        |   2 +-
+ package/pkg-rebar.mk         |   4 +-
+ package/pkg-virtual.mk       |   2 +-
+ package/skeleton/Config.in   |   5 ++
+ package/skeleton/skeleton.mk | 158 +++++++++++++++++++++++++++++++++++++++++++
+ system/Config.in             |   2 +
+ system/system.mk             | 122 ---------------------------------
+ 11 files changed, 177 insertions(+), 150 deletions(-)
+ create mode 100644 package/skeleton/Config.in
+ create mode 100644 package/skeleton/skeleton.mk
+ delete mode 100644 system/system.mk
 
->  	$(if $(BR2_PACKAGE_OPENSSL),openssl)
->  QPID_PROTON_CONF_OPTS = \
->  	-DBUILD_JAVA=OFF \
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/Makefile b/Makefile
+index 546bcd3..054eb6e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -361,8 +361,6 @@ HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
+ # Quotes are needed for spaces and all in the original PATH content.
+ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
+ 
+-TARGET_SKELETON = $(TOPDIR)/system/skeleton
+-
+ # Location of a file giving a big fat warning that output/target
+ # should not be used as the root filesystem.
+ TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+@@ -416,7 +414,6 @@ include $(sort $(wildcard package/*/*.mk))
+ 
+ include boot/common.mk
+ include linux/linux.mk
+-include system/system.mk
+ include fs/common.mk
+ 
+ include $(BR2_EXTERNAL)/external.mk
+@@ -441,7 +438,7 @@ world: target-post-image
+ # dependencies anywhere else
+ #
+ ################################################################################
+-$(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
++$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
+ 	@mkdir -p $@
+ 
+ # We make a symlink lib32->lib or lib64->lib as appropriate
+@@ -462,27 +459,10 @@ $(STAGING_DIR):
+ 	@mkdir -p $(STAGING_DIR)/usr/bin
+ 	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+ 
+-ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
+-TARGET_SKELETON = $(BR2_ROOTFS_SKELETON_CUSTOM_PATH)
+-endif
+-
+ RSYNC_VCS_EXCLUSIONS = \
+ 	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
+ 	--exclude CVS
+ 
+-$(BUILD_DIR)/.root:
+-	mkdir -p $(TARGET_DIR)
+-	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+-		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+-		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+-	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+-	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+-	@mkdir -p $(TARGET_DIR)/usr
+-	@ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
+-	touch $@
+-
+-$(TARGET_DIR): $(BUILD_DIR)/.root
+-
+ STRIP_FIND_CMD = find $(TARGET_DIR)
+ ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
+ STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 55154ff..b630ec9 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -164,7 +164,7 @@ $(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
+ # and _GETTEXTIZE away from the non-host rule
+ ifeq ($(4),host)
+ $(2)_DEPENDENCIES ?= $$(filter-out host-automake host-autoconf host-libtool \
+-				host-gettext host-toolchain $(1),\
++				host-gettext host-skeleton host-toolchain $(1),\
+     $$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
+ endif
+ 
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index f17a883..574eccc 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -146,7 +146,8 @@ endif
+ # This must be repeated from inner-generic-package, otherwise we only get
+ # host-cmake in _DEPENDENCIES because of the following line
+ ifeq ($(4),host)
+-$(2)_DEPENDENCIES ?= $$(filter-out host-toolchain $(1),$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
++$(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
++	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
+ endif
+ 
+ $(2)_DEPENDENCIES += host-cmake
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index beff2d7..d1d6711 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -405,10 +405,13 @@ $(2)_REDISTRIBUTE		?= YES
+ $(2)_ADD_TOOLCHAIN_DEPENDENCY	?= YES
+ 
+ ifeq ($(4),host)
+-$(2)_DEPENDENCIES ?= $$(filter-out  host-toolchain $(1),\
++$(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
+ 	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
+ endif
+ ifeq ($(4),target)
++ifneq ($(1),skeleton)
++$(2)_DEPENDENCIES += skeleton
++endif
+ ifeq ($$($(2)_ADD_TOOLCHAIN_DEPENDENCY),YES)
+ $(2)_DEPENDENCIES += toolchain
+ endif
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 426301a..b7a702d 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -150,7 +150,7 @@ endif
+ # automatically from the dependencies of the corresponding target
+ # package.
+ ifeq ($(4),host)
+-$(2)_DEPENDENCIES ?= $$(filter-out host-python host-python3 host-python-setuptools host-toolchain $(1),$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
++$(2)_DEPENDENCIES ?= $$(filter-out host-python host-python3 host-python-setuptools host-skeleton host-toolchain $(1),$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
+ endif
+ 
+ # Target packages need both the python interpreter on the target (for
+diff --git a/package/pkg-rebar.mk b/package/pkg-rebar.mk
+index 75facd5..c727489 100644
+--- a/package/pkg-rebar.mk
++++ b/package/pkg-rebar.mk
+@@ -192,11 +192,11 @@ ifeq ($$($(2)_USE_AUTOCONF),YES)
+ # is NO.  Also filter the result of _AUTORECONF and _GETTEXTIZE away
+ # from the non-host rule
+ $(2)_DEPENDENCIES ?= $$(filter-out host-automake host-autoconf host-libtool \
+-				host-gettext host-toolchain host-erlang-rebar $(1),\
++				host-gettext host-skeleton host-toolchain host-erlang-rebar $(1),\
+     $$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
+ else
+ # Same deal, if _USE_BUNDLED_REBAR is NO.
+-$(2)_DEPENDENCIES ?= $$(filter-out  host-toolchain host-erlang-rebar $(1),\
++$(2)_DEPENDENCIES ?= $$(filter-out  host-skeleton host-toolchain host-erlang-rebar $(1),\
+ 	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
+ endif
+ 
+diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+index 2889ef9..9c68b51 100644
+--- a/package/pkg-virtual.mk
++++ b/package/pkg-virtual.mk
+@@ -50,7 +50,7 @@ $(2)_VERSION = virtual
+ # This must be repeated from inner-generic-package, otherwise we get an empty
+ # _DEPENDENCIES
+ ifeq ($(4),host)
+-$(2)_DEPENDENCIES ?= $$(filter-out host-toolchain $(1),\
++$(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
+ 	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
+ endif
+ 
+diff --git a/package/skeleton/Config.in b/package/skeleton/Config.in
+new file mode 100644
+index 0000000..d25147b
+--- /dev/null
++++ b/package/skeleton/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_SKELETON
++	bool
++	default y
++	help
++	  The basic skeleton for your rootfs.
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+new file mode 100644
+index 0000000..77fd9cb
+--- /dev/null
++++ b/package/skeleton/skeleton.mk
+@@ -0,0 +1,158 @@
++################################################################################
++#
++# skeleton
++#
++################################################################################
++
++# source included in buildroot
++SKELETON_SOURCE =
++
++# The skeleton can't depend on the toolchain, since all packages depends on the
++# skeleton and the toolchain is a target package, as is skeleton.
++# Hence, skeleton would depends on the toolchain and the toolchain would depend
++# on skeleton.
++SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
++
++ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
++SKELETON_PATH = $(BR2_ROOTFS_SKELETON_CUSTOM_PATH)
++else
++SKELETON_PATH = system/skeleton
++endif
++
++define SKELETON_INSTALL_TARGET_CMDS
++	rsync -a --ignore-times $(SYNC_VCS_EXCLUSIONS) \
++		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
++		$(SKELETON_PATH)/ $(TARGET_DIR)/
++	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
++		$(TARGET_DIR_WARNING_FILE)
++	ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
++	mkdir -p $(TARGET_DIR)/usr
++	ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
++endef
++
++SKELETON_TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
++SKELETON_TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
++SKELETON_TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
++SKELETON_TARGET_GENERIC_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
++SKELETON_TARGET_GENERIC_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
++SKELETON_TARGET_GENERIC_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
++SKELETON_TARGET_GENERIC_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
++SKELETON_TARGET_GENERIC_GETTY_TERM = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
++SKELETON_TARGET_GENERIC_GETTY_OPTIONS = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_OPTIONS))
++
++ifneq ($(SKELETON_TARGET_GENERIC_HOSTNAME),)
++define SYSTEM_HOSTNAME
++	mkdir -p $(TARGET_DIR)/etc
++	echo "$(SKELETON_TARGET_GENERIC_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
++	$(SED) '$$a \127.0.1.1\t$(SKELETON_TARGET_GENERIC_HOSTNAME)' \
++		-e '/^127.0.1.1/d' $(TARGET_DIR)/etc/hosts
++endef
++TARGET_FINALIZE_HOOKS += SYSTEM_HOSTNAME
++endif
++
++ifneq ($(SKELETON_TARGET_GENERIC_ISSUE),)
++define SYSTEM_ISSUE
++	mkdir -p $(TARGET_DIR)/etc
++	echo "$(SKELETON_TARGET_GENERIC_ISSUE)" > $(TARGET_DIR)/etc/issue
++endef
++TARGET_FINALIZE_HOOKS += SYSTEM_ISSUE
++endif
++
++define SET_NETWORK_LOCALHOST
++	( \
++		echo "# interface file auto-generated by buildroot"; \
++		echo ;                                               \
++		echo "auto lo";                                      \
++		echo "iface lo inet loopback";                       \
++	) > $(TARGET_DIR)/etc/network/interfaces
++endef
++
++NETWORK_DHCP_IFACE = $(call qstrip,$(BR2_SYSTEM_DHCP))
++
++ifneq ($(NETWORK_DHCP_IFACE),)
++define SET_NETWORK_DHCP
++	( \
++		echo ;                                               \
++		echo "auto $(NETWORK_DHCP_IFACE)";                   \
++		echo "iface $(NETWORK_DHCP_IFACE) inet dhcp";        \
++	) >> $(TARGET_DIR)/etc/network/interfaces
++endef
++endif
++
++define SET_NETWORK
++	mkdir -p $(TARGET_DIR)/etc/network/
++	$(SET_NETWORK_LOCALHOST)
++	$(SET_NETWORK_DHCP)
++endef
++
++TARGET_FINALIZE_HOOKS += SET_NETWORK
++
++# The TARGET_FINALIZE_HOOKS must be sourced only if the users choose to use the
++# default skeleton.
++ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
++
++ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
++ifeq ($(SKELETON_TARGET_GENERIC_ROOT_PASSWD),)
++SYSTEM_ROOT_PASSWORD =
++else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)),)
++SYSTEM_ROOT_PASSWORD = $(SKELETON_TARGET_GENERIC_ROOT_PASSWD)
++else
++SKELETON_DEPENDENCIES += host-mkpasswd
++# This variable will only be evaluated in the finalize stage, so we can
++# be sure that host-mkpasswd will have already been built by that time.
++SYSTEM_ROOT_PASSWORD = $(shell $(MKPASSWD) -m "$(SKELETON_TARGET_GENERIC_PASSWD_METHOD)" "$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)")
++endif
++else # !BR2_TARGET_ENABLE_ROOT_LOGIN
++SYSTEM_ROOT_PASSWORD = *
++endif
++
++define SKELETON_SYSTEM_SET_ROOT_PASSWD
++	$(SED) 's,^root:[^:]*:,root:$(SYSTEM_ROOT_PASSWORD):,' $(TARGET_DIR)/etc/shadow
++endef
++TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_SET_ROOT_PASSWD
++
++ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
++define SKELETON_SYSTEM_BIN_SH
++	rm -f $(TARGET_DIR)/bin/sh
++endef
++else
++define SKELETON_SYSTEM_BIN_SH
++	ln -sf $(SKELETON_TARGET_GENERIC_BIN_SH) $(TARGET_DIR)/bin/sh
++endef
++endif
++TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_BIN_SH
++
++ifeq ($(BR2_SKELETON_TARGET_GENERIC_GETTY),y)
++ifeq ($(BR2_PACKAGE_SYSVINIT),y)
++# In sysvinit inittab, the "id" must not be longer than 4 bytes, so we
++# skip the "tty" part and keep only the remaining.
++define SKELETON_SYSTEM_GETTY
++	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(SKELETON_TARGET_GENERIC_GETTY_PORT) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_OPTIONS) $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
++		$(TARGET_DIR)/etc/inittab
++endef
++else
++# Add getty to busybox inittab
++define SKELETON_SYSTEM_GETTY
++	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(SKELETON_TARGET_GENERIC_GETTY_PORT)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_OPTIONS) $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
++		$(TARGET_DIR)/etc/inittab
++endef
++endif
++TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_GETTY
++endif
++
++ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
++# Find commented line, if any, and remove leading '#'s
++define SKELETON_SYSTEM_REMOUNT_RW
++	$(SED) '/^#.*-o remount,rw \/$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
++endef
++else
++# Find uncommented line, if any, and add a leading '#'
++define SKELETON_SYSTEM_REMOUNT_RW
++	$(SED) '/^[^#].*-o remount,rw \/$$/s~^~#~' $(TARGET_DIR)/etc/inittab
++endef
++endif
++TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_REMOUNT_RW
++
++endif # BR2_ROOTFS_SKELETON_DEFAULT
++
++$(eval $(generic-package))
+diff --git a/system/Config.in b/system/Config.in
+index fad829d..ab1d510 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -158,11 +158,13 @@ choice
+ 
+ config BR2_ROOTFS_SKELETON_DEFAULT
+ 	bool "default target skeleton"
++	select BR2_PACKAGE_SKELETON
+ 	help
+ 	  Use default target skeleton
+ 
+ config BR2_ROOTFS_SKELETON_CUSTOM
+ 	bool "custom target skeleton"
++	select BR2_PACKAGE_SKELETON
+ 	help
+ 	  Use custom target skeleton.
+ 
+diff --git a/system/system.mk b/system/system.mk
+deleted file mode 100644
+index fd94e03..0000000
+--- a/system/system.mk
++++ /dev/null
+@@ -1,122 +0,0 @@
+-TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+-TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
+-TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
+-TARGET_GENERIC_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
+-TARGET_GENERIC_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
+-TARGET_GENERIC_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
+-TARGET_GENERIC_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
+-TARGET_GENERIC_GETTY_TERM = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
+-TARGET_GENERIC_GETTY_OPTIONS = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_OPTIONS))
+-
+-ifneq ($(TARGET_GENERIC_HOSTNAME),)
+-define SYSTEM_HOSTNAME
+-	mkdir -p $(TARGET_DIR)/etc
+-	echo "$(TARGET_GENERIC_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
+-	$(SED) '$$a \127.0.1.1\t$(TARGET_GENERIC_HOSTNAME)' \
+-		-e '/^127.0.1.1/d' $(TARGET_DIR)/etc/hosts
+-endef
+-TARGET_FINALIZE_HOOKS += SYSTEM_HOSTNAME
+-endif
+-
+-ifneq ($(TARGET_GENERIC_ISSUE),)
+-define SYSTEM_ISSUE
+-	mkdir -p $(TARGET_DIR)/etc
+-	echo "$(TARGET_GENERIC_ISSUE)" > $(TARGET_DIR)/etc/issue
+-endef
+-TARGET_FINALIZE_HOOKS += SYSTEM_ISSUE
+-endif
+-
+-define SET_NETWORK_LOCALHOST
+-	( \
+-		echo "# interface file auto-generated by buildroot"; \
+-		echo ;                                               \
+-		echo "auto lo";                                      \
+-		echo "iface lo inet loopback";                       \
+-	) > $(TARGET_DIR)/etc/network/interfaces
+-endef
+-
+-NETWORK_DHCP_IFACE = $(call qstrip,$(BR2_SYSTEM_DHCP))
+-
+-ifneq ($(NETWORK_DHCP_IFACE),)
+-define SET_NETWORK_DHCP
+-	( \
+-		echo ;                                               \
+-		echo "auto $(NETWORK_DHCP_IFACE)";                   \
+-		echo "iface $(NETWORK_DHCP_IFACE) inet dhcp";        \
+-	) >> $(TARGET_DIR)/etc/network/interfaces
+-endef
+-endif
+-
+-define SET_NETWORK
+-	mkdir -p $(TARGET_DIR)/etc/network/
+-	$(SET_NETWORK_LOCALHOST)
+-	$(SET_NETWORK_DHCP)
+-endef
+-
+-TARGET_FINALIZE_HOOKS += SET_NETWORK
+-
+-ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+-
+-ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
+-ifeq ($(TARGET_GENERIC_ROOT_PASSWD),)
+-SYSTEM_ROOT_PASSWORD =
+-else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(TARGET_GENERIC_ROOT_PASSWD)),)
+-SYSTEM_ROOT_PASSWORD = $(TARGET_GENERIC_ROOT_PASSWD)
+-else
+-PACKAGES += host-mkpasswd
+-# This variable will only be evaluated in the finalize stage, so we can
+-# be sure that host-mkpasswd will have already been built by that time.
+-SYSTEM_ROOT_PASSWORD = $(shell $(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)")
+-endif
+-else # !BR2_TARGET_ENABLE_ROOT_LOGIN
+-SYSTEM_ROOT_PASSWORD = *
+-endif
+-
+-define SYSTEM_SET_ROOT_PASSWD
+-	$(SED) 's,^root:[^:]*:,root:$(SYSTEM_ROOT_PASSWORD):,' $(TARGET_DIR)/etc/shadow
+-endef
+-TARGET_FINALIZE_HOOKS += SYSTEM_SET_ROOT_PASSWD
+-
+-ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
+-define SYSTEM_BIN_SH
+-	rm -f $(TARGET_DIR)/bin/sh
+-endef
+-else
+-define SYSTEM_BIN_SH
+-	ln -sf $(TARGET_GENERIC_BIN_SH) $(TARGET_DIR)/bin/sh
+-endef
+-endif
+-TARGET_FINALIZE_HOOKS += SYSTEM_BIN_SH
+-
+-ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+-ifeq ($(BR2_PACKAGE_SYSVINIT),y)
+-# In sysvinit inittab, the "id" must not be longer than 4 bytes, so we
+-# skip the "tty" part and keep only the remaining.
+-define SYSTEM_GETTY
+-	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY_PORT) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_OPTIONS) $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
+-		$(TARGET_DIR)/etc/inittab
+-endef
+-else
+-# Add getty to busybox inittab
+-define SYSTEM_GETTY
+-	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY_PORT)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_OPTIONS) $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
+-		$(TARGET_DIR)/etc/inittab
+-endef
+-endif
+-TARGET_FINALIZE_HOOKS += SYSTEM_GETTY
+-endif
+-
+-ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
+-# Find commented line, if any, and remove leading '#'s
+-define SYSTEM_REMOUNT_RW
+-	$(SED) '/^#.*-o remount,rw \/$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
+-endef
+-else
+-# Find uncommented line, if any, and add a leading '#'
+-define SYSTEM_REMOUNT_RW
+-	$(SED) '/^[^#].*-o remount,rw \/$$/s~^~#~' $(TARGET_DIR)/etc/inittab
+-endef
+-endif
+-TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_RW
+-
+-endif # BR2_ROOTFS_SKELETON_DEFAULT
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.4
