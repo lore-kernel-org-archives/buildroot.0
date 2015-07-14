@@ -1,49 +1,55 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 14 Jul 2015 13:31:13 +0200
-Subject: [Buildroot] [PATCH v4 0/5] Linux kernel specific infrastructure
-Message-ID: <1436873478-13533-1-git-send-email-romain.naour@openwide.fr>
+Date: Tue, 14 Jul 2015 13:31:17 +0200
+Subject: [Buildroot] [PATCH v4 4/5] linux/perf: use correct definition of
+	ARCH on x86_64
+In-Reply-To: <1436873478-13533-1-git-send-email-romain.naour@openwide.fr>
+References: <1436873478-13533-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1436873478-13533-5-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patches series introduces a new infrastructure to build Linux tools
-available in the kernel tree.
+This patch is based on the patch sent by Steven Noonan [1] and
+reworked to use the newly introduced perf linux tool.
 
-- The first patch add the Linux tools core infra.
-- Add a new Linux tool: cpupower.
-- Migrate the perf package to the new Linux tool infra.
-- Fix the build for x86_64 kernels.
-- Add the documentation about Linux tool infra and Linux extensions.
+LINUX_MAKE_FLAGS defines ARCH=$(KERNEL_ARCH), and KERNEL_ARCH is x86_64 on
+a 64-bit x86 kernel build. The perf Makefiles expect that the ARCH will be
+"x86" on both 32-bit x86 and 64-bit x86.
 
-Thanks Yann and Arnout for your help and review.
+I didn't experience issues with the Linux 3.14.x version of perf, but this
+issue cropped up once I started building 3.19.x.
 
-Best regards,
-Romain Naour
+[1] http://lists.busybox.net/pipermail/buildroot/2015-March/122525.html
 
-Romain Naour (5):
-  linux: add linux-tools infra
-  linux-tools: add cpupower
-  package/perf: migrate perf to use the new linux-tools infrastructure
-  linux/perf: use correct definition of ARCH on x86_64
-  docs/manual: add documentation for linux-ext and linux-tools.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Cc: Steven Noonan <steven@uplinklabs.net>
+---
+v4: new patch
+---
+ linux/linux-tool-perf.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- Config.in.legacy                                   |   7 +
- docs/manual/adding-packages-kernel-module.txt      |   1 +
- .../adding-packages-linux-kernel-spec-infra.txt    | 141 +++++++++++++++++++++
- docs/manual/adding-packages.txt                    |   2 +
- linux/Config.in                                    |   3 +
- package/perf/Config.in => linux/Config.tools.in    |  18 ++-
- linux/linux-tool-cpupower.mk                       |  39 ++++++
- package/perf/perf.mk => linux/linux-tool-perf.mk   |  31 +++--
- linux/linux.mk                                     |  24 ++++
- package/Config.in                                  |   1 -
- 10 files changed, 248 insertions(+), 19 deletions(-)
- create mode 100644 docs/manual/adding-packages-linux-kernel-spec-infra.txt
- rename package/perf/Config.in => linux/Config.tools.in (63%)
- create mode 100644 linux/linux-tool-cpupower.mk
- rename package/perf/perf.mk => linux/linux-tool-perf.mk (71%)
-
+diff --git a/linux/linux-tool-perf.mk b/linux/linux-tool-perf.mk
+index 463262c..b0ba00a 100644
+--- a/linux/linux-tool-perf.mk
++++ b/linux/linux-tool-perf.mk
+@@ -8,8 +8,15 @@ LINUX_TOOLS += perf
+ 
+ PERF_DEPENDENCIES = host-flex host-bison
+ 
++ifeq ($(KERNEL_ARCH),x86_64)
++PERF_ARCH=x86
++else
++PERF_ARCH=$(KERNEL_ARCH)
++endif
++
+ PERF_MAKE_FLAGS = \
+ 	$(LINUX_MAKE_FLAGS) \
++	ARCH=$(PERF_ARCH) \
+ 	NO_LIBAUDIT=1 \
+ 	NO_NEWT=1 \
+ 	NO_GTK2=1 \
 -- 
 2.4.3
