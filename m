@@ -1,89 +1,209 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 14 Jul 2015 19:35:12 +0200
-Subject: [Buildroot] [PATCH v5 5/8] linux: add linux-tools infra
+Date: Tue, 14 Jul 2015 19:35:15 +0200
+Subject: [Buildroot] [PATCH v5 8/8] docs/manual: add documentation for
+	linux-ext and linux-tools.
 In-Reply-To: <1436895315-15554-1-git-send-email-romain.naour@openwide.fr>
 References: <1436895315-15554-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1436895315-15554-6-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1436895315-15554-9-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit add an infrastructure to build linux kernel
-tools available in the kernel sources.
-
-Currently, the only linux kernel tool packaged in Buildroot
-is perf and it's packaged as a separate generic package.
-This is a problem for licence information raised in this
-thread [1].
-
-Since these tools require to build a Linux kernel, we can
-use some hooks in linux package like we did for linux
-extensions [2] and remove the perf package.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2015-May/128783.html
-[2] http://lists.busybox.net/pipermail/buildroot/2015-March/121835.html
-
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v5: no change
+v5: manual:
+    rename linux specific infra title.
+    move the chapiter higher with other infra.
+    add a comment about what should be done by the
+    Linux extension package.
 v4: no change
-v3: unconditionally set LINUX_INSTALL_STAGING to YES
-v2: remove LINUX_TOOL prefix
+v3: complete the linux kernel extention manual about the
+    moment where are applied the PREPARE_KERNEL.
+v2: new patch
 ---
- linux/linux.mk | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ docs/manual/adding-packages-kernel-module.txt      |   1 +
+ .../adding-packages-linux-kernel-spec-infra.txt    | 143 +++++++++++++++++++++
+ docs/manual/adding-packages.txt                    |   2 +
+ 3 files changed, 146 insertions(+)
+ create mode 100644 docs/manual/adding-packages-linux-kernel-spec-infra.txt
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 8c535f3..4c4b59a 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -313,6 +313,8 @@ define LINUX_INSTALL_TARGET_CMDS
- 	$(LINUX_INSTALL_HOST_TOOLS)
- endef
+diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
+index 0a5ec5b..ffeeef5 100644
+--- a/docs/manual/adding-packages-kernel-module.txt
++++ b/docs/manual/adding-packages-kernel-module.txt
+@@ -128,6 +128,7 @@ configure the build of the kernel module:
+ * +FOO_MODULE_MAKE_OPTS+ may be set to contain extra variable definitions
+   to pass to the Linux buildsystem.
  
-+# Include all our externsions and tools definitions.
-+#
- # Note: our package infrastructure uses the full-path of the last-scanned
- # Makefile to determine what package we're currently defining, using the
- # last directory component in the path. As such, including other Makefile,
-@@ -322,6 +324,7 @@ endef
- # the current Makefile, we are OK. But this is a hard requirement: files
- # included here *must* be in the same directory!
- include $(sort $(wildcard linux/linux-ext-*.mk))
-+include $(sort $(wildcard linux/linux-tool-*.mk))
++[[kernel-variables]]
+ You may also reference (but you may *not* set!) those variables:
  
- LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
- 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
-@@ -330,6 +333,27 @@ LINUX_PRE_PATCH_HOOKS += $(foreach ext,$(LINUX_EXTENSIONS),\
- 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),\
- 		$(call UPPERCASE,$(ext))_PREPARE_KERNEL))
+  * +LINUX_DIR+ contains the path to where the Linux kernel has been
+diff --git a/docs/manual/adding-packages-linux-kernel-spec-infra.txt b/docs/manual/adding-packages-linux-kernel-spec-infra.txt
+new file mode 100644
+index 0000000..72eebfa
+--- /dev/null
++++ b/docs/manual/adding-packages-linux-kernel-spec-infra.txt
+@@ -0,0 +1,143 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
++
++[[linux-kernel-specific-infra]]
++=== Infrastructure specific to the Linux kernel package
++
++The Linux kernel package can use some specific infrastructure based on package
++hooks for building Linux kernel tools or/and adding Linux kernel extensions.
++
++[[linux-kernel-tools]]
++==== linux-kernel-tools
++
++Buildroot offers a helper infrastructure to build some tools available inside
++the Linux kernel sources. Those tools always require a kernel to be built by
++Buildroot, so it's not easy to package them as usual packages. There is a
++simplified packaging based on generic package which builds each of those tools
++right after the kernel.
++
++Let's look at an example of how to add a new Linux tool. For a new Linux tool
++named +foo+, create a new menu entry in the existing +linux/Config.tools.in+.
++This file will contain the option descriptions related to each kernel tool
++that will be used and displayed in the configuration tool. It would basically
++look like:
++
++------------------------------
++01: config BR2_LINUX_KERNEL_TOOL_FOO
++02: 	bool "foo"
++03: 	help
++04: 	  This is a comment that explains what foo kernel tool is.
++05:
++06: 	  http://foosoftware.org/foo/
++------------------------------
++
++The name of the option starts with the prefix +BR2_LINUX_KERNEL_TOOL_+,
++followed by the uppercase name of the tool (like is done for packages).
++
++Then for each linux tool, add a new +.mk+ file named +linux/linux-tool-foo.mk+.
++It would basically look like:
++
++------------------------------
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06:
++07: LINUX_TOOLS += foo
++08:
++09: FOO_DEPENDENCIES = libbbb
++10:
++11: define FOO_BUILD_CMDS
++12:	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools foo
++13: endef
++14:
++15: define FOO_INSTALL_STAGING_CMDS
++16:	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
++17:		DESTDIR=$(STAGING_DIR) \
++18:		foo_install
++19: endef
++20:
++21: define FOO_INSTALL_TARGET_CMDS
++22:	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
++23:		DESTDIR=$(@D) \
++24:		foo_install
++25: endef
++--------------------------------
++
++On line 7, we register the Linux tool +foo+ to the list of available
++Linux tools.
++
++On line 9, we specify the list of dependencies this tool relies on. These
++dependencies are added to the Linux package dependencies list only when the
+++foo+ tool is selected.
++
++The rest of the Makefile, lines 11-25 defines what should be done at the
++different steps of the Linux tool like for a
++xref:generic-package-tutorial[+generic package+]. They will actually be
++used only when the +foo+ tool is selected. The only supported commands are
+++_BUILD_CMDS+, +_INSTALL_STAGING_CMDS+ and +_INSTALL_TARGET_CMDS+.
++
++.Note
++One *must not* call +$(eval $(generic-package))+ or any other
++package infrastructure ! Linux tools are not packages by themselves,
++they are part of the linux package.
++
++[[linux-kernel-ext]]
++==== linux-kernel-extensions
++
++Some packages provide new features that require the Linux kernel tree to
++be modified. This can be in the form of patches to be applied on the
++kernel tree, or in the form of new files to be added to the tree. The
++Buildroot's Linux kernel extensions infrastructure provides a simple
++solution to automatically do this, just after the kernel sources are
++extracted and before the kernel patches are applied.
++
++Let's look at an example on how to add a new Linux extension +foo+.
++
++First, create the package +foo+ that provides the extension: this package
++is a standard package; see the previous chapters on how to create such a
++package. This package is in charge to download the sources archive, check
++the hash, define the licence informations and build user space tools if
++any.
++
++Then create the 'Linux extension' proper: create a new menu entry in the
++existing +linux/Config.ext.in+. This file contains the option descriptions
++related to each kernel extension that will be used and displayed in the
++configuration tool. It would basically look like:
++
++------------------------------
++01: config BR2_LINUX_KERNEL_EXT_FOO
++02: 	bool "foo"
++03: 	help
++04: 	  This is a comment that explains what foo kernel extension is.
++05:
++06: 	  http://foosoftware.org/foo/
++------------------------------
++
++Then for each linux extension, add a new +.mk+ file named
+++linux/linux-ext-foo.mk+. It should basically contain:
++
++------------------------------
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06:
++07: LINUX_EXTENSIONS += foo
++08:
++09: define FOO_PREPARE_KERNEL
++10:		$(FOO_DIR)/prepare-kernel-tree.sh --linux-dir=$(@D)
++11: endef
++--------------------------------
++
++On line 7, we add the Linux extension +foo+ to the list of available
++Linux extensions.
++
++On line 9-11, we define what should be done by the extension to modify
++the Linux kernel tree; this is specific to the linux extension and can
++use the variables defined by the +foo+ package, like: +$(FOO_DIR)+ or
+++$(FOO_VERSION)+... as well as all the Linux variables, like:
+++$(LINUX_VERSION)+ or +$(LINUX_VERSION_PROBED)+, +$(KERNEL_ARCH)+...
++See the xref:kernel-variables[definition of those kernel variables].
+\ No newline at end of file
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index 721fe39..76f90c9 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -33,6 +33,8 @@ include::adding-packages-kernel-module.txt[]
  
-+# Install Linux kernel tools in staging directory since some tools
-+# may install shared libraries and headers (e.g. cpupower). The
-+# kernel image is NOT installed in staging directory.
-+LINUX_INSTALL_STAGING = YES
-+
-+LINUX_DEPENDENCIES += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-+		$($(call UPPERCASE,$(tool))_DEPENDENCIES)))
-+
-+LINUX_POST_BUILD_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-+		$(call UPPERCASE,$(tool))_BUILD_CMDS))
-+
-+LINUX_POST_INSTALL_STAGING_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-+		$(call UPPERCASE,$(tool))_INSTALL_STAGING_CMDS))
-+
-+LINUX_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-+		$(call UPPERCASE,$(tool))_INSTALL_TARGET_CMDS))
-+
- # Checks to give errors that the user can understand
- ifeq ($(BR_BUILDING),y)
+ include::adding-packages-asciidoc.txt[]
  
++include::adding-packages-linux-kernel-spec-infra.txt[]
++
+ include::adding-packages-hooks.txt[]
+ 
+ include::adding-packages-gettext.txt[]
 -- 
 2.4.3
