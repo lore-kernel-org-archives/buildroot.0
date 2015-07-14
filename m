@@ -1,61 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 11:57:38 +0200
-Subject: [Buildroot] [PATCH 20/38] proftpd: systemd support
-In-Reply-To: <de424ff6bb3228307c64e35bcafab21db1b75526.1432332802.git.alex.suykov@gmail.com>
-References: <cover.1432332802.git.alex.suykov@gmail.com>
- <de424ff6bb3228307c64e35bcafab21db1b75526.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <20150714115738.731636f6@free-electrons.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 14 Jul 2015 11:59:04 +0200
+Subject: [Buildroot] [PATCH] package/mono-gtksharp3: new package
+In-Reply-To: <20150714115218.25acce3f@free-electrons.com>
+References: <1425562382-9625-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20150714115218.25acce3f@free-electrons.com>
+Message-ID: <CA+TH9VmgVKWP+ysNkuXTjgg3EsNnukQnE0VRg3zQNgm7YAbVog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+Dear Thomas Petazzoni,
 
-On Sat, 23 May 2015 13:06:15 +0300, Alex Suykov wrote:
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/proftpd/proftpd.mk      |  8 ++++++++
->  package/proftpd/proftpd.service | 10 ++++++++++
->  2 files changed, 18 insertions(+)
->  create mode 100644 package/proftpd/proftpd.service
-> 
-> diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-> index 023b4dd..81a8a69 100644
-> --- a/package/proftpd/proftpd.mk
-> +++ b/package/proftpd/proftpd.mk
-> @@ -55,4 +55,12 @@ define PROFTPD_INSTALL_INIT_SYSV
->  	$(INSTALL) -D -m 0755 package/proftpd/S50proftpd $(TARGET_DIR)/etc/init.d/S50proftpd
->  endef
->  
-> +define PROFTPD_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -D -m 644 package/proftpd/proftpd.service \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/proftpd.service
-> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +	ln -sf /usr/lib/systemd/system/proftpd.service \
 
-This should have been a relative path.
+2015-07-14 11:52 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Angelo Compagnucci,
+>
+> On Thu,  5 Mar 2015 14:33:02 +0100, Angelo Compagnucci wrote:
+>> This patch adds gtksharp3 package for mono.
+>>
+>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>
+> The patch looks good, but it unfortunately doesn't build here:
+>
+> checking for gmcs... no
+> configure: error: No C# compiler found. You need to install either mono (>=2.8) or .Net
+> package/pkg-generic.mk:146: recipe for target '/home/thomas/buildroot/output/build/mono-gtksharp3-2.99.3/.stamp_configured' failed
+> make: *** [/home/thomas/buildroot/output/build/mono-gtksharp3-2.99.3/.stamp_configured] Error 1
 
-> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/proftpd.service
-> +endef
-> +
->  $(eval $(autotools-package))
-> diff --git a/package/proftpd/proftpd.service b/package/proftpd/proftpd.service
-> new file mode 100644
-> index 0000000..f1777a5
-> --- /dev/null
-> +++ b/package/proftpd/proftpd.service
-> @@ -0,0 +1,10 @@
-> +[Unit]
-> +Description=FTR server
+Several mono version has changed in the meantime, so I think this
+patch should be updated. I'll look at this asap.
 
-And 'FTP server'.
+Sincerely, Angelo
 
-Applied with those two changes, thanks a lot!
+>
+> I'm building the following defconfig:
+>
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.05-496-g85945aa.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_PACKAGE_XORG7=y
+> BR2_PACKAGE_MONO=y
+> BR2_PACKAGE_MONO_GTKSHARP3=y
+> BR2_PACKAGE_LIBGTK3=y
+>
+> Can you have a look? In the mean time, I'll mark the patch as Changes
+> Requested in patchwork, so can you resend a new version after fixing
+> this problem? Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-Thomas
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Profile: http://it.linkedin.com/in/compagnucciangelo
