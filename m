@@ -1,50 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 12:20:49 +0200
-Subject: [Buildroot] [git commit] package: fix fallout from checking kconfig
-	config files
-Message-ID: <20150714102059.236518181F@busybox.osuosl.org>
+Date: Tue, 14 Jul 2015 12:23:29 +0200
+Subject: [Buildroot] [PATCH v2 1/1] gmock: new package
+In-Reply-To: <CAHXCMML+4JgBr1msNmu8Z4Ja0FjmR1TficJq4d5nfnPXaXTg6A@mail.gmail.com>
+References: <1425304883-4332-2-git-send-email-casantos@datacom.ind.br>
+ <1431713119-2821-1-git-send-email-casantos@datacom.ind.br>
+ <CAHXCMML+4JgBr1msNmu8Z4Ja0FjmR1TficJq4d5nfnPXaXTg6A@mail.gmail.com>
+Message-ID: <20150714122329.2b58433d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cdcd83f31ded1dbf6d13d16b4aafdf594b964d94
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Samuel, Carlos,
 
-Those checks should only be done when the package is actually enabled.
+On Tue, 14 Jul 2015 12:09:34 +0200, Samuel Martin wrote:
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/busybox/busybox.mk |    2 +-
- package/uclibc/uclibc.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> > +################################################################################
+> > +#
+> > +# gmock
+> > +#
+> > +################################################################################
+> > +
+> > +GMOCK_VERSION = 1.7.0
+> According to [1], gmock version must be the same as the gtest's one,
+> so maybe we should do:
+> GMOCK_VERSION = $(GTEST_VERSION)
+> (but, taking care of the *.mk inclusion to get GTEST_VERSION defined
+> before including gmock.mk).
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index d8c8bad..6b2abca 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -225,7 +225,7 @@ endef
- 
- # Checks to give errors that the user can understand
- # Must be before we call to kconfig-package
--ifeq ($(BR_BUILDING),y)
-+ifeq ($(BR2_PACKAGE_BUSYBOX)$(BR_BUILDING),yy)
- ifeq ($(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG)),)
- $(error No BusyBox configuration file specified, check your BR2_PACKAGE_BUSYBOX_CONFIG setting)
- endif
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 3aceae3..9dfafad 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -476,7 +476,7 @@ endef
- 
- # Checks to give errors that the user can understand
- # Must be before we call to kconfig-package
--ifeq ($(BR_BUILDING),y)
-+ifeq ($(BR2_PACKAGE_UCLIBC)$(BR_BUILDING),yy)
- ifeq ($(call qstrip,$(BR2_UCLIBC_CONFIG)),)
- $(error No uClibc configuration file specified, check your BR2_UCLIBC_CONFIG setting)
- endif
+I don't think this is a good idea. gmock is included *before* gtest,
+and there's not much that can be done about this.
+
+So instead, I would recommend to just to:
+
+# Make sure this remains the same version as the gtest one
+GMOCK_VERSION = 1.7.0
+
+and then in gtest.mk:
+
+# Make sure this remains the same version as the gmock one
+GTEST_VERSION = 1.7.0
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
