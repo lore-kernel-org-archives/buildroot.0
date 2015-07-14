@@ -1,37 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 17:40:15 +0200
-Subject: [Buildroot] [PATCH 1/1] Makefile: create $(BUILD_DIR) before
- attempting to touch .root
-In-Reply-To: <1436867048-6333-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1436867048-6333-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20150714174015.33211eb3@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 14 Jul 2015 18:42:30 +0300
+Subject: [Buildroot] [PATCH v4 2/3] toolchain-external: add OSELAS
+ 2014.12.0 Cortex-M3 toolchain
+In-Reply-To: <1436886664-3206-3-git-send-email-guido@vanguardiasur.com.ar>
+References: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1436886664-3206-1-git-send-email-guido@vanguardiasur.com.ar>
+ <1436886664-3206-3-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <20150714154230.GC2332@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Hi Guido,
 
-On Tue, 14 Jul 2015 11:44:08 +0200, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> The target $(BUILD_DIR)/.root does not have a direct dependency on
-> $(BUILD_DIR), meaning that cases could exist where the target is executed
-> without $(BUILD_DIR) being present.
-> Instead of hoping on a specific order, and instead of adding new make
-> dependencies, just make sure the directory is created.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, Jul 14, 2015 at 12:11:03PM -0300, Guido Mart?nez wrote:
+> +config BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3_201412
+> +	bool "OSELAS ARM Cortex-M3 2014.12"
+> +	depends on BR2_cortex_m3
+> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
+> +	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> +	select BR2_LARGEFILE
+> +	select BR2_INET_IPV6
 
-Marked as superseded, because the skeleton package from Maxime makes
-this no longer needed. Thanks!
+These two symbols were removed recently. All toolchains should now support LFS 
+and IPv6.
 
-Thomas
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
