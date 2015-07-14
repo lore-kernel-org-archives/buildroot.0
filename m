@@ -1,160 +1,184 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 14 Jul 2015 20:27:45 +0200
-Subject: [Buildroot] [PATCH] package: Introduce $(2)_INFRA_EXTRA_DEPENDENCIES
-Message-ID: <1436898465-11711-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 14 Jul 2015 11:42:00 -0700
+Subject: [Buildroot] [PATCH 1/3] golang: new package
+Message-ID: <1436899322-19731-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of repeating the filter-out function to remove the host-package
-that we don't want as dependencies in each infra, handle it it
-pkg-generic through a generic variable, which is specified by each
-infra.
+This patch introduces golang as a host and target package, allowing for cross-platform go builds.
 
-The $(2)_INFRA_EXTRA_DEPENDENCIES contains the specific host package
-that we want to filter from the package's dependencies.
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/pkg-autotools.mk | 12 ++++--------
- package/pkg-cmake.mk     |  7 -------
- package/pkg-generic.mk   |  3 ++-
- package/pkg-python.mk    | 17 +++--------------
- package/pkg-rebar.mk     | 16 +++++++---------
- package/pkg-virtual.mk   |  7 -------
- 6 files changed, 16 insertions(+), 46 deletions(-)
+ package/Config.in                                  |  1 +
+ package/Config.in.host                             |  1 +
+ package/golang/0001-add-no-march-option-gccp.patch | 19 ++++++++++
+ .../0002-remove-unnecessary-march-ld-flag.patch    | 29 ++++++++++++++++
+ package/golang/Config.in                           |  6 ++++
+ package/golang/Config.in.host                      |  6 ++++
+ package/golang/golang.mk                           | 40 ++++++++++++++++++++++
+ 7 files changed, 102 insertions(+)
+ create mode 100644 package/golang/0001-add-no-march-option-gccp.patch
+ create mode 100644 package/golang/0002-remove-unnecessary-march-ld-flag.patch
+ create mode 100644 package/golang/Config.in
+ create mode 100644 package/golang/Config.in.host
+ create mode 100644 package/golang/golang.mk
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index b630ec9..6235787 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -159,14 +159,10 @@ $(2)_INSTALL_OPTS                ?= install
- $(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
- $(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
- 
--# This must be repeated from inner-generic-package, otherwise we get an empty
--# _DEPENDENCIES if _AUTORECONF is YES.  Also filter the result of _AUTORECONF
--# and _GETTEXTIZE away from the non-host rule
--ifeq ($(4),host)
--$(2)_DEPENDENCIES ?= $$(filter-out host-automake host-autoconf host-libtool \
--				host-gettext host-skeleton host-toolchain $(1),\
--    $$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
--endif
-+# Specifiy the packages that needs to be excluded and are specific to this
-+# package infrastructure.
-+$(2)_INFRA_EXTRA_DEPENDENCIES = host-automake host-autoconf host-libtool \
-+	host-gettext
- 
- #
- # Configure step. Only define it if not already defined by the package
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 574eccc..f2e66bc 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -143,13 +143,6 @@ endef
+diff --git a/package/Config.in b/package/Config.in
+index 5beb450..b49c94f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -455,6 +455,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-p1-zlib/Config.in"
+ endmenu
  endif
- endif
- 
--# This must be repeated from inner-generic-package, otherwise we only get
--# host-cmake in _DEPENDENCIES because of the following line
--ifeq ($(4),host)
--$(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
--	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
--endif
--
- $(2)_DEPENDENCIES += host-cmake
- 
- #
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index d1d6711..2756593 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -405,7 +405,8 @@ $(2)_REDISTRIBUTE		?= YES
- $(2)_ADD_TOOLCHAIN_DEPENDENCY	?= YES
- 
- ifeq ($(4),host)
--$(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
-+$(2)_DEPENDENCIES ?= $$(filter-out \
-+	host-skeleton host-toolchain $$($(2)_INFRA_EXTRA_DEPENDENCIES) $(1),\
- 	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
- endif
- ifeq ($(4),target)
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index b7a702d..6e3776a 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -138,20 +138,9 @@ else
- $$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils' or 'setuptools'")
- endif
- 
--# The below statement intends to calculate the dependencies of host
--# packages by derivating them from the dependencies of the
--# corresponding target package, after adding the 'host-' prefix in
--# front of the dependencies.
--#
--# However it must be repeated from inner-generic-package, as we need
--# to exclude the python, host-python and host-python-setuptools
--# packages, which are added below in the list of dependencies
--# depending on the package characteristics, and shouldn't be derived
--# automatically from the dependencies of the corresponding target
--# package.
--ifeq ($(4),host)
--$(2)_DEPENDENCIES ?= $$(filter-out host-python host-python3 host-python-setuptools host-skeleton host-toolchain $(1),$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
--endif
-+# Specifiy the packages that needs to be excluded and are specific to this
-+# package infrastructure.
-+$(2)_INFRA_EXTRA_DEPENDENCIES = host-python host-python3 host-python-setuptools
- 
- # Target packages need both the python interpreter on the target (for
- # runtime) and the python interpreter on the host (for
-diff --git a/package/pkg-rebar.mk b/package/pkg-rebar.mk
-index c727489..ef38f26 100644
---- a/package/pkg-rebar.mk
-+++ b/package/pkg-rebar.mk
-@@ -187,17 +187,15 @@ endif
- else # !target
- 
- ifeq ($$($(2)_USE_AUTOCONF),YES)
--# This must be repeated from inner-autotools-package, otherwise we get
--# an empty _DEPENDENCIES if _AUTORECONF is YES or _USE_BUNDLED_REBAR
--# is NO.  Also filter the result of _AUTORECONF and _GETTEXTIZE away
--# from the non-host rule
--$(2)_DEPENDENCIES ?= $$(filter-out host-automake host-autoconf host-libtool \
--				host-gettext host-skeleton host-toolchain host-erlang-rebar $(1),\
--    $$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
-+# Specifiy the packages that needs to be excluded and are specific to this
-+# package infrastructure.
-+# if _AUTORECONF is YES or _USE_BUNDLED_REBAR is NO.  Also filter the result of
-+#_AUTORECONF and _GETTEXTIZE away from the non-host rule
-+$(2)_INFRA_EXTRA_DEPENDENCIES = host-automake host-autoconf host-libtool \
-+	host-gettext host-erlang-rebar
- else
- # Same deal, if _USE_BUNDLED_REBAR is NO.
--$(2)_DEPENDENCIES ?= $$(filter-out  host-skeleton host-toolchain host-erlang-rebar $(1),\
--	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
-+$(2)_INFRA_EXTRA_DEPENDENCIES = host-erlang-rebar
- endif
- 
- # Host packages need the erlang interpreter on the host
-diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-index 9c68b51..cb919b0 100644
---- a/package/pkg-virtual.mk
-+++ b/package/pkg-virtual.mk
-@@ -47,13 +47,6 @@ $(2)_SOURCE =
- # Fake a version string, so it looks nicer in the build log
- $(2)_VERSION = virtual
- 
--# This must be repeated from inner-generic-package, otherwise we get an empty
--# _DEPENDENCIES
--ifeq ($(4),host)
--$(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
--	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
--endif
--
- # Add dependency against the provider
- $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
- 
++	source "package/golang/Config.in"
+ 	source "package/guile/Config.in"
+ 	source "package/haserl/Config.in"
+ 	source "package/jamvm/Config.in"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 1e047aa..e36afee 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -11,6 +11,7 @@ menu "Host utilities"
+ 	source "package/genext2fs/Config.in.host"
+ 	source "package/genimage/Config.in.host"
+ 	source "package/genpart/Config.in.host"
++	source "package/golang/Config.in.host"
+ 	source "package/imx-usb-loader/Config.in.host"
+ 	source "package/lpc3250loader/Config.in.host"
+ 	source "package/mke2img/Config.in.host"
+diff --git a/package/golang/0001-add-no-march-option-gccp.patch b/package/golang/0001-add-no-march-option-gccp.patch
+new file mode 100644
+index 0000000..87231aa
+--- /dev/null
++++ b/package/golang/0001-add-no-march-option-gccp.patch
+@@ -0,0 +1,19 @@
++Adds an option to not add the problematic -m parameter to GCC.
++
++Signed-off-by: Christian Stewart <christian@paral.in>
++
++diff -Nau golang.orig/src/cmd/cgo/gcc.go golang/src/cmd/cgo/gcc.go
++--- golang.orig/src/cmd/cgo/gcc.go.orig	2015-07-09 15:53:55.720794139 -0700
+++++ golang/src/cmd/cgo/gcc.go	2015-07-09 17:46:43.664496374 -0700
++@@ -736,6 +736,11 @@
++ 
++ // gccMachine returns the gcc -m flag to use, either "-m32", "-m64" or "-marm".
++ func (p *Package) gccMachine() []string {
+++
+++	if os.Getenv("CGO_NO_EMULATION") == "1" {
+++		return nil
+++	}
+++
++ 	switch goarch {
++ 	case "amd64":
++ 		return []string{"-m64"}
+diff --git a/package/golang/0002-remove-unnecessary-march-ld-flag.patch b/package/golang/0002-remove-unnecessary-march-ld-flag.patch
+new file mode 100644
+index 0000000..7cc20f4
+--- /dev/null
++++ b/package/golang/0002-remove-unnecessary-march-ld-flag.patch
+@@ -0,0 +1,29 @@
++Removes defining -m parameter to LD, which is unnecessary in buildroot.
++
++Signed-off-by: Christian Stewart <christian@paral.in>
++
++diff -Nau golang.orig/src/cmd/ld/lib.c golang/src/cmd/ld/lib.c
++--- golang.orig/src/cmd/ld/lib.c.orig	2015-07-09 18:38:44.192359082 -0700
+++++ golang/src/cmd/ld/lib.c	2015-07-09 18:39:02.108358294 -0700
++@@ -589,20 +589,7 @@
++ 	if(extld == nil)
++ 		extld = "gcc";
++ 	argv[argc++] = extld;
++-	switch(thechar){
++-	case '8':
++-		argv[argc++] = "-m32";
++-		break;
++-	case '6':
++-		argv[argc++] = "-m64";
++-		break;
++-	case '5':
++-		argv[argc++] = "-marm";
++-		break;
++-	}
++-	if(!debug['s'] && !debug_s) {
++-		argv[argc++] = "-gdwarf-2"; 
++-	} else {
+++	if(debug['s'] || debug_s) {
++ 		argv[argc++] = "-s";
++ 	}
++ 	if(HEADTYPE == Hdarwin)
+diff --git a/package/golang/Config.in b/package/golang/Config.in
+new file mode 100644
+index 0000000..5f058c6
+--- /dev/null
++++ b/package/golang/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_GOLANG
++	bool "golang"
++	help
++	  Go compiler and cli tool.
++
++	  http://golang.org/
+diff --git a/package/golang/Config.in.host b/package/golang/Config.in.host
+new file mode 100644
+index 0000000..5d556bb
+--- /dev/null
++++ b/package/golang/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_GOLANG
++	bool "host golang"
++	help
++	  Go compiler for the host system.
++
++	  http://golang.org/
+diff --git a/package/golang/golang.mk b/package/golang/golang.mk
+new file mode 100644
+index 0000000..4893bcc
+--- /dev/null
++++ b/package/golang/golang.mk
+@@ -0,0 +1,40 @@
++################################################################################
++#
++# GOLANG
++#
++################################################################################
++
++GOLANG_VERSION = 883bc6ed0ea815293fe6309d66f967ea60630e87
++GOLANG_SITE = $(call github,golang,go,$(GOLANG_VERSION))
++GOLANG_LICENSE_FILES = LICENSE
++GOLANG_INSTALL_STAGING = NO
++GOLANG_INSTALL_TARGET = YES
++
++HOST_GOLANG_DEPENDENCIES =
++GOLANG_DEPENDENCIES =
++
++GOLANG = $(HOST_DIR)/usr/bin/go
++GOLANGFMT = $(HOST_DIR)/usr/bin/gofmt
++
++define GOLANG_BUILD_CMDS
++	cd $(@D)/src/ && CC_FOR_TARGET="$(TARGET_CC)" LD_FOR_TARGET="$(TARGET_LD)" GOOS=linux GOARCH=$(ARCH) GOROOT_FINAL="/usr/src/go" ./make.bash
++endef
++
++define GOLANG_INSTALL_TARGET_CMDS
++	cp $(@D)/bin/linux_$(ARCH)/* $(TARGET_DIR)/usr/bin/
++	mkdir -p $(TARGET_DIR)/usr/src/go/
++	cp -r $(@D)/* $(TARGET_DIR)/usr/src/go/
++endef
++
++define HOST_GOLANG_BUILD_CMDS
++	cd $(@D)/src/ && CC_FOR_TARGET="$(TARGET_CC)" GOOS=linux GOARCH=$(ARCH) GOROOT_FINAL=$(HOST_DIR)/usr/src/go/ bash ./make.bash
++endef
++
++define HOST_GOLANG_INSTALL_CMDS
++	cp $(@D)/bin/go $(@D)/bin/gofmt $(HOST_DIR)/usr/bin/
++	mkdir -p $(HOST_DIR)/usr/src/go/
++	cp -r $(@D)/* $(HOST_DIR)/usr/src/go/
++endef
++
++$(eval $(host-generic-package))
++$(eval $(generic-package))
 -- 
 2.1.4
