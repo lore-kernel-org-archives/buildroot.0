@@ -1,47 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 09:46:51 +0200
-Subject: [Buildroot] [git commit] core: fix download menu
-Message-ID: <20150714074707.29B3F7FD45@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 Jul 2015 09:50:57 +0200
+Subject: [Buildroot] [PATCH] core/download: don't be verbose in scp
+Message-ID: <1436860257-31021-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3318a5a798a37bd2b55feb619f8d0a90b9c7ddd2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Currently, we by default run scp with the -v option, which is highly
+verbose (as -v is intended to be a debug option for scp).
 
-Currently, when one enables the "Only allow downloads from primary"
-option, all the other mirror options are hidden (expected!) but the
-LuaRocks and CPAN mirrors (bad!).
+Remove the option altogether to get back to a normal output by default.
 
-Fix that.
-
+Reported-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ support/download/scp | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/Config.in b/Config.in
-index e10427f..8b1bd8d 100644
---- a/Config.in
-+++ b/Config.in
-@@ -218,8 +218,6 @@ config BR2_GNU_MIRROR
- 	     http://ftp.gnu.org/pub/gnu
- 	     http://mirror.aarnet.edu.au/pub/gnu
+diff --git a/support/download/scp b/support/download/scp
+index 3d6876f..f29686a 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -11,7 +11,6 @@ set -e
+ # Environment:
+ #   SCP       : the scp command to call
  
--endif
--
- config BR2_LUAROCKS_MIRROR
- 	string "LuaRocks mirror"
- 	default "http://rocks.moonscript.org"
-@@ -239,6 +237,8 @@ config BR2_CPAN_MIRROR
- 	  The list of mirrors is available at:
- 	  http://search.cpan.org/mirror
- 
-+endif
-+
- endmenu
- 
- config BR2_JLEVEL
+-verbose=-v
+ while getopts :q OPT; do
+     case "${OPT}" in
+     q)  verbose=-q;;
+-- 
+1.9.1
