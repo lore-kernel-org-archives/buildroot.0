@@ -1,32 +1,52 @@
 From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Tue, 14 Jul 2015 17:17:20 +0200
-Subject: [Buildroot] [PATCH v4 1/7] docs/manual: Fix trivial typo
+Date: Tue, 14 Jul 2015 17:14:01 +0200
+Subject: [Buildroot] [PATCH v4 3/7] boot/uboot: Add support for dtb.img
+	format
 In-Reply-To: <20150714171214.706e9e4d@pcviktorin.fit.vutbr.cz>
-Message-ID: <20150714171720.5e057e07@pcviktorin.fit.vutbr.cz>
+Message-ID: <20150714171401.117b8fec@pcviktorin.fit.vutbr.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Allow to generate u-boot-dtb.img. This is the same format
+as u-boot.img, however, it contains a built-in device-tree.
+This file is being loaded by the U-Boot SPL.
+
 Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 ---
- docs/manual/adding-packages-python.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ boot/uboot/Config.in | 3 +++
+ boot/uboot/uboot.mk  | 2 ++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
-index f81d625..588dbf8 100644
---- a/docs/manual/adding-packages-python.txt
-+++ b/docs/manual/adding-packages-python.txt
-@@ -143,7 +143,7 @@ therefore only use a few of them, or none.
- * +HOST_PYTHON_FOO_NEEDS_HOST_PYTHON+, to define the host python
-   interpreter. The usage of this variable is limited to host
-   packages. The two supported value are +python2+ and +python3+. It
--  will ensures the right host python package is available and will
-+  will ensure the right host python package is available and will
-   invoke it for the build. If some build steps are overloaded, the
-   right python interpreter must be explicitly called in the commands.
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index fa1741c..0554544 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -109,6 +109,9 @@ config BR2_TARGET_UBOOT_FORMAT_BIN
+ config BR2_TARGET_UBOOT_FORMAT_IMG
+ 	bool "u-boot.img"
  
++config BR2_TARGET_UBOOT_FORMAT_DTB_IMG
++	bool "u-boot-dtb.img"
++
+ config BR2_TARGET_UBOOT_FORMAT_IMX
+ 	bool "u-boot.imx"
+ 
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 2cfff28..e064a8e 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -47,6 +47,8 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
+ UBOOT_BIN = u-boot-nand.bin
+ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
+ UBOOT_BIN = u-boot.img
++else ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_IMG),y)
++UBOOT_BIN = u-boot-dtb.img
+ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
+ UBOOT_BIN = u-boot.imx
+ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SB),y)
 -- 
 2.4.5
 
