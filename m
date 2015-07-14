@@ -1,29 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Jul 2015 14:17:52 +0300
-Subject: [Buildroot] [PATCH] olsr: update hash source comment
-Message-ID: <28034039c3387104b8a19230eb131a043f9b96a8.1436872672.git.baruch@tkos.co.il>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Tue, 14 Jul 2015 13:28:45 +0200
+Subject: [Buildroot] [PATCH v4 2/2] graph-depends: Strip skeleton from
+	dependency
+In-Reply-To: <1436873325-694-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1436873325-694-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1436873325-694-2-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit ec9e34c9bb7c (olsr: bump version, 2015-07-14) update the hash but left
-the old source comment. Fix this.
+skeleton being a mandatory dependency, we don't want all our packages to
+have a link back to that node, the graph would be awful.
 
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/olsr/olsr.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/scripts/graph-depends | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/olsr/olsr.hash b/package/olsr/olsr.hash
-index 83c48e021de6..e14d52cd9ea2 100644
---- a/package/olsr/olsr.hash
-+++ b/package/olsr/olsr.hash
-@@ -1,2 +1,2 @@
--# From http://www.olsr.org/releases/0.6/SHA256SUM-0.6.8
-+# From http://www.olsr.org/releases/0.9/SHA256SUM-0.9.0.2
- sha256	cc464b29c7740354d815d5faa753fd27c0677d71e8eb42e78abc382996892845 olsrd-0.9.0.2.tar.bz2
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index c26e1e0..5f77038 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -271,16 +271,17 @@ def remove_transitive_deps(pkg,deps):
+             new_d.append(d[i])
+     return new_d
+ 
+-# This function removes the dependency on the 'toolchain' package
+-def remove_toolchain_deps(pkg,deps):
+-    return [p for p in deps[pkg] if not p == 'toolchain']
++# This function removes the dependency on some 'mandatory' package, like the
++# 'toolchain' package, or the 'skeleton' package
++def remove_mandatory_deps(pkg,deps):
++    return [p for p in deps[pkg] if p not in ['toolchain', 'skeleton']]
+ 
+ # This functions trims down the dependency list of all packages.
+ # It applies in sequence all the dependency-elimination methods.
+ def remove_extra_deps(deps):
+     for pkg in list(deps.keys()):
+         if not pkg == 'all':
+-            deps[pkg] = remove_toolchain_deps(pkg,deps)
++            deps[pkg] = remove_mandatory_deps(pkg,deps)
+     for pkg in list(deps.keys()):
+         if not transitive or pkg == 'all':
+             deps[pkg] = remove_transitive_deps(pkg,deps)
 -- 
 2.1.4
