@@ -1,30 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 14:01:10 +0200
-Subject: [Buildroot] [PATCH 14/38] mongoose: systemd support
-In-Reply-To: <fa462132229bb0c222bd9d3598cd0c8c9e741f8c.1432332802.git.alex.suykov@gmail.com>
-References: <cover.1432332802.git.alex.suykov@gmail.com>
- <fa462132229bb0c222bd9d3598cd0c8c9e741f8c.1432332802.git.alex.suykov@gmail.com>
-Message-ID: <20150714140110.0c800b30@free-electrons.com>
+Date: Tue, 14 Jul 2015 14:03:03 +0200
+Subject: [Buildroot] [git commit] tinyhttpd: systemd support
+Message-ID: <20150714120327.7E21F81D3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+commit: http://git.buildroot.net/buildroot/commit/?id=b7afea9500de01a9b41c32045de6ec72c209d59e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 23 May 2015 13:05:13 +0300, Alex Suykov wrote:
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/mongoose/mongoose.mk      |  8 ++++++++
->  package/mongoose/mongoose.service | 10 ++++++++++
->  2 files changed, 18 insertions(+)
->  create mode 100644 package/mongoose/mongoose.service
+[Thomas: use relative symlink.]
 
-Applied after changing to use a relative path for the symlink, thanks.
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tinyhttpd/tinyhttpd.mk      |    8 ++++++++
+ package/tinyhttpd/tinyhttpd.service |   10 ++++++++++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tinyhttpd/tinyhttpd.mk b/package/tinyhttpd/tinyhttpd.mk
+index 0934b71..194249b 100644
+--- a/package/tinyhttpd/tinyhttpd.mk
++++ b/package/tinyhttpd/tinyhttpd.mk
+@@ -24,4 +24,12 @@ define TINYHTTPD_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S85tinyhttpd
+ endef
+ 
++define TINYHTTPD_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/tinyhttpd/tinyhttpd.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/tinyhttpd.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/tinyhttpd.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/tinyhttpd.service
++endef
++
+ $(eval $(generic-package))
+diff --git a/package/tinyhttpd/tinyhttpd.service b/package/tinyhttpd/tinyhttpd.service
+new file mode 100644
+index 0000000..0ae5bac
+--- /dev/null
++++ b/package/tinyhttpd/tinyhttpd.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Tiny HTTP daemon
++After=network.target
++
++[Service]
++ExecStart=/usr/sbin/tinyhttpd
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
