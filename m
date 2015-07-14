@@ -1,33 +1,33 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Jul 2015 18:43:26 +0300
-Subject: [Buildroot] [PATCH v4 3/3] toolchain: disable internal for
- blackfin
-In-Reply-To: <1436886664-3206-4-git-send-email-guido@vanguardiasur.com.ar>
-References: <1435340002-20396-1-git-send-email-guido@vanguardiasur.com.ar>
- <1436886664-3206-1-git-send-email-guido@vanguardiasur.com.ar>
- <1436886664-3206-4-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <20150714154326.GD2332@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Jul 2015 17:43:43 +0200
+Subject: [Buildroot] [PATCH] package/qpid-proton: needs host-python2
+In-Reply-To: <20150714120325.GB2332@tarshish>
+References: <1436873894-1080-1-git-send-email-yann.morin.1998@free.fr>
+ <20150714114803.GA2332@tarshish>
+ <20150714135627.26cf899a@free-electrons.com>
+ <20150714120325.GB2332@tarshish>
+Message-ID: <20150714174343.398e8385@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Guido,
+Dear Baruch Siach,
 
-On Tue, Jul 14, 2015 at 12:11:04PM -0300, Guido Mart?nez wrote:
-> The internal toolchain won't work with Cortex-M3, mostly because of the
-> fact that some packages (notably: uclibc and glibc) fall back to regular
-> ARM instructions in some situations, and Cortex-M3 has no support for
-> those kind of instructions.
-> 
-> So, just disable it for now and rely on the external toolchain.
+On Tue, 14 Jul 2015 15:03:25 +0300, Baruch Siach wrote:
 
-Subject line does not match the patch.
+> Related to this, what do you thing about changing the host python requirement 
+> in the manual?
 
-baruch
+Yes, sounds good. Samuel is using Buildroot with both Python 2 and
+Python 3 installed on his machine, but Python 3 being the default one.
+However, I don't know if anyone has tested with a pure Python 3
+installation. But it _should_ work. If not that's a bug that we should
+fix.
 
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
