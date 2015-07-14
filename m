@@ -1,43 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 14 Jul 2015 18:30:39 -0300
-Subject: [Buildroot] [PATCH v2] Makefile: save MAKE_VERSION
-Message-ID: <1436909439-8176-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Jul 2015 23:17:25 +0200
+Subject: [Buildroot] [git commit] package/perf: use correct definition of
+	ARCH on x86_64
+Message-ID: <20150714213615.5778681D5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Save MAKE_VERSION as RUNNING_MAKE_VERSION since this is later clobbered
-by the make package.
+commit: http://git.buildroot.net/buildroot/commit/?id=1b787822fbf3cda83eb7ef28c1187af6f6247781
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It will be used by the webkitgtk24 package to check for older make
-versions which have a bug building it with parallel jobs (it hangs).
+LINUX_MAKE_FLAGS defines ARCH=$(KERNEL_ARCH), and KERNEL_ARCH is x86_64 on
+a 64-bit x86 kernel build. The perf Makefiles expect that the ARCH will be
+"x86" on both 32-bit x86 and 64-bit x86.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+I didn't experience issues with the Linux 3.14.x version of perf, but this
+issue cropped up once I started building 3.19.x.
+
+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+[Romain:
+  - fix coding style]
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/perf/perf.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 9a18853..531ac5d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -43,10 +43,13 @@ all:
- # Set and export the version string
- export BR2_VERSION := 2015.08-git
+diff --git a/package/perf/perf.mk b/package/perf/perf.mk
+index 42fbe24..2bdd555 100644
+--- a/package/perf/perf.mk
++++ b/package/perf/perf.mk
+@@ -10,8 +10,15 @@ PERF_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
  
-+# Save running make version since it's clobbered by the make package
-+RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+ PERF_DEPENDENCIES = linux host-flex host-bison
+ 
++ifeq ($(KERNEL_ARCH),x86_64)
++PERF_ARCH=x86
++else
++PERF_ARCH=$(KERNEL_ARCH)
++endif
 +
- # Check for minimal make version (note: this check will break at make 10.x)
- MIN_MAKE_VERSION = 3.81
--ifneq ($(firstword $(sort $(MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MIN_MAKE_VERSION))
--$(error You have make '$(MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
-+ifneq ($(firstword $(sort $(RUNNING_MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MIN_MAKE_VERSION))
-+$(error You have make '$(RUNNING_MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
- endif
- 
- export HOSTARCH := $(shell uname -m | \
--- 
-2.3.6
+ PERF_MAKE_FLAGS = \
+ 	$(LINUX_MAKE_FLAGS) \
++	ARCH=$(PERF_ARCH) \
+ 	NO_LIBAUDIT=1 \
+ 	NO_NEWT=1 \
+ 	NO_GTK2=1 \
