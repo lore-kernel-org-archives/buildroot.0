@@ -1,44 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 14 Jul 2015 13:05:29 -0300
-Subject: [Buildroot] [PATCH] inadyn: fix init script and default config
- file
-In-Reply-To: <20150714175909.30648ed9@free-electrons.com>
-References: <1436109171-30701-1-git-send-email-thomas.petazzoni@free-electrons.com>	<55A51BB2.4090304@zacarias.com.ar>	<20150714171916.56ef4a3f@free-electrons.com>	<55A52996.9090403@zacarias.com.ar>
- <20150714175909.30648ed9@free-electrons.com>
-Message-ID: <55A53349.6040507@zacarias.com.ar>
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Date: Tue, 14 Jul 2015 11:08:49 -0500
+Subject: [Buildroot] [PATCH v8 15/16] cpio: new package
+In-Reply-To: <CAHXCMMLSTjXxc1RRwXNCt1tjAUzQzzP7STKxP-M7UPMSymQUuQ@mail.gmail.com>
+References: <1436570882-56442-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <1436570882-56442-16-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <CAHXCMMLSTjXxc1RRwXNCt1tjAUzQzzP7STKxP-M7UPMSymQUuQ@mail.gmail.com>
+Message-ID: <CANn-YGQXaTmNJq4CxNZwvqJ60XQVqyGyr=s7Rt21gBz8nGvrjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/07/15 12:59, Thomas Petazzoni wrote:
+Samuel,
 
-> Ah, yes, I see. So maybe we should instead have:
+On Tue, Jul 14, 2015 at 10:38 AM, Samuel Martin <s.martin49@gmail.com> wrote:
+> Clayton, all,
 >
-> ENABLED="no"
->
-> in /etc/default/inadyn
->
-> and in the SXXinadyn, if ENABLED=="no", do something like:
->
-> Starting inadyn: SKIPPED
->
-> or something like that.
->
-> Thoughts?
+> On Sat, Jul 11, 2015 at 1:28 AM, Clayton Shotwell
+> <clayton.shotwell@rockwellcollins.com> wrote:
+>> Adding the cpio archive utility for the target and host. Patches have
+>> been pulled from ArchLinux and Debian to fix CVE issues and compile
+>> issues.
+> According to the url, patches are pulled from ArchLinux and Gentoo.
 
-Yes, the initscripts enable/disable logic is pending (my fault probably, 
-though i didn't follow the conclusions with detail).
+That is in fact correct. I'll update the comment so it is correct.
 
-> Ah, you're talking about inadyn -b option, while I was thinking of the
-> start-stop-daemon option. Then it definitely makes sense, and I can get
-> rid of the background option in the example config file.
->
-> Sounds OK?
+Thanks,
+Clayton
 
-Yup, it's mostly covering for user omission since it costs nothing.
-With the addition of -- -b :)
-It also makes the systemd service more resilient, since it normally 
-doesn't expect a background (at least via BR default config).
-Regards.
+Clayton Shotwell
+Senior Software Engineer, Rockwell Collins
+clayton.shotwell at rockwellcollins.com
