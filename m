@@ -1,44 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jul 2015 16:15:25 +0200
-Subject: [Buildroot] [git commit] bmon: bump to version 3.7
-Message-ID: <20150714141540.A044980794@busybox.osuosl.org>
+Date: Tue, 14 Jul 2015 16:15:31 +0200
+Subject: [Buildroot] [git commit] libnl: remove patch to fix bmon breakage
+Message-ID: <20150714141540.ACD2E80794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f64210b30f6e6b717e2279298daca8a990daaa17
+commit: http://git.buildroot.net/buildroot/commit/?id=c7ca4e81163700146e39f3b9aba90225bad86b45
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Upstream decided that programs should be fixed, so so be it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bmon/bmon.hash |    2 +-
- package/bmon/bmon.mk   |    3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ ...remove-unnecessary-include-of-private-lin.patch |   44 --------------------
+ 1 files changed, 0 insertions(+), 44 deletions(-)
 
-diff --git a/package/bmon/bmon.hash b/package/bmon/bmon.hash
-index 65747b4..810a0b9 100644
---- a/package/bmon/bmon.hash
-+++ b/package/bmon/bmon.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  62c8c20d00572a7670891d4c112924786cb69ec4ca92d5052951566f000d1514  bmon-3.6.tar.gz
-+sha256  a9f3d7010074a3190038a8d95df5d47aaf2046b47d872590336b5f93be084685  bmon-3.7.tar.gz
-diff --git a/package/bmon/bmon.mk b/package/bmon/bmon.mk
-index e430bf6..0939609 100644
---- a/package/bmon/bmon.mk
-+++ b/package/bmon/bmon.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--BMON_VERSION = 3.6
-+BMON_VERSION = 3.7
- BMON_SITE = https://github.com/tgraf/bmon/releases/download/v$(BMON_VERSION)
- BMON_DEPENDENCIES = host-pkgconf libconfuse libnl ncurses
-+BMON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- BMON_LICENSE = BSD-2c, MIT
- BMON_LICENSE_FILES = LICENSE.BSD LICENSE.MIT
- 
+diff --git a/package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch b/package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch
+deleted file mode 100644
+index 3520899..0000000
+--- a/package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 61310ce3f2b6c5c21be8c788848f083e4c58d138 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Fri, 17 Apr 2015 07:20:48 -0300
+-Subject: [PATCH] Revert "route: remove unnecessary include of private
+- linux/if.h"
+-
+-It breaks rtnl_link_get_flags() checks against IFF_* defines that aren't
+-defined.
+-
+-This reverts commit 50a76998ac36ace3716d3c979b352fac73cfc80a.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- include/netlink/route/link.h | 1 +
+- src/nl-link-set.c            | 1 -
+- 2 files changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/include/netlink/route/link.h b/include/netlink/route/link.h
+-index 8f74f42..a7aa88b 100644
+---- a/include/netlink/route/link.h
+-+++ b/include/netlink/route/link.h
+-@@ -15,6 +15,7 @@
+- #include <netlink/netlink.h>
+- #include <netlink/cache.h>
+- #include <netlink/addr.h>
+-+#include <linux/if.h>
+- #include <sys/types.h>
+- 
+- #ifdef __cplusplus
+-diff --git a/src/nl-link-set.c b/src/nl-link-set.c
+-index 6a6bac8..bbb60f9 100644
+---- a/src/nl-link-set.c
+-+++ b/src/nl-link-set.c
+-@@ -9,7 +9,6 @@
+-  * Copyright (c) 2003-2010 Thomas Graf <tgraf@suug.ch>
+-  */
+- 
+--#include <linux/if.h>
+- #include <netlink/cli/utils.h>
+- #include <netlink/cli/link.h>
+- 
+--- 
+-2.0.5
+-
