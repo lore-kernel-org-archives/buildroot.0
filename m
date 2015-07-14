@@ -1,39 +1,76 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 14 Jul 2015 10:19:40 -0300
-Subject: [Buildroot] [PATCH] samba4: bump to version 4.2.3
-Message-ID: <1436879980-22822-1-git-send-email-gustavo@zacarias.com.ar>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 14 Jul 2015 14:20:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: version bump to 0.10.40
+Message-ID: <1436880003-9098-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../{0.10.39 => 0.10.40}/0001-remove-python-bz2-dependency.patch      | 0
+ .../{0.10.39 => 0.10.40}/0002-gyp-force-link-command-to-use-CXX.patch | 0
+ package/nodejs/{0.10.39 => 0.10.40}/0003-use-python-variable.patch    | 0
+ .../0004-fix-build-error-without-OpenSSL-support.patch                | 0
+ package/nodejs/Config.in                                              | 4 ++--
+ package/nodejs/nodejs.hash                                            | 4 ++--
+ 6 files changed, 4 insertions(+), 4 deletions(-)
+ rename package/nodejs/{0.10.39 => 0.10.40}/0001-remove-python-bz2-dependency.patch (100%)
+ rename package/nodejs/{0.10.39 => 0.10.40}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
+ rename package/nodejs/{0.10.39 => 0.10.40}/0003-use-python-variable.patch (100%)
+ rename package/nodejs/{0.10.39 => 0.10.40}/0004-fix-build-error-without-OpenSSL-support.patch (100%)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 11c15b7..e2b3969 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	27d6c69dc3afee38fd28051001d2d4bdae38c567612a9ec6477bb5567e2abc1e	samba-4.2.2.tar.gz
-+sha256	b6dfa5ae4818d891ee2fcff04a5912f4a4fb2394b4f5e66a2a15b428da094c7c	samba-4.2.3.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 7d10a0c..c88cc9f 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nodejs/0.10.39/0001-remove-python-bz2-dependency.patch b/package/nodejs/0.10.40/0001-remove-python-bz2-dependency.patch
+similarity index 100%
+rename from package/nodejs/0.10.39/0001-remove-python-bz2-dependency.patch
+rename to package/nodejs/0.10.40/0001-remove-python-bz2-dependency.patch
+diff --git a/package/nodejs/0.10.39/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/0.10.40/0002-gyp-force-link-command-to-use-CXX.patch
+similarity index 100%
+rename from package/nodejs/0.10.39/0002-gyp-force-link-command-to-use-CXX.patch
+rename to package/nodejs/0.10.40/0002-gyp-force-link-command-to-use-CXX.patch
+diff --git a/package/nodejs/0.10.39/0003-use-python-variable.patch b/package/nodejs/0.10.40/0003-use-python-variable.patch
+similarity index 100%
+rename from package/nodejs/0.10.39/0003-use-python-variable.patch
+rename to package/nodejs/0.10.40/0003-use-python-variable.patch
+diff --git a/package/nodejs/0.10.39/0004-fix-build-error-without-OpenSSL-support.patch b/package/nodejs/0.10.40/0004-fix-build-error-without-OpenSSL-support.patch
+similarity index 100%
+rename from package/nodejs/0.10.39/0004-fix-build-error-without-OpenSSL-support.patch
+rename to package/nodejs/0.10.40/0004-fix-build-error-without-OpenSSL-support.patch
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 0838729..c5ec792 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -30,7 +30,7 @@ choice
+ 	  Select the version of Node.js you wish to use.
  
--SAMBA4_VERSION = 4.2.2
-+SAMBA4_VERSION = 4.2.3
- SAMBA4_SITE = http://ftp.samba.org/pub/samba
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ config BR2_BR2_PACKAGE_NODEJS_0_10_X
+-	bool "v0.10.39"
++	bool "v0.10.40"
+ 
+ # V8 included with v0.12.5 requires at least ARMv6
+ config BR2_BR2_PACKAGE_NODEJS_0_12_X
+@@ -41,7 +41,7 @@ endchoice
+ 
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+-	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
++	default "0.10.40"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
+ 	default "0.12.7"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
+ 
+ menu "Module Selection"
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 8cd670e..9be2806 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From upstream URL: http://nodejs.org/dist/v0.10.39/SHASUMS256.txt
+-sha256	68f8d8f9515c4e77e2a06034b742e19e9848c1fee5bcadedc1d68f3e4302df37  node-v0.10.39.tar.gz
++# From upstream URL: http://nodejs.org/dist/v0.10.40/SHASUMS256.txt
++sha256	bae79c2fd959aebe1629af36077bebbb760128db753da226d2344cd91499149f  node-v0.10.40.tar.gz
+ 
+ # From upstream URL: http://nodejs.org/dist/v0.12.7/SHASUMS256.txt
+ sha256	b23d64df051c9c969b0c583f802d5d71de342e53067127a5061415be7e12f39d  node-v0.12.7.tar.gz
 -- 
-2.3.6
+2.1.4
