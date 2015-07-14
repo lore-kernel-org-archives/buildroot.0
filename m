@@ -1,65 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jul 2015 00:52:02 +0200
-Subject: [Buildroot] [git commit] package/libmemcached: disable documentation
-Message-ID: <20150714225337.53E4B81D42@busybox.osuosl.org>
+Date: Wed, 15 Jul 2015 00:54:46 +0200
+Subject: [Buildroot] [PATCH] package/libmemcached: disable documentation
+In-Reply-To: <1431382192-3141-1-git-send-email-romain.naour@openwide.fr>
+References: <1431382192-3141-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150715005446.5fafbc8e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5eb5f2710c2451d7e35dd600e6ced835efb9dda5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Romain Naour,
 
-libmemcached fail to build the documentation/man due to
-an python sphinx error.
+On Tue, 12 May 2015 00:09:52 +0200, Romain Naour wrote:
+> libmemcached fail to build the documentation/man due to
+> an python sphinx error.
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+> This is probably an error throw by my Fedora 21 host.
+> ---
+>  .../libmemcached/0004-disable-doc-and-man.patch    | 37 ++++++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 package/libmemcached/0004-disable-doc-and-man.patch
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../libmemcached/0004-disable-doc-and-man.patch    |   37 ++++++++++++++++++++
- 1 files changed, 37 insertions(+), 0 deletions(-)
+I don't really like the patch because it's clearly not upstreamable,
+but:
 
-diff --git a/package/libmemcached/0004-disable-doc-and-man.patch b/package/libmemcached/0004-disable-doc-and-man.patch
-new file mode 100644
-index 0000000..9605095
---- /dev/null
-+++ b/package/libmemcached/0004-disable-doc-and-man.patch
-@@ -0,0 +1,37 @@
-+From 6c01bd3562cc18fbafdf950bbeb73a399c1adcdd Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Tue, 12 May 2015 00:00:02 +0200
-+Subject: [PATCH] disable doc and man
-+
-+WARNING: master file /home/naourr/git/buildroot/test/libmemcached-bfin/build/libmemcached-1.0.18/docs/index.rst not found
-+
-+Exception occurred:
-+  File "/usr/lib/python2.7/site-packages/sphinx/environment.py", line 1213, in get_doctree
-+    f = open(doctree_filename, 'rb')
-+IOError: [Errno 2] No such file or directory: '/home/naourr/buildroot-test/test/libmemcached-bfin/build/libmemcached-1.0.18/man/.doctrees/hashkit_create.doctree'
-+The full traceback has been saved in /tmp/sphinx-err-JCIsnB.log, if you want to report the issue to the developers.
-+Please also report this if it was a user error, so that a better error message can be provided next time.
-+Either send bugs to the mailing list at <http://groups.google.com/group/sphinx-dev/>,
-+or report them in the tracker at <http://bitbucket.org/birkenfeld/sphinx/issues/>. Thanks!
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ Makefile.am | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 7f44102..cb7d058 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -55,8 +55,6 @@ endif
-+ include libmemcachedutil-1.0/include.am
-+ 
-+ include clients/include.am
-+-include docs/include.am
-+-include man/include.am
-+ 
-+ if BUILD_LIBMEMCACHED_PROTOCOL
-+ include example/include.am
-+-- 
-+1.9.3
-+
+ 1/ The existing other 3 patches we have are also non-upstreamable
+
+ 2/ Upstream uses the Bazaar version control system, which is probably
+    the most efficient thing you can do to make sure nobody will be
+    interested in contributing to your project :-)
+
+So, let's not care about this patch not being in an upstreamable state.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
