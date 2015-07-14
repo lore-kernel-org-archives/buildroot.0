@@ -1,40 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jul 2015 00:04:34 +0200
-Subject: [Buildroot] probleme building tesseract-ocr
-In-Reply-To: <CAKcgs2yf20HHub-qRXMsct88BfrFRxeKdbLVDhh7fEXKEHEEBA@mail.gmail.com>
-References: <1431014547.27289.16.camel@halley>
- <CAKcgs2yf20HHub-qRXMsct88BfrFRxeKdbLVDhh7fEXKEHEEBA@mail.gmail.com>
-Message-ID: <20150715000434.40690f00@free-electrons.com>
+Date: Wed, 15 Jul 2015 00:06:04 +0200
+Subject: [Buildroot] [git commit] boot/uboot: Add support for dtb.img format
+Message-ID: <20150714220926.D917781D34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gilles, C?dric,
+commit: http://git.buildroot.net/buildroot/commit/?id=920b50b7e0d7535899ccba77b85d3df57e2c2a2a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 8 May 2015 22:20:53 +0200, Gilles Talis wrote:
+Allow to generate u-boot-dtb.img. This is the same format
+as u-boot.img, however, it contains a built-in device-tree.
+This file is being loaded by the U-Boot SPL.
 
-> I have some work-in-progress patches around these packages, that you
-> can re-use. Both packages build and have been quickly tested. However,
-> they need to be cleaned up, verified against toolchain dependencies,
-> etc...
-> Patches are attached, I'd be grateful if you could clean them up and
-> send them for review once you are happy with them.
+Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/uboot/Config.in |    3 +++
+ boot/uboot/uboot.mk  |    2 ++
+ 2 files changed, 5 insertions(+), 0 deletions(-)
 
-Have you found some time to work on those patches? Since Gilles sent
-them, they have been sitting in our patch tracking system, but they are
-indeed not ready for merging.
-
-So I will mark them as "Not Applicable" so that they no longer appear
-in our list of pending patches. So if you're still interested in
-tesseract-ocr, please resend an updated version of the patches once you
-consider them to be ready for review.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index fa1741c..1cdb2fa 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -106,6 +106,9 @@ config BR2_TARGET_UBOOT_FORMAT_AIS
+ config BR2_TARGET_UBOOT_FORMAT_BIN
+ 	bool "u-boot.bin"
+ 
++config BR2_TARGET_UBOOT_FORMAT_DTB_IMG
++	bool "u-boot-dtb.img"
++
+ config BR2_TARGET_UBOOT_FORMAT_IMG
+ 	bool "u-boot.img"
+ 
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 2cfff28..8053678 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -45,6 +45,8 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
+ UBOOT_BIN = u-boot.ldr
+ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
+ UBOOT_BIN = u-boot-nand.bin
++else ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_IMG),y)
++UBOOT_BIN = u-boot-dtb.img
+ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
+ UBOOT_BIN = u-boot.img
+ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
