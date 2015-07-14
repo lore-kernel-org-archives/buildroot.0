@@ -1,142 +1,42 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 14 Jul 2015 16:05:53 +0200
-Subject: [Buildroot] [PATCHv2] transmission: improve systemd support
-In-Reply-To: <1436881866-2168-1-git-send-email-aurelien@chabot.fr>
-References: <1421684056-5266-11-git-send-email-maxtram95@gmail.com>
- <1436881866-2168-1-git-send-email-aurelien@chabot.fr>
-Message-ID: <CAGduivy48ijCY6MxObh2KNJjEii8R9s89T5f7mVWOMB_-shE6w@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 14 Jul 2015 11:06:19 -0300
+Subject: [Buildroot] [PATCH 1/2] bmon: bump to version 3.7
+Message-ID: <1436882780-5141-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Aur?lien, all
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/bmon/bmon.hash | 2 +-
+ package/bmon/bmon.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-On Tue, Jul 14, 2015 at 3:51 PM, Aur?lien Chabot <aurelien@chabot.fr> wrote:
-> From: Maxim Mikityanskiy <maxtram95@gmail.com>
->
-> Support running transmission-daemon in system-wide mode using systemd:
->
-> 1. Pass --with-systemd-daemon to configure script if systemd is enabled.
->
-> 2. Install sysctl.d config file to increase send and receive buffer
-> sizes.
->
-> 3. Install sysusers.d config file to create transmission user when using
-> systemd. Create transmission user when not using systemd.
->
-> 4. Install transmission-daemon.service for systemd.
->
-> [Aur?lien : Fix symlink relative path, use upstream service file,
-> no need for config path, and use transmission user in sysv script]
->
-> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-> Signed-off-by: Aur?lien Chabot <aurelien@chabot.fr>
-> ---
->  package/transmission/S92transmission            |  4 +--
->  package/transmission/transmission.mk            | 37 +++++++++++++++++++++++++
->  package/transmission/transmission_sysctl.conf   |  2 ++
->  package/transmission/transmission_sysusers.conf |  1 +
->  4 files changed, 41 insertions(+), 3 deletions(-)
->  create mode 100644 package/transmission/transmission_sysctl.conf
->  create mode 100644 package/transmission/transmission_sysusers.conf
->
-> diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
-> index 1870522..e5976b0 100644
-> --- a/package/transmission/S92transmission
-> +++ b/package/transmission/S92transmission
-> @@ -24,9 +24,7 @@
->  # by default, this is set to 'transmission'.
->  # For the sake of security you shouldn't set a password
->  # on this user
-> -#USERNAME=transmission
-> -USERNAME=default
-> -
-> +USERNAME=transmission
->
->
->  # ----- *ADVANCED* CONFIGURATION -----
-> diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-> index bbc32bf..81dd110 100644
-> --- a/package/transmission/transmission.mk
-> +++ b/package/transmission/transmission.mk
-> @@ -36,11 +36,48 @@ endif
->  ifeq ($(BR2_PACKAGE_TRANSMISSION_DAEMON),y)
->  TRANSMISSION_CONF_OPTS += --enable-daemon
->
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +TRANSMISSION_DEPENDENCIES += systemd
-> +TRANSMISSION_CONF_OPTS += --with-systemd-daemon
-> +else
-> +TRANSMISSION_CONF_OPTS += --without-systemd-daemon
-> +endif
-> +
-> +ifeq ($(BR2_INIT_SYSTEMD),)
-> +define TRANSMISSION_USERS
-> +       transmission -1 transmission -1 * /var/lib/transmission - transmission Transmission Daemon
-> +endef
-> +endif
-> +
->  define TRANSMISSION_INSTALL_INIT_SYSV
->         $(INSTALL) -m 0755 -D package/transmission/S92transmission \
->                 $(TARGET_DIR)/etc/init.d/S92transmission
->  endef
->
-> +define TRANSMISSION_INSTALL_INIT_SYSTEMD
-> +       $(INSTALL) -D -m 0755 $(@D)/daemon/transmission-daemon.service \
-> +               $(TARGET_DIR)/usr/lib/systemd/system/transmission-daemon.service
-Do we still need to install the service ? Doesn't the transmission
-Makefile do it for us ?
-> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +       ln -fs ../../../../usr/lib/systemd/system/transmission-daemon.service \
-> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/transmission-daemon.service
-> +endef
-> +
-> +define TRANSMISSION_INSTALL_SYSCTL_HOOK
-> +       $(INSTALL) -D -m 644 package/transmission/transmission_sysctl.conf \
-> +               $(TARGET_DIR)/usr/lib/sysctl.d/20-transmission.conf
-> +endef
-> +
-> +TRANSMISSION_POST_INSTALL_TARGET_HOOKS += \
-> +       TRANSMISSION_INSTALL_SYSCTL_HOOK
-> +
-I don't know what the other think about it but I really don't like the
-fact that there's some sysctl conf installed by a package.
-> +define TRANSMISSION_INSTALL_SYSUSERS_HOOK
-> +       $(INSTALL) -D -m 644 package/transmission/transmission_sysusers.conf \
-> +               $(TARGET_DIR)/usr/lib/sysusers.d/transmission.conf
-> +endef
-> +
-> +TRANSMISSION_POST_INSTALL_TARGET_HOOKS += \
-> +       TRANSMISSION_INSTALL_SYSUSERS_HOOK
-> +
->  else
->  TRANSMISSION_CONF_OPTS += --disable-daemon
->  endif
-> diff --git a/package/transmission/transmission_sysctl.conf b/package/transmission/transmission_sysctl.conf
-> new file mode 100644
-> index 0000000..7862332
-> --- /dev/null
-> +++ b/package/transmission/transmission_sysctl.conf
-> @@ -0,0 +1,2 @@
-> +net.core.wmem_max = 1048576
-> +net.core.rmem_max = 4194304
-So I would scratch that too.
-> diff --git a/package/transmission/transmission_sysusers.conf b/package/transmission/transmission_sysusers.conf
-> new file mode 100644
-> index 0000000..09396d4
-> --- /dev/null
-> +++ b/package/transmission/transmission_sysusers.conf
-> @@ -0,0 +1 @@
-> +u transmission - "Transmission daemon" /var/lib/transmission
-> --
-Have you tested with a read-only file system ? Since
-/var/lib/transmission is not a tmpfs, I don't know if transmission
-will be very happy about that.
-> 2.4.5
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/bmon/bmon.hash b/package/bmon/bmon.hash
+index 65747b4..810a0b9 100644
+--- a/package/bmon/bmon.hash
++++ b/package/bmon/bmon.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  62c8c20d00572a7670891d4c112924786cb69ec4ca92d5052951566f000d1514  bmon-3.6.tar.gz
++sha256  a9f3d7010074a3190038a8d95df5d47aaf2046b47d872590336b5f93be084685  bmon-3.7.tar.gz
+diff --git a/package/bmon/bmon.mk b/package/bmon/bmon.mk
+index e430bf6..0939609 100644
+--- a/package/bmon/bmon.mk
++++ b/package/bmon/bmon.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-BMON_VERSION = 3.6
++BMON_VERSION = 3.7
+ BMON_SITE = https://github.com/tgraf/bmon/releases/download/v$(BMON_VERSION)
+ BMON_DEPENDENCIES = host-pkgconf libconfuse libnl ncurses
++BMON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ BMON_LICENSE = BSD-2c, MIT
+ BMON_LICENSE_FILES = LICENSE.BSD LICENSE.MIT
+ 
+-- 
+2.3.6
