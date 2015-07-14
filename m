@@ -1,156 +1,141 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 13 Jul 2015 22:57:07 -0400
-Subject: [Buildroot] [PATCH v3 2/3] util-linux: rework utilities menu for
-	finer control
-In-Reply-To: <1436842628-29469-1-git-send-email-danomimanchego123@gmail.com>
-References: <1436842628-29469-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <1436842628-29469-2-git-send-email-danomimanchego123@gmail.com>
+Date: Mon, 13 Jul 2015 22:57:06 -0400
+Subject: [Buildroot] [PATCH v3 1/3] util-linux: update tool select options
+Message-ID: <1436842628-29469-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When even a single extra util-linux utility is enabled, the
-default build and install will install many more programs,
-including many that overlap with those offered by busybox.
+Add missing app config options:
+  - line
+  - tunelp
 
-Fix by reworking the install-utilies menu to take advantage
-of the new --disable-all-programs config option.  This option
-make it possible to disable the basic set of apps, and then
-enable only the desired apps.
+Drop app config options no longer supported by util-linux:
+  - arch
+  - ddate
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
 ---
 
-Changes v1 -> v2:
-  - Rework to incorporate ideas and suggestions from Thomas Petazzoni
-    and Arnout Vandecappelle.  At least, in spirit.
-
 Changes v2 -> v3:
-  - Change BR2_PACKAGE_UTIL_LINUX_SELECTED_BINARIES to
-    BR2_PACKAGE_UTIL_LINUX_BINARIES, to conserve backwards-
-    compatibility without need for a legacy option.
-  - Enable 'Basic set' by default to match output of previous
-    build when binaries were selected.
+  - Drop app config options eliminated from util-linx: arch, ddate.
 ---
- package/util-linux/Config.in     | 43 ++++++++++++++++++++++++++++++++++++++--
- package/util-linux/util-linux.mk | 15 +++++++-------
- 2 files changed, 49 insertions(+), 9 deletions(-)
+ Config.in.legacy                 | 13 +++++++++++++
+ package/util-linux/Config.in     | 21 +++++++++++----------
+ package/util-linux/util-linux.mk |  4 ++--
+ 3 files changed, 26 insertions(+), 12 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 0a8d0a6..7b7e3f0 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -278,6 +278,19 @@ config BR2_PACKAGE_WDCTL
+ 	  util-linux' wdctl option has been renamed to BR2_PACKAGE_UTIL_LINUX_WDCTL
+ 	  to be aligned with how the other options are named.
+ 
++config BR2_PACKAGE_UTIL_LINUX_ARCH
++	bool "util-linux' arch option has been removed"
++	select BR2_LEGACY
++	help
++	  util-linux' arch was dropped in util-linux 2.23, in favor of
++	  the coreutils version.
++
++config BR2_PACKAGE_UTIL_LINUX_DDATE
++	bool "util-linux' ddate option has been removed"
++	select BR2_LEGACY
++	help
++	  util-linux' ddate was dropped in util-linux 2.23.
++
+ config BR2_PACKAGE_RPM_BZIP2_PAYLOADS
+ 	bool "rpm's bzip2 payloads option has been removed"
+ 	select BR2_LEGACY
 diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 80e87d7..042cae0 100644
+index 39df11c..80e87d7 100644
 --- a/package/util-linux/Config.in
 +++ b/package/util-linux/Config.in
-@@ -35,18 +35,57 @@ config BR2_PACKAGE_UTIL_LINUX_LIBUUID
+@@ -52,11 +52,6 @@ config BR2_PACKAGE_UTIL_LINUX_AGETTY
  	help
- 	  Install libuuid.
+ 	  Alternative linux getty
  
-+choice
-+	prompt "Install utilities"
-+	default BR2_PACKAGE_UTIL_LINUX_NO_BINARIES
-+
-+config BR2_PACKAGE_UTIL_LINUX_NO_BINARIES
-+	bool "none"
-+	help
-+	  Disable all util-linux binaries.
-+
-+config BR2_PACKAGE_UTIL_LINUX_ALL_BINARIES
-+	bool "all"
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-+	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_LINUX_PAM  # login utils
-+	select BR2_PACKAGE_ZLIB  # cramfs
-+	select BR2_PACKAGE_NCURSES  # more, setterm, ul
-+	select BR2_PACKAGE_LIBCAP_NG  # setpriv
-+	help
-+	  Install the complete set of util-linux binaries.
-+
- config BR2_PACKAGE_UTIL_LINUX_BINARIES
--	bool "install utilities"
-+	bool "custom"
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+-config BR2_PACKAGE_UTIL_LINUX_ARCH
+-	bool "arch"
+-	help
+-	  Print machine architecture
+-
+ config BR2_PACKAGE_UTIL_LINUX_BFS
+ 	bool "bfs"
  	help
--	  Install the basic set of util-linux binaries.
-+	  Manually select which util-linux binaries to install.
-+
-+endchoice
- 
- if BR2_PACKAGE_UTIL_LINUX_BINARIES
- 
-+config BR2_PACKAGE_UTIL_LINUX_BASIC_SET
-+	bool "Basic set"
-+	default y
-+	help
-+	  Install a basic set of util-linux binaries.
-+
-+	  blkdiscard, blkid, blockdev, cal, chcpu, col, colcrt, colrm, column,
-+	  ctrlaltdel, dmesg, fdisk, findfs, findmnt, flock, fsfreeze, fstrim,
-+	  getopt, hexdump, ipcmk, ipcrm, ipcs, isosize, ldattach, linux32,
-+	  linux64, logger, look, lsblk, lscpu, lslocks, lslogins, mcookie,
-+	  mkfs, mkswap, namei, prlimit, readprofile, renice, rev, rtcwake,
-+	  script, scriptreplay, setarch, setsid, sfdisk, swaplabel, swapoff,
-+	  swapon, tailf, uname26, uuidgen, whereis, wipefs
-+
- config BR2_PACKAGE_UTIL_LINUX_AGETTY
- 	bool "agetty"
+@@ -80,11 +75,6 @@ config BR2_PACKAGE_UTIL_LINUX_CRAMFS
  	help
+ 	  Build fsck.cramfs and mkfs.cramfs
+ 
+-config BR2_PACKAGE_UTIL_LINUX_DDATE
+-	bool "ddate"
+-	help
+-	  Convert Gregorian dates to Discordian dates
+-
+ config BR2_PACKAGE_UTIL_LINUX_EJECT
+ 	bool "eject"
+ 	help
+@@ -120,6 +110,11 @@ config BR2_PACKAGE_UTIL_LINUX_LAST
+ 	help
+ 	  Show a listing of last logged in users
+ 
++config BR2_PACKAGE_UTIL_LINUX_LINE
++	bool "line"
++	help
++	  Read one line
++
+ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
+ 	bool "login utilities"
+ 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+@@ -230,6 +225,12 @@ config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
+ 	help
+ 	  Switch to another filesystem as the root of the mount tree
+ 
++config BR2_PACKAGE_UTIL_LINUX_TUNELP
++	bool "tunelp"
++	select BR2_PACKAGE_NCURSES
++	help
++	  Set various parameters for the lp device
++
+ config BR2_PACKAGE_UTIL_LINUX_UL
+ 	bool "ul"
+ 	select BR2_PACKAGE_NCURSES
 diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 622438e..8fb6b71 100644
+index a44a45e..622438e 100644
 --- a/package/util-linux/util-linux.mk
 +++ b/package/util-linux/util-linux.mk
-@@ -59,8 +59,14 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
- # Used by login-utils
- UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
- 
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_NO_BINARIES),y)
-+UTIL_LINUX_CONF_OPTS += --disable-all-programs
-+else ifeq ($(BR2_PACKAGE_UTIL_LINUX_ALL_BINARIES),y)
-+UTIL_LINUX_CONF_OPTS += --enable-all-programs
-+else
+@@ -62,11 +62,9 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
  # Disable/Enable utilities
  UTIL_LINUX_CONF_OPTS += \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_BASIC_SET),,--disable-all-programs) \
  	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
+-	$(if $(BR2_PACKAGE_UTIL_LINUX_ARCH),--enable-arch,--disable-arch) \
  	$(if $(BR2_PACKAGE_UTIL_LINUX_BFS),--enable-bfs,--disable-bfs) \
  	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
-@@ -106,6 +112,7 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WDCTL),--enable-wdctl,--disable-wdctl) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_ZRAMCTL),--enable-zramctl,--disable-zramctl)
-+endif
- 
- # In the host version of util-linux, we so far only require libuuid,
- # and none of the util-linux utilities, so we disable all of them, unless
-@@ -124,12 +131,6 @@ else
- HOST_UTIL_LINUX_CONF_OPTS += --disable-all-programs
- endif
- 
--# Avoid building the tools if they are disabled since we can't install on
--# a per-directory basis.
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),)
--UTIL_LINUX_CONF_OPTS += --disable-all-programs
--endif
--
- # Install PAM configuration files
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),y)
- define UTIL_LINUX_INSTALL_PAMFILES
-@@ -145,7 +146,7 @@ endif
- UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
- 
- # Install agetty->getty symlink to avoid breakage when there's no busybox
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_AGETTY),y)
-+ifneq ($(BR2_PACKAGE_UTIL_LINUX_ALL_BINARIES)$(BR2_PACKAGE_UTIL_LINUX_AGETTY),)
- ifeq ($(BR2_PACKAGE_BUSYBOX),)
- define UTIL_LINUX_GETTY_SYMLINK
- 	ln -sf agetty $(TARGET_DIR)/sbin/getty
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
+-	$(if $(BR2_PACKAGE_UTIL_LINUX_DDATE),--enable-ddate,--disable-ddate) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FDFORMAT),--enable-fdformat,--disable-fdformat) \
+@@ -78,6 +76,7 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS),--enable-libsmartcols,--disable-libsmartcols) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
+@@ -97,6 +96,7 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_SETPRIV),--enable-setpriv,--disable-setpriv) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_SETTERM),--enable-setterm,--disable-setterm) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT),--enable-switch_root,--disable-switch_root) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_TUNELP),--enable-tunelp,--disable-tunelp) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_UL),--enable-ul,--disable-ul) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_UNSHARE),--enable-unshare,--disable-unshare) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_UTMPDUMP),--enable-utmpdump,--disable-utmpdump) \
 -- 
 1.9.1
