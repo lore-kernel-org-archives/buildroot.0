@@ -1,34 +1,38 @@
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Tue, 14 Jul 2015 11:08:49 -0500
-Subject: [Buildroot] [PATCH v8 15/16] cpio: new package
-In-Reply-To: <CAHXCMMLSTjXxc1RRwXNCt1tjAUzQzzP7STKxP-M7UPMSymQUuQ@mail.gmail.com>
-References: <1436570882-56442-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1436570882-56442-16-git-send-email-clayton.shotwell@rockwellcollins.com>
- <CAHXCMMLSTjXxc1RRwXNCt1tjAUzQzzP7STKxP-M7UPMSymQUuQ@mail.gmail.com>
-Message-ID: <CANn-YGQXaTmNJq4CxNZwvqJ60XQVqyGyr=s7Rt21gBz8nGvrjA@mail.gmail.com>
+From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
+Date: Tue, 14 Jul 2015 13:09:32 -0300
+Subject: [Buildroot] [PATCH v5 1/3] busybox: disable nslookup applet
+In-Reply-To: <1436886664-3206-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1436886664-3206-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <1436890174-23236-1-git-send-email-guido@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel,
+Some toolchains have no resolver support (res_* family), so they fail to
+build this applet (which is the only user of those functions). Instead
+of selectively disabling it on such limited toolchains, just drop it
+from the default config, since (to the best of my knowledge) is not
+widely used.
 
-On Tue, Jul 14, 2015 at 10:38 AM, Samuel Martin <s.martin49@gmail.com> wrote:
-> Clayton, all,
->
-> On Sat, Jul 11, 2015 at 1:28 AM, Clayton Shotwell
-> <clayton.shotwell@rockwellcollins.com> wrote:
->> Adding the cpio archive utility for the target and host. Patches have
->> been pulled from ArchLinux and Debian to fix CVE issues and compile
->> issues.
-> According to the url, patches are pulled from ArchLinux and Gentoo.
+Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+---
+ package/busybox/busybox.config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-That is in fact correct. I'll update the comment so it is correct.
-
-Thanks,
-Clayton
-
-Clayton Shotwell
-Senior Software Engineer, Rockwell Collins
-clayton.shotwell at rockwellcollins.com
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index 8d1d80a..91c3006 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
+@@ -838,7 +838,7 @@ CONFIG_IPRULE=y
+ CONFIG_NETSTAT=y
+ # CONFIG_FEATURE_NETSTAT_WIDE is not set
+ # CONFIG_FEATURE_NETSTAT_PRG is not set
+-CONFIG_NSLOOKUP=y
++# CONFIG_NSLOOKUP is not set
+ # CONFIG_NTPD is not set
+ # CONFIG_FEATURE_NTPD_SERVER is not set
+ # CONFIG_FEATURE_NTPD_CONF is not set
+-- 
+2.1.4
