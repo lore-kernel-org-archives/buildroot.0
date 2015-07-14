@@ -1,27 +1,43 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 14 Jul 2015 16:59:19 +0200
-Subject: [Buildroot] [PATCH v8 04/16] busybox: selinux support
-In-Reply-To: <1436570882-56442-5-git-send-email-clayton.shotwell@rockwellcollins.com>
-References: <1436570882-56442-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1436570882-56442-5-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <CAHXCMML-g=2-YYpuUh0NWAKCsAEGtKsgWJKaDMuZBwDQSX_zGQ@mail.gmail.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Tue, 14 Jul 2015 10:02:56 -0500
+Subject: [Buildroot] [PATCH v3 1/1] linux: add config options for nfs-utils
+Message-ID: <1436886176-118956-1-git-send-email-ryan.barnett@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jul 11, 2015 at 1:27 AM, Clayton Shotwell
-<clayton.shotwell@rockwellcollins.com> wrote:
-> Add a configure option to enable the SELinux support in the
-> busybox configuration from the Buildroot menuconfig.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+When nfs-utils packages is selected, automatically enable the kernel
+options for NFSD. This will allow for an NFS server to work by only
+adding /etc/exports to the filesystem.
 
-Regards,
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+---
+Test with qemu_x86_defconfig
 
+Changes v2 -> v3:
+  - Add CONFIG_NFSD_V3 option as well to really support only v3 of NFS
+
+Changes v1 -> v2:
+  - Only enable CONFIG_NFSD (suggested by Arnout)
+---
+ linux/linux.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 8c535f3..31e1f01 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -217,6 +217,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 	$(if $(BR2_PACKAGE_XTABLES_ADDONS),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
++	$(if $(BR2_PACKAGE_NFS_UTILS),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFSD,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFSD_V3,$(@D)/.config))
+ 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
+ endef
 -- 
-Samuel
+1.9.1
