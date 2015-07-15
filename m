@@ -1,43 +1,63 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 15 Jul 2015 13:13:46 -0300
-Subject: [Buildroot] [PATCH] libnss: security bump to version 3.19.2
-Message-ID: <1436976826-22602-1-git-send-email-gustavo@zacarias.com.ar>
+From: =?windows-1252?Q?Guillaume_GARDET_-_Olis=E9o?= <guillaume.gardet@oliseo.fr>
+Date: Wed, 15 Jul 2015 18:14:54 +0200
+Subject: [Buildroot] [PATCH V3 4/5] c-icap: new package
+In-Reply-To: <20150710190905.0aa3bc3a@free-electrons.com>
+References: <1415808993-2394-1-git-send-email-guillaume.gardet@oliseo.fr>	<1416322487-14247-1-git-send-email-guillaume.gardet@oliseo.fr>	<1416322487-14247-5-git-send-email-guillaume.gardet@oliseo.fr>
+ <20150710190905.0aa3bc3a@free-electrons.com>
+Message-ID: <55A686FE.90203@oliseo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2015-2730, CVE-2015-2721, and probably others.
+Le 10/07/2015 19:09, Thomas Petazzoni a ?crit :
+> Dear Guillaume GARDET,
+>
+> On Tue, 18 Nov 2014 15:54:46 +0100, Guillaume GARDET wrote:
+>> Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+>>
+>> ---
+>>   package/Config.in        |  1 +
+>>   package/c-icap/Config.in | 15 ++++++++++++
+>>   package/c-icap/S96cicap  | 35 ++++++++++++++++++++++++++
+>>   package/c-icap/c-icap.mk | 64 ++++++++++++++++++++++++++++++++++++++++++++++++
+>>   4 files changed, 115 insertions(+)
+>>   create mode 100644 package/c-icap/Config.in
+>>   create mode 100644 package/c-icap/S96cicap
+>>   create mode 100644 package/c-icap/c-icap.mk
+> I've applied, but a lot of changes were needed to make the patch
+> correct. In fact, with the patch you posted, the c-icap daemon was not
+> even starting properly at boot time because the c-icap.conf file
+> contained invalid paths.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Thanks.
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 1f76f03..2336590 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_4_RTM/src/SHA256SUMS
--sha256	1d98ad1881a4237ec98cbe472fc851480f0b0e954dfe224d047811fb96ff9d79	nss-3.17.4.tar.gz
-+# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_19_2_RTM/src/SHA256SUMS
-+sha256	1306663e8f61d8449ad8cbcffab743a604dcd9f6f34232c210847c51dce2c9ae	nss-3.19.2.tar.gz
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index db272b3..0821804 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.17.4
-+LIBNSS_VERSION = 3.19.2
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
--- 
-2.3.6
+
+Guillaume
+
+>
+> Here are the changes I made before committing:
+>
+>      [Thomas:
+>       - Remove trailing whitespace everywhere
+>       - Rewrap the Config.in help text
+>       - Fix Config.in comment, the proper text for BR2_PREFER_STATIC_LIB is
+>         "dynamic library", not "libdl library"
+>       - Use a PID file in the init script
+>       - Show OK / FAIL when stopping the service
+>       - Remove the largefile/IPv6 handling in c-icap.mk, since they are now
+>         mandatory. We therefore pass --enable-large-files and --enable-ipv6
+>         unconditionally.
+>       - Remove the reference to a non-existing
+>         C_ICAP_INSTALL_TARGET_CONFIGS install target hook.
+>       - Install the init script unconditionally.
+>       - Remove unneeded example configuration files (*.default) from /etc,
+>         and fixup the c-icap.conf so that the default values work with
+>         Buildroot
+>       - Properly handle the *-config scripts installed by c-icap.
+>       - Add hash file.]
+>
+> Thanks!
+>
+> Thomas
