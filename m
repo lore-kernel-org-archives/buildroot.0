@@ -1,209 +1,60 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 15 Jul 2015 19:52:09 +0200
-Subject: [Buildroot] [PATCH v5 1/1] toolchain: create symlink to 'lib' from
-	ARCH_LIB_DIR iso fixed lib32/lib64
-Message-ID: <1436982729-7270-1-git-send-email-patrickdepinguin@gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 15 Jul 2015 17:59:05 +0000
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
+ results for 2015-07-13
+In-Reply-To: <20150714063019.304A8101082@stock.ovh.net>
+References: <20150714063019.304A8101082@stock.ovh.net>
+Message-ID: <1436983123.3682.19.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Hi Thomas,
 
-Currently, following symbolic links are created in both target and
-staging directories:
-- lib(32|64) --> lib
-- usr/lib(32|64) --> lib
+On Tue, 2015-07-14 at 08:30 +0200, Thomas Petazzoni wrote:
+> Those results are limited to the arc architecture.
+> 
+> Build statistics for 2015-07-13
+> ===============================
+> 
+>         success : 3  
+>        failures : 16 
+>        timeouts : 0  
+>           TOTAL : 19 
+> 
+> Classification of failures by reason
+> ====================================
+> 
+>              util-linux-2.26.2 | 5 
+>              btrfs-progs-4.1.1 | 5 
+>                   zeromq-4.0.5 | 3 
+>                alsa-lib-1.0.29 | 1 
+>                   boost-1.58.0 | 1 
+>                  libpcap-1.7.4 | 1 
+> 
+> Detail of failures
+> ===================
 
-The decision for lib32 or lib64 is based on the target architecture
-configuration in buildroot (BR2_ARCH_IS_64).
+Most of items were addressed in the previous mail and remaining here failed due to
+inability to get sources:
+------------------------------------>8-------------------------------
+>>> libpcap 1.7.4 Downloading[23m
+--2015-07-13 18:00:40--  http://www.tcpdump.org/release/libpcap-1.7.4.tar.gz
+Resolving www.tcpdump.org... failed: Name or service not known.
+wget: unable to resolve host address `www.tcpdump.org'
+--2015-07-13 18:01:07--  http://sources.buildroot.net/libpcap-1.7.4.tar.gz
+Resolving sources.buildroot.net... 176.9.16.109
+Connecting to sources.buildroot.net|176.9.16.109|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2015-07-13 18:01:07 ERROR 404: Not Found.
 
-In at least one case this is not correct: when building for a Cavium Octeon
-III processor using the toolchain from the Cavium Networks SDK, and
-specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, libraries are expected
-in directory 'lib32-fp' rather than 'lib32' (likewise for lib64-fp).
+make: *** [/home/peko/autobuild/instance-1/output/build/libpcap-1.7.4/.stamp_downloaded] Error 1
+make: Leaving directory `/home/peko/autobuild/instance-1/buildroot'
+------------------------------------>8-------------------------------
 
-More generally, for external toolchains, the correct symbolic link is
-from (usr/)${ARCH_LIB_DIR} to lib. For internal toolchains, current
-toolchains always use either lib32 or lib64.
+Now I may wget that tarball, so probably temporary connection issue.
 
-Fix the problem as follows:
-- create a symlink creation helper in toolchain/helpers.mk
-- for external toolchains, call these helpers based on ARCH_LIB_DIR
-- for internal toolchains, call these helpers based on the existing
-  fixed lib32/lib64 logic, moved from Makefile into gcc-initial.
+>          arc |                  libpcap-1.7.4 | NOK | 
+> http://autobuild.buildroot.net/results/7f5b393f8b99172a5b9cd1a4aee7e94b755f4ce7/
+> 
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
----
-v5:
-- move internal toolchain logic into gcc-initial.mk
-- also silence the internal toolchain link steps with $(Q)
-v4:
-- merge both helpers into one
-- remove the separate target for the internal toolchain and hook into
-  gcc-initial
-- re-add deleted comment about MIPS64/n32
-v3:
-- update commit message wrapping
-- change dependency on $(BUILD_DIR) to a order-only dependency
-v2:
-- fix 'lib32-fp' leftover in toolchain-buildroot
-- silence commands creating symlink with $(Q)
-- fix case where ARCH_LIB_DIR is 'lib'
-
-Note: in output/staging/usr/ there would still be more directories than I
-think are really necessary. This behavior is not changed by this patch, it
-was already present before.
-For example, with the mentioned Octeon III toolchain, output/staging/usr/
-contains:
-    bin      bin32      bin32-fp      bin64-fp,
-    lib                 lib32-fp      lib64-fp
-    libexec  libexec32  libexec32-fp  libexec64-fp
-    sbin     sbin32     sbin32-fp     sbin64-fp
-
-where bin/lib/libexec/sbin seem to be the 64-bit equivalents of
-bin32/lib32/libexec32/sbin32.
-This is related to the behavior of copy_toolchain_sysroot in
-toolchain/helpers.mk. It already attempts to filter out lib32 and lib64, but
-does not care about any bin/sbin/libexec directories, nor about such names
-as lib32-fp.
-As the behavior is not changed by this patch, and as I'm not fully aware
-about which directories are really needed in all cases, I am not touching
-this area.
-
- Makefile                                           | 10 ----------
- package/gcc/gcc-initial/gcc-initial.mk             | 17 +++++++++++++++++
- package/skeleton/skeleton.mk                       |  3 ---
- toolchain/helpers.mk                               | 13 +++++++++++++
- toolchain/toolchain-external/toolchain-external.mk | 12 ++++++++++++
- 5 files changed, 42 insertions(+), 13 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 531ac5d..c1fec47 100644
---- a/Makefile
-+++ b/Makefile
-@@ -444,20 +444,10 @@ world: target-post-image
- $(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
- 	@mkdir -p $@
- 
--# We make a symlink lib32->lib or lib64->lib as appropriate
--# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
--ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
--LIB_SYMLINK = lib64
--else
--LIB_SYMLINK = lib32
--endif
--
- $(STAGING_DIR):
- 	@mkdir -p $(STAGING_DIR)/bin
- 	@mkdir -p $(STAGING_DIR)/lib
--	@ln -snf lib $(STAGING_DIR)/$(LIB_SYMLINK)
- 	@mkdir -p $(STAGING_DIR)/usr/lib
--	@ln -snf lib $(STAGING_DIR)/usr/$(LIB_SYMLINK)
- 	@mkdir -p $(STAGING_DIR)/usr/include
- 	@mkdir -p $(STAGING_DIR)/usr/bin
- 	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 6bb7997..29a8a9b 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -62,4 +62,21 @@ HOST_GCC_INITIAL_MAKE_OPTS += all-target-libgcc
- HOST_GCC_INITIAL_INSTALL_OPTS += install-target-libgcc
- endif
- 
-+# The creation of lib32/lib64 symlinks into target and staging directories
-+# needs to be done before the C library is installed. Hooking into the libc
-+# hooks directly is tricky because there are multiple C libraries supported.
-+# Instead, hook into the install step of host-gcc-initial.
-+#
-+# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
-+ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
-+HOST_GCC_INITIAL_LIB_SYMLINK = lib64
-+else
-+HOST_GCC_INITIAL_LIB_SYMLINK = lib32
-+endif
-+define HOST_GCC_INITIAL_CREATE_STAGING_TARGET_SYMLINK
-+	$(Q)$(call create_lib_symlinks,$(HOST_GCC_INITIAL_LIB_SYMLINK),$(STAGING_DIR))
-+	$(Q)$(call create_lib_symlinks,$(HOST_GCC_INITIAL_LIB_SYMLINK),$(TARGET_DIR))
-+endef
-+HOST_GCC_INITIAL_POST_INSTALL_HOOKS += HOST_GCC_INITIAL_CREATE_STAGING_TARGET_SYMLINK
-+
- $(eval $(host-autotools-package))
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 48e7085..2481bd1 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -25,9 +25,6 @@ define SKELETON_INSTALL_TARGET_CMDS
- 		$(SKELETON_PATH)/ $(TARGET_DIR)/
- 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
- 		$(TARGET_DIR_WARNING_FILE)
--	ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
--	mkdir -p $(TARGET_DIR)/usr
--	ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
- endef
- 
- SKELETON_TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 895f3f1..292a865 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -1,5 +1,18 @@
- # This Makefile fragment declares toolchain related helper functions.
- 
-+# Create the necessary symlink from (usr/)lib32|lib64|lib32-fp|... to lib
-+# In general, for external toolchains, the correct link name is $ARCH_LIB_DIR.
-+# $1: link name
-+# $2: destination directory (TARGET_DIR / STAGING_DIR)
-+create_lib_symlinks = \
-+	LIB_SYMLINK="$(strip $1)" ; \
-+	DESTDIR="$(strip $2)" ; \
-+	if [ "$${LIB_SYMLINK}" != "lib" ]; then \
-+		mkdir -p "$${DESTDIR}/usr" ; \
-+		ln -snf lib "$${DESTDIR}/$${LIB_SYMLINK}" ; \
-+		ln -snf lib "$${DESTDIR}/usr/$${LIB_SYMLINK}" ; \
-+	fi
-+
- # The copy_toolchain_lib_root function copies a toolchain library and
- # its symbolic links from the sysroot directory to the target
- # directory. Note that this function is used both by the external
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index fcb033c..348e90f 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -615,6 +615,16 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
- 	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
- endef
- 
-+define TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK
-+	$(Q)ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	$(call create_lib_symlinks,$${ARCH_LIB_DIR},$(STAGING_DIR))
-+endef
-+
-+define TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK
-+	$(Q)ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	$(call create_lib_symlinks,$${ARCH_LIB_DIR},$(TARGET_DIR))
-+endef
-+
- # Special installation target used on the Blackfin architecture when
- # FDPIC is not the primary binary format being used, but the user has
- # nonetheless requested the installation of the FDPIC libraries to the
-@@ -733,6 +743,7 @@ define TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO
- endef
- 
- define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
-+	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
-@@ -742,6 +753,7 @@ endef
- # and the target directory, we do everything within the
- # install-staging step, arbitrarily.
- define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
-+	$(TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
--- 
-1.9.5
+-Alexey
