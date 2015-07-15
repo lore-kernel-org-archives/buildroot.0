@@ -1,71 +1,42 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 15 Jul 2015 18:08:41 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2015-07-12
-In-Reply-To: <20150713063017.18FF71015E3@stock.ovh.net>
-References: <20150713063017.18FF71015E3@stock.ovh.net>
-Message-ID: <1436983720.3682.24.camel@synopsys.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 15 Jul 2015 20:11:40 +0200
+Subject: [Buildroot] [PATCH 01/15] package/x11r7/xdriver_xf86-input-vmmouse:
+	bump version to 13.1.0
+Message-ID: <1436983914-7858-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2015-07-13 at 08:30 +0200, Thomas Petazzoni wrote:
-> Those results are limited to the arc architecture.
-> 
-> Build statistics for 2015-07-12
-> ===============================
-> 
->         success : 5  
->        failures : 15 
->        timeouts : 0  
->           TOTAL : 20 
-> 
-> Classification of failures by reason
-> ====================================
-> 
->                   zeromq-4.0.5 | 5 
->                    tinc-1.0.24 | 3 
->              util-linux-2.26.2 | 2 
->              libselinux-2.1.13 | 1 
->                  rsyslog-8.9.0 | 1 
->                  cdrkit-1.1.11 | 1 
->                wvstreams-4.6.1 | 1 
->                   boost-1.58.0 | 1 
-> 
-> Detail of failures
-> ===================
-> 
->          arc |                  cdrkit-1.1.11 | NOK | 
-> http://autobuild.buildroot.net/results/f3b2f25c93443a52f5916913f80f15e00a117eee/
 
-That's something new:
-------------------------------->8------------------------
-/home/test/autobuild/instance-1/output/host/usr/arc-buildroot-linux
--uclibc/sysroot/usr/lib/libpthread.a(lowlevellock.os): In function `__lll_lock_wait_private':
-lowlevellock.c:(.text+0x0): multiple definition of `__lll_lock_wait_private'
-/home/test/autobuild/instance-1/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(libc
--lowlevellock.os):libc-lowlevellock.c:(.text+0x0): first defined here
-collect2: error: ld returned 1 exit status
-------------------------------->8------------------------
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash     |    4 ++--
+ .../x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Let me look at this one.
-
->          arc |                  rsyslog-8.9.0 | NOK | 
-> http://autobuild.buildroot.net/results/e7ac306490ebaa21cc997911aafa2d959bb6b60b/
-
-Fixed with http://git.buildroot.net/buildroot/commit/package/rsyslog?id=6a9095a39a72926e622285ba21d93dd48d580f0a
-
->          arc |                wvstreams-4.6.1 | NOK | 
-> http://autobuild.buildroot.net/results/74c4208bfc026115c22b5f7c4a1859d93c6e4057/
-
-Once again that strange TERM signal:
-------------------------------->8------------------------
-linking libwvutils.so...
-collect2: error: ld terminated with signal 6 [Aborted]
-wvrules.mk:179: recipe for target 'libwvutils.so' failed
-make[1]: *** [libwvutils.so] Error 1
-------------------------------->8------------------------
-
--Alexey
+diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash
+index 5331fac..302b1cd 100644
+--- a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash
++++ b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/xorg/2013-January/055275.html
+-sha256	04cfb60366008d4db815c550d8fb8d0a4270c75fa7a20fa3bddc9ecbd355612c	xf86-input-vmmouse-13.0.0.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-June/002616.html
++sha256	0af558957ac1be1b2863712c2475de8f4d7f14921fd01ded2e2fde4921b19319	xf86-input-vmmouse-13.1.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
+index d982d82..53ceec8 100644
+--- a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
++++ b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_INPUT_VMMOUSE_VERSION = 13.0.0
++XDRIVER_XF86_INPUT_VMMOUSE_VERSION = 13.1.0
+ XDRIVER_XF86_INPUT_VMMOUSE_SOURCE = xf86-input-vmmouse-$(XDRIVER_XF86_INPUT_VMMOUSE_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_VMMOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_VMMOUSE_LICENSE = MIT
+-- 
+1.7.10.4
