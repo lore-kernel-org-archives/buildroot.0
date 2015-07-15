@@ -1,44 +1,43 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 15 Jul 2015 17:21:13 +0200
-Subject: [Buildroot] Buildroot enhancement proposal: on starting a GUI
-	service at boot
-Message-ID: <CA+TH9VkiLkeg+9LWedL=2GBkAN4iAK1eO0+cs0_QW4qp7SS1qg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 15 Jul 2015 13:13:46 -0300
+Subject: [Buildroot] [PATCH] libnss: security bump to version 3.19.2
+Message-ID: <1436976826-22602-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Developers,
+Fixes:
+CVE-2015-2730, CVE-2015-2721, and probably others.
 
-One of the common use-case for an embedded system is to start a gui at
-boot. Probably it will be the main point of interaction after all and
-the most sensitive process in the whole system.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I'm thinking on adding a custom option to set correctly a gui service
-to be started at boot, something that will make easier for a buildroot
-user to start a custom gui service at boot instead of fighting with
-overlay and service scipts/files.
-
-Note that this gui service is different from a standard service: it
-should be respawned if someting goes wrong and this cannot be done in
-a normal busybox/systemv init script: for busybox/systemv it should be
-added directly to /etc/inittab.
-
-Actually I'm more oriented in adding an option into "System
-configuration": a string that will contain the command line to be
-added as a service. The matter is to individuate which init system is
-in use and acting accordingly: adding a line in /etc/inittab for
-busybox and systemv or adding a service file for systemd.
-
-Aside from technical difficulty which is none, what could be the best
-way to implement such behaviour? Is it a desirable feature for
-buildroot?
-If yes, what is the best approach to have it accepted, a "package", an
-option, where?
-
-I'm looking for advice! thank you!
-
-Sincerely, Angelo
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 1f76f03..2336590 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_4_RTM/src/SHA256SUMS
+-sha256	1d98ad1881a4237ec98cbe472fc851480f0b0e954dfe224d047811fb96ff9d79	nss-3.17.4.tar.gz
++# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_19_2_RTM/src/SHA256SUMS
++sha256	1306663e8f61d8449ad8cbcffab743a604dcd9f6f34232c210847c51dce2c9ae	nss-3.19.2.tar.gz
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index db272b3..0821804 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.17.4
++LIBNSS_VERSION = 3.19.2
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+2.3.6
