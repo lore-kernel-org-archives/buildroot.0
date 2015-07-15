@@ -1,133 +1,209 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 15 Jul 2015 17:52:16 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2015-07-14
-In-Reply-To: <20150715063016.118A21016B5@stock.ovh.net>
-References: <20150715063016.118A21016B5@stock.ovh.net>
-Message-ID: <1436982736.3682.16.camel@synopsys.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 15 Jul 2015 19:52:09 +0200
+Subject: [Buildroot] [PATCH v5 1/1] toolchain: create symlink to 'lib' from
+	ARCH_LIB_DIR iso fixed lib32/lib64
+Message-ID: <1436982729-7270-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-On Wed, 2015-07-15 at 08:30 +0200, Thomas Petazzoni wrote:
-> Those results are limited to the arc architecture.
-> 
-> Build statistics for 2015-07-14
-> ===============================
-> 
->         success : 6  
->        failures : 23 
->        timeouts : 0  
->           TOTAL : 29 
-> 
-> Classification of failures by reason
-> ====================================
-> 
->                   zeromq-4.0.5 | 9 
->              util-linux-2.26.2 | 5 
->                   boost-1.58.0 | 3 
->                alsa-lib-1.0.29 | 3 
->              btrfs-progs-4.1.1 | 1 
->              libselinux-2.1.13 | 1 
->                    tinc-1.0.24 | 1 
-> 
-> Detail of failures
-> ===================
-> 
->          arc |                alsa-lib-1.0.29 | NOK | 
-> http://autobuild.buildroot.net/results/af9596843794610560a77374408fbdfab21aa891/
->          arc |                alsa-lib-1.0.29 | NOK | 
-> http://autobuild.buildroot.net/results/ec53d93c116441c84105f3a27d250554630ce553/
->          arc |                alsa-lib-1.0.29 | NOK | 
-> http://autobuild.buildroot.net/results/519934a75cbe6bfdd522fe33b66dfe0522956046/
+Currently, following symbolic links are created in both target and
+staging directories:
+- lib(32|64) --> lib
+- usr/lib(32|64) --> lib
 
-Probably still unsolved problem in uClibc?
-http://lists.uclibc.org/pipermail/uclibc/2014-August/048535.html
+The decision for lib32 or lib64 is based on the target architecture
+configuration in buildroot (BR2_ARCH_IS_64).
 
-Interesting enough something similar was fixed a while back for "vfork",
-see http://patchwork.ozlabs.org/patch/329893/,
-http://git.uclibc.org/uClibc/commit/?id=00b07e8ca5664985bbbbdc1d375407ac36124317
+In at least one case this is not correct: when building for a Cavium Octeon
+III processor using the toolchain from the Cavium Networks SDK, and
+specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, libraries are expected
+in directory 'lib32-fp' rather than 'lib32' (likewise for lib64-fp).
 
->          arc |                   boost-1.58.0 | NOK | 
-> http://autobuild.buildroot.net/results/596c2eb1378946b8c0fea6b3ebcf80ee7e14995a/
->          arc |                   boost-1.58.0 | NOK | 
-> http://autobuild.buildroot.net/results/0585f6c926042d7c859150dbf7b33928c4687273/
->          arc |                   boost-1.58.0 | NOK | 
-> http://autobuild.buildroot.net/results/16fd658176b4e4927f7c7dbe5598b7a38b819af9/
+More generally, for external toolchains, the correct symbolic link is
+from (usr/)${ARCH_LIB_DIR} to lib. For internal toolchains, current
+toolchains always use either lib32 or lib64.
 
-Looks like an issue with boost that for some reason
-uses syscall (non-existent on some arches including ARC)
-directly instead of libc's eventfd().
------------------>8-------------------
-"syscall(__NR_eventfd, 0);"
------------------>8-------------------
+Fix the problem as follows:
+- create a symlink creation helper in toolchain/helpers.mk
+- for external toolchains, call these helpers based on ARCH_LIB_DIR
+- for internal toolchains, call these helpers based on the existing
+  fixed lib32/lib64 logic, moved from Makefile into gcc-initial.
 
->          arc |              btrfs-progs-4.1.1 | NOK | 
-> http://autobuild.buildroot.net/results/e48c8b7ce150a70af175f78d67f90056faa6fd3b/
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Internal compiler's issue on handling of TLS data.
-Internal bug-report was filed, waiting for an action.
------------------>8-------------------
-undefined reference to `.tdata'
------------------>8-------------------
+---
+v5:
+- move internal toolchain logic into gcc-initial.mk
+- also silence the internal toolchain link steps with $(Q)
+v4:
+- merge both helpers into one
+- remove the separate target for the internal toolchain and hook into
+  gcc-initial
+- re-add deleted comment about MIPS64/n32
+v3:
+- update commit message wrapping
+- change dependency on $(BUILD_DIR) to a order-only dependency
+v2:
+- fix 'lib32-fp' leftover in toolchain-buildroot
+- silence commands creating symlink with $(Q)
+- fix case where ARCH_LIB_DIR is 'lib'
 
->          arc |              libselinux-2.1.13 | NOK | 
-> http://autobuild.buildroot.net/results/40bdee839acd8dfb5c78aead953a690dbfc461d8/
+Note: in output/staging/usr/ there would still be more directories than I
+think are really necessary. This behavior is not changed by this patch, it
+was already present before.
+For example, with the mentioned Octeon III toolchain, output/staging/usr/
+contains:
+    bin      bin32      bin32-fp      bin64-fp,
+    lib                 lib32-fp      lib64-fp
+    libexec  libexec32  libexec32-fp  libexec64-fp
+    sbin     sbin32     sbin32-fp     sbin64-fp
 
-That's something new, need to look at this one in depth.
------------------>8-------------------
-/tmp/ccyYpeOv.s: Assembler messages:
-/tmp/ccyYpeOv.s:475: Error: internal error: fixup not contained within frag
------------------>8-------------------
+where bin/lib/libexec/sbin seem to be the 64-bit equivalents of
+bin32/lib32/libexec32/sbin32.
+This is related to the behavior of copy_toolchain_sysroot in
+toolchain/helpers.mk. It already attempts to filter out lib32 and lib64, but
+does not care about any bin/sbin/libexec directories, nor about such names
+as lib32-fp.
+As the behavior is not changed by this patch, and as I'm not fully aware
+about which directories are really needed in all cases, I am not touching
+this area.
 
->          arc |                    tinc-1.0.24 | NOK | 
-> http://autobuild.buildroot.net/results/60319063757340810fc6545f5da94e45f9b6c811/
+ Makefile                                           | 10 ----------
+ package/gcc/gcc-initial/gcc-initial.mk             | 17 +++++++++++++++++
+ package/skeleton/skeleton.mk                       |  3 ---
+ toolchain/helpers.mk                               | 13 +++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk | 12 ++++++++++++
+ 5 files changed, 42 insertions(+), 13 deletions(-)
 
-Another case of PIE usage. Will send a patch for it soon.
-
->          arc |              util-linux-2.26.2 | NOK | 
-> http://autobuild.buildroot.net/results/bc7995f1e4e0d103c83c8e43703b93ea50829899/
->          arc |              util-linux-2.26.2 | NOK | 
-> http://autobuild.buildroot.net/results/d82f06660557d3d43a7f7c806d51217f607ce8c9/
->          arc |              util-linux-2.26.2 | NOK | 
-> http://autobuild.buildroot.net/results/eb2182939f223ceb697145e3b450113ad770ad21/
->          arc |              util-linux-2.26.2 | NOK | 
-> http://autobuild.buildroot.net/results/94c0185c88b0a8107bda5e0a590f2f77153860d5/
->          arc |              util-linux-2.26.2 | NOK | 
-> http://autobuild.buildroot.net/results/d60738b7ef7a266d112b19006bcabd7a818213ad/
-
-The same as with "libselinux".
------------------>8-------------------
-randutils.c:(.text+0x138): undefined reference to `.tdata'
------------------>8-------------------
-
->          arc |                   zeromq-4.0.5 | NOK | 
-> http://autobuild.buildroot.net/results/621c2b77197963d229a3b322ee35ce85ecfc01cd/
->          arc |                   zeromq-4.0.5 | NOK | 
-> http://autobuild.buildroot.net/results/a2891e9ef98f5505d88d9a2f84e0fa3e81ca779c/
->          arc |                   zeromq-4.0.5 | NOK | 
-> http://autobuild.buildroot.net/results/506e2903b9ac5f2027d8edbe2ae9f90ba04991ba/
->          arc |                   zeromq-4.0.5 | NOK | 
-> http://autobuild.buildroot.net/results/021d3efeb0dab244885e9159d6f579f3eb04ffcf/
->          arc |                   zeromq-4.0.5 | NOK | 
-> http://autobuild.buildroot.net/results/50e9be0896da86c042f3f4eae1cdd329dddc9e2a/
->          arc |                   zeromq-4.0.5 | NOK | 
-> http://autobuild.buildroot.net/results/17ba855ba6286c202d032667e6b14fcf5d697ebf/
->          arc |                   zeromq-4.0.5 | NOK | 
-> http://autobuild.buildroot.net/results/409cc6a54937b72b0524d7466472d9178e6b07e4/
->          arc |                   zeromq-4.0.5 | NOK | 
-> http://autobuild.buildroot.net/results/705b82af4951779a7c672e51461db4624df8436f/
->          arc |                   zeromq-4.0.5 | NOK | 
-> http://autobuild.buildroot.net/results/77c9fb8ab581c9ed70fbb3d29ad1cccef291a84c/
-
-Should be fixed with arc-2015.06 release, please consider applying
-http://patchwork.ozlabs.org/patch/495837/
------------------>8-------------------
-socket_base.cpp:1157:1: error: Internal consistency failure: cfi row mismatch [-Werror]
------------------>8-------------------
-
--Alexey
+diff --git a/Makefile b/Makefile
+index 531ac5d..c1fec47 100644
+--- a/Makefile
++++ b/Makefile
+@@ -444,20 +444,10 @@ world: target-post-image
+ $(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
+ 	@mkdir -p $@
+ 
+-# We make a symlink lib32->lib or lib64->lib as appropriate
+-# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
+-ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
+-LIB_SYMLINK = lib64
+-else
+-LIB_SYMLINK = lib32
+-endif
+-
+ $(STAGING_DIR):
+ 	@mkdir -p $(STAGING_DIR)/bin
+ 	@mkdir -p $(STAGING_DIR)/lib
+-	@ln -snf lib $(STAGING_DIR)/$(LIB_SYMLINK)
+ 	@mkdir -p $(STAGING_DIR)/usr/lib
+-	@ln -snf lib $(STAGING_DIR)/usr/$(LIB_SYMLINK)
+ 	@mkdir -p $(STAGING_DIR)/usr/include
+ 	@mkdir -p $(STAGING_DIR)/usr/bin
+ 	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index 6bb7997..29a8a9b 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -62,4 +62,21 @@ HOST_GCC_INITIAL_MAKE_OPTS += all-target-libgcc
+ HOST_GCC_INITIAL_INSTALL_OPTS += install-target-libgcc
+ endif
+ 
++# The creation of lib32/lib64 symlinks into target and staging directories
++# needs to be done before the C library is installed. Hooking into the libc
++# hooks directly is tricky because there are multiple C libraries supported.
++# Instead, hook into the install step of host-gcc-initial.
++#
++# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
++ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
++HOST_GCC_INITIAL_LIB_SYMLINK = lib64
++else
++HOST_GCC_INITIAL_LIB_SYMLINK = lib32
++endif
++define HOST_GCC_INITIAL_CREATE_STAGING_TARGET_SYMLINK
++	$(Q)$(call create_lib_symlinks,$(HOST_GCC_INITIAL_LIB_SYMLINK),$(STAGING_DIR))
++	$(Q)$(call create_lib_symlinks,$(HOST_GCC_INITIAL_LIB_SYMLINK),$(TARGET_DIR))
++endef
++HOST_GCC_INITIAL_POST_INSTALL_HOOKS += HOST_GCC_INITIAL_CREATE_STAGING_TARGET_SYMLINK
++
+ $(eval $(host-autotools-package))
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 48e7085..2481bd1 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -25,9 +25,6 @@ define SKELETON_INSTALL_TARGET_CMDS
+ 		$(SKELETON_PATH)/ $(TARGET_DIR)/
+ 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+ 		$(TARGET_DIR_WARNING_FILE)
+-	ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+-	mkdir -p $(TARGET_DIR)/usr
+-	ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
+ endef
+ 
+ SKELETON_TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 895f3f1..292a865 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -1,5 +1,18 @@
+ # This Makefile fragment declares toolchain related helper functions.
+ 
++# Create the necessary symlink from (usr/)lib32|lib64|lib32-fp|... to lib
++# In general, for external toolchains, the correct link name is $ARCH_LIB_DIR.
++# $1: link name
++# $2: destination directory (TARGET_DIR / STAGING_DIR)
++create_lib_symlinks = \
++	LIB_SYMLINK="$(strip $1)" ; \
++	DESTDIR="$(strip $2)" ; \
++	if [ "$${LIB_SYMLINK}" != "lib" ]; then \
++		mkdir -p "$${DESTDIR}/usr" ; \
++		ln -snf lib "$${DESTDIR}/$${LIB_SYMLINK}" ; \
++		ln -snf lib "$${DESTDIR}/usr/$${LIB_SYMLINK}" ; \
++	fi
++
+ # The copy_toolchain_lib_root function copies a toolchain library and
+ # its symbolic links from the sysroot directory to the target
+ # directory. Note that this function is used both by the external
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index fcb033c..348e90f 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -615,6 +615,16 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+ 	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
+ endef
+ 
++define TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK
++	$(Q)ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
++	$(call create_lib_symlinks,$${ARCH_LIB_DIR},$(STAGING_DIR))
++endef
++
++define TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK
++	$(Q)ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
++	$(call create_lib_symlinks,$${ARCH_LIB_DIR},$(TARGET_DIR))
++endef
++
+ # Special installation target used on the Blackfin architecture when
+ # FDPIC is not the primary binary format being used, but the user has
+ # nonetheless requested the installation of the FDPIC libraries to the
+@@ -733,6 +743,7 @@ define TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO
+ endef
+ 
+ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
++	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+@@ -742,6 +753,7 @@ endef
+ # and the target directory, we do everything within the
+ # install-staging step, arbitrarily.
+ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
++	$(TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
+-- 
+1.9.5
