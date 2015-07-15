@@ -1,41 +1,47 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 15 Jul 2015 12:51:26 +0200
-Subject: [Buildroot] [PATCH] package/mono: bump to version 4.0.2.5
-Message-ID: <1436957486-10937-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 15 Jul 2015 08:17:10 -0300
+Subject: [Buildroot] [PATCH] dnsmasq: bump to version 2.73
+In-Reply-To: <CALq67GDUHTUQbp1wfqv_zfzP4u3Zzcq5-kJ_Fm2gmStturqOjQ@mail.gmail.com>
+References: <1434804976-8637-1-git-send-email-gustavo@zacarias.com.ar>
+ <CALq67GDUHTUQbp1wfqv_zfzP4u3Zzcq5-kJ_Fm2gmStturqOjQ@mail.gmail.com>
+Message-ID: <55A64136.5000800@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps mono to version 4.0.2.5
+On 15/07/15 00:58, Ryan Barnett wrote:
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/mono/mono.hash | 2 +-
- package/mono/mono.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Tonight I was trying to use dnsmasq tonight for the first time for DNS
+> and DHCP functionality. I'm unable to successfully start the
+> application as it segs fault. After some debugging with strace turns
+> out with the new version (2.73) of dnsmasq requires /tmp/resolv.conf
+> to exist (actually /etc/resolv.conf since it sim links to
+> /tmp/resolv.conf) even if you have the 'no-resolv' option specified in
+> the config file. Below is the output from strace:
+>
+> lstat64("/etc", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+> lstat64("/etc/resolv.conf", {st_mode=S_IFLNK|0777, st_size=18, ...}) = 0
+> readlink("/etc/resolv.conf", "../tmp/resolv.conf", 4095) = 18
+> lstat64("/tmp", {st_mode=S_IFDIR|S_ISVTX|0777, st_size=100, ...}) = 0
+> lstat64("/tmp/resolv.conf", 0xbea996f8) = -1 ENOENT (No such file or directory)
+> --- SIGSEGV {si_signo=SIGSEGV, si_code=SEGV_ACCERR, si_addr=0x4b5d0} ---
+> +++ killed by SIGSEGV +++
+> Segmentation fault
+>
+> I've verified if, 1) I revert this commit everything works or 2) if I
+> add a touch to /tmp/resolv.conf to the S80dnsmasq startup script
+> before invoking dnsmasq.
+>
+> How do we want to address this issue? Is option 2 preferable?
+>
+> Currently I'm not finding anything helpful on resolving this issue but
+> it does appear there is some traffic on the mailing list for dnsmasq:
+>
+> https://www.mail-archive.com/dnsmasq-discuss at lists.thekelleys.org.uk/msg09635.html
 
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index c1d0c6e..cf8e0d5 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 4485d8b44a939bef64b3b1b6a7f0388761cfe6803e149aa1e56aab023cfb267e  mono-4.0.0.tar.bz2
-+sha256 b074584eea5bbaaf29362486a69d70abe53d0d2feb334f231fa9c841cf6fd651  mono-4.0.2.5.tar.bz2
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index 63026f1..9cb8564 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONO_VERSION = 4.0.0
-+MONO_VERSION = 4.0.2.5
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
- MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
--- 
-1.9.1
+Hi Ryan.
+Wait for the 2.74 release (rc1 was recently released) that fixes this issue?
+Or backport the fix (probably 362c9303).
+Regards.
