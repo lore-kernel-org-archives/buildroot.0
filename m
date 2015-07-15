@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 15 Jul 2015 20:11:42 +0200
-Subject: [Buildroot] [PATCH 03/15] package/x11r7/xproto_xproto: bump version
-	to 7.0.28
+Date: Wed, 15 Jul 2015 20:11:41 +0200
+Subject: [Buildroot] [PATCH 02/15] package/x11r7/xkeyboard-config: bump
+	version to 2.15
 In-Reply-To: <1436983914-7858-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1436983914-7858-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1436983914-7858-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1436983914-7858-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xproto_xproto/xproto_xproto.hash |    4 ++--
- package/x11r7/xproto_xproto/xproto_xproto.mk   |    2 +-
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash |    4 ++--
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk   |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xproto_xproto/xproto_xproto.hash b/package/x11r7/xproto_xproto/xproto_xproto.hash
-index 6c5a24d..333ac6d 100644
---- a/package/x11r7/xproto_xproto/xproto_xproto.hash
-+++ b/package/x11r7/xproto_xproto/xproto_xproto.hash
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index 68213a6..c9bdca2 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
 @@ -1,2 +1,2 @@
--# From http://comments.gmane.org/gmane.comp.freedesktop.xorg.announce/2243
--sha256	246f23a6b235c8008183deeb1dcd76d529a099f93600b648b399811b10ea110c	xproto-7.0.27.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-July/002618.html
-+sha256	29e85568d1f68ceef8a2c081dad9bc0e5500a53cfffde24b564dc43d46ddf6ca	xproto-7.0.28.tar.bz2
-diff --git a/package/x11r7/xproto_xproto/xproto_xproto.mk b/package/x11r7/xproto_xproto/xproto_xproto.mk
-index 99d63f5..7357b8c 100644
---- a/package/x11r7/xproto_xproto/xproto_xproto.mk
-+++ b/package/x11r7/xproto_xproto/xproto_xproto.mk
+-# From http://lists.x.org/archives/xorg-announce/2015-January/002527.html
+-sha256	dc91458a214c56a35727f9e523fc647615de64137057ca6ee4d4d4474a4bb2ae	xkeyboard-config-2.14.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-May/002609.html
++sha256	0e443cf7ca2f0b40846472c029647a05933fc705d611e1478c4db8a48a6f38bf	xkeyboard-config-2.15.tar.bz2
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index 96a769e..f88686b 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XPROTO_XPROTO_VERSION = 7.0.27
-+XPROTO_XPROTO_VERSION = 7.0.28
- XPROTO_XPROTO_SOURCE = xproto-$(XPROTO_XPROTO_VERSION).tar.bz2
- XPROTO_XPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
- XPROTO_XPROTO_LICENSE = MIT
+-XKEYBOARD_CONFIG_VERSION = 2.14
++XKEYBOARD_CONFIG_VERSION = 2.15
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
+ XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
 -- 
 1.7.10.4
