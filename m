@@ -1,62 +1,63 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 15 Jul 2015 12:08:02 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain: create symlink to 'lib' from
- ARCH_LIB_DIR iso fixed lib32/lib64
-In-Reply-To: <55A62262.1090304@mind.be>
-References: <1436949545-12487-1-git-send-email-patrickdepinguin@gmail.com>
- <20150715105526.19c500e8@free-electrons.com>
- <CAAXf6LXzu+j-xV7nPx200Tj8NAt6x_yrOoOjiEJpZGrCUmkB9g@mail.gmail.com>
- <20150715105950.42ac4b53@free-electrons.com> <55A62262.1090304@mind.be>
-Message-ID: <CAAXf6LV494mu_bbmzVfXRtyHDBhn7+mcY4Le8moqyZNYLn6JaQ@mail.gmail.com>
+From: paul at crapouillou.net <paul@crapouillou.net>
+Date: Wed, 15 Jul 2015 11:55:03 +0200
+Subject: [Buildroot] [PATCH] package/dropbear: Fix symlink only if pointing
+	to the right directory
+Message-ID: <1436954103-8380-1-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 15, 2015 at 11:05 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 07/15/15 10:59, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Wed, 15 Jul 2015 10:57:52 +0200, Thomas De Schampheleire wrote:
->>
->>> Well that is part of the discussion: conceptually I believe that the
->>> symlink creation is part of the toolchain as a whole. It needs to be
->>> done before libc, but actually all remaining toolchain components will
->>> probably rely on it, and also the packages.
->>> By placing it in gcc-initial I believe it is pretty hidden.
->>
->> It is also pretty hidden to put the hook for a given package outside of
->> this package .mk file.
->>
->>> Moreover, suppose we add support for the llvm/clang compiler. For such
->>> toolchains, we'd also need the symbolic links, so that code would have
->>> to be duplicated...
->>
->> I don't think trying to take llvm/clang into account really makes sense
->> here. It's probably going to be so much different than what we have
->> today that lots of things would have to be reworked anyway.
->
->  Just to be clear: for me this is a bikeshedding discussion. Neither is right,
-> so just go for one.
->
->  BTW, yesterday I did ask everyone in Toulouse if it would be OK have add to the
-> gcc-final hook from toolchain-buildroot.mk, and nobody really opposed (though I
-> don't think you really said anything, ThomasP).
->
+From: Paul Cercueil <paul@crapouillou.net>
 
-Suppose we do add the hook in gcc-initial, where would the link target
-be defined? So this code:
+This commit ensures that the /etc/dropbear symlink won't be removed if
+it points elsewhere than /var/run/dropbear.
 
-+# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
-+ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
-+TOOLCHAIN_BUILDROOT_LIB_SYMLINK = lib64
-+else
-+TOOLCHAIN_BUILDROOT_LIB_SYMLINK = lib32
-+endif
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ package/dropbear/S50dropbear      | 4 ++--
+ package/dropbear/dropbear.service | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-
-Do you think that belongs also in gcc-initial? Or should that stay in
-buildroot-toolchain?
-
-/Thomas
+diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
+index af50ccf..d42fb60 100644
+--- a/package/dropbear/S50dropbear
++++ b/package/dropbear/S50dropbear
+@@ -12,12 +12,12 @@ start() {
+ 	echo -n "Starting dropbear sshd: "
+ 	umask 077
+ 
+-	# If /etc/dropbear is not a directory, and
++	# If /etc/dropbear is a symlink to /var/run/dropbear, and
+ 	#   - the filesystem is RO (i.e. we can not rm the symlink),
+ 	#     create the directory pointed to by the symlink.
+ 	#   - the filesystem is RW (i.e. we can rm the symlink),
+ 	#     replace the symlink with an actual directory
+-	if ! [ -d /etc/dropbear ]; then
++	if [ "$(readlink /etc/dropbear)" = "/var/run/dropbear" ]; then
+ 		if rm -f /etc/dropbear; then
+ 			mkdir -p /etc/dropbear
+ 		else
+diff --git a/package/dropbear/dropbear.service b/package/dropbear/dropbear.service
+index 0e2cf54..62ade1f 100644
+--- a/package/dropbear/dropbear.service
++++ b/package/dropbear/dropbear.service
+@@ -3,13 +3,13 @@ Description=Dropbear SSH daemon
+ After=syslog.target network.target auditd.service
+ 
+ [Service]
+-# If /etc/dropbear is not a directory, and
++# If /etc/dropbear is a symlink to /var/run/dropbear, and
+ #   - the filesystem is RO (i.e. we can not rm the symlink),
+ #     create the directory pointed to by the symlink.
+ #   - the filesystem is RW (i.e. we can rm the symlink),
+ #     replace the symlink with an actual directory
+ ExecStartPre=/bin/sh -c '\
+-if ! [ -d /etc/dropbear ]; then \
++if [ "$(readlink /etc/dropbear)" = "/var/run/dropbear" ]; then \
+     if rm -f /etc/dropbear; then \
+         mkdir -p /etc/dropbear; \
+     else \
+-- 
+2.1.4
