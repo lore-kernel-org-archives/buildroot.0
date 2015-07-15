@@ -1,46 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 15 Jul 2015 20:11:46 +0200
-Subject: [Buildroot] [PATCH 07/15] package/x11r7/xdriver_xf86-video-cirrus:
-	bump version to 1.5.3
+Date: Wed, 15 Jul 2015 20:11:45 +0200
+Subject: [Buildroot] [PATCH 06/15]
+	package/x11r7/xdriver_xf86-input-libinput: bump version to 0.12.0
 In-Reply-To: <1436983914-7858-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1436983914-7858-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1436983914-7858-7-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1436983914-7858-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.hash      |    2 ++
- .../x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk  |    5 +++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
- create mode 100644 package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.hash
+ .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash   |    4 ++--
+ .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk     |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.hash b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.hash
-new file mode 100644
-index 0000000..86ef09e
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.hash
-@@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2015-May/002600.html
-+sha256	edc87b20a55259126b5239b5c1ef913419eab7ded0ed12ae9ae989460d7351ab	xf86-video-cirrus-1.5.3.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
-index e68656d..f2523db 100644
---- a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
-+++ b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+index 05e119e..3936f01 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-June/002610.html
+-sha256	56babf46c13d15fbd15c9d43815e9220e63acd9ed28095e7d68ad03f9148bbda	xf86-input-libinput-0.11.0.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-July/002619.html
++sha256	db8f919c24a381cec1e7840f1f2117251501c0c7ae2a43941d84753154a826d6	xf86-input-libinput-0.12.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index 722e700..30973ea 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_CIRRUS_VERSION = df389885adf71ed3b045c2fde9fd3ba4329e1a58
--XDRIVER_XF86_VIDEO_CIRRUS_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-cirrus
-+XDRIVER_XF86_VIDEO_CIRRUS_VERSION = 1.5.3
-+XDRIVER_XF86_VIDEO_CIRRUS_SOURCE = xf86-video-cirrus-$(XDRIVER_XF86_VIDEO_CIRRUS_VERSION).tar.bz2
-+XDRIVER_XF86_VIDEO_CIRRUS_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_CIRRUS_LICENSE = MIT
- XDRIVER_XF86_VIDEO_CIRRUS_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_CIRRUS_AUTORECONF = YES
+-XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.11.0
++XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.12.0
+ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
 -- 
 1.7.10.4
