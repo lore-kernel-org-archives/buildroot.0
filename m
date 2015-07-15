@@ -1,96 +1,41 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 15 Jul 2015 12:50:47 +0200
-Subject: [Buildroot] [PATCH v2] package/mono-gtksharp3: new package
-Message-ID: <1436957447-9863-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Wed, 15 Jul 2015 12:51:26 +0200
+Subject: [Buildroot] [PATCH] package/mono: bump to version 4.0.2.5
+Message-ID: <1436957486-10937-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds mono gtksharp3 package for mono.
+This patch bumps mono to version 4.0.2.5
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
-Changelog
+ package/mono/mono.hash | 2 +-
+ package/mono/mono.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-v1->v2:
-* Fixing missing detection of mono mcs binary
-
-v1:
-* added version number everywhere (gtksharp3).
-* added license file for cairo components.
-* added hash file
-
- package/Config.in                          |  5 +++++
- package/mono-gtksharp3/Config.in           |  8 ++++++++
- package/mono-gtksharp3/mono-gtksharp3.hash |  2 ++
- package/mono-gtksharp3/mono-gtksharp3.mk   | 17 +++++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/mono-gtksharp3/Config.in
- create mode 100644 package/mono-gtksharp3/mono-gtksharp3.hash
- create mode 100644 package/mono-gtksharp3/mono-gtksharp3.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 86a53c8..8973214 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -508,6 +508,11 @@ endif
- 	source "package/lutok/Config.in"
- 	source "package/moarvm/Config.in"
- 	source "package/mono/Config.in"
-+if BR2_PACKAGE_MONO
-+menu "Mono libraries/modules"
-+	source "package/mono-gtksharp3/Config.in"
-+endmenu
-+endif
- 	source "package/nodejs/Config.in"
- 	source "package/perl/Config.in"
- if BR2_PACKAGE_PERL
-diff --git a/package/mono-gtksharp3/Config.in b/package/mono-gtksharp3/Config.in
-new file mode 100644
-index 0000000..570b62c
---- /dev/null
-+++ b/package/mono-gtksharp3/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_MONO_GTKSHARP3
-+	bool "gtk# 3"
-+	depends on BR2_PACKAGE_LIBGTK3
-+	help
-+	  Gtk# is a .NET language binding for the GTK+ toolkit.
-+	  This package provides version 3 of the bindings.
-+
-+	  http://www.mono-project.com/docs/gui/gtksharp/
-diff --git a/package/mono-gtksharp3/mono-gtksharp3.hash b/package/mono-gtksharp3/mono-gtksharp3.hash
-new file mode 100644
-index 0000000..4005051
---- /dev/null
-+++ b/package/mono-gtksharp3/mono-gtksharp3.hash
-@@ -0,0 +1,2 @@
-+# sha256 from https://download.gnome.org/sources/gtk-sharp/2.99/gtk-sharp-2.99.3.sha256sum
-+sha256 6440f571416267ae0cb5698071d087b31e3084693fa2c829b1db37ca7ea2c3a2	gtk-sharp-2.99.3.tar.xz
-diff --git a/package/mono-gtksharp3/mono-gtksharp3.mk b/package/mono-gtksharp3/mono-gtksharp3.mk
-new file mode 100644
-index 0000000..fa63d66
---- /dev/null
-+++ b/package/mono-gtksharp3/mono-gtksharp3.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# gtksharp3
-+#
-+################################################################################
-+
-+MONO_GTKSHARP3_VERSION_MAJOR = 2.99
-+MONO_GTKSHARP3_VERSION = $(MONO_GTKSHARP3_VERSION_MAJOR).3
-+MONO_GTKSHARP3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/$(MONO_GTKSHARP3_VERSION_MAJOR)/
-+MONO_GTKSHARP3_SOURCE = gtk-sharp-$(MONO_GTKSHARP3_VERSION).tar.xz
-+MONO_GTKSHARP3_LICENSE = LGPLv2, MIT (cairo)
-+MONO_GTKSHARP3_LICENSE_FILES = COPYING
-+MONO_GTKSHARP3_INSTALL_STAGING = YES
-+MONO_GTKSHARP3_DEPENDENCIES = mono libgtk3
-+MONO_GTKSHARP3_CONF_OPTS += CSC=$(HOST_DIR)/usr/bin/mcs
-+
-+$(eval $(autotools-package))
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+index c1d0c6e..cf8e0d5 100644
+--- a/package/mono/mono.hash
++++ b/package/mono/mono.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 4485d8b44a939bef64b3b1b6a7f0388761cfe6803e149aa1e56aab023cfb267e  mono-4.0.0.tar.bz2
++sha256 b074584eea5bbaaf29362486a69d70abe53d0d2feb334f231fa9c841cf6fd651  mono-4.0.2.5.tar.bz2
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index 63026f1..9cb8564 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONO_VERSION = 4.0.0
++MONO_VERSION = 4.0.2.5
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
 -- 
 1.9.1
