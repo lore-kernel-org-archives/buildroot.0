@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 15 Jul 2015 15:28:07 -0300
-Subject: [Buildroot] [PATCH 16/40] sawman: add hash file
+Date: Wed, 15 Jul 2015 15:28:08 -0300
+Subject: [Buildroot] [PATCH 17/40] proftpd: add hash file
 In-Reply-To: <1436984911-17680-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1436984911-17680-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1436984911-17680-16-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1436984911-17680-17-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/sawman/sawman.hash | 2 ++
+ package/proftpd/proftpd.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/sawman/sawman.hash
+ create mode 100644 package/proftpd/proftpd.hash
 
-diff --git a/package/sawman/sawman.hash b/package/sawman/sawman.hash
+diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
 new file mode 100644
-index 0000000..6fd2ecd
+index 0000000..183e824
 --- /dev/null
-+++ b/package/sawman/sawman.hash
++++ b/package/proftpd/proftpd.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	2cfb0a5d5114e6d0eb777b881ede2614d047786b90c505897c9e5d45288e0d4c	SaWMan-1.6.3.tar.gz
++# Locally calculated after checking pgp signature
++sha256	c198b53991ce641eae6b3237e856e59f0bfe8330794145b49cae33f85b6f5370	proftpd-1.3.4d.tar.gz
 -- 
 2.3.6
