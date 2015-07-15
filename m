@@ -1,73 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 15 Jul 2015 16:17:08 +0200
-Subject: [Buildroot] Package naming convention [was: Re: [PATCH 1/2]
- scanpypi: new utility]
-In-Reply-To: <916572081.3104684.1436969298786.JavaMail.root@openwide.fr>
-References: <916572081.3104684.1436969298786.JavaMail.root@openwide.fr>
-Message-ID: <55A66B64.5090603@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 15 Jul 2015 11:17:17 -0300
+Subject: [Buildroot] [PATCH] usb_modeswitch: bump to version 2.2.4
+Message-ID: <1436969837-10264-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi all,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/usb_modeswitch/usb_modeswitch.hash | 2 +-
+ package/usb_modeswitch/usb_modeswitch.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- A topic for all to discuss here...
-
-On 07/15/15 16:08, Denis Thulin wrote:
-[snip]
->>> +def pkg_buildroot_name(pkg_name):
->>> +    """
->>> +    Returns name to avoid troublesome characters.
->>
->>  No it doesn't.
->>
->> Returns the buildroot package name for the PyPI package pkg_name.
->>
->>
->>  In fact, the function should also prepend the python- prefix,
->>  because the
->> buildroot name starts with python-.
-> 
-> Actually, I have a question here, should I change . into - or into nothing ?
-> I'm asking this because when looking into existing packages I noticed 'web.py'
-> became 'python-webpy' but 'zope.interface' became 'python-zope-interface'
-
- Good question, we indeed have no real convention of what the buildroot name is
-for packages with weird characters.
-
- Actually, we do: keep the upstream name as much as possible. So python-webpy,
-for instance, keeps the upstream webpy name (note that the upstream name is
-webpy, even though the package is identified in PyPI as web.py. PyPI isn't very
-consistent either). For zope.interface, I actually see no reason not to keep the
-upstream name, so the package really should have been called
-python-zope.interface IMHO.
-
- What do the others think?
-
- BTW Thanks Denis for pointing this out.
-
- Regards,
- Arnout
-
-> 
->>
->>> +    Remove all non alphanumeric characters except -
->>> +    Also lowers the name
->>> +
->>> +    Keyword arguments:
->>> +    pkg_name -- String to rename
->>> +    """
->>> +    name = re.sub('[^\w-]', '', pkg_name.lower())
->>> +    name = re.sub('^python-', '', name)
->>> +    return name
-[snip]
-
+diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
+index 1e8df22..089dd6e 100644
+--- a/package/usb_modeswitch/usb_modeswitch.hash
++++ b/package/usb_modeswitch/usb_modeswitch.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	d1a0d9a9e7411f07796611881a8f264daa946e2a28418abed34639b3583d7593	usb-modeswitch-2.2.3.tar.bz2
++sha256	096da0eb492a872b091c658cc03c0471b3f0b6afbb86d606582b61fcb37de29b	usb-modeswitch-2.2.4.tar.bz2
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index 0a2b8db..fd1e1f7 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USB_MODESWITCH_VERSION = 2.2.3
++USB_MODESWITCH_VERSION = 2.2.4
+ USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DEPENDENCIES = libusb
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.3.6
