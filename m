@@ -1,77 +1,61 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 14 Jul 2015 16:01:01 -0700
-Subject: [Buildroot] [PATCH v1 1/1] rtl8821au: new package
-Message-ID: <1436914861-10912-1-git-send-email-christian@paral.in>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Tue, 14 Jul 2015 22:58:23 -0500
+Subject: [Buildroot] [PATCH] dnsmasq: bump to version 2.73
+In-Reply-To: <1434804976-8637-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1434804976-8637-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <CALq67GDUHTUQbp1wfqv_zfzP4u3Zzcq5-kJ_Fm2gmStturqOjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding a kernel module based USB wifi driver. There is no official
-version of this driver that works properly on ARM and with newer USB
-WiFi cards. This driver version builds module 8821au and is based on a
-kernel module release from ASUS with various fixes integrated in.
+Gustavo, All,
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/linux-firmware/Config.in |  5 +++++
- package/rtl8821au/rtl8821au.hash |  1 +
- package/rtl8821au/rtl8821au.mk   | 22 ++++++++++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/rtl8821au/rtl8821au.hash
- create mode 100644 package/rtl8821au/rtl8821au.mk
+On Sat, Jun 20, 2015 at 7:56 AM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/dnsmasq/dnsmasq.hash | 2 +-
+>  package/dnsmasq/dnsmasq.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> --- a/package/dnsmasq/dnsmasq.mk
+> +++ b/package/dnsmasq/dnsmasq.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -DNSMASQ_VERSION = 2.72
+> +DNSMASQ_VERSION = 2.73
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 2e4c205..a99b877 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -189,6 +189,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX
- 	help
- 	  Realtek rtl8821ae
- 
-+config BR2_PACKAGE_RTL8821AU
-+	bool "Realtek 8821AU"
-+	help
-+	  Realtek rtl8821au kernel module
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X
- 	bool "TI wl127x"
- 	help
-diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
-new file mode 100644
-index 0000000..21f47a2
---- /dev/null
-+++ b/package/rtl8821au/rtl8821au.hash
-@@ -0,0 +1 @@
-+sha256 7ab9aae237ff562d5c40675115ffb9e36a4774490df0a6a8a4c7746dfd567e14  rtl8821au-4.3.14.tar.gz
-diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
-new file mode 100644
-index 0000000..f5f3da6
---- /dev/null
-+++ b/package/rtl8821au/rtl8821au.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# rtl8821au
-+#
-+################################################################################
-+
-+RTL8821AU_VERSION = 4.3.14
-+RTL8821AU_SITE = $(call github,paralin,rtl8821au,v$(RTL8821AU_VERSION))
-+
-+define RTL8821AU_BUILD_CMDS
-+	$(SED) "s/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/g" -i $(@D)/Makefile
-+	$(MAKE) -C $(@D) ARCH="$(ARCH)" KVER="$(LINUX_VERSION_PROBED)" USER_EXTRA_CFLAGS="-DCONFIG_LITTLE_ENDIAN" CROSS_COMPILE="$(CROSS_COMPILE)" KSRC="$(LINUX_BUILDDIR)" CC="$(TARGET_CC)" LD="$(TARGET_LD)" modules
-+endef
-+
-+define RTL8821AU_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -p -m 644 $(@D)/8821au.ko $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/kernel/drivers/net/wireless/
-+	$(HOST_DIR)/sbin/depmod -a --basedir=$(TARGET_DIR) $(LINUX_VERSION_PROBED)
-+endef
-+
-+RTL8821AU_DEPENDENCIES = linux linux-firmware
-+
-+$(eval $(generic-package))
--- 
-2.1.4
+Tonight I was trying to use dnsmasq tonight for the first time for DNS
+and DHCP functionality. I'm unable to successfully start the
+application as it segs fault. After some debugging with strace turns
+out with the new version (2.73) of dnsmasq requires /tmp/resolv.conf
+to exist (actually /etc/resolv.conf since it sim links to
+/tmp/resolv.conf) even if you have the 'no-resolv' option specified in
+the config file. Below is the output from strace:
+
+lstat64("/etc", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+lstat64("/etc/resolv.conf", {st_mode=S_IFLNK|0777, st_size=18, ...}) = 0
+readlink("/etc/resolv.conf", "../tmp/resolv.conf", 4095) = 18
+lstat64("/tmp", {st_mode=S_IFDIR|S_ISVTX|0777, st_size=100, ...}) = 0
+lstat64("/tmp/resolv.conf", 0xbea996f8) = -1 ENOENT (No such file or directory)
+--- SIGSEGV {si_signo=SIGSEGV, si_code=SEGV_ACCERR, si_addr=0x4b5d0} ---
++++ killed by SIGSEGV +++
+Segmentation fault
+
+I've verified if, 1) I revert this commit everything works or 2) if I
+add a touch to /tmp/resolv.conf to the S80dnsmasq startup script
+before invoking dnsmasq.
+
+How do we want to address this issue? Is option 2 preferable?
+
+Currently I'm not finding anything helpful on resolving this issue but
+it does appear there is some traffic on the mailing list for dnsmasq:
+
+https://www.mail-archive.com/dnsmasq-discuss at lists.thekelleys.org.uk/msg09635.html
+
+Thanks,
+-Ryan
