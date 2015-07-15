@@ -1,39 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 15 Jul 2015 11:17:17 -0300
-Subject: [Buildroot] [PATCH] usb_modeswitch: bump to version 2.2.4
-Message-ID: <1436969837-10264-1-git-send-email-gustavo@zacarias.com.ar>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 15 Jul 2015 10:07:52 -0400
+Subject: [Buildroot] [PATCH 1/2] pkg-download: add optional destination
+	filename
+In-Reply-To: <20150715003949.7506a433@free-electrons.com>
+References: <1429462679-4769-1-git-send-email-fhunleth@troodon-software.com>
+ <20150715003949.7506a433@free-electrons.com>
+Message-ID: <CA+-urNSO_UX6zfMEmyPdrUJNne7NvGAQB9Fw5Oq11xpRz61Sxw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/usb_modeswitch/usb_modeswitch.hash | 2 +-
- package/usb_modeswitch/usb_modeswitch.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Thomas,
 
-diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
-index 1e8df22..089dd6e 100644
---- a/package/usb_modeswitch/usb_modeswitch.hash
-+++ b/package/usb_modeswitch/usb_modeswitch.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	d1a0d9a9e7411f07796611881a8f264daa946e2a28418abed34639b3583d7593	usb-modeswitch-2.2.3.tar.bz2
-+sha256	096da0eb492a872b091c658cc03c0471b3f0b6afbb86d606582b61fcb37de29b	usb-modeswitch-2.2.4.tar.bz2
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index 0a2b8db..fd1e1f7 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--USB_MODESWITCH_VERSION = 2.2.3
-+USB_MODESWITCH_VERSION = 2.2.4
- USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
- USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DEPENDENCIES = libusb
--- 
-2.3.6
+On Tue, Jul 14, 2015 at 6:39 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> Dear Frank Hunleth,
+>
+> On Sun, 19 Apr 2015 12:57:58 -0400, Frank Hunleth wrote:
+> > This adds an optional parameter to the DOWNLOAD macro so that it's
+> > possible to specify a destination filename that's different from one
+> > being downloaded.
+> >
+> > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> > ---
+> >  package/pkg-download.mk | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> This patch is still pending in patchwork, but the discussion in PATCH
+> 2/2 didn't really reached a conclusion other than the fact that you had
+> a very specific case of a patch being updated by upstream without being
+> renamed, and that you were going to talk with upstream about this. We
+> haven't heard from you about this specific problem since end of April,
+> and anyway the proposed implementation wasn't matching our requirements.
+>
+> So I've marked this patch as Rejected in patchwork. Of course, if you
+> still have the issue, let's reopen the discussion and work on a proper
+> solution for the problem.
+
+Yes, this is the right answer. Thanks for closing the loop.
+
+To summarize what happened between then and now, I traded messages
+with people on the Intel Edison mailing list, but the responses took
+about as long as my project. The change to maintain the kernel and
+uboot sources outside of their massive Yocto tar ball is on their
+"roadmap". That would get rid of the patch file naming conflicts that
+started this whole patch series.
+
+For me, I ended up copying the uboot and kernel patches to the local
+BR tree for the project. Since I'm finished with the work on the
+Edison, I don't have a need for the patch anymore. However, if others
+run into issues with getting Buildroot to work on the Edison, I don't
+mind digging up my notes and sharing.
+
+Thanks,
+Frank
