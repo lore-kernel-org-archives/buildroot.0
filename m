@@ -1,70 +1,51 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 15 Jul 2015 10:40:10 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Jul 2015 10:55:26 +0200
 Subject: [Buildroot] [PATCH 1/1] toolchain: create symlink to 'lib' from
  ARCH_LIB_DIR iso fixed lib32/lib64
 In-Reply-To: <1436949545-12487-1-git-send-email-patrickdepinguin@gmail.com>
 References: <1436949545-12487-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LV=RT98wu-9LhspGuf5Y1Nc0ajLno3BkL=WvPAB3FwPMA@mail.gmail.com>
+Message-ID: <20150715105526.19c500e8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 15, 2015 at 10:39 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> Currently, following symbolic links are created in both target and
-> staging directories:
-> - lib(32|64) --> lib
-> - usr/lib(32|64) --> lib
->
-> The decision for lib32 or lib64 is based on the target architecture
-> configuration in buildroot (BR2_ARCH_IS_64).
->
-> In at least one case this is not correct: when building for a Cavium Octeon
-> III processor using the toolchain from the Cavium Networks SDK, and
-> specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, libraries are expected
-> in directory 'lib32-fp' rather than 'lib32' (likewise for lib64-fp).
->
-> More generally, for external toolchains, the correct symbolic link is
-> from (usr/)${ARCH_LIB_DIR} to lib. For internal toolchains, current
-> toolchains always use either lib32 or lib64.
->
-> Fix the problem as follows:
-> - create a symlink creation helper in toolchain/helpers.mk
-> - for external toolchains, call these helpers based on ARCH_LIB_DIR
-> - for internal toolchains, call these helpers based on the existing
->   fixed lib32/lib64 logic, moved from Makefile
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> ---
->  Makefile                                             | 10 ----------
->  package/skeleton/skeleton.mk                         |  3 ---
->  toolchain/helpers.mk                                 | 13 +++++++++++++
->  toolchain/toolchain-buildroot/toolchain-buildroot.mk | 18 ++++++++++++++++++
->  toolchain/toolchain-external/toolchain-external.mk   | 12 ++++++++++++
->  5 files changed, 43 insertions(+), 13 deletions(-)
->
-> Note: in output/staging/usr/ there would still be more directories than I
-> think are really necessary. This behavior is not changed by this patch, it
-> was already present before.
-> For example, with the mentioned Octeon III toolchain, output/staging/usr/
-> contains:
->     bin      bin32      bin32-fp      bin64-fp,
->     lib                 lib32-fp      lib64-fp
->     libexec  libexec32  libexec32-fp  libexec64-fp
->     sbin     sbin32     sbin32-fp     sbin64-fp
->
-> where bin/lib/libexec/sbin seem to be the 64-bit equivalents of
-> bin32/lib32/libexec32/sbin32.
-> This is related to the behavior of copy_toolchain_sysroot in
-> toolchain/helpers.mk. It already attempts to filter out lib32 and lib64, but
-> does not care about any bin/sbin/libexec directories, nor about such names
-> as lib32-fp.
-> As the behavior is not changed by this patch, and as I'm not fully aware
-> about which directories are really needed in all cases, I am not touching
-> this area.
+Thomas,
 
-Sorry, forgot to add the subject flag v4.
+On Wed, 15 Jul 2015 10:39:05 +0200, Thomas De Schampheleire wrote:
+
+> diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+> index b30cc33..30c50d6 100644
+> --- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+> +++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+> @@ -14,4 +14,22 @@ TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-gcc-final
+>  
+>  TOOLCHAIN_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
+>  
+> +# The creation of lib32/lib64 symlinks into target and staging directories
+> +# needs to be done before the C library is installed. Hooking into the libc
+> +# hooks directly is tricky because there are multiple C libraries supported.
+> +# Instead, hook into the install step of host-gcc-initial.
+> +#
+> +# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
+> +ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
+> +TOOLCHAIN_BUILDROOT_LIB_SYMLINK = lib64
+> +else
+> +TOOLCHAIN_BUILDROOT_LIB_SYMLINK = lib32
+> +endif
+> +
+> +define TOOLCHAIN_BUILDROOT_CREATE_STAGING_TARGET_SYMLINK
+> +	$(call create_lib_symlinks,$(TOOLCHAIN_BUILDROOT_LIB_SYMLINK),$(STAGING_DIR))
+> +	$(call create_lib_symlinks,$(TOOLCHAIN_BUILDROOT_LIB_SYMLINK),$(TARGET_DIR))
+> +endef
+> +HOST_GCC_INITIAL_POST_INSTALL_HOOKS += TOOLCHAIN_BUILDROOT_CREATE_STAGING_TARGET_SYMLINK
+
+If it's a host-gcc-initial hook, then it should go in the
+gcc/gcc-initial/gcc-initial.mk file.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
