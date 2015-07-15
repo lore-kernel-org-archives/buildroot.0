@@ -1,111 +1,124 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 15 Jul 2015 08:53:09 +0200
-Subject: [Buildroot] [PATCH 2/2] uclibc: remove obsolete patches
-Message-ID: <20150715065309.GA21821@waldemar-brodkorb.de>
+From: Julien Viard de Galbert <julien.viarddegalbert@openwide.fr>
+Date: Wed, 15 Jul 2015 09:43:26 +0200 (CEST)
+Subject: [Buildroot] [PATCH v3] dieharder: new package
+In-Reply-To: <20150711074344.GA7573@free.fr>
+Message-ID: <733231957.3059218.1436946206315.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patches are in 1.0.4 release included.
+Hello All,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- .../1.0.3/0001-Fix-libgcc_s_resume-issue.patch     |   56 --------------------
- package/uclibc/1.0.3/0002-fix-parallel-build.patch |   21 --------
- 2 files changed, 77 deletions(-)
- delete mode 100644 package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch
- delete mode 100644 package/uclibc/1.0.3/0002-fix-parallel-build.patch
+I've been moving and still need to wait to get internet access at
+the new home, so this will take some time, but yes, I think it's
+better to upstream patches than work on our side.
 
-diff --git a/package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch b/package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch
-deleted file mode 100644
-index 2d64b98..0000000
---- a/package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 8f3bfd31864c28bf5901fc92e0405c729c2204c9 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sun, 14 Jun 2015 13:19:43 +0200
--Subject: [PATCH] Fix libgcc_s_resume issue
--
--When built with gcc 5.1, uClibc-ng fails to build with the following
--issue:
--
--    LD librt-0.9.33.2.so
--  librt/librt_so.a(rt-unwind-resume.oS): In function `_Unwind_Resume':
--  rt-unwind-resume.c:(.text+0x3c): undefined reference to `libgcc_s_resume'
--  collect2: error: ld returned 1 exit status
--  make[2]: *** [lib/librt.so] Error 1
--
--This commit fixes the code in a way similar to what was done in glibc
--in commit:
--
--   https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=175cef4163dd60f95106cfd5f593b8a4e09d02c9
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c | 3 ++-
-- libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c       | 3 ++-
-- 2 files changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
--index f4d6f41..a6a0515 100644
----- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
--+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
--@@ -27,7 +27,8 @@
-- #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
-- 
-- static void *libgcc_s_handle;
---static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
--+static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
--+  __attribute_used__;
-- static _Unwind_Reason_Code (*libgcc_s_personality)
--   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
-- static _Unwind_Reason_Code (*libgcc_s_forcedunwind)
--diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
--index f9a4ffb..e2e2e0b 100644
----- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
--+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
--@@ -25,7 +25,8 @@
-- #define __libc_dlclose          dlclose
-- #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
-- 
---static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
--+static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
--+  __attribute_used__;
-- static _Unwind_Reason_Code (*libgcc_s_personality)
--   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
-- 
---- 
--2.1.0
--
-diff --git a/package/uclibc/1.0.3/0002-fix-parallel-build.patch b/package/uclibc/1.0.3/0002-fix-parallel-build.patch
-deleted file mode 100644
-index d7c3091..0000000
---- a/package/uclibc/1.0.3/0002-fix-parallel-build.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--fix parallel build if UCLIBC_HAS_LOCALE is enabled for arm/xtensa
--
--Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-- 
--diff -Nur uClibc-ng-1.0.3.orig/Makefile.in uClibc-ng-1.0.3/Makefile.in
----- uClibc-ng-1.0.3.orig/Makefile.in	2015-06-13 20:26:56.000000000 +0200
--+++ uClibc-ng-1.0.3/Makefile.in	2015-06-29 20:23:26.000000000 +0200
--@@ -183,11 +183,12 @@
-- headers-y += $(target-headers-sysdep)
-- 
-- headers: $(top_builddir)include/bits/uClibc_config.h | subdirs
--+	$(Q)$(if $(UCLIBC_HAS_LOCALE),$(MAKE) -C extra/locale locale_headers)
--+
-- subdirs: $(addprefix $(top_builddir),$(subdirs))
-- 
-- $(pregen-headers-y): $(headers_dep)
-- pregen: headers $(pregen-headers-y) $(headers_dep)
---	$(Q)$(if $(UCLIBC_HAS_LOCALE),$(MAKE) -C extra/locale locale_headers)
-- 
-- $(top_builddir)include/bits/sysnum.h: $(top_srcdir)extra/scripts/gen_bits_syscall_h.sh | $(top_builddir)include/bits
-- 	@$(disp_gen)
+Also I'm not sure how soon I'll be able to work on this, I will
+keep all your emails and review them all at that time.
+
+Best regards,
+
+Julien
+----- Mail original -----
+> De: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ?: "Romain Naour" <romain.naour@openwide.fr>
+> Cc: "Julien Viard de Galbert" <julien@vdg.name>, buildroot at buildroot.org, "julien viarddegalbert"
+> <julien.viarddegalbert@openwide.fr>
+> Envoy?: Samedi 11 Juillet 2015 09:43:44
+> Objet: Re: [Buildroot] [PATCH v3] dieharder: new package
+> 
+> Julien, Romain, All,
+> 
+> On 2015-07-11 01:10 +0200, Romain Naour spake thusly:
+> > Le 17/05/2015 09:43, julien.viarddegalbert at openwide.fr a ?crit :
+> > > From: Julien Viard de Galbert <julien@vdg.name>
+> > > 
+> > > Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+> [--SNIP--]
+> > > diff --git a/package/dieharder/dieharder.mk
+> > > b/package/dieharder/dieharder.mk
+> > > new file mode 100644
+> > > index 0000000..2a3d46b
+> > > --- /dev/null
+> > > +++ b/package/dieharder/dieharder.mk
+> > > @@ -0,0 +1,26 @@
+> > > +################################################################################
+> > > +#
+> > > +# dieharder
+> > > +#
+> > > +################################################################################
+> > > +
+> > > +DIEHARDER_VERSION = 3.31.1
+> > > +DIEHARDER_SITE = http://www.phy.duke.edu/~rgb/General/dieharder/
+> > > +DIEHARDER_SOURCE = dieharder-$(DIEHARDER_VERSION).tgz
+> > > +DIEHARDER_SUBDIR = dieharder-$(DIEHARDER_VERSION)
+> > > +DIEHARDER_LICENSE = GPLv2b
+> > > +DIEHARDER_LICENSE_FILES = $(DIEHARDER_SUBDIR)/COPYING
+> > > +DIEHARDER_DEPENDENCIES = gsl
+> > > +
+> > > +DIEHARDER_CONF_OPTS = --includedir=$(STAGING_DIR)/usr/include
+> > > +# fix endiannes detection
+> > > +ifeq ($(BR2_ENDIAN),"BIG")
+> > > +DIEHARDER_CONF_OPTS += ac_cv_c_endian=big
+> > > +else
+> > > +DIEHARDER_CONF_OPTS += ac_cv_c_endian=little
+> > > +endif
+> > 
+> > There is a build issue with musl libc due to missing M_PI when
+> > _GNU_SOURCE is
+> > not defined.
+> > 
+> > I suggest you add it in CFLAGS by using DIEHARDER_MAKE_OPTS:
+> > 
+> > DIEHARDER_MAKE_OPTS = CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+> 
+> Better yet: patch dieharder to define it in the source, and submit
+> that
+> patch upstream.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> > Don't forget to take into account Thomas's comment for the next
+> > version ;-)
+> > 
+> > Best regards,
+> > Romain
+> > 
+> > > +
+> > > +# parallel build fail, disable it
+> > > +DIEHARDER_MAKE=$(MAKE1)
+> > > +
+> > > +$(eval $(autotools-package))
+> > > 
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> |  conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+> |               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/
+> |  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+> |   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.7.10.4
+Julien Viard de Galbert       // `` OPEN WIDE    23-25 Rue Daviel
+Responsable des op?rations    \\//  Ing?nierie   75013 Paris - France
+julien.viarddegalbert at openwide.fr                +33 (0)1 42 68 28 11
+Open Wide Ing?nierie                           ingenierie.openwide.fr
+Open Wide vid?o avanc?es                 video.ingenierie.openwide.fr
+Blog des technologies libres et embarqu?es       www.linuxembedded.fr
