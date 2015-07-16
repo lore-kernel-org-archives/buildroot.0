@@ -1,27 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jul 2015 23:39:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apache: security bump to
- version 2.4.16
-In-Reply-To: <1437065357-23614-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1437065357-23614-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150716233958.31947810@free-electrons.com>
+Date: Thu, 16 Jul 2015 23:40:17 +0200
+Subject: [Buildroot] [PATCH] lxc: add hash file
+In-Reply-To: <4c4438030b09b3e82d18d44f721de927bd7fbb5f.1437032210.git.baruch@tkos.co.il>
+References: <4c4438030b09b3e82d18d44f721de927bd7fbb5f.1437032210.git.baruch@tkos.co.il>
+Message-ID: <20150716234017.5cc80093@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Baruch Siach,
 
-On Thu, 16 Jul 2015 18:49:17 +0200, Bernd Kuhls wrote:
-> Fixes CVE-2015-3183, CVE-2015-3185, CVE-2015-0253, CVE-2015-0228
-> http://marc.info/?l=apache-httpd-announce&m=143704705330655&w=2
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Thu, 16 Jul 2015 10:36:50 +0300, Baruch Siach wrote:
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/apache/apache.hash |    4 ++--
->  package/apache/apache.mk   |    2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/lxc/lxc.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/lxc/lxc.hash
 
 Applied, thanks.
 
