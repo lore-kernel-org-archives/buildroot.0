@@ -1,28 +1,37 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Thu, 16 Jul 2015 14:15:13 -0700
-Subject: [Buildroot] [PATCH] Add missing checksum for host-tar.
-Message-ID: <1437081313-8271-1-git-send-email-hollis_blanchard@mentor.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 16 Jul 2015 23:16:46 +0200
+Subject: [Buildroot] [PATCH] core/out-of-tree: fix Makefile wrapper
+Message-ID: <1437081406-16475-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes a very early error in a fresh build:
-"ERROR: No hash found for tar-1.28.cpio.gz"
+Commit 971faf8 (Makefile: fix out-of-tree builds with multiple targets
+with 'all') renamed the default target to '_all' to avoid name-clashing.
 
-Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+In doing so, I forgot to also fix the instance in the .PHONY rule.
+
+Fix that now.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/tar/tar.hash |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ support/scripts/mkmakefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tar/tar.hash b/package/tar/tar.hash
-index ffad2d2..5d2f1db 100644
---- a/package/tar/tar.hash
-+++ b/package/tar/tar.hash
-@@ -1,2 +1,3 @@
- # Locally calculated after checking signature
- sha256	64ee8d88ec1b47a0961033493f919d27218c41b580138fd6802327462aff22f2	tar-1.28.tar.xz
-+sha256	a3906a862f83dac1dfaf0ed200c62bd21f6d00f184a7f42b91978593a8553104	tar-1.28.cpio.gz
+diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
+index 974e2c0..833be6a 100755
+--- a/support/scripts/mkmakefile
++++ b/support/scripts/mkmakefile
+@@ -30,7 +30,7 @@ MAKEARGS += O=\$(if \$(patsubst /%,,\$(makedir)),\$(CURDIR)/)\$(patsubst %/,%,\$
+ 
+ MAKEFLAGS += --no-print-directory
+ 
+-.PHONY: all \$(MAKECMDGOALS)
++.PHONY: _all \$(MAKECMDGOALS)
+ 
+ all	:= \$(filter-out Makefile,\$(MAKECMDGOALS))
+ 
 -- 
-1.7.1
+1.9.1
