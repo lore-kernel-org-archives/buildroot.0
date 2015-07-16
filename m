@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Jul 2015 22:36:35 +0200
-Subject: [Buildroot] [git commit] time: add hash file
-Message-ID: <20150716205329.8533D7FBCD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] sdl: add hash file
+Message-ID: <20150716205329.C62F77FBCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33a33dcfb44bf6f82bd444dbd1df2e1a69a2484c
+commit: http://git.buildroot.net/buildroot/commit/?id=34e67fe74ddc8a8184b3901ed1be1f2dfac18824
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/time/time.hash |    2 ++
+ package/sdl/sdl.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/time/time.hash b/package/time/time.hash
+diff --git a/package/sdl/sdl.hash b/package/sdl/sdl.hash
 new file mode 100644
-index 0000000..6ad8c24
+index 0000000..ad59b90
 --- /dev/null
-+++ b/package/time/time.hash
++++ b/package/sdl/sdl.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	e37ea79a253bf85a85ada2f7c632c14e481a5fd262a362f6f4fd58e68601496d	time-1.7.tar.gz
++# Locally calculated after checking pgp signature
++sha256	d6d316a793e5e348155f0dd93b979798933fb98aa1edebcc108829d6474aad00	SDL-1.2.15.tar.gz
