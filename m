@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Jul 2015 22:36:36 +0200
-Subject: [Buildroot] [git commit] iftop: add hash file
-Message-ID: <20150716205330.A60BC81E0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fbset: add hash file
+Message-ID: <20150716205330.DAFA581E0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a6c3f7dc7f1137ab0d7a300d957d4f26b493efc5
+commit: http://git.buildroot.net/buildroot/commit/?id=ddb03a86de29e9a8da610e27376cafa031aea5cf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/iftop/iftop.hash |    2 ++
+ package/fbset/fbset.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/iftop/iftop.hash b/package/iftop/iftop.hash
+diff --git a/package/fbset/fbset.hash b/package/fbset/fbset.hash
 new file mode 100644
-index 0000000..19ce66b
+index 0000000..ca8cc6d
 --- /dev/null
-+++ b/package/iftop/iftop.hash
++++ b/package/fbset/fbset.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	f733eeea371a7577f8fe353d86dd88d16f5b2a2e702bd96f5ffb2c197d9b4f97	iftop-1.0pre4.tar.gz
++sha256	40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20	fbset-2.1.tar.gz
