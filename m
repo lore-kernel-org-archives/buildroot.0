@@ -1,52 +1,74 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 17 Jul 2015 00:45:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: disable for PowerPC CS
-	toolchains
-Message-ID: <1437086706-20437-1-git-send-email-joerg.krause@embedded.rocks>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 17 Jul 2015 00:56:58 +0200
+Subject: [Buildroot] [PATCH] package: Fix overwrite inittab w/ default
+ skeleton
+In-Reply-To: <CAGduivwRsW1SPqnNuncicLy5geAL72PZtfdbMydr5qncG_4DTg@mail.gmail.com>
+References: <1437064235-32432-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20150716230722.304e5f9a@free-electrons.com>
+ <55A81F61.3050307@zacarias.com.ar>
+ <20150716233553.4d46b3d0@free-electrons.com>
+ <CAGduivwRsW1SPqnNuncicLy5geAL72PZtfdbMydr5qncG_4DTg@mail.gmail.com>
+Message-ID: <55A836BA.8050905@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Those toolchains use gcc <= 4.5, which is too old as they are missing to
-construct an empty std::shared_ptr with a nullptr (0) as an argument. This
-is only introduced with gcc-4.6.
+On 07/16/15 23:42, Maxime Hadjinlian wrote:
+> 
+> On Jul 16, 2015 11:35 PM, "Thomas Petazzoni"
+> <thomas.petazzoni@free-electrons.com
+> <mailto:thomas.petazzoni@free-electrons.com>> wrote:
+[snip]
+>> I agree with you that this is a change in behavior, but I would say
+>> it's a change for good: making people realize that using a custom
+>> skeleton very often doesn't work as they intend it to work.
+>>
+>> Any opinions from others?
+> I agree that a custom skeleton is not the proper way to go and leads to more
+> errors and trouble than anything.
+> I would remove the possibility entirely.
 
-Fixes:
-http://autobuild.buildroot.net/results/faf/faf1b071c0a5bd8395d79abf2e6a32169ad7f136
-http://autobuild.buildroot.net/results/247/247b3f1ac3d3a9712e9410eef298fce8d885f92c
-http://autobuild.buildroot.net/results/de6/de601c4d4dd7922895892d78d3a37902fb98c7be
-http://autobuild.buildroot.net/results/a4d/a4d7bf9863c134f59d285616b9c1f78201bd1a3e
+ I have one use case that still needs a custom skeleton (i.e. I found no other
+way to handle it). There's a system where I want /bin to symlink to /usr/bin, to
+avoid some problems with wrong absolute paths in scripts. Turns out that doing
+that in a post-build script doesn't work because some other symlinks get broken,
+so it needs to be done in the skeleton...
 
-and many more.
+ Now, Peter wasn't against changing the default skeleton to do exactly that,
+because it also solves the issue when busybox installs something in /bin while
+the full version installs it in /usr/bin. So in that case, yes we could probably
+eliminate the custom skeleton. Though there may be other cases.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/upmpdcli/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
-index 6464d06..0fe3d10 100644
---- a/package/upmpdcli/Config.in
-+++ b/package/upmpdcli/Config.in
-@@ -7,6 +7,8 @@ config BR2_PACKAGE_UPMPDCLI
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
- 	# libupnpp triggers the _gp link issue
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
-@@ -21,6 +23,8 @@ comment "upmpdcli needs a toolchain w/ C++, threads"
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ Regards,
+ Arnout
+
+> I can cook up a patch at that effect.
+> It would greatly disturb many user though. It needs to be well thought through.
+>>
+>> Thanks!
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux, Kernel and Android engineering
+>> http://free-electrons.com
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+
 -- 
-2.4.6
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
