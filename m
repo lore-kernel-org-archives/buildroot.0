@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Jul 2015 22:36:36 +0200
-Subject: [Buildroot] [git commit] less: add hash file
-Message-ID: <20150716205330.9559181E0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] sdl_sound: add hash file
+Message-ID: <20150716205329.DB2857FBCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=35e961f20cd2e8ef87709bb00d7d53c7b9ca053f
+commit: http://git.buildroot.net/buildroot/commit/?id=a59362a9f22238129ef081cc05a91cea92744215
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/less/less.hash |    2 ++
+ package/sdl_sound/sdl_sound.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/less/less.hash b/package/less/less.hash
+diff --git a/package/sdl_sound/sdl_sound.hash b/package/sdl_sound/sdl_sound.hash
 new file mode 100644
-index 0000000..b1a227e
+index 0000000..a548627
 --- /dev/null
-+++ b/package/less/less.hash
++++ b/package/sdl_sound/sdl_sound.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	e536c7819ede54b3d487f0ffc4c14b3620bed83734d92a81e89f62346db0fcac	less-458.tar.gz
++sha256	3999fd0bbb485289a52be14b2f68b571cb84e380cc43387eadf778f64c79e6df	SDL_sound-1.0.3.tar.gz
