@@ -1,26 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jul 2015 22:36:36 +0200
-Subject: [Buildroot] [git commit] libdvdnav: add hash file
-Message-ID: <20150716205330.850557FBCD@busybox.osuosl.org>
+Date: Thu, 16 Jul 2015 22:56:39 +0200
+Subject: [Buildroot] [PATCH] gcc: add gcc 5.2.0
+In-Reply-To: <1437079928-9591-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1437079928-9591-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150716225639.14772165@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b0e1b2391b02105f9f3e5f40d6c069d1a970110a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libdvdnav/libdvdnav.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Thu, 16 Jul 2015 17:52:08 -0300, Gustavo Zacarias wrote:
 
-diff --git a/package/libdvdnav/libdvdnav.hash b/package/libdvdnav/libdvdnav.hash
-new file mode 100644
-index 0000000..4a0d851
---- /dev/null
-+++ b/package/libdvdnav/libdvdnav.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	7fca272ecc3241b6de41bbbf7ac9a303ba25cb9e0c82aa23901d3104887f2372	libdvdnav-4.2.1.tar.xz
+> +	config BR2_GCC_VERSION_5_2_X
+> +		bool "gcc 5.2.x"
+> +		# Broken or unsupported architectures
+> +		depends on !BR2_arc
+> +		select BR2_GCC_NEEDS_MPC
+> +		select BR2_GCC_SUPPORTS_GRAPHITE
+> +
+>  endchoice
+>  
+>  config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
+> @@ -99,6 +106,7 @@ config BR2_GCC_VERSION
+>  	default "4.8.5"     if BR2_GCC_VERSION_4_8_X
+>  	default "4.9.3"     if BR2_GCC_VERSION_4_9_X
+>  	default "5.1.0"     if BR2_GCC_VERSION_5_1_X
+> +	default "5.2.0"     if BR2_GCC_VERSION_5_2_X
+
+That's not the right way of adding gcc 5.2 support. The gcc
+release numbers have changed: 5 is the major release, and 5.{1,2} are
+the bug fix releases.
+
+Quoting https://gcc.gnu.org/ml/gcc/2015-07/msg00198.html:
+
+  GCC 5.2 is a bug-fix release from the GCC 5 branch
+  containing important fixes for regressions and serious bugs in
+  GCC 5.1 with more than 81 bugs fixed since the previous release.
+
+Therefore, we should instead rename BR2_GCC_VERSION_5_1_X to
+BR2_GCC_VERSION_5_X, and then simply update from 5.1 to 5.2 (keeping
+only 5.2 and removing 5.1), exactly like we were doing when the version
+was changed from 4.9.1 to 4.9.2 for example.
+
+Could you rework your patch in this direction?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
