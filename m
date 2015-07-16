@@ -1,88 +1,41 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 16 Jul 2015 08:34:51 -0300 (BRT)
-Subject: [Buildroot] [PATCH v2 1/1] gmock: new package
-In-Reply-To: <CAHXCMML+4JgBr1msNmu8Z4Ja0FjmR1TficJq4d5nfnPXaXTg6A@mail.gmail.com>
-References: <1425304883-4332-2-git-send-email-casantos@datacom.ind.br>
- <1431713119-2821-1-git-send-email-casantos@datacom.ind.br>
- <CAHXCMML+4JgBr1msNmu8Z4Ja0FjmR1TficJq4d5nfnPXaXTg6A@mail.gmail.com>
-Message-ID: <1309988878.2915051.1437046491484.JavaMail.zimbra@datacom.ind.br>
+From: Nimai Mahajan <nimaim@gmail.com>
+Date: Thu, 16 Jul 2015 08:48:02 -0400
+Subject: [Buildroot] Another Buildroot Enhancement Suggestion (re-use base
+	build)
+Message-ID: <CALoSW65V2bmF8GEtUH_hLm-_n9vPDEjnK5-YXyx_eXoy04fDKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Samuel Martin" <s.martin49@gmail.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: "buildroot" <buildroot@buildroot.org>
-> Sent: Tuesday, July 14, 2015 7:09:34 AM
-> Subject: Re: [Buildroot] [PATCH v2 1/1] gmock: new package
+I should have brought this up during the hackathon but it totally
+slipped my mind. But anyways, here it goes: we use Buildroot for ~3-4
+projects here at work and it's been great for us since it is very easy
+to customize and build from the ground up. We generally compile our
+builds from scratch, as is the Buildroot norm, and that works (I also
+use CCACHE and external toolchain and that does help quite a bit) but
+I was wondering if this could be even further sped up.
 
->> diff --git a/package/gmock/gmock.mk b/package/gmock/gmock.mk
->> new file mode 100644
->> index 0000000..3a7173e
->> --- /dev/null
->> +++ b/package/gmock/gmock.mk
->> @@ -0,0 +1,52 @@
->> +################################################################################
->> +#
->> +# gmock
->> +#
->> +################################################################################
->> +
->> +GMOCK_VERSION = 1.7.0
-> According to [1], gmock version must be the same as the gtest's one,
-> so maybe we should do:
-> GMOCK_VERSION = $(GTEST_VERSION)
-> (but, taking care of the *.mk inclusion to get GTEST_VERSION defined
-> before including gmock.mk).
-> 
->> +GMOCK_SOURCE = gmock-$(GMOCK_VERSION).zip
->> +GMOCK_SITE = http://googlemock.googlecode.com/files
->> +GMOCK_INSTALL_STAGING = YES
->> +GMOCK_INSTALL_TARGET = NO
->> +GMOCK_LICENSE = BSD-3c
->> +GMOCK_LICENSE_FILES = LICENSE
->> +GMOCK_DEPENDENCIES = gtest
->> +HOST_GMOCK_DEPENDENCIES = host-python
-> Does this require python2? or can it work with  ?
+The use case is that our release builds for those 3-4 projects is
+always the same (minus a slightly different fs overlay and 1-2
+different packages). Is there any way or do you guys see any
+usefulness in taking an already built "external base build" with all
+the packages that subsequent builds will use and telling Buildroot
+what to add on top of it? Basically, it doesn't make sense to me to
+rebuild the entire thing when only a few files change. This is
+probably a huge effort as I don't think a mechanism exists to do it
+but I'm just looking for some comments/thoughts. Does this even make
+sense or is there already a decent way to do this?
 
-I did not test with python3. I will give it a try and update gmock.mk accordingly.
- 
->> +GMOCK_CONF_OPTS = --enable-static --disable-shared
-> Why do you always force the static lib to be built? is it for the same
-> reason as gtest [2]?
+For release builds, this is not a major problem because builds only
+take 5-10 min at most, but when you're compiling debug builds with
+debugging symbols for various projects, this can add hours or even
+days if builds fail. We have Jenkins running and pumping out builds
+for us 24/7, and this would help a lot in testing, taking a prebuilt
+base build and just recompiling our custom packages (for now, we do a
+-dirclean on our packages and rebuild them every time which works for
+the time being).
 
-It's required in order to keep the GMock package completely separated from GTest. According to [3] "Google Mock can be used as a DLL, but the same DLL must contain Google Test as well.  See Google Test's README file for instructions on how to set up necessary compiler settings". 
-
-[...]
-
->> +# The host package does not build anything, just installs gmock_gen stuff, so
->> +# it does not need to be a host-autotools-package.
->> +$(eval $(host-generic-package))
-> 
-> AFAI understand, host-gmock only install tools needed when building a
-> package depending on gmock (target package).
-> Since host-gmock is not a dependency of gmock, a package using gmock
-> will have to depend on both gmock and host-gmock at buildtime.
-> Maybe, it would be good to make gmock depends on host-gmock to ensure
-> that all needed tools will be available when building a package
-> depending on gmock, but without the explicitly dependency on
-> host-gmock.
-
-Yes, I will add a dependence on host-gmock.
-
-> Please, take into account these comments and submit a new version of
-> this patch if you are still interested in having it in the official
-> Buildroot tree, meanwhile it'll be marked as "Change Requested" in
-> patchwork.
-> 
-> 
-> [1] https://code.google.com/p/googlemock/source/browse/trunk/README#43
-> [2] http://git.buildroot.net/buildroot/tree/package/gtest/gtest.mk#n15
-
-[3] https://code.google.com/p/googlemock/source/browse/trunk/README#276
-
-
-Carlos Santos (Casantos)
-DATACOM, P&D
+Thanks,
+Nimai
