@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Jul 2015 22:36:36 +0200
-Subject: [Buildroot] [git commit] fbset: add hash file
-Message-ID: <20150716205330.DAFA581E0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] findutils: add hash file
+Message-ID: <20150716205330.D1BAC81E0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ddb03a86de29e9a8da610e27376cafa031aea5cf
+commit: http://git.buildroot.net/buildroot/commit/?id=8957c13c36681bca80b76ed1eb53c4e67599043b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/fbset/fbset.hash |    2 ++
+ package/findutils/findutils.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/fbset/fbset.hash b/package/fbset/fbset.hash
+diff --git a/package/findutils/findutils.hash b/package/findutils/findutils.hash
 new file mode 100644
-index 0000000..ca8cc6d
+index 0000000..66f1fcc
 --- /dev/null
-+++ b/package/fbset/fbset.hash
++++ b/package/findutils/findutils.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20	fbset-2.1.tar.gz
++# Locally calculated after checking pgp signature
++sha256	434f32d171cbc0a5e72cfc5372c6fc4cb0e681f8dce566a0de5b6fccd702b62a	findutils-4.4.2.tar.gz
