@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jul 2015 23:28:23 +0200
-Subject: [Buildroot] [PATCH] can-utils: fix musl build
-In-Reply-To: <1437077485-28954-1-git-send-email-yegorslists@googlemail.com>
-References: <1437077485-28954-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20150716232823.7b5eaa5f@free-electrons.com>
+Date: Thu, 16 Jul 2015 23:30:17 +0200
+Subject: [Buildroot] [PATCH] gcc: add gcc 5.2.0
+In-Reply-To: <55A81E9E.8000103@zacarias.com.ar>
+References: <1437079928-9591-1-git-send-email-gustavo@zacarias.com.ar>
+ <20150716225639.14772165@free-electrons.com>
+ <55A81B35.2040200@zacarias.com.ar>
+ <20150716231024.656693cb@free-electrons.com>
+ <55A81E9E.8000103@zacarias.com.ar>
+Message-ID: <20150716233017.383ce16b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Hello,
 
-On Thu, 16 Jul 2015 22:11:25 +0200, Yegor Yefremov wrote:
-> Include additional headers like <sys/time.h> and <linux/sockios.h>
-> to resolve undefined symbols.
-> 
-> Fixes following autobuild failure:
-> http://autobuild.buildroot.net/results/0dd/0ddb5a70358bdbb491fbee670c7843c15217e78d/
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  .../0001-log2asc-include-sys-time.h.patch          | 28 +++++++++++++++
->  ...Include-linux-sockios.h-to-fix-musl-build.patch | 42 ++++++++++++++++++++++
->  2 files changed, 70 insertions(+)
->  create mode 100644 package/can-utils/0001-log2asc-include-sys-time.h.patch
->  create mode 100644 package/can-utils/0002-Include-linux-sockios.h-to-fix-musl-build.patch
+On Thu, 16 Jul 2015 18:14:06 -0300, Gustavo Zacarias wrote:
 
-Applied, thanks.
+> I was going to go for what you've said until i saw the size delta and 
+> issue, and opted for this approach, but i'm open to votes/suggestions as 
+> well.
+> Maybe skipping 5.2.0 for the time?
+
+Yes, I think skipping 5.2.0 for the time is the best option. As I said,
+it anyway doesn't make much sense to have a compiler that doesn't even
+build a kernel properly for a major architecture like ARM.
 
 Thomas
 -- 
