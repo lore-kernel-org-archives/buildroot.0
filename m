@@ -1,106 +1,35 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 16 Jul 2015 23:42:50 +0200
-Subject: [Buildroot] [PATCH] package: Fix overwrite inittab w/ default
-	skeleton
-In-Reply-To: <20150716233553.4d46b3d0@free-electrons.com>
-References: <1437064235-32432-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20150716230722.304e5f9a@free-electrons.com>
- <55A81F61.3050307@zacarias.com.ar>
- <20150716233553.4d46b3d0@free-electrons.com>
-Message-ID: <CAGduivwRsW1SPqnNuncicLy5geAL72PZtfdbMydr5qncG_4DTg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 16 Jul 2015 23:45:17 +0200
+Subject: [Buildroot] [PATCH v1] racehound: fix kernel module compile
+In-Reply-To: <1437081852-30727-1-git-send-email-ps.report@gmx.net>
+References: <1437081852-30727-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20150716214517.GA4472@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Jul 16, 2015 11:35 PM, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> wrote:
->
-> Hello,
->
-> On Thu, 16 Jul 2015 18:17:21 -0300, Gustavo Zacarias wrote:
->
-> > Actually i reported the bug to Maxime, he just forgot to add the
-> > Reported-By.
->
-> Ok, thanks for the info.
->
-> > The problem with this is that it's a change in behaviour, this didn't
-> > happen in the previous releases.
->
-> Well, all the commits I cited in my previous reply definitely changed
-> the behavior in a similar way, just for different files.
->
-> > My usage scenario is customized initscripts that rely on a very minimal
-> > inittab (rcS, rcK and getty, nothing more).
-> > All of the basic startup is handled in initscripts, which i think we
-> > should do for BR as well - there's no reason to stick a lot of stuff in
-> > inittab IMO.
->
-> Possibly yes, though it's a different question. Even if the default
-> inittab is more minimal, there are still lots of reasons for which you
-> might need a custom version of it. So making the default version more
-> minimal is kinda unrelated to whether we keep or overwrite the inittab
-> of a custom skeleton.
->
-> > But even if we do that i'm still concerned about the behaviour change
-> > that can lead to non-working systems when upgrading buildroot.
-> > Another option is to just get rid of the custom skeleton altogether, if
-> > it's being stepped on right and left what's the purpose?
->
-> My personal preference would be to ultimately get rid of the custom
-> skeleton thing. We have been encouraging rootfs overlay and post-build
-> scripts since quite a while in the Buildroot manual, see
-> http://buildroot.org/downloads/manual/manual.html#rootfs-custom:
->
-> """
-> The two recommended methods, which can co-exist, are root filesystem
-> overlay(s) and post build script(s).
->
-> Root filesystem overlays (BR2_ROOTFS_OVERLAY)
->
-> Post-build scripts (BR2_ROOTFS_POST_BUILD_SCRIPT)
->
-> [...]
->
-> Below two more methods of customizing the target filesystem are
-> described, but they are not recommended.
->
-> Direct modification of the target filesystem
->
-> Custom target skeleton (BR2_ROOTFS_SKELETON_CUSTOM)
->
-> [...]
->
-> This method is not recommended because it duplicates the entire
-> skeleton, which prevents taking advantage of the fixes or improvements
-> brought to the default skeleton in later Buildroot releases.
-> """
->
-> If were to not overwrite the inittab, we should also revert all of the
-> commits I mentioned, and guarantee that the files in the custom
-> skeleton would not be overwritten.
->
-> I agree with you that this is a change in behavior, but I would say
-> it's a change for good: making people realize that using a custom
-> skeleton very often doesn't work as they intend it to work.
->
-> Any opinions from others?
-I agree that a custom skeleton is not the proper way to go and leads to
-more errors and trouble than anything.
-I would remove the possibility entirely.
-I can cook up a patch at that effect.
-It would greatly disturb many user though. It needs to be well thought
-through.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150716/dd79fae8/attachment.html>
+Peter, All,
+
+On 2015-07-16 23:24 +0200, Peter Seiderer spake thusly:
+> - check for linux kernel >= 3.14
+> - add cross compile enviornment for linux kernel compile
+> - add additional kernel config hint (CONFIG_KALLSYMS_ALL)
+> - fix kernel module install path
+
+Could you see if it were possible to use the newly introduced
+kernel-module infrastructure to build this kernel module, please?
+
+    http://nightly.buildroot.org/#_infrastructure_for_packages_building_kernel_modules
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
