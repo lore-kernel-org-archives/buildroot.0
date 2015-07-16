@@ -1,66 +1,79 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 16 Jul 2015 18:48:11 -0300
-Subject: [Buildroot] [PATCH] package: Fix overwrite inittab w/ default
- skeleton
-In-Reply-To: <20150716233553.4d46b3d0@free-electrons.com>
-References: <1437064235-32432-1-git-send-email-maxime.hadjinlian@gmail.com>	<20150716230722.304e5f9a@free-electrons.com>	<55A81F61.3050307@zacarias.com.ar>
- <20150716233553.4d46b3d0@free-electrons.com>
-Message-ID: <55A8269B.4030208@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 16 Jul 2015 23:51:18 +0200
+Subject: [Buildroot] [PATCH] Add xxhash package
+In-Reply-To: <1437080375-96542-1-git-send-email-eswierk@skyportsystems.com>
+References: <1437080375-96542-1-git-send-email-eswierk@skyportsystems.com>
+Message-ID: <20150716215118.GB4472@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/07/15 18:35, Thomas Petazzoni wrote:
+Ed, All,
 
-> Well, all the commits I cited in my previous reply definitely changed
-> the behavior in a similar way, just for different files.
+On 2015-07-16 13:59 -0700, Ed Swierk spake thusly:
+> "xxHash is an extremely fast hash algorithm, running at RAM
+> speed limits."
+> 
+> Signed-off-by: Ed Swierk <eswierk@skyportsystems.com>
+[--SNIP--]
+> new file mode 100644
+> index 0000000..ba680ba
+> --- /dev/null
+> +++ b/package/xxhash/xxhash.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# xxhash
+> +#
+> +################################################################################
+> +
+> +XXHASH_VERSION = r40
+> +XXHASH_SITE = $(call github,Cyan4973,xxHash,$(XXHASH_VERSION))
+> +XXHASH_LICENSE = Free
 
-Hi.
-Yes, albeit in less intrusive files.
-Also not all of the packages did the check, we just made it consistently 
-overwrite.
+'Free' is not a license name (t least not a common one). We have a list
+of commonly used licenses in the manual:
+    http://buildroot.net/downloads/manual/manual.html#legal-info-list-licenses
 
->> My usage scenario is customized initscripts that rely on a very minimal
->> inittab (rcS, rcK and getty, nothing more).
->> All of the basic startup is handled in initscripts, which i think we
->> should do for BR as well - there's no reason to stick a lot of stuff in
->> inittab IMO.
->
-> Possibly yes, though it's a different question. Even if the default
-> inittab is more minimal, there are still lots of reasons for which you
-> might need a custom version of it. So making the default version more
-> minimal is kinda unrelated to whether we keep or overwrite the inittab
-> of a custom skeleton.
+However, the licensing terms of that package are in fact a bit weird. In
+fact, the LICENSE file is the text of the BSD-2c. But when one looks at
+the source files, one (xxhash.c) is BSD-2c, while the other (xxhsum.c)
+is clearly GPLv2+.
 
-It's just an example, i might just as well configure "no init system" 
-since part of the customization is nuking all of the BR-provided ones 
-since i provide more feature-complete ones and it will definitely fix my 
-problem - i'm not concerned about my corner case, it's just debate about 
-what's the right thing to do.
+So you would write:
 
-> My personal preference would be to ultimately get rid of the custom
-> skeleton thing. We have been encouraging rootfs overlay and post-build
-> scripts since quite a while in the Buildroot manual, see
-> http://buildroot.org/downloads/manual/manual.html#rootfs-custom:
+    XXHASH_LICENSE = BSD-2c, GPLv2+
+    XXHASH_LICENSE_FILES = LICENSE xxhsum.c
 
-Well, exactly what i'm going to, if we don't respect it why keep it?
-Going forward it's getting more overrides from new stuff, we don't 
-recommend it and so on and on, maybe it's just time to kill it.
+(yes, we put the source file in there because the GPLv2+ license is only
+visible in that file).
 
-> If were to not overwrite the inittab, we should also revert all of the
-> commits I mentioned, and guarantee that the files in the custom
-> skeleton would not be overwritten.
->
-> I agree with you that this is a change in behavior, but I would say
-> it's a change for good: making people realize that using a custom
-> skeleton very often doesn't work as they intend it to work.
->
-> Any opinions from others?
+Regards,
+Yann E. MORIN.
 
-I was kind of joking with Maxime on IRC about defining an 
-INSTALL_NO_CLOBBER to avoid checks on these things, it would avoid going 
-all atomic on overwrites by using a custom install all along, maybe that 
-would be a solution.
-Regards.
+> +define XXHASH_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) xxhsum
+> +endef
+> +
+> +define XXHASH_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 0755 -D $(@D)/xxhsum $(TARGET_DIR)/usr/bin/xxhsum
+> +endef
+> +
+> +$(eval $(generic-package))
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
