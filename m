@@ -1,37 +1,53 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 16 Jul 2015 11:25:34 +0300
-Subject: [Buildroot] [PATCH] toolchain-external: fix uClibc-ng 64bit dynamic
-	loader link
-Message-ID: <b301100fe3edad0eed23cf5557548fe014410899.1437035134.git.baruch@tkos.co.il>
+From: Eric Limpens <limpens@gmail.com>
+Date: Thu, 16 Jul 2015 10:46:14 +0200
+Subject: [Buildroot] [PATCH 1/1] bluez5_utils: add ability to build sixaxis
+	plugin
+Message-ID: <1437036374-4179-1-git-send-email-limpens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 34f95bf9dbb0 (toolchain-external: fix support of uClibc-ng toolchains,
-2015-07-13) added the missing ld-uClibc.so.1 dynamic linker symlink that
-binaries expect when linked with uClibc-ng. However on 64bit targets the
-linker is called ld64-uClibc.so.1. Handle that case as well.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Eric Limpens <limpens@gmail.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/bluez5_utils/Config.in       | 5 +++++
+ package/bluez5_utils/bluez5_utils.mk | 7 +++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index fcb033ca2ebf..ce9d79f2fa41 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -730,6 +730,9 @@ define TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO
- 	if test -e $(TARGET_DIR)/lib/ld-uClibc.so.1; then \
- 		ln -sf ld-uClibc.so.1 $(TARGET_DIR)/lib/ld-uClibc.so.0 ; \
- 	fi
-+	if test -e $(TARGET_DIR)/lib/ld64-uClibc.so.1; then \
-+		ln -sf ld64-uClibc.so.1 $(TARGET_DIR)/lib/ld64-uClibc.so.0 ; \
-+	fi
- endef
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 472432b..dade0ee 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -58,6 +58,11 @@ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+ 	help
+ 	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
  
- define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
++config BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS
++	bool "build sixaxis plugin"
++	help
++	  Build BlueZ 5.x sixaxis plugin (support Sony Dualshock controller)
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_TEST
+ 	bool "build tests"
+ 	help
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index a1adbe1..4c50e53 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -41,6 +41,13 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
+ endif
+ 
++# enable sixaxis plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-sixaxis
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-sixaxis
++endif
++
+ # install gatttool (For some reason upstream choose not to do it by default)
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL),y)
+ define BLUEZ5_UTILS_INSTALL_GATTTOOL
 -- 
-2.1.4
+1.9.1
