@@ -1,28 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jul 2015 23:41:08 +0200
-Subject: [Buildroot] [PATCH] gettext: bump to version 0.19.5.1
-In-Reply-To: <1436966217-1558-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1436966217-1558-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150716234108.66f03273@free-electrons.com>
+Date: Thu, 16 Jul 2015 23:41:39 +0200
+Subject: [Buildroot] [git commit] setools: Add missing bison dependency
+Message-ID: <20150716214148.01F5281DE1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=0daffc0b65aa86d6d5bc6916736e0cffcdf540cc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 15 Jul 2015 10:16:57 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gettext/gettext.hash | 6 +++---
->  package/gettext/gettext.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+The setools package needs the yacc utility which is part of the bison
+package to build.
 
-Applied, thanks.
+Fixes http://autobuild.buildroot.net/results/8f9/8f95e83411552397ca29e9aee5c457a1a762b364/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/setools/setools.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+index 912daf8..a2bfd42 100644
+--- a/package/setools/setools.mk
++++ b/package/setools/setools.mk
+@@ -7,7 +7,7 @@
+ SETOOLS_VERSION = 3.3.8
+ SETOOLS_SOURCE = setools-$(SETOOLS_VERSION).tar.bz2
+ SETOOLS_SITE = https://raw.githubusercontent.com/wiki/TresysTechnology/setools3/files/dists/setools-$(SETOOLS_VERSION)/
+-SETOOLS_DEPENDENCIES = libselinux libsepol sqlite libxml2 bzip2
++SETOOLS_DEPENDENCIES = libselinux libsepol sqlite libxml2 bzip2 host-bison
+ SETOOLS_INSTALL_STAGING = YES
+ SETOOLS_LICENSE = GPLv2+ LGPLv2.1+
+ SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
+@@ -32,7 +32,7 @@ SETOOLS_CONF_OPTS = \
+ 	--with-selinux-devel="$(STAGING_DIR)/usr"
+ 
+ HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol host-sqlite \
+-	host-libxml2 host-bzip2
++	host-libxml2 host-bzip2 host-bison
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ HOST_SETOOLS_PYTHON_VERSION=$(PYTHON3_VERSION_MAJOR)
