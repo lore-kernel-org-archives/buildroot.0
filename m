@@ -1,38 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 16 Jul 2015 18:14:06 -0300
-Subject: [Buildroot] [PATCH] gcc: add gcc 5.2.0
-In-Reply-To: <20150716231024.656693cb@free-electrons.com>
-References: <1437079928-9591-1-git-send-email-gustavo@zacarias.com.ar>	<20150716225639.14772165@free-electrons.com>	<55A81B35.2040200@zacarias.com.ar>
- <20150716231024.656693cb@free-electrons.com>
-Message-ID: <55A81E9E.8000103@zacarias.com.ar>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Thu, 16 Jul 2015 14:15:13 -0700
+Subject: [Buildroot] [PATCH] Add missing checksum for host-tar.
+Message-ID: <1437081313-8271-1-git-send-email-hollis_blanchard@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This fixes a very early error in a fresh build:
+"ERROR: No hash found for tar-1.28.cpio.gz"
 
+Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+---
+ package/tar/tar.hash |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-On 16/07/15 18:10, Thomas Petazzoni wrote:
-
-> Gah, not the sort of thing you would expect from a bug fix release :-/
->
->> Do we still want to step on 5.1 considering this?
->
-> Then I'm not sure obviously. I see two options here:
->
->   * Switch to the policy where we support only one 5.x version at a time
->     (option named BR2_GCC_VERSION_5_X), and keep 5.1 for now until 5.3
->     is released, hopefully fixing the major bugs.
->
->   * Package gcc 5.2 separately from 5.1. But it's pretty useless to
->     offer as a package a compiler that is not even capable of building a
->     kernel that boots.
->
-> Opinions?
-
-I was going to go for what you've said until i saw the size delta and 
-issue, and opted for this approach, but i'm open to votes/suggestions as 
-well.
-Maybe skipping 5.2.0 for the time?
-Regards.
+diff --git a/package/tar/tar.hash b/package/tar/tar.hash
+index ffad2d2..5d2f1db 100644
+--- a/package/tar/tar.hash
++++ b/package/tar/tar.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated after checking signature
+ sha256	64ee8d88ec1b47a0961033493f919d27218c41b580138fd6802327462aff22f2	tar-1.28.tar.xz
++sha256	a3906a862f83dac1dfaf0ed200c62bd21f6d00f184a7f42b91978593a8553104	tar-1.28.cpio.gz
+-- 
+1.7.1
