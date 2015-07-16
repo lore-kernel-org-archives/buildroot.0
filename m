@@ -1,41 +1,35 @@
-From: Nimai Mahajan <nimaim@gmail.com>
-Date: Thu, 16 Jul 2015 08:48:02 -0400
-Subject: [Buildroot] Another Buildroot Enhancement Suggestion (re-use base
-	build)
-Message-ID: <CALoSW65V2bmF8GEtUH_hLm-_n9vPDEjnK5-YXyx_eXoy04fDKw@mail.gmail.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Thu, 16 Jul 2015 15:02:34 +0200
+Subject: [Buildroot] [PATCH 2/2] wpa_supplicant: Have Hotspot 2.0 depend on
+	nl80211
+In-Reply-To: <1437051754-24060-1-git-send-email-nicolas.cavallari@green-communications.fr>
+References: <20150713112947.7e14fd64@free-electrons.com>
+ <1437051754-24060-1-git-send-email-nicolas.cavallari@green-communications.fr>
+Message-ID: <1437051754-24060-2-git-send-email-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I should have brought this up during the hackathon but it totally
-slipped my mind. But anyways, here it goes: we use Buildroot for ~3-4
-projects here at work and it's been great for us since it is very easy
-to customize and build from the ground up. We generally compile our
-builds from scratch, as is the Buildroot norm, and that works (I also
-use CCACHE and external toolchain and that does help quite a bit) but
-I was wondering if this could be even further sped up.
+Hotspot 2.0 uses ANQP whose implementation needs offchannel/
+remain-on-channel capabilities from the driver, which only exist in the
+nl80211 driver.  Compiling would work, but the feature would not work.
+---
+ package/wpa_supplicant/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-The use case is that our release builds for those 3-4 projects is
-always the same (minus a slightly different fs overlay and 1-2
-different packages). Is there any way or do you guys see any
-usefulness in taking an already built "external base build" with all
-the packages that subsequent builds will use and telling Buildroot
-what to add on top of it? Basically, it doesn't make sense to me to
-rebuild the entire thing when only a few files change. This is
-probably a huge effort as I don't think a mechanism exists to do it
-but I'm just looking for some comments/thoughts. Does this even make
-sense or is there already a decent way to do this?
-
-For release builds, this is not a major problem because builds only
-take 5-10 min at most, but when you're compiling debug builds with
-debugging symbols for various projects, this can add hours or even
-days if builds fail. We have Jenkins running and pumping out builds
-for us 24/7, and this would help a lot in testing, taking a prebuilt
-base build and just recompiling our custom packages (for now, we do a
--dirclean on our packages and rebuild them every time which works for
-the time being).
-
-Thanks,
-Nimai
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 1824f95..c163bbc 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -40,6 +40,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_EAP
+ 
+ config BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT
+ 	bool "Enable HS20"
++	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
+ 	help
+ 	  Enable Hotspot 2.0 and IEEE 802.11u interworking functionality.
+ 
+-- 
+2.1.4
