@@ -1,40 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jul 2015 22:36:36 +0200
-Subject: [Buildroot] [git commit] sdl_gfx: add hash file
-Message-ID: <20150716205330.0B6987FBCD@busybox.osuosl.org>
+Date: Thu, 16 Jul 2015 22:36:35 +0200
+Subject: [Buildroot] [git commit] sdl_ttf: add hash file
+Message-ID: <20150716205329.CF5D97FBCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1421810b8529a298177b4ac8954ee207a280d5bd
+commit: http://git.buildroot.net/buildroot/commit/?id=add53670e09bedb2ad6904375870caa62cb308f7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also update homepage URL.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/sdl_gfx/Config.in    |    2 +-
- package/sdl_gfx/sdl_gfx.hash |    3 +++
- 2 files changed, 4 insertions(+), 1 deletions(-)
+ package/sdl_ttf/sdl_ttf.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/sdl_gfx/Config.in b/package/sdl_gfx/Config.in
-index 4910b2d..b5d5cac 100644
---- a/package/sdl_gfx/Config.in
-+++ b/package/sdl_gfx/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_SDL_GFX
- 	  circles or polygons, an interpolating rotozoomer for SDL
- 	  surfaces, framerate control and MMX image filters.
- 
--	  http://www.ferzkopp.net/joomla/content/view/19/14/
-+	  http://cms.ferzkopp.net/index.php/software/13-sdl-gfx
-diff --git a/package/sdl_gfx/sdl_gfx.hash b/package/sdl_gfx/sdl_gfx.hash
+diff --git a/package/sdl_ttf/sdl_ttf.hash b/package/sdl_ttf/sdl_ttf.hash
 new file mode 100644
-index 0000000..8c2be96
+index 0000000..ac7d6a6
 --- /dev/null
-+++ b/package/sdl_gfx/sdl_gfx.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/sdlgfx/files/
-+md5	fcc3c4f2d1b4943409bf7e67dd65d03a	SDL_gfx-2.0.23.tar.gz
-+sha1	aae60e7fed539f3f8a0a0bd6da3bbcf625642596	SDL_gfx-2.0.23.tar.gz
++++ b/package/sdl_ttf/sdl_ttf.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	724cd895ecf4da319a3ef164892b72078bd92632a5d812111261cde248ebcdb7	SDL_ttf-2.0.11.tar.gz
