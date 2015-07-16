@@ -1,37 +1,108 @@
-From: =?UTF-8?Q?Aur=C3=A9lien_Chabot?= <aurelien@chabot.fr>
-Date: Thu, 16 Jul 2015 23:27:24 +0200
-Subject: [Buildroot] [PATCHv2] transmission: improve systemd support
-In-Reply-To: <CAGduivy48ijCY6MxObh2KNJjEii8R9s89T5f7mVWOMB_-shE6w@mail.gmail.com>
-References: <1421684056-5266-11-git-send-email-maxtram95@gmail.com>
- <1436881866-2168-1-git-send-email-aurelien@chabot.fr>
- <CAGduivy48ijCY6MxObh2KNJjEii8R9s89T5f7mVWOMB_-shE6w@mail.gmail.com>
-Message-ID: <CAJup9chhK-zNzDyB0HvO4eWRm3T_u5-zMs70BcoeDbRMXm+wZw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 16 Jul 2015 23:26:04 +0200
+Subject: [Buildroot] [git commit] can-utils: fix musl build
+Message-ID: <20150716212816.358AF81DF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 14, 2015 at 4:05 PM, Maxime Hadjinlian <
-maxime.hadjinlian@gmail.com> wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=f819586d47488667d10da95301c34079c89a5164
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Have you tested with a read-only file system ? Since
-> /var/lib/transmission is not a tmpfs, I don't know if transmission
-> will be very happy about that.
->
+Include additional headers like <sys/time.h> and <linux/sockios.h>
+to resolve undefined symbols.
 
-From what I try, transmission doesn't crash or stop if it cannot write it's
-configuration. That's why I remove the tmpfs. Moreover the tmpfs stuff was
-only added for systemd, and if we choose to do that we should do the same
-for sysvinit.
+Fixes following autobuild failure:
+http://autobuild.buildroot.net/results/0dd/0ddb5a70358bdbb491fbee670c7843c15217e78d/
 
-I just saw a well that with systemd the folder /var/lib/transmission is not
-created, so I should have kept the line creating the folder.
-BTW, is it really the prefer solution to user sysuser.d instead of the
-buildroot user target ? Isn't this cause also problem on read only fs,
-because ets/passwd will not be writable ?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-log2asc-include-sys-time.h.patch          |   28 +++++++++++++
+ ...Include-linux-sockios.h-to-fix-musl-build.patch |   42 ++++++++++++++++++++
+ 2 files changed, 70 insertions(+), 0 deletions(-)
 
-Aur?lien
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150716/c2794fc3/attachment-0001.html>
+diff --git a/package/can-utils/0001-log2asc-include-sys-time.h.patch b/package/can-utils/0001-log2asc-include-sys-time.h.patch
+new file mode 100644
+index 0000000..30cf23b
+--- /dev/null
++++ b/package/can-utils/0001-log2asc-include-sys-time.h.patch
+@@ -0,0 +1,28 @@
++From 50a71462a3291f7e08fa25f67b274792bb419211 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Tue, 14 Jul 2015 21:24:37 +0200
++Subject: [PATCH 1/2] log2asc: include sys/time.h
++
++Without this patch compilation against musl C library
++breaks, because struct timeval cannot be found.
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ log2asc.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/log2asc.c b/log2asc.c
++index 29d13e8..8fb88a9 100644
++--- a/log2asc.c
+++++ b/log2asc.c
++@@ -48,6 +48,7 @@
++ #include <unistd.h>
++ 
++ #include <net/if.h>
+++#include <sys/time.h>
++ #include <linux/can.h>
++ 
++ #include "lib.h"
++-- 
++2.1.4
++
+diff --git a/package/can-utils/0002-Include-linux-sockios.h-to-fix-musl-build.patch b/package/can-utils/0002-Include-linux-sockios.h-to-fix-musl-build.patch
+new file mode 100644
+index 0000000..aca3eb4
+--- /dev/null
++++ b/package/can-utils/0002-Include-linux-sockios.h-to-fix-musl-build.patch
+@@ -0,0 +1,42 @@
++From 204cfffefb2ee6058e5d22a4b65cff22e6cff5ee Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Thu, 16 Jul 2015 21:30:02 +0200
++Subject: [PATCH 2/2] Include linux/sockios.h to fix musl build
++
++Including <sys/ioctl.h> and <net/if.h> is not sufficient
++to musl to find SIOCSIFNAME, so <linux/sockios.h> must be
++included too.
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ slcan_attach.c | 1 +
++ slcand.c       | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/slcan_attach.c b/slcan_attach.c
++index ab8ff0a..485cbe3 100644
++--- a/slcan_attach.c
+++++ b/slcan_attach.c
++@@ -52,6 +52,7 @@
++ #include <net/if.h>
++ #include <termios.h>
++ #include <linux/tty.h>
+++#include <linux/sockios.h>
++ 
++ void print_usage(char *prg)
++ {
++diff --git a/slcand.c b/slcand.c
++index e5e4752..e8c70e0 100644
++--- a/slcand.c
+++++ b/slcand.c
++@@ -38,6 +38,7 @@
++ #include <net/if.h>
++ #include <termios.h>
++ #include <linux/tty.h>
+++#include <linux/sockios.h>
++ 
++ /* Change this to whatever your daemon is called */
++ #define DAEMON_NAME "slcand"
++-- 
++2.1.4
++
