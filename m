@@ -1,87 +1,79 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 17 Jul 2015 00:35:01 +0200
-Subject: [Buildroot] [PATCHv4] Makefile: fix performance regression
- casued by the umask handling
-In-Reply-To: <1437085987-4512-1-git-send-email-yann.morin.1998@free.fr>
-References: <1437085987-4512-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <55A83195.8080204@mind.be>
+Date: Fri, 17 Jul 2015 00:40:20 +0200
+Subject: [Buildroot] [PATCH] ARC: allow selection of MMU page size
+In-Reply-To: <1437073441-11321-1-git-send-email-abrodkin@synopsys.com>
+References: <1437073441-11321-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <55A832D4.9020801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/17/15 00:33, Yann E. MORIN wrote:
-> From: Guido Mart?nez <guido@vanguardiasur.com.ar>
+On 07/16/15 21:04, Alexey Brodkin wrote:
+> Modern ARC cores (those sporting MMU of version 3 and 4) allow selection
+> of different page sizes (4, 8 or 16 kB) during ASIC design creation.
+> And it's important to build a toolchain with page size setting that matches
+> hardware.
 > 
-> Commit bee5745c introduced an extra level of 'make' when the umask is
-> different from 0022. However, when several targets were specified on
-> the command line, a new make instance would be called for each target.
-> This introduces a huge performance overhead when many targets are
-> specified on the command line.
+> Otherwise user-space applications will fail on execution due to
+> unexpected data layout/alignment etc.
 > 
-> To fix this, use the same approach as used in the mkmakefile script:
-> an addition target on which the MAKECMDGOALS depend, so that this
-> target is run only once.
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> c: Anton Kolesov <akolesov@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  arch/Config.in.arc       | 30 ++++++++++++++++++++++++++++++
+>  package/uclibc/uclibc.mk |  8 ++++++++
+>  2 files changed, 38 insertions(+)
 > 
-> Note that the mkmakefile script contains a special exception for
-> Makefile, because the Makefile in the output directory is generated.
-> Since the top-level Makefile is not generated, this exception is not
-> needed here.
-> 
-> While we're at it, also fix the whitespace in the UMASK assignment.
-> 
-> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> [yann.morin.1998 at free.fr: aggregate patches from Arnout and Guido]
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+> index b48a90f..e960eb8 100644
+> --- a/arch/Config.in.arc
+> +++ b/arch/Config.in.arc
+> @@ -40,3 +40,33 @@ config BR2_GCC_TARGET_CPU
+>  	default "arc700" if BR2_arc750d
+>  	default "arc700" if BR2_arc770d
+>  	default "archs"	 if BR2_archs38
+> +
+> +choice
+> +	prompt "MMU Page Size"
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ It is not really current policy, but wouldn't it make more sense to do
 
- Someone finally got it right :-)
+	prompt "MMU Page Size" if BR2_arc770d || BR2_archs38
 
- Sorry for all the spam...
+? (i.e., only show it when there's anything to choose).
+
+ Also perhaps it makes sense to add a new symbol
+BR2_ARC_SUPPORTS_PAGE_SIZE_SELECTION or similar instead of specifying the
+individual processors.
+
 
  Regards,
  Arnout
 
-> 
-> ---
-> Changes v0 -> v4:
->   - aggregate Arnout's and Guido's patches together, keepign the best of
->     both patches
->   - fix the spaces in UMASK assignment
-> ---
->  Makefile | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 531ac5d..afdf554 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -25,15 +25,15 @@
->  #--------------------------------------------------------------
->  
->  # Trick for always running with a fixed umask
-> -UMASK=0022
-> +UMASK = 0022
->  ifneq ($(shell umask),$(UMASK))
-> -.PHONY: all $(MAKECMDGOALS)
-> +.PHONY: _all $(MAKECMDGOALS)
->  
-> -all:
-> -	@umask $(UMASK) && $(MAKE) --no-print-directory
-> +$(MAKECMDGOALS): _all
-> +	@:
->  
-> -$(MAKECMDGOALS):
-> -	@umask $(UMASK) && $(MAKE) --no-print-directory $@
-> +_all:
-> +	@umask $(UMASK) && $(MAKE) --no-print-directory $(MAKECMDGOALS)
->  
->  else # umask
->  
-> 
+> +	default BR2_arc_page_size_8k
+> +	help
+> +	    MMU starting from version 3 (could be found in ARC 770) and now
+> +	    version 4 (could be found in ARC HS38) allows selection of page
+> +	    size during ASIC design creation. And it's important to build
+> +	    a toolchain with page size setting that matches hardware.
+> +	    Otherwise user-space applications will fail on execution due to
+> +	    unexpected data layout/alignment.
+> +
+> +config BR2_arc_page_size_4k
+> +	bool "4KB"
+> +	depends on BR2_arc770d || BR2_archs38
+> +
+> +config BR2_arc_page_size_8k
+> +	bool "8KB"
+> +
+> +config BR2_arc_page_size_16k
+> +	bool "16KB"
+> +	depends on BR2_arc770d || BR2_archs38
+
+[snip]
 
 
 -- 
