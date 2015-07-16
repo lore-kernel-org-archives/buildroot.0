@@ -1,56 +1,74 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 17 Jul 2015 00:03:30 +0200
-Subject: [Buildroot] [PATCH] Makefile: fix performance regression introduced
-	by "Makefile: don't depend on the umask"
-In-Reply-To: <20150716225237.367d958a@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 17 Jul 2015 00:09:11 +0200
+Subject: [Buildroot] [PATCH] Makefile: optimize umask setting
+In-Reply-To: <1437083717-2736-1-git-send-email-guido@vanguardiasur.com.ar>
 References: <20150716225237.367d958a@free-electrons.com>
-Message-ID: <1437084210-25086-1-git-send-email-arnout@mind.be>
+ <1437083717-2736-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <55A82B87.6030808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit bee5745c introduced an extra level of 'make' when the umask is
-different from 0022. However, when several targets were specified on
-the command line, a new make instance would be called for each target.
-This introduces a huge performance overhead when many targets are
-specified on the command line.
+On 07/16/15 23:55, Guido Mart?nez wrote:
+> When using make to build multiple targets ("make a b ..."), the makefile
+> would get called individually for each target, making the build a lot
+> slower since every Makefile in BR's tree was parsed each time.
+> 
+> Fix this by making every invoked target depend on an "_all" rule, and
+> doing the real work there, only one time. This is similar to the logic
+> used in the generated makefile (support/scripts/mkmakefile).
+> 
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> ---
+>  Makefile | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 531ac5d..f50f767 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -27,13 +27,13 @@
+>  # Trick for always running with a fixed umask
+>  UMASK=0022
+>  ifneq ($(shell umask),$(UMASK))
+> -.PHONY: all $(MAKECMDGOALS)
+> +.PHONY: _all
 
-To fix this, use the same approach as used in the mkmakefile script:
-an addition target on which the MAKECMDGOALS depend, so that this
-target is run only once.
+ $(MAKECMDGOALS) should still be .PHONY (the non-phony targets are only
+non-phony on the next level of make invocation).
 
-Note that the mkmakefile script contains a special exception for
-Makefile, because the Makefile in the output directory is generated.
-Since the top-level Makefile is not generated, this exception is not
-needed here.
+ But in my patch, I forgot to replace all by _all :-)
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Guido Mart?nez <guido@vanguardiasur.com.a>
----
- Makefile | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+>  
+> -all:
+> -	@umask $(UMASK) && $(MAKE) --no-print-directory
+> +$(MAKECMDGOALS): _all
+> +	@:
+>  
+> -$(MAKECMDGOALS):
+> -	@umask $(UMASK) && $(MAKE) --no-print-directory $@
+> +_all:
+> +	@umask $(UMASK) && $(MAKE) --no-print-directory $(MAKECMDGOALS)
 
-diff --git a/Makefile b/Makefile
-index c7d6bee..b4ef2fa 100644
---- a/Makefile
-+++ b/Makefile
-@@ -29,11 +29,11 @@ UMASK=0022
- ifneq ($(shell umask),$(UMASK))
- .PHONY: all $(MAKECMDGOALS)
- 
--all:
--	@umask $(UMASK) && $(MAKE) --no-print-directory
-+_all:
-+	@umask $(UMASK) && $(MAKE) --no-print-directory $(MAKEARGS) $(MAKECMDGOALS)
- 
--$(MAKECMDGOALS):
--	@umask $(UMASK) && $(MAKE) --no-print-directory $@
-+$(MAKECMDGOALS): _all
-+	@:
- 
- else # umask
- 
+ That's indeed a more logical order.
+
+ mkmakefile also adds $(MAKEARGS) - should we keep that?
+
+ Regards,
+ Arnout
+
+>  
+>  else # umask
+>  
+> 
+
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
