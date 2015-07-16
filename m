@@ -1,77 +1,64 @@
-From: Emeric Vigier <emeric.vigier@savoirfairelinux.com>
-Date: Thu, 16 Jul 2015 11:15:49 -0400
-Subject: [Buildroot] [PATCH v3 1/1] Makefile: add target to clean
-	targetfs
-In-Reply-To: <55A5859B.2010809@savoirfairelinux.com>
-References: <1425947100-9031-1-git-send-email-emeric.vigier@savoirfairelinux.com>
- <1430095555-8484-1-git-send-email-emeric.vigier@savoirfairelinux.com>
- <553DF343.8010400@andin.de> <55A5859B.2010809@savoirfairelinux.com>
-Message-ID: <55A7CAA5.5020502@savoirfairelinux.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Thu, 16 Jul 2015 18:30:35 +0200
+Subject: [Buildroot] [PATCH] package: Fix overwrite inittab w/ default
+	skeleton
+Message-ID: <1437064235-32432-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> Another problem that showed up was that some of the package install
->> steps dont seem separated very well. E.g. qt5 examples copies everything
->> from a certain staging-dir/* to target/..
->> A later qt5 module also creates files in that staging-dir, so next round
->> there's more files in target.
->>
->> I realize this is due to my way of not deleteing the staging dir any
->> longer - I used to in the beginning. If I recall correctly this is
->> because I noticed some packages copy files into staging/ during compile
->> and these files are then missing after a reinstall. I'm not entirely
->> sure though.
->
-> I enabled qt4 and compare the targetfs after a target-clean, no
-> differences:
->
-> $ rsync -rvncl --delete --exclude '*.pyc' --exclude '*.pyo' --exclude
-> 'tmp/ldconfig/aux-cache' output/target/ output/target.orig.qt4/
-> sending incremental file list
->
-> sent 15,095 bytes  received 62 bytes  30,314.00 bytes/sec
-> total size is 16,028,992  speedup is 1,057.53 (DRY RUN)
->
-> With what QT configs did you meet problems specifically?
+If you select a custom skeleton, and have busybox or sysvinit as init,
+the install of their inittab would trigger, rendering yours useless.
 
-Qt4 showed no difference in the targetfs.
+The hooks doing the sed in the skeleton package would only trigger for a
+default skeleton.
 
-I disabled Qt4 and enabled Qt5 with several modules and saw no 
-differences in targetfs either. Here is my Qt5 config:
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/busybox/busybox.mk   | 2 +-
+ package/sysvinit/sysvinit.mk | 8 +++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-   http://pastie.org/10296840
-
-I had to switch from a buildroot toolchain to a Linaro-gcc-4.9 toolchain 
-to build Qt5. I haven't enabled Qt5-webkit because I fell into this 
-GCC-4.9 bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=61207.
-
->> So my question is, in your approach, are you certain the re-installed
->> staging/ is the same as the original for all packages? Maybe you can run
->> some comparison like my rsync line for staging as well.
-
-I only delete staging symlink, not the sysroot content. This patch does 
-not aim at fixing the black magic that some packages may be doing 
-between the staging dir and the target dir, just recreating the targetfs.
-
-So the only improvement I have in mind for this patch is this:
-
-         rm -rf $(TARGET_DIR) $(STAGING_DIR) $(BUILD_DIR)/.root \
--         $(BUILD_DIR)/*/.stamp_target_installed 
-$(BUILD_DIR)/*/.stamp_staging_installed
-+         $(BUILD_DIR)/*/.stamp_target_installed 
-$(BUILD_DIR)/*/.stamp_staging_installed \
-+         $(BUILD_DIR)/host-gcc-final-*/.stamp_host_installed
-
-Do you have other things in mind?
-
->> regards,
->> Andreas
->
-> thanks,
-> --
-> Emeric
-
-Emeric
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 6b2abca..7c208d3 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -148,7 +148,7 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
+ endef
+ 
+-ifeq ($(BR2_INIT_BUSYBOX),y)
++ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT)$(BR2_INIT_BUSYBOX),yy)
+ define BUSYBOX_INSTALL_INITTAB
+ 	$(INSTALL) -D -m 0644 package/busybox/inittab $(TARGET_DIR)/etc/inittab
+ endef
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index 2460dd9..34800d8 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -30,14 +30,20 @@ define SYSVINIT_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) SULOGINLIBS="-lcrypt" -C $(@D)/src
+ endef
+ 
++ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT)$(BR2_INIT_SYSVINIT),yy)
++define SYSVINIT_INSTALL_INITTAB
++	$(INSTALL) -D -m 0644 package/sysvinit/inittab $(TARGET_DIR)/etc/inittab
++endef
++endif
++
+ define SYSVINIT_INSTALL_TARGET_CMDS
+ 	for x in halt init shutdown killall5; do \
+ 		$(INSTALL) -D -m 0755 $(@D)/src/$$x $(TARGET_DIR)/sbin/$$x || exit 1; \
+ 	done
+-	$(INSTALL) -D -m 0644 package/sysvinit/inittab $(TARGET_DIR)/etc/inittab
+ 	ln -sf /sbin/halt $(TARGET_DIR)/sbin/reboot
+ 	ln -sf /sbin/halt $(TARGET_DIR)/sbin/poweroff
+ 	ln -sf killall5 $(TARGET_DIR)/sbin/pidof
++	$(SYSVINIT_INSTALL_INITTAB)
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.1.4
