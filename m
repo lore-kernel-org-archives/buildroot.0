@@ -1,68 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jul 2015 23:25:30 +0200
-Subject: [Buildroot] [PATCH] ARC: allow selection of MMU page size
-In-Reply-To: <1437073441-11321-1-git-send-email-abrodkin@synopsys.com>
-References: <1437073441-11321-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150716232530.761b0529@free-electrons.com>
+From: =?UTF-8?Q?Aur=C3=A9lien_Chabot?= <aurelien@chabot.fr>
+Date: Thu, 16 Jul 2015 23:27:24 +0200
+Subject: [Buildroot] [PATCHv2] transmission: improve systemd support
+In-Reply-To: <CAGduivy48ijCY6MxObh2KNJjEii8R9s89T5f7mVWOMB_-shE6w@mail.gmail.com>
+References: <1421684056-5266-11-git-send-email-maxtram95@gmail.com>
+ <1436881866-2168-1-git-send-email-aurelien@chabot.fr>
+ <CAGduivy48ijCY6MxObh2KNJjEii8R9s89T5f7mVWOMB_-shE6w@mail.gmail.com>
+Message-ID: <CAJup9chhK-zNzDyB0HvO4eWRm3T_u5-zMs70BcoeDbRMXm+wZw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+On Tue, Jul 14, 2015 at 4:05 PM, Maxime Hadjinlian <
+maxime.hadjinlian@gmail.com> wrote:
 
-On Thu, 16 Jul 2015 22:04:01 +0300, Alexey Brodkin wrote:
+> Have you tested with a read-only file system ? Since
+> /var/lib/transmission is not a tmpfs, I don't know if transmission
+> will be very happy about that.
+>
 
-> +choice
-> +	prompt "MMU Page Size"
-> +	default BR2_arc_page_size_8k
-> +	help
-> +	    MMU starting from version 3 (could be found in ARC 770) and now
-> +	    version 4 (could be found in ARC HS38) allows selection of page
-> +	    size during ASIC design creation. And it's important to build
+From what I try, transmission doesn't crash or stop if it cannot write it's
+configuration. That's why I remove the tmpfs. Moreover the tmpfs stuff was
+only added for systemd, and if we choose to do that we should do the same
+for sysvinit.
 
-Remove the "And".
+I just saw a well that with systemd the folder /var/lib/transmission is not
+created, so I should have kept the line creating the folder.
+BTW, is it really the prefer solution to user sysuser.d instead of the
+buildroot user target ? Isn't this cause also problem on read only fs,
+because ets/passwd will not be writable ?
 
-> +	    a toolchain with page size setting that matches hardware.
-
-"with a page size matching the hardware configuration"
-
-> +	    Otherwise user-space applications will fail on execution due to
-
-"will fail at runtime"
-
-> +	    unexpected data layout/alignment.
-
-What is the impact for people using external toolchains?
-
-> +
-> +config BR2_arc_page_size_4k
-
-Can you use BR2_ARC_PAGE_SIZE_4K instead? I know the BR2_arc option is
-lower-case, but for most architectures options are upper-case, even if
-the core selection is lower-case. I think lower-case options is more an
-accident of the past rather than a real policy.
-
-> +	bool "4KB"
-> +	depends on BR2_arc770d || BR2_archs38
-> +
-> +config BR2_arc_page_size_8k
-> +	bool "8KB"
-> +
-> +config BR2_arc_page_size_16k
-> +	bool "16KB"
-> +	depends on BR2_arc770d || BR2_archs38
-
-Can you quickly comment on why 4 KB / 16 KB have dependencies on
-specific ARC cores and not 8 KB ?
-
-Can you respin with those changes?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Aur?lien
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150716/c2794fc3/attachment-0001.html>
