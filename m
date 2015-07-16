@@ -1,33 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jul 2015 23:12:30 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix uClibc-ng 64bit
- dynamic loader link
-In-Reply-To: <b301100fe3edad0eed23cf5557548fe014410899.1437035134.git.baruch@tkos.co.il>
-References: <b301100fe3edad0eed23cf5557548fe014410899.1437035134.git.baruch@tkos.co.il>
-Message-ID: <20150716231230.23eb7197@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 16 Jul 2015 18:14:06 -0300
+Subject: [Buildroot] [PATCH] gcc: add gcc 5.2.0
+In-Reply-To: <20150716231024.656693cb@free-electrons.com>
+References: <1437079928-9591-1-git-send-email-gustavo@zacarias.com.ar>	<20150716225639.14772165@free-electrons.com>	<55A81B35.2040200@zacarias.com.ar>
+ <20150716231024.656693cb@free-electrons.com>
+Message-ID: <55A81E9E.8000103@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
 
-On Thu, 16 Jul 2015 11:25:34 +0300, Baruch Siach wrote:
-> Commit 34f95bf9dbb0 (toolchain-external: fix support of uClibc-ng toolchains,
-> 2015-07-13) added the missing ld-uClibc.so.1 dynamic linker symlink that
-> binaries expect when linked with uClibc-ng. However on 64bit targets the
-> linker is called ld64-uClibc.so.1. Handle that case as well.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  toolchain/toolchain-external/toolchain-external.mk | 3 +++
->  1 file changed, 3 insertions(+)
 
-Applied, thanks.
+On 16/07/15 18:10, Thomas Petazzoni wrote:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Gah, not the sort of thing you would expect from a bug fix release :-/
+>
+>> Do we still want to step on 5.1 considering this?
+>
+> Then I'm not sure obviously. I see two options here:
+>
+>   * Switch to the policy where we support only one 5.x version at a time
+>     (option named BR2_GCC_VERSION_5_X), and keep 5.1 for now until 5.3
+>     is released, hopefully fixing the major bugs.
+>
+>   * Package gcc 5.2 separately from 5.1. But it's pretty useless to
+>     offer as a package a compiler that is not even capable of building a
+>     kernel that boots.
+>
+> Opinions?
+
+I was going to go for what you've said until i saw the size delta and 
+issue, and opted for this approach, but i'm open to votes/suggestions as 
+well.
+Maybe skipping 5.2.0 for the time?
+Regards.
