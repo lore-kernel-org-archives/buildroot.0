@@ -1,48 +1,54 @@
-From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
-Date: Thu, 16 Jul 2015 18:55:17 -0300
-Subject: [Buildroot] [PATCH] Makefile: optimize umask setting
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 17 Jul 2015 00:03:30 +0200
+Subject: [Buildroot] [PATCH] Makefile: fix performance regression introduced
+	by "Makefile: don't depend on the umask"
 In-Reply-To: <20150716225237.367d958a@free-electrons.com>
 References: <20150716225237.367d958a@free-electrons.com>
-Message-ID: <1437083717-2736-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <1437084210-25086-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using make to build multiple targets ("make a b ..."), the makefile
-would get called individually for each target, making the build a lot
-slower since every Makefile in BR's tree was parsed each time.
+Commit bee5745c introduced an extra level of 'make' when the umask is
+different from 0022. However, when several targets were specified on
+the command line, a new make instance would be called for each target.
+This introduces a huge performance overhead when many targets are
+specified on the command line.
 
-Fix this by making every invoked target depend on an "_all" rule, and
-doing the real work there, only one time. This is similar to the logic
-used in the generated makefile (support/scripts/mkmakefile).
+To fix this, use the same approach as used in the mkmakefile script:
+an addition target on which the MAKECMDGOALS depend, so that this
+target is run only once.
 
-Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+Note that the mkmakefile script contains a special exception for
+Makefile, because the Makefile in the output directory is generated.
+Since the top-level Makefile is not generated, this exception is not
+needed here.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Guido Mart?nez <guido@vanguardiasur.com.a>
 ---
- Makefile | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ Makefile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 531ac5d..f50f767 100644
+index c7d6bee..b4ef2fa 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -27,13 +27,13 @@
- # Trick for always running with a fixed umask
- UMASK=0022
+@@ -29,11 +29,11 @@ UMASK=0022
  ifneq ($(shell umask),$(UMASK))
--.PHONY: all $(MAKECMDGOALS)
-+.PHONY: _all
+ .PHONY: all $(MAKECMDGOALS)
  
 -all:
 -	@umask $(UMASK) && $(MAKE) --no-print-directory
-+$(MAKECMDGOALS): _all
-+	@:
++_all:
++	@umask $(UMASK) && $(MAKE) --no-print-directory $(MAKEARGS) $(MAKECMDGOALS)
  
 -$(MAKECMDGOALS):
 -	@umask $(UMASK) && $(MAKE) --no-print-directory $@
-+_all:
-+	@umask $(UMASK) && $(MAKE) --no-print-directory $(MAKECMDGOALS)
++$(MAKECMDGOALS): _all
++	@:
  
  else # umask
  
