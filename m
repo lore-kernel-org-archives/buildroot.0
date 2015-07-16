@@ -1,79 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 16 Jul 2015 23:51:18 +0200
-Subject: [Buildroot] [PATCH] Add xxhash package
-In-Reply-To: <1437080375-96542-1-git-send-email-eswierk@skyportsystems.com>
-References: <1437080375-96542-1-git-send-email-eswierk@skyportsystems.com>
-Message-ID: <20150716215118.GB4472@free.fr>
+From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
+Date: Thu, 16 Jul 2015 18:55:17 -0300
+Subject: [Buildroot] [PATCH] Makefile: optimize umask setting
+In-Reply-To: <20150716225237.367d958a@free-electrons.com>
+References: <20150716225237.367d958a@free-electrons.com>
+Message-ID: <1437083717-2736-1-git-send-email-guido@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ed, All,
+When using make to build multiple targets ("make a b ..."), the makefile
+would get called individually for each target, making the build a lot
+slower since every Makefile in BR's tree was parsed each time.
 
-On 2015-07-16 13:59 -0700, Ed Swierk spake thusly:
-> "xxHash is an extremely fast hash algorithm, running at RAM
-> speed limits."
-> 
-> Signed-off-by: Ed Swierk <eswierk@skyportsystems.com>
-[--SNIP--]
-> new file mode 100644
-> index 0000000..ba680ba
-> --- /dev/null
-> +++ b/package/xxhash/xxhash.mk
-> @@ -0,0 +1,19 @@
-> +################################################################################
-> +#
-> +# xxhash
-> +#
-> +################################################################################
-> +
-> +XXHASH_VERSION = r40
-> +XXHASH_SITE = $(call github,Cyan4973,xxHash,$(XXHASH_VERSION))
-> +XXHASH_LICENSE = Free
+Fix this by making every invoked target depend on an "_all" rule, and
+doing the real work there, only one time. This is similar to the logic
+used in the generated makefile (support/scripts/mkmakefile).
 
-'Free' is not a license name (t least not a common one). We have a list
-of commonly used licenses in the manual:
-    http://buildroot.net/downloads/manual/manual.html#legal-info-list-licenses
+Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+---
+ Makefile | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-However, the licensing terms of that package are in fact a bit weird. In
-fact, the LICENSE file is the text of the BSD-2c. But when one looks at
-the source files, one (xxhash.c) is BSD-2c, while the other (xxhsum.c)
-is clearly GPLv2+.
-
-So you would write:
-
-    XXHASH_LICENSE = BSD-2c, GPLv2+
-    XXHASH_LICENSE_FILES = LICENSE xxhsum.c
-
-(yes, we put the source file in there because the GPLv2+ license is only
-visible in that file).
-
-Regards,
-Yann E. MORIN.
-
-> +define XXHASH_BUILD_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) xxhsum
-> +endef
-> +
-> +define XXHASH_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 0755 -D $(@D)/xxhsum $(TARGET_DIR)/usr/bin/xxhsum
-> +endef
-> +
-> +$(eval $(generic-package))
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/Makefile b/Makefile
+index 531ac5d..f50f767 100644
+--- a/Makefile
++++ b/Makefile
+@@ -27,13 +27,13 @@
+ # Trick for always running with a fixed umask
+ UMASK=0022
+ ifneq ($(shell umask),$(UMASK))
+-.PHONY: all $(MAKECMDGOALS)
++.PHONY: _all
+ 
+-all:
+-	@umask $(UMASK) && $(MAKE) --no-print-directory
++$(MAKECMDGOALS): _all
++	@:
+ 
+-$(MAKECMDGOALS):
+-	@umask $(UMASK) && $(MAKE) --no-print-directory $@
++_all:
++	@umask $(UMASK) && $(MAKE) --no-print-directory $(MAKECMDGOALS)
+ 
+ else # umask
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.4
