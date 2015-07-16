@@ -1,43 +1,42 @@
-From: Anthony Viallard <viallard@syscom-instruments.com>
-Date: Thu, 16 Jul 2015 11:39:28 +0200
-Subject: [Buildroot] [PATCH 1/1] gcc: make sure we don't have a copy of
-	libiberty.a in host library dir
-Message-ID: <1437039568-22957-1-git-send-email-viallard@syscom-instruments.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Thu, 16 Jul 2015 12:17:36 +0200
+Subject: [Buildroot] [PATCH v2 4/4] Makefile: staging symlink uses a
+	relative path
+In-Reply-To: <1436775527-2484-5-git-send-email-s.martin49@gmail.com>
+References: <1436775527-2484-1-git-send-email-s.martin49@gmail.com>
+ <1436775527-2484-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <6195872.eqbV4amuVy@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With old gcc version (like with 4.7.4), libiberty.a is copied to
-library directory and it's not the behavior we want.
+Hello Samuel,
 
-According to Arnout Vandecappelle, newer version of gcc
-have fixed the problem. But if you choose gcc 4.7.X, the problem
-is there. Therefore, I send this little patch which remove the
-bad file after the build is finished.
+On Monday 13 July 2015 10:18:47 Samuel Martin wrote:
+> A step forward toward a relocatable SDK.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index daf692e..30a2d0e 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -447,7 +447,7 @@ $(STAGING_DIR):
+>  	@ln -snf lib $(STAGING_DIR)/usr/$(LIB_SYMLINK)
+>  	@mkdir -p $(STAGING_DIR)/usr/include
+>  	@mkdir -p $(STAGING_DIR)/usr/bin
+> -	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+> +	@ln -snf $(subst $(BASE_DIR)/,,$(STAGING_DIR)) $(BASE_DIR)/staging
+Does it work if user customize BR2_HOST_DIR?
 
-Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
----
- package/gcc/gcc-final/gcc-final.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+BR,
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 16bf4ee..2cce860 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -185,6 +185,12 @@ endef
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_USR_LIBS
- endif
- 
-+define HOST_GCC_FINAL_RM_LIBIBERTY_A
-+	rm -f $(HOST_DIR)/usr/lib/libiberty.a
-+endef
-+
-+HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_RM_LIBIBERTY_A
-+
- ifeq ($(BR2_xtensa),y)
- HOST_GCC_FINAL_CONF_OPTS += --enable-cxx-flags="$(TARGET_ABI)"
- endif
 -- 
-2.1.4
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
