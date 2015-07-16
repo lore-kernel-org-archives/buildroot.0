@@ -1,65 +1,53 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 17 Jul 2015 00:19:43 +0200
-Subject: [Buildroot] [PATCH] Makefile: fix performance regression introduced
-	by "Makefile: don't depend on the umask"
-In-Reply-To: <1437084210-25086-1-git-send-email-arnout@mind.be>
-References: <1437084210-25086-1-git-send-email-arnout@mind.be>
-Message-ID: <1437085183-26124-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 17 Jul 2015 00:32:59 +0200
+Subject: [Buildroot] [PATCH] Update from polarssl to mbed 1.3.11
+In-Reply-To: <20150716231142.6486d101@free-electrons.com>
+References: <1437080329-96500-1-git-send-email-eswierk@skyportsystems.com>
+ <20150716231142.6486d101@free-electrons.com>
+Message-ID: <55A8311B.30503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit bee5745c introduced an extra level of 'make' when the umask is
-different from 0022. However, when several targets were specified on
-the command line (i.e., 'make a b c'), a new make instance would be
-called for each target, which each times parses all the makefiles. This
-introduces a huge performance overhead when many targets are specified
-on the command line.
+On 07/16/15 23:11, Thomas Petazzoni wrote:
+> Dear Ed Swierk,
+> 
+> On Thu, 16 Jul 2015 13:58:49 -0700, Ed Swierk wrote:
+>> This patch updates the polarssl package to build the current mbed 1.3.x
+>> release.
+>>
+>> It also prefixes the generated binaries with mbed_, to avoid names that
+>> overlap with other packages (like sha1sum) or that are generic and
+>> confusing (like selftest or hello).
+>>
+>> Signed-off-by: Ed Swierk <eswierk@skyportsystems.com>
+>> ---
+>>  package/polarssl/0001-no-test-suite.patch          | 27 ----------------------
+>>  ...he-standard-CMake-flag-to-drive-the-share.patch | 18 +++++++--------
+>>  package/polarssl/polarssl.hash                     |  4 ++--
+>>  package/polarssl/polarssl.mk                       | 17 +++++++++++---
+>>  4 files changed, 25 insertions(+), 41 deletions(-)
+>>  delete mode 100644 package/polarssl/0001-no-test-suite.patch
+> 
+> Thanks for your patch. However, following Gustavo's comment, I've
+> marked your patch as "Changes Requested" in our patch tracking system.
+> Can you resubmit a new version that takes into account Gustavo's
+> comments?
 
-To fix this, use the same approach as used in the mkmakefile script:
-an additional _all target on which the MAKECMDGOALS depend, so that this
-target is run only once.
+ Since it anyway is not compatible and upstream changed name, perhaps it's
+better just to create a new package called mbedtls? When we remove polarssl we
+can make a legacy entry to point to mbedtls.
 
-Note that the mkmakefile script contains a special exception for
-Makefile, because the Makefile in the output directory is generated.
-Since the top-level Makefile is not generated, this exception is not
-needed here.
+ Regards,
+ Arnout
 
-While we're at it, also fix the whitespace in the UMASK assignment.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Guido Mart?nez <guido@vanguardiasur.com.r>
----
-v2:
- - replace _all by all in .PHONY
- - remove the useless MAKEFLAGS (it is not defined, the variable is
-   called MAKEFLAGS but that's already included in MAKE)
- - add UMASK whitespace fix
----
- Makefile | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index c7d6bee..b4ef2fa 100644
---- a/Makefile
-+++ b/Makefile
-@@ -29,11 +29,11 @@ UMASK=0022
- ifneq ($(shell umask),$(UMASK))
- .PHONY: all $(MAKECMDGOALS)
- 
--all:
--	@umask $(UMASK) && $(MAKE) --no-print-directory
-+_all:
-+	@umask $(UMASK) && $(MAKE) --no-print-directory $(MAKEARGS) $(MAKECMDGOALS)
- 
--$(MAKECMDGOALS):
--	@umask $(UMASK) && $(MAKE) --no-print-directory $@
-+$(MAKECMDGOALS): _all
-+	@:
- 
- else # umask
- 
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
