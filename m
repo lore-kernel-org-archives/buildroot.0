@@ -1,38 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jul 2015 23:36:49 +0200
-Subject: [Buildroot] [PATCH] Add missing checksum for host-tar.
-In-Reply-To: <1437081313-8271-1-git-send-email-hollis_blanchard@mentor.com>
-References: <1437081313-8271-1-git-send-email-hollis_blanchard@mentor.com>
-Message-ID: <20150716233649.7d0724ad@free-electrons.com>
+Date: Thu, 16 Jul 2015 23:38:52 +0200
+Subject: [Buildroot] [git commit] core/out-of-tree: fix Makefile wrapper
+Message-ID: <20150716213900.3298681DA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Hollis Blanchard,
+commit: http://git.buildroot.net/buildroot/commit/?id=6bae1ac5757f7dac2c906447502542bbb0cbdd62
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 16 Jul 2015 14:15:13 -0700, Hollis Blanchard wrote:
-> This fixes a very early error in a fresh build:
-> "ERROR: No hash found for tar-1.28.cpio.gz"
-> 
-> Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
-> ---
->  package/tar/tar.hash |    1 +
->  1 files changed, 1 insertions(+), 0 deletions(-)
+Commit 971faf8 (Makefile: fix out-of-tree builds with multiple targets
+with 'all') renamed the default target to '_all' to avoid name-clashing.
 
-I've applied after fixing the commit title. The commit title for
-packages should always look like "<package>: <description>", so I've
-changed it to:
+In doing so, I forgot to also fix the instance in the .PHONY rule.
 
-	tar: add missing hash for the host variant
+Fix that now.
 
-Indeed we talk more about "hashes" than "checksums" in Buildroot.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/mkmakefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
+index 974e2c0..833be6a 100755
+--- a/support/scripts/mkmakefile
++++ b/support/scripts/mkmakefile
+@@ -30,7 +30,7 @@ MAKEARGS += O=\$(if \$(patsubst /%,,\$(makedir)),\$(CURDIR)/)\$(patsubst %/,%,\$
+ 
+ MAKEFLAGS += --no-print-directory
+ 
+-.PHONY: all \$(MAKECMDGOALS)
++.PHONY: _all \$(MAKECMDGOALS)
+ 
+ all	:= \$(filter-out Makefile,\$(MAKECMDGOALS))
+ 
