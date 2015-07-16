@@ -1,43 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jul 2015 23:11:42 +0200
-Subject: [Buildroot] [PATCH] Update from polarssl to mbed 1.3.11
-In-Reply-To: <1437080329-96500-1-git-send-email-eswierk@skyportsystems.com>
-References: <1437080329-96500-1-git-send-email-eswierk@skyportsystems.com>
-Message-ID: <20150716231142.6486d101@free-electrons.com>
+Date: Thu, 16 Jul 2015 23:12:06 +0200
+Subject: [Buildroot] [git commit] toolchain-external: fix uClibc-ng 64bit
+	dynamic loader link
+Message-ID: <20150716211218.7131B81E0F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ed Swierk,
+commit: http://git.buildroot.net/buildroot/commit/?id=6ec15820289808ed9a53086d1e384c8b4c5802fa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 16 Jul 2015 13:58:49 -0700, Ed Swierk wrote:
-> This patch updates the polarssl package to build the current mbed 1.3.x
-> release.
-> 
-> It also prefixes the generated binaries with mbed_, to avoid names that
-> overlap with other packages (like sha1sum) or that are generic and
-> confusing (like selftest or hello).
-> 
-> Signed-off-by: Ed Swierk <eswierk@skyportsystems.com>
-> ---
->  package/polarssl/0001-no-test-suite.patch          | 27 ----------------------
->  ...he-standard-CMake-flag-to-drive-the-share.patch | 18 +++++++--------
->  package/polarssl/polarssl.hash                     |  4 ++--
->  package/polarssl/polarssl.mk                       | 17 +++++++++++---
->  4 files changed, 25 insertions(+), 41 deletions(-)
->  delete mode 100644 package/polarssl/0001-no-test-suite.patch
+Commit 34f95bf9dbb0 (toolchain-external: fix support of uClibc-ng toolchains,
+2015-07-13) added the missing ld-uClibc.so.1 dynamic linker symlink that
+binaries expect when linked with uClibc-ng. However on 64bit targets the
+linker is called ld64-uClibc.so.1. Handle that case as well.
 
-Thanks for your patch. However, following Gustavo's comment, I've
-marked your patch as "Changes Requested" in our patch tracking system.
-Can you resubmit a new version that takes into account Gustavo's
-comments?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index fcb033c..ce9d79f 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -730,6 +730,9 @@ define TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO
+ 	if test -e $(TARGET_DIR)/lib/ld-uClibc.so.1; then \
+ 		ln -sf ld-uClibc.so.1 $(TARGET_DIR)/lib/ld-uClibc.so.0 ; \
+ 	fi
++	if test -e $(TARGET_DIR)/lib/ld64-uClibc.so.1; then \
++		ln -sf ld64-uClibc.so.1 $(TARGET_DIR)/lib/ld64-uClibc.so.0 ; \
++	fi
+ endef
+ 
+ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
