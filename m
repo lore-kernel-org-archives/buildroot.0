@@ -1,85 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 17 Jul 2015 00:40:20 +0200
-Subject: [Buildroot] [PATCH] ARC: allow selection of MMU page size
-In-Reply-To: <1437073441-11321-1-git-send-email-abrodkin@synopsys.com>
-References: <1437073441-11321-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <55A832D4.9020801@mind.be>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 17 Jul 2015 00:45:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: disable for PowerPC CS
+	toolchains
+Message-ID: <1437086706-20437-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/16/15 21:04, Alexey Brodkin wrote:
-> Modern ARC cores (those sporting MMU of version 3 and 4) allow selection
-> of different page sizes (4, 8 or 16 kB) during ASIC design creation.
-> And it's important to build a toolchain with page size setting that matches
-> hardware.
-> 
-> Otherwise user-space applications will fail on execution due to
-> unexpected data layout/alignment etc.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> c: Anton Kolesov <akolesov@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  arch/Config.in.arc       | 30 ++++++++++++++++++++++++++++++
->  package/uclibc/uclibc.mk |  8 ++++++++
->  2 files changed, 38 insertions(+)
-> 
-> diff --git a/arch/Config.in.arc b/arch/Config.in.arc
-> index b48a90f..e960eb8 100644
-> --- a/arch/Config.in.arc
-> +++ b/arch/Config.in.arc
-> @@ -40,3 +40,33 @@ config BR2_GCC_TARGET_CPU
->  	default "arc700" if BR2_arc750d
->  	default "arc700" if BR2_arc770d
->  	default "archs"	 if BR2_archs38
-> +
-> +choice
-> +	prompt "MMU Page Size"
+Those toolchains use gcc <= 4.5, which is too old as they are missing to
+construct an empty std::shared_ptr with a nullptr (0) as an argument. This
+is only introduced with gcc-4.6.
 
- It is not really current policy, but wouldn't it make more sense to do
+Fixes:
+http://autobuild.buildroot.net/results/faf/faf1b071c0a5bd8395d79abf2e6a32169ad7f136
+http://autobuild.buildroot.net/results/247/247b3f1ac3d3a9712e9410eef298fce8d885f92c
+http://autobuild.buildroot.net/results/de6/de601c4d4dd7922895892d78d3a37902fb98c7be
+http://autobuild.buildroot.net/results/a4d/a4d7bf9863c134f59d285616b9c1f78201bd1a3e
 
-	prompt "MMU Page Size" if BR2_arc770d || BR2_archs38
+and many more.
 
-? (i.e., only show it when there's anything to choose).
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/upmpdcli/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- Also perhaps it makes sense to add a new symbol
-BR2_ARC_SUPPORTS_PAGE_SIZE_SELECTION or similar instead of specifying the
-individual processors.
-
-
- Regards,
- Arnout
-
-> +	default BR2_arc_page_size_8k
-> +	help
-> +	    MMU starting from version 3 (could be found in ARC 770) and now
-> +	    version 4 (could be found in ARC HS38) allows selection of page
-> +	    size during ASIC design creation. And it's important to build
-> +	    a toolchain with page size setting that matches hardware.
-> +	    Otherwise user-space applications will fail on execution due to
-> +	    unexpected data layout/alignment.
-> +
-> +config BR2_arc_page_size_4k
-> +	bool "4KB"
-> +	depends on BR2_arc770d || BR2_archs38
-> +
-> +config BR2_arc_page_size_8k
-> +	bool "8KB"
-> +
-> +config BR2_arc_page_size_16k
-> +	bool "16KB"
-> +	depends on BR2_arc770d || BR2_archs38
-
-[snip]
-
-
+diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
+index 6464d06..0fe3d10 100644
+--- a/package/upmpdcli/Config.in
++++ b/package/upmpdcli/Config.in
+@@ -7,6 +7,8 @@ config BR2_PACKAGE_UPMPDCLI
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
+ 	# libupnpp triggers the _gp link issue
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+@@ -21,6 +23,8 @@ comment "upmpdcli needs a toolchain w/ C++, threads"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.4.6
