@@ -1,64 +1,92 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 16 Jul 2015 18:30:35 +0200
-Subject: [Buildroot] [PATCH] package: Fix overwrite inittab w/ default
-	skeleton
-Message-ID: <1437064235-32432-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 16 Jul 2015 22:04:01 +0300
+Subject: [Buildroot] [PATCH] ARC: allow selection of MMU page size
+Message-ID: <1437073441-11321-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If you select a custom skeleton, and have busybox or sysvinit as init,
-the install of their inittab would trigger, rendering yours useless.
+Modern ARC cores (those sporting MMU of version 3 and 4) allow selection
+of different page sizes (4, 8 or 16 kB) during ASIC design creation.
+And it's important to build a toolchain with page size setting that matches
+hardware.
 
-The hooks doing the sed in the skeleton package would only trigger for a
-default skeleton.
+Otherwise user-space applications will fail on execution due to
+unexpected data layout/alignment etc.
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+c: Anton Kolesov <akolesov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/busybox/busybox.mk   | 2 +-
- package/sysvinit/sysvinit.mk | 8 +++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ arch/Config.in.arc       | 30 ++++++++++++++++++++++++++++++
+ package/uclibc/uclibc.mk |  8 ++++++++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 6b2abca..7c208d3 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -148,7 +148,7 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
- endef
- 
--ifeq ($(BR2_INIT_BUSYBOX),y)
-+ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT)$(BR2_INIT_BUSYBOX),yy)
- define BUSYBOX_INSTALL_INITTAB
- 	$(INSTALL) -D -m 0644 package/busybox/inittab $(TARGET_DIR)/etc/inittab
- endef
-diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-index 2460dd9..34800d8 100644
---- a/package/sysvinit/sysvinit.mk
-+++ b/package/sysvinit/sysvinit.mk
-@@ -30,14 +30,20 @@ define SYSVINIT_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) SULOGINLIBS="-lcrypt" -C $(@D)/src
- endef
- 
-+ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT)$(BR2_INIT_SYSVINIT),yy)
-+define SYSVINIT_INSTALL_INITTAB
-+	$(INSTALL) -D -m 0644 package/sysvinit/inittab $(TARGET_DIR)/etc/inittab
-+endef
-+endif
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index b48a90f..e960eb8 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -40,3 +40,33 @@ config BR2_GCC_TARGET_CPU
+ 	default "arc700" if BR2_arc750d
+ 	default "arc700" if BR2_arc770d
+ 	default "archs"	 if BR2_archs38
 +
- define SYSVINIT_INSTALL_TARGET_CMDS
- 	for x in halt init shutdown killall5; do \
- 		$(INSTALL) -D -m 0755 $(@D)/src/$$x $(TARGET_DIR)/sbin/$$x || exit 1; \
- 	done
--	$(INSTALL) -D -m 0644 package/sysvinit/inittab $(TARGET_DIR)/etc/inittab
- 	ln -sf /sbin/halt $(TARGET_DIR)/sbin/reboot
- 	ln -sf /sbin/halt $(TARGET_DIR)/sbin/poweroff
- 	ln -sf killall5 $(TARGET_DIR)/sbin/pidof
-+	$(SYSVINIT_INSTALL_INITTAB)
++choice
++	prompt "MMU Page Size"
++	default BR2_arc_page_size_8k
++	help
++	    MMU starting from version 3 (could be found in ARC 770) and now
++	    version 4 (could be found in ARC HS38) allows selection of page
++	    size during ASIC design creation. And it's important to build
++	    a toolchain with page size setting that matches hardware.
++	    Otherwise user-space applications will fail on execution due to
++	    unexpected data layout/alignment.
++
++config BR2_arc_page_size_4k
++	bool "4KB"
++	depends on BR2_arc770d || BR2_archs38
++
++config BR2_arc_page_size_8k
++	bool "8KB"
++
++config BR2_arc_page_size_16k
++	bool "16KB"
++	depends on BR2_arc770d || BR2_archs38
++
++endchoice
++
++config BR2_ARC_PAGE_SIZE
++	string
++	default "4K" if BR2_arc_page_size_4k
++	default "8K" if BR2_arc_page_size_8k
++	default "16K" if BR2_arc_page_size_16k
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 9dfafad..a2ba230 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -70,6 +70,13 @@ UCLIBC_ARC_TYPE = CONFIG_$(call qstrip,$(BR2_UCLIBC_ARC_TYPE))
+ define UCLIBC_ARC_TYPE_CONFIG
+ 	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_ARC_TYPE),$(@D)/.config)
  endef
++
++UCLIBC_ARC_PAGE_SIZE = CONFIG_ARC_PAGE_SIZE_$(call qstrip,$(BR2_ARC_PAGE_SIZE))
++define UCLIBC_ARC_PAGE_SIZE_CONFIG
++	$(SED) '/CONFIG_ARC_PAGE_SIZE_*/d' $(@D)/.config
++	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_ARC_PAGE_SIZE),$(@D)/.config)
++endef
++
+ endif # arc
  
- $(eval $(generic-package))
+ #
+@@ -367,6 +374,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(call KCONFIG_SET_OPT,SHARED_LIB_LOADER_PREFIX,"/lib",$(@D)/.config)
+ 	$(UCLIBC_MMU_CONFIG)
+ 	$(UCLIBC_ARC_TYPE_CONFIG)
++	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+ 	$(UCLIBC_ARM_ABI_CONFIG)
+ 	$(UCLIBC_ARM_BX_CONFIG)
+ 	$(UCLIBC_MIPS_ABI_CONFIG)
 -- 
-2.1.4
+2.4.3
