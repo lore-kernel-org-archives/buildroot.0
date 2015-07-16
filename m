@@ -1,63 +1,40 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 15 Jul 2015 16:55:20 -0500
-Subject: [Buildroot] [PATCH v7 20/22] squashfs: Add xattr support
-In-Reply-To: <20150715222138.41336c86@free-electrons.com>
-References: <1433251718-3167-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1433251718-3167-21-git-send-email-clayton.shotwell@rockwellcollins.com>
- <20150706121602.402373fc@free-electrons.com>
- <CANn-YGTqC=bhPjybxvfbH9sVZ2Vfa6xrvKaRkVOAvKTdCV3byA@mail.gmail.com>
- <20150710222353.637179e9@free-electrons.com>
- <CANQCQpZ=b1oNNCk0viuBpjw9nw9KXMja7q4Z0qGi0Vk3kTj8NA@mail.gmail.com>
- <20150715222138.41336c86@free-electrons.com>
-Message-ID: <CANQCQpa-dtKQhyPMR5Fnuq8a3HFpZ33efyTjFnXFZDm4SPhvdQ@mail.gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 16 Jul 2015 08:02:33 +0200
+Subject: [Buildroot] Report of the Buildroot Hackaton
+In-Reply-To: <20150715220842.06a511ab@free-electrons.com>
+References: <20150715220842.06a511ab@free-electrons.com>
+Message-ID: <1437026553.1849.7.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Dear Thomas,
 
-On Wed, Jul 15, 2015 at 3:21 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Matthew Weber,
->
-> On Sat, 11 Jul 2015 12:12:36 -0500, Matthew Weber wrote:
->
->> > No problem. However, I'm curious to know what is your use case: you are
->> > preparing a SquashFS image on your target?
->>
->> We build a x86 SELinux enabled qemu target that repackages our target
->> filesystems with pre-labelled security attributes.  Sort of a sandbox
->> approach.
->
-> Why is this needed? Can you generate those security attributes at build
-> time?
+On Mi, 2015-07-15 at 22:08 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> As I announced in a mail last week [1], six Buildroot developers met
+> this week-end in Toulouse France for a 4-day long hackaton. We
+> started on Friday 10th and ended late on Tuesday 14th night.
+> 
+> Yann E. Morin, Samuel Martin, Romain Naour, Arnout Vandecappelle,
+> Maxime Hadjinlian and myself participated to this event. Each day, we
+> worked from around 10 AM to about 2/3 AM in the night. So as you can
+> imagine, a crazy number of hours have been spent working on 
+> Buildroot.
 
-If you did you would need to modify the (host) Kernel on your build
-machine to have all of the filesystem types w/ext attributes and
-selinux enabled that you need for the rootfs creation.  Instead we
-build a inbetween QEMU that performs this in a sandbox as a post build
-step.  Then we can build on any unmodified distribution
-(Ubuntu/CentOS/Arch/etc)....
+Many thanks to you glorious six and all the helpers for working so
+concentrated on Buildroot!
 
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> During those four days, the weather was very nice, if not a bit
+> warm. We had some nice time on Saturday evening visiting the historic
+> Toulouse center and having dinner at a restaurant, on Sunday evening
+> we did a great barbecue with Argentinian wine provided by Gustavo
+> (thanks!) and on Monday evening we had a pizza party!
 
+Sounds really like a beautiful and joyful weekend!
 
-
--- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+Best regards
+J?rg Krause
