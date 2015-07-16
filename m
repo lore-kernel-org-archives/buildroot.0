@@ -1,53 +1,43 @@
-From: Eric Limpens <limpens@gmail.com>
-Date: Thu, 16 Jul 2015 10:46:14 +0200
-Subject: [Buildroot] [PATCH 1/1] bluez5_utils: add ability to build sixaxis
-	plugin
-Message-ID: <1437036374-4179-1-git-send-email-limpens@gmail.com>
+From: Anthony Viallard <viallard@syscom-instruments.com>
+Date: Thu, 16 Jul 2015 11:39:28 +0200
+Subject: [Buildroot] [PATCH 1/1] gcc: make sure we don't have a copy of
+	libiberty.a in host library dir
+Message-ID: <1437039568-22957-1-git-send-email-viallard@syscom-instruments.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Eric Limpens <limpens@gmail.com>
----
- package/bluez5_utils/Config.in       | 5 +++++
- package/bluez5_utils/bluez5_utils.mk | 7 +++++++
- 2 files changed, 12 insertions(+)
+With old gcc version (like with 4.7.4), libiberty.a is copied to
+library directory and it's not the behavior we want.
 
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index 472432b..dade0ee 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -58,6 +58,11 @@ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
- 	help
- 	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
- 
-+config BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS
-+	bool "build sixaxis plugin"
-+	help
-+	  Build BlueZ 5.x sixaxis plugin (support Sony Dualshock controller)
-+
- config BR2_PACKAGE_BLUEZ5_UTILS_TEST
- 	bool "build tests"
- 	help
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index a1adbe1..4c50e53 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -41,6 +41,13 @@ else
- BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
+According to Arnout Vandecappelle, newer version of gcc
+have fixed the problem. But if you choose gcc 4.7.X, the problem
+is there. Therefore, I send this little patch which remove the
+bad file after the build is finished.
+
+Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
+---
+ package/gcc/gcc-final/gcc-final.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 16bf4ee..2cce860 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -185,6 +185,12 @@ endef
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_USR_LIBS
  endif
  
-+# enable sixaxis plugin
-+ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-sixaxis
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-sixaxis
-+endif
++define HOST_GCC_FINAL_RM_LIBIBERTY_A
++	rm -f $(HOST_DIR)/usr/lib/libiberty.a
++endef
 +
- # install gatttool (For some reason upstream choose not to do it by default)
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL),y)
- define BLUEZ5_UTILS_INSTALL_GATTTOOL
++HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_RM_LIBIBERTY_A
++
+ ifeq ($(BR2_xtensa),y)
+ HOST_GCC_FINAL_CONF_OPTS += --enable-cxx-flags="$(TARGET_ABI)"
+ endif
 -- 
-1.9.1
+2.1.4
