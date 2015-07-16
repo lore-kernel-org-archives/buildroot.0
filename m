@@ -1,92 +1,48 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 16 Jul 2015 22:04:01 +0300
-Subject: [Buildroot] [PATCH] ARC: allow selection of MMU page size
-Message-ID: <1437073441-11321-1-git-send-email-abrodkin@synopsys.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 16 Jul 2015 21:09:01 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: bump to version 2015.07
+Message-ID: <1437073741-28047-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Modern ARC cores (those sporting MMU of version 3 and 4) allow selection
-of different page sizes (4, 8 or 16 kB) during ASIC design creation.
-And it's important to build a toolchain with page size setting that matches
-hardware.
-
-Otherwise user-space applications will fail on execution due to
-unexpected data layout/alignment etc.
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-c: Anton Kolesov <akolesov@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- arch/Config.in.arc       | 30 ++++++++++++++++++++++++++++++
- package/uclibc/uclibc.mk |  8 ++++++++
- 2 files changed, 38 insertions(+)
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/Config.in.arc b/arch/Config.in.arc
-index b48a90f..e960eb8 100644
---- a/arch/Config.in.arc
-+++ b/arch/Config.in.arc
-@@ -40,3 +40,33 @@ config BR2_GCC_TARGET_CPU
- 	default "arc700" if BR2_arc750d
- 	default "arc700" if BR2_arc770d
- 	default "archs"	 if BR2_archs38
-+
-+choice
-+	prompt "MMU Page Size"
-+	default BR2_arc_page_size_8k
-+	help
-+	    MMU starting from version 3 (could be found in ARC 770) and now
-+	    version 4 (could be found in ARC HS38) allows selection of page
-+	    size during ASIC design creation. And it's important to build
-+	    a toolchain with page size setting that matches hardware.
-+	    Otherwise user-space applications will fail on execution due to
-+	    unexpected data layout/alignment.
-+
-+config BR2_arc_page_size_4k
-+	bool "4KB"
-+	depends on BR2_arc770d || BR2_archs38
-+
-+config BR2_arc_page_size_8k
-+	bool "8KB"
-+
-+config BR2_arc_page_size_16k
-+	bool "16KB"
-+	depends on BR2_arc770d || BR2_archs38
-+
-+endchoice
-+
-+config BR2_ARC_PAGE_SIZE
-+	string
-+	default "4K" if BR2_arc_page_size_4k
-+	default "8K" if BR2_arc_page_size_8k
-+	default "16K" if BR2_arc_page_size_16k
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 9dfafad..a2ba230 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -70,6 +70,13 @@ UCLIBC_ARC_TYPE = CONFIG_$(call qstrip,$(BR2_UCLIBC_ARC_TYPE))
- define UCLIBC_ARC_TYPE_CONFIG
- 	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_ARC_TYPE),$(@D)/.config)
- endef
-+
-+UCLIBC_ARC_PAGE_SIZE = CONFIG_ARC_PAGE_SIZE_$(call qstrip,$(BR2_ARC_PAGE_SIZE))
-+define UCLIBC_ARC_PAGE_SIZE_CONFIG
-+	$(SED) '/CONFIG_ARC_PAGE_SIZE_*/d' $(@D)/.config
-+	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_ARC_PAGE_SIZE),$(@D)/.config)
-+endef
-+
- endif # arc
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 1cdb2fa..f0c0094 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -18,7 +18,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
  
- #
-@@ -367,6 +374,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
- 	$(call KCONFIG_SET_OPT,SHARED_LIB_LOADER_PREFIX,"/lib",$(@D)/.config)
- 	$(UCLIBC_MMU_CONFIG)
- 	$(UCLIBC_ARC_TYPE_CONFIG)
-+	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
- 	$(UCLIBC_ARM_ABI_CONFIG)
- 	$(UCLIBC_ARM_BX_CONFIG)
- 	$(UCLIBC_MIPS_ABI_CONFIG)
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2015.04"
++	bool "2015.07"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -63,7 +63,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2015.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2015.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index 9cc96f6..3b687d5 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	0a1a70df586655f527befa6f12e184e96ed61b126e5a567382321b17200f5d60  u-boot-2015.04.tar.bz2
++sha256	0b48c9bd717f2c322ef791f8282e14c88be942dc7d1226df7e31a812a3af94d9  u-boot-2015.07.tar.bz2
 -- 
-2.4.3
+2.4.6
