@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jul 2015 23:28:52 +0200
-Subject: [Buildroot] [git commit] tar: add missing hash for host variant
-Message-ID: <20150716213900.2409D81DA2@busybox.osuosl.org>
+Date: Thu, 16 Jul 2015 23:39:03 +0200
+Subject: [Buildroot] [PATCH] core/out-of-tree: fix Makefile wrapper
+In-Reply-To: <1437081406-16475-1-git-send-email-yann.morin.1998@free.fr>
+References: <1437081406-16475-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150716233903.4e2d98a0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3788ad02cb7eb7e8384168a07e84223ae19e6f2d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-This fixes a very early error in a fresh build:
-"ERROR: No hash found for tar-1.28.cpio.gz"
+On Thu, 16 Jul 2015 23:16:46 +0200, Yann E. MORIN wrote:
+> Commit 971faf8 (Makefile: fix out-of-tree builds with multiple targets
+> with 'all') renamed the default target to '_all' to avoid name-clashing.
+> 
+> In doing so, I forgot to also fix the instance in the .PHONY rule.
+> 
+> Fix that now.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  support/scripts/mkmakefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-[Thomas: adjust commit title.]
+Applied, thanks.
 
-Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tar/tar.hash |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/tar/tar.hash b/package/tar/tar.hash
-index ffad2d2..5d2f1db 100644
---- a/package/tar/tar.hash
-+++ b/package/tar/tar.hash
-@@ -1,2 +1,3 @@
- # Locally calculated after checking signature
- sha256	64ee8d88ec1b47a0961033493f919d27218c41b580138fd6802327462aff22f2	tar-1.28.tar.xz
-+sha256	a3906a862f83dac1dfaf0ed200c62bd21f6d00f184a7f42b91978593a8553104	tar-1.28.cpio.gz
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
