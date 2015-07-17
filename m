@@ -1,65 +1,118 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Jul 2015 18:53:54 +0200
-Subject: [Buildroot] [PATCH 1/1] release: remove manual build files from
- release tarballs
-In-Reply-To: <1437128435-17331-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1437128435-17331-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20150717165354.GC3637@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 17 Jul 2015 19:24:53 +0200
+Subject: [Buildroot] [PATCH] ARC: update tools to arc-2015.06 release
+In-Reply-To: <1437147503.3374.9.camel@synopsys.com>
+References: <1436964678-24352-1-git-send-email-abrodkin@synopsys.com>
+ <55A8EAF7.5060506@openwide.fr> <55A8ED2C.4000805@openwide.fr>
+ <1437147503.3374.9.camel@synopsys.com>
+Message-ID: <55A93A65.5070903@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Alexey,
 
-On 2015-07-17 12:20 +0200, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Le 17/07/2015 17:38, Alexey Brodkin a ?crit :
+> Hi Romain,
 > 
-> The Buildroot release tarballs inadvertently contain a build/docs directory,
-> containing the manual sources, the generated lists, and manual.text and
-> manual.pdf (but excluding manual.html).
+> On Fri, 2015-07-17 at 13:55 +0200, Romain Naour wrote:
+>> Le 17/07/2015 13:45, Romain Naour a ?crit :
+>>> Hi Alexey,
+>>>
+>>> Le 15/07/2015 14:51, Alexey Brodkin a ?crit :
+>>>> I'm happy to update GNU tools for ARC cores to the most recent
+>>>> arc-2015.06 release.
+>>>>
+>>>> This release brings following major improvements:
+>>>>  * GCC: source update to v4.8.4
+>>>>  * GCC: C ABI compatibility between MetaWare and GNU toolchains
+>>>>  * uClibc: support for thread local storage and Native Pthread Library (NPTL)
+>>>>  * GDB: updated to version 7.9.1
+>>>>
+>>>> Also a lot of fixes and improvements has been done, please refer to
+>>>> https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2015.06
+>>>> for more details.
+>>>>
+>>>> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+>>>> Cc: Anton Kolesov <akolesov@synopsys.com>
+>>>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>>> Cc: Peter Korsgaard <peter@korsgaard.com>
+>>>> Cc: Romain Naour <romain.naour@openwide.fr>
+>>>> ---
+>>>>
+>>>> I hope this time all required pieces are in place :)
+>>>
+>>> Your patch looks good, but I have a build failure with uclibc:
+>>>
+>>> make O=test/arc/ toolchain 2>&1 | tee build-arc-toolchain.log
+>>>
+>>>>>> uclibc arc-2015.06 Patching
+>>> support/kconfig/merge_config.sh -m -O /home/naourr/git/buildroot/test/arc/build/uclibc-arc-2015.06 
+>>> package/uclibc/uClibc-snapshot.config 
+>>> Using package/uclibc/uClibc-snapshot.config as base
+>>> #
+>>> # merged configuration written to /home/naourr/git/buildroot/test/arc/build/uclibc-arc-2015.06/.config (needs make)
+>>> #
+>>>   MKDIR include/config
+>>>   MKDIR include/generated
+>>>   MKDIR extra/config/lxdialog
+>>>   HOSTCC-o extra/config/conf.o
+>>>   GEN extra/config/zconf.tab.c
+>>>   GEN extra/config/zconf.lex.c
+>>>   GEN extra/config/zconf.hash.c
+>>> /bin/sh: test/arc//extra/config/zconf.hash.c: No such file or directory
+>>> Makefile:70: recipe for target 'test/arc//extra/config/zconf.hash.c' failed
+>>> make[3]: *** [test/arc//extra/config/zconf.hash.c] Error 1
+>>> make[3]: *** Waiting for unfinished jobs....
+>>> /bin/sh: test/arc//extra/config/zconf.tab.c: No such file or directory
+>>> /bin/sh: test/arc//extra/config/zconf.lex.c: No such file or directory
+>>> Makefile:70: recipe for target 'test/arc//extra/config/zconf.tab.c' failed
+>>> make[3]: *** [test/arc//extra/config/zconf.tab.c] Error 1
+>>> Makefile:70: recipe for target 'test/arc//extra/config/zconf.lex.c' failed
+>>> make[3]: *** [test/arc//extra/config/zconf.lex.c] Error 1
+>>> Assembler messages:
+>>> Fatal error: can't create test/arc//extra/config/conf.o: No such file or directory
+>>> Makefile:64: recipe for target 'test/arc//extra/config/conf.o' failed
+>>> make[3]: *** [test/arc//extra/config/conf.o] Error 1
+>>> Makefile.in:465: recipe for target 'test/arc//extra/config/conf' failed
+>>> make[2]: *** [test/arc//extra/config/conf] Error 2
+>>> package/uclibc/uclibc.mk:485: recipe for target '/home/naourr/git/buildroot/test/arc/build/uclibc-arc
+>>> -2015.06/.config' failed
+>>> make[1]: *** [/home/naourr/git/buildroot/test/arc/build/uclibc-arc-2015.06/.config] Error 2
+>>> Makefile:36: recipe for target 'toolchain' failed
+>>> make: *** [toolchain] Error 2
+>>>
+>>> It seems a issue related of out of tree build...
+>>> The same issue happen with 2015.06-rc1/
+>>>
+>>> However, it build fine without 'O='.
+>>>
+>>> Humm, I tried to build different version of uClibc (-ng, -snapshot and -arc)
+>>> and the out of tree build is broken.
+>>>
+>>> Yann, have you an idea, is it a kconfig-package issue ?
+>>
+>> I'm on master 0daffc0b65aa86d6d5bc6916736e0cffcdf540cc (setools: Add missing
+>> bison dependency). So after "core/out-of-tree: fix Makefile wrapper".
 > 
-> This directory is populated as $(BUILD_DIR) (==$(O)/build), while O is
-> set explicitly from the release target to a subdirectory
-> buildroot-xxxx.yy-git/ which was populated with 'git archive'.
-> 
-> Since the generated manuals are available in docs/manual, which is
-> also referred to from the README, the build directory is not needed and
-> should be removed from the release tarball.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> It's pretty interesting.
+> I'm on 5eb5f2710c2451d7e35dd600e6ced835efb9dda5 (funny enough it's your commit)
+> "package/libmemcached: disable documentation" and for me ARC toolchain gets built
+> with O=xxx (I always build out of tree).
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+This is weird, because uClibc doesn't build for me with O=, since
+bee5745ccc20be6dbba243b1f8af0d5c522923e8 (Makefile: don't depend on the umask).
 
-Regards,
-Yann E. MORIN.
+It seems that Arnout was not affected by this issue when reviewing/testing.
+Also someone else reported this issue on IRC today.
 
-> ---
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
+My umask was 0002 and I had to set it to 0022 to workaround the issue.
+
+Romain
 > 
-> diff --git a/Makefile b/Makefile
-> index 531ac5d..168d62a 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -936,6 +936,7 @@ release: OUT = buildroot-$(BR2_VERSION)
->  release:
->  	git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
->  	$(MAKE) O=$(OUT) manual-html manual-text manual-pdf
-> +	$(MAKE) O=$(OUT) manual-clean
->  	tar rf $(OUT).tar $(OUT)
->  	gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
->  	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
-> -- 
-> 1.8.5.1
+> So yes probably we're seeing some regression.
 > 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> -Alexey
+> 
