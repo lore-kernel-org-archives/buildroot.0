@@ -1,82 +1,103 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 17 Jul 2015 15:31:57 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2015-07-14
-In-Reply-To: <1437142401.1824.6.camel@embedded.rocks>
-References: <20150715063016.118A21016B5@stock.ovh.net>
- <1436982736.3682.16.camel@synopsys.com>
- <1437142401.1824.6.camel@embedded.rocks>
-Message-ID: <1437147117.3374.4.camel@synopsys.com>
+Date: Fri, 17 Jul 2015 15:38:24 +0000
+Subject: [Buildroot] [PATCH] ARC: update tools to arc-2015.06 release
+In-Reply-To: <55A8ED2C.4000805@openwide.fr>
+References: <1436964678-24352-1-git-send-email-abrodkin@synopsys.com>
+ <55A8EAF7.5060506@openwide.fr> <55A8ED2C.4000805@openwide.fr>
+Message-ID: <1437147503.3374.9.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
+Hi Romain,
 
-On Fri, 2015-07-17 at 16:13 +0200, J?rg Krause wrote:
-> Dear Alexey, Thomas,
-> 
-> On Mi, 2015-07-15 at 17:52 +0000, Alexey Brodkin wrote:
-> > Hi Thomas,
+On Fri, 2015-07-17 at 13:55 +0200, Romain Naour wrote:
+> Le 17/07/2015 13:45, Romain Naour a ?crit :
+> > Hi Alexey,
 > > 
-> > On Wed, 2015-07-15 at 08:30 +0200, Thomas Petazzoni wrote:
-> > > Those results are limited to the arc architecture.
+> > Le 15/07/2015 14:51, Alexey Brodkin a ?crit :
+> > > I'm happy to update GNU tools for ARC cores to the most recent
+> > > arc-2015.06 release.
 > > > 
-> > > Build statistics for 2015-07-14
-> > > ===============================
+> > > This release brings following major improvements:
+> > >  * GCC: source update to v4.8.4
+> > >  * GCC: C ABI compatibility between MetaWare and GNU toolchains
+> > >  * uClibc: support for thread local storage and Native Pthread Library (NPTL)
+> > >  * GDB: updated to version 7.9.1
 > > > 
-> > >         success : 6  
-> > >        failures : 23 
-> > >        timeouts : 0  
-> > >           TOTAL : 29 
+> > > Also a lot of fixes and improvements has been done, please refer to
+> > > https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2015.06
+> > > for more details.
 > > > 
-> > > Classification of failures by reason
-> > > ====================================
+> > > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> > > Cc: Anton Kolesov <akolesov@synopsys.com>
+> > > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > > Cc: Peter Korsgaard <peter@korsgaard.com>
+> > > Cc: Romain Naour <romain.naour@openwide.fr>
+> > > ---
 > > > 
-> > >                   zeromq-4.0.5 | 9 
-> > >              util-linux-2.26.2 | 5 
-> > >                   boost-1.58.0 | 3 
-> > >                alsa-lib-1.0.29 | 3 
-> > >              btrfs-progs-4.1.1 | 1 
-> > >              libselinux-2.1.13 | 1 
-> > >                    tinc-1.0.24 | 1 
-> > > 
-> > > Detail of failures
-> > > ===================
-> > > 
-> > >          arc |                   boost-1.58.0 | NOK | 
-> > > http://autobuild.buildroot.net/results/596c2eb1378946b8c0fea6b3ebcf
-> > > 80ee7e14995a/
-> > >          arc |                   boost-1.58.0 | NOK | 
-> > > http://autobuild.buildroot.net/results/0585f6c926042d7c859150dbf7b3
-> > > 3928c4687273/
-> > >          arc |                   boost-1.58.0 | NOK | 
-> > > http://autobuild.buildroot.net/results/16fd658176b4e4927f7c7dbe5598
-> > > b7a38b819af9/
+> > > I hope this time all required pieces are in place :)
 > > 
-> > Looks like an issue with boost that for some reason
-> > uses syscall (non-existent on some arches including ARC)
-> > directly instead of libc's eventfd().
-> > ----------------->8-------------------
-> > "syscall(__NR_eventfd, 0);"
-> > ----------------->8-------------------
+> > Your patch looks good, but I have a build failure with uclibc:
+> > 
+> > make O=test/arc/ toolchain 2>&1 | tee build-arc-toolchain.log
+> > 
+> > > > > uclibc arc-2015.06 Patching
+> > support/kconfig/merge_config.sh -m -O /home/naourr/git/buildroot/test/arc/build/uclibc-arc-2015.06 
+> > package/uclibc/uClibc-snapshot.config 
+> > Using package/uclibc/uClibc-snapshot.config as base
+> > #
+> > # merged configuration written to /home/naourr/git/buildroot/test/arc/build/uclibc-arc-2015.06/.config (needs make)
+> > #
+> >   MKDIR include/config
+> >   MKDIR include/generated
+> >   MKDIR extra/config/lxdialog
+> >   HOSTCC-o extra/config/conf.o
+> >   GEN extra/config/zconf.tab.c
+> >   GEN extra/config/zconf.lex.c
+> >   GEN extra/config/zconf.hash.c
+> > /bin/sh: test/arc//extra/config/zconf.hash.c: No such file or directory
+> > Makefile:70: recipe for target 'test/arc//extra/config/zconf.hash.c' failed
+> > make[3]: *** [test/arc//extra/config/zconf.hash.c] Error 1
+> > make[3]: *** Waiting for unfinished jobs....
+> > /bin/sh: test/arc//extra/config/zconf.tab.c: No such file or directory
+> > /bin/sh: test/arc//extra/config/zconf.lex.c: No such file or directory
+> > Makefile:70: recipe for target 'test/arc//extra/config/zconf.tab.c' failed
+> > make[3]: *** [test/arc//extra/config/zconf.tab.c] Error 1
+> > Makefile:70: recipe for target 'test/arc//extra/config/zconf.lex.c' failed
+> > make[3]: *** [test/arc//extra/config/zconf.lex.c] Error 1
+> > Assembler messages:
+> > Fatal error: can't create test/arc//extra/config/conf.o: No such file or directory
+> > Makefile:64: recipe for target 'test/arc//extra/config/conf.o' failed
+> > make[3]: *** [test/arc//extra/config/conf.o] Error 1
+> > Makefile.in:465: recipe for target 'test/arc//extra/config/conf' failed
+> > make[2]: *** [test/arc//extra/config/conf] Error 2
+> > package/uclibc/uclibc.mk:485: recipe for target '/home/naourr/git/buildroot/test/arc/build/uclibc-arc
+> > -2015.06/.config' failed
+> > make[1]: *** [/home/naourr/git/buildroot/test/arc/build/uclibc-arc-2015.06/.config] Error 2
+> > Makefile:36: recipe for target 'toolchain' failed
+> > make: *** [toolchain] Error 2
+> > 
+> > It seems a issue related of out of tree build...
+> > The same issue happen with 2015.06-rc1/
+> > 
+> > However, it build fine without 'O='.
+> > 
+> > Humm, I tried to build different version of uClibc (-ng, -snapshot and -arc)
+> > and the out of tree build is broken.
+> > 
+> > Yann, have you an idea, is it a kconfig-package issue ?
 > 
-> __NR_eventfd needs __ARCH_WANT_SYSCALL_NO_FLAGS to be defined in
-> asm/unistd.h. I am not a toolchain expert so I do not know how to
-> handle this.
+> I'm on master 0daffc0b65aa86d6d5bc6916736e0cffcdf540cc (setools: Add missing
+> bison dependency). So after "core/out-of-tree: fix Makefile wrapper".
 
-Mentioned syscall and define go from kernel headers.
-For old platforms like x86, ARM etc that system call was implemented.
+It's pretty interesting.
+I'm on 5eb5f2710c2451d7e35dd600e6ced835efb9dda5 (funny enough it's your commit)
+"package/libmemcached: disable documentation" and for me ARC toolchain gets built
+with O=xxx (I always build out of tree).
 
-Even though it is now obsolete for compatibility reasons it was left
-as it is on those platforms.
-
-Newer platforms like ARC and probably others strictly follow so-called
-UAPI and so use "include/uapi/asm-generic/unistd.h" and so don't support 
-__NR_eventfd syscall relying instead on newer implementation __NR_eventfd2.
-
-IMHO it's an issue in boost that somebody (probably me) has to fix.
+So yes probably we're seeing some regression.
 
 -Alexey
