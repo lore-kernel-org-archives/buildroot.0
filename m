@@ -1,32 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Jul 2015 09:59:45 +0200
-Subject: [Buildroot] [PATCH] ARC: allow selection of MMU page size
-In-Reply-To: <55A832D4.9020801@mind.be>
-References: <1437073441-11321-1-git-send-email-abrodkin@synopsys.com>
- <55A832D4.9020801@mind.be>
-Message-ID: <20150717095945.0fafbba4@free-electrons.com>
+From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Date: Fri, 17 Jul 2015 10:00:15 +0200
+Subject: [Buildroot] [PATCH 2/2] wpa_supplicant: Have Hotspot 2.0 depend
+ on nl80211
+In-Reply-To: <20150717094532.0e40060c@free-electrons.com>
+References: <20150713112947.7e14fd64@free-electrons.com>	<1437051754-24060-1-git-send-email-nicolas.cavallari@green-communications.fr>	<1437051754-24060-2-git-send-email-nicolas.cavallari@green-communications.fr>	<20150717064101.GE3147@tarshish>
+ <20150717094532.0e40060c@free-electrons.com>
+Message-ID: <55A8B60F.2070200@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
-
-On Fri, 17 Jul 2015 00:40:20 +0200, Arnout Vandecappelle wrote:
-
-> > +choice
-> > +	prompt "MMU Page Size"
+On 17/07/2015 09:45, Thomas Petazzoni wrote:
+> On Fri, 17 Jul 2015 09:41:01 +0300, Baruch Siach wrote:
+>>>  config BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT
+>>>  	bool "Enable HS20"
+>>> +	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
+>>
+>> Please add the BR2_PACKAGE_LIBNL dependency here as well.
 > 
->  It is not really current policy, but wouldn't it make more sense to do
+> Not needed since it's a "depends on", so
+> BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT will anyway only be visible if
+> BR2_PACKAGE_WPA_SUPPLICANT_NL80211 is enabled, and if
+> BR2_PACKAGE_WPA_SUPPLICANT_NL80211 is enabled, then it has selected
+> BR2_PACKAGE_LIBNL.
 > 
-> 	prompt "MMU Page Size" if BR2_arc770d || BR2_archs38
+> Am I missing something?
 
-Why? In the patch submitted by Alexey, the 8K option is available for
-all cores.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I was thinking the same thing.
