@@ -1,43 +1,63 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 17 Jul 2015 14:46:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/luajit: disable for static build
-Message-ID: <1437137197-5278-1-git-send-email-joerg.krause@embedded.rocks>
+From: Nimai Mahajan <nimaim@gmail.com>
+Date: Fri, 17 Jul 2015 09:17:12 -0400
+Subject: [Buildroot] Another Buildroot Enhancement Suggestion (re-use
+	base build)
+In-Reply-To: <20150717070407.GF3147@tarshish>
+References: <CALoSW65V2bmF8GEtUH_hLm-_n9vPDEjnK5-YXyx_eXoy04fDKw@mail.gmail.com>
+ <20150717070407.GF3147@tarshish>
+Message-ID: <CALoSW65SOUXu4R1c+K_5sjOZ08a25sdnOt-WbC8RSKTf89BQpw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-luajit requires dlopen().
+On Fri, Jul 17, 2015 at 3:04 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Nimai,
+>
+> On Thu, Jul 16, 2015 at 08:48:02AM -0400, Nimai Mahajan wrote:
+>> I should have brought this up during the hackathon but it totally
+>> slipped my mind. But anyways, here it goes: we use Buildroot for ~3-4
+>> projects here at work and it's been great for us since it is very easy
+>> to customize and build from the ground up. We generally compile our
+>> builds from scratch, as is the Buildroot norm, and that works (I also
+>> use CCACHE and external toolchain and that does help quite a bit) but
+>> I was wondering if this could be even further sped up.
+>>
+>> The use case is that our release builds for those 3-4 projects is
+>> always the same (minus a slightly different fs overlay and 1-2
+>> different packages). Is there any way or do you guys see any
+>> usefulness in taking an already built "external base build" with all
+>> the packages that subsequent builds will use and telling Buildroot
+>> what to add on top of it? Basically, it doesn't make sense to me to
+>> rebuild the entire thing when only a few files change. This is
+>> probably a huge effort as I don't think a mechanism exists to do it
+>> but I'm just looking for some comments/thoughts. Does this even make
+>> sense or is there already a decent way to do this?
+>>
+>> For release builds, this is not a major problem because builds only
+>> take 5-10 min at most, but when you're compiling debug builds with
+>> debugging symbols for various projects, this can add hours or even
+>> days if builds fail. We have Jenkins running and pumping out builds
+>> for us 24/7, and this would help a lot in testing, taking a prebuilt
+>> base build and just recompiling our custom packages (for now, we do a
+>> -dirclean on our packages and rebuild them every time which works for
+>> the time being).
+>
+> The patch at http://patchwork.ozlabs.org/patch/464753/ might be helpful for
+> you. Please check it out and let us know.
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
 
-Fixes:
-http://autobuild.buildroot.net/results/20d/20dfb10198f3688f92208591960192ca08280987/
-http://autobuild.buildroot.net/results/c3c/c3cfdf8dfb315bf64caa9ed0f362016111fd93ac/
-http://autobuild.buildroot.net/results/8cb/8cbf6207ecf7b254aeccd9ec5c07376a044e1f8f/
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/luajit/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index f6995e2..8ce528b 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- config BR2_PACKAGE_LUAJIT
- 	bool "luajit"
- 	select BR2_PACKAGE_HAS_LUAINTERPRETER
-+	depends on !BR2_STATIC_LIBS # dlopen
- 	# Luajit is only available for some target architectures, and
- 	# has some complexity wrt 32/64. See luajit.mk for details.
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-@@ -32,3 +33,6 @@ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
- 	default "5.1"
- 
- endif
-+
-+comment "luajit needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
--- 
-2.4.6
+Thanks, I will take a look at that. I think with that + the recently
+proposed RFC here
+(http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/120702)
+that highlights a "phased" build approach, I think this is definitely
+doable in a reliable way. I think it depends on what will Thomas plans
+to do about the custom skeleton, as the first patch seems reliant on
+that.
