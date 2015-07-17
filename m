@@ -1,103 +1,59 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 17 Jul 2015 15:38:24 +0000
-Subject: [Buildroot] [PATCH] ARC: update tools to arc-2015.06 release
-In-Reply-To: <55A8ED2C.4000805@openwide.fr>
-References: <1436964678-24352-1-git-send-email-abrodkin@synopsys.com>
- <55A8EAF7.5060506@openwide.fr> <55A8ED2C.4000805@openwide.fr>
-Message-ID: <1437147503.3374.9.camel@synopsys.com>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Fri, 17 Jul 2015 09:01:32 -0700
+Subject: [Buildroot] [RFC/PATCH] linux: remove the zImage before rebuild
+In-Reply-To: <1411773774-7712-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1411773774-7712-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <55A926DC.9010803@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+Hi Guido, I just ran across this discussion <http://patchwork.ozlabs.org/patch/394002/> in patchwork, and wanted to say I hit the same thing this week (and spent a few hours figuring out what had gone wrong). Has there been any activity on the problem recently?
 
-On Fri, 2015-07-17 at 13:55 +0200, Romain Naour wrote:
-> Le 17/07/2015 13:45, Romain Naour a ?crit :
-> > Hi Alexey,
-> > 
-> > Le 15/07/2015 14:51, Alexey Brodkin a ?crit :
-> > > I'm happy to update GNU tools for ARC cores to the most recent
-> > > arc-2015.06 release.
-> > > 
-> > > This release brings following major improvements:
-> > >  * GCC: source update to v4.8.4
-> > >  * GCC: C ABI compatibility between MetaWare and GNU toolchains
-> > >  * uClibc: support for thread local storage and Native Pthread Library (NPTL)
-> > >  * GDB: updated to version 7.9.1
-> > > 
-> > > Also a lot of fixes and improvements has been done, please refer to
-> > > https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2015.06
-> > > for more details.
-> > > 
-> > > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> > > Cc: Anton Kolesov <akolesov@synopsys.com>
-> > > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > > Cc: Peter Korsgaard <peter@korsgaard.com>
-> > > Cc: Romain Naour <romain.naour@openwide.fr>
-> > > ---
-> > > 
-> > > I hope this time all required pieces are in place :)
-> > 
-> > Your patch looks good, but I have a build failure with uclibc:
-> > 
-> > make O=test/arc/ toolchain 2>&1 | tee build-arc-toolchain.log
-> > 
-> > > > > uclibc arc-2015.06 Patching
-> > support/kconfig/merge_config.sh -m -O /home/naourr/git/buildroot/test/arc/build/uclibc-arc-2015.06 
-> > package/uclibc/uClibc-snapshot.config 
-> > Using package/uclibc/uClibc-snapshot.config as base
-> > #
-> > # merged configuration written to /home/naourr/git/buildroot/test/arc/build/uclibc-arc-2015.06/.config (needs make)
-> > #
-> >   MKDIR include/config
-> >   MKDIR include/generated
-> >   MKDIR extra/config/lxdialog
-> >   HOSTCC-o extra/config/conf.o
-> >   GEN extra/config/zconf.tab.c
-> >   GEN extra/config/zconf.lex.c
-> >   GEN extra/config/zconf.hash.c
-> > /bin/sh: test/arc//extra/config/zconf.hash.c: No such file or directory
-> > Makefile:70: recipe for target 'test/arc//extra/config/zconf.hash.c' failed
-> > make[3]: *** [test/arc//extra/config/zconf.hash.c] Error 1
-> > make[3]: *** Waiting for unfinished jobs....
-> > /bin/sh: test/arc//extra/config/zconf.tab.c: No such file or directory
-> > /bin/sh: test/arc//extra/config/zconf.lex.c: No such file or directory
-> > Makefile:70: recipe for target 'test/arc//extra/config/zconf.tab.c' failed
-> > make[3]: *** [test/arc//extra/config/zconf.tab.c] Error 1
-> > Makefile:70: recipe for target 'test/arc//extra/config/zconf.lex.c' failed
-> > make[3]: *** [test/arc//extra/config/zconf.lex.c] Error 1
-> > Assembler messages:
-> > Fatal error: can't create test/arc//extra/config/conf.o: No such file or directory
-> > Makefile:64: recipe for target 'test/arc//extra/config/conf.o' failed
-> > make[3]: *** [test/arc//extra/config/conf.o] Error 1
-> > Makefile.in:465: recipe for target 'test/arc//extra/config/conf' failed
-> > make[2]: *** [test/arc//extra/config/conf] Error 2
-> > package/uclibc/uclibc.mk:485: recipe for target '/home/naourr/git/buildroot/test/arc/build/uclibc-arc
-> > -2015.06/.config' failed
-> > make[1]: *** [/home/naourr/git/buildroot/test/arc/build/uclibc-arc-2015.06/.config] Error 2
-> > Makefile:36: recipe for target 'toolchain' failed
-> > make: *** [toolchain] Error 2
-> > 
-> > It seems a issue related of out of tree build...
-> > The same issue happen with 2015.06-rc1/
-> > 
-> > However, it build fine without 'O='.
-> > 
-> > Humm, I tried to build different version of uClibc (-ng, -snapshot and -arc)
-> > and the out of tree build is broken.
-> > 
-> > Yann, have you an idea, is it a kconfig-package issue ?
-> 
-> I'm on master 0daffc0b65aa86d6d5bc6916736e0cffcdf540cc (setools: Add missing
-> bison dependency). So after "core/out-of-tree: fix Makefile wrapper".
+Hollis Blanchard
+Mentor Graphics Emulation Division
 
-It's pretty interesting.
-I'm on 5eb5f2710c2451d7e35dd600e6ced835efb9dda5 (funny enough it's your commit)
-"package/libmemcached: disable documentation" and for me ARC toolchain gets built
-with O=xxx (I always build out of tree).
+On 09/26/2014 04:22 PM, Guido Mart?nez wrote:
+> Currently, if we run "make linux-rebuild", the device tree blob gets
+> appended twice to the kernel image, rendering the latter append useless.
+>
+> Fix this by removing the zImage before building, so the DTB append runs
+> on a fresh kernel image. This is not optimal as the final Linux linking
+> step is run again, but at least we get sensible results.
+>
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> ---
+> Hi guys,
+>
+> Has anyone ran into the above problem? It was a small headache for me,
+> so I wrote this small patch.
+>
+> It's not great, the right thing to do would be copying the zImage out
+> of the kernel tree and appending the DTB there, but my attempt at doing
+> that broke some other builds. This should work every time.
+>
+>
+>  linux/linux.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 2fb7437..14c2b8e 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -263,6 +263,10 @@ endif
+>  # Compilation. We make sure the kernel gets rebuilt when the
+>  # configuration has changed.
+>  define LINUX_BUILD_CMDS
+> +	# Remove the previous image, if it exists, to prevent appending
+> +	# multiple DTBs
+> +	rm -f $(KERNEL_ARCH_PATH)/boot/zImage
+> +
+>  	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
+>  		cp $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
+>  	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
 
-So yes probably we're seeing some regression.
-
--Alexey
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150717/de46db10/attachment.html>
