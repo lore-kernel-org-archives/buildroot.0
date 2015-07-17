@@ -1,48 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Jul 2015 09:45:32 +0200
-Subject: [Buildroot] [PATCH 2/2] wpa_supplicant: Have Hotspot 2.0 depend
- on nl80211
-In-Reply-To: <20150717064101.GE3147@tarshish>
+From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Date: Fri, 17 Jul 2015 09:49:54 +0200
+Subject: [Buildroot] [PATCH 1/2] wpa_supplicant: Add an explicit option
+ to enable nl80211.
+In-Reply-To: <20150717063934.GD3147@tarshish>
 References: <20150713112947.7e14fd64@free-electrons.com>
  <1437051754-24060-1-git-send-email-nicolas.cavallari@green-communications.fr>
- <1437051754-24060-2-git-send-email-nicolas.cavallari@green-communications.fr>
- <20150717064101.GE3147@tarshish>
-Message-ID: <20150717094532.0e40060c@free-electrons.com>
+ <20150717063934.GD3147@tarshish>
+Message-ID: <55A8B3A2.4010107@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
-
-On Fri, 17 Jul 2015 09:41:01 +0300, Baruch Siach wrote:
-
-> >  package/wpa_supplicant/Config.in | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-> > index 1824f95..c163bbc 100644
-> > --- a/package/wpa_supplicant/Config.in
-> > +++ b/package/wpa_supplicant/Config.in
-> > @@ -40,6 +40,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_EAP
-> >  
-> >  config BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT
-> >  	bool "Enable HS20"
-> > +	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
+On 17/07/2015 08:39, Baruch Siach wrote:
+> Hi Nicolas,
 > 
-> Please add the BR2_PACKAGE_LIBNL dependency here as well.
+> On Thu, Jul 16, 2015 at 03:02:33PM +0200, Nicolas Cavallari wrote:
+>> Currently, nl80211 support is conditional with libnl being enabled,
+>> using implicit dependencies.  This causes problems since it is not
+>> obvious and wpa_supplicant without nl80211 isn't what most user expects.
+>>
+>> If nl80211 isn't enabled, then buildroot only enables the wext driver,
+>> which will only work if some deprecated kernel feature isn't left
+>> disabled, or if using a outdated out-of-tree linux driver which doesn't
+>> use the cfg80211 infrastructure.
+>>
+>> This makes nl80211 support an explicit option, which
+>> "select BR2_PACKAGE_LIBNL" accordingly.  To handle upgrades nicely, it
+>> would have been nice to have "default y if BR2_PACKAGE_LIBNL", but
+>> Kconfig treats this as a circular dependency.  So instead, this enables
+>> the option by default, which is less worse than not enabling nl80211
+>> when it was previously implicitly enabled.
+>>
+>> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+>> ---
+>>  package/wpa_supplicant/Config.in         | 16 ++++++++++++++++
+>>  package/wpa_supplicant/wpa_supplicant.mk |  2 +-
+>>  2 files changed, 17 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+>> index f32a867..1824f95 100644
+>> --- a/package/wpa_supplicant/Config.in
+>> +++ b/package/wpa_supplicant/Config.in
+>> @@ -8,6 +8,22 @@ config BR2_PACKAGE_WPA_SUPPLICANT
+>>  
+>>  if BR2_PACKAGE_WPA_SUPPLICANT
+>>  
+>> +config BR2_PACKAGE_WPA_SUPPLICANT_NL80211
+>> +	bool "Enable nl80211 support"
+>> +	default y
+>> +	select BR2_PACKAGE_LIBNL
+> 
+> BR2_PACKAGE_LIBNL depends on BR2_TOOLCHAIN_HAS_THREADS. You need to propagate 
+> this dependency here, since Kconfig doesn't do that automatically. See 
+> http://nightly.buildroot.org/manual.html#depends-on-vs-select.
 
-Not needed since it's a "depends on", so
-BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT will anyway only be visible if
-BR2_PACKAGE_WPA_SUPPLICANT_NL80211 is enabled, and if
-BR2_PACKAGE_WPA_SUPPLICANT_NL80211 is enabled, then it has selected
-BR2_PACKAGE_LIBNL.
+libnl need threads ?
 
-Am I missing something?
+apparently, no it doesn't if configure is run with
+--disable-pthreads.  But this is not supported by buildroot.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+will respin accordingly.
