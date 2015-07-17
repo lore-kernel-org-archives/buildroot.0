@@ -1,146 +1,88 @@
-From: =?UTF-8?q?Ignacy=20Gaw=C4=99dzki?= <ignacy.gawedzki@green-communications.fr>
-Date: Fri, 17 Jul 2015 12:44:36 +0200
-Subject: [Buildroot] [PATCH 1/1] angularjs: new package.
-Message-ID: <1437129876-5158-1-git-send-email-ignacy.gawedzki@green-communications.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 17 Jul 2015 13:11:16 +0200
+Subject: [Buildroot] [PATCH] Update from polarssl to mbed 1.3.11
+In-Reply-To: <55A8D954.8020703@zacarias.com.ar>
+References: <1437080329-96500-1-git-send-email-eswierk@skyportsystems.com>
+ <20150716231142.6486d101@free-electrons.com> <55A8311B.30503@mind.be>
+ <20150717095210.223e90bb@free-electrons.com>
+ <55A8D954.8020703@zacarias.com.ar>
+Message-ID: <55A8E2D4.7080108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
----
- package/Config.in              |  1 +
- package/angularjs/Config.in    | 60 ++++++++++++++++++++++++++++++++++++++++++
- package/angularjs/angularjs.mk | 41 +++++++++++++++++++++++++++++
- 3 files changed, 102 insertions(+)
- create mode 100644 package/angularjs/Config.in
- create mode 100644 package/angularjs/angularjs.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 86a53c8..a8c16ac 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -866,6 +866,7 @@ menu "Hardware handling"
- endmenu
- 
- menu "Javascript"
-+	source "package/angularjs/Config.in"
- 	source "package/bootstrap/Config.in"
- 	source "package/explorercanvas/Config.in"
- 	source "package/flot/Config.in"
-diff --git a/package/angularjs/Config.in b/package/angularjs/Config.in
-new file mode 100644
-index 0000000..38fb56f
---- /dev/null
-+++ b/package/angularjs/Config.in
-@@ -0,0 +1,60 @@
-+config BR2_PACKAGE_ANGULARJS
-+	bool "AngularJS"
-+	help
-+	  AngularJS web application framework.
-+
-+	  http://angularjs.org
-+
-+if BR2_PACKAGE_ANGULARJS
-+
-+menuconfig BR2_ANGULARJS_MODULES
-+	bool "Select AngularJS modules"
-+
-+	help
-+	  Select which modules to install, instead of installing all of them.
-+
-+if BR2_ANGULARJS_MODULES
-+
-+config BR2_ANGULARJS_MODULE_animate
-+	bool "animate"
-+	default y
-+
-+config BR2_ANGULARJS_MODULE_aria
-+	bool "aria"
-+	default y
-+
-+config BR2_ANGULARJS_MODULE_cookies
-+	bool "cookies"
-+	default y
-+
-+config BR2_ANGULARJS_MODULE_loader
-+	bool "loader"
-+	default y
-+
-+config BR2_ANGULARJS_MODULE_message-format
-+	bool "message-format"
-+	default y
-+
-+config BR2_ANGULARJS_MODULE_messages
-+	bool "messages"
-+	default y
-+
-+config BR2_ANGULARJS_MODULE_resource
-+	bool "resource"
-+	default y
-+
-+config BR2_ANGULARJS_MODULE_route
-+	bool "route"
-+	default y
-+
-+config BR2_ANGULARJS_MODULE_sanitize
-+	bool "sanitize"
-+	default y
-+
-+config BR2_ANGULARJS_MODULE_touch
-+	bool "touch"
-+	default y
-+
-+endif
-+
-+endif
-diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
-new file mode 100644
-index 0000000..c7b587b
---- /dev/null
-+++ b/package/angularjs/angularjs.mk
-@@ -0,0 +1,41 @@
-+################################################################################
-+#
-+# AngularJS
-+#
-+################################################################################
-+
-+ANGULARJS_VERSION = 1.4.2
-+ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
-+ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)/
-+
-+define ANGULARJS_EXTRACT_CMDS
-+	unzip $(DL_DIR)/$(ANGULARJS_SOURCE) -d $(@D)
-+	mv $(@D)/angular-$(ANGULARJS_VERSION)/* $(@D)
-+	rmdir $(@D)/angular-$(ANGULARJS_VERSION)
-+endef
-+
-+ANGULARJS_FILES = angular.min.js
-+
-+ANGULARJS_MODULES = animate aria cookies loader message-format \
-+		    messages resource route sanitize touch
-+
-+ifeq ($(BR2_ANGULARJS_MODULES),y)
-+
-+ANGULARJS_FILES += $(foreach mod,$(ANGULARJS_MODULES),\
-+		   $(if $(filter y,$(BR2_ANGULARJS_MODULE_$(mod))),\
-+			angular-$(mod).min.js))
-+
-+else
-+
-+ANGULARJS_FILES += $(foreach mod,$(ANGULARJS_MODULES),angular-$(mod).min.js)
-+
-+endif
-+
-+define ANGULARJS_INSTALL_TARGET_CMDS
-+	for f in $(strip $(ANGULARJS_FILES)); do	\
-+		$(INSTALL) -m 0644 -D $(@D)/$$f		\
-+		$(TARGET_DIR)/var/www/$${f%.min.js}.js;	\
-+	done
-+endef
-+
-+$(eval $(generic-package))
+
+On 07/17/15 12:30, Gustavo Zacarias wrote:
+> On 17/07/15 04:52, Thomas Petazzoni wrote:
+> 
+>> Arnout, Ed,
+>>
+>> On Fri, 17 Jul 2015 00:32:59 +0200, Arnout Vandecappelle wrote:
+>>
+>>>> Thanks for your patch. However, following Gustavo's comment, I've
+>>>> marked your patch as "Changes Requested" in our patch tracking system.
+>>>> Can you resubmit a new version that takes into account Gustavo's
+>>>> comments?
+>>>
+>>>   Since it anyway is not compatible and upstream changed name, perhaps it's
+>>> better just to create a new package called mbedtls? When we remove polarssl we
+>>> can make a legacy entry to point to mbedtls.
+>>
+>> Why would we remove polarssl? Is the project dead? Or is mbedtls its
+>> replacement?
+>>
+>> Other than that, yes: if mbedtls is like a new library that is
+>> incompatible with polarssl, then a separate package is the best option.
+> 
+> mbedtls is polarssl, it just got renamed when they got bought by ARM.
+> Adding to confusion this was done with the 1.3+ branches but not with 1.2 (which
+> is in security maintenance).
+> It was to reflect that polarssl (now mbedtls) is the crypto library for the mbed
+> operating system, even though it still works with linux (likely they enabled
+> this with 1.3+ but never backported to 1.2- hence keeping the old name).
+> Last time i've checked the 1.2 and 1.3 series couldn't coexist sanely on the
+> same system, and since programs checks for polarssl rather than mbedtls for now
+> it's probably still the case.
+> rtmpdump can use any of the three optionally (gnutls, openssl, polarssl), dunno
+> if it can handle 1.3+
+> curl needs 1.3+ (we never enabled polarssl support).
+> Newer hiawatha needs 1.3+ (or can use bundled).
+> shairport-sync can use either polarssl or openssl (mandatory one of them), dunno
+> if it can handle 1.3+
+> openvpn can use openssl or polarssl (not 1.3+).
+> So it basically narrows down the choices, though it doesn't necessarily take
+> down other packages.
+> Question is, keep 1.2 and some small targets small or go 1.3+ ?
+> Also there's mbedtls 2.0.0 now, which, again, breaks API. And this has a better
+> chance of living side by side with polarssl 1.2 since they've renamed everything
+> it seems.
+
+ So the tarball called mbedtls installs a library called polarssl? Or does it
+install a library called mbedtls with a symlink from polarssl?
+
+ Either way, since there's an API change, I still think it makes sense to make
+it a new package - that's what we do with webkitgtk24 as well. If side-by-side
+is not possible, we can just make it depend on !polarssl or vice versa. It's a
+bit of a pain while we have both polarssl and mbedtls because of the extra
+select/depends stuff in the packages using it, but anyway most packages only
+have automatic dependencies in the .mk file.
+
+ With the API breakage in mbedtls 2.0 in mind, it's probably best to call the
+new package mbedtls13 so we can eventually (when everything has migrated to 2.0
+API) end up with just a single package mbedtls.
+
+ All this for a TLS library that has simplicity as its USP :-)
+
+ Regards,
+ Arnout
+
 -- 
-2.1.4
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
