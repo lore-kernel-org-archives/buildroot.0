@@ -1,53 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Jul 2015 18:47:27 +0200
-Subject: [Buildroot] [PATCHv4] Makefile: fix performance regression
- casued by the umask handling
-In-Reply-To: <55A83195.8080204@mind.be>
-References: <1437085987-4512-1-git-send-email-yann.morin.1998@free.fr>
- <55A83195.8080204@mind.be>
-Message-ID: <20150717164727.GB3637@free.fr>
+Date: Fri, 17 Jul 2015 18:53:54 +0200
+Subject: [Buildroot] [PATCH 1/1] release: remove manual build files from
+ release tarballs
+In-Reply-To: <1437128435-17331-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1437128435-17331-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20150717165354.GC3637@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Guido, All,
+Thomas, All,
 
-On 2015-07-17 00:35 +0200, Arnout Vandecappelle spake thusly:
-> On 07/17/15 00:33, Yann E. MORIN wrote:
-> > From: Guido Mart?nez <guido@vanguardiasur.com.ar>
-> > 
-> > Commit bee5745c introduced an extra level of 'make' when the umask is
-> > different from 0022. However, when several targets were specified on
-> > the command line, a new make instance would be called for each target.
-> > This introduces a huge performance overhead when many targets are
-> > specified on the command line.
-> > 
-> > To fix this, use the same approach as used in the mkmakefile script:
-> > an addition target on which the MAKECMDGOALS depend, so that this
-> > target is run only once.
-> > 
-> > Note that the mkmakefile script contains a special exception for
-> > Makefile, because the Makefile in the output directory is generated.
-> > Since the top-level Makefile is not generated, this exception is not
-> > needed here.
-> > 
-> > While we're at it, also fix the whitespace in the UMASK assignment.
-> > 
-> > Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
-> > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > [yann.morin.1998 at free.fr: aggregate patches from Arnout and Guido]
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+On 2015-07-17 12:20 +0200, Thomas De Schampheleire spake thusly:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 > 
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> The Buildroot release tarballs inadvertently contain a build/docs directory,
+> containing the manual sources, the generated lists, and manual.text and
+> manual.pdf (but excluding manual.html).
 > 
->  Someone finally got it right :-)
+> This directory is populated as $(BUILD_DIR) (==$(O)/build), while O is
+> set explicitly from the release target to a subdirectory
+> buildroot-xxxx.yy-git/ which was populated with 'git archive'.
+> 
+> Since the generated manuals are available in docs/manual, which is
+> also referred to from the README, the build directory is not needed and
+> should be removed from the release tarball.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Almost... I made a typo in the subject... ;-]
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 531ac5d..168d62a 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -936,6 +936,7 @@ release: OUT = buildroot-$(BR2_VERSION)
+>  release:
+>  	git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
+>  	$(MAKE) O=$(OUT) manual-html manual-text manual-pdf
+> +	$(MAKE) O=$(OUT) manual-clean
+>  	tar rf $(OUT).tar $(OUT)
+>  	gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
+>  	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
+> -- 
+> 1.8.5.1
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
