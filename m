@@ -1,31 +1,80 @@
-From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Date: Fri, 17 Jul 2015 10:00:15 +0200
-Subject: [Buildroot] [PATCH 2/2] wpa_supplicant: Have Hotspot 2.0 depend
- on nl80211
-In-Reply-To: <20150717094532.0e40060c@free-electrons.com>
-References: <20150713112947.7e14fd64@free-electrons.com>	<1437051754-24060-1-git-send-email-nicolas.cavallari@green-communications.fr>	<1437051754-24060-2-git-send-email-nicolas.cavallari@green-communications.fr>	<20150717064101.GE3147@tarshish>
- <20150717094532.0e40060c@free-electrons.com>
-Message-ID: <55A8B60F.2070200@green-communications.fr>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Fri, 17 Jul 2015 09:59:09 +0200
+Subject: [Buildroot] [PATCH 1/2 v2] wpa_supplicant: Add an explicit option
+	to enable nl80211.
+In-Reply-To: <55A8B3A2.4010107@green-communications.fr>
+References: <55A8B3A2.4010107@green-communications.fr>
+Message-ID: <1437119950-25976-1-git-send-email-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/07/2015 09:45, Thomas Petazzoni wrote:
-> On Fri, 17 Jul 2015 09:41:01 +0300, Baruch Siach wrote:
->>>  config BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT
->>>  	bool "Enable HS20"
->>> +	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
->>
->> Please add the BR2_PACKAGE_LIBNL dependency here as well.
-> 
-> Not needed since it's a "depends on", so
-> BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT will anyway only be visible if
-> BR2_PACKAGE_WPA_SUPPLICANT_NL80211 is enabled, and if
-> BR2_PACKAGE_WPA_SUPPLICANT_NL80211 is enabled, then it has selected
-> BR2_PACKAGE_LIBNL.
-> 
-> Am I missing something?
+Currently, nl80211 support is conditionnal with libnl being enabled,
+using implicit dependencies.  This causes problems since it is not
+obvious and wpa_supplicant without nl80211 isn't what most user expects.
 
-I was thinking the same thing.
+If nl80211 isn't enabled, then buildroot only enables the wext driver,
+which will only work if some deprecated kernel feature isn't left
+disabled, or if using a outdated out-of-tree linux driver which doesn't
+use the cfg80211 infrastructure.
+
+This makes nl80211 support an explicit option, which
+"select BR2_PACKAGE_LIBNL" accordingly.  To handle upgrades nicely, it
+would have been nice to have "default y if BR2_PACKAGE_LIBNL", but
+Kconfig treats this as a circular dependency.  So instead, this enables
+the option by default, which is less worse than not enabling nl80211
+when it was previously implicitely enabled.
+
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
+v2: Added depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
+
+ package/wpa_supplicant/Config.in         | 17 +++++++++++++++++
+ package/wpa_supplicant/wpa_supplicant.mk |  2 +-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index f32a867..29dc4b9 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -8,6 +8,23 @@ config BR2_PACKAGE_WPA_SUPPLICANT
+ 
+ if BR2_PACKAGE_WPA_SUPPLICANT
+ 
++config BR2_PACKAGE_WPA_SUPPLICANT_NL80211
++	bool "Enable nl80211 support"
++	default y
++	select BR2_PACKAGE_LIBNL
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
++	help
++	  Enable support for nl80211.  This is the current wireless API for
++	  Linux, supported by all wireless drivers in vanilla Linux, but may
++	  not be supported by some out-of-tree Linux wireless drivers.
++	  wpa_supplicant will still fall back to using the Wireless Extensions
++	  (wext) API with these drivers.
++
++	  If this option is disabled, then only the deprecated wext API will
++	  be supported, with far less features.  Linux may supports using
++	  wext with modern drivers using a compatibility layer, but it must
++	  be enabled in the kernel configuration.
++
+ config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
+ 	bool "Enable AP mode"
+ 	help
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index eb4278a..6e25280 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -32,7 +32,7 @@ WPA_SUPPLICANT_CONFIG_DISABLE = \
+ # libnl-3 needs -lm (for rint) and -lpthread if linking statically
+ # And library order matters hence stick -lnl-3 first since it's appended
+ # in the wpa_supplicant Makefiles as in LIBS+=-lnl-3 ... thus failing
+-ifeq ($(BR2_PACKAGE_LIBNL),y)
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_NL80211),y)
+ ifeq ($(BR2_STATIC_LIBS),y)
+ WPA_SUPPLICANT_LIBS += -lnl-3 -lm -lpthread
+ endif
+-- 
+2.1.4
