@@ -1,64 +1,40 @@
-From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Date: Fri, 17 Jul 2015 09:49:54 +0200
-Subject: [Buildroot] [PATCH 1/2] wpa_supplicant: Add an explicit option
- to enable nl80211.
-In-Reply-To: <20150717063934.GD3147@tarshish>
-References: <20150713112947.7e14fd64@free-electrons.com>
- <1437051754-24060-1-git-send-email-nicolas.cavallari@green-communications.fr>
- <20150717063934.GD3147@tarshish>
-Message-ID: <55A8B3A2.4010107@green-communications.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Jul 2015 09:52:10 +0200
+Subject: [Buildroot] [PATCH] Update from polarssl to mbed 1.3.11
+In-Reply-To: <55A8311B.30503@mind.be>
+References: <1437080329-96500-1-git-send-email-eswierk@skyportsystems.com>
+ <20150716231142.6486d101@free-electrons.com>
+ <55A8311B.30503@mind.be>
+Message-ID: <20150717095210.223e90bb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/07/2015 08:39, Baruch Siach wrote:
-> Hi Nicolas,
+Arnout, Ed,
+
+On Fri, 17 Jul 2015 00:32:59 +0200, Arnout Vandecappelle wrote:
+
+> > Thanks for your patch. However, following Gustavo's comment, I've
+> > marked your patch as "Changes Requested" in our patch tracking system.
+> > Can you resubmit a new version that takes into account Gustavo's
+> > comments?
 > 
-> On Thu, Jul 16, 2015 at 03:02:33PM +0200, Nicolas Cavallari wrote:
->> Currently, nl80211 support is conditional with libnl being enabled,
->> using implicit dependencies.  This causes problems since it is not
->> obvious and wpa_supplicant without nl80211 isn't what most user expects.
->>
->> If nl80211 isn't enabled, then buildroot only enables the wext driver,
->> which will only work if some deprecated kernel feature isn't left
->> disabled, or if using a outdated out-of-tree linux driver which doesn't
->> use the cfg80211 infrastructure.
->>
->> This makes nl80211 support an explicit option, which
->> "select BR2_PACKAGE_LIBNL" accordingly.  To handle upgrades nicely, it
->> would have been nice to have "default y if BR2_PACKAGE_LIBNL", but
->> Kconfig treats this as a circular dependency.  So instead, this enables
->> the option by default, which is less worse than not enabling nl80211
->> when it was previously implicitly enabled.
->>
->> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
->> ---
->>  package/wpa_supplicant/Config.in         | 16 ++++++++++++++++
->>  package/wpa_supplicant/wpa_supplicant.mk |  2 +-
->>  2 files changed, 17 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
->> index f32a867..1824f95 100644
->> --- a/package/wpa_supplicant/Config.in
->> +++ b/package/wpa_supplicant/Config.in
->> @@ -8,6 +8,22 @@ config BR2_PACKAGE_WPA_SUPPLICANT
->>  
->>  if BR2_PACKAGE_WPA_SUPPLICANT
->>  
->> +config BR2_PACKAGE_WPA_SUPPLICANT_NL80211
->> +	bool "Enable nl80211 support"
->> +	default y
->> +	select BR2_PACKAGE_LIBNL
-> 
-> BR2_PACKAGE_LIBNL depends on BR2_TOOLCHAIN_HAS_THREADS. You need to propagate 
-> this dependency here, since Kconfig doesn't do that automatically. See 
-> http://nightly.buildroot.org/manual.html#depends-on-vs-select.
+>  Since it anyway is not compatible and upstream changed name, perhaps it's
+> better just to create a new package called mbedtls? When we remove polarssl we
+> can make a legacy entry to point to mbedtls.
 
-libnl need threads ?
+Why would we remove polarssl? Is the project dead? Or is mbedtls its
+replacement?
 
-apparently, no it doesn't if configure is run with
---disable-pthreads.  But this is not supported by buildroot.
+Other than that, yes: if mbedtls is like a new library that is
+incompatible with polarssl, then a separate package is the best option.
 
-will respin accordingly.
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
