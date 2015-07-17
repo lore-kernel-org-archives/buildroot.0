@@ -1,39 +1,40 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Fri, 17 Jul 2015 09:59:10 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] wpa_supplicant: Have Hotspot 2.0 depend
-	on nl80211
-In-Reply-To: <1437119950-25976-1-git-send-email-nicolas.cavallari@green-communications.fr>
-References: <55A8B3A2.4010107@green-communications.fr>
- <1437119950-25976-1-git-send-email-nicolas.cavallari@green-communications.fr>
-Message-ID: <1437119950-25976-2-git-send-email-nicolas.cavallari@green-communications.fr>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 17 Jul 2015 08:04:34 +0000
+Subject: [Buildroot] [PATCH] ARC: allow selection of MMU page size
+In-Reply-To: <20150717095945.0fafbba4@free-electrons.com>
+References: <1437073441-11321-1-git-send-email-abrodkin@synopsys.com>
+ <55A832D4.9020801@mind.be> <20150717095945.0fafbba4@free-electrons.com>
+Message-ID: <1437120274.9157.3.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hotspot 2.0 uses ANQP whose implementation needs offchannel/
-remain-on-channel capabilities from the driver, which only exist in the
-nl80211 driver.  Compiling would work, but the feature would not work.
+Hi Thomas, Arnout,
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
----
+On Fri, 2015-07-17 at 09:59 +0200, Thomas Petazzoni wrote:
+> Arnout,
+> 
+> On Fri, 17 Jul 2015 00:40:20 +0200, Arnout Vandecappelle wrote:
+> 
+> > > +choice
+> > > +	prompt "MMU Page Size"
+> > 
+> >  It is not really current policy, but wouldn't it make more sense to do
+> > 
+> > 	prompt "MMU Page Size" if BR2_arc770d || BR2_archs38
+> 
+> Why? In the patch submitted by Alexey, the 8K option is available for
+> all cores.
 
-v2: added signoff.
- package/wpa_supplicant/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Indeed there's no reason to select page size for MMUv2 (read ARC 750D), but
+IMHO it's good to let user know what's current page size.
 
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index 29dc4b9..22cf7f8 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -41,6 +41,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_EAP
- 
- config BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT
- 	bool "Enable HS20"
-+	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
- 	help
- 	  Enable Hotspot 2.0 and IEEE 802.11u interworking functionality.
- 
--- 
-2.1.4
+Because software built for ARC 750D will run perfectly fine on ARC770D
+if it has the same page size (and by default it is 8k).
+
+That's why I decided to leave a "Page Size" entry in configuration utility
+even though it could not be modified for ARC 750D.
+
+-Alexey
