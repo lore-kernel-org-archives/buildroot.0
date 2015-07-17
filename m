@@ -1,28 +1,31 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 17 Jul 2015 11:31:18 -0300
-Subject: [Buildroot] [PATCH] gcc: add gcc 5.2.0
-In-Reply-To: <20150716233017.383ce16b@free-electrons.com>
-References: <1437079928-9591-1-git-send-email-gustavo@zacarias.com.ar>
- <20150716225639.14772165@free-electrons.com>
- <55A81B35.2040200@zacarias.com.ar>
- <20150716231024.656693cb@free-electrons.com>
- <55A81E9E.8000103@zacarias.com.ar>
- <20150716233017.383ce16b@free-electrons.com>
-Message-ID: <55A911B6.3000502@zacarias.com.ar>
+Date: Fri, 17 Jul 2015 11:31:14 -0300
+Subject: [Buildroot] [PATCH 2/2] gcc/libmudflap: also unavailable for gcc 5.x
+In-Reply-To: <1437143474-9187-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1437143474-9187-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1437143474-9187-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/07/15 18:30, Thomas Petazzoni wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gcc/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Yes, I think skipping 5.2.0 for the time is the best option. As I said,
-> it anyway doesn't make much sense to have a compiler that doesn't even
-> build a kernel properly for a major architecture like ARM.
-
-Hi.
-I've retested and found that i've got a busted versatile launcher script 
-(used for webkit testing), after reverting some changes it works just fine.
-So 5.2.0 it is, replacing 5.1.0.
-Regards.
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 6a4086e..9dd60a0 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -144,6 +144,7 @@ config BR2_GCC_ENABLE_LIBMUDFLAP
+ 	# which mudflap is not supported.
+ 	depends on !BR2_ARM_INSTRUCTIONS_THUMB && !BR2_powerpc_SPE
+ 	depends on !BR2_GCC_VERSION_4_9_X
++	depends on !BR2_GCC_VERSION_5_X
+ 	help
+ 	  libmudflap is a gcc library used for the mudflap pointer
+ 	  debugging functionality. It is only needed if you intend to
+-- 
+2.3.6
