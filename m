@@ -1,67 +1,64 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 17 Jul 2015 16:13:21 +0200
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2015-07-14
-In-Reply-To: <1436982736.3682.16.camel@synopsys.com>
-References: <20150715063016.118A21016B5@stock.ovh.net>
- <1436982736.3682.16.camel@synopsys.com>
-Message-ID: <1437142401.1824.6.camel@embedded.rocks>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 17 Jul 2015 16:15:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/boost: boost-filesystem needs wchar
+Message-ID: <1437142516-12378-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey, Thomas,
+Also add reverse dependency for cc-tool.
 
-On Mi, 2015-07-15 at 17:52 +0000, Alexey Brodkin wrote:
-> Hi Thomas,
-> 
-> On Wed, 2015-07-15 at 08:30 +0200, Thomas Petazzoni wrote:
-> > Those results are limited to the arc architecture.
-> > 
-> > Build statistics for 2015-07-14
-> > ===============================
-> > 
-> >         success : 6  
-> >        failures : 23 
-> >        timeouts : 0  
-> >           TOTAL : 29 
-> > 
-> > Classification of failures by reason
-> > ====================================
-> > 
-> >                   zeromq-4.0.5 | 9 
-> >              util-linux-2.26.2 | 5 
-> >                   boost-1.58.0 | 3 
-> >                alsa-lib-1.0.29 | 3 
-> >              btrfs-progs-4.1.1 | 1 
-> >              libselinux-2.1.13 | 1 
-> >                    tinc-1.0.24 | 1 
-> > 
-> > Detail of failures
-> > ===================
-> > 
-> >          arc |                   boost-1.58.0 | NOK | 
-> > http://autobuild.buildroot.net/results/596c2eb1378946b8c0fea6b3ebcf
-> > 80ee7e14995a/
-> >          arc |                   boost-1.58.0 | NOK | 
-> > http://autobuild.buildroot.net/results/0585f6c926042d7c859150dbf7b3
-> > 3928c4687273/
-> >          arc |                   boost-1.58.0 | NOK | 
-> > http://autobuild.buildroot.net/results/16fd658176b4e4927f7c7dbe5598
-> > b7a38b819af9/
-> 
-> Looks like an issue with boost that for some reason
-> uses syscall (non-existent on some arches including ARC)
-> directly instead of libc's eventfd().
-> ----------------->8-------------------
-> "syscall(__NR_eventfd, 0);"
-> ----------------->8-------------------
+Fixes:
+http://autobuild.buildroot.net/results/2c7/2c7783b7f3cc28d54d15a7f017442c48244ffd8e/
+http://autobuild.buildroot.net/results/2c7/2c7783b7f3cc28d54d15a7f017442c48244ffd8e/
+http://autobuild.buildroot.net/results/0dd/0dd3ef96bbd034a41d908cdaa6552b27fda78132/
+http://autobuild.buildroot.net/results/34b/34b55b2cd83fd5d87af4a9c15d05094b16ef3960/
 
-__NR_eventfd needs __ARCH_WANT_SYSCALL_NO_FLAGS to be defined in
-asm/unistd.h. I am not a toolchain expert so I do not know how to
-handle this.
+and many more
 
-Best regards
-J?rg Krause
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/boost/Config.in   | 4 ++++
+ package/cc-tool/Config.in | 5 +++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 92d59c2..68004b6 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -77,6 +77,10 @@ config BR2_PACKAGE_BOOST_EXCEPTION
+ 
+ config BR2_PACKAGE_BOOST_FILESYSTEM
+ 	bool "boost-filesystem"
++	depends on BR2_USE_WCHAR
++
++comment "boost-filesystem needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_BOOST_GRAPH
+ 	bool "boost-graph"
+diff --git a/package/cc-tool/Config.in b/package/cc-tool/Config.in
+index be11599..f8e4531 100644
+--- a/package/cc-tool/Config.in
++++ b/package/cc-tool/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_CC_TOOL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	depends on BR2_USE_WCHAR # boost-filesystem
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+@@ -17,6 +18,6 @@ config BR2_PACKAGE_CC_TOOL
+ 
+ 	  http://sourceforge.net/projects/cctool/
+ 
+-comment "cc-tool needs a toolchain w/ C++, threads"
++comment "cc-tool needs a toolchain w/ C++, threads, wchar"
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-- 
+2.4.6
