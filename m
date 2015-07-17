@@ -1,44 +1,59 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 17 Jul 2015 12:20:35 +0200
-Subject: [Buildroot] [PATCH 1/1] release: remove manual build files from
-	release tarballs
-Message-ID: <1437128435-17331-1-git-send-email-patrickdepinguin@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 17 Jul 2015 07:30:44 -0300
+Subject: [Buildroot] [PATCH] Update from polarssl to mbed 1.3.11
+In-Reply-To: <20150717095210.223e90bb@free-electrons.com>
+References: <1437080329-96500-1-git-send-email-eswierk@skyportsystems.com>
+ <20150716231142.6486d101@free-electrons.com> <55A8311B.30503@mind.be>
+ <20150717095210.223e90bb@free-electrons.com>
+Message-ID: <55A8D954.8020703@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 17/07/15 04:52, Thomas Petazzoni wrote:
 
-The Buildroot release tarballs inadvertently contain a build/docs directory,
-containing the manual sources, the generated lists, and manual.text and
-manual.pdf (but excluding manual.html).
+> Arnout, Ed,
+>
+> On Fri, 17 Jul 2015 00:32:59 +0200, Arnout Vandecappelle wrote:
+>
+>>> Thanks for your patch. However, following Gustavo's comment, I've
+>>> marked your patch as "Changes Requested" in our patch tracking system.
+>>> Can you resubmit a new version that takes into account Gustavo's
+>>> comments?
+>>
+>>   Since it anyway is not compatible and upstream changed name, perhaps it's
+>> better just to create a new package called mbedtls? When we remove polarssl we
+>> can make a legacy entry to point to mbedtls.
+>
+> Why would we remove polarssl? Is the project dead? Or is mbedtls its
+> replacement?
+>
+> Other than that, yes: if mbedtls is like a new library that is
+> incompatible with polarssl, then a separate package is the best option.
 
-This directory is populated as $(BUILD_DIR) (==$(O)/build), while O is
-set explicitly from the release target to a subdirectory
-buildroot-xxxx.yy-git/ which was populated with 'git archive'.
-
-Since the generated manuals are available in docs/manual, which is
-also referred to from the README, the build directory is not needed and
-should be removed from the release tarball.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Makefile b/Makefile
-index 531ac5d..168d62a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -936,6 +936,7 @@ release: OUT = buildroot-$(BR2_VERSION)
- release:
- 	git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
- 	$(MAKE) O=$(OUT) manual-html manual-text manual-pdf
-+	$(MAKE) O=$(OUT) manual-clean
- 	tar rf $(OUT).tar $(OUT)
- 	gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
- 	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
--- 
-1.8.5.1
+mbedtls is polarssl, it just got renamed when they got bought by ARM.
+Adding to confusion this was done with the 1.3+ branches but not with 
+1.2 (which is in security maintenance).
+It was to reflect that polarssl (now mbedtls) is the crypto library for 
+the mbed operating system, even though it still works with linux (likely 
+they enabled this with 1.3+ but never backported to 1.2- hence keeping 
+the old name).
+Last time i've checked the 1.2 and 1.3 series couldn't coexist sanely on 
+the same system, and since programs checks for polarssl rather than 
+mbedtls for now it's probably still the case.
+rtmpdump can use any of the three optionally (gnutls, openssl, 
+polarssl), dunno if it can handle 1.3+
+curl needs 1.3+ (we never enabled polarssl support).
+Newer hiawatha needs 1.3+ (or can use bundled).
+shairport-sync can use either polarssl or openssl (mandatory one of 
+them), dunno if it can handle 1.3+
+openvpn can use openssl or polarssl (not 1.3+).
+So it basically narrows down the choices, though it doesn't necessarily 
+take down other packages.
+Question is, keep 1.2 and some small targets small or go 1.3+ ?
+Also there's mbedtls 2.0.0 now, which, again, breaks API. And this has a 
+better chance of living side by side with polarssl 1.2 since they've 
+renamed everything it seems.
+Regards.
