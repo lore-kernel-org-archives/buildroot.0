@@ -1,33 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Jul 2015 16:32:23 +0200
-Subject: [Buildroot] [PATCH] gcc: add gcc 5.2.0
-In-Reply-To: <55A911B6.3000502@zacarias.com.ar>
-References: <1437079928-9591-1-git-send-email-gustavo@zacarias.com.ar>
- <20150716225639.14772165@free-electrons.com>
- <55A81B35.2040200@zacarias.com.ar>
- <20150716231024.656693cb@free-electrons.com>
- <55A81E9E.8000103@zacarias.com.ar>
- <20150716233017.383ce16b@free-electrons.com>
- <55A911B6.3000502@zacarias.com.ar>
-Message-ID: <20150717163223.752f3ca7@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 17 Jul 2015 15:31:57 +0000
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
+ results for 2015-07-14
+In-Reply-To: <1437142401.1824.6.camel@embedded.rocks>
+References: <20150715063016.118A21016B5@stock.ovh.net>
+ <1436982736.3682.16.camel@synopsys.com>
+ <1437142401.1824.6.camel@embedded.rocks>
+Message-ID: <1437147117.3374.4.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo,
+Hi J?rg,
 
-On Fri, 17 Jul 2015 11:31:18 -0300, Gustavo Zacarias wrote:
+On Fri, 2015-07-17 at 16:13 +0200, J?rg Krause wrote:
+> Dear Alexey, Thomas,
+> 
+> On Mi, 2015-07-15 at 17:52 +0000, Alexey Brodkin wrote:
+> > Hi Thomas,
+> > 
+> > On Wed, 2015-07-15 at 08:30 +0200, Thomas Petazzoni wrote:
+> > > Those results are limited to the arc architecture.
+> > > 
+> > > Build statistics for 2015-07-14
+> > > ===============================
+> > > 
+> > >         success : 6  
+> > >        failures : 23 
+> > >        timeouts : 0  
+> > >           TOTAL : 29 
+> > > 
+> > > Classification of failures by reason
+> > > ====================================
+> > > 
+> > >                   zeromq-4.0.5 | 9 
+> > >              util-linux-2.26.2 | 5 
+> > >                   boost-1.58.0 | 3 
+> > >                alsa-lib-1.0.29 | 3 
+> > >              btrfs-progs-4.1.1 | 1 
+> > >              libselinux-2.1.13 | 1 
+> > >                    tinc-1.0.24 | 1 
+> > > 
+> > > Detail of failures
+> > > ===================
+> > > 
+> > >          arc |                   boost-1.58.0 | NOK | 
+> > > http://autobuild.buildroot.net/results/596c2eb1378946b8c0fea6b3ebcf
+> > > 80ee7e14995a/
+> > >          arc |                   boost-1.58.0 | NOK | 
+> > > http://autobuild.buildroot.net/results/0585f6c926042d7c859150dbf7b3
+> > > 3928c4687273/
+> > >          arc |                   boost-1.58.0 | NOK | 
+> > > http://autobuild.buildroot.net/results/16fd658176b4e4927f7c7dbe5598
+> > > b7a38b819af9/
+> > 
+> > Looks like an issue with boost that for some reason
+> > uses syscall (non-existent on some arches including ARC)
+> > directly instead of libc's eventfd().
+> > ----------------->8-------------------
+> > "syscall(__NR_eventfd, 0);"
+> > ----------------->8-------------------
+> 
+> __NR_eventfd needs __ARCH_WANT_SYSCALL_NO_FLAGS to be defined in
+> asm/unistd.h. I am not a toolchain expert so I do not know how to
+> handle this.
 
-> I've retested and found that i've got a busted versatile launcher script 
-> (used for webkit testing), after reverting some changes it works just fine.
-> So 5.2.0 it is, replacing 5.1.0.
+Mentioned syscall and define go from kernel headers.
+For old platforms like x86, ARM etc that system call was implemented.
 
-Excellent, this solves the discussion I guess. Thanks!
+Even though it is now obsolete for compatibility reasons it was left
+as it is on those platforms.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Newer platforms like ARC and probably others strictly follow so-called
+UAPI and so use "include/uapi/asm-generic/unistd.h" and so don't support 
+__NR_eventfd syscall relying instead on newer implementation __NR_eventfd2.
+
+IMHO it's an issue in boost that somebody (probably me) has to fix.
+
+-Alexey
