@@ -1,63 +1,67 @@
-From: Nimai Mahajan <nimaim@gmail.com>
-Date: Fri, 17 Jul 2015 09:17:12 -0400
-Subject: [Buildroot] Another Buildroot Enhancement Suggestion (re-use
-	base build)
-In-Reply-To: <20150717070407.GF3147@tarshish>
-References: <CALoSW65V2bmF8GEtUH_hLm-_n9vPDEjnK5-YXyx_eXoy04fDKw@mail.gmail.com>
- <20150717070407.GF3147@tarshish>
-Message-ID: <CALoSW65SOUXu4R1c+K_5sjOZ08a25sdnOt-WbC8RSKTf89BQpw@mail.gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Fri, 17 Jul 2015 16:13:21 +0200
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
+ results for 2015-07-14
+In-Reply-To: <1436982736.3682.16.camel@synopsys.com>
+References: <20150715063016.118A21016B5@stock.ovh.net>
+ <1436982736.3682.16.camel@synopsys.com>
+Message-ID: <1437142401.1824.6.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 17, 2015 at 3:04 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Nimai,
->
-> On Thu, Jul 16, 2015 at 08:48:02AM -0400, Nimai Mahajan wrote:
->> I should have brought this up during the hackathon but it totally
->> slipped my mind. But anyways, here it goes: we use Buildroot for ~3-4
->> projects here at work and it's been great for us since it is very easy
->> to customize and build from the ground up. We generally compile our
->> builds from scratch, as is the Buildroot norm, and that works (I also
->> use CCACHE and external toolchain and that does help quite a bit) but
->> I was wondering if this could be even further sped up.
->>
->> The use case is that our release builds for those 3-4 projects is
->> always the same (minus a slightly different fs overlay and 1-2
->> different packages). Is there any way or do you guys see any
->> usefulness in taking an already built "external base build" with all
->> the packages that subsequent builds will use and telling Buildroot
->> what to add on top of it? Basically, it doesn't make sense to me to
->> rebuild the entire thing when only a few files change. This is
->> probably a huge effort as I don't think a mechanism exists to do it
->> but I'm just looking for some comments/thoughts. Does this even make
->> sense or is there already a decent way to do this?
->>
->> For release builds, this is not a major problem because builds only
->> take 5-10 min at most, but when you're compiling debug builds with
->> debugging symbols for various projects, this can add hours or even
->> days if builds fail. We have Jenkins running and pumping out builds
->> for us 24/7, and this would help a lot in testing, taking a prebuilt
->> base build and just recompiling our custom packages (for now, we do a
->> -dirclean on our packages and rebuild them every time which works for
->> the time being).
->
-> The patch at http://patchwork.ozlabs.org/patch/464753/ might be helpful for
-> you. Please check it out and let us know.
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Dear Alexey, Thomas,
 
-Thanks, I will take a look at that. I think with that + the recently
-proposed RFC here
-(http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/120702)
-that highlights a "phased" build approach, I think this is definitely
-doable in a reliable way. I think it depends on what will Thomas plans
-to do about the custom skeleton, as the first patch seems reliant on
-that.
+On Mi, 2015-07-15 at 17:52 +0000, Alexey Brodkin wrote:
+> Hi Thomas,
+> 
+> On Wed, 2015-07-15 at 08:30 +0200, Thomas Petazzoni wrote:
+> > Those results are limited to the arc architecture.
+> > 
+> > Build statistics for 2015-07-14
+> > ===============================
+> > 
+> >         success : 6  
+> >        failures : 23 
+> >        timeouts : 0  
+> >           TOTAL : 29 
+> > 
+> > Classification of failures by reason
+> > ====================================
+> > 
+> >                   zeromq-4.0.5 | 9 
+> >              util-linux-2.26.2 | 5 
+> >                   boost-1.58.0 | 3 
+> >                alsa-lib-1.0.29 | 3 
+> >              btrfs-progs-4.1.1 | 1 
+> >              libselinux-2.1.13 | 1 
+> >                    tinc-1.0.24 | 1 
+> > 
+> > Detail of failures
+> > ===================
+> > 
+> >          arc |                   boost-1.58.0 | NOK | 
+> > http://autobuild.buildroot.net/results/596c2eb1378946b8c0fea6b3ebcf
+> > 80ee7e14995a/
+> >          arc |                   boost-1.58.0 | NOK | 
+> > http://autobuild.buildroot.net/results/0585f6c926042d7c859150dbf7b3
+> > 3928c4687273/
+> >          arc |                   boost-1.58.0 | NOK | 
+> > http://autobuild.buildroot.net/results/16fd658176b4e4927f7c7dbe5598
+> > b7a38b819af9/
+> 
+> Looks like an issue with boost that for some reason
+> uses syscall (non-existent on some arches including ARC)
+> directly instead of libc's eventfd().
+> ----------------->8-------------------
+> "syscall(__NR_eventfd, 0);"
+> ----------------->8-------------------
+
+__NR_eventfd needs __ARCH_WANT_SYSCALL_NO_FLAGS to be defined in
+asm/unistd.h. I am not a toolchain expert so I do not know how to
+handle this.
+
+Best regards
+J?rg Krause
