@@ -1,93 +1,105 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 17 Jul 2015 09:11:18 +0000
-Subject: [Buildroot] [PATCH] ARC: allow selection of MMU page size
-In-Reply-To: <20150716232530.761b0529@free-electrons.com>
-References: <1437073441-11321-1-git-send-email-abrodkin@synopsys.com>
- <20150716232530.761b0529@free-electrons.com>
-Message-ID: <1437124277.9157.16.camel@synopsys.com>
+Date: Fri, 17 Jul 2015 12:11:42 +0300
+Subject: [Buildroot] [PATCH v2] ARC: allow selection of MMU page size
+Message-ID: <1437124302-18610-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Modern ARC cores (those sporting MMU of version 3 and 4) allow selection
+of different page sizes (4, 8 or 16 kB) during ASIC design creation.
+And it's important to build a toolchain with page size setting that matches
+hardware.
 
-On Thu, 2015-07-16 at 23:25 +0200, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Thu, 16 Jul 2015 22:04:01 +0300, Alexey Brodkin wrote:
-> 
-> > +choice
-> > +	prompt "MMU Page Size"
-> > +	default BR2_arc_page_size_8k
-> > +	help
-> > +	    MMU starting from version 3 (could be found in ARC 770) and now
-> > +	    version 4 (could be found in ARC HS38) allows selection of page
-> > +	    size during ASIC design creation. And it's important to build
-> 
-> Remove the "And".
-> 
-> > +	    a toolchain with page size setting that matches hardware.
-> 
-> "with a page size matching the hardware configuration"
-> 
-> > +	    Otherwise user-space applications will fail on execution due to
-> 
-> "will fail at runtime"
+Otherwise user-space applications will fail on execution due to
+unexpected data layout/alignment etc.
 
-Thanks for pointing to that.
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
 
-> > +	    unexpected data layout/alignment.
-> 
-> What is the impact for people using external toolchains?
+Changes compared to v1:
+ [1] Use upper-case in BR2_ARC_PAGE_SIZE_x
+ [2] Updated comments
 
-Well people have to use toolchain which page size matches HW.
-That means you need to know which value is set in both
-toolchain and HW.
+ arch/Config.in.arc       | 37 +++++++++++++++++++++++++++++++++++++
+ package/uclibc/uclibc.mk |  8 ++++++++
+ 2 files changed, 45 insertions(+)
 
-By default in either substances 8k is used and most of the time
-people will use it.
-
-Still even in case of external toolchain we nay check for PAGE_SHIFT
-value in "sysroot/usr/include/bits/uClibc_page.h".
-
-PAGE_SHIFT=12 -> PAGE_SIZE=4k
-PAGE_SHIFT=13 -> PAGE_SIZE=8k (default)
-PAGE_SHIFT=14 -> PAGE_SIZE=16k
-
-> > +
-> > +config BR2_arc_page_size_4k
-> 
-> Can you use BR2_ARC_PAGE_SIZE_4K instead? I know the BR2_arc option is
-> lower-case, but for most architectures options are upper-case, even if
-> the core selection is lower-case. I think lower-case options is more an
-> accident of the past rather than a real policy.
-
-OK, will do.
-
-> > +	bool "4KB"
-> > +	depends on BR2_arc770d || BR2_archs38
-> > +
-> > +config BR2_arc_page_size_8k
-> > +	bool "8KB"
-> > +
-> > +config BR2_arc_page_size_16k
-> > +	bool "16KB"
-> > +	depends on BR2_arc770d || BR2_archs38
-> 
-> Can you quickly comment on why 4 KB / 16 KB have dependencies on
-> specific ARC cores and not 8 KB ?
-
-8K page was the only option on earlier ARC cores like ARC 750D.
-Starting from ARC 770D it's possible to select page size from 3 options:
-4, 8 and 16k. But still 8k is its default value and most often that's
-what people use.
-
-Do you want that comment
-
-> Can you respin with those changes?
-
-Sure, will do shortly.\
-
--Alexey
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index b48a90f..1115d71 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -40,3 +40,40 @@ config BR2_GCC_TARGET_CPU
+ 	default "arc700" if BR2_arc750d
+ 	default "arc700" if BR2_arc770d
+ 	default "archs"	 if BR2_archs38
++
++choice
++	prompt "MMU Page Size"
++	default BR2_ARC_PAGE_SIZE_8K
++	help
++        MMU starting from version 3 (could be found in ARC 770) and now
++        version 4 (could be found in ARC HS38) allows selection of page
++        size during ASIC design creation.
++
++        Following options are available for MMU v3 and v4: 4kB, 8kB and 16 kB.
++
++        Default is 8 kB (that really matches the only page size in MMU v2).
++        It is important to build a toolchain with page size matching the
++        hardware configuration. Otherwise user-space applications will
++        fail at runtime.
++
++config BR2_ARC_PAGE_SIZE_4K
++	bool "4KB"
++	depends on BR2_arc770d || BR2_archs38
++
++config BR2_ARC_PAGE_SIZE_8K
++	bool "8KB"
++    help
++        This is the one and only option available for MMUv2 and default
++        value for MMU v3 and v4.
++
++config BR2_ARC_PAGE_SIZE_16K
++	bool "16KB"
++	depends on BR2_arc770d || BR2_archs38
++
++endchoice
++
++config BR2_ARC_PAGE_SIZE
++	string
++	default "4K" if BR2_ARC_PAGE_SIZE_4K
++	default "8K" if BR2_ARC_PAGE_SIZE_8K
++	default "16K" if BR2_ARC_PAGE_SIZE_16K
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 9dfafad..a2ba230 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -70,6 +70,13 @@ UCLIBC_ARC_TYPE = CONFIG_$(call qstrip,$(BR2_UCLIBC_ARC_TYPE))
+ define UCLIBC_ARC_TYPE_CONFIG
+ 	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_ARC_TYPE),$(@D)/.config)
+ endef
++
++UCLIBC_ARC_PAGE_SIZE = CONFIG_ARC_PAGE_SIZE_$(call qstrip,$(BR2_ARC_PAGE_SIZE))
++define UCLIBC_ARC_PAGE_SIZE_CONFIG
++	$(SED) '/CONFIG_ARC_PAGE_SIZE_*/d' $(@D)/.config
++	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_ARC_PAGE_SIZE),$(@D)/.config)
++endef
++
+ endif # arc
+ 
+ #
+@@ -367,6 +374,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(call KCONFIG_SET_OPT,SHARED_LIB_LOADER_PREFIX,"/lib",$(@D)/.config)
+ 	$(UCLIBC_MMU_CONFIG)
+ 	$(UCLIBC_ARC_TYPE_CONFIG)
++	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+ 	$(UCLIBC_ARM_ABI_CONFIG)
+ 	$(UCLIBC_ARM_BX_CONFIG)
+ 	$(UCLIBC_MIPS_ABI_CONFIG)
+-- 
+2.4.3
