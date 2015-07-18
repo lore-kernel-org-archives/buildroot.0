@@ -1,106 +1,117 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 14:46:37 +0200
-Subject: [Buildroot] [PATCH v9 04/15] busybox: applets as individual
- binaries
-In-Reply-To: <1436905227-26937-5-git-send-email-clayton.shotwell@rockwellcollins.com>
-References: <1436905227-26937-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1436905227-26937-5-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <20150718144637.22cee806@free-electrons.com>
+Date: Sat, 18 Jul 2015 14:55:45 +0200
+Subject: [Buildroot] [git commit] busybox: selinux support
+Message-ID: <20150718130508.D15FD81D62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Clayton Shotwell,
+commit: http://git.buildroot.net/buildroot/commit/?id=b0b3dc5612a012dd29293bee0cd848aa1b7c0b7d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Jul 2015 15:20:16 -0500, Clayton Shotwell wrote:
+Add a configure option to enable the SELinux support in the
+busybox configuration from the Buildroot menuconfig.
 
-> diff --git a/package/busybox/0002-applets-Add-installation-of-individual-binaries.patch b/package/busybox/0002-applets-Add-installation-of-individual-binaries.patch
-> new file mode 100644
-> index 0000000..ae0e654
-> --- /dev/null
-> +++ b/package/busybox/0002-applets-Add-installation-of-individual-binaries.patch
-> @@ -0,0 +1,103 @@
-> +From 3451b55054a6fe2073a21301938802a27dec835d Mon Sep 17 00:00:00 2001
-> +From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-> +Date: Mon, 16 Dec 2013 14:45:33 -0600
-> +Subject: [PATCH 5/5] applets: Add installation of individual binaries
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ags-strip-non-l-arguments-returned-by-pkg.patch |   28 ++++++++++++++++++++
+ package/busybox/Config.in                          |   18 ++++++++++++
+ package/busybox/busybox.mk                         |    9 ++++++
+ 3 files changed, 55 insertions(+), 0 deletions(-)
 
-This PATCH 5/5 is not desirable, use git format-patch -N when
-generating patches. Also, now that the patch is upstream, maybe you
-could backport the upstream patch, with has Denys Signed-off-by, and
-add an indication that the patch is upstream.
-
-(Note: I would have done all that myself, but I have some other
-comments below)
-
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 6b2abca..4942e75 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -50,9 +50,37 @@ BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAG
->  BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
->  BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
->  
-> +ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
-> +define BUSYBOX_PERMISSIONS
-> +	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
-> +endef
-> +
-> +# Set permissions on all applets with BB_SUID_REQUIRE and BB_SUID_MAYBE. The
-> +# permissions are pulled from the applets.h file that is generated during
-> +# the build and used to determine all of the possible applets. The permissions
-> +# file is generated and added to the list of device tables used by makedevs to
-> +# set file permissions.
-> +define BUSYBOX_MAKEDEV_PERMISSIONS
-> +	if [ -f $(@D)/.buildroot_permissions ]; then \
-> +		rm $(@D)/.buildroot_permissions; \
-> +	fi; \
-> +	touch $(@D)/.buildroot_permissions; \
-> +	for app in `grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" $(@D)/include/applets.h \
-> +			| sed -e 's/,.*//' -e 's/.*(//'`; \
-> +	do \
-> +		temp=`grep -w $${app} $(@D)/busybox.links`; \
-> +		if [ -n "$${temp}" ]; then \
-> +			echo "$${temp} f 4755 0  0 - - - - -" >> $(@D)/.buildroot_permissions; \
-> +		fi; \
-> +	done
-> +endef
-> +BUSYBOX_POST_INSTALL_TARGET_HOOKS += BUSYBOX_MAKEDEV_PERMISSIONS
-> +BR2_ROOTFS_DEVICE_TABLE += $(BUSYBOX_DIR)/.buildroot_permissions
-> +else
-
-I'm sorry but I don't like this. I don't think any Buildroot package
-*modifies* a BR2_<something> option, that's really a hack. I think the
-only reasonable solution is to have a real permission table, containing
-the list of all applets that may need SUID root. However, I don't
-remember if we error out when a file mentioned in a permission table
-does not exist. I've added Yann in Cc to discuss that further. Maybe we
-need a special syntax in the permission table to say "change the
-permission of this file if it exists, otherwise ignore".
-
-> +ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
-> +define BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX,$(BUSYBOX_BUILD_CONFIG))
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_INDIVIDUAL,$(BUSYBOX_BUILD_CONFIG))
-> +endef
-> +
-> +define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
-> +	rm -f $(TARGET_DIR)/bin/busybox
-> +endef
-
-This is not really installing individual binaries, but removing the
-main Busybox binary. Could you rename the macro accordingly?
-
-Long term, it'd be nicer if the Busybox build system itself would not
-install bin/busybox when individual binaries are selected.
-
-Could you work on the above issues? Really, only the permission table
-one is annoying, the rest is trivial.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/busybox/0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch b/package/busybox/0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+new file mode 100644
+index 0000000..105626c
+--- /dev/null
++++ b/package/busybox/0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+@@ -0,0 +1,28 @@
++From 67eb23d2be8aba3c474dac81a15b0fa11e5847b7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 25 Nov 2013 22:51:53 +0100
++Subject: [PATCH] Makefile.flags: strip non -l arguments returned by pkg-config
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makefile.flags | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.flags b/Makefile.flags
++index 307afa7..885e323 100644
++--- a/Makefile.flags
+++++ b/Makefile.flags
++@@ -141,7 +141,9 @@ ifeq ($(CONFIG_SELINUX),y)
++ SELINUX_PC_MODULES = libselinux libsepol
++ $(eval $(call pkg_check_modules,SELINUX,$(SELINUX_PC_MODULES)))
++ CPPFLAGS += $(SELINUX_CFLAGS)
++-LDLIBS += $(if $(SELINUX_LIBS),$(SELINUX_LIBS:-l%=%),$(SELINUX_PC_MODULES:lib%=%))
+++LDLIBS += $(if $(SELINUX_LIBS),\
+++       $(patsubst -l%,%,$(filter -l%,$(SELINUX_LIBS))),\
+++       $(SELINUX_PC_MODULES:lib%=%))
++ endif
++ 
++ ifeq ($(CONFIG_EFENCE),y)
++-- 
++1.8.1.2
++
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 6847a60..25f72de 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -32,6 +32,24 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	  Show packages in menuconfig that are potentially also provided
+ 	  by busybox.
+ 
++config BR2_PACKAGE_BUSYBOX_SELINUX
++	select BR2_PACKAGE_LIBSELINUX
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
++	bool "Enable SELinux support"
++	help
++	  Enable SELinux support in BusyBox. Please note that
++	  depending on your BusyBox configuration and the SELinux
++	  policy implementation, you may want to also enable
++	  BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES.
++
++	  For instance, if your BusyBox configuration only uses a
++	  couple of minor BusyBox features, such as simple command
++	  line utilities, the symlinked version of BusyBox can be used
++	  to save space. If BusyBox provides more features, such as
++	  crond, then individual binaries have to be enabled for the
++	  SELinux type transitions to occur properly.
++
+ config BR2_PACKAGE_BUSYBOX_WATCHDOG
+ 	bool "Install the watchdog daemon startup script"
+ 	help
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 6b2abca..65ce7ef 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -141,6 +141,14 @@ define BUSYBOX_SET_INIT
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
++BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
++define BUSYBOX_SET_SELINUX
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUX,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUXENABLED,$(BUSYBOX_BUILD_CONFIG))
++endef
++endif
++
+ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
+@@ -199,6 +207,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
++	$(BUSYBOX_SET_SELINUX)
+ endef
+ 
+ define BUSYBOX_CONFIGURE_CMDS
