@@ -1,28 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 18 Jul 2015 12:01:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 8171] glamor missing
-In-Reply-To: <bug-8171-163@https.bugs.busybox.net/>
-References: <bug-8171-163@https.bugs.busybox.net/>
-Message-ID: <20150718120132.58A8481D35@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 18 Jul 2015 14:03:32 +0200
+Subject: [Buildroot] [PATCH 01/15]
+ package/x11r7/xdriver_xf86-input-vmmouse: bump version to 13.1.0
+In-Reply-To: <1436983914-7858-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1436983914-7858-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150718140332.0904c5a4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8171
+Dear Bernd Kuhls,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Wed, 15 Jul 2015 20:11:40 +0200, Bernd Kuhls wrote:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash     |    4 ++--
+>  .../x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk |    2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+All 15 patches applied, thanks!
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-07-18 12:01:29 UTC ---
-Fixed by commit daa433bff6d2d9934705feacd3619a7618d13ae5. Thanks Bernd!
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
