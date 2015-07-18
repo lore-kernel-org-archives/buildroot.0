@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 11:14:27 +0200
-Subject: [Buildroot] [PATCH] ARC: update tools to arc-2015.06 release
-In-Reply-To: <1436964678-24352-1-git-send-email-abrodkin@synopsys.com>
-References: <1436964678-24352-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150718111427.76436e73@free-electrons.com>
+Date: Sat, 18 Jul 2015 11:16:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: disable for PowerPC
+ CS toolchains
+In-Reply-To: <1437086706-20437-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1437086706-20437-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150718111610.55f5a57b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Dear J?rg Krause,
 
-On Wed, 15 Jul 2015 15:51:18 +0300, Alexey Brodkin wrote:
-> I'm happy to update GNU tools for ARC cores to the most recent
-> arc-2015.06 release.
+On Fri, 17 Jul 2015 00:45:06 +0200, J?rg Krause wrote:
+> Those toolchains use gcc <= 4.5, which is too old as they are missing to
+> construct an empty std::shared_ptr with a nullptr (0) as an argument. This
+> is only introduced with gcc-4.6.
 > 
-> This release brings following major improvements:
->  * GCC: source update to v4.8.4
->  * GCC: C ABI compatibility between MetaWare and GNU toolchains
->  * uClibc: support for thread local storage and Native Pthread Library (NPTL)
->  * GDB: updated to version 7.9.1
+> Fixes:
+> http://autobuild.buildroot.net/results/faf/faf1b071c0a5bd8395d79abf2e6a32169ad7f136
+> http://autobuild.buildroot.net/results/247/247b3f1ac3d3a9712e9410eef298fce8d885f92c
+> http://autobuild.buildroot.net/results/de6/de601c4d4dd7922895892d78d3a37902fb98c7be
+> http://autobuild.buildroot.net/results/a4d/a4d7bf9863c134f59d285616b9c1f78201bd1a3e
 > 
-> Also a lot of fixes and improvements has been done, please refer to
-> https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2015.06
-> for more details.
+> and many more.
 > 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Anton Kolesov <akolesov@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Romain Naour <romain.naour@openwide.fr>
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
+>  package/upmpdcli/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Applied, thanks.
+I've applied since it's the way we have been handling this so far.
+However, during the hackaton, we discussed this a little bit, and we
+believe we probably need to add some hidden Config.in options like
+"BR2_PACKAGE_GCC_AT_LEAST_4_5", "BR2_PACKAGE_GCC_AT_LEAST_4_8", so that
+packages can depend on these options more easily.
+
+Thanks!
 
 Thomas
 -- 
