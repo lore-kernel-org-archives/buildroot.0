@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 14:13:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boost: boost-filesystem needs
- wchar
-In-Reply-To: <1437142516-12378-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1437142516-12378-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150718141356.6cd14110@free-electrons.com>
+Date: Sat, 18 Jul 2015 14:36:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: Add patch to fix
+ OPEN_MAX build error
+In-Reply-To: <1437079992-31679-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1437079992-31679-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150718143642.7ae447e3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,42 @@ To: buildroot@busybox.net
 
 Dear J?rg Krause,
 
-On Fri, 17 Jul 2015 16:15:16 +0200, J?rg Krause wrote:
-> Also add reverse dependency for cc-tool.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/2c7/2c7783b7f3cc28d54d15a7f017442c48244ffd8e/
-> http://autobuild.buildroot.net/results/2c7/2c7783b7f3cc28d54d15a7f017442c48244ffd8e/
-> http://autobuild.buildroot.net/results/0dd/0dd3ef96bbd034a41d908cdaa6552b27fda78132/
-> http://autobuild.buildroot.net/results/34b/34b55b2cd83fd5d87af4a9c15d05094b16ef3960/
-> 
-> and many more
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/boost/Config.in   | 4 ++++
->  package/cc-tool/Config.in | 5 +++--
->  2 files changed, 7 insertions(+), 2 deletions(-)
+On Thu, 16 Jul 2015 22:53:12 +0200, J?rg Krause wrote:
 
-Applied, thanks.
+> ++#ifndef OPEN_MAX
+> ++#define OPEN_MAX 256 /* Guess */
+> ++#endif
+> ++
+
+This is not the right fix. There is some Linux-specific code in
+closefrom.cpp, but it doesn't get used since when you build C++ code
+with -std=c++0x, the compiler doesn't define "linux" or "__linux", but
+"__linux__", so the following test doesn't work anymore:
+
+#elif (defined(linux) || defined(__linux))
+
+See what the compiler does, without -std=c++0x:
+
+$ ./output/host/usr/bin/powerpc-linux-g++ -dM -E - < /dev/null | grep -i linux#define __linux 1
+#define __linux__ 1
+#define __gnu_linux__ 1
+#define linux 1
+
+And now, with -std=c++0x:
+
+$ ./output/host/usr/bin/powerpc-linux-g++ -std=c++0x -dM -E - < /dev/null | grep -i linux
+#define __linux__ 1
+#define __gnu_linux__ 1
+
+So, just change the closefrom.cpp Linux test to:
+
+#elif (defined(linux) || defined(__linux) || defined(__linux__))
+
+and it will build fine, and be a lot better than a guessed 256 value.
+Can you submit a new patch that does this, and report the proper
+solution upstream?
+
+Thanks!
 
 Thomas
 -- 
