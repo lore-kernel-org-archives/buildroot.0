@@ -1,64 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 22:11:49 +0200
-Subject: [Buildroot] [PATCH] package: add shadow 4.2.1
-In-Reply-To: <1426736888-29437-3-git-send-email-steven@uplinklabs.net>
-References: <1426736888-29437-1-git-send-email-steven@uplinklabs.net>
- <1426736888-29437-3-git-send-email-steven@uplinklabs.net>
-Message-ID: <20150718221149.7d6a85bb@free-electrons.com>
+Date: Sat, 18 Jul 2015 22:26:04 +0200
+Subject: [Buildroot] [git commit] package/mono-gtksharp3: new package
+Message-ID: <20150718203251.D8C4381D5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Steven,
+commit: http://git.buildroot.net/buildroot/commit/?id=a4e7176a4005830ce8a2709b09066c26a06de255
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Mar 2015 20:48:05 -0700, Steven Noonan wrote:
-> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
-> ---
->  package/Config.in                                 |   1 +
->  package/shadow/Config.in                          |  10 +
->  package/shadow/chgpasswd.pam                      |   4 +
->  package/shadow/chpasswd.pam                       |   6 +
->  package/shadow/newusers.pam                       |   6 +
->  package/shadow/passwd.pam                         |   4 +
->  package/shadow/remove-util-linux-conflicts.patch  | 642 ++++++++++++++++++++++
->  package/shadow/shadow-4.2.1-subordinate-ids.patch |  34 ++
->  package/shadow/shadow-strncpy-usage.patch         |  25 +
->  package/shadow/shadow.hash                        |   1 +
->  package/shadow/shadow.mk                          |  43 ++
->  package/shadow/xstrdup.patch                      |   9 +
->  12 files changed, 785 insertions(+)
->  create mode 100644 package/shadow/Config.in
->  create mode 100644 package/shadow/chgpasswd.pam
->  create mode 100644 package/shadow/chpasswd.pam
->  create mode 100644 package/shadow/newusers.pam
->  create mode 100644 package/shadow/passwd.pam
->  create mode 100644 package/shadow/remove-util-linux-conflicts.patch
->  create mode 100644 package/shadow/shadow-4.2.1-subordinate-ids.patch
->  create mode 100644 package/shadow/shadow-strncpy-usage.patch
->  create mode 100644 package/shadow/shadow.hash
->  create mode 100644 package/shadow/shadow.mk
->  create mode 100644 package/shadow/xstrdup.patch
+This patch adds mono gtksharp3 package for mono.
 
-Shortly after you submitted this patch, Ryan Barnett (in Cc) made a
-number of comments / asked some questions, but you never answered or
-posted a new version.
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                          |    5 +++++
+ package/mono-gtksharp3/Config.in           |    8 ++++++++
+ package/mono-gtksharp3/mono-gtksharp3.hash |    2 ++
+ package/mono-gtksharp3/mono-gtksharp3.mk   |   17 +++++++++++++++++
+ 4 files changed, 32 insertions(+), 0 deletions(-)
 
-Ryan also mentioned that another proposal had been made for the shadow
-package, as part of the SELinux support. While the SELinux series is
-still on-going (some of it has been merged, some remains to be merged),
-the shadow package is no longer part of it.
-
-Therefore, Steven and Ryan, if you still care about shadow, please
-resubmit a new version that addresses the different problems/questions.
-
-In the mean time, I'll mark the patch as Changes Requested in patchwork.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 5974855..ddbf180 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -509,6 +509,11 @@ endif
+ 	source "package/lutok/Config.in"
+ 	source "package/moarvm/Config.in"
+ 	source "package/mono/Config.in"
++if BR2_PACKAGE_MONO
++menu "Mono libraries/modules"
++	source "package/mono-gtksharp3/Config.in"
++endmenu
++endif
+ 	source "package/nodejs/Config.in"
+ 	source "package/perl/Config.in"
+ if BR2_PACKAGE_PERL
+diff --git a/package/mono-gtksharp3/Config.in b/package/mono-gtksharp3/Config.in
+new file mode 100644
+index 0000000..570b62c
+--- /dev/null
++++ b/package/mono-gtksharp3/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MONO_GTKSHARP3
++	bool "gtk# 3"
++	depends on BR2_PACKAGE_LIBGTK3
++	help
++	  Gtk# is a .NET language binding for the GTK+ toolkit.
++	  This package provides version 3 of the bindings.
++
++	  http://www.mono-project.com/docs/gui/gtksharp/
+diff --git a/package/mono-gtksharp3/mono-gtksharp3.hash b/package/mono-gtksharp3/mono-gtksharp3.hash
+new file mode 100644
+index 0000000..4005051
+--- /dev/null
++++ b/package/mono-gtksharp3/mono-gtksharp3.hash
+@@ -0,0 +1,2 @@
++# sha256 from https://download.gnome.org/sources/gtk-sharp/2.99/gtk-sharp-2.99.3.sha256sum
++sha256 6440f571416267ae0cb5698071d087b31e3084693fa2c829b1db37ca7ea2c3a2	gtk-sharp-2.99.3.tar.xz
+diff --git a/package/mono-gtksharp3/mono-gtksharp3.mk b/package/mono-gtksharp3/mono-gtksharp3.mk
+new file mode 100644
+index 0000000..fa63d66
+--- /dev/null
++++ b/package/mono-gtksharp3/mono-gtksharp3.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# gtksharp3
++#
++################################################################################
++
++MONO_GTKSHARP3_VERSION_MAJOR = 2.99
++MONO_GTKSHARP3_VERSION = $(MONO_GTKSHARP3_VERSION_MAJOR).3
++MONO_GTKSHARP3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/$(MONO_GTKSHARP3_VERSION_MAJOR)/
++MONO_GTKSHARP3_SOURCE = gtk-sharp-$(MONO_GTKSHARP3_VERSION).tar.xz
++MONO_GTKSHARP3_LICENSE = LGPLv2, MIT (cairo)
++MONO_GTKSHARP3_LICENSE_FILES = COPYING
++MONO_GTKSHARP3_INSTALL_STAGING = YES
++MONO_GTKSHARP3_DEPENDENCIES = mono libgtk3
++MONO_GTKSHARP3_CONF_OPTS += CSC=$(HOST_DIR)/usr/bin/mcs
++
++$(eval $(autotools-package))
