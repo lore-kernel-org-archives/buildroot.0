@@ -1,48 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 11:19:39 +0200
-Subject: [Buildroot] [PATCH] gcc: fix undefined reference to .tdata
-In-Reply-To: <1437127940-9819-1-git-send-email-abrodkin@synopsys.com>
-References: <1437127940-9819-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150718111939.02d9aea5@free-electrons.com>
+Date: Sat, 18 Jul 2015 11:20:14 +0200
+Subject: [Buildroot] [git commit] gptfdisk: bump version 1.0.0
+Message-ID: <20150718092928.5F33B8198C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+commit: http://git.buildroot.net/buildroot/commit/?id=abf422ae0a523ac24bcd07aec6748bc9d2f706bc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 17 Jul 2015 13:12:20 +0300, Alexey Brodkin wrote:
-> This fix is done in development tree:
-> http://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/366cc86e4f8ff6f00f0b731dc6f78d22c7ac9e0a
-> and will be a part of the next release of ARC GNU tools.
-> Once that new release happens this patch must be removed.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/8b22ac0dc9e3c1cd44f2fdbe5cc99a41cf77f454/
-> http://autobuild.buildroot.net/results/37e9c3c79e0a6aea5b89428c2226811ebb3fd611/
-> http://autobuild.buildroot.net/results/37e9c3c79e0a6aea5b89428c2226811ebb3fd611/
-> and many others.
-> 
-> Prerequisite:
-> "ARC: update tools to arc-2015.06 release": http://patchwork.ozlabs.org/patch/495837/
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Anton Kolesov <akolesov@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...iate-between-a-bss-TLS-initialized-symbol.patch | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/gcc/arc-2015.06/0001-Differentiate-between-a-bss-TLS-initialized-symbol.patch
+Signed-off-by: Aur??lien Chabot <aurelien@chabot.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gptfdisk/gptfdisk.hash |    6 +++---
+ package/gptfdisk/gptfdisk.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied, thanks. This probably means I should do another round at
-rebuilding the external toolchains, at least the ARC one.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gptfdisk/gptfdisk.hash b/package/gptfdisk/gptfdisk.hash
+index 93f7b36..0a72e0d 100644
+--- a/package/gptfdisk/gptfdisk.hash
++++ b/package/gptfdisk/gptfdisk.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/0.8.10/
+-md5	9cf4246c181c324bdbd553fe9b348373	gptfdisk-0.8.10.tar.gz
+-sha1	1708e232220236b6bdf299b315e9bc2205c01ba5	gptfdisk-0.8.10.tar.gz
++# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.0/
++md5	2061f917af084215898d4fea04d8388f	gptfdisk-1.0.0.tar.gz
++sha1	97f25db2def1c1939ed3954520bfd9948806d95a	gptfdisk-1.0.0.tar.gz
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index f812376..abfddfb 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GPTFDISK_VERSION = 0.8.10
++GPTFDISK_VERSION = 1.0.0
+ GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
+ GPTFDISK_LICENSE = GPLv2+
+ GPTFDISK_LICENSE_FILES = COPYING
