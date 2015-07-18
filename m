@@ -1,165 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 19:16:50 +0200
-Subject: [Buildroot] [PATCH 1/1] angularjs: new package.
-In-Reply-To: <CAGduivxBdvS75bNaHo_AmWaZZZ4x0qqbr27kVPbLrvjay05uJQ@mail.gmail.com>
-References: <1437129876-5158-1-git-send-email-ignacy.gawedzki@green-communications.fr>
- <CAGduivxBdvS75bNaHo_AmWaZZZ4x0qqbr27kVPbLrvjay05uJQ@mail.gmail.com>
-Message-ID: <20150718191650.6f34b9e5@free-electrons.com>
+Date: Sat, 18 Jul 2015 17:43:19 +0200
+Subject: [Buildroot] [git commit] cpio: new package
+Message-ID: <20150718171711.4FB1681D5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, Ignacy,
+commit: http://git.buildroot.net/buildroot/commit/?id=03d3df31f82019e8f7de732f0e0c3a633c5d4918
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 18 Jul 2015 17:58:48 +0200, Maxime Hadjinlian wrote:
+Adding the cpio archive utility for the target and host. Patches have
+been pulled from ArchLinux and Gentoo to fix CVE issues and compile
+issues.
 
-> > +menuconfig BR2_ANGULARJS_MODULES
-> > +       bool "Select AngularJS modules"
-> > +
-> > +       help
-> > +         Select which modules to install, instead of installing all of them.
-> The phrasing seems a bit wrong to me here, but I'm no english expert.
-> Maybe stop at "Select modules to install." ?
+[Thomas: remove host variant of the package, as discussed during the
+review of earlier version.]
 
-No, the original wording is correct, but could be clarified. I think
-that what you missed is that this option is a menuconfig, not a menu:
-you can enable/disable this option.
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in      |    1 +
+ package/cpio/Config.in |    8 ++++++++
+ package/cpio/cpio.hash |    9 +++++++++
+ package/cpio/cpio.mk   |   25 +++++++++++++++++++++++++
+ 4 files changed, 43 insertions(+), 0 deletions(-)
 
-So, what happens is that when you have:
-
-	[ ] Select AngularJS modules ---
-
-Then all modules are installed. However, when you have:
-
-	[*] Select AngularJS modules ---
-	   [*] animate
-	   [ ] aria
-
-Then animate will be installed, but not aria.
-
-This part looks OK to me.
-
-> > +if BR2_ANGULARJS_MODULES
-> > +
-> > +config BR2_ANGULARJS_MODULE_animate
-> > +       bool "animate"
-> > +       default y
-> The name of the config should be all in uppercase.
-
-Agreed.
-
-> The module should not be at y by default.
-> A little help text to explain what this modules does and is usefull
-> for would be nice (no need for a long text, just a few words)
-
-Agreed.
-
-
-> > diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
-> > new file mode 100644
-> > index 0000000..c7b587b
-> > --- /dev/null
-> > +++ b/package/angularjs/angularjs.mk
-> > @@ -0,0 +1,41 @@
-> > +################################################################################
-> > +#
-> > +# AngularJS
-
-This should be in lowercase.
-
-> > +#
-> > +################################################################################
-> > +
-> > +ANGULARJS_VERSION = 1.4.2
-> It seems there's already a newer version on their website.
-> > +ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
-> > +ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)/
-> You are missing the LICENSE and LICENSE_FILES information here.
-> You are also missing the '.hash' file, have a look at:
-> http://buildroot.org/downloads/manual/manual.html#adding-packages-hash
-> > +
-> > +define ANGULARJS_EXTRACT_CMDS
-> > +       unzip $(DL_DIR)/$(ANGULARJS_SOURCE) -d $(@D)
-> > +       mv $(@D)/angular-$(ANGULARJS_VERSION)/* $(@D)
-> > +       rmdir $(@D)/angular-$(ANGULARJS_VERSION)
-> > +endef
-> > +
-> > +ANGULARJS_FILES = angular.min.js
-
-Change this to just:
-
-ANGULARJS_FILES = angular
-
-(see below why)
-
-> > +
-> > +ANGULARJS_MODULES = animate aria cookies loader message-format \
-> > +                   messages resource route sanitize touch
-
-One tab for the indentation of the second line.
-
-> > +
-> > +ifeq ($(BR2_ANGULARJS_MODULES),y)
-> > +
-
-Unneeded newline.
-
-> > +ANGULARJS_FILES += $(foreach mod,$(ANGULARJS_MODULES),\
-> > +                  $(if $(filter y,$(BR2_ANGULARJS_MODULE_$(mod))),\
-
-The filter is not needed, and you'll have to use the lowercase function
-once the options will be capitalized. So probably something like:
-
-	$(foreach mod,$(ANGULARJS_MODULES),\
-		$(if $(BR2_ANGULARJS_MODULE_$(call UPPERCASE,$(mod))),angular-$(mod)))
-
-> > +                       angular-$(mod).min.js))
-> > +
-> > +else
-> > +
-
-Unneeded new line.
-
-> > +ANGULARJS_FILES += $(foreach mod,$(ANGULARJS_MODULES),angular-$(mod).min.js)
-> > +
-> > +endif
-> > +
-> > +define ANGULARJS_INSTALL_TARGET_CMDS
-> > +       for f in $(strip $(ANGULARJS_FILES)); do        \
-> > +               $(INSTALL) -m 0644 -D $(@D)/$$f         \
-> > +               $(TARGET_DIR)/var/www/$${f%.min.js}.js; \
-> > +       done
-> > +endef
-> 
-> Instead of this construct, look at how it's done in
-> package/nfs-utils/nfs-utils.mk, you can use Make at your own advantage
-> and define:
-> ANGULAR_JS_MODULES_$(BR2_PACKAGE_NFS_UTILS_RPCDEBUG) += path/to/the/file
-> 
-> Then install everything and delete $(ANGULAR_JS_MODULES_) which will
-> contains the modules not selected.
-> This way, you don't even need a loop.
-
-I disagree here, I think the original implementation from Ignacy is
-pretty good and smart. But using a foreach loop is better for error
-handling (it will stop if one install command fails) :
-
-	$(foreach f,$(ANGULARJS_FILES),\
-		$(INSTALL) -m 0644 -D $(@D)/$(f).min.js $(TARGET_DIR)/var/www/$(f).js$(sep))
-
-> As mentionned on IRC by Thomas De Schampheleire, you may need to
-> qstrip instead of strip.
-
-I don't see why. There are no double quotes anywhere here. qstrip is
-used when you get a 'string' option from Config.in, which is not the
-case here.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 86a53c8..5974855 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -150,6 +150,7 @@ endmenu
+ menu "Filesystem and flash utilities"
+ 	source "package/btrfs-progs/Config.in"
+ 	source "package/cifs-utils/Config.in"
++	source "package/cpio/Config.in"
+ 	source "package/cramfs/Config.in"
+ 	source "package/curlftpfs/Config.in"
+ 	source "package/dosfstools/Config.in"
+diff --git a/package/cpio/Config.in b/package/cpio/Config.in
+new file mode 100644
+index 0000000..1787f39
+--- /dev/null
++++ b/package/cpio/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CPIO
++	bool "cpio"
++	# Need argp.h support
++	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
++	help
++	  cpio archive utility for creation and extraction.
++
++	  https://www.gnu.org/software/cpio/
+diff --git a/package/cpio/cpio.hash b/package/cpio/cpio.hash
+new file mode 100644
+index 0000000..c52e86a
+--- /dev/null
++++ b/package/cpio/cpio.hash
+@@ -0,0 +1,9 @@
++# Locally calculated after checking pgp signature
++sha256	601b1d774cd6e4cd39416203c91ec59dbd65dd27d79d75e1a9b89497ea643978	cpio-2.11.tar.gz
++
++# Locally calculated
++sha256 903fb87e00813daf257be5d1680ad93770d320c707ab2ec345486958b2e8a21f cpio-2.11-stdio.in.patch
++sha256 6b6505a97dda75d24627d9ba461b45ab9ea4764e1a2788d6986eb2978434f25d cpio-2.11-CVE-2014-9112.patch
++sha256 0cf7c9749f1c1610aaf46e17eacd6614c5ef8c2114236bcdd08d53e929020ae5 cpio-2.11-testsuite-CVE-2014-9112.patch
++sha256 f1f587f70a38363691cbd4dfe89f962c8c57266277f0fbc781910c6a7065be7e cpio-2.11-check_for_symlinks-CVE-2015-1197.patch
++sha256 b3d317e3c5705d7f9e503f56540baf3cb6dd1d0e9be0261151a5b08378c2d98c cpio-2.11-stat.patch
+diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
+new file mode 100644
+index 0000000..aa9dace
+--- /dev/null
++++ b/package/cpio/cpio.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# cpio
++#
++################################################################################
++
++CPIO_VERSION = 2.11
++CPIO_SITE = http://ftp.gnu.org/gnu/cpio
++CPIO_LICENSE = GPLv3+
++CPIO_LICENSE_FILES = COPYING
++CPIO_PATCH = \
++	https://projects.archlinux.org/svntogit/packages.git/plain/cpio/trunk/cpio-2.11-stdio.in.patch \
++	https://projects.archlinux.org/svntogit/packages.git/plain/cpio/trunk/cpio-2.11-CVE-2014-9112.patch \
++	https://projects.archlinux.org/svntogit/packages.git/plain/cpio/trunk/cpio-2.11-testsuite-CVE-2014-9112.patch \
++	https://projects.archlinux.org/svntogit/packages.git/plain/cpio/trunk/cpio-2.11-check_for_symlinks-CVE-2015-1197.patch \
++	https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-arch/cpio/files/cpio-2.11-stat.patch
++
++# cpio uses argp.h which is not provided by uclibc by default.
++# Use the argp-standalone package to provide this but make sure
++# the host package does not try to use the host version.
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++CPIO_DEPENDENCIES += argp-standalone
++endif
++
++$(eval $(autotools-package))
