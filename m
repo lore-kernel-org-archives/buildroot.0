@@ -1,55 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 12:26:05 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-ati:
-	Depends on xlib_libXcomposite
-Message-ID: <20150718120024.9194E7FE2D@busybox.osuosl.org>
+Date: Sat, 18 Jul 2015 12:24:52 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-cirrus:
+	bump version to 1.5.3
+Message-ID: <20150718120024.1676181D8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0ebec4d8070b9841f1bb7f3d0e2144f5b03e5cfe
+commit: http://git.buildroot.net/buildroot/commit/?id=e45edc34fadcd6e666a123a4ab32a13b37dc3f74
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When xserver_xorg-server is built without composite support building this
-package will fail:
-
-radeon_dri2.c: In function 'radeon_dri2_copy_region2':
-radeon_dri2.c:438:28: error: 'struct _Pixmap' has no member named 'screen_x'
-  off_x = drawable->x - pPix->screen_x;
-                            ^
-radeon_dri2.c:439:28: error: 'struct _Pixmap' has no member named 'screen_y'
-  off_y = drawable->y - pPix->screen_y;
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xdriver_xf86-video-ati/Config.in     |    1 +
- .../xdriver_xf86-video-ati.mk                      |    1 +
- 2 files changed, 2 insertions(+), 0 deletions(-)
+ .../xdriver_xf86-video-cirrus.hash                 |    2 ++
+ .../xdriver_xf86-video-cirrus.mk                   |    5 +++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
-index a555fa3..191c20f 100644
---- a/package/x11r7/xdriver_xf86-video-ati/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
- 	depends on BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_LIBDRM        if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
- 	select BR2_PACKAGE_LIBDRM_RADEON if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
- 	select BR2_PACKAGE_XPROTO_GLPROTO
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
-diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-index ce47e49..15807c2 100644
---- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-+++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-@@ -11,6 +11,7 @@ XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
- XDRIVER_XF86_VIDEO_ATI_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_ATI_DEPENDENCIES = \
- 	libdrm \
-+	xlib_libXcomposite \
- 	xproto_fontsproto \
- 	xproto_glproto \
- 	xproto_randrproto \
+diff --git a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.hash b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.hash
+new file mode 100644
+index 0000000..86ef09e
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.hash
+@@ -0,0 +1,2 @@
++# From http://lists.x.org/archives/xorg-announce/2015-May/002600.html
++sha256	edc87b20a55259126b5239b5c1ef913419eab7ded0ed12ae9ae989460d7351ab	xf86-video-cirrus-1.5.3.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
+index e68656d..f2523db 100644
+--- a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
++++ b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_CIRRUS_VERSION = df389885adf71ed3b045c2fde9fd3ba4329e1a58
+-XDRIVER_XF86_VIDEO_CIRRUS_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-cirrus
++XDRIVER_XF86_VIDEO_CIRRUS_VERSION = 1.5.3
++XDRIVER_XF86_VIDEO_CIRRUS_SOURCE = xf86-video-cirrus-$(XDRIVER_XF86_VIDEO_CIRRUS_VERSION).tar.bz2
++XDRIVER_XF86_VIDEO_CIRRUS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_CIRRUS_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_CIRRUS_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_CIRRUS_AUTORECONF = YES
