@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 12:24:58 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-neomagic:
-	bump version to 1.2.9
-Message-ID: <20150718120024.276DC8164F@busybox.osuosl.org>
+Date: Sat, 18 Jul 2015 12:23:24 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xproto_xproto: bump version
+	to 7.0.28
+Message-ID: <20150718120023.C6DCC7FE2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=560660d06be550aed1f1bfa52bbe58be5fdc387d
+commit: http://git.buildroot.net/buildroot/commit/?id=c7845548d89b644672f22ffca3e15f6682f6d56d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-video-neomagic.hash               |    2 ++
- .../xdriver_xf86-video-neomagic.mk                 |    5 +++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/x11r7/xproto_xproto/xproto_xproto.hash |    4 ++--
+ package/x11r7/xproto_xproto/xproto_xproto.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash
-new file mode 100644
-index 0000000..fc83066
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.hash
-@@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2015-May/002602.html
-+sha256	72f89396b10527549337cb72a7eafb1194cf140144f9236a94ad2becdf140bf2	xf86-video-neomagic-1.2.9.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
-index 85bcb2a..c307761 100644
---- a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
-+++ b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/x11r7/xproto_xproto/xproto_xproto.hash b/package/x11r7/xproto_xproto/xproto_xproto.hash
+index 6c5a24d..333ac6d 100644
+--- a/package/x11r7/xproto_xproto/xproto_xproto.hash
++++ b/package/x11r7/xproto_xproto/xproto_xproto.hash
+@@ -1,2 +1,2 @@
+-# From http://comments.gmane.org/gmane.comp.freedesktop.xorg.announce/2243
+-sha256	246f23a6b235c8008183deeb1dcd76d529a099f93600b648b399811b10ea110c	xproto-7.0.27.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-July/002618.html
++sha256	29e85568d1f68ceef8a2c081dad9bc0e5500a53cfffde24b564dc43d46ddf6ca	xproto-7.0.28.tar.bz2
+diff --git a/package/x11r7/xproto_xproto/xproto_xproto.mk b/package/x11r7/xproto_xproto/xproto_xproto.mk
+index 99d63f5..7357b8c 100644
+--- a/package/x11r7/xproto_xproto/xproto_xproto.mk
++++ b/package/x11r7/xproto_xproto/xproto_xproto.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION = 6661bdd4551e4e63e983685464a277845aed3012
--XDRIVER_XF86_VIDEO_NEOMAGIC_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-neomagic
-+XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION = 1.2.9
-+XDRIVER_XF86_VIDEO_NEOMAGIC_SOURCE = xf86-video-neomagic-$(XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION).tar.bz2
-+XDRIVER_XF86_VIDEO_NEOMAGIC_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE = MIT
- XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_NEOMAGIC_AUTORECONF = YES
+-XPROTO_XPROTO_VERSION = 7.0.27
++XPROTO_XPROTO_VERSION = 7.0.28
+ XPROTO_XPROTO_SOURCE = xproto-$(XPROTO_XPROTO_VERSION).tar.bz2
+ XPROTO_XPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
+ XPROTO_XPROTO_LICENSE = MIT
