@@ -1,68 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 23:02:26 +0200
-Subject: [Buildroot] [git commit] host-zynq-boot-bin: new package
-Message-ID: <20150718211742.D1E9E807B2@busybox.osuosl.org>
+Date: Sat, 18 Jul 2015 23:04:44 +0200
+Subject: [Buildroot] [git commit] boot/uboot: Generate BOOT.BIN file when
+	building for Xilinx Zynq
+Message-ID: <20150718211742.E8D207FDFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee845a46e2e7d60ac52c38555c183020ce8cd711
+commit: http://git.buildroot.net/buildroot/commit/?id=aabe23f8615f065d7bf62801d38efd17125e78d0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The package provides a Python script that can create the file BOOT.BIN
-to boot Xilinx Zynq based boards.
+This commit integrates generation of a bootable image
+for Xilinx Zynq. The generation is independent on Xilinx
+flow and utilizes the host-zynq-boot-bin package. The only
+required step is to generate a proper U-Boot SPL (instead
+of the FSBL).
 
-The script zynq-boot-bin.py is contained in the Xilinx repository of
-U-Boot (it is not in upstream).
+The SPL generation might work when providing the working
+ps7_init.c file to U-Boot. However, from U-Boot 2015.07
+a set of generic ps7_init.c files is included and used to
+build the U-Boot SPL for various boards. The ps7_init.c file
+has been released under GNU/GPL license for this purpose.
+For details, see
 
-[Thomas:
- - remove appearance of the package in menuconfig, U-Boot will depend
-   on it directly, so there's no need for it to appear in menuconfig
- - use $(INSTALL) instead of cp for the installation
- - remove @ before the extract and install commands.]
+http://lists.denx.de/pipermail/u-boot/2015-April/210664.html
+
+The SPL searchs for u-boot-dtb.img when booting so we
+enforce using of the BR2_TARGET_UBOOT_FORMAT_DTB_IMG format.
+
+[Thomas: remove select of BR2_PACKAGE_HOST_ZYNQ_BOOT_BIN, since this
+option no longer exists.]
 
 Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/zynq-boot-bin/zynq-boot-bin.hash |    2 ++
- package/zynq-boot-bin/zynq-boot-bin.mk   |   22 ++++++++++++++++++++++
- 2 files changed, 24 insertions(+), 0 deletions(-)
+ boot/uboot/Config.in |   12 ++++++++++++
+ boot/uboot/uboot.mk  |   10 ++++++++++
+ 2 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/package/zynq-boot-bin/zynq-boot-bin.hash b/package/zynq-boot-bin/zynq-boot-bin.hash
-new file mode 100644
-index 0000000..0bc23de
---- /dev/null
-+++ b/package/zynq-boot-bin/zynq-boot-bin.hash
-@@ -0,0 +1,2 @@
-+# From https://raw.githubusercontent.com/Xilinx/u-boot-xlnx
-+sha1	940331ee02b0007099effa61e382fe7ea4174054	zynq-boot-bin.py
-diff --git a/package/zynq-boot-bin/zynq-boot-bin.mk b/package/zynq-boot-bin/zynq-boot-bin.mk
-new file mode 100644
-index 0000000..46051fb
---- /dev/null
-+++ b/package/zynq-boot-bin/zynq-boot-bin.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# zynq-boot-bin
-+#
-+################################################################################
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index f0c0094..6d8fa6a 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -272,6 +272,18 @@ config BR2_TARGET_UBOOT_SPL_NAME
+ 	  u-boot build. For most platform it is spl/u-boot-spl.bin
+ 	  but not always. It is MLO on OMAP for example.
+ 
++config BR2_TARGET_UBOOT_ZYNQ_IMAGE
++	bool "Generate image for Xilinx Zynq"
++	depends on BR2_arm
++	depends on BR2_TARGET_UBOOT_SPL
++	depends on BR2_TARGET_UBOOT_FORMAT_DTB_IMG
++	help
++	 Generate the BOOT.BIN file from U-Boot's SPL. The image
++	 boots the Xilinx Zynq chip without any FPGA bitstream.
++	 A bitstream can be loaded by the U-Boot. The SPL searchs
++	 for u-boot-dtb.img file so this U-Boot format is required
++	 to be set.
 +
-+ZYNQ_BOOT_BIN_VERSION = xilinx-v2015.1
-+ZYNQ_BOOT_BIN_SOURCE = zynq-boot-bin.py
-+ZYNQ_BOOT_BIN_SITE = https://raw.githubusercontent.com/Xilinx/u-boot-xlnx/$(ZYNQ_BOOT_BIN_VERSION)/tools
-+ZYNQ_BOOT_BIN_LICENSE = GPLv3+
-+
-+HOST_ZYNQ_BOOT_BIN_DEPENDENCIES = host-python
-+
-+define HOST_ZYNQ_BOOT_BIN_EXTRACT_CMDS
-+	cp $(DL_DIR)/$(ZYNQ_BOOT_BIN_SOURCE) $(@D)
+ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
+ 	bool "Environment image"
+ 	help
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 8053678..042e066 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -182,6 +182,16 @@ UBOOT_POST_BUILD_HOOKS += UBOOT_BUILD_OMAP_IFT
+ UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_OMAP_IFT_IMAGE
+ endif
+ 
++ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
++define UBOOT_GENERATE_ZYNQ_IMAGE
++	$(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
++		-u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))     \
++		-o $(BINARIES_DIR)/BOOT.BIN
 +endef
++UBOOT_DEPENDENCIES += host-zynq-boot-bin
++UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_GENERATE_ZYNQ_IMAGE
++endif
 +
-+define HOST_ZYNQ_BOOT_BIN_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/$(ZYNQ_BOOT_BIN_SOURCE) $(HOST_DIR)/usr/bin/$(ZYNQ_BOOT_BIN_SOURCE)
-+endef
-+
-+$(eval $(host-generic-package))
+ ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
+ ifeq ($(BR_BUILDING),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
