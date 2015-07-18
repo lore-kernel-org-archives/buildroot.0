@@ -1,40 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 14:00:30 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-ati: Add
-	optional support for glamor
-Message-ID: <20150718120051.AB14C81D77@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 18 Jul 2015 12:01:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 8171] glamor missing
+In-Reply-To: <bug-8171-163@https.bugs.busybox.net/>
+References: <bug-8171-163@https.bugs.busybox.net/>
+Message-ID: <20150718120132.58A8481D35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=daa433bff6d2d9934705feacd3619a7618d13ae5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=8171
 
-xserver_xorg-server depends on libepoxy for glamor support, therefore we
-use this package as an indicator whether glamor support is present.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Fixes https://bugs.busybox.net/show_bug.cgi?id=8171
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../xdriver_xf86-video-ati.mk                      |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-07-18 12:01:29 UTC ---
+Fixed by commit daa433bff6d2d9934705feacd3619a7618d13ae5. Thanks Bernd!
 
-diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-index 15807c2..cba9e76 100644
---- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-+++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-@@ -22,4 +22,10 @@ XDRIVER_XF86_VIDEO_ATI_DEPENDENCIES = \
- 	xproto_xproto \
- 	xserver_xorg-server
- 
-+ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
-+XDRIVER_XF86_VIDEO_ATI_CONF_OPTS = --enable-glamor
-+else
-+XDRIVER_XF86_VIDEO_ATI_CONF_OPTS = --disable-glamor
-+endif
-+
- $(eval $(autotools-package))
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
