@@ -1,36 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 19:20:15 +0200
-Subject: [Buildroot] [PATCH] qt: enable Script and WebKit modules for ARC
-In-Reply-To: <1436968037-26800-1-git-send-email-abrodkin@synopsys.com>
-References: <1436968037-26800-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150718192015.3676e5a8@free-electrons.com>
+Date: Sat, 18 Jul 2015 19:20:49 +0200
+Subject: [Buildroot] [git commit] cpio: needs wchar support
+Message-ID: <20150718172119.C4D6B80056@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+commit: http://git.buildroot.net/buildroot/commit/?id=6c7d490558498888a783fe3ca53f1a3b6cef1b16
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 15 Jul 2015 16:47:17 +0300, Alexey Brodkin wrote:
+Spotted during package review/testing, but forgot to squash it in the
+original patch.
 
-> diff --git a/package/qt/Config.in b/package/qt/Config.in
-> index 306fe1f..cadc784 100644
-> --- a/package/qt/Config.in
-> +++ b/package/qt/Config.in
-> @@ -412,7 +412,8 @@ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
->  	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazeel || \
->  		BR2_microblazebe || BR2_mips || BR2_mipsel || \
->  		(BR2_mips64 || BR2_mips64el) && !BR2_MIPS_NABI32 || BR2_powerpc || \
-> -		BR2_powerpc64 || BR2_powerpc64le || BR2_sparc || BR2_x86_64
-> +		BR2_powerpc64 || BR2_powerpc64le || BR2_sparc || BR2_x86_64 || \
-> +		BR2_arc
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cpio/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Alphabetic ordering was not correct (for both), so I've fixed that up
-and applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/cpio/Config.in b/package/cpio/Config.in
+index 1787f39..df40fac 100644
+--- a/package/cpio/Config.in
++++ b/package/cpio/Config.in
+@@ -2,7 +2,11 @@ config BR2_PACKAGE_CPIO
+ 	bool "cpio"
+ 	# Need argp.h support
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  cpio archive utility for creation and extraction.
+ 
+ 	  https://www.gnu.org/software/cpio/
++
++comment "cpio needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
