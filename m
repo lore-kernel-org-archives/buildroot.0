@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 23:19:03 +0200
-Subject: [Buildroot] [PATCH v4 4/7] boot/uboot: Generate BOOT.BIN file
- when building for Xilinx Zynq
-In-Reply-To: <20150714171602.6e5b5bda@pcviktorin.fit.vutbr.cz>
+Date: Sat, 18 Jul 2015 23:19:09 +0200
+Subject: [Buildroot] [PATCH v4 6/7] zedboard: Patch default U-Boot
+ environment for zedboard
+In-Reply-To: <20150714171608.5d71bdcf@pcviktorin.fit.vutbr.cz>
 References: <20150714171214.706e9e4d@pcviktorin.fit.vutbr.cz>
- <20150714171602.6e5b5bda@pcviktorin.fit.vutbr.cz>
-Message-ID: <20150718231903.0e0252c5@free-electrons.com>
+ <20150714171608.5d71bdcf@pcviktorin.fit.vutbr.cz>
+Message-ID: <20150718231909.5eaa407a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,37 +14,24 @@ To: buildroot@busybox.net
 
 Dear Jan Viktorin,
 
-On Tue, 14 Jul 2015 17:16:02 +0200, Jan Viktorin wrote:
-> This commit integrates generation of a bootable image
-> for Xilinx Zynq. The generation is independent on Xilinx
-> flow and utilizes the host-zynq-boot-bin package. The only
-> required step is to generate a proper U-Boot SPL (instead
-> of the FSBL).
+On Tue, 14 Jul 2015 17:16:08 +0200, Jan Viktorin wrote:
+> This patch changes the U-Boot's default environment to
+> boot Zedboard out-of-the-box from SD card.
 > 
-> The SPL generation might work when providing the working
-> ps7_init.c file to U-Boot. However, from U-Boot 2015.07
-> a set of generic ps7_init.c files is included and used to
-> build the U-Boot SPL for various boards. The ps7_init.c file
-> has been released under GNU/GPL license for this purpose.
-> For details, see
-> 
-> http://lists.denx.de/pipermail/u-boot/2015-April/210664.html
-> 
-> The SPL searchs for u-boot-dtb.img when booting so we
-> enforce using of the BR2_TARGET_UBOOT_FORMAT_DTB_IMG format.
+> The sdboot procedure tries to load a file system.bit into
+> the Zynq's PL (only if it exists). It is also possible to
+> alter the booting by an uEnv.txt file located on your SD card.
+> The uEnv.txt is a plain text file with <key>=<value> pairs
+> one per line.
 > 
 > Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 > ---
->  boot/uboot/Config.in | 13 +++++++++++++
->  boot/uboot/uboot.mk  | 10 ++++++++++
->  2 files changed, 23 insertions(+)
+>  ...eate-zedboard-specific-U-Boot-environment.patch | 46 ++++++++++++++++++++++
+>  configs/zedboard_defconfig                         |  1 +
+>  2 files changed, 47 insertions(+)
+>  create mode 100644 board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch
 
-I've made one change:
-
-    [Thomas: remove select of BR2_PACKAGE_HOST_ZYNQ_BOOT_BIN, since this
-    option no longer exists.]
-    
-and applied the patch. Thanks!
+Applied, thanks.
 
 Thomas
 -- 
