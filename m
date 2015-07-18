@@ -1,43 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 11:34:32 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-vmmouse:
-	bump version to 13.1.0
-Message-ID: <20150718093446.4C92981D6C@busybox.osuosl.org>
+Date: Sat, 18 Jul 2015 12:25:04 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-savage:
+	bump version to 2.3.8
+Message-ID: <20150718120024.46E7B8164F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5a22391227f9ff924c7d5107705c49206ca0ff5d
+commit: http://git.buildroot.net/buildroot/commit/?id=ec3eca22e071549861f7fd67e5659998bf760192
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-input-vmmouse.hash                |    4 ++--
- .../xdriver_xf86-input-vmmouse.mk                  |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../xdriver_xf86-video-savage.hash                 |    2 ++
+ .../xdriver_xf86-video-savage.mk                   |    5 +++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash
-index 5331fac..302b1cd 100644
---- a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash
-+++ b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/xorg/2013-January/055275.html
--sha256	04cfb60366008d4db815c550d8fb8d0a4270c75fa7a20fa3bddc9ecbd355612c	xf86-input-vmmouse-13.0.0.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-June/002616.html
-+sha256	0af558957ac1be1b2863712c2475de8f4d7f14921fd01ded2e2fde4921b19319	xf86-input-vmmouse-13.1.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
-index d982d82..53ceec8 100644
---- a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
-+++ b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash
+new file mode 100644
+index 0000000..25afb13
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash
+@@ -0,0 +1,2 @@
++# From http://lists.x.org/archives/xorg-announce/2015-May/002603.html
++sha256	fdcea4a86532bceb50095eaf0fe2f38bbfa160e98463b815f4b549eb9985fa63	xf86-video-savage-2.3.8.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
+index 676ffed..dc5644a 100644
+--- a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
++++ b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_VMMOUSE_VERSION = 13.0.0
-+XDRIVER_XF86_INPUT_VMMOUSE_VERSION = 13.1.0
- XDRIVER_XF86_INPUT_VMMOUSE_SOURCE = xf86-input-vmmouse-$(XDRIVER_XF86_INPUT_VMMOUSE_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_VMMOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_VMMOUSE_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_SAVAGE_VERSION = d28cd83c7b0b4a943efbe5ddf257c8ee2646ea73
+-XDRIVER_XF86_VIDEO_SAVAGE_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-savage
++XDRIVER_XF86_VIDEO_SAVAGE_VERSION = 2.3.8
++XDRIVER_XF86_VIDEO_SAVAGE_SOURCE = xf86-video-savage-$(XDRIVER_XF86_VIDEO_SAVAGE_VERSION).tar.bz2
++XDRIVER_XF86_VIDEO_SAVAGE_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_SAVAGE_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_SAVAGE_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_SAVAGE_AUTORECONF = YES
