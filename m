@@ -1,86 +1,131 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 23:04:44 +0200
-Subject: [Buildroot] [git commit] boot/uboot: Generate BOOT.BIN file when
-	building for Xilinx Zynq
-Message-ID: <20150718211742.E8D207FDFF@busybox.osuosl.org>
+Date: Sat, 18 Jul 2015 23:06:52 +0200
+Subject: [Buildroot] [git commit] zedboard: Update readme.txt to reflect
+	BOOT.BIN generation
+Message-ID: <20150718211743.464977FDFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aabe23f8615f065d7bf62801d38efd17125e78d0
+commit: http://git.buildroot.net/buildroot/commit/?id=c139f0cce7d78e21b67f4649541a25ae8b5251f4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This commit integrates generation of a bootable image
-for Xilinx Zynq. The generation is independent on Xilinx
-flow and utilizes the host-zynq-boot-bin package. The only
-required step is to generate a proper U-Boot SPL (instead
-of the FSBL).
-
-The SPL generation might work when providing the working
-ps7_init.c file to U-Boot. However, from U-Boot 2015.07
-a set of generic ps7_init.c files is included and used to
-build the U-Boot SPL for various boards. The ps7_init.c file
-has been released under GNU/GPL license for this purpose.
-For details, see
-
-http://lists.denx.de/pipermail/u-boot/2015-April/210664.html
-
-The SPL searchs for u-boot-dtb.img when booting so we
-enforce using of the BR2_TARGET_UBOOT_FORMAT_DTB_IMG format.
-
-[Thomas: remove select of BR2_PACKAGE_HOST_ZYNQ_BOOT_BIN, since this
-option no longer exists.]
 
 Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/uboot/Config.in |   12 ++++++++++++
- boot/uboot/uboot.mk  |   10 ++++++++++
- 2 files changed, 22 insertions(+), 0 deletions(-)
+ board/avnet/zedboard/readme.txt |   84 +++++++++++++++++---------------------
+ 1 files changed, 38 insertions(+), 46 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index f0c0094..6d8fa6a 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -272,6 +272,18 @@ config BR2_TARGET_UBOOT_SPL_NAME
- 	  u-boot build. For most platform it is spl/u-boot-spl.bin
- 	  but not always. It is MLO on OMAP for example.
+diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
+index a3f1f3e..e0ce024 100644
+--- a/board/avnet/zedboard/readme.txt
++++ b/board/avnet/zedboard/readme.txt
+@@ -5,68 +5,60 @@ System-On-Chip.
+ Zedboard information including schematics, reference designs, and manuals are
+ available from http://www.zedboard.org .
  
-+config BR2_TARGET_UBOOT_ZYNQ_IMAGE
-+	bool "Generate image for Xilinx Zynq"
-+	depends on BR2_arm
-+	depends on BR2_TARGET_UBOOT_SPL
-+	depends on BR2_TARGET_UBOOT_FORMAT_DTB_IMG
-+	help
-+	 Generate the BOOT.BIN file from U-Boot's SPL. The image
-+	 boots the Xilinx Zynq chip without any FPGA bitstream.
-+	 A bitstream can be loaded by the U-Boot. The SPL searchs
-+	 for u-boot-dtb.img file so this U-Boot format is required
-+	 to be set.
-+
- menuconfig BR2_TARGET_UBOOT_ENVIMAGE
- 	bool "Environment image"
- 	help
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 8053678..042e066 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -182,6 +182,16 @@ UBOOT_POST_BUILD_HOOKS += UBOOT_BUILD_OMAP_IFT
- UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_OMAP_IFT_IMAGE
- endif
+-The U-Boot firmware for the Xilinx Zynq All Programmable SoC depends
+-on some proprietary code. This dependency consists of a pair of
+-files are available from the Xilinx SDK installation.
++Steps to create a working system for Zedboard:
  
-+ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
-+define UBOOT_GENERATE_ZYNQ_IMAGE
-+	$(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
-+		-u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))     \
-+		-o $(BINARIES_DIR)/BOOT.BIN
-+endef
-+UBOOT_DEPENDENCIES += host-zynq-boot-bin
-+UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_GENERATE_ZYNQ_IMAGE
-+endif
+-You will need these files from Xilinx SDK installation to generate
+-the U-Boot firmware:
+-	ps7_init.c
+-	ps7_init.h
++1) make zedboard_defconfig
++2) make
++3) copy files BOOT.BIN, u-boot-dtb.img, rootfs.cpio.uboot,
++	uImage, zynq-zed.dtb into your SD card
++4) boot your Zedboard
+ 
+-Buildroot will create the following files and place them in the
+-<output>/images directory.
+-	zynq-zed.dtb
+-	rootfs.cpio.uboot
+-	uImage
+-	u-boot.img
+-	boot.bin
++The expected output:
+ 
++ U-Boot SPL 2015.07-rc2 (Jun 18 2015 - 16:42:58)
++ mmc boot
++ reading system.dtb
++ spl_load_image_fat_os: error reading image system.dtb, err - -1
++ reading u-boot-dtb.img
++ reading u-boot-dtb.img
+ 
+-uboot.bin  -- U-Boot SPL w/ Xilinx boot.bin wrapper
+----------------------------------------------------
++ U-Boot 2015.07-rc2 (Jun 18 2015 - 16:42:58 +0200)
+ 
+-Due to licensing issues, the files ps7_init.c/h are not able to be
+-distributed with the U-Boot source code.  These files are required to make a
+-boot.bin file.
+-
+-If you already have the Xilinx tools installed, the following sequence will
+-unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
+-
+-make zedboard_defconfig
+-make uboot-patch
+-cp ${XILINX}/ISE_DS/EDK/sw/lib/hwplatform_templates/zed_hw_platform/ps7_init.{c,h} \
+-output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
+-
+-After copying these files into the U-Boot source tree, you can
+-continue the build with:
+-
+-make
+-
+-*Notice*
+-While the build will successfully complete without the ps7_init.*
+-files,  the uboot.bin file generated by this configuration will not
+-function properly on the Zedboard.  Therefore, it is imperative that
+-the ps7_init.* files be copied into the U-Boot source tree any time
+-the clean, or uboot-dirclean targets are made.
++ Model: Zynq ZED Board
++ I2C:   ready
++ DRAM:  ECC disabled 512 MiB
++ MMC:   zynq_sdhci: 0
++ Using default environment
++ ...
+ 
++When using an older U-Boot then 2015.07, a working ps7_init.c
++file is required to be installed into the U-Boot directory
++structure. From 2015.07, the major Zynq-based boards are
++supported without any manual intervention.
+ 
+ Resulting system
+ ----------------
+ A FAT32 partition should be created at the beginning of the SD Card
+ and the following files should be installed:
+-	/boot.bin
+-	/devicetree.dtb
++	/BOOT.BIN
++	/zynq-zed.dtb
+ 	/uImage
+-	/uramdisk.image.gz
+-	/u-boot.img
++	/rootfs-cpio.uboot
++	/u-boot-dtb.img
+ 
+ 
+ All needed files can be taken from output/images/
+ 
+-boot.bin, uImage and u-boot.img are direct copies of the same files
++BOOT.BIN, uImage and u-boot-dtb.img are direct copies of the same files
+ available on output/images/
+ 
+-devicetree.dtb is just zynq-zed.dtb renamed.
++There is a patch attached that redefines the U-Boot's environment
++to work with Buildroot out-of-the-box.
 +
- ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
- ifeq ($(BR_BUILDING),y)
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
++You can alter the booting procedure by creating a file uEnv.txt
++in the root of the SD card. It is a plain text file in format
++<key>=<value> one per line:
+ 
+-uramdisk.image.gz is rootfs.cpio.uboot renamed
++kernel_image=myimage
++modeboot=myboot
++myboot=...
