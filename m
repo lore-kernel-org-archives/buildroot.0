@@ -1,46 +1,52 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 18 Jul 2015 17:20:07 +0200
-Subject: [Buildroot] [PATCHv2] transmission: improve systemd support
-In-Reply-To: <CAJup9chhK-zNzDyB0HvO4eWRm3T_u5-zMs70BcoeDbRMXm+wZw@mail.gmail.com>
-References: <1421684056-5266-11-git-send-email-maxtram95@gmail.com>
- <1436881866-2168-1-git-send-email-aurelien@chabot.fr>
- <CAGduivy48ijCY6MxObh2KNJjEii8R9s89T5f7mVWOMB_-shE6w@mail.gmail.com>
- <CAJup9chhK-zNzDyB0HvO4eWRm3T_u5-zMs70BcoeDbRMXm+wZw@mail.gmail.com>
-Message-ID: <CAGduivwgKjmvq+U74HTOykYg05kaoTC2uqRry5K=m1kif9iT+A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 18 Jul 2015 17:26:07 +0200
+Subject: [Buildroot] [git commit] openssh: selinux and pam support
+Message-ID: <20150718153630.9287C81DD7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Aur?lien, all
+commit: http://git.buildroot.net/buildroot/commit/?id=f5f5bd92df7708d19ac19a9df922739520c707ee
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Jul 16, 2015 at 11:27 PM, Aur?lien Chabot <aurelien@chabot.fr> wrote:
->
-> On Tue, Jul 14, 2015 at 4:05 PM, Maxime Hadjinlian
-> <maxime.hadjinlian@gmail.com> wrote:
->>
->> Have you tested with a read-only file system ? Since
->> /var/lib/transmission is not a tmpfs, I don't know if transmission
->> will be very happy about that.
->
->
-> From what I try, transmission doesn't crash or stop if it cannot write it's
-> configuration. That's why I remove the tmpfs. Moreover the tmpfs stuff was
-> only added for systemd, and if we choose to do that we should do the same
-> for sysvinit.
->
-> I just saw a well that with systemd the folder /var/lib/transmission is not
-> created, so I should have kept the line creating the folder.
-> BTW, is it really the prefer solution to user sysuser.d instead of the
-> buildroot user target ? Isn't this cause also problem on read only fs,
-> because ets/passwd will not be writable ?
-You are absolutely right, that's not the way to go, you should use the
-Buildroot infra to do that.
-As I said before, please remove also the sysctl settings, it should
-not be install by us.
+[Thomas: in the sed expression, use % as a delimiter instead of /,
+since the line contains several / that all had to be escaped.]
 
-I'll try to give it a better look and test that tonight or tomorrow.
->
-> Aur?lien
->
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openssh/openssh.mk |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
+
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 11a844e..5a7162f 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -30,8 +30,24 @@ endif
+ OPENSSH_DEPENDENCIES = zlib openssl
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++define OPENSSH_INSTALL_PAM_CONF
++	$(INSTALL) -D -m 644 $(@D)/contrib/sshd.pam.generic $(TARGET_DIR)/etc/pam.d/sshd
++	$(SED) '\%password   required     /lib/security/pam_cracklib.so%d' $(TARGET_DIR)/etc/pam.d/sshd
++	$(SED) 's/\#UsePAM no/UsePAM yes/' $(TARGET_DIR)/etc/ssh/sshd_config
++endef
++
+ OPENSSH_DEPENDENCIES += linux-pam
+ OPENSSH_CONF_OPTS += --with-pam
++OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_PAM_CONF
++else
++OPENSSH_CONF_OPTS += --without-pam
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++OPENSSH_DEPENDENCIES += libselinux
++OPENSSH_CONF_OPTS += --with-selinux
++else
++OPENSSH_CONF_OPTS += --without-selinux
+ endif
+ 
+ define OPENSSH_INSTALL_INIT_SYSTEMD
