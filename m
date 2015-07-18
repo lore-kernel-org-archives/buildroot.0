@@ -1,72 +1,100 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 16:02:09 +0200
-Subject: [Buildroot] [PATCH v9 09/15] dbus: selinux file context support
-In-Reply-To: <1436905227-26937-10-git-send-email-clayton.shotwell@rockwellcollins.com>
-References: <1436905227-26937-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <1436905227-26937-10-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <20150718160209.6a3b2850@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Jul 2015 16:08:12 +0200
+Subject: [Buildroot] [PATCH] package/dropbear: Fix symlink only if
+ pointing to the right directory
+In-Reply-To: <1436954103-8380-1-git-send-email-paul@crapouillou.net>
+References: <1436954103-8380-1-git-send-email-paul@crapouillou.net>
+Message-ID: <20150718140812.GA3504@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Clayton Shotwell,
+Paul, All,
 
-On Tue, 14 Jul 2015 15:20:21 -0500, Clayton Shotwell wrote:
-
-> --- a/package/dbus/S30dbus
-> +++ b/package/dbus/S30dbus
-> @@ -17,6 +17,10 @@
->  [ -d /var/run/dbus ] || mkdir -p /var/run/dbus
->  [ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
->  [ -d /tmp/dbus ] || mkdir -p /tmp/dbus
-> +[ -d /var/lib/dbus ] || mkdir -p /var/lib/dbus
-
-This doesn't make a lot of sense, have you looked at what dbus.mk is
-doing? It does:
-
-        mkdir -p $(TARGET_DIR)/var/lib
-        rm -rf $(TARGET_DIR)/var/lib/dbus
-        ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
-
-In DBUS_INSTALL_INIT_SYSV. So, /var/lib/dbus is a symlink to /tmp/dbus.
-And /tmp/dbus is created just above in the init script. Therefore, I
-don't understand why you want to re-create /var/lib/dbus if it doesn't
-exist: it should already exist as a valid symlink, pointing
-to /tmp/dbus, created just above.
-
-> diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-> index 7deae11..e9c9aaf 100644
-> --- a/package/dbus/dbus.mk
-> +++ b/package/dbus/dbus.mk
-> @@ -44,6 +44,20 @@ ifeq ($(BR2_microblaze),y)
->  DBUS_CONF_OPTS += --disable-inotify
->  endif
+On 2015-07-15 11:55 +0200, paul at crapouillou.net spake thusly:
+> From: Paul Cercueil <paul@crapouillou.net>
+> 
+> This commit ensures that the /etc/dropbear symlink won't be removed if
+> it points elsewhere than /var/run/dropbear.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  package/dropbear/S50dropbear      | 4 ++--
+>  package/dropbear/dropbear.service | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
+> index af50ccf..d42fb60 100644
+> --- a/package/dropbear/S50dropbear
+> +++ b/package/dropbear/S50dropbear
+> @@ -12,12 +12,12 @@ start() {
+>  	echo -n "Starting dropbear sshd: "
+>  	umask 077
 >  
-> +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-> +DBUS_CONF_OPTS += --enable-selinux
-> +DBUS_DEPENDENCIES += libselinux
-> +else
-> +DBUS_CONF_OPTS += --disable-selinux
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_AUDIT),y)
-> +DBUS_CONF_OPTS += --enable-libaudit
-> +DBUS_DEPENDENCIES += audit libcap-ng
-> +else
-> +DBUS_CONF_OPTS += --disable-libaudit
-> +endif
+> -	# If /etc/dropbear is not a directory, and
+> +	# If /etc/dropbear is a symlink to /var/run/dropbear, and
+>  	#   - the filesystem is RO (i.e. we can not rm the symlink),
+>  	#     create the directory pointed to by the symlink.
+>  	#   - the filesystem is RW (i.e. we can rm the symlink),
+>  	#     replace the symlink with an actual directory
+> -	if ! [ -d /etc/dropbear ]; then
+> +	if [ "$(readlink /etc/dropbear)" = "/var/run/dropbear" ]; then
 
-I've committed this part of the patch (i.e the change to dbus.mk).
-Please resubmit a new patch with just the S30dbus patches. Also, can
-you explain on which files/directories restorecon will have to be
-called? Will it impact many init scripts?
+/etc/dropbear is a relative symlink, so readlink (at least from
+coreutils) would return the relative path, not the absolute path.
 
-Thanks,
+So, I can't see a way this can work as-is. However, what about this:
 
-Thomas
+    if [    -L /etc/dropbear \
+         -a "$(readlink -f /etc/dropbear)" = "/var/run/dropbear" ]
+    then
+        # trick-trac on .etc.dropbear
+    fi
+
+(Ditto the unit file, of course! ;-)
+
+Care to fix and resend, please?
+
+Regards,
+Yann E. MORIN.
+
+>  		if rm -f /etc/dropbear; then
+>  			mkdir -p /etc/dropbear
+>  		else
+> diff --git a/package/dropbear/dropbear.service b/package/dropbear/dropbear.service
+> index 0e2cf54..62ade1f 100644
+> --- a/package/dropbear/dropbear.service
+> +++ b/package/dropbear/dropbear.service
+> @@ -3,13 +3,13 @@ Description=Dropbear SSH daemon
+>  After=syslog.target network.target auditd.service
+>  
+>  [Service]
+> -# If /etc/dropbear is not a directory, and
+> +# If /etc/dropbear is a symlink to /var/run/dropbear, and
+>  #   - the filesystem is RO (i.e. we can not rm the symlink),
+>  #     create the directory pointed to by the symlink.
+>  #   - the filesystem is RW (i.e. we can rm the symlink),
+>  #     replace the symlink with an actual directory
+>  ExecStartPre=/bin/sh -c '\
+> -if ! [ -d /etc/dropbear ]; then \
+> +if [ "$(readlink /etc/dropbear)" = "/var/run/dropbear" ]; then \
+>      if rm -f /etc/dropbear; then \
+>          mkdir -p /etc/dropbear; \
+>      else \
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
