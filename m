@@ -1,40 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 23:52:18 +0200
-Subject: [Buildroot] [git commit] libsigsegv: unavailable for powerpc with
-	uclibc
-Message-ID: <20150718215223.1B07C81DBB@busybox.osuosl.org>
+Date: Sat, 18 Jul 2015 23:52:45 +0200
+Subject: [Buildroot] [PATCH] libsigsegv: unavailable for powerpc with
+ uclibc
+In-Reply-To: <1436191311-23939-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1436191311-23939-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150718235245.733ef99b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b3850d837888afacc48eef3c2c6514e282724a27
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Fixes:
-http://autobuild.buildroot.net/results/c5f/c5fef9a89f99e13de9cabe52c2ac1602d85974fe/
+On Mon,  6 Jul 2015 11:01:51 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/c5f/c5fef9a89f99e13de9cabe52c2ac1602d85974fe/
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/libsigsegv/Config.in | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libsigsegv/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+Applied, thanks.
 
-diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
-index 2ca9a28..35f6d67 100644
---- a/package/libsigsegv/Config.in
-+++ b/package/libsigsegv/Config.in
-@@ -3,7 +3,12 @@ config BR2_PACKAGE_LIBSIGSEGV
- 	depends on !BR2_xtensa
- 	depends on !BR2_arc # no ucontext_i.sym file
- 	depends on !BR2_microblaze
-+	# No ucontext support in uclibc for powerpc
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
- 	help
- 	  Library for handling page faults in user mode.
- 
- 	  http://libsigsegv.sourceforge.net/
-+
-+comment "libsigsegv needs an (e)glibc toolchain"
-+	depends on BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
