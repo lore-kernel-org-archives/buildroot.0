@@ -1,41 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 23:05:24 +0200
-Subject: [Buildroot] [git commit] zedboard: Generate BOOT.BIN automatically
-Message-ID: <20150718211743.1D24A807B2@busybox.osuosl.org>
+Date: Sat, 18 Jul 2015 23:06:45 +0200
+Subject: [Buildroot] [git commit] zedboard: Patch default U-Boot environment
+	for zedboard
+Message-ID: <20150718211743.3247881DE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=46d6a561be418e67c3f859f7d3e7461b2a663749
+commit: http://git.buildroot.net/buildroot/commit/?id=4db53c3848d9599851b31079875f7c0d18911e76
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The U-Boot v2015.07 builds working SPL without a manual
-intervention. The BOOT.BIN is generated from the standard
-SPL so no BR2_TARGET_UBOOT_SPL_NAME redefinition is needed.
-The SPL requires the u-boot-dtb.img file to boot properly.
+This patch changes the U-Boot's default environment to
+boot Zedboard out-of-the-box from SD card.
+
+The sdboot procedure tries to load a file system.bit into
+the Zynq's PL (only if it exists). It is also possible to
+alter the booting by an uEnv.txt file located on your SD card.
+The uEnv.txt is a plain text file with <key>=<value> pairs
+one per line.
 
 Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/zedboard_defconfig |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ ...eate-zedboard-specific-U-Boot-environment.patch |   46 ++++++++++++++++++++
+ configs/zedboard_defconfig                         |    1 +
+ 2 files changed, 47 insertions(+), 0 deletions(-)
 
+diff --git a/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch b/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch
+new file mode 100644
+index 0000000..1971503
+--- /dev/null
++++ b/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch
+@@ -0,0 +1,46 @@
++From a4c0058967a551385da5e16d2787d9f704cab225 Mon Sep 17 00:00:00 2001
++From: Jan Viktorin <viktorin@rehivetech.com>
++Date: Thu, 18 Jun 2015 16:26:02 +0200
++Subject: [PATCH 2/2] zynq: Create zedboard-specific U-Boot environment
++
++---
++ include/configs/zynq_zed.h | 25 +++++++++++++++++++++++++
++ 1 file changed, 25 insertions(+)
++
++diff --git a/include/configs/zynq_zed.h b/include/configs/zynq_zed.h
++index 946de95..2400a88 100644
++--- a/include/configs/zynq_zed.h
+++++ b/include/configs/zynq_zed.h
++@@ -24,4 +24,29 @@
++
++ #include <configs/zynq-common.h>
++
+++#undef CONFIG_EXTRA_ENV_SETTINGS
+++#define CONFIG_EXTRA_ENV_SETTINGS \
+++	"envload=mmc info && if fatload mmc 0 0x1000 uEnv.txt;"\
+++	" then echo Importing uEnv.txt; env import -t 0x1000"  \
+++	" $filesize; fi;\0"                                    \
+++	"bootcmd=run $modeboot\0"                              \
+++	"modeboot=sdboot\0"                                    \
+++	"baudrate=115200\0"                                    \
+++	"bootenv=uEnv.txt\0"                                   \
+++	"devicetree_image=zynq-zed.dtb\0"                      \
+++	"kernel_image=uImage\0"                                \
+++	"ramdisk_image=rootfs.cpio.uboot\0"                    \
+++	"fpga_image=system.bit\0"                              \
+++	"sdboot=echo Booting from SD...;"                      \
+++	" run envload; run fpgaboot;"                          \
+++	" fatload mmc 0 0x1000000 ${kernel_image}"             \
+++	" && fatload mmc 0 0x2000000 ${ramdisk_image}"         \
+++	" && fatload mmc 0 0x3000000 ${devicetree_image}"      \
+++	" && bootm 0x1000000 0x2000000 0x3000000\0"            \
+++	"fpgaboot=if fatload mmc 0 0x1000000 ${fpga_image};"   \
+++	" then echo Booting FPGA from ${fpga_image};"          \
+++	" fpga info 0 && fpga loadb 0 0x1000000 $filesize;"    \
+++	" else echo FPGA image ${fpga_image} was not found,"   \
+++	" skipping...; fi;\0"
+++
++ #endif /* __CONFIG_ZYNQ_ZED_H */
++--
++2.4.3
++
 diff --git a/configs/zedboard_defconfig b/configs/zedboard_defconfig
-index 76688e9..cd6436c 100644
+index cd6436c..99720db 100644
 --- a/configs/zedboard_defconfig
 +++ b/configs/zedboard_defconfig
-@@ -19,8 +19,8 @@ BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="zynq_zed"
+@@ -21,6 +21,7 @@ BR2_TARGET_UBOOT_BOARDNAME="zynq_zed"
  BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2014.1"
--BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.denx.de/u-boot.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2015.07-rc2"
-+BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.denx.de/u-boot.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2015.07-rc2"
++BR2_TARGET_UBOOT_PATCH="$(TOPDIR)/board/avnet/zedboard/uboot"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
  BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="boot.bin"
-+BR2_TARGET_UBOOT_ZYNQ_IMAGE=y
+ BR2_TARGET_UBOOT_ZYNQ_IMAGE=y
