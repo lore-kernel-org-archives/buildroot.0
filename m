@@ -1,53 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 22:56:26 +0200
-Subject: [Buildroot] [PATCH v2] uclibc: run snapshot and ng configs
- through "savedefconfig"
-In-Reply-To: <1429544863-19143-1-git-send-email-abrodkin@synopsys.com>
-References: <1429544863-19143-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150718225626.603c2b7f@free-electrons.com>
+Date: Sat, 18 Jul 2015 23:02:26 +0200
+Subject: [Buildroot] [git commit] host-zynq-boot-bin: new package
+Message-ID: <20150718211742.D1E9E807B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+commit: http://git.buildroot.net/buildroot/commit/?id=ee845a46e2e7d60ac52c38555c183020ce8cd711
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 20 Apr 2015 18:47:43 +0300, Alexey Brodkin wrote:
-> Recently uClibc got support of "savedefconfig" target that allows
-> generation of compact configuration description which only lists
-> differences from default options.
-> 
-> That's uClibc commit -
-> http://git.uclibc.org/uClibc/commit/?id=e286a674419d31cb0757dd2f8307d8b4756cf1f9
-> 
-> This change represents post-processing of "uClibc-snapshot.defconfig"
-> and "uClibc-ng.config" with "make savedefconfig" made on current
-> uClibc/master and uClibc-ng/1.0 branches accordingly.
-> 
-> Unfortunately the most recent stable uClibc version 0.9.33.2 doesn't
-> have "savedefconfig" target so I'm leaving uClibc-0.9.33.config as it
-> is.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Cc: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> Changes in v2:
->  [1] uClibc-ng/1.0 branch is used as a base instead of master because as of
->      today only uClibc-ng v1.0 is supported in Buildroot. And uClibc-gd master
->      branch has significant differences in supported options.
+The package provides a Python script that can create the file BOOT.BIN
+to boot Xilinx Zynq based boards.
 
-I've refreshed the defconfig with the latest Buildroot and current
-versions of uClibc, and applied. Test builds of an ARM
-(uClibc-ng.config) and ARC (uClibc-snapshot.config) worked fine.
+The script zynq-boot-bin.py is contained in the Xilinx repository of
+U-Boot (it is not in upstream).
 
-Thanks!
+[Thomas:
+ - remove appearance of the package in menuconfig, U-Boot will depend
+   on it directly, so there's no need for it to appear in menuconfig
+ - use $(INSTALL) instead of cp for the installation
+ - remove @ before the extract and install commands.]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/zynq-boot-bin/zynq-boot-bin.hash |    2 ++
+ package/zynq-boot-bin/zynq-boot-bin.mk   |   22 ++++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 0 deletions(-)
+
+diff --git a/package/zynq-boot-bin/zynq-boot-bin.hash b/package/zynq-boot-bin/zynq-boot-bin.hash
+new file mode 100644
+index 0000000..0bc23de
+--- /dev/null
++++ b/package/zynq-boot-bin/zynq-boot-bin.hash
+@@ -0,0 +1,2 @@
++# From https://raw.githubusercontent.com/Xilinx/u-boot-xlnx
++sha1	940331ee02b0007099effa61e382fe7ea4174054	zynq-boot-bin.py
+diff --git a/package/zynq-boot-bin/zynq-boot-bin.mk b/package/zynq-boot-bin/zynq-boot-bin.mk
+new file mode 100644
+index 0000000..46051fb
+--- /dev/null
++++ b/package/zynq-boot-bin/zynq-boot-bin.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# zynq-boot-bin
++#
++################################################################################
++
++ZYNQ_BOOT_BIN_VERSION = xilinx-v2015.1
++ZYNQ_BOOT_BIN_SOURCE = zynq-boot-bin.py
++ZYNQ_BOOT_BIN_SITE = https://raw.githubusercontent.com/Xilinx/u-boot-xlnx/$(ZYNQ_BOOT_BIN_VERSION)/tools
++ZYNQ_BOOT_BIN_LICENSE = GPLv3+
++
++HOST_ZYNQ_BOOT_BIN_DEPENDENCIES = host-python
++
++define HOST_ZYNQ_BOOT_BIN_EXTRACT_CMDS
++	cp $(DL_DIR)/$(ZYNQ_BOOT_BIN_SOURCE) $(@D)
++endef
++
++define HOST_ZYNQ_BOOT_BIN_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/$(ZYNQ_BOOT_BIN_SOURCE) $(HOST_DIR)/usr/bin/$(ZYNQ_BOOT_BIN_SOURCE)
++endef
++
++$(eval $(host-generic-package))
