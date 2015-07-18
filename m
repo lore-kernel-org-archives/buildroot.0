@@ -1,46 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Jul 2015 19:44:53 +0200
-Subject: [Buildroot] [git commit] release: remove manual build files from
-	release tarballs
-Message-ID: <20150718091105.D1557819AE@busybox.osuosl.org>
+Date: Sat, 18 Jul 2015 11:11:11 +0200
+Subject: [Buildroot] [PATCH 1/1] release: remove manual build files from
+ release tarballs
+In-Reply-To: <1437128435-17331-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1437128435-17331-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20150718111111.57138b33@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=15cb98769e462ca0707870418baa68e7e3e10197
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thomas De Schampheleire,
 
-The Buildroot release tarballs inadvertently contain a build/docs directory,
-containing the manual sources, the generated lists, and manual.text and
-manual.pdf (but excluding manual.html).
+On Fri, 17 Jul 2015 12:20:35 +0200, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> The Buildroot release tarballs inadvertently contain a build/docs directory,
+> containing the manual sources, the generated lists, and manual.text and
+> manual.pdf (but excluding manual.html).
+> 
+> This directory is populated as $(BUILD_DIR) (==$(O)/build), while O is
+> set explicitly from the release target to a subdirectory
+> buildroot-xxxx.yy-git/ which was populated with 'git archive'.
+> 
+> Since the generated manuals are available in docs/manual, which is
+> also referred to from the README, the build directory is not needed and
+> should be removed from the release tarball.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> ---
+>  Makefile | 1 +
+>  1 file changed, 1 insertion(+)
 
-This directory is populated as $(BUILD_DIR) (==$(O)/build), while O is
-set explicitly from the release target to a subdirectory
-buildroot-xxxx.yy-git/ which was populated with 'git archive'.
+Applied, thanks.
 
-Since the generated manuals are available in docs/manual, which is
-also referred to from the README, the build directory is not needed and
-should be removed from the release tarball.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 531ac5d..168d62a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -936,6 +936,7 @@ release: OUT = buildroot-$(BR2_VERSION)
- release:
- 	git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
- 	$(MAKE) O=$(OUT) manual-html manual-text manual-pdf
-+	$(MAKE) O=$(OUT) manual-clean
- 	tar rf $(OUT).tar $(OUT)
- 	gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
- 	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
