@@ -1,95 +1,109 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Jul 2015 16:08:12 +0200
-Subject: [Buildroot] [PATCH] package/dropbear: Fix symlink only if
- pointing to the right directory
-In-Reply-To: <1436954103-8380-1-git-send-email-paul@crapouillou.net>
-References: <1436954103-8380-1-git-send-email-paul@crapouillou.net>
-Message-ID: <20150718140812.GA3504@free.fr>
+Date: Sat, 18 Jul 2015 16:26:31 +0200
+Subject: [Buildroot] [PATCH v9 04/15] busybox: applets as individual
+ binaries
+In-Reply-To: <20150718144637.22cee806@free-electrons.com>
+References: <1436905227-26937-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <1436905227-26937-5-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <20150718144637.22cee806@free-electrons.com>
+Message-ID: <20150718142631.GB3504@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Paul, All,
+Clayton, Thomas, All,
 
-On 2015-07-15 11:55 +0200, paul at crapouillou.net spake thusly:
-> From: Paul Cercueil <paul@crapouillou.net>
+On 2015-07-18 14:46 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 14 Jul 2015 15:20:16 -0500, Clayton Shotwell wrote:
+[--SNIP--]
+> > diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> > index 6b2abca..4942e75 100644
+> > --- a/package/busybox/busybox.mk
+> > +++ b/package/busybox/busybox.mk
+> > @@ -50,9 +50,37 @@ BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAG
+> >  BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
+> >  BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
+> >  
+> > +ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
+> > +define BUSYBOX_PERMISSIONS
+> > +	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
+> > +endef
+> > +
+> > +# Set permissions on all applets with BB_SUID_REQUIRE and BB_SUID_MAYBE. The
+> > +# permissions are pulled from the applets.h file that is generated during
+> > +# the build and used to determine all of the possible applets. The permissions
+> > +# file is generated and added to the list of device tables used by makedevs to
+> > +# set file permissions.
+> > +define BUSYBOX_MAKEDEV_PERMISSIONS
+> > +	if [ -f $(@D)/.buildroot_permissions ]; then \
+> > +		rm $(@D)/.buildroot_permissions; \
+> > +	fi; \
+> > +	touch $(@D)/.buildroot_permissions; \
+> > +	for app in `grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" $(@D)/include/applets.h \
+> > +			| sed -e 's/,.*//' -e 's/.*(//'`; \
+> > +	do \
+> > +		temp=`grep -w $${app} $(@D)/busybox.links`; \
+> > +		if [ -n "$${temp}" ]; then \
+> > +			echo "$${temp} f 4755 0  0 - - - - -" >> $(@D)/.buildroot_permissions; \
+> > +		fi; \
+> > +	done
+> > +endef
+> > +BUSYBOX_POST_INSTALL_TARGET_HOOKS += BUSYBOX_MAKEDEV_PERMISSIONS
+> > +BR2_ROOTFS_DEVICE_TABLE += $(BUSYBOX_DIR)/.buildroot_permissions
+> > +else
 > 
-> This commit ensures that the /etc/dropbear symlink won't be removed if
-> it points elsewhere than /var/run/dropbear.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  package/dropbear/S50dropbear      | 4 ++--
->  package/dropbear/dropbear.service | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
-> index af50ccf..d42fb60 100644
-> --- a/package/dropbear/S50dropbear
-> +++ b/package/dropbear/S50dropbear
-> @@ -12,12 +12,12 @@ start() {
->  	echo -n "Starting dropbear sshd: "
->  	umask 077
->  
-> -	# If /etc/dropbear is not a directory, and
-> +	# If /etc/dropbear is a symlink to /var/run/dropbear, and
->  	#   - the filesystem is RO (i.e. we can not rm the symlink),
->  	#     create the directory pointed to by the symlink.
->  	#   - the filesystem is RW (i.e. we can rm the symlink),
->  	#     replace the symlink with an actual directory
-> -	if ! [ -d /etc/dropbear ]; then
-> +	if [ "$(readlink /etc/dropbear)" = "/var/run/dropbear" ]; then
+> I'm sorry but I don't like this. I don't think any Buildroot package
+> *modifies* a BR2_<something> option, that's really a hack. I think the
+> only reasonable solution is to have a real permission table, containing
+> the list of all applets that may need SUID root. However, I don't
+> remember if we error out when a file mentioned in a permission table
+> does not exist. I've added Yann in Cc to discuss that further. Maybe we
+> need a special syntax in the permission table to say "change the
+> permission of this file if it exists, otherwise ignore".
 
-/etc/dropbear is a relative symlink, so readlink (at least from
-coreutils) would return the relative path, not the absolute path.
+Well, I had a cursory look at makedev.c, and it seems a missing file is
+treated as an error:
 
-So, I can't see a way this can work as-is. However, what about this:
+  482         } else if (type == 'f') {
+  483             struct stat st;
+  484             if ((stat(full_name, &st) < 0 || !S_ISREG(st.st_mode))) {
+  485                 bb_perror_msg("line %d: regular file '%s' does not exist", linenum, full_name);
+  486                 ret = EXIT_FAILURE;
+  487                 goto loop;
+  488             }
 
-    if [    -L /etc/dropbear \
-         -a "$(readlink -f /etc/dropbear)" = "/var/run/dropbear" ]
-    then
-        # trick-trac on .etc.dropbear
-    fi
+So, either we filter-out missing applets (Hurck!) or we add a mode to
+makedev to ignore missing files, something along the lines of:
 
-(Ditto the unit file, of course! ;-)
+    diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+    index 53ff6fe..8a66fa3 100644
+    --- a/package/makedevs/makedevs.c
+    +++ b/package/makedevs/makedevs.c
+    @@ -479,9 +479,11 @@ int main(int argc, char **argv)
+     				ret = EXIT_FAILURE;
+     				goto loop;
+     			}
+    -		} else if (type == 'f') {		
+    +		} else if (type == 'f' || type == 'F') {
+     			struct stat st;
+     			if ((stat(full_name, &st) < 0 || !S_ISREG(st.st_mode))) {
+    +				if (type == 'F')
+    +					continue; /* Ignore optional files */
+     				bb_perror_msg("line %d: regular file '%s' does not exist", linenum, full_name);
+     				ret = EXIT_FAILURE;
+     				goto loop;
 
-Care to fix and resend, please?
+(Of course 'F' is just a place-holder, we might need a better type...)
+
+Totally untested; needs update in the documentation as well. Might be
+worth sending to Busybox too (like for the recursive option) sicne
+Busybox is our upstream for that makedev.c file (but was a long time
+ago, might no longer apply cleanly...)
 
 Regards,
 Yann E. MORIN.
-
->  		if rm -f /etc/dropbear; then
->  			mkdir -p /etc/dropbear
->  		else
-> diff --git a/package/dropbear/dropbear.service b/package/dropbear/dropbear.service
-> index 0e2cf54..62ade1f 100644
-> --- a/package/dropbear/dropbear.service
-> +++ b/package/dropbear/dropbear.service
-> @@ -3,13 +3,13 @@ Description=Dropbear SSH daemon
->  After=syslog.target network.target auditd.service
->  
->  [Service]
-> -# If /etc/dropbear is not a directory, and
-> +# If /etc/dropbear is a symlink to /var/run/dropbear, and
->  #   - the filesystem is RO (i.e. we can not rm the symlink),
->  #     create the directory pointed to by the symlink.
->  #   - the filesystem is RW (i.e. we can rm the symlink),
->  #     replace the symlink with an actual directory
->  ExecStartPre=/bin/sh -c '\
-> -if ! [ -d /etc/dropbear ]; then \
-> +if [ "$(readlink /etc/dropbear)" = "/var/run/dropbear" ]; then \
->      if rm -f /etc/dropbear; then \
->          mkdir -p /etc/dropbear; \
->      else \
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
