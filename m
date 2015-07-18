@@ -1,57 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 12:24:30 +0200
-Subject: [Buildroot] [git commit] package/{mesa3d,
-	mesa3d-headers}: bump version to 10.6.2
-Message-ID: <20150718120023.ED4727FE2D@busybox.osuosl.org>
+Date: Sat, 18 Jul 2015 12:24:17 +0200
+Subject: [Buildroot] [git commit] package/libinput: bump version to 0.19.0,
+	add locale dependency
+Message-ID: <20150718120023.D4E428164F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3f035f39af9faedc7694a5410bd98f8fef1b2a04
+commit: http://git.buildroot.net/buildroot/commit/?id=7697638c09e462b5ac3b006a464958547d6d0a57
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Since 2015-04-22 libinput needs locale support:
+http://cgit.freedesktop.org/wayland/libinput/commit/src/libinput-util.c?id=5c671e0375cc03032fcac26efe4a7835a74c8bfc
+
+This patch adds the needed dependency also to
+weston and xdriver_xf86-input-libinput.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk |    2 +-
- package/mesa3d/mesa3d.hash               |    4 ++--
- package/mesa3d/mesa3d.mk                 |    2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/libinput/Config.in                         |    5 +++--
+ package/libinput/libinput.hash                     |    4 ++--
+ package/libinput/libinput.mk                       |    2 +-
+ package/weston/Config.in                           |    6 ++++--
+ .../x11r7/xdriver_xf86-input-libinput/Config.in    |    5 +++--
+ 5 files changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index c5f2dba..74ce8ae 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/libinput/Config.in b/package/libinput/Config.in
+index 14e4e70..f7793df 100644
+--- a/package/libinput/Config.in
++++ b/package/libinput/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBINPUT
+ 	bool "libinput"
++	depends on BR2_ENABLE_LOCALE
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_LIBEVDEV
+ 	select BR2_PACKAGE_MTDEV
+@@ -13,5 +14,5 @@ config BR2_PACKAGE_LIBINPUT
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 10.6.1
-+MESA3D_HEADERS_VERSION = 10.6.2
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 5c34a9e..4ba94ea 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
+ 	  http://freedesktop.org/wiki/Software/libinput/
+ 
+-comment "libinput needs udev /dev management"
+-	depends on !BR2_PACKAGE_HAS_UDEV
++comment "libinput needs udev /dev management and a toolchain w/ locale"
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_ENABLE_LOCALE
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 6452847..299a28f 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/mesa-announce/2015-June/000161.html
--sha256	6c80a2b647e57c85dc36e609d9aed17f878f0d8e0cf9ace86d14cf604101e1eb	mesa-10.6.1.tar.xz
-+# From http://lists.freedesktop.org/archives/mesa-announce/2015-July/000163.html
-+sha256	05753d3db4212900927b9894221a1669a10f56786e86a7e818b6e18a0817dca9	mesa-10.6.2.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 118f071..e5afed2 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+-# From http://lists.freedesktop.org/archives/wayland-devel/2015-April/021485.html
+-sha256	2bed202ebe2d5026950d6f9d2ac0f0160d12f61c5a0f6d0d6ef671bbb02c1b64	libinput-0.14.1.tar.xz
++# From http://lists.freedesktop.org/archives/wayland-devel/2015-July/023184.html
++sha256	69a97da47ef8fa9debadaa8ee11005b9b5183bd2b87c5aa7827b7c388a5acc5d	libinput-0.19.0.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index bacee6a..175e04f 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 10.6.1
-+MESA3D_VERSION = 10.6.2
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+-LIBINPUT_VERSION = 0.14.1
++LIBINPUT_VERSION = 0.19.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_LICENSE = MIT
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index dec3583..07773f0 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -1,7 +1,8 @@
+-comment "weston needs udev and a toolchain w/ threads, dynamic library, headers >= 3.0"
++comment "weston needs udev and a toolchain w/ locale, threads, dynamic library, headers >= 3.0"
+ 	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || BR2_STATIC_LIBS
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || BR2_STATIC_LIBS || \
++		!BR2_ENABLE_LOCALE
+ 
+ config BR2_PACKAGE_WESTON
+ 	bool "weston"
+@@ -13,6 +14,7 @@ config BR2_PACKAGE_WESTON
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_MTDEV
+ 	select BR2_PACKAGE_LIBINPUT
++	depends on BR2_ENABLE_LOCALE # libinput
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on !BR2_STATIC_LIBS # wayland
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/Config.in b/package/x11r7/xdriver_xf86-input-libinput/Config.in
+index cc878b6..69697ed 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/Config.in
++++ b/package/x11r7/xdriver_xf86-input-libinput/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_LIBINPUT
+ 	bool "xf86-input-libinput"
++	depends on BR2_ENABLE_LOCALE # libinput
+ 	depends on BR2_PACKAGE_HAS_UDEV # libinput
+ 	select BR2_PACKAGE_LIBINPUT
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+@@ -9,5 +10,5 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_LIBINPUT
+ 	  libinput, so while it does provide all features that libinput supports
+ 	  it does little beyond.
+ 
+-comment "xf86-input-libinput requires udev to be enabled"
+-	depends on !BR2_PACKAGE_HAS_UDEV
++comment "xf86-input-libinput needs udev /dev management and a toolchain w/ locale"
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_ENABLE_LOCALE
