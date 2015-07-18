@@ -1,70 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 21:06:02 +0200
-Subject: [Buildroot] [git commit] package/luajit: disable for static build
-Message-ID: <20150718190700.85B198045D@busybox.osuosl.org>
+Date: Sat, 18 Jul 2015 21:08:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/luajit: disable for static build
+In-Reply-To: <1437137197-5278-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1437137197-5278-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150718210844.3c4d9eaa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b2e8f28efac7125a6a8cf1db9087b3710101b487
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+J?rg,
 
-luajit requires dlopen().
+On Fri, 17 Jul 2015 14:46:37 +0200, J?rg Krause wrote:
+> luajit requires dlopen().
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/20d/20dfb10198f3688f92208591960192ca08280987/
+> http://autobuild.buildroot.net/results/c3c/c3cfdf8dfb315bf64caa9ed0f362016111fd93ac/
+> http://autobuild.buildroot.net/results/8cb/8cbf6207ecf7b254aeccd9ec5c07376a044e1f8f/
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/luajit/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+> index f6995e2..8ce528b 100644
+> --- a/package/luajit/Config.in
+> +++ b/package/luajit/Config.in
+> @@ -8,6 +8,7 @@ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+>  config BR2_PACKAGE_LUAJIT
+>  	bool "luajit"
+>  	select BR2_PACKAGE_HAS_LUAINTERPRETER
+> +	depends on !BR2_STATIC_LIBS # dlopen
 
-Fixes:
-http://autobuild.buildroot.net/results/20d/20dfb10198f3688f92208591960192ca08280987/
-http://autobuild.buildroot.net/results/c3c/c3cfdf8dfb315bf64caa9ed0f362016111fd93ac/
-http://autobuild.buildroot.net/results/8cb/8cbf6207ecf7b254aeccd9ec5c07376a044e1f8f/
+You forgot to propagate this dependency to the sysdig package, which
+selects luajit, so I've done that an applied.
 
-[Thomas: propagate the new dependency to the sysdig package, which
-selects luajit.]
+Technically speaking, it is possible to build luajit in
+BR2_STATIC_LIBS=y configuration, by setting LJ_TARGET_DLOPEN to 0 in
+src/lj_arch.h, but then you cannot load any C module, which makes
+LuaJIT maybe a little bit useless. If anyone is interested, they can
+always work on making this change.
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/luajit/Config.in |    4 ++++
- package/sysdig/Config.in |    5 +++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+Thanks!
 
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index f6995e2..8ce528b 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- config BR2_PACKAGE_LUAJIT
- 	bool "luajit"
- 	select BR2_PACKAGE_HAS_LUAINTERPRETER
-+	depends on !BR2_STATIC_LIBS # dlopen
- 	# Luajit is only available for some target architectures, and
- 	# has some complexity wrt 32/64. See luajit.mk for details.
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-@@ -32,3 +33,6 @@ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
- 	default "5.1"
- 
- endif
-+
-+comment "luajit needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index 3d7ee67..36d35fb 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_SYSDIG
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_INSTALL_LIBSTDCPP # libjson
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS # luajit
- 	help
- 	  Sysdig is open source, system-level exploration:
- 	  capture system state and activity from a running Linux instance,
-@@ -15,6 +16,6 @@ config BR2_PACKAGE_SYSDIG
- 
- 	  http://sysdig.org
- 
--comment "sysdig needs a toolchain w/ C++ and a Linux kernel to be built"
--	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP
-+comment "sysdig needs a toolchain w/ C++, dynamibc library and a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
