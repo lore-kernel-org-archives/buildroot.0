@@ -1,175 +1,231 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 18 Jul 2015 21:25:41 +0200
-Subject: [Buildroot] [PATCH 1/1] angularjs: new package.
-In-Reply-To: <20150718191650.6f34b9e5@free-electrons.com>
-References: <1437129876-5158-1-git-send-email-ignacy.gawedzki@green-communications.fr>
- <CAGduivxBdvS75bNaHo_AmWaZZZ4x0qqbr27kVPbLrvjay05uJQ@mail.gmail.com>
- <20150718191650.6f34b9e5@free-electrons.com>
-Message-ID: <CAAXf6LV0DdDu=OjP-fgmtM9VQdf6OzmV4zNzHRmeRtqOYs8Nag@mail.gmail.com>
+From: Carlos Soto <csotoalonso@gmail.com>
+Date: Sat, 18 Jul 2015 21:36:04 +0200
+Subject: [Buildroot] [PATCH 00/13] Update Freescale packages to
+	3.10.53-1.1.0_GA
+Message-ID: <CAD7j7Q-B9NAQqVHZr+uPmFTjOa5BJ-Orc3bOKFx81UHYX8Yk0Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ignacy, Thomas,
+Gary Bisson <gary.bisson@...> writes:
 
-On Sat, Jul 18, 2015 at 7:16 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Maxime, Ignacy,
 >
-> On Sat, 18 Jul 2015 17:58:48 +0200, Maxime Hadjinlian wrote:
+> Hi all,
 >
->> > +menuconfig BR2_ANGULARJS_MODULES
->> > +       bool "Select AngularJS modules"
->> > +
->> > +       help
->> > +         Select which modules to install, instead of installing all of them.
->> The phrasing seems a bit wrong to me here, but I'm no english expert.
->> Maybe stop at "Select modules to install." ?
+> This serie aims at updating all the Freescale pacakges to version
+> 3.10.53-1.1.0_GA. This is based on the updates made in the meta-fsl-am
+> layer on Jan 27, 2015.
+> https://github.com/Freescale/meta-fsl-arm/commits/master
 >
-> No, the original wording is correct, but could be clarified. I think
-> that what you missed is that this option is a menuconfig, not a menu:
-> you can enable/disable this option.
+> All the patches are pretty straight forward apart from the graphics
+> package update which I based on Antoine Tenart patch. I will detail
+> the changes and the testing on every patch.
 >
-> So, what happens is that when you have:
+> In order to test as much features as I could at once, here is my
+> configuration (using Nitrogen6x):
+> BR2_arm=y
+> BR2_cortex_a9=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TARGET_OPTIMIZATION="-pipe"
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
 >
->         [ ] Select AngularJS modules ---
+BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 >
-> Then all modules are installed. However, when you have:
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="
+https://github.com/boundarydevices/linux-imx6/tarball/98c0fdbe/linux-imx6-98c0fdbe.tar.gz
+"
+> BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
+> BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+> BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_vm
+imx6dl-nitrogen6x
+> imx6q-nitrogen6x imx6q-nitrogen6_max imx6q-sabrelite"
+> BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> BR2_PACKAGE_GSTREAMER=y
+> BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC=y
+> BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC=y
+> BR2_PACKAGE_GST_PLUGINS_GOOD=y
+> BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUTODETECT=y
+> BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX=y
+> BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MATROSKA=y
+> BR2_PACKAGE_GST_FSL_PLUGINS=y
+> BR2_PACKAGE_GSTREAMER1=y
+> BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC=y
+> BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC=y
+> BR2_PACKAGE_GST1_PLUGINS_GOOD=y
+> BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT=y
+> BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ID3DEMUX=y
+> BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA=y
+> BR2_PACKAGE_GST1_IMX=y
+> BR2_PACKAGE_GST1_LIBAV=y
+> BR2_PACKAGE_STRACE=y
+> BR2_PACKAGE_QT5=y
+> BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+> BR2_PACKAGE_QT5BASE_EXAMPLES=y
+> BR2_PACKAGE_QT5BASE_OPENGL_ES2=y
+> BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+> BR2_PACKAGE_QT5BASE_XCB=y
+> BR2_PACKAGE_QT5BASE_DEFAULT_QPA="xcb"
+> BR2_PACKAGE_QT5BASE_GIF=y
+> BR2_PACKAGE_QT5BASE_JPEG=y
+> BR2_PACKAGE_QT5BASE_PNG=y
+> BR2_PACKAGE_QT5QUICKCONTROLS=y
+> BR2_PACKAGE_XORG7=y
+> BR2_PACKAGE_XSERVER_XORG_SERVER=y
+> BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
+> BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV=y
+> BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV=y
+> BR2_PACKAGE_XTERM=y
+> BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
+> BR2_PACKAGE_IMX_GPU_VIV=y
+> BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES=y
+> BR2_PACKAGE_I2C_TOOLS=y
+> BR2_PACKAGE_PYTHON=y
+> BR2_PACKAGE_PYTHON_CFFI=y
+> BR2_PACKAGE_PYTHON_SETUPTOOLS=y
+> BR2_PACKAGE_LIBSHA1=y
+> BR2_PACKAGE_TIFF=y
+> BR2_PACKAGE_OPENSSH=y
+> BR2_PACKAGE_RSYNC=y
+> BR2_TARGET_UBOOT=y
+> BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
+> BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
 >
->         [*] Select AngularJS modules ---
->            [*] animate
->            [ ] aria
+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="
+http://github.com/boundarydevices/u-boot-imx6/tarball/21eb4146/u-boot-21eb4146.tar.gz
+"
+> BR2_TARGET_UBOOT_FORMAT_IMX=y
+> BR2_PACKAGE_HOST_E2FSPROGS=y
+> BR2_PACKAGE_HOST_GENEXT2FS=y
+> BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 >
-> Then animate will be installed, but not aria.
+> Regards,
+> Gary
 >
-> This part looks OK to me.
+> Antoine Tenart (1):
+>   gpu-viv-bin-mx6q: bump to 5.0.11.p4.1
 >
->> > +if BR2_ANGULARJS_MODULES
->> > +
->> > +config BR2_ANGULARJS_MODULE_animate
->> > +       bool "animate"
->> > +       default y
->> The name of the config should be all in uppercase.
+> Gary Bisson (12):
+>   libfslvpuwrap: bump version to 1.0.57
+>   libfslcodec: bump version to 4.0.2
+>   libfslparser: bump version to 4.0.2
+>   gst-fsl-plugins: bump version to 4.0.2
+>   imx-vpu: bump version to 5.4.27
+>   freescale-imx: bump to 3.10.53-1.1.0 GA release
+>   gpu-viv-bin-mx6q: rename package to imx-gpu-viv
+>   xdriver_xf86-video-imx-viv: bump to version 3.10.53-1.1.0 GA
+>   nitrogen6x_defconfig: bump version to 3.10.53_1.1.1_ga
+>   board/boundarydevices: update 6x_bootscript
+>   freescale_imx6*_defconfig: bump version to 3.10.53-1.1.0 GA
+>   qmx6_defconfig: bump version to 3.10.53_1.1.0
 >
-> Agreed.
+>  board/boundarydevices/nitrogen6x/6x_bootscript     | Bin 3207 -> 4682
+bytes
+>  configs/freescale_imx6dlsabreauto_defconfig        |   6 +-
+>  configs/freescale_imx6dlsabresd_defconfig          |   7 +-
+>  configs/freescale_imx6qsabreauto_defconfig         |   6 +-
+>  configs/freescale_imx6qsabresd_defconfig           |   7 +-
+>  configs/freescale_imx6sololiteevk_defconfig        |   5 +-
+>  configs/nitrogen6x_defconfig                       |  10 +--
+>  configs/qmx6_defconfig                             |   8 +-
+>  package/freescale-imx/Config.in                    |   2 +-
+>  package/freescale-imx/freescale-imx.mk             |   2 +-
+>  .../0001-correct-HAL-include.patch                 |  16 ----
+>  package/freescale-imx/gpu-viv-bin-mx6q/egl.pc      |  10 ---
+>  package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc   |  10 ---
+>  .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |  89
+-------------------
+>  package/freescale-imx/gpu-viv-bin-mx6q/vg.pc       |  10 ---
+>  .../{gpu-viv-bin-mx6q => imx-gpu-viv}/Config.in    |  26 +++---
+>  package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   |  98
++++++++++++++++++++++
+>  .../0001-vpu-io-fix-IOSystemInit-failure.patch     |  32 -------
+>  ...-lib-fix-IOGetVirtMem-return-value-checks.patch |  59 -------------
+>  package/freescale-imx/imx-vpu/imx-vpu.mk           |   2 +-
+>  .../0002-Fix-bashism-in-configure-script.patch     |   4 +-
+>  .../gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk   |   2 +-
+>  package/gstreamer1/gst1-imx/Config.in              |   6 +-
+>  package/gstreamer1/gst1-imx/gst1-imx.mk            |   2 +-
+>  package/libfslcodec/libfslcodec.mk                 |   2 +-
+>  package/libfslparser/libfslparser.mk               |   2 +-
+>  ...-fix-tests-of-return-value-from-IOGetVirt.patch |  44 ---------
+>  package/libfslvpuwrap/libfslvpuwrap.mk             |   2 +-
+>  package/qt5/qt5base/qt5base.mk                     |   2 +-
+>  .../0001-Fix-LoadExtenions.patch                   |  15 ----
+>  package/x11r7/xdriver_xf86-video-imx-viv/Config.in |   6 +-
+>  .../xdriver_xf86-video-imx-viv.mk                  |   4 +-
+>  32 files changed, 152 insertions(+), 344 deletions(-)
+>  delete mode 100644
+package/freescale-imx/gpu-viv-bin-mx6q/0001-correct-HAL-include.patch
+>  delete mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+>  delete mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+>  delete mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/
+gpu-viv-bin-mx6q.mk
+>  delete mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
+>  rename package/freescale-imx/{gpu-viv-bin-mx6q => imx-gpu-viv}/Config.in
+(72%)
+>  create mode 100644 package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+>  delete mode 100644
+package/freescale-imx/imx-vpu/0001-vpu-io-fix-IOSystemInit-failure.patch
+>  delete mode 100644
+package/freescale-imx/imx-vpu/0002-vpu-lib-fix-IOGetVirtMem-return-value-checks.patch
+>  delete mode 100644
+package/libfslvpuwrap/0001-vpu_wrapper-fix-tests-of-return-value-from-IOGetVirt.patch
+>  delete mode 100644
+package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
 >
->> The module should not be at y by default.
->> A little help text to explain what this modules does and is usefull
->> for would be nice (no need for a long text, just a few words)
->
-> Agreed.
->
->
->> > diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
->> > new file mode 100644
->> > index 0000000..c7b587b
->> > --- /dev/null
->> > +++ b/package/angularjs/angularjs.mk
->> > @@ -0,0 +1,41 @@
->> > +################################################################################
->> > +#
->> > +# AngularJS
->
-> This should be in lowercase.
->
->> > +#
->> > +################################################################################
->> > +
->> > +ANGULARJS_VERSION = 1.4.2
->> It seems there's already a newer version on their website.
->> > +ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
->> > +ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)/
->> You are missing the LICENSE and LICENSE_FILES information here.
->> You are also missing the '.hash' file, have a look at:
->> http://buildroot.org/downloads/manual/manual.html#adding-packages-hash
->> > +
->> > +define ANGULARJS_EXTRACT_CMDS
->> > +       unzip $(DL_DIR)/$(ANGULARJS_SOURCE) -d $(@D)
->> > +       mv $(@D)/angular-$(ANGULARJS_VERSION)/* $(@D)
->> > +       rmdir $(@D)/angular-$(ANGULARJS_VERSION)
->> > +endef
->> > +
->> > +ANGULARJS_FILES = angular.min.js
->
-> Change this to just:
->
-> ANGULARJS_FILES = angular
->
-> (see below why)
->
->> > +
->> > +ANGULARJS_MODULES = animate aria cookies loader message-format \
->> > +                   messages resource route sanitize touch
->
-> One tab for the indentation of the second line.
->
->> > +
->> > +ifeq ($(BR2_ANGULARJS_MODULES),y)
->> > +
->
-> Unneeded newline.
->
->> > +ANGULARJS_FILES += $(foreach mod,$(ANGULARJS_MODULES),\
->> > +                  $(if $(filter y,$(BR2_ANGULARJS_MODULE_$(mod))),\
->
-> The filter is not needed, and you'll have to use the lowercase function
-> once the options will be capitalized. So probably something like:
->
->         $(foreach mod,$(ANGULARJS_MODULES),\
->                 $(if $(BR2_ANGULARJS_MODULE_$(call UPPERCASE,$(mod))),angular-$(mod)))
->
->> > +                       angular-$(mod).min.js))
->> > +
->> > +else
->> > +
->
-> Unneeded new line.
->
->> > +ANGULARJS_FILES += $(foreach mod,$(ANGULARJS_MODULES),angular-$(mod).min.js)
->> > +
->> > +endif
->> > +
->> > +define ANGULARJS_INSTALL_TARGET_CMDS
->> > +       for f in $(strip $(ANGULARJS_FILES)); do        \
->> > +               $(INSTALL) -m 0644 -D $(@D)/$$f         \
->> > +               $(TARGET_DIR)/var/www/$${f%.min.js}.js; \
 
-Here, IIUC, you are installing foo.min.js as foo.js. I think this is
-misleading: it is common practice in web development to actually
-include minified files as .min.js instead of renaming this, so I don't
-see why it should be done here.
 
->> > +       done
->> > +endef
->>
->> Instead of this construct, look at how it's done in
->> package/nfs-utils/nfs-utils.mk, you can use Make at your own advantage
->> and define:
->> ANGULAR_JS_MODULES_$(BR2_PACKAGE_NFS_UTILS_RPCDEBUG) += path/to/the/file
->>
->> Then install everything and delete $(ANGULAR_JS_MODULES_) which will
->> contains the modules not selected.
->> This way, you don't even need a loop.
->
-> I disagree here, I think the original implementation from Ignacy is
-> pretty good and smart. But using a foreach loop is better for error
-> handling (it will stop if one install command fails) :
->
->         $(foreach f,$(ANGULARJS_FILES),\
->                 $(INSTALL) -m 0644 -D $(@D)/$(f).min.js $(TARGET_DIR)/var/www/$(f).js$(sep))
->
->> As mentionned on IRC by Thomas De Schampheleire, you may need to
->> qstrip instead of strip.
->
-> I don't see why. There are no double quotes anywhere here. qstrip is
-> used when you get a 'string' option from Config.in, which is not the
-> case here.
+Any news witch those patches? Would they be commmitted any time soon? I've
+tried to apply them to my local copy and I wasn't able to, so instead I
+applied the changes "manually" (I know, a bit noob :P)
 
-To clarify: I realize that these are not string options and qstrip
-will not make a technical difference over strip. However, for
-consistency, I think it makes sense that packages always use qstrip
-rather than strip.
+Anyway, they seem to work except for the fact that as soon as a program is
+stopped (mainly I've tried with glxgears) the xserver crashes. That's the
+error log:
+CProcess termination by interupt!
+client(200000): Released pid(314).
+client(200000): Released cmdline(./glxgears) and cmdargs(NULL).
+(dix) removing device 2
+(dix) removing device 3
+(dix) removing device 5
+(dix) removing device 4
+# client(0): Released pid(311).
+client(0): Released cmdline(X) and cmdargs(NULL).
+APM: OSPMOpen called
+APM: Opening device
+xfree init mode:    35714   800 817 837 865   480 500 513 526
+fbdev init mode:    28000   800 17 20 28   480 20 13 13   32 8:8:8
+InitOutput - xf86Screens[0]->pScreen = 0x2036f78
+xf86Screens[0]->pScreen->CreateWindow = 0x76793e18
+Sync Extension 3.1
+XFree86VidModeExtensionInit
+xf86CreateRootWindow(0x21354c8)
+(EE)
+(EE) Backtrace:
+(EE)
+(EE) Segmentation fault at address 0x11
+(EE)
+Fatal server error:
+(EE) Caught signal 11 (Segmentation fault). Server aborting
+(EE)
+(EE)
+Please consult the The X.Org Foundation support
+     at http://wiki.x.org
+ for help.
+(EE) Please also check the log file at "/var/log/Xorg.0.log" for additional
+information.
+(EE)
+(EE) Server terminated with error (1). Closing log file.
 
-/Thomas
+
+As I said, I've applied the changes by hand so that should be the cause.
+That's why I would like the patch to be commited in order to get it right.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150718/f3f96b9f/attachment-0001.html>
