@@ -1,41 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jul 2015 14:12:59 +0200
-Subject: [Buildroot] [PATCH v2] ARC: allow selection of MMU page size
-In-Reply-To: <1437124302-18610-1-git-send-email-abrodkin@synopsys.com>
-References: <1437124302-18610-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150718141259.1c7bd109@free-electrons.com>
+Date: Sat, 18 Jul 2015 14:13:50 +0200
+Subject: [Buildroot] [git commit] package/boost: boost-filesystem needs wchar
+Message-ID: <20150718121355.8EFF381D5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+commit: http://git.buildroot.net/buildroot/commit/?id=b685629b9ccc6316305736caa16560ad90d85a80
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 17 Jul 2015 12:11:42 +0300, Alexey Brodkin wrote:
-> Modern ARC cores (those sporting MMU of version 3 and 4) allow selection
-> of different page sizes (4, 8 or 16 kB) during ASIC design creation.
-> And it's important to build a toolchain with page size setting that matches
-> hardware.
-> 
-> Otherwise user-space applications will fail on execution due to
-> unexpected data layout/alignment etc.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Anton Kolesov <akolesov@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
+Also add reverse dependency for cc-tool.
 
-I've done some minor edits of the Config.in help text, and also fixed
-the indentation: indentation for Config.in properties is one tab, and
-for the help text it's one tab + two spaces (it was broken in several
-places). After fixing those minor issues, I've applied and pushed!
+Fixes:
+http://autobuild.buildroot.net/results/2c7/2c7783b7f3cc28d54d15a7f017442c48244ffd8e/
+http://autobuild.buildroot.net/results/2c7/2c7783b7f3cc28d54d15a7f017442c48244ffd8e/
+http://autobuild.buildroot.net/results/0dd/0dd3ef96bbd034a41d908cdaa6552b27fda78132/
+http://autobuild.buildroot.net/results/34b/34b55b2cd83fd5d87af4a9c15d05094b16ef3960/
 
-Thanks!
+and many more
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/boost/Config.in   |    4 ++++
+ package/cc-tool/Config.in |    5 +++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 92d59c2..68004b6 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -77,6 +77,10 @@ config BR2_PACKAGE_BOOST_EXCEPTION
+ 
+ config BR2_PACKAGE_BOOST_FILESYSTEM
+ 	bool "boost-filesystem"
++	depends on BR2_USE_WCHAR
++
++comment "boost-filesystem needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_BOOST_GRAPH
+ 	bool "boost-graph"
+diff --git a/package/cc-tool/Config.in b/package/cc-tool/Config.in
+index be11599..f8e4531 100644
+--- a/package/cc-tool/Config.in
++++ b/package/cc-tool/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_CC_TOOL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	depends on BR2_USE_WCHAR # boost-filesystem
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+@@ -17,6 +18,6 @@ config BR2_PACKAGE_CC_TOOL
+ 
+ 	  http://sourceforge.net/projects/cctool/
+ 
+-comment "cc-tool needs a toolchain w/ C++, threads"
++comment "cc-tool needs a toolchain w/ C++, threads, wchar"
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
