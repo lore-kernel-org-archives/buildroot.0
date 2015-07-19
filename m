@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:30 +0200
-Subject: [Buildroot] [PATCH/RFC v3 25/50] package/kodi-pvr-pctv: new package
+Date: Sun, 19 Jul 2015 21:05:39 +0200
+Subject: [Buildroot] [PATCH/RFC v3 34/50] package/kodi-audiodecoder-snesapu:
+	new package
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-26-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-35-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,59 +13,58 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-pctv/Config.in        |    8 ++++++++
- package/kodi-pvr-pctv/kodi-pvr-pctv.mk |   17 +++++++++++++++++
- package/kodi/Config.in                 |    1 +
- 3 files changed, 26 insertions(+)
- create mode 100644 package/kodi-pvr-pctv/Config.in
- create mode 100644 package/kodi-pvr-pctv/kodi-pvr-pctv.mk
+ package/kodi-audiodecoder-snesapu/Config.in           |    7 +++++++
+ .../kodi-audiodecoder-snesapu.mk                      |   17 +++++++++++++++++
+ package/kodi/Config.in                                |    1 +
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/kodi-audiodecoder-snesapu/Config.in
+ create mode 100644 package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
 
-diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
+diff --git a/package/kodi-audiodecoder-snesapu/Config.in b/package/kodi-audiodecoder-snesapu/Config.in
 new file mode 100644
-index 0000000..255cd4a
+index 0000000..0cb572f
 --- /dev/null
-+++ b/package/kodi-pvr-pctv/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_KODI_PVR_PCTV
-+	bool "kodi-pvr-pctv"
-+	select BR2_PACKAGE_JSONCPP
++++ b/package/kodi-audiodecoder-snesapu/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_AUDIODECODER_SNESAPU
++	bool "kodi-audiodecoder-snesapu"
 +	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  PCTV PVR client addon for Kodi
++	  SPC decoder addon for Kodi
 +
-+	  https://github.com/kodi-pvr/pvr.vdr.vnsi
-diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
++	  https://github.com/notspiff/audiodecoder.snesapu
+diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
 new file mode 100644
-index 0000000..978cb7b
+index 0000000..6d433d7
 --- /dev/null
-+++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
++++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-pvr-pctv
++# kodi-audiodecoder-snesapu
 +#
 +################################################################################
 +
-+KODI_PVR_PCTV_VERSION = d23160c043b0cd0a86463f6a3590a8126ff8af9d
-+KODI_PVR_PCTV_SITE = $(call github,kodi-pvr,pvr.pctv,$(KODI_PVR_PCTV_VERSION))
-+KODI_PVR_PCTV_LICENSE = GPLv2+
-+KODI_PVR_PCTV_LICENSE_FILES = src/client.cpp
++KODI_AUDIODECODER_SNESAPU_VERSION = 399d1d3f32fe6f62f5657b8ce67c30229629cb51
++KODI_AUDIODECODER_SNESAPU_SITE = $(call github,notspiff,audiodecoder.snesapu,$(KODI_AUDIODECODER_SNESAPU_VERSION))
++KODI_AUDIODECODER_SNESAPU_LICENSE = GPLv2+
++KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = src/SPCCodec.cpp
 +
-+KODI_PVR_PCTV_DEPENDENCIES = jsoncpp kodi-platform
++KODI_AUDIODECODER_SNESAPU_DEPENDENCIES = kodi-platform
 +
-+KODI_PVR_PCTV_CONF_OPTS += \
++KODI_AUDIODECODER_SNESAPU_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index f9a3602..6aaf72f 100644
+index 790be0d..91d9783 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -263,6 +263,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-mythtv/Config.in"
- 	source "package/kodi-pvr-nextpvr/Config.in"
- 	source "package/kodi-pvr-njoy/Config.in"
-+	source "package/kodi-pvr-pctv/Config.in"
+@@ -275,6 +275,7 @@ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-modplug/Config.in"
+ 	source "package/kodi-audiodecoder-nosefart/Config.in"
+ 	source "package/kodi-audiodecoder-sidplay/Config.in"
++	source "package/kodi-audiodecoder-snesapu/Config.in"
  endmenu
  
  menu "Audio encoder addons"
