@@ -1,76 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Jul 2015 23:22:02 +0200
-Subject: [Buildroot] [PATCH v2 1/3] qt5: bump version to 5.5.0
-In-Reply-To: <1436380555-13657-1-git-send-email-corjon.j@ecagroup.com>
-References: <1436380555-13657-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <20150719232202.67a5bc98@free-electrons.com>
+From: =?UTF-8?q?Aur=C3=A9lien=20Chabot?= <aurelien@chabot.fr>
+Date: Mon, 20 Jul 2015 00:18:01 +0200
+Subject: [Buildroot] [PATCH v3] transmission: improve systemd support
+In-Reply-To: <1421684056-5266-11-git-send-email-maxtram95@gmail.com>
+References: <1421684056-5266-11-git-send-email-maxtram95@gmail.com>
+Message-ID: <1437344281-12250-1-git-send-email-aurelien@chabot.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Julien Corjon,
+From: Maxim Mikityanskiy <maxtram95@gmail.com>
 
-On Wed,  8 Jul 2015 20:35:53 +0200, Julien Corjon wrote:
-> QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES is no longer useful since eglfs does not
-> depend on the device makespecs anymore. Instead, backends are autodetected by
-> configure [1].
-> 
-> 0008-forkd-disable-eventfd-for-uclibc.patch disable missing eventfd in new Qt
-> 3rd party forkd for uClibc toolchains.
-> 
-> Remove patches commited in Qt mainline and update pending one
-> 
-> [1] https://codereview.qt-project.org/#/c/107548/
-> 
-> Tested-by: Julien Corjon <corjon.j@ecagroup.com> Full compilation on ARM/uClibc
-> Tested-by: Julien Corjon <corjon.j@ecagroup.com> Partialy compiled and tested
->   on i.MX6/linaro with OpenGL backend
-> 
-> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+Support running transmission-daemon in system-wide mode using systemd:
 
-I was about to apply this, but unfortunately, it breaks the build with
-rpi-userland as the egl provider:
+1. Pass --with-systemd-daemon to configure script if systemd is enabled.
 
-/home/test/outputs/qt5/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/interface/vcos/vcos_types.h:38:33: fatal error: vcos_platform_types.h: No such file or directory
- #include "vcos_platform_types.h"
+2. Create the transmission user if having daemon
 
-I checked, and without your patches, the build works fine. The
-defconfig I'm testing is:
+3. Install transmission-daemon.service for systemd.
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.05-496-g85945aa.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-BR2_PACKAGE_QT5BASE_EGLFS=y
-BR2_PACKAGE_QT5BASE_JPEG=y
-BR2_PACKAGE_QT5BASE_PNG=y
-BR2_PACKAGE_QT5DECLARATIVE=y
-BR2_PACKAGE_QT5MULTIMEDIA=y
-BR2_PACKAGE_QT5QUICK1=y
-BR2_PACKAGE_QT5SENSORS=y
-BR2_PACKAGE_QT5SERIALPORT=y
-BR2_PACKAGE_QT5SVG=y
-BR2_PACKAGE_QJSON=y
-BR2_PACKAGE_QUAZIP=y
-BR2_PACKAGE_RPI_USERLAND=y
+[Aur?lien : Fix symlink relative path, use upstream service file,
+no need for config path, and use transmission user in sysv script,
+remove sysctl stuff]
 
-Maybe Bernd or Yann can help with this Raspberry Pi specific issue?
+Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+Signed-off-by: Aur?lien Chabot <aurelien@chabot.fr>
+---
+ package/transmission/S92transmission |  4 +---
+ package/transmission/transmission.mk | 19 +++++++++++++++++++
+ 2 files changed, 20 insertions(+), 3 deletions(-)
 
-It's clearly a header path missing. It's probably caused by the
-refactoring of how the platform-specific EGL stuff is handled in Qt5.
-
-Thomas
+diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
+index 1870522..e5976b0 100644
+--- a/package/transmission/S92transmission
++++ b/package/transmission/S92transmission
+@@ -24,9 +24,7 @@
+ # by default, this is set to 'transmission'.
+ # For the sake of security you shouldn't set a password
+ # on this user
+-#USERNAME=transmission
+-USERNAME=default
+-
++USERNAME=transmission
+ 
+ 
+ # ----- *ADVANCED* CONFIGURATION -----
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index bbc32bf..efc00a1 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -36,11 +36,30 @@ endif
+ ifeq ($(BR2_PACKAGE_TRANSMISSION_DAEMON),y)
+ TRANSMISSION_CONF_OPTS += --enable-daemon
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++TRANSMISSION_DEPENDENCIES += systemd
++TRANSMISSION_CONF_OPTS += --with-systemd-daemon
++else
++TRANSMISSION_CONF_OPTS += --without-systemd-daemon
++endif
++
++define TRANSMISSION_USERS
++	transmission -1 transmission -1 * /var/lib/transmission - transmission Transmission Daemon
++endef
++
+ define TRANSMISSION_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/transmission/S92transmission \
+ 		$(TARGET_DIR)/etc/init.d/S92transmission
+ endef
+ 
++define TRANSMISSION_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0755 $(@D)/daemon/transmission-daemon.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/transmission-daemon.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/transmission-daemon.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/transmission-daemon.service
++endef
++
+ else
+ TRANSMISSION_CONF_OPTS += --disable-daemon
+ endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.6
