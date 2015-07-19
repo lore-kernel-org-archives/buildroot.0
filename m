@@ -1,52 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jul 2015 15:15:28 +0200
-Subject: [Buildroot] [PATCHv2] core/pkg-generic: host variants inherits
-	target's override-srcdir
-Message-ID: <1437311728-31289-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 19 Jul 2015 15:29:50 +0200
+Subject: [Buildroot] [PATCH v7 1/1] Added linux drivers backports project
+In-Reply-To: <1435791533-25991-1-git-send-email-petr.vorel@gmail.com>
+References: <1435791533-25991-1-git-send-email-petr.vorel@gmail.com>
+Message-ID: <20150719132950.GC4020@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a package has both a target and a host variants, and there is an
-override-srcdir set for the target variant, the host variant should
-inherit the target's override-srcdir, unless explicitly set, like we do
-for all other target-variant properties.
+Petr, All,
 
-However, do not override it if expressly set to empty (i.e. when the
-user wants to override only the target variant).
+On 2015-07-02 00:58 +0200, Petr Vorel spake thusly:
+> https://backports.wiki.kernel.org
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Also, as we do for the other variables, the target variant never
-inherits from the host variant.
+Since there's quite some work left to be done, and we would like to have
+this as part of the next release, I'm adopting this patch to fix the
+remaining issues that Arnout and I raised earlier.
 
-Reported-by: Mike <mikez@OpenPlayer.org>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+However, I have a question, see below...
 
----
-Changes v1 -> v2:
-  - really do not override the host variant if expressly set to empty
-    (Arnout)
----
- package/pkg-generic.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+> diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
+> new file mode 100644
+> index 0000000..d45166a
+> --- /dev/null
+> +++ b/package/linux-backports/linux-backports.mk
+> @@ -0,0 +1,64 @@
+> +################################################################################
+> +#
+> +# linux-backports
+> +#
+> +################################################################################
+> +
+> +LINUX_BACKPORTS_VERSION_MAJOR = 4.0.1
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 75dc8b7..6a7d97e 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -340,6 +340,10 @@ else
- endif
- $(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))
- 
-+ifdef $(3)_OVERRIDE_SRCDIR
-+  $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
-+endif
-+
- $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
- $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
- $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+How are the versions of Linux and linux-backports related?
+
+I.e. does linux-backports have to match the Linux version, or can we
+use whatever linux-backports version with whatever Linux version?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
