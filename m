@@ -1,86 +1,95 @@
 From: =?UTF-8?q?Aur=C3=A9lien=20Chabot?= <aurelien@chabot.fr>
-Date: Sun, 19 Jul 2015 23:02:39 +0200
-Subject: [Buildroot] [PATCH 2/2] rpcbind: add systemd support
-In-Reply-To: <1437339759-21456-1-git-send-email-aurelien@chabot.fr>
-References: <1437339759-21456-1-git-send-email-aurelien@chabot.fr>
-Message-ID: <1437339759-21456-2-git-send-email-aurelien@chabot.fr>
+Date: Sun, 19 Jul 2015 23:02:38 +0200
+Subject: [Buildroot] [PATCH 1/2] rpcbind: bump version 0.2.3
+Message-ID: <1437339759-21456-1-git-send-email-aurelien@chabot.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Refreshed patch:
+	0001-Remove-yellow-pages-support.patch
+
 Signed-off-by: Aur?lien Chabot <aurelien@chabot.fr>
 ---
- package/rpcbind/rpcbind.mk      | 18 +++++++++++++++++-
- package/rpcbind/rpcbind.service | 10 ++++++++++
- package/rpcbind/rpcbind.socket  |  8 ++++++++
- 3 files changed, 35 insertions(+), 1 deletion(-)
- create mode 100644 package/rpcbind/rpcbind.service
- create mode 100644 package/rpcbind/rpcbind.socket
+ package/rpcbind/0001-Remove-yellow-pages-support.patch | 16 ++++++++--------
+ package/rpcbind/rpcbind.hash                           |  2 +-
+ package/rpcbind/rpcbind.mk                             |  3 ++-
+ 3 files changed, 11 insertions(+), 10 deletions(-)
 
+diff --git a/package/rpcbind/0001-Remove-yellow-pages-support.patch b/package/rpcbind/0001-Remove-yellow-pages-support.patch
+index e35828f..314e32e 100644
+--- a/package/rpcbind/0001-Remove-yellow-pages-support.patch
++++ b/package/rpcbind/0001-Remove-yellow-pages-support.patch
+@@ -1,4 +1,4 @@
+-From 249e25c5cc675c212ca4e4a3342bff8f59285b1a Mon Sep 17 00:00:00 2001
++From 226b9c57ff403b407dbf1ff8a615da455a4cbd23 Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Date: Sat, 10 Nov 2012 22:03:43 +0100
+ Subject: [PATCH] Remove yellow pages support
+@@ -13,20 +13,20 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  1 file changed, 18 deletions(-)
+ 
+ diff --git a/src/security.c b/src/security.c
+-index d272f74..8d5863c 100644
++index 0c9453f..abc81bb 100644
+ --- a/src/security.c
+ +++ b/src/security.c
+-@@ -23,9 +23,6 @@
++@@ -24,9 +24,6 @@
+  #include <rpcsvc/mount.h>
+  #include <rpcsvc/rquota.h>
+  #include <rpcsvc/nfs_prot.h>
+ -#include <rpcsvc/yp.h>
+ -#include <rpcsvc/ypclnt.h>
+ -#include <rpcsvc/yppasswd.h>
+- 
+- #include "rpcbind.h"
+- 
+-@@ -308,24 +305,9 @@ check_callit(SVCXPRT *xprt, struct r_rmtcall_args *args, int versnum /*__unused*
++ #else
++ # define MOUNTPROC_MNT	1
++ # define MOUNTPROC_UMNT	3
++@@ -325,24 +322,9 @@ check_callit(SVCXPRT *xprt, struct r_rmtcall_args *args, int versnum /*__unused*
+  		    args->rmt_proc != MOUNTPROC_UMNT)
+  			break;
+  		goto deny;
+@@ -52,5 +52,5 @@ index d272f74..8d5863c 100644
+  		break;
+  	}
+ -- 
+-2.0.0
++2.4.5
+ 
+diff --git a/package/rpcbind/rpcbind.hash b/package/rpcbind/rpcbind.hash
+index 830ef55..5c9ecd1 100644
+--- a/package/rpcbind/rpcbind.hash
++++ b/package/rpcbind/rpcbind.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  da169ff877a5a07581fad50a9a808ac6e96f0c277a3df49a7ef005778428496e  rpcbind-0.2.1.tar.bz2
++sha256 9897823a9d820ea011d9ea02054d5ab99469b9ca5346265fee380713c8fed27b  rpcbind-0.2.3.tar.bz2
 diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
-index d879de1..5396480 100644
+index b85d88e..d879de1 100644
 --- a/package/rpcbind/rpcbind.mk
 +++ b/package/rpcbind/rpcbind.mk
-@@ -14,11 +14,27 @@ RPCBIND_CONF_ENV += \
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPCBIND_VERSION = 0.2.1
++RPCBIND_VERSION = 0.2.3
+ RPCBIND_SITE = http://downloads.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIND_VERSION)
+ RPCBIND_SOURCE = rpcbind-$(RPCBIND_VERSION).tar.bz2
+ RPCBIND_LICENSE = BSD-3c
+@@ -14,6 +14,7 @@ RPCBIND_CONF_ENV += \
  	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/tirpc/"
  RPCBIND_DEPENDENCIES += libtirpc host-pkgconf
  RPCBIND_CONF_OPTS += --with-rpcuser=root
--RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
-+
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+	RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
-+else
-+	RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
-+endif
-+
-+define RPCBIND_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -m 0755 -D package/rpcbind/rpcbind.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.service
-+	$(INSTALL) -m 0755 -D package/rpcbind/rpcbind.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.socket
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/sockets.target.wants
-+	ln -fs ../../../../usr/lib/systemd/system/rpcbind.socket \
-+		$(TARGET_DIR)/etc/systemd/system/sockets.target.wants/rpcbind.socket
-+endef
++RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
  
  define RPCBIND_INSTALL_INIT_SYSV
  	$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
- 		$(TARGET_DIR)/etc/init.d/S30rpcbind
- endef
- 
-+
- $(eval $(autotools-package))
-diff --git a/package/rpcbind/rpcbind.service b/package/rpcbind/rpcbind.service
-new file mode 100644
-index 0000000..b7a32a1
---- /dev/null
-+++ b/package/rpcbind/rpcbind.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=RPC bind service
-+Requires=rpcbind.socket
-+
-+[Service]
-+Type=forking
-+ExecStart=/usr/bin/rpcbind
-+
-+[Install]
-+Also=rpcbind.socket
-diff --git a/package/rpcbind/rpcbind.socket b/package/rpcbind/rpcbind.socket
-new file mode 100644
-index 0000000..d63c1d9
---- /dev/null
-+++ b/package/rpcbind/rpcbind.socket
-@@ -0,0 +1,8 @@
-+[Unit]
-+Description=RPCbind Server Activation Socket
-+
-+[Socket]
-+ListenStream=/var/run/rpcbind.sock
-+
-+[Install]
-+WantedBy=sockets.target
 -- 
 2.4.6
