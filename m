@@ -1,107 +1,71 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:12 +0200
-Subject: [Buildroot] [PATCH/RFC v3 07/50] package/kodi: Rework audio encoder
-	support
+Date: Sun, 19 Jul 2015 21:05:08 +0200
+Subject: [Buildroot] [PATCH/RFC v3 03/50] package/libplatform: new package
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make option BR2_PACKAGE_KODI_OPTICALDRIVE invisible, it is only
-needed when an audio encoder addon is enabled.
-
-Add Kconfig submenu for audio encoders to prepare for addition of
-more binary addons.
+Needed by libcec 3.x
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-flac/Config.in   |    1 +
- package/kodi-audioencoder-lame/Config.in   |    1 +
- package/kodi-audioencoder-vorbis/Config.in |    1 +
- package/kodi-audioencoder-wav/Config.in    |    1 +
- package/kodi/Config.in                     |   20 +++++++-------------
- 5 files changed, 11 insertions(+), 13 deletions(-)
+ package/Config.in                  |    1 +
+ package/libplatform/Config.in      |    6 ++++++
+ package/libplatform/libplatform.mk |   16 ++++++++++++++++
+ 3 files changed, 23 insertions(+)
+ create mode 100644 package/libplatform/Config.in
+ create mode 100644 package/libplatform/libplatform.mk
 
-diff --git a/package/kodi-audioencoder-flac/Config.in b/package/kodi-audioencoder-flac/Config.in
-index 799f9c5..95acbba 100644
---- a/package/kodi-audioencoder-flac/Config.in
-+++ b/package/kodi-audioencoder-flac/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_KODI_AUDIOENCODER_FLAC
- 	bool "kodi-audioencoder-flac"
- 	select BR2_PACKAGE_FLAC
-+	select BR2_PACKAGE_KODI_OPTICALDRIVE
- 	select BR2_PACKAGE_LIBOGG
- 	help
- 	  An audioencoder addon for Kodi
-diff --git a/package/kodi-audioencoder-lame/Config.in b/package/kodi-audioencoder-lame/Config.in
-index be00296..dc6a0cd 100644
---- a/package/kodi-audioencoder-lame/Config.in
-+++ b/package/kodi-audioencoder-lame/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KODI_AUDIOENCODER_LAME
- 	bool "kodi-audioencoder-lame"
-+	select BR2_PACKAGE_KODI_OPTICALDRIVE
- 	select BR2_PACKAGE_LAME
- 	help
- 	  An audioencoder addon for Kodi
-diff --git a/package/kodi-audioencoder-vorbis/Config.in b/package/kodi-audioencoder-vorbis/Config.in
-index ab8b4b3..8b84626 100644
---- a/package/kodi-audioencoder-vorbis/Config.in
-+++ b/package/kodi-audioencoder-vorbis/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KODI_AUDIOENCODER_VORBIS
- 	bool "kodi-audioencoder-vorbis"
-+	select BR2_PACKAGE_KODI_OPTICALDRIVE
- 	select BR2_PACKAGE_LIBOGG
- 	select BR2_PACKAGE_LIBVORBIS
- 	help
-diff --git a/package/kodi-audioencoder-wav/Config.in b/package/kodi-audioencoder-wav/Config.in
-index 6813f02..6bdbb9a 100644
---- a/package/kodi-audioencoder-wav/Config.in
-+++ b/package/kodi-audioencoder-wav/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KODI_AUDIOENCODER_WAV
- 	bool "kodi-audioencoder-wav"
-+	select BR2_PACKAGE_KODI_OPTICALDRIVE
- 	help
- 	  An audioencoder addon for Kodi
- 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 7d4b068..f182fbf 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -247,20 +247,14 @@ config BR2_PACKAGE_KODI_WAVPACK
- 	  Select this if you want to play back WV files.
- 
- config BR2_PACKAGE_KODI_OPTICALDRIVE
--	bool "optical drive"
--	help
--	  Enable support for optical drives
--
--if BR2_PACKAGE_KODI_OPTICALDRIVE
--
--comment "Kodi audioencoder addons"
--
--source "package/kodi-audioencoder-flac/Config.in"
--source "package/kodi-audioencoder-lame/Config.in"
--source "package/kodi-audioencoder-vorbis/Config.in"
--source "package/kodi-audioencoder-wav/Config.in"
+diff --git a/package/Config.in b/package/Config.in
+index 983d4e4..c8f3a72 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1063,6 +1063,7 @@ menu "Other"
+ 	source "package/liblinear/Config.in"
+ 	source "package/libnspr/Config.in"
+ 	source "package/libpfm4/Config.in"
++	source "package/libplatform/Config.in"
+ 	source "package/libplist/Config.in"
+ 	source "package/libpthread-stubs/Config.in"
+ 	source "package/libpthsem/Config.in"
+diff --git a/package/libplatform/Config.in b/package/libplatform/Config.in
+new file mode 100644
+index 0000000..7d275b1
+--- /dev/null
++++ b/package/libplatform/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBPLATFORM
 +	bool
- 
--endif # BR2_PACKAGE_KODI_OPTICALDRIVE
-+menu "Audio encoder addons"
-+	source "package/kodi-audioencoder-flac/Config.in"
-+	source "package/kodi-audioencoder-lame/Config.in"
-+	source "package/kodi-audioencoder-vorbis/Config.in"
-+	source "package/kodi-audioencoder-wav/Config.in"
-+endmenu
- 
- comment "Kodi PVR addons"
- 
++	help
++	  Platform support library used by libCEC and binary add-ons for Kodi
++
++	  https://github.com/Pulse-Eight/platform
+diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
+new file mode 100644
+index 0000000..77fbcec
+--- /dev/null
++++ b/package/libplatform/libplatform.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libplatform
++#
++################################################################################
++
++LIBPLATFORM_VERSION = 1.0.10
++LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
++LIBPLATFORM_LICENSE = GPLv3+
++LIBPLATFORM_LICENSE_FILES = COPYING
++LIBPLATFORM_INSTALL_STAGING = YES
++
++LIBPLATFORM_CONF_OPTS += \
++	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
++
++$(eval $(cmake-package))
 -- 
 1.7.10.4
