@@ -1,85 +1,35 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 19 Jul 2015 22:40:43 +0200
-Subject: [Buildroot] [PATCH] core/pkg-generic: host variants inherits
- target's override-srcdir
-In-Reply-To: <20150719104206.GA4020@free.fr>
-References: <1436097417-1809-1-git-send-email-yann.morin.1998@free.fr>
- <559B02FB.8010803@mind.be> <20150719104206.GA4020@free.fr>
-Message-ID: <55AC0B4B.1020001@mind.be>
+Date: Sun, 19 Jul 2015 22:42:34 +0200
+Subject: [Buildroot] [PATCH] uboot: BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR ->
+ legacy
+In-Reply-To: <1429903115-29129-1-git-send-email-fhunleth@troodon-software.com>
+References: <1429903115-29129-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <55AC0BBA.3000403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/19/15 12:42, Yann E. MORIN wrote:
-> On 2015-07-07 00:36 +0200, Arnout Vandecappelle spake thusly:
->> On 07/05/15 13:56, Yann E. MORIN wrote:
->>> When a package has both a target and a host variants, and there is an
->>> override-srcdir set for the target variant, the host variant should
->>> inherit the target's override-srcdir, unless explicitly set, like we do
->>> for all other target-variant properties.
->>>
->>> Reported-by: Mike <mikez@OpenPlayer.org>
->>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>> ---
->>>  package/pkg-generic.mk | 6 ++++++
->>>  1 file changed, 6 insertions(+)
->>>
->>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->>> index 9fe01b8..926d594 100644
->>> --- a/package/pkg-generic.mk
->>> +++ b/package/pkg-generic.mk
->>> @@ -310,6 +310,12 @@ else
->>>    $(2)_VERSION := $$(call sanitize,$$($(2)_VERSION))
->>>  endif
->>>  
->>> +ifndef $(2)_OVERRIDE_SRCDIR
->>> +  ifdef $(3)_OVERRIDE_SRCDIR
->>> +    $(2)_OVERRIDE_SRCDIR = $$($(3)_OVERRIDE_SRCDIR)
->>> +  endif
->>> +endif
->>
->>  IMHO this should be
->>
->> ifdef $(3)_OVERRIDE_SRCDIR)
->>   $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
->> endif
->>
->> i.e. don't set the override if it has been explicitly set to empty. Note that
->> the ifdef is still needed, otherwise the target override will always be set.
+On 04/24/15 21:18, Frank Hunleth wrote:
+> This changes BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR from deprecated to
+> legacy. The added legacy handling will automatically copy the
+> BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR setting to BR2_TARGET_UBOOT_PATCH,
+> which should make upgrading configurations easier.
+> 
+> Thanks to Arnout for suggesting the switch to legacy.
+> 
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 
-[snip]
+ Hi Frank,
 
-> 4) with:
-> 
->     $ cat local.mk
->     MPC_OVERRIDE_SRCDIR = /path/to/somewhere
->     HOST_MPC_OVERRIDE_SRCDIR = 
-> 
->     $ make printvars |grep -E '^[^[:space:]]+_OVERRIDE_SRCDIR' |grep MPC
->     HOST_MPC_OVERRIDE_SRCDIR=/path/to/somewhere ($(MPC_OVERRIDE_SRCDIR))
->     MPC_OVERRIDE_SRCDIR=/path/to/somewhere (/path/to/somewhere)
-> 
->     ==> KO
-> 
-> So, you're right, something's wrong, but it seems to me that the case
-> you described (my 3rd test-case) does work as expected, whereas the
-> other way around (test-case 4) indeed does not work. Sigh... :-/
+ Thanks for this patch, but since we didn't include it in 2015.05, it's too late
+to change it now. So I've marked it as rejected in patchwork.
 
- It's actually the fourth case I wanted to describe, I just didn't want to spend
-so much text on it :-P
 
  Regards,
  Arnout
 
-> 
-> I'll fix that, thanks!
-> 
-> Regards,
-> Yann E. MORIN.
-> 
 
 
 -- 
