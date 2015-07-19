@@ -1,100 +1,107 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:18 +0200
-Subject: [Buildroot] [PATCH/RFC v3 13/50] package/kodi-pvr-addons: Prepare
-	to split into addon-specific packages
+Date: Sun, 19 Jul 2015 21:05:12 +0200
+Subject: [Buildroot] [PATCH/RFC v3 07/50] package/kodi: Rework audio encoder
+	support
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-14-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The PVR addons formerly being part of the xbmc-pvr-addons package were
-split into seperate packages being hosted on https://github.com/kodi-pvr
+Make option BR2_PACKAGE_KODI_OPTICALDRIVE invisible, it is only
+needed when an audio encoder addon is enabled.
 
-This patch removes the old PVR addon package to prepare for the new
-PVR addon packages being added as subsequent patches.
+Add Kconfig submenu for audio encoders to prepare for addition of
+more binary addons.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-addons/Config.in          |    6 ------
- package/kodi-pvr-addons/kodi-pvr-addons.mk |   27 ---------------------------
- package/kodi/Config.in                     |    9 ++++-----
- 3 files changed, 4 insertions(+), 38 deletions(-)
- delete mode 100644 package/kodi-pvr-addons/Config.in
- delete mode 100644 package/kodi-pvr-addons/kodi-pvr-addons.mk
+ package/kodi-audioencoder-flac/Config.in   |    1 +
+ package/kodi-audioencoder-lame/Config.in   |    1 +
+ package/kodi-audioencoder-vorbis/Config.in |    1 +
+ package/kodi-audioencoder-wav/Config.in    |    1 +
+ package/kodi/Config.in                     |   20 +++++++-------------
+ 5 files changed, 11 insertions(+), 13 deletions(-)
 
-diff --git a/package/kodi-pvr-addons/Config.in b/package/kodi-pvr-addons/Config.in
-deleted file mode 100644
-index 80916c7..0000000
---- a/package/kodi-pvr-addons/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_KODI_PVR_ADDONS
--	bool "kodi-pvr-addons"
--	help
--	  A collection of PVR backend addons for Kodi
--
--	  https://github.com/opdenkamp/xbmc-pvr-addons
-diff --git a/package/kodi-pvr-addons/kodi-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
-deleted file mode 100644
-index 1a09265..0000000
---- a/package/kodi-pvr-addons/kodi-pvr-addons.mk
-+++ /dev/null
-@@ -1,27 +0,0 @@
--################################################################################
--#
--# kodi-pvr-addons
--#
--################################################################################
--
--# This cset is on the branch 'helix'
--# When Kodi is updated, this should be updated to the corresponding branch
--KODI_PVR_ADDONS_VERSION = 4854fbe9dc0499ca8d1e10e8c18e329d3eb48814
--KODI_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(KODI_PVR_ADDONS_VERSION))
--KODI_PVR_ADDONS_LICENSE = GPLv3+
--KODI_PVR_ADDONS_LICENSE_FILES = COPYING
--
--# There's no ./configure in the git tree, we need to generate it
--KODI_PVR_ADDONS_AUTORECONF = YES
--
--KODI_PVR_ADDONS_DEPENDENCIES = zlib
--# This really is a runtime dependency, but we need KODI to be installed
--# first, since we'll install files in KODI's directories _after_ KODI has
--# installed its own files
--KODI_PVR_ADDONS_DEPENDENCIES += kodi
--
--KODI_PVR_ADDONS_CONF_OPTS = \
--	--enable-release \
--	--enable-addons-with-dependencies
--
--$(eval $(autotools-package))
+diff --git a/package/kodi-audioencoder-flac/Config.in b/package/kodi-audioencoder-flac/Config.in
+index 799f9c5..95acbba 100644
+--- a/package/kodi-audioencoder-flac/Config.in
++++ b/package/kodi-audioencoder-flac/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_KODI_AUDIOENCODER_FLAC
+ 	bool "kodi-audioencoder-flac"
+ 	select BR2_PACKAGE_FLAC
++	select BR2_PACKAGE_KODI_OPTICALDRIVE
+ 	select BR2_PACKAGE_LIBOGG
+ 	help
+ 	  An audioencoder addon for Kodi
+diff --git a/package/kodi-audioencoder-lame/Config.in b/package/kodi-audioencoder-lame/Config.in
+index be00296..dc6a0cd 100644
+--- a/package/kodi-audioencoder-lame/Config.in
++++ b/package/kodi-audioencoder-lame/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_AUDIOENCODER_LAME
+ 	bool "kodi-audioencoder-lame"
++	select BR2_PACKAGE_KODI_OPTICALDRIVE
+ 	select BR2_PACKAGE_LAME
+ 	help
+ 	  An audioencoder addon for Kodi
+diff --git a/package/kodi-audioencoder-vorbis/Config.in b/package/kodi-audioencoder-vorbis/Config.in
+index ab8b4b3..8b84626 100644
+--- a/package/kodi-audioencoder-vorbis/Config.in
++++ b/package/kodi-audioencoder-vorbis/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_AUDIOENCODER_VORBIS
+ 	bool "kodi-audioencoder-vorbis"
++	select BR2_PACKAGE_KODI_OPTICALDRIVE
+ 	select BR2_PACKAGE_LIBOGG
+ 	select BR2_PACKAGE_LIBVORBIS
+ 	help
+diff --git a/package/kodi-audioencoder-wav/Config.in b/package/kodi-audioencoder-wav/Config.in
+index 6813f02..6bdbb9a 100644
+--- a/package/kodi-audioencoder-wav/Config.in
++++ b/package/kodi-audioencoder-wav/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_AUDIOENCODER_WAV
+ 	bool "kodi-audioencoder-wav"
++	select BR2_PACKAGE_KODI_OPTICALDRIVE
+ 	help
+ 	  An audioencoder addon for Kodi
+ 
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index f182fbf..13638df 100644
+index 7d4b068..f182fbf 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -249,6 +249,10 @@ config BR2_PACKAGE_KODI_WAVPACK
+@@ -247,20 +247,14 @@ config BR2_PACKAGE_KODI_WAVPACK
+ 	  Select this if you want to play back WV files.
+ 
  config BR2_PACKAGE_KODI_OPTICALDRIVE
- 	bool
+-	bool "optical drive"
+-	help
+-	  Enable support for optical drives
+-
+-if BR2_PACKAGE_KODI_OPTICALDRIVE
+-
+-comment "Kodi audioencoder addons"
+-
+-source "package/kodi-audioencoder-flac/Config.in"
+-source "package/kodi-audioencoder-lame/Config.in"
+-source "package/kodi-audioencoder-vorbis/Config.in"
+-source "package/kodi-audioencoder-wav/Config.in"
++	bool
  
-+menu "PVR addons"
-+	source "package/kodi-addon-xvdr/Config.in"
+-endif # BR2_PACKAGE_KODI_OPTICALDRIVE
++menu "Audio encoder addons"
++	source "package/kodi-audioencoder-flac/Config.in"
++	source "package/kodi-audioencoder-lame/Config.in"
++	source "package/kodi-audioencoder-vorbis/Config.in"
++	source "package/kodi-audioencoder-wav/Config.in"
 +endmenu
-+
- menu "Audio encoder addons"
- 	source "package/kodi-audioencoder-flac/Config.in"
- 	source "package/kodi-audioencoder-lame/Config.in"
-@@ -256,9 +260,4 @@ menu "Audio encoder addons"
- 	source "package/kodi-audioencoder-wav/Config.in"
- endmenu
  
--comment "Kodi PVR addons"
--
--source "package/kodi-addon-xvdr/Config.in"
--source "package/kodi-pvr-addons/Config.in"
--
- endif # BR2_PACKAGE_KODI
+ comment "Kodi PVR addons"
+ 
 -- 
 1.7.10.4
