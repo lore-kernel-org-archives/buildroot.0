@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:44 +0200
-Subject: [Buildroot] [PATCH/RFC v3 39/50]
-	package/kodi-screensaver-biogenesis: new package
+Date: Sun, 19 Jul 2015 21:05:33 +0200
+Subject: [Buildroot] [PATCH/RFC v3 28/50] package/kodi-pvr-vdr-vnsi: new
+	package
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-40-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-29-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +13,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-biogenesis/Config.in         |    6 ++++++
- .../kodi-screensaver-biogenesis.mk                    |   17 +++++++++++++++++
- package/kodi/Config.in                                |    1 +
- 3 files changed, 24 insertions(+)
- create mode 100644 package/kodi-screensaver-biogenesis/Config.in
- create mode 100644 package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+ package/kodi-pvr-vdr-vnsi/Config.in            |    7 +++++++
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk |   17 +++++++++++++++++
+ package/kodi/Config.in                         |    1 +
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/kodi-pvr-vdr-vnsi/Config.in
+ create mode 100644 package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
 
-diff --git a/package/kodi-screensaver-biogenesis/Config.in b/package/kodi-screensaver-biogenesis/Config.in
+diff --git a/package/kodi-pvr-vdr-vnsi/Config.in b/package/kodi-pvr-vdr-vnsi/Config.in
 new file mode 100644
-index 0000000..31e1017
+index 0000000..768dec8
 --- /dev/null
-+++ b/package/kodi-screensaver-biogenesis/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KODI_SCREENSAVER_BIOGENESIS
-+	bool "kodi-screensaver-biogenesis"
++++ b/package/kodi-pvr-vdr-vnsi/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_PVR_VDR_VNSI
++	bool "kodi-pvr-vdr-vnsi"
++	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  BioGenesis screensaver for Kodi
++	  Kodi PVR addon VNSI
 +
-+	  https://github.com/notspiff/screensaver.biogenesis
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
++	  https://github.com/kodi-pvr/pvr.vdr.vnsi
+diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
 new file mode 100644
-index 0000000..3639198
+index 0000000..bac61ab
 --- /dev/null
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
++++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-screensaver-biogenesis
++# kodi-pvr-vdr-vnsi
 +#
 +################################################################################
 +
-+KODI_SCREENSAVER_BIOGENESIS_VERSION = 2eccbd4e46320de03fde6731c560660659fd34d7
-+KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,notspiff,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
-+KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPLv2+
-+KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = src/Life.cpp
++KODI_PVR_VDR_VNSI_VERSION = 550a4a2e093b4418394cdbe6f72cd7c76f0327b7
++KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI_VERSION))
++KODI_PVR_VDR_VNSI_LICENSE = GPLv2+
++KODI_PVR_VDR_VNSI_LICENSE_FILES = src/VNSI_Admin.cpp
 +
-+KODI_SCREENSAVER_BIOGENESIS_DEPENDENCIES = kodi
++KODI_PVR_VDR_VNSI_DEPENDENCIES = kodi-platform
 +
-+KODI_SCREENSAVER_BIOGENESIS_CONF_OPTS += \
++KODI_PVR_VDR_VNSI_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 60e0e15..9598c53 100644
+index 7b497fc..92f10df 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -290,6 +290,7 @@ endmenu
- 
- menu "Screensavers"
- 	source "package/kodi-screensaver-asteroids/Config.in"
-+	source "package/kodi-screensaver-biogenesis/Config.in"
+@@ -266,6 +266,7 @@ menu "PVR addons"
+ 	source "package/kodi-pvr-pctv/Config.in"
+ 	source "package/kodi-pvr-stalker/Config.in"
+ 	source "package/kodi-pvr-vbox/Config.in"
++	source "package/kodi-pvr-vdr-vnsi/Config.in"
  endmenu
  
- endif # BR2_PACKAGE_KODI
+ menu "Audio encoder addons"
 -- 
 1.7.10.4
