@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:43 +0200
-Subject: [Buildroot] [PATCH/RFC v3 38/50]
-	package/kodi-screensaver-asteroids: new package
+Date: Sun, 19 Jul 2015 21:05:45 +0200
+Subject: [Buildroot] [PATCH/RFC v3 40/50]
+	package/kodi-screensaver-crystalmorph: new package
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-39-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-41-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,63 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-asteroids/Config.in          |    6 ++++++
- .../kodi-screensaver-asteroids.mk                     |   17 +++++++++++++++++
- package/kodi/Config.in                                |    4 ++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/kodi-screensaver-asteroids/Config.in
- create mode 100644 package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+ package/kodi-screensaver-crystalmorph/Config.in       |   10 ++++++++++
+ .../kodi-screensaver-crystalmorph.mk                  |   17 +++++++++++++++++
+ package/kodi/Config.in                                |    1 +
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/kodi-screensaver-crystalmorph/Config.in
+ create mode 100644 package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
 
-diff --git a/package/kodi-screensaver-asteroids/Config.in b/package/kodi-screensaver-asteroids/Config.in
+diff --git a/package/kodi-screensaver-crystalmorph/Config.in b/package/kodi-screensaver-crystalmorph/Config.in
 new file mode 100644
-index 0000000..b1a1d20
+index 0000000..88edbf0
 --- /dev/null
-+++ b/package/kodi-screensaver-asteroids/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS
-+	bool "kodi-screensaver-asteroids"
++++ b/package/kodi-screensaver-crystalmorph/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
++	bool "kodi-screensaver-crystalmorph"
++	depends on BR2_PACKAGE_KODI_GL # libglu
 +	help
-+	  Asteroids screensaver for Kodi
++	  CrystalMorph screensaver for Kodi
 +
-+	  https://github.com/notspiff/screensaver.asteroids
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
++	  https://github.com/notspiff/screensaver.crystalmorph
++
++comment "crystalmorph needs an OpenGL backend"
++	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
 new file mode 100644
-index 0000000..cc25e40
+index 0000000..afa48ff
 --- /dev/null
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
++++ b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-screensaver-asteroids
++# kodi-screensaver-crystalmorph
 +#
 +################################################################################
 +
-+KODI_SCREENSAVER_ASTEROIDS_VERSION = d4c2e3b499544ef55be364b34e5569d9c31c9615
-+KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,notspiff,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
-+KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPLv2+
-+KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = src/main.cpp
++KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 2e7c10e3543f5aaab6fd2f5aa9d05b976a43ba68
++KODI_SCREENSAVER_CRYSTALMORPH_SITE = $(call github,notspiff,screensaver.crystalmorph,$(KODI_SCREENSAVER_CRYSTALMORPH_VERSION))
++KODI_SCREENSAVER_CRYSTALMORPH_LICENSE = GPLv2+
++KODI_SCREENSAVER_CRYSTALMORPH_LICENSE_FILES = src/Fractal.cpp
 +
-+KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = kodi
++KODI_SCREENSAVER_CRYSTALMORPH_DEPENDENCIES = kodi
 +
-+KODI_SCREENSAVER_ASTEROIDS_CONF_OPTS += \
++KODI_SCREENSAVER_CRYSTALMORPH_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 63c3564..60e0e15 100644
+index 9598c53..87b3698 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -288,4 +288,8 @@ menu "Audio encoder addons"
- 	source "package/kodi-audioencoder-wav/Config.in"
+@@ -291,6 +291,7 @@ endmenu
+ menu "Screensavers"
+ 	source "package/kodi-screensaver-asteroids/Config.in"
+ 	source "package/kodi-screensaver-biogenesis/Config.in"
++	source "package/kodi-screensaver-crystalmorph/Config.in"
  endmenu
  
-+menu "Screensavers"
-+	source "package/kodi-screensaver-asteroids/Config.in"
-+endmenu
-+
  endif # BR2_PACKAGE_KODI
 -- 
 1.7.10.4
