@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:38 +0200
-Subject: [Buildroot] [PATCH/RFC v3 33/50] package/kodi-audiodecoder-sidplay:
-	new package
+Date: Sun, 19 Jul 2015 21:05:22 +0200
+Subject: [Buildroot] [PATCH/RFC v3 17/50] package/kodi-pvr-dvbviewer: new
+	package
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-34-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-18-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +13,58 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audiodecoder-sidplay/Config.in           |    8 ++++++++
- .../kodi-audiodecoder-sidplay.mk                      |   17 +++++++++++++++++
- package/kodi/Config.in                                |    1 +
- 3 files changed, 26 insertions(+)
- create mode 100644 package/kodi-audiodecoder-sidplay/Config.in
- create mode 100644 package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
+ package/kodi-pvr-dvbviewer/Config.in             |    7 +++++++
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk |   17 +++++++++++++++++
+ package/kodi/Config.in                           |    1 +
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/kodi-pvr-dvbviewer/Config.in
+ create mode 100644 package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
 
-diff --git a/package/kodi-audiodecoder-sidplay/Config.in b/package/kodi-audiodecoder-sidplay/Config.in
+diff --git a/package/kodi-pvr-dvbviewer/Config.in b/package/kodi-pvr-dvbviewer/Config.in
 new file mode 100644
-index 0000000..ae99afa
+index 0000000..e7dd7b3
 --- /dev/null
-+++ b/package/kodi-audiodecoder-sidplay/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_KODI_AUDIODECODER_SIDPLAY
-+	bool "kodi-audiodecoder-sidplay"
++++ b/package/kodi-pvr-dvbviewer/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_PVR_DVBVIEWER
++	bool "kodi-pvr-dvbviewer"
 +	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_LIBSIDPLAY2
 +	help
-+	  Sidplay decoder addon for Kodi
++	  Kodi's DVBViewer client addon
 +
-+	  https://github.com/notspiff/audiodecoder.sidplay
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
++	  https://github.com/kodi-pvr/pvr.dvbviewer
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
 new file mode 100644
-index 0000000..ba9a515
+index 0000000..21e6372
 --- /dev/null
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-audiodecoder-sidplay
++# kodi-pvr-dvbviewer
 +#
 +################################################################################
 +
-+KODI_AUDIODECODER_SIDPLAY_VERSION = 27b2c0582878857bfe03195471fa7ffa4bcc40f0
-+KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,notspiff,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
-+KODI_AUDIODECODER_SIDPLAY_LICENSE = GPLv2+
-+KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = src/SIDCodec.cpp
++KODI_PVR_DVBVIEWER_VERSION = cbfd4552a4381d289bcfb8eda33699ecfd156bd7
++KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
++KODI_PVR_DVBVIEWER_LICENSE = GPLv2+
++KODI_PVR_DVBVIEWER_LICENSE_FILES = src/client.cpp
 +
-+KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi-platform libsidplay2
++KODI_PVR_DVBVIEWER_DEPENDENCIES = kodi-platform
 +
-+KODI_AUDIODECODER_SIDPLAY_CONF_OPTS += \
++KODI_PVR_DVBVIEWER_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 94a3624..790be0d 100644
+index b21530b..716f8e1 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -274,6 +274,7 @@ endmenu
- menu "Audio decoder addons"
- 	source "package/kodi-audiodecoder-modplug/Config.in"
- 	source "package/kodi-audiodecoder-nosefart/Config.in"
-+	source "package/kodi-audiodecoder-sidplay/Config.in"
+@@ -255,6 +255,7 @@ menu "PVR addons"
+ 	source "package/kodi-addon-xvdr/Config.in"
+ 	source "package/kodi-pvr-argustv/Config.in"
+ 	source "package/kodi-pvr-dvblink/Config.in"
++	source "package/kodi-pvr-dvbviewer/Config.in"
  endmenu
  
  menu "Audio encoder addons"
