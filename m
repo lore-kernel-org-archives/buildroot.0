@@ -1,56 +1,75 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:11 +0200
-Subject: [Buildroot] [PATCH/RFC v3 06/50] package/kodi: Add option for lirc
-	support
+Date: Sun, 19 Jul 2015 21:05:19 +0200
+Subject: [Buildroot] [PATCH/RFC v3 14/50] package/kodi-platform: new package
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-7-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-15-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/xbmc/xbmc/commit/b641e1eea54b4b9ab7f1b95092ab0a755abc63be
+This package is used by the PVR addon packages and has no use by itself,
+therefore is does not show up in menuconfig.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in |    5 +++++
- package/kodi/kodi.mk   |    6 ++++++
- 2 files changed, 11 insertions(+)
+ package/kodi-platform/Config.in        |    7 +++++++
+ package/kodi-platform/kodi-platform.mk |   17 +++++++++++++++++
+ package/kodi/Config.in                 |    2 ++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/kodi-platform/Config.in
+ create mode 100644 package/kodi-platform/kodi-platform.mk
 
+diff --git a/package/kodi-platform/Config.in b/package/kodi-platform/Config.in
+new file mode 100644
+index 0000000..cde1925
+--- /dev/null
++++ b/package/kodi-platform/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_PLATFORM
++	bool
++	select BR2_PACKAGE_LIBPLATFORM
++	help
++	  Kodi add-on platform support library
++
++	  https://github.com/xbmc/kodi-platform
+diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
+new file mode 100644
+index 0000000..22d7752
+--- /dev/null
++++ b/package/kodi-platform/kodi-platform.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# kodi-platform
++#
++################################################################################
++
++KODI_PLATFORM_VERSION = 33b6390b5d2abe5b674f9eb04bdee19228543054
++KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
++KODI_PLATFORM_LICENSE = GPLv3+
++KODI_PLATFORM_LICENSE_FILES = COPYING
++KODI_PLATFORM_INSTALL_STAGING = YES
++KODI_PLATFORM_DEPENDENCIES = libplatform kodi
++
++KODI_PLATFORM_CONF_OPTS += \
++	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
++
++$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 62553d4..7d4b068 100644
+index 13638df..454f839 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -166,6 +166,11 @@ comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic
- 	depends on !BR2_GCC_VERSION_4_5_X
- 	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV
+@@ -102,6 +102,8 @@ menuconfig BR2_PACKAGE_KODI
  
-+config BR2_PACKAGE_KODI_LIRC
-+	bool "lirc"
-+	help
-+	  Enable lirc support
-+
- config BR2_PACKAGE_KODI_LIBMICROHTTPD
- 	bool "web server"
- 	select BR2_PACKAGE_LIBMICROHTTPD
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index c97dafa..44ecea9 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -186,6 +186,12 @@ else
- KODI_CONF_OPTS += --disable-libcec
- endif
+ if BR2_PACKAGE_KODI
  
-+ifeq ($(BR2_PACKAGE_KODI_LIRC),y)
-+KODI_CONF_OPTS += --enable-lirc
-+else
-+KODI_CONF_OPTS += --disable-lirc
-+endif
++source "package/kodi-platform/Config.in"
 +
- ifeq ($(BR2_PACKAGE_KODI_WAVPACK),y)
- KODI_DEPENDENCIES += wavpack
- endif
+ config BR2_PACKAGE_KODI_ALSA_LIB
+ 	bool "alsa"
+ 	select BR2_PACKAGE_ALSA_LIB
 -- 
 1.7.10.4
