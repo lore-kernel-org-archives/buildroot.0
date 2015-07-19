@@ -1,41 +1,30 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 19 Jul 2015 22:42:34 +0200
-Subject: [Buildroot] [PATCH] uboot: BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR ->
- legacy
-In-Reply-To: <1429903115-29129-1-git-send-email-fhunleth@troodon-software.com>
-References: <1429903115-29129-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <55AC0BBA.3000403@mind.be>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Sun, 19 Jul 2015 22:50:39 +0200
+Subject: [Buildroot] [PATCH 1/2] monkey: remove the default value of the
+	MONKEY_SOURCE variable
+Message-ID: <1437339040-2999-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/24/15 21:18, Frank Hunleth wrote:
-> This changes BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR from deprecated to
-> legacy. The added legacy handling will automatically copy the
-> BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR setting to BR2_TARGET_UBOOT_PATCH,
-> which should make upgrading configurations easier.
-> 
-> Thanks to Arnout for suggesting the switch to legacy.
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/monkey/monkey.mk   | 1 -
+ 1 file changed, 1 deletion(-)
 
- Hi Frank,
-
- Thanks for this patch, but since we didn't include it in 2015.05, it's too late
-to change it now. So I've marked it as rejected in patchwork.
-
-
- Regards,
- Arnout
-
-
-
+diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
+index 419750e..31e8846 100644
+--- a/package/monkey/monkey.mk
++++ b/package/monkey/monkey.mk
+@@ -6,7 +6,6 @@
+ 
+ MONKEY_VERSION_MAJOR = 1.5
+ MONKEY_VERSION = $(MONKEY_VERSION_MAJOR).6
+-MONKEY_SOURCE = monkey-$(MONKEY_VERSION).tar.gz
+ MONKEY_SITE = http://monkey-project.com/releases/$(MONKEY_VERSION_MAJOR)/
+ MONKEY_LICENCE = Apache-2.0
+ MONKEY_LICENCE_FILE = LICENSE
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.9.1
