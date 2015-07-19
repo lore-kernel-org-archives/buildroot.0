@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:31 +0200
-Subject: [Buildroot] [PATCH/RFC v3 26/50] package/kodi-pvr-stalker: new
-	package
+Date: Sun, 19 Jul 2015 21:05:15 +0200
+Subject: [Buildroot] [PATCH/RFC v3 10/50] package/kodi-audioencoder-vorbis:
+	bump version
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-27-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-11-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-stalker/Config.in           |    7 +++++++
- package/kodi-pvr-stalker/kodi-pvr-stalker.mk |   17 +++++++++++++++++
- package/kodi/Config.in                       |    1 +
- 3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-pvr-stalker/Config.in
- create mode 100644 package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+ package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
-new file mode 100644
-index 0000000..b327fd8
---- /dev/null
-+++ b/package/kodi-pvr-stalker/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_STALKER
-+	bool "kodi-pvr-stalker"
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	help
-+	  A PVR Client that connects Kodi to Stalker Middleware
-+
-+	  https://github.com/kodi-pvr/pvr.stalker
-diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-new file mode 100644
-index 0000000..8e98425
---- /dev/null
-+++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# kodi-pvr-stalker
-+#
-+################################################################################
-+
-+KODI_PVR_STALKER_VERSION = 5f6eb1992ffd45a075ebb7bc4253c4a88bf65c80
-+KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
-+KODI_PVR_STALKER_LICENSE = GPLv2+
-+KODI_PVR_STALKER_LICENSE_FILES = src/client.cpp
-+
-+KODI_PVR_STALKER_DEPENDENCIES = kodi-platform
-+
-+KODI_PVR_STALKER_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 6aaf72f..3cbc9aa 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -264,6 +264,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-nextpvr/Config.in"
- 	source "package/kodi-pvr-njoy/Config.in"
- 	source "package/kodi-pvr-pctv/Config.in"
-+	source "package/kodi-pvr-stalker/Config.in"
- endmenu
+diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+index 493fcbf..6bf2933 100644
+--- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
++++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- menu "Audio encoder addons"
+-KODI_AUDIOENCODER_VORBIS_VERSION = d556a6872e59806526f208e8d0af5f886a6c67bb
++KODI_AUDIOENCODER_VORBIS_VERSION = 15d619dae4411ecebadf2ec2996d611600ad0bee
+ KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
+ KODI_AUDIOENCODER_VORBIS_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
 -- 
 1.7.10.4
