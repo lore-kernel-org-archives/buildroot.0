@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:47 +0200
-Subject: [Buildroot] [PATCH/RFC v3 42/50] package/kodi-screensaver-pingpong:
-	new package
+Date: Sun, 19 Jul 2015 21:05:41 +0200
+Subject: [Buildroot] [PATCH/RFC v3 36/50]
+	package/kodi-audiodecoder-timidity: new package
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-43-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-37-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +13,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-pingpong/Config.in           |    6 ++++++
- .../kodi-screensaver-pingpong.mk                      |   17 +++++++++++++++++
+ package/kodi-audiodecoder-timidity/Config.in          |    7 +++++++
+ .../kodi-audiodecoder-timidity.mk                     |   17 +++++++++++++++++
  package/kodi/Config.in                                |    1 +
- 3 files changed, 24 insertions(+)
- create mode 100644 package/kodi-screensaver-pingpong/Config.in
- create mode 100644 package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/kodi-audiodecoder-timidity/Config.in
+ create mode 100644 package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
 
-diff --git a/package/kodi-screensaver-pingpong/Config.in b/package/kodi-screensaver-pingpong/Config.in
+diff --git a/package/kodi-audiodecoder-timidity/Config.in b/package/kodi-audiodecoder-timidity/Config.in
 new file mode 100644
-index 0000000..916b8c2
+index 0000000..8f604ad
 --- /dev/null
-+++ b/package/kodi-screensaver-pingpong/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KODI_SCREENSAVER_PINGPONG
-+	bool "kodi-screensaver-pingpong"
++++ b/package/kodi-audiodecoder-timidity/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_AUDIODECODER_TIMIDITY
++	bool "kodi-audiodecoder-timidity"
++	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  Ping-pong screensaver for Kodi
++	  Timidity decoder addon for Kodi
 +
-+	  https://github.com/notspiff/screensaver.pingpong
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
++	  https://github.com/notspiff/audiodecoder.timidity
+diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
 new file mode 100644
-index 0000000..57bcc92
+index 0000000..70672c4
 --- /dev/null
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
++++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-screensaver-pingpong
++# kodi-audiodecoder-timidity
 +#
 +################################################################################
 +
-+KODI_SCREENSAVER_PINGPONG_VERSION = 00fd2a7c70d581ada1bc89829c6870530b4c65b9
-+KODI_SCREENSAVER_PINGPONG_SITE = $(call github,notspiff,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
-+KODI_SCREENSAVER_PINGPONG_LICENSE = GPLv2+
-+KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = src/readme.txt
++KODI_AUDIODECODER_TIMIDITY_VERSION = da5eb9ac6557fc1ea0f48cc044cfd16f4f2a1e0b
++KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,notspiff,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
++KODI_AUDIODECODER_TIMIDITY_LICENSE = GPLv2+
++KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = src/TimidityCodec.cpp
 +
-+KODI_SCREENSAVER_PINGPONG_DEPENDENCIES = kodi
++KODI_AUDIODECODER_TIMIDITY_DEPENDENCIES = kodi-platform
 +
-+KODI_SCREENSAVER_PINGPONG_CONF_OPTS += \
++KODI_AUDIODECODER_TIMIDITY_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 56a378e..67be56c 100644
+index 8bf3ee1..bf937ad 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -293,6 +293,7 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-biogenesis/Config.in"
- 	source "package/kodi-screensaver-crystalmorph/Config.in"
- 	source "package/kodi-screensaver-greynetic/Config.in"
-+	source "package/kodi-screensaver-pingpong/Config.in"
+@@ -277,6 +277,7 @@ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-sidplay/Config.in"
+ 	source "package/kodi-audiodecoder-snesapu/Config.in"
+ 	source "package/kodi-audiodecoder-stsound/Config.in"
++	source "package/kodi-audiodecoder-timidity/Config.in"
  endmenu
  
- endif # BR2_PACKAGE_KODI
+ menu "Audio encoder addons"
 -- 
 1.7.10.4
