@@ -1,60 +1,60 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 19 Jul 2015 09:07:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: disable for PowerPC
- CS toolchains
-In-Reply-To: <20150718111610.55f5a57b@free-electrons.com>
-References: <1437086706-20437-1-git-send-email-joerg.krause@embedded.rocks>
- <20150718111610.55f5a57b@free-electrons.com>
-Message-ID: <1437289664.12715.17.camel@embedded.rocks>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 19 Jul 2015 09:15:54 +0200
+Subject: [Buildroot] [PATCH v2 4/4] Makefile: staging symlink uses a
+ relative path
+In-Reply-To: <6195872.eqbV4amuVy@sagittea>
+References: <1436775527-2484-1-git-send-email-s.martin49@gmail.com>
+ <1436775527-2484-5-git-send-email-s.martin49@gmail.com>
+ <6195872.eqbV4amuVy@sagittea>
+Message-ID: <CAHXCMMJbncpfhzKjrirB15N0t_bv8PsBh1+chYB0Mz75DKKdeA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Hi J?rome, all,
 
-On Sa, 2015-07-18 at 11:16 +0200, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
-> 
-> On Fri, 17 Jul 2015 00:45:06 +0200, J?rg Krause wrote:
-> > Those toolchains use gcc <= 4.5, which is too old as they are 
-> > missing to
-> > construct an empty std::shared_ptr with a nullptr (0) as an 
-> > argument. This
-> > is only introduced with gcc-4.6.
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/faf/faf1b071c0a5bd8395d79abf
-> > 2e6a32169ad7f136
-> > http://autobuild.buildroot.net/results/247/247b3f1ac3d3a9712e9410ee
-> > f298fce8d885f92c
-> > http://autobuild.buildroot.net/results/de6/de601c4d4dd7922895892d78
-> > d3a37902fb98c7be
-> > http://autobuild.buildroot.net/results/a4d/a4d7bf9863c134f59d285616
-> > b9c1f78201bd1a3e
-> > 
-> > and many more.
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > ---
-> >  package/upmpdcli/Config.in | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> 
-> I've applied since it's the way we have been handling this so far.
-> However, during the hackaton, we discussed this a little bit, and we
-> believe we probably need to add some hidden Config.in options like
-> "BR2_PACKAGE_GCC_AT_LEAST_4_5", "BR2_PACKAGE_GCC_AT_LEAST_4_8", so 
-> that
-> packages can depend on these options more easily.
+On Thu, Jul 16, 2015 at 12:17 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+> Hello Samuel,
+>
+> On Monday 13 July 2015 10:18:47 Samuel Martin wrote:
+>> A step forward toward a relocatable SDK.
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> ---
+>>  Makefile | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index daf692e..30a2d0e 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -447,7 +447,7 @@ $(STAGING_DIR):
+>>       @ln -snf lib $(STAGING_DIR)/usr/$(LIB_SYMLINK)
+>>       @mkdir -p $(STAGING_DIR)/usr/include
+>>       @mkdir -p $(STAGING_DIR)/usr/bin
+>> -     @ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+>> +     @ln -snf $(subst $(BASE_DIR)/,,$(STAGING_DIR)) $(BASE_DIR)/staging
+> Does it work if user customize BR2_HOST_DIR?
+Yes and no. :-)
 
-I see! This would be indeed helpful.
+I mean, Buildroot still works correctly, but the symlink is not
+relative because the substitution does not have any effect when
+BR2_HOST_DIR points somewhere out of BASE_DIR.
 
-Upstream submitted a patch regarding this build error which removes the
-necessity for a gcc >= 4.6 toolchain. Shall I submit this upstream
-patch to allow using the excluded toolchains again, or do we just wait
-until a new version of upmpdcli will be released and we include them
-again in that case?
+I'm not sure a relative symlink is judicious when BR2_HOST_DIR is set,
+moreover when it points somewhere out of BASE_DIR.
 
-Best regards
-J?rg Krause
+>
+> BR,
+>
+> --
+> J?r?me Pouiller, Sysmic
+> Embedded Linux specialist
+> http://www.sysmic.fr
+
+Regards,
+
+-- 
+Samuel
