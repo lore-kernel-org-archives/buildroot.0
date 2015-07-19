@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:45 +0200
-Subject: [Buildroot] [PATCH/RFC v3 40/50]
-	package/kodi-screensaver-crystalmorph: new package
+Date: Sun, 19 Jul 2015 21:05:42 +0200
+Subject: [Buildroot] [PATCH/RFC v3 37/50]
+	package/kodi-audiodecoder-vgmstream: new package
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-41-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-38-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +13,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-crystalmorph/Config.in       |   10 ++++++++++
- .../kodi-screensaver-crystalmorph.mk                  |   17 +++++++++++++++++
+ package/kodi-audiodecoder-vgmstream/Config.in         |    7 +++++++
+ .../kodi-audiodecoder-vgmstream.mk                    |   17 +++++++++++++++++
  package/kodi/Config.in                                |    1 +
- 3 files changed, 28 insertions(+)
- create mode 100644 package/kodi-screensaver-crystalmorph/Config.in
- create mode 100644 package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/kodi-audiodecoder-vgmstream/Config.in
+ create mode 100644 package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
 
-diff --git a/package/kodi-screensaver-crystalmorph/Config.in b/package/kodi-screensaver-crystalmorph/Config.in
+diff --git a/package/kodi-audiodecoder-vgmstream/Config.in b/package/kodi-audiodecoder-vgmstream/Config.in
 new file mode 100644
-index 0000000..88edbf0
+index 0000000..ebf83df
 --- /dev/null
-+++ b/package/kodi-screensaver-crystalmorph/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
-+	bool "kodi-screensaver-crystalmorph"
-+	depends on BR2_PACKAGE_KODI_GL # libglu
++++ b/package/kodi-audiodecoder-vgmstream/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_AUDIODECODER_VGMSTREAM
++	bool "kodi-audiodecoder-vgmstream"
++	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  CrystalMorph screensaver for Kodi
++	  VGM decoder addon for Kodi
 +
-+	  https://github.com/notspiff/screensaver.crystalmorph
-+
-+comment "crystalmorph needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_KODI_GL
-diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
++	  https://github.com/notspiff/audiodecoder.vgmstream
+diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
 new file mode 100644
-index 0000000..afa48ff
+index 0000000..a888e9f
 --- /dev/null
-+++ b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
++++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-screensaver-crystalmorph
++# kodi-audiodecoder-vgmstream
 +#
 +################################################################################
 +
-+KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 2e7c10e3543f5aaab6fd2f5aa9d05b976a43ba68
-+KODI_SCREENSAVER_CRYSTALMORPH_SITE = $(call github,notspiff,screensaver.crystalmorph,$(KODI_SCREENSAVER_CRYSTALMORPH_VERSION))
-+KODI_SCREENSAVER_CRYSTALMORPH_LICENSE = GPLv2+
-+KODI_SCREENSAVER_CRYSTALMORPH_LICENSE_FILES = src/Fractal.cpp
++KODI_AUDIODECODER_VGMSTREAM_VERSION = 7723f9130957f4684eac5788ccbc2f45c39590ad
++KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,notspiff,audiodecoder.vgmstream,$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
++KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPLv2+
++KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = src/VGMCodec.cpp
 +
-+KODI_SCREENSAVER_CRYSTALMORPH_DEPENDENCIES = kodi
++KODI_AUDIODECODER_VGMSTREAM_DEPENDENCIES = kodi-platform
 +
-+KODI_SCREENSAVER_CRYSTALMORPH_CONF_OPTS += \
++KODI_AUDIODECODER_VGMSTREAM_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 9598c53..87b3698 100644
+index bf937ad..63c3564 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -291,6 +291,7 @@ endmenu
- menu "Screensavers"
- 	source "package/kodi-screensaver-asteroids/Config.in"
- 	source "package/kodi-screensaver-biogenesis/Config.in"
-+	source "package/kodi-screensaver-crystalmorph/Config.in"
+@@ -278,6 +278,7 @@ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-snesapu/Config.in"
+ 	source "package/kodi-audiodecoder-stsound/Config.in"
+ 	source "package/kodi-audiodecoder-timidity/Config.in"
++	source "package/kodi-audiodecoder-vgmstream/Config.in"
  endmenu
  
- endif # BR2_PACKAGE_KODI
+ menu "Audio encoder addons"
 -- 
 1.7.10.4
