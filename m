@@ -1,34 +1,132 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sun, 19 Jul 2015 22:50:40 +0200
-Subject: [Buildroot] [PATCH 2/2] monkey: fix license typos
-In-Reply-To: <1437339040-2999-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1437339040-2999-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <1437339040-2999-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Jul 2015 22:51:43 +0200
+Subject: [Buildroot] [git commit] audit: Add startup script
+Message-ID: <20150719205234.D49B881D62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/monkey/monkey.mk                 | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=7e068bb5ff6815f50e7ce729b67e831d0d8d4ed1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
-index 419750e..2f53426 100644
---- a/package/monkey/monkey.mk
-+++ b/package/monkey/monkey.mk
-@@ -8,8 +8,8 @@ MONKEY_VERSION_MAJOR = 1.5
- MONKEY_VERSION = $(MONKEY_VERSION_MAJOR).6
- MONKEY_SOURCE = monkey-$(MONKEY_VERSION).tar.gz
- MONKEY_SITE = http://monkey-project.com/releases/$(MONKEY_VERSION_MAJOR)/
--MONKEY_LICENCE = Apache-2.0
--MONKEY_LICENCE_FILE = LICENSE
-+MONKEY_LICENSE = Apache-2.0
-+MONKEY_LICENSE_FILES = LICENSE
+The startup script for the audit package did not meet the buildroot
+standards when the package was initially merged. Adding a compliant
+startup script for starting the audit daemon along with rotating the
+logs and other features.
+
+[Thomas:
+  - Replace "Failed" by "FAIL" to be consistent with the rest of the
+    init script and other packages
+  - Use $(INSTALL) -D with a complete destination path to avoid having
+    to create /etc/init.d before installing the init script.]
+
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/audit/S01auditd |   80 +++++++++++++++++++++++++++++++++++++++++++++++
+ package/audit/audit.mk  |    4 ++
+ 2 files changed, 84 insertions(+), 0 deletions(-)
+
+diff --git a/package/audit/S01auditd b/package/audit/S01auditd
+new file mode 100644
+index 0000000..9485739
+--- /dev/null
++++ b/package/audit/S01auditd
+@@ -0,0 +1,80 @@
++#!/bin/sh
++#
++# auditd       This starts and stops auditd
++#
++# description: This starts the Linux Auditing System Daemon,
++#              which collects security related events in a dedicated
++#              audit log. If this daemon is turned off, audit events
++#              will be sent to syslog.
++#
++
++NAME=auditd
++DAEMON=/usr/sbin/${NAME}
++CONFIG=/etc/audit/auditd.conf
++PIDFILE=/var/run/${NAME}.pid
++
++start(){
++	echo -n "Starting ${NAME}: "
++
++	# Create dir to store log files in if one doesn't exist. Create
++	# the directory with SELinux permissions if possible
++	command -v matchpathcon >/dev/null 2>&1
++	if [ $? = 0 ]; then
++		mkdir -p /var/log/audit -Z `matchpathcon -n /var/log/audit`
++	else
++		mkdir -p /var/log/audit
++	fi
++
++	# Run audit daemon executable
++	start-stop-daemon -S -q -p ${PIDFILE} --exec ${DAEMON}
++
++	if [ $? = 0 ]; then
++		# Load the default rules
++		test -f /etc/audit/rules.d/audit.rules && /usr/sbin/auditctl -R /etc/audit/rules.d/audit.rules >/dev/null
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++}
++
++stop(){
++	echo -n "Stopping ${NAME}: "
++
++	start-stop-daemon -K -q -p ${PIDFILE}
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++
++reload(){
++	echo -n "Reloading ${NAME} configuration: "
++	start-stop-daemon --stop -s 1 -p ${PIDFILE} 1>/dev/null
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++
++rotate(){
++	echo -n "Rotating ${NAME} logs: "
++	start-stop-daemon --stop -s 10 -p ${PIDFILE} 1>/dev/null
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++
++case "$1" in
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart)
++		stop
++		start
++		;;
++	reload)
++		reload
++		;;
++	rotate)
++		rotate
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload|rotate}"
++		exit 1
++		;;
++esac
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index ab3e087..e30f886 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -34,6 +34,10 @@ ifeq ($(BR2_aarch64),y)
+ AUDIT_CONF_OPTS += --with-aarch64
+ endif
  
- # This package has a configure script, but it's not using
- # autoconf/automake, so we're using the generic-package
--- 
-1.9.1
++define AUDIT_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/audit/S01auditd $(TARGET_DIR)/etc/init.d/S01auditd
++endef
++
+ define AUDIT_INSTALL_CLEANUP
+ 	$(RM) -rf $(TARGET_DIR)/etc/rc.d
+ 	$(RM) -rf $(TARGET_DIR)/etc/sysconfig
