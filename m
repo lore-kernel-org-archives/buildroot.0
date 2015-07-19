@@ -1,27 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Jul 2015 11:53:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-addon-xvdr: bump version
- and switch to branch kodi-helix
-In-Reply-To: <XnsA4DC774212EA8berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1428695666-10412-1-git-send-email-bernd.kuhls@t-online.de>
- <20150719111637.5ac3a5c8@free-electrons.com>
- <XnsA4DC774212EA8berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20150719115343.16f760fd@free-electrons.com>
+Date: Sun, 19 Jul 2015 11:53:52 +0200
+Subject: [Buildroot] [PATCH 2/2 v2] pkg-infra: munging .la files is not
+ limited to autotools packages
+In-Reply-To: <2498f2352f5b65d77d91f6405d39e6349de640dc.1430687963.git.yann.morin.1998@free.fr>
+References: <cover.1430687963.git.yann.morin.1998@free.fr>
+ <2498f2352f5b65d77d91f6405d39e6349de640dc.1430687963.git.yann.morin.1998@free.fr>
+Message-ID: <20150719115352.7d513f34@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Dear Yann E. MORIN,
 
-On Sun, 19 Jul 2015 11:43:25 +0200, Bernd Kuhls wrote:
+On Sun,  3 May 2015 23:30:39 +0200, Yann E. MORIN wrote:
+> Currently, we're only fixing libtool's .la files for autotools packages,
+> and even more so, only for those that do not define their own
+> _INSTALL_STAGING_CMDS.
+> 
+> However, .la files might also be installed by non-autotools packages,
+> like the NVidia GPU binary blob (libGL.la).
+> 
+> So, move that code into the global build rule, so all packages get their
+> .la files fixed, whether they be autotools packages or not, and whether
+> they define their own _INSTALL_STAGING_CMDS or not.
+> 
+> Also print a message.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  package/pkg-autotools.mk | 27 ---------------------------
+>  package/pkg-generic.mk   | 30 ++++++++++++++++++++++++++++++
+>  2 files changed, 30 insertions(+), 27 deletions(-)
 
-> Kodi Isengard reached rc2 last week, so I think its release will happen in 
-> the foreseeable future. Therefore this patch makes no sense anymore imho, I 
-> marked it as superseded in patchworks.
-
-Great, thanks for the feedback!
+Applied, thanks.
 
 Thomas
 -- 
