@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:16 +0200
-Subject: [Buildroot] [PATCH/RFC v3 11/50] package/kodi-audioencoder-wav:
+Date: Sun, 19 Jul 2015 21:05:14 +0200
+Subject: [Buildroot] [PATCH/RFC v3 09/50] package/kodi-audioencoder-lame:
 	bump version
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-10-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk |    2 +-
+ package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-index 06803f2..9cd5117 100644
---- a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-+++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+index 8a4a28c..78a2d71 100644
+--- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
++++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_AUDIOENCODER_WAV_VERSION = 40aaedfa1cd9c75749c82f6e1bd7c42ef61fdb38
-+KODI_AUDIOENCODER_WAV_VERSION = 797c990eea7851889cd44a597c0392deba9c51c0
- KODI_AUDIOENCODER_WAV_SITE = $(call github,xbmc,audioencoder.wav,$(KODI_AUDIOENCODER_WAV_VERSION))
- KODI_AUDIOENCODER_WAV_LICENSE = GPLv2+
- KODI_AUDIOENCODER_WAV_LICENSE_FILES = src/EncoderWav.cpp
+-KODI_AUDIOENCODER_LAME_VERSION = 3eb59de951996659c143faaabacc5f34ee9a0b81
++KODI_AUDIOENCODER_LAME_VERSION = b283cd50cd2f89b7fd7b903c957a6a993e3756d2
+ KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
+ KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
 -- 
 1.7.10.4
