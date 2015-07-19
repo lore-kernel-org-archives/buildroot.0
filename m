@@ -1,84 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Jul 2015 11:19:15 +0200
-Subject: [Buildroot] [PATCH 1/1] ncurses: generate libtermcap
-In-Reply-To: <1429880066-7743-1-git-send-email-pascal.mazon@6wind.com>
-References: <1429880066-7743-1-git-send-email-pascal.mazon@6wind.com>
-Message-ID: <20150719111915.7248ebf9@free-electrons.com>
+Date: Sun, 19 Jul 2015 11:23:14 +0200
+Subject: [Buildroot] [PATCH] package/glibc: enable lock elision on
+ x86_64 hosts
+In-Reply-To: <1426716071-27570-2-git-send-email-steven@uplinklabs.net>
+References: <1426716071-27570-1-git-send-email-steven@uplinklabs.net>
+ <1426716071-27570-2-git-send-email-steven@uplinklabs.net>
+Message-ID: <20150719112314.2d733eaf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Dear Steven Noonan,
 
-Can you have a look at the patch below? According to Pascal, the
-submitter, it's related to an issue that appears with Cavium Octeon
-toolchains which I believe you have access to. Apparently, the
-toolchain ships with a libtermcap.a library, which causes some
-troubles down the road.
+On Wed, 18 Mar 2015 15:01:09 -0700, Steven Noonan wrote:
+> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+> ---
+>  package/glibc/glibc.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 0a37bb3..651711a 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -90,6 +90,7 @@ define GLIBC_CONFIGURE_CMDS
+>  		--prefix=/usr \
+>  		--enable-shared \
+>  		$(if $(BR2_SOFT_FLOAT),--without-fp,--with-fp) \
+> +		$(if $(BR2_x86_64),--enable-lock-elision,) \
 
-Thanks!
+What happens on x86-64 processors that don't have the HW support needed
+for lock elision ? Does glibc gracefully falls back at runtime to
+"normal" locks ?
+
+Thanks,
 
 Thomas
-
-On Fri, 24 Apr 2015 14:54:26 +0200, Pascal Mazon wrote:
-> There is no libtermcap package in buildroot, but ncurses implements termcap
-> natively. Furthermore, ncurses already provides the termcap.h header file.
-> 
-> With this patch, we fix an issue encountered with some external toolchains
-> that include a libtermcap.a (typically the GNU libtermcap version) in their
-> sysroot folder.
-> Bash, for instance, would be linking with this libtermcap while using
-> headers from ncurses.
-> 
-> In order to be consistent, let's make sure there is only the ncurses'
-> termcap library. To that effect, we:
-> - remove any libtermcap.* in the staging dir,
-> - install a link to libncurses static and/or shared in staging and target
->   dirs.
-> 
-> Signed-off-by: Pascal Mazon <pascal.mazon@6wind.com>
-> ---
->  package/ncurses/ncurses.mk | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-> index 8368c690b606..f4b03ed5db15 100644
-> --- a/package/ncurses/ncurses.mk
-> +++ b/package/ncurses/ncurses.mk
-> @@ -112,6 +112,20 @@ ifneq ($(BR2_ENABLE_DEBUG),y)
->  NCURSES_CONF_OPTS += --without-debug
->  endif
->  
-> +define NCURSES_LINK_LIBTERMCAP
-> +	ln -sf libncurses$(NCURSES_LIB_SUFFIX).$(2) $(1)/usr/lib/libtermcap.$(2)
-> +endef
-> +
-> +NCURSES_LINK_STAGING_TERMCAP = \
-> +	rm -f $(STAGING_DIR)/usr/lib/libtermcap.*; \
-> +	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBTERMCAP,$(STAGING_DIR),a);) \
-> +	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBTERMCAP,$(STAGING_DIR),so))
-> +NCURSES_LINK_TARGET_TERMCAP = \
-> +	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBTERMCAP,$(TARGET_DIR),a);) \
-> +	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBTERMCAP,$(TARGET_DIR),so))
-> +
-> +NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_TERMCAP
-> +
->  # ncurses breaks with parallel build, but takes quite a while to
->  # build single threaded. Work around it similar to how Gentoo does
->  define NCURSES_BUILD_CMDS
-> @@ -143,6 +157,7 @@ define NCURSES_INSTALL_TARGET_CMDS
->  	mkdir -p $(TARGET_DIR)/usr/lib
->  	$(NCURSES_INSTALL_TARGET_LIBS)
->  	$(NCURSES_LINK_TARGET_LIBS)
-> +	$(NCURSES_LINK_TARGET_TERMCAP)
->  	$(NCURSES_INSTALL_TARGET_PROGS)
->  	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
->  	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
-
-
-
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
