@@ -1,61 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jul 2015 15:36:05 +0200
-Subject: [Buildroot] [PATCH v7 1/1] Added linux drivers backports project
-In-Reply-To: <20150719132950.GC4020@free.fr>
-References: <1435791533-25991-1-git-send-email-petr.vorel@gmail.com>
- <20150719132950.GC4020@free.fr>
-Message-ID: <20150719133605.GD4020@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Jul 2015 20:56:44 +0200
+Subject: [Buildroot] [PATCH/RFC v2 02/44] package/libplatform: new
+	package
+References: <1434292603-12052-1-git-send-email-bernd.kuhls@t-online.de>
+ <1434292603-12052-3-git-send-email-bernd.kuhls@t-online.de>
+ <20150614224431.00c71b0f@free-electrons.com>
+Message-ID: <XnsA4DCD510FC835berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, All,
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20150614224431.00c71b0f at free-electrons.com:
 
-On 2015-07-19 15:29 +0200, Yann E. MORIN spake thusly:
-> On 2015-07-02 00:58 +0200, Petr Vorel spake thusly:
-> > https://backports.wiki.kernel.org
-> > 
-> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Dear Bernd Kuhls,
 > 
-> Since there's quite some work left to be done, and we would like to have
-> this as part of the next release, I'm adopting this patch to fix the
-> remaining issues that Arnout and I raised earlier.
+> On Sun, 14 Jun 2015 16:36:01 +0200, Bernd Kuhls wrote:
 > 
-> However, I have a question, see below...
+>> diff --git a/package/libplatform/Config.in b/package/libplatform/Config.in
+>> new file mode 100644
+>> index 0000000..7d275b1
+>> --- /dev/null
+>> +++ b/package/libplatform/Config.in
+>> @@ -0,0 +1,6 @@
+>> +config BR2_PACKAGE_LIBPLATFORM
+>> +     bool
 > 
-> > diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-> > new file mode 100644
-> > index 0000000..d45166a
-> > --- /dev/null
-> > +++ b/package/linux-backports/linux-backports.mk
-> > @@ -0,0 +1,64 @@
-> > +################################################################################
-> > +#
-> > +# linux-backports
-> > +#
-> > +################################################################################
-> > +
-> > +LINUX_BACKPORTS_VERSION_MAJOR = 4.0.1
+> Any reason to not have a prompt?
 > 
-> How are the versions of Linux and linux-backports related?
-> 
-> I.e. does linux-backports have to match the Linux version, or can we
-> use whatever linux-backports version with whatever Linux version?
+> Also, it probably needs C++ and threads support.
 
-Forget it, I now found the info you did put in the help text! ;-)
+Hi,
 
-Regards,
-Yann E. MORIN.
+this package was split from main Kodi source to provide common functions to 
+binary addon packages, it is of no use as a standalone package, therefore I 
+did not add a prompt. Packages depending on libplatform depend on c++/threads 
+themselves, I thought this should be enough.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Regards, Bernd
