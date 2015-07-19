@@ -1,451 +1,289 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:07 +0200
-Subject: [Buildroot] [PATCH/RFC v3 02/50] package/libsquish: New package
+Date: Sun, 19 Jul 2015 21:05:06 +0200
+Subject: [Buildroot] [PATCH/RFC v3 01/50] package/ffmpeg: bump version to
+	2.7.1
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kodi 15.0 contains an updated version of libsquish:
-https://github.com/xbmc/xbmc/tree/master/tools/depends/native/libsquish-native
-
-The OpenElec project provides a separate tarball including the Kodi-
-specific patches:
-http://sources.openelec.tv/devel/libsquish-1.10-openelec.tar.gz
-
-This patch contains the relevant diff between upstream libsquish 1.13
-and the OpenElec tarball.
+Removed patches applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                 |    1 +
- package/libsquish/0001-kodi.patch |  327 +++++++++++++++++++++++++++++++++++++
- package/libsquish/Config.in       |   13 ++
- package/libsquish/libsquish.hash  |    2 +
- package/libsquish/libsquish.mk    |   36 ++++
- 5 files changed, 379 insertions(+)
- create mode 100644 package/libsquish/0001-kodi.patch
- create mode 100644 package/libsquish/Config.in
- create mode 100644 package/libsquish/libsquish.hash
- create mode 100644 package/libsquish/libsquish.mk
+ ...ix-dxva-playback-of-streams-that-don-t-st.patch |    6 +-
+ package/ffmpeg/0014-fix-ff-thread-get-format.patch |  131 --------------------
+ .../ffmpeg/0015-hevc-avoid-unnecessary-calls.patch |   72 -----------
+ package/ffmpeg/ffmpeg.hash                         |    2 +-
+ package/ffmpeg/ffmpeg.mk                           |    2 +-
+ 5 files changed, 5 insertions(+), 208 deletions(-)
+ delete mode 100644 package/ffmpeg/0014-fix-ff-thread-get-format.patch
+ delete mode 100644 package/ffmpeg/0015-hevc-avoid-unnecessary-calls.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 20ecd38..983d4e4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -717,6 +717,7 @@ endmenu
- menu "Compression and decompression"
- 	source "package/libarchive/Config.in"
- 	source "package/libzip/Config.in"
-+	source "package/libsquish/Config.in"
- 	source "package/lzo/Config.in"
- 	source "package/snappy/Config.in"
- 	source "package/szip/Config.in"
-diff --git a/package/libsquish/0001-kodi.patch b/package/libsquish/0001-kodi.patch
-new file mode 100644
-index 0000000..a9bca66
---- /dev/null
-+++ b/package/libsquish/0001-kodi.patch
-@@ -0,0 +1,327 @@
-+Add Kodi-specific patch
-+
-+Kodi 15.0 contains an updated version of libsquish:
-+https://github.com/xbmc/xbmc/tree/master/tools/depends/native/libsquish-native
-+
-+The OpenElec project provides a separate tarball including the Kodi-
-+specific patches:
-+http://sources.openelec.tv/devel/libsquish-1.10-openelec.tar.gz
-+
-+This patch contains the relevant diff between upstream libsquish 1.13
-+and the OpenElec tarball.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uwNr 1.13/squish.cpp libsquish-1.10-openelec/squish.cpp
-+--- 1.13/squish.cpp	2015-04-30 12:48:49.000000000 +0200
-++++ libsquish-1.10-openelec/squish.cpp	2015-01-09 10:58:43.000000000 +0100
-+@@ -23,6 +23,7 @@
-+ 
-+    -------------------------------------------------------------------------- */
-+ 
-++#include <string.h>
-+ #include <squish.h>
-+ #include "colourset.h"
-+ #include "maths.h"
-+@@ -39,7 +40,7 @@
-+     // grab the flag bits
-+     int method = flags & ( kDxt1 | kDxt3 | kDxt5 );
-+     int fit = flags & ( kColourIterativeClusterFit | kColourClusterFit | kColourRangeFit );
-+-    int extra = flags & kWeightColourByAlpha;
-++	int extra = flags & ( kWeightColourByAlpha | kSourceBGRA );
-+ 
-+     // set defaults
-+     if( method != kDxt3 && method != kDxt5 )
-+@@ -124,8 +125,30 @@
-+     return blockcount*blocksize;
-+ }
-+ 
-++void CopyRGBA( u8 const* source, u8* dest, int flags )
-++{
-++	if (flags & kSourceBGRA)
-++	{
-++		// convert from bgra to rgba
-++		dest[0] = source[2];
-++		dest[1] = source[1];
-++		dest[2] = source[0];
-++		dest[3] = source[3];
-++	}
-++	else
-++	{
-++		for( int i = 0; i < 4; ++i )
-++			*dest++ = *source++;
-++	}
-++}
-++
-+ void CompressImage( u8 const* rgba, int width, int height, void* blocks, int flags, float* metric )
-+ {
-++	CompressImage(rgba, width, height, width*4, blocks, flags, metric);
-++}
-++  
-++void CompressImage( u8 const* rgba, int width, int height, int pitch, void* blocks, int flags, float* metric )
-++{
-+     // fix any bad flags
-+     flags = FixFlags( flags );
-+ 
-+@@ -154,20 +177,14 @@
-+                     if( sx < width && sy < height )
-+                     {
-+                         // copy the rgba value
-+-                        u8 const* sourcePixel = rgba + 4*( width*sy + sx );
-+-                        for( int i = 0; i < 4; ++i )
-+-                            *targetPixel++ = *sourcePixel++;
-+-
-++						u8 const* sourcePixel = rgba + pitch*sy + 4*sx;
-++						CopyRGBA(sourcePixel, targetPixel, flags);
-+                         // enable this pixel
-+                         mask |= ( 1 << ( 4*py + px ) );
-+                     }
-+-                    else
-+-                    {
-+-                        // skip this pixel as its outside the image
-+                         targetPixel += 4;
-+                     }
-+                 }
-+-            }
-+ 
-+             // compress it into the output
-+             CompressMasked( sourceRgba, mask, targetBlock, flags, metric );
-+@@ -180,6 +197,11 @@
-+ 
-+ void DecompressImage( u8* rgba, int width, int height, void const* blocks, int flags )
-+ {
-++	DecompressImage( rgba, width, height, width*4, blocks, flags );
-++}
-++
-++void DecompressImage( u8* rgba, int width, int height, int pitch, void const* blocks, int flags )
-++{
-+     // fix any bad flags
-+     flags = FixFlags( flags );
-+ 
-+@@ -207,24 +229,132 @@
-+                     int sy = y + py;
-+                     if( sx < width && sy < height )
-+                     {
-+-                        u8* targetPixel = rgba + 4*( width*sy + sx );
-++						u8* targetPixel = rgba + pitch*sy + 4*sx;
-+ 
-+                         // copy the rgba value
-++						CopyRGBA(sourcePixel, targetPixel, flags);
-++					}
-++					sourcePixel += 4;
-++				}
-++			}
-++			
-++			// advance
-++			sourceBlock += bytesPerBlock;
-++		}
-++	}
-++}
-++
-++static double ErrorSq(double x, double y)
-++{
-++	return (x - y) * (x - y);
-++}
-++
-++static void ComputeBlockWMSE(u8 const *original, u8 const *compressed, unsigned int w, unsigned int h, double &cmse, double &amse)
-++{
-++	// Computes the MSE for the block and weights it by the variance of the original block.
-++	// If the variance of the original block is less than 4 (i.e. a standard deviation of 1 per channel)
-++	// then the block is close to being a single colour. Quantisation errors in single colour blocks
-++	// are easier to see than similar errors in blocks that contain more colours, particularly when there
-++	// are many such blocks in a large area (eg a blue sky background) as they cause banding.  Given that
-++	// banding is easier to see than small errors in "complex" blocks, we weight the errors by a factor
-++	// of 5. This implies that images with large, single colour areas will have a higher potential WMSE
-++	// than images with lots of detail.
-++
-++	cmse = amse = 0;
-++	unsigned int sum_p[4];  // per channel sum of pixels
-++	unsigned int sum_p2[4]; // per channel sum of pixels squared
-++	memset(sum_p, 0, sizeof(sum_p));
-++	memset(sum_p2, 0, sizeof(sum_p2));
-++	for( unsigned int py = 0; py < 4; ++py )
-++	{
-++		for( unsigned int px = 0; px < 4; ++px )
-++		{
-++			if( px < w && py < h )
-++			{
-++				double pixelCMSE = 0;
-++				for( int i = 0; i < 3; ++i )
-++				{
-++					pixelCMSE += ErrorSq(original[i], compressed[i]);
-++					sum_p[i] += original[i];
-++					sum_p2[i] += (unsigned int)original[i]*original[i];
-++				}
-++				if( original[3] == 0 && compressed[3] == 0 )
-++					pixelCMSE = 0; // transparent in both, so colour is inconsequential
-++				amse += ErrorSq(original[3], compressed[3]);
-++				cmse += pixelCMSE;
-++				sum_p[3] += original[3];
-++				sum_p2[3] += (unsigned int)original[3]*original[3];
-++			}
-++			original += 4;
-++			compressed += 4;
-++		}
-++	}
-++	unsigned int variance = 0;
-+                         for( int i = 0; i < 4; ++i )
-+-                            *targetPixel++ = *sourcePixel++;
-++		variance += w*h*sum_p2[i] - sum_p[i]*sum_p[i];
-++	if( variance < 4 * w * w * h * h )
-++	{
-++		amse *= 5;
-++		cmse *= 5;
-+                     }
-+-                    else
-++}
-++  
-++void ComputeMSE( u8 const *rgba, int width, int height, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE )
-+                     {
-+-                        // skip this pixel as its outside the image
-+-                        sourcePixel += 4;
-++	ComputeMSE(rgba, width, height, width*4, dxt, flags, colourMSE, alphaMSE);
-++}
-++                
-++void ComputeMSE( u8 const *rgba, int width, int height, int pitch, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE )
-++{
-++	// fix any bad flags
-++	flags = FixFlags( flags );
-++	colourMSE = alphaMSE = 0;
-++
-++	// initialise the block input
-++	squish::u8 const* sourceBlock = dxt;
-++	int bytesPerBlock = ( ( flags & squish::kDxt1 ) != 0 ) ? 8 : 16;
-++
-++	// loop over blocks
-++	for( int y = 0; y < height; y += 4 )
-++	{
-++		for( int x = 0; x < width; x += 4 )
-++		{
-++			// decompress the block
-++			u8 targetRgba[4*16];
-++			Decompress( targetRgba, sourceBlock, flags );
-++			u8 const* sourcePixel = targetRgba;
-++
-++			// copy across to a similar pixel block
-++			u8 originalRgba[4*16];
-++			u8* originalPixel = originalRgba;
-++
-++			for( int py = 0; py < 4; ++py )
-++			{
-++				for( int px = 0; px < 4; ++px )
-++				{
-++					int sx = x + px;
-++					int sy = y + py;
-++					if( sx < width && sy < height )
-++					{
-++						u8 const* targetPixel = rgba + pitch*sy + 4*sx;
-++						CopyRGBA(targetPixel, originalPixel, flags);
-+                     }
-++					sourcePixel += 4;
-++					originalPixel += 4;
-+                 }
-+             }
-+ 
-++			// compute the weighted MSE of the block
-++			double blockCMSE, blockAMSE;
-++			ComputeBlockWMSE(originalRgba, targetRgba, std::min(4, width - x), std::min(4, height - y), blockCMSE, blockAMSE);
-++			colourMSE += blockCMSE;
-++			alphaMSE += blockAMSE;
-+             // advance
-+             sourceBlock += bytesPerBlock;
-+         }
-+     }
-++	colourMSE /= (width * height * 3);
-++	alphaMSE /= (width * height);
-+ }
-+ 
-+ } // namespace squish
-+diff -uwNr 1.13/squish.h libsquish-1.10-openelec/squish.h
-+--- 1.13/squish.h	2015-04-30 12:55:27.000000000 +0200
-++++ libsquish-1.10-openelec/squish.h	2015-01-09 10:58:43.000000000 +0100
-+@@ -57,7 +57,10 @@
-+     kColourRangeFit = ( 1 << 4 ),
-+ 
-+     //! Weight the colour by alpha during cluster fit (disabled by default).
-+-    kWeightColourByAlpha = ( 1 << 7 )
-++	kWeightColourByAlpha = ( 1 << 7 ),
-++	
-++	//! Source is BGRA rather than RGBA
-++	kSourceBGRA = ( 1 << 9 ),
-+ };
-+ 
-+ // -----------------------------------------------------------------------------
-+@@ -194,6 +197,7 @@
-+     @param rgba   The pixels of the source.
-+     @param width  The width of the source image.
-+     @param height The height of the source image.
-++	@param pitch	The pitch of the source image.
-+     @param blocks Storage for the compressed output.
-+     @param flags  Compression flags.
-+     @param metric An optional perceptual metric.
-+@@ -231,6 +235,7 @@
-+     to allocate for the compressed output.
-+ */
-+ void CompressImage( u8 const* rgba, int width, int height, void* blocks, int flags, float* metric = 0 );
-++void CompressImage( u8 const* rgba, int width, int height, int pitch, void* blocks, int flags, float* metric = 0 );
-+ 
-+ // -----------------------------------------------------------------------------
-+ 
-+@@ -239,6 +244,7 @@
-+     @param rgba   Storage for the decompressed pixels.
-+     @param width  The width of the source image.
-+     @param height The height of the source image.
-++	@param pitch    The pitch of the decompressed pixels.
-+     @param blocks The compressed DXT blocks.
-+     @param flags  Compression flags.
-+ 
-+@@ -254,6 +260,32 @@
-+     Internally this function calls squish::Decompress for each block.
-+ */
-+ void DecompressImage( u8* rgba, int width, int height, void const* blocks, int flags );
-++void DecompressImage( u8* rgba, int width, int height, int pitch, void const* blocks, int flags );
-++
-++// -----------------------------------------------------------------------------
-++
-++/*! @brief Computes MSE of an compressed image in memory.
-++
-++	@param rgba		The original image pixels.
-++	@param width	The width of the source image.
-++	@param height	The height of the source image.
-++	@param pitch  	The pitch of the source image.
-++	@param dxt		The compressed dxt blocks
-++	@param flags	Compression flags.
-++	@param colourMSE	The MSE of the colour values.
-++	@param alphaMSE	The MSE of the alpha values.
-++	
-++	The colour MSE and alpha MSE are computed across all pixels. The colour MSE is
-++	averaged across all rgb values (i.e. colourMSE = sum sum_k ||dxt.k - rgba.k||/3)
-++	
-++	The flags parameter should specify either kDxt1, kDxt3 or kDxt5 compression, 
-++	however, DXT1 will be used by default if none is specified. All other flags 
-++	are ignored.
-++
-++	Internally this function calls squish::Decompress for each block.
-++*/
-++void ComputeMSE(u8 const *rgba, int width, int height, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE);
-++void ComputeMSE(u8 const *rgba, int width, int height, int pitch, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE);
-+ 
-+ // -----------------------------------------------------------------------------
-+ 
-+diff -uwNr 1.13/squish.pc.in libsquish-1.10-openelec/squish.pc.in
-+--- 1.13/squish.pc	1970-01-01 01:00:00.000000000 +0100
-++++ libsquish-1.10-openelec/squish.pc	2015-01-09 10:58:43.000000000 +0100
-+@@ -0,0 +1,13 @@
-++prefix=/usr
-++exec_prefix=${prefix}
-++libdir=${prefix}/lib
-++sharedlibdir=${libdir}
-++includedir=${prefix}/include
-++
-++Name: squish
-++Description: squish DXT lib
-++Version: 1.1.3-kodi
-++
-++Requires:
-++Libs: -L${libdir} -L${sharedlibdir} -lsquish
-++Cflags: -I${includedir}
-diff --git a/package/libsquish/Config.in b/package/libsquish/Config.in
-new file mode 100644
-index 0000000..eabe6c5
---- /dev/null
-+++ b/package/libsquish/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LIBSQUISH
-+	bool "libsquish"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  The libSquish library compresses images with the DXT standard
-+	  (also known as S3TC). This standard is mainly used by OpenGL
-+	  and DirectX for the lossy compression of RGBA textures.
-+
-+	  http://sourceforge.net/projects/libsquish
-+
-+comment "libsquish needs a toolchain w/ C++, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-diff --git a/package/libsquish/libsquish.hash b/package/libsquish/libsquish.hash
-new file mode 100644
-index 0000000..caa7198
---- /dev/null
-+++ b/package/libsquish/libsquish.hash
-@@ -0,0 +1,2 @@
-+# From http://sourceforge.net/projects/libsquish/files
-+sha1	7bcdd7d0f0460a29e25dcdab8dc41a30e58bb366	libsquish-1.13.tgz
-diff --git a/package/libsquish/libsquish.mk b/package/libsquish/libsquish.mk
-new file mode 100644
-index 0000000..df37368
---- /dev/null
-+++ b/package/libsquish/libsquish.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# libsquish
-+#
-+################################################################################
-+
-+LIBSQUISH_VERSION = 1.13
-+LIBSQUISH_SOURCE = libsquish-$(LIBSQUISH_VERSION).tgz
-+LIBSQUISH_SITE = http://downloads.sourceforge.net/project/libsquish
-+LIBSQUISH_INSTALL_STAGING = YES
-+LIBSQUISH_STRIP_COMPONENTS = 0
-+LIBSQUISH_LICENSE = MIT
-+LIBSQUISH_LICENSE_FILES = README
-+
-+define LIBSQUISH_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
-+
-+define LIBSQUISH_INSTALL_STAGING_CMDS
-+	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig/
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
-+		PREFIX=/usr INSTALL_DIR=$(STAGING_DIR)/usr
-+	$(INSTALL) -m 644 $(@D)/squish.pc $(STAGING_DIR)/usr/lib/pkgconfig
-+	ln -sf libsquish.so.0.0 $(STAGING_DIR)/usr/lib/libsquish.so
-+
-+endef
-+
-+define LIBSQUISH_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/include/
-+	mkdir -p $(TARGET_DIR)/usr/lib/pkgconfig/
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
-+		PREFIX=/usr INSTALL_DIR=$(TARGET_DIR)/usr
-+	ln -sf libsquish.so.0.0 $(TARGET_DIR)/usr/lib/libsquish.so
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/ffmpeg/0012-dxva-h264-Fix-dxva-playback-of-streams-that-don-t-st.patch b/package/ffmpeg/0012-dxva-h264-Fix-dxva-playback-of-streams-that-don-t-st.patch
+index 0aa0aeb..f346da1 100644
+--- a/package/ffmpeg/0012-dxva-h264-Fix-dxva-playback-of-streams-that-don-t-st.patch
++++ b/package/ffmpeg/0012-dxva-h264-Fix-dxva-playback-of-streams-that-don-t-st.patch
+@@ -32,7 +32,7 @@ index 6deccc3..85b25fd 100644
+ +        h->got_first_iframe = 1;
+ +    }
+ +
+-     ret = ff_dxva2_common_end_frame(avctx, &h->cur_pic_ptr->f,
++     ret = ff_dxva2_common_end_frame(avctx, h->cur_pic_ptr->f,
+                                      &ctx_pic->pp, sizeof(ctx_pic->pp),
+                                      &ctx_pic->qm, sizeof(ctx_pic->qm),
+ diff --git a/libavcodec/h264.c b/libavcodec/h264.c
+@@ -40,9 +40,9 @@ index 222bf58..ea2ec17 100644
+ --- a/libavcodec/h264.c
+ +++ b/libavcodec/h264.c
+ @@ -1085,6 +1085,7 @@ void ff_h264_flush_change(H264Context *h)
+-     h->list_count = 0;
+-     h->current_slice = 0;
+      h->mmco_reset = 1;
++     for (i = 0; i < h->nb_slice_ctx; i++)
++         h->slice_ctx[i].list_count = 0;
+ +    h->got_first_iframe = 0;
+  }
+  
+diff --git a/package/ffmpeg/0014-fix-ff-thread-get-format.patch b/package/ffmpeg/0014-fix-ff-thread-get-format.patch
+deleted file mode 100644
+index 8e7e339..0000000
+--- a/package/ffmpeg/0014-fix-ff-thread-get-format.patch
++++ /dev/null
+@@ -1,131 +0,0 @@
+-From b52c216539bdbee830e0d306b372037d4e0cb35f Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Reimar=20D=C3=B6ffinger?= <Reimar.Doeffinger@gmx.de>
+-Date: Sun, 8 Mar 2015 19:44:12 +0100
+-Subject: [PATCH] pthread: Fix ff_thread_get_format issues when called outside
+- frame decode
+-
+-Patch part of the XBMC patch set for ffmpeg, downloaded from
+-https://github.com/xbmc/FFmpeg/.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- libavcodec/pthread_frame.c | 22 +++++++++++++++++++---
+- 1 file changed, 19 insertions(+), 3 deletions(-)
+-
+-diff --git a/libavcodec/pthread_frame.c b/libavcodec/pthread_frame.c
+-index 5a4ab84..c29d0a9 100644
+---- a/libavcodec/pthread_frame.c
+-+++ b/libavcodec/pthread_frame.c
+-@@ -53,6 +53,7 @@
+-  * Context used by codec threads and stored in their AVCodecInternal thread_ctx.
+-  */
+- typedef struct PerThreadContext {
+-+    int main_thread;
+-     struct FrameThreadContext *parent;
+- 
+-     pthread_t      thread;
+-@@ -83,7 +84,8 @@ typedef struct PerThreadContext {
+-                                      * Set when the codec calls get_format().
+-                                      * State is returned to STATE_SETTING_UP afterwards.
+-                                      */
+--        STATE_SETUP_FINISHED        ///< Set after the codec has called ff_thread_finish_setup().
+-+        STATE_SETUP_FINISHED,       ///< Set after the codec has called ff_thread_finish_setup().
+-+        STATE_UPDATE_CONTEXT,       ///< Main thread is updating its context
+-     } state;
+- 
+-     /**
+-@@ -105,6 +107,7 @@ typedef struct PerThreadContext {
+-  * Context stored in the client AVCodecInternal thread_ctx.
+-  */
+- typedef struct FrameThreadContext {
+-+    int main_thread;
+-     PerThreadContext *threads;     ///< The contexts for each thread.
+-     PerThreadContext *prev_thread; ///< The last thread submit_packet() was called on.
+- 
+-@@ -143,6 +146,7 @@ static attribute_align_arg void *frame_worker_thread(void *arg)
+-     AVCodecContext *avctx = p->avctx;
+-     const AVCodec *codec = avctx->codec;
+- 
+-+    av_assert0(!p->main_thread);
+-     pthread_mutex_lock(&p->mutex);
+-     while (1) {
+-             while (p->state == STATE_INPUT_READY && !fctx->die)
+-@@ -330,6 +334,8 @@ static int submit_packet(PerThreadContext *p, AVPacket *avpkt)
+- 
+-     pthread_mutex_lock(&p->mutex);
+- 
+-+    p->state = STATE_UPDATE_CONTEXT;
+-+
+-     release_delayed_buffers(p);
+- 
+-     if (prev_thread) {
+-@@ -408,6 +414,7 @@ int ff_thread_decode_frame(AVCodecContext *avctx,
+-     int finished = fctx->next_finished;
+-     PerThreadContext *p;
+-     int err;
+-+    av_assert0(fctx->main_thread);
+- 
+-     /*
+-      * Submit a packet to the next decoding thread.
+-@@ -515,6 +522,7 @@ void ff_thread_finish_setup(AVCodecContext *avctx) {
+- 
+-     if (!(avctx->active_thread_type&FF_THREAD_FRAME)) return;
+- 
+-+    av_assert0(!p->main_thread);
+-     if(p->state == STATE_SETUP_FINISHED){
+-         av_log(avctx, AV_LOG_WARNING, "Multiple ff_thread_finish_setup() calls\n");
+-     }
+-@@ -549,6 +557,7 @@ void ff_frame_thread_free(AVCodecContext *avctx, int thread_count)
+-     const AVCodec *codec = avctx->codec;
+-     int i;
+- 
+-+    av_assert0(fctx->main_thread);
+-     park_frame_worker_threads(fctx, thread_count);
+- 
+-     if (fctx->prev_thread && fctx->prev_thread != fctx->threads)
+-@@ -634,6 +643,7 @@ int ff_frame_thread_init(AVCodecContext *avctx)
+-     }
+- 
+-     avctx->internal->thread_ctx = fctx = av_mallocz(sizeof(FrameThreadContext));
+-+    fctx->main_thread = 1;
+- 
+-     fctx->threads = av_mallocz_array(thread_count, sizeof(PerThreadContext));
+-     pthread_mutex_init(&fctx->buffer_mutex, NULL);
+-@@ -718,6 +728,7 @@ void ff_thread_flush(AVCodecContext *avctx)
+- 
+-     if (!fctx) return;
+- 
+-+    av_assert0(fctx->main_thread);
+-     park_frame_worker_threads(fctx, avctx->thread_count);
+-     if (fctx->prev_thread) {
+-         if (fctx->prev_thread != &fctx->threads[0])
+-@@ -743,7 +754,10 @@ void ff_thread_flush(AVCodecContext *avctx)
+- int ff_thread_can_start_frame(AVCodecContext *avctx)
+- {
+-     PerThreadContext *p = avctx->internal->thread_ctx;
+--    if ((avctx->active_thread_type&FF_THREAD_FRAME) && p->state != STATE_SETTING_UP &&
+-+    if (!(avctx->active_thread_type&FF_THREAD_FRAME))
+-+        return 1;
+-+    av_assert0(!p->main_thread);
+-+    if (p->state != STATE_SETTING_UP &&
+-         (avctx->codec->update_thread_context || !THREAD_SAFE_CALLBACKS(avctx))) {
+-         return 0;
+-     }
+-@@ -762,6 +776,7 @@ static int thread_get_buffer_internal(AVCodecContext *avctx, ThreadFrame *f, int
+-     if (!(avctx->active_thread_type & FF_THREAD_FRAME))
+-         return ff_get_buffer(avctx, f->f, flags);
+- 
+-+    av_assert0(!p->main_thread);
+-     if (p->state != STATE_SETTING_UP &&
+-         (avctx->codec->update_thread_context || !THREAD_SAFE_CALLBACKS(avctx))) {
+-         av_log(avctx, AV_LOG_ERROR, "get_buffer() cannot be called after ff_thread_finish_setup()\n");
+-@@ -819,7 +834,8 @@ enum AVPixelFormat ff_thread_get_format(AVCodecContext *avctx, const enum AVPixe
+-     enum AVPixelFormat res;
+-     PerThreadContext *p = avctx->internal->thread_ctx;
+-     if (!(avctx->active_thread_type & FF_THREAD_FRAME) || avctx->thread_safe_callbacks ||
+--        avctx->get_format == avcodec_default_get_format)
+-+        avctx->get_format == avcodec_default_get_format ||
+-+        p->main_thread || p->state == STATE_UPDATE_CONTEXT)
+-         return ff_get_format(avctx, fmt);
+-     if (p->state != STATE_SETTING_UP) {
+-         av_log(avctx, AV_LOG_ERROR, "get_format() cannot be called after ff_thread_finish_setup()\n");
+diff --git a/package/ffmpeg/0015-hevc-avoid-unnecessary-calls.patch b/package/ffmpeg/0015-hevc-avoid-unnecessary-calls.patch
+deleted file mode 100644
+index 4e6050d..0000000
+--- a/package/ffmpeg/0015-hevc-avoid-unnecessary-calls.patch
++++ /dev/null
+@@ -1,72 +0,0 @@
+-From ef86b05da8ad38c9c83e6f075536635647e6b799 Mon Sep 17 00:00:00 2001
+-From: Rainer Hochecker <fernetmenta@online.de>
+-Date: Thu, 12 Mar 2015 12:49:48 +0100
+-Subject: [PATCH] hevc: avoid unnecessary calls to get_format
+-
+-Patch part of the XBMC patch set for ffmpeg, downloaded from
+-https://github.com/xbmc/FFmpeg/.
+-
+-Upstream status: committed to master
+-http://git.videolan.org/?p=ffmpeg.git;a=commit;h=786032cad8ecabe577d9cff0356da6e9e9488a2d
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- libavcodec/hevc.c | 23 ++++++++++++++---------
+- 1 file changed, 14 insertions(+), 9 deletions(-)
+-
+-diff --git a/libavcodec/hevc.c b/libavcodec/hevc.c
+-index b7ad29a..77b0c0c 100644
+---- a/libavcodec/hevc.c
+-+++ b/libavcodec/hevc.c
+-@@ -280,7 +280,7 @@ static int decode_lt_rps(HEVCContext *s, LongTermRPS *rps, GetBitContext *gb)
+-     return 0;
+- }
+- 
+--static int set_sps(HEVCContext *s, const HEVCSPS *sps)
+-+static int set_sps(HEVCContext *s, const HEVCSPS *sps, enum AVPixelFormat pix_fmt)
+- {
+-     #define HWACCEL_MAX (CONFIG_HEVC_DXVA2_HWACCEL)
+-     enum AVPixelFormat pix_fmts[HWACCEL_MAX + 2], *fmt = pix_fmts;
+-@@ -304,13 +304,18 @@ static int set_sps(HEVCContext *s, const HEVCSPS *sps)
+- #endif
+-     }
+- 
+--    *fmt++ = sps->pix_fmt;
+--    *fmt = AV_PIX_FMT_NONE;
+-+    if (pix_fmt == AV_PIX_FMT_NONE) {
+-+        *fmt++ = sps->pix_fmt;
+-+        *fmt = AV_PIX_FMT_NONE;
+- 
+--    ret = ff_thread_get_format(s->avctx, pix_fmts);
+--    if (ret < 0)
+--        goto fail;
+--    s->avctx->pix_fmt = ret;
+-+        ret = ff_thread_get_format(s->avctx, pix_fmts);
+-+        if (ret < 0)
+-+            goto fail;
+-+        s->avctx->pix_fmt = ret;
+-+    }
+-+    else {
+-+        s->avctx->pix_fmt = pix_fmt;
+-+    }
+- 
+-     ff_set_sar(s->avctx, sps->vui.sar);
+- 
+-@@ -420,7 +425,7 @@ static int hls_slice_header(HEVCContext *s)
+-                 sh->no_output_of_prior_pics_flag = 0;
+-         }
+-         ff_hevc_clear_refs(s);
+--        ret = set_sps(s, s->sps);
+-+        ret = set_sps(s, s->sps, AV_PIX_FMT_NONE);
+-         if (ret < 0)
+-             return ret;
+- 
+-@@ -3335,7 +3340,7 @@ static int hevc_update_thread_context(AVCodecContext *dst,
+-     }
+- 
+-     if (s->sps != s0->sps)
+--        if ((ret = set_sps(s, s0->sps)) < 0)
+-+        if ((ret = set_sps(s, s0->sps, src->pix_fmt)) < 0)
+-             return ret;
+- 
+-     s->seq_decode = s0->seq_decode;
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 0add973..a6cb310 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	59eb98c1b5896ac29abc0385f7c875d1b4942d695818818d418ee71eea1e0cfb	ffmpeg-2.6.3.tar.bz2
++sha256	7e07b97d2415feeae9c9b5595e35e7b7aab33207e81bf9f8c0d1eece43f7f720	ffmpeg-2.7.1.tar.bz2
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 0030d97..0162db2 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 2.6.3
++FFMPEG_VERSION = 2.7.1
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
 -- 
 1.7.10.4
