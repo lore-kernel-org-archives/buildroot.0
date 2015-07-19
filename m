@@ -1,48 +1,29 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 19 Jul 2015 12:33:00 +0300
-Subject: [Buildroot] [PATCH] package/glibc: enable lock elision on
- x86_64 hosts
-In-Reply-To: <20150719112314.2d733eaf@free-electrons.com>
-References: <1426716071-27570-1-git-send-email-steven@uplinklabs.net>
- <1426716071-27570-2-git-send-email-steven@uplinklabs.net>
- <20150719112314.2d733eaf@free-electrons.com>
-Message-ID: <20150719093300.GG13027@tarshish>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Jul 2015 11:43:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-addon-xvdr: bump version
+	and switch to branch kodi-helix
+References: <1428695666-10412-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150719111637.5ac3a5c8@free-electrons.com>
+Message-ID: <XnsA4DC774212EA8berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20150719111637.5ac3a5c8 at free-electrons.com:
 
-On Sun, Jul 19, 2015 at 11:23:14AM +0200, Thomas Petazzoni wrote:
-> On Wed, 18 Mar 2015 15:01:09 -0700, Steven Noonan wrote:
-> > Signed-off-by: Steven Noonan <steven@uplinklabs.net>
-> > ---
-> >  package/glibc/glibc.mk | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> > index 0a37bb3..651711a 100644
-> > --- a/package/glibc/glibc.mk
-> > +++ b/package/glibc/glibc.mk
-> > @@ -90,6 +90,7 @@ define GLIBC_CONFIGURE_CMDS
-> >  		--prefix=/usr \
-> >  		--enable-shared \
-> >  		$(if $(BR2_SOFT_FLOAT),--without-fp,--with-fp) \
-> > +		$(if $(BR2_x86_64),--enable-lock-elision,) \
-> 
-> What happens on x86-64 processors that don't have the HW support needed
-> for lock elision ? Does glibc gracefully falls back at runtime to
-> "normal" locks ?
+> What is the status of this patch? I think you later posted another
+> big RFC patch series that bumps the entire Kodi stack to the latest
+> beta version, and it was quite significantly changing the handling of
+> add-ons, IIRC.
 
-According to the code at sysdeps/unix/sysv/linux/x86/elision-conf.c, 
-__elision_available is initialized from HAS_RTM which is evaluated at run-time 
-(sysdeps/x86_64/multiarch/init-arch.h).
+Hi,
 
-baruch
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Kodi Isengard reached rc2 last week, so I think its release will happen in 
+the foreseeable future. Therefore this patch makes no sense anymore imho, I 
+marked it as superseded in patchworks.
+
+Regards, Bernd
