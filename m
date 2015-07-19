@@ -1,35 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Jul 2015 10:11:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: disable for PowerPC
- CS toolchains
-In-Reply-To: <1437289664.12715.17.camel@embedded.rocks>
-References: <1437086706-20437-1-git-send-email-joerg.krause@embedded.rocks>
- <20150718111610.55f5a57b@free-electrons.com>
- <1437289664.12715.17.camel@embedded.rocks>
-Message-ID: <20150719101144.3b8e071f@free-electrons.com>
+Date: Sun, 19 Jul 2015 11:12:25 +0200
+Subject: [Buildroot] [git commit] package/upmpdcli: Add patch to fix
+	OPEN_MAX build error
+Message-ID: <20150719091232.4F7A5819BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=a9f99c61aa3e56073d1fcfe20d68151f074f9838
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 19 Jul 2015 09:07:44 +0200, J?rg Krause wrote:
+When building upmpdcli with certain toolchains using the compiler flag
+-std=c++0x let gcc not define "linux" or "__linux", but "__linux__". Therefore,
+the Linux-specific code in closefrom.cpp is not used and the build fails.
 
-> Upstream submitted a patch regarding this build error which removes the
-> necessity for a gcc >= 4.6 toolchain. Shall I submit this upstream
-> patch to allow using the excluded toolchains again, or do we just wait
-> until a new version of upmpdcli will be released and we include them
-> again in that case?
+Fixes:
+http://autobuild.buildroot.net/results/d66/d660a9409552b3e1ad9e3ed716386fd0a67fd8db
+http://autobuild.buildroot.net/results/f19/f19e843cdcc968a72919ca3792a90dd40552bd59
+http://autobuild.buildroot.net/results/a77/a776001dae51c4dae1f25b3a9bf9a9fe2ca69003
+http://autobuild.buildroot.net/results/3e7/3e7590566ed3cc7a1dd412fb66b7b987e847aa25
 
-I think you can wait for the new upstream release, and at this point
-remove the toolchain exclusions.
+and many more.
 
-Thanks!
+Pull request is open on github [1].
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+[1]
+https://github.com/medoc92/upmpdcli/pull/15
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-Add-conditional-check-for-__linux__.patch |   32 ++++++++++++++++++++
+ 1 files changed, 32 insertions(+), 0 deletions(-)
+
+diff --git a/package/upmpdcli/0001-Add-conditional-check-for-__linux__.patch b/package/upmpdcli/0001-Add-conditional-check-for-__linux__.patch
+new file mode 100644
+index 0000000..910ee3c
+--- /dev/null
++++ b/package/upmpdcli/0001-Add-conditional-check-for-__linux__.patch
+@@ -0,0 +1,32 @@
++From 69740cf6fe35413edc4b6adc502ba70ce8de8557 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Sun, 19 Jul 2015 08:48:13 +0200
++Subject: [PATCH 1/1] Add conditional check for __linux__
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++When building upmpdcli with certain toolchains using the compiler flag
++-std=c++0x let gcc not define "linux" or "__linux", but "__linux__".
++
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++---
++ src/closefrom.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/closefrom.cpp b/src/closefrom.cpp
++index 4429b20..0cd7957 100644
++--- a/src/closefrom.cpp
+++++ b/src/closefrom.cpp
++@@ -111,7 +111,7 @@ int libclf_closefrom(int fd0)
++ }
++ 
++ /*************************************************************************/
++-#elif (defined(linux) || defined(__linux))
+++#elif (defined(linux) || defined(__linux) || defined(__linux__))
++ 
++ /* Use /proc/self/fd directory */
++ #include <sys/types.h>
++-- 
++2.4.6
++
