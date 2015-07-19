@@ -1,64 +1,124 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Jul 2015 23:09:43 +0200
-Subject: [Buildroot] [PATCH 02/11] ejabberd: simplify init script by
- patching ejabberdctl
-In-Reply-To: <CAJtjsKZeXXQvGimN=Zq1gdPLSwX5LY1J=Jh0J9L8SYwBK6y9XQ@mail.gmail.com>
-References: <1436349264-11797-1-git-send-email-johan.oudinet@gmail.com>
- <1436349264-11797-3-git-send-email-johan.oudinet@gmail.com>
- <20150711123051.664507d5@free-electrons.com>
- <CAJtjsKZeXXQvGimN=Zq1gdPLSwX5LY1J=Jh0J9L8SYwBK6y9XQ@mail.gmail.com>
-Message-ID: <20150719230943.1f63c757@free-electrons.com>
+Date: Sun, 19 Jul 2015 23:06:10 +0200
+Subject: [Buildroot] [git commit] ejabberd: simplify init script by patching
+	ejabberdctl
+Message-ID: <20150719210952.57A7381DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Johan,
+commit: http://git.buildroot.net/buildroot/commit/?id=4ef5bcde94ed7689d0c69f7077da398afb090c7e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Jul 2015 11:52:41 +0200, Johan Oudinet wrote:
+Let a user modify environment variables used in ejabberdctl by loading
+a default configuration file.
 
-> > So this makes the patch Buildroot specific. Why isn't the
-> > {{installuser}} properly replaced by the "right" value at install time?
-> 
-> If we define the installuser variable, then the Makefile try to chmod
-> files with this user, which does not necessarily exist in the host
-> system. Debian packaging of ejabberd does the same trick to not set
-> the installuser variable and patch the ejabberdctl instead. In the
-> last buildroot version of ejabberd, each call of ejabberdctl was
-> prefixed by "su ejabberd -c", which is less convenient than fixing
-> INSTALLUSER to ejabberd.
-> If you prefer, I could modify this variable in a post-build hook.
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ejabberd/0009-fix-ejabberdctl.patch |   21 +++++++++++++++++
+ package/ejabberd/S50ejabberd                |   32 +++++++++++---------------
+ 2 files changed, 35 insertions(+), 18 deletions(-)
 
-Ok, thanks for the additional explanation. The proposal you made works
-for me, especially since Debian is doing the same.
-
-> > I don't really understand why we are loading this default file here and
-> > in the init script itself. Who is installing this /etc/default/ejabberd
-> > file? What does it contain?
-> 
-> I like shell scripts that read a configuration files in /etc/default
-> so one can modify the script behavior without modifying it.
-
-Me too. What was confusing me is that both the init script *and* the
-ejabberdctl script were reading it. But you gave some good explanation
-for that.
-
-> > This change doesn't seem to be related.
-> 
-> Which one? Using $CTL instead of ctl because we removed the ctl
-> function or try to start the service even if stop failed?
-> I agree that the second one is not related to the simplification of
-> the init script. Should I split it in another commit?
-
-The change to start the service even if the stop failed. But that's
-a minor detail.
-
-Therefore, I've applied the patch as is. Thanks again for this
-contribution and the additional explanations!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ejabberd/0009-fix-ejabberdctl.patch b/package/ejabberd/0009-fix-ejabberdctl.patch
+new file mode 100644
+index 0000000..9ae23ac
+--- /dev/null
++++ b/package/ejabberd/0009-fix-ejabberdctl.patch
+@@ -0,0 +1,21 @@
++Description: fix ejabberdctl
++ Change default values so ejabberdctl run commands as ejabberd user
++ Also add a way for the user to change default values.
++Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
++
++diff --git a/ejabberdctl.template b/ejabberdctl.template
++index 79f4438..df0abba 100755
++--- a/ejabberdctl.template
+++++ b/ejabberdctl.template
++@@ -14,7 +14,10 @@ SCRIPT_DIR=`cd ${0%/*} && pwd`
++ ERL={{erl}}
++ IEX={{bindir}}/iex
++ EPMD={{bindir}}/epmd
++-INSTALLUSER={{installuser}}
+++INSTALLUSER=ejabberd
+++
+++# Read default configuration file if present.
+++[ ! -r /etc/default/ejabberd ] || . /etc/default/ejabberd
++ 
++ # check the proper system user is used if defined
++ if [ "$INSTALLUSER" != "" ] ; then
+diff --git a/package/ejabberd/S50ejabberd b/package/ejabberd/S50ejabberd
+index ff38d92..2161ead 100644
+--- a/package/ejabberd/S50ejabberd
++++ b/package/ejabberd/S50ejabberd
+@@ -3,30 +3,26 @@
+ # Start/stop ejabberd
+ #
+ 
+-NAME=ejabberd
+-USER=ejabberd
++CTL=/usr/sbin/ejabberdctl
++DEFAULT=/etc/default/ejabberd
++INSTALLUSER=ejabberd
+ RUNDIR=/var/run/ejabberd
+-SPOOLDIR=/var/lib/ejabberd
+ 
+-# Read configuration variable file if it is present.
+-[ -r /etc/default/$NAME ] && . /etc/default/$NAME
++# Read default configuration file if present.
++[ -r "$DEFAULT" ] && . "$DEFAULT"
+ 
++# Create RUNDIR.
+ mkrundir() {
+-    install -d -o "$USER" -g "$USER" "$RUNDIR" "$SPOOLDIR"
+-}
+-
+-# Run ejabberdctl as user $USER.
+-ctl() {
+-    su $USER -c "ejabberdctl $*"
++    install -d -o "$INSTALLUSER" -g "$INSTALLUSER" "$RUNDIR"
+ }
+ 
+ case "$1" in
+     start)
+         mkrundir || exit 1
+         echo -n "Starting ejabberd... "
+-        ctl start --spool "$SPOOLDIR"
++        "$CTL" start
+         # Wait until ejabberd is up and running.
+-        if ctl started; then
++        if "$CTL" started; then
+             echo "done"
+         else
+             echo "failed"
+@@ -34,23 +30,23 @@ case "$1" in
+         ;;
+     stop)
+         echo -n "Stopping ejabberd... "
+-        ctl stop > /dev/null
+-        if [ $? -eq 3 ] || ctl stopped; then
++        "$CTL" stop > /dev/null
++        if [ $? -eq 3 ] || "$CTL" stopped; then
+             echo "OK"
+         else
+             echo "failed"
+         fi
+         ;;
+     status)
+-        ctl status
++        "$CTL" status
+         ;;
+     restart|force-reload)
+-        "$0" stop
++        "$0" stop || true
+         "$0" start
+         ;;
+     live)
+         mkrundir || exit 1
+-        ctl live
++        "$CTL" live
+         ;;
+     *)
+         echo "Usage: $0 {start|stop|status|restart|force-reload|live}"
