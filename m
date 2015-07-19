@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:27 +0200
-Subject: [Buildroot] [PATCH/RFC v3 22/50] package/kodi-pvr-mythtv: new
-	package
+Date: Sun, 19 Jul 2015 21:05:38 +0200
+Subject: [Buildroot] [PATCH/RFC v3 33/50] package/kodi-audiodecoder-sidplay:
+	new package
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-23-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-34-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,58 +13,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-mythtv/Config.in          |    7 +++++++
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk |   17 +++++++++++++++++
- package/kodi/Config.in                     |    1 +
- 3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-pvr-mythtv/Config.in
- create mode 100644 package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+ package/kodi-audiodecoder-sidplay/Config.in           |    8 ++++++++
+ .../kodi-audiodecoder-sidplay.mk                      |   17 +++++++++++++++++
+ package/kodi/Config.in                                |    1 +
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/kodi-audiodecoder-sidplay/Config.in
+ create mode 100644 package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
 
-diff --git a/package/kodi-pvr-mythtv/Config.in b/package/kodi-pvr-mythtv/Config.in
+diff --git a/package/kodi-audiodecoder-sidplay/Config.in b/package/kodi-audiodecoder-sidplay/Config.in
 new file mode 100644
-index 0000000..798ff3e
+index 0000000..ae99afa
 --- /dev/null
-+++ b/package/kodi-pvr-mythtv/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_MYTHTV
-+	bool "kodi-pvr-mythtv"
++++ b/package/kodi-audiodecoder-sidplay/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_AUDIODECODER_SIDPLAY
++	bool "kodi-audiodecoder-sidplay"
 +	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_LIBSIDPLAY2
 +	help
-+	  MythTV PVR for Kodi
++	  Sidplay decoder addon for Kodi
 +
-+	  https://github.com/kodi-pvr/pvr.mythtv
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++	  https://github.com/notspiff/audiodecoder.sidplay
+diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
 new file mode 100644
-index 0000000..c90eeeb
+index 0000000..ba9a515
 --- /dev/null
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-pvr-mythtv
++# kodi-audiodecoder-sidplay
 +#
 +################################################################################
 +
-+KODI_PVR_MYTHTV_VERSION = 75fee97e2e690b0ee6d2b1540218b61586683e20
-+KODI_PVR_MYTHTV_SITE = $(call github,kodi-pvr,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
-+KODI_PVR_MYTHTV_LICENSE = GPLv2+
-+KODI_PVR_MYTHTV_LICENSE_FILES = src/client.cpp
++KODI_AUDIODECODER_SIDPLAY_VERSION = 27b2c0582878857bfe03195471fa7ffa4bcc40f0
++KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,notspiff,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
++KODI_AUDIODECODER_SIDPLAY_LICENSE = GPLv2+
++KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = src/SIDCodec.cpp
 +
-+KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
++KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi-platform libsidplay2
 +
-+KODI_PVR_MYTHTV_CONF_OPTS += \
++KODI_AUDIODECODER_SIDPLAY_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index ad1d23e..80ffe3a 100644
+index 94a3624..790be0d 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -260,6 +260,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-hts/Config.in"
- 	source "package/kodi-pvr-iptvsimple/Config.in"
- 	source "package/kodi-pvr-mediaportal-tvserver/Config.in"
-+	source "package/kodi-pvr-mythtv/Config.in"
+@@ -274,6 +274,7 @@ endmenu
+ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-modplug/Config.in"
+ 	source "package/kodi-audiodecoder-nosefart/Config.in"
++	source "package/kodi-audiodecoder-sidplay/Config.in"
  endmenu
  
  menu "Audio encoder addons"
