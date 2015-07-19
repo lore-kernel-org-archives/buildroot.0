@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jul 2015 21:05:37 +0200
-Subject: [Buildroot] [PATCH/RFC v3 32/50]
-	package/kodi-audiodecoder-nosefart: new package
+Date: Sun, 19 Jul 2015 21:05:30 +0200
+Subject: [Buildroot] [PATCH/RFC v3 25/50] package/kodi-pvr-pctv: new package
 In-Reply-To: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437332755-9764-33-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437332755-9764-26-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,58 +12,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audiodecoder-nosefart/Config.in          |    7 +++++++
- .../kodi-audiodecoder-nosefart.mk                     |   17 +++++++++++++++++
- package/kodi/Config.in                                |    1 +
- 3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-audiodecoder-nosefart/Config.in
- create mode 100644 package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
+ package/kodi-pvr-pctv/Config.in        |    8 ++++++++
+ package/kodi-pvr-pctv/kodi-pvr-pctv.mk |   17 +++++++++++++++++
+ package/kodi/Config.in                 |    1 +
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/kodi-pvr-pctv/Config.in
+ create mode 100644 package/kodi-pvr-pctv/kodi-pvr-pctv.mk
 
-diff --git a/package/kodi-audiodecoder-nosefart/Config.in b/package/kodi-audiodecoder-nosefart/Config.in
+diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
 new file mode 100644
-index 0000000..96591aa
+index 0000000..255cd4a
 --- /dev/null
-+++ b/package/kodi-audiodecoder-nosefart/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_AUDIODECODER_NOSEFART
-+	bool "kodi-audiodecoder-nosefart"
++++ b/package/kodi-pvr-pctv/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_PVR_PCTV
++	bool "kodi-pvr-pctv"
++	select BR2_PACKAGE_JSONCPP
 +	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  Nosefart decoder addon for Kodi
++	  PCTV PVR client addon for Kodi
 +
-+	  https://github.com/notspiff/audiodecoder.nosefart
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
++	  https://github.com/kodi-pvr/pvr.vdr.vnsi
+diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
 new file mode 100644
-index 0000000..b849e76
+index 0000000..978cb7b
 --- /dev/null
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
++++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-audiodecoder-nosefart
++# kodi-pvr-pctv
 +#
 +################################################################################
 +
-+KODI_AUDIODECODER_NOSEFART_VERSION = 936313f2be5c4936af8a643876363dcea76a8ebe
-+KODI_AUDIODECODER_NOSEFART_SITE = $(call github,notspiff,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
-+KODI_AUDIODECODER_NOSEFART_LICENSE = GPLv2+
-+KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = src/NSFCodec.cpp
++KODI_PVR_PCTV_VERSION = d23160c043b0cd0a86463f6a3590a8126ff8af9d
++KODI_PVR_PCTV_SITE = $(call github,kodi-pvr,pvr.pctv,$(KODI_PVR_PCTV_VERSION))
++KODI_PVR_PCTV_LICENSE = GPLv2+
++KODI_PVR_PCTV_LICENSE_FILES = src/client.cpp
 +
-+KODI_AUDIODECODER_NOSEFART_DEPENDENCIES = kodi-platform
++KODI_PVR_PCTV_DEPENDENCIES = jsoncpp kodi-platform
 +
-+KODI_AUDIODECODER_NOSEFART_CONF_OPTS += \
++KODI_PVR_PCTV_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index f7041c3..94a3624 100644
+index f9a3602..6aaf72f 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -273,6 +273,7 @@ endmenu
- 
- menu "Audio decoder addons"
- 	source "package/kodi-audiodecoder-modplug/Config.in"
-+	source "package/kodi-audiodecoder-nosefart/Config.in"
+@@ -263,6 +263,7 @@ menu "PVR addons"
+ 	source "package/kodi-pvr-mythtv/Config.in"
+ 	source "package/kodi-pvr-nextpvr/Config.in"
+ 	source "package/kodi-pvr-njoy/Config.in"
++	source "package/kodi-pvr-pctv/Config.in"
  endmenu
  
  menu "Audio encoder addons"
