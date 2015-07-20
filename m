@@ -1,40 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 20 Jul 2015 22:49:51 +0200
-Subject: [Buildroot] [git commit] package/lttng-tools: remove autoreconf
-Message-ID: <20150720205435.9778D7FA54@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/neard: remove autoreconf
+Message-ID: <20150720205435.3589A81E4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b624a193bb7c70a14774555d113cc744148391e
+commit: http://git.buildroot.net/buildroot/commit/?id=a91e289630e6f1cee8b8b722151a7f6d8a50bb2d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch is gone
-with the commit fb5d605638c359d008329dd9f8fb6c2c8a2c0537.
-
-lttng-tools-no-sync-file-range-in-uclibc.patch is gone
-with the commit ed692e2dbbf8d4751d39a636dd1119e829bd0f99.
-
-There is no need to autoreconf lttng-tools.
+neard have been bumped several time since autoreconf
+was added in neard.mk.
+autoreconf seems not needed anymore.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lttng-tools/lttng-tools.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ package/neard/neard.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index e218a95..0cd381c 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -17,8 +17,6 @@ LTTNG_TOOLS_CONF_OPTS += --with-xml-prefix=$(STAGING_DIR)/usr
- # trace format into an human readable format.
- LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt host-lttng-babeltrace util-linux
+diff --git a/package/neard/neard.mk b/package/neard/neard.mk
+index fc92421..ed2c6b1 100644
+--- a/package/neard/neard.mk
++++ b/package/neard/neard.mk
+@@ -10,7 +10,6 @@ NEARD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/nfc
+ NEARD_LICENSE = GPLv2
+ NEARD_LICENSE_FILES = COPYING
  
--LTTNG_AUTORECONF = YES
--
- ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
- LTTNG_TOOLS_CONF_OPTS += --enable-lttng-ust
- LTTNG_TOOLS_DEPENDENCIES += lttng-libust
+-NEARD_AUTORECONF = YES
+ NEARD_DEPENDENCIES = host-pkgconf dbus libglib2 libnl
+ NEARD_CONF_OPTS = --disable-traces
+ 
