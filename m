@@ -1,55 +1,48 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Mon, 20 Jul 2015 13:49:14 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-07-19
-In-Reply-To: <20150720124408.GM13027@tarshish>
-References: <20150720063017.2400B101C74@stock.ovh.net>
- <CA+BsyQ4=X7ZA0LTiHNo4SAC2FotUJGL+3xb1LgjNjFUQCUBk+g@mail.gmail.com>
- <20150720124408.GM13027@tarshish>
-Message-ID: <CA+BsyQ7zi_ni7qV4X5m07YYJ=eF3YdmQghX+GBcZcZAUtdeUGA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 20 Jul 2015 15:57:55 +0300
+Subject: [Buildroot] [PATCH] Revert "busybox: added linux-pam support"
+Message-ID: <5ab7928dcb3c3e35267eab5aaf1af4fc794faaf6.1437397075.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
-> Welcome. Looking into autobuild issues and posting patches is a great way
-> to
-> start. Make sure to read
->
-> http://nightly.buildroot.org/manual.html#_analyzing_and_fixing_autobuild_failures
-> before you start. An overlap in autobuild issues fixing happen at times,
-> but
-> it's quite rare. Anyone is allowed and encouraged to post build failure
-> fixes,
-> as well as run-time failures, though the autobuilder currently doesn't
-> catch
-> failures of the latter type.
->
+This reverts commit 083aeac94e19cde6abd4b29cf29db589327d8c49.
 
-Sounds good. I will follow the instructions as above.
+Commit f21b2558a097 (busybox: added linux-pam support, 2015-06-02) added
+linux-pam support already, no need to do this again. Commit 083aeac94e19
+(busybox: added linux-pam support, 2015-07-14) also effectively annulled the
+build failure fix from commit 98e1848db11e (busybox: PAM support needs thread
+support, 2015-07-04). Revert it.
 
-It most likely has to do with recent sourceforge infrastructure issues
-> (
-> http://sourceforge.net/blog/sourceforge-infrastructure-and-service-restoration/
-> ).
->
+Fixes:
+http://autobuild.buildroot.net/results/8df/8df14bde19a41b78aa6422a1649a570914f747ee/
+http://autobuild.buildroot.net/results/30d/30dd11b576b590de513031fce5e034353f2f5544/
+http://autobuild.buildroot.net/results/de6/de628d84b0ed49be8f5d021c789357b2e66f2b02/
 
-Agreed, that must be the cause.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/busybox/busybox.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-I noticed there are around 200 packages that download from sourceforge. I
-didn't do an exhaustive investigation but noticed that zlib is fetched from
-there. Might it be better to fetch this (and other packages) from their
-authoritative site, where one exists ? (in zlib's case,
-http://zlib.net/zlib-1.2.8.tar.gz ?)
-
-[sourceforge has been in the news for other reasons lately .. I get the
-general feeling that it is a resource that is not long for this world .. ]
-
-Cheers
-
-Brendan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150720/632462fa/attachment.html>
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index ce6652b017d7..65ce7efe95e1 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -141,13 +141,6 @@ define BUSYBOX_SET_INIT
+ endef
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+-define BUSYBOX_LINUX_PAM
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
+-endef
+-BUSYBOX_DEPENDENCIES += linux-pam
+-endif
+-
+ ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
+ BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
+ define BUSYBOX_SET_SELINUX
+-- 
+2.1.4
