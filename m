@@ -1,90 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Jul 2015 13:56:41 +0200
-Subject: [Buildroot] [PATCH 1/5] aarch64: add big endian(aarch64_be)
-	support
-In-Reply-To: <1437391542-13590-2-git-send-email-bamvor.zhangjian@huawei.com>
-References: <1437391542-13590-1-git-send-email-bamvor.zhangjian@huawei.com>
- <1437391542-13590-2-git-send-email-bamvor.zhangjian@huawei.com>
-Message-ID: <20150720135641.5608d679@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 20 Jul 2015 13:56:39 +0200
+Subject: [Buildroot] [PATCH 1/1] angularjs: new package.
+In-Reply-To: <20150720114915.GA3641@zenon.in.qult.net>
+References: <1437129876-5158-1-git-send-email-ignacy.gawedzki@green-communications.fr>
+ <CAGduivxBdvS75bNaHo_AmWaZZZ4x0qqbr27kVPbLrvjay05uJQ@mail.gmail.com>
+ <20150718191650.6f34b9e5@free-electrons.com>
+ <CAAXf6LV0DdDu=OjP-fgmtM9VQdf6OzmV4zNzHRmeRtqOYs8Nag@mail.gmail.com>
+ <20150720114915.GA3641@zenon.in.qult.net>
+Message-ID: <CAAXf6LU1=Ydf4idyXgi5A8vik6JKeyjoerp_uaLPdTfQybommg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Zhang,
+On Mon, Jul 20, 2015 at 1:49 PM, Ignacy Gaw?dzki
+<ignacy.gawedzki@green-communications.fr> wrote:
+> On Sat, Jul 18, 2015 at 09:25:41PM +0200, thus spake Thomas De Schampheleire:
+>> >> > +define ANGULARJS_INSTALL_TARGET_CMDS
+>> >> > +       for f in $(strip $(ANGULARJS_FILES)); do        \
+>> >> > +               $(INSTALL) -m 0644 -D $(@D)/$$f         \
+>> >> > +               $(TARGET_DIR)/var/www/$${f%.min.js}.js; \
+>>
+>> Here, IIUC, you are installing foo.min.js as foo.js. I think this is
+>> misleading: it is common practice in web development to actually
+>> include minified files as .min.js instead of renaming this, so I don't
+>> see why it should be done here.
+>
+> Hi Thomas,
+>
+> I think it should be up to the web server to decide whether the
+> version served is minified or not.  Otherwise you'd have to make the
+> JS application choose the actual version, while it makes no functional
+> difference.  Therefore, the application includes some .js file and
+> ignores whether it is minified or not.
+>
+> I got my inspiration from the jquery package, which installs a
+> minified version as jquery.js.  Do you think I should install minified
+> files as .min.js anyway?
 
-Thanks for this new iteration!
+Hmm, ok, then it makes sense to be consistent.
 
-On Mon, 20 Jul 2015 19:25:38 +0800, Zhang Jian(Bamvor) wrote:
+I wonder if anyone ever would like to have the unminified files on
+target, and how we'd call them if the minified is installed as .js.
+But that's probably a problem to be solved then...
 
-> diff --git a/Makefile b/Makefile
-> index b1bcf78..35818f0 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -329,7 +329,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
->  	-e s/arcle/arc/ \
->  	-e s/arceb/arc/ \
->  	-e s/arm.*/arm/ -e s/sa110/arm/ \
-> -	-e s/aarch64/arm64/ \
-> +	-e s/aarch64.*/arm64/ \
->  	-e s/bfin/blackfin/ \
->  	-e s/parisc64/parisc/ \
->  	-e s/powerpc64.*/powerpc/ \
-> diff --git a/arch/Config.in b/arch/Config.in
-> index 94397b3..875f412 100644
-> --- a/arch/Config.in
-> +++ b/arch/Config.in
-> @@ -59,7 +59,16 @@ config BR2_armeb
->  	  http://en.wikipedia.org/wiki/ARM
->  
->  config BR2_aarch64
-> -	bool "AArch64"
-> +	bool "AArch64 (little endian)"
-> +	select BR2_ARCH_IS_64
-> +	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	help
-> +	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
-> +	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
-> +	  http://en.wikipedia.org/wiki/ARM
-> +
-> +config BR2_aarch64_be
-> +	bool "AArch64 (big endian)"
->  	select BR2_ARCH_IS_64
->  	select BR2_ARCH_HAS_MMU_MANDATORY
->  	help
-> @@ -347,7 +356,7 @@ if BR2_arm || BR2_armeb
->  source "arch/Config.in.arm"
->  endif
->  
-> -if BR2_aarch64
-> +if BR2_aarch64 || BR2_aarch64_be
->  source "arch/Config.in.aarch64"
->  endif
->  
-> diff --git a/arch/Config.in.aarch64 b/arch/Config.in.aarch64
-> index 2e79870..9830302 100644
-> --- a/arch/Config.in.aarch64
-> +++ b/arch/Config.in.aarch64
-> @@ -1,8 +1,11 @@
->  config BR2_ARCH
->  	default "aarch64"	if BR2_aarch64
-> +	default "aarch64_be"	if BR2_aarch64_be
->  
->  config BR2_ENDIAN
-> -	default "LITTLE"
-> +	default "LITTLE" if BR2_aarch64
-> +	default "BIG"	 if BR2_aarch64_be
->  
->  config BR2_ARCH_HAS_ATOMICS
->  	default y
-> +
-
-The changes above have already been applied to Buildroot. Please make
-sure to base your patches on the latest master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+/Thomas
