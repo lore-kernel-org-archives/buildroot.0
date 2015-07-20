@@ -1,37 +1,94 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Jul 2015 23:50:21 +0200
-Subject: [Buildroot] [PATCH 3/3] package/libtirpc: Do not build
- unsupported API files
-In-Reply-To: <1437426915-4608-3-git-send-email-joerg.krause@embedded.rocks>
-References: <1437426915-4608-1-git-send-email-joerg.krause@embedded.rocks>
- <1437426915-4608-3-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150720235021.06f9e815@free-electrons.com>
+From: Christian Stewart <christian@paral.in>
+Date: Mon, 20 Jul 2015 15:32:18 -0700
+Subject: [Buildroot] [PATCH v2 1/1] rtl8821au: new package
+Message-ID: <1437431538-1528-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Adding a kernel module based USB wifi driver. There is no official
+version of this driver that works properly on ARM and with newer USB
+WiFi cards. This driver version builds module 8821au and is based on a
+kernel module release from ASUS with various fixes integrated in.
 
-On Mon, 20 Jul 2015 23:15:15 +0200, J?rg Krause wrote:
-> Version 0.3.2 re-enables some APIs for backward compatibility with
-> glibc's SunRPC:
->   - key_prot
->   - netname
->   - rtime
-> 
-> Unfortunalty, this breaks building libtirpc with uClibc and musl:
->   getpublickey.c:41:28: fatal error: rpcsvc/yp_prot.h: No such file or directory
+[Thomas, Yann:
+  - Using the new kernel-module setup]
 
-Should this be part of
-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch ? yp_prot.h is
-also NIS related.
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/Config.in                |  1 +
+ package/rtl8821au/Config.in      |  7 +++++++
+ package/rtl8821au/rtl8821au.hash |  1 +
+ package/rtl8821au/rtl8821au.mk   | 25 +++++++++++++++++++++++++
+ 4 files changed, 34 insertions(+)
+ create mode 100644 package/rtl8821au/Config.in
+ create mode 100644 package/rtl8821au/rtl8821au.hash
+ create mode 100644 package/rtl8821au/rtl8821au.mk
 
-Best regards,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 20ecd38..7207bc6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -403,6 +403,7 @@ endif
+ 	source "package/read-edid/Config.in"
+ 	source "package/rng-tools/Config.in"
+ 	source "package/rpi-userland/Config.in"
++	source "package/rtl8821au/Config.in"
+ 	source "package/sane-backends/Config.in"
+ 	source "package/sdparm/Config.in"
+ 	source "package/setserial/Config.in"
+diff --git a/package/rtl8821au/Config.in b/package/rtl8821au/Config.in
+new file mode 100644
+index 0000000..0a8cd74
+--- /dev/null
++++ b/package/rtl8821au/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_RTL8821AU
++	bool "rtl8821au"
++	depends on BR2_LINUX_KERNEL
++	help
++		rtl8821au wifi driver
++
++		https://github.com/paralin/rtl8821au
+diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
+new file mode 100644
+index 0000000..21f47a2
+--- /dev/null
++++ b/package/rtl8821au/rtl8821au.hash
+@@ -0,0 +1 @@
++sha256 7ab9aae237ff562d5c40675115ffb9e36a4774490df0a6a8a4c7746dfd567e14  rtl8821au-4.3.14.tar.gz
+diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
+new file mode 100644
+index 0000000..61cce23
+--- /dev/null
++++ b/package/rtl8821au/rtl8821au.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# rtl8821au
++#
++################################################################################
++
++RTL8821AU_VERSION = 4.3.14
++RTL8821AU_SITE = $(call github,paralin,rtl8821au,v$(RTL8821AU_VERSION))
++ifeq ($(call qstrip,$(BR2_ENDAIN)),BIG)
++RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_BIG_ENDIAN
++else
++RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_LITTLE_ENDIAN
++endif
++
++define RTL8821AU_CONFIGURE_CMDS
++	$(SED) "s/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/g" $(@D)/Makefile
++endef
++
++RTL8821AU_MODULE_MAKE_OPTS = \
++	CONFIG_RTL8821AU=m \
++	KVER=$(LINUX_VERSION_PROBED) \
++	USER_EXTRA_CFLAGS=$(RTL8821AU_CFLAGS_ENDIAN)
++
++$(eval $(kernel-module))
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
