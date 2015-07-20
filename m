@@ -1,62 +1,46 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 20 Jul 2015 21:52:53 +0300
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Mon, 20 Jul 2015 20:15:04 +0100
 Subject: [Buildroot] [PATCH] autobuild - acpid does not build against
 	musl
-In-Reply-To: <1437417346-18621-1-git-send-email-brendanheading@gmail.com>
+In-Reply-To: <20150720185253.GR13027@tarshish>
 References: <1437417346-18621-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <20150720185253.GR13027@tarshish>
+ <20150720185253.GR13027@tarshish>
+Message-ID: <CA+BsyQ6zhyOA0pLW0C0KmgJx6f70Dtcyd-kj_Qft+qCGefJ7QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Brendan,
+Baruch,
 
-On Mon, Jul 20, 2015 at 07:35:46PM +0100, Brendan Heading wrote:
-> Fixes http://autobuild.buildroot.net/results/33e/33ef25e4707a5b81083204e0f064570c11d88af6/
+> Please spare a few words on what this patch is doing.
 
-Please spare a few words on what this patch is doing.
+Sure.
 
-Also, your sign-off is missing.
+>> +Some external toolchains using strange C libraries (eg MUSL) do not define
+>> +this macro.
+>
+> What is the upstream status of this patch?
 
-> ---
->  package/acpid/0003-fix-TEMP_FAILURE_RETRY.patch | 76 +++++++++++++++++++++++++
->  package/acpid/0004-fix-warnings.patch           | 38 +++++++++++++
->  2 files changed, 114 insertions(+)
->  create mode 100644 package/acpid/0003-fix-TEMP_FAILURE_RETRY.patch
->  create mode 100644 package/acpid/0004-fix-warnings.patch
-> 
-> diff --git a/package/acpid/0003-fix-TEMP_FAILURE_RETRY.patch b/package/acpid/0003-fix-TEMP_FAILURE_RETRY.patch
-> new file mode 100644
-> index 0000000..7d81b3c
-> --- /dev/null
-> +++ b/package/acpid/0003-fix-TEMP_FAILURE_RETRY.patch
-> @@ -0,0 +1,76 @@
-> +Add missing TEMP_FAILURE_RETRY.
-> +
-> +Some external toolchains using strange C libraries (eg MUSL) do not define
-> +this macro.
+I've not checked. Should I do so before resubmitting ?
 
-What is the upstream status of this patch?
+I must admit I wasn't too sure about the idea of the patch here, as it
+fixes only one package rather than addressing an issue that will
+effect any package using the same macro. But I noted a precedent for
+this (in the same package, there is a patch to add a macro missing
+from unpatched uclibc versions configured as part of an external
+toolchain) so I went ahead and submitted.
 
-> +
-> +Signed-off-by : Brendan Heading <brendanheading@gmail.com>
+I can certainly raise it with the upstream devs ..
 
-[snip]
+> Does this patch fix build failure or correctness? Buildroot generally doesn't
+> carry warning fix only patches.
 
-> diff --git a/package/acpid/0004-fix-warnings.patch b/package/acpid/0004-fix-warnings.patch
-> new file mode 100644
-> index 0000000..3c6a89d
-> --- /dev/null
-> +++ b/package/acpid/0004-fix-warnings.patch
+Warnings only. I will remove.
 
-Does this patch fix build failure or correctness? Buildroot generally doesn't 
-carry warning fix only patches.
+Thanks for the feedback on my first ever patch :)
 
-baruch
+Regards
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Brendan
