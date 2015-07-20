@@ -1,57 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Jul 2015 14:38:32 +0200
-Subject: [Buildroot] [PATCH] busybox: linux-pam support requires threads
-In-Reply-To: <6d2d86487b691cfe8c1c66a9630d0e51461290c4.1437388422.git.baruch@tkos.co.il>
-References: <6d2d86487b691cfe8c1c66a9630d0e51461290c4.1437388422.git.baruch@tkos.co.il>
-Message-ID: <20150720143832.15fad90b@free-electrons.com>
+Date: Mon, 20 Jul 2015 14:39:52 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-07-19
+In-Reply-To: <CA+BsyQ4=X7ZA0LTiHNo4SAC2FotUJGL+3xb1LgjNjFUQCUBk+g@mail.gmail.com>
+References: <20150720063017.2400B101C74@stock.ovh.net>
+ <CA+BsyQ4=X7ZA0LTiHNo4SAC2FotUJGL+3xb1LgjNjFUQCUBk+g@mail.gmail.com>
+Message-ID: <20150720143952.40f1803c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Brendan Heading,
 
-On Mon, 20 Jul 2015 13:33:42 +0300, Baruch Siach wrote:
-> Commit 083aeac94e19 (busybox: added linux-pam support, 2015-07-14) enabled
-> CONFIG_PAM when the linux-pam package is selected. Busybox build system adds
-> -lpthread unconditionally when CONFIG_PAM is enabled, which leads to build
-> failure when the toolchain does not support pthreads. Enable CONFIG_PAM only
-> when the toolchain supports threads.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/8df/8df14bde19a41b78aa6422a1649a570914f747ee/
-> http://autobuild.buildroot.net/results/30d/30dd11b576b590de513031fce5e034353f2f5544/
-> http://autobuild.buildroot.net/results/de6/de628d84b0ed49be8f5d021c789357b2e66f2b02/
-> 
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Mon, 20 Jul 2015 13:30:24 +0100, Brendan Heading wrote:
 
-I was pretty sure I already fixed that one. And I indeed already fixed
-it. Except that after that I merged another patch adding again
-Linux-PAM support in Busybox. Big mistake on my side:
+> hi all, new to the buildroot list - I have some free time, and I've been
+> using buildroot for a while in projects with my previous employer, so I'm
+> keen to repay some of the time and effort it has saved me in the past. This
+> list of bugs looks like a great place to start ;)
 
-083aeac94e19cde6abd4b29cf29db589327d8c49 busybox: added linux-pam support
-b0b3dc5612a012dd29293bee0cd848aa1b7c0b7d busybox: selinux support
-cdcd83f31ded1dbf6d13d16b4aafdf594b964d94 package: fix fallout from checking kconfig config files
-3ff5f63e48237cf569aaba6be35e179bf8556a19 package/busybox: check for config file
-89d39fc7a392530be043bac541ade0bef746edb6 initscripts: new package
-b98dd2355780c732bf440042fb8faafe731efc94 busybox: improve support for telnetd
-e1baac68bcb9fb3cb3d2603d238a2ce8e7eb1125 busybox: Install udhcpc script only if enabled
-aa1362f220e733689fe4210b0bb2433f6d595e6b busybox: adjust configuration to add fancy options to the sleep applet
-98e1848db11e707f96504ccf9cb2ed09e6787dd1 busybox: PAM support needs thread support
-f21b2558a097d07b53b6f20a47770468e9e4f7ed busybox: added linux-pam support
+Absolutely!
 
-f21b2558a097d07b53b6f20a47770468e9e4f7ed was merged first, I fixed the
-thread dependency in 98e1848db11e707f96504ccf9cb2ed09e6787dd1 but then
-later on, I merged again a linux-pam dependency addition, which didn't
-conflict because the piece of code was added at a different place.
+> Shall I just begin to submit patches or are there likely to be people
+> already looking at these issues ?
 
-So really, the proper fix is to revert
-083aeac94e19cde6abd4b29cf29db589327d8c49. Can you send a patch doing
-this revert?
+Some people might be looking at them, so if you start working on an
+issue that seems to be a bit long to investigate/solve, don't hesitate
+to reply to the autobuilder e-mail saying on which issue you are
+working on.
 
-Sorry for the mess :-/
+> The fan-ctrl failure for all arches looks like it might have been a
+> sourceforge problem. The package is fetched from a sourceforge svn
+> repository (regular package tarball downloads from sourceforge look OK).
+> Maybe sourceforge have been fiddling with things, I haven't checked.
+
+Yes, it's a download problem. Just ignore for now, hopefully
+SourceForge will be back soon.
+
+Thanks!
 
 Thomas
 -- 
