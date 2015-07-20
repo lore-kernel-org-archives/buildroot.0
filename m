@@ -1,40 +1,36 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 20 Jul 2015 19:47:56 +0200
-Subject: [Buildroot] [PATCH 08/11] package/lttng-tools: remove autoreconf
+Date: Mon, 20 Jul 2015 19:47:58 +0200
+Subject: [Buildroot] [PATCH 10/11] package/xdriver_xf86-video-cirrus: remove
+	autoreconf
 In-Reply-To: <1437414479-16714-1-git-send-email-romain.naour@openwide.fr>
 References: <1437414479-16714-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1437414479-16714-8-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1437414479-16714-10-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch is gone
-with the commit fb5d605638c359d008329dd9f8fb6c2c8a2c0537.
+xdriver_xf86-video-cirrus no longer use the git repository.
 
-lttng-tools-no-sync-file-range-in-uclibc.patch is gone
-with the commit ed692e2dbbf8d4751d39a636dd1119e829bd0f99.
-
-There is no need to autoreconf lttng-tools.
+commit: e45edc34fadcd6e666a123a4ab32a13b37dc3f74
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/lttng-tools/lttng-tools.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index e218a95..0cd381c 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -17,8 +17,6 @@ LTTNG_TOOLS_CONF_OPTS += --with-xml-prefix=$(STAGING_DIR)/usr
- # trace format into an human readable format.
- LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt host-lttng-babeltrace util-linux
+diff --git a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
+index f2523db..78e8a9c 100644
+--- a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
++++ b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
+@@ -9,7 +9,6 @@ XDRIVER_XF86_VIDEO_CIRRUS_SOURCE = xf86-video-cirrus-$(XDRIVER_XF86_VIDEO_CIRRUS
+ XDRIVER_XF86_VIDEO_CIRRUS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_CIRRUS_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_CIRRUS_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_CIRRUS_AUTORECONF = YES
+ XDRIVER_XF86_VIDEO_CIRRUS_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xproto
  
--LTTNG_AUTORECONF = YES
--
- ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
- LTTNG_TOOLS_CONF_OPTS += --enable-lttng-ust
- LTTNG_TOOLS_DEPENDENCIES += lttng-libust
+ $(eval $(autotools-package))
 -- 
 2.4.3
