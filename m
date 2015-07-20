@@ -1,49 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Jul 2015 22:27:13 +0200
-Subject: [Buildroot] [PATCH] core/pkg-kconfig: do not always silence
-	oldconfig
-Message-ID: <1437424033-30705-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Jul 2015 22:38:51 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-07-19
+In-Reply-To: <1437422115.1945.4.camel@embedded.rocks>
+References: <20150720063017.2400B101C74@stock.ovh.net>
+ <1437422115.1945.4.camel@embedded.rocks>
+Message-ID: <20150720223851.68e8f706@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When debugging packages that use the pkg-kconfig infrastructure, it
-is sometime interesting to see the exact command line that is being
-executed when running oldconfig.
+Dear J?rg Krause,
 
-But currently, those command lines are prefixed with '@' which makes
-them silent, always.
+On Mon, 20 Jul 2015 21:55:15 +0200, J?rg Krause wrote:
 
-Instead, use $(Q) so they are silent by default, and verbose with V=1.
+> >          arm |                 libtirpc-0.3.1 | NOK | 
+> > http://autobuild.buildroot.net/results/80321de8d4c6c0a00439b07289a581
+> > 8962128b43/
+> 
+> This is odd:
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS is not set
+> # libtirpc needs a toolchain w/ threads
+> 
+> -> why is libtirpc build anyhow?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
- package/pkg-kconfig.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Take the configuration, run menuconfig and exit, you will see:
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index f708875..3e17a70 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -65,14 +65,14 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
- $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
- 	support/kconfig/merge_config.sh -m -O $$(@D) \
- 		$$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
--	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-+	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
- 		$$($(2)_KCONFIG_OPTS) oldconfig
- 
- # In order to get a usable, consistent configuration, some fixup may be needed.
- # The exact rules are specified by the package .mk file.
- define $(2)_FIXUP_DOT_CONFIG
- 	$$($(2)_KCONFIG_FIXUP_CMDS)
--	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-+	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
- 		$$($(2)_KCONFIG_OPTS) oldconfig
- 	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
- endef
+warning: (BR2_PACKAGE_NFS_UTILS) selects BR2_PACKAGE_RPCBIND which has unmet direct dependencies (BR2_TOOLCHAIN_HAS_THREADS && !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_USE_MMU)
+
+The problem is that nfs-utils selects libtirpc without properly caring
+for the thread dependency. This is caused by a patch from Maxime
+Hadjinlian that added a "select BR2_PACKAGE_RPCBIND" in
+nfs-utils/Config.in.
+
+Since we probably don't care much about using nfs-utils in a
+non-threaded scenario, maybe we could simply do:
+
+comment "nfs-utils needs a toolchain w/ threads"
+        depends on BR2_USE_MMU
+        depends on !BR2_TOOLCHAIN_HAS_THREADS
+
+config BR2_PACKAGE_NFS_UTILS
+        bool "nfs-utils"
+        depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc, rpcbind
+        select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+        select BR2_PACKAGE_RPCBIND # runtime
+
+We could try to be smarter and use portmap when no threads are
+available, but really this is too much complexity for such a corner
+case.
+
+Care to send a patch?
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
