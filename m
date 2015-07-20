@@ -1,36 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 20 Jul 2015 22:49:51 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-neomagic:
-	remove autoreconf
-Message-ID: <20150720205435.A17547FA54@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ulogd: remove autoreconf
+Message-ID: <20150720205434.EBEDC81E4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d5471bba736d320c52eceb2e19fc9cab14dd722c
+commit: http://git.buildroot.net/buildroot/commit/?id=65be5bc30d91f3418b7a1b66ba304be762f24574
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-xdriver_xf86-video-neomagic no longer use the git repository.
+Autoreconf is not needed anymore since ulogd 2.0.4
+where logd-01-pthread-conditional.patch was removed.
 
-commit: 560660d06be550aed1f1bfa52bbe58be5fdc387d
+commit: 010745a955b6cf4c979588fafdb7506460038e0f
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-video-neomagic.mk                 |    1 -
+ package/ulogd/ulogd.mk |    1 -
  1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
-index c307761..cfd5536 100644
---- a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
-+++ b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
-@@ -9,7 +9,6 @@ XDRIVER_XF86_VIDEO_NEOMAGIC_SOURCE = xf86-video-neomagic-$(XDRIVER_XF86_VIDEO_NE
- XDRIVER_XF86_VIDEO_NEOMAGIC_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE = MIT
- XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_NEOMAGIC_AUTORECONF = YES
- XDRIVER_XF86_VIDEO_NEOMAGIC_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xproto
- 
- $(eval $(autotools-package))
+diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
+index 7ff5b73..7730198 100644
+--- a/package/ulogd/ulogd.mk
++++ b/package/ulogd/ulogd.mk
+@@ -8,7 +8,6 @@ ULOGD_VERSION = 2.0.5
+ ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
+ ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
+ ULOGD_CONF_OPTS = --with-dbi=no --with-pgsql=no
+-ULOGD_AUTORECONF = YES
+ ULOGD_DEPENDENCIES = host-pkgconf \
+ 	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
+ 	libnfnetlink
