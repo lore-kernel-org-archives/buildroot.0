@@ -1,172 +1,137 @@
-From: =?UTF-8?q?Ignacy=20Gaw=C4=99dzki?= <ignacy.gawedzki@green-communications.fr>
-Date: Mon, 20 Jul 2015 16:50:44 +0200
-Subject: [Buildroot] [PATCH v2 1/1] angularjs: new package.
-Message-ID: <1437403844-19942-1-git-send-email-ignacy.gawedzki@green-communications.fr>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 20 Jul 2015 15:28:13 +0000
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
+ results for 2015-07-19
+In-Reply-To: <20150720063017.17A55101C2C@stock.ovh.net>
+References: <20150720063017.17A55101C2C@stock.ovh.net>
+Message-ID: <1437406093.4091.26.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
----
- package/Config.in                |  1 +
- package/angularjs/Config.in      | 79 ++++++++++++++++++++++++++++++++++++++++
- package/angularjs/angularjs.hash |  2 +
- package/angularjs/angularjs.mk   | 38 +++++++++++++++++++
- 4 files changed, 120 insertions(+)
- create mode 100644 package/angularjs/Config.in
- create mode 100644 package/angularjs/angularjs.hash
- create mode 100644 package/angularjs/angularjs.mk
+Hi Thomas,
 
-diff --git a/package/Config.in b/package/Config.in
-index 20ecd38..ba7523e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -873,6 +873,7 @@ menu "Hardware handling"
- endmenu
- 
- menu "Javascript"
-+	source "package/angularjs/Config.in"
- 	source "package/bootstrap/Config.in"
- 	source "package/explorercanvas/Config.in"
- 	source "package/flot/Config.in"
-diff --git a/package/angularjs/Config.in b/package/angularjs/Config.in
-new file mode 100644
-index 0000000..2c02530
---- /dev/null
-+++ b/package/angularjs/Config.in
-@@ -0,0 +1,79 @@
-+config BR2_PACKAGE_ANGULARJS
-+	bool "AngularJS"
-+	help
-+	  AngularJS web application framework.
-+
-+	  http://angularjs.org
-+
-+if BR2_PACKAGE_ANGULARJS
-+
-+menuconfig BR2_ANGULARJS_MODULES
-+	bool "Select AngularJS modules"
-+	help
-+	  Select which modules to install.  Choose N to install all the
-+	  modules.
-+
-+if BR2_ANGULARJS_MODULES
-+
-+config BR2_ANGULARJS_MODULE_ANIMATE
-+	bool "animate"
-+	help
-+	  The ngAnimate module provides support for CSS-based animations
-+	  (keyframes and transitions) as well as JavaScript-based animations
-+	  via callback hooks. Animations are not enabled by default, however,
-+	  by including ngAnimate then the animation hooks are enabled for an
-+	  Angular app.
-+
-+config BR2_ANGULARJS_MODULE_ARIA
-+	bool "aria"
-+	help
-+	  The ngAria module provides support for common ARIA attributes that
-+	  convey state or semantic information about the application for users
-+	  of assistive technologies, such as screen readers.
-+
-+config BR2_ANGULARJS_MODULE_COOKIES
-+	bool "cookies"
-+	help
-+	  The ngCookies module provides a convenient wrapper for reading and
-+	  writing browser cookies.
-+
-+config BR2_ANGULARJS_MODULE_MESSAGE_FORMAT
-+	bool "message-format"
-+	help
-+	  The ngMessageFormat module is used recognize MessageFormat extensions
-+	  in interpolation expressions.
-+
-+config BR2_ANGULARJS_MODULE_MESSAGES
-+	bool "messages"
-+	help
-+	  The ngMessages module provides enhanced support for displaying
-+	  messages within templates (typically within forms or when rendering
-+	  message objects that return key/value data).
-+
-+config BR2_ANGULARJS_MODULE_RESOURCE
-+	bool "resource"
-+	help
-+	  The ngResource module provides interaction support with RESTful
-+	  services via the $resource service.
-+
-+config BR2_ANGULARJS_MODULE_ROUTE
-+	bool "route"
-+	help
-+	  The ngRoute module provides routing and deeplinking services and
-+	  directives for angular apps.
-+
-+config BR2_ANGULARJS_MODULE_SANITIZE
-+	bool "sanitize"
-+	help
-+	  The ngSanitize module provides functionality to sanitize HTML.
-+
-+config BR2_ANGULARJS_MODULE_TOUCH
-+	bool "touch"
-+	help
-+	  The ngTouch module provides touch events and other helpers for
-+	  touch-enabled devices. The implementation is based on jQuery Mobile
-+	  touch event handling (jquerymobile.com).
-+
-+endif
-+
-+endif
-diff --git a/package/angularjs/angularjs.hash b/package/angularjs/angularjs.hash
-new file mode 100644
-index 0000000..100b6dc
---- /dev/null
-+++ b/package/angularjs/angularjs.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 a99e3c22b54178b7646856efd95e825650d32d3125904a28216aeba52e221bad angular-1.4.3.zip
-diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
-new file mode 100644
-index 0000000..556ee3d
---- /dev/null
-+++ b/package/angularjs/angularjs.mk
-@@ -0,0 +1,38 @@
-+################################################################################
-+#
-+# angularjs
-+#
-+################################################################################
-+
-+ANGULARJS_VERSION = 1.4.3
-+ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
-+ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)/
-+ANGULARJS_LICENSE = MIT
-+# There's no separate license file in the archive, so use angular.js instead.
-+ANGULARJS_LICENSE_FILES = angular-$(ANGULARJS_VERSION)/angular.js
-+
-+define ANGULARJS_EXTRACT_CMDS
-+	unzip $(DL_DIR)/$(ANGULARJS_SOURCE) -d $(@D)
-+endef
-+
-+ANGULARJS_FILES = angular
-+
-+ANGULARJS_MODULES = animate aria cookies message-format messages resource \
-+	route sanitize touch
-+
-+ifeq ($(BR2_ANGULARJS_MODULES),y)
-+ANGULARJS_FILES += $(foreach mod,$(ANGULARJS_MODULES),\
-+			$(if $(BR2_ANGULARJS_MODULE_$(call UPPERCASE,$(mod))),\
-+				angular-$(mod)))
-+else
-+ANGULARJS_FILES += $(foreach mod,$(ANGULARJS_MODULES),angular-$(mod))
-+endif
-+
-+define ANGULARJS_INSTALL_TARGET_CMDS
-+	$(foreach f,$(ANGULARJS_FILES),\
-+		$(INSTALL) -m 0644 -D \
-+			$(@D)/angular-$(ANGULARJS_VERSION)/$(f).min.js \
-+			$(TARGET_DIR)/var/www/$(f).js$(sep))
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.1.4
+On Mon, 2015-07-20 at 08:30 +0200, Thomas Petazzoni wrote:
+> Those results are limited to the arc architecture.
+> 
+> Build statistics for 2015-07-19
+> ===============================
+> 
+>         success : 2  
+>        failures : 21 
+>        timeouts : 0  
+>           TOTAL : 23 
+> 
+> Classification of failures by reason
+> ====================================
+> 
+>                   snmppp-3.3.5 | 4 
+>                   zeromq-4.0.5 | 3 
+>                   mysql-5.1.73 | 3 
+>              libselinux-2.1.13 | 2 
+>                       atf-0.21 | 1 
+>                   cairo-1.14.2 | 1 
+>                   bonnie-1.03e | 1 
+>              armadillo-5.100.2 | 1 
+>                   fan-ctrl-1.3 | 1 
+>                 bellagio-0.9.3 | 1 
+> flann-04b4a56533faf8c8228d0... | 1 
+>                alsa-lib-1.0.29 | 1 
+>                   bcusdk-0.0.5 | 1 
+> 
+> Detail of failures
+> ===================
+> 
+>          arc |                alsa-lib-1.0.29 | NOK | 
+> http://autobuild.buildroot.net/results/77766d3b102ccb12da9242027a994e199b6b9b34/
+
+That's a problem with multiply defined "vfork" in static build.
+We are looking into it currently.
+
+>          arc |              armadillo-5.100.2 | NOK | 
+> http://autobuild.buildroot.net/results/a1edda4f84feb5f04749c6bce17357878d39c0a8/
+
+That's undefined ".tbss". I didn't expect it to happen.
+Looks like a valid problem in assembler/compiler.
+Reported to toolchain developers.
+
+>          arc |                       atf-0.21 | NOK | 
+> http://autobuild.buildroot.net/results/cdf0729496153598e3a2f2903f69ce2879745c03/
+
+I believe that's the same issue as for armadillo.
+-------------------------->8--------------------------
+configure: error: C++ compiler cannot create executables
+-------------------------->8--------------------------
+
+The thing is attempt to link anything against libstdc++ leads to failure with
+missing .tbss.
+
+>          arc |                   bcusdk-0.0.5 | NOK | 
+> http://autobuild.buildroot.net/results/8e78a8a3f2c9d216543eddadfdae7da4ef4b24a7/
+
+The same.
+
+>          arc |                 bellagio-0.9.3 | NOK | 
+> http://autobuild.buildroot.net/results/203eb72ead23ea7930dc1a55dd54a8b3eea5c576/
+
+The same.
+
+>          arc |                   bonnie-1.03e | NOK | 
+> http://autobuild.buildroot.net/results/8291d199d76f39c513029a1d63c44370c5e30bb9/
+
+The same.
+
+>          arc |                   cairo-1.14.2 | NOK | 
+> http://autobuild.buildroot.net/results/e516b72cde1a299510588977131ca21708ea2fce/
+
+The same.
+
+>          arc |                   fan-ctrl-1.3 | NOK | 
+> http://autobuild.buildroot.net/results/cb614f3344a7e15034409898e95de9578581b71f/
+
+That's most probably SourceForge issue, see they experience problems:
+http://sourceforge.net/blog/sourceforge-infrastructure-and-service
+-restoration/?utm_source=rss&utm_medium=rss&utm_campaign=sourceforge-infrastructure-and-service-restoration
+
+>          arc | flann-04b4a56533faf8c8228d0... | NOK | 
+> http://autobuild.buildroot.net/results/3c9885e01a75530641012466d00a59dad2378375/
+
+Missing ".tbss".
+
+>          arc |              libselinux-2.1.13 | NOK | 
+> http://autobuild.buildroot.net/results/fb333a453b869cd87730e5b55289cc28d9688af1/
+>          arc |              libselinux-2.1.13 | NOK | 
+
+> http://autobuild.buildroot.net/results/b184b5e3f4d45a7fb7331208048f22e165c47432/
+
+Interesting enough I cannot reproduce it with recent tools built from sources.
+Probably update of BR prebuilt toolchain to arc-2015.06 will resolve
+autobuilder problem as well.
+
+
+>          arc |                   mysql-5.1.73 | NOK | 
+> http://autobuild.buildroot.net/results/f97d4386fae4d7939f417f0059412d0d55553e71
+
+Missing ".tbss".
+> 
+>          arc |                   snmppp-3.3.5 | NOK | 
+> http://autobuild.buildroot.net/results/c123b3b4001f961ce5efe870d52da0079fef7670/
+> 
+The same.
+
+>          arc |                   zeromq-4.0.5 | NOK | 
+> http://autobuild.buildroot.net/results/f406a42b017316d52d5adf3f9ac1a47d5c4e3b51/
+>          arc |                   zeromq-4.0.5 | NOK | 
+> http://autobuild.buildroot.net/results/ed5c5b50df91f1025dc615e9cb2b11a1efdbf3fb/
+>          arc |                   zeromq-4.0.5 | NOK | 
+> http://autobuild.buildroot.net/results/cad220d090afbf75bc08a7d57bcaff44631c000b/
+> 
+
+Looks like Buildroot pre-built tools are a bit outdated.
+br-arcle-hs38-full-2015.05-496-g85945aa.tar.bz2
+
+Consider rebuilding?
+
+-Alexey
