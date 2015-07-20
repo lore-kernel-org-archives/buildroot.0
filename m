@@ -1,32 +1,95 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Mon, 20 Jul 2015 08:53:52 +0200
-Subject: [Buildroot] [PATCH 1/1] c-icap-modules: fix license typos
-Message-ID: <1437375232-2696-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 20 Jul 2015 09:03:25 +0200
+Subject: [Buildroot] [PATCH 1/1] New package dawgdic - directed acyclic
+ word graphs
+In-Reply-To: <1437370681-12567-1-git-send-email-yba@tkos.co.il>
+References: <1437370681-12567-1-git-send-email-yba@tkos.co.il>
+Message-ID: <CAGduivzV1OW4UCCSh=arNpX+W=HXg-n0A2dJDr+xvXdh0bkyvg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/c-icap-modules/c-icap-modules.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Jonathan, all
 
-diff --git a/package/c-icap-modules/c-icap-modules.mk b/package/c-icap-modules/c-icap-modules.mk
-index 27c57e1..aeab580 100644
---- a/package/c-icap-modules/c-icap-modules.mk
-+++ b/package/c-icap-modules/c-icap-modules.mk
-@@ -7,8 +7,8 @@
- C_ICAP_MODULES_VERSION = 0.3.2
- C_ICAP_MODULES_SOURCE = c_icap_modules-$(C_ICAP_MODULES_VERSION).tar.gz
- C_ICAP_MODULES_SITE = http://downloads.sourceforge.net/c-icap/
--C_ICAP_MODULES_LICENCE = GPLv2+
--C_ICAP_MODULES_LICENCE_FILE = COPYING
-+C_ICAP_MODULES_LICENSE = GPLv2+
-+C_ICAP_MODULES_LICENSE_FILES = COPYING
- C_ICAP_MODULES_DEPENDENCIES = c-icap
- 
- C_ICAP_MODULES_CONF_OPTS = \
--- 
-1.9.1
+On Mon, Jul 20, 2015 at 7:38 AM, Jonathan Ben-Avraham <yba@tkos.co.il> wrote:
+> From: Jonathan Ben Avraham <yba@tkos.co.il>
+>
+> This package provides utilties and object files for building and accessing
+> directed acyclic word graphs (DAWG) dictionaries. See
+> https://code.google.com/p/dawgdic/
+>
+> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+> ---
+>  package/Config.in          |    1 +
+>  package/dawgdic/Config.in  |   12 ++++++++++++
+>  package/dawgdic/dawgdic.mk |   16 ++++++++++++++++
+>  3 files changed, 29 insertions(+)
+>  create mode 100644 package/dawgdic/Config.in
+>  create mode 100644 package/dawgdic/dawgdic.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index d9b0794..222004a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1018,6 +1018,7 @@ menu "Other"
+>         source "package/clapack/Config.in"
+>         source "package/classpath/Config.in"
+>         source "package/cppcms/Config.in"
+> +       source "package/dawgdic/Config.in"
+>         source "package/ding-libs/Config.in"
+>         source "package/eigen/Config.in"
+>         source "package/elfutils/Config.in"
+> diff --git a/package/dawgdic/Config.in b/package/dawgdic/Config.in
+> new file mode 100644
+> index 0000000..e015d31
+> --- /dev/null
+> +++ b/package/dawgdic/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_DAWGDIC
+> +       bool "dawgdic"
+> +       help
+> +         dawgdic provides a library for building and accessing
+> +         dictionaries implemented with directed acyclic word graphs
+> +         (DAWG). A dawg is constructed by minimizing a trie as a
+> +         deterministic finite automaton (DFA), and thus the dawg has
+> +         an advantage in memory usage. In addition, dawgdic uses a
+> +         double-array as a base data structure, so its retrieval
+> +         speed is as fast as that of Darts, a library for building
+> +         and accessing double-array tries. See
+Insert a new line here (end previous sentence at the '.')
+> +         https://code.google.com/p/dawgdic/
+> diff --git a/package/dawgdic/dawgdic.mk b/package/dawgdic/dawgdic.mk
+> new file mode 100644
+> index 0000000..697602c
+> --- /dev/null
+> +++ b/package/dawgdic/dawgdic.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# dawgdic
+> +#
+> +################################################################################
+> +
+> +DAWGDIC_SITE = http://dawgdic.googlecode.com/svn/trunk
+> +DAWGDIC_SITE_METHOD = svn
+> +DAWGDIC_VERSION = 63
+I am bit worried here, this package is hosted on the closing
+google-code, and there has been no sign of life since November 2012...
+I saw some people that exported the code to Github.
+What should we do in such a case ?
+> +DAWGDIC_LICENSE = BSD-3c
+> +DAWGDIC_LICENSE_FILES = COPYING
+> +
+> +DAWGDIC_AUTORECONF = YES
+> +DAWGDIC_INSTALL_STAGING = YES
+> +
+> +$(eval $(autotools-package))
+> --
+> 1.7.9.5
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
