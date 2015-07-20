@@ -1,40 +1,80 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Mon, 20 Jul 2015 13:31:33 +1000
-Subject: [Buildroot] [PATCH v3 2/2] powerpc-utils: optionally use librtas
-In-Reply-To: <20150713184418.66c0298b@free-electrons.com>
-References: <cover.1432015191.git.sam.bobroff@au1.ibm.com>
- <9a73202315e0a236b78d9644905c20b79572f93d.1432015191.git.sam.bobroff@au1.ibm.com>
- <20150713184418.66c0298b@free-electrons.com>
-Message-ID: <20150720033133.GB15460@ocelot.ozlabs.ibm.com>
+From: Jonathan Ben-Avraham <yba@tkos.co.il>
+Date: Mon, 20 Jul 2015 08:38:01 +0300
+Subject: [Buildroot] [PATCH 1/1] New package dawgdic - directed acyclic word
+	graphs
+Message-ID: <1437370681-12567-1-git-send-email-yba@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 13, 2015 at 06:44:18PM +0200, Thomas Petazzoni wrote:
-> Dear Sam Bobroff,
-> 
-> On Tue, 19 May 2015 15:59:56 +1000, Sam Bobroff wrote:
-> > Now that librtas is available, optionally use it with powerpc-utils to
-> > enable it's RTAS dependant functionality.  It is used by default, as
-> > most distros do, but made optional because it adds several new programs
-> > and significantly increases the size of the installed package.
-> > 
-> > Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-> > ---
-> > v3:
-> 
-> Applied after propagating the glibc dependency of librtas, as noted by
-> Romain Naour.
-> 
-> Thanks!
-> 
-> Thomas
+From: Jonathan Ben Avraham <yba@tkos.co.il>
 
-Baruch, Romain and Thomas,
+This package provides utilties and object files for building and accessing
+directed acyclic word graphs (DAWG) dictionaries. See
+https://code.google.com/p/dawgdic/
 
-Thanks for the reviews and improvements!
+Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+---
+ package/Config.in          |    1 +
+ package/dawgdic/Config.in  |   12 ++++++++++++
+ package/dawgdic/dawgdic.mk |   16 ++++++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/dawgdic/Config.in
+ create mode 100644 package/dawgdic/dawgdic.mk
 
-Cheers,
-Sam.
+diff --git a/package/Config.in b/package/Config.in
+index d9b0794..222004a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1018,6 +1018,7 @@ menu "Other"
+ 	source "package/clapack/Config.in"
+ 	source "package/classpath/Config.in"
+ 	source "package/cppcms/Config.in"
++	source "package/dawgdic/Config.in"
+ 	source "package/ding-libs/Config.in"
+ 	source "package/eigen/Config.in"
+ 	source "package/elfutils/Config.in"
+diff --git a/package/dawgdic/Config.in b/package/dawgdic/Config.in
+new file mode 100644
+index 0000000..e015d31
+--- /dev/null
++++ b/package/dawgdic/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_DAWGDIC
++	bool "dawgdic"
++	help
++	  dawgdic provides a library for building and accessing
++	  dictionaries implemented with directed acyclic word graphs
++	  (DAWG). A dawg is constructed by minimizing a trie as a
++	  deterministic finite automaton (DFA), and thus the dawg has
++	  an advantage in memory usage. In addition, dawgdic uses a
++	  double-array as a base data structure, so its retrieval
++	  speed is as fast as that of Darts, a library for building
++	  and accessing double-array tries. See
++	  https://code.google.com/p/dawgdic/
+diff --git a/package/dawgdic/dawgdic.mk b/package/dawgdic/dawgdic.mk
+new file mode 100644
+index 0000000..697602c
+--- /dev/null
++++ b/package/dawgdic/dawgdic.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# dawgdic
++#
++################################################################################
++
++DAWGDIC_SITE = http://dawgdic.googlecode.com/svn/trunk
++DAWGDIC_SITE_METHOD = svn
++DAWGDIC_VERSION = 63
++DAWGDIC_LICENSE = BSD-3c
++DAWGDIC_LICENSE_FILES = COPYING
++
++DAWGDIC_AUTORECONF = YES
++DAWGDIC_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+-- 
+1.7.9.5
