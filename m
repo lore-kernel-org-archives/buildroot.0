@@ -1,35 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Jul 2015 22:56:09 +0200
-Subject: [Buildroot] [PATCH 01/11] package/ulogd: remove autoreconf
-In-Reply-To: <1437414479-16714-1-git-send-email-romain.naour@openwide.fr>
-References: <1437414479-16714-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150720225609.6644867c@free-electrons.com>
+Date: Mon, 20 Jul 2015 22:56:54 +0200
+Subject: [Buildroot] [git commit] package/glibc: enable lock elision on
+	x86_64 hosts
+Message-ID: <20150720205701.63F1B81E73@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=d3ff6cbb4205d7382fc4b2f728ea8bcf6345f8de
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 20 Jul 2015 19:47:49 +0200, Romain Naour wrote:
-> Autoreconf is not needed anymore since ulogd 2.0.4
-> where logd-01-pthread-conditional.patch was removed.
-> 
-> commit: 010745a955b6cf4c979588fafdb7506460038e0f
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/ulogd/ulogd.mk | 1 -
->  1 file changed, 1 deletion(-)
+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glibc/glibc.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-All 11 patches applied, thanks. I have not tested them, I trust you :)
-The autobuilders will tell me if I was right or not! :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 0a37bb3..cbfbf32 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -90,6 +90,7 @@ define GLIBC_CONFIGURE_CMDS
+ 		--prefix=/usr \
+ 		--enable-shared \
+ 		$(if $(BR2_SOFT_FLOAT),--without-fp,--with-fp) \
++		$(if $(BR2_x86_64),--enable-lock-elision) \
+ 		--with-pkgversion="Buildroot" \
+ 		--without-cvs \
+ 		--disable-profile \
