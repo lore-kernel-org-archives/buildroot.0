@@ -1,35 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 20 Jul 2015 22:49:51 +0200
-Subject: [Buildroot] [git commit] package/dhcp: remove autoreconf
-Message-ID: <20150720205435.5BC2B81E4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-neomagic:
+	remove autoreconf
+Message-ID: <20150720205435.A17547FA54@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f757bbbfdf168b9e1104c246513b89a9ba21da0
+commit: http://git.buildroot.net/buildroot/commit/?id=d5471bba736d320c52eceb2e19fc9cab14dd722c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-0001-fix-configure-debug.patch was removed in
-commit 68e846d3b2875b5e7a79bfb33629bf2793840939
+xdriver_xf86-video-neomagic no longer use the git repository.
+
+commit: 560660d06be550aed1f1bfa52bbe58be5fdc387d
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dhcp/dhcp.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ .../xdriver_xf86-video-neomagic.mk                 |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index c0d4588..effcbe2 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -9,8 +9,6 @@ DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
- DHCP_INSTALL_STAGING = YES
- DHCP_LICENSE = ISC
- DHCP_LICENSE_FILES = LICENSE
--# For 0001-fix-configure-debug.patch
--DHCP_AUTORECONF = YES
- DHCP_CONF_ENV = \
- 	CPPFLAGS='-D_PATH_DHCPD_CONF=\"/etc/dhcp/dhcpd.conf\" \
- 		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
+diff --git a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
+index c307761..cfd5536 100644
+--- a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
++++ b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
+@@ -9,7 +9,6 @@ XDRIVER_XF86_VIDEO_NEOMAGIC_SOURCE = xf86-video-neomagic-$(XDRIVER_XF86_VIDEO_NE
+ XDRIVER_XF86_VIDEO_NEOMAGIC_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_NEOMAGIC_AUTORECONF = YES
+ XDRIVER_XF86_VIDEO_NEOMAGIC_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xproto
+ 
+ $(eval $(autotools-package))
