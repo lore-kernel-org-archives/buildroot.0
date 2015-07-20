@@ -1,233 +1,325 @@
 From: Zhang Jian(Bamvor) <bamvor.zhangjian@huawei.com>
-Date: Mon, 20 Jul 2015 19:25:41 +0800
-Subject: [Buildroot] [PATCH 4/5] aarch64: ilp32: add ilp32 build config
+Date: Mon, 20 Jul 2015 19:25:38 +0800
+Subject: [Buildroot] [PATCH 1/5] aarch64: add big endian(aarch64_be) support
 In-Reply-To: <1437391542-13590-1-git-send-email-bamvor.zhangjian@huawei.com>
 References: <1437391542-13590-1-git-send-email-bamvor.zhangjian@huawei.com>
-Message-ID: <1437391542-13590-5-git-send-email-bamvor.zhangjian@huawei.com>
+Message-ID: <1437391542-13590-2-git-send-email-bamvor.zhangjian@huawei.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add ILP32 in menuconfig. And disable the libc and toolchain which
-does not support ILP32.
+Add aarch64_be support. Note that CONFIG_CPU_BIG_ENDIAN should be
+defined in kernel config when building a big endian kernel.
+Add !BR2_aarch64_be along with !BR2_aarch64 in the following file:
+grep "\!BR2_aarch64" `find . -name "Config.*"`
 
 Signed-off-by: Zhang Jian(Bamvor) <bamvor.zhangjian@huawei.com>
 ---
- arch/Config.in.aarch64                 | 35 ++++++++++++++++++++++++++++++++++
- package/gcc/Config.in.host             |  3 ++-
- toolchain/Config.in                    |  2 ++
- toolchain/toolchain-external/Config.in | 22 +++++++++++++++++++++
- 4 files changed, 61 insertions(+), 1 deletion(-)
+ Makefile                                |  2 +-
+ arch/Config.in                          | 13 +++++++++++--
+ arch/Config.in.aarch64                  |  5 ++++-
+ package/binutils/Config.in              |  4 ++--
+ package/binutils/Config.in.host         | 10 ++++++----
+ package/dropwatch/Config.in             |  5 +++--
+ package/gcc/Config.in.host              |  8 ++++----
+ package/gdb/Config.in.host              |  2 +-
+ package/gpsd/Config.in                  |  2 +-
+ package/lightning/Config.in             |  5 +++--
+ package/nginx/Config.in                 |  3 +--
+ package/oprofile/Config.in              |  6 ++++--
+ toolchain/toolchain-buildroot/Config.in | 27 ++++++++++++++-------------
+ 13 files changed, 55 insertions(+), 37 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index b1bcf78..35818f0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -329,7 +329,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+ 	-e s/arcle/arc/ \
+ 	-e s/arceb/arc/ \
+ 	-e s/arm.*/arm/ -e s/sa110/arm/ \
+-	-e s/aarch64/arm64/ \
++	-e s/aarch64.*/arm64/ \
+ 	-e s/bfin/blackfin/ \
+ 	-e s/parisc64/parisc/ \
+ 	-e s/powerpc64.*/powerpc/ \
+diff --git a/arch/Config.in b/arch/Config.in
+index 94397b3..875f412 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -59,7 +59,16 @@ config BR2_armeb
+ 	  http://en.wikipedia.org/wiki/ARM
+ 
+ config BR2_aarch64
+-	bool "AArch64"
++	bool "AArch64 (little endian)"
++	select BR2_ARCH_IS_64
++	select BR2_ARCH_HAS_MMU_MANDATORY
++	help
++	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
++	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
++	  http://en.wikipedia.org/wiki/ARM
++
++config BR2_aarch64_be
++	bool "AArch64 (big endian)"
+ 	select BR2_ARCH_IS_64
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+@@ -347,7 +356,7 @@ if BR2_arm || BR2_armeb
+ source "arch/Config.in.arm"
+ endif
+ 
+-if BR2_aarch64
++if BR2_aarch64 || BR2_aarch64_be
+ source "arch/Config.in.aarch64"
+ endif
+ 
 diff --git a/arch/Config.in.aarch64 b/arch/Config.in.aarch64
-index 9830302..b4e3e43 100644
+index 2e79870..9830302 100644
 --- a/arch/Config.in.aarch64
 +++ b/arch/Config.in.aarch64
-@@ -9,3 +9,38 @@ config BR2_ENDIAN
+@@ -1,8 +1,11 @@
+ config BR2_ARCH
+ 	default "aarch64"	if BR2_aarch64
++	default "aarch64_be"	if BR2_aarch64_be
+ 
+ config BR2_ENDIAN
+-	default "LITTLE"
++	default "LITTLE" if BR2_aarch64
++	default "BIG"	 if BR2_aarch64_be
+ 
  config BR2_ARCH_HAS_ATOMICS
  	default y
++
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index 64d0a09..f9e0f16 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_BINUTILS
+ 	bool "binutils"
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  Install binutils on the target
+@@ -22,5 +22,5 @@ config BR2_PACKAGE_BINUTILS_TARGET
+ endif
  
-+config BR2_GCC_TARGET_ABI
-+	default "" if BR2_AARCH64_LP64
-+	default "ilp32" if BR2_AARCH64_ILP32
-+
-+choice
-+	prompt "Target ABI"
-+	depends on BR2_aarch64 || BR2_aarch64_be
-+	default BR2_AARCH64_LP64
-+	help
-+	  Application Binary Interface to use. The Application Binary
-+	  Interface describes the calling conventions (how arguments
-+	  are passed to functions, how the return value is passed, how
-+	  system calls are made, etc.).
-+
-+config BR2_AARCH64_LP64
-+	bool "LP64"
-+	help
-+	  The LP64 is the default ABI in aarch64. It means that
-+	  long and pointer is 64bit.
-+
-+config BR2_AARCH64_ILP32
-+	bool "ILP32"
-+	help
-+	  ILP32 is a method for running 32bit application on 64bit platform, such
-+	  binary is elf32 with aarch64 assembly and is compiled by 64bit compiler.
-+	  Refer the following table:
-+
-+	    \-            |  arm 32bit  | arm64 ILP32 | arm64 LP64
-+	  ----------------|-------------|-------------|-------------
-+	  instruction set |   armv7-a   |   armv8-a   |   armv8-a
-+	  int             |   32bit     |   32bit     |   32bit
-+	  long            |   32bit     | **32bit**   |   64bit
-+	  pointer         |   32bit     | **32bit**   |   64bit
-+
-+endchoice
+ comment "binutils needs a toolchain w/ wchar"
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on !BR2_USE_WCHAR
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 3fe65e0..a7a06a4 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -8,13 +8,15 @@ choice
+ 	  Select the version of binutils you wish to use.
+ 
+ 	config BR2_BINUTILS_VERSION_2_22
+-		depends on !BR2_aarch64 && !BR2_microblaze && \
+-			   !BR2_powerpc64le && !BR2_nios2
++		depends on !BR2_aarch64 && !BR2_aarch64_be && \
++			   !BR2_microblaze && !BR2_powerpc64le && \
++			   !BR2_nios2
+ 		bool "binutils 2.22"
+ 
+ 	config BR2_BINUTILS_VERSION_2_23_2
+-		depends on !BR2_aarch64 && !BR2_microblaze && \
+-			   !BR2_powerpc64le && !BR2_nios2
++		depends on !BR2_aarch64 && !BR2_aarch64_be && \
++			   !BR2_microblaze && !BR2_powerpc64le && \
++			   !BR2_nios2
+ 		bool "binutils 2.23.2"
+ 
+ 	config BR2_BINUTILS_VERSION_2_24
+diff --git a/package/dropwatch/Config.in b/package/dropwatch/Config.in
+index d331e5e..e109242 100644
+--- a/package/dropwatch/Config.in
++++ b/package/dropwatch/Config.in
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_DROPWATCH
+ 	bool "dropwatch"
+ 	select BR2_PACKAGE_BINUTILS
+-	depends on !BR2_aarch64 && !BR2_nios2 # binutils
++	# binutils
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on BR2_USE_WCHAR # binutils
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_LIBNL
+@@ -13,5 +14,5 @@ config BR2_PACKAGE_DROPWATCH
+ 	  https://fedorahosted.org/dropwatch/
+ 
+ comment "dropwatch needs a toolchain w/ threads, wchar"
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
 diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index fd92b92..fec1a9d 100644
+index 4501b32..fd92b92 100644
 --- a/package/gcc/Config.in.host
 +++ b/package/gcc/Config.in.host
-@@ -55,7 +55,8 @@ choice
- 		bool "gcc 4.8.x"
+@@ -17,8 +17,8 @@ choice
+ 		bool "gcc 4.5.x"
+ 		depends on BR2_DEPRECATED_SINCE_2015_05
  		# Broken or unsupported architectures
- 		depends on !BR2_microblaze && !BR2_arc \
+-		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
 -			&& !BR2_powerpc64le && !BR2_nios2
-+			&& !BR2_powerpc64le && !BR2_nios2 \
-+			&& !BR2_AARCH64_ILP32
++		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_aarch64_be && \
++			   !BR2_arc && !BR2_powerpc64le && !BR2_nios2
  		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a12
+ 		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
+ 			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
+@@ -38,8 +38,8 @@ choice
+ 	config BR2_GCC_VERSION_4_7_X
+ 		bool "gcc 4.7.x"
+ 		# Broken or unsupported architectures
+-		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
+-			&& !BR2_powerpc64le && !BR2_nios2
++		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_aarch64_be && \
++			   !BR2_arc && !BR2_powerpc64le && !BR2_nios2
+ 		# Broken or unsupported ARM cores
+ 		depends on !BR2_cortex_a12 && !BR2_pj4
  		# Broken or unsupported PPC cores
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index a851ce4..794bf8b 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -27,6 +27,7 @@ config BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !BR2_AARCH64_ILP32
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index d2469fc..92dc910 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_HOST_GDB
+ 	# allow to build a cross-gdb, as the one of the external
+ 	# toolchain should be used.
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	help
+ 	  Build a cross gdb that runs on the host machine and debugs
+ 	  programs running on the target. It requires 'gdbserver'
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index fa8b8f6..36813ab 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -39,7 +39,7 @@ config BR2_PACKAGE_GPSD_OLDSTYLE
+ config BR2_PACKAGE_GPSD_PROFILING
+ 	bool "profiling support"
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+-	depends on !BR2_aarch64
++	depends on !BR2_aarch64 && !BR2_aarch64_be
  
+ comment "profiling support not available with uClibc-based toolchain"
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/lightning/Config.in b/package/lightning/Config.in
+index 8caf39f..3ca477a 100644
+--- a/package/lightning/Config.in
++++ b/package/lightning/Config.in
+@@ -14,13 +14,14 @@ config BR2_PACKAGE_LIGHTNING_DISASSEMBLER
+ 	bool "enable disassembler"
+ 	select BR2_PACKAGE_BINUTILS
+ 	select BR2_PACKAGE_ZLIB
+-	depends on !BR2_aarch64 && !BR2_nios2 # binutils
++	# binutils
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on BR2_USE_WCHAR # binutils
+ 	help
+ 	  Enable the GNU lightning disassembler.
+ 
+ comment "lightning disassembler needs a toolchain w/ wchar"
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on !BR2_USE_WCHAR
+ 
+ endif
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index be445f4..ef0266e 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -15,8 +15,7 @@ config BR2_PACKAGE_NGINX_FILE_AIO
+ 	# but it's available on neither AArch64 nor ARC where only
+ 	# eventfd() is available. See
+ 	# https://bugs.launchpad.net/linaro-aarch64/+bug/1160013
+-	depends on !BR2_aarch64
+-	depends on !BR2_arc
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_arc
+ 
+ config BR2_PACKAGE_NGINX_HTTP
+ 	bool "http server"
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index 9cf5693..b5d0bb6 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -5,7 +5,8 @@ config BR2_PACKAGE_OPROFILE
+ 	select BR2_PACKAGE_BINUTILS
+ 	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_aarch64 && !BR2_nios2 # binutils
++	# binutils
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on BR2_USE_WCHAR # binutils
+ 	depends on !BR2_xtensa
+ 	# libpfm4 is needed on PowerPC, and requires thread support
+@@ -28,7 +29,8 @@ config BR2_PACKAGE_OPROFILE
+ 
+ comment "oprofile needs a toolchain w/ C++, wchar"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_aarch64 && !BR2_nios2 && !BR2_xtensa
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2 && \
++		   !BR2_xtensa
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+ 
+ comment "oprofile needs a toolchain w/ NPTL on PPC"
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 77a197e..13e2b15 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -23,8 +23,8 @@ source "package/linux-headers/Config.in.host"
  choice
- 	prompt "Toolchain type"
-@@ -40,6 +41,7 @@ choice
- config BR2_TOOLCHAIN_BUILDROOT
- 	bool "Buildroot toolchain"
- 	depends on !BR2_bfin
-+	depends on !BR2_AARCH64_ILP32
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ 	prompt "C library"
+ 	default BR2_TOOLCHAIN_UCLIBC
+-	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_aarch64 || BR2_microblaze \
+-		|| BR2_mips64 || BR2_mips64el || BR2_powerpc64
++	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_aarch64 || BR2_aarch64_be \
++		|| BR2_microblaze || BR2_mips64 || BR2_mips64el || BR2_powerpc64
  
- config BR2_TOOLCHAIN_EXTERNAL
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index e70989e..12ad00a 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -588,6 +588,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
- 	depends on BR2_sh4a || BR2_sh4aeb
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_AARCH64_ILP32
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -611,6 +612,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- 	depends on BR2_sh4a || BR2_sh4aeb
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_AARCH64_ILP32
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -789,6 +791,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- 	depends on BR2_aarch64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_AARCH64_ILP32
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -803,6 +806,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
- 	depends on BR2_aarch64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_AARCH64_ILP32
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -1008,69 +1012,86 @@ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_15
- 	bool "3.15.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14
- 	bool "3.14.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_13
- 	bool "3.13.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12
- 	bool "3.12.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_11
- 	bool "3.11.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10
- 	bool "3.10.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9
- 	bool "3.9.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_8
- 	bool "3.8.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_7
- 	bool "3.7.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_6
- 	bool "3.6.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_5
- 	bool "3.5.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_4
- 	bool "3.4.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_3
- 	bool "3.3.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2
- 	bool "3.2.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_1
- 	bool "3.1.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_0
- 	bool "3.0.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	depends on !BR2_AARCH64_ILP32
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
- 	bool "2.6.x"
-+	depends on !BR2_AARCH64_ILP32
- 
- endchoice
- 
-@@ -1081,6 +1102,7 @@ choice
- config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
  	bool "uClibc"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	depends on !BR2_AARCH64_ILP32
- 	# For the time being, we assume that all custom external
- 	# toolchains have shadow password support.
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+@@ -42,11 +42,12 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 	bool "eglibc"
+-	depends on BR2_arm    || BR2_armeb    || BR2_aarch64 || \
+-		   BR2_i386   || BR2_mips     || BR2_mipsel  || \
+-		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
+-		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
+-		   BR2_x86_64 || BR2_microblaze || BR2_powerpc64
++	depends on BR2_arm        || BR2_armeb    || BR2_aarch64    || \
++		   BR2_aarch64_be || BR2_i386     || BR2_mips       || \
++		   BR2_mipsel     || BR2_mips64   || BR2_mips64el   || \
++		   BR2_powerpc    || BR2_sh       || BR2_sh64       || \
++		   BR2_sparc      || BR2_x86_64   || BR2_microblaze || \
++		   BR2_powerpc64
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_DEPRECATED_SINCE_2015_08
+@@ -61,12 +62,12 @@ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 	bool "glibc"
+-	depends on BR2_arm         || BR2_armeb    || BR2_aarch64 || \
+-		   BR2_i386        || BR2_mips     || BR2_mipsel  || \
+-		   BR2_mips64      || BR2_mips64el || BR2_powerpc || \
+-		   BR2_powerpc64   || BR2_powerpc64le || BR2_sh   || \
+-		   BR2_sh64        || BR2_sparc    || BR2_x86_64  || \
+-		   BR2_microblaze  || BR2_nios2
++	depends on BR2_arm         || BR2_armeb      || BR2_aarch64 || \
++		   BR2_aarch64_be  || BR2_i386       || BR2_mips    || \
++		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
++		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
++		   BR2_sh          || BR2_sh64       || BR2_sparc   || \
++		   BR2_x86_64      || BR2_microblaze || BR2_nios2
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_powerpc_SPE
 -- 
 1.8.4.5
