@@ -1,144 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Jul 2015 22:41:52 +0200
-Subject: [Buildroot] [PATCH] autobuild - acpid does not build against
- musl
-In-Reply-To: <1437417346-18621-1-git-send-email-brendanheading@gmail.com>
-References: <1437417346-18621-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <20150720224152.11d13fa5@free-electrons.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 20 Jul 2015 22:48:14 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-07-19
+In-Reply-To: <20150720223851.68e8f706@free-electrons.com>
+References: <20150720063017.2400B101C74@stock.ovh.net>
+ <1437422115.1945.4.camel@embedded.rocks>
+ <20150720223851.68e8f706@free-electrons.com>
+Message-ID: <1437425294.1945.8.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+Dear Thomas Petazzoni,
 
-The commit title should be:
-
-	acpid: fix build against musl
-
-On Mon, 20 Jul 2015 19:35:46 +0100, Brendan Heading wrote:
-> Fixes http://autobuild.buildroot.net/results/33e/33ef25e4707a5b81083204e0f064570c11d88af6/
-
-Generally, we prefer:
-
-Fixes:
-	http://autobuild.buildroot.net/results/33e/33ef25e4707a5b81083204e0f064570c11d88af6/
-
-Please add your Signed-off-by line as well.
-
-> ---
->  package/acpid/0003-fix-TEMP_FAILURE_RETRY.patch | 76 +++++++++++++++++++++++++
->  package/acpid/0004-fix-warnings.patch           | 38 +++++++++++++
->  2 files changed, 114 insertions(+)
->  create mode 100644 package/acpid/0003-fix-TEMP_FAILURE_RETRY.patch
->  create mode 100644 package/acpid/0004-fix-warnings.patch
+On Mo, 2015-07-20 at 22:38 +0200, Thomas Petazzoni wrote:
+> Dear J?rg Krause,
 > 
-> diff --git a/package/acpid/0003-fix-TEMP_FAILURE_RETRY.patch b/package/acpid/0003-fix-TEMP_FAILURE_RETRY.patch
-> new file mode 100644
-> index 0000000..7d81b3c
-> --- /dev/null
-> +++ b/package/acpid/0003-fix-TEMP_FAILURE_RETRY.patch
-> @@ -0,0 +1,76 @@
-> +Add missing TEMP_FAILURE_RETRY.
-> +
-> +Some external toolchains using strange C libraries (eg MUSL) do not define
-> +this macro.
+> On Mon, 20 Jul 2015 21:55:15 +0200, J?rg Krause wrote:
+> 
+> > >          arm |                 libtirpc-0.3.1 | NOK | 
+> > > http://autobuild.buildroot.net/results/80321de8d4c6c0a00439b07289
+> > > a581
+> > > 8962128b43/
+> > 
+> > This is odd:
+> > # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS is not set
+> > # libtirpc needs a toolchain w/ threads
+> > 
+> > -> why is libtirpc build anyhow?
+> 
+> Take the configuration, run menuconfig and exit, you will see:
+> 
+> warning: (BR2_PACKAGE_NFS_UTILS) selects BR2_PACKAGE_RPCBIND which 
+> has unmet direct dependencies (BR2_TOOLCHAIN_HAS_THREADS && 
+> !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_USE_MMU)
 
-musl is not "strange".
+I have done so, but I must missed the warning somehow. Thanks for the
+hint!
 
-> +
-> +Signed-off-by : Brendan Heading <brendanheading@gmail.com>
+> 
+> The problem is that nfs-utils selects libtirpc without properly 
+> caring
+> for the thread dependency. This is caused by a patch from Maxime
+> Hadjinlian that added a "select BR2_PACKAGE_RPCBIND" in
+> nfs-utils/Config.in.
+> 
+> Since we probably don't care much about using nfs-utils in a
+> non-threaded scenario, maybe we could simply do:
+> 
+> comment "nfs-utils needs a toolchain w/ threads"
+>         depends on BR2_USE_MMU
+>         depends on !BR2_TOOLCHAIN_HAS_THREADS
+> 
+> config BR2_PACKAGE_NFS_UTILS
+>         bool "nfs-utils"
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc, rpcbind
+>         select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>         select BR2_PACKAGE_RPCBIND # runtime
+> 
+> We could try to be smarter and use portmap when no threads are
+> available, but really this is too much complexity for such a corner
+> case.
+> 
+> Care to send a patch?
 
-no space between Signed-off-by and colon.
+Thanks for clarification! I'll prepare a patch.
 
-> +
-> +Index : b/acpid.h
-> +===================================================================
-> +--- a/acpid.h
-> ++++ b/acpid.h
-> +@@ -39,6 +39,18 @@
-> + 
-> + #define PACKAGE 		"acpid"
-> + 
-> ++/* Evaluate EXPRESSION, and repeat as long as it returns -1 with `errno'
-> ++   set to EINTR.  */
-> ++
-> ++#ifndef TEMP_FAILURE_RETRY
-> ++#define TEMP_FAILURE_RETRY(expression) \
-> ++  (__extension__                                                             \
-> ++    ({ long int __result;                                                    \
-> ++       do __result = (long int) (expression);                                \
-> ++       while (__result == -1L && errno == EINTR);                            \
-> ++       __result; }))
-> ++#endif
-> ++
-> + /*
-> +  * acpid.c
-> +  */
-> +Index : b/kacpimon/libnetlink.h
-> +===================================================================
-> +--- a/kacpimon/libnetlink.h
-> ++++ b/kacpimon/libnetlink.h
-> +@@ -11,6 +11,18 @@
-> + #define MSG_CMSG_CLOEXEC 0x40000000
-> + #endif
-> + 
-> ++/* Evaluate EXPRESSION, and repeat as long as it returns -1 with `errno'
-> ++   set to EINTR.  */
-> ++
-> ++#ifndef TEMP_FAILURE_RETRY
-> ++#define TEMP_FAILURE_RETRY(expression) \
-> ++  (__extension__							      \
-> ++    ({ long int __result;						      \
-> ++       do __result = (long int) (expression);				      \
-> ++       while (__result == -1L && errno == EINTR);			      \
-> ++       __result; }))
-> ++#endif
-> ++
-> + struct rtnl_handle
-> + {
-> + 	int			fd;
-> +Index : b/libnetlink.h
-> +===================================================================
-> +--- a/libnetlink.h
-> ++++ b/libnetlink.h
-> +@@ -11,6 +11,18 @@
-> + #define MSG_CMSG_CLOEXEC 0x40000000
-> + #endif
-> + 
-> ++/* Evaluate EXPRESSION, and repeat as long as it returns -1 with `errno'
-> ++   set to EINTR.  */
-> ++
-> ++#ifndef TEMP_FAILURE_RETRY
-> ++#define TEMP_FAILURE_RETRY(expression) \
-> ++  (__extension__							      \
-> ++    ({ long int __result;						      \
-> ++       do __result = (long int) (expression);				      \
-> ++       while (__result == -1L && errno == EINTR);			      \
-> ++       __result; }))
-> ++#endif
-
-Is it really necessary to repeat that three times? Can we put that in
-some common header?
-
-> ++
-> + struct rtnl_handle
-> + {
-> + 	int			fd;
-> diff --git a/package/acpid/0004-fix-warnings.patch b/package/acpid/0004-fix-warnings.patch
-> new file mode 100644
-> index 0000000..3c6a89d
-> --- /dev/null
-> +++ b/package/acpid/0004-fix-warnings.patch
-
-As Baruch said, not needed, except if you submit the patch upstream
-directly.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards
+J?rg Krause
