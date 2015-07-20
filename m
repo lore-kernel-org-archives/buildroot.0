@@ -1,36 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Jul 2015 22:49:51 +0200
-Subject: [Buildroot] [git commit] package/stress: remove autoreconf
-Message-ID: <20150720205435.149167FA54@busybox.osuosl.org>
+Date: Mon, 20 Jul 2015 22:56:09 +0200
+Subject: [Buildroot] [PATCH 01/11] package/ulogd: remove autoreconf
+In-Reply-To: <1437414479-16714-1-git-send-email-romain.naour@openwide.fr>
+References: <1437414479-16714-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150720225609.6644867c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=06ba02a936459cb023a3be893d5ae2cb2914ae66
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Romain Naour,
 
-autoreconf is not needed anymore since non-lfs enabler patch
-has been removed.
+On Mon, 20 Jul 2015 19:47:49 +0200, Romain Naour wrote:
+> Autoreconf is not needed anymore since ulogd 2.0.4
+> where logd-01-pthread-conditional.patch was removed.
+> 
+> commit: 010745a955b6cf4c979588fafdb7506460038e0f
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  package/ulogd/ulogd.mk | 1 -
+>  1 file changed, 1 deletion(-)
 
-commit: 415765b5a8861f3b7e86e9786bf903a5a4d09e73
+All 11 patches applied, thanks. I have not tested them, I trust you :)
+The autobuilders will tell me if I was right or not! :-)
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/stress/stress.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+Thanks!
 
-diff --git a/package/stress/stress.mk b/package/stress/stress.mk
-index 4bb801e..1b5ba06 100644
---- a/package/stress/stress.mk
-+++ b/package/stress/stress.mk
-@@ -8,7 +8,6 @@ STRESS_VERSION = 1.0.4
- STRESS_SITE = http://people.seas.harvard.edu/~apw/stress
- STRESS_LICENSE = GPLv2+
- STRESS_LICENSE_FILES = COPYING
--STRESS_AUTORECONF = YES
- 
- # Stress is linked statically if the --enable-static is specified.
- # However, this option is always specified in the global
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
