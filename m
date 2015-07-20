@@ -1,36 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 20 Jul 2015 22:49:51 +0200
-Subject: [Buildroot] [git commit] package/ulogd: remove autoreconf
-Message-ID: <20150720205434.EBEDC81E4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xdriver_xf86-video-cirrus: remove
+	autoreconf
+Message-ID: <20150720205435.B2AD781E4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=65be5bc30d91f3418b7a1b66ba304be762f24574
+commit: http://git.buildroot.net/buildroot/commit/?id=022953e77dce2d1c96dc7e0d6f964f5291011bb6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Autoreconf is not needed anymore since ulogd 2.0.4
-where logd-01-pthread-conditional.patch was removed.
+xdriver_xf86-video-cirrus no longer use the git repository.
 
-commit: 010745a955b6cf4c979588fafdb7506460038e0f
+commit: e45edc34fadcd6e666a123a4ab32a13b37dc3f74
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ulogd/ulogd.mk |    1 -
+ .../xdriver_xf86-video-cirrus.mk                   |    1 -
  1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
-index 7ff5b73..7730198 100644
---- a/package/ulogd/ulogd.mk
-+++ b/package/ulogd/ulogd.mk
-@@ -8,7 +8,6 @@ ULOGD_VERSION = 2.0.5
- ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
- ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
- ULOGD_CONF_OPTS = --with-dbi=no --with-pgsql=no
--ULOGD_AUTORECONF = YES
- ULOGD_DEPENDENCIES = host-pkgconf \
- 	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
- 	libnfnetlink
+diff --git a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
+index f2523db..78e8a9c 100644
+--- a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
++++ b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
+@@ -9,7 +9,6 @@ XDRIVER_XF86_VIDEO_CIRRUS_SOURCE = xf86-video-cirrus-$(XDRIVER_XF86_VIDEO_CIRRUS
+ XDRIVER_XF86_VIDEO_CIRRUS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_CIRRUS_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_CIRRUS_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_CIRRUS_AUTORECONF = YES
+ XDRIVER_XF86_VIDEO_CIRRUS_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xproto
+ 
+ $(eval $(autotools-package))
