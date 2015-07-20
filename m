@@ -1,36 +1,42 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 20 Jul 2015 19:47:59 +0200
-Subject: [Buildroot] [PATCH 11/11]
-	package/x11r7/xdriver_xf86-video-siliconmotion: remove autoreconf
-In-Reply-To: <1437414479-16714-1-git-send-email-romain.naour@openwide.fr>
-References: <1437414479-16714-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1437414479-16714-11-git-send-email-romain.naour@openwide.fr>
+Date: Mon, 20 Jul 2015 19:55:49 +0200
+Subject: [Buildroot] [PATCH] package/cython: new host package
+Message-ID: <1437414949-16978-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xdriver_xf86-video-siliconmotion no longer use the git repository.
-
-commit: b343bc690e0004ab916eda09d88be9f4210e867b
+Some phyton packages may use the Cython compiler.
+At least, one package (libplist) in Buildroot can use it.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- .../xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/cython/cython.mk | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 package/cython/cython.mk
 
-diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
-index 37e87a5..2aa22ae 100644
---- a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
-+++ b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
-@@ -9,7 +9,6 @@ XDRIVER_XF86_VIDEO_SILICONMOTION_SOURCE = xf86-video-siliconmotion-$(XDRIVER_XF8
- XDRIVER_XF86_VIDEO_SILICONMOTION_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_SILICONMOTION_LICENSE = MIT
- XDRIVER_XF86_VIDEO_SILICONMOTION_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_SILICONMOTION_AUTORECONF = YES
- XDRIVER_XF86_VIDEO_SILICONMOTION_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xproto
- 
- $(eval $(autotools-package))
+diff --git a/package/cython/cython.mk b/package/cython/cython.mk
+new file mode 100644
+index 0000000..b730774
+--- /dev/null
++++ b/package/cython/cython.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# cython
++#
++################################################################################
++
++CYTHON_VERSION = 0.22.1
++CYTHON_SOURCE = Cython-$(CYTHON_VERSION).tar.gz
++CYTHON_SITE = http://cython.org/release/
++# Cython can also use setuptools
++CYTHON_SETUP_TYPE = distutils
++CYTHON_LICENSE = Apache-2.0
++CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
++
++$(eval $(host-python-package))
 -- 
 2.4.3
