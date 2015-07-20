@@ -1,36 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 20 Jul 2015 22:49:51 +0200
-Subject: [Buildroot] [git commit]
-	package/x11r7/xdriver_xf86-video-siliconmotion: remove autoreconf
-Message-ID: <20150720205435.CCA8E7FA54@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dhcp: remove autoreconf
+Message-ID: <20150720205435.5BC2B81E4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2fb4ed378444793875de2c9fc34efd6536f7e21f
+commit: http://git.buildroot.net/buildroot/commit/?id=7f757bbbfdf168b9e1104c246513b89a9ba21da0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-xdriver_xf86-video-siliconmotion no longer use the git repository.
-
-commit: b343bc690e0004ab916eda09d88be9f4210e867b
+0001-fix-configure-debug.patch was removed in
+commit 68e846d3b2875b5e7a79bfb33629bf2793840939
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-video-siliconmotion.mk            |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/dhcp/dhcp.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
-index 37e87a5..2aa22ae 100644
---- a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
-+++ b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
-@@ -9,7 +9,6 @@ XDRIVER_XF86_VIDEO_SILICONMOTION_SOURCE = xf86-video-siliconmotion-$(XDRIVER_XF8
- XDRIVER_XF86_VIDEO_SILICONMOTION_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_SILICONMOTION_LICENSE = MIT
- XDRIVER_XF86_VIDEO_SILICONMOTION_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_SILICONMOTION_AUTORECONF = YES
- XDRIVER_XF86_VIDEO_SILICONMOTION_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xproto
- 
- $(eval $(autotools-package))
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index c0d4588..effcbe2 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -9,8 +9,6 @@ DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
+ DHCP_INSTALL_STAGING = YES
+ DHCP_LICENSE = ISC
+ DHCP_LICENSE_FILES = LICENSE
+-# For 0001-fix-configure-debug.patch
+-DHCP_AUTORECONF = YES
+ DHCP_CONF_ENV = \
+ 	CPPFLAGS='-D_PATH_DHCPD_CONF=\"/etc/dhcp/dhcpd.conf\" \
+ 		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
