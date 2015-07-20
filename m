@@ -1,34 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Jul 2015 15:28:12 +0200
-Subject: [Buildroot] [git commit] c-icap-modules: fix license typos
-Message-ID: <20150720132825.E9D047F918@busybox.osuosl.org>
+Date: Mon, 20 Jul 2015 15:28:40 +0200
+Subject: [Buildroot] [PATCH 1/1] c-icap-modules: fix license typos
+In-Reply-To: <1437375232-2696-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1437375232-2696-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20150720152840.7e5fa481@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=92f96564d3a5b5c4cd4e20faafb4fdc84df2707d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Jerzy Grzegorek,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/c-icap-modules/c-icap-modules.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 20 Jul 2015 08:53:52 +0200, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+>  package/c-icap-modules/c-icap-modules.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/c-icap-modules/c-icap-modules.mk b/package/c-icap-modules/c-icap-modules.mk
-index 27c57e1..aeab580 100644
---- a/package/c-icap-modules/c-icap-modules.mk
-+++ b/package/c-icap-modules/c-icap-modules.mk
-@@ -7,8 +7,8 @@
- C_ICAP_MODULES_VERSION = 0.3.2
- C_ICAP_MODULES_SOURCE = c_icap_modules-$(C_ICAP_MODULES_VERSION).tar.gz
- C_ICAP_MODULES_SITE = http://downloads.sourceforge.net/c-icap/
--C_ICAP_MODULES_LICENCE = GPLv2+
--C_ICAP_MODULES_LICENCE_FILE = COPYING
-+C_ICAP_MODULES_LICENSE = GPLv2+
-+C_ICAP_MODULES_LICENSE_FILES = COPYING
- C_ICAP_MODULES_DEPENDENCIES = c-icap
- 
- C_ICAP_MODULES_CONF_OPTS = \
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
